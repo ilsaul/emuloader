@@ -1,9 +1,9 @@
 object FormGameInfo: TFormGameInfo
-  Left = 223
-  Top = 110
+  Left = 220
+  Top = 206
   BorderIcons = []
   BorderStyle = bsToolWindow
-  ClientHeight = 376
+  ClientHeight = 289
   ClientWidth = 497
   Color = clBtnFace
   DefaultMonitor = dmPrimary
@@ -20,40 +20,9 @@ object FormGameInfo: TFormGameInfo
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Shape1: TShape
-    Left = 0
-    Top = 0
-    Width = 497
-    Height = 60
-    Align = alTop
-  end
-  object ImageGameIcon: TImage
-    Left = 8
-    Top = 14
-    Width = 32
-    Height = 32
-    Center = True
-    Transparent = True
-  end
-  object LabelGameDescription: TLabel
-    Left = 56
-    Top = 24
-    Width = 83
-    Height = 13
-    Caption = 'Game Description'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 328
-    Width = 487
-    Height = 10
-    Shape = bsTopLine
-  end
   object PageControlGameInfo: TPageControl
     Left = 8
-    Top = 72
+    Top = 8
     Width = 481
     Height = 233
     ActivePage = TabSheetGameInfo
@@ -63,10 +32,9 @@ object FormGameInfo: TFormGameInfo
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabIndex = 0
     TabOrder = 1
     object TabSheetGameInfo: TTabSheet
-      Caption = 'Game Info'
+      Caption = 'Game Description'
       ImageIndex = -1
       object LabelManufacturer: TLabel
         Left = 8
@@ -79,7 +47,7 @@ object FormGameInfo: TFormGameInfo
       object Manufacturer: TLabel
         Left = 8
         Top = 24
-        Width = 457
+        Width = 409
         Height = 13
         AutoSize = False
         Caption = 'Manufacturer'
@@ -411,11 +379,19 @@ object FormGameInfo: TFormGameInfo
         ShowHint = True
         Transparent = True
       end
+      object ImageGameIcon: TImage
+        Left = 432
+        Top = 8
+        Width = 32
+        Height = 32
+        Center = True
+        Transparent = True
+      end
     end
   end
   object ButtonClose: TButton
     Left = 416
-    Top = 344
+    Top = 256
     Width = 75
     Height = 23
     Hint = 'Close this window'

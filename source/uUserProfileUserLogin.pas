@@ -4,19 +4,16 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  StdCtrls, ExtCtrls, IniFiles, Mask, GraphicEx;
+  StdCtrls, ExtCtrls, IniFiles, Mask;
 
 type
   TFormUserProfileUserLogin = class(TForm)
-    LabelUserProfileLogin: TLabel;
     LabelEnterPassword: TLabel;
     LabelSelectUserProfile: TLabel;
     Password: TMaskEdit;
     UserProfile: TComboBox;
     ButtonOk: TButton;
     ButtonCancel: TButton;
-    TopImage: TImage;
-    BottomLine: TBevel;
     LabelConfirmPassword: TLabel;
     ConfirmPassword: TMaskEdit;
     procedure ButtonCancelClick(Sender: TObject);
@@ -31,7 +28,6 @@ type
     procedure PanelFormMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure UserProfileChange(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure ConfirmPasswordKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
@@ -81,8 +77,9 @@ begin
 
        if Password.Text <> ConfirmPassword.Text then
           begin
-            GenerateMessage(FormMain.GetLanguageText('Messages', 'IncorrectPasswordTitle', 'Password Confirmation'),
-                            FormMain.GetLanguageText('Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.'), 2);
+            FormMain.GetMessagesLng('Messages', 'IncorrectPasswordTitle', 'Password Confirmation',
+                                    'Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.');
+            GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
             Password.SelectAll;
             Password.SetFocus;
             Exit;
@@ -111,44 +108,47 @@ begin
                  end
               else
                  begin
-                   GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                   Format(FormMain.GetLanguageText('Messages', 'UserProfileNotFoundMsg', 'File "%s.dat" not found or is empty! Please, select another profile or configure the options for this user on Users Profile Manager.'), [CurrentUserProfile]), 2);
+                   FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                           'Messages', 'UserProfileNotFoundMsg', 'File "%s.dat" not found or is empty! Please, select another profile or configure the options for this user on Users Profile Manager.');
+                   GenerateMessage(FormMain.MessageText[0],
+                                   Format(FormMain.MessageText[1], [CurrentUserProfile]), 2);
                  end;
             end;
           2: //this is for changing the password
             begin
               if Password.Text <> '' then
                  begin
-                    case FileExists(FormMain.FrontendPath+'UserProfiles.ini') of
-                      True:
-                        begin
-                          if GetFileSize(FormMain.FrontendPath+'UserProfiles.ini') > 32768 then
-                             begin
-                               MemPasswordFile:= TMemIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
-                               MemPasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
-                               FreeAndNil(MemPasswordFile);
-                             end
-                          else
-                             begin
-                               PasswordFile:= TIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
-                               PasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
-                               FreeAndNil(PasswordFile);
-                             end;
-                        end;
-                      False:
-                        begin
-                          PasswordFile:= TIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
-                          PasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
-                          FreeAndNil(PasswordFile);
-                        end;
-                    end;
-                    FormMain.MenuUserProfile.Tag:= 0;
-                    Close;
+                   case FileExists(FormMain.FrontendPath+'UserProfiles.ini') of
+                     True:
+                       begin
+                         if GetFileSize(FormMain.FrontendPath+'UserProfiles.ini') > 32768 then
+                            begin
+                              MemPasswordFile:= TMemIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
+                              MemPasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
+                              FreeAndNil(MemPasswordFile);
+                            end
+                         else
+                            begin
+                              PasswordFile:= TIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
+                              PasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
+                              FreeAndNil(PasswordFile);
+                            end;
+                       end;
+                     False:
+                       begin
+                         PasswordFile:= TIniFile.Create(FormMain.FrontendPath+'UserProfiles.ini');
+                         PasswordFile.WriteString(CurrentUserProfile, 'Password', EncryptData(Password.Text));
+                         FreeAndNil(PasswordFile);
+                       end;
+                   end;
+                   FormMain.MenuUserProfile.Tag:= 0;
+                   Close;
                  end
               else
                  begin
-                   GenerateMessage(FormMain.GetLanguageText('Messages', 'NoPasswordTitle', 'No Password'),
-                                   FormMain.GetLanguageText('Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.'), 2);
+                   FormMain.GetMessagesLng('Messages', 'NoPasswordTitle', 'No Password',
+                                           'Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.');
+                   GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
                  end;
             end;
         end;
@@ -158,8 +158,9 @@ begin
         case Password.Tag of
           0, 3:
             begin
-              GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                              FormMain.GetLanguageText('Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.'), 2);
+              FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                      'Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.');
+              GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
               Password.SetFocus;
               Password.SelectAll;
             end;
@@ -174,14 +175,14 @@ begin
   FormMain.SetUserProfileLoginLanguage;
   case Password.Tag of
     0: begin
-         LabelUserProfileLogin.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogout', 'User Profile Logout');
+         Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogout', 'User Profile Logout');
          Password.Clear;
          ConfirmPassword.Clear;
          LabelConfirmPassword.Enabled:= False;
          ConfirmPassword.Enabled:= False;
        end;
     1: begin
-         LabelUserProfileLogin.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogin', 'User Profile Login');
+         Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogin', 'User Profile Login');
        end;
     2: begin
          LabelEnterPassword.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelEnterNewPassword', 'Enter New Password');
@@ -189,7 +190,7 @@ begin
          Password.SelectAll;
        end;
     3: begin
-         LabelUserProfileLogin.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogin', 'User Profile Login');
+         Caption:= FormMain.GetLanguageText('Login Logout', 'LabelUserProfileLogin', 'User Profile Login');
          Password.Clear;
          ConfirmPassword.Clear;
        end;
@@ -309,12 +310,5 @@ begin
   FormMain.ActiveUserProfileDescription:= UserProfile.Text;
   CurrentUserProfile:= UserProfile.Text;
 end;
-
-procedure TFormUserProfileUserLogin.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\Users.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\Users.png');
-end;
-
 
 end.

@@ -4,7 +4,8 @@ object FormCustomGameDescription: TFormCustomGameDescription
   ActiveControl = ButtonCancel
   BorderIcons = []
   BorderStyle = bsToolWindow
-  ClientHeight = 321
+  Caption = 'Custom Game Description'
+  ClientHeight = 233
   ClientWidth = 490
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,41 +16,17 @@ object FormCustomGameDescription: TFormCustomGameDescription
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 490
-    Height = 60
-  end
-  object LabelCaption: TLabel
-    Left = 72
-    Top = 24
-    Width = 122
-    Height = 13
-    Caption = 'Custom Game Description'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 272
-    Width = 480
-    Height = 10
-    Shape = bsTopLine
-  end
   object PageControlCustomCommandLine: TPageControl
     Left = 8
-    Top = 72
+    Top = 8
     Width = 473
     Height = 177
     ActivePage = TabSheetCustomCommandLine
     ParentShowHint = False
     ShowHint = True
-    TabIndex = 0
     TabOrder = 0
     object TabSheetCustomCommandLine: TTabSheet
       Caption = 'Game Name'
@@ -118,7 +95,7 @@ object FormCustomGameDescription: TFormCustomGameDescription
   end
   object ButtonOk: TButton
     Left = 320
-    Top = 288
+    Top = 200
     Width = 75
     Height = 23
     Hint = 'Close and update settings'
@@ -131,7 +108,7 @@ object FormCustomGameDescription: TFormCustomGameDescription
   end
   object ButtonCancel: TButton
     Left = 408
-    Top = 288
+    Top = 200
     Width = 75
     Height = 23
     Hint = 'Close without updating'

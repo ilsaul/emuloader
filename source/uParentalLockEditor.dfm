@@ -1,4 +1,4 @@
-object FormParentalLockManager: TFormParentalLockManager
+object FormParentalLockEditor: TFormParentalLockEditor
   Left = 183
   Top = 145
   BorderIcons = [biSystemMenu]
@@ -262,7 +262,6 @@ object FormParentalLockManager: TFormParentalLockManager
     Height = 369
     ActivePage = TabSheetSearchGames
     Images = ParentalLockImageList
-    TabIndex = 0
     TabOrder = 0
     object TabSheetSearchGames: TTabSheet
       Caption = 'Search Games'
@@ -322,7 +321,7 @@ object FormParentalLockManager: TFormParentalLockManager
       object Keyword: TEdit
         Left = 176
         Top = 24
-        Width = 153
+        Width = 113
         Height = 21
         TabOrder = 1
         OnKeyPress = KeywordKeyPress
@@ -378,8 +377,8 @@ object FormParentalLockManager: TFormParentalLockManager
         OnClick = ButtonDeleteSelectedKeywordsClick
       end
       object ButtonBeginSearch: TButton
-        Left = 364
-        Top = 40
+        Left = 440
+        Top = 24
         Width = 145
         Height = 23
         Hint = 
@@ -392,8 +391,8 @@ object FormParentalLockManager: TFormParentalLockManager
         OnClick = ButtonBeginSearchClick
       end
       object ButtonAddKeyword: TButton
-        Left = 176
-        Top = 48
+        Left = 296
+        Top = 24
         Width = 75
         Height = 23
         Hint = 'Add the keyword to the search criteria'
@@ -426,18 +425,6 @@ object FormParentalLockManager: TFormParentalLockManager
         ShowHint = True
         TabOrder = 7
         OnClick = ButtonAddGamesClick
-      end
-      object ParentalLockImage: TImage32Ex
-        Left = 532
-        Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 8
-        Transparent = True
       end
     end
     object TabSheetLockedGamesList: TTabSheet
@@ -550,7 +537,7 @@ object FormParentalLockManager: TFormParentalLockManager
     Width = 177
     Height = 23
     Hint = 'Read all data from file "LockGames.dat"'
-    Caption = '&Read "LockGames.dat"'
+    Caption = '&Read "LockedGames.dat"'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4

@@ -3,6 +3,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
   Top = 158
   BorderIcons = []
   BorderStyle = bsToolWindow
+  Caption = 'User Profile Editor'
   ClientHeight = 423
   ClientWidth = 626
   Color = clBtnFace
@@ -20,43 +21,20 @@ object FormUserProfileEditor: TFormUserProfileEditor
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 626
-    Height = 60
-  end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 384
-    Width = 616
-    Height = 10
-    Shape = bsTopLine
-  end
-  object LabelCaption: TLabel
-    Left = 72
-    Top = 24
-    Width = 86
-    Height = 13
-    Caption = 'User Profile Editor'
-    ShowAccelChar = False
-    Transparent = True
-  end
   object PageControlMainOptions: TPageControl
     Left = 8
-    Top = 64
+    Top = 8
     Width = 609
-    Height = 305
+    Height = 369
     ActivePage = TabSheetProfileMainData
     Images = UserProfileImageList
     MultiLine = True
-    TabIndex = 0
     TabOrder = 0
     object TabSheetProfileMainData: TTabSheet
       Caption = 'Profile Main Data'
       object ButtonCreateNewProfile: TButton
-        Left = 64
-        Top = 136
+        Left = 8
+        Top = 128
         Width = 169
         Height = 23
         Hint = 'Create new user profile'
@@ -67,8 +45,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         OnClick = ButtonCreateNewProfileClick
       end
       object ButtonCancelNewProfile: TButton
-        Left = 264
-        Top = 136
+        Left = 208
+        Top = 128
         Width = 169
         Height = 23
         Hint = 'Cancel new user profile (before saving to .dat file)'
@@ -80,8 +58,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         OnClick = ButtonCancelNewProfileClick
       end
       object ButtonDeleteSelectedProfile: TButton
-        Left = 264
-        Top = 168
+        Left = 208
+        Top = 160
         Width = 169
         Height = 23
         Hint = 
@@ -95,8 +73,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         OnClick = ButtonDeleteSelectedProfileClick
       end
       object ButtonSaveProfile: TButton
-        Left = 64
-        Top = 168
+        Left = 8
+        Top = 160
         Width = 169
         Height = 23
         Hint = 'Update existing profile options or save new profile'
@@ -108,8 +86,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         OnClick = ButtonSaveProfileClick
       end
       object ButtonPassword: TButton
-        Left = 64
-        Top = 200
+        Left = 8
+        Top = 192
         Width = 169
         Height = 23
         Hint = 'Define/change a password'
@@ -119,27 +97,15 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 4
         OnClick = ButtonPasswordClick
       end
-      object ProfileMainDataImage: TImage32Ex
+      object LabelSelectUserProfile: TGroupBox
         Left = 8
         Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 5
-        Transparent = True
-      end
-      object LabelSelectUserProfile: TGroupBox
-        Left = 64
-        Top = 16
         Width = 369
         Height = 105
         Caption = 'Select User Profile'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 6
+        TabOrder = 5
         object LabelProfileDescription: TLabel
           Left = 8
           Top = 56
@@ -183,136 +149,136 @@ object FormUserProfileEditor: TFormUserProfileEditor
       Caption = 'Miscellaneous'
       ImageIndex = 1
       object CreateGamesListImage: TImage
-        Left = 64
-        Top = 16
+        Left = 8
+        Top = 8
         Width = 16
         Height = 16
         Transparent = True
       end
       object EmulatorsSetupImage: TImage
-        Left = 64
-        Top = 40
+        Left = 8
+        Top = 32
         Width = 16
         Height = 16
         Transparent = True
       end
       object EmulatorsDescriptionImage: TImage
-        Left = 64
-        Top = 64
+        Left = 8
+        Top = 56
         Width = 16
         Height = 16
         Transparent = True
       end
       object SelectExecutable1Image: TImage
-        Left = 64
-        Top = 88
+        Left = 8
+        Top = 80
         Width = 16
         Height = 16
         Transparent = True
       end
       object EmulatorsDefaultOptionsImage: TImage
-        Left = 64
-        Top = 208
+        Left = 8
+        Top = 200
         Width = 16
         Height = 16
         Transparent = True
       end
       object FrontendPreferencesImage: TImage
-        Left = 64
-        Top = 232
+        Left = 8
+        Top = 224
         Width = 16
         Height = 16
         Transparent = True
       end
       object FavoriteGamesImage: TImage
-        Left = 336
-        Top = 40
+        Left = 280
+        Top = 32
         Width = 16
         Height = 16
         Transparent = True
       end
       object SelectExecutable2Image: TImage
-        Left = 64
-        Top = 112
+        Left = 8
+        Top = 104
         Width = 16
         Height = 16
         Transparent = True
       end
       object SelectExecutable3Image: TImage
-        Left = 64
-        Top = 136
+        Left = 8
+        Top = 128
         Width = 16
         Height = 16
         Transparent = True
       end
       object SelectExecutable4Image: TImage
-        Left = 64
-        Top = 160
+        Left = 8
+        Top = 152
         Width = 16
         Height = 16
         Transparent = True
       end
       object SelectExecutable5Image: TImage
-        Left = 64
-        Top = 184
+        Left = 8
+        Top = 176
         Width = 16
         Height = 16
         Transparent = True
       end
       object FavoriteUsersManagerImage: TImage
-        Left = 336
-        Top = 16
+        Left = 280
+        Top = 8
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowHideGamesListColumnsImage: TImage
-        Left = 336
-        Top = 64
+        Left = 280
+        Top = 56
         Width = 16
         Height = 16
         Transparent = True
       end
       object ParentalLockImage: TImage
-        Left = 336
-        Top = 88
+        Left = 280
+        Top = 80
         Width = 16
         Height = 16
         Enabled = False
         Transparent = True
       end
       object UserProfileImage: TImage
-        Left = 336
-        Top = 112
+        Left = 280
+        Top = 104
         Width = 16
         Height = 16
         Enabled = False
         Transparent = True
       end
       object FullScreenImage: TImage
-        Left = 336
-        Top = 136
+        Left = 280
+        Top = 128
         Width = 16
         Height = 16
         Transparent = True
       end
       object FullScreenExitImage: TImage
-        Left = 336
-        Top = 160
+        Left = 280
+        Top = 152
         Width = 16
         Height = 16
         Transparent = True
       end
       object KeysMappingSelectorImage: TImage
-        Left = 336
-        Top = 184
+        Left = 280
+        Top = 176
         Width = 16
         Height = 16
         Transparent = True
       end
       object CreateGamesList: TCheckBox
-        Left = 88
-        Top = 16
+        Left = 32
+        Top = 8
         Width = 233
         Height = 17
         Hint = 'Create MAME games list (.dat)'
@@ -324,8 +290,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 0
       end
       object EmulatorsSetup: TCheckBox
-        Left = 88
-        Top = 40
+        Left = 32
+        Top = 32
         Width = 233
         Height = 17
         Hint = 'Change MAME executables and default options'
@@ -337,8 +303,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 1
       end
       object EmulatorsDescriptions: TCheckBox
-        Left = 88
-        Top = 64
+        Left = 32
+        Top = 56
         Width = 233
         Height = 17
         Hint = 'Change emulators descriptions'
@@ -350,8 +316,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 2
       end
       object SelectExecutable1: TCheckBox
-        Left = 88
-        Top = 88
+        Left = 32
+        Top = 80
         Width = 233
         Height = 17
         Hint = 'Change between available MAME executables'
@@ -363,8 +329,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 3
       end
       object EmulatorsDefaultOptions: TCheckBox
-        Left = 88
-        Top = 208
+        Left = 32
+        Top = 200
         Width = 233
         Height = 17
         Hint = 'Change MAME default options'
@@ -376,8 +342,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 4
       end
       object FrontendPreferences: TCheckBox
-        Left = 88
-        Top = 232
+        Left = 32
+        Top = 224
         Width = 233
         Height = 17
         Hint = 'Access to "Preferences" screen'
@@ -389,8 +355,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 5
       end
       object FavoriteGames: TCheckBox
-        Left = 360
-        Top = 40
+        Left = 304
+        Top = 32
         Width = 233
         Height = 17
         Hint = 'Switch to favorites games list'
@@ -402,8 +368,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 6
       end
       object FavoriteUsersManager: TCheckBox
-        Left = 360
-        Top = 16
+        Left = 304
+        Top = 8
         Width = 233
         Height = 17
         Hint = 'Access to favorite users manager'
@@ -415,8 +381,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 7
       end
       object GamesColumnsEditor: TCheckBox
-        Left = 360
-        Top = 64
+        Left = 304
+        Top = 56
         Width = 233
         Height = 17
         Hint = 'Access to games columns editor'
@@ -428,8 +394,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 8
       end
       object ParentalLock: TCheckBox
-        Left = 360
-        Top = 88
+        Left = 304
+        Top = 80
         Width = 233
         Height = 17
         Hint = 'Access to parental lock'
@@ -442,8 +408,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 9
       end
       object UserProfile: TCheckBox
-        Left = 360
-        Top = 112
+        Left = 304
+        Top = 104
         Width = 233
         Height = 17
         Hint = 'Access to users profiles'
@@ -456,8 +422,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 10
       end
       object FullScreen: TCheckBox
-        Left = 360
-        Top = 136
+        Left = 304
+        Top = 128
         Width = 233
         Height = 17
         Hint = 'Toggle frontend'#39's main screen between window/full screen'
@@ -469,8 +435,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 11
       end
       object SelectExecutable2: TCheckBox
-        Left = 88
-        Top = 112
+        Left = 32
+        Top = 104
         Width = 233
         Height = 17
         Hint = 'Change between available MAME executables'
@@ -482,8 +448,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 12
       end
       object SelectExecutable3: TCheckBox
-        Left = 88
-        Top = 136
+        Left = 32
+        Top = 128
         Width = 233
         Height = 17
         Hint = 'Change between available MAME executables'
@@ -495,8 +461,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 13
       end
       object SelectExecutable4: TCheckBox
-        Left = 88
-        Top = 160
+        Left = 32
+        Top = 152
         Width = 233
         Height = 17
         Hint = 'Change between available MAME executables'
@@ -508,8 +474,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 14
       end
       object SelectExecutable5: TCheckBox
-        Left = 88
-        Top = 184
+        Left = 32
+        Top = 176
         Width = 233
         Height = 17
         Hint = 'Change between available MAME executables'
@@ -521,8 +487,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 15
       end
       object FullScreenExit: TCheckBox
-        Left = 360
-        Top = 160
+        Left = 304
+        Top = 152
         Width = 233
         Height = 17
         Hint = 'Enable / disable the exit option while in full screen mode'
@@ -534,8 +500,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 16
       end
       object KeysMappingSelector: TCheckBox
-        Left = 360
-        Top = 184
+        Left = 304
+        Top = 176
         Width = 233
         Height = 17
         Hint = 'Enable / disable the keys mapping button in the toolbar'
@@ -546,177 +512,195 @@ object FormUserProfileEditor: TFormUserProfileEditor
         State = cbChecked
         TabOrder = 17
       end
-      object UserProfileMiscellaneousImage: TImage32Ex
-        Left = 8
-        Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 18
-        Transparent = True
-      end
     end
     object TabSheetGames: TTabSheet
       Caption = 'Games'
       ImageIndex = 2
       object PageControlGames: TPageControl
-        Left = 8
-        Top = 8
-        Width = 585
-        Height = 257
+        Left = 0
+        Top = 0
+        Width = 601
+        Height = 340
         ActivePage = TabSheetGames1
+        Align = alClient
         Images = UserProfileImageList
         ParentShowHint = False
         ShowHint = True
-        TabIndex = 0
         TabOrder = 0
         object TabSheetGames1: TTabSheet
           Caption = '1'
           ImageIndex = 2
           object GamesFilterSelectionImage: TImage
-            Left = 64
-            Top = 16
+            Left = 8
+            Top = 8
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesListShowBigIconsImage: TImage
-            Left = 64
-            Top = 40
+            Left = 8
+            Top = 32
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesListShowSmallIconsImage: TImage
-            Left = 64
-            Top = 64
+            Left = 8
+            Top = 56
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesListShowListImage: TImage
-            Left = 64
-            Top = 88
+            Left = 8
+            Top = 80
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesListShowDetailsImage: TImage
-            Left = 64
-            Top = 112
+            Left = 8
+            Top = 104
             Width = 16
             Height = 16
             Transparent = True
           end
           object PlayRecordedGameImage: TImage
-            Left = 320
-            Top = 40
+            Left = 8
+            Top = 248
             Width = 16
             Height = 16
             Transparent = True
           end
           object RecordGameImage: TImage
-            Left = 320
-            Top = 64
+            Left = 8
+            Top = 272
             Width = 16
             Height = 16
             Transparent = True
           end
           object CustomGameOptionsImage: TImage
-            Left = 64
-            Top = 136
+            Left = 8
+            Top = 128
             Width = 16
             Height = 16
             Transparent = True
           end
           object CustomInitializationOptionsImage: TImage
-            Left = 64
-            Top = 160
+            Left = 8
+            Top = 152
             Width = 16
             Height = 16
             Transparent = True
           end
           object CustomGameDescriptionImage: TImage
-            Left = 64
-            Top = 208
+            Left = 8
+            Top = 200
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesInformationImage: TImage
-            Left = 320
-            Top = 88
+            Left = 264
+            Top = 8
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesHistoryImage: TImage
-            Left = 320
-            Top = 112
+            Left = 264
+            Top = 32
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesDriverInformationImage: TImage
-            Left = 320
-            Top = 136
+            Left = 264
+            Top = 56
             Width = 16
             Height = 16
             Transparent = True
           end
           object GamesFAQImage: TImage
-            Left = 320
-            Top = 160
+            Left = 264
+            Top = 80
             Width = 16
             Height = 17
             Transparent = True
           end
           object CustomCommandLineImage: TImage
-            Left = 64
-            Top = 184
+            Left = 8
+            Top = 176
             Width = 16
             Height = 16
             Transparent = True
           end
           object CustomGameCategoryImage: TImage
-            Left = 320
-            Top = 16
+            Left = 8
+            Top = 224
             Width = 16
             Height = 16
             Transparent = True
           end
           object AutomaticGameInformationImage: TImage
-            Left = 320
-            Top = 184
+            Left = 264
+            Top = 104
             Width = 16
             Height = 16
             Transparent = True
           end
           object DeleteGameZIPImage: TImage
-            Left = 320
-            Top = 208
+            Left = 264
+            Top = 128
             Width = 16
             Height = 16
             Transparent = True
           end
-          object GamesImage1: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 0
+          object AddGamesToFavoritesImage: TImage
+            Left = 264
+            Top = 152
+            Width = 16
+            Height = 16
+            Transparent = True
+          end
+          object DeleteGamesFromFavoritesImage: TImage
+            Left = 264
+            Top = 176
+            Width = 16
+            Height = 16
+            Transparent = True
+          end
+          object RealIconsImage: TImage
+            Left = 264
+            Top = 224
+            Width = 16
+            Height = 16
+            Transparent = True
+          end
+          object AddGameParentalLockImage: TImage
+            Left = 264
+            Top = 200
+            Width = 16
+            Height = 16
+            Transparent = True
+          end
+          object GamesAuditImage: TImage
+            Left = 264
+            Top = 272
+            Width = 16
+            Height = 16
+            Transparent = True
+          end
+          object RefreshGamesImage: TImage
+            Left = 264
+            Top = 248
+            Width = 16
+            Height = 16
             Transparent = True
           end
           object GamesFilterSelector: TCheckBox
-            Left = 88
-            Top = 16
+            Left = 32
+            Top = 8
             Width = 225
             Height = 17
             Hint = 
@@ -727,11 +711,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 1
+            TabOrder = 0
           end
           object GamesListShowBigIcons: TCheckBox
-            Left = 88
-            Top = 40
+            Left = 32
+            Top = 32
             Width = 225
             Height = 17
             Hint = 'Access to big icons games mode'
@@ -740,11 +724,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 2
+            TabOrder = 1
           end
           object GamesListShowSmallIcons: TCheckBox
-            Left = 88
-            Top = 64
+            Left = 32
+            Top = 56
             Width = 225
             Height = 17
             Hint = 'Access to small icons games mode'
@@ -753,11 +737,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 3
+            TabOrder = 2
           end
           object GamesListShowList: TCheckBox
-            Left = 88
-            Top = 88
+            Left = 32
+            Top = 80
             Width = 225
             Height = 17
             Hint = 'Access to list games mode'
@@ -766,11 +750,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 4
+            TabOrder = 3
           end
           object GamesListShowDetails: TCheckBox
-            Left = 88
-            Top = 112
+            Left = 32
+            Top = 104
             Width = 225
             Height = 17
             Hint = 'Access to details games mode'
@@ -779,11 +763,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 5
+            TabOrder = 4
           end
           object PlayRecordedGame: TCheckBox
-            Left = 344
-            Top = 40
+            Left = 32
+            Top = 248
             Width = 225
             Height = 17
             Hint = 'Play recorded MAME games (.inp)'
@@ -792,11 +776,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 6
+            TabOrder = 5
           end
           object RecordGame: TCheckBox
-            Left = 344
-            Top = 64
+            Left = 32
+            Top = 272
             Width = 225
             Height = 17
             Hint = 'Record games to .inp files'
@@ -805,11 +789,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 7
+            TabOrder = 6
           end
           object CustomGameOptions: TCheckBox
-            Left = 88
-            Top = 136
+            Left = 32
+            Top = 128
             Width = 225
             Height = 17
             Hint = 'Access to customize games options'
@@ -818,11 +802,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 8
+            TabOrder = 7
           end
           object CustomInitializationOptions: TCheckBox
-            Left = 88
-            Top = 160
+            Left = 32
+            Top = 152
             Width = 225
             Height = 17
             Hint = 'Access to customize game drivers & game resources (bios) options'
@@ -831,11 +815,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 9
+            TabOrder = 8
           end
           object CustomGameDescription: TCheckBox
-            Left = 88
-            Top = 208
+            Left = 32
+            Top = 200
             Width = 225
             Height = 17
             Hint = 'Access to customize games descriptions'
@@ -844,11 +828,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 10
+            TabOrder = 9
           end
           object GamesInformation: TCheckBox
-            Left = 344
-            Top = 88
+            Left = 288
+            Top = 8
             Width = 225
             Height = 17
             Hint = 'Access to mameinfo.dat information'
@@ -857,11 +841,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 11
+            TabOrder = 10
           end
           object GamesHistory: TCheckBox
-            Left = 344
-            Top = 112
+            Left = 288
+            Top = 32
             Width = 225
             Height = 17
             Hint = 'Access to history.dat information'
@@ -870,11 +854,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 12
+            TabOrder = 11
           end
           object GamesDriverInformation: TCheckBox
-            Left = 344
-            Top = 136
+            Left = 288
+            Top = 56
             Width = 225
             Height = 17
             Hint = 'Access to mameinfo.dat information'
@@ -883,11 +867,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 13
+            TabOrder = 12
           end
           object GamesFAQ: TCheckBox
-            Left = 344
-            Top = 160
+            Left = 288
+            Top = 80
             Width = 225
             Height = 17
             Hint = 'Access to games f.a.q information'
@@ -896,11 +880,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 14
+            TabOrder = 13
           end
           object CustomCommandLine: TCheckBox
-            Left = 88
-            Top = 184
+            Left = 32
+            Top = 176
             Width = 225
             Height = 17
             Hint = 'Access to create games custom command lines'
@@ -909,11 +893,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 15
+            TabOrder = 14
           end
           object CustomGameCategory: TCheckBox
-            Left = 344
-            Top = 16
+            Left = 32
+            Top = 224
             Width = 225
             Height = 17
             Hint = 'Access to create custom categories for games'
@@ -922,11 +906,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 16
+            TabOrder = 15
           end
           object AutomaticGameInformation: TCheckBox
-            Left = 344
-            Top = 184
+            Left = 288
+            Top = 104
             Width = 225
             Height = 17
             Hint = 'Access to the automatic game information'
@@ -935,11 +919,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 17
+            TabOrder = 16
           end
           object DeleteGameZIP: TCheckBox
-            Left = 344
-            Top = 208
+            Left = 288
+            Top = 128
             Width = 225
             Height = 17
             Hint = 'Physically delete MAME .zip files'
@@ -948,76 +932,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 18
-          end
-        end
-        object TabSheetGames2: TTabSheet
-          Caption = '2'
-          ImageIndex = 2
-          object AddGamesToFavoritesImage: TImage
-            Left = 64
-            Top = 16
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object DeleteGamesFromFavoritesImage: TImage
-            Left = 64
-            Top = 40
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object RealIconsImage: TImage
-            Left = 64
-            Top = 88
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object AddGameParentalLockImage: TImage
-            Left = 64
-            Top = 64
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object CustomGamesManagerImage: TImage
-            Left = 64
-            Top = 160
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object GamesAuditImage: TImage
-            Left = 64
-            Top = 136
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object RefreshGamesImage: TImage
-            Left = 64
-            Top = 112
-            Width = 16
-            Height = 16
-            Transparent = True
-          end
-          object GamesImage2: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 0
-            Transparent = True
+            TabOrder = 17
           end
           object AddGamesToFavorites: TCheckBox
-            Left = 88
-            Top = 16
+            Left = 288
+            Top = 152
             Width = 225
             Height = 17
             Hint = 'Add games to favorites lists'
@@ -1026,11 +945,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 1
+            TabOrder = 18
           end
           object DeleteGamesFromFavorites: TCheckBox
-            Left = 88
-            Top = 40
+            Left = 288
+            Top = 176
             Width = 225
             Height = 17
             Hint = 'Delete games from favorites lists'
@@ -1039,24 +958,24 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 2
+            TabOrder = 19
           end
-          object RealIcons: TCheckBox
-            Left = 88
-            Top = 88
+          object GamesIcons: TCheckBox
+            Left = 288
+            Top = 224
             Width = 225
             Height = 17
             Hint = 'Access to MAMu_ icons'
-            Caption = 'Real Icons'
+            Caption = 'Games Icons'
             Checked = True
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 3
+            TabOrder = 20
           end
           object AddGameParentalLock: TCheckBox
-            Left = 88
-            Top = 64
+            Left = 288
+            Top = 200
             Width = 225
             Height = 17
             Hint = 'Access to add games to blocked list option'
@@ -1065,24 +984,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 4
-          end
-          object CustomGamesManager: TCheckBox
-            Left = 88
-            Top = 160
-            Width = 225
-            Height = 17
-            Hint = 'Access to the custom games manager'
-            Caption = 'Custom Games Manager'
-            Checked = True
-            ParentShowHint = False
-            ShowHint = True
-            State = cbChecked
-            TabOrder = 5
+            TabOrder = 21
           end
           object GamesAudit: TCheckBox
-            Left = 88
-            Top = 136
+            Left = 288
+            Top = 272
             Width = 225
             Height = 17
             Hint = 'Access to games auditing'
@@ -1091,11 +997,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 6
+            TabOrder = 22
           end
           object RefreshGames: TCheckBox
-            Left = 88
-            Top = 112
+            Left = 288
+            Top = 248
             Width = 225
             Height = 17
             Hint = 'Refresh games list (all refresh types)'
@@ -1104,7 +1010,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 7
+            TabOrder = 23
           end
         end
       end
@@ -1113,92 +1019,92 @@ object FormUserProfileEditor: TFormUserProfileEditor
       Caption = 'Preview Pictures'
       ImageIndex = 3
       object ShowPicturesImage: TImage
-        Left = 64
-        Top = 16
+        Left = 8
+        Top = 8
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowTitleSnapshotsImage: TImage
-        Left = 64
-        Top = 40
+        Left = 8
+        Top = 32
         Width = 16
         Height = 16
         Transparent = True
       end
       object DeletePicturesImage: TImage
-        Left = 64
-        Top = 232
+        Left = 8
+        Top = 224
         Width = 16
         Height = 16
         Transparent = True
       end
       object RenamePicturesImage: TImage
-        Left = 64
-        Top = 208
+        Left = 8
+        Top = 200
         Width = 16
         Height = 16
         Transparent = True
       end
       object DeleteExtraPicturesImage: TImage
-        Left = 64
-        Top = 256
+        Left = 8
+        Top = 248
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowInGameSnapshotsImage: TImage
-        Left = 64
-        Top = 64
+        Left = 8
+        Top = 56
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowMarqueesImage: TImage
-        Left = 64
-        Top = 88
+        Left = 8
+        Top = 80
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowFlyersImage: TImage
-        Left = 64
-        Top = 112
+        Left = 8
+        Top = 104
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowCabinetsImage: TImage
-        Left = 64
-        Top = 136
+        Left = 8
+        Top = 128
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowControlPanelsImage: TImage
-        Left = 64
-        Top = 160
+        Left = 8
+        Top = 152
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowControlPanelLayoutsImage: TImage
-        Left = 64
-        Top = 184
+        Left = 8
+        Top = 176
         Width = 16
         Height = 16
         Transparent = True
       end
       object CreatePicturesListImage: TImage
-        Left = 336
-        Top = 16
+        Left = 8
+        Top = 272
         Width = 16
         Height = 16
         Transparent = True
       end
       object ShowTitleSnapshots: TCheckBox
-        Left = 88
-        Top = 40
+        Left = 32
+        Top = 32
         Width = 233
         Height = 17
         Hint = 'Access to title snapshots'
@@ -1210,11 +1116,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 0
       end
       object DeletePictures: TCheckBox
-        Left = 88
-        Top = 232
+        Left = 32
+        Top = 224
         Width = 233
         Height = 17
-        Hint = 'Delete in-game snapshots'
+        Hint = 'Delete in game snapshots'
         Caption = 'Delete Pictures'
         Checked = True
         ParentShowHint = False
@@ -1223,11 +1129,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 1
       end
       object RenamePictures: TCheckBox
-        Left = 88
-        Top = 208
+        Left = 32
+        Top = 200
         Width = 233
         Height = 17
-        Hint = 'Rename in-game snapshots'
+        Hint = 'Rename in game snapshots'
         Caption = 'Rename Pictures'
         Checked = True
         ParentShowHint = False
@@ -1236,11 +1142,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 2
       end
       object DeleteExtraPictures: TCheckBox
-        Left = 88
-        Top = 256
+        Left = 32
+        Top = 248
         Width = 233
         Height = 17
-        Hint = 'Delete extra in-game snapshots'
+        Hint = 'Delete extra in game snapshots'
         Caption = 'Delete Extra Pictures'
         Checked = True
         ParentShowHint = False
@@ -1249,8 +1155,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 3
       end
       object ShowPictures: TCheckBox
-        Left = 88
-        Top = 16
+        Left = 32
+        Top = 8
         Width = 233
         Height = 17
         Hint = 'Access to preview pictures'
@@ -1262,11 +1168,11 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 4
       end
       object ShowInGameSnapshots: TCheckBox
-        Left = 88
-        Top = 64
+        Left = 32
+        Top = 56
         Width = 233
         Height = 17
-        Hint = 'Access to in-game snapshots'
+        Hint = 'Access to in game snapshots'
         Caption = 'Show In Game Snapshots'
         Checked = True
         ParentShowHint = False
@@ -1275,8 +1181,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 5
       end
       object ShowMarquees: TCheckBox
-        Left = 88
-        Top = 88
+        Left = 32
+        Top = 80
         Width = 233
         Height = 17
         Hint = 'Access to marquees'
@@ -1288,8 +1194,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 6
       end
       object ShowFlyers: TCheckBox
-        Left = 88
-        Top = 112
+        Left = 32
+        Top = 104
         Width = 233
         Height = 17
         Hint = 'Access to flyers'
@@ -1301,8 +1207,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 7
       end
       object ShowCabinets: TCheckBox
-        Left = 88
-        Top = 136
+        Left = 32
+        Top = 128
         Width = 233
         Height = 17
         Hint = 'Access to cabinets'
@@ -1314,8 +1220,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 8
       end
       object ShowControlPanels: TCheckBox
-        Left = 88
-        Top = 160
+        Left = 32
+        Top = 152
         Width = 233
         Height = 17
         Hint = 'Access to control panels'
@@ -1327,8 +1233,8 @@ object FormUserProfileEditor: TFormUserProfileEditor
         TabOrder = 9
       end
       object ShowControlPanelLayouts: TCheckBox
-        Left = 88
-        Top = 184
+        Left = 32
+        Top = 176
         Width = 233
         Height = 17
         Hint = 'Access to control panel layouts'
@@ -1339,21 +1245,9 @@ object FormUserProfileEditor: TFormUserProfileEditor
         State = cbChecked
         TabOrder = 10
       end
-      object PreviewPicturesImage: TImage32Ex
-        Left = 8
-        Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 11
-        Transparent = True
-      end
       object CreatePicturesList: TCheckBox
-        Left = 360
-        Top = 16
+        Left = 32
+        Top = 272
         Width = 233
         Height = 17
         Hint = 'Access to create "pictures.dat" file for the virtual list'
@@ -1362,13 +1256,13 @@ object FormUserProfileEditor: TFormUserProfileEditor
         ParentShowHint = False
         ShowHint = True
         State = cbChecked
-        TabOrder = 12
+        TabOrder = 11
       end
     end
   end
   object ButtonSave: TButton
     Left = 280
-    Top = 394
+    Top = 392
     Width = 75
     Height = 23
     Hint = 'Save changes on current profile'
@@ -1380,7 +1274,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
   end
   object ButtonClose: TButton
     Left = 544
-    Top = 394
+    Top = 392
     Width = 75
     Height = 23
     Hint = 'Close this window'
@@ -1393,7 +1287,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
   end
   object ButtonOk: TButton
     Left = 368
-    Top = 394
+    Top = 392
     Width = 75
     Height = 23
     Hint = 'Close and update settings'
@@ -1405,7 +1299,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
   end
   object ButtonReadUserProfileDAT: TButton
     Left = 8
-    Top = 394
+    Top = 392
     Width = 169
     Height = 23
     Hint = 'Read all data from file "profilename.dat"'
@@ -1416,7 +1310,7 @@ object FormUserProfileEditor: TFormUserProfileEditor
     OnClick = ButtonReadUserProfileDATClick
   end
   object UserProfileImageList: TImageList
-    Left = 432
-    Top = 368
+    Left = 472
+    Top = 392
   end
 end

@@ -3,7 +3,7 @@ unit uAbout;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Controls, Forms, TextFade, ExtCtrls,
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, ExtCtrls,
   StdCtrls, jpeg;
 
 type
@@ -11,7 +11,8 @@ type
     ImageLogo: TImage;
     LabelFrontendVersion: TLabel;
     ButtonClose: TButton;
-    TextFader: TTextFader;
+    Label1: TLabel;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ButtonCloseClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -37,12 +38,10 @@ begin
      ImageLogo.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\logo\About.jpg');
 
   LabelFrontendVersion.Caption:='v'+FrontendVersion;
-  TextFader.Active:= True;
 end;
 
 procedure TFormAbout.ButtonCloseClick(Sender: TObject);
 begin
-  TextFader.Active:= False;
   Close;
 end;
 

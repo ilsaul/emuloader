@@ -26,8 +26,6 @@ type
     LabelClassicBios: TLabel;
     NeoGeoBios: TImage;
     LabelNeoGeoBios: TLabel;
-    CustomGames: TImage;
-    LabelCustomGames: TLabel;
     UnClassicMR: TImage;
     UnClassicMV: TImage;
     UnClassicCR: TImage;
@@ -44,10 +42,10 @@ type
     LabelUnClassicBios: TLabel;
     UnNeoGeoBios: TImage;
     LabelUnNeoGeoBios: TLabel;
-    UnCustomGames: TImage;
-    LabelUnCustomGames: TLabel;
-    RealIcon: TImage;
-    LabelRealIcon: TLabel;
+    GameIcon: TImage;
+    LabelGameIcon: TLabel;
+    LabelUnGameIcon: TLabel;
+    UnGameIcon: TImage;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
@@ -90,8 +88,7 @@ begin
   FormMain.BuiltInSmallListImageList.GetIcon(5, NeoGeoC.Picture.Icon);
   FormMain.BuiltInSmallListImageList.GetIcon(12, ClassicBios.Picture.Icon);
   FormMain.BuiltInSmallListImageList.GetIcon(13, NeoGeoBios.Picture.Icon);
-  FormMain.BuiltInSmallListImageList.GetIcon(16, CustomGames.Picture.Icon);
-  FormMain.SmallRealIconsImageList.GetIcon(0, RealIcon.Picture.Icon);
+  FormMain.SmallGamesIconsImageList.GetIcon(0, GameIcon.Picture.Icon);
 
   FormMain.BuiltInSmallListImageList.GetIcon(6, UnClassicMR.Picture.Icon);
   FormMain.BuiltInSmallListImageList.GetIcon(7, UnClassicMV.Picture.Icon);
@@ -101,7 +98,7 @@ begin
   FormMain.BuiltInSmallListImageList.GetIcon(11, UnNeoGeoC.Picture.Icon);
   FormMain.BuiltInSmallListImageList.GetIcon(14, UnClassicBios.Picture.Icon);
   FormMain.BuiltInSmallListImageList.GetIcon(15, UnNeoGeoBios.Picture.Icon);
-  FormMain.BuiltInSmallListImageList.GetIcon(17, UnCustomGames.Picture.Icon);
+  FormMain.SmallGamesIconsImageList.GetIcon(0, UnGameIcon.Picture.Icon);
 end;
 
 procedure TFormGamesListLegend.FormShow(Sender: TObject);

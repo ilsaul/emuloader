@@ -33,7 +33,7 @@ object FormStatus: TFormStatus
     BitmapAlign = baTopLeft
     Color = clBlack
     ParentColor = False
-    Scale = 1
+    Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
     OnMouseDown = ImageLogoMouseDown
@@ -57,7 +57,7 @@ object FormStatus: TFormStatus
       Transparent = True
     end
     object LabelStatusType: TLabel
-      Left = 41
+      Left = 42
       Top = 268
       Width = 417
       Height = 14

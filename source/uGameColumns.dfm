@@ -4,7 +4,8 @@ object FormFilterGameColumns: TFormFilterGameColumns
   ActiveControl = ColumnsList
   BorderIcons = []
   BorderStyle = bsToolWindow
-  ClientHeight = 406
+  Caption = 'Game Columns'
+  ClientHeight = 327
   ClientWidth = 409
   Color = clBtnFace
   DefaultMonitor = dmPrimary
@@ -17,36 +18,13 @@ object FormFilterGameColumns: TFormFilterGameColumns
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 409
-    Height = 60
-  end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 360
-    Width = 399
-    Height = 10
-    Shape = bsTopLine
-  end
-  object LabelCaption: TLabel
-    Left = 72
-    Top = 24
-    Width = 70
-    Height = 13
-    Caption = 'Game Columns'
-    ShowAccelChar = False
-    Transparent = True
-  end
   object ButtonOk: TButton
     Left = 240
-    Top = 376
+    Top = 296
     Width = 75
     Height = 23
     Hint = 'Close and update settings'
@@ -59,7 +37,7 @@ object FormFilterGameColumns: TFormFilterGameColumns
   end
   object ButtonCancel: TButton
     Left = 328
-    Top = 376
+    Top = 296
     Width = 75
     Height = 23
     Hint = 'Close without updating'
@@ -71,24 +49,26 @@ object FormFilterGameColumns: TFormFilterGameColumns
   end
   object PageControlVisibleColumns: TPageControl
     Left = 8
-    Top = 72
+    Top = 8
     Width = 393
-    Height = 265
+    Height = 273
     ActivePage = TabSheetVisibleColumns
     ParentShowHint = False
     ShowHint = True
-    TabIndex = 0
     TabOrder = 2
     object TabSheetVisibleColumns: TTabSheet
       object ColumnsList: TListView
         Left = 8
         Top = 8
         Width = 273
-        Height = 217
+        Height = 225
         Checkboxes = True
         Columns = <
           item
             Width = 250
+          end
+          item
+            Width = 0
           end>
         ColumnClick = False
         HideSelection = False
@@ -101,43 +81,86 @@ object FormFilterGameColumns: TFormFilterGameColumns
         OnKeyUp = ColumnsListKeyUp
         OnSelectItem = ColumnsListSelectItem
       end
-      object ButtonsBox: TGroupBox
-        Left = 288
-        Top = 3
-        Width = 91
-        Height = 113
+      object ButtonDefault: TButton
+        Left = 296
+        Top = 208
+        Width = 75
+        Height = 23
+        Hint = 'Set default value(s)'
+        Caption = 'Default'
         TabOrder = 1
-        object ButtonShowHide: TButton
-          Tag = 1
-          Left = 8
-          Top = 16
-          Width = 75
-          Height = 23
-          Hint = 'Show / hide column'
-          Caption = '&Hide'
-          TabOrder = 0
-          OnClick = ButtonShowHideClick
-        end
-        object ButtonUp: TButton
-          Left = 8
-          Top = 48
-          Width = 75
-          Height = 23
-          Hint = 'Move selected column up'
-          Caption = '&Up'
-          TabOrder = 1
-          OnClick = ButtonUpClick
-        end
-        object ButtonDown: TButton
-          Left = 8
-          Top = 80
-          Width = 75
-          Height = 23
-          Hint = 'Move selected column down'
-          Caption = '&Down'
-          TabOrder = 2
-          OnClick = ButtonDownClick
-        end
+        OnClick = ButtonDefaultClick
+      end
+      object ButtonShowHide: TButton
+        Tag = 1
+        Left = 296
+        Top = 8
+        Width = 75
+        Height = 23
+        Hint = 'Show / hide column'
+        Caption = '&Hide'
+        TabOrder = 2
+        OnClick = ButtonShowHideClick
+      end
+      object ButtonUp: TButton
+        Left = 296
+        Top = 40
+        Width = 75
+        Height = 23
+        Hint = 'Move selected column up'
+        Caption = '&Up'
+        TabOrder = 3
+        OnClick = ButtonUpClick
+      end
+      object ButtonDown: TButton
+        Left = 296
+        Top = 72
+        Width = 75
+        Height = 23
+        Hint = 'Move selected column down'
+        Caption = '&Down'
+        TabOrder = 4
+        OnClick = ButtonDownClick
+      end
+      object ButtonSave: TButton
+        Left = 296
+        Top = 176
+        Width = 75
+        Height = 23
+        Hint = 'Save contents to a file'
+        Caption = '&Save'
+        TabOrder = 5
+        OnClick = ButtonSaveClick
+      end
+      object ButtonLoad: TButton
+        Left = 296
+        Top = 144
+        Width = 75
+        Height = 23
+        Hint = 'Load settings'
+        Caption = '&Load'
+        TabOrder = 6
+        OnClick = ButtonLoadClick
+      end
+      object ColumnSizeUpDown: TUpDown
+        Left = 354
+        Top = 104
+        Width = 17
+        Height = 21
+        Associate = ColumnSize
+        Max = 800
+        TabOrder = 7
+        Thousands = False
+        OnClick = ColumnSizeUpDownClick
+      end
+      object ColumnSize: TEdit
+        Left = 297
+        Top = 104
+        Width = 57
+        Height = 21
+        AutoSize = False
+        TabOrder = 8
+        Text = '0'
       end
     end
   end

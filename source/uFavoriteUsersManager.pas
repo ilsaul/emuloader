@@ -17,9 +17,6 @@ type
     ButtonConfirmNewUser: TButton;
     LabelSelectUser: TGroupBox;
     UsersList: TComboBox;
-    TopImage: TImage;
-    LabelCaption: TLabel;
-    BottomLine: TBevel;
     ButtonClose: TButton;
     ToolBarButtons: TToolBar;
     ButtonNewUser: TToolButton;
@@ -84,8 +81,11 @@ begin
              NewUser.Text:= '';
            end
         else
-           GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                           FormMain.GetLanguageText('Messages', 'FavoriteUserFoundMsg', 'This user already exists!'), 2);
+           begin
+             FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                     'Messages', 'FavoriteUserFoundMsg', 'This user already exists!');
+             GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+           end;
       end;
     1: // Edit a existing user
       begin
@@ -93,8 +93,11 @@ begin
         if UserIndex = -1 then
            begin
              if RenameFile(FormMain.FrontendPath+'resources\favorites\'+UsersList.Text+'.dat', FormMain.FrontendPath+'resources\favorites\'+NewUser.Text+'.dat') = False then
-                GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                FormMain.GetLanguageText('Messages', 'FavoriteUserRenameErrorMsg', 'An error has occurred trying to rename the favorite file!'), 2);
+                begin
+                  FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                          'Messages', 'FavoriteUserRenameErrorMsg', 'An error has occurred trying to rename the favorite file!');
+                  GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+                end;
 
              if (NewUser.Text <> UsersList.Text) and (NewUser.Text <> '') then
                 begin
@@ -113,8 +116,11 @@ begin
              LabelNewUser.Visible:= False;
            end
         else
-           GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                           FormMain.GetLanguageText('Messages', 'FavoriteUserFoundMsg', 'This user already exists!'), 2);
+           begin
+             FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                     'Messages', 'FavoriteUserFoundMsg', 'This user already exists!');
+             GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+           end;
       end;
     2: // Delete a existing user
       begin
@@ -127,19 +133,6 @@ begin
   end;
   FavoriteIni.UpdateFile;
   FreeAndNil(FavoriteIni);
-  {if GetFileSize(FormMain.FrontendPath+'resources\favorites\'+UsersList.Text+'.dat') < 32768 then
-     begin
-       FavoriteFile:= THashedStringList.Create;
-       FavoriteFile.BeginUpdate;
-       FavoriteIni.GetStrings(FavoriteFile);
-       FavoriteFile.EndUpdate;
-       FavoriteIni.Free;
-       FavoriteFile.SaveToFile(FormMain.FrontendPath+'Favorites.ini');
-       FavoriteFile.Free;
-       FavoriteFile:=nil;
-     end
-  else
-     FavoriteIni.Free;}
 end;
 
 procedure TFormFavoriteUsersManager.FormCreate(Sender: TObject);
@@ -148,9 +141,6 @@ var
   FavUsersList: THashedStringList;
   Loop: Integer;
 begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\FavoriteUsersManager.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\FavoriteUsersManager.png');
-
   ButtonUpdateFavoriteGamesList.Enabled:= not FormMain.MenuShowFavorite.Checked;
   FavUsersList:= THashedStringList.Create;
   FavoritesIni:= TIniFile.Create(FormMain.FrontendPath+'Favorites.ini');
@@ -204,16 +194,20 @@ procedure TFormFavoriteUsersManager.ButtonDeleteUserClick(Sender: TObject);
 begin
   if UsersList.Text <> '(Default)' then
      begin
-       if GenerateMessage(FormMain.GetLanguageText('Messages', 'FavoriteUserDeleteTitle', 'Delete Favorite User'),
-                          FormMain.GetLanguageText('Messages', 'FavoriteUserDeleteMsg', 'Delete current user. Are you sure ?'), 1) = mrYes then
+       FormMain.GetMessagesLng('Messages', 'FavoriteUserDeleteTitle', 'Delete Favorite User',
+                               'Messages', 'FavoriteUserDeleteMsg', 'Delete current user. Are you sure ?');
+       if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrYes then
           begin
             ActionType:= 2;
             ManageUser(UsersList.Text);
           end;
      end
   else
-     GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                     FormMain.GetLanguageText('Messages', 'FavoriteUserDeleteErrorMsg', 'The "Default" user cannot be deleted!'), 2);
+     begin
+       FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                               'Messages', 'FavoriteUserDeleteErrorMsg', 'The "Default" user cannot be deleted!');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+     end;
 end;
 
 procedure TFormFavoriteUsersManager.FormKeyUp(Sender: TObject; var Key: Word;
@@ -270,8 +264,9 @@ var
 begin
   if GetFileSize(FormMain.FrontendPath+'resources\favorites\'+UsersList.Text+'.dat') = 0 then
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'FavoriteGamesEmptyTitle', 'No Games In The List'),
-                       FormMain.GetLanguageText('Messages', 'FavoriteGamesEmptyMsg', 'This favorites list is empty!'), 2);
+       FormMain.GetMessagesLng('Messages', 'FavoriteGamesEmptyTitle', 'No Games In The List',
+                               'Messages', 'FavoriteGamesEmptyMsg', 'This favorites list is empty!');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
        Exit;
      end;
 
@@ -459,8 +454,9 @@ begin
   if ReloadFavorites then
      begin
        mGamesList.SaveToFile(FormMain.FrontendPath+'resources\favorites\'+UsersList.Text+'.dat');
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                       Format(FormMain.GetLanguageText('Messages', 'FavoriteGamesUpdatedMsg', '"%s" favorite games updated!'), [UsersList.Text]), 2);
+       FormMain.GetMessagesLng('Messages', 'CompleteOperationTitle', 'Operation Complete',
+                               'Messages', 'FavoriteGamesUpdatedMsg', '"%s" favorite games updated!');
+       GenerateMessage(FormMain.MessageText[0], Format(FormMain.MessageText[1], [UsersList.Text]), 2);
      end;
   FreeAndNil(mGamesList);
 end;

@@ -31,7 +31,7 @@ object FormMessages: TFormMessages
     BitmapAlign = baTopLeft
     Color = clBtnFace
     ParentColor = False
-    Scale = 1
+    Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
     OnMouseDown = ImageBackgroundMouseDown

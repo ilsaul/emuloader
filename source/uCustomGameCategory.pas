@@ -4,15 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GR32_Image, StdCtrls, ExtCtrls, ComCtrls, IniFiles;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles;
 
 type
   TFormCustomGameCategory = class(TForm)
-    TopImage: TImage;
-    LabelCaption: TLabel;
     PageControlCustomCommandLine: TPageControl;
     TabSheetCustomCommandLine: TTabSheet;
-    BottomLine: TBevel;
     ButtonOk: TButton;
     ButtonCancel: TButton;
     GameIcon: TImage;
@@ -28,7 +25,6 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure NewCategoryChange(Sender: TObject);
     procedure ButtonOriginalCategoryClick(Sender: TObject);
     procedure CustomCategoriesListChange(Sender: TObject);
@@ -84,11 +80,11 @@ var
 begin
   FormMain.UpdateGeneralAppearance(FormCustomGameCategory);
   FormMain.SetCustomGameCategoryLanguage;
-  case FormMain.MenuRealIcons.Checked of
-    True : FormMain.BigRealIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
+  case FormMain.MenuGamesIcons.Checked of
+    True : FormMain.BigGamesIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
     False: FormMain.BuiltInBigListImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
   end;
-  TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[14].Caption, GameName]);
+  TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[FormMain.GetColumnIndex(14)].Caption, GameName]);
   LabelGameDescription.Caption:= FormMain.GamesList[FormMain.SelectedGame].eDescription;
 
   // Get list of categories, if file "catver.ini" is available
@@ -189,12 +185,6 @@ begin
        FormMain.List.Invalidate;
      end;
   Close;
-end;
-
-procedure TFormCustomGameCategory.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\CustomGameCategory.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\CustomGameCategory.png');
 end;
 
 procedure TFormCustomGameCategory.NewCategoryChange(

@@ -34,8 +34,6 @@ type
     ScreenDC           : HDC;
     MoveRect           : TRect;
     Moving             : Boolean;
-  public
-    { Public declarations }
   end;
 
 var
@@ -50,6 +48,8 @@ uses uMain, uCommon;
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
   LabelProgress.Caption:= '';
+  LabelStatusType.Caption:= '';
+  LabelMessage.Caption:= '';
   ImageLogo.SetupBitmap;
   with ImageLogo.Bitmap.Font do
   begin
@@ -88,7 +88,7 @@ begin
      end;
   FormStatus.Left:= (Screen.Width shr 1)-(Width shr 1)-1;
   FormStatus.Top:=  (Screen.Height shr 1)-(Height shr 1)-1;
-  SetWindowPos(FormStatus.Handle,hWnd_TopMost, 0, 0, 0, 0,SWP_NOMOVE+SWP_NOSIZE);
+  SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOMOVE+SWP_NOSIZE);
 
   LabelProgress.Hint:= FormMain.GetLanguageText('Audit Games', 'LabelStatusFormat', '%.6d of %.6d');
 end;
@@ -105,7 +105,7 @@ begin
        OldLeft:= X;
        OldTop:= Y;
        MoveRect:= BoundsRect;
-       DrawFocusRect(ScreenDC,MoveRect);
+       DrawFocusRect(ScreenDC, MoveRect);
        Moving:= True;
      end;
 end;
@@ -115,12 +115,12 @@ procedure TFormStatus.ImageLogoMouseMove(Sender: TObject;
 begin
   if Moving then
      begin
-       DrawFocusRect(ScreenDC,MoveRect);
+       DrawFocusRect(ScreenDC, MoveRect);
        OldX:= X;
        OldY:= Y;
        MoveRect:= Rect(Left+OldX-OldLeft,Top+OldY-OldTop,
                        Left+Width+OldX-OldLeft,Top+Height+OldY-OldTop);
-       DrawFocusRect(ScreenDC,MoveRect);
+       DrawFocusRect(ScreenDC, MoveRect);
      end;
 end;
 
@@ -131,10 +131,10 @@ begin
   if Button = mbLeft then
      begin
        ReleaseCapture;
-       DrawFocusRect(ScreenDC,MoveRect);
+       DrawFocusRect(ScreenDC, MoveRect);
        Left:= Left+X-OldLeft;
        Top:= Top+Y-OldTop;
-       ReleaseDC(0,ScreenDC);
+       ReleaseDC(0, ScreenDC);
        Moving:= False;
      end;
 end;

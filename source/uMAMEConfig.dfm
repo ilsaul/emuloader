@@ -112,46 +112,33 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
     ActivePage = TabSheetMAMEOptions
     HotTrack = True
     Images = MAMEConfigImageList
-    TabIndex = 1
     TabOrder = 3
     TabStop = False
     object TabSheetMAMEFolders: TTabSheet
       Caption = 'Folders'
       object PageControlFolders: TPageControl
-        Left = 8
-        Top = 8
-        Width = 585
-        Height = 329
+        Left = 0
+        Top = 0
+        Width = 601
+        Height = 348
         ActivePage = TabSheetFolders1
+        Align = alClient
         Images = MAMEConfigImageList
         ParentShowHint = False
         ShowHint = True
-        TabIndex = 0
         TabOrder = 0
         object TabSheetFolders1: TTabSheet
-          object GeneralFolders1Image: TImage32Ex
+          object LabelFolderROMs: TGroupBox
             Left = 8
             Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 0
-            Transparent = True
-          end
-          object LabelFolderROMs: TGroupBox
-            Left = 64
-            Top = 16
-            Width = 249
+            Width = 281
             Height = 57
             Caption = 'ROMs'
-            TabOrder = 1
+            TabOrder = 0
             object FolderROMs: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Path to romsets'
               TabStop = False
@@ -160,7 +147,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderROMsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -173,14 +160,14 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderSamples: TGroupBox
-            Left = 64
-            Top = 80
-            Width = 249
+            Left = 8
+            Top = 72
+            Width = 281
             Height = 57
             Caption = 'Samples'
-            TabOrder = 2
+            TabOrder = 1
             object FolderSamplesButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -194,7 +181,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             object FolderSamples: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Path to samplesets'
               TabStop = False
@@ -204,14 +191,14 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderINIFiles: TGroupBox
-            Left = 64
-            Top = 144
-            Width = 249
+            Left = 8
+            Top = 136
+            Width = 281
             Height = 57
             Caption = 'INI Files'
-            TabOrder = 3
+            TabOrder = 2
             object FolderINIFilesButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -225,7 +212,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             object FolderINIFiles: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Path to ini files'
               TabStop = False
@@ -235,14 +222,14 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderGamesConfiguration: TGroupBox
-            Left = 64
-            Top = 208
-            Width = 249
+            Left = 8
+            Top = 200
+            Width = 281
             Height = 57
             Caption = 'Games Configuration'
-            TabOrder = 4
+            TabOrder = 3
             object FolderGamesConfigurationButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -256,7 +243,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             object FolderGamesConfiguration: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory to save configurations'
               TabStop = False
@@ -266,16 +253,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderSaveStates: TGroupBox
-            Left = 320
-            Top = 16
-            Width = 249
+            Left = 304
+            Top = 8
+            Width = 281
             Height = 57
             Caption = 'Save States'
-            TabOrder = 5
+            TabOrder = 4
             object FolderSaveStates: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory to save states'
               TabStop = False
@@ -284,7 +271,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderSaveStatesButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -297,16 +284,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderHighScores: TGroupBox
-            Left = 320
-            Top = 80
-            Width = 249
+            Left = 304
+            Top = 72
+            Width = 281
             Height = 57
             Caption = 'High Scores'
-            TabOrder = 6
+            TabOrder = 5
             object FolderHighScores: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory to save hiscores'
               TabStop = False
@@ -315,7 +302,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderHighScoresButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -328,16 +315,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderNVRAM: TGroupBox
-            Left = 320
-            Top = 144
-            Width = 249
+            Left = 304
+            Top = 136
+            Width = 281
             Height = 57
             Caption = 'NVRAM'
-            TabOrder = 7
+            TabOrder = 6
             object FolderNVRAM: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory to save nvram contents'
               TabStop = False
@@ -346,7 +333,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderNVRAMButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -359,16 +346,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderMemoryCards: TGroupBox
-            Left = 320
-            Top = 208
-            Width = 249
+            Left = 304
+            Top = 200
+            Width = 281
             Height = 57
             Caption = 'Memory Cards'
-            TabOrder = 8
+            TabOrder = 7
             object FolderMemoryCards: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory to save memory card contents'
               TabStop = False
@@ -377,7 +364,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderMemoryCardsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -391,29 +378,17 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
           end
         end
         object TabSheetFolders2: TTabSheet
-          object GeneralFolders2Image: TImage32Ex
+          object LabelFolderGamesRecording: TGroupBox
             Left = 8
             Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 0
-            Transparent = True
-          end
-          object LabelFolderGamesRecording: TGroupBox
-            Left = 64
-            Top = 16
-            Width = 249
+            Width = 281
             Height = 57
             Caption = 'Inputs Recording'
-            TabOrder = 1
+            TabOrder = 0
             object FolderInputsRecording: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory for recordings'
               TabStop = False
@@ -422,7 +397,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderInputsRecordingButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -435,16 +410,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderArtworks: TGroupBox
-            Left = 64
-            Top = 80
-            Width = 249
+            Left = 8
+            Top = 72
+            Width = 281
             Height = 57
             Caption = 'Artworks'
-            TabOrder = 2
+            TabOrder = 1
             object FolderArtworks: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory for Artwork (Overlays etc.)'
               TabStop = False
@@ -453,7 +428,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderArtworksButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -466,16 +441,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderDiff: TGroupBox
-            Left = 64
-            Top = 144
-            Width = 249
+            Left = 8
+            Top = 136
+            Width = 281
             Height = 57
             Caption = 'Diff'
-            TabOrder = 3
+            TabOrder = 2
             object FolderDiff: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory for hard drive image difference files'
               TabStop = False
@@ -484,7 +459,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderDiffButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -497,16 +472,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderInGameSnapshots: TGroupBox
-            Left = 64
-            Top = 208
-            Width = 249
+            Left = 8
+            Top = 200
+            Width = 281
             Height = 57
             Caption = 'Snapshots'
-            TabOrder = 4
+            TabOrder = 3
             object FolderSnapshots: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory for screenshots (.png format)'
               TabStop = False
@@ -515,7 +490,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderSnapshotsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -528,16 +503,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelFolderKeysMapping: TGroupBox
-            Left = 320
-            Top = 16
-            Width = 249
+            Left = 304
+            Top = 8
+            Width = 281
             Height = 57
             Caption = 'Keys Mapping'
-            TabOrder = 5
+            TabOrder = 4
             object FolderKeysMapping: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Directory for preconfigured controller keys'
               TabStop = False
@@ -546,7 +521,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               TabOrder = 0
             end
             object FolderKeysMappingButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -565,22 +540,22 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
       Caption = 'Options'
       ImageIndex = 1
       object PageControlOptions: TPageControl
-        Left = 8
-        Top = 8
-        Width = 577
-        Height = 329
+        Left = 0
+        Top = 0
+        Width = 601
+        Height = 348
         ActivePage = TabSheetMAMEDisplay
+        Align = alClient
         HotTrack = True
         Images = MAMEConfigImageList
-        TabIndex = 0
         TabOrder = 0
         TabStop = False
         object TabSheetMAMEDisplay: TTabSheet
           Caption = 'Display'
           ImageIndex = 2
           object LabelResolution: TLabel
-            Left = 64
-            Top = 16
+            Left = 8
+            Top = 8
             Width = 50
             Height = 13
             Caption = 'Resolution'
@@ -588,8 +563,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelCustomResolution: TLabel
-            Left = 240
-            Top = 16
+            Left = 176
+            Top = 8
             Width = 57
             Height = 13
             Caption = 'Custom Res'
@@ -597,8 +572,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelGammaValue: TLabel
-            Left = 482
-            Top = 35
+            Left = 412
+            Top = 27
             Width = 22
             Height = 13
             Caption = '1.00'
@@ -606,8 +581,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelGamma: TLabel
-            Left = 416
-            Top = 16
+            Left = 344
+            Top = 8
             Width = 35
             Height = 13
             Caption = 'Gamma'
@@ -615,8 +590,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelResolutionValue: TLabel
-            Left = 130
-            Top = 35
+            Left = 76
+            Top = 27
             Width = 23
             Height = 13
             Caption = 'Auto'
@@ -624,8 +599,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object AutoFrameSkip: TCheckBox
-            Left = 64
-            Top = 72
+            Left = 8
+            Top = 64
             Width = 153
             Height = 17
             Hint = 
@@ -640,8 +615,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 0
           end
           object Window: TCheckBox
-            Left = 64
-            Top = 120
+            Left = 8
+            Top = 112
             Width = 153
             Height = 17
             Hint = 
@@ -653,8 +628,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 1
           end
           object HardwareStretch: TCheckBox
-            Left = 64
-            Top = 168
+            Left = 8
+            Top = 160
             Width = 153
             Height = 17
             Hint = 'Stretch video using the hardware (direct draw must be on)'
@@ -666,8 +641,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 2
           end
           object DirectDraw: TCheckBox
-            Left = 240
-            Top = 192
+            Left = 176
+            Top = 184
             Width = 153
             Height = 17
             Hint = 'Use DirectDraw for rendering'
@@ -679,8 +654,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 3
           end
           object SwitchResolution: TCheckBox
-            Left = 240
-            Top = 96
+            Left = 176
+            Top = 88
             Width = 153
             Height = 17
             Hint = 
@@ -694,8 +669,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 4
           end
           object SwitchColorDepth: TCheckBox
-            Left = 64
-            Top = 96
+            Left = 8
+            Top = 88
             Width = 153
             Height = 17
             Hint = 'Switch color depths to best fit (Direct Draw must be on)'
@@ -707,8 +682,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 5
           end
           object Maximize: TCheckBox
-            Left = 64
-            Top = 144
+            Left = 8
+            Top = 136
             Width = 153
             Height = 17
             Hint = 
@@ -722,8 +697,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 6
           end
           object KeepAspectRatio: TCheckBox
-            Left = 240
-            Top = 72
+            Left = 176
+            Top = 64
             Width = 153
             Height = 17
             Hint = 'Enforce aspect ratio'
@@ -735,8 +710,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 7
           end
           object MatchRefreshRate: TCheckBox
-            Left = 240
-            Top = 120
+            Left = 176
+            Top = 112
             Width = 153
             Height = 17
             Hint = 
@@ -748,8 +723,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 8
           end
           object SyncronizeRefreshRate: TCheckBox
-            Left = 240
-            Top = 168
+            Left = 176
+            Top = 160
             Width = 153
             Height = 17
             Hint = 'Syncronize only to the monitor refresh (direct draw must be on)'
@@ -759,8 +734,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 9
           end
           object Scanlines: TCheckBox
-            Left = 416
-            Top = 192
+            Left = 344
+            Top = 184
             Width = 153
             Height = 17
             Hint = 'Emulate scanlines (hardware stretch needs to be off)'
@@ -770,8 +745,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 10
           end
           object RotateRight: TCheckBox
-            Left = 416
-            Top = 120
+            Left = 344
+            Top = 112
             Width = 153
             Height = 17
             Hint = 'Rotate screen clockwise'
@@ -781,8 +756,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 11
           end
           object FlipY: TCheckBox
-            Left = 416
-            Top = 168
+            Left = 344
+            Top = 160
             Width = 153
             Height = 17
             Hint = 'Flip screen left-right'
@@ -792,8 +767,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 12
           end
           object WaitVSync: TCheckBox
-            Left = 240
-            Top = 144
+            Left = 176
+            Top = 136
             Width = 153
             Height = 17
             Hint = 
@@ -805,8 +780,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 13
           end
           object NoRotate: TCheckBox
-            Left = 416
-            Top = 72
+            Left = 344
+            Top = 64
             Width = 153
             Height = 17
             Hint = 'Do not apply rotation in screen'
@@ -816,8 +791,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 14
           end
           object RotateLeft: TCheckBox
-            Left = 416
-            Top = 96
+            Left = 344
+            Top = 88
             Width = 153
             Height = 17
             Hint = 'Rotate screen anti-clockwise'
@@ -827,8 +802,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 15
           end
           object TripleBuffer: TCheckBox
-            Left = 64
-            Top = 192
+            Left = 8
+            Top = 184
             Width = 153
             Height = 17
             Hint = 'Enable/disable triple buffering (only if fullscreen)'
@@ -838,8 +813,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 16
           end
           object FlipX: TCheckBox
-            Left = 416
-            Top = 144
+            Left = 344
+            Top = 136
             Width = 153
             Height = 17
             Hint = 'Flip screen upside-down'
@@ -849,8 +824,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 17
           end
           object CustomResolution: TEdit
-            Left = 240
-            Top = 32
+            Left = 176
+            Top = 24
             Width = 89
             Height = 21
             Hint = 'Specifies a custom resolution to run in'
@@ -860,26 +835,26 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             TabOrder = 18
           end
           object Gamma: TGaugeBar2
-            Left = 416
-            Top = 32
+            Left = 344
+            Top = 24
             Width = 65
             Height = 20
             Hint = 'Set the global gamma correction in the game'
             Color = clWindow
             Backgnd = bgPattern
             ButtonSize = 12
-            LargeChange = 0.5
-            Max = 2
-            Min = 0.5
+            LargeChange = 0.500000000000000000
+            Max = 2.000000000000000000
+            Min = 0.500000000000000000
             ShowHint = True
             ShowHandleGrip = True
-            SmallChange = 0.01
-            Position = 0.5
+            SmallChange = 0.010000000000000000
+            Position = 0.500000000000000000
             OnChange = GammaChange
           end
           object Sleep: TCheckBox
-            Left = 64
-            Top = 216
+            Left = 8
+            Top = 208
             Width = 153
             Height = 17
             Hint = 'Allow MAME to give back time to the system when it'#39's not needed'
@@ -890,21 +865,9 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             State = cbChecked
             TabOrder = 20
           end
-          object DisplayImage: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 21
-            Transparent = True
-          end
           object Resolution: TGaugeBar
-            Left = 64
-            Top = 32
+            Left = 8
+            Top = 24
             Width = 65
             Height = 20
             Hint = 'Specifies an exact resolution to run in'
@@ -918,8 +881,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = ResolutionChange
           end
           object rdtsc: TCheckBox
-            Left = 240
-            Top = 216
+            Left = 176
+            Top = 208
             Width = 153
             Height = 17
             Hint = 'Prefer RDTSC over QueryPerformanceCounter for timing'
@@ -928,15 +891,48 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
+            TabOrder = 22
+          end
+          object HighPriority: TCheckBox
+            Left = 344
+            Top = 208
+            Width = 153
+            Height = 17
+            Hint = 'Increase thread priority'
+            Caption = 'High Priority'
+            ParentShowHint = False
+            ShowHint = True
             TabOrder = 23
+          end
+          object AutoRotateLeft: TCheckBox
+            Left = 8
+            Top = 232
+            Width = 153
+            Height = 17
+            Hint = 'Automatically rotate screen anti-clockwise for vertical games'
+            Caption = 'Auto Rotate Left'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 24
+          end
+          object AutoRotateRight: TCheckBox
+            Left = 176
+            Top = 232
+            Width = 153
+            Height = 17
+            Hint = 'Automatically rotate screen clockwise for vertical games'
+            Caption = 'Auto Rotate Right'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 25
           end
         end
         object TabSheetMAMEDisplay2: TTabSheet
           Caption = 'Display 2'
           ImageIndex = 2
           object LabelDebuggerResolution: TLabel
-            Left = 232
-            Top = 176
+            Left = 176
+            Top = 168
             Width = 100
             Height = 13
             Caption = 'Debugger Resolution'
@@ -944,8 +940,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelRefreshRate: TLabel
-            Left = 64
-            Top = 128
+            Left = 8
+            Top = 120
             Width = 64
             Height = 13
             Caption = 'Refresh Rate'
@@ -953,8 +949,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFramesToRun: TLabel
-            Left = 232
-            Top = 128
+            Left = 176
+            Top = 120
             Width = 72
             Height = 13
             Caption = 'Frames To Run'
@@ -962,8 +958,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFramesToRunValue: TLabel
-            Left = 330
-            Top = 147
+            Left = 274
+            Top = 139
             Width = 6
             Height = 13
             Caption = '0'
@@ -971,8 +967,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFullScreenBrightness: TLabel
-            Left = 64
-            Top = 176
+            Left = 8
+            Top = 168
             Width = 105
             Height = 13
             Caption = 'Full Screen Brightness'
@@ -982,8 +978,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelRefreshRateValue: TLabel
-            Left = 154
-            Top = 147
+            Left = 100
+            Top = 139
             Width = 23
             Height = 13
             Caption = 'Auto'
@@ -991,8 +987,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFullScreenBrightnessValue: TLabel
-            Left = 130
-            Top = 195
+            Left = 76
+            Top = 187
             Width = 22
             Height = 13
             Caption = '0.00'
@@ -1000,8 +996,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelEffect: TLabel
-            Left = 384
-            Top = 128
+            Left = 328
+            Top = 120
             Width = 29
             Height = 13
             Caption = 'Effect'
@@ -1009,8 +1005,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelEffectValue: TLabel
-            Left = 450
-            Top = 147
+            Left = 396
+            Top = 139
             Width = 25
             Height = 13
             Caption = 'None'
@@ -1018,8 +1014,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelScreenAspect: TLabel
-            Left = 384
-            Top = 176
+            Left = 328
+            Top = 168
             Width = 97
             Height = 13
             Caption = 'Screen Aspect Ratio'
@@ -1027,8 +1023,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelScreenAspectValue: TLabel
-            Left = 450
-            Top = 195
+            Left = 396
+            Top = 187
             Width = 16
             Height = 13
             Caption = '4:3'
@@ -1036,8 +1032,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFrameSkip: TLabel
-            Left = 64
-            Top = 224
+            Left = 8
+            Top = 216
             Width = 52
             Height = 13
             Caption = 'Frame Skip'
@@ -1045,8 +1041,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelFrameSkipValue: TLabel
-            Left = 130
-            Top = 243
+            Left = 76
+            Top = 235
             Width = 6
             Height = 13
             Caption = '0'
@@ -1054,8 +1050,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelBrightness: TLabel
-            Left = 232
-            Top = 224
+            Left = 176
+            Top = 216
             Width = 50
             Height = 13
             Caption = 'Brightness'
@@ -1065,8 +1061,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelBrightnessValue: TLabel
-            Left = 298
-            Top = 243
+            Left = 244
+            Top = 235
             Width = 22
             Height = 13
             Caption = '1.00'
@@ -1074,8 +1070,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelDebuggerResolutionValue: TLabel
-            Left = 298
-            Top = 195
+            Left = 244
+            Top = 187
             Width = 23
             Height = 13
             Caption = 'Auto'
@@ -1083,8 +1079,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelPauseBrightness: TLabel
-            Left = 384
-            Top = 224
+            Left = 328
+            Top = 216
             Width = 82
             Height = 13
             Caption = 'Pause Brightness'
@@ -1094,17 +1090,35 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Transparent = True
           end
           object LabelPauseBrightnessValue: TLabel
-            Left = 450
-            Top = 243
+            Left = 396
+            Top = 235
             Width = 22
             Height = 13
             Caption = '0.65'
             ShowAccelChar = False
             Transparent = True
           end
+          object LabelCleanStretch: TLabel
+            Left = 8
+            Top = 264
+            Width = 65
+            Height = 13
+            Caption = 'Clean Stretch'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelCleanStretchValue: TLabel
+            Left = 76
+            Top = 283
+            Width = 23
+            Height = 13
+            Caption = 'Auto'
+            ShowAccelChar = False
+            Transparent = True
+          end
           object FramesToRun: TGaugeBar
-            Left = 232
-            Top = 144
+            Left = 176
+            Top = 136
             Width = 97
             Height = 20
             Hint = 'Sets the number of frames to run within the game'
@@ -1119,8 +1133,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = FramesToRunChange
           end
           object RefreshRate: TGaugeBar
-            Left = 64
-            Top = 144
+            Left = 8
+            Top = 136
             Width = 89
             Height = 20
             Hint = 
@@ -1136,8 +1150,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = RefreshRateChange
           end
           object FullScreenBrightness: TGaugeBar2
-            Left = 64
-            Top = 192
+            Left = 8
+            Top = 184
             Width = 65
             Height = 20
             Hint = 
@@ -1146,16 +1160,16 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             Color = clWindow
             Backgnd = bgPattern
             ButtonSize = 12
-            LargeChange = 1
-            Max = 4
+            LargeChange = 1.000000000000000000
+            Max = 4.000000000000000000
             ShowHint = True
             ShowHandleGrip = True
-            SmallChange = 0.01
+            SmallChange = 0.010000000000000000
             OnChange = FullScreenBrightnessChange
           end
           object Effect: TGaugeBar
-            Left = 384
-            Top = 144
+            Left = 328
+            Top = 136
             Width = 65
             Height = 20
             Hint = 'Specify the blitting effect'
@@ -1169,8 +1183,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = EffectChange
           end
           object ScreenAspect: TGaugeBar
-            Left = 384
-            Top = 192
+            Left = 328
+            Top = 184
             Width = 65
             Height = 20
             Hint = 'Specify an alternate monitor aspect ratio'
@@ -1184,8 +1198,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = ScreenAspectChange
           end
           object FrameSkip: TGaugeBar
-            Left = 64
-            Top = 240
+            Left = 8
+            Top = 232
             Width = 65
             Height = 20
             Hint = 'Set frameskip explicitly (autoframeskip needs to be off)'
@@ -1199,8 +1213,8 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = FrameSkipChange
           end
           object LabelVector: TGroupBox
-            Left = 64
-            Top = 16
+            Left = 8
+            Top = 8
             Width = 417
             Height = 97
             Caption = 'Vector'
@@ -1215,7 +1229,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Transparent = True
             end
             object LabelFlickerValue: TLabel
-              Left = 74
+              Left = 76
               Top = 67
               Width = 22
               Height = 13
@@ -1233,7 +1247,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Transparent = True
             end
             object LabelBeamValue: TLabel
-              Left = 210
+              Left = 212
               Top = 67
               Width = 22
               Height = 13
@@ -1251,7 +1265,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Transparent = True
             end
             object LabelIntensityValue: TLabel
-              Left = 378
+              Left = 380
               Top = 67
               Width = 22
               Height = 13
@@ -1281,11 +1295,11 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Color = clWindow
               Backgnd = bgPattern
               ButtonSize = 12
-              LargeChange = 5
-              Max = 100
+              LargeChange = 5.000000000000000000
+              Max = 100.000000000000000000
               ShowHint = True
               ShowHandleGrip = True
-              SmallChange = 5
+              SmallChange = 5.000000000000000000
               OnChange = FlickerChange
             end
             object Translucency: TCheckBox
@@ -1310,13 +1324,13 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Color = clWindow
               Backgnd = bgPattern
               ButtonSize = 12
-              LargeChange = 0.1
-              Max = 16
-              Min = 1
+              LargeChange = 0.100000000000000000
+              Max = 16.000000000000000000
+              Min = 1.000000000000000000
               ShowHint = True
               ShowHandleGrip = True
-              SmallChange = 0.01
-              Position = 1
+              SmallChange = 0.010000000000000000
+              Position = 1.000000000000000000
               OnChange = BeamChange
             end
             object Intensity: TGaugeBar2
@@ -1328,49 +1342,37 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               Color = clWindow
               Backgnd = bgPattern
               ButtonSize = 12
-              LargeChange = 0.1
-              Max = 3
-              Min = 0.5
+              LargeChange = 0.100000000000000000
+              Max = 3.000000000000000000
+              Min = 0.500000000000000000
               ShowHint = True
               ShowHandleGrip = True
-              SmallChange = 0.01
-              Position = 1.5
+              SmallChange = 0.010000000000000000
+              Position = 1.500000000000000000
               OnChange = IntensityChange
             end
           end
           object Brightness: TGaugeBar2
-            Left = 232
-            Top = 240
+            Left = 176
+            Top = 232
             Width = 65
             Height = 20
             Hint = 'Brightness correction'
             Color = clWindow
             Backgnd = bgPattern
             ButtonSize = 12
-            LargeChange = 0.1
-            Max = 2
-            Min = 0.5
+            LargeChange = 0.100000000000000000
+            Max = 2.000000000000000000
+            Min = 0.500000000000000000
             ShowHint = True
             ShowHandleGrip = True
-            SmallChange = 0.01
-            Position = 1
+            SmallChange = 0.010000000000000000
+            Position = 1.000000000000000000
             OnChange = BrightnessChange
           end
-          object Display2Image: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 8
-            Transparent = True
-          end
           object DebuggerResolution: TGaugeBar
-            Left = 232
-            Top = 192
+            Left = 176
+            Top = 184
             Width = 65
             Height = 20
             Hint = 'Set resolution for debugger window (run in window must be on)'
@@ -1384,325 +1386,799 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             OnChange = DebuggerResolutionChange
           end
           object PauseBrightness: TGaugeBar2
-            Left = 384
-            Top = 240
+            Left = 328
+            Top = 232
             Width = 65
             Height = 20
             Hint = 'Additional pause brightness'
             Color = clWindow
             Backgnd = bgPattern
             ButtonSize = 12
-            LargeChange = 0.1
-            Max = 2
-            Min = 0.5
+            LargeChange = 0.100000000000000000
+            Max = 2.000000000000000000
+            Min = 0.500000000000000000
             ShowHint = True
             ShowHandleGrip = True
-            SmallChange = 0.01
-            Position = 0.65
+            SmallChange = 0.010000000000000000
+            Position = 0.650000000000000000
             OnChange = PauseBrightnessChange
           end
+          object CleanStretch: TGaugeBar
+            Left = 8
+            Top = 280
+            Width = 65
+            Height = 20
+            Hint = 'Stretch to integer ratios, ignore game aspect ratio'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            Max = 4
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 2
+            OnChange = CleanStretchChange
+          end
         end
-        object TabSheetMAMESoundControllers: TTabSheet
-          Caption = 'Sound / Controllers'
-          ImageIndex = 3
-          object LabelSoundOptions: TGroupBox
-            Left = 64
-            Top = 16
-            Width = 497
-            Height = 97
-            Caption = 'Sound'
+        object TabSheetMAMEDisplay3: TTabSheet
+          Caption = 'Display 3'
+          ImageIndex = 2
+          object LabelDirect3D: TGroupBox
+            Left = 8
+            Top = 8
+            Width = 577
+            Height = 233
+            Caption = 'Direct3D'
             TabOrder = 0
-            object LabelSampleRate: TLabel
-              Left = 8
-              Top = 24
-              Width = 60
+            object LabelD3DFilter: TLabel
+              Left = 208
+              Top = 96
+              Width = 24
               Height = 13
-              Caption = 'Sample Rate'
+              Caption = 'Filter'
               ShowAccelChar = False
               Transparent = True
             end
-            object LabelSampleRateValue: TLabel
-              Left = 74
-              Top = 43
-              Width = 45
+            object LabelD3DFilterValue: TLabel
+              Left = 276
+              Top = 116
+              Width = 41
               Height = 13
-              Caption = '44100 Hz'
+              Caption = 'Bi-Linear'
               ShowAccelChar = False
               Transparent = True
             end
-            object LabelCustomSampleRate: TLabel
-              Left = 160
-              Top = 24
-              Width = 52
+            object LabelD3DFeedback: TLabel
+              Left = 408
+              Top = 48
+              Width = 46
               Height = 13
-              Caption = 'Custom SR'
+              Caption = 'Feedback'
               ShowAccelChar = False
               Transparent = True
             end
-            object LabelCustomSampleRateValue: TLabel
-              Left = 226
-              Top = 43
+            object LabelD3DFeedbackValue: TLabel
+              Left = 500
+              Top = 68
               Width = 40
               Height = 13
               Caption = 'Disabled'
               ShowAccelChar = False
               Transparent = True
             end
-            object LabelVolume: TLabel
-              Left = 312
-              Top = 24
-              Width = 34
-              Height = 13
-              Caption = 'Volume'
-              ShowAccelChar = False
-              Transparent = True
-            end
-            object LabelVolumeValue: TLabel
-              Left = 378
-              Top = 43
-              Width = 21
-              Height = 13
-              Caption = '0 dB'
-              ShowAccelChar = False
-              Transparent = True
-            end
-            object SampleRate: TGaugeBar
+            object LabelD3DScanline: TLabel
               Left = 8
-              Top = 40
-              Width = 65
-              Height = 20
-              Hint = 'Set samplerate'
-              Color = clWindow
-              Backgnd = bgPattern
-              ButtonSize = 12
-              Max = 3
-              ShowHint = True
-              ShowHandleGrip = True
-              Position = 2
-              OnChange = SampleRateChange
+              Top = 48
+              Width = 39
+              Height = 13
+              Caption = 'Scanline'
+              ShowAccelChar = False
+              Transparent = True
             end
-            object CustomSampleRate: TGaugeBar
-              Left = 160
-              Top = 40
-              Width = 65
-              Height = 20
-              Hint = 'Set a custom samplerate (will override samplerate)'
-              Color = clWindow
-              Backgnd = bgPattern
-              ButtonSize = 12
-              LargeChange = 100
-              Max = 50000
-              Min = 4999
-              ShowHint = True
-              ShowHandleGrip = True
-              Position = 4999
-              OnChange = CustomSampleRateChange
+            object LabelD3DScanlineValue: TLabel
+              Left = 100
+              Top = 68
+              Width = 40
+              Height = 13
+              Caption = 'Disabled'
+              ShowAccelChar = False
+              Transparent = True
             end
-            object Volume: TGaugeBar
-              Left = 312
-              Top = 40
-              Width = 65
-              Height = 20
-              Hint = 'Volume attenuation (in dB)'
-              Color = clWindow
-              Backgnd = bgPattern
-              ButtonSize = 12
-              LargeChange = 5
-              Max = 0
-              Min = -32
-              ShowHint = True
-              ShowHandleGrip = True
-              Position = 0
-              OnChange = VolumeChange
-            end
-            object Sound: TCheckBox
+            object LabelD3DEffect: TLabel
               Left = 8
-              Top = 72
-              Width = 137
-              Height = 17
-              Hint = 'Enable/disable sound and sound CPUs'
-              Caption = 'Sound'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 3
-            end
-            object Samples: TCheckBox
-              Left = 160
-              Top = 72
-              Width = 137
-              Height = 17
-              Hint = 'Use of samples files'
-              Caption = 'Samples'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 4
-            end
-            object ResampleFilter: TCheckBox
-              Left = 312
-              Top = 72
-              Width = 169
-              Height = 17
-              Hint = 'Resample if samplerate does not match'
-              Caption = 'Resample Filter'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 5
-            end
-          end
-          object LabelControllersOptions: TGroupBox
-            Left = 64
-            Top = 136
-            Width = 497
-            Height = 121
-            Caption = 'Controllers'
-            TabOrder = 1
-            object LabelControllerKeysMapping: TLabel
-              Left = 312
-              Top = 72
-              Width = 66
+              Top = 96
+              Width = 29
               Height = 13
-              Caption = 'Keys Mapping'
+              Caption = 'Effect'
               ShowAccelChar = False
               Transparent = True
             end
-            object LabelAnalogDigitalDeadzone: TLabel
-              Left = 8
-              Top = 72
-              Width = 129
+            object LabelD3DEffectValue: TLabel
+              Left = 76
+              Top = 116
+              Width = 25
               Height = 13
-              Caption = 'Analog to Digital Deadzone'
-              ParentShowHint = False
-              ShowAccelChar = False
-              ShowHint = True
-              Transparent = True
-            end
-            object LabelAnalogDigitalDeadzoneValue: TLabel
-              Left = 106
-              Top = 91
-              Width = 22
-              Height = 13
-              Caption = '0.30'
+              Caption = 'None'
               ShowAccelChar = False
               Transparent = True
             end
-            object Joystick: TCheckBox
+            object LabelD3DPrescale: TLabel
+              Left = 208
+              Top = 48
+              Width = 40
+              Height = 13
+              Caption = 'Prescale'
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object LabelD3DPrescaleValue: TLabel
+              Left = 276
+              Top = 68
+              Width = 23
+              Height = 13
+              Caption = 'Auto'
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object Direct3D: TCheckBox
               Left = 8
               Top = 24
-              Width = 137
+              Width = 153
               Height = 17
-              Hint = 'Enable joystick input'
-              Caption = 'Joystick'
+              Hint = 'Use Direct3D for rendering'
+              Caption = 'Direct3D'
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
             end
-            object SteadyKey: TCheckBox
-              Left = 312
-              Top = 48
-              Width = 137
+            object D3DTextureManagement: TCheckBox
+              Left = 208
+              Top = 24
+              Width = 153
               Height = 17
-              Hint = 
-                'It selects a different handling for simultaneous button presses ' +
-                'but the controls are less responsive'
-              Caption = 'Steady Key'
+              Hint = 'Use DirectX texture management'
+              Caption = 'Texture Management'
+              Checked = True
               ParentShowHint = False
               ShowHint = True
+              State = cbChecked
               TabOrder = 1
             end
-            object Mouse: TCheckBox
-              Left = 160
-              Top = 24
-              Width = 137
-              Height = 17
-              Hint = 'Enable mouse input (Windows mouse will be unavailable)'
-              Caption = 'Mouse'
-              ParentShowHint = False
+            object D3DFilter: TGaugeBar
+              Left = 208
+              Top = 112
+              Width = 65
+              Height = 20
+              Hint = 'Interpolation method'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
+              Max = 4
               ShowHint = True
-              TabOrder = 2
+              ShowHandleGrip = True
+              Position = 1
+              OnChange = D3DFilterChange
             end
-            object ControllerKeysMapping: TComboBox
-              Left = 312
-              Top = 88
-              Width = 169
-              Height = 21
-              Hint = 'Pre-configure for specified controller'
-              Style = csDropDownList
-              ItemHeight = 13
-              ItemIndex = 0
-              ParentShowHint = False
+            object D3DFeedback: TGaugeBar
+              Left = 408
+              Top = 64
+              Width = 89
+              Height = 20
+              Hint = 'Feedback strength'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
               ShowHint = True
-              TabOrder = 3
-              Text = '(None)'
-              Items.Strings = (
-                '(None)')
+              ShowHandleGrip = True
+              Position = 0
+              OnChange = D3DFeedbackChange
             end
-            object LightGun: TCheckBox
+            object D3DScanline: TGaugeBar
               Left = 8
-              Top = 48
-              Width = 137
-              Height = 17
-              Hint = 'Enable lightgun input'
-              Caption = 'Light Gun'
-              ParentShowHint = False
+              Top = 64
+              Width = 89
+              Height = 20
+              Hint = 'Scanline intensity'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
               ShowHint = True
-              TabOrder = 4
+              ShowHandleGrip = True
+              Position = 100
+              OnChange = D3DScanlineChange
             end
-            object KeyboardLEDs: TCheckBox
-              Left = 160
-              Top = 48
-              Width = 137
+            object D3DEffectsRotation: TCheckBox
+              Left = 408
+              Top = 24
+              Width = 153
               Height = 17
-              Hint = 'Enable keyboard LED emulation'
-              Caption = 'Keyboard LEDs'
+              Hint = 'Enable rotation of effects for rotated games'
+              Caption = 'Effects Rotation'
               Checked = True
               ParentShowHint = False
               ShowHint = True
               State = cbChecked
               TabOrder = 5
             end
-            object AnalogDigitalDeadzone: TGaugeBar2
+            object D3DEffect: TGaugeBar
               Left = 8
-              Top = 88
-              Width = 97
+              Top = 112
+              Width = 65
               Height = 20
-              Hint = 'Minimal analog value for digital input'
+              Hint = 'Specify the blitting effect'
               Color = clWindow
               Backgnd = bgPattern
               ButtonSize = 12
-              LargeChange = 0.05
-              Max = 1
+              Max = 18
+              Min = -1
               ShowHint = True
               ShowHandleGrip = True
-              SmallChange = 0.01
-              Position = 0.3
-              OnChange = AnalogDigitalDeadzoneChange
+              Position = 0
+              OnChange = D3DEffectChange
+            end
+            object LabelD3DCustomEffects: TGroupBox
+              Left = 8
+              Top = 144
+              Width = 273
+              Height = 81
+              Caption = 'Custom Effects'
+              TabOrder = 7
+              object D3DCustomEffects: TEdit
+                Left = 8
+                Top = 48
+                Width = 257
+                Height = 21
+                Hint = 'Customised blitting effects preset'
+                TabStop = False
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+              object D3DCustomEffectsEnable: TCheckBox
+                Left = 8
+                Top = 24
+                Width = 153
+                Height = 17
+                Hint = 'Enable custom effects'
+                Caption = 'Enabled'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 1
+              end
+            end
+            object LabelD3DExpertEffects: TGroupBox
+              Left = 296
+              Top = 144
+              Width = 273
+              Height = 81
+              Caption = 'Expert Custom Effects'
+              TabOrder = 8
+              object D3DExpertEffects: TEdit
+                Left = 8
+                Top = 48
+                Width = 257
+                Height = 21
+                Hint = 'Additional customised settings (undocumented)'
+                TabStop = False
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 0
+              end
+              object D3DExpertEffectsEnable: TCheckBox
+                Left = 8
+                Top = 24
+                Width = 153
+                Height = 17
+                Hint = 'Enable expert custom effects'
+                Caption = 'Enabled'
+                ParentShowHint = False
+                ShowHint = True
+                TabOrder = 1
+              end
+            end
+            object D3DPrescale: TGaugeBar
+              Left = 208
+              Top = 64
+              Width = 65
+              Height = 20
+              Hint = 'Enable prescale'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
+              Max = 4
+              Min = -1
+              ShowHint = True
+              ShowHandleGrip = True
+              Position = 1
+              OnChange = D3DPrescaleChange
             end
           end
-          object SoundControllersImage: TImage32Ex
+        end
+        object TabSheetMAMEDisplay4: TTabSheet
+          Caption = 'Display 4'
+          ImageIndex = 2
+          object LabelZoomValue: TLabel
+            Left = 76
+            Top = 179
+            Width = 12
+            Height = 13
+            Caption = '2x'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelZoom: TLabel
+            Left = 8
+            Top = 160
+            Width = 26
+            Height = 13
+            Caption = 'Zoom'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelSystemBiosValue: TLabel
+            Left = 48
+            Top = 133
+            Width = 35
+            Height = 13
+            Hint = 'default'
+            Caption = 'Default'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelSystemBios: TLabel
+            Left = 8
+            Top = 112
+            Width = 19
+            Height = 13
+            Caption = 'Bios'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelArtwork: TGroupBox
             Left = 8
             Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
+            Width = 497
+            Height = 97
+            Caption = 'Artwork'
+            TabOrder = 0
+            object LabelArtworkResolution: TLabel
+              Left = 344
+              Top = 48
+              Width = 91
+              Height = 13
+              Caption = 'Artwork Resolution'
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object LabelArtworkResolutionValue: TLabel
+              Left = 436
+              Top = 67
+              Width = 23
+              Height = 13
+              Caption = 'Auto'
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object Artwork: TCheckBox
+              Left = 8
+              Top = 24
+              Width = 145
+              Height = 17
+              Hint = 'Use additional game artwork'
+              Caption = 'Artwork'
+              Checked = True
+              ParentShowHint = False
+              ShowHint = True
+              State = cbChecked
+              TabOrder = 0
+            end
+            object Backdrop: TCheckBox
+              Left = 8
+              Top = 48
+              Width = 145
+              Height = 17
+              Hint = 'Use backdrop artwork'
+              Caption = 'Backdrop'
+              Checked = True
+              ParentShowHint = False
+              ShowHint = True
+              State = cbChecked
+              TabOrder = 1
+            end
+            object Bezel: TCheckBox
+              Left = 176
+              Top = 48
+              Width = 145
+              Height = 17
+              Hint = 'Use bezel artwork'
+              Caption = 'Bezel'
+              Checked = True
+              ParentShowHint = False
+              ShowHint = True
+              State = cbChecked
+              TabOrder = 2
+            end
+            object Overlay: TCheckBox
+              Left = 176
+              Top = 24
+              Width = 145
+              Height = 17
+              Hint = 'Use overlay artwork'
+              Caption = 'Overlay'
+              Checked = True
+              ParentShowHint = False
+              ShowHint = True
+              State = cbChecked
+              TabOrder = 3
+            end
+            object Crop: TCheckBox
+              Left = 344
+              Top = 24
+              Width = 145
+              Height = 17
+              Hint = 'Crop artwork to game screen only'
+              Caption = 'Crop'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 4
+            end
+            object ArtworkResolution: TGaugeBar
+              Left = 344
+              Top = 64
+              Width = 89
+              Height = 20
+              Hint = 'Artwork resolution'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
+              LargeChange = 5
+              Max = 30
+              ShowHint = True
+              ShowHandleGrip = True
+              Position = 0
+              OnChange = ArtworkResolutionChange
+            end
+          end
+          object Zoom: TGaugeBar
+            Left = 8
+            Top = 176
+            Width = 65
+            Height = 20
+            Hint = 'Force specific zoom level'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            Max = 8
+            Min = 1
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 2
+            OnChange = ZoomChange
+          end
+          object SystemBios: TButton
+            Left = 8
+            Top = 128
+            Width = 33
+            Height = 23
+            Hint = 'Change system bios'
+            Caption = '...'
+            ParentShowHint = False
+            PopupMenu = PopupSystemBios
+            ShowHint = True
             TabOrder = 2
+          end
+        end
+        object TabSheetMAMESound: TTabSheet
+          Caption = 'Sound'
+          ImageIndex = 3
+          object LabelSampleRate: TLabel
+            Left = 8
+            Top = 8
+            Width = 60
+            Height = 13
+            Caption = 'Sample Rate'
+            ShowAccelChar = False
             Transparent = True
+          end
+          object LabelSampleRateValue: TLabel
+            Left = 76
+            Top = 27
+            Width = 45
+            Height = 13
+            Caption = '44100 Hz'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelCustomSampleRate: TLabel
+            Left = 160
+            Top = 8
+            Width = 52
+            Height = 13
+            Caption = 'Custom SR'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelCustomSampleRateValue: TLabel
+            Left = 228
+            Top = 27
+            Width = 40
+            Height = 13
+            Caption = 'Disabled'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelVolume: TLabel
+            Left = 312
+            Top = 8
+            Width = 34
+            Height = 13
+            Caption = 'Volume'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelVolumeValue: TLabel
+            Left = 380
+            Top = 27
+            Width = 21
+            Height = 13
+            Caption = '0 dB'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelAudioLatency: TLabel
+            Left = 8
+            Top = 56
+            Width = 68
+            Height = 13
+            Caption = 'Audio Latency'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelAudioLatencyValue: TLabel
+            Left = 76
+            Top = 75
+            Width = 6
+            Height = 13
+            Caption = '1'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object SampleRate: TGaugeBar
+            Left = 8
+            Top = 24
+            Width = 65
+            Height = 20
+            Hint = 'Set samplerate'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            Max = 3
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 2
+            OnChange = SampleRateChange
+          end
+          object CustomSampleRate: TGaugeBar
+            Left = 160
+            Top = 24
+            Width = 65
+            Height = 20
+            Hint = 'Set a custom samplerate (will override samplerate)'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            LargeChange = 100
+            Max = 50000
+            Min = 4999
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 4999
+            OnChange = CustomSampleRateChange
+          end
+          object Volume: TGaugeBar
+            Left = 312
+            Top = 24
+            Width = 65
+            Height = 20
+            Hint = 'Volume attenuation (in dB)'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            LargeChange = 5
+            Max = 0
+            Min = -32
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 0
+            OnChange = VolumeChange
+          end
+          object Sound: TCheckBox
+            Left = 160
+            Top = 80
+            Width = 137
+            Height = 17
+            Hint = 'Enable/disable sound and sound CPUs'
+            Caption = 'Sound'
+            Checked = True
+            ParentShowHint = False
+            ShowHint = True
+            State = cbChecked
+            TabOrder = 3
+          end
+          object Samples: TCheckBox
+            Left = 160
+            Top = 56
+            Width = 137
+            Height = 17
+            Hint = 'Use of samples files'
+            Caption = 'Samples'
+            Checked = True
+            ParentShowHint = False
+            ShowHint = True
+            State = cbChecked
+            TabOrder = 4
+          end
+          object ResampleFilter: TCheckBox
+            Left = 312
+            Top = 56
+            Width = 169
+            Height = 17
+            Hint = 'Resample if samplerate does not match'
+            Caption = 'Resample Filter'
+            Checked = True
+            ParentShowHint = False
+            ShowHint = True
+            State = cbChecked
+            TabOrder = 5
+          end
+          object AudioLatency: TGaugeBar
+            Left = 8
+            Top = 72
+            Width = 65
+            Height = 20
+            Hint = 'Set audio latency (increase to reduce glitches)'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            LargeChange = 100
+            Max = 4
+            Min = 1
+            ShowHint = True
+            ShowHandleGrip = True
+            Position = 1
+            OnChange = AudioLatencyChange
+          end
+        end
+        object TabSheetMAMEControllers: TTabSheet
+          Caption = 'Controllers'
+          ImageIndex = 4
+          object LabelControllerKeysMapping: TLabel
+            Left = 312
+            Top = 56
+            Width = 66
+            Height = 13
+            Caption = 'Keys Mapping'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelAnalogDigitalDeadzone: TLabel
+            Left = 8
+            Top = 56
+            Width = 129
+            Height = 13
+            Caption = 'Analog to Digital Deadzone'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = True
+            Transparent = True
+          end
+          object LabelAnalogDigitalDeadzoneValue: TLabel
+            Left = 108
+            Top = 75
+            Width = 22
+            Height = 13
+            Caption = '0.30'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object Joystick: TCheckBox
+            Left = 8
+            Top = 8
+            Width = 137
+            Height = 17
+            Hint = 'Enable joystick input'
+            Caption = 'Joystick'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object SteadyKey: TCheckBox
+            Left = 312
+            Top = 32
+            Width = 137
+            Height = 17
+            Hint = 
+              'It selects a different handling for simultaneous button presses ' +
+              'but the controls are less responsive'
+            Caption = 'Steady Key'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object Mouse: TCheckBox
+            Left = 160
+            Top = 8
+            Width = 137
+            Height = 17
+            Hint = 'Enable mouse input (Windows mouse will be unavailable)'
+            Caption = 'Mouse'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object ControllerKeysMapping: TComboBox
+            Left = 312
+            Top = 72
+            Width = 169
+            Height = 21
+            Hint = 'Pre-configure for specified controller'
+            Style = csDropDownList
+            ItemHeight = 13
+            ItemIndex = 0
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+            Text = '(None)'
+            Items.Strings = (
+              '(None)')
+          end
+          object LightGun: TCheckBox
+            Left = 8
+            Top = 32
+            Width = 137
+            Height = 17
+            Hint = 'Enable lightgun input'
+            Caption = 'Light Gun'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object KeyboardLEDs: TCheckBox
+            Left = 160
+            Top = 32
+            Width = 137
+            Height = 17
+            Hint = 'Enable keyboard LED emulation'
+            Caption = 'Keyboard LEDs'
+            Checked = True
+            ParentShowHint = False
+            ShowHint = True
+            State = cbChecked
+            TabOrder = 5
+          end
+          object AnalogDigitalDeadzone: TGaugeBar2
+            Left = 8
+            Top = 72
+            Width = 97
+            Height = 20
+            Hint = 'Minimal analog value for digital input'
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            LargeChange = 0.050000000000000000
+            Max = 1.000000000000000000
+            ShowHint = True
+            ShowHandleGrip = True
+            SmallChange = 0.010000000000000000
+            Position = 0.300000000000000000
+            OnChange = AnalogDigitalDeadzoneChange
           end
         end
         object TabSheetMAMEMiscellaneous: TTabSheet
           Caption = 'Miscellaneous'
-          ImageIndex = 4
+          ImageIndex = 5
           object LabelExternalFiles: TGroupBox
-            Left = 64
-            Top = 16
+            Left = 8
+            Top = 8
             Width = 193
             Height = 153
             Caption = 'External Files'
@@ -1808,15 +2284,33 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
           end
           object LabelTweaks: TGroupBox
-            Left = 264
-            Top = 16
+            Left = 208
+            Top = 8
             Width = 297
-            Height = 153
+            Height = 201
             Caption = 'Tweaks'
             TabOrder = 1
+            object LabelMaxLogSize: TLabel
+              Left = 8
+              Top = 152
+              Width = 62
+              Height = 13
+              Caption = 'Max Log Size'
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object LabelMaxLogSizeValue: TLabel
+              Left = 245
+              Top = 171
+              Width = 30
+              Height = 13
+              Caption = '10000'
+              ShowAccelChar = False
+              Transparent = True
+            end
             object Throttle: TCheckBox
               Left = 8
-              Top = 24
+              Top = 16
               Width = 145
               Height = 17
               Hint = 'Throttle speed to the game'#39's framerate'
@@ -1829,7 +2323,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object Verbose: TCheckBox
               Left = 168
-              Top = 24
+              Top = 16
               Width = 121
               Height = 17
               Hint = 'Displays some diagnostic information at startup'
@@ -1840,7 +2334,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object Cheat: TCheckBox
               Left = 8
-              Top = 48
+              Top = 40
               Width = 145
               Height = 17
               Hint = 'Enable/disable cheat subsystem'
@@ -1851,7 +2345,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object Clones: TCheckBox
               Left = 8
-              Top = 72
+              Top = 64
               Width = 145
               Height = 17
               Hint = 'Enable/disable clones'
@@ -1864,7 +2358,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object ReadConfigFile: TCheckBox
               Left = 8
-              Top = 96
+              Top = 88
               Width = 145
               Height = 17
               Hint = 'Enable/disable the reading of the config files'
@@ -1877,7 +2371,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object Log: TCheckBox
               Left = 168
-              Top = 48
+              Top = 40
               Width = 121
               Height = 17
               Hint = 'Generate error.log file'
@@ -1888,7 +2382,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object Debug: TCheckBox
               Left = 168
-              Top = 96
+              Top = 88
               Width = 121
               Height = 17
               Hint = 'Enable/disable debugger (only if available)'
@@ -1899,7 +2393,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object OSDebug: TCheckBox
               Left = 168
-              Top = 72
+              Top = 64
               Width = 121
               Height = 17
               Hint = 'Output error log to debugger'
@@ -1910,7 +2404,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object SkipDisclaimer: TCheckBox
               Left = 8
-              Top = 120
+              Top = 112
               Width = 121
               Height = 17
               Hint = 'Skip displaying the disclaimer screen'
@@ -1921,7 +2415,7 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
             end
             object SkipGameInfo: TCheckBox
               Left = 168
-              Top = 120
+              Top = 112
               Width = 121
               Height = 17
               Hint = 'Skip displaying the game info screen'
@@ -1930,123 +2424,34 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
               ShowHint = True
               TabOrder = 9
             end
-          end
-          object LabelArtwork: TGroupBox
-            Left = 64
-            Top = 192
-            Width = 497
-            Height = 97
-            Caption = 'Artwork'
-            TabOrder = 2
-            object LabelArtworkResolution: TLabel
-              Left = 344
-              Top = 48
-              Width = 91
-              Height = 13
-              Caption = 'Artwork Resolution'
-              ShowAccelChar = False
-              Transparent = True
-            end
-            object LabelArtworkResolutionValue: TLabel
-              Left = 434
-              Top = 67
-              Width = 23
-              Height = 13
-              Caption = 'Auto'
-              ShowAccelChar = False
-              Transparent = True
-            end
-            object Artwork: TCheckBox
+            object MaxLogSize: TGaugeBar
               Left = 8
-              Top = 24
-              Width = 145
-              Height = 17
-              Hint = 'Use additional game artwork'
-              Caption = 'Artwork'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 0
-            end
-            object Backdrop: TCheckBox
-              Left = 8
-              Top = 48
-              Width = 145
-              Height = 17
-              Hint = 'Use backdrop artwork'
-              Caption = 'Backdrop'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 1
-            end
-            object Overlay: TCheckBox
-              Left = 176
-              Top = 24
-              Width = 145
-              Height = 17
-              Hint = 'Use overlay artwork'
-              Caption = 'Overlay'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 2
-            end
-            object Bezel: TCheckBox
-              Left = 176
-              Top = 48
-              Width = 145
-              Height = 17
-              Hint = 'Use bezel artwork'
-              Caption = 'Bezel'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 3
-            end
-            object Crop: TCheckBox
-              Left = 344
-              Top = 24
-              Width = 145
-              Height = 17
-              Hint = 'Crop artwork to game screen only'
-              Caption = 'Crop'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 4
-            end
-            object ArtworkResolution: TGaugeBar
-              Left = 344
-              Top = 64
-              Width = 89
+              Top = 168
+              Width = 233
               Height = 20
-              Hint = 'Artwork resolution'
+              Hint = 'Maximum error.log size (in KB)'
               Color = clWindow
               Backgnd = bgPattern
               ButtonSize = 12
               LargeChange = 5
-              Max = 30
+              Max = 2000000
+              Min = 1
               ShowHint = True
               ShowHandleGrip = True
-              Position = 0
-              OnChange = ArtworkResolutionChange
+              Position = 10000
+              OnChange = MaxLogSizeChange
             end
-          end
-          object MiscellaneousImage: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 3
-            Transparent = True
+            object CRCIntegrityChecks: TCheckBox
+              Left = 168
+              Top = 136
+              Width = 121
+              Height = 17
+              Hint = 'Use only CRC for all integrity checks'
+              Caption = 'Use CRC Only'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 11
+            end
           end
         end
       end
@@ -2055,5 +2460,31 @@ object FormMAMEConfiguration: TFormMAMEConfiguration
   object MAMEConfigImageList: TImageList
     Left = 368
     Top = 392
+  end
+  object PopupSystemBios: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Style = []
+    MenuFont.Charset = DEFAULT_CHARSET
+    MenuFont.Color = clWindowText
+    MenuFont.Height = -11
+    MenuFont.Name = 'MS Sans Serif'
+    MenuFont.Style = []
+    Left = 64
+    Top = 160
   end
 end

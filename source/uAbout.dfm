@@ -43,77 +43,34 @@ object FormAbout: TFormAbout
     ParentFont = False
     Transparent = True
   end
-  object TextFader: TTextFader
-    Left = 12
-    Top = 188
-    Width = 285
-    Height = 37
-    BackgroundMode = bmNone
+  object Label1: TLabel
+    Left = 52
+    Top = 192
+    Width = 212
+    Height = 13
+    Caption = 'Developed by Ciro Alfredo Consentino'
     Color = clBlack
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
-    Font.Height = -12
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
-    LineDelay = 1000
-    Lines.Strings = (
-      
-        'Emu Loader is a freeware software with full source available and' +
-        ' cannot be sold'
-      'The frontend is mainly designed to manage'
-      
-        'M.A.M.E. - Multiple Arcade Machine Emulator (M.A.M.E. and DOS M.' +
-        'A.M.E.)'
-      
-        'Works with version 0.36 up to the latest release (old versions h' +
-        'ave some limitations)'
-      
-        'It'#39's designed to support virtually any new M.A.M.E. version with' +
-        'out'
-      'making changes in the frontend (just create a new games list...)'
-      
-        'It can be freely distributed, but please, keep the files unchang' +
-        'ed'
-      'Compatible with all versions of Windows'
-      'This frontend is a learning project'
-      'It causes NO harm or any changes to your hardware and software'
-      ''
-      
-        'Any comments or bugs reports please, e-mail me or post a message' +
-        ' in the forum'
-      ''
-      'e-mail: emuloader@mameworld.net'
-      'homepage: http://www.mameworld.net/emuloader/'
-      ''
-      'Many thanks to M.A.M.E. team for their excellent work!'
-      'Special thanks to Mugnier Aymeric [MAMu_]'
-      'for making the 3D model of Hot Rod controller,'
-      'and the upcoming SlikStik and X-Arcade 3D models.'
-      ''
-      'Also thanks to'
-      'Ra Chen (who made EL famous), :-)'
-      'AzzaAzza69 for the awesome virtual mode,'
-      'Marshall Brooks for beta testing and the "Tips and Tricks" file,'
-      'Marco De Mori, for a bunch of fixes'
-      'Roland Testa [TriggerFin],'
-      'Humbert Stephane [StephH],'
-      'L. D. Orchard [Eldio],'
-      'Fuzz Norelid,'
-      'Gh0st,'
-      'Stig Remnes,'
-      'Dave Swanwick,'
-      'Michael Haralabos for Image32Ex component,'
-      'Flash. S for the Chinese (Simplified) translation,'
-      'Sword Liu for the Chinese (Traditional) translation,'
-      'NONeSUCH for the Korean translation,'
-      'Renato Mucciarelli for the German translation'
-      'and everyone else with the bugs reports'
-      'for helping in the development of Emu Loader'
-      ''
-      'Made in Brazil'
-      ''
-      ''
-      '')
+    ParentColor = False
+    ParentFont = False
+    Transparent = True
+  end
+  object Label2: TLabel
+    Left = 36
+    Top = 208
+    Width = 243
+    Height = 13
+    Caption = 'DOS MAME and MAME32 are not supported!'
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
     ParentColor = False
     ParentFont = False
     Transparent = True

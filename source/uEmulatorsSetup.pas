@@ -4,14 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, INIFiles, ImgList, GR32_Image, uGR32Extra,
-  GR32_RangeBars;
+  StdCtrls, ExtCtrls, ComCtrls, INIFiles, ImgList, GR32_RangeBars;
 
 type
   TFormEmulatorsSetup = class(TForm)
     ButtonOk: TButton;
     ButtonCancel: TButton;
-    TopImage: TImage;
     PageControlEmulatorsFileName: TPageControl;
     TabSheetEmulator1: TTabSheet;
     ExecutableFile: TEdit;
@@ -38,19 +36,11 @@ type
     ButtonClearCommandLine5: TButton;
     ButtonSet5thEmulatorOptions: TButton;
     ExecutableFile5ButtonSelect: TButton;
-    BottomLine: TBevel;
-    LabelTopDescription: TLabel;
-    EmulatorExecutable1Image: TImage32Ex;
-    EmulatorExecutable2Image: TImage32Ex;
-    EmulatorExecutable3Image: TImage32Ex;
-    EmulatorExecutable4Image: TImage32Ex;
-    EmulatorExecutable5Image: TImage32Ex;
     DefaultGamesListBuilder: TGaugeBar;
     LabelDefaultGamesListBuilderValue: TLabel;
-    LabelDefaultGamesListBuilder: TLabel;
+    LabelDefaultEmulator: TLabel;
     procedure ButtonCancelClick(Sender: TObject);
     procedure ExecutableFileChange(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure ButtonSet1stEmulatorOptionsClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -90,7 +80,7 @@ type
     ExeChanged: Boolean;
     BackupEmulatorExecutable, BackupEmulatorExecutable2, BackupEmulatorExecutable3: String;
     BackupEmulatorExecutable4, BackupEmulatorExecutable5: String;
-    function  VerifyExecutable(ExecutableNumber: Byte): Boolean;
+    function  VerifyExecutable(ExecutableNumber: ShortInt): Boolean;
   public
     Folders: THashedStringList;
     SaveCfg: Boolean;
@@ -115,19 +105,6 @@ end;
 procedure TFormEmulatorsSetup.ExecutableFileChange(Sender: TObject);
 begin
   ExeChanged:= True;
-end;
-
-procedure TFormEmulatorsSetup.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\EmulatorSetup.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\EmulatorSetup.png');
-
-  // Load Icons
-  FormMain.LoadIcon(EmulatorExecutable1Image, 'EmulatorExecutable1.png');
-  FormMain.LoadIcon(EmulatorExecutable2Image, 'EmulatorExecutable2.png');
-  FormMain.LoadIcon(EmulatorExecutable3Image, 'EmulatorExecutable3.png');
-  FormMain.LoadIcon(EmulatorExecutable4Image, 'EmulatorExecutable4.png');
-  FormMain.LoadIcon(EmulatorExecutable5Image, 'EmulatorExecutable5.png');
 end;
 
 procedure TFormEmulatorsSetup.ButtonSet1stEmulatorOptionsClick(Sender: TObject);
@@ -171,11 +148,11 @@ begin
        BackupEmulatorExecutable5:= ExecutableFile5.Text;
      end;
 
-  DefaultGamesListBuilder.Position:= StrToInt(FormMain.DefaultDatabaseBuilderExecutable);
+  DefaultGamesListBuilder.Position:= FormMain.MenuCurrentEmulator.Tag;
   DefaultGameSListBuilder.OnChange(Self);
 end;
 
-function TFormEmulatorsSetup.VerifyExecutable(ExecutableNumber: Byte): Boolean;
+function TFormEmulatorsSetup.VerifyExecutable(ExecutableNumber: ShortInt): Boolean;
 var
   ExecutableFileName: String;
   ExeType: String[5];
@@ -194,22 +171,37 @@ begin
        ExeType:= ExeStrings[FormMain.GetExeType(ExecutableFileName)];
        if ExeType = 'NoFmt' then
           begin
+            FormMain.GetMessagesLng('Messages', 'UnknownEmulatorFileFormatMsg', 'Executable %d has an unknown format!',
+                                    'Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME only).');
             GenerateMessage(FormMain.GetLanguageText('Messages', 'UnknownEmulatorFileFormatTitle', 'Unknown Executable Format'),
-                            Format(FormMain.GetLanguageText('Messages', 'UnknownEmulatorFileFormatMsg', 'Executable %d has an unknown format!')+#13+
-                                   FormMain.GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), [ExecutableNumber]), 2);
+                            Format(FormMain.MessageText[0]+#13+FormMain.MessageText[1], [ExecutableNumber]), 2);
+            Result:= False;
+            Exit;
+          end
+       else
+       if (ExeType = 'DOS') and (ExecutableNumber = DefaultGamesListBuilder.Position) then
+          begin
+            FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                           'Messages', 'InvalidBinaryDOSMAMEMsg', 'A DOS MAME binary can''t be used as the default games list binary. Please use a Win32 MAME binary.');
+            GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
             Result:= False;
             Exit;
           end
        else
        if ((ExeType = 'DOS') or (ExeType = 'Win32')) then
           begin
-            case FormMain.GetEmulatorVersion(ExecutableNumber, ExeType) of
-              True: FormMain.CheckMAMEIniFile(ExecutableFileName);
+            case FormMain.GetEmulatorVersion(ExecutableNumber) of
+              True:
+                begin
+                  if ExeType = 'Win32' then
+                     FormMain.CheckMAMEIniFile(ExecutableFileName);
+                end;
               False:
                 begin
+                  FormMain.GetMessagesLng('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!',
+                                          'Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME only).');
                   GenerateMessage(FormMain.GetLanguageText('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File'),
-                                  Format(FormMain.GetLanguageText('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!')+#13+
-                                         FormMain.GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), [ExecutableNumber]), 2);
+                                  Format(FormMain.MessageText[0]+#13+FormMain.MessageText[1], [ExecutableNumber]), 2);
                   Result:= False;
                   Exit;
                 end;
@@ -217,9 +209,7 @@ begin
           end;
      end
   else
-     begin
-       Result:= False;
-     end;
+     Result:= False;
 end;
 
 procedure TFormEmulatorsSetup.ButtonOkClick(Sender: TObject);
@@ -234,8 +224,9 @@ begin
 
   if ExecutableFile.Text = '' then
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'NoExecutableSelectedTitle', 'MAME Executable Not Selected'),
-                       FormMain.GetLanguageText('Messages', 'NoExecutableSelectedMsg', 'Select a primary executable first (MAME or DOS MAME)! The others are optional.'), 2);
+       FormMain.GetMessagesLng('Messages', 'NoExecutableSelectedTitle', 'MAME Executable Not Selected',
+                               'Messages', 'NoExecutableSelectedMsg', 'Select a primary executable first (MAME only)! The others are optional.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
        Exit;
      end;
 
@@ -250,11 +241,7 @@ begin
         FormMain.MenuGet1stEmulatorDefaultDescription.Enabled:= True;
         BackupEmulatorExecutable:= FormMain.EmulatorExecutable[1];
       end;
-    False:
-      begin
-        // First emulator is invalid...
-        Exit;
-      end;
+    False: Exit;
   end;
   Application.ProcessMessages;
 
@@ -365,9 +352,8 @@ begin
       end;
   end;
   Application.ProcessMessages;
-  FormMain.DefaultDatabaseBuilderExecutable:= IntToStr(DefaultGamesListBuilder.Position);
-  FormMain.LoadFolders(FormMain.DefaultDatabaseBuilderExecutable);
-  FormMain.GetMAMEExtendedPaths;
+  FormMain.MenuCurrentEmulator.Tag:= DefaultGamesListBuilder.Position;
+  FormMain.SelectExecutable(FormMain.MenuCurrentEmulator.Tag);
   Close;
 end;
 

@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ComCtrls, ToolWin, ExtCtrls, IniFiles, StdCtrls, Buttons, ImgList,
-  FileCtrl, GR32_Image, GR32_Filters, GR32, GR32_RangeBars, GraphicEx,
-  ShellAPI, CommCtrl, ThemeMgr, ThemeSrv, ZipForge, JPEG;
+  FileCtrl, GR32_Image, GR32, GR32_RangeBars, GraphicEx, ShellAPI, CommCtrl,
+  ZipForge, JPEG, Themes, fmodtypes, spectrum, BarMenus, GR32_Transforms;
 
 type
   TExetype = (etUnknown, etDOS, etWinNE, etWinPE);
@@ -24,31 +24,44 @@ type
     eDescription: String;
     eYear: String[4];
     eManufacturer: String;
-    eSound: String[10];
-    eFrequency: String[8];
-    eSamples: String[3];
+    eSound: String[20];
+    eFrequency: String[14];
+    eSamples: String[20];
     eControlType: String;
-    eVideo: String[8];
-    eOrientation: String[10];
-    eResolution: String[8];
-    eDriverStatus: String[12];
-    eSoundStatus: String[12];
-    eColorStatus: String[12];
-    eMerged: String[3];
+    eVideo: String[20];
+    eOrientation: String[20];
+    eResolution: String[20];
+    eDriverStatus: String[20];
+    eSoundStatus: String[20];
+    eColorStatus: String[20];
+    eMerged: String[20];
     eName: String[8];
     eClone: String[18];
     eCategory: String;
     eVersionAdded: String[20];
     eDriver: String[14];
     eGameSize: String[12];
+    eGameTimesPlayed: String[4];
+    eGameTotalPlayTime: String;
   end;
 
 type
   TQuickSortCompare = function (var GameItem1, GameItem2: TGameInfo; var ColumnID: Integer): Integer;
 
+const
+  MAX_SONGS = 2;
+
+type
+  TSongType = record
+    Module: PFMusicModule;
+    Stream: PFSoundStream;
+    Channel: Integer;
+    Playing: Boolean;
+  end;
+
 type
   TFormMain = class(TForm)
-    MainMenu: TMainMenu;
+    MainMenu: TBcBarMainMenu;
     MenuFile: TMenuItem;
     MenuCreateGamesList: TMenuItem;
     MenuPreferences: TMenuItem;
@@ -57,8 +70,7 @@ type
     N3: TMenuItem;
     MenuHelp: TMenuItem;
     MenuAbout: TMenuItem;
-    MenuViewTextFiles: TMenuItem;
-    PopupMenuPictures: TPopupMenu;
+    PopupMenuPictures: TBcBarPopupMenu;
     PopupShowInGameSnapshot: TMenuItem;
     PopupShowMarquee: TMenuItem;
     PopupShowFlyer: TMenuItem;
@@ -67,7 +79,7 @@ type
     PopupDeleteCurrentPicture: TMenuItem;
     PopupRenameCurrentPicture: TMenuItem;
     PopupDeleteAllExtraPictures: TMenuItem;
-    PopupMenuGamesList: TPopupMenu;
+    PopupMenuGamesList: TBcBarPopupMenu;
     PopupPlayGameStandard: TMenuItem;
     N8: TMenuItem;
     PopupPlayGame: TMenuItem;
@@ -84,7 +96,6 @@ type
     PopupGameInformation: TMenuItem;
     PopupAddToFavorites: TMenuItem;
     PopupDeleteFromFavorites: TMenuItem;
-    N13: TMenuItem;
     PopupShowHideFavoriteUsersManager: TMenuItem;
     N14: TMenuItem;
     PopupRefreshAllGames: TMenuItem;
@@ -96,9 +107,7 @@ type
     N17: TMenuItem;
     PopupShowControlPanel: TMenuItem;
     MenuGames: TMenuItem;
-    MenuCustomGamesManager: TMenuItem;
     MenuAuditAllGames: TMenuItem;
-    N18: TMenuItem;
     MenuAuditSelectedGame: TMenuItem;
     MenuPlayGameStandard: TMenuItem;
     N19: TMenuItem;
@@ -114,7 +123,6 @@ type
     MenuGameInformation: TMenuItem;
     MenuAddToFavorites: TMenuItem;
     MenuDeleteFromFavorites: TMenuItem;
-    N24: TMenuItem;
     MenuShowHideFavoriteUsersManager: TMenuItem;
     MenuCreateIconsList: TMenuItem;
     N26: TMenuItem;
@@ -143,8 +151,6 @@ type
     MenuVisitEmuLoaderHomepage: TMenuItem;
     SendEMailEmuLoader: TMenuItem;
     N35: TMenuItem;
-    PopupCustomGamesManager: TMenuItem;
-    N36: TMenuItem;
     MenuAdvancedTools: TMenuItem;
     PopupShowFirstPicture: TMenuItem;
     MenuShowFirstPicture: TMenuItem;
@@ -163,23 +169,17 @@ type
     MenuGameDriverInformation: TMenuItem;
     PopupGameDriverInformation: TMenuItem;
     MenuAutomaticGameInformation: TMenuItem;
-    N41: TMenuItem;
     PopupAutomaticGameInformation: TMenuItem;
     PopupShowGameInfo: TMenuItem;
     N44: TMenuItem;
     MenuShowGameInfo: TMenuItem;
-    MenuCreateNewGamesList: TMenuItem;
-    MenuSwitchGamesList: TMenuItem;
-    MenuTotalPlayTime: TMenuItem;
     MenuCustomGameOptions: TMenuItem;
     PopupCustomGameOptions: TMenuItem;
     PopupGamesAudit: TMenuItem;
     MenuGamesAudit: TMenuItem;
     MenuRefreshGames: TMenuItem;
     PopupRefreshGames: TMenuItem;
-    N47: TMenuItem;
     N48: TMenuItem;
-    N49: TMenuItem;
     N50: TMenuItem;
     N53: TMenuItem;
     N54: TMenuItem;
@@ -192,8 +192,8 @@ type
     PopupCustomInitializationOptions: TMenuItem;
     BuiltInSmallListImageList: TImageList;
     BuiltInBigListImageList: TImageList;
-    BigRealIconsImageList: TImageList;
-    SmallRealIconsImageList: TImageList;
+    BigGamesIconsImageList: TImageList;
+    SmallGamesIconsImageList: TImageList;
     N64: TMenuItem;
     MenuGamesColumnsEditor: TMenuItem;
     N43: TMenuItem;
@@ -204,7 +204,6 @@ type
     N65: TMenuItem;
     PopupSetGameDriverCustomOptions: TMenuItem;
     PopupDeleteGameDriverCustomOptions: TMenuItem;
-    MenuSelectGameTotalPlayTime: TMenuItem;
     MenuSetDebugCustomOptions: TMenuItem;
     MenuDeleteDebugCustomOptions: TMenuItem;
     PopupSetDebugCustomOptions: TMenuItem;
@@ -229,38 +228,27 @@ type
     MenuDeleteZIPFileName: TMenuItem;
     N77: TMenuItem;
     PopupDeleteZIPFileName: TMenuItem;
-    MenuRealIconsItems: TMenuItem;
-    PopupRealIconsItems: TMenuItem;
+    MenuIcons: TMenuItem;
+    PopupIcons: TMenuItem;
     MenuParentalLock: TMenuItem;
     MenuKeysAssignment: TMenuItem;
     N81: TMenuItem;
-    MenuMAMEKeysInfo: TMenuItem;
     PopupShowFavorite: TMenuItem;
-    PopupRealIcons: TMenuItem;
-    MenuRealIcons: TMenuItem;
+    PopupGamesIcons: TMenuItem;
+    MenuGamesIcons: TMenuItem;
     N83: TMenuItem;
     N84: TMenuItem;
     MenuShowOnlyParentIcon: TMenuItem;
     PopupShowOnlyParentIcon: TMenuItem;
-    MenuParentalLockManager: TMenuItem;
+    MenuParentalLockEditor: TMenuItem;
     MenuShowActiveMAMEROMPaths: TMenuItem;
     MenuUserProfile: TMenuItem;
     MenuUserProfileEditor: TMenuItem;
     N90: TMenuItem;
     MenuFullScreen: TMenuItem;
-    ToolBarMenu: TToolBar;
-    MenuButFile: TToolButton;
-    MenuButView: TToolButton;
-    MenuButGames: TToolButton;
-    MenuButPictures: TToolButton;
-    MenuButAdvancedTools: TToolButton;
-    MenuButHelp: TToolButton;
-    ToolButton2: TToolButton;
     ToolBarButtons: TToolBar;
-    ToolButton4: TToolButton;
     ButtonShowFavorite: TToolButton;
     ToolButton3: TToolButton;
-    ButtonRefreshAllGames: TToolButton;
     ToolButton17: TToolButton;
     ButtonPlayRecordedGame: TToolButton;
     ButtonRecordGame: TToolButton;
@@ -279,7 +267,6 @@ type
     PanelPictures: TPanel;
     SplitterMAMEInfo: TSplitter;
     PanelPicture1: TPanel;
-    Picture: TImage32;
     PanelmameinfoDAT: TPanel;
     MAMEInfoTextHolder: TRichEdit;
     Splitter: TSplitter;
@@ -298,7 +285,6 @@ type
     N93: TMenuItem;
     ToolButton8: TToolButton;
     MenuLanguage: TMenuItem;
-    N94: TMenuItem;
     MenuAuditSelectedGameUnneededFiles: TMenuItem;
     N66: TMenuItem;
     MenuAuditAvailableGamesUnneededFiles: TMenuItem;
@@ -309,7 +295,6 @@ type
     PopupAuditAvailableGamesUnneededFiles: TMenuItem;
     N97: TMenuItem;
     PopupAuditAllGamesUnneededFiles: TMenuItem;
-    ToolButton1: TToolButton;
     PopupFullScreen: TMenuItem;
     ToolButton5: TToolButton;
     ToolbarButtonsImageList: TImageList;
@@ -320,16 +305,9 @@ type
     MenuVisitHotRodHomepage: TMenuItem;
     FontDialog: TFontDialog;
     ToolBarsPanel: TCoolBar;
-    ThemeManager: TThemeManager;
     PopupExit: TMenuItem;
-    PopupMenuModeView: TPopupMenu;
-    ButtonModeViewBigIcons: TMenuItem;
-    ButtonModeViewSmallIcons: TMenuItem;
-    ButtonModeViewList: TMenuItem;
-    ButtonModeViewDetails: TMenuItem;
-    ButtonModeView: TToolButton;
     ButtonPicturesModeView: TToolButton;
-    PopupMenuPicturesTypes: TPopupMenu;
+    PopupMenuPicturesTypes: TBcBarPopupMenu;
     ButtonShowTitleSnapshot: TMenuItem;
     ButtonShowInGameSnapshot: TMenuItem;
     ButtonShowMarquee: TMenuItem;
@@ -337,14 +315,14 @@ type
     ButtonShowCabinet: TMenuItem;
     ButtonShowControlPanel: TMenuItem;
     ButtonShowControlPanelLayout: TMenuItem;
-    PopupMenuExecutablesMode: TPopupMenu;
+    PopupMenuExecutablesMode: TBcBarPopupMenu;
     ButtonUseExecutable1: TMenuItem;
     ButtonUseExecutable2: TMenuItem;
     ButtonUseExecutable3: TMenuItem;
     ButtonUseExecutable4: TMenuItem;
     ButtonUseExecutable5: TMenuItem;
     ButtonExecutablesMode: TToolButton;
-    PopupMenuGamesDataMode: TPopupMenu;
+    PopupMenuGamesDataMode: TBcBarPopupMenu;
     ButtonGameInformation: TMenuItem;
     ButtonGameHistory: TMenuItem;
     ButtonGameDriverInformation: TMenuItem;
@@ -352,7 +330,7 @@ type
     N57: TMenuItem;
     ButtonAutomaticGameInformation: TMenuItem;
     ButtonGamesDataMode: TToolButton;
-    PopupMenuGameFilters: TPopupMenu;
+    PopupMenuGameFilters: TBcBarPopupMenu;
     ButtonShowAllGames: TMenuItem;
     ButtonShowAvailableGames: TMenuItem;
     ButtonShowUnavailableGames: TMenuItem;
@@ -360,20 +338,17 @@ type
     ToolButton6: TToolButton;
     ButtonControllerKeysMapping: TToolButton;
     ToolButton11: TToolButton;
-    PopupMenuControllerKeysMapping: TPopupMenu;
+    PopupMenuControllerKeysMapping: TBcBarPopupMenu;
     ctrlrDefault: TMenuItem;
     OpenDialog: TOpenDialog;
-    LabelEmulatorVersion: TToolButton;
     MenuExportGamesListTextFile: TMenuItem;
     N2: TMenuItem;
     MenuEmulator: TMenuItem;
-    MenuButEmulator: TToolButton;
     MenuCurrentEmulator: TMenuItem;
     N28: TMenuItem;
     N55: TMenuItem;
-    N58: TMenuItem;
     N23: TMenuItem;
-    PopupGameType: TPopupMenu;
+    PopupGameType: TBcBarPopupMenu;
     PopupAllGames: TMenuItem;
     PopupClassic: TMenuItem;
     PopupNeoGeo: TMenuItem;
@@ -381,7 +356,6 @@ type
     PopupClone: TMenuItem;
     PopupRaster: TMenuItem;
     PopupVector: TMenuItem;
-    PopupCustomGames: TMenuItem;
     ButtonGameType: TToolButton;
     List: TListView;
     N6: TMenuItem;
@@ -413,8 +387,6 @@ type
     PopupGameDescription: TMenuItem;
     PopupChangeGameDescription: TMenuItem;
     PopupDeleteCustomDescription: TMenuItem;
-    N32: TMenuItem;
-    N33: TMenuItem;
     MenuGameCategory: TMenuItem;
     MenuChangeGameCategory: TMenuItem;
     MenuDeleteCustomCategory: TMenuItem;
@@ -424,10 +396,6 @@ type
     N37: TMenuItem;
     PopupCheckMissingIcons: TMenuItem;
     PopupCheckUnneededIcons: TMenuItem;
-    N40: TMenuItem;
-    N42: TMenuItem;
-    MenuUpdateGamesCategories: TMenuItem;
-    MenuUpdateGamesDescriptions: TMenuItem;
     N45: TMenuItem;
     PopupUpdateGamesDescriptions: TMenuItem;
     N51: TMenuItem;
@@ -439,6 +407,47 @@ type
     ButViewPreviousPicture: TToolButton;
     ButViewNextPicture: TToolButton;
     LabelPictureNumber: TLabel;
+    Picture: TImage32;
+    ButtonsImageList: TImageList;
+    PanelSpectrum: TPanel;
+    tmrMain: TTimer;
+    ButtonMouse: TToolButton;
+    ButtonLightGun: TToolButton;
+    LabelEmulatorVersion: TMenuItem;
+    MenuUserManual: TMenuItem;
+    MenuOpenGameInternetPage: TMenuItem;
+    N18: TMenuItem;
+    PopupOpenGameInternetPage: TMenuItem;
+    N32: TMenuItem;
+    MenuSelectParentGame: TMenuItem;
+    PopupSelectParentGame: TMenuItem;
+    ToolButton1: TToolButton;
+    ButtonSystemBios: TToolButton;
+    PopupSystemBios: TBcBarPopupMenu;
+    MenuAuditSelectedGameRenameFiles: TMenuItem;
+    PopupAuditSelectedGameRenameFiles: TMenuItem;
+    MenuDeleteAudioFileName: TMenuItem;
+    PopupDeleteAudioFileName: TMenuItem;
+    MenuCustomSettings: TMenuItem;
+    PopupCustomSettings: TMenuItem;
+    PopupFavoriteGames: TMenuItem;
+    MenuFavoriteGames: TMenuItem;
+    N13: TMenuItem;
+    MenuDeleteSelected: TMenuItem;
+    N24: TMenuItem;
+    MenuDeleteCFGFile: TMenuItem;
+    MenuDeleteNVRAMFile: TMenuItem;
+    MenuDeleteHIFile: TMenuItem;
+    N33: TMenuItem;
+    MenuDeleteINPFile: TMenuItem;
+    MenuDeleteStateFile: TMenuItem;
+    PopupDeleteSelected: TMenuItem;
+    N36: TMenuItem;
+    PopupDeleteCFGFile: TMenuItem;
+    PopupDeleteNVRAMFile: TMenuItem;
+    PopupDeleteHIFile: TMenuItem;
+    PopupDeleteINPFile: TMenuItem;
+    PopupDeleteStateFile: TMenuItem;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure ListColumnClick(Sender: TObject; Column: TListColumn);
@@ -459,7 +468,6 @@ type
     procedure PopupShowFlyerClick(Sender: TObject);
     procedure PopupShowCabinetClick(Sender: TObject);
     procedure MenuAboutClick(Sender: TObject);
-    procedure MenuViewTextFilesClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure MenuShowGamesIconsLegendClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -467,7 +475,6 @@ type
     procedure PopupShowControlPanelClick(Sender: TObject);
     procedure ListKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure MenuCustomGamesManagerClick(Sender: TObject);
     procedure MenuPlayGameStandardClick(Sender: TObject);
     procedure MenuGamesClick(Sender: TObject);
     procedure MenuPlayGameClick(Sender: TObject);
@@ -512,7 +519,6 @@ type
     procedure MenuShowGameInfoClick(Sender: TObject);
     procedure MenuFileClick(Sender: TObject);
     procedure MenuAdvancedToolsClick(Sender: TObject);
-    procedure MenuTotalPlayTimeClick(Sender: TObject);
     procedure MenuSet1stEmulatorDefaultOptionsClick(Sender: TObject);
     procedure MenuSet2ndEmulatorDefaultOptionsClick(Sender: TObject);
     procedure MenuSet3rdEmulatorDefaultOptionsClick(Sender: TObject);
@@ -521,7 +527,6 @@ type
     procedure MenuSetGameDriverCustomOptionsClick(Sender: TObject);
     procedure MenuCustomInitializationOptionsClick(Sender: TObject);
     procedure MenuDeleteGameDriverCustomOptionsClick(Sender: TObject);
-    procedure MenuSelectGameTotalPlayTimeClick(Sender: TObject);
     procedure MenuSetDebugCustomOptionsClick(Sender: TObject);
     procedure MenuDeleteDebugCustomOptionsClick(Sender: TObject);
     procedure ButtonShowControlPanelLayoutClick(Sender: TObject);
@@ -538,7 +543,6 @@ type
     procedure ListKeyPress(Sender: TObject; var Key: Char);
     procedure ListKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure MenuMAMEKeysInfoClick(Sender: TObject);
     procedure ButtonUseExecutable1Click(Sender: TObject);
     procedure ButtonUseExecutable2Click(Sender: TObject);
     procedure MenuUseExecutable3Click(Sender: TObject);
@@ -554,10 +558,10 @@ type
     procedure MenuShowControlPanelClick(Sender: TObject);
     procedure MenuShowControlPanelLayoutClick(Sender: TObject);
     procedure PopupShowFavoriteClick(Sender: TObject);
-    procedure MenuRealIconsClick(Sender: TObject);
-    procedure MenuParentalLockManagerClick(
+    procedure MenuGamesIconsClick(Sender: TObject);
+    procedure MenuParentalLockEditorClick(
       Sender: TObject);
-    procedure PopupRealIconsClick(Sender: TObject);
+    procedure PopupGamesIconsClick(Sender: TObject);
     procedure PopupPlayRecordedGameClick(Sender: TObject);
     procedure PopupRecordGameClick(Sender: TObject);
     procedure MenuShowActiveMAMEROMPathsClick(Sender: TObject);
@@ -574,22 +578,16 @@ type
     procedure MenuShowPicturesClick(Sender: TObject);
     procedure PopupShowPicturesClick(Sender: TObject);
     procedure MenuUserProfileEditorClick(Sender: TObject);
-    procedure MenuLanguageClick(Sender: TObject);
     procedure ButtonShowAllGamesClick(Sender: TObject);
     procedure ButtonShowAvailableGamesClick(Sender: TObject);
     procedure ButtonShowUnavailableGamesClick(Sender: TObject);
     procedure PopupFullScreenClick(Sender: TObject);
     procedure ButtonUseExecutable4Click(Sender: TObject);
     procedure ButtonUseExecutable5Click(Sender: TObject);
-    procedure MenuCreateNewGamesListClick(Sender: TObject);
     procedure MenuVisitXArcadeHomepageClick(Sender: TObject);
     procedure MenuVisitSlikStikHomepageClick(Sender: TObject);
     procedure MenuVisitHotRodHomepageClick(Sender: TObject);
     procedure StatusBarFavoriteUserClick(Sender: TObject);
-    procedure ButtonModeViewBigIconsClick(Sender: TObject);
-    procedure ButtonModeViewSmallIconsClick(Sender: TObject);
-    procedure ButtonModeViewListClick(Sender: TObject);
-    procedure ButtonModeViewDetailsClick(Sender: TObject);
     procedure PopupAutomaticGameInformationClick(Sender: TObject);
     procedure ButtonAutomaticGameInformationClick(Sender: TObject);
     procedure ListData(Sender: TObject; Item: TListItem);
@@ -608,7 +606,6 @@ type
     procedure PopupCloneClick(Sender: TObject);
     procedure PopupRasterClick(Sender: TObject);
     procedure PopupVectorClick(Sender: TObject);
-    procedure PopupCustomGamesClick(Sender: TObject);
     procedure MenuCheckMissingIconsClick(Sender: TObject);
     procedure MenuCheckUnneededIconsClick(Sender: TObject);
     procedure MenuSetCustomCommandLineClick(Sender: TObject);
@@ -623,8 +620,6 @@ type
     procedure MenuDeleteCustomDescriptionClick(Sender: TObject);
     procedure MenuChangeGameCategoryClick(Sender: TObject);
     procedure MenuDeleteCustomCategoryClick(Sender: TObject);
-    procedure MenuUpdateGamesDescriptionsClick(Sender: TObject);
-    procedure MenuUpdateGamesCategoriesClick(Sender: TObject);
     procedure ListColumnRightClick(Sender: TObject; Column: TListColumn;
       Point: TPoint);
     procedure ZipForgeProcessFileFailure(Sender: TObject; FileName: String;
@@ -633,22 +628,32 @@ type
     procedure ZipForgeOverallProgress(Sender: TObject; Progress: Double;
       Operation: TZFProcessOperation; ProgressPhase: TZFProgressPhase;
       var Cancel: Boolean);
+    procedure PanelSpectrumClick(Sender: TObject);
+    procedure tmrMainTimer(Sender: TObject);
+    procedure MenuUserManualClick(Sender: TObject);
+    procedure MenuOpenGameInternetPageClick(Sender: TObject);
+    procedure MenuSelectParentGameClick(Sender: TObject);
+    procedure MenuDeleteAudioFileNameClick(Sender: TObject);
+    procedure MenuDeleteCFGFileClick(Sender: TObject);
+    procedure MenuDeleteNVRAMFileClick(Sender: TObject);
+    procedure MenuDeleteHIFileClick(Sender: TObject);
+    procedure MenuDeleteINPFileClick(Sender: TObject);
+    procedure MenuDeleteStateFileClick(Sender: TObject);
 
   private
+    BiosName: String[8];
     ColumnsSort: array of ShortInt;
     AddParentSet: Boolean;
     ListROMs: THashedStringList;
-    IsPlayChoice, IsCvs, IsNeoGeo, IsDecoSystem, IsPgm, IsSuperKanekoNova, IsSTV: Boolean;
 
     ClassicMRList, ClassicMVList, ClassicCRList, ClassicCVList, NeoGeoMList, NeoGeoCList: THashedStringList;
     UnavailableClassicMRList, UnavailableClassicMVList, UnavailableClassicCRList, UnavailableClassicCVList, UnavailableNeoGeoMList, UnavailableNeoGeoCList: THashedStringList;
     BiosList, UnavailableBiosList: THashedStringList;
 
     ListFilterActualSelection: Integer;
-    RealIconsList: THashedStringList;
+    GamesIconsList: THashedStringList;
     ProcessingAutomaticMAMEInfoDAT: Boolean;
 
-    TotalPlayTime: String;
     CurrentGameDriver: String[12];
 
     //temporary variable to workarround the closing window after activating parental lock
@@ -658,48 +663,66 @@ type
     LabelPictureNumberValue: String[35];
     PictureNumber: ShortInt;
     VirtualPicturesList: THashedStringList;
+    ZipContents, ZipContentsFullPath: THashedStringList;
+
+    TerminateEmuLoader: Boolean;
+
+    // FMOD
+    FSongs: array [0..MAX_SONGS - 1] of TSongType;
+    FSpectrum: TMiniSpectrum;
+    procedure ShowSpectrum;
+    procedure ActivateSpectrum;
+    procedure LoadSound;
+    procedure PlaySound;
+    procedure StopSound;
+    // FMOD
 
     procedure ClearEntries;
     procedure InitializeColumnsSort;
     procedure InitializeEmulatorVariables;
     procedure ClearMemoryColumnsVariables;
     function  FindGame(CurrentIndex: Integer; GameDescription: String): Integer;
+    function  FindGameName(GameName: String): Integer;
 
     function  GetPlayTime(Milliseconds: Int64): String;
     procedure ChangeEmulatorDescription(EmulatorNumber: ShortInt);
-    procedure GetEmulatorDefaultDescription(const EmulatorFileName: String; EmulatorNumber: ShortInt);
+    procedure GetEmulatorDefaultDescription(EmulatorNumber: ShortInt);
 
     // Load Icons in TImageList components
     function  LoadToolbarIcons: Boolean;
     function  LoadStatusBarIcons: Boolean;
     function  LoadMAMEConfigurationIcons(IconList: TImageList): Boolean;
 
-    procedure SetRealIcons;
+    procedure SetGamesIcons;
+    procedure SetPictureMode(TypeIndex: ShortInt);
+    procedure FreeMemoryZipContents;
 
     function  LoadGames(ClassificationName: String; IsFavorite: Boolean; BiosTypeName: String): Boolean;
     procedure ScanLockedGames(mGamesList: THashedStringList);
-    function  LoadROMClasses(FavoriteList: Boolean): Boolean;
-    function  VerifyResourceFiles(Resource: Boolean; FileROM: String): Boolean;
-    function  CreateGamesList(ExecutableString: String; DefaultDatabase: Boolean): Boolean;
+    procedure ProcessGamesList(mGamesList: THashedStringList);
+    function  VerifyResourceFiles(Resource, Bios: Boolean; FileROM: String; IniFile: TMemIniFile): Boolean;
+    function  CreateGamesList: Boolean;
     procedure SetGameMemoryInfo;
     function  AddToFavorite: Boolean;
     function  DeleteFromFavorite: Boolean;
-    function  RefreshGames(GamesList1: THashedStringList; GamesList2: THashedStringList; GamesList1Position: Integer): Boolean;
+    function  RefreshGames(GamesList1, GamesList2, SamplesTempList: THashedStringList; GamesList1Position: Integer): Boolean;
     function  VerifyFiles(VClassicMR: Boolean; VClassicMV: Boolean; VClassicCR: Boolean; VClassicCV: Boolean; VNeoGeoM: Boolean; VNeoGeoC: Boolean;
                           VUnClassicMR: Boolean; VUnClassicMV: Boolean; VUnClassicCR: Boolean; VUnClassicCV: Boolean; VUnNeoGeoM: Boolean; VUnNeoGeoC: Boolean;
-                          VBios: Boolean; VUnBios: Boolean;
-                          VCustomGames: Boolean; VUnCustomGames: Boolean; IsCustomList: Boolean): Boolean;
+                          VBios: Boolean; VUnBios: Boolean): Boolean;
 
     procedure RefreshGamesCanceledMessage;
     function  StopRefreshAllGames: Boolean;
     function  StopBuildDatabase: Boolean;
 
-    procedure CheckPlayTime;
     function  ReadSelectedGamePlayTime(GameName: String): String;
     procedure UpdateSelectedGamePlayTime(GameName: String; TotalPlayTime: Int64);
 
+    procedure CallDeleteFile(FileName, Folder: String);
+    procedure LoadSelectedLanguage(Sender: TObject);
+    procedure GetLanguageFiles;
+
     // New Full Screen Mode functions
-    procedure WMSystemCommand(var Msg: TWMSysCommand) ;  message WM_SYSCOMMAND;
+    procedure WMSystemCommand(var Msg: TWMSysCommand);  message WM_SYSCOMMAND;
 
     { Private declarations }
   public
@@ -707,46 +730,47 @@ type
     CompleteGamesList: THashedStringList;
     ColumnSorted: ShortInt;
     SelectedGame: Integer;
-
+    SelectedGameName: String[8];
 
     EmulatorVersion: array of String;
     EmulatorExecutable: array of String;
     EmulatorType: array of ShortInt;
 
     FrontendPath, FavoriteUser: String;
-    ShowingPicture, TextWordWrap, CancelCurrentOperation, AbortExecution: Boolean;
+    ShowingPicture, CancelCurrentOperation, AbortExecution: Boolean;
 
     ROMsFolders, GameSizeBits: THashedStringList;
 
     historyFile, mameinfoFile: String;
-    CategoriesList, RealIconsDAT: TMemIniFile;
+    CategoriesList, GamesIconsDAT: TMemIniFile;
 
     ClassicMR, ClassicMV, ClassicCR, ClassicCV, NeoGeoM, NeoGeoC: Boolean;
     UnavailableClassicMR, UnavailableClassicMV, UnavailableClassicCR, UnavailableClassicCV, UnavailableNeoGeoM, UnavailableNeoGeoC: Boolean;
     BiosClassic, BiosNeoGeo, UnavailableBiosClassic, UnavailableBiosNeoGeo: Boolean;
-    CustomGames, UnavailableCustomGames: Boolean;
 
-    mImageIndex: ShortInt;
-    mROMIdentification: ShortInt;
-    mDescription, mManufacturer, mControlType, mCategory: String;
-    mYear: String[4];
-    mSound: String[10];
-    mFrequency: String[8];
-    mSamples: String[3];
-    mVideo: String[8];
-    mOrientation: String[10];
-    mResolution: String[8];
-    mDriverStatus: String[12];
-    mSoundStatus: String[12];
-    mColorStatus: String[12];
-    mMerged: String[3];
+    mImageIndex, mROMIdentification: ShortInt;
+    mDescription, mManufacturer, mControlType, mCategory, mGameTotalPlayTime: String;
+    mYear, mGameTimesPlayed: String[4];
+    mSound, mOrientation, mVideo, mResolution, mSamples, mMerged: String[20];
     mName: String[8];
+    mDriverStatus, mSoundStatus, mColorStatus: String[20];
     mClone: String[18];
     mVersionAdded: String[20];
-    mDriver: String[14];
+    mFrequency, mDriver: String[14];
 
-    snaptitleDir, snapingameDir, marqueeDir, flyerDir, cabinetDir, controlpanelDir, controlpanellayoutDir: String;
-    iconDir, faqDir, ctrlrDir, IniFilesDir, PictureZIP: String;
+    mSampleName, mSampleOfName: String;
+
+    // translated column fields
+    aSound: array[0..2] of String;
+    aSamples: array[0..1] of String;
+    aControlType: array[0..9] of String;
+    aVideo: array[0..1] of String;
+    aOrientation: array[0..1] of String;
+    aStatus: array[0..2] of String;
+    aMerged: String;
+
+    snapingameDir, samplesDir: String;
+    ctrlrDir, IniFilesDir, PictureZIP: String;
 
     PictureType: ShortInt;
 
@@ -754,62 +778,66 @@ type
     ParentListROMsName, ParentListROMsSize, ParentListROMsCRC, ParentListROMsNameFullPath: THashedStringList;
 
     Auditing: Boolean;
-    DefaultDatabaseBuilderExecutable: String[1];
     AutoMAMEInfoDATFile, AutoHistoryDATFile, ParentalLockGamesList: THashedStringList;
 
     ParentalLockPasswordString, ActiveUserProfileDescription, FrontendLanguage, LogoFileName: String;
+    MessageText: array[0..1] of String;
+
+    // FMOD procedures
+    function  InitDeInitFMOD(FMODStatus, ReloadDLL: Boolean): Boolean;
+    procedure PopulateDevices;
+    procedure SetVolume(VolumeValue: Integer);
+    // FMOD procedures
 
     procedure QuickSort(const CompareFunction: TQuickSortCompare; const SortAscending: Boolean; const LoValue, HiValue, ColumnID: Integer);
     procedure SortColumn(ColumnID: ShortInt; ForceSortAscending: Boolean);
 
     function  PopulateROMDataLine: String;
-    function  AddGames(ClearGames: Boolean): Boolean; // Add games to the list (Virtual Mode)
+    function  LoadROMClasses(FavoriteList: Boolean): Boolean;
+    function  AddGames: Boolean; // Add games to the list (Virtual Mode)
 
-    procedure UpdateProgressLabel(Position, Total: Integer; IncValue: Boolean);
+    procedure UpdateProgressLabel(Position, Total: Integer);
 
     function  CheckWinXPThemes: Boolean;
     function  CheckFileAttributes(const FileNameString: String): Boolean;
 
     procedure DialogOpenFile(FilterType: ShortInt; const DialogTitle: String; EditHolder: TEdit);
     procedure DialogSelectFolder(EditHolder: TEdit; MultipleFolders: Boolean);
-    procedure LoadIcon(ImageHolder: TImage32; ImageFileName: String);
 
+    procedure SelectExecutable(BinaryNumber: ShortInt);
     procedure SetGameType(GameTypeIndex: ShortInt);
     function  GetGameTypeDescription(GameClass, BiosType: String): String;
-    procedure ExecuteGame(GameName: String; RunStandard: Boolean; ShowAverageFPS: Boolean);
+    procedure ExecuteGame(GameName: String; RunStandard: Boolean);
 
     procedure UpdateStatusBarGame;
     procedure AppException(Sender: TObject; E: Exception);
     function  LoadROMFilters(const GamesFilter: String): Boolean;
-    function  SearchZIP(GameName: String): Boolean;
-    function  SearchZIPFolder(GameName: String): String;
+    function  SearchZIP(const GameName: String): Boolean;
+    function  SearchZIPFolder(const GameName: String): String;
     function  SearchCHDFolder(GameName, DiskImageFileName: String): String;
     function  FoundMerged(GameName, OriginalGameName: String): Boolean;
 
-    function  RunProcess(AppPath: String; MustWait: Boolean=FALSE;
-                         Visibility: Word=SW_SHOWNORMAL; RunningGame: Boolean=True):DWORD;
+    function  RunProcess(AppPath: String; MustWait: Boolean=False;
+                         Visibility: Word=SW_SHOWNORMAL; RunningGame: Boolean=True): DWORD;
 
-    procedure LoadFolders(ExecutableString: String);
+    procedure LoadFolders;
+    procedure GetSamplesFolder;
+    function  SearchSampleZip(List: THashedStringList; GameName: String): Boolean;
+    function  UpdateSampleInfo(ListTemp: THashedStringList; GameName: String): Boolean;
 
-    procedure LoadRealIcons;
+    procedure LoadGamesIcons;
     procedure GetROMFields(const ROMLine: String);
     procedure GetGameROMs(ROMLine: String; Auditing: Boolean);
-    function  GetEmulatorVersion(EmulatorNumber: ShortInt; ExeFileType: String): Boolean;
+    function  GetEmulatorVersion(EmulatorNumber: ShortInt): Boolean;
     function  GetExeType(const FileName: String): TExeType;
     procedure UpdateGeneralAppearance(FormName: TForm);
-    procedure ReadTextViewerFont(FormID: Byte);
-    procedure UpdateTextViewerFont(FormID: Byte);
     procedure CreateIniFile;
     function  ReadIniFile: Boolean;
     procedure UpdateIniFile;
+    procedure LoadBiosSet(Main: Boolean; PopupHolder: TBcBarPopupMenu);
 
     function  GetExecutableINIFileName(ExecutableFileName: String): String;
     function  CheckMAMEIniFiles: Boolean;
-
-    function  CheckDOSMAMEConfigFile(ExecutableString: String): Boolean;
-    procedure CreateDOSMAMEConfigFile(ExecutableString: String);
-    procedure ReadDOSMAMEConfigFile(ExecutableString: String);
-    procedure UpdateDOSMAMEConfigFile(ExecutableString: String);
 
     function  ReadMAMECustomCommandLine(GameName: String; CustomCmdType: ShortInt): String;
     procedure UpdateMAMECustomCommandLine(GameName, CustomExecutable, CustomParameters: String; CustomCmdType: ShortInt);
@@ -832,39 +860,36 @@ type
     function  SetDefaultAspectRatio(const AspectRatioValue: String): Byte;
     function  SetResolution(ResolutionValue: String): ShortInt;
     function  SetBlitterEffect(BlitterEffectValue: String): ShortInt;
+    function  SetEffectName(EffectsIndex: Integer): String;
+    function  SetCleanStretch(CleanStretchString: String): Integer;
+
+    function  SetD3DPrescale(D3DPrescaleString: String): Integer;
 
     // DOS MAME Options grouped
+    procedure FeatureNotAvailableDOSMAME;
     function  GetDOSResolution(ResolutionHolder: TGaugeBar): String;
-    function  GetDOSMonitor(MonitorHolder: TGaugeBar): String;
-    function  GetDOSSoundCard(SoundCardHolder: TGaugeBar): String;
-    function  GetDOSJoystick(JoystickHolder: TGaugeBar): String;
-    function  GetDOSVesaMode(VESAHolder: TGaugeBar): String;
-    function  GetDOSDepth(DepthHolder: TGaugeBar): String;
 
     function  SetDOSResolution(ResolutionValue: String): ShortInt;
-    function  SetDOSJoystick(JoystickValue: String): ShortInt;
-    function  SetDOSVesaMode(VesaModeValue: String): ShortInt;
-    function  SetDOSScanlines(ScanlinesValue: String): ShortInt;
+
+    procedure SetButtonSystemBiosTag(Sender: TObject);
 
     function  CheckMAMEIniFile(ExecutableString: String): Boolean;
     procedure CreateMAMEIniFile(ExecutableString: String);
-    procedure ReadMAMEIniFile(ExecutableString: String);
+    procedure ReadMAMEIniFile(ExecutableString: String; CustomGameOption: Boolean);
     procedure UpdateMAMEIniFile(ExecutableString: String);
 
     procedure SetCustomOptions(GameName: String; Driver: Boolean);
     procedure DeleteCustomOptions(GameName: String);
 
     procedure GetKeysMappingList(ExecutableString: String);
-    procedure AddPopupItem(PopupHolder: TPopupMenu; Description: String; Duplicate, LoadDefault: Boolean);
+    procedure AddPopupItem(PopupHolder: TPopupMenu; Description, HintName: String; Duplicate, BiosSetPopup: Boolean);
     procedure GetControllersList(ListHolder: THashedStringList; FolderControllerKeys: String);
 
     procedure CallEmulatorOptions(ExecutableString: String);
-
     procedure ExtractROMsFolders(ROMsList: String);
 
-    procedure GetMAMEExtendedPaths;
-    procedure SmoothPicture(PictureHolder: TImage32);
-    procedure SetAspectRatio(PictureHolder: TImage32);
+    procedure SmoothPicture;
+    procedure SetAspectRatio;
     procedure ToggleVirtualPicturesList(EnableList: Boolean);
     procedure SetVirtualPictureType;
     procedure GetTotalPictures;
@@ -876,15 +901,16 @@ type
     procedure CyclePictureType;
     procedure InvertCyclePictureType;
     procedure ButtonViewPicture(ButtonCode: ShortInt);
+    function  GetZipFolderFull(FolderType: ShortInt): String;
     function  ShowPicture(GameName, CloneGameName: String; ImageHolder: TImage32; ImageType: Integer; CloseZIP: Boolean): String;
     procedure LoadPictureFromStream(StreamHolder: TMemoryStream; ImageHolder: TImage32; PicType: ShortInt);
 
+    procedure CallRefreshGames(RefreshMode: ShortInt);
     function  RefreshGame: Boolean;
-
     function  SearchString(const SubString, StringLine: String): Boolean;
+    function  GetSizeType(Value: Extended; Bits: Boolean): ShortString;
 
     // ZIP functions
-    //function  Subs(S: String; Sub, Sost: Char): String;
     function  GetContents(ZipFileName: String; DeleteList, DeleteParentList: Boolean): Boolean;
     function  UnZipFile(ZipFileName, ROMFileName: String): Boolean;
     function  UnZipFileMemory(ZipFileName, ROMFileName: String; StreamHolder: TMemoryStream): Boolean;
@@ -895,9 +921,6 @@ type
     function  ExtractFilesList(ZipFileName, FilesUnzip: String): Boolean;
 
     procedure ShowAutomaticGameInformation;
-
-    function  GetCurrentEmulatorFormat: ShortInt;
-    function  GetCurrentEmulatorExecutable: String;
 
     function  GetColumnIndex(ColumnTagIndex: ShortInt): ShortInt;
     procedure SetColumnPosition(ColumnID, NewPositionIndex: ShortInt; ForceUpdate: Boolean);
@@ -910,7 +933,7 @@ type
     procedure AddDefaultIcons(IconFileName: String; IconList: TImageList; IconType: ShortInt; GameIcons: Boolean);
     procedure ReadDefaultIconsFile;
 
-    function  SaveLoadRealIcons(ActionIndex: Shortint): Boolean;
+    function  SaveLoadGamesIcons(ActionIndex: Shortint): Boolean;
     procedure SelectItem(ItemIndex: Integer);
 
     // User Profile procedures
@@ -924,6 +947,7 @@ type
     procedure SetLockedGamesList(Mode: Boolean);
 
     // Language procedures
+    procedure GetMessagesLng(const TitleSection, TitleEntry, TitleString, MessageSection, MessageEntry, MessageString: String);
     function  GetLanguageText(const Section, Option, TextString: String): String;
     function  GetStatusMessage(MsgCode: String): String;
     procedure SetMessagesLanguage;
@@ -934,15 +958,10 @@ type
     procedure SetParentalLockLanguage;
     procedure SetUserProfileLoginLanguage;
     procedure SetUserProfileLanguage;
-    procedure SetTextViewerLanguage;
     procedure SetDATViewerLanguage;
     procedure SetFavoriteUsersManagerLanguage;
-    procedure SetCustomGamesLanguage;
     procedure SetGameColumnsLanguage;
     procedure SetMAMEConfigurationLanguage;
-    procedure SetMAMECustomConfigurationLanguage;
-    procedure SetDOSMAMEConfigurationLanguage;
-    procedure SetDOSMAMECustomConfigurationLanguage;
     procedure SetPreferencesLanguage;
     procedure SetCustomCommandLineLanguage;
     procedure SetIconsLegendLanguage;
@@ -957,32 +976,395 @@ var
 
 implementation
 
-uses uPreferences, uStatus, uMAMEKeysInfo, uFavoriteUsersManager,
-     uAuditGames, uDOSMAMECustomConfig, uAbout,
-     uTextFilesViewer, uDATViewer, uGamesListLegend,
-     uCustomGames, uMessages, uGameInfo, uDOSMAMEConfig, uMAMEConfig,
-     uEmulatorsSetup, uMAMECustomConfig,
-     uGameColumns, uParentalLockManager, uParentalLockPasswordLogout,
-     uCommon, uFilesUtil, uUserProfileEditor, uUserProfileUserLogin, uLanguage,
-     uCustomCommandLine, uCustomGameDescription, uCustomGameCategory;
+uses uPreferences, uStatus, uFavoriteUsersManager,
+     uAuditGames, uAbout, uDATViewer, uGamesListLegend, uMessages,
+     uGameInfo, uMAMEConfig, uEmulatorsSetup, uGameColumns, uParentalLockEditor,
+     uParentalLockPasswordLogout, uCommon, uFilesUtil, uUserProfileEditor,
+     uUserProfileUserLogin, uCustomCommandLine,
+     uCustomGameDescription, uCustomGameCategory,
+     fmoddyn, fmoderrors; // FMOD units
+
+const
+  MusicTypes: array [TFMusicTypes] of String =
+    ('None', 'Protracker/FastTracker', 'ScreamTracker 3', 'FastTracker 2', 'Impulse Tracker', 'Midi', 'FMOD Sample Bank');
+
+const
+  OutputTypes: array [0..2] of TFSoundOutputTypes =
+    (FSOUND_OUTPUT_WINMM, FSOUND_OUTPUT_DSOUND, FSOUND_OUTPUT_A3D);
+  OutputRates: array [0..4] of Integer = (8000, 11025, 22050, 44100, 48000);
 
 {$R *.DFM}
 {$R Icons.res}
 
-{function TFormMain.Subs(S: String; Sub, Sost: Char): String;
+procedure TFormMain.PopulateDevices;
 var
-  Counter: Longint;
+  DriverCount: Integer;
+  Driver: Integer;
 begin
-  for Counter:= 0 to Length(S) do
-    if S[Counter] = Sub then
-       S[Counter]:= Sost;
-  Result:= S;
-end;}
+  FormPreferences.OutputDevice.Items.Clear;
+  DriverCount:= FSOUND_GetNumDrivers;
+  if DriverCount > 0 then
+  begin
+    for Driver:= 0 to DriverCount - 1 do
+      FormPreferences.OutputDevice.Items.Add(FSOUND_GetDriverName(Driver));
+    FormPreferences.OutputDevice.ItemIndex:= 0;
+  end;
+end;
+
+procedure TFormMain.SetVolume(VolumeValue: Integer);
+begin
+  FormPreferences.LabelSoundClipVolumeValue.Caption:= Format('%3.3d', [FormPreferences.SoundClipVolume.Position]);
+  if FormPreferences.PlaySoundClip.Checked then
+     begin
+       if FSongs[0].Module <> nil then
+          FMUSIC_SetMasterVolume(FSongs[0].Module, FormPreferences.SoundClipVolume.Position)
+       else
+       if FSongs[0].Stream <> nil then
+          FSOUND_SetVolume(FSongs[0].Channel, FormPreferences.SoundClipVolume.Position);
+     end;
+end;
+
+function TFormMain.InitDeInitFMOD(FMODStatus, ReloadDLL: Boolean): Boolean;
+var
+  Index: Integer;
+begin
+  Result:= True;
+  case FMODStatus of
+    True:
+      begin
+        if ReloadDLL then
+           begin
+             if not FMOD_Load() then
+                begin
+                  GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                 'Messages', 'fmodFileNotFoundmsg', 'File "fmod.dll" could not be loaded! Make sure file "fmod.dll" exists.');
+                  GenerateMessage(MessageText[0], MessageText[1], 2);
+                  Result:= False;
+                  FormPreferences.PlaySoundClip.Checked:= False;
+                  Exit;
+                end;
+           end;
+        { Check version numbers }
+        if FMOD_VERSION > FSOUND_GetVersion then
+           begin
+             GetMessagesLng('Messages', 'fmodVersionMismatchTitle', 'Version Mismatch',
+                            'Messages', 'fmodVersionMismatchMsg', 'API version %3.2f is newer than DLL version %3.2f');
+             GenerateMessage(MessageText[0], Format(MessageText[1], [FMOD_VERSION, FSOUND_GetVersion]), 2);
+             Result:= False;
+             FormPreferences.PlaySoundClip.Checked:= False;
+             Exit;
+           end;
+
+        { Initialize FSOUND }
+        try
+          if not FSOUND_SetOutput(OutputTypes[FormPreferences.OutputType.ItemIndex]) then
+             begin
+               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                              'Messages', 'FSOUND_SetOutputMsg', 'Failed to initialize "%s" output! Try selecting another type.');
+               GenerateMessage(MessageText[0]+' [FSOUND_SetOutput]',
+                               Format(MessageText[1], [FormPreferences.OutputType.Items[FormPreferences.OutputType.ItemIndex]]), 2);
+               Result:= False;
+               FormPreferences.PlaySoundClip.Checked:= False;
+               Exit;
+             end;
+          if FormPreferences.OutputDevice.Items.Count > 0 then
+             Index:= FormPreferences.OutputDevice.ItemIndex
+          else
+             Index:= FormPreferences.OutputDevice.Tag;
+
+          if Index = -1 then
+             Index:= 0;
+
+          if not FSOUND_SetDriver(Index) then
+             begin
+               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                              'Messages', 'FSOUND_SetDriverMsg', 'Failed to initialize "%s" sound driver! Try selecting another driver.');
+               GenerateMessage(MessageText[0]+' [FSOUND_SetDriver]',
+                               Format(MessageText[1], [FormPreferences.OutputDevice.Items[Index]]), 2);
+               Result:= False;
+               FormPreferences.PlaySoundClip.Checked:= False;
+               Exit;
+             end;
+
+          if not FSOUND_SetMixer(TFSoundMixerTypes(FormPreferences.MixerType.ItemIndex)) then
+             begin
+               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                              'Messages', 'FSOUND_SetMixerMsg', 'Failed to initialize "%s" sound mixer! Try selecting another mixer.');
+               GenerateMessage(MessageText[0]+' [FSOUND_SetMixer]',
+                               Format(MessageText[1], [FormPreferences.MixerType.Items[FormPreferences.MixerType.ItemIndex]]), 2);
+               FormPreferences.PlaySoundClip.Checked:= False;
+               Result:= False;
+               Exit;
+             end;
+
+          if not FSOUND_SetHWND(Handle) then
+             begin
+               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                              'Messages', 'FSOUND_SetHWNDMsg', 'Failed to set window handle! Try restarting the frontend or even the operation system.');
+               GenerateMessage(MessageText[0]+' [FSOUND_SetHWND]', MessageText[1], 2);
+               Result:= False;
+               FormPreferences.PlaySoundClip.Checked:= False;
+               Exit;
+             end;
+        except
+          GenerateMessage(GetLanguageText('Messages', 'InitializationTitle', 'Initialization'), FMOD_ErrorString(FSOUND_GetError), 2);
+          Result:= False;
+          FormPreferences.PlaySoundClip.Checked:= False;
+          Exit;
+        end;
+
+        if not FSOUND_Init(OutputRates[FormPreferences.OutputRate.ItemIndex], 128, 0 or FSOUND_INIT_GLOBALFOCUS) then
+           begin
+             GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error')+' [FSOUND_Init]',
+                             FMOD_ErrorString(FSOUND_GetError), 2);
+             Result:= False;
+             FormPreferences.PlaySoundClip.Checked:= False;
+             Exit;
+           end;
+
+        { Initialize song list to empty }
+        for Index:= 0 to MAX_SONGS - 1 do
+        begin
+          FSongs[Index].Module:= nil;
+          FSongs[Index].Stream:= nil;
+          FSongs[Index].Channel:= -1;
+        end;
+
+        FSpectrum:= TMiniSpectrum.Create(nil);
+        FSpectrum.Parent:= PanelSpectrum;
+        FSpectrum.Align:= alClient;
+        FSpectrum.Enabled:= False;
+        FSpectrum.OnClick:= PanelSpectrumClick;
+        ActivateSpectrum;
+      end;
+    False:
+      begin
+        if FormPreferences.LabelSoundClipSettings.Tag = 1 then
+           begin
+             FMUSIC_StopAllSongs();
+             if FSongs[0].Playing then
+                StopSound;
+             for Index:= 0 to MAX_SONGS - 1 do
+             begin
+               if FSongs[Index].Module <> nil then
+               begin
+                 FMUSIC_FreeSong(FSongs[Index].Module);
+               end
+               else if FSongs[Index].Stream <> nil then
+               begin
+                 FSOUND_Stream_Stop(FSongs[Index].Stream);
+                 FSOUND_Stream_Close(FSongs[Index].Stream);
+               end;
+             end;
+             FSpectrum.Free;
+             FSOUND_Close;
+
+             if ReloadDLL then
+                FMOD_UnLoad;
+           end;
+      end;
+  end;
+end;
+
+procedure TFormMain.ShowSpectrum;
+begin
+  if Assigned(FSpectrum) and (FSpectrum.Enabled) then
+     FSpectrum.Draw;
+end;
+
+procedure TFormMain.ActivateSpectrum;
+begin
+  case PanelSpectrum.Tag of
+    0: FSpectrum.Enabled:= False;
+    1: begin
+         FSpectrum.Enabled:= True;
+         FSpectrum.Style:= ssSmooth;
+       end;
+    2: begin
+         if not FSpectrum.Enabled then
+            FSpectrum.Enabled:= True;
+         FSpectrum.Style:= ssBlock;
+       end;
+  end;
+end;
+
+procedure TFormMain.LoadSound;
+var
+  Module: PFMusicModule;
+  Stream: PFSoundStream;
+  SndFileName: String;
+
+  function FoundGameFile(audioExtention: String): Boolean;
+  begin
+    Result:= True;
+    case FileExists(FormPreferences.SoundClipFolder.Text+'\'+GamesList[SelectedGame].eName+audioExtention) of
+      True: SndFileName:= FormPreferences.SoundClipFolder.Text+'\'+GamesList[SelectedGame].eName+audioExtention;
+      False:
+        begin
+          if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eClone <> GamesList[SelectedGame].eName) and
+             (FormPreferences.ParentSoundClip.Checked) then
+             begin
+               case FileExists(FormPreferences.SoundClipFolder.Text+'\'+GamesList[SelectedGame].eClone+audioExtention) of
+                 True : SndFileName:= FormPreferences.SoundClipFolder.Text+'\'+GamesList[SelectedGame].eClone+audioExtention;
+                 False: Result:= False;
+               end;
+             end
+          else
+             Result:= False;
+        end;
+    end;
+  end;
+
+  function SearchSoundFile: Boolean;
+  begin
+    Result:= True;
+    SndFileName:= '';
+    if not FoundGameFile('.mp3') then
+       if not FoundGameFile('.ogg') then
+          if not FoundGameFile('.wav') then
+             if not FoundGameFile('.s3m') then
+                if not FoundGameFile('.xm') then
+                   if not FoundGameFile('.it') then
+                      if not FoundGameFile('.mid') then
+                         if not FoundGameFile('.rmi') then
+                            if not FoundGameFile('.sgt') then
+                               if not FoundGameFile('.mod') then
+                                  if not FoundGameFile('.mp2') then
+                                     if not FoundGameFile('.wma') then
+                                        if not FoundGameFile('.asf') then
+                                           Result:= False;
+  end;
+
+begin
+  if FSongs[0].Playing then
+     StopSound;
+
+  if SearchSoundFile then
+  begin
+    tmrMain.Enabled:= True;
+    Stream:= nil;
+    Module:= FMUSIC_LoadSong(PChar(SndFileName));
+    if Module = nil then
+       begin
+         case FormPreferences.LoopSoundClip.Checked of
+           True : Stream:= FSOUND_Stream_Open(PChar(SndFileName), FSOUND_NORMAL or FSOUND_LOOP_NORMAL, 0, 0);
+           False: Stream:= FSOUND_Stream_Open(PChar(SndFileName), FSOUND_NORMAL or FSOUND_LOOP_OFF, 0, 0);
+         end;
+       end;
+
+    if (Module = nil) and (Stream = nil) then
+       Application.MessageBox(FMOD_ErrorString(FSOUND_GetError), 'Load error', MB_OK or MB_ICONHAND);
+
+    if Module <> nil then
+    begin
+      FMUSIC_SetMasterVolume(Module, FormPreferences.SoundClipVolume.Position);
+      if (FMUSIC_GetType(Module) = FMUSIC_TYPE_MOD) or (FMUSIC_GetType(Module) = FMUSIC_TYPE_S3M) then
+        FMUSIC_SetPanSeperation(Module, 0.15);  // 15% crossover
+    end;
+
+    FSongs[0].Module:= Module;
+    FSongs[0].Stream:= Stream;
+    FSongs[0].Playing:= False;
+
+    PlaySound;
+  end;
+end;
+
+procedure TFormMain.PlaySound;
+begin
+  if FSongs[0].Module <> nil then
+     begin
+       FSongs[0].Playing:= FMUSIC_PlaySong(FSongs[0].Module);
+       if not FSongs[0].Playing then
+          Application.MessageBox(FMOD_ErrorString(FSOUND_GetError), 'Play song', MB_OK or MB_ICONHAND);
+     end
+  else
+  if FSongs[0].Stream <> nil then
+     begin
+       FSongs[0].Channel:= FSOUND_Stream_Play(FSOUND_FREE, FSongs[0].Stream);
+       FSongs[0].Playing:= FSongs[0].Channel >= 0;
+       if not FSongs[0].Playing then
+          Application.MessageBox(FMOD_ErrorString(FSOUND_GetError), 'Play stream', MB_OK or MB_ICONHAND)
+       else
+          begin
+            FSOUND_SetPan(FSongs[0].Channel, FSOUND_STEREOPAN);
+            FSOUND_SetVolume(FSongs[0].Channel, FormPreferences.SoundClipVolume.Position);
+          end;
+     end;
+end;
+
+procedure TFormMain.StopSound;
+begin
+  if FSongs[0].Module <> nil then
+     FMUSIC_StopSong(FSongs[0].Module)
+  else
+  if FSongs[0].Stream <> nil then
+     FSOUND_Stream_Stop(FSongs[0].Stream);
+  FSongs[0].Channel:= -1;
+  FSongs[0].Playing:= False;
+  tmrMain.Enabled:= False;
+end;
+
+procedure TFormMain.FreeMemoryZipContents;
+begin
+  if Assigned(ZipContents) then
+     begin
+       FreeAndNil(ZipContents);
+       FreeAndNil(ZipContentsFullPath);
+     end;
+end;
+
+function TFormMain.GetSizeType(Value: Extended; Bits: Boolean): ShortString;
+
+  function FormatText(Value: Extended): String;
+  begin
+    if Value = 0 then
+       Result:= ''
+    else
+    if Pos('.0', FloatToStr(Value)) <> 0 then
+       Result:= TrimLeft(Format('%3u', [Trunc(Value)]))
+    else
+    if Pos('.', FloatToStr(Value)) <> 0 then
+       Result:= TrimLeft(Format('%3.2f', [Value]))
+    else
+       Result:= TrimLeft(Format('%3u', [Trunc(Value)]));
+  end;
+  
+begin
+  if Bits then
+     Value:= Value * 8; // convert bytes to bits
+
+  if Trunc(Value / 1024) > 0 then
+     begin
+       Value:= Value / 1024; // convert bits to Kb
+       if Trunc(Value / 1024) > 0 then
+          begin
+            Value:= Value / 1024; // convert Kb to Mb
+            if Trunc(Value / 1024) > 0 then
+               begin
+                 Value:= Value / 1024; // convert Mb to Gb
+                 Result:= FormatText(Value)+' G';
+               end
+            else
+               Result:= FormatText(Value)+' M';
+          end
+       else
+          Result:= FormatText(Value)+' K';
+     end
+  else
+     Result:= FormatText(Value)+' B';
+     
+  case Bits of
+    True : Result:= Result+'bits';
+    False: Result:= Result+'Bytes';
+  end;
+end;
 
 function TFormMain.GetContents(ZipFileName: String; DeleteList, DeleteParentList: Boolean): Boolean;
 var
   ArchiveItem: TZFArchiveItem;
 begin
+  Result:= True;
   AddParentSet:= DeleteParentList;
   if DeleteList then
      begin
@@ -1015,196 +1397,246 @@ begin
     FileName:= ZipFileName;
 
     // Open existing archive file
-    OpenArchive(fmOpenRead);
+    try
+      OpenArchive(fmOpenRead);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
-         // Search text files stored inside the archive
-         if (FindFirst('*.*', ArchiveItem, faAnyFile-faDirectory)) then
-            begin
-              case AddParentSet of
-                False:
-                  begin
-                    repeat
-                      if Assigned(ListROMsName) then
-                         ListROMsName.Add(AnsiLowerCase(ArchiveItem.FileName));
-                      if Assigned(ListROMsSize) then
-                         ListROMsSize.Add(IntToStr(ArchiveItem.UncompressedSize));
-                      if Assigned(ListROMsCRC) then
-                         ListROMsCRC.Add(LowerCase(Format('%x', [ArchiveItem.CRC])));
+      Result:= FileCount > 0;
+      if Result then
+         begin
+           // Search text files stored inside the archive
+           if FindFirst('*.*', ArchiveItem) then
+              begin
+                case AddParentSet of
+                  False:
+                    begin
+                      repeat
+                        if Assigned(ListROMsName) then
+                           ListROMsName.Add(AnsiLowerCase(ArchiveItem.FileName));
+                        if Assigned(ListROMsSize) then
+                           ListROMsSize.Add(IntToStr(ArchiveItem.UncompressedSize));
+                        if Assigned(ListROMsCRC) then
+                           ListROMsCRC.Add(LowerCase(Format('%x', [ArchiveItem.CRC])));
 
-                      if Assigned(ListROMsNameFullPath) then
-                         ListROMsNameFullPath.Add(AnsiLowerCase(AnsiLowerCase(ArchiveItem.StoredPath+ArchiveItem.FileName)));
-                    until (not FindNext(ArchiveItem));
-                  end;
-                True:
-                  begin
-                    repeat
-                      if Assigned(ParentListROMsName) then
-                         ParentListROMsName.Add(AnsiLowerCase(ArchiveItem.FileName));
-                      if Assigned(ParentListROMsSize) then
-                         ParentListROMsSize.Add(IntToStr(ArchiveItem.UncompressedSize));
-                      if Assigned(ParentListROMsCRC) then
-                         ParentListROMsCRC.Add(LowerCase(Format('%x', [ArchiveItem.CRC])));
+                        if Assigned(ListROMsNameFullPath) then
+                           ListROMsNameFullPath.Add(AnsiLowerCase(AnsiLowerCase(ArchiveItem.StoredPath+ArchiveItem.FileName)));
+                      until (not FindNext(ArchiveItem));
+                    end;
+                  True:
+                    begin
+                      repeat
+                        if Assigned(ParentListROMsName) then
+                           ParentListROMsName.Add(AnsiLowerCase(ArchiveItem.FileName));
+                        if Assigned(ParentListROMsSize) then
+                           ParentListROMsSize.Add(IntToStr(ArchiveItem.UncompressedSize));
+                        if Assigned(ParentListROMsCRC) then
+                           ParentListROMsCRC.Add(LowerCase(Format('%x', [ArchiveItem.CRC])));
 
-                      if Assigned(ParentListROMsNameFullPath) then
-                         ParentListROMsNameFullPath.Add(AnsiLowerCase(AnsiLowerCase(ArchiveItem.StoredPath+ArchiveItem.FileName)));
-                    until (not FindNext(ArchiveItem));
-                  end;
-              end;
-            end
-         else
-            Result:= False;
-       end;
-    // Close the archive
-    CloseArchive;
+                        if Assigned(ParentListROMsNameFullPath) then
+                           ParentListROMsNameFullPath.Add(AnsiLowerCase(AnsiLowerCase(ArchiveItem.StoredPath+ArchiveItem.FileName)));
+                      until (not FindNext(ArchiveItem));
+                    end;
+                end;
+              end
+           else
+              Result:= False;
+         end;
+      CloseArchive;
+      ZipForge.FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      ZipForge.FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.UnZipFile(ZipFileName, ROMFileName: String): Boolean;
 begin
+  Result:= True;
   with ZipForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenRead);
+    try
+      OpenArchive(fmOpenRead);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
-         BaseDir:= GetWinTempDir;
-         ExtractFiles(ROMFileName);
-       end;
-    CloseArchive;
+      Result:= FileCount > 0;
+      if Result then
+         begin
+           BaseDir:= GetWinTempDir;
+           ExtractFiles(ROMFileName);
+         end;
+      CloseArchive;
+      FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.UnZipFileMemory(ZipFileName, ROMFileName: String; StreamHolder: TMemoryStream): Boolean;
 begin
+  Result:= True;
   with ZipForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenRead);
+    try
+      OpenArchive(fmOpenRead);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
+      Result:= FileCount > 0;
+      if Result then
          ExtractToStream(ROMFileName, StreamHolder);
-       end;
-    CloseArchive;
+      CloseArchive;
+      FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.DeleteFileInsideZip(ZipFileName, DelFileName: String): Boolean;
 begin
+  Result:= True;
   with ZipForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenReadWrite);
+    try
+      OpenArchive(fmOpenReadWrite);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
+      Result:= FileCount > 0;
+      if Result then
          DeleteFiles(DelFileName);
-       end;
-    CloseArchive;
+      CloseArchive;
+      FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.DeleteExtraFileInsideZip(ZipFileName, DelFileName: String): Boolean;
 begin
+  Result:= True;
   with ZipForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenReadWrite);
+    try
+      OpenArchive(fmOpenReadWrite);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
+      Result:= FileCount > 0;
+      if Result then
          DeleteFiles(DelFileName+'????.png', faAnyFile-faDirectory, DelFileName+'.png');
-       end;
-    CloseArchive;
-    FileMasks:= nil;
-    ExclusionMasks:= nil;
+      CloseArchive;
+      FileName:= '';
+      FileMasks:= nil;
+      ExclusionMasks:= nil;
+    except
+      Result:= False;
+      CloseArchive;
+      FileName:= '';
+      FileMasks:= nil;
+      ExclusionMasks:= nil;
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.RenameFileInsideZip(ZipFileName, CurrentName, NewName: String): Boolean;
 begin
+  Result:= True;
   with ZIPForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenReadWrite);
+    try
+      RepairArchive; // this repairs damaged archive (don't know why but this needs to be here)... huh ?
+      if not Active then
+         OpenArchive(fmOpenReadWrite);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
+      Result:= FileCount > 0;
+      if Result then
          RenameFile(CurrentName, NewName);
-         //GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-         //                   Format(GetLanguageText('Messages', 'RenameInsideZIPFailedMsg', 'Could not rename "%s" to "%s".')   , [CurrentName, NewName]), 2);
-       end;
-    CloseArchive;
+
+      CloseArchive;
+      FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
 function TFormMain.ExtractFilesList(ZipFileName, FilesUnzip: String): Boolean;
 begin
+  Result:= True;
+
   with ZIPForge do
   begin
     FileName:= ZipFileName;
-    OpenArchive(fmOpenRead);
+    try
+      OpenArchive(fmOpenRead);
 
-    Result:= FileCount > 0;
-    if Result then
-       begin
-         BaseDir:= GetWinTempDir;
-         ExtractFiles(FilesUnzip);
-         //GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-         //                   Format(GetLanguageText('Messages', 'RenameInsideZIPFailedMsg', 'Could not rename "%s" to "%s".')   , [CurrentName, NewName]), 2);
-       end;
-    CloseArchive;
+      Result:= (FileCount > 0);
+      if Result then
+         begin
+           BaseDir:= GetWinTempDir;
+           ExtractFiles(FilesUnzip);
+         end;
+      CloseArchive;
+      BaseDir:= '';
+      FileName:= '';
+    except
+      Result:= False;
+      CloseArchive;
+      BaseDir:= '';
+      FileName:= '';
+    end;
   end;
   if not Result then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'FileOpenErrorMsg',
-                                              'Could not open file "%s"! File can be damaged or incomplete. Please verify.'), [ZipFileName]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FileOpenErrorMsg', 'Could not open file "%s"! File can be damaged or incomplete. Please verify.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ZipFileName]), 2);
      end;
 end;
 
@@ -1237,6 +1669,8 @@ begin
     Finalize(GamesList[Loop].eVersionAdded);
     Finalize(GamesList[Loop].eDriver);
     Finalize(GamesList[Loop].eGameSize);
+    Finalize(GamesList[Loop].eGameTimesPlayed);
+    Finalize(GamesList[Loop].eGameTotalPlayTime);
   end;
 end;
 
@@ -1262,6 +1696,10 @@ begin
   mCategory:= '';
   mVersionAdded:= '';
   mDriver:= '';
+  mGameTimesPlayed:= '';
+  mGameTotalPlayTime:= '';
+  mSampleName:= '';
+  mSampleOfName:= '';
 end;
 
 procedure TFormMain.SetGameMemoryInfo;
@@ -1291,6 +1729,8 @@ begin
     mCategory:= eCategory;
     mVersionAdded:= eVersionAdded;
     mDriver:= eDriver;
+    mGameTimesPlayed:= eGameTimesPlayed;
+    mGameTimesPlayed:= eGameTotalPlayTime;
   end;
 end;
 
@@ -1300,7 +1740,7 @@ var
 begin
   // set 0 for Ascending
   // set 1 for Descending
-  SetLength(ColumnsSort, 18);
+  SetLength(ColumnsSort, 21);
   for Loop:=0 to Length(ColumnsSort) do
     ColumnsSort[Loop]:= 0;
 end;
@@ -1319,26 +1759,29 @@ end;
 
 function CompareColumnsValue(var GameItem1, GameItem2: TGameInfo; var ColumnID: Integer): Integer;
 begin
+  // CompareStr
   case ColumnID of
-     0: Result:= CompareStr(GameItem1.eDescription, GameItem2.eDescription);
-     1: Result:= CompareStr(GameItem1.eYear, GameItem2.eYear);
-     2: Result:= CompareStr(GameItem1.eManufacturer, GameItem2.eManufacturer);
-     3: Result:= CompareStr(GameItem1.eSound, GameItem2.eSound);
-     4: Result:= CompareStr(GameItem1.eFrequency, GameItem2.eFrequency);
-     5: Result:= CompareStr(GameItem1.eSamples, GameItem2.eSamples);
-     6: Result:= CompareStr(GameItem1.eControlType, GameItem2.eControlType);
-     7: Result:= CompareStr(GameItem1.eVideo, GameItem2.eVideo);
-     8: Result:= CompareStr(GameItem1.eOrientation, GameItem2.eOrientation);
-     9: Result:= CompareStr(GameItem1.eResolution, GameItem2.eResolution);
-    10: Result:= CompareStr(GameItem1.eDriverStatus, GameItem2.eDriverStatus);
-    11: Result:= CompareStr(GameItem1.eSoundStatus, GameItem2.eSoundStatus);
-    12: Result:= CompareStr(GameItem1.eColorStatus, GameItem2.eColorStatus);
-    13: Result:= CompareStr(GameItem1.eMerged, GameItem2.eMerged);
-    14: Result:= CompareStr(GameItem1.eName, GameItem2.eName);
-    15: Result:= CompareStr(GameItem1.eClone, GameItem2.eClone);
-    16: Result:= CompareStr(GameItem1.eCategory, GameItem2.eCategory);
-    17: Result:= CompareStr(GameItem1.eVersionAdded, GameItem2.eVersionAdded);
-    18: Result:= CompareStr(GameItem1.eDriver, GameItem2.eDriver);
+     0: Result:= CompareText(GameItem1.eDescription, GameItem2.eDescription);
+     1: Result:= CompareText(GameItem1.eYear, GameItem2.eYear);
+     2: Result:= CompareText(GameItem1.eManufacturer, GameItem2.eManufacturer);
+     3: Result:= CompareText(GameItem1.eSound, GameItem2.eSound);
+     4: Result:= CompareText(GameItem1.eFrequency, GameItem2.eFrequency);
+     5: Result:= CompareText(GameItem1.eSamples, GameItem2.eSamples);
+     6: Result:= CompareText(GameItem1.eControlType, GameItem2.eControlType);
+     7: Result:= CompareText(GameItem1.eVideo, GameItem2.eVideo);
+     8: Result:= CompareText(GameItem1.eOrientation, GameItem2.eOrientation);
+     9: Result:= CompareText(GameItem1.eResolution, GameItem2.eResolution);
+    10: Result:= CompareText(GameItem1.eDriverStatus, GameItem2.eDriverStatus);
+    11: Result:= CompareText(GameItem1.eSoundStatus, GameItem2.eSoundStatus);
+    12: Result:= CompareText(GameItem1.eColorStatus, GameItem2.eColorStatus);
+    13: Result:= CompareText(GameItem1.eMerged, GameItem2.eMerged);
+    14: Result:= CompareText(GameItem1.eName, GameItem2.eName);
+    15: Result:= CompareText(GameItem1.eClone, GameItem2.eClone);
+    16: Result:= CompareText(GameItem1.eCategory, GameItem2.eCategory);
+    17: Result:= CompareText(GameItem1.eVersionAdded, GameItem2.eVersionAdded);
+    18: Result:= CompareText(GameItem1.eDriver, GameItem2.eDriver);
+    19: Result:= CompareText(GameItem1.eGameTimesPlayed, GameItem2.eGameTimesPlayed);
+    20: Result:= CompareText(GameItem1.eGameTotalPlayTime, GameItem2.eGameTotalPlayTime);
   end;
 end;
 
@@ -1392,7 +1835,7 @@ begin
   if ForceSortAscending then
      ColumnsSort[ColumnID]:= 0;
 
-  QuickSort(CompareColumnsValue, (ColumnsSort[ColumnID] = 0), Low(GamesList), High(GamesList), List.Column[ColumnID].ID);
+  QuickSort(CompareColumnsValue, (ColumnsSort[ColumnID] = 0), Low(GamesList), High(GamesList), ColumnID);
 
   // toggle ascending/descending for column clicked on
   ColumnsSort[ColumnID]:= Ord(not Boolean(ColumnsSort[ColumnID]));
@@ -1400,6 +1843,7 @@ begin
 
   if CurrentGame = '' then
      begin
+       SelectedGame:= FindGameName(SelectedGameName);
        if (SelectedGame < Length(GamesList)) and (Length(GamesList) > 0) then
           SelectItem(SelectedGame)
        else
@@ -1407,7 +1851,7 @@ begin
      end
   else
      SelectItem(FindGame(SelectedGame, CurrentGame));
-  ColumnSorted:= List.Column[ColumnID].ID;
+  ColumnSorted:= ColumnID;
 end;
 
 function TFormMain.FindGame(CurrentIndex: Integer; GameDescription: String): Integer;
@@ -1448,9 +1892,27 @@ begin
      end;
 end;
 
+function TFormMain.FindGameName(GameName: String): Integer;
+var
+  Loop: Integer;
+begin
+  Result:= 0;
+  if (GameName = '') or (Length(GamesList) = 0) then
+     Exit;
+
+  for Loop:=0 to Length(GamesList)-1 do
+  begin
+    if GamesList[Loop].eName = GameName then
+       begin
+         Result:= Loop;
+         Break;
+       end;
+  end;
+end;
+
 function TFormMain.PopulateROMDataLine: String;
 begin
-  Result:= Format('%.2u', [mROMIdentification])+'¬'+mDescription+'¬'+mYear+'¬'+mManufacturer+'¬'+mSound+'¬'+mFrequency+'¬'+mSamples+'¬'+mControlType+'¬'+mVideo+'¬'+mOrientation+'¬'+mResolution+'¬'+mDriverStatus+'¬'+mSoundStatus+'¬'+mColorStatus+'¬'+mMerged+'¬'+mName+'¬'+mClone+'¬'+mCategory+'¬'+mVersionAdded+'¬'+mDriver+';';
+  Result:= Format('%.2u', [mROMIdentification])+'¬'+mDescription+'¬'+mYear+'¬'+mManufacturer+'¬'+mSound+'¬'+mFrequency+'¬'+mSamples+'¬'+mControlType+'¬'+mVideo+'¬'+mOrientation+'¬'+mResolution+'¬'+mDriverStatus+'¬'+mSoundStatus+'¬'+mColorStatus+'¬'+mMerged+'¬'+mName+'¬'+mClone+'¬'+mDriver+';';
 end;
 
 function TFormMain.SearchString(const SubString, StringLine: String): Boolean;
@@ -1470,22 +1932,16 @@ begin
     3: OpenDialog.Filter:= 'Data files (*.dat)|*.dat'; // .dat
     4: OpenDialog.Filter:= 'JPEG image file (*.jpg; *.jpeg)|*.jpg; *.jpeg'; // .jpeg image files
     5: OpenDialog.Filter:= 'PNG image file (*.png)|*.png'; // .png image files
+    6: OpenDialog.Filter:= 'Initialization files (*.ini)|*.ini'; // .ini
   end;
   OpenDialog.Title:= DialogTitle;
 
   if OpenDialog.Execute then
-     EditHolder.Text:= OpenDialog.FileName;
+     begin
+       if EditHolder <> nil then
+          EditHolder.Text:= OpenDialog.FileName;
+     end;
   SetCurrentDir(FrontendPath);
-end;
-
-function TFormMain.GetCurrentEmulatorFormat: ShortInt;
-begin
-  Result:= EmulatorType[ButtonExecutablesMode.Tag];
-end;
-
-function TFormMain.GetCurrentEmulatorExecutable: String;
-begin
-  Result:= EmulatorExecutable[ButtonExecutablesMode.Tag];
 end;
 
 procedure TFormMain.DialogSelectFolder(EditHolder: TEdit; MultipleFolders: Boolean);
@@ -1560,7 +2016,7 @@ begin
   else
   if EditHolder.Name = 'FolderIcons' then
      DialogText:= Format(GetLanguageText('Preferences', 'SelectFolderDialogText', 'Select a Folder for %s'),
-                         [GetLanguageText('Resource', 'IconsDescription', 'Real Icons')])
+                         [GetLanguageText('Resource', 'IconsDescription', 'Games Icons')])
   else
   if EditHolder.Name = 'FolderGamesFAQ' then
      DialogText:= Format(GetLanguageText('Preferences', 'SelectFolderDialogText', 'Select a Folder for %s'),
@@ -1572,6 +2028,7 @@ begin
 
   if SelectDirectory(DialogText, '', Value) then
      begin
+       Value:= ExcludeTrailingPathDelimiter(Value);
        case MultipleFolders of
          True:
            begin
@@ -1580,18 +2037,9 @@ begin
              else
                 EditHolder.Text:= Value;
            end;
-         False:
-           begin
-             EditHolder.Text:= Value;
-           end;
+         False: EditHolder.Text:= Value;
        end;
      end;
-end;
-
-procedure TFormMain.LoadIcon(ImageHolder: TImage32; ImageFileName: String);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\icons\'+ImageFileName) then
-     ImageHolder.Bitmap.LoadFromFile(FormMain.FrontendPath+'resources\images\icons\'+ImageFileName);
 end;
 
 // New Full Screen mode function
@@ -1612,7 +2060,8 @@ end;
 
 function TFormMain.CheckWinXPThemes: Boolean;
 begin
-  with ThemeManager, ThemeServices do
+  Result:= False;
+  with ThemeServices do
   begin
     case ThemesAvailable of
       True : Result:= ThemesEnabled;
@@ -1688,12 +2137,6 @@ begin
           Result:= GetLanguageText('Resource', 'UnavailableNeoGeoBiosDescription', 'Unavailable Neo Geo Bios');
      end
   else
-  if GameClass = 'CustomGames' then
-     Result:= GetLanguageText('Resource', 'CustomGamesDescription', 'Custom Games')
-  else
-  if GameClass = 'UnCustomGames' then
-     Result:= GetLanguageText('Resource', 'UnavailableCustomGamesDescription', 'Unavailable Custom Games')
-  else
      Result:= Format(GetLanguageText('Resource', 'MiscGamesDescription', '%s Games'), [GameClass]); // this is for favorites games (which uses the filename for description)
 end;
 
@@ -1710,9 +2153,7 @@ begin
         if ParentalLockGamesList.Count > 0 then
            begin
              for Loop:=0 to ParentalLockGamesList.Count -1 do
-             begin
-               ParentalLockGamesList[Loop]:= DecryptData(ParentalLockGamesList[Loop]);
-             end;
+                 ParentalLockGamesList[Loop]:= DecryptData(ParentalLockGamesList[Loop]);
            end;
       end;
     False: FreeAndNil(ParentalLockGamesList);
@@ -1722,11 +2163,11 @@ end;
 
 procedure TFormMain.AppException(Sender: TObject; E: Exception);
 begin
-  GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'), E.Message, 2);
+  GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'), E.Message, 2)
 end;
 
-function TFormMain.RunProcess(AppPath: String; MustWait: Boolean=FALSE;
-  Visibility: Word=SW_SHOWNORMAL; RunningGame: Boolean=TRUE):DWORD;
+function TFormMain.RunProcess(AppPath: String; MustWait: Boolean=False;
+  Visibility: Word=SW_SHOWNORMAL; RunningGame: Boolean=True): DWORD;
 var
   SI: TStartupInfo;
   PI: TProcessInformation;
@@ -1735,9 +2176,9 @@ var
 begin
   if Length(AppPath) > 254 then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                       Format(GetLanguageText('Messages', 'CommandLineLimitMsg',
-                                              'The command line has more than 254 characters - [%u]'), [Length(AppPath)]), 2);
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'CommandLineLimitMsg', 'The command line has more than 254 characters - [%u]');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [Length(AppPath)]), 2);
        Exit;
      end;
   FillChar(SI, SizeOf(SI), 0);
@@ -1749,27 +2190,19 @@ begin
   if not CreateProcess(nil, zFileName,
      nil, nil, False, Create_New_Console+Normal_Priority_Class, nil, nil, SI, PI) then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'FileExecutionErrorTitle', 'Execution Failed'),
-                       Format(GetLanguageText('Messages', 'FileExecutionErrorMsg', 'Failed to excecute program "%s". Error Code %d'), [AppPath, GetLastError]), 2);
+       GetMessagesLng('Messages', 'FileExecutionErrorTitle', 'Execution Failed',
+                      'Messages', 'FileExecutionErrorMsg', 'Failed to excecute program "%s". Error Code %d');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [AppPath, GetLastError]), 2);
      end;
 
   Proc:= PI.hProcess;
   CloseHandle(PI.hThread);
 
-  {// Original code
-  if MustWait then
-     begin
-       if WaitForSingleObject(Proc, Infinite) <> Wait_Failed then
-          GetExitCodeProcess(Proc, Result);
-     end;}
+  if (FormPreferences.MinimizeFrontend.Checked) and (RunningGame) then
+     Application.Minimize;
 
   if MustWait then
      begin
-       // it will wait 10 seconds and then test if MAME is still running
-       // this is the first atempt to avoid EL crashing
-       // and to avoid the crash of the entire system!
-       // to change the wait time (in milliseconds), just change the
-       // "10000" value on the "WaitForSingleObject" lines ;-)
        if WaitForSingleObject(Proc, 10000) <> Wait_Failed then
           begin
             GetExitCodeProcess(Proc, Result);
@@ -1783,6 +2216,8 @@ begin
      end;
 
   CloseHandle(Proc);
+  if (FormPreferences.MinimizeFrontend.Checked) and (RunningGame) then
+     Application.Restore;
 {---PARAMETERS------------------------------------------------------------------
 AppPath: The full path and Application Name to run ie. c:winnt notepad.exe
 
@@ -1856,23 +2291,24 @@ begin
   end;
 end;
 
-function TFormMain.GetEmulatorVersion(EmulatorNumber: ShortInt; ExeFileType: String): Boolean;
+function TFormMain.GetEmulatorVersion(EmulatorNumber: ShortInt): Boolean;
 var
   CommandLine: String;
   BatchFile: THashedStringList;
   Continue: Boolean;
+  ExeType: String[5];
 begin
   Continue:= True;
   Result:= True;
   SetCurrentDir(FrontendPath);
-
   CommandLine:= SystemStr+EmulatorExecutable[EmulatorNumber]+ SystemStr+' -help > '+SystemStr+FrontendPath+'EmuVersion'+IntToStr(EmulatorNumber)+'.tmp'+SystemStr;
 
-  if ExeFileType = 'DOS' then
-     EmulatorType[EmulatorNumber]:= 2
-  else
-  if ExeFileType = 'Win32' then
+  ExeType:= ExeStrings[GetExeType(EmulatorExecutable[MenuCurrentEmulator.Tag])];
+  if ExeType = 'Win32' then
      EmulatorType[EmulatorNumber]:= 1
+  else
+  if ExeType = 'DOS' then
+     EmulatorType[EmulatorNumber]:= 2
   else
      begin
        Continue:= False;
@@ -1890,87 +2326,23 @@ begin
           begin
             BatchFile:= THashedStringList.Create;
             BatchFile.LoadFromFile(FrontendPath+'EmuVersion'+IntToStr(EmulatorNumber)+'.tmp');
-            case EmulatorNumber of
-              1:
-                begin
-                  EmulatorVersion[1]:= BatchFile[0];
-                  Delete(EmulatorVersion[1], (Pos(')', EmulatorVersion[1])+1), Length(EmulatorVersion[1]));
-                end;
-              2:
-                begin
-                  EmulatorVersion[2]:= BatchFile[0];
-                  Delete(EmulatorVersion[2], (Pos(')', EmulatorVersion[2])+1), Length(EmulatorVersion[2]));
-                end;
-              3:
-                begin
-                  EmulatorVersion[3]:= BatchFile[0];
-                  Delete(EmulatorVersion[3], (Pos(')', EmulatorVersion[3])+1), Length(EmulatorVersion[3]));
-                end;
-              4:
-                begin
-                  EmulatorVersion[4]:= BatchFile[0];
-                  Delete(EmulatorVersion[4], (Pos(')', EmulatorVersion[4])+1), Length(EmulatorVersion[4]));
-                end;
-              5:
-                begin
-                  EmulatorVersion[5]:= BatchFile[0];
-                  Delete(EmulatorVersion[5], (Pos(')', EmulatorVersion[5])+1), Length(EmulatorVersion[5]));
-                end;
-            end;
+
+            EmulatorVersion[EmulatorNumber]:= BatchFile[0];
+            Delete(EmulatorVersion[EmulatorNumber], (Pos(')', EmulatorVersion[EmulatorNumber])+1), Length(EmulatorVersion[EmulatorNumber]));
           end;
      end;
 
   FreeAndNil(BatchFile);
-  if FileExists(FrontendPath+'EmuVersion'+IntToStr(EmulatorNumber)+'.tmp') then
-     begin
-       DeleteFile(FrontendPath+'EmuVersion'+IntToStr(EmulatorNumber)+'.tmp');
-       Application.ProcessMessages;
-    end;
+  DeleteFile(FrontendPath+'EmuVersion'+IntToStr(EmulatorNumber)+'.tmp');
+  Application.ProcessMessages;
+
+  GetMessagesLng('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!',
+                 'Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u');
 
   if EmulatorVersion[EmulatorNumber] = '' then
-     EmulatorVersion[EmulatorNumber]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                   Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                   EmulatorVersion[EmulatorNumber]);
-
-  {case EmulatorNumber of
-    1:
-      begin
-        if EmulatorVersion[1] = '' then
-           EmulatorVersion[1]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                      Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                      EmulatorVersion[1]);
-      end;
-    2:
-      begin
-        if EmulatorVersion[2] = '' then
-           EmulatorVersion[2]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                      Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                      EmulatorVersion[2]);
-      end;
-    3:
-      begin
-        if EmulatorVersion[3] = '' then
-           EmulatorVersion[3]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                      Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                      EmulatorVersion[3]);
-      end;
-    4:
-      begin
-        if EmulatorVersion[4] = '' then
-           EmulatorVersion[4]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                      Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                      EmulatorVersion[4]);
-      end;
-    5:
-      begin
-        if EmulatorVersion[5] = '' then
-           EmulatorVersion[5]:= InputBox(GetLanguageText('Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!'),
-                                      Format(GetLanguageText('Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u'), [EmulatorNumber]),
-                                      EmulatorVersion[5]);
-      end;
-  end;}
-
-  LabelEmulatorVersion.Caption:= EmulatorVersion[ButtonExecutablesMode.Tag];
+     EmulatorVersion[EmulatorNumber]:= InputBox(MessageText[0], Format(MessageText[1], [EmulatorNumber]),
+                                                EmulatorVersion[EmulatorNumber]);
+  LabelEmulatorVersion.Caption:= '-> '+EmulatorVersion[ButtonExecutablesMode.Tag];
 end;
 
 procedure TFormMain.UpdateGeneralAppearance(FormName: TForm);
@@ -1978,56 +2350,6 @@ begin
   FormName.Font:= FormMain.Font;
   if (FormName.Name <> 'FormStatus') and (FormName.Name <> 'FormAbout') then
      FormName.Color:= FormMain.Color;
-end;
-
-procedure TFormMain.ReadTextViewerFont(FormID: Byte);
-var
-  INIFile: TIniFile;
-begin
-  // Read Text Viewer and DAT Viewer Font Style
-  INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
-  case FormID of
-    0:
-      begin
-        FormDATViewer.DATTextHolder.Font.Color:= INIFile.ReadInteger('Custom Colors', 'FileViewerFontColor', 0);
-        FormDATViewer.DATTextHolder.Font.Name:= INIFile.ReadString('Custom Colors', 'FileViewerFontName', 'Courier New');
-        FormDATViewer.DATTextHolder.Font.Size:= INIFile.ReadInteger('Custom Colors', 'FileViewerFontSize', 8);
-        FormDATViewer.DATTextHolder.Font.Style:= TFontStyles(Byte(INIFile.ReadInteger('Custom Colors', 'FileViewerFontType', 0)));
-      end;
-    1:
-      begin
-        FormTextViewer.TextHolder.Font.Color:= INIFile.ReadInteger('Custom Colors', 'FileViewerFontColor', 0);;
-        FormTextViewer.TextHolder.Font.Name:= INIFile.ReadString('Custom Colors', 'FileViewerFontName', 'Courier New');
-        FormTextViewer.TextHolder.Font.Size:= INIFile.ReadInteger('Custom Colors', 'FileViewerFontSize', 8);
-        FormTextViewer.TextHolder.Font.Style:= TFontStyles(Byte(INIFile.ReadInteger('Custom Colors', 'FileViewerFontType', 0)));
-      end;
-  end;
-  FreeAndNil(INIFile);
-end;
-
-procedure TFormMain.UpdateTextViewerFont(FormID: Byte);
-var
-  INIFile: TIniFile;
-begin
-  // Read Text Viewer and DAT Viewer Font Style
-  INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
-  case FormID of
-    0:
-      begin
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontColor', Cardinal(FormDATViewer.DATTextHolder.Font.Color));
-        INIFile.WriteString('Custom Colors', 'FileViewerFontName', FormDATViewer.DATTextHolder.Font.Name);
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontSize', FormDATViewer.DATTextHolder.Font.Size);
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontType', Byte(FormDATViewer.DATTextHolder.Font.Style));
-      end;
-    1:
-      begin
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontColor', Cardinal(FormTextViewer.TextHolder.Font.Color));
-        INIFile.WriteString('Custom Colors', 'FileViewerFontName', FormTextViewer.TextHolder.Font.Name);
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontSize', FormTextViewer.TextHolder.Font.Size);
-        INIFile.WriteInteger('Custom Colors', 'FileViewerFontType', Byte(FormTextViewer.TextHolder.Font.Style));
-      end;
-  end;
-  FreeAndNil(INIFile);
 end;
 
 procedure TFormMain.CreateIniFile;
@@ -2063,18 +2385,19 @@ begin
   INIFile.WriteInteger('Configuration', 'SplitterPosition', 315);
   INIFile.WriteInteger('Configuration', 'SplitterMAMEInfoPosition', 86);
   INIFile.WriteInteger('Configuration', 'FullScreen', 0);
-  INIFile.WriteInteger('Configuration', 'TextWordWrap', 0);
   INIFile.WriteInteger('Configuration', 'ParentalLock', 0);
   INIFile.WriteInteger('Configuration', 'UserProfile', 0);
   INIFile.WriteString('Configuration', 'UserProfileName', '');
-  INIFile.WriteString('Configuration', 'Language', 'English');
+  if FrontendLanguage = '' then
+     FrontendLanguage:= 'english.lng';
+  INIFile.WriteString('Configuration', 'Language', FrontendLanguage);
 
   INIFile.WriteInteger('Preferences', 'AverageFPS', 0);
   INIFile.WriteInteger('Preferences', 'NewDescriptionFormat', 0);
-  INIFile.WriteInteger('Preferences', 'RealIcons', 0);
+  INIFile.WriteInteger('Preferences', 'GamesIcons', 0);
   //INIFile.WriteInteger('Preferences', 'ShowOnlyParentIcon', 0); // will be activated later
 
-  INIFile.WriteInteger('Preferences', 'LastGameSelected', 0);
+  INIFile.WriteString('Preferences', 'LastGameSelected', '');
   INIFile.WriteInteger('Preferences', 'LastColumnSorted', 0);
   INIFile.WriteInteger('Preferences', 'ColumnSortDirection', 0); // 0 - Ascending ; 1 - Descending
 
@@ -2089,7 +2412,17 @@ begin
   INIFile.WriteInteger('Preferences', 'UseCustomOptionsDefault', 0);
   INIFile.WriteInteger('Preferences', 'UseCustomGameDescription', 0);
   INIFile.WriteInteger('Preferences', 'UseCustomGameCategory', 0);
-  INIFile.WriteInteger('Preferences', 'AuditHardDiskImages', 0);
+
+  INIFile.WriteInteger('Preferences', 'AutoGameInfo1', 1);
+  INIFile.WriteInteger('Preferences', 'AutoGameInfo2', 2);
+  INIFile.WriteInteger('Preferences', 'AutoGameInfo3', 3);
+  INIFile.WriteInteger('Preferences', 'AutoGameInfo4', 4);
+
+  INIFile.WriteString('Preferences', 'InternetPageLink', 'http://www.mame.dk/gameinfo/%s/');
+
+  // Games Filters
+  INIFile.WriteInteger('Preferences', 'HidePreliminaryGames', 0);
+  INIFile.WriteInteger('Preferences', 'HideBios', 0);
 
   INIFile.WriteInteger('MAME', 'UseCustomAspectRatio', 0); // OFF by default
   INIFile.WriteInteger('MAME', 'HorizontalGameAspectRatio', 14); // Default ratio is 4:3
@@ -2114,8 +2447,6 @@ begin
   INIFile.WriteInteger('GamesList', 'BiosNeoGeo', 1);
   INIFile.WriteInteger('GamesList', 'UnavailableBiosClassic', 1);
   INIFile.WriteInteger('GamesList', 'UnavailableBiosNeoGeo', 1);
-  INIFile.WriteInteger('GamesList', 'CustomGames', 1);
-  INIFile.WriteInteger('GamesList', 'UnavailableCustomGames', 1);
 
   INIFile.WriteInteger('Favorites', 'Favorite', 0);
   INIFile.WriteString('Favorites', 'User', 'Default');
@@ -2123,14 +2454,16 @@ begin
   INIFile.WriteInteger('Pictures', 'ShowPictures', 1);
   INIFile.WriteInteger('Pictures', 'ShowParentPictures', 1);
   INIFile.WriteInteger('Pictures', 'AspectRatio', 1);
-  INIFile.WriteInteger('Pictures', 'SmoothPictures', 1);
-  INIFile.WriteInteger('Pictures', 'PictureButton', 1); // Title Snapshot, In-Game Snapshot, Marquee, Flyer, Cabinet, Control Panel
+  INIFile.WriteInteger('Pictures', 'SmoothPictures', 2);
+  INIFile.WriteInteger('Pictures', 'PictureButton', 1); // Title Snapshot, In Game Snapshot, Marquee, Flyer, Cabinet, Control Panel, Control Panel Layout
   INIFile.WriteInteger('Pictures', 'Stretch', 1);
   INIFile.WriteInteger('Pictures', 'NewPictureNameFormat', 0);
   INIFile.WriteInteger('Pictures', 'StretchLargerPictures', 0);
   INIFile.WriteInteger('Pictures', 'CyclePictureTypes', 0);
   INIFile.WriteInteger('Pictures', 'PicturesTransparency', 0);
   INIFile.WriteInteger('Pictures', 'VirtualList', 0);
+  INIFile.WriteInteger('Pictures', 'HideNavigationPanel', 0);
+  INIFile.WriteInteger('Pictures', 'HidePictureHint', 0);
 
   INIFile.WriteInteger('Columns', 'Description', 300);
   INIFile.WriteInteger('Columns', 'Year', 65);
@@ -2151,6 +2484,8 @@ begin
   INIFile.WriteInteger('Columns', 'Category', 180);
   INIFile.WriteInteger('Columns', 'VersionAdded', 100);
   INIFile.WriteInteger('Columns', 'Driver', 80);
+  INIFile.WriteInteger('Columns', 'GameTimesPlayed', 50);
+  INIFile.WriteInteger('Columns', 'GamePlayTime', 70);
 
   INIFile.WriteInteger('Columns', 'YearPosition', 1);
   INIFile.WriteInteger('Columns', 'ManufacturerPosition', 2);
@@ -2170,6 +2505,8 @@ begin
   INIFile.WriteInteger('Columns', 'CategoryPosition', 16);
   INIFile.WriteInteger('Columns', 'VersionAddedPosition', 17);
   INIFile.WriteInteger('Columns', 'DriverPosition', 18);
+  INIFile.WriteInteger('Columns', 'GameTimesPlayedPosition', 19);
+  INIFile.WriteInteger('Columns', 'GamePlayTimePosition', 20);
 
   INIFile.WriteInteger('Columns', 'YearVisible', 1);
   INIFile.WriteInteger('Columns', 'ManufacturerVisible', 1);
@@ -2189,6 +2526,8 @@ begin
   INIFile.WriteInteger('Columns', 'CategoryVisible', 1);
   INIFile.WriteInteger('Columns', 'VersionAddedVisible', 1);
   INIFile.WriteInteger('Columns', 'DriverVisible', 1);
+  INIFile.WriteInteger('Columns', 'GameTimesPlayedVisible', 1);
+  INIFile.WriteInteger('Columns', 'GamePlayTimeVisible', 1);
 
 
   INIFile.WriteString('Preferences', 'SplashLogoFile', 'resources\images\logo\Logo.jpg');
@@ -2202,8 +2541,6 @@ begin
   INIFile.WriteInteger('SlikStik', 'UseSlikStik', 0);
   INIFile.WriteString('SlikStik', 'ImageBackground', 'resources\images\controllers\SlikStik.png');
   INIFile.WriteInteger('SlikStik', 'Swap2ndStick', 0);
-
-  INIFile.WriteInteger('ExtraInfo', 'TotalPlayTime', 0);
 
   // Default General Font
   INIFile.WriteInteger('Appearance', 'GeneralBackgroundColor', Cardinal(TColor(clBtnFace)));
@@ -2234,12 +2571,6 @@ begin
   INIFile.WriteInteger('Appearance', 'AutomaticGameInfoFontSize', 8);
   INIFile.WriteInteger('Appearance', 'AutomaticGameInfoFontType', 0);
 
-  // Default Text Viewer and DAT Viewer Font Style
-  INIFile.WriteInteger('Appearance', 'FileViewerFontColor', 0);
-  INIFile.WriteString('Appearance', 'FileViewerFontName', 'Courier New');
-  INIFile.WriteInteger('Appearance', 'FileViewerFontSize', 8);
-  INIFile.WriteInteger('Appearance', 'FileViewerFontType', 0);
-
   INIFile.WriteString('Folders', 'TitleSnapshotsFolder', 'title');
   INIFile.WriteString('Folders', 'MarqueesFolder', 'marquees');
   INIFile.WriteString('Folders', 'CabinetsFolder', 'cabinets');
@@ -2249,6 +2580,27 @@ begin
   INIFile.WriteString('Folders', 'IconsFolder', 'icons');
   INIFile.WriteString('Folders', 'GamesFAQFolder', 'faq');
 
+  // FMOD settings
+  INIFile.WriteInteger('SoundClip', 'PlaySoundClip', 0);
+  INIFile.WriteInteger('SoundClip', 'ParentSoundClip', 1);
+  INIFile.WriteInteger('SoundClip', 'Loop', 0);
+  INIFile.WriteInteger('SoundClip', 'Volume', 255);
+  INIFile.WriteString ('SoundClip', 'Folder', 'soundclips');
+  INIFile.WriteInteger('SoundClip', 'OutputType', 1);
+  INIFile.WriteInteger('SoundClip', 'OutputDevice', 0);
+  INIFile.WriteInteger('SoundClip', 'MixerType', 4);
+  INIFile.WriteInteger('SoundClip', 'OutputRate', 3);
+  INIFile.WriteInteger('SoundClip', 'Spectrum', 0); // 0 - off; 1 - Smooth; 2 - Block
+
+  INIFile.WriteString('ZipFiles', 'TitleSnapshots', 'titles.zip');
+  INIFile.WriteString('ZipFiles', 'InGameSnapshots', 'snap.zip');
+  INIFile.WriteString('ZipFiles', 'Marquees', 'marquees.zip');
+  INIFile.WriteString('ZipFiles', 'Cabinets', 'cabinets.zip');
+  INIFile.WriteString('ZipFiles', 'Flyers', 'flyers.zip');
+  INIFile.WriteString('ZipFiles', 'ControlPanels', 'cpanel.zip');
+  INIFile.WriteString('ZipFiles', 'ControlPanelLayouts', 'cplayout.zip');
+  INIFile.WriteString('ZipFiles', 'Icons', 'icons.zip');
+
   FreeAndNil(INIFile);
 end;
 
@@ -2256,10 +2608,39 @@ function TFormMain.ReadIniFile: Boolean;
 var
   INIFile: TIniFile;
   Loop: ShortInt;
+  ColumnsPosList: array of ShortInt;
+
+  function SelectPictureMenu(MenuName: TMenuItem; PictureColorBox: TColorBox): Boolean;
+  begin
+    case MenuName.Checked of
+      True : MenuName.OnClick(Self);
+      False: MenuName.Click;
+    end;
+    PictureColorBox.OnSelect(Self);
+  end;
+
+  procedure lngCheck;
+  var
+    Root, mItem: TMenuItem;
+    Loop: Integer;
+  begin
+    Root:= MainMenu.Items[5].Find('Language');
+    for Loop:=0 to Root.Count-1 do
+    begin
+      mItem:= Root.Items[Loop];
+      if mItem.Hint = FrontendLanguage then
+         begin
+           if not mItem.Checked then
+              mItem.Checked:= True;
+           Break;
+         end;
+    end;
+  end;
+  
 begin
   Result:= True;
   INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
-  DefaultDatabaseBuilderExecutable:=INIFile.ReadString('Configuration', 'DefaultDatabaseBuilderExecutable', '1');
+  MenuCurrentEmulator.Tag:= INIFile.ReadInteger('Configuration', 'DefaultDatabaseBuilderExecutable', 1);
   EmulatorExecutable[1]:= INIFile.ReadString('Configuration', 'EmulatorName', '');
   EmulatorVersion[1]:= INIFile.ReadString('Configuration', 'EmulatorVersion', '');
   EmulatorType[1]:= INIFile.ReadInteger('Configuration', 'EmulatorType', EmulatorType[1]);
@@ -2275,7 +2656,7 @@ begin
   EmulatorExecutable[5]:= INIFile.ReadString('Configuration', 'EmulatorName5', '');
   EmulatorVersion[5]:= INIFile.ReadString('Configuration', 'EmulatorVersion5', '');
   EmulatorType[5]:= INIFile.ReadInteger('Configuration', 'EmulatorType5', EmulatorType[5]);
-  LabelEmulatorVersion.Caption:= EmulatorVersion[1];
+  LabelEmulatorVersion.Caption:= '-> '+EmulatorVersion[1];
 
   if EmulatorExecutable[1] <> '' then
      begin
@@ -2347,37 +2728,29 @@ begin
        MenuGet5thEmulatorDefaultDescription.Enabled:= False;
      end;
 
-  ButtonModeView.Tag:= INIFile.ReadInteger('Configuration', 'ModeView', 3);
+  MenuModeViewDetails.Tag:= INIFile.ReadInteger('Configuration', 'ModeView', 3);
   ButtonGameType.Tag:= INIFile.ReadInteger('Configuration', 'ListFilter', 0);
   case ButtonGameType.Tag of
-    //0: PopupAllGames.Checked:= True;
     1: PopupClassic.Checked:= True;
     2: PopupNeoGeo.Checked:= True;
     3: PopupOriginal.Checked:= True;
     4: PopupClone.Checked:= True;
     5: PopupRaster.Checked:= True;
     6: PopupVector.Checked:= True;
-    7: PopupCustomGames.Checked:= True;
   end;
+  ButtonGameType.ImageIndex:= ButtonGameType.Tag+4;
 
   ButtonGameFilters.Tag:= INIFile.ReadInteger('Configuration', 'ListFilterID', 0);
   case ButtonGameFilters.Tag of
-    //0: ButtonShowAllGames.Down:=True;
-    1: begin ButtonShowAvailableGames.Checked:= True; ButtonGameFilters.ImageIndex:= 66; end;
-    2: begin ButtonShowUnavailableGames.Checked:= True; ButtonGameFilters.ImageIndex:= 67; end;
+    1: begin ButtonShowAvailableGames.Checked:= True; ButtonGameFilters.ImageIndex:= 12; end;
+    2: begin ButtonShowUnavailableGames.Checked:= True; ButtonGameFilters.ImageIndex:= 13; end;
   end;
 
   if INIFile.ReadString('Configuration', 'WindowState', 'Normal') = 'Maximized' then
      FormMain.Tag:= 1;
 
   ButtonExecutablesMode.Tag:= INIFile.ReadInteger('Configuration', 'UseExecutable', 1);
-  case ButtonExecutablesMode.Tag of
-    1: MenuUseExecutable1.OnClick(Self);
-    2: MenuUseExecutable2.Click;
-    3: MenuUseExecutable3.Click;
-    4: MenuUseExecutable4.Click;
-    5: MenuUseExecutable5.Click;
-  end;
+  SelectExecutable(ButtonExecutablesMode.Tag);
 
   FormMain.Width:= INIFile.ReadInteger('Configuration', 'ScreenWidthSize', 630);
   FormMain.Height:= INIFile.ReadInteger('Configuration', 'ScreenHeightSize', 460);
@@ -2388,8 +2761,6 @@ begin
   FormMain.Top:= INIFile.ReadInteger('Configuration', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
   MenuFullScreen.Tag:= INIFile.ReadInteger('Configuration', 'FullScreen', 0);
 
-  TextWordWrap:= Boolean(INIFile.ReadInteger('Configuration', 'TextWordWrap', 0));
-
   MenuParentalLock.Tag:= INIFile.ReadInteger('Configuration', 'ParentalLock', 0);
 
   ActiveUserProfileDescription:= INIFile.ReadString('Configuration', 'UserProfileName', '');
@@ -2398,13 +2769,14 @@ begin
   //if INIFile.ReadInteger('Preferences','ShowOnlyParentIcon', 0) = 1 then
   //   MenuShowOnlyParentIcon.Click;
 
-  MenuRealIcons.Tag:= INIFile.ReadInteger('Preferences', 'RealIcons', 0);
-
-  FrontendLanguage:= INIFile.ReadString('Configuration', 'Language', 'English');
+  MenuGamesIcons.Tag:= INIFile.ReadInteger('Preferences', 'GamesIcons', 0);
   LabelPictureNumberValue:= '%.3d of %.3d pictures';
-  if FrontendLanguage <> 'English' then
-     SetMainLanguage;
 
+  FrontendLanguage:= INIFile.ReadString('Configuration', 'Language', 'english.lng');
+  if LowerCase(FrontendLanguage) <> 'english.lng' then
+     lngCheck;
+  SetMainLanguage;
+  
   // read General Font Type
   FormMain.Font.Name:= INIFile.ReadString('Appearance', 'GeneralFontName', 'Tahoma');
   FormMain.Font.Size:= INIFile.ReadInteger('Appearance', 'GeneralFontSize', 8);
@@ -2446,10 +2818,9 @@ begin
     UpdateGeneralAppearance(FormPreferences);
     UpdateGeneralAppearance(FormStatus);
 
-    AverageFPS.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'AverageFPS', 0));
     NewDescriptionFormat.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'NewDescriptionFormat', 0));
 
-    SelectedGame:= INIFile.ReadInteger('Preferences', 'LastGameSelected', 0);
+    SelectedGameName:= INIFile.ReadString('Preferences', 'LastGameSelected', '');
     ColumnSorted:= INIFile.ReadInteger('Preferences', 'LastColumnSorted', 0);
     ColumnsSort[ColumnSorted]:= INIFile.ReadInteger('Preferences', 'ColumnSortDirection', 0); // 0 - Ascending ; 1 - Descending
 
@@ -2461,7 +2832,6 @@ begin
       2: ShowGameSizeCompressedZip.Checked:= True;
     end;
 
-    ShowStatistics.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShowStatistics', 0));
     MinimizeFrontend.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'MinimizeFrontend', 0));
     FillAllCloneColumns.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'FillAllCloneColumns', 0));
     DefaultGameIconsFolder.Text:= INIFile.ReadString('Preferences', 'DefaultIconsFolder', 'resources\defaulticons\gameslist');
@@ -2469,7 +2839,17 @@ begin
     UseCustomOptionsDefault.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseCustomOptionsDefault', 0));
     UseCustomGameDescription.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseCustomGameDescription', 0));
     UseCustomGameCategory.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseCustomGameCategory', 0));
-    AuditCHDFiles.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'AuditHardDiskImages', 0));
+
+    AutomaticGameInformation1.ItemIndex:= INIFile.ReadInteger('Preferences', 'AutoGameInfo1', 1);
+    AutomaticGameInformation2.ItemIndex:= INIFile.ReadInteger('Preferences', 'AutoGameInfo2', 2);
+    AutomaticGameInformation3.ItemIndex:= INIFile.ReadInteger('Preferences', 'AutoGameInfo3', 3);
+    AutomaticGameInformation4.ItemIndex:= INIFile.ReadInteger('Preferences', 'AutoGameInfo4', 4);
+
+    InternetPage.Text:= INIFile.ReadString('Preferences', 'InternetPageLink', 'http://www.mame.dk/gameinfo/%s/');
+
+    // Games Filters
+    HidePreliminaryGames.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'HidePreliminaryGames', 0));
+    HideBios.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'HideBios', 0));
 
     // M.A.M.E. Tab
     // Emu Loader Folders
@@ -2510,51 +2890,20 @@ begin
   BiosNeoGeo:= Boolean(INIFile.ReadInteger('GamesList', 'BiosNeoGeo', 1));
   UnavailableBiosClassic:= Boolean(INIFile.ReadInteger('GamesList', 'UnavailableBiosClassic', 1));
   UnavailableBiosNeoGeo:= Boolean(INIFile.ReadInteger('GamesList', 'UnavailableBiosNeoGeo', 1));
-  CustomGames:= Boolean(INIFile.ReadInteger('GamesList', 'CustomGames', 1));
-  UnavailableCustomGames:= Boolean(INIFile.ReadInteger('GamesList', 'UnavailableCustomGames', 1));
 
   FavoriteUser:= INIFile.ReadString('Favorites', 'User', 'Default');
   StatusBarFavoriteUser.Caption:= Format(GetLanguageText('Main', 'StatusBarFavoriteUser', 'Favorite User: %s'), [FavoriteUser]);
 
-  // Title Snapshot, In-Game Snapshot, Marquee, Flyer, Cabinet, Control Panel, Control Panel Layout
+  // Title Snapshot, In Game Snapshot, Marquee, Flyer, Cabinet, Control Panel, Control Panel Layout
   ButtonPicturesModeView.Tag:= INIFile.ReadInteger('Pictures', 'PictureButton', 1);
   case ButtonPicturesModeView.Tag of
-    0:
-      begin
-        MenuShowTitleSnapshot.Click;
-        FormPreferences.TitleSnapshotPicturesBackgroundColor.OnSelect(Self);
-      end;
-    1:
-      begin
-        MenuShowInGameSnapShot.Checked:= False;
-        MenuShowInGameSnapshot.Click;
-        FormPreferences.InGameSnapshotPicturesBackgroundColor.OnSelect(Self);
-      end;
-    2:
-      begin
-        MenuShowMarquee.Click;
-        FormPreferences.MarqueePicturesBackgroundColor.OnSelect(Self);
-      end;
-    3:
-      begin
-        MenuShowFlyer.Click;
-        FormPreferences.FlyerPicturesBackgroundColor.OnSelect(Self);
-      end;
-    4:
-      begin
-        MenuShowCabinet.Click;
-        FormPreferences.CabinetPicturesBackgroundColor.OnSelect(Self);
-      end;
-    5:
-      begin
-        MenuShowControlPanel.Click;
-        FormPreferences.ControlPanelPicturesBackgroundColor.OnSelect(Self);
-      end;
-    6:
-      begin
-        MenuShowControlPanelLayout.Click;
-        FormPreferences.ControlPanelLayoutPicturesBackgroundColor.OnSelect(Self);
-      end;
+    0: SelectPictureMenu(MenuShowTitleSnapshot, FormPreferences.TitleSnapshotPicturesBackgroundColor);
+    1: SelectPictureMenu(MenuShowInGameSnapShot, FormPreferences.InGameSnapshotPicturesBackgroundColor);
+    2: SelectPictureMenu(MenuShowMarquee, FormPreferences.MarqueePicturesBackgroundColor);
+    3: SelectPictureMenu(MenuShowFlyer, FormPreferences.FlyerPicturesBackgroundColor);
+    4: SelectPictureMenu(MenuShowCabinet, FormPreferences.CabinetPicturesBackgroundColor);
+    5: SelectPictureMenu(MenuShowControlPanel, FormPreferences.ControlPanelPicturesBackgroundColor);
+    6: SelectPictureMenu(MenuShowControlPanelLayout, FormPreferences.ControlPanelLayoutPicturesBackgroundColor);
   end;
 
   with FormPreferences do
@@ -2564,37 +2913,48 @@ begin
 
     StretchPicture.Tag:= INIFile.ReadInteger('Pictures', 'Stretch', 1);
     AspectRatio.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'AspectRatio', 1));
-    SmoothPictures.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'SmoothPictures', 1));
+    SmoothPictures.Position:= INIFile.ReadInteger('Pictures', 'SmoothPictures', 2);
     ShowParentPictures.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'ShowParentPictures', 1));
     NewPictureNameFormat.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'NewPictureNameFormat', 0));
     StretchLargerPictures.Tag:= INIFile.ReadInteger('Pictures', 'StretchLargerPictures', 0);
     CyclePictureTypes.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'CyclePictureTypes', 0));
     PicturesTransparency.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'PicturesTransparency', 0));
     PicturesVirtualList.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'VirtualList', 0));
+    HideNavigationPanel.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'HideNavigationPanel', 0));
+    HidePictureHint.Checked:= Boolean(INIFile.ReadInteger('Pictures', 'HidePictureHint', 0));
   end;
 
   if not Boolean(INIFile.ReadInteger('Pictures', 'ShowPictures', 1)) then
      MenuShowPictures.Click;
 
+  SetLength(ColumnsPosList, List.Columns.Count+1);
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'YearPosition', 1)]:= 1;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'ManufacturerPosition', 2)]:= 2;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'SoundPosition', 3)]:= 3;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'FrequencyPosition', 4)]:= 4;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'SamplesPosition', 5)]:= 5;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'ControlTypePosition', 6)]:= 6;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'VideoPosition', 7)]:= 7;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'OrientationPosition', 8)]:= 8;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'ResolutionPosition', 9)]:= 9;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'DriverStatusPosition', 10)]:= 10;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'SoundStatusPosition', 11)]:= 11;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'ColorStatusPosition', 12)]:= 12;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'MergedPosition', 13)]:= 13;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'NamePosition', 14)]:= 14;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'ClonePosition', 15)]:= 15;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'CategoryPosition', 16)]:= 16;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'VersionAddedPosition', 17)]:= 17;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'DriverPosition', 18)]:= 18;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'GameTimesPlayedPosition', 19)]:= 19;
+  ColumnsPosList[INIFile.ReadInteger('Columns', 'GamePlayTimePosition', 20)]:= 20;
+
   List.Items.BeginUpdate;
-  SetColumnPosition(1, INIFile.ReadInteger('Columns', 'YearPosition', 1), False);
-  SetColumnPosition(2, INIFile.ReadInteger('Columns', 'ManufacturerPosition', 2), False);
-  SetColumnPosition(3, INIFile.ReadInteger('Columns', 'SoundPosition', 3), False);
-  SetColumnPosition(4, INIFile.ReadInteger('Columns', 'FrequencyPosition', 4), False);
-  SetColumnPosition(5, INIFile.ReadInteger('Columns', 'SamplesPosition', 5), False);
-  SetColumnPosition(6, INIFile.ReadInteger('Columns', 'ControlTypePosition', 6), False);
-  SetColumnPosition(7, INIFile.ReadInteger('Columns', 'VideoPosition', 7), False);
-  SetColumnPosition(8, INIFile.ReadInteger('Columns', 'OrientationPosition', 8), False);
-  SetColumnPosition(9, INIFile.ReadInteger('Columns', 'ResolutionPosition', 9), False);
-  SetColumnPosition(10, INIFile.ReadInteger('Columns', 'DriverStatusPosition', 10), False);
-  SetColumnPosition(11, INIFile.ReadInteger('Columns', 'SoundStatusPosition', 11), False);
-  SetColumnPosition(12, INIFile.ReadInteger('Columns', 'ColorStatusPosition', 12), False);
-  SetColumnPosition(13, INIFile.ReadInteger('Columns', 'MergedPosition', 13), False);
-  SetColumnPosition(14, INIFile.ReadInteger('Columns', 'NamePosition', 14), False);
-  SetColumnPosition(15, INIFile.ReadInteger('Columns', 'ClonePosition', 15), False);
-  SetColumnPosition(16, INIFile.ReadInteger('Columns', 'CategoryPosition', 16), False);
-  SetColumnPosition(17, INIFile.ReadInteger('Columns', 'VersionAddedPosition', 17), False);
-  SetColumnPosition(18, INIFile.ReadInteger('Columns', 'DriverPosition', 18), False);
+  for Loop:= 1 to List.Columns.Count-1 do
+      SetColumnPosition(ColumnsPosList[Loop], Loop, True);
+
+  for Loop:=0 to Length(ColumnsPosList) do
+      Finalize(ColumnsPosList);
 
   List.Columns[GetColumnIndex(0)].Width:= INIFile.ReadInteger('Columns', 'Description', 300);
 
@@ -2688,6 +3048,16 @@ begin
     0: List.Columns[GetColumnIndex(18)].Tag:= 0;
   end;
 
+  case INIFile.ReadInteger('Columns', 'GameTimesPlayedVisible', 1) of
+    1: List.Columns[GetColumnIndex(19)].Width:= INIFile.ReadInteger('Columns', 'GameTimesPlayed', 50);
+    0: List.Columns[GetColumnIndex(19)].Tag:= 0;
+  end;
+
+  case INIFile.ReadInteger('Columns', 'GamePlayTimeVisible', 1) of
+    1: List.Columns[GetColumnIndex(20)].Width:= INIFile.ReadInteger('Columns', 'GamePlayTime', 70);
+    0: List.Columns[GetColumnIndex(20)].Tag:= 0;
+  end;
+
   for Loop:=1 to List.Columns.Count-1 do
   begin
     if List.Columns[Loop].Tag = 0 then
@@ -2711,14 +3081,33 @@ begin
 
     SplashLogo.Text:= INIFile.ReadString('Preferences', 'SplashLogoFile', 'resources\images\logo\Logo.jpg');
     if SplashLogo.Text = '' then
-       SplashLogo.Text:= 'resources\images\logo\Logo.jpg';
+       SplashLogo.Text:= 'resources\images\logo\logo.jpg';
+
+    // FMOD settings
+    PlaySoundClip.Tag:= INIFile.ReadInteger('SoundClip', 'PlaySoundClip', 0);
+    ParentSoundClip.Checked:= Boolean(INIFile.ReadInteger('SoundClip', 'ParentSoundClip', 1));
+    LoopSoundClip.Checked:= Boolean(INIFile.ReadInteger('SoundClip', 'Loop', 0));
+    SoundClipVolume.Position:= INIFile.ReadInteger('SoundClip', 'Volume', 255);
+    SoundClipFolder.Text:= INIFile.ReadString('SoundClip', 'Folder', 'soundclips');
+    OutputType.ItemIndex:= INIFile.ReadInteger('SoundClip', 'OutputType', 1);
+    OutputDevice.Tag:= INIFile.ReadInteger('SoundClip', 'OutputDevice', 0);
+    MixerType.ItemIndex:= INIFile.ReadInteger('SoundClip', 'MixerType', 4);
+    OutputRate.ItemIndex:= INIFile.ReadInteger('SoundClip', 'OutputRate', 3);
+    PanelSpectrum.Tag:= INIFile.ReadInteger('SoundClip', 'Spectrum', 0); // 0 - off; 1 - Smooth; 2 - Block
+
+    ZipTitleSnapshots.Text:= INIFile.ReadString('ZipFiles', 'TitleSnapshots', 'titles.zip');
+    ZipInGameSnapshots.Text:= INIFile.ReadString('ZipFiles', 'InGameSnapshots', 'snap.zip');
+    ZipMarquees.Text:= INIFile.ReadString('ZipFiles', 'Marquees', 'marquees.zip');
+    ZipCabinets.Text:= INIFile.ReadString('ZipFiles', 'Cabinets', 'cabinets.zip');
+    ZipFlyers.Text:= INIFile.ReadString('ZipFiles', 'Flyers', 'flyers.zip');
+    ZipControlPanels.Text:= INIFile.ReadString('ZipFiles', 'ControlPanels', 'cpanel.zip');
+    ZipControlPanelLayouts.Text:= INIFile.ReadString('ZipFiles', 'ControlPanelLayouts', 'cplayout.zip');
+    ZipIcons.Text:= INIFile.ReadString('ZipFiles', 'Icons', 'icons.zip');
   end;
   LogoFileName:= FormPreferences.SplashLogo.Text;
   FormStatus.OnActivate(Self);
 
-  TotalPlayTime:= INIFile.ReadString('ExtraInfo', 'TotalPlayTime', '0');
   FreeAndNil(INIFile);
-  CheckPlayTime;
 end;
 
 procedure TFormMain.UpdateIniFile;
@@ -2726,7 +3115,7 @@ var
   INIFile: TIniFile;
 begin
   INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
-  INIFile.WriteString('Configuration', 'DefaultDatabaseBuilderExecutable', DefaultDatabaseBuilderExecutable);
+  INIFile.WriteInteger('Configuration', 'DefaultDatabaseBuilderExecutable', MenuCurrentEmulator.Tag);
   INIFile.WriteString('Configuration', 'EmulatorName', EmulatorExecutable[1]);
   INIFile.WriteString('Configuration', 'EmulatorVersion', EmulatorVersion[1]);
   INIFile.WriteInteger('Configuration', 'EmulatorType', EmulatorType[1]);
@@ -2743,7 +3132,7 @@ begin
   INIFile.WriteString('Configuration', 'EmulatorVersion5', EmulatorVersion[5]);
   INIFile.WriteInteger('Configuration', 'EmulatorType5', EmulatorType[5]);
 
-  INIFile.WriteInteger('Configuration', 'ModeView', ButtonModeView.Tag);
+  INIFile.WriteInteger('Configuration', 'ModeView', MenuModeViewDetails.Tag);
   INIFile.WriteInteger('Configuration', 'ListFilter', ButtonGameType.Tag);
   INIFile.WriteInteger('Configuration', 'ListFilterID', ButtonGameFilters.Tag);
 
@@ -2767,8 +3156,6 @@ begin
   INIFile.WriteInteger('Configuration', 'SplitterMAMEInfoPosition', PanelmameinfoDAT.Height);
   INIFile.WriteInteger('Configuration', 'FullScreen', Ord(MenuFullScreen.Checked));
 
-  INIFile.WriteInteger('Configuration', 'TextWordWrap', Ord(TextWordWrap));
-
   INIFile.WriteInteger('Configuration', 'ParentalLock', Ord(MenuParentalLock.Checked));
   INIFile.WriteInteger('Configuration', 'UserProfile', Ord(MenuUserProfile.Checked));
   case MenuUserProfile.Checked of
@@ -2778,7 +3165,7 @@ begin
 
   INIFile.WriteString('Configuration', 'Language', FrontendLanguage);
 
-  INIFile.WriteInteger('Preferences', 'RealIcons', Ord(MenuRealIcons.Checked));
+  INIFile.WriteInteger('Preferences', 'GamesIcons', Ord(MenuGamesIcons.Checked));
   //INIFile.WriteInteger('Preferences', 'ShowOnlyParentIcon', Ord(MenuShowOnlyParentIcon.Checked));
 
   // update General Font Style
@@ -2815,10 +3202,9 @@ begin
     INIFile.WriteInteger('Appearance', 'AutomaticGameInfoFontSize', MAMEInfoTextHolder.Font.Size);
     INIFile.WriteInteger('Appearance', 'AutomaticGameInfoFontType', Byte(MAMEInfoTextHolder.Font.Style));
 
-    INIFile.WriteInteger('Preferences', 'AverageFPS', Ord(AverageFPS.Checked));
     INIFile.WriteInteger('Preferences', 'NewDescriptionFormat', Ord(NewDescriptionFormat.Checked));
 
-    INIFile.WriteInteger('Preferences', 'LastGameSelected', SelectedGame);
+    INIFile.WriteString('Preferences', 'LastGameSelected', GamesList[SelectedGame].eName);
     INIFile.WriteInteger('Preferences', 'LastColumnSorted', ColumnSorted);
     case List.Column[ColumnSorted].Tag of
       0: INIFile.WriteInteger('Preferences', 'ColumnSortDirection', 1);
@@ -2836,15 +3222,25 @@ begin
        INIFile.WriteInteger('Preferences', 'GameSizeType', 2);
 
     INIFile.WriteInteger('Preferences', 'AutoGameInformation', Ord(MenuAutomaticGameInformation.Checked));
-    INIFile.WriteInteger('Preferences', 'ShowStatistics', Ord(ShowStatistics.Checked));
     INIFile.WriteInteger('Preferences', 'MinimizeFrontend', Ord(MinimizeFrontend.Checked));
     INIFile.WriteInteger('Preferences', 'FillAllCloneColumns', Ord(FillAllCloneColumns.Checked));
     INIFile.WriteString('Preferences', 'DefaultIconsFolder', DefaultGameIconsFolder.Text);
     INIFile.WriteInteger('Preferences', 'ShowPreliminaryGamesDisabled', Ord(ShowPreliminaryGamesDisabled.Checked));
+
+    INIFile.WriteInteger('Preferences', 'AutoGameInfo1', AutomaticGameInformation1.ItemIndex);
+    INIFile.WriteInteger('Preferences', 'AutoGameInfo2', AutomaticGameInformation2.ItemIndex);
+    INIFile.WriteInteger('Preferences', 'AutoGameInfo3', AutomaticGameInformation3.ItemIndex);
+    INIFile.WriteInteger('Preferences', 'AutoGameInfo4', AutomaticGameInformation4.ItemIndex);
+
+    INIFile.WriteString('Preferences', 'InternetPageLink', InternetPage.Text);
+
+    // Games Filters
+    INIFile.WriteInteger('Preferences', 'HidePreliminaryGames', Ord(HidePreliminaryGames.Checked));
+    INIFile.WriteInteger('Preferences', 'HideBios', Ord(HideBios.Checked));
+
     INIFile.WriteInteger('Preferences', 'UseCustomOptionsDefault', Ord(UseCustomOptionsDefault.Checked));
     INIFile.WriteInteger('Preferences', 'UseCustomGameDescription', Ord(UseCustomGameDescription.Checked));
     INIFile.WriteInteger('Preferences', 'UseCustomGameCategory', Ord(UseCustomGameCategory.Checked));
-    INIFile.WriteInteger('Preferences', 'AuditHardDiskImages', Ord(AuditCHDFiles.Checked));
 
     // M.A.M.E. Tab
     // Emu Loader Folders
@@ -2883,8 +3279,6 @@ begin
   INIFile.WriteInteger('GamesList', 'BiosNeoGeo', Ord(BiosNeoGeo));
   INIFile.WriteInteger('GamesList', 'UnavailableBiosClassic', Ord(UnavailableBiosClassic));
   INIFile.WriteInteger('GamesList', 'UnavailableBiosNeoGeo', Ord(UnavailableBiosNeoGeo));
-  INIFile.WriteInteger('GamesList', 'CustomGames', Ord(CustomGames));
-  INIFile.WriteInteger('GamesList', 'UnavailableCustomGames', Ord(UnavailableCustomGames));
 
   INIFile.WriteInteger('Favorites', 'Favorite', Ord(ButtonShowFavorite.Down));
   INIFile.WriteString('Favorites', 'User', FavoriteUser);
@@ -2894,12 +3288,14 @@ begin
     INIFile.WriteInteger('Pictures', 'Stretch', Ord(StretchPicture.Checked));
     INIFile.WriteInteger('Pictures', 'ShowParentPictures', Ord(ShowParentPictures.Checked));
     INIFile.WriteInteger('Pictures', 'AspectRatio', Ord(AspectRatio.Checked));
-    INIFile.WriteInteger('Pictures', 'SmoothPictures', Ord(SmoothPictures.Checked));
+    INIFile.WriteInteger('Pictures', 'SmoothPictures', SmoothPictures.Position);
     INIFile.WriteInteger('Pictures', 'NewPictureNameFormat', Ord(NewPictureNameFormat.Checked));
     INIFile.WriteInteger('Pictures', 'StretchLargerPictures', Ord(StretchLargerPictures.Checked));
     INIFile.WriteInteger('Pictures', 'CyclePictureTypes', Ord(CyclePictureTypes.Checked));
     INIFile.WriteInteger('Pictures', 'PicturesTransparency', Ord(PicturesTransparency.Checked));
     INIFile.WriteInteger('Pictures', 'VirtualList', Ord(PicturesVirtualList.Checked));
+    INIFile.WriteInteger('Pictures', 'HideNavigationPanel', Ord(HideNavigationPanel.Checked));
+    INIFile.WriteInteger('Pictures', 'HidePictureHint', Ord(HidePictureHint.Checked));
   end;
 
   INIFile.WriteInteger('Pictures', 'ShowPictures', Ord(MenuShowPictures.Checked));
@@ -2943,6 +3339,10 @@ begin
      INIFile.WriteInteger('Columns', 'VersionAdded', List.Columns[GetColumnIndex(17)].Width);
   if List.Columns[GetColumnIndex(18)].Tag = 1 then
      INIFile.WriteInteger('Columns', 'Driver', List.Columns[GetColumnIndex(18)].Width);
+  if List.Columns[GetColumnIndex(19)].Tag = 1 then
+     INIFile.WriteInteger('Columns', 'GameTimesPlayed', List.Columns[GetColumnIndex(19)].Width);
+  if List.Columns[GetColumnIndex(20)].Tag = 1 then
+     INIFile.WriteInteger('Columns', 'GamePlayTime', List.Columns[GetColumnIndex(20)].Width);
 
   INIFile.WriteInteger('Columns', 'YearVisible', List.Columns[GetColumnIndex(1)].Tag);
   INIFile.WriteInteger('Columns', 'ManufacturerVisible', List.Columns[GetColumnIndex(2)].Tag);
@@ -2962,6 +3362,8 @@ begin
   INIFile.WriteInteger('Columns', 'CategoryVisible', List.Columns[GetColumnIndex(16)].Tag);
   INIFile.WriteInteger('Columns', 'VersionAddedVisible', List.Columns[GetColumnIndex(17)].Tag);
   INIFile.WriteInteger('Columns', 'DriverVisible', List.Columns[GetColumnIndex(18)].Tag);
+  INIFile.WriteInteger('Columns', 'GameTimesPlayedVisible', List.Columns[GetColumnIndex(19)].Tag);
+  INIFile.WriteInteger('Columns', 'GamePlayTimeVisible', List.Columns[GetColumnIndex(20)].Tag);
 
   INIFile.WriteInteger('Columns', 'YearPosition', List.Columns[GetColumnIndex(1)].Index);
   INIFile.WriteInteger('Columns', 'ManufacturerPosition', List.Columns[GetColumnIndex(2)].Index);
@@ -2981,6 +3383,8 @@ begin
   INIFile.WriteInteger('Columns', 'CategoryPosition', List.Columns[GetColumnIndex(16)].Index);
   INIFile.WriteInteger('Columns', 'VersionAddedPosition', List.Columns[GetColumnIndex(17)].Index);
   INIFile.WriteInteger('Columns', 'DriverPosition', List.Columns[GetColumnIndex(18)].Index);
+  INIFile.WriteInteger('Columns', 'GameTimesPlayedPosition', List.Columns[GetColumnIndex(19)].Index);
+  INIFile.WriteInteger('Columns', 'GamePlayTimePosition', List.Columns[GetColumnIndex(20)].Index);
 
   with FormPreferences do
   begin
@@ -2995,19 +3399,81 @@ begin
     INIFile.WriteInteger('SlikStik', 'Swap2ndStick', Ord(SlikStikSwap2ndPlayerStick.Checked));
 
     INIFile.WriteString('Preferences', 'SplashLogoFile', SplashLogo.Text);
-  end;
 
-  CheckPlayTime;
-  INIFile.WriteString('ExtraInfo', 'TotalPlayTime', TotalPlayTime);
+    // FMOD settings
+    INIFile.WriteInteger('SoundClip', 'PlaySoundClip', Ord(PlaySoundClip.Checked));
+    INIFile.WriteInteger('SoundClip', 'ParentSoundClip', Ord(ParentSoundClip.Checked));
+    INIFile.WriteInteger('SoundClip', 'Loop', Ord(LoopSoundClip.Checked));
+    INIFile.WriteInteger('SoundClip', 'Volume', SoundClipVolume.Position);
+    INIFile.WriteString('SoundClip', 'Folder', ExcludeTrailingPathDelimiter(SoundClipFolder.Text));
+    INIFile.WriteInteger('SoundClip', 'OutputType', OutputType.ItemIndex);
+    if OutputDevice.Items.Count > 0 then
+       INIFile.WriteInteger('SoundClip', 'OutputDevice', OutputDevice.ItemIndex)
+    else
+       INIFile.WriteInteger('SoundClip', 'OutputDevice', OutputDevice.Tag);
+    INIFile.WriteInteger('SoundClip', 'MixerType', MixerType.ItemIndex);
+    INIFile.WriteInteger('SoundClip', 'OutputRate', OutputRate.ItemIndex);
+    INIFile.WriteInteger('SoundClip', 'Spectrum', PanelSpectrum.Tag); // 0 - off; 1 - Smooth; 2 - Block
+
+    INIFile.WriteString('ZipFiles', 'TitleSnapshots', ZipTitleSnapshots.Text);
+    INIFile.WriteString('ZipFiles', 'InGameSnapshots', ZipInGameSnapshots.Text);
+    INIFile.WriteString('ZipFiles', 'Marquees', ZipMarquees.Text);
+    INIFile.WriteString('ZipFiles', 'Cabinets', ZipCabinets.Text);
+    INIFile.WriteString('ZipFiles', 'Flyers', ZipFlyers.Text);
+    INIFile.WriteString('ZipFiles', 'ControlPanels', ZipControlPanels.Text);
+    INIFile.WriteString('ZipFiles', 'ControlPanelLayouts', ZipControlPanelLayouts.Text);
+    INIFile.WriteString('ZipFiles', 'Icons', ZipIcons.Text);
+  end;
   FreeAndNil(INIFile);
 end;
 
-procedure TFormMain.LoadRealIcons;
+procedure TFormMain.LoadBiosSet(Main: Boolean; PopupHolder: TBcBarPopupMenu);
+var
+  BiosSection, BiosList: THashedStringList;
+  BiosSetFile: TMemIniFile;
+  LoopMain, Loop: Integer;
+begin
+  if not FileExists(FrontendPath+'biosset.ini') then
+     Exit;
+
+  // clear PopupSystemBios popup menu first
+  PopupHolder.BeginUpdate;
+  PopupHolder.Items.Clear;
+  PopupHolder.EndUpdate;
+
+  if Main then
+     AddPopupItem(PopupHolder, 'Disabled', 'disabled', False, True);
+  AddPopupItem(PopupHolder, 'Default', 'default', False, True);
+
+  BiosSetFile:= TMemIniFile.Create(FrontendPath+'biosset.ini');
+  BiosSection:= THashedStringList.Create;
+  BiosList:= THashedStringList.Create;
+  BiosSetFile.ReadSection('Descriptions', BiosSection);
+  if BiosSection.Count > 0 then
+     begin
+       for LoopMain:=0 to BiosSection.Count-1 do
+       begin
+         BiosList.Clear;
+         BiosSetFile.ReadSection(BiosSection[LoopMain], BiosList);
+         if BiosList.Count > 0 then
+            begin
+              AddPopupItem(PopupHolder, '-', BiosSetFile.ReadString('Descriptions', BiosSection[LoopMain], ''), True, True);
+              for Loop:=0 to BiosList.Count-1 do
+                  AddPopupItem(PopupHolder, BiosSetFile.ReadString(BiosSection[LoopMain], BiosList[Loop], 'bios'), BiosList[Loop], False, True);
+            end;
+       end;
+     end;
+  FreeAndNil(BiosSetFile);
+  FreeAndNil(BiosSection);
+  FreeAndNil(BiosList);
+end;
+
+procedure TFormMain.LoadGamesIcons;
 var
   Loop, IconIdx: Integer;
   FileIcon: TIcon;
   mGamesList, mTempList: THashedStringList;
-  IconIdxVerify, WindowsTempDir: String;
+  IconIdxVerify, WindowsTempDir, TempIconDir: String;
   UseZIPIcons: Boolean;
   //StartClock, EndClock: Integer;
 
@@ -3015,17 +3481,15 @@ var
   var
     LoopIcon: Integer;
   begin
-    if FileExists(FrontendPath+'resources\IconsIndex.dat') then
-       DeleteFile(FrontendPath+'resources\IconsIndex.dat');
-    if FileExists(FrontendPath+'resources\IconsList.ini') then
-       DeleteFile(FrontendPath+'resources\IconsList.ini');
+    DeleteFile(FrontendPath+'resources\IconsIndex.dat');
+    DeleteFile(FrontendPath+'resources\IconsList.ini');
 
-    if BigRealIconsImageList.Count > 1 then
+    if BigGamesIconsImageList.Count > 1 then
      begin
-       for LoopIcon:=BigRealIconsImageList.Count-1 downto 1 do
+       for LoopIcon:=BigGamesIconsImageList.Count-1 downto 1 do
        begin
-         BigRealIconsImageList.Delete(LoopIcon);
-         SmallRealIconsImageList.Delete(LoopIcon);
+         BigGamesIconsImageList.Delete(LoopIcon);
+         SmallGamesIconsImageList.Delete(LoopIcon);
        end;
      end;
   end;
@@ -3035,73 +3499,63 @@ begin
 
   Screen.Cursor:= crDefault;
   WindowsTempDir:= GetWinTempDir;
-  RealIconsList:= THashedStringList.Create;
+  GamesIconsList:= THashedStringList.Create;
   FileIcon:= TIcon.Create;
   FileIcon.Width:= 32;
   FileIcon.Height:= 32;
   FileIcon.Transparent:= True;
   FormStatus.Show;
   FormStatus.LabelProgress.Caption:= '';
-  case FileExists(iconDir+'\icons.zip') of
+  TempIconDir:= GetZipFolderFull(7);
+  case FileExists(TempIconDir+FormPreferences.ZipIcons.Text) of
     True:
       begin
         ListROMsName:= THashedStringList.Create;
-        ListROMsSize:= THashedStringList.Create;
-        ListROMsCRC:= THashedStringList.Create;
         ListROMsNameFullPath:= THashedStringList.Create;
-        UseZIPIcons:= True;
-        GetContents(iconDir+'\icons.zip', True, False);
+        UseZIPIcons:= GetContents(TempIconDir+FormPreferences.ZipIcons.Text, True, False);
 
-        FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'SearchRealIconsTitle', 'Search Zipped Real Icons');
-        FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'UnzipRealIcons', 'Unzipping real icons. Please, wait a moment...');
+        GetMessagesLng('Status Messages', 'SearchGamesIconsTitle', 'Search Zipped Games Icons',
+                       'Status Messages', 'UnzipGamesIcons', 'Unzipping games icons. Please, wait a moment...');
+        FormStatus.LabelStatusType.Caption:= MessageText[0];
+        FormStatus.LabelMessage.Caption:= MessageText[1];
         FormStatus.Refresh;
-        ExtractFilesList(iconDir+'\icons.zip', '*.ico');
-        {for Loop:=0 to ListROMsName.Count -1 do
-        begin
-          if ((LowerCase(ExtractFileExt(ListROMsName[Loop])) = '.ico') and (Pos('!',ListROMsName[Loop]) = 0) and
-              (LowerCase(ExtractFileExt(ListROMsName[Loop])) <> '.htm')) then
-             begin
-               if not FileExists(iconDir+'\'+ListROMsName[Loop]) then
-                  UnZipFile(iconDir+'\icons.zip', ListROMsName[Loop]);
-                  //UnZip_SelectedFiles(iconDir+'\icons.zip', ListROMsNameFullPath[Loop]);
-             end;
-
-          UpdateProgressLabel(Loop+1, ListROMsName.Count, False);
-          Application.ProcessMessages;
-        end;}
-        FreeAndNil(ListROMsSize);
-        FreeAndNil(ListROMsCRC);
+        ExtractFilesList(TempIconDir+FormPreferences.ZipIcons.Text, '*.ico');
         FreeAndNil(ListROMsNameFullPath);
       end;
     False: UseZIPIcons:= False;
   end;
 
+  FormStatus.LabelProgress.Tag:= 0;
   case ((FileExists(FrontendPath+'resources\IconsIndex.dat')) or (FileExists(FrontendPath+'resources\IconsList.ini'))) of
     False:
       begin
-        FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'CreateRealIconsTitle', 'Create Real Icons');
-        FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'CreateRealIconsList', 'Creating icons list. Please, wait a moment...');
+        GetMessagesLng('Status Messages', 'CreateGamesIconsTitle', 'Create Games Icons',
+                       'Status Messages', 'CreateGamesIconsList', 'Creating icons list. Please, wait a moment...');
+        FormStatus.LabelStatusType.Caption:= MessageText[0];
+        FormStatus.LabelMessage.Caption:= MessageText[1];
         FormStatus.LabelMessage.Refresh;
         mGamesList:= THashedStringList.Create;
         GetGamesList(mGamesList, True, True);
 
         mTempList:= THashedStringList.Create;
+        mTempList.BeginUpdate;
+        GamesIconsList.BeginUpdate;
         mTempList.Add('[IconsOrder]');
-        RealIconsList.Add('[IconsIndex]');
+        GamesIconsList.Add('[IconsIndex]');
         FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'VerifyGames', 'Verifying games. Please, wait a moment...');
         FormStatus.LabelMessage.Refresh;
-        if MenuRealIcons.Checked then
+        if MenuGamesIcons.Checked then
            List.Items.BeginUpdate;
         for Loop:=0 to mGamesList.Count -1 do
         begin
           GetROMFields(mGamesList[Loop]);
-          case FileExists(iconDir+'\'+mName+'.ico') of
+            case FileExists(TempIconDir+mName+'.ico') of
             True:
               begin
-                FileIcon.LoadFromFile(iconDir+'\'+mName+'.ico');
-                IconIdx:= BigRealIconsImageList.AddIcon(FileIcon);
-                SmallRealIconsImageList.AddIcon(FileIcon);
-                RealIconsList.Add(IntToStr(IconIdx)+'='+mName);
+                FileIcon.LoadFromFile(TempIconDir+mName+'.ico');
+                IconIdx:= BigGamesIconsImageList.AddIcon(FileIcon);
+                SmallGamesIconsImageList.AddIcon(FileIcon);
+                GamesIconsList.Add(IntToStr(IconIdx)+'='+mName);
                 mTempList.Add(mName+'='+IntToStr(IconIdx));
               end;
             False:
@@ -3113,9 +3567,9 @@ begin
                         True:
                           begin
                             FileIcon.LoadFromFile(WindowsTempDir+'\'+mName+'.ico');
-                            IconIdx:= BigRealIconsImageList.AddIcon(FileIcon);
-                            SmallRealIconsImageList.AddIcon(FileIcon);
-                            RealIconsList.Add(IntToStr(IconIdx)+'='+mName);
+                            IconIdx:= BigGamesIconsImageList.AddIcon(FileIcon);
+                            SmallGamesIconsImageList.AddIcon(FileIcon);
+                            GamesIconsList.Add(IntToStr(IconIdx)+'='+mName);
                             mTempList.Add(mName+'='+IntToStr(IconIdx));
                             DeleteFile(WindowsTempDir+'\'+mName+'.ico');
                           end;
@@ -3144,42 +3598,48 @@ begin
                 end;
               end;
           end;
-          UpdateProgressLabel(Loop+1, mGamesList.Count, False);
+          UpdateProgressLabel(Loop+1, mGamesList.Count);
           Application.ProcessMessages;
         end;
-        if MenuRealIcons.Checked then
+        if MenuGamesIcons.Checked then
            List.Items.EndUpdate;
         Screen.Cursor:= crHourGlass;
+        mTempList.EndUpdate;
+        GamesIconsList.EndUpdate;
         mTempList.SaveToFile(FrontendPath+'resources\IconsList.ini');
         FreeAndNil(mTempList);
         FreeAndNil(mGamesList);
-        RealIconsList.SaveToFile(FrontendPath+'resources\IconsIndex.dat');
-        FreeAndNil(RealIconsList);
+        GamesIconsList.SaveToFile(FrontendPath+'resources\IconsIndex.dat');
+        FreeAndNil(GamesIconsList);
         FormStatus.LabelProgress.Caption:= '';
-        FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'SaveRealIconsTitle', 'Saving Real Icons Resource');
-        FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'SaveRealIconsDATFile', 'Saving icons to .dat files. Please, wait a moment...');
+        GetMessagesLng('Status Messages', 'SaveGamesIconsTitle', 'Save Games Icons Resource',
+                       'Status Messages', 'SaveGamesIconsDATFile', 'Saving games icons to .dat files. Please, wait a moment...');
+        FormStatus.LabelStatusType.Caption:= MessageText[0];
+        FormStatus.LabelMessage.Caption:= MessageText[1];
         FormStatus.LabelMessage.Refresh;
 
-        if not SaveLoadRealIcons(0) then
+        if not SaveLoadGamesIcons(0) then
            DeleteIconIndexFiles;
       end;
     True:
       begin
-        FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'LoadRealIconsTitle', 'Load Real Icons Resource');
-        RealIconsList.LoadFromFile(FrontendPath+'resources\IconsIndex.dat');
+        GetMessagesLng('Status Messages', 'LoadGamesIconsTitle', 'Load Games Icons Resource',
+                       'Status Messages', 'LoadGamesIconsDAT', 'Loading icons from .dat files. Please, wait a moment...');
+        FormStatus.LabelStatusType.Caption:= MessageText[0];
+        GamesIconsList.LoadFromFile(FrontendPath+'resources\IconsIndex.dat');
 
-        FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadRealIconsDAT', 'Loading icons from .dat files. Please, wait a moment...');
+        FormStatus.LabelMessage.Caption:= MessageText[1];
         FormStatus.LabelMessage.Refresh;
 
-        for Loop:=0 to RealIconsList.Count-1 do
+        for Loop:=0 to GamesIconsList.Count-1 do
         begin
           if Loop > 0 then
           begin
-          if RealIconsList[Loop] <> '' then
+          if GamesIconsList[Loop] <> '' then
              begin
-               IconIdxVerify:= RealIconsList.Values[IntToStr(Loop)];
-               case FileExists(iconDir+'\'+IconIdxVerify+'.ico') of
-                 True: FileIcon.LoadFromFile(iconDir+'\'+IconIdxVerify+'.ico');
+               IconIdxVerify:= GamesIconsList.Values[IntToStr(Loop)];
+               case FileExists(TempIconDir+IconIdxVerify+'.ico') of
+                 True: FileIcon.LoadFromFile(TempIconDir+IconIdxVerify+'.ico');
                  False:
                    begin
                      case FileExists(WindowsTempDir+'\'+IconIdxVerify+'.ico') of
@@ -3188,13 +3648,13 @@ begin
                            FileIcon.LoadFromFile(WindowsTempDir+'\'+IconIdxVerify+'.ico');
                            DeleteFile(WindowsTempDir+'\'+IconIdxVerify+'.ico');
                          end;
-                       False: BigRealIconsImageList.GetIcon(0, FileIcon);
+                       False: BigGamesIconsImageList.GetIcon(0, FileIcon);
                      end;
                    end;
                end;
-               IconIdx:= BigRealIconsImageList.AddIcon(FileIcon);
-               SmallRealIconsImageList.AddIcon(FileIcon);
-               UpdateProgressLabel(Loop+1, RealIconsList.Count, False);
+               IconIdx:= BigGamesIconsImageList.AddIcon(FileIcon);
+               SmallGamesIconsImageList.AddIcon(FileIcon);
+               UpdateProgressLabel(Loop+1, GamesIconsList.Count);
                Application.ProcessMessages;
              end
           else
@@ -3202,13 +3662,15 @@ begin
           end;
         end;
         Screen.Cursor:= crHourGlass;
-        FreeAndNil(RealIconsList);
+        FreeAndNil(GamesIconsList);
         FormStatus.LabelProgress.Caption:= '';
-        FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'SaveRealIconsTitle', 'Saving Real Icons Resource');
-        FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'SaveRealIconsDATFile', 'Saving real icons to .dat files. Please, wait a moment...');
+        GetMessagesLng('Status Messages', 'SaveGamesIconsTitle', 'Save Games Icons Resource',
+                       'Status Messages', 'SaveGamesIconsDATFile', 'Saving games icons to .dat files. Please, wait a moment...');
+        FormStatus.LabelStatusType.Caption:= MessageText[0];
+        FormStatus.LabelMessage.Caption:= MessageText[1];
         FormStatus.LabelMessage.Refresh;
 
-        if not SaveLoadRealIcons(0) then
+        if not SaveLoadGamesIcons(0) then
            DeleteIconIndexFiles;
       end;
   end;
@@ -3220,13 +3682,13 @@ begin
         begin
           if ((LowerCase(ExtractFileExt(ListROMsName[Loop])) = '.ico') and (Pos('!',ListROMsName[Loop]) = 0) and
               (LowerCase(ExtractFileExt(ListROMsName[Loop])) <> '.htm')) then
-             begin
-               if FileExists(WindowsTempDir+'\'+ListROMsName[Loop]) then
-                  DeleteFile(WindowsTempDir+'\'+ListROMsName[Loop]);
-             end;
+              DeleteFile(WindowsTempDir+'\'+ListROMsName[Loop]);
         end;
-        FreeAndNil(ListROMsName);
      end;
+  FreeAndNil(ListROMsName);
+  FreeAndNil(ListROMsSize);
+  FreeAndNil(ListROMsCRC);
+  FreeAndNil(ListROMsNameFullPath);
   FormStatus.Close;
   Screen.Cursor:= crHourGlass;
 
@@ -3234,739 +3696,18 @@ begin
   //ShowMessage(IntToStr(EndClock-StartClock));
 end;
 
-function TFormMain.CheckDOSMAMEConfigFile(ExecutableString: String): Boolean;
-begin
-  Result:= FileExists(ExtractFilePath(ExecutableString)+'mame.cfg');
-  if not Result then
-     CreateDOSMAMEConfigFile(ExecutableString);
-end;
-
-procedure TFormMain.CreateDOSMAMEConfigFile(ExecutableString: String);
-var
-  MAMEcfgFile: THashedStringList;
-  CommandLine: String;
-begin
-  SetCurrentDir(ExtractFilePath(ExecutableString));
-  CommandLine:= SystemStr+ExecutableString+SystemStr+' -createconfig';
-  case Win32Platform of
-    0,1: RunProcess('command.com /c '+CommandLine, True, SW_SHOWNORMAL, False); //Win9x
-    2  : RunProcess('cmd.exe /c '+SystemStr+CommandLine+SystemStr, True, SW_SHOWNORMAL, False); // Win2000 and WinXP
-  end;
-  Application.ProcessMessages;
-  // still need to update this procedure... or maybe not (due to older DOS MAME builds)
-  if not FileExists(ExtractFilePath(ExecutableString)+'mame.cfg') then
-  begin
-    MAMEcfgFile:= THashedStringList.Create;
-
-    MAMEcfgFile.Add('emulate_three = no');
-    MAMEcfgFile.Add('[directory]');
-    MAMEcfgFile.Add('inp = INP');
-    MAMEcfgFile.Add('hi = HI');
-    MAMEcfgFile.Add('sta = STA');
-    MAMEcfgFile.Add('cheat = .');
-    MAMEcfgFile.Add('memcard = MEMCARD');
-    MAMEcfgFile.Add('nvram = NVRAM');
-    MAMEcfgFile.Add('artwork = ARTWORK');
-    MAMEcfgFile.Add('cfg = CFG');
-    MAMEcfgFile.Add('snap = SNAP');
-    MAMEcfgFile.Add('rompath = ROMS');
-    MAMEcfgFile.Add('samplepath = SAMPLES');
-    MAMEcfgFile.Add(' ');
-    MAMEcfgFile.Add('[config]');
-    MAMEcfgFile.Add('scanlines = yes');
-    MAMEcfgFile.Add('stretch = yes');
-    MAMEcfgFile.Add('artwork = yes');
-    MAMEcfgFile.Add('samples = yes');
-    MAMEcfgFile.Add('vsync = no');
-    MAMEcfgFile.Add('waitvsync = no');
-    MAMEcfgFile.Add('triplebuffer = no');
-    MAMEcfgFile.Add('tweak = no');
-    MAMEcfgFile.Add('vesamode = vesa3');
-    MAMEcfgFile.Add('mmx = auto');
-    MAMEcfgFile.Add('dirty = auto');
-    MAMEcfgFile.Add('antialias = yes');
-    MAMEcfgFile.Add('translucency = yes');
-    MAMEcfgFile.Add('vgafreq = -1');
-    MAMEcfgFile.Add('alwayssynced = no');
-    MAMEcfgFile.Add('depth = auto');
-    MAMEcfgFile.Add('skiplines = 0');
-    MAMEcfgFile.Add('skipcolumns = 0');
-    MAMEcfgFile.Add('beam = 1.00');
-    MAMEcfgFile.Add('flicker = 0.00');
-    MAMEcfgFile.Add('gamma = 1.00');
-    MAMEcfgFile.Add('frameskip = auto');
-    MAMEcfgFile.Add('norotate = no');
-    MAMEcfgFile.Add('ror = no');
-    MAMEcfgFile.Add('rol = no');
-    MAMEcfgFile.Add('flipx = no');
-    MAMEcfgFile.Add('flipy = no');
-    MAMEcfgFile.Add('soundcard = -1');
-    MAMEcfgFile.Add('samplerate = 44100');
-    MAMEcfgFile.Add('stereo = yes');
-    MAMEcfgFile.Add('volume = 0');
-    MAMEcfgFile.Add('sampleratedetect = yes');
-    MAMEcfgFile.Add('resamplefilter = yes');
-    MAMEcfgFile.Add('mouse = yes');
-    MAMEcfgFile.Add('joystick = none');
-    MAMEcfgFile.Add('steadykey = no');
-    MAMEcfgFile.Add('hotrod = no');
-    MAMEcfgFile.Add('hotrodse = no');
-    MAMEcfgFile.Add('cheat = no');
-    MAMEcfgFile.Add('cheatfile = CHEAT.DAT');
-    MAMEcfgFile.Add('historyfile = HISTORY.DAT');
-    MAMEcfgFile.Add('mameinfofile = MAMEINFO.DAT');
-    MAMEcfgFile.Add('resolution = auto');
-    MAMEcfgFile.Add('vectorres = auto');
-    MAMEcfgFile.Add('language = english');
-    MAMEcfgFile.Add('monitor = standard');
-    MAMEcfgFile.Add('centerx = 0');
-    MAMEcfgFile.Add('centery = 0');
-    MAMEcfgFile.Add('waitinterlace = no');
-    MAMEcfgFile.Add(' ');
-    MAMEcfgFile.Add('[tweaked]');
-    MAMEcfgFile.Add('224x288_h = 95');
-    MAMEcfgFile.Add('224x288_v = 84');
-    MAMEcfgFile.Add('240x256_h = 103');
-    MAMEcfgFile.Add('240x256_v = 35');
-    MAMEcfgFile.Add('256x240_h = 85');
-    MAMEcfgFile.Add('256x240_v = 67');
-    MAMEcfgFile.Add('256x256_h = 108');
-    MAMEcfgFile.Add('256x256_v = 35');
-    MAMEcfgFile.Add('256x256_hor_h = 85');
-    MAMEcfgFile.Add('256x256_hor_v = 96');
-    MAMEcfgFile.Add('288x224_h = 95');
-    MAMEcfgFile.Add('288x224_v = 12');
-    MAMEcfgFile.Add('240x320_h = 90');
-    MAMEcfgFile.Add('240x320_v = 140');
-    MAMEcfgFile.Add('320x240_h = 95');
-    MAMEcfgFile.Add('320x240_v = 12');
-    MAMEcfgFile.Add('336x240_h = 95');
-    MAMEcfgFile.Add('336x240_v = 12');
-    MAMEcfgFile.Add('384x224_h = 108');
-    MAMEcfgFile.Add('384x224_v = 12');
-    MAMEcfgFile.Add('384x240_h = 108');
-    MAMEcfgFile.Add('384x240_v = 12');
-    MAMEcfgFile.Add('384x256_h = 108');
-    MAMEcfgFile.Add('384x256_v = 35');
-    MAMEcfgFile.Add('224x288arc_h = 93');
-    MAMEcfgFile.Add('224x288arc_v = 56');
-    MAMEcfgFile.Add('288x224arc_h = 93');
-    MAMEcfgFile.Add('288x224arc_v = 9');
-    MAMEcfgFile.Add('256x240arc_h = 93');
-    MAMEcfgFile.Add('256x240arc_v = 9');
-    MAMEcfgFile.Add('256x256arc_h = 93');
-    MAMEcfgFile.Add('256x256arc_v = 23');
-    MAMEcfgFile.Add('320x240arc_h = 105');
-    MAMEcfgFile.Add('320x240arc_v = 9');
-    MAMEcfgFile.Add('320x256arc_h = 105');
-    MAMEcfgFile.Add('320x256arc_v = 23');
-    MAMEcfgFile.Add('352x240arc_h = 106');
-    MAMEcfgFile.Add('352x240arc_v = 9');
-    MAMEcfgFile.Add('352x256arc_h = 106');
-    MAMEcfgFile.Add('352x256arc_v = 23');
-    MAMEcfgFile.Add('368x224arc_h = 106');
-    MAMEcfgFile.Add('368x224arc_v = 9');
-    MAMEcfgFile.Add('368x240arc_h = 106');
-    MAMEcfgFile.Add('368x240arc_v = 9');
-    MAMEcfgFile.Add('368x256arc_h = 106');
-    MAMEcfgFile.Add('368x256arc_v = 23');
-    MAMEcfgFile.Add('512x224arc_h = 191');
-    MAMEcfgFile.Add('512x224arc_v = 9');
-    MAMEcfgFile.Add('512x256arc_h = 191');
-    MAMEcfgFile.Add('512x256arc_v = 23');
-    MAMEcfgFile.Add('512x448arc_h = 191');
-    MAMEcfgFile.Add('512x448arc_v = 9');
-    MAMEcfgFile.Add('512x512arc_h = 191');
-    MAMEcfgFile.Add('512x512arc_v = 23');
-    MAMEcfgFile.Add('640x480arc_h = 193');
-    MAMEcfgFile.Add('640x480arc_v = 9');
-
-    MAMEcfgFile.SaveToFile(ExtractFilePath(ExecutableString)+'mame.cfg');
-    FreeAndNil(MAMEcfgFile);
-    SetCurrentDir(FrontendPath);
-  end;
-end;
-
-procedure TFormMain.ReadDOSMAMEConfigFile(ExecutableString: String);
-var
-  MAMEcfg: TIniFile;
-  Result: String;
-  ctrlrKeysList: THashedStringList;
-begin
-  MAMEcfg:= TIniFile.Create(ExtractFilePath(ExecutableString)+'mame.cfg');
-  ThousandSeparator:= Char(',');
-  DecimalSeparator:= Char('.');
-  with MAMEcfg do
-  begin
-    with FormDOSMAMEConfiguration do
-    begin
-      // Read MAME Paths
-      FolderROMs.Text:= ReadString('directory', 'rompath', 'roms');
-      ExtractROMsFolders(FolderROMs.Text);
-      FolderSamples.Text:= ReadString('directory', 'samplepath', 'samples');
-      FolderGamesConfiguration.Text:= ReadString('directory', 'cfg', 'cfg');
-      FolderSaveStates.Text:= ReadString('directory', 'sta', 'sta');
-      FolderHighScores.Text:= ReadString('directory', 'hi', 'hi');
-      FolderNVRAM.Text:= ReadString('directory', 'nvram', 'nvram');
-      FolderMemoryCards.Text:= ReadString('directory', 'memcard', 'memcard');
-      FolderInputsRecording.Text:= ReadString('directory', 'inp', 'inp');
-      FolderArtworks.Text:= ReadString('directory', 'artwork', 'artwork');
-      FolderSnapshots.Text:= ReadString('directory', 'snap', 'snap');
-      FolderCheats.Text:= ReadString('directory', 'cheat', 'cheats');
-      FolderDiff.Text:= ReadString('directory', 'diff', 'diff');
-      FolderKeysMapping.Text:= ReadString('directory', 'ctrlr_directory', 'ctrlr');
-      if FolderKeysMapping.Text <> '' then
-         begin
-           ctrlrKeysList:= THashedStringList.Create;
-           if (Pos(':\', FolderKeysMapping.Text) > 0) or (Pos(':', FolderKeysMapping.Text) > 0) then
-              GetControllersList(ctrlrKeysList, FolderKeysMapping.Text)
-           else
-              GetControllersList(ctrlrKeysList, ExtractFilePath(ExecutableString)+FolderKeysMapping.Text);
-
-           if ctrlrKeysList.Count > 0 then
-              ControllerKeysMapping.Items.AddStrings(ctrlrKeysList);
-           FreeAndNil(ctrlrKeysList);
-         end;
-
-      // Read MAME Options
-
-      // Display Options
-      Result:= IntToStr(FormMain.SetResolution(ReadString('config', 'resolution', 'auto')));
-      if Result = '-1' then
-         CustomResolution.Text:= Result
-      else
-         Resolution.Position:= StrToInt(Result);
-
-      Result:= ReadString('config', 'depth', 'auto');
-      if Result = 'auto' then
-         Depth.Position:= 0 else
-      if Result = '8' then
-         Depth.Position:= 1 else
-      if Result = '15' then
-         Depth.Position:= 2 else
-      if Result = '16' then
-         Depth.Position:= 3 else
-      if Result = '24' then
-         Depth.Position:= 4 else
-         Depth.Position:= 5;
-
-      VESA.Position:= SetDOSVesaMode(ReadString('config', 'vesamode', 'auto'));
-
-      CenterX.Position:= ReadInteger('config', 'centerx', 0);
-      CenterY.Position:= ReadInteger('config', 'centery', 0);
-
-      SkipColumns.Position:= ReadInteger('config', 'skipcolumns', 0);
-      SkipLines.Position:= ReadInteger('config', 'skiplines', 0);
-
-      Result:= ReadString('config', 'monitor', 'standard');
-      if Result = 'standard' then
-         Monitor.Position:= 0 else
-      if Result = 'ntsc' then
-         Monitor.Position:= 1 else
-      if Result = 'pal' then
-         Monitor.Position:= 2 else
-         Monitor.Position:= 3;
-
-      Result:= ReadString('config', 'frameskip', 'auto');
-      if Result = 'auto' then
-         Frameskip.Position:= -1
-      else
-         Frameskip.Position:= StrToInt(Result);
-
-      Gamma.Position:= StrToFloat(Format('%1.2f', [StrToFloat(TrimLeft(ReadString('config', 'gamma', '1.00')))]));
-
-      DebuggerResolution.Position:= SetDOSResolution(ReadString('config', 'debug_resolution', 'auto'));
-      Brightness.Position:= StrToFloat(Format('%1.2f', [StrToFloat(TrimLeft(ReadString('config', 'brightness', '1.00')))]));
-      PauseBrightness.Position:= StrToFloat(Format('%1.2f', [StrToFloat(TrimLeft(ReadString('config', 'pause_brightness', '0.65')))]));
-
-      // Vector Options
-      Antialias.Checked:= ReadString('config', 'antialias', 'yes') = 'yes';
-      Translucency.Checked:= ReadString('config', 'translucency', 'yes') = 'yes';
-      Flicker.Position:= StrToFloat(Format('%3.2f', [StrToFloat(TrimLeft(ReadString('config', 'flicker', '0.00')))]));
-      Beam.Position:= StrToFloat(Format('%2.2f', [StrToFloat(TrimLeft(ReadString('config', 'beam', '1.00')))]));
-      Intensity.Position:= StrToFloat(Format('%1.2f', [StrToFloat(TrimLeft(ReadString('config', 'intensity', '1.50')))]));
-      VectorResolution.Position:= SetResolution(ReadString('config', 'vectorres', 'auto'));
-
-      VGAFrequency.Position:= ReadInteger('config', 'vgafreq', -1);
-      // Sound Card Options
-      Result:= ReadString('config', 'soundcard', '-1');
-      case StrToInt(Result) of
-       -1: SoundCard.Position:= 0;
-        0: SoundCard.Position:= 1;
-        1: SoundCard.Position:= 2;
-        3: SoundCard.Position:= 3;
-        4: SoundCard.Position:= 4;
-        5: SoundCard.Position:= 5;
-        6: SoundCard.Position:= 6;
-        7: SoundCard.Position:= 7;
-      end;
-
-      Sound.Checked:= ReadString('config', 'sound', 'yes') = 'yes';
-
-      Result:= ReadString('config', 'samplerate', '44100');
-      case StrToInt(Result) of
-        11025: SampleRate.Position:= 0;
-        22050: SampleRate.Position:= 1;
-        44100: SampleRate.Position:= 2;
-        48000: SampleRate.Position:= 3;
-        else   CustomSampleRate.Position:= StrToInt(Result);
-      end;
-
-      Volume.Position:= ReadInteger('config', 'volume', 0);
-
-      Stereo.Checked:= ReadString('config', 'stereo', 'yes') = 'yes';
-      Samples.Checked:= ReadString('config', 'samples', 'yes') = 'yes';
-      DetectSampleRate.Checked:= ReadString('config', 'sampleratedetect', 'yes') = 'yes';
-      ResampleFilter.Checked:= ReadString('config', 'resamplefilter', 'yes') = 'yes';
-
-      // Controllers Options
-      Joystick.Position:= SetDOSJoystick(ReadString('config', 'joystick', 'none'));
-      Mouse.Checked:= ReadString('config', 'mouse', 'yes') = 'yes';
-      KeyboardLEDs.Checked:= ReadString('config', 'keyboard_leds', 'yes') = 'yes';
-
-      // Miscellaneous Options
-      FilenameCheat.Text:= ReadString('config', 'cheatfile', 'CHEAT.DAT');
-      FilenameMAMEInfo.Text:= ReadString('config', 'mameinfofile', 'MAMEINFO.DAT');
-      FilenameHistory.Text:= ReadString('config', 'historyfile', 'HISTORY.DAT');
-
-      SteadyKey.Checked:= ReadString('config', 'steadykey', 'no') = 'yes';
-      ControllerKeysMapping.ItemIndex:= ControllerKeysMapping.Items.IndexOf(ReadString('config', 'ctrlr', 'standard'));
-      if ControllerKeysMapping.ItemIndex = -1 then
-         ControllerKeysMapping.ItemIndex:= 0;
-
-      // Visual Effects Options
-      Scanlines.Position:= SetDOSScanlines(ReadString('config', 'scanlines', 'yes'));
-      Stretch.Checked:= ReadString('config', 'stretch', 'yes') = 'yes';
-      VSync.Checked:= ReadString('config', 'vsync', 'yes') = 'yes';
-      AlwaysSynced.Checked:= ReadString('config', 'alwayssynced', 'yes') = 'yes';
-      WaitVSync.Checked:= ReadString('config', 'waitvsync', 'yes') = 'yes';
-      RotateLeft.Checked:= ReadString('config', 'rol', 'yes') = 'yes';
-      RotateRight.Checked:= ReadString('config', 'ror', 'yes') = 'yes';
-      NoRotate.Checked:= ReadString('config', 'norotate', 'yes') = 'yes';
-      TripleBuffer.Checked:= ReadString('config', 'triplebuffer', 'yes') = 'yes';
-      WaitInterlace.Checked:= ReadString('config', 'waitinterlace', 'yes') = 'yes';
-
-      Artwork.Checked:= ReadString('config', 'artwork', 'yes') = 'yes';
-      Backdrop.Checked:= ReadString('config', 'use_backdrops' ,'yes') = 'yes';
-      Overlay.Checked:= ReadString('config', 'use_overlays', 'yes') = 'yes';
-      Bezel.Checked:= ReadString('config', 'use_bezels', 'yes') = 'yes';
-      Crop.Checked:= ReadString('config', 'artwork_crop', 'no') = 'yes';
-      Result:= ReadString('config', 'artwork_resolution', 'auto');
-      if Result = 'auto' then
-         ArtworkResolution.Position:= 0
-      else
-         ArtworkResolution.Position:= StrToInt(Result);
-
-      Result:= ReadString('config', 'mmx', 'auto');
-      if Result = 'auto' then
-         MMX.Position:= -1 else
-      if Result = 'yes' then
-         MMX.Position:= 0 else
-      if Result = 'no' then
-         MMX.Position:= 1 else
-         MMX.Position:= -1;
-
-      Result:= ReadString('config', 'dirty', 'auto');
-      if Result = 'auto' then
-         Dirty.Position:= -1 else
-      if Result = 'yes' then
-         Dirty.Position:= 0 else
-      if Result = 'no' then
-         Dirty.Position:= 1 else
-         Dirty.Position:= -1;
-
-
-      FlipX.Checked:= ReadString('config', 'flipx', 'yes') = 'yes';
-      FlipY.Checked:= ReadString('config', 'flipy', 'yes') = 'yes';
-
-      // Tweaks Options
-      Throttle.Checked:= ReadString('config', 'throttle', 'yes') = 'yes';
-      Tweak.Checked:= ReadString('config', 'tweak', 'yes') = 'yes';
-      Cheat.Checked:= ReadString('config', 'cheat', 'yes') = 'yes';
-      SkipDisclaimer.Checked:= ReadString('config', 'skip_disclaimer', 'no') = 'yes';
-      SkipGameInfo.Checked:= ReadString('config', 'skip_gameinfo', 'no') = 'yes';
-
-      { -ignorecfg     ignore mame.cfg and start with default options
-        -debug         Activates the integrated debugger.
-                         During emulation, press the Tilde key (~) to activate the
-                         debugger. This is available only if the program is compiled with
-                         MAME_DEBUG defined
-
-        theese are in-line options (does not have in mame.cfg) }
-    end;
-    FreeAndNil(MAMEcfg);
-  end;
-end;
-
-procedure TFormMain.UpdateDOSMAMEConfigFile(ExecutableString: String);
-var
-  MAMEcfg: TIniFile;
-begin
-  MAMEcfg:= TIniFile.Create(ExtractFilePath(ExecutableString)+'mame.cfg');
-  with MAMEcfg do
-  begin
-    // Write MAME Paths
-    with FormDOSMAMEConfiguration do
-    begin
-      WriteString('directory', 'rompath', FolderROMs.Text);
-      ExtractROMsFolders(FolderROMs.Text);
-      WriteString('directory', 'samplepath', FolderSamples.Text);
-      WriteString('directory', 'cfg', FolderGamesConfiguration.Text);
-      WriteString('directory', 'sta', FolderSaveStates.Text);
-      WriteString('directory', 'hi', FolderHighScores.Text);
-      WriteString('directory', 'nvram', FolderNVRAM.Text);
-      WriteString('directory', 'memcard', FolderMemoryCards.Text);
-      WriteString('directory', 'inp', FolderInputsRecording.Text);
-      WriteString('directory', 'artwork', FolderArtworks.Text);
-      WriteString('directory', 'snap', FolderSnapshots.Text);
-      WriteString('directory', 'cheat', FolderCheats.Text);
-      WriteString('directory', 'diff', FolderDiff.Text);
-
-      // Write MAME Options
-
-      // Display Options
-      if CustomResolution.Text = '' then
-         WriteString('config', 'resolution', LowerCase(LabelResolutionValue.Caption))
-      else
-         WriteString('config', 'resolution', LowerCase(CustomResolution.Text));
-
-      case Depth.Position of
-        0: WriteString('config', 'depth', 'auto');
-        1: WriteString('config', 'depth', '8');
-        2: WriteString('config', 'depth', '15');
-        3: WriteString('config', 'depth', '16');
-        4: WriteString('config', 'depth', '24');
-        5: WriteString('config', 'depth', '32');
-      end;
-
-      WriteString('config', 'vesamode', LowerCase(LabelVESAValue.Caption));
-
-      WriteInteger('config', 'centerx', CenterX.Position);
-      WriteInteger('config', 'centery', CenterY.Position);
-
-      WriteInteger('config', 'skipcolumns', SkipColumns.Position);
-      WriteInteger('config', 'skiplines', SkipLines.Position);
-
-      case Monitor.Position of
-        0: WriteString('config', 'monitor', 'standard');
-        1: WriteString('config', 'monitor', 'ntsc');
-        2: WriteString('config', 'monitor', 'pal');
-        3: WriteString('config', 'monitor', 'arcade');
-      end;
-
-      if Frameskip.Position = -1 then
-         WriteString('config', 'frameskip', 'auto') else
-         WriteInteger('config', 'frameskip', Frameskip.Position);
-
-      WriteString('config', 'scanlines', LowerCase(LabelScanlinesValue.Caption));
-      WriteString('config', 'debug_resolution', LowerCase(LabelDebuggerResolutionValue.Caption));
-      WriteString('config', 'brightness', LowerCase(LabelBrightnessValue.Caption));
-
-      WriteString('config', 'gamma', LabelGammaValue.Caption);
-      WriteInteger('config', 'vgafreq', VGAFrequency.Position);
-
-      // Vector Options
-      case Antialias.Checked of
-        True : WriteString('config', 'antialias', 'yes');
-        False: WriteString('config', 'antialias', 'no');
-      end;
-
-      case Translucency.Checked of
-        True : WriteString('config', 'translucency', 'yes');
-        False: WriteString('config', 'translucency', 'no');
-      end;
-
-      WriteString('config', 'flicker', LabelFlickerValue.Caption);
-      WriteString('config', 'beam', LabelBeamValue.Caption);
-      WriteString('config', 'intensity', LabelIntensityValue.Caption);
-      WriteString('config', 'vectorres', LowerCase(LabelVectorResolutionValue.Caption));
-
-      // Sound Card Options
-      case SoundCard.Position of
-        0: WriteString('config', 'soundcard', '-1');
-        1: WriteString('config', 'soundcard', '0');
-        2: WriteString('config', 'soundcard', '1');
-        3: WriteString('config', 'soundcard', '3');
-        4: WriteString('config', 'soundcard', '4');
-        5: WriteString('config', 'soundcard', '5');
-        6: WriteString('config', 'soundcard', '6');
-        7: WriteString('config', 'soundcard', '7');
-      end;
-
-      case Sound.Checked of
-        True : WriteString('config', 'sound', 'yes');
-        False: WriteString('config', 'sound', 'no');
-      end;
-
-      if CustomSampleRate.Position = 4999 then
-         begin
-           case SampleRate.Position of
-             0: WriteString('config', 'samplerate', '11025');
-             1: WriteString('config', 'samplerate', '22050');
-             2: WriteString('config', 'samplerate', '44100');
-             3: WriteString('config', 'samplerate', '48000');
-           end;
-         end
-      else
-         WriteInteger('config', 'samplerate', CustomSampleRate.Position);
-
-      WriteInteger('config', 'volume', Volume.Position);
-
-      case Stereo.Checked of
-        True : WriteString('config', 'stereo', 'yes');
-        False: WriteString('config', 'stereo', 'no');
-      end;
-
-      case Samples.Checked of
-        True : WriteString('config', 'samples', 'yes');
-        False: WriteString('config', 'samples', 'no');
-      end;
-
-      case DetectSampleRate.Checked of
-        True : WriteString('config', 'sampleratedetect', 'yes');
-        False: WriteString('config', 'sampleratedetect', 'no');
-      end;
-
-      case ResampleFilter.Checked of
-        True : WriteString('config', 'resamplefilter', 'yes');
-        False: WriteString('config', 'resamplefilter', 'no');
-      end;
-
-      // Controllers Options
-      case Joystick.Position of
-         0: WriteString('config', 'joystick', 'none');
-         1: WriteString('config', 'joystick', 'auto');
-         2: WriteString('config', 'joystick', 'standard');
-         3: WriteString('config', 'joystick', 'dual');
-         4: WriteString('config', 'joystick', '4button');
-         5: WriteString('config', 'joystick', '6button');
-         6: WriteString('config', 'joystick', '8button');
-         7: WriteString('config', 'joystick', 'fspro');
-         8: WriteString('config', 'joystick', 'wingex');
-         9: WriteString('config', 'joystick', 'wingwarrior');
-        10: WriteString('config', 'joystick', 'sidewinder');
-        11: WriteString('config', 'joystick', 'gamepadpro');
-        12: WriteString('config', 'joystick', 'grip');
-        13: WriteString('config', 'joystick', 'grip4');
-        14: WriteString('config', 'joystick', 'sneslpt1');
-        15: WriteString('config', 'joystick', 'sneslpt2');
-        16: WriteString('config', 'joystick', 'sneslpt3');
-        17: WriteString('config', 'joystick', 'psxlpt1');
-        18: WriteString('config', 'joystick', 'psxlpt2');
-        19: WriteString('config', 'joystick', 'psxlpt3');
-        20: WriteString('config', 'joystick', 'n64lpt1');
-        21: WriteString('config', 'joystick', 'n64lpt2');
-        22: WriteString('config', 'joystick', 'n64lpt3');
-        23: WriteString('config', 'joystick', 'segaisa');
-        24: WriteString('config', 'joystick', 'segapci');
-        25: WriteString('config', 'joystick', 'db9lpt1');
-        26: WriteString('config', 'joystick', 'db9lpt2');
-        27: WriteString('config', 'joystick', 'db9lpt3');
-        28: WriteString('config', 'joystick', 'tgxlpt1');
-        29: WriteString('config', 'joystick', 'tgxlpt2');
-        30: WriteString('config', 'joystick', 'tgxlpt3');
-      end;
-
-      case Mouse.Checked of
-        True : WriteString('config', 'mouse', 'yes');
-        False: WriteString('config', 'mouse', 'no');
-      end;
-
-      case KeyboardLEDs.Checked of
-        True : WriteString('config', 'keyboard_leds', 'yes');
-        False: WriteString('config', 'keyboard_leds', 'no');
-      end;
-
-      // Miscellaneous Options
-      WriteString('config', 'cheatfile', FilenameCheat.Text);
-      WriteString('config', 'mameinfofile', FilenameMAMEInfo.Text);
-      WriteString('config', 'historyfile', FilenameHistory.Text);
-
-      case Artwork.Checked of
-        True : WriteString('config', 'artwork', 'yes');
-        False: WriteString('config', 'artwork', 'no');
-      end;
-
-      case Backdrop.Checked of
-        True : WriteString('config', 'use_backdrops', 'yes');
-        False: WriteString('config', 'use_backdrops', 'no');
-      end;
-
-      case Overlay.Checked of
-        True : WriteString('config', 'use_overlays', 'yes');
-        False: WriteString('config', 'use_overlays', 'no');
-      end;
-
-      case Bezel.Checked of
-        True : WriteString('config', 'use_bezels', 'yes');
-        False: WriteString('config', 'use_bezels', 'no');
-      end;
-
-      case Crop.Checked of
-        True : WriteString('config', 'artwork_crop', 'yes');
-        False: WriteString('config', 'artwork_crop', 'no');
-      end;
-
-      WriteString('config', 'artwork_resolution', 'auto');
-
-      // Visual Effects Options
-      case Stretch.Checked of
-        True : WriteString('config', 'stretch', 'yes');
-        False: WriteString('config', 'stretch', 'no');
-      end;
-
-      case VSync.Checked of
-        True : WriteString('config', 'vsync', 'yes');
-        False: WriteString('config', 'vsync', 'no');
-      end;
-
-      case AlwaysSynced.Checked of
-        True : WriteString('config', 'alwayssynced', 'yes');
-        False: WriteString('config', 'alwayssynced', 'no');
-      end;
-
-      case WaitVSync.Checked of
-        True : WriteString('config', 'waitvsync', 'yes');
-        False: WriteString('config', 'waitvsync', 'no');
-      end;
-
-      case RotateLeft.Checked of
-        True : WriteString('config', 'rol', 'yes');
-        False: WriteString('config', 'rol', 'no');
-      end;
-
-      case RotateRight.Checked of
-        True : WriteString('config', 'ror', 'yes');
-        False: WriteString('config', 'ror', 'no');
-      end;
-
-      case NoRotate.Checked of
-        True : WriteString('config', 'norotate', 'yes');
-        False: WriteString('config', 'norotate', 'no');
-      end;
-
-      case TripleBuffer.Checked of
-        True : WriteString('config', 'triplebuffer', 'yes');
-        False: WriteString('config', 'triplebuffer', 'no');
-      end;
-
-      case WaitInterlace.Checked of
-        True : WriteString('config', 'waitinterlace', 'yes');
-        False: WriteString('config', 'waitinterlace', 'no');
-      end;
-
-      WriteString('config', 'mmx', LowerCase(LabelMMXValue.Caption));
-      WriteString('config', 'dirty', LowerCase(LabelDirtyValue.Caption));
-
-      case FlipX.Checked of
-        True : WriteString('config', 'flipx', 'yes');
-        False: WriteString('config', 'flipx', 'no');
-      end;
-
-      case FlipY.Checked of
-        True : WriteString('config', 'flipy', 'yes');
-        False: WriteString('config', 'flipy', 'no');
-      end;
-
-      // Tweaks Options
-      case Throttle.Checked of
-        True : WriteString('config', 'throttle', 'yes');
-        False: WriteString('config', 'throttle', 'no');
-      end;
-
-      case Tweak.Checked of
-        True : WriteString('config', 'tweak', 'yes');
-        False: WriteString('config', 'tweak', 'no');
-      end;
-
-      case Cheat.Checked of
-        True : WriteString('config', 'cheat', 'yes');
-        False: WriteString('config', 'cheat', 'no');
-      end;
-
-      case SteadyKey.Checked of
-        True : WriteString('config', 'steadykey', 'yes');
-        False: WriteString('config', 'steadykey', 'no');
-      end;
-
-      { -ignorecfg     ignore mame.cfg and start with default options
-        -debug         Activates the integrated debugger.
-                         During emulation, press the Tilde key (~) to activate the
-                         debugger. This is available only if the program is compiled with
-                         MAME_DEBUG defined
-
-        theese are in-line options (does not have in mame.cfg) }
-    end;
-    FreeAndNil(MAMEcfg);
-  end;
-end;
-
 function TFormMain.CheckMAMEIniFiles: Boolean;
+var
+  Loop: ShortInt;
 begin
   Result:= True;
-  case EmulatorType[1] of
-    1:
-      begin
-        if not CheckMAMEIniFile(EmulatorExecutable[1]) then
-           Result:= False;
-      end;
-    2:
-      begin
-        if not CheckDOSMAMEConfigFile(EmulatorExecutable[1]) then
-           Result:= False;
-      end;
-  end;
-
-  case EmulatorType[2] of
-    1:
-      begin
-        if not CheckMAMEIniFile(EmulatorExecutable[2]) then
-           Result:= False;
-      end;
-    2:
-      begin
-        if not CheckDOSMAMEConfigFile(EmulatorExecutable[2]) then
-           Result:= False;
-      end;
-  end;
-
-  case EmulatorType[3] of
-    1:
-      begin
-        if not CheckMAMEIniFile(EmulatorExecutable[3]) then
-           Result:= False;
-      end;
-    2:
-      begin
-        if CheckDOSMAMEConfigFile(EmulatorExecutable[3]) = False then
-           Result:= False;
-      end;
-  end;
-
-  case EmulatorType[4] of
-    1:
-      begin
-        if not CheckMAMEIniFile(EmulatorExecutable[4]) then
-           Result:= False;
-      end;
-    2:
-      begin
-        if not CheckDOSMAMEConfigFile(EmulatorExecutable[4]) then
-           Result:= False;
-      end;
-  end;
-
-  case EmulatorType[5] of
-    1:
-      begin
-        if not CheckMAMEIniFile(EmulatorExecutable[5]) then
-           Result:= False;
-      end;
-    2:
-      begin
-        if not CheckDOSMAMEConfigFile(EmulatorExecutable[5]) then
-           Result:= False;
-      end;
+  for Loop:= 1 to 5 do
+  begin
+    if EmulatorType[Loop] = 1 then
+       begin
+         if not CheckMAMEIniFile(EmulatorExecutable[Loop]) then
+            Result:= False;
+       end;
   end;
 end;
 
@@ -3979,17 +3720,13 @@ end;
 
 function TFormMain.CheckMAMEIniFile(ExecutableString: String): Boolean;
 begin
-  Result:= True;
-  if ExecutableString <> '' then
+  Result:= (ExecutableString <> '');
+  if Result then
      begin
-       if not FileExists(ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString)) then
-          begin
-            Result:= False;
-            CreateMAMEIniFile(ExecutableString);
-          end;
-     end
-  else
-     Result:= False;
+       Result:= FileExists(ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString));
+       if not Result then
+          CreateMAMEIniFile(ExecutableString);
+     end;
 end;
 
 function TFormMain.ReadMAMECustomCommandLine(GameName: String; CustomCmdType: ShortInt): String;
@@ -4083,8 +3820,7 @@ begin
     0: Folder:= 'customcmd\';
     1: Folder:= 'drvcustomcmd\';
   end;
-  if FileExists(FrontendPath+'resources\'+Folder+GameName+'.ini') then
-     DeleteFile(FrontendPath+'resources\'+Folder+GameName+'.ini');
+  DeleteFile(FrontendPath+'resources\'+Folder+GameName+'.ini');
 end;
 
 
@@ -4113,7 +3849,6 @@ function TFormMain.UpdateCustomGameDescription(GameName, CustomDescription, Defa
 var
   CustomDescriptionList: THashedStringList;
   GameIndex: Integer;
-  DATFile, ROMDataLine: String;
 begin
   Result:= LowerCase(CustomDescription) <> LowerCase(DefaultDescription);
   if not Result then
@@ -4142,54 +3877,13 @@ begin
   if CustomDescriptionList.Count > 0 then
      CustomDescriptionList.SaveToFile(FrontendPath+'GameDescription.ini');
   FreeAndNil(CustomDescriptionList);
-
-  // now, let's update the .dat file with the new description
-  SetGameMemoryInfo;
-
-  case mROMIdentification of
-     0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-     1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-     2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-     3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-     4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-     5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-     6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-     7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-     8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-     9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-    10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-    11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-    12, 13: DATFile:= FrontendPath+'resources\BIOS.dat';
-    14, 15: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-  end;
-  case FileExists(DATFile) of
-    True:
-      begin
-        ROMDataLine:= PopulateROMDataLine;
-        CustomDescriptionList:= THashedStringList.Create;
-        CustomDescriptionList.LoadFromFile(DATFile);
-        GameIndex:= CustomDescriptionList.IndexOf(ROMDataLine);
-        if GameIndex <> -1 then
-           begin
-             mDescription:= CustomDescription;
-             ROMDataLine:= '';
-             ROMDataLine:= PopulateROMDataLine;
-             CustomDescriptionList[GameIndex]:= ROMDataLine;
-             CustomDescriptionList.SaveToFile(DATFile);
-           end
-        else
-           Result:= False;
-        FreeAndNil(CustomDescriptionList);
-      end;
-    False: Result:= False;
-  end;
 end;
 
 procedure TFormMain.DeleteCustomGameDescription(GameName: String);
 var
   CustomDescriptionList: THashedStringList;
   GameIndex: Integer;
-  DATFile, ROMDataLine, DefaultDescription: String;
+  DefaultDescription: String;
   UpdateGame: Boolean;
 begin
   UpdateGame:= True;
@@ -4226,43 +3920,10 @@ begin
   // now, let's update the .dat file with the original description
   if UpdateGame then
      begin
-       SetGameMemoryInfo;
-       case mROMIdentification of
-          0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-          1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-          2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-          3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-          4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-          5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-          6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-          7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-          8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-          9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-         10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-         11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-         12, 13: DATFile:= FrontendPath+'resources\BIOS.dat';
-         14, 15: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-       end;
-       if FileExists(DATFile) then
-          begin
-            ROMDataLine:= PopulateROMDataLine;
-            CustomDescriptionList:= THashedStringList.Create;
-            CustomDescriptionList.LoadFromFile(DATFile);
-            GameIndex:= CustomDescriptionList.IndexOf(ROMDataLine);
-            if GameIndex <> -1 then
-               begin
-                 mDescription:= DefaultDescription;
-                 ROMDataLine:= '';
-                 ROMDataLine:= PopulateROMDataLine;
-                 CustomDescriptionList[GameIndex]:= ROMDataLine;
-                 CustomDescriptionList.SaveToFile(DATFile);
-                 List.Items.BeginUpdate;
-                 GamesList[SelectedGame].eDescription:= DefaultDescription;
-                 List.Items.EndUpdate;
-                 List.Invalidate;
-               end;
-             FreeAndNil(CustomDescriptionList);
-          end;
+       List.Items.BeginUpdate;
+       GamesList[SelectedGame].eDescription:= DefaultDescription;
+       List.Items.EndUpdate;
+       List.Invalidate;
      end;
 end;
 
@@ -4284,7 +3945,6 @@ function TFormMain.UpdateCustomGameCategory(GameName, CustomCategory, DefaultCat
 var
   CustomCategoryList: THashedStringList;
   GameIndex: Integer;
-  DATFile, ROMDataLine: String;
 begin
   Result:= LowerCase(CustomCategory) <> LowerCase(DefaultCategory);
   if not Result then
@@ -4309,47 +3969,6 @@ begin
   if CustomCategoryList.Count > 0 then
      CustomCategoryList.SaveToFile(FrontendPath+'GameCategory.ini');
   FreeAndNil(CustomCategoryList);
-
-  // now, let's update the .dat file with the new description
-  SetGameMemoryInfo;
-
-  case mROMIdentification of
-     0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-     1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-     2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-     3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-     4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-     5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-     6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-     7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-     8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-     9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-    10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-    11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-    12, 13: DATFile:= FrontendPath+'resources\BIOS.dat';
-    14, 15: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-  end;
-  case FileExists(DATFile) of
-    True:
-      begin
-        ROMDataLine:= PopulateROMDataLine;
-        CustomCategoryList:= THashedStringList.Create;
-        CustomCategoryList.LoadFromFile(DATFile);
-        GameIndex:= CustomCategoryList.IndexOf(ROMDataLine);
-        if GameIndex <> -1 then
-           begin
-             mCategory:= CustomCategory;
-             ROMDataLine:= '';
-             ROMDataLine:= PopulateROMDataLine;
-             CustomCategoryList[GameIndex]:= ROMDataLine;
-             CustomCategoryList.SaveToFile(DATFile);
-           end
-        else
-           Result:= False;
-        FreeAndNil(CustomCategoryList);
-      end;
-    False: Result:= False;
-  end;
 end;
 
 procedure TFormMain.DeleteCustomGameCategory(GameName: String);
@@ -4357,7 +3976,7 @@ var
   CustomCategoryList: THashedStringList;
   TempFile: TMemIniFile;
   GameIndex: Integer;
-  DATFile, ROMDataLine, DefaultCategory: String;
+  DefaultCategory: String;
   UpdateGame: Boolean;
 begin
   UpdateGame:= True;
@@ -4400,43 +4019,10 @@ begin
   // now, let's update the .dat file with the original category (only if file "catver.ini" is available)
   if UpdateGame then
      begin
-       SetGameMemoryInfo;
-       case mROMIdentification of
-          0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-          1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-          2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-          3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-          4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-          5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-          6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-          7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-          8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-          9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-         10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-         11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-         12, 13: DATFile:= FrontendPath+'resources\BIOS.dat';
-         14, 15: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-       end;
-       if FileExists(DATFile) then
-          begin
-            ROMDataLine:= PopulateROMDataLine;
-            CustomCategoryList:= THashedStringList.Create;
-            CustomCategoryList.LoadFromFile(DATFile);
-            GameIndex:= CustomCategoryList.IndexOf(ROMDataLine);
-            if GameIndex <> -1 then
-               begin
-                 mCategory:= DefaultCategory;
-                 ROMDataLine:= '';
-                 ROMDataLine:= PopulateROMDataLine;
-                 CustomCategoryList[GameIndex]:= ROMDataLine;
-                 CustomCategoryList.SaveToFile(DATFile);
-                 List.Items.BeginUpdate;
-                 GamesList[SelectedGame].eCategory:= DefaultCategory;
-                 List.Items.EndUpdate;
-                 List.Invalidate;
-               end;
-             FreeAndNil(CustomCategoryList);
-          end;
+       List.Items.BeginUpdate;
+       GamesList[SelectedGame].eCategory:= DefaultCategory;
+       List.Items.EndUpdate;
+       List.Invalidate;
      end;
 end;
 
@@ -4460,12 +4046,12 @@ begin
   if ctrlrKeysList.Count > 0 then
      begin
        for Loop:=0 to ctrlrKeysList.Count -1 do
-           AddPopupItem(PopupMenuControllerKeysMapping, ctrlrKeysList[Loop], False, True);
+           AddPopupItem(PopupMenuControllerKeysMapping, ctrlrKeysList[Loop], '', False, False);
      end;
   FreeAndNil(ctrlrKeysList);
 end;
 
-procedure TFormMain.AddPopupItem(PopupHolder: TPopupMenu; Description: String; Duplicate, LoadDefault: Boolean);
+procedure TFormMain.AddPopupItem(PopupHolder: TPopupMenu; Description, HintName: String; Duplicate, BiosSetPopup: Boolean);
 var
   NewMenuItem: TMenuItem;
   Loop: Integer;
@@ -4486,8 +4072,17 @@ begin
   NewMenuItem.Caption:= Description;
   NewMenuItem.AutoCheck:= True;
   NewMenuItem.RadioItem:= True;
-  NewMenuItem.OnClick:= ctrlrDefaultClick;
+  case BiosSetPopup of
+    True:
+      begin
+        NewMenuItem.Hint:= HintName;
+        NewMenuItem.OnClick:= SetButtonSystemBiosTag;
+      end;
+    False: NewMenuItem.OnClick:= ctrlrDefaultClick;
+  end;
   PopupHolder.Items.Add(NewMenuItem);
+  if BiosSetPopup and (HintName = 'disabled') then
+     NewMenuItem.Checked:= True;
 end;
 
 procedure TFormMain.GetControllersList(ListHolder: THashedStringList; FolderControllerKeys: String);
@@ -4500,7 +4095,12 @@ begin
      end;
 end;
 
-// Read / Write "mame.ini" and "mame.cfg" functions
+procedure TFormMain.SetButtonSystemBiosTag(Sender: TObject);
+begin
+  BiosName:= TMenuItem(Sender).Hint;
+end;
+
+// Read / Write "mame.ini" functions
 function TFormMain.GetAspectRatio(AspectRatioHolder: TGaugeBar): String;
 begin
   case AspectRatioHolder.Position of
@@ -4543,7 +4143,8 @@ end;
 function TFormMain.GetBlitterEffect(BlitterEffectHolder: TGaugeBar): String;
 begin
   case BlitterEffectHolder.Position of
-     0: Result:= 'None'; // Default  Value
+    -1: Result:= 'Auto'; // only for D3D Effect
+     0: Result:= 'None'; // Default Value
      1: Result:= '25% Scanlines';
      2: Result:= '50% Scanlines';
      3: Result:= '75% Scanlines';
@@ -4555,6 +4156,13 @@ begin
      9: Result:= 'RGB Tiny';
     10: Result:= '75% Vertical Scanlines';
     11: Result:= 'Sharp';
+    12: Result:= 'RGB Minimum Mask';
+    13: Result:= 'Medium Dot Mask';
+    14: Result:= 'RGB Medium Mask';
+    15: Result:= 'RGB Micro';
+    16: Result:= 'Aperture Grille';
+    17: Result:= 'Medium Dot Bright';
+    18: Result:= 'RGB Maximum Bright';
   end;
 end;
 
@@ -4829,6 +4437,9 @@ end;
 
 function TFormMain.SetBlitterEffect(BlitterEffectValue: String): ShortInt;
 begin
+  if BlitterEffectValue = 'auto' then
+     Result:= -1
+  else
   if BlitterEffectValue = 'none' then
      Result:= 0
   else
@@ -4863,7 +4474,97 @@ begin
      Result:= 10
   else
   if BlitterEffectValue = 'sharp' then
-     Result:= 11;
+     Result:= 11
+  else
+  if BlitterEffectValue = 'rgbminmask' then
+     Result:= 12
+  else
+  if BlitterEffectValue = 'dotmedmask' then
+     Result:= 13
+  else
+  if BlitterEffectValue = 'rgbmedmask' then
+     Result:= 14
+  else
+  if BlitterEffectValue = 'rgbmicro' then
+     Result:= 15
+  else
+  if BlitterEffectValue = 'aperturegrille' then
+     Result:= 16
+  else
+  if BlitterEffectValue = 'dotmedbright' then
+     Result:= 17
+  else
+  if BlitterEffectValue = 'rgbmaxbright' then
+     Result:= 18;
+end;
+
+function TFormMain.SetEffectName(EffectsIndex: Integer): String;
+begin
+  case EffectsIndex of
+    -1: Result:= 'auto';
+     0: Result:= 'none';
+     1: Result:= 'scan25';
+     2: Result:= 'scan50';
+     3: Result:= 'scan75';
+     4: Result:= 'rgb16';
+     5: Result:= 'rgb6';
+     6: Result:= 'rgb4';
+     7: Result:= 'rgb4v';
+     8: Result:= 'rgb3';
+     9: Result:= 'rgbtiny';
+    10: Result:= 'scan75v';
+    11: Result:= 'sharp';
+    12: Result:= 'rgbminmask';
+    13: Result:= 'dotmedmask';
+    14: Result:= 'rgbmedmask';
+    15: Result:= 'rgbmicro';
+    16: Result:= 'aperturegrille';
+    17: Result:= 'dotmedbright';
+    18: Result:= 'rgbmaxbright';
+  end;
+end;
+
+function TFormMain.SetCleanStretch(CleanStretchString: String): Integer;
+begin
+  if CleanStretchString = 'none' then
+     Result:= 0
+  else
+  if CleanStretchString = 'full' then
+     Result:= 1
+  else
+  if CleanStretchString = 'auto' then
+     Result:= 2
+  else
+  if CleanStretchString = 'horizontal' then
+     Result:= 3
+  else
+  if CleanStretchString = 'vertical' then
+     Result:= 4
+  else
+     Result:= 2;
+end;
+
+function TFormMain.SetD3DPrescale(D3DPrescaleString: String): Integer;
+begin
+  if D3DPrescaleString = 'none' then
+     Result:= -1
+  else
+  if D3DPrescaleString = 'auto' then
+     Result:= 0
+  else
+  if D3DPrescaleString = 'full' then
+     Result:= 1
+  else
+  if D3DPrescaleString = '2' then
+     Result:= 2
+  else
+  if D3DPrescaleString = '3' then
+     Result:= 3
+  else
+  if D3DPrescaleString = '4' then
+     Result:= 4
+  else
+     Result:= 0;
 end;
 
 function TFormMain.GetDOSResolution(ResolutionHolder: TGaugeBar): String;
@@ -4901,91 +4602,6 @@ begin
     29: Result:= '1152x864';
     30: Result:= '1280x1024';
     31: Result:= '1600x1200';
-  end;
-end;
-
-function TFormMain.GetDOSMonitor(MonitorHolder: TGaugeBar): String;
-begin
- case MonitorHolder.Position of
-    0: Result:= 'Standard (Standard PC Monitor)';
-    1: Result:= 'NTSC Monitor';
-    2: Result:= 'PAL Monitor';
-    3: Result:= 'Arcade Monitor';
-  end;
-end;
-
-function TFormMain.GetDOSSoundCard(SoundCardHolder: TGaugeBar): String;
-begin
-  case SoundCardHolder.Position of
-    0: Result:= 'Auto Detect';
-    1: Result:= 'Silence';
-    2: Result:= 'Sound Blaster';
-    3: Result:= 'Pro Audio Spectrum';
-    4: Result:= 'Ultrasound Max (CS4231)';
-    5: Result:= 'Ultrasound';
-    6: Result:= 'Windows Sound System';
-    7: Result:= 'Ensoniq Soundscape';
-  end;
-end;
-
-function TFormMain.GetDOSJoystick(JoystickHolder: TGaugeBar): String;
-begin
-  case JoystickHolder.Position of
-     0: Result:= 'No Joystick';
-     1: Result:= 'Auto Detect';
-     2: Result:= 'Standard (2 button joystick)';
-     3: Result:= 'Dual Joysticks';
-     4: Result:= 'Stick/Pad with 4 buttons';
-     5: Result:= 'Stick/Pad with 6 buttons';
-     6: Result:= 'Stick/Pad with 8 buttons';
-     7: Result:= 'CH Flightstick Pro';
-     8: Result:= 'Wingman Extreme';
-     9: Result:= 'Wingman Warrior';
-    10: Result:= 'Microsoft Sidewinder Gamepad (up to 4)';
-    11: Result:= 'Gravis GamePad Pro';
-    12: Result:= 'Gravis GrIP';
-    13: Result:= 'Gravis GrIP (constrained to move only along the X and Y axes)';
-    14: Result:= 'SNES pad on LPT1 (needs special hardware)';
-    15: Result:= 'SNES pad on LPT2 (needs special hardware)';
-    16: Result:= 'SNES pad on LPT3 (needs special hardware)';
-    17: Result:= 'PSX pad on LPT1 (needs special hardware)';
-    18: Result:= 'PSX pad on LPT2 (needs special hardware)';
-    19: Result:= 'PSX pad on LPT3 (needs special hardware)';
-    20: Result:= 'N64 pad on LPT1 (needs special hardware)';
-    21: Result:= 'N64 pad on LPT2 (needs special hardware)';
-    22: Result:= 'N64 pad on LPT3 (needs special hardware)';
-    23: Result:= 'if SEGA ISA (needs special hardware)';
-    24: Result:= 'if SEGA PCI (needs special hardware)';
-    25: Result:= 'C64/Atari/Sinclair via DB9 on LPT1 (needs special hardware)';
-    26: Result:= 'C64/Atari/Sinclair via DB9 on LPT2 (needs special hardware)';
-    27: Result:= 'C64/Atari/Sinclair via DB9 on LPT3 (needs special hardware)';
-    28: Result:= 'Turbografix Interface on LPT1 (needs special hardware)';
-    29: Result:= 'Turbografix Interface on LPT2 (needs special hardware)';
-    30: Result:= 'Turbografix Interface on LPT3 (needs special hardware)';
-  end;
-end;
-
-function TFormMain.GetDOSVesaMode(VESAHolder: TGaugeBar): String;
-begin
-  case VESAHolder.Position of
-    0: Result:= 'Yes';
-    1: Result:= 'No';
-    2: Result:= 'VESA1';
-    3: Result:= 'VESA2b';
-    4: Result:= 'VESA2l';
-    5: Result:= 'VESA3';
-  end;
-end;
-
-function TFormMain.GetDOSDepth(DepthHolder: TGaugeBar): String;
-begin
-  case DepthHolder.Position of
-    0: Result:= 'Auto';
-    1: Result:= '8 bpp';
-    2: Result:= '15 bpp';
-    3: Result:= '16 bpp';
-    4: Result:= '24 bpp';
-    5: Result:= '32 bpp';
   end;
 end;
 
@@ -5058,102 +4674,6 @@ begin
      Result:= 0;
 end;
 
-function TFormMain.SetDOSVesaMode(VesaModeValue: String): ShortInt;
-begin
-  if VesaModeValue = 'yes' then
-     Result:= 0 else
-  if VesaModeValue = 'no' then
-     Result:= 1 else
-  if VesaModeValue = 'vesa1' then
-     Result:= 2 else
-  if VesaModeValue = 'vesa2b' then
-     Result:= 3 else
-  if VesaModeValue = 'vesa2l' then
-     Result:= 4 else
-  if VesaModeValue = 'vesa3' then
-     Result:= 5 else
-     Result:= 0;
-end;
-
-function TFormMain.SetDOSScanlines(ScanlinesValue: String): ShortInt;
-begin
-  if ScanlinesValue = 'yes' then
-     Result:= 0 else
-  if ScanlinesValue = 'no' then
-     Result:= 1 else
-  if ScanlinesValue = 'horizontal' then
-     Result:= 2 else
-  if ScanlinesValue = 'vertical' then
-     Result:= 3 else
-     Result:= 0;
-end;
-
-function TFormMain.SetDOSJoystick(JoystickValue: String): ShortInt;
-begin
-  if JoystickValue = 'none' then
-     Result:= 0 else
-  if JoystickValue = 'auto' then
-     Result:= 1 else
-  if JoystickValue = 'standard' then
-     Result:= 2 else
-  if JoystickValue = 'dual' then
-     Result:= 3 else
-  if JoystickValue = '4button' then
-     Result:= 4 else
-  if JoystickValue = '6button' then
-     Result:= 5 else
-  if JoystickValue = '8button' then
-     Result:= 6 else
-  if JoystickValue = 'fspro' then
-     Result:= 7 else
-  if JoystickValue = 'wingex' then
-     Result:= 8 else
-  if JoystickValue = 'wingwarrior' then
-     Result:= 9 else
-  if JoystickValue = 'sidewinder' then
-     Result:= 10 else
-  if JoystickValue = 'gamepadpro' then
-     Result:= 11 else
-  if JoystickValue = 'grip' then
-     Result:= 12 else
-  if JoystickValue = 'grip4' then
-     Result:= 13 else
-  if JoystickValue = 'sneslpt1' then
-     Result:= 14 else
-  if JoystickValue = 'sneslpt2' then
-     Result:= 15 else
-  if JoystickValue = 'sneslpt3' then
-     Result:= 16 else
-  if JoystickValue = 'psxlpt1' then
-     Result:= 17 else
-  if JoystickValue = 'psxlpt2' then
-     Result:= 18 else
-  if JoystickValue = 'psxlpt3' then
-     Result:= 19 else
-  if JoystickValue = 'n64lpt1' then
-     Result:= 20 else
-  if JoystickValue = 'n64lpt2' then
-     Result:= 21 else
-  if JoystickValue = 'n64lpt3' then
-     Result:= 22 else
-  if JoystickValue = 'segaisa' then
-     Result:= 23 else
-  if JoystickValue = 'segapci' then
-     Result:= 24 else
-  if JoystickValue = 'db9lpt1' then
-     Result:= 25 else
-  if JoystickValue = 'db9lpt2' then
-     Result:= 26 else
-  if JoystickValue = 'db9lpt3' then
-     Result:= 27 else
-  if JoystickValue = 'tgxlpt1' then
-     Result:= 28 else
-  if JoystickValue = 'tgxlpt2' then
-     Result:= 29 else
-  if JoystickValue = 'tgxlpt3' then
-     Result:= 30;
-end;
-
 procedure TFormMain.CreateMAMEIniFile(ExecutableString: String);
 begin
   SetCurrentDir(ExtractFilePath(ExecutableString));
@@ -5161,18 +4681,27 @@ begin
   SetCurrentDir(FrontendPath);
 end;
 
-procedure TFormMain.ReadMAMEIniFile(ExecutableString: String);
+procedure TFormMain.ReadMAMEIniFile(ExecutableString: String; CustomGameOption: Boolean);
 var
-  TextLine, Value: String;
+  TextLine, Value, IniFilename, GameName: String;
   MAMEIniFile, ctrlrKeysList: THashedStringList;
-  Loop: Integer;
+  Loop, Loop2: Integer;
 begin
-  if FileExists(ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString)) then
+  case CustomGameOption of
+    True:
+      begin
+        GameName:= GamesList[SelectedGame].eName;
+        IniFilename:= IniFilesDir+'\'+GameName+'.ini';
+      end;
+    False: IniFilename:= ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString);
+  end;
+
+  if FileExists(IniFilename) then
      begin
        ThousandSeparator:= Char(',');
        DecimalSeparator:= Char('.');
        MAMEIniFile:= THashedStringList.Create;
-       MAMEIniFile.LoadFromFile(ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString));
+       MAMEIniFile.LoadFromFile(IniFilename);
        for Loop:=0 to MAMEIniFile.Count -1 do
        begin
          TextLine:= MAMEIniFile[Loop];
@@ -5180,62 +4709,53 @@ begin
          begin
            if (Pos('#', TextLine) <> 0) or (TextLine <> '') then
               begin
-                if Copy(TextLine,1,7) = 'clones ' then
+                if Copy(TextLine, 1, 7) = 'clones ' then
                    Clones.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,8) = 'rompath ' then
+                if Copy(TextLine, 1, 8) = 'rompath ' then
                    FolderROMs.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,11) = 'samplepath ' then
+                if Copy(TextLine, 1, 11) = 'samplepath ' then
                    FolderSamples.Text:= ExtractMAMEIniValue(TextLine)
                 else
                 if Copy(TextLine, 1, 10) = '# inipath ' then
-                   FolderINIFiles.Text:= ''
+                   FolderINIFiles.Text:= 'ini'
                 else
-                if Copy(TextLine,1,8) = 'inipath ' then
+                if Copy(TextLine, 1, 8) = 'inipath ' then
                    begin
                      FolderINIFiles.Text:= ExtractMAMEIniValue(TextLine);
                      if FolderINIFiles.Text = '.;ini' then
                         FolderINIFiles.Text:= 'ini';
                    end
                 else
-                if Copy(TextLine,1,14) = 'cfg_directory ' then
+                if Copy(TextLine, 1, 14) = 'cfg_directory ' then
                    FolderGamesConfiguration.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,16) = 'nvram_directory ' then
+                if Copy(TextLine, 1, 16) = 'nvram_directory ' then
                    FolderNVRAM.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,18) = 'memcard_directory ' then
+                if Copy(TextLine, 1, 18) = 'memcard_directory ' then
                    FolderMemoryCards.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,16) = 'input_directory ' then
+                if Copy(TextLine, 1, 16) = 'input_directory ' then
                    FolderInputsRecording.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,18) = 'hiscore_directory ' then
+                if Copy(TextLine, 1, 18) = 'hiscore_directory ' then
                    FolderHighScores.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,16) = 'state_directory ' then
+                if Copy(TextLine, 1, 16) = 'state_directory ' then
                    FolderSaveStates.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,18) = 'artwork_directory ' then
+                if Copy(TextLine, 1, 18) = 'artwork_directory ' then
                    FolderArtworks.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,19) = 'snapshot_directory ' then
+                if Copy(TextLine, 1, 19) = 'snapshot_directory ' then
                    FolderSnapshots.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,15) = 'diff_directory ' then
+                if Copy(TextLine, 1, 15) = 'diff_directory ' then
                    FolderDiff.Text:= ExtractMAMEIniValue(TextLine)
                 else
-                if Copy(TextLine,1,11) = 'cheat_file ' then
-                   FilenameCheat.Text:= ExtractMAMEIniValue(TextLine)
-                else
-                if Copy(TextLine,1,13) = 'history_file ' then
-                   FilenameHistory.Text:= ExtractMAMEIniValue(TextLine)
-                else
-                if Copy(TextLine,1,14) = 'mameinfo_file ' then
-                   FilenameMAMEInfo.Text:= ExtractMAMEIniValue(TextLine)
-                else
-                if Copy(TextLine,1,16) = 'ctrlr_directory ' then
+                if Copy(TextLine, 1, 16) = 'ctrlr_directory ' then
                    begin
                      FolderKeysMapping.Text:= ExtractMAMEIniValue(TextLine);
                      ctrlrKeysList:= THashedStringList.Create;
@@ -5249,76 +4769,92 @@ begin
                      FreeAndNil(ctrlrKeysList);
                    end
                 else
-                if Copy(TextLine,1,14) = 'autoframeskip ' then
+                if Copy(TextLine, 1, 11) = 'cheat_file ' then
+                   FilenameCheat.Text:= ExtractMAMEIniValue(TextLine)
+                else
+                if Copy(TextLine, 1, 13) = 'history_file ' then
+                   FilenameHistory.Text:= ExtractMAMEIniValue(TextLine)
+                else
+                if Copy(TextLine, 1, 14) = 'mameinfo_file ' then
+                   FilenameMAMEInfo.Text:= ExtractMAMEIniValue(TextLine)
+                else
+                if Copy(TextLine, 1, 14) = 'autoframeskip ' then
                    AutoFrameSkip.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,10) = 'frameskip ' then
+                if Copy(TextLine, 1, 10) = 'frameskip ' then
                    FrameSkip.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
-                if Copy(TextLine,1,10) = 'waitvsync ' then
+                if Copy(TextLine, 1, 10) = 'waitvsync ' then
                    WaitVSync.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'triplebuffer ' then
+                if Copy(TextLine, 1, 13) = 'triplebuffer ' then
                    TripleBuffer.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,7) = 'window ' then
+                if Copy(TextLine, 1, 7) = 'window ' then
                    Window.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'ddraw ' then
+                if Copy(TextLine, 1, 6) = 'ddraw ' then
                    DirectDraw.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,10) = 'hwstretch ' then
+                if Copy(TextLine, 1, 9) = 'direct3d ' then
+                   Direct3D.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 10) = 'hwstretch ' then
                    HardwareStretch.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,11) = 'resolution ' then
+                if Copy(TextLine, 1, 13) = 'cleanstretch ' then
+                   CleanStretch.Position:= SetCleanStretch(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 11) = 'resolution ' then
                    begin
-                     Value:= IntToStr(FormMain.SetResolution(ExtractMAMEIniValue(TextLine)));
+                     Value:= IntToStr(SetResolution(ExtractMAMEIniValue(TextLine)));
                      if Value = '-1' then
                         CustomResolution.Text:= Value
                      else
                         Resolution.Position:= StrToInt(Value);
                    end
                 else
-                if Copy(TextLine,1,8) = 'refresh ' then
+                if Copy(TextLine, 1, 5) = 'zoom ' then
+                   Zoom.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 8) = 'refresh ' then
                    RefreshRate.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
-                if Copy(TextLine,1,10) = 'scanlines ' then
+                if Copy(TextLine, 1, 10) = 'scanlines ' then
                    Scanlines.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                  else
-                if Copy(TextLine,1,10) = 'switchres ' then
+                if Copy(TextLine, 1, 10) = 'switchres ' then
                    SwitchResolution.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,10) = 'switchbpp ' then
+                if Copy(TextLine, 1, 10) = 'switchbpp ' then
                    SwitchColorDepth.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,9) = 'maximize ' then
+                if Copy(TextLine, 1, 9) = 'maximize ' then
                    Maximize.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,11) = 'keepaspect ' then
+                if Copy(TextLine, 1, 11) = 'keepaspect ' then
                    KeepAspectRatio.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'matchrefresh ' then
+                if Copy(TextLine, 1, 13) = 'matchrefresh ' then
                    MatchRefreshRate.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,12) = 'syncrefresh ' then
+                if Copy(TextLine, 1, 12) = 'syncrefresh ' then
                    SyncronizeRefreshRate.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,9) = 'throttle ' then
+                if Copy(TextLine, 1, 9) = 'throttle ' then
                    Throttle.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,23) = 'full_screen_brightness ' then
+                if Copy(TextLine, 1, 23) = 'full_screen_brightness ' then
                    FullScreenBrightness.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,14) = 'frames_to_run ' then
+                if Copy(TextLine, 1, 14) = 'frames_to_run ' then
                    FramesToRun.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
-                if Copy(TextLine,1,7) = 'effect ' then
+                if Copy(TextLine, 1, 7) = 'effect ' then
                    Effect.Position:= SetBlitterEffect(ExtractMAMEIniValue(TextLine))
                 else
                 if Copy(TextLine, 1, 14) = 'screen_aspect ' then
-                   begin
-                     ScreenAspect.Position:= SetDefaultAspectRatio(ExtractMAMEIniValue(TextLine));
-                   end
+                   ScreenAspect.Position:= SetDefaultAspectRatio(ExtractMAMEIniValue(TextLine))
                 else
                 if Copy(TextLine, 1, 6) = 'sleep ' then
                    Sleep.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
@@ -5326,22 +4862,90 @@ begin
                 if Copy(TextLine, 1, 6) = 'rdtsc ' then
                    rdtsc.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'mouse ' then
+                if Copy(TextLine, 1, 14) = 'high_priority ' then
+                   HighPriority.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                // d3d options
+                if Copy(TextLine, 1, 13) = 'd3dtexmanage ' then
+                   D3DTextureManagement.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 10) = 'd3dfilter ' then
+                   D3DFilter.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 12) = 'd3dprescale ' then
+                   D3DPrescale.Position:= SetD3DPrescale(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 12) = 'd3dfeedback ' then
+                   D3DFeedback.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 8) = 'd3dscan ' then
+                   D3DScanline.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 16) = 'd3deffectrotate ' then
+                   D3DEffectsRotation.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 10) = 'd3deffect ' then
+                   D3DEffect.Position:= SetBlitterEffect(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 12) = '# d3dcustom ' then
+                   begin
+                     D3DCustomEffectsEnable.Checked:= False;
+                     Value:= ExtractMAMEIniValue(TextLine);
+                     if Value <> '<NULL> (not set)' then
+                        D3DCustomEffects.Text:= Value
+                     else
+                        D3DCustomEffects.Text:= '';
+                   end
+                else
+                if Copy(TextLine, 1, 10) = 'd3dcustom ' then
+                   begin
+                     D3DCustomEffectsEnable.Checked:= True;
+                     Value:= ExtractMAMEIniValue(TextLine);
+                     if Value <> '<NULL> (not set)' then
+                        D3DCustomEffects.Text:= Value
+                     else
+                        D3DCustomEffects.Text:= '';
+                   end
+                else
+                if Copy(TextLine, 1, 12) = '# d3dexpert ' then
+                   begin
+                     D3DExpertEffectsEnable.Checked:= False;
+                     Value:= ExtractMAMEIniValue(TextLine);
+                     if Value <> '<NULL> (not set)' then
+                        D3DExpertEffects.Text:= Value
+                     else
+                        D3DExpertEffects.Text:= '';
+                   end
+                else
+                if Copy(TextLine, 1, 10) = 'd3dexpert ' then
+                   begin
+                     D3DExpertEffectsEnable.Checked:= True;
+                     Value:= ExtractMAMEIniValue(TextLine);
+                     if Value <> '<NULL> (not set)' then
+                        D3DExpertEffects.Text:= Value
+                     else
+                        D3DExpertEffects.Text:= '';
+                   end
+                else
+                if Copy(TextLine, 1, 14) = 'audio_latency ' then
+                   AudioLatency.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
+                else
+                if Copy(TextLine, 1, 6) = 'mouse ' then
                    Mouse.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,9) = 'joystick ' then
+                if Copy(TextLine, 1, 9) = 'joystick ' then
                    Joystick.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,9) = 'lightgun ' then
+                if Copy(TextLine, 1, 9) = 'lightgun ' then
                    Lightgun.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,10) = 'steadykey ' then
+                if Copy(TextLine, 1, 10) = 'steadykey ' then
                    SteadyKey.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,14) = 'keyboard_leds ' then
+                if Copy(TextLine, 1, 14) = 'keyboard_leds ' then
                    KeyboardLEDs.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'a2d_deadzone ' then
+                if Copy(TextLine, 1, 13) = 'a2d_deadzone ' then
                    AnalogDigitalDeadzone.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
                 if Copy(TextLine, 1, 8) = '# ctrlr ' then
@@ -5354,49 +4958,55 @@ begin
                          ControllerKeysMapping.ItemIndex:= 0;
                     end
                 else
-                if Copy(TextLine,1,9) = 'norotate ' then
+                if Copy(TextLine, 1, 9) = 'norotate ' then
                    NoRotate.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,4) = 'ror ' then
+                if Copy(TextLine, 1, 4) = 'ror ' then
                    RotateRight.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,4) = 'rol ' then
+                if Copy(TextLine, 1, 4) = 'rol ' then
                    RotateLeft.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'flipx ' then
+                if Copy(TextLine, 1, 8) = 'autoror ' then
+                   AutoRotateRight.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 8) = 'autorol ' then
+                   AutoRotateLeft.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 6) = 'flipx ' then
                    FlipX.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'flipy ' then
+                if Copy(TextLine, 1, 6) = 'flipy ' then
                    FlipY.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,17) = 'debug_resolution ' then
+                if Copy(TextLine, 1, 17) = 'debug_resolution ' then
                    DebuggerResolution.Position:= SetDOSResolution(LowerCase(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'gamma ' then
+                if Copy(TextLine, 1, 6) = 'gamma ' then
                    Gamma.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,11) = 'brightness ' then
+                if Copy(TextLine, 1, 11) = 'brightness ' then
                    Brightness.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
                 if Copy(TextLine, 1, 17) = 'pause_brightness ' then
                    PauseBrightness.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,10) = 'antialias ' then
+                if Copy(TextLine, 1, 10) = 'antialias ' then
                    Antialias.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'translucency ' then
+                if Copy(TextLine, 1, 13) = 'translucency ' then
                    Translucency.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,5) = 'beam ' then
+                if Copy(TextLine, 1, 5) = 'beam ' then
                    Beam.Position:= StrToFloat(Format('%2.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,8) = 'flicker ' then
+                if Copy(TextLine, 1, 8) = 'flicker ' then
                    Flicker.Position:= StrToFloat(Format('%3.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,10) = 'intensity ' then
+                if Copy(TextLine, 1, 10) = 'intensity ' then
                    Intensity.Position:= StrToFloat(Format('%1.2f', [StrToFloat(ExtractMAMEIniValue(TextLine))]))
                 else
-                if Copy(TextLine,1,11) = 'samplerate ' then
+                if Copy(TextLine, 1, 11) = 'samplerate ' then
                    begin
                      Value:= ExtractMAMEIniValue(TextLine);
                      case StrToInt(Value) of
@@ -5408,44 +5018,47 @@ begin
                      end;
                    end
                 else
-                if Copy(TextLine,1,8) = 'samples ' then
+                if Copy(TextLine, 1, 8) = 'samples ' then
                    Samples.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,15) = 'resamplefilter ' then
+                if Copy(TextLine, 1, 15) = 'resamplefilter ' then
                    ResampleFilter.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'sound ' then
+                if Copy(TextLine, 1, 6) = 'sound ' then
                    Sound.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,7) = 'volume ' then
+                if Copy(TextLine, 1, 7) = 'volume ' then
                    Volume.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
-                if Copy(TextLine,1,8) = 'artwork ' then
+                if Copy(TextLine, 1, 8) = 'artwork ' then
                    Artwork.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,14) = 'use_backdrops ' then
+                if Copy(TextLine, 1, 14) = 'use_backdrops ' then
                    Backdrop.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'use_overlays ' then
+                if Copy(TextLine, 1, 13) = 'use_overlays ' then
                    Overlay.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,11) = 'use_bezels ' then
+                if Copy(TextLine, 1, 11) = 'use_bezels ' then
                    Bezel.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,13) = 'artwork_crop ' then
+                if Copy(TextLine, 1, 13) = 'artwork_crop ' then
                    Crop.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,19) = 'artwork_resolution ' then
+                if Copy(TextLine, 1, 19) = 'artwork_resolution ' then
                    ArtworkResolution.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
-                if Copy(TextLine,1,6) = 'cheat ' then
+                if Copy(TextLine, 1, 6) = 'cheat ' then
                    Cheat.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,6) = 'debug ' then
+                if Copy(TextLine, 1, 6) = 'debug ' then
                    Debug.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,4) = 'log ' then
+                if Copy(TextLine, 1, 4) = 'log ' then
                    Log.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 11) = 'maxlogsize ' then
+                   MaxLogSize.Position:= StrToInt(ExtractMAMEIniValue(TextLine))
                 else
                 if Copy(TextLine, 1, 6) = 'oslog ' then
                    OSDebug.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
@@ -5456,10 +5069,29 @@ begin
                 if Copy(TextLine, 1, 14) = 'skip_gameinfo ' then
                    SkipGameInfo.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,11) = 'readconfig ' then
+                if Copy(TextLine, 1, 8) = 'crconly ' then
+                   CRCIntegrityChecks.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
+                else
+                if Copy(TextLine, 1, 5) = 'bios ' then
+                   begin
+                     if PopupSystemBios.Items.Count > 0 then
+                        begin
+                          Value:= ExtractMAMEIniValue(TextLine);
+                          for Loop2:=0 to PopupSystemBios.Items.Count-1 do
+                          begin
+                            if PopupSystemBios.Items[Loop2].Hint = Value then
+                               begin
+                                 PopupSystemBios.Items[Loop2].Click;
+                                 Break;
+                               end;
+                          end;
+                        end;
+                   end
+                else
+                if Copy(TextLine, 1, 11) = 'readconfig ' then
                    ReadConfigFile.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)))
                 else
-                if Copy(TextLine,1,8) = 'verbose ' then
+                if Copy(TextLine, 1, 8) = 'verbose ' then
                    Verbose.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)));
               end;
          end;
@@ -5472,6 +5104,7 @@ procedure TFormMain.UpdateMAMEIniFile(ExecutableString: String);
 var
   MAMEIniFile: THashedStringList;
   Loop: Integer;
+  Value: String;
 begin
   MAMEIniFile:= THashedStringList.Create;
   MAMEIniFile.LoadFromFile(ExtractFilePath(ExecutableString)+GetExecutableINIFileName(ExecutableString));
@@ -5479,13 +5112,13 @@ begin
   begin
     if (Pos('#', MAMEIniFile[Loop]) <> 0) or (MAMEIniFile[Loop] <> '') then
        begin
-         if Copy(MAMEIniFile[Loop],1,7) = 'clones ' then
+         if Copy(MAMEIniFile[Loop], 1, 7) = 'clones ' then
             MAMEIniFile[Loop]:= 'clones                  '+IntToStr(Ord(FormMAMEConfiguration.Clones.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'rompath ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'rompath ' then
             MAMEIniFile[Loop]:= 'rompath                 '+FormMAMEConfiguration.FolderROMs.Text
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'samplepath ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'samplepath ' then
             MAMEIniFile[Loop]:= 'samplepath              '+FormMAMEConfiguration.FolderSamples.Text
          else
          if (Copy(MAMEIniFile[Loop], 1, 8) =  'inipath ') or (Copy(MAMEIniFile[Loop], 1, 10) =  '# inipath ') then
@@ -5496,67 +5129,73 @@ begin
                  MAMEIniFile[Loop]:= 'inipath                 '+FormMAMEConfiguration.FolderINIFiles.Text;
             end
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'cfg_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'cfg_directory ' then
             MAMEIniFile[Loop]:= 'cfg_directory           '+FormMAMEConfiguration.FolderGamesConfiguration.Text
          else
-         if Copy(MAMEIniFile[Loop],1,16) = 'nvram_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 16) = 'nvram_directory ' then
             MAMEIniFile[Loop]:= 'nvram_directory         '+FormMAMEConfiguration.FolderNVRAM.Text
          else
-         if Copy(MAMEIniFile[Loop],1,18) = 'memcard_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 18) = 'memcard_directory ' then
             MAMEIniFile[Loop]:= 'memcard_directory       '+FormMAMEConfiguration.FolderMemoryCards.Text
          else
-         if Copy(MAMEIniFile[Loop],1,16) = 'input_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 16) = 'input_directory ' then
             MAMEIniFile[Loop]:= 'input_directory         '+FormMAMEConfiguration.FolderInputsRecording.Text
          else
-         if Copy(MAMEIniFile[Loop],1,18) = 'hiscore_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 18) = 'hiscore_directory ' then
             MAMEIniFile[Loop]:= 'hiscore_directory       '+FormMAMEConfiguration.FolderHighScores.Text
          else
-         if Copy(MAMEIniFile[Loop],1,16) = 'state_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 16) = 'state_directory ' then
             MAMEIniFile[Loop]:= 'state_directory         '+FormMAMEConfiguration.FolderSaveStates.Text
          else
-         if Copy(MAMEIniFile[Loop],1,18) = 'artwork_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 18) = 'artwork_directory ' then
             MAMEIniFile[Loop]:= 'artwork_directory       '+FormMAMEConfiguration.FolderArtworks.Text
          else
-         if Copy(MAMEIniFile[Loop],1,15) = 'diff_directory ' then
-            MAMEIniFile[Loop]:= 'diff_directory          '+FormMAMEConfiguration.FolderDiff.Text
-         else
-         if Copy(MAMEIniFile[Loop],1,19) = 'snapshot_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 19) = 'snapshot_directory ' then
             MAMEIniFile[Loop]:= 'snapshot_directory      '+FormMAMEConfiguration.FolderSnapshots.Text
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'cheat_file ' then
-            MAMEIniFile[Loop]:= 'cheat_file              '+FormMAMEConfiguration.FilenameCheat.Text
+         if Copy(MAMEIniFile[Loop], 1, 15) = 'diff_directory ' then
+            MAMEIniFile[Loop]:= 'diff_directory          '+FormMAMEConfiguration.FolderDiff.Text
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'history_file ' then
-            MAMEIniFile[Loop]:= 'history_file            '+FormMAMEConfiguration.FilenameHistory.Text
-         else
-         if Copy(MAMEIniFile[Loop],1,14) = 'mameinfo_file ' then
-            MAMEIniFile[Loop]:= 'mameinfo_file           '+FormMAMEConfiguration.FilenameMAMEInfo.Text
-         else
-         if Copy(MAMEIniFile[Loop],1,16) = 'ctrlr_directory ' then
+         if Copy(MAMEIniFile[Loop], 1, 16) = 'ctrlr_directory ' then
             MAMEIniFile[Loop]:= 'ctrlr_directory         '+FormMAMEConfiguration.FolderKeysMapping.Text
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'autoframeskip ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'cheat_file ' then
+            MAMEIniFile[Loop]:= 'cheat_file              '+FormMAMEConfiguration.FilenameCheat.Text
+         else
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'history_file ' then
+            MAMEIniFile[Loop]:= 'history_file            '+FormMAMEConfiguration.FilenameHistory.Text
+         else
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'mameinfo_file ' then
+            MAMEIniFile[Loop]:= 'mameinfo_file           '+FormMAMEConfiguration.FilenameMAMEInfo.Text
+         else
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'autoframeskip ' then
             MAMEIniFile[Loop]:= 'autoframeskip           '+IntToStr(Ord(FormMAMEConfiguration.AutoFrameSkip.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'frameskip ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'frameskip ' then
             MAMEIniFile[Loop]:= 'frameskip               '+IntToStr(FormMAMEConfiguration.FrameSkip.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'waitvsync ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'waitvsync ' then
             MAMEIniFile[Loop]:= 'waitvsync               '+IntToStr(Ord(FormMAMEConfiguration.WaitVSync.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'triplebuffer ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'triplebuffer ' then
             MAMEIniFile[Loop]:= 'triplebuffer            '+IntToStr(Ord(FormMAMEConfiguration.TripleBuffer.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,7) = 'window ' then
+         if Copy(MAMEIniFile[Loop], 1, 7) = 'window ' then
             MAMEIniFile[Loop]:= 'window                  '+IntToStr(Ord(FormMAMEConfiguration.Window.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'ddraw ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'ddraw ' then
             MAMEIniFile[Loop]:= 'ddraw                   '+IntToStr(Ord(FormMAMEConfiguration.DirectDraw.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'hwstretch ' then
+         if Copy(MAMEIniFile[Loop], 1, 9) = 'direct3d ' then
+            MAMEIniFile[Loop]:= 'direct3d                '+IntToStr(Ord(FormMAMEConfiguration.Direct3D.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'hwstretch ' then
             MAMEIniFile[Loop]:= 'hwstretch               '+IntToStr(Ord(FormMAMEConfiguration.HardwareStretch.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'resolution ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'cleanstretch ' then
+            MAMEIniFile[Loop]:= 'cleanstretch            '+LowerCase(FormMAMEConfiguration.LabelCleanStretchValue.Caption)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'resolution ' then
             begin
               if FormMAMEConfiguration.CustomResolution.Text = '' then
                  MAMEIniFile[Loop]:= 'resolution              '+LowerCase(FormMAMEConfiguration.LabelResolutionValue.Caption)
@@ -5564,82 +5203,135 @@ begin
                  MAMEIniFile[Loop]:= 'resolution              '+LowerCase(FormMAMEConfiguration.CustomResolution.Text);
             end
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'refresh ' then
+         if Copy(MAMEIniFile[Loop], 1, 5) = 'zoom ' then
+            MAMEIniFile[Loop]:= 'zoom                    '+IntToStr(FormMAMEConfiguration.Zoom.Position)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'refresh ' then
             MAMEIniFile[Loop]:= 'refresh                 '+IntToStr(FormMAMEConfiguration.RefreshRate.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'scanlines ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'scanlines ' then
             MAMEIniFile[Loop]:= 'scanlines               '+IntToStr(Ord(FormMAMEConfiguration.Scanlines.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'switchres ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'switchres ' then
             MAMEIniFile[Loop]:= 'switchres               '+IntToStr(Ord(FormMAMEConfiguration.SwitchResolution.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'switchbpp ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'switchbpp ' then
             MAMEIniFile[Loop]:= 'switchbpp               '+IntToStr(Ord(FormMAMEConfiguration.SwitchColorDepth.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,9) = 'maximize ' then
+         if Copy(MAMEIniFile[Loop], 1, 9) = 'maximize ' then
             MAMEIniFile[Loop]:= 'maximize                '+IntToStr(Ord(FormMAMEConfiguration.Maximize.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'keepaspect ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'keepaspect ' then
             MAMEIniFile[Loop]:= 'keepaspect              '+IntToStr(Ord(FormMAMEConfiguration.KeepAspectRatio.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'matchrefresh ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'matchrefresh ' then
             MAMEIniFile[Loop]:= 'matchrefresh            '+IntToStr(Ord(FormMAMEConfiguration.MatchRefreshRate.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,12) = 'syncrefresh ' then
+         if Copy(MAMEIniFile[Loop], 1, 12) = 'syncrefresh ' then
             MAMEIniFile[Loop]:= 'syncrefresh             '+IntToStr(Ord(FormMAMEConfiguration.SyncronizeRefreshRate.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,9) = 'throttle ' then
+         if Copy(MAMEIniFile[Loop], 1, 9) = 'throttle ' then
             MAMEIniFile[Loop]:= 'throttle                '+IntToStr(Ord(FormMAMEConfiguration.Throttle.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,23) = 'full_screen_brightness ' then
+         if Copy(MAMEIniFile[Loop], 1, 23) = 'full_screen_brightness ' then
             MAMEIniFile[Loop]:= 'full_screen_brightness   '+FormMAMEConfiguration.LabelFullScreenBrightnessValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'frames_to_run ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'frames_to_run ' then
             MAMEIniFile[Loop]:= 'frames_to_run           '+IntToStr(FormMAMEConfiguration.FramesToRun.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,7) = 'effect ' then
-            begin
-              case FormMAMEConfiguration.Effect.Position of
-                 0: MAMEIniFile[Loop]:= 'effect                  none';
-                 1: MAMEIniFile[Loop]:= 'effect                  scan25';
-                 2: MAMEIniFile[Loop]:= 'effect                  scan50';
-                 3: MAMEIniFile[Loop]:= 'effect                  scan75';
-                 4: MAMEIniFile[Loop]:= 'effect                  rgb16';
-                 5: MAMEIniFile[Loop]:= 'effect                  rgb6';
-                 6: MAMEIniFile[Loop]:= 'effect                  rgb4';
-                 7: MAMEIniFile[Loop]:= 'effect                  rgb4v';
-                 8: MAMEIniFile[Loop]:= 'effect                  rgb3';
-                 9: MAMEIniFile[Loop]:= 'effect                  rgbtiny';
-                10: MAMEIniFile[Loop]:= 'effect                  scan75v';
-                11: MAMEIniFile[Loop]:= 'effect                  sharp';
-              end;
-            end
+         if Copy(MAMEIniFile[Loop], 1, 7) = 'effect ' then
+            MAMEIniFile[Loop]:= 'effect                  '+SetEffectName(FormMAMEConfiguration.Effect.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'screen_aspect ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'screen_aspect ' then
             MAMEIniFile[Loop]:= 'screen_aspect           '+FormMAMEConfiguration.LabelScreenAspectValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'sleep ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'sleep ' then
             MAMEIniFile[Loop]:= 'sleep                   '+IntToStr(Ord(FormMAMEConfiguration.Sleep.Checked))
          else
          if Copy(MAMEIniFile[Loop], 1, 6) = 'rdtsc ' then
             MAMEIniFile[Loop]:= 'rdtsc                   '+IntToStr(Ord(FormMAMEConfiguration.rdtsc.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'mouse ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'high_priority ' then
+            MAMEIniFile[Loop]:= 'high_priority           '+IntToStr(Ord(FormMAMEConfiguration.HighPriority.Checked))
+         else
+         // D3D Options
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'd3dtexmanage ' then
+            MAMEIniFile[Loop]:= 'd3dtexmanage            '+IntToStr(Ord(FormMAMEConfiguration.D3DTextureManagement.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'd3dfilter ' then
+            MAMEIniFile[Loop]:= 'd3dfilter               '+IntToStr(FormMAMEConfiguration.D3DFilter.Position)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 12) = 'd3dprescale ' then
+            MAMEIniFile[Loop]:= 'd3dprescale             '+LowerCase(FormMAMEConfiguration.LabelD3DPrescaleValue.Caption)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 12) = 'd3dfeedback ' then
+            MAMEIniFile[Loop]:= 'd3dfeedback             '+IntToStr(FormMAMEConfiguration.D3DFeedback.Position)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'd3dscan ' then
+            MAMEIniFile[Loop]:= 'd3dscan                 '+IntToStr(FormMAMEConfiguration.D3DScanline.Position)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 16) = 'd3deffectrotate ' then
+            MAMEIniFile[Loop]:= 'd3deffectrotate         '+IntToStr(Ord(FormMAMEConfiguration.D3DEffectsRotation.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'd3deffect ' then
+            MAMEIniFile[Loop]:= 'd3deffect               '+SetEffectName(FormMAMEConfiguration.D3DEffect.Position)
+         else
+         if (Copy(MAMEIniFile[Loop], 1, 12) = '# d3dcustom ') or (Copy(MAMEIniFile[Loop], 1, 10) = 'd3dcustom ') then
+            begin
+              Value:= FormMAMEConfiguration.D3DCustomEffects.Text;
+              if Value = '' then
+                 Value:= '<NULL> (not set)';
+
+              case FormMAMEConfiguration.D3DCustomEffectsEnable.Checked of
+                True:
+                  begin
+                    if Value = '<NULL> (not set)' then
+                       MAMEIniFile[Loop]:= '# d3dcustom             '+Value
+                    else
+                       MAMEIniFile[Loop]:= 'd3dcustom               '+Value
+                  end;
+                False: MAMEIniFile[Loop]:= '# d3dcustom             '+Value;
+              end;
+            end
+         else
+         if (Copy(MAMEIniFile[Loop], 1, 12) = '# d3dexpert ') or (Copy(MAMEIniFile[Loop], 1, 10) = 'd3dexpert ') then
+            begin
+              Value:= FormMAMEConfiguration.D3DExpertEffects.Text;
+              if Value = '' then
+                 Value:= '<NULL> (not set)';
+
+              case FormMAMEConfiguration.D3DExpertEffectsEnable.Checked of
+                True:
+                  begin
+                    if Value = '<NULL> (not set)' then
+                       MAMEIniFile[Loop]:= '# d3dexpert             '+Value
+                    else
+                       MAMEIniFile[Loop]:= 'd3dexpert               '+Value
+                  end;
+                False: MAMEIniFile[Loop]:= '# d3dexpert             '+Value;
+              end;
+            end
+         else
+
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'audio_latency ' then
+            MAMEIniFile[Loop]:= 'audio_latency           '+IntToStr(FormMAMEConfiguration.AudioLatency.Position)
+         else
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'mouse ' then
             MAMEIniFile[Loop]:= 'mouse                   '+IntToStr(Ord(FormMAMEConfiguration.Mouse.Checked))
          else
          if Copy(MAMEIniFile[Loop],1,9) = 'joystick ' then
             MAMEIniFile[Loop]:= 'joystick                '+IntToStr(Ord(FormMAMEConfiguration.Joystick.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,9) = 'lightgun ' then
+         if Copy(MAMEIniFile[Loop], 1, 9) = 'lightgun ' then
             MAMEIniFile[Loop]:= 'lightgun                '+IntToStr(Ord(FormMAMEConfiguration.Lightgun.Checked))
          else
          if Copy(MAMEIniFile[Loop], 1, 10) = 'steadykey ' then
             MAMEIniFile[Loop]:= 'steadykey               '+IntToStr(Ord(FormMAMEConfiguration.SteadyKey.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'keyboard_leds ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'keyboard_leds ' then
             MAMEIniFile[Loop]:= 'keyboard_leds           '+IntToStr(Ord(FormMAMEConfiguration.KeyboardLEDs.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'a2d_deadzone ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'a2d_deadzone ' then
             MAMEIniFile[Loop]:= 'a2d_deadzone            '+FormMAMEConfiguration.LabelAnalogDigitalDeadzoneValue.Caption
          else
          if (Copy(MAMEIniFile[Loop], 1, 8) = '# ctrlr ') or (Copy(MAMEIniFile[Loop], 1, 6) = 'ctrlr ') then
@@ -5650,49 +5342,55 @@ begin
                  MAMEIniFile[Loop]:= 'ctrlr                   '+FormMAMEConfiguration.ControllerKeysMapping.Text;
             end
          else
-         if Copy(MAMEIniFile[Loop],1,9) = 'norotate ' then
+         if Copy(MAMEIniFile[Loop], 1, 9) = 'norotate ' then
             MAMEIniFile[Loop]:= 'norotate                '+IntToStr(Ord(FormMAMEConfiguration.NoRotate.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,4) = 'ror ' then
+         if Copy(MAMEIniFile[Loop], 1, 4) = 'ror ' then
             MAMEIniFile[Loop]:= 'ror                     '+IntToStr(Ord(FormMAMEConfiguration.RotateRight.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,4) = 'rol ' then
+         if Copy(MAMEIniFile[Loop], 1, 4) = 'rol ' then
             MAMEIniFile[Loop]:= 'rol                     '+IntToStr(Ord(FormMAMEConfiguration.RotateLeft.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'flipx ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'autoror ' then
+            MAMEIniFile[Loop]:= 'autoror                 '+IntToStr(Ord(FormMAMEConfiguration.AutoRotateRight.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'autorol ' then
+            MAMEIniFile[Loop]:= 'autorol                 '+IntToStr(Ord(FormMAMEConfiguration.AutoRotateLeft.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'flipx ' then
             MAMEIniFile[Loop]:= 'flipx                   '+IntToStr(Ord(FormMAMEConfiguration.FlipX.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'flipy ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'flipy ' then
             MAMEIniFile[Loop]:= 'flipy                   '+IntToStr(Ord(FormMAMEConfiguration.FlipY.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,17) = 'debug_resolution ' then
+         if Copy(MAMEIniFile[Loop], 1, 17) = 'debug_resolution ' then
             MAMEIniFile[Loop]:= 'debug_resolution        '+ LowerCase(FormMAMEConfiguration.LabelDebuggerResolutionValue.Caption)
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'gamma ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'gamma ' then
             MAMEIniFile[Loop]:= 'gamma                   '+FormMAMEConfiguration.LabelGammaValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'brightness ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'brightness ' then
             MAMEIniFile[Loop]:= 'brightness              '+FormMAMEConfiguration.LabelBrightnessValue.Caption
          else
          if Copy(MAMEIniFile[Loop], 1, 17) = 'pause_brightness ' then
             MAMEIniFile[Loop]:= 'pause_brightness        '+FormMAMEConfiguration.LabelPauseBrightnessValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'antialias ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'antialias ' then
             MAMEIniFile[Loop]:= 'antialias               '+IntToStr(Ord(FormMAMEConfiguration.Antialias.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'translucency ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'translucency ' then
             MAMEIniFile[Loop]:= 'translucency            '+IntToStr(Ord(FormMAMEConfiguration.Translucency.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,5) = 'beam ' then
+         if Copy(MAMEIniFile[Loop], 1, 5) = 'beam ' then
             MAMEIniFile[Loop]:= 'beam                    '+FormMAMEConfiguration.LabelBeamValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'flicker ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'flicker ' then
             MAMEIniFile[Loop]:= 'flicker                 '+FormMAMEConfiguration.LabelFlickerValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,10) = 'intensity ' then
+         if Copy(MAMEIniFile[Loop], 1, 10) = 'intensity ' then
             MAMEIniFile[Loop]:= 'intensity               '+FormMAMEConfiguration.LabelIntensityValue.Caption
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'samplerate ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'samplerate ' then
             begin
               if FormMAMEConfiguration.CustomSampleRate.Position > 4999 then
                  MAMEIniFile[Loop]:= 'samplerate              '+IntToStr(FormMAMEConfiguration.CustomSampleRate.Position)
@@ -5707,44 +5405,47 @@ begin
                  end;
             end
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'samples ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'samples ' then
             MAMEIniFile[Loop]:= 'samples                 '+IntToStr(Ord(FormMAMEConfiguration.Samples.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,15) = 'resamplefilter ' then
+         if Copy(MAMEIniFile[Loop], 1, 15) = 'resamplefilter ' then
             MAMEIniFile[Loop]:= 'resamplefilter          '+IntToStr(Ord(FormMAMEConfiguration.ResampleFilter.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'sound ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'sound ' then
             MAMEIniFile[Loop]:= 'sound                   '+IntToStr(Ord(FormMAMEConfiguration.Sound.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,7) = 'volume ' then
+         if Copy(MAMEIniFile[Loop], 1, 7) = 'volume ' then
             MAMEIniFile[Loop]:= 'volume                  '+IntToStr(FormMAMEConfiguration.Volume.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'artwork ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'artwork ' then
             MAMEIniFile[Loop]:= 'artwork                 '+IntToStr(Ord(FormMAMEConfiguration.Artwork.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,14) = 'use_backdrops ' then
+         if Copy(MAMEIniFile[Loop], 1, 14) = 'use_backdrops ' then
             MAMEIniFile[Loop]:= 'use_backdrops           '+IntToStr(Ord(FormMAMEConfiguration.Backdrop.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'use_overlays ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'use_overlays ' then
             MAMEIniFile[Loop]:= 'use_overlays            '+IntToStr(Ord(FormMAMEConfiguration.Overlay.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'use_bezels ' then
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'use_bezels ' then
             MAMEIniFile[Loop]:= 'use_bezels              '+IntToStr(Ord(FormMAMEConfiguration.Bezel.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,13) = 'artwork_crop ' then
+         if Copy(MAMEIniFile[Loop], 1, 13) = 'artwork_crop ' then
             MAMEIniFile[Loop]:= 'artwork_crop            '+IntToStr(Ord(FormMAMEConfiguration.Crop.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,19) = 'artwork_resolution ' then
+         if Copy(MAMEIniFile[Loop], 1, 19) = 'artwork_resolution ' then
             MAMEIniFile[Loop]:= 'artwork_resolution      '+IntToStr(FormMAMEConfiguration.ArtworkResolution.Position)
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'cheat ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'cheat ' then
             MAMEIniFile[Loop]:= 'cheat                   '+IntToStr(Ord(FormMAMEConfiguration.Cheat.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,6) = 'debug ' then
+         if Copy(MAMEIniFile[Loop], 1, 6) = 'debug ' then
             MAMEIniFile[Loop]:= 'debug                   '+IntToStr(Ord(FormMAMEConfiguration.Debug.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,4) = 'log ' then
+         if Copy(MAMEIniFile[Loop], 1, 4) = 'log ' then
             MAMEIniFile[Loop]:= 'log                     '+IntToStr(Ord(FormMAMEConfiguration.Log.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'maxlogsize ' then
+            MAMEIniFile[Loop]:= 'maxlogsize              '+IntToStr(FormMAMEConfiguration.MaxLogSize.Position)
          else
          if Copy(MAMEIniFile[Loop], 1, 6) = 'oslog ' then
             MAMEIniFile[Loop]:= 'oslog                   '+IntToStr(Ord(FormMAMEConfiguration.OSDebug.Checked))
@@ -5755,10 +5456,16 @@ begin
          if Copy(MAMEIniFile[Loop], 1, 14) = 'skip_gameinfo ' then
             MAMEIniFile[Loop]:= 'skip_gameinfo           '+IntToStr(Ord(FormMAMEConfiguration.SkipGameInfo.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,11) = 'readconfig ' then
+         if Copy(MAMEIniFile[Loop], 1, 8)  = 'crconly ' then
+            MAMEIniFile[Loop]:= 'crconly                 '+IntToStr(Ord(FormMAMEConfiguration.CRCIntegrityChecks.Checked))
+         else
+         if Copy(MAMEIniFile[Loop], 1, 5) = 'bios ' then
+            MAMEIniFile[Loop]:= 'bios                    '+FormMAMEConfiguration.LabelSystemBiosValue.Hint
+         else
+         if Copy(MAMEIniFile[Loop], 1, 11) = 'readconfig ' then
             MAMEIniFile[Loop]:= 'readconfig              '+IntToStr(Ord(FormMAMEConfiguration.ReadConfigFile.Checked))
          else
-         if Copy(MAMEIniFile[Loop],1,8) = 'verbose ' then
+         if Copy(MAMEIniFile[Loop], 1, 8) = 'verbose ' then
             MAMEIniFile[Loop]:= 'verbose                 '+IntToStr(Ord(FormMAMEConfiguration.Verbose.Checked));
        end;
   end;
@@ -5768,26 +5475,23 @@ end;
 
 function TFormMain.GetPlayTime(Milliseconds: Int64): String;
 var
-  Hours, Minutes, Seconds, Days: Int64;
-  Sec: Int64;
+  Hours, Minutes, Seconds, Days, Sec: Int64;
 begin
   Sec:= Milliseconds div 1000;
   Days:= Sec div (3600*24);
   Hours:= (Sec-((Days*(3600*24)))) div 3600;
   Minutes:= (Sec-((Days*(3600*24))+(Hours*3600))) div 60;
-  Seconds:= (Sec-((Days*(3600*24)) + (Hours*3600)+ (Minutes*60)));
-  Result:= Format(GetLanguageText('Messages', 'DaysHoursPlayedMsg', '%.2d Days, %.2d:%.2d:%.2d hs'), [Days, Hours, Minutes, Seconds]);
+  Seconds:= (Sec-((Days*(3600*24))+(Hours*3600)+(Minutes*60)));
+  Result:= Format('%.d:%.2d:%.2d:%.2d', [Days, Hours, Minutes, Seconds]);
 end;
 
-procedure TFormMain.ExecuteGame(GameName: String; RunStandard: Boolean; ShowAverageFPS: Boolean);
+procedure TFormMain.ExecuteGame(GameName: String; RunStandard: Boolean);
 var
-  ExeType: String[5];
   CommandLine, NewOption, NewOption2: String;
-  Found2ndExecutable, Found3rdExecutable, Found4thExecutable, Found5thExecutable, UseCustomCommandLine: Boolean;
+  UseCustomCommandLine: Boolean;
   OriginalFile: TIniFile;
-  NewFile, CustomGame: THashedStringList;
+  NewFile: THashedStringList;
   StartClock, EndClock: Int64;
-  EmulatorFormat: Byte;
 
   function CheckGameDriverCustomCmd: String;
   var
@@ -5814,683 +5518,158 @@ var
     Result:= cmd;
   end;
 
-  function CheckDOSoption(MAMEentry, FloatFormat: String): String;
-  var
-    OriginalValue: String;
-  begin
-    if FloatFormat = '' then
-       OriginalValue:= OriginalFile.ReadString('config', MAMEentry, '')
-    else
-       OriginalValue:= (Format(FloatFormat, [OriginalFile.ReadFloat('config', 'beam', 10000)]));
-    if OriginalValue = '10000' then // option doesn't exist on mame.cfg ???
-       OriginalValue:= '';
-       
-    NewOption:= NewFile.Values[MAMEentry];
-    if (OriginalValue = '') and (NewOption = '') then
-       Result:= 'error'
-    else
-    if (NewOption <> OriginalValue) and (NewOption <> '') then
-       Result:= NewOption
-    else
-       Result:= 'error';
-  end;
-
 begin
   if List.Selected = nil then
      Exit;
-  Found2ndExecutable:= True;
-  Found3rdExecutable:= True;
-  Found4thExecutable:= True;
-  Found5thExecutable:= True;
   UseCustomCommandLine:= False;
-  if GamesList[SelectedGame].eROMIdentification in [12..15] then
-     begin
-       GenerateMessage(GetLanguageText('Messages', 'WarningTitle', 'Warning'),
-                       GetLanguageText('Messages', 'BiosROMMsg', 'This is a Bios ROM. Please, select a valid game to play!'), 2);
-     end
-  else
-  begin
-    if GamesList[SelectedGame].eROMIdentification in [0..11] then
+
+  case FileExists(EmulatorExecutable[ButtonExecutablesMode.Tag]) of
+    True: CommandLine:= SystemStr+EmulatorExecutable[ButtonExecutablesMode.Tag]+SystemStr+' '+GameName;
+    False:
       begin
-        case ButtonExecutablesMode.Tag of
-          1:
-            begin
-              case FileExists(EmulatorExecutable[1]) of
-                True:
-                  begin
-                    CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
-                    ExeType:= ExeStrings[GetExeType(EmulatorExecutable[1])];
-                    EmulatorFormat:= EmulatorType[1];
-                  end;
-                False:
-                  begin
-                    GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                    GetLanguageText('Messages', 'Emulator1NotFoundMsg', '1st emulator not found. Aborted...'), 2);
-                    Exit;
-                  end;
-              end;
-            end;
-          2:
-            begin
-              case FileExists(EmulatorExecutable[2]) of
-                True:
-                  begin
-                    CommandLine:= SystemStr+EmulatorExecutable[2]+SystemStr+' '+GameName;
-                    ExeType:= ExeStrings[GetExeType(EmulatorExecutable[2])];
-                    EmulatorFormat:= EmulatorType[2];
-                  end;
-                False:
-                  begin
-                    case FileExists(EmulatorExecutable[1]) of
-                      True:
-                        begin
-                          MenuUseExecutable1.Click;
-                          CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
-                          Found2ndExecutable:= False;
-                          ExeType:= ExeStrings[GetExeType(EmulatorExecutable[1])];
-                          EmulatorFormat:= EmulatorType[1];
-                        end;
-                      False:
-                        begin
-                          GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                          GetLanguageText('Messages', 'Emulator2and1NotFoundMsg', '2nd and 1st emulators not found. Aborted...'), 2);
-                          Exit;
-                        end;
-                    end;
-                  end;
-              end;
-            end;
-          3:
-            begin
-              case FileExists(EmulatorExecutable[3]) of
-                True:
-                  begin
-                    CommandLine:= SystemStr+EmulatorExecutable[3]+SystemStr+' '+GameName;
-                    ExeType:= ExeStrings[GetExeType(EmulatorExecutable[3])];
-                    EmulatorFormat:= EmulatorType[3];
-                  end;
-                False:
-                  begin
-                    case FileExists(EmulatorExecutable[1]) of
-                      True:
-                        begin
-                          MenuUseExecutable1.Click;
-                          CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
-                          Found3rdExecutable:= False;
-                          ExeType:= ExeStrings[GetExeType(EmulatorExecutable[1])];
-                          EmulatorFormat:= EmulatorType[1];
-                        end;
-                      False:
-                        begin
-                          GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                          GetLanguageTexT('Messages', 'Emulator3and1NotFoundMsg', '3rd and 1st emulators not found. Aborted...'), 2);
-                          Exit;
-                        end;
-                    end;
-                  end;
-              end;
-            end;
-          4:
-            begin
-              case FileExists(EmulatorExecutable[4]) of
-                True:
-                  begin
-                    CommandLine:= SystemStr+EmulatorExecutable[4]+SystemStr+' '+GameName;
-                    ExeType:= ExeStrings[GetExeType(EmulatorExecutable[4])];
-                    EmulatorFormat:= EmulatorType[4];
-                  end;
-                False:
-                  begin
-                    case FileExists(EmulatorExecutable[1]) of
-                      True:
-                        begin
-                          MenuUseExecutable1.Click;
-                          CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
-                          Found4thExecutable:= False;
-                          ExeType:= ExeStrings[GetExeType(EmulatorExecutable[1])];
-                          EmulatorFormat:= EmulatorType[1];
-                        end;
-                      False:
-                        begin
-                          GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                          GetLanguageText('Messages', 'Emulator4and1NotFoundMsg', '4th and 1st emulators not found. Aborted...'), 2);
-                          Exit;
-                        end;
-                    end;
-                  end;
-              end;
-            end;
-          5:
-            begin
-              case FileExists(EmulatorExecutable[5]) of
-                True:
-                  begin
-                    CommandLine:= SystemStr+EmulatorExecutable[5]+SystemStr+' '+GameName;
-                    ExeType:= ExeStrings[GetExeType(EmulatorExecutable[5])];
-                    EmulatorFormat:= EmulatorType[5];
-                  end;
-                False:
-                  begin
-                    case FileExists(EmulatorExecutable[1]) of
-                      True:
-                        begin
-                          MenuUseExecutable1.Click;
-                          CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
-                          Found5thExecutable:= False;
-                          ExeType:= ExeStrings[GetExeType(EmulatorExecutable[1])];
-                          EmulatorFormat:= EmulatorType[1];
-                        end;
-                      False:
-                        begin
-                          GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                          GetLanguageText('Messages', 'Emulator5and1NotFoundMsg', '5th and 1st emulators not found. Aborted...'), 2);
-                          Exit;
-                        end;
-                    end;
-                  end;
-              end;
-            end;
-        end;
-
-        if not RunStandard then
+        if ButtonExecutablesMode.Tag = 1 then
            begin
-             case FileExists(FrontendPath+'resources\customcmd\'+GameName+'.ini') of
-               True:
-                 begin
-                   NewOption:= ReadMAMECustomCommandLine(GameName, 0);
-                   if NewOption <> 'Not Found' then
-                      begin
-                        CommandLine:= NewOption;
-                        UseCustomCommandLine:= True;
-                      end;
-                 end;
-               False:
-                 begin
-                   NewOption2:= CheckGameDriverCustomCmd;
-                   if NewOption2 <> 'Not Found' then
-                      begin
-                        NewOption:= ReadMAMECustomCommandLine(NewOption2, 1);
-                        if Pos('%s', LowerCase(NewOption)) <> 0 then
-                           begin
-                             CommandLine:= Format(NewOption, [GameName]);
-                             UseCustomCommandLine:= True;
-                           end
-                        else
-                           NewOption:= 'Not Found';
-                      end;
-                 end;
-             end;
-             case EmulatorFormat of
-               1: //MAME executable
-                 begin
-                   // do nothing... MAME automatically searches for gamename.ini file
-                 end;
-               2: //DOS MAME executable
-                 begin
-                   case FileExists(FrontendPath+'resources\dosgamecfg\'+GameName+'.cfg') of
-                     True:
-                      begin
-                        if not UseCustomCommandLine then
-                           begin
-                              // verify new setting with original mame.cfg
-                              NewFile:= THashedStringList.Create;
-                              NewFile.LoadFromFile(FrontendPath+'resources\dosgamecfg\'+GameName+'.cfg');
-                              OriginalFile:= TIniFile.Create(ExtractFilePath(GetCurrentEmulatorExecutable)+'mame.cfg'); // Load the default options file
-                              //--------------------------------------------------- begin ---------------------------------------------------
-                              if CheckDOSoption('scanlines', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -scanlines '+NewOption;
-
-                              if CheckDOSoption('stretch', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nostretch'
-                                   else
-                                      CommandLine:= CommandLine+' -stretch';
-                                 end;
-
-                              if CheckDOSoption('artwork', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -noartwork'
-                                   else
-                                      CommandLine:= CommandLine+' -artwork';
-                                 end;
-
-                              if CheckDOSoption('use_backdrops', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nouse_backdrops'
-                                   else
-                                      CommandLine:= CommandLine+' -use_backdrops';
-                                 end;
-
-                              if CheckDOSoption('use_overlays', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nouse_overlays'
-                                   else
-                                      CommandLine:= CommandLine+' -use_overlays';
-                                 end;
-
-                              if CheckDOSoption('use_bezels', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nouse_bezels'
-                                   else
-                                      CommandLine:= CommandLine+' -use_bezels';
-                                 end;
-
-                              if CheckDOSoption('artwork_crop', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -noartwork_crop'
-                                   else
-                                      CommandLine:= CommandLine+' -artwork_crop';
-                                 end;
-
-                              if CheckDOSoption('artwork_resolution', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -artworkresolution '+NewOption;
-
-                              if CheckDOSoption('samples', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nosamples'
-                                   else
-                                      CommandLine:= CommandLine+' -samples';
-                                 end;
-
-                              if CheckDOSoption('vsync', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -novsync'
-                                   else
-                                      CommandLine:= CommandLine+' -vsync';
-                                 end;
-
-                              if CheckDOSoption('waitvsync', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nowaitvsync'
-                                   else
-                                      CommandLine:= CommandLine+' -waitvsync';
-                                 end;
-
-                              if CheckDOSoption('triplebuffer', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -notriplebuffer'
-                                   else
-                                      CommandLine:= CommandLine+' -triplebuffer';
-                                 end;
-
-                              if CheckDOSoption('tweak', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -notweak'
-                                   else
-                                      CommandLine:= CommandLine+' -tweak';
-                                 end;
-
-                              if CheckDOSoption('vesamode', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -vesamode '+NewOption;
-
-                              if CheckDOSoption('mmx', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -mmx'
-                                   else
-                                      if NewOption = 'no' then
-                                         CommandLine:= CommandLine+' -nommx'
-                                 end;
-
-                              if CheckDOSoption('dirty', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -dirty'
-                                   else
-                                      if NewOption = 'no' then
-                                         CommandLine:= CommandLine+' -nodirty'
-                                 end;
-
-                              if CheckDOSoption('antialias', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -noantialias'
-                                   else
-                                      CommandLine:= CommandLine+' -antialias';
-                                 end;
-
-                              if CheckDOSoption('translucency', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -notranslucency'
-                                   else
-                                      CommandLine:= CommandLine+' -translucency';
-                                 end;
-
-                              if CheckDOSoption('vgafreq', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -vgafreq '+NewOption;
-
-                              if CheckDOSoption('alwayssynced', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -noalwayssynced'
-                                   else
-                                      CommandLine:= CommandLine+' -alwayssynced';
-                                 end;
-
-                              if CheckDOSoption('depth', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -depth '+NewOption;
-
-                              if CheckDOSoption('skiplines', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -skiplines '+NewOption;
-
-                              if CheckDOSoption('skipcolumns', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -skipcolumns '+NewOption;
-
-                              if CheckDOSoption('beam', '%2.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -beam '+NewOption;
-
-                              if CheckDOSoption('flicker', '%3.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -flicker '+NewOption;
-
-                              if CheckDOSoption('intensity', '%1.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -intensity '+NewOption;
-
-                              if CheckDOSoption('gamma', '%1.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -gamma '+NewOption;
-
-                              if CheckDOSoption('brightness', '%1.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -brightness '+NewOption;
-
-                              if CheckDOSoption('pause_brightness', '%1.2f') <> 'error' then
-                                 CommandLine:= CommandLine+' -pause_brightness '+NewOption;
-
-                              if CheckDOSoption('frameskip', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -frameskip '+NewOption;
-
-                              if CheckDOSoption('throttle', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nothrottle'
-                                   else
-                                      CommandLine:= CommandLine+' -throttle';
-                                 end;
-
-                              if CheckDOSoption('norotate', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -norotate';
-                                 end;
-
-                              if CheckDOSoption('ror', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -ror';
-                                 end;
-
-                              if CheckDOSoption('rol', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -rol';
-                                 end;
-
-                              if CheckDOSoption('flipx', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -flipx';
-                                 end;
-
-                              if CheckDOSoption('flipy', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -flipy';
-                                 end;
-
-                              if CheckDOSoption('soundcard', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -soundcard '+NewOption;
-
-                              if CheckDOSoption('sound', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nosound'
-                                   else
-                                      CommandLine:= CommandLine+' -sound';
-                                 end;
-
-                              if CheckDOSoption('samplerate', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -samplerate '+NewOption;
-
-                              if CheckDOSoption('stereo', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nostereo'
-                                   else
-                                      CommandLine:= CommandLine+' -stereo';
-                                 end;
-
-                              if CheckDOSoption('volume', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -volume '+NewOption;
-
-                              if CheckDOSoption('sampleratedetect', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nosampleratedetect'
-                                   else
-                                      CommandLine:= CommandLine+' -sampleratedetect';
-                                 end;
-
-                              if CheckDOSoption('resamplefilter', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -noresamplefilter'
-                                   else
-                                      CommandLine:= CommandLine+' -resamplefilter';
-                                 end;
-
-                              if CheckDOSoption('mouse', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nomouse'
-                                   else
-                                      CommandLine:= CommandLine+' -mouse';
-                                 end;
-
-                              if CheckDOSoption('joystick', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -joystick '+NewOption;
-
-                              if CheckDOSoption('steadykey', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nosteadykey'
-                                   else
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -steadykey';
-                                 end;
-
-                              if CheckDOSoption('keyboard_leds', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nokeyboard_leds'
-                                   else
-                                      CommandLine:= CommandLine+' -keyboard_leds';
-                                 end;
-
-                              if CheckDOSoption('cheat', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'no' then
-                                      CommandLine:= CommandLine+' -nocheat'
-                                   else
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -cheat';
-                                 end;
-
-                              if CheckDOSoption('resolution', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -resolution '+NewOption;
-
-                              if CheckDOSoption('vectorres', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -vectorres '+NewOption;
-
-                              if CheckDOSoption('debug_resolution', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -debug_resolution '+NewOption;
-
-                              // ------------------- future MAME option -------------------
-                              {NewOption:=NewFile.Values['language'];
-                              if NewOption <> (OriginalFile.Values['language']) then
-                                 begin
-                                   CommandLine:= CommandLine+' -language '+NewOption;
-                                 end;}
-                              // ------------------- future MAME option -------------------
-
-                              if CheckDOSoption('monitor', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -monitor '+NewOption;
-
-                              if CheckDOSoption('centerx', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -centerx '+NewOption;
-
-                              if CheckDOSoption('centery', '') <> 'error' then
-                                 CommandLine:= CommandLine+' -centery '+NewOption;
-
-                              if CheckDOSoption('waitinterlace', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -waitinterlace';
-                                 end;
-
-                              if CheckDOSoption('skip_disclaimer', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -skip_disclaimer';
-                                 end;
-
-                              if CheckDOSoption('skip_gameinfo', '') <> 'error' then
-                                 begin
-                                   if NewOption = 'yes' then
-                                      CommandLine:= CommandLine+' -skip_gameinfo';
-                                 end;
-                           end;
-                        //---------------------------------------------------- end ----------------------------------------------------
-
-                        FreeAndNil(NewFile);
-                        FreeAndNil(OriginalFile);
-                      end;
-                     False:
-                       begin
-                         if not UseCustomCommandLine then
-                            GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                            GetLanguageText('Messages', 'NoGameCustomOptionsMsg', 'There is no custom options for this game! Running with default options...'), 2);
-                       end;
-                   end;
-                 end;
-             end;
-           end;
-      end
-    else
-      begin
-        // this is for the custom game
-        if FileExists(FrontendPath+'resources\CustomGamesCmd.ini') then
-           begin
-             CustomGame:= THashedStringList.Create;
-             CustomGame.LoadFromFile(FrontendPath+'resources\CustomGamesCmd.ini');
-             CommandLine:= CustomGame.Values[GameName];
-             if CommandLine <> '' then
-                begin
-                  SetCurrentDir(ExtractFilePath(SetCustomCmdDir(CommandLine)));
-                  ExeType:= ExeStrings[GetExeType(CommandLine)];
-                  CommandLine:= CommandLine+' '+CustomGame.Values[GameName+'Params'];
-                end;
-           end;
-        FreeAndNil(CustomGame);
-
-        if CommandLine = '' then
-           begin
-             SetCurrentDir(FrontendPath);
+             GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                            'Messages', 'Emulator1NotFoundMsg', '1st emulator not found. Aborted...');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
              Exit;
            end
         else
-           UseCustomCommandLine:= True;
-      end;
-
-    if not UseCustomCommandLine then
-       begin
-         if MenuPlayRecordedGame.Checked then
-            begin
-              if INPFilename.Text = '' then
-                 INPFilename.Text:= GameName;
-              CommandLine:= CommandLine+' -playback '+ INPFilename.Text;
-            end
-         else
-         if MenuRecordGame.Checked then
-            begin
-              if INPFilename.Text = '' then
-                 INPFilename.Text:= GameName;
-              CommandLine:= CommandLine+' -record '+ INPFilename.Text;
-            end;
-
-         if (FormPreferences.UseCustomAspectRatio.Checked) and (EmulatorFormat = 1) then
-            begin
-              if GamesList[SelectedGame].eOrientation = 'Horizontal' then
+           begin
+             case FileExists(EmulatorExecutable[1]) of
+               True:
                  begin
-                   if FormPreferences.HorizontalAspectRatio.Position <> FormPreferences.HorizontalAspectRatio.Tag then
-                      CommandLine:= CommandLine+' -screen_aspect '+FormPreferences.LabelHorizontalAspectRatioValue.Caption;
-                 end
-              else
-              if GamesList[SelectedGame].eOrientation = 'Vertical' then
-                 begin
-                   if FormPreferences.VerticalAspectRatio.Position <> FormPreferences.VerticalAspectRatio.Tag then
-                      CommandLine:= CommandLine+' -screen_aspect '+FormPreferences.LabelVerticalAspectRatioValue.Caption;
+                   MenuUseExecutable1.Click;
+                   CommandLine:= SystemStr+EmulatorExecutable[1]+SystemStr+' '+GameName;
                  end;
-            end;
+               False:
+                 begin
+                   case ButtonExecutablesMode.Tag of
+                     2:
+                       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                      'Messages', 'Emulator2and1NotFoundMsg', '2nd and 1st emulators not found. Aborted...');
+                     3:
+                       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                      'Messages', 'Emulator3and1NotFoundMsg', '3rd and 1st emulators not found. Aborted...');
+                     4:
+                       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                      'Messages', 'Emulator4and1NotFoundMsg', '4th and 1st emulators not found. Aborted...');
+                     5:
+                       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                      'Messages', 'Emulator5and1NotFoundMsg', '5th and 1st emulators not found. Aborted...');
+                   end;
+                   GenerateMessage(MessageText[0], MessageText[1], 2);
+                   Exit;
+                 end;
+             end;
+           end;
+      end;
+  end;
 
-         if FormPreferences.UseExtraParametersMAME.Checked then
-            begin
-              case EmulatorFormat of
-                1:
-                  begin
-                    if FormPreferences.ExtraParametersMAME.Text <> '' then
-                       CommandLine:= CommandLine+' '+FormPreferences.ExtraParametersMAME.Text;
-                  end;
-                2:
-                  begin
-                    if FormPreferences.ExtraParametersDOSMAME.Text <> '' then
-                       CommandLine:= CommandLine+' '+FormPreferences.ExtraParametersDOSMAME.Text;
-                  end;
-              end;
-            end;
-         SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-
-         if (not ctrlrDefault.Checked) and (not UseCustomCommandLine) then
-            CommandLine:= CommandLine+' -ctrlr '+ButtonControllerKeysMapping.Hint;
+  if not RunStandard then
+     begin
+       case FileExists(FrontendPath+'resources\customcmd\'+GameName+'.ini') of
+         True:
+           begin
+             NewOption:= ReadMAMECustomCommandLine(GameName, 0);
+             if NewOption <> 'Not Found' then
+                begin
+                  CommandLine:= NewOption;
+                  UseCustomCommandLine:= True;
+                end;
+           end;
+         False:
+           begin
+             NewOption2:= CheckGameDriverCustomCmd;
+             if NewOption2 <> 'Not Found' then
+                begin
+                  NewOption:= ReadMAMECustomCommandLine(NewOption2, 1);
+                  if Pos('%s', LowerCase(NewOption)) <> 0 then
+                     begin
+                       CommandLine:= Format(NewOption, [GameName]);
+                       UseCustomCommandLine:= True;
+                     end
+                  else
+                     NewOption:= 'Not Found';
+                end;
+           end;
        end;
+     end;
 
-    //ShowMessage(CommandLine); Exit; // uncomment this line only to debug the full command line
+  if not UseCustomCommandLine then
+     begin
+       if MenuPlayRecordedGame.Checked then
+          begin
+            if INPFilename.Text = '' then
+               INPFilename.Text:= GameName;
+            CommandLine:= CommandLine+' -playback '+ INPFilename.Text;
+          end
+       else
+       if MenuRecordGame.Checked then
+          begin
+            if INPFilename.Text = '' then
+               INPFilename.Text:= GameName;
+            CommandLine:= CommandLine+' -record '+ INPFilename.Text;
+          end;
+
+       if (FormPreferences.UseCustomAspectRatio.Checked) and (EmulatorType[ButtonExecutablesMode.Tag] = 1) then
+          begin
+            if GamesList[SelectedGame].eOrientation = aOrientation[0] then
+               begin
+                 // horizontal
+                 if FormPreferences.HorizontalAspectRatio.Position <> FormPreferences.HorizontalAspectRatio.Tag then
+                    CommandLine:= CommandLine+' -screen_aspect '+FormPreferences.LabelHorizontalAspectRatioValue.Caption;
+               end
+            else
+            if GamesList[SelectedGame].eOrientation = aOrientation[1] then
+               begin
+                 // vertical
+                 if FormPreferences.VerticalAspectRatio.Position <> FormPreferences.VerticalAspectRatio.Tag then
+                    CommandLine:= CommandLine+' -screen_aspect '+FormPreferences.LabelVerticalAspectRatioValue.Caption;
+               end;
+          end;
+
+       if FormPreferences.UseExtraParametersMAME.Checked then
+          begin
+            case EmulatorType[ButtonExecutablesMode.Tag] of
+              1:
+                begin
+                  if FormPreferences.ExtraParametersMAME.Text <> '' then
+                     CommandLine:= CommandLine+' '+FormPreferences.ExtraParametersMAME.Text;
+                end;
+              2:
+                begin
+                  if FormPreferences.ExtraParametersDOSMAME.Text <> '' then
+                     CommandLine:= CommandLine+' '+FormPreferences.ExtraParametersDOSMAME.Text;
+                end;
+            end;
+          end;
+       SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
+
+       if (not ctrlrDefault.Checked) and (not UseCustomCommandLine) then
+          CommandLine:= CommandLine+' -ctrlr '+ButtonControllerKeysMapping.Hint;
+
+       if ButtonMouse.Down then
+          CommandLine:= CommandLine+' -mouse'
+       else
+       if (ButtonLightGun.Down) and (EmulatorType[ButtonExecutablesMode.Tag] = 1) then
+          CommandLine:= CommandLine+' -lightgun';
+
+       if (BiosName <> 'disabled') and (BiosName <> '') and (Pos('-bios ', CommandLine) = 0) then
+          CommandLine:= CommandLine+' -bios '+BiosName;
+     end;
+
+    //ShowMessage(CommandLine); // uncomment this line to show the full command line (debug)
+    //Exit; // uncomment this line to exit to prevent running MAME (debug)
+
+    if FormPreferences.PlaySoundClip.Checked then
+       InitDeInitFMOD(False, False);
 
     Application.ProcessMessages;
-    if FormPreferences.MinimizeFrontend.Checked then
-       Application.Minimize;
-
     StartClock:= GetTickCount;
-    case ShowAverageFPS of
-      True:
-        begin
-          case UseCustomCommandLine of
-            True:
-              begin
-                case Win32Platform of
-                  0,1: RunProcess('command.com /c '+CommandLine, True, SW_SHOWNORMAL, True); //Win9x
-                  2  : RunProcess('cmd.exe /c '+SystemStr+CommandLine+SystemStr, True, SW_SHOWNORMAL, True); // Win2000 and WinXP
-                end;
-              end;
-            False:
-              begin
-                case Win32Platform of
-                  0,1: RunProcess('command.com /c '+CommandLine+' > '+SystemStr+FrontendPath+'MAMEfps.log'+SystemStr, True, SW_SHOWNORMAL, True); //Win9x
-                  2  : RunProcess('cmd.exe /c '+SystemStr+CommandLine+' > '+SystemStr+FrontendPath+'MAMEfps.log'+SystemStr+SystemStr, True, SW_SHOWNORMAL, True); // Win2000 and WinXP
-                end;
-              end;
-          end;
-        end;
-      False:
+    case EmulatorType[ButtonExecutablesMode.Tag] of
+      1: RunProcess(CommandLine, True, SW_SHOWNORMAL, True);
+      2:
         begin
           case Win32Platform of
             0,1: RunProcess('command.com /c '+CommandLine, True, SW_SHOWNORMAL, True); //Win9x
@@ -6501,44 +5680,20 @@ begin
     EndClock:= GetTickCount;
     ThousandSeparator:= Char(',');
     DecimalSeparator:= Char('.');
-    if FormPreferences.MinimizeFrontend.Checked then
-       Application.Restore;
-
-    //this debugger message is only for variable tests
-    {ShowMessage(#13+'"Total Play Time" current value: "'+TotalPlayTime+'" milliseconds'+#13+
-                '"Start Clock" value: "'+IntToStr(StartClock)+'" milliseconds'+#13+
-                '"End Clock" value: "'+IntToStr(EndClock)+'" milliseconds'+#13+
-                '"Game Running Time" (EndClock-StartClock): "'+(IntToStr(EndClock-StartClock)+'" milliseconds')+#13+#13+
-                '"Total Play Time" new value: "'+IntToStr(StrToInt(TotalPlayTime)+(EndClock-StartClock))+'" milliseconds'+#13);}
-
-    CheckPlayTime;
-    TotalPlayTime:= IntToStr((StrToInt64(TotalPlayTime)+ (EndClock-StartClock)));
     SetCurrentDir(FrontendPath);
     UpdateSelectedGamePlayTime(GameName, (EndClock-StartClock));
     ShowingPicture:= True;
     MenuShowPictures.OnClick(Self);
-
-    if ShowAverageFPS then
-       begin
-         if FileExists(FrontendPath+'MAMEfps.log') then
-            begin
-              NewOption:= '';
-              NewFile:= THashedStringList.Create;
-              NewFile.LoadFromFile(FrontendPath+'MAMEfps.log');
-              Application.MessageBox(PChar('ROMs Loading:'+#13+'-------------'+#13+#13+NewFile.Text), PChar(GamesList[SelectedGame].eDescription+ ' Results'), mb_Ok+mb_IconInformation);
-              FreeAndNil(NewFile);
-              DeleteFile(FrontendPath+'MAMEfps.log')
-            end;
-       end;
-  end;
+    if FormPreferences.PlaySoundClip.Checked then
+       InitDeInitFMOD(True, False);
 end;
 
 function TFormMain.AddToFavorite: Boolean;
 var
   FavoriteFile: THashedStringList;
-  Loop: Integer;
+  GameIndex: Integer;
   AddToList: Boolean;
-  ROMDataLine: String;
+  GameString: String;
 begin
   Result:= False;
   if List.Selected = nil then
@@ -6546,29 +5701,31 @@ begin
   Screen.Cursor:= crHourGlass;
   AddToList:= True;
   FavoriteFile:= THashedStringList.Create;
+  if GamesList[SelectedGame].eClone = GamesList[SelectedGame].eName then
+     GameString:= Format('%s=%s', [GamesList[SelectedGame].eName, ''])
+  else
+     GameString:= Format('%s=%s', [GamesList[SelectedGame].eName, GamesList[SelectedGame].eClone]);
+
   if FileExists(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat') then
      begin
        FavoriteFile.LoadFromFile(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat');
+
        if FavoriteFile.Count > 0 then
           begin
-            for Loop:=0 to FavoriteFile.Count -1 do
-            begin
-              if SearchString('¬'+GamesList[SelectedGame].eDescription+'¬', FavoriteFile[Loop]) then
-                 begin
-                   GenerateMessage(GetLanguageText('Messages', 'FavoriteGameNotAddedTitle', 'Game Not Added'),
-                                   GetLanguageText('Messages', 'FavoriteGameNotAddedMsg', 'This game is already on the list!'), 2);
-                   AddToList:= False;
-                   Break;
-                 end;
-            end;
+            GameIndex:= FavoriteFile.IndexOf(GameString);
+            if GameIndex <> -1 then
+               begin
+                 GetMessagesLng('Messages', 'FavoriteGameNotAddedTitle', 'Game Not Added',
+                                'Messages', 'FavoriteGameNotAddedMsg', 'This game is already on the list!');
+                 GenerateMessage(MessageText[0], MessageText[1], 2);
+                 AddToList:= False;
+               end;
           end;
      end;
   if AddToList then
      begin
-       SetGameMemoryInfo;
-       ROMDataLine:= PopulateROMDataLine;
        FavoriteFile.BeginUpdate;
-       FavoriteFile.Add(ROMDataLine);
+       FavoriteFile.Add(GameString);
        FavoriteFile.EndUpdate;
        FavoriteFile.SaveToFile(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat');
      end;
@@ -6580,7 +5737,8 @@ end;
 function TFormMain.DeleteFromFavorite: Boolean;
 var
   FavoriteFile: THashedStringList;
-  Loop, GameIndex: Integer;
+  GameIndex: Integer;
+  GameString: String;
 begin
   Result:= False;
   if List.Selected = nil then
@@ -6593,34 +5751,44 @@ begin
        FavoriteFile.LoadFromFile(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat');
        if FavoriteFile.Count > 0 then
           begin
-            for Loop:=0 to FavoriteFile.Count -1 do
-            begin
-              if SearchString('¬'+GamesList[SelectedGame].eDescription+'¬', FavoriteFile[Loop]) then
-                 begin
-                   Result:= True;
-                   FavoriteFile.Delete(Loop);
-                   FavoriteFile.SaveToFile(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat');
-                   GameIndex:= SelectedGame;
-                   Break;
-                 end;
-              if Loop = FavoriteFile.Count-1 then
-                 GenerateMessage(GetLanguageText('Messages', 'FailedOperationTitle', 'Operation Failed'),
-                                 GetLanguageText('Messages', 'FavoriteGameNotDeletedMsg', 'This game is not on the list!'), 2);
-            end;
+            if GamesList[SelectedGame].eClone = GamesList[SelectedGame].eName then
+               GameString:= Format('%s=%s', [GamesList[SelectedGame].eName, ''])
+            else
+               GameString:= Format('%s=%s', [GamesList[SelectedGame].eName, GamesList[SelectedGame].eClone]);
+
+            GameIndex:= FavoriteFile.IndexOf(GameString);
+
+            if GameIndex = -1 then
+               begin
+                 GetMessagesLng('Messages', 'FailedOperationTitle', 'Operation Failed',
+                                'Messages', 'FavoriteGameNotDeletedMsg', 'This game is not on the list!');
+                 GenerateMessage(MessageText[0], MessageText[1], 2);
+               end
+            else
+               begin
+                 Result:= True;
+                 FavoriteFile.Delete(GameIndex);
+                 FavoriteFile.SaveToFile(FrontendPath+'resources\favorites\'+FavoriteUser+'.dat');
+                 GameIndex:= SelectedGame;
+               end;
           end;
      end;
-   False: GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                          GetLanguageText('Messages', 'FavoriteFileNotFoundMsg', 'Favorite file not found!'), 2);
+   False:
+     begin
+       GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                      'Messages', 'FavoriteFileNotFoundMsg', 'Favorite file not found!');
+       GenerateMessage(MessageText[0], MessageText[1], 2);
+     end;
   end;
-
 
   if Result then
      begin
        if FavoriteFile.Count = 0 then
           begin
             Screen.Cursor:= crDefault;
-            GenerateMessage(GetLanguageText('Messages', 'FavoriteGamesEmptyTitle', 'No Games In The List'),
-                            GetLanguageText('Messages', 'FavoriteGamesEmptyMsg', 'This favorites list is empty!'), 2);
+            GetMessagesLng('Messages', 'FavoriteGamesEmptyTitle', 'No Games In The List',
+                           'Messages', 'FavoriteGamesEmptyMsg', 'This favorites list is empty!');
+            GenerateMessage(MessageText[0], MessageText[1], 2);
             MenuShowFavorite.Click;
           end
        else
@@ -6641,31 +5809,20 @@ begin
   Screen.Cursor:= crDefault;
 end;
 
-procedure TFormMain.LoadFolders(ExecutableString: String);
+procedure TFormMain.LoadFolders;
 var
-  MAMEcfg: TIniFile;
   MAMEIniFile: THashedStringList;
-  Folder, TextLine: String;
+  Folder, TextLine, ExecutableString: String;
   ExeType: String[5];
   Loop: Integer;
 begin
-  ExecutableString:=EmulatorExecutable[StrToInt(ExecutableString)];
+  ExecutableString:= EmulatorExecutable[ButtonExecutablesMode.Tag];
+  if (not FileExists(ExecutableString)) or (ExecutableString = '') then
+     Exit;
 
   ExeType:= ExeStrings[GetExeType(ExecutableString)];
   if ExeType = 'DOS' then
-     begin
-       MAMEcfg:= TIniFile.Create(ExtractFilePath(ExecutableString)+'mame.cfg');
-       with MAMEcfg do
-       begin
-         Folder:= ReadString('directory', 'rompath', 'roms');
-         snapingameDir:= ReadString('directory', 'snap', 'snap');
-
-         mameinfoFile:= ReadString('config', 'mameinfofile', 'mameinfo.dat');
-         historyFile:= ReadString('config', 'historyfile', 'history.dat');
-       end;
-       FreeAndNil(MAMEcfg);
-     end
-  else
+     Exit;
   if ExeType = 'Win32' then
      begin
        MAMEIniFile:= THashedStringList.Create;
@@ -6680,12 +5837,19 @@ begin
             end;
 
          if Copy(TextLine, 1, 8) = 'inipath ' then
-            IniFilesDir:= ExtractMAMEIniValue(TextLine);
+            begin
+              IniFilesDir:= ExtractMAMEIniValue(TextLine);
+              if LowerCase(IniFilesDir) = ';ini' then
+                 IniFilesDir:= 'ini';
+            end;
+
+         if Copy(TextLine, 1, 10) = '# inipath ' then
+            IniFilesDir:= 'ini';
 
          if Copy(TextLine, 1, 19) = 'snapshot_directory ' then
             snapingameDir:= ExtractMAMEIniValue(TextLine);
 
-         if Copy(TextLine,1,16) = 'ctrlr_directory ' then
+         if Copy(TextLine, 1, 16) = 'ctrlr_directory ' then
             begin
               ctrlrDir:= ExtractMAMEIniValue(TextLine);
               GetKeysMappingList(ExecutableString);
@@ -6697,7 +5861,7 @@ begin
          if Copy(TextLine, 1, 14) = 'mameinfo_file ' then
             mameinfoFile:= ExtractMAMEIniValue(TextLine);
 
-         if Copy(TextLine,1,14) = 'screen_aspect ' then
+         if Copy(TextLine, 1, 14) = 'screen_aspect ' then
             begin
               FormPreferences.HorizontalAspectRatio.Tag:= SetDefaultAspectRatio(ExtractMAMEIniValue(TextLine));
               FormPreferences.VerticalAspectRatio.Tag:= FormPreferences.HorizontalAspectRatio.Tag;
@@ -6737,44 +5901,40 @@ begin
   end;
 end;
 
-function TFormMain.SearchZIP(GameName: String): Boolean;
+function TFormMain.SearchZIP(const GameName: String): Boolean;
 var
   Loop: Integer;
-  //Drive: String;
 begin
   Result:= False;
-  for Loop:=0 to ROMsFolders.Count -1 do
-  begin
-    //Drive:= ExtractFileDrive(ROMsFolders.Strings[Loop]);
-    //if DiskInDrive(Drive[1]) then
-     //  begin
+  if ROMsFolders.Count > 0 then
+     begin
+       for Loop:=0 to ROMsFolders.Count -1 do
+       begin
          if FileExists(ROMsFolders.Strings[Loop]+'\'+GameName+'.zip') then
             begin
               Result:= True;
               Break;
             end;
-       //end;
-  end;
+       end;
+     end;
 end;
 
-function TFormMain.SearchZIPFolder(GameName: String): String;
+function TFormMain.SearchZIPFolder(const GameName: String): String;
 var
   Loop: Integer;
-  //Drive: String;
 begin
   Result:= 'Not Found';
-  for Loop:=0 to ROMsFolders.Count -1 do
-  begin
-    //Drive:= ExtractFileDrive(ROMsFolders.Strings[Loop]);
-    //if DiskInDrive(Drive[1]) then
-      // begin
+  if ROMsFolders.Count > 0 then
+     begin
+       for Loop:=0 to ROMsFolders.Count -1 do
+       begin
          if FileExists(ROMsFolders.Strings[Loop]+'\'+GameName+'.zip') then
             begin
               Result:= ROMsFolders.Strings[Loop]+'\'+GameName+'.zip';
               Break;
             end;
-      // end;
-  end;
+       end;
+     end;
 end;
 
 function TFormMain.SearchCHDFolder(GameName, DiskImageFileName: String): String;
@@ -6782,102 +5942,49 @@ var
   Loop: Integer;
 begin
   Result:= 'Not Found';
-  for Loop:=0 to ROMsFolders.Count -1 do
-  begin
-    if FileExists(ROMsFolders.Strings[Loop]+'\'+GameName+'\'+DiskImageFileName) then
+  if ROMsFolders.Count > 0 then
+     begin
+       for Loop:=0 to ROMsFolders.Count -1 do
        begin
-         Result:= ROMsFolders.Strings[Loop]+'\'+GameName+'\'+DiskImageFileName;
-         Break;
+         if FileExists(ROMsFolders.Strings[Loop]+'\'+GameName+'\'+DiskImageFileName) then
+            begin
+              Result:= ROMsFolders.Strings[Loop]+'\'+GameName+'\'+DiskImageFileName;
+              Break;
+            end;
        end;
-  end;
+     end;
 end;
 
-function TFormMain.VerifyResourceFiles(Resource: Boolean; FileROM: String): Boolean;
+function TFormMain.VerifyResourceFiles(Resource, Bios: Boolean; FileROM: String; IniFile: TMemIniFile): Boolean;
+var
+  TempStr: String;
+  Loop, Position: Integer;
 begin
-  if ((Pos('name neo-geo.rom', FileROM) = 0) and (Pos('name ng-sm1.rom', FileROM) = 0) and // Neo Geo
-      (Pos('name ng-sfix.rom', FileROM) = 0) and (Pos('name ng-lo.rom', FileROM) = 0) and // Neo Geo
+  TempStr:= '';
+  // Will get the name of the ROM first
+  Position:= Pos('name ', FileROM);
+  Inc(Position, 5);
+  repeat
+    TempStr:= TempStr+FileROM[Position];
+    Inc(Position);
+  until
+    FileROM[Position] = ' ';
 
-      (Pos('name pch1-c.8t', FileROM) = 0) and (Pos('name pch1-c.8p', FileROM) = 0) and (Pos('name pch1-c.8m', FileROM) = 0) and // Playchoice-10
-      (Pos('name pch1-c.8k', FileROM) = 0) and (Pos('name 82s129.6f', FileROM) = 0) and (Pos('name 82s129.6e', FileROM) = 0) and // Playchoice-10
-      (Pos('name 82s129.6d', FileROM) = 0) and // Playchoice-10
-
-      (Pos('name 5b.bin', FileROM) = 0) and (Pos('name 82s185.10h', FileROM) = 0) and (Pos('name 82s123.10k', FileROM) = 0) and // CVS
-
-      (Pos('name rms8.cpu', FileROM) = 0) and (Pos('name rms8.snd', FileROM) = 0) and (Pos('name cass8041.bin', FileROM) = 0) and // Deco
-      (Pos('name dsp8.3m', FileROM) = 0) and (Pos('name dsp8.10d', FileROM) = 0) and (Pos('name rms8.j3', FileROM) = 0) and // Deco
-
-      (Pos('name pgm_p01s.rom', FileROM) = 0) and (Pos('name pgm_t01s.rom', FileROM) = 0) and (Pos('name pgm_m01s.rom', FileROM) = 0) and // PGM
-
-      (Pos('name sknsj1.u10', FileROM) = 0) and (Pos('name ksns-bio.eur', FileROM) = 0) and // Super Kaneko Nova System
-
-      (Pos('name epr19730.ic8', FileROM) = 0) and (Pos('name mp17951a.s', FileROM) = 0) and (Pos('name mp17952a.s', FileROM) = 0)) then // ST-V Bios
+  if TempStr <> '' then
      begin
-       Result:= True;
-     end
-  else
-
-  if ((Pos('name neo-geo.rom', FileROM) > 0) or (Pos('name ng-sm1.rom', FileROM) > 0) or
-      (Pos('name ng-sfix.rom', FileROM) > 0) or (Pos('name ng-lo.rom', FileROM) > 0)) then
-     begin
-       Result:= Resource;
-     end
-  else
-
-  if ((Pos('name pch1-c.8t', FileROM) > 0) or (Pos('name pch1-c.8p', FileROM) > 0) or (Pos('name pch1-c.8m', FileROM) > 0) or
-      (Pos('name pch1-c.8k', FileROM) > 0) or (Pos('name 82s129.6f', FileROM) > 0) or (Pos('name 82s129.6e', FileROM) > 0) or
-      (Pos('name 82s129.6d', FileROM) > 0)) then
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsPlayChoice;
+       case IniFile.ValueExists('bios filenames', TempStr) of
+         True:
+           begin
+             case Resource of
+               True : Result:= True;
+               False: Result:= not Bios;
+             end;
+           end;
+         False: Result:= True;
        end;
      end
   else
-
-  if ((Pos('name 5b.bin', FileROM) > 0) or (Pos('name 82s185.10h', FileROM) > 0) or (Pos('name 82s123.10k', FileROM) > 0)) then
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsCvs;
-       end;
-     end
-  else
-
-  if ((Pos('name rms8.cpu', FileROM) > 0) or (Pos('name rms8.snd', FileROM) > 0) or (Pos('name cass8041.bin', FileROM) > 0) or
-      (Pos('dsp8.3m', FileROM) > 0) or (Pos('dsp8.10d', FileROM) > 0) or (Pos('rms8.j3', FileROM) > 0))then
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsDecoSystem;
-       end;
-     end
-  else
-
-  if ((Pos('name pgm_p01s.rom', FileROM) > 0) or (Pos('name pgm_t01s.rom', FileROM) > 0) or (Pos('name pgm_m01s.rom', FileROM) > 0)) then
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsPgm;
-       end;
-     end
-  else
-
-  if ((Pos('name sknsj1.u10', FileROM) > 0) or (Pos('name ksns-bio.eur', FileROM) > 0)) then
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsSuperKanekoNova;
-       end;
-     end
-  else
-
-  if ((Pos('name epr19730.ic8', FileROM) > 0) and (Pos('name mp17951a.s', FileROM) > 0) and (Pos('name mp17952a.s', FileROM) > 0)) then // ST-V Bios
-     begin
-       case Resource of
-         True : Result:= True;
-         False: Result:= not IsSTV;
-       end;
-     end
+     Result:= True;
 end;
 
 procedure TFormMain.ShowAutomaticGameInformation;
@@ -6885,10 +5992,166 @@ var
   LineIndex: Integer;
   AddLine: Boolean;
   FoundMAMEInfo, FoundHistory, FoundDriver, FoundFAQShowInfo, ShowInfo: Boolean;
-  Loop, Loop2: Integer;
-  DATVersion: String;
+  DATVersion, TempFAQdir: String;
   TextStrings, InfoText: THashedStringList;
   MergedText: TMemoryStream;
+
+  function InformationData: Boolean;
+  begin
+    AddLine:= False;
+    if Assigned(AutoMAMEInfoDATFile) then
+       begin
+         LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eName);
+         ShowInfo:= LineIndex > -1;
+
+         if not ShowInfo then
+            begin
+              if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
+                 begin
+                   LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eClone);
+                   ShowInfo:= LineIndex > -1;
+                 end;
+            end;
+         if ShowInfo then
+            begin
+              FoundMAMEInfo:= True;
+              Inc(LineIndex);
+              InfoText.BeginUpdate;
+              InfoText.Clear;
+              while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
+              begin
+                case AddLine of
+                  False:
+                    begin
+                      if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$mame' then
+                         begin
+                           AddLine:= True;
+                           InfoText.Add('---------- Information Data ----------'+#13#10);
+                         end;
+                    end;
+                  True: InfoText.Add(AutoMAMEInfoDATFile[LineIndex]);
+                end;
+                Inc(LineIndex);
+              end;
+              InfoText.EndUpdate;
+              TextStrings.AddStrings(InfoText);
+            end;
+       end;
+  end;
+
+  function HistoryData: Boolean;
+  var
+    Loop, Loop2: Integer;
+  begin
+    if Assigned(AutoHistoryDATFile) then
+       begin
+         AddLine:= False;
+         for Loop:=0 to AutoHistoryDATFile.Count -1 do
+         begin
+           if Copy(AutoHistoryDATFile[Loop], 1, 5) = '$info' then
+              begin
+                if GetGameHistory(GamesList[SelectedGame].eName, AutoHistoryDATFile[Loop]) then
+                   begin
+                     InfoText.BeginUpdate;
+                     InfoText.Clear;
+                     FoundHistory:= True;
+                     Loop2:= Loop+1;
+                     InfoText.Add('---------- History Data ----------'+#13#10);
+                     while Trim(AutoHistoryDATFile[Loop2]) <> '$end' do
+                     begin
+                       case AddLine of
+                         False:
+                           begin
+                             if Trim(AutoHistoryDATFile[Loop2]) = '$bio' then
+                                AddLine:= True;
+                           end;
+                         True: InfoText.Add(AutoHistoryDATFile[Loop2]);
+                       end;
+                       Inc(Loop2);
+                     end;
+                     InfoText.EndUpdate;
+                     TextStrings.AddStrings(InfoText);
+                     Break;
+                   end;
+              end;
+         end;
+       end;
+  end;
+
+  function GameDriverData: Boolean;
+  begin
+    if Assigned(AutoMAMEInfoDATFile) then
+       begin
+         AddLine:= False;
+         LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eDriver);
+         if LineIndex > -1 then
+            begin
+              InfoText.BeginUpdate;
+              InfoText.Clear;
+              FoundDriver:= True;
+              Inc(LineIndex);
+              InfoText.Add('---------- Driver Data ----------'+#13#10);
+              DATVersion:=AutoMAMEInfoDATFile[0];
+              Delete(DATVersion, 1, 2);
+              MAMEInfoTextHolder.Lines.Add(DATVersion+#13);
+              while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
+              begin
+                case AddLine of
+                  False:
+                    begin
+                      if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$drv' then
+                         AddLine:= True;
+                    end;
+                  True: InfoText.Add(AutoMAMEInfoDATFile[LineIndex]);
+                end;
+                Inc(LineIndex);
+              end;
+              InfoText.EndUpdate;
+              TextStrings.AddStrings(InfoText);
+            end;
+       end;
+  end;
+
+  function GameFAQData: Boolean;
+  begin
+    TempFAQdir:= GetZipFolderFull(8);
+    case FileExists(TempFAQdir+GamesList[SelectedGame].eName+'.faq') of
+      False:
+        begin
+          if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
+              begin
+                ShowInfo:= FileExists(TempFAQdir+GamesList[SelectedGame].eClone+'.faq');
+                if ShowInfo then
+                   DATVersion:= TempFAQdir+GamesList[SelectedGame].eClone+'.faq';
+              end
+          else
+              ShowInfo:= False;
+        end;
+      True: DATVersion:= TempFAQdir+GamesList[SelectedGame].eName+'.faq';
+    end;
+    if ShowInfo then
+       begin
+         InfoText.BeginUpdate;
+         InfoText.Clear;
+         FoundFAQShowInfo:= True;
+
+         InfoText.LoadFromFile(DATVersion);
+         InfoText.Insert(0, '---------- Game FAQ Data ----------'+#13#10);
+         InfoText.EndUpdate;
+         TextStrings.AddStrings(InfoText);
+       end;
+  end;
+
+  procedure LoadText(ComboBoxHolder: TComboBox);
+  begin
+    case ComboBoxHolder.ItemIndex of
+      1: InformationData;
+      2: HistoryData;
+      3: GameDriverData;
+      4: GameFAQData;
+    end;
+  end;
+
 begin
   if List.Selected = nil then
      Exit;
@@ -6897,6 +6160,7 @@ begin
   FoundHistory:= False;
   FoundDriver:= False;
   AddLine:= False;
+  ShowInfo:= False;
   MAMEInfoTextHolder.Lines.BeginUpdate;
   if MAMEInfoTextHolder.Lines.Count > 0 then
      MAMEInfoTextHolder.Clear;
@@ -6904,146 +6168,13 @@ begin
   InfoText:= THashedStringList.Create;
   TextStrings:= THashedStringList.Create;
   TextStrings.BeginUpdate;
-  if Assigned(AutoMAMEInfoDATFile) then
-     begin
-       LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eName);
-       ShowInfo:= LineIndex > -1;
 
-       if not ShowInfo then
-          begin
-            if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
-               begin
-                 LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eClone);
-                 ShowInfo:= LineIndex > -1;
-               end;
-          end;
-       if ShowInfo then
-          begin
-            FoundMAMEInfo:= True;
-            Inc(LineIndex);
-            InfoText.BeginUpdate;
-            while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
-            begin
-              case AddLine of
-                False:
-                  begin
-                    if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$mame' then
-                       begin
-                         AddLine:= True;
-                         InfoText.Add('---------- Information Data ----------'+#13#10);
-                       end;
-                  end;
-                True: InfoText.Add(AutoMAMEInfoDATFile[LineIndex]);
-              end;
-              Inc(LineIndex);
-            end;
-            InfoText.EndUpdate;
-            TextStrings.AddStrings(InfoText);
-          end;
+  LoadText(FormPreferences.AutomaticGameInformation1);
+  LoadText(FormPreferences.AutomaticGameInformation2);
+  LoadText(FormPreferences.AutomaticGameInformation3);
+  LoadText(FormPreferences.AutomaticGameInformation4);
 
-     end;
-
-  if Assigned(AutoHistoryDATFile) then
-     begin
-       AddLine:= False;
-       for Loop:=0 to AutoHistoryDATFile.Count -1 do
-       begin
-         if Copy(AutoHistoryDATFile[Loop], 1, 5) = '$info' then
-            begin
-              if GetGameHistory(GamesList[SelectedGame].eName, AutoHistoryDATFile[Loop]) then
-                 begin
-                   InfoText.BeginUpdate;
-                   InfoText.Clear;
-                   FoundHistory:= True;
-                   Loop2:= Loop+1;
-                   if FoundMAMEInfo then
-                      InfoText.Add('');
-                   InfoText.Add('---------- History Data ----------'+#13#10);
-                   while Trim(AutoHistoryDATFile[Loop2]) <> '$end' do
-                   begin
-                     case AddLine of
-                       False:
-                         begin
-                           if Trim(AutoHistoryDATFile[Loop2]) = '$bio' then
-                              AddLine:= True;
-                         end;
-                       True: InfoText.Add(AutoHistoryDATFile[Loop2]);
-                     end;
-                     Inc(Loop2);
-                   end;
-                   InfoText.EndUpdate;
-                   TextStrings.AddStrings(InfoText);
-                 end;
-            end;
-        end;
-     end;
-
-  if Assigned(AutoMAMEInfoDATFile) then
-     begin
-       AddLine:= False;
-       LineIndex:= AutoMAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eDriver);
-       if LineIndex > -1 then
-          begin
-            InfoText.BeginUpdate;
-            InfoText.Clear;
-            FoundDriver:= True;
-            Inc(LineIndex);
-            if FoundMAMEInfo or FoundHistory then
-               InfoText.Add('');
-            InfoText.Add('---------- Driver Data ----------'+#13#10);
-            DATVersion:=AutoMAMEInfoDATFile[0];
-            Delete(DATVersion, 1, 2);
-            MAMEInfoTextHolder.Lines.Add(DATVersion+#13);
-            while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
-            begin
-              case AddLine of
-                False:
-                  begin
-                    if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$drv' then
-                       AddLine:= True;
-                  end;
-                True: InfoText.Add(AutoMAMEInfoDATFile[LineIndex]);
-              end;
-              Inc(LineIndex);
-            end;
-            InfoText.EndUpdate;
-            TextStrings.AddStrings(InfoText);
-          end;
-     end;
-
-  case FileExists(faqDir+'\'+GamesList[SelectedGame].eName+'.faq') of
-    False:
-      begin
-        if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
-            begin
-              ShowInfo:= FileExists(faqDir+'\'+GamesList[SelectedGame].eClone+'.faq');
-              if ShowInfo then
-                 DATVersion:= faqDir+'\'+GamesList[SelectedGame].eClone+'.faq';
-            end
-        else
-            ShowInfo:= False;
-      end;
-    True: DATVersion:= faqDir+'\'+GamesList[SelectedGame].eName+'.faq';
-  end;
-  if ShowInfo then
-     begin
-       InfoText.BeginUpdate;
-       InfoText.Clear;
-       FoundFAQShowInfo:= True;
-
-       InfoText.LoadFromFile(DATVersion);
-       if FoundMAMEInfo or FoundHistory or FoundDriver then
-          begin
-            InfoText.Insert(0, '');
-            InfoText.Insert(1, '---------- Game FAQ Data ----------'+#13#10);
-          end
-       else
-          InfoText.Insert(0, '---------- Game FAQ Data ----------'+#13#10);
-       InfoText.EndUpdate;
-       TextStrings.AddStrings(InfoText);
-       FreeAndNil(InfoText);
-     end;
-
+  FreeAndNil(InfoText);
   MergedText:= TMemoryStream.Create;
   TextStrings.SaveToStream(MergedText);
   FreeAndNil(TextStrings);
@@ -7072,32 +6203,61 @@ begin
 end;
 
 // new procedure
-function TFormMain.CreateGamesList(ExecutableString: String; DefaultDatabase: Boolean): Boolean;
-var
-  ListInfoFile, ListDetailsFile, ROMsList, CustomDescriptionList, CustomCategoryList: THashedStringList;
-  FileLine, ROMsDetailsLine, TempString, ROMDataLine, LineResult: String;
-  MainLoop, Loop, Position, GameSize, TotalProgress: Integer;
-  IsResource, CheckFolder: Boolean;
-  TotalGamesFound, TotalMergedGamesFound, TotalResourcesFound, TotalNotFound: Integer;
-  //StartClock, EndClock: Integer;
 
-  BiosFoundMsg, GameFoundMsg, BiosMergedFoundMsg, GameMergedFoundMsg: String;
-  FolderName: String;
+procedure TFormMain.SelectExecutable(BinaryNumber: ShortInt);
+
+  procedure ClickMenu(MenuName: TMenuItem);
+  begin
+    case MenuName.Checked of
+      True : MenuName.OnClick(Self);
+      False: MenuName.Click;
+    end;
+  end;
+
+begin
+  case BinaryNumber of
+    1: ClickMenu(MenuUseExecutable1);
+    2: ClickMenu(MenuUseExecutable2);
+    3: ClickMenu(MenuUseExecutable3);
+    4: ClickMenu(MenuUseExecutable4);
+    5: ClickMenu(MenuUseExecutable5);
+  end;
+end;
+
+function TFormMain.CreateGamesList: Boolean;
+var
+  ListInfoFile, ListDetailsFile, ListClonesFile, ROMsList, SamplesList: THashedStringList;
+  FileLine, ROMsDetailsLine, SamplesDetailsLine, TempString, ROMDataLine, LineResult, ExecutableString, SampleOf: String;
+  MainLoop, Loop, Position, GameSize, TotalProgress, BiosLoop: Integer;
+  IsResource, IsGameBios, IsGameEntry: Boolean;
+  Counter, CurrentProgress: Integer;
+  BiosDriver, BiosSet: TMemIniFile;
+  //StartClock, EndClock: Integer;
 
   procedure RestoreHistoryFile;
   begin
     if FileExists(ExtractFilePath(ExecutableString)+'history.ren')then
        begin
          if not RenameFile(ExtractFilePath(ExecutableString)+'history.ren', ExtractFilePath(ExecutableString)+'history.dat') then
-            GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                            Format(GetLanguageText('Messages', 'RenameFailed2Msg', 'Could not rename "%s" file back to "%s"!. Please rename it manually.'), [ExtractFilePath(ExecutableString)+'history.ren', ExtractFilePath(ExecutableString)+'history.dat']), 2);
+            begin
+              GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                             'Messages', 'RenameFailed2Msg', 'Could not rename "%s" file back to "%s"!. Please rename it manually.');
+              GenerateMessage(MessageText[0], Format(MessageText[1], [ExtractFilePath(ExecutableString)+'history.ren', ExtractFilePath(ExecutableString)+'history.dat']), 2);
+            end;
        end;
   end;
 
 begin
-  LoadFolders(ExecutableString);
-  ExecutableString:= EmulatorExecutable[StrToInt(ExecutableString)];
+  ExecutableString:= EmulatorExecutable[MenuCurrentEmulator.Tag];
+  if not FileExists(ExecutableString) then
+     begin
+       GetMessagesLng('Messages', 'FailedOperationTitle', 'Operation Failed',
+                      'Messages', 'FileNotFoundMsg', 'File "%s" not found.');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [ExecutableString]), 2);
+       Exit;
+     end;
 
+  SelectExecutable(MenuCurrentEmulator.Tag);
   SetCurrentDir(FrontendPath);
   Result:= True;
 
@@ -7106,17 +6266,30 @@ begin
   if FileExists(ExtractFilePath(ExecutableString)+'history.dat')then
      begin
        if not RenameFile(ExtractFilePath(ExecutableString)+'history.dat', ExtractFilePath(ExecutableString)+'history.ren') then
-          GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                          Format(GetLanguageText('Messages', 'RenameFailedMsg', 'Could not rename "%s" file!. To avoid major problems, please rename the file and click "Ok" to continue.'), [ExtractFilePath(ExecutableString)+'history.dat']), 2);
+          begin
+            GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                           'Messages', 'RenameFailedMsg', 'Could not rename "%s" file!. To avoid major problems, please rename the file and click "Ok" to continue.');
+            GenerateMessage(MessageText[0], Format(MessageText[1], [ExtractFilePath(ExecutableString)+'history.dat']), 2);
+          end;
      end;
 
-  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'CreateGamesListTitle', 'Create Games List');
-  FormStatus.LabelStatusType.Refresh;
+  GetMessagesLng('Status Messages', 'CreateGamesListTitle', 'Create Games List',
+                 'Status Messages', 'CreateListListClonesFile', 'Creating temporary clones list. Please, wait a moment...');
+
+  FormStatus.LabelStatusType.Caption:= MessageText[0];
+  FormStatus.LabelMessage.Caption:= MessageText[1];
+  FormStatus.Refresh;
+
+  LineResult:= SystemStr+ExecutableString+SystemStr+' -listclones > '+SystemStr+FrontendPath+'listclones.tmp'+SystemStr;
+  case Win32Platform of
+    0,1: RunProcess('command.com /c '+LineResult, True, SW_SHOWMINIMIZED, False); //Win9x
+      2: RunProcess('cmd.exe /c ' +SystemStr+LineResult+SystemStr, True, SW_SHOWMINIMIZED, False); // Win2000 and WinXP
+  end;
 
   FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'CreateListInfoFile', 'Creating temporary listinfo file. Please, wait a moment...');
   FormStatus.LabelMessage.Refresh;
 
-  LineResult:= SystemStr+ExecutableString+SystemStr+' -listinfo > '+SystemStr+FrontendPath+'ListInfo.tmp'+SystemStr;
+  LineResult:= SystemStr+ExecutableString+SystemStr+' -listinfo > '+SystemStr+FrontendPath+'listinfo.tmp'+SystemStr;
   case Win32Platform of
     0,1: RunProcess('command.com /c '+LineResult, True, SW_SHOWMINIMIZED, False); //Win9x
       2: RunProcess('cmd.exe /c ' +SystemStr+LineResult+SystemStr, True, SW_SHOWMINIMIZED, False); // Win2000 and WinXP
@@ -7125,7 +6298,7 @@ begin
   FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'CreateListDetailsFile', 'Creating temporary listdetails file. Please, wait a moment...');
   FormStatus.LabelMessage.Refresh;
 
-  LineResult:= SystemStr+ExecutableString+SystemStr+' -listdetails > '+SystemStr+FrontendPath+'ListDetails.tmp'+SystemStr;
+  LineResult:= SystemStr+ExecutableString+SystemStr+' -listdetails > '+SystemStr+FrontendPath+'listdetails.tmp'+SystemStr;
   case Win32Platform of
     0,1: RunProcess('command.com /c '+LineResult, True, SW_SHOWMINIMIZED, False); //Win9x
       2: RunProcess('cmd.exe /c '+SystemStr+LineResult+SystemStr, True, SW_SHOWMINIMIZED, False); // Win2000 and WinXP
@@ -7134,326 +6307,204 @@ begin
   if FormMain.Visible then
      FormMain.Refresh;
 
-  case FileExists(FrontendPath+'ListInfo.tmp') of
+  case FileExists(FrontendPath+'listinfo.tmp') of
     True:
       begin
-        if not FileExists(FrontendPath+'ListDetails.tmp') then
+        if not FileExists(FrontendPath+'listdetails.tmp') then
            begin
-             GenerateMessage(GetLanguageText('Messages', 'FileCreationErrorTitle', 'File Creation Error'),
-                             GetLanguageText('Messages', 'FileListDetailsNotCreated', '"ListDetails.tmp" not created! Aborting...'), 2);
+             GetMessagesLng('Messages', 'FileCreationErrorTitle', 'File Creation Error',
+                            'Messages', 'FileListDetailsNotCreated', '"listdetails.tmp" not created! Aborting...');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
              Exit;
            end;
       end;
     False:
       begin
-        case FileExists(FrontendPath+'ListDetails.tmp') of
+        case FileExists(FrontendPath+'listdetails.tmp') of
           True:
             begin
-              GenerateMessage(GetLanguageText('Messages', 'FileCreationErrorTitle', 'File Creation Error'),
-                              GetLanguageText('Messages', 'FileListInfoNotCreated', 'File "ListInfo.tmp" not created! Aborting...'), 2);
+              GetMessagesLng('Messages', 'FileCreationErrorTitle', 'File Creation Error',
+                             'Messages', 'FileListInfoNotCreated', 'File "listinfo.tmp" not created! Aborting...');
+              GenerateMessage(MessageText[0], MessageText[1], 2);
               Exit;
             end;
           False:
             begin
-              GenerateMessage(GetLanguageText('Messages', 'FileCreationErrorTitle', 'File Creation Error'),
-                              GetLanguageText('Messages', 'FileListInfoListDetailsNotCreated', 'Files "ListInfo.tmp" and "ListDetails.tmp" not created! Aborting...'), 2);
+              GetMessagesLng('Messages', 'FileCreationErrorTitle', 'File Creation Error',
+                             'Messages', 'FileListInfoListDetailsNotCreated', 'Files "listinfo.tmp" and "listdetails.tmp" not created! Aborting...');
+              GenerateMessage(MessageText[0], MessageText[1], 2);
               Exit;
             end;
         end;
       end;
   end;
 
+  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'CreateListParseGames', 'Parsing files. Please, wait a moment...');
+  FormStatus.LabelMessage.Refresh;
+
   // both temporary files are sucessfully created :-)
   ListDetailsFile:= THashedStringList.Create;
-  ListDetailsFile.LoadFromFile(FrontendPath+'ListDetails.tmp');
-  ListDetailsFile.BeginUpdate;
-  for Loop:=0 to ListDetailsFile.Count -1 do
-    ListDetailsFile[Loop]:= Trim(Copy(ListDetailsFile[Loop], 1, 8))+'='+Trim(Copy(ListDetailsFile[Loop], 10, 10));
-  ListDetailsFile.EndUpdate;
+  ListDetailsFile.LoadFromFile(FrontendPath+'listdetails.tmp');
+  if ListDetailsFile.Count > 0 then
+     begin
+       ListDetailsFile.BeginUpdate;
+       for Loop:=0 to ListDetailsFile.Count -1 do
+         ListDetailsFile[Loop]:= Trim(Copy(ListDetailsFile[Loop], 1, 8))+'='+Trim(Copy(ListDetailsFile[Loop], 10, 10));
+       ListDetailsFile.EndUpdate;
+     end;
+
+  if FileExists(FrontendPath+'listclones.tmp') then
+     begin
+       ListClonesFile:= THashedStringList.Create;
+       ListClonesFile.LoadFromFile(FrontendPath+'listclones.tmp');
+       if ListClonesFile.Count > 0 then
+          begin
+            ListClonesFile.BeginUpdate;
+            ListClonesFile.Delete(0);
+            for Loop:=0 to ListClonesFile.Count -1 do
+            begin
+              TempString:= ListClonesFile[Loop];
+              ListClonesFile[Loop]:= Trim(Copy(TempString, 1, 8))+'='+Trim(Copy(TempString, 10, Length(TempString)));
+            end;
+            ListClonesFile.EndUpdate;
+            TempString:= '';
+          end
+       else
+          FreeAndNil(ListClonesFile);
+     end;
 
   ListInfoFile:= THashedStringList.Create;
-  ListInfoFile.LoadFromFile(FrontendPath+'ListInfo.tmp');
+  ListInfoFile.LoadFromFile(FrontendPath+'listinfo.tmp');
 
   FormStatus.LabelProgress.Caption:= '';
   TotalProgress:= ListInfoFile.Count-1;
+
+  case Assigned(GameSizeBits) of
+    True : GameSizeBits.Clear;
+    False: GameSizeBits:= THashedStringList.Create;
+  end;
+
   ClassicMRList:= THashedStringList.Create;
-  ClassicMVList:= THashedStringList.Create;
-  ClassicCRList:= THashedStringList.Create;
-  ClassicCVList:= THashedStringList.Create;
-  NeoGeoMList:= THashedStringList.Create;
-  NeoGeoCList:= THashedStringList.Create;
   UnavailableClassicMRList:= THashedStringList.Create;
   UnavailableClassicMVList:= THashedStringList.Create;
   UnavailableClassicCRList:= THashedStringList.Create;
   UnavailableClassicCVList:= THashedStringList.Create;
   UnavailableNeoGeoMList:= THashedStringList.Create;
   UnavailableNeoGeoCList:= THashedStringList.Create;
-  BiosList:= THashedStringList.Create;
   UnavailableBiosList:= THashedStringList.Create;
 
-  ClassicMRList.BeginUpdate;
-  ClassicMVList.BeginUpdate;
-  ClassicCRList.BeginUpdate;
-  ClassicCVList.BeginUpdate;
-  NeoGeoMList.BeginUpdate;
-  NeoGeoCList.BeginUpdate;
-  UnavailableClassicMRList.BeginUpdate;
-  UnavailableClassicMVList.BeginUpdate;
-  UnavailableClassicCRList.BeginUpdate;
-  UnavailableClassicCVList.BeginUpdate;
-  UnavailableNeoGeoMList.BeginUpdate;
-  UnavailableNeoGeoCList.BeginUpdate;
-  BiosList.BeginUpdate;
-  UnavailableBiosList.BeginUpdate;
+  DeleteFile(FrontendPath+'bios.ini');
+  BiosDriver:= TMemIniFile.Create(FrontendPath+'bios.ini');
 
-  ROMsList:= THashedStringList.Create;
-  ROMsList.BeginUpdate;
-
-  case Assigned(GameSizeBits) of
-    true : GameSizeBits.Clear;
-    false: GameSizeBits:= THashedStringList.Create;
-  end;
-  GameSizeBits.BeginUpdate;
-  GameSizeBits.Add('; Game Size (in bytes)');
-
-  ListROMsName:= THashedStringList.Create;
-  ListROMsSize:= THashedStringList.Create;
-  ListROMsCRC:= THashedStringList.Create;
-  ParentListROMsName:= THashedStringList.Create;
-  ParentListROMsSize:= THashedStringList.Create;
-  ParentListROMsCRC:= THashedStringList.Create;
-
-  if FileExists(FrontendPath+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-
-  if FormPreferences.UseCustomGameDescription.Checked then
-     begin
-       if FileExists(FrontendPath+'GameDescription.ini') then
-          begin
-            CustomDescriptionList:= THashedStringList.Create;
-            CustomDescriptionList.LoadFromFile(FrontendPath+'GameDescription.ini');
-            if CustomDescriptionList.Count = 0 then
-               FreeAndNil(CustomDescriptionList);
-          end;
-     end;
-
-  if FormPreferences.UseCustomGameCategory.Checked then
-     begin
-       if FileExists(FrontendPath+'GameCategory.ini') then
-          begin
-            CustomCategoryList:= THashedStringList.Create;
-            CustomCategoryList.LoadFromFile(FrontendPath+'GameCategory.ini');
-            if CustomCategoryList.Count = 0 then
-               FreeAndNil(CustomCategoryList);
-          end;
-     end;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'SearchGames', 'Searching for games. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-
-  BiosFoundMsg:= GetLanguageText('Status Messages', 'BiosFound', 'Bios %s found...');
-  GameFoundMsg:= GetLanguageText('Status Messages', 'GameFound', 'Game %s found...');
-  BiosMergedFoundMsg:= GetLanguageText('Status Messages', 'BiosMergedFound', 'Bios %s found merged in %s...');
-  GameMergedFoundMsg:= GetLanguageText('Status Messages', 'GameMergedFound', 'Game %s found merged in %s...');
+  DeleteFile(FrontendPath+'biosset.ini');
+  BiosSet:= TMemIniFile.Create(FrontendPath+'biosset.ini');
 
   FormStatus.SetFocus;
-  for MainLoop:=0 to ListInfoFile.Count -1 do
+  if ListInfoFile.Count > 0 then
   begin
-    FileLine:= ListInfoFile[MainLoop];
-    if FileLine = 'game (' then
-       begin
-         ClearMemoryColumnsVariables;
-         ROMsDetailsLine:= '';
-         TempString:= '';
-         GameSize:= 0;
+    UnavailableBiosList.BeginUpdate;
 
-         IsNeoGeo:= False;
-         isResource:= False;
-         IsPlayChoice:= False;
-         IsCvs:= False;
-         IsPgm:= False;
-         IsSuperKanekoNova:= False;
-         IsResource:= False;
-         IsSTV:= False;
+    ROMsList:= THashedStringList.Create;
+    ROMsList.BeginUpdate;
+    SamplesList:= THashedStringList.Create;
+    SamplesList.BeginUpdate;
 
-         ListROMsName.Clear;
-         ListROMsSize.Clear;
-         ListROMsCRC.Clear;
-       end
-    else
+    GameSizeBits.BeginUpdate;
+    // now is the tricky part.
+    // I need to get all bios sets first and create the "bios.ini" file!!!!
+    IsResource:= False;
+    IsGameBios:= False;
+    for MainLoop:=0 to ListInfoFile.Count -1 do
+    begin
+      FileLine:= ListInfoFile[MainLoop];
 
-    if ListInfoFile[MainLoop-1] = 'game (' then
-       begin
-         Delete(FileLine, 1, 6);
-         mName:= FileLine;
-         if ROMsList.Count > 0 then
-            ROMsList.Add(' ');
-         ROMsList.Add('game '+mName);
+      if FileLine ='resource (' then
+         begin
+           ClearMemoryColumnsVariables;
+           ROMsDetailsLine:= '';
+           TempString:= '';
+           GameSize:= 0;
+         end
+      else
 
-         // will search for the game in "catver.ini"
+      if (MainLoop > 0) and (ListInfoFile[MainLoop-1] = 'resource (') then
+         begin
+           Delete(FileLine, 1, 6);
+           mName:= FileLine;
+           if ROMsList.Count > 0 then
+              ROMsList.Add(' ');
 
-         if Assigned(CustomCategoryList) then
-            mCategory:= CustomCategoryList.Values[mName];
+           ROMsList.Add('bios '+mName);
+           IsResource:= True;
+           mDriver:= ListDetailsFile.Values[mName];
+           BiosDriver.WriteString('bios', mName, 'bios'); // write bios in "bios.ini"
+         end
+      else
 
-         if Assigned(CategoriesList) then
-            begin
-              if mCategory = '' then
-                 mCategory:= CategoriesList.ReadString('Category', mName, '');
-              mVersionAdded:= CategoriesList.ReadString('VerAdded', mName, '');
-            end;
-         mDriver:= ListDetailsFile.Values[mName];
-       end
-    else
+      if IsResource then
+      begin
 
-    if FileLine ='resource (' then
-       begin
-         ClearMemoryColumnsVariables;
-         ROMsDetailsLine:= '';
-         TempString:= '';
-         GameSize:= 0;
-       end
-    else
+      if (Pos('description ', FileLine) > 0) and (Pos('biosset (', FileLine) = 0) then
+         begin
+           Delete(FileLine, 1, Pos('"', FileLine));
+           Delete(FileLine, Length(FileLine), 1);
+           mDescription:= FileLine;
+         end
+      else
 
-    if ListInfoFile[MainLoop-1] = 'resource (' then
-       begin
-         Delete(FileLine, 1, 6);
-         mName:= FileLine;
-         if ROMsList.Count > 0 then
-            ROMsList.Add(' ');
+      if Pos('year ', FileLine) > 0 then
+         begin
+           Delete(FileLine, 1, 6);
+           mYear:= FileLine;
+         end
+      else
 
-         ROMsList.Add('bios '+mName);
-         IsResource:= True;
-         
-         IsNeoGeo:= mName = 'neogeo';
-         IsPlayChoice:= mName = 'playch10';
-         IsCvs:= mName = 'cvs';
-         IsDecoSystem:= mName = 'decocass';
-         IsPgm:= mName = 'pgm';
-         IsSuperKanekoNova:= mName = 'skns';
-         IsSTV:= mName = 'stvbios';
+      if Pos('manufacturer ', FileLine) > 0 then
+         begin
+           Delete(FileLine, 1, Pos('"', FileLine));
+           Delete(FileLine, Length(FileLine), 1);
+           mManufacturer:= FileLine;
+         end
+      else
 
-         ListROMsName.Clear;
-         ListROMsSize.Clear;
-         ListROMsCRC.Clear;
-
-         // will search for the game in "catver.ini"
-         if Assigned(CustomCategoryList) then
-            mCategory:= CustomCategoryList.Values[mName];
-
-         if Assigned(CategoriesList) then
-            begin
-              if mCategory = '' then
-                 mCategory:= CategoriesList.ReadString('Category', mName, 'BIOS');
-              mVersionAdded:= CategoriesList.ReadString('VerAdded', mName, '');
-            end;
-         mDriver:= ListDetailsFile.Values[mName];
-       end
-    else
-
-    if Pos('history ', FileLine) > 0 then
-       begin
-         // do nothing, this line will be ignored but I need to test it...
-       end
-    else
-
-    if Pos('description ', FileLine) > 0 then
-       begin
-         if Assigned(CustomDescriptionList) then
-            mDescription:= CustomDescriptionList.Values[mName+'_custom'];
-
-           if mDescription = '' then
-              begin
-                Delete(FileLine, 1, Pos('"', FileLine));
-                Delete(FileLine, Length(FileLine), 1);
-                mDescription:= FileLine;
-              end;
-       end
-    else
-
-    if Pos('year ', FileLine) > 0 then
-       begin
-         Delete(FileLine, 1, 6);
-         mYear:= FileLine;
-       end
-    else
-
-    if Pos('manufacturer ', FileLine) > 0 then
-       begin
-         Delete(FileLine, 1, Pos('"', FileLine));
-         Delete(FileLine, Length(FileLine), 1);
-         mManufacturer:= FileLine;
-       end
-    else
-
-    if Pos('cloneof ', FileLine) > 0 then
-       begin
-         Position:= Pos('cloneof', FileLine);
-         Delete(FileLine, 1, Position+7);
-         mClone:= FileLine;
-         ROMsList.Add('cloneof '+mClone);
-
-         IsNeoGeo:= ((mClone = 'cloneof 2020bb')   or (mClone = 'cloneof breakers') or (mClone = 'cloneof burningf') or
-                     (mClone = 'cloneof maglord')  or (mClone = 'cloneof puzzledp') or (mClone = 'cloneof sengoku')  or
-                     (mClone = 'cloneof shocktro') or (mClone = 'cloneof ridhero')  or (mClone = 'cloneof kof99')    or
-                     (mClone = 'cloneof garou')    or (mClone = 'cloneof mslug3')   or (mClone = 'cloneof kof2000')  or
-                     (mClone = 'cloneof aof'));
-         if IsNeoGeo then
-            mROMIdentification:= 5; // it's a Neo-Geo Clone
-
-         IsCvs:= ((mClone = 'cloneof 8ball') or (mClone = 'cloneof radarzon')); // it's a Classic Clone (CVS)
-
-         IsDecoSystem:= ((mClone = 'cloneof ctisland') or (mClone = 'cloneof cdiscon1') or (mClone = 'cloneof cburnrub') or
-                         (mClone = 'cloneof cgraplop') or (mClone = 'cloneof clapapa')  or (mClone = 'cloneof cnightst') or
-                         (mClone = 'cloneof cscrtry')  or (mClone = 'cloneof cppicf')); // it's a Classic Clone (DECO)
-
-         IsPgm:= ((mClone = 'cloneof orlegend') or (mClone = 'cloneof kov')); // it's a Classic Clone (PGM)
-
-         IsSuperKanekoNova:= (mClone = 'cloneof puzzloop'); // it's a Classic Clone (SKNS)
-       end
-    else
-
-    if Pos('romof ', FileLine) > 0 then
-       begin
-         Delete(FileLine, 1, 1);
-
-         IsNeoGeo:= ((FileLine = 'romof 2020bb')   or (FileLine = 'romof breakers') or (FileLine = 'romof burningf') or
-                     (FileLine = 'romof maglord')  or (FileLine = 'romof puzzledp') or (FileLine = 'romof sengoku')  or
-                     (FileLine = 'romof shocktro') or (FileLine = 'romof ridhero')  or (FileLine = 'romof kof99')    or
-                     (FileLine = 'romof garou')    or (FileLine = 'romof mslug3')   or (FileLine = 'romof kof2000')  or
-                     (FileLine = 'romof aof'));
-
-         case IsNeoGeo of
-           True: mROMIdentification:= 5; // it's a Neo-Geo Clone
-           False:
-             begin
-               IsNeoGeo:= (FileLine = 'romof neogeo');
-               if IsNeoGeo then
-                  mROMIdentification:= 4; // it's a Neo-Geo Master
-             end;
-         end;
-
-         IsPlayChoice:= (FileLine = 'romof playch10');
-
-         IsCvs:= ((FileLine = 'romof cvs') or (FileLine = 'romof 8ball') or (FileLine = 'romof radarzon')); // it's a Classic Clone (CVS)
-
-         IsDecoSystem:= ((FileLine = 'romof decocass') or (FileLine = 'romof ctisland') or (FileLine = 'romof cdiscon1') or
-                         (FileLine = 'romof cburnrub') or (FileLine = 'romof cgraplop') or (FileLine = 'romof clapapa')  or
-                         (FileLine = 'romof cnightst') or (FileLine = 'romof cscrtry')  or (FileLine = 'romof cppicf')); // it's a Classic Clone (DECO)
-
-         IsPgm:= ((FileLine = 'romof pgm') or (FileLine = 'romof orlegend') or (FileLine = 'romof kov')); // it's a Classic Clone (PGM)
-
-         IsSuperKanekoNova:= ((FileLine = 'romof skns') or (FileLine = 'romof puzzloop')); // it's a Classic Clone (SKNS)
-
-         IsSTV:= (FileLine = 'romof stvbios');
-       end
-    else
-
-    if (Pos('rom (', FileLine) > 0) or (Pos('disk (', FileLine) > 0) then
-       begin
-         // will need to test all the other resources files
-         if VerifyResourceFiles(IsResource, FileLine) then
+      if Pos('biosset (', FileLine) > 0 then
          begin
            TempString:= '';
+           ROMsDetailsLine:= '';
+           // Will get the name of the biosset first
+           Position:= Pos('name ', FileLine);
+           for Loop:=Position+5 to Length(FileLine) do
+           begin
+             if FileLine[Loop] <> ' ' then
+                TempString:= TempString+FileLine[Loop]
+             else
+                begin
+                  ROMsDetailsLine:= TempString; // name of the biosset
+                  Break;
+                end;
+           end;
+
+           TempString:= '';
+           // Will get the description of the biosset first
+           Position:= Pos('description "', FileLine);
+           for Loop:=Position+13 to Length(FileLine) do
+           begin
+             if FileLine[Loop] <> '"' then
+                TempString:= TempString+FileLine[Loop]
+             else
+                Break;
+           end;
+           BiosSet.WriteString(mName, ROMsDetailsLine, TempString);
+           if not BiosSet.ValueExists('Descriptions', mName) then
+              BiosSet.WriteString('Descriptions', mName, mDescription);
+           BiosDriver.UpdateFile;
+         end
+      else
+
+      if Pos('rom (', FileLine) > 0 then
+         begin
+           TempString:= '';
+           ROMsDetailsLine:= '';
            // Will get the name of the ROM first
            Position:= Pos('name ', FileLine);
            for Loop:=Position+5 to Length(FileLine) do
@@ -7465,7 +6516,7 @@ begin
                 end
              else
                 begin
-                  ListROMsName.Add(TempString);
+                  BiosDriver.WriteString('bios filenames', TempString, mName);
                   ROMsDetailsLine:= ROMsDetailsLine+'¬';
                   Break;
                 end;
@@ -7484,7 +6535,6 @@ begin
                      end
                   else
                      begin
-                       ListROMsSize.Add(TempString);
                        ROMsDetailsLine:= ROMsDetailsLine+'¬';
                        GameSize:= GameSize+StrToInt(TempString);
                        TempString:= '';
@@ -7493,11 +6543,9 @@ begin
                 end;
               end
            else
-           if Position = 0 then
               begin
-                ListROMsSize.Add('0');
-                ROMsDetailsLine:= ROMsDetailsLine+'0¬';
-                GameSize:= GameSize+0;
+                if Position = 0 then
+                   ROMsDetailsLine:= ROMsDetailsLine+'0¬';
               end;
 
            // now will get the crc of the ROM
@@ -7513,556 +6561,654 @@ begin
                        TempString:= TempString+FileLine[Loop];
                      end
                   else
-                     begin
-                       ListROMsCRC.Add(TempString);
-                       ROMsDetailsLine:= ROMsDetailsLine+';';
-                       Break;
-                     end;
+                     Break;
                 end;
               end
            else
-           if Position = 0 then
-              begin
-                Position:= Pos('md5 ', FileLine);
-                if Position <> 0 then
-                   begin
-                     for Loop:= Position+4 to Length(FileLine) do
-                     begin
-                       if FileLine[Loop] <> ' ' then
-                          begin
-                            ROMsDetailsLine:= ROMsDetailsLine+FileLine[Loop];
-                            TempString:= TempString+FileLine[Loop];
-                          end
-                       else
-                          begin
-                            ListROMsCRC.Add(TempString);
-                            ROMsDetailsLine:= ROMsDetailsLine+';';
-                            Break;
-                          end;
-                     end;
-                   end
-              end;
+              ROMsDetailsLine:= ROMsDetailsLine+'00000000';
+
+           ROMsDetailsLine:= ROMsDetailsLine+';';
            ROMsList.Add(ROMsDetailsLine);
            ROMsDetailsLine:= '';
+         end
+      else
+
+      if FileLine = ')' then
+         begin
+           // reached the end of the games details info
+           // must verify if is clone or master
+           // must verify if is neogeo or classic
+           // must verify is is raster or vector
+
+           if mName = 'neogeo' then
+              mROMIdentification:= 15
+           else
+              mROMIdentification:= 14;
+
+           ROMDataLine:= PopulateROMDataLine;
+
+           if GameSizeBits.IndexOfName(mName) = -1 then
+              GameSizeBits.Add(mName+'='+IntToStr(GameSize)); // game not found, will add it to the list
+
+           UnavailableBiosList.Add(ROMDataLine);
+           IsResource:= False;
          end;
-       end
-    else
+      end;
+    end;
+    BiosSet.UpdateFile;
+    FreeAndNil(BiosSet);
+    BiosDriver.UpdateFile;
 
-    if Pos('sampleof ', FileLine) > 0 then
-       begin
-         if (mSamples = 'No') or (mSamples = '') then
-            mSamples:= 'Yes';
-       end
-    else
+    // get name, cloneof, romof fields
+    // if romof, check in the values of "cloneslist" list to see if the parent name is found
+    // but only if the cloneof is empty
+    IsGameEntry:= False;
+    for MainLoop:=0 to ListInfoFile.Count -1 do
+    begin
+      FileLine:= ListInfoFile[MainLoop];
+      if FileLine = 'game (' then
+         begin
+           ClearMemoryColumnsVariables;
+           ROMsDetailsLine:= '';
+           TempString:= '';
+         end
+      else
 
-    if Pos('sample ', FileLine) > 0 then
-       begin
-         if (mSamples = 'No') or (mSamples = '') then
-            mSamples:= 'Yes';
-       end;
+      if (MainLoop > 0) and (ListInfoFile[MainLoop-1] = 'game (') then
+         begin
+           Delete(FileLine, 1, 6);
+           mName:= FileLine;
+           IsGameBios:= False;
+           IsGameEntry:= True;
+         end
+      else
 
-    if Pos('chip (', FileLine) > 0 then
-       begin
-         if Pos('type audio name Samples', FileLine) > 0 then
-            begin
-              if (mSamples = 'No') or (mSamples = '') then
-                 mSamples:= 'Yes';
-            end;
-       end
-    else
+      if IsGameEntry then
+      begin
 
-    if Pos('video (', FileLine) > 0 then
-       begin
-         // will get the Video Type
-         if Pos('screen raster', FileLine) > 0 then
-            mVideo:= 'Raster' else
-         if Pos('screen vector', FileLine) > 0 then
-            mVideo:= 'Vector' else mVideo:= 'Unknown';
+      if Pos('cloneof ', FileLine) > 0 then
+         begin
+           Position:= Pos('cloneof', FileLine);
+           Delete(FileLine, 1, Position+7);
+           mClone:= FileLine;
+         end
+      else
 
-         // will get the orientation
-         if Pos('orientation vertical', FileLine) > 0 then
-            mOrientation:= 'Vertical' else
-         if Pos('orientation horizontal', FileLine) > 0 then
-            mOrientation:= 'Horizontal' else mOrientation:= 'Unknown';
-
-         // will get the resolution
-         if Pos(' x ', FileLine) > 0 then
-            begin
-              Position:= Pos(' x ', FileLine)+3;
-              for Loop:=Position to Length(FileLine) do
+      if Pos('romof ', FileLine) > 0 then
+         begin
+           Position:= Pos('romof', FileLine);
+           Delete(FileLine, 1, Position+5);
+           if mClone = '' then
               begin
-                if FileLine[Loop] <> ' ' then
-                   mResolution:= mResolution+FileLine[Loop]
-                else
+                IsGameBios:= False;
+                if BiosDriver.ValueExists('bios', FileLine) then
                    begin
-                     mResolution:= mResolution+'x';
-                     Break;
-                   end;
-              end;
-
-              Position:= Pos(' y ', FileLine)+3;
-              for Loop:=Position to Length(FileLine) do
-              begin
-                if FileLine[Loop] <> ' ' then
-                   mResolution:= mResolution+FileLine[Loop]
-                else
-                   Break;
-              end;
-            end;
-
-         // will get the frequency
-         if Pos(' freq ', FileLine) > 0 then
-            begin
-              Position:= Pos(' freq ', FileLine)+6;
-              for Loop:=Position to Length(FileLine) do
-              begin
-                if FileLine[Loop] <> '.' then
-                   mFrequency:= mFrequency+FileLine[Loop]
-                else
-                   begin
-                     mFrequency:= mFrequency+' Hz';
-                     Break;
-                   end;
-              end;
-            end else mFrequency:= 'Unknown';
-       end
-    else
-
-    if Pos('sound (', FileLine) > 0 then
-       begin
-         if Pos('channels 0', FileLine) > 0 then
-            mSound:= ''
-         else
-         if Pos('channels 1', FileLine) > 0 then
-            mSound:= 'Mono'
-         else
-         if Pos('channels 2', FileLine) > 0 then
-            mSound:= 'Stereo' else mSound:= 'Unknown';
-       end
-    else
-
-    if Pos('input (', FileLine) > 0 then
-       begin
-         if Pos('control ', FileLine) > 0 then
-            begin
-              if Pos('joy4way', FileLine) > 0 then
-                 mControlType:= 'Joy 4 Way'
-              else
-              if Pos('joy8way', FileLine) > 0 then
-                 mControlType:= 'Joy 8 Way'
-              else
-              if Pos('doublejoy4way', FileLine) > 0 then
-                 mControlType:= 'Double Joy 4 Way'
-              else
-              if Pos('doublejoy8way', FileLine) > 0 then
-                 mControlType:= 'Double Joy 8 Way'
-              else
-              if Pos('dial', FileLine) > 0 then
-                 mControlType:= 'Dial'
-              else
-              if Pos('paddle', FileLine) > 0 then
-                 mControlType:= 'Paddle'
-              else
-              if Pos('stick', FileLine) > 0 then
-                 mControlType:= 'Stick'
-              else
-              if Pos('trackball', FileLine) > 0 then
-                 mControlType:= 'Trackball'
-              else
-              if Pos('lightgun', FileLine) > 0 then
-                 mControlType:= 'Light Gun' else mControlType:= 'Unknown';
-            end
-         else
-            mControlType:= 'Buttons';
-       end
-    else
-
-    if Pos('driver (', FileLine) > 0 then
-       begin
-         if Pos('status good', FileLine) > 0 then
-            mDriverStatus:= 'Good'
-         else
-         if Pos('status preliminary', FileLine) > 0 then
-            mDriverStatus:= 'Preliminary'
-         else
-         if Pos('status imperfect', FileLine) > 0 then
-            mDriverStatus:= 'Imperfect' else mDriverStatus:= 'Unknown';
-
-         if Pos('color good', FileLine) > 0 then
-            mColorStatus:= 'Good'
-         else
-         if Pos('color preliminary', FileLine) > 0 then
-            mColorStatus:= 'Preliminary'
-         else
-         if Pos('color imperfect', FileLine) > 0 then
-            mColorStatus:= 'Imperfect' else mColorStatus:= 'Unknown';
-
-         if Pos('sound good', FileLine) > 0 then
-            mSoundStatus:= 'Good'
-         else
-         if Pos('sound preliminary', FileLine) > 0 then
-            mSoundStatus:= 'Preliminary'
-         else
-         if Pos('sound imperfect', FileLine) > 0 then
-            mSoundStatus:= 'Imperfect' else mSoundStatus:= 'Unknown';
-       end
-    else
-
-    if FileLine = ')' then
-       begin
-         // reached the end of the games details info
-         // must verify if is clone or master
-         // must verify if is neogeo or classic
-         // must verify is is raster or vector
-
-         if mVideo = 'Raster' then
-            begin
-              // it's a raster game
-              if mClone = '' then
-                 begin
-                   // it's a master game
-                   if mROMIdentification <> 4 then // if it's not a Neo-Geo Master
-                      mROMIdentification:= 0; // it's a Classic Master Raster
-                 end
-              else
-                 begin
-                   // it's a clone game
-                   if mROMIdentification <> 5 then // if it's not a Neo-Geo Clone
-                      mROMIdentification:= 2;
-                 end;
-            end
-         else
-         if mVideo = 'Vector' then
-            begin
-              // it's a vector game
-              if mClone = '' then
-                 mROMIdentification:= 1  // it's a master game
-              else
-                 mROMIdentification:= 3; // it's a clone game
-            end;
-
-         if mName = 'neogeo' then
-            mROMIdentification:= 13
-         else
-         if (mName = 'playch10') or (mName = 'cvs') or (mName = 'decocass') or (mName = 'pgm') or (mName = 'skns') or (mName = 'stvbios') then
-            mROMIdentification:= 12;
-
-         ROMDataLine:= PopulateROMDataLine;
-
-         if GameSizeBits.IndexOfName(mName) = -1 then
-            GameSizeBits.Add(mName+'='+IntToStr(GameSize)); // game not found, will add it to the list
-
-         case SearchZIP(mName) of
-           True:
-             begin
-               case isResource of
-                 True:
-                   begin
-                     FormStatus.LabelMessage.Caption:= Format(BiosFoundMsg, [mName]);
-                     Inc(TotalResourcesFound);
-                   end;
-                 False:
-                   begin
-                     FormStatus.LabelMessage.Caption:= Format(GameFoundMsg, [mName]);
-                     Inc(TotalGamesFound);
-                   end;
-               end;
-               FormStatus.LabelMessage.Refresh;
-
-               case mROMIdentification of
-                 0: ClassicMRList.Add(ROMDataLine);
-                 1: ClassicMVList.Add(ROMDataLine);
-                 2: ClassicCRList.Add(ROMDataLine);
-                 3: ClassicCVList.Add(ROMDataLine);
-                 4: NeoGeoMList.Add(ROMDataLine);
-                 5: NeoGeoCList.Add(ROMDataLine);
-                12, 13: BiosList.Add(ROMDataLine);
-               end;
-             end;
-           False:
-             begin
-               // see if it's a clone game
-               // if yes, search for merged
-               if mClone <> '' then
-                  begin
-                    case FoundMerged(mName, mClone) of
-                      True:
+                     if Assigned(ListClonesFile) then
                         begin
-                          mMerged:= 'Yes';
-                          ROMDataLine:= PopulateROMDataLine;
-                          case isResource of
-                            True:
-                              begin
-                                FormStatus.LabelMessage.Caption:= Format(BiosMergedFoundMsg, [mName, mClone]);
-                                Inc(TotalResourcesFound);
-                              end;
-                            False:
-                              begin
-                                FormStatus.LabelMessage.Caption:= Format(GameMergedFoundMsg, [mName, mClone]);
-                                Inc(TotalMergedGamesFound);
-                              end;
-                          end;
-                          FormStatus.LabelMessage.Refresh;
-
-                          case mROMIdentification of
-                            0: ClassicMRList.Add(ROMDataLine);
-                            1: ClassicMVList.Add(ROMDataLine);
-                            2: ClassicCRList.Add(ROMDataLine);
-                            3: ClassicCVList.Add(ROMDataLine);
-                            4: NeoGeoMList.Add(ROMDataLine);
-                            5: NeoGeoCList.Add(ROMDataLine);
-                           12, 13: BiosList.Add(ROMDataLine);
-                          end;
+                           for Loop:=0 to ListClonesFile.Count-1 do
+                           begin
+                             if ListClonesFile.ValueFromIndex[Loop] = mName then
+                                begin
+                                  IsGameBios:= True;
+                                  Break;
+                                end;
+                           end;
+                           if IsGameBios then
+                              BiosDriver.WriteString('games', mName, FileLine);
                         end;
-                      False:
-                        begin
-                          Inc(TotalNotFound);
-                          case mROMIdentification of
-                             0: mROMIdentification:= 6;
-                             1: mROMIdentification:= 7;
-                             2: mROMIdentification:= 8;
-                             3: mROMIdentification:= 9;
-                             4: mROMIdentification:= 10;
-                             5: mROMIdentification:= 11;
-                            12: mROMIdentification:= 14;
-                            13: mROMIdentification:= 15;
-                          end;
+                   end;
+              end;
+         end
+      else
+      
+      if FileLine = ')' then
+         IsGameEntry:= False;
+      end;
+    end;
+    BiosDriver.UpdateFile;
+    FreeAndNil(ListClonesFile);
 
-                          ROMDataLine:= PopulateROMDataLine;
+    // now, the normal games, but no resources this time (bios)
+    IsResource:= False;
+    IsGameEntry:= False;
+    for MainLoop:=0 to ListInfoFile.Count -1 do
+    begin
+      FileLine:= ListInfoFile[MainLoop];
+      if FileLine = 'game (' then
+         begin
+           ClearMemoryColumnsVariables;
+           ROMsDetailsLine:= '';
+           SamplesDetailsLine:= '';
+           TempString:= '';
+           GameSize:= 0;
+         end
+      else
 
-                          case mROMIdentification of
-                            6: UnavailableClassicMRList.Add(ROMDataLine);
-                            7: UnavailableClassicMVList.Add(ROMDataLine);
-                            8: UnavailableClassicCRList.Add(ROMDataLine);
-                            9: UnavailableClassicCVList.Add(ROMDataLine);
-                           10: UnavailableNeoGeoMList.Add(ROMDataLine);
-                           11: UnavailableNeoGeoCList.Add(ROMDataLine);
-                           14, 15: UnavailableBiosList.Add(ROMDataLine)
-                          end;
-                        end;
+      if ListInfoFile[MainLoop-1] = 'game (' then
+         begin
+           Delete(FileLine, 1, 6);
+           mName:= FileLine;
+           if ROMsList.Count > 0 then
+              ROMsList.Add(' ');
+           ROMsList.Add('game '+mName);
+
+           mDriver:= ListDetailsFile.Values[mName];
+           IsGameBios:= False;
+           IsGameEntry:= True;
+         end
+      else
+
+      if IsGameEntry then
+      begin
+
+      if Pos('history ', FileLine) > 0 then
+         begin
+           // do nothing, this line will be ignored but I need to test it...
+         end
+      else
+
+      if (Pos('description ', FileLine) > 0) and (Pos('biosset (', FileLine) = 0) then
+         begin
+           Delete(FileLine, 1, Pos('"', FileLine));
+           Delete(FileLine, Length(FileLine), 1);
+           mDescription:= FileLine;
+         end
+      else
+
+      if Pos('year ', FileLine) > 0 then
+         begin
+           Delete(FileLine, 1, 6);
+           mYear:= FileLine;
+         end
+      else
+
+      if Pos('manufacturer ', FileLine) > 0 then
+         begin
+           Delete(FileLine, 1, Pos('"', FileLine));
+           Delete(FileLine, Length(FileLine), 1);
+           mManufacturer:= FileLine;
+         end
+      else
+
+      if Pos('biosset (', FileLine) > 0 then // Neo Geo only (for now...)
+         begin
+           // do nothing ...for now
+         end
+      else
+
+      if Pos('cloneof ', FileLine) > 0 then
+         begin
+           Position:= Pos('cloneof', FileLine);
+           Delete(FileLine, 1, Position+7);
+           mClone:= FileLine;
+           ROMsList.Add('cloneof '+mClone);
+
+           case Assigned(BiosDriver) of
+             True:
+               begin
+                 IsGameBios:= BiosDriver.ValueExists('games', mClone);
+                 if IsGameBios then
+                    begin
+                      TempString:= BiosDriver.ReadString('games', mClone, 'error');
+                      if (TempString <> 'error') and (TempString = 'neogeo') then
+                         mROMIdentification:= 11; // it's a Neo-Geo Clone
+                      TempString:= '';
                     end;
+               end;
+             False: IsGameBios:= False;
+           end;
+         end
+      else
+
+      if Pos('romof ', FileLine) > 0 then
+         begin
+           Position:= Pos('romof', FileLine);
+           Delete(FileLine, 1, Position+5);
+
+           case Assigned(BiosDriver) of
+             True:
+               begin
+                 if mClone = '' then
+                    begin
+                      IsGameBios:= BiosDriver.ValueExists('bios', FileLine);
+                      if IsGameBios then
+                         begin
+                           if FileLine = 'neogeo' then
+                              mROMIdentification:= 10; // it's a Neo-Geo Master
+                         end;
+                    end;
+               end;
+             False: IsGameBios:= False;
+           end;
+         end
+      else
+
+      if Pos('sampleof ', FileLine) > 0 then
+         begin
+           mSamples:= '0';
+           mSampleName:= mName;
+           Position:= Pos('sampleof', FileLine);
+           Delete(FileLine, 1, Position+8);
+           mSampleOfName:= FileLine;
+         end
+      else
+
+      if (Pos('rom (', FileLine) > 0) or (Pos('disk (', FileLine) > 0) then
+         begin
+           // will need to test all the other resources files
+           if VerifyResourceFiles(IsResource, IsGameBios, FileLine, BiosDriver) then
+           begin
+             TempString:= '';
+             // Will get the name of the ROM first
+             Position:= Pos('name ', FileLine);
+             for Loop:=Position+5 to Length(FileLine) do
+             begin
+               if FileLine[Loop] <> ' ' then
+                  begin
+                    ROMsDetailsLine:= ROMsDetailsLine+FileLine[Loop];
+                    TempString:= TempString+FileLine[Loop];
                   end
                else
                   begin
-                    Inc(TotalNotFound);
-                    case mROMIdentification of
-                       0: mROMIdentification:= 6;
-                       1: mROMIdentification:= 7;
-                       2: mROMIdentification:= 8;
-                       3: mROMIdentification:= 9;
-                       4: mROMIdentification:= 10;
-                       5: mROMIdentification:= 11;
-                      12: mROMIdentification:= 14;
-                      13: mROMIdentification:= 15;
-                    end;
-
-                    ROMDataLine:= PopulateROMDataLine;
-
-                    case mROMIdentification of
-                      6: UnavailableClassicMRList.Add(ROMDataLine);
-                      7: UnavailableClassicMVList.Add(ROMDataLine);
-                      8: UnavailableClassicCRList.Add(ROMDataLine);
-                      9: UnavailableClassicCVList.Add(ROMDataLine);
-                     10: UnavailableNeoGeoMList.Add(ROMDataLine);
-                     11: UnavailableNeoGeoCList.Add(ROMDataLine);
-                     14, 15: UnavailableBiosList.Add(ROMDataLine)
-                    end;
+                    ROMsDetailsLine:= ROMsDetailsLine+'¬';
+                    Break;
                   end;
              end;
+             // now will get the size of the ROM
+             TempString:= '';
+             Position:= Pos('size ', FileLine);
+             if Position <> 0 then
+                begin
+                  for Loop:= Position+5 to Length(FileLine) do
+                  begin
+                    if FileLine[Loop] <> ' ' then
+                       begin
+                         ROMsDetailsLine:= ROMsDetailsLine+FileLine[Loop];
+                         TempString:= TempString+FileLine[Loop];
+                       end
+                    else
+                       begin
+                         ROMsDetailsLine:= ROMsDetailsLine+'¬';
+                         GameSize:= GameSize+StrToInt(TempString);
+                         TempString:= '';
+                         Break;
+                       end;
+                  end;
+                end
+             else
+             if Position = 0 then
+                ROMsDetailsLine:= ROMsDetailsLine+'0¬';
+
+             // now will get the crc of the ROM
+             TempString:= '';
+             Position:= Pos('crc ', FileLine);
+             if Position <> 0 then
+                begin
+                  for Loop:= Position+4 to Length(FileLine) do
+                  begin
+                    if FileLine[Loop] <> ' ' then
+                       begin
+                         ROMsDetailsLine:= ROMsDetailsLine+FileLine[Loop];
+                         TempString:= TempString+FileLine[Loop];
+                       end
+                    else
+                       Break;
+                  end;
+                end
+             else
+                begin
+                  Position:= Pos('md5 ', FileLine);
+                  if Position <> 0 then
+                     begin
+                       for Loop:= Position+4 to Length(FileLine) do
+                       begin
+                         if FileLine[Loop] <> ' ' then
+                            begin
+                              ROMsDetailsLine:= ROMsDetailsLine+FileLine[Loop];
+                              TempString:= TempString+FileLine[Loop];
+                            end
+                         else
+                            Break;
+                       end;
+                     end
+                  else
+                     ROMsDetailsLine:= ROMsDetailsLine+'00000000';
+                end;
+             ROMsDetailsLine:= ROMsDetailsLine+';';
+             ROMsList.Add(ROMsDetailsLine);
+             ROMsDetailsLine:= '';
+           end;
+         end
+      else
+
+      if Pos('sample ', FileLine) > 0 then
+         begin
+           mSamples:= '0';
+           mSampleName:= mName;
+           Position:= Pos('sample', FileLine);
+           Delete(FileLine, 1, Position+6);
+           if SamplesDetailsLine <> '' then
+              SamplesDetailsLine:= SamplesDetailsLine+'¬';
+           SamplesDetailsLine:= SamplesDetailsLine+FileLine;
+         end
+      else
+
+      if Pos('video (', FileLine) > 0 then
+         begin
+           // will get the Video Type
+           if Pos('screen raster', FileLine) > 0 then
+              mVideo:= '0' else
+           if Pos('screen vector', FileLine) > 0 then
+              mVideo:= '1';
+
+           // will get the orientation
+           if Pos('orientation horizontal', FileLine) > 0 then
+              mOrientation:= '0' else
+           if Pos('orientation vertical', FileLine) > 0 then
+              mOrientation:= '1';
+
+           // will get the resolution
+           if Pos(' x ', FileLine) > 0 then
+              begin
+                Position:= Pos(' x ', FileLine)+3;
+                for Loop:=Position to Length(FileLine) do
+                begin
+                  if FileLine[Loop] <> ' ' then
+                     mResolution:= mResolution+FileLine[Loop]
+                  else
+                     begin
+                       mResolution:= mResolution+'x';
+                       Break;
+                     end;
+                end;
+
+                Position:= Pos(' y ', FileLine)+3;
+                for Loop:=Position to Length(FileLine) do
+                begin
+                  if FileLine[Loop] <> ' ' then
+                     mResolution:= mResolution+FileLine[Loop]
+                  else
+                     Break;
+                end;
+              end;
+
+           // will get the frequency
+           if Pos(' freq ', FileLine) > 0 then
+              begin
+                Position:= Pos(' freq ', FileLine)+6;
+                for Loop:=Position to Length(FileLine) do
+                begin
+                  if FileLine[Loop] <> ' ' then
+                     mFrequency:= mFrequency+FileLine[Loop]
+                  else
+                     begin
+                       mFrequency:= mFrequency+' Hz';
+                       Break;
+                     end;
+                end;
+              end else mFrequency:= '';
+         end
+      else
+
+      if Pos('sound (', FileLine) > 0 then
+         begin
+           if Pos('channels 0', FileLine) > 0 then
+              mSound:= '0' // no sound
+           else
+           if Pos('channels 1', FileLine) > 0 then
+              mSound:= '1' // mono
+           else
+           if Pos('channels 2', FileLine) > 0 then
+              mSound:= '2'; // stereo
+         end
+      else
+
+      if Pos('input (', FileLine) > 0 then
+         begin
+           if Pos('control ', FileLine) > 0 then
+              begin
+                if Pos('joy4way', FileLine) > 0 then
+                   mControlType:= '0'
+                else
+                if Pos('joy8way', FileLine) > 0 then
+                   mControlType:= '1'
+                else
+                if Pos('doublejoy4way', FileLine) > 0 then
+                   mControlType:= '2'
+                else
+                if Pos('doublejoy8way', FileLine) > 0 then
+                   mControlType:= '3'
+                else
+                if Pos('dial', FileLine) > 0 then
+                   mControlType:= '4'
+                else
+                if Pos('paddle', FileLine) > 0 then
+                   mControlType:= '5'
+                else
+                if Pos('stick', FileLine) > 0 then
+                   mControlType:= '6'
+                else
+                if Pos('trackball', FileLine) > 0 then
+                   mControlType:= '7'
+                else
+                if Pos('lightgun', FileLine) > 0 then
+                   mControlType:= '8';
+              end
+           else
+              mControlType:= '9'; // buttons
+         end
+      else
+
+      if Pos('driver (', FileLine) > 0 then
+         begin
+           if Pos('status good', FileLine) > 0 then
+              mDriverStatus:= '0'
+           else
+           if Pos('status preliminary', FileLine) > 0 then
+              mDriverStatus:= '1'
+           else
+           if Pos('status imperfect', FileLine) > 0 then
+              mDriverStatus:= '2';
+
+           if Pos('color good', FileLine) > 0 then
+              mColorStatus:= '0'
+           else
+           if Pos('color preliminary', FileLine) > 0 then
+              mColorStatus:= '1'
+           else
+           if Pos('color imperfect', FileLine) > 0 then
+              mColorStatus:= '2';
+
+           if Pos('sound good', FileLine) > 0 then
+              mSoundStatus:= '0'
+           else
+           if Pos('sound preliminary', FileLine) > 0 then
+              mSoundStatus:= '1'
+           else
+           if Pos('sound imperfect', FileLine) > 0 then
+              mSoundStatus:= '2';
+         end
+      else
+
+      if FileLine = ')' then
+         begin
+           // reached the end of the games details info
+           // must verify if is clone or master
+           // must verify if is neogeo or classic
+           // must verify is is raster or vector
+
+           if mSampleName <> '' then
+              begin
+                if SamplesList.Count > 0 then
+                   SamplesList.Add(' ');
+                SamplesList.Add('game '+mSampleName);
+                if mSampleOfName <> '' then
+                   SamplesList.Add('sampleof '+mSampleOfName);
+                if SamplesDetailsLine <> '' then
+                   SamplesList.Add(SamplesDetailsLine+';');
+              end;
+
+           case StrToInt(mVideo) of
+             0:
+              begin
+                // it's a raster game
+                if mClone = '' then
+                   begin
+                     // it's a master game
+                     if mROMIdentification <> 10 then // if it's not a Neo-Geo Master
+                        mROMIdentification:= 6; // it's a Classic Master Raster
+                   end
+                else
+                   begin
+                     // it's a clone game
+                     if mROMIdentification <> 11 then // if it's not a Neo-Geo Clone
+                        mROMIdentification:= 8;
+                   end;
+              end;
+             1:
+              begin
+                // it's a vector game
+                if mClone = '' then
+                   mROMIdentification:= 7  // it's a master game
+                else
+                   mROMIdentification:= 9; // it's a clone game
+              end;
+           end;
+
+           if BiosDriver.ValueExists('bios', mName) then
+              begin
+                if mName = 'neogeo' then
+                   mROMIdentification:= 15
+                else
+                   mROMIdentification:= 14;
+              end;
+
+           ROMDataLine:= PopulateROMDataLine;
+
+           if GameSizeBits.IndexOfName(mName) = -1 then
+              GameSizeBits.Add(mName+'='+IntToStr(GameSize)); // game not found, will add it to the list
+
+           case mROMIdentification of
+             6: UnavailableClassicMRList.Add(ROMDataLine);
+             7: UnavailableClassicMVList.Add(ROMDataLine);
+             8: UnavailableClassicCRList.Add(ROMDataLine);
+             9: UnavailableClassicCVList.Add(ROMDataLine);
+            10: UnavailableNeoGeoMList.Add(ROMDataLine);
+            11: UnavailableNeoGeoCList.Add(ROMDataLine);
+            14, 15: UnavailableBiosList.Add(ROMDataLine)
+           end;
+           IsGameEntry:= False;
          end;
-       end;
-    UpdateProgressLabel(MainLoop, TotalProgress, False);
-    Application.ProcessMessages;
+      end;
+      UpdateProgressLabel(MainLoop, TotalProgress);
+      Application.ProcessMessages;
 
+      if StopBuildDatabase then
+         begin
+           FreeAndNil(ListInfoFile);
+           FreeAndNil(ROMsList);
+           FreeAndNil(SamplesList);
+           FreeAndNil(GameSizeBits);
+           FreeAndNil(ListDetailsFile);
+           FreeAndNil(BiosDriver);
+           Result:= False;
+           RestoreHistoryFile;
+           GetMessagesLng('Messages', 'CancelOperation', 'Operation Canceled',
+                          'Messages', 'BuildGamesCancelMsg', 'Games list build is canceled!');
+           GenerateMessage(MessageText[0], MessageText[1], 2);
+           Exit;
+         end;
+    end;
+    if GameSizeBits.Count > 0 then
+       GameSizeBits.Insert(0, '; Game Size (in bytes)');
+    GameSizeBits.EndUpdate;
+    ROMsList.EndUpdate;
 
-    if StopBuildDatabase then
-       begin
-         FreeAndNil(ListInfoFile);
-         FreeAndNil(ROMsList);
-         FreeAndNil(CustomDescriptionList);
-         Result:= False;
-         RestoreHistoryFile;
-         GenerateMessage(GetLanguageText('Messages', 'CancelOperation', 'Operation Canceled'),
-                         GetLanguageText('Messages', 'BuildGamesCancelMsg', 'Games list build is canceled!'), 2);
-         Exit;
-       end;
+    UnavailableClassicMRList.EndUpdate;
+    UnavailableClassicMVList.EndUpdate;
+    UnavailableClassicCRList.EndUpdate;
+    UnavailableClassicCVList.EndUpdate;
+    UnavailableNeoGeoMList.EndUpdate;
+    UnavailableNeoGeoCList.EndUpdate;
+    UnavailableBiosList.EndUpdate;
   end;
   FreeAndNil(ListInfoFile);
   FreeAndNil(ListDetailsFile);
-  FreeAndNil(CustomDescriptionList);
-  FreeAndNil(CustomCategoryList);
+  FreeAndNil(BiosDriver);
 
-  ROMsList.EndUpdate;
-  GameSizeBits.EndUpdate;
-  GameSizeBits.Sort;
-
-  FolderName:= '';
-  CheckFolder:= False;
-  case DefaultDatabase of
-    True: FolderName:= FrontendPath+'resources\';
-    False:
-      begin
-        //FolderName:=InputBox(GetLanguageText(FrontendLanguage, 'Messages', 'GetEmulatorVersionFailedTitle', 'Unable to get the file version!', False),
-        //                             Format(GetLanguageText(FrontendLanguage, 'Messages', 'GetEmulatorVersionFailedMsg', 'Enter a description for Executable %u', False), [EmulatorNumber]),
-        //                             EmulatorVersion);
-
-        while FolderName = '' do
-        begin
-          FolderName:= InputBox('Folder Name', 'Enter a folder name', 'New DB');
-        end;
-
-        //while CheckFolder = False do
-        while not CheckFolder do
-        begin
-          case DirectoryExists(FrontendPath+'resources\'+FolderName) of
-            True:
-             begin
-                case GenerateMessage('Folder Found', 'The folder "'+FrontendPath+'resources\'+FolderName+'" already exists! Continue?', 1) of
-                  mrYes: CheckFolder:= True;
-                  mrNo:
-                    begin
-                      FolderName:= '';
-                      while FolderName = '' do
-                      begin
-                        FolderName:= InputBox('Folder Name', 'Enter a folder name', 'New DB');
-                      end;
-                    end;
-                end;
-              end;
-            False:
-              begin
-                CheckFolder:= True;
-              end;
-          end;
-        end;
-        FolderName:= FrontendPath+'resources\'+FolderName+'\';
-        ForceDirectories(FolderName);
-      end;
-  end;
+  if GameSizeBits.Count > 0 then
+     begin
+       GameSizeBits.Sort;
+       GameSizeBits.SaveToFile(FrontendPath+'resources\GameSize.dat');
+     end;
+  FreeAndNil(GameSizeBits);
   FormStatus.LabelProgress.Caption:= '';
-  if FileExists(FolderName+'ROMs.dat') then
-     DeleteFile(FolderName+'ROMs.dat');
+  DeleteFile(FrontendPath+'resources\ROMs.dat');
 
-  ROMsList.SaveToFile(FolderName+'ROMs.dat');
-
+  if (Assigned(ROMsList)) and (ROMsList.Count > 0) then
+     ROMsList.SaveToFile(FrontendPath+'resources\ROMs.dat');
   FreeAndNil(ROMsList);
 
-  ClassicMRList.EndUpdate;
-  ClassicMVList.EndUpdate;
-  ClassicCRList.EndUpdate;
-  ClassicCVList.EndUpdate;
-  NeoGeoMList.EndUpdate;
-  NeoGeoCList.EndUpdate;
-  UnavailableClassicMRList.EndUpdate;
-  UnavailableClassicMVList.EndUpdate;
-  UnavailableClassicCRList.EndUpdate;
-  UnavailableClassicCVList.EndUpdate;
-  UnavailableNeoGeoMList.EndUpdate;
-  UnavailableNeoGeoCList.EndUpdate;
-  BiosList.EndUpdate;
-  UnavailableBiosList.EndUpdate;
+  if (Assigned(SamplesList)) and (SamplesList.Count > 0) then
+     SamplesList.SaveToFile(FrontendPath+'resources\samples.dat');
+  FreeAndNil(SamplesList);
 
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMR');
-  FormStatus.LabelMessage.Refresh;
-  ClassicMRList.SaveToFile(FolderName+'ClassicMR.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMV');
-  FormStatus.LabelMessage.Refresh;
-  ClassicMVList.SaveToFile(FolderName+'ClassicMV.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCR');
-  FormStatus.LabelMessage.Refresh;
-  ClassicCRList.SaveToFile(FolderName+'ClassicCR.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCV');
-  FormStatus.LabelMessage.Refresh;
-  ClassicCVList.SaveToFile(FolderName+'ClassicCV.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoM');
-  FormStatus.LabelMessage.Refresh;
-  NeoGeoMList.SaveToFile(FolderName+'NeoGeoM.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoC');
-  FormStatus.LabelMessage.Refresh;
-  NeoGeoCList.SaveToFile(FolderName+'NeoGeoC.dat');
-
-  FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveBios');
-  FormStatus.LabelMessage.Refresh;
-  BiosList.SaveToFile(FolderName+'BIOS.dat');
+  // create all available files with zero bytes
+  ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMR.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMV.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicCR.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicCV.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\NeoGeoM.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\NeoGeoC.dat');
+  ClassicMRList.SaveToFile(FrontendPath+'resources\Bios.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMR');
   FormStatus.LabelMessage.Refresh;
-  UnavailableClassicMRList.SaveToFile(FolderName+'UnClassicMR.dat');
+  UnavailableClassicMRList.SaveToFile(FrontendPath+'resources\UnClassicMR.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMV');
   FormStatus.LabelMessage.Refresh;
-  UnavailableClassicMVList.SaveToFile(FolderName+'UnClassicMV.dat');
+  UnavailableClassicMVList.SaveToFile(FrontendPath+'resources\UnClassicMV.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCR');
   FormStatus.LabelMessage.Refresh;
-  UnavailableClassicCRList.SaveToFile(FolderName+'UnClassicCR.dat');
+  UnavailableClassicCRList.SaveToFile(FrontendPath+'resources\UnClassicCR.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCV');
   FormStatus.LabelMessage.Refresh;
-  UnavailableClassicCVList.SaveToFile(FolderName+'UnClassicCV.dat');
+  UnavailableClassicCVList.SaveToFile(FrontendPath+'resources\UnClassicCV.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoM');
   FormStatus.LabelMessage.Refresh;
-  UnavailableNeoGeoMList.SaveToFile(FolderName+'UnNeoGeoM.dat');
+  UnavailableNeoGeoMList.SaveToFile(FrontendPath+'resources\UnNeoGeoM.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoC');
   FormStatus.LabelMessage.Refresh;
-  UnavailableNeoGeoCList.SaveToFile(FolderName+'UnNeoGeoC.dat');
+  UnavailableNeoGeoCList.SaveToFile(FrontendPath+'resources\UnNeoGeoC.dat');
 
   FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnBios');
   FormStatus.LabelMessage.Refresh;
-  UnavailableBiosList.SaveToFile(FolderName+'UnBIOS.dat');
+  UnavailableBiosList.SaveToFile(FrontendPath+'resources\UnBios.dat');
 
   FreeAndNil(ClassicMRList);
-  FreeAndNil(ClassicMVList);
-  FreeAndNil(ClassicCRList);
-  FreeAndNil(ClassicCVList);
-  FreeAndNil(NeoGeoMList);
-  FreeAndNil(NeoGeoCList);
   FreeAndNil(UnavailableClassicMRList);
   FreeAndNil(UnavailableClassicMVList);
   FreeAndNil(UnavailableClassicCRList);
   FreeAndNil(UnavailableClassicCVList);
   FreeAndNil(UnavailableNeoGeoMList);
   FreeAndNil(UnavailableNeoGeoCList);
-  FreeAndNil(BiosList);
   FreeAndNil(UnavailableBiosList);
-  FreeAndNil(CategoriesList);
-  FreeAndNil(ListROMsName);
-  FreeAndNil(ListROMsSize);
-  FreeAndNil(ListROMsCRC);
-  FreeAndNil(ParentListROMsName);
-  FreeAndNil(ParentListROMsSize);
-  FreeAndNil(ParentListROMsCRC);
-
-  GameSizeBits.SaveToFile(FolderName+'GameSize.dat');
 
   RestoreHistoryFile;
 
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DeleteListInfoFile', 'Deleting file ListInfo.tmp from disk...');
-  FormStatus.LabelMessage.Refresh;
-  if FileExists(FrontendPath+'ListInfo.tmp') then
-     DeleteFile(FrontendPath+'ListInfo.tmp');
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DeleteListDetailsFile', 'Deleting file ListDetails.tmp from disk...');
-  FormStatus.LabelMessage.Refresh;
-  if FileExists(FrontendPath+'ListDetails.tmp') then
-     DeleteFile(FrontendPath+'ListDetails.tmp');
+  DeleteFile(FrontendPath+'listinfo.tmp');
+  DeleteFile(FrontendPath+'listdetails.tmp');
+  DeleteFile(FrontendPath+'listclones.tmp');
 
   //EndClock:=GetTickCount;
   //ShowMessage(IntToStr(EndClock-StartClock));
   FormMain.Visible:= True;
   Application.ProcessMessages;
-  if FormPreferences.ShowStatistics.Checked then
-     GenerateMessage('Database Build Statistics', 'Total Split Games Found: '+IntToStr(TotalGamesFound)+#13+
-                     'Total Merged Games Found: '+IntToStr(TotalMergedGamesFound)+#13+
-                     'Total Resources Found: '+IntToStr(TotalResourcesFound)+#13+
-                     'Total Games Missing: '+IntToStr(TotalNotFound), 2);
 end;
 
 function TFormMain.StopBuildDatabase: Boolean;
@@ -8070,42 +7216,23 @@ begin
   Result:= False;
   if CancelCurrentOperation then
      begin
-       case GenerateMessage(GetLanguageText('Messages', 'CancelTitle', 'Cancel'),
-                            GetLanguageText('Messages', 'StopGamesBuildMsg', 'Stop building the games list ? The current games list will not be changed.'), 1) of
+       GetMessagesLng('Messages', 'CancelTitle', 'Cancel',
+                      'Messages', 'StopGamesBuildMsg', 'Stop building the games list ? The current games list will not be changed.');
+       case GenerateMessage(MessageText[0], MessageText[1], 1) of
          mrYes:
            begin
              Result:= True;
-             FreeAndNil(ClassicMRList);
-             FreeAndNil(ClassicMVList);
-             FreeAndNil(ClassicCRList);
-             FreeAndNil(ClassicCVList);
-             FreeAndNil(NeoGeoMList);
-             FreeAndNil(NeoGeoCList);
              FreeAndNil(UnavailableClassicMRList);
              FreeAndNil(UnavailableClassicMVList);
              FreeAndNil(UnavailableClassicCRList);
              FreeAndNil(UnavailableClassicCVList);
              FreeAndNil(UnavailableNeoGeoMList);
              FreeAndNil(UnavailableNeoGeoCList);
-             FreeAndNil(BiosList);
              FreeAndNil(UnavailableBiosList);
-             FreeAndNil(CategoriesList);
-             FreeAndNil(ListROMsName);
-             FreeAndNil(ListROMsSize);
-             FreeAndNil(ListROMsCRC);
-             FreeAndNil(ParentListROMsName);
-             FreeAndNil(ParentListROMsSize);
-             FreeAndNil(ParentListROMsCRC);
 
-             FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DeleteListInfoFile', 'Deleting file ListInfo.tmp from disk...');
-             FormStatus.LabelMessage.Refresh;
-             if FileExists(FrontendPath+'ListInfo.tmp') then
-                DeleteFile(FrontendPath+'ListInfo.tmp');
-
-             FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DeleteListDetailsFile', 'Deleting file ListDetails.tmp from disk...');
-             FormStatus.LabelMessage.Refresh;
-             if FileExists(FrontendPath+'ListDetails.tmp') then
-                DeleteFile(FrontendPath+'ListDetails.tmp');
+             DeleteFile(FrontendPath+'listinfo.tmp');
+             DeleteFile(FrontendPath+'listdetails.tmp');
+             DeleteFile(FrontendPath+'listclones.tmp');
 
              FormStatus.KeyPreview:= False;
              FormStatus.LabelProgress.Caption:= '';
@@ -8153,18 +7280,18 @@ begin
         if BiosNeoGeo             then LoadGames('Bios', False, 'NeoGeoBios');
         if UnavailableBiosClassic then LoadGames('UnBios', False, 'UnClassicBios');
         if UnavailableBiosNeoGeo  then LoadGames('UnBios', False, 'UnNeoGeoBios');
-
-        if CustomGames            then LoadGames('CustomGames', False, '');
-        if UnavailableCustomGames then LoadGames('UnCustomGames', False, '');
+        if (FileExists(FrontendPath+'resources\cGames.dat')) and
+           (GetFileSize(FrontendPath+'resources\cGames.dat') > 0) then
+           LoadGames('cGames', False, '');
       end;
     True: LoadGames(FavoriteUser, True, '');
   end;
 
-  Result:= AddGames(True);
+  Result:= AddGames;
   FreeAndNil(CompleteGamesList);
   if Result then
      begin
-       SetRealIcons;
+       SetGamesIcons;
        StatusBarShownGames.Caption:= Format(GetLanguageText('Main', 'StatusBarShownGames', '%u Games'), [Length(GamesList)]);
      end;
   ClearMemoryColumnsVariables;
@@ -8219,9 +7346,7 @@ begin
            15: mMerged:= TempField;
            16: mName:= TempField;
            17: mClone:= TempField;
-           18: mCategory:= TempField;
-           19: mVersionAdded:= TempField;
-           20: mDriver:= TempField;
+           18: mDriver:= TempField;
          end;
          TempField:= '';
          Inc(FieldNumber);
@@ -8268,39 +7393,38 @@ begin
   end;
 end;
 
-procedure TFormMain.SetRealIcons;
+procedure TFormMain.SetGamesIcons;
 var
   Loop: Integer;
 begin
-  if not MenuRealIcons.Checked then
+  if not MenuGamesIcons.Checked then
      Exit;
 
-  if BigRealIconsImageList.Count = 1 then
+  if BigGamesIconsImageList.Count = 1 then
      begin
-       MenuRealIcons.OnClick(Self);
+       MenuGamesIcons.OnClick(Self);
        Exit;
      end;
 
   if Length(GamesList) = 0 then
      Exit;
 
-  RealIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
-  List.LargeImages:= BigRealIconsImageList;
-  List.SmallImages:= SmallRealIconsImageList;
+  GamesIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
+  List.LargeImages:= BigGamesIconsImageList;
+  List.SmallImages:= SmallGamesIconsImageList;
   for Loop:=0 to Length(GamesList)-1 do
-  begin
-    GamesList[Loop].eImageIndex:= RealIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
-  end;
-  FreeAndNil(RealIconsDAT);
+      GamesList[Loop].eImageIndex:= GamesIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
+      
+  FreeAndNil(GamesIconsDAT);
   List.Invalidate;
 end;
 
 function TFormMain.LoadGames(ClassificationName: String; IsFavorite: Boolean; BiosTypeName: String): Boolean;
 var
-  ClassFile: THashedStringList;
-  ROMLine, DATFolder: String;
-  AddToList: Boolean;
-  Loop: Integer;
+  ClassFile, FavoritesList: THashedStringList;
+  ROMLine, DATFolder, SearchGame: String;
+  AddToList, Continue: Boolean;
+  Loop, Loop2, FieldSep: Integer;
 begin
   AddToList:= True;
 
@@ -8315,28 +7439,58 @@ begin
      begin
        ClassFile:= THashedStringList.Create;
        ClassFile.LoadFromFile(DATFolder+ClassificationName+'.dat');
+       if IsFavorite then
+          begin
+            FavoritesList:= THashedStringList.Create;
+            GetGamesList(FavoritesList, True, True);
+          end;
+
        for Loop:=0 to ClassFile.Count -1 do
        begin
          ROMLine:= ClassFile[Loop];
+         Continue:= True;
 
-         if BiosTypeName = 'ClassicBios' then
-            AddToList:= Copy(ROMLine, 1, 2) = '12'
-         else
-         if BiosTypeName = 'NeoGeoBios' then
-            AddToList:= Copy(ROMLine, 1, 2) = '13'
-         else
-         if BiosTypeName = 'UnClassicBios' then
-            AddToList:= Copy(ROMLine, 1, 2) = '14'
-         else
-         if BiosTypeName = 'UnNeoGeoBios' then
-            AddToList:= Copy(ROMLine, 1, 2) = '15'
-         else
-           AddToList:= True;
+         if IsFavorite then
+            begin
+              FieldSep:= Pos('=', ROMLine);
+              SearchGame:= Format('¬%s¬%s¬', [(Copy(ROMLine, 1, FieldSep-1)), (Copy(ROMLine, FieldSep+1, Length(ROMLine)-FieldSep))]);
+              for Loop2:=0 to FavoritesList.Count -1 do
+              begin
+                case SearchString(SearchGame, FavoritesList[Loop2]) of
+                  True:
+                    begin
+                      Continue:= True;
+                      ROMLine:= FavoritesList[Loop2];
+                      Break;
+                    end;
+                  False: Continue:= False;
+                end;
+              end;
+            end;
 
-         if AddToList then
-            CompleteGamesList.Add(ClassFile[Loop]);
+         if Continue then
+            begin
+              if BiosTypeName = 'ClassicBios' then
+                 AddToList:= Copy(ROMLine, 1, 2) = '12'
+              else
+              if BiosTypeName = 'NeoGeoBios' then
+                 AddToList:= Copy(ROMLine, 1, 2) = '13'
+              else
+              if BiosTypeName = 'UnClassicBios' then
+                 AddToList:= Copy(ROMLine, 1, 2) = '14'
+              else
+              if BiosTypeName = 'UnNeoGeoBios' then
+                 AddToList:= Copy(ROMLine, 1, 2) = '15'
+              else
+                AddToList:= True;
+
+              if AddToList then
+                 CompleteGamesList.Add(ROMLine);
+            end;
        end;
        FreeAndNil(ClassFile);
+       if IsFavorite then
+          FreeAndNil(FavoritesList);
      end;
 end;
 
@@ -8348,15 +7502,20 @@ begin
   if not MenuParentalLock.Checked then
      Exit;
 
+  if MenuShowFavorite.Checked then
+     Exit;
+
   TempList:= THashedStringList.Create;
   TempList.BeginUpdate;
   mGamesList.BeginUpdate;
   if FormStatus.Visible then
      begin
-       FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'ParentalLockTitle', 'Parental Lock');
-       FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'ParentalLockVerifyLockedGames', 'Verifying locked games. Please, wait a moment...');
-       FormStatus.LabelMessage.Refresh;
+       GetMessagesLng('Status Messages', 'ParentalLockTitle', 'Parental Lock',
+                      'Status Messages', 'ParentalLockVerifyLockedGames', 'Verifying locked games. Please, wait a moment...');
+       FormStatus.LabelStatusType.Caption:= MessageText[0];
+       FormStatus.LabelMessage.Caption:= MessageText[1];
        FormStatus.LabelProgress.Caption:= '';
+       FormStatus.Refresh;
      end;
   for Loop:= mGamesList.Count-1 downto 0 do
   begin
@@ -8375,10 +7534,52 @@ begin
   FreeAndNil(TempList);
 end;
 
-function TFormMain.AddGames(ClearGames: Boolean): Boolean;
+procedure TFormMain.ProcessGamesList(mGamesList: THashedStringList);
+var
+  Loop: Integer;
+  TempList: THashedStringList;
+  AddGame: Boolean;
+begin
+  if CompleteGamesList.Count = 0 then
+     Exit;
+
+  ClearMemoryColumnsVariables;
+  TempList:= THashedStringList.Create;
+  TempList.BeginUpdate;
+
+  for Loop:= mGamesList.Count-1 downto 0 do
+  begin
+    AddGame:= True;
+    GetROMFields(mGamesList[Loop]);
+    if FormPreferences.HidePreliminaryGames.Checked then
+       AddGame:= (mDriverStatus <> '1') and (mSoundStatus <> '1') and (mColorStatus <> '1');
+
+    if FormPreferences.HideBios.Checked then
+       begin
+         if AddGame then
+            AddGame:= StrToInt(Copy(mGamesList[Loop], 1, 2)) < 12;
+       end;
+
+    if AddGame then
+       TempList.Add(mGamesList[Loop]);
+  end;
+  TempList.EndUpdate;
+  if TempList.Count > 0 then
+     begin
+       mGamesList.BeginUpdate;
+       mGamesList.Clear;
+       mGamesList.Assign(TempList);
+       mGamesList.EndUpdate;
+     end;
+  ClearMemoryColumnsVariables;
+  FreeAndNil(TempList);
+end;
+
+function TFormMain.AddGames: Boolean;
 var
   Loop: Integer;
   NonWorkingGame: Boolean;
+  CustomCategoryList, CustomDescriptionList, GamePlayTime: THashedStringList;
 begin
   Result:= False;
   if CompleteGamesList.Count > 0 then
@@ -8387,26 +7588,22 @@ begin
        if CompleteGamesList.Count = 0 then
           Exit;
 
-       Result:= True;
-       case ClearGames of
-         True:
-           begin
-             ClearEntries;
-             SetLength(GamesList, CompleteGamesList.Count);
-           end;
-         False:
-           begin
-             SetLength(GamesList, Length(GamesList)+CompleteGamesList.Count);
-           end;
-       end;
+       if (FormPreferences.HidePreliminaryGames.Checked) or
+          (FormPreferences.HideBios.Checked) then
+          ProcessGamesList(CompleteGamesList);
 
+       Result:= True;
+       ClearEntries;
+       SetLength(GamesList, CompleteGamesList.Count);
+       
        if FormStatus.Visible then
           begin
-            FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'LoadGamesTitle', 'Loading Games');
-            FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadGamesList', 'Loading games list. Please wait a moment...');
+            GetMessagesLng('Status Messages', 'LoadGamesTitle', 'Loading Games',
+                           'Status Messages', 'LoadGamesList', 'Loading games list. Please wait a moment...');
+            FormStatus.LabelStatusType.Caption:= MessageText[0];
+            FormStatus.LabelMessage.Caption:= MessageText[1];
             FormStatus.Refresh;
           end;
-       ClearMemoryColumnsVariables;
        if not Assigned(GameSizeBits) then
           begin
             if FileExists(FrontendPath+'resources\GameSize.dat') then
@@ -8415,11 +7612,53 @@ begin
                  GameSizeBits.LoadFromFile(FrontendPath+'resources\GameSize.dat');
                end;
           end;
+
+       if FileExists(FrontendPath+'catver.ini') then
+          CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
+
+       if FormPreferences.UseCustomGameCategory.Checked then
+          begin
+            if FileExists(FrontendPath+'GameCategory.ini') then
+               begin
+                 CustomCategoryList:= THashedStringList.Create;
+                 CustomCategoryList.LoadFromFile(FrontendPath+'GameCategory.ini');
+                 if CustomCategoryList.Count = 0 then
+                    FreeAndNil(CustomCategoryList);
+               end;
+          end;
+
+       if FormPreferences.UseCustomGameDescription.Checked then
+          begin
+            if FileExists(FrontendPath+'GameDescription.ini') then
+               begin
+                 CustomDescriptionList:= THashedStringList.Create;
+                 CustomDescriptionList.LoadFromFile(FrontendPath+'GameDescription.ini');
+                 if CustomDescriptionList.Count = 0 then
+                    FreeAndNil(CustomDescriptionList);
+               end;
+          end;
+
+       if not Assigned(GamePlayTime) then
+          begin
+            if FileExists(FrontendPath+'GamePlayTime.ini') then
+               begin
+                 GamePlayTime:= THashedStringList.Create;
+                 GamePlayTime.LoadFromFile(FrontendPath+'GamePlayTime.ini');
+               end;
+          end;
+
        for Loop:=0 to CompleteGamesList.Count-1 do
        begin
+         ClearMemoryColumnsVariables;
          GetROMFields(CompleteGamesList[Loop]);
-         NonWorkingGame:= mDriverStatus = 'Preliminary';
+         NonWorkingGame:= mDriverStatus = '1'; // preliminary
          mImageIndex:= mROMIdentification;
+
+         if Assigned(CustomDescriptionList) then
+            begin
+              if CustomDescriptionList.Values[mName+'_custom'] <> '' then
+                 mDescription:= CustomDescriptionList.Values[mName+'_custom'];
+            end;
 
          if FormPreferences.NewDescriptionFormat.Checked then
             begin
@@ -8436,6 +7675,26 @@ begin
                  mClone:= mName;
             end;
 
+         if Assigned(CustomCategoryList) then
+            mCategory:=  CustomCategoryList.Values[mName];
+         if Assigned(CategoriesList) then
+            begin
+              if mCategory = '' then
+                 mCategory:= CategoriesList.ReadString('Category', mName, '');
+              mVersionAdded:= CategoriesList.ReadString('VerAdded', mName, '');
+            end;
+
+         if Assigned(GamePlayTime) then
+            begin
+              mGameTotalPlayTime:= GamePlayTime.Values[mName];
+              if mGameTotalPlayTime <> '' then
+                 begin
+                   mGameTimesPlayed:= Copy(mGameTotalPlayTime, Pos('¬', mGameTotalPlayTime)+1, Length(mGameTotalPlayTime));
+                   Delete(mGameTotalPlayTime, Pos('¬', mGameTotalPlayTime), Length(mGameTotalPlayTime));
+                   mGameTotalPlayTime:= GetPlayTime(StrToInt(mGameTotalPlayTime));
+                 end;
+            end;
+
          with GamesList[Loop] do
          begin
            eImageIndex:= mImageIndex;
@@ -8443,17 +7702,27 @@ begin
            eDescription:= mDescription;
            eYear:= mYear;
            eManufacturer:= mManufacturer;
-           eSound:= mSound;
+           if mSound <> '' then
+              eSound:= aSound[StrToInt(mSound)] else eSound:= '';
            eFrequency:= mFrequency;
-           eSamples:= mSamples;
-           eControlType:= mControlType;
-           eVideo:= mVideo;
-           eOrientation:= mOrientation;
-           eResolution:= mResolution;
-           eDriverStatus:= mDriverStatus;
-           eSoundStatus:= mSoundStatus;
-           eColorStatus:= mColorStatus;
-           eMerged:= mMerged;
+           if mSamples <> '' then
+              eSamples:= aSamples[StrToInt(mSamples)] else eSamples:= '';
+           if mControlType <> '' then
+              eControlType:= aControlType[StrToInt(mControlType)] else eControlType:= '';
+           if mVideo <> '' then
+              eVideo:= aVideo[StrToInt(mVideo)] else eVideo:= '';
+           if mOrientation <> '' then
+              eOrientation:= aOrientation[StrToInt(mOrientation)] else eOrientation:= '';
+           if mResolution <> '' then
+              eResolution:= mResolution else eResolution:= '';
+           if mDriverStatus <> '' then
+              eDriverStatus:= aStatus[StrToInt(mDriverStatus)] else eDriverStatus:= '';
+           if mSoundStatus <> '' then
+              eSoundStatus:= aStatus[StrToInt(mSoundStatus)] else eSoundStatus:= '';
+           if mColorStatus <> '' then
+              eColorStatus:= aStatus[StrToInt(mColorStatus)] else eColorStatus:= '';
+           if mMerged <> '' then
+              eMerged:= aMerged else mMerged:= '';
            eName:= mName;
            eClone:= mClone;
            eCategory:= mCategory;
@@ -8463,26 +7732,28 @@ begin
              True : eGameSize:= GameSizeBits.Values[mName];
              False: eGameSize:= '';
            end;
+           eGameTimesPlayed:= mGameTimesPlayed;
+           eGameTotalPlayTime:= mGameTotalPlayTime;
          end;
        end;
        FreeAndNil(GameSizeBits);
+       FreeAndNil(GamePlayTime);
+       FreeAndNil(CustomDescriptionList);
+       FreeAndNil(CategoriesList);
        List.Items.Count:= CompleteGamesList.Count;
      end;
 end;
 
-procedure TFormMain.UpdateProgressLabel(Position, Total: Integer; IncValue: Boolean);
+procedure TFormMain.UpdateProgressLabel(Position, Total: Integer);
+var
+  Counter: Integer;
 begin
-  case IncValue of
-    True:
-      begin
-        FormStatus.LabelProgress.Tag:= FormStatus.LabelProgress.Tag+1;
-        FormStatus.LabelProgress.Caption:= Format(FormStatus.LabelProgress.Hint, [FormStatus.LabelProgress.Tag, Total]);
-      end;
-    False:
-      begin
-        FormStatus.LabelProgress.Caption:= Format(FormStatus.LabelProgress.Hint, [Position, Total]);
-      end;
-  end;
+  Counter:= Trunc((Position*100) / Total);
+  if (Counter <> FormStatus.LabelProgress.Tag) or ((Counter = 0) and (FormStatus.LabelProgress.Tag = 0)) then
+     begin
+       FormStatus.LabelProgress.Tag:= Counter;
+       FormStatus.LabelProgress.Caption:= IntToStr(FormStatus.LabelProgress.Tag)+'%';
+     end;
 end;
 
 procedure TFormMain.UpdateStatusBarGame;
@@ -8493,17 +7764,14 @@ begin
   if List.Selected = nil then
      Exit;
   GameIcon:= TIcon.Create;
-  case MenuRealIcons.Checked of
+  case MenuGamesIcons.Checked of
     False:
       begin
         GetDefaultIcon:= False;
         if BuiltInSmallListImageList.Count >= GamesList[SelectedGame].eImageIndex then
            BuiltInSmallListImageList.GetIcon(GamesList[SelectedGame].eImageIndex, GameIcon);
       end;
-    True:
-      begin
-        GetDefaultIcon:= BuiltInSmallListImageList.Count > 0;
-      end;
+    True: GetDefaultIcon:= (BuiltInSmallListImageList.Count > 0);
   end;
 
   if GetDefaultIcon then
@@ -8522,52 +7790,35 @@ begin
 end;
 
 // pictures procedures
-procedure TFormMain.GetMAMEExtendedPaths;
+procedure TFormMain.SmoothPicture;
+var
+  FilterString: TStretchFilter;
 begin
-  with FormPreferences do
-  begin
-    snaptitleDir:= FolderTitleSnapshots.Text;
-    marqueeDir:= FolderMarquees.Text;
-    cabinetDir:= FolderCabinets.Text;
-    flyerDir:= FolderFlyers.Text;
-    controlpanelDir:= FolderControlPanels.Text;
-    controlpanellayoutDir:= FolderControlPanelLayouts.Text;
-    iconDir:= FolderIcons.Text;
-    faqDir:= FolderGamesFAQ.Text;
-
-    if LowerCase(snaptitleDir) = 'title' then
-       snaptitleDir:= FrontendPath+'title';
-
-    if LowerCase(marqueeDir) = 'marquees' then
-       marqueeDir:= FrontendPath+'marquees';
-
-    if LowerCase(flyerDir) = 'flyers' then
-       flyerDir:= FrontendPath+'flyers';
-
-    if LowerCase(cabinetDir) = 'cabinets' then
-       cabinetDir:= FrontendPath+'cabinets';
-
-    if LowerCase(controlpanelDir) = 'cpanels' then
-       controlpanelDir:= FrontendPath+'cpanels';
-
-    if LowerCase(iconDir) = 'icons' then
-       iconDir:= FrontendPath+'icons';
-
-    if LowerCase(faqDir) = 'faq' then
-       faqDir:= FrontendPath+'faq';
+  case FormPreferences.SmoothPictures.Position of
+    0: begin
+         if GR32_Transforms.FullEdge then
+            GR32_Transforms.FullEdge:= False;
+         FilterString:= sfNearest;
+         FormPreferences.LabelSmoothPicturesValue.Caption:= 'Nearest';
+       end;
+    1: begin
+         if not GR32_Transforms.FullEdge then
+            GR32_Transforms.FullEdge:= True;
+         FilterString:= sfLinear;
+         FormPreferences.LabelSmoothPicturesValue.Caption:= 'Linear';
+       end;
+    2: begin
+         if not GR32_Transforms.FullEdge then
+            GR32_Transforms.FullEdge:= True;
+         FilterString:= sfLanczos;
+         FormPreferences.LabelSmoothPicturesValue.Caption:= 'Lanczos';
+       end;
   end;
+  Picture.Bitmap.StretchFilter:= FilterString;
+  Picture.Bitmap.Changed;
 end;
 
-procedure TFormMain.SmoothPicture(PictureHolder: TImage32);
-begin
-  case FormPreferences.SmoothPictures.Checked of
-    True : PictureHolder.Bitmap.StretchFilter:= sfLinear;
-    False: PictureHolder.Bitmap.StretchFilter:= sfNearest;
-  end;
-  PictureHolder.Refresh;
-end;
-
-procedure TFormMain.SetAspectRatio(PictureHolder: TImage32);
+procedure TFormMain.SetAspectRatio;
 begin
   case FormPreferences.AspectRatio.Checked of
     True:
@@ -8578,29 +7829,26 @@ begin
               case FormPreferences.StretchLargerPictures.Checked of
                 True:
                   begin
-                    if PictureHolder.Bitmap.Width > PictureHolder.Width then
-                       PictureHolder.ScaleMode:= smResize
+                    if (Picture.Bitmap.Width > Picture.Width) or (Picture.Bitmap.Height > Picture.Height) then
+                       Picture.ScaleMode:= smResize
                     else
-                    if PictureHolder.Bitmap.Height > PictureHolder.Height then
-                       PictureHolder.ScaleMode:= smResize
-                    else
-                       PictureHolder.ScaleMode:= smNormal;
+                       Picture.ScaleMode:= smNormal;
                   end;
-                False: PictureHolder.ScaleMode:= smResize;
+                False: Picture.ScaleMode:= smResize;
               end;
             end;
-          False: PictureHolder.ScaleMode:= smNormal;
+          False: Picture.ScaleMode:= smNormal;
         end;
       end;
     False:
       begin
         case FormPreferences.StretchPicture.Checked of
-          True : PictureHolder.ScaleMode:= smStretch;
-          False: PictureHolder.ScaleMode:= smNormal;
+          True : Picture.ScaleMode:= smStretch;
+          False: Picture.ScaleMode:= smNormal;
         end;
       end;
   end;
-  PictureHolder.Refresh;
+  Picture.Bitmap.Changed;
 end;
 
 procedure TFormMain.ToggleVirtualPicturesList(EnableList: Boolean);
@@ -8625,7 +7873,7 @@ var
 begin
   case ButtonPicturesModeView.Tag of
     0: SectionName:= 'Title Snapshot';
-    1: SectionName:= 'In-Game Snapshot';
+    1: SectionName:= 'In Game Snapshot';
     2: SectionName:= 'Marquee';
     3: SectionName:= 'Flyer';
     4: SectionName:= 'Cabinet';
@@ -8847,6 +8095,32 @@ begin
   ImageHolder.Bitmap.EndUpdate;
 end;
 
+function TFormMain.GetZipFolderFull(FolderType: ShortInt): String;
+begin
+  case FolderType of
+    0: Result:= FormPreferences.FolderTitleSnapshots.Text; // Title Snapshots
+    1: Result:= snapingameDir; // In Game Snapshots (taken from "mame.ini" file)
+    2: Result:= FormPreferences.FolderMarquees.Text; // Marquee
+    3: Result:= FormPreferences.FolderFlyers.Text; // Flyer
+    4: Result:= FormPreferences.FolderCabinets.Text; // Cabinet
+    5: Result:= FormPreferences.FolderControlPanels.Text; // Control Panel
+    6: Result:= FormPreferences.FolderControlPanelLayouts.Text; // Control Panel Layout
+    7: Result:= FormPreferences.FolderIcons.Text; // Game Icons
+    8: Result:= FormPreferences.FolderGamesFAQ.Text; // Game FAQ
+  end;
+  if Result <> '' then
+     begin
+       if Pos(':', Result) = 0 then
+          begin
+            if FolderType = 1 then
+               SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]))
+            else
+               Result:= FrontendPath+Result;
+          end;
+       Result:= IncludeTrailingPathDelimiter(Result);
+     end;
+end;
+
 function TFormMain.ShowPicture(GameName, CloneGameName: String; ImageHolder: TImage32; ImageType: Integer; CloseZIP: Boolean): String;
 var
   Folder, PictureName, PictureExt: String;
@@ -8854,6 +8128,7 @@ var
   PictureIndex: Integer;
 
   PictureStream: TMemoryStream;
+  FileContents: Boolean;
 
   function GetParentPictureName: String;
   begin
@@ -8866,7 +8141,7 @@ var
   function UnzipToMemory: Boolean;
   begin
     PictureStream:= TMemoryStream.Create;
-    UnZipFileMemory(Folder+PictureZIP, ListROMsNameFullPath[PictureIndex], PictureStream);
+    UnZipFileMemory(Folder+PictureZIP, ZipContentsFullPath[PictureIndex], PictureStream);
     ImageChanged:= True;
     ShowingPicture:= True;
     ImageFromZIP:= True;
@@ -8900,17 +8175,17 @@ var
   function SearchZippedImageFile: Boolean;
   begin
     PictureExt:= '.png';
-    PictureIndex:= ListROMsName.IndexOf(PictureName+PictureExt);
+    PictureIndex:= ZipContents.IndexOf(PictureName+PictureExt);
     if PictureIndex = -1 then
        begin
          if SearchAllFormats then
             begin
               PictureExt:= '.jpg';
-              PictureIndex:= ListROMsName.IndexOf(PictureName+PictureExt);
+              PictureIndex:= ZipContents.IndexOf(PictureName+PictureExt);
               if PictureIndex = -1 then
                  begin
                    PictureExt:= '.gif';
-                   PictureIndex:= ListROMsName.IndexOf(PictureName+PictureExt);
+                   PictureIndex:= ZipContents.IndexOf(PictureName+PictureExt);
                  end;
             end;
        end;
@@ -8941,6 +8216,25 @@ var
        Result:= SearchString('['+CloneGameName+'.', ImageHolder.Hint);
   end;
 
+  function GenerateMemZIPList: Boolean;
+  begin
+    if not Assigned(ListROMsName) then
+       begin
+         ListROMsName:= THashedStringList.Create;
+         ListROMsNameFullPath:= THashedStringList.Create;
+       end;
+    Result:= GetContents(Folder+PictureZIP, True, False);
+    if Result then
+       begin
+         ZipContents.Clear;
+         ZipContentsFullPath.Clear;
+         ZipContents.AddStrings(ListROMsName);
+         ZipContentsFullPath.AddStrings(ListROMsNameFullPath);
+         ZipContents.Insert(0, IntToStr(GetFileSize(Folder+PictureZIP)));
+         ZipContentsFullPath.Insert(0, ZipContents[0]);
+       end;
+  end;
+
 begin
   if Length(GamesList) = 0 then
      Exit;
@@ -8949,47 +8243,21 @@ begin
   ImageFromZIP:= False;
   SearchAllFormats:= not (ImageType in [0, 1]);
 
+  if ImageType > -1 then
+     Folder:= GetZipFolderFull(ImageType);
+
   case ImageType of
    -1: begin
          Folder:= FrontendPath+'resources\images\';
          PictureZIP:= '';
        end;
-    0: begin
-         Folder:= snaptitleDir+'\';
-         case FileExists(Folder+'title.zip') of
-           True : PictureZIP:= 'title.zip';
-           False: PictureZIP:= 'titles.zip';
-         end;
-       end;
-    1: begin
-         if Pos(':\', snapingameDir) = 0 then
-            SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-         Folder:= snapingameDir+'\';
-         case FileExists(Folder+'ingame.zip') of
-           True : PictureZIP:= 'ingame.zip';
-           False: PictureZIP:= 'snap.zip';
-         end;
-       end;
-    2: begin
-         Folder:= marqueeDir+'\';
-         PictureZIP:= 'marquees.zip';
-       end;
-    3: begin
-         Folder:= flyerDir+'\';
-         PictureZIP:= 'flyers.zip';
-       end;
-    4: begin
-         Folder:= cabinetDir+'\';
-         PictureZIP:= 'cabinets.zip';
-       end;
-    5: begin
-         Folder:= controlpanelDir+'\';
-         PictureZIP:= 'cpanels.zip';
-       end;
-    6: begin
-         Folder:= controlpanellayoutDir+'\';
-         PictureZIP:= 'cplayouts.zip';
-       end;
+    0: PictureZIP:= FormPreferences.ZipTitleSnapshots.Text;
+    1: PictureZIP:= FormPreferences.ZipInGameSnapshots.Text;
+    2: PictureZIP:= FormPreferences.ZipMarquees.Text;
+    3: PictureZIP:= FormPreferences.ZipFlyers.Text;
+    4: PictureZIP:= FormPreferences.ZipCabinets.Text;
+    5: PictureZIP:= FormPreferences.ZipControlPanels.Text;
+    6: PictureZIP:= FormPreferences.ZipControlPanelLayouts.Text;
   end;
 
   if PictureNumber = 1 then
@@ -9004,42 +8272,56 @@ begin
          case FileExists(Folder+PictureZIP) of
            True:
              begin
-               if not Assigned(ListROMsName) then
+               if not Assigned(ZipContents) then
                   begin
-                    ListROMsName:= THashedStringList.Create;
-                    ListROMsNameFullPath:= THashedStringList.Create;
+                    ZipContents:= THashedStringList.Create;
+                    ZipContentsFullPath:= THashedStringList.Create;
                   end;
-               if ListROMsName.Count = 0 then
-                  GetContents(Folder+PictureZIP, True, False);
-               if SearchZippedImageFile then
-                  UnzipToMemory
+               if ZipContents.Count = 0 then
+                  FileContents:= GenerateMemZIPList
                else
                   begin
-                    case FormPreferences.ShowParentPictures.Checked of
-                      True:
-                        begin
-                          if (CloneGameName <> '') and (CloneGameName <> GameName) then
-                             begin
-                               ImageChanged:= not FoundParentImage;
-                               ShowingPicture:= True;
-                               if ImageChanged then
-                                  begin
-                                    GetParentPictureName;
-                                    if not SearchImageFile then
-                                       begin
-                                         case SearchZippedImageFile of
-                                           True : UnzipToMemory;
-                                           False: PictureNotFound:= True;
-                                         end;
-                                       end;
-                                  end;
-                             end
-                          else
-                             PictureNotFound:= True; // it's not clone and file not found
-                        end;
-                      False: PictureNotFound:= True;
-                    end;
+                    if ZipContents[0] <> IntToStr(GetFileSize(Folder+PictureZIP)) then
+                       FileContents:= GenerateMemZIPList
+                    else
+                       FileContents:= True;
                   end;
+
+               case FileContents of
+                 True:
+                   begin
+                     if SearchZippedImageFile then
+                        UnzipToMemory
+                     else
+                        begin
+                          case FormPreferences.ShowParentPictures.Checked of
+                            True:
+                              begin
+                                if (CloneGameName <> '') and (CloneGameName <> GameName) then
+                                   begin
+                                     ImageChanged:= not FoundParentImage;
+                                     ShowingPicture:= True;
+                                     if ImageChanged then
+                                        begin
+                                          GetParentPictureName;
+                                          if not SearchImageFile then
+                                             begin
+                                               case SearchZippedImageFile of
+                                                 True : UnzipToMemory;
+                                                 False: PictureNotFound:= True;
+                                               end;
+                                             end;
+                                       end;
+                                   end
+                                else
+                                   PictureNotFound:= True; // it's not clone and file not found
+                              end;
+                            False: PictureNotFound:= True;
+                          end;
+                        end;
+                   end;
+                 False: PictureNotFound:= True; // could not open .zip file to get image
+               end;
              end;
            False:
              begin
@@ -9083,7 +8365,6 @@ begin
        end;
        ShowingPicture:= False;
        ImageChanged:= not SearchString(PictureName, ImageHolder.Hint);
-       //ImageChanged:= True;
        if PicturesToolBar.Tag = 0 then
           ButViewNextPicture.Tag:= 0;
      end;
@@ -9114,7 +8395,6 @@ begin
                   Result:= 'No Change';
                   ImageHolder.Bitmap.EndUpdate;
                 end;
-             FreeAndNil(PictureStream);
            end;
          False:
            begin
@@ -9168,8 +8448,8 @@ begin
                end;
           end;
        if FormPreferences.StretchLargerPictures.Checked then
-          SetAspectRatio(Picture);
-       ImageHolder.Repaint;
+          SetAspectRatio;
+       ImageHolder.Changed;
        ImageHolder.Bitmap.EndUpdate;
      end
   else
@@ -9180,6 +8460,7 @@ begin
        FreeAndNil(ListROMsName);
        FreeAndNil(ListROMsNameFullPath);
      end;
+  FreeAndNil(PictureStream);
   SetCurrentDir(FrontendPath);
 end;
 
@@ -9214,55 +8495,820 @@ begin
   FilePath:= SearchZIPFolder(OriginalGameName);
   if FilePath <> 'Not Found' then
      begin
-       GetContents(FilePath, False, True); // get files list (it's parent of a clone game)
-       for Loop:=0 to ListROMsName.Count -1 do
-       begin
-         // search for the file in ParentROMsName and if found increment counter...
-         if ParentListROMsName.IndexOf(ListROMsName[Loop]) > -1 then
-            Inc(FileCounter)
-         else
-            begin
-              if ((ListROMsCRC[Loop] <> '00000000') and (ListROMsCRC[Loop] <> '0000000') and
-                  (ListROMsCRC[Loop] <> '000000')) then
+       if GetContents(FilePath, False, True) then; // get files list (it's parent of a clone game)
+          begin
+            if ParentListROMsName.Count > 0 then
+               begin
+                 for Loop:=0 to ListROMsName.Count -1 do
                  begin
-                   CRCNumber:= StrToInt('$'+ListROMsCRC[Loop]);
-                   FixedCRCHex:= LowerCase(Format('%x', [CRCNumber]));
-                   if ParentListROMsCRC.IndexOf(FixedCRCHex) > -1 then
-                      Inc(FileCounter);
-                 end
-              else
-                 begin
-                   if ParentListROMsCRC.IndexOf(ListROMsCRC[Loop]) > -1 then
-                      Inc(FileCounter);
+                   // search for the file in ParentROMsName and if found increment counter...
+                   if ParentListROMsName.IndexOf(ListROMsName[Loop]) > -1 then
+                      Inc(FileCounter)
+                   else
+                      begin
+                        if Length(ListROMsCRC[Loop]) = 32 then
+                           Inc(FileCounter)
+                        else
+                        if ((ListROMsCRC[Loop] <> '00000000') and (ListROMsCRC[Loop] <> '0000000') and
+                            (ListROMsCRC[Loop] <> '000000') and (Length(ListROMsCRC[Loop]) <> 32)) then
+                           begin
+                             CRCNumber:= StrToInt('$'+ListROMsCRC[Loop]);
+                             FixedCRCHex:= LowerCase(Format('%x', [CRCNumber]));
+                             if ParentListROMsCRC.IndexOf(FixedCRCHex) > -1 then
+                                Inc(FileCounter);
+                           end
+                        else
+                           begin
+                             if ParentListROMsCRC.IndexOf(ListROMsCRC[Loop]) > -1 then
+                                Inc(FileCounter);
+                           end;
+                      end;
                  end;
-            end;
-       end;
-       Result:= (FileCounter = ListROMsName.Count);
+                 Result:= (FileCounter = ListROMsName.Count);
+               end
+            else
+               Result:= False;
+          end;
      end;
 end;
 
+procedure TFormMain.CallRefreshGames(RefreshMode: ShortInt);
+var
+  {StartClock, EndClock, }NumGamesChanged: Integer;
+  ListGamesTemp, SamplesList: THashedStringList;
+  Loop, CurrentProgress, TotalProgress: Integer;
+  DelClassicMR, DelClassicMV, DelClassicCR, DelClassicCV, DelNeoGeoM, DelNeoGeoC, DelClassicBIOS, DelNeoGeoBIOS: Boolean;
+  DelUnClassicMR, DelUnClassicMV, DelUnClassicCR, DelUnClassicCV, DelUnNeoGeoM, DelUnNeoGeoC, DelUnClassicBIOS, DelUnNeoGeoBIOS: Boolean;
+
+  VerifyGameMsg, VerifyBiosMsg, SelectedGameCaption: String;
+
+  procedure FreeMemoryVars;
+  begin
+    FreeAndNil(ListGamesTemp);
+    FreeAndNil(SamplesList);
+    SetCurrentDir(FrontendPath);
+  end;
+
+begin
+  if (Length(GamesList) = 0) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
+     Exit;
+
+  FormStatus.Show;
+  FormStatus.LabelProgress.Caption:= '';
+  FormStatus.KeyPreview:= True;
+  case RefreshMode of
+    0: GetMessagesLng('Status Messages', 'RefreshGamesListTitle', 'Refresh Games List',
+                      'Status Messages', 'LoadGamesDATFile', 'Loading .dat games files to memory. Please, wait a moment...');
+    1: GetMessagesLng('Status Messages', 'RefreshGamesListAvailableTitle', 'Refresh Games List (Available Games Only)',
+                      'Status Messages', 'LoadGamesDATFile', 'Loading .dat games files to memory. Please, wait a moment...');
+    2: GetMessagesLng('Status Messages', 'RefreshGamesListUnavailableTitle', 'Refresh Games List (Unavailable Games Only)',
+                      'Status Messages', 'LoadGamesDATFile', 'Loading .dat games files to memory. Please, wait a moment...');
+  end;
+
+  FormStatus.LabelStatusType.Caption:= MessageText[0];
+  SelectedGameCaption:= GamesList[SelectedGame].eDescription;
+  //NumGamesChanged:= 0;
+  //StartClock:= GetTickCount();
+  DelClassicMR:= False;
+  DelClassicMV:= False;
+  DelClassicCR:= False;
+  DelClassicCV:= False;
+  DelNeoGeoM:= False;
+  DelNeoGeoC:= False;
+  DelClassicBIOS:= False;
+  DelNeoGeoBIOS:= False;
+  DelUnClassicMR:= False;
+  DelUnClassicMV:= False;
+  DelUnClassicCR:= False;
+  DelUnClassicCV:= False;
+  DelUnNeoGeoM:= False;
+  DelUnNeoGeoC:= False;
+  DelUnClassicBIOS:= False;
+  DelUnNeoGeoBIOS:= False;
+
+  FormStatus.LabelMessage.Caption:= MessageText[1];
+  FormStatus.LabelMessage.Refresh;
+
+
+  ClassicMRList:= THashedStringList.Create;
+  ClassicMVList:= THashedStringList.Create;
+  ClassicCRList:= THashedStringList.Create;
+  ClassicCVList:= THashedStringList.Create;
+  NeoGeoMList:= THashedStringList.Create;
+  NeoGeoCList:= THashedStringList.Create;
+  UnavailableClassicMRList:= THashedStringList.Create;
+  UnavailableClassicMVList:= THashedStringList.Create;
+  UnavailableClassicCRList:= THashedStringList.Create;
+  UnavailableClassicCVList:= THashedStringList.Create;
+  UnavailableNeoGeoMList:= THashedStringList.Create;
+  UnavailableNeoGeoCList:= THashedStringList.Create;
+  BiosList:= THashedStringList.Create;
+  UnavailableBiosList:= THashedStringList.Create;
+
+  ClassicMRList.LoadFromFile(FrontendPath+'resources\ClassicMR.dat');
+  ClassicMVList.LoadFromFile(FrontendPath+'resources\ClassicMV.dat');
+  ClassicCRList.LoadFromFile(FrontendPath+'resources\ClassicCR.dat');
+  ClassicCVList.LoadFromFile(FrontendPath+'resources\ClassicCV.dat');
+  NeoGeoMList.LoadFromFile(FrontendPath+'resources\NeoGeoM.dat');
+  NeoGeoCList.LoadFromFile(FrontendPath+'resources\NeoGeoC.dat');
+  UnavailableClassicMRList.LoadFromFile(FrontendPath+'resources\UnClassicMR.dat');
+  UnavailableClassicMVList.LoadFromFile(FrontendPath+'resources\UnClassicMV.dat');
+  UnavailableClassicCRList.LoadFromFile(FrontendPath+'resources\UnClassicCR.dat');
+  UnavailableClassicCVList.LoadFromFile(FrontendPath+'resources\UnClassicCV.dat');
+  UnavailableNeoGeoMList.LoadFromFile(FrontendPath+'resources\UnNeoGeoM.dat');
+  UnavailableNeoGeoCList.LoadFromFile(FrontendPath+'resources\UnNeoGeoC.dat');
+  BiosList.LoadFromFile(FrontendPath+'resources\Bios.dat');
+  UnavailableBiosList.LoadFromFile(FrontendPath+'resources\UnBios.dat');
+
+  case RefreshMode of
+    0: // All Games
+      begin
+        TotalProgress:= (UnavailableClassicMRList.Count+UnavailableClassicMVList.Count+UnavailableClassicCRList.Count+UnavailableClassicCVList.Count+
+                         UnavailableNeoGeoMList.Count+UnavailableNeoGeoCList.Count+UnavailableBiosList.Count+
+                         ClassicMRList.Count+ClassicMVList.Count+ClassicCRList.Count+ClassicCVList.Count+NeoGeoMList.Count+NeoGeoCList.Count+BiosList.Count);
+      end;
+    1: // Available Games
+      begin
+        TotalProgress:= (ClassicMRList.Count+ClassicMVList.Count+ClassicCRList.Count+ClassicCVList.Count+NeoGeoMList.Count+NeoGeoCList.Count+BiosList.Count);
+      end;
+    2: // Unavailable Games
+      begin
+        TotalProgress:= (UnavailableClassicMRList.Count+UnavailableClassicMVList.Count+UnavailableClassicCRList.Count+UnavailableClassicCVList.Count+
+                         UnavailableNeoGeoMList.Count+UnavailableNeoGeoCList.Count+UnavailableBiosList.Count);
+      end;
+  end;
+
+  ClassicMRList.BeginUpdate;
+  ClassicMVList.BeginUpdate;
+  ClassicCRList.BeginUpdate;
+  ClassicCVList.BeginUpdate;
+  NeoGeoMList.BeginUpdate;
+  NeoGeoCList.BeginUpdate;
+  UnavailableClassicMRList.BeginUpdate;
+  UnavailableClassicMVList.BeginUpdate;
+  UnavailableClassicCRList.BeginUpdate;
+  UnavailableClassicCVList.BeginUpdate;
+  UnavailableNeoGeoMList.BeginUpdate;
+  UnavailableNeoGeoCList.BeginUpdate;
+  BiosList.BeginUpdate;
+  UnavailableBiosList.BeginUpdate;
+
+  GetSamplesFolder;
+  
+  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadROMsDATFile',
+                                                    'Loading file "ROMs.dat" to memory. Please, wait a moment...');
+  FormStatus.LabelMessage.Refresh;
+  ListROMs:= THashedStringList.Create;
+  ListROMs.LoadFromFile(FrontendPath+'resources\ROMs.dat');
+
+  ListGamesTemp:= THashedStringList.Create; // only for All Games
+
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
+
+
+  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'VerifyGames',
+                                                    'Verifying games. Please, wait a moment...');
+  FormStatus.LabelMessage.Refresh;
+  FormStatus.LabelProgress.Tag:= 0;
+  CurrentProgress:= 0;
+  LoadFolders;
+
+  // Refresh Unavailable Classic Master Raster
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableClassicMRList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableClassicMRList[Loop]);
+      if RefreshGames(UnavailableClassicMRList, ClassicMRList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnClassicMR:= True;
+           DelClassicMR:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Classic Master Vector
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableClassicMVList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableClassicMVList[Loop]);
+      if RefreshGames(UnavailableClassicMVList, ClassicMVList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnClassicMV:= True;
+           DelClassicMV:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Classic Clone Raster
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableClassicCRList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableClassicCRList[Loop]);
+      if RefreshGames(UnavailableClassicCRList, ClassicCRList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnClassicCR:= True;
+           DelClassicCR:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Classic Clone Vector
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableClassicCVList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableClassicCVList[Loop]);
+      if RefreshGames(UnavailableClassicCVList, ClassicCVList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnClassicCV:= True;
+           DelClassicCV:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Neo Geo Master
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableNeoGeoMList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableNeoGeoMList[Loop]);
+      if RefreshGames(UnavailableNeoGeoMList, NeoGeoMList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnNeoGeoM:= True;
+           DelNeoGeoM:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Neo Geo Clone
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableNeoGeoCList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableNeoGeoCList[Loop]);
+      if RefreshGames(UnavailableNeoGeoCList, NeoGeoCList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnNeoGeoC:= True;
+           DelNeoGeoC:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Unavailable Bios
+  if RefreshMode in [0, 2] then
+  begin
+    for Loop:= UnavailableBiosList.Count -1 downto 0 do
+    begin
+      GetROMFields(UnavailableBiosList[Loop]);
+      if RefreshGames(UnavailableBiosList, BiosList, SamplesList, Loop) then
+         begin
+           Inc(NumGamesChanged);
+           if RefreshMode = 0 then
+              ListGamesTemp.Add(mName);
+           DelUnClassicBIOS:= True;
+           DelUnNeoGeoBIOS:= True;
+           DelClassicBIOS:= True;
+           DelNeoGeoBIOS:= True;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Classic Master Raster
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= ClassicMRList.Count -1 downto 0 do
+    begin
+      GetROMFields(ClassicMRList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(ClassicMRList, UnavailableClassicMRList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelClassicMR:= True;
+                DelUnClassicMR:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Classic Master Vector
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= ClassicMVList.Count -1 downto 0 do
+    begin
+      GetROMFields(ClassicMVList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+          if RefreshGames(ClassicMVList, UnavailableClassicMVList, SamplesList, Loop) then
+             begin
+               Inc(NumGamesChanged);
+               DelClassicMV:= True;
+               DelUnClassicMV:= True;
+             end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Classic Clone Raster
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= ClassicCRList.Count -1 downto 0 do
+    begin
+      GetROMFields(ClassicCRList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(ClassicCRList, UnavailableClassicCRList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelClassicCR:= True;
+                DelUnClassicCR:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Classic Clone Vector
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= ClassicCVList.Count -1 downto 0 do
+    begin
+      GetROMFields(ClassicCVList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(ClassicCVList, UnavailableClassicCVList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelClassicCV:= True;
+                DelUnClassicCV:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Neo Geo Master
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= NeoGeoMList.Count -1 downto 0 do
+    begin
+      GetROMFields(NeoGeoMList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(NeoGeoMList, UnavailableNeoGeoMList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelNeoGeoM:= True;
+                DelUnNeoGeoM:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Neo Geo Clone
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= NeoGeoCList.Count -1 downto 0 do
+    begin
+      GetROMFields(NeoGeoCList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(NeoGeoCList, UnavailableNeoGeoCList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelNeoGeoC:= True;
+                DelUnNeoGeoC:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  // Refresh Bios
+  if RefreshMode in [0, 1] then
+  begin
+    for Loop:= BiosList.Count -1 downto 0 do
+    begin
+      GetROMFields(BiosList[Loop]);
+      if ListGamesTemp.IndexOf(mName) = -1 then
+         begin
+           if RefreshGames(BiosList, UnavailableBiosList, SamplesList, Loop) then
+              begin
+                Inc(NumGamesChanged);
+                DelClassicBIOS:= True;
+                DelNeoGeoBIOS:= True;
+                DelUnClassicBIOS:= True;
+                DelUnNeoGeoBIOS:= True;
+              end;
+         end;
+      Inc(CurrentProgress);
+      UpdateProgressLabel(CurrentProgress, TotalProgress);
+      Application.ProcessMessages;
+      if StopRefreshAllGames then
+         begin
+           FreeMemoryVars;
+           RefreshGamesCanceledMessage;
+           Exit;
+         end;
+    end;
+  end;
+
+  ClassicMRList.EndUpdate;
+  ClassicMVList.EndUpdate;
+  ClassicCRList.EndUpdate;
+  ClassicCVList.EndUpdate;
+  NeoGeoMList.EndUpdate;
+  NeoGeoCList.EndUpdate;
+  UnavailableClassicMRList.EndUpdate;
+  UnavailableClassicMVList.EndUpdate;
+  UnavailableClassicCRList.EndUpdate;
+  UnavailableClassicCVList.EndUpdate;
+  UnavailableNeoGeoMList.EndUpdate;
+  UnavailableNeoGeoCList.EndUpdate;
+  BiosList.EndUpdate;
+
+  FreeMemoryVars;
+  FreeAndNil(SamplesList);
+  SetCurrentDir(FrontendPath);
+
+  if DelUnClassicMR then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMR');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableClassicMRList.SaveToFile(FrontendPath+'resources\UnClassicMR.dat');
+     end;
+
+  if DelUnClassicMV then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMV');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableClassicMVList.SaveToFile(FrontendPath+'resources\UnClassicMV.dat');
+     end;
+
+  if DelUnClassicCR then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCR');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableClassicCRList.SaveToFile(FrontendPath+'resources\UnClassicCR.dat');
+     end;
+
+  if DelUnClassicCV then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCV');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableClassicCVList.SaveToFile(FrontendPath+'resources\UnClassicCV.dat');
+     end;
+
+  if DelUnNeoGeoM then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoM');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableNeoGeoMList.SaveToFile(FrontendPath+'resources\UnNeoGeoM.dat');
+     end;
+
+  if DelUnNeoGeoC then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoC');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableNeoGeoCList.SaveToFile(FrontendPath+'resources\UnNeoGeoC.dat');
+     end;
+
+  if ((DelUnClassicBIOS) or (DelUnNeoGeoBIOS)) then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicBios');
+       FormStatus.LabelMessage.Refresh;
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoBios');
+       FormStatus.LabelMessage.Refresh;
+       UnavailableBiosList.SaveToFile(FrontendPath+'resources\UnBIOS.dat');
+     end;
+
+  if DelClassicMR then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMR');
+       FormStatus.LabelMessage.Refresh;
+       ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMR.dat');
+     end;
+
+  if DelClassicMV then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMV');
+       FormStatus.LabelMessage.Refresh;
+       ClassicMVList.SaveToFile(FrontendPath+'resources\ClassicMV.dat');
+     end;
+
+  if DelClassicCR then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCR');
+       FormStatus.LabelMessage.Refresh;
+       ClassicCRList.SaveToFile(FrontendPath+'resources\ClassicCR.dat');
+     end;
+
+  if DelClassicCV then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCV');
+       FormStatus.LabelMessage.Refresh;
+       ClassicCVList.SaveToFile(FrontendPath+'resources\ClassicCV.dat');
+     end;
+
+  if DelNeoGeoM then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoM');
+       FormStatus.LabelMessage.Refresh;
+       NeoGeoMList.SaveToFile(FrontendPath+'resources\NeoGeoM.dat');
+     end;
+
+  if DelNeoGeoC then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoC');
+       FormStatus.LabelMessage.Refresh;
+       NeoGeoCList.SaveToFile(FrontendPath+'resources\NeoGeoC.dat');
+     end;
+
+  if ((DelClassicBIOS) or (DelNeoGeoBIOS)) then
+     begin
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicBios');
+       FormStatus.LabelMessage.Refresh;
+       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoBios');
+       FormStatus.LabelMessage.Refresh;
+       BiosList.SaveToFile(FrontendPath+'resources\Bios.dat');
+     end;
+
+  FreeAndNil(ClassicMRList);
+  FreeAndNil(ClassicMVList);
+  FreeAndNil(ClassicCRList);
+  FreeAndNil(ClassicCVList);
+  FreeAndNil(NeoGeoMList);
+  FreeAndNil(NeoGeoCList);
+  FreeAndNil(UnavailableClassicMRList);
+  FreeAndNil(UnavailableClassicMVList);
+  FreeAndNil(UnavailableClassicCRList);
+  FreeAndNil(UnavailableClassicCVList);
+  FreeAndNil(UnavailableNeoGeoMList);
+  FreeAndNil(UnavailableNeoGeoCList);
+  FreeAndNil(BiosList);
+  FreeAndNil(UnavailableBiosList);
+  FreeAndNil(ListROMs);
+  FreeAndNil(SamplesList);
+
+  //EndClock:= GetTickCount();
+
+  FormStatus.LabelProgress.Caption:= '';
+  FormStatus.LabelProgress.Tag:= 0;
+  if NumGamesChanged <> 0 then
+     LoadROMClasses(False);
+
+  if Length(GamesList) > 0 then
+     begin
+        SortColumn(ColumnSorted, True);
+        SelectItem(FindGame(SelectedGame, SelectedGameCaption));
+     end
+  else
+     begin
+       ShowPicture('NoGamesAvailable', '', Picture, -1, True);
+       // no games on list, show the "No Games Available" image
+     end;
+  FormStatus.Close;
+end;
+
+function TFormMain.SearchSampleZip(List: THashedStringList; GameName: String): Boolean;
+var
+  Index: Integer;
+begin
+  Result:= False;
+  if not Assigned(List) then
+     begin
+       List:= THashedStringList.Create;
+       List.LoadFromFile(FrontendPath+'resources\samples.dat');
+     end;
+  Index:= List.IndexOf('game '+LowerCase(GameName));
+  if Index <> -1 then
+     begin
+       Result:= FileExists(samplesDir+'\'+Copy(List[Index], 6, Length(List[Index])-5)+'.zip');
+       if not Result then
+          if Pos('sampleof ', List[Index+1]) <> 0 then
+             Result:= FileExists(samplesDir+'\'+Copy(List[Index+1], 10, Length(List[Index+1])-9)+'.zip');
+     end;
+end;
+
+procedure TFormMain.GetSamplesFolder;
+var
+  MAMEIniFile: THashedStringList;
+  Loop: Integer;
+begin
+  MAMEIniFile:= THashedStringList.Create;
+  MAMEIniFile.LoadFromFile(ExtractFilePath(EmulatorExecutable[MenuCurrentEmulator.Tag])+GetExecutableINIFileName(EmulatorExecutable[MenuCurrentEmulator.Tag]));
+  for Loop:=0 to MAMEIniFile.Count -1 do
+  begin
+    if Copy(MAMEIniFile[Loop], 1, 11) = 'samplepath ' then
+       begin
+         samplesDir:= ExtractMAMEIniValue(MAMEIniFile[Loop]);
+         Break;
+       end;
+  end;
+  FreeAndNil(MAMEIniFile);
+  if samplesDir = '' then
+     samplesDir:= ExtractFilePath(EmulatorExecutable[MenuCurrentEmulator.Tag])+'samples'
+  else
+     begin
+       if Pos(':', samplesDir) = 0 then
+          samplesDir:= ExtractFilePath(EmulatorExecutable[MenuCurrentEmulator.Tag])+samplesDir;
+     end;
+end;
+
+function TFormMain.UpdateSampleInfo(ListTemp: THashedStringList; GameName: String): Boolean;
+begin
+  Result:= False;
+  if mSamples <> '' then
+     begin
+       case SearchSampleZip(ListTemp, GameName) of
+         True:
+           begin
+             if mSamples = '0' then
+                begin
+                  Result:= True;
+                  mSamples:= '1';
+                end;
+           end;
+         False:
+           begin
+             if mSamples = '1' then
+                begin
+                  Result:= True;
+                  mSamples:= '0';
+                end;
+           end;
+       end;
+     end;
+end;
+
+
 function TFormMain.RefreshGame: Boolean;
 var
-  GameFound, GameFoundMerged, ChangeGameStatus, NewVersionAdded: Boolean;
-  DATFileName1, DATFileName2, ROMDataLine, CloneZIPFolder, LineResult: String;
+  GameFound, GameFoundMerged, ChangeGameStatus, FoundSamples: Boolean;
+  DATFileName1, DATFileName2, ROMDataLine, CloneZIPFolder: String;
   LinePosition, Loop: Integer;
   GameList1, GameList2: THashedStringList;
+  SamplesList: THashedStringList;
+
+  procedure UpdateGameInfo;
+  var
+    LoopInt: Integer;
+  begin
+    ChangeGameStatus:= False;
+    ROMDataLine:= PopulateROMDataLine;
+    GameList1:= THashedStringList.Create;
+    GameList1.LoadFromFile(DATFileName1);
+    for LoopInt:=0 to GameList1.Count -1 do
+    begin
+      if SearchString('¬'+mDescription+'¬', GameList1[LoopInt]) then
+         begin
+           GameList1[LoopInt]:= ROMDataLine;
+           Break;
+         end;
+    end;
+    GameList1.SaveToFile(DATFileName1);
+    FreeAndNil(GameList1);
+  end;
+
 begin
   ChangeGameStatus:= True;
   Result:= True;
-
-  case Assigned(CategoriesList) of
-    True : LineResult:= CategoriesList.ReadString('VerAdded', mName, 'Error');
-    False: LineResult:= 'Error';
-  end;
-  if LineResult <> 'Error' then
-     begin
-       if LineResult <> mVersionAdded then
-          begin
-            mVersionAdded:= LineResult;
-            NewVersionAdded:= True;
-          end;
-     end;
+  GetSamplesFolder;
 
   case mROMIdentification of
     0: DATFileName1:= FrontendPath+'resources\ClassicMR.dat';
@@ -9277,16 +9323,13 @@ begin
     9: DATFileName1:= FrontendPath+'resources\UnClassicCV.dat';
    10: DATFileName1:= FrontendPath+'resources\UnNeoGeoM.dat';
    11: DATFileName1:= FrontendPath+'resources\UnNeoGeoC.dat';
-   12, 13: DATFileName1:= FrontendPath+'resources\BIOS.dat';
-   14, 15: DATFileName1:= FrontendPath+'resources\UnBIOS.dat';
+   12, 13: DATFileName1:= FrontendPath+'resources\Bios.dat';
+   14, 15: DATFileName1:= FrontendPath+'resources\UnBios.dat';
   end;
 
-  case SearchZIP(mName) of
-    True:
-      begin
-        GameFound:= True;
-        GameFoundMerged:= False;
-      end;
+  GameFound:= SearchZIP(mName);
+  case GameFound of
+    True: GameFoundMerged:= False;
     False:
       begin
         if mClone <> '' then
@@ -9311,25 +9354,13 @@ begin
              CloneZIPFolder:= SearchZIPFolder(mClone);
              if CloneZIPFolder <> 'Not Found' then
                 begin
-                  GetContents(CloneZIPFolder,False, True);
-                  case FoundMerged(mName, mClone) of
-                    True:
-                      begin
-                        GameFound:= False;
-                        GameFoundMerged:= True;
-                      end;
-                    False:
-                      begin
-                        GameFound:= False;
-                        GameFoundMerged:= False;
-                      end;
+                  case GetContents(CloneZIPFolder, False, True) of
+                    True : GameFoundMerged:= FoundMerged(mName, mClone);
+                    False: GameFoundMerged:= False;
                   end;
                 end
              else
-                begin
-                  GameFound:= False;
-                  GameFoundMerged:= False;
-                end;
+                GameFoundMerged:= False;
 
              FreeAndNil(ListROMsName);
              FreeAndNil(ListROMsSize);
@@ -9339,13 +9370,11 @@ begin
              FreeAndNil(ParentListROMsCRC);
            end
         else
-           begin
-             GameFound:= False;
-             GameFoundMerged:= False;
-           end;
+           GameFoundMerged:= False;
       end;
   end;
 
+  FoundSamples:= UpdateSampleInfo(SamplesList, mName);
   case GameFound of
     True:
       begin
@@ -9383,35 +9412,24 @@ begin
           14:
            begin
              mROMIdentification:= 12;
-             DATFileName2:= FrontendPath+'resources\BIOS.dat';
+             DATFileName2:= FrontendPath+'resources\Bios.dat';
            end;
           15:
            begin
              mROMIdentification:= 13;
-             DATFileName2:= FrontendPath+'resources\BIOS.dat';
+             DATFileName2:= FrontendPath+'resources\Bios.dat';
            end;
         else
-        if (mMerged = 'Yes') or (NewVersionAdded) then
+        if mMerged = '1' then
            begin
              // gamefile was found but here is set as available and merged, so will change only the
              // "Merged" status
-             if mMerged = 'Yes' then
-                mMerged:= '';
-             ChangeGameStatus:= False;
-             ROMDataLine:= PopulateROMDataLine;
-             GameList1:= THashedStringList.Create;
-             GameList1.LoadFromFile(DATFileName1);
-             for Loop:=0 to GameList1.Count -1 do
-             begin
-               if SearchString('¬'+mDescription+'¬', GameList1[Loop]) then
-                  begin
-                    GameList1[Loop]:= ROMDataLine;
-                    Break;
-                  end;
-             end;
-             GameList1.SaveToFile(DATFileName1);
-             FreeAndNil(GameList1);
+             mMerged:= '';
+             UpdateGameInfo;
            end
+        else
+        if FoundSamples then
+           UpdateGameInfo
         else
            begin
              ChangeGameStatus:= False;
@@ -9429,60 +9447,50 @@ begin
                  begin
                    mROMIdentification:= 0;
                    DATFileName2:= FrontendPath+'resources\ClassicMR.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 7:
                  begin
                    mROMIdentification:= 1;
                    DATFileName2:= FrontendPath+'resources\ClassicMV.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 8:
                  begin
                    mROMIdentification:= 2;
                    DATFileName2:= FrontendPath+'resources\ClassicCR.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 9:
                  begin
                    mROMIdentification:= 3;
                    DATFileName2:= FrontendPath+'resources\ClassicCV.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 10:
                  begin
                    mROMIdentification:= 4;
                    DATFileName2:= FrontendPath+'resources\NeoGeoM.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 11:
                  begin
                    mROMIdentification:= 5;
                    DATFileName2:= FrontendPath+'resources\NeoGeoC.dat';
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
               else
-              if (mMerged = '') or (NewVersionAdded) then
+              if mMerged = '' then
                  begin
                    ChangeGameStatus:= False;
                    // gamefile was found but here is set as available and not merged, so will change only the
                    // "Merged" status
-                   if mMerged = '' then
-                      mMerged:= 'Yes';
-                   ROMDataLine:= PopulateROMDataLine;
-                   GameList1:= THashedStringList.Create;
-                   GameList1.LoadFromFile(DATFileName1);
-                   for Loop:=0 to GameList1.Count -1 do
-                   begin
-                     if SearchString('¬'+mDescription+'¬', GameList1[Loop]) then
-                        begin
-                          GameList1[Loop]:= ROMDataLine;
-                          Break;
-                        end;
-                   end;
-                   GameList1.SaveToFile(DATFileName1);
-                   FreeAndNil(GameList1);
+                   mMerged:= '1';
+                   UpdateGameInfo;
                  end
+              else
+              if FoundSamples then
+                 UpdateGameInfo
               else
                  begin
                    ChangeGameStatus:= False;
@@ -9532,7 +9540,7 @@ begin
                 12:
                  begin
                    mROMIdentification:= 14;
-                   DATFileName2:= FrontendPath+'resources\UnBIOS.dat';
+                   DATFileName2:= FrontendPath+'resources\UnBios.dat';
                    mMerged:= '';
                  end;
                 13:
@@ -9542,32 +9550,19 @@ begin
                    mMerged:= '';
                  end;
               else
+              if FoundSamples then
+                 UpdateGameInfo
+              else
                  begin
                    ChangeGameStatus:= False;
-                   Result:= NewVersionAdded;
-                   if Result then
-                      begin
-                        ROMDataLine:= PopulateROMDataLine;
-                        GameList1:= THashedStringList.Create;
-                        GameList1.LoadFromFile(DATFileName1);
-                        for Loop:=0 to GameList1.Count -1 do
-                        begin
-                          if SearchString('¬'+mDescription+'¬', GameList1[Loop]) then
-                             begin
-                               GameList1[Loop]:= ROMDataLine;
-                               Break;
-                             end;
-                        end;
-                        GameList1.SaveToFile(DATFileName1);
-                        FreeAndNil(GameList1);
-                      end;
+                   Result:= False;
                  end;
               end;
             end;
         end;
       end;
   end;
-
+  FreeAndNil(SamplesList);
   if ChangeGameStatus then
      begin
        ROMDataLine:= PopulateROMDataLine;
@@ -9595,35 +9590,27 @@ end;
 
 // This procedure is for the Full Database Refresh
 // not for the single refresh
-function TFormMain.RefreshGames(GamesList1: THashedStringList; GamesList2: THashedStringList; GamesList1Position: Integer): Boolean;
+function TFormMain.RefreshGames(GamesList1, GamesList2, SamplesTempList: THashedStringList; GamesList1Position: Integer): Boolean;
 var
-  GameFound, GameFoundMerged, ChangeGameStatus, NewVersionAdded: Boolean;
+  GameFound, GameFoundMerged, ChangeGameStatus, FoundSamples: Boolean;
   LinePosition, Loop: Integer;
-  ROMDataLine, CloneZIPFolder, LineResult: String;
+  ROMDataLine, CloneZIPFolder: String;
+
+  procedure UpdateGameInfo;
+  begin
+    ChangeGameStatus:= False;
+    ROMDataLine:= PopulateROMDataLine;
+    GamesList1[GamesList1Position]:= ROMDataLine;
+  end;
+
 begin
   ChangeGameStatus:= True;
   Result:= True;
-  NewVersionAdded:= False;
 
-  case Assigned(CategoriesList) of
-    True : LineResult:= CategoriesList.ReadString('VerAdded', mName, 'Error');
-    False: LineResult:= 'Error';
-  end;
-  if LineResult <> 'Error' then
-     begin
-       if LineResult <> mVersionAdded then
-          begin
-            mVersionAdded:= LineResult;
-            NewVersionAdded:= True;
-          end;
-     end;
-
-  case SearchZIP(mName) of
-    True:
-      begin
-        GameFound:=True;
-        GameFoundMerged:=False;
-      end;
+  FoundSamples:= UpdateSampleInfo(SamplesTempList, mName);
+  GameFound:= SearchZIP(mName);
+  case GameFound of
+    True: GameFoundMerged:=False;
     False:
       begin
         if mClone <> '' then
@@ -9648,25 +9635,13 @@ begin
              CloneZIPFolder:= SearchZIPFolder(mClone);
              if CloneZIPFolder <> 'Not Found' then
                 begin
-                  GetContents(CloneZIPFolder,False, True);
-                  case FoundMerged(mName, mClone) of
-                    True:
-                      begin
-                        GameFound:= False;
-                        GameFoundMerged:= True;
-                      end;
-                    False:
-                      begin
-                        GameFound:= False;
-                        GameFoundMerged:= False;
-                      end;
+                  case GetContents(CloneZIPFolder, False, True) of
+                    True : GameFoundMerged:= FoundMerged(mName, mClone);
+                    False: GameFoundMerged:= False;
                   end;
                 end
              else
-                begin
-                  GameFound:= False;
-                  GameFoundMerged:= False;
-                end;
+                GameFoundMerged:= False;
 
              FreeAndNil(ListROMsName);
              FreeAndNil(ListROMsSize);
@@ -9676,10 +9651,7 @@ begin
              FreeAndNil(ParentListROMsCRC);
            end
         else
-           begin
-             GameFound:= False;
-             GameFoundMerged:= False;
-           end;
+           GameFoundMerged:= False;
       end;
   end;
 
@@ -9696,16 +9668,16 @@ begin
           14: mROMIdentification:= 12;
           15: mROMIdentification:= 13;
         else
-        if (mMerged = 'Yes') or (NewVersionAdded) then
+        if mMerged = '1' then
            begin
              // gamefile was found but here is set as available and merged, so will change only the
              // "Merged" status
-             if mMerged = 'Yes' then
-                mMerged:= '';
-             ChangeGameStatus:= False;
-             ROMDataLine:= PopulateROMDataLine;
-             GamesList1[GamesList1Position]:= ROMDataLine;
+             mMerged:= '';
+             UpdateGameInfo;
            end
+        else
+        if FoundSamples then
+           UpdateGameInfo
         else
            begin
              ChangeGameStatus:= False;
@@ -9722,44 +9694,44 @@ begin
                 6:
                  begin
                    mROMIdentification:= 0;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 7:
                  begin
                    mROMIdentification:= 1;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 8:
                  begin
                    mROMIdentification:= 2;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 9:
                  begin
                    mROMIdentification:= 3;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 10:
                  begin
                    mROMIdentification:= 4;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
                 11:
                  begin
                    mROMIdentification:= 5;
-                   mMerged:= 'Yes';
+                   mMerged:= '1';
                  end;
               else
-              if (mMerged = '') or (NewVersionAdded) then
+              if mMerged = '' then
                  begin
-                   ChangeGameStatus:= False;
                    // gamefile was found but here is set as available and not merged, so will change only the
                    // "Merged" status
-                   if mMerged = '' then
-                      mMerged:= 'Yes';
-                   ROMDataLine:= PopulateROMDataLine;
-                   GamesList1[GamesList1Position]:= ROMDataLine;
+                   mMerged:= '1';
+                   UpdateGameInfo;
                  end
+              else
+              if FoundSamples then
+                 UpdateGameInfo
               else
                  begin
                    ChangeGameStatus:= False;
@@ -9811,21 +9783,18 @@ begin
                    mMerged:= '';
                  end;
               else
+              if FoundSamples then
+                 UpdateGameInfo
+              else
                  begin
                    ChangeGameStatus:= False;
-                   Result:= NewVersionAdded;
-                   if Result then
-                      begin
-                        ROMDataLine:= PopulateROMDataLine;
-                        GamesList1[GamesList1Position]:= ROMDataLine;
-                      end;
+                   Result:= False;
                  end;
               end;
             end;
         end;
       end;
   end;
-
   if ChangeGameStatus then
      begin
        ROMDataLine:= PopulateROMDataLine;
@@ -9837,35 +9806,34 @@ end;
 
 procedure TFormMain.SetCustomOptions(GameName: String; Driver: Boolean);
 begin
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-  if not Assigned(FormMAMECustomConfiguration) then
-     FormMAMECustomConfiguration:= TFormMAMECustomConfiguration.Create(Self);
-  LoadMAMEConfigurationIcons(FormMAMECustomConfiguration.MAMEConfigImageList);
-  FormMAMECustomConfiguration.GameName:= GameName;
-  FormMAMECustomConfiguration.EmulatorString:= GetCurrentEmulatorExecutable;
-  FormMAMECustomConfiguration.ButtonReadMAMEGamenameIni.Caption:= Format(GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), [GameName+'.ini']);
-  FormMAMECustomConfiguration.ButtonReadMAMEGamenameIni.Hint:= Format(GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), [GameName+'.ini']);
-  FormMAMECustomConfiguration.ShowModal;
-  FreeAndNil(FormMAMECustomConfiguration);
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
+  if not Assigned(FormMAMEConfiguration) then
+     FormMAMEConfiguration:= TFormMAMEConfiguration.Create(Self);
+  LoadMAMEConfigurationIcons(FormMAMEConfiguration.MAMEConfigImageList);
+  FormMAMEConfiguration.Tag:= 1; // means custom options
+  FormMAMEConfiguration.GameName:= GameName;
+  FormMAMEConfiguration.EmulatorString:= EmulatorExecutable[ButtonExecutablesMode.Tag];
+  GetMessagesLng('Resource', 'ButtonReadIni', '&Read "%s"',
+                 'Resource', 'ButtonReadIniHint', 'Read all data from file "%s"');
+  FormMAMEConfiguration.ReadMAMEIni.Caption:= Format(MessageText[0], [GameName+'.ini']);
+  FormMAMEConfiguration.ReadMAMEIni.Hint:= Format(MessageText[1], [GameName+'.ini']);
+  FormMAMEConfiguration.ShowModal;
+  FreeAndNil(FormMAMEConfiguration);
   SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormMain.DeleteCustomOptions(GameName: String);
 begin
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-  if GenerateMessage(GetLanguageText('Messages', 'CustomInitializationDeleteTitle', 'Delete Custom Initialization File'),
-                     Format(GetLanguageText('Messages', 'CustomInitializationDeleteMsg', 'Delete initialization file "%s". Are you sure ?'),
-                            [IniFilesDir+'\'+GameName+'.ini']), 1) = mrYes then
-     begin
-       DeleteFile(IniFilesDir+'\'+GameName+'.ini');
-     end;
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
+  GetMessagesLng('Messages', 'CustomInitializationDeleteTitle', 'Delete Custom Initialization File',
+                 'Messages', 'CustomInitializationDeleteMsg', 'Delete initialization file "%s". Are you sure ?');
+  if GenerateMessage(MessageText[0], Format(MessageText[1], [IniFilesDir+'\'+GameName+'.ini']), 1) = mrYes then
+     DeleteFile(IniFilesDir+'\'+GameName+'.ini');
   SetCurrentDir(FrontendPath);
-end;
-
-procedure TFormMain.CheckPlayTime;
-begin
-  if TotalPlayTime = '' then
-     TotalPlayTime:= '0';
 end;
 
 function TFormMain.ReadSelectedGamePlayTime(GameName: String): String;
@@ -9907,10 +9875,19 @@ begin
        INIFile.Strings[INIFile.IndexOfName(GameName)]:= GameName+'='+IntToStr(PlayTime)+'¬'+IntToStr(NumberPlay);
      end
   else
-     INIFile.Add(GameName+'='+IntToStr(TotalPlayTime)+'¬1');
+     begin
+       NumberPlay:= 1;
+       PlayTime:= TotalPlayTime;
+       INIFile.Add(GameName+'='+IntToStr(TotalPlayTime)+'¬1');
+     end;
 
   INIFile.SaveToFile(FrontendPath+'GamePlayTime.ini');
   FreeAndNil(INIFile);
+
+  // update selected game.
+  GamesList[SelectedGame].eGameTimesPlayed:= IntToStr(NumberPlay);
+  GamesList[SelectedGame].eGameTotalPlayTime:= GetPlayTime(PlayTime);
+  List.Invalidate;
 end;
 
 {
@@ -9934,6 +9911,8 @@ end;
   16 - Category
   17 - Version Added
   18 - Driver
+  19 - Game X Played
+  20 - Game Play Time
 }
 
 function TFormMain.GetColumnIndex(ColumnTagIndex: ShortInt): ShortInt;
@@ -9943,7 +9922,7 @@ begin
   Result:= -1;
   for Loop:=0 to List.Columns.Count -1 do
   begin
-    if List.Columns[Loop].ID = ColumnTagIndex then
+    if List.Column[Loop].ID = ColumnTagIndex then
        begin
          Result:= Loop;
          Break;
@@ -9963,11 +9942,12 @@ begin
 
   if Continue then
      begin
-       for Loop:=0 to List.Columns.Count -1 do
+       for Loop:=1 to List.Columns.Count -1 do
        begin
-         if List.Columns[Loop].ID = ColumnID then
+         if List.Column[Loop].ID = ColumnID then
             begin
-              List.Columns[Loop].Index:= NewPositionIndex;
+              if List.Column[Loop].Index <> NewPositionIndex then
+                 List.Column[Loop].Index:= NewPositionIndex;
               Break;
             end;
        end;
@@ -9994,7 +9974,7 @@ end;
 
 procedure TFormMain.UpdateColumnsVisibility;
 var
-  Loop, ColumnIndex: ShortInt;
+  Loop: ShortInt;
   INIFile: TIniFile;
 begin
   INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
@@ -10008,26 +9988,7 @@ begin
     case FormFilterGameColumns.ColumnsList.Items[Loop].Checked of
       True:
         begin
-          case FormFilterGameColumns.ColumnsList.Items[Loop].ImageIndex of
-             1: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Year', 65);
-             2: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Manufacturer', 150);
-             3: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Sound', 73);
-             4: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Frequency', 70);
-             5: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Samples', 83);
-             6: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'ControlType', 110);
-             7: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Video', 70);
-             8: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Orientation', 100);
-             9: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Resolution', 95);
-            10: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'DriverStatus', 85);
-            11: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'SoundStatus', 85);
-            12: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'ColorStatus', 85);
-            13: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Merged', 78);
-            14: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Name', 80);
-            15: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Clone', 80);
-            16: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Category', 180);
-            17: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'VersionAdded', 100);
-            18: List.Columns[Loop+1].Width:= INIFile.ReadInteger('Columns', 'Driver', 80);
-          end;
+          List.Columns[Loop+1].Width:= StrToInt(FormFilterGameColumns.ColumnsList.Items[Loop].SubItems[0]);
           List.Columns[Loop+1].Tag:= 1;
         end;
       False: List.Columns[Loop+1].Tag:= 0;
@@ -10050,18 +10011,35 @@ var
   Loop: ShortInt;
 begin
   Result:= True;
-  for Loop:=0 to 83 do
+  for Loop:=0 to 90 do
   begin
     if not FileExists(FrontendPath+'resources\images\toolbars\Main\toolbar\'+IntToStr(Loop)+'.ico') then
        Result:= False;
   end;
+  if not FileExists(FrontendPath+'resources\images\toolbars\Preferences\8.ico') then
+     Result:= False;
 
   if Result then
      begin
        if ToolbarButtonsImageList.Count > 0 then
           ToolbarButtonsImageList.Clear;
-       for Loop:= 0 to 83 do
+       for Loop:= 0 to 90 do
          AddDefaultIcons('Main\toolbar\'+IntToStr(Loop)+'.ico', ToolbarButtonsImageList, 1, False);
+       AddDefaultIcons('Preferences\8.ico', ToolbarButtonsImageList, 1, False);
+     end;
+
+  for Loop:=0 to 34 do
+  begin
+    if not FileExists(FrontendPath+'resources\images\toolbars\Main\toolbar\icons24\'+IntToStr(Loop)+'.ico') then
+       Result:= False;
+  end;
+
+  if Result then
+     begin
+       if ButtonsImageList.Count > 0 then
+          ButtonsImageList.Clear;
+       for Loop:= 0 to 34 do
+         AddDefaultIcons('Main\toolbar\icons24\'+IntToStr(Loop)+'.ico', ButtonsImageList, 1, False);
      end;
 end;
 
@@ -10096,8 +10074,7 @@ begin
             (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\UnavailableMaster.ico'))   and
             (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\UnavailableClone.ico'))    and
             (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\Bios.ico'))                and
-            (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\CustomGames.ico'))         and
-            (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\NoRealIcon.ico')));
+            (FileExists(FormPreferences.DefaultGameIconsFolder.Text+'\NoGameIcon.ico')));
 end;
 
 procedure TFormMain.ReadDefaultIconsFile;
@@ -10168,17 +10145,9 @@ begin
   AddDefaultIcons(FileString, BuiltInBigListImageList, 0, True);
   AddDefaultIcons(FileString, BuiltInSmallListImageList, 1, True);
 
-  FileString:= FormPreferences.DefaultGameIconsFolder.Text+'\CustomGames.ico';
-  AddDefaultIcons(FileString, BuiltInBigListImageList, 0, True);
-  AddDefaultIcons(FileString, BuiltInSmallListImageList, 1, True);
-
-  FileString:= FormPreferences.DefaultGameIconsFolder.Text+'\UnavailableMaster.ico';
-  AddDefaultIcons(FileString, BuiltInBigListImageList, 0, True);
-  AddDefaultIcons(FileString, BuiltInSmallListImageList, 1, True);
-
-  FileString:= FormPreferences.DefaultGameIconsFolder.Text+'\NoRealIcon.ico';
-  AddDefaultIcons(FileString, BigRealIconsImageList, 0, True);
-  AddDefaultIcons(FileString, SmallRealIconsImageList, 1, True);
+  FileString:= FormPreferences.DefaultGameIconsFolder.Text+'\NoGameIcon.ico';
+  AddDefaultIcons(FileString, BigGamesIconsImageList, 0, True);
+  AddDefaultIcons(FileString, SmallGamesIconsImageList, 1, True);
 end;
 
 // MAME Configuration screens
@@ -10187,16 +10156,18 @@ begin
   Result:= ((FileExists(FrontendPath+'resources\images\toolbars\Main\toolbar\77.ico')) and
             (FileExists(FrontendPath+'resources\images\toolbars\Main\toolbar\27.ico')) and
             (FileExists(FrontendPath+'resources\images\toolbars\MAMEConfiguration\2.ico')) and
-            (FileExists(FrontendPath+'resources\images\toolbars\MAMEConfiguration\3.ico')) and
-            (FileExists(FrontendPath+'resources\images\toolbars\MAMEConfiguration\4.ico')));
+            (FileExists(FrontendPath+'resources\images\toolbars\Preferences\8.ico')) and
+            (FileExists(FrontendPath+'resources\images\toolbars\Main\toolbar\25.ico')) and
+            (FileExists(FrontendPath+'resources\images\toolbars\MAMEConfiguration\5.ico')));
 
   if Result then
      begin
        AddDefaultIcons('Main\toolbar\77.ico', IconList, 1, False);
        AddDefaultIcons('Main\toolbar\27.ico', IconList, 1, False);
        AddDefaultIcons('MAMEConfiguration\2.ico', IconList, 1, False);
-       AddDefaultIcons('MAMEConfiguration\3.ico', IconList, 1, False);
-       AddDefaultIcons('MAMEConfiguration\4.ico', IconList, 1, False);
+       AddDefaultIcons('Preferences\8.ico', IconList, 1, False);
+       AddDefaultIcons('Main\toolbar\25.ico', IconList, 1, False);
+       AddDefaultIcons('MAMEConfiguration\5.ico', IconList, 1, False);
      end;
 end;
 
@@ -10224,18 +10195,18 @@ begin
     False: FileIcon.LoadFromFile(FrontendPath+'resources\images\toolbars\'+IconFileName);
   end;
 
-  if (IconList = SmallRealIconsImageList) or (IconList = BigRealIconsImageList) then
+  if (IconList = SmallGamesIconsImageList) or (IconList = BigGamesIconsImageList) then
      begin
        if IconList.Count > 0 then
           begin
             if IconList.Count > 1 then
                begin
-                 if Pos('NoRealIcon.ico', IconFileName) <> 0 then
+                 if Pos('NoGameIcon.ico', IconFileName) <> 0 then
                     IconList.ReplaceIcon(0, FileIcon);
                end
             else
                begin
-                 if Pos('NoRealIcon.ico', IconFileName) <> 0 then
+                 if Pos('NoGameIcon.ico', IconFileName) <> 0 then
                     IconList.ReplaceIcon(0, FileIcon)
                  else
                     IconIndex:= IconList.AddIcon(FileIcon);
@@ -10288,11 +10259,6 @@ begin
   MenuModeViewSmallIcons.Visible:= True;
   MenuModeViewList.Visible:= True;
   MenuModeViewDetails.Visible:= True;
-  ButtonModeView.Visible:= True;
-  ButtonModeViewBigIcons.Visible:= True;
-  ButtonModeViewSmallIcons.Visible:= True;
-  ButtonModeViewList.Visible:= True;
-  ButtonModeViewDetails.Visible:= True;
 
   // Menu "Show Favorite User Games" - Switch to Favorites List???
   MenuShowFavorite.Visible:= True;
@@ -10314,6 +10280,9 @@ begin
 
   // from main menu "Games"
   // Menu "Custom Game Options" - let user change options for a specific game???
+  MenuCustomSettings.Visible:= True;
+  PopupCustomSettings.Visible:= True;
+  
   MenuCustomGameOptions.Visible:= True;
   PopupCustomGameOptions.Visible:= True;
 
@@ -10371,11 +10340,14 @@ begin
   ButtonGameFAQ.Visible:= True;
   ButtonAutomaticGameInformation.Visible:= True;
 
-  // Menu "Delete gamename.zip" - let user delete .ZIP files???
-  MenuDeleteZIPFileName.Visible:= True;
-  PopupDeleteZIPFileName.Visible:= True;
+  // Menu "Delete gamename.zip" - let user delete .ZIP and Audio files???
+  MenuDeleteSelected.Visible:= True;
+  PopupDeleteSelected.Visible:= True;
 
   // Menu "Add to Favorites" - let user add games to favorite lists???
+  MenuFavoriteGames.Visible:= True;
+  PopupFavoriteGames.Visible:= True;
+
   MenuAddToFavorites.Visible:= True;
   PopupAddToFavorites.Visible:= True;
 
@@ -10387,22 +10359,17 @@ begin
   MenuAddGameParentalLock.Visible:= True;
   PopupAddGameParentalLock.Visible:= True;
 
-  // Menu "Real Icons" - let user switch between default and real icons???
-  MenuRealIconsItems.Visible:= True;
-  PopupRealIconsItems.Visible:= True;
+  // Menu "Icons" - let user switch between default and games icons???
+  MenuIcons.Visible:= True;
+  PopupIcons.Visible:= True;
 
-  // Menu "Create Icons List" - let user create/re-create a real icons list???
+  // Menu "Create Icons List" - let user create/re-create a games icons list???
   MenuCreateIconsList.Visible:= True;
   PopupCreateIconsList.Visible:= True;
 
   // Menu "Refresh Games" - let user refresh games???
   MenuRefreshGames.Visible:= True;
-  ButtonRefreshAllGames.Visible:= True;
   PopupRefreshGames.Visible:= True;
-
-  // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-  MenuCustomGamesManager.Visible:= True;
-  PopupCustomGamesManager.Visible:= True;
 
   // from main menu "Pictures"
   // Menu "Show Pictures" - let user toggle between pictures and no pictures???
@@ -10452,7 +10419,7 @@ begin
   // from main menu "Advanced Tools"
   // Menu "Parental Lock" and "Parental Lock Manager"
   MenuParentalLock.Visible:= True;
-  MenuParentalLockManager.Visible:= True;
+  MenuParentalLockEditor.Visible:= True;
 
   // Menu "User Profile" and "User Profile Manager"
   MenuUserProfile.Visible:= True;
@@ -10520,20 +10487,9 @@ begin
         // from main menu "View"
         //Change View Modes??? (Big Icons, Small Icons, List, Details)
         MenuModeViewBigIcons.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'GamesListShowBigIcons' ,1));
-        ButtonModeViewBigIcons.Visible:= MenuModeViewBigIcons.Visible;
-
         MenuModeViewSmallIcons.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'GamesListShowSmallIcons' ,1));
-        ButtonModeViewSmallIcons.Visible:= MenuModeViewSmallIcons.Visible;
-
         MenuModeViewList.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'GamesListShowList' ,1));
-        ButtonModeViewList.Visible:= MenuModeViewList.Visible;
-
         MenuModeViewDetails.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'GamesListShowDetails' ,1));
-        ButtonModeViewDetails.Visible:= MenuModeViewDetails.Visible;
-
-        if ((not ButtonModeViewBigIcons.Visible) and (not ButtonModeViewSmallIcons.Visible) and
-           (not ButtonModeViewList.Visible)      and (not ButtonModeViewDetails.Visible)) then
-           ButtonModeView.Visible:= False;
 
         // Menu "Show Favorite User Games" - Switch to Favorites List???
         MenuShowFavorite.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'ShowFavoriteGames' ,1));
@@ -10573,6 +10529,14 @@ begin
         // Menu "Game Category"
         MenuGameCategory.Visible:= Boolean(UserFileName.ReadInteger('Games', 'CustomGameCategory', 1));
         PopupGameCategory.Visible:= MenuGameCategory.Visible;
+
+        if (not MenuCustomGameOptions.Visible) and (not MenuCustomInitializationOptions.Visible) and
+           (not MenuCustomCommandLine.Visible) and (not MenuGameDescription.Visible) and
+           (not MenuGameCategory.Visible) then
+           begin
+             MenuCustomSettings.Visible:= False;
+             PopupCustomSettings.Visible:= False;
+           end;
 
         // Menu "Games Audit" - set user audit games???
         MenuGamesAudit.Visible:= Boolean(UserFileName.ReadInteger('Games', 'GamesAudit', 1));
@@ -10622,8 +10586,8 @@ begin
            end;
 
         // Menu "Delete gamename.zip" - let user delete .ZIP files???
-        MenuDeleteZIPFileName.Visible:= Boolean(UserFileName.ReadInteger('Games', 'DeleteGameZIP', 1));
-        PopupDeleteZIPFileName.Visible:= MenuDeleteZIPFileName.Visible;
+        MenuDeleteSelected.Visible:= Boolean(UserFileName.ReadInteger('Games', 'DeleteGameZIP', 1));
+        PopupDeleteSelected.Visible:= MenuDeleteSelected.Visible;
 
         // Menu "Add to Favorites" - let user add games to favorite lists???
         MenuAddToFavorites.Visible:= Boolean(UserFileName.ReadInteger('Games', 'AddToFavorites', 1));
@@ -10633,22 +10597,23 @@ begin
         MenuDeleteFromFavorites.Visible:= Boolean(UserFileName.ReadInteger('Games', 'DeleteFromFavorites', 1));
         PopupDeleteFromFavorites.Visible:= MenuDeleteFromFavorites.Visible;
 
+        if (not MenuAddToFavorites.Visible) and (not MenuDeleteFromFavorites.Visible) then
+           begin
+             MenuFavoriteGames.Visible:= False;
+             PopupFavoriteGames.Visible:= False;
+           end;
+
         // Menu "Add Game to Parental Lock" - let user add a game to blocked lists ?
         MenuAddGameParentalLock.Visible:= Boolean(UserFileName.ReadInteger('Games', 'AddGameParentalLock', 1));
         PopupAddGameParentalLock.Visible:= MenuAddGameParentalLock.Visible;
 
-        // Menu "Real Icons" - let user switch between default and real icons???
-        MenuRealIconsItems.Visible:= Boolean(UserFileName.ReadInteger('Games', 'RealIcons', 1));
-        PopupRealIconsItems.Visible:= MenuRealIconsItems.Visible;
+        // Menu "Icons" - let user switch between default and games icons???
+        MenuIcons.Visible:= Boolean(UserFileName.ReadInteger('Games', 'GamesIcons', 1));
+        PopupIcons.Visible:= MenuIcons.Visible;
 
         // Menu "Refresh Games" - let user refresh games???
         MenuRefreshGames.Visible:= Boolean(UserFileName.ReadInteger('Games', 'RefreshGames', 1));
-        ButtonRefreshAllGames.Visible:= MenuRefreshGames.Visible;
         PopupRefreshGames.Visible:= MenuRefreshGames.Visible;
-
-        // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-        MenuCustomGamesManager.Visible:= Boolean(UserFileName.ReadInteger('Games', 'CustomGamesManager', 1));
-        PopupCustomGamesManager.Visible:= MenuCustomGamesManager.Visible;
 
         // from main menu "Pictures"
         // Menu "Show Pictures" - let user toggle between pictures and no pictures???
@@ -10708,7 +10673,7 @@ begin
         // from main menu "Advanced Tools"
         // Menu "Parental Lock" and "Parental Lock Manager"
         MenuParentalLock.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'ParentalLock', 1));
-        MenuParentalLockManager.Visible:= MenuParentalLock.Visible;
+        MenuParentalLockEditor.Visible:= MenuParentalLock.Visible;
 
         // Menu "User Profile" and "User Profile Manager"
         MenuUserProfile.Visible:= Boolean(UserFileName.ReadInteger('Miscellaneous', 'UserProfile', 1));
@@ -10803,7 +10768,6 @@ begin
     // Menu "Game Category"
     CustomGameCategory.Checked:= Boolean(UserFileName.ReadInteger('Games', 'CustomGameCategory', 1));
 
-
     // Menu "Games Audit" - set user audit games???
     GamesAudit.Checked:= Boolean(UserFileName.ReadInteger('Games', 'GamesAudit', 1));
 
@@ -10832,14 +10796,11 @@ begin
     // Menu "Add Game to Parental Lock" - let user add a game to blocked lists ?
     AddGameParentalLock.Checked:= Boolean(UserFileName.ReadInteger('Games', 'AddGameParentalLock', 1));
 
-    // Menu "Real Icons" - let user switch between default and real icons???
-    RealIcons.Checked:= Boolean(UserFileName.ReadInteger('Games', 'RealIcons', 1));
+    // Menu "Icons" - let user switch between default and games icons???
+    GamesIcons.Checked:= Boolean(UserFileName.ReadInteger('Games', 'GamesIcons', 1));
 
     // Menu "Refresh Games" - let user refresh games???
     RefreshGames.Checked:= Boolean(UserFileName.ReadInteger('Games', 'RefreshGames', 1));
-
-    // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-    CustomGamesManager.Checked:= Boolean(UserFileName.ReadInteger('Games', 'CustomGamesManager', 1));
 
     // from main menu "Pictures"
     // Menu "Show Pictures" - let user toggle between pictures and no pictures???
@@ -10982,14 +10943,11 @@ begin
     // Menu "Add Game to Parental Lock" - let user add a game to blocked lists ?
     UserFileName.WriteInteger('Games', 'AddGameParentalLock', Ord(AddGameParentalLock.Checked));
 
-    // Menu "Real Icons" - let user switch between default and real icons???
-    UserFileName.WriteInteger('Games', 'RealIcons', Ord(RealIcons.Checked));
+    // Menu "Icons" - let user switch between default and games icons???
+    UserFileName.WriteInteger('Games', 'GamesIcons', Ord(GamesIcons.Checked));
 
     // Menu "Refresh Games" - let user refresh games???
     UserFileName.WriteInteger('Games', 'RefreshGames', Ord(RefreshGames.Checked));
-
-    // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-    UserFileName.WriteInteger('Games', 'CustomGamesManager', Ord(CustomGamesManager.Checked));
 
     // from main menu "Pictures"
     // Menu "Show Pictures" - let user toggle between pictures and no pictures???
@@ -11081,6 +11039,7 @@ begin
     GamesFilterSelector.Checked:= True;
 
     // from main menu "Games"
+
     // Menu "Custom Game Options" - let user change options for a specific game???
     CustomGameOptions.Checked:= True;
 
@@ -11124,14 +11083,11 @@ begin
     // Menu "Add Game to Parental Lock" - let user add a game to blocked lists ?
     AddGameParentalLock.Checked:= True;
 
-    // Menu "Real Icons" - let user switch between default and real icons???
-    RealIcons.Checked:= True;
+    // Menu "Icons" - let user switch between default and games icons???
+    GamesIcons.Checked:= True;
 
     // Menu "Refresh Games" - let user refresh games???
     RefreshGames.Checked:= True;
-
-    // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-    CustomGamesManager.Checked:= True;
 
     // from main menu "Pictures"
     // Menu "Show Pictures" - let user toggle between pictures and no pictures???
@@ -11171,7 +11127,6 @@ begin
 
     KeysMappingSelector.Checked:= True;
   end;
-  // All main menus are done!!!!!!
 end;
 
 function TFormMain.VerifyProfileChanges(UserProfile: String): Boolean;
@@ -11182,8 +11137,9 @@ begin
 
   if not FileExists(FrontendPath+'resources\profiles\'+UserProfile+'.dat') then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                       Format(GetLanguageText('Messages', 'UserProfileNotCreatedMsg', 'The user profile "%s" is not created yet! It cannot be verifyed. Aborting...'), [UserProfile]), 2);
+       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                      'Messages', 'UserProfileNotCreatedMsg', 'The user profile "%s" is not created yet! It cannot be verifyed. Aborting...');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [UserProfile]), 2);
        Exit;
      end;
   UserFileName:= TIniFile.Create(FrontendPath+'resources\profiles\'+UserProfile+'.dat');
@@ -11311,16 +11267,12 @@ begin
     if AddGameParentalLock.Checked <> Boolean(UserFileName.ReadInteger('Games', 'AddGameParentalLock', 1)) then
        Result:= True;
 
-    // Menu "Real Icons" - let user switch between default and real icons???
-    if RealIcons.Checked <> Boolean(UserFileName.ReadInteger('Games', 'RealIcons', 1)) then
+    // Menu "Icons" - let user switch between default and games icons???
+    if GamesIcons.Checked <> Boolean(UserFileName.ReadInteger('Games', 'GamesIcons', 1)) then
        Result:= True;
 
     // Menu "Refresh Games" - let user refresh games???
     if RefreshGames.Checked <> Boolean(UserFileName.ReadInteger('Games', 'RefreshGames', 1)) then
-       Result:= True;
-
-    // Menu "Custom Games Manager" - let user add/edit/delete games from custom games list???
-    if CustomGamesManager.Checked <> Boolean(UserFileName.ReadInteger('Games', 'CustomGamesManager', 1)) then
        Result:= True;
 
     // from main menu "Pictures"
@@ -11390,12 +11342,12 @@ var
   FileFound: Boolean;
 begin
   FileFound:= False;
-  if FrontendLanguage <> 'Default' then
+  if (LowerCase(FrontendLanguage) <> 'english.lng') and (FrontendLanguage <> '') then
      begin
-        if FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+        if FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
            begin
              FileFound:= True;
-             LngFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+             LngFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
            end;
      end;
 
@@ -11556,17 +11508,45 @@ begin
      FreeAndNil(LngFile);
 end;
 
+procedure TFormMain.GetMessagesLng(const TitleSection, TitleEntry, TitleString, MessageSection, MessageEntry, MessageString: String);
+var
+  LngFile: TMemIniFile;
+begin
+  if (LowerCase(FrontendLanguage) <> 'english.lng') and (FrontendLanguage <> '') then
+     begin
+        if FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
+           begin
+             LngFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
+             case LngFile.ValueExists(TitleSection, TitleEntry) of
+               True : MessageText[0]:= LngFile.ReadString(TitleSection, TitleEntry, TitleString);
+               False: MessageText[0]:= TitleString;
+             end;
+             case LngFile.ValueExists(MessageSection, MessageEntry) of
+               True : MessageText[1]:= LngFile.ReadString(MessageSection, MessageEntry, MessageString);
+               False: MessageText[1]:= MessageString;
+             end;
+             FreeAndNil(LngFile);
+           end;
+     end
+  else
+     begin
+       MessageText[0]:= TitleString;
+       MessageText[1]:= MessageString;
+     end;
+end;
+
 function TFormMain.GetLanguageText(const Section, Option, TextString: String): String;
 var
   LngFile: TMemIniFile;
 begin
   Result:= TextString;
-  if FrontendLanguage <> 'Default' then
+  if (LowerCase(FrontendLanguage) <> 'english.lng') and (FrontendLanguage <> '') then
      begin
-        if FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+        if FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
            begin
-             LngFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-             Result:= LngFile.ReadString(Section, Option, TextString);
+             LngFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
+             if LngFile.ValueExists(Section, Option) then
+                Result:= LngFile.ReadString(Section, Option, TextString);
              FreeAndNil(LngFile);
            end;
      end
@@ -11576,10 +11556,10 @@ procedure TFormMain.SetMessagesLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormMessages do
   begin
@@ -11600,14 +11580,14 @@ end;
 procedure TFormMain.SetMainLanguage;
 var
   LanguageFile: TMemIniFile;
-  CurrentItemIndex: Integer;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   //Main Menu
+  MainMenu.BeginUpdate;
   MenuFile.Caption:= LanguageFile.ReadString('Main', 'MenuFile', '&File');
   MenuView.Caption:= LanguageFile.ReadString('Main', 'MenuView', '&View');
   MenuEmulator.Caption:= LanguageFile.ReadString('Main', 'MenuEmulator', '&Emulator');
@@ -11616,18 +11596,8 @@ begin
   MenuAdvancedTools.Caption:= LanguageFile.ReadString('Main', 'MenuAdvancedTools', '&Advanced Tools');
   MenuHelp.Caption:= LanguageFile.ReadString('Main', 'MenuHelp', '&Help');
 
-  MenuButFile.Caption:= MenuFile.Caption;
-  MenuButView.Caption:= MenuView.Caption;
-  MenuButEmulator.Caption:= MenuEmulator.Caption;
-  MenuButGames.Caption:= MenuGames.Caption;
-  MenuButPictures.Caption:= MenuPictures.Caption;
-  MenuButAdvancedTools.Caption:= MenuAdvancedTools.Caption;
-  MenuButHelp.Caption:= MenuHelp.Caption;
-
   // Menu "File"
-  MenuCreateGamesList.Caption:= LanguageFile.ReadString('Main', 'MenuCreateGamesList', '&Create Games List (Default)');
-  MenuCreateNewGamesList.Caption:= LanguageFile.ReadString('Main', 'MenuCreateNewDatabase', 'Create a &New Games List');
-  MenuSwitchGamesList.Caption:= LanguageFile.ReadString('Main', 'MenuSwitchGamesList', '&Switch Games List');
+  MenuCreateGamesList.Caption:= LanguageFile.ReadString('Main', 'MenuCreateGamesList', '&Create Games List');
   MenuExportGamesListTextFile.Caption:= LanguageFile.ReadString('Main', 'MenuExportGamesListTextFile', 'Export Games List to Text File');
   MenuPreferences.Caption:= LanguageFile.ReadString('Main', 'MenuPreferences', '&Preferences');
   MenuExit.Caption:= LanguageFile.ReadString('Main', 'MenuExit', 'E&xit');
@@ -11673,6 +11643,7 @@ begin
   // Menu "Games"
   MenuPlayGameStandard.Caption:= LanguageFile.ReadString('Main', 'MenuPlayGameStandard', '&Play Game (Standard)');
 
+  MenuCustomSettings.Caption:= LanguageFile.ReadString('Main', 'MenuCustomSettings', 'Custom Settings');
   MenuCustomGameOptions.Caption:= LanguageFile.ReadString('Main', 'MenuCustomGameOptions', 'Custom Game Options');
   MenuPlayGame.Caption:= LanguageFile.ReadString('Main', 'MenuPlayGame', 'Pl&ay Game');
   MenuSetCustomOptions.Caption:= LanguageFile.ReadString('Main', 'MenuSetCustomOptions', '&Set Custom Options (Selected Game)');
@@ -11693,15 +11664,17 @@ begin
   MenuGameDescription.Caption:= LanguageFile.ReadString('Main', 'MenuGameDescription', 'Game Description');
   MenuChangeGameDescription.Caption:= LanguageFile.ReadString('Main', 'MenuChangeGameDescription', 'Change Game Description');
   MenuDeleteCustomDescription.Caption:= LanguageFile.ReadString('Main', 'MenuDeleteCustomDescription', 'Delete Custom Description');
-  MenuUpdateGamesDescriptions.Caption:= LanguageFile.ReadString('Main', 'MenuUpdateGamesDescriptions', 'Update Games Descriptions');
 
   MenuGameCategory.Caption:= LanguageFile.ReadString('Main', 'MenuGameCategory', 'Game Category');
   MenuChangeGameCategory.Caption:= LanguageFile.ReadString('Main', 'MenuChangeGameCategory', 'Change Game Category');
   MenuDeleteCustomCategory.Caption:= LanguageFile.ReadString('Main', 'MenuDeleteCustomCategory', 'Delete Custom Category');
-  MenuUpdateGamesCategories.Caption:= LanguageFile.ReadString('Main', 'MenuUpdateGamesCategories', 'Update Games Categories');
+
+  MenuSelectParentGame.Caption:= LanguageFile.ReadString('Main', 'MenuSelectParentGame', 'Select Parent Game');
+  MenuOpenGameInternetPage.Caption:= LanguageFile.ReadString('Main', 'MenuOpenGameInternetPage', 'Open Game''s Internet Page');
 
   MenuGamesAudit.Caption:= LanguageFile.ReadString('Main', 'MenuGamesAudit', 'Games Audit');
   MenuAuditSelectedGame.Caption:= LanguageFile.ReadString('Main', 'MenuAuditSelectedGame', '&Selected Game');
+  MenuAuditSelectedGameRenameFiles.Caption:= LanguageFile.ReadString('Main', 'MenuAuditSelectedGameRenameFiles', 'Selected Game (Rename Files)');
   MenuAuditAvailableGames.Caption:= LanguageFile.ReadString('Main', 'MenuAuditAvailableGames', 'All A&vailable Games');
   MenuAuditAllGames.Caption:= LanguageFile.ReadString('Main', 'MenuAuditAllGames', '&All Games');
   MenuAuditSelectedGameUnneededFiles.Caption:= LanguageFile.ReadString('Main', 'MenuAuditSelectedGameUnneededFiles', 'Selected Game [Unneeded Files]');
@@ -11711,6 +11684,15 @@ begin
   MenuPlayRecordedGame.Caption:= LanguageFile.ReadString('Main', 'MenuPlayRecordedGame', 'Play a Re&corded Game');
   MenuRecordGame.Caption:= LanguageFile.ReadString('Main', 'MenuRecordGame', '&Record Game');
 
+  MenuDeleteSelected.Caption:= LanguageFile.ReadString('Parental Lock', 'ButtonDeleteSelectedKeywords', 'Delete Selected');
+  MenuDeleteZIPFileName.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteZIPFileName', 'Delete File "%s"');
+  MenuDeleteAudioFileName.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteAudioFileName', 'Delete Audio File "%s"');
+  MenuDeleteCFGFile.Hint:= Languagefile.ReadString('Main', 'MenuDeleteConfigFile', 'Delete config File "%s"');
+  MenuDeleteNVRAMFile.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteNVRAMFile', 'Delete Nvram File "%s"');
+  MenuDeleteHIFile.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteHiScoreFile', 'Delete Hi-Score File "%s"');
+  MenuDeleteINPFile.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteInputFile', 'Delete Input File "%s"');
+  MenuDeleteStateFile.Hint:= LanguageFile.ReadString('Main', 'MenuDeleteSaveStateFile', 'Delete Save State File "%s"');
+
   MenuGamesData.Caption:= LanguageFile.ReadString('Main', 'MenuGamesData', 'Games Data');
   MenuGameInformation.Caption:= LanguageFile.ReadString('Main', 'MenuGameInformation', 'Game Information (requires "mameinfo.dat")');
   MenuGameHistory.Caption:= LanguageFile.ReadString('Main', 'MenuGameHistory', 'Game History (requires "history.dat")');
@@ -11719,13 +11701,14 @@ begin
   MenuGameFAQ.Caption:= LanguageFile.ReadString('Main', 'MenuGameFAQ', 'Game F.A.Q. (requires "gamename.faq")');
   MenuShowGameInfo.Caption:= LanguageFile.ReadString('Main', 'MenuShowGameInfo', 'Show Game &Info');
 
+  MenuFavoriteGames.Caption:= LanguageFile.ReadString('User Profile', 'LabelFavoriteGames', 'Favorite Games');
   MenuAddToFavorites.Caption:= LanguageFile.ReadString('Main', 'MenuAddToFavorites', '&Add To Favorites');
   MenuDeleteFromFavorites.Caption:= LanguageFile.ReadString('Main', 'MenuDeleteFromFavorites', '&Delete From Favorites');
 
   MenuAddGameParentalLock.Caption:= LanguageFile.ReadString('Main', 'MenuAddGameParentalLock', 'Add Game to Parental &Lock');
 
-  MenuRealIconsItems.Caption:= LanguageFile.ReadString('Main', 'MenuRealIconsItems', 'Real Icons');
-  MenuRealIcons.Caption:= LanguageFile.ReadString('Main', 'MenuRealIcons', '&Real Icons');
+  MenuIcons.Caption:= LanguageFile.ReadString('Main', 'MenuIcons', 'Icons');
+  MenuGamesIcons.Caption:= LanguageFile.ReadString('Main', 'MenuGamesIcons', '&Games Icons');
   MenuShowOnlyParentIcon.Caption:= LanguageFile.ReadString('Main', 'MenuShowOnlyParentIcon', 'Show Only &Parent Icon');
   MenuCreateIconsList.Caption:= LanguageFile.ReadString('Main', 'MenuCreateIconsList', '&Create Icons List');
   MenuCheckMissingIcons.Caption:= LanguageFile.ReadString('Main', 'MenuCheckMissingIcons', 'Check For Missing Icons');
@@ -11740,8 +11723,6 @@ begin
   MenuGameDescription.Caption:= LanguageFile.ReadString('Main', 'MenuGameDescription', 'Game Description');
   MenuChangeGameDescription.Caption:= LanguageFile.ReadString('Main', 'MenuChangeGameDescription', 'Change Game Description');
   MenuDeleteCustomDescription.Caption:= LanguageFile.ReadString('Main', 'MenuDeleteCustomDescription', 'Delete Custom Description');
-
-  MenuCustomGamesManager.Caption:= LanguageFile.ReadString('Main', 'MenuCustomGamesManager', 'Custom Games &Manager');
 
   // Menu "Pictures"
   MenuShowPictures.Caption:= LanguageFile.ReadString('Main', 'MenuShowPictures', '&Show Pictures');
@@ -11761,10 +11742,8 @@ begin
   MenuCreatePicturesList.Caption:= LanguageFile.ReadString('Main', 'MenuCreatePicturesList', 'Create Pictures List');
 
   // Menu "Advanced Tools"
-  MenuTotalPlayTime.Caption:= LanguageFile.ReadString('Main', 'MenuTotalPlayTime', 'Total Play &Time');
-  MenuSelectGameTotalPlayTime.Caption:= LanguageFile.ReadString('Main', 'MenuSelectGameTotalPlayTime', 'Selected &Game Total Play Time');
   MenuParentalLock.Caption:= LanguageFile.ReadString('Main', 'MenuParentalLock', '&Parental Lock');
-  MenuParentalLockManager.Caption:= LanguageFile.ReadString('Main', 'MenuParentalLockManager', 'Parental Lock &Manager');
+  MenuParentalLockEditor.Caption:= LanguageFile.ReadString('Main', 'MenuParentalLockEditor', 'Parental Lock Editor');
   MenuUserProfile.Caption:= LanguageFile.ReadString('Main', 'MenuUserProfile', '&User Profile');
   MenuUserProfileEditor.Caption:= LanguageFile.ReadString('Main', 'MenuUserProfileEditor', 'User Profile &Editor');
   MenuKeysAssignment.Caption:= LanguageFile.ReadString('Main', 'MenuKeysAssignment', '&Keys Assignment');
@@ -11773,19 +11752,20 @@ begin
 
   // Menu "Help"
   MenuShowGamesIconsLegend.Caption:= LanguageFile.ReadString('Main', 'MenuShowGamesIconsLegend', 'Show Icons &Legend');
-  MenuViewTextFiles.Caption:= LanguageFile.ReadString('Main', 'MenuViewTextFiles', 'View &Text Files');
   MenuVisitEmuLoaderHomepage.Caption:= LanguageFile.ReadString('Main', 'MenuVisitEmuLoaderHomepage', 'Visit Emu Loader &Homepage');
   SendEMailEmuLoader.Caption:= LanguageFile.ReadString('Main', 'SendEMailEmuLoader', 'Send an E-&Mail to Emu Loader');
   MenuVisitHotRodHomepage.Caption:= LanguageFile.ReadString('Main', 'MenuVisitHotRodHomepage', 'Visit Hot Rod Homepage');
   MenuVisitSlikStikHomepage.Caption:= LanguageFile.ReadString('Main', 'MenuVisitSlikStikHomepage', 'Visit SlikStik Homepage');
   MenuVisitXArcadeHomepage.Caption:= LanguageFile.ReadString('Main', 'MenuVisitXArcadeHomepage', 'Visit X-Arcade Homepage');
-
-  MenuMAMEKeysInfo.Caption:= LanguageFile.ReadString('Main', 'MenuMAMEKeysInfo', '&MAME Keys Info');
+  MenuUserManual.Caption:= LanguageFile.ReadString('Main', 'MenuUserManual', 'User Manual');
   MenuAbout.Caption:= LanguageFile.ReadString('Main', 'MenuAbout', '&About...');
+
+  MainMenu.EndUpdate;
 
   // Popup Games
   PopupPlayGameStandard.Caption:= MenuPlayGameStandard.Caption;
 
+  PopupCustomSettings.Caption:= MenuCustomSettings.Caption;
   PopupPlayGame.Caption:= MenuPlayGame.Caption;
   PopupCustomGameOptions.Caption:= MenuCustomGameOptions.Caption;
   PopupSetCustomOptions.Caption:= MenuSetCustomOptions.Caption;
@@ -11811,8 +11791,12 @@ begin
   PopupChangeGameCategory.Caption:= MenuChangeGameCategory.Caption;
   PopupDeleteCustomCategory.Caption:= MenuDeleteCustomCategory.Caption;
 
+  PopupSelectParentGame.Caption:= MenuSelectParentGame.Caption;
+  PopupOpenGameInternetPage.Caption:= MenuOpenGameInternetPage.Caption;
+
   PopupGamesAudit.Caption:= MenuGamesAudit.Caption;
   PopupAuditSelectedGame.Caption:= MenuAuditSelectedGame.Caption;
+  PopupAuditSelectedGameRenameFiles.Caption:= MenuAuditSelectedGameRenameFiles.Caption;
   PopupAuditAvailableGames.Caption:= MenuAuditAvailableGames.Caption;
   PopupAuditAllGames.Caption:= MenuAuditAllGames.Caption;
   PopupAuditSelectedGameUnneededFiles.Caption:= MenuAuditSelectedGameUnneededFiles.Caption;
@@ -11822,6 +11806,14 @@ begin
   PopupPlayRecordedGame.Caption:= MenuPlayRecordedGame.Caption;
   PopupRecordGame.Caption:= MenuRecordGame.Caption;
 
+  PopupDeleteSelected.Caption:= MenuDeleteSelected.Caption;
+  PopupDeleteCFGFile.Caption:= MenuDeleteCFGFile.Caption;
+  PopupDeleteNVRAMFile.Caption:= MenuDeleteNVRAMFile.Caption;
+  PopupDeleteHIFile.Caption:= MenuDeleteHIFile.Caption;
+  PopupDeleteINPFile.Caption:= MenuDeleteINPFile.Caption;
+  PopupDeleteStateFile.Caption:= MenuDeleteStateFile.Caption;
+  
+  PopupFavoriteGames.Caption:= MenuFavoriteGames.Caption;
   PopupAddToFavorites.Caption:= MenuAddToFavorites.Caption;
   PopupDeleteFromFavorites.Caption:= MenuDeleteFromFavorites.Caption;
 
@@ -11844,8 +11836,8 @@ begin
   PopupFullScreen.Caption:= MenuFullScreen.Caption;
   PopupExit.Caption:= MenuExit.Caption;
 
-  PopupRealIconsItems.Caption:= MenuRealIconsItems.Caption;
-  PopupRealIcons.Caption:= MenuRealIcons.Caption;
+  PopupIcons.Caption:= MenuIcons.Caption;
+  PopupGamesIcons.Caption:= MenuGamesIcons.Caption;
   PopupShowOnlyParentIcon.Caption:= MenuShowOnlyParentIcon.Caption;
   PopupCreateIconsList.Caption:= MenuCreateIconsList.Caption;
   PopupCheckMissingIcons.Caption:= MenuCheckMissingIcons.Caption;
@@ -11860,8 +11852,6 @@ begin
   PopupGameDescription.Caption:= MenuGameDescription.Caption;
   PopupChangeGameDescription.Caption:= MenuChangeGameDescription.Caption;
   PopupDeleteCustomDescription.Caption:= MenuDeleteCustomDescription.Caption;
-
-  PopupCustomGamesManager.Caption:= MenuCustomGamesManager.Caption;
 
   // Popup Pictures
   PopupShowPictures.Caption:= MenuShowPictures.Caption;
@@ -11882,7 +11872,7 @@ begin
   PopupCreatePicturesList.Caption:= MenuCreatePicturesList.Caption;
 
   // Games List Column Descriptions
-  List.Column[0].Caption:=  LanguageFile.ReadString('Main', 'ListColumnDescription', 'Description');
+  List.Column[0].Caption:=                  LanguageFile.ReadString('Main', 'ListColumnDescription', 'Description');
   List.Column[GetColumnIndex(1)].Caption:=  LanguageFile.ReadString('Main', 'ListColumnYear', 'Year');
   List.Column[GetColumnIndex(2)].Caption:=  LanguageFile.ReadString('Main', 'ListColumnManufacturer', 'Manufacturer');
   List.Column[GetColumnIndex(3)].Caption:=  LanguageFile.ReadString('Main', 'ListColumnSound', 'Sound');
@@ -11901,6 +11891,45 @@ begin
   List.Column[GetColumnIndex(16)].Caption:= LanguageFile.ReadString('Main', 'ListColumnCategory', 'Category');
   List.Column[GetColumnIndex(17)].Caption:= LanguageFile.ReadString('Main', 'ListColumnVersionAdded', 'Version Added');
   List.Column[GetColumnIndex(18)].Caption:= LanguageFile.ReadString('Main', 'ListColumnDriver', 'Driver');
+  List.Column[GetColumnIndex(19)].Caption:= LanguageFile.ReadString('Main', 'ListColumnPlayed', 'Played');
+  List.Column[GetColumnIndex(20)].Caption:= LanguageFile.ReadString('Main', 'ListColumnTimePlayed', 'Time Played');
+
+  // Game Fields Translations
+  // Sound
+  aSound[0]:= ''; // no sound
+  aSound[1]:= LanguageFile.ReadString('Resource', 'gameinfoMono', 'Mono'); // mono
+  aSound[2]:= LanguageFile.ReadString('Resource', 'gameinfoStereo', 'Stereo'); // stereo
+
+  // Samples
+  aSamples[0]:= LanguageFile.ReadString('Resource', 'gameinfoMissing', 'Missing'); // sample missing
+  aSamples[1]:= LanguageFile.ReadString('Resource', 'gameinfoPresent', 'Present'); // present
+
+  // Control Type
+  aControlType[0]:= LanguageFile.ReadString('Resource', 'gameinfoJoy4way', 'Joystick 4 Way');
+  aControlType[1]:= LanguageFile.ReadString('Resource', 'gameinfoJoy8way', 'Joystick 8 Way');
+  aControlType[2]:= LanguageFile.ReadString('Resource', 'gameinfoDoublejoy4way', 'Double Joystick 4 Way');
+  aControlType[3]:= LanguageFile.ReadString('Resource', 'gameinfoDoublejoy8way', 'Double Joystick 8 Way');
+  aControlType[4]:= LanguageFile.ReadString('Resource', 'gameinfoDial', 'Dial');
+  aControlType[5]:= LanguageFile.ReadString('Resource', 'gameinfoPaddle', 'Paddle');
+  aControlType[6]:= LanguageFile.ReadString('Resource', 'gameinfoStick', 'Stick');
+  aControlType[7]:= LanguageFile.ReadString('Resource', 'gameinfoTrackball', 'Trackball');
+  aControlType[8]:= LanguageFile.ReadString('Resource', 'gameinfoLightgun', 'Light Gun');
+  aControlType[9]:= LanguageFile.ReadString('Resource', 'gameinfoButtons', 'Buttons');
+
+  // Video
+  aVideo[0]:= LanguageFile.ReadString('Resource', 'gameinfoRaster', 'Raster'); // Raster
+  aVideo[1]:= LanguageFile.ReadString('Resource', 'gameinfoVector', 'Vector'); // Vector
+
+  // Orientation
+  aOrientation[0]:= LanguageFile.ReadString('Resource', 'gameinfoHorizontal', 'Horizontal'); // Horizontal
+  aOrientation[1]:= LanguageFile.ReadString('Resource', 'gameinfoVertical', 'Vertical'); // Vertical
+
+  // Driver / Sound / Color Status
+  aStatus[0]:= LanguageFile.ReadString('Resource', 'gameinfoStatusGood', 'Good'); // Good
+  aStatus[1]:= LanguageFile.ReadString('Resource', 'gameinfoStatusPreliminary', 'Preliminary'); // Preliminary
+  aStatus[2]:= LanguageFile.ReadString('Resource', 'gameinfoStatusImperfect', 'Imperfect'); // Imperfect
+
+  aMerged:= LanguageFile.ReadString('Resource', 'gameinfoMerged', 'Yes'); // Yes
 
   // Status Bar Buttons
   StatusBarShownGames.Caption:= Format(LanguageFile.ReadString('Main', 'StatusBarShownGames', '%u Games'), [Length(GamesList)]); // not needed
@@ -11918,7 +11947,6 @@ begin
 
   // Toolbar Buttons
   // Toolbar Games Filter
-  CurrentItemIndex:= ButtonGameType.Tag;
   PopupAllGames.Caption:= LanguageFile.ReadString('Main', 'GameTypeAllGames', 'All Games');
   PopupClassic.Caption:= LanguageFile.ReadString('Main', 'GameTypeClassic', 'Classic');
   PopupNeoGeo.Caption:= LanguageFile.ReadString('Main', 'GameTypeNeoGeo', 'Neo Geo');
@@ -11926,22 +11954,17 @@ begin
   PopupClone.Caption:= LanguageFile.ReadString('Main', 'GameTypeClone', 'Clone');
   PopupRaster.Caption:= LanguageFile.ReadString('Main', 'GameTypeRaster', 'Raster');
   PopupVector.Caption:= LanguageFile.ReadString('Main', 'GameTypeVector', 'Vector');
-  PopupCustomGames.Caption:= LanguageFile.ReadString('Main', 'GameTypeCustomGames', 'Custom Games');
   ButtonGameType.Hint:= LanguageFile.ReadString('Main', 'ButtonGameTypeHint', 'Select games filter');
 
   ButtonGameFilters.Hint:= ButtonGameType.Hint;
   ButtonShowAllGames.Caption:= LanguageFile.ReadString('Main', 'ButtonShowAllGames', 'Show All Games');
   ButtonShowAvailableGames.Caption:= LanguageFile.ReadString('Main', 'ButtonShowAvailableGames', 'Show Available Games Only');
-  ButtonShowUnavailableGames.Hint:= LanguageFile.ReadString('Main', 'ButtonShowUnavailableGames', 'Show Unavailable Games Only');
+  ButtonShowUnavailableGames.Caption:= LanguageFile.ReadString('Main', 'ButtonShowUnavailableGames', 'Show Unavailable Games Only');
+
+  // Toolbar System Bios
+  ButtonSystemBios.Hint:= LanguageFile.ReadString('MAME Options', 'SystemBiosHint', 'Change system bios');
 
   // Toolbar Buttons Hints
-
-  ButtonModeView.Hint:= LanguageFile.ReadString('Main', 'ButtonModeViewHint', 'Games mode view');
-  ButtonModeViewBigIcons.Caption:= MenuModeViewBigIcons.Caption;
-  ButtonModeViewSmallIcons.Caption:= MenuModeViewSmallIcons.Caption;
-  ButtonModeViewList.Caption:= MenuModeViewList.Caption;
-  ButtonModeViewDetails.Caption:= MenuModeViewDetails.Caption;
-
   ButtonShowFavorite.Hint:= LanguageFile.ReadString('Main', 'ButtonShowFavoriteHint', 'Show Favorite User''s Games');
 
   ButtonPicturesModeView.Hint:= LanguageFile.ReadString('Main', 'ButtonPicturesModeViewHint', 'Pictures mode view');
@@ -11952,8 +11975,6 @@ begin
   ButtonShowCabinet.Caption:= MenuShowCabinet.Caption;
   ButtonShowControlPanel.Caption:= MenuShowControlPanel.Caption;
   ButtonShowControlPanelLayout.Caption:= MenuShowControlPanelLayout.Caption;
-
-  ButtonRefreshAllGames.Hint:= LanguageFile.ReadString('Main', 'ButtonRefreshAllGamesHint', 'Refresh all games');
 
   ButtonPlayRecordedGame.Hint:= LanguageFile.ReadString('Main', 'ButtonPlayRecordedGameHint', 'Playback a recorded game');
   ButtonRecordGame.Hint:= LanguageFile.ReadString('Main', 'ButtonRecordGameHint' ,'Record game');
@@ -11978,6 +11999,9 @@ begin
   ButtonGameDriverInformation.Hint:= LanguageFile.ReadString('Main', 'ButtonGameDriverInformationHint', 'Show the driver information for selected game');
   ButtonGameFAQ.Hint:= LanguageFile.ReadString('Main', 'ButtonGameFAQHint', 'Show the faq for selected game');
 
+  ButtonMouse.Hint:= LanguageFile.ReadString('MAME Options', 'MouseHint', 'Enable mouse input (Windows mouse will be unavailable)');
+  ButtonLightGun.Hint:= LanguageFile.ReadString('MAME Options', 'LightGunHint', 'Enable lightgun input');
+
   // Picture Bottom Components
   ButViewPreviousPicture.Hint:= LanguageFile.ReadString('Main', 'ButViewPreviousPictureHint', 'View previous picture');
   ButViewNextPicture.Hint:= LanguageFile.ReadString('Main', 'ButViewNextPictureHint', 'View next picture');
@@ -11998,15 +12022,15 @@ var
   LanguageFile: TMemIniFile;
   TranslationText: String;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormEmulatorsSetup do
   begin
     // Screen Title
-    LabelTopDescription.Caption:= LanguageFile.ReadString('Emulators Setup', 'Title', 'Emulators Setup');
+    Caption:= LanguageFile.ReadString('Emulators Setup', 'Title', 'Emulators Setup');
 
     // Executable files
     ExecutableFileButtonSelect.Hint:= LanguageFile.ReadString('Emulators Setup', 'ExecutableFileButtonHint', 'Click here to select a file (MAME and DOS MAME only)');
@@ -12022,7 +12046,7 @@ begin
     ButtonSet4thEmulatorOptions.Caption:= LanguageFile.ReadString('Emulators Setup', 'ButtonSet4thEmulatorOptionsCaption' ,'Set &4th Emulator Options');
     ButtonSet5thEmulatorOptions.Caption:= LanguageFile.ReadString('Emulators Setup', 'ButtonSet5thEmulatorOptionsCaption' ,'Set &5th Emulator Options');
 
-    TranslationText:= LanguageFile.ReadString('Emulators Setup', 'ButtonSetEmulatorOptionsHint', 'Configure default data on "mame.ini" or "mame.cfg" for executable %u');
+    TranslationText:= LanguageFile.ReadString('Emulators Setup', 'ButtonSetEmulatorOptionsHint', 'Configure default data on "mame.ini" for executable %u');
 
     ButtonSet1stEmulatorOptions.Hint:= Format(TranslationText, [1]);
     ButtonSet2ndEmulatorOptions.Hint:= Format(TranslationText, [2]);
@@ -12031,7 +12055,7 @@ begin
     ButtonSet5thEmulatorOptions.Hint:= Format(TranslationText, [5]);
 
     // Default Database Builder options
-    LabelDefaultGamesListBuilder.Caption:= LanguageFile.ReadString('Emulators Setup', 'LabelDefaultGamesListBuilderCaption', 'Default Games List Builder');
+    LabelDefaultEmulator.Caption:= LanguageFile.ReadString('Emulators Setup', 'LabelDefaultEmulatorCaption', 'Default Emulator');
     DefaultGamesListBuilder.Hint:= LanguageFile.ReadString('Emulators Setup', 'LabelDefaultGamesListBuildExecutableCaption', 'Emulator %u');
 
     // Buttons
@@ -12060,10 +12084,10 @@ procedure TFormMain.SetAuditGamesLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormAudit do
   begin
@@ -12107,14 +12131,14 @@ procedure TFormMain.SetParentalLockLogoutLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormParentalLockPasswordLogout do
   begin
-    LabelParentalLockLogout.Caption:= LanguageFile.ReadString('Login Logout', 'LabelParentalLockLogout', 'Parental Lock Logout');
+    Caption:= LanguageFile.ReadString('Login Logout', 'LabelParentalLockLogout', 'Parental Lock Logout');
     LabelEnterPassword.Caption:= LanguageFile.ReadString('Login Logout', 'LabelEnterPassword', 'Enter Password');
     LabelConfirmPassword.Caption:= LanguageFile.ReadString('Login Logout', 'LabelConfirmPassword', 'Confirm Password');
 
@@ -12132,12 +12156,12 @@ procedure TFormMain.SetParentalLockLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
-  with FormParentalLockManager do
+  with FormParentalLockEditor do
   begin
     // Screen Title
     Caption:= LanguageFile.ReadString('Parental Lock', 'Title', 'Parental Lock');
@@ -12162,14 +12186,15 @@ begin
     // Games Found options
     LabelGamesFound.Caption:= LanguageFile.ReadString('Parental Lock', 'LabelGamesFound', 'Games Found');
 
-    ButtonDeleteSelectedGamesFound.Caption:= LanguageFile.ReadString('Parental Lock', 'ButtonDeleteSelectedGamesFound', 'Delete Selected');
+
+    ButtonDeleteSelectedGamesFound.Caption:= ButtonDeleteSelectedKeywords.Caption;
     ButtonDeleteSelectedGamesFound.Hint:= LanguageFile.ReadString('Parental Lock', 'ButtonDeleteSelectedGamesFoundHint', 'Delete selected games from the list (can be more than one)');
 
     ButtonAddGames.Caption:= LanguageFile.ReadString('Parental Lock', 'ButtonAddGames', 'Add &Games To List');
     ButtonAddGames.Hint:= LanguageFile.ReadString('Parental Lock', 'ButtonAddGamesHint', 'Add found games to the list of locked games');
 
     // Locked Games options
-    ButtonDeleteSelectedLockedGames.Caption:= LanguageFile.ReadString('Parental Lock', 'ButtonDeleteSelectedLockedGames', 'Delete Selected');
+    ButtonDeleteSelectedLockedGames.Caption:= ButtonDeleteSelectedKeywords.Caption;
     ButtonDeleteSelectedLockedGames.Hint:= LanguageFile.ReadString('Parental Lock', 'ButtonDeleteSelectedLockedGamesHint', 'Delete selected locked games from the list (can be more than one)');
 
     // Games Found Columns
@@ -12204,10 +12229,10 @@ procedure TFormMain.SetUserProfileLoginLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormUserProfileUserLogin do
   begin
@@ -12229,15 +12254,15 @@ procedure TFormMain.SetUserProfileLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormUserProfileEditor do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('User Profile', 'Title', 'User Profile Editor');
+    Caption:= LanguageFile.ReadString('User Profile', 'Title', 'User Profile Editor');
 
     // Tab Sheet's titles
     TabSheetProfileMainData.Caption:= LanguageFile.ReadString('User Profile', 'TabSheetProfileMainDataCaption', 'Profile Main Data');
@@ -12317,9 +12342,8 @@ begin
     AddGamesToFavorites.Caption:= LanguageFile.ReadString('User Profile', 'LabelAddGamesToFavorites', 'Add Games To Favorites');
     DeleteGamesFromFavorites.Caption:= LanguageFile.ReadString('User Profile', 'LabelDeleteGamesFromFavorites', 'Delete Games From Favorites');
     AddGameParentalLock.Caption:= LanguageFile.ReadString('User Profile', 'LabelAddGameParentalLock', 'Add Game to Parental Lock');
-    RealIcons.Caption:= LanguageFile.ReadString('User Profile', 'LabelRealIcons', 'Real Icons');
+    GamesIcons.Caption:= LanguageFile.ReadString('User Profile', 'LabelGamesIcons', 'Games Icons');
     RefreshGames.Caption:= LanguageFile.ReadString('User Profile', 'LabelRefreshGames', 'Refresh Games');
-    CustomGamesManager.Caption:= LanguageFile.ReadString('User Profile', 'LabelCustomGamesManager', 'Custom Games Manager');
 
     GamesFilterSelector.Hint:= LanguageFile.ReadString('User Profile', 'LabelGamesFilterSelectorHint', 'Change between games filter options (all games, neo geo, classic, etc...)');
     GamesListShowBigIcons.Hint:= LanguageFile.ReadString('User Profile', 'LabelGamesListShowBigIconsHint', 'Access to big icons games mode');
@@ -12346,9 +12370,8 @@ begin
     AddGamesToFavorites.Hint:= LanguageFile.ReadString('User Profile', 'LabelAddGamesToFavoritesHint', 'Add games to favorites lists');
     DeleteGamesFromFavorites.Hint:= LanguageFile.ReadString('User Profile', 'LabelDeleteGamesFromFavoritesHint', 'Delete games from favorites lists');
     AddGameParentalLock.Hint:= LanguageFile.ReadString('User Profile', 'LabelAddGameParentalLockHint', 'Access to add games to blocked list option');
-    RealIcons.Hint:= LanguageFile.ReadString('User Profile', 'LabelRealIconsHint', 'Access to MAMu_ icons');
+    GamesIcons.Hint:= LanguageFile.ReadString('User Profile', 'LabelGamesIconsHint', 'Access to MAMu_ icons');
     RefreshGames.Hint:= LanguageFile.ReadString('User Profile', 'LabelRefreshGamesHint', 'Refresh games list (all refresh types)');
-    CustomGamesManager.Hint:= LanguageFile.ReadString('User Profile', 'LabelCustomGamesManagerHint', 'Access to the custom games manager');
 
     // Preview Pictures tab
     ShowPictures.Caption:= LanguageFile.ReadString('User Profile', 'LabelShowPictures', 'Show Pictures');
@@ -12366,15 +12389,15 @@ begin
 
     ShowPictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowPicturesHint', 'Access to preview pictures');
     ShowTitleSnapshots.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowTitleSnapshotsHint', 'Access to title snapshots');
-    ShowInGameSnapshots.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowInGameSnapshotsHint', 'Access to in-game snapshots');
+    ShowInGameSnapshots.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowInGameSnapshotsHint', 'Access to in game snapshots');
     ShowMarquees.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowMarqueesHint', 'Access to marquees');
     ShowFlyers.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowFlyersHint', 'Access to flyers');
     ShowCabinets.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowCabinetsHint', 'Access to cabinets');
     ShowControlPanels.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowControlPanelsHint', 'Access to control panels');
     ShowControlPanelLayouts.Hint:= LanguageFile.ReadString('User Profile', 'LabelShowControlPanelLayoutsHint', 'Access to control panel layouts');
-    DeletePictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelDeletePicturesHint', 'Delete in-game snapshots');
-    RenamePictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelRenamePicturesHint', 'Rename in-game snapshots');
-    DeleteExtraPictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelDeleteExtraPicturesHint', 'Delete extra in-game snapshots');
+    DeletePictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelDeletePicturesHint', 'Delete in game snapshots');
+    RenamePictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelRenamePicturesHint', 'Rename in game snapshots');
+    DeleteExtraPictures.Hint:= LanguageFile.ReadString('User Profile', 'LabelDeleteExtraPicturesHint', 'Delete extra in game snapshots');
     CreatePicturesList.Hint:= LanguageFile.ReadString('User Profile', 'LabelCreatePicturesListHint', 'Access to create "pictures.dat" file for the virtual list');
 
     // Buttons
@@ -12406,51 +12429,22 @@ begin
   FreeAndNil(LanguageFile);
 end;
 
-procedure TFormMain.SetTextViewerLanguage;
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     Exit;
-
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-  with FormTextViewer do
-  begin
-    // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Text Viewer', 'Title', 'Text Files Viewer');
-
-    // Buttons
-    ButtonTextFilesFont.Caption:= LanguageFile.ReadString('Resource', 'ButtonFont', 'Select Font');
-    ButtonTextFilesFont.Hint:= LanguageFile.ReadString('Text Viewer', 'TextFontHint', 'Select font for the text');
-    ButtonTextFilesDefaultFont.Caption:= LanguageFile.ReadString('Resource', 'ButtonDefault', 'Default');
-    ButtonTextFilesDefaultFont.Hint:= LanguageFile.ReadString('Text Viewer', 'DefaultFontHint', 'Select default font for the text');
-    ButtonClose.Caption:= LanguageFile.ReadString('Resource', 'ButtonClose', '&Close');
-    ButtonClose.Hint:= LanguageFile.ReadString('Resource', 'ButtonCloseHint', 'Close this window');
-  end;
-  FreeAndNil(LanguageFile);
-end;
-
 procedure TFormMain.SetDATViewerLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormDATViewer do
   begin
     // Labels & Options
-    WordWrap.Caption:= LanguageFile.ReadString('DAT Viewer', 'LabelWordWrap', 'Word Wrap');
-    WordWrap.Hint:= LanguageFile.ReadString('DAT Viewer', 'LabelWordWrapHint', 'Breaks the text to fit on screen');
+    //WordWrap.Caption:= LanguageFile.ReadString('DAT Viewer', 'LabelWordWrap', 'Word Wrap');
+    //WordWrap.Hint:= LanguageFile.ReadString('DAT Viewer', 'LabelWordWrapHint', 'Breaks the text to fit on screen');
 
     // Buttons
-    ButtonDATFilesFont.Caption:= LanguageFile.ReadString('Resource', 'ButtonFont', 'Select Font');
-    ButtonDATFilesFont.Hint:= LanguageFile.ReadString('DAT Viewer', 'DATFilesFontHint', 'Select font for the text');
-    ButtonTextFilesDefaultFont.Caption:= LanguageFile.ReadString('Resource', 'ButtonDefault', 'Default');
-    ButtonTextFilesDefaultFont.Hint:= LanguageFile.ReadString('Text Viewer', 'DefaultFontHint', 'Select default font for the text');
     ButtonClose.Caption:= LanguageFile.ReadString('Resource', 'ButtonClose', '&Close');
     ButtonClose.Hint:= LanguageFile.ReadString('Resource', 'ButtonCloseHint', 'Close this window');
   end;
@@ -12461,15 +12455,15 @@ procedure TFormMain.SetFavoriteUsersManagerLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormFavoriteUsersManager do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Favorite User', 'Title', 'Favorite Users Manager');
+    Caption:= LanguageFile.ReadString('Favorite User', 'Title', 'Favorite Users Manager');
 
     // Labels & Options
     ButtonNewUser.Hint:= LanguageFile.ReadString('Favorite User', 'ButtonNewUserHint', 'Create a new user');
@@ -12497,132 +12491,19 @@ begin
   FreeAndNil(LanguageFile);
 end;
 
-procedure TFormMain.SetCustomGamesLanguage;
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     Exit;
-
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-  with FormCustomGames do
-  begin
-    // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Custom Games', 'Title', 'Custom Games Manager');
-
-    // Tab Sheet's titles
-    TabSheetGameInformation.Caption:= LanguageFile.ReadString('Custom Games', 'TabSheetGameInformation', 'Game Information');
-    TabSheetCustomGamesList.Caption:= LanguageFile.ReadString('Custom Games', 'TabSheetCustomGamesList', 'Custom Games List');
-    TabSheetTutorial.Caption:= LanguageFile.ReadString('Custom Games', 'TabSheetTutorial', 'Tutorial');
-
-    // Labels & Options
-    LabelCommandLineMessage.Caption:= LanguageFile.ReadString('Custom Games', 'LabelCommandLineMessage', 'Custom Emulator Executable');
-    CommandLineButtonSelect.Hint:= LanguageFile.ReadString('Custom Games', 'CommandLineButtonHint', 'Click here to select a file');
-
-    LabelCommandLineParameters.Caption:= LanguageFile.ReadString('Custom Games', 'LabelCommandLineParameters', 'Command Line Parameters');
-    CommandLineParameters.Hint:= LanguageFile.ReadString('Custom Games', 'CommandLineParametersHint', 'Type the parameters, surrounded by quotes if it has long name');
-
-    LabelDescription.Caption:= LanguageFile.ReadString('Main', 'ListColumnDescription', 'Description');
-    LabelYear.Caption:= LanguageFile.ReadString('Main', 'ListColumnYear', 'Year');
-    LabelManufacturer.Caption:= LanguageFile.ReadString('Main', 'ListColumnManufacturer', 'Manufacturer');
-    LabelSound.Caption:= LanguageFile.ReadString('Custom Games', 'LabelSound', 'Sound');
-    LabelFrequency.Caption:= LanguageFile.ReadString('Main', 'ListColumnFrequency', 'Frequency');
-    Samples.Caption:= LanguageFile.ReadString('Main', 'ListColumnSamples', 'Samples');
-    LabelControlType.Caption:= LanguageFile.ReadString('Main', 'ListColumnControlType', 'Control Type');
-    LabelVideo.Caption:= LanguageFile.ReadString('Main', 'ListColumnVideo', 'Video');
-    LabelOrientation.Caption:= LanguageFile.ReadString('Main', 'ListColumnOrientation', 'Orientation');
-    LabelResolution.Caption:= LanguageFile.ReadString('Main', 'ListColumnResolution', 'Resolution');
-    LabelDriverStatus.Caption:= LanguageFile.ReadString('Main', 'ListColumnDriverStatus', 'Driver Status');
-    LabelSoundStatus.Caption:= LanguageFile.ReadString('Main', 'ListColumnSoundStatus', 'Sound Status');
-    LabelColorStatus.Caption:= LanguageFile.ReadString('Main', 'ListColumnColorStatus', 'Color Status');
-    Merged.Caption:= LanguageFile.ReadString('Main', 'ListColumnMerged', 'Merged');
-    LabelName.Caption:= LanguageFile.ReadString('Main', 'ListColumnName', 'Name');
-    LabelCloneOf.Caption:= LanguageFile.ReadString('Main', 'ListColumnCloneOf', 'Clone of');
-    LabelCategory.Caption:= LanguageFile.ReadString('Main', 'ListColumnCategory', 'Category');
-    LabelVersionAdded.Caption:= LanguageFile.ReadString('Main', 'ListColumnVersionAdded', 'Version Added');
-    LabelDriver.Caption:= LanguageFile.ReadString('Main', 'ListColumnDriver', 'Driver');
-
-    Description.Hint:= LanguageFile.ReadString('Custom Games', 'DescriptionHint', 'Type anything you want');
-    Manufacturer.Hint:= LanguageFile.ReadString('Custom Games', 'ManufacturerHint', 'Select a manufacturer');
-    ManufacturerCustom.Hint:= LanguageFile.ReadString('Custom Games', 'ManufacturerCustomHint', 'Type a manufacturer description. This only is valid when selecting "Custom" on manufacturer');
-    Resolution.Hint:= LanguageFile.ReadString('Custom Games', 'ResolutionHint', 'Select a resolution');
-    ResolutionCustom.Hint:= LanguageFile.ReadString('Custom Games', 'ResolutionCustomHint', 'Type a resolution (format 0000x0000). This only is valid when selecting "Custom" on resolution');
-    Year.Hint:= LanguageFile.ReadString('Custom Games', 'YearHint', 'Select an year');
-    Frequency.Hint:= LanguageFile.ReadString('Custom Games', 'FrequencyHint', 'Select a frequency');
-    Video.Hint:= LanguageFile.ReadString('Custom Games', 'VideoHint', 'Select a video type');
-    DriverStatus.Hint:= LanguageFile.ReadString('Custom Games', 'DriverStatusHint', 'Select a driver status');
-    SoundStatus.Hint:= LanguageFile.ReadString('Custom Games', 'SoundStatusHint', 'Select a sound status');
-    ColorStatus.Hint:= LanguageFile.ReadString('Custom Games', 'ColorStatusHint', 'Select a color status');
-    ControlType.Hint:= LanguageFile.ReadString('Custom Games', 'ControlTypeHint', 'Select the type of game controls');
-    Orientation.Hint:= LanguageFile.ReadString('Custom Games', 'OrientationHint', 'Select an orientation');
-    Sound.Hint:= LanguageFile.ReadString('Custom Games', 'SoundHint', 'Select a sound type');
-    Name.Hint:= LanguageFile.ReadString('Custom Games', 'NameHint', 'Type the name of the game (8 characters max)');
-    CloneOf.Hint:= LanguageFile.ReadString('Custom Games', 'CloneOfHint', 'Type the name of the clone game (8 characters max)');
-    CategoriesList.Hint:= LanguageFile.ReadString('Custom Games', 'CategoriesListHint', 'Select a category');
-    VersionAdded.Hint:= LanguageFile.ReadString('Custom Games', 'VersionAddedHint', 'Type the version that this game was added (20 characters max)');
-    DriverFile.Hint:= LanguageFile.ReadString('Custom Games', 'DriverFileHint', 'Type the driver filename (MS-DOS 8.3 format only)');
-    Samples.Hint:= LanguageFile.ReadString('Custom Games', 'LabelSamplesHint', 'The game has samples ?');
-    Merged.Hint:= LanguageFile.ReadString('Custom Games', 'LabelMergedHint', 'The game is merged into the master game ?');
-
-    ListCustomGames.Column[0].Caption:= FormMain.List.Column[0].Caption;
-    ListCustomGames.Column[1].Caption:= FormMain.List.Column[GetColumnIndex(1)].Caption;
-    ListCustomGames.Column[2].Caption:= FormMain.List.Column[GetColumnIndex(2)].Caption;
-    ListCustomGames.Column[3].Caption:= FormMain.List.Column[GetColumnIndex(3)].Caption;
-    ListCustomGames.Column[4].Caption:= FormMain.List.Column[GetColumnIndex(4)].Caption;
-    ListCustomGames.Column[5].Caption:= FormMain.List.Column[GetColumnIndex(5)].Caption;
-    ListCustomGames.Column[6].Caption:= FormMain.List.Column[GetColumnIndex(6)].Caption;
-    ListCustomGames.Column[7].Caption:= FormMain.List.Column[GetColumnIndex(7)].Caption;
-    ListCustomGames.Column[8].Caption:= FormMain.List.Column[GetColumnIndex(8)].Caption;
-    ListCustomGames.Column[9].Caption:= FormMain.List.Column[GetColumnIndex(9)].Caption;
-    ListCustomGames.Column[10].Caption:= FormMain.List.Column[GetColumnIndex(10)].Caption;
-    ListCustomGames.Column[11].Caption:= FormMain.List.Column[GetColumnIndex(11)].Caption;
-    ListCustomGames.Column[12].Caption:= FormMain.List.Column[GetColumnIndex(12)].Caption;
-    ListCustomGames.Column[13].Caption:= FormMain.List.Column[GetColumnIndex(13)].Caption;
-    ListCustomGames.Column[14].Caption:= FormMain.List.Column[GetColumnIndex(14)].Caption;
-    ListCustomGames.Column[15].Caption:= FormMain.List.Column[GetColumnIndex(15)].Caption;
-    ListCustomGames.Column[16].Caption:= FormMain.List.Column[GetColumnIndex(16)].Caption;
-    ListCustomGames.Column[17].Caption:= FormMain.List.Column[GetColumnIndex(17)].Caption;
-    ListCustomGames.Column[18].Caption:= FormMain.List.Column[GetColumnIndex(18)].Caption;
-
-    // Buttons
-    ButtonClearCommandLine.Caption:= LanguageFile.ReadString('Resource', 'ButtonClear', 'Cl&ear');
-    ButtonClearCommandLine.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonClearCommandLineHint', 'Clear the command line and command line parameters');
-
-    ButtonNewGame.Caption:= LanguageFile.ReadString('Custom Games', 'ButtonNewGameCaption', '&New Game');
-    ButtonNewGame.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonNewGameHint', 'Clear all fields to add a new game and enter in the add mode');
-
-    ButtonEditGame.Caption:= LanguageFile.ReadString('Custom Games', 'ButtonEditGameCaption', 'Edi&t Game');
-    ButtonEditGame.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonEdutGameHint', 'Edit current game');
-
-    ButtonDeleteGame.Caption:= LanguageFile.ReadString('Custom Games', 'ButtonDeleteGameCaption', '&Delete Game');
-    ButtonDeleteGame.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonDeleteGameHint', 'Delete current game from the list');
-
-    ButtonOk.Caption:= LanguageFile.ReadString('Resource', 'ButtonOk', '&Ok');
-    ButtonOk.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonOkHint', 'Save the new game into the custom list');
-
-    ButtonCancel.Caption:= LanguageFile.ReadString('Resource', 'ButtonCancel', 'C&ancel');
-    ButtonCancel.Hint:= LanguageFile.ReadString('Custom Games', 'ButtonCancelHint', 'Cancel any changes');
-
-    ButtonClose.Caption:= LanguageFile.ReadString('Resource', 'ButtonClose', '&Close');
-    ButtonClose.Hint:= LanguageFile.ReadString('Resource', 'ButtonCloseHint', 'Close this window');
-  end;
-  FreeAndNil(LanguageFile);
-end;
-
 procedure TFormMain.SetGameColumnsLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormFilterGameColumns do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Game Columns', 'Title', 'Game Columns');
+    Caption:= LanguageFile.ReadString('Game Columns', 'Title', 'Game Columns');
 
     // Buttons
     ButtonUp.Caption:= LanguageFile.ReadString('Resource', 'ButtonUp', '&Up');
@@ -12634,11 +12515,20 @@ begin
     ButtonShowHide.Caption:= LanguageFile.ReadString('Resource', 'ButtonHide', '&Hide');
     ButtonShowHide.Hint:= LanguageFile.ReadString('Resource', 'ButtonShowHideHint', 'Show / hide column');
 
+    ButtonLoad.Caption:= LanguageFile.ReadString('Resource', 'ButtonLoad', '&Load');
+    ButtonLoad.Hint:= LanguageFile.ReadString('Resource', 'ButtonLoadHint', 'Load settings');
+
+    ButtonSave.Caption:= LanguageFile.ReadString('Resource', 'ButtonSave', '&Save');
+    ButtonSave.Hint:= LanguageFile.ReadString('Resource', 'ButtonSaveHint', 'Save contents to a file');
+
     ButtonOk.Caption:= LanguageFile.ReadString('Resource', 'ButtonOk', '&Ok');
     ButtonOk.Hint:= LanguageFile.ReadString('Resource', 'ButtonOkHint', 'Close and update settings');
 
     ButtonCancel.Caption:= LanguageFile.ReadString('Resource', 'ButtonCancel', 'C&ancel');
     ButtonCancel.Hint:= LanguageFile.ReadString('Resource', 'ButtonCancelHint', 'Close without updating');
+
+    ButtonDefault.Caption:= LanguageFile.ReadString('Resource', 'ButtonDefault', 'Default');
+    ButtonDefault.Hint:= LanguageFile.ReadString('Resource', 'ButtonDefaultHint', 'Set default value(s)');
   end;
   FreeAndNil(LanguageFile);
 end;
@@ -12647,10 +12537,10 @@ procedure TFormMain.SetMAMEConfigurationLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormMAMEConfiguration do
   begin
@@ -12661,9 +12551,12 @@ begin
     TabSheetMAMEFolders.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetFoldersCaption', 'Folders');
     TabSheetMAMEOptions.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetOptionsCaption', 'Options');
 
-    TabSheetMAMEDisplay.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay1Caption', 'Display');
-    TabSheetMAMEDisplay2.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay2Caption', 'Display 2');
-    TabSheetMAMESoundControllers.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetSoundControllersCaption', 'Sound / Controllers');
+    TabSheetMAMEDisplay.Caption:= Format(LanguageFile.ReadString('MAME Options', 'TabSheetDisplayCaption', 'Display %d'), [1]);
+    TabSheetMAMEDisplay2.Caption:= Format(LanguageFile.ReadString('MAME Options', 'TabSheetDisplayCaption', 'Display %d'), [2]);
+    TabSheetMAMEDisplay3.Caption:= Format(LanguageFile.ReadString('MAME Options', 'TabSheetDisplayCaption', 'Display %d'), [3]);
+    TabSheetMAMEDisplay4.Caption:= Format(LanguageFile.ReadString('MAME Options', 'TabSheetDisplayCaption', 'Display %d'), [4]);
+    TabSheetMAMESound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
+    TabSheetMAMEControllers.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetControllersCaption', 'Controllers');
     TabSheetMAMEMiscellaneous.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetMiscellaneousCaption', 'Miscellaneous');
 
     // Tab Sheet "Display" Label & Options
@@ -12718,6 +12611,9 @@ begin
     FlipY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipY', 'Flip Y');
     Sleep.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSleep', 'Sleep');
     RDTSC.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRDTSC', 'RDTSC');
+    HighPriority.Caption:= LanguageFile.ReadString('MAME Options', 'LabelHighPriority', 'High Priority');
+    AutoRotateLeft.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAutoRotateLeft', 'Auto Rotate Left');
+    AutoRotateRight.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAutoRotateRight', 'Auto Rotate Right');
 
     AutoFrameSkip.Hint:= LanguageFile.ReadString('MAME Options', 'AutoFrameSkipHint', 'Automatically determines the frameskip level while you''re playing the game to keep the game running at full speed. It overrides the frameskip value');
     KeepAspectRatio.Hint:= LanguageFile.ReadString('MAME Options', 'KeepAspectRatioHint', 'Enforce aspect ratio');
@@ -12739,6 +12635,9 @@ begin
     FlipY.Hint:= LanguageFile.ReadString('MAME Options', 'FlipYHint', 'Flip screen left-right');
     Sleep.Hint:= LanguageFile.ReadString('MAME Options', 'LabelSleepHint', 'Allow MAME to give back time to the system when it''s not needed');
     RDTSC.Hint:= LanguageFile.ReadString('MAME Options', 'RDTSCHint', 'Prefer RDTSC over QueryPerformanceCounter for timing');
+    HighPriority.Hint:= LanguageFile.ReadString('MAME Options', 'HighPriorityHint', 'Increase thread priority');
+    AutoRotateLeft.Hint:= LanguageFile.ReadString('MAME Options', 'AutoRotateLeftHint', 'Automatically rotate screen anti-clockwise for vertical games');
+    AutoRotateRight.Hint:= LanguageFile.ReadString('MAME Options', 'AutoRotateRightHint', 'Automatically rotate screen clockwise for vertical games');
 
     // "Display 2" Options & Labels
     // Vector options
@@ -12755,14 +12654,50 @@ begin
     Beam.Hint:= LanguageFile.ReadString('MAME Options', 'BeamHint', 'Set beam width in vector games');
     Intensity.Hint:= LanguageFile.ReadString('MAME Options', 'IntensityHint', 'Set intensity in vector games');
 
+    // Display 3 Options & Labels
+    LabelDirect3D.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDirect3D', 'Direct3D');
+    Direct3D.Caption:= LabelDirect3D.Caption;
+    LabelD3DFilter.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DFilter', 'Filter');
+    D3DTextureManagement.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DTextureManagement', 'Texture Management');
+    LabelD3DPrescale.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DPrescale', 'Prescale');
+    D3DEffectsRotation.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DEffectsRotation', 'Effects Rotation');
+    LabelD3DEffect.Caption:= LabelEffect.Caption;
+    LabelD3DScanline.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DScanline', 'Scanline');
+    LabelD3DFeedback.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DFeedback', 'Feedback');
+    LabelD3DCustomEffects.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DCustomEffects', 'Custom Effects');
+    LabelD3DExpertEffects.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DExpertEffects', 'Expert Custom Effects');
+    D3DCustomEffectsEnable.Caption:= LanguageFile.ReadString('Resource', 'EnabledStatus', 'Enabled');
+    D3DExpertEffectsEnable.Caption:= D3DCustomEffectsEnable.Caption;
+
+    Direct3D.Hint:= LanguageFile.ReadString('MAME Options', 'Direct3DHint', 'Use Direct3D for rendering');
+    D3DFilter.Hint:= LanguageFile.ReadString('MAME Options', 'D3DFilterHint', 'Interpolation method');
+    D3DTextureManagement.Hint:= LanguageFile.ReadString('MAME Options', 'D3DTextureManagementHint', 'Use DirectX texture management');
+    D3DPrescale.Hint:= LanguageFile.ReadString('MAME Options', 'D3DPrescaleHint', 'Enable prescale');
+    D3DEffectsRotation.Hint:= LanguageFile.ReadString('MAME Options', 'D3DEffectsRotationHint', 'Enable rotation of effects for rotated games');
+    D3DEffect.Hint:= Effect.Hint;
+    D3DScanline.Hint:= LanguageFile.ReadString('MAME Options', 'D3DScanlineHint', 'Scanline intensity');
+    D3DFeedback.Hint:= LanguageFile.ReadString('MAME Options', 'D3DFeedbackHint', 'Feedback strength');
+    D3DCustomEffectsEnable.Hint:= LanguageFile.ReadString('MAME Options', 'D3DCustomEffectsEnableHint', 'Enable custom effects');
+    D3DExpertEffectsEnable.Hint:= LanguageFile.ReadString('MAME Options', 'D3DExpertEffectsEnableHint', 'Enable expert custom effects');
+    D3DCustomEffects.Hint:= LanguageFile.ReadString('MAME Options', 'D3DCustomEffectsHint', 'Customised blitting effects preset');
+    D3DExpertEffects.Hint:= LanguageFile.ReadString('MAME Options', 'D3DExpertEffectsHint', 'Additional customised settings (undocumented)');
+
+    LabelSystemBios.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSystemBios', 'Bios');
+    LabelZoom.Caption:= LanguageFile.ReadString('MAME Options', 'LabelZoom', 'Zoom');
+    LabelCleanStretch.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCleanStretch', 'Clean Stretch');
+
+    SystemBios.Hint:= LanguageFile.ReadString('MAME Options', 'SystemBiosHint', 'Change system bios');
+    Zoom.Hint:= LanguageFile.ReadString('MAME Options', 'ZoomHint', 'Force specific zoom level');
+    CleanStretch.Hint:= LanguageFile.ReadString('MAME Options', 'CleanStretchHint', 'Stretch to integer ratios, ignore game aspect ratio');
+
     // "Sound" Options & Labels
-    LabelSoundOptions.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
     LabelSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSampleRate', 'Sample Rate');
     LabelCustomSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomSampleRate', 'Custom SR');
     LabelVolume.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVolume', 'Volume');
     Sound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
     Samples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamples', 'Samples');
     ResampleFilter.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResampleFilter', 'Resample Filter');
+    LabelAudioLatency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAudioLatency', 'Audio Latency');
 
     SampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'SampleRateHint', 'Set samplerate');
     CustomSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'CustomSampleRateHint', 'Set a custom samplerate (will override samplerate)');
@@ -12770,9 +12705,9 @@ begin
     Sound.Hint:= LanguageFile.ReadString('MAME Options', 'SoundHint', 'Enable/disable sound and sound CPUs');
     Samples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesHint', 'Use of samples files');
     ResampleFilter.Hint:= LanguageFile.ReadString('MAME Options', 'ResampleFilterHint', 'Resample if samplerate does not match');
+    AudioLatency.Hint:= LanguageFile.ReadString('MAME Options', 'AudioLatencyHint', 'Set audio latency (increase to reduce glitches)');
 
     // "Controllers" Options & Labels
-    LabelControllersOptions.Caption:= LanguageFile.ReadString('MAME Options', 'LabelControllerFrameBox', 'Controllers');
     Joystick.Caption:= LanguageFile.ReadString('MAME Options', 'LabelJoystick', 'Joystick');
     Mouse.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMouse', 'Mouse');
     LightGun.Caption:= LanguageFile.ReadString('MAME Options', 'LabelLightGun', 'Light Gun');
@@ -12802,6 +12737,8 @@ begin
     SkipDisclaimer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipDisclaimer', 'Skip Disclaimer');
     SkipGameInfo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipGameInfo', 'Skip Game Info');
     Debug.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDebug', 'Debug');
+    LabelMaxLogSize.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMaxLogSize', 'Max Log Size');
+    CRCIntegrityChecks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCRCIntegrityChecks', 'Use CRC Only');
 
     Throttle.Hint:= LanguageFile.ReadString('MAME Options', 'ThrottleHint', 'Throttle speed to the game''s framerate');
     Cheat.Hint:= LanguageFile.ReadString('MAME Options', 'CheatHint', 'Enable/disable cheat subsystem');
@@ -12813,6 +12750,8 @@ begin
     SkipDisclaimer.Hint:= LanguageFile.ReadString('MAME Options', 'SkipDisclaimerHint', 'Skip displaying the disclaimer screen');
     SkipGameInfo.Hint:= LanguageFile.ReadString('MAME Options', 'SkipGameInfoHint', 'Skip displaying the game info screen');
     Debug.Hint:= LanguageFile.ReadString('MAME Options', 'DebugHint', 'Enable/disable debugger (only if available)');
+    MaxLogSize.Hint:= LanguageFile.ReadString('MAME Options', 'MaxLogSizeHint', 'Maximum error.log size (in KB)');
+    CRCIntegrityChecks.Hint:= LanguageFile.ReadString('MAME Options', 'CRCIntegrityChecksHint', 'Use only CRC for all integrity checks');
 
     // "External Files" Options & Labels
     LabelExternalFiles.Caption:= LanguageFile.ReadString('MAME Options', 'LabelExternalFilesFrameBox', 'External Files');
@@ -12830,8 +12769,8 @@ begin
     FilenameHistoryButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'HistoryFileButtonHint', 'Click here to select a history file');
 
     // "Artwork" Options
-    LabelArtwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkFrameBox', 'Artwork');
-    Artwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtwork', 'Artwork');
+    LabelArtwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtwork', 'Artwork');
+    Artwork.Caption:= LabelArtwork.Caption;
     Overlay.Caption:= LanguageFile.ReadString('MAME Options', 'LabelOverlay', 'Overlay');
     Backdrop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBackdrop', 'Backdrop');
     Bezel.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBezel', 'Bezel');
@@ -12899,695 +12838,14 @@ begin
   FreeAndNil(LanguageFile);
 end;
 
-procedure TFormMain.SetMAMECustomConfigurationLanguage;
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     Exit;
-
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-  with FormMAMECustomConfiguration do
-  begin
-    // Screen Title
-    Caption:= LanguageFile.ReadString('MAME Options', 'MAMECustomConfigurationTitle', 'MAME Custom Configuration');
-
-    // Main Tab Sheet's titles
-    TabSheetMAMEFolders.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetFoldersCaption', 'Folders');
-    TabSheetMAMEOptions.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetOptionsCaption', 'Options');
-    TabSheetMAMEDisplay.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay1Caption', 'Display');
-    TabSheetMAMEDisplay2.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay2Caption', 'Display 2');
-    TabSheetMAMESoundControllers.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetSoundControllersCaption', 'Sound / Controllers');
-    TabSheetMAMEMiscellaneous.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetMiscellaneousCaption', 'Miscellaneous');
-
-    // Tab Sheet "Display" Label & Options
-    LabelResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResolution', 'Resolution');
-    LabelCustomResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomResolution', 'Custom Res');
-
-    Resolution.Hint:= LanguageFile.ReadString('MAME Options', 'ResolutionHint', 'Specifies an exact resolution to run in');
-    CustomResolution.Hint:= LanguageFile.ReadString('MAME Options', 'CustomResolutionHint', 'Specifies a custom resolution to run in');
-
-    LabelGamma.Caption:= LanguageFile.ReadString('MAME Options', 'LabelGamma', 'Gamma');
-    Gamma.Hint:= LanguageFile.ReadString('MAME Options', 'GammaHint', 'Set the global gamma correction in the game');
-
-    // "Display 2"
-    LabelRefreshRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRefreshRate', 'Refresh Rate');
-    LabelFramesToRun.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFramesToRun', 'Frames To Run');
-    LabelEffect.Caption:= LanguageFile.ReadString('MAME Options', 'LabelEffect', 'Effect');
-    LabelFullScreenBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFullScreenBrightness', 'Full Screen Brightness');
-    LabelScreenAspect.Caption:= LanguageFile.ReadString('MAME Options', 'LabelScreenAspectRatio', 'Screen Aspect Ratio');
-    LabelFrameSkip.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFrameSkip', 'Frame Skip');
-    LabelBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBrightness', 'Brightness');
-    LabelPauseBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelPauseBrightness', 'Pause Brightness');
-    LabelDebuggerResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDebuggerResolution', 'Debugger Resolution');
-
-    RefreshRate.Hint:= LanguageFile.ReadString('MAME Options', 'RefreshRateHint', 'Set specific monitor refresh rate (direct draw must be on and run in window must be off)');
-    FramesToRun.Hint:= LanguageFile.ReadString('MAME Options', 'FramesToRunHint', 'Sets the number of frames to run within the game');
-    Effect.Hint:= LanguageFile.ReadString('MAME Options', 'EffectHint', 'Specify the blitting effect');
-    FullScreenBrightness.Hint:= LanguageFile.ReadString('MAME Options', 'FullScreenBrightnessHint', 'Sets the brightness in full screen mode if available (direct draw must be on and run in window must be off)');
-    ScreenAspect.Hint:= LanguageFile.ReadString('MAME Options', 'ScreenAspectRatioHint', 'Specify an alternate monitor aspect ratio');
-    FrameSkip.Hint:= LanguageFile.ReadString('MAME Options', 'FrameSkipHint', 'Set frameskip explicitly (autoframeskip needs to be off)');
-    Brightness.Hint:= LanguageFile.ReadString('MAME Options', 'BrightnessHint', 'Brightness correction');
-    PauseBrightness.Hint:= LanguageFile.ReadString('MAME Options', 'PauseBrightnessHint', 'Additional pause brightness');
-    DebuggerResolution.Hint:= LanguageFile.ReadString('MAME Options', 'DebuggerResolutionHint', 'Set resolution for debugger window (run in window must be on)');
-
-    // "Display"
-    AutoFrameSkip.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAutoFrameSkip', 'Auto Frame Skip');
-    KeepAspectRatio.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeepAspectRatio', 'Keep Aspect Ratio');
-    SwitchColorDepth.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSwitchColorDepth', 'Switch Color Depth');
-    SwitchResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSwitchResolution', 'Switch Resolution');
-    Window.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRunInWindow', 'Run In Window');
-    MatchRefreshRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMatchRefreshRate', 'Match Refresh Rate');
-    TripleBuffer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTripleBuffer', 'Triple Buffer');
-    NoRotate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelNoRotate', 'No Rotate');
-    RotateLeft.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateLeft', 'Rotate Left');
-    RotateRight.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateRight', 'Rotate Right');
-    Maximize.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMaximize', 'Maximize');
-    WaitVSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitVerticalSync', 'Wait Vertical Sync');
-    DirectDraw.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDirectDraw', 'Direct Draw');
-    HardwareStretch.Caption:= LanguageFile.ReadString('MAME Options', 'LabelHardwareStretch', 'Hardware Stretch');
-    SyncronizeRefreshRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSyncRefreshRate', 'Sync Refresh Rate');
-    Scanlines.Caption:= LanguageFile.ReadString('MAME Options', 'LabelScanlines', 'Scanlines');
-    FlipX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipX', 'Flip X');
-    FlipY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipY', 'Flip Y');
-    Sleep.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSleep', 'Sleep');
-    RDTSC.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRDTSC', 'RDTSC');
-
-    AutoFrameSkip.Hint:= LanguageFile.ReadString('MAME Options', 'AutoFrameSkipHint', 'Automatically determines the frameskip level while you''re playing the game to keep the game running at full speed. It overrides the frameskip value');
-    KeepAspectRatio.Hint:= LanguageFile.ReadString('MAME Options', 'KeepAspectRatioHint', 'Enforce aspect ratio');
-    SwitchColorDepth.Hint:= LanguageFile.ReadString('MAME Options', 'SwitchColorDepthHint', 'Switch color depths to best fit (Direct Draw must be on)');
-    SwitchResolution.Hint:= LanguageFile.ReadString('MAME Options', 'SwitchResolutionHint', 'Switch resolutions to best fit (direct draw and full screen must be on)');
-    Window.Hint:= LanguageFile.ReadString('MAME Options', 'RunInWindowHint', 'Run in a window. Current Windows resolution and depth will be used');
-    MatchRefreshRate.Hint:= LanguageFile.ReadString('MAME Options', 'MatchRefreshRateHint', 'Attempt to match the game''s refresh rate (direct draw must be on and run in window must be off)');
-    TripleBuffer.Hint:= LanguageFile.ReadString('MAME Options', 'TripleBufferHint', 'Enable/disable triple buffering (only if fullscreen)');
-    NoRotate.Hint:= LanguageFile.ReadString('MAME Options', 'NoRotateHint', 'Do not apply rotation in screen');
-    RotateLeft.Hint:= LanguageFile.ReadString('MAME Options', 'RotateLeftHint', 'Rotate screen anti-clockwise');
-    RotateRight.Hint:= LanguageFile.ReadString('MAME Options', 'RotateRightHint', 'Rotate screen clockwise');
-    Maximize.Hint:= LanguageFile.ReadString('MAME Options', 'MaximizeHint', 'Controls initial window size in windowed mode (run in window must be on)');
-    WaitVSync.Hint:= LanguageFile.ReadString('MAME Options', 'WaitVerticalSyncHint', 'Wait for vertical syncronization to reduce tearing (direct draw must be on)');
-    DirectDraw.Hint:= LanguageFile.ReadString('MAME Options', 'DirectDrawHint', 'Use DirectDraw for rendering');
-    HardwareStretch.Hint:= LanguageFile.ReadString('MAME Options', 'HardwareStretchHint', 'Stretch video using the hardware (direct draw must be on)');
-    SyncronizeRefreshRate.Hint:= LanguageFile.ReadString('MAME Options', 'SyncRefreshRateHint', 'Syncronize only to the monitor refresh (direct draw must be on)');
-    Scanlines.Hint:= LanguageFile.ReadString('MAME Options', 'ScanlinesHint', 'Emulate scanlines (hardware stretch needs to be off)');
-    FlipX.Hint:= LanguageFile.ReadString('MAME Options', 'FlipXHint', 'Flip screen upside-down');
-    FlipY.Hint:= LanguageFile.ReadString('MAME Options', 'FlipYHint', 'Flip screen left-right');
-    Sleep.Hint:= LanguageFile.ReadString('MAME Options', 'LabelSleepHint', 'Allow MAME to give back time to the system when it''s not needed');
-    RDTSC.Hint:= LanguageFile.ReadString('MAME Options', 'RDTSCHint', 'Prefer RDTSC over QueryPerformanceCounter for timing');
-
-    // "Display 2" Options & Labels
-    // Vector options
-    LabelVector.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVectorFrameBox', 'Vector');
-    Antialias.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAntialias', 'Antialias');
-    Translucency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTranslucency', 'Translucency');
-    LabelFlicker.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlicker', 'Flicker');
-    LabelBeam.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBeam', 'Beam');
-    LabelIntensity.Caption:= LanguageFile.ReadString('MAME Options', 'LabelIntensity', 'Intensity');
-
-    Antialias.Hint:= LanguageFile.ReadString('MAME Options', 'AntialiasHint', 'Draw antialiased vectors');
-    Translucency.Hint:= LanguageFile.ReadString('MAME Options', 'TranslucencyHint', 'Draw translucent vectors');
-    Flicker.Hint:= LanguageFile.ReadString('MAME Options', 'FlickerHint', 'Set flickering in vector games');
-    Beam.Hint:= LanguageFile.ReadString('MAME Options', 'BeamHint', 'Set beam width in vector games');
-    Intensity.Hint:= LanguageFile.ReadString('MAME Options', 'IntensityHint', 'Set intensity in vector games');
-
-    // "Sound" Options & Labels
-    LabelSoundOptions.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    LabelSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSampleRate', 'Sample Rate');
-    LabelCustomSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomSampleRate', 'Custom SR');
-    LabelVolume.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVolume', 'Volume');
-    Sound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    Samples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamples', 'Samples');
-    ResampleFilter.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResampleFilter', 'Resample Filter');
-
-    SampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'SampleRateHint', 'Set samplerate');
-    CustomSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'CustomSampleRateHint', 'Set a custom samplerate (will override samplerate)');
-    Volume.Hint:= LanguageFile.ReadString('MAME Options', 'VolumeHint', 'Volume attenuation (in dB)');
-    Sound.Hint:= LanguageFile.ReadString('MAME Options', 'SoundHint', 'Enable/disable sound and sound CPUs');
-    Samples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesHint', 'Use of samples files');
-    ResampleFilter.Hint:= LanguageFile.ReadString('MAME Options', 'ResampleFilterHint', 'Resample if samplerate does not match');
-
-    // "Controllers" Options & Labels
-    LabelControllersOptions.Caption:= LanguageFile.ReadString('MAME Options', 'LabelControllerFrameBox', 'Controllers');
-    Joystick.Caption:= LanguageFile.ReadString('MAME Options', 'LabelJoystick', 'Joystick');
-    Mouse.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMouse', 'Mouse');
-    LightGun.Caption:= LanguageFile.ReadString('MAME Options', 'LabelLightGun', 'Light Gun');
-    KeyboardLEDs.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeyboardLEDs', 'Keyboard LEDs');
-    LabelAnalogDigitalDeadzone.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAnalogDigitalDeadzone', 'Analog to Digital Deadzone');
-    SteadyKey.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSteadyKey', 'Steady Key');
-    LabelControllerKeysMapping.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeysMapping', 'Keys Mapping');
-    ControllerKeysMapping.Items[0]:= LanguageFile.ReadString('MAME Options', 'ControllerKeysMappingNone', '(None)');
-
-    Joystick.Hint:= LanguageFile.ReadString('MAME Options', 'JoystickHint', 'Enable joystick input');
-    Mouse.Hint:= LanguageFile.ReadString('MAME Options', 'MouseHint', 'Enable mouse input (Windows mouse will be unavailable)');
-    LightGun.Hint:= LanguageFile.ReadString('MAME Options', 'LightGunHint', 'Enable lightgun input');
-    KeyboardLEDs.Hint:= LanguageFile.ReadString('MAME Options', 'KeyboardLEDsHint', 'Enable keyboard LED emulation');
-    AnalogDigitalDeadzone.Hint:= LanguageFile.ReadString('MAME Options', 'AnalogDigitalDeadzoneHint', 'Minimal analog value for digital input');
-    SteadyKey.Hint:= LanguageFile.ReadString('MAME Options', 'SteadyKeyHint', 'It selects a different handling for simultaneous button presses but the controls are less responsive');
-    ControllerKeysMapping.Hint:= LanguageFile.ReadString('MAME Options', 'ControllerKeysMappingHint', 'Pre-configure for specified controller');
-
-    // "Tweaks" Options & Labels
-    LabelTweaks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTweaksFrameBox', 'Tweaks');
-    Throttle.Caption:= LanguageFile.ReadString('MAME Options', 'LabelThrottle', 'Throttle');
-    Cheat.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCheat', 'Cheat');
-    Clones.Caption:= LanguageFile.ReadString('MAME Options', 'LabelClones', 'Clones');
-    ReadConfigFile.Caption:= LanguageFile.ReadString('MAME Options', 'LabelReadConfigFile', 'Read Config File');
-    Verbose.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVerbose', 'Verbose');
-    Log.Caption:= LanguageFile.ReadString('MAME Options', 'LabelLog', 'Log');
-    OSDebug.Caption:= LanguageFile.ReadString('MAME Options', 'LabelOSDebug', 'Log to Debug');
-    SkipDisclaimer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipDisclaimer', 'Skip Disclaimer');
-    SkipGameInfo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipGameInfo', 'Skip Game Info');
-    Debug.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDebug', 'Debug');
-
-    Throttle.Hint:= LanguageFile.ReadString('MAME Options', 'ThrottleHint', 'Throttle speed to the game''s framerate');
-    Cheat.Hint:= LanguageFile.ReadString('MAME Options', 'CheatHint', 'Enable/disable cheat subsystem');
-    Clones.Hint:= LanguageFile.ReadString('MAME Options', 'ClonesHint', 'Enable/disable clones');
-    ReadConfigFile.Hint:= LanguageFile.ReadString('MAME Options', 'ReadConfigFileHint', 'Enable/disable the reading of the config files');
-    Verbose.Hint:= LanguageFile.ReadString('MAME Options', 'VerboseHint', 'Displays some diagnostic information at startup');
-    Log.Hint:= LanguageFile.ReadString('MAME Options', 'LogHint', 'Generate error.log file');
-    OSDebug.Hint:= LanguageFile.ReadString('MAME Options', 'OSDebugHint', 'Output error log to debugger');
-    SkipDisclaimer.Hint:= LanguageFile.ReadString('MAME Options', 'SkipDisclaimerHint', 'Skip displaying the disclaimer screen');
-    SkipGameInfo.Hint:= LanguageFile.ReadString('MAME Options', 'SkipGameInfoHint', 'Skip displaying the game info screen');
-    Debug.Hint:= LanguageFile.ReadString('MAME Options', 'DebugHint', 'Enable/disable debugger (only if available)');
-
-    // "Artwork" Options
-    LabelArtwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkFrameBox', 'Artwork');
-    Artwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtwork', 'Artwork');
-    Overlay.Caption:= LanguageFile.ReadString('MAME Options', 'LabelOverlay', 'Overlay');
-    Backdrop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBackdrop', 'Backdrop');
-    Bezel.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBezel', 'Bezel');
-    Crop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCrop', 'Crop');
-    LabelArtworkResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkResolution', 'Artwork Resolution');
-
-    Artwork.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkHint', 'Use additional game artwork');
-    Overlay.Hint:= LanguageFile.ReadString('MAME Options', 'OverlayHint', 'Use overlay artwork');
-    Backdrop.Hint:= LanguageFile.ReadString('MAME Options', 'BackdropHint', 'Use backdrop artwork');
-    Bezel.Hint:= LanguageFile.ReadString('MAME Options', 'BezelHint', 'Use bezel artwork');
-    Crop.Hint:= LanguageFile.ReadString('MAME Options', 'CropHint', 'Crop artwork to game screen only');
-    ArtworkResolution.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkResolutionHint', 'Artwork resolution');
-
-    // "Folders" tab
-    // "Folders" Options & Labels
-    LabelFolderROMs.Caption:= LanguageFile.ReadString('MAME Options', 'LabelROMsFolder', 'ROMs');
-    LabelFolderSamples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamplesFolder', 'Samples');
-    LabelFolderGamesConfiguration.Caption:= LanguageFile.ReadString('MAME Options', 'LabelGamesConfigurationFolder', 'Games Configuration');
-    LabelFolderSaveStates.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSaveStateFolder', 'Save States');
-    LabelFolderHighScores.Caption:= LanguageFile.ReadString('MAME Options', 'LabelHighScoresFolder', 'High Scores');
-    LabelFolderNVRAM.Caption:= LanguageFile.ReadString('MAME Options', 'LabelNVRAMFolder', 'NVRAM');
-    LabelFolderMemoryCards.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMemoryCardsFolder', 'Memory Cards');
-    LabelFolderGamesRecording.Caption:= LanguageFile.ReadString('MAME Options', 'LabelInputsRecordingFolder', 'Inputs Recording');
-    LabelFolderArtworks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworksFolder', 'Artworks');
-    LabelFolderDiff.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFolderDiff', 'Diff');
-    LabelFolderInGameSnapshots.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSnapshotsFolder', 'Snapshots');
-    LabelFolderKeysMapping.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeysMapping', 'Keys Mapping');
-
-    FolderROMs.Hint:= LanguageFile.ReadString('MAME Options', 'ROMsFolderHint', 'Path to romsets');
-    FolderSamples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesFolderHint', 'Path to samplesets');
-    FolderGamesConfiguration.Hint:= LanguageFile.ReadString('MAME Options', 'GamesConfigurationFolderHint', 'Directory to save configurations');
-    FolderSaveStates.Hint:= LanguageFile.ReadString('MAME Options', 'SaveStateFolderHint', 'Directory to save states');
-    FolderHighScores.Hint:= LanguageFile.ReadString('MAME Options', 'HighScoresFolderHint', 'Directory to save hiscores');
-    FolderNVRAM.Hint:= LanguageFile.ReadString('MAME Options', 'NVRAMFolderHint', 'Directory to save nvram contents');
-    FolderMemoryCards.Hint:= LanguageFile.ReadString('MAME Options', 'MemoryCardsFolderHint', 'Directory to save memory card contents');
-    FolderInputsRecording.Hint:= LanguageFile.ReadString('MAME Options', 'InputsRecordingFolderHint', 'Directory for recordings');
-    FolderArtworks.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworksFolderHint', 'Directory for Artwork (Overlays etc.)');
-    FolderDiff.Hint:= LanguageFile.ReadString('MAME Options', 'DiffFolderHint', 'Directory for hard drive image difference files');
-    FolderSnapshots.Hint:= LanguageFile.ReadString('MAME Options', 'SnapshotsFolderHint', 'Directory for screenshots (.png format)');
-    FolderKeysMapping.Hint:= LanguageFile.ReadString('MAME Options', 'KeysMappingHint', 'Directory for preconfigured controller keys');
-
-    FolderROMsButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'MultiButtonHint', 'Click here to select folders (can have more than one)');
-    FolderSamplesButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'SingleButtonHint', 'Click here to select a folder');
-    FolderGamesConfigurationButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderSaveStatesButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderHighScoresButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderNVRAMButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderMemoryCardsButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderInputsRecordingButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderArtworksButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderDiffButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderSnapshotsButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderKeysMappingButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-
-    // Buttons
-    ButtonOk.Caption:= LanguageFile.ReadString('Resource', 'ButtonOk', '&Ok');
-    ButtonOk.Hint:= LanguageFile.ReadString('Resource', 'ButtonOkHint', 'Close and update settings');
-
-    ButtonCancel.Caption:= LanguageFile.ReadString('Resource', 'ButtonCancel', 'C&ancel');
-    ButtonCancel.Hint:= LanguageFile.ReadString('Resource', 'ButtonCancelHint', 'Close without updating');
-  end;
-  FreeAndNil(LanguageFile);
-end;
-
-procedure TFormMain.SetDOSMAMEConfigurationLanguage;
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     Exit;
-
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-  with FormDOSMAMEConfiguration do
-  begin
-    // Screen Title
-    Caption:= LanguageFile.ReadString('MAME Options', 'DOSMAMEConfigurationTitle', 'DOS MAME Configuration');
-
-    // I need to find a way to create only one procedure for all MAME Configuration screens, but Delphi doesn't
-    // accept a Form name as an input :-(((
-
-    // Main Tab Sheet's titles
-    TabSheetDOSMAMEFolders.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetFoldersCaption', 'Folders');
-    TabSheetDOSMAMEOptions.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetOptionsCaption', 'Options');
-
-    TabSheetDOSMAMEDisplay.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay1Caption', 'Display');
-    TabSheetDOSMAMEDisplay2.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay2Caption', 'Display 2');
-    TabSheetDOSMAMESoundControllers.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetSoundControllersCaption', 'Sound / Controllers');
-    TabSheetDOSMAMEMiscellaneous.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetMiscellaneousCaption', 'Miscellaneous');
-
-    // Tab Sheet "Display" Label & Options
-    LabelResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResolution', 'Resolution');
-    LabelCustomResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomResolution', 'Custom Res');
-
-    Resolution.Hint:= LanguageFile.ReadString('MAME Options', 'ResolutionHint', 'Specifies an exact resolution to run in');
-    CustomResolution.Hint:= LanguageFile.ReadString('MAME Options', 'CustomResolutionHint', 'Specifies a custom resolution to run in');
-
-    LabelDepth.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDepth', 'Depth');
-    LabelFrameSkip.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFrameSkip', 'Frame Skip');
-    LabelGamma.Caption:= LanguageFile.ReadString('MAME Options', 'LabelGamma', 'Gamma');
-
-    Depth.Hint:= LanguageFile.ReadString('MAME Options', 'DepthHint', 'Specify the colordepth the core should render in bits per pixel (bpp)');
-    FrameSkip.Hint:= LanguageFile.ReadString('MAME Options', 'FrameSkipHint', 'Set frameskip explicitly (autoframeskip needs to be off)');
-    Gamma.Hint:= LanguageFile.ReadString('MAME Options', 'GammaHint', 'Set the global gamma correction in the game');
-
-    LabelMonitor.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMonitor', 'Monitor');
-    LabelVESA.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVesa', 'VESA');
-    LabelDOSMAMEVGAFrequency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVGAFrequency', 'VGA Frequency');
-
-    Monitor.Hint:= LanguageFile.ReadString('MAME Options', 'MonitorHint', 'Selects the monitor type');
-    VESA.Hint:= LanguageFile.ReadString('MAME Options', 'VesaHint', 'Forces the VESA mode. The best available one is used by default');
-    VGAFrequency.Hint:= LanguageFile.ReadString('MAME Options', 'VGAFrequencyHint', 'Specifies different frequencies for the custom video modes. WARNING: IT IS POSSIBLE TO SET FREQUENCIES WAY OUTSIDE OF YOUR MONITOR''S RANGE, WHICH COULD DAMAGE YOUR MONITOR. USE THIS OPTION AT YOUR OWN RISK!');
-
-    LabelCenterX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCenterX', 'Center X');
-    LabelCenterY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCenterY', 'Center Y');
-
-    CenterX.Hint:= LanguageFile.ReadString('MAME Options', 'CenterXHint', 'Center screen horizontally');
-    CenterY.Hint:= LanguageFile.ReadString('MAME Options', 'CenterYHint', 'Center screen vertically');
-
-    LabelSkipColumns.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipColumns', 'Skip Columns');
-    LabelSkipLines.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipLines', 'Skip Lines');
-
-    SkipColumns.Hint:= LanguageFile.ReadString('MAME Options', 'SkipColumnsHint', 'Adjust horizontal screen position');
-    SkipLines.Hint:= LanguageFile.ReadString('MAME Options', 'SkipLinesHint', 'Adjust vertical screen position');
-
-    // "Visual Effects" Options & Labels
-    TripleBuffer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTripleBuffer', 'Triple Buffer');
-    NoRotate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelNoRotate', 'No Rotate');
-    RotateLeft.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateLeft', 'Rotate Left');
-    RotateRight.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateRight', 'Rotate Right');
-    WaitVSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitVerticalSync', 'Wait Vertical Sync');
-    VSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVSync', 'Vertical Sync');
-    LabelScanlines.Caption:= LanguageFile.ReadString('MAME Options', 'LabelScanlines', 'Scanlines');
-    FlipX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipX', 'Flip X');
-    FlipY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipY', 'Flip Y');
-
-    Stretch.Caption:= LanguageFile.ReadString('MAME Options', 'LabelStretch', 'Stretch');
-    AlwaysSynced.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAlwaysSynced', 'Always Synced');
-    WaitInterlace.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitInterlace', 'Wait Interlace');
-    LabelMMX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMMX', 'MMX');
-    LabelDirty.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDirty', 'Dirty');
-
-    TripleBuffer.Hint:= LanguageFile.ReadString('MAME Options', 'TripleBufferHint', 'Enable/disable triple buffering (only if fullscreen)');
-    NoRotate.Hint:= LanguageFile.ReadString('MAME Options', 'NoRotateHint', 'Do not apply rotation in screen');
-    RotateLeft.Hint:= LanguageFile.ReadString('MAME Options', 'RotateLeftHint', 'Rotate screen anti-clockwise');
-    RotateRight.Hint:= LanguageFile.ReadString('MAME Options', 'RotateRightHint', 'Rotate screen clockwise');
-    WaitVSync.Hint:= LanguageFile.ReadString('MAME Options', 'WaitVerticalSyncHint', 'Wait for vertical syncronization to reduce tearing (direct draw must be on)');
-    VSync.Hint:= LanguageFile.ReadString('MAME Options', 'VSyncHint', 'Synchronize video display with the video beam instead of using the timer');
-    Scanlines.Hint:= LanguageFile.ReadString('MAME Options', 'ScanlinesHint', 'Emulate scanlines (hardware stretch needs to be off)');
-    FlipX.Hint:= LanguageFile.ReadString('MAME Options', 'FlipXHint', 'Flip screen upside-down');
-    FlipY.Hint:= LanguageFile.ReadString('MAME Options', 'FlipYHint', 'Flip screen left-right');
-
-    Stretch.Hint:= LanguageFile.ReadString('MAME Options', 'StretchHint', 'Stretch video');
-    AlwaysSynced.Hint:= LanguageFile.ReadString('MAME Options', 'AlwaysSyncedHint', 'Always syncronize video display');
-    WaitInterlace.Hint:= LanguageFile.ReadString('MAME Options', 'WaitInterlaceHint', 'Forces update of both odd and even fields of an interlaced low scanrate display (monitor=ntsc,pal,arcade) for each game loop');
-    MMX.Hint:= LanguageFile.ReadString('MAME Options', 'MMXHint', 'Use Intel''s MMX instructions to speed up emulation (only if available)');
-    Dirty.Hint:= LanguageFile.ReadString('MAME Options', 'DirtyHint', 'Enable dirty video optimization (speeds up vector games tremendously)');
-
-    LabelDebuggerResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDebuggerResolution', 'Debugger Resolution');
-    LabelBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBrightness', 'Brightness');
-    LabelPauseBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelPauseBrightness', 'Pause Brightness');
-
-    DebuggerResolution.Hint:= LanguageFile.ReadString('MAME Options', 'DebuggerResolutionHint', 'Set resolution for debugger window (run in window must be on)');
-    Brightness.Hint:= LanguageFile.ReadString('MAME Options', 'BrightnessHint', 'Brightness correction');
-    PauseBrightness.Hint:= LanguageFile.ReadString('MAME Options', 'PauseBrightnessHint', 'Additional pause brightness');
-
-    // Vector options
-    LabelVector.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVectorFrameBox', 'Vector');
-    Antialias.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAntialias', 'Antialias');
-    Translucency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTranslucency', 'Translucency');
-    LabelFlicker.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlicker', 'Flicker');
-    LabelBeam.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBeam', 'Beam');
-    LabelIntensity.Caption:= LanguageFile.ReadString('MAME Options', 'LabelIntensity', 'Intensity');
-    LabelVectorResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVectorResolution', 'Vector Resolution');
-
-    Antialias.Hint:= LanguageFile.ReadString('MAME Options', 'AntialiasHint', 'Draw antialiased vectors');
-    Translucency.Hint:= LanguageFile.ReadString('MAME Options', 'TranslucencyHint', 'Draw translucent vectors');
-    Flicker.Hint:= LanguageFile.ReadString('MAME Options', 'FlickerHint', 'Set flickering in vector games');
-    Beam.Hint:= LanguageFile.ReadString('MAME Options', 'BeamHint', 'Set beam width in vector games');
-    Intensity.Hint:= LanguageFile.ReadString('MAME Options', 'IntensityHint', 'Set intensity in vector games');
-    VectorResolution.Hint:= LanguageFile.ReadString('MAME Options', 'VectorResolutionHint', 'Set vector resolution');
-
-    // "Sound" Options & Labels
-    LabelSound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    LabelSoundCard.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSoundCard', 'Sound Card');
-    Sound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    LabelSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSampleRate', 'Sample Rate');
-    LabelCustomSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomSampleRate', 'Custom SR');
-    LabelVolume.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVolume', 'Volume');
-    Stereo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelStereo', 'Stereo');
-    Samples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamples', 'Samples');
-    ResampleFilter.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResampleFilter', 'Resample Filter');
-    DetectSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDetectSampleRate', 'Detect Sample Rate');
-
-    SoundCard.Hint:= LanguageFile.ReadString('MAME Options', 'SoundCardHint', 'Selects sound card (If this is not specified, MAME will ask you)');
-    Sound.Hint:= LanguageFile.ReadString('MAME Options', 'SoundHint', 'Enable/disable sound and sound CPUs');
-    SampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'SampleRateHint', 'Set samplerate');
-    CustomSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'CustomSampleRateHint', 'Set a custom samplerate (will override samplerate)');
-    Volume.Hint:= LanguageFile.ReadString('MAME Options', 'VolumeHint', 'Volume attenuation (in dB)');
-    Stereo.Hint:= LanguageFile.ReadString('MAME Options', 'StereoHint', 'Selects stereo or mono output for games supporting stereo sound');
-    Samples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesHint', 'Use of samples files');
-    ResampleFilter.Hint:= LanguageFile.ReadString('MAME Options', 'ResampleFilterHint', 'Resample if samplerate does not match');
-    DetectSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'DetectSampleRateHint', 'Use correct games''s sample rate');
-
-    // "Controllers" Options & Labels
-    LabelControllers.Caption:= LanguageFile.ReadString('MAME Options', 'LabelControllerFrameBox', 'Controllers');
-
-    LabelJoystick.Caption:= LanguageFile.ReadString('MAME Options', 'LabelJoystick', 'Joystick');
-    Mouse.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMouse', 'Mouse');
-    SteadyKey.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSteadyKey', 'Steady Key');
-    KeyboardLEDs.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeyboardLEDs', 'Keyboard LEDs');
-    LabelControllerKeysMapping.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeysMapping', 'Keys Mapping');
-
-    Joystick.Hint:= LanguageFile.ReadString('MAME Options', 'JoystickHint', 'Enable joystick input');
-    Mouse.Hint:= LanguageFile.ReadString('MAME Options', 'MouseHint', 'Enable mouse input (Windows mouse will be unavailable)');
-    SteadyKey.Hint:= LanguageFile.ReadString('MAME Options', 'SteadyKeyHint', 'It selects a different handling for simultaneous button presses but the controls are less responsive');
-    KeyboardLEDs.Hint:= LanguageFile.ReadString('MAME Options', 'KeyboardLEDsHint', 'Enable keyboard LED emulation');
-    ControllerKeysMapping.Hint:= LanguageFile.ReadString('MAME Options', 'ControllerKeysMappingHint', 'Pre-configure for specified controller');
-
-    // "Tweaks" Options & Labels
-    LabelTweaks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTweaksFrameBox', 'Tweaks');
-
-    Throttle.Caption:= LanguageFile.ReadString('MAME Options', 'LabelThrottle', 'Throttle');
-    Cheat.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCheat', 'Cheat');
-    Tweak.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTweak', 'Tweak');
-    SkipDisclaimer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipDisclaimer', 'Skip Disclaimer');
-    SkipGameInfo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipGameInfo', 'Skip Game Info');
-
-    Throttle.Hint:= LanguageFile.ReadString('MAME Options', 'ThrottleHint', 'Throttle speed to the game''s framerate');
-    Cheat.Hint:= LanguageFile.ReadString('MAME Options', 'CheatHint', 'Enable/disable cheat subsystem');
-    Tweak.Hint:= LanguageFile.ReadString('MAME Options', 'TweakHint', 'Use tweaked VGA modes whose resolutions matching those of the emulated games');
-    SkipDisclaimer.Hint:= LanguageFile.ReadString('MAME Options', 'SkipDisclaimerHint', 'Skip displaying the disclaimer screen');
-    SkipGameInfo.Hint:= LanguageFile.ReadString('MAME Options', 'SkipGameInfoHint', 'Skip displaying the game info screen');
-
-    // "External Files" Options & Labels
-    LabelExternalFiles.Caption:= LanguageFile.ReadString('MAME Options', 'LabelExternalFilesFrameBox', 'External Files');
-
-    LabelCheatFile.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCheatFile', 'Cheat File');
-    LabelMAMEInfoFile.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMAMEInfoFile', 'Info File');
-    LabelHistoryFile.Caption:= LanguageFile.ReadString('MAME Options', 'LabelHistoryFile', 'History File');
-
-    FilenameCheat.Hint:= LanguageFile.ReadString('MAME Options', 'CheatFileHint', 'Select a cheat filename');
-    FilenameMAMEInfo.Hint:= LanguageFile.ReadString('MAME Options', 'MAMEInfoFileHint', 'Select a mameinfo filename');
-    FilenameHistory.Hint:= LanguageFile.ReadString('MAME Options', 'HistoryFileHint', 'Select a history filename');
-
-    FilenameCheatButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'CheatFileButtonHint', 'Click here to select a cheat file');
-    FilenameMAMEInfoButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'MAMEInfoFileButtonHint', 'Click here to select a mameinfo file');
-    FilenameHistoryButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'HistoryFileButtonHint', 'Click here to select a history file');
-
-    LabelArtwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkFrameBox', 'Artwork');
-    Artwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtwork', 'Artwork');
-    Overlay.Caption:= LanguageFile.ReadString('MAME Options', 'LabelOverlay', 'Overlay');
-    Backdrop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBackdrop', 'Backdrop');
-    Bezel.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBezel', 'Bezel');
-    Crop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCrop', 'Crop');
-    LabelArtworkResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkResolution', 'Artwork Resolution');
-
-    Artwork.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkHint', 'Use additional game artwork');
-    Overlay.Hint:= LanguageFile.ReadString('MAME Options', 'OverlayHint', 'Use overlay artwork');
-    Backdrop.Hint:= LanguageFile.ReadString('MAME Options', 'BackdropHint', 'Use backdrop artwork');
-    Bezel.Hint:= LanguageFile.ReadString('MAME Options', 'BezelHint', 'Use bezel artwork');
-    Crop.Hint:= LanguageFile.ReadString('MAME Options', 'CropHint', 'Crop artwork to game screen only');
-    ArtworkResolution.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkResolutionHint', 'Artwork resolution');
-
-    // "Folders" tab
-    // "Folders" Options & Labels
-    LabelFolderROMs.Caption:= LanguageFile.ReadString('MAME Options', 'LabelROMsFolder', 'ROMs');
-    LabelFolderSamples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamplesFolder', 'Samples');
-    LabelFolderGamesConfiguration.Caption:= LanguageFile.ReadString('MAME Options', 'LabelGamesConfigurationFolder', 'Games Configuration');
-    LabelFolderSaveStates.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSaveStateFolder', 'Save States');
-    LabelFolderHighScores.Caption:= LanguageFile.ReadString('MAME Options', 'LabelHighScoresFolder', 'High Scores');
-    LabelFolderNVRAM.Caption:= LanguageFile.ReadString('MAME Options', 'LabelNVRAMFolder', 'NVRAM');
-    LabelFolderMemoryCards.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMemoryCardsFolder', 'Memory Cards');
-    LabelFolderGamesRecording.Caption:= LanguageFile.ReadString('MAME Options', 'LabelInputsRecordingFolder', 'Inputs Recording');
-    LabelFolderArtworks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworksFolder', 'Artworks');
-    LabelFolderInGameSnapshots.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSnapshotsFolder', 'Snapshots');
-    LabelFolderCheats.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCheatsFolder', 'Cheats');
-    LabelFolderDiff.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFolderDiff', 'Diff');
-    LabelFolderKeysMapping.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeysMapping', 'Keys Mapping');
-
-    FolderROMs.Hint:= LanguageFile.ReadString('MAME Options', 'ROMsFolderHint', 'Path to romsets');
-    FolderSamples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesFolderHint', 'Path to samplesets');
-    FolderGamesConfiguration.Hint:= LanguageFile.ReadString('MAME Options', 'GamesConfigurationFolderHint', 'Directory to save configurations');
-    FolderSaveStates.Hint:= LanguageFile.ReadString('MAME Options', 'SaveStateFolderHint', 'Directory to save states');
-    FolderHighScores.Hint:= LanguageFile.ReadString('MAME Options', 'HighScoresFolderHint', 'Directory to save hiscores');
-    FolderNVRAM.Hint:= LanguageFile.ReadString('MAME Options', 'NVRAMFolderHint', 'Directory to save nvram contents');
-    FolderMemoryCards.Hint:= LanguageFile.ReadString('MAME Options', 'MemoryCardsFolderHint', 'Directory to save memory card contents');
-    FolderInputsRecording.Hint:= LanguageFile.ReadString('MAME Options', 'InputsRecordingFolderHint', 'Directory for recordings');
-    FolderArtworks.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworksFolderHint', 'Directory for Artwork (Overlays etc.)');
-    FolderSnapshots.Hint:= LanguageFile.ReadString('MAME Options', 'SnapshotsFolderHint', 'Directory for screenshots (.png format)');
-    FolderCheats.Hint:= LanguageFile.ReadString('MAME Options', 'CheatsFolderHint', 'Directory for cheatfiles');
-    FolderDiff.Hint:= LanguageFile.ReadString('MAME Options', 'DiffFolderHint', 'Directory for hard drive image difference files');
-    FolderKeysMapping.Hint:= LanguageFile.ReadString('MAME Options', 'KeysMappingHint', 'Directory for preconfigured controller keys');
-
-    FolderROMsButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'MultiButtonHint', 'Click here to select folders (can have more than one)');
-    FolderSamplesButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'SingleButtonHint', 'Click here to select a folder');
-    FolderGamesConfigurationButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderSaveStatesButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderHighScoresButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderNVRAMButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderMemoryCardsButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderInputsRecordingButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderArtworksButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderSnapshotsButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderCheatsButtonSelect.Hint:= FolderROMsButtonSelect.Hint;
-    FolderDiffButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-    FolderKeysMappingButtonSelect.Hint:= FolderSamplesButtonSelect.Hint;
-
-    // Buttons
-    ButtonOk.Caption:= LanguageFile.ReadString('Resource', 'ButtonOk', '&Ok');
-    ButtonOk.Hint:= LanguageFile.ReadString('Resource', 'ButtonOkHint', 'Close and update settings');
-
-    ButtonCancel.Caption:= LanguageFile.ReadString('Resource', 'ButtonCancel', 'C&ancel');
-    ButtonCancel.Hint:= LanguageFile.ReadString('Resource', 'ButtonCancelHint', 'Close without updating');
-  end;
-  FreeAndNil(LanguageFile);
-end;
-
-procedure TFormMain.SetDOSMAMECustomConfigurationLanguage;
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     Exit;
-
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-  with FormDOSMAMECustomConfiguration do
-  begin
-    // Screen Title
-    Caption:= LanguageFile.ReadString('MAME Options', 'DOSMAMECustomConfigurationTitle', 'DOS MAME Custom Configuration');
-
-    // Main Tab Sheet's titles
-    TabSheetDOSMAMEOptions.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetOptionsCaption', 'Options');
-    TabSheetDOSMAMEDisplay.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay1Caption', 'Display');
-    TabSheetDOSMAMEDisplay2.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetDisplay2Caption', 'Display 2');
-    TabSheetDOSMAMESoundControllers.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetSoundControllersCaption', 'Sound / Controllers');
-    TabSheetDOSMAMEMiscellaneous.Caption:= LanguageFile.ReadString('MAME Options', 'TabSheetMiscellaneousCaption', 'Miscellaneous');
-
-    // Tab Sheet "Display" Label & Options
-    LabelResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResolution', 'Resolution');
-    LabelCustomResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomResolution', 'Custom Res');
-
-    Resolution.Hint:= LanguageFile.ReadString('MAME Options', 'ResolutionHint', 'Specifies an exact resolution to run in');
-    CustomResolution.Hint:= LanguageFile.ReadString('MAME Options', 'CustomResolutionHint', 'Specifies a custom resolution to run in');
-
-    LabelDepth.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDepth', 'Depth');
-    LabelFrameSkip.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFrameSkip', 'Frame Skip');
-    LabelGamma.Caption:= LanguageFile.ReadString('MAME Options', 'LabelGamma', 'Gamma');
-
-    Depth.Hint:= LanguageFile.ReadString('MAME Options', 'DepthHint', 'Specify the colordepth the core should render in bits per pixel (bpp)');
-    FrameSkip.Hint:= LanguageFile.ReadString('MAME Options', 'FrameSkipHint', 'Set frameskip explicitly (autoframeskip needs to be off)');
-    Gamma.Hint:= LanguageFile.ReadString('MAME Options', 'GammaHint', 'Set the global gamma correction in the game');
-
-    LabelMonitor.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMonitor', 'Monitor');
-    LabelVESA.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVesa', 'VESA');
-    LabelVGAFrequency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVGAFrequency', 'VGA Frequency');
-
-    Monitor.Hint:= LanguageFile.ReadString('MAME Options', 'MonitorHint', 'Selects the monitor type');
-    VESA.Hint:= LanguageFile.ReadString('MAME Options', 'VesaHint', 'Forces the VESA mode. The best available one is used by default');
-    VGAFrequency.Hint:= LanguageFile.ReadString('MAME Options', 'VGAFrequencyHint', 'Specifies different frequencies for the custom video modes. WARNING: IT IS POSSIBLE TO SET FREQUENCIES WAY OUTSIDE OF YOUR MONITOR''S RANGE, WHICH COULD DAMAGE YOUR MONITOR. USE THIS OPTION AT YOUR OWN RISK!');
-
-    LabelCenterX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCenterX', 'Center X');
-    LabelCenterY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCenterY', 'Center Y');
-
-    CenterX.Hint:= LanguageFile.ReadString('MAME Options', 'CenterXHint', 'Center screen horizontally');
-    CenterY.Hint:= LanguageFile.ReadString('MAME Options', 'CenterYHint', 'Center screen vertically');
-
-    LabelSkipColumns.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipColumns', 'Skip Columns');
-    LabelSkipLines.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipLines', 'Skip Lines');
-
-    SkipColumns.Hint:= LanguageFile.ReadString('MAME Options', 'SkipColumnsHint', 'Adjust horizontal screen position');
-    SkipLines.Hint:= LanguageFile.ReadString('MAME Options', 'SkipLinesHint', 'Adjust vertical screen position');
-
-    // "Visual Effects" Options & Labels
-    TripleBuffer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTripleBuffer', 'Triple Buffer');
-    NoRotate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelNoRotate', 'No Rotate');
-    RotateLeft.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateLeft', 'Rotate Left');
-    RotateRight.Caption:= LanguageFile.ReadString('MAME Options', 'LabelRotateRight', 'Rotate Right');
-    WaitVSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitVerticalSync', 'Wait Vertical Sync');
-    LabelScanlines.Caption:= LanguageFile.ReadString('MAME Options', 'LabelScanlines', 'Scanlines');
-    FlipX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipX', 'Flip X');
-    FlipY.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlipY', 'Flip Y');
-
-    Stretch.Caption:= LanguageFile.ReadString('MAME Options', 'LabelStretch', 'Stretch');
-    WaitVSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitVerticalSync', 'Wait Vertical Sync');
-    VSync.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVSync', 'Vertical Sync');
-    AlwaysSynced.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAlwaysSynced', 'Always Synced');
-    WaitInterlace.Caption:= LanguageFile.ReadString('MAME Options', 'LabelWaitInterlace', 'Wait Interlace');
-    LabelMMX.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMMX', 'MMX');
-    LabelDirty.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDirty', 'Dirty');
-
-    TripleBuffer.Hint:= LanguageFile.ReadString('MAME Options', 'TripleBufferHint', 'Enable/disable triple buffering (only if fullscreen)');
-    NoRotate.Hint:= LanguageFile.ReadString('MAME Options', 'NoRotateHint', 'Do not apply rotation in screen');
-    RotateLeft.Hint:= LanguageFile.ReadString('MAME Options', 'RotateLeftHint', 'Rotate screen anti-clockwise');
-    RotateRight.Hint:= LanguageFile.ReadString('MAME Options', 'RotateRightHint', 'Rotate screen clockwise');
-    WaitVSync.Hint:= LanguageFile.ReadString('MAME Options', 'WaitVerticalSyncHint', 'Wait for vertical syncronization to reduce tearing (direct draw must be on)');
-    VSync.Hint:= LanguageFile.ReadString('MAME Options', 'VSyncHint', 'Synchronize video display with the video beam instead of using the timer');
-    Scanlines.Hint:= LanguageFile.ReadString('MAME Options', 'ScanlinesHint', 'Emulate scanlines (hardware stretch needs to be off)');
-    FlipX.Hint:= LanguageFile.ReadString('MAME Options', 'FlipXHint', 'Flip screen upside-down');
-    FlipY.Hint:= LanguageFile.ReadString('MAME Options', 'FlipYHint', 'Flip screen left-right');
-
-    Stretch.Hint:= LanguageFile.ReadString('MAME Options', 'StretchHint', 'Stretch video');
-    WaitVSync.Hint:= LanguageFile.ReadString('MAME Options', 'WaitVerticalSyncHint', 'Synchronize video display with the video beam instead of using the timer');
-    AlwaysSynced.Hint:= LanguageFile.ReadString('MAME Options', 'AlwaysSyncedHint', 'Always syncronize video display');
-    WaitInterlace.Hint:= LanguageFile.ReadString('MAME Options', 'WaitInterlaceHint', 'Forces update of both odd and even fields of an interlaced low scanrate display (monitor=ntsc,pal,arcade) for each game loop');
-    MMX.Hint:= LanguageFile.ReadString('MAME Options', 'MMXHint', 'Use Intel''s MMX instructions to speed up emulation (only if available)');
-    Dirty.Hint:= LanguageFile.ReadString('MAME Options', 'DirtyHint', 'Enable dirty video optimization (speeds up vector games tremendously)');
-
-    LabelDebuggerResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDebuggerResolution', 'Debugger Resolution');
-    LabelBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBrightness', 'Brightness');
-    LabelPauseBrightness.Caption:= LanguageFile.ReadString('MAME Options', 'LabelPauseBrightness', 'Pause Brightness');
-
-    DebuggerResolution.Hint:= LanguageFile.ReadString('MAME Options', 'DebuggerResolutionHint', 'Set resolution for debugger window (run in window must be on)');
-    Brightness.Hint:= LanguageFile.ReadString('MAME Options', 'BrightnessHint', 'Brightness correction');
-    PauseBrightness.Hint:= LanguageFile.ReadString('MAME Options', 'PauseBrightnessHint', 'Additional pause brightness');
-
-    // Vector options
-    LabelVector.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVectorFrameBox', 'Vector');
-    Antialias.Caption:= LanguageFile.ReadString('MAME Options', 'LabelAntialias', 'Antialias');
-    Translucency.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTranslucency', 'Translucency');
-    LabelFlicker.Caption:= LanguageFile.ReadString('MAME Options', 'LabelFlicker', 'Flicker');
-    LabelBeam.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBeam', 'Beam');
-    LabelIntensity.Caption:= LanguageFile.ReadString('MAME Options', 'LabelIntensity', 'Intensity');
-    LabelVectorResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVectorResolution', 'Vector Resolution');
-
-    Antialias.Hint:= LanguageFile.ReadString('MAME Options', 'AntialiasHint', 'Draw antialiased vectors');
-    Translucency.Hint:= LanguageFile.ReadString('MAME Options', 'TranslucencyHint', 'Draw translucent vectors');
-    Flicker.Hint:= LanguageFile.ReadString('MAME Options', 'FlickerHint', 'Set flickering in vector games');
-    Beam.Hint:= LanguageFile.ReadString('MAME Options', 'BeamHint', 'Set beam width in vector games');
-    Intensity.Hint:= LanguageFile.ReadString('MAME Options', 'IntensityHint', 'Set intensity in vector games');
-    VectorResolution.Hint:= LanguageFile.ReadString('MAME Options', 'VectorResolutionHint', 'Set vector resolution');
-
-    // "Sound" Options & Labels
-    LabelSound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    LabelSoundCard.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSoundCard', 'Sound Card');
-    Sound.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSound', 'Sound');
-    LabelSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSampleRate', 'Sample Rate');
-    LabelCustomSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCustomSampleRate', 'Custom SR');
-    LabelVolume.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVolume', 'Volume');
-    Stereo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelStereo', 'Stereo');
-    Samples.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSamples', 'Samples');
-    ResampleFilter.Caption:= LanguageFile.ReadString('MAME Options', 'LabelResampleFilter', 'Resample Filter');
-    DetectSampleRate.Caption:= LanguageFile.ReadString('MAME Options', 'LabelDetectSampleRate', 'Detect Sample Rate');
-
-    SoundCard.Hint:= LanguageFile.ReadString('MAME Options', 'SoundCardHint', 'Selects sound card (If this is not specified, MAME will ask you)');
-    Sound.Hint:= LanguageFile.ReadString('MAME Options', 'SoundHint', 'Enable/disable sound and sound CPUs');
-    SampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'SampleRateHint', 'Set samplerate');
-    CustomSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'CustomSampleRateHint', 'Set a custom samplerate (will override samplerate)');
-    Volume.Hint:= LanguageFile.ReadString('MAME Options', 'VolumeHint', 'Volume attenuation (in dB)');
-    Stereo.Hint:= LanguageFile.ReadString('MAME Options', 'StereoHint', 'Selects stereo or mono output for games supporting stereo sound');
-    Samples.Hint:= LanguageFile.ReadString('MAME Options', 'SamplesHint', 'Use of samples files');
-    ResampleFilter.Hint:= LanguageFile.ReadString('MAME Options', 'ResampleFilterHint', 'Resample if samplerate does not match');
-    DetectSampleRate.Hint:= LanguageFile.ReadString('MAME Options', 'DetectSampleRateHint', 'Use correct games''s sample rate');
-
-    // "Controllers" Options & Labels
-    LabelControllers.Caption:= LanguageFile.ReadString('MAME Options', 'LabelControllerFrameBox', 'Controllers');
-
-    LabelJoystick.Caption:= LanguageFile.ReadString('MAME Options', 'LabelJoystick', 'Joystick');
-    Mouse.Caption:= LanguageFile.ReadString('MAME Options', 'LabelMouse', 'Mouse');
-    SteadyKey.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSteadyKey', 'Steady Key');
-    KeyboardLEDs.Caption:= LanguageFile.ReadString('MAME Options', 'LabelKeyboardLEDs', 'Keyboard LEDs');
-
-    Joystick.Hint:= LanguageFile.ReadString('MAME Options', 'JoystickHint', 'Enable joystick input');
-    Mouse.Hint:= LanguageFile.ReadString('MAME Options', 'MouseHint', 'Enable mouse input (Windows mouse will be unavailable)');
-    SteadyKey.Hint:= LanguageFile.ReadString('MAME Options', 'SteadyKeyHint', 'It selects a different handling for simultaneous button presses but the controls are less responsive');
-    KeyboardLEDs.Hint:= LanguageFile.ReadString('MAME Options', 'KeyboardLEDsHint', 'Enable keyboard LED emulation');
-
-    LabelArtwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkFrameBox', 'Artwork');
-    Artwork.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtwork', 'Artwork');
-    Overlay.Caption:= LanguageFile.ReadString('MAME Options', 'LabelOverlay', 'Overlay');
-    Backdrop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBackdrop', 'Backdrop');
-    Bezel.Caption:= LanguageFile.ReadString('MAME Options', 'LabelBezel', 'Bezel');
-    Crop.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCrop', 'Crop');
-    LabelArtworkResolution.Caption:= LanguageFile.ReadString('MAME Options', 'LabelArtworkResolution', 'Artwork Resolution');
-
-    Artwork.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkHint', 'Use additional game artwork');
-    Overlay.Hint:= LanguageFile.ReadString('MAME Options', 'OverlayHint', 'Use overlay artwork');
-    Backdrop.Hint:= LanguageFile.ReadString('MAME Options', 'BackdropHint', 'Use backdrop artwork');
-    Bezel.Hint:= LanguageFile.ReadString('MAME Options', 'BezelHint', 'Use bezel artwork');
-    Crop.Hint:= LanguageFile.ReadString('MAME Options', 'CropHint', 'Crop artwork to game screen only');
-    ArtworkResolution.Hint:= LanguageFile.ReadString('MAME Options', 'ArtworkResolutionHint', 'Artwork resolution');
-
-    // "Tweaks" Options & Labels
-    LabelTweaks.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTweaksFrameBox', 'Tweaks');
-
-    Throttle.Caption:= LanguageFile.ReadString('MAME Options', 'LabelThrottle', 'Throttle');
-    Cheat.Caption:= LanguageFile.ReadString('MAME Options', 'LabelCheat', 'Cheat');
-    Tweak.Caption:= LanguageFile.ReadString('MAME Options', 'LabelTweak', 'Tweak');
-    SkipDisclaimer.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipDisclaimer', 'Skip Disclaimer');
-    SkipGameInfo.Caption:= LanguageFile.ReadString('MAME Options', 'LabelSkipGameInfo', 'Skip Game Info');
-
-    Throttle.Hint:= LanguageFile.ReadString('MAME Options', 'ThrottleHint', 'Throttle speed to the game''s framerate');
-    Cheat.Hint:= LanguageFile.ReadString('MAME Options', 'CheatHint', 'Enable/disable cheat subsystem');
-    Tweak.Hint:= LanguageFile.ReadString('MAME Options', 'TweakHint', 'Use tweaked VGA modes whose resolutions matching those of the emulated games');
-    SkipDisclaimer.Hint:= LanguageFile.ReadString('MAME Options', 'SkipDisclaimerHint', 'Skip displaying the disclaimer screen');
-    SkipGameInfo.Hint:= LanguageFile.ReadString('MAME Options', 'SkipGameInfoHint', 'Skip displaying the game info screen');
-
-    // Buttons
-    ButtonOk.Caption:= LanguageFile.ReadString('Resource', 'ButtonOk', '&Ok');
-    ButtonOk.Hint:= LanguageFile.ReadString('Resource', 'ButtonOkHint', 'Close and update settings');
-
-    ButtonCancel.Caption:= LanguageFile.ReadString('Resource', 'ButtonCancel', 'C&ancel');
-    ButtonCancel.Hint:= LanguageFile.ReadString('Resource', 'ButtonCancelHint', 'Close without updating');
-  end;
-  FreeAndNil(LanguageFile);
-end;
-
 procedure TFormMain.SetPreferencesLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormPreferences do
   begin
@@ -13600,6 +12858,8 @@ begin
     TabSheetHotRod.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetHotRod.Caption', 'Hot Rod');
     TabSheetSlikStik.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetSlikStikCaption', 'SlikStik');
     TabSheetXArcade.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetXArcadeCaption', 'X-Arcade');
+    TabSheetSoundClips.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetSoundClipsCaption', 'Sound Clips');
+    TabSheetZipFiles.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetZipFilesCaption', 'Zip Files');
 
     // "General" tab
     // "General" Tab Sheet's titles
@@ -13608,25 +12868,62 @@ begin
     TabSheetPictures.Caption:= LanguageFile.ReadString('Preferences', 'TabSheetPicturesCaption', 'Pictures');
 
     // "Miscellaneous" Labels & Options
-    AverageFPS.Caption:= LanguageFile.ReadString('Preferences', 'LabelAverageFPS', 'Show Average FPS On MAME Exit');
     LabelSplashLogo.Caption:= LanguageFile.ReadString('Preferences', 'LabelSplashLogo', 'Splash Logo');
     LabelGameSize.Caption:= LanguageFile.ReadString('Preferences', 'LabelGameSize', 'Game Size');
     ShowGameSize.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowGameSize', 'Show Game Size');
     ShowGameSizeBits.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowGameSizeBits', 'Game Size in Bits (Default)');
     ShowGameSizeBytes.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowGameSizeBytes', 'Game Size in Bytes');
     ShowGameSizeCompressedZip.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowGameSizeCompressedZip', 'Zipped Game Size in Bytes');
-    ShowStatistics.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowStatistics', 'Show Statistics');
     MinimizeFrontend.Caption:= LanguageFile.ReadString('Preferences', 'LabelMinimizeFrontend', 'Minimize Frontend');
 
-    AverageFPS.Hint:= LanguageFile.ReadString('Preferences', 'AverageFPSHint', 'Show the average frames per second of the last executed game (it also shows the loading process)');
     SplashLogo.Hint:= LanguageFile.ReadString('Preferences', 'SplashLogoHint', 'Select a logo to use on splash screen');
     SplashLogoButtonSelect.Hint:= LanguageFile.ReadString('Preferences', 'SplashLogoButtonSelectHint', 'Click here to select a logo file');
     ShowGameSize.Hint:= LanguageFile.ReadString('Preferences', 'ShowGameSizeHint', 'Enable / disable the game size in status bar (speed up the scrolling)');
     ShowGameSizeBits.Hint:= LanguageFile.ReadString('Preferences', 'ShowGameSizeBitsHint', 'Shows the game size in bits (see status bar)');
     ShowGameSizeBytes.Hint:= LanguageFile.ReadString('Preferences', 'ShowGameSizeBytesHint', 'Shows the game size in bytes (see status bar)');
     ShowGameSizeCompressedZip.Hint:= LanguageFile.ReadString('Preferences', 'ShowGameSizeCompressedZipHint', 'Shows the game''s ZIP file size in bytes (see status bar)');
-    ShowStatistics.Hint:= LanguageFile.ReadString('Preferences', 'ShowStatisticsHint', 'Shows the statistic after building/refreshing a games list');
     MinimizeFrontend.Hint:= LanguageFile.ReadString('Preferences', 'MinimizeFrontendHint', 'It minimizes the frontend before game starts and restores after quitting game');
+
+    LabelAutomaticGameInformation.Caption:= LanguageFile.ReadString('User Profile', 'LabelAutomaticGameInformation', 'Automatic Game Information');
+    AutomaticGameInformation1.Tag:= AutomaticGameInformation1.ItemIndex;
+    AutomaticGameInformation1.Items.BeginUpdate;
+    AutomaticGameInformation1.Items.Strings[0]:= LanguageFile.ReadString('MAME Options', 'ControllerKeysMappingNone', '(None)');
+    AutomaticGameInformation1.Items.Strings[1]:= LanguageFile.ReadString('User Profile', 'LabelGamesInformation', 'Games Information');
+    AutomaticGameInformation1.Items.Strings[2]:= LanguageFile.ReadString('User Profile', 'LabelGamesHistory', 'Games History');
+    AutomaticGameInformation1.Items.Strings[3]:= LanguageFile.ReadString('User Profile', 'LabelGamesDriverInformation', 'Games Driver Information');
+    AutomaticGameInformation1.Items.Strings[4]:= LanguageFile.ReadString('User Profile', 'LabelGamesFAQ', 'Games F.A.Q.');
+    AutomaticGameInformation1.Items.EndUpdate;
+    AutomaticGameInformation1.ItemIndex:= AutomaticGameInformation1.Tag;
+
+    AutomaticGameInformation2.Tag:= AutomaticGameInformation2.ItemIndex;
+    AutomaticGameInformation2.Items.BeginUpdate;
+    AutomaticGameInformation2.Items.Strings[0]:= AutomaticGameInformation1.Items.Strings[0];
+    AutomaticGameInformation2.Items.Strings[1]:= AutomaticGameInformation1.Items.Strings[1];
+    AutomaticGameInformation2.Items.Strings[2]:= AutomaticGameInformation1.Items.Strings[2];
+    AutomaticGameInformation2.Items.Strings[3]:= AutomaticGameInformation1.Items.Strings[3];
+    AutomaticGameInformation2.Items.Strings[4]:= AutomaticGameInformation1.Items.Strings[4];
+    AutomaticGameInformation2.Items.EndUpdate;
+    AutomaticGameInformation2.ItemIndex:= AutomaticGameInformation2.Tag;
+
+    AutomaticGameInformation3.Tag:= AutomaticGameInformation3.ItemIndex;
+    AutomaticGameInformation3.Items.BeginUpdate;
+    AutomaticGameInformation3.Items.Strings[0]:= AutomaticGameInformation1.Items.Strings[0];
+    AutomaticGameInformation3.Items.Strings[1]:= AutomaticGameInformation1.Items.Strings[1];
+    AutomaticGameInformation3.Items.Strings[2]:= AutomaticGameInformation1.Items.Strings[2];
+    AutomaticGameInformation3.Items.Strings[3]:= AutomaticGameInformation1.Items.Strings[3];
+    AutomaticGameInformation3.Items.Strings[4]:= AutomaticGameInformation1.Items.Strings[4];
+    AutomaticGameInformation3.Items.EndUpdate;
+    AutomaticGameInformation3.ItemIndex:= AutomaticGameInformation3.Tag;
+
+    AutomaticGameInformation4.Tag:= AutomaticGameInformation4.ItemIndex;
+    AutomaticGameInformation4.Items.BeginUpdate;
+    AutomaticGameInformation4.Items.Strings[0]:= AutomaticGameInformation1.Items.Strings[0];
+    AutomaticGameInformation4.Items.Strings[1]:= AutomaticGameInformation1.Items.Strings[1];
+    AutomaticGameInformation4.Items.Strings[2]:= AutomaticGameInformation1.Items.Strings[2];
+    AutomaticGameInformation4.Items.Strings[3]:= AutomaticGameInformation1.Items.Strings[3];
+    AutomaticGameInformation4.Items.Strings[4]:= AutomaticGameInformation1.Items.Strings[4];
+    AutomaticGameInformation4.Items.EndUpdate;
+    AutomaticGameInformation4.ItemIndex:= AutomaticGameInformation4.Tag;
 
     // "Games" Labels & Options
     NewDescriptionFormat.Caption:= LanguageFile.ReadString('Preferences', 'LabelNewDescriptionFormat', 'New Description Format');
@@ -13635,9 +12932,7 @@ begin
     UseCustomOptionsDefault.Caption:= LanguageFile.ReadString('Preferences', 'LabelUseCustomOptionsDefault', 'Use Custom Options by Default');
     UseCustomGameDescription.Caption:= LanguageFile.ReadString('Preferences', 'LabelUseCustomGameDescription', 'Use Custom Game Description');
     UseCustomGameCategory.Caption:= LanguageFile.ReadString('Preferences', 'LabelUseCustomGameCategory', 'Use Custom Game Category');
-    AuditCHDFiles.Caption:= LanguageFile.ReadString('Preferences', 'LabelAuditCHDFiles', 'Audit Hard Disk Images');
     LabelDefaultGameIconsFolder.Caption:= LanguageFile.ReadString('Preferences', 'LabelDefaultGameIconsFolder', 'Default Game Icons Folder');
-    ButtonUpdateGameIconsFolder.Caption:= LanguageFile.ReadString('Resource', 'LabelButtonUpdate', 'Update');
 
     NewDescriptionFormat.Hint:= LanguageFile.ReadString('Preferences', 'NewDescriptionFormatHint', 'Show a different description for some games');
     FillAllCloneColumns.Hint:= LanguageFile.ReadString('Preferences', 'FillAllCloneColumnsHint', 'Add the parent name in all "clone of" columns (for the master games)');
@@ -13646,19 +12941,32 @@ begin
     UseCustomOptionsDefault.Hint:= LanguageFile.ReadString('Preferences', 'UseCustomOptionsDefaultHint', 'Run game with custom command line, custom options or default options with a single click');
     UseCustomGameDescription.Hint:= LanguageFile.ReadString('Preferences', 'UseCustomGameDescriptionHint', 'Use custom game descriptions when creating a new games list');
     UseCustomGameCategory.Hint:= LanguageFile.ReadString('Preferences', 'UseCustomGameCategoryHint', 'Use custom game categories when creating a new games list');
-    AuditCHDFiles.Hint:= LanguageFile.ReadString('Preferences', 'AuditCHDFilesHint', 'Verify the MD5 checksum on .chd files when auditing a game');
     DefaultGameIconsFolderButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'SingleButtonHint', 'Click here to select a folder');
-    ButtonUpdateGameIconsFolder.Hint:= LanguageFile.ReadString('Preferences', 'ButtonUpdateHint', 'Update icons on games list');
+
+    InternetPage.EditLabel.Caption:= LanguageFile.ReadString('Preferences', 'LabelInternetPage', 'Internet Page');
+    InternetPage.Hint:= LanguageFile.ReadString('Preferences', 'InternetPageHint', 'Link for the page of the selected game (the mask "%s" is not required)');
+
+    // Filters
+    GamesFilterBox.Caption:= LanguageFile.ReadString('MAME Options', 'LabelD3DFilter', 'Filter');
+    HidePreliminaryGames.Caption:= LanguageFile.ReadString('Preferences', 'LabelHidePreliminaryGames', 'Hide Preliminary Games');
+    HideBios.Caption:= LanguageFile.ReadString('Preferences', 'LabelHideBios', 'Hide Bios');
+    ButtonUpdateGamesList.Caption:= LanguageFile.ReadString('Resource', 'ButtonUpdate', 'Update');
+
+    HidePreliminaryGames.Hint:= LanguageFile.ReadString('Preferences', 'HidePreliminaryGamesHint', 'Do not load games with preliminary drivers on the games list');
+    HideBios.Hint:= LanguageFile.ReadString('Preferences', 'HideBiosHint', 'Do not load bios on the games list');
+    ButtonUpdateGamesList.Hint:= LanguageFile.ReadString('Preferences', 'ButtonUpdateGamesListHint', 'Update the games list');
 
     // "Pictures" Labels & Options
     ShowParentPictures.Caption:= LanguageFile.ReadString('Preferences', 'LabelShowParentPictures', 'Show Parent Pictures');
     NewPictureNameFormat.Caption:= LanguageFile.ReadString('Preferences', 'LabelNewPictureNameFormat', 'New Picture Name Format');
     CyclePictureTypes.Caption:= LanguageFile.ReadString('Preferences', 'LabelCyclePictureTypes', 'Cycle Picture Types');
+    HideNavigationPanel.Caption:= LanguageFile.ReadString('Preferences', 'LabelHideNavigationPanel', 'Hide Navigation Panel');
+    HidePictureHint.Caption:= LanguageFile.ReadString('Preferences', 'LabelHidePictureHint', 'Hide Picture Hint');
 
     LabelPicturesVisualEffects.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVisualEffectsFrameBox', 'Visual Effects');
     StretchPicture.Caption:= LanguageFile.ReadString('Preferences', 'PictureStretch', 'Stretch');
     StretchLargerPictures.Caption:= LanguageFile.ReadString('Preferences', 'LabelStretchLargerPictures', 'Stretch Larger Pictures Only');
-    SmoothPictures.Caption:= LanguageFile.ReadString('Preferences', 'LabelSmoothPictures', 'Smooth Pictures');
+    LabelSmoothPictures.Caption:= LanguageFile.ReadString('Preferences', 'LabelSmoothPictures', 'Smooth Pictures');
     AspectRatio.Caption:= LanguageFile.ReadString('Preferences', 'LabelAspectRatio', 'Aspect Ratio');
     PicturesTransparency.Caption:= LanguageFile.ReadString('Preferences', 'LabelUsePicturesTransparency', 'Use Pictures Transparency');
     PicturesVirtualList.Caption:= LanguageFile.ReadString('Preferences', 'LabelUseVirtualList', 'Use Virtual List');
@@ -13666,6 +12974,8 @@ begin
     ShowParentPictures.Hint:= LanguageFile.ReadString('Preferences', 'ShowParentPicturesHint', 'Show the master picture when the clone picture doesn''t exist');
     NewPictureNameFormat.Hint:= LanguageFile.ReadString('Preferences', 'NewPictureNameFormatHint', 'Use pictures names with format gamename0000.ext instead of game0000.ext');
     CyclePictureTypes.Hint:= LanguageFile.ReadString('Preferences', 'CyclePictureTypesHint', 'Cycle thru all picture types automatically when viewing pictures');
+    HideNavigationPanel.Hint:= LanguageFile.ReadString('Preferences', 'HideNavigationPanelHint', 'Hide the bottom pictures navigation panel');
+    HidePictureHint.Hint:= LanguageFile.ReadString('Preferences', 'HidePictureHintHint', 'Hide the hint of the picture');
 
     StretchPicture.Hint:= LanguageFile.ReadString('Preferences', 'StretchPictureHint', 'Stretch pictures to pit in the preview area');
     StretchLargerPictures.Hint:= LanguageFile.ReadString('Preferences', 'StretchLargerPicturesHint', 'It will stretch down all images that can''t fit on preview area (Stretch must be ON)');
@@ -13685,7 +12995,7 @@ begin
     LabelFolderCabinets.Caption:= LanguageFile.ReadString('Resource', 'CabinetsDesciption', 'Cabinets');
     LabelFolderControlPanels.Caption:= LanguageFile.ReadString('Resource', 'ControlPanelsDescription', 'Control Panels');
     LabelFolderControlPanelLayouts.Caption:= LanguageFile.ReadString('Resource', 'ControlPanelLayoutsDescription', 'Control Panel Layouts');
-    LabelFolderIcons.Caption:= LanguageFile.ReadString('Resource', 'IconsDescription', 'Real Icons');
+    LabelFolderIcons.Caption:= LanguageFile.ReadString('Resource', 'IconsDescription', 'Games Icons');
     LabelFolderGamesFAQ.Caption:= LanguageFile.ReadString('Resource', 'GamesFAQDescription', 'Games F.A.Q.');
 
     FolderTitleSnapshotsButtonSelect.Hint:= LanguageFile.ReadString('MAME Options', 'SingleButtonHint', 'Click here to select a folder');
@@ -13736,13 +13046,13 @@ begin
 
     // "Pictures" Box
     LabelPicturesColors.Caption:= TabSheetPictures.Caption;
-    LabelTitleSnapshotPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'TitleSnapshotsDescription', 'Title Snapshots');
-    LabelInGameSnapshotPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'InGameSnapshotsDescription', 'In-Game Snapshots');
-    LabelMarqueePicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'MarqueesDescription', 'Marquees');
-    LabelFlyerPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'FlyersDescription', 'Flyers');
-    LabelCabinetPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'CabinetsDesciption', 'Cabinets');
-    LabelControlPanelPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'ControlPanelsDescription', 'Control Panels');
-    LabelControlPanelLayoutPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'ControlPanelLayoutsDescription', 'Control Panel Layouts');
+    LabelTitleSnapshotPicturesBackgroundColor.Caption:= LabelFolderTitleSnapshots.Caption;
+    LabelInGameSnapshotPicturesBackgroundColor.Caption:= LanguageFile.ReadString('Resource', 'InGameSnapshotsDescription', 'In Game Snapshots');
+    LabelMarqueePicturesBackgroundColor.Caption:= LabelFolderMarquees.Caption;
+    LabelFlyerPicturesBackgroundColor.Caption:= LabelFolderFlyers.Caption;
+    LabelCabinetPicturesBackgroundColor.Caption:= LabelFolderCabinets.Caption;
+    LabelControlPanelPicturesBackgroundColor.Caption:= LabelFolderControlPanels.Caption;
+    LabelControlPanelLayoutPicturesBackgroundColor.Caption:= LabelFolderControlPanelLayouts.Caption;
 
     // "Automatic Game Information" Box
     LabelAutomaticGameInfo.Caption:= MenuAutomaticGameInformation.Caption;
@@ -13779,13 +13089,50 @@ begin
     XArcadeImageFile.Hint:= Format(LanguageFile.ReadString('Preferences', 'ControllerImageFileHint', '%s image filename'), [TabSheetXArcade.Caption]);
     XArcadeImageFileButtonSelect.Hint:= HotRodSEImageFileButtonSelect.Hint;
 
+    // "Sound Clips" Labels & Options
+    PlaySoundClip.Caption:= LanguageFile.ReadString('Preferences', 'LabelPlaySoundClip', 'Play Sound Clip');
+    ParentSoundClip.Caption:= LanguageFile.ReadString('Preferences', 'LabelParentSoundClip', 'Use Parent Sound Clip');
+    LoopSoundClip.Caption:= LanguageFile.ReadString('Preferences', 'LabelLoopSoundClip', 'Loop');
+    LabelSoundClipVolume.Caption:= LanguageFile.ReadString('MAME Options', 'LabelVolume', 'Volume');
+    LabelSoundClipFolder.Caption:= LanguageFile.ReadString('Preferences', 'LabelSoundClipFolder', 'Folder');
+
+    LabelSoundClipSettings.Caption:= LanguageFile.ReadString('Preferences', 'LabelSoundClipSettings', 'Settings');
+    LabelOutputType.Caption:= LanguageFile.ReadString('Preferences', 'LabelOutputType', 'Output Type');
+    LabelOutputDevice.Caption:= LanguageFile.ReadString('Preferences', 'LabelOutputDevice', 'Output Device');
+    LabelMixerType.Caption:= LanguageFile.ReadString('Preferences', 'LabelMixerType', 'Mixer Type');
+    LabelOutputRate.Caption:= LanguageFile.ReadString('Preferences', 'LabelOutputRate', 'Output Rate');
+
+    PlaySoundClip.Hint:= LanguageFile.ReadString('Preferences', 'PlaySoundClipHint', 'Play a sound clip when selecting a game');
+    ParentSoundClip.Hint:= LanguageFile.ReadString('Preferences', 'ParentSoundClipHint', 'Play the sound clip of the master game, if clip of the clone game is not found');
+    LoopSoundClip.Hint:= LanguageFile.ReadString('Preferences', 'LoopSoundClipHint', 'Play a sound clip over and over again, in an endless loop');
+    SoundClipFolder.Hint:= LanguageFile.ReadString('Preferences', 'SoundClipFolderHint', 'Select a folder where sound clip files are');
+    SoundClipFolderSelect.Hint:= FolderTitleSnapshotsButtonSelect.Hint;
+
+    OutputType.Hint:= LanguageFile.ReadString('Preferences', 'OutputTypeHint', 'Select the output type to be use');
+    OutputDevice.Hint:= LanguageFile.ReadString('Preferences', 'OutputDeviceHint', 'Select the audio device to be used');
+    MixerType.Hint:= LanguageFile.ReadString('Preferences', 'MixerTypeHint', 'Select the mixer to be used');
+    OutputRate.Hint:= LanguageFile.ReadString('Preferences', 'OutputRateHint', 'Select the samplerate to be used');
+
+    // Zip Files Labels & Options
+    LabelZipTitleSnapshots.Caption:= LabelFolderTitleSnapshots.Caption;
+    LabelZipInGameSnapshots.Caption:= LabelInGameSnapshotPicturesBackgroundColor.Caption;
+    LabelZipMarquees.Caption:= LabelFolderMarquees.Caption;
+    LabelZipFlyers.Caption:= LabelFolderFlyers.Caption;
+    LabelZipCabinets.Caption:= LabelFolderCabinets.Caption;
+    LabelZipControlPanels.Caption:= LabelFolderControlPanels.Caption;
+    LabelZipControlPanelLayouts.Caption:= LabelFolderControlPanelLayouts.Caption;
+    LabelZipIcons.Caption:= LabelFolderIcons.Caption;
+
+    ZipTitleSnapshotsButtonSelect.Hint:= LanguageFile.ReadString('Preferences', 'SelectFileHint', 'Click here to select a file');
+    ZipInGameSnapshotsButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipMarqueesButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipFlyersButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipCabinetsButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipControlPanelsButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipControlPanelLayoutsButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+    ZipIconsButtonSelect.Hint:= ZipTitleSnapshotsButtonSelect.Hint;
+
     // Buttons
-    ButtonUpdateGameIconsFolder.Caption:= LanguageFile.ReadString('Resource', 'ButtonUpdate', 'Update');
-    ButtonUpdateGameIconsFolder.Hint:= LanguageFile.ReadString('Preferences', 'ButtonUpdateHint', 'Update icons on games list');
-
-    ButtonUpdateEmuLoaderFolders.Caption:= ButtonUpdateGameIconsFolder.Caption;
-    ButtonUpdateEmuLoaderFolders.Hint:= LanguageFile.ReadString('Preferences', 'ButtonUpdateFoldersHint', 'Update folders on memory');
-
     ButtonClose.Caption:= LanguageFile.ReadString('Resource', 'ButtonClose', '&Close');
     ButtonClose.Hint:= LanguageFile.ReadString('Resource', 'ButtonCloseHint', 'Close this window');
   end;
@@ -13796,15 +13143,15 @@ procedure TFormMain.SetCustomCommandLineLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormCustomCommandLine do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Custom Command Line', 'Title', 'Custom Command Line');
+    Caption:= LanguageFile.ReadString('Custom Command Line', 'Title', 'Custom Command Line');
 
     // Options & Labels
     LabelCustomCommandLineExecutable.Caption:= LanguageFile.ReadString('Custom Command Line', 'LabelCustomCommandLineExecutable', 'Command Line Executable');
@@ -13828,13 +13175,17 @@ procedure TFormMain.SetIconsLegendLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormGamesListLegend do
   begin
+    // Tabsheets
+    TabSheetAvailableGames.Caption:= LanguageFile.ReadString('Resource', 'AvailableStatus', 'Available');
+    TabSheetUnavailableGames.Caption:= LanguageFile.ReadString('Resource', 'UnavailableStatus', 'Unavailable');
+
     // Labels
     LabelClassicMR.Caption:= LanguageFile.ReadString('Resource', 'ClassicMasterRasterDescription', 'Classic Master Raster Games');
     LabelClassicMV.Caption:= LanguageFile.ReadString('Resource', 'ClassicMasterVectorDescription', 'Classic Master Vector Games');
@@ -13844,8 +13195,7 @@ begin
     LabelNeoGeoC.Caption:= LanguageFile.ReadString('Resource', 'NeoGeoCloneDescription', 'Neo Geo Clone Games');
     LabelClassicBios.Caption:= LanguageFile.ReadString('Resource', 'ClassicBiosDescription', 'Classic Bios');
     LabelNeoGeoBios.Caption:= LanguageFile.ReadString('Resource', 'NeoGeoBiosDescription', 'Neo Geo Bios');
-    LabelCustomGames.Caption:= LanguageFile.ReadString('Resource', 'CustomGamesDescription', 'Custom Games');
-    LabelRealIcon.Caption:= LanguageFile.ReadString('Resource', 'IconsDescription', 'Real Icons');
+    LabelGameIcon.Caption:= LanguageFile.ReadString('Resource', 'IconsDescription', 'Games Icons');
 
     LabelUnClassicMR.Caption:= LanguageFile.ReadString('Resource', 'UnavailableClassicMasterRasterDescription', 'Unavailable Classic Master Raster Games');
     LabelUnClassicMV.Caption:= LanguageFile.ReadString('Resource', 'UnavailableClassicMasterVectorDescription', 'Unavailable Classic Master Vector Games');
@@ -13855,7 +13205,7 @@ begin
     LabelUnNeoGeoC.Caption:= LanguageFile.ReadString('Resource', 'UnavailableNeoGeoCloneDescription', 'Unavailable Neo Geo Clone Games');
     LabelUnClassicBios.Caption:= LanguageFile.ReadString('Resource', 'UnavailableClassicBiosDescription', 'Unavailable Classic Bios');
     LabelUnNeoGeoBios.Caption:= LanguageFile.ReadString('Resource', 'UnavailableNeoGeoBiosDescription', 'Unavailable Neo Geo Bios');
-    LabelUnCustomGames.Caption:= LanguageFile.ReadString('Resource', 'UnavailableCustomGamesDescription', 'Unavailable Custom Games');
+    LabelUnGameIcon.Caption:= LabelGameIcon.Caption;
   end;
 end;
 
@@ -13863,15 +13213,15 @@ procedure TFormMain.SetCustomGameDescriptionLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormCustomGameDescription do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Custom Game Description', 'Title', 'Custom Game Description');
+    Caption:= LanguageFile.ReadString('Custom Game Description', 'Title', 'Custom Game Description');
 
     // Options & Labels
     LabelNewDescription.Caption:= LanguageFile.ReadString('Custom Game Description', 'LabelNewDescription', 'New Description');
@@ -13896,15 +13246,15 @@ procedure TFormMain.SetCustomGameCategoryLanguage;
 var
   LanguageFile: TMemIniFile;
 begin
-  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if not FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      Exit;
 
-  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+  LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
   with FormCustomGameCategory do
   begin
     // Screen Title
-    LabelCaption.Caption:= LanguageFile.ReadString('Custom Game Category', 'Title', 'Custom Game Category');
+    Caption:= LanguageFile.ReadString('Custom Game Category', 'Title', 'Custom Game Category');
 
     // Options & Labels
     LabelDefaultCategories.Caption:= LanguageFile.ReadString('Custom Game Category', 'LabelDefaultCategories', 'Default Categories');
@@ -13943,7 +13293,7 @@ end;
 
 procedure TFormMain.ListColumnClick(Sender: TObject; Column: TListColumn);
 begin
-  SortColumn(Column.ID, False);
+  SortColumn(Column.Index, False);
 end;
 
 procedure TFormMain.MenuEmulatorSetupClick(Sender: TObject);
@@ -13989,6 +13339,17 @@ var
   FavoritesIni: THashedStringList;
   FavoriteFile: TextFile;
 begin
+  TerminateEmuLoader:= not DirectoryExists(FrontendPath+'resources');
+  if TerminateEmuLoader then
+     begin
+       Application.MessageBox('The folder "resources" could not be found!'+#13+
+                              'This is a required folder and the frontend will not work without it.'+#13+
+                              'Please, make sure to create the folder and all it''s sub-folders as well.',
+                              'Fatal Error', mb_Ok+mb_IconError);
+       Exit;
+     end;
+
+  ZipForge.Active:= False;
   ClearEntries;
   CloseStatusWindow:= False;
   Application.OnException:= AppException;
@@ -14000,15 +13361,6 @@ begin
   CancelCurrentOperation:= False;
   ProcessingAutomaticMAMEInfoDAT:= False;
   Caption:= Caption+' - [v'+FrontendVersion+']';
-  if not DirectoryExists(FrontendPath+'resources') then
-     begin
-       Application.MessageBox('The folder "resources" could not be found!'+#13+
-                              'This is a required folder and the frontend will not work without it.'+#13+
-                              'Please, make sure to create the folder and all it''s sub-folders as well.',
-                              'Fatal Error', mb_Ok+mb_IconError);
-       Application.Terminate;
-       Exit;
-     end;
 
   if DirectoryExists(FrontendPath+'resources\favorites') then
      begin
@@ -14022,21 +13374,24 @@ begin
                end;
           end;
 
-       if not FileExists(FrontendPath+'Favorites.ini') then
+       if not FileExists(FrontendPath+'favorites.ini') then
           begin
             FavoritesIni:= THashedStringList.Create;
             FavoritesIni.BeginUpdate;
             FavoritesIni.Add('[Default]');
             FavoritesIni.Add('file=default.dat');
             FavoritesIni.EndUpdate;
-            FavoritesIni.SaveToFile(FrontendPath+'Favorites.ini');
+            FavoritesIni.SaveToFile(FrontendPath+'favorites.ini');
             FreeAndNil(FavoritesIni);
           end;
      end;
 
+  FrontendLanguage:= 'english.lng';
   PictureNumber:= 1;
   LoadToolbarIcons;
   LoadStatusBarIcons;
+  if FileExists(FrontendPath+'resources\images\menubar.bmp') then
+     MainMenu.Bar.BarBackPicture.Picture.LoadFromFile(FrontendPath+'resources\images\menubar.bmp');
   SetLength(EmulatorType, 5);
   SetLength(EmulatorVersion, 6);
   SetLength(EmulatorExecutable, 6);
@@ -14047,11 +13402,41 @@ end;
 procedure TFormMain.FormShow(Sender: TObject);
 var
   INIFile: TIniFile;
+  GamesListFound: Boolean;
+
+  function CallCreateGamesList: Boolean;
+  begin
+    SetCurrentDir(ExtractFilePath(IntToStr(MenuCurrentEmulator.Tag)));
+    CreateGamesList;
+    SetCurrentDir(FrontendPath);
+    GamesListFound:= False;
+  end;
+
+  procedure ReadFrontendcmdParameter;
+  begin
+    if ParamStr(1) <> '' then
+       begin
+         case FileExists(FrontendPath+'resources\language\'+ParamStr(1)) of
+           True : FrontendLanguage:= LowerCase(ParamStr(1));
+           False: FrontendLanguage:= 'english.lng';
+         end;
+       end;
+  end;
+
 begin
+  if TerminateEmuLoader then
+     begin
+       Application.Terminate;
+       PostMessage(Handle, wm_Close, 0, 0);
+       Exit;
+     end;
+
   FormStatus.Show;
   FormStatus.Refresh;
-
   AbortExecution:= True;
+  GamesListFound:= True;
+  GetLanguageFiles;
+
   case FileExists(FrontendPath+'EmuLoader.ini') of
     True:
       begin
@@ -14060,11 +13445,13 @@ begin
         case ReadINIFile of
           False:
             begin
-              GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                              GetLanguageText('Messages', 'EmulatorFileNotFoundMsg', 'One or more of the emulator executables were not found. Please, select valid executable(s)'), 2);
+              ReadFrontendcmdParameter;
+              GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                             'Messages', 'EmulatorFileNotFoundMsg', 'One or more of the emulator executables were not found. Please, select valid executable(s)');
+              GenerateMessage(MessageText[0], MessageText[1], 2);
               MenuEmulatorSetup.OnClick(Self);
               INIFile:= TIniFile.Create(FrontendPath+'EmuLoader.ini');
-              INIFile.WriteString('Configuration', 'DefaultDatabaseBuilderExecutable', DefaultDatabaseBuilderExecutable);
+              INIFile.WriteInteger('Configuration', 'DefaultDatabaseBuilderExecutable', MenuCurrentEmulator.Tag);
               INIFile.WriteString('Configuration', 'EmulatorName', EmulatorExecutable[1]);
               INIFile.WriteString('Configuration', 'EmulatorVersion', EmulatorVersion[1]);
               INIFile.WriteInteger('Configuration', 'EmulatorType', EmulatorType[1]);
@@ -14084,8 +13471,10 @@ begin
 
               if not ReadINIFile then
                  begin
-                   GenerateMessage(GetLanguageText('Messages', 'FatalErrorTitle', 'Fatal Error'),
-                                   GetLanguageText('Messages', 'NoValidEmulatorFilesMsg', 'There are no valid emulators to use! The frontend will be terminated.'), 2);
+                   TerminateEmuLoader:= True;
+                   GetMessagesLng('Messages', 'FatalErrorTitle', 'Fatal Error',
+                                  'Messages', 'NoValidEmulatorFilesMsg', 'There are no valid emulators to use! The frontend will be terminated.');
+                   GenerateMessage(MessageText[0], MessageText[1], 2);
                    Application.Terminate;
                    PostMessage(Handle, wm_Close, 0, 0);
                    Exit;
@@ -14095,12 +13484,13 @@ begin
             begin
               if not CheckMAMEIniFiles then
                  begin
-                   GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                   GetLanguageText('Messages', 'NoEmulatorIniFileFoundMsg', 'One or more MAME initialization files were not found! Please, verify your MAME executables and their options to continue.'), 2);
-
+                   GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                  'Messages', 'NoEmulatorIniFileFoundMsg', 'One or more MAME initialization files were not found! Please, verify your MAME executables and their options to continue.');
+                   GenerateMessage(MessageText[0], MessageText[1], 2);
                    MenuEmulatorSetup.OnClick(Self);
                    if MainMenu.Tag = 1 then
                       begin
+                        TerminateEmuLoader:= True;
                         Application.Terminate;
                         PostMessage(Handle, wm_Close, 0, 0);
                         Exit;
@@ -14116,14 +13506,12 @@ begin
                 (FileExists(FrontendPath+'resources\UnClassicCR.dat')) and (FileExists(FrontendPath+'resources\UnClassicCV.dat')) and
                 (FileExists(FrontendPath+'resources\UnNeoGeoM.dat'))   and (FileExists(FrontendPath+'resources\UnNeoGeoC.dat'))   and
                 (FileExists(FrontendPath+'resources\Bios.dat'))        and (FileExists(FrontendPath+'resources\UnBios.dat'))) then
-               begin
-                 LoadFolders(DefaultDatabaseBuilderExecutable);
-                 CreateGamesList(DefaultDatabaseBuilderExecutable, True);
-               end;
+                 CallCreateGamesList;
       end;
     False:
       begin
-        DefaultDatabaseBuilderExecutable:= '1';
+        ReadFrontendcmdParameter;
+        MenuCurrentEmulator.Tag:= 1;
         if not ((FileExists(FrontendPath+'resources\ClassicMR.dat'))   and (FileExists(FrontendPath+'resources\ClassicMV.dat'))   and
                 (FileExists(FrontendPath+'resources\ClassicCR.dat'))   and (FileExists(FrontendPath+'resources\ClassicCV.dat'))   and
                 (FileExists(FrontendPath+'resources\NeoGeoM.dat'))     and (FileExists(FrontendPath+'resources\NeoGeoC.dat'))     and
@@ -14133,19 +13521,16 @@ begin
                 (FileExists(FrontendPath+'resources\Bios.dat'))        and (FileExists(FrontendPath+'resources\UnBios.dat'))) then
            begin
              // there is no "EmuLoader.ini" and no .dat files - 1st time execution
-             GenerateMessage(GetLanguageText('Messages', 'WelcomeTitle', 'Welcome to Emu Loader'),
-                             GetLanguageText('Messages', 'WelcomeMsg', 'Please, configure the software!'), 2);
+             GetMessagesLng('Messages', 'WelcomeTitle', 'Welcome to Emu Loader',
+                            'Messages', 'WelcomeMsg', 'Please, configure the software!');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
              AbortExecution:= True;
              MenuEmulatorSetup.OnClick(Self);
              case MainMenu.Tag of
-               0:
-                 begin
-                   //AbortExecution:=True;
-                   LoadFolders(DefaultDatabaseBuilderExecutable);
-                   CreateGamesList(DefaultDatabaseBuilderExecutable, True);
-                 end;
+               0: CallCreateGamesList;
                1:
                  begin
+                   TerminateEmuLoader:= True;
                    Application.Terminate;
                    PostMessage(Handle, wm_Close, 0, 0);
                    Exit;
@@ -14155,16 +13540,16 @@ begin
         else
            begin
              // there is no "EmuLoader.ini" but all .dat files exists - just create the ini file
-             GenerateMessage(GetLanguageText('Messages', 'IniFileMissingTitle', 'File Missing'),
-                             Format(GetLanguageText('Messages', 'IniFileMissingMsg',
-                                                    '%sEmuLoader.ini" not found. Please, re-configure the software!'),
-                                    [FrontendPath]), 2);
+             GetMessagesLng('Messages', 'IniFileMissingTitle', 'File Missing',
+                            'Messages', 'IniFileMissingMsg', '%sEmuLoader.ini" not found. Please, re-configure the software!');
+             GenerateMessage(MessageText[0], Format(MessageText[1], [FrontendPath]), 2);
              AbortExecution:= True;
              MenuEmulatorSetup.OnClick(Self);
              case MainMenu.Tag of
-               0: LoadFolders(DefaultDatabaseBuilderExecutable);
+               0: SelectExecutable(MenuCurrentEmulator.Tag);
                1:
                  begin
+                   TerminateEmuLoader:= True;
                    Application.Terminate;
                    PostMessage(Handle, wm_Close, 0, 0);
                    Exit;
@@ -14180,19 +13565,19 @@ begin
   end;
 
   Screen.Cursor:= crHourGlass;
-  GetMAMEExtendedPaths; // get snap, marquee, flyer, cabinet, control panel, icons and faq paths
-
   ClearEntries;
 
   if CheckDefaultIconsFile then
      ReadDefaultIconsFile;
 
-  if MenuRealIcons.Tag = 1 then
+  if MenuGamesIcons.Tag = 1 then
      begin
-       FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'LoadRealIconsTitle', 'Load Real Icons Resource');
-       FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadRealIconsDAT', 'Loading icons from .dat files. Please, wait a moment...');
+       GetMessagesLng('Status Messages', 'LoadGamesIconsTitle', 'Load Games Icons Resource',
+                      'Status Messages', 'LoadGamesIconsDAT', 'Loading icons from .dat files. Please, wait a moment...');
+       FormStatus.LabelStatusType.Caption:= MessageText[0];
+       FormStatus.LabelMessage.Caption:= MessageText[1];
        FormStatus.LabelMessage.Refresh;
-       MenuRealIcons.Click;
+       MenuGamesIcons.Click;
      end;
 
   if MenuParentalLock.Tag = 1 then
@@ -14208,13 +13593,16 @@ begin
   FormStatus.LabelProgress.Caption:= '';
   case ButtonShowFavorite.Down of
     True : ButtonShowFavorite.OnClick(Self);
-    False: LoadROMClasses(False);
+    False:
+      begin
+        LoadROMClasses(False);
+        if not GamesListFound then
+           MenuRefreshUnavailableGames.OnClick(Self);
+      end;
   end;
 
   Screen.Cursor:= crHourGlass;
   FormStatus.LabelProgress.Caption:= '';
-
-  LoadFolders(IntToStr(ButtonExecutablesMode.Tag));
 
   if MenuUserProfile.Tag = 1 then
      begin
@@ -14229,7 +13617,9 @@ begin
   ShowingPicture:= True;
   if Length(GamesList) > 0 then
      SortColumn(ColumnSorted, False);
+  LoadBiosSet(True, PopupSystemBios);
   CloseStatusWindow:= True;
+  BiosName:= 'disabled';
   Screen.Cursor:= crDefault;
 end;
 
@@ -14249,19 +13639,24 @@ var
   PictureName: String;
 begin
   if Selected then
-  //if Item.Focused then
      begin
        if Item.Index <> SelectedGame then
           SelectedGame:= Item.Index;
+
+       if FormPreferences.PlaySoundClip.Checked then
+          begin
+            if Assigned(FSpectrum) then
+               FSpectrum.Invalidate;
+            LoadSound;
+          end;
        if MenuShowPictures.Checked then
           begin
-            if MenuAutomaticGameInformation.Checked then
-               if not ProcessingAutomaticMAMEInfoDAT then
-                  begin
-                    if not Assigned(AutoMAMEInfoDATFile) then
-                       MenuAutomaticGameInformation.OnClick(Self);
-                    ShowAutomaticGameInformation;
-                  end;
+            if (not ProcessingAutomaticMAMEInfoDAT) and (MenuAutomaticGameInformation.Checked) then
+               begin
+                 if not Assigned(AutoMAMEInfoDATFile) then
+                    MenuAutomaticGameInformation.OnClick(Self);
+                 ShowAutomaticGameInformation;
+               end;
             PictureNumber:= 1;
             ButViewNextPicture.Tag:= 1;
             GetTotalPictures;
@@ -14281,65 +13676,57 @@ end;
 procedure TFormMain.MenuCreateGamesListClick(Sender: TObject);
 var
   Loop: Integer;
-  ExeType: String[5];
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     begin
+       FeatureNotAvailableDOSMAME;
+       Exit;
+     end;
+
   FormStatus.Show;
   FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DetectEmulatorVersion',
                                                     'Detecting emulator version. Please, wait a moment...');
   FormStatus.LabelMessage.Refresh;
-
-  ExeType:= ExeStrings[GetExeType(EmulatorExecutable[StrToInt(DefaultDatabaseBuilderExecutable)])];
-
-  if not GetEmulatorVersion(StrToInt(DefaultDatabaseBuilderExecutable), ExeType) then
+  if not GetEmulatorVersion(MenuCurrentEmulator.Tag) then
      begin
+       GetMessagesLng('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!',
+                      'Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).');
        GenerateMessage(GetLanguageText('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File'),
-                                      Format(GetLanguageText('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!')+#13+
-                                             GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), [1]), 2);
+                       Format(MessageText[0]+#13+MessageText[1], [1]), 2);
+       SetCurrentDir(FrontendPath);
+       FormStatus.Close;
        Exit;
      end;
 
   CancelCurrentOperation:= False;
   FormStatus.KeyPreview:= True;
-
   ShowingPicture:= True;
+  SetCurrentDir(ExtractFilePath(IntToStr(MenuCurrentEmulator.Tag)));
 
-  LoadFolders(DefaultDatabaseBuilderExecutable);
-  SetCurrentDir(ExtractFilePath(DefaultDatabaseBuilderExecutable));
-
-  if CreateGamesList(DefaultDatabaseBuilderExecutable, True) then
+  if CreateGamesList then
      begin
        Picture.Bitmap.Clear;
        Picture.Hint:= '';
        LabelPictureNumber.Caption:= '';
 
-       if BigRealIconsImageList.Count > 1 then
+       if BigGamesIconsImageList.Count > 1 then
           begin
-            FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'ClearRealIcons',
-                                                              'Cleaning real icons list. Please, wait a moment...');
-            FormStatus.LabelMessage.Refresh;
-            for Loop:=BigRealIconsImageList.Count-1 downto 1 do
+            for Loop:=BigGamesIconsImageList.Count-1 downto 1 do
             begin
-              BigRealIconsImageList.Delete(Loop);
-              SmallRealIconsImageList.Delete(Loop);
+              BigGamesIconsImageList.Delete(Loop);
+              SmallGamesIconsImageList.Delete(Loop);
             end;
           end;
        Application.ProcessMessages;
+       DeleteFile(FrontendPath+'resources\IconsIndex.dat');
+       DeleteFile(FrontendPath+'resources\IconsList.ini');
+       DeleteFile(FrontendPath+'resources\BigIconsList.dat');
+       DeleteFile(FrontendPath+'resources\SmallIconsList.dat');
 
-       FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DeleteRealIconsDAT',
-                                                         'Deleting real icons .dat files. Please, wait a moment...');
-       FormStatus.LabelMessage.Refresh;
-       if FileExists(FrontendPath+'resources\IconsIndex.dat') then
-          DeleteFile(FrontendPath+'resources\IconsIndex.dat');
-       if FileExists(FrontendPath+'resources\IconsList.ini') then
-          DeleteFile(FrontendPath+'resources\IconsList.ini');
-       if FileExists(FrontendPath+'resources\BigIconsList.dat') then
-           DeleteFile(FrontendPath+'resources\BigIconsList.dat');
-        if FileExists(FrontendPath+'resources\SmallIconsList.dat') then
-           DeleteFile(FrontendPath+'resources\SmallIconsList.dat');
-
-       if MenuRealIcons.Checked then
-          MenuRealIcons.OnClick(Self);
-
+       MenuRefreshUnavailableGames.OnClick(Self);
+       if MenuGamesIcons.Checked then
+          MenuGamesIcons.OnClick(Self);
+       LoadBiosSet(True, PopupSystemBios);
        Application.ProcessMessages;
        LoadROMClasses(False);
        SortColumn(ColumnSorted, True);
@@ -14348,32 +13735,31 @@ begin
      end;
   SetCurrentDir(FrontendPath);
   FormStatus.KeyPreview:= False;
+  LoadBiosSet(True, PopupSystemBios);
   FormStatus.Close;
 end;
 
-function TFormMain.SaveLoadRealIcons(ActionIndex: Shortint): Boolean;
+function TFormMain.SaveLoadGamesIcons(ActionIndex: Shortint): Boolean;
 var
   GamesFileName: TMemoryStream;
 begin
   Result:= True;
   case ActionIndex of
-    0: //Save current real icons list
+    0: //Save current games icons list
       begin
-        if FileExists(FrontendPath+'resources\BigIconsList.dat') then
-           DeleteFile(FrontendPath+'resources\BigIconsList.dat');
-        if FileExists(FrontendPath+'resources\SmallIconsList.dat') then
-           DeleteFile(FrontendPath+'resources\SmallIconsList.dat');
-
+        DeleteFile(FrontendPath+'resources\BigIconsList.dat');
+        DeleteFile(FrontendPath+'resources\SmallIconsList.dat');
         Application.ProcessMessages;
 
         try
           GamesFileName:= TMemoryStream.Create;
-          GamesFileName.WriteComponent(BigRealIconsImageList);
+          GamesFileName.WriteComponent(BigGamesIconsImageList);
           GamesFileName.SaveToFile(FrontendPath+'resources\BigIconsList.dat');
         except
           on EStreamError do begin
-                               GenerateMessage(GetLanguageText('Messages', 'OutOfMemoryTitle', 'Out of Memory'),
-                                               Format(GetLanguageText('Messages', 'OutOfMemoryMsg', 'There is not enough memory to save %s file! Please restart Windows and try again.'), [FrontendPath+'resources\BigIconsList.dat']), 2);
+                               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                              'Messages', 'GamesIconsErrorMsg', 'Could no save %s file! Please change your Windows color depth to 16bis or 8bits and try again.');
+                               GenerateMessage(MessageText[0], Format(MessageText[1], [FrontendPath+'resources\BigIconsList.dat']), 2);
                                Result:= False;
                              end;
         end;
@@ -14383,31 +13769,32 @@ begin
            begin
              try
                GamesFileName:= TMemoryStream.Create;
-               GamesFileName.WriteComponent(SmallRealIconsImageList);
+               GamesFileName.WriteComponent(SmallGamesIconsImageList);
                GamesFileName.SaveToFile(FrontendPath+'resources\SmallIconsList.dat');
              except
                on EStreamError do begin
-                                    GenerateMessage(GetLanguageText('Messages', 'OutOfMemoryTitle', 'Out of Memory'),
-                                                    Format(GetLanguageText('Messages', 'OutOfMemoryMsg', 'There is not enough memory to save %s file! Please restart Windows and try again.'), [FrontendPath+'resources\SmallIconsList.dat']), 2);
+                                    GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                                   'Messages', 'GamesIconsErrorMsg', 'Could no save %s file! Please change your Windows color depth to 16bis or 8bits and try again.');
+                                    GenerateMessage(MessageText[0], Format(MessageText[1], [FrontendPath+'resources\BigIconsList.dat']), 2);
                                     Result:= False;
                                   end;
              end;
              FreeAndNil(GamesFileName);
            end;
       end;
-    1: //Load real icons to the icons list
+    1: //Load games icons to the icons list
       begin
         case FileExists(FrontendPath+'resources\BigIconsList.dat') and FileExists(FrontendPath+'resources\SmallIconsList.dat') of
           True:
             begin
-              BigRealIconsImageList.Clear;
-              SmallRealIconsImageList.Clear;
+              BigGamesIconsImageList.Clear;
+              SmallGamesIconsImageList.Clear;
               Application.ProcessMessages;
 
               try
                 GamesFileName:= TMemoryStream.Create;
                 GamesFileName.LoadFromFile(FrontendPath+'resources\BigIconsList.dat');
-                GamesFileName.ReadComponent(BigRealIconsImageList);
+                GamesFileName.ReadComponent(BigGamesIconsImageList);
               except
                 Result:= False;
               end;
@@ -14418,7 +13805,7 @@ begin
                    try
                      GamesFileName:= TMemoryStream.Create;
                      GamesFileName.LoadFromFile(FrontendPath+'resources\SmallIconsList.dat');
-                     GamesFileName.ReadComponent(SmallRealIconsImageList);
+                     GamesFileName.ReadComponent(SmallGamesIconsImageList);
                    except
                      Result:= False;
                    end;
@@ -14447,8 +13834,7 @@ end;
 
 function TFormMain.VerifyFiles(VClassicMR: Boolean; VClassicMV: Boolean; VClassicCR: Boolean; VClassicCV: Boolean; VNeoGeoM: Boolean; VNeoGeoC: Boolean;
                                VUnClassicMR: Boolean; VUnClassicMV: Boolean; VUnClassicCR: Boolean; VUnClassicCV: Boolean; VUnNeoGeoM: Boolean; VUnNeoGeoC: Boolean;
-                               VBios: Boolean; VUnBios: Boolean;
-                               VCustomGames: Boolean; VUnCustomGames: Boolean; IsCustomList: Boolean): Boolean;
+                               VBios: Boolean; VUnBios: Boolean): Boolean;
 begin
   Result:= False;
 
@@ -14549,50 +13935,6 @@ begin
           if GetFileSize(FrontendPath+'resources\UnBios.dat') > 0 then
              Result:= True;
      end;
-
-  if VCustomGames then
-     begin
-       case FileExists(FrontendPath+'resources\CustomGames.dat') of
-         True:
-           begin
-             if GetFileSize(FrontendPath+'resources\CustomGames.dat') > 0 then
-                Result:= True;
-           end;
-         False:
-           begin
-             case IsCustomList of
-               True: Result:= False;
-               False:
-                 case Result of
-                   True : Result:= True;
-                   False: Result:= False;
-                 end;
-             end;
-           end;
-       end;
-     end;
-
-  if VUnCustomGames then
-     begin
-       case FileExists(FrontendPath+'resources\UnCustomGames.dat') of
-         True:
-           begin
-             if GetFileSize(FrontendPath+'resources\UnCustomGames.dat') > 0 then
-                Result:= True;
-           end;
-         False:
-           begin
-             case IsCustomList of
-               True: Result:= False;
-               False:
-                 case Result of
-                   True : Result:= True;
-                   False: Result:= False;
-                 end;
-             end;
-           end;
-       end;
-     end;
 end;
 
 procedure TFormMain.SetGameType(GameTypeIndex: ShortInt);
@@ -14612,12 +13954,10 @@ begin
   Un. Classic Clone Vector
   Un. Neo Geo Master
   Un. Neo Geo Clone
-  Classic BIOS
-  Neo Geo BIOS
-  Un. Classic BIOS
-  Un. Neo Geo BIOS
-  Custom Games
-  Un. Custom Games}
+  Classic Bios
+  Neo Geo Bios
+  Un. Classic Bios
+  Un. Neo Geo Bios}
 
   Screen.Cursor:= crHourGlass;
 
@@ -14638,7 +13978,7 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False) of
+             case VerifyFiles(True, True, True, True, True, True, True, True, True, True, True, True, True, True) of
                True:
                  begin
                    ClassicMR:= LoadROMFilters('ClassicMR');
@@ -14657,15 +13997,13 @@ begin
                    BiosNeoGeo:= LoadROMFilters('NeoGeoBios');
                    UnavailableBiosClassic:= LoadROMFilters('UnClassicBios');
                    UnavailableBiosNeoGeo:= LoadROMFilters('UnNeoGeoBios');
-                   CustomGames:= LoadROMFilters('CustomGames');
-                   UnavailableCustomGames:= LoadROMFilters('UnCustomGames');
                  end;
                False: ShowWarning:= True;
              end;
            end;
           1:
            begin
-             case VerifyFiles(True, True, True, True, True, True, False, False, False, False, False, False, True, False, True, False, False) of
+             case VerifyFiles(True, True, True, True, True, True, False, False, False, False, False, False, True, False) of
                True:
                  begin
                    UnavailableClassicMR:= False;
@@ -14676,7 +14014,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicMV:= LoadROMFilters('ClassicMV');
@@ -14686,14 +14023,13 @@ begin
                    NeoGeoC:= LoadROMFilters('NeoGeoC');
                    BiosClassic:= LoadROMFilters('ClassicBios');
                    BiosNeoGeo:= LoadROMFilters('NeoGeoBios');
-                   CustomGames:= LoadROMFilters('CustomGames');
                  end;
                False: ShowWarning:= True;
              end;
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, True, True, True, True, True, True, False, True, False, True, False) of
+             case VerifyFiles(False, False, False, False, False, False, True, True, True, True, True, True, False, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14704,7 +14040,6 @@ begin
                    NeoGeoC:= False;
                    BiosClassic:= False;
                    BiosNeoGeo:= False;
-                   CustomGames:= False;
 
                    UnavailableClassicMR:= LoadROMFilters('UnClassicMR');
                    UnavailableClassicMV:= LoadROMFilters('UnClassicMV');
@@ -14714,19 +14049,25 @@ begin
                    UnavailableNeoGeoC:= LoadROMFilters('UnNeoGeoC');
                    UnavailableBiosClassic:= LoadROMFilters('UnClassicBios');
                    UnavailableBiosNeoGeo:= LoadROMFilters('UnNeoGeoBios');
-                   UnavailableCustomGames:= LoadROMFilters('UnCustomGames');
                  end;
                False: ShowWarning:= True;
              end;
            end;
         end;
+        if (FileExists(FrontendPath+'resources\cGames.dat')) and
+           (GetFileSize(FrontendPath+'resources\cGames.dat') > 0) then
+           begin
+             if ShowWarning then
+                ShowWarning:= False;
+             LoadROMFilters('cGames');
+           end;
       end;
     1: // Classic games only
       begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(True, True, True, True, False, False, True, True, True, True, False, False, True, True, False, False, False) of
+             case VerifyFiles(True, True, True, True, False, False, True, True, True, True, False, False, True, True) of
                True:
                  begin
                    NeoGeoM:= False;
@@ -14735,8 +14076,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicMV:= LoadROMFilters('ClassicMV');
@@ -14754,7 +14093,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(True, False, True, False, False, False, False, False, False, False, False, False, True, False, False, False, False) of
+             case VerifyFiles(True, False, True, False, False, False, False, False, False, False, False, False, True, False) of
                True:
                  begin
                    ClassicMV:= False;
@@ -14762,7 +14101,6 @@ begin
                    NeoGeoM:= False;
                    NeoGeoC:= False;
                    BiosNeoGeo:= False;
-                   CustomGames:= False;
 
                    UnavailableClassicMR:= False;
                    UnavailableClassicMV:= False;
@@ -14772,7 +14110,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicCR:= LoadROMFilters('ClassicCR');
@@ -14783,7 +14120,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, True, False, True, False, False, False, False, True, False, False, False) of
+             case VerifyFiles(False, False, False, False, False, False, True, False, True, False, False, False, False, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14794,13 +14131,11 @@ begin
                    NeoGeoC:= False;
                    BiosClassic:= False;
                    BiosNeoGeo:= False;
-                   CustomGames:= False;
                    UnavailableClassicMV:= False;
                    UnavailableClassicCV:= False;
                    UnavailableNeoGeoM:= False;
                    UnavailableNeoGeoC:= False;
                    UnavailableBiosNeoGeo:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableClassicMR:= LoadROMFilters('UnClassicMR');
                    UnavailableClassicCR:= LoadROMFilters('UnClassicCR');
@@ -14816,7 +14151,7 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(False, False, False, False, True, True, False, False, False, False, True, True, True, True, False, False, False) of
+             case VerifyFiles(False, False, False, False, True, True, False, False, False, False, True, True, True, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14829,8 +14164,6 @@ begin
                    UnavailableClassicCV:= False;
                    BiosClassic:= False;
                    UnavailableBiosClassic:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    NeoGeoM:= LoadROMFilters('NeoGeoM');
                    NeoGeoC:= LoadROMFilters('NeoGeoC');
@@ -14844,7 +14177,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(False, False, False, False, True, True, False, False, False, False, False, False, True, False, False, False, False) of
+             case VerifyFiles(False, False, False, False, True, True, False, False, False, False, False, False, True, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14860,8 +14193,6 @@ begin
                    BiosClassic:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    NeoGeoM:= LoadROMFilters('NeoGeoM');
                    NeoGeoC:= LoadROMFilters('NeoGeoC');
@@ -14872,7 +14203,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, False, False, False, False, True, True, False, True, False, False, False) of
+             case VerifyFiles(False, False, False, False, False, False, False, False, False, False, True, True, False, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14889,8 +14220,6 @@ begin
                    BiosNeoGeo:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableNeoGeoM:= LoadROMFilters('UnNeoGeoM');
                    UnavailableNeoGeoC:= LoadROMFilters('UnNeoGeoC');
@@ -14906,7 +14235,7 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(True, True, False, False, True, False, True, True, False, False, True, False, True, True, False, False, False) of
+             case VerifyFiles(True, True, False, False, True, False, True, True, False, False, True, False, True, True) of
                True:
                  begin
                    ClassicCR:= False;
@@ -14915,8 +14244,6 @@ begin
                    UnavailableClassicCR:= False;
                    UnavailableClassicCV:= False;
                    UnavailableNeoGeoC:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicMV:= LoadROMFilters('ClassicMV');
@@ -14934,7 +14261,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(True, True, False, False, True, False, False, False, False, False, False, False, True, False, False, False, False) of
+             case VerifyFiles(True, True, False, False, True, False, False, False, False, False, False, False, True, False) of
                True:
                  begin
                    ClassicCR:= False;
@@ -14948,8 +14275,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicMV:= LoadROMFilters('ClassicMV');
@@ -14962,7 +14287,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, True, True, False, False, True, False, False, True, False, False, False) of
+             case VerifyFiles(False, False, False, False, False, False, True, True, False, False, True, False, False, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -14976,8 +14301,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    BiosClassic:= False;
                    BiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableClassicMR:= LoadROMFilters('UnClassicMR');
                    UnavailableClassicMV:= LoadROMFilters('UnClassicMV');
@@ -14995,7 +14318,7 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(False, False, True, True, False, True, False, False, True, True, False, True, True, True, False, False, False) of
+             case VerifyFiles(False, False, True, True, False, True, False, False, True, True, False, True, True, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15008,8 +14331,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicCR:= LoadROMFilters('ClassicCR');
                    ClassicCV:= LoadROMFilters('ClassicCV');
@@ -15023,7 +14344,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(False, False, True, True, False, True, False, False, False, False, False, False, False, False, False, False, False) of
+             case VerifyFiles(False, False, True, True, False, True, False, False, False, False, False, False, False, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15039,8 +14360,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicCR:= LoadROMFilters('ClassicCR');
                    ClassicCV:= LoadROMFilters('ClassicCV');
@@ -15051,7 +14370,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, False, False, True, True, False, True, False, False, False, False, False) of
+             case VerifyFiles(False, False, False, False, False, False, False, False, True, True, False, True, False, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15067,8 +14386,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableClassicCR:= LoadROMFilters('UnClassicCR');
                    UnavailableClassicCV:= LoadROMFilters('UnClassicCV');
@@ -15084,15 +14401,13 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(True, False, True, False, True, True, True, False, True, False, True, True, True, True, False, False, False) of
+             case VerifyFiles(True, False, True, False, True, True, True, False, True, False, True, True, True, True) of
                True:
                  begin
                    ClassicMV:= False;
                    ClassicCV:= False;
                    UnavailableClassicMV:= False;
                    UnavailableClassicCV:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicCR:= LoadROMFilters('ClassicCR');
@@ -15112,7 +14427,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(True, False, True, False, True, True, False, False, False, False, False, False, True, False, False, False, False) of
+             case VerifyFiles(True, False, True, False, True, True, False, False, False, False, False, False, True, False) of
                True:
                  begin
                    ClassicMV:= False;
@@ -15125,8 +14440,6 @@ begin
                    UnavailableNeoGeoC:= False;
                    UnavailableBiosClassic:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMR:= LoadROMFilters('ClassicMR');
                    ClassicCR:= LoadROMFilters('ClassicCR');
@@ -15140,7 +14453,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(True, False, True, False, True, True, True, False, True, False, True, True, True, True, False, False, False) of
+             case VerifyFiles(True, False, True, False, True, True, True, False, True, False, True, True, True, True) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15153,8 +14466,6 @@ begin
                    UnavailableClassicCV:= False;
                    BiosClassic:= False;
                    BiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableClassicMR:= LoadROMFilters('UnClassicMR');
                    UnavailableClassicCR:= LoadROMFilters('UnClassicCR');
@@ -15173,7 +14484,7 @@ begin
         case ButtonGameFilters.Tag of
           0:
            begin
-             case VerifyFiles(False, True, False, True, False, False, False, True, False, True, False, False, False, False, False, False, False) of
+             case VerifyFiles(False, True, False, True, False, False, False, True, False, True, False, False, False, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15188,8 +14499,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMV:= LoadROMFilters('ClassicMV');
                    ClassicCV:= LoadROMFilters('ClassicCV');
@@ -15201,7 +14510,7 @@ begin
            end;
           1:
            begin
-             case VerifyFiles(False, True, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False) of
+             case VerifyFiles(False, True, False, True, False, False, False, False, False, False, False, False, False, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15218,8 +14527,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    ClassicMV:= LoadROMFilters('ClassicMV');
                    ClassicCV:= LoadROMFilters('ClassicCV');
@@ -15229,7 +14536,7 @@ begin
            end;
           2:
            begin
-             case VerifyFiles(False, False, False, False, False, False, False, True, False, True, False, False, False, False, False, False, False) of
+             case VerifyFiles(False, False, False, False, False, False, False, True, False, True, False, False, False, False) of
                True:
                  begin
                    ClassicMR:= False;
@@ -15246,8 +14553,6 @@ begin
                    UnavailableBiosClassic:= False;
                    BiosNeoGeo:= False;
                    UnavailableBiosNeoGeo:= False;
-                   CustomGames:= False;
-                   UnavailableCustomGames:= False;
 
                    UnavailableClassicMV:= LoadROMFilters('UnClassicMV');
                    UnavailableClassicCV:= LoadROMFilters('UnClassicCV');
@@ -15257,65 +14562,46 @@ begin
            end;
         end;
       end;
-    7: // Custom Games
-      begin
-        case VerifyFiles(False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, True, True) of
-          True:
-            begin
-              ClassicMR:= False;
-              ClassicMV:= False;
-              ClassicCR:= False;
-              ClassicCV:= False;
-              NeoGeoM:= False;
-              NeoGeoC:= False;
-              UnavailableClassicMR:= False;
-              UnavailableClassicMV:= False;
-              UnavailableClassicCR:= False;
-              UnavailableClassicCV:= False;
-              UnavailableNeoGeoM:= False;
-              UnavailableNeoGeoC:= False;
-              BiosClassic:= False;
-              UnavailableBiosClassic:= False;
-              BiosNeoGeo:= False;
-              UnavailableBiosNeoGeo:= False;
-
-              CustomGames:= LoadROMFilters('CustomGames');
-              UnavailableCustomGames:= LoadROMFilters('UnCustomGames');
-            end;
-          False: ShowWarning:= True;
-        end;
-      end;
   end;
-
-  if ShowWarning then
-     begin
-       ShowPicture('NoGamesAvailable', '', Picture, -1, True);
-       // no games on list, show the "No Games Available" image
-       ChangeOption:= False;
-     end;
 
   case ChangeOption of
     False: GameTypeIndex:= ListFilterActualSelection;
     True:
       begin
-        if not AddGames(True) then
-           Application.MessageBox('Oops. Could not add games. This error cannot happen! Please contact Emu Loader author at emuloader@mameworld.net', 'Fatal Error', mb_Ok+mb_IconError);
-
-        StatusBarShownGames.Caption:= Format(GetLanguageText('Main', 'StatusBarShownGames', '%u Games'), [Length(GamesList)]);
-        SetRealIcons;
-        ShowingPicture:= True;
         ListFilterActualSelection:= ButtonGameType.Tag;
-        SortColumn(ColumnSorted, True);
-        SelectItem(FindGame(SelectedGame, SelectedGameCaption));
+        ShowingPicture:= True;
+        case ShowWarning of
+          True:
+            begin
+              ShowPicture('NoGamesAvailable', '', Picture, -1, True);
+              ClearEntries;
+              List.Items.Count:= 0;
+              List.Invalidate;
+            end;
+          False:
+            begin
+              case AddGames of
+                True:
+                  begin
+                    StatusBarShownGames.Caption:= Format(GetLanguageText('Main', 'StatusBarShownGames', '%u Games'), [Length(GamesList)]);
+                    SetGamesIcons;
+                    SortColumn(ColumnSorted, True);
+                    SelectItem(FindGame(SelectedGame, SelectedGameCaption));
+                  end;
+                False: Application.MessageBox('Oops. Could not add games. This error cannot happen! Please contact Emu Loader author at emuloader@mameworld.net', 'Fatal Error', mb_Ok+mb_IconError);
+              end;
+            end;
+        end;
       end;
   end;
   FreeAndNil(CompleteGamesList);
 
   ButtonGameType.Tag:= GameTypeIndex;
+  ButtonGameType.ImageIndex:= GameTypeIndex+4;
   case ButtonGameFilters.Tag of
-    0: ButtonGameFilters.ImageIndex:= 65;
-    1: ButtonGameFilters.ImageIndex:= 66;
-    2: ButtonGameFilters.ImageIndex:= 67;
+    0: ButtonGameFilters.ImageIndex:= 11;
+    1: ButtonGameFilters.ImageIndex:= 12;
+    2: ButtonGameFilters.ImageIndex:= 13;
   end;
   List.SetFocus;
   Screen.Cursor:= crDefault;
@@ -15325,15 +14611,6 @@ procedure TFormMain.ButtonViewPicture(ButtonCode: ShortInt);
 var
   LoopPicture: ShortInt;
   PictureName: String;
-
-  procedure FreeMemoryFiles;
-  begin
-    FreeAndNil(ListROMsName);
-    FreeAndNil(ListROMsSize);
-    FreeAndNil(ListROMsCRC);
-    FreeAndNil(ListROMsNameFullPath);
-  end;
-
 begin
   if MenuShowPictures.Checked then
      begin
@@ -15369,7 +14646,6 @@ begin
                        end;
                     Inc(PictureNumber);
                   end;
-                  FreeMemoryFiles;
                   if PictureNumber > 100 then
                      begin
                        if FormPreferences.CyclePictureTypes.Checked then
@@ -15407,7 +14683,6 @@ begin
                        end;
                     Dec(PictureNumber);
                   end;
-                  FreeMemoryFiles;
                   if PictureNumber < 1 then
                      begin
                        if FormPreferences.CyclePictureTypes.Checked then
@@ -15420,7 +14695,6 @@ begin
        end;
        UpdateLabelPictures;
        Screen.Cursor:= crDefault;
-       ShowingPicture:= True;
      end;
 end;
 
@@ -15455,12 +14729,14 @@ var
 begin
   if not Assigned(FormAbout) then
      FormAbout:= TFormAbout.Create(Self);
-  if FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      begin
-       LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
+       LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
 
-       FormAbout.ButtonClose.Caption:= GetLanguageText('Resource', 'ButtonClose', '&Close');
-       FormAbout.ButtonClose.Hint:= GetLanguageText('Resource', 'ButtonCloseHint', 'Close this window');
+       GetMessagesLng('Resource', 'ButtonClose', '&Close',
+                      'Resource', 'ButtonCloseHint', 'Close this window');
+       FormAbout.ButtonClose.Caption:= MessageText[0];
+       FormAbout.ButtonClose.Hint:= MessageText[1];
      end;
   FreeAndNil(LanguageFile);
 
@@ -15468,26 +14744,26 @@ begin
   FreeAndNil(FormAbout);
 end;
 
-procedure TFormMain.MenuViewTextFilesClick(Sender: TObject);
-begin
-  if not Assigned(FormTextViewer) then
-     FormTextViewer:= TFormTextViewer.Create(Self);
-
-  FormTextViewer.EmulatorPath:= ShortToLongPath(ExtractFilePath(GetCurrentEmulatorExecutable))+'docs\';
-
-  FormTextViewer.ShowModal;
-  FreeAndNil(FormTextViewer);
-end;
-
 procedure TFormMain.FormActivate(Sender: TObject);
-var
-  DefColor: Integer;
 begin
   // Need to do this trick or everytime you click on the main screen
   // or call another screen, these lines always keep executing
-  // This is ment to be executed only one time (when initializing the frontend)
+  // This is ment to be executed only one time, when initializing the frontend
+  if TerminateEmuLoader then
+     Exit;
+     
   if ToolBarsPanel.Tag = 0 then
      begin
+       if FormPreferences.PlaySoundClip.Tag = 1 then
+          begin
+            FormPreferences.PlaySoundClip.Tag:= 0;
+            FormPreferences.PlaySoundClip.Checked:= True;
+            PopulateDevices; // Get all sound devices present on the system
+            if FormPreferences.OutputDevice.Items.Count > 0 then
+               FormPreferences.OutputDevice.ItemIndex:= FormPreferences.OutputDevice.Tag;
+            if List.Selected <> nil then
+               LoadSound;
+          end;
        if Tag = 1 then
           WindowState:= wsMaximized
        else
@@ -15502,7 +14778,7 @@ begin
        if FormPreferences.StretchLargerPictures.Tag = 1 then
           FormPreferences.StretchLargerPictures.Checked:= True
        else
-          SetAspectRatio(Picture);
+          SetAspectRatio;
 
        ToolBarsPanel.Tag:= 1;
        ListFilterActualSelection:= ButtonGameType.Tag;
@@ -15516,7 +14792,7 @@ begin
          1: FormPreferences.StretchPicture.Tag:= 0;
        end;
 
-       case ButtonModeView.Tag of
+       case MenuModeViewDetails.Tag of
          0: MenuModeViewBigIcons.Click;
          1: MenuModeViewSmallIcons.Click;
          2: MenuModeViewList.Click;
@@ -15532,7 +14808,7 @@ begin
 
        if MenuFullScreen.Tag = 1 then
           MenuFullScreen.Click;
-
+          
        FormStatus.LabelProgress.Caption:= '';
        FormStatus.Close;
      end;
@@ -15549,8 +14825,9 @@ begin
       end;
     False:
       begin
-        FormGamesListLegend.Release;
-        FormGamesListLegend:= nil;
+        FreeAndNil(FormGamesListLegend);
+        //FormGamesListLegend.Release;
+        //FormGamesListLegend:= nil;
       end;
   end;
 end;
@@ -15560,6 +14837,12 @@ var
   Loop: ShortInt;
 begin
   // Check "EmuLoader.ini" file not "Read Only" attribute
+  // free any created entries
+  if TerminateEmuLoader then
+     Exit;
+
+  if FormPreferences.PlaySoundClip.Checked then
+     InitDeInitFMOD(False, True);
   if not CheckFileAttributes('EmuLoader.ini') then
      UpdateINIFile;
 
@@ -15575,7 +14858,6 @@ begin
   if MenuFullScreen.Checked then
      MenuFullScreen.Click;
 
-  // free any created entries
   ClearEntries;
   for Loop:=0 to Length(EmulatorType) do
   begin
@@ -15583,6 +14865,7 @@ begin
     Finalize(EmulatorVersion[Loop]);
     Finalize(EmulatorExecutable[Loop]);
   end;
+  FreeMemoryZipContents;
 end;
 
 procedure TFormMain.ListKeyDown(Sender: TObject; var Key: Word;
@@ -15695,31 +14978,11 @@ begin
      end;
 end;
 
-procedure TFormMain.MenuCustomGamesManagerClick(Sender: TObject);
-begin
-  if not Assigned(FormCustomGames) then
-     FormCustomGames:= TFormCustomGames.Create(Self);
-  FormCustomGames.ShowModal;
-  FreeAndNil(FormCustomGames);
-  if ((FileExists(FrontendPath+'resources\CustomGames.dat')) and
-      (FileExists(FrontendPath+'resources\UnCustomGames.dat'))) then
-     begin
-       if ((GetFileSize(FrontendPath+'resources\CustomGames.dat') = 0) and
-           (GetFileSize(FrontendPath+'resources\UnCustomGames.dat') = 0)) then
-          begin
-            DeleteFile(FrontendPath+'resources\CustomGames.dat');
-            DeleteFile(FrontendPath+'resources\UnCustomGames.dat');
-            if FileExists(FrontendPath+'resources\CustomGamesCmd.ini') then
-               DeleteFile(FrontendPath+'resources\CustomGamesCmd.ini');
-          end;
-     end;
-end;
-
 procedure TFormMain.MenuPlayGameStandardClick(Sender: TObject);
 begin
   case FormPreferences.UseCustomOptionsDefault.Checked of
     True : MenuPlayGame.OnClick(Self);
-    False: ExecuteGame(GamesList[SelectedGame].eName, True, FormPreferences.AverageFPS.Checked);
+    False: ExecuteGame(GamesList[SelectedGame].eName, True);
   end;
 end;
 
@@ -15729,149 +14992,76 @@ var
 begin
   if GamesList[SelectedGame].eDescription <> '' then
   begin
-    case ButtonShowFavorite.Down of
-      True:
-        begin
-          MenuAddToFavorites.Enabled:= False;
-          MenuDeleteFromFavorites.Enabled:= True;
+    MenuAddToFavorites.Enabled:= not ButtonShowFavorite.Down;
+    MenuDeleteFromFavorites.Enabled:= ButtonShowFavorite.Down;
 
-          PopupAddToFavorites.Enabled:= False;
-          PopupDeleteFromFavorites.Enabled:= True;
-        end;
-      False:
-        begin
-          MenuAddToFavorites.Enabled:= True;
-          MenuDeleteFromFavorites.Enabled:= False;
+    PopupAddToFavorites.Enabled:= not ButtonShowFavorite.Down;
+    PopupDeleteFromFavorites.Enabled:= ButtonShowFavorite.Down;
 
-          PopupAddToFavorites.Enabled:= True;
-          PopupDeleteFromFavorites.Enabled:= False;
-        end;
-    end;
+    MenuCustomGameOptions.Enabled:= True;
+    PopupCustomGameOptions.Enabled:= True;
+    MenuCustomCommandLine.Enabled:= True;
+    MenuGameDescription.Enabled:= True;
+    MenuGameCategory.Enabled:= True;
 
-    if GamesList[SelectedGame].eROMIdentification in [0..15] then
+    PopupCustomCommandLine.Enabled:= True;
+    PopupGameDescription.Enabled:= True;
+    PopupGameCategory.Enabled:= True;
+
+    MenuAuditSelectedGame.Enabled:= True;
+    PopupAuditSelectedGame.Enabled:= True;
+
+    MenuCustomInitializationOptions.Enabled:= EmulatorType[ButtonExecutablesMode.Tag] = 1;
+    PopupCustomInitializationOptions.Enabled:= MenuCustomInitializationOptions.Enabled;
+
+    if MenuCustomInitializationOptions.Enabled then
        begin
-         MenuCustomGameOptions.Enabled:= True;
-         PopupCustomGameOptions.Enabled:= True;
-         MenuCustomCommandLine.Enabled:= True;
-         MenuGameDescription.Enabled:= True;
-         MenuGameCategory.Enabled:= True;
-
-         PopupCustomCommandLine.Enabled:= True;
-         PopupGameDescription.Enabled:= True;
-         PopupGameCategory.Enabled:= True;
-
-         MenuAuditSelectedGame.Enabled:= True;
-         PopupAuditSelectedGame.Enabled:= True;
-
-         case GetCurrentEmulatorFormat of
-           1: begin
-                CheckFile:= IniFilesDir+'\'+GamesList[SelectedGame].eName+'.ini';
-                SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-                MenuCustomInitializationOptions.Enabled:= True;
-                PopupCustomInitializationOptions.Enabled:= True;
-              end;
-           2: begin
-                CheckFile:= FrontendPath+'resources\dosgamecfg\'+GamesList[SelectedGame].eName+'.cfg';
-                MenuCustomInitializationOptions.Enabled:= False;
-                PopupCustomInitializationOptions.Enabled:= False;
-              end;
-         end;
-
-         case FileExists(CheckFile) of
-           True:
-             begin
-               MenuPlayGame.Enabled:= True;
-               MenuSetCustomOptions.Enabled:= True;
-               MenuDeleteCustomOptions.Enabled:= True;
-
-               PopupPlayGame.Enabled:= True;
-               PopupSetCustomOptions.Enabled:= True;
-               PopupDeleteCustomOptions.Enabled:= True;
-             end;
-           False:
-             begin
-               MenuPlayGame.Enabled:= False;
-               MenuSetCustomOptions.Enabled:= True;
-               MenuDeleteCustomOptions.Enabled:= False;
-
-               PopupPlayGame.Enabled:= False;
-               PopupSetCustomOptions.Enabled:= True;
-               PopupDeleteCustomOptions.Enabled:= False;
-             end;
-         end;
-
-         case FileExists(FrontendPath+'resources\customcmd\'+GamesList[SelectedGame].eName+'.ini') of
-           True:
-             begin
-               MenuPlayGame.Enabled:= True;
-               MenuSetCustomCommandLine.Enabled:= True;
-               MenuDeleteCustomCommandLine.Enabled:= True;
-
-               PopupPlayGame.Enabled:= True;
-               PopupSetCustomCommandLine.Enabled:= True;
-               PopupDeleteCustomCommandLine.Enabled:= True;
-             end;
-           False:
-             begin
-               MenuSetCustomCommandLine.Enabled:= True;
-               MenuDeleteCustomCommandLine.Enabled:= False;
-
-               PopupSetCustomCommandLine.Enabled:= True;
-               PopupDeleteCustomCommandLine.Enabled:= False;
-             end;
-         end;
-
-         CheckFile:= GamesList[SelectedGame].eDriver;
-         Delete(CheckFile, Length(CheckFile)-1, 2);
-         case FileExists(FrontendPath+'resources\drvcustomcmd\'+CheckFile+'.ini') of
-           True:
-             begin
-               MenuPlayGame.Enabled:= True;
-               MenuSetDriverCustomCommandLine.Enabled:= True;
-               MenuDeleteDriverCustomCommandLine.Enabled:= True;
-
-               PopupPlayGame.Enabled:= True;
-               PopupSetDriverCustomCommandLine.Enabled:= True;
-               PopupDeleteDriverCustomCommandLine.Enabled:= True;
-             end;
-           False:
-             begin
-               MenuSetDriverCustomCommandLine.Enabled:= True;
-               MenuDeleteDriverCustomCommandLine.Enabled:= False;
-
-               PopupSetDriverCustomCommandLine.Enabled:= True;
-               PopupDeleteDriverCustomCommandLine.Enabled:= False;
-             end;
-         end;
-
-         MenuAuditAllGames.Enabled:= not Assigned(FormAudit);
-         MenuAuditAvailableGames.Enabled:= MenuAuditAllGames.Enabled;
-         PopupAuditAllGames.Enabled:= MenuAuditAllGames.Enabled;
-         PopupAuditAvailableGames.Enabled:= MenuAuditAllGames.Enabled;
-       end
-    else
-       begin
-         MenuPlayGame.Enabled:= False;
-         MenuCustomGameOptions.Enabled:= False;
-         MenuCustomInitializationOptions.Enabled:= False;
-         MenuCustomCommandLine.Enabled:= False;
-         MenuGameDescription.Enabled:= False;
-         MenuGameCategory.Enabled:= False;
-         MenuDeleteCustomOptions.Enabled:= False;
-         MenuAuditSelectedGame.Enabled:= False;
-
-         PopupPlayGame.Enabled:= False;
-         PopupCustomGameOptions.Enabled:= False;
-         PopupCustomInitializationOptions.Enabled:= False;
-         PopupCustomCommandLine.Enabled:= False;
-         PopupGameDescription.Enabled:= False;
-         PopupGameCategory.Enabled:= False;
-         PopupDeleteCustomOptions.Enabled:= False;
-         PopupAuditSelectedGame.Enabled:= False;
-
-         MenuDeleteZIPFileName.Enabled:= False;
-         PopupDeleteZIPFileName.Enabled:= False;
+         CheckFile:= IniFilesDir+'\'+GamesList[SelectedGame].eName+'.ini';
+         SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
        end;
+
+    MenuPlayGame.Enabled:= FileExists(CheckFile);
+    PopupPlayGame.Enabled:= MenuPlayGame.Enabled;
+
+    MenuSetCustomOptions.Enabled:= True;
+    PopupSetCustomOptions.Enabled:= True;
+
+    MenuDeleteCustomOptions.Enabled:= MenuPlayGame.Enabled;
+    PopupDeleteCustomOptions.Enabled:= MenuPlayGame.Enabled;
+
+    MenuSetCustomCommandLine.Enabled:= True;
+    PopupSetCustomCommandLine.Enabled:= True;
+
+    MenuDeleteCustomCommandLine.Enabled:= FileExists(FrontendPath+'resources\customcmd\'+GamesList[SelectedGame].eName+'.ini');
+    PopupDeleteCustomCommandLine.Enabled:= MenuDeleteCustomCommandLine.Enabled;
+
+    if MenuDeleteCustomCommandLine.Enabled then
+       begin
+         MenuPlayGame.Enabled:= True;
+         PopupPlayGame.Enabled:= True;
+       end;
+
+
+    CheckFile:= GamesList[SelectedGame].eDriver;
+    Delete(CheckFile, Length(CheckFile)-1, 2);
+
+    MenuSetDriverCustomCommandLine.Enabled:= True;
+    PopupSetDriverCustomCommandLine.Enabled:= True;
+
+    MenuDeleteDriverCustomCommandLine.Enabled:= FileExists(FrontendPath+'resources\drvcustomcmd\'+CheckFile+'.ini');
+    PopupDeleteDriverCustomCommandLine.Enabled:= MenuDeleteDriverCustomCommandLine.Enabled;
+
+    if MenuDeleteDriverCustomCommandLine.Enabled then
+       begin
+         MenuPlayGame.Enabled:= True;
+         PopupPlayGame.Enabled:= True;
+       end;
+
+    MenuAuditAllGames.Enabled:= not Assigned(FormAudit);
+    MenuAuditAvailableGames.Enabled:= MenuAuditAllGames.Enabled;
+    PopupAuditAllGames.Enabled:= MenuAuditAllGames.Enabled;
+    PopupAuditAvailableGames.Enabled:= MenuAuditAllGames.Enabled;
+
 
     MenuGameHistory.Enabled:= FileExists(historyFile);
     PopupGameHistory.Enabled:= MenuGameHistory.Enabled;
@@ -15881,9 +15071,33 @@ begin
     MenuGameDriverInformation.Enabled:= MenuGameInformation.Enabled;
     PopupGameDriverInformation.Enabled:= MenuGameInformation.Enabled;
 
-    MenuDeleteZIPFileName.Caption:= Format(GetLanguageText('Main', 'MenuDeleteZIPFileName', 'Delete File %s'),
+    MenuDeleteZIPFileName.Caption:= Format(MenuDeleteZIPFileName.Hint,
                                            [LowerCase(GamesList[SelectedGame].eName)+'.zip']);
     PopupDeleteZIPFileName.Caption:= MenuDeleteZIPFileName.Caption;
+
+    MenuDeleteAudioFileName.Caption:= Format(MenuDeleteAudioFileName.Hint,
+                                             [LowerCase(GamesList[SelectedGame].eName)+'.mp3']);
+    PopupDeleteAudioFileName.Caption:= MenuDeleteAudioFileName.Caption;
+
+    MenuDeleteCFGFile.Caption:= Format(MenuDeleteCFGFile.Hint,
+                                       [LowerCase(GamesList[SelectedGame].eName)+'.cfg']);
+    PopupDeleteCFGFile.Caption:= MenuDeleteCFGFile.Caption;
+
+    MenuDeleteNVRAMFile.Caption:= Format(MenuDeleteNVRAMFile.Hint,
+                                         [LowerCase(GamesList[SelectedGame].eName)+'.nv']);
+    PopupDeleteNVRAMFile.Caption:= MenuDeleteNVRAMFile.Caption;
+
+    MenuDeleteHIFile.Caption:= Format(MenuDeleteHIFile.Hint,
+                                      [LowerCase(GamesList[SelectedGame].eName)+'.hi']);
+    PopupDeleteHIFile.Caption:= MenuDeleteHIFile.Caption;
+
+    MenuDeleteINPFile.Caption:= Format(MenuDeleteINPFile.Hint,
+                                       [LowerCase(GamesList[SelectedGame].eName)+'.inp']);
+    PopupDeleteINPFile.Caption:= MenuDeleteINPFile.Caption;
+
+    MenuDeleteStateFile.Caption:= Format(MenuDeleteStateFile.Hint,
+                                         [LowerCase(GamesList[SelectedGame].eName)+'.sta']);
+    PopupDeleteStateFile.Caption:= MenuDeleteStateFile.Caption;
 
     MenuAddGameParentalLock.Enabled:= FileExists(FrontendPath+'ParentalLock.pwd') and FileExists(FrontendPath+'resources\BlockedGames.dat');
     PopupAddGameParentalLock.Enabled:= MenuAddGameParentalLock.Enabled;
@@ -15894,56 +15108,35 @@ end;
 
 procedure TFormMain.MenuPlayGameClick(Sender: TObject);
 begin
-  ExecuteGame(GamesList[SelectedGame].eName, False, FormPreferences.AverageFPS.Checked);
+  ExecuteGame(GamesList[SelectedGame].eName, False);
+end;
+
+procedure TFormMain.FeatureNotAvailableDOSMAME;
+begin
+  GetMessagesLng('Messages', 'CustomOptionsNotAvailableTitle', 'Custom Options Not Available',
+                 'Messages', 'CustomOptionsNotAvailableMsg', 'This executable format does not have custom options availale! Valid executable are MAME only.');
+  GenerateMessage(MessageText[0], MessageText[1], 2);
 end;
 
 procedure TFormMain.MenuSetCustomOptionsClick(Sender: TObject);
 begin
-{
-Emulator Types
---------------
-1: MAME
-2: DOS MAME
-}
-  case GetCurrentEmulatorFormat of
+  case EmulatorType[ButtonExecutablesMode.Tag] of
     1: SetCustomOptions(GamesList[SelectedGame].eName, False);
-    2:
-      begin
-        if not Assigned(FormDOSMAMECustomConfiguration) then
-           FormDOSMAMECustomConfiguration:= TFormDOSMAMECustomConfiguration.Create(Self);
-        LoadMAMEConfigurationIcons(FormDOSMAMECustomConfiguration.MAMEConfigImageList);
-        FormDOSMAMECustomConfiguration.GameName:= GamesList[SelectedGame].eName;
-        FormDOSMAMECustomConfiguration.EmulatorString:= GetCurrentEmulatorExecutable;
-        FormDOSMAMECustomConfiguration.ReadMAMEcfg.Caption:= Format(GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), [GamesList[SelectedGame].eName+'.cfg']);
-        FormDOSMAMECustomConfiguration.ReadMAMEcfg.Hint:= Format(GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), [GamesList[SelectedGame].eName+'.cfg']);
-        FormDOSMAMECustomConfiguration.ShowModal;
-        FreeAndNil(FormDOSMAMECustomConfiguration);
-      end;
-    else
-        GenerateMessage(GetLanguageText('Messages', 'CustomOptionsNotAvailableTitle', 'Custom Options Not Available'),
-                        GetLanguageText('Messages', 'CustomOptionsNotAvailableMsg', 'This executable format does not have custom options availale! Valid executable are MAME and DOS MAME only.'), 2);
+    2: FeatureNotAvailableDOSMAME; // DOS MAME not supported!
   end;
 end;
 
 procedure TFormMain.MenuDeleteCustomOptionsClick(Sender: TObject);
 begin
-  case GetCurrentEmulatorFormat of
-    1: DeleteCustomOptions(GamesList[SelectedGame].eName); //MAME
-    2: //DOS MAME
-      begin
-        if GenerateMessage(GetLanguageText('Messages', 'CustomOptionsDeleteTitle', 'Delete Custom Options'),
-                           Format(GetLanguageText('Messages', 'CustomOptionsDeleteMsg',
-                                  'Delete configuration file "%s"". Are you sure ?'), [FrontendPath+'resources\dosgamecfg\'+GamesList[SelectedGame].eName+'.cfg']), 1) = mrYes then
-           begin
-             DeleteFile(FrontendPath+'resources\dosgamecfg\'+GamesList[SelectedGame].eName+'.cfg');
-           end;
-      end;
+  case EmulatorType[ButtonExecutablesMode.Tag] of
+    1: DeleteCustomOptions(GamesList[SelectedGame].eName);
+    2: FeatureNotAvailableDOSMAME;
   end;
 end;
 
 procedure TFormMain.MenuAuditSelectedGameClick(Sender: TObject);
 begin
-  if List.Selected = nil then
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
      Exit;
   case Assigned(FormAudit) of
     False: FormAudit:= TFormAudit.Create(Self);
@@ -15956,9 +15149,11 @@ begin
         ListROMsName:= THashedStringList.Create;
         ListROMsSize:= THashedStringList.Create;
         ListROMsCRC:= THashedStringList.Create;
+        ListROMsNameFullPath:= THashedStringList.Create;
         ParentListROMsName:= THashedStringList.Create;
         ParentListROMsSize:= THashedStringList.Create;
         ParentListROMsCRC:= THashedStringList.Create;
+        ParentListROMsNameFullPath:= THashedStringList.Create;
       end;
   end;
   SetAuditGamesLanguage;
@@ -15967,27 +15162,31 @@ begin
   FormAudit.AuditMode:= 0;
   FormAudit.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
   FormAudit.Show;
-  FormAudit.Audit;
+  FormAudit.Audit(False);
 end;
 
 procedure TFormMain.MenuAuditAllGamesClick(Sender: TObject);
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
   if not Assigned(FormAudit) then
      FormAudit:= TFormAudit.Create(Self);
   SetAuditGamesLanguage;
   FormAudit.AuditMode:= 1;
   FormAudit.Show;
-  FormAudit.Audit;
+  FormAudit.Audit(False);
 end;
 
 procedure TFormMain.MenuAuditAvailableGamesClick(Sender: TObject);
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
   if not Assigned(FormAudit) then
      FormAudit:= TFormAudit.Create(Self);
   SetAuditGamesLanguage;
   FormAudit.AuditMode:= 2;
   FormAudit.Show;
-  FormAudit.Audit;
+  FormAudit.Audit(False);
 end;
 
 procedure TFormMain.ButtonPlayRecordedGameClick(Sender: TObject);
@@ -16000,77 +15199,6 @@ begin
   MenuRecordGame.Click;
 end;
 
-procedure TFormMain.MenuGameHistoryClick(Sender: TObject);
-var
-  HistoryDATFile: THashedStringList;
-  Loop, Loop2: Integer;
-  AddLine: Boolean;
-  PathDAT: String;
-begin
-  if List.Selected = nil then
-     Exit;
-
-  if Pos(':\', historyFile) = 0 then
-     PathDAT:= ExtractFilePath(GetCurrentEmulatorExecutable)+historyFile
-  else
-     PathDAT:= historyFile;
-
-  if (historyFile = '') or ((historyFile <> '') and (not FileExists(PathDAT))) then
-     begin
-       GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                       Format(GetLanguageText('Messages', 'FileNotFoundMsg', 'File "%s" not found'), [PathDAT]), 2);
-       Exit;
-     end;
-
-  HistoryDATFile:= THashedStringList.Create;
-  HistoryDATFile.LoadFromFile(PathDAT);
-  PathDAT:= '';
-  // need to find the selected gamename in file "history.dat"
-  // if found creates the History Form and copy all the info the text holder and shows the form
-  AddLine:= False;
-  for Loop:=0 to HistoryDATFile.Count -1 do
-  begin
-    if Copy(HistoryDATFile[Loop],1,5) = '$info' then
-       begin
-         if GetGameHistory(GamesList[SelectedGame].eName, HistoryDATFile[Loop]) then
-            begin
-              if not Assigned(FormDATViewer) then
-                 FormDATViewer:= TFormDATViewer.Create(Self);
-              if TextWordWrap then
-                 begin
-                   FormDATViewer.WordWrap.Checked:= True;
-                   FormDATViewer.WordWrap.OnClick(Self);
-                 end;
-              Loop2:= Loop+1;
-              while Trim(HistoryDATFile[Loop2]) <> '$end' do
-              begin
-                case AddLine of
-                  False:
-                    begin
-                      if Trim(HistoryDATFile[Loop2]) = '$bio' then
-                         AddLine:= True;
-                    end;
-                  True: FormDATViewer.DATTextHolder.Lines.Add(HistoryDATFile[Loop2]);
-                end;
-                Inc(Loop2);
-              end;
-
-              FreeAndNil(HistoryDATFile);
-
-              FormDATViewer.Caption:= Format(GetLanguageText('DAT Viewer', 'Title1' ,'Viewing %s - [file "%s"]'),
-                                             [(GetLanguageText('DAT Viewer', 'GameHistory', 'Game History')), historyFile]);
-              FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
-              FormDATViewer.ShowModal;
-              TextWordWrap:= FormDATViewer.WordWrap.Checked;
-              FreeAndNil(FormDATViewer);
-              Exit;
-            end;
-       end;
-  end;
-  GenerateMessage(GetLanguageText('Messages', 'NoGameHistoryTitle', 'History Not Found'),
-                  GetLanguageText('Messages', 'NoGameHistoryMsg', 'There is no history for this game.'), 2);
-end;
-
 procedure TFormMain.MenuGameInformationClick(Sender: TObject);
 var
   MAMEInfoDATFile: THashedStringList;
@@ -16078,18 +15206,19 @@ var
   AddLine, ShowInfo: Boolean;
   DATVersion: String;
 begin
-  if List.Selected = nil then
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
      Exit;
 
   if Pos(':\', mameinfoFile) = 0 then
-     DATVersion:= ExtractFilePath(GetCurrentEmulatorExecutable)+mameinfoFile
+     DATVersion:= ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag])+mameinfoFile
   else
      DATVersion:= mameinfoFile;
 
   if (mameinfoFile = '') or ((mameinfoFile <> '') and (not FileExists(DATVersion))) then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                       Format(GetLanguageText('Messages', 'FileNotFoundMsg', 'File "%s" not found'), [DATVersion]), 2);
+       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                      'Messages', 'FileNotFoundMsg', 'File "%s" not found');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [DATVersion]), 2);
        Exit;
      end;
 
@@ -16116,14 +15245,9 @@ begin
 
   if ShowInfo then
      begin
+       Inc(LineIndex);
        if not Assigned(FormDATViewer) then
           FormDATViewer:= TFormDATViewer.Create(Self);
-       if TextWordWrap then
-          begin
-            FormDATViewer.WordWrap.Checked:= True;
-            FormDATViewer.WordWrap.OnClick(Self);
-          end;
-       Inc(LineIndex);
        FormDATViewer.DATTextHolder.Lines.BeginUpdate;
        DATVersion:= MAMEInfoDATFile[0];
        Delete(DATVersion, 1, 2);
@@ -16142,17 +15266,86 @@ begin
        end;
        FormDATViewer.DATTextHolder.Lines.EndUpdate;
        FreeAndNil(MAMEInfoDATFile);
-
-       FormDATViewer.Caption:= Format(GetLanguageText('DAT Viewer', 'Title1' ,'Viewing %s - [file "%s"]'),
-                                      [(GetLanguageText('DAT Viewer', 'GameInformation', 'Game Information')), mameinfoFile]);
+       GetMessagesLng('DAT Viewer', 'Title1' ,'Viewing %s - [file "%s"]',
+                      'DAT Viewer', 'GameInformation', 'Game Information');
+       FormDATViewer.Caption:= Format(MessageText[0], [MessageText[1], mameinfoFile]);
        FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
        FormDATViewer.ShowModal;
-       TextWordWrap:= FormDATViewer.WordWrap.Checked;
        FreeAndNil(FormDATViewer);
        Exit;
      end;
-  GenerateMessage(GetLanguageText('Messages', 'NoGameInformationTitle', 'Information Not Found'),
-                  GetLanguageText('Messages', 'NoGameInformationMsg', 'There is no information for this game.'), 2);
+  FreeAndNil(MAMEInfoDATFile);
+  GetMessagesLng('Messages', 'NoGameInformationTitle', 'Information Not Found',
+                 'Messages', 'NoGameInformationMsg', 'There is no information for this game.');
+  GenerateMessage(MessageText[0], MessageText[1], 2);
+end;
+
+procedure TFormMain.MenuGameHistoryClick(Sender: TObject);
+var
+  HistoryDATFile: THashedStringList;
+  Loop, Loop2: Integer;
+  AddLine: Boolean;
+  PathDAT: String;
+begin
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
+     Exit;
+
+  if Pos(':\', historyFile) = 0 then
+     PathDAT:= ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag])+historyFile
+  else
+     PathDAT:= historyFile;
+
+  if (historyFile = '') or ((historyFile <> '') and (not FileExists(PathDAT))) then
+     begin
+       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                      'Messages', 'FileNotFoundMsg', 'File "%s" not found');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [PathDAT]), 2);
+       Exit;
+     end;
+
+  HistoryDATFile:= THashedStringList.Create;
+  HistoryDATFile.LoadFromFile(PathDAT);
+  PathDAT:= '';
+  // need to find the selected gamename in file "history.dat"
+  // if found creates the History Form and copy all the info the text holder and shows the form
+  AddLine:= False;
+  for Loop:=0 to HistoryDATFile.Count -1 do
+  begin
+    if Copy(HistoryDATFile[Loop],1,5) = '$info' then
+       begin
+         if GetGameHistory(GamesList[SelectedGame].eName, HistoryDATFile[Loop]) then
+            begin
+              Loop2:= Loop+1;
+              if not Assigned(FormDATViewer) then
+                 FormDATViewer:= TFormDATViewer.Create(Self);
+              while Trim(HistoryDATFile[Loop2]) <> '$end' do
+              begin
+                case AddLine of
+                  False:
+                    begin
+                      if Trim(HistoryDATFile[Loop2]) = '$bio' then
+                         AddLine:= True;
+                    end;
+                  True: FormDATViewer.DATTextHolder.Lines.Add(HistoryDATFile[Loop2]);
+                end;
+                Inc(Loop2);
+              end;
+
+              FreeAndNil(HistoryDATFile);
+              GetMessagesLng('DAT Viewer', 'Title1' ,'Viewing %s - [file "%s"]',
+                             'DAT Viewer', 'GameHistory', 'Game History');
+              FormDATViewer.Caption:= Format(MessageText[0], [MessageText[1], historyFile]);
+              FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
+              FormDATViewer.ShowModal;
+              FreeAndNil(FormDATViewer);
+              Exit;
+            end;
+       end;
+  end;
+  FreeAndNil(HistoryDATFile);
+  GetMessagesLng('Messages', 'NoGameHistoryTitle', 'History Not Found',
+                 'Messages', 'NoGameHistoryMsg', 'There is no history for this game.');
+  GenerateMessage(MessageText[0], MessageText[1], 2);
 end;
 
 procedure TFormMain.MenuGameDriverInformationClick(Sender: TObject);
@@ -16162,18 +15355,19 @@ var
   AddLine: Boolean;
   DATVersion: String;
 begin
-  if List.Selected = nil then
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
      Exit;
 
   if Pos(':\', mameinfoFile) = 0 then
-     DATVersion:= ExtractFilePath(GetCurrentEmulatorExecutable)+mameinfoFile
+     DATVersion:= ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag])+mameinfoFile
   else
      DATVersion:= mameinfoFile;
 
   if (mameinfoFile = '') or ((mameinfoFile <> '') and (not FileExists(DATVersion))) then
      begin
-       GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                       Format(GetLanguageText('Messages', 'FileNotFoundMsg', 'File "%s" not found'), [DATVersion]), 2);
+       GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                      'Messages', 'FileNotFoundMsg', 'File "%s" not found');
+       GenerateMessage(MessageText[0], Format(MessageText[1], [DATVersion]), 2);
        Exit;
      end;
 
@@ -16189,14 +15383,9 @@ begin
   LineIndex:= MAMEInfoDATFile.IndexOf('$info='+GamesList[SelectedGame].eDriver);
   if LineIndex > -1 then
      begin
+       Inc(LineIndex);
        if not Assigned(FormDATViewer) then
           FormDATViewer:= TFormDATViewer.Create(Self);
-       if TextWordWrap then
-          begin
-            FormDATViewer.WordWrap.Checked:= True;
-            FormDATViewer.WordWrap.OnClick(Self);
-          end;
-       Inc(LineIndex);
        FormDATViewer.DATTextHolder.Lines.BeginUpdate;
        DATVersion:= MAMEInfoDATFile[0];
        Delete(DATVersion, 1, 2);
@@ -16211,17 +15400,71 @@ begin
        end;
        FormDATViewer.DATTextHolder.Lines.EndUpdate;
        FreeAndNil(MAMEInfoDATFile);
-
-       FormDATViewer.Caption:= Format(GetLanguageText('DAT Viewer', 'Title2' ,'Viewing %s [%s] - [file "%s"]'),
-                                      [(GetLanguageText('DAT Viewer', 'GameDriverInformation', 'Game Driver Information')), GamesList[SelectedGame].eDriver, mameinfoFile]);
+       GetMessagesLng('DAT Viewer', 'Title2' ,'Viewing %s [%s] - [file "%s"]',
+                      'DAT Viewer', 'GameDriverInformation', 'Game Driver Information');
+       FormDATViewer.Caption:= Format(MessageText[0], [MessageText[1], GamesList[SelectedGame].eDriver, mameinfoFile]);
        FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
        FormDATViewer.ShowModal;
-       TextWordWrap:= FormDATViewer.WordWrap.Checked;
        FreeAndNil(FormDATViewer);
        Exit;
      end;
-  GenerateMessage(GetLanguageText('Messages', 'NoGameDriverInformationTitle', 'Driver Information Not Found'),
-                  GetLanguageText('Messages', 'NoGameDriverInformationMsg', 'There is no driver information for this game.'), 2);
+  FreeAndNil(MAMEInfoDATFile);
+  FreeAndNil(FormDATViewer);
+  GetMessagesLng('Messages', 'NoGameDriverInformationTitle', 'Driver Information Not Found',
+                 'Messages', 'NoGameDriverInformationMsg', 'There is no driver information for this game.');
+  GenerateMessage(MessageText[0], MessageText[1], 2);
+end;
+
+procedure TFormMain.MenuGameFAQClick(Sender: TObject);
+var
+  FileFound: Boolean;
+  FilenameString, TempFAQdir: String;
+begin
+  if List.Selected = nil then
+     Exit;
+  SetCurrentDir(FrontendPath);
+
+  FileFound:= True;
+  TempFAQdir:= GetZipFolderFull(8);
+  case FileExists(TempFAQdir+GamesList[SelectedGame].eName+'.faq') of
+    False:
+      begin
+        if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
+            begin
+              FileFound:= FileExists(TempFAQdir+GamesList[SelectedGame].eClone+'.faq');
+              if FileFound then
+                 FilenameString:= TempFAQdir+GamesList[SelectedGame].eClone+'.faq';
+            end
+        else
+            FileFound:= False;
+      end;
+    True: FilenameString:= TempFAQdir+GamesList[SelectedGame].eName+'.faq';
+  end;
+
+  case FileFound of
+    True:
+      begin
+        if GetFileSize(FilenameString) = 0 then
+           Exit;
+        if not Assigned(FormDATViewer) then
+           FormDATViewer:= TFormDATViewer.Create(Self);
+        FormDATViewer.DATTextHolder.Lines.BeginUpdate;
+        FormDATViewer.DATTextHolder.Lines.LoadFromFile(FilenameString);
+        FormDATViewer.DATTextHolder.Lines.EndUpdate;
+        FormDATViewer.Caption:= Format(GetLanguageText('DAT Viewer', 'Title3' ,'Viewing [%s] - F.A.Q. - Frequently Asked Questions'),
+                                      [ExtractFileName(FilenameString)]);
+        FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
+        FormDATViewer.ShowModal;
+        FreeAndNil(FormDATViewer);
+      end;
+    False:
+      begin
+        FreeAndNil(FormDATViewer);
+        GetMessagesLng('Messages', 'NoGameFAQInformationTitle', 'F.A.Q. Information Not Found',
+                       'Messages', 'NoGameFAQInformationMsg', 'There is no F.A.Q. information for this game.');
+        GenerateMessage(MessageText[0], MessageText[1], 2);
+      end;
+  end;
 end;
 
 procedure TFormMain.MenuAddToFavoritesClick(Sender: TObject);
@@ -16237,47 +15480,43 @@ end;
 procedure TFormMain.MenuCreateIconsListClick(Sender: TObject);
 var
   Loop: Integer;
-  UpdateGameMsg: String;
 begin
   Screen.Cursor:= crHourGlass;
   FormStatus.Show;
 
-  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'CreateRealIconsTitle', 'Create Real Icons');
+  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'CreateGamesIconsTitle', 'Create Games Icons');
   FormStatus.Refresh;
 
-  if BigRealIconsImageList.Count > 1 then
+  if BigGamesIconsImageList.Count > 1 then
      begin
-       for Loop:=BigRealIconsImageList.Count-1 downto 1 do
+       for Loop:=BigGamesIconsImageList.Count-1 downto 1 do
        begin
-         BigRealIconsImageList.Delete(Loop);
-         SmallRealIconsImageList.Delete(Loop);
+         BigGamesIconsImageList.Delete(Loop);
+         SmallGamesIconsImageList.Delete(Loop);
        end;
      end;
-  if FileExists(FrontendPath+'resources\IconsIndex.dat') then
-     DeleteFile(FrontendPath+'resources\IconsIndex.dat');
-  if FileExists(FrontendPath+'resources\IconsList.ini') then
-     DeleteFile(FrontendPath+'resources\IconsList.ini');
+  DeleteFile(FrontendPath+'resources\IconsIndex.dat');
+  DeleteFile(FrontendPath+'resources\IconsList.ini');
 
-  LoadRealIcons;
+  LoadGamesIcons;
 
-  if (MenuRealIcons.Checked) and
+  if (MenuGamesIcons.Checked) and
      (FileExists(FrontendPath+'resources\IconsIndex.dat')) and (FileExists(FrontendPath+'resources\IconsList.ini')) then
      begin
        FormStatus.LabelProgress.Caption:= '';
-       RealIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
+       GamesIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
 
-       List.LargeImages:= BigRealIconsImageList;
-       List.SmallImages:= SmallRealIconsImageList;
-       UpdateGameMsg:= GetLanguageText('Status Messages', 'UpdateGame', 'Updating game %s. Please wait a moment...');
+       List.LargeImages:= BigGamesIconsImageList;
+       List.SmallImages:= SmallGamesIconsImageList;
+       FormStatus.LabelProgress.Tag:= 0;
        for Loop:=0 to Length(GamesList)-1 do
        begin
-         FormStatus.LabelMessage.Caption:= Format(UpdateGameMsg, [GamesList[Loop].eName]);
          FormStatus.LabelMessage.Refresh;
-         GamesList[Loop].eImageIndex:= RealIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
-         UpdateProgressLabel(Loop, Length(GamesList), False);
+         GamesList[Loop].eImageIndex:= GamesIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
+         UpdateProgressLabel(Loop, Length(GamesList));
        end;
        FormStatus.LabelProgress.Caption:= '';
-       FreeAndNil(RealIconsDAT);
+       FreeAndNil(GamesIconsDAT);
        List.Invalidate;
      end;
   FormStatus.Close;
@@ -16287,27 +15526,24 @@ procedure TFormMain.MenuRefreshSelectedGameClick(Sender: TObject);
 var
   GameIndex: Integer;
 begin
-  if List.Selected = nil then
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
      Exit;
   SetGameMemoryInfo;
 
   ListROMs:= THashedStringList.Create;
   ListROMs.LoadFromFile(FrontendPath+'resources\ROMs.dat');
 
-  if FileExists(FrontendPath+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
   if RefreshGame then
      begin
        GameIndex:= SelectedGame;
-       if ((mROMIdentification in [6..11, 14..15, 17]) and (ButtonShowUnavailableGames.Checked)) or
-          ((mROMIdentification in [0..5, 12..13, 16])  and (ButtonShowAvailableGames.Checked)) then
+       if ButtonShowUnavailableGames.Checked or ButtonShowAvailableGames.Checked then
           begin
             LoadROMClasses(False);
-
+            ShowingPicture:= True;
             if Length(GamesList) > 0 then
                begin
+                 SortColumn(ColumnSorted, True);
                  if (GameIndex <= (Length(GamesList)-1)) then
                     SelectItem(GameIndex)
                  else
@@ -16315,6 +15551,7 @@ begin
                     SelectItem(GameIndex-1)
                  else
                  SelectItem(0);
+                 MenuShowPictures.OnClick(Self);
                end
             else
                begin
@@ -16325,9 +15562,13 @@ begin
        else
          begin
            GamesList[GameIndex].eROMIdentification:= mROMIdentification;
-           GamesList[GameIndex].eMerged:= mMerged;
+           if mMerged <> '' then
+              GamesList[GameIndex].eMerged:= aMerged
+           else
+              GamesList[GameIndex].eMerged:= '';
+           GamesList[GameIndex].eSamples:= aSamples[StrToInt(mSamples)];
            GamesList[GameIndex].eVersionAdded:= mVersionAdded;
-           if not MenuRealIcons.Checked then
+           if not MenuGamesIcons.Checked then
               begin
                 GamesList[GameIndex].eImageIndex:= mROMIdentification;
                 List.Invalidate;
@@ -16341,598 +15582,15 @@ begin
 end;
 
 procedure TFormMain.MenuRefreshAllGamesClick(Sender: TObject);
-var
-  {StartClock, EndClock, }NumGamesChanged: Integer;
-  ListGamesTemp: THashedStringList;
-  Loop, TotalProgress: Integer;
-  DelClassicMR, DelClassicMV, DelClassicCR, DelClassicCV, DelNeoGeoM, DelNeoGeoC, DelClassicBIOS, DelNeoGeoBIOS: Boolean;
-  DelUnClassicMR, DelUnClassicMV, DelUnClassicCR, DelUnClassicCV, DelUnNeoGeoM, DelUnNeoGeoC, DelUnClassicBIOS, DelUnNeoGeoBIOS: Boolean;
-
-  VerifyGameMsg, VerifyBiosMsg, SelectedGameCaption: String;
 begin
-  if List.Selected = nil then
-     Exit;
-  FormStatus.Show;
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.KeyPreview:= True;
-  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'RefreshGamesListTitle', 'Refresh Games List');
-  SelectedGameCaption:= GamesList[SelectedGame].eDescription;
-  NumGamesChanged:= 0;
-  //StartClock:= GetTickCount();
-  DelClassicMR:= False;
-  DelClassicMV:= False;
-  DelClassicCR:= False;
-  DelClassicCV:= False;
-  DelNeoGeoM:= False;
-  DelNeoGeoC:= False;
-  DelClassicBIOS:= False;
-  DelNeoGeoBIOS:= False;
-  DelUnClassicMR:= False;
-  DelUnClassicMV:= False;
-  DelUnClassicCR:= False;
-  DelUnClassicCV:= False;
-  DelUnNeoGeoM:= False;
-  DelUnNeoGeoC:= False;
-  DelUnClassicBIOS:= False;
-  DelUnNeoGeoBIOS:= False;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadGamesDATFile',
-                                                    'Loading .dat games files to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ClassicMRList:= THashedStringList.Create;
-  ClassicMVList:= THashedStringList.Create;
-  ClassicCRList:= THashedStringList.Create;
-  ClassicCVList:= THashedStringList.Create;
-  NeoGeoMList:= THashedStringList.Create;
-  NeoGeoCList:= THashedStringList.Create;
-  UnavailableClassicMRList:= THashedStringList.Create;
-  UnavailableClassicMVList:= THashedStringList.Create;
-  UnavailableClassicCRList:= THashedStringList.Create;
-  UnavailableClassicCVList:= THashedStringList.Create;
-  UnavailableNeoGeoMList:= THashedStringList.Create;
-  UnavailableNeoGeoCList:= THashedStringList.Create;
-  BiosList:= THashedStringList.Create;
-  UnavailableBiosList:= THashedStringList.Create;
-
-  ClassicMRList.LoadFromFile(FrontendPath+'resources\ClassicMR.dat');
-  ClassicMVList.LoadFromFile(FrontendPath+'resources\ClassicMV.dat');
-  ClassicCRList.LoadFromFile(FrontendPath+'resources\ClassicCR.dat');
-  ClassicCVList.LoadFromFile(FrontendPath+'resources\ClassicCV.dat');
-  NeoGeoMList.LoadFromFile(FrontendPath+'resources\NeoGeoM.dat');
-  NeoGeoCList.LoadFromFile(FrontendPath+'resources\NeoGeoC.dat');
-  UnavailableClassicMRList.LoadFromFile(FrontendPath+'resources\UnClassicMR.dat');
-  UnavailableClassicMVList.LoadFromFile(FrontendPath+'resources\UnClassicMV.dat');
-  UnavailableClassicCRList.LoadFromFile(FrontendPath+'resources\UnClassicCR.dat');
-  UnavailableClassicCVList.LoadFromFile(FrontendPath+'resources\UnClassicCV.dat');
-  UnavailableNeoGeoMList.LoadFromFile(FrontendPath+'resources\UnNeoGeoM.dat');
-  UnavailableNeoGeoCList.LoadFromFile(FrontendPath+'resources\UnNeoGeoC.dat');
-  BiosList.LoadFromFile(FrontendPath+'resources\BIOS.dat');
-  UnavailableBiosList.LoadFromFile(FrontendPath+'resources\UnBIOS.dat');
-
-  TotalProgress:= (UnavailableClassicMRList.Count+UnavailableClassicMVList.Count+UnavailableClassicCRList.Count+UnavailableClassicCVList.Count+
-                   UnavailableNeoGeoMList.Count+UnavailableNeoGeoCList.Count+UnavailableBiosList.Count+
-                   ClassicMRList.Count+ClassicMVList.Count+ClassicCRList.Count+ClassicCVList.Count+NeoGeoMList.Count+NeoGeoCList.Count+BiosList.Count);
-
-  ClassicMRList.BeginUpdate;
-  ClassicMVList.BeginUpdate;
-  ClassicCRList.BeginUpdate;
-  ClassicCVList.BeginUpdate;
-  NeoGeoMList.BeginUpdate;
-  NeoGeoCList.BeginUpdate;
-  UnavailableClassicMRList.BeginUpdate;
-  UnavailableClassicMVList.BeginUpdate;
-  UnavailableClassicCRList.BeginUpdate;
-  UnavailableClassicCVList.BeginUpdate;
-  UnavailableNeoGeoMList.BeginUpdate;
-  UnavailableNeoGeoCList.BeginUpdate;
-  BiosList.BeginUpdate;
-  UnavailableBiosList.BeginUpdate;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadROMsDATFile',
-                                                    'Loading file "ROMs.dat" to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ListROMs:= THashedStringList.Create;
-  ListROMs.LoadFromFile(FrontendPath+'resources\ROMs.dat');
-
-  ListGamesTemp:= THashedStringList.Create;
-
-  LoadFolders(DefaultDatabaseBuilderExecutable);
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-
-  if FileExists(FrontendPath+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-
-  // Get Verify Game message
-  VerifyGameMsg:= GetLanguageText('Status Messages', 'VerifyGame', 'Verifying game %s. Please, wait a moment...');
-  VerifyBiosMsg:= GetLanguageText('Status Messages', 'VerifyBios', 'Verifying bios %s. Please, wait a moment...');
-
-  FormStatus.LabelProgress.Tag:= 0;
-  // Refresh Unavailable Classic Master Raster
-  for Loop:= UnavailableClassicMRList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicMRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicMRList, ClassicMRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnClassicMR:= True;
-         DelClassicMR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Master Vector
-  for Loop:= UnavailableClassicMVList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicMVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicMVList, ClassicMVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnClassicMV:= True;
-         DelClassicMV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Clone Raster
-  for Loop:= UnavailableClassicCRList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicCRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicCRList, ClassicCRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnClassicCR:= True;
-         DelClassicCR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Clone Vector
-  for Loop:= UnavailableClassicCVList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicCVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicCVList, ClassicCVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnClassicCV:= True;
-         DelClassicCV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Neo Geo Master
-  for Loop:= UnavailableNeoGeoMList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableNeoGeoMList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableNeoGeoMList, NeoGeoMList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnNeoGeoM:= True;
-         DelNeoGeoM:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Neo Geo Clone
-  for Loop:= UnavailableNeoGeoCList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableNeoGeoCList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableNeoGeoCList, NeoGeoCList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnNeoGeoC:= True;
-         DelNeoGeoC:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Bios
-  for Loop:= UnavailableBiosList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableBiosList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyBiosMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableBiosList, BiosList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         ListGamesTemp.Add(mName);
-         DelUnClassicBIOS:= True;
-         DelUnNeoGeoBIOS:= True;
-         DelClassicBIOS:= True;
-         DelNeoGeoBIOS:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Master Raster
-  for Loop:= ClassicMRList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicMRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(ClassicMRList, UnavailableClassicMRList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelClassicMR:= True;
-              DelUnClassicMR:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Master Vector
-  for Loop:= ClassicMVList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicMVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-        if RefreshGames(ClassicMVList, UnavailableClassicMVList, Loop) then
-           begin
-             Inc(NumGamesChanged);
-             DelClassicMV:= True;
-             DelUnClassicMV:= True;
-           end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Clone Raster
-  for Loop:= ClassicCRList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicCRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(ClassicCRList, UnavailableClassicCRList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelClassicCR:= True;
-              DelUnClassicCR:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Clone Vector
-  for Loop:= ClassicCVList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicCVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(ClassicCVList, UnavailableClassicCVList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelClassicCV:= True;
-              DelUnClassicCV:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Neo Geo Master
-  for Loop:= NeoGeoMList.Count -1 downto 0 do
-  begin
-    GetROMFields(NeoGeoMList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(NeoGeoMList, UnavailableNeoGeoMList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelNeoGeoM:= True;
-              DelUnNeoGeoM:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Neo Geo Clone
-  for Loop:= NeoGeoCList.Count -1 downto 0 do
-  begin
-    GetROMFields(NeoGeoCList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(NeoGeoCList, UnavailableNeoGeoCList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelNeoGeoC:= True;
-              DelUnNeoGeoC:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Bios
-  for Loop:= BiosList.Count -1 downto 0 do
-  begin
-    GetROMFields(BiosList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyBiosMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if ListGamesTemp.IndexOf(mName) = -1 then
-       begin
-         if RefreshGames(BiosList, UnavailableBiosList, Loop) then
-            begin
-              Inc(NumGamesChanged);
-              DelClassicBIOS:= True;
-              DelNeoGeoBIOS:= True;
-              DelUnClassicBIOS:= True;
-              DelUnNeoGeoBIOS:= True;
-            end;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-  // I think that the Bios refreshing is working correctly now...
-  ClassicMRList.EndUpdate;
-  ClassicMVList.EndUpdate;
-  ClassicCRList.EndUpdate;
-  ClassicCVList.EndUpdate;
-  NeoGeoMList.EndUpdate;
-  NeoGeoCList.EndUpdate;
-  UnavailableClassicMRList.EndUpdate;
-  UnavailableClassicMVList.EndUpdate;
-  UnavailableClassicCRList.EndUpdate;
-  UnavailableClassicCVList.EndUpdate;
-  UnavailableNeoGeoMList.EndUpdate;
-  UnavailableNeoGeoCList.EndUpdate;
-  BiosList.EndUpdate;
-
-  FreeAndNil(ListGamesTemp);
-  SetCurrentDir(FrontendPath);
-  FreeAndNil(CategoriesList);
-  
-  if DelUnClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMRList.SaveToFile(FrontendPath+'resources\UnClassicMR.dat');
-     end;
-
-  if DelUnClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMVList.SaveToFile(FrontendPath+'resources\UnClassicMV.dat');
-     end;
-
-  if DelUnClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCRList.SaveToFile(FrontendPath+'resources\UnClassicCR.dat');
-     end;
-
-  if DelUnClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCVList.SaveToFile(FrontendPath+'resources\UnClassicCV.dat');
-     end;
-
-  if DelUnNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoMList.SaveToFile(FrontendPath+'resources\UnNeoGeoM.dat');
-     end;
-
-  if DelUnNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoCList.SaveToFile(FrontendPath+'resources\UnNeoGeoC.dat');
-     end;
-
-  if ((DelUnClassicBIOS) or (DelUnNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableBiosList.SaveToFile(FrontendPath+'resources\UnBIOS.dat');
-     end;
-
-  if DelClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMR.dat');
-     end;
-
-  if DelClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMVList.SaveToFile(FrontendPath+'resources\ClassicMV.dat');
-     end;
-
-  if DelClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCRList.SaveToFile(FrontendPath+'resources\ClassicCR.dat');
-     end;
-
-  if DelClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCVList.SaveToFile(FrontendPath+'resources\ClassicCV.dat');
-     end;
-
-  if DelNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoMList.SaveToFile(FrontendPath+'resources\NeoGeoM.dat');
-     end;
-
-  if DelNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoCList.SaveToFile(FrontendPath+'resources\NeoGeoC.dat');
-     end;
-
-  if ((DelClassicBIOS) or (DelNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       BiosList.SaveToFile(FrontendPath+'resources\Bios.dat');
-     end;
-
-  FreeAndNil(ClassicMRList);
-  FreeAndNil(ClassicMVList);
-  FreeAndNil(ClassicCRList);
-  FreeAndNil(ClassicCVList);
-  FreeAndNil(NeoGeoMList);
-  FreeAndNil(NeoGeoCList);
-  FreeAndNil(UnavailableClassicMRList);
-  FreeAndNil(UnavailableClassicMVList);
-  FreeAndNil(UnavailableClassicCRList);
-  FreeAndNil(UnavailableClassicCVList);
-  FreeAndNil(UnavailableNeoGeoMList);
-  FreeAndNil(UnavailableNeoGeoCList);
-  FreeAndNil(BiosList);
-  FreeAndNil(UnavailableBiosList);
-  FreeAndNil(ListROMs);
-
-  //EndClock:= GetTickCount();
-
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.LabelProgress.Tag:= 0;
-  if NumGamesChanged <> 0 then
-     LoadROMClasses(False);
-
-  if Length(GamesList) > 0 then
-     begin
-        SortColumn(ColumnSorted, True);
-        SelectItem(FindGame(SelectedGame, SelectedGameCaption));
-     end
-  else
-     begin
-       ShowPicture('NoGamesAvailable', '', Picture, -1, True);
-       // no games on list, show the "No Games Available" image
-     end;
-  FormStatus.Close;
+  CallRefreshGames(0);  
 end;
 
 procedure TFormMain.RefreshGamesCanceledMessage;
 begin
-  GenerateMessage(GetLanguageText('Messages', 'CancelOperationTitle', 'Operation Canceled'),
-                  GetLanguageText('Messages', 'RefreshGamesCancelMsg', 'Refresh games list is canceled!'), 2);
+  GetMessagesLng('Messages', 'CancelOperationTitle', 'Operation Canceled',
+                 'Messages', 'RefreshGamesCancelMsg', 'Refresh games list is canceled!');
+  GenerateMessage(MessageText[0], MessageText[1], 2);
 end;
 
 function TFormMain.StopRefreshAllGames: Boolean;
@@ -16940,8 +15598,9 @@ begin
   Result:= False;
   if CancelCurrentOperation then
      begin
-       case GenerateMessage(GetLanguageText('Messages', 'CancelTitle', 'Cancel'),
-                            GetLanguageText('Messages', 'StopRefreshGamesMsg', 'Stop refreshing the games list ? The current games list will not be changed.'), 1) of
+       GetMessagesLng('Messages', 'CancelTitle', 'Cancel',
+                      'Messages', 'StopRefreshGamesMsg', 'Stop refreshing the games list ? The current games list will not be changed.');
+       case GenerateMessage(MessageText[0], MessageText[1], 1) of
          mrYes:
            begin
              Result:= True;
@@ -16978,21 +15637,22 @@ var
   Result, PictureFileName, ZIPFile: String;
   Index: Integer;
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+     
   if ButtonPicturesModeView.Tag = 1 then
      begin
        if Pos(':\', snapingameDir) = 0 then
-          SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+          SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
      end;
   Index:= Pos('[', Picture.Hint);
   if Index = 0 then
      begin
-       Result:= InputBox(GetLanguageText('Messages', 'RenamePictureTitle', 'Rename Picture'),
-                         GetLanguageText('Messages', 'RenamePictureMsg', 'Enter New Filename'),
-                         ExtractFileName(Picture.Hint));
+       GetMessagesLng('Messages', 'RenamePictureTitle', 'Rename Picture',
+                      'Messages', 'RenamePictureMsg', 'Enter New Filename');
+       Result:= InputBox(MessageText[0], MessageText[1], ExtractFileName(Picture.Hint));
        if Result <> ExtractFileName(Picture.Hint) then
-          begin
-            RenameFile(Picture.Hint, ExtractFilePath(Picture.Hint)+Result);
-          end;
+          RenameFile(Picture.Hint, ExtractFilePath(Picture.Hint)+Result);
      end
   else
      begin
@@ -17003,18 +15663,17 @@ begin
             PictureFileName:= Picture.Hint;
             Delete(PictureFileName, 1, Index);
             Delete(PictureFileName, Length(PictureFileName), 1);
-            Result:= InputBox(GetLanguageText('Messages', 'RenamePictureTitle', 'Rename Picture'),
-                              GetLanguageText('Messages', 'RenamePictureMsg', 'Enter New Filename'),
-                              PictureFileName);
+            GetMessagesLng('Messages', 'RenamePictureTitle', 'Rename Picture',
+                           'Messages', 'RenamePictureMsg', 'Enter New Filename');
+            Result:= InputBox(MessageText[0], MessageText[1], PictureFileName);
             Application.ProcessMessages;
             if Result <> PictureFileName then
-               begin
-                 RenameFileInsideZip(ZIPFile, PictureFileName, Result);
-               end;
+               RenameFileInsideZip(ZIPFile, PictureFileName, Result);
           end;
      end;
   if ButtonPicturesModeView.Tag = 1 then
      SetCurrentDir(FrontendPath);
+  ShowingPicture:= True;
   MenuShowPictures.OnClick(Self);
 end;
 
@@ -17023,14 +15682,18 @@ var
   PictureFileName, ZIPFile: String;
   Index: Integer;
 begin
-  if GenerateMessage(GetLanguageText('Messages', 'DeletePictureTitle', 'Delete Picture'),
-                     Format(GetLanguageText('Messages', 'DeletePictureMsg', 'Delete picture "%s". Are you sure ?'), [Picture.Hint]), 1) = mrYes then
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+     
+  GetMessagesLng('Messages', 'DeletePictureTitle', 'Delete Picture',
+                 'Messages', 'DeletePictureMsg', 'Delete picture "%s". Are you sure ?');
+  if GenerateMessage(MessageText[0], Format(MessageText[1], [Picture.Hint]), 1) = mrYes then
      begin
        Application.ProcessMessages;
        if ButtonPicturesModeView.Tag = 1 then
           begin
             if Pos(':\', snapingameDir) = 0 then
-               SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+               SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
           end;
        Index:= Pos('[', Picture.Hint);
        if Index = 0 then
@@ -17050,6 +15713,7 @@ begin
           end;
        if ButtonPicturesModeView.Tag = 1 then
           SetCurrentDir(FrontendPath);
+       ShowingPicture:= True;
        MenuShowPictures.OnClick(Self);
      end;
 end;
@@ -17057,14 +15721,18 @@ end;
 procedure TFormMain.MenuDeleteAllExtraPicturesClick(Sender: TObject);
 var
   Loop: Integer;
-  PictureName, PictureExt, ZIPFile: String;
+  PictureName, ZIPFile: String;
 begin
-  if GenerateMessage(GetLanguageText('Messages', 'DeleteExtraPicturesTitle', 'Delete Extra Pictures'),
-                     GetLanguageText('Messages', 'DeleteExtraPicturesMsg', 'This will permanently delete all extra snapshots for the selected game! Are you sure ?'), 1) = mrYes then
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+     
+  GetMessagesLng('Messages', 'DeleteExtraPicturesTitle', 'Delete Extra Pictures',
+                 'Messages', 'DeleteExtraPicturesMsg', 'This will permanently delete all extra snapshots for the selected game! Are you sure ?');
+  if GenerateMessage(MessageText[0], MessageText[1], 1) = mrYes then
      begin
        Application.ProcessMessages;
        if Pos(':\', snapingameDir) = 0 then
-          SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+          SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
 
        for Loop:=0 to 100 do
        begin
@@ -17072,9 +15740,7 @@ begin
            True : PictureName:= GamesList[SelectedGame].eName+Format('%.4u', [Loop]);
            False: PictureName:= SetPictureFileName(GamesList[SelectedGame].eName)+Format('%.4u', [Loop]);
          end;
-
-         if FileExists(snapingameDir+'\'+PictureName+'.png') then
-            DeleteFile(snapingameDir+'\'+PictureName+'.png');
+         DeleteFile(snapingameDir+'\'+PictureName+'.png');
        end;
 
        // Delete extra file inside .ZIP
@@ -17090,11 +15756,13 @@ begin
             end;
             DeleteExtraFileInsideZip(ZIPFile, PictureName);
           end;
-       GenerateMessage(GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                       GetLanguageText('Messages', 'DeletedExtraPicturesMsg', 'All extra snapshots are deleted.'), 2);
+       GetMessagesLng('Messages', 'CompleteOperationTitle', 'Operation Complete',
+                      'Messages', 'DeletedExtraPicturesMsg', 'All extra snapshots are deleted.');
+       GenerateMessage(MessageText[0], MessageText[1], 2);
        if PictureNumber > 1 then
           PictureNumber:= 1;
        SetCurrentDir(FrontendPath);
+       ShowingPicture:= True;
        MenuShowPictures.OnClick(Self);
      end;
 end;
@@ -17121,36 +15789,28 @@ end;
 
 procedure TFormMain.MenuModeViewBigIconsClick(Sender: TObject);
 begin
-  ButtonModeViewBigIcons.Checked:= MenuModeViewBigIcons.Checked;
-  ButtonModeView.ImageIndex:= 0;
-  ButtonModeView.Tag:= 0;
+  MenuModeViewDetails.Tag:= 0;
   List.ViewStyle:= vsIcon;
   SortColumn(0, True);
 end;
 
 procedure TFormMain.MenuModeViewSmallIconsClick(Sender: TObject);
 begin
-  ButtonModeViewSmallIcons.Checked:= MenuModeViewSmallIcons.Checked;
-  ButtonModeView.ImageIndex:= 1;
-  ButtonModeView.Tag:= 1;
+  MenuModeViewDetails.Tag:= 1;
   List.ViewStyle:= vsSmallIcon;
   SortColumn(0, True);
 end;
 
 procedure TFormMain.MenuModeViewListClick(Sender: TObject);
 begin
-  ButtonModeViewList.Checked:= MenuModeViewList.Checked;
-  ButtonModeView.ImageIndex:= 2;
-  ButtonModeView.Tag:= 2;
+  MenuModeViewDetails.Tag:= 2;
   List.ViewStyle:= vsList;
   SortColumn(0, True);
 end;
 
 procedure TFormMain.MenuModeViewDetailsClick(Sender: TObject);
 begin
-  ButtonModeViewDetails.Checked:= MenuModeViewDetails.Checked;
-  ButtonModeView.ImageIndex:= 3;
-  ButtonModeView.Tag:= 3;
+  MenuModeViewDetails.Tag:= 3;
   List.ViewStyle:= vsReport;
   SortColumn(ColumnSorted, True);
 end;
@@ -17160,10 +15820,10 @@ begin
   if MenuUseExecutable1.Checked then
      begin
        ButtonUseExecutable1.Checked:= True;
-       ButtonExecutablesMode.ImageIndex:= 15;
+       ButtonExecutablesMode.ImageIndex:= 25;
        ButtonExecutablesMode.Tag:= 1;
-       LabelEmulatorVersion.Caption:= EmuLatorVersion[1];
-       LoadFolders('1');
+       LabelEmulatorVersion.Caption:= '-> '+EmuLatorVersion[1];
+       LoadFolders;
      end;
 end;
 
@@ -17174,10 +15834,10 @@ begin
        if MenuUseExecutable2.Checked then
           begin
             ButtonUseExecutable2.Checked:= True;
-            ButtonExecutablesMode.ImageIndex:= 16;
+            ButtonExecutablesMode.ImageIndex:= 26;
             ButtonExecutablesMode.Tag:= 2;
-            LabelEmulatorVersion.Caption:= EmuLatorVersion[2];
-            LoadFolders('2');
+            LabelEmulatorVersion.Caption:= '-> '+EmuLatorVersion[2];
+            LoadFolders;
           end;
      end
   else
@@ -17191,10 +15851,10 @@ begin
        if MenuUseExecutable3.Checked then
           begin
             ButtonUseExecutable3.Checked:= True;
-            ButtonExecutablesMode.ImageIndex:= 47;
+            ButtonExecutablesMode.ImageIndex:= 27;
             ButtonExecutablesMode.Tag:= 3;
-            LabelEmulatorVersion.Caption:= EmuLatorVersion[3];
-            LoadFolders('3');
+            LabelEmulatorVersion.Caption:= '-> '+EmuLatorVersion[3];
+            LoadFolders;
           end;
      end
   else
@@ -17208,10 +15868,10 @@ begin
        if MenuUseExecutable4.Checked then
           begin
             ButtonUseExecutable4.Checked:= True;
-            ButtonExecutablesMode.ImageIndex:= 61;
+            ButtonExecutablesMode.ImageIndex:= 28;
             ButtonExecutablesMode.Tag:= 4;
-            LabelEmulatorVersion.Caption:= EmuLatorVersion[4];
-            LoadFolders('4');
+            LabelEmulatorVersion.Caption:= '-> '+EmuLatorVersion[4];
+            LoadFolders;
           end;
      end
   else
@@ -17225,10 +15885,10 @@ begin
        if MenuUseExecutable5.Checked then
           begin
             ButtonUseExecutable5.Checked:= True;
-            ButtonExecutablesMode.ImageIndex:= 62;
+            ButtonExecutablesMode.ImageIndex:= 29;
             ButtonExecutablesMode.Tag:= 5;
-            LabelEmulatorVersion.Caption:= EmuLatorVersion[5];
-            LoadFolders('5');
+            LabelEmulatorVersion.Caption:= '-> '+EmuLatorVersion[5];
+            LoadFolders;
           end;
      end
   else
@@ -17255,7 +15915,6 @@ begin
              PopupShowHideFavoriteUsersManager.Enabled:= False;
 
              MenuRefreshAllGames.Enabled:= False;
-             ButtonRefreshAllGames.Enabled:= False;
              PopupRefreshAllGames.Enabled:= False;
 
              MenuRefreshSelectedGame.Enabled:= False;
@@ -17267,24 +15926,26 @@ begin
              MenuRefreshUnavailableGames.Enabled:= False;
              PopupRefreshUnavailableGames.Enabled:= False;
 
-             MenuCustomGamesManager.Enabled:= False;
-             PopupCustomGamesManager.Enabled:= False;
-
              ButtonGameType.Enabled:= False;
              ButtonGameFilters.Enabled:= False;
 
              ButtonShowFavorite.Tag:= 0;
 
              case LoadROMClasses(True) of
-               True : StatusBarFavoriteUser.Hint:= Format('%s - [%s]', [GetLanguageText('Main', 'StatusBarFavoriteUserHint', 'Show favorite users manager'),
-                                                          GetLanguageText('Resources', 'DisabledStatus', 'Disabled')]);
+               True:
+                 begin
+                   GetMessagesLng('Main', 'StatusBarFavoriteUserHint', 'Show favorite users manager',
+                                  'Resources', 'DisabledStatus', 'Disabled');
+                   StatusBarFavoriteUser.Hint:= Format('%s - [%s]', [MessageText[0], MessageText[1]]);
+                 end;
                False: MenuShowFavorite.Click;
              end;
            end
         else
            begin
-             GenerateMessage(GetLanguageText('Messages', 'NoFavoriteGamesTitle', 'No Favorite Games'),
-                             GetLanguageText('Messages', 'NoFavoriteGamesMsg', 'There are no games for this user!'), 2);
+             GetMessagesLng('Messages', 'NoFavoriteGamesTitle', 'No Favorite Games',
+                            'Messages', 'NoFavoriteGamesMsg', 'There are no games for this user!');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
              MenuShowFavorite.Checked:= False;
              ButtonShowFavorite.Down:= False;
              PopupShowFavorite.Checked:= False;
@@ -17300,7 +15961,6 @@ begin
         PopupShowHideFavoriteUsersManager.Enabled:= True;
 
         MenuRefreshAllGames.Enabled:= True;
-        ButtonRefreshAllGames.Enabled:= True;
         PopupRefreshAllGames.Enabled:= True;
 
         MenuRefreshSelectedGame.Enabled:= True;
@@ -17311,9 +15971,6 @@ begin
 
         MenuRefreshUnavailableGames.Enabled:= True;
         PopupRefreshUnavailableGames.Enabled:= True;
-
-        MenuCustomGamesManager.Enabled:= True;
-        PopupCustomGamesManager.Enabled:= True;
 
         ButtonGameType.Enabled:= True;
         ButtonGameFilters.Enabled:= True;
@@ -17332,6 +15989,7 @@ begin
                SelectItem(FindGame(SelectedGame, SelectedGameDescription))
             else
                begin
+                 SelectedGame:= FindGameName(SelectedGameName);
                  if (SelectedGame <= (Length(GamesList)-1)) then
                      SelectItem(SelectedGame)
                   else
@@ -17351,822 +16009,13 @@ begin
 end;
 
 procedure TFormMain.MenuRefreshAvailableGamesClick(Sender: TObject);
-var
-  {StartClock, EndClock,} NumGamesChanged: Integer;
-  Loop, TotalProgress: Integer;
-  DelClassicMR, DelClassicMV, DelClassicCR, DelClassicCV, DelNeoGeoM, DelNeoGeoC, DelClassicBIOS, DelNeoGeoBIOS: Boolean;
-  DelUnClassicMR, DelUnClassicMV, DelUnClassicCR, DelUnClassicCV, DelUnNeoGeoM, DelUnNeoGeoC, DelUnClassicBIOS, DelUnNeoGeoBIOS: Boolean;
-
-  VerifyGameMsg, VerifyBiosMsg, SelectedGameCaption: String;
 begin
-  if List.Selected = nil then
-     Exit;
-  FormStatus.Show;
-  FormStatus.KeyPreview:= True;
-  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'RefreshGamesListAvailableTitle',
-                                                       'Refresh Games List (Available Games Only)');
-
-  SelectedGameCaption:= GamesList[SelectedGame].eDescription;
-  NumGamesChanged:= 0;
-  //StartClock:= GetTickCount();
-  DelClassicMR:= False;
-  DelClassicMV:= False;
-  DelClassicCR:= False;
-  DelClassicCV:= False;
-  DelNeoGeoM:= False;
-  DelNeoGeoC:= False;
-  DelClassicBIOS:= False;
-  DelNeoGeoBIOS:= False;
-  DelUnClassicMR:= False;
-  DelUnClassicMV:= False;
-  DelUnClassicCR:= False;
-  DelUnClassicCV:= False;
-  DelUnNeoGeoM:= False;
-  DelUnNeoGeoC:= False;
-  DelUnClassicBIOS:= False;
-  DelUnNeoGeoBIOS:= False;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadGamesDATFile',
-                                                    'Loading .dat games files to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ClassicMRList:= THashedStringList.Create;
-  ClassicMVList:= THashedStringList.Create;
-  ClassicCRList:= THashedStringList.Create;
-  ClassicCVList:= THashedStringList.Create;
-  NeoGeoMList:= THashedStringList.Create;
-  NeoGeoCList:= THashedStringList.Create;
-  UnavailableClassicMRList:= THashedStringList.Create;
-  UnavailableClassicMVList:= THashedStringList.Create;
-  UnavailableClassicCRList:= THashedStringList.Create;
-  UnavailableClassicCVList:= THashedStringList.Create;
-  UnavailableNeoGeoMList:= THashedStringList.Create;
-  UnavailableNeoGeoCList:= THashedStringList.Create;
-  BiosList:= THashedStringList.Create;
-  UnavailableBiosList:= THashedStringList.Create;
-
-  ClassicMRList.LoadFromFile(FrontendPath+'resources\ClassicMR.dat');
-  ClassicMVList.LoadFromFile(FrontendPath+'resources\ClassicMV.dat');
-  ClassicCRList.LoadFromFile(FrontendPath+'resources\ClassicCR.dat');
-  ClassicCVList.LoadFromFile(FrontendPath+'resources\ClassicCV.dat');
-  NeoGeoMList.LoadFromFile(FrontendPath+'resources\NeoGeoM.dat');
-  NeoGeoCList.LoadFromFile(FrontendPath+'resources\NeoGeoC.dat');
-  UnavailableClassicMRList.LoadFromFile(FrontendPath+'resources\UnClassicMR.dat');
-  UnavailableClassicMVList.LoadFromFile(FrontendPath+'resources\UnClassicMV.dat');
-  UnavailableClassicCRList.LoadFromFile(FrontendPath+'resources\UnClassicCR.dat');
-  UnavailableClassicCVList.LoadFromFile(FrontendPath+'resources\UnClassicCV.dat');
-  UnavailableNeoGeoMList.LoadFromFile(FrontendPath+'resources\UnNeoGeoM.dat');
-  UnavailableNeoGeoCList.LoadFromFile(FrontendPath+'resources\UnNeoGeoC.dat');
-  BiosList.LoadFromFile(FrontendPath+'resources\BIOS.dat');
-  UnavailableBiosList.LoadFromFile(FrontendPath+'resources\UnBIOS.dat');
-
-  TotalProgress:= (ClassicMRList.Count+ClassicMVList.Count+ClassicCRList.Count+ClassicCVList.Count+NeoGeoMList.Count+NeoGeoCList.Count+
-                   BiosList.Count);
-
-  FormStatus.LabelProgress.Caption:= '';
-
-  ClassicMRList.BeginUpdate;
-  ClassicMVList.BeginUpdate;
-  ClassicCRList.BeginUpdate;
-  ClassicCVList.BeginUpdate;
-  NeoGeoMList.BeginUpdate;
-  NeoGeoCList.BeginUpdate;
-  UnavailableClassicMRList.BeginUpdate;
-  UnavailableClassicMVList.BeginUpdate;
-  UnavailableClassicCRList.BeginUpdate;
-  UnavailableClassicCVList.BeginUpdate;
-  UnavailableNeoGeoMList.BeginUpdate;
-  UnavailableNeoGeoCList.BeginUpdate;
-  BiosList.BeginUpdate;
-  UnavailableBiosList.BeginUpdate;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadROMsDATFile',
-                                                    'Loading file "ROMs.dat" to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ListROMs:= THashedStringList.Create;
-  ListROMs.LoadFromFile(FrontendPath+'resources\ROMs.dat');
-
-  LoadFolders(DefaultDatabaseBuilderExecutable);
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-
-  if FileExists(FrontendPath+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-
-  // Get Verify Game message
-  VerifyGameMsg:= GetLanguageText('Status Messages', 'VerifyGame', 'Verifying game %s. Please, wait a moment...');
-  VerifyBiosMsg:= GetLanguageText('Status Messages', 'VerifyBios', 'Verifying bios %s. Please, wait a moment...');
-
-  FormStatus.LabelProgress.Tag:= 0;
-  // Refresh Classic Master Raster
-  for Loop:= ClassicMRList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicMRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    if RefreshGames(ClassicMRList, UnavailableClassicMRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelClassicMR:= True;
-         DelUnClassicMR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Master Vector
-  for Loop:= ClassicMVList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicMVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(ClassicMVList, UnavailableClassicMVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelClassicMV:= True;
-         DelUnClassicMV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Clone Raster
-  for Loop:= ClassicCRList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicCRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(ClassicCRList, UnavailableClassicCRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelClassicCR:= True;
-         DelUnClassicCR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Classic Clone Vector
-  for Loop:= ClassicCVList.Count -1 downto 0 do
-  begin
-    GetROMFields(ClassicCVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(ClassicCVList, UnavailableClassicCVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelClassicCV:= True;
-         DelUnClassicCV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Neo Geo Master
-  for Loop:= NeoGeoMList.Count -1 downto 0 do
-  begin
-    GetROMFields(NeoGeoMList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-
-    if RefreshGames(NeoGeoMList, UnavailableNeoGeoMList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelNeoGeoM:= True;
-         DelUnNeoGeoM:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Neo Geo Clone
-  for Loop:= NeoGeoCList.Count -1 downto 0 do
-  begin
-    GetROMFields(NeoGeoCList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(NeoGeoCList, UnavailableNeoGeoCList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelNeoGeoC:= True;
-         DelUnNeoGeoC:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh BIOS
-  for Loop:= BiosList.Count -1 downto 0 do
-  begin
-    GetROMFields(BiosList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyBiosMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(BiosList, UnavailableBiosList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelClassicBIOS:= True;
-         DelNeoGeoBIOS:= True;
-         DelUnClassicBIOS:= True;
-         DelUnNeoGeoBIOS:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-  // I think that the BIOS refreshing is working correctly now...
-  ClassicMRList.EndUpdate;
-  ClassicMVList.EndUpdate;
-  ClassicCRList.EndUpdate;
-  ClassicCVList.EndUpdate;
-  NeoGeoMList.EndUpdate;
-  NeoGeoCList.EndUpdate;
-  UnavailableClassicMRList.EndUpdate;
-  UnavailableClassicMVList.EndUpdate;
-  UnavailableClassicCRList.EndUpdate;
-  UnavailableClassicCVList.EndUpdate;
-  UnavailableNeoGeoMList.EndUpdate;
-  UnavailableNeoGeoCList.EndUpdate;
-  BiosList.EndUpdate;
-
-  SetCurrentDir(FrontendPath);
-  FreeAndNil(CategoriesList);
-  if DelUnClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMRList.SaveToFile(FrontendPath+'resources\UnClassicMR.dat');
-     end;
-
-  if DelUnClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMVList.SaveToFile(FrontendPath+'resources\UnClassicMV.dat');
-     end;
-
-  if DelUnClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCRList.SaveToFile(FrontendPath+'resources\UnClassicCR.dat');
-     end;
-
-  if DelUnClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCVList.SaveToFile(FrontendPath+'resources\UnClassicCV.dat');
-     end;
-
-  if DelUnNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoMList.SaveToFile(FrontendPath+'resources\UnNeoGeoM.dat');
-     end;
-
-  if DelUnNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoCList.SaveToFile(FrontendPath+'resources\UnNeoGeoC.dat');
-     end;
-
-  if ((DelUnClassicBIOS) or (DelUnNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableBiosList.SaveToFile(FrontendPath+'resources\UnBios.dat');
-     end;
-
-  if DelClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMR.dat');
-     end;
-
-  if DelClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMVList.SaveToFile(FrontendPath+'resources\ClassicMV.dat');
-     end;
-
-  if DelClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCRList.SaveToFile(FrontendPath+'resources\ClassicCR.dat');
-     end;
-
-  if DelClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCVList.SaveToFile(FrontendPath+'resources\ClassicCV.dat');
-     end;
-
-  if DelNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoMList.SaveToFile(FrontendPath+'resources\NeoGeoM.dat');
-     end;
-
-  if DelNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoCList.SaveToFile(FrontendPath+'resources\NeoGeoC.dat');
-     end;
-
-  if ((DelClassicBIOS) or (DelNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       BiosList.SaveToFile(FrontendPath+'resources\Bios.dat');
-     end;
-
-  FreeAndNil(ClassicMRList);
-  FreeAndNil(ClassicMVList);
-  FreeAndNil(ClassicCRList);
-  FreeAndNil(ClassicCVList);
-  FreeAndNil(NeoGeoMList);
-  FreeAndNil(NeoGeoCList);
-  FreeAndNil(UnavailableClassicMRList);
-  FreeAndNil(UnavailableClassicMVList);
-  FreeAndNil(UnavailableClassicCRList);
-  FreeAndNil(UnavailableClassicCVList);
-  FreeAndNil(UnavailableNeoGeoMList);
-  FreeAndNil(UnavailableNeoGeoCList);
-  FreeAndNil(BiosList);
-  FreeAndNil(UnavailableBiosList);
-  FreeAndNil(ListROMs);
-
-  //EndClock:= GetTickCount();
-
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.LabelProgress.Tag:= 0;
-  if NumGamesChanged <> 0 then
-     LoadROMClasses(False);
-
-  if Length(GamesList) > 0 then
-     begin
-      SortColumn(ColumnSorted, True);
-      SelectItem(FindGame(SelectedGame, SelectedGameCaption));
-     end
-  else
-     begin
-       ShowPicture('NoGamesAvailable', '', Picture, -1, True);
-       // no games on the list, will show the "No Available Games" image
-     end;
-  FormStatus.Close;
+  CallRefreshGames(1);
 end;
 
 procedure TFormMain.MenuRefreshUnavailableGamesClick(Sender: TObject);
-var
-  {StartClock, EndClock,} NumGamesChanged: Integer;
-  Loop, TotalProgress: Integer;
-  DelClassicMR, DelClassicMV, DelClassicCR, DelClassicCV, DelNeoGeoM, DelNeoGeoC, DelClassicBIOS, DelNeoGeoBIOS: Boolean;
-  DelUnClassicMR, DelUnClassicMV, DelUnClassicCR, DelUnClassicCV, DelUnNeoGeoM, DelUnNeoGeoC, DelUnClassicBIOS, DelUnNeoGeoBIOS: Boolean;
-
-  VerifyGameMsg, VerifyBiosMsg, SelectedGameCaption: String;
 begin
-  if List.Selected = nil then
-     Exit;
-  FormStatus.Show;
-  FormStatus.KeyPreview:= True;
-  FormStatus.LabelStatusType.Caption:= GetLanguageText('Status Messages', 'RefreshGamesListUnavailableTitle',
-                                                       'Refresh Games List(Unavailable Games Only)');
-  SelectedGameCaption:= GamesList[SelectedGame].eDescription;
-  NumGamesChanged:= 0;
-  //StartClock:= GetTickCount();
-  DelClassicMR:= False;
-  DelClassicMV:= False;
-  DelClassicCR:= False;
-  DelClassicCV:= False;
-  DelNeoGeoM:= False;
-  DelNeoGeoC:= False;
-  DelClassicBIOS:= False;
-  DelNeoGeoBIOS:= False;
-  DelUnClassicMR:= False;
-  DelUnClassicMV:= False;
-  DelUnClassicCR:= False;
-  DelUnClassicCV:= False;
-  DelUnNeoGeoM:= False;
-  DelUnNeoGeoC:= False;
-  DelUnClassicBIOS:= False;
-  DelUnNeoGeoBIOS:= False;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadGamesDATFile',
-                                                    'Loading .dat games files to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ClassicMRList:= THashedStringList.Create;
-  ClassicMVList:= THashedStringList.Create;
-  ClassicCRList:= THashedStringList.Create;
-  ClassicCVList:= THashedStringList.Create;
-  NeoGeoMList:= THashedStringList.Create;
-  NeoGeoCList:= THashedStringList.Create;
-  UnavailableClassicMRList:= THashedStringList.Create;
-  UnavailableClassicMVList:= THashedStringList.Create;
-  UnavailableClassicCRList:= THashedStringList.Create;
-  UnavailableClassicCVList:= THashedStringList.Create;
-  UnavailableNeoGeoMList:= THashedStringList.Create;
-  UnavailableNeoGeoCList:= THashedStringList.Create;
-  BiosList:= THashedStringList.Create;
-  UnavailableBiosList:= THashedStringList.Create;
-
-  ClassicMRList.LoadFromFile(FrontendPath+'resources\ClassicMR.dat');
-  ClassicMVList.LoadFromFile(FrontendPath+'resources\ClassicMV.dat');
-  ClassicCRList.LoadFromFile(FrontendPath+'resources\ClassicCR.dat');
-  ClassicCVList.LoadFromFile(FrontendPath+'resources\ClassicCV.dat');
-  NeoGeoMList.LoadFromFile(FrontendPath+'resources\NeoGeoM.dat');
-  NeoGeoCList.LoadFromFile(FrontendPath+'resources\NeoGeoC.dat');
-  UnavailableClassicMRList.LoadFromFile(FrontendPath+'resources\UnClassicMR.dat');
-  UnavailableClassicMVList.LoadFromFile(FrontendPath+'resources\UnClassicMV.dat');
-  UnavailableClassicCRList.LoadFromFile(FrontendPath+'resources\UnClassicCR.dat');
-  UnavailableClassicCVList.LoadFromFile(FrontendPath+'resources\UnClassicCV.dat');
-  UnavailableNeoGeoMList.LoadFromFile(FrontendPath+'resources\UnNeoGeoM.dat');
-  UnavailableNeoGeoCList.LoadFromFile(FrontendPath+'resources\UnNeoGeoC.dat');
-  BiosList.LoadFromFile(FrontendPath+'resources\BIOS.dat');
-  UnavailableBiosList.LoadFromFile(FrontendPath+'resources\UnBIOS.dat');
-
-  TotalProgress:= (UnavailableClassicMRList.Count+UnavailableClassicMVList.Count+UnavailableClassicCRList.Count+UnavailableClassicCVList.Count+
-                   UnavailableNeoGeoMList.Count+UnavailableNeoGeoCList.Count+UnavailableBiosList.Count);
-  FormStatus.LabelProgress.Caption:= '';
-
-  ClassicMRList.BeginUpdate;
-  ClassicMVList.BeginUpdate;
-  ClassicCRList.BeginUpdate;
-  ClassicCVList.BeginUpdate;
-  NeoGeoMList.BeginUpdate;
-  NeoGeoCList.BeginUpdate;
-  UnavailableClassicMRList.BeginUpdate;
-  UnavailableClassicMVList.BeginUpdate;
-  UnavailableClassicCRList.BeginUpdate;
-  UnavailableClassicCVList.BeginUpdate;
-  UnavailableNeoGeoMList.BeginUpdate;
-  UnavailableNeoGeoCList.BeginUpdate;
-  BiosList.BeginUpdate;
-  UnavailableBiosList.BeginUpdate;
-
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'LoadROMsDATFile',
-                                                    'Loading file "ROMs.dat" to memory. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-  ListROMs:= THashedStringList.Create;
-  ListROMs.LoadFromFile(FrontendPath+'resources\ROMs.dat');
-
-  LoadFolders(DefaultDatabaseBuilderExecutable);
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
-
-  if FileExists(FrontendPath+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-
-  // Get Verify Game message
-  VerifyGameMsg:= GetLanguageText('Status Messages', 'VerifyGame', 'Verifying game %s. Please, wait a moment...');
-  VerifyBiosMsg:= GetLanguageText('Status Messages', 'VerifyBios', 'Verifying bios %s. Please, wait a moment...');
-
-  FormStatus.LabelProgress.Tag:= 0;
-  // Refresh Unavailable Classic Master Raster
-  for Loop:= UnavailableClassicMRList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicMRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-
-    if RefreshGames(UnavailableClassicMRList, ClassicMRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnClassicMR:= True;
-         DelClassicMR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Master Vector
-  for Loop:= UnavailableClassicMVList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicMVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicMVList, ClassicMVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnClassicMV:= True;
-         DelClassicMV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Clone Raster
-  for Loop:= UnavailableClassicCRList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicCRList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicCRList, ClassicCRList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnClassicCR:= True;
-         DelClassicCR:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Classic Clone Vector
-  for Loop:= UnavailableClassicCVList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableClassicCVList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableClassicCVList, ClassicCVList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnClassicCV:= True;
-         DelClassicCV:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Neo Geo Master
-  for Loop:= UnavailableNeoGeoMList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableNeoGeoMList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableNeoGeoMList, NeoGeoMList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnNeoGeoM:= True;
-         DelNeoGeoM:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable Neo Geo Clone
-  for Loop:= UnavailableNeoGeoCList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableNeoGeoCList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyGameMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableNeoGeoCList, NeoGeoCList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnNeoGeoC:= True;
-         DelNeoGeoC:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-
-  // Refresh Unavailable BIOS
-  for Loop:= UnavailableBiosList.Count -1 downto 0 do
-  begin
-    GetROMFields(UnavailableBiosList[Loop]);
-    FormStatus.LabelMessage.Caption:= Format(VerifyBiosMsg, [mName]);
-    FormStatus.LabelMessage.Refresh;
-    if RefreshGames(UnavailableBiosList, BiosList, Loop) then
-       begin
-         Inc(NumGamesChanged);
-         DelUnClassicBIOS:= True;
-         DelUnNeoGeoBIOS:= True;
-         DelClassicBIOS:= True;
-         DelNeoGeoBIOS:= True;
-       end;
-    UpdateProgressLabel(0, TotalProgress, True);
-    Application.ProcessMessages;
-    if StopRefreshAllGames then
-       begin
-         RefreshGamesCanceledMessage;
-         Exit;
-       end;
-  end;
-  // I think that the BIOS refreshing is working correctly now...
-  ClassicMRList.EndUpdate;
-  ClassicMVList.EndUpdate;
-  ClassicCRList.EndUpdate;
-  ClassicCVList.EndUpdate;
-  NeoGeoMList.EndUpdate;
-  NeoGeoCList.EndUpdate;
-  UnavailableClassicMRList.EndUpdate;
-  UnavailableClassicMVList.EndUpdate;
-  UnavailableClassicCRList.EndUpdate;
-  UnavailableClassicCVList.EndUpdate;
-  UnavailableNeoGeoMList.EndUpdate;
-  UnavailableNeoGeoCList.EndUpdate;
-  BiosList.EndUpdate;
-
-  SetCurrentDir(FrontendPath);
-
-  FreeAndNil(CategoriesList);
-
-  if DelUnClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMRList.SaveToFile(FrontendPath+'resources\UnClassicMR.dat');
-     end;
-
-  if DelUnClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicMVList.SaveToFile(FrontendPath+'resources\UnClassicMV.dat');
-     end;
-
-  if DelUnClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCRList.SaveToFile(FrontendPath+'resources\UnClassicCR.dat');
-     end;
-
-  if DelUnClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableClassicCVList.SaveToFile(FrontendPath+'resources\UnClassicCV.dat');
-     end;
-
-  if DelUnNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoMList.SaveToFile(FrontendPath+'resources\UnNeoGeoM.dat');
-     end;
-
-  if DelUnNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableNeoGeoCList.SaveToFile(FrontendPath+'resources\UnNeoGeoC.dat');
-     end;
-
-  if ((DelUnClassicBIOS) or (DelUnNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveUnNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       UnavailableBiosList.SaveToFile(FrontendPath+'resources\UnBios.dat');
-     end;
-
-  if DelClassicMR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMRList.SaveToFile(FrontendPath+'resources\ClassicMR.dat');
-     end;
-
-  if DelClassicMV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicMV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicMVList.SaveToFile(FrontendPath+'resources\ClassicMV.dat');
-     end;
-
-  if DelClassicCR then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCR');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCRList.SaveToFile(FrontendPath+'resources\ClassicCR.dat');
-     end;
-
-  if DelClassicCV then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicCV');
-       FormStatus.LabelMessage.Refresh;
-       ClassicCVList.SaveToFile(FrontendPath+'resources\ClassicCV.dat');
-     end;
-
-  if DelNeoGeoM then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoM');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoMList.SaveToFile(FrontendPath+'resources\NeoGeoM.dat');
-     end;
-
-  if DelNeoGeoC then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoC');
-       FormStatus.LabelMessage.Refresh;
-       NeoGeoCList.SaveToFile(FrontendPath+'resources\NeoGeoC.dat');
-     end;
-
-  if ((DelClassicBIOS) or (DelNeoGeoBIOS)) then
-     begin
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveClassicBios');
-       FormStatus.LabelMessage.Refresh;
-       FormStatus.LabelMessage.Caption:= GetStatusMessage('SaveNeoGeoBios');
-       FormStatus.LabelMessage.Refresh;
-       BiosList.SaveToFile(FrontendPath+'resources\Bios.dat');
-     end;
-
-  FreeAndNil(ClassicMRList);
-  FreeAndNil(ClassicMVList);
-  FreeAndNil(ClassicCRList);
-  FreeAndNil(ClassicCVList);
-  FreeAndNil(NeoGeoMList);
-  FreeAndNil(NeoGeoCList);
-  FreeAndNil(UnavailableClassicMRList);
-  FreeAndNil(UnavailableClassicMVList);
-  FreeAndNil(UnavailableClassicCRList);
-  FreeAndNil(UnavailableClassicCVList);
-  FreeAndNil(UnavailableNeoGeoMList);
-  FreeAndNil(UnavailableNeoGeoCList);
-  FreeAndNil(BiosList);
-  FreeAndNil(UnavailableBiosList);
-  FreeAndNil(ListROMs);
-
-  //EndClock:= GetTickCount();
-
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.LabelProgress.Tag:= 0;
-  if NumGamesChanged <> 0 then
-     LoadROMClasses(False);
-
-  if Length(GamesList) > 0 then
-     begin
-       SortColumn(ColumnSorted, True);
-       SelectItem(FindGame(SelectedGame, SelectedGameCaption));
-     end
-  else
-     begin
-       ShowPicture('NoGamesAvailable', '', Picture, -1, True);
-       // no games on the list, will show the "No Available Games" image
-     end;
-  FormStatus.Close;
+  CallRefreshGames(2);
 end;
 
 procedure TFormMain.PictureClick(Sender: TObject);
@@ -18201,18 +16050,16 @@ begin
   ButtonAutomaticGameInformation.Checked:= MenuAutomaticGameInformation.Checked;
 
   if Pos(':\', mameinfoFile) = 0 then
-     PathDAT1:= ExtractFilePath(GetCurrentEmulatorExecutable)+mameinfoFile
+     PathDAT1:= ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag])+mameinfoFile
   else
      PathDAT1:= mameinfoFile;
 
   if Pos(':\', historyFile) = 0 then
-     PathDAT2:= ExtractFilePath(GetCurrentEmulatorExecutable)+historyFile
+     PathDAT2:= ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag])+historyFile
   else
      PathDAT2:= historyFile;
 
-  if Pos(':\', faqDir) = 0 then
-     PathDAT3:= FrontendPath+faqDir+'\'+GamesList[SelectedGame].eName+'.faq';
-
+  PathDAT3:= GetZipFolderFull(8)+GamesList[SelectedGame].eName+'.faq';
 
   if (PathDAT1 <> '') or (PathDAT2 <> '') or (PathDAT3 <> '') then
      begin
@@ -18256,57 +16103,41 @@ begin
   if not Assigned(FormGameInfo) then
      FormGameInfo:= TFormGameInfo.Create(Self);
 
-  if FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
+  if FileExists(FrontendPath+'resources\language\'+FrontendLanguage) then
      begin
-       LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-       FormGameInfo.ButtonClose.Caption:= GetLanguageText('Resource', 'ButtonClose', '&Close');
-       FormGameInfo.ButtonClose.Hint:= GetLanguageText('Resource', 'ButtonCloseHint', 'Close this window');
+       LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage);
+       GetMessagesLng('Resource', 'ButtonClose', '&Close',
+                      'Resource', 'ButtonCloseHint', 'Close this window');
+       FormGameInfo.ButtonClose.Caption:= MessageText[0];
+       FormGameInfo.ButtonClose.Hint:= MessageText[1];
      end;
   FreeAndNil(LanguageFile);
 
   GameIcon:= TIcon.Create;
   with FormGameInfo do
   begin
-    case MenuRealIcons.Checked of
-      True : BigRealIconsImageList.GetIcon(GamesList[SelectedGame].eImageIndex, GameIcon);
+    case MenuGamesIcons.Checked of
+      True : BigGamesIconsImageList.GetIcon(GamesList[SelectedGame].eImageIndex, GameIcon);
       False: BuiltInBigListImageList.GetIcon(GamesList[SelectedGame].eImageIndex, GameIcon);
     end;
     ImageGameIcon.Picture.Icon:= GameIcon;
     Application.ProcessMessages;
     FreeAndNil(GameIcon);
 
-    LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
+    TabSheetGameInfo.Caption:= GamesList[SelectedGame].eDescription;
     Manufacturer.Caption:= '(C) '+GamesList[SelectedGame].eManufacturer;
     Year.Caption:= GamesList[SelectedGame].eYear;
-    if GamesList[SelectedGame].eSound = '' then
-       Sound.Caption:= 'No Sound'
-    else
-       Sound.Caption:= GamesList[SelectedGame].eSound;
-
+    Sound.Caption:= GamesList[SelectedGame].eSound;
     Frequency.Caption:= GamesList[SelectedGame].eFrequency;
-    if GamesList[SelectedGame].eSamples = 'Yes' then
-       Samples.Caption:= 'Present'
-    else
-    if GamesList[SelectedGame].eSamples = 'No' then
-       Samples.Caption:= 'Missing'
-    else
-       Samples.Caption:= 'No';
-
+    Samples.Caption:= GamesList[SelectedGame].eSamples;
     ControlType.Caption:= GamesList[SelectedGame].eControlType;
     Video.Caption:= GamesList[SelectedGame].eVideo;
     Orientation.Caption:= GamesList[SelectedGame].eOrientation;
     Resolution.Caption:= GamesList[SelectedGame].eResolution;
     Name.Caption:= GamesList[SelectedGame].eName;
-    if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eClone <> GamesList[SelectedGame].eName) then
-       CloneOf.Caption:= GamesList[SelectedGame].eClone
-    else
-       CloneOf.Caption:= '';
-    if GamesList[SelectedGame].eMerged = 'Yes' then
-       Merged.Caption:= GamesList[SelectedGame].eClone
-    else
-       Merged.Caption:= '';
-
+    if GamesList[SelectedGame].eClone <> GamesList[SelectedGame].eName then
+       CloneOf.Caption:= GamesList[SelectedGame].eClone;
+    Merged.Caption:= GamesList[SelectedGame].eMerged;
     DriverStatus.Caption:= GamesList[SelectedGame].eDriverStatus;
     SoundStatus.Caption:= GamesList[SelectedGame].eSoundStatus;
     ColorStatus.Caption:= GamesList[SelectedGame].eColorStatus;
@@ -18356,14 +16187,6 @@ begin
   MenuRestoreMainScreenDefaultScreenSizePosition.Enabled:= FormMain.WindowState = wsNormal;
 end;
 
-procedure TFormMain.MenuTotalPlayTimeClick(Sender: TObject);
-begin
-  CheckPlayTime;
-  GenerateMessage(GetLanguageText('Messages', 'TotalPlayTimeTitle', 'Total Time Played'),
-                  Format(GetLanguageText('Messages', 'TotalPlayTimeMsg', 'Time played since last install of Emu Loader: %s'),
-                         [GetPlayTime(StrToInt64(TotalPlayTime))]), 2);
-end;
-
 procedure TFormMain.CallEmulatorOptions(ExecutableString: String);
 var
   ExeType: String[5];
@@ -18372,17 +16195,7 @@ begin
      begin
        ExeType:= ExeStrings[GetExeType(ExecutableString)];
        if ExeType = 'DOS' then
-          begin
-            if not Assigned(FormDOSMAMEConfiguration) then
-               FormDOSMAMEConfiguration:= TFormDOSMAMEConfiguration.Create(Self);
-            LoadMAMEConfigurationIcons(FormDOSMAMEConfiguration.MAMEConfigImageList);
-            FormDOSMAMEConfiguration.EmulatorString:=ExecutableString;
-            FormDOSMAMEConfiguration.ReadMAMEcfg.Caption:= Format(GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), ['mame.cfg']);
-            FormDOSMAMEConfiguration.ReadMAMEcfg.Hint:= Format(GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), ['mame.cfg']);
-            FormDOSMAMEConfiguration.Caption:=FormDOSMAMEConfiguration.Caption;
-            FormDOSMAMEConfiguration.ShowModal;
-            FreeAndNil(FormDOSMAMEConfiguration);
-          end
+          FeatureNotAvailableDOSMAME
        else
        if ExeType = 'Win32' then
           begin
@@ -18390,111 +16203,55 @@ begin
             if not Assigned(FormMAMEConfiguration) then
                FormMAMEConfiguration:= TFormMAMEConfiguration.Create(Self);
             LoadMAMEConfigurationIcons(FormMAMEConfiguration.MAMEConfigImageList);
+            FormMAMEConfiguration.Tag:= 0; // means default options
             FormMAMEConfiguration.EmulatorString:= ExecutableString;
-            FormMAMEConfiguration.ReadMAMEini.Caption:= Format(GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), [GetExecutableINIFileName(ExecutableString)]);
-            FormMAMEConfiguration.ReadMAMEini.Hint:= Format(GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), [GetExecutableINIFileName(ExecutableString)]);
+            GetMessagesLng('Resource', 'ButtonReadIni', '&Read "%s"',
+                           'Resource', 'ButtonReadIniHint', 'Read all data from file "%s"');
+            FormMAMEConfiguration.ReadMAMEini.Caption:= Format(MessageText[0], [GetExecutableINIFileName(ExecutableString)]);
+            FormMAMEConfiguration.ReadMAMEini.Hint:= Format(MessageText[1], [GetExecutableINIFileName(ExecutableString)]);
             FormMAMEConfiguration.ShowModal;
             FreeAndNil(FormMAMEConfiguration);
+            LoadFolders;
             SetCurrentDir(FrontendPath);
           end
        else
           begin
-            GenerateMessage(GetLanguageText('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File'),
-                            GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), 2);
+            GetMessagesLng('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File',
+                           'Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME only).');
+            GenerateMessage(MessageText[0], MessageText[1], 2);
           end;
      end
   else
-     GenerateMessage(GetLanguageText('Messages', 'NoExecutableSelectedTitle', 'MAME Executable Not Selected'),
-                     GetLanguageText('Messages', 'SelectEmulatorFileMsg', 'Select a executable before continue!'), 2);
+     begin
+       GetMessagesLng('Messages', 'NoExecutableSelectedTitle', 'MAME Executable Not Selected',
+                      'Messages', 'SelectEmulatorFileMsg', 'Select a executable before continue!');
+       GenerateMessage(MessageText[0], MessageText[1], 2);
+     end;
 end;
 
 procedure TFormMain.MenuSet1stEmulatorDefaultOptionsClick(Sender: TObject);
 begin
   CallEmulatorOptions(EmulatorExecutable[1]);
-  if MenuUseExecutable1.Checked then
-     LoadFolders('1');
 end;
 
 procedure TFormMain.MenuSet2ndEmulatorDefaultOptionsClick(Sender: TObject);
 begin
   CallEmulatorOptions(EmulatorExecutable[2]);
-  if MenuUseExecutable2.Checked then
-     LoadFolders('2');
 end;
 
 procedure TFormMain.MenuSet3rdEmulatorDefaultOptionsClick(Sender: TObject);
 begin
   CallEmulatorOptions(EmulatorExecutable[3]);
-  if MenuUseExecutable3.Checked then
-  LoadFolders('3');
 end;
 
 procedure TFormMain.MenuSet4thEmulatorDefaultOptionsClick(Sender: TObject);
 begin
   CallEmulatorOptions(EmulatorExecutable[4]);
-  if MenuUseExecutable4.Checked then
-     LoadFolders('4');
 end;
 
 procedure TFormMain.MenuSet5thEmulatorDefaultOptionsClick(Sender: TObject);
 begin
   CallEmulatorOptions(EmulatorExecutable[5]);
-  if MenuUseExecutable5.Checked then
-     LoadFolders('5');
-end;
-
-procedure TFormMain.MenuGameFAQClick(Sender: TObject);
-var
-  FileFound: Boolean;
-  FilenameString: String;
-begin
-  if List.Selected = nil then
-     Exit;
-  SetCurrentDir(FrontendPath);
-
-  FileFound:= True;
-  case FileExists(faqDir+'\'+GamesList[SelectedGame].eName+'.faq') of
-    False:
-      begin
-        if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eName <> GamesList[SelectedGame].eClone) then
-            begin
-              FileFound:= FileExists(faqDir+'\'+GamesList[SelectedGame].eClone+'.faq');
-              if FileFound then
-                 FilenameString:= faqDir+'\'+GamesList[SelectedGame].eClone+'.faq';
-            end
-        else
-            FileFound:= False;
-      end;
-    True: FilenameString:= faqDir+'\'+GamesList[SelectedGame].eName+'.faq';
-  end;
-
-  case FileFound of
-    True:
-      begin
-        if not Assigned(FormDATViewer) then
-           FormDATViewer:= TFormDATViewer.Create(Self);
-
-        if TextWordWrap then
-           begin
-             FormDATViewer.WordWrap.Checked:= True;
-             FormDATViewer.WordWrap.OnClick(Self);
-           end;
-        FormDATViewer.DATTextHolder.Lines.BeginUpdate;
-        FormDATViewer.DATTextHolder.Lines.LoadFromFile(FilenameString);
-        FormDATViewer.DATTextHolder.Lines.EndUpdate;
-        FormDATViewer.Caption:= Format(GetLanguageText('DAT Viewer', 'Title3' ,'Viewing [%s] - F.A.Q. - Frequently Asked Questions'),
-                                      [ExtractFileName(FilenameString)]);
-        FormDATViewer.LabelGameDescription.Caption:= GamesList[SelectedGame].eDescription;
-        FormDATViewer.ShowModal;
-        TextWordWrap:= FormDATViewer.WordWrap.Checked;
-        FreeAndNil(FormDATViewer);
-      end;
-    False:
-      begin
-        GenerateMessage(GetLanguageText('Messages', 'NoGameFAQInformationTitle', 'F.A.Q. Information Not Found'),
-                        GetLanguageText('Messages', 'NoGameFAQInformationMsg', 'There is no F.A.Q. information for this game.'), 2);
-      end;
-  end;
 end;
 
 procedure TFormMain.MenuSetDebugCustomOptionsClick(Sender: TObject);
@@ -18530,7 +16287,7 @@ procedure TFormMain.MenuCustomInitializationOptionsClick(Sender: TObject);
 
   procedure ToggleOptions(Filename: String; MenuSetName, MenuDeleteName, PopupSetName, PopupDeleteName: TMenuItem);
   begin
-    SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+    SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
     case FileExists(IniFilesDir+'\'+Filename) of
       True:
         begin
@@ -18552,9 +16309,12 @@ procedure TFormMain.MenuCustomInitializationOptionsClick(Sender: TObject);
     SetCurrentDir(FrontendPath);
   end;
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+     
   if GamesList[SelectedGame].eDescription <> '' then
      begin
-       case GetCurrentEmulatorFormat of
+       case EmulatorType[ButtonExecutablesMode.Tag] of
          1:
            begin
              MenuCustomInitializationOptions.Enabled:= True;
@@ -18588,25 +16348,6 @@ begin
            end;
        end;
      end;
-end;
-
-procedure TFormMain.MenuSelectGameTotalPlayTimeClick(Sender: TObject);
-var
-  PlayTime, NumberPlay: String;
-begin
-  PlayTime:= ReadSelectedGamePlayTime(GamesList[SelectedGame].eName);
-  if PlayTime <> '' then
-     begin
-       NumberPlay:= Copy(PlayTime, Pos('¬',PlayTime)+1, Length(PlayTime));
-       Delete(PlayTime, Pos('¬',PlayTime), Length(PlayTime));
-       GenerateMessage(GetLanguageText('Messages', 'TotalPlayTimeTitle', 'Total Time Played'),
-                       GamesList[SelectedGame].eDescription+#13#10+#13#10+
-                       Format(GetLanguageText('Messages', 'TotalPlayTimeMsg', 'Time played since last install: %s'), [GetPlayTime(StrToInt64(PlayTime))])+#13#10+
-                       Format(GetLanguageText('Messages', 'TotalPlayTimeNumberPlayMsg', 'Times Played: %s'), [NumberPlay]), 2);
-     end
-  else
-     GenerateMessage(GetLanguageText('Messages', 'NoInformationAvailableTitle', 'No Information Available'),
-                     GetLanguageText('Messages', 'TotalPlayTimeNoInformationMsg', 'This game does not have any info... Please, play it at least once.'), 2);
 end;
 
 procedure TFormMain.ButtonShowControlPanelLayoutClick(Sender: TObject);
@@ -18662,46 +16403,18 @@ begin
   if NewDescription <> EmulatorVersion[EmulatorNumber] then
      begin
        EmulatorVersion[EmulatorNumber]:= NewDescription;
-       case EmulatorNumber of
-         1:
-           begin
-             if MenuUseExecutable1.Checked then
-                LabelEmulatorVersion.Caption:= EmulatorVersion[1];
-           end;
-         2:
-           begin
-             if MenuUseExecutable2.Checked then
-                LabelEmulatorVersion.Caption:= EmulatorVersion[2];
-           end;
-         3:
-           begin
-             if MenuUseExecutable3.Checked then
-                LabelEmulatorVersion.Caption:= EmulatorVersion[3];
-           end;
-         4:
-           begin
-             if MenuUseExecutable4.Checked then
-                LabelEmulatorVersion.Caption:= EmulatorVersion[4];
-           end;
-         5:
-           begin
-             if MenuUseExecutable5.Checked then
-                LabelEmulatorVersion.Caption:= EmulatorVersion[5];
-           end;
-       end;
+       LabelEmulatorVersion.Caption:= '-> '+EmulatorVersion[ButtonExecutablesMode.Tag];
      end;
 end;
 
-procedure TFormMain.GetEmulatorDefaultDescription(const EmulatorFileName: String; EmulatorNumber: ShortInt);
-var
-  ExeType: String[5];
+procedure TFormMain.GetEmulatorDefaultDescription(EmulatorNumber: ShortInt);
 begin
-  ExeType:= ExeStrings[GetExeType(EmulatorFileName)];
-  if not GetEmulatorVersion(EmulatorNumber, ExeType) then
+  if not GetEmulatorVersion(EmulatorNumber) then
      begin
+       GetMessagesLng('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!',
+                      'Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).');
        GenerateMessage(GetLanguageText('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File'),
-                       Format(GetLanguageText('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!')+#13+
-                              GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), [EmulatorNumber]), 2);
+                       Format(MessageText[0]+#13+MessageText[1], [EmulatorNumber]), 2);
        Exit;
      end;
 end;
@@ -18709,31 +16422,133 @@ end;
 procedure TFormMain.MenuGet1stEmulatorDefaultDescriptionClick(
   Sender: TObject);
 begin
-  GetEmulatorDefaultDescription(EmulatorExecutable[1], 1);
+  GetEmulatorDefaultDescription(1);
 end;
 
 procedure TFormMain.MenuGet2ndEmulatorDefaultDescriptionClick(
   Sender: TObject);
 begin
-  GetEmulatorDefaultDescription(EmulatorExecutable[2], 2);
+  GetEmulatorDefaultDescription(2);
 end;
 
 procedure TFormMain.MenuGet3rdEmulatorDefaultDescriptionClick(
   Sender: TObject);
 begin
-  GetEmulatorDefaultDescription(EmulatorExecutable[3], 3);
+  GetEmulatorDefaultDescription(3);
 end;
 
 procedure TFormMain.MenuGet4thEmulatorDefaultDescriptionClick(
   Sender: TObject);
 begin
-  GetEmulatorDefaultDescription(EmulatorExecutable[4], 4);
+  GetEmulatorDefaultDescription(4);
 end;
 
 procedure TFormMain.MenuGet5thEmulatorDefaultDescriptionClick(
   Sender: TObject);
 begin
-  GetEmulatorDefaultDescription(EmulatorExecutable[5], 5);
+  GetEmulatorDefaultDescription(5);
+end;
+
+procedure TFormMain.CallDeleteFile(FileName, Folder: String);
+
+  procedure GetFolder;
+  var
+    ExeType: String[5];
+    BinaryMAME, TextLine: String;
+    MAMEIniFile: THashedStringList;
+    Loop: Integer;
+    FoundFolder: Boolean;
+  begin
+    BinaryMAME:= EmulatorExecutable[ButtonExecutablesMode.Tag];
+    ExeType:= ExeStrings[GetExeType(BinaryMAME)];
+    if ExeType = 'DOS' then
+       Folder:= 'ERROR'
+    else
+    if ExeType = 'Win32' then
+       begin
+         MAMEIniFile:= THashedStringList.Create;
+         MAMEIniFile.LoadFromFile(ExtractFilePath(BinaryMAME)+GetExecutableINIFileName(BinaryMAME));
+         FoundFolder:= False;
+         for Loop:=0 to MAMEIniFile.Count -1 do
+         begin
+           TextLine:= MAMEIniFile[Loop];
+           if Folder = 'cfg' then
+              begin
+                if Copy(TextLine, 1, 14) = 'cfg_directory ' then
+                   FoundFolder:= True;
+              end
+           else
+           if Folder = 'nvram' then
+              begin
+                if Copy(TextLine, 1, 16) = 'nvram_directory ' then
+                   FoundFolder:= True;
+              end
+           else
+           if Folder = 'memcard' then
+              begin
+                if Copy(TextLine, 1, 18) = 'memcard_directory ' then
+                   FoundFolder:= True;
+              end
+           else
+           if Folder = 'input' then
+              begin
+                if Copy(TextLine, 1, 16) = 'input_directory ' then
+                   FoundFolder:= True;
+              end
+           else
+           if Folder = 'hiscore' then
+              begin
+                if Copy(TextLine, 1, 18) = 'hiscore_directory ' then
+                   FoundFolder:= True;
+              end
+           else
+           if Folder = 'state' then
+              begin
+                if Copy(TextLine, 1, 16) = 'state_directory ' then
+                   FoundFolder:= True;
+              end;
+
+           if FoundFolder then
+              begin
+                Folder:= ExtractMAMEIniValue(TextLine);
+                Break;
+              end;
+         end;
+         FreeAndNil(MAMEIniFile);
+       end;
+  end;
+
+begin
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
+     Exit;
+
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
+  GetFolder;
+  if Folder = 'ERROR' then
+     begin
+       FeatureNotAvailableDOSMAME;
+       Exit;
+     end
+  else
+  if Folder = '' then
+     Exit;
+  case FileExists(Folder+'\'+FileName) of
+    True:
+      begin
+        GetMessagesLng('Messages', 'DeleteFileTitle', 'Delete File',
+                       'Messages', 'DeleteFileMsg', 'Delete file "%s". Are you sure ?');
+        if GenerateMessage(MessageText[0], Format(MessageText[1], [Folder+'\'+FileName]), 1) = mrYes then
+           DeleteFile(Folder+'\'+FileName);
+        Application.ProcessMessages;
+      end;
+    False:
+      begin
+        GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                       'Messages', 'DeleteFileFailedMsg', 'There is no file to delete! Try selecting a different MAME Executable.');
+        GenerateMessage(MessageText[0], MessageText[1], 2);
+      end;
+  end;
+  SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormMain.MenuDeleteZIPFileNameClick(Sender: TObject);
@@ -18741,11 +16556,11 @@ var
   ZIPFileName, ZIPFolderName, DeleteMessage: String;
   MergedGame, DeleteFileName: Boolean;
 begin
-  if List.Selected = nil then
+  if (List.Selected = nil) or (EmulatorType[ButtonExecutablesMode.Tag] = 2) then
      Exit;
 
-  LoadFolders(IntToStr(ButtonExecutablesMode.Tag));
-  SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+  LoadFolders;
+  SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
   DeleteFileName:= False;
   MergedGame:= False;
   ZIPFileName:= GamesList[SelectedGame].eName;
@@ -18761,28 +16576,24 @@ begin
             if ZIPFolderName = 'Not Found' then
                begin
                  // Parent filename not found
-                 GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                                 GetLanguageText('Messages', 'DeleteFileFailedMsg', 'There is no file to delete! Try selecting a different MAME Executable.'), 2);
+                 GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                                'Messages', 'DeleteFileFailedMsg', 'There is no file to delete! Try selecting a different MAME Executable.');
+                 GenerateMessage(MessageText[0], MessageText[1], 2);
                  Exit;
                end
             else
-               begin
-                 // Parent filename found
-                 DeleteFileName:= True;
-               end;
+               DeleteFileName:= True; // Parent filename found
           end
        else
           begin
-            GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                            GetLanguageText('Messages', 'DeleteFileFailedMsg', 'There is no file to delete! Try selecting a different MAME Executable.'), 2);
+            GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                           'Messages', 'DeleteFileFailedMsg', 'There is no file to delete! Try selecting a different MAME Executable.');
+            GenerateMessage(MessageText[0], MessageText[1], 2);
             Exit;
           end;
      end
   else
-     begin
-       // ZIP filename found
-       DeleteFileName:= True;
-     end;
+     DeleteFileName:= True; // ZIP filename found
 
   if DeleteFileName then
      begin
@@ -18800,20 +16611,12 @@ begin
                                                      'This will physically delete the file "%s" from disk! The game "%s" is merged, which means that the parent game will also be lost. Are you sure ?'), [ZIPFolderName, GamesList[SelectedGame].eName]);
        end;
 
-       case GenerateMessage(MenuDeleteZIPFileName.Caption+' [MAME '+IntToStr(ButtonExecutablesMode.Tag)+']', DeleteMessage, 1) of
-         mrYes:
-           begin
-             DeleteFile(ZIPFolderName);
-             Application.ProcessMessages;
-             MenuRefreshSelectedGame.OnClick(Self);
-             GenerateMessage(GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                             Format(GetLanguageText('Messages', 'DeleteFileCompleteMsg', 'The file "%s" is deleted!'), [ZIPFolderName]), 2);
-           end;
-         mrNo:
-           begin
-             // File not deleted
-           end;
-       end;
+       if GenerateMessage(MenuDeleteZIPFileName.Caption+' [MAME '+IntToStr(ButtonExecutablesMode.Tag)+']', DeleteMessage, 1) = mrYes then
+          begin
+            DeleteFile(ZIPFolderName);
+            MenuRefreshSelectedGame.OnClick(Self);
+          end;
+       Application.ProcessMessages;
      end;
   SetCurrentDir(FrontendPath);
 end;
@@ -18831,13 +16634,14 @@ begin
         if (not FileExists(FrontendPath+'ParentalLock.pwd')) and (not FileExists(FrontendPath+'resources\BlockedGames.dat')) then
            begin
              // start new session
-             if not Assigned(FormParentalLockManager) then
-                FormParentalLockManager:= TFormParentalLockManager.Create(Self);
-             GenerateMessage(GetLanguageText('Messages', 'ParentalLockWelcomeTitle', 'Welcome To Parental Lock Mode'),
-                             GetLanguageText('Messages', 'ParentalLockWelcomeMsg', 'Please, add keywords to the keywords list and choose the games to lock.'), 2);
-             FormParentalLockManager.HaveProtectedGames:= False;
-             FormParentalLockManager.ShowModal;
-             FreeAndNil(FormParentalLockManager);
+             if not Assigned(FormParentalLockEditor) then
+                FormParentalLockEditor:= TFormParentalLockEditor.Create(Self);
+             GetMessagesLng('Messages', 'ParentalLockWelcomeTitle', 'Welcome To Parental Lock Mode',
+                            'Messages', 'ParentalLockWelcomeMsg', 'Please, add keywords to the keywords list and choose the games to lock.');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
+             FormParentalLockEditor.HaveProtectedGames:= False;
+             FormParentalLockEditor.ShowModal;
+             FreeAndNil(FormParentalLockEditor);
              case MenuParentalLock.Tag of
                0: begin
                     SetLockedGamesList(True);
@@ -18863,8 +16667,9 @@ begin
                           end
                        else
                           begin
-                            GenerateMessage(GetLanguageText('Messages', 'NoLockedGamesFoundTitle', 'No Locked Games'),
-                                            GetLanguageText('Messages', 'NoLockedGamesFoundMsg', 'There are no games on the locked list! You must select at least one game for this to work.'), 2);
+                            GetMessagesLng('Messages', 'NoLockedGamesFoundTitle', 'No Locked Games',
+                                           'Messages', 'NoLockedGamesFoundMsg', 'There are no games on the locked list! You must select at least one game for this to work.');
+                            GenerateMessage(MessageText[0], MessageText[1], 2);
                             MenuParentalLock.Tag:= 1;
                             MenuParentalLock.Click;
                           end;
@@ -18874,8 +16679,9 @@ begin
                 end
              else
                 begin
-                  GenerateMessage(GetLanguageText('Messages', 'NoLockedGamesFoundTitle', 'No Locked Games'),
-                                  GetLanguageText('Messages', 'NoLockedGamesFoundMsg', 'There are no games on the locked list! You must select at least one game for this to work.'), 2);
+                  GetMessagesLng('Messages', 'NoLockedGamesFoundTitle', 'No Locked Games',
+                                 'Messages', 'NoLockedGamesFoundMsg', 'There are no games on the locked list! You must select at least one game for this to work.');
+                  GenerateMessage(MessageText[0], MessageText[1], 2);
                   MenuParentalLock.Tag:= 1;
                   MenuParentalLock.Click;
                 end;
@@ -19046,7 +16852,7 @@ begin
 
   if (not FormPreferences.HotRod.Checked) and (not FormPreferences.XArcade.Checked) and (not FormPreferences.SlikStik.Checked) then
      begin
-        if (Key = VK_F2) and (Shift = [ssShift]) then
+        {if (Key = VK_F2) and (Shift = [ssShift]) then
            begin
              if MenuFullScreen.Visible then
                 MenuFullScreen.Click;
@@ -19063,7 +16869,7 @@ begin
              if MenuAutomaticGameInformation.Visible then
                 MenuAutomaticGameInformation.Click;
            end
-        else
+        else}
         if Key = VK_F11 then
            begin
              if MenuShowPictures.Visible then
@@ -19077,32 +16883,11 @@ begin
            end
         else
         if Key = VK_F9 then
-           Picture.OnClick(Self);
+           CyclePictureType
+        else
+        if (Key = VK_F7) and (Shift = [ssShift]) then
+           FormPreferences.PlaySoundClip.Checked:= not FormPreferences.PlaySoundClip.Checked;
      end;
-end;
-
-procedure TFormMain.MenuMAMEKeysInfoClick(Sender: TObject);
-var
-  LanguageFile: TMemIniFile;
-begin
-  if not Assigned(FormMAMEKeysInfo) then
-     FormMAMEKeysInfo:= TFormMAMEKeysInfo.Create(Self);
-
-  if FileExists(FrontendPath+'resources\images\topwindow\MAMEKeysInfo.png') then
-     FormMAMEKeysInfo.TopImage.Picture.LoadFromFile(FrontendPath+'resources\images\topwindow\MAMEKeysInfo.png');
-
-  if FileExists(FrontendPath+'resources\language\'+FrontendLanguage+'.lng') then
-     begin
-       LanguageFile:= TMemIniFile.Create(FrontendPath+'resources\language\'+FrontendLanguage+'.lng');
-
-       FormMAMEKeysInfo.ButtonClose.Caption:= GetLanguageText('Resource', 'ButtonClose', '&Close');
-       FormMAMEKeysInfo.ButtonClose.Hint:= GetLanguageText('Resource', 'ButtonCloseHint', 'Close this window');
-     end;
-  FreeAndNil(LanguageFile);
-
-  FormMAMEKeysInfo.LabelCaption.Caption:= MenuMAMEKeysInfo.Caption;
-  FormMAMEKeysInfo.ShowModal;
-  FreeAndNil(FormMAMEKeysInfo);
 end;
 
 procedure TFormMain.ButtonUseExecutable1Click(Sender: TObject);
@@ -19161,116 +16946,102 @@ begin
   end;
 end;
 
-procedure TFormMain.MenuShowTitleSnapshotClick(Sender: TObject);
+procedure TFormMain.SetPictureMode(TypeIndex: ShortInt);
 begin
   PictureNumber:= 1;
-  PictureType:= 0;
-  ButtonShowTitleSnapshot.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 37;
+  PictureType:= TypeIndex;
+  case PictureType of
+    0: begin
+         ButtonShowTitleSnapshot.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 15;
+         PopupShowTitleSnapshot.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.TitleSnapshotPicturesBackgroundColor.OnSelect(Self);
+       end;
+    1: begin
+         ButtonShowInGameSnapshot.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 16;
+         PopupShowInGameSnapshot.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.InGameSnapshotPicturesBackgroundColor.OnSelect(Self);
+       end;
+    2: begin
+         ButtonShowMarquee.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 17;
+         PopupShowMarquee.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.MarqueePicturesBackgroundColor.OnSelect(Self);
+       end;
+    3: begin
+         ButtonShowFlyer.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 18;
+         PopupShowFlyer.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.FlyerPicturesBackgroundColor.OnSelect(Self);
+       end;
+    4: begin
+         ButtonShowCabinet.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 19;
+         PopupShowCabinet.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.CabinetPicturesBackgroundColor.OnSelect(Self);
+       end;
+    5: begin
+         ButtonShowControlPanel.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 20;
+         PopupShowControlPanel.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.ControlPanelPicturesBackgroundColor.OnSelect(Self); 
+       end;
+    6: begin
+         ButtonShowControlPanelLayout.Checked:= True;
+         ButtonPicturesModeView.ImageIndex:= 21;
+         PopupShowControlPanelLayout.Checked:= True;
+         if not FormStatus.Visible then
+            FormPreferences.ControlPanelLayoutPicturesBackgroundColor.OnSelect(Self);
+       end;
+  end;
   ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowTitleSnapshot.Checked:= True;
   ShowingPicture:= True;
+  FreeMemoryZipContents;
+
   if not FormStatus.Visible then
-     begin
-       FormPreferences.TitleSnapshotPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+     MenuShowPictures.OnClick(Self);
+end;
+
+procedure TFormMain.MenuShowTitleSnapshotClick(Sender: TObject);
+begin
+  SetPictureMode(0);
 end;
 
 procedure TFormMain.MenuShowInGameSnapshotClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 1;
-  ButtonShowInGameSnapshot.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 5;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowInGameSnapshot.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.InGameSnapshotPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(1);
 end;
 
 procedure TFormMain.MenuShowMarqueeClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 2;
-  ButtonShowMarquee.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 6;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowMarquee.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.MarqueePicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(2);
 end;
 
 procedure TFormMain.MenuShowFlyerClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 3;
-  ButtonShowFlyer.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 7;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowFlyer.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.FlyerPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(3);
 end;
 
 procedure TFormMain.MenuShowCabinetClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 4;
-  ButtonShowCabinet.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 8;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowCabinet.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.CabinetPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(4);
 end;
 
 procedure TFormMain.MenuShowControlPanelClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 5;
-  ButtonShowControlPanel.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 17;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowControlPanel.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.ControlPanelPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(5);
 end;
 
 procedure TFormMain.MenuShowControlPanelLayoutClick(Sender: TObject);
 begin
-  PictureNumber:= 1;
-  PictureType:= 6;
-  ButtonShowControlPanelLayout.Checked:= True;
-  ButtonPicturesModeView.ImageIndex:= 59;
-  ButtonPicturesModeView.Tag:= PictureType;
-  PopupShowControlPanelLayout.Checked:= True;
-  ShowingPicture:= True;
-  if not FormStatus.Visible then
-     begin
-       FormPreferences.ControlPanelLayoutPicturesBackgroundColor.OnSelect(Self);
-       MenuShowPictures.OnClick(Self);
-     end;
+  SetPictureMode(6);
 end;
 
 procedure TFormMain.PopupShowTitleSnapshotClick(Sender: TObject);
@@ -19283,45 +17054,45 @@ begin
   MenuShowFavorite.Click;
 end;
 
-procedure TFormMain.MenuRealIconsClick(Sender: TObject);
+procedure TFormMain.MenuGamesIconsClick(Sender: TObject);
 var
   Loop: Integer;
 begin
   Screen.Cursor:= crHourGlass;
-  case MenuRealIcons.Checked of
+  case MenuGamesIcons.Checked of
     True:
       begin
-        PopupRealIcons.Checked:= True;
-        if BigRealIconsImageList.Count = 1 then
+        PopupGamesIcons.Checked:= True;
+        if BigGamesIconsImageList.Count = 1 then
            begin
-             if not SaveLoadRealIcons(1) then
-                LoadRealIcons;
+             if not SaveLoadGamesIcons(1) then
+                LoadGamesIcons;
            end;
 
         if (Length(GamesList) > 0) and (FileExists(FrontendPath+'resources\IconsIndex.dat')) and (FileExists(FrontendPath+'resources\IconsList.ini')) then
            begin
-             RealIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
-             List.LargeImages:= BigRealIconsImageList;
-             List.SmallImages:= SmallRealIconsImageList;
+             GamesIconsDAT:= TMemIniFile.Create(FrontendPath+'resources\IconsList.ini');
+             List.LargeImages:= BigGamesIconsImageList;
+             List.SmallImages:= SmallGamesIconsImageList;
 
              for Loop:=0 to Length(GamesList)-1 do
-               GamesList[Loop].eImageIndex:= RealIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
-             FreeAndNil(RealIconsDAT);
+               GamesList[Loop].eImageIndex:= GamesIconsDAT.ReadInteger('IconsOrder', GamesList[Loop].eName, 0);
+             FreeAndNil(GamesIconsDAT);
            end
         else
            begin
-             case MenuRealIcons.Tag of
-               0: MenuRealIcons.Click;
+             case MenuGamesIcons.Tag of
+               0: MenuGamesIcons.Click;
                1: begin
-                    List.LargeImages:= BigRealIconsImageList;
-                    List.SmallImages:= SmallRealIconsImageList;
+                    List.LargeImages:= BigGamesIconsImageList;
+                    List.SmallImages:= SmallGamesIconsImageList;
                   end;
              end;
            end;
       end;
     False:
       begin
-        PopupRealIcons.Checked:= False;
+        PopupGamesIcons.Checked:= False;
         List.LargeImages:= BuiltInBigListImageList;
         List.SmallImages:= BuiltInSmallListImageList;
         for Loop:=0 to Length(GamesList)-1 do
@@ -19330,42 +17101,44 @@ begin
       end;
   end;
   List.Invalidate;
-  if MenuRealIcons.Tag = 1 then
-     MenuRealIcons.Tag:= 0;
+  if MenuGamesIcons.Tag = 1 then
+     MenuGamesIcons.Tag:= 0;
   Screen.Cursor:= crDefault;
 end;
 
-procedure TFormMain.MenuParentalLockManagerClick(
+procedure TFormMain.MenuParentalLockEditorClick(
   Sender: TObject);
 begin
   case MenuParentalLock.Checked of
     False:
       begin
-        if not Assigned(FormParentalLockManager) then
-           FormParentalLockManager:= TFormParentalLockManager.Create(Self);
+        if not Assigned(FormParentalLockEditor) then
+           FormParentalLockEditor:= TFormParentalLockEditor.Create(Self);
         if (not FileExists(FrontendPath+'ParentalLock.pwd')) and (not FileExists(FrontendPath+'resources\BlockedGames.dat')) then
            begin
-              GenerateMessage(GetLanguageText('Messages', 'ParentalLockWelcomeTitle', 'Welcome To Parental Lock Mode'),
-                             GetLanguageText('Messages', 'ParentalLockWelcomeMsg', 'Please, add keywords to the keywords list and choose the games to lock.'), 2);
-              FormParentalLockManager.HaveProtectedGames:= False;
+             GetMessagesLng('Messages', 'ParentalLockWelcomeTitle', 'Welcome To Parental Lock Mode',
+                            'Messages', 'ParentalLockWelcomeMsg', 'Please, add keywords to the keywords list and choose the games to lock.');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
+             FormParentalLockEditor.HaveProtectedGames:= False;
            end
         else
-           FormParentalLockManager.HaveProtectedGames:= (FileExists(FrontendPath+'resources\BlockedGames.dat')) and (GetFileSize(FrontendPath+'resources\BlockedGames.dat') > 0);
+           FormParentalLockEditor.HaveProtectedGames:= (FileExists(FrontendPath+'resources\BlockedGames.dat')) and (GetFileSize(FrontendPath+'resources\BlockedGames.dat') > 0);
 
-        FormParentalLockManager.ShowModal;
-        FreeAndNil(FormParentalLockManager);
+        FormParentalLockEditor.ShowModal;
+        FreeAndNil(FormParentalLockEditor);
       end;
     True:
       begin
-        GenerateMessage(GetLanguageText('Messages', 'ParentalLockActivatedTitle', 'Parental Lock Activated'),
-                        GetLanguageText('Messages', 'ParentalLockActivatedMsg', 'Access to parental lock manager denied! To add/delete games from the locked games list, the parental lock must be deactivated.'), 2);
+        GetMessagesLng('Messages', 'ParentalLockActivatedTitle', 'Parental Lock Activated',
+                       'Messages', 'ParentalLockActivatedMsg', 'Access to parental lock manager denied! To add/delete games from the locked games list, the parental lock must be deactivated.');
+        GenerateMessage(MessageText[0], MessageText[1], 2);
       end;
   end;
 end;
 
-procedure TFormMain.PopupRealIconsClick(Sender: TObject);
+procedure TFormMain.PopupGamesIconsClick(Sender: TObject);
 begin
-  MenuRealIcons.Click;
+  MenuGamesIcons.Click;
 end;
 
 procedure TFormMain.PopupPlayRecordedGameClick(Sender: TObject);
@@ -19383,6 +17156,9 @@ var
   Counter: Integer;
   ROMsString: String;
 begin
+  if EmulatorType[ButtonExecutablesMode.Tag] = 2 then
+     Exit;
+     
   ROMsString:= '';
   for Counter:=0 to ROMsFolders.Count-1 do
       ROMsString:= ROMsString+ROMsFolders[Counter]+#13#10;
@@ -19401,17 +17177,14 @@ begin
       begin
         if ActiveUserProfileDescription = '' then
            begin
+             GetMessagesLng('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode',
+                            'Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.');
              case FileExists(FrontendPath+'UserProfiles.ini') of
-               False:
-                 begin
-                    GenerateMessage(GetLanguageText('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode'),
-                                    GetLanguageText('Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.'), 2);
-                 end;
+               False: GenerateMessage(MessageText[0], MessageText[1], 2);
                True:
                  begin
                    if GetFileSize(FrontendPath+'UserProfiles.ini') = 0 then
-                      GenerateMessage(GetLanguageText('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode'),
-                                      GetLanguageText('Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.'), 2)
+                      GenerateMessage(MessageText[0], MessageText[1], 2)
                    else
                       Profiles:= True;
                  end;
@@ -19448,8 +17221,9 @@ begin
                                MenuUserProfile.Checked:= False;
                                FreeAndNil(FormUserProfileUserLogin);
                                StatusBarUserProfile.Visible:= MenuUserProfile.Checked;
-                               GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                               Format(GetLanguageText('Messages', 'UserProfileReadOptionsErrorMsg', 'Could not read profile options! Profile "%s" not activated!'), [ActiveUserProfileDescription]), 2);
+                               GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                              'Messages', 'UserProfileReadOptionsErrorMsg', 'Could not read profile options! Profile "%s" not activated!');
+                               GenerateMessage(MessageText[0], Format(MessageText[1], [ActiveUserProfileDescription]), 2);
                                Exit;
                              end;
                            True:
@@ -19475,8 +17249,9 @@ begin
                    ActiveUserProfileDescription:= '';
                    MenuUserProfile.Checked:= False;
                    MenuUserProfile.Tag:= 0;
-                   if GenerateMessage(GetLanguageText('Messages', 'NoUserProfileTitle', 'No User Profiles'),
-                                      GetLanguageText('Messages', 'NoUserProfileMsg', 'There are no profiles to activate! Do you want to create a profile now ?'), 1) = mrYes then
+                   GetMessagesLng('Messages', 'NoUserProfileTitle', 'No User Profiles',
+                                  'Messages', 'NoUserProfileMsg', 'There are no profiles to activate! Do you want to create a profile now ?');
+                   if GenerateMessage(MessageText[0], MessageText[1], 1) = mrYes then
                       begin
                         if not Assigned(FormUserProfileEditor) then
                            FormUserProfileEditor:= TFormUserProfileEditor.Create(Self);
@@ -19497,8 +17272,9 @@ begin
                 begin
                   MenuUserProfile.Checked:= False;
                   FreeAndNil(FormUserProfileUserLogin);
-                  GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                  Format(GetLanguageText('Messages', 'UserProfileSetOptionsErrorMsg', 'Could not set profile options, please verify! Profile "%s" not activated.'), [ActiveUserProfileDescription]), 2);
+                  GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                 'Messages', 'UserProfileSetOptionsErrorMsg', 'Could not set profile options, please verify! Profile "%s" not activated.');
+                  GenerateMessage(MessageText[0], Format(MessageText[1], [ActiveUserProfileDescription]), 2);
                   ActiveUserProfileDescription:= '';
                   StatusBarUserProfile.Visible:= MenuUserProfile.Checked;
                   Exit;
@@ -19521,7 +17297,7 @@ begin
           GetProfiles(UserProfile.Items);
           UserProfile.Items.EndUpdate;
           UserProfile.ItemIndex:= UserProfile.Items.IndexOf(ActiveUserProfileDescription);
-          LabelUserProfileLogin.Caption:= GetLanguageText('Login Logout', 'LabelUserProfileLogout', 'User Profile Logout');
+          Caption:= GetLanguageText('Login Logout', 'LabelUserProfileLogout', 'User Profile Logout');
         end;
         FormUserProfileUserLogin.ShowModal;
         case MenuUserProfile.Tag of
@@ -19529,8 +17305,9 @@ begin
             begin
               FreeAndNil(FormUserProfileUserLogin);
               ResetUserProfileOptions;
-              GenerateMessage(GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                              GetLanguageText('Messages', 'UserProfileDeactivated', 'User Profile is deactivated!'), 2);
+              GetMessagesLng('Messages', 'CompleteOperationTitle', 'Operation Complete',
+                             'Messages', 'UserProfileDeactivated', 'User Profile is deactivated!');
+              GenerateMessage(MessageText[0], MessageText[1], 2);
               ActiveUserProfileDescription:= '';
               StatusBarUserProfile.Visible:= MenuUserProfile.Checked;
               ToolbarStatusBar.Repaint;
@@ -19570,7 +17347,7 @@ begin
         ToolbarsPanel.Visible:= False;
         ToolbarStatusBar.Visible:= False;
 
-        SetWindowLong(FormMain.Handle, GWL_STYLE,GetWindowLong(FormMain.Handle, GWL_STYLE) and not WS_CAPTION);
+        SetWindowLong(FormMain.Handle, GWL_STYLE, GetWindowLong(FormMain.Handle, GWL_STYLE) and not WS_CAPTION);
         SetWindowPos(FormMain.Handle, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN),
                      GetSystemMetrics(SM_CYSCREEN), SWP_SHOWWINDOW or SWP_NOACTIVATE);
         SetForegroundWindow(FormMain.Handle);
@@ -19586,7 +17363,7 @@ begin
         LockWindowUpdate(FormMain.Handle);
         FormMain.WindowState:= wsNormal;
 
-        { Make the form normal }
+        // Make the form normal
         MoveWindow(FormMain.Handle, FormMainLeft, FormMainTop, FormMainWidth, FormMainHeight, True);
         LockWindowUpdate(0);
 
@@ -19622,7 +17399,7 @@ begin
         if PictureName <> 'No Change' then
            begin
              Picture.Hint:= PictureName;
-             Picture.Refresh;
+             Picture.Bitmap.Changed;
            end;
         UpdateLabelPictures;
       end;
@@ -19634,6 +17411,7 @@ begin
 
         PanelPictures.Visible:= False;
         Splitter.Visible:= False;
+        FreeMemoryZipContents;
       end;
   end;
 end;
@@ -19652,14 +17430,18 @@ begin
   case FileExists(FrontendPath+'UserProfiles.ini') of
     False:
       begin
-         GenerateMessage(GetLanguageText('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode'),
-                         GetLanguageText('Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.'), 2);
+        GetMessagesLng('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode',
+                       'Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.');
+        GenerateMessage(MessageText[0], MessageText[1], 2);
       end;
     True:
       begin
         if GetFileSize(FrontendPath+'UserProfiles.ini') = 0 then
-           GenerateMessage(GetLanguageText('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode'),
-           GetLanguageText('Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.'), 2)
+           begin
+             GetMessagesLng('Messages', 'UserProfileWelcomeTitle', 'Welcome To User Profile Mode',
+                            'Messages', 'UserProfileWelcomeMsg', 'Please, create a new profile.');
+             GenerateMessage(MessageText[0], MessageText[1], 2);
+           end
         else
            Profiles:= True;
       end;
@@ -19669,8 +17451,9 @@ begin
      begin
        if not FileExists(FrontendPath+'resources\profiles\'+ActiveUserProfileDescription+'.dat') then
           begin
-            GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                            Format(GetLanguageText('Messages', 'UserProfileFileNotFoundMsg', 'File "%s.dat" not found! Please, set profile options again.'), [ActiveUserProfileDescription]), 2);
+            GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                           'Messages', 'UserProfileFileNotFoundMsg', 'File "%s.dat" not found! Please, set profile options again.');
+            GenerateMessage(MessageText[0], Format(MessageText[1], [ActiveUserProfileDescription]), 2);
           end;
        // this will open then current user profile for editing, after verifying password
        if not Assigned(FormUserProfileUserLogin) then
@@ -19711,15 +17494,6 @@ begin
         FormUserProfileEditor.ShowModal;
         FreeAndNil(FormUserProfileEditor);
      end;
-end;
-
-procedure TFormMain.MenuLanguageClick(Sender: TObject);
-begin
-  if not Assigned(FormLanguage) then
-     FormLanguage:= TFormLanguage.Create(Self);
-  UpdateGeneralAppearance(FormLanguage);
-  FormLanguage.ShowModal;
-  FreeAndNil(FormLanguage);
 end;
 
 procedure TFormMain.ButtonShowAllGamesClick(Sender: TObject);
@@ -19764,40 +17538,6 @@ begin
   MenuUseExecutable5.Click;
 end;
 
-procedure TFormMain.MenuCreateNewGamesListClick(Sender: TObject);
-var
-  Loop: Integer;
-  ExeType: String[5];
-begin
-  FormStatus.Show;
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.LabelMessage.Caption:= GetLanguageText('Status Messages', 'DetectEmulatorVersion',
-                                                    'Detecting emulator version. Please, wait a moment...');
-  FormStatus.LabelMessage.Refresh;
-
-  ExeType:= ExeStrings[GetExeType(EmulatorExecutable[StrToInt(DefaultDatabaseBuilderExecutable)])];
-
-  if not GetEmulatorVersion(StrToInt(DefaultDatabaseBuilderExecutable), ExeType) then
-     begin
-       GenerateMessage(GetLanguageText('Messages', 'InvalidEmulatorFileFormatTitle', 'Invalid Executable File'),
-                       Format(GetLanguageText('Messages', 'InvalidEmulatorFileFormatMsg', 'Executable %d is not valid!')+#13+
-                              GetLanguageText('Messages', 'SelectValidEmulatorFileMsg', 'Please, select a valid executable (MAME and DOS MAME only).'), [1]), 2);
-       Exit;
-     end;
-
-  CancelCurrentOperation:= False;
-  FormStatus.KeyPreview:= True;
-
-  ShowingPicture:= True;
-
-  LoadFolders(DefaultDatabaseBuilderExecutable);
-  CreateGamesList(DefaultDatabaseBuilderExecutable, False);
-
-  FormStatus.LabelProgress.Caption:= '';
-  FormStatus.Close;
-  FormStatus.KeyPreview:= False;
-end;
-
 procedure TFormMain.MenuVisitXArcadeHomepageClick(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', 'http://www.x-arcade.com', nil, nil, SW_SHOWNORMAL);
@@ -19815,30 +17555,10 @@ end;
 
 procedure TFormMain.StatusBarFavoriteUserClick(Sender: TObject);
 begin
-  if MenuShowHideFavoriteUsersManager.Enabled then
+  if MenuShowHideFavoriteUsersManager.Visible then
      MenuShowHideFavoriteUsersManager.Click;
 end;
 
-
-procedure TFormMain.ButtonModeViewBigIconsClick(Sender: TObject);
-begin
-  MenuModeViewBigIcons.Click;
-end;
-
-procedure TFormMain.ButtonModeViewSmallIconsClick(Sender: TObject);
-begin
-  MenuModeViewSmallIcons.Click;
-end;
-
-procedure TFormMain.ButtonModeViewListClick(Sender: TObject);
-begin
-  MenuModeViewList.Click;
-end;
-
-procedure TFormMain.ButtonModeViewDetailsClick(Sender: TObject);
-begin
-  MenuModeViewDetails.Click;
-end;
 
 procedure TFormMain.PopupAutomaticGameInformationClick(Sender: TObject);
 begin
@@ -19860,7 +17580,7 @@ begin
     Item.ImageIndex:= eImageIndex;
     Item.Caption:= eDescription;
 
-    if ButtonModeView.Tag = 3 then
+    if MenuModeViewDetails.Tag = 3 then
        begin
          Item.SubItems.Add(eYear);
          Item.SubItems.Add(eManufacturer);
@@ -19880,6 +17600,8 @@ begin
          Item.SubItems.Add(eCategory);
          Item.SubItems.Add(eVersionAdded);
          Item.SubItems.Add(eDriver);
+         Item.SubItems.Add(eGameTimesPlayed);
+         Item.SubItems.Add(eGameTotalPlayTime);
        end;
   end;
 end;
@@ -19935,9 +17657,7 @@ begin
          // yes - found one
        end
     else
-       begin
-         Break;
-       end;
+       Break;
   until (False);
 end;
 
@@ -19947,7 +17667,7 @@ begin
   if Item.Index > Length(GamesList) then
      List.Canvas.Font.Style:= List.Canvas.Font.Style - [fsStrikeOut]
   else
-  if (GamesList[Item.Index].eDriverStatus = 'Preliminary') and (FormPreferences.ShowPreliminaryGamesDisabled.Checked) then
+  if (GamesList[Item.Index].eDriverStatus = aStatus[1]) and (FormPreferences.ShowPreliminaryGamesDisabled.Checked) then
      begin
        List.Canvas.Font.Style:= List.Canvas.Font.Style + [fsStrikeOut];
        List.Canvas.Font.Color:= clGrayText;
@@ -20026,37 +17746,32 @@ begin
   SetGameType(TMenuItem(Sender).Tag);
 end;
 
-procedure TFormMain.PopupCustomGamesClick(Sender: TObject);
-begin
-  SetGameType(TMenuItem(Sender).Tag);
-end;
-
 procedure TFormMain.MenuCheckMissingIconsClick(Sender: TObject);
 var
   Loop: Integer;
-  Folder, IconName, VerifyGameMsg: String;
+  Folder, IconName: String;
   CheckCloneGames, SearchIcon, IsCloneGame, UseZIPFile: Boolean;
   NoIconsList: THashedStringList;
   MissingGamesCount: Integer;
 begin
-  if GenerateMessage(GetLanguageText('Messages', 'SearchCloneIconsTitle', 'Search Clone Icons'),
-                     GetLanguageText('Messages', 'SearchCloneIconsMsg', 'Search missing icons for clone games ?'), 1) = mrYes then
+  GetMessagesLng('Messages', 'SearchCloneIconsTitle', 'Search Clone Icons',
+                 'Messages', 'SearchCloneIconsMsg', 'Search missing icons for clone games ?');
+  if GenerateMessage(MessageText[0], MessageText[1], 1) = mrYes then
      CheckCloneGames:= True
   else
      CheckCloneGames:= False;
 
   Screen.Cursor:= crHourGlass;
-  GetMAMEExtendedPaths;
-  Folder:= iconDir+'\';
+  Folder:= GetZipFolderFull(7);
   MissingGamesCount:= 0;
-  UseZIPFile:= FileExists(Folder+'icons.zip');
+  UseZIPFile:= FileExists(Folder+FormPreferences.ZipIcons.Text);
 
   if UseZIPFile then
      begin
        ListROMsName:= THashedStringList.Create;
        ListROMsSize:= THashedStringList.Create;
        ListROMsCRC:=  THashedStringList.Create;
-       GetContents(Folder+'icons.zip', True, False);
+       UseZipFile:= GetContents(Folder+FormPreferences.ZipIcons.Text, True, False);
      end;
 
   NoIconsList:= THashedStringList.Create;
@@ -20074,7 +17789,7 @@ begin
          IsCloneGame:= False;
        end;
 
-    if (SearchIcon) and  (GamesList[Loop].eROMIdentification in [0..5, 12..13, 16]) then
+    if SearchIcon then
        begin
          IconName:= GamesList[Loop].eName;
          if not FileExists(Folder+IconName+'.ico') then
@@ -20138,17 +17853,14 @@ begin
        end;
   end;
 
-  if UseZIPFile then
-     begin
-       FreeAndNil(ListROMsName);
-       FreeAndNil(ListROMsSize);
-       FreeAndNil(ListROMsCRC);
-     end;
+  FreeAndNil(ListROMsName);
+  FreeAndNil(ListROMsSize);
+  FreeAndNil(ListROMsCRC);
 
   Screen.Cursor:= crDefault;
   if NoIconsList.Count > 0 then
      begin
-       NoIconsList.Insert(0, '<p align="center"><font face="Tahoma" color="#FF0000" size="3"><b>Missing Real Icons</b></font></p>');
+       NoIconsList.Insert(0, '<p align="center"><font face="Tahoma" color="#FF0000" size="3"><b>Missing Games Icons</b></font></p>');
        NoIconsList.Insert(1, '<table border="1" cellspacing="0" width="100%">');
        NoIconsList.Insert(2, '<tr>');
        NoIconsList.Insert(3, '<td nowrap BGCOLOR="#D4D0C8"><B>Description [Game Name]</B></td>');
@@ -20169,11 +17881,12 @@ procedure TFormMain.MenuCheckUnneededIconsClick(Sender: TObject);
 var
   UnneededIconsList, GamesListDAT: THashedStringList;
   Loop, FileIndex, UnnededIconsCount: Integer;
-  Folder, VerifyFileMsg: String;
+  Folder: String;
+  UseZipFile: Boolean;
 begin
-  GetMAMEExtendedPaths;
-  Folder:= iconDir+'\';
-  case FileExists(Folder+'icons.zip') of
+  Folder:= GetZipFolderFull(7);
+  UseZipFile:= FileExists(Folder+FormPreferences.ZipIcons.Text);
+  case UseZipFile of
     True:
       begin
         Screen.Cursor:= crHourGlass;
@@ -20196,26 +17909,29 @@ begin
         ListROMsName:= THashedStringList.Create;
         ListROMsSize:= THashedStringList.Create;
         ListROMsCRC:=  THashedStringList.Create;
-        GetContents(Folder+'icons.zip', True, False);
+        UseZipFile:= GetContents(Folder+FormPreferences.ZipIcons.Text, True, False);
         UnneededIconsList.BeginUpdate;
-        for Loop:=0 to ListROMsName.Count -1 do
-        begin
-          FileIndex:= GamesListDAT.IndexOf(LowerCase(ListROMsName[Loop]));
-          if FileIndex = -1 then
+        if UseZipFile then
+           begin
+             for Loop:=0 to ListROMsName.Count -1 do
              begin
-               // file not found in games list, will add to the unneeded files list
-               Inc(UnnededIconsCount);
-               UnneededIconsList.Add('<tr>');
-               UnneededIconsList.Add('<td nowrap>'+ListROMsName[Loop]+'</td>');
-               UnneededIconsList.Add('<td nowrap>'+Folder+ListROMsName[Loop]+'</td>');
-               UnneededIconsList.Add('</tr>');
+               FileIndex:= GamesListDAT.IndexOf(LowerCase(ListROMsName[Loop]));
+               if FileIndex = -1 then
+                  begin
+                    // file not found in games list, will add to the unneeded files list
+                    Inc(UnnededIconsCount);
+                    UnneededIconsList.Add('<tr>');
+                    UnneededIconsList.Add('<td nowrap>'+ListROMsName[Loop]+'</td>');
+                    UnneededIconsList.Add('<td nowrap>'+Folder+ListROMsName[Loop]+'</td>');
+                    UnneededIconsList.Add('</tr>');
+                  end;
              end;
-        end;
+           end;
         UnneededIconsList.EndUpdate;
         Screen.Cursor:= crDefault;
         if UnneededIconsList.Count > 0 then
            begin
-             UnneededIconsList.Insert(0, '<p align="center"><font face="Tahoma" color="#FF0000" size="3"><b>Unneeded Real Icon Files</b></font></p>');
+             UnneededIconsList.Insert(0, '<p align="center"><font face="Tahoma" color="#FF0000" size="3"><b>Unneeded Games Icon Files</b></font></p>');
              UnneededIconsList.Insert(1, '<table border="1" cellspacing="0" width="100%">');
              UnneededIconsList.Insert(2, '<tr>');
              UnneededIconsList.Insert(3, '<td nowrap BGCOLOR="#D4D0C8"><B>File Name</B></td>');
@@ -20229,15 +17945,16 @@ begin
                 UnneededIconsList.SaveToFile(GamesListSaveDialog.Filename);
 
              FreeAndNil(UnneededIconsList);
-             FreeAndNil(ListROMsName);
-             FreeAndNil(ListROMsSize);
-             FreeAndNil(ListROMsCRC);
            end;
+        FreeAndNil(ListROMsName);
+        FreeAndNil(ListROMsSize);
+        FreeAndNil(ListROMsCRC);
       end;
     False:
       begin
-        GenerateMessage(GetLanguageText('Messages', 'FileNotFoundTitle', 'File Not Found'),
-                        GetLanguageText('Messages', 'NoIconsZipFileFound', 'File "icons.zip" not found! Please, verify the "Icons" path in "MAME Extended Options" screen and try again...'), 2);
+        GetMessagesLng('Messages', 'FileNotFoundTitle', 'File Not Found',
+                       'Messages', 'NoIconsZipFileFound', 'File "icons.zip" not found! Please, verify the "Icons" path in "MAME Extended Options" screen and try again...');
+        GenerateMessage(MessageText[0], MessageText[1], 2);
       end;
   end;
 end;
@@ -20255,12 +17972,10 @@ end;
 
 procedure TFormMain.MenuDeleteCustomCommandLineClick(Sender: TObject);
 begin
-  if GenerateMessage(GetLanguageText('Messages', 'CustomCommandLineDeleteTitle', 'Delete Custom Command Line File'),
-                     Format(GetLanguageText('Messages', 'CustomCommandLineDeleteMsg', 'Delete custom command line file "%s". Are you sure ?'),
-                            [FrontendPath+'resources\customcmd\'+GamesList[SelectedGame].eName+'.ini']), 1) = mrYes then
-     begin
-       DeleteMAMECustomCommandLine(GamesList[SelectedGame].eName, 0);
-     end;
+  GetMessagesLng('Messages', 'CustomCommandLineDeleteTitle', 'Delete Custom Command Line File',
+                 'Messages', 'CustomCommandLineDeleteMsg', 'Delete custom command line file "%s". Are you sure ?');
+  if GenerateMessage(MessageText[0], Format(MessageText[1], [FrontendPath+'resources\customcmd\'+GamesList[SelectedGame].eName+'.ini']), 1) = mrYes then
+     DeleteMAMECustomCommandLine(GamesList[SelectedGame].eName, 0);
 end;
 
 procedure TFormMain.MenuSetDriverCustomCommandLineClick(Sender: TObject);
@@ -20282,12 +17997,10 @@ var
 begin
   GameName:= GamesList[SelectedGame].eDriver;
   Delete(GameName, Length(GameName)-1, 2);
-  if GenerateMessage(GetLanguageText('Messages', 'CustomCommandLineDeleteTitle', 'Delete Custom Command Line File'),
-                     Format(GetLanguageText('Messages', 'CustomCommandLineDeleteMsg', 'Delete custom command line file "%s". Are you sure ?'),
-                            [FrontendPath+'resources\drvcustomcmd\'+GameName+'.ini']), 1) = mrYes then
-     begin
-       DeleteMAMECustomCommandLine(GameName, 1);
-     end;
+  GetMessagesLng('Messages', 'CustomCommandLineDeleteTitle', 'Delete Custom Command Line File',
+                 'Messages', 'CustomCommandLineDeleteMsg', 'Delete custom command line file "%s". Are you sure ?');
+  if GenerateMessage(MessageText[0], Format(MessageText[1], [FrontendPath+'resources\drvcustomcmd\'+GameName+'.ini']), 1) = mrYes then
+     DeleteMAMECustomCommandLine(GameName, 1);
 end;
 
 procedure TFormMain.ButViewPreviousPictureClick(Sender: TObject);
@@ -20316,43 +18029,12 @@ var
     end;
   end;
 
-  function DetectZIPFile(const ZIPFileName: String; PictureType: ShortInt): Boolean;
+  function DetectZIPFile(const ZIPFileName: String): Boolean;
   begin
     PictureZIP:= '';
-    case PictureType of
-      0: // Title Snapshots
-        begin
-          Result:= True;
-          case FileExists(Folder+'title.zip') of
-            True: PictureZIP:= 'title.zip';
-            False:
-              begin
-                 Result:= FileExists(Folder+'titles.zip');
-                 if Result then
-                    PictureZIP:= 'titles.zip';
-              end;
-          end;
-        end;
-      1: // In-Game Snapshots
-        begin
-          Result:= True;
-          case FileExists(Folder+'ingame.zip') of
-            True: PictureZIP:= 'ingame.zip';
-            False:
-              begin
-                 Result:= FileExists(Folder+'snap.zip');
-                 if Result then
-                    PictureZIP:= 'snap.zip';
-              end;
-          end;
-        end;
-      2..6: // Marquees, Flyers, Cabinets, Control Panels, Control Panel Layouts
-        begin
-          Result:= FileExists(Folder+ZIPFileName);
-          if Result then
-             PictureZIP:= ZIPFileName;
-        end;
-    end;
+    Result:= FileExists(Folder+ZIPFileName);
+    if Result then
+       PictureZIP:= ZIPFileName;
   end;
 
   function SearchPictureFile(const GameName: String): Boolean;
@@ -20402,8 +18084,9 @@ var
          ListROMsName:= THashedStringList.Create;
          ListROMsSize:= THashedStringList.Create;
          ListROMsCRC:=  THashedStringList.Create;
-         GetContents(Folder+PictureZIP, True, False);
-         UseZIPFile:= ListROMsName.Count > 0;
+         UseZipFile:= GetContents(Folder+PictureZIP, True, False);
+         if UseZipFile then
+            UseZIPFile:= ListROMsName.Count > 0;
          if not UseZIPFile then
             begin
               FreeAndNil(ListROMsName);
@@ -20470,47 +18153,46 @@ begin
   IniFilePictures.BeginUpdate;
 
   // Get Title Snapshots files
-  Folder:= snaptitleDir+'\';
-  UseZIPFile:= DetectZIPFile('', 0);
+  Folder:= GetZipFolderFull(0);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipTitleSnapshots.Text);
   CreatePicturesList('Title Snapshot');
 
-  // Get In-Game Snapshots files
+  // Get In Game Snapshots files
   if Pos(':\', snapingameDir) = 0 then
-     SetCurrentDir(ExtractFilePath(GetCurrentEmulatorExecutable));
+     SetCurrentDir(ExtractFilePath(EmulatorExecutable[ButtonExecutablesMode.Tag]));
   Folder:= snapingameDir+'\';
-  UseZIPFile:= DetectZIPFile('', 1);
-  CreatePicturesList('In-Game Snapshot');
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipInGameSnapshots.Text);
+  CreatePicturesList('In Game Snapshot');
   SetCurrentDir(FrontendPath);
 
   // Get Marquees files
-  Folder:= marqueeDir+'\';
-  UseZIPFile:= DetectZIPFile('marquees.zip', 2);
+  Folder:= GetZipFolderFull(2);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipMarquees.Text);
   CreatePicturesList('Marquee');
 
   // Get Flyers files
-  Folder:= flyerDir+'\';
-  UseZIPFile:= DetectZIPFile('flyers.zip', 3);
+  Folder:= GetZipFolderFull(3);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipFlyers.Text);
   CreatePicturesList('Flyer');
 
   // Get Cabinets files
-  Folder:= cabinetDir+'\';
-  UseZIPFile:= DetectZIPFile('cabinets.zip', 4);
+  Folder:= GetZipFolderFull(4);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipCabinets.Text);
   CreatePicturesList('Cabinet');
 
   // Get Control Panels files
-  Folder:= controlpanelDir+'\';
-  UseZIPFile:= DetectZIPFile('cpanels.zip', 5);
+  Folder:= GetZipFolderFull(5);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipControlPanels.Text);
   CreatePicturesList('Control Panel');
 
   // Get Control Panel Layouts files
-  Folder:= controlpanellayoutDir+'\';
-  UseZIPFile:= DetectZIPFile('cplayouts.zip', 6);
+  Folder:= GetZipFolderFull(6);
+  UseZIPFile:= DetectZIPFile(FormPreferences.ZipControlPanelLayouts.Text);
   CreatePicturesList('Control Panel Layout');
 
   if IniFilePictures.Count > 0 then
      begin
-       if FileExists(FrontendPath+'resources\pictures.dat') then
-          DeleteFile(FrontendPath+'resources\pictures.dat');
+       DeleteFile(FrontendPath+'resources\pictures.dat');
        IniFilePictures.SaveToFile(FrontendPath+'resources\pictures.dat');
        FormPreferences.PicturesVirtualList.OnClick(Self);
      end;
@@ -20523,7 +18205,6 @@ var
   BlockedGames: THashedStringList;
   Loop, GameIndex: Integer;
   AddToList: Boolean;
-  ROMDataLine: String;
 begin
   if List.Selected = nil then
      Exit;
@@ -20540,8 +18221,9 @@ begin
              begin
                if DecryptData(BlockedGames[Loop]) = GamesList[SelectedGame].eName then
                   begin
-                    GenerateMessage(GetLanguageText('Messages', 'FavoriteGameNotAddedTitle', 'Game Not Added'),
-                                    GetLanguageText('Messages', 'FavoriteGameNotAddedMsg', 'This game is already on the list!'), 2);
+                    GetMessagesLng('Messages', 'FavoriteGameNotAddedTitle', 'Game Not Added',
+                                   'Messages', 'FavoriteGameNotAddedMsg', 'This game is already on the list!');
+                    GenerateMessage(MessageText[0], MessageText[1], 2);
                     AddToList:= False;
                     Break;
                   end;
@@ -20606,170 +18288,6 @@ begin
   DeleteCustomGameCategory(GamesList[SelectedGame].eName);
 end;
 
-procedure TFormMain.MenuUpdateGamesDescriptionsClick(Sender: TObject);
-var
-  CustomDescriptionList, GamesListDAT: THashedStringList;
-  Loop, Loop2: Integer;
-  DATFile, ROMDataLine, GameString, DescriptionString: String;
-  DATChanged, UpdateGames: Boolean;
-begin
-  if not FileExists(FrontendPath+'GameDescription.ini') then
-     Exit;
-
-  Screen.Cursor:= crHourGlass;
-  UpdateGames:= False;
-  CustomDescriptionList:= THashedStringList.Create;
-  CustomDescriptionList.LoadFromFile(FrontendPath+'GameDescription.ini');
-  UpdateGames:= False;
-  for Loop:=0 to 13 do
-  begin
-    DATChanged:= False;
-    case Loop of
-       0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-       1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-       2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-       3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-       4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-       5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-       6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-       7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-       8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-       9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-      10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-      11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-      12: DATFile:= FrontendPath+'resources\BIOS.dat';
-      13: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-    end;
-
-    if (FileExists(DATFile)) and (GetFileSize(DATFile) > 0) then
-       begin
-         GamesListDAT:= THashedStringList.Create;
-         GamesListDAT.LoadFromFile(DATFile);
-         for Loop2:=0 to GamesListDAT.Count -1 do
-         begin
-           GameString:= GamesListDAT[Loop2];
-           GetROMFields(GameString);
-           DescriptionString:= '';
-           DescriptionString:= CustomDescriptionList.Values[mName+'_custom'];
-           if (DescriptionString <> mDescription) and (DescriptionString <> '') then
-              begin
-                ROMDataLine:= PopulateROMDataLine;
-                GamesListDAT[Loop2]:= ROMDataLine;
-                DATChanged:= True;
-                UpdateGames:= True;
-              end;
-         end;
-       end;
-    if DATChanged then
-       begin
-         GamesListDAT.SaveToFile(DATFile);
-         UpdateGames:= True;
-       end;
-    FreeAndNil(GamesListDAT);
-  end;
-  FreeAndNil(CustomDescriptionList);
-  Screen.Cursor:= crDefault;
-  if UpdateGames then
-     SetGameType(ButtonGameType.Tag);
-end;
-
-procedure TFormMain.MenuUpdateGamesCategoriesClick(Sender: TObject);
-var
-  CustomCategoryList, DefaultCategoryList, GamesListDAT: THashedStringList;
-  TempList: TMemIniFile;
-  Loop, Loop2: Integer;
-  DATFile, ROMDataLine, GameString, CategoryString: String;
-  DATChanged, UpdateGames: Boolean;
-begin
-  if (not FileExists(FrontendPath+'GameCategory.ini')) and (not FileExists(FrontendPath+'catver.ini')) then
-     Exit;
-
-  Screen.Cursor:= crHourGlass;
-  UpdateGames:= False;
-  if FileExists(FrontendPath+'GameCategory.ini') then
-     begin
-       CustomCategoryList:= THashedStringList.Create;
-       CustomCategoryList.LoadFromFile(FrontendPath+'GameCategory.ini');
-     end;
-
-  if FileExists(FrontendPath+'catver.ini') then
-     begin
-       DefaultCategoryList:= THashedStringList.Create;
-       TempList:= TMemIniFile.Create(FrontendPath+'catver.ini');
-       TempList.ReadSectionValues('Category', DefaultCategoryList);
-       if DefaultCategoryList.Count = 0 then
-          FreeAndNil(DefaultCategoryList);
-       FreeAndNil(TempList);
-     end;
-
-  for Loop:=0 to 13 do
-  begin
-    DATChanged:= False;
-    case Loop of
-       0: DATFile:= FrontendPath+'resources\ClassicMR.dat';
-       1: DATFile:= FrontendPath+'resources\ClassicMV.dat';
-       2: DATFile:= FrontendPath+'resources\ClassicCR.dat';
-       3: DATFile:= FrontendPath+'resources\ClassicCV.dat';
-       4: DATFile:= FrontendPath+'resources\NeoGeoM.dat';
-       5: DATFile:= FrontendPath+'resources\NeoGeoC.dat';
-       6: DATFile:= FrontendPath+'resources\UnClassicMR.dat';
-       7: DATFile:= FrontendPath+'resources\UnClassicMV.dat';
-       8: DATFile:= FrontendPath+'resources\UnClassicCR.dat';
-       9: DATFile:= FrontendPath+'resources\UnClassicCV.dat';
-      10: DATFile:= FrontendPath+'resources\UnNeoGeoM.dat';
-      11: DATFile:= FrontendPath+'resources\UnNeoGeoC.dat';
-      12: DATFile:= FrontendPath+'resources\BIOS.dat';
-      13: DATFile:= FrontendPath+'resources\UnBIOS.dat';
-    end;
-
-    if (FileExists(DATFile)) and (GetFileSize(DATFile) > 0) then
-       begin
-         GamesListDAT:= THashedStringList.Create;
-         GamesListDAT.LoadFromFile(DATFile);
-         for Loop2:=0 to GamesListDAT.Count -1 do
-         begin
-           GameString:= GamesListDAT[Loop2];
-           GetROMFields(GameString);
-           CategoryString:= '';
-           case Assigned(CustomCategoryList) of
-             True:
-               begin
-                 CategoryString:= CustomCategoryList.Values[mName];
-                 if CategoryString = '' then
-                    begin
-                      if Assigned(DefaultCategoryList) then
-                         CategoryString:= DefaultCategoryList.Values[mName];
-                    end;
-               end;
-             False:
-               begin
-                 if Assigned(DefaultCategoryList) then
-                    CategoryString:= DefaultCategoryList.Values[mName];
-               end;
-           end;
-           if (CategoryString <> '') and (CategoryString <> mCategory) then
-              begin
-                mCategory:= CategoryString;
-                ROMDataLine:= PopulateROMDataLine;
-                GamesListDAT[Loop2]:= ROMDataLine;
-                DATChanged:= True;
-              end;
-         end;
-       end;
-    if DATChanged then
-       begin
-         GamesListDAT.SaveToFile(DATFile);
-         UpdateGames:= True;
-       end;
-    FreeAndNil(GamesListDAT);
-  end;
-  FreeAndNil(CustomCategoryList);
-  FreeAndNil(DefaultCategoryList);
-  Screen.Cursor:= crDefault;
-  if UpdateGames then
-     SetGameType(ButtonGameType.Tag);
-end;
-
 procedure TFormMain.ListColumnRightClick(Sender: TObject;
   Column: TListColumn; Point: TPoint);
 begin
@@ -20784,15 +18302,15 @@ begin
   case Operation of
     poExtract:
       begin
-        GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                        Format(GetLanguageText('Messages', 'ExtractFailedMsg',
-                               'An error has occurred while extracting from file "%s".'+#13#10+#13#10+'%s'), [FileName, ErrorMessage]), 2);
+        GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                       'Messages', 'ExtractFailedMsg', 'An error has occurred while extracting from file "%s".');
+        GenerateMessage(MessageText[0], Format(MessageText[1]+#13#10+#13#10+'%s', [FileName, ErrorMessage]), 2);
       end;
     poDelete:
       begin
-        GenerateMessage(GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                        Format(GetLanguageText('Messages', 'DeleteFailedMsg',
-                               'An error has occurred while deleting from file "%s".'+#13#10+#13#10+'%s'), [FileName, ErrorMessage]), 2);
+        GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                       'Messages', 'DeleteFailedMsg', 'An error has occurred while deleting from file "%s".');
+        GenerateMessage(MessageText[0], Format(MessageText[1]+#13#10+#13#10+'%s', [FileName, ErrorMessage]), 2);
       end;
   end;
 end;
@@ -20801,17 +18319,234 @@ procedure TFormMain.ZipForgeOverallProgress(Sender: TObject;
   Progress: Double; Operation: TZFProcessOperation;
   ProgressPhase: TZFProgressPhase; var Cancel: Boolean);
 begin
-  if Operation = poExtract then
+  {if Operation = poExtract then
      begin
        if FormStatus.Visible then
           begin
             FormStatus.LabelProgress.Caption:= IntToStr(Trunc(Progress))+'%';
+            FormStatus.LabelProgress.Refresh;
             Application.ProcessMessages;
           end;
-     end;
-  GetFileSize('teste');
+     end;}
 end;
 
+procedure TFormMain.PanelSpectrumClick(Sender: TObject);
+begin
+  if FormPreferences.PlaySoundClip.Checked then
+     begin
+       case PanelSpectrum.Tag of
+         0: begin
+              PanelSpectrum.Tag:= 1;
+              FSpectrum.Enabled:= True;
+              FSpectrum.Style:= ssSmooth;
+            end;
+         1: begin
+              PanelSpectrum.Tag:= 2;
+              if not FSpectrum.Enabled then
+                 FSpectrum.Enabled:= True;
+              FSpectrum.Style:= ssBlock;
+            end;
+         2: begin
+              PanelSpectrum.Tag:= 0;
+              FSpectrum.Enabled:= False;
+            end;
+       end;
+     end;
+end;
+
+procedure TFormMain.tmrMainTimer(Sender: TObject);
+begin
+  ShowSpectrum;
+  if FMUSIC_IsFinished(FSongs[0].Module) then
+     StopSound;
+end;
+
+procedure TFormMain.MenuUserManualClick(Sender: TObject);
+var
+  chmFile: String;
+begin
+  if LowerCase(FrontendLanguage) = 'english.lng' then
+     chmFile:= FrontendPath+'help\emuloader.chm'
+  else
+     begin
+       chmFile:= FrontendPath+'help\'+LowerCase(FrontendLanguage)+'.chm';
+       if not FileExists(chmFile) then
+          chmFile:= FrontendPath+'help\emuloader.chm';
+     end;
+  if FileExists(chmFile) then
+     ShellExecute(Handle, 'open', PChar(chmFile), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TFormMain.MenuOpenGameInternetPageClick(Sender: TObject);
+begin
+  if FormPreferences.InternetPage.Text <> '' then
+     ShellExecute(Handle, 'open', PChar(Format(FormPreferences.InternetPage.Text, [GamesList[SelectedGame].eName])), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TFormMain.MenuSelectParentGameClick(Sender: TObject);
+var
+  GameIndex: Integer;
+begin
+  if (GamesList[SelectedGame].eClone <> '') and (GamesList[SelectedGame].eClone <> GamesList[SelectedGame].eName) then
+     begin
+       GameIndex:= FindGameName(GamesList[SelectedGame].eClone);
+       if GameIndex = 0 then
+          begin
+            if GamesList[0].eName <> GamesList[SelectedGame].eClone then
+               Exit;
+          end;
+       SelectItem(GameIndex);
+     end;
+end;
+
+procedure TFormMain.MenuDeleteAudioFileNameClick(Sender: TObject);
+var
+  AudioFileName, AudioFolder, DeleteMessage: String;
+  SoundClipActive: Boolean;
+
+  procedure DeleteAudio(AudioFormat: String);
+  begin
+    DeleteFile(AudioFolder+'\'+AudioFileName+AudioFormat);
+    Application.ProcessMessages;
+  end;
+
+begin
+  if List.Selected = nil then
+     Exit;
+  if FormPreferences.SoundClipFolder.Text = '' then
+     Exit;
+
+  SoundClipActive:= FormPreferences.PlaySoundClip.Checked;
+
+  AudioFolder:= ExcludeTrailingPathDelimiter(FormPreferences.SoundClipFolder.Text);
+  SetCurrentDir(FrontendPath);
+  AudioFileName:= GamesList[SelectedGame].eName;
+
+  DeleteMessage:= Format(GetLanguageText('Messages', 'DeleteAudioFileMsg',
+                         'This will physically delete all audio files of game "%s" from disk! Are you sure ?'), [AudioFileName]);
+  if GenerateMessage(MenuDeleteAudioFileName.Caption, DeleteMessage, 1) = mrYes then
+     begin
+       if SoundClipActive then
+          FormPreferences.PlaySoundClip.Checked:= False;
+
+       DeleteAudio('.mp3');
+       DeleteAudio('.ogg');
+       DeleteAudio('.wav');
+       DeleteAudio('.s3m');
+       DeleteAudio('.xm');
+       DeleteAudio('.it');
+       DeleteAudio('.mid');
+       DeleteAudio('.rmi');
+       DeleteAudio('.sgt');
+       DeleteAudio('.mod');
+       DeleteAudio('.mp2');
+       DeleteAudio('.wma');
+       DeleteAudio('.asf');
+
+       if SoundClipActive then
+          FormPreferences.PlaySoundClip.Checked:= True;
+     end;
+  SetCurrentDir(FrontendPath);
+end;
+
+procedure TFormMain.MenuDeleteCFGFileClick(Sender: TObject);
+begin
+  CallDeleteFile(GamesList[SelectedGame].eName+'.cfg', 'cfg');
+end;
+
+procedure TFormMain.MenuDeleteNVRAMFileClick(Sender: TObject);
+begin
+  CallDeleteFile(GamesList[SelectedGame].eName+'.nv', 'nvram');
+end;
+
+procedure TFormMain.MenuDeleteHIFileClick(Sender: TObject);
+begin
+  CallDeleteFile(GamesList[SelectedGame].eName+'.hi', 'hiscore');
+end;
+
+procedure TFormMain.MenuDeleteINPFileClick(Sender: TObject);
+begin
+  CallDeleteFile(GamesList[SelectedGame].eName+'.inp', 'input');
+end;
+
+procedure TFormMain.MenuDeleteStateFileClick(Sender: TObject);
+begin
+  CallDeleteFile(GamesList[SelectedGame].eName+'.sta', 'state');
+end;
+
+procedure TFormMain.LoadSelectedLanguage(Sender: TObject);
+var
+  Loop: Integer;
+begin
+  if FileExists(FrontendPath+'resources\language\'+TMenuItem(Sender).Hint) then
+     begin
+       Screen.Cursor:= crHourGlass;
+       FormMain.ToolBarsPanel.Tag:= 1;
+       FormMain.FrontendLanguage:= TMenuItem(Sender).Hint;
+
+       FormMain.SetMainLanguage;
+       FormMain.SetPreferencesLanguage;
+       FormMain.UpdateLabelPictures;
+       for Loop:=1 to FormMain.List.Columns.Count-1 do
+       begin
+         if FormMain.List.Columns[Loop].Tag = 0 then
+            FormMain.List.Columns[Loop].Width:= 0;
+       end;
+       if Length(GamesList) > 0 then
+          SetGameType(ButtonGameType.Tag);
+       Screen.Cursor:= crDefault;
+     end;
+end;
+
+procedure TFormMain.GetLanguageFiles;
+var
+  Loop: Integer;
+  lngList: THashedStringList;
+  lngIni: TMemIniFile;
+
+  procedure AddlngMenuItem(Description, Hint: String);
+  var
+    Root, mItem: TMenuItem;
+  begin
+    Root:= MainMenu.Items[5].Find('Language');
+    mItem:= TMenuItem.Create(root);
+    if Description = '' then
+       Description:= 'Unknown';
+    mItem.Caption := Description;
+    mItem.Hint:= Hint;
+    mItem.AutoCheck:= True;
+    mItem.RadioItem:= True;
+    mItem.OnClick:= LoadSelectedLanguage;
+    if LowerCase(Hint) = 'english.lng' then
+       begin
+         mItem.Default:= True;
+         mItem.Checked:= True;
+       end;
+    Root.Add(mItem);
+  end;
+
+begin
+  lngList:= THashedStringList.Create;
+  AddlngMenuItem('English', 'english.lng');
+  GetFilesList(FrontendPath+'resources\language', '.lng', lngList, False, True);
+  if lngList.Count > 0 then
+     begin
+       for Loop:=0 to lngList.Count-1 do
+       begin
+         if LowerCase(lngList[Loop]) <> 'english.lng' then
+            begin
+              if FileExists(FrontendPath+'resources\language\'+lngList[Loop]) then
+                 begin
+                   lngIni:= TMemIniFile.Create(FrontendPath+'resources\language\'+lngList[Loop]);
+                   AddlngMenuItem(lngIni.ReadString('Version Information', 'Description', lngList[Loop]), lngList[Loop]);
+                   FreeAndNil(lngIni);
+                 end;
+            end;
+            Application.ProcessMessages;
+       end;
+     end;
+  FreeAndNil(lngList);
+end;
+
+
 end.
-
-

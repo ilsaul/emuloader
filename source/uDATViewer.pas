@@ -4,26 +4,18 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  ExtCtrls, StdCtrls, ShellApi, ComCtrls, RichEdit;
+  ExtCtrls, StdCtrls, ComCtrls, OleCtrls;
 
 type
   TFormDATViewer = class(TForm)
     LabelGameDescription: TLabel;
-    TopImage: TImage;
-    WordWrap: TCheckBox;
-    DATTextHolder: TRichEdit;
     ButtonClose: TButton;
-    ButtonDATFilesFont: TButton;
-    ButtonTextFilesDefaultFont: TButton;
-    BottomLine: TBevel;
+    GameIcon: TImage;
+    DATTextHolder: TRichEdit;
     procedure ButtonCloseClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure WordWrapClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ButtonDATFilesFontClick(Sender: TObject);
-    procedure ButtonTextFilesDefaultFontClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     procedure GotoTop;
     { Private declarations }
@@ -40,25 +32,19 @@ uses uMain;
 
 {$R *.DFM}
 
-procedure TFormDATViewer.ButtonCloseClick(Sender: TObject);
-begin
-  FormMain.UpdateTextViewerFont(0);
-  Close;
-end;
-
 procedure TFormDATViewer.GotoTop;
 var
- ScrollMessage:TWMVScroll;
+  ScrollMessage:TWMVScroll;
 begin
-  ScrollMessage.Msg:=WM_VScroll;
-  ScrollMessage.ScrollCode:=Sb_Top;
+  ScrollMessage.Msg:= WM_VScroll;
+  ScrollMessage.ScrollCode:= Sb_Top;
   //ScrollMessage.Pos:=0;
   DATTextHolder.Dispatch(ScrollMessage);
 end;
 
-procedure TFormDATViewer.FormActivate(Sender: TObject);
+procedure TFormDATViewer.ButtonCloseClick(Sender: TObject);
 begin
-  GotoTop;
+  Close;
 end;
 
 procedure TFormDATViewer.FormKeyPress(Sender: TObject; var Key: Char);
@@ -67,38 +53,22 @@ begin
      ButtonClose.OnClick(Self);
 end;
 
-procedure TFormDATViewer.WordWrapClick(Sender: TObject);
-begin
-  DATTextHolder.WordWrap:=WordWrap.Checked;
-end;
-
-procedure TFormDATViewer.FormCreate(Sender: TObject);
-begin
-  DATTextHolder.Color:= FormMain.MAMEInfoTextHolder.Color;
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\FileViewer.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\FileViewer.png');
-end;
-
 procedure TFormDATViewer.FormShow(Sender: TObject);
+var
+  Flags: OLEVariant;
+
 begin
   FormMain.UpdateGeneralAppearance(FormDATViewer);
   FormMain.SetDATViewerLanguage;
-  FormMain.ReadTextViewerFont(0);
+  case FormMain.MenuGamesIcons.Checked of
+    True : FormMain.SmallGamesIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
+    False: FormMain.BuiltInSmallListImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
+  end;
 end;
 
-procedure TFormDATViewer.ButtonDATFilesFontClick(Sender: TObject);
+procedure TFormDATViewer.FormActivate(Sender: TObject);
 begin
-  FormMain.FontDialog.Font:= DATTextHolder.Font;
-  if FormMain.FontDialog.Execute then
-     DATTextHolder.Font:= FormMain.FontDialog.Font;
-end;
-
-procedure TFormDATViewer.ButtonTextFilesDefaultFontClick(Sender: TObject);
-begin
-  DATTextHolder.Font.Color:= 0;
-  DATTextHolder.Font.Name:= 'Courier New';
-  DATTextHolder.Font.Size:= 8;
-  DATTextHolder.Font.Style:= [];
+  GotoTop;
 end;
 
 end.

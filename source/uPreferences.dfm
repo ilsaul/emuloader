@@ -78,61 +78,36 @@ object FormPreferences: TFormPreferences
     Images = PreferencesImageList
     ParentShowHint = False
     ShowHint = True
-    TabIndex = 0
     TabOrder = 0
     TabStop = False
     object TabSheetGeneral: TTabSheet
       Caption = 'General'
       object PageControlGeneralOptions: TPageControl
-        Left = 8
-        Top = 8
-        Width = 585
-        Height = 361
+        Left = 0
+        Top = 0
+        Width = 601
+        Height = 377
         ActivePage = TabSheetMAMEFolders
+        Align = alClient
         HotTrack = True
         Images = PreferencesImageList
         ParentShowHint = False
         ShowHint = True
-        TabIndex = 0
         TabOrder = 0
         object TabSheetMAMEFolders: TTabSheet
           Caption = 'Folders'
           ImageIndex = 9
-          object MAMEFoldersImage: TImage32Ex
+          object LabelFolderTitleSnapshots: TGroupBox
             Left = 8
             Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 0
-            Transparent = True
-          end
-          object ButtonUpdateEmuLoaderFolders: TButton
-            Left = 496
-            Top = 272
-            Width = 75
-            Height = 23
-            Hint = 'Update folders on memory'
-            Caption = 'Update'
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 1
-            OnClick = ButtonUpdateEmuLoaderFoldersClick
-          end
-          object LabelFolderTitleSnapshots: TGroupBox
-            Left = 64
-            Top = 16
-            Width = 249
+            Width = 281
             Height = 57
             Caption = 'Title Snapshots'
-            TabOrder = 2
+            TabOrder = 0
             object FolderTitleSnapshots: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -140,7 +115,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderTitleSnapshotsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -153,16 +128,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderMarquees: TGroupBox
-            Left = 64
-            Top = 80
-            Width = 249
+            Left = 8
+            Top = 72
+            Width = 281
             Height = 57
             Caption = 'Marquees'
-            TabOrder = 3
+            TabOrder = 1
             object FolderMarquees: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -170,7 +145,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderMarqueesButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -183,16 +158,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderFlyers: TGroupBox
-            Left = 64
-            Top = 144
-            Width = 249
+            Left = 8
+            Top = 136
+            Width = 281
             Height = 57
             Caption = 'Flyers'
-            TabOrder = 4
+            TabOrder = 2
             object FolderFlyers: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -200,7 +175,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderFlyersButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -213,16 +188,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderCabinets: TGroupBox
-            Left = 64
-            Top = 208
-            Width = 249
+            Left = 8
+            Top = 200
+            Width = 281
             Height = 57
             Caption = 'Cabinets'
-            TabOrder = 5
+            TabOrder = 3
             object FolderCabinets: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -230,7 +205,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderCabinetsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -243,16 +218,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderGamesFAQ: TGroupBox
-            Left = 320
-            Top = 208
-            Width = 249
+            Left = 304
+            Top = 200
+            Width = 281
             Height = 57
             Caption = 'Games F.A.Q.'
-            TabOrder = 6
+            TabOrder = 4
             object FolderGamesFAQ: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -260,7 +235,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderGamesFAQButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -273,16 +248,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderControlPanels: TGroupBox
-            Left = 320
-            Top = 16
-            Width = 249
+            Left = 304
+            Top = 8
+            Width = 281
             Height = 57
             Caption = 'Control Panels'
-            TabOrder = 7
+            TabOrder = 5
             object FolderControlPanels: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -290,7 +265,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderControlPanelsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -303,16 +278,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderControlPanelLayouts: TGroupBox
-            Left = 320
-            Top = 80
-            Width = 249
+            Left = 304
+            Top = 72
+            Width = 281
             Height = 57
             Caption = 'Control Panel Layouts'
-            TabOrder = 8
+            TabOrder = 6
             object FolderControlPanelLayouts: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -320,7 +295,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderControlPanelLayoutsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -333,16 +308,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelFolderIcons: TGroupBox
-            Left = 320
-            Top = 144
-            Width = 249
+            Left = 304
+            Top = 136
+            Width = 281
             Height = 57
-            Caption = 'Real Icons'
-            TabOrder = 9
+            Caption = 'Games Icons'
+            TabOrder = 7
             object FolderIcons: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               TabStop = False
               ParentShowHint = False
@@ -350,7 +325,7 @@ object FormPreferences: TFormPreferences
               TabOrder = 0
             end
             object FolderIconsButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -366,33 +341,9 @@ object FormPreferences: TFormPreferences
         object TabSheetMiscellaneous: TTabSheet
           Caption = 'Miscellaneous'
           ImageIndex = 5
-          object AverageFPS: TCheckBox
-            Left = 64
-            Top = 16
-            Width = 249
-            Height = 17
-            Hint = 
-              'Show the average frames per second of the last executed game (it' +
-              ' also shows the loading process)'
-            Caption = 'Show Average FPS On MAME Exit'
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-          end
-          object ShowStatistics: TCheckBox
-            Left = 64
-            Top = 40
-            Width = 249
-            Height = 17
-            Hint = 'Shows the statistic after building/refreshing a games list'
-            Caption = 'Show Statistics'
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 1
-          end
           object MinimizeFrontend: TCheckBox
-            Left = 64
-            Top = 64
+            Left = 8
+            Top = 8
             Width = 249
             Height = 17
             Hint = 
@@ -403,17 +354,17 @@ object FormPreferences: TFormPreferences
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 2
+            TabOrder = 0
           end
           object LabelGameSize: TGroupBox
-            Left = 64
-            Top = 112
-            Width = 249
+            Left = 8
+            Top = 56
+            Width = 281
             Height = 97
             Caption = 'Game Size'
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 3
+            TabOrder = 1
             object ShowGameSizeBits: TCheckBox
               Left = 8
               Top = 24
@@ -454,16 +405,16 @@ object FormPreferences: TFormPreferences
             end
           end
           object LabelSplashLogo: TGroupBox
-            Left = 64
-            Top = 224
-            Width = 249
+            Left = 304
+            Top = 56
+            Width = 281
             Height = 57
             Caption = 'Splash Logo'
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 4
+            TabOrder = 2
             object SplashLogoButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -477,7 +428,7 @@ object FormPreferences: TFormPreferences
             object SplashLogo: TEdit
               Left = 8
               Top = 24
-              Width = 201
+              Width = 233
               Height = 21
               Hint = 'Select a logo to use on splash screen'
               ParentShowHint = False
@@ -486,22 +437,9 @@ object FormPreferences: TFormPreferences
               OnChange = SplashLogoChange
             end
           end
-          object MiscellaneousImage: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            Bitmap.OuterColor = -1
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 5
-            Transparent = True
-          end
           object ShowGameSize: TCheckBox
-            Left = 64
-            Top = 88
+            Left = 8
+            Top = 32
             Width = 249
             Height = 17
             Hint = 
@@ -512,17 +450,121 @@ object FormPreferences: TFormPreferences
             ParentShowHint = False
             ShowHint = True
             State = cbChecked
-            TabOrder = 6
+            TabOrder = 3
             OnClick = ShowGameSizeClick
+          end
+          object LabelAutomaticGameInformation: TGroupBox
+            Left = 8
+            Top = 160
+            Width = 281
+            Height = 129
+            Caption = 'Automatic Game Information'
+            TabOrder = 4
+            object LabelAutomaticGameInformation1: TLabel
+              Left = 8
+              Top = 27
+              Width = 6
+              Height = 13
+              Caption = '1'
+            end
+            object LabelAutomaticGameInformation2: TLabel
+              Left = 8
+              Top = 51
+              Width = 6
+              Height = 13
+              Caption = '2'
+            end
+            object LabelAutomaticGameInformation3: TLabel
+              Left = 8
+              Top = 75
+              Width = 6
+              Height = 13
+              Caption = '3'
+            end
+            object LabelAutomaticGameInformation4: TLabel
+              Left = 8
+              Top = 99
+              Width = 6
+              Height = 13
+              Caption = '4'
+            end
+            object AutomaticGameInformation1: TComboBox
+              Left = 24
+              Top = 24
+              Width = 249
+              Height = 21
+              Style = csDropDownList
+              ItemHeight = 13
+              ItemIndex = 1
+              TabOrder = 0
+              Text = 'Games Information'
+              Items.Strings = (
+                '(None)'
+                'Games Information'
+                'Games History'
+                'Games Driver Information'
+                'Games F.A.Q.')
+            end
+            object AutomaticGameInformation2: TComboBox
+              Left = 24
+              Top = 48
+              Width = 249
+              Height = 21
+              Style = csDropDownList
+              ItemHeight = 13
+              ItemIndex = 2
+              TabOrder = 1
+              Text = 'Games History'
+              Items.Strings = (
+                '(None)'
+                'Games Information'
+                'Games History'
+                'Games Driver Information'
+                'Games F.A.Q.')
+            end
+            object AutomaticGameInformation3: TComboBox
+              Left = 24
+              Top = 72
+              Width = 249
+              Height = 21
+              Style = csDropDownList
+              ItemHeight = 13
+              ItemIndex = 3
+              TabOrder = 2
+              Text = 'Games Driver Information'
+              Items.Strings = (
+                '(None)'
+                'Games Information'
+                'Games History'
+                'Games Driver Information'
+                'Games F.A.Q.')
+            end
+            object AutomaticGameInformation4: TComboBox
+              Left = 24
+              Top = 96
+              Width = 249
+              Height = 21
+              Style = csDropDownList
+              ItemHeight = 13
+              ItemIndex = 4
+              TabOrder = 3
+              Text = 'Games F.A.Q.'
+              Items.Strings = (
+                '(None)'
+                'Games Information'
+                'Games History'
+                'Games Driver Information'
+                'Games F.A.Q.')
+            end
           end
         end
         object TabSheetGames: TTabSheet
           Caption = 'Games'
           ImageIndex = 6
           object NewDescriptionFormat: TCheckBox
-            Left = 64
-            Top = 16
-            Width = 249
+            Left = 8
+            Top = 8
+            Width = 281
             Height = 17
             Hint = 'Show a different description for some games'
             Caption = 'New Description Format'
@@ -532,8 +574,8 @@ object FormPreferences: TFormPreferences
             OnClick = NewDescriptionFormatClick
           end
           object FillAllCloneColumns: TCheckBox
-            Left = 64
-            Top = 40
+            Left = 8
+            Top = 32
             Width = 249
             Height = 17
             Hint = 
@@ -546,8 +588,8 @@ object FormPreferences: TFormPreferences
             OnClick = FillAllCloneColumnsClick
           end
           object ShowPreliminaryGamesDisabled: TCheckBox
-            Left = 64
-            Top = 64
+            Left = 8
+            Top = 56
             Width = 249
             Height = 17
             Hint = 
@@ -562,39 +604,28 @@ object FormPreferences: TFormPreferences
             OnClick = ShowPreliminaryGamesDisabledClick
           end
           object LabelDefaultGameIconsFolder: TGroupBox
-            Left = 64
-            Top = 184
-            Width = 249
-            Height = 89
+            Left = 8
+            Top = 152
+            Width = 281
+            Height = 57
             Caption = 'Default Game Icons Folder'
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
-            object ButtonUpdateGameIconsFolder: TButton
-              Left = 162
-              Top = 56
-              Width = 75
-              Height = 23
-              Hint = 'Update icons on games list'
-              Caption = 'Update'
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 0
-              OnClick = ButtonUpdateGameIconsFolderClick
-            end
             object DefaultGameIconsFolder: TEdit
               Left = 8
               Top = 24
-              Width = 204
+              Width = 233
               Height = 21
               Hint = 'Select a folder where the default icons are'
               TabStop = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 1
+              TabOrder = 0
+              OnChange = DefaultGameIconsFolderChange
             end
             object DefaultGameIconsFolderButtonSelect: TButton
-              Left = 216
+              Left = 248
               Top = 24
               Width = 21
               Height = 21
@@ -602,25 +633,13 @@ object FormPreferences: TFormPreferences
               Caption = '...'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 1
               OnClick = DefaultGameIconsFolderButtonSelectClick
             end
           end
-          object GamesListImage: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 4
-            Transparent = True
-          end
           object UseCustomOptionsDefault: TCheckBox
-            Left = 64
-            Top = 88
+            Left = 8
+            Top = 80
             Width = 249
             Height = 17
             Hint = 
@@ -629,43 +648,89 @@ object FormPreferences: TFormPreferences
             Caption = 'Use Custom Options by Default'
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 5
+            TabOrder = 4
           end
           object UseCustomGameDescription: TCheckBox
-            Left = 64
-            Top = 112
+            Left = 8
+            Top = 104
             Width = 249
             Height = 17
             Hint = 'Use custom game descriptions when creating a new games list'
             Caption = 'Use Custom Game Description'
-            TabOrder = 6
+            TabOrder = 5
           end
           object UseCustomGameCategory: TCheckBox
-            Left = 64
-            Top = 136
+            Left = 8
+            Top = 128
             Width = 249
             Height = 17
             Hint = 'Use custom game categories when creating a new games list'
             Caption = 'Use Custom Game Category'
-            TabOrder = 7
+            TabOrder = 6
           end
-          object AuditCHDFiles: TCheckBox
-            Left = 64
-            Top = 160
-            Width = 249
-            Height = 17
-            Hint = 'Verify the MD5 checksum on .chd files when auditing a game'
-            Caption = 'Audit Hard Disk Images'
+          object GamesFilterBox: TGroupBox
+            Left = 304
+            Top = 0
+            Width = 281
+            Height = 105
+            Caption = 'Filter'
+            TabOrder = 7
+            object HidePreliminaryGames: TCheckBox
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 17
+              Hint = 'Do not load games with preliminary drivers on the games list'
+              Caption = 'Hide Preliminary Games'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object HideBios: TCheckBox
+              Left = 8
+              Top = 48
+              Width = 233
+              Height = 17
+              Hint = 'Do not load bios on the games list'
+              Caption = 'Hide Bios'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object ButtonUpdateGamesList: TButton
+              Left = 194
+              Top = 72
+              Width = 75
+              Height = 23
+              Hint = 'Update the games list'
+              Caption = 'Update'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              OnClick = ButtonUpdateGamesListClick
+            end
+          end
+          object InternetPage: TLabeledEdit
+            Left = 8
+            Top = 232
+            Width = 281
+            Height = 21
+            Hint = 
+              'Link for the page of the selected game (the mask "%s" is not req' +
+              'uired)'
+            EditLabel.Width = 67
+            EditLabel.Height = 13
+            EditLabel.Caption = 'Internet Page'
             TabOrder = 8
-            OnClick = AuditCHDFilesClick
+            Text = 'http://www.mame.dk/gameinfo/%s/'
           end
         end
         object TabSheetPictures: TTabSheet
           Caption = 'Pictures'
           ImageIndex = 7
           object NewPictureNameFormat: TCheckBox
-            Left = 64
-            Top = 40
+            Left = 8
+            Top = 32
             Width = 249
             Height = 17
             Hint = 
@@ -677,8 +742,8 @@ object FormPreferences: TFormPreferences
             TabOrder = 0
           end
           object ShowParentPictures: TCheckBox
-            Left = 64
-            Top = 16
+            Left = 8
+            Top = 8
             Width = 249
             Height = 17
             Hint = 'Show the master picture when the clone picture doesn'#39't exist'
@@ -690,54 +755,47 @@ object FormPreferences: TFormPreferences
             TabOrder = 1
             OnClick = ShowParentPicturesClick
           end
-          object PreviewPicturesImage: TImage32Ex
-            Left = 8
-            Top = 8
-            Width = 52
-            Height = 52
-            Bitmap.DrawMode = dmBlend
-            BitmapAlign = baTopLeft
-            Scale = 1
-            ScaleMode = smNormal
-            TabOrder = 2
-            Transparent = True
-          end
           object CyclePictureTypes: TCheckBox
-            Left = 64
-            Top = 64
+            Left = 8
+            Top = 56
             Width = 249
             Height = 17
             Hint = 'Cycle thru all picture types automatically when viewing pictures'
             Caption = 'Cycle Picture Types'
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 3
+            TabOrder = 2
             OnClick = CyclePictureTypesClick
           end
           object LabelPicturesVisualEffects: TGroupBox
-            Left = 64
-            Top = 88
-            Width = 249
-            Height = 169
+            Left = 8
+            Top = 80
+            Width = 281
+            Height = 193
             Caption = 'Visual Effects'
-            TabOrder = 4
-            object SmoothPictures: TCheckBox
+            TabOrder = 3
+            object LabelSmoothPictures: TLabel
               Left = 8
               Top = 72
               Width = 233
-              Height = 17
-              Hint = 'This gives a nice touch for preview pictures'
+              Height = 13
+              AutoSize = False
               Caption = 'Smooth Pictures'
-              Checked = True
-              ParentShowHint = False
-              ShowHint = True
-              State = cbChecked
-              TabOrder = 0
-              OnClick = SmoothPicturesClick
+              ShowAccelChar = False
+              Transparent = True
+            end
+            object LabelSmoothPicturesValue: TLabel
+              Left = 116
+              Top = 91
+              Width = 38
+              Height = 13
+              Caption = 'Lanczos'
+              ShowAccelChar = False
+              Transparent = True
             end
             object AspectRatio: TCheckBox
               Left = 8
-              Top = 96
+              Top = 120
               Width = 233
               Height = 17
               Hint = 'Show the pictures in it'#39's correct aspect when resizing'
@@ -746,12 +804,12 @@ object FormPreferences: TFormPreferences
               ParentShowHint = False
               ShowHint = True
               State = cbChecked
-              TabOrder = 1
+              TabOrder = 0
               OnClick = AspectRatioClick
             end
             object PicturesTransparency: TCheckBox
               Left = 8
-              Top = 120
+              Top = 144
               Width = 233
               Height = 17
               Hint = 
@@ -760,18 +818,18 @@ object FormPreferences: TFormPreferences
               Caption = 'Use Pictures Transparency'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 1
             end
             object PicturesVirtualList: TCheckBox
               Left = 8
-              Top = 144
+              Top = 168
               Width = 233
               Height = 17
               Hint = 'Enable/disable the virtual list of the game'#39's total pictures'
               Caption = 'Use Virtual List'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 3
+              TabOrder = 2
               OnClick = PicturesVirtualListClick
             end
             object StretchPicture: TCheckBox
@@ -786,7 +844,7 @@ object FormPreferences: TFormPreferences
               ParentShowHint = False
               ShowHint = True
               State = cbChecked
-              TabOrder = 4
+              TabOrder = 3
               OnClick = StretchPictureClick
             end
             object StretchLargerPictures: TCheckBox
@@ -800,8 +858,515 @@ object FormPreferences: TFormPreferences
               Caption = 'Stretch Larger Pictures Only'
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 5
+              TabOrder = 4
               OnClick = StretchLargerPicturesClick
+            end
+            object SmoothPictures: TGaugeBar
+              Tag = 14
+              Left = 8
+              Top = 88
+              Width = 105
+              Height = 20
+              Hint = 'This gives a nice touch for preview pictures'
+              Color = clWindow
+              Backgnd = bgPattern
+              ButtonSize = 12
+              Max = 2
+              ShowHandleGrip = True
+              Position = 2
+              OnChange = SmoothPicturesChange
+            end
+          end
+          object HideNavigationPanel: TCheckBox
+            Left = 304
+            Top = 8
+            Width = 249
+            Height = 17
+            Hint = 'Hide the bottom pictures navigation panel'
+            Caption = 'Hide Navigation Panel'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+            OnClick = HideNavigationPanelClick
+          end
+          object HidePictureHint: TCheckBox
+            Left = 304
+            Top = 32
+            Width = 249
+            Height = 17
+            Hint = 'Hide the hint of the picture'
+            Caption = 'Hide Picture Hint'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+            OnClick = HidePictureHintClick
+          end
+        end
+        object TabSheetSoundClips: TTabSheet
+          Caption = 'Sound Clips'
+          ImageIndex = 10
+          object LabelSoundClipVolumeValue: TLabel
+            Left = 484
+            Top = 107
+            Width = 18
+            Height = 13
+            Caption = '255'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelSoundClipVolume: TLabel
+            Left = 304
+            Top = 88
+            Width = 169
+            Height = 13
+            AutoSize = False
+            Caption = 'Volume'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object PlaySoundClip: TCheckBox
+            Left = 8
+            Top = 8
+            Width = 249
+            Height = 17
+            Hint = 'Play a sound clip when selecting a game'
+            Caption = 'Play Sound Clip'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            OnClick = PlaySoundClipClick
+          end
+          object LabelSoundClipSettings: TGroupBox
+            Left = 8
+            Top = 96
+            Width = 281
+            Height = 217
+            Caption = 'Settings'
+            TabOrder = 1
+            DesignSize = (
+              281
+              217)
+            object LabelOutputType: TLabel
+              Left = 8
+              Top = 24
+              Width = 61
+              Height = 13
+              Caption = 'Output Type'
+              ShowAccelChar = False
+            end
+            object LabelOutputDevice: TLabel
+              Left = 8
+              Top = 72
+              Width = 69
+              Height = 13
+              Caption = 'Output Device'
+              ShowAccelChar = False
+            end
+            object LabelMixerType: TLabel
+              Left = 8
+              Top = 120
+              Width = 53
+              Height = 13
+              Caption = 'Mixer Type'
+              ShowAccelChar = False
+            end
+            object LabelOutputRate: TLabel
+              Left = 8
+              Top = 168
+              Width = 60
+              Height = 13
+              Caption = 'Output Rate'
+              ShowAccelChar = False
+            end
+            object OutputType: TComboBox
+              Left = 8
+              Top = 40
+              Width = 265
+              Height = 21
+              Hint = 'Select the output type to be use'
+              Style = csDropDownList
+              Anchors = [akLeft, akTop, akRight]
+              ItemHeight = 13
+              ItemIndex = 1
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+              Text = 'DirectSound'
+              OnSelect = OutputTypeSelect
+              Items.Strings = (
+                'Window Multimedia WaveOut'
+                'DirectSound'
+                'A3D')
+            end
+            object OutputDevice: TComboBox
+              Left = 8
+              Top = 88
+              Width = 265
+              Height = 21
+              Hint = 'Select the audio device to be used'
+              Style = csDropDownList
+              Anchors = [akLeft, akTop, akRight]
+              ItemHeight = 0
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              OnSelect = OutputDeviceSelect
+            end
+            object MixerType: TComboBox
+              Left = 8
+              Top = 136
+              Width = 265
+              Height = 21
+              Hint = 'Select the mixer to be used'
+              Style = csDropDownList
+              Anchors = [akLeft, akTop, akRight]
+              ItemHeight = 13
+              ItemIndex = 4
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              Text = 'Auto-Detect Interpolating Mixer (High Quality)'
+              OnSelect = MixerTypeSelect
+              Items.Strings = (
+                'Auto-Detect (Low Quality)'
+                'Non-MMX Blendmode Mixer'
+                'MMX, Pentium Optimized Blendmode Mixer'
+                'MMX, PPro/P2/P3 Optimized Mixer'
+                'Auto-Detect Interpolating Mixer (High Quality)'
+                'Interpolating FPU Mixer'
+                'Interpolating Pentium Mixer'
+                'Interpolating PPro/P2/P3 Mixer')
+            end
+            object OutputRate: TComboBox
+              Left = 8
+              Top = 184
+              Width = 265
+              Height = 21
+              Hint = 'Select the samplerate to be used'
+              Style = csDropDownList
+              Anchors = [akLeft, akTop, akRight]
+              ItemHeight = 13
+              ItemIndex = 3
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 3
+              Text = '44100 Hz'
+              OnSelect = OutputRateSelect
+              Items.Strings = (
+                '8000 Hz'
+                '11025 Hz'
+                '22050 Hz'
+                '44100 Hz'
+                '48000 Hz')
+            end
+          end
+          object LoopSoundClip: TCheckBox
+            Left = 304
+            Top = 64
+            Width = 225
+            Height = 17
+            Hint = 'Play a sound clip over and over again, in an endless loop'
+            Caption = 'Loop'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object LabelSoundClipFolder: TGroupBox
+            Left = 8
+            Top = 32
+            Width = 281
+            Height = 57
+            Caption = 'Folder'
+            TabOrder = 3
+            object SoundClipFolder: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              Hint = 'Select a folder where sound clip files are'
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object SoundClipFolderSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a folder'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              OnClick = SoundClipFolderSelectClick
+            end
+          end
+          object ParentSoundClip: TCheckBox
+            Left = 304
+            Top = 40
+            Width = 225
+            Height = 17
+            Hint = 
+              'Play the sound clip of the master game, if clip of the clone gam' +
+              'e is not found'
+            Caption = 'Use Parent Sound Clip'
+            Checked = True
+            ParentShowHint = False
+            ShowHint = True
+            State = cbChecked
+            TabOrder = 4
+          end
+          object SoundClipVolume: TGaugeBar
+            Tag = 14
+            Left = 304
+            Top = 104
+            Width = 177
+            Height = 20
+            Color = clWindow
+            Backgnd = bgPattern
+            ButtonSize = 12
+            LargeChange = 10
+            Max = 255
+            ShowHandleGrip = True
+            Position = 255
+            OnChange = SoundClipVolumeChange
+          end
+        end
+        object TabSheetZipFiles: TTabSheet
+          Caption = 'Zip Files'
+          ImageIndex = 11
+          object LabelZipTitleSnapshots: TGroupBox
+            Left = 8
+            Top = 8
+            Width = 281
+            Height = 57
+            Caption = 'Title Snapshots'
+            TabOrder = 0
+            object ZipTitleSnapshots: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipTitleSnapshotsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              OnClick = ZipTitleSnapshotsButtonSelectClick
+            end
+          end
+          object LabelZipControlPanels: TGroupBox
+            Left = 304
+            Top = 72
+            Width = 281
+            Height = 57
+            Caption = 'Control Panels'
+            TabOrder = 1
+            object ZipControlPanels: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipControlPanelsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipMarquees: TGroupBox
+            Left = 8
+            Top = 136
+            Width = 281
+            Height = 57
+            Caption = 'Marquees'
+            TabOrder = 2
+            object ZipMarquees: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipMarqueesButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipControlPanelLayouts: TGroupBox
+            Left = 304
+            Top = 136
+            Width = 281
+            Height = 57
+            Caption = 'Control Panel Layouts'
+            TabOrder = 3
+            object ZipControlPanelLayouts: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipControlPanelLayoutsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipFlyers: TGroupBox
+            Left = 8
+            Top = 200
+            Width = 281
+            Height = 57
+            Caption = 'Flyers'
+            TabOrder = 4
+            object ZipFlyers: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipFlyersButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipIcons: TGroupBox
+            Left = 304
+            Top = 200
+            Width = 281
+            Height = 57
+            Caption = 'Games Icons'
+            TabOrder = 5
+            object ZipIcons: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipIconsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipCabinets: TGroupBox
+            Left = 304
+            Top = 8
+            Width = 281
+            Height = 57
+            Caption = 'Cabinets'
+            TabOrder = 6
+            object ZipCabinets: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipCabinetsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+          end
+          object LabelZipInGameSnapshots: TGroupBox
+            Left = 8
+            Top = 72
+            Width = 281
+            Height = 57
+            Caption = 'In Game Snapshots'
+            TabOrder = 7
+            object ZipInGameSnapshotsButtonSelect: TButton
+              Left = 248
+              Top = 24
+              Width = 21
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = '...'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object ZipInGameSnapshots: TEdit
+              Left = 8
+              Top = 24
+              Width = 233
+              Height = 21
+              TabStop = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
             end
           end
         end
@@ -811,8 +1376,8 @@ object FormPreferences: TFormPreferences
       Caption = 'Appearance'
       ImageIndex = 1
       object LabelCustomColorsGamesList: TGroupBox
-        Left = 64
-        Top = 128
+        Left = 8
+        Top = 120
         Width = 185
         Height = 105
         Caption = 'Games'
@@ -863,8 +1428,8 @@ object FormPreferences: TFormPreferences
         end
       end
       object LabelPicturesColors: TGroupBox
-        Left = 264
-        Top = 16
+        Left = 208
+        Top = 8
         Width = 185
         Height = 329
         Caption = 'Pictures'
@@ -885,7 +1450,7 @@ object FormPreferences: TFormPreferences
           Width = 153
           Height = 13
           AutoSize = False
-          Caption = 'In-Game Snaphots'
+          Caption = 'In Game Snaphots'
           ShowAccelChar = False
           Transparent = True
         end
@@ -1015,8 +1580,8 @@ object FormPreferences: TFormPreferences
         end
       end
       object LabelCustomColorsGeneral: TGroupBox
-        Left = 64
-        Top = 16
+        Left = 8
+        Top = 8
         Width = 185
         Height = 105
         Caption = 'General'
@@ -1070,8 +1635,8 @@ object FormPreferences: TFormPreferences
         end
       end
       object LabelAutomaticGameInfo: TGroupBox
-        Left = 64
-        Top = 240
+        Left = 8
+        Top = 232
         Width = 185
         Height = 105
         Caption = 'Automatic Game Information'
@@ -1124,26 +1689,14 @@ object FormPreferences: TFormPreferences
           OnClick = ButtonAutomaticGameInfoDefaultColorFontClick
         end
       end
-      object AppearanceImage: TImage32Ex
-        Left = 8
-        Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 4
-        Transparent = True
-      end
     end
     object TabSheetMAME: TTabSheet
       Caption = 'M.A.M.E.'
       ImageIndex = 8
       object LabelCustomAspectRatioMAME: TGroupBox
-        Left = 64
-        Top = 16
-        Width = 249
+        Left = 8
+        Top = 8
+        Width = 281
         Height = 145
         Caption = 'Custom Aspect Ratio'
         TabOrder = 0
@@ -1157,7 +1710,7 @@ object FormPreferences: TFormPreferences
           ShowAccelChar = False
         end
         object LabelHorizontalAspectRatioValue: TLabel
-          Left = 114
+          Left = 116
           Top = 67
           Width = 16
           Height = 13
@@ -1175,7 +1728,7 @@ object FormPreferences: TFormPreferences
           ShowAccelChar = False
         end
         object LabelVerticalAspectRatioValue: TLabel
-          Left = 114
+          Left = 116
           Top = 115
           Width = 16
           Height = 13
@@ -1230,9 +1783,9 @@ object FormPreferences: TFormPreferences
         end
       end
       object LabelExtraParametersMAME: TGroupBox
-        Left = 320
-        Top = 16
-        Width = 249
+        Left = 304
+        Top = 8
+        Width = 281
         Height = 145
         Caption = 'Extra Command Line Parameters'
         TabOrder = 1
@@ -1272,7 +1825,7 @@ object FormPreferences: TFormPreferences
         object ExtraParametersMAME: TEdit
           Left = 8
           Top = 64
-          Width = 233
+          Width = 265
           Height = 21
           Hint = 'Specify an extra command line parameter for MAME executables'
           ParentShowHint = False
@@ -1282,25 +1835,13 @@ object FormPreferences: TFormPreferences
         object ExtraParametersDOSMAME: TEdit
           Left = 8
           Top = 112
-          Width = 233
+          Width = 265
           Height = 21
           Hint = 'Specify an extra command line parameter for DOS MAME executables'
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
         end
-      end
-      object MAMEExtraOptionsImage: TImage32Ex
-        Left = 8
-        Top = 8
-        Width = 52
-        Height = 52
-        Bitmap.DrawMode = dmBlend
-        BitmapAlign = baTopLeft
-        Scale = 1
-        ScaleMode = smNormal
-        TabOrder = 2
-        Transparent = True
       end
     end
     object TabSheetHotRod: TTabSheet
@@ -1448,7 +1989,7 @@ object FormPreferences: TFormPreferences
         Width = 580
         Height = 340
         BitmapAlign = baTopLeft
-        Scale = 1
+        Scale = 1.000000000000000000
         ScaleMode = smNormal
         TabOrder = 1
       end
@@ -1620,7 +2161,7 @@ object FormPreferences: TFormPreferences
         Width = 580
         Height = 340
         BitmapAlign = baTopLeft
-        Scale = 1
+        Scale = 1.000000000000000000
         ScaleMode = smNormal
         TabOrder = 1
       end
@@ -1804,7 +2345,7 @@ object FormPreferences: TFormPreferences
         Width = 580
         Height = 340
         BitmapAlign = baTopLeft
-        Scale = 1
+        Scale = 1.000000000000000000
         ScaleMode = smNormal
         TabOrder = 1
       end

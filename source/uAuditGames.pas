@@ -4,7 +4,20 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, ComCtrls, ZTreeView, ImgList, IniFiles, StdCtrls, Menus;
+  ExtCtrls, ComCtrls, ImgList, IniFiles, StdCtrls, Menus, CommCtrl;
+
+
+
+
+{type
+  pGameDetails = ^TGameDetails;
+  TGameDetails = record
+    GameIndex: Integer;
+    ImageIndex: Integer;
+    Caption: String;
+    CRC: String;
+    Size: Integer;
+  end;}
 
 type
   TFormAudit = class(TForm)
@@ -21,7 +34,6 @@ type
     PopupSaveResultstoHTMLFile: TMenuItem;
     PopupSaveBadGamestoHTMLFile: TMenuItem;
     LabelGameDescription: TLabel;
-    TopImage: TImage;
     LabelMergedMasterGame: TLabel;
     LabelAuditedGames: TLabel;
     LabelAudited: TLabel;
@@ -33,8 +45,7 @@ type
     LabelBadAuditedGames: TLabel;
     ButtonClose: TButton;
     ButtonCancel: TButton;
-    AuditROMsTree: TZTreeView;
-    ProgressBarFileAudit: TProgressBar;
+    AuditROMsTree: TTreeView;
     procedure ButtonCloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ButtonCancelClick(Sender: TObject);
@@ -42,35 +53,57 @@ type
     procedure PopupHideGamesDetailsClick(Sender: TObject);
     procedure PopupShowOnlyBadGamesClick(Sender: TObject);
     procedure PopupAuditGameAgainClick(Sender: TObject);
-    procedure AuditROMsTreeCollapsing(Sender: TObject; Node: TTreeNode;
-      var AllowCollapse: Boolean);
-    procedure AuditROMsTreeExpanding(Sender: TObject; Node: TTreeNode;
-      var AllowExpansion: Boolean);
     procedure PopupSaveResultstoHTMLFileClick(Sender: TObject);
     procedure PopupSaveBadGamestoHTMLFileClick(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure AuditROMsTreeCollapsing(Sender: TObject; Node: TTreeNode;
+      var AllowCollapse: Boolean);
+    procedure AuditROMsTreeExpanding(Sender: TObject; Node: TTreeNode;
+      var AllowExpansion: Boolean);
+    {procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType;
+      var CellText: WideString);
+    procedure VSTFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
+      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure VSTGetImageIndex(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+      var Ghosted: Boolean; var ImageIndex: Integer);}
   private
     ListROMName, ListROMSize, ListROMCRC: String;
     ROMsList: THashedStringList;
     ROMStatus: Integer;
     GameOk, Auditing: Boolean;
+    aBiosDriver: TMemIniFile;
     function  LoadToolbarIcons: Boolean;
 
     function  TestROMSizeCRC(ListSize, ZIPName, ZIPSize, ListCRC, ZIPCRC: String): String;
     function  MountHTMLLine(StringData: String): String;
     function  MountGameLine(NodeLevel: Integer; BitmapFileName: String; IconIndex: Integer; NodeText: String): String;
+
+    // bold nodes functions
+    procedure SetNodeState(node : TTreeNode; State : Integer);
+    function  GetNodeState(node : TTreeNode): Integer;
+
+    procedure Bold(node : TTreeNode);
+    procedure UnBold(node : TTreeNode);
+    function IsBold(node : TTreeNode) : Boolean;
+    procedure ToggleBold(node : TTreeNode);
+
+
     { Private declarations }
   public
+    //Games: array of TGameDetails;
     ROMsName, ROMsSize, ROMsCRC: THashedStringList;
     GameName, ParentGameName, LabelStatusFormat: String;
     TotalGames, AvailableGames, UnavailableGames, GoodGames, BadGames, CurrentGame, AuditMode: Integer;
     function  CreateMD5Checksum(DiskFileName, DiskMD5: String; out RealMD5Value: String): Boolean;
-    procedure MD5Proc(StreamPos, StreamSize: Integer);
     function  MountFilesList(GameName: String): String;
-    function  AuditGame(GameName, ParentGameName: String): Boolean;
-    procedure Audit;
+    function  AuditGame(GameName, ParentGameName: String; RenameFiles: Boolean): Boolean;
+    procedure Audit(FixFileNames: Boolean);
     { Public declarations }
   end;
 
@@ -79,9 +112,63 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon, md5gen, uFilesUtil;
+uses uMain, uStatus, uCommon, uFilesUtil;
 
 {$R *.DFM}
+
+procedure TFormAudit.Bold(node : TTreeNode);
+begin
+  SetNodeState(node, TVIS_BOLD);
+end;
+
+procedure TFormAudit.UnBold(node : TTreeNode);
+begin
+  SetNodeState(node, 0);
+end;
+
+function TFormAudit.IsBold(node : TTreeNode) : Boolean;
+begin
+  Result := ((GetNodeState(node) and TVIS_BOLD) <> 0);
+end;
+
+procedure TFormAudit.ToggleBold(node : TTreeNode);
+begin
+ if IsBold(node) then
+    UnBold(node)
+ else
+    Bold(node);
+end;
+
+procedure TFormAudit.SetNodeState(node : TTreeNode; State : Integer);
+var
+  tvi  : TTVItem;
+begin
+  FillChar(tvi, Sizeof(tvi), 0);
+  tvi.hItem := node.ItemID;
+  tvi.mask := TVIF_STATE;
+  tvi.stateMask := TVIS_BOLD;
+  tvi.state := State;
+  TreeView_SetItem(node.Handle, tvi);
+(********************************************************************************)
+(*  Using OnChange causes an access violation error when no OnChange event      *)
+(*  handler is specified within the program. Using the TCustomTreeView.Change   *)
+(*  procedure instead resolves this problem.                                    *)
+(********************************************************************************)
+//OnChange(Self,Node);
+  //Change(Node);
+end;
+
+function TFormAudit.GetNodeState(node : TTreeNode): Integer;
+var
+  tvi  : TTVItem;
+begin
+  FillChar(tvi, Sizeof(tvi), 0);
+  tvi.hItem := node.ItemID;
+  tvi.mask := TVIF_STATE;
+  tvi.stateMask := TVIS_BOLD;
+  TreeView_GetItem(Handle, tvi);
+  Result := tvi.state;
+end;
 
 // procedures ---------------------------
 function TFormAudit.LoadToolbarIcons: Boolean;
@@ -123,11 +210,10 @@ begin
   ROMsName.Clear;
   ROMsSize.Clear;
   ROMsCRC.Clear;
-  if ((GameName = 'neogeo') or (GameName = 'playch10') or (GameName = 'cvs') or
-      (GameName = 'decocass') or (GameName = 'pgm') or (GameName = 'skns') or (GameName = 'stvbios')) then
-     GameType:= 'bios '
-  else
-     GameType:= 'game ';
+  case aBiosDriver.ValueExists('bios', GameName) of
+    True : GameType:= 'bios ';
+    False: GameType:= 'game ';
+  end;
 
   for Loop:=0 to ROMsList.Count -1 do
   begin
@@ -155,29 +241,38 @@ function TFormAudit.CreateMD5Checksum(DiskFileName, DiskMD5: String; out RealMD5
 var
   TestFile: TFileStream;
   FileName, MD5ChecksumFound: String;
+  Buffer: array [0..15] of Byte;
+  Loop: ShortInt;
+
+const
+  HexTable: String = '0123456789ABCDEF';
+
+  function ByteToHex(Value: Byte): String;
+  var
+    zwVal: Byte;
+  begin
+    zwVal := (Value and $0F); //first mask (Lo) Byte of Value
+    Result:= HexTable[zwVal + 1]; //from HexTable to Result
+    zwVal := (Value and $F0) shr 4; //second mask (Hi) Byte of Value and 4Bits to the right shift
+    Result:= HexTable[zwVal + 1] + Result; //add from HexTable to Result
+  end;
+
 begin
-  Result:= Boolean(FormMain.MenuGamesAudit.Tag); // 0 - do not audit .chd; 1 - audit .chd
+  FileName:= FormMain.SearchCHDFolder(GameName, DiskFilename);
+  Result:= (FileName <> 'Not Found');
   if Result then
      begin
-       FileName:= FormMain.SearchCHDFolder(GameName, DiskFilename);
-       if FileName <> 'Not Found' then
-          begin
-            ProgressBarFileAudit.Visible:= True;
-            TestFile:= TFileStream.Create(FileName, (fmOpenRead or fmShareDenyNone));
-            MD5ChecksumFound:= LowerCase(md5sum(TestFile, MD5Proc));
-            FreeAndNil(TestFile);
-            RealMD5Value:= MD5ChecksumFound;
-            Result:= (MD5ChecksumFound = DiskMD5);
-            ProgressBarFileAudit.Visible:= False;
-          end;
-     end;
-end;
+       TestFile:= TFileStream.Create(FileName, (fmOpenRead or fmShareDenyNone));
+       TestFile.Seek(44, soFromBeginning); // go to byte 44 (begining of MD5 checksum on .chd files)
+       TestFile.ReadBuffer(Buffer, 16); // read 16 bytes (size of MD5 checksum on .chd files)
+       FreeAndNil(TestFile);
+       MD5ChecksumFound:= '';
+       for loop:=0 to 15 do
+         MD5ChecksumFound:= MD5ChecksumFound+LowerCase(ByteToHex(Buffer[Loop])); // put all hexa values together
 
-procedure TFormAudit.MD5Proc(StreamPos, StreamSize: Integer);
-begin
-  if (StreamPos <> 0) and (StreamSize <> 0) then
-     ProgressBarFileAudit.Position:= Trunc((StreamPos / StreamSize) * 100);
-  Application.ProcessMessages;
+       RealMD5Value:= MD5ChecksumFound;
+       Result:= (MD5ChecksumFound = DiskMD5);
+     end;
 end;
 
 function TFormAudit.TestROMSizeCRC(ListSize, ZIPName, ZIPSize, ListCRC, ZIPCRC: String): String;
@@ -229,16 +324,7 @@ begin
 
   case DiskImage of
     False: Result:= Format('%12s  %10s  %8s', [ZIPName, ZIPSize, ZIPCRC]);
-    True:
-      begin
-        case FormMain.MenuGamesAudit.Tag of
-          0: begin
-               Result:= Format('%12s  %10s  %32s', [ZIPName, ListSize, ListCRC]);
-               Result:= Result+'  [not audited]';
-             end;
-          1: Result:= Format('%12s  %10s  %32s', [ZIPName, ListSize, ZIPCRC]);
-        end;
-      end;
+    True : Result:= Format('%12s  %10s  %32s', [ZIPName, ListSize, ZIPCRC]);
   end;
 
   case SizeOk of
@@ -293,13 +379,12 @@ begin
   end;
 end;
 
-function TFormAudit.AuditGame(GameName, ParentGameName: String): Boolean;
+function TFormAudit.AuditGame(GameName, ParentGameName: String; RenameFiles: Boolean): Boolean;
 var
   Loop, ROMIndex, ROMsCount, NotFoundROMsCount, CRCNumber: Integer;
-  FileNotFound, ParentFileNotFound, OriginalGame, DiskImage: Boolean;
-  ZIPFileName, ResultLine, FixedCRCHex, ROMsNodeEndText: String;
+  FileNotFound, ParentFileNotFound, OriginalGame, DiskImage, ZipOK, ParentZipOk: Boolean;
+  ZIPFileName, ParentZIPFileName, ResultLine, FixedCRCHex, ROMsNodeEndText: String;
   ROMsNode: TTreeNode;
-  chdMD5ini: THashedStringList;
 
   function GetFixedCRC: String;
   begin
@@ -313,6 +398,27 @@ var
     end;
   end;
 
+  function RenameROM(FileToCheck: String; IsParent: Boolean): Boolean;
+  begin
+    if RenameFiles and (FileToCheck <> 'Not Found') then
+       begin
+         //ShowMessage('will rename file: '+FormMain.ListROMsNameFullPath[ROMIndex]+#13+'to: '+ROMsName[Loop]+#13+'of file: '+FileToCheck);
+         case IsParent of
+           False:
+             begin
+               if Pos('\', FormMain.ListROMsNameFullPath[ROMIndex]) <> 0 then
+                  FormMain.RenameFileInsideZip(FileToCheck, FormMain.ListROMsNameFullPath[ROMIndex], ExtractFilePath(FormMain.ListROMsNameFullPath[ROMIndex])+ROMsName[Loop])
+               else
+                  FormMain.RenameFileInsideZip(FileToCheck, FormMain.ListROMsNameFullPath[ROMIndex], ROMsName[Loop]);
+             end;
+           True:
+             begin
+
+             end;
+         end;
+       end;
+  end;
+
   procedure ScanCHDFileMD5;
   var
     CHDFileName: String;
@@ -323,22 +429,12 @@ var
          // I need to read chd_md5.ini file for the full file MD5 checksum
          if ListROMSize = '0' then
             ListROMSize:= IntToStr(GetFileSize(CHDFileName));
-         if FileExists(FormMain.FrontendPath+'chd md5.ini') then
-            begin
-              chdMD5ini:= THashedStringList.Create;
-              chdMD5ini.LoadFromFile(FormMain.FrontendPath+'chd md5.ini');
-              ListROMCRC:= chdMD5ini.Values[ROMsName[Loop]];
-              FreeAndNil(chdMD5ini);
-            end;
          ResultLine:= TestROMSizeCRC(ListROMSize, ROMsName[Loop], ROMsSize[Loop], ListROMCRC, '-create');
          Inc(ROMsCount);
        end
     else
        begin
-         case FormMain.MenuGamesAudit.Tag of
-           0: ResultLine:= Format('%12s  %10s  %32s  [not audited]', [ROMsName[Loop], ListROMSize, ROMsCRC[Loop]]);
-           1: ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ListROMSize, ROMsCRC[Loop]]);
-         end;
+         ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ListROMSize, ROMsCRC[Loop]]);
          ROMStatus:= 12;
          GameOk:= False;
          Inc(NotFoundROMsCount);
@@ -372,17 +468,29 @@ begin
   if Assigned(FormMain.ParentListROMsCRC) then
      FormMain.ParentListROMsCRC.Clear;
 
+  if Assigned(FormMain.ListROMsNameFullPath) then
+     FormMain.ListROMsNameFullPath.Clear;
+
+  if Assigned(FormMain.ParentListROMsNameFullPath) then
+     FormMain.ParentListROMsNameFullPath.Clear;
+
+  ZipOk:= True;
+  ParentZipOk:= True;
+
+  //with VST do
+  //  RootNodeCount:= RootNodeCount+TotalGames;
+
   if ZIPFileName <> 'Not Found' then
      begin
-        FormMain.GetContents(ZIPFileName, True, False);
+        ZipOk:= FormMain.GetContents(ZIPFileName, True, False);
         FileNotFound:= False;
         if not OriginalGame then
            begin
-             ZIPFileName:= FormMain.SearchZIPFolder(ParentGameName);
-             if ZIPFileName <> 'Not Found' then
+             ParentZIPFileName:= FormMain.SearchZIPFolder(ParentGameName);
+             if ParentZIPFileName <> 'Not Found' then
                 begin
                    ParentFileNotFound:= False;
-                   FormMain.GetContents(ZIPFileName, False, True);
+                   ParentZipOk:= FormMain.GetContents(ParentZIPFileName, False, True);
                    OriginalGame:= False;
                 end;
            end;
@@ -392,11 +500,11 @@ begin
        case OriginalGame of
          False:
            begin
-             ZIPFileName:= FormMain.SearchZIPFolder(ParentGameName);
-             if ZIPFileName <> 'Not Found' then
+             ParentZIPFileName:= FormMain.SearchZIPFolder(ParentGameName);
+             if ParentZIPFileName <> 'Not Found' then
                 begin
                    ParentFileNotFound:= False;
-                   FormMain.GetContents(ZIPFileName, True, True); // Original Line
+                   ParentZipOk:= FormMain.GetContents(ParentZIPFileName, True, True); // Original Line
                    OriginalGame:= False;
                 end
              else
@@ -419,7 +527,13 @@ begin
         ROMsNode:= AuditROMsTree.Items.Add(nil, GameName); // Add a root node
         case FileNotFound of
           True : ROMsNodeEndText:= ' - ['+GameName+'.zip not found]';
-          False: ROMsNodeEndText:= '';
+          False:
+            begin
+              case ZipOK of
+                True : ROMsNodeEndText:= '';
+                False: ROMsNodeEndText:= ' - ['+GameName+'.zip damaged]';
+              end;
+            end;
         end;
       end;
     False:
@@ -430,24 +544,60 @@ begin
               ROMsNode:= AuditROMsTree.Items.Add(nil, GameName+' ('+ParentGameName+')'); // Add a root node
               case FileNotFound of
                 True : ROMsNodeEndText:= ' - ['+GameName+'.zip and '+ParentGameName+'.zip not found]';
-                False: ROMsNodeEndText:= ' - ['+ParentGameName+'.zip not found]';
+                False:
+                  begin
+                    case ZipOK of
+                      True : ROMsNodeEndText:= ' - ['+ParentGameName+'.zip not found]';
+                      False: ROMsNodeEndText:= ' - ['+GameName+'.zip damaged and '+ParentGameName+'.zip not found]';
+                    end;
+                  end;
               end;
             end;
           False:
             begin
               ROMsNode:= AuditROMsTree.Items.Add(nil, GameName+' ('+ParentGameName+')'); // Add a root node
               case FileNotFound of
-                True : ROMsNodeEndText:= ' - ['+GameName+'.zip not found]';
-                False: ROMsNodeEndText:= '';
+                True:
+                  begin
+                    case ParentZipOk of
+                      True : ROMsNodeEndText:= ' - ['+GameName+'.zip not found]';
+                      False: ROMsNodeEndText:= ' - ['+GameName+'.zip not found and '+ParentGameName+'.zip damaged]';
+                    end;
+                  end;
+                False:
+                  begin
+                    if ZipOk and ParentZipOk then
+                       ROMsNodeEndText:= ''
+                    else
+                    if (not ZipOk) and ParentZipOk then
+                       ROMsNodeEndText:= ' - ['+GameName+'.zip damaged]'
+                    else
+                    if ZipOk and (not ParentZipOk) then
+                       ROMsNodeEndText:= ' - ['+ParentGameName+'.zip damaged]'
+                    else
+                    if (not ZipOk) and (not ParentZipOk) then
+                       ROMsNodeEndTExt:= ' - ['+GameName+'.zip and '+ParentGameName+'.zip damaged]';
+                  end;
               end;
             end;
         end;
       end;
   end;
 
-  AuditROMsTree.Bold(ROMsNode);
+  Bold(ROMsNode);
   for Loop:=0 to ROMsName.Count -1 do
   begin
+    {with VST do
+    begin
+      if Assigned(FocusedNode) then
+        begin
+          Count := StrToInt(Edit1.Text);
+          ChildCount[FocusedNode]:= ChildCount[FocusedNode]+1;
+          Expanded[FocusedNode]:= True;
+          InvalidateToBottom(FocusedNode);
+        end;
+    end;}
+
     ROMStatus:= 12;
     if ((not FileNotFound) or (not ParentFileNotFound) or (LowerCase(ExtractFileExt(ROMsName[Loop])) = '.chd')) then
        begin
@@ -480,8 +630,27 @@ begin
                                ROMIndex:= FormMain.ListROMsCRC.IndexOf(FixedCRCHex);
                                 if ROMIndex > -1 then
                                    begin
-                                     ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
-                                                  +'  [correct name: '+ROMsName[Loop]+']';
+                                     case RenameROM(ZIPFileName, False) of
+                                       True:
+                                         begin
+                                           ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
+                                                                       +'  [renamed from '+FormMain.ListROMsName[ROMIndex]+' to '+ROMsName[Loop]+']';
+                                         end;
+                                       False:
+                                         begin
+                                           ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
+                                                                       +'  [correct name: '+ROMsName[Loop]+']';
+                                         end;
+                                     end;
+
+                                     {if RenameFiles and (ZIPFileName <> 'Not Found') then
+                                        begin
+                                          ShowMessage('will rename file: '+FormMain.ListROMsNameFullPath[ROMIndex]+#13+'to: '+ROMsName[Loop]+#13+'of file: '+ZIPFileName);
+                                          if Pos('\', FormMain.ListROMsNameFullPath[ROMIndex]) <> 0 then
+                                             FormMain.RenameFileInsideZip(ZIPFileName, FormMain.ListROMsNameFullPath[ROMIndex], ExtractFilePath(FormMain.ListROMsNameFullPath[ROMIndex])+ROMsName[Loop])
+                                          else
+                                             FormMain.RenameFileInsideZip(ZIPFileName, FormMain.ListROMsNameFullPath[ROMIndex], ROMsName[Loop]);
+                                        end;}
                                      Inc(ROMsCount);
                                      // found crc number
                                    end
@@ -493,27 +662,16 @@ begin
                                      Inc(NotFoundROMsCount);
                                    end;
                              end;
-                           True:
-                             begin
-                               ScanCHDFileMD5;
-                             end;
+                           True: ScanCHDFileMD5;
                          end;
                        end
                     else
                        begin
                          case DiskImage of
-                           False: ResultLine:= Format('%12s  %10s  %8s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                           True:
-                             begin
-                               case FormMain.MenuGamesAudit.Tag of
-                                 0: ResultLine:= Format('%12s  %10s  %32s  [not audited]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                                 1: ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                               end;
-                             end;
+                           False: ResultLine:= Format('%12s  %10s  %8s', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
+                           True : ResultLine:= Format('%12s  %10s  %32s', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
                          end;
-                         ROMStatus:= 12;
-                         GameOk:= False;
-                         Inc(NotFoundROMsCount);
+                         Inc(ROMsCount);
                        end;
                   end;
              end;
@@ -558,8 +716,28 @@ begin
                                     ROMIndex:= FormMain.ListROMsCRC.IndexOf(FixedCRCHex);
                                     if ROMIndex > -1 then
                                        begin
-                                         ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
-                                                      +'  [correct name: '+ROMsName[Loop]+']';
+                                         case RenameROM(ZIPFileName, False) of
+                                           True:
+                                             begin
+                                               ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
+                                                                           +'  [renamed from '+FormMain.ListROMsName[ROMIndex]+' to '+ROMsName[Loop]+']';
+                                             end;
+                                           False:
+                                             begin
+                                               ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ListROMsName[ROMIndex], FormMain.ListROMsSize[ROMIndex], ListROMCRC, FormMain.ListROMsCRC[ROMIndex])
+                                                                           +'  [correct name: '+ROMsName[Loop]+']';
+                                             end;
+                                         end;
+
+                                         {if RenameFiles and (ZIPFileName <> 'Not Found')then
+                                            begin
+                                              ShowMessage('will rename file: '+FormMain.ListROMsNameFullPath[ROMIndex]+#13+'to: '+ROMsName[Loop]+#13+'of file: '+ZIPFileName);
+                                              if Pos('\', FormMain.ListROMsNameFullPath[ROMIndex]) <> 0 then
+                                                 FormMain.RenameFileInsideZip(ZIPFileName, FormMain.ListROMsNameFullPath[ROMIndex], ExtractFilePath(FormMain.ListROMsNameFullPath[ROMIndex])+ROMsName[Loop])
+                                              else
+                                                 FormMain.RenameFileInsideZip(ZIPFileName, FormMain.ListROMsNameFullPath[ROMIndex], ROMsName[Loop]);
+                                            end;}
+
                                          Inc(ROMsCount);
                                          // found crc number
                                        end
@@ -568,8 +746,27 @@ begin
                                          ROMIndex:= FormMain.ParentListROMsCRC.IndexOf(FixedCRCHex);
                                          if ROMIndex > -1 then
                                             begin
-                                              ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ParentListROMsName[ROMIndex], FormMain.ParentListROMsSize[ROMIndex], ListROMCRC, FormMain.ParentListROMsCRC[ROMIndex])
-                                                           +'  [correct name: '+ROMsName[Loop]+']';
+                                              case RenameROM(ParentZIPFileName, True) of
+                                                True:
+                                                  begin
+                                                    ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ParentListROMsName[ROMIndex], FormMain.ParentListROMsSize[ROMIndex], ListROMCRC, FormMain.ParentListROMsCRC[ROMIndex])
+                                                                                +'  [renamed from '+FormMain.ParentListROMsName[ROMIndex]+' to '+ROMsName[Loop]+']';
+                                                  end;
+                                                False:
+                                                  begin
+                                                    ResultLine:= TestROMSizeCRC(ListROMSize, FormMain.ParentListROMsName[ROMIndex], FormMain.ParentListROMsSize[ROMIndex], ListROMCRC, FormMain.ParentListROMsCRC[ROMIndex])
+                                                                                +'  [correct name: '+ROMsName[Loop]+']';
+                                                  end;
+                                              end;
+
+                                              {if RenameFiles and (ParentZIPFileName <> 'Not Found')then
+                                                 begin
+                                                   ShowMessage('will rename file: '+FormMain.ParentListROMsNameFullPath[ROMIndex]+#13+'to: '+ROMsName[Loop]+#13+'of file: '+ParentZIPFileName);
+                                                   if Pos('\', FormMain.ParentListROMsNameFullPath[ROMIndex]) <> 0 then
+                                                      FormMain.RenameFileInsideZip(ParentZIPFileName, FormMain.ParentListROMsNameFullPath[ROMIndex], ExtractFilePath(FormMain.ParentListROMsNameFullPath[ROMIndex])+ROMsName[Loop])
+                                                   else
+                                                      FormMain.RenameFileInsideZip(ParentZIPFileName, FormMain.ParentListROMsNameFullPath[ROMIndex], ROMsName[Loop]);
+                                                 end;}
                                               Inc(ROMsCount);
                                               // found crc number
                                               case ROMStatus of
@@ -590,27 +787,16 @@ begin
                                             end;
                                        end;
                                   end;
-                                True:
-                                  begin
-                                    ScanCHDFileMD5;
-                                  end;
+                                True: ScanCHDFileMD5;
                               end;
                             end
                          else
                             begin
                               case DiskImage of
-                                False: ResultLine:= Format('%12s  %10s  %8s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                                True:
-                                  begin
-                                    case FormMain.MenuGamesAudit.Tag of
-                                      0: ResultLine:= Format('%12s  %10s  %32s  [not audited]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                                      1: ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                                    end;
-                                  end;
+                                False: ResultLine:= Format('%12s  %10s  %8s', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
+                                True : ResultLine:= Format('%12s  %10s  %32s', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
                               end;
-                              ROMStatus:= 12;
-                              GameOk:= False;
-                              Inc(NotFoundROMsCount);
+                              Inc(ROMsCount);
                             end;
                        end;
                   end;
@@ -630,13 +816,7 @@ begin
        begin
          case DiskImage of
            False: ResultLine:= Format('%12s  %10s  %8s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-           True:
-             begin
-               case FormMain.MenuGamesAudit.Tag of
-                 0: ResultLine:= Format('%12s  %10s  %32s  [not audited]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-                 1: ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
-               end;
-             end;
+           True : ResultLine:= Format('%12s  %10s  %32s  [not found]', [ROMsName[Loop], ROMsSize[Loop], ROMsCRC[Loop]]);
          end;
          ROMStatus:= 12;
          GameOk:= False;
@@ -720,11 +900,12 @@ begin
   AuditROMsTree.FullCollapse;
   AuditROMsTree.Items.Clear;
   AuditROMsTree.Items.EndUpdate;
+  FreeAndNil(aBiosDriver);
   FormAudit.Release;
   FormAudit:= nil;
 end;
 
-procedure TFormAudit.Audit;
+procedure TFormAudit.Audit(FixFileNames: Boolean);
 var
   Result: String;
   mGamesList: THashedStringList;
@@ -734,7 +915,12 @@ begin
   //StartClock:= GetTickCount;
   if LabelStatusFormat = '' then
      LabelStatusFormat:= '%.6d of %.6d';
-  SetCurrentDir(ExtractFilePath(FormMain.GetCurrentEmulatorExecutable));
+  SetCurrentDir(ExtractFilePath(FormMain.EmulatorExecutable[FormMain.ButtonExecutablesMode.Tag]));
+  //SetCurrentDir(ExtractFilePath(FormMain.GetCurrentEmulatorExecutable));
+
+  if not Assigned(aBiosDriver) then
+     aBiosDriver:= TMemIniFile.Create(FormMain.FrontendPath+'bios.ini');
+
   AuditROMsTree.Items.BeginUpdate;
   case AuditMode of
     0: //Single Audit
@@ -756,7 +942,7 @@ begin
         LabelAuditedGames.Caption:= Format(LabelStatusFormat, [1, 1]);
         ButtonCancel.Enabled:= False;
         Result:= MountFilesList(GameName);
-        case AuditGame(GameName, ParentGameName) of
+        case AuditGame(GameName, ParentGameName, FixFileNames) of
           True : Inc(GoodGames);
           False: Inc(BadGames);
         end;
@@ -808,8 +994,7 @@ begin
         while not Eof(GameROMsList) do
         begin
           ReadLn(GameROMsList, Result);
-          if ((Result = 'bios neogeo') or (Result = 'bios playch10') or (Result = 'bios cvs') or
-              (Result = 'bios decocass') or (Result = 'bios pgm') or (Result = 'bios skns') or (Pos('game ', Result) > 0)) then
+          if ((Pos('bios ', Result) > 0) or (Pos('game ', Result) > 0)) then
              begin
                GameName:= Copy(Result, 6, Length(Result));
                ROMsName.BeginUpdate;
@@ -835,7 +1020,7 @@ begin
                case AuditMode of
                  1:
                    begin
-                     case AuditGame(GameName, ParentGameName) of
+                     case AuditGame(GameName, ParentGameName, FixFileNames) of
                        True : Inc(GoodGames);
                        False: Inc(BadGames);
                      end;
@@ -849,7 +1034,7 @@ begin
                    begin
                      if mGamesList.IndexOf(GameName) > -1 then
                         begin
-                          case AuditGame(GameName, ParentGameName) of
+                          case AuditGame(GameName, ParentGameName, FixFileNames) of
                             True : Inc(GoodGames);
                             False: Inc(BadGames);
                           end;
@@ -901,8 +1086,14 @@ end;
 
 procedure TFormAudit.FormCreate(Sender: TObject);
 begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\AuditGame.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\AuditGame.png');
+  // Let the tree know how much data space we need.
+  //VST.NodeDataSize := SizeOf(TGameDetails);
+  // Set an initial number of nodes.
+  //VST.RootNodeCount:= 0;
+  {if FormMain.List.SmallImages = FormMain.BuiltInSmallListImageList then
+     VST.Images:= FormMain.BuiltInSmallListImageList
+  else
+     VST.Images:= FormMain.SmallRealIconsImageList;}
 
   LoadToolbarIcons;
 
@@ -913,9 +1104,11 @@ begin
   FormMain.ListROMsName:= THashedStringList.Create;
   FormMain.ListROMsSize:= THashedStringList.Create;
   FormMain.ListROMsCRC:= THashedStringList.Create;
+  FormMain.ListROMsNameFullPath:= THashedStringList.Create;
   FormMain.ParentListROMsName:= THashedStringList.Create;
   FormMain.ParentListROMsSize:= THashedStringList.Create;
   FormMain.ParentListROMsCRC:= THashedStringList.Create;
+  FormMain.ParentListROMsNameFullPath:= THashedStringList.Create;
 end;
 
 procedure TFormAudit.ButtonCancelClick(Sender: TObject);
@@ -982,19 +1175,7 @@ begin
   FormMain.ParentListROMsSize:= THashedStringList.Create;
   FormMain.ParentListROMsCRC:= THashedStringList.Create;
 
-  Audit;
-end;
-
-procedure TFormAudit.AuditROMsTreeCollapsing(Sender: TObject;
-  Node: TTreeNode; var AllowCollapse: Boolean);
-begin
-  Application.ProcessMessages;
-end;
-
-procedure TFormAudit.AuditROMsTreeExpanding(Sender: TObject;
-  Node: TTreeNode; var AllowExpansion: Boolean);
-begin
-  Application.ProcessMessages;
+  Audit(False);
 end;
 
 function TFormAudit.MountHTMLLine(StringData: String): String;
@@ -1105,8 +1286,9 @@ begin
          CloseFile(HTMLFile);
          LabelMergedMasterGame.Caption:= '';
        end;
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                       Format(FormMain.GetLanguageText('Audit Games', 'HTMLFileSavedMsg', 'File "%s" saved with audit info.'), [SaveAuditDialog.FileName]), 2);
+       FormMain.GetMessagesLng('Messages', 'CompleteOperationTitle', 'Operation Complete',
+                               'Audit Games', 'HTMLFileSavedMsg', 'File "%s" saved with audit info.');
+       GenerateMessage(FormMain.MessageText[0], Format(FormMain.MessageText[1], [SaveAuditDialog.FileName]), 2);
      end;
 end;
 
@@ -1237,8 +1419,9 @@ begin
          LabelMergedMasterGame.Caption:= '';
          FreeAndNil(GameDetails);
        end;
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'CompleteOperationTitle', 'Operation Complete'),
-                       Format(FormMain.GetLanguageText('Audit Games', 'HTMLFileSavedMsg', 'File "%s" saved with audit info.'), [SaveAuditDialog.FileName]), 2);
+       FormMain.GetMessagesLng('Messages', 'CompleteOperationTitle', 'Operation Complete',
+                               'Audit Games', 'HTMLFileSavedMsg', 'File "%s" saved with audit info.');
+       GenerateMessage(FormMain.MessageText[0], Format(FormMain.MessageText[1], [SaveAuditDialog.FileName]), 2);
      end;
 end;
 
@@ -1258,6 +1441,90 @@ end;
 procedure TFormAudit.FormShow(Sender: TObject);
 begin
   FormMain.UpdateGeneralAppearance(FormAudit);
+end;
+
+{procedure TFormAudit.VSTGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: WideString);
+//var
+ // Data: pGameDetails;
+begin
+  // A handler for the OnGetText event is always needed as it provides the tree with the string data to display.
+  // Note that we are always using WideString.
+  //Data:= Sender.GetNodeData(Node);
+  //if Assigned(Data) then
+   //  CellText:= Data.Caption;
+     //Text:= Data.Caption; // doesn't work!!! don't know where this "Text" property is from
+end;
+
+procedure TFormAudit.VSTFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+//var
+ // Data: pGameDetails;
+begin
+  //Data:= Sender.GetNodeData(Node);
+  // Explicitely free the string, the VCL cannot know that there is one but needs to free
+  // it nonetheless. For more fields in such a record which must be freed use Finalize(Data^) instead touching
+  // every member individually.
+  //if Assigned(Data) then
+  //   Data.Caption:= '';
+end;
+
+procedure TFormAudit.VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
+  Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+//var
+//  Data: pGameDetails;
+begin
+  //with Sender do
+  //begin
+  //  Data:= GetNodeData(Node);
+    // Construct a node caption. This event is triggered once for each node but
+    // appears asynchronously, which means when the node is displayed not when it is added.
+ //   Data.Caption:= GameName;// Format('Level %d, Index %d', [GetNodeLevel(Node), Node.Index]);
+  //  Data.ImageIndex:= 3;
+  //end;
+end;
+
+procedure TFormAudit.VSTGetImageIndex(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+  var Ghosted: Boolean; var ImageIndex: Integer);
+//var
+//  Data: pGameDetails;
+begin
+  //if Node.Parent = Sender.RootNode then
+  //   ImageIndex:= Data.ImageIndex;
+end;}
+
+procedure TFormAudit.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if CanClose then
+     begin
+       FreeAndNil(ROMsName);
+       FreeAndNil(ROMsSize);
+       FreeAndNil(ROMsCRC);
+
+       FreeAndNil(FormMain.ListROMsName);
+       FreeAndNil(FormMain.ListROMsSize);
+       FreeAndNil(FormMain.ListROMsCRC);
+       FreeAndNil(FormMain.ListROMsNameFullPath);
+       FreeAndNil(FormMain.ParentListROMsName);
+       FreeAndNil(FormMain.ParentListROMsSize);
+       FreeAndNil(FormMain.ParentListROMsCRC);
+       FreeAndNil(FormMain.ParentListROMsNameFullPath);
+     end;
+end;
+
+procedure TFormAudit.AuditROMsTreeCollapsing(Sender: TObject; Node: TTreeNode;
+  var AllowCollapse: Boolean);
+begin
+  Application.ProcessMessages;
+end;
+
+procedure TFormAudit.AuditROMsTreeExpanding(Sender: TObject; Node: TTreeNode;
+  var AllowExpansion: Boolean);
+begin
+  Application.ProcessMessages;
 end;
 
 end.

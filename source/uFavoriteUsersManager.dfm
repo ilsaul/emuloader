@@ -4,7 +4,8 @@ object FormFavoriteUsersManager: TFormFavoriteUsersManager
   ActiveControl = LabelSelectUser
   BorderIcons = []
   BorderStyle = bsToolWindow
-  ClientHeight = 375
+  Caption = 'Favorite Users Manager'
+  ClientHeight = 295
   ClientWidth = 370
   Color = clBtnFace
   DefaultMonitor = dmPrimary
@@ -23,36 +24,12 @@ object FormFavoriteUsersManager: TFormFavoriteUsersManager
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 370
-    Height = 60
-  end
-  object LabelCaption: TLabel
-    Left = 72
-    Top = 24
-    Width = 289
-    Height = 13
-    AutoSize = False
-    Caption = 'Favorite Users Manager'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 328
-    Width = 360
-    Height = 10
-    Shape = bsTopLine
-  end
   object PageControlUsersList: TPageControl
     Left = 8
-    Top = 72
+    Top = 8
     Width = 353
     Height = 241
     ActivePage = TabSheetUsersList
-    TabIndex = 0
     TabOrder = 0
     object TabSheetUsersList: TTabSheet
       Caption = 'Users List'
@@ -185,7 +162,6 @@ object FormFavoriteUsersManager: TFormFavoriteUsersManager
           Left = 69
           Top = 0
           Width = 8
-          Caption = 'ToolButton2'
           ImageIndex = 44
           Style = tbsSeparator
         end
@@ -201,7 +177,7 @@ object FormFavoriteUsersManager: TFormFavoriteUsersManager
   end
   object ButtonClose: TButton
     Left = 288
-    Top = 344
+    Top = 264
     Width = 75
     Height = 23
     Hint = 'Close this window'

@@ -18,21 +18,16 @@ object FormAudit: TFormAudit
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 618
-    Height = 60
-  end
   object LabelGameDescription: TLabel
-    Left = 72
-    Top = 24
-    Width = 537
+    Left = 8
+    Top = 8
+    Width = 601
     Height = 15
     AutoSize = False
     Caption = 'This is the description of the game (or the selected game)'
@@ -152,17 +147,16 @@ object FormAudit: TFormAudit
     TabOrder = 1
     OnClick = ButtonCancelClick
   end
-  object AuditROMsTree: TZTreeView
+  object AuditROMsTree: TTreeView
     Left = 8
-    Top = 72
+    Top = 32
     Width = 601
-    Height = 281
+    Height = 313
     Hint = 'Right-click mouse for popup menu'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
     Font.Height = -11
     Font.Name = 'Courier New'
-    Font.Pitch = fpFixed
     Font.Style = []
     HideSelection = False
     Images = ImageListResults
@@ -170,34 +164,21 @@ object FormAudit: TFormAudit
     ParentFont = False
     ParentShowHint = False
     PopupMenu = PopupAuditGames
-    ReadOnly = True
     ShowHint = True
     ShowLines = False
     TabOrder = 2
     ToolTips = False
     OnCollapsing = AuditROMsTreeCollapsing
     OnExpanding = AuditROMsTreeExpanding
-    Recursive = False
-  end
-  object ProgressBarFileAudit: TProgressBar
-    Left = 400
-    Top = 360
-    Width = 126
-    Height = 15
-    Min = 0
-    Max = 100
-    Smooth = True
-    TabOrder = 3
-    Visible = False
   end
   object ImageListResults: TImageList
-    Left = 560
-    Top = 24
+    Left = 584
+    Top = 8
   end
   object PopupAuditGames: TPopupMenu
     Images = ImageListResults
-    Left = 528
-    Top = 24
+    Left = 552
+    Top = 8
     object PopupAuditGameAgain: TMenuItem
       Caption = 'Audit &Game Again...'
       ImageIndex = 19
@@ -244,7 +225,7 @@ object FormAudit: TFormAudit
     Filter = 'HTML File (*.html; *.htm)|*.html;*.htm'
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableIncludeNotify]
     Title = 'Save Audit Results to a File'
-    Left = 496
-    Top = 24
+    Left = 520
+    Top = 8
   end
 end

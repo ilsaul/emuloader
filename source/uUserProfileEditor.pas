@@ -4,8 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, ImgList, GR32_Image,
-  uGR32Extra;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, ImgList;
 
 type
   TFormUserProfileEditor = class(TForm)
@@ -82,20 +81,12 @@ type
     FullScreenExitImage: TImage;
     KeysMappingSelectorImage: TImage;
     KeysMappingSelector: TCheckBox;
-    TopImage: TImage;
-    BottomLine: TBevel;
-    LabelCaption: TLabel;
-    ProfileMainDataImage: TImage32Ex;
-    UserProfileMiscellaneousImage: TImage32Ex;
-    PreviewPicturesImage: TImage32Ex;
     LabelSelectUserProfile: TGroupBox;
     SelectUserProfile: TComboBox;
     LabelProfileDescription: TLabel;
     ProfileDescription: TEdit;
     PageControlGames: TPageControl;
     TabSheetGames1: TTabSheet;
-    TabSheetGames2: TTabSheet;
-    GamesImage1: TImage32Ex;
     GamesFilterSelectionImage: TImage;
     GamesFilterSelector: TCheckBox;
     GamesListShowBigIconsImage: TImage;
@@ -124,31 +115,28 @@ type
     GamesDriverInformation: TCheckBox;
     GamesFAQImage: TImage;
     GamesFAQ: TCheckBox;
-    GamesImage2: TImage32Ex;
-    AddGamesToFavoritesImage: TImage;
-    AddGamesToFavorites: TCheckBox;
-    DeleteGamesFromFavoritesImage: TImage;
-    DeleteGamesFromFavorites: TCheckBox;
-    RealIcons: TCheckBox;
-    RealIconsImage: TImage;
-    AddGameParentalLock: TCheckBox;
-    AddGameParentalLockImage: TImage;
-    CustomGamesManager: TCheckBox;
-    CustomGamesManagerImage: TImage;
     CreatePicturesListImage: TImage;
     CreatePicturesList: TCheckBox;
     CustomCommandLine: TCheckBox;
     CustomCommandLineImage: TImage;
-    GamesAuditImage: TImage;
-    GamesAudit: TCheckBox;
-    RefreshGamesImage: TImage;
-    RefreshGames: TCheckBox;
     CustomGameCategoryImage: TImage;
     CustomGameCategory: TCheckBox;
     AutomaticGameInformationImage: TImage;
     AutomaticGameInformation: TCheckBox;
     DeleteGameZIP: TCheckBox;
     DeleteGameZIPImage: TImage;
+    AddGamesToFavoritesImage: TImage;
+    DeleteGamesFromFavoritesImage: TImage;
+    RealIconsImage: TImage;
+    AddGameParentalLockImage: TImage;
+    GamesAuditImage: TImage;
+    RefreshGamesImage: TImage;
+    AddGamesToFavorites: TCheckBox;
+    DeleteGamesFromFavorites: TCheckBox;
+    GamesIcons: TCheckBox;
+    AddGameParentalLock: TCheckBox;
+    GamesAudit: TCheckBox;
+    RefreshGames: TCheckBox;
     procedure ButtonReadUserProfileDATClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonPasswordClick(Sender: TObject);
@@ -200,14 +188,14 @@ function TFormUserProfileEditor.LoadToolbarIcons: Boolean;
 
 begin
   Result:= ((FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\72.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\MAMEConfiguration\4.ico')) and
+            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\MAMEConfiguration\5.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\25.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\7.ico')));
 
   if Result then
      begin
        FormMain.AddDefaultIcons('Main\toolbar\72.ico', UserProfileImageList, 1, False);
-       FormMain.AddDefaultIcons('MAMEConfiguration\4.ico', UserProfileImageList, 1, False);
+       FormMain.AddDefaultIcons('MAMEConfiguration\5.ico', UserProfileImageList, 1, False);
        FormMain.AddDefaultIcons('Main\toolbar\25.ico', UserProfileImageList, 1, False);
        FormMain.AddDefaultIcons('Preferences\7.ico', UserProfileImageList, 1, False);
      end;
@@ -255,7 +243,6 @@ begin
   LoadOptionIcon(68, RealIconsImage);
   LoadOptionIcon(11, RefreshGamesImage);
   LoadOptionIcon(29, GamesAuditImage);
-  LoadOptionIcon(38, CustomGamesManagerImage);
   LoadOptionIcon(63, ShowPicturesImage);
   LoadOptionIcon(37, ShowTitleSnapshotsImage);
   LoadOptionIcon(5,  ShowInGameSnapshotsImage);
@@ -275,22 +262,25 @@ begin
   Result:= True;
   if ((SelectUserProfile.Text = '') and (ProfileDescription.Text = '')) or (SelectUserProfile.Text = '') then
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'NoProfileSelectedTitle', 'No Profile Selected'),
-                       FormMain.GetLanguageText('Messages', 'NoProfileSelectedMsg', 'There is no profile created/selected! Please, create or select a profile before saving it.'), 2);
+       FormMain.GetMessagesLng('Messages', 'NoProfileSelectedTitle', 'No Profile Selected',
+                               'Messages', 'NoProfileSelectedMsg', 'There is no profile created/selected! Please, create or select a profile before saving it.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
        Result:= False;
        Exit;
      end;
   if LowerCase(ProfileDescription.Text) = 'new user' then
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'InvalidProfileTitle', 'Invalid Profile Name'),
-                       FormMain.GetLanguageText('Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.'), 2);
+       FormMain.GetMessagesLng('Messages', 'InvalidProfileTitle', 'Invalid Profile Name',
+                               'Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
        Result:= False;
        Exit;
      end;
   if not HavePassword then
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'NoPasswordTitle', 'No Password'),
-                       FormMain.GetLanguageText('Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.'), 2);
+       FormMain.GetMessagesLng('Messages', 'NoPasswordTitle', 'No Password',
+                               'Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
        Result:= False;
        Exit;
      end;
@@ -309,16 +299,19 @@ begin
           begin
             if LowerCase(ProfileDescription.Text) = 'new user' then
                begin
-                 GenerateMessage(FormMain.GetLanguageText('Messages', 'InvalidProfileTitle', 'Invalid Profile Name'),
-                                 FormMain.GetLanguageText('Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.'), 2);
+                 FormMain.GetMessagesLng('Messages', 'InvalidProfileTitle', 'Invalid Profile Name',
+                                         'Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.');
+                 GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
                  Result:= False;
                  Exit;
                end;
           end
        else
           begin
-            GenerateMessage(FormMain.GetLanguageText('Messages', 'UseProfileFoundTitle', 'Profile Found'),
-                            Format(FormMain.GetLanguageText('Messages', 'UseProfileFoundMsg', 'The profile "%s" already exists! Please, choose another description for this profile.'), [ProfileDescription.Text]), 2);
+            FormMain.GetMessagesLng('Messages', 'UseProfileFoundTitle', 'Profile Found',
+                                    'Messages', 'UseProfileFoundMsg', 'The profile "%s" already exists! Please, choose another description for this profile.');
+            GenerateMessage(FormMain.MessageText[0],
+                            Format(FormMain.MessageText[1], [ProfileDescription.Text]), 2);
             Result:= False;
             Exit;
           end;
@@ -334,50 +327,57 @@ begin
               end
            else
               begin
-                GenerateMessage(FormMain.GetLanguageText('Messages', 'UseProfileFoundTitle', 'Profile Found'),
-                                Format(FormMain.GetLanguageText('Messages', 'UseProfileFoundMsg', 'The profile "%s" already exists! Please, choose another description for this profile.'), [ProfileDescription.Text]), 2);
+                FormMain.GetMessagesLng('Messages', 'UseProfileFoundTitle', 'Profile Found',
+                                        'Messages', 'UseProfileFoundMsg', 'The profile "%s" already exists! Please, choose another description for this profile.');
+                GenerateMessage(FormMain.MessageText[0],
+                                Format(FormMain.MessageText[1], [ProfileDescription.Text]), 2);
                 Result:= False;
                 Exit;
               end;
          end
       else
          begin
-            case GenerateMessage(FormMain.GetLanguageText('Messages', 'NewProfileDescriptionTitle', 'New Profile Description'),
-                                 FormMain.GetLanguageText('Messages', 'NewProfileDescriptionMsg', 'The profile description has changed! Do you wish to update it ?'), 1) of
-              mrYes:
-                begin
-                  if SelectUserProfile.Items.IndexOf(ProfileDescription.Text) <> -1 then
-                     begin
-                       GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                       FormMain.GetLanguageText('Messages', 'NewProfileDescriptionErrorMsg',
-                                                                'Could not change profile description because there is another profile with the same name! Please, enter a different name.'), 2);
-                       Result:= False;
-                       Exit;
-                     end;
-                  if not RenameProfileDescription(SelectUserProfile.Text, ProfileDescription.Text) then
-                     begin
-                       GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                       FormMain.GetLanguageText('Messages', 'NewProfileDescriptionError2Msg', 'Could not change profile description in UserProfiles.ini! Please, try again.'), 2);
-                       Result:= False;
-                       Exit;
-                     end;
-                  if not RenameFile(FormMain.FrontendPath+'resources\profiles\'+SelectUserProfile.Text, FormMain.FrontendPath+'resources\profiles\'+UserProfileFileName) then
-                     begin
-                       if not DeleteFile(FormMain.FrontendPath+'resources\profiles\'+SelectUserProfile.Text) then
-                          GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                                          Format(FormMain.GetLanguageText('Messages', 'UserProfileRenameDeleteErrorMsg',
-                                                                          'Could not rename nor delete profile "%s.dat". Please, delete file "resources\profiles\%s.dat" manually...'), [UserProfileFileName, SelectUserProfile.Text]), 2);
-                     end;
-                  UserProfileFileName:= ProfileDescription.Text;
-                  SelectUserProfile.Items.BeginUpdate;
-                  SelectUserProfile.Items.Strings[SelectUserProfile.Items.IndexOf(SelectUserProfile.Text)]:= ProfileDescription.Text;
-                  SelectUserProfile.Items.EndUpdate;
-                  SelectUserProfile.ItemIndex:= SelectUserProfile.Items.IndexOf(ProfileDescription.Text);
-                  if FormMain.MenuUserProfile.Checked then
-                     FormMain.StatusBarUserProfile.Caption:= Format(FormMain.GetLanguageText('Main', 'StatusBarUserProfile', 'User Profile: %s'), [UserProfileFileName]);
-                end;
-              mrNo : ProfileDescription.Text:= SelectUserProfile.Text;
-            end;
+           FormMain.GetMessagesLng('Messages', 'NewProfileDescriptionTitle', 'New Profile Description',
+                                   'Messages', 'NewProfileDescriptionMsg', 'The profile description has changed! Do you wish to update it ?');
+           case GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) of
+             mrYes:
+               begin
+                 if SelectUserProfile.Items.IndexOf(ProfileDescription.Text) <> -1 then
+                    begin
+                      FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                              'Messages', 'NewProfileDescriptionErrorMsg', 'Could not change profile description because there is another profile with the same name! Please, enter a different name.');
+                      GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+                      Result:= False;
+                      Exit;
+                    end;
+                 if not RenameProfileDescription(SelectUserProfile.Text, ProfileDescription.Text) then
+                    begin
+                      FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                              'Messages', 'NewProfileDescriptionError2Msg', 'Could not change profile description in UserProfiles.ini! Please, try again.');
+                      GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+                      Result:= False;
+                      Exit;
+                    end;
+                 if not RenameFile(FormMain.FrontendPath+'resources\profiles\'+SelectUserProfile.Text, FormMain.FrontendPath+'resources\profiles\'+UserProfileFileName) then
+                    begin
+                      if not DeleteFile(FormMain.FrontendPath+'resources\profiles\'+SelectUserProfile.Text) then
+                         begin
+                           FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                                   'Messages', 'UserProfileRenameDeleteErrorMsg', 'Could not rename nor delete profile "%s.dat". Please, delete file "resources\profiles\%s.dat" manually...');
+                           GenerateMessage(FormMain.MessageText[0],
+                                           Format(FormMain.MessageText[1], [UserProfileFileName, SelectUserProfile.Text]), 2);
+                         end;
+                    end;
+                 UserProfileFileName:= ProfileDescription.Text;
+                 SelectUserProfile.Items.BeginUpdate;
+                 SelectUserProfile.Items.Strings[SelectUserProfile.Items.IndexOf(SelectUserProfile.Text)]:= ProfileDescription.Text;
+                 SelectUserProfile.Items.EndUpdate;
+                 SelectUserProfile.ItemIndex:= SelectUserProfile.Items.IndexOf(ProfileDescription.Text);
+                 if FormMain.MenuUserProfile.Checked then
+                    FormMain.StatusBarUserProfile.Caption:= Format(FormMain.GetLanguageText('Main', 'StatusBarUserProfile', 'User Profile: %s'), [UserProfileFileName]);
+               end;
+             mrNo : ProfileDescription.Text:= SelectUserProfile.Text;
+           end;
          end;
      end;
   UserProfileFileName:= ProfileDescription.Text;
@@ -399,9 +399,12 @@ begin
   if (HaveProfiles) and (SelectUserProfile.Text <> 'New User') then
      begin
        if not FormMain.ReadUserProfileOptions(UserProfileFileName) then
-          GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                          Format(FormMain.GetLanguageText('Messages', 'ReadConfigFileErrorMsg',
-                                                          'Could not read options from "%s" file! Please, verify if file is in place.'), [UserProfileFileName+'.ini']), 2);
+          begin
+            FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                    'Messages', 'ReadConfigFileErrorMsg', 'Could not read options from "%s" file! Please, verify if file is in place.');
+            GenerateMessage(FormMain.MessageText[0],
+                            Format(FormMain.MessageText[1], [UserProfileFileName+'.ini']), 2);
+          end;
      end;
 end;
 
@@ -415,8 +418,10 @@ begin
             begin
               if FormMain.VerifyProfileChanges(ProfileDescription.Text) then
                  begin
-                   case GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileChangedTitle', 'Profile Changed'),
-                                        Format(FormMain.GetLanguageText('Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?'), [ProfileDescription.Text]), 1) of
+                   FormMain.GetMessagesLng('Messages', 'UserProfileChangedTitle', 'Profile Changed',
+                                           'Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?');
+                   case GenerateMessage(FormMain.MessageText[0],
+                                        Format(FormMain.MessageText[1], [ProfileDescription.Text]), 1) of
                      mrYes:
                        begin
                          if SaveProfile then
@@ -426,10 +431,7 @@ begin
                               Close;
                             end;
                        end;
-                     mrNo:
-                       begin
-                         Close;
-                       end;
+                     mrNo: Close;
                    end;
                  end;
               Close;
@@ -449,8 +451,10 @@ begin
       begin
         if FormMain.VerifyProfileChanges(ProfileDescription.Text) then
            begin
-             case GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileChangedTitle', 'Profile Changed'),
-                                  Format(FormMain.GetLanguageText('Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?'), [ProfileDescription.Text]), 1) of
+             FormMain.GetMessagesLng('Messages', 'UserProfileChangedTitle', 'Profile Changed',
+                                     'Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?');
+             case GenerateMessage(FormMain.MessageText[0],
+                                  Format(FormMain.MessageText[1], [ProfileDescription.Text]), 1) of
                mrYes:
                  begin
                    if SaveProfile then
@@ -460,10 +464,7 @@ begin
                         Close;
                       end;
                  end;
-               mrNo:
-                 begin
-                   Close;
-                 end;
+               mrNo: Close;
              end;
            end;
       end;
@@ -478,23 +479,24 @@ begin
            begin
               if LowerCase(ProfileDescription.Text) = 'new user' then
                  begin
-                   GenerateMessage(FormMain.GetLanguageText('Messages', 'InvalidProfileTitle', 'Invalid Profile Name'),
-                                   FormMain.GetLanguageText('Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.'), 2);
+                   FormMain.GetMessagesLng('Messages', 'InvalidProfileTitle', 'Invalid Profile Name',
+                                           'Messages', 'InvalidProfileMsg', 'This profile is not valid! Please, enter a different name.');
+                   GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
                    Exit;
                  end;
            end
         else
            begin
-             GenerateMessage(FormMain.GetLanguageText('Messages', 'NoProfileSelectedTitle', 'No Profile Selected'),
-                             FormMain.GetLanguageText('Messages', 'NoProfileSelectedMsg', 'There is no profile created/selected! Please, create or select a profile before saving it.'), 2);
+             FormMain.GetMessagesLng('Messages', 'NoProfileSelectedTitle', 'No Profile Selected',
+                                     'Messages', 'NoProfileSelectedMsg', 'There is no profile created/selected! Please, create or select a profile before saving it.');
+             GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
              Exit;
            end;
         if not Assigned(FormUserProfileUserLogin) then
            FormUserProfileUserLogin:= TFormUserProfileUserLogin.Create(Self);
         with FormUserProfileUserLogin do
         begin
-          LabelUserProfileLogin.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelCreateEditPassword', 'Create/Edit Password');
-          LabelSelectUserProfile.Enabled:= False;
+          Caption:= FormMain.GetLanguageText('Login Logout', 'LabelCreateEditPassword', 'Create/Edit Password');
           UserProfile.Enabled:= False;
           CurrentUserProfile:= ProfileDescription.Text;
           Password.Tag:= 2;
@@ -508,8 +510,11 @@ begin
         HavePassword:= FormMain.MenuUserProfile.Tag = 0;
      end
   else
-     GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                     FormMain.GetLanguageText('Messages', 'UserProfileDescriptionErrorMsg', 'Profile description is empty! Please, enter a description before choosing a password.'), 2);
+     begin
+       FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                               'Messages', 'UserProfileDescriptionErrorMsg', 'Profile description is empty! Please, enter a description before choosing a password.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
+     end;
 end;
 
 procedure TFormUserProfileEditor.SelectUserProfileChange(Sender: TObject);
@@ -524,7 +529,6 @@ begin
                 FormUserProfileUserLogin:= TFormUserProfileUserLogin.Create(Self);
              with FormUserProfileUserLogin do
              begin
-               LabelSelectUserProfile.Enabled:= False;
                UserProfile.Enabled:= False;
                CurrentUserProfile:= SelectUserProfile.Text;
                Password.Tag:= 3;
@@ -540,10 +544,10 @@ begin
                  begin
                    UserProfileFileName:= SelectUserProfile.Text;
                    ProfileDescription.Text:= UserProfileFileName;
-
-                   ButtonReadUserProfileDAT.Caption:= Format(FormMain.GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), [UserProfileFileName+'.dat']);
-                   ButtonReadUserProfileDAT.Hint:= Format(FormMain.GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), [UserProfileFileName+'.dat']);
-
+                   FormMain.GetMessagesLng('Resource', 'ButtonReadIni', '&Read "%s"',
+                                           'Resource', 'ButtonReadIniHint', 'Read all data from file "%s"');
+                   ButtonReadUserProfileDAT.Caption:= Format(FormMain.MessageText[0], [UserProfileFileName+'.dat']);
+                   ButtonReadUserProfileDAT.Hint:= Format(FormMain.MessageText[1], [UserProfileFileName+'.dat']);
                    ButtonReadUserProfileDAT.OnClick(Self);
                    HavePassword:= True;
                    ButtonSaveProfile.Enabled:= True;
@@ -565,8 +569,10 @@ begin
            begin
              UserProfileFileName:= SelectUserProfile.Text;
              ProfileDescription.Text:= UserProfileFileName;
-             ButtonReadUserProfileDAT.Caption:= Format(FormMain.GetLanguageText('Resource', 'ButtonReadIni', '&Read "%s"'), [UserProfileFileName+'.dat']);
-             ButtonReadUserProfileDAT.Hint:= Format(FormMain.GetLanguageText('Resource', 'ButtonReadIniHint', 'Read all data from file "%s"'), [UserProfileFileName+'.dat']);
+             FormMain.GetMessagesLng('Resource', 'ButtonReadIni', '&Read "%s"',
+                                     'Resource', 'ButtonReadIniHint', 'Read all data from file "%s"');
+             ButtonReadUserProfileDAT.Caption:= Format(FormMain.MessageText[0], [UserProfileFileName+'.dat']);
+             ButtonReadUserProfileDAT.Hint:= Format(FormMain.MessageText[1], [UserProfileFileName+'.dat']);
              ButtonReadUserProfileDAT.OnClick(Self);
              HavePassword:= True;
            end;
@@ -607,27 +613,27 @@ begin
   ButtonCancelNewProfile.Enabled:= True;
   ButtonDeleteSelectedProfile.Enabled:= False;
   ButtonSaveProfile.Enabled:= True;
-  LabelSelectUserProfile.Enabled:= False;
   SelectUserProfile.Enabled:= False;
   HavePassword:= False;
   FormMain.ResetProfileEditorOptions;
   ProfileDescription.Text:= 'Choose a user name';
   ProfileDescription.SelectAll;
   ProfileDescription.SetFocus;
+
 end;
 
 procedure TFormUserProfileEditor.ButtonCancelNewProfileClick(
   Sender: TObject);
 begin
-  if GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileCancelNewProfileTitle', 'Cancel New Profile'),
-                     FormMain.GetLanguageText('Messages', 'UserProfileCancelNewProfileMsg', 'Cancel the creation of the new profile. Are you sure ?'), 1) = mrYes then
+  FormMain.GetMessagesLng('Messages', 'UserProfileCancelNewProfileTitle', 'Cancel New Profile',
+                          'Messages', 'UserProfileCancelNewProfileMsg', 'Cancel the creation of the new profile. Are you sure ?');
+  if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrYes then
      begin
        ButtonCancelNewProfile.Enabled:= False;
        SelectUserProfile.Items.Delete(SelectUserProfile.ItemIndex);
        SelectUserProfile.ItemIndex:= -1;
        ProfileDescription.Text:= '';
        ButtonCreateNewProfile.Enabled:= True;
-       LabelSelectUserProfile.Enabled:= True;
        SelectUserProfile.Enabled:= True;
        ButtonSaveProfile.Enabled:= False;
        ButtonDeleteSelectedProfile.Enabled:= False;
@@ -645,7 +651,6 @@ begin
             ButtonCreateNewProfile.Enabled:= True;
             ButtonCancelNewProfile.Enabled:= False;
             ButtonDeleteSelectedProfile.Enabled:= True;
-            LabelSelectUserProfile.Enabled:= True;
             SelectUserProfile.Enabled:= True;
           end;
      end;
@@ -663,16 +668,21 @@ end;
 procedure TFormUserProfileEditor.ButtonDeleteSelectedProfileClick(
   Sender: TObject);
 begin
-  if GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileDeleteTitle', 'Delete Profile'),
-                     Format(FormMain.GetLanguageText('Messages', 'UserProfileDeleteMsg', 'Delete profile "%s" from disk. Are you sure ?'), [UserProfileFileName]), 1) = mrNo then
+  FormMain.GetMessagesLng('Messages', 'UserProfileDeleteTitle', 'Delete Profile',
+                          'Messages', 'UserProfileDeleteMsg', 'Delete profile "%s" from disk. Are you sure ?');
+  if GenerateMessage(FormMain.MessageText[0],
+                     Format(FormMain.MessageText[1], [UserProfileFileName]), 1) = mrNo then
      Exit;
   case DeleteUserProfile(UserProfileFileName) of
     True:
       begin
         if not DeleteFile(FormMain.FrontendPath+'resources\profiles\'+UserProfileFileName+'.dat') then
-           GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                           Format(FormMain.GetLanguageText('Messages', 'UserProfileDeleteErrorMsg',
-                                  'Could not delete profile "%s.dat". Please, delete file "resources\profiles\%s.dat" before using this name description again...'), [UserProfileFileName, UserProfileFileName]), 2);
+           begin
+             FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                     'Messages', 'UserProfileDeleteErrorMsg', 'Could not delete profile "%s.dat". Please, delete file "resources\profiles\%s.dat" before using this name description again...');
+             GenerateMessage(FormMain.MessageText[0],
+                             Format(FormMain.MessageText[1], [UserProfileFileName, UserProfileFileName]), 2);
+           end;
         // must delete the file is file size is zero (0)
         SelectUserProfile.DeleteSelected;
         SelectUserProfile.ItemIndex:= -1;
@@ -687,9 +697,10 @@ begin
       end;
     False:
       begin
-        GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                        Format(FormMain.GetLanguageText('Messages', 'UserProfileDeleteError2Msg',
-                                                        'Could not delete section "[%s]" from UserProfiles.ini! Please, try again or verify UserProfiles.ini file contents.'), [UserProfileFileName]), 2);
+        FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                'Messages', 'UserProfileDeleteError2Msg', 'Could not delete section "[%s]" from UserProfiles.ini! Please, try again or verify UserProfiles.ini file contents.');
+        GenerateMessage(FormMain.MessageText[0],
+                        Format(FormMain.MessageText[1], [UserProfileFileName]), 2);
       end;
   end;
 end;
@@ -703,7 +714,6 @@ begin
             ButtonCreateNewProfile.Enabled:= True;
             ButtonCancelNewProfile.Enabled:= False;
             ButtonDeleteSelectedProfile.Enabled:= True;
-            LabelSelectUserProfile.Enabled:= True;
             SelectUserProfile.Enabled:= True;
           end;
      end;
@@ -718,8 +728,10 @@ begin
             begin
               if FormMain.VerifyProfileChanges(ProfileDescription.Text) then
                  begin
-                   case GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileChangedTitle', 'Profile Changed'),
-                                        Format(FormMain.GetLanguageText('Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?'), [ProfileDescription.Text]), 1) of
+                   FormMain.GetMessagesLng('Messages', 'UserProfileChangedTitle', 'Profile Changed',
+                                           'Messages', 'UserProfileChangedMsg', 'The user profile "%s" has changed. Do you want to save and apply changes ?');
+                   case GenerateMessage(FormMain.MessageText[0],
+                                        Format(FormMain.MessageText[1], [ProfileDescription.Text]), 1) of
                      mrYes:
                        begin
                          if SaveProfile then
@@ -729,18 +741,16 @@ begin
                               Close;
                             end;
                        end;
-                     mrNo:
-                       begin
-                         Close;
-                       end;
+                     mrNo: Close;
                    end;
                  end;
               Close;
             end;
           False:
             begin
-              if GenerateMessage(FormMain.GetLanguageText('Messages', 'UserProfileNotSavedTitle', 'Profile Not Saved'),
-                                 FormMain.GetLanguageText('Messages', 'UserProfileNotSavedMsg', 'There is a unsaved profile. You will loose all settings! Are you sure ?'), 1) = mrNo then
+              FormMain.GetMessagesLng('Messages', 'UserProfileNotSavedTitle', 'Profile Not Saved',
+                                      'Messages', 'UserProfileNotSavedMsg', 'There is a unsaved profile. You will loose all settings! Are you sure ?');
+              if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrNo then
                  Exit;
             end;
         end;
@@ -750,16 +760,7 @@ end;
 
 procedure TFormUserProfileEditor.FormCreate(Sender: TObject);
 begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\UserProfile.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\UserProfile.png');
-
   // Load Icons
-  FormMain.LoadIcon(ProfileMainDataImage, 'UserProfile\ProfileMainData.png');
-  FormMain.LoadIcon(UserProfileMiscellaneousImage, 'MAMEConfiguration\Miscellaneous.png');
-  FormMain.LoadIcon(GamesImage1, 'UserProfile\Games.png');
-  FormMain.LoadIcon(GamesImage2, 'UserProfile\Games.png');
-  FormMain.LoadIcon(PreviewPicturesImage, 'UserProfile\PreviewPictures.png');
-
   LoadToolbarIcons;
 end;
 

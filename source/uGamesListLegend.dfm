@@ -4,7 +4,7 @@ object FormGamesListLegend: TFormGamesListLegend
   ActiveControl = PageControlIconsDescription
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
-  ClientHeight = 290
+  ClientHeight = 274
   ClientWidth = 424
   Color = clBtnFace
   DefaultMonitor = dmPrimary
@@ -28,11 +28,11 @@ object FormGamesListLegend: TFormGamesListLegend
     Left = 8
     Top = 8
     Width = 409
-    Height = 273
+    Height = 257
     ActivePage = TabSheetAvailableGames
-    TabIndex = 0
     TabOrder = 0
     object TabSheetAvailableGames: TTabSheet
+      Caption = 'Available'
       object ClassicMR: TImage
         Left = 8
         Top = 8
@@ -169,42 +169,26 @@ object FormGamesListLegend: TFormGamesListLegend
         ShowAccelChar = False
         Transparent = True
       end
-      object CustomGames: TImage
+      object GameIcon: TImage
         Left = 8
         Top = 200
         Width = 16
         Height = 16
         Transparent = True
       end
-      object LabelCustomGames: TLabel
+      object LabelGameIcon: TLabel
         Left = 32
         Top = 200
         Width = 361
         Height = 13
         AutoSize = False
-        Caption = 'Custom Games'
-        ShowAccelChar = False
-        Transparent = True
-      end
-      object RealIcon: TImage
-        Left = 8
-        Top = 224
-        Width = 16
-        Height = 16
-        Transparent = True
-      end
-      object LabelRealIcon: TLabel
-        Left = 32
-        Top = 224
-        Width = 361
-        Height = 13
-        AutoSize = False
-        Caption = 'Real Icon'
+        Caption = 'Game Icon'
         ShowAccelChar = False
         Transparent = True
       end
     end
     object TabSheetUnavailableGames: TTabSheet
+      Caption = 'Unavailable'
       ImageIndex = 1
       object UnClassicMR: TImage
         Left = 8
@@ -342,21 +326,21 @@ object FormGamesListLegend: TFormGamesListLegend
         ShowAccelChar = False
         Transparent = True
       end
-      object UnCustomGames: TImage
-        Left = 8
-        Top = 200
-        Width = 16
-        Height = 16
-        Transparent = True
-      end
-      object LabelUnCustomGames: TLabel
+      object LabelUnGameIcon: TLabel
         Left = 32
         Top = 200
         Width = 361
         Height = 13
         AutoSize = False
-        Caption = 'Unavailable Custom Games'
+        Caption = 'Game Icon'
         ShowAccelChar = False
+        Transparent = True
+      end
+      object UnGameIcon: TImage
+        Left = 8
+        Top = 200
+        Width = 16
+        Height = 16
         Transparent = True
       end
     end

@@ -2,11 +2,11 @@ unit uCommon;
 
 interface
 
-uses Windows, Messages, Classes, ExtCtrls, ComCtrls,
+uses Windows, Messages, Classes, ExtCtrls, ComCtrls, dialogs,
      SysUtils, ShlObj, Forms, Controls, IniFiles, uMessages, uFilesUtil;
 
 const
-  FrontendVersion = '3.4.1';
+  FrontendVersion = '4.1';
   SystemStr: String[1] = '"';
 
 function  ExtMatch(FileExtension, Extensions: String; Delimiter: Char): Boolean;
@@ -32,7 +32,6 @@ function  ExtractMAMEIniValue(MAMEOption: String): String;
 
 function  GetGameHistory(const GameName: String; const StringLine: String): Boolean;
 procedure GetGamesFilesList(Folder, FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean);
-function  DiskInDrive(Drive: Char): Boolean;
 
 implementation
 
@@ -174,8 +173,8 @@ begin
      ListHolder.Clear;
 
   // Rewrite path
-  if (Folder[LengthDir] <> ':') and (Folder[LengthDir] <> '\') then
-     Folder:= Folder+'\';
+  if Folder[LengthDir] <> ':' then
+     Folder:= IncludeTrailingPathDelimiter(Folder);
 
   // Add Files
   Counter:= FindFirst(Folder + '*.*', $37, Search);
@@ -184,24 +183,26 @@ begin
     // It's a directory?
     if (Search.Attr and $10 = $10) and (Search.Name <> '.') and
        (Search.Name <> '..') then
-       begin
-         GetCtrlrList(Folder+Search.Name, FileType, ListHolder, False);
-       end
+       GetCtrlrList(Folder+Search.Name, FileType, ListHolder, False)
     else
        begin
          if FileType = '.zip' then
             begin
               if LowerCase(ExtractFileExt(Search.Name)) = FileType then
                  begin
-                   ControllerDescription:= Search.Name;
-                   Delete(ControllerDescription, Length(ControllerDescription)-3, 4);
-                   if ListHolder.IndexOf(ControllerDescription) = -1 then
-                      ListHolder.Add(ControllerDescription);
+                   Continue:= False;
+                   if FileType = '.zip' then
+                      begin
+                        ControllerDescription:= Search.Name;
+                        Delete(ControllerDescription, Length(ControllerDescription)-3, 4);
+                        if ListHolder.IndexOf(ControllerDescription) = -1 then
+                           ListHolder.Add(ControllerDescription);
+                      end;
                  end;
             end
          else
          if FileType = '.ini' then
-            Continue:= LowerCase(Search.Name) = 'default.ini'
+            Continue:= (LowerCase(Search.Name) = 'default.ini')
          else
             Continue:= False;
 
@@ -209,8 +210,7 @@ begin
             begin
               EndIndex:= -1;
               IndexLastFolder:= -1;
-              if Folder[Length(Folder)] = '\' then
-                 Delete(Folder, Length(Folder), 1);
+              Folder:= ExcludeTrailingPathDelimiter(Folder);
               ControllerDescription:= '';
               for Loop:=Length(Folder) downto 0 do
               begin
@@ -254,8 +254,8 @@ begin
      ListHolder.Clear;
 
   // Rewrite path
-  if (Folder[LengthDir] <> ':') and (Folder[LengthDir] <> '\') then
-     Folder:= Folder+'\';
+  if Folder[LengthDir] <> ':' then
+     Folder:= IncludeTrailingPathDelimiter(Folder);
 
   // Add Files
   Counter:= FindFirst(Folder + '*.*', $37, Search);
@@ -486,14 +486,27 @@ end;}
 function ExtractMAMEIniValue(MAMEOption: String): String;
 var
   Index: Integer;
+  Disabled: Boolean;
 begin
   Result:= '';
+  Disabled:= (Pos('#', MAMEOption) > 0);
   Index:= Pos(' ', MAMEOption);
   if Index = -1 then
      Result:= 'Error'
   else
      begin
         Delete(MAMEOption, 1, Index);
+        if Disabled then
+           begin
+             Index:= Pos(' ', MAMEOption);
+             if Index = -1 then
+                begin
+                  Result:= 'Error';
+                  Exit;
+                end
+             else
+                Delete(MAMEOption, 1, Index);
+           end;
         Result:= Trim(MAMEOption);
         if Result = '' then
            Result:= 'Error';
@@ -537,8 +550,8 @@ begin
 
   ListHolder.BeginUpdate;
   // Rewrite path
-  if (Folder[LengthDir] <> ':') and (Folder[LengthDir] <> '\') then
-     Folder:= Folder+'\';
+  if Folder[LengthDir] <> ':' then
+     Folder:= IncludeTrailingPathDelimiter(Folder);
 
   // Add Files
   Counter:= FindFirst(Folder + '*.*', $37, Search);
@@ -562,31 +575,5 @@ begin
   ListHolder.EndUpdate;
 end;
 
-function DiskInDrive(Drive: Char): Boolean;
-var
-  ErrorMode: Word;
-begin
-  { make it upper case }
-  if Drive in ['a'..'z'] then
-     Dec(Drive, $20);
-
-  { make sure it's a letter }
-  if not (Drive in ['A'..'Z']) then
-     raise EConvertError.Create('Not a valid drive ID');
-
-  { turn off critical errors }
-  ErrorMode:= SetErrorMode(SEM_FailCriticalErrors);
-  try
-    { drive 1 = a, 2 = b, 3 = c, etc. }
-    Result:= not (DiskSize(Ord(Drive) - $40) = -1);
-    {if DiskSize(Ord(Drive) - $40) = -1 then
-       Result:= False
-    else
-       Result:= True;}
-  finally
-  { restore old error mode }
-    SetErrorMode(ErrorMode);
-  end;
-end;
 
 end.

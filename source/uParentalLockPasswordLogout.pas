@@ -4,17 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  ExtCtrls, StdCtrls, IniFiles, Mask, GraphicEx;
+  ExtCtrls, StdCtrls, IniFiles, Mask;
 
 type
   TFormParentalLockPasswordLogout = class(TForm)
-    LabelParentalLockLogout: TLabel;
     LabelEnterPassword: TLabel;
     Password: TMaskEdit;
     ButtonOk: TButton;
     ButtonCancel: TButton;
-    TopImage: TImage;
-    BottomLine: TBevel;
     LabelConfirmPassword: TLabel;
     ConfirmPassword: TMaskEdit;
     procedure ButtonCancelClick(Sender: TObject);
@@ -27,7 +24,6 @@ type
       Y: Integer);
     procedure PanelFormMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure FormCreate(Sender: TObject);
     procedure ConfirmPasswordKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
@@ -74,8 +70,9 @@ begin
 
        if Password.Text <> ConfirmPassword.Text then
           begin
-            GenerateMessage(FormMain.GetLanguageText('Messages', 'IncorrectPasswordTitle', 'Password Confirmation'),
-                            FormMain.GetLanguageText('Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.'), 2);
+            FormMain.GetMessagesLng('Messages', 'IncorrectPasswordTitle', 'Password Confirmation',
+                                    'Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.');
+            GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
             Password.SelectAll;
             Password.SetFocus;
             Exit;
@@ -105,8 +102,9 @@ begin
                  end
               else
                  begin
-                   GenerateMessage(FormMain.GetLanguageText('Messages', 'NoPasswordTitle', 'No Password'),
-                                   FormMain.GetLanguageText('Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.'), 2);
+                   FormMain.GetMessagesLng('Messages', 'NoPasswordTitle', 'No Password',
+                                           'Messages', 'NoPasswordMsg', 'The password is empty! Please, enter a valid password.');
+                   GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
                  end;
             end;
         end;
@@ -116,8 +114,9 @@ begin
         case Password.Tag of
           0:
             begin
-              GenerateMessage(FormMain.GetLanguageText('Messages', 'ErrorTitle', 'Error'),
-                              FormMain.GetLanguageText('Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.'), 2);
+              FormMain.GetMessagesLng('Messages', 'ErrorTitle', 'Error',
+                                      'Messages', 'IncorrectPasswordMsg', 'The password is incorrect! Try again.');
+              GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
               Password.SetFocus;
               Password.SelectAll;
             end;
@@ -141,8 +140,10 @@ begin
          ConfirmPassword.Enabled:= False;
        end;
     1: begin
-         LabelParentalLockLogout.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelCreateEditPassword', 'Create/Edit Password');
-         LabelEnterPassword.Caption:= FormMain.GetLanguageText('Login Logout', 'LabelEnterNewPassword', 'Enter New Password');
+         FormMain.GetMessagesLng('Login Logout', 'LabelCreateEditPassword', 'Create/Edit Password',
+                                 'Login Logout', 'LabelEnterNewPassword', 'Enter New Password');
+         Caption:= FormMain.MessageText[0];
+         LabelEnterPassword.Caption:= FormMain.MessageText[1];
          Password.Text:= DecryptData(FormMain.ParentalLockPasswordString);
          Password.SelectAll;
        end;
@@ -232,12 +233,5 @@ begin
        Moving:= False;
      end;
 end;
-
-procedure TFormParentalLockPasswordLogout.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\Key.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\Key.png');
-end;
-
 
 end.

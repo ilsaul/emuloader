@@ -1,9 +1,10 @@
 object FormUserProfileUserLogin: TFormUserProfileUserLogin
-  Left = 475
-  Top = 205
+  Left = 327
+  Top = 267
   BorderIcons = []
   BorderStyle = bsToolWindow
-  ClientHeight = 271
+  Caption = 'User Profile Login'
+  ClientHeight = 184
   ClientWidth = 275
   Color = clBtnFace
   DefaultMonitor = dmPrimary
@@ -15,29 +16,12 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object TopImage: TImage
-    Left = 0
-    Top = 0
-    Width = 275
-    Height = 60
-  end
-  object LabelUserProfileLogin: TLabel
-    Left = 72
-    Top = 24
-    Width = 193
-    Height = 13
-    AutoSize = False
-    Caption = 'User Profile Login'
-    ShowAccelChar = False
-    Transparent = True
-  end
   object LabelEnterPassword: TLabel
     Left = 8
-    Top = 120
+    Top = 56
     Width = 75
     Height = 13
     Caption = 'Enter Password'
@@ -46,23 +30,16 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
   end
   object LabelSelectUserProfile: TLabel
     Left = 8
-    Top = 72
+    Top = 8
     Width = 87
     Height = 13
     Caption = 'Select User Profile'
     ShowAccelChar = False
     Transparent = True
   end
-  object BottomLine: TBevel
-    Left = 5
-    Top = 224
-    Width = 265
-    Height = 10
-    Shape = bsTopLine
-  end
   object LabelConfirmPassword: TLabel
     Left = 8
-    Top = 168
+    Top = 104
     Width = 86
     Height = 13
     Caption = 'Confirm Password'
@@ -71,7 +48,7 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
   end
   object Password: TMaskEdit
     Left = 8
-    Top = 136
+    Top = 72
     Width = 257
     Height = 21
     PasswordChar = '*'
@@ -80,7 +57,7 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
   end
   object UserProfile: TComboBox
     Left = 8
-    Top = 88
+    Top = 24
     Width = 257
     Height = 21
     Style = csDropDownList
@@ -91,8 +68,8 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
     OnKeyPress = UserProfileKeyPress
   end
   object ButtonOk: TButton
-    Left = 104
-    Top = 240
+    Left = 56
+    Top = 152
     Width = 75
     Height = 23
     Hint = 'Close and update settings'
@@ -104,8 +81,8 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
     OnClick = ButtonOkClick
   end
   object ButtonCancel: TButton
-    Left = 192
-    Top = 240
+    Left = 144
+    Top = 152
     Width = 75
     Height = 23
     Hint = 'Close without updating'
@@ -117,7 +94,7 @@ object FormUserProfileUserLogin: TFormUserProfileUserLogin
   end
   object ConfirmPassword: TMaskEdit
     Left = 8
-    Top = 184
+    Top = 120
     Width = 257
     Height = 21
     PasswordChar = '*'

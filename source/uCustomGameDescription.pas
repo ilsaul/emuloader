@@ -4,15 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GR32_Image, StdCtrls, ExtCtrls, ComCtrls;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls;
 
 type
   TFormCustomGameDescription = class(TForm)
-    TopImage: TImage;
-    LabelCaption: TLabel;
     PageControlCustomCommandLine: TPageControl;
     TabSheetCustomCommandLine: TTabSheet;
-    BottomLine: TBevel;
     ButtonOk: TButton;
     ButtonCancel: TButton;
     GameIcon: TImage;
@@ -25,7 +22,6 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure NewDescriptionChange(Sender: TObject);
     procedure NewDescriptionDblClick(Sender: TObject);
     procedure ButtonOriginalDescriptionClick(Sender: TObject);
@@ -68,11 +64,11 @@ procedure TFormCustomGameDescription.FormShow(Sender: TObject);
 begin
   FormMain.UpdateGeneralAppearance(FormCustomGameDescription);
   FormMain.SetCustomGameDescriptionLanguage;
-  case FormMain.MenuRealIcons.Checked of
-    True : FormMain.BigRealIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
+  case FormMain.MenuGamesIcons.Checked of
+    True : FormMain.BigGamesIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
     False: FormMain.BuiltInBigListImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
   end;
-  TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[14].Caption, GameName]);
+  TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[FormMain.GetColumnIndex(14)].Caption, GameName]);
   LabelGameDescription.Caption:= FormMain.GamesList[FormMain.SelectedGame].eDescription;
   NewDescription.Text:= FormMain.ReadCustomGameDescription(GameName, OriginalDescription);
   if NewDescription.Text = '' then
@@ -92,12 +88,6 @@ begin
        FormMain.List.Invalidate;
      end;
   Close;
-end;
-
-procedure TFormCustomGameDescription.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\CustomGameDescription.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\CustomGameDescription.png');
 end;
 
 procedure TFormCustomGameDescription.NewDescriptionChange(

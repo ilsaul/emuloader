@@ -4,15 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GR32_Image, StdCtrls, ExtCtrls, ComCtrls;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls;
 
 type
   TFormCustomCommandLine = class(TForm)
-    TopImage: TImage;
-    LabelCaption: TLabel;
     PageControlCustomCommandLine: TPageControl;
     TabSheetCustomCommandLine: TTabSheet;
-    BottomLine: TBevel;
     ButtonOk: TButton;
     ButtonCancel: TButton;
     GameIcon: TImage;
@@ -28,7 +25,6 @@ type
     procedure CommandLineButtonSelectClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure CustomCommandLineExecutableChange(Sender: TObject);
     procedure CustomCommandLineParamatersChange(Sender: TObject);
   private
@@ -81,15 +77,15 @@ procedure TFormCustomCommandLine.FormShow(Sender: TObject);
 begin
   FormMain.UpdateGeneralAppearance(FormCustomCommandLine);
   FormMain.SetCustomCommandLineLanguage;
-  case FormMain.MenuRealIcons.Checked of
-    True : FormMain.BigRealIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
+  case FormMain.MenuGamesIcons.Checked of
+    True : FormMain.BigGamesIconsImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
     False: FormMain.BuiltInBigListImageList.GetIcon(FormMain.GamesList[FormMain.SelectedGame].eImageIndex, GameIcon.Picture.Icon);
   end;
   case GameIcon.Tag of
-    0: TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[14].Caption, GameName]);
-    1: TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[18].Caption, GameName]);
+    0: TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[FormMain.GetColumnIndex(14)].Caption, GameName]);
+    1: TabSheetCustomCommandLine.Caption:= Format('%s: %s', [FormMain.List.Column[FormMain.GetColumnIndex(18)].Caption, GameName]);
   end;
-  
+
   LabelGameDescription.Caption:= FormMain.GamesList[FormMain.SelectedGame].eDescription;
   FormMain.ReadMAMECustomCommandLine(GameName, GameIcon.Tag);
   CheckBlankFields;
@@ -99,12 +95,6 @@ procedure TFormCustomCommandLine.ButtonOkClick(Sender: TObject);
 begin
   FormMain.UpdateMAMECustomCommandLine(GameName, CustomCommandLineExecutable.Text, CustomCommandLineParamaters.Text, GameIcon.Tag);
   Close;
-end;
-
-procedure TFormCustomCommandLine.FormCreate(Sender: TObject);
-begin
-  if FileExists(FormMain.FrontendPath+'resources\images\topwindow\CustomCommandLine.png') then
-     TopImage.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\topwindow\CustomCommandLine.png');
 end;
 
 procedure TFormCustomCommandLine.CustomCommandLineExecutableChange(

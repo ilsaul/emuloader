@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ExtCtrls, StdCtrls, ComCtrls, Menus, ImgList, IniFiles, GR32_RangeBars,
-  GR32_Image, GraphicEx, uGR32Extra;
+  GraphicEx, GR32_Image;
 
 type
   TFormPreferences = class(TForm)
@@ -57,8 +57,6 @@ type
     TabSheetMiscellaneous: TTabSheet;
     TabSheetGames: TTabSheet;
     TabSheetPictures: TTabSheet;
-    AverageFPS: TCheckBox;
-    ShowStatistics: TCheckBox;
     MinimizeFrontend: TCheckBox;
     NewDescriptionFormat: TCheckBox;
     FillAllCloneColumns: TCheckBox;
@@ -83,18 +81,11 @@ type
     SplashLogoButtonSelect: TButton;
     SplashLogo: TEdit;
     LabelDefaultGameIconsFolder: TGroupBox;
-    ButtonUpdateGameIconsFolder: TButton;
     DefaultGameIconsFolder: TEdit;
     DefaultGameIconsFolderButtonSelect: TButton;
     TabSheetMAME: TTabSheet;
-    MiscellaneousImage: TImage32Ex;
-    GamesListImage: TImage32Ex;
-    PreviewPicturesImage: TImage32Ex;
-    AppearanceImage: TImage32Ex;
     UseCustomOptionsDefault: TCheckBox;
     TabSheetMAMEFolders: TTabSheet;
-    MAMEFoldersImage: TImage32Ex;
-    ButtonUpdateEmuLoaderFolders: TButton;
     LabelCustomAspectRatioMAME: TGroupBox;
     LabelHorizontalAspectRatio: TLabel;
     LabelHorizontalAspectRatioValue: TLabel;
@@ -109,10 +100,8 @@ type
     UseExtraParametersMAME: TCheckBox;
     ExtraParametersMAME: TEdit;
     ExtraParametersDOSMAME: TEdit;
-    MAMEExtraOptionsImage: TImage32Ex;
     CyclePictureTypes: TCheckBox;
     LabelPicturesVisualEffects: TGroupBox;
-    SmoothPictures: TCheckBox;
     AspectRatio: TCheckBox;
     PicturesTransparency: TCheckBox;
     PicturesVirtualList: TCheckBox;
@@ -145,7 +134,69 @@ type
     FolderGamesFAQButtonSelect: TButton;
     UseCustomGameDescription: TCheckBox;
     UseCustomGameCategory: TCheckBox;
-    AuditCHDFiles: TCheckBox;
+    LabelSmoothPictures: TLabel;
+    SmoothPictures: TGaugeBar;
+    LabelSmoothPicturesValue: TLabel;
+    TabSheetSoundClips: TTabSheet;
+    PlaySoundClip: TCheckBox;
+    LabelSoundClipSettings: TGroupBox;
+    LabelOutputType: TLabel;
+    OutputType: TComboBox;
+    LabelOutputDevice: TLabel;
+    OutputDevice: TComboBox;
+    LabelMixerType: TLabel;
+    MixerType: TComboBox;
+    LabelOutputRate: TLabel;
+    OutputRate: TComboBox;
+    LoopSoundClip: TCheckBox;
+    LabelSoundClipFolder: TGroupBox;
+    SoundClipFolder: TEdit;
+    SoundClipFolderSelect: TButton;
+    ParentSoundClip: TCheckBox;
+    SoundClipVolume: TGaugeBar;
+    LabelSoundClipVolumeValue: TLabel;
+    LabelSoundClipVolume: TLabel;
+    HideNavigationPanel: TCheckBox;
+    HidePictureHint: TCheckBox;
+    GamesFilterBox: TGroupBox;
+    HidePreliminaryGames: TCheckBox;
+    HideBios: TCheckBox;
+    ButtonUpdateGamesList: TButton;
+    LabelAutomaticGameInformation: TGroupBox;
+    LabelAutomaticGameInformation1: TLabel;
+    LabelAutomaticGameInformation2: TLabel;
+    LabelAutomaticGameInformation3: TLabel;
+    LabelAutomaticGameInformation4: TLabel;
+    AutomaticGameInformation1: TComboBox;
+    AutomaticGameInformation2: TComboBox;
+    AutomaticGameInformation3: TComboBox;
+    AutomaticGameInformation4: TComboBox;
+    InternetPage: TLabeledEdit;
+    TabSheetZipFiles: TTabSheet;
+    LabelZipTitleSnapshots: TGroupBox;
+    ZipTitleSnapshots: TEdit;
+    ZipTitleSnapshotsButtonSelect: TButton;
+    LabelZipControlPanels: TGroupBox;
+    ZipControlPanels: TEdit;
+    ZipControlPanelsButtonSelect: TButton;
+    LabelZipMarquees: TGroupBox;
+    ZipMarquees: TEdit;
+    ZipMarqueesButtonSelect: TButton;
+    LabelZipControlPanelLayouts: TGroupBox;
+    ZipControlPanelLayouts: TEdit;
+    ZipControlPanelLayoutsButtonSelect: TButton;
+    LabelZipFlyers: TGroupBox;
+    ZipFlyers: TEdit;
+    ZipFlyersButtonSelect: TButton;
+    LabelZipIcons: TGroupBox;
+    ZipIcons: TEdit;
+    ZipIconsButtonSelect: TButton;
+    LabelZipCabinets: TGroupBox;
+    ZipCabinets: TEdit;
+    ZipCabinetsButtonSelect: TButton;
+    LabelZipInGameSnapshots: TGroupBox;
+    ZipInGameSnapshotsButtonSelect: TButton;
+    ZipInGameSnapshots: TEdit;
     procedure ButtonCloseClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure AspectRatioClick(Sender: TObject);
@@ -160,7 +211,6 @@ type
     procedure HotRodClick(Sender: TObject);
     procedure StretchLargerPicturesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure SmoothPicturesClick(Sender: TObject);
     procedure XArcadeClick(Sender: TObject);
     procedure SlikStikClick(Sender: TObject);
     procedure VisitSlikStikImageClick(Sender: TObject);
@@ -190,7 +240,6 @@ type
     procedure HotRodSEImageFileButtonSelectClick(Sender: TObject);
     procedure SlikStikImageFileButtonSelectClick(Sender: TObject);
     procedure XArcadeImageFileButtonSelectClick(Sender: TObject);
-    procedure ButtonUpdateGameIconsFolderClick(Sender: TObject);
     procedure HorizontalAspectRatioChange(Sender: TObject);
     procedure VerticalAspectRatioChange(Sender: TObject);
     procedure HorizontalAspectRatioMouseUp(Sender: TObject;
@@ -206,14 +255,26 @@ type
     procedure FolderControlPanelLayoutsButtonSelectClick(Sender: TObject);
     procedure FolderIconsButtonSelectClick(Sender: TObject);
     procedure FolderGamesFAQButtonSelectClick(Sender: TObject);
-    procedure ButtonUpdateEmuLoaderFoldersClick(Sender: TObject);
     procedure StretchPictureClick(Sender: TObject);
     procedure PicturesVirtualListClick(Sender: TObject);
     procedure CyclePictureTypesClick(Sender: TObject);
-    procedure AuditCHDFilesClick(Sender: TObject);
+    procedure SmoothPicturesChange(Sender: TObject);
+    procedure SoundClipFolderSelectClick(Sender: TObject);
+    procedure PlaySoundClipClick(Sender: TObject);
+    procedure OutputDeviceSelect(Sender: TObject);
+    procedure OutputTypeSelect(Sender: TObject);
+    procedure MixerTypeSelect(Sender: TObject);
+    procedure OutputRateSelect(Sender: TObject);
+    procedure SoundClipVolumeChange(Sender: TObject);
+    procedure HideNavigationPanelClick(Sender: TObject);
+    procedure HidePictureHintClick(Sender: TObject);
+    procedure ButtonUpdateGamesListClick(Sender: TObject);
+    procedure ZipTitleSnapshotsButtonSelectClick(Sender: TObject);
+    procedure DefaultGameIconsFolderChange(Sender: TObject);
   private
     { Private declarations }
     function  LoadToolbarIcons: Boolean;
+    procedure RestartFMOD;
   public
     procedure UpdateGameSize;
     { Public declarations }
@@ -229,6 +290,16 @@ uses uMain, uStatus, uCommon, uFilesUtil;
 {$R *.DFM}
 
 // procedures
+
+procedure TFormPreferences.RestartFMOD;
+begin
+  if PlaySoundClip.Checked then
+     begin
+       FormMain.InitDeInitFMOD(False, False);
+       FormMain.InitDeInitFMOD(True, False);
+     end;
+end;
+
 function TFormPreferences.LoadToolbarIcons: Boolean;
 begin
   Result:= ((FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\0.ico')) and
@@ -236,11 +307,13 @@ begin
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\2.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\3.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\4.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\MAMEConfiguration\4.ico')) and
+            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\MAMEConfiguration\5.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\25.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\7.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\52.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\77.ico')));
+            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\77.ico')) and
+            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\8.ico')) and
+            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\9.ico')));
 
   if Result then
      begin
@@ -249,56 +322,17 @@ begin
        FormMain.AddDefaultIcons('Preferences\2.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Preferences\3.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Preferences\4.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('MAMEConfiguration\4.ico', PreferencesImageList, 1, False);
+       FormMain.AddDefaultIcons('MAMEConfiguration\5.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Main\toolbar\25.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Preferences\7.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Main\toolbar\52.ico', PreferencesImageList, 1, False);
        FormMain.AddDefaultIcons('Main\toolbar\77.ico', PreferencesImageList, 1, False);
+       FormMain.AddDefaultIcons('Preferences\8.ico', PreferencesImageList, 1, False);
+       FormMain.AddDefaultIcons('Preferences\9.ico', PreferencesImageList, 1, False);
      end;
 end;
 
 procedure TFormPreferences.UpdateGameSize;
-
-  function FormatText(Value: Extended): String;
-  begin
-    if Value = 0 then
-       Result:= ''
-    else
-    if Pos('.0', FloatToStr(Value)) <> 0 then
-       Result:= TrimLeft(Format('%3u', [Trunc(Value)]))
-    else
-    if Pos('.', FloatToStr(Value)) <> 0 then
-       Result:= TrimLeft(Format('%3.2f', [Value]))
-    else
-       Result:= TrimLeft(Format('%3u', [Trunc(Value)]));
-  end;
-
-  function GetSizeType(Value: Extended; Bits: Boolean): ShortString;
-  begin
-    if Bits then
-       Value:= Value * 8; // convert bytes to bits
-
-    if Trunc(Value / 1024) > 0 then
-       begin
-         Value:= Value / 1024; // convert bits to Kb
-         if Trunc(Value / 1024) > 0 then
-            begin
-              Value:= Value / 1024; // convert Kb to Mb
-              if Trunc(Value / 1024) > 0 then
-                 begin
-                   Value:= Value / 1024; // convert Mb to Gb
-                   Result:= FormatText(Value)+' G';
-                 end
-              else
-                 Result:= FormatText(Value)+' M';
-            end
-         else
-            Result:= FormatText(Value)+' K';
-       end
-    else
-       Result:= FormatText(Value)+' B';
-end;
-
 var
   GameSize: Extended;
   SizeInfo: String;
@@ -314,11 +348,11 @@ begin
      GameSize:= StrToFloat(SizeInfo);
 
   if ShowGameSizeBits.Checked then
-     FormMain.StatusBarGameSize.Caption:= GetSizeType(GameSize, True)+'Bits'
+     FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, True)
   else
 
   if ShowGameSizeBytes.Checked then
-     FormMain.StatusBarGameSize.Caption:= GetSizeType(GameSize, False)+'Bytes'
+     FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, False)
   else
      begin
        // get the .zip file size
@@ -328,7 +362,7 @@ begin
           GameSize:= GetFileSize(FormMain.SearchZipFolder(FormMain.GamesList[FormMain.SelectedGame].eClone));
 
        if GameSize > -1 then
-          FormMain.StatusBarGameSize.Caption:= GetSizeType(GameSize, False)+'Bytes'
+          FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, False)
        else
           FormMain.StatusBarGameSize.Caption:= '';
      end;
@@ -365,24 +399,12 @@ begin
      SlikStikImage.Bitmap.LoadFromFile(SlikStikImageFile.Text);
 
   // Load Icons
-  // General tab
-  FormMain.LoadIcon(MiscellaneousImage, 'MAMEConfiguration\Miscellaneous.png');
-  FormMain.LoadIcon(GamesListImage, 'Preferences\GamesList.png');
-  FormMain.LoadIcon(PreviewPicturesImage, 'Preferences\PreviewPictures.png');
-
-  // Appearance tab
-  FormMain.LoadIcon(AppearanceImage, 'Preferences\Appearance.png');
-
-  // M.A.M.E. tabs
-  FormMain.LoadIcon(MAMEFoldersImage, 'Preferences\EmuLoaderFolders.png');
-  FormMain.LoadIcon(MAMEExtraOptionsImage, 'Preferences\MAMEExtraOptions.png');
-
   LoadToolbarIcons;
 end;
 
 procedure TFormPreferences.AspectRatioClick(Sender: TObject);
 begin
-  FormMain.SetAspectRatio(FormMain.Picture);
+  FormMain.SetAspectRatio;
 end;
 
 procedure TFormPreferences.ShowParentPicturesClick(Sender: TObject);
@@ -563,11 +585,6 @@ begin
      end;
 end;
 
-procedure TFormPreferences.SmoothPicturesClick(Sender: TObject);
-begin
-  FormMain.SmoothPicture(FormMain.Picture);
-end;
-
 procedure TFormPreferences.XArcadeClick(Sender: TObject);
 begin
   if XArcade.Checked then
@@ -745,7 +762,6 @@ procedure TFormPreferences.DefaultGameIconsFolderButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogSelectFolder(DefaultGameIconsFolder, False);
-  ButtonUpdateGameIconsFolder.OnClick(Self);
 end;
 
 procedure TFormPreferences.HotRodSEImageFileButtonSelectClick(
@@ -770,27 +786,6 @@ begin
   FormMain.DialogOpenFile(5, Format(FormMain.GetLanguageText('Preferences', 'DialogController', 'Select an image file for the %s controller'), [TabSheetXArcade.Caption]), XArcadeImageFile);
   if FileExists(XArcadeImageFile.Text) then
      XArcadeImage.Bitmap.LoadFromFile(XArcadeImageFile.Text);
-end;
-
-procedure TFormPreferences.ButtonUpdateGameIconsFolderClick(
-  Sender: TObject);
-begin
-  if DefaultGameIconsFolder.Text <> '' then
-     begin
-       if FormMain.CheckDefaultIconsFile then
-          begin
-            if not FormMain.MenuRealIcons.Checked then
-               FormMain.List.Items.BeginUpdate;
-            FormMain.BuiltInBigListImageList.Clear;
-            FormMain.BuiltInSmallListImageList.Clear;
-            FormMain.ReadDefaultIconsFile;
-            if not FormMain.MenuRealIcons.Checked then
-               begin
-                 FormMain.List.Invalidate;
-                 FormMain.List.Items.EndUpdate;
-               end;
-          end;
-     end;
 end;
 
 procedure TFormPreferences.HorizontalAspectRatioChange(Sender: TObject);
@@ -868,15 +863,9 @@ begin
   FormMain.DialogSelectFolder(FolderGamesFAQ, False);
 end;
 
-procedure TFormPreferences.ButtonUpdateEmuLoaderFoldersClick(
-  Sender: TObject);
-begin
-  FormMain.GetMAMEExtendedPaths;
-end;
-
 procedure TFormPreferences.StretchPictureClick(Sender: TObject);
 begin
-  FormMain.SetAspectRatio(FormMain.Picture);
+  FormMain.SetAspectRatio;
   if StretchPicture.Tag = 0 then
      FormMain.List.SetFocus;
 end;
@@ -903,9 +892,118 @@ begin
   FormMain.UpdateLabelPictures;
 end;
 
-procedure TFormPreferences.AuditCHDFilesClick(Sender: TObject);
+procedure TFormPreferences.SmoothPicturesChange(Sender: TObject);
 begin
-  FormMain.MenuGamesAudit.Tag:= Ord(AuditCHDFiles.Checked);
+  FormMain.SmoothPicture;
+end;
+
+procedure TFormPreferences.SoundClipFolderSelectClick(Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(SoundClipFolder, False);
+end;
+
+procedure TFormPreferences.PlaySoundClipClick(Sender: TObject);
+begin
+  FormMain.PanelSpectrum.Visible:= PlaySoundClip.Checked;
+  FormMain.InitDeInitFMOD(PlaySoundClip.Checked, True);
+  LabelSoundClipSettings.Tag:= Ord(PlaySoundClip.Checked);
+  if PlaySoundClip.Checked then
+     begin
+       FormMain.PopulateDevices; // Get all sound devices present on the system
+       if OutputDevice.Items.Count > 0 then
+          if OutputDevice.Tag > OutputDevice.Items.Count then
+             OutputDevice.ItemIndex:= 0
+          else
+             OutputDevice.ItemIndex:= OutputDevice.Tag;
+     end;
+end;
+
+procedure TFormPreferences.OutputDeviceSelect(Sender: TObject);
+begin
+  RestartFMOD;
+end;
+
+procedure TFormPreferences.OutputTypeSelect(Sender: TObject);
+begin
+  RestartFMOD;
+  if PlaySoundClip.Checked then
+     begin
+       if OutputDevice.ItemIndex <> -1 then
+          OutputDevice.Tag:= OutputDevice.ItemIndex;
+       OutputDevice.Items.Clear;
+       FormMain.PopulateDevices;
+       if OutputDevice.Tag > OutputDevice.Items.Count then
+          OutputDevice.ItemIndex:= 0
+       else
+          OutputDevice.ItemIndex:= OutputDevice.Tag;
+     end;
+end;
+
+procedure TFormPreferences.MixerTypeSelect(Sender: TObject);
+begin
+  RestartFMOD;
+end;
+
+procedure TFormPreferences.OutputRateSelect(Sender: TObject);
+begin
+  RestartFMOD;
+end;
+
+procedure TFormPreferences.SoundClipVolumeChange(Sender: TObject);
+begin
+  FormMain.SetVolume(SoundClipVolume.Position);
+end;
+
+procedure TFormPreferences.HideNavigationPanelClick(Sender: TObject);
+var
+  DATpanel: Boolean;
+begin
+  DATpanel:= FormMain.PanelmameinfoDAT.Visible;
+  if DATpanel then
+     FormMain.PanelmameinfoDAT.Visible:= False;
+  FormMain.PicturesToolbarPanel.Visible:= not HideNavigationPanel.Checked;
+  if DATpanel then
+     FormMain.PanelmameinfoDAT.Visible:= True;
+end;
+
+procedure TFormPreferences.HidePictureHintClick(Sender: TObject);
+begin
+  FormMain.Picture.ShowHint:= not HidePictureHint.Checked;
+end;
+
+procedure TFormPreferences.ButtonUpdateGamesListClick(Sender: TObject);
+begin
+  if Length(FormMain.GamesList) > 0 then
+     FormMain.SetGameType(FormMain.ButtonGameType.Tag);
+end;
+
+procedure TFormPreferences.ZipTitleSnapshotsButtonSelectClick(
+  Sender: TObject);
+begin
+  FormMain.OpenDialog.FilterIndex:= 2;
+  if FormMain.OpenDialog.Execute then
+     ZipTitleSnapshots.Text:= ExtractFileName(FormMain.OpenDialog.FileName);
+  FormMain.OpenDialog.FilterIndex:= 1;
+end;
+
+procedure TFormPreferences.DefaultGameIconsFolderChange(Sender: TObject);
+begin
+  if DefaultGameIconsFolder.Text <> '' then
+     begin
+       if (FormMain.CheckDefaultIconsFile) and (Length(FormMain.GamesList) > 0) then
+          begin
+            if not FormMain.MenuGamesIcons.Checked then
+               FormMain.List.Items.BeginUpdate;
+            FormMain.BuiltInBigListImageList.Clear;
+            FormMain.BuiltInSmallListImageList.Clear;
+            FormMain.ReadDefaultIconsFile;
+            if not FormMain.MenuGamesIcons.Checked then
+               begin
+                 FormMain.List.Invalidate;
+                 FormMain.List.Items.EndUpdate;
+               end;
+          end;
+     end;
 end;
 
 end.

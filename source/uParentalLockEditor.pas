@@ -1,4 +1,4 @@
-unit uParentalLockManager;
+unit uParentalLockEditor;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   GR32_Image, uGR32Extra;
 
 type
-  TFormParentalLockManager = class(TForm)
+  TFormParentalLockEditor = class(TForm)
     ParentalLockImageList: TImageList;
     PopupMenuGamesFound: TPopupMenu;
     PopupPlayGameStandard: TMenuItem;
@@ -34,7 +34,6 @@ type
     ButtonPassword: TButton;
     ButtonReadLockGamesDAT: TButton;
     BlockedList: TListView;
-    ParentalLockImage: TImage32Ex;
     procedure ButtonCancelClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -69,7 +68,7 @@ type
   end;
 
 var
-  FormParentalLockManager: TFormParentalLockManager;
+  FormParentalLockEditor: TFormParentalLockEditor;
 
 implementation
 
@@ -78,7 +77,7 @@ uses uMain, uStatus, uParentalLockPasswordLogout, uPreferences, uCommon,
 
 {$R *.dfm}
 
-function TFormParentalLockManager.LoadToolbarIcons: Boolean;
+function TFormParentalLockEditor.LoadToolbarIcons: Boolean;
 begin
   Result:= ((FileExists(FormMain.FrontendPath+'resources\images\toolbars\ParentalLock\0.ico')) and
             (FileExists(FormMain.FrontendPath+'resources\images\toolbars\ParentalLock\0.ico'))  and
@@ -92,7 +91,7 @@ begin
      end;
 end;
 
-procedure TFormParentalLockManager.ReadLockedGamesDAT;
+procedure TFormParentalLockEditor.ReadLockedGamesDAT;
 var
   LockedGamesDAT, GamesListDAT: THashedStringList;
   Loop: Integer;
@@ -113,9 +112,8 @@ begin
             GetGamesList(GamesListDAT, True, True);
             BlockedList.Items.BeginUpdate;
             for Loop:=0 to LockedGamesDAT.Count -1 do
-            begin
-              LockedGamesDAT[Loop]:= DecryptData(LockedGamesDAT[Loop]);
-            end;
+                LockedGamesDAT[Loop]:= DecryptData(LockedGamesDAT[Loop]);
+
             for Loop:=0 to GamesListDAT.Count -1 do
             begin
               FormMain.GetROMFields(GamesListDAT[Loop]);
@@ -140,7 +138,7 @@ begin
      end;
 end;
 
-procedure TFormParentalLockManager.AddGamesToProtectedList;
+procedure TFormParentalLockEditor.AddGamesToProtectedList;
 var
   Loop, Loop2: Integer;
   GameFound: Boolean;
@@ -194,7 +192,7 @@ begin
   LabelTotalGamesLocked.Caption:= Format(FormMain.GetLanguageText('Main', 'StatusBarShownGames', '%u Games'), [BlockedList.Items.Count]);
 end;
 
-procedure TFormParentalLockManager.UpdateLockGamesList;
+procedure TFormParentalLockEditor.UpdateLockGamesList;
 var
   LockedGamesDAT: THashedStringList;
   Loop: Integer;
@@ -204,28 +202,28 @@ begin
         LockedGamesDAT:= THashedStringList.Create;
         LockedGamesDAT.BeginUpdate;
         for Loop:=0 to BlockedList.Items.Count -1 do
-        begin
-          LockedGamesDAT.Add(EncryptData(BlockedList.Items[Loop].SubItems[0]));
-        end;
-        LockedGamesDAT.EndUpdate;
+            LockedGamesDAT.Add(EncryptData(BlockedList.Items[Loop].SubItems[0]));
 
+        LockedGamesDAT.EndUpdate;
         LockedGamesDAT.SaveToFile(FormMain.FrontendPath+'resources\BlockedGames.dat');
         FreeAndNil(LockedGamesDAT);
      end
   else
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'NoGamesFoundTitle', 'No Games Found'),
-                       FormMain.GetLanguageText('Messages', 'NoLockedGamesFoundMsg', 'There is no games on the locked list! You must select at least one game for this to work.'), 2);
+       FormMain.GetMessagesLng('Messages', 'NoGamesFoundTitle', 'No Games Found',
+                               'Messages', 'NoLockedGamesFoundMsg', 'There is no games on the locked list! You must select at least one game for this to work.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
      end;
 end;
 
-procedure TFormParentalLockManager.ButtonCancelClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonCancelClick(Sender: TObject);
 begin
   case ProtectedListChanged of
     True:
       begin
-        if GenerateMessage(FormMain.GetLanguageText('Messages', 'LockedGamesListChangedTitle', 'Games List Changed'),
-                           FormMain.GetLanguageText('Messages', 'LockedGamesListChangedMsg', 'The locked games list has changed! Cancel the changes ?'), 1) = mrYes then
+        FormMain.GetMessagesLng('Messages', 'LockedGamesListChangedTitle', 'Games List Changed',
+                                'Messages', 'LockedGamesListChangedMsg', 'The locked games list has changed! Cancel the changes ?');
+        if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrYes then
            begin
              FormMain.MenuParentalLock.Tag:= 1;
              Close;
@@ -239,18 +237,16 @@ begin
   end;
 end;
 
-procedure TFormParentalLockManager.ButtonOkClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonOkClick(Sender: TObject);
 begin
   if BlockedList.Items.Count = 0 then
      begin
-       if FileExists(FormMain.FrontendPath+'resources\BlockedGames.dat') then
-          DeleteFile(FormMain.FrontendPath+'resources\BlockedGames.dat');
-       if FileExists(FormMain.FrontendPath+'ParentalLock.pwd') then
-          DeleteFile(FormMain.FrontendPath+'ParentalLock.pwd');
+       DeleteFile(FormMain.FrontendPath+'resources\BlockedGames.dat');
+       DeleteFile(FormMain.FrontendPath+'ParentalLock.pwd');
        Close;
        Exit;
      end;
-     
+
   case FileExists(FormMain.FrontendPath+'ParentalLock.pwd') of
     True:
       begin
@@ -268,13 +264,13 @@ begin
   end;
 end;
 
-procedure TFormParentalLockManager.FormKeyPress(Sender: TObject; var Key: Char);
+procedure TFormParentalLockEditor.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #27 then
      ButtonCancel.OnClick(Self);
 end;
 
-procedure TFormParentalLockManager.FormCreate(Sender: TObject);
+procedure TFormParentalLockEditor.FormCreate(Sender: TObject);
 var
   SysMenu: HMenu;
 begin
@@ -282,31 +278,30 @@ begin
   EnableMenuItem(SysMenu, SC_CLOSE, MF_DISABLED or MF_GRAYED);
 
   // Load Icons
-  FormMain.LoadIcon(ParentalLockImage, 'ParentalLock.png');
   LoadToolbarIcons;
 end;
 
-procedure TFormParentalLockManager.SearchKeywordsKeyUp(Sender: TObject;
+procedure TFormParentalLockEditor.SearchKeywordsKeyUp(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_DELETE then
      ButtonDeleteSelectedKeywords.OnClick(Self);
 end;
 
-procedure TFormParentalLockManager.BlockedListKeyUp(Sender: TObject;
+procedure TFormParentalLockEditor.BlockedListKeyUp(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_DELETE then
      ButtonDeleteSelectedLockedGames.OnClick(Self);
 end;
 
-procedure TFormParentalLockManager.ButtonAddGamesClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonAddGamesClick(Sender: TObject);
 begin
   AddGamesToProtectedList;
   TabSheetLockedGamesList.Show;
 end;
 
-procedure TFormParentalLockManager.ButtonAddKeywordClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonAddKeywordClick(Sender: TObject);
 begin
   if SearchKeywords.Items.IndexOf(LowerCase(Keyword.Text)) = -1 then
      begin
@@ -316,13 +311,14 @@ begin
      end
   else
      begin
-       GenerateMessage(FormMain.GetLanguageText('Messages', 'ParentalLockKeywordFoundTitle', 'Keyword Found'),
-                       FormMain.GetLanguageText('Messages', 'ParentalLockKeywordFoundMsg', 'This keyword is already on the list! Please, enter another one.'), 2);
+       FormMain.GetMessagesLng('Messages', 'ParentalLockKeywordFoundTitle', 'Keyword Found',
+                               'Messages', 'ParentalLockKeywordFoundMsg', 'This keyword is already on the list! Please, enter another one.');
+       GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 2);
      end;
   Keyword.SetFocus;
 end;
 
-procedure TFormParentalLockManager.ButtonDeleteSelectedKeywordsClick(
+procedure TFormParentalLockEditor.ButtonDeleteSelectedKeywordsClick(
   Sender: TObject);
 begin
   SearchKeywords.Items.BeginUpdate;
@@ -330,35 +326,43 @@ begin
   SearchKeywords.Items.EndUpdate;
 end;
 
-procedure TFormParentalLockManager.ButtonReadLockGamesDATClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonReadLockGamesDATClick(Sender: TObject);
 begin
   ReadLockedGamesDAT;
 end;
 
-procedure TFormParentalLockManager.GamesFoundListKeyUp(Sender: TObject;
+procedure TFormParentalLockEditor.GamesFoundListKeyUp(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_DELETE then
      ButtonDeleteSelectedGamesFound.OnClick(Self);
 end;
 
-procedure TFormParentalLockManager.ButtonBeginSearchClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonBeginSearchClick(Sender: TObject);
 var
   GamesListDAT: THashedStringList;
+  CatVerFile: TMemIniFile;
   AddGame, GameFound: Boolean;
   Loop, Loop2, Loop3: Integer;
 
   function CheckGame: Boolean;
+  var
+    Value: String;
   begin
-    Result:= (Pos((SearchKeywords.Items.Strings[Loop2]), (LowerCase(FormMain.mDescription))) > 0);
+    Result:= (Pos((LowerCase(SearchKeywords.Items.Strings[Loop2])), (LowerCase(FormMain.mDescription))) > 0);
     if not Result then
-       Result:= (Pos((SearchKeywords.Items.Strings[Loop2]), (LowerCase(FormMain.mCategory))) > 0);
+       begin
+         FormMain.mCategory:= CatVerFile.ReadString('Category', Lowercase(FormMain.mName), '');
+         Result:= (Pos((LowerCase(SearchKeywords.Items.Strings[Loop2])), (LowerCase(FormMain.mCategory))) > 0);
+       end;
   end;
 
 begin
   Screen.Cursor:= crHourGlass;
   GamesListDAT:= THashedStringList.Create;
   GetGamesList(GamesListDAT, True, True);
+  if FileExists(FormMain.FrontendPath+'catver.ini') then
+     CatVerFile:= TMemIniFile.Create(FormMain.FrontendPath+'catver.ini');
   GamesFoundList.Items.BeginUpdate;
   if GamesFoundList.Items.Count = 0 then
      begin
@@ -389,6 +393,7 @@ begin
          AddGame:= False;
          GameFound:= False;
          FormMain.GetROMFields(GamesListDAT[Loop]);
+         FormMain.mCategory:= CatVerFile.ReadString('Category', Lowercase(FormMain.mName), '');
          for Loop2:=0 to SearchKeywords.Items.Count -1 do
          begin
            if CheckGame then
@@ -400,7 +405,8 @@ begin
              GameFound:= ((FormMain.mDescription = GamesFoundList.Items[Loop3].Caption) and
                           (FormMain.mName = GamesFoundList.Items[Loop3].SubItems[0]) and
                           (FormMain.mClone = GamesFoundList.Items[Loop3].SubItems[1]) and
-                          (FormMain.mCategory = GamesFoundList.Items[Loop3].SubItems[2]));
+                          (FormMain.mCategory = GamesFoundList.Items[Loop3].SubItems[2]) and
+                          (FormMain.mCategory <> ''));
              if GameFound then
                 Break;
            end;
@@ -422,21 +428,23 @@ begin
   GamesFoundList.SortType:= stNone;
   GamesFoundList.Items.EndUpdate;
   FreeAndNil(GamesListDAT);
+  FreeAndNil(CatVerFile);
   Screen.Cursor:= crDefault;
 end;
 
-procedure TFormParentalLockManager.KeywordKeyPress(Sender: TObject;
+procedure TFormParentalLockEditor.KeywordKeyPress(Sender: TObject;
   var Key: Char);
 begin
   if Key = #13 then
      ButtonAddKeyword.OnClick(Self);
 end;
 
-procedure TFormParentalLockManager.ButtonDeleteSelectedGamesFoundClick(
+procedure TFormParentalLockEditor.ButtonDeleteSelectedGamesFoundClick(
   Sender: TObject);
 begin
-  if GenerateMessage(FormMain.GetLanguageText('Messages', 'DeleteSelectedGameTitle', 'Delete Selected Game(s)'),
-                     FormMain.GetLanguageText('Messages', 'DeleteSelectedGameMsg', 'Delete selected game(s) from the list. Are you sure ?'), 1) = mrYes then
+  FormMain.GetMessagesLng('Messages', 'DeleteSelectedGameTitle', 'Delete Selected Game(s)',
+                          'Messages', 'DeleteSelectedGameMsg', 'Delete selected game(s) from the list. Are you sure ?');
+  if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrYes then
      begin
        GamesFoundList.Items.BeginUpdate;
        GamesFoundList.DeleteSelected;
@@ -445,13 +453,14 @@ begin
      end;
 end;
 
-procedure TFormParentalLockManager.ButtonDeleteSelectedLockedGamesClick(
+procedure TFormParentalLockEditor.ButtonDeleteSelectedLockedGamesClick(
   Sender: TObject);
 var
   GameSelectedIndex: Integer;
 begin
-  if GenerateMessage(FormMain.GetLanguageText('Messages', 'DeleteSelectedLockedGamesTitle', 'Delete Selected Locked Game(s)'),
-                     FormMain.GetLanguageText('Messages', 'DeleteSelectedLockedGamesMsg', 'Delete selected game(s) from the locked games list. Are you sure ?'), 1) = mrYes then
+  FormMain.GetMessagesLng('Messages', 'DeleteSelectedLockedGamesTitle', 'Delete Selected Locked Game(s)',
+                          'Messages', 'DeleteSelectedLockedGamesMsg', 'Delete selected game(s) from the locked games list. Are you sure ?');
+  if GenerateMessage(FormMain.MessageText[0], FormMain.MessageText[1], 1) = mrYes then
      begin
        GameSelectedIndex:= BlockedList.Selected.Index;
        BlockedList.Items.BeginUpdate;
@@ -461,7 +470,7 @@ begin
      end;
 end;
 
-procedure TFormParentalLockManager.ButtonPasswordClick(Sender: TObject);
+procedure TFormParentalLockEditor.ButtonPasswordClick(Sender: TObject);
 begin
   if not Assigned(FormParentalLockPasswordLogout) then
      FormParentalLockPasswordLogout:=TFormParentalLockPasswordLogout.Create(Self);
@@ -470,18 +479,18 @@ begin
   FreeAndNil(FormParentalLockPasswordLogout);
 end;
 
-procedure TFormParentalLockManager.FormShow(Sender: TObject);
+procedure TFormParentalLockEditor.FormShow(Sender: TObject);
 begin
-  FormMain.UpdateGeneralAppearance(FormParentalLockManager);
+  FormMain.UpdateGeneralAppearance(FormParentalLockEditor);
   FormMain.SetParentalLockLanguage;
   ReadLockedGamesDAT;
   LabelTotalGamesLocked.Caption:= Format(FormMain.GetLanguageText('Main', 'StatusBarShownGames', '%u Games'), [BlockedList.Items.Count]);
   Keyword.SetFocus;
 end;
 
-procedure TFormParentalLockManager.PopupPlayGameStandardClick(Sender: TObject);
+procedure TFormParentalLockEditor.PopupPlayGameStandardClick(Sender: TObject);
 begin
-  FormMain.ExecuteGame(GamesFoundList.Selected.SubItems[0], True, FormPreferences.AverageFPS.Checked);
+  FormMain.ExecuteGame(GamesFoundList.Selected.SubItems[0], True);
 end;
 
 end.
