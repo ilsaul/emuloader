@@ -1,0 +1,1 @@
+C:\Arquiv~1\Borland\Delphi5\Bin\brcc32.exe Icons.rc
