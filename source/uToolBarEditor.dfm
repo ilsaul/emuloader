@@ -1,0 +1,167 @@
+object FormToolBarEditor: TFormToolBarEditor
+  Left = 646
+  Top = 296
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Customize Tool Bar'
+  ClientHeight = 350
+  ClientWidth = 437
+  Color = 15856113
+  DefaultMonitor = dmMainForm
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 15
+  object ToolBarListView: TEasyListview
+    Left = 0
+    Top = 0
+    Width = 454
+    Height = 301
+    BorderStyle = bsNone
+    CellSizes.Tile.Height = 50
+    Color = clWhite
+    DisabledBlendColor = clWhite
+    EditManager.Font.Charset = ANSI_CHARSET
+    EditManager.Font.Color = clBlack
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
+    EditManager.Font.Style = []
+    UseDockManager = False
+    Header.Columns.Items = {
+      0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000101000100000000000001DD000000FFFFFF1F0001000000
+      00000000000000000000000000000000}
+    Header.Draggable = False
+    Header.Height = 23
+    HotTrack.Color = clBlack
+    HotTrack.Enabled = True
+    HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
+    HotTrack.Underline = False
+    ImagesLarge = IL_ToolBarButtonsEditor
+    PaintInfoGroup.Expandable = False
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoItem.Border = 1
+    PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.CaptionIndent = 0
+    PaintInfoItem.CheckType = ectBox
+    PaintInfoItem.ShowBorder = False
+    ParentShowHint = False
+    ShowThemedBorder = False
+    ShowHint = True
+    Selection.BlendColorSelRect = 10902593
+    Selection.BlendIcon = False
+    Selection.BorderColor = 10902593
+    Selection.BorderColorSelRect = 10902593
+    Selection.Color = 10902593
+    Selection.FullCellPaint = True
+    Selection.FullItemPaint = True
+    Selection.Gradient = True
+    Selection.GradientColorBottom = 16506264
+    Selection.GradientColorTop = 15582647
+    Selection.InactiveBorderColor = 10902593
+    Selection.InactiveColor = 15582647
+    Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RoundRectRadius = 2
+    Selection.TextColor = clBlack
+    Selection.UseFocusRect = False
+    TabOrder = 0
+    View = elsTile
+    OnItemCheckChange = ToolBarListViewItemCheckChange
+    OnItemPaintText = ToolBarListViewItemPaintText
+  end
+  object PanelEx1: TPanelEx
+    Left = 0
+    Top = 301
+    Width = 437
+    Height = 49
+    Color1 = clWhite
+    Color2 = 15856113
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object BoundToGamesPanel: TAdvOfficeCheckBox
+      Left = 8
+      Top = 3
+      Width = 145
+      Height = 20
+      Hint = 'Limit toolbar to the games list panel'
+      ShowHint = True
+      TabOrder = 0
+      OnClick = BoundToGamesPanelClick
+      Alignment = taLeftJustify
+      Caption = 'Bound To Games Panel'
+      ReturnIsTab = False
+      ShadowColor = clSkyBlue
+      Themed = True
+    end
+    object ShowHideToolBar: TAdvOfficeCheckBox
+      Left = 8
+      Top = 24
+      Width = 105
+      Height = 20
+      ShowHint = True
+      TabOrder = 1
+      OnClick = ShowHideToolBarClick
+      Alignment = taLeftJustify
+      Caption = 'Hide Tool Bar'
+      ReturnIsTab = False
+      ShadowColor = clSkyBlue
+      Themed = True
+    end
+    object ButtonDefault: TBitBtn
+      Left = 241
+      Top = 16
+      Width = 89
+      Height = 25
+      Hint = 'Set all buttons visible'
+      Caption = 'Default'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ButtonDefaultClick
+    end
+    object ButtonClose: TBitBtn
+      Left = 339
+      Top = 16
+      Width = 89
+      Height = 25
+      Caption = 'Close'
+      ModalResult = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object SmallToolBar: TAdvOfficeCheckBox
+      Left = 120
+      Top = 24
+      Width = 100
+      Height = 20
+      Hint = 'Use large icons or small icons in main tool bar'
+      ShowHint = True
+      TabOrder = 4
+      OnClick = SmallToolBarClick
+      Alignment = taLeftJustify
+      Caption = 'Small Tool Bar'
+      ReturnIsTab = False
+      ShadowColor = clSkyBlue
+      Themed = True
+    end
+  end
+  object IL_ToolBarButtonsEditor: TImageList
+    Height = 40
+    Width = 44
+    Left = 280
+    Top = 208
+  end
+end

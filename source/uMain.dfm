@@ -1,105 +1,34 @@
 object FormMain: TFormMain
-  Left = 252
-  Top = 185
-  Width = 630
-  Height = 465
-  ActiveControl = List
-  Caption = 'Emu Loader - Powerful M.A.M.E. Frontend'
+  Left = 489
+  Top = 288
+  Width = 1000
+  Height = 570
+  Caption = 'Emu Loader'
   Color = clBtnFace
-  Constraints.MinHeight = 460
+  Constraints.MinHeight = 400
   Constraints.MinWidth = 630
-  DefaultMonitor = dmPrimary
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
   Font.Style = []
-  Icon.Data = {
-    0000010001002020000000000000A80800001600000028000000200000004000
-    000001000800000000008004000000000000000000000001000000000000FFFF
-    FF005E5ECD000000000088A9D4003265B10054C4E70041A3DA006A6AEF007171
-    71000AA6CE00089BB8003E4186009293BE007B96C600629BA90026778D003977
-    9B001DD3FF0003D9FF006768A2000C72C4000F527E00637FA5005B73AF003398
-    E80000819A002E98FF00516EFF00486CEF004747A2001F1F5A00006897009B9B
-    9B00002EC600578DD1001981D600539EEB00649CF0003F559E006C9ADE006194
-    D80029445E003880F40055597A002727CC005E5E82000808D8000C16DC001FA6
-    FE000093DB00093A45003C3C3C00595990001E1EA300285A7D0056559E001367
-    85000563880000467B0026586C003870FB001225F3000C0FC900098EE900096B
-    D8004477FA0003035D004B4BF3000F39A6001F22EE00012F66001555C900133B
-    6000171CC7002260D6000E19A3000457C9001425CD00000BE300636F7D006874
-    8500286AD800444DE1000039DC0000268F000037B7005050E300009AEA005E5C
-    4D00022FE1000139A1003641FF002E36660031509A001F4C6400185267002333
-    4C000019E7000048B700124EF6002D4A94001D294C000C1993001247FF002831
-    FF0000008D00000BC500283FFF000000C2000783F0000E88F300107AFB001063
-    FF0007439F0012719C00007DEF00073F8A0004227B00031C5E00484774004252
-    FB000E188700071A800009249C00186CFF004D4D7600070746004B52FF000361
-    F10014146D00504F4100125DA3001BB8F80012639C00005BED00001843000D25
-    6000001F56000F228500373E610000167E000044EB000554D700004CEF00026E
-    F400009DFF00625E5800736D6B0089898900003C8600000FBA000051DB000017
-    BE003B3B3B0000006A00051BF80057586100000F2B000E6FFF000F2B4F00122C
-    3F0013AFFF000A264E000F2A2E00035EDE00142C320016B7FF00051A30000054
-    BC000053B2001E2D41007878B2000230F8003838F9007C7DB3000E234A007D7C
-    73000C305F000A1214000017F500002E5400000C2300002B4D00001B4D00082E
-    5B0000094A0057575700A9A9A900171B2A00004FFC00093E9800217DEB001B3C
-    78000F3F960009126D000221490007244800091769003F3F3F002180E5001539
-    78003D3D3D00212B3B000015A2000D131C00FDFDFD00FBFBFB00ACACAC001515
-    150084848400242424001C1C1C00232331000014AE000829FF00051379004B49
-    4300175BFF000228A2000F1527000011350013202F0014274700B1B1AC000916
-    2900000B7400212C330000A7F7001318280000057000001834000022FF000025
-    9F00F0F0F000000A6D002E2A23000D192A002F3337001E21280052504B004646
-    4600001AAC00000A53001F20320000033B001C2234000D38FF0000007F001413
-    1E00001A76000C3EFF000418770005163A00066CFF0002093C008F8D89000202
-    02020202020202020202F8F8F8F8F8F8F899C6C933333333333399F802020202
-    0202020202020202F8B2020202020202EF2020202020202020202033F8020202
-    020202020202D2020202B28B341377D0E900000000000000000000CEF8F80202
-    0202020202D00202F30B525B686849D0DF000000000000000000000008F80202
-    02020202EB020279786B9B6ACB699AE4ED20DFDFDFDFDFDFDFDFDFBBD3F80202
-    020202EB0202D7D6E7D5F402BC8B2B9CD2ED20B002F8D4EBD2D3D2EEF8020202
-    0202D202027AF6AC8C02F5261C3C3C1B5CD800CDD3B2422CABD002F802020202
-    02EB0202FBFAFAF9B25D3CD9BDFAF6AC7BD3E900C6EDF8F77F2D02B202020202
-    020202F2FABD54FC4A7CBDBDBDBD8D53DAD0DF00938B0CD3CB07D002F8020202
-    02020221BD559D8EFDFDFDFD80BEAFDDDBB2200020B57FAE7EAD7D02D3020202
-    0202B7BD8FDC95FDFDFD90A4BF2228270DED9300E9B22F781D2E010202F802D3
-    02024470C19F6F6E6E6E6E6D6D6D6FFD9EC099CDCED24B9BAD6C43D302F802B2
-    02B2DDDEE4DDDEDEDEA03630919173FDFD71D3E90082C2B34581351E02F80202
-    0299FF202020202020D1D35EA191916D734CD0DF00B0FE9B683702B502F8D002
-    99E90000000000000000DFB272E391917390E09400DFCC3DB356B20202F802B2
-    DF00000000000000000000EBE41FE39173A4A29200E9D04DB3ADCC02F802B2D0
-    E90000E9DFDFDFDFDFDF93B20E5F579123C3B1EDCD0099669B4502020202D0D0
-    DF00E9D2BCE2E2EED2E2A3191138319118C474D0DF0058E19B3E02020202D0B2
-    9400DF02833F06D3B2320A120939E3911446A460C6D1D3CB9BF702B20202D3B2
-    EFE9E9B2488510EDB2F8A50F0584E391B495FD47EEE4C5B34EB502020202D002
-    F0D1D1EFF0C6C6F0F0F0F0D03BA6913AE6A4FD5AFE59E7B3E5020202020202C6
-    00CECE0000000000000000E9D015B6A740FD97B5E8ACE796020202020202D3EB
-    DFE9E9E9E9E9E9E9E9E9E9E9D3D329C76F86B775FAE761F402020202020202D2
-    D3990892D0D2EBD2D3D2EBD3AA241AFD628776FAACE7EA020202020202020202
-    D0EF00E9D0C804164FEDECB8A9A89589028863F6E7CB02020202020202020202
-    D3D2E900EFFC512A250350CAAAE402EE64D9F6E798B502020202020202020202
-    F0D0DF00E9C6D0F8CCE4D2D0B2D31741D9ACE7CBB50202020202020202020202
-    02D0D10000CDE9E9E9E9E9E9DFC96567ACF1B902020202020202020202020202
-    02D3D2DF000000000000000000E9B28AF2020202B20202020202020202020202
-    0202D2EBDF0000000000000000E9B2020202B2D3020202020202020202020202
-    020202D2D292D1D1D1D1D1D1D1C6B2D0D0D30202020202020202020202020202
-    02020202D2D3B2B2B2D0D0D0D0B2D2F80202020202020202020202020202FFF0
-    0003FFC00001FF000000FE000000FC000000F8000001F0000003E0000003E000
-    0001C0000001C000000080000000800000008000000000000000000000010000
-    0003000000030000000300000007000000070000000F0000000F8000001FC000
-    001FC000003FC000007FE00000FFE00001FFF00003FFF8000FFFFC003FFF}
-  Menu = MainMenu
   OldCreateOrder = False
   Position = poDefault
   Scaled = False
+  ShowHint = True
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnResize = FormResize
   OnShow = FormShow
   PixelsPerInch = 96
-  TextHeight = 13
-  object ToolBarsPanel: TCoolBar
+  TextHeight = 15
+  object ToolBarPanel: TCoolBar
+    Tag = 1
     Left = 0
     Top = 0
-    Width = 622
-    Height = 31
+    Width = 984
+    Height = 47
     AutoSize = True
     BandBorderStyle = bsNone
     BandMaximize = bmNone
@@ -107,2543 +36,2589 @@ object FormMain: TFormMain
       item
         Control = ToolBarButtons
         ImageIndex = -1
-        MinHeight = 31
-        Width = 622
+        MinHeight = 47
+        Width = 789
+      end
+      item
+        Break = False
+        Control = ToolBarFilterTitle
+        FixedSize = True
+        ImageIndex = -1
+        MinHeight = 24
+        Width = 195
       end>
+    EdgeBorders = []
     EdgeInner = esNone
     EdgeOuter = esNone
     FixedOrder = True
+    OnMouseDown = ToolBarButtonsMouseDown
     object ToolBarButtons: TToolBar
       Left = 0
       Top = 0
-      Width = 618
-      Height = 31
-      ButtonHeight = 30
-      ButtonWidth = 31
+      Width = 570
+      Height = 47
+      ButtonHeight = 46
+      ButtonWidth = 51
+      Constraints.MaxWidth = 570
       EdgeBorders = []
       EdgeInner = esNone
       EdgeOuter = esNone
       Flat = True
-      Images = ButtonsImageList
-      TabOrder = 0
-      Transparent = True
-      Wrapable = False
-      OnResize = ToolBarButtonsResize
-      object ButtonGameType: TToolButton
-        Left = 0
-        Top = 0
-        Hint = 'Select games filter'
-        DropdownMenu = PopupGameType
-        ImageIndex = 4
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ButtonGameFilters: TToolButton
-        Left = 44
-        Top = 0
-        Hint = 'Select games filter'
-        DropdownMenu = PopupMenuGameFilters
-        ImageIndex = 11
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton5: TToolButton
-        Left = 88
-        Top = 0
-        Width = 8
-        ImageIndex = 60
-        Style = tbsSeparator
-      end
-      object ButtonShowFavorite: TToolButton
-        Left = 96
-        Top = 0
-        Hint = 'Show Favorite User'#39's Games'
-        ImageIndex = 14
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsCheck
-        OnClick = ButtonShowFavoriteClick
-      end
-      object ToolButton3: TToolButton
-        Left = 127
-        Top = 0
-        Width = 8
-        ImageIndex = 5
-        Style = tbsSeparator
-      end
-      object ButtonPicturesModeView: TToolButton
-        Left = 135
-        Top = 0
-        Hint = 'Pictures mode view'
-        DropdownMenu = PopupMenuPicturesTypes
-        ImageIndex = 16
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton6: TToolButton
-        Left = 179
-        Top = 0
-        Width = 8
-        ImageIndex = 6
-        Style = tbsSeparator
-      end
-      object ButtonPlayRecordedGame: TToolButton
-        Left = 187
-        Top = 0
-        Hint = 'Playback a recorded game'
-        AllowAllUp = True
-        Grouped = True
-        ImageIndex = 23
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsCheck
-        OnClick = ButtonPlayRecordedGameClick
-      end
-      object ButtonRecordGame: TToolButton
-        Left = 218
-        Top = 0
-        Hint = 'Record game'
-        AllowAllUp = True
-        Grouped = True
-        ImageIndex = 24
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsCheck
-        OnClick = ButtonRecordGameClick
-      end
-      object INPFilename: TEdit
-        Left = 249
-        Top = 4
-        Width = 80
-        Height = 21
-        Hint = 'INP Filename'
-        CharCase = ecLowerCase
-        Constraints.MaxHeight = 21
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 0
-      end
-      object ToolButton8: TToolButton
-        Left = 329
-        Top = 0
-        Width = 8
-        ImageIndex = 15
-        Style = tbsSeparator
-      end
-      object ButtonExecutablesMode: TToolButton
-        Tag = 1
-        Left = 337
-        Top = 0
-        Hint = 'Select executable to run games'
-        DropdownMenu = PopupMenuExecutablesMode
-        ImageIndex = 25
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton32: TToolButton
-        Left = 381
-        Top = 0
-        Width = 8
-        ImageIndex = 15
-        Style = tbsSeparator
-      end
-      object ButtonGamesDataMode: TToolButton
-        Left = 389
-        Top = 0
-        Hint = 'Show various information for selected game'
-        DropdownMenu = PopupMenuGamesDataMode
-        ImageIndex = 30
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton11: TToolButton
-        Left = 433
-        Top = 0
-        Width = 8
-        ImageIndex = 76
-        Style = tbsSeparator
-      end
-      object ButtonControllerKeysMapping: TToolButton
-        Left = 441
-        Top = 0
-        Hint = '(Default)'
-        DropdownMenu = PopupMenuControllerKeysMapping
-        ImageIndex = 31
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton17: TToolButton
-        Left = 485
-        Top = 0
-        Width = 8
-        ImageIndex = 29
-        Style = tbsSeparator
-      end
-      object ButtonSystemBios: TToolButton
-        Tag = -1
-        Left = 493
-        Top = 0
-        Hint = 'Change system bios'
-        DropdownMenu = PopupSystemBios
-        ImageIndex = 34
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsDropDown
-      end
-      object ToolButton1: TToolButton
-        Left = 537
-        Top = 0
-        Width = 8
-        ImageIndex = 34
-        Style = tbsSeparator
-      end
-      object ButtonMouse: TToolButton
-        Left = 545
-        Top = 0
-        Hint = 'Enable mouse input (Windows mouse will be unavailable)'
-        AllowAllUp = True
-        Grouped = True
-        ImageIndex = 32
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsCheck
-      end
-      object ButtonLightGun: TToolButton
-        Left = 576
-        Top = 0
-        Hint = 'Enable lightgun input'
-        AllowAllUp = True
-        Grouped = True
-        ImageIndex = 33
-        ParentShowHint = False
-        ShowHint = True
-        Style = tbsCheck
-      end
-    end
-  end
-  object PanelStatusBar: TPanel
-    Left = 0
-    Top = 389
-    Width = 622
-    Height = 22
-    Align = alBottom
-    AutoSize = True
-    BevelOuter = bvNone
-    ParentColor = True
-    TabOrder = 1
-    object ToolBarStatusBar: TToolBar
-      Left = 0
-      Top = 0
-      Width = 622
-      Height = 22
-      AutoSize = True
-      ButtonWidth = 134
-      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      Images = StatusBarImageList
-      Indent = -2
-      List = True
+      Images = IL_ToolBarButtons
       ParentShowHint = False
-      ShowCaptions = True
       ShowHint = True
       TabOrder = 0
       Transparent = True
       Wrapable = False
-      object StatusBarGameName: TToolButton
-        Left = -2
+      OnMouseDown = ToolBarButtonsMouseDown
+      object ButtonMainMenuOptions: TToolButton
+        Left = 0
         Top = 0
-        Hint = 'Short game name'
+        Hint = 'Menu options'
         AutoSize = True
-        Caption = 'gamename'
+        Caption = 'Menu Options'
+        DropdownMenu = MainMenuOptions
         ImageIndex = 0
       end
-      object StatusBarGameSize: TToolButton
-        Left = 81
+      object ButtonViewMode: TToolButton
+        Left = 51
         Top = 0
-        Hint = 'Size of game'
+        Hint = 'Games view mode'
         AutoSize = True
-        Caption = '000.00 Gbits'
-        ImageIndex = 3
-      end
-      object StatusBarShownGames: TToolButton
-        Left = 173
-        Top = 0
-        Hint = 'Total games shown'
-        AutoSize = True
-        Caption = 'Shown games'
+        Caption = 'View Mode'
+        DropdownMenu = PopupMenuViewMode
         ImageIndex = 1
       end
-      object StatusBarRandomGame: TToolButton
-        Left = 270
+      object ButtonGameFilterArcade: TToolButton
+        Left = 102
         Top = 0
-        Hint = 'Select a random game to play'
+        Hint = 'Select systems filter'
         AutoSize = True
-        Caption = 'Random Game'
-        ImageIndex = 4
-        OnClick = StatusBarRandomGameClick
-      end
-      object StatusBarFavoriteUser: TToolButton
-        Left = 370
-        Top = 0
-        Hint = 'Show favorite users manager'
-        AutoSize = True
-        Caption = 'Favorite User: Default'
+        Caption = 'Systems Filter'
         ImageIndex = 2
-        OnClick = StatusBarFavoriteUserClick
+        OnClick = ButtonGameFilterArcadeClick
       end
-      object StatusBarUserProfile: TToolButton
-        Left = 508
+      object ButtonGameFilterFavorites: TToolButton
+        Left = 153
         Top = 0
-        Hint = 'Active user profile name'
+        Hint = 'Show favorites list [Ctrl+F3 toggle ON/OFF]'
         AutoSize = True
-        Caption = 'User Profile: None'
+        Caption = 'Favorites Filter'
+        DropdownMenu = PopupFavorites
+        ImageIndex = 3
+        Style = tbsCheck
+      end
+      object ButtonGameFilterMain: TToolButton
+        Left = 204
+        Top = 0
+        Hint = 'Selected games filter'#13#10' -> List All Filters (Default)'
+        AutoSize = True
+        Caption = 'Main Filter'
+        ImageIndex = 4
+        OnClick = ButtonGameFilterMainClick
+      end
+      object ButtonGameFilterParentClone: TToolButton
+        Left = 255
+        Top = 0
+        Hint = 'Select parent/clone games filter'
+        AutoSize = True
+        Caption = 'Parent/Clone Filter'
+        DropdownMenu = PopupGameFilterParentClone
         ImageIndex = 5
-        Visible = False
+      end
+      object ButtonGameFilterHaveMiss: TToolButton
+        Left = 306
+        Top = 0
+        Hint = 'Select available/missing games filter'
+        AutoSize = True
+        Caption = 'Have/Miss Filter'
+        DropdownMenu = PopupGameFilterHaveMiss
+        ImageIndex = 6
+      end
+      object ButtonGameFilterDriverStatus: TToolButton
+        Left = 357
+        Top = 0
+        Hint = 'Select driver status filter'
+        AutoSize = True
+        Caption = 'Driver Status Filter'
+        ImageIndex = 7
+        OnClick = ButtonGameFilterDriverStatusClick
+      end
+      object ButtonGameFilterOrientation: TToolButton
+        Left = 408
+        Top = 0
+        Hint = 'Select horizontal/vertical orientation games filter'
+        AutoSize = True
+        Caption = 'Orientation Filter'
+        DropdownMenu = PopupGameFilterOrientation
+        ImageIndex = 8
+      end
+      object ButtonMAMu_Icons: TToolButton
+        Left = 459
+        Top = 0
+        Hint = 'MAMu_ Icons'
+        AutoSize = True
+        Caption = 'MAMu_ Icons'
+        DropdownMenu = PopupMAMu_Icons
+        ImageIndex = 9
+      end
+      object ButtonExtraFilters: TToolButton
+        Left = 510
+        Top = 0
+        Hint = 'Extra filters for the games list'
+        AutoSize = True
+        Caption = 'Miscellaneous Filters'
+        ImageIndex = 10
+        OnClick = ButtonExtraFiltersClick
+      end
+    end
+    object ToolBarFilterTitle: TToolBar
+      Left = 789
+      Top = 11
+      Width = 195
+      Height = 24
+      AutoSize = True
+      ButtonHeight = 24
+      Caption = 'Search Bar'
+      Constraints.MaxWidth = 195
+      Constraints.MinWidth = 195
+      EdgeBorders = []
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      Images = IL_LeftPanel
+      ParentFont = False
+      TabOrder = 1
+      Transparent = True
+      OnMouseDown = ToolBarButtonsMouseDown
+      object PanelTextBarFilter: TPanel
+        Left = 0
+        Top = 0
+        Width = 145
+        Height = 24
+        BevelOuter = bvNone
+        Constraints.MinHeight = 24
+        ParentBackground = True
+        TabOrder = 0
+        object FilterGameTitle: TEdit
+          Left = 0
+          Top = 0
+          Width = 145
+          Height = 24
+          Hint = 'Search games'#13#10'Filter: Game Title'
+          AutoSize = False
+          BevelKind = bkFlat
+          Color = clWhite
+          Constraints.MaxHeight = 24
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clSilver
+          Font.Height = -11
+          Font.Name = 'Trebuchet MS'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          Text = ' Search games...'
+          OnClick = FilterGameTitleClick
+          OnEnter = FilterGameTitleEnter
+          OnExit = FilterGameTitleExit
+          OnKeyPress = FilterGameTitleKeyPress
+        end
+        object FilterBarOptionsButton: TPanelEx
+          Left = 125
+          Top = 3
+          Width = 17
+          Height = 18
+          Color1 = clWhite
+          Color2 = clSilver
+          Color3 = clYellow
+          Color4 = clTeal
+          ColorFrame = 15790320
+          Frames = [frLeft, frTop, frRight, frBottom]
+          ParentBackground = False
+          Style = vgSolid
+          object ButtonSearchBarOptions: TLabel
+            Left = 3
+            Top = 3
+            Width = 12
+            Height = 14
+            Hint = 'Click here to change filter settings'
+            AutoSize = False
+            Caption = #234
+            Color = clMoneyGreen
+            Font.Charset = SYMBOL_CHARSET
+            Font.Color = clBlack
+            Font.Height = -13
+            Font.Name = 'Wingdings'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            ShowAccelChar = False
+            Transparent = True
+            OnMouseDown = ButtonSearchBarOptionsMouseDown
+            OnMouseEnter = ButtonSearchBarOptionsMouseEnter
+            OnMouseLeave = ButtonSearchBarOptionsMouseLeave
+          end
+        end
+      end
+      object ButtonFilterTitleApply: TToolButton
+        Left = 145
+        Top = 0
+        Hint = 'Click here to apply filter'
+        AutoSize = True
+        Caption = 'Apply'
+        ImageIndex = 6
+        OnClick = ButtonFilterTitleApplyClick
+      end
+      object ButtonFilterTitleReset: TToolButton
+        Left = 168
+        Top = 0
+        Hint = 'Click here to reset filter to default (main tool bar buttons)'
+        AutoSize = True
+        Caption = 'Reset'
+        ImageIndex = 7
+        OnClick = ButtonFilterTitleResetClick
       end
     end
   end
-  object PanelGamesPictures: TPanel
+  object PanelGameImages: TPanel
     Left = 0
-    Top = 31
-    Width = 622
-    Height = 358
+    Top = 47
+    Width = 984
+    Height = 485
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
-    TabOrder = 2
-    object Splitter: TSplitter
-      Left = 305
+    TabOrder = 1
+    object Splitter: TSplitterEx
+      Left = 608
       Top = 0
-      Width = 2
-      Height = 358
-      Hint = 'Drag and Drop this splitter'
+      Width = 6
+      Height = 485
       Align = alRight
+      OnMoved = SplitterMoved
+      Appearance.BorderColor = clNone
+      Appearance.BorderColorHot = clNone
+      Appearance.Color = 16445929
+      Appearance.ColorTo = 15587527
+      Appearance.ColorHot = 13891839
+      Appearance.ColorHotTo = 7782911
+      Appearance.SingleColor = clBtnFace
+      Appearance.SingleColorHot = clGray
+      GripStyle = sgDots
+      Style = tsOffice2007Luna
     end
     object PanelList: TPanel
       Left = 0
       Top = 0
-      Width = 305
-      Height = 358
+      Width = 608
+      Height = 485
       Align = alClient
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      object List: TListView
+      object GamesListView: TEasyListview
         Left = 0
-        Top = 0
-        Width = 305
-        Height = 358
+        Top = 24
+        Width = 608
+        Height = 441
         Align = alClient
-        Color = clBlack
-        Columns = <
-          item
-            Caption = 'Description'
-            Tag = 1
-            Width = 300
-          end
-          item
-            Caption = 'Year'
-            Tag = 1
-            Width = 65
-          end
-          item
-            Caption = 'Manufacturer'
-            Tag = 1
-            Width = 150
-          end
-          item
-            Caption = 'Sound'
-            Tag = 1
-            Width = 73
-          end
-          item
-            Caption = 'Frequency'
-            Tag = 1
-            Width = 70
-          end
-          item
-            Caption = 'Samples'
-            Tag = 1
-            Width = 83
-          end
-          item
-            Caption = 'Control Type'
-            Tag = 1
-            Width = 110
-          end
-          item
-            Caption = 'Video'
-            Tag = 1
-            Width = 70
-          end
-          item
-            Caption = 'Orientation'
-            Tag = 1
-            Width = 100
-          end
-          item
-            Caption = 'Resolution'
-            Tag = 1
-            Width = 95
-          end
-          item
-            Caption = 'Driver Status'
-            Tag = 1
-            Width = 85
-          end
-          item
-            Caption = 'Sound Status'
-            Tag = 1
-            Width = 85
-          end
-          item
-            Caption = 'Color Status'
-            Tag = 1
-            Width = 85
-          end
-          item
-            Caption = 'Merged'
-            Tag = 1
-            Width = 78
-          end
-          item
-            Caption = 'Name'
-            Tag = 1
-            Width = 80
-          end
-          item
-            Caption = 'Clone of'
-            Tag = 1
-            Width = 80
-          end
-          item
-            Caption = 'Category'
-            Tag = 1
-            Width = 180
-          end
-          item
-            Caption = 'Version Added'
-            Tag = 1
-            Width = 100
-          end
-          item
-            Caption = 'Driver'
-            Tag = 1
-            Width = 80
-          end
-          item
-            Caption = 'Played'
-            Tag = 1
-          end
-          item
-            Caption = 'Time Played'
-            Tag = 1
-            Width = 70
-          end>
-        HideSelection = False
-        IconOptions.AutoArrange = True
-        LargeImages = BuiltInBigListImageList
-        OwnerData = True
-        ReadOnly = True
-        RowSelect = True
+        CellSizes.SmallIcon.Height = 20
+        CellSizes.Tile.Width = 254
+        CellSizes.Report.Height = 26
+        Color = clWhite
+        DisabledBlendAlpha = 0
+        EditManager.Font.Charset = ANSI_CHARSET
+        EditManager.Font.Color = clBlack
+        EditManager.Font.Height = -12
+        EditManager.Font.Name = 'Segoe UI'
+        EditManager.Font.Style = []
+        ImagesState = IL_GroupedMode
+        UseDockManager = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        GroupFont.Charset = ANSI_CHARSET
+        GroupFont.Color = clBlack
+        GroupFont.Height = -12
+        GroupFont.Name = 'Segoe UI'
+        GroupFont.Style = []
+        HintType = ehtToolTip
+        Header.Columns.Items = {
+          0600000017000000110000005445617379436F6C756D6E53746F726564FFFECE
+          0006000000800800010100010000000001000190010000FFFFFF1F0001000000
+          01000000050000005400690074006C0065000000000000000000000000001100
+          00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+          00010100000000000141000000FFFFFF1F000100000001000000040000005900
+          650061007200000000000000000000000000110000005445617379436F6C756D
+          6E53746F726564FFFECE00060000008008000101000102000000000001B40000
+          00FFFFFF1F0001000000010000000C0000004D0061006E007500660061006300
+          7400750072006500720000000000000000000000000011000000544561737943
+          6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
+          0164000000FFFFFF1F0001000000010000000B0000004F007200690065006E00
+          74006100740069006F006E000000000000000000000000001100000054456173
+          79436F6C756D6E53746F726564FFFECE00060000008008000101000104000000
+          0000015A000000FFFFFF1F0001000000010000000A0000005200650073006F00
+          6C007500740069006F006E000000000000000000000000001100000054456173
+          79436F6C756D6E53746F726564FFFECE00060000008008000101000105000000
+          00000164000000FFFFFF1F0001000000010000000C0000005200650066007200
+          6500730068002000520061007400650000000000000000000000000011000000
+          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+          06000000000001B4000000FFFFFF1F0001000000010000000800000043006100
+          7400650067006F00720079000000000000000000000000001100000054456173
+          79436F6C756D6E53746F726564FFFECE00060000008008000101000107000000
+          00000164000000FFFFFF1F0001000000010000000D0000005600650072007300
+          69006F006E002000410064006400650064000000000000000000000000001100
+          00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+          00010800000000000164000000FFFFFF1F000100000001000000090000004700
+          61006D00650020004E0061006D00650000000000000000000000000011000000
+          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+          0900000000000164000000FFFFFF1F0001000000010000000800000043006C00
+          6F006E00650020006F0066000000000000000000000000001100000054456173
+          79436F6C756D6E53746F726564FFFECE0006000000800800010100010A000000
+          00000169000000FFFFFF1F0001000000010000000B0000004400720069007600
+          6500720020004E0061006D006500000000000000000000000000110000005445
+          617379436F6C756D6E53746F726564FFFECE0006000000800800010100010B00
+          000000000150000000FFFFFF1F0001000000010000000700000050006C006100
+          7900650072007300000000000000000000000000110000005445617379436F6C
+          756D6E53746F726564FFFECE0006000000800800010100010C0000000000015A
+          000000FFFFFF1F00010000000100000006000000440072006900760065007200
+          000000000000000000000000110000005445617379436F6C756D6E53746F7265
+          64FFFECE0006000000800800010100010D0000000000015A000000FFFFFF1F00
+          01000000010000000900000045006D0075006C006100740069006F006E000000
+          00000000000000000000110000005445617379436F6C756D6E53746F726564FF
+          FECE0006000000800800010100010E0000000000015A000000FFFFFF1F000100
+          0000010000000500000043006F006C006F007200000000000000000000000000
+          110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+          010100010F0000000000015A000000FFFFFF1F00010000000100000005000000
+          53006F0075006E00640000000000000000000000000011000000544561737943
+          6F6C756D6E53746F726564FFFECE000600000080080001010001100000000000
+          015A000000FFFFFF1F0001000000010000000700000047007200610070006800
+          69006300000000000000000000000000110000005445617379436F6C756D6E53
+          746F726564FFFECE000600000080080001010001110000000000013C000000FF
+          FFFF1F0001000000010000000600000050006C00610079006500640000000000
+          0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
+          0006000000800800010100011200000000000164000000FFFFFF1F0001000000
+          01000000080000004C0061006E00670075006100670065000000000000000000
+          00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+          00800800010100011300000000000182000000FFFFFF1F000100000001000000
+          0B000000470061006D0065002000530074006100740075007300000000000000
+          000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+          000000800800010100011400000000000173000000FFFFFF1F00010000000100
+          000009000000470061006D0065002000530069007A0065000000000000000000
+          00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+          00800800010100011500000000000182000000FFFFFF1F000100000001000000
+          0B0000004C00610073007400200050006C006100790065006400000000000000
+          000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+          00000080080001010001160000000000016E000000FFFFFF1F00010000000100
+          00000E00000054006F00740061006C00200050006C0061007900740069006D00
+          6500000000000000000000000000}
+        Header.Draggable = False
+        Header.Font.Charset = ANSI_CHARSET
+        Header.Font.Color = clBlack
+        Header.Font.Height = -12
+        Header.Font.Name = 'Segoe UI'
+        Header.Font.Style = []
+        Header.Height = 23
+        Header.Visible = True
+        IncrementalSearch.Enabled = True
+        IncrementalSearch.ResetTime = 1000
+        IncrementalSearch.StartType = eissFocusedNode
+        ImagesSmall = IL_StandardIconsStandard
+        ImagesLarge = IL_StandardIconsLarge
+        ImagesExLarge = IL_StandardIconsExtraLarge
+        PaintInfoColumn.CaptionIndent = 0
+        PaintInfoGroup.BandBlended = False
+        PaintInfoGroup.BandEnabled = False
+        PaintInfoGroup.Expandable = False
+        PaintInfoGroup.MarginBottom.Size = 0
+        PaintInfoGroup.MarginBottom.Visible = True
+        PaintInfoGroup.MarginBottom.CaptionIndent = 4
+        PaintInfoGroup.MarginTop.Size = 20
+        PaintInfoItem.BorderColor = 16370824
+        PaintInfoItem.ShowBorder = False
+        PaintInfoItem.TileDetailCount = 2
+        ParentFont = False
         ParentShowHint = False
         PopupMenu = PopupMenuGamesList
-        ShowHint = False
-        SmallImages = BuiltInSmallListImageList
-        SortType = stText
+        PopupMenuHeader = PopupGamesColumns
+        ShowHint = True
+        Selection.BlendAlphaImage = 0
+        Selection.BlendColorSelRect = 10902593
+        Selection.BlendIcon = False
+        Selection.BorderColor = 10902593
+        Selection.BorderColorSelRect = 10902593
+        Selection.Color = 10902593
+        Selection.FullCellPaint = True
+        Selection.FullItemPaint = True
+        Selection.FullRowSelect = True
+        Selection.Gradient = True
+        Selection.GradientColorBottom = 16506264
+        Selection.GradientColorTop = 15582647
+        Selection.InactiveBorderColor = 10902593
+        Selection.InactiveColor = 15582647
+        Selection.MouseButton = [cmbLeft, cmbRight]
+        Selection.MultiSelect = True
+        Selection.RoundRectRadius = 2
+        Selection.TextColor = clBlack
+        Selection.UseFocusRect = False
         TabOrder = 0
-        ViewStyle = vsReport
-        OnColumnClick = ListColumnClick
-        OnColumnRightClick = ListColumnRightClick
-        OnCustomDrawItem = ListCustomDrawItem
-        OnData = ListData
-        OnDataFind = ListDataFind
-        OnDblClick = MenuPlayGameStandardClick
-        OnKeyDown = ListKeyDown
-        OnKeyPress = ListKeyPress
-        OnKeyUp = ListKeyUp
-        OnSelectItem = ListSelectItem
+        View = elsReport
+        OnColumnClick = GamesListViewColumnClick
+        OnColumnPaintText = GamesListViewColumnPaintText
+        OnColumnSizeChanging = GamesListViewColumnSizeChanging
+        OnDblClick = GamesListViewDblClick
+        OnHeaderMouseDown = GamesListViewHeaderMouseDown
+        OnIncrementalSearch = GamesListViewIncrementalSearch
+        OnItemCompare = GamesListViewItemCompare
+        OnItemFreeing = GamesListViewItemFreeing
+        OnItemInitialize = GamesListViewItemInitialize
+        OnItemPaintText = GamesListViewItemPaintText
+        OnItemSelectionChanged = GamesListViewItemSelectionChanged
+        OnItemSelectionChanging = GamesListViewItemSelectionChanging
+        OnItemThumbnailDraw = GamesListViewItemThumbnailDraw
+        OnKeyAction = GamesListViewKeyAction
+        OnThreadCallBack = GamesListViewThreadCallBack
       end
-    end
-    object PanelPictures: TPanel
-      Left = 307
-      Top = 0
-      Width = 315
-      Height = 358
-      Align = alRight
-      BevelOuter = bvNone
-      BorderStyle = bsSingle
-      Constraints.MinWidth = 315
-      ParentColor = True
-      PopupMenu = PopupMenuPictures
-      TabOrder = 1
-      object SplitterMAMEInfo: TSplitter
+      object StatusBarPanel: TPanelEx
+        Tag = 1
         Left = 0
-        Top = 245
-        Width = 311
-        Height = 2
-        Cursor = crVSplit
-        Hint = 'Drag and Drop this splitter'
+        Top = 465
+        Width = 608
+        Height = 20
         Align = alBottom
-        Visible = False
+        Color1 = 15391180
+        Color2 = 16512497
+        Color3 = 16641245
+        Color4 = 16637122
+        ColorFrame = 7891291
+        Frames = [frLeft, frTop, frRight, frBottom]
+        ParentBackground = False
+        Style = vgSimple
+        object StatusBar_GamesTotal: TShadowLabel
+          Left = 6
+          Top = 0
+          Width = 90
+          Height = 18
+          Caption = '000000 Games'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSkyBlue
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object StatusBar_GamesGameName: TShadowLabel
+          Left = 129
+          Top = 0
+          Width = 220
+          Height = 18
+          Caption = 'gamename [clonename] [biosname]'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSkyBlue
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object IconGameStatus: TImage
+          Tag = -1
+          Left = 110
+          Top = 2
+          Width = 16
+          Height = 16
+          Transparent = True
+        end
       end
-      object PanelPicture1: TPanel
+      object ToolBarFilterByMainCPU: TToolBar
         Left = 0
         Top = 0
-        Width = 311
-        Height = 245
-        Align = alClient
-        BevelOuter = bvNone
-        TabOrder = 0
-        object Picture: TImage32
+        Width = 608
+        Height = 24
+        EdgeBorders = []
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        Images = IL_LeftPanel
+        ParentFont = False
+        TabOrder = 2
+        Transparent = True
+        Visible = False
+        Wrapable = False
+        OnCustomDraw = ImagesToolbarButtonsCustomDraw
+        object LabelFilterCPU: TPanelEx
           Left = 0
           Top = 0
-          Width = 311
-          Height = 245
-          Align = alClient
-          AutoSize = True
-          Bitmap.StretchFilter = sfLanczos
-          BitmapAlign = baCenter
-          Color = clBlack
-          ParentColor = False
-          ParentShowHint = False
-          Scale = 1.000000000000000000
-          ScaleMode = smResize
-          ShowHint = True
-          TabOrder = 0
-          OnClick = PictureClick
+          Width = 59
+          Height = 22
+          Color1 = 9547720
+          Color2 = clSilver
+          Color3 = clYellow
+          Color4 = clTeal
+          ColorFrame = 7368816
+          Frames = [frLeft, frTop, frRight, frBottom]
+          ParentBackground = False
+          Style = vgSolid
+          object ShadowLabel1: TShadowLabel
+            Left = 3
+            Top = 3
+            Width = 54
+            Height = 14
+            Caption = 'CPU Filter'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWhite
+            Font.Height = -11
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ShowAccelChar = False
+            ShadowColor = clNavy
+            ShadowEnabled = True
+            EllipsType = etNone
+            Transparent = True
+          end
         end
-      end
-      object PanelmameinfoDAT: TPanel
-        Left = 0
-        Top = 247
-        Width = 311
-        Height = 84
-        Align = alBottom
-        BevelInner = bvLowered
-        TabOrder = 1
-        Visible = False
-        object MAMEInfoTextHolder: TRichEdit
-          Left = 2
-          Top = 2
-          Width = 307
-          Height = 80
-          TabStop = False
-          Align = alClient
-          BorderStyle = bsNone
-          Font.Charset = DEFAULT_CHARSET
+        object FilterCPU: TEdit
+          Left = 59
+          Top = 0
+          Width = 120
+          Height = 22
+          Hint = 
+            'After typing you can hit the "ENTER" hot-key or press the "Apply' +
+            '" button'
+          AutoSize = False
+          BevelKind = bkFlat
+          Color = clWhite
+          Constraints.MinHeight = 22
+          Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
-          Font.Name = 'Courier New'
-          Font.Pitch = fpFixed
+          Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          PlainText = True
-          ReadOnly = True
-          ScrollBars = ssBoth
           TabOrder = 0
-          WantReturns = False
+          OnKeyDown = FilterCPUKeyDown
+        end
+        object FilterCPUList: TComboBox
+          Left = 179
+          Top = 0
+          Width = 121
+          Height = 21
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemHeight = 13
+          ParentFont = False
+          TabOrder = 1
+        end
+        object ButtonFilterCPUApply: TToolButton
+          Left = 300
+          Top = 0
+          Hint = 'Click here to apply CPU filter'
+          AutoSize = True
+          ImageIndex = 6
+          OnClick = ButtonFilterCPUApplyClick
+        end
+        object ButtonFilterCPUReset: TToolButton
+          Left = 323
+          Top = 0
+          Hint = 'Click here to reset filter to default'
+          AutoSize = True
+          ImageIndex = 7
+          OnClick = ButtonFilterCPUResetClick
+        end
+        object ButtonFilterCPUClose: TToolButton
+          Left = 346
+          Top = 0
+          Hint = 'Disable this feature'
+          AutoSize = True
+          ImageIndex = 12
+          OnClick = ButtonFilterCPUCloseClick
         end
       end
-      object PicturesToolbarPanel: TPanel
+      object BitBtn4: TBitBtn
+        Left = 24
+        Top = 328
+        Width = 129
+        Height = 25
+        Caption = 'Unicode Functions'
+        TabOrder = 3
+        Visible = False
+        OnClick = BitBtn4Click
+      end
+      object BitBtn1: TBitBtn
+        Left = 128
+        Top = 224
+        Width = 137
+        Height = 25
+        Caption = 'Get Emu Version'
+        TabOrder = 4
+        Visible = False
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 328
+        Top = 272
+        Width = 145
+        Height = 25
+        Caption = 'Vectrex'
+        TabOrder = 5
+        Visible = False
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 408
+        Top = 216
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn3'
+        TabOrder = 6
+        Visible = False
+        OnClick = BitBtn3Click
+      end
+      object BitBtn5: TBitBtn
+        Left = 24
+        Top = 240
+        Width = 75
+        Height = 25
+        Caption = 'ReadIni'
+        TabOrder = 7
+        Visible = False
+        OnClick = BitBtn5Click
+      end
+    end
+    object PanelScreenshotsArea: TPanelEx
+      Left = 614
+      Top = 0
+      Width = 370
+      Height = 485
+      Align = alRight
+      BevelOuter = bvNone
+      Color1 = clBtnFace
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgSolid
+      object PanelWebBrowser: TPanel
         Left = 0
-        Top = 331
-        Width = 311
-        Height = 23
-        Align = alBottom
-        AutoSize = True
+        Top = 317
+        Width = 370
+        Height = 137
         BevelOuter = bvNone
+        BorderStyle = bsSingle
         ParentColor = True
-        TabOrder = 2
-        object PicturesToolBar: TToolBar
+        TabOrder = 1
+        Visible = False
+        OnResize = PanelWebBrowserResize
+        object WebBrowser: TWebBrowser
+          Left = 0
+          Top = 22
+          Width = 366
+          Height = 111
+          Align = alClient
+          TabOrder = 0
+          OnEnter = WebBrowserEnter
+          OnStatusTextChange = WebBrowserStatusTextChange
+          OnBeforeNavigate2 = WebBrowserBeforeNavigate2
+          ControlData = {
+            4C000000D4250000790B00000000000000000000000000000000000000000000
+            000000004C000000000000000000000001000000E0D057007335CF11AE690800
+            2B2E12620A000000000000004C0000000114020000000000C000000000000046
+            8000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000100000000000000000000000000000000000000}
+        end
+        object WebToolBarButtons: TToolBar
           Left = 0
           Top = 0
-          Width = 64
-          Height = 23
-          Align = alLeft
+          Width = 366
+          Height = 22
           AutoSize = True
-          EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+          ButtonWidth = 133
           EdgeInner = esNone
           EdgeOuter = esNone
           Flat = True
-          Images = ToolbarButtonsImageList
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
+          Images = IL_LeftPanel
+          List = True
+          ShowCaptions = True
+          TabOrder = 1
+          Transparent = False
           Wrapable = False
-          object ButViewPreviousPicture: TToolButton
+          OnCustomDraw = ImagesToolbarButtonsCustomDraw
+          object WebButtonRefresh: TToolButton
             Left = 0
             Top = 0
-            Hint = 'View previous picture'
-            Caption = 'ButViewPreviousPicture'
-            ImageIndex = 82
-            OnClick = ButViewPreviousPictureClick
+            Hint = 'Refresh current web page'
+            AutoSize = True
+            Caption = 'Refresh'
+            ImageIndex = 7
+            OnClick = WebButtonRefreshClick
           end
-          object ButViewNextPicture: TToolButton
-            Tag = 1
-            Left = 23
+          object WebButtonStop: TToolButton
+            Left = 70
             Top = 0
-            Hint = 'View next picture'
-            Caption = 'ButViewNextPicture'
-            ImageIndex = 83
-            OnClick = ButViewNextPictureClick
+            Hint = 'Stop loading web page'
+            AutoSize = True
+            Caption = 'Stop'
+            ImageIndex = 13
+            OnClick = WebButtonStopClick
           end
-          object LabelPictureNumber: TLabel
-            Left = 46
+          object WebButtonExit: TToolButton
+            Left = 125
             Top = 0
-            Width = 18
-            Height = 22
-            Caption = '000'
-            ShowAccelChar = False
-            Transparent = False
-            Layout = tlCenter
+            Caption = 'Exit Progetto EMMA'
+            ImageIndex = 12
+            OnClick = WebButtonExitClick
           end
         end
-        object PanelSpectrum: TPanel
-          Left = 192
-          Top = 0
-          Width = 119
-          Height = 23
-          Hint = 'Sound spectrum'
-          Align = alRight
+        object WebBrowserStatusPanel: TPanelEx
+          Left = 2
+          Top = 113
+          Width = 72
+          Height = 20
+          Color1 = clWhite
+          Color2 = 14540253
+          Color3 = clYellow
+          Color4 = clTeal
+          ColorFrame = clSilver
+          Frames = [frTop, frRight]
+          ParentBackground = False
+          Style = vgSimple
+          Visible = False
+          object LabelWebBrowserStatus: TShadowLabel
+            Left = 4
+            Top = 2
+            Width = 60
+            Height = 16
+            Caption = 'Load Satus'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            Transparent = True
+          end
+        end
+      end
+      object PanelImagesDocuments: TPanel
+        Left = 0
+        Top = 31
+        Width = 370
+        Height = 270
+        BevelOuter = bvNone
+        BorderStyle = bsSingle
+        ParentBackground = False
+        TabOrder = 0
+        object SplitterMAMEInfo: TSplitterEx
+          Left = 0
+          Top = 151
+          Width = 366
+          Height = 7
+          Cursor = crVSplit
+          Align = alTop
+          Visible = False
+          OnCanResize = SplitterMAMEInfoCanResize
+          Appearance.BorderColor = clNone
+          Appearance.BorderColorHot = clNone
+          Appearance.Color = 16445929
+          Appearance.ColorTo = 15587527
+          Appearance.ColorHot = 13891839
+          Appearance.ColorHotTo = 7782911
+          Appearance.SingleColor = clBtnFace
+          Appearance.SingleColorHot = clGray
+          GripStyle = sgDots
+          Style = tsOffice2007Luna
+        end
+        object PanelImage: TPanel
+          Left = 0
+          Top = 158
+          Width = 366
+          Height = 108
+          Align = alClient
           BevelOuter = bvNone
-          BorderStyle = bsSingle
+          BorderWidth = 7
+          Color = clBlack
+          ParentBackground = False
           ParentShowHint = False
-          ShowHint = True
+          ShowHint = False
+          TabOrder = 0
+          object Images: TImage32
+            Tag = 1
+            Left = 7
+            Top = 7
+            Width = 352
+            Height = 94
+            Align = alClient
+            Bitmap.DrawMode = dmBlend
+            Bitmap.ResamplerClassName = 'TKernelResampler'
+            Bitmap.Resampler.KernelClassName = 'THermiteKernel'
+            Bitmap.Resampler.KernelMode = kmDynamic
+            Bitmap.Resampler.TableSize = 32
+            BitmapAlign = baCenter
+            Color = clBlack
+            ParentColor = False
+            ParentShowHint = False
+            PopupMenu = PopupMenuImages
+            Scale = 1.000000000000000000
+            ScaleMode = smResize
+            ShowHint = True
+            TabOrder = 0
+          end
+        end
+        object PanelGameDocuments: TPanel
+          Left = 0
+          Top = 0
+          Width = 366
+          Height = 151
+          Align = alTop
+          BevelOuter = bvNone
+          Constraints.MinHeight = 50
           TabOrder = 1
           Visible = False
-          OnClick = PanelSpectrumClick
+          object PanelRichEdit: TPanel
+            Left = 0
+            Top = 0
+            Width = 366
+            Height = 151
+            Align = alClient
+            BevelOuter = bvNone
+            TabOrder = 0
+            object MAMEInfoTextHolder: TRichEditURL
+              Left = 0
+              Top = 0
+              Width = 366
+              Height = 151
+              TabStop = False
+              Align = alClient
+              BorderStyle = bsNone
+              Color = clWhite
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -12
+              Font.Name = 'Consolas'
+              Font.Style = []
+              ParentFont = False
+              ParentShowHint = False
+              PopupMenu = PopupGameDocuments
+              ReadOnly = True
+              ScrollBars = ssBoth
+              ShowHint = False
+              TabOrder = 0
+              WantReturns = False
+              OnURLClick = MAMEInfoTextHolderURLClick
+            end
+          end
+        end
+      end
+      object ImagesToolbarButtons: TToolBar
+        Left = 0
+        Top = 0
+        Width = 370
+        Height = 31
+        AutoSize = True
+        ButtonHeight = 30
+        ButtonWidth = 31
+        Constraints.MinHeight = 31
+        EdgeBorders = []
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Flat = True
+        Images = IL_ImagesToolBarButtons
+        Indent = 2
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+        Transparent = False
+        Wrapable = False
+        OnCustomDraw = ImagesToolbarButtonsCustomDraw
+        object ButtonImageEnableThreads: TToolButton
+          Left = 2
+          Top = 0
+          Hint = 'Enable threads (load images faster)'
+          ImageIndex = 10
+          Style = tbsCheck
+        end
+        object ButtonImageViewMode: TToolButton
+          Left = 33
+          Top = 0
+          Hint = 'Toggle view mode [current: classic]'
+          ImageIndex = 9
+          OnClick = ButtonImageViewModeClick
+        end
+        object ButtonPreviousImage: TToolButton
+          Left = 64
+          Top = 0
+          Hint = 'Previous image [F11]'
+          AutoSize = True
+          Caption = 'Previous Image'
+          ImageIndex = 0
+          OnClick = ButtonNextImageClick
+        end
+        object ButtonNextImage: TToolButton
+          Tag = 1
+          Left = 95
+          Top = 0
+          Hint = 'Next image [F12]'
+          AutoSize = True
+          Caption = 'Next Image'
+          ImageIndex = 1
+          OnClick = ButtonNextImageClick
+        end
+        object ButtonPreviousCategory: TToolButton
+          Left = 126
+          Top = 0
+          Hint = 'Previous image category [Ctrl+F9]'
+          AutoSize = True
+          Caption = 'Previous Image Category'
+          ImageIndex = 3
+          OnClick = ButtonNextCategoryClick
+        end
+        object ButtonNextCategory: TToolButton
+          Tag = 1
+          Left = 157
+          Top = 0
+          Hint = 'Next image category [F9]'
+          AutoSize = True
+          Caption = 'Next Image Category'
+          ImageIndex = 4
+          OnClick = ButtonNextCategoryClick
+        end
+        object ButtonImageCategory: TToolButton
+          Tag = 1
+          Left = 188
+          Top = 0
+          Hint = 'Category [Game Snapshot]'
+          AutoSize = True
+          Caption = 'Image Category'
+          DropdownMenu = PopupMenuImageCategories
+          ImageIndex = 2
+        end
+        object ButtonScreenshotLayouts: TToolButton
+          Left = 219
+          Top = 0
+          Hint = 'Layout [Single]'
+          AutoSize = True
+          DropdownMenu = PopupScreenshotLayouts
+          ImageIndex = 5
+        end
+        object ButtonPreviousLayout: TToolButton
+          Left = 250
+          Top = 0
+          Hint = 'Previous layout [Ctrl+F9]'
+          AutoSize = True
+          Caption = 'Previous Layout'
+          ImageIndex = 6
+          OnClick = ButtonNextLayoutClick
+        end
+        object ButtonNextLayout: TToolButton
+          Tag = 1
+          Left = 281
+          Top = 0
+          Hint = 'Next layout [F9]'
+          AutoSize = True
+          Caption = 'Next Layout'
+          ImageIndex = 7
+          OnClick = ButtonNextLayoutClick
+        end
+        object ButtonPlayVideoPreview: TToolButton
+          Left = 312
+          Top = 0
+          Hint = 'Play a video of selected game'
+          Caption = 'Play Video Preview'
+          ImageIndex = 11
+          OnClick = ButtonPlayVideoPreviewClick
         end
       end
     end
   end
-  object MainMenu: TBcBarMainMenu
-    Images = ToolbarButtonsImageList
+  object PopupMenuImages: TBcBarPopupMenu
+    Tag = 1
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
     OwnerDraw = True
-    Bar.GradientStart = clWhite
-    Bar.GradientEnd = clWhite
-    Bar.Width = 35
-    Bar.BarBackPicture.Transparent = False
-    Bar.BarBackPicture.VertAlignment = vaBottom
-    Bar.BarBackPicture.HorzAlignment = haCenter
+    OnPopup = PopupMenuImagesPopup
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
     Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
     Bar.BarCaption.Font.Color = clWhite
     Bar.BarCaption.Font.Height = -19
     Bar.BarCaption.Font.Name = 'Tahoma'
     Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Visible = False
     Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Charset = ANSI_CHARSET
     Separators.Font.Color = clWindowText
     Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Name = 'Tahoma'
     Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
     MenuFont.Style = []
-    Left = 528
-    Top = 88
-    object MenuFile: TMenuItem
-      Caption = '&File'
-      OnClick = MenuFileClick
-      object MenuCreateGamesList: TMenuItem
-        Caption = '&Create Games List'
-        ImageIndex = 35
-        OnClick = MenuCreateGamesListClick
-      end
-      object N3: TMenuItem
-        Caption = '-'
-      end
-      object MenuExportGamesListTextFile: TMenuItem
-        Caption = 'Export Games List to Text File'
-        OnClick = MenuExportGamesListTextFileClick
-      end
-      object N2: TMenuItem
-        Caption = '-'
-      end
-      object MenuPreferences: TMenuItem
-        Caption = '&Preferences'
-        ImageIndex = 33
-        OnClick = MenuPreferencesClick
-      end
-      object N34: TMenuItem
-        Caption = '-'
-      end
-      object MenuExit: TMenuItem
-        Caption = 'E&xit'
-        ImageIndex = 34
-        OnClick = MenuExitClick
-      end
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 632
+    Top = 280
+    object PopupImageStretch: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Stretch'
+      Checked = True
+      OnClick = PopupImageStretchClick
     end
-    object MenuView: TMenuItem
-      Caption = '&View'
-      object MenuModeViewBigIcons: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Big Icons'
-        ImageIndex = 0
-        RadioItem = True
-        OnClick = MenuModeViewBigIconsClick
-      end
-      object MenuModeViewSmallIcons: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Small Icons'
-        ImageIndex = 1
-        RadioItem = True
-        OnClick = MenuModeViewSmallIconsClick
-      end
-      object MenuModeViewList: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &List'
-        ImageIndex = 2
-        RadioItem = True
-        OnClick = MenuModeViewListClick
-      end
-      object MenuModeViewDetails: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Details'
-        Checked = True
-        ImageIndex = 3
-        RadioItem = True
-        OnClick = MenuModeViewDetailsClick
-      end
-      object N27: TMenuItem
-        Caption = '-'
-      end
-      object MenuShowFavorite: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Favorite User Games'
-        ImageIndex = 4
-        OnClick = MenuShowFavoriteClick
-      end
-      object MenuShowHideFavoriteUsersManager: TMenuItem
-        AutoCheck = True
-        Caption = 'Show / Hide Fa&vorite Users Manager'
-        ImageIndex = 9
-        OnClick = MenuShowHideFavoriteUsersManagerClick
-      end
-      object N52: TMenuItem
-        Caption = '-'
-      end
-      object MenuGamesColumnsEditor: TMenuItem
-        Caption = 'Games &Columns Editor'
-        ImageIndex = 46
-        OnClick = MenuGamesColumnsEditorClick
-      end
-      object N64: TMenuItem
-        Caption = '-'
-      end
-      object MenuGamesData: TMenuItem
-        Caption = 'Games Data'
-        ImageIndex = 74
-        object MenuGameInformation: TMenuItem
-          Caption = 'Game Information (requires "mameinfo.dat")'
-          ImageIndex = 21
-          OnClick = MenuGameInformationClick
-        end
-        object MenuGameHistory: TMenuItem
-          Caption = 'Game History (requires "history.dat")'
-          ImageIndex = 20
-          OnClick = MenuGameHistoryClick
-        end
-        object MenuGameDriverInformation: TMenuItem
-          Caption = 'Game Driver Information (requires "mameinfo.dat")'
-          ImageIndex = 48
-          OnClick = MenuGameDriverInformationClick
-        end
-        object MenuGameFAQ: TMenuItem
-          Caption = 'Game F.A.Q. (requires "gamename.faq")'
-          ImageIndex = 75
-          OnClick = MenuGameFAQClick
-        end
-        object N76: TMenuItem
-          Caption = '-'
-        end
-        object MenuAutomaticGameInformation: TMenuItem
-          AutoCheck = True
-          Caption = 'Automatic Game Information'
-          ShortCut = 114
-          OnClick = MenuAutomaticGameInformationClick
-        end
-      end
-      object MenuShowGameInfo: TMenuItem
-        Caption = 'Show Game &Info'
-        ImageIndex = 50
-        ShortCut = 8265
-        OnClick = MenuShowGameInfoClick
-      end
-      object N43: TMenuItem
-        Caption = '-'
-      end
-      object MenuFullScreen: TMenuItem
-        AutoCheck = True
-        Caption = '&Full Screen'
-        ImageIndex = 64
-        ShortCut = 8305
-        OnClick = MenuFullScreenClick
-      end
-      object N55: TMenuItem
-        Caption = '-'
-      end
-      object MenuShowActiveMAMEROMPaths: TMenuItem
-        Caption = 'Show Active M.A.M.E. ROM &Paths'
-        OnClick = MenuShowActiveMAMEROMPathsClick
-      end
+    object PopupImageStretchLarger: TMenuItem
+      AutoCheck = True
+      Caption = 'Stretch Larger Images Only'
+      OnClick = PopupImageStretchClick
     end
-    object MenuGames: TMenuItem
-      Caption = '&Games'
-      OnClick = MenuGamesClick
-      object MenuPlayGameStandard: TMenuItem
-        Caption = '&Play Game (Standard)'
-        ImageIndex = 25
-        ShortCut = 13
-        OnClick = MenuPlayGameStandardClick
-      end
-      object MenuPlayGame: TMenuItem
-        Caption = 'Pl&ay Game'
-        ImageIndex = 26
-        ShortCut = 8205
-        OnClick = MenuPlayGameClick
-      end
-      object MenuCustomSettings: TMenuItem
-        Caption = 'Custom Settings'
-        object N19: TMenuItem
-          Caption = '-'
-        end
-        object MenuCustomGameOptions: TMenuItem
-          Caption = 'Custom Game Options'
-          ImageIndex = 70
-          object MenuSetCustomOptions: TMenuItem
-            Caption = '&Set Custom Options (Selected Game)'
-            ImageIndex = 27
-            OnClick = MenuSetCustomOptionsClick
-          end
-          object MenuDeleteCustomOptions: TMenuItem
-            Caption = '&Delete Custom Options (Selected Game)'
-            ImageIndex = 76
-            OnClick = MenuDeleteCustomOptionsClick
-          end
-        end
-        object MenuCustomInitializationOptions: TMenuItem
-          Caption = 'Custom Initialization Options'
-          ImageIndex = 70
-          OnClick = MenuCustomInitializationOptionsClick
-          object MenuSetGameDriverCustomOptions: TMenuItem
-            Caption = 'Set Game Driver Custom Options (Selected Game)'
-            ImageIndex = 27
-            OnClick = MenuSetGameDriverCustomOptionsClick
-          end
-          object MenuDeleteGameDriverCustomOptions: TMenuItem
-            Caption = 'Delete Game Driver Custom Options (Selected Game)'
-            ImageIndex = 76
-            OnClick = MenuDeleteGameDriverCustomOptionsClick
-          end
-          object N46: TMenuItem
-            Caption = '-'
-          end
-          object MenuSetDebugCustomOptions: TMenuItem
-            Caption = 'Set Debug Custom Options'
-            ImageIndex = 27
-            OnClick = MenuSetDebugCustomOptionsClick
-          end
-          object MenuDeleteDebugCustomOptions: TMenuItem
-            Caption = 'Delete Debug Custom Options'
-            ImageIndex = 76
-            OnClick = MenuDeleteDebugCustomOptionsClick
-          end
-        end
-        object MenuCustomCommandLine: TMenuItem
-          Caption = 'Custom Command Line'
-          ImageIndex = 44
-          object MenuSetCustomCommandLine: TMenuItem
-            Caption = 'Set Custom Command Line'
-            ImageIndex = 27
-            OnClick = MenuSetCustomCommandLineClick
-          end
-          object MenuDeleteCustomCommandLine: TMenuItem
-            Caption = 'Delete Custom Command Line'
-            ImageIndex = 76
-            OnClick = MenuDeleteCustomCommandLineClick
-          end
-          object N4: TMenuItem
-            Caption = '-'
-          end
-          object MenuSetDriverCustomCommandLine: TMenuItem
-            Caption = 'Set Driver Custom Command Line'
-            ImageIndex = 27
-            OnClick = MenuSetDriverCustomCommandLineClick
-          end
-          object MenuDeleteDriverCustomCommandLine: TMenuItem
-            Caption = 'Delete Driver Custom Command Line'
-            ImageIndex = 76
-            OnClick = MenuDeleteDriverCustomCommandLineClick
-          end
-        end
-        object N18: TMenuItem
-          Caption = '-'
-        end
-        object MenuGameDescription: TMenuItem
-          Caption = 'Game Description'
-          object MenuChangeGameDescription: TMenuItem
-            Caption = 'Change Game Description'
-            ImageIndex = 27
-            OnClick = MenuChangeGameDescriptionClick
-          end
-          object MenuDeleteCustomDescription: TMenuItem
-            Caption = 'Delete Custom Description'
-            ImageIndex = 76
-            OnClick = MenuDeleteCustomDescriptionClick
-          end
-        end
-        object MenuGameCategory: TMenuItem
-          Caption = 'Game Category'
-          object MenuChangeGameCategory: TMenuItem
-            Caption = 'Change Game Category'
-            ImageIndex = 27
-            OnClick = MenuChangeGameCategoryClick
-          end
-          object MenuDeleteCustomCategory: TMenuItem
-            Caption = 'Delete Custom Category'
-            ImageIndex = 76
-            OnClick = MenuDeleteCustomCategoryClick
-          end
-        end
-      end
-      object N20: TMenuItem
-        Caption = '-'
-      end
-      object MenuSelectParentGame: TMenuItem
-        Caption = 'Select Parent Game'
-        OnClick = MenuSelectParentGameClick
-      end
-      object MenuOpenGameInternetPage: TMenuItem
-        Caption = 'Open Game'#39's Internet Page'
-        OnClick = MenuOpenGameInternetPageClick
-      end
-      object N21: TMenuItem
-        Caption = '-'
-      end
-      object MenuPlayRecordedGame: TMenuItem
-        AutoCheck = True
-        Caption = 'Play a Re&corded Game'
-        ImageIndex = 12
-        RadioItem = True
-        OnClick = MenuPlayRecordedGameClick
-      end
-      object MenuRecordGame: TMenuItem
-        AutoCheck = True
-        Caption = '&Record Game'
-        ImageIndex = 13
-        RadioItem = True
-        OnClick = MenuRecordGameClick
-      end
-      object N22: TMenuItem
-        Caption = '-'
-      end
-      object MenuDeleteSelected: TMenuItem
-        Caption = 'Delete Selected'
-        object MenuDeleteZIPFileName: TMenuItem
-          Caption = 'Delete File "filename.zip"'
-          ImageIndex = 71
-          OnClick = MenuDeleteZIPFileNameClick
-        end
-        object MenuDeleteAudioFileName: TMenuItem
-          Caption = 'Delete Audio File "filename.mp3"'
-          ImageIndex = 91
-          OnClick = MenuDeleteAudioFileNameClick
-        end
-        object N33: TMenuItem
-          Caption = '-'
-        end
-        object MenuDeleteCFGFile: TMenuItem
-          Caption = 'Delete Config File "filename.cfg"'
-          ImageIndex = 69
-          OnClick = MenuDeleteCFGFileClick
-        end
-        object MenuDeleteNVRAMFile: TMenuItem
-          Caption = 'Delete Nvram File "filename.nv"'
-          ImageIndex = 69
-          OnClick = MenuDeleteNVRAMFileClick
-        end
-        object MenuDeleteHIFile: TMenuItem
-          Caption = 'Delete Hi-Score File "filename.hi"'
-          ImageIndex = 69
-          OnClick = MenuDeleteHIFileClick
-        end
-        object MenuDeleteINPFile: TMenuItem
-          Caption = 'Delete Input File "filename.inp"'
-          ImageIndex = 69
-          OnClick = MenuDeleteINPFileClick
-        end
-        object MenuDeleteStateFile: TMenuItem
-          Caption = 'Delete Save State File "filename.sta"'
-          ImageIndex = 69
-          OnClick = MenuDeleteStateFileClick
-        end
-      end
-      object N24: TMenuItem
-        Caption = '-'
-      end
-      object MenuFavoriteGames: TMenuItem
-        Caption = 'Favorite Games'
-        object MenuAddToFavorites: TMenuItem
-          Caption = '&Add To Favorites'
-          ImageIndex = 30
-          ShortCut = 8262
-          OnClick = MenuAddToFavoritesClick
-        end
-        object MenuDeleteFromFavorites: TMenuItem
-          Caption = '&Delete From Favorites'
-          ImageIndex = 31
-          ShortCut = 8260
-          OnClick = MenuDeleteFromFavoritesClick
-        end
-      end
-      object MenuAddGameParentalLock: TMenuItem
-        Caption = 'Add Game to Parental &Lock'
-        ImageIndex = 60
-        OnClick = MenuAddGameParentalLockClick
-      end
-      object N30: TMenuItem
-        Caption = '-'
-      end
-      object MenuIcons: TMenuItem
-        Caption = 'Icons'
-        object MenuGamesIcons: TMenuItem
-          AutoCheck = True
-          Caption = '&Games Icons'
-          ImageIndex = 68
-          OnClick = MenuGamesIconsClick
-        end
-        object MenuShowOnlyParentIcon: TMenuItem
-          AutoCheck = True
-          Caption = 'Show Only &Parent Icon'
-          Enabled = False
-        end
-        object N83: TMenuItem
-          Caption = '-'
-        end
-        object MenuCreateIconsList: TMenuItem
-          Caption = '&Create Icons List'
-          OnClick = MenuCreateIconsListClick
-        end
-        object N6: TMenuItem
-          Caption = '-'
-        end
-        object MenuCheckMissingIcons: TMenuItem
-          Caption = 'Check for Missing Icons'
-          ImageIndex = 32
-          OnClick = MenuCheckMissingIconsClick
-        end
-        object MenuCheckUnneededIcons: TMenuItem
-          Caption = 'Check for Unneeded Icons'
-          ImageIndex = 39
-          OnClick = MenuCheckUnneededIconsClick
-        end
-      end
-      object N26: TMenuItem
-        Caption = '-'
-      end
-      object MenuRefreshGames: TMenuItem
-        Caption = 'Refresh Games'
-        object MenuRefreshSelectedGame: TMenuItem
-          Caption = '&Selected Game'
-          ShortCut = 8308
-          OnClick = MenuRefreshSelectedGameClick
-        end
-        object N48: TMenuItem
-          Caption = '-'
-        end
-        object MenuRefreshAvailableGames: TMenuItem
-          Caption = 'All A&vailable Games'
-          OnClick = MenuRefreshAvailableGamesClick
-        end
-        object MenuRefreshUnavailableGames: TMenuItem
-          Caption = 'All &Unavailable Games'
-          OnClick = MenuRefreshUnavailableGamesClick
-        end
-        object MenuRefreshAllGames: TMenuItem
-          Caption = 'A&ll Games'
-          ImageIndex = 11
-          ShortCut = 116
-          OnClick = MenuRefreshAllGamesClick
-        end
-      end
-      object MenuGamesAudit: TMenuItem
-        Caption = 'Games Audit'
-        object MenuAuditSelectedGame: TMenuItem
-          Caption = '&Selected Game'
-          ImageIndex = 29
-          ShortCut = 8257
-          OnClick = MenuAuditSelectedGameClick
-        end
-        object MenuAuditSelectedGameRenameFiles: TMenuItem
-          Caption = 'Selected Game (Rename Files)'
-          ImageIndex = 29
-          ShortCut = 24641
-          Visible = False
-        end
-        object N54: TMenuItem
-          Caption = '-'
-        end
-        object MenuAuditAvailableGames: TMenuItem
-          Caption = 'All A&vailable Games'
-          ShortCut = 8311
-          OnClick = MenuAuditAvailableGamesClick
-        end
-        object MenuAuditAllGames: TMenuItem
-          Caption = '&All Games'
-          ImageIndex = 24
-          ShortCut = 119
-          OnClick = MenuAuditAllGamesClick
-        end
-        object N66: TMenuItem
-          Caption = '-'
-          Visible = False
-        end
-        object MenuAuditSelectedGameUnneededFiles: TMenuItem
-          Caption = 'Selected Game [Unneeded Files]'
-          Enabled = False
-          Visible = False
-        end
-        object N95: TMenuItem
-          Caption = '-'
-          Visible = False
-        end
-        object MenuAuditAvailableGamesUnneededFiles: TMenuItem
-          Caption = 'All Available Games [Unneeded Files]'
-          Enabled = False
-          Visible = False
-        end
-        object MenuAuditAllGamesUnneededFiles: TMenuItem
-          Caption = 'All Games [Unneeded Files]'
-          Enabled = False
-          Visible = False
-        end
-      end
+    object PopupImageDisplayParent: TMenuItem
+      AutoCheck = True
+      Caption = 'Display Parent Images'
+      Checked = True
+      OnClick = PopupImageStretchClick
     end
-    object MenuEmulator: TMenuItem
-      Caption = '&Emulator'
-      object MenuEmulatorSetup: TMenuItem
-        Caption = 'E&mulator Setup'
-        ImageIndex = 55
-        OnClick = MenuEmulatorSetupClick
-      end
-      object MenuEmulatorDefaultOptions: TMenuItem
-        Caption = 'Emulator Default Options'
-        ImageIndex = 69
-        object MenuSet1stEmulatorDefaultOptions: TMenuItem
-          Caption = 'Set 1st Emulator Default Options'
-          ImageIndex = 15
-          OnClick = MenuSet1stEmulatorDefaultOptionsClick
-        end
-        object MenuSet2ndEmulatorDefaultOptions: TMenuItem
-          Caption = 'Set 2nd Emulator Default Options'
-          ImageIndex = 16
-          OnClick = MenuSet2ndEmulatorDefaultOptionsClick
-        end
-        object MenuSet3rdEmulatorDefaultOptions: TMenuItem
-          Caption = 'Set 3rd Emulator Default Options'
-          ImageIndex = 47
-          OnClick = MenuSet3rdEmulatorDefaultOptionsClick
-        end
-        object MenuSet4thEmulatorDefaultOptions: TMenuItem
-          Caption = 'Set 4th Emulator Default Options'
-          ImageIndex = 61
-          OnClick = MenuSet4thEmulatorDefaultOptionsClick
-        end
-        object MenuSet5thEmulatorDefaultOptions: TMenuItem
-          Caption = 'Set 5th Emulator Default Options'
-          ImageIndex = 62
-          OnClick = MenuSet5thEmulatorDefaultOptionsClick
-        end
-      end
-      object MenuEmulatorDescription: TMenuItem
-        Caption = 'Emulator Description'
-        object MenuChange1stEmulatorDescription: TMenuItem
-          Caption = 'Change 1st Emulator Description'
-          ImageIndex = 15
-          OnClick = MenuChange1stEmulatorDescriptionClick
-        end
-        object MenuChange2ndEmulatorDescription: TMenuItem
-          Caption = 'Change 2nd Emulator Description'
-          ImageIndex = 16
-          OnClick = MenuChange2ndEmulatorDescriptionClick
-        end
-        object MenuChange3rdEmulatorDescription: TMenuItem
-          Caption = 'Change 3rd Emulator Description'
-          ImageIndex = 47
-          OnClick = MenuChange3rdEmulatorDescriptionClick
-        end
-        object MenuChange4thEmulatorDescription: TMenuItem
-          Caption = 'Change 4th Emulator Description'
-          ImageIndex = 61
-          OnClick = MenuChange4thEmulatorDescriptionClick
-        end
-        object MenuChange5thEmulatorDescription: TMenuItem
-          Caption = 'Change 5th Emulator Description'
-          ImageIndex = 62
-          OnClick = MenuChange5thEmulatorDescriptionClick
-        end
-        object N67: TMenuItem
-          Caption = '-'
-        end
-        object MenuGet1stEmulatorDefaultDescription: TMenuItem
-          Caption = 'Get 1st Emulator Default Description'
-          ImageIndex = 15
-          OnClick = MenuGet1stEmulatorDefaultDescriptionClick
-        end
-        object MenuGet2ndEmulatorDefaultDescription: TMenuItem
-          Caption = 'Get 2nd Emulator Default Description'
-          ImageIndex = 16
-          OnClick = MenuGet2ndEmulatorDefaultDescriptionClick
-        end
-        object MenuGet3rdEmulatorDefaultDescription: TMenuItem
-          Caption = 'Get 3rd Emulator Default Description'
-          ImageIndex = 47
-          OnClick = MenuGet3rdEmulatorDefaultDescriptionClick
-        end
-        object MenuGet4thEmulatorDefaultDescription: TMenuItem
-          Caption = 'Get 4th Emulator Default Description'
-          ImageIndex = 61
-          OnClick = MenuGet4thEmulatorDefaultDescriptionClick
-        end
-        object MenuGet5thEmulatorDefaultDescription: TMenuItem
-          Caption = 'Get 5th Emulator Default Description'
-          ImageIndex = 62
-          OnClick = MenuGet5thEmulatorDefaultDescriptionClick
-        end
-      end
-      object N17: TMenuItem
-        Caption = '-'
-      end
-      object MenuCurrentEmulator: TMenuItem
-        Tag = 1
-        Caption = 'Current Emulator'
-        object MenuUseExecutable1: TMenuItem
-          AutoCheck = True
-          Caption = 'Use 1st Emulator Executable'
-          Checked = True
-          ImageIndex = 15
-          RadioItem = True
-          OnClick = MenuUseExecutable1Click
-        end
-        object MenuUseExecutable2: TMenuItem
-          AutoCheck = True
-          Caption = 'Use 2nd Emulator Executable'
-          ImageIndex = 16
-          RadioItem = True
-          OnClick = MenuUseExecutable2Click
-        end
-        object MenuUseExecutable3: TMenuItem
-          AutoCheck = True
-          Caption = 'Use 3rd Emulator Executable'
-          ImageIndex = 47
-          RadioItem = True
-          OnClick = MenuUseExecutable3Click
-        end
-        object MenuUseExecutable4: TMenuItem
-          AutoCheck = True
-          Caption = 'Use 4th Emulator Executable'
-          ImageIndex = 61
-          RadioItem = True
-          OnClick = MenuUseExecutable4Click
-        end
-        object MenuUseExecutable5: TMenuItem
-          AutoCheck = True
-          Caption = 'Use 5th Emulator Executable'
-          ImageIndex = 62
-          RadioItem = True
-          OnClick = MenuUseExecutable5Click
-        end
-      end
-      object N28: TMenuItem
-        Caption = '-'
-      end
-      object MenuKeysAssignment: TMenuItem
-        Caption = '&Keys Assignment'
-        ImageIndex = 54
-      end
+    object N47: TMenuItem
+      Caption = '-'
     end
-    object MenuPictures: TMenuItem
-      Caption = '&Pictures'
-      OnClick = MenuPicturesClick
-      object MenuShowPictures: TMenuItem
-        AutoCheck = True
-        Caption = '&Show Pictures'
-        Checked = True
-        ImageIndex = 63
-        ShortCut = 117
-        OnClick = MenuShowPicturesClick
+    object PopupShowFirstImage: TMenuItem
+      Caption = 'Go To First Image'
+      OnClick = PopupShowFirstImageClick
+    end
+    object ImagePanelSeparator: TMenuItem
+      Caption = '-'
+    end
+    object PopupRenameCurrentImage: TMenuItem
+      Caption = 'Rename Image'
+      OnClick = PopupRenameCurrentImageClick
+    end
+    object PopupDeleteCurrentImage: TMenuItem
+      Caption = 'Delete Image'
+      ImageIndex = 14
+      OnClick = PopupDeleteCurrentImageClick
+    end
+    object N5: TMenuItem
+      Caption = '-'
+      Hint = 'Layouts view mode'
+    end
+    object PopupImageCenterAllSplitters: TMenuItem
+      Caption = 'Center All Splitters'
+      OnClick = PopupImageCenterAllSplittersClick
+    end
+    object PopupImageShowSplitterGrip: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Splitter Grip Icon'
+      Checked = True
+      OnClick = PopupImageShowSplitterGripClick
+    end
+    object PopupImageCustomizeSplitters: TMenuItem
+      Caption = 'Customize Splitters'
+      OnClick = PopupImageCustomizeSplittersClick
+    end
+    object PopupImageShowLayoutDimensions: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Layout Dimensions'
+      OnClick = PopupImageShowLayoutDimensionsClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object PopupImageShowToolBar: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Tool Bar'
+      Checked = True
+      ShortCut = 16457
+      OnClick = PopupImageShowToolBarClick
+    end
+    object PopupImageCategoryLayoutSettings: TMenuItem
+      Caption = 'Category / Layout Settings'
+      OnClick = MenuImageCategoryLayoutSettingsClick
+    end
+  end
+  object PopupMenuGamesList: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    OnPopup = PopupMenuGamesListPopup
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Bar.BarCaption.ShadowColor = clBlack
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 312
+    Top = 416
+    object PopupPlayGameStandard: TMenuItem
+      Caption = 'Run Game'
+      ImageIndex = 18
+      ShortCut = 13
+      OnClick = PopupPlayGameStandardClick
+    end
+    object PopupPlayExtraMAME: TMenuItem
+      Caption = 'Run Game (Extra)'
+      ImageIndex = 18
+      object PopupRunGamePlaybackInput: TMenuItem
+        Tag = 20
+        Caption = 'Run Game and Playback Input'
+        OnClick = PopupRunGamePlaybackInputClick
       end
-      object N1: TMenuItem
-        Caption = '-'
-      end
-      object MenuShowTitleSnapshot: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Title Snapshots'
-        ImageIndex = 37
-        RadioItem = True
-        OnClick = MenuShowTitleSnapshotClick
-      end
-      object MenuShowInGameSnapshot: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &In Game Snapshots'
-        Checked = True
-        ImageIndex = 5
-        RadioItem = True
-        OnClick = MenuShowInGameSnapshotClick
-      end
-      object MenuShowMarquee: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Marquees'
-        ImageIndex = 6
-        RadioItem = True
-        OnClick = MenuShowMarqueeClick
-      end
-      object MenuShowFlyer: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Flyers'
-        ImageIndex = 7
-        RadioItem = True
-        OnClick = MenuShowFlyerClick
-      end
-      object MenuShowCabinet: TMenuItem
-        AutoCheck = True
-        Caption = 'Show &Cabinets'
-        ImageIndex = 8
-        RadioItem = True
-        OnClick = MenuShowCabinetClick
-      end
-      object MenuShowControlPanel: TMenuItem
-        AutoCheck = True
-        Caption = 'Show Control &Panels'
-        ImageIndex = 17
-        RadioItem = True
-        OnClick = MenuShowControlPanelClick
-      end
-      object MenuShowControlPanelLayout: TMenuItem
-        AutoCheck = True
-        Caption = 'Show Control Panel La&youts'
-        ImageIndex = 59
-        RadioItem = True
-        OnClick = MenuShowControlPanelLayoutClick
-      end
-      object N70: TMenuItem
-        Caption = '-'
-      end
-      object MenuShowFirstPicture: TMenuItem
-        Caption = 'Show Firs&t Picture'
-        OnClick = MenuShowFirstPictureClick
-      end
-      object N38: TMenuItem
-        Caption = '-'
-      end
-      object MenuRenameCurrentPicture: TMenuItem
-        Caption = '&Rename Current Picture'
-        ImageIndex = 49
-        OnClick = MenuRenameCurrentPictureClick
-      end
-      object MenuDeleteCurrentPicture: TMenuItem
-        Caption = '&Delete Current Picture'
-        ImageIndex = 28
-        OnClick = MenuDeleteCurrentPictureClick
-      end
-      object MenuDeleteAllExtraPictures: TMenuItem
-        Caption = 'Delete All E&xtra Pictures'
-        ImageIndex = 28
-        OnClick = MenuDeleteAllExtraPicturesClick
+      object PopupRunGameRecordInput: TMenuItem
+        Tag = 21
+        Caption = 'Run Game and Record Input'
+        OnClick = PopupRunGamePlaybackInputClick
       end
       object N12: TMenuItem
         Caption = '-'
       end
-      object MenuCreatePicturesList: TMenuItem
-        Caption = 'Create Pictures List'
-        OnClick = MenuCreatePicturesListClick
+      object PopupRunGameRecordWaveOutput: TMenuItem
+        Tag = 23
+        Caption = 'Run Game and Record Wave Output'
+        OnClick = PopupRunGamePlaybackInputClick
+      end
+      object PopupRunGameRecordMNGOutput: TMenuItem
+        Tag = 24
+        Caption = 'Run Game and Record MNG Output'
+        OnClick = PopupRunGamePlaybackInputClick
+      end
+      object PopupRunGameRecordAVIOutput: TMenuItem
+        Tag = 25
+        Caption = 'Run Game and Record AVI Output'
+        OnClick = PopupRunGamePlaybackInputClick
+      end
+      object N50: TMenuItem
+        Caption = '-'
+      end
+      object PopupRunGameEffectOverlay: TMenuItem
+        Tag = 27
+        Caption = 'Run Game with Effect Overlay'
+        OnClick = PopupRunGamePlaybackInputClick
+      end
+      object PopupRunGameLoadSaveState: TMenuItem
+        Tag = 22
+        Caption = 'Run Game and Load a Save State'
+        ImageIndex = 16
+        Visible = False
+        OnClick = PopupRunGamePlaybackInputClick
       end
     end
-    object MenuAdvancedTools: TMenuItem
-      Caption = '&Advanced Tools'
-      OnClick = MenuAdvancedToolsClick
-      object MenuLanguage: TMenuItem
-        Tag = 1
-        Caption = '&Language'
-        ImageIndex = 73
-      end
-      object N39: TMenuItem
-        Caption = '-'
-      end
-      object MenuParentalLock: TMenuItem
-        AutoCheck = True
-        Caption = '&Parental Lock'
-        ImageIndex = 60
-        OnClick = MenuParentalLockClick
-      end
-      object MenuParentalLockEditor: TMenuItem
-        Caption = 'Parental Lock Editor'
-        OnClick = MenuParentalLockEditorClick
-      end
-      object N90: TMenuItem
-        Caption = '-'
-      end
-      object MenuUserProfile: TMenuItem
-        AutoCheck = True
-        Caption = '&User Profile'
-        ImageIndex = 72
-        OnClick = MenuUserProfileClick
-      end
-      object MenuUserProfileEditor: TMenuItem
-        Caption = 'User Profile &Editor'
-        OnClick = MenuUserProfileEditorClick
-      end
-      object N81: TMenuItem
-        Caption = '-'
-      end
-      object MenuRestoreMainScreenDefaultScreenSizePosition: TMenuItem
-        Caption = 'Restore Main Screen Default Scr&een Size/Position'
-        ImageIndex = 51
-        OnClick = MenuRestoreMainScreenDefaultScreenSizePositionClick
-      end
+    object PopupRunGameWithAlterMAME: TMenuItem
+      Tag = 1
+      Caption = 'Run Game With AlterMAME'
+      ImageIndex = 18
+      OnClick = PopupRunGamePlaybackInputClick
     end
-    object MenuHelp: TMenuItem
-      Caption = '&Help'
-      object MenuShowGamesIconsLegend: TMenuItem
-        AutoCheck = True
-        Caption = 'Show Icons &Legend'
-        OnClick = MenuShowGamesIconsLegendClick
-      end
-      object N16: TMenuItem
-        Caption = '-'
-      end
-      object MenuVisitEmuLoaderHomepage: TMenuItem
-        Caption = 'Visit Emu Loader &Homepage'
-        ImageIndex = 18
-        OnClick = MenuVisitEmuLoaderHomepageClick
-      end
-      object SendEMailEmuLoader: TMenuItem
-        Caption = 'Send an E-&Mail to Emu Loader'
-        ImageIndex = 19
-        OnClick = SendEMailEmuLoaderClick
-      end
-      object N35: TMenuItem
-        Caption = '-'
-      end
-      object MenuVisitHotRodHomepage: TMenuItem
-        Caption = 'Visit Hot Rod Homepage'
-        ImageIndex = 18
-        OnClick = MenuVisitHotRodHomepageClick
-      end
-      object MenuVisitSlikStikHomepage: TMenuItem
-        Caption = 'Visit SlikStik Homepage'
-        ImageIndex = 18
-        OnClick = MenuVisitSlikStikHomepageClick
-      end
-      object MenuVisitXArcadeHomepage: TMenuItem
-        Caption = 'Visit X-Arcade Homepage'
-        ImageIndex = 18
-        OnClick = MenuVisitXArcadeHomepageClick
-      end
-      object N29: TMenuItem
-        Caption = '-'
-      end
-      object MenuUserManual: TMenuItem
-        Caption = 'User Manual'
-        ImageIndex = 36
-        OnClick = MenuUserManualClick
-      end
-      object MenuAbout: TMenuItem
-        Caption = '&About...'
-        ImageIndex = 23
-        OnClick = MenuAboutClick
-      end
+    object PopupPlayVideoPreview: TMenuItem
+      Caption = 'Play Video Preview'
+      Hint = 'Play a video of selected game'
+      ImageIndex = 13
+      ShortCut = 8278
+      OnClick = ButtonPlayVideoPreviewClick
     end
-    object LabelEmulatorVersion: TMenuItem
+    object PopupAutorunGameAlterMAME: TMenuItem
+      AutoCheck = True
+      Caption = 'Autorun Game With AlterMAME'
+      Hint = 'Try again with AlterMAME if fails with MAME'
     end
-  end
-  object PopupMenuPictures: TBcBarPopupMenu
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    OnPopup = MenuPicturesClick
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Bar.BarCaption.ShadowColor = clBlack
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 496
-    Top = 152
-    object PopupShowPictures: TMenuItem
-      Caption = 'Show Pictures'
-      Checked = True
-      ImageIndex = 63
-      OnClick = PopupShowPicturesClick
-    end
-    object N93: TMenuItem
+    object N29: TMenuItem
       Caption = '-'
-    end
-    object PopupShowTitleSnapshot: TMenuItem
-      Caption = 'Show Title Snapshots'
-      ImageIndex = 37
-      RadioItem = True
-      OnClick = PopupShowTitleSnapshotClick
-    end
-    object PopupShowInGameSnapshot: TMenuItem
-      Caption = 'Show In Game Snapshots'
-      Checked = True
-      ImageIndex = 5
-      RadioItem = True
-      OnClick = PopupShowInGameSnapshotClick
-    end
-    object PopupShowMarquee: TMenuItem
-      Caption = 'Show Marquees'
-      ImageIndex = 6
-      RadioItem = True
-      OnClick = PopupShowMarqueeClick
-    end
-    object PopupShowFlyer: TMenuItem
-      Caption = 'Show Flyers'
-      ImageIndex = 7
-      RadioItem = True
-      OnClick = PopupShowFlyerClick
-    end
-    object PopupShowCabinet: TMenuItem
-      Caption = 'Show Cabinets'
-      ImageIndex = 8
-      RadioItem = True
-      OnClick = PopupShowCabinetClick
-    end
-    object PopupShowControlPanel: TMenuItem
-      Caption = 'Show Control Panels'
-      ImageIndex = 17
-      RadioItem = True
-      OnClick = PopupShowControlPanelClick
-    end
-    object PopupShowControlPanelLayout: TMenuItem
-      Caption = 'Show Control Panel Layouts'
-      ImageIndex = 59
-      RadioItem = True
-      OnClick = PopupShowControlPanelLayoutClick
-    end
-    object N71: TMenuItem
-      Caption = '-'
-    end
-    object PopupShowFirstPicture: TMenuItem
-      Caption = 'Show First Picture'
-      OnClick = MenuShowFirstPictureClick
-    end
-    object N5: TMenuItem
-      Caption = '-'
-    end
-    object PopupRenameCurrentPicture: TMenuItem
-      Caption = 'Rename Current Picture'
-      ImageIndex = 49
-      OnClick = MenuRenameCurrentPictureClick
-    end
-    object PopupDeleteCurrentPicture: TMenuItem
-      Caption = 'Delete Current Picture'
-      ImageIndex = 28
-      OnClick = MenuDeleteCurrentPictureClick
-    end
-    object PopupDeleteAllExtraPictures: TMenuItem
-      Caption = 'Delete All Extra Pictures'
-      ImageIndex = 28
-      OnClick = MenuDeleteAllExtraPicturesClick
-    end
-    object N25: TMenuItem
-      Caption = '-'
-    end
-    object PopupCreatePicturesList: TMenuItem
-      Caption = 'Create Pictures List'
-      OnClick = MenuCreatePicturesListClick
-    end
-  end
-  object PopupMenuGamesList: TBcBarPopupMenu
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    OnPopup = MenuGamesClick
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Bar.BarCaption.ShadowColor = clBlack
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 464
-    Top = 152
-    object PopupPlayGameStandard: TMenuItem
-      Caption = 'Play Game (Standard)'
-      ImageIndex = 25
-      ShortCut = 13
-      OnClick = MenuPlayGameStandardClick
-    end
-    object PopupPlayGame: TMenuItem
-      Caption = 'Play Game'
-      GroupIndex = 1
-      ImageIndex = 26
-      ShortCut = 8205
-      OnClick = MenuPlayGameClick
     end
     object PopupCustomSettings: TMenuItem
       Caption = 'Custom Settings'
-      GroupIndex = 1
-      object N8: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
+      object PopupSetCustomOptions: TMenuItem
+        Caption = 'Set [gamename] Custom Options'
+        Hint = 'Set [%s] Custom Options'
+        ImageIndex = 7
+        OnClick = PopupSetCustomOptionsClick
       end
-      object PopupCustomGameOptions: TMenuItem
-        Caption = 'Custom Game Options'
-        GroupIndex = 1
-        ImageIndex = 70
-        object PopupSetCustomOptions: TMenuItem
-          Caption = 'Set Custom Options (Selected Game)'
-          GroupIndex = 1
-          ImageIndex = 27
-          OnClick = MenuSetCustomOptionsClick
-        end
-        object PopupDeleteCustomOptions: TMenuItem
-          Caption = 'Delete Custom Options (Selected Game)'
-          GroupIndex = 1
-          ImageIndex = 76
-          OnClick = MenuDeleteCustomOptionsClick
-        end
+      object PopupDeleteCustomOptions: TMenuItem
+        Tag = 1
+        Caption = 'Delete [gamename] Custom Options'
+        Hint = 'Delete [%s] Custom Options'
+        ImageIndex = 14
+        OnClick = PopupSetCustomOptionsClick
       end
-      object PopupCustomInitializationOptions: TMenuItem
-        Caption = 'Custom Initialization Options (MAME Only)'
-        GroupIndex = 1
-        ImageIndex = 70
-        OnClick = MenuCustomInitializationOptionsClick
-        object PopupSetGameDriverCustomOptions: TMenuItem
-          Caption = 'Set Game Driver Custom Options (Selected Game)'
-          ImageIndex = 27
-          OnClick = MenuSetGameDriverCustomOptionsClick
+      object PopupSetGameDriverCustomOptions: TMenuItem
+        Caption = 'Set [drivername] Custom Options'
+        Hint = 'Set [%s] Custom Options'
+        ImageIndex = 7
+        OnClick = PopupSetGameDriverCustomOptionsClick
+      end
+      object PopupDeleteGameDriverCustomOptions: TMenuItem
+        Tag = 1
+        Caption = 'Delete [drivername] Custom Options'
+        Hint = 'Delete [%s] Custom Options'
+        ImageIndex = 14
+        OnClick = PopupSetGameDriverCustomOptionsClick
+      end
+      object PopupCustomMAME: TMenuItem
+        Caption = 'Extra'
+        object PopupSetMAMEHorizontalGamesOptions: TMenuItem
+          Caption = 'Set Horizontal Game Options'
+          Hint = 'horizont'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
-        object PopupDeleteGameDriverCustomOptions: TMenuItem
-          Caption = 'Delete Game Driver Custom Options (Selected Game)'
-          ImageIndex = 76
-          OnClick = MenuDeleteGameDriverCustomOptionsClick
+        object PopupDeleteMAMEHorizontalGamesOptions: TMenuItem
+          Tag = 1
+          Caption = 'Delete Horizontal Game Options'
+          Hint = 'horizont'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
-        object N65: TMenuItem
-          Caption = '-'
+        object PopupSetMAMEVerticalGamesOptions: TMenuItem
+          Caption = 'Set Vertical Game Options'
+          Hint = 'vertical'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
+        end
+        object PopupDeleteMAMEVerticalGamesOptions: TMenuItem
+          Tag = 1
+          Caption = 'Delete Vertical Game Options'
+          Hint = 'vertical'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
         object PopupSetDebugCustomOptions: TMenuItem
           Caption = 'Set Debug Custom Options'
-          ImageIndex = 27
-          OnClick = MenuSetDebugCustomOptionsClick
+          Hint = 'debug'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
         object PopupDeleteDebugCustomOptions: TMenuItem
+          Tag = 1
           Caption = 'Delete Debug Custom Options'
-          ImageIndex = 76
-          OnClick = MenuDeleteDebugCustomOptionsClick
+          Hint = 'debug'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
+        end
+        object PopupSetMAMEVectorGamesOptions: TMenuItem
+          Caption = 'Set Vector Custom Options'
+          Hint = 'vector'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
+        end
+        object PopupDeleteMAMEVectorGamesOptions: TMenuItem
+          Tag = 1
+          Caption = 'Delete Vector Custom Options'
+          Hint = 'vector'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
       end
-      object PopupCustomCommandLine: TMenuItem
-        Caption = 'Custom Command Line'
-        GroupIndex = 1
-        ImageIndex = 44
-        object PopupSetCustomCommandLine: TMenuItem
-          Caption = 'Set Custom Command Line'
-          ImageIndex = 27
-          OnClick = MenuSetCustomCommandLineClick
-        end
-        object PopupDeleteCustomCommandLine: TMenuItem
-          Caption = 'Delete Custom Command Line'
-          ImageIndex = 76
-          OnClick = MenuDeleteCustomCommandLineClick
-        end
-        object N7: TMenuItem
-          Caption = '-'
-        end
-        object PopupSetDriverCustomCommandLine: TMenuItem
-          Caption = 'Set Driver Custom Command Line'
-          ImageIndex = 27
-          OnClick = MenuSetDriverCustomCommandLineClick
-        end
-        object PopupDeleteDriverCustomCommandLine: TMenuItem
-          Caption = 'Delete Driver Custom Command Line'
-          ImageIndex = 76
-          OnClick = MenuDeleteDriverCustomCommandLineClick
-        end
-      end
-      object N9: TMenuItem
+      object N45: TMenuItem
         Caption = '-'
-        GroupIndex = 1
+        Hint = 'for MAME/UME. only'
       end
-      object PopupGameDescription: TMenuItem
-        Caption = 'Game Description'
-        GroupIndex = 1
-        object PopupChangeGameDescription: TMenuItem
-          Caption = 'Change Game Description'
-          ImageIndex = 27
-          OnClick = MenuChangeGameDescriptionClick
+      object PopupSetArcadeIniCustomOptions: TMenuItem
+        Caption = 'Set [arcade.ini] Custom Options'
+        Hint = 'arcade'
+        ImageIndex = 7
+        OnClick = PopupSetMAMEHorizontalGamesOptionsClick
+      end
+      object DeleteArcadeIniCustomOptions: TMenuItem
+        Tag = 1
+        Caption = 'Delete [arcade.ini] Custom Options'
+        Hint = 'arcade'
+        ImageIndex = 14
+        OnClick = PopupSetMAMEHorizontalGamesOptionsClick
+      end
+    end
+    object PopupAlterMAMECustomSettings: TMenuItem
+      Caption = 'AlterMAME Custom Settings'
+      object PopupSetCustomOptionsAlterMAME: TMenuItem
+        Caption = 'Set [gamename] Custom Options'
+        Hint = 'Set [%s] Custom Options'
+        ImageIndex = 7
+        OnClick = PopupSetCustomOptionsAlterMAMEClick
+      end
+      object PopupDeleteCustomOptionsAlterMAME: TMenuItem
+        Tag = 1
+        Caption = 'Delete [gamename] Custom Options'
+        Hint = 'Delete [%s] Custom Options'
+        ImageIndex = 14
+        OnClick = PopupSetCustomOptionsAlterMAMEClick
+      end
+      object PopupSetGameDriverCustomOptionsAlterMAME: TMenuItem
+        Caption = 'Set [drivername] Custom Options'
+        Hint = 'Set [%s] Custom Options'
+        ImageIndex = 7
+        OnClick = PopupSetGameDriverCustomOptionsAlterMAMEClick
+      end
+      object PopupDeleteGameDriverCustomOptionsAlterMAME: TMenuItem
+        Tag = 1
+        Caption = 'Delete [drivername] Custom Options'
+        Hint = 'Delete [%s] Custom Options'
+        ImageIndex = 14
+        OnClick = PopupSetGameDriverCustomOptionsAlterMAMEClick
+      end
+      object PopupCustomMAMEAlterMAME: TMenuItem
+        Caption = 'Extra'
+        object PopupSetMAMEHorizontalGamesOptionsAlterMAME: TMenuItem
+          Caption = 'Set Horizontal Game Options'
+          Hint = 'horizont'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
         end
-        object PopupDeleteCustomDescription: TMenuItem
-          Caption = 'Delete Custom Description'
-          ImageIndex = 76
-          OnClick = MenuDeleteCustomDescriptionClick
+        object PopupDeleteMAMEHorizontalGamesOptionsAlterMAME: TMenuItem
+          Tag = 1
+          Caption = 'Delete Horizontal Game Options'
+          Hint = 'horizont'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
         end
-        object N45: TMenuItem
-          Caption = '-'
+        object PopupSetMAMEVerticalGamesOptionsAlterMAME: TMenuItem
+          Caption = 'Set Vertical Game Options'
+          Hint = 'vertical'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
         end
-        object PopupUpdateGamesDescriptions: TMenuItem
-          Caption = 'Update Games Descriptions'
-          ImageIndex = 11
+        object PopupDeleteMAMEVerticalGamesOptionsAlterMAME: TMenuItem
+          Tag = 1
+          Caption = 'Delete Vertical Game Options'
+          Hint = 'vertical'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
+        end
+        object PopupSetDebugCustomOptionsAlterMAME: TMenuItem
+          Caption = 'Set Debug Custom Options'
+          Hint = 'debug'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
+        end
+        object PopupDeleteDebugCustomOptionsAlterMAME: TMenuItem
+          Tag = 1
+          Caption = 'Delete Debug Custom Options'
+          Hint = 'debug'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
+        end
+        object PopupSetMAMEVectorGamesOptionsAlterMAME: TMenuItem
+          Caption = 'Set Vector Custom Options'
+          Hint = 'vector'
+          ImageIndex = 7
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
+        end
+        object PopupDeleteMAMEVectorGamesOptionsAlterMAME: TMenuItem
+          Tag = 1
+          Caption = 'Delete Vector Custom Options'
+          Hint = 'vector'
+          ImageIndex = 14
+          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
         end
       end
-      object PopupGameCategory: TMenuItem
-        Caption = 'Game Category'
-        GroupIndex = 1
-        object PopupChangeGameCategory: TMenuItem
-          Caption = 'Change Game Category'
-          ImageIndex = 27
-          OnClick = MenuChangeGameCategoryClick
-        end
-        object PopupDeleteCustomCategory: TMenuItem
-          Caption = 'Delete Custom Category'
-          ImageIndex = 76
-          OnClick = MenuDeleteCustomCategoryClick
-        end
-        object N51: TMenuItem
-          Caption = '-'
-        end
-        object PopupUpdateGamesCategories: TMenuItem
-          Caption = 'Update Games Categories'
-          ImageIndex = 11
-        end
+      object N63: TMenuItem
+        Caption = '-'
+        Hint = 'for U.M.E. only'
+      end
+      object PopupSetArcadeIniCustomOptionsAlterMAME: TMenuItem
+        Caption = 'Set [arcade.ini] Custom Options'
+        Hint = 'arcade'
+        ImageIndex = 7
+        OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
+      end
+      object DeleteArcadeIniCustomOptionsAlterMAME: TMenuItem
+        Tag = 1
+        Caption = 'Delete [arcade.ini] Custom Options'
+        Hint = 'arcade'
+        ImageIndex = 14
+        OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
       end
     end
     object N10: TMenuItem
       Caption = '-'
-      GroupIndex = 1
     end
-    object PopupSelectParentGame: TMenuItem
-      Caption = 'Select Parent Game'
-      GroupIndex = 1
-      OnClick = MenuSelectParentGameClick
+    object PopupSelectSet: TMenuItem
+      Caption = 'Select Set'
+      Visible = False
     end
-    object PopupOpenGameInternetPage: TMenuItem
-      Caption = 'Open Game'#39's Internet Page'
-      GroupIndex = 1
-      OnClick = MenuOpenGameInternetPageClick
+    object PopupSelectaRandomGame: TMenuItem
+      Caption = 'Select a Random Game'
+      ShortCut = 16466
+      OnClick = PopupSelectaRandomGameClick
+    end
+    object PopupSelectGameStartup: TMenuItem
+      Caption = 'Select Game at Startup'
+      SubMenuImages = IL_StandardIconsStandard
+      OnClick = PopupSelectGameStartupClick
+      object PopupStartupGameSelectionGameSelected: TMenuItem
+        Tag = -1
+        Caption = '(none)'
+        Hint = 'Use last selected game'
+        OnClick = PopupStartupGameSelectionGameSelectedClick
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object PopupStartupGameSelectionUseCurrentSelection: TMenuItem
+        Caption = 'Use Current: Game Title'
+        OnClick = PopupStartupGameSelectionUseCurrentSelectionClick
+      end
+      object PopupStartupGameSelectionClear: TMenuItem
+        Caption = 'Clear Selection'
+        Hint = 'Disable feature'
+        OnClick = PopupStartupGameSelectionClearClick
+      end
+    end
+    object GameInfo1: TMenuItem
+      Caption = '-'
+      Hint = 'Game info'
+    end
+    object PopupGameDetails: TMenuItem
+      Caption = 'Game Details'
+      ImageIndex = 10
+      ShortCut = 8265
+      OnClick = PopupGameDetailsClick
+    end
+    object PopupAutomaticGameInformation: TMenuItem
+      AutoCheck = True
+      Caption = 'View Game Documents'
+      ImageIndex = 9
+      ShortCut = 114
+      OnClick = PopupAutomaticGameInformationClick
+    end
+    object N28: TMenuItem
+      Caption = '-'
+      Hint = 'Games Files (ROMs/CHDs)'
+    end
+    object PopupDeleteSelectedGames: TMenuItem
+      Caption = 'Delete Selected Games'
+      ImageIndex = 14
+      ShortCut = 46
+      OnClick = PopupDeleteSelectedGamesClick
+    end
+    object PopupExtraCopyMoveSelectedGames: TMenuItem
+      Caption = 'Extra'
+      object PopupCopySelectedGames: TMenuItem
+        Tag = 1
+        Caption = 'Copy Selected Games to Folder'
+        OnClick = PopupDeleteSelectedGamesClick
+      end
+      object PopupMoveSelectedGames: TMenuItem
+        Tag = 2
+        Caption = 'Move Selected Games to Folder'
+        OnClick = PopupDeleteSelectedGamesClick
+      end
     end
     object N32: TMenuItem
       Caption = '-'
-      GroupIndex = 1
     end
-    object PopupPlayRecordedGame: TMenuItem
-      Caption = 'Play a Recorded Game'
-      GroupIndex = 1
-      ImageIndex = 12
-      RadioItem = True
-      OnClick = PopupPlayRecordedGameClick
+    object PopupAddToFavorites: TMenuItem
+      Caption = 'Add To Favorites'
+      Hint = 'Add To Favorites [%u]'
+      ImageIndex = 3
+      ShortCut = 8262
+      OnClick = PopupAddToFavoritesClick
     end
-    object PopupRecordGame: TMenuItem
-      Caption = 'Record Game'
-      GroupIndex = 1
-      ImageIndex = 13
-      RadioItem = True
-      OnClick = PopupRecordGameClick
+    object PopupDeleteFromFavorites: TMenuItem
+      Caption = 'Remove From Favorites'
+      Hint = 'Remove From Favorites [%u]'
+      ImageIndex = 3
+      ShortCut = 8260
+      OnClick = PopupDeleteFromFavoritesClick
     end
-    object N11: TMenuItem
+    object Separator_FullScreen: TMenuItem
       Caption = '-'
-      GroupIndex = 1
+      Hint = 'Full Screen Mode'
+      Visible = False
     end
-    object PopupDeleteSelected: TMenuItem
-      Caption = 'Delete Selected'
-      GroupIndex = 1
-      object PopupDeleteZIPFileName: TMenuItem
-        Caption = 'Delete File filename.zip'
-        GroupIndex = 1
-        ImageIndex = 71
-        OnClick = MenuDeleteZIPFileNameClick
-      end
-      object PopupDeleteAudioFileName: TMenuItem
-        Caption = 'Delete Audio File filename.mp3'
-        GroupIndex = 1
-        ImageIndex = 91
-        OnClick = MenuDeleteAudioFileNameClick
-      end
-      object N36: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupDeleteCFGFile: TMenuItem
-        Caption = 'Delete Config File filename.cfg'
-        GroupIndex = 1
-        ImageIndex = 69
-        OnClick = MenuDeleteCFGFileClick
-      end
-      object PopupDeleteNVRAMFile: TMenuItem
-        Caption = 'Delete Nvram File filename.nv'
-        GroupIndex = 1
-        ImageIndex = 69
-        OnClick = MenuDeleteNVRAMFileClick
-      end
-      object PopupDeleteHIFile: TMenuItem
-        Caption = 'Delete Hi-Score File filename.hi'
-        GroupIndex = 1
-        ImageIndex = 69
-        OnClick = MenuDeleteHIFileClick
-      end
-      object PopupDeleteINPFile: TMenuItem
-        Caption = 'Delete Input File filename.inp'
-        GroupIndex = 1
-        ImageIndex = 69
-        OnClick = MenuDeleteINPFileClick
-      end
-      object PopupDeleteStateFile: TMenuItem
-        Caption = 'Delete Save State File filename.sta'
-        GroupIndex = 1
-        ImageIndex = 69
-        OnClick = MenuDeleteStateFileClick
-      end
-    end
-    object N44: TMenuItem
-      Caption = '-'
-      GroupIndex = 1
-    end
-    object PopupFavoriteGames: TMenuItem
-      Caption = 'Favorite Games'
-      GroupIndex = 1
-      object PopupAddToFavorites: TMenuItem
-        Caption = 'Add To Favorites'
-        GroupIndex = 1
-        ImageIndex = 30
-        ShortCut = 8262
-        OnClick = MenuAddToFavoritesClick
-      end
-      object PopupDeleteFromFavorites: TMenuItem
-        Caption = 'Delete From Favorites'
-        GroupIndex = 1
-        ImageIndex = 31
-        ShortCut = 8260
-        OnClick = MenuDeleteFromFavoritesClick
-      end
-    end
-    object PopupAddGameParentalLock: TMenuItem
-      Caption = 'Add Game to Parental Lock'
-      GroupIndex = 1
-      ImageIndex = 60
-      OnClick = MenuAddGameParentalLockClick
-    end
-    object N31: TMenuItem
-      Caption = '-'
-      GroupIndex = 1
-    end
-    object PopupView: TMenuItem
-      Caption = 'View'
-      GroupIndex = 1
-      object PopupShowFavorite: TMenuItem
-        Caption = 'Show Favorite User Games'
-        GroupIndex = 1
-        ImageIndex = 4
-        OnClick = PopupShowFavoriteClick
-      end
-      object PopupShowHideFavoriteUsersManager: TMenuItem
-        Caption = 'Show / Hide Favorite Users Manager'
-        GroupIndex = 1
-        ImageIndex = 9
-        OnClick = PopupShowHideFavoriteUsersManagerClick
-      end
-      object N72: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupGamesColumnsEditor: TMenuItem
-        Caption = 'Games &Columns Editor'
-        GroupIndex = 1
-        ImageIndex = 46
-        OnClick = MenuGamesColumnsEditorClick
-      end
-      object N13: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupGamesData: TMenuItem
-        Caption = 'Games Data'
-        GroupIndex = 1
-        ImageIndex = 74
-        object PopupGameInformation: TMenuItem
-          Caption = 'Game Information (requires "mameinfo.dat")'
-          GroupIndex = 1
-          ImageIndex = 21
-          OnClick = MenuGameInformationClick
-        end
-        object PopupGameHistory: TMenuItem
-          Caption = 'Game History (requires "history.dat")'
-          GroupIndex = 1
-          ImageIndex = 20
-          OnClick = MenuGameHistoryClick
-        end
-        object PopupGameDriverInformation: TMenuItem
-          Caption = 'Game Driver Information (requires "mameinfo.dat")'
-          GroupIndex = 1
-          ImageIndex = 48
-          OnClick = MenuGameDriverInformationClick
-        end
-        object PopupGameFAQ: TMenuItem
-          Caption = 'Game F.A.Q. (requires "gamename.faq")'
-          GroupIndex = 1
-          ImageIndex = 75
-          OnClick = MenuGameFAQClick
-        end
-        object N77: TMenuItem
-          Caption = '-'
-          GroupIndex = 1
-        end
-        object PopupAutomaticGameInformation: TMenuItem
-          Caption = 'Automatic Game Information'
-          GroupIndex = 1
-          OnClick = PopupAutomaticGameInformationClick
-        end
-      end
-      object PopupShowGameInfo: TMenuItem
-        Caption = 'Show Game Info'
-        GroupIndex = 1
-        ImageIndex = 50
-        ShortCut = 8265
-        OnClick = MenuShowGameInfoClick
-      end
-    end
-    object N23: TMenuItem
-      Caption = '-'
-      GroupIndex = 1
-    end
-    object PopupFullScreen: TMenuItem
-      AutoCheck = True
-      Caption = 'Full Screen'
-      GroupIndex = 1
-      ImageIndex = 64
+    object PopupReturnToWindowMode: TMenuItem
+      Caption = 'Return To Window Mode'
       ShortCut = 8305
-      OnClick = PopupFullScreenClick
+      Visible = False
+      OnClick = PopupReturnToWindowModeClick
     end
-    object PopupExit: TMenuItem
-      Caption = 'Exit'
-      Enabled = False
-      GroupIndex = 1
-      ImageIndex = 34
+    object PopupExitApplication: TMenuItem
+      Caption = 'Exit Application'
+      ImageIndex = 2
+      Visible = False
       OnClick = MenuExitClick
-    end
-    object N14: TMenuItem
-      Caption = '-'
-      GroupIndex = 1
-    end
-    object PopupIcons: TMenuItem
-      Caption = 'Icons'
-      GroupIndex = 1
-      object PopupGamesIcons: TMenuItem
-        Caption = 'Games Icons'
-        GroupIndex = 1
-        ImageIndex = 68
-        OnClick = PopupGamesIconsClick
-      end
-      object PopupShowOnlyParentIcon: TMenuItem
-        Caption = 'Show Only Parent Icon'
-        Enabled = False
-        GroupIndex = 1
-      end
-      object N84: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupCreateIconsList: TMenuItem
-        Caption = 'Create Icons List'
-        GroupIndex = 1
-        OnClick = MenuCreateIconsListClick
-      end
-      object N37: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupCheckMissingIcons: TMenuItem
-        Caption = 'Check for Missing Icons'
-        GroupIndex = 1
-        ImageIndex = 32
-        OnClick = MenuCheckMissingIconsClick
-      end
-      object PopupCheckUnneededIcons: TMenuItem
-        Caption = 'Check for Unneeded Icons'
-        GroupIndex = 1
-        ImageIndex = 39
-        OnClick = MenuCheckUnneededIconsClick
-      end
     end
     object N15: TMenuItem
       Caption = '-'
-      GroupIndex = 1
+      Hint = 'Validate Games'
     end
-    object PopupRefreshGames: TMenuItem
-      Caption = 'Refresh Games'
-      GroupIndex = 1
-      object PopupRefreshSelectedGame: TMenuItem
-        Caption = 'Selected Game'
-        GroupIndex = 1
-        ShortCut = 8308
-        OnClick = MenuRefreshSelectedGameClick
-      end
-      object N50: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupRefreshAvailableGames: TMenuItem
-        Caption = 'All Available Games'
-        GroupIndex = 1
-        OnClick = MenuRefreshAvailableGamesClick
-      end
-      object PopupRefreshUnavailableGames: TMenuItem
-        Caption = 'All Unavailable Games'
-        GroupIndex = 1
-        OnClick = MenuRefreshUnavailableGamesClick
-      end
-      object PopupRefreshAllGames: TMenuItem
-        Caption = 'All Games'
-        GroupIndex = 1
-        ImageIndex = 11
-        ShortCut = 116
-        OnClick = MenuRefreshAllGamesClick
-      end
-    end
-    object PopupGamesAudit: TMenuItem
-      Caption = 'Games Audit'
-      GroupIndex = 1
-      object PopupAuditSelectedGame: TMenuItem
-        Caption = 'Audit Selected Game'
-        GroupIndex = 1
-        ImageIndex = 29
-        ShortCut = 8257
-        OnClick = MenuAuditSelectedGameClick
-      end
-      object PopupAuditSelectedGameRenameFiles: TMenuItem
-        Caption = 'Selected Game (Rename Files)'
-        GroupIndex = 1
-        ImageIndex = 29
-        ShortCut = 24641
-      end
-      object N53: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-      end
-      object PopupAuditAvailableGames: TMenuItem
-        Caption = 'Audit All Available Games'
-        GroupIndex = 1
-        ShortCut = 8311
-        OnClick = MenuAuditAvailableGamesClick
-      end
-      object PopupAuditAllGames: TMenuItem
-        Caption = 'Audit All Games'
-        GroupIndex = 1
-        ImageIndex = 24
-        ShortCut = 119
-        OnClick = MenuAuditAllGamesClick
-      end
-      object N96: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-        Visible = False
-      end
-      object PopupAuditSelectedGameUnneededFiles: TMenuItem
-        Caption = 'Selected Game [Unneeded Files]'
-        Enabled = False
-        GroupIndex = 1
-        Visible = False
-      end
-      object N97: TMenuItem
-        Caption = '-'
-        GroupIndex = 1
-        Visible = False
-      end
-      object PopupAuditAvailableGamesUnneededFiles: TMenuItem
-        Caption = 'All Available Games [Unneeded Files]'
-        Enabled = False
-        GroupIndex = 1
-        Visible = False
-      end
-      object PopupAuditAllGamesUnneededFiles: TMenuItem
-        Caption = 'All Games [Unneeded Files]'
-        Enabled = False
-        GroupIndex = 1
-        Visible = False
-      end
-    end
-  end
-  object GamesListSaveDialog: TSaveDialog
-    DefaultExt = 'htm'
-    Filter = 
-      'HTML File (*.html; *.htm)|*.html;*.htm|Batch File (*.bat)|*.bat|' +
-      'Text File (*.txt)|*.txt|Initialization Files (*.ini)|*.ini'
-    Options = [ofOverwritePrompt, ofHideReadOnly, ofNoChangeDir]
-    Title = 'Save Games List To a File'
-    Left = 560
-    Top = 152
-  end
-  object BuiltInSmallListImageList: TImageList
-    Left = 496
-    Top = 120
-  end
-  object BuiltInBigListImageList: TImageList
-    Height = 32
-    Width = 32
-    Left = 496
-    Top = 88
-  end
-  object BigGamesIconsImageList: TImageList
-    Height = 32
-    Width = 32
-    Left = 464
-    Top = 88
-  end
-  object SmallGamesIconsImageList: TImageList
-    Left = 464
-    Top = 120
-  end
-  object ToolbarButtonsImageList: TImageList
-    Left = 560
-    Top = 88
-  end
-  object StatusBarImageList: TImageList
-    AllocBy = 0
-    Left = 560
-    Top = 120
-  end
-  object FontDialog: TFontDialog
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    Left = 496
-    Top = 184
-  end
-  object PopupMenuPicturesTypes: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 464
-    Top = 216
-    object ButtonShowTitleSnapshot: TMenuItem
-      AutoCheck = True
-      Caption = 'Show &Title Snapshots'
-      ImageIndex = 37
-      RadioItem = True
-      OnClick = ButtonShowTitleSnapshotClick
-    end
-    object ButtonShowInGameSnapshot: TMenuItem
-      AutoCheck = True
-      Caption = 'Show &In Game Snapshots'
-      Checked = True
-      ImageIndex = 5
-      RadioItem = True
-      OnClick = ButtonShowInGameSnapshotClick
-    end
-    object ButtonShowMarquee: TMenuItem
-      AutoCheck = True
-      Caption = 'Show &Marquees'
-      ImageIndex = 6
-      RadioItem = True
-      OnClick = ButtonShowMarqueeClick
-    end
-    object ButtonShowFlyer: TMenuItem
-      AutoCheck = True
-      Caption = 'Show &Flyers'
-      ImageIndex = 7
-      RadioItem = True
-      OnClick = ButtonShowFlyerClick
-    end
-    object ButtonShowCabinet: TMenuItem
-      AutoCheck = True
-      Caption = 'Show &Cabinets'
+    object PopupSelectScanGamesMode: TMenuItem
+      Caption = 'Select Scan Mode'
+      HelpContext = -1
+      Hint = 'Full Scan (Validate ROMs/CHDs)'
       ImageIndex = 8
-      RadioItem = True
-      OnClick = ButtonShowCabinetClick
+      OnClick = PopupSelectScanGamesModeClick
     end
-    object ButtonShowControlPanel: TMenuItem
-      AutoCheck = True
-      Caption = 'Show Control &Panels'
-      ImageIndex = 17
-      RadioItem = True
-      OnClick = ButtonShowControlPanelClick
+    object PopupScanGames: TMenuItem
+      Caption = 'Scan Games (Audit ROMs)'
+      object PopupScanAllSelectedGames: TMenuItem
+        Tag = 3
+        Caption = 'Selected Games'
+        Hint = 'Selected Games [%u]'
+        ShortCut = 8308
+        OnClick = PopupScanAllGamesClick
+      end
+      object PopupScanForceSelectedGamesAvailable: TMenuItem
+        Tag = 5
+        Caption = 'Force Selected Games Available'
+        Hint = 'Force Selected Games Available [%u]'
+        ShortCut = 8309
+        OnClick = PopupScanAllGamesClick
+      end
+      object N33: TMenuItem
+        Caption = '-'
+      end
+      object PopupScanAvailableGames: TMenuItem
+        Tag = 1
+        Caption = 'Scan Available Games'
+        OnClick = PopupScanAllGamesClick
+      end
+      object PopupScanMissingGames: TMenuItem
+        Tag = 2
+        Caption = 'Scan Missing Games'
+        OnClick = PopupScanAllGamesClick
+      end
+      object PopupScanMissingROMsCHDs: TMenuItem
+        Tag = 4
+        Caption = 'Scan Missing ROMs/CHDs'
+        OnClick = PopupScanAllGamesClick
+      end
+      object PopupScanAllGames: TMenuItem
+        Caption = 'Scan All Games'
+        ShortCut = 116
+        OnClick = PopupScanAllGamesClick
+      end
     end
-    object ButtonShowControlPanelLayout: TMenuItem
-      AutoCheck = True
-      Caption = 'Show Control Panel La&youts'
-      ImageIndex = 59
-      RadioItem = True
-      OnClick = ButtonShowControlPanelLayoutClick
+    object PopupScanResults: TMenuItem
+      Caption = 'View Missing ROMs/CHDs'
+      object PopupScanResultsSelectedGame: TMenuItem
+        Caption = 'Selected Game'
+        ShortCut = 8257
+        OnClick = PopupScanResultsSelectedGameClick
+      end
+      object PopupScanResultsAllGames: TMenuItem
+        Caption = 'All Games'
+        ShortCut = 119
+        OnClick = PopupScanResultsAllGamesClick
+      end
     end
-  end
-  object PopupMenuExecutablesMode: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 496
-    Top = 216
-    object ButtonUseExecutable1: TMenuItem
-      AutoCheck = True
-      Caption = 'Use 1st Emulator Executable'
-      Checked = True
-      ImageIndex = 15
-      RadioItem = True
-      OnClick = ButtonUseExecutable1Click
-    end
-    object ButtonUseExecutable2: TMenuItem
-      AutoCheck = True
-      Caption = 'Use 2nd Emulator Executable'
-      ImageIndex = 16
-      RadioItem = True
-      OnClick = ButtonUseExecutable2Click
-    end
-    object ButtonUseExecutable3: TMenuItem
-      AutoCheck = True
-      Caption = 'Use 3rd Emulator Executable'
-      ImageIndex = 47
-      RadioItem = True
-      OnClick = ButtonUseExecutable3Click
-    end
-    object ButtonUseExecutable4: TMenuItem
-      AutoCheck = True
-      Caption = 'Use 4th Emulator Executable'
-      ImageIndex = 61
-      RadioItem = True
-      OnClick = ButtonUseExecutable4Click
-    end
-    object ButtonUseExecutable5: TMenuItem
-      AutoCheck = True
-      Caption = 'Use 5th Emulator Executable'
-      ImageIndex = 62
-      RadioItem = True
-      OnClick = ButtonUseExecutable5Click
-    end
-  end
-  object PopupMenuGamesDataMode: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 528
-    Top = 216
-    object ButtonGameInformation: TMenuItem
-      Caption = 'Game Information (requires "mameinfo.dat")'
-      ImageIndex = 21
-      OnClick = MenuGameInformationClick
-    end
-    object ButtonGameHistory: TMenuItem
-      Caption = 'Game History (requires "history.dat")'
-      ImageIndex = 20
-      OnClick = MenuGameHistoryClick
-    end
-    object ButtonGameDriverInformation: TMenuItem
-      Caption = 'Game Driver Information (requires "mameinfo.dat")'
-      ImageIndex = 48
-      OnClick = MenuGameDriverInformationClick
-    end
-    object ButtonGameFAQ: TMenuItem
-      Caption = 'Game F.A.Q. (requires "gamename.faq")'
-      ImageIndex = 75
-      OnClick = MenuGameFAQClick
-    end
-    object N57: TMenuItem
+    object N34: TMenuItem
       Caption = '-'
     end
-    object ButtonAutomaticGameInformation: TMenuItem
-      AutoCheck = True
-      Caption = 'Automatic Game Information'
-      OnClick = ButtonAutomaticGameInformationClick
+    object PopupFontSettings: TMenuItem
+      Caption = 'Font Settings'
+      OnClick = MenuFontSettingsClick
+    end
+    object PopupThumbnails: TMenuItem
+      Caption = 'Thumbnails'
+      object PopupThumbnailShowParentThumbs: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Parent Thumbails'
+        Checked = True
+        OnClick = PopupThumbnailShowParentThumbsClick
+      end
+      object PopupThumbnailKeepAspectRatio: TMenuItem
+        AutoCheck = True
+        Caption = 'Keep Aspect Ratio'
+        Checked = True
+        OnClick = PopupThumbnailKeepAspectRatioClick
+      end
+      object PopupThumbnailSettings: TMenuItem
+        Caption = 'Customize'
+        ImageIndex = 7
+        OnClick = MenuThumbnailSettingsClick
+      end
+      object N21: TMenuItem
+        Caption = '-'
+      end
+      object ReloadThumbnailsSelectedGames1: TMenuItem
+        Tag = 1
+        Caption = 'Reload Selected'
+        OnClick = PopupThumbReloadAllClick
+      end
+      object PopupThumbReloadAll: TMenuItem
+        Caption = 'Reload All'
+        OnClick = PopupThumbReloadAllClick
+      end
+      object N52: TMenuItem
+        Caption = '-'
+      end
+      object PopupThumbDeleteSelectedGameSnapshots: TMenuItem
+        Caption = 'Delete Selected Game Snapshots'
+        Hint = 'Delete Selected %s'
+        ImageIndex = 14
+        ShortCut = 24660
+        OnClick = PopupThumbDeleteSelectedGameSnapshotsClick
+      end
+    end
+    object PopupShowToolBar: TMenuItem
+      Caption = 'Show Tool Bar'
+      ShortCut = 16468
+      Visible = False
+      OnClick = PopupShowToolBarClick
     end
   end
-  object PopupMenuGameFilters: TBcBarPopupMenu
+  object FontDialog: TFontDialog
+    Tag = -1
+    OnShow = FontDialogShow
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    Left = 376
+    Top = 416
+  end
+  object PopupGameFilterHaveMiss: TBcBarPopupMenu
     AutoHotkeys = maManual
-    Images = ToolbarButtonsImageList
+    Images = IL_FilterHaveMiss_Small
     OwnerDraw = True
+    TrackButton = tbLeftButton
     Bar.GradientStart = clTeal
     Bar.GradientStyle = gsDiagonalLeftRight
     Bar.Width = 10
+    Bar.Visible = False
     Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
     Bar.BarCaption.Font.Color = clWhite
     Bar.BarCaption.Font.Height = -19
     Bar.BarCaption.Font.Name = 'Tahoma'
     Bar.BarCaption.Font.Style = [fsBold, fsItalic]
     Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Charset = ANSI_CHARSET
     Separators.Font.Color = clWindowText
     Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Name = 'Tahoma'
     Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
     MenuFont.Style = []
-    Left = 560
-    Top = 184
-    object ButtonShowAllGames: TMenuItem
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 168
+    Top = 208
+    object PopupShowHaveMiss: TMenuItem
       AutoCheck = True
-      Caption = 'Show All Games'
+      Caption = 'List All'
       Checked = True
-      ImageIndex = 65
+      Default = True
+      ImageIndex = 0
       RadioItem = True
-      OnClick = ButtonShowAllGamesClick
+      OnClick = PopupShowHaveMissClick
     end
-    object ButtonShowAvailableGames: TMenuItem
-      AutoCheck = True
-      Caption = 'Show Available Games Only'
-      ImageIndex = 66
-      RadioItem = True
-      OnClick = ButtonShowAvailableGamesClick
-    end
-    object ButtonShowUnavailableGames: TMenuItem
-      AutoCheck = True
-      Caption = 'Show Unavailable Games Only'
-      ImageIndex = 67
-      RadioItem = True
-      OnClick = ButtonShowUnavailableGamesClick
-    end
-  end
-  object PopupMenuControllerKeysMapping: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 528
-    Top = 184
-    object ctrlrDefault: TMenuItem
-      AutoCheck = True
-      Caption = '(Default)'
-      Checked = True
-      RadioItem = True
-      OnClick = ctrlrDefaultClick
-    end
-  end
-  object OpenDialog: TOpenDialog
-    Filter = 'Executable Files (*.exe)|*.exe|Zip Files (*.zip)|*.zip'
-    Options = [ofReadOnly, ofHideReadOnly, ofNoChangeDir]
-    Left = 528
-    Top = 152
-  end
-  object PopupGameType: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = ToolbarButtonsImageList
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
-    MenuFont.Style = []
-    Left = 560
-    Top = 216
-    object PopupAllGames: TMenuItem
-      AutoCheck = True
-      Caption = 'All Games'
-      Checked = True
-      ImageIndex = 84
-      RadioItem = True
-      OnClick = PopupAllGamesClick
-    end
-    object PopupClassic: TMenuItem
+    object PopupShowHave: TMenuItem
       Tag = 1
       AutoCheck = True
-      Caption = 'Classic'
-      ImageIndex = 85
+      Caption = 'Available'
+      ImageIndex = 1
       RadioItem = True
-      OnClick = PopupClassicClick
+      OnClick = PopupShowHaveMissClick
     end
-    object PopupNeoGeo: TMenuItem
+    object PopupShowMiss: TMenuItem
       Tag = 2
       AutoCheck = True
-      Caption = 'Neo Geo'
-      ImageIndex = 86
+      Caption = 'Missing'
+      ImageIndex = 2
       RadioItem = True
-      OnClick = PopupNeoGeoClick
+      OnClick = PopupShowHaveMissClick
     end
-    object PopupOriginal: TMenuItem
+    object PopupShowMissROMs: TMenuItem
       Tag = 3
       AutoCheck = True
-      Caption = 'Original'
-      ImageIndex = 87
+      Caption = 'Missing ROMs/CHDs'
+      ImageIndex = 3
       RadioItem = True
-      OnClick = PopupOriginalClick
-    end
-    object PopupClone: TMenuItem
-      Tag = 4
-      AutoCheck = True
-      Caption = 'Clone'
-      ImageIndex = 88
-      RadioItem = True
-      OnClick = PopupCloneClick
-    end
-    object PopupRaster: TMenuItem
-      Tag = 5
-      AutoCheck = True
-      Caption = 'Raster'
-      ImageIndex = 89
-      RadioItem = True
-      OnClick = PopupRasterClick
-    end
-    object PopupVector: TMenuItem
-      Tag = 6
-      AutoCheck = True
-      Caption = 'Vector'
-      ImageIndex = 90
-      RadioItem = True
-      OnClick = PopupVectorClick
+      OnClick = PopupShowHaveMissClick
     end
   end
   object ZipForge: TZipForge
     ExtractCorruptedFiles = False
     CompressionLevel = clMax
     CompressionMode = 9
-    CurrentVersion = '2.06 '
+    CurrentVersion = '2.73 '
     SpanningMode = smNone
     SpanningOptions.AdvancedNaming = True
     SpanningOptions.VolumeSize = vsAutoDetect
     Options.CreateDirs = False
     Options.FlushBuffers = True
+    Options.OEMFileNames = True
     InMemory = False
-    OnOverallProgress = ZipForgeOverallProgress
     OnProcessFileFailure = ZipForgeProcessFileFailure
     Zip64Mode = zmDisabled
-    Left = 528
-    Top = 120
+    Left = 312
+    Top = 384
   end
-  object ButtonsImageList: TImageList
+  object PopupMenuViewMode: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_ViewMode_Small
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 40
+    Top = 208
+    object ButtonViewModeDetails: TMenuItem
+      AutoCheck = True
+      Caption = 'Details (columns)'
+      Checked = True
+      Default = True
+      ImageIndex = 0
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object ButtonViewModeGrouped: TMenuItem
+      AutoCheck = True
+      Caption = 'Grouped (columns)'
+      ImageIndex = 1
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object ButtonViewModeSmallIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Small Icons'
+      ImageIndex = 2
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object ButtonViewModeLargeIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Large Icons'
+      ImageIndex = 3
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object ButtonViewModeTiles: TMenuItem
+      AutoCheck = True
+      Caption = 'Tiles'
+      ImageIndex = 4
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object ButtonViewModeThumbnails: TMenuItem
+      AutoCheck = True
+      Caption = 'Thumbnails'
+      ImageIndex = 5
+      RadioItem = True
+      OnClick = ButtonViewModeDetailsClick
+    end
+    object N13: TMenuItem
+      Caption = '-'
+    end
+    object PopupGameIconSize: TMenuItem
+      Tag = 2
+      Caption = 'Game Icon Size'
+      SubMenuImages = IL_MenuPopup
+      Hint = 'Details/grouped'
+      object PopupIconSizeExtraLarge: TMenuItem
+        AutoCheck = True
+        Caption = 'Extra Large'
+        Hint = '48x48'
+        RadioItem = True
+        OnClick = PopupIconSizeStandardClick
+      end
+      object PopupIconSizeLarge: TMenuItem
+        Tag = 1
+        AutoCheck = True
+        Caption = 'Large'
+        Hint = '32x32'
+        RadioItem = True
+        OnClick = PopupIconSizeStandardClick
+      end
+      object PopupIconSizeStandard: TMenuItem
+        Tag = 2
+        AutoCheck = True
+        Caption = 'Standard'
+        Checked = True
+        Default = True
+        Hint = '24x24'
+        RadioItem = True
+        OnClick = PopupIconSizeStandardClick
+      end
+      object PopupIconSizeSmall: TMenuItem
+        Tag = 3
+        AutoCheck = True
+        Caption = 'Small'
+        Hint = '16x16'
+        RadioItem = True
+        OnClick = PopupIconSizeStandardClick
+      end
+    end
+    object ButtonViewModeThumbnailSettings: TMenuItem
+      Caption = 'Thumbnail Settings'
+      SubMenuImages = IL_MenuPopup
+      object MenuThumbnailShowParentThumbs: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Parent Thumbails'
+        Checked = True
+        Hint = 'Load parent game thumb into clones'
+        OnClick = MenuThumbnailShowParentThumbsClick
+      end
+      object MenuThumbnailKeepAspectRatio: TMenuItem
+        AutoCheck = True
+        Caption = 'Keep Aspect Ratio'
+        Checked = True
+        OnClick = MenuThumbnailKeepAspectRatioClick
+      end
+      object MenuThumbnailSettings: TMenuItem
+        Caption = 'Customize'
+        ImageIndex = 7
+        OnClick = MenuThumbnailSettingsClick
+      end
+    end
+  end
+  object PopupGameFilterParentClone: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_FilterParentClone_Small
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 136
+    Top = 208
+    object PopupShowParentClone: TMenuItem
+      AutoCheck = True
+      Caption = 'List Both'
+      Checked = True
+      Default = True
+      ImageIndex = 0
+      RadioItem = True
+      OnClick = PopupShowParentCloneClick
+    end
+    object PopupShowParent: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Parent'
+      ImageIndex = 1
+      RadioItem = True
+      OnClick = PopupShowParentCloneClick
+    end
+    object PopupShowClone: TMenuItem
+      Tag = 2
+      AutoCheck = True
+      Caption = 'Clone'
+      ImageIndex = 2
+      RadioItem = True
+      OnClick = PopupShowParentCloneClick
+    end
+  end
+  object IL_ToolBarButtons: TImageList
+    Height = 40
+    Width = 44
+    Left = 360
+    Top = 144
+  end
+  object IL_MenuPopup: TImageList
+    Left = 312
+    Top = 448
+  end
+  object IL_StandardIconsLarge: TImageList
+    Height = 32
+    Width = 32
+    Left = 168
+    Top = 176
+  end
+  object IL_StandardIconsStandard: TImageList
     Height = 24
     Width = 24
-    Left = 560
-    Top = 56
+    Left = 200
+    Top = 176
   end
-  object tmrMain: TTimer
-    Enabled = False
-    Interval = 50
-    OnTimer = tmrMainTimer
-    Left = 464
-    Top = 184
+  object IL_StandardIconsSmall: TImageList
+    Left = 232
+    Top = 176
   end
-  object PopupSystemBios: TBcBarPopupMenu
+  object IL_ArcadeSystem_Large: TImageList
+    Height = 32
+    Width = 32
+    Left = 328
+    Top = 144
+  end
+  object IL_ArcadeSystem_Small: TImageList
+    Height = 24
+    Width = 24
+    Left = 328
+    Top = 112
+  end
+  object IL_ImagesCategory_Small: TImageList
+    Height = 24
+    Width = 24
+    Left = 264
+    Top = 112
+  end
+  object IL_FilterWorkingNonWorking_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 200
+    Top = 112
+  end
+  object IL_FilterWorkingNonWorking_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 200
+    Top = 144
+  end
+  object IL_FilterHaveMiss_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 168
+    Top = 112
+  end
+  object IL_FilterHaveMiss_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 168
+    Top = 144
+  end
+  object IL_FilterParentClone_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 136
+    Top = 112
+  end
+  object IL_FilterParentClone_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 136
+    Top = 144
+  end
+  object IL_ViewMode_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 40
+    Top = 112
+  end
+  object IL_ViewMode_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 40
+    Top = 144
+  end
+  object IL_ArcadeFilter_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 72
+    Top = 112
+  end
+  object IL_ArcadeFilter_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 72
+    Top = 144
+  end
+  object BcDrawModule: TBcCustomDrawModule
+    OnDrawMenuItem = BcDrawModuleDrawMenuItem
+    OnMeasureMenuItem = BcDrawModuleMeasureMenuItem
+    Left = 40
+    Top = 247
+  end
+  object PopupMAMu_Icons: TBcBarPopupMenu
     AutoHotkeys = maManual
+    Images = IL_MiscToolBarSmall
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    OnPopup = PopupMAMu_IconsPopup
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 312
+    Top = 208
+    object PopupEnableMAMu_Icons: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable MAMu_ Icons'
+      Hint = 'Show custom game icons'
+      ImageIndex = 5
+      ShortCut = 16461
+      OnClick = PopupEnableMAMu_IconsClick
+    end
+    object PopupSetFoldersMAMu_: TMenuItem
+      Caption = 'Select a Folder'
+      ImageIndex = 2
+      OnClick = PopupSetFoldersMAMu_Click
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object PopupShowParentIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable Parent Icons'
+      Checked = True
+      Hint = 'Show icons for parent games'
+      OnClick = PopupShowParentIconsClick
+    end
+    object PopupShowCloneIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable Clone Icons'
+      Checked = True
+      Hint = 'Show icons for clone games'
+      OnClick = PopupShowParentIconsClick
+    end
+    object PopupShowGameBiosIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable Game Bios Icons'
+      Hint = 'Show bios icon if game icon not found'
+      OnClick = PopupShowParentIconsClick
+    end
+    object PopupShowGameDriverIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Game Driver Icons'
+      Hint = 'Show driver icon if no icons are found'
+      OnClick = PopupShowParentIconsClick
+    end
+    object N25: TMenuItem
+      Caption = '-'
+    end
+    object PopupForceGameBiosIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Force Game Bios Icons'
+      Hint = 'Show bios icon even if game icon found'
+      OnClick = PopupShowParentIconsClick
+    end
+    object PopupForceGameDriverIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Force Game Driver Icons'
+      Hint = 'Show driver icon even if game icon found'
+      OnClick = PopupShowParentIconsClick
+    end
+    object N9: TMenuItem
+      Caption = '-'
+    end
+    object PopupMAMu_IconsManager: TMenuItem
+      Caption = 'MAMu_ Icons Manager'
+      Hint = 'For missing and not used icons'
+      OnClick = PopupMAMu_IconsManagerClick
+    end
+    object PopupReloadMAMu_Icons: TMenuItem
+      Caption = 'Reload All Icons'
+      Hint = 'Clear cache and reload icons'
+      ImageIndex = 3
+      OnClick = PopupShowParentIconsClick
+    end
+  end
+  object IL_LeftPanel: TImageList
+    Left = 40
+    Top = 432
+  end
+  object PopupMenuImageCategories: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_ImagesCategory_Small
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 360
+    Top = 208
+    object ButtonShowTitleSnapshot: TMenuItem
+      AutoCheck = True
+      Caption = 'Title Snapshot'
+      Hint = 'Title Snapshot'
+      ImageIndex = 0
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowGameSnapshot: TMenuItem
+      AutoCheck = True
+      Caption = 'Game Snapshot'
+      Checked = True
+      Default = True
+      Hint = 'Game Snapshot'
+      ImageIndex = 1
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowMarquee: TMenuItem
+      AutoCheck = True
+      Caption = 'Marquee'
+      Hint = 'Marquee'
+      ImageIndex = 2
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowFlyer: TMenuItem
+      AutoCheck = True
+      Caption = 'Flyer'
+      Hint = 'Flyer'
+      ImageIndex = 3
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowCabinet: TMenuItem
+      AutoCheck = True
+      Caption = 'Cabinet'
+      Hint = 'Cabinet'
+      ImageIndex = 4
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowControlPanel: TMenuItem
+      AutoCheck = True
+      Caption = 'Control Panel'
+      Hint = 'Control Panel'
+      ImageIndex = 5
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowControlPanelLayout: TMenuItem
+      AutoCheck = True
+      Caption = 'Control Panel Layout'
+      Hint = 'Control Panel Layout'
+      ImageIndex = 6
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowPCB: TMenuItem
+      AutoCheck = True
+      Caption = 'PCB'
+      Hint = 'PCB'
+      ImageIndex = 7
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowInGameArtwork: TMenuItem
+      AutoCheck = True
+      Caption = 'In-Game Artwork'
+      Hint = 'In-Game Artwork'
+      ImageIndex = 8
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowMAWSGameInfo: TMenuItem
+      AutoCheck = True
+      Caption = 'Progetto EMMA Game Info'
+      Hint = 'Progetto EMMA Game Info'
+      ImageIndex = 9
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object N36: TMenuItem
+      Caption = '-'
+    end
+    object PopupSetupCategoryFolders: TMenuItem
+      Caption = 'Setup Folders'
+      OnClick = MenuImageCategoryLayoutSettingsClick
+    end
+  end
+  object PopupScreenshotLayouts: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_ScreenshotLayouts_Small
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = ANSI_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -16
+    Bar.BarCaption.Font.Name = 'Trebuchet MS'
+    Bar.BarCaption.Font.Style = [fsBold]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Caption = 'Screenshots Layouts'
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 392
+    Top = 208
+    object PopupScrLayoutSingle: TMenuItem
+      AutoCheck = True
+      Caption = 'Single'
+      Checked = True
+      Default = True
+      ImageIndex = 0
+      RadioItem = True
+      OnClick = PopupScrLayoutSingleClick
+    end
+  end
+  object PopupGameDocuments: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
     OwnerDraw = True
     Bar.GradientStart = clTeal
     Bar.GradientStyle = gsDiagonalLeftRight
     Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Bar.BarCaption.ShadowColor = clBlack
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 648
+    Top = 120
+    object GameDocumentsFont: TMenuItem
+      Caption = 'Text Font'
+      OnClick = GameDocumentsFontClick
+    end
+    object GameDocumentsCustomizePanel: TMenuItem
+      Caption = 'Customize Panel'
+      ImageIndex = 7
+      OnClick = GameDocumentsCustomizePanelClick
+    end
+    object N43: TMenuItem
+      Caption = '-'
+      Hint = 'Align panel'
+    end
+    object GameDocumentsLayout1_Top: TMenuItem
+      Tag = 151
+      AutoCheck = True
+      Caption = 'Top'
+      Checked = True
+      Default = True
+      RadioItem = True
+      OnClick = GameDocumentsLayout1_TopClick
+    end
+    object GameDocumentsLayout2_Bottom: TMenuItem
+      Tag = 151
+      AutoCheck = True
+      Caption = 'Bottom'
+      HelpContext = 1
+      RadioItem = True
+      OnClick = GameDocumentsLayout1_TopClick
+    end
+    object GameDocumentsLayout3_Left: TMenuItem
+      Tag = 151
+      AutoCheck = True
+      Caption = 'Left'
+      HelpContext = 2
+      RadioItem = True
+      OnClick = GameDocumentsLayout1_TopClick
+    end
+    object GameDocumentsLayout4_Right: TMenuItem
+      Tag = 151
+      AutoCheck = True
+      Caption = 'Right'
+      HelpContext = 3
+      RadioItem = True
+      OnClick = GameDocumentsLayout1_TopClick
+    end
+    object N27: TMenuItem
+      Caption = '-'
+      Hint = 'Quick access'
+    end
+    object GameDocsGoToInformation: TMenuItem
+      Tag = -1
+      Caption = 'Go To Game Info'
+      Visible = False
+      OnClick = GameDocsGoToInformationClick
+    end
+    object GameDocsGoToHistory: TMenuItem
+      Tag = -1
+      Caption = 'Go To History'
+      Visible = False
+      OnClick = GameDocsGoToInformationClick
+    end
+    object GameDocsGoToDriverInfo: TMenuItem
+      Tag = -1
+      Caption = 'Go To Driver Info'
+      Visible = False
+      OnClick = GameDocsGoToInformationClick
+    end
+    object GameDocsGoToStory: TMenuItem
+      Tag = -1
+      Caption = 'Go To Story'
+      Visible = False
+      OnClick = GameDocsGoToInformationClick
+    end
+    object GameDocsGoToMarp: TMenuItem
+      Tag = -1
+      Caption = 'Go To Marp'
+      Visible = False
+      OnClick = GameDocsGoToInformationClick
+    end
+    object N42: TMenuItem
+      Caption = '-'
+    end
+    object PopupDisableGameDocs: TMenuItem
+      Caption = 'Disable'
+      ImageIndex = 9
+      ShortCut = 114
+      Visible = False
+      OnClick = PopupDisableGameDocsClick
+    end
+  end
+  object IL_StandardIconsExtraLarge: TImageList
+    Height = 48
+    Width = 48
+    Left = 136
+    Top = 176
+  end
+  object IL_ImagesCategory_Large: TImageList
+    Height = 48
+    Width = 48
+    Left = 264
+    Top = 144
+  end
+  object IL_ScreenshotLayouts_Small: TImageList
+    Height = 24
+    Width = 24
+    Left = 392
+    Top = 176
+  end
+  object IL_ImagesToolBarButtons: TImageList
+    Height = 24
+    Width = 24
+    Left = 392
+    Top = 144
+  end
+  object IL_MiscToolBarPopup: TImageList
+    Height = 24
+    Width = 24
+    Left = 392
+    Top = 112
+  end
+  object PopupGameFilterOrientation: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_FilterHorizontalVertical_Small
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -11
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = []
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 232
+    Top = 208
+    object PopupShowOrientationAll: TMenuItem
+      AutoCheck = True
+      Caption = 'List Both'
+      Checked = True
+      Default = True
+      ImageIndex = 0
+      RadioItem = True
+      OnClick = PopupShowOrientationAllClick
+    end
+    object PopupShowOrientationHorizontal: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Horizontal'
+      ImageIndex = 1
+      RadioItem = True
+      OnClick = PopupShowOrientationAllClick
+    end
+    object PopupShowOrientationVertical: TMenuItem
+      Tag = 2
+      AutoCheck = True
+      Caption = 'Vertical'
+      ImageIndex = 2
+      RadioItem = True
+      OnClick = PopupShowOrientationAllClick
+    end
+  end
+  object IL_FilterHorizontalVertical_Large: TImageList
+    Height = 40
+    Width = 44
+    Left = 232
+    Top = 144
+  end
+  object IL_FilterHorizontalVertical_Small: TImageList
+    Height = 22
+    Width = 28
+    Left = 232
+    Top = 112
+  end
+  object IL_ArcadeSystem_ExtraLarge: TImageList
+    Height = 48
+    Width = 48
+    Left = 328
+    Top = 176
+  end
+  object IL_GroupedMode: TImageList
+    Left = 264
+    Top = 176
+  end
+  object PopupFilterGameTitle: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Visible = False
     Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
     Bar.BarCaption.Font.Color = clWhite
     Bar.BarCaption.Font.Height = -19
@@ -2655,12 +2630,975 @@ object FormMain: TFormMain
     Separators.Font.Height = -11
     Separators.Font.Name = 'MS Sans Serif'
     Separators.Font.Style = []
-    MenuFont.Charset = DEFAULT_CHARSET
-    MenuFont.Color = clWindowText
-    MenuFont.Height = -11
-    MenuFont.Name = 'MS Sans Serif'
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
     MenuFont.Style = []
-    Left = 560
-    Top = 248
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 754
+    Top = 6
+    object FilterTextBarIncludeToolBarFilters: TMenuItem
+      AutoCheck = True
+      Caption = 'Include Tool Bar Filters'
+      Checked = True
+      ImageIndex = 5
+    end
+    object N39: TMenuItem
+      Caption = '-'
+      Hint = 'Search games by...'
+    end
+    object FilterGameTitle_Title: TMenuItem
+      AutoCheck = True
+      Caption = 'Game Title'
+      Checked = True
+      Default = True
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Year: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Year'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Manufacturer: TMenuItem
+      Tag = 2
+      AutoCheck = True
+      Caption = 'Manufacturer'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Category: TMenuItem
+      Tag = 3
+      AutoCheck = True
+      Caption = 'Category'
+      Hint = 'catver.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_VersionAdded: TMenuItem
+      Tag = 4
+      AutoCheck = True
+      Caption = 'Version Added'
+      Hint = 'catver.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Language: TMenuItem
+      Tag = 5
+      AutoCheck = True
+      Caption = 'Language'
+      Hint = 'languages.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_DriverName: TMenuItem
+      Tag = 6
+      AutoCheck = True
+      Caption = 'Driver Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_BiosName: TMenuItem
+      Tag = 7
+      AutoCheck = True
+      Caption = 'Bios Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_ScreenResolution: TMenuItem
+      Tag = 8
+      AutoCheck = True
+      Caption = 'Screen Resolution'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_GameName: TMenuItem
+      Tag = 9
+      AutoCheck = True
+      Caption = 'Game Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_CloneOf: TMenuItem
+      Tag = 10
+      AutoCheck = True
+      Caption = 'Clone of'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_NumberofPlayers: TMenuItem
+      Tag = 11
+      AutoCheck = True
+      Caption = '# of Players'
+      Hint = 'nplayers.ini optional'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object N26: TMenuItem
+      Caption = '-'
+    end
+    object FilterSearchBarHelp: TMenuItem
+      Caption = 'Help'
+      ImageIndex = 10
+      OnClick = FilterSearchBarHelpClick
+    end
+  end
+  object IL_Systems: TImageList
+    Height = 68
+    Width = 68
+    Left = 360
+    Top = 176
+  end
+  object IL_MainMenuOptions: TImageList
+    Height = 24
+    Width = 24
+    Left = 72
+    Top = 328
+  end
+  object MainMenuOptions: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 40
+    Top = 328
+    object MenuPreferences: TMenuItem
+      Caption = 'Preferences'
+      Hint = 'Modify frontend settings'
+      ImageIndex = 7
+      OnClick = MenuPreferencesClick
+    end
+    object MenuEmulatorSetup: TMenuItem
+      Caption = 'Emulator Setup'
+      Hint = 'Select emulators to play with'
+      OnClick = MenuEmulatorSetupClick
+    end
+    object MenuEmulatorDefaultSettings: TMenuItem
+      Caption = 'Emulator Default Settings'
+      ImageIndex = 7
+      OnClick = MenuEmulatorDefaultSettingsClick
+    end
+    object MenuAlterMAMEDefaultSettings: TMenuItem
+      Caption = 'AlterMAME Default Settings'
+      ImageIndex = 7
+      OnClick = MenuAlterMAMEDefaultSettingsClick
+    end
+    object MenuCreateGamesList: TMenuItem
+      Caption = 'Create Games List'
+      OnClick = MenuCreateGamesListClick
+    end
+    object MenuViewEmulatorFullCommandLine: TMenuItem
+      AutoCheck = True
+      Caption = 'Run Game Confirmation Dialog'
+      Checked = True
+      Hint = 'Show confirmation/warning dialogs'
+    end
+    object N18: TMenuItem
+      Caption = '-'
+    end
+    object MenuFile: TMenuItem
+      Caption = 'File'
+      object MenuExportGamesListTextFile: TMenuItem
+        Caption = 'Export Games List'
+        object MenuExportAllFilesFullFormat: TMenuItem
+          Caption = 'All Games (Full Format)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportVisibleGamesFullFormat: TMenuItem
+          Tag = 1
+          Caption = 'Visible Games (Full Format)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportAllSelectedGamesGameNameOnly: TMenuItem
+          Tag = 4
+          Caption = 'Selected Games (Full Format)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object N23: TMenuItem
+          Caption = '-'
+        end
+        object MenuExportAllGamesGameNameOnly: TMenuItem
+          Tag = 2
+          Caption = 'All Games (Game Name = System)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportVisibleGamesGameNameOnly: TMenuItem
+          Tag = 3
+          Caption = 'Visible Games (Game Name = System)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportAllSelectedGames: TMenuItem
+          Tag = 5
+          Caption = 'Selected Games (Game Name = System)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object N11: TMenuItem
+          Caption = '-'
+          Hint = 'MAME Content Manager Plus'
+        end
+        object MenuExportMCMPlusAllGames: TMenuItem
+          Tag = 6
+          Caption = 'All Games (MAME / HBMAME)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportMCMPlusVisibleGames: TMenuItem
+          Tag = 7
+          Caption = 'Visible Games (MAME / HBMAME)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+        object MenuExportMCMPlusAllSelectedGames: TMenuItem
+          Tag = 8
+          Caption = 'Selected Games (MAME / HBMAME)'
+          OnClick = MenuExportAllFilesFullFormatClick
+        end
+      end
+    end
+    object MenuView: TMenuItem
+      Caption = 'View'
+      object MenuViewToolBar: TMenuItem
+        Caption = 'Tool Bar Buttons'
+        object MenuEnableToolBar: TMenuItem
+          AutoCheck = True
+          Caption = 'Show Tool Bar'
+          Checked = True
+          ShortCut = 16468
+          OnClick = MenuEnableToolBarClick
+        end
+        object MenuBoundToGamesPanel: TMenuItem
+          AutoCheck = True
+          Caption = 'Bound to Games Panel'
+          Hint = 'Limit panel size to games list'
+          OnClick = MenuBoundToGamesPanelClick
+        end
+        object MenuSmallToolBar: TMenuItem
+          AutoCheck = True
+          Caption = 'Small Tool Bar'
+          Hint = 'Use small icons in main tool bar'
+          OnClick = MenuSmallToolBarClick
+        end
+        object N20: TMenuItem
+          Caption = '-'
+        end
+        object MenuCustomizeToolBar: TMenuItem
+          Caption = 'Customize'
+          ImageIndex = 7
+          OnClick = MenuCustomizeToolBarClick
+        end
+      end
+      object MenuShowGamesStatusBar: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Games Status Bar'
+        Checked = True
+        OnClick = MenuShowGamesStatusBarClick
+      end
+      object N6: TMenuItem
+        Caption = '-'
+      end
+      object MenuROMsFolders: TMenuItem
+        Caption = 'ROMs Folders'
+        ImageIndex = 4
+        OnClick = MenuROMsFoldersClick
+      end
+      object MenuViewFilesVersions: TMenuItem
+        Caption = 'Files Versions'
+        Hint = 'Show emulator/games list version info'
+        OnClick = MenuViewFilesVersionsClick
+      end
+      object N38: TMenuItem
+        Caption = '-'
+      end
+      object MenuViewFullScreen: TMenuItem
+        AutoCheck = True
+        Caption = 'Frontend In Full Screen'
+        Hint = 'Hide title bar and tool bars'
+        ShortCut = 8305
+        OnClick = MenuViewFullScreenClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object MenuRestoreDefaultScreenshotsPanelSize: TMenuItem
+        Caption = 'Default Screenshots Panel Size'
+        OnClick = MenuRestoreDefaultScreenshotsPanelSizeClick
+      end
+      object MenuRestoreMainScreenDefaultScreenSizePosition: TMenuItem
+        Caption = 'Default Screen Size/Position'
+        Hint = 'Windowed mode'
+        OnClick = MenuRestoreMainScreenDefaultScreenSizePositionClick
+      end
+    end
+    object MenuEmulator: TMenuItem
+      Caption = 'Emulator'
+      object MenuEmulatorReloadROMsFolders: TMenuItem
+        Caption = 'Reload ROMs Folders'
+        Hint = 'Clear cache and reload from files'
+        ImageIndex = 4
+        OnClick = MenuEmulatorReloadROMsFoldersClick
+      end
+    end
+    object MenuGameList: TMenuItem
+      Caption = 'Games List'
+      object NewTitleFormat: TMenuItem
+        AutoCheck = True
+        Caption = 'Alternate Title Format [Game, The]'
+        OnClick = NewTitleFormatClick
+      end
+      object MenuIncrementalSearch: TMenuItem
+        Caption = 'Incremental Search'
+        Hint = 'Type game title/name on keyboard'
+        object MenuIncrementalSearchGameTitle: TMenuItem
+          AutoCheck = True
+          Caption = 'Game Title'
+          Checked = True
+          Default = True
+          RadioItem = True
+          OnClick = MenuIncrementalSearchGameTitleClick
+        end
+        object MenuIncrementalSearchGameName: TMenuItem
+          Tag = 1
+          AutoCheck = True
+          Caption = 'Game Name'
+          RadioItem = True
+          OnClick = MenuIncrementalSearchGameTitleClick
+        end
+      end
+      object MenuFontSettings: TMenuItem
+        Caption = 'Font Settings'
+        OnClick = MenuFontSettingsClick
+      end
+      object MenuCustomizeGamesListAppearance: TMenuItem
+        Caption = 'Games List Appearance'
+        OnClick = MenuCustomizeGamesListAppearanceClick
+      end
+      object MenuArcadeBrowseGames: TMenuItem
+        Caption = 'Browse Games With'
+        object MenuArcadeControlKeyboardMouse: TMenuItem
+          AutoCheck = True
+          Caption = 'Keyboard + Mouse'
+          Checked = True
+          Default = True
+          RadioItem = True
+          OnClick = MenuArcadeControlKeyboardMouseClick
+        end
+        object MenuArcadeControlDevastator2: TMenuItem
+          Tag = 1
+          AutoCheck = True
+          Caption = 'Devastator II'
+          RadioItem = True
+          OnClick = MenuArcadeControlKeyboardMouseClick
+        end
+        object MenuArcadeControlHotRodSE: TMenuItem
+          Tag = 2
+          AutoCheck = True
+          Caption = 'Hot Rod SE'
+          RadioItem = True
+          OnClick = MenuArcadeControlKeyboardMouseClick
+        end
+        object MenuArcadeControlSlikStik: TMenuItem
+          Tag = 3
+          AutoCheck = True
+          Caption = 'SlikStik'
+          RadioItem = True
+          OnClick = MenuArcadeControlKeyboardMouseClick
+        end
+        object MenuArcadeControlXArcade: TMenuItem
+          Tag = 4
+          AutoCheck = True
+          Caption = 'X-Arcade'
+          RadioItem = True
+          OnClick = MenuArcadeControlKeyboardMouseClick
+        end
+        object N40: TMenuItem
+          Caption = '-'
+          Hint = 'Settings'
+        end
+        object MenuArcadeControlSlikStik_SwapStick: TMenuItem
+          AutoCheck = True
+          Caption = 'Swap 2nd Player Up/Down (SlikStik)'
+        end
+        object _remove_me___MenuArcadeControlPlayer1StickNumLockFixXArcade: TMenuItem
+          AutoCheck = True
+          Caption = 'Player 1 Stick NumLock Fix (X-Arcade)'
+          Hint = 'Check this if select games doesn'#39't work'
+          Visible = False
+        end
+      end
+      object MenuArcadeControllersLayout: TMenuItem
+        Caption = 'View Arcade Controllers Layout'
+        OnClick = MenuArcadeControllersLayoutClick
+      end
+      object MenuShowPlayersInfoFromNplayersIniOnly: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Players Info From nplayers.ini Only'
+        Hint = 'Do not show players info from MAME'
+        OnClick = MenuShowPlayersInfoFromNplayersIniOnlyClick
+      end
+      object N30: TMenuItem
+        Caption = '-'
+      end
+      object MenuScanMAMEAudioSamples: TMenuItem
+        Caption = 'Scan MAME/HBMAME Missing Audio Samples'
+        Hint = 'Check for missing files (.zip; .7z)'
+        OnClick = MenuScanMAMEAudioSamplesClick
+      end
+    end
+    object MenuImages: TMenuItem
+      Caption = 'Images'
+      OnClick = MenuImagesClick
+      object MenuShowImages: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Images'
+        Checked = True
+        Hint = 'Enable preview screenshots panel'
+        ImageIndex = 6
+        ShortCut = 117
+        OnClick = MenuShowImagesClick
+      end
+      object PopupDisplayGameSnapshotifGameArtworkNotFound: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Game Snap if Artwork Not Found'
+        Hint = 'Load in-game snapshot if found (unzipped)'
+      end
+      object MenuImageResampler: TMenuItem
+        Tag = 2
+        Caption = 'Resampler'
+        Hint = 'Set image resize filter'
+        object MenuImageFilterLinear: TMenuItem
+          Tag = 1
+          AutoCheck = True
+          Caption = 'Linear'
+          HelpContext = 1
+          Hint = 'Blurry, fast'
+          RadioItem = True
+          OnClick = MenuImageFilterOffClick
+        end
+        object MenuImageFilterHermite: TMenuItem
+          Tag = 2
+          AutoCheck = True
+          Caption = 'Hermite'
+          Checked = True
+          Default = True
+          HelpContext = 8
+          Hint = 'Sharp, slow'
+          RadioItem = True
+          OnClick = MenuImageFilterOffClick
+        end
+        object MenuImageFilterScale2x: TMenuItem
+          Tag = 3
+          AutoCheck = True
+          Caption = 'Scale2x'
+          Hint = '2x resolution'
+          RadioItem = True
+          OnClick = MenuImageFilterOffClick
+        end
+        object N41: TMenuItem
+          Caption = '-'
+        end
+        object MenuImageFilterOff: TMenuItem
+          AutoCheck = True
+          Caption = 'Off'
+          RadioItem = True
+          OnClick = MenuImageFilterOffClick
+        end
+      end
+      object MenuImagesEnableToolBar: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Tool Bar'
+        Checked = True
+        ShortCut = 16457
+        OnClick = MenuImagesEnableToolBarClick
+      end
+      object N8: TMenuItem
+        Caption = '-'
+        Hint = 'Game info from internet'
+      end
+      object MenuImageUseMAWSInternetInfo: TMenuItem
+        AutoCheck = True
+        Caption = 'Use MAWS Info (Internet)'
+        Hint = 'http://maws.mameworld.info'
+        RadioItem = True
+        OnClick = MenuImageUseMAWSInternetInfoClick
+      end
+      object MenuImageUseProgettoEMMAInternetInfo: TMenuItem
+        Tag = 1
+        AutoCheck = True
+        Caption = 'Use ProgettoEMMA Info (Internet)'
+        Checked = True
+        Default = True
+        Hint = 'http://www.progettoemma.net'
+        RadioItem = True
+        OnClick = MenuImageUseMAWSInternetInfoClick
+      end
+      object N14: TMenuItem
+        Caption = '-'
+      end
+      object MenuImageViewMode: TMenuItem
+        Caption = 'View Mode'
+        object MenuImageViewModeClassic: TMenuItem
+          AutoCheck = True
+          Caption = 'Classic Mode'
+          Checked = True
+          Default = True
+          Hint = 'Single Image View'
+          RadioItem = True
+          OnClick = MenuImageViewModeClassicClick
+        end
+        object MenuImageViewModeLayouts: TMenuItem
+          Tag = 1
+          AutoCheck = True
+          Caption = 'Layouts Mode'
+          Hint = 'Multiple Images View'
+          RadioItem = True
+          OnClick = MenuImageViewModeClassicClick
+        end
+      end
+      object MenuImageCategoryLayoutSettings: TMenuItem
+        Caption = 'Category / Layout Settings'
+        OnClick = MenuImageCategoryLayoutSettingsClick
+      end
+      object MenuImageCategoryPrevNextAutoSwitch: TMenuItem
+        AutoCheck = True
+        Caption = 'Category Prev/Next Auto Switch'
+        Hint = 'Switch category with prev/next image buttons'
+      end
+      object MenuImageLayoutPrevNextAutoSwitch: TMenuItem
+        AutoCheck = True
+        Caption = 'Layout Prev/Next Auto Switch'
+        Hint = 'Switch layout with prev/next image buttons'
+      end
+      object N31: TMenuItem
+        Caption = '-'
+        Hint = 'MAME Snapshots ("%g/%i" only!)'
+      end
+      object ImagesAutoRenameSnaps: TMenuItem
+        AutoCheck = True
+        Caption = 'Auto Rename Snaps to EL Format'
+        Checked = True
+        Hint = '"gamename/0000.png" to "gamename.png"'
+      end
+      object ImagesAutoDeleteSnaps: TMenuItem
+        AutoCheck = True
+        Caption = 'Delete Files After Rename'
+        Checked = True
+        Hint = 'Delete "gamename\00??.png" file(s)'
+      end
+      object MenuImagesAutoRenameSnapsInfo: TMenuItem
+        Caption = 'Help'
+        ImageIndex = 10
+        OnClick = MenuImagesAutoRenameSnapsInfoClick
+      end
+      object N44: TMenuItem
+        Caption = '-'
+      end
+      object MenuImagesManager: TMenuItem
+        Caption = 'Images Manager'
+        Hint = 'For missing and not used images'
+        OnClick = MenuImagesManagerClick
+      end
+      object MenuImagesDeleteCloneGameImages: TMenuItem
+        Caption = 'Delete Clone Game Images'
+        OnClick = MenuImagesDeleteCloneGameImagesClick
+      end
+    end
+    object MenuSettings: TMenuItem
+      Caption = 'Settings'
+      object MenuReloadFrontendIcons: TMenuItem
+        Caption = 'Reload Frontend Icons'
+        Hint = 'Clear cache and reload all icons'
+        ImageIndex = 15
+        OnClick = MenuReloadFrontendIconsClick
+      end
+      object MenuReloadGamesListIcons: TMenuItem
+        Caption = 'Reload Games List Icons'
+        Hint = 'Clear cache and reload game icons'
+        ImageIndex = 15
+        OnClick = MenuReloadGamesListIconsClick
+      end
+    end
+    object MenuSettingsMaintenance: TMenuItem
+      Caption = 'Maintenance'
+      object MenuNotUsedGameFiles: TMenuItem
+        Caption = 'Not Used Game Files'
+        Hint = 'List files not used by any game'
+        ImageIndex = 12
+        OnClick = MenuNotUsedGameFilesClick
+      end
+    end
+    object MenuHelp: TMenuItem
+      Caption = 'Help'
+      object MenuVisitHomepage: TMenuItem
+        Caption = 'Visit Homepage'
+        object MenuVisitEmuLoaderHomepage: TMenuItem
+          Caption = 'Emu Loader'
+          Hint = 'http://emuloader.mameworld.info'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitMAMEWorldHomepage: TMenuItem
+          Caption = 'MAMEWorld'
+          Hint = 'http://www.mameworld.info'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object N16: TMenuItem
+          Caption = '-'
+          Hint = 'Emulators'
+        end
+        object MenuVisitMAMEHomepage: TMenuItem
+          Caption = 'MAME'
+          Hint = 'http://mamedev.org'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitZiNcHomepage: TMenuItem
+          Caption = 'ZiNc'
+          Hint = 'http://www.emuhype.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitDaphneHomepage: TMenuItem
+          Caption = 'Daphne'
+          Hint = 'http://www.daphne-emu.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitDemulHomepage: TMenuItem
+          Caption = 'Demul'
+          Hint = 'http://demul.emulation64.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitSEGAModel2Homepage: TMenuItem
+          Caption = 'SEGA Model 2'
+          Hint = 'http://nebula.emulatronia.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitSupermodelHomepage: TMenuItem
+          Caption = 'Supermodel'
+          Hint = 'http://www.supermodel3.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitHBMAMEHomepage: TMenuItem
+          Caption = 'HBMAME'
+          Hint = 'http://hbmame.the-chronicles.org'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitDICEHomepage: TMenuItem
+          Caption = 'DICE'
+          Hint = 'http://adamulation.blogspot.com.br'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object N24: TMenuItem
+          Caption = '-'
+          Hint = 'Resources'
+        end
+        object MenuVisitMrDoArcadeHomepage: TMenuItem
+          Caption = 'Mr. Do'#39's! Arcade - MAME Artwork'
+          Hint = 'http://mrdo.mameworld.info'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitMAMu_Homepage: TMenuItem
+          Caption = 'MAMu_ - Icons Master'
+          Hint = 'http://icons.mameworld.info'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitClrMAMEProHomepage: TMenuItem
+          Caption = 'ClrMAMEPro - ROMs Manager'
+          Hint = 'http://www.emulab.it/clrmamepro'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object MenuVisitEmuMoviesVideoSnaps: TMenuItem
+          Caption = 'EmuMovies - Video Snaps'
+          Hint = 
+            'http://emumovies.com/forums/index.php/files/category/1-arcade-co' +
+            'llections/'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
+        object ArcadeControllers1: TMenuItem
+          Caption = 'Arcade Controllers'
+          object MenuVisitDevastator2Homepage: TMenuItem
+            Caption = 'Devastator II'
+            Hint = 'http://www.treyonics.com'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitHotRodHomepage: TMenuItem
+            Caption = 'Hot Rod'
+            Hint = 'http://www.hanaho.com'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitSlikStikHomepage: TMenuItem
+            Caption = 'SlikStik'
+            Hint = 'http://www.slikstik.com'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitXArcadeHomepage: TMenuItem
+            Caption = 'X-Arcade'
+            Hint = 'http://www.x-arcade.com'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+        end
+        object Extras1: TMenuItem
+          Caption = 'Extras'
+          object MenuVisitProgettoEMMAHomepage: TMenuItem
+            Caption = 'Progetto EMMA'
+            Hint = 'http://www.progettoemma.net'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitMashMameInfo: TMenuItem
+            Caption = 'Mash'#39's MameInfo'
+            Hint = 'http://www.mameworld.info/mameinfo'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitMAWSHomepage: TMenuItem
+            Caption = 'MAWS'
+            Hint = 'http://maws.mameworld.info/maws'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitEasyEmu: TMenuItem
+            Caption = 'EasyEmu'
+            Hint = 'http://www.mameworld.info/easyemu'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitCatlistEMMA: TMenuItem
+            Caption = 'Catlist (ProgettoEMMA)'
+            Hint = 'http://www.progettoemma.net/index.php?catlist'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+          object MenuVisitCatlistHomepage: TMenuItem
+            Caption = 'Catlist'
+            Hint = 'http://catlist.mameworld.info'
+            OnClick = MenuVisitEmuLoaderHomepageClick
+          end
+        end
+      end
+      object MenuHelpMAMEDocsWiki: TMenuItem
+        Caption = 'MAME Documentation Wiki'
+        Hint = 'http://mamedev.org/devwiki'
+        OnClick = MenuVisitEmuLoaderHomepageClick
+      end
+      object N35: TMenuItem
+        Caption = '-'
+      end
+      object MenuHelpViewQuickSetupGuide: TMenuItem
+        Caption = 'View Quick Setup Guide'
+        OnClick = MenuHelpViewQuickSetupGuideClick
+      end
+      object MenuHelpViewReadme: TMenuItem
+        Tag = 1
+        Caption = 'View Readme'
+        ImageIndex = 9
+        OnClick = MenuHelpViewQuickSetupGuideClick
+      end
+      object MenuHelpViewFAQ: TMenuItem
+        Tag = 2
+        Caption = 'View F.A.Q.'
+        OnClick = MenuHelpViewQuickSetupGuideClick
+      end
+      object N53: TMenuItem
+        Caption = '-'
+      end
+      object MenuAbout: TMenuItem
+        Caption = 'About...'
+        ImageIndex = 10
+        OnClick = MenuAboutClick
+      end
+      object getsnaps1: TMenuItem
+        Caption = 'get_snaps'
+        Visible = False
+        OnClick = getsnaps1Click
+      end
+      object MenuValidateMAMECHDTypes: TMenuItem
+        Caption = 'Search New CHD and Control Types'
+        Visible = False
+        OnClick = MenuValidateMAMECHDTypesClick
+      end
+      object yrdyr1: TMenuItem
+        Caption = 'Find Game With Most ROMs'
+        Visible = False
+        OnClick = yrdyr1Click
+      end
+    end
+    object N17: TMenuItem
+      Caption = '-'
+    end
+    object MenuExit: TMenuItem
+      Caption = 'Exit'
+      ImageIndex = 2
+      OnClick = MenuExitClick
+    end
+  end
+  object PopupSplitters: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Visible = False
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 728
+    Top = 240
+    object CenterSplitter1: TMenuItem
+      Caption = 'Center This Splitter'
+      OnClick = CenterSplitter1Click
+    end
+    object MenuItem11: TMenuItem
+      Caption = 'Center All Splitters'
+      OnClick = PopupImageCenterAllSplittersClick
+    end
+    object PopupShowSplitterGrip: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Splitter Grip Icon'
+      Checked = True
+      OnClick = PopupShowSplitterGripClick
+    end
+    object N22: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem13: TMenuItem
+      Caption = 'Customize Splitters'
+      OnClick = PopupImageCustomizeSplittersClick
+    end
+  end
+  object PopupFavorites: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MiscToolBarSmall
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -11
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = []
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 80
+    Top = 208
+    object PopupEnableFavorites: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable Favorites'
+      Hint = 'Default'
+      ImageIndex = 6
+      ShortCut = 16498
+      OnClick = PopupEnableFavoritesClick
+    end
+    object PopupFavoritesManager: TMenuItem
+      Caption = 'More...'
+      Hint = 'Manage favorites'
+      OnClick = PopupFavoritesManagerClick
+    end
+  end
+  object IL_MiscToolBarSmall: TImageList
+    Height = 22
+    Width = 28
+    Left = 312
+    Top = 240
+  end
+  object PopupGamesColumns: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = ANSI_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -16
+    Bar.BarCaption.Font.Name = 'Trebuchet MS'
+    Bar.BarCaption.Font.Style = [fsBold]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Caption = 'Screenshots Layouts'
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 296
+    Top = 80
+    object PopupCustomizeColumns: TMenuItem
+      Caption = 'Customize Columns'
+      OnClick = PopupCustomizeColumnsClick
+    end
+    object PopupCustomizeColumnsHeaderFont: TMenuItem
+      Caption = 'Customize Columns Header Font'
+      OnClick = PopupCustomizeColumnsHeaderFontClick
+    end
+    object PopupDefaultHeaderFont: TMenuItem
+      Caption = 'Default Header Font'
+      OnClick = PopupDefaultHeaderFontClick
+    end
   end
 end

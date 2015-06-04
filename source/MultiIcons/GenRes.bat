@@ -1,1 +1,3 @@
-C:\Arquiv~1\Borland\Delphi5\Bin\brcc32.exe Icons.rc
+pause
+"C:\Program Files\Borland\Delphi7\Bin\brcc32.exe" Icons.rc
+pause

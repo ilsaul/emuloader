@@ -1,3 +1,2 @@
-MOREICONS1 ICON C:\EmuLoader\MultiIcons\MoreIcons1.ico
-MOREICONS2 ICON C:\EmuLoader\MultiIcons\MoreIcons2.ico
-MOREICONS3 ICON C:\EmuLoader\MultiIcons\MoreIcons3.ico
+NEWICON MAINICON D:\EmuLoader\Distribution\icon1.ico
+NEWICON ICON2 D:\EmuLoader\Distribution\icon2.ico

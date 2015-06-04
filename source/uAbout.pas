@@ -4,19 +4,15 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ExtCtrls,
-  StdCtrls, jpeg;
+  StdCtrls, GraphicEx, Messages, GR32_Image, ShadowLabel;
 
 type
   TFormAbout = class(TForm)
-    ImageLogo: TImage;
-    LabelFrontendVersion: TLabel;
-    ButtonClose: TButton;
-    Label1: TLabel;
-    Label2: TLabel;
+    ImageAbout: TImage32;
+    LabelVersion: TShadowLabel;
     procedure FormCreate(Sender: TObject);
-    procedure ButtonCloseClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure FormShow(Sender: TObject);
+    procedure ImageAboutClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,32 +24,26 @@ var
 
 implementation
 
-uses uCommon, uMain;
+uses uMain;
 
 {$R *.DFM}
 
 procedure TFormAbout.FormCreate(Sender: TObject);
 begin
-  if FileExists(FormMain.FrontendPath+'resources\images\logo\About.jpg') then
-     ImageLogo.Picture.LoadFromFile(FormMain.FrontendPath+'resources\images\logo\About.jpg');
-
-  LabelFrontendVersion.Caption:='v'+FrontendVersion;
-end;
-
-procedure TFormAbout.ButtonCloseClick(Sender: TObject);
-begin
-  Close;
+  if FileExists(FormMain.GetFolderFull(35)+'about.png') then
+     ImageAbout.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'about.png');
+  LabelVersion.Caption:= FormMain.FrontendVersion;
 end;
 
 procedure TFormAbout.FormKeyPress(Sender: TObject; var Key: Char);
 begin
-  if ((Key = #27) or (Key = #13)) then
-     ButtonClose.OnClick(Self);
+  if Key in [#27, #13] then
+     Close;
 end;
 
-procedure TFormAbout.FormShow(Sender: TObject);
+procedure TFormAbout.ImageAboutClick(Sender: TObject);
 begin
-  FormMain.UpdateGeneralAppearance(FormAbout);
+  Close;
 end;
 
 end.

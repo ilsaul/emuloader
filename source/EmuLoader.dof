@@ -31,12 +31,12 @@ ShowHints=1
 ShowWarnings=1
 UnitAliases=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 NamespacePrefix=
-SymbolDeprecated=1
+SymbolDeprecated=0
 SymbolLibrary=1
-SymbolPlatform=1
+SymbolPlatform=0
 UnitLibrary=1
-UnitPlatform=1
-UnitDeprecated=1
+UnitPlatform=0
+UnitDeprecated=0
 HResultCompat=1
 HidingMember=1
 HiddenVirtual=1
@@ -80,7 +80,7 @@ UnsafeType=0
 UnsafeCode=0
 UnsafeCast=0
 [Linker]
-MapFile=0
+MapFile=3
 OutputObjs=0
 ConsoleApp=1
 DebugInfo=0
@@ -90,13 +90,13 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=c:\EmuLoader
-UnitOutputDir=c:\EmuLoader\dcu
+OutputDir=..\
+UnitOutputDir=..\dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
-Packages=vcl;rtl;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;GR32_DSGN_D7;GR32_D7;components;vclZipForged7
-Conditionals=
+Packages=vcl;rtl;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;VclSmp;dbrtl;bdertl;vcldb;vclactnband;vclshlctrls;Rave50CLX;Rave50VCL;vclZipForged7;CoolBreezeD7;GR32_DSGN_D7;GR32_D7;VirtualTreesD7;components;madBasic_;madDisAsm_
+Conditionals=madExcept
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -108,9 +108,9 @@ DebugCWD=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=0
-MajorVer=4
-MinorVer=1
-Release=0
+MajorVer=7
+MinorVer=8
+Release=3
 Build=0
 Debug=0
 PreRelease=0
@@ -121,21 +121,31 @@ Locale=1033
 CodePage=1252
 [Version Info Keys]
 CompanyName=
-FileDescription=Emu Loader - Powerful M.A.M.E. Frontend
-FileVersion=4.1.0.0
-InternalName=EmuLoader
-LegalCopyright=(C)  2000-2004 - Ciro Alfredo Consentino
+FileDescription=Emu Loader
+FileVersion=7.8.3.0
+InternalName=EmuLoader.exe
+LegalCopyright=(C) Ciro Alfredo Consentino
 LegalTrademarks=
-OriginalFilename=EmuLoader.exe
-ProductName=Emu Loader - Powerful M.A.M.E. Frontend
-ProductVersion=4
-Comments=May The Force Be With You
+OriginalFilename=
+ProductName=Emu Loader
+ProductVersion=7
+Comments=
+[HistoryLists\hlConditionals]
+Count=2
+Item0=madExcept
+Item1=madExcept;fulldebugmode
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=c:\EmuLoader\dcu
+Count=4
+Item0=..\dcu
+Item1=D:\EmuLoader\dcu
+Item2=C:\EmuLoader\dcu
+Item3=C:\EmuLoader\dcu
 [HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=c:\EmuLoader
+Count=4
+Item0=..\
+Item1=D:\EmuLoader
+Item2=C:\EmuLoader
+Item3=C:\EmuLoader

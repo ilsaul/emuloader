@@ -3,281 +3,185 @@ unit uPreferences;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, ImgList, IniFiles, GR32_RangeBars,
-  GraphicEx, GR32_Image;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles,
+  Buttons, BarMenus, GraphicEx,  MPCommonObjects, EasyListview,
+  SplitterEx, AdvOfficeButtons, AdvGroupBox, ShadowLabel, PanelEx, ShellAPI;
 
 type
   TFormPreferences = class(TForm)
-    PreferencesImageList: TImageList;
-    PageControlPreferences: TPageControl;
-    TabSheetGeneral: TTabSheet;
-    TabSheetAppearance: TTabSheet;
-    TabSheetHotRod: TTabSheet;
-    TabSheetSlikStik: TTabSheet;
-    TabSheetXArcade: TTabSheet;
-    ButtonClose: TButton;
-    HotRod: TCheckBox;
-    HotRodImage: TImage32;
-    HotRodSEImageFile: TEdit;
-    VisitSlikStikImage: TImage;
-    SlikStik: TCheckBox;
-    SlikStikImage: TImage32;
-    SlikStikImageFile: TEdit;
-    XArcade: TCheckBox;
-    XArcadeImage: TImage32;
-    XArcadeImageFile: TEdit;
-    VisitHotRodImage: TImage;
-    VisitXArcadeImage: TImage;
-    SlikStikSwap2ndPlayerStick: TCheckBox;
-    LabelCustomColorsGamesList: TGroupBox;
-    LabelListBackground: TLabel;
-    ListBackgroundColor: TColorBox;
-    ButtonGamesListFont: TButton;
-    ButtonGamesListDefaultFont: TButton;
-    LabelPicturesColors: TGroupBox;
-    LabelTitleSnapshotPicturesBackgroundColor: TLabel;
-    TitleSnapshotPicturesBackgroundColor: TColorBox;
-    LabelInGameSnapshotPicturesBackgroundColor: TLabel;
-    InGameSnapshotPicturesBackgroundColor: TColorBox;
-    LabelMarqueePicturesBackgroundColor: TLabel;
-    MarqueePicturesBackgroundColor: TColorBox;
-    LabelFlyerPicturesBackgroundColor: TLabel;
-    FlyerPicturesBackgroundColor: TColorBox;
-    LabelCabinetPicturesBackgroundColor: TLabel;
-    CabinetPicturesBackgroundColor: TColorBox;
-    LabelControlPanelPicturesBackgroundColor: TLabel;
-    ControlPanelPicturesBackgroundColor: TColorBox;
-    LabelControlPanelLayoutPicturesBackgroundColor: TLabel;
-    ControlPanelLayoutPicturesBackgroundColor: TColorBox;
-    LabelCustomColorsGeneral: TGroupBox;
-    ButtonGeneralFont: TButton;
-    ButtonGeneralDefaultFont: TButton;
-    PageControlGeneralOptions: TPageControl;
-    TabSheetMiscellaneous: TTabSheet;
-    TabSheetGames: TTabSheet;
-    TabSheetPictures: TTabSheet;
-    MinimizeFrontend: TCheckBox;
-    NewDescriptionFormat: TCheckBox;
-    FillAllCloneColumns: TCheckBox;
-    NewPictureNameFormat: TCheckBox;
-    ShowParentPictures: TCheckBox;
-    LabelAutomaticGameInfo: TGroupBox;
-    LabelAutomaticGameInformationFont: TLabel;
-    AutomaticGameInformationBackgroundColor: TColorBox;
-    ButtonAutomaticGameInfoFont: TButton;
-    ButtonAutomaticGameInfoDefaultColorFont: TButton;
-    GeneralBackgroundColor: TColorBox;
-    LabelGeneralBackgroundColor: TLabel;
-    ShowPreliminaryGamesDisabled: TCheckBox;
-    HotRodSEImageFileButtonSelect: TButton;
-    SlikStikImageFileButtonSelect: TButton;
-    XArcadeImageFileButtonSelect: TButton;
-    LabelGameSize: TGroupBox;
-    ShowGameSizeBits: TCheckBox;
-    ShowGameSizeBytes: TCheckBox;
-    ShowGameSizeCompressedZip: TCheckBox;
-    LabelSplashLogo: TGroupBox;
-    SplashLogoButtonSelect: TButton;
-    SplashLogo: TEdit;
-    LabelDefaultGameIconsFolder: TGroupBox;
-    DefaultGameIconsFolder: TEdit;
-    DefaultGameIconsFolderButtonSelect: TButton;
-    TabSheetMAME: TTabSheet;
-    UseCustomOptionsDefault: TCheckBox;
-    TabSheetMAMEFolders: TTabSheet;
-    LabelCustomAspectRatioMAME: TGroupBox;
-    LabelHorizontalAspectRatio: TLabel;
-    LabelHorizontalAspectRatioValue: TLabel;
-    LabelVerticalAspectRatio: TLabel;
-    LabelVerticalAspectRatioValue: TLabel;
-    HorizontalAspectRatio: TGaugeBar;
-    VerticalAspectRatio: TGaugeBar;
-    UseCustomAspectRatio: TCheckBox;
-    LabelExtraParametersMAME: TGroupBox;
-    LabelMAMEExecutables: TLabel;
-    LabelDOSMAMEExecutables: TLabel;
-    UseExtraParametersMAME: TCheckBox;
-    ExtraParametersMAME: TEdit;
-    ExtraParametersDOSMAME: TEdit;
-    CyclePictureTypes: TCheckBox;
-    LabelPicturesVisualEffects: TGroupBox;
-    AspectRatio: TCheckBox;
-    PicturesTransparency: TCheckBox;
-    PicturesVirtualList: TCheckBox;
-    StretchPicture: TCheckBox;
-    StretchLargerPictures: TCheckBox;
-    ShowGameSize: TCheckBox;
-    LabelFolderTitleSnapshots: TGroupBox;
-    LabelFolderMarquees: TGroupBox;
-    FolderTitleSnapshots: TEdit;
-    FolderTitleSnapshotsButtonSelect: TButton;
-    FolderMarquees: TEdit;
-    FolderMarqueesButtonSelect: TButton;
-    LabelFolderFlyers: TGroupBox;
-    LabelFolderCabinets: TGroupBox;
-    FolderFlyers: TEdit;
-    FolderFlyersButtonSelect: TButton;
-    LabelFolderGamesFAQ: TGroupBox;
-    FolderCabinets: TEdit;
-    FolderCabinetsButtonSelect: TButton;
-    LabelFolderControlPanels: TGroupBox;
-    FolderControlPanels: TEdit;
-    FolderControlPanelsButtonSelect: TButton;
-    LabelFolderControlPanelLayouts: TGroupBox;
-    FolderControlPanelLayouts: TEdit;
-    FolderControlPanelLayoutsButtonSelect: TButton;
-    LabelFolderIcons: TGroupBox;
-    FolderIcons: TEdit;
-    FolderIconsButtonSelect: TButton;
-    FolderGamesFAQ: TEdit;
-    FolderGamesFAQButtonSelect: TButton;
-    UseCustomGameDescription: TCheckBox;
-    UseCustomGameCategory: TCheckBox;
-    LabelSmoothPictures: TLabel;
-    SmoothPictures: TGaugeBar;
-    LabelSmoothPicturesValue: TLabel;
-    TabSheetSoundClips: TTabSheet;
-    PlaySoundClip: TCheckBox;
-    LabelSoundClipSettings: TGroupBox;
-    LabelOutputType: TLabel;
-    OutputType: TComboBox;
-    LabelOutputDevice: TLabel;
-    OutputDevice: TComboBox;
-    LabelMixerType: TLabel;
-    MixerType: TComboBox;
-    LabelOutputRate: TLabel;
-    OutputRate: TComboBox;
-    LoopSoundClip: TCheckBox;
-    LabelSoundClipFolder: TGroupBox;
-    SoundClipFolder: TEdit;
-    SoundClipFolderSelect: TButton;
-    ParentSoundClip: TCheckBox;
-    SoundClipVolume: TGaugeBar;
-    LabelSoundClipVolumeValue: TLabel;
-    LabelSoundClipVolume: TLabel;
-    HideNavigationPanel: TCheckBox;
-    HidePictureHint: TCheckBox;
-    GamesFilterBox: TGroupBox;
-    HidePreliminaryGames: TCheckBox;
-    HideBios: TCheckBox;
-    ButtonUpdateGamesList: TButton;
-    LabelAutomaticGameInformation: TGroupBox;
-    LabelAutomaticGameInformation1: TLabel;
-    LabelAutomaticGameInformation2: TLabel;
-    LabelAutomaticGameInformation3: TLabel;
-    LabelAutomaticGameInformation4: TLabel;
-    AutomaticGameInformation1: TComboBox;
-    AutomaticGameInformation2: TComboBox;
-    AutomaticGameInformation3: TComboBox;
-    AutomaticGameInformation4: TComboBox;
-    InternetPage: TLabeledEdit;
-    TabSheetZipFiles: TTabSheet;
-    LabelZipTitleSnapshots: TGroupBox;
-    ZipTitleSnapshots: TEdit;
-    ZipTitleSnapshotsButtonSelect: TButton;
-    LabelZipControlPanels: TGroupBox;
-    ZipControlPanels: TEdit;
-    ZipControlPanelsButtonSelect: TButton;
-    LabelZipMarquees: TGroupBox;
-    ZipMarquees: TEdit;
-    ZipMarqueesButtonSelect: TButton;
-    LabelZipControlPanelLayouts: TGroupBox;
-    ZipControlPanelLayouts: TEdit;
-    ZipControlPanelLayoutsButtonSelect: TButton;
-    LabelZipFlyers: TGroupBox;
-    ZipFlyers: TEdit;
-    ZipFlyersButtonSelect: TButton;
-    LabelZipIcons: TGroupBox;
-    ZipIcons: TEdit;
-    ZipIconsButtonSelect: TButton;
-    LabelZipCabinets: TGroupBox;
-    ZipCabinets: TEdit;
-    ZipCabinetsButtonSelect: TButton;
-    LabelZipInGameSnapshots: TGroupBox;
-    ZipInGameSnapshotsButtonSelect: TButton;
-    ZipInGameSnapshots: TEdit;
-    procedure ButtonCloseClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure AspectRatioClick(Sender: TObject);
-    procedure ShowParentPicturesClick(Sender: TObject);
-    procedure NewDescriptionFormatClick(Sender: TObject);
+    PageOptions: TNotebook;
+    DisableMinimize: TAdvOfficeCheckBox;
+    StartupBox: TAdvGroupBox;
+    LabelStartupGamesListNotFound: TLabel;
+    StartupGamesListNotFound: TComboBox;
+    NewBinariesDetectionEnabled: TAdvOfficeCheckBox;
+    StartupNewBinaryFound: TComboBox;
+    GroupBoxSplitters: TAdvGroupBox;
+    LabelSplitterStyleSelector: TLabel;
+    SplitterStyleSelector: TComboBox;
+    ButtonSplitterStyleDefault: TBitBtn;
+    GroupBoxSplitterSingleColor: TAdvGroupBox;
+    LabelSplitterSingleColor: TLabel;
+    LabelSplitterSingleColorHot: TLabel;
+    SplitterSingleColor: TColorBox;
+    SplitterSingleColorHot: TColorBox;
+    ButtonSplitterSingleColorDefault: TBitBtn;
+    SplitterGripIcon: TAdvOfficeCheckBox;
+    ButtonCustomizeGameFonts: TBitBtn;
+    GroupBoxImageLayoytSplitters: TAdvGroupBox;
+    LabelImageLayoutSplitterStyleSelector: TLabel;
+    ImageLayoutSplitterStyleSelector: TComboBox;
+    ButtonImageLayoutSplitterStyleDefault: TBitBtn;
+    GroupBoxImageLayoutSplitterSingleColor: TAdvGroupBox;
+    LabelImageLayoutSplitterSingleColor: TLabel;
+    LabelImageLayoutSplitterSingleColorHot: TLabel;
+    ImageLayoutSplitterSingleColor: TColorBox;
+    ImageLayoutSplitterSingleColorHot: TColorBox;
+    ButtonImageLayoutSplitterSingleColorDefault: TBitBtn;
+    GroupBox3: TAdvGroupBox;
+    GameDocs: TEasyListview;
+    ButtonUp: TBitBtn;
+    ButtonDown: TBitBtn;
+    ButtonResetAutoGameInfoOrder: TBitBtn;
+    LabelAppearanceGameDocuments: TLabel;
+    GameDocumentsBackgroundColor: TColorBox;
+    ButtonGameDocumentsFont: TBitBtn;
+    ButtonGameDocumentsDefault: TBitBtn;
+    GameSelectionAlphaBlend: TAdvOfficeCheckBox;
+    LabelMAMu_IconsFolder: TLabel;
+    MAMu_IconsFolder: TEdit;
+    ButtonMAMu_IconsFolderSelect: TBitBtn;
+    GameSelectionDarkFont: TAdvOfficeCheckBox;
+    ImageEnableGripIcon: TAdvOfficeCheckBox;
+    Label1: TLabel;
+    MAMu_Icon: TImage;
+    ShadowLabel1: TShadowLabel;
+    StartupHelpButton: TBitBtn;
+    PanelEx1: TPanelEx;
+    ButtonGeneral: TSpeedButton;
+    ButtonGamesList: TSpeedButton;
+    ButtonImages: TSpeedButton;
+    ButtonGameDocuments: TSpeedButton;
+    Bevel1: TBevel;
+    ButtonVideoPreview: TSpeedButton;
+    LabelVideoPreviewTitle: TShadowLabel;
+    VideoPreviewFolder: TEdit;
+    ButtonSelectVideoPreviewFolder: TBitBtn;
+    PanelVideoPreviewSystems: TPanelEx;
+    SystemsVideoPreview: TEasyListview;
+    LabelVideoPreviewSystem: TShadowLabel;
+    PanelEx3: TPanelEx;
+    Label2: TLabel;
+    LabelVideoPreviewMediaPlayerExecutable: TLabel;
+    VideoPreviewMediaPlayerExecutable: TEdit;
+    ButtonSelectVideoPreviewMediaPlayer: TBitBtn;
+    LabelVideoPreviewMediaPlayerParameters: TLabel;
+    VideoPreviewMediaPlayerParameters: TEdit;
+    ButtonClearVideoPreviewMediaPlayerParameters: TBitBtn;
+    VideoPreviewAutoPlay: TAdvOfficeCheckBox;
+    LabelVideoPreviewAutoPlay: TShadowLabel;
+    LabelVideoPreviewAutoPlayHelp: TShadowLabel;
+    ButtonVideoPreviewHelp: TBitBtn;
+    VideoPreviewParentGameVideo: TAdvOfficeCheckBox;
+    VideoPreviewEnabled: TAdvOfficeCheckBox;
+    LabelVideoPreviewEnabled: TShadowLabel;
+    ButtonResetVideoPreviewMediaPlayerParameters: TBitBtn;
+    ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtn;
+    ColumnsSettings: TAdvGroupBox;
+    DisableCloneIndent: TAdvOfficeCheckBox;
+    DisableDriverStatusIcons: TAdvOfficeCheckBox;
+    LabelDisableDriverStatusIcons: TLabel;
+    DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBox;
+    LabelDriverStatusShowFirstLetterOnly: TLabel;
+    HideDriverStatusTexts: TAdvOfficeCheckBox;
+    LabelHideDriverStatusTexts: TLabel;
+    LabelShortDriverColumnTitles: TLabel;
+    ShortDriverColumnTitles: TAdvOfficeCheckBox;
+    GamesBackgroundGroupBox: TAdvGroupBox;
+    LabelGamesBackgroundColor: TLabel;
+    GamesBackgroundColor: TColorBox;
+    ButtonDefaultBkSortedColor: TBitBtn;
+    GamesBackgroundImageEnable: TAdvOfficeCheckBox;
+    GamesBackgroundImage: TEdit;
+    GamesBackgroundImageButtonSelect: TBitBtn;
+    GamesBackgroundImageButtonUpdate: TBitBtn;
+    GamesTileBackground: TAdvOfficeCheckBox;
+    ButtonCustomizeColumnHeaderFont: TBitBtn;
+    ButtonCustomizeColumns: TBitBtn;
+    LastPlayedHideSeconds: TAdvOfficeCheckBox;
+    TotalPlayTimeHideSeconds: TAdvOfficeCheckBox;
+    ButtonDefaultColumnHeaderFont: TBitBtn;
+    DisableNaturalSorting: TAdvOfficeCheckBox;
+    LabelDisableNaturalSorting: TLabel;
+    LabelGoToMAMEInfo: TLabel;
+    LabelGoToMARP: TLabel;
+    LabelGoToMAMEScore: TLabel;
+    LabelGoToMAMEHistory: TLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure ShowGameSizeBitsClick(Sender: TObject);
-    procedure ShowGameSizeBytesClick(Sender: TObject);
-    procedure ShowGameSizeCompressedZipClick(Sender: TObject);
-    procedure ShowGameSizeClick(Sender: TObject);
-    procedure FillAllCloneColumnsClick(Sender: TObject);
-    procedure HotRodClick(Sender: TObject);
-    procedure StretchLargerPicturesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure XArcadeClick(Sender: TObject);
-    procedure SlikStikClick(Sender: TObject);
-    procedure VisitSlikStikImageClick(Sender: TObject);
-    procedure VisitHotRodImageClick(Sender: TObject);
-    procedure VisitXArcadeImageClick(Sender: TObject);
-    procedure ListBackgroundColorSelect(Sender: TObject);
-    procedure TitleSnapshotPicturesBackgroundColorSelect(Sender: TObject);
-    procedure InGameSnapshotPicturesBackgroundColorSelect(Sender: TObject);
-    procedure MarqueePicturesBackgroundColorSelect(Sender: TObject);
-    procedure FlyerPicturesBackgroundColorSelect(Sender: TObject);
-    procedure CabinetPicturesBackgroundColorSelect(Sender: TObject);
-    procedure ControlPanelPicturesBackgroundColorSelect(Sender: TObject);
-    procedure ControlPanelLayoutPicturesBackgroundColorSelect(
+    procedure GamesBackgroundColorSelect(Sender: TObject);
+    procedure ButtonGameDocumentsFontClick(Sender: TObject);
+    procedure GameDocumentsBackgroundColorSelect(
       Sender: TObject);
-    procedure ButtonGamesListFontClick(Sender: TObject);
-    procedure ButtonGamesListDefaultFontClick(Sender: TObject);
-    procedure ButtonGeneralFontClick(Sender: TObject);
-    procedure ButtonGeneralDefaultFontClick(Sender: TObject);
-    procedure ButtonAutomaticGameInfoFontClick(Sender: TObject);
-    procedure AutomaticGameInformationBackgroundColorSelect(
+    procedure ButtonGameDocumentsDefaultClick(Sender: TObject);
+    procedure GamesBackgroundImageButtonSelectClick(Sender: TObject);
+    procedure GamesBackgroundImageButtonUpdateClick(Sender: TObject);
+    procedure GamesTileBackgroundClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonResetAutoGameInfoOrderClick(Sender: TObject);
+    procedure ButtonDefaultBkSortedColorClick(Sender: TObject);
+    procedure PopupMenuThemePreviewMeasureMenuItem(Sender: TObject;
+      AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
+      ABarVisible: Boolean; var DefaultMeasure: Boolean);
+    procedure ButtonCustomizeGameFontsClick(Sender: TObject);
+    procedure GameDocsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure ButtonUpClick(Sender: TObject);
+    procedure GameSelectionAlphaBlendClick(Sender: TObject);
+    procedure ImageLayoutSplitterStyleSelectorSelect(Sender: TObject);
+    procedure ButtonImageLayoutSplitterStyleDefaultClick(Sender: TObject);
+    procedure ImageLayoutSplitterSingleColorSelect(Sender: TObject);
+    procedure ImageLayoutSplitterSingleColorHotSelect(Sender: TObject);
+    procedure ButtonImageLayoutSplitterSingleColorDefaultClick(Sender: TObject);
+    procedure ButtonSplitterStyleDefaultClick(Sender: TObject);
+    procedure ButtonSplitterSingleColorDefaultClick(Sender: TObject);
+    procedure SplitterStyleSelectorSelect(Sender: TObject);
+    procedure SplitterSingleColorSelect(Sender: TObject);
+    procedure SplitterSingleColorHotSelect(Sender: TObject);
+    procedure SplitterGripIconClick(Sender: TObject);
+    procedure ButtonGeneralClick(Sender: TObject);
+    procedure ButtonMAMu_IconsFolderSelectClick(Sender: TObject);
+    procedure ImageEnableGripIconClick(Sender: TObject);
+    procedure StartupHelpButtonClick(Sender: TObject);
+    procedure SystemsVideoPreviewItemSelectionChanged(
+      Sender: TCustomEasyListview; Item: TEasyItem);
+    procedure VideoPreviewFolderChange(Sender: TObject);
+    procedure ButtonSelectVideoPreviewFolderClick(Sender: TObject);
+    procedure LabelVideoPreviewAutoPlayHelpClick(Sender: TObject);
+    procedure LabelVideoPreviewAutoPlayHelpMouseEnter(Sender: TObject);
+    procedure LabelVideoPreviewAutoPlayHelpMouseLeave(Sender: TObject);
+    procedure ButtonSelectVideoPreviewMediaPlayerClick(Sender: TObject);
+    procedure ButtonClearVideoPreviewMediaPlayerParametersClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ButtonVideoPreviewHelpClick(Sender: TObject);
+    procedure ButtonResetVideoPreviewMediaPlayerParametersClick(
       Sender: TObject);
-    procedure ButtonAutomaticGameInfoDefaultColorFontClick(Sender: TObject);
-    procedure GeneralBackgroundColorSelect(Sender: TObject);
-    procedure ShowPreliminaryGamesDisabledClick(Sender: TObject);
-    procedure SplashLogoButtonSelectClick(Sender: TObject);
-    procedure DefaultGameIconsFolderButtonSelectClick(Sender: TObject);
-    procedure HotRodSEImageFileButtonSelectClick(Sender: TObject);
-    procedure SlikStikImageFileButtonSelectClick(Sender: TObject);
-    procedure XArcadeImageFileButtonSelectClick(Sender: TObject);
-    procedure HorizontalAspectRatioChange(Sender: TObject);
-    procedure VerticalAspectRatioChange(Sender: TObject);
-    procedure HorizontalAspectRatioMouseUp(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure VerticalAspectRatioMouseUp(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure SplashLogoChange(Sender: TObject);
-    procedure FolderTitleSnapshotsButtonSelectClick(Sender: TObject);
-    procedure FolderMarqueesButtonSelectClick(Sender: TObject);
-    procedure FolderFlyersButtonSelectClick(Sender: TObject);
-    procedure FolderCabinetsButtonSelectClick(Sender: TObject);
-    procedure FolderControlPanelsButtonSelectClick(Sender: TObject);
-    procedure FolderControlPanelLayoutsButtonSelectClick(Sender: TObject);
-    procedure FolderIconsButtonSelectClick(Sender: TObject);
-    procedure FolderGamesFAQButtonSelectClick(Sender: TObject);
-    procedure StretchPictureClick(Sender: TObject);
-    procedure PicturesVirtualListClick(Sender: TObject);
-    procedure CyclePictureTypesClick(Sender: TObject);
-    procedure SmoothPicturesChange(Sender: TObject);
-    procedure SoundClipFolderSelectClick(Sender: TObject);
-    procedure PlaySoundClipClick(Sender: TObject);
-    procedure OutputDeviceSelect(Sender: TObject);
-    procedure OutputTypeSelect(Sender: TObject);
-    procedure MixerTypeSelect(Sender: TObject);
-    procedure OutputRateSelect(Sender: TObject);
-    procedure SoundClipVolumeChange(Sender: TObject);
-    procedure HideNavigationPanelClick(Sender: TObject);
-    procedure HidePictureHintClick(Sender: TObject);
-    procedure ButtonUpdateGamesListClick(Sender: TObject);
-    procedure ZipTitleSnapshotsButtonSelectClick(Sender: TObject);
-    procedure DefaultGameIconsFolderChange(Sender: TObject);
+    procedure ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
+    procedure DisableCloneIndentClick(Sender: TObject);
+    procedure GamesBackgroundImageEnableClick(Sender: TObject);
+    procedure ButtonCustomizeColumnsClick(Sender: TObject);
+    procedure ButtonCustomizeColumnHeaderFontClick(Sender: TObject);
+    procedure ButtonDefaultColumnHeaderFontClick(Sender: TObject);
+    procedure DisableNaturalSortingClick(Sender: TObject);
+    procedure LabelGoToMAMEInfoMouseEnter(Sender: TObject);
+    procedure LabelGoToMAMEInfoClick(Sender: TObject);
+    procedure LabelGoToMAMEInfoMouseLeave(Sender: TObject);
   private
     { Private declarations }
-    function  LoadToolbarIcons: Boolean;
-    procedure RestartFMOD;
   public
-    procedure UpdateGameSize;
     { Public declarations }
+
   end;
 
 var
@@ -285,295 +189,26 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon, uFilesUtil;
+uses uMain, uStatus, uCommon;
 
 {$R *.DFM}
 
-// procedures
-
-procedure TFormPreferences.RestartFMOD;
-begin
-  if PlaySoundClip.Checked then
-     begin
-       FormMain.InitDeInitFMOD(False, False);
-       FormMain.InitDeInitFMOD(True, False);
-     end;
-end;
-
-function TFormPreferences.LoadToolbarIcons: Boolean;
-begin
-  Result:= ((FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\0.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\1.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\2.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\3.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\4.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\MAMEConfiguration\5.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\25.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\7.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\52.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Main\toolbar\77.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\8.ico')) and
-            (FileExists(FormMain.FrontendPath+'resources\images\toolbars\Preferences\9.ico')));
-
-  if Result then
-     begin
-       FormMain.AddDefaultIcons('Preferences\0.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\1.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\2.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\3.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\4.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('MAMEConfiguration\5.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Main\toolbar\25.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\7.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Main\toolbar\52.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Main\toolbar\77.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\8.ico', PreferencesImageList, 1, False);
-       FormMain.AddDefaultIcons('Preferences\9.ico', PreferencesImageList, 1, False);
-     end;
-end;
-
-procedure TFormPreferences.UpdateGameSize;
-var
-  GameSize: Extended;
-  SizeInfo: String;
-begin
-  SizeInfo:= FormMain.GamesList[FormMain.SelectedGame].eGameSize;
-  if SizeInfo = '' then
-     begin
-       FormMain.StatusBarGameSize.Caption:= '';
-       FormMain.StatusBarGameSize.Visible:= False;
-       Exit;
-     end
-  else
-     GameSize:= StrToFloat(SizeInfo);
-
-  if ShowGameSizeBits.Checked then
-     FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, True)
-  else
-
-  if ShowGameSizeBytes.Checked then
-     FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, False)
-  else
-     begin
-       // get the .zip file size
-       if FormMain.GamesList[FormMain.SelectedGame].eMerged = '' then
-          GameSize:= GetFileSize(FormMain.SearchZipFolder(FormMain.GamesList[FormMain.SelectedGame].eName))
-       else
-          GameSize:= GetFileSize(FormMain.SearchZipFolder(FormMain.GamesList[FormMain.SelectedGame].eClone));
-
-       if GameSize > -1 then
-          FormMain.StatusBarGameSize.Caption:= FormMain.GetSizeType(GameSize, False)
-       else
-          FormMain.StatusBarGameSize.Caption:= '';
-     end;
-
-  FormMain.StatusBarGameSize.Visible:= FormMain.StatusBarGameSize.Caption <> '';
-end;
-// end of procedures
-
-procedure TFormPreferences.ButtonCloseClick(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TFormPreferences.FormCreate(Sender: TObject);
-var
-  SysMenu: HMenu;
-begin
-  SysMenu:= GetSystemMenu(handle, False);
-  EnableMenuItem(SysMenu, SC_CLOSE, MF_DISABLED or MF_GRAYED);
-
-  if XArcadeImageFile.Text = '' then
-     XArcadeImageFile.Text:= 'resources\images\controllers\X-Arcade.jpg';
-  if FileExists(XArcadeImageFile.Text) then
-     XArcadeImage.Bitmap.LoadFromFile(XArcadeImageFile.Text);
-
-  if HotRodSEImageFile.Text = '' then
-     HotRodSEImageFile.Text:= 'resources\images\controllers\HotRodSE.jpg';
-  if FileExists(HotRodSEImageFile.Text) then
-     HotRodImage.Bitmap.LoadFromFile(HotRodSEImageFile.Text);
-
-  if SlikStikImageFile.Text = '' then
-     SlikStikImageFile.Text:= 'resources\images\controllers\SlikStik.jpg';
-  if FileExists(SlikStikImageFile.Text) then
-     SlikStikImage.Bitmap.LoadFromFile(SlikStikImageFile.Text);
-
-  // Load Icons
-  LoadToolbarIcons;
-end;
-
-procedure TFormPreferences.AspectRatioClick(Sender: TObject);
-begin
-  FormMain.SetAspectRatio;
-end;
-
-procedure TFormPreferences.ShowParentPicturesClick(Sender: TObject);
-var
-  PictureName: String;
-begin
-  case ShowParentPictures.Checked of
-    True:
-      begin
-        with FormMain do
-        begin
-          PictureName:= ShowPicture(GamesList[SelectedGame].eName, GamesList[SelectedGame].eClone, Picture, PictureType, True);
-          if PictureName <> 'No Change' then
-             Picture.Hint:= PictureName;
-          UpdateLabelPictures;
-        end;
-      end;
-    False:
-      begin
-        with FormMain do
-        begin
-          if FormMain.Active then
-          if GamesList[SelectedGame].eClone <> '' then
-             begin
-               Picture.Bitmap.Clear;
-               Picture.Hint:= '';
-               LabelPictureNumber.Caption:= '';
-             end;
-        end;
-      end;
-  end;
-end;
-
-procedure TFormPreferences.NewDescriptionFormatClick(Sender: TObject);
-var
-  Loop: Integer;
-  GameDescription: String;
-begin
-  if Length(FormMain.GamesList) = 0 then
-     Exit;
-  FormMain.List.Items.BeginUpdate;
-  case NewDescriptionFormat.Checked of
-    True:
-      begin
-        for Loop:=0 to Length(FormMain.GamesList)-1 do
-        begin
-          GameDescription:= FormMain.GamesList[Loop].eDescription;
-          if (Copy(GameDescription, 1, 4) = 'The ') then
-             FormMain.GamesList[Loop].eDescription:= Copy(GameDescription, 5, Length(GameDescription))+', The'
-          else
-          if (Copy(GameDescription, 1, 3) = 'Le ') then
-             FormMain.GamesList[Loop].eDescription:= Copy(GameDescription, 4, Length(GameDescription))+', Le';
-        end;
-      end;
-    False:
-      begin
-        for Loop:=0 to Length(FormMain.GamesList)-1 do
-        begin
-          GameDescription:= FormMain.GamesList[Loop].eDescription;
-          if Pos(', The',GameDescription) > 0 then
-             FormMain.GamesList[Loop].eDescription:= 'The '+Copy(GameDescription, 1, Length(GameDescription)-5)
-          else
-          if Pos(', Le',GameDescription) > 0 then
-             FormMain.GamesList[Loop].eDescription:= 'Le '+Copy(GameDescription, 1, Length(GameDescription)-4);
-        end;
-      end;
-  end;
-  FormMain.List.Items.EndUpdate;
-  FormMain.List.Invalidate;
-  if FormMain.ColumnSorted = 0 then
-     FormMain.SortColumn(FormMain.ColumnSorted, True);
-end;
+// might be useful in the future...
+//procedure TFormPreferences.ELV_GetMissROM_Selected(ColorBoxHolder: TColorBox);
+//var
+//  colorRed, colorGreen, colorBlue, NewColor: Integer; // will hold default RGB color
+//begin
+//   colorRed:= GetRValue(ColorBoxHolder.Selected);
+//   colorGreen:= GetGValue(ColorBoxHolder.Selected);
+//   colorBlue:= GetBValue(ColorBoxHolder.Selected);
+//   NewColor:= RGB(colorBlue, colorGreen, colorRed); // invert... blue becomes red :-))
+//   ColorBoxHolder.Tag:= NewColor;
+//end;
 
 procedure TFormPreferences.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #27 then
-     ButtonClose.OnClick(Self);
-end;
-
-procedure TFormPreferences.ShowGameSizeBitsClick(Sender: TObject);
-begin
-  case ShowGameSizeBits.Checked of
-    True:
-      begin
-        ShowGameSizeBytes.Checked:= False;
-        ShowGameSizeCompressedZip.Checked:= False;
-      end;
-    False: ShowGameSizeBits.Checked:= ((not ShowGameSizeBytes.Checked) and (not ShowGameSizeCompressedZip.Checked));
-  end;
-  FormMain.UpdateStatusBarGame;
-end;
-
-procedure TFormPreferences.ShowGameSizeBytesClick(Sender: TObject);
-begin
-  case ShowGameSizeBytes.Checked of
-    True:
-      begin
-        ShowGameSizeBits.Checked:= False;
-        ShowGameSizeCompressedZip.Checked:= False;
-      end;
-    False: ShowGameSizeBits.Checked:= ((not ShowGameSizeBits.Checked) and (not ShowGameSizeCompressedZip.Checked));
-  end;
-  FormMain.UpdateStatusBarGame;
-end;
-
-procedure TFormPreferences.ShowGameSizeCompressedZipClick(Sender: TObject);
-begin
-  case ShowGameSizeCompressedZip.Checked of
-    True:
-      begin
-        ShowGameSizeBits.Checked:= False;
-        ShowGameSizeBytes.Checked:= False;
-      end;
-    False: ShowGameSizeBits.Checked:= ((not ShowGameSizeBits.Checked) and (not ShowGameSizeBytes.Checked));
-  end;
-  FormMain.UpdateStatusBarGame;
-end;
-
-procedure TFormPreferences.ShowGameSizeClick(Sender: TObject);
-begin
-  case ShowGameSize.Checked of
-    True : UpdateGameSize;
-    False: FormMain.StatusBarGameSize.Caption:= '';
-  end;
-  FormMain.StatusBarGameSize.Visible:= ShowGameSize.Checked;
-end;
-
-procedure TFormPreferences.FillAllCloneColumnsClick(Sender: TObject);
-var
-  Loop: Integer;
-begin
-  if Length(FormMain.GamesList) > 0 then
-     begin
-       FormMain.List.Items.BeginUpdate;
-       case FillAllCloneColumns.Checked of
-         True:
-           begin
-             for Loop:=0 to Length(FormMain.GamesList)-1 do
-             begin
-               if FormMain.GamesList[Loop].eClone = '' then
-                  FormMain.GamesList[Loop].eClone:= FormMain.GamesList[Loop].eName;
-             end;
-           end;
-         False:
-           begin
-             for Loop:=0 to Length(FormMain.GamesList)-1 do
-             begin
-               if FormMain.GamesList[Loop].eImageIndex in [0, 1, 4, 6, 7, 10, 12..15] then
-                  FormMain.GamesList[Loop].eClone:= '';
-             end;
-           end;
-       end;
-       FormMain.List.Items.EndUpdate;
-       FormMain.List.Invalidate;
-     end;
-end;
-
-procedure TFormPreferences.HotRodClick(Sender: TObject);
-begin
-  if HotRod.Checked then
-     begin
-       XArcade.Checked:= False;
-       SlikStik.Checked:= False;
-     end;
-end;
-
-procedure TFormPreferences.StretchLargerPicturesClick(Sender: TObject);
-begin
-  StretchPicture.OnClick(Self);
+     Close;
 end;
 
 procedure TFormPreferences.FormShow(Sender: TObject);
@@ -583,428 +218,490 @@ begin
        PostMessage(Handle, wm_Close, 0, 0);
        Exit;
      end;
-end;
-
-procedure TFormPreferences.XArcadeClick(Sender: TObject);
-begin
-  if XArcade.Checked then
+  if FormPreferences.Tag = 2 then
      begin
-       HotRod.Checked:= False;
-       SlikStik.Checked:= False;
+       MAMu_IconsFolder.SetFocus;
+       FormPreferences.Tag:= 0;
      end;
 end;
 
-procedure TFormPreferences.SlikStikClick(Sender: TObject);
+procedure TFormPreferences.GamesBackgroundColorSelect(Sender: TObject);
 begin
-  if SlikStik.Checked then
-     begin
-       HotRod.Checked:= False;
-       XArcade.Checked:= False;
-     end;
+  FormMain.GamesListView.Color:= GamesBackgroundColor.Selected;
 end;
 
-procedure TFormPreferences.VisitSlikStikImageClick(Sender: TObject);
-begin
-  FormMain.MenuVisitSlikStikHomepageClick(Self);
-end;
-
-procedure TFormPreferences.VisitHotRodImageClick(Sender: TObject);
-begin
-  FormMain.MenuVisitHotRodHomepage.OnClick(Self);
-end;
-
-procedure TFormPreferences.VisitXArcadeImageClick(Sender: TObject);
-begin
-  FormMain.MenuVisitXArcadeHomepage.OnClick(Self);
-end;
-
-procedure TFormPreferences.ListBackgroundColorSelect(Sender: TObject);
-begin
-  FormMain.List.Color:= ListBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.TitleSnapshotPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowTitleSnapshot.Checked then
-     FormMain.Picture.Color:= TitleSnapshotPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.InGameSnapshotPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowInGameSnapshot.Checked then
-     FormMain.Picture.Color:= InGameSnapshotPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.MarqueePicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowMarquee.Checked then
-     FormMain.Picture.Color:= MarqueePicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.FlyerPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowFlyer.Checked then
-     FormMain.Picture.Color:= FlyerPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.CabinetPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowCabinet.Checked then
-     FormMain.Picture.Color:= CabinetPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.ControlPanelPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowControlPanel.Checked then
-     FormMain.Picture.Color:= ControlPanelPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.ControlPanelLayoutPicturesBackgroundColorSelect(
-  Sender: TObject);
-begin
-  if FormMain.MenuShowControlPanelLayout.Checked then
-     FormMain.Picture.Color:= ControlPanelLayoutPicturesBackgroundColor.Selected;
-end;
-
-procedure TFormPreferences.ButtonGamesListFontClick(Sender: TObject);
-begin
-  FormMain.FontDialog.Font:= FormMain.List.Font;
-  if FormMain.FontDialog.Execute then
-     FormMain.List.Font:= FormMain.FontDialog.Font;
-end;
-
-procedure TFormPreferences.ButtonGamesListDefaultFontClick(Sender: TObject);
-begin
-  FormMain.List.Font.Color:= clWhite;
-  FormMain.List.Font.Name:= 'Tahoma';
-  FormMain.List.Font.Size:= 8;
-  FormMain.List.Font.Style:= [];
-  ListBackgroundColor.Selected:= clBlack;
-  ListBackgroundColor.OnSelect(Self);
-end;
-
-procedure TFormPreferences.ButtonGeneralFontClick(Sender: TObject);
-begin
-  FormMain.FontDialog.Font:= FormMain.Font;
-  if FormMain.FontDialog.Execute then
-     FormMain.Font:= FormMain.FontDialog.Font;
-  FormMain.UpdateGeneralAppearance(FormMain);
-  FormMain.UpdateGeneralAppearance(FormPreferences);
-  FormMain.UpdateGeneralAppearance(FormStatus);
-end;
-
-procedure TFormPreferences.ButtonGeneralDefaultFontClick(Sender: TObject);
-begin
-  FormMain.Font.Color:= clWindowText;
-  FormMain.Font.Name:= 'Tahoma';
-  FormMain.Font.Size:= 8;
-  FormMain.Font.Style:= [];
-  GeneralBackgroundColor.Selected:= clBtnFace;
-  GeneralBackgroundColor.OnSelect(Self);
-  FormMain.UpdateGeneralAppearance(FormMain);
-  FormMain.UpdateGeneralAppearance(FormPreferences);
-  FormMain.UpdateGeneralAppearance(FormStatus);
-end;
-
-procedure TFormPreferences.ButtonAutomaticGameInfoFontClick(
+procedure TFormPreferences.ButtonGameDocumentsFontClick(
   Sender: TObject);
 begin
   FormMain.FontDialog.Font:= FormMain.MAMEInfoTextHolder.Font;
+  FormMain.FontDialog.Tag:= 6;
   if FormMain.FontDialog.Execute then
      FormMain.MAMEInfoTextHolder.Font:= FormMain.FontDialog.Font;
 end;
 
-procedure TFormPreferences.AutomaticGameInformationBackgroundColorSelect(
+procedure TFormPreferences.GameDocumentsBackgroundColorSelect(
   Sender: TObject);
 begin
-  FormMain.MAMEInfoTextHolder.Color:= AutomaticGameInformationBackgroundColor.Selected;
+  FormMain.MAMEInfoTextHolder.Color:= GameDocumentsBackgroundColor.Selected;
 end;
 
-procedure TFormPreferences.ButtonAutomaticGameInfoDefaultColorFontClick(Sender: TObject);
+procedure TFormPreferences.ButtonGameDocumentsDefaultClick(Sender: TObject);
 begin
   FormMain.MAMEInfoTextHolder.Font.Color:= clBlack;
-  FormMain.MAMEInfoTextHolder.Font.Name:= 'Courier New';
-  FormMain.MAMEInfoTextHolder.Font.Size:= 8;
+  FormMain.MAMEInfoTextHolder.Font.Name:= 'Consolas';
+  FormMain.MAMEInfoTextHolder.Font.Size:= 9;
   FormMain.MAMEInfoTextHolder.Font.Style:= [];
-  AutomaticGameInformationBackgroundColor.Selected:= TColor(clWindow);
-  AutomaticGameInformationBackgroundColor.OnSelect(Self);
+  FormMain.SetSelectedColorBox(GameDocumentsBackgroundColor, GameDocumentsBackgroundColor.DefaultColorColor);
 end;
 
-procedure TFormPreferences.GeneralBackgroundColorSelect(Sender: TObject);
-begin
-  if FormMain.CheckWinXPThemes then
-     GeneralBackgroundColor.Selected:= clBtnFace;
-
-  FormMain.Color:= GeneralBackgroundColor.Selected;
-  FormPreferences.Color:= FormMain.Color;
-end;
-
-procedure TFormPreferences.ShowPreliminaryGamesDisabledClick(
+procedure TFormPreferences.GamesBackgroundImageButtonSelectClick(
   Sender: TObject);
 begin
-  if Length(FormMain.GamesList) > 0 then
-     FormMain.List.Invalidate;
+  FormMain.DialogOpenFile(5, GamesBackgroundImageEnable.Caption, GamesBackgroundImage, False);
+  GamesBackgroundImageButtonUpdate.Click;
 end;
 
-procedure TFormPreferences.SplashLogoButtonSelectClick(Sender: TObject);
-begin
-  FormMain.DialogOpenFile(4, FormMain.GetLanguageText('Preferences', 'DialogLogo', 'Select a file for splash screen'), SplashLogo);
-  FormMain.LogoFileName:= SplashLogo.Text;
-end;
-
-procedure TFormPreferences.DefaultGameIconsFolderButtonSelectClick(
+procedure TFormPreferences.GamesBackgroundImageButtonUpdateClick(
   Sender: TObject);
+var
+  ListViewBk: TPNGGraphic;
+  FileFullPath: String;
 begin
-  FormMain.DialogSelectFolder(DefaultGameIconsFolder, False);
-end;
-
-procedure TFormPreferences.HotRodSEImageFileButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogOpenFile(5, Format(FormMain.GetLanguageText('Preferences', 'DialogController', 'Select an image file for the %s controller'), [TabSheetHotRod.Caption]), HotRodSEImageFile);
-  if FileExists(HotRodSEImageFile.Text) then
-     HotRodImage.Bitmap.LoadFromFile(HotRodSEImageFile.Text);
-end;
-
-procedure TFormPreferences.SlikStikImageFileButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogOpenFile(5, Format(FormMain.GetLanguageText('Preferences', 'DialogController', 'Select an image file for the %s controller'), [TabSheetSlikStik.Caption]), SlikStikImageFile);
-  if FileExists(SlikStikImageFile.Text) then
-     SlikStikImage.Bitmap.LoadFromFile(SlikStikImageFile.Text);
-end;
-
-procedure TFormPreferences.XArcadeImageFileButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogOpenFile(5, Format(FormMain.GetLanguageText('Preferences', 'DialogController', 'Select an image file for the %s controller'), [TabSheetXArcade.Caption]), XArcadeImageFile);
-  if FileExists(XArcadeImageFile.Text) then
-     XArcadeImage.Bitmap.LoadFromFile(XArcadeImageFile.Text);
-end;
-
-procedure TFormPreferences.HorizontalAspectRatioChange(Sender: TObject);
-begin
-  LabelHorizontalAspectRatioValue.Caption:= FormMain.GetAspectRatio(HorizontalAspectRatio);
-end;
-
-procedure TFormPreferences.VerticalAspectRatioChange(Sender: TObject);
-begin
-  LabelVerticalAspectRatioValue.Caption:= FormMain.GetAspectRatio(VerticalAspectRatio);
-end;
-
-procedure TFormPreferences.HorizontalAspectRatioMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if Button = mbRight then
-     HorizontalAspectRatio.Position:= HorizontalAspectRatio.Tag;
-end;
-
-procedure TFormPreferences.VerticalAspectRatioMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if Button = mbRight then
-     VerticalAspectRatio.Position:= VerticalAspectRatio.Tag;
-end;
-
-procedure TFormPreferences.SplashLogoChange(Sender: TObject);
-begin
-  FormMain.LogoFileName:= SplashLogo.Text;
-end;
-
-procedure TFormPreferences.FolderTitleSnapshotsButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderTitleSnapshots, False);
-end;
-
-procedure TFormPreferences.FolderMarqueesButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderMarquees, False);
-end;
-
-procedure TFormPreferences.FolderFlyersButtonSelectClick(Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderFlyers, False);
-end;
-
-procedure TFormPreferences.FolderCabinetsButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderCabinets, False);
-end;
-
-procedure TFormPreferences.FolderControlPanelsButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderControlPanels, False);
-end;
-
-procedure TFormPreferences.FolderControlPanelLayoutsButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderControlPanelLayouts, False);
-end;
-
-procedure TFormPreferences.FolderIconsButtonSelectClick(Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderIcons, False);
-end;
-
-procedure TFormPreferences.FolderGamesFAQButtonSelectClick(
-  Sender: TObject);
-begin
-  FormMain.DialogSelectFolder(FolderGamesFAQ, False);
-end;
-
-procedure TFormPreferences.StretchPictureClick(Sender: TObject);
-begin
-  FormMain.SetAspectRatio;
-  if StretchPicture.Tag = 0 then
-     FormMain.List.SetFocus;
-end;
-
-procedure TFormPreferences.PicturesVirtualListClick(Sender: TObject);
-begin
-  FormMain.ToggleVirtualPicturesList(PicturesVirtualList.Checked);
-end;
-
-procedure TFormPreferences.CyclePictureTypesClick(Sender: TObject);
-begin
-  case CyclePictureTypes.Checked of
+  case GamesBackgroundImageEnable.Checked of
     True:
       begin
-        FormMain.ButViewPreviousPicture.ImageIndex:= 80;
-        FormMain.ButViewNextPicture.ImageIndex:= 81;
+        FileFullPath:= FormMain.FullFolderFix(GamesBackgroundImage.Text);
+        if (not FileExists(FileFullPath)) or (FileFullPath = '') then
+           begin
+             if not FormMain.IsStartup then
+                FormMain.BlinkBkEdit(GamesBackgroundImage);
+             Exit;
+           end;
+
+        try
+          ListViewBk:= TPNGGraphic.Create;
+          ListViewBk.LoadFromFile(FileFullPath);
+          FormMain.GamesListView.BackGround.Image.Assign(ListViewBk);
+          FreeAndNil(ListViewBk);
+        except
+          FormMain.GamesListView.Background.Image:= nil;
+        end;
       end;
     False:
       begin
-        FormMain.ButViewPreviousPicture.ImageIndex:= 82;
-        FormMain.ButViewNextPicture.ImageIndex:= 83;
+        FormMain.GamesListView.Background.Image:= nil;
       end;
   end;
-  FormMain.UpdateLabelPictures;
 end;
 
-procedure TFormPreferences.SmoothPicturesChange(Sender: TObject);
+procedure TFormPreferences.GamesTileBackgroundClick(Sender: TObject);
 begin
-  FormMain.SmoothPicture;
+  FormMain.GamesListView.BackGround.Tile:= GamesTileBackground.Checked;
 end;
 
-procedure TFormPreferences.SoundClipFolderSelectClick(Sender: TObject);
+procedure TFormPreferences.FormCreate(Sender: TObject);
 begin
-  FormMain.DialogSelectFolder(SoundClipFolder, False);
+  PageOptions.PageIndex:= 0;
+  FormMain.LoadMessageIcon(MAMu_Icon, 'mamu_.ico', True);
+
+  FormMain.ELV_ResetNormalColors(GameDocs);
+
+  FormMain.ELV_ResetNormalColors(SystemsVideoPreview);
+  LabelVideoPreviewSystem.Caption:= '';
+  FormMain.ELV_PopulateSystems(SystemsVideoPreview, True, True, 1);
+  SystemsVideoPreview.Items.Items[1].Caption:= 'Supmod3l';
+  SystemsVideoPreview.Items.Items[6].Caption:= 'Model 2';
 end;
 
-procedure TFormPreferences.PlaySoundClipClick(Sender: TObject);
-begin
-  FormMain.PanelSpectrum.Visible:= PlaySoundClip.Checked;
-  FormMain.InitDeInitFMOD(PlaySoundClip.Checked, True);
-  LabelSoundClipSettings.Tag:= Ord(PlaySoundClip.Checked);
-  if PlaySoundClip.Checked then
-     begin
-       FormMain.PopulateDevices; // Get all sound devices present on the system
-       if OutputDevice.Items.Count > 0 then
-          if OutputDevice.Tag > OutputDevice.Items.Count then
-             OutputDevice.ItemIndex:= 0
-          else
-             OutputDevice.ItemIndex:= OutputDevice.Tag;
-     end;
-end;
-
-procedure TFormPreferences.OutputDeviceSelect(Sender: TObject);
-begin
-  RestartFMOD;
-end;
-
-procedure TFormPreferences.OutputTypeSelect(Sender: TObject);
-begin
-  RestartFMOD;
-  if PlaySoundClip.Checked then
-     begin
-       if OutputDevice.ItemIndex <> -1 then
-          OutputDevice.Tag:= OutputDevice.ItemIndex;
-       OutputDevice.Items.Clear;
-       FormMain.PopulateDevices;
-       if OutputDevice.Tag > OutputDevice.Items.Count then
-          OutputDevice.ItemIndex:= 0
-       else
-          OutputDevice.ItemIndex:= OutputDevice.Tag;
-     end;
-end;
-
-procedure TFormPreferences.MixerTypeSelect(Sender: TObject);
-begin
-  RestartFMOD;
-end;
-
-procedure TFormPreferences.OutputRateSelect(Sender: TObject);
-begin
-  RestartFMOD;
-end;
-
-procedure TFormPreferences.SoundClipVolumeChange(Sender: TObject);
-begin
-  FormMain.SetVolume(SoundClipVolume.Position);
-end;
-
-procedure TFormPreferences.HideNavigationPanelClick(Sender: TObject);
+procedure TFormPreferences.ButtonResetAutoGameInfoOrderClick(
+  Sender: TObject);
 var
-  DATpanel: Boolean;
+  Loop: Integer;
 begin
-  DATpanel:= FormMain.PanelmameinfoDAT.Visible;
-  if DATpanel then
-     FormMain.PanelmameinfoDAT.Visible:= False;
-  FormMain.PicturesToolbarPanel.Visible:= not HideNavigationPanel.Checked;
-  if DATpanel then
-     FormMain.PanelmameinfoDAT.Visible:= True;
+  FormMain.ClearListView(GameDocs);
+  GameDocs.BeginUpdate;
+  for Loop:=1 to 5 do
+      FormMain.ELV_AddGameDocs(Loop);
+  GameDocs.EndUpdate;
 end;
 
-procedure TFormPreferences.HidePictureHintClick(Sender: TObject);
+procedure TFormPreferences.ButtonDefaultBkSortedColorClick(Sender: TObject);
 begin
-  FormMain.Picture.ShowHint:= not HidePictureHint.Checked;
+  SetDefaultColorBox(GamesBackgroundColor);
 end;
 
-procedure TFormPreferences.ButtonUpdateGamesListClick(Sender: TObject);
+procedure TFormPreferences.PopupMenuThemePreviewMeasureMenuItem(
+  Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
+  Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
 begin
-  if Length(FormMain.GamesList) > 0 then
-     FormMain.SetGameType(FormMain.ButtonGameType.Tag);
+  if (GetMenuBarMenusIntf(TMenu(Sender)).UseMenuStyle = msWindowsXP) then
+     Height:= Height+2;
+  if AMenuItem.ShortCut <> scNone then
+     Width:= Width+ACanvas.TextWidth(ShortCutToText(AMenuItem.ShortCut))+10;
 end;
 
-procedure TFormPreferences.ZipTitleSnapshotsButtonSelectClick(
+procedure TFormPreferences.ButtonCustomizeGameFontsClick(Sender: TObject);
+begin
+  FormMain.MenuFontSettings.Click;
+end;
+
+procedure TFormPreferences.GameDocsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if not Item.Checked then
+     ACanvas.Font.Color:= clGray;
+end;
+
+procedure TFormPreferences.ButtonUpClick(Sender: TObject);
+begin
+  FormMain.ELV_MoveItem(GameDocs, Boolean(TBitBtn(Sender).Tag));
+end;
+
+procedure TFormPreferences.GameSelectionAlphaBlendClick(Sender: TObject);
+begin
+  FormMain.GamesListView.Selection.AlphaBlend:= GameSelectionAlphaBlend.Checked;
+  FormMain.GamesListView.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
+end;
+
+procedure TFormPreferences.ImageLayoutSplitterStyleSelectorSelect(
   Sender: TObject);
 begin
-  FormMain.OpenDialog.FilterIndex:= 2;
-  if FormMain.OpenDialog.Execute then
-     ZipTitleSnapshots.Text:= ExtractFileName(FormMain.OpenDialog.FileName);
-  FormMain.OpenDialog.FilterIndex:= 1;
+  FormMain.SetGroupBoxState(GroupBoxImageLayoutSplitterSingleColor, ImageLayoutSplitterStyleSelector.ItemIndex = 1);
+  //GroupBoxImageLayoutSplitterSingleColor.Visible:= ImageLayoutSplitterStyleSelector.ItemIndex = 1;
+  FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
-procedure TFormPreferences.DefaultGameIconsFolderChange(Sender: TObject);
+procedure TFormPreferences.ButtonImageLayoutSplitterStyleDefaultClick(Sender: TObject);
 begin
-  if DefaultGameIconsFolder.Text <> '' then
+  SetSelectedComboBox(6, ImageLayoutSplitterStyleSelector);
+end;
+
+procedure TFormPreferences.ImageLayoutSplitterSingleColorSelect(
+  Sender: TObject);
+begin
+  FormMain.UpdateImageLayoutSplittersStyle;
+end;
+
+procedure TFormPreferences.ImageLayoutSplitterSingleColorHotSelect(
+  Sender: TObject);
+begin
+  FormMain.UpdateImageLayoutSplittersStyle;
+end;
+
+procedure TFormPreferences.ButtonImageLayoutSplitterSingleColorDefaultClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(ImageLayoutSplitterSingleColor);
+  SetDefaultColorBox(ImageLayoutSplitterSingleColorHot);
+end;
+
+procedure TFormPreferences.ButtonSplitterStyleDefaultClick(
+  Sender: TObject);
+begin
+  SetSelectedComboBox(6, SplitterStyleSelector);
+end;
+
+procedure TFormPreferences.ButtonSplitterSingleColorDefaultClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(SplitterSingleColor);
+  SetDefaultColorBox(SplitterSingleColorHot);
+end;
+
+procedure TFormPreferences.SplitterStyleSelectorSelect(Sender: TObject);
+begin
+  FormMain.SetGroupBoxState(GroupBoxSplitterSingleColor, SplitterStyleSelector.ItemIndex = 1);
+  //GroupBoxSplitterSingleColor.Enabled{Visible}:= SplitterStyleSelector.ItemIndex = 1;
+  FormMain.UpdateSplitterStyle(FormMain.Splitter, TTMSStyle(SplitterStyleSelector.ItemIndex),
+                               SplitterSingleColor.Selected,
+                               SplitterSingleColorHot.Selected);
+  FormMain.UpdateSplitterStyle(FormMain.SplitterMAMEInfo, TTMSStyle(SplitterStyleSelector.ItemIndex),
+                               SplitterSingleColor.Selected,
+                               SplitterSingleColorHot.Selected);
+end;
+
+procedure TFormPreferences.SplitterSingleColorSelect(Sender: TObject);
+begin
+  SplitterStyleSelector.OnSelect(Self);
+end;
+
+procedure TFormPreferences.SplitterSingleColorHotSelect(Sender: TObject);
+begin
+  SplitterStyleSelector.OnSelect(Self);
+end;
+
+procedure TFormPreferences.SplitterGripIconClick(Sender: TObject);
+begin
+  FormMain.SetGripIcon(FormMain.Splitter, SplitterGripIcon.Checked);
+  FormMain.SetGripIcon(FormMain.SplitterMAMEInfo, SplitterGripIcon.Checked);
+end;
+
+procedure TFormPreferences.ButtonGeneralClick(Sender: TObject);
+begin
+  PageOptions.PageIndex:= TSpeedButton(Sender).Tag;
+  if PageOptions.PageIndex = 4 then
      begin
-       if (FormMain.CheckDefaultIconsFile) and (Length(FormMain.GamesList) > 0) then
+       if not FormMain.CheckSelected(SystemsVideoPreview) then
+          FormMain.ELV_SelectItem(SystemsVideoPreview, 0);
+       SystemsVideoPreview.SetFocus;
+     end;
+end;
+
+procedure TFormPreferences.ButtonMAMu_IconsFolderSelectClick(
+  Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(MAMu_IconsFolder, False);
+end;
+
+procedure TFormPreferences.ImageEnableGripIconClick(Sender: TObject);
+begin
+  if ImageEnableGripIcon.Tag = 0 then
+     FormMain.PopupImageShowSplitterGrip.Click;
+end;
+
+procedure TFormPreferences.StartupHelpButtonClick(Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('Games List Not Found'+#13#10, clBlack, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'    This option can create a games list automatically if it''s not found at startup. It only works if an emulator '+
+                  'file have been selected in emulator setup screen.'+#13#10+#13#10);
+  FormMain.AddMsgText('New Emulator Detection'+#13#10, clBlack, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'    Enable this option so EL can auto-detect a new emulator binary at startup (MD5 checksum) and create a '+
+                  'new games list.'+#13#10+#13#10+
+                  '    Drop-down options and what they mean:'+#13#10);
+  FormMain.AddMsgText('Ask', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': Ask if you want to create games list at that time'+#13#10);
+  FormMain.AddMsgText('Auto-Create', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': Games list will be created without warning or confirmation'+#13#10);
+  FormMain.AddMsgText('Skip', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': Skip new games list creation, but update the emulator version info if ');
+  FormMain.AddMsgText('New Emulator Detection', clBlack, [fsBold]);
+  FormMain.AddMsgText(' is checked.');
+  GenerateMessage('Help', 'Startup options for emulators and games list.');
+end;
+
+procedure TFormPreferences.SystemsVideoPreviewItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Selected then
+     begin
+       LabelVideoPreviewSystem.Caption:= FormMain.GetEmulatorDescription(Item.ImageIndex);
+       Sender.Tag:= Item.ImageIndex;
+       VideoPreviewFolder.Text:= FormMain.VideoPreviewDir[Sender.Tag];
+     end;
+end;
+
+procedure TFormPreferences.VideoPreviewFolderChange(Sender: TObject);
+begin
+  if FormMain.CheckSelected(SystemsVideoPreview) then
+     FormMain.VideoPreviewDir[SystemsVideoPreview.Tag]:= VideoPreviewFolder.Text;
+end;
+
+procedure TFormPreferences.ButtonSelectVideoPreviewFolderClick(Sender: TObject);
+begin
+  if FormMain.CheckSelected(SystemsVideoPreview) then
+     FormMain.DialogSelectFolder(VideoPreviewFolder, False);
+end;
+
+procedure TFormPreferences.LabelVideoPreviewAutoPlayHelpClick(Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('    This option play videos automatically when selecting games but, depending on how '+
+                      'you setup the media player, it might crash the frontend or even Windows if you select different games while a '+
+                      'video is playing.'+#13#10+#13#10+
+                      '    I recommend using this setting only if scrolling the games list slowly and if you really want to '+
+                      'watch videos for every new game you select.'+#13#10#13#10+
+                      'Remember that you can start a video by:'+#13#10);
+  FormMain.AddMsgText('Shift-V', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' shortcut'+#13#10);
+  FormMain.AddMsgText('Play Video Preview', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' button in images tool bar buttons'+#13#10);
+  FormMain.AddMsgText('Play Video Preview', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' menu option in games popup menu (mouse right click)'+#13#10+
+                      'If browsing games with an arcade controller, there''s a button assigned for this task.');
+  GenerateMessage('Info', 'AutoPlay video previews.');
+
+  {GenerateMessage('INFO', 'AutoPlay video previews.',
+                  '    This option play videos automatically when selecting games but, depending on how '+
+                  'you setup the media player, it might crash the frontend or even Windows if you select different games while a '+
+                  'video is playing.'+#13#10+#13#10+
+                  '    I recommend using this setting only if scrolling the games list slowly and if you really want to '+
+                  'watch videos for every new game you select.'+#13#13#10+
+                  'Remember that you can start a video by:'+#13#10+
+                  'Shift+V shortcut'+#13#10+'"Play Video Preview" button in images tool bar buttons'+#13#10+
+                  '"Play Video Preview" menu option in games popup menu (mouse right click)'+#13#10+
+                  'If browsing games with an arcade controller, there''s a button assigned for this task.', 2);}
+end;
+
+procedure TFormPreferences.LabelVideoPreviewAutoPlayHelpMouseEnter(Sender: TObject);
+begin
+  TShadowLabel(Sender).Font.Color:= clBlue;
+  TShadowLabel(Sender).Font.Style:= [fsUnderline];
+end;
+
+procedure TFormPreferences.LabelVideoPreviewAutoPlayHelpMouseLeave(Sender: TObject);
+begin
+  TShadowLabel(Sender).Font.Color:= clNavy;
+  TShadowLabel(Sender).Font.Style:= [];
+end;
+
+procedure TFormPreferences.ButtonSelectVideoPreviewMediaPlayerClick(Sender: TObject);
+begin
+  FormMain.DialogOpenFile(2, 'Select a media player executable', VideoPreviewMediaPlayerExecutable, False);
+  FormMain.ReadVideoPreviewIni(True);
+end;
+
+procedure TFormPreferences.ButtonClearVideoPreviewMediaPlayerParametersClick(Sender: TObject);
+begin
+  VideoPreviewMediaPlayerParameters.Clear;
+end;
+
+procedure TFormPreferences.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if CanClose then
+     begin
+       if not Application.Terminated then
           begin
-            if not FormMain.MenuGamesIcons.Checked then
-               FormMain.List.Items.BeginUpdate;
-            FormMain.BuiltInBigListImageList.Clear;
-            FormMain.BuiltInSmallListImageList.Clear;
-            FormMain.ReadDefaultIconsFile;
-            if not FormMain.MenuGamesIcons.Checked then
-               begin
-                 FormMain.List.Invalidate;
-                 FormMain.List.Items.EndUpdate;
-               end;
+            FormMain.UpdateVideoPreviewIni;
+            FormMain.SetVideoPreviewState;
           end;
      end;
 end;
 
+procedure TFormPreferences.ButtonVideoPreviewHelpClick(Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('    It''s very simple and easy to setup. First you need a media player. I use and recommend the awesome ');
+  FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
+  FormMain.AddMsgText('http://mpc-hc.org', $00a65300);
+  FormMain.AddMsgText('. Make sure to enable "Store settings to .ini file" option for maximum customization. '+
+                      'But you can use any media player.');
+  FormMain.AddMsgText(#13#10+#13#10+'    Select the player ');
+  FormMain.AddMsgText('executable', clBlack, [fsBold]);
+  FormMain.AddMsgText(' file. Parameters will be loaded automatically if already defined in ');
+  FormMain.AddMsgText('\ini_files\videopreview.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('. If not, type the proper switches to play, and if possible, auto-close when playback is done.'+//#13#10+
+                      ' You can also use a ');
+  FormMain.AddMsgText('batch', clBlack, [fsBold]);
+  FormMain.AddMsgText(' file but parameters are not supported.'+#13#10+#13#10);
+  FormMain.AddMsgText('    The ', clMaroon, [fsBold]);
+  FormMain.AddMsgText('%1', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' tag is required for the video/audio filename. Surrounding quotes is not required.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(#13#10+#13#10+'    Select a ');
+  FormMain.AddMsgText('system', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' and the ');
+  FormMain.AddMsgText('folder', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' where video/audio files are. Recursive folder scan is NOT supported.');
+  FormMain.AddMsgText(#13#10+'    Check ');
+  FormMain.AddMsgText('Play Video Enabled', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' setting. Uncheck it if you want to disable this feature completely.'+
+                      #13#10+'    Check ');
+  FormMain.AddMsgText('Parent Game Video', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' setting for clone games, to play videos of parent games.'+#13#10+'    The ');
+  FormMain.AddMsgText('AutoPlay', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' setting play videos automatically when selecting games. Disabled by default for safety reasons (see ''read more...'' '+
+                      'for more details).'+#13#10+#13#10+
+                      '    If AutoPlay is disabled, you can play videos manually with ');
+  FormMain.AddMsgText('Shift+V', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' shortcut or ');
+  FormMain.AddMsgText('Play Video Preview', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' in images tool bar buttons / games popup menu. There''s a button assigned for arcade controllers as well.');
+
+  GenerateMessage('Help', 'How to watch game video previews.');
+end;
+
+procedure TFormPreferences.ButtonResetVideoPreviewMediaPlayerParametersClick(
+  Sender: TObject);
+begin
+  FormMain.ReadVideoPreviewIni(True);
+end;
+
+procedure TFormPreferences.ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('    The ');
+  FormMain.AddMsgText('%1', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' tag is required so Emu Loader can replace it by the video/audio filename.'+#13#10+
+                      '    Why you ask ? Some media player like ');
+  FormMain.AddMsgText('VLC media player ', clBlack, [fsBold]);
+  FormMain.AddMsgText('http://www.videolan.org/vlc/index.html', $00a65300);
+  FormMain.AddMsgText(' require command line switches before the filename.');
+  FormMain.AddMsgText(#13#10+'    Others like ');
+  FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
+  FormMain.AddMsgText('http://mpc-hc.org', $00a65300);
+  FormMain.AddMsgText(' can have switches before or after the filename.'+#13#10+
+                      '    This tag is also required by batch files. Extra tags are NOT supported.'+
+                      #13#10+'Emu Loader will surround the file with quotes so, there''s '+
+                      'no need to use them.'+#13#10+'    Make sure to include a ');
+  FormMain.AddMsgText('auto close', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' parameter so the media player closes itself after the playback is finished!');
+
+  GenerateMessage('INFO', 'Required parameter.');
+end;
+
+procedure TFormPreferences.DisableCloneIndentClick(Sender: TObject);
+begin
+  FormMain.GamesListView.BeginUpdate;
+  FormMain.GamesListView.EndUpdate(False);
+end;
+
+procedure TFormPreferences.GamesBackgroundImageEnableClick(Sender: TObject);
+begin
+  FormMain.GamesListView.BackGround.Enabled:= GamesBackgroundImageEnable.Checked;
+  GamesBackgroundImageButtonUpdate.Click;
+end;
+
+procedure TFormPreferences.ButtonCustomizeColumnsClick(Sender: TObject);
+begin
+  FormMain.PopupCustomizeColumns.Click;
+end;
+
+procedure TFormPreferences.ButtonCustomizeColumnHeaderFontClick(
+  Sender: TObject);
+begin
+  FormMain.PopupCustomizeColumnsHeaderFont.Click;
+end;
+
+procedure TFormPreferences.ButtonDefaultColumnHeaderFontClick(
+  Sender: TObject);
+begin
+  FormMain.PopupDefaultHeaderFont.Click;
+end;
+
+procedure TFormPreferences.DisableNaturalSortingClick(Sender: TObject);
+begin
+  if FormMain.IsStartup then
+     Exit; 
+  FormMain.GamesListView.BeginUpdate;
+  FormMain.GamesListView.Sort.SortAll;
+  FormMain.GamesListView.EndUpdate(False);
+  if FormMain.SelectedEasyItem <> nil then
+     FormMain.SelectedEasyItem.MakeVisible(emvAuto);
+end;
+
+procedure TFormPreferences.LabelGoToMAMEInfoMouseEnter(Sender: TObject);
+begin
+  TLabel(Sender).Font.Color:= clBlue;
+  TLabel(Sender).Font.Style:= [fsUnderline];
+end;
+
+procedure TFormPreferences.LabelGoToMAMEInfoMouseLeave(Sender: TObject);
+begin
+  TLabel(Sender).Font.Color:= clNavy;
+  TLabel(Sender).Font.Style:= [];
+end;
+
+procedure TFormPreferences.LabelGoToMAMEInfoClick(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', PChar(TLabel(Sender).Hint), nil, nil, SW_SHOWNORMAL);
+end;
+
+
+
 end.
+
+
+
 

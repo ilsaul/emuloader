@@ -1,16 +1,17 @@
 object FormAbout: TFormAbout
-  Left = 167
-  Top = 148
-  BorderIcons = []
-  BorderStyle = bsToolWindow
-  ClientHeight = 273
-  ClientWidth = 315
-  Color = clBlack
-  DefaultMonitor = dmPrimary
-  Font.Charset = DEFAULT_CHARSET
+  Left = 705
+  Top = 316
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsNone
+  Caption = 'About...'
+  ClientHeight = 450
+  ClientWidth = 640
+  Color = clBtnFace
+  DefaultMonitor = dmMainForm
+  Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
-  Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Height = -13
+  Font.Name = 'Segoe UI'
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
@@ -18,74 +19,40 @@ object FormAbout: TFormAbout
   Scaled = False
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
-  OnShow = FormShow
   PixelsPerInch = 96
-  TextHeight = 13
-  object ImageLogo: TImage
-    Left = 8
-    Top = 8
-    Width = 300
-    Height = 150
-    AutoSize = True
-  end
-  object LabelFrontendVersion: TLabel
-    Left = 264
-    Top = 160
-    Width = 38
-    Height = 13
-    Alignment = taRightJustify
-    Caption = 'v00.00'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWhite
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    Transparent = True
-  end
-  object Label1: TLabel
-    Left = 52
-    Top = 192
-    Width = 212
-    Height = 13
-    Caption = 'Developed by Ciro Alfredo Consentino'
+  TextHeight = 17
+  object ImageAbout: TImage32
+    Left = 0
+    Top = 0
+    Width = 640
+    Height = 450
+    Align = alClient
+    Bitmap.DrawMode = dmBlend
+    Bitmap.ResamplerClassName = 'TNearestResampler'
+    BitmapAlign = baTopLeft
     Color = clBlack
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWhite
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
     ParentColor = False
-    ParentFont = False
-    Transparent = True
-  end
-  object Label2: TLabel
-    Left = 36
-    Top = 208
-    Width = 243
-    Height = 13
-    Caption = 'DOS MAME and MAME32 are not supported!'
-    Color = clBlack
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWhite
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-    Transparent = True
-  end
-  object ButtonClose: TButton
-    Left = 229
-    Top = 238
-    Width = 75
-    Height = 23
-    Hint = 'Close this window'
-    Caption = '&Close'
-    Default = True
-    ParentShowHint = False
-    ShowHint = True
+    Scale = 1.000000000000000000
+    ScaleMode = smNormal
     TabOrder = 0
-    OnClick = ButtonCloseClick
+    OnClick = ImageAboutClick
+    object LabelVersion: TShadowLabel
+      Left = 573
+      Top = 227
+      Width = 44
+      Height = 14
+      Alignment = taRightJustify
+      Caption = 'v12.0.0'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clOlive
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShadowColor = clNavy
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
   end
 end
