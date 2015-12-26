@@ -15,11 +15,12 @@ type
     fROMIdentification: Integer;
     fSystemID: Integer;
     fSystemType: ShortInt;
-    fTitle: String;
+    fTitle: WideString;
     fName: String;
     fClone: String;
     fCloneParent: String;
     fAudioSampleName: String;
+    fSoftwareName: String;
     fDriverStatus: ShortInt;
     fGameStatus: ShortInt; // 0 - have or miss; 1 - missing ROMs/CHDs
     fSampleStatus: ShortInt; // 0 - not found; 1 - found; -1 - not needed (empty)
@@ -34,11 +35,12 @@ type
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: Integer read fSystemID write fSystemID;
     property eSystemType: ShortInt read fSystemType write fSystemType;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
     property eAudioSampleName: String read fAudioSampleName write fAudioSampleName;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus;
     property eSampleStatus: ShortInt read fSampleStatus write fSampleStatus;
@@ -133,7 +135,7 @@ end;
 function TFileInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   case Column of
-    0: Result:= eROMIdentification;
+    0: Result:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
   else
        Result:= -1;
   end;
@@ -162,7 +164,7 @@ begin
      begin
        TFileInfo(SelectedItem).Selected:= True;
        FilesListView.Selection.FocusedItem:= SelectedItem;
-       SelectedItem.MakeVisible(emvAuto);
+       SelectedItem.MakeVisible(emvMiddle) //(emvAuto);
      end;
   FormMain.ELV_SetSelectRibbon(TFileInfo(SelectedItem).eGameStatus, FilesListView);
 end;
@@ -183,15 +185,16 @@ end;
 
 procedure TFormScanAudioSamples.UpdateTotalGames;
 begin
-  LabelTotalItems.Caption:= IntToStr(FilesListView.Groups.VisibleItemCount)+' Games with missing samples';
+  LabelTotalItems.Caption:= IntToStr(FilesListView.Groups.VisibleItemCount)+' Missing Samples';
 end;
 
 procedure TFormScanAudioSamples.AddGamesToList;
 var
-  SamplesFiles, GamesSamples: array[0..1] of THashedStringList; // 0 -> HBMAME; 1 -> MAME
+  SamplesFiles, GamesSamples, AddedSampleName: array[0..1] of THashedStringList; // 0 -> HBMAME; 1 -> MAME
   HaveMAME, HaveHBMAME: Boolean;
   samName, FileExt: String;
   addItem, gItem: TEasyItem;
+  gGroup: TEasyGroup;
 
   function GetSampleFiles(SystemIndex: Integer): Boolean;
   var
@@ -217,6 +220,8 @@ var
            SamplesFiles[SystemIndex].Strings[sLoop]:= tmpStr+'='+SamplesFiles[SystemIndex].Strings[sLoop];
          end;
          SamplesFiles[SystemIndex].EndUpdate;
+         AddedSampleName[SystemIndex]:= THashedStringList.Create;
+         AddedSampleName[SystemIndex].BeginUpdate;
        end
     else
        FreeAndNil(SamplesFiles[SystemIndex]);
@@ -231,8 +236,8 @@ var
     if not Assigned(SamplesFiles[sysIndex]) then
        Exit;
 
-    Result:= (FormMain.TempGameVars.eSystemID in [idMAME, idHBMAME]) and (FormMain.TempGameVars.eAudioType = 2);
-    if Result then
+    //Result:= (FormMain.TempGameVars.eSystemID in [idMAME, idHBMAME]) and (FormMain.TempGameVars.eAudioType = 2);
+    //if Result then
        Result:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification) or
                 FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus);
 
@@ -253,7 +258,18 @@ var
 
     sFileFound:= sysIndex <> -1;
     if sFileFound then
-       Exit;
+       Exit
+    else
+    begin
+      if Assigned(AddedSampleName[sysIndex]) then
+       begin
+         Result:= AddedSampleName[sysIndex].IndexOf(samName) = -1;
+         if Result then
+            AddedSampleName[sysIndex].Add(samName)
+         else
+            Exit;
+       end;
+    end;
 
     addItem:= FilesListView.Items.AddCustom(TFileInfo, nil);
 
@@ -268,6 +284,7 @@ var
       False: TFileInfo(addItem).eCloneParent:= FormMain.TempGameVars.eName;
     end;
     TFileInfo(addItem).eAudioSampleName:= samName;
+    TFileInfo(addItem).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
     TFileInfo(addItem).eDriverStatus:= FormMain.TempGameVars.eDriverStatus;
     TFileInfo(addItem).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
     TFileInfo(addItem).eSampleFile:= samName;
@@ -336,8 +353,10 @@ begin
        PostMessage(Handle, wm_Close, 0, 0);
        FreeStringList(GamesSamples[1]);
        FreeStringList(SamplesFiles[1]);
+       FreeStringList(AddedSampleName[1]);
        FreeStringList(GamesSamples[0]);
        FreeStringList(SamplesFiles[0]);
+       FreeStringList(AddedSampleName[0]);
        Exit;
      end;
 
@@ -350,12 +369,20 @@ begin
   FilesListView.BeginUpdate;
   FilesListView.Items.ReIndexDisable:= True;
   // add games that use external samples to the list (samples found or not, have / miss games)
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
+  gGroup:= FormMain.GamesListView.Groups.FirstGroup;
   repeat
-    FormMain.FillTempGameInfo(gItem);
-    ELV_AddItem;
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-  until gItem = nil;
+    gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+    repeat
+      if (uMain.TEasyGameInfo(gItem).eSystemID in [idMAME, idHBMAME]) and (uMain.TEasyGameInfo(gItem).eAudioType = 2) then
+         begin
+           FormMain.FillTempGameInfo(gItem);
+           ELV_AddItem;
+         end;
+      gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+    until gItem = nil;
+
+    gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+  until gGroup = nil;
 
   FilesListView.Items.ReIndexDisable:= False;
   FilesListView.EndUpdate;
@@ -364,11 +391,13 @@ begin
     True : SelectFirstVisibleItem;
     False: SetFilter;
   end;
-  FreeStringList(SamplesFiles[1]);
+  FreeStringList(SamplesFiles[1]); // MAME
   FreeStringList(GamesSamples[1]);
+  FreeStringList(AddedSampleName[1]);
 
-  FreeStringList(SamplesFiles[0]);
+  FreeStringList(SamplesFiles[0]); // HBMAME
   FreeStringList(GamesSamples[0]);
+  FreeStringList(AddedSampleName[0]);
 
   if FormMain.CheckTotal(FilesListView) then
      begin
@@ -379,7 +408,7 @@ begin
      end
   else
      begin
-       GenerateMessage('Info', FormScanAudioSamples.Caption, '    Found samples for all games. Exiting...', 2);
+       GenerateMessage('Info', FormScanAudioSamples.Caption, '    Found samples for all available games. Exiting...', 2);
        PostMessage(Handle, wm_Close, 0, 0);
      end;
 end;
@@ -448,6 +477,14 @@ end;
 
 procedure TFormScanAudioSamples.FormShow(Sender: TObject);
 begin
+  if Screen.Width < 1024 then
+     begin
+       ClientWidth:= Screen.Width-24;
+       LabelDownloadLink.Left:= 150;
+     end;
+  if Screen.Height < 600 then
+     ClientHeight:= Screen.Height-60;
+     
   FormMain.ELV_ResetNormalColors(FilesListView);
   FormMain.CheckSevenZip(Tag);
   FormMain.LoadSystemsIcons(IL_Systems);
@@ -486,7 +523,7 @@ begin
   if TFileInfo(SelectedItem).eSampleStatus = -1 then
      Exit;
   RunGame:= True;
-  FormMain.FindGameName(TFileInfo(SelectedItem).eName, TFileInfo(SelectedItem).eSystemID, TFileInfo(SelectedItem).eSystemType, GameEasy, False);
+  FormMain.FindGameName(TFileInfo(SelectedItem).eName, TFileInfo(SelectedItem).eSystemID, TFileInfo(SelectedItem).eSoftwareName, GameEasy, False);
 
   if GameEasy <> nil then
      begin

@@ -32,36 +32,39 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelFilename: TShadowLabel
     Left = 260
-    Top = 117
-    Width = 313
-    Height = 16
+    Top = 121
+    Width = 301
+    Height = 23
     AutoSize = False
     Caption = 'd:\EmuLoader\snap\elevator.png'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = 10900224
     Font.Height = -11
-    Font.Name = 'Consolas'
-    Font.Style = [fsBold]
+    Font.Name = 'Lucida Console'
+    Font.Style = []
     ParentColor = False
     ParentFont = False
+    ParentShowHint = False
     ShowAccelChar = False
+    ShowHint = True
     ShadowColor = clSilver
     ShadowEnabled = False
     EllipsType = etPathEllips
     Transparent = True
+    WordWrap = True
   end
   object LabelFileSize: TShadowLabel
     Left = 260
-    Top = 133
-    Width = 313
-    Height = 16
+    Top = 149
+    Width = 308
+    Height = 12
     AutoSize = False
-    Caption = 'Size: 331 Bytes'
+    Caption = '0000.00 KBytes         Jan/01/2016 00:00:00'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
-    Font.Name = 'Consolas'
+    Font.Name = 'Lucida Console'
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
@@ -69,10 +72,11 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ShadowEnabled = False
     EllipsType = etNone
     Transparent = True
+    Layout = tlCenter
   end
   object LabelFileType: TShadowLabel
     Left = 216
-    Top = 78
+    Top = 76
     Width = 345
     Height = 19
     Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
@@ -85,25 +89,6 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ShowAccelChar = False
     ShadowColor = 16448250
     ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelDateTime: TShadowLabel
-    Left = 260
-    Top = 149
-    Width = 313
-    Height = 16
-    AutoSize = False
-    Caption = 'Date/Time: 11/11/11'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Consolas'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
     EllipsType = etNone
     Transparent = True
   end
@@ -151,6 +136,27 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ShadowEnabled = False
     EllipsType = etNone
     Transparent = True
+  end
+  object LabelSoftwareListTitle: TShadowLabel
+    Left = 216
+    Top = 93
+    Width = 345
+    Height = 14
+    AutoSize = False
+    Caption = 'Software List Title'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 21414
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 16112579
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    Layout = tlCenter
+    Visible = False
   end
   object PanelEx1: TPanelEx
     Left = 0
@@ -281,12 +287,6 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Width = 200
     Height = 21
     AutoSize = False
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
     TabOrder = 0
     Visible = False
     OnKeyPress = RenameImageEditBoxKeyPress

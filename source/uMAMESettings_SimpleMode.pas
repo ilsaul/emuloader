@@ -1083,10 +1083,10 @@ begin
          if FormMain.MemGameInfo.eScreenOrientation = 0 then
             Result:= 'horizont';
        end;
-     4: Result:= 'arcade';   // UME only
-     5: Result:= 'console';  // UME only
-     6: Result:= 'computer'; // UME only
-     7: Result:= 'othersys'; // othersys // systype_ini ?????? UME only
+     4: Result:= 'arcade';   // UME / MAME v0.163 and newer
+     5: Result:= 'console';  // UME / MAME v0.163 and newer
+     6: Result:= 'computer'; // UME / MAME v0.163 and newer
+     7: Result:= 'othersys'; // othersys // systype_ini ?????? UME / MAME v0.163 and newer
      8:
        begin
          if FormMain.MemGameInfo.eScreenType = 1 then
@@ -1466,10 +1466,10 @@ begin
                       '- debug.ini'+#13#10+
                       '- vertical.ini (if screen game is vertical)'+#13#10+
                       '- horizont.ini (if screen game is horizontal)'+#13#10+
-                      '- arcade.ini (UME only)'+#13#10+
-                      '- console.ini (UME only)'+#13#10+
-                      '- computer.ini (UME only)'+#13#10+
-                      '- othersys.ini (UME only; this filename and its purpose is a mistery to me!)'+#13#10+
+                      '- arcade.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- console.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- computer.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- othersys.ini (UME / MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
                       '- vector.ini (if game is vector)'+#13#10+
                       '- source\sourcefile.ini or sourcefile.ini'+#13#10+
                       '- biosname.ini'+#13#10+

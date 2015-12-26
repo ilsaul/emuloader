@@ -39,14 +39,14 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     object LabelImageCategoryFolder: TShadowLabel
       Left = 12
       Top = 310
-      Width = 97
-      Height = 16
+      Width = 114
+      Height = 15
       Hint = 'Folder [%s]'
       Caption = 'Folder [.png; .jpg]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -58,14 +58,14 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     object LabelImageBackgroundColor: TShadowLabel
       Left = 361
       Top = 310
-      Width = 98
-      Height = 16
+      Width = 112
+      Height = 15
       Hint = 'Folder [%s]'
       Caption = 'Background Color'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -122,14 +122,14 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         Color = clWhite
         EditManager.Font.Charset = ANSI_CHARSET
         EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -11
-        EditManager.Font.Name = 'Consolas'
+        EditManager.Font.Height = -9
+        EditManager.Font.Name = 'Verdana'
         EditManager.Font.Style = []
         UseDockManager = False
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -11
-        Font.Name = 'Consolas'
+        Font.Height = -9
+        Font.Name = 'Verdana'
         Font.Style = []
         GroupFont.Charset = ANSI_CHARSET
         GroupFont.Color = clWindowText
@@ -447,10 +447,10 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Transparent = True
     end
     object LabelLayScr3: TShadowLabel
-      Left = 225
+      Left = 228
       Top = 329
-      Width = 96
-      Height = 27
+      Width = 91
+      Height = 23
       Alignment = taCenter
       AutoSize = False
       Caption = 'Control Panel Layout'
@@ -458,8 +458,8 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
       Font.Height = -11
-      Font.Name = 'Consolas'
-      Font.Style = [fsBold]
+      Font.Name = 'Lucida Console'
+      Font.Style = []
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -471,10 +471,10 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       OnClick = IconLayScr3Click
     end
     object LabelLayScr2: TShadowLabel
-      Left = 116
+      Left = 118
       Top = 329
-      Width = 96
-      Height = 27
+      Width = 91
+      Height = 23
       Alignment = taCenter
       AutoSize = False
       Caption = 'Title Snapshots'
@@ -482,8 +482,8 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
       Font.Height = -11
-      Font.Name = 'Consolas'
-      Font.Style = [fsBold]
+      Font.Name = 'Lucida Console'
+      Font.Style = []
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -540,10 +540,10 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Transparent = True
     end
     object LabelLayScr1: TShadowLabel
-      Left = 8
+      Left = 10
       Top = 329
-      Width = 96
-      Height = 27
+      Width = 91
+      Height = 23
       Alignment = taCenter
       AutoSize = False
       Caption = 'Game Snapshots'
@@ -551,8 +551,8 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
       Font.Height = -11
-      Font.Name = 'Consolas'
-      Font.Style = [fsBold]
+      Font.Name = 'Lucida Console'
+      Font.Style = []
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False

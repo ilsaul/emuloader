@@ -16,18 +16,15 @@ type
     fROMIdentification: Integer;
     fSystemID: Integer;
     fSystemType: ShortInt;
-    fTitle: String;
+    fTitle: WideString;
     fManufacturer: String;
     fName: String;
     fClone: String;
     fCloneParent: String;
     fDriverName: String;
     fBiosName: String;
+    fSoftwareName: String;
     fDriverStatus: ShortInt;
-    fEmulationStatus: ShortInt;
-    fColorStatus: ShortInt;
-    fSoundStatus: ShortInt;
-    fGraphicStatus: ShortInt;
     fVersionAdded: String;
     fMechanical: Boolean;
     fGameStatus: ShortInt; // 0 - have or miss; 1 - missing ROMs/CHDs
@@ -43,18 +40,15 @@ type
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: Integer read fSystemID write fSystemID;
     property eSystemType: ShortInt read fSystemType write fSystemType;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eManufacturer: String read fManufacturer write fManufacturer;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
     property eDriverName: String read fDriverName write fDriverName;
     property eBiosName: String read fBiosName write fBiosName;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName; // softwarelist name "msx1_cart" (games from MSX1 cartridge software list); a800; vectrex; empty: is arcade game or MESS machine
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
-    property eEmulationStatus: ShortInt read fEmulationStatus write fEmulationStatus;
-    property eColorStatus: ShortInt read fColorStatus write fColorStatus;
-    property eSoundStatus: ShortInt read fSoundStatus write fSoundStatus;
-    property eGraphicStatus: ShortInt read fGraphicStatus write fGraphicStatus;
     property eVersionAdded: String read fVersionAdded write fVersionAdded;
     property eMechanical: Boolean read fMechanical write fMechanical;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus;
@@ -181,11 +175,13 @@ type
     ButtonScanMissing: TBitBtn;
     ButtonScanNotUsed: TBitBtn;
     BitBtn3: TBitBtn;
-    PopupSearchIconsDevicesWithNoROMs: TMenuItem;
     PopupShowDevicesOnly: TMenuItem;
     N6: TMenuItem;
     PopupNotUsedSortListbyFilenames: TMenuItem;
     PopupNotUsedSortListbyNewestDateTime: TMenuItem;
+    PopupSearchIconsSoftwarelistGames: TMenuItem;
+    PopupShowSoftwarelistGamesOnly: TMenuItem;
+    PopupSearchIconsDeviceSets: TMenuItem;
     procedure FormShow(Sender: TObject);
     function MissingIconsListItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
@@ -261,8 +257,6 @@ type
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
       var DoDefault: Boolean): Integer;
     procedure PopupNotUsedSortListbyFilenamesClick(Sender: TObject);
-    procedure MissingIconsListColumnPaintText(Sender: TCustomEasyListview;
-      Column: TEasyColumn; ACanvas: TCanvas);
   private
     { Private declarations }
     IconHistoryFolder: String;
@@ -286,10 +280,10 @@ type
     procedure UpdateTotalGamesLabelMissing;
     procedure ResetMissingIconsList;
     procedure ClearSelectedMissing;
-    function  AddMAMu_MissingIcon(sysID: Integer; GameName, CloneName, DriverName, BiosName: String; IconList: TImageList): Integer;
+    function  AddMAMu_MissingIcon(sysID: Integer; const GameName, CloneName, DriverName, BiosName, SoftwareName: String; IconList: TImageList): Integer;
     function  LoadGamesToMissingList(ShowFolderMessage: Boolean = True): Boolean;
     procedure GenerateNotWorkingIconsDeleteCopy(ActionIndex: Integer);
-    function  SearchName(GameName: String): TEasyItem;
+    function  SearchName(const GameName, SoftwareName: String): TEasyItem;
 
     // not used icons functions
     function  RenameIconFile(OldName, NewName, FilePath: String): Boolean;
@@ -302,7 +296,7 @@ type
     function  SaveHistoryToFile(ELV_Item: TEasyItem; OldIconName: String = ''): Boolean;
 
     procedure SelectSystem;
-    procedure CreateEditIcon(const IconName: String; sysID: Integer);
+    procedure CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
   public
     { Public declarations }
     SourceIconFile: String;
@@ -334,14 +328,15 @@ begin
         end;
       end;
     4: Result:= eDriverName;
-    //7: Result:= aStatus[eDriverStatus];
-    10: Result:= eManufacturer;
-    11: Result:= eVersionAdded;
-    12:
+    5: Result:= aStatus[eDriverStatus];
+    6: Result:= eManufacturer;
+    7: Result:= eVersionAdded;
+    8:
       begin
-        Result:= '';
-        if eMechanical then
-           Result:= 'Yes';
+        case eMechanical of
+          True : Result:= 'Yes';
+          False: Result:= '';
+        end;
       end;
   end;
 end;
@@ -354,45 +349,34 @@ begin
        if not eIconLoaded then
           begin
             eImageIndex:= FormMAMu_IconsManager.AddMAMu_MissingIcon(eSystemID, eName, eClone,
-                                                eDriverName, eBiosName, FormMAMu_IconsManager.IL_MissingIcons);
+                                                eDriverName, eBiosName, eSoftwareName, FormMAMu_IconsManager.IL_MissingIcons);
             if eImageIndex = -1 then
-               eImageIndex:= eROMIdentification;
+               eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
             eIconLoaded:= True;
           end;
        Result:= eImageIndex;
      end;
-  case Column of
+  {case Column of
     0:
       begin
         if not eIconLoaded then
            begin
              eImageIndex:= FormMAMu_IconsManager.AddMAMu_MissingIcon(eSystemID, eName, eClone,
-                                                 eDriverName, eBiosName, FormMAMu_IconsManager.IL_MissingIcons);
+                                                 eDriverName, eBiosName, eSoftwareName, FormMAMu_IconsManager.IL_MissingIcons);
              if eImageIndex = -1 then
                 eImageIndex:= eROMIdentification;
              eIconLoaded:= True;
            end;
         Result:= eImageIndex;
       end;
-  end;
+  end;}
 end;
 
 function TMissingIconInfo.GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   Result:= -1;
   if Column = 5 then
-     Result:= eDriverStatus
-  else
-    begin
-      if not (eSystemID in [idMAME, idHBMAME]) then
-           Exit;
-      case Column of
-        6: Result:= eEmulationStatus;
-        7: Result:= eColorStatus;
-        8: Result:= eSoundStatus;
-        9: Result:= eGraphicStatus;
-      end;
-    end;
+     Result:= eDriverStatus;
 end;
 
 function TNotUsedIconInfo.GetCaptions(Column: Integer): WideString;
@@ -453,13 +437,14 @@ begin
     PanelNotUsedIcons.Width:= INIFile.ReadInteger('MAMu_IconsManager', 'MainSplitterPos', 350);
     NotUsedIconsList.Height:= INIFile.ReadInteger('MAMu_IconsManager', 'HistorySplitterPos', 370);
     PopupSearchCloneIcons.Checked:= Boolean(INIFile.ReadInteger('MAMu_IconsManager', 'SearchCloneGames', 0));
-    PopupSearchIconsDevicesWithNoROMs.Checked:= Boolean(INIFile.ReadInteger('MAMu_IconsManager', 'SearchDeviceNoROMs', 0));
+    PopupSearchIconsSoftwarelistGames.Checked:= Boolean(INIFile.ReadInteger('MAMu_IconsManager', 'SearchSoftlistGames', 0));
+
     if INIFile.ReadInteger('MAMu_IconsManager', 'NotUsedIconsSortByDateTime', 0) = 1 then
        PopupNotUsedSortListbyNewestDateTime.Checked:= True;
 
     for Loop:=0 to MissingIconsList.Header.Columns.Count-1 do
     begin
-      if not (Loop in [5..9]) then
+      if Loop < 8 then
          MissingIconsList.Header.Columns[Loop].Width:= INIFile.ReadInteger('MAMu_IconsManager', 'MissingListColWidth_'+IntToStr(Loop),
                                                                            MissingIconsList.Header.Columns[Loop].Width);
     end;
@@ -492,12 +477,13 @@ begin
     INIFile.WriteInteger('MAMu_IconsManager', 'MainSplitterPos', PanelNotUsedIcons.Width);
     INIFile.WriteInteger('MAMu_IconsManager', 'HistorySplitterPos', NotUsedIconsList.Height);
     INIFile.WriteInteger('MAMu_IconsManager', 'SearchCloneGames', Ord(PopupSearchCloneIcons.Checked));
-    INIFile.WriteInteger('MAMu_IconsManager', 'SearchDeviceNoROMs', Ord(PopupSearchIconsDevicesWithNoROMs.Checked));
+    INIFile.WriteInteger('MAMu_IconsManager', 'SearchSoftlistGames', Ord(PopupSearchIconsSoftwarelistGames.Checked));
+
     INIFile.WriteInteger('MAMu_IconsManager', 'NotUsedIconsSortByDateTime', Ord(PopupNotUsedSortListbyNewestDateTime.Checked));
 
     for Loop:=0 to MissingIconsList.Header.Columns.Count-1 do
     begin
-      if not (Loop in [5..9]) then
+      if Loop < 8 then
          INIFile.WriteInteger('MAMu_IconsManager', 'MissingListColWidth_'+IntToStr(Loop), MissingIconsList.Header.Columns[Loop].Width);
     end;
     INIFile.UpdateFile;
@@ -537,7 +523,7 @@ begin
      begin
        TMissingIconInfo(SelectedItemMissing).Selected:= True;
        MissingIconsList.Selection.FocusedItem:= SelectedItemMissing;
-       SelectedItemMissing.MakeVisible(emvAuto);
+       SelectedItemMissing.MakeVisible(emvMiddle) //(emvAuto);
      end;
   FormMain.ELV_SetSelectRibbon(TMissingIconInfo(SelectedItemMissing).eGameStatus, MissingIconsList);
 end;
@@ -575,7 +561,7 @@ begin
   SelectedItemMissing:= nil;
 end;
 
-function TFormMAMu_IconsManager.AddMAMu_MissingIcon(sysID: Integer; GameName, CloneName, DriverName, BiosName: String; IconList: TImageList): Integer;
+function TFormMAMu_IconsManager.AddMAMu_MissingIcon(sysID: Integer; const GameName, CloneName, DriverName, BiosName, SoftwareName: String; IconList: TImageList): Integer;
 var
   Icon32: TExIcon;
   FileFullPath: String;
@@ -600,7 +586,7 @@ var
     Result:= -1;
     if BiosName <> '' then
        begin
-         if FormMain.ScanFoldersIcon(BiosName, sysID, FileFullPath, False) then
+         if FormMain.ScanFoldersIcon(BiosName, SoftwareName, sysID, FileFullPath, False) then
             begin
               if FormMain.LoadMAMu_Icon(FileFullPath, Icon32, icoIndex, False) then
                  Result:= AddIcon;
@@ -613,7 +599,7 @@ var
     Result:= -1;
     if DriverName <> '' then
        begin
-         if FormMain.ScanFoldersIcon(ChangeFileExt(DriverName, ''), sysID, FileFullPath, False) then
+         if FormMain.ScanFoldersIcon(ChangeFileExt(DriverName, ''), SoftwareName, sysID, FileFullPath, False) then
             begin
               if FormMain.LoadMAMu_Icon(FileFullPath, Icon32, icoIndex, False) then
                  Result:= AddIcon;
@@ -632,7 +618,7 @@ begin
   if Result = -1 then
      begin
        // load regular MAMu_ game icon
-       if FormMain.ScanFoldersIcon(GameName, sysID, FileFullPath, False) then
+       if FormMain.ScanFoldersIcon(GameName, SoftwareName, sysID, FileFullPath, False) then
           begin
             if FormMain.LoadMAMu_Icon(FileFullPath, Icon32, icoIndex, False) then
                Result:= AddIcon;
@@ -645,23 +631,42 @@ var
   FileFullPath: String;
   //IconFound: Boolean;
   Item, gItem: TEasyItem;
+  gGroup: TEasyGroup;
   TotalGames, GamesCount, zzzIconIndex: Integer;
+
+  function IsValidGame: Boolean;
+  begin
+    Result:= uMain.TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag;
+    if Result then
+       Result:= uMain.TEasyGameInfo(gItem).eSoftwareName = '';
+
+    if Result then
+       FormMain.FillTempGameInfo(gItem);
+  end;
 
   function AddItem: Boolean;
   var
     addGameItem, iszzzIcon: Boolean;
     IconMD5: String;
   begin
-    Result:= FormMain.TempGameVars.eSystemID = ButtonSystem.Tag;
+    Result:= IsValidGame;
     if not Result then
        Exit;
+    //Result:= FormMain.TempGameVars.eSystemID = ButtonSystem.Tag;
+    //if not Result then
+    //   Exit;
+    //if FormMain.TempGameVars.eSoftwareName <> '' then
+    //   Exit; // no software list games support!!!!
 
-    if not PopupSearchIconsDevicesWithNoROMs.Checked then
+    //if not PopupSearchIconsSoftwarelistGames.Checked then
+    //   Result:= FormMain.TempGameVars.eSoftwareName = '';
+
+    if Result then
        begin
          if FormMain.IsROM_Device(FormMain.TempGameVars.eROMIdentification) then
-            Result:= uMain.TEasyGameInfo(gItem).eROMInfo <> nil; // .Count > 0;
+            Result:= PopupSearchIconsDeviceSets.Checked;
        end;
-
+       
     if Result then
        if FormMain.GameIsClone(FormMain.TempGameVars.eClone) then
           Result:= PopupSearchCloneIcons.Checked;
@@ -670,7 +675,7 @@ var
     case Result of
       True:
         begin
-          addGameItem:= FormMain.ScanFoldersIcon(FormMain.TempGameVars.eName, ButtonSystem.Tag, FileFullPath, False);
+          addGameItem:= FormMain.ScanFoldersIcon(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName, ButtonSystem.Tag, FileFullPath, False);
           //addGameItem:= not addGameItem; // not needed, just for testing
         end;
       False: Exit; // for clone games, "SearchCloneGames" is disabled... need to exit, nothing to add!!
@@ -720,12 +725,9 @@ var
          end;
          TMissingIconInfo(Item).eDriverName:= FormMain.TempGameVars.eDriverName;
          TMissingIconInfo(Item).eBiosName:= FormMain.TempGameVars.eBiosName;
+         TMissingIconInfo(Item).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
 
          TMissingIconInfo(Item).eDriverStatus:= FormMain.TempGameVars.eDriverStatus;
-         TMissingIconInfo(Item).eEmulationStatus:= FormMain.TempGameVars.eEmulationStatus;
-         TMissingIconInfo(Item).eColorStatus:= FormMain.TempGameVars.eColorStatus;
-         TMissingIconInfo(Item).eSoundStatus:= FormMain.TempGameVars.eSoundStatus;
-         TMissingIconInfo(Item).eGraphicStatus:= FormMain.TempGameVars.eGraphicStatus;
 
          TMissingIconInfo(Item).eVersionAdded:= FormMain.TempGameVars.eVersionAdded;
          TMissingIconInfo(Item).eMechanical:= FormMain.TempGameVars.eMechanical;
@@ -759,15 +761,34 @@ begin
   GamesCount:= 0;
   MissingIconsList.BeginUpdate;
   MissingIconsList.Items.ReIndexDisable:= True;
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    FormMain.FillTempGameInfo(gItem);
-    AddItem;
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-    Inc(GamesCount);
-    FormStatus.UpdateProgressBar(GamesCount, TotalGames);
-    Application.ProcessMessages;
-  until gItem = nil;
+  if FormMain.IsGroupedView then
+  begin
+    gGroup:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+      repeat
+        //FormMain.FillTempGameInfo(gItem);
+        AddItem;
+        gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+        Inc(GamesCount);
+        FormStatus.UpdateProgressBar(GamesCount, TotalGames);
+        Application.ProcessMessages;
+      until gItem = nil;
+      gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+    until gGroup = nil;
+  end
+  else
+  begin
+    gItem:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      //FormMain.FillTempGameInfo(gItem);
+      AddItem;
+      gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
+      Inc(GamesCount);
+      FormStatus.UpdateProgressBar(GamesCount, TotalGames);
+      Application.ProcessMessages;
+    until gItem = nil;
+  end;
   MissingIconsList.Items.ReIndexDisable:= False;
   MissingIconsList.Sort.SortAll;
   MissingIconsList.EndUpdate;
@@ -800,8 +821,10 @@ var
     Result:= False;
     gamesItem:= MissingIconsList.Groups.FirstItem;
     repeat
-      IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID);
-      if TMissingIconInfo(gamesItem).eName = TNotWorkingGameInfo(Item).eName then
+      IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID,
+                                               TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
+      if (TMissingIconInfo(gamesItem).eName = TNotWorkingGameInfo(Item).eName) and
+         (TMissingIconInfo(gamesItem).eSoftwareName = TNotWorkingGameInfo(Item).eSoftwareName) then
          begin
            Result:= True;
            TMissingIconInfo(gamesItem).eIsIconZZZ:= (ActionIndex in [1, 2]);
@@ -826,7 +849,8 @@ begin
      begin
        if not FormMain.CheckSelected(MissingIconsList) then
           Exit;
-       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID);
+       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID,
+                                                TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
        if not FileExists(FormMain.MAMu_Folder+'zzz.ico') then
           begin
             GenerateMessage('Error', 'File not found', '    File zzz.ico was not found. This file is required for this '+
@@ -879,6 +903,7 @@ begin
     if Item.Checked then
        begin
          GameSelected:= False;
+         // need to add SoftwareName here!!!!!!!!
          FileStr:= FormMain.GetMAMu_IconFolder(FormDeleteMAMu_NotWorkingIcons.Tag)+
                    TNotWorkingGameInfo(Item).eName+'.ico';
          case ActionIndex of
@@ -913,7 +938,7 @@ begin
      FormStatus.Close;
 end;
 
-function TFormMAMu_IconsManager.SearchName(GameName: String): TEasyItem;
+function TFormMAMu_IconsManager.SearchName(const GameName, SoftwareName: String): TEasyItem;
 var
   Item: TEasyItem;
 begin
@@ -922,7 +947,7 @@ begin
      Exit;
   Item:= MissingIconsList.Groups.FirstItem;
   repeat
-    if SameText(TMissingIconInfo(Item).eName, GameName) then
+    if (TMissingIconInfo(Item).eName =  GameName) and (TMissingIconInfo(Item).eSoftwareName = SoftwareName) then
        Result:= Item;
     Item:= MissingIconsList.Groups.NextItem(Item);
   until (Item = nil) or (Result <> nil);
@@ -975,6 +1000,7 @@ var
   FileIndex: Integer;
   tmpString: String;
   gItem, addItem: TEasyItem;
+  gGroup: TEasyGroup;
   Loop2: Integer;
   HistoryFileStr: String;
 
@@ -1005,18 +1031,40 @@ begin
   el_GamesList.Duplicates:= dupIgnore;
   el_GamesList.BeginUpdate;
 
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    FormMain.FillTempGameInfo(gItem);
-    if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
-       begin
-         el_GamesList.Add(TEasyGameInfo(gItem).eName+'.ico');
-         AddToHashedList(TEasyGameInfo(gItem).eBiosName);
-         tmpString:= ChangeFileExt(TEasyGameInfo(gItem).eDriverName, '');
-         AddToHashedList(tmpString);
-       end;
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-  until gItem = nil;
+  if FormMain.IsGroupedView then
+  begin
+    gGroup:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+      repeat
+        FormMain.FillTempGameInfo(gItem);
+        if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
+           begin
+             el_GamesList.Add(TEasyGameInfo(gItem).eName+'.ico');
+             AddToHashedList(TEasyGameInfo(gItem).eBiosName);
+             tmpString:= ChangeFileExt(TEasyGameInfo(gItem).eDriverName, '');
+             AddToHashedList(tmpString);
+           end;
+        gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+      until gItem = nil;
+      gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+    until gGroup = nil;
+  end
+  else
+  begin
+    gItem:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      FormMain.FillTempGameInfo(gItem);
+      if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
+         begin
+           el_GamesList.Add(TEasyGameInfo(gItem).eName+'.ico');
+           AddToHashedList(TEasyGameInfo(gItem).eBiosName);
+           tmpString:= ChangeFileExt(TEasyGameInfo(gItem).eDriverName, '');
+           AddToHashedList(tmpString);
+         end;
+      gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
+    until gItem = nil;
+  end;
 
   el_GamesList.EndUpdate;
   el_GamesList.Sorted:= False;
@@ -1035,9 +1083,14 @@ begin
           tmpString:= ExtractFileName(tempList[Loop2]);
           if ExcludeFiles.IndexOf(tmpString) = -1 then
              begin
-               FileIndex:= el_GamesList.IndexOf(tmpString);
-               if FileIndex <> -1 then
-                  tempList.Delete(Loop2);
+               if tmpString = 'deviceset.ico' then
+                  tempList.Delete(Loop2)
+               else
+               begin
+                 FileIndex:= el_GamesList.IndexOf(tmpString);
+                 if FileIndex <> -1 then
+                    tempList.Delete(Loop2);
+               end;
              end
           else
              tempList.Delete(Loop2);
@@ -1203,27 +1256,32 @@ begin
   FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
 end;
 
-procedure TFormMAMu_IconsManager.CreateEditIcon(const IconName: String; sysID: Integer);
+procedure TFormMAMu_IconsManager.CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
 var
   BlankIcon: String;
-  IconFullPath: String;
+  IconFullPath, SoftNameFolder: String;
 begin
   BlankIcon:= FormMain.FrontendPath+'resources\blank_icon.ico';
   case FileExists(BlankIcon) of
     True:
       begin
         IconFullPath:= FormMain.GetMAMu_IconFolder(sysID);
-        if not FileExists(IconFullPath+IconName) then
+        SoftNameFolder:= '';
+        if SoftwareName <> '' then
+           SoftNameFolder:= SoftwareName+'\';
+        if not FileExists(IconFullPath+SoftNameFolder+IconName) then
            begin
-             CopyFile(PChar(BlankIcon), PChar(IconFullPath+IconName), False);
+             if SoftNameFolder <> '' then
+                ForceDirectories(IconFullPath+SoftNameFolder);
+             CopyFile(PChar(BlankIcon), PChar(IconFullPath+SoftNameFolder+IconName), False);
              Sleep(80);
              Application.ProcessMessages;
            end;
-        case FileExists(IconFullPath+IconName) of
-          True : ShellExecute(Handle, nil, PAnsiChar(IconFullPath+IconName), nil, nil, SW_SHOWNORMAL);
+        case FileExists(IconFullPath+SoftNameFolder+IconName) of
+          True : ShellExecute(Handle, nil, PAnsiChar(IconFullPath+SoftNameFolder+IconName), nil, nil, SW_SHOWNORMAL);
           False: GenerateMessage('Error', PopupCreateEditIcon.Caption,
                         Format('    Failed to create file "%s" or your computer needs a pause higher than 80 milliseconds.',
-                               [IconFullPath+IconName]), 2, False, 1);
+                               [IconFullPath+SoftNameFolder+IconName]), 2, False, 1);
         end;
       end;
     False:
@@ -1271,19 +1329,15 @@ begin
   FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
 
   case Column.Index of
-     0: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eTitle, TMissingIconInfo(gItem2).eTitle);
-     1: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eName, TMissingIconInfo(gItem2).eName);
-     2: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eCloneParent, TMissingIconInfo(gItem2).eCloneParent);
-     3: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eBiosName, TMissingIconInfo(gItem2).eBiosName);
-     4: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eDriverName, TMissingIconInfo(gItem2).eDriverName);
-     5: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eDriverStatus], aStatus[TMissingIconInfo(gItem2).eDriverStatus]);
-     6: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eEmulationStatus], aStatus[TMissingIconInfo(gItem2).eEmulationStatus]);
-     7: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eColorStatus], aStatus[TMissingIconInfo(gItem2).eColorStatus]);
-     8: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eSoundStatus], aStatus[TMissingIconInfo(gItem2).eSoundStatus]);
-     9: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eGraphicStatus], aStatus[TMissingIconInfo(gItem2).eGraphicStatus]);
-    10: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eManufacturer, TMissingIconInfo(gItem2).eManufacturer);
-    11: Result:= AnsiCompareText(TMissingIconInfo(gItem1).eVersionAdded, TMissingIconInfo(gItem2).eVersionAdded);
-    12: Result:= CompareIntValue(Ord(TMissingIconInfo(gItem1).eMechanical), Ord(TMissingIconInfo(gItem2).eMechanical))
+    0: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eTitle, TMissingIconInfo(gItem2).eTitle);
+    1: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eName, TMissingIconInfo(gItem2).eName);
+    2: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eCloneParent, TMissingIconInfo(gItem2).eCloneParent);
+    3: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eBiosName, TMissingIconInfo(gItem2).eBiosName);
+    4: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eDriverName, TMissingIconInfo(gItem2).eDriverName);
+    5: Result:= AnsiCompareText(aStatus[TMissingIconInfo(gItem1).eDriverStatus], aStatus[TMissingIconInfo(gItem2).eDriverStatus]);
+    6: Result:= FormMain.iCompare(TMissingIconInfo(gItem1).eManufacturer, TMissingIconInfo(gItem2).eManufacturer);
+    7: Result:= AnsiCompareText(TMissingIconInfo(gItem1).eVersionAdded, TMissingIconInfo(gItem2).eVersionAdded);
+    8: Result:= CompareIntValue(Ord(TMissingIconInfo(gItem1).eMechanical), Ord(TMissingIconInfo(gItem2).eMechanical))
    end;
 end;
 
@@ -1303,7 +1357,17 @@ begin
             ACanvas.Font.Size:= 8;//ACanvas.Font.Size-1;
             ACanvas.Font.Style:= [];//ACanvas.Font.Style+[fsItalic];
           end;
-     end;
+     end
+  else
+  begin
+    if not (Position in [0, 6]) then
+       begin
+         // only columns Title and Manufacturer will use user defined font
+         // all others will use Tahoma, size 8 
+         ACanvas.Font.Name:= 'Tahoma';
+         ACanvas.Font.Size:= 8;
+       end;
+  end;
 end;
 
 procedure TFormMAMu_IconsManager.MissingIconsListColumnClick(
@@ -1365,7 +1429,7 @@ begin
 
   RunGame:= True;
   FormMain.FindGameName(TMissingIconInfo(SelectedItemMissing).eName, TMissingIconInfo(SelectedItemMissing).eSystemID,
-                                                                     TMissingIconInfo(SelectedItemMissing).eSystemType, GameEasy, False);
+                                                                     TMissingIconInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
 
   if GameEasy <> nil then
      begin
@@ -1404,10 +1468,16 @@ procedure TFormMAMu_IconsManager.PopupCreateEditIconClick(Sender: TObject);
 begin
   if MissingIconsList.Selection.Count <> 1 then
      Exit;
+  if TMissingIconInfo(SelectedItemMissing).eSoftwareName <> '' then
+     begin
+       GenerateMessage('Info', TMenuItem(Sender).Caption,
+                       '    You can only create a game icon for software list games. Aborting...');
+       Exit;
+     end;
   case TMenuItem(Sender).Tag of
-    0: CreateEditIcon(TMissingIconInfo(SelectedItemMissing).eName+'.ico', TMissingIconInfo(SelectedItemMissing).eSystemID);
-    1: CreateEditIcon(TMissingIconInfo(SelectedItemMissing).eBiosName+'.ico', TMissingIconInfo(SelectedItemMissing).eSystemID);
-    2: CreateEditIcon(ChangeFileExt(TMissingIconInfo(SelectedItemMissing).eDriverName, '.ico'), TMissingIconInfo(SelectedItemMissing).eSystemID);
+    0: CreateEditIcon(TMissingIconInfo(SelectedItemMissing).eName+'.ico', TMissingIconInfo(SelectedItemMissing).eSoftwareName, TMissingIconInfo(SelectedItemMissing).eSystemID);
+    1: CreateEditIcon(TMissingIconInfo(SelectedItemMissing).eBiosName+'.ico', TMissingIconInfo(SelectedItemMissing).eSoftwareName, TMissingIconInfo(SelectedItemMissing).eSystemID);
+    2: CreateEditIcon(ChangeFileExt(TMissingIconInfo(SelectedItemMissing).eDriverName, '.ico'), TMissingIconInfo(SelectedItemMissing).eSoftwareName, TMissingIconInfo(SelectedItemMissing).eSystemID);
   end;
 end;
 
@@ -1459,6 +1529,7 @@ begin
       5: Item.Visible:= TMissingIconInfo(Item).eIsIconZZZ;// True; // show games with "Not Working" icon (from zzz.ico)
       6: Item.Visible:= (TMissingIconInfo(Item).eDriverStatus <> 2) and TMissingIconInfo(Item).eIsIconZZZ;
       7: Item.Visible:= FormMain.IsROM_Device(TMissingIconInfo(Item).eROMIdentification); // show device sets only
+    //  8: Item.Visible:= (TMissingIconInfo(Item).eSoftwareName <> '') and IconZZZPreliminary; // show software list games only
     end;
     Item:= MissingIconsList.Groups.NextItem(Item);
   until Item = nil;
@@ -1674,15 +1745,18 @@ procedure TFormMAMu_IconsManager.PopupNotUsedRenameFileClick(
 var
   OldName, NewName: String;
 
-  procedure UpdateMissingIcon(const GameName: String);
+  procedure UpdateMissingIcon(const GameName, SoftwareName: String);
   var
     MissingItem: TEasyItem;
   begin
-    MissingItem:= SearchName(ChangeFileExt(GameName, ''));
+    MissingItem:= SearchName(ChangeFileExt(GameName, ''), SoftwareName);
     if MissingItem <> nil then
        begin
          TMissingIconInfo(MissingItem).eIconLoaded:= False;
-         TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification;
+         if SoftwareName = '' then
+            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification
+         else
+            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification; // this is new softlist game image index uMain "MaxGameID"
          MissingItem.Invalidate(True);
        end;
   end;
@@ -1715,8 +1789,8 @@ begin
              FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedIconInfo(SelectedItemNotUsed).eFileName,
                                                             TNotUsedIconInfo(SelectedItemNotUsed).eNameOriginal))),
                                           NotUsedIconsList);
-             UpdateMissingIcon(OldName);
-             UpdateMissingIcon(NewName);
+             UpdateMissingIcon(OldName, ''); // need to add SoftwareName here ????
+             UpdateMissingIcon(NewName, ''); // need to add SoftwareName here ????
            end;
          False:
            begin
@@ -2093,19 +2167,19 @@ procedure TFormMAMu_IconsManager.PopupRestoreColumnsSizesClick(Sender: TObject);
 begin
   // column.position changes, column.index does not!!!
   MissingIconsList.Header.Columns[0].Width:= 270;
-  MissingIconsList.Header.Columns[1].Width:= 100;
-  MissingIconsList.Header.Columns[2].Width:= 100;
-  MissingIconsList.Header.Columns[3].Width:= 100;
-  MissingIconsList.Header.Columns[4].Width:= 110;
-  MissingIconsList.Header.Columns[10].Width:= 170;
-  MissingIconsList.Header.Columns[11].Width:= 100;
-  MissingIconsList.Header.Columns[12].Width:= 80;
+  MissingIconsList.Header.Columns[1].Width:= 85;
+  MissingIconsList.Header.Columns[2].Width:= 85;
+  MissingIconsList.Header.Columns[3].Width:= 85;
+  MissingIconsList.Header.Columns[4].Width:= 90;
+  MissingIconsList.Header.Columns[5].Width:= 80;
+  MissingIconsList.Header.Columns[6].Width:= 170;
+  MissingIconsList.Header.Columns[7].Width:= 85;
   Application.ProcessMessages;
 end;
 
 procedure TFormMAMu_IconsManager.PopupMissingIconsPopup(Sender: TObject);
 begin
-  PopupCopyIconZZZtoSelectedGames.Visible:= not (PopupGamesViewMode.Tag in [4, 5]); 
+  PopupCopyIconZZZtoSelectedGames.Visible:= not (PopupGamesViewMode.Tag in [4, 5]);
 end;
 
 procedure TFormMAMu_IconsManager.PopupMissSearchforGameTitleClick(
@@ -2249,7 +2323,7 @@ procedure TFormMAMu_IconsManager.MissingIconsListColumnSizeChanging(
   Sender: TCustomEasyListview; Column: TEasyColumn; Width,
   NewWidth: Integer; var Allow: Boolean);
 begin
-  if Column.Index in [7..9] then
+  if Column.Index = TEasyListView(Sender).Header.Columns.Count-1 then
      Allow:= False;
 end;
 
@@ -2275,13 +2349,6 @@ begin
   NotUsedIconsList.BeginUpdate;
   NotUsedIconsList.Sort.SortAll;
   NotUsedIconsList.EndUpdate;
-end;
-
-procedure TFormMAMu_IconsManager.MissingIconsListColumnPaintText(
-  Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
-begin
-  if Column.Index in [5..9] then
-     ACanvas.Font.Size:= 7;
 end;
 
 end.

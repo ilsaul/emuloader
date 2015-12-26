@@ -62,11 +62,10 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     PaintInfoGroup.BandBlended = False
     PaintInfoGroup.BandColor = clGray
     PaintInfoGroup.BandColorFade = 16448250
-    PaintInfoGroup.BandIndent = 32
+    PaintInfoGroup.BandIndent = 28
     PaintInfoGroup.BandLength = 400
     PaintInfoGroup.BandThickness = 1
-    PaintInfoGroup.CaptionIndent = 60
-    PaintInfoGroup.CaptionLines = 2
+    PaintInfoGroup.CaptionIndent = 56
     PaintInfoGroup.Expandable = False
     PaintInfoGroup.ExpandImageIndent = 6
     PaintInfoGroup.ImageIndent = 30
@@ -114,15 +113,10 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     object LabelTotalItems: TShadowLabel
       Left = 8
       Top = 5
-      Width = 90
-      Height = 18
+      Width = 78
+      Height = 16
       Caption = '000000 Games'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
+      ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
@@ -142,6 +136,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
       Font.Name = 'Trebuchet MS'
       Font.Style = [fsBold, fsItalic]
       ParentFont = False
+      ShowAccelChar = False
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone

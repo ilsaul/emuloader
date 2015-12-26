@@ -5,7 +5,7 @@ object FormFiltersExtra: TFormFiltersExtra
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Miscellaneous Filters'
-  ClientHeight = 354
+  ClientHeight = 394
   ClientWidth = 401
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -86,7 +86,7 @@ object FormFiltersExtra: TFormFiltersExtra
   end
   object LabelSTVMultiSlot: TLabel
     Left = 24
-    Top = 220
+    Top = 240
     Width = 100
     Height = 16
     Caption = 'Multi-slot machines'
@@ -101,7 +101,7 @@ object FormFiltersExtra: TFormFiltersExtra
   end
   object LabelNeoGeoMVS: TLabel
     Left = 24
-    Top = 188
+    Top = 208
     Width = 100
     Height = 16
     Caption = 'Multi-slot machines'
@@ -114,9 +114,18 @@ object FormFiltersExtra: TFormFiltersExtra
     ShowAccelChar = False
     Transparent = True
   end
+  object LabelScreenOrientation: TLabel
+    Left = 8
+    Top = 152
+    Width = 98
+    Height = 15
+    Caption = 'Screen Orientation'
+    ShowAccelChar = False
+    Transparent = True
+  end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
     Left = 8
-    Top = 264
+    Top = 324
     Width = 129
     Height = 20
     Hint = 'Enable/disable the main cpu filter bar'
@@ -131,7 +140,7 @@ object FormFiltersExtra: TFormFiltersExtra
   end
   object PanelEx1: TPanelEx
     Left = 0
-    Top = 313
+    Top = 353
     Width = 401
     Height = 41
     Color1 = clWhite
@@ -328,7 +337,7 @@ object FormFiltersExtra: TFormFiltersExtra
     Tag = 1
     Left = 208
     Top = 244
-    Width = 73
+    Width = 63
     Height = 20
     Checked = True
     ShowHint = True
@@ -344,7 +353,7 @@ object FormFiltersExtra: TFormFiltersExtra
     Tag = 1
     Left = 320
     Top = 204
-    Width = 65
+    Width = 60
     Height = 20
     Checked = True
     ShowHint = True
@@ -392,7 +401,7 @@ object FormFiltersExtra: TFormFiltersExtra
     Tag = 1
     Left = 208
     Top = 264
-    Width = 89
+    Width = 84
     Height = 20
     Checked = True
     ShowHint = True
@@ -420,19 +429,6 @@ object FormFiltersExtra: TFormFiltersExtra
     State = cbChecked
     Themed = True
   end
-  object HideDeviceSetsNoROMs: TAdvOfficeCheckBox
-    Left = 8
-    Top = 144
-    Width = 185
-    Height = 20
-    TabOrder = 17
-    Visible = False
-    Alignment = taRightJustify
-    Caption = 'Hide Device Sets With No ROMs'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    Themed = True
-  end
   object ButtonCategoriesToHideInfo: TBitBtn
     Left = 319
     Top = 179
@@ -442,19 +438,19 @@ object FormFiltersExtra: TFormFiltersExtra
     Caption = '?'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 18
+    TabOrder = 17
     OnClick = ButtonCategoriesToHideInfoClick
   end
   object HideGamesWithCHDFiles: TAdvOfficeCheckBox
     Left = 8
-    Top = 244
+    Top = 264
     Width = 171
     Height = 20
     Hint = 
       'Check to hide all games that have CHD files'#13#10'(use main games fil' +
       'ter to only show CHD games)'
     ShowHint = True
-    TabOrder = 19
+    TabOrder = 18
     Alignment = taLeftJustify
     Caption = 'Hide Games With CHD Files'
     ReturnIsTab = False
@@ -463,14 +459,14 @@ object FormFiltersExtra: TFormFiltersExtra
   end
   object NeoGeoMVS: TAdvOfficeCheckBox
     Left = 8
-    Top = 172
+    Top = 192
     Width = 161
     Height = 20
     Hint = 
       'Check it to show only Neo-Geo games compatible with multi-slot m' +
-      'achines'#13#10'MAME/UME v0.154 minimum required'
+      'achines'#13#10'MAME v0.154 minimum required'
     ShowHint = True
-    TabOrder = 20
+    TabOrder = 19
     Alignment = taLeftJustify
     Caption = 'Show Only Neo-Geo MVS'
     ReturnIsTab = False
@@ -479,14 +475,14 @@ object FormFiltersExtra: TFormFiltersExtra
   end
   object STVMultiSlot: TAdvOfficeCheckBox
     Left = 8
-    Top = 204
+    Top = 224
     Width = 163
     Height = 20
     Hint = 
       'Check it to show only ST-V games compatible with multi-slot mach' +
-      'ines'#13#10'MAME/UME v0.154 minimum required'
+      'ines'#13#10'MAME v0.154 minimum required'
     ShowHint = True
-    TabOrder = 21
+    TabOrder = 20
     Alignment = taLeftJustify
     Caption = 'Show Only ST-V Multi-Slot'
     ReturnIsTab = False
@@ -503,7 +499,7 @@ object FormFiltersExtra: TFormFiltersExtra
     ItemHeight = 15
     ItemIndex = 0
     ParentCtl3D = False
-    TabOrder = 22
+    TabOrder = 21
     Text = 'List All'
     Items.Strings = (
       'List All')
@@ -516,12 +512,78 @@ object FormFiltersExtra: TFormFiltersExtra
     Height = 20
     Checked = True
     ShowHint = True
-    TabOrder = 23
+    TabOrder = 22
     Alignment = taLeftJustify
     Caption = 'Utilities'
     ReturnIsTab = False
     ShadowColor = clSilver
     State = cbChecked
+    Themed = True
+  end
+  object ScreenOrientation: TComboBox
+    Left = 8
+    Top = 169
+    Width = 185
+    Height = 23
+    Style = csDropDownList
+    Ctl3D = True
+    ItemHeight = 15
+    ItemIndex = 0
+    ParentCtl3D = False
+    TabOrder = 23
+    Text = 'List All'
+    Items.Strings = (
+      'List All'
+      'Horizontal Games'
+      'Vertical Games'
+      'Unknown')
+  end
+  object ShowMergedSetsOnly: TAdvOfficeCheckBox
+    Left = 8
+    Top = 304
+    Width = 145
+    Height = 20
+    Hint = 
+      'Check to show only clone sets merged into parent sets (MAME/HBMA' +
+      'ME)'#13#10'Merged sets are not fully supported!'
+    ShowHint = True
+    TabOrder = 24
+    Alignment = taLeftJustify
+    Caption = 'Show Merged Sets Only'
+    ReturnIsTab = False
+    ShadowColor = clSilver
+    Themed = True
+  end
+  object CategoryLightGun: TAdvOfficeCheckBox
+    Tag = 1
+    Left = 208
+    Top = 284
+    Width = 73
+    Height = 20
+    Checked = True
+    ShowHint = True
+    TabOrder = 25
+    Alignment = taLeftJustify
+    Caption = 'Light Gun'
+    ReturnIsTab = False
+    ShadowColor = clSilver
+    State = cbChecked
+    Themed = True
+  end
+  object HideNoDumpROMsGames: TAdvOfficeCheckBox
+    Left = 8
+    Top = 284
+    Width = 151
+    Height = 20
+    Hint = 
+      'Check to hide games that have all ROMs/CHDs tagged as "nodump" o' +
+      'r without CRC32/SHA1 checksum'
+    ShowHint = True
+    TabOrder = 26
+    Alignment = taLeftJustify
+    Caption = 'Hide "No Dump" Games'
+    ReturnIsTab = False
+    ShadowColor = clSilver
     Themed = True
   end
 end

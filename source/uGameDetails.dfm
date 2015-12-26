@@ -125,8 +125,7 @@ object FormGameDetails: TFormGameDetails
       AutoSize = False
       Caption = 
         'game: gamename [clone of parentname] [bios: biosname]'#13#10'HBMAME: H' +
-        'omeBrew Multiple Arcade Machine Emulator v0.151ex12 (Dec 14 2013' +
-        ')'
+        'omeBrew Multiple Arcade Machine Emulator v0.151 (Dec 14 2013)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9
@@ -205,7 +204,7 @@ object FormGameDetails: TFormGameDetails
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.Sizeable = False
     Header.Visible = True

@@ -4,13 +4,13 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
-  ExtCtrls, StdCtrls, ShadowLabel;
+  ExtCtrls, StdCtrls, ShadowLabel, GR32_Image;
 
 type
   TFormControllerKeysLayout = class(TForm)
-    ControllerImage: TImage;
     FrameBottom: TBevel;
     LabelWarning: TShadowLabel;
+    ControllerImage: TImage32;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
@@ -69,8 +69,8 @@ begin
       end;
   end;
   case FileExists(FormMain.GetFolderFull(35)+ImageFile) of
-    True : ControllerImage.Picture.LoadFromFile(FormMain.GetFolderFull(35)+ImageFile);
-    False: ControllerImage.Picture:= nil;
+    True : ControllerImage.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+ImageFile);
+    False: ControllerImage.Bitmap:= nil;
   end;
 end;
 
@@ -85,13 +85,21 @@ procedure TFormControllerKeysLayout.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if CanClose then
-     ControllerImage.Picture:= nil;
+     ControllerImage.Bitmap:= nil;
 end;
 
 procedure TFormControllerKeysLayout.FormShow(Sender: TObject);
 begin
   LoadCtrlImg;
   SetFocus;
+  if Screen.Width = 640 then
+     begin
+       ControllerImage.ScaleMode:= smResize;
+       ClientWidth:= 635;
+       ClientHeight:= 351+FrameBottom.Height;
+       LabelWarning.Left:= 30;
+       LabelWarning.Top:= ClientHeight-18;
+     end;
 end;
 
 procedure TFormControllerKeysLayout.SelectPrevLayout;
@@ -119,9 +127,9 @@ begin
   end;
 end;
 
+
 procedure TFormControllerKeysLayout.ControllerImageMouseDown(
-  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
-  Y: Integer);
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   case Button of
     mbLeft : SelectNextLayout;

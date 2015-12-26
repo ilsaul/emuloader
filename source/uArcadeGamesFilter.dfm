@@ -3,7 +3,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
   Top = 280
   BorderIcons = []
   BorderStyle = bsToolWindow
-  Caption = 'Games Filters'
+  Caption = 'Arcade Games Filters'
   ClientHeight = 450
   ClientWidth = 498
   Color = 15856113

@@ -60,15 +60,15 @@ object FormStatus: TFormStatus
     end
     object LabelTimer: TShadowLabel
       Left = 567
-      Top = 433
+      Top = 436
       Width = 56
-      Height = 16
+      Height = 13
       Alignment = taCenter
       Caption = '00:00:00'
       Font.Charset = ANSI_CHARSET
       Font.Color = clLime
-      Font.Height = -13
-      Font.Name = 'Consolas'
+      Font.Height = -12
+      Font.Name = 'Lucida Console'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -76,7 +76,6 @@ object FormStatus: TFormStatus
       ShadowEnabled = True
       EllipsType = etNone
       Transparent = True
-      Layout = tlCenter
     end
     object LabelStatusType: TShadowLabel
       Left = 50
@@ -118,6 +117,26 @@ object FormStatus: TFormStatus
       ShadowEnabled = True
       EllipsType = etNone
       Transparent = True
+    end
+    object LabelSoftwareScanCount: TShadowLabel
+      Left = 631
+      Top = 417
+      Width = 69
+      Height = 14
+      Alignment = taCenter
+      Caption = '[000 of 000]'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clAqua
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clNavy
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = False
+      Visible = False
     end
     object ProgressBar: TProgressBar
       Left = 3

@@ -36,7 +36,6 @@ type
     CategoryPinMAME: TAdvOfficeCheckBox;
     CategoryQuiz: TAdvOfficeCheckBox;
     CategoryUtilities: TAdvOfficeCheckBox;
-    HideDeviceSetsNoROMs: TAdvOfficeCheckBox;
     ButtonCategoriesToHideInfo: TBitBtn;
     HideGamesWithCHDFiles: TAdvOfficeCheckBox;
     ButtonDefaultOptions: TBitBtn;
@@ -45,6 +44,11 @@ type
     STVMultiSlot: TAdvOfficeCheckBox;
     LabelNeoGeoMVS: TLabel;
     ControlType_New: TComboBox;
+    ScreenOrientation: TComboBox;
+    LabelScreenOrientation: TLabel;
+    ShowMergedSetsOnly: TAdvOfficeCheckBox;
+    CategoryLightGun: TAdvOfficeCheckBox;
+    HideNoDumpROMsGames: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -121,9 +125,13 @@ begin
   CategoryPinMAME.Checked:= True;
   CategoryQuiz.Checked:= True;
   CategoryUtilities.Checked:= True;
+  CategoryLightGun.Checked:= True;
   HideGamesWithCHDFiles.Checked:= False;
+  HideNoDumpROMsGames.Checked:= False;
   NeoGeoMVS.Checked:= False;
   STVMultiSlot.Checked:= False;
+  ScreenOrientation.ItemIndex:= 0;
+  ShowMergedSetsOnly.Checked:= False;
 end;
 
 procedure TFormFiltersExtra.FormKeyPress(Sender: TObject; var Key: Char);

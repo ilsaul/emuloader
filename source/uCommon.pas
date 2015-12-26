@@ -49,24 +49,24 @@ const
      ('image_08_gameartwork', 'GameArtwork', 'ingameartwork.png', 'snapartwork'),
      ('image_09_maws', 'MAWS', '', ''));
 
-  aColumns: packed array[0..22] of packed array[0..1] of String = (
+  aColumns: packed array[0..23] of packed array[0..1] of String = (
      //IniEntryName, ColumnTitle
-     ('Title', 'Title'),
-     ('Year', 'Year'),
-     ('Manufacturer', 'Manufacturer'),
+     ('Title', 'Title'),                      // 00
+     ('Year', 'Year'),                        // 01
+     ('Manufacturer', 'Manufacturer'),        // 02
 
-     ('Orientation', 'Orientation'),
-     ('Resolution', 'Resolution'),
-     ('RefreshRate', 'Refresh Rate'),
+     ('Orientation', 'Orientation'),          // 03
+     ('Resolution', 'Resolution'),            // 04
+     ('RefreshRate', 'Refresh Rate'),         // 05
 
-     ('Category', 'Category'),
-     ('VersionAdded', 'Version Added'),
+     ('Category', 'Category'), // catver.ini (MAME arcade); category_home.ini (MESS machines -listxml); softlist <description> (hash\softwarelist.xml files)
+     ('VersionAdded', 'Version Added'),       // 07
 
-     ('Name', 'Game Name'),
-     ('Clone', 'Clone of'),
-     ('DriverName', 'Driver Name'),
+     ('Name', 'Game Name'),                   // 08
+     ('Clone', 'Clone of'),                   // 09
+     ('DriverName', 'Driver Name'),           // 10
 
-     ('NumPlayers', 'Players'),
+     ('NumPlayers', 'Players'),               // 11
 
      ('DriverStatus', 'Driver Status'),
      ('EmulationStatus', 'Emulation Status'), // 13
@@ -74,15 +74,38 @@ const
      ('SoundStatus', 'Sound Status'),         // 15
      ('GraphicStatus', 'Graphic Status'),     // 16
 
-     ('Played', 'Played'),
-     ('Language', 'Language'),
-     ('GameStatus', 'Game Status'),
-     ('GameSize', 'Game Size'),
-     ('LastPlayed', 'Last Played'),
-     ('Playtime', 'Playtime'));
+     ('Played', 'Played'),                    // 17
+     ('Language', 'Language'),                // 18
+     ('GameStatus', 'Game Status'),           // 19
+     ('GameSize', 'Game Size'),               // 20
+     ('LastPlayed', 'Last Played'),           // 21
+     ('Playtime', 'Playtime'),                // 22
+     ('Usage', 'Usage'));                     // 23
 
-  aColumnsWidth: packed array[0..22] of Integer = ( //           13  14  15  16
-    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 130, 115, 130, 110);
+  aColumnsWidth: packed array[0..23] of Integer = ( //           13  14  15  16
+    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 130, 115, 130, 110, 200);
+
+  aColumnsMachinesList: packed array[0..5] of String =
+     ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver'); // Machines List Side Panel
+
+  aColumnsWidthMachinesList: packed array[0..5] of Integer =         // Machines List Side Panel
+     (250, 45, 120, 85, 85, 95);
+
+  aColumnsSoftwareListOrder: packed array[0..13] of Integer =
+     ( 0,  // 00 -> title
+       1,  // 01 -> year
+       2,  // 02 -> manufacturer
+       6,  // 03 -> category
+      23,  // 04 -> usage tip
+      17,  // 05 -> times played
+      21,  // 06 -> last played date/time
+      22,  // 07 -> total playtime
+       8,  // 08 -> game name
+       9,  // 09 -> clone of
+      12,  // 10 -> driver status
+      13,  // 11 -> emulation status
+      20,  // 12 -> game size
+      19); // 13 -> game set status
 
   ChecksumMode: array [0..4] of TMessageDigestClass = (
     TMD2, TMD4, TMD5, TSHA1, TRIPEMD160);
@@ -102,6 +125,14 @@ const
      ($00cdcdcd, $00cdcdcd), // 2 -> inactive border color, gradient mode (same as bar single color)
      (clGray, clGray));      // 3 -> inactive font color
 
+  // too light colors... better on a dark background
+  //ListSelectionColorInactiveMachinesList: packed array[0..3] of packed array[0..1] of Integer =
+  //  // normal colors (blue), missing ROMs/CHDs colors (red)
+  //  (($00e8c39b, $009bc3e8), // 0 -> inactive single color
+  //   ($00fef8f0, $00f0f8fe), // 1 -> inactive color, gradient mode(same as gradient color top)
+  //   ($00fef1e0, $00e0f1fe), // 2 -> inactive border color, gradient mode (same as bar single color)
+  //   (clGray, clGray));      // 3 -> inactive font color
+     
   VersionInfo: array [1..9] of String = ('CompanyName', 'FileDescription', 'FileVersion', 'InternalName',
     'LegalCopyRight', 'OriginalFileName', 'ProductName', 'ProductVersion',
     'SpecialBuild');
@@ -148,8 +179,8 @@ function  GenerateMessage(const WindowMessage, TitleMessage: String; const Descr
 procedure CallMessageBox;
 procedure FreeMessageBox;
 
-function  GetSystemFileName(SystemID: Byte; const SoftwareList: String = ''): String;
-function  GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
+function  GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
+//function  GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
 procedure GenerateControllerDefinitionsFilesList(Folder: String; ListHolder: THashedStringList; ClearList: Boolean = False);
 procedure GetFilesList(Folder, FileType, FileMask: String; ListHolder: THashedStringList; SubDirectories, ClearList, ReturnFullPath: Boolean);
 procedure GetFoldersList(Folder: String; ListHolder: THashedStringList; ClearList, SubDirectories: Boolean);
@@ -157,7 +188,7 @@ procedure GetFoldersList(Folder: String; ListHolder: THashedStringList; ClearLis
 function  GetPlayTime(Milliseconds: Int64; ShowHoursDays: Boolean = False; HideSeconds: Boolean = False): String;
 function  ExtractMAMEIniValue(const MAMEOption: String): String;
 
-function  GetGameHistory(const GameName, StringLine: String): Boolean;
+function  GetGameHistory(const GameName, StringLine: String; TagLength: Integer): Boolean;
 
 // SHA-1 / MD5 routines
 function  ComputeHashValue(Mode: Integer; const FileName: String): String;
@@ -190,7 +221,7 @@ function  GetScrLayoutDefaultType(LayoutIndex, ImageIndex: Byte): ShortInt;
 //function  GetWindowsVersion: String;
 
 function  FileExists(const FileName: String): Boolean;
-function  RenameFile(const OldName, NewName: String): Boolean;
+function  RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
 function  MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
 
 procedure SetDefaultColorBox(ColorHolder: TColorBox);
@@ -240,6 +271,7 @@ procedure FindCloseW(var F: TSearchRecW);
 
 function  GetFileSizeW(const aFileName: WideString): Int64;
 function  FileAgeW(const FileName: WideString): Integer;
+procedure DeleteAllFilesW(const FolderName: WideString; RecursiveFolders: Boolean = False);
 function  GetShortFileNameW(const FileName: WideString): String;
 
 procedure ShowMessageW(const MessageStr: WideString; TitleStr: String = '');
@@ -263,6 +295,8 @@ function  StringReplaceW(const S, OldPattern, NewPattern: WideString;
                          Flags: TReplaceFlags; WholeWord: Boolean = False): WideString;
 
 //function  ProcessExists(const exeFileName: string): Boolean;
+
+function  CheckAppOneInstance: Boolean;
 
 implementation
 
@@ -954,46 +988,62 @@ begin
   FreeAndNil(FormMessageBox);
 end;
 
-function GetSystemFileName(SystemID: Byte; const SoftwareList: String = ''): String;
+function GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 begin
+  // FileID
+  // 0 -> games list             "system_name.el'
+  // 1 -> ROMs list              "system_name.elrom'
+  // 2 -> games set status       "system_name.elstatus'
+  // 3 -> missing files          "system_name.miss'
+  // 4 -> wav/flac audio samples "system_name.elsamples'
+  // 5 -> machines list+softlist "system_name.elsoftlist'
+  Result:= '';
   case SystemID of
     idMAME      :
                   begin
                     if SoftwareList = '' then
-                       Result:= 'mame.el'
+                       Result:= 'mame'
                     else
-                       Result:= SoftwareList+'.el';
+                       Result:= SoftwareList;
                   end;
-    idSupermodel: Result:= 'supermodelsegamodel3.el';
-    idDaphne    : Result:= 'daphne.el';
-    idDemul     : Result:= 'demul.el';
-    idHBMAME    : Result:= 'hbmame.el';
-    idDICE      : Result:= 'dice.el';
-    idSegaModel2: Result:= 'segamodel2.el';
-    idZiNc      : Result:= 'zinc.el';
+    idSupermodel: Result:= 'supermodelsegamodel3';
+    idDaphne    : Result:= 'daphne';
+    idDemul     : Result:= 'demul';
+    idHBMAME    : Result:= 'hbmame';
+    idDICE      : Result:= 'dice';
+    idSegaModel2: Result:= 'segamodel2';
+    idZiNc      : Result:= 'zinc';
+  end;
+  case FileID of
+    0: Result:= Result+'.el';
+    1: Result:= Result+'.elrom';
+    2: Result:= Result+'.elstatus';
+    3: Result:= Result+'.miss';
+    4: Result:= Result+'.elsamples';
+    5: Result:= Result+'.elsoftlist';
   end;
 end;
 
-function GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
+{function GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
 begin
   Result:= '';
   case SystemID of
     idMAME      :
                   begin
                     if SoftwareList = '' then
-                       Result:= 'mame_roms.el'
+                       Result:= 'mame.elrom'
                     else
-                       Result:= SoftwareList+'_roms.el';
+                       Result:= SoftwareList+'.elrom';
                   end;
-    idSupermodel: Result:= 'supermodelsegamodel3_roms.el';
+    idSupermodel: Result:= 'supermodelsegamodel3.elrom';
     //idDaphne: this system have no ROMs database in EL
-    idDemul     : Result:= 'demul_roms.el';
-    idHBMAME    : Result:= 'hbmame_roms.el';
-    idDICE      : Result:= 'dice_roms.el';
-    idSegaModel2: Result:= 'segamodel2_roms.el';
-    idZiNc      : Result:= 'zinc_roms.el';
+    idDemul     : Result:= 'demul.elrom';
+    idHBMAME    : Result:= 'hbmame.elrom';
+    idDICE      : Result:= 'dice.elrom';
+    idSegaModel2: Result:= 'segamodel2.elrom';
+    idZiNc      : Result:= 'zinc.elrom';
   end;
-end;
+end;}
 
 procedure GenerateControllerDefinitionsFilesList(Folder: String; ListHolder: THashedStringList; ClearList: Boolean = False);
 var
@@ -1157,7 +1207,7 @@ function ExtractMAMEIniValue(const MAMEOption: String): String;
 var
   Index: Integer;
 begin
-  Index:= Pos(' ', MAMEOption);
+  Index:= PosEx(' ', MAMEOption);
   if Index <> 0 then
      begin
         Result:= MAMEOption;
@@ -1168,7 +1218,7 @@ begin
      Result:= '';
 end;
 
-function GetGameHistory(const GameName, StringLine: String): Boolean;
+function GetGameHistory(const GameName, StringLine: String; TagLength: Integer): Boolean;
 var
   Loop, StringSize: Integer;
   HistoryName: String;
@@ -1176,7 +1226,7 @@ begin
   Result:= False;
   HistoryName:= '';
   StringSize:= Length(StringLine);
-  for Loop:=7 to StringSize do
+  for Loop:=TagLength+2 to StringSize do
   begin
     if (StringLine[Loop] <> ',') and (Loop < StringSize) then
        HistoryName:= HistoryName+StringLine[Loop]
@@ -1394,7 +1444,7 @@ begin
      begin
        if strLine[1] <> '#' then
           begin
-            Index:= Pos(' ', strLine);
+            Index:= PosEx(' ', strLine);
             if Index <> 0 then
                Result:= Copy(strLine, 1, Index-1);
           end;
@@ -1408,13 +1458,15 @@ begin
   Result:= '';
   if strLine <> '' then
      begin
-       strPosition:= Pos(EntryName+'="', strLine);
+       //strPosition:= Pos(EntryName+'="', strLine);
+       strPosition:= PosEx(EntryName+'="', strLine);
        if strPosition <> 0 then
           begin
             strPosition:= strPosition+(Length(EntryName)+1);
             Result:= strLine;
             Delete(Result, 1, strPosition);
-            Result:= Copy(Result, 1, Pos('"', Result)-1);
+            //Result:= Copy(Result, 1, Pos('"', Result)-1);
+            Result:= Copy(Result, 1, PosEx('"', Result)-1);
             if Result = '' then
                Result:= '';
           end;
@@ -1428,7 +1480,8 @@ begin
   Result:= '';
   if strLine <> '' then
      begin
-       strPosition:= Pos(EntryName+' ', strLine);
+       strPosition:= PosEx(EntryName+' ', strLine);
+       //strPosition:= Pos(EntryName+' ', strLine);
        if strPosition <> 0 then
           begin
             strPosition:= strPosition+(Length(EntryName)+1);
@@ -1451,10 +1504,22 @@ begin
   if strLine <> '' then
      begin
        // <title>3D Mine Storm</title>
-       strPosition:= Pos('<'+EntryName+'>', strLine);
+       {strPosition:= Pos('<'+EntryName+'>', strLine);
        if strPosition <> 0 then
           begin
-            strPosition2:= Pos('</'+EntryName+'>', strLine);
+            strPosition2:= PosEx('</'+EntryName+'>', strLine, StrPosition);
+            if strPosition2 = 0 then
+               Exit;
+            strPosition:= strPosition+Length(EntryName)+2;
+            //strPosition2:= strPosition21;
+            Result:= Copy(strLine, strPosition, (strPosition2-strPosition));
+          end;}
+
+       strPosition:= PosEx('<'+EntryName+'>', strLine);
+       if strPosition <> 0 then
+          begin
+            //strPosition2:= PosEx('</'+EntryName+'>', strLine, StrPosition);
+            strPosition2:= PosEx('/>', strLine, StrPosition);
             if strPosition2 = 0 then
                Exit;
             strPosition:= strPosition+Length(EntryName)+2;
@@ -1464,7 +1529,6 @@ begin
      end;
 
 end;
-
 
 // this function is used by the resolution list in SEGA Model 2 Emulator settings screen!
 procedure ListScreenModes(ListHolder: TStrings; ResolutionOnly: Boolean = False);
@@ -1709,12 +1773,18 @@ begin
 end;
 
 // RenameFile fix for Windows 7 (Delphi 7 function fails constantly)
-function RenameFile(const OldName, NewName: String): Boolean;
+function RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
+var
+  rFlags: Cardinal;
 begin
-  Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName),
-           MOVEFILE_COPY_ALLOWED
-           +MOVEFILE_REPLACE_EXISTING
-           +MOVEFILE_WRITE_THROUGH);
+  rFlags:= MOVEFILE_COPY_ALLOWED+MOVEFILE_WRITE_THROUGH;
+  if OverwriteExistingFile then
+     rFlags:= rFlags+MOVEFILE_REPLACE_EXISTING;
+
+  Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName), rFlags);
+           //MOVEFILE_COPY_ALLOWED
+           //+MOVEFILE_REPLACE_EXISTING
+           //+MOVEFILE_WRITE_THROUGH);
 end;
 
 function MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
@@ -1976,7 +2046,7 @@ end;}
 
 function DarkenColor(Color: TColor; Perc: integer): TColor;
 var
-  r,g,b: longint;
+  r, g, b: Integer;//longint;
   l: longint;
 begin
   l := ColorToRGB(Color);
@@ -1993,7 +2063,7 @@ end;
 
 function BrightnessColor(Col: TColor; Brightness: Integer): TColor; overload;
 var
-  r1,g1,b1: Integer;
+  r1, g1, b1: Integer;
 begin
   Col := ColorToRGB(Col);
   r1 := GetRValue(Col);
@@ -2020,7 +2090,7 @@ end;
 
 function BrightnessColor(Col: TColor; BR, BG, BB: Integer): TColor; overload;
 var
-  r1,g1,b1: Integer;
+  r1, g1, b1: Integer;
 begin
   Col := Longint(ColorToRGB(Col));
   r1 := GetRValue(Col);
@@ -2047,7 +2117,7 @@ end;
 
 function Blend(Color1, Color2: TColor; A: Byte): TColor;
 var
-  c1, c2: LongInt;
+  c1, c2: Integer; //LongInt;
   R, G, B, v1, v2: Byte;
 begin
   A := Round(2.55 * A);
@@ -2171,7 +2241,7 @@ begin
   if (Result <> '') and ReturnExeFileOnly then
      begin
        if Result[1] = '"' then
-          Result:=Copy(Result,2,-1 + Pos('"',Copy(Result,2,MaxINt))) ;
+          Result:=Copy(Result, 2, -1+PosEx('"', Copy(Result, 2, MaxInt))) ;
      end;
 end;
 
@@ -2571,6 +2641,27 @@ begin
   Result:= -1;
 end;
 
+procedure DeleteAllFilesW(const FolderName: WideString; RecursiveFolders: Boolean = False);
+var
+  Search: TSearchRecW;
+begin
+  // this function's purpose is to delete all files from "eldir\softwarelist\" folder (create MAME games list)
+  if FindFirstW(FolderName+'*', faAnyFile, Search) = 0 then
+  begin
+    repeat
+      // It's a directory?
+      if (Search.Name <> '.') and (Search.Name <> '..') then
+      begin
+        if (Search.Attr and $10 = $10) and (RecursiveFolders) then
+           DeleteAllFilesW(FolderName+'\'+Search.Name, RecursiveFolders)
+        else
+           DeleteFileW(PWideChar(FolderName+'\'+ Search.Name));
+      end;
+    until FindNextW(Search) <> 0;
+  end;
+  FindCloseW(Search);
+end;
+
 //function WStrPas(const Str: PWideChar): WideString;
 //begin
 //  Result := Str;
@@ -2755,6 +2846,32 @@ begin
     lstrcpynw(dst,src,len+1);
   end;
   result:=dst;
+end;
+
+function CheckAppOneInstance: Boolean;
+var
+  Mutex: THandle;
+  elIni: TMemIniFile;
+  iPath: String;
+begin
+  Result:= False;
+  iPath:= ShortToLongPath(ExtractFilePath(Application.ExeName));
+  if not FileExists(iPath+'EmuLoader.ini') then
+     Exit;
+
+  elIni:= TMemIniFile.Create(iPath+'EmuLoader.ini');
+  Result:= Boolean(elIni.ReadInteger('Preferences', 'AllowOneInstance', 0));
+  FreeAndNil(elIni);
+  if not Result then
+     Exit;
+
+  Mutex:= Windows.CreateMutex(nil, True, 'EmuLoader');
+  if (Mutex = 0) or (GetLastError = ERROR_ALREADY_EXISTS) then
+     Application.MessageBox('   Emu Loader is already running!'+#13#10+#13#10+
+                            'To run multiple instances of the frontend, make sure to uncheck setting "Allow Only One Instance" in preferences screen.'+
+                            #13#10+#13#10+'Aborting...', '', mb_Ok+mb_IconExclamation)
+  else
+     Result:= False;
 end;
 
 

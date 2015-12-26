@@ -146,6 +146,7 @@ object FormDeleteMAMu_NotWorkingIcons: TFormDeleteMAMu_NotWorkingIcons
       Font.Name = 'Trebuchet MS'
       Font.Style = [fsItalic]
       ParentFont = False
+      ShowAccelChar = False
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone

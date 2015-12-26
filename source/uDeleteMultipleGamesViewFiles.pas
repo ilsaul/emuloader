@@ -23,6 +23,7 @@ type
     fClone: String;
     fDriverName: String;
     fBiosName : String;}
+    fSoftwareName: String;
     fGameStatus: ShortInt;
 
     fFileName: String;
@@ -43,6 +44,7 @@ type
     property eClone: String read fClone write fClone;
     property eDriverName: String read fDriverName write fDriverName;
     property eBiosName: String read fBiosName write fBiosName;}
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have; 1 - miss; 2 - missing ROMs/CHDs
     property eFileName: String read fFileName write fFileName;
     property eFileSize: Int64 read fFileSize write fFileSize;
@@ -58,7 +60,7 @@ type
     fROMIdentification: Integer;
     fSystemID: ShortInt;
     fMediaType: ShortInt;
-    fTitle: String;
+    fTitle: WideString;
     fName: String;
     fClone: String;
     fCloneParent: String;
@@ -66,6 +68,7 @@ type
     fHaveROMs, fHaveCHDs, fHaveCFGs: Boolean;
     fDriverStatus: ShortInt;
     fBiosName: String;
+    fSoftwareName: String;
     fGameStatus: ShortInt;
   protected
     function GetCaptions(Column: Integer): WideString; override;
@@ -75,7 +78,7 @@ type
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: ShortInt read fSystemID write fSystemID;
     property eMediaType: ShortInt read fMediaType write fMediaType;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
@@ -85,6 +88,7 @@ type
     property eHaveCFGs: Boolean read fHaveCFGs write fHaveCFGs;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eBiosName: String read fBiosName write fBiosName;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have 1 - miss; 2 - missing ROMs/CHDs
   end;
 
@@ -163,9 +167,9 @@ begin
         if eMediaType > 0 then
            begin
              if eHeaderVerCHD > 0 then
-                Result:= Result+' [Header v'+IntToStr(eHeaderVerCHD)+']'
+                Result:= Result+'  [Header v'+IntToStr(eHeaderVerCHD)+']'
              else
-                Result:= Result+ ' [Invalid Header]';
+                Result:= Result+ '  [Invalid Header]';
            end;
       end;
   end;
@@ -213,7 +217,9 @@ var
   Item, addItem: TEasyItem;
   addGroup: TEasyGroup;
   Loop, tmpMediaType, tmpFileType, IsParentCHD, fixFileType: Integer;
-  tmpFileName, ChecksumCHD, GroupGameTitle: String;
+  tmpFileName, ChecksumCHD: String;
+  GroupGameTitle: WideString;
+  GroupSoftwareName: String;
   HeaderVerCHD: Byte;
   GhostItem: Boolean;
 begin
@@ -223,9 +229,15 @@ begin
   end;
   GroupToFocus:= nil;
   if Item = nil then
-     GroupGameTitle:= ''
+  begin
+    GroupGameTitle:= '';
+    GroupSoftwareName:= '';
+  end
   else
+  begin
     GroupGameTitle:= uDeleteMultipleGamesFiles.TGameInfo(Item).eTitle;
+    GroupSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName;
+  end;
   repeat
     addGroup:= FilesListView.Groups.AddCustom(TViewGameInfoGroup, nil);
 
@@ -242,13 +254,17 @@ begin
     TViewGameInfoGroup(addGroup).eHaveCFGs:= uDeleteMultipleGamesFiles.TGameInfo(Item).eHaveCFGs;
     TViewGameInfoGroup(addGroup).eDriverStatus:= uDeleteMultipleGamesFiles.TGameInfo(Item).eDriverStatus;
     TViewGameInfoGroup(addGroup).eBiosName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eBiosName;
+    TViewGameInfoGroup(addGroup).eSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName;
     TViewGameInfoGroup(addGroup).eGameStatus:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameStatus;
 
     if GroupGameTitle <> '' then
        begin
          if GroupToFocus = nil then
-            if TViewGameInfoGroup(addGroup).eTitle = GroupGameTitle then
+         begin
+           if (TViewGameInfoGroup(addGroup).eTitle = GroupGameTitle) and
+              (TViewGameInfoGroup(addGroup).eSoftwareName = GroupSoftwareName) then
                GroupToFocus:= addGroup;
+         end;
        end;
 
     // add files
@@ -290,6 +306,7 @@ begin
               end;
            TViewFileInfo(addItem).eFileType:= fixFileType;
            TViewFileInfo(addItem).eMediaType:= tmpMediaType;
+           TViewFileInfo(addItem).eSoftwareName:= TViewGameInfoGroup(addGroup).eSoftwareName; // might not be needed!!
            TViewFileInfo(addItem).eGameStatus:= TViewGameInfoGroup(addGroup).eGameStatus; // might not be needed!!
            TViewFileInfo(addItem).eFileName:= tmpFileName;
            TViewFileInfo(addItem).eFileSize:= GetFileSize(tmpFileName);
@@ -358,7 +375,7 @@ begin
   if SearchGroup <> nil then
      begin
        FilesListView.Selection.FocusedGroup:= SearchGroup;
-       SearchGroup.MakeVisible(emvAuto);
+       SearchGroup.MakeVisible(emvMiddle) //(emvAuto);
      end;
 
   UpdateTotalFilesLabel;
@@ -379,13 +396,13 @@ begin
       end;
     1:
       begin
-        ACanvas.Font.Name:= 'Consolas';
-        ACanvas.Font.Size:= ACanvas.Font.Size+1;
+        ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
+        ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
-        ACanvas.Font.Name:= 'Consolas';
-        ACanvas.Font.Size:= ACanvas.Font.Size-1;
+        ACanvas.Font.Name:= 'Verdana';//'Consolas';
+        ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then
@@ -425,10 +442,12 @@ procedure TFormDeleteMultipleGamesViewFiles.FilesListViewGroupImageDraw(
   Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas;
   const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
 begin
-  FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+8,
+  //FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+8,
+  //                                       MaxGameID+TViewGameInfoGroup(Group).eSystemID);
+  FormMain.IL_StandardIconsSmall.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+12,
                                          MaxGameID+TViewGameInfoGroup(Group).eSystemID);
-  FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+30, Group.BoundsRectTopMargin.Top+8,
-                                         TViewGameInfoGroup(Group).eROMIdentification);
+  FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26{30}, Group.BoundsRectTopMargin.Top+8,
+                                         FormMain.GetMAMEImageIndex(TViewGameInfoGroup(Group).eROMIdentification, TViewGameInfoGroup(Group).eSoftwareName));
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.FilesListViewGroupImageDrawIsCustom(

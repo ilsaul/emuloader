@@ -40,8 +40,11 @@ type
     ZiNcFilePath: String;
     TextPos, LeftPanelSize, LeftPanelMinimumTextSize, LeftPanelLastText: Integer;
     function  FindZiNcFile(const NameString: String): String;
-    function  AddEntry2(const sLabelTitle: String; sValue: String = ''; sImageIndex: ShortInt = -1): Boolean;
+    function  CreateLabelTitle(const lTitle: String): TShadowLabel;
+    function  CreateLabelValue(const tValue: String; DriverIndex: ShortInt = -1): TShadowLabel;
+    function  AddEntry2(const sLabelTitle: String; sValue: WideString = ''; sImageIndex: ShortInt = -1): Boolean;
     //function  AddEntry2(const sLabelTitle: String; sValue: String = ''; sImageIndex: ShortInt = -1): Boolean;
+    function  GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
     procedure FillGameTree;
     procedure FillROMsTree;
   public
@@ -73,39 +76,88 @@ begin
      Close;
 end;
 
-function TFormGameDetails.AddEntry2(const sLabelTitle: String; sValue: String = ''; sImageIndex: ShortInt = -1): Boolean;
+function TFormGameDetails.CreateLabelTitle(const lTitle: String): TShadowLabel;
+var
+  newLabel: TShadowLabel;
+begin
+  newLabel:= TShadowLabel.Create(Self);
+  newLabel.Parent:= FormGameDetails;
+  newLabel.Font:= LabelYear.Font;
+  newLabel.ShadowEnabled:= LabelYear.ShadowEnabled;
+  newLabel.ShadowColor:= LabelYear.ShadowColor;
+  newLabel.ShowAccelChar:= False;
+  newLabel.Left:= LabelYear.Left;
+  newLabel.Top:= TextPos;
+  newLabel.Caption:= lTitle;
+end;
+
+function TFormGameDetails.CreateLabelValue(const tValue: String; DriverIndex: ShortInt = -1): TShadowLabel;
+var
+  newLabelValue: TShadowLabel;
+  ValueStr: String;
+begin
+  {if DriverIndex > -1 then
+     begin
+       case DriverIndex of
+         1: ValueStr:= aStatus[FormMain.MemGameInfo.eEmulationStatus];
+         2: ValueStr:= aStatus[FormMain.MemGameInfo.eColorStatus];
+         3: ValueStr:= aStatus[FormMain.MemGameInfo.eSoundStatus];
+         4: ValueStr:= aStatus[FormMain.MemGameInfo.eGraphicStatus];
+       end;
+     end
+  else}
+     ValueStr:= tValue;
+  if ValueStr = '' then
+     Exit;
+  newLabelValue:= TShadowLabel.Create(Self);
+  newLabelValue.Parent:= FormGameDetails;
+  newLabelValue.Font:= LabelYearValue.Font;
+  newLabelValue.ShadowEnabled:= LabelYearValue.ShadowEnabled;
+  newLabelValue.ShadowColor:= LabelYearValue.ShadowColor;
+  newLabelValue.ShowAccelChar:= False;
+  //newLabelValue.Transparent:= False;
+  //newLabelValue.Color:= clSkyBlue;
+  case DriverIndex of
+    -1: newLabelValue.Left:= LabelYearValue.Left;
+     1: // EmulationStatus
+       begin
+         newLabelValue.Left:= 5;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
+       end;
+     2: // ColorStatus
+       begin
+         newLabelValue.Left:= 74;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eColorStatus);
+       end;
+     3: // SoundStatus
+       begin
+         newLabelValue.Left:= 110;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eSoundStatus);
+       end;
+     4: // GraphicStatus
+       begin
+         newLabelValue.Left:= 150;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
+       end;
+  end;
+  if DriverIndex <> -1 then
+     begin
+       case NewLabelValue.Tag of
+         0: NewLabelValue.Font.Color:= clRed;   // preliminary driver
+         1: NewLabelValue.Font.Color:= clGreen; // good driver
+         2: NewLabelValue.Font.Color:= clOlive; // imperfect driver
+       end
+     end;
+  newLabelValue.Top:= TextPos;
+  newLabelValue.Caption:= ValueStr;
+  //TextPos:= TextPos+LabelYearValue.Height;//15;
+  Result:= newLabelValue;
+  LeftPanelLastText:= newLabelValue.Top;
+end;
+
+function TFormGameDetails.AddEntry2(const sLabelTitle: String; sValue: WideString = ''; sImageIndex: ShortInt = -1): Boolean;
 var
   LabelTemp: TShadowLabel;
-
-  function CreateLabel(const lTitle: String): TShadowLabel;
-  var
-    newLabel, newLabelValue: TShadowLabel;
-  begin
-    newLabel:= TShadowLabel.Create(Self);
-    newLabel.Parent:= FormGameDetails;
-    newLabel.Font:= LabelYear.Font;
-    newLabel.ShadowEnabled:= LabelYear.ShadowEnabled;
-    newLabel.ShadowColor:= LabelYear.ShadowColor;
-    newLabel.ShowAccelChar:= False;
-    newLabel.Left:= LabelYear.Left;
-    newLabel.Top:= TextPos;
-    newLabel.Caption:= lTitle;
-
-    newLabelValue:= TShadowLabel.Create(Self);
-    newLabelValue.Parent:= FormGameDetails;
-    newLabelValue.Font:= LabelYearValue.Font;
-    newLabelValue.ShadowEnabled:= LabelYearValue.ShadowEnabled;
-    newLabelValue.ShadowColor:= LabelYearValue.ShadowColor;
-    newLabelValue.ShowAccelChar:= False;
-    //newLabelValue.Transparent:= False;
-    //newLabelValue.Color:= clSkyBlue;
-    newLabelValue.Left:= LabelYearValue.Left;
-    newLabelValue.Top:= TextPos;
-    newLabelValue.Caption:= lTitle;
-    //TextPos:= TextPos+LabelYearValue.Height;//15;
-    Result:= newLabelValue;
-    LeftPanelLastText:= newLabelValue.Top;
-  end;
 
   function AddFileInfo(const FileStr: String; FileFound: Boolean): Boolean;
   begin
@@ -117,17 +169,12 @@ begin
   if not Result then
      Exit;
 
-  LabelTemp:= CreateLabel(sLabelTitle);
+  CreateLabelTitle(sLabelTitle);
+  LabelTemp:= CreateLabelValue(sValue);
   LabelTemp.Caption:= sValue;
   LabelTemp.Tag:= sImageIndex;
   case sImageIndex of
-   -5:
-     begin
-       // game type: "Game Files" string
-       LabelTemp.Font.Color:= $00A65300;//clNavy;
-       LabelTemp.Font.Name:= 'Segoe UI Semibold';
-       LabelTemp.Font.Style:= [fsBold];
-     end;
+   -5: LabelTemp.Font.Color:= $00a65300;//clNavy; // game type: "Game Files" string
     0: LabelTemp.Font.Color:= clRed;   // File Missing
     1: LabelTemp.Font.Color:= clGreen; // Have File / ROM
     2: LabelTemp.Font.Color:= clOlive; // Missing ROMs/CHDs
@@ -153,18 +200,30 @@ begin
   TextPos:= TextPos+LabelTemp.Height;
 end;
 
+function TFormGameDetails.GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
+begin
+  case StatusID of
+   -1: Result:= -1;
+    0: Result:= 1;
+    1: Result:= 2;
+    2: Result:= 0;
+  else
+    Result:= -1;
+  end;
+end;
+
 procedure TFormGameDetails.FillGameTree;
 var
   ZipName, ZipParent, ZipBios, ZipExtension, SampleName, ZipDevice, tmpString, SamplesFolder: String;
   IsBiosGame, FileFound, IsSegaModel2, NoROMs: Boolean;
-  ImgIndex{, SetType}: ShortInt;
+  ImgIndex: ShortInt;
   ListSamples: THashedStringList;
   Loop: Integer;
 
   function AddControlsList(const ctrlList: String): Boolean;
   var
     TempString: String;
-    Loop{, Counter}: Integer;
+    Loop: Integer;
     ButtonsOnly: Boolean;
   begin
     Result:= (ctrlList <> '') or (FormMain.MemGameInfo.eButtonsCount > 0);
@@ -216,7 +275,6 @@ var
          Result:= FormMain.MemGameInfo.eCHDsCount > 0;
          if Result then
             begin
-              //Result:= FormMain.MemGameInfo.eUseDeviceROMs = 0;
               Result:= TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets = nil;
               if Result then
                  Result:= not FormMain.ValidateBiosName(FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eName);
@@ -241,16 +299,32 @@ var
        Result:= not FormMain.GameHaveROMs(FormMain.MemGameInfo.eHaveGameROMs);
   end;
 
-  function GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
+  function AddSoftEntry(const iString: String; sTitle: String = ''): Boolean;
   begin
-    case StatusID of
-     -1: Result:= -1;
-      0: Result:= 1;
-      1: Result:= 2;
-      2: Result:= 0;
-    else
-      Result:= -1;
-    end;
+    Result:= True;
+    AddEntry2(sTitle, iString);
+  end;
+
+  function AddDriverStatus: Boolean;
+  var
+    iLabelDriver: TShadowLabel;
+  begin
+    if FormMain.MemGameInfo.eSoftwareName <> '' then
+       Exit; // why add EmulationStatus if it's the same as DriverStatus ????
+    if FormMain.MemGameInfo.eDriverStatus < 1 then //= -1 then
+       Exit; // driver is "good" or "none" then don't add extra status texts
+
+    iLabelDriver:= nil;
+    if FormMain.MemGameInfo.eEmulationStatus <> -1 then
+       iLabelDriver:= CreateLabelValue('   Emulation', 1);
+    if FormMain.MemGameInfo.eColorStatus <> -1 then
+       iLabelDriver:= CreateLabelValue('Color', 2);
+    if FormMain.MemGameInfo.eSoundStatus <> -1 then
+       iLabelDriver:= CreateLabelValue('Sound', 3);
+    if FormMain.MemGameInfo.eGraphicStatus <> -1 then
+       iLabelDriver:= CreateLabelValue('Graphic', 4);
+    if iLabelDriver <> nil then
+       TextPos:= TextPos+iLabelDriver.Height;
   end;
 
 begin
@@ -262,14 +336,13 @@ begin
   if LabelYearValue.Visible then
      begin
        LabelYearValue.Caption:= FormMain.MemGameInfo.eYear;
-       TextPos:= LabelYear.Top+17
+       TextPos:= LabelYear.Top+LabelYear.Height;
      end
   else
      TextPos:= LabelYear.Top;
   IsSegaModel2:= FormMain.MemGameInfo.eSystemID = idSegaModel2;
-  //LabelYearValue.Caption:= FillBlank(FormMain.MemGameInfo.eYear);
-  if FormMain.MemGameInfo.eManufacturer <> '' then
-     AddEntry2('Manufacturer', FormMain.MemGameInfo.eManufacturer);
+ 
+  AddEntry2('Manufacturer', FormMain.MemGameInfo.eManufacturer);
 
   case FormMain.MemGameInfo.eAudioType of
     0: AddEntry2('Audio', 'Standard Audio (chip)');
@@ -368,24 +441,35 @@ begin
 
   ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eDriverStatus);
   AddEntry2('Driver Status', aStatus[FormMain.MemGameInfo.eDriverStatus], ImgIndex);
-  if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) then
-     begin
-       ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
-       AddEntry2('   Emulation', aStatus[FormMain.MemGameInfo.eEmulationStatus], ImgIndex);
-       ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eColorStatus);
-       AddEntry2('   Color', aStatus[FormMain.MemGameInfo.eColorStatus], ImgIndex);
-       ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eSoundStatus);
-       AddEntry2('   Sound', aStatus[FormMain.MemGameInfo.eSoundStatus], ImgIndex);
-       ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
-       AddEntry2('   Graphic', aStatus[FormMain.MemGameInfo.eGraphicStatus], ImgIndex);
-     end;
+  AddDriverStatus;
+  //if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) and (FormMain.MemGameInfo.eSoftwareName = '') then
+  //   begin
+  //     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
+  //     AddEntry2('   Emulation', aStatus[FormMain.MemGameInfo.eEmulationStatus], ImgIndex);
+  //     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eColorStatus);
+  //     AddEntry2('   Color', aStatus[FormMain.MemGameInfo.eColorStatus], ImgIndex);
+  //     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eSoundStatus);
+  //     AddEntry2('   Sound', aStatus[FormMain.MemGameInfo.eSoundStatus], ImgIndex);
+  //     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
+  //     AddEntry2('   Graphic', aStatus[FormMain.MemGameInfo.eGraphicStatus], ImgIndex);
+  //   end;
 
-  AddEntry2('Category', FormMain.MemGameInfo.eCategory);
+  if FormMain.MemGameInfo.eSoftwareName = '' then
+     tmpString:= 'Category'
+  else
+     tmpString:= 'Software List';
+  AddEntry2(tmpString, FormMain.MemGameInfo.eCategory); // AddEntry2('Category', '');
+  tmpString:= '';
+  //if FormMain.MemGameInfo.eSoftwareName <> '' then
+  //   AddEntry2('XML List', FormMain.MemGameInfo.eSoftwareName); // not needed; info shown in top bar (game title; game name)
   AddEntry2('Version Added', FormMain.MemGameInfo.eVersionAdded);
+
+  AddEntry2('Compatibility', FormMain.MemGameInfo.eSoftwareCompatible);
+  AddEntry2('Usage', FormMain.MemGameInfo.eSoftwareUsageTip);
 
   AddEntry2('# of Players', FormMain.GetNumberPlayersInfo(FormMain.MemGameInfo.eNumberPlayers, FormMain.MemGameInfo.eNumberPlayersIni));
   AddEntry2('Main CPU Chip', FormMain.MemGameInfo.eChipCPU);
-  if FormMain.MemGameInfo.eLanguage <> '' then
+  //if FormMain.MemGameInfo.eLanguage <> '' then
      AddEntry2('Language', FormMain.MemGameInfo.eLanguage);
 
   if (FormMain.MemGameInfo.eSystemID = idZiNc) and (not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification)) then // ZinC game index
@@ -400,45 +484,57 @@ begin
      begin
        tmpString:= IntToStr(FormMain.MemGameInfo.ePlayed)+'x';
        if FormMain.MemGameInfo.ePlayedDate <> 0 then
-          tmpString:= tmpString+' ('+FormMain.GetDateTimeStr(FormMain.MemGameInfo.ePlayedDate)+')';
+          tmpString:= tmpString+' ('+FormMain.GetDateTimeStr(FormMain.MemGameInfo.ePlayedDate, True, True)+')';
        AddEntry2('Played', tmpString);
      end;
   tmpString:= '';
   if FormMain.MemGameInfo.eTotalPlaytime > 0 then
      AddEntry2('Playtime', GetPlayTime(FormMain.MemGameInfo.eTotalPlaytime, True));
 
-  // MAME merged set status
-  if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) and (FormMain.GameIsClone(FormMain.MemGameInfo.eClone)) then
-     if FormMain.IsGameMerged(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eName) then
-        LabelEmulatorVersion.Tag:= 1; // means merged into parent set
-        
   if FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID] <> '' then
      LabelEmulatorVersion.Caption:= LabelEmulatorVersion.Caption+#13#10+
                                     FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
 
-  if FormMain.MemGameInfo.eGameSizeText <> '' then
+  //if FormMain.MemGameInfo.eGameSizeText <> '' then
      AddEntry2('Game Size', FormMain.MemGameInfo.eGameSizeText);
 
+  // added in June 10, 2015 (show software list strings)
+  ImgIndex:= Length(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList);
+  if ImgIndex > 0 then
+     begin
+       AddSoftEntry(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList[0], 'Software List');
+       //AddEntry2('Software List', uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList[0]);
+       if ImgIndex > 1 then
+          begin
+            for Loop:= 1 to (ImgIndex-1) do
+                AddSoftEntry(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList[Loop]);
+                //AddEntry2('', uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList[Loop]);
+          end;
+     end;
   //AddEntry2('Scan Mode', aScanMode[FormMain.MemGameInfo.eScanMode], 20); // no longer used (info at top bar)
 
-  tmpString:= 'this set is a ';
+  //tmpString:= 'this set is a ';
+  tmpString:= '';
   if IsSegaModel2 and IsBiosGame then
-     tmpString:= tmpString+'bios'
+     tmpString:= 'Bios'
   else
-     {begin
-       if IsBiosGame then
-          tmpString:= tmpString+'bios'
-       else
-          tmpString:= tmpString+'game';
-     end
-  else}
   if FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification) then
-     tmpString:= tmpString+'bios'
+     tmpString:= 'Bios'
   else
   if FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification) then
-     tmpString:= tmpString+'device'
+     tmpString:= 'Device'
   else
-     tmpString:= tmpString+'game';
+     begin
+       if FormMain.MemGameInfo.eSoftwareName = '' then
+          begin
+            case FormMain.MemGameInfo.eSystemType of
+              0: tmpString:= 'Game';
+              1: tmpString:= 'Machine';
+            end;
+          end
+       else
+          tmpString:= 'Softwarelist game';
+     end;
   AddEntry2('Game Files', tmpString, -5);//' ');
   //if FormMain.GameHaveROMs(FormMain.MemGameInfo.eHaveGameROMs) or (FormMain.MemGameInfo.eSystemID = idDaphne) then
   //   AddEntry2('Game Files', ' ')
@@ -451,11 +547,11 @@ begin
      ((TEasyGameInfo(FormMain.SelectedEasyItem).eHaveGameROMs = 0) and (FormMain.MemGameInfo.eSystemID <> idDaphne)) then
      begin
        NoROMs:= True;
-       AddEntry2('   Game Set', 'This set contain no ROMs', 1) // special case for sets with no ROMs
+       AddEntry2('   Game Set', 'Set with no ROMs', 1) // special case for sets with no ROMs
      end
   else
   begin
-    ZipName:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eSystemID);
+    ZipName:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSoftwareName);
     if ZipName <> '' then
        begin
          if IsZiNcSystem then
@@ -465,7 +561,7 @@ begin
        begin
          case IsZiNcSystem of
            True : ZipParent:= FindZiNcFile(FormMain.MemGameInfo.eClone);
-           False: ZipParent:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eClone, FormMain.MemGameInfo.eSystemID);
+           False: ZipParent:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eClone, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSoftwareName);
          end;
        end;
   end;
@@ -479,7 +575,7 @@ begin
        begin
          case IsZiNcSystem of
            True : ZipBios:= FindZiNcFile(FormMain.MemGameInfo.eBiosName);
-           False: ZipBios:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eBiosName, FormMain.MemGameInfo.eSystemID);
+           False: ZipBios:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eBiosName, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSoftwareName);
          end;
        end;
 
@@ -489,8 +585,9 @@ begin
        tmpString:= '.zip';
 
     if ZipName <> '' then
-       AddEntry2('   Game Set', ExtractFileName(ZipName)+' ('+
-                            FormMain.GetSizeType(GetFileSize(ZipName), False)+')', Ord(ZipName <> ''))
+       AddEntry2('   Game Set', ExtractFileName(ZipName), Ord(ZipName <> ''))
+       //AddEntry2('   Game Set', ExtractFileName(ZipName)+' ('+
+       //                     FormMain.GetSizeType(GetFileSize(ZipName), False)+')', Ord(ZipName <> ''))
     else
     if IsCHDGameOnly then
        begin
@@ -498,19 +595,19 @@ begin
          // still need to double-check this and make sure there's no need to validate IsCHDGameOnly...
        end
     else
-    if (not IsBiosSetOnly) and (not IsDeviceSetOnly) then //and (TEasyGameInfo(FormMain.SelectedEasyItem).eHaveGameROMs = 0) then
+    if (not IsBiosSetOnly) and (not IsDeviceSetOnly) and (not NoROMs) then
        begin
-         if LabelEmulatorVersion.Tag <> 1 then
+         if not FormMain.MemGameInfo.eIsMerged then
             AddEntry2('   Game Set', FormMain.MemGameInfo.eName+tmpString, 0)
          else
-            AddEntry2('   Game Set', 'Merged in parent set', 1); // for merged clone sets!!!
+            AddEntry2('   Game Set', FormMain.MemGameInfo.eName+tmpString, 0); // 'Merged in parent set', 1); // for merged clone sets!!!
        end;
-
     if FormMain.GameIsClone(FormMain.MemGameInfo.eClone) and (not NoROMs) then
        begin
          if ZipParent <> '' then
-            AddEntry2('   Parent Set', ExtractFileName(ZipParent)+ ' ('+
-                                   FormMain.GetSizeType(GetFileSize(ZipParent), False)+')', 1)
+            AddEntry2('   Parent Set', ExtractFileName(ZipParent), 1)
+            //AddEntry2('   Parent Set', ExtractFileName(ZipParent)+ ' ('+
+            //                       FormMain.GetSizeType(GetFileSize(ZipParent), False)+')', 1)
          else
          if {not }IsBiosSetOnly then // this is for G-NET and others with bios set + chd (no game set)
             AddEntry2('   Parent Set', FormMain.MemGameInfo.eClone+tmpString, 0);
@@ -522,8 +619,9 @@ begin
          else
             FormMain.TempGameVars.eTitle:= '   Bios Set';
          if ZipBios <> '' then
-            AddEntry2(FormMain.TempGameVars.eTitle, ExtractFileName(ZipBios)+ ' ('+
-                                 FormMain.GetSizeType(GetFileSize(ZipBios), False)+')', 1)
+            AddEntry2(FormMain.TempGameVars.eTitle, ExtractFileName(ZipBios), 1)
+            //AddEntry2(FormMain.TempGameVars.eTitle, ExtractFileName(ZipBios)+ ' ('+
+            //                     FormMain.GetSizeType(GetFileSize(ZipBios), False)+')', 1)
          else
             AddEntry2(FormMain.TempGameVars.eTitle, FormMain.TempGameVars.eBiosName+tmpString, 0);
        end;
@@ -541,7 +639,7 @@ begin
     else
     if not IsBiosSetOnly then
        begin
-         if LabelEmulatorVersion.Tag <> 1 then
+         if LabelEmulatorVersion.Tag <> 1 then // not used anymore... use "MemGameInfo.eIsMerged" instead!!!!
             AddEntry2('   Game Set', FileStatusStr[0]+': '+FormMain.MemGameInfo.eName+tmpString, 0)
          else
             AddEntry2('   Game Set', FileStatusStr[0]+ ' (Merged in parent set)', 1);//ImgIndex); // for merged clone sets!!!
@@ -570,39 +668,20 @@ begin
        end;}
   //end; // should be removed from here ???? May 30, 2015
 
-  // if FormMain.MemGameInfo.eUseDeviceROMs = 1 then
   if TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets <> nil then
      begin
        for ImgIndex:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets.Count-1 do
        begin
          ZipDevice:= FormMain.SearchZIPFolder(TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets[ImgIndex], 1);
          if ZipDevice <> '' then
-            AddEntry2('   Device Set '+IntToStr(imgIndex+1), ExtractFileName(ZipDevice)+ ' ('+
-                                  FormMain.GetSizeType(GetFileSize(ZipDevice), False)+')', 1)
+            AddEntry2('   Device Set '+IntToStr(imgIndex+1), ExtractFileName(ZipDevice), 1)
+            //AddEntry2('   Device Set '+IntToStr(imgIndex+1), ExtractFileName(ZipDevice)+ ' ('+
+            //                      FormMain.GetSizeType(GetFileSize(ZipDevice), False)+')', 1)
          else
             AddEntry2('   Device Set '+IntToStr(imgIndex+1), TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets[ImgIndex]+tmpString, 0);
        end;
        //FreeAndNil(ListDeviceSets);
      end;
-  {
-  if FormMain.MemGameInfo.eUseDeviceROMs = 1 then
-     begin
-       FormMain.LoadListDeviceROMs(FormMain.MemGameInfo.eSystemID);
-       ListDeviceSets:= TStringList.Create;
-       FormMain.ListGamesDeviceROMs[Ord(FormMain.MemGameInfo.eSystemID = 1)].ReadSection(FormMain.MemGameInfo.eName, ListDeviceSets);
-       FreeAndNil(FormMain.ListGamesDeviceROMs[Ord(FormMain.MemGameInfo.eSystemID = 1)]);
-
-       for ImgIndex:=0 to ListDeviceSets.Count-1 do
-       begin
-         ZipDevice:= FormMain.SearchZIPFolder(ListDeviceSets[imgIndex], 1);
-         if ZipDevice <> '' then
-            AddEntry2('   Device Set '+IntToStr(imgIndex+1), FileStatusStr[1]+': '+ExtractFileName(ZipDevice)+ ' ('+
-                                  FormMain.GetSizeType(GetFileSize(ZipDevice), False)+')', 1)
-         else
-            AddEntry2('   Device Set '+IntToStr(imgIndex+1), FileStatusStr[0]+': '+ListDeviceSets[imgIndex]+tmpString, 0);
-       end;
-       FreeAndNil(ListDeviceSets);
-     end;}
   FormMain.ClearMemGameInfo(FormMain.TempGameVars);
 end;
 
@@ -914,7 +993,7 @@ begin
        Exit;
      end;
 
-  sFile:= FormMain.GetGamesFolderEL+ChangeFileExt(GetSystemFileName(FormMain.MemGameInfo.eSystemID), '.miss');
+  sFile:= FormMain.GetGamesFolderEL(Ord(FormMain.MemGameInfo.eSoftwareName <> ''))+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 3, FormMain.MemGameInfo.eSoftwareName);
   if FileExists(sFile) then
      missFile:= TMemIniFile.Create(sFile);
   AddROMs;
@@ -926,7 +1005,7 @@ var
   Loop: Integer;
   CHDsAllNoDump: Boolean;
   iROM: String;
-  
+
   ROMsCount, BottomPos, HeaderSize, iROMsHeight: Integer;
 begin
   FormMain.ELV_ResetNormalColors(ROMsListView);
@@ -934,7 +1013,8 @@ begin
   //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
   //FormMain.IL_ArcadeSystem_Large.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                              SystemIcon.Picture.Icon);
   FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
@@ -952,7 +1032,8 @@ begin
   end;
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
 
-  LeftPanelMinimumTextSize:= 137;
+  LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Checksum column size is 65, difference is 186...
 
   if FormMain.MemGameInfo.eCHDsCount > 0 then
@@ -1037,9 +1118,18 @@ begin
 
   Inc(BottomPos, 7); // add 7 pixels to make the 6 pixels border
 
+  //FormGameDetails.ClientHeight:= 400;//
   if FormGameDetails.ClientHeight > BottomPos then
      FormGameDetails.ClientHeight:= BottomPos;
 
+  FormGameDetails.VertScrollBar.Visible:= True;
+  FormGameDetails.HorzScrollBar.Visible:= True;
+  //if FormGameDetails.ClientWidth > 620 then
+  //   FormGameDetails.ClientWidth:= 620;
+  //if FormGameDetails.ClientHeight > 400 then
+  //   FormGameDetails.ClientHeight:= 400;
+
+  // no used anymore ???? is this a debug stuff ?
   //BottomPos:= ROMsListView.Header.Columns[0].Width+ROMsListView.Header.Columns[1].Width+ROMsListView.Header.Columns[2].Width;
   //Caption:= 'header: '+IntToStr(BottomPos)+'  -> ELV width: '+IntToStr(ROMsListView.ClientWidth);
 end;

@@ -20,6 +20,7 @@ type
     ButtonApply: TBitBtn;
     ButtonConfirm: TBitBtn;
     KeepAspectRatio: TAdvOfficeCheckBox;
+    ShowImageGameDocsPanel: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);
     procedure ButtonApplyClick(Sender: TObject);
@@ -61,10 +62,15 @@ procedure TFormThumbnailView.ButtonApplyClick(Sender: TObject);
 begin
   FormMain.MenuThumbnailKeepAspectRatio.Checked:= KeepAspectRatio.Checked;
   FormMain.PopupThumbnailKeepAspectRatio.Checked:= KeepAspectRatio.Checked;
+
+  FormMain.MenuThumbnailShowImagesGameDocsPanel.Checked:= ShowImageGameDocsPanel.Checked;
+  FormMain.MenuThumbnailShowImagesGameDocsPanel.OnClick(Self);
+  //FormMain.PopupThumbnailShowImagesGameDocsPanel.Checked:= ShowImageGameDocsPanel.Checked;
+
   FormMain.SetThumbGridSize(GridSize.Position);
   FormMain.ELV_MakeVisible;
-  //if FormMain.CheckSelected(FormMain.GamesListView) then
-  //   FormMain.ResetThumbnails(True); // generates memory leaks!!!!!!!!! :_((
+  if FormMain.CheckSelected(FormMain.GamesListView) then
+     FormMain.ResetThumbnails(True); // generates memory leaks!!!!!!!!! :_((
 
   if TBitBtn(Sender).Tag = 1 then
      Close;
@@ -77,6 +83,7 @@ begin
   ShowBorder.Checked:= FormMain.GamesListView.PaintInfoItem.ShowBorder;
   ShowGameTitles.Checked:= not FormMain.GamesListView.PaintInfoItem.HideCaption;
   KeepAspectRatio.Checked:= FormMain.MenuThumbnailKeepAspectRatio.Checked;
+  ShowImageGameDocsPanel.Checked:= FormMain.MenuThumbnailShowImagesGameDocsPanel.Checked;
   //RectWidth( Item.View.ItemRect(Item, nil, ertIcon));
 end;
 

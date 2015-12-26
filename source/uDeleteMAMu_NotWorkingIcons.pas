@@ -14,12 +14,13 @@ type
     fIconLoaded: Boolean;
     fROMIdentification: Integer;
     fSystemID: Integer;
-    fTitle: String;
+    fTitle: WideString;
     fName: String;
     fClone: String;
     fCloneParent: String;
     fDriverName: String;
     fDriverStatus: ShortInt;
+    fSoftwareName: String;
     fGameStatus: ShortInt; // 0 - have or miss; 1 - missing ROMs/CHDs
   protected
     function GetCaptions(Column: Integer): WideString; override;
@@ -29,12 +30,13 @@ type
     property eIconLoaded: Boolean read fIconLoaded write fIconLoaded;
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: Integer read fSystemID write fSystemID;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
     property eDriverName: String read fDriverName write fDriverName;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus;
   end;
 
@@ -60,7 +62,7 @@ type
     procedure ButtonCancelClick(Sender: TObject);
   private
     { Private declarations }
-    function  AddMAMu_Icon(sysID: Integer; GameName: String): Integer;
+    function  AddMAMu_Icon(sysID: Integer; const GameName, SoftwareName: String): Integer;
     procedure PopulateGamesList;
     procedure ReplaceZZZIcon;
     function  CheckNameZZZ(FileNameStr: String): Boolean;
@@ -90,8 +92,10 @@ begin
         TextGameStr:= eName;
         if FormMain.GameIsClone(eClone) then
            TextGameStr:= TextGameStr+' ['+eClone+']';
+        if eSoftwareName <> '' then
+           TextGameStr:= TextGameStr+' [xml '+eSoftwareName+']';
         FullStr:= '%s%'+IntToStr(39-Length(TextGameStr))+'s';
-        Result:= Format(FullStr, [TextGameStr, ' ['+aStatus[eDriverStatus]+']']);
+        Result:= Format(FullStr, [TextGameStr, ' [driver: '+aStatus[eDriverStatus]+']']);
       end;
   end;
 end;
@@ -106,9 +110,9 @@ begin
            begin
              if not eIconLoaded then
                 begin
-                  eImageIndex:= FormDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(eSystemID, eName);
+                  eImageIndex:= FormDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(eSystemID, eName, eSoftwareName);
                   if eImageIndex = -1 then
-                     eImageIndex:= eROMIdentification;
+                     eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
                   eIconLoaded:= True;
                 end;
            end;
@@ -119,7 +123,7 @@ begin
      Result:= -1;
 end;
 
-function TFormDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(sysID: Integer; GameName: String): Integer;
+function TFormDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(sysID: Integer; const GameName, SoftwareName: String): Integer;
 var
   Icon32: TExIcon;
   tmpIco: TIcon;
@@ -127,7 +131,7 @@ var
   FilePath: String;
 begin
   Result:= -1;
-  if not FormMain.ScanFoldersIcon(GameName, sysID, FilePath, False) then
+  if not FormMain.ScanFoldersIcon(GameName, SoftwareName, sysID, FilePath, False) then
      Exit;
 
   if FormMain.LoadMAMu_Icon(FilePath, Icon32, icoIndex, False) then
@@ -169,6 +173,7 @@ begin
        TNotWorkingGameInfo(addItem).eCloneParent:= '';
        TNotWorkingGameInfo(addItem).eDriverName:= '';
        TNotWorkingGameInfo(addItem).eDriverStatus:= 0;
+       TNotWorkingGameInfo(addItem).eSoftwareName:= '';
        TNotWorkingGameInfo(addItem).eGameStatus:= 0;
        addItem.Checked:= False;
        addItem.Details[1]:= 1;
@@ -191,6 +196,7 @@ begin
            0:
              begin
                zIcon:= TIcon.Create;
+               // add the softlistname sub-folder after "FormMAMu_Folder" here...
                zIcon.LoadFromFile(FormMain.MAMu_Folder+TMissingIconInfo(Item).eName+'.ico'); // index = MaxGameID+1
                addIndex:= IL_NotWorking.AddIcon(zIcon);
                FreeAndNil(zIcon);
@@ -212,6 +218,7 @@ begin
          TNotWorkingGameInfo(addItem).eCloneParent:= TMissingIconInfo(Item).eCloneParent;
          TNotWorkingGameInfo(addItem).eDriverName:= TMissingIconInfo(Item).eDriverName;
          TNotWorkingGameInfo(addItem).eDriverStatus:= TMissingIconInfo(Item).eDriverStatus;
+         TNotWorkingGameInfo(addItem).eSoftwareName:= TMissingIconInfo(Item).eSoftwareName;
          TNotWorkingGameInfo(addItem).eGameStatus:= TMissingIconInfo(Item).eGameStatus;
          addItem.Checked:= True;
          addItem.Details[1]:= 1;
@@ -263,7 +270,7 @@ var
   //FolderStr: String;
 begin
   FormDeleteMAMu_NotWorkingIcons.Tag:= FormMAMu_IconsManager.ButtonSystem.Tag;
-  ButtonSourceIcon.Visible:= LabelHotkeys.Tag <> 0; // delete files only support zzz.ico ?
+  ButtonSourceIcon.Enabled:= LabelHotkeys.Tag <> 0; // delete files only support zzz.ico ?
   FormMAMu_IconsManager.SourceIconFile:= 'zzz.ico';
   case LabelHotkeys.Tag of
     0:
@@ -359,7 +366,7 @@ end;
 procedure TFormDeleteMAMu_NotWorkingIcons.FormShow(Sender: TObject);
 begin
   mmResult:= mrCancel;
-  ButtonSourceIcon.Visible:= LabelHotkeys.Tag <> 0;
+  ButtonSourceIcon.Enabled:= LabelHotkeys.Tag <> 0;
   FormMain.ELV_SelectItem(NotWorkingIcons, 0);
   if NotWorkingIcons.Scrollbars.VertBarVisible then
      NotWorkingIcons.HotTrack.Enabled:= False;

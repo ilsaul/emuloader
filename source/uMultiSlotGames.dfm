@@ -44,7 +44,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Left = 4
     Top = 4
     Width = 763
-    Height = 232
+    Height = 229
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 20
     Color = clWhite
@@ -69,7 +69,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000008000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800801010100010000000000000117000000FFFFFF1F0001000000
+      0006000000800801010100010000000000000017000000FFFFFF1F0001000000
       00000000000000000000000000000000110000005445617379436F6C756D6E53
       746F726564FFFECE000600000080080001010001010000000000004A010000FF
       FFFF1F000100000001000000050000005400690074006C006500000000000000
@@ -96,7 +96,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Height = 24
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
@@ -188,12 +187,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Height = 25
     Hint = 'Move selected game to upper slot [Ctrl+Up Arrow]'
     Caption = 'Move To Upper Slot'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
@@ -206,12 +199,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Height = 25
     Hint = 'Move selected game to lower slot [Ctrl+Down Arrow]'
     Caption = 'Move To Lower Slot'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
@@ -224,12 +211,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Height = 25
     Hint = 'Remove selected games from the list [Delete]'
     Caption = 'Remove From List'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4

@@ -33,8 +33,8 @@ implementation
 
 procedure TFormRenameIconFile.NewFilenameKeyPress(Sender: TObject;
   var Key: Char);
-var
-  NewValue: String;
+//var
+//  NewValue: String;
 begin
   if Key in ['/', '*', '?', '<', '>', '|', ':', ';'] then
      begin

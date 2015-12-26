@@ -56,7 +56,7 @@ begin
   FormMain.AddDefaultIcons('filter2_01_both.ico', tempFolder, IL_ToolBarButtonsEditor);
   FormMain.AddDefaultIcons('filter3_01_listall.ico', tempFolder, IL_ToolBarButtonsEditor);
   FormMain.AddDefaultIcons('filter4_01_all.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter5_01_both.ico', tempFolder, IL_ToolBarButtonsEditor);
+  FormMain.AddDefaultIcons('filter5_machines.ico', tempFolder, IL_ToolBarButtonsEditor);
   FormMain.AddDefaultIcons('mamu_.ico', tempFolder, IL_ToolBarButtonsEditor);
   FormMain.AddDefaultIcons('filter_extra.ico', tempFolder, IL_ToolBarButtonsEditor);
   FormMain.AddDefaultIcons('filter_text.ico', tempFolder, IL_ToolBarButtonsEditor);

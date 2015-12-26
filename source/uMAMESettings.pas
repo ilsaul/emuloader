@@ -30,7 +30,6 @@ type
     ArtworkControlPanels: TAdvOfficeCheckBox;
     ArtworkMarquees: TAdvOfficeCheckBox;
     VectorGroupBox: TAdvGroupBox;
-    Antialias: TAdvOfficeCheckBox;
     MultiKeyboard: TAdvOfficeCheckBox;
     Mouse: TAdvOfficeCheckBox;
     MultiMouse: TAdvOfficeCheckBox;
@@ -60,12 +59,6 @@ type
     Analog_Trackball: TComboBox;
     Analog_Positional: TComboBox;
     Analog_Mouse: TComboBox;
-    UIModeBox: TAdvGroupBox;
-    LabelUIModeKey: TLabel;
-    LabelUIModeKeyCustom: TLabel;
-    UIModeKey: TComboBox;
-    UIModeKeyCustom: TEdit;
-    ButtonUIModeKeyDetectKey: TBitBtn;
     SkipGameInfo: TAdvOfficeCheckBox;
     ReadConfigFiles: TAdvOfficeCheckBox;
     WriteConfigFiles: TAdvOfficeCheckBox;
@@ -159,8 +152,6 @@ type
     LabelCoinImpulse: TLabel;
     LabelControllerDefinitions: TLabel;
     ControllerDefinitions: TComboBox;
-    LabelVectorBeamWidth: TLabel;
-    VectorBeamWidth: TGaugeBar2;
     LabelVectorFlickerEffect: TLabel;
     VectorFlickerEffect: TGaugeBar2;
     LabelJoystickDeadzone: TLabel;
@@ -202,12 +193,8 @@ type
     ButtonPageSDLMAMEInput: TToolButton;
     SDKKeyboardMappingBox: TAdvGroupBox;
     LabelSDLKeymapFilename: TLabel;
-    LabelSDLKeyToToggleKeyboardMode: TLabel;
     SDLKeymapFilename: TEdit;
     ButtonSDLKeymapFilenameSelect: TBitBtn;
-    SDLKeyToToggleKeyboardMode: TEdit;
-    ButtonSDLKeyToToggleKeyboardModeReset: TBitBtn;
-    ButtonSDLKeyToToggleKeyboardModeSelect: TBitBtn;
     ButtonSDLKeymapFilenameReset: TBitBtn;
     SDLJoystickMappingBox: TAdvGroupBox;
     SDLJoystickMapping1: TComboBox;
@@ -528,8 +515,6 @@ type
     ButtonSDLAlternativeLibGLToUseCustom: TBitBtn;
     ButtonResetHTTPServer: TBitBtn;
     DummyWriteSnapshot: TAdvOfficeCheckBox;
-    HLSLPresetToUse: TComboBox;
-    LabelHLSLPresetToUse: TLabel;
     Label7: TLabel;
     HLSLUpscaleSnapX: TEdit;
     HLSLUpscaleSnapY: TEdit;
@@ -543,6 +528,35 @@ type
     LabelSaveStateName: TLabel;
     SaveStateName: TEdit;
     ButtonSaveStateNameReset: TBitBtn;
+    LabelSoftwareListTitle: TShadowLabel;
+    UIModeBox: TAdvGroupBox;
+    LabelUIModeKeyCustom: TLabel;
+    UIModeKeyCustom: TEdit;
+    ButtonUIModeKeyDetectKey: TBitBtn;
+    CommOptionsBox: TAdvGroupBox;
+    LabelCommLocalHost: TLabel;
+    CommLocalHost: TEdit;
+    LabelCommLocalPort: TLabel;
+    CommLocalPort: TEdit;
+    LabelCommRemoteHost: TLabel;
+    CommRemoteHost: TEdit;
+    LabelCommRemotePort: TLabel;
+    CommRemotePort: TEdit;
+    CommLocalHostButtonReset: TBitBtn;
+    CommLocalPortButtonReset: TBitBtn;
+    CommRemoteHostButtonReset: TBitBtn;
+    CommRemotePortButtonReset: TBitBtn;
+    Label6: TLabel;
+    Label8: TLabel;
+    EnableGlobalInputs: TAdvOfficeCheckBox;
+    VectorBeamWidthMin: TGaugeBar2;
+    LabelVectorBeamWidthMin: TLabel;
+    LabelVectorBeamWidthMax: TLabel;
+    VectorBeamWidthMax: TGaugeBar2;
+    LabelVectorBeamIntensityWeight: TLabel;
+    VectorBeamIntensityWeight: TGaugeBar2;
+    AntialiasVectorBkPanel: TPanelEx;
+    Antialias: TAdvOfficeCheckBox;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -568,7 +582,6 @@ type
     procedure FullScreenBrightnessChange(Sender: TObject);
     procedure FullScreenContrastChange(Sender: TObject);
     procedure FullScreenGammaChange(Sender: TObject);
-    procedure VectorBeamWidthChange(Sender: TObject);
     procedure VectorFlickerEffectChange(Sender: TObject);
     procedure SecondsToRunChange(Sender: TObject);
     procedure ScreenNameSelect(Sender: TObject);
@@ -687,8 +700,6 @@ type
     procedure ButtonSDLAlternativeLibGLToUseCustomClick(Sender: TObject);
     procedure ButtonSDLKeymapFilenameSelectClick(Sender: TObject);
     procedure ButtonSDLKeymapFilenameResetClick(Sender: TObject);
-    procedure ButtonSDLKeyToToggleKeyboardModeResetClick(Sender: TObject);
-    procedure SDKKeyboardMappingBoxCheckBoxClick(Sender: TObject);
     procedure ButtonSnapNameDefaultClick(Sender: TObject);
     procedure ButtonSaveStateNameResetClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -707,6 +718,17 @@ type
     procedure HLSLUpscaleSnapXKeyPress(Sender: TObject; var Key: Char);
     procedure HLSLUpscaleSnapYKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonHLSLUpscaleSnapResetClick(Sender: TObject);
+    procedure CommLocalHostKeyPress(Sender: TObject; var Key: Char);
+    procedure CommLocalPortKeyPress(Sender: TObject; var Key: Char);
+    procedure CommLocalHostButtonResetClick(Sender: TObject);
+    procedure CommLocalPortButtonResetClick(Sender: TObject);
+    procedure CommRemoteHostButtonResetClick(Sender: TObject);
+    procedure CommRemotePortButtonResetClick(Sender: TObject);
+    procedure HLSLEnableClick(Sender: TObject);
+    procedure EnableGLSLClick(Sender: TObject);
+    procedure VectorBeamWidthMinChange(Sender: TObject);
+    procedure VectorBeamWidthMaxChange(Sender: TObject);
+    procedure VectorBeamIntensityWeightChange(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -800,7 +822,7 @@ end;
 procedure TFormMAMESettings.PopulateVideoOutputMode;
 var
   mameIni: THashedStringList;
-  Loop, ScanIndex: Integer;
+  Loop: Integer;
 begin
   if VideoOutputMode.Items.Count > 0 then
      Exit;
@@ -831,7 +853,6 @@ begin
 
        if FileExists(emuIni) then
           begin
-            ScanIndex:= 0;
             mameIni:= THashedStringList.Create;
             mameIni.LoadFromFile(emuIni);
             for Loop:=0 to mameIni.Count-1 do
@@ -839,22 +860,34 @@ begin
               if SameText(Copy(mameIni[Loop], 1, 12), 'sdlvideofps ') then
                  begin
                    IsSDLMAME:= True;
-                   Inc(ScanIndex);
                  end
               else
               if SameText(Copy(mameIni[Loop], 1, 8), 'gl_glsl ') then
                  begin
                    GLSL_GroupBox.Enabled:= True;
-                   Inc(ScanIndex);
                  end
               else
               if SameText(Copy(mameIni[Loop], 1, 12), 'hlsl_enable ') then
                  begin
                    HLSL_GroupBox.Enabled:= True;
-                   Inc(ScanIndex);
-                 end;
-              if ScanIndex = 3 then
-                 Break;
+                 end
+              else
+              if SameText(Copy(mameini[Loop], 1, 5), 'beam ') then
+                 begin
+                   LabelVectorBeamWidthMin.Hint:= 'Beam Width [%2.2f]';
+                   LabelVectorBeamWidthMin.Caption:= 'Beam Width [1.00]';
+                   VectorBeamWidthMin.Hint:= 'Set vector beam width';
+                   LabelVectorBeamWidthMax.Enabled:= False;
+                   VectorBeamWidthMax.Enabled:= False;
+                   LabelVectorBeamIntensityWeight.Enabled:= False;
+                   VectorBeamIntensityWeight.Enabled:= False;
+                 end
+              else
+              if SameText(Copy(mameini[Loop], 1, 5), 'http ') then
+                 HTTPServer.Enabled:= True
+              else
+              if SameText(Copy(mameini[Loop], 1, 8), 'console ') then
+                 EnableEmulatorLUAConsole.Enabled:= True;
             end;
             FreeAndNil(mameIni);
           end;
@@ -873,7 +906,6 @@ begin
       end;
     False: // MAME; HBMAME; UME
       begin
-
         VideoOutputMode.Items.Add('GDI');
         VideoOutputMode.Items.Add('DirectDraw');
         VideoOutputMode.Items.Add('Direct3D');
@@ -897,7 +929,7 @@ end;
 // OPTION_PRIORITY_DEBUG_INI,
 // OPTION_PRIORITY_ORIENTATION_INI,
 // OPTION_PRIORITY_SYSTYPE_INI,
-// OPTION_PRIORITY_VECTOR_INI,
+// OPTION_PRIORITY_SCREEN_INI,
 // OPTION_PRIORITY_SOURCE_INI,
 // OPTION_PRIORITY_GPARENT_INI,
 // OPTION_PRIORITY_PARENT_INI,
@@ -913,7 +945,7 @@ end;
 // console.ini  // systype_ini
 // computer.ini // systype_ini
 // othersys.ini // systype_ini ??????
-// vector.ini
+// raster.ini   // vector.ini  // lcd.ini
 // source\sourcefile.ini // source_ini
 // sourcefile.ini        // source_ini
 // biosname.ini   // grandparent_ini
@@ -1126,7 +1158,7 @@ begin
                FormMain.ExtractMultiFolders(GetStringValue, sysID, FolderIniFiles)
             else
             if (EntryString = 'fontpath ') and EmuDefaultSettings then
-               FolderFontFiles.Text:= GetStringValue // FormMain.ExtractMultiFolders(GetStringValue, sysID, FolderFontFiles) // old EasyListView extract function...
+               FolderFontFiles.Text:= GetStringValue
             else
             if (EntryString = 'cheatpath ') and EmuDefaultSettings then
                FolderCheatFiles.Text:= GetStringValue
@@ -1314,7 +1346,16 @@ begin
                Antialias.Checked:= GetBooleanValue
             else
             if EntryString = 'beam ' then
-               VectorBeamWidth.Position:= GetFloatValue('%2.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
+               VectorBeamWidthMin.Position:= GetFloatValue('%2.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
+            else
+            if EntryString = 'beam_width_min ' then
+               VectorBeamWidthMin.Position:= GetFloatValue('%2.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
+            else
+            if EntryString = 'beam_width_max ' then
+               VectorBeamWidthMax.Position:= GetFloatValue('%2.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
+            else
+            if EntryString = 'beam_intensity_weight ' then
+               VectorBeamIntensityWeight.Position:= GetFloatValue('%1.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
             else
             if EntryString = 'flicker ' then
                VectorFlickerEffect.Position:= GetFloatValue('%3.2f') //StrToFloat(Format('%3.2f', [StrToFloat(GetStringValue)]))
@@ -1461,18 +1502,9 @@ begin
                CoinImpulse.ItemIndex:= GetIntegerValue+1
             else
             if (((EntryString = 'uimodekey ') or
-                 (EntryString = 'umk '))) and (not IsSDLMAME) then
+                 (EntryString = 'umk '))) then
                begin
-                 // this settings is no longer used by Windows MAME ???? Maybe it's for MESS only
-                 Value:= GetStringValue;
-                 case SameText(Value, 'auto') of
-                   True: UIModeKey.ItemIndex:= 0;
-                   False:
-                     begin
-                       UIModeKey.ItemIndex:= 1;
-                       UIModeKeyCustom.Text:= Value;
-                     end;
-                 end;
+                 UIModeKeyCustom.Text:= GetStringValue;
                end
             else
             // # CORE INPUT AUTOMATIC ENABLE OPTIONS
@@ -1582,6 +1614,18 @@ begin
                  if Value = '1' then // internal
                     Debugger.ItemIndex:= 1;
                end
+            else
+            if EntryString = 'comm_localhost ' then
+               CommLocalHost.Text:= GetStringValue
+            else
+            if EntryString = 'comm_localport ' then
+               CommLocalPort.Text:= GetStringValue
+            else
+            if EntryString = 'comm_remotehost ' then
+               CommRemoteHost.Text:= GetStringValue
+            else
+            if EntryString = 'comm_remoteport ' then
+               CommRemotePort.Text:= GetStringValue
             else
             // # CORE MISC OPTIONS
             if EntryString = 'drc ' then
@@ -1899,9 +1943,9 @@ begin
             if EntryString = 'hlsl_prescale_y ' then
                HLSLPrescaleOverrideY.ItemIndex:= GetIntegerValue
             else
-            if EntryString = 'hlsl_preset ' then
-               HLSLPresetToUse.ItemIndex:= GetIntegerValue+1
-            else
+            //if EntryString = 'hlsl_preset ' then
+            //   HLSLPresetToUse.ItemIndex:= GetIntegerValue+1
+            //else
             if EntryString = 'hlsl_snap_width ' then
                HLSLUpscaleSnapX.Text:= GetStringValue
             else
@@ -2097,6 +2141,9 @@ begin
             //if EntryString = 'hide_cursor ' then // deprecated setting
             //   HideCursor.Checked:= GetBooleanValue
             //else
+            if EntryString = 'global_inputs ' then
+               EnableGlobalInputs.Checked:= GetBooleanValue
+            else
             if (EntryString = 'dual_lightgun ') or
                (EntryString = 'dual ') then
                DualLightGun.Checked:= GetBooleanValue
@@ -2109,9 +2156,6 @@ begin
             else
             if EntryString = 'keymap_file ' then
                SDLKeymapFilename.Text:= GetStringValue
-            else
-            if (EntryString = 'uimodekey ') and IsSDLMAME then
-               SDLKeyToToggleKeyboardMode.Text:= GetStringValue
             else
             // # SDL JOYSTICK MAPPING
             if EntryString = 'joy_idx1 ' then
@@ -2614,7 +2658,7 @@ begin
             begin
               Value:= SnapName.Text;
               if Value = '' then
-                 Value:= '%g/%i';
+                 Value:= '%g';
               UpdateMAMELine(EntryString, Value);
             //SetSnapViewOption(EntryString)
             end
@@ -2755,7 +2799,16 @@ begin
             UpdateMAMELine(EntryString, GetBooleanValue(Antialias.Checked))
          else
          if tmpEntryStr = 'beam ' then
-            UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamWidth.Position]), True)
+            UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamWidthMin.Position]), True)
+         else
+         if tmpEntryStr = 'beam_width_min ' then
+            UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamWidthMin.Position]), True)
+         else
+         if tmpEntryStr = 'beam_width_max ' then
+            UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamWidthMax.Position]), True)
+         else
+         if tmpEntryStr = 'beam_intensity_weight ' then
+            UpdateMAMELine(EntryString, Format('%1.2f', [VectorBeamIntensityWeight.Position]), True)
          else
          if tmpEntryStr = 'flicker ' then
             UpdateMAMELine(EntryString, Format('%3.2f', [VectorFlickerEffect.Position]), True)
@@ -2912,19 +2965,8 @@ begin
             UpdateMAMELine(EntryString, IntToStr(CoinImpulse.ItemIndex-1))
          else
          if ((tmpEntryStr = 'uimodekey ') or
-            (tmpEntryStr = 'umk ')) and (not IsSDLMAME) then
-            begin
-              case UIModeKey.ItemIndex of
-                0: UpdateMAMELine(EntryString, 'auto');
-                1:
-                  begin
-                    if UIModeKeyCustom.Text <> '' then
-                       UpdateMAMELine(EntryString, UIModeKeyCustom.Text)
-                    else
-                       UpdateMAMELine(EntryString, 'auto');
-                  end;
-              end;
-            end
+            (tmpEntryStr = 'umk ')) then
+            UpdateMAMELine(EntryString, UIModeKeyCustom.Text)
          else
          // # CORE INPUT AUTOMATIC ENABLE OPTIONS
          if (tmpEntryStr = 'paddle_device ') or
@@ -3006,6 +3048,19 @@ begin
               end;
               UpdateMAMELine(EntryString, Value);
             end
+         else
+         //# CORE COMM OPTIONS
+         if tmpEntryStr = 'comm_localhost ' then
+            UpdateMAMELine(EntryString, CommLocalHost.Text)
+         else
+         if tmpEntryStr = 'comm_localport ' then
+            UpdateMAMELine(EntryString, CommLocalPort.Text)
+         else
+         if tmpEntryStr = 'comm_remotehost ' then
+            UpdateMAMELine(EntryString, CommRemoteHost.Text)
+         else
+         if tmpEntryStr = 'comm_remoteport ' then
+            UpdateMAMELine(EntryString, CommRemotePort.Text)
          else
          // # CORE MISC OPTIONS
          if tmpEntryStr = 'drc ' then
@@ -3246,9 +3301,9 @@ begin
          if tmpEntryStr = 'hlsl_prescale_y ' then
             UpdateMAMELine(EntryString, IntToStr(HLSLPrescaleOverrideY.ItemIndex))
          else
-         if tmpEntryStr = 'hlsl_preset ' then
-            UpdateMAMELine(EntryString, IntToStr(HLSLPresetToUse.ItemIndex-1))
-         else
+         //if tmpEntryStr = 'hlsl_preset ' then
+         //   UpdateMAMELine(EntryString, IntToStr(HLSLPresetToUse.ItemIndex-1))
+         //else
          if tmpEntryStr = 'hlsl_snap_width ' then
             UpdateMAMELine(EntryString, HLSLUpscaleSnapX.Text)
          else
@@ -3445,6 +3500,9 @@ begin
          //if tmpEntryStr = 'hide_cursor ' then // deprecated setting
          //   UpdateMAMELine(EntryString, GetBooleanValue(HideCursor.Checked))
          //else
+         if tmpEntryStr = 'global_inputs ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(EnableGlobalInputs.Checked))
+         else
          if (tmpEntryStr = 'dual_lightgun ') or
             (tmpEntryStr = 'dual ') then
             UpdateMAMELine(EntryString, GetBooleanValue(DualLightGun.Checked))
@@ -3457,9 +3515,6 @@ begin
          else
          if tmpEntryStr = 'keymap_file ' then
             UpdateMAMELine(EntryString, SDLKeymapFilename.Text)
-         else
-         if (tmpEntryStr = 'uimodekey ') and IsSDLMAME then
-            UpdateMAMELine(EntryString, SDLKeyToToggleKeyboardMode.Text)
          else
          // # SDL JOYSTICK MAPPING
          if tmpEntryStr = 'joy_idx1 ' then
@@ -3752,14 +3807,23 @@ begin
          if FormMain.MemGameInfo.eScreenOrientation = 0 then
             Result:= 'horizont';
        end;
-     4: Result:= 'arcade';   // UME only
-     5: Result:= 'console';  // UME only
-     6: Result:= 'computer'; // UME only
-     7: Result:= 'othersys'; // othersys // systype_ini ?????? UME only
+     4: Result:= 'arcade';   // UME / MAME v0.163 and newer
+     5: Result:= 'console';  // UME / MAME v0.163 and newer
+     6: Result:= 'computer'; // UME / MAME v0.163 and newer
+     7: Result:= 'othersys'; // othersys // systype_ini ?????? UME / MAME v0.163 and newer
      8:
        begin
-         if FormMain.MemGameInfo.eScreenType = 1 then
-            Result:= 'vector';
+         //  -1 -> none; 0 -> raster; 1 -> vector; 2 -> LCD; 3 -> unknown
+         // MAME v0.167 and newer
+         case FormMain.MemGameInfo.eScreenType of
+           0: Result:= 'raster';
+           1: Result:= 'vector';
+           2: Result:= 'lcd';
+         else
+              Result:= 'raster';
+         end;
+         //if FormMain.MemGameInfo.eScreenType = 1 then
+         //   Result:= 'vector';
        end;
      9: Result:= ChangeFileExt(FormMain.MemGameInfo.eDriverName, ''); // source\sourcefile.ini or sourcefile.ini // source_ini
     10: Result:= FormMain.MemGameInfo.eBiosName; // biosname.ini   // grandparent_ini
@@ -4006,11 +4070,6 @@ begin
   LabelFullScreenGamma.Caption:= Format(LabelFullScreenGamma.Hint, [FullScreenGamma.Position]);
 end;
 
-procedure TFormMAMESettings.VectorBeamWidthChange(Sender: TObject);
-begin
-  LabelVectorBeamWidth.Caption:= Format(LabelVectorBeamWidth.Hint, [VectorBeamWidth.Position]);
-end;
-
 procedure TFormMAMESettings.VectorFlickerEffectChange(Sender: TObject);
 begin
   LabelVectorFlickerEffect.Caption:= Format(LabelVectorFlickerEffect.Hint, [VectorFlickerEffect.Position]);
@@ -4174,6 +4233,7 @@ begin
         ButtonPageSDLMAMEInput.Visible:= False;//Enabled:= False;
       end;
   end;
+  FormMain.SetGroupBoxState(HTTPServer, HTTPServer.Enabled, True);
 end;
 
 procedure TFormMAMESettings.FormShow(Sender: TObject);
@@ -4268,8 +4328,15 @@ begin
 
        LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
 
-       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                                   SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+
+       if FormMain.MemGameInfo.eSoftwareName <> '' then
+          begin
+            LabelSoftwareListTitle.Visible:= True;
+            LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
+          end;
 
        //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
        //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, GameIcon.Picture.Icon);
@@ -4328,7 +4395,7 @@ end;
 
 procedure TFormMAMESettings.SnapNameDefaultButtonClick(Sender: TObject);
 begin
-  SnapName.Text:= '%g/%i';
+  SnapName.Text:= '%g';
 end;
 
 procedure TFormMAMESettings.SnapSizeWidthKeyPress(Sender: TObject;
@@ -4382,8 +4449,6 @@ end;
 
 procedure TFormMAMESettings.UIModeKeyChange(Sender: TObject);
 begin
-  UIModeKeyCustom.Enabled:= UIModeKey.ItemIndex = 1;
-  LabelUIModeKeyCustom.Enabled:= UIModeKeyCustom.Enabled;
   ButtonUIModeKeyDetectKey.Enabled:= UIModeKeyCustom.Enabled;
 end;
 
@@ -4949,21 +5014,9 @@ begin
   SDLKeymapFilename.Text:= 'keymap.dat';
 end;
 
-procedure TFormMAMESettings.ButtonSDLKeyToToggleKeyboardModeResetClick(
-  Sender: TObject);
-begin
-  SDLKeyToToggleKeyboardMode.Text:= 'SCRLOCK';
-end;
-
-procedure TFormMAMESettings.SDKKeyboardMappingBoxCheckBoxClick(
-  Sender: TObject);
-begin
-  ButtonSDLKeyToToggleKeyboardModeSelect.Enabled:= False;
-end;
-
 procedure TFormMAMESettings.ButtonSnapNameDefaultClick(Sender: TObject);
 begin
-  SnapName.Text:= '%g/%i';
+  SnapName.Text:= '%g';
 end;
 
 procedure TFormMAMESettings.ButtonSaveStateNameResetClick(Sender: TObject);
@@ -5020,11 +5073,12 @@ begin
                       '- debug.ini'+#13#10+
                       '- vertical.ini (if screen game is vertical)'+#13#10+
                       '- horizont.ini (if screen game is horizontal)'+#13#10+
-                      '- arcade.ini (UME only)'+#13#10+
-                      '- console.ini (UME only)'+#13#10+
-                      '- computer.ini (UME only)'+#13#10+
-                      '- othersys.ini (UME only; this filename and its purpose is a mistery to me!)'+#13#10+
-                      '- vector.ini (if game is vector)'+#13#10+
+                      '- arcade.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- console.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- computer.ini (UME / MAME v0.163 and newer)'+#13#10+
+                      '- othersys.ini (UME / MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
+                      '- raster.ini (if screen game is raster)'+#13#10+
+                      '- vector.ini (if screen game is vector)'+#13#10+
                       '- source\sourcefile.ini or sourcefile.ini'+#13#10+
                       '- biosname.ini'+#13#10+
                       '- parentgame.ini (if current game is clone)'+#13#10+
@@ -5113,6 +5167,70 @@ begin
   HLSLUpscaleSnapX.Text:= '2048';
   HLSLUpscaleSnapY.Text:= '1536';
 
+end;
+
+procedure TFormMAMESettings.CommLocalHostKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key in ['\', '/', ':', '*', '?', '"', '<', '>', '|', ','] then
+     Key:= Char(0)
+end;
+
+procedure TFormMAMESettings.CommLocalPortKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key in ['\', '/', ':', '*', '?', '"', '<', '>', '|', '.'] then
+     Key:= Char(0)
+end;
+
+procedure TFormMAMESettings.CommLocalHostButtonResetClick(Sender: TObject);
+begin
+  CommLocalHost.Text:= CommLocalHost.Hint;
+end;
+
+procedure TFormMAMESettings.CommLocalPortButtonResetClick(Sender: TObject);
+begin
+  CommLocalPort.Text:= CommLocalPort.Hint;
+end;
+
+procedure TFormMAMESettings.CommRemoteHostButtonResetClick(
+  Sender: TObject);
+begin
+  CommRemoteHost.Text:= CommRemoteHost.Hint;
+end;
+
+procedure TFormMAMESettings.CommRemotePortButtonResetClick(
+  Sender: TObject);
+begin
+  CommRemotePort.Text:= CommRemotePort.Hint;
+end;
+
+procedure TFormMAMESettings.HLSLEnableClick(Sender: TObject);
+begin
+  if HLSLEnable.Checked then
+     EnableGLSL.Checked:= False;
+end;
+
+procedure TFormMAMESettings.EnableGLSLClick(Sender: TObject);
+begin
+  if EnableGLSL.Checked then
+     HLSLEnable.Checked:= False;
+end;
+
+procedure TFormMAMESettings.VectorBeamWidthMinChange(Sender: TObject);
+begin
+  LabelVectorBeamWidthMin.Caption:= Format(LabelVectorBeamWidthMin.Hint, [VectorBeamWidthMin.Position]);
+end;
+
+procedure TFormMAMESettings.VectorBeamWidthMaxChange(Sender: TObject);
+begin
+  LabelVectorBeamWidthMax.Caption:= Format(LabelVectorBeamWidthMax.Hint, [VectorBeamWidthMax.Position]);
+end;
+
+procedure TFormMAMESettings.VectorBeamIntensityWeightChange(
+  Sender: TObject);
+begin
+  LabelVectorBeamIntensityWeight.Caption:= Format(LabelVectorBeamIntensityWeight.Hint, [VectorBeamIntensityWeight.Position]);
 end;
 
 end.

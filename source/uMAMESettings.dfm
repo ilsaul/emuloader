@@ -23,6 +23,26 @@ object FormMAMESettings: TFormMAMESettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
+  object LabelSoftwareListTitle: TShadowLabel
+    Left = 87
+    Top = 58
+    Width = 105
+    Height = 14
+    Caption = 'Software List Title'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 21414
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 16112579
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    Layout = tlCenter
+    Visible = False
+  end
   object NotebookPages: TNotebook
     Left = 0
     Top = 72
@@ -212,7 +232,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000001F6010000FFFFFF1F0001000000
+          00060000008008000101000100000000000001F4010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -587,7 +607,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -719,7 +739,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -1190,30 +1210,17 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object VectorGroupBox: TAdvGroupBox
-        Left = 176
-        Top = 288
+        Left = 360
+        Top = 236
         Width = 169
-        Height = 136
+        Height = 207
         RoundEdges = True
         Caption = 'Vector'
         ParentCtl3D = True
         TabOrder = 1
-        object LabelVectorBeamWidth: TLabel
-          Left = 8
-          Top = 44
-          Width = 113
-          Height = 15
-          Hint = 'Beam Width [%2.2f]'
-          AutoSize = False
-          Caption = 'Beam Width [1.00]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = False
-        end
         object LabelVectorFlickerEffect: TLabel
           Left = 8
-          Top = 92
+          Top = 20
           Width = 121
           Height = 15
           Hint = 'Flicker Effect [%3.2f]'
@@ -1224,39 +1231,48 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = False
         end
-        object Antialias: TAdvOfficeCheckBox
+        object LabelVectorBeamWidthMin: TLabel
           Left = 8
-          Top = 20
-          Width = 73
-          Height = 20
-          Hint = 'Use antialiasing when drawing vectors'
-          Checked = True
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Antialias'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
+          Top = 68
+          Width = 145
+          Height = 15
+          Hint = 'Beam Min Width [%2.2f]'
+          AutoSize = False
+          Caption = 'Beam Min Width [1.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = False
         end
-        object VectorBeamWidth: TGaugeBar2
+        object LabelVectorBeamWidthMax: TLabel
           Left = 8
-          Top = 60
-          Width = 153
-          Height = 20
-          Hint = 'Set vector beam width'
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 0.100000001490116100
-          Max = 10.000000000000000000
-          Min = 0.100000001490116100
-          ShowHandleGrip = True
-          SmallChange = 0.050000000745058060
-          Position = 1.000000000000000000
-          OnChange = VectorBeamWidthChange
+          Top = 116
+          Width = 145
+          Height = 15
+          Hint = 'Beam Max Width [%2.2f]'
+          AutoSize = False
+          Caption = 'Beam Max Width [1.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = False
+        end
+        object LabelVectorBeamIntensityWeight: TLabel
+          Left = 8
+          Top = 164
+          Width = 158
+          Height = 15
+          Hint = 'Beam Intensity Weight [%1.2f]'
+          AutoSize = False
+          Caption = 'Beam Intensity Weight [0.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = False
         end
         object VectorFlickerEffect: TGaugeBar2
           Left = 8
-          Top = 108
+          Top = 36
           Width = 153
           Height = 20
           Hint = 'Set vector flicker effect'
@@ -1267,6 +1283,81 @@ object FormMAMESettings: TFormMAMESettings
           ShowHandleGrip = True
           SmallChange = 0.500000000000000000
           OnChange = VectorFlickerEffectChange
+        end
+        object VectorBeamWidthMin: TGaugeBar2
+          Left = 8
+          Top = 84
+          Width = 153
+          Height = 20
+          Hint = 'Set minimum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 10.000000000000000000
+          Min = 0.009999999776482582
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          Position = 1.000000000000000000
+          OnChange = VectorBeamWidthMinChange
+        end
+        object VectorBeamWidthMax: TGaugeBar2
+          Left = 8
+          Top = 132
+          Width = 153
+          Height = 20
+          Hint = 'Set maximum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 10.000000000000000000
+          Min = 0.009999999776482582
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          Position = 1.000000000000000000
+          OnChange = VectorBeamWidthMaxChange
+        end
+        object VectorBeamIntensityWeight: TGaugeBar2
+          Left = 8
+          Top = 180
+          Width = 153
+          Height = 20
+          Hint = 'Set maximum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 1.000000000000000000
+          Min = -1.000000000000000000
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          OnChange = VectorBeamIntensityWeightChange
+        end
+        object AntialiasVectorBkPanel: TPanelEx
+          Left = 88
+          Top = 0
+          Width = 71
+          Height = 22
+          Color1 = 15856113
+          Color2 = clSilver
+          Color3 = clYellow
+          Color4 = clTeal
+          ColorFrame = clGreen
+          Frames = []
+          ParentBackground = False
+          Style = vgSolid
+          object Antialias: TAdvOfficeCheckBox
+            Left = 5
+            Top = 0
+            Width = 65
+            Height = 19
+            Hint = 'Use antialiasing when drawing vectors'
+            Checked = True
+            TabOrder = 0
+            Alignment = taLeftJustify
+            Caption = 'Antialias'
+            ReturnIsTab = False
+            State = cbChecked
+            Themed = True
+          end
         end
       end
       object ScreenOptionsBox: TAdvGroupBox
@@ -1433,14 +1524,14 @@ object FormMAMESettings: TFormMAMESettings
         Left = 360
         Top = 20
         Width = 169
-        Height = 208
+        Height = 204
         RoundEdges = True
         Caption = 'Full Screen'
         ParentCtl3D = True
         TabOrder = 6
         object LabelFullScreenBrightness: TLabel
           Left = 8
-          Top = 68
+          Top = 64
           Width = 153
           Height = 15
           Hint = 'Brightness Correction [%1.2f]'
@@ -1453,7 +1544,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFullScreenContrast: TLabel
           Left = 8
-          Top = 116
+          Top = 112
           Width = 153
           Height = 15
           Hint = 'Contrast Correction [%1.2f]'
@@ -1466,7 +1557,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFullScreenGamma: TLabel
           Left = 8
-          Top = 164
+          Top = 160
           Width = 153
           Height = 15
           Hint = 'Gamma Correction [%1.2f]'
@@ -1503,7 +1594,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenBrightness: TGaugeBar2
           Left = 8
-          Top = 84
+          Top = 80
           Width = 153
           Height = 20
           Hint = 'Brightness value in full screen mode (entire screen)'
@@ -1519,7 +1610,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenContrast: TGaugeBar2
           Left = 8
-          Top = 132
+          Top = 128
           Width = 153
           Height = 20
           Hint = 'Contrast value in full screen mode (entire screen)'
@@ -1535,7 +1626,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenGamma: TGaugeBar2
           Left = 8
-          Top = 180
+          Top = 176
           Width = 153
           Height = 20
           Hint = 'Gamma value in full screen mode (entire screen)'
@@ -1554,7 +1645,7 @@ object FormMAMESettings: TFormMAMESettings
         Left = 544
         Top = 20
         Width = 308
-        Height = 208
+        Height = 204
         Transparent = False
         RoundEdges = True
         Caption = 'Performance'
@@ -1562,7 +1653,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 3
         object LabelSpeed: TLabel
           Left = 8
-          Top = 116
+          Top = 112
           Width = 120
           Height = 15
           Hint = 'Gameplay Speed [%3.2f]'
@@ -1574,7 +1665,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFrameskip: TLabel
           Left = 108
-          Top = 68
+          Top = 64
           Width = 54
           Height = 15
           Caption = 'Frameskip'
@@ -1585,7 +1676,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelThreadPriority: TLabel
           Left = 208
-          Top = 68
+          Top = 64
           Width = 78
           Height = 15
           Caption = 'Thread Priority'
@@ -1596,7 +1687,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelNumberProcessors: TLabel
           Left = 8
-          Top = 68
+          Top = 64
           Width = 80
           Height = 15
           Caption = '# of Processors'
@@ -1607,7 +1698,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelBenchmark: TLabel
           Left = 158
-          Top = 116
+          Top = 112
           Width = 118
           Height = 15
           Hint = 'sec'
@@ -1619,7 +1710,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelSecondsToRun: TLabel
           Left = 8
-          Top = 164
+          Top = 160
           Width = 275
           Height = 15
           Hint = 'sec'
@@ -1717,7 +1808,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Speed: TGaugeBar2
           Left = 8
-          Top = 132
+          Top = 128
           Width = 142
           Height = 20
           Hint = 
@@ -1736,7 +1827,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Frameskip: TComboBox
           Left = 108
-          Top = 84
+          Top = 80
           Width = 93
           Height = 21
           Hint = 'Set frameskip to fixed value (autoframeskip must be disabled)'
@@ -1768,7 +1859,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ThreadPriority: TComboBox
           Left = 208
-          Top = 84
+          Top = 80
           Width = 92
           Height = 21
           Hint = 'Thread priority for the main game thread'
@@ -1804,7 +1895,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object NumberProcessors: TComboBox
           Left = 8
-          Top = 84
+          Top = 80
           Width = 93
           Height = 21
           Hint = 
@@ -1831,7 +1922,7 @@ object FormMAMESettings: TFormMAMESettings
         object Benchmark: TGaugeBar
           Tag = 14
           Left = 158
-          Top = 132
+          Top = 128
           Width = 142
           Height = 20
           Hint = 'Implies: -video none -sound none -nothrottle'
@@ -1847,7 +1938,7 @@ object FormMAMESettings: TFormMAMESettings
         object SecondsToRun: TGaugeBar
           Tag = 14
           Left = 8
-          Top = 180
+          Top = 176
           Width = 293
           Height = 20
           Hint = 'Time to Run Before Automatically Exiting ['
@@ -1862,10 +1953,10 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object LabelScreenRotation: TAdvGroupBox
-        Left = 360
-        Top = 240
-        Width = 234
-        Height = 104
+        Left = 176
+        Top = 288
+        Width = 169
+        Height = 155
         RoundEdges = True
         Caption = 'Screen Rotation'
         ParentCtl3D = True
@@ -1875,7 +1966,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 80
           Width = 96
           Height = 20
-          Hint = 'Flip screen upside-down'
+          Hint = 'Flip screen left-right'
           TabOrder = 0
           Alignment = taLeftJustify
           Caption = 'Flip Left-Right'
@@ -1883,11 +1974,11 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object FlipY: TAdvOfficeCheckBox
-          Left = 118
-          Top = 80
+          Left = 8
+          Top = 100
           Width = 113
           Height = 20
-          Hint = 'Flip screen left-right'
+          Hint = 'Flip screen upside-down'
           TabOrder = 1
           Alignment = taLeftJustify
           Caption = 'Flip Upside-Down'
@@ -1911,7 +2002,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object RotateRight: TAdvOfficeCheckBox
-          Left = 118
+          Left = 86
           Top = 40
           Width = 51
           Height = 20
@@ -1935,7 +2026,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object AutoRotateRight: TAdvOfficeCheckBox
-          Left = 118
+          Left = 86
           Top = 60
           Width = 81
           Height = 20
@@ -1963,7 +2054,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object GroupBoxAudio: TAdvGroupBox
         Left = 630
-        Top = 240
+        Top = 236
         Width = 222
         Height = 161
         RoundEdges = True
@@ -2145,7 +2236,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 0
         object LabelShadowMaskTexture: TLabel
           Left = 8
-          Top = 112
+          Top = 123
           Width = 115
           Height = 15
           Caption = 'Shadow Mask Texture'
@@ -2156,7 +2247,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelHLSLPath: TLabel
           Left = 8
-          Top = 64
+          Top = 75
           Width = 94
           Height = 15
           Caption = 'Path to HLSL Files'
@@ -2191,20 +2282,9 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object LabelHLSLPresetToUse: TLabel
-          Left = 8
-          Top = 208
-          Width = 68
-          Height = 15
-          Caption = 'Preset to Use'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
         object Label7: TLabel
           Left = 52
-          Top = 274
+          Top = 237
           Width = 7
           Height = 15
           Caption = 'X'
@@ -2213,7 +2293,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelHLSLUpscaleSnapshot: TLabel
           Left = 8
-          Top = 256
+          Top = 219
           Width = 159
           Height = 15
           Caption = 'Upscaled Snapshot Resolution'
@@ -2224,7 +2304,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelHLSLPrescaleOverride: TLabel
           Left = 8
-          Top = 160
+          Top = 171
           Width = 157
           Height = 15
           Caption = 'HLSL Prescale Override Factor'
@@ -2235,7 +2315,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelHLSLPrescaleOverrideX: TLabel
           Left = 8
-          Top = 178
+          Top = 189
           Width = 7
           Height = 15
           Hint = 'Scale Screen '#39'Prescale'#39' [%ux]'
@@ -2247,7 +2327,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelHLSLPrescaleOverrideY: TLabel
           Left = 80
-          Top = 178
+          Top = 189
           Width = 7
           Height = 15
           Hint = 'Scale Screen '#39'Prescale'#39' [%ux]'
@@ -2257,13 +2337,31 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = True
         end
+        object Label8: TLabel
+          Left = 26
+          Top = 38
+          Width = 126
+          Height = 11
+          Caption = 'Select '#39'Direct3D'#39' Output Mode'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 10900224
+          Font.Height = -9
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
         object HLSLEnable: TAdvOfficeCheckBox
           Left = 8
           Top = 20
-          Width = 89
+          Width = 88
           Height = 20
           Hint = 'Enables HLSL post-processing (Pixel Shader 3.0 required)'
           TabOrder = 0
+          OnClick = HLSLEnableClick
           Alignment = taLeftJustify
           Caption = 'Enable HLSL'
           ReturnIsTab = False
@@ -2271,7 +2369,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object YIQEnable: TAdvOfficeCheckBox
           Left = 8
-          Top = 40
+          Top = 51
           Width = 141
           Height = 20
           Hint = 
@@ -2286,7 +2384,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ShadowMaskTexture: TEdit
           Left = 8
-          Top = 128
+          Top = 139
           Width = 135
           Height = 21
           Hint = 'A PNG that defines the shadow mask for each pixel'
@@ -2298,7 +2396,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ButtonSelectShadowMaskTexture: TBitBtn
           Left = 145
-          Top = 128
+          Top = 139
           Width = 43
           Height = 21
           Hint = 'Click here to select a file'
@@ -2310,7 +2408,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object HLSLPath: TEdit
           Left = 8
-          Top = 80
+          Top = 91
           Width = 135
           Height = 21
           Hint = 'Path to the .fx files that are in use'
@@ -2324,7 +2422,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ButtonSelectHLSLPath: TBitBtn
           Left = 145
-          Top = 80
+          Top = 91
           Width = 43
           Height = 21
           Hint = 'Click here to select a folder'
@@ -2382,13 +2480,40 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 9
           OnClick = HLSLIniFileButtonResetClick
         end
-        object HLSLPresetToUse: TComboBox
-          Tag = -1
+        object HLSLUpscaleSnapX: TEdit
           Left = 8
-          Top = 224
-          Width = 86
+          Top = 235
+          Width = 41
           Height = 21
-          Hint = 'HLSL preset to use'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 10
+          OnKeyPress = HLSLUpscaleSnapXKeyPress
+        end
+        object HLSLUpscaleSnapY: TEdit
+          Left = 62
+          Top = 235
+          Width = 41
+          Height = 21
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 11
+          OnKeyPress = HLSLUpscaleSnapYKeyPress
+        end
+        object HLSLPrescaleOverrideX: TComboBox
+          Tag = -1
+          Left = 18
+          Top = 187
+          Width = 54
+          Height = 21
           Style = csDropDownList
           Ctl3D = True
           Font.Charset = ANSI_CHARSET
@@ -2400,47 +2525,23 @@ object FormMAMESettings: TFormMAMESettings
           ItemIndex = 0
           ParentCtl3D = False
           ParentFont = False
-          TabOrder = 10
-          Text = '-1 (Default)'
+          TabOrder = 12
+          Text = 'Auto'
           Items.Strings = (
-            '-1 (Default)'
-            '0'
+            'Auto'
             '1'
             '2'
-            '3')
+            '3'
+            '4'
+            '5'
+            '6'
+            '7'
+            '8')
         end
-        object HLSLUpscaleSnapX: TEdit
-          Left = 8
-          Top = 272
-          Width = 41
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 11
-          OnKeyPress = HLSLUpscaleSnapXKeyPress
-        end
-        object HLSLUpscaleSnapY: TEdit
-          Left = 62
-          Top = 272
-          Width = 41
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 12
-          OnKeyPress = HLSLUpscaleSnapYKeyPress
-        end
-        object HLSLPrescaleOverrideX: TComboBox
+        object HLSLPrescaleOverrideY: TComboBox
           Tag = -1
-          Left = 18
-          Top = 176
+          Left = 90
+          Top = 187
           Width = 54
           Height = 21
           Style = csDropDownList
@@ -2467,46 +2568,16 @@ object FormMAMESettings: TFormMAMESettings
             '7'
             '8')
         end
-        object HLSLPrescaleOverrideY: TComboBox
-          Tag = -1
-          Left = 90
-          Top = 176
-          Width = 54
-          Height = 21
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          TabOrder = 14
-          Text = 'Auto'
-          Items.Strings = (
-            'Auto'
-            '1'
-            '2'
-            '3'
-            '4'
-            '5'
-            '6'
-            '7'
-            '8')
-        end
         object ButtonHLSLUpscaleSnapReset: TBitBtn
           Left = 145
-          Top = 272
+          Top = 235
           Width = 43
           Height = 21
           Hint = 'Click here to set default upscale resolution'
           Caption = 'Reset'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 15
+          TabOrder = 14
           OnClick = ButtonHLSLUpscaleSnapResetClick
         end
       end
@@ -2747,6 +2818,23 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
+        object Label6: TLabel
+          Left = 96
+          Top = 24
+          Width = 124
+          Height = 11
+          Caption = 'Select '#39'OpenGL'#39' Output Mode'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 10900224
+          Font.Height = -9
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
         object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBox
           Left = 8
           Top = 40
@@ -2808,6 +2896,7 @@ object FormMAMESettings: TFormMAMESettings
           Height = 20
           Hint = 'Enable OpenGL GLSL, if available'
           TabOrder = 4
+          OnClick = EnableGLSLClick
           Alignment = taLeftJustify
           Caption = 'Enable GLSL'
           ReturnIsTab = False
@@ -3959,14 +4048,16 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
       end
       object UIMouse: TAdvOfficeCheckBox
-        Left = 570
-        Top = 311
-        Width = 105
+        Left = 564
+        Top = 331
+        Width = 212
         Height = 20
-        Hint = 'Display user interface mouse cursor'
+        Hint = 
+          'Displays a mouse cursor when using the built-in user interface f' +
+          'or MAME'
         TabOrder = 9
         Alignment = taLeftJustify
-        Caption = 'Show UI Mouse'
+        Caption = 'Display User Interface Mouse Cursor'
         ReturnIsTab = False
         Themed = True
       end
@@ -4374,100 +4465,17 @@ object FormMAMESettings: TFormMAMESettings
             'Lightgun')
         end
       end
-      object UIModeBox: TAdvGroupBox
-        Left = 562
-        Top = 232
-        Width = 289
-        Height = 71
-        RoundEdges = True
-        Caption = 'UI Mode (Full Keyboard Emulation)'
-        ParentCtl3D = True
-        TabOrder = 12
-        object LabelUIModeKey: TLabel
-          Left = 8
-          Top = 24
-          Width = 66
-          Height = 15
-          Caption = 'ON/OFF Key'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelUIModeKeyCustom: TLabel
-          Left = 144
-          Top = 24
-          Width = 64
-          Height = 15
-          Caption = 'Custom Key'
-          Enabled = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object UIModeKey: TComboBox
-          Left = 8
-          Top = 40
-          Width = 129
-          Height = 21
-          Hint = 
-            'Specifies the key used to toggle between full and partial UI mod' +
-            'e'
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          Text = 'Auto'
-          OnChange = UIModeKeyChange
-          Items.Strings = (
-            'Auto'
-            'Custom Key')
-        end
-        object UIModeKeyCustom: TEdit
-          Left = 144
-          Top = 40
-          Width = 137
-          Height = 21
-          TabStop = False
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          TabOrder = 1
-        end
-        object ButtonUIModeKeyDetectKey: TBitBtn
-          Left = 258
-          Top = 18
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a hot-key'
-          Caption = '...'
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-          TabStop = False
-          Visible = False
-          OnClick = ButtonUIModeKeyDetectKeyClick
-        end
-      end
       object UIActive: TAdvOfficeCheckBox
-        Left = 708
+        Left = 564
         Top = 311
-        Width = 126
+        Width = 272
         Height = 20
-        Hint = 'Enable user interface on top of emulated keyboard (if present)'
-        TabOrder = 13
+        Hint = 
+          'Enable access to the built-in user interface in MAME on top of e' +
+          'mulated keyboard'
+        TabOrder = 12
         Alignment = taLeftJustify
-        Caption = 'Show User Interface'
+        Caption = 'Enable Partial Keyboard Emulation (UI Enabled)'
         ReturnIsTab = False
         Themed = True
       end
@@ -4488,7 +4496,7 @@ object FormMAMESettings: TFormMAMESettings
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 14
+        TabOrder = 13
         Text = 'Obbey Driver'
         Items.Strings = (
           'Disabled'
@@ -4521,7 +4529,7 @@ object FormMAMESettings: TFormMAMESettings
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 15
+        TabOrder = 14
         Text = '(None)'
         Items.Strings = (
           '(None)')
@@ -4534,7 +4542,7 @@ object FormMAMESettings: TFormMAMESettings
         RoundEdges = True
         Caption = 'Auto-boot'
         Ctl3D = True
-        TabOrder = 16
+        TabOrder = 15
         object LabelAutobootCommand: TLabel
           Left = 8
           Top = 20
@@ -4640,25 +4648,26 @@ object FormMAMESettings: TFormMAMESettings
         CheckBox.Visible = True
         RoundEdges = True
         Caption = 'Enable HTTP Server'
+        Enabled = False
         ParentCtl3D = True
-        TabOrder = 17
+        TabOrder = 16
         object Label2: TLabel
           Left = 8
           Top = 20
-          Width = 73
+          Width = 22
           Height = 15
-          AutoSize = False
           Caption = 'Port'
+          Enabled = False
           ShowAccelChar = False
           Transparent = True
         end
         object Label3: TLabel
           Left = 103
           Top = 20
-          Width = 113
+          Width = 91
           Height = 15
-          AutoSize = False
           Caption = 'Path to Web Files'
+          Enabled = False
           ShowAccelChar = False
           Transparent = True
         end
@@ -4711,9 +4720,226 @@ object FormMAMESettings: TFormMAMESettings
         Hint = 
           'Start emulator with LUA console enabled'#13#10'For UME/MAME v0.153ex5 ' +
           'and newer'
-        TabOrder = 18
+        Enabled = False
+        TabOrder = 17
         Alignment = taLeftJustify
         Caption = 'Enable Emulator LUA Console'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object UIModeBox: TAdvGroupBox
+        Left = 562
+        Top = 232
+        Width = 289
+        Height = 71
+        RoundEdges = True
+        Caption = 'Full Keyboard Emulation (User Interface Disabled)'
+        ParentCtl3D = True
+        TabOrder = 18
+        object LabelUIModeKeyCustom: TLabel
+          Left = 8
+          Top = 24
+          Width = 66
+          Height = 15
+          Caption = 'ON/OFF Key'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object UIModeKeyCustom: TEdit
+          Left = 8
+          Top = 40
+          Width = 273
+          Height = 21
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          TabOrder = 0
+        end
+        object ButtonUIModeKeyDetectKey: TBitBtn
+          Left = 122
+          Top = 18
+          Width = 21
+          Height = 21
+          Hint = 'Click here to select a hot-key'
+          Caption = '...'
+          Enabled = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          TabStop = False
+          Visible = False
+          OnClick = ButtonUIModeKeyDetectKeyClick
+        end
+      end
+      object CommOptionsBox: TAdvGroupBox
+        Left = 328
+        Top = 20
+        Width = 219
+        Height = 200
+        RoundEdges = True
+        Caption = 'Comm Options'
+        Ctl3D = True
+        TabOrder = 19
+        object LabelCommLocalHost: TLabel
+          Left = 8
+          Top = 20
+          Width = 128
+          Height = 15
+          Caption = 'Local Address to Bind to'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelCommLocalPort: TLabel
+          Left = 8
+          Top = 65
+          Width = 108
+          Height = 15
+          Caption = 'Local Port to Bind to'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelCommRemoteHost: TLabel
+          Left = 8
+          Top = 110
+          Width = 128
+          Height = 15
+          Caption = 'Local Address to Bind to'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelCommRemotePort: TLabel
+          Left = 8
+          Top = 155
+          Width = 108
+          Height = 15
+          Caption = 'Local Port to Bind to'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object CommLocalHost: TEdit
+          Left = 8
+          Top = 36
+          Width = 157
+          Height = 21
+          Hint = '0.0.0.0'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 0
+          OnKeyPress = CommLocalHostKeyPress
+        end
+        object CommLocalPort: TEdit
+          Left = 8
+          Top = 81
+          Width = 157
+          Height = 21
+          Hint = '15112'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 1
+          OnKeyPress = CommLocalPortKeyPress
+        end
+        object CommRemoteHost: TEdit
+          Left = 8
+          Top = 126
+          Width = 157
+          Height = 21
+          Hint = '127.0.0.1'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 2
+          OnKeyPress = CommLocalHostKeyPress
+        end
+        object CommRemotePort: TEdit
+          Left = 8
+          Top = 171
+          Width = 157
+          Height = 21
+          Hint = '15112'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 3
+          OnKeyPress = CommLocalPortKeyPress
+        end
+        object CommLocalHostButtonReset: TBitBtn
+          Left = 168
+          Top = 36
+          Width = 43
+          Height = 21
+          Hint = 'Reset to default address'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+          OnClick = CommLocalHostButtonResetClick
+        end
+        object CommLocalPortButtonReset: TBitBtn
+          Left = 168
+          Top = 81
+          Width = 43
+          Height = 21
+          Hint = 'Reset to default port'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+          OnClick = CommLocalPortButtonResetClick
+        end
+        object CommRemoteHostButtonReset: TBitBtn
+          Left = 168
+          Top = 126
+          Width = 43
+          Height = 21
+          Hint = 'Reset to default address'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          OnClick = CommRemoteHostButtonResetClick
+        end
+        object CommRemotePortButtonReset: TBitBtn
+          Left = 168
+          Top = 171
+          Width = 43
+          Height = 21
+          Hint = 'Reset to default port'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+          OnClick = CommRemotePortButtonResetClick
+        end
+      end
+      object EnableGlobalInputs: TAdvOfficeCheckBox
+        Left = 16
+        Top = 100
+        Width = 128
+        Height = 20
+        Hint = 'Read inputs even when the MAME window is not in focus'
+        TabOrder = 20
+        Alignment = taLeftJustify
+        Caption = 'Enable Global Inputs'
         ReturnIsTab = False
         Themed = True
       end
@@ -5203,29 +5429,18 @@ object FormMAMESettings: TFormMAMESettings
         Left = 16
         Top = 20
         Width = 249
-        Height = 113
+        Height = 65
         CheckBox.Visible = True
         RoundEdges = True
         Caption = 'Enable SDL Keyboard Mapping'
         Ctl3D = True
         TabOrder = 0
-        OnCheckBoxClick = SDKKeyboardMappingBoxCheckBoxClick
         object LabelSDLKeymapFilename: TLabel
           Left = 8
           Top = 20
           Width = 94
           Height = 15
           Caption = 'Keymap Filename'
-          Enabled = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelSDLKeyToToggleKeyboardMode: TLabel
-          Left = 8
-          Top = 68
-          Width = 163
-          Height = 15
-          Caption = 'Key To Toggle Keyboard Mode'
           Enabled = False
           ShowAccelChar = False
           Transparent = True
@@ -5256,45 +5471,6 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 2
           OnClick = ButtonSDLKeymapFilenameSelectClick
-        end
-        object SDLKeyToToggleKeyboardMode: TEdit
-          Left = 8
-          Top = 84
-          Width = 144
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-        end
-        object ButtonSDLKeyToToggleKeyboardModeReset: TBitBtn
-          Left = 197
-          Top = 84
-          Width = 43
-          Height = 21
-          Hint = 'Click here to reset keyboard mode key'
-          Caption = 'Reset'
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 4
-          OnClick = ButtonSDLKeyToToggleKeyboardModeResetClick
-        end
-        object ButtonSDLKeyToToggleKeyboardModeSelect: TBitBtn
-          Left = 154
-          Top = 84
-          Width = 43
-          Height = 21
-          Hint = 'Click here to auto-detect a pressed key'
-          Caption = 'Detect'
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
         end
         object ButtonSDLKeymapFilenameReset: TBitBtn
           Left = 197

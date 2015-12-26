@@ -50,22 +50,23 @@ object FormScanResults: TFormScanResults
     GroupFont.Style = [fsBold, fsItalic]
     HintType = ehtToolTip
     Header.AutoSizeHeight = False
+    Header.AutoSizeHeightMargin = 5
     Header.Columns.Items = {
       0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
       0006000000800800010100010000000000000051010000FFFFFF1F0001000000
-      010000000D0000002000200020002000200020002000200020004E0061006D00
-      6500000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE00060000008008000101000101000000000000F8000000FFFFFF
-      1F0001000000010000000800000043006800650063006B00730075006D000000
-      00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-      FECE0006000000800800010100010200000000000072000000FFFFFF1F000100
-      0000010000000600000053007400610074007500730000000000000000000000
-      0000}
+      0100000015000000200020002000200020002000200020002000200020002000
+      200020002000200020004E0061006D0065000000000000000000000000001100
+      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+      000101000000000000F8000000FFFFFF1F000100000001000000080000004300
+      6800650063006B00730075006D00000000000000000000000000110000005445
+      617379436F6C756D6E53746F726564FFFECE0006000000800800010100010200
+      000000000072000000FFFFFF1F00010000000100000006000000530074006100
+      740075007300000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.Height = 19
     Header.Sizeable = False
@@ -309,16 +310,10 @@ object FormScanResults: TFormScanResults
     Style = vgSimple
     object LabelTotalGames: TShadowLabel
       Left = 105
-      Top = 13
-      Width = 90
-      Height = 18
+      Top = 14
+      Width = 78
+      Height = 16
       Caption = '000000 Games'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
@@ -326,6 +321,12 @@ object FormScanResults: TFormScanResults
       ShadowEnabled = False
       EllipsType = etNone
       Transparent = True
+    end
+    object MAMEMachinesFilterIcon: TImage
+      Left = 256
+      Top = 13
+      Width = 16
+      Height = 16
     end
     object ButtonToggleTree: TBitBtn
       Left = 8
@@ -346,6 +347,29 @@ object FormScanResults: TFormScanResults
       Caption = 'Close'
       ModalResult = 1
       TabOrder = 1
+    end
+    object MAMEMachinesFilter: TComboBox
+      Left = 275
+      Top = 10
+      Width = 185
+      Height = 21
+      Hint = 'MAME games filter'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemHeight = 13
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 2
+      Text = 'List All'
+      OnSelect = MAMEMachinesFilterSelect
+      Items.Strings = (
+        'List All'
+        'MAME Games Only'
+        'MAME Software List Games Only')
     end
   end
   object IconPanel: TPanelEx

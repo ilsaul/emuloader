@@ -214,7 +214,7 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000001000190010000FFFFFF1F0001000000
+        0006000000800800010101010000000001000190010000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
         00010100000000000164000000FFFFFF1F000100000001000000040000004E00
@@ -271,54 +271,58 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
       ParentBackground = False
       Style = vgVista
       object SystemIcon: TImage
+        Tag = 1
         Left = 1
         Top = 3
         Width = 24
         Height = 24
+        Hint = 'Click here to select a system'
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = SystemIconClick
       end
       object ImageCategoryIcon: TImage
-        Left = 381
+        Tag = 1
+        Left = 109
         Top = 3
         Width = 24
         Height = 24
-      end
-      object ButtonSystem: TBitBtn
-        Tag = 1
-        Left = 27
-        Top = 2
-        Width = 345
-        Height = 26
-        Hint = 'Click here to select a system'
-        Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentFont = False
+        Hint = 'Click here to select a image category'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 0
-        OnClick = ButtonSystemClick
+        OnClick = ImageCategoryIconClick
       end
-      object ButtonImageCategory: TBitBtn
-        Tag = 1
-        Left = 407
-        Top = 2
-        Width = 140
-        Height = 26
+      object LabelSystem: TShadowLabel
+        Left = 28
+        Top = 8
+        Width = 77
+        Height = 16
+        Hint = 'Click here to select a system'
+        Caption = 'SEGA Model 2'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = SystemIconClick
+      end
+      object LabelImageCategory: TShadowLabel
+        Left = 136
+        Top = 8
+        Width = 114
+        Height = 16
         Hint = 'Click here to select a image category'
         Caption = 'Control Panel Layout'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentFont = False
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = True
-        TabOrder = 1
-        OnClick = ButtonImageCategoryClick
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = ImageCategoryIconClick
       end
       object ButtonScan: TBitBtn
         Left = 3
@@ -329,7 +333,7 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Start Scan'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 2
+        TabOrder = 0
         OnClick = ButtonScanClick
       end
       object ButtonDeleteImages: TBitBtn
@@ -341,7 +345,7 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Delete All'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 1
         OnClick = ButtonDeleteImagesClick
       end
       object ButtonDeleteSelected: TBitBtn
@@ -353,11 +357,11 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Delete Selected'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 4
+        TabOrder = 2
         OnClick = ButtonDeleteSelectedClick
       end
       object ButtonHelp: TBitBtn
-        Left = 560
+        Left = 264
         Top = 3
         Width = 38
         Height = 24
@@ -365,20 +369,8 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Help'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 5
+        TabOrder = 3
         OnClick = ButtonHelpClick
-      end
-      object ButtonClose: TBitBtn
-        Left = 560
-        Top = 30
-        Width = 38
-        Height = 24
-        Hint = 'Close this window'
-        Caption = 'Exit'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 6
-        OnClick = ButtonCloseClick
       end
       object ButtonRemoveSelected: TBitBtn
         Left = 94
@@ -389,7 +381,7 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Remove Selected'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 7
+        TabOrder = 4
         OnClick = ButtonRemoveSelectedClick
       end
       object ButtonRenameToParent: TBitBtn
@@ -403,7 +395,7 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
         Caption = 'Rename to Parent'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 8
+        TabOrder = 5
         OnClick = ButtonRenameToParentClick
       end
     end

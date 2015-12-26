@@ -35,6 +35,8 @@ type
     LabelToggleVisibility: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    ButtonCustomizeColumnHeaderFont: TBitBtn;
+    ButtonCustomizeColumnHeaderFontSetDefault: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -58,12 +60,14 @@ type
     procedure ButtonReloadProfileClick(Sender: TObject);
     procedure ButtonDefaultClick(Sender: TObject);
     procedure ButtonSizeDecreaseClick(Sender: TObject);
+    procedure ButtonCustomizeColumnHeaderFontClick(Sender: TObject);
+    procedure ButtonCustomizeColumnHeaderFontSetDefaultClick(Sender: TObject);
   private
     procedure MoveColumn(MoveUp: Boolean);
     procedure ResetColumns(DefaultSettings: Boolean = False);
     procedure Resize480Height;
     procedure SetDefaultProfile;
-    procedure LoadProfile;
+    //procedure LoadProfile;
     function  SaveProfile: Boolean;
     { Private declarations }
   public
@@ -111,43 +115,85 @@ end;
 procedure TFormColumnsEditor.ResetColumns(DefaultSettings: Boolean = False);
 var
   gColumn: TEasyColumn;
+  IsMachinesList: Boolean;
+  Loop, ColIndex: Integer;
 begin
+  // need to get the columns order from uCommon.aColumnsSoftwareListOrder[] array
+  // default all -> IsMachinesList.... will have to write a separate function for it.
+  // reset all -> IsMachinesLsit...... it works fine.
+
   ColumnsListView.Tag:= 1;
   FormMain.ClearListView(ColumnsListView);
+  IsMachinesList:= FormMain.PanelMachinesList.Visible;
   gColumn:= nil;
   ColumnsListView.BeginUpdate;
-  case DefaultSettings of
-    True : gColumn:= FormMain.GamesListView.Header.FirstColumn;
-    False: gColumn:= FormMain.GamesListView.Header.FirstColumnByPosition;
-  end;
-  repeat
-    with ColumnsListView.Items.Add do
-    begin
-      ImageIndex:= gColumn.Index;
-      case gColumn.Index of
-        17: Caption:= aColumns[gColumn.Index, 1]+' (count)';
-        21: Caption:= aColumns[gColumn.Index, 1]+' (date)';
-      else
-            Caption:= aColumns[gColumn.Index, 1];
+
+  if DefaultSettings and IsMachinesList then
+     begin
+       for Loop:= Low(aColumnsSoftwareListOrder) to High(aColumnsSoftwareListOrder) do
+       begin
+         ColIndex:= aColumnsSoftwareListOrder[Loop];
+         with ColumnsListView.Items.Add do
+         begin
+           ImageIndex:= ColIndex;
+           case ColIndex of
+             17: Caption:= aColumns[ColIndex, 1]+' (count)';
+             21: Caption:= aColumns[ColIndex, 1]+' (date)';
+           else
+                 Caption:= aColumns[ColIndex, 1];
+           end;
+           Captions[1]:= IntToStr(aColumnsWidth[ColIndex]);
+           Checked:= True;
+         end;
+       end;
+     end
+  else
+  begin
+    case DefaultSettings of
+      True : gColumn:= FormMain.GamesListView.Header.FirstColumn;
+      False: gColumn:= FormMain.GamesListView.Header.FirstColumnByPosition;
+    end;
+    repeat
+      if (not IsMachinesList) or (IsMachinesList and FormMain.IsValidSoftwareListColumn(gColumn.Index)) then
+      begin
+        with ColumnsListView.Items.Add do
+        begin
+          ImageIndex:= gColumn.Index; // 'gColumn.Index' never changes its value!!
+          case gColumn.Index of
+            17: Caption:= aColumns[gColumn.Index, 1]+' (count)';
+            21: Caption:= aColumns[gColumn.Index, 1]+' (date)';
+          else
+                Caption:= aColumns[gColumn.Index, 1];
+          end;
+          case DefaultSettings of
+            True:
+              begin
+                Captions[1]:= IntToStr(aColumnsWidth[gColumn.Index]);
+                Checked:= True;
+              end;
+            False:
+              begin
+                Captions[1]:= IntToStr(gColumn.Width);
+                Checked:= gColumn.Visible;
+              end;
+          end;
+
+          {if IsMachinesList then
+          begin
+            if not FormMain.IsValidSoftwareListColumn(gColumn.Index) then
+               begin
+                 Enabled:= False;
+                 Bold:= True;
+               end;
+          end;}
+        end;
       end;
       case DefaultSettings of
-        True:
-          begin
-            Captions[1]:= IntToStr(aColumnsWidth[gColumn.Index]);
-            Checked:= True;
-          end;
-        False:
-          begin
-            Captions[1]:= IntToStr(gColumn.Width);
-            Checked:= gColumn.Visible;
-          end;
+        True : gColumn:= FormMain.GamesListView.Header.NextColumn(gColumn);
+        False: gColumn:= FormMain.GamesListView.Header.NextColumnByPosition(gColumn);
       end;
-    end;
-    case DefaultSettings of
-      True : gColumn:= FormMain.GamesListView.Header.NextColumn(gColumn); 
-      False: gColumn:= FormMain.GamesListView.Header.NextColumnByPosition(gColumn);
-    end;
-  until gColumn = nil;
+    until gColumn = nil;
+  end;
   ColumnsListView.EndUpdate;
   ColumnsListView.Tag:= 0;
   ColumnsListView.SetFocus;
@@ -168,9 +214,45 @@ end;
 procedure TFormColumnsEditor.SetDefaultProfile;
 var
   gColumn: TEasyColumn;
+  IsMachinesList: Boolean;
+  Loop: Integer;
 begin
+  IsMachinesList:= FormMain.PanelMachinesList.Visible;
   FormMain.GamesListView.BeginUpdate;
-  gColumn:= FormMain.GamesListView.Header.FirstColumn;
+
+  case IsMachinesList of
+    True:
+      begin
+        for Loop:=Low(aColumnsSoftwareListOrder) to High(aColumnsSoftwareListOrder) do
+        begin
+          gColumn:= FormMain.GamesListView.Header.Columns[aColumnsSoftwareListOrder[Loop]];
+          if gColumn.Position <> Loop then
+             gColumn.Position:= Loop;
+          if gColumn.Width <> aColumnsWidth[gColumn.Index] then
+             gColumn.Width:= aColumnsWidth[gColumn.Index];
+          if not gColumn.Visible then
+             gColumn.Visible:= True;
+        end;
+        for Loop:= 1 to FormMain.GamesListView.Header.Columns.Count-1 do
+            FormMain.GamesListView.Header.Columns[Loop].Visible:= FormMain.IsValidSoftwareListColumn(Loop);
+      end;
+    False:
+      begin
+        gColumn:= FormMain.GamesListView.Header.FirstColumn;
+        repeat
+          if gColumn.Position <> gColumn.Index then
+             gColumn.Position:= gColumn.Index;
+          if gColumn.Width <> aColumnsWidth[gColumn.Index] then
+             gColumn.Width:= aColumnsWidth[gColumn.Index];
+          if not gColumn.Visible then
+             gColumn.Visible:= True;
+          gColumn:= FormMain.GamesListView.Header.NextColumn(gColumn);
+        until gColumn = nil;
+
+      end;
+  end;
+
+{  gColumn:= FormMain.GamesListView.Header.FirstColumn;
   repeat
     if gColumn.Position <> gColumn.Index then
        gColumn.Position:= gColumn.Index;
@@ -179,7 +261,8 @@ begin
     if not gColumn.Visible then
        gColumn.Visible:= True;
     gColumn:= FormMain.GamesListView.Header.NextColumn(gColumn);
-  until gColumn = nil;
+  until gColumn = nil;}
+
   FormMain.GamesListView.EndUpdate;
 end;
 
@@ -196,10 +279,12 @@ procedure TFormColumnsEditor.FormShow(Sender: TObject);
 begin
   Resize480Height;
   FormMain.ELV_ResetNormalColors(ColumnsListView);
+  if FormMain.PanelMachinesList.Visible then
+     FormColumnsEditor.Caption:= 'Customize Software List Columns (Details / Grouped)';
   ResetColumns;
 end;
 
-procedure TFormColumnsEditor.LoadProfile;
+{procedure TFormColumnsEditor.LoadProfile;
 var
   Loop: Integer;
   columnFile: TMemIniFile;
@@ -244,25 +329,54 @@ begin
   end;
   ColumnsListView.SetFocus;
   FormMain.ELV_SelectItem(ColumnsListView, 0);
-end;
+end;}
 
 function TFormColumnsEditor.SaveProfile: Boolean;
 var
   columnFile: TMemIniFile;
   Item: TEasyItem;
+  IsMachinesList: Boolean;
 begin
+  IsMachinesList:= FormMain.PanelMachinesList.Visible;
   Result:= False; // frontend's default columns profile
-  DeleteFile(FormMain.GetColumnProfile); // will always rewrite the profile, not matter what (OK button was clicked)
+  //DeleteFile(FormMain.GetColumnProfile); // will always rewrite the profile, not matter what (OK button was clicked)
   columnFile:= TMemIniFile.Create(FormMain.GetColumnProfile);
+  case IsMachinesList of
+    True:
+      begin
+        columnFile.EraseSection('Position_SoftwareList');
+        columnFile.EraseSection('Visible_SoftwareList');
+      end;
+    False:
+      begin
+        columnFile.EraseSection('Position');
+        columnFile.EraseSection('Width');
+        columnFile.EraseSection('Visible');
+        columnFile.EraseSection('Sort');
+      end;
+  end;
   Item:= ColumnsListView.Groups.FirstItem;
   repeat
     if Item.ImageIndex <> 0 then // no reposition of title column!!
        begin
-         if Item.Index <> Item.ImageIndex then
-            begin
-              columnFile.WriteInteger('Position', aColumns[Item.ImageIndex, 0], Item.Index);
-              Result:= True;
-            end;
+         case IsMachinesList of
+           True:
+             begin
+               if (Item.Index <> Item.ImageIndex) and (Item.ImageIndex <> aColumnsSoftwareListOrder[Item.Index]) then
+                  begin
+                    columnFile.WriteInteger('Position_SoftwareList', aColumns[Item.ImageIndex, 0], Item.Index);
+                    Result:= True;
+                  end;
+             end;
+           False:
+             begin
+               if Item.Index <> Item.ImageIndex then
+                  begin
+                    columnFile.WriteInteger('Position', aColumns[Item.ImageIndex, 0], Item.Index);
+                    Result:= True;
+                  end;
+             end;
+         end;
        end;
 
     if Item.Captions[1] = '' then
@@ -275,7 +389,10 @@ begin
 
     if not Item.Checked then
        begin
-         columnFile.WriteInteger('Visible', aColumns[Item.ImageIndex, 0], 0);
+         case IsMachinesList of
+           True : columnFile.WriteInteger('Visible_SoftwareList', aColumns[Item.ImageIndex, 0], 0);
+           False: columnFile.WriteInteger('Visible', aColumns[Item.ImageIndex, 0], 0);
+         end;
          Result:= True;
        end;
 
@@ -284,6 +401,8 @@ begin
   if Result then
      columnFile.UpdateFile;
   FreeAndNil(columnFile);
+  if not FormMain.ValidateFile(FormMain.GetColumnProfile) then
+     DeleteFile(FormMain.GetColumnProfile);
 end;
 
 procedure TFormColumnsEditor.FormCloseQuery(Sender: TObject;
@@ -295,7 +414,13 @@ begin
        if ModalResult = mrOk then
           begin
             case SaveProfile of
-              True : FormMain.ReadColumnProfile;
+              True:
+                begin
+                  case FormMain.PanelMachinesList.Visible of
+                    True : FormMain.ReadColumnsProfileMachinesList;
+                    False: FormMain.ReadColumnProfile;
+                  end;
+                end;
               False: SetDefaultProfile;
             end;
           end;
@@ -462,7 +587,10 @@ end;
 
 procedure TFormColumnsEditor.ButtonReloadProfileClick(Sender: TObject);
 begin
-  LoadProfile;
+  ResetColumns;
+  ColumnsListView.SetFocus;
+  FormMain.ELV_SelectItem(ColumnsListView, 0);
+  //LoadProfile;
 end;
 
 procedure TFormColumnsEditor.ButtonDefaultClick(Sender: TObject);
@@ -486,6 +614,17 @@ begin
   ColumnsListView.Tag:= 2;
   ColumnsListView.Selection.First.Captions[1]:= IntToStr(tSize);
   ColumnsListView.Tag:= 0;
+end;
+
+procedure TFormColumnsEditor.ButtonCustomizeColumnHeaderFontClick(
+  Sender: TObject);
+begin
+  FormMain.PopupCustomizeColumnsHeaderFont.Click;
+end;
+
+procedure TFormColumnsEditor.ButtonCustomizeColumnHeaderFontSetDefaultClick(Sender: TObject);
+begin
+  FormMain.PopupDefaultHeaderFont.Click;
 end;
 
 end.

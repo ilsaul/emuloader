@@ -19,7 +19,6 @@ type
     GameIcon: TImage;
     LabelGameDetails: TShadowLabel;
     LabelFileType: TShadowLabel;
-    LabelDateTime: TShadowLabel;
     PanelEx1: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
@@ -27,6 +26,7 @@ type
     ImageCategoryIcon: TImage;
     LabelImageCategory: TShadowLabel;
     Shape1: TShape;
+    LabelSoftwareListTitle: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure RenameImageEditBoxKeyPress(Sender: TObject; var Key: Char);
@@ -50,11 +50,20 @@ uses uMain;
 
 procedure TFormImageDeleteRename.FormShow(Sender: TObject);
 begin
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, GameIcon.Picture.Icon);
+  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                              GameIcon.Picture.Icon);
   //FormMain.LoadGameIDThumbIcon(GameIcon, FormMain.MemGameInfo.eROMIdentification);
   //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
 
   LabelGameDetails.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+  if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
+     LabelGameDetails.Caption:= LabelGameDetails.Caption+#13#10+'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
+
+  if FormMain.MemGameInfo.eSoftwareName <> '' then
+     begin
+       LabelSoftwareListTitle.Visible:= True;
+       LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
+     end;
 
   LabelFileType.Caption:= FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True); // GetFileTypeStr(LabelFilename.Hint);
   LabelGameStatus.Caption:= LabelGameStatus.Caption+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
@@ -63,8 +72,15 @@ begin
   LabelFilename.Caption:= LabelFilename.Hint;
   ImagePreview.Bitmap.LoadFromFile(LabelFilename.Caption);
 
-  LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSize(LabelFilename.Hint), False);
-  LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAge(LabelFilename.Hint));
+
+
+  LabelFileSize.Caption:= FormMain.GetSizeType(GetFileSize(LabelFilename.Hint), False);
+  LabelFileSize.Caption:= LabelFileSize.Caption+
+                          Format('%'+IntToStr(43-Length(LabelFileSize.Caption))+'s',
+                                 [FormMain.GetDateTimeStr(FileAge(LabelFilename.Hint))]);
+
+  //LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSize(LabelFilename.Hint), False);
+  //LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAge(LabelFilename.Hint));
 
   FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
   case ImageCategoryIcon.Tag of

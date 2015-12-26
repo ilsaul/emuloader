@@ -37,7 +37,7 @@ object FormROMsFolders: TFormROMsFolders
     ReadOnly = True
     TabOrder = 0
   end
-  object PanelEx1: TPanelEx
+  object PanelList: TPanelEx
     Left = 0
     Top = 0
     Width = 640
@@ -85,14 +85,14 @@ object FormROMsFolders: TFormROMsFolders
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -11
-      EditManager.Font.Name = 'Consolas'
+      EditManager.Font.Height = -9
+      EditManager.Font.Name = 'Verdana'
       EditManager.Font.Style = []
       UseDockManager = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Consolas'
+      Font.Height = -9
+      Font.Name = 'Verdana'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clWindowText

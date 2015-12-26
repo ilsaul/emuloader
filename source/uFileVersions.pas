@@ -19,7 +19,7 @@ type
   public
     { Public declarations }
   end;
-
+  
 var
   FormFileVersions: TFormFileVersions;
 
@@ -52,7 +52,7 @@ begin
   Item:= Systems.Groups.FirstItem;
   repeat
     Item.Captions[1]:= ' '+FormMain.EmulatorFile[Item.ImageIndex];
-    Item.Captions[2]:= 'Emulator  : '+FormMain.EmulatorVersion[Item.ImageIndex];
+    Item.Captions[2]:= 'Emulator    : '+FormMain.EmulatorVersion[Item.ImageIndex];
     Item.Captions[3]:= 'Games List: '+GetGamesListVersion(Item.ImageIndex);
     Item.Details[1]:= 1;
     Item.Details[2]:= 2;
@@ -75,7 +75,7 @@ begin
   if Screen.Height = 480 then
      begin
        FormFileVersions.ClientHeight:= 396;
-       FormFileVersions.ClientWidth:= FormFileVersions.ClientWidth+17;
+       FormFileVersions.ClientWidth:= FormFileVersions.ClientWidth+GetSystemMetrics(SM_CXVSCROLL);//17;
      end;
 end;
 

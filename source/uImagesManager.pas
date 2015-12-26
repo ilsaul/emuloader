@@ -12,14 +12,15 @@ type
   TMissingImageInfo = class(TEasyItemStored)
   private
     fROMIdentification: Integer;
-    fSystemID: Integer;
     fSystemType: ShortInt;
     fImageCategory: ShortInt;
-    fTitle: String;
+    fTitle: WideString;
     fName: String;
     fClone: String;
     fCloneParent: String;
     fDriverName: String;
+    fSoftwareName: String;
+    fSoftwareTitle: String;
     fDriverStatus: ShortInt;
     fEmulationStatus: ShortInt;
     fColorStatus: ShortInt;
@@ -32,14 +33,15 @@ type
     function GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
-    property eSystemID: Integer read fSystemID write fSystemID;
     property eSystemType: ShortInt read fSystemType write fSystemType;
     property eImageCategory: ShortInt read fImageCategory write fImageCategory;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
     property eDriverName: String read fDriverName write fDriverName;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
+    property eSoftwareTitle: String read fSoftwareTitle write fSoftwareTitle;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eEmulationStatus: ShortInt read fEmulationStatus write fEmulationStatus;
     property eColorStatus: ShortInt read fColorStatus write fColorStatus;
@@ -53,7 +55,6 @@ type
   private
     fImageIndex: Integer;
     fImageLoaded: Boolean;
-    fSystemID: Integer;
     fImageCategory: ShortInt;
     fFileName: String;
     fSize: Int64;
@@ -69,7 +70,6 @@ type
   public
     property eImageIndex: Integer read fImageIndex write fImageIndex;
     property eImageLoaded: Boolean read fImageLoaded write fImageLoaded;
-    property eSystemID: Integer read fSystemID write fSystemID;
     property eImageCategory: ShortInt read fImageCategory write fImageCategory;
     property eFileName: String read fFileName write fFileName;
     property eSize: Int64 read fSize write fSize;
@@ -107,10 +107,6 @@ type
     LabelTotalItemsMissing: TLabel;
     LabelTotalItemsNotUsed: TLabel;
     ButtonNotUsedDeleteFiles: TSpeedButton;
-    PopupViewMode: TMenuItem;
-    PopupViewDetailsSmallIcons: TMenuItem;
-    PopupViewDetailsLargeIcons: TMenuItem;
-    PopupViewTiles: TMenuItem;
     PopupGamesFilter: TMenuItem;
     PopupRestoreColumnsSizes: TMenuItem;
     IL_NotUsedImages: TImageList;
@@ -132,16 +128,15 @@ type
     SplitterNotUsed: TSplitterEx;
     PopupScanDeviceSets: TMenuItem;
     PanelToolBarButtons: TPanelEx;
-    SystemIcon: TImage;
-    ButtonSystem: TBitBtn;
     ImageCategoryIcon: TImage;
     ButtonImageCategory: TBitBtn;
     ButtonHelp: TBitBtn;
-    ButtonExit: TBitBtn;
     ButtonScanBoth: TBitBtn;
     ButtonScanMissing: TBitBtn;
     ButtonScanNotUsed: TBitBtn;
-    PopupScanDevicesWithNoROMs: TMenuItem;
+    PopupScanSoftwareListGames: TMenuItem;
+    PopupScanNonArcadeMachines: TMenuItem;
+    N5: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure MissingImagesListColumnClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; ShiftState: TShiftState;
@@ -167,7 +162,6 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure PopupMissingClearListClick(Sender: TObject);
     procedure PopupMissingRemoveSelectedClick(Sender: TObject);
-    procedure PopupViewDetailsSmallIconsClick(Sender: TObject);
     procedure PopupShowAllGamesClick(Sender: TObject);
     procedure PopupRestoreColumnsSizesClick(Sender: TObject);
     procedure PopupMissingImagesMeasureMenuItem(Sender: TObject;
@@ -195,9 +189,7 @@ type
       ShiftState: TShiftState; var Handled: Boolean);
     procedure ButtonNotUsedDeleteFilesClick(Sender: TObject);
     procedure SplitterListMoved(Sender: TObject);
-    procedure ButtonSystemClick(Sender: TObject);
     procedure ButtonImageCategoryClick(Sender: TObject);
-    procedure ButtonExitClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonScanBothClick(Sender: TObject);
     procedure ButtonScanMissingClick(Sender: TObject);
@@ -205,13 +197,10 @@ type
     procedure MissingImagesListColumnSizeChanging(
       Sender: TCustomEasyListview; Column: TEasyColumn; Width,
       NewWidth: Integer; var Allow: Boolean);
-    procedure MissingImagesListColumnPaintText(Sender: TCustomEasyListview;
-      Column: TEasyColumn; ACanvas: TCanvas);
   private
     { Private declarations }
     SelectedItemMissing, SelectedItemNotUsed: TEasyItem;
 
-    procedure SelectSystem;
     procedure SelectImageCategory;
 
     procedure ReadIniFile;
@@ -254,8 +243,9 @@ begin
     0: Result:= eTitle;
     1: Result:= eName;
     2: Result:= eClone;
-    3: Result:= eDriverName;
-    //3: Result:= aStatus[eDriverStatus];
+    3: Result:= eSoftwareTitle;
+    4: Result:= eDriverName;
+    5: Result:= aStatus[eDriverStatus];
     20:
       begin
         Result:= eName;
@@ -268,7 +258,7 @@ end;
 function TMissingImageInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   case Column of
-    0: Result:= eROMIdentification;
+    0: Result:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
   else
        Result:= -1;
   end;
@@ -277,19 +267,13 @@ end;
 function TMissingImageInfo.GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   Result:= -1;
-  if Column = 4 then
-     Result:= eDriverStatus
-  else
-     begin
-        if not (eSystemID in [idMAME, idHBMAME]) then
-           Exit;
-       case Column of
-         5: Result:= eEmulationStatus;
-         6: Result:= eColorStatus;
-         7: Result:= eSoundStatus;
-         8: Result:= eGraphicStatus;
-       end;
-     end;
+  case Column of
+    5: Result:= eDriverStatus;
+    6: Result:= eEmulationStatus;
+    7: Result:= eColorStatus;
+    8: Result:= eSoundStatus;
+    9: Result:= eGraphicStatus;
+  end;
 end;
 
 function TNotUsedImageInfo.GetCaptions(Column: Integer): WideString;
@@ -319,18 +303,6 @@ begin
   else
        Result:= -1;
   end;
-end;
-
-procedure TFormImagesManager.SelectSystem;
-var
-  selSys: ShortInt;
-begin
-  selSys:= FormMain.CallSelectSystem(0, ButtonSystem.Tag);
-  if selSys = -1 then
-     Exit;
-  ButtonSystem.Tag:= selSys;
-  ButtonSystem.Caption:= FormMain.GetEmulatorDescription(selSys);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
 end;
 
 procedure TFormImagesManager.SelectImageCategory;
@@ -364,7 +336,8 @@ begin
     PopupScanMissingGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanMissingGames', 0));
     PopupScanBiosGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanBiosSets', 0));
     PopupScanDeviceSets.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanDeviceSets', 0));
-    PopupScanDevicesWithNoROMs.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanDevicesNoROMs', 0));
+    PopupScanSoftwareListGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanSoftwareListGames', 0));
+    PopupScanNonArcadeMachines.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanNonArcadeMachines', 0));
 
     for Loop:=0 to 3 do
         MissingImagesList.Header.Columns[Loop].Width:= INIFile.ReadInteger('ImagesManager', 'MissingListColWidth_'+IntToStr(Loop),
@@ -402,7 +375,8 @@ begin
     INIFile.WriteInteger('ImagesManager', 'ScanMissingGames', Ord(PopupScanMissingGames.Checked));
     INIFile.WriteInteger('ImagesManager', 'ScanBiosSets', Ord(PopupScanBiosGames.Checked));
     INIFile.WriteInteger('ImagesManager', 'ScanDeviceSets', Ord(PopupScanDeviceSets.Checked));
-    INIFile.WriteInteger('ImagesManager', 'ScanDevicesNoROMs', Ord(PopupScanDevicesWithNoROMs.Checked));
+    INIFile.WriteInteger('ImagesManager', 'ScanSoftwareListGames', Ord(PopupScanSoftwareListGames.Checked));
+    INIFile.WriteInteger('ImagesManager', 'ScanNonArcadeMachines', Ord(PopupScanNonArcadeMachines.Checked));
 
     for Loop:=0 to 3 do
         INIFile.WriteInteger('ImagesManager', 'MissingListColWidth_'+IntToStr(Loop), MissingImagesList.Header.Columns[Loop].Width);
@@ -417,12 +391,12 @@ function TFormImagesManager.ValidateImageFolder: Boolean;
 var
   tmpFolder: String;
 begin
-  tmpFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, ButtonSystem.Tag);
+  tmpFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME);
   Result:= tmpFolder <> '';// DirectoryExists(tmpFolder);
   if Result then
      Exit;
 
-  if GenerateMessage('Error', FormMain.GetEmulatorDescription(ButtonSystem.Tag),
+  if GenerateMessage('Error', FormMain.GetEmulatorDescription(idMAME),
                      'No folder is selected for '+ButtonImageCategory.Caption+'. Would you like to select one now ?', 1) = mrYes then
      begin
        FormMain.MenuImageCategoryLayoutSettings.Click;
@@ -440,7 +414,7 @@ begin
      begin
        TMissingImageInfo(SelectedItemMissing).Selected:= True;
        MissingImagesList.Selection.FocusedItem:= SelectedItemMissing;
-       SelectedItemMissing.MakeVisible(emvAuto);
+       SelectedItemMissing.MakeVisible(emvMiddle) //(emvAuto);
      end;
   FormMain.ELV_SetSelectRibbon(TMissingImageInfo(SelectedItemMissing).eGameStatus, MissingImagesList);
 end;
@@ -458,15 +432,16 @@ end;
 
 function TFormImagesManager.LoadGamesToMissingList(ShowFolderMessage: Boolean = True): Boolean;
 var
-  tempFolder: String;
+  tempFolder, SoftwareNameDir: String;
   ImageFound, SearchFile: Boolean;
   ELFormat: String;
 
   gItem, Item: TEasyItem;
+  gGroup: TEasyGroup;
 
   function AddItem: Boolean;
   begin
-    Result:= FormMain.TempGameVars.eSystemID = ButtonSystem.Tag;
+    Result:= FormMain.TempGameVars.eSystemID = idMAME;
     if not Result then
        Exit;
 
@@ -474,12 +449,18 @@ var
       True : SearchFile:= PopupSearchCloneImages.Checked;
       False: SearchFile:= True;
     end;
-    if SearchFile and (not PopupScanDevicesWithNoROMs.Checked) then
-       SearchFile:= (not FormMain.IsROM_Device(FormMain.TempGameVars.eROMIdentification)) and
-                    (uMain.TEasyGameInfo(gItem).eROMInfo <> nil); // uMain.TEasyGameInfo(gItem).eROMInfo.Count > 0);
+    if SearchFile and (not PopupScanSoftwareListGames.Checked) then
+       SearchFile:= FormMain.TempGameVars.eSoftwareName = '';
+
+    if SearchFile and ((FormMain.TempGameVars.eSystemType = 1) and (FormMain.TempGameVars.eSoftwareName = '')) then
+       SearchFile:= PopupScanNonArcadeMachines.Checked; // 0 -> arcade; 1 -> non-arcade (MESS machines); this requires category_home.ini
 
     if SearchFile and (not PopupScanDeviceSets.Checked) then
-       SearchFile:= not FormMain.IsROM_Device(FormMain.TempGameVars.eROMIdentification);
+       begin
+         SearchFile:= not FormMain.IsROM_Device(FormMain.TempGameVars.eROMIdentification);
+         if SearchFile then
+            SearchFile:= FormMain.GameHaveROMs(FormMain.TempGameVars.eHaveGameROMs);
+       end;
     if SearchFile and (not PopupScanMissingGames.Checked) then
        SearchFile:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification);
     if SearchFile and (not PopupScanBiosGames.Checked) then
@@ -491,7 +472,7 @@ var
        
     if SearchFile then
        begin
-         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0);
+         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0, FormMain.TempGameVars.eSoftwareName);
          // EL format
          ImageFound:= FileExists(tempFolder+ELFormat+'.png'); // search unzipped image
          if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
@@ -503,8 +484,7 @@ var
          FormMain.TempGameVars.eImageIndex:= FormMain.TempGameVars.eROMIdentification;
          Item:= MissingImagesList.Items.AddCustom(TMissingImageInfo, nil);
          TMissingImageInfo(Item).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
-         TMissingImageInfo(Item).eSystemID:= FormMain.TempGameVars.eSystemID;
-         TMissingImageInfo(Item).esystemType:= FormMain.TempGameVars.eSystemType;
+         TMissingImageInfo(Item).eSystemType:= FormMain.TempGameVars.eSystemType;
          TMissingImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
          TMissingImageInfo(Item).eTitle:= FormMain.TempGameVars.eTitle;
          TMissingImageInfo(Item).eName:= FormMain.TempGameVars.eName;
@@ -513,6 +493,11 @@ var
            True : TMissingImageInfo(Item).eCloneParent:= FormMain.TempGameVars.eClone;
            False: TMissingImageInfo(Item).eCloneParent:= FormMain.TempGameVars.eName;
          end;
+         TMissingImageInfo(Item).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
+         if FormMain.TempGameVars.eSoftwareName <> '' then
+            TMissingImageInfo(Item).eSoftwareTitle:= FormMain.TempGameVars.eCategory
+         else
+            TMissingImageInfo(Item).eSoftwareTitle:= '';
          TMissingImageInfo(Item).eDriverName:= FormMain.TempGameVars.eDriverName;
          TMissingImageInfo(Item).eDriverStatus:= FormMain.TempGameVars.eDriverStatus;
          TMissingImageInfo(Item).eEmulationStatus:= FormMain.TempGameVars.eEmulationStatus;
@@ -539,17 +524,34 @@ begin
        FormStatus.TitleStr(FormImagesManager.Caption);
      end;
   FormStatus.MessageStr('Scanning for games with missing images');
-  tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, ButtonSystem.Tag); // [imgType, sysID]
+  tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME); // [imgType, sysID]
   
   FormMain.ClearListView(MissingImagesList);
   MissingImagesList.BeginUpdate;
   MissingImagesList.Items.ReIndexDisable:= True;
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    FormMain.FillTempGameInfo(gItem);
-    AddItem;
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-  until gItem = nil;
+
+  if FormMain.IsGroupedView then
+  begin
+    gGroup:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+      repeat
+        FormMain.FillTempGameInfo(gItem);
+        AddItem;
+        gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+      until gItem = nil;
+      gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+    until gGroup = nil;
+  end
+  else
+  begin
+    gItem:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      FormMain.FillTempGameInfo(gItem);
+      AddItem;
+      gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
+    until gItem = nil;
+  end;
   MissingImagesList.Items.ReIndexDisable:= False;
   MissingImagesList.Sort.SortAll;
   MissingImagesList.EndUpdate;
@@ -564,7 +566,7 @@ begin
         MissingImagesList.Groups.FirstGroup.Caption:= ButtonImageCategory.Caption;
         MissingImagesList.Groups.FirstGroup.ImageIndex:= ButtonImageCategory.Tag;
       end;
-    False: GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(ButtonSystem.Tag),
+    False: GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(idMAME),
                            '    Scan complete, but it seems that all games have images. If you want to scan clone games, '+
                            'make sure to select the "Search Clone Images" in popup menu.', 2);
   end;
@@ -630,27 +632,40 @@ var
   el_GamesList, tempList: THashedStringList;
   WindowTitleError, ActiveFolder, AddToFolder: String;
   gItem, Item: TEasyItem;
+  gGroup: TEasyGroup;
   MainFolderGroup, Group: TEasyGroup;
-  Loop2: Integer;
-  Folder: String;
+  Loop2, iPos: Integer;
+  strName, strCloneOf, strSoftwareName, Folder: String;
 
   function CheckGameFiles(FileIndex: Integer; ImageExt: String): Boolean;
   var
     iLoop: Byte;
-    strName, tempString: String;
+    tempString: String;
   begin
     Result:= True;
-    strName:= el_GamesList[FileIndex];
+    //strName:= el_GamesList.Names[FileIndex];
+    //strSoftwareName:= el_GamesList.ValueFromIndex[FileIndex];
     for iLoop:=1 to 10 do
     begin
       tempString:= Folder+
-                   Format('%s%s', [FormMain.GetImageName(strName, iLoop, 0), ImageExt]);
+                   Format('%s%s', [FormMain.GetImageName(strName, iLoop, 0, strSoftwareName), ImageExt]);
 
       FileIndex:= tempList.IndexOf(tempString);
       if FileIndex <> -1 then
          tempList.Delete(FileIndex)
       else
-         Break;
+         begin
+           if (iLoop = 1) and (strCloneOf <> '') then
+           begin
+             tempString:= Folder+
+                          Format('%s%s', [FormMain.GetImageName(strCloneOf, iLoop, 0, strSoftwareName), ImageExt]);
+             FileIndex:= tempList.IndexOf(tempString);
+             if FileIndex = -1 then
+                Break;
+           end
+           else
+              Break;
+         end;
          // stop scan since files need to be sequential
          // valid  : gamename.png; gamename0000.png; gamename0001.png; gamename0002.png
          // invalid: gamename.png; gamename0000.png; gamename0002.png
@@ -711,20 +726,48 @@ begin
   el_GamesList.Duplicates:= dupIgnore;
   el_GamesList.BeginUpdate;
 
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    FormMain.FillTempGameInfo(gItem);
-    if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
-       el_GamesList.Add(TEasyGameInfo(gItem).eName);
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-  until gItem = nil;
+  if FormMain.IsGroupedView then
+  begin
+    gGroup:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+      repeat
+        if TEasyGameInfo(gItem).eSystemID = idMAME then
+        begin
+          FormMain.FillTempGameInfo(gItem);
+          if FormMain.GameIsClone(TEasyGameInfo(gItem).eClone) then
+             el_GamesList.Add(TEasyGameInfo(gItem).eName+'¬'+TEasyGameInfo(gItem).eClone+'='+TEasyGameInfo(gItem).eSoftwareName)
+          else
+             el_GamesList.Add(TEasyGameInfo(gItem).eName+'='+TEasyGameInfo(gItem).eSoftwareName);
+        end;
+        gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+
+      until gItem = nil;
+      gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+    until gGroup = nil;
+  end
+  else
+  begin
+    gItem:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      if TEasyGameInfo(gItem).eSystemID = idMAME then
+      begin
+        FormMain.FillTempGameInfo(gItem);
+        if FormMain.GameIsClone(TEasyGameInfo(gItem).eClone) then
+           el_GamesList.Add(TEasyGameInfo(gItem).eName+'¬'+TEasyGameInfo(gItem).eClone+'='+TEasyGameInfo(gItem).eSoftwareName)
+        else
+           el_GamesList.Add(TEasyGameInfo(gItem).eName+'='+TEasyGameInfo(gItem).eSoftwareName);
+      end;
+      gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
+    until gItem = nil;
+  end;
 
   el_GamesList.EndUpdate;
   el_GamesList.Sorted:= False;
 
   // scan image files
   FormStatus.MessageStr('Building images files list');
-  Folder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, ButtonSystem.Tag);
+  Folder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME);
   tempList:= THashedStringList.Create;
   GetFilesList(Folder, '.png', '*.*', tempList, True, False, True);
   if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
@@ -734,10 +777,22 @@ begin
   case Boolean(Loop2) of
     True:
       begin
+        //tempList.SaveToFile(FormMain.FrontendPath+'not_used_images.txt');
         tempList.BeginUpdate;
         FormStatus.MessageStr('Validating files (up to 10 images per game)');
         for Loop2:=0 to el_GamesList.Count-1 do
         begin
+          strName:= el_GamesList.Names[Loop2];
+          iPos:= Pos('¬', strName);
+          if iPos <> 0 then
+             begin
+               strCloneOf:= Copy(strName, iPos+1, Length(strName));
+               Delete(strName, iPos, Length(strName));
+             end
+          else
+             strCloneOf:= '';
+          strSoftwareName:= el_GamesList.ValueFromIndex[Loop2];
+
           CheckGameFiles(Loop2, '.png');
           if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
              CheckGameFiles(Loop2, '.jpg');
@@ -760,7 +815,6 @@ begin
 
                Item:= AddToGroup(tempList[Loop2]);
                TNotUsedImageInfo(Item).eImageLoaded:= False;
-               TNotUsedImageInfo(Item).eSystemID:= ButtonSystem.Tag;
                TNotUsedImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
                TNotUsedImageInfo(Item).eFileName:= ExtractFileName(tempList[Loop2]);
                TNotUsedImageInfo(Item).eSize:= GetFileSize(tempList[Loop2]);
@@ -784,7 +838,7 @@ begin
            end
         else
            begin
-             GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(ButtonSystem.Tag),
+             GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(idMAME),
                              'Scanning complete but nothing was found.', 2);
            end;
       end;
@@ -793,11 +847,11 @@ begin
         case DirectoryExists(Folder) of
           True : GenerateMessage(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetEmulatorDescription(ButtonSystem.Tag),
+                        FormMain.GetEmulatorDescription(idMAME),
                         '    No files were found in '+Folder, 2);
           False: GenerateMessage(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetEmulatorDescription(ButtonSystem.Tag),
+                        FormMain.GetEmulatorDescription(idMAME),
                         '    No files were found in '+Folder+#13#10+'Folder does not exist.', 2);
         end;
       end;
@@ -958,10 +1012,7 @@ begin
   FormMain.LoadCategoriesIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
   FormMain.IL_ImagesCategory_Small.GetIcon(ButtonImageCategory.Tag, ImageCategoryIcon.Picture.Icon);
-
-  ButtonSystem.Caption:= FormMain.GetEmulatorDescription(ButtonSystem.Tag);
   ButtonImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption;
 
   FormMain.ELV_ResetNormalColors(MissingImagesList);
@@ -1025,6 +1076,12 @@ begin
             ACanvas.Font.Size:= 8;//ACanvas.Font.Size-1;
             //ACanvas.Font.Style:= ACanvas.Font.Style+[fsItalic];
           end;
+     end
+  else
+  if Position in [1, 2, 4, 5] then
+     begin
+       ACanvas.Font.Name:= 'Tahoma';
+       ACanvas.Font.Size:= 8;
      end;
 end;
 
@@ -1074,7 +1131,7 @@ var
 
   function ShowGameNotFoundMsg: Boolean;
   begin
-    GenerateMessage('Error', FormMain.GetEmulatorDescription(TMissingImageInfo(SelectedItemMissing).eSystemID),
+    GenerateMessage('Error', FormMain.GetEmulatorDescription(idMAME),
                     '    Could not find the game in main games list. For this feature to work, '+
                     'the game must be valid and visible on the main screen. Make sure the games list for '+
                     'this system is loaded.', 2, False, 1);
@@ -1087,8 +1144,8 @@ begin
      Exit;
 
   RunGame:= True;
-  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, TMissingImageInfo(SelectedItemMissing).eSystemID,
-                                                                      TMissingImageInfo(SelectedItemMissing).eSystemType, GameEasy, False);
+  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME,
+                                                                      TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
   if GameEasy <> nil then
      begin
        case GameEasy.Visible of
@@ -1167,57 +1224,6 @@ begin
   UpdateTotalGamesLabelMissing;
 end;
 
-procedure TFormImagesManager.PopupViewDetailsSmallIconsClick(Sender: TObject);
-begin
-  if TMenuItem(Sender).Tag = PopupViewMode.Tag then
-     begin
-       if not TMenuItem(Sender).Checked then
-          TMenuItem(Sender).Checked:= True;
-       Exit;
-     end;
-  PopupViewMode.Tag:= TMenuItem(Sender).Tag;
-  case TMenuItem(Sender).Tag of
-    0: // details view, small scons
-      begin
-        if MissingImagesList.ImagesSmall <> FormMain.IL_StandardIconsSmall then
-           begin
-             MissingImagesList.ImagesSmall:= FormMain.IL_StandardIconsSmall;
-             MissingImagesList.CellSizes.Report.Height:= 20;
-             IL_ImageCategory.Width:= 16;
-             IL_ImageCategory.Height:= 16;
-             IL_ImageCategory.Clear;
-             FormMain.LoadCategoriesIcons(IL_ImageCategory);
-             MissingImagesList.PaintInfoGroup.ImageIndent:= 20;
-           end;
-      end;
-    1: // details view large icons
-      begin
-        if MissingImagesList.ImagesSmall <> FormMain.IL_StandardIconsLarge then
-           begin
-             MissingImagesList.ImagesSmall:= FormMain.IL_StandardIconsLarge;
-             MissingImagesList.CellSizes.Report.Height:= 36;
-             IL_ImageCategory.Width:= 32;
-             IL_ImageCategory.Height:= 32;
-             IL_ImageCategory.Clear;
-             FormMain.LoadCategoriesIcons(IL_ImageCategory);
-             MissingImagesList.PaintInfoGroup.ImageIndent:= 38;
-           end;
-      end;
-    2: // tiles view
-      begin
-        // do nothing... for now
-        MissingImagesList.PaintInfoGroup.ImageIndent:= 58;
-      end;
-  end;
-  MissingImagesList.BeginUpdate;
-  case TMenuItem(Sender).Tag of
-    0, 1: if MissingImagesList.View <> elsReport then MissingImagesList.View:= elsReport; // report view
-    2: if MissingImagesList.View <> elsTile then MissingImagesList.View:= elsTile;// tiles view
-  end;
-  MissingImagesList.EndUpdate;
-  SetSelectedMissingGame(False);
-end;
-
 procedure TFormImagesManager.PopupShowAllGamesClick(Sender: TObject);
 var
   Item: TEasyItem;
@@ -1247,10 +1253,11 @@ procedure TFormImagesManager.PopupRestoreColumnsSizesClick(Sender: TObject);
 begin
   // column.position changes, column.index does not!!!
   MissingImagesList.Header.Columns[0].Width:= 270;
-  MissingImagesList.Header.Columns[1].Width:= 105;
-  MissingImagesList.Header.Columns[2].Width:= 105;
-  MissingImagesList.Header.Columns[3].Width:= 100;
-  MissingImagesList.Header.Columns[4].Width:= 150;
+  MissingImagesList.Header.Columns[1].Width:= 85;
+  MissingImagesList.Header.Columns[2].Width:= 85;
+  MissingImagesList.Header.Columns[3].Width:= 150;
+  MissingImagesList.Header.Columns[4].Width:= 90;
+  MissingImagesList.Header.Columns[5].Width:= 85;
   Application.ProcessMessages;
 end;
 
@@ -1276,7 +1283,7 @@ begin
   ListOutput:= THashedStringList.Create;
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Missing Images <----------'+#13#10);
-  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(TMissingImageInfo(Item).eSystemID));
+  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(idMAME));
   ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TMissingImageInfo(Item).eImageCategory].Caption);
   ListOutput.Add('     Total Games: '+IntToStr(MissingImagesList.Groups.ItemCount)+#13#10);
   ListOutput.Add(Format('%16s %16s %s', ['[Name]', '[Clone of]', '[Title]']));
@@ -1466,7 +1473,7 @@ begin
   ListOutput:= THashedStringList.Create;
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Not Used Images <----------'+#13#10);
-  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(TNotUsedImageInfo(Item).eSystemID));
+  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(idMAME));
   ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TNotUsedImageInfo(Item).eImageCategory].Caption);
   ListOutput.Add('     Total Files: '+IntToStr(NotUsedImagesList.Groups.ItemCount)+#13#10);
   Item:= NotUsedImagesList.Groups.FirstItem;
@@ -1610,19 +1617,9 @@ begin
   LabelTotalItemsNotUsed.Left:= PanelNotUsed.Left;
 end;
 
-procedure TFormImagesManager.ButtonSystemClick(Sender: TObject);
-begin
-  SelectSystem;
-end;
-
 procedure TFormImagesManager.ButtonImageCategoryClick(Sender: TObject);
 begin
   SelectImageCategory;
-end;
-
-procedure TFormImagesManager.ButtonExitClick(Sender: TObject);
-begin
-  Close;
 end;
 
 procedure TFormImagesManager.ButtonHelpClick(Sender: TObject);
@@ -1631,12 +1628,10 @@ begin
   FormMain.AddMsgText('Games With Missing Images', $00a65300, [fsBold], taCenter);
   FormMain.AddMsgText(#13#10+'How to create a list of all games without a snapshot'+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select a ');
-  FormMain.AddMsgText('system', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' and an ');
   FormMain.AddMsgText('image category', $00a65300, [fsBold]);
   FormMain.AddMsgText('. More scan options are found in popup menu. Click ');
   FormMain.AddMsgText('Scan Missing', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' button. Only one system and one image category can be listed at a time (no mixed lists).'+
+  FormMain.AddMsgText(' button. Only one image category can be listed at a time (no mixed lists).'+
   #13#10+'    To ');
   FormMain.AddMsgText('create a snapshot', $00a65300, [fsBold]);
   FormMain.AddMsgText(' (if emulator supports it), run selected game with ');
@@ -1653,7 +1648,14 @@ begin
   FormMain.AddMsgText('.txt file', $00a65300, [fsBold]);
   FormMain.AddMsgText(' with ');
   FormMain.AddMsgText('Save Games List To File', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' in popup menu.'+#13#10+#13#10);
+  FormMain.AddMsgText(' in popup menu.'+#13#10+'    Setting ');
+  FormMain.AddMsgText('Scan Device Sets', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' does not add device sets with no ROMs.'+#13#10+'    Setting ');
+  FormMain.AddMsgText('Scan Non-Arcade Machines', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' require ');
+  FormMain.AddMsgText('category_home.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' file created by AntoPISA.'+#13#10+#13#10);
+
   FormMain.AddMsgText('Not Used Images', $00a65300, [fsBold], taCenter);
   FormMain.AddMsgText(#13#10+'How to delete images not used by any game. '+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select a ');
@@ -1710,18 +1712,6 @@ procedure TFormImagesManager.MissingImagesListColumnSizeChanging(
 begin
   if Column.Index > 3 then
      Allow:= False;
-end;
-
-procedure TFormImagesManager.MissingImagesListColumnPaintText(
-  Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
-begin
-  if Column.Index in [4..8] then
-     begin
-       ACanvas.Font.Size:= 7;
-       //Column.Alignment:= taCenter;
-       //ACanvas. MoveTo(ACanvas.ClipRect.Left, 4);
-
-     end;
 end;
 
 end.

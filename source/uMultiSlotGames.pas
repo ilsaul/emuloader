@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, MPCommonObjects, EasyListview, PanelEx;
+  StdCtrls, Buttons, MPCommonObjects, EasyListview, PanelEx;
 
 type
   TFormMultiSlotGames = class(TForm)
@@ -165,18 +165,21 @@ procedure TFormMultiSlotGames.GamesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(Item.Tag,
-                               Item.StateImageIndexes[6],
-                               Item.Captions[2], ACanvas);
-  ACanvas.Font.Name:= 'Segoe UI';
-  ACanvas.Font.Size:= 9;
+  //ACanvas.Font.Name:= 'Segoe UI';
+  //ACanvas.Font.Size:= 9;
   case Position of
     0:
      begin
-       ACanvas.Font.Name:= 'Tahoma';
-       ACanvas.Font.Size:= 8;
+       //ACanvas.Font.Name:= 'Tahoma';
+       //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
        ACanvas.Font.Color:= $00323232;
+     end;
+    1:
+     begin
+       FormMain.GetCanvasFontCustom(Item.Tag,
+                                    Item.StateImageIndexes[7],
+                                    Item.Captions[3], ACanvas);
      end;
     4: ACanvas.Font.Size:= 7;
   end;

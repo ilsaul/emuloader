@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
-  MPCommonUtilities, EasyListview, StdCtrls, Buttons, AdvGroupBox,
-  ShadowLabel, ExtCtrls;
+  MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
+  AdvGroupBox, ShadowLabel, ExtCtrls;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -371,6 +371,9 @@ var
   favList: THashedStringList;
   DeleteActiveProfile: Boolean;
 begin
+  if FormMain.PopupEnableFavorites.Checked then
+     Exit; // is favorites filter is enabled, can't anything than selecting a different favorites profile!!!
+     
   ////////////////////////////// still need to finish messages in here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Action index
   // 0 -> create new favorites profile
@@ -406,7 +409,7 @@ begin
                begin
                  Item.Selected:= True;
                  FavoritesList.Selection.FocusedItem:= Item;
-                 Item.MakeVisible(emvAuto);
+                 Item.MakeVisible(emvMiddle) //(emvAuto);
                end;
           end
        else
@@ -500,6 +503,8 @@ end;
 
 procedure TFormFavoritesManager.EditTitleFileName(ColumnIndex: Integer);
 begin
+  if FormMain.PopupEnableFavorites.Checked then
+     Exit;
   if not FormMain.CheckSelected(FavoritesList) then
      Exit;
   if FormMain.IsFavoriteDefault(TFavFileInfo(FavoritesList.Selection.First).eFileName) then
@@ -519,10 +524,14 @@ var
   Loop, GameIndex, TitleIndex, RemovedCount: Integer;
   ErrorMsgTitle, FavMsgTitle: String;
   gItem, favItem: TEasyItem;
+  gGroup: TEasyGroup;
 
   function AddGameHashedList: Boolean;
   begin
-    mGamesList.Add(FormMain.TempGameVars.eName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
+    if FormMain.TempGameVars.eSoftwareName = '' then
+       mGamesList.Add(FormMain.TempGameVars.eName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True))
+    else
+       mGamesList.Add(FormMain.TempGameVars.eName+'_'+FormMain.TempGameVars.eSoftwareName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
     Result:= True;
   end;
 
@@ -567,12 +576,28 @@ begin
   mGamesList:= THashedStringList.Create;
   mGamesList.BeginUpdate;
 
-  gItem:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    FormMain.FillTempGameInfo(gItem);
-    AddGameHashedList;
-    gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
-  until gItem = nil;
+  if FormMain.IsGroupedView then
+  begin
+    gGroup:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
+      repeat
+        FormMain.FillTempGameInfo(gItem);
+        AddGameHashedList;
+        gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
+      until gItem = nil;
+      gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
+    until gGroup = nil;
+  end
+  else
+  begin
+    gItem:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      FormMain.FillTempGameInfo(gItem);
+      AddGameHashedList;
+      gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
+    until gItem = nil;
+  end;
 
   mGamesList.EndUpdate;
   if mGamesList.Count = 0 then
@@ -638,6 +663,7 @@ var
   favFile: THashedStringList;
   tIndex: Integer;
   Item: TEasyItem;
+  Group: TEasyGroup;
   StrToSearch: String;
 begin
   Result:= FileExists(FormMain.GetFavoritesFile);
@@ -669,17 +695,47 @@ begin
   tIndex:= favFile.Count;
 
   FormMain.GamesListView.BeginUpdate;
-  Item:= FormMain.GamesListView.Groups.FirstItem;
-  repeat
-    StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
-    if tIndex > 0 then
-       uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
-    else
-       uMain.TEasyGameInfo(Item).eIsFavorite:= False;
-    Item:= FormMain.GamesListView.Groups.NextItem(Item);
-  until Item = nil;
+  GlobalThreadManager.FlushMessageCache(FormMain.GamesListView, TID_START); // remove any pending requests before reloading them
+  if FormMain.IsGroupedView then
+  begin
+    Group:= FormMain.GamesListView.Groups.FirstGroup;
+    repeat
+      Item:= FormMain.GamesListView.Groups.FirstInGroup(Group);
+      repeat
+        if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
+           StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
+        else
+           StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+        if tIndex > 0 then
+           uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
+        else
+           uMain.TEasyGameInfo(Item).eIsFavorite:= False;
+           
+        Item:= FormMain.GamesListView.Groups.NextInGroup(Group, Item);
+      until Item = nil; // repeat items
+      Group:= FormMain.GamesListView.Groups.NextGroup(Group);
+    until Group = nil;
+  end
+  else
+  begin
+    Item:= FormMain.GamesListView.Groups.FirstItem;
+    repeat
+      if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
+         StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
+      else
+         StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+      if tIndex > 0 then
+         uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
+      else
+         uMain.TEasyGameInfo(Item).eIsFavorite:= False;
+         
+      Item:= FormMain.GamesListView.Groups.NextItem(Item);
+    until Item = nil;
+  end;
   FreeAndNil(favFile);
   FormMain.GamesListView.EndUpdate(False);
+  if FormMain.IsThumbnailView then
+     FormMain.ResetThumbnails;
   Screen.Cursor:= crDefault;
   PanelUpdatingFavTagInGames.Visible:= False;
 end;
@@ -749,7 +805,16 @@ begin
 end;
 
 procedure TFormFavoritesManager.FormShow(Sender: TObject);
+var
+  Loop: Byte;
 begin
+  if FormMain.PopupEnableFavorites.Checked then
+     begin
+       FormFavoritesManager.Caption:= 'Select a Favorites Profile';
+       for Loop:=0 to 5 do
+           ToolbarButtons.Buttons[Loop].Enabled:= False;
+     end;
+  ToolBarSetSelectedProfileActive.Enabled:= True;
   FormMain.ELV_ResetNormalColors(FavoritesList);
   FavoritesList.Header.Columns[0].SortDirection:= esdNone;
   FavoritesList.Header.Columns[3].SortDirection:= esdDescending;

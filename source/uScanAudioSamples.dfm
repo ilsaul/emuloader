@@ -65,12 +65,10 @@ object FormScanAudioSamples: TFormScanAudioSamples
       0000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -12
-    Header.Font.Name = 'Segoe UI'
+    Header.Font.Color = clBlack
+    Header.Font.Height = -11
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Height = 23
-    Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
@@ -126,13 +124,13 @@ object FormScanAudioSamples: TFormScanAudioSamples
     ParentBackground = False
     Style = vgSimple
     object LabelDownloadLink: TShadowLabel
-      Left = 311
+      Left = 308
       Top = 6
-      Width = 262
+      Width = 269
       Height = 16
       Cursor = crHandPoint
       Hint = 'http://www.progettosnaps.net/samples_en.html'
-      Caption = 'Click here to download samples (Progetto Snaps)'
+      Caption = 'Click here to download samples (Progetto-SNAPS)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -12
@@ -152,16 +150,10 @@ object FormScanAudioSamples: TFormScanAudioSamples
     end
     object LabelTotalItems: TShadowLabel
       Left = 4
-      Top = 4
-      Width = 223
-      Height = 18
-      Caption = '000000 Games with missing samples'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
+      Top = 5
+      Width = 130
+      Height = 16
+      Caption = '000000 Missing Samples'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False

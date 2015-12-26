@@ -15,6 +15,7 @@ type
     LabelStatusType: TShadowLabel;
     ProgressBar: TProgressBar;
     LabelVersion: TShadowLabel;
+    LabelSoftwareScanCount: TShadowLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -75,20 +76,26 @@ end;
 
 procedure TFormStatus.TitleStr(const TitleText: String; MergeCurrentText: Boolean = False);
 begin
+  LabelStatusType.Canvas.Lock;
   case MergeCurrentText of
     True : LabelStatusType.Caption:= LabelStatusType.Caption+' '+TitleText;
     False: LabelStatusType.Caption:= TitleText;
   end;
+  LabelStatusType.Canvas.UnLock;
 end;
 
 procedure TFormStatus.MessageStr(const MessageText: String; Refresh: Boolean = True);
 begin
+  LabelMessage.Canvas.Lock; // help to reduce flickering if text changes too fast (parse MESS software lists...)
   LabelMessage.Caption:= MessageText;
+  LabelMessage.Canvas.UnLock;
   if Refresh then
+     Application.ProcessMessages; // this one is the real flickering fix...
+  {if Refresh then
      begin
        LabelStatusType.Refresh;
        LabelMessage.Refresh;
-     end;
+     end;}
 end;
 
 procedure TFormStatus.SetProgressPos(Position: Integer);
@@ -116,6 +123,7 @@ begin
 
   if not Application.Terminated then
      begin
+       LabelSoftwareScanCount.Left:= 554;
        if Screen.Height < 600 then
           begin
             LabelStatusType.Font.Name:= 'Segoe UI';
@@ -172,7 +180,6 @@ begin
        ImageBk.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'logo.png');
      end;
   LabelVersion.Caption:= FormMain.FrontendVersion;
-
 end;
 
 procedure TFormStatus.FormCloseQuery(Sender: TObject;

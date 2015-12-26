@@ -3,7 +3,7 @@ object FormFavoritesManager: TFormFavoritesManager
   Top = 354
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Favorites'
+  Caption = 'Favorites Manager'
   ClientHeight = 402
   ClientWidth = 614
   Color = clWhite
@@ -15,6 +15,7 @@ object FormFavoritesManager: TFormFavoritesManager
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -146,7 +147,7 @@ object FormFavoritesManager: TFormFavoritesManager
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.Sizeable = False
     Header.Visible = True

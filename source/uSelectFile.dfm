@@ -98,7 +98,7 @@ object FormSelectFile: TFormSelectFile
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.Sizeable = False
     Header.Visible = True
@@ -247,10 +247,12 @@ object FormSelectFile: TFormSelectFile
     object LabelGameNameCloneOf: TShadowLabel
       Left = 40
       Top = 34
-      Width = 481
+      Width = 545
       Height = 13
       AutoSize = False
-      Caption = 'name: gamename [clone of gamename] [bios: biosname] [merged]'
+      Caption = 
+        'name: gamename [clone of gamename] [bios: biosname] [merged] [xm' +
+        'l file: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9

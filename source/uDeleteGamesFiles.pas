@@ -19,6 +19,7 @@ type
     fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
     fSystemID: ShortInt;
     fMediaType: ShortInt; // 0 -> ROM; >= 1 -> CHD (for ROMs and CHD only)... -1 -> game config file
+    fSoftwareName: String;
     fGameStatus: ShortInt;
 
     fFileName: String;
@@ -35,6 +36,7 @@ type
     property eSystemID: ShortInt read fSystemID write fSystemID;
     property eFileType: ShortInt read fFileType write fFileType;
     property eMediaType: ShortInt read fMediaType write fMediaType;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have; 1 - miss; 2 - missing ROMs/CHDs
     property eFileName: String read fFileName write fFileName;
     property eFileSize: Int64 read fFileSize write fFileSize;
@@ -65,12 +67,12 @@ type
     LabelTotalFilesChecked: TShadowLabel;
     PanelDestinationFolder: TPanelEx;
     LabelCopyMoveDestination: TShadowLabel;
-    LabelDestinationFolder: TShadowLabel;
     DestinationFolder: TEdit;
     CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
     ButtonSelectROMsFolder: TBitBtn;
     LabelGameDetails: TLabel;
     LabelEmulatorVersion: TLabel;
+    LabelSoftwareListTitle: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -150,9 +152,9 @@ begin
         if eMediaType > 0 then
            begin
              if eHeaderVerCHD > 0 then
-                Result:= Result+' [Header v'+IntToStr(eHeaderVerCHD)+']'
+                Result:= Result+'  [Header v'+IntToStr(eHeaderVerCHD)+']'
              else
-                Result:= Result+ ' [Invalid Header]';
+                Result:= Result+ '  [Invalid Header]';
            end;
         Result:= Format('%-'+FillBlank+'s', [Result]);
       end;
@@ -178,7 +180,7 @@ var
   sFileType: Integer;
 begin
   if Enabled then
-     CheckBoxHolder.Font.Color:= clNavy
+     CheckBoxHolder.Font.Color:= $00a65300 //clNavy
   else
      CheckBoxHolder.Font.Color:= clGray;//$00e6e6e6;
 
@@ -229,15 +231,15 @@ begin
   ZiNcFilePath:= '';
 
   GameIsMerged:= False;
-  FileFullPath:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eSystemID);
+  FileFullPath:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSoftwareName);
   if (FileFullPath = '') and FormMain.GameIsClone(FormMain.MemGameInfo.eClone) then
      begin
        // check for merged game MAME and HBMAME
        if not FormMain.IsROM_HaveMissROMs(FormMain.MemGameInfo.eGameSetStatus) then
           begin
-            GameIsMerged:= FormMain.IsGameMerged(FormMain.MemGameInfo.eSystemID, formMain.MemGameInfo.eName);
+            GameIsMerged:= FormMain.MemGameInfo.eIsMerged;
             if GameIsMerged then
-               FileFullPath:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eClone, FormMain.MemGameInfo.eSystemID);
+               FileFullPath:= FormMain.SearchZIPFolder(FormMain.MemGameInfo.eClone, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSoftwareName);
           end;
      end;
   if FileFullPath <> '' then
@@ -245,6 +247,7 @@ begin
        // add .zip file
        addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
        TGameInfo(addItem).eMediaType:= 0;
+       TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
        TGameInfo(addItem).eMerged:= GameIsMerged;
        TGameInfo(addItem).eFileName:= FileFullPath;
        TGameInfo(addItem).eFileSize:= GetFileSize(FileFullPath);
@@ -273,7 +276,8 @@ begin
               begin
                 Delete(romName, 1, 2);
                 FormMain.GetCHDName(romName, FormMain.GameIsClone(FormMain.MemGameInfo.eClone), chdName, chdParentName); // get correct chdName and chdParentName (for MAME)
-                DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.MemGameInfo.eSystemID, romName, FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eClone, FormMain.MemGameInfo.eBiosName);
+                DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.MemGameInfo.eSystemID, romName, FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eClone,
+                                                        FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eSoftwareName);
                 if DiskFile <> '' then
                    begin
                      // file found...
@@ -282,6 +286,7 @@ begin
 
                      addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
                      TGameInfo(addItem).eMediaType:= 1;
+                     TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
                      TGameInfo(addItem).eMerged:= False;
                      TGameInfo(addItem).eFileName:= DiskFile;
                      TGameInfo(addItem).eFileSize:= GetFileSize(DiskFile);
@@ -430,6 +435,7 @@ var
           TGameInfo(addItem).eFileType:= FileType;
           TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
           TGameInfo(addItem).eMediaType:= -1; // for config files
+          TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
           TGameInfo(addItem).eMerged:= False;
           TGameInfo(addItem).eFileName:= FileFullPath;
           TGameInfo(addItem).eFileSize:= GetFileSize(FileFullPath);
@@ -455,6 +461,7 @@ var
            TGameInfo(addItem).eFileType:= fixFileType;
            TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
            TGameInfo(addItem).eMediaType:= -1; // for config files
+           TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
            TGameInfo(addItem).eMerged:= False;
            TGameInfo(addItem).eFileName:= nvram_MAME[Loop];
            TGameInfo(addItem).eFileSize:= GetFileSize(nvram_MAME[Loop]);
@@ -514,7 +521,8 @@ begin
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
   FormMain.ELV_ResetNormalColors(FilesListView);
 
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                              SystemIcon.Picture.Icon);
   FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
   //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
@@ -527,6 +535,13 @@ begin
      begin
        LabelEmulatorVersion.Visible:= False;
        LabelGameDetails.Top:= LabelGameDetails.Top+7;
+     end;
+  if FormMain.MemGameInfo.eSoftwareName <> '' then
+     begin
+       LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
+       LabelSoftwareListTitle.Visible:= True;
+       FilesListView.Height:= FilesListView.Height-6;
+       FilesListView.Top:= FilesListView.Top+6;
      end;
 
   GameChanged:= False;
@@ -595,7 +610,7 @@ begin
 
   if FilesListView.Scrollbars.VertBarVisible then
      begin
-       FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-16;
+       FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);//16;
        FilesListView.HotTrack.Enabled:= False; // disable to fix hot track painting bug :_((
      end
   else
@@ -624,7 +639,28 @@ begin
       begin
         CallMessageBox;
         FormMain.ShowGameNameEntryMsgBox;
+
+        FormMain.AddMsgText(FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True)+#13#10, clGray, [fsBold, fsItalic], taCenter);
+        if FormMain.MemGameInfo.eSoftwareName <> '' then
+           FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, $000053a6, [fsBold], taCenter, 9);
+
         if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then // .Count > 0
+           begin
+             FormMain.AddMsgText(#13#10+'    No files were found to ');
+             FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
+           end
+        else
+           begin
+             FormMain.AddMsgText(#13#10+'    This game does not use any ROMs. There are no extra files to ');
+             FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
+           end;
+        FormMain.AddMsgText('.');//+#13#10+#13#10);
+
+        //FormMain.AddMsgText('Emulator File: ');
+        //FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], clBlack, [fsBold]);
+
+
+        {if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then // .Count > 0
            begin
              FormMain.AddMsgText('    No files were found to ');
              FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
@@ -636,8 +672,10 @@ begin
            end;
         FormMain.AddMsgText('.'+#13#10+#13#10);
         FormMain.AddMsgText(FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True)+#13#10, clGray, [fsBold, fsItalic], taCenter);
+        if FormMain.MemGameInfo.eSoftwareName <> '' then
+           FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, $000053a6, [fsBold], taCenter, 9);
         FormMain.AddMsgText('Emulator File: ');
-        FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], clBlack, [fsBold]);
+        FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], clBlack, [fsBold]);}
         GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle, '', 2, False, -1);
         PostMessage(Handle, wm_Close, 0, 0);
         Close;
@@ -659,13 +697,13 @@ begin
       end;
     1:
       begin
-        ACanvas.Font.Name:= 'Consolas';
-        ACanvas.Font.Size:= ACanvas.Font.Size+1;
+        ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
+        ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
-        ACanvas.Font.Name:= 'Consolas';
-        ACanvas.Font.Size:= ACanvas.Font.Size-1;
+        ACanvas.Font.Name:= 'Verdana';//'Lucida Console';//'Consolas';
+        ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then

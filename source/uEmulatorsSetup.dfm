@@ -93,7 +93,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     EllipsType = etNone
     Transparent = True
   end
-  object Label1: TLabel
+  object LabelAlterMAME_Autorun: TLabel
     Left = 197
     Top = 316
     Width = 288
@@ -194,7 +194,6 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     ParentCtl3D = False
     ParentFont = False
     ParentShowHint = False
-    ReadOnly = True
     ShowHint = True
     TabOrder = 6
     OnChange = AlterMAME_execChange
@@ -282,14 +281,14 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -11
-      EditManager.Font.Name = 'Consolas'
+      EditManager.Font.Height = -9
+      EditManager.Font.Name = 'Verdana'
       EditManager.Font.Style = []
       UseDockManager = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Consolas'
+      Font.Height = -9
+      Font.Name = 'Verdana'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clBlack
@@ -419,7 +418,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
   object PanelMAMEEmulatorsText: TPanelEx
     Left = 205
     Top = 140
-    Width = 395
+    Width = 428
     Height = 15
     Color1 = 15856113
     Color2 = clSilver
@@ -432,11 +431,11 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     object ShadowLabel2: TShadowLabel
       Left = 1
       Top = 0
-      Width = 383
+      Width = 430
       Height = 15
       Caption = 
-        '--             /                     /          /               ' +
-        '    /                    --'
+        '--            /                   /                            /' +
+        '        /                  /        --'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -455,10 +454,10 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       Width = 41
       Height = 15
       Cursor = crHandPoint
-      Hint = 'http://mamedev.org/'
+      Hint = 'http://mamedev.org'
       Caption = 'MAME'
       Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
+      Font.Color = clNavy
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -475,7 +474,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel3: TShadowLabel
-      Left = 76
+      Left = 69
       Top = 0
       Width = 75
       Height = 15
@@ -483,7 +482,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       Hint = 'http://mameplus.sourceforge.net'
       Caption = 'MAME Plus!'
       Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
+      Font.Color = clNavy
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -500,7 +499,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel4: TShadowLabel
-      Left = 167
+      Left = 271
       Top = 0
       Width = 29
       Height = 15
@@ -508,7 +507,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       Hint = 'http://mamedev.emulab.it/haze/'
       Caption = 'UME'
       Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
+      Font.Color = clNavy
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -525,7 +524,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel5: TShadowLabel
-      Left = 298
+      Left = 309
       Top = 0
       Width = 69
       Height = 15
@@ -533,7 +532,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       Hint = 'http://wolfmame.marpirc.net'
       Caption = 'WolfMAME'
       Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
+      Font.Color = clNavy
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -550,17 +549,42 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel6: TShadowLabel
-      Left = 214
+      Left = 388
       Top = 0
-      Width = 65
+      Width = 27
       Height = 15
       Cursor = crHandPoint
       Hint = 
         'http://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=8&' +
         'page=1'
-      Caption = 'SDLMAME'
+      Caption = 'SDL'
       Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = True
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+      OnClick = ShadowLabel1Click
+      OnMouseEnter = ShadowLabel1MouseEnter
+      OnMouseLeave = ShadowLabel1MouseLeave
+    end
+    object ShadowLabel7: TShadowLabel
+      Left = 151
+      Top = 0
+      Width = 112
+      Height = 15
+      Cursor = crHandPoint
+      Hint = 'http://ashura.altervista.org'
+      Caption = 'MAME (Ash build)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -594,7 +618,6 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     ParentCtl3D = False
     ParentFont = False
     ParentShowHint = False
-    ReadOnly = True
     ShowHint = True
     TabOrder = 3
     OnChange = Arcade_execChange
@@ -610,61 +633,5 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     ShowHint = True
     TabOrder = 15
     OnClick = ButtonSetOptionsAlterMAMEClick
-  end
-  object ParseBox: TPanelEx
-    Left = 83
-    Top = 403
-    Width = 473
-    Height = 60
-    BevelInner = bvNone
-    BevelKind = bkFlat
-    Color1 = clMoneyGreen
-    Color2 = clWhite
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = clBlack
-    Frames = [frLeft, frTop, frRight, frBottom]
-    ParentBackground = False
-    Style = vgSolid
-    Visible = False
-    object LabelMessage: TShadowLabel
-      Left = 8
-      Top = 33
-      Width = 454
-      Height = 17
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Generating MD5 checksum and parsing emulator version info...'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 16112579
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-    end
-    object LabelEmulatorFullPath: TShadowLabel
-      Left = 8
-      Top = 8
-      Width = 454
-      Height = 17
-      AutoSize = False
-      Caption = 'emulator filename full path'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 3289650
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = True
-      EllipsType = etPathEllips
-      Transparent = True
-    end
   end
 end

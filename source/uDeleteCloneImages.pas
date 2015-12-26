@@ -13,10 +13,11 @@ type
   TEasyGameInfo_dc = class(TEasyItemStored)
   private
     fROMIdentification: Integer;
-    fTitle,
+    fTitle: WideString;
     fName,
     fClone,
-    fDriverName: String;
+    fDriverName,
+    fSoftwareName: String;
     fScreenOrientation,
     fDriverStatus,
     fSystem,
@@ -26,13 +27,14 @@ type
     function GetCaptions(Column: Integer): WideString; override;
   public
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eDriverName: String read fDriverName write fDriverName;
     property eScreenOrientation: ShortInt read fScreenOrientation write fScreenOrientation;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eSystem: ShortInt read fSystem write fSystem;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus;
     property eDeleteFromList: ShortInt read fDeleteFromList write fDeleteFromList;
   end;
@@ -53,19 +55,18 @@ type
     DeleteClonesList: TEasyListview;
     Shape1: TShape;
     PanelEx1: TPanelEx;
-    ButtonSystem: TBitBtn;
     SystemIcon: TImage;
     ImageCategoryIcon: TImage;
-    ButtonImageCategory: TBitBtn;
     ButtonScan: TBitBtn;
     ButtonDeleteImages: TBitBtn;
     ButtonDeleteSelected: TBitBtn;
     ButtonHelp: TBitBtn;
-    ButtonClose: TBitBtn;
     ButtonRemoveSelected: TBitBtn;
     PanelEx2: TPanelEx;
     ButtonRenameToParent: TBitBtn;
     IL_ToolBar: TImageList;
+    LabelSystem: TShadowLabel;
+    LabelImageCategory: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure DeleteClonesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -80,21 +81,19 @@ type
     procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonRenameToParentClick(Sender: TObject);
     procedure ButtonRemoveSelectedClick(Sender: TObject);
-    procedure ButtonCloseClick(Sender: TObject);
-    procedure ButtonSystemClick(Sender: TObject);
-    procedure ButtonImageCategoryClick(Sender: TObject);
     procedure ButtonScanClick(Sender: TObject);
     procedure ButtonDeleteImagesClick(Sender: TObject);
     procedure ButtonDeleteSelectedClick(Sender: TObject);
     function DeleteClonesListItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
       var DoDefault: Boolean): Integer;
+    procedure SystemIconClick(Sender: TObject);
+    procedure ImageCategoryIconClick(Sender: TObject);
   private
     { Private declarations }
     SelectedItem: TEasyItem;
     ImageFullPath: String;
     WindowTitleError: String;
-    procedure UpdateVertScrollbar;
     procedure LoadImages;
     procedure DeleteFiles(SelectedOnly: Boolean = False);
     procedure RenameImages;
@@ -128,25 +127,20 @@ begin
   end;
 end;
 
-procedure TFormDeleteCloneImages.UpdateVertScrollbar;
-begin
-  if DeleteClonesList.Scrollbars.VertBarVisible then
-     DeleteClonesList.Header.Columns[0].Width:= 383
-  else
-     DeleteClonesList.Header.Columns[0].Width:= 400;
-end;
-
 procedure TFormDeleteCloneImages.LoadImages;
 var
-  FileStr, FileExt: String;
+  FileStr, FileExt, SoftNameFolder: String;
 begin
-  FileStr:= ImageFullPath+TEasyGameInfo_dc(SelectedItem).eName;
+  SoftNameFolder:= '';
+  if TEasyGameInfo_dc(SelectedItem).eSoftwareName <> '' then
+     SoftNameFolder:= TEasyGameInfo_dc(SelectedItem).eSoftwareName+'\';
+  FileStr:= ImageFullPath+SoftNameFolder+TEasyGameInfo_dc(SelectedItem).eName;
   FileExt:= '.png';
   case FileExists(FileStr+FileExt) of
     True : ImageScr1.Bitmap.LoadFromFile(FileStr+FileExt);
     False:
       begin
-        if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
+        if not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag) then
            begin
              FileExt:= '.jpg';
              if FileExists(FileStr+FileExt) then
@@ -160,13 +154,13 @@ begin
    // load parent image, if found
   if FormMain.GameIsClone(TEasyGameInfo_dc(SelectedItem).eClone) then
      begin
-       FileStr:= ImageFullPath+TEasyGameInfo_dc(SelectedItem).eClone;
+       FileStr:= ImageFullPath+SoftNameFolder+TEasyGameInfo_dc(SelectedItem).eClone;
        FileExt:= '.png';
        case FileExists(FileStr+FileExt) of
          True : ImageParentScr1.Bitmap.LoadFromFile(FileStr+FileExt);
          False:
            begin
-             if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
+             if not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag) then
                 begin
                   FileExt:= '.jpg';
                   if FileExists(FileStr+FileExt) then
@@ -184,7 +178,7 @@ end;
 procedure TFormDeleteCloneImages.DeleteFiles(SelectedOnly: Boolean = False);
 var
   Item, ItemToDelete: TEasyItem;
-  FileStr, FileExt: String;
+  FileStr, FileExt, SoftNameFolderStr: String;
   Loop: Integer;
   imgDeleted: Boolean;
 begin
@@ -210,24 +204,27 @@ begin
   repeat
     imgDeleted:= False;
     ItemToDelete:= nil;
+    SoftNameFolderStr:= '';
+    if TEasyGameInfo_dc(Item).eSoftwareName <> '' then
+       SoftNameFolderStr:= TEasyGameInfo_dc(Item).eSoftwareName+'\';
     for Loop:=1 to 99 do
     begin
       FileStr:= FormMain.GetImageName(TEasyGameInfo_dc(Item).eName, Loop, 0);
       FileExt:= '.png';
-      case FileExists(ImageFullPath+FileStr+FileExt) of
+      case FileExists(ImageFullPath+SoftNameFolderStr+FileStr+FileExt) of
         True:
           begin
-            if DeleteFile(ImageFullPath+FileStr+FileExt) then
+            if DeleteFile(ImageFullPath+SoftNameFolderStr+FileStr+FileExt) then
                imgDeleted:= True;
           end;
         False:
           begin
-            if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
+            if not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag) then
                begin
                  FileExt:= '.jpg';
-                 if FileExists(ImageFullPath+FileStr+FileExt) then
+                 if FileExists(ImageFullPath+SoftNameFolderStr+FileStr+FileExt) then
                     begin
-                      if DeleteFile(ImageFullPath+FileStr+FileExt) then
+                      if DeleteFile(ImageFullPath+SoftNameFolderStr+FileStr+FileExt) then
                          imgDeleted:= True;
                     end;
                end;
@@ -255,7 +252,6 @@ begin
   DeleteClonesList.Items.ReIndexDisable:= False;
   if SelectedOnly then
      DeleteClonesList.Selection.DeleteSelected;
-  UpdateVertScrollbar;
   DeleteClonesList.EndUpdate;
   FormStatus.Close;
   ClearScreens;
@@ -271,20 +267,25 @@ var
   FileRenamed: Boolean;
 
   function RenameImageFile(ScreenIndex: ShortInt): Boolean;
+  var
+    SoftNameFolder: String;
   begin
     Result:= False;
-    if (ScreenIndex > 1) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+    if (ScreenIndex > 1) and (not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag)) then
        Exit;
     FileExt:= '.png';
-    oldName:= ImageFullPath+FormMain.GetImageName(TEasyGameInfo_dc(SelectedItem).eName, ScreenIndex, 0);
+    SoftNameFolder:= '';
+    if TEasyGameInfo_dc(SelectedItem).eSoftwareName <> '' then
+       SoftNameFolder:= TEasyGameInfo_dc(SelectedItem).eSoftwareName+'\';
+    oldName:= ImageFullPath+SoftNameFolder+FormMain.GetImageName(TEasyGameInfo_dc(SelectedItem).eName, ScreenIndex, 0);
     Result:= FileExists(oldName+FileExt);
-    if (not Result) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+    if (not Result) and (not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag)) then
        begin
          FileExt:= '.jpg';
          Result:= FileExists(oldName+FileExt);
        end;
     if Result then
-       newName:= ImageFullPath+FormMain.GetImageName(TEasyGameInfo_dc(SelectedItem).eClone, ScreenIndex, 0);
+       newName:= ImageFullPath+SoftNameFolder+FormMain.GetImageName(TEasyGameInfo_dc(SelectedItem).eClone, ScreenIndex, 0);
   end;
   
 begin
@@ -315,37 +316,37 @@ procedure TFormDeleteCloneImages.SelectImageCategory;
 var
   selCat: ShortInt;
 begin
-  selCat:= FormMain.CallSelectImageCategory(ButtonImageCategory.Tag);
+  selCat:= FormMain.CallSelectImageCategory(ImageCategoryIcon.Tag);
   if selCat = -1 then
      Exit;
-  ButtonImageCategory.Tag:= selCat;
-  ButtonImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption;
-  FormMain.IL_ImagesCategory_Small.GetIcon(ButtonImageCategory.Tag, ImageCategoryIcon.Picture.Icon);
+  ImageCategoryIcon.Tag:= selCat;
+  LabelImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Caption;
+  FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
 end;
 
 procedure TFormDeleteCloneImages.SelectSystem;
 var
   selSys: ShortInt;
 begin
-  selSys:= FormMain.CallSelectSystem(0, ButtonSystem.Tag);
+  selSys:= FormMain.CallSelectSystem(0, SystemIcon.Tag);
   if selSys = -1 then
      Exit;
-  ButtonSystem.Tag:= selSys;
-  ButtonSystem.Caption:= FormMain.GetEmulatorDescription(selSys);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
+  SystemIcon.Tag:= selSys;
+  LabelSystem.Caption:= FormMain.GetSystemShortTitle(selSys);
+  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
 end;
 
 procedure TFormDeleteCloneImages.BuildGamesList;
 var
   Item, addItem: TEasyItem;
-  FolderStr: String;
+  FolderStr, SoftListFolderStr: String;
 
   function AddGameToList: Boolean;
   var
     FileExtension: String;
   begin
     FileExtension:= '.png';
-    Result:= (FormMain.TempGameVars.eSystemID = ButtonSystem.Tag) and
+    Result:= (FormMain.TempGameVars.eSystemID = SystemIcon.Tag) and
              FormMain.GameIsClone(FormMain.TempGameVars.eClone);
 
     if not Result then
@@ -355,20 +356,24 @@ var
 
     if not Result then
        Exit;
-    Result:= FileExists(FolderStr+FormMain.TempGameVars.eName+FileExtension);
+    SoftListFolderStr:= '';
+    if FormMain.TempGameVars.eSoftwareName <> '' then
+       SoftListFolderStr:= FormMain.TempGameVars.eSoftwareName+'\';
+       
+    Result:= FileExists(FolderStr+SoftListFolderStr+FormMain.TempGameVars.eName+FileExtension);
     if not Result then
        begin
-         if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
+         if not FormMain.ImagesPNGOnly(ImageCategoryIcon.Tag) then
             begin
               FileExtension:= '.jpg';
-              Result:= FileExists(FolderStr+FormMain.TempGameVars.eName+FileExtension);
+              Result:= FileExists(FolderStr+SoftListFolderStr+FormMain.TempGameVars.eName+FileExtension);
             end;
        end;
     if not Result then
        Exit;
 
     addItem:= DeleteClonesList.Items.AddCustom(TEasyGameInfo_dc, nil);
-    addItem.ImageIndex:= FormMain.TempGameVars.eROMIdentification;
+    addItem.ImageIndex:= FormMain.GetMAMEImageIndex(FormMain.TempGameVars.eROMIdentification, FormMain.TempGameVars.eSoftwareName);
     addItem.StateImageIndexes[0]:= FormMain.TempGameVars.eSystemID;
     TEasyGameInfo_dc(addItem).eTitle:= FormMain.TempGameVars.eTitle;
     TEasyGameInfo_dc(addItem).eName:= FormMain.TempGameVars.eName;
@@ -377,6 +382,7 @@ var
     TEasyGameInfo_dc(addItem).eScreenOrientation:= FormMain.TempGameVars.eScreenOrientation;
     TEasyGameInfo_dc(addItem).eDriverStatus:= FormMain.TempGameVars.eDriverStatus;
     TEasyGameInfo_dc(addItem).eSystem:= FormMain.TempGameVars.eSystemID;
+    TEasyGameInfo_dc(addItem).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
     TEasyGameInfo_dc(addItem).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
     TEasyGameInfo_dc(addItem).eDeleteFromList:= 0;
   end;
@@ -392,7 +398,7 @@ begin
        SetSelectedGame;
        Exit;
      end;
-  FolderStr:= FormMain.GetFolderFull(ButtonImageCategory.Tag, ButtonSystem.Tag);
+  FolderStr:= FormMain.GetFolderFull(ImageCategoryIcon.Tag, SystemIcon.Tag);
   if (FolderStr = '') or (not DirectoryExists(FolderStr)) then
      Exit;
   FormStatus.Show;
@@ -412,7 +418,6 @@ begin
 
   DeleteClonesList.Items.ReIndexDisable:= False;
   DeleteClonesList.Sort.SortAll;
-  UpdateVertScrollbar;
   DeleteClonesList.EndUpdate;
   UpdateTotalGamesLabel;
   SelectedItem:= DeleteClonesList.Groups.FirstItem;
@@ -430,7 +435,7 @@ begin
      begin
        TEasyGameInfo_dc(SelectedItem).Selected:= True;
        DeleteClonesList.Selection.FocusedItem:= SelectedItem;
-       SelectedItem.MakeVisible(emvAuto);
+       SelectedItem.MakeVisible(emvMiddle) //(emvAuto);
      end;
   FormMain.ELV_SetSelectRibbon(TEasyGameInfo_dc(SelectedItem).eGameStatus, DeleteClonesList);
   LoadImages;
@@ -446,7 +451,7 @@ end;
 
 procedure TFormDeleteCloneImages.FixBackgroundColor;
 begin
-  ImageScr1.Color:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Tag;
+  ImageScr1.Color:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Tag;
   ImageParentScr1.Color:= ImageScr1.Color;
 end;
 
@@ -457,11 +462,11 @@ end;
 
 procedure TFormDeleteCloneImages.FormShow(Sender: TObject);
 begin
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
-  FormMain.IL_ImagesCategory_Small.GetIcon(ButtonImageCategory.Tag, ImageCategoryIcon.Picture.Icon);
+  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
+  FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
 
-  ButtonSystem.Caption:= FormMain.GetEmulatorDescription(ButtonSystem.Tag);
-  ButtonImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption;
+  LabelSystem.Caption:= FormMain.GetSystemShortTitle(SystemIcon.Tag);
+  LabelImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Caption;
 
   WindowTitleError:= 'Error: '+FormDeleteCloneImages.Caption;
 
@@ -551,24 +556,8 @@ end;
 procedure TFormDeleteCloneImages.ButtonRemoveSelectedClick(Sender: TObject);
 begin
   DeleteClonesList.Selection.DeleteSelected(True);
-  UpdateVertScrollbar;
   UpdateTotalGamesLabel;
   DeleteClonesList.SetFocus;
-end;
-
-procedure TFormDeleteCloneImages.ButtonCloseClick(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TFormDeleteCloneImages.ButtonSystemClick(Sender: TObject);
-begin
-  SelectSystem;
-end;
-
-procedure TFormDeleteCloneImages.ButtonImageCategoryClick(Sender: TObject);
-begin
-  SelectImageCategory;
 end;
 
 procedure TFormDeleteCloneImages.ButtonScanClick(Sender: TObject);
@@ -600,6 +589,16 @@ begin
     1: Result:= FormMain.iCompare(TEasyGameInfo_dc(gItem1).eName, TEasyGameInfo_dc(gItem2).eName);
     2: Result:= FormMain.iCompare(TEasyGameInfo_dc(gItem1).eClone, TEasyGameInfo_dc(gItem2).eClone);
   end;
+end;
+
+procedure TFormDeleteCloneImages.SystemIconClick(Sender: TObject);
+begin
+  SelectSystem;
+end;
+
+procedure TFormDeleteCloneImages.ImageCategoryIconClick(Sender: TObject);
+begin
+  SelectImageCategory;
 end;
 
 end.

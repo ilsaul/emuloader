@@ -3,7 +3,7 @@ object FormImagesManager: TFormImagesManager
   Top = 244
   Width = 931
   Height = 550
-  Caption = 'Images Manager'
+  Caption = 'MAME Images Manager'
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -64,38 +64,30 @@ object FormImagesManager: TFormImagesManager
     GroupFont.Style = [fsBold, fsItalic]
     HintType = ehtToolTip
     Header.Columns.Items = {
-      0600000009000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
       000600000080080001010001000000000100010E010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000164000000FFFFFF1F000100000001000000040000004E00
+      00010100000000000155000000FFFFFF1F000100000001000000040000004E00
       61006D006500000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE00060000008008000101000102000000000001640000
+      6E53746F726564FFFECE00060000008008000101000102000000000001550000
       00FFFFFF1F0001000000010000000800000043006C006F006E00650020006F00
       6600000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE0006000000800800010100010300000000000169000000FFFFFF
-      1F0001000000010000000B00000044007200690076006500720020004E006100
-      6D006500000000000000000000000000110000005445617379436F6C756D6E53
-      746F726564FFFECE000600000080080001010001040000000000011B000000FF
-      FFFF1F0001000000010000000300000044007200760000000000000000000000
-      0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
-      080001010001050000000000011B000000FFFFFF1F0001000000010000000300
-      000045006D007500000000000000000000000000110000005445617379436F6C
-      756D6E53746F726564FFFECE000600000080080001010001060000000000011B
-      000000FFFFFF1F0001000000010000000300000043006C007200000000000000
-      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-      00000080080001010001070000000000011B000000FFFFFF1F00010000000100
-      00000300000053006E0064000000000000000000000000001100000054456173
-      79436F6C756D6E53746F726564FFFECE00060000008008000101000108000000
-      0000011B000000FFFFFF1F000100000001000000030000004700720070000000
-      00000000000000000000}
+      726564FFFECE0006000000800800010100010300000000000196000000FFFFFF
+      1F0001000000010000000D00000053006F006600740077006100720065002000
+      4C00690073007400000000000000000000000000110000005445617379436F6C
+      756D6E53746F726564FFFECE000600000080080001010001040000000000015A
+      000000FFFFFF1F0001000000010000000B000000440072006900760065007200
+      20004E0061006D00650000000000000000000000000011000000544561737943
+      6F6C756D6E53746F726564FFFECE000600000080080001010001050000000000
+      0155000000FFFFFF1F0001000000010000000D00000044007200690076006500
+      72002000530074006100740075007300000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Height = 22
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1300
@@ -127,7 +119,6 @@ object FormImagesManager: TFormImagesManager
     TabOrder = 0
     View = elsReport
     OnColumnClick = MissingImagesListColumnClick
-    OnColumnPaintText = MissingImagesListColumnPaintText
     OnColumnSizeChanged = MissingImagesListColumnSizeChanged
     OnColumnSizeChanging = MissingImagesListColumnSizeChanging
     OnDblClick = MissingImagesListDblClick
@@ -269,32 +260,20 @@ object FormImagesManager: TFormImagesManager
     object LabelTotalItemsMissing: TLabel
       Left = 2
       Top = 0
-      Width = 130
+      Width = 124
       Height = 23
       Hint = ' %u Missing Images'
       Caption = ' 000000 Missing Images'
       Constraints.MinHeight = 23
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
       Layout = tlCenter
     end
     object LabelTotalItemsNotUsed: TLabel
       Left = 610
       Top = 0
-      Width = 136
+      Width = 130
       Height = 23
       Caption = ' 000000 not Used Images'
       Constraints.MinHeight = 23
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
       Layout = tlCenter
     end
     object ButtonNotUsedDeleteFiles: TSpeedButton
@@ -327,40 +306,15 @@ object FormImagesManager: TFormImagesManager
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSimple
-    object SystemIcon: TImage
-      Left = 1
-      Top = 3
-      Width = 24
-      Height = 24
-    end
     object ImageCategoryIcon: TImage
-      Left = 381
+      Left = 2
       Top = 3
       Width = 24
       Height = 24
-    end
-    object ButtonSystem: TBitBtn
-      Tag = 1
-      Left = 27
-      Top = 2
-      Width = 345
-      Height = 26
-      Hint = 'Click here to select a system'
-      Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      OnClick = ButtonSystemClick
     end
     object ButtonImageCategory: TBitBtn
       Tag = 1
-      Left = 407
+      Left = 28
       Top = 2
       Width = 140
       Height = 26
@@ -374,11 +328,11 @@ object FormImagesManager: TFormImagesManager
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 0
       OnClick = ButtonImageCategoryClick
     end
     object ButtonScanBoth: TBitBtn
-      Left = 560
+      Left = 184
       Top = 2
       Width = 65
       Height = 26
@@ -386,11 +340,11 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Scan Both'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 4
+      TabOrder = 2
       OnClick = ButtonScanBothClick
     end
     object ButtonScanMissing: TBitBtn
-      Left = 631
+      Left = 255
       Top = 2
       Width = 90
       Height = 26
@@ -398,23 +352,23 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Scan Missing'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 3
       OnClick = ButtonScanMissingClick
     end
     object ButtonScanNotUsed: TBitBtn
-      Left = 727
+      Left = 351
       Top = 2
-      Width = 90
+      Width = 160
       Height = 26
       Hint = 'Click here to scan not used images'
       Caption = 'Scan Not Used'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 6
+      TabOrder = 4
       OnClick = ButtonScanNotUsedClick
     end
     object ButtonHelp: TBitBtn
-      Left = 830
+      Left = 518
       Top = 2
       Width = 38
       Height = 26
@@ -422,20 +376,8 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Help'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 1
       OnClick = ButtonHelpClick
-    end
-    object ButtonExit: TBitBtn
-      Left = 874
-      Top = 2
-      Width = 38
-      Height = 26
-      Hint = 'Close this window'
-      Caption = 'Exit'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 3
-      OnClick = ButtonExitClick
     end
   end
   object IL_Buttons: TImageList
@@ -506,9 +448,13 @@ object FormImagesManager: TFormImagesManager
       AutoCheck = True
       Caption = 'Scan Device Sets'
     end
-    object PopupScanDevicesWithNoROMs: TMenuItem
+    object PopupScanSoftwareListGames: TMenuItem
       AutoCheck = True
-      Caption = 'Scan Devices With No ROMs'
+      Caption = 'Scan Software List Games'
+    end
+    object PopupScanNonArcadeMachines: TMenuItem
+      AutoCheck = True
+      Caption = 'Scan Non-Arcade Machines'
     end
     object N1: TMenuItem
       Caption = '-'
@@ -521,31 +467,6 @@ object FormImagesManager: TFormImagesManager
     object PopupMissingClearList: TMenuItem
       Caption = 'Clear Games List'
       OnClick = PopupMissingClearListClick
-    end
-    object PopupViewMode: TMenuItem
-      Caption = '-'
-      Hint = 'View mode'
-    end
-    object PopupViewDetailsSmallIcons: TMenuItem
-      AutoCheck = True
-      Caption = 'Details View (16x16)'
-      Checked = True
-      RadioItem = True
-      OnClick = PopupViewDetailsSmallIconsClick
-    end
-    object PopupViewDetailsLargeIcons: TMenuItem
-      Tag = 1
-      AutoCheck = True
-      Caption = 'Details View (32x32)'
-      RadioItem = True
-      OnClick = PopupViewDetailsSmallIconsClick
-    end
-    object PopupViewTiles: TMenuItem
-      Tag = 2
-      AutoCheck = True
-      Caption = 'Tiles View (48x48)'
-      RadioItem = True
-      OnClick = PopupViewDetailsSmallIconsClick
     end
     object N3: TMenuItem
       Caption = '-'
@@ -573,6 +494,9 @@ object FormImagesManager: TFormImagesManager
         RadioItem = True
         OnClick = PopupShowAllGamesClick
       end
+    end
+    object N5: TMenuItem
+      Caption = '-'
     end
     object PopupMissingSaveToFile: TMenuItem
       Caption = 'Save Games List To File'

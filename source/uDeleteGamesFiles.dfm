@@ -22,6 +22,28 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
+  object LabelSoftwareListTitle: TShadowLabel
+    Left = 8
+    Top = 60
+    Width = 598
+    Height = 14
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Software List: softlist title'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 21414
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 16112579
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    Layout = tlCenter
+    Visible = False
+  end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
@@ -259,7 +281,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
       Top = 6
-      Width = 250
+      Width = 218
       Height = 41
       CaptionPosition = cpTopCenter
       RoundEdges = True
@@ -267,26 +289,20 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Caption = ' Auto-Check File Types '
       Color = clBtnFace
       Ctl3D = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
       ParentColor = False
-      ParentFont = False
       TabOrder = 2
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
-        Left = 136
+        Left = 115
         Top = 18
-        Width = 106
+        Width = 101
         Height = 16
         Hint = 'Use this option to check/uncheck game config/RAM files'
         HelpContext = 2
         Checked = True
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
@@ -302,14 +318,14 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       object DeleteROMs: TAdvOfficeCheckBox
         Left = 8
         Top = 18
-        Width = 55
+        Width = 52
         Height = 16
         Hint = 'Use this option to check/uncheck the gamename .zip/.7z file'
         Checked = True
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
@@ -323,18 +339,18 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
       object DeleteCHDs: TAdvOfficeCheckBox
-        Left = 72
+        Left = 63
         Top = 18
-        Width = 55
+        Width = 50
         Height = 16
         Hint = 
           'Use this option to check/uncheck CHD files (if supported by the ' +
           'game)'
         HelpContext = 1
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
@@ -363,37 +379,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     ParentBackground = False
     Style = vgSolid
     object LabelCopyMoveDestination: TShadowLabel
-      Left = 46
-      Top = 4
-      Width = 543
-      Height = 16
-      Caption = 
-        'Select a destination folder, full path. CHD files are sent to a ' +
-        '"\chd_files\" sub-folder. No network paths!'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-    end
-    object LabelDestinationFolder: TShadowLabel
       Left = 8
-      Top = 23
-      Width = 38
-      Height = 19
-      Caption = 'Folder'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
-      ParentFont = False
+      Top = 4
+      Width = 323
+      Height = 16
+      Caption = 'Select a destination folder. Full paths only, no network paths!'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
@@ -401,8 +391,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object DestinationFolder: TEdit
-      Left = 46
-      Top = 22
+      Left = 8
+      Top = 20
       Width = 370
       Height = 21
       AutoSize = False
@@ -410,8 +400,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       TabOrder = 0
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
-      Left = 468
-      Top = 22
+      Left = 430
+      Top = 20
       Width = 142
       Height = 20
       Hint = 
@@ -425,8 +415,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Themed = True
     end
     object ButtonSelectROMsFolder: TBitBtn
-      Left = 418
-      Top = 22
+      Left = 380
+      Top = 20
       Width = 43
       Height = 21
       Hint = 'Click here to select a folder'

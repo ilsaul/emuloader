@@ -1,6 +1,6 @@
 object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
-  Left = 655
-  Top = 323
+  Left = 624
+  Top = 325
   BorderStyle = bsDialog
   Caption = 'Copy Games Files'
   ClientHeight = 377
@@ -36,7 +36,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Top = 3
       Width = 140
       Height = 17
-      Caption = 'Copying 000,000 files to'
+      Caption = 'Copying 000.000 files to'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -13
@@ -94,7 +94,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Width = 273
       Height = 17
       AutoSize = False
-      Caption = 'Remaining 000,000 files (0000.00 GB)'
+      Caption = 'Remaining 000.000 files (0000.00 GB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -13
@@ -186,9 +186,11 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelGameNameCloneOf: TShadowLabel
       Left = 40
       Top = 34
-      Width = 333
+      Width = 456
       Height = 13
-      Caption = 'name: gamename [clone of gamename] [bios: biosname] [merged]'
+      Caption = 
+        'name: gamename [clone of gamename] [bios: biosname] [merged] [xm' +
+        'l file: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9
@@ -210,8 +212,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     Color = 15856113
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Consolas'
+    Font.Height = -12
+    Font.Name = 'Lucida Console'
     Font.Style = []
     ParentFont = False
     ReadOnly = True
@@ -250,8 +252,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Caption = 'd:\mame_roms\elevator.zip'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Consolas'
+      Font.Height = -12
+      Font.Name = 'Lucida Console'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -259,6 +261,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowEnabled = False
       EllipsType = etNone
       Transparent = True
+      Layout = tlCenter
     end
     object LabelFileSizeDate: TShadowLabel
       Left = 83
@@ -266,11 +269,11 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Width = 518
       Height = 14
       AutoSize = False
-      Caption = 'Size: 331 Bytes'
+      Caption = 'Size: 0000.00 KBytes  Date/Time: Jan/01/2016 00:00:00'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Consolas'
+      Font.Height = -9
+      Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -278,6 +281,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowEnabled = False
       EllipsType = etNone
       Transparent = True
+      Layout = tlCenter
     end
     object LabelFileType: TShadowLabel
       Left = 95

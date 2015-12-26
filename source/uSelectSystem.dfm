@@ -5,7 +5,7 @@ object FormSelectSystem: TFormSelectSystem
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Select One or More Systems'
-  ClientHeight = 312
+  ClientHeight = 358
   ClientWidth = 718
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -55,11 +55,11 @@ object FormSelectSystem: TFormSelectSystem
     Transparent = True
   end
   object LabelQuickScan: TLabel
-    Left = 325
+    Left = 314
     Top = 204
-    Width = 207
+    Width = 218
     Height = 15
-    Caption = '(search for game set and chd files only)'
+    Caption = '(search for game files only, no validation)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clNavy
     Font.Height = -12
@@ -90,6 +90,26 @@ object FormSelectSystem: TFormSelectSystem
     Width = 16
     Height = 16
   end
+  object LabelMultiSelect: TShadowLabel
+    Left = 4
+    Top = 129
+    Width = 110
+    Height = 31
+    AutoSize = False
+    Caption = 'Hold Ctrl or Shift for multiple selections'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clGray
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 14540253
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    WordWrap = True
+  end
   object ScanModeCurrentTaskOnly: TAdvOfficeCheckBox
     Left = 417
     Top = 145
@@ -112,6 +132,12 @@ object FormSelectSystem: TFormSelectSystem
     Top = 228
     Width = 144
     Height = 20
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 2
     Alignment = taLeftJustify
     Caption = 'Force Games Available'
@@ -123,6 +149,12 @@ object FormSelectSystem: TFormSelectSystem
     Top = 202
     Width = 82
     Height = 20
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 1
     Alignment = taLeftJustify
     Caption = 'Quick Scan'
@@ -132,8 +164,14 @@ object FormSelectSystem: TFormSelectSystem
   object FullScan: TAdvOfficeRadioButton
     Left = 186
     Top = 176
-    Width = 65
+    Width = 69
     Height = 20
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 0
     TabStop = True
     Alignment = taLeftJustify
@@ -191,14 +229,14 @@ object FormSelectSystem: TFormSelectSystem
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -11
-      EditManager.Font.Name = 'Consolas'
+      EditManager.Font.Height = -9
+      EditManager.Font.Name = 'Verdana'
       EditManager.Font.Style = []
       UseDockManager = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Consolas'
+      Font.Height = -9
+      Font.Name = 'Verdana'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clWindowText
@@ -256,7 +294,7 @@ object FormSelectSystem: TFormSelectSystem
   end
   object PanelButtons: TPanelEx
     Left = 0
-    Top = 264
+    Top = 310
     Width = 718
     Height = 48
     Align = alBottom
@@ -268,25 +306,66 @@ object FormSelectSystem: TFormSelectSystem
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object LabelMultiSelect: TShadowLabel
-      Left = 598
-      Top = 9
-      Width = 113
-      Height = 31
-      AutoSize = False
-      Caption = 'Hold Ctrl or Shift for multiple selections'
+    object LabelCreateSoftwareListGames: TShadowLabel
+      Left = 46
+      Top = 25
+      Width = 166
+      Height = 13
+      Caption = 'Add MAME consoles/computers games'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clGray
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
+      Font.Color = clMaroon
+      Font.Height = -9
+      Font.Name = 'Arial'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
-      ShadowColor = 14540253
+      ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
       Transparent = True
-      WordWrap = True
+    end
+    object LabelAddMAMEDeviceSetWithNoROMs: TShadowLabel
+      Left = 555
+      Top = 25
+      Width = 145
+      Height = 13
+      Caption = 'Add MAME devices with no ROMs'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -9
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelCustomizeSoftwareList: TShadowLabel
+      Left = 6
+      Top = 25
+      Width = 34
+      Height = 13
+      Cursor = crHandPoint
+      Hint = 'Customize software list'
+      Caption = 'custom'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -9
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = True
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+      OnClick = LabelCustomizeSoftwareListClick
+      OnMouseEnter = LabelCustomizeSoftwareListMouseEnter
+      OnMouseLeave = LabelCustomizeSoftwareListMouseLeave
     end
     object ButtonOk: TBitBtn
       Left = 265
@@ -311,6 +390,128 @@ object FormSelectSystem: TFormSelectSystem
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+    end
+    object CreateSoftwareListGames: TAdvOfficeCheckBox
+      Left = 29
+      Top = 7
+      Width = 177
+      Height = 20
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = CreateSoftwareListGamesClick
+      Alignment = taLeftJustify
+      Caption = 'Create Software List Games'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object ButtonHelpCreateSoftwareListGames: TBitBtn
+      Left = 6
+      Top = 8
+      Width = 17
+      Height = 17
+      Hint = 'What is this ?'
+      Caption = '?'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      TabStop = False
+      OnClick = ButtonHelpCreateSoftwareListGamesClick
+    end
+    object AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox
+      Left = 538
+      Top = 7
+      Width = 172
+      Height = 20
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 7891291
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = AddMAMEDeviceSetWithNoROMsClick
+      Alignment = taLeftJustify
+      Caption = 'Device Sets With No ROMs'
+      ReturnIsTab = False
+      Themed = True
+    end
+  end
+  object ScanMAMESetsBox: TAdvGroupBox
+    Left = 176
+    Top = 260
+    Width = 367
+    Height = 41
+    BorderStyle = bsNone
+    Transparent = False
+    Caption = '            Scan MAME Sets (v0.162 and newer)'
+    Ctl3D = True
+    TabOrder = 6
+    object ImageScanMAME: TImage
+      Left = 23
+      Top = 0
+      Width = 16
+      Height = 16
+    end
+    object ScanMAMEAllSets: TAdvOfficeRadioButton
+      Left = 10
+      Top = 20
+      Width = 62
+      Height = 20
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      TabStop = True
+      OnClick = ScanMAMEAllSetsClick
+      Alignment = taLeftJustify
+      Caption = 'All Sets'
+      Checked = True
+      ReturnIsTab = False
+      Themed = True
+    end
+    object ScanMAMEArcadeMachines: TAdvOfficeRadioButton
+      Tag = 1
+      Left = 89
+      Top = 20
+      Width = 118
+      Height = 20
+      TabOrder = 1
+      OnClick = ScanMAMEAllSetsClick
+      Alignment = taLeftJustify
+      Caption = 'Arcade/Machines'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object ScanMAMESoftwareListGames: TAdvOfficeRadioButton
+      Tag = 2
+      Left = 224
+      Top = 20
+      Width = 139
+      Height = 20
+      TabOrder = 2
+      OnClick = ScanMAMEAllSetsClick
+      Alignment = taLeftJustify
+      Caption = 'Software List Games'
+      ReturnIsTab = False
+      Themed = True
     end
   end
 end

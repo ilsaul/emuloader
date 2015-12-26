@@ -5,7 +5,7 @@ object FormThumbnailView: TFormThumbnailView
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Thumbnail Settings'
-  ClientHeight = 239
+  ClientHeight = 262
   ClientWidth = 393
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -56,9 +56,9 @@ object FormThumbnailView: TFormThumbnailView
     TabOrder = 0
     OnChange = GridSizeChange
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
-    Font.Name = 'Consolas'
+    Font.Name = 'Lucida Console'
     Font.Style = []
     ParentFont = False
     LabelsFactor = 1
@@ -125,7 +125,7 @@ object FormThumbnailView: TFormThumbnailView
   end
   object ButtonApply: TBitBtn
     Left = 99
-    Top = 205
+    Top = 228
     Width = 89
     Height = 25
     Hint = 'Apply current settings to thumbnails'
@@ -137,7 +137,7 @@ object FormThumbnailView: TFormThumbnailView
   end
   object ButtonClose: TBitBtn
     Left = 293
-    Top = 205
+    Top = 228
     Width = 89
     Height = 25
     Hint = 'Close without updating grid size and aspect ratio settings'
@@ -150,7 +150,7 @@ object FormThumbnailView: TFormThumbnailView
   object ButtonConfirm: TBitBtn
     Tag = 1
     Left = 195
-    Top = 205
+    Top = 228
     Width = 89
     Height = 25
     Hint = 'Apply current settings to thumbnails and exit'
@@ -172,6 +172,18 @@ object FormThumbnailView: TFormThumbnailView
     Caption = 'Keep Aspect Ratio'
     ReturnIsTab = False
     State = cbChecked
+    Themed = True
+  end
+  object ShowImageGameDocsPanel: TAdvOfficeCheckBox
+    Left = 8
+    Top = 187
+    Width = 193
+    Height = 20
+    ShowHint = True
+    TabOrder = 10
+    Alignment = taLeftJustify
+    Caption = 'Show Images/Game Docs Panel'
+    ReturnIsTab = False
     Themed = True
   end
 end

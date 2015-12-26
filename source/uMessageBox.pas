@@ -123,11 +123,12 @@ begin
   // $00e5fafa // yellow
   // $00eeeeee // silver
 
-  if (PanelMessages.Tag = -1) or LabelGameNameCloneOf.Visible then
-     FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, MessageIcon.Picture.Icon)
+  if (PanelMessages.Tag = -1) or (LabelGameNameCloneOf.Visible and (PanelMessages.Tag <> 4)) then
+     FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                                 MessageIcon.Picture.Icon)
   else
   if PanelMessages.Tag = 4 then // for Multi-cart loading systems...
-     FormMain.IL_ArcadeSystem_Large.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
+     FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
   else
      begin
        MessageIcon.Width:= 32;

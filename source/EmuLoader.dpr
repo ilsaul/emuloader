@@ -2,6 +2,7 @@ program EmuLoader;
 
 uses
   FastMM4,
+  SynFastWideString,
   madExcept,
   Forms,
   uCommon in 'uCommon.pas',
@@ -28,7 +29,6 @@ uses
   uSelectImageCategory in 'uSelectImageCategory.pas' {FormSelectImageCategory},
   uFileVersions in 'uFileVersions.pas' {FormFileVersions},
   uSelectDirectory in 'uSelectDirectory.pas' {FormSelectDirectory},
-  uZipFilesNotUsed in 'uZipFilesNotUsed.pas' {FormZipFilesNotUsed},
   uROMsFolders in 'uROMsFolders.pas' {FormROMsFolders},
   uGamesListFontSettings in 'uGamesListFontSettings.pas' {FormGamesListFontSettings},
   uDeleteCloneImages in 'uDeleteCloneImages.pas' {FormDeleteCloneImages},
@@ -53,17 +53,24 @@ uses
   uSEGAModel2EmulatorSettings in 'uSEGAModel2EmulatorSettings.pas' {FormSEGAModel2EmulatorSettings},
   uFiltersDriverStatus in 'uFiltersDriverStatus.pas' {FormFiltersDriverStatus},
   uMultiSlotGames in 'uMultiSlotGames.pas' {FormMultiSlotGames},
-  uMAMESettings_SimpleMode in 'uMAMESettings_SimpleMode.pas' {FormMAMESettings_SimpleMode};
+  uMAMESettings_SimpleMode in 'uMAMESettings_SimpleMode.pas' {FormMAMESettings_SimpleMode},
+  uSoftwareListSelectMachineToRunGame in 'uSoftwareListSelectMachineToRunGame.pas' {FormSoftwareListMachineToRunGame},
+  uFiltersMAMEMachines in 'uFiltersMAMEMachines.pas' {FormFiltersMAMEMachines},
+  uSoftwareListCustomize in 'uSoftwareListCustomize.pas' {FormSoftwareListCustomize},
+  uApplyFilterMsgBox in 'uApplyFilterMsgBox.pas' {FormApplyFilterMsgBox},
+  uExportGamesList in 'uExportGamesList.pas' {FormExportGamesList};
 
 {$R *.RES}
 
 begin
+  if CheckAppOneInstance then
+     Exit;
   Application.Initialize;
-  Application.Title := 'Emu Loader: Arcade Emulator Frontend';
+  Application.Title := 'Emu Loader: MAME and Arcade Frontend';
   Application.HintPause:= 200; // fix for the hint pause... :_(
   Application.HintColor:= $00f8f4f3;//$00EEEBE6;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPreferences, FormPreferences);
-  Application.CreateForm(TFormMAMESettings_SimpleMode, FormMAMESettings_SimpleMode);
   Application.Run;
 end.
+

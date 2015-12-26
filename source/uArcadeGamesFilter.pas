@@ -89,7 +89,7 @@ begin
         FormMain.AddMsgText('    File ');
         FormMain.AddMsgText(FormMain.GetIniFilesFolder+'mame_filters.ini', $00a65300, [fsBold]);
         FormMain.AddMsgText(' was not found. The filters list cannot be loaded.'+#13#10+'Aborting...');
-        GenerateMessage('Games Filters', 'File access failed.', '', 2, False, 1);
+        GenerateMessage('Arcade Games Filters', 'File access failed.', '', 2, False, 1);
         Exit;
       end;
   end;
@@ -172,7 +172,7 @@ begin
               FormMain.AddMsgText('. Either remove this section or replace the file ');
               FormMain.AddMsgText(FormMain.GetIniFilesFolder+'mame_filters.ini', $00a65300, [fsBold]);
               FormMain.AddMsgText(' with a proper copy.');
-              GenerateMessage('Games Filters', 'A main filter was found with empty sub-filters.', '', 2);
+              GenerateMessage('Arcade Games Filters', 'A main filter was found with empty sub-filters.', '', 2);
             end;
         end;
   end;
@@ -195,7 +195,8 @@ begin
      iconFolder:= FiltersListView.Selection.First.Caption;
   FiltersListView.SetFocus;
 
-  FormArcadeGamesFilter.Caption:= iconFolder;
+  //Arcade Games Filters
+  //FormArcadeGamesFilter.Caption:= 'Arcade Games Filters: '+iconFolder;
   Item:= FiltersListView.Selection.First;
   //FormArcadeGamesFilter.Caption:= FormArcadeGamesFilter.Caption+ ' [selected: '+Item.OwnerGroup.Caption+' -> '+Item.Caption+']';
   ButtonGoToCurrentFilter.Hint:= ButtonGoToCurrentFilter.Hint+#13#10+Item.OwnerGroup.Caption+' -> '+Item.Caption;

@@ -22,15 +22,15 @@ object FormMAMu_ExcludedList: TFormMAMu_ExcludedList
   object LabelInfo: TLabel
     Left = 17
     Top = 362
-    Width = 356
-    Height = 28
+    Width = 354
+    Height = 26
     AutoSize = False
     Caption = 
       'Edit text above. Listed files will never be added into the icons' +
       ' list. Icon filenames only... do NOT add folders!'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
-    Font.Height = -12
+    Font.Height = -11
     Font.Name = 'Verdana'
     Font.Style = []
     ParentFont = False

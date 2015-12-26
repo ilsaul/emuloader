@@ -24,7 +24,7 @@ object FormMessageBox: TFormMessageBox
   object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 634
+    Width = 619
     Height = 60
     Color1 = 16445669
     Color2 = clWhite
@@ -93,8 +93,8 @@ object FormMessageBox: TFormMessageBox
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
     ReadOnly = True

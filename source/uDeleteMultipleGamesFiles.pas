@@ -14,8 +14,9 @@ type
   private
     fROMIdentification: Integer;
     fSystemID: ShortInt;
+    // fSystemType: ShortInt; // no needed here ??? maybe just for info "arcade / non-arcade"
     fMediaType: ShortInt;
-    fTitle: String;
+    fTitle: WideString;
     fName: String;
     fClone: String;
     fCloneParent: String;
@@ -24,6 +25,8 @@ type
     fHaveROMs, fHaveCHDs, fHaveCFGs: Boolean;
     fDriverStatus: ShortInt;
     fBiosName: String;
+    fSoftwareName: String;
+    fCategory: String;
     fGameStatus: ShortInt;
     fGameFiles: THashedStringList;
   protected
@@ -34,7 +37,7 @@ type
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: ShortInt read fSystemID write fSystemID;
     property eMediaType: ShortInt read fMediaType write fMediaType;
-    property eTitle: String read fTitle write fTitle;
+    property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eCloneParent: String read fCloneParent write fCloneParent;
@@ -45,6 +48,8 @@ type
     property eHaveCFGs: Boolean read fHaveCFGs write fHaveCFGs;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eBiosName: String read fBiosName write fBiosName;
+    property eSoftwareName: String read fSoftwareName write fSoftwareName;
+    property eCategory: String read fCategory write fCategory;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have 1 - miss; 2 - missing ROMs/CHDs
     property eGameFiles: THashedStringList read fGameFiles write fGameFiles;
     // game files.... file type ("filetype" ONLY if media type is "-1"!!!)
@@ -71,9 +76,7 @@ type
     DeleteCFGsNVRAMs: TAdvOfficeCheckBox;
     ButtonDeleteFiles: TBitBtn;
     ButtonNo: TBitBtn;
-    FindGame: TEdit;
-    ButtonFindGame: TBitBtn;
-    LabelSearchGame: TShadowLabel;
+    LabelSearchGameName: TShadowLabel;
     PopupGames: TBcBarPopupMenu;
     PopupRemoveSelectedGames: TMenuItem;
     PopupParentGame: TMenuItem;
@@ -81,13 +84,15 @@ type
     PopupViewSelectedFilesList: TMenuItem;
     PopupViewFilesListAllGames: TMenuItem;
     ButtonHelp: TBitBtn;
-    LabelTotalItems: TShadowLabel;
     PanelDestinationFolder: TPanelEx;
-    LabelDestinationFolder: TShadowLabel;
     DestinationFolder: TEdit;
     LabelCopyMoveDestination: TShadowLabel;
     ButtonSelectROMsFolder: TBitBtn;
     CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
+    PanelSearchGameName: TPanel;
+    FindGameName: TEdit;
+    SearchGameNameBox: TPanelEx;
+    ButtonFindGameName: TLabel;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonHelpClick(Sender: TObject);
@@ -95,10 +100,6 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure GamesListItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
-    procedure ButtonFindGameClick(Sender: TObject);
-    procedure FindGameEnter(Sender: TObject);
-    procedure FindGameExit(Sender: TObject);
-    procedure FindGameKeyPress(Sender: TObject; var Key: Char);
     procedure GamesListKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure GamesListColumnClick(Sender: TCustomEasyListview;
@@ -119,17 +120,24 @@ type
     procedure PopupViewFilesListAllGamesClick(Sender: TObject);
     procedure PopupParentGameClick(Sender: TObject);
     procedure PopupRemoveSelectedGamesClick(Sender: TObject);
+    procedure GamesListColumnPaintText(Sender: TCustomEasyListview;
+      Column: TEasyColumn; ACanvas: TCanvas);
+    procedure ButtonFindGameNameClick(Sender: TObject);
+    procedure FindGameNameEnter(Sender: TObject);
+    procedure FindGameNameExit(Sender: TObject);
+    procedure FindGameNameKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonFindGameNameMouseEnter(Sender: TObject);
+    procedure ButtonFindGameNameMouseLeave(Sender: TObject);
   private
     { Private declarations }
     SelectedItem: TEasyItem;
     SystemAffected: array[1..MaxArcadeSystems] of Boolean;
-    tempFilesList: THashedStringList;
-    MergedSets: array[0..1] of THashedStringList;
+    tempFilesList, SoftListAffected: THashedStringList;
     FolderCFG: array[1..MaxArcadeSystems] of String;
     FolderNVRAM: array[1..MaxArcadeSystems] of String;
     ActionString: String;
     ROMsTotalSize, CHDsTotalSize, CFGsTotalSize: Int64;
-    ROMsTotalFiles, CHDsTotalFiles, CFGsTotalFiles, StatusIconIndex: Integer;
+    ROMsTotalFiles, CHDsTotalFiles, CFGsTotalFiles{, StatusIconIndex}: Integer;
     procedure SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
     procedure SetSelectedGame(ELV_Item: TEasyItem);
     procedure UpdateTotalFilesLabel;
@@ -137,6 +145,7 @@ type
     procedure SearchConfigFiles(var HaveCFGsVar: Boolean);
     procedure AdjustWindowSize;
     procedure AddGamesToList;
+    procedure GetSoftwareNames;
     function  ProcessGamesFiles: Boolean;
   public
     { Public declarations }
@@ -159,36 +168,45 @@ begin
     1: Result:= eName;
     2: Result:= eClone;
     3: Result:= eBiosName;
-    4: Result:= eDriverName;
-    8:
+    4: Result:= eCategory;//eDriverName;
+    5: Result:= eDriverName;
+    {8:
       begin
         case eMerged of
           True : Result:= 'Yes';
           False: Result:= '';
         end;
-      end;
+      end;}
   end;
 end;
 
 function TGameInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
+  if Column = 0 then
+     Result:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName)
+  else
+     Result:= -1;
+end;
+
+function TGameInfo.GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger;
+begin
   case Column of
-    0: Result:= eROMIdentification;
-    5:
+    0: Result:= eSystemID-1;
+    6:
       begin
         if eHaveROMs then
            Result:= FormDeleteMultipleGamesFiles.DeleteROMs.Tag// MaxGameID+MaxArcadeSystems+1
         else
            Result:= -1;
       end;
-    6:
+    7:
       begin
         if eHaveCHDs then
            Result:= FormDeleteMultipleGamesFiles.DeleteCHDs.Tag //MaxGameID+MaxArcadeSystems+2
         else
            Result:= -1;
       end;
-    7:
+    8:
       begin
         if eHaveCFGs then
            Result:= FormDeleteMultipleGamesFiles.DeleteCFGsNVRAMs.Tag //MaxGameID+MaxArcadeSystems+3
@@ -200,24 +218,10 @@ begin
   end;
 end;
 
-function TGameInfo.GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger;
-begin
-  case Column of
-    0: Result:= MaxGameID+eSystemID;
-    //4:
-    //  begin
-    //    if eDriverStatus <> -1 then
-    //       Result:= eDriverStatus+FormDeleteMultipleGamesFiles.StatusIconIndex;
-    //  end;
-  else
-       Result:= -1;
-  end;
-end;
-
 procedure TFormDeleteMultipleGamesFiles.SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
 begin
   if Enabled then
-     CheckBoxHolder.Font.Color:= clNavy
+     CheckBoxHolder.Font.Color:= $00a65300 //clNavy
   else
      CheckBoxHolder.Font.Color:= clGray;
 end;
@@ -240,7 +244,8 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.UpdateTotalFilesLabel;
 begin
-  LabelTotalItems.Caption:= IntToStr(GamesList.Groups.ItemCount)+' Games';
+  FormDeleteMultipleGamesFiles.Caption:= FormDeleteMultipleGamesFiles.Hint+' ['+IntToStr(GamesList.Groups.ItemCount)+' Games]';
+  //LabelTotalItems.Caption:= IntToStr(GamesList.Groups.ItemCount)+' Games';
 end;
 
 procedure TFormDeleteMultipleGamesFiles.SearchROMsFiles(eROMsList: TStringList; var MergedSetVar: Boolean; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean);
@@ -253,22 +258,19 @@ begin
   IsZiNcSystem:= FormMain.TempGameVars.eSystemID = idZiNc;
   ZiNcFilePath:= '';
 
+  HaveROMsVar:= False;
   MergedSetVar:= False;
-  FileFullPath:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSystemID);
+  HaveCHDsVar:= False;
+  FileFullPath:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSystemID, FormMain.TempGameVars.eSoftwareName);
   if (FileFullPath = '') and FormMain.GameIsClone(FormMain.TempGameVars.eClone) and
      FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
      begin
-       // MergedSets[1] -> MAME
-       // MergedSets[0] -> HBMAME
        // check for merged game
-       if Assigned(MergedSets[Ord(FormMain.TempGameVars.eSystemID = idMAME)]) then
+       if not FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus) then
           begin
-            if not FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus) then
-               begin
-                 MergedSetVar:= MergedSets[Ord(FormMain.TempGameVars.eSystemID = idMAME)].IndexOf(FormMain.TempGameVars.eName) <> -1;
-                 if MergedSetVar then
-                    FileFullPath:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eClone, FormMain.TempGameVars.eSystemID);
-               end;
+            MergedSetVar:= FormMain.TempGameVars.eIsMerged;
+            if MergedSetVar then
+               FileFullPath:= FormMain.SearchZIPFolder(FormMain.TempGameVars.eClone, FormMain.TempGameVars.eSystemID, FormMain.TempGameVars.eSoftwareName);
           end;
      end;
   if FileFullPath <> '' then
@@ -297,7 +299,7 @@ begin
          begin
            Delete(romName, 1, 2);
            FormMain.GetCHDName(romName, FormMain.GameIsClone(FormMain.TempGameVars.eClone), chdName, chdParentName); // get correct chdName and chdParentName (for MAME)
-           DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.TempGameVars.eSystemID, romName, FormMain.TempGameVars.eName, FormMain.TempGameVars.eClone, FormMain.TempGameVars.eBiosName);
+           DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.TempGameVars.eSystemID, romName, FormMain.TempGameVars.eName, FormMain.TempGameVars.eClone, FormMain.TempGameVars.eBiosName, FormMain.TempGameVars.eSoftwareName);
 
            if DiskFile <> '' then
               begin
@@ -435,9 +437,9 @@ var
   end;
 
 begin
-  if FormMain.TempGameVars.eSystemID = idDaphne then
+  if (FormMain.TempGameVars.eSystemID = idDaphne) or (FormMain.TempGameVars.eSoftwareName <> '') then
      Exit; // Daphne doesn't have any config files to delete (EL doesn't delete them!!!)
-     
+           // do not add config files for software list games, they are not created by MAME... yet? then     
   AddItem_ELV(0); // .cfg; .input (segamodel2)
   AddItem_ELV(1); // .dat; .nv; nvram
   AddItem_ELV(2); // .eeprom
@@ -450,7 +452,7 @@ var
   Loop: Integer;
   gItem, addItem: TEasyItem;
   GameIsMerged, FoundROMs, FoundCHDs, FoundCFGs: Boolean;
-  HaveCHDs, HaveMerged, HaveBiosSets: Boolean;
+  HaveROMs, HaveCHDs, HaveCFGs, HaveMerged, HaveBiosSets, HaveClones, HaveCategory, HaveDriverName: Boolean;
 
   function AddGame: Boolean;
   begin
@@ -475,6 +477,11 @@ var
     TGameInfo(addItem).eDriverName:= FormMain.TempGameVars.eDriverName;
     TGameInfo(addItem).eDriverStatus:= FormMain.TempGameVars.eDriverStatus;
     TGameInfo(addItem).eBiosName:= FormMain.TempGameVars.eBiosName;
+    TGameInfo(addItem).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
+    if FormMain.TempGameVars.eSoftwareName = '' then
+       TGameInfo(addItem).eCategory:= ''
+    else
+       TGameInfo(addItem).eCategory:= FormMain.TempGameVars.eCategory;
     TGameInfo(addItem).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
     TGameInfo(addItem).eMerged:= GameIsMerged;
     TGameInfo(addItem).eHaveROMs:= FoundROMs; // useful for a future expansion ???
@@ -484,21 +491,30 @@ var
     TGameInfo(addItem).eGameFiles.AddStrings(tempFilesList);
   end;
 
+  function HideColumn(ColumnIndex: Integer): Boolean;
+  begin
+    //FormDeleteMultipleGamesFiles.ClientWidth:= FormDeleteMultipleGamesFiles.ClientWidth-GamesList.Header.Columns[ColumnIndex].Width;
+    //ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-GamesList.Header.Columns[ColumnIndex].Width;
+    //ButtonNo.Left:= ButtonNo.Left-GamesList.Header.Columns[ColumnIndex].Width;
+    //ButtonHelp.Left:= ButtonHelp.Left-GamesList.Header.Columns[ColumnIndex].Width;
+    Loop:= Loop-GamesList.Header.Columns[ColumnIndex].Width;
+    GamesList.Header.Columns[ColumnIndex].Visible:= False;
+  end;
+
 begin
+  HaveROMs:= False;
   HaveCHDs:= False;
+  HaveCFGs:= False;
   HaveMerged:= False;
   HaveBiosSets:= False;
+  HaveClones:= False;
+  HaveCategory:= False;
+  HaveDriverName:= False;
   for Loop:= 1 to MaxArcadeSystems do
   begin
     SystemAffected[Loop]:= False;
     if ActionMode = 0 then
        FormMain.LoadFolders_ConfigFiles(Loop, FolderCFG[Loop], FolderNVRAM[Loop]);
-
-    if FileExists(FormMain.GetGamesFolderEL+FormMain.GetSystemIniSection(Loop, True)+'_merged.ini') then
-       begin
-         MergedSets[Ord(Loop = idMAME)]:= THashedStringList.Create;
-         MergedSets[Ord(Loop = idMAME)].LoadFromFile(FormMain.GetGamesFolderEL+FormMain.GetSystemIniSection(Loop, True)+'_merged.ini');
-       end;
   end;
   ROMsTotalSize:= 0;
   CHDsTotalSize:= 0;
@@ -526,12 +542,22 @@ begin
     tempFilesList.EndUpdate;
     if AddGame then
        begin
+         if FoundROMs then
+            HaveROMs:= True;
          if uMain.TEasyGameInfo(gItem).eCHDsCount > 0 then
             HaveCHDs:= True;
+         if FoundCFGs then
+            HaveCFGs:= True;
          if GameIsMerged then
             HaveMerged:= True;
          if FormMain.ValidateBiosName(uMain.TEasyGameInfo(gItem).eBiosName, uMain.TEasyGameInfo(gItem).eName) then
             HaveBiosSets:= True;
+         if FormMain.GameIsClone(uMain.TEasyGameInfo(gItem).eClone) then
+            HaveClones:= True;
+         if uMain.TEasyGameInfo(gItem).eSoftwareName <> '' then
+            HaveCategory:= True;
+         if uMain.TEasyGameInfo(gItem).eDriverName <> '' then
+            HaveDriverName:= True;
        end;       
     gItem:= FormMain.GamesListView.Selection.Next(gItem);
     Application.ProcessMessages;
@@ -545,8 +571,6 @@ begin
      GamesList.Sort.SortAll;
   GamesList.Items.ReIndexDisable:= False;
   GamesList.EndUpdate(False);
-  FreeAndNil(MergedSets[1]); // MAME
-  FreeAndNil(MergedSets[0]); // HBMAME
   FreeAndNil(tempFilesList);
   FormMain.ClearMemGameInfo(FormMain.TempGameVars);
 
@@ -556,7 +580,37 @@ begin
                      'No files found. There are no files to be processed.', 2, False, 1)
   else
     begin
+      //GamesList.BeginUpdate;
+      //if not HaveMerged then
+      //   HideColumn(8);
+      Loop:= GamesList.Width;
+      if not HaveCFGs then
+         HideColumn(8);
       if not HaveCHDs then
+         HideColumn(7);
+      if not HaveROMs then
+         HideColumn(6);
+      if not HaveDriverName then
+         HideColumn(5);
+      if not HaveCategory then
+         HideColumn(4);
+      if not HaveBiosSets then
+         HideColumn(3);
+      if not HaveClones then
+         HideColumn(2);
+
+      if Loop < 620 then
+         begin
+           GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+(620-Loop)-5;
+           Loop:= 620-5;
+         end;
+
+      ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
+      ButtonNo.Left:= ButtonNo.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
+      ButtonHelp.Left:= ButtonHelp.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
+      FormDeleteMultipleGamesFiles.ClientWidth:= Loop;
+      
+      {if not HaveCHDs then
          begin
            FormDeleteMultipleGamesFiles.Width:= FormDeleteMultipleGamesFiles.Width-GamesList.Header.Columns[6].Width;
            ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-GamesList.Header.Columns[6].Width;
@@ -581,9 +635,10 @@ begin
                 ButtonHelp.Caption:= '?';
                 ButtonHelp.Width:= 23;
                 ButtonHelp.Left:= ButtonDeleteFiles.Left-27;
-                LabelTotalItems.Left:= 428+((ButtonHelp.Left-428-100) div 2);
+                //LabelTotalItems.Left:= 428+((ButtonHelp.Left-428-100) div 2);
               end;
-         end;
+         end;}
+      //GamesList.EndUpdate(False);
     end;
 end;
 
@@ -641,37 +696,46 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.AdjustWindowSize;
 var
-  gListSize, bPanelSize, iScrSize: Integer;
-  iAdjustSize: Boolean;
+  gListSize, bPanelSize, iScrSize, MaxGameCount: Integer;
+  iScreenWidth, iScreenHeight: Integer;
 begin
   if not FormMain.CheckTotal(GamesList) then
      Exit;
-  gListSize:= GamesList.Groups.ItemCount;
-  iAdjustSize:= gListSize < 20;
-  if not iAdjustSize then
-     begin
-       if PanelDestinationFolder.Visible then
-          FormDeleteMultipleGamesFiles.ClientHeight:= FormDeleteMultipleGamesFiles.ClientHeight-4;
-       Exit;
-     end;
-     
-  gListSize:= gListSize*GamesList.CellSizes.Report.Height;
-  gListSize:= gListSize+GamesList.Header.Height+6;
 
+  iScreenWidth:= Screen.Width-20;
+  iScreenHeight:= Screen.WorkAreaRect.Bottom-Screen.WorkAreaRect.Top;
+
+  if FormdeleteMultipleGamesFiles.Width > iScreenWidth then
+     begin
+       ButtonHelp.Left:= ButtonHelp.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
+       ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
+       ButtonNo.Left:= ButtonNo.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
+       FormdeleteMultipleGamesFiles.Width:= iScreenWidth;
+     end;
 
   if PanelDestinationFolder.Visible then
-     bPanelSize:= (PanelOptions.Height+PanelDestinationFolder.Height)
+     bPanelSize:= PanelOptions.Height+PanelDestinationFolder.Height
   else
      bPanelSize:= PanelOptions.Height;
 
-  iScrSize:= Screen.Height-95-30;
+  MaxGameCount:= GamesList.Groups.ItemCount;
+  if MaxGameCount > 20 then
+     MaxGameCount:= 20;
+  case Screen.Height of
+    768: MaxGameCount:= 18;
+    720: MaxGameCount:= 17;
+    600: MaxGameCount:= 14;
+    480: MaxGameCount:= 10;
+  end;
 
-  if gListSize+bPanelSize < Screen.Height then
-     FormDeleteMultipleGamesFiles.ClientHeight:= gListSize+bPanelSize;
-  //else
-  //   CallMaximizeWindow(FormDeleteMultipleGamesFiles);
-  //FormDeleteMultipleGamesFiles.Top:= 30;
-  //FormDeleteMultipleGamesFiles.Height:= Screen.Height-95;
+  gListSize:= MaxGameCount*GamesList.CellSizes.Report.Height;
+  gListSize:= gListSize+GamesList.Header.Height+6;
+
+  iScrSize:= iScreenHeight-30-40;//-bPanelSize; // max form height // GetSystemMetrics(SM_CYCAPTION); 30 -> form caption height; 405 -> small border
+
+  FormDeleteMultipleGamesFiles.ClientHeight:= gListSize+bPanelSize;
+  if FormDeleteMultipleGamesFiles.Height > iScrSize then
+     FormDeleteMultipleGamesFiles.Height:= iScrSize;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.FormShow(Sender: TObject);
@@ -686,6 +750,7 @@ begin
     2: ActionString:= 'Move';
   end;
 
+  FormDeleteMultipleGamesFiles.Height:= 800;
   if ActionMode = 0 then
      begin
        PanelDestinationFolder.Visible:= False;
@@ -699,8 +764,8 @@ begin
        DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
-       GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+GamesList.Header.Columns[7].Width;
-       GamesList.Header.Columns[7].Visible:= False;
+       //GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+GamesList.Header.Columns[8].Width; // merged set column
+       //GamesList.Header.Columns[8].Visible:= False; // merged set column
      end;
   //StatusIconIndex:= IL_DeleteGameIcons.Count-3;
 
@@ -709,15 +774,26 @@ begin
      FormStatus.Close;
 
   AdjustWindowSize;
-  FormDeleteMultipleGamesFiles.Left:= (Screen.Width shr 1)-(FormDeleteMultipleGamesFiles.Width shr 1)-1;
-  FormDeleteMultipleGamesFiles.Top:= (Screen.Height shr 1)-(FormDeleteMultipleGamesFiles.Height shr 1)-1;
+
   if GamesList.Scrollbars.VertBarVisible then
      begin
        GamesList.BeginUpdate;
-       GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width-16;
+       GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL); //16;
        GamesList.EndUpdate;
      end;
+  //if FormDeleteMultipleGamesFiles.Width > Screen.Width then
+  //   begin
+  //     FormDeleteMultipleGamesFiles.Width:= 780;//Screen.Width-20;
+  //     if GamesList.Scrollbars.HorzBarVisible then
+  //        FormDeleteMultipleGamesFiles.ClientHeight:= FormDeleteMultipleGamesFiles.ClientHeight+GetSystemMetrics(SM_CYHSCROLL);
+  //   end;
+
+  FormDeleteMultipleGamesFiles.Left:= (Screen.Width shr 1)-(FormDeleteMultipleGamesFiles.Width shr 1)-1;
+  FormDeleteMultipleGamesFiles.Top:= (Screen.Height shr 1)-(FormDeleteMultipleGamesFiles.Height shr 1)-1;
+
   Application.ProcessMessages;
+  if not FormMain.CheckTotal(GamesList) then
+     PostMessage(Handle, wm_Close, 0, 0); // force auto-close if there are no games to process
 end;
 
 procedure TFormDeleteMultipleGamesFiles.FormKeyPress(Sender: TObject;
@@ -746,17 +822,27 @@ begin
   FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
   FormMain.AddMsgText(' for each game. Select one or more games and call the popup menu. Click ');
   FormMain.AddMsgText('View Selected Files List', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' menu item to view selected games only or ');
+  FormMain.AddMsgText(' menu item to view only selected games or ');
   FormMain.AddMsgText('View Files List (All Games)', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' menu item to view files list of all games in the list.'+#13#10+#13#10+'    To ');
+  FormMain.AddMsgText(' to view files list of all games in the list.'+#13#10+#13#10+'    To ');
   FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
   FormMain.AddMsgText(' files, click ');
   FormMain.AddMsgText(ActionString+' Files', $00a65300, [fsBold]);
   FormMain.AddMsgText(' button. You can follow the progress in a dialog box. If there are errors, they will be listed in the log '+
                       'panel.'+#13#10+#13#10);
-  if ActionMode = 0 then
-     FormMain.AddMsgText('    When deleting files, if there are changes, you will be prompted to update the main games list. '+
-                         'Be aware that recycle bin is not supported. Files cannot be recovered afterwards.'+#13#10+#13#10);
+  case ActionMode of
+    0: FormMain.AddMsgText('    When deleting files, if there are changes, you will be prompted to update the main games list. '+
+                           'Be aware that recycle bin is not supported. Files cannot be recovered afterwards.'+#13#10+#13#10);
+    1, 2:
+      begin
+        FormMain.AddMsgText('    CHD files are sent to a ');
+        FormMain.AddMsgText('\chd_files\', $00a65300, [fsBold]);
+        FormMain.AddMsgText(' sub-folder and software list game files are sent to a ');
+        FormMain.AddMsgText('\softlistname\', $00a65300, [fsBold]);
+        FormMain.AddMsgText(' sub-folder.'+#13#10+#13#10);
+      end;
+  end;
+
   FormMain.AddMsgText('    Incremental search is supported (quick search), just type a game title. To search by game name, use the ');
   FormMain.AddMsgText('Search Game Name', $00a65300, [fsBold]);
   FormMain.AddMsgText(' bar.');
@@ -771,7 +857,12 @@ procedure TFormDeleteMultipleGamesFiles.GamesListItemPaintText(
 begin
   FormMain.GetCanvasFontCustom(TGameInfo(Item).eGameStatus,
                          TGameInfo(Item).eDriverStatus,
-                         TGameInfo(Item).eClone, ACanvas, True);
+                         TGameInfo(Item).eClone, ACanvas, True);                         
+  if Position > 0 then
+     begin
+       ACanvas.Font.Name:= 'Tahoma';
+       ACanvas.Font.Size:= 8;
+     end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.GamesListItemSelectionChanged(
@@ -781,53 +872,6 @@ begin
      begin
        SetSelectedGame(Item);
      end;
-end;
-
-procedure TFormDeleteMultipleGamesFiles.ButtonFindGameClick(
-  Sender: TObject);
-var
-  Item: TEasyItem;
-  Found: Boolean;
-begin
-  if (not FormMain.CheckTotal(GamesList)) or (FindGame.Text = '') then
-     begin
-       GamesList.SetFocus;
-       Exit;
-     end;
-
-  Found:= False;
-  Item:= GamesList.Groups.FirstItem;
-  repeat
-    if WideIncrementalSearch(TGameInfo(Item).eName, FindGame.Text) = 0 then
-       Found:= True;
-    if not Found then
-       Item:= GamesList.Groups.NextItem(Item);
-  until Found or (Item = nil);
-  if Found then
-     begin
-       GamesList.Selection.ClearAll;
-       Item.Selected:= True;
-       GamesList.Selection.FocusedItem:= Item;
-       Item.MakeVisible(emvAuto);
-     end;
-  GamesList.SetFocus;
-end;
-
-procedure TFormDeleteMultipleGamesFiles.FindGameEnter(Sender: TObject);
-begin
-  FindGame.Font.Color:= clBlack;
-end;
-
-procedure TFormDeleteMultipleGamesFiles.FindGameExit(Sender: TObject);
-begin
-  FindGame.Font.Color:= clGray;
-end;
-
-procedure TFormDeleteMultipleGamesFiles.FindGameKeyPress(Sender: TObject;
-  var Key: Char);
-begin
-  if Key = #13 then
-     ButtonFindGame.Click;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.GamesListKeyAction(
@@ -852,12 +896,12 @@ begin
   if FormMain.CheckSelected(GamesList) then
      begin
        if SelectedItem <> nil then
-          SelectedItem.MakeVisible(emvAuto)
+          SelectedItem.MakeVisible(emvMiddle) //(emvAuto)
        else
           begin
             Item:= GamesList.Selection.First;
             if Item <> nil then
-               Item.MakeVisible(emvAuto);
+               Item.MakeVisible(emvMiddle) //(emvAuto);
           end;
      end;
 end;
@@ -869,39 +913,29 @@ var
   tmpItem1, tmpItem2: Boolean;
   gItem1, gItem2: TEasyItem;
 begin
-  if Column.Index <> 8 then
-     begin
-       DoDefault:= False;
-       FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
-     end;
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
   case Column.Index of
     0: Result:= FormMain.iCompare(TGameInfo(gItem1).eTitle, TGameInfo(gItem2).eTitle);
     1: Result:= FormMain.iCompare(TGameInfo(gItem1).eName, TGameInfo(gItem2).eName);
     2: Result:= FormMain.iCompare(TGameInfo(gItem1).eCloneParent, TGameInfo(gItem2).eCloneParent);
-     {begin
-       // "clone of" column
-       //DoDefault:= False;
-       case Column.SortDirection of
-         esdAscending : Result:= CompareText(TGameInfo(Item1).eCloneParent, TGameInfo(Item2).eCloneParent);
-         esdDescending: Result:= CompareText(TGameInfo(Item2).eCloneParent, TGameInfo(Item1).eCloneParent);
-       end;
-     end;}
     3: Result:= FormMain.iCompare(TGameInfo(gItem1).eBiosName, TGameInfo(gItem2).eBiosName);
-    4: Result:= FormMain.iCompare(TGameInfo(gItem1).eDriverName, TGameInfo(gItem2).eDriverName);
-    5, 6, 7:
+    4: Result:= FormMain.iCompare(TGameInfo(gItem1).eCategory, TGameInfo(gItem2).eCategory);
+    5: Result:= FormMain.iCompare(TGameInfo(gItem1).eDriverName, TGameInfo(gItem2).eDriverName);
+    6, 7, 8:
      begin
        case Column.Index of
-         5:
+         6:
            begin
              tmpItem1:= TGameInfo(gItem1).eHaveROMs;
              tmpItem2:= TGameInfo(gItem2).eHaveROMs;
            end;
-         6:
+         7:
            begin
              tmpItem1:= TGameInfo(gItem1).eHaveCHDs;
              tmpItem2:= TGameInfo(gItem2).eHaveCHDs;
            end;
-         7:
+         8:
            begin
              tmpItem1:= TGameInfo(gItem1).eHaveCFGs;
              tmpItem2:= TGameInfo(gItem2).eHaveCFGs;
@@ -932,6 +966,38 @@ begin
   SetCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
   if FormDeleteMultipleGamesFiles.Visible then
      GamesList.SetFocus;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.GetSoftwareNames;
+var
+  Item: TEasyItem;
+begin
+  FreeAndNil(SoftListAffected);
+  if not FormMain.CheckTotal(GamesList) then
+     Exit;
+
+  Item:= GamesList.Groups.FirstItem;
+  repeat
+    if TGameInfo(Item).eSoftwareName <> '' then
+       begin
+         if not Assigned(SoftListAffected) then
+            begin
+              SoftListAffected:= THashedStringList.Create;
+              SoftListAffected.Sorted:= True;
+              SoftListAffected.Duplicates:= dupIgnore;
+              SoftListAffected.BeginUpdate;
+            end;
+         SoftListAffected.Add(TGameInfo(Item).eSoftwareName);
+       end;
+    Item:= GamesList.Groups.NextItem(Item);
+  until Item = nil;
+  if Assigned(SoftListAffected) then
+     begin
+       SoftListAffected.Sorted:= False;
+       SoftListAffected.EndUpdate;
+       if SoftListAffected.Count = 0 then
+          FreeAndNil(SoftListAffected);
+     end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.ButtonDeleteFilesClick(
@@ -1036,6 +1102,7 @@ begin
   if GenerateMessage(ActionString, FormDeleteMultipleGamesFiles.Caption, '', 1, True, 2) = mrNo then
      Exit;
 
+  GetSoftwareNames;
   if ProcessGamesFiles then
      begin
        if ActionMode = 0 then
@@ -1052,11 +1119,23 @@ begin
                 for Loop:= 1 to MaxArcadeSystems do
                 begin
                   if SystemAffected[Loop] then
-                     FormMain.CallScanGames(0, False, Loop);
+                     FormMain.CallScanGames(0, False, Loop, '', True);
+                  Application.ProcessMessages;
                 end;
+                if Assigned(SoftListAffected) then
+                begin
+                  for Loop:=0 to SoftListAffected.Count-1 do
+                  begin
+                    FormMain.CallScanGames(0, False, idMAME, SoftListAffected[Loop], True);
+                    Application.ProcessMessages;
+                  end;
+                end;
+                FormStatus.Close;
               end;
           end;
      end;
+  if Assigned(SoftListAffected) then
+     FreeAndNil(SoftListAffected);
   Application.ProcessMessages;
   //ButtonClose.Click; // won't be closing the dialog after process is concluded... no sir!
 end;
@@ -1066,7 +1145,6 @@ procedure TFormDeleteMultipleGamesFiles.ButtonSelectROMsFolderClick(
 begin
   FormMain.DialogSelectFolder(DestinationFolder, False);
 end;
-
 
 procedure TFormDeleteMultipleGamesFiles.PopupGamesMeasureMenuItem(
   Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
@@ -1117,7 +1195,8 @@ begin
   repeat
     if TGameInfo(Item).eName = TGameInfo(selItem).eClone then
        begin
-         if TGameInfo(Item).eSystemID = TGameInfo(selItem).eSystemID then
+         if (TGameInfo(Item).eSystemID = TGameInfo(selItem).eSystemID) and
+            (TGameInfo(Item).eSoftwareName = TGameInfo(selItem).eSoftwareName) then
             ParentFound:= True;
        end;
     if not ParentFound then
@@ -1128,7 +1207,7 @@ begin
        GamesList.Selection.ClearAll;
        Item.Selected:= True;
        GamesList.Selection.FocusedItem:= Item;
-       Item.MakeVisible(emvAuto);
+       Item.MakeVisible(emvMiddle) //(emvAuto);
      end;
   GamesList.SetFocus;
 end;
@@ -1142,6 +1221,85 @@ begin
        UpdateTotalFilesLabel;
      end;
   GamesList.SetFocus;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.GamesListColumnPaintText(
+  Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
+begin
+  if Column.Index > 5 then
+     ACanvas.Font.Name:= 'Consolas';
+end;
+
+procedure TFormDeleteMultipleGamesFiles.ButtonFindGameNameClick(
+  Sender: TObject);
+var
+  Item: TEasyItem;
+  Found: Boolean;
+begin
+  if (not FormMain.CheckTotal(GamesList)) or (FindGameName.Text = '') or (SameText(' Type a game name...', FindGameName.Text)) then
+     begin
+       FormMain.BlinkBkEdit(FindGameName);
+       GamesList.SetFocus;
+       Exit;
+     end;
+
+  Found:= False;
+  Item:= GamesList.Groups.FirstItem;
+  repeat
+    if WideIncrementalSearch(TGameInfo(Item).eName, FindGameName.Text) = 0 then
+       Found:= True;
+    if not Found then
+       Item:= GamesList.Groups.NextItem(Item);
+  until Found or (Item = nil);
+  if Found then
+     begin
+       GamesList.Selection.ClearAll;
+       Item.Selected:= True;
+       GamesList.Selection.FocusedItem:= Item;
+       Item.MakeVisible(emvMiddle) //(emvAuto);
+     end;
+  GamesList.SetFocus;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.FindGameNameEnter(
+  Sender: TObject);
+begin
+  if SameText(' Type a game name...', TEdit(Sender).Text) then
+     begin
+       TEdit(Sender).Font.Color:= clBlack;
+       TEdit(Sender).Text:= '';
+     end;
+  TEdit(Sender).Font.Color:= clBlack;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.FindGameNameExit(
+  Sender: TObject);
+begin
+  if TEdit(Sender).Text = '' then
+     begin
+       TEdit(Sender).Font.Color:= clSilver;
+       TEdit(Sender).Text:= ' Type a game name...';
+     end;
+  //TEdit(Sender).Font.Color:= clGray;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.FindGameNameKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     ButtonFindGameName.OnClick(Self);
+end;
+
+procedure TFormDeleteMultipleGamesFiles.ButtonFindGameNameMouseEnter(
+  Sender: TObject);
+begin
+  SearchGameNameBox.Color1:= clSkyBlue;
+end;
+
+procedure TFormDeleteMultipleGamesFiles.ButtonFindGameNameMouseLeave(
+  Sender: TObject);
+begin
+  SearchGameNameBox.Color1:= clWhite;
 end;
 
 end.

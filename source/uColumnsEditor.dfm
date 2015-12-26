@@ -4,8 +4,8 @@ object FormColumnsEditor: TFormColumnsEditor
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Columns (Details / Grouped)'
-  ClientHeight = 464
-  ClientWidth = 560
+  ClientHeight = 416
+  ClientWidth = 460
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,7 +23,7 @@ object FormColumnsEditor: TFormColumnsEditor
   PixelsPerInch = 96
   TextHeight = 15
   object LabelButtonUpDown: TLabel
-    Left = 404
+    Left = 304
     Top = 45
     Width = 119
     Height = 15
@@ -36,7 +36,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object LabelButtonEditWidth: TLabel
-    Left = 404
+    Left = 304
     Top = 73
     Width = 139
     Height = 15
@@ -49,7 +49,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object LabelButtonSize: TLabel
-    Left = 404
+    Left = 304
     Top = 100
     Width = 121
     Height = 15
@@ -62,7 +62,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object LabelButtonDefaultSize: TLabel
-    Left = 404
+    Left = 304
     Top = 152
     Width = 20
     Height = 15
@@ -75,7 +75,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object LabelButtonResetSize: TLabel
-    Left = 404
+    Left = 304
     Top = 126
     Width = 20
     Height = 15
@@ -88,7 +88,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object LabelButtonReloadProfileDefaultSettings: TLabel
-    Left = 404
+    Left = 304
     Top = 217
     Width = 20
     Height = 15
@@ -101,15 +101,15 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object Shape2: TShape
-    Left = 311
+    Left = 211
     Top = 0
     Width = 1
-    Height = 464
+    Height = 416
     Brush.Color = clBtnFace
     Pen.Color = 7891291
   end
   object LabelToggleVisibility: TLabel
-    Left = 404
+    Left = 304
     Top = 176
     Width = 146
     Height = 15
@@ -122,7 +122,7 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 404
+    Left = 304
     Top = 249
     Width = 20
     Height = 15
@@ -135,15 +135,15 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
   end
   object Label3: TLabel
-    Left = 322
-    Top = 280
-    Width = 226
+    Left = 222
+    Top = 320
+    Width = 231
     Height = 52
     AutoSize = False
     Caption = 
-      'You can access this dialog and other options in game columns pop' +
-      'up menu (mouse right-click).'#13#10#13#10'There are more options in prefer' +
-      'ences screen.'
+      'You can access this dialog and other options in columns header p' +
+      'opup menu (mouse right-click).'#13#10#13#10'There are more options in pref' +
+      'erences screen.'
     Font.Charset = ANSI_CHARSET
     Font.Color = 3289650
     Font.Height = -11
@@ -157,22 +157,21 @@ object FormColumnsEditor: TFormColumnsEditor
   object ColumnsListView: TEasyListview
     Left = 0
     Top = 0
-    Width = 311
-    Height = 464
+    Width = 211
+    Height = 416
     BackGround.Enabled = True
-    CellSizes.Report.Height = 19
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
     EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Verdana'
+    EditManager.Font.Name = 'Trebuchet MS'
     EditManager.Font.Style = []
     UseDockManager = False
     DragManager.Enabled = True
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
-    Font.Name = 'Verdana'
+    Font.Name = 'Trebuchet MS'
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clBlack
@@ -183,20 +182,19 @@ object FormColumnsEditor: TFormColumnsEditor
     Header.AutoSizeHeightMargin = 6
     Header.Columns.Items = {
       0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000000000100000000000000F0000000FFFFFF1F0001000000
+      00060000008008000000000100000000000000A0000000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000000
-      00010100000000000045000000FFFFFF1F000100000001000000040000005300
+      00010100000000000031000000FFFFFF1F000100000001000000040000005300
       69007A006500000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Lucida Console'
+    Header.Font.Height = -9
+    Header.Font.Name = 'Verdana'
     Header.Font.Style = []
-    Header.Height = 19
+    Header.Height = 18
     Header.Sizeable = False
-    Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
@@ -241,36 +239,24 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object ButtonUp: TBitBtn
     Tag = 1
-    Left = 320
+    Left = 220
     Top = 40
     Width = 39
     Height = 25
     Hint = 'Move selected column up'
     Caption = 'Up'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
     OnClick = ButtonUpClick
   end
   object ButtonDown: TBitBtn
-    Left = 361
+    Left = 261
     Top = 40
     Width = 39
     Height = 25
     Hint = 'Move selected column down'
     Caption = 'Down'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
@@ -278,108 +264,72 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object ButtonEditWidth: TBitBtn
     Tag = 1
-    Left = 320
+    Left = 220
     Top = 68
     Width = 80
     Height = 25
     Hint = 'Edit selected column width, in pixels'
     Caption = 'Edit Size'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
     OnClick = ButtonEditWidthClick
   end
   object ButtonReloadProfile: TBitBtn
-    Left = 320
+    Left = 220
     Top = 212
     Width = 80
     Height = 25
     Hint = 'Reload current columns settings from main games list'
     Caption = 'Reset All'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4
     OnClick = ButtonReloadProfileClick
   end
   object ButtonDefault: TBitBtn
-    Left = 320
+    Left = 220
     Top = 244
     Width = 80
     Height = 25
     Hint = 'Reset all columns to frontend default settings'
     Caption = 'Default All'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 5
     OnClick = ButtonDefaultClick
   end
   object ButtonDefaultSize: TBitBtn
-    Left = 320
+    Left = 220
     Top = 147
     Width = 80
     Height = 25
     Hint = 'Reset selected column width to default size'
-    Caption = 'Default'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
+    Caption = 'Default Size'
     ParentShowHint = False
     ShowHint = True
     TabOrder = 6
     OnClick = ButtonDefaultSizeClick
   end
   object ButtonResetSize: TBitBtn
-    Left = 320
+    Left = 220
     Top = 121
     Width = 80
     Height = 25
     Hint = 'Reset selected column width to current size'
     Caption = 'Reset Size'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 7
     OnClick = ButtonResetSizeClick
   end
   object ButtonSizeDecrease: TBitBtn
-    Left = 320
+    Left = 220
     Top = 95
     Width = 39
     Height = 25
     Hint = 'Decrease selected column size'
     Caption = '-'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 8
@@ -387,26 +337,20 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object ButtonSizeIncrease: TBitBtn
     Tag = 1
-    Left = 361
+    Left = 261
     Top = 95
     Width = 39
     Height = 25
     Hint = 'Increase selected column size'
     Caption = '+'
-    Font.Charset = OEM_CHARSET
-    Font.Color = clBlack
-    Font.Height = -8
-    Font.Name = 'Terminal'
-    Font.Style = []
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 9
     OnClick = ButtonSizeDecreaseClick
   end
   object PanelButtons: TPanelEx
-    Left = 312
-    Top = 423
+    Left = 212
+    Top = 375
     Width = 248
     Height = 41
     Color1 = 15856113
@@ -443,7 +387,7 @@ object FormColumnsEditor: TFormColumnsEditor
     end
   end
   object PanelEx2: TPanelEx
-    Left = 312
+    Left = 212
     Top = 0
     Width = 248
     Height = 30
@@ -473,5 +417,31 @@ object FormColumnsEditor: TFormColumnsEditor
       Transparent = True
       WordWrap = True
     end
+  end
+  object ButtonCustomizeColumnHeaderFont: TBitBtn
+    Left = 220
+    Top = 288
+    Width = 142
+    Height = 23
+    Caption = 'Customize Header Font'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 12
+    OnClick = ButtonCustomizeColumnHeaderFontClick
+  end
+  object ButtonCustomizeColumnHeaderFontSetDefault: TBitBtn
+    Left = 364
+    Top = 288
+    Width = 80
+    Height = 23
+    Caption = 'Default Font'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 13
+    OnClick = ButtonCustomizeColumnHeaderFontSetDefaultClick
   end
 end

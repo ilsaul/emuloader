@@ -1,10 +1,10 @@
 object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
-  Left = 531
-  Top = 253
+  Left = 554
+  Top = 291
   BorderStyle = bsDialog
   Caption = 'Delete Games Files'
-  ClientHeight = 598
-  ClientWidth = 956
+  ClientHeight = 525
+  ClientWidth = 876
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,11 +23,11 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   object GamesList: TEasyListview
     Left = 0
     Top = 0
-    Width = 956
-    Height = 495
+    Width = 876
+    Height = 427
     Align = alClient
     BorderStyle = bsNone
-    CellSizes.Report.Height = 26
+    CellSizes.Report.Height = 28
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -48,45 +48,45 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000009000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000100018D010000FFFFFF1F0001000000
+      000600000080080001010001000000000100012C010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000164000000FFFFFF1F000100000001000000040000004E00
+      00010100000000000150000000FFFFFF1F000100000001000000040000004E00
       61006D006500000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE00060000008008000101000102000000000001640000
+      6E53746F726564FFFECE00060000008008000101000102000000000001500000
       00FFFFFF1F0001000000010000000800000043006C006F006E00650020006F00
       6600000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE0006000000800800010100010300000000000164000000FFFFFF
+      726564FFFECE0006000000800800010100010300000000000150000000FFFFFF
       1F00010000000100000009000000420069006F00730020004E0061006D006500
       000000000000000000000000110000005445617379436F6C756D6E53746F7265
-      64FFFECE0006000000800800010100010400000000000164000000FFFFFF1F00
-      01000000010000000B00000044007200690076006500720020004E0061006D00
-      6500000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE000600000080080001010001050000000000011E000000FFFFFF
-      1F0001000000010000000300000052004F004D000000000001000000FFFFFFFF
-      00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-      0080080001010001060000000000011E000000FFFFFF1F000100000001000000
-      0300000043004800440000000000000000000000000011000000544561737943
-      6F6C756D6E53746F726564FFFECE000600000080080001010001070000000000
-      011E000000FFFFFF1F0001000000010000000300000043004600470000000000
-      0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010800000000000134000000FFFFFF1F0001000000
-      01000000060000004D0065007200670065006400000000000000000000000000}
+      64FFFECE0006000000800800010100010400000000000196000000FFFFFF1F00
+      01000000010000000D00000053006F0066007400770061007200650020004C00
+      690073007400000000000000000000000000110000005445617379436F6C756D
+      6E53746F726564FFFECE000600000080080001010001050000000000015F0000
+      00FFFFFF1F000100000001000000060000004400720069007600650072000000
+      00000000000000000000110000005445617379436F6C756D6E53746F726564FF
+      FECE000600000080080001010001060000000000011E000000FFFFFF1F000100
+      0000010000000300000052004F004D000000000001000000FFFFFFFF00000000
+      110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+      01010001070000000000011E000000FFFFFF1F00010000000100000003000000
+      430048004400000000000000000000000000110000005445617379436F6C756D
+      6E53746F726564FFFECE000600000080080001010001080000000000011E0000
+      00FFFFFF1F000100000001000000030000004300460047000000000000000000
+      00000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
     Header.Font.Height = -11
-    Header.Font.Name = 'Consolas'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
-    ImagesSmall = IL_DeleteGameIcons
+    ImagesSmall = FormMain.IL_StandardIconsStandard
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoItem.CaptionLines = 2
     PaintInfoItem.ShowBorder = False
     ParentFont = False
     ParentShowHint = False
@@ -106,6 +106,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     TabOrder = 0
     View = elsReport
     OnColumnClick = GamesListColumnClick
+    OnColumnPaintText = GamesListColumnPaintText
     OnItemCompare = GamesListItemCompare
     OnItemFreeing = GamesListItemFreeing
     OnItemPaintText = GamesListItemPaintText
@@ -114,9 +115,9 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   end
   object PanelOptions: TPanelEx
     Left = 0
-    Top = 543
-    Width = 956
-    Height = 55
+    Top = 475
+    Width = 876
+    Height = 50
     Align = alBottom
     Color1 = clWhite
     Color2 = 15856113
@@ -126,38 +127,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object LabelSearchGame: TShadowLabel
-      Left = 268
-      Top = 8
-      Width = 108
+    object LabelSearchGameName: TShadowLabel
+      Left = 234
+      Top = 3
+      Width = 107
       Height = 16
       Caption = 'Search Game Name'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-    end
-    object LabelTotalItems: TShadowLabel
-      Left = 456
-      Top = 19
-      Width = 100
-      Height = 18
-      Alignment = taCenter
-      AutoSize = False
-      Caption = '000000 Games'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
@@ -166,8 +141,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
-      Top = 6
-      Width = 251
+      Top = 1
+      Width = 218
       Height = 41
       Hint = 'Check File Types to %'
       CaptionPosition = cpTopCenter
@@ -176,26 +151,20 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Caption = ' Check File Types to Delete '
       Color = clBtnFace
       Ctl3D = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
       ParentColor = False
-      ParentFont = False
       TabOrder = 0
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
-        Left = 136
+        Left = 115
         Top = 18
-        Width = 111
+        Width = 100
         Height = 16
         Hint = 'Check this option to process game config/RAM files'
         HelpContext = 2
         Checked = True
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 2
@@ -210,14 +179,14 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       object DeleteROMs: TAdvOfficeCheckBox
         Left = 8
         Top = 18
-        Width = 55
+        Width = 52
         Height = 16
         Hint = 'Check this option to process the gamename .zip/.7z file'
         Checked = True
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 0
@@ -230,18 +199,18 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         Themed = True
       end
       object DeleteCHDs: TAdvOfficeCheckBox
-        Left = 72
+        Left = 63
         Top = 18
-        Width = 54
+        Width = 50
         Height = 16
         Hint = 
           'Check this option to process CHD files (if supported by the game' +
           ')'
         HelpContext = 1
         Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
+        Font.Color = 10900224
         Font.Height = -11
-        Font.Name = 'Verdana'
+        Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 1
@@ -255,8 +224,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
     object ButtonDeleteFiles: TBitBtn
       Tag = 1
-      Left = 765
-      Top = 14
+      Left = 687
+      Top = 9
       Width = 89
       Height = 35
       Hint = 'Click here to process files of all games on the list'
@@ -267,8 +236,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonDeleteFilesClick
     end
     object ButtonNo: TBitBtn
-      Left = 860
-      Top = 14
+      Left = 781
+      Top = 9
       Width = 89
       Height = 35
       Hint = 'Click here to cancel the operation ("Esc" hotkey)'
@@ -278,64 +247,93 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ShowHint = True
       TabOrder = 2
     end
-    object FindGame: TEdit
-      Left = 268
-      Top = 25
-      Width = 123
-      Height = 22
-      AutoSize = False
-      CharCase = ecLowerCase
-      Color = clWhite
-      Ctl3D = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clGray
-      Font.Height = -13
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
-      ParentCtl3D = False
-      ParentFont = False
-      TabOrder = 3
-      Text = 'type a game name...'
-      OnEnter = FindGameEnter
-      OnExit = FindGameExit
-      OnKeyPress = FindGameKeyPress
-    end
-    object ButtonFindGame: TBitBtn
-      Left = 393
-      Top = 25
-      Width = 35
-      Height = 22
-      Hint = 'Find a game by name (partial name support)'
-      Caption = 'Find'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 4
-      OnClick = ButtonFindGameClick
-    end
     object ButtonHelp: TBitBtn
       Tag = 1
-      Left = 584
-      Top = 21
-      Width = 68
+      Left = 647
+      Top = 16
+      Width = 33
       Height = 23
       Hint = 'A litte help on how to use this feature'
       Caption = 'Help'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 3
       OnClick = ButtonHelpClick
+    end
+    object PanelSearchGameName: TPanel
+      Left = 234
+      Top = 19
+      Width = 145
+      Height = 24
+      BevelOuter = bvNone
+      Constraints.MinHeight = 24
+      ParentBackground = True
+      TabOrder = 4
+      object FindGameName: TEdit
+        Left = 0
+        Top = 0
+        Width = 135
+        Height = 24
+        AutoSize = False
+        BevelKind = bkFlat
+        Color = clWhite
+        Constraints.MaxHeight = 24
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clSilver
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        Text = ' Type a game name...'
+        OnEnter = FindGameNameEnter
+        OnExit = FindGameNameExit
+        OnKeyPress = FindGameNameKeyPress
+      end
+      object SearchGameNameBox: TPanelEx
+        Left = 115
+        Top = 3
+        Width = 17
+        Height = 18
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = 15790320
+        Frames = [frLeft, frTop, frRight, frBottom]
+        ParentBackground = False
+        Style = vgSolid
+        object ButtonFindGameName: TLabel
+          Left = 3
+          Top = 3
+          Width = 12
+          Height = 14
+          Hint = 'Find a game by name (partial name support)'
+          AutoSize = False
+          Caption = #234
+          Color = clMoneyGreen
+          Font.Charset = SYMBOL_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Wingdings'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = True
+          Transparent = True
+          OnClick = ButtonFindGameNameClick
+          OnMouseEnter = ButtonFindGameNameMouseEnter
+          OnMouseLeave = ButtonFindGameNameMouseLeave
+        end
+      end
     end
   end
   object PanelDestinationFolder: TPanelEx
     Left = 0
-    Top = 495
-    Width = 956
+    Top = 427
+    Width = 876
     Height = 48
     Align = alBottom
     Color1 = clWhite
@@ -346,38 +344,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelDestinationFolder: TShadowLabel
-      Left = 8
-      Top = 24
-      Width = 38
-      Height = 19
-      Caption = 'Folder'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-    end
     object LabelCopyMoveDestination: TShadowLabel
-      Left = 46
-      Top = 4
-      Width = 594
+      Left = 8
+      Top = 6
+      Width = 323
       Height = 16
-      Caption = 
-        'Select a destination folder. CHD files are sent to a "\chd_files' +
-        '\" sub-folder. No network paths and full paths only!'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      ParentFont = False
+      Caption = 'Select a destination folder. Full paths only, no network paths!'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
@@ -385,15 +357,15 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Transparent = True
     end
     object DestinationFolder: TEdit
-      Left = 46
+      Left = 8
       Top = 22
-      Width = 460
+      Width = 334
       Height = 21
       AutoSize = False
       TabOrder = 0
     end
     object ButtonSelectROMsFolder: TBitBtn
-      Left = 508
+      Left = 344
       Top = 22
       Width = 43
       Height = 21
@@ -405,7 +377,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonSelectROMsFolderClick
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
-      Left = 558
+      Left = 394
       Top = 22
       Width = 142
       Height = 20
@@ -421,8 +393,6 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
   end
   object IL_DeleteGameIcons: TImageList
-    Height = 24
-    Width = 24
     Left = 48
     Top = 328
   end

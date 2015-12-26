@@ -10,7 +10,7 @@ uses
 type
   TFormROMsFolders = class(TForm)
     FoldersList: TMemo;
-    PanelEx1: TPanelEx;
+    PanelList: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     SystemsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -84,7 +84,32 @@ end;
 procedure TFormROMsFolders.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(SystemsListView);
+  if Screen.Width < 720 then
+     begin
+       SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge; //FormMain.IL_Systems
+       SystemsListView.CellSizes.Icon.Width:= 58;
+       SystemsListView.CellSizes.Icon.Height:= 72;
+       SystemsListView.Font.Name:= 'Tahoma';
+       SystemsListView.Font.Size:= 7;
+       FormROMsFolders.ClientHeight:= FormROMsFolders.ClientHeight-20;
+       PanelList.Height:= PanelList.Height-20;
+
+       SystemsListView.Height:= SystemsListView.Height-20;
+       SystemsListView.Width:= SystemsListView.Width-160;
+       FormROMsFolders.ClientWidth:= FormROMsFolders.ClientWidth-160;
+
+       LabelSystemTitle.Top:= LabelSystemTitle.Top-20;
+       LabelSystemTitle.Width:= ClientWidth;
+       FoldersList.Top:= FoldersList.Top-20;
+       FoldersList.Width:= ClientWidth-16;
+     end;
   FormMain.ELV_PopulateSystems(SystemsListView, True, True, 1);
+  if Screen.Width < 720 then
+     begin
+       SystemsListView.BeginUpdate;
+       SystemsListView.Items.Items[SystemsListView.Groups.ItemCount-2].Caption:= 'Model 2';
+       SystemsListView.EndUpdate;
+     end;
   //FormMain.ELV_SystemsShortTitle(SystemsListView);
   SetSystemState;
   FormMain.ELV_SelectItem(SystemsListView, 0);

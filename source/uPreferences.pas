@@ -12,38 +12,12 @@ type
   TFormPreferences = class(TForm)
     PageOptions: TNotebook;
     DisableMinimize: TAdvOfficeCheckBox;
-    StartupBox: TAdvGroupBox;
-    LabelStartupGamesListNotFound: TLabel;
-    StartupGamesListNotFound: TComboBox;
-    NewBinariesDetectionEnabled: TAdvOfficeCheckBox;
-    StartupNewBinaryFound: TComboBox;
     GroupBoxSplitters: TAdvGroupBox;
-    LabelSplitterStyleSelector: TLabel;
     SplitterStyleSelector: TComboBox;
     ButtonSplitterStyleDefault: TBitBtn;
-    GroupBoxSplitterSingleColor: TAdvGroupBox;
-    LabelSplitterSingleColor: TLabel;
-    LabelSplitterSingleColorHot: TLabel;
-    SplitterSingleColor: TColorBox;
-    SplitterSingleColorHot: TColorBox;
-    ButtonSplitterSingleColorDefault: TBitBtn;
     SplitterGripIcon: TAdvOfficeCheckBox;
     ButtonCustomizeGameFonts: TBitBtn;
     GroupBoxImageLayoytSplitters: TAdvGroupBox;
-    LabelImageLayoutSplitterStyleSelector: TLabel;
-    ImageLayoutSplitterStyleSelector: TComboBox;
-    ButtonImageLayoutSplitterStyleDefault: TBitBtn;
-    GroupBoxImageLayoutSplitterSingleColor: TAdvGroupBox;
-    LabelImageLayoutSplitterSingleColor: TLabel;
-    LabelImageLayoutSplitterSingleColorHot: TLabel;
-    ImageLayoutSplitterSingleColor: TColorBox;
-    ImageLayoutSplitterSingleColorHot: TColorBox;
-    ButtonImageLayoutSplitterSingleColorDefault: TBitBtn;
-    GroupBox3: TAdvGroupBox;
-    GameDocs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonResetAutoGameInfoOrder: TBitBtn;
     LabelAppearanceGameDocuments: TLabel;
     GameDocumentsBackgroundColor: TColorBox;
     ButtonGameDocumentsFont: TBitBtn;
@@ -54,11 +28,9 @@ type
     ButtonMAMu_IconsFolderSelect: TBitBtn;
     GameSelectionDarkFont: TAdvOfficeCheckBox;
     ImageEnableGripIcon: TAdvOfficeCheckBox;
-    Label1: TLabel;
     MAMu_Icon: TImage;
     ShadowLabel1: TShadowLabel;
-    StartupHelpButton: TBitBtn;
-    PanelEx1: TPanelEx;
+    PanelTabButtons: TPanelEx;
     ButtonGeneral: TSpeedButton;
     ButtonGamesList: TSpeedButton;
     ButtonImages: TSpeedButton;
@@ -85,21 +57,15 @@ type
     ButtonVideoPreviewHelp: TBitBtn;
     VideoPreviewParentGameVideo: TAdvOfficeCheckBox;
     VideoPreviewEnabled: TAdvOfficeCheckBox;
-    LabelVideoPreviewEnabled: TShadowLabel;
     ButtonResetVideoPreviewMediaPlayerParameters: TBitBtn;
     ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtn;
     ColumnsSettings: TAdvGroupBox;
     DisableCloneIndent: TAdvOfficeCheckBox;
     DisableDriverStatusIcons: TAdvOfficeCheckBox;
-    LabelDisableDriverStatusIcons: TLabel;
     DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBox;
-    LabelDriverStatusShowFirstLetterOnly: TLabel;
     HideDriverStatusTexts: TAdvOfficeCheckBox;
-    LabelHideDriverStatusTexts: TLabel;
-    LabelShortDriverColumnTitles: TLabel;
     ShortDriverColumnTitles: TAdvOfficeCheckBox;
     GamesBackgroundGroupBox: TAdvGroupBox;
-    LabelGamesBackgroundColor: TLabel;
     GamesBackgroundColor: TColorBox;
     ButtonDefaultBkSortedColor: TBitBtn;
     GamesBackgroundImageEnable: TAdvOfficeCheckBox;
@@ -107,17 +73,60 @@ type
     GamesBackgroundImageButtonSelect: TBitBtn;
     GamesBackgroundImageButtonUpdate: TBitBtn;
     GamesTileBackground: TAdvOfficeCheckBox;
-    ButtonCustomizeColumnHeaderFont: TBitBtn;
-    ButtonCustomizeColumns: TBitBtn;
     LastPlayedHideSeconds: TAdvOfficeCheckBox;
     TotalPlayTimeHideSeconds: TAdvOfficeCheckBox;
-    ButtonDefaultColumnHeaderFont: TBitBtn;
     DisableNaturalSorting: TAdvOfficeCheckBox;
     LabelDisableNaturalSorting: TLabel;
-    LabelGoToMAMEInfo: TLabel;
-    LabelGoToMARP: TLabel;
-    LabelGoToMAMEScore: TLabel;
-    LabelGoToMAMEHistory: TLabel;
+    LabelGoToMAMEInfo: TShadowLabel;
+    LabelGoToMARP: TShadowLabel;
+    LabelGoToMAMEScore: TShadowLabel;
+    LabelGoToMAMEHistory: TShadowLabel;
+    GameMultilineCaptions: TAdvOfficeCheckBox;
+    LabelGameMultilineCaptions: TLabel;
+    LabelImageLayoutSplitterSingleColor: TLabel;
+    ImageLayoutSplitterSingleColor: TColorBox;
+    ImageLayoutSplitterSingleColorHot: TColorBox;
+    LabelImageLayoutSplitterSingleColorHot: TLabel;
+    ButtonImageLayoutSplitterSingleColorDefault: TBitBtn;
+    HideDOSBoxFrame: TAdvGroupBox;
+    HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox;
+    HideDOSBoxRunGame: TAdvOfficeCheckBox;
+    ShadowLabel2: TShadowLabel;
+    VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox;
+    ButtonHelpVideoPreviewPlayDummyVideo: TBitBtn;
+    LabelGoToMESSInfo: TShadowLabel;
+    LabelVideoPreviewDummyVideoParameters: TLabel;
+    VideoPreviewDummyVideoParameters: TEdit;
+    ButtonClearVideoPreviewDummyVideoParameters: TBitBtn;
+    ButtonResetVideoPreviewDummyVideoParameters: TBitBtn;
+    LabelImagePanelOuterFrameColor: TLabel;
+    ImagePanelOuterFrameColor: TColorBox;
+    ButtonImagePanelOuterFrameColorDefault: TBitBtn;
+    LabelGoToGameInit: TShadowLabel;
+    GameDocs: TEasyListview;
+    ButtonUp: TBitBtn;
+    ButtonDown: TBitBtn;
+    ButtonResetAutoGameInfoOrder: TBitBtn;
+    Label1: TLabel;
+    ShadowLabel3: TShadowLabel;
+    AllowOnlyOneInstance: TAdvOfficeCheckBox;
+    ShadowLabel4: TShadowLabel;
+    LabelSplitterSingleColor: TLabel;
+    SplitterSingleColor: TColorBox;
+    SplitterSingleColorHot: TColorBox;
+    LabelSplitterSingleColorHot: TLabel;
+    ButtonSplitterSingleColorDefault: TBitBtn;
+    GamesListStatusBarBox: TAdvGroupBox;
+    LabelGamesListStatusBarBottomColor: TLabel;
+    LabelGamesListStatusBarTopColor: TLabel;
+    LabelGamesListStatusBarFontColor: TLabel;
+    LabelGamesListStatusBarFrameColor: TLabel;
+    GamesListStatusBarGradientBar: TAdvOfficeCheckBox;
+    GamesListStatusBarBottomColor: TColorBox;
+    GamesListStatusBarButtonDefault: TBitBtn;
+    GamesListStatusBarTopColor: TColorBox;
+    GamesListStatusBarFontColor: TColorBox;
+    GamesListStatusBarFrameColor: TColorBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -139,8 +148,6 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure ButtonUpClick(Sender: TObject);
     procedure GameSelectionAlphaBlendClick(Sender: TObject);
-    procedure ImageLayoutSplitterStyleSelectorSelect(Sender: TObject);
-    procedure ButtonImageLayoutSplitterStyleDefaultClick(Sender: TObject);
     procedure ImageLayoutSplitterSingleColorSelect(Sender: TObject);
     procedure ImageLayoutSplitterSingleColorHotSelect(Sender: TObject);
     procedure ButtonImageLayoutSplitterSingleColorDefaultClick(Sender: TObject);
@@ -153,7 +160,6 @@ type
     procedure ButtonGeneralClick(Sender: TObject);
     procedure ButtonMAMu_IconsFolderSelectClick(Sender: TObject);
     procedure ImageEnableGripIconClick(Sender: TObject);
-    procedure StartupHelpButtonClick(Sender: TObject);
     procedure SystemsVideoPreviewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure VideoPreviewFolderChange(Sender: TObject);
@@ -170,13 +176,22 @@ type
     procedure ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
     procedure DisableCloneIndentClick(Sender: TObject);
     procedure GamesBackgroundImageEnableClick(Sender: TObject);
-    procedure ButtonCustomizeColumnsClick(Sender: TObject);
-    procedure ButtonCustomizeColumnHeaderFontClick(Sender: TObject);
-    procedure ButtonDefaultColumnHeaderFontClick(Sender: TObject);
     procedure DisableNaturalSortingClick(Sender: TObject);
     procedure LabelGoToMAMEInfoMouseEnter(Sender: TObject);
     procedure LabelGoToMAMEInfoClick(Sender: TObject);
     procedure LabelGoToMAMEInfoMouseLeave(Sender: TObject);
+    procedure GameMultilineCaptionsClick(Sender: TObject);
+    procedure ButtonHelpVideoPreviewPlayDummyVideoClick(Sender: TObject);
+    procedure ButtonClearVideoPreviewDummyVideoParametersClick(Sender: TObject);
+    procedure ButtonResetVideoPreviewDummyVideoParametersClick(Sender: TObject);
+    procedure ImagePanelOuterFrameColorSelect(Sender: TObject);
+    procedure ButtonImagePanelOuterFrameColorDefaultClick(Sender: TObject);
+    procedure GamesListStatusBarGradientBarClick(Sender: TObject);
+    procedure GamesListStatusBarTopColorSelect(Sender: TObject);
+    procedure GamesListStatusBarBottomColorSelect(Sender: TObject);
+    procedure GamesListStatusBarFrameColorSelect(Sender: TObject);
+    procedure GamesListStatusBarFontColorSelect(Sender: TObject);
+    procedure GamesListStatusBarButtonDefaultClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -248,8 +263,8 @@ end;
 procedure TFormPreferences.ButtonGameDocumentsDefaultClick(Sender: TObject);
 begin
   FormMain.MAMEInfoTextHolder.Font.Color:= clBlack;
-  FormMain.MAMEInfoTextHolder.Font.Name:= 'Consolas';
-  FormMain.MAMEInfoTextHolder.Font.Size:= 9;
+  FormMain.MAMEInfoTextHolder.Font.Name:= 'Lucida Console';
+  FormMain.MAMEInfoTextHolder.Font.Size:= 8;
   FormMain.MAMEInfoTextHolder.Font.Style:= [];
   FormMain.SetSelectedColorBox(GameDocumentsBackgroundColor, GameDocumentsBackgroundColor.DefaultColorColor);
 end;
@@ -320,7 +335,7 @@ var
 begin
   FormMain.ClearListView(GameDocs);
   GameDocs.BeginUpdate;
-  for Loop:=1 to 5 do
+  for Loop:=1 to 6 do
       FormMain.ELV_AddGameDocs(Loop);
   GameDocs.EndUpdate;
 end;
@@ -362,19 +377,8 @@ procedure TFormPreferences.GameSelectionAlphaBlendClick(Sender: TObject);
 begin
   FormMain.GamesListView.Selection.AlphaBlend:= GameSelectionAlphaBlend.Checked;
   FormMain.GamesListView.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
-end;
-
-procedure TFormPreferences.ImageLayoutSplitterStyleSelectorSelect(
-  Sender: TObject);
-begin
-  FormMain.SetGroupBoxState(GroupBoxImageLayoutSplitterSingleColor, ImageLayoutSplitterStyleSelector.ItemIndex = 1);
-  //GroupBoxImageLayoutSplitterSingleColor.Visible:= ImageLayoutSplitterStyleSelector.ItemIndex = 1;
-  FormMain.UpdateImageLayoutSplittersStyle;
-end;
-
-procedure TFormPreferences.ButtonImageLayoutSplitterStyleDefaultClick(Sender: TObject);
-begin
-  SetSelectedComboBox(6, ImageLayoutSplitterStyleSelector);
+  FormMain.MachinesListSidePanel.Selection.AlphaBlend:= GameSelectionAlphaBlend.Checked;
+  FormMain.MachinesListSidePanel.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
 end;
 
 procedure TFormPreferences.ImageLayoutSplitterSingleColorSelect(
@@ -411,12 +415,15 @@ end;
 
 procedure TFormPreferences.SplitterStyleSelectorSelect(Sender: TObject);
 begin
-  FormMain.SetGroupBoxState(GroupBoxSplitterSingleColor, SplitterStyleSelector.ItemIndex = 1);
+  //FormMain.SetGroupBoxState(GroupBoxSplitterSingleColor, SplitterStyleSelector.ItemIndex = 1);
   //GroupBoxSplitterSingleColor.Enabled{Visible}:= SplitterStyleSelector.ItemIndex = 1;
   FormMain.UpdateSplitterStyle(FormMain.Splitter, TTMSStyle(SplitterStyleSelector.ItemIndex),
                                SplitterSingleColor.Selected,
                                SplitterSingleColorHot.Selected);
   FormMain.UpdateSplitterStyle(FormMain.SplitterMAMEInfo, TTMSStyle(SplitterStyleSelector.ItemIndex),
+                               SplitterSingleColor.Selected,
+                               SplitterSingleColorHot.Selected);
+  FormMain.UpdateSplitterStyle(FormMain.SplitterMachines, TTMSStyle(SplitterStyleSelector.ItemIndex),
                                SplitterSingleColor.Selected,
                                SplitterSingleColorHot.Selected);
 end;
@@ -460,27 +467,6 @@ begin
      FormMain.PopupImageShowSplitterGrip.Click;
 end;
 
-procedure TFormPreferences.StartupHelpButtonClick(Sender: TObject);
-begin
-  CallMessageBox;
-  FormMain.AddMsgText('Games List Not Found'+#13#10, clBlack, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'    This option can create a games list automatically if it''s not found at startup. It only works if an emulator '+
-                  'file have been selected in emulator setup screen.'+#13#10+#13#10);
-  FormMain.AddMsgText('New Emulator Detection'+#13#10, clBlack, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'    Enable this option so EL can auto-detect a new emulator binary at startup (MD5 checksum) and create a '+
-                  'new games list.'+#13#10+#13#10+
-                  '    Drop-down options and what they mean:'+#13#10);
-  FormMain.AddMsgText('Ask', $00a65300, [fsBold]);
-  FormMain.AddMsgText(': Ask if you want to create games list at that time'+#13#10);
-  FormMain.AddMsgText('Auto-Create', $00a65300, [fsBold]);
-  FormMain.AddMsgText(': Games list will be created without warning or confirmation'+#13#10);
-  FormMain.AddMsgText('Skip', $00a65300, [fsBold]);
-  FormMain.AddMsgText(': Skip new games list creation, but update the emulator version info if ');
-  FormMain.AddMsgText('New Emulator Detection', clBlack, [fsBold]);
-  FormMain.AddMsgText(' is checked.');
-  GenerateMessage('Help', 'Startup options for emulators and games list.');
-end;
-
 procedure TFormPreferences.SystemsVideoPreviewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
@@ -510,8 +496,9 @@ begin
   FormMain.AddMsgText('    This option play videos automatically when selecting games but, depending on how '+
                       'you setup the media player, it might crash the frontend or even Windows if you select different games while a '+
                       'video is playing.'+#13#10+#13#10+
-                      '    I recommend using this setting only if scrolling the games list slowly and if you really want to '+
-                      'watch videos for every new game you select.'+#13#10#13#10+
+                      '    I recommend using this setting only if you don''t want to start the video manually. '+
+                      'With it enabled, after loading the video the active and focused application will be the media player.'+#13#10+
+                      'I recommend using a hot-key to close the media player manually so you won''t have to close it using the mouse.'+#13#10#13#10+
                       'Remember that you can start a video by:'+#13#10);
   FormMain.AddMsgText('Shift-V', $00a65300, [fsBold]);
   FormMain.AddMsgText(' shortcut'+#13#10);
@@ -549,7 +536,7 @@ end;
 procedure TFormPreferences.ButtonSelectVideoPreviewMediaPlayerClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(2, 'Select a media player executable', VideoPreviewMediaPlayerExecutable, False);
-  FormMain.ReadVideoPreviewIni(True);
+  FormMain.ReadVideoPreviewIni(True, True, False);
 end;
 
 procedure TFormPreferences.ButtonClearVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -573,22 +560,23 @@ end;
 procedure TFormPreferences.ButtonVideoPreviewHelpClick(Sender: TObject);
 begin
   CallMessageBox;
-  FormMain.AddMsgText('    It''s very simple and easy to setup. First you need a media player. I use and recommend the awesome ');
+  FormMain.AddMsgText('    It''s very simple and easy to setup. First, get a media player of your choice. I use and recommend the awesome ');
   FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', $00a65300);
-  FormMain.AddMsgText('. Make sure to enable "Store settings to .ini file" option for maximum customization. '+
-                      'But you can use any media player.');
-  FormMain.AddMsgText(#13#10+#13#10+'    Select the player ');
+  FormMain.AddMsgText(' (small RAM footprint and portable). Make sure to enable ');
+  FormMain.AddMsgText('Store settings to .ini file', clMaroon, [fsItalic]);
+  FormMain.AddMsgText(' option in MPC Home Cinema for maximum customization. '+
+                      #13#10+#13#10+'    Select the ');
   FormMain.AddMsgText('executable', clBlack, [fsBold]);
-  FormMain.AddMsgText(' file. Parameters will be loaded automatically if already defined in ');
+  FormMain.AddMsgText(' file. Parameters will be loaded automatically if defined in ');
   FormMain.AddMsgText('\ini_files\videopreview.ini', $00a65300, [fsBold]);
   FormMain.AddMsgText('. If not, type the proper switches to play, and if possible, auto-close when playback is done.'+//#13#10+
                       ' You can also use a ');
   FormMain.AddMsgText('batch', clBlack, [fsBold]);
-  FormMain.AddMsgText(' file but parameters are not supported.'+#13#10+#13#10);
+  FormMain.AddMsgText(' file but extra parameters are not supported.'+#13#10+#13#10);
   FormMain.AddMsgText('    The ', clMaroon, [fsBold]);
   FormMain.AddMsgText('%1', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' tag is required for the video/audio filename. Surrounding quotes is not required.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' tag is required for the video/audio filename. Surrounding quotes are not required.', clMaroon, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'    Select a ');
   FormMain.AddMsgText('system', $00a65300, [fsBold]);
   FormMain.AddMsgText(' and the ');
@@ -599,10 +587,14 @@ begin
   FormMain.AddMsgText(' setting. Uncheck it if you want to disable this feature completely.'+
                       #13#10+'    Check ');
   FormMain.AddMsgText('Parent Game Video', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' setting for clone games, to play videos of parent games.'+#13#10+'    The ');
+  FormMain.AddMsgText(' setting for clone games, to play videos of parent games.'+#13#10+'    Check ');
+  FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' setting to enforce playback of a short video file on a new selected game that doesn''t have a video file.'+
+                      #13#10+'    The ');
   FormMain.AddMsgText('AutoPlay', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' setting play videos automatically when selecting games. Disabled by default for safety reasons (see ''read more...'' '+
-                      'for more details).'+#13#10+#13#10+
+  FormMain.AddMsgText(' setting play videos automatically when selecting games. Disabled by default for safety reasons (see ');
+  FormMain.AddMsgText('read more...', $00a65300, [fsItalic]);
+  FormMain.AddMsgText(' for more details).'+#13#10+#13#10+
                       '    If AutoPlay is disabled, you can play videos manually with ');
   FormMain.AddMsgText('Shift+V', $00a65300, [fsBold]);
   FormMain.AddMsgText(' shortcut or ');
@@ -615,7 +607,7 @@ end;
 procedure TFormPreferences.ButtonResetVideoPreviewMediaPlayerParametersClick(
   Sender: TObject);
 begin
-  FormMain.ReadVideoPreviewIni(True);
+  FormMain.ReadVideoPreviewIni(False, True, False);
 end;
 
 procedure TFormPreferences.ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -632,13 +624,13 @@ begin
   FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', $00a65300);
   FormMain.AddMsgText(' can have switches before or after the filename.'+#13#10+
-                      '    This tag is also required by batch files. Extra tags are NOT supported.'+
+                      '    This tag is also required by batch files, but extra tags are NOT supported.'+
                       #13#10+'Emu Loader will surround the file with quotes so, there''s '+
                       'no need to use them.'+#13#10+'    Make sure to include a ');
   FormMain.AddMsgText('auto close', $00a65300, [fsBold]);
   FormMain.AddMsgText(' parameter so the media player closes itself after the playback is finished!');
 
-  GenerateMessage('INFO', 'Required parameter.');
+  GenerateMessage('Info', 'Required parameter.');
 end;
 
 procedure TFormPreferences.DisableCloneIndentClick(Sender: TObject);
@@ -653,23 +645,6 @@ begin
   GamesBackgroundImageButtonUpdate.Click;
 end;
 
-procedure TFormPreferences.ButtonCustomizeColumnsClick(Sender: TObject);
-begin
-  FormMain.PopupCustomizeColumns.Click;
-end;
-
-procedure TFormPreferences.ButtonCustomizeColumnHeaderFontClick(
-  Sender: TObject);
-begin
-  FormMain.PopupCustomizeColumnsHeaderFont.Click;
-end;
-
-procedure TFormPreferences.ButtonDefaultColumnHeaderFontClick(
-  Sender: TObject);
-begin
-  FormMain.PopupDefaultHeaderFont.Click;
-end;
-
 procedure TFormPreferences.DisableNaturalSortingClick(Sender: TObject);
 begin
   if FormMain.IsStartup then
@@ -678,19 +653,27 @@ begin
   FormMain.GamesListView.Sort.SortAll;
   FormMain.GamesListView.EndUpdate(False);
   if FormMain.SelectedEasyItem <> nil then
-     FormMain.SelectedEasyItem.MakeVisible(emvAuto);
+     FormMain.SelectedEasyItem.MakeVisible(emvMiddle);//(emvAuto);
+  if FormMain.PanelMachinesList.Visible then
+     begin
+       FormMain.MachinesListSidePanel.BeginUpdate;
+       FormMain.MachinesListSidePanel.Sort.SortAll;
+       FormMain.MachinesListSidePanel.EndUpdate(False);
+       if FormMain.SelectedMachineItem <> nil then
+          FormMain.SelectedMachineItem.MakeVisible(emvMiddle);//(emvAuto);
+     end;
 end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoMouseEnter(Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clBlue;
-  TLabel(Sender).Font.Style:= [fsUnderline];
+  TShadowLabel(Sender).Font.Color:= clBlue;
+  TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoMouseLeave(Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clNavy;
-  TLabel(Sender).Font.Style:= [];
+  TShadowLabel(Sender).Font.Color:= clNavy;
+  TShadowLabel(Sender).Font.Style:= [];
 end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoClick(Sender: TObject);
@@ -698,7 +681,99 @@ begin
   ShellExecute(Handle, 'open', PChar(TLabel(Sender).Hint), nil, nil, SW_SHOWNORMAL);
 end;
 
+procedure TFormPreferences.GameMultilineCaptionsClick(Sender: TObject);
+begin
+  if FormMain.IsGroupedView or FormMain.IsDetailsView then
+     begin
+       if FormMain.PopupGameIconSize.Tag in [0, 1] then
+          FormMain.GamesListView.PaintInfoItem.CaptionLines:= Ord(GameMultilineCaptions.Checked)+1;
+     end;
+end;
 
+procedure TFormPreferences.ButtonHelpVideoPreviewPlayDummyVideoClick(
+  Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('    If a video from previous selected game is still playing and you select a new game that have '+
+                      'no video to play, the previous video keeps playing until it finishes or you manually close the media player.'+#13#10+
+                      'You can use this setting to force Emu Loader to load and play a "100 ms" video for games without a video file.'+#13#10+#13#10+
+                      '    You can set custom parameters for the dummy video as well, but both the parameters and the ');
+  FormMain.AddMsgText('%1', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' tag are optional. Some players might run and auto-close without the need of a video/audio file to play.'+#13#10+
+                      'Note that if ');
+  FormMain.AddMsgText('Dummy Media Player Parameters', clMaroon, [fsItalic]);
+  FormMain.AddMsgText(' is empty, the media player parameters will be used automatically.'+#13#10+#13#10+
+                      '    As a bonus, current playing video will be stopped when you want to start a game or exit the frontend.'+#13#10+
+                      'Make sure the file ');
+  FormMain.AddMsgText('resources\images\no_image\novideo.avi', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' exists or the dummy video will not load.');
+  
+  GenerateMessage('Help', 'Play Dummy Video to Stop Current Playback');
+end;
+
+procedure TFormPreferences.ButtonClearVideoPreviewDummyVideoParametersClick(Sender: TObject);
+begin
+  VideoPreviewDummyVideoParameters.Clear;
+end;
+
+procedure TFormPreferences.ButtonResetVideoPreviewDummyVideoParametersClick(Sender: TObject);
+begin
+  FormMain.ReadVideoPreviewIni(False, False, True);
+end;
+
+procedure TFormPreferences.ImagePanelOuterFrameColorSelect(
+  Sender: TObject);
+begin
+  FormMain.PanelImage.Color:= ImagePanelOuterFrameColor.Selected;
+end;
+
+procedure TFormPreferences.ButtonImagePanelOuterFrameColorDefaultClick(Sender: TObject);
+begin
+  SetDefaultColorBox(ImagePanelOuterFrameColor);
+end;
+
+procedure TFormPreferences.GamesListStatusBarGradientBarClick(
+  Sender: TObject);
+begin
+  case GamesListStatusBarGradientBar.Checked of
+    True : FormMain.StatusBarPanel.Style:= vgSimple;
+    False: FormMain.StatusBarPanel.Style:= vgSolid;
+  end;
+end;
+
+procedure TFormPreferences.GamesListStatusBarTopColorSelect(
+  Sender: TObject);
+begin
+  FormMain.StatusBarPanel.Color1:= GamesListStatusBarTopColor.Selected;
+end;
+
+procedure TFormPreferences.GamesListStatusBarBottomColorSelect(
+  Sender: TObject);
+begin
+  FormMain.StatusBarPanel.Color2:= GamesListStatusBarBottomColor.Selected;
+end;
+
+procedure TFormPreferences.GamesListStatusBarFrameColorSelect(
+  Sender: TObject);
+begin
+  FormMain.StatusBarPanel.ColorFrame:= GamesListStatusBarFrameColor.Selected;
+end;
+
+procedure TFormPreferences.GamesListStatusBarFontColorSelect(
+  Sender: TObject);
+begin
+  FormMain.StatusBar_GamesTotal.Font.Color:= GamesListStatusBarFontColor.Selected;
+  FormMain.StatusBar_GamesGameName.Font.Color:= GamesListStatusBarFontColor.Selected;
+end;
+
+procedure TFormPreferences.GamesListStatusBarButtonDefaultClick(Sender: TObject);
+begin
+  SetDefaultColorBox(GamesListStatusBarTopColor);
+  SetDefaultColorBox(GamesListStatusBarBottomColor);
+  SetDefaultColorBox(GamesListStatusBarFontColor);
+  SetDefaultColorBox(GamesListStatusBarFrameColor);
+  GamesListStatusBarGradientBar.Checked:= True;
+end;
 
 end.
 
