@@ -1,6 +1,6 @@
 object FormSelectFile: TFormSelectFile
-  Left = 669
-  Top = 342
+  Left = 907
+  Top = 526
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Load an Input File'
@@ -43,10 +43,11 @@ object FormSelectFile: TFormSelectFile
     Transparent = True
   end
   object LabelNewFilename: TShadowLabel
-    Left = 135
+    Left = 132
     Top = 293
     Width = 225
     Height = 16
+    Alignment = taRightJustify
     Caption = 'New Name (file extention not required)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack

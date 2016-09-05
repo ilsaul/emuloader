@@ -27,8 +27,8 @@ object FormExportGamesList: TFormExportGamesList
     AutoSize = False
     Caption = 
       '     Choose the output format. Software list games require MAME ' +
-      'v0.162 or UME. File "category_home.ini" required to exclude non-' +
-      'arcade machines.'
+      'v0.162 or UME. File "mess.ini" from AntoPISA is required to excl' +
+      'ude non-arcade machines.'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12

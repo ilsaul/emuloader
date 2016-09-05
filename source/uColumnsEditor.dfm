@@ -34,6 +34,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object LabelButtonEditWidth: TLabel
     Left = 304
@@ -47,6 +48,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object LabelButtonSize: TLabel
     Left = 304
@@ -60,6 +62,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object LabelButtonDefaultSize: TLabel
     Left = 304
@@ -73,6 +76,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object LabelButtonResetSize: TLabel
     Left = 304
@@ -86,6 +90,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object LabelButtonReloadProfileDefaultSettings: TLabel
     Left = 304
@@ -99,6 +104,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object Shape2: TShape
     Left = 211
@@ -120,6 +126,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object Label2: TLabel
     Left = 304
@@ -133,6 +140,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    Transparent = True
   end
   object Label3: TLabel
     Left = 222

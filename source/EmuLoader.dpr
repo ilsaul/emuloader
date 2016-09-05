@@ -58,7 +58,8 @@ uses
   uFiltersMAMEMachines in 'uFiltersMAMEMachines.pas' {FormFiltersMAMEMachines},
   uSoftwareListCustomize in 'uSoftwareListCustomize.pas' {FormSoftwareListCustomize},
   uApplyFilterMsgBox in 'uApplyFilterMsgBox.pas' {FormApplyFilterMsgBox},
-  uExportGamesList in 'uExportGamesList.pas' {FormExportGamesList};
+  uExportGamesList in 'uExportGamesList.pas' {FormExportGamesList},
+  uRunExtraMAME in 'uRunExtraMAME.pas' {FormRunGameExtraMAME};
 
 {$R *.RES}
 

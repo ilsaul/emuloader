@@ -5,7 +5,7 @@ object FormPreferences: TFormPreferences
   BorderStyle = bsDialog
   Caption = 'Preferences'
   ClientHeight = 392
-  ClientWidth = 505
+  ClientWidth = 619
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -27,21 +27,21 @@ object FormPreferences: TFormPreferences
   object PanelTabButtons: TPanelEx
     Left = 0
     Top = 0
-    Width = 505
-    Height = 32
+    Width = 73
+    Height = 392
     Color1 = 14540253
     Color2 = 15856113
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = 14540253
-    Frames = []
+    ColorFrame = 7891291
+    Frames = [frRight]
     ParentBackground = False
-    Style = vgSimple
+    Style = vgSolid
     object ButtonGeneral: TSpeedButton
-      Left = 7
-      Top = 7
-      Width = 74
-      Height = 25
+      Left = 1
+      Top = 1
+      Width = 70
+      Height = 50
       GroupIndex = 1
       Down = True
       Caption = 'General'
@@ -50,21 +50,21 @@ object FormPreferences: TFormPreferences
     end
     object ButtonGamesList: TSpeedButton
       Tag = 1
-      Left = 81
-      Top = 7
-      Width = 125
-      Height = 25
+      Left = 1
+      Top = 52
+      Width = 70
+      Height = 50
       GroupIndex = 1
-      Caption = 'Games List/Columns'
+      Caption = 'Games List'#13#10' / Columns'
       Flat = True
       OnClick = ButtonGeneralClick
     end
     object ButtonImages: TSpeedButton
       Tag = 2
-      Left = 206
-      Top = 7
-      Width = 76
-      Height = 25
+      Left = 1
+      Top = 103
+      Width = 70
+      Height = 50
       GroupIndex = 1
       Caption = 'Images'
       Flat = True
@@ -72,45 +72,39 @@ object FormPreferences: TFormPreferences
     end
     object ButtonGameDocuments: TSpeedButton
       Tag = 3
-      Left = 282
-      Top = 7
-      Width = 125
-      Height = 25
+      Left = 1
+      Top = 154
+      Width = 70
+      Height = 50
       GroupIndex = 1
-      Caption = 'Game Docs (MAME)'
+      Caption = 'Game Docs'#13#10'(MAME)'
       Flat = True
       OnClick = ButtonGeneralClick
     end
     object ButtonVideoPreview: TSpeedButton
       Tag = 4
-      Left = 407
-      Top = 7
-      Width = 90
-      Height = 25
+      Left = 1
+      Top = 205
+      Width = 70
+      Height = 50
       GroupIndex = 1
-      Caption = 'Video Preview'
+      Caption = 'Video'#13#10'Preview'
       Flat = True
       OnClick = ButtonGeneralClick
     end
-    object Bevel1: TBevel
-      Left = 7
-      Top = 29
-      Width = 491
-      Height = 2
-    end
   end
   object PageOptions: TNotebook
-    Left = 0
-    Top = 32
-    Width = 505
-    Height = 360
+    Left = 73
+    Top = 0
+    Width = 546
+    Height = 392
     TabOrder = 0
     object TPage
       Left = 0
       Top = 0
       Caption = 'General'
       object DisableMinimize: TAdvOfficeCheckBox
-        Left = 108
+        Left = 126
         Top = 12
         Width = 286
         Height = 20
@@ -121,7 +115,7 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object GroupBoxSplitters: TAdvGroupBox
-        Left = 108
+        Left = 126
         Top = 146
         Width = 293
         Height = 133
@@ -260,7 +254,7 @@ object FormPreferences: TFormPreferences
         end
       end
       object HideDOSBoxFrame: TAdvGroupBox
-        Left = 108
+        Left = 126
         Top = 56
         Width = 293
         Height = 81
@@ -289,12 +283,12 @@ object FormPreferences: TFormPreferences
         object HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox
           Left = 8
           Top = 20
-          Width = 241
+          Width = 247
           Height = 20
           Checked = True
           TabOrder = 0
           Alignment = taLeftJustify
-          Caption = 'Get Emulator Version / Create Games List'
+          Caption = 'Create Games List / Read Emulator Version'
           ReturnIsTab = False
           State = cbChecked
           Themed = True
@@ -312,14 +306,16 @@ object FormPreferences: TFormPreferences
         end
       end
       object AllowOnlyOneInstance: TAdvOfficeCheckBox
-        Left = 108
+        Left = 126
         Top = 32
         Width = 154
         Height = 20
+        Checked = True
         TabOrder = 3
         Alignment = taLeftJustify
         Caption = 'Allow Only One Instance'
         ReturnIsTab = False
+        State = cbChecked
         Themed = True
       end
     end
@@ -331,9 +327,11 @@ object FormPreferences: TFormPreferences
       object LabelMAMu_IconsFolder: TLabel
         Left = 50
         Top = 312
-        Width = 278
+        Width = 391
         Height = 15
-        Caption = 'MAMu_ Icons Folder (frontend relative path support)'
+        Caption = 
+          'MAMu_ Icons Folder (emulator relative path support; MAME only fe' +
+          'ature!)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -12
@@ -905,6 +903,101 @@ object FormPreferences: TFormPreferences
         TabOrder = 2
         OnClick = ButtonImagePanelOuterFrameColorDefaultClick
       end
+      object GroupBoxInternetGameInfo: TAdvGroupBox
+        Left = 16
+        Top = 184
+        Width = 473
+        Height = 125
+        Caption = 'Internet Game Info'
+        Ctl3D = True
+        TabOrder = 3
+        object LabelInternetGameInfoLink: TLabel
+          Left = 8
+          Top = 20
+          Width = 80
+          Height = 15
+          Caption = 'Game Info Link'
+        end
+        object LabelInternetMAMESoftwareListGameInfoLink: TLabel
+          Left = 8
+          Top = 60
+          Width = 189
+          Height = 15
+          Caption = 'MAME Software List Game Info Link'
+        end
+        object Label5: TLabel
+          Left = 13
+          Top = 104
+          Width = 444
+          Height = 14
+          Caption = 
+            'You must use      tags so they can be replaced by               ' +
+            '   and                  .'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object Label6: TLabel
+          Left = 92
+          Top = 104
+          Width = 362
+          Height = 14
+          Caption = 
+            '%s                                              game name       ' +
+            'softlist name'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object InternetGameInfoLink: TEdit
+          Left = 8
+          Top = 36
+          Width = 409
+          Height = 21
+          AutoSize = False
+          Color = clWhite
+          TabOrder = 0
+        end
+        object InternetGameInfoLinkButtonDefault: TBitBtn
+          Left = 418
+          Top = 35
+          Width = 47
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Default'
+          TabOrder = 1
+          OnClick = InternetGameInfoLinkButtonDefaultClick
+        end
+        object InternetMAMESoftwareListGameInfoLink: TEdit
+          Left = 8
+          Top = 76
+          Width = 409
+          Height = 21
+          AutoSize = False
+          Color = clWhite
+          TabOrder = 2
+        end
+        object InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn
+          Left = 418
+          Top = 75
+          Width = 47
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Default'
+          TabOrder = 3
+          OnClick = InternetMAMESoftwareListGameInfoLinkButtonDefaultClick
+        end
+      end
     end
     object TPage
       Left = 0
@@ -1083,7 +1176,6 @@ object FormPreferences: TFormPreferences
         ShadowEnabled = False
         EllipsType = etNone
         Transparent = True
-        Visible = False
         OnClick = LabelGoToMAMEInfoClick
         OnMouseEnter = LabelGoToMAMEInfoMouseEnter
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
@@ -1105,9 +1197,9 @@ object FormPreferences: TFormPreferences
       object ShadowLabel3: TShadowLabel
         Left = 94
         Top = 32
-        Width = 261
+        Width = 74
         Height = 16
-        Caption = 'Display Order (Place files in MAME'#39's main folder)'
+        Caption = 'Display Order'
         ShowAccelChar = False
         ShadowColor = clGray
         ShadowEnabled = False
@@ -1245,7 +1337,7 @@ object FormPreferences: TFormPreferences
       HelpContext = 4
       Caption = 'Video Preview'
       object LabelVideoPreviewTitle: TShadowLabel
-        Left = 189
+        Left = 269
         Top = 12
         Width = 227
         Height = 19
@@ -1262,36 +1354,42 @@ object FormPreferences: TFormPreferences
         EllipsType = etNone
       end
       object Label2: TLabel
-        Left = 96
-        Top = 118
-        Width = 259
+        Left = 53
+        Top = 134
+        Width = 310
         Height = 15
-        Caption = 'Folder (relative path supported, no network path)'
+        Caption = 'Folder (emulator relative path supported, no network path)'
+        ShowAccelChar = False
+        Transparent = True
       end
       object LabelVideoPreviewMediaPlayerExecutable: TLabel
-        Left = 96
-        Top = 163
+        Left = 53
+        Top = 195
         Width = 179
         Height = 15
         Caption = 'Media Player File (.exe; .bat; .cmd)'
+        ShowAccelChar = False
+        Transparent = True
       end
       object LabelVideoPreviewMediaPlayerParameters: TLabel
-        Left = 96
-        Top = 211
+        Left = 53
+        Top = 243
         Width = 312
         Height = 15
         Caption = 'Media Player Parameters        (%1 tag required for filename)'
+        ShowAccelChar = False
+        Transparent = True
       end
       object LabelVideoPreviewAutoPlay: TShadowLabel
-        Left = 248
-        Top = 339
-        Width = 118
-        Height = 13
+        Left = 206
+        Top = 371
+        Width = 143
+        Height = 16
         Caption = 'Use With Extreme Caution!'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -9
-        Font.Name = 'Arial'
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
@@ -1301,16 +1399,16 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object LabelVideoPreviewAutoPlayHelp: TShadowLabel
-        Left = 311
-        Top = 326
-        Width = 54
-        Height = 12
+        Left = 283
+        Top = 355
+        Width = 66
+        Height = 16
         Cursor = crHandPoint
         Caption = 'read more...'
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
-        Font.Height = -9
-        Font.Name = 'Tahoma'
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
@@ -1323,16 +1421,40 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelVideoPreviewAutoPlayHelpMouseLeave
       end
       object LabelVideoPreviewDummyVideoParameters: TLabel
-        Left = 96
-        Top = 278
+        Left = 53
+        Top = 310
         Width = 270
         Height = 15
         Caption = 'Dummy Media Player Parameters (%1 tag optional)'
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelSnapDirAutoSearch: TShadowLabel
+        Left = 50
+        Top = 176
+        Width = 379
+        Height = 12
+        Caption = 
+          'Snap Dir Auto-Search: emudir\videosnaps\; snap_dir\videosnaps\; ' +
+          'snap_dir'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -9
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = False
+        ShadowColor = 16119285
+        ShadowEnabled = True
+        EllipsType = etNone
+        Transparent = True
       end
       object VideoPreviewFolder: TEdit
-        Left = 91
-        Top = 135
-        Width = 275
+        Left = 48
+        Top = 151
+        Width = 403
         Height = 21
         Hint = 'Select a Folder For Video Preview'
         AutoSize = False
@@ -1344,8 +1466,8 @@ object FormPreferences: TFormPreferences
         OnChange = VideoPreviewFolderChange
       end
       object ButtonSelectVideoPreviewFolder: TBitBtn
-        Left = 371
-        Top = 134
+        Left = 456
+        Top = 150
         Width = 43
         Height = 23
         Hint = 'Click here to select a folder'
@@ -1354,10 +1476,10 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonSelectVideoPreviewFolderClick
       end
       object PanelVideoPreviewSystems: TPanelEx
-        Left = 91
+        Left = 48
         Top = 32
-        Width = 323
-        Height = 78
+        Width = 450
+        Height = 93
         Color1 = 16448250
         Color2 = clSilver
         Color3 = clYellow
@@ -1368,12 +1490,12 @@ object FormPreferences: TFormPreferences
         Style = vgSolid
         object LabelVideoPreviewSystem: TShadowLabel
           Left = 1
-          Top = 58
-          Width = 321
+          Top = 73
+          Width = 448
           Height = 19
           Alignment = taCenter
           AutoSize = False
-          Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
+          Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
           Color = 16448250
           Font.Charset = ANSI_CHARSET
           Font.Color = clMaroon
@@ -1392,22 +1514,22 @@ object FormPreferences: TFormPreferences
           Tag = -1
           Left = 1
           Top = 1
-          Width = 340
-          Height = 57
+          Width = 468
+          Height = 72
           BorderStyle = bsNone
-          CellSizes.Icon.Height = 55
-          CellSizes.Icon.Width = 40
+          CellSizes.Icon.Height = 72
+          CellSizes.Icon.Width = 56
           Color = clWhite
           EditManager.Font.Charset = ANSI_CHARSET
           EditManager.Font.Color = clBlack
-          EditManager.Font.Height = -8
-          EditManager.Font.Name = 'Arial'
+          EditManager.Font.Height = -9
+          EditManager.Font.Name = 'Verdana'
           EditManager.Font.Style = []
           UseDockManager = False
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Arial'
+          Font.Height = -9
+          Font.Name = 'Verdana'
           Font.Style = []
           GroupFont.Charset = ANSI_CHARSET
           GroupFont.Color = clWindowText
@@ -1416,7 +1538,7 @@ object FormPreferences: TFormPreferences
           GroupFont.Style = []
           Header.Columns.Items = {
             0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-            0006000000800800010100010000000000000154010000FFFFFF1F0001000000
+            00060000008008000101000100000000000001D4010000FFFFFF1F0001000000
             00000000000000000000000000000000}
           Header.Draggable = False
           Header.FixedSingleColumn = True
@@ -1430,7 +1552,7 @@ object FormPreferences: TFormPreferences
           HotTrack.Enabled = True
           HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
           HotTrack.Underline = False
-          ImagesLarge = FormMain.IL_ArcadeSystem_Large
+          ImagesLarge = FormMain.IL_ArcadeSystem_ExtraLarge
           PaintInfoGroup.Expandable = False
           PaintInfoGroup.MarginBottom.CaptionIndent = 4
           PaintInfoItem.BorderColor = 16370824
@@ -1460,10 +1582,10 @@ object FormPreferences: TFormPreferences
           OnItemSelectionChanged = SystemsVideoPreviewItemSelectionChanged
         end
         object PanelEx3: TPanelEx
-          Left = 322
+          Left = 449
           Top = 0
           Width = 1
-          Height = 58
+          Height = 74
           Color1 = clWhite
           Color2 = clSilver
           Color3 = clYellow
@@ -1475,9 +1597,9 @@ object FormPreferences: TFormPreferences
         end
       end
       object VideoPreviewMediaPlayerExecutable: TEdit
-        Left = 91
-        Top = 180
-        Width = 275
+        Left = 48
+        Top = 212
+        Width = 403
         Height = 21
         AutoSize = False
         Ctl3D = True
@@ -1488,8 +1610,8 @@ object FormPreferences: TFormPreferences
         TabOrder = 3
       end
       object ButtonSelectVideoPreviewMediaPlayer: TBitBtn
-        Left = 371
-        Top = 179
+        Left = 456
+        Top = 211
         Width = 43
         Height = 23
         Hint = 'Click here to select a file'
@@ -1498,9 +1620,9 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonSelectVideoPreviewMediaPlayerClick
       end
       object VideoPreviewMediaPlayerParameters: TEdit
-        Left = 91
-        Top = 228
-        Width = 230
+        Left = 48
+        Top = 260
+        Width = 358
         Height = 21
         AutoSize = False
         Ctl3D = True
@@ -1510,8 +1632,8 @@ object FormPreferences: TFormPreferences
         TabOrder = 5
       end
       object ButtonClearVideoPreviewMediaPlayerParameters: TBitBtn
-        Left = 326
-        Top = 227
+        Left = 411
+        Top = 259
         Width = 43
         Height = 23
         Caption = 'Clear'
@@ -1519,8 +1641,8 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonClearVideoPreviewMediaPlayerParametersClick
       end
       object VideoPreviewAutoPlay: TAdvOfficeCheckBox
-        Left = 233
-        Top = 321
+        Left = 190
+        Top = 353
         Width = 69
         Height = 20
         Hint = 'Play video previews automatically when selecting games'
@@ -1531,8 +1653,8 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object ButtonVideoPreviewHelp: TBitBtn
-        Left = 371
-        Top = 328
+        Left = 352
+        Top = 360
         Width = 43
         Height = 23
         Hint = 'A little help please...'
@@ -1541,8 +1663,8 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonVideoPreviewHelpClick
       end
       object VideoPreviewParentGameVideo: TAdvOfficeCheckBox
-        Left = 91
-        Top = 321
+        Left = 48
+        Top = 353
         Width = 121
         Height = 20
         Hint = 'Play video of parent game if video of clone game is not found'
@@ -1553,7 +1675,7 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object VideoPreviewEnabled: TAdvOfficeCheckBox
-        Left = 91
+        Left = 49
         Top = 11
         Width = 70
         Height = 20
@@ -1575,8 +1697,8 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object ButtonResetVideoPreviewMediaPlayerParameters: TBitBtn
-        Left = 371
-        Top = 227
+        Left = 456
+        Top = 259
         Width = 43
         Height = 23
         Hint = 'Reload parameter settings from video_preview.ini'
@@ -1585,8 +1707,8 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonResetVideoPreviewMediaPlayerParametersClick
       end
       object ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtn
-        Left = 230
-        Top = 211
+        Left = 187
+        Top = 243
         Width = 15
         Height = 15
         Hint = 'Why ???'
@@ -1601,8 +1723,8 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonHelpVideoPreviewMediaPlayerParametersClick
       end
       object VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox
-        Left = 109
-        Top = 257
+        Left = 66
+        Top = 289
         Width = 260
         Height = 18
         TabOrder = 13
@@ -1612,8 +1734,8 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object ButtonHelpVideoPreviewPlayDummyVideo: TBitBtn
-        Left = 91
-        Top = 259
+        Left = 48
+        Top = 291
         Width = 15
         Height = 15
         Hint = 'Why ???'
@@ -1628,9 +1750,9 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonHelpVideoPreviewPlayDummyVideoClick
       end
       object VideoPreviewDummyVideoParameters: TEdit
-        Left = 91
-        Top = 295
-        Width = 230
+        Left = 48
+        Top = 327
+        Width = 358
         Height = 21
         AutoSize = False
         Ctl3D = True
@@ -1640,8 +1762,8 @@ object FormPreferences: TFormPreferences
         TabOrder = 15
       end
       object ButtonClearVideoPreviewDummyVideoParameters: TBitBtn
-        Left = 326
-        Top = 294
+        Left = 411
+        Top = 326
         Width = 43
         Height = 23
         Caption = 'Clear'
@@ -1649,14 +1771,30 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonClearVideoPreviewDummyVideoParametersClick
       end
       object ButtonResetVideoPreviewDummyVideoParameters: TBitBtn
-        Left = 371
-        Top = 294
+        Left = 456
+        Top = 326
         Width = 43
         Height = 23
         Hint = 'Reload dummy parameter settings from video_preview.ini'
         Caption = 'Reset'
         TabOrder = 17
         OnClick = ButtonResetVideoPreviewDummyVideoParametersClick
+      end
+      object ButtonSnaplDirAutoSearchHelp: TBitBtn
+        Left = 431
+        Top = 174
+        Width = 15
+        Height = 15
+        Hint = 'What is Auto-Search ?'
+        Caption = '?'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 18
+        OnClick = ButtonSnaplDirAutoSearchHelpClick
       end
     end
   end

@@ -1,6 +1,6 @@
 object FormMain: TFormMain
-  Left = 490
-  Top = 289
+  Left = 1103
+  Top = 651
   Width = 1000
   Height = 570
   Caption = 'Emu Loader'
@@ -37,7 +37,7 @@ object FormMain: TFormMain
         Control = ToolBarButtons
         ImageIndex = -1
         MinHeight = 47
-        Width = 789
+        Width = 766
       end
       item
         Break = False
@@ -45,7 +45,7 @@ object FormMain: TFormMain
         FixedSize = True
         ImageIndex = -1
         MinHeight = 24
-        Width = 195
+        Width = 218
       end>
     EdgeBorders = []
     EdgeInner = esNone
@@ -173,15 +173,15 @@ object FormMain: TFormMain
       end
     end
     object ToolBarFilterTitle: TToolBar
-      Left = 789
+      Left = 766
       Top = 11
-      Width = 195
+      Width = 218
       Height = 24
       AutoSize = True
       ButtonHeight = 24
       Caption = 'Search Bar'
-      Constraints.MaxWidth = 195
-      Constraints.MinWidth = 195
+      Constraints.MaxWidth = 218
+      Constraints.MinWidth = 218
       EdgeBorders = []
       EdgeInner = esNone
       EdgeOuter = esNone
@@ -274,8 +274,19 @@ object FormMain: TFormMain
         ImageIndex = 6
         OnClick = ButtonFilterTitleApplyClick
       end
-      object ButtonFilterTitleReset: TToolButton
+      object ButtonFilterControls: TToolButton
         Left = 168
+        Top = 0
+        Hint = 
+          'Click here to select a controls filter (will be applied automati' +
+          'cally)'
+        AutoSize = True
+        Caption = 'Controls'
+        DropdownMenu = PopupSearchBarControlsFilter
+        ImageIndex = 14
+      end
+      object ButtonFilterTitleReset: TToolButton
+        Left = 191
         Top = 0
         Hint = 'Click here to reset filter to default (main tool bar buttons)'
         AutoSize = True
@@ -365,7 +376,7 @@ object FormMain: TFormMain
           UseDockManager = False
           HintType = ehtToolTip
           Header.Columns.Items = {
-            0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
+            0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
             00060000008008000101000100000000010000FA000000FFFFFF1F0001000000
             01000000070000004D0061006300680069006E00650000000000000000000000
             0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
@@ -382,6 +393,9 @@ object FormMain: TFormMain
             00000000000000000000110000005445617379436F6C756D6E53746F726564FF
             FECE000600000080080001010001050000000000005F000000FFFFFF1F000100
             0000010000000600000044007200690076006500720000000000000000000000
+            0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
+            080001010001060000000000005A000000FFFFFF1F0001000000010000000A00
+            0000530061007600650020005300740061007400650000000000000000000000
             0000}
           Header.Draggable = False
           Header.Height = 23
@@ -733,7 +747,7 @@ object FormMain: TFormMain
           Font.Style = []
           ParentFont = False
           TabOrder = 0
-          OnKeyDown = FilterCPUKeyDown
+          OnKeyPress = FilterCPUKeyPress
         end
         object FilterCPUList: TComboBox
           Left = 179
@@ -806,6 +820,46 @@ object FormMain: TFormMain
         Visible = False
         OnClick = ButtonNoGameROMsWithDevROMsClick
       end
+      object BitBtn1: TBitBtn
+        Left = 432
+        Top = 304
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn1'
+        TabOrder = 7
+        Visible = False
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 456
+        Top = 144
+        Width = 75
+        Height = 25
+        Caption = 'memcard'
+        TabOrder = 8
+        Visible = False
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 480
+        Top = 80
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn3'
+        TabOrder = 9
+        Visible = False
+        OnClick = BitBtn3Click
+      end
+      object BitBtn4: TBitBtn
+        Left = 448
+        Top = 112
+        Width = 105
+        Height = 25
+        Caption = 'Unzip to Stream'
+        TabOrder = 10
+        Visible = False
+        OnClick = BitBtn4Click
+      end
     end
     object PanelScreenshotsArea: TPanelEx
       Left = 614
@@ -856,7 +910,7 @@ object FormMain: TFormMain
           Width = 366
           Height = 22
           AutoSize = True
-          ButtonWidth = 133
+          ButtonWidth = 147
           EdgeInner = esNone
           EdgeOuter = esNone
           Flat = True
@@ -888,7 +942,7 @@ object FormMain: TFormMain
           object WebButtonExit: TToolButton
             Left = 125
             Top = 0
-            Caption = 'Exit Progetto EMMA'
+            Caption = 'Exit Internet Game Info'
             ImageIndex = 12
             OnClick = WebButtonExitClick
           end
@@ -938,11 +992,11 @@ object FormMain: TFormMain
         TabOrder = 0
         object SplitterMAMEInfo: TSplitterEx
           Left = 0
-          Top = 151
+          Top = 108
           Width = 366
           Height = 7
           Cursor = crVSplit
-          Align = alTop
+          Align = alBottom
           Visible = False
           OnCanResize = SplitterMAMEInfoCanResize
           Appearance.BorderColor = clNone
@@ -958,7 +1012,7 @@ object FormMain: TFormMain
         end
         object PanelImage: TPanel
           Left = 0
-          Top = 158
+          Top = 0
           Width = 366
           Height = 108
           Align = alClient
@@ -993,47 +1047,39 @@ object FormMain: TFormMain
           end
         end
         object PanelGameDocuments: TPanel
+          Tag = 1
           Left = 0
-          Top = 0
+          Top = 115
           Width = 366
           Height = 151
-          Align = alTop
+          Align = alBottom
           BevelOuter = bvNone
           Constraints.MinHeight = 50
           TabOrder = 1
           Visible = False
-          object PanelRichEdit: TPanel
+          object MAMEInfoTextHolder: TRichEditURL
             Left = 0
             Top = 0
             Width = 366
             Height = 151
+            TabStop = False
             Align = alClient
-            BevelOuter = bvNone
+            BorderStyle = bsNone
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -12
+            Font.Name = 'Consolas'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            PopupMenu = PopupGameDocuments
+            ReadOnly = True
+            ScrollBars = ssBoth
+            ShowHint = False
             TabOrder = 0
-            object MAMEInfoTextHolder: TRichEditURL
-              Left = 0
-              Top = 0
-              Width = 366
-              Height = 151
-              TabStop = False
-              Align = alClient
-              BorderStyle = bsNone
-              Color = clWhite
-              Font.Charset = ANSI_CHARSET
-              Font.Color = clBlack
-              Font.Height = -12
-              Font.Name = 'Consolas'
-              Font.Style = []
-              ParentFont = False
-              ParentShowHint = False
-              PopupMenu = PopupGameDocuments
-              ReadOnly = True
-              ScrollBars = ssBoth
-              ShowHint = False
-              TabOrder = 0
-              WantReturns = False
-              OnURLClick = MAMEInfoTextHolderURLClick
-            end
+            WantReturns = False
+            OnURLClick = MAMEInfoTextHolderURLClick
           end
         end
       end
@@ -1190,8 +1236,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 632
-    Top = 280
+    Left = 640
+    Top = 112
     object PopupImageStretch: TMenuItem
       Tag = 1
       AutoCheck = True
@@ -1305,9 +1351,10 @@ object FormMain: TFormMain
       ShortCut = 13
       OnClick = PopupPlayGameStandardClick
     end
-    object PopupPlayExtraMAME: TMenuItem
-      Caption = 'Run Game (Extra)'
+    object REMOVE_ME_PopupPlayExtraMAME: TMenuItem
+      Caption = 'INVALID!!! Run Game (Extra)'
       ImageIndex = 18
+      Visible = False
       object PopupRunGamePlaybackInput: TMenuItem
         Tag = 20
         Caption = 'Run Game and Playback Input'
@@ -1348,9 +1395,13 @@ object FormMain: TFormMain
         Tag = 22
         Caption = 'Run Game and Load a Save State'
         ImageIndex = 16
-        Visible = False
         OnClick = PopupRunGamePlaybackInputClick
       end
+    end
+    object PopupPlayGameExtraParametersMAME: TMenuItem
+      Caption = 'Run Game (Extra Parameters)'
+      ImageIndex = 18
+      OnClick = PopupPlayGameExtraParametersMAMEClick
     end
     object PopupRunGameWithAlterMAME: TMenuItem
       Tag = 1
@@ -1360,7 +1411,7 @@ object FormMain: TFormMain
       OnClick = PopupRunGamePlaybackInputClick
     end
     object PopupMachineToRunGame: TMenuItem
-      Caption = 'Machine to Run Game'
+      Caption = 'Select Machine to Run Game'
       Hint = '(none)'
       OnClick = PopupMachineToRunGameClick
     end
@@ -2573,10 +2624,10 @@ object FormMain: TFormMain
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
     end
-    object ButtonShowControlPanelLayout: TMenuItem
+    object ButtonShowSoftwareCover: TMenuItem
       AutoCheck = True
-      Caption = 'Control Panel Layout'
-      Hint = 'Control Panel Layout'
+      Caption = 'Software Cover'
+      Hint = 'Software Cover'
       ImageIndex = 6
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
@@ -2597,10 +2648,9 @@ object FormMain: TFormMain
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
     end
-    object ButtonShowMAWSGameInfo: TMenuItem
+    object ButtonShowInternetGameInfo: TMenuItem
       AutoCheck = True
-      Caption = 'Progetto EMMA Game Info'
-      Hint = 'Progetto EMMA Game Info'
+      Caption = 'Internet Game Info'
       ImageIndex = 9
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
@@ -2685,8 +2735,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 648
-    Top = 120
+    Left = 656
+    Top = 240
     object GameDocumentsFont: TMenuItem
       Caption = 'Text Font'
       OnClick = GameDocumentsFontClick
@@ -2704,8 +2754,6 @@ object FormMain: TFormMain
       Tag = 151
       AutoCheck = True
       Caption = 'Top'
-      Checked = True
-      Default = True
       RadioItem = True
       OnClick = GameDocumentsLayout1_TopClick
     end
@@ -2713,6 +2761,8 @@ object FormMain: TFormMain
       Tag = 151
       AutoCheck = True
       Caption = 'Bottom'
+      Checked = True
+      Default = True
       HelpContext = 1
       RadioItem = True
       OnClick = GameDocumentsLayout1_TopClick
@@ -2851,8 +2901,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 754
-    Top = 6
+    Left = 720
+    Top = 8
     object FilterTextBarIncludeToolBarFilters: TMenuItem
       AutoCheck = True
       Caption = 'Include Tool Bar Filters'
@@ -2865,7 +2915,7 @@ object FormMain: TFormMain
     end
     object FilterGameTitle_Title: TMenuItem
       AutoCheck = True
-      Caption = 'Game Title'
+      Caption = 'Title'
       Checked = True
       Default = True
       RadioItem = True
@@ -3041,7 +3091,7 @@ object FormMain: TFormMain
       OnClick = MenuCustomizeSoftwareListClick
     end
     object MenuAddMAMEDeviceSetsWithNoROMs: TMenuItem
-      Caption = 'Add MAME Device Sets With No ROMs'
+      Caption = 'Add MAME Device Sets With No ROMs (DO NOT REMOVE!!!)'
       Visible = False
     end
     object N18: TMenuItem
@@ -3351,27 +3401,6 @@ object FormMain: TFormMain
         ShortCut = 16457
         OnClick = MenuImagesEnableToolBarClick
       end
-      object N8: TMenuItem
-        Caption = '-'
-        Hint = 'Game info from internet'
-      end
-      object MenuImageUseProgettoEMMAInternetInfo: TMenuItem
-        Tag = 1
-        AutoCheck = True
-        Caption = 'Use ProgettoEMMA Info (Internet)'
-        Checked = True
-        Default = True
-        Hint = 'http://www.progettoemma.net'
-        RadioItem = True
-        OnClick = MenuImageUseMAWSInternetInfoClick
-      end
-      object MenuImageUseMAWSInternetInfo: TMenuItem
-        AutoCheck = True
-        Caption = 'Use MAWS Info (Internet)'
-        Hint = 'http://maws.mameworld.info'
-        RadioItem = True
-        OnClick = MenuImageUseMAWSInternetInfoClick
-      end
       object N14: TMenuItem
         Caption = '-'
       end
@@ -3408,19 +3437,6 @@ object FormMain: TFormMain
         AutoCheck = True
         Caption = 'Layout Prev/Next Auto Switch'
         Hint = 'Switch layout with prev/next image buttons'
-      end
-      object N31: TMenuItem
-        Caption = '-'
-        Hint = 'Software List Games Snapshot (MAME)'
-      end
-      object MenuImageUseCustomSoftListSnapName: TMenuItem
-        AutoCheck = True
-        Caption = 'Use Custom "snapname" To Take Snapshots'
-        Hint = '-snapname softlistname/gamename'
-      end
-      object MenuImageUseCustomSoftListSnapNameHelp: TMenuItem
-        Caption = 'Help'
-        ImageIndex = 10
       end
       object N44: TMenuItem
         Caption = '-'
@@ -3581,6 +3597,10 @@ object FormMain: TFormMain
         Hint = 'http://mamedev.org/devwiki'
         OnClick = MenuVisitEmuLoaderHomepageClick
       end
+      object HelpMAMEDocumentation: TMenuItem
+        Caption = 'MAME Documentation'
+        Hint = 'http://docs.mamedev.org/index.html'
+      end
       object N35: TMenuItem
         Caption = '-'
       end
@@ -3617,6 +3637,11 @@ object FormMain: TFormMain
         Visible = False
         OnClick = MenuValidateMAMECHDTypesClick
       end
+      object CreateSupermodelXMLdatFromSourceFile1: TMenuItem
+        Caption = 'Create Supermodel XML dat From Source File'
+        Visible = False
+        OnClick = CreateSupermodelXMLdatFromSourceFile1Click
+      end
     end
     object N17: TMenuItem
       Caption = '-'
@@ -3625,61 +3650,6 @@ object FormMain: TFormMain
       Caption = 'Exit'
       ImageIndex = 2
       OnClick = MenuExitClick
-    end
-    object oldExportGamesToFile1: TMenuItem
-      Caption = 'old Export Games To File'
-      Visible = False
-      object MenuExportAllFilesFullFormat: TMenuItem
-        Caption = 'All Games (Full Format)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportVisibleGamesFullFormat: TMenuItem
-        Tag = 1
-        Caption = 'Visible Games (Full Format)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportAllSelectedGamesGameNameOnly: TMenuItem
-        Tag = 4
-        Caption = 'Selected Games (Full Format)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object N23: TMenuItem
-        Caption = '-'
-      end
-      object MenuExportAllGamesGameNameOnly: TMenuItem
-        Tag = 2
-        Caption = 'All Games (Game Name = System)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportVisibleGamesGameNameOnly: TMenuItem
-        Tag = 3
-        Caption = 'Visible Games (Game Name = System)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportAllSelectedGames: TMenuItem
-        Tag = 5
-        Caption = 'Selected Games (Game Name = System)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object N11: TMenuItem
-        Caption = '-'
-        Hint = 'MAME Content Manager Plus'
-      end
-      object MenuExportMCMPlusAllGames: TMenuItem
-        Tag = 6
-        Caption = 'All Games (MAME / HBMAME)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportMCMPlusVisibleGames: TMenuItem
-        Tag = 7
-        Caption = 'Visible Games (MAME / HBMAME)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
-      object MenuExportMCMPlusAllSelectedGames: TMenuItem
-        Tag = 8
-        Caption = 'Selected Games (MAME / HBMAME)'
-        OnClick = MenuExportAllFilesFullFormatClick
-      end
     end
   end
   object PopupSplitters: TBcBarPopupMenu
@@ -3712,8 +3682,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 728
-    Top = 240
+    Left = 704
+    Top = 120
     object CenterSplitter1: TMenuItem
       Caption = 'Center This Splitter'
       OnClick = CenterSplitter1Click
@@ -3951,6 +3921,37 @@ object FormMain: TFormMain
         OnClick = ListAll1Click
       end
     end
+    object PopupMachinesListSidePanelFiltersSaveState: TMenuItem
+      Caption = 'Save State'
+      object PopupMachinesListSidePanelFiltersSaveState_ListAll: TMenuItem
+        AutoCheck = True
+        Caption = 'List All'
+        Checked = True
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelFiltersSaveState_ListAllClick
+      end
+      object PopupMachinesListSidePanelFiltersSaveState_Supported: TMenuItem
+        Tag = 1
+        AutoCheck = True
+        Caption = 'Supported'
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelFiltersSaveState_ListAllClick
+      end
+      object PopupMachinesListSidePanelFiltersSaveState_Unsupported: TMenuItem
+        Tag = 2
+        AutoCheck = True
+        Caption = 'Unsupported'
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelFiltersSaveState_ListAllClick
+      end
+      object PopupMachinesListSidePanelFiltersSaveState_Unknown: TMenuItem
+        Tag = 3
+        AutoCheck = True
+        Caption = 'Unknown'
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelFiltersSaveState_ListAllClick
+      end
+    end
     object PopupMachinesListSidePanelCustomSettings: TMenuItem
       Caption = 'Custom Settings'
       Visible = False
@@ -3984,5 +3985,36 @@ object FormMain: TFormMain
       Caption = 'Reset Columns Width'
       OnClick = PopupMachinesListSidePanelResetColumnsWidthClick
     end
+  end
+  object PopupSearchBarControlsFilter: TBcBarPopupMenu
+    Tag = 1
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 688
+    Top = 8
   end
 end

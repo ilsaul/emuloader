@@ -150,11 +150,11 @@ object FormScanResults: TFormScanResults
       object LabelEmulatorVersion: TShadowLabel
         Left = 53
         Top = 2
-        Width = 426
+        Width = 366
         Height = 14
         Caption = 
-          'HBMAME: HomeBrew Multiple Arcade Machine Emulator v0.151.10 (Mar' +
-          ' 14 2013)'
+          'Supermodel: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 201' +
+          '2)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
         Font.Height = -11
@@ -170,11 +170,11 @@ object FormScanResults: TFormScanResults
       object LabelGamesListVersion: TShadowLabel
         Left = 76
         Top = 16
-        Width = 390
+        Width = 343
         Height = 14
         Caption = 
-          'HBMAME: HomeBrew Multiple Arcade Machine Emulator v0.151.10 (Mar' +
-          ' 14 2013)'
+          'Supermodel: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 201' +
+          '2)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11

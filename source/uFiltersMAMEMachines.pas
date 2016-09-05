@@ -28,6 +28,7 @@ type
     EnableMAMEMachinesSidePanel: TAdvOfficeCheckBox;
     Label1: TLabel;
     Label2: TLabel;
+    Label4: TLabel;
     procedure LabelCategoryIniForMESSMouseEnter(Sender: TObject);
     procedure LabelCategoryIniForMESSClick(Sender: TObject);
     procedure LabelCategoryIniForMESSMouseLeave(Sender: TObject);

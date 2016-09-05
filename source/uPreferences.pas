@@ -35,7 +35,6 @@ type
     ButtonGamesList: TSpeedButton;
     ButtonImages: TSpeedButton;
     ButtonGameDocuments: TSpeedButton;
-    Bevel1: TBevel;
     ButtonVideoPreview: TSpeedButton;
     LabelVideoPreviewTitle: TShadowLabel;
     VideoPreviewFolder: TEdit;
@@ -127,6 +126,17 @@ type
     GamesListStatusBarTopColor: TColorBox;
     GamesListStatusBarFontColor: TColorBox;
     GamesListStatusBarFrameColor: TColorBox;
+    GroupBoxInternetGameInfo: TAdvGroupBox;
+    LabelInternetGameInfoLink: TLabel;
+    InternetGameInfoLink: TEdit;
+    InternetGameInfoLinkButtonDefault: TBitBtn;
+    LabelInternetMAMESoftwareListGameInfoLink: TLabel;
+    InternetMAMESoftwareListGameInfoLink: TEdit;
+    InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn;
+    Label5: TLabel;
+    Label6: TLabel;
+    LabelSnapDirAutoSearch: TShadowLabel;
+    ButtonSnaplDirAutoSearchHelp: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -192,6 +202,9 @@ type
     procedure GamesListStatusBarFrameColorSelect(Sender: TObject);
     procedure GamesListStatusBarFontColorSelect(Sender: TObject);
     procedure GamesListStatusBarButtonDefaultClick(Sender: TObject);
+    procedure InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
+    procedure InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
+    procedure ButtonSnaplDirAutoSearchHelpClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -285,7 +298,7 @@ begin
   case GamesBackgroundImageEnable.Checked of
     True:
       begin
-        FileFullPath:= FormMain.FullFolderFix(GamesBackgroundImage.Text);
+        FileFullPath:= FormMain.FullFolderFix(GamesBackgroundImage.Text, '', True);
         if (not FileExists(FileFullPath)) or (FileFullPath = '') then
            begin
              if not FormMain.IsStartup then
@@ -536,7 +549,7 @@ end;
 procedure TFormPreferences.ButtonSelectVideoPreviewMediaPlayerClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(2, 'Select a media player executable', VideoPreviewMediaPlayerExecutable, False);
-  FormMain.ReadVideoPreviewIni(True, True, False);
+  FormMain.ReadVideoPreviewIni(True, True, False, False);
 end;
 
 procedure TFormPreferences.ButtonClearVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -551,6 +564,10 @@ begin
      begin
        if not Application.Terminated then
           begin
+            if InternetGameInfoLink.Text = '' then
+               InternetGameInfoLinkButtonDefault.Click;
+            if InternetMAMESoftwareListGameInfoLink.Text = '' then
+               InternetMAMESoftwareListGameInfoLinkButtonDefault.Click;
             FormMain.UpdateVideoPreviewIni;
             FormMain.SetVideoPreviewState;
           end;
@@ -607,7 +624,7 @@ end;
 procedure TFormPreferences.ButtonResetVideoPreviewMediaPlayerParametersClick(
   Sender: TObject);
 begin
-  FormMain.ReadVideoPreviewIni(False, True, False);
+  FormMain.ReadVideoPreviewIni(False, True, False, False);
 end;
 
 procedure TFormPreferences.ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -718,7 +735,7 @@ end;
 
 procedure TFormPreferences.ButtonResetVideoPreviewDummyVideoParametersClick(Sender: TObject);
 begin
-  FormMain.ReadVideoPreviewIni(False, False, True);
+  FormMain.ReadVideoPreviewIni(False, False, True, False);
 end;
 
 procedure TFormPreferences.ImagePanelOuterFrameColorSelect(
@@ -773,6 +790,43 @@ begin
   SetDefaultColorBox(GamesListStatusBarFontColor);
   SetDefaultColorBox(GamesListStatusBarFrameColor);
   GamesListStatusBarGradientBar.Checked:= True;
+end;
+
+procedure TFormPreferences.InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
+begin
+  InternetGameInfoLink.Text:= 'http://www.progettoemma.net/gioco.php?game=%s';
+end;
+
+procedure TFormPreferences.InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
+begin
+  InternetMAMESoftwareListGameInfoLink.Text:= 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s';
+end;
+
+procedure TFormPreferences.ButtonSnaplDirAutoSearchHelpClick(
+  Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('    You can place your video files in emulator''s folder or game snapshot folders. By doing this you don''t need '+
+                      'to select custom folders for video files. All systems are supported, not just MAME. You have three choices:'+#13#10+#13#10);
+  FormMain.AddMsgText('1.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' create a ');
+  FormMain.AddMsgText('videosnaps', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' sub-folder in the emulator root folder (');
+  FormMain.AddMsgText('emu_dir\videosnaps', $00a65300, [fsBold]);
+  FormMain.AddMsgText(').'+#13#10);
+  FormMain.AddMsgText('2.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' create a ');
+  FormMain.AddMsgText('videosnaps', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' sub-folder in the "snap_dir" folder (');
+  FormMain.AddMsgText('snap_dir\videosnaps', $00a65300, [fsBold]);
+  FormMain.AddMsgText(').'+#13#10);
+  FormMain.AddMsgText('3.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' mixed together with image files in the ');
+  FormMain.AddMsgText('snap_dir', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' root folder (not recommended).'+#13#10#13#10+
+                      '    Note that even if you select a custom folder for your video files, if not '+
+                      'found, the files will also be searched in these folders!');
+  GenerateMessage('Help', 'What is Snap Dir Auto-Search ?');
 end;
 
 end.

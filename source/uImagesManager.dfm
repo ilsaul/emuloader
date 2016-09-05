@@ -3,7 +3,8 @@ object FormImagesManager: TFormImagesManager
   Top = 244
   Width = 931
   Height = 550
-  Caption = 'MAME Images Manager'
+  BorderIcons = [biSystemMenu, biMaximize]
+  Caption = 'MAME Images Manager (Unzipped Images Only!)'
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -270,15 +271,30 @@ object FormImagesManager: TFormImagesManager
     object LabelTotalItemsNotUsed: TLabel
       Left = 610
       Top = 0
-      Width = 130
+      Width = 118
       Height = 23
-      Caption = ' 000000 not Used Images'
+      Caption = ' 000000 Invalid Images'
       Constraints.MinHeight = 23
       Layout = tlCenter
     end
-    object ButtonNotUsedDeleteFiles: TSpeedButton
-      Left = 768
+    object ButtonInvalidImagesDeleteFiles: TSpeedButton
+      Left = 776
       Top = 0
+      Width = 137
+      Height = 22
+      Caption = 'Delete Invalid Images'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = ButtonInvalidImagesDeleteFilesClick
+    end
+    object ButtonNotUsedImagesDeleteFiles: TSpeedButton
+      Left = 162
+      Top = 1
       Width = 145
       Height = 22
       Caption = 'Delete Not Used Images'
@@ -289,7 +305,7 @@ object FormImagesManager: TFormImagesManager
       Font.Name = 'Trebuchet MS'
       Font.Style = [fsBold]
       ParentFont = False
-      OnClick = ButtonNotUsedDeleteFilesClick
+      OnClick = ButtonNotUsedImagesDeleteFilesClick
     end
   end
   object PanelToolBarButtons: TPanelEx
@@ -331,44 +347,32 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 0
       OnClick = ButtonImageCategoryClick
     end
-    object ButtonScanBoth: TBitBtn
-      Left = 184
+    object ButtonScanMissing: TBitBtn
+      Left = 183
       Top = 2
-      Width = 65
+      Width = 124
       Height = 26
-      Hint = 'Click here to scan missing and not used images'
-      Caption = 'Scan Both'
+      Hint = 'Click here to scan games with missing  images'
+      Caption = 'Scan Missing Images'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
-      OnClick = ButtonScanBothClick
+      OnClick = ButtonScanMissingClick
     end
-    object ButtonScanMissing: TBitBtn
-      Left = 255
+    object ButtonScanInvalidImages: TBitBtn
+      Left = 443
       Top = 2
-      Width = 90
+      Width = 118
       Height = 26
-      Hint = 'Click here to scan games with missing  images'
-      Caption = 'Scan Missing'
+      Hint = 'Click here to scan unknown image filenames, not used by any game'
+      Caption = 'Scan Invalid Images'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
-      OnClick = ButtonScanMissingClick
-    end
-    object ButtonScanNotUsed: TBitBtn
-      Left = 351
-      Top = 2
-      Width = 160
-      Height = 26
-      Hint = 'Click here to scan not used images'
-      Caption = 'Scan Not Used'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 4
-      OnClick = ButtonScanNotUsedClick
+      OnClick = ButtonScanInvalidImagesClick
     end
     object ButtonHelp: TBitBtn
-      Left = 518
+      Left = 590
       Top = 2
       Width = 38
       Height = 26
@@ -378,6 +382,18 @@ object FormImagesManager: TFormImagesManager
       ShowHint = True
       TabOrder = 1
       OnClick = ButtonHelpClick
+    end
+    object ButtonScanNotUsedImages: TBitBtn
+      Left = 311
+      Top = 2
+      Width = 128
+      Height = 26
+      Hint = 'Click here to search available images for missing games'
+      Caption = 'Scan Not Used Images'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = ButtonScanNotUsedImagesClick
     end
   end
   object IL_Buttons: TImageList
@@ -430,7 +446,7 @@ object FormImagesManager: TFormImagesManager
     end
     object N2: TMenuItem
       Caption = '-'
-      Hint = 'Scan settings'
+      Hint = 'Scan Settings'
     end
     object PopupSearchCloneImages: TMenuItem
       AutoCheck = True
@@ -448,6 +464,11 @@ object FormImagesManager: TFormImagesManager
       AutoCheck = True
       Caption = 'Scan Device Sets'
     end
+    object PopupScanArcadeMachines: TMenuItem
+      AutoCheck = True
+      Caption = 'Scan Arcade Games/Machines'
+      Checked = True
+    end
     object PopupScanSoftwareListGames: TMenuItem
       AutoCheck = True
       Caption = 'Scan Software List Games'
@@ -455,6 +476,7 @@ object FormImagesManager: TFormImagesManager
     object PopupScanNonArcadeMachines: TMenuItem
       AutoCheck = True
       Caption = 'Scan Non-Arcade Machines'
+      Checked = True
     end
     object N1: TMenuItem
       Caption = '-'

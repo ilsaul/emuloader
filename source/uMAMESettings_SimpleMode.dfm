@@ -5,7 +5,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
   BorderStyle = bsDialog
   Caption = 'Emulator Settings (Basic Mode)'
   ClientHeight = 414
-  ClientWidth = 581
+  ClientWidth = 565
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -26,7 +26,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
   object NotebookPages: TNotebook
     Left = 0
     Top = 72
-    Width = 581
+    Width = 565
     Height = 311
     Color = 15856113
     ParentColor = False
@@ -36,7 +36,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       Top = 0
       Caption = 'Folders'
       object FolderROMsDisksBox: TLabel
-        Left = 16
+        Left = 9
         Top = 15
         Width = 169
         Height = 15
@@ -45,7 +45,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Transparent = True
       end
       object LabelFolderGameSnapshots: TLabel
-        Left = 16
+        Left = 9
         Top = 211
         Width = 155
         Height = 15
@@ -54,7 +54,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
       end
       object LabelFolderNVRAM: TLabel
-        Left = 304
+        Left = 295
         Top = 211
         Width = 185
         Height = 15
@@ -63,7 +63,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
       end
       object LabelFolderArtworks: TLabel
-        Left = 304
+        Left = 295
         Top = 120
         Width = 219
         Height = 15
@@ -72,7 +72,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
       end
       object LabelFolderSamples: TLabel
-        Left = 16
+        Left = 9
         Top = 257
         Width = 104
         Height = 15
@@ -81,7 +81,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
       end
       object LabelFolderInputDeviceLogs: TLabel
-        Left = 303
+        Left = 294
         Top = 257
         Width = 186
         Height = 15
@@ -90,7 +90,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
       end
       object LabelFolderIniFiles: TLabel
-        Left = 16
+        Left = 9
         Top = 120
         Width = 80
         Height = 15
@@ -102,9 +102,9 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderROMs: TEasyListview
         Tag = 1
-        Left = 15
+        Left = 8
         Top = 32
-        Width = 464
+        Width = 462
         Height = 80
         Hint = 'Path To ROM Sets And Hard Disk Images'
         BackGround.Enabled = True
@@ -120,7 +120,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000001CC010000FFFFFF1F0001000000
+          00060000008008000101000100000000000001CA010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -163,7 +163,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderROMsButtonUp: TBitBtn
         Tag = 1
-        Left = 480
+        Left = 471
         Top = 32
         Width = 43
         Height = 21
@@ -176,7 +176,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonUpClick
       end
       object FolderROMsButtonDown: TBitBtn
-        Left = 523
+        Left = 514
         Top = 32
         Width = 43
         Height = 21
@@ -189,7 +189,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonUpClick
       end
       object FolderROMsButtonSelect: TBitBtn
-        Left = 480
+        Left = 471
         Top = 70
         Width = 43
         Height = 21
@@ -201,7 +201,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonSelectClick
       end
       object FolderROMsButtonEdit: TBitBtn
-        Left = 523
+        Left = 514
         Top = 70
         Width = 43
         Height = 21
@@ -211,7 +211,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonEditClick
       end
       object FolderROMsButtonDelete: TBitBtn
-        Left = 480
+        Left = 471
         Top = 91
         Width = 43
         Height = 21
@@ -221,7 +221,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonDeleteClick
       end
       object FolderROMsButtonClear: TBitBtn
-        Left = 523
+        Left = 514
         Top = 91
         Width = 43
         Height = 21
@@ -233,7 +233,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderROMsButtonClearClick
       end
       object FolderSamples: TEdit
-        Left = 16
+        Left = 9
         Top = 274
         Width = 217
         Height = 21
@@ -248,7 +248,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 7
       end
       object FolderSamplesButtonSelect: TBitBtn
-        Left = 235
+        Left = 228
         Top = 274
         Width = 43
         Height = 21
@@ -260,7 +260,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderSamplesButtonSelectClick
       end
       object FolderGameSnapshots: TEdit
-        Left = 16
+        Left = 9
         Top = 228
         Width = 217
         Height = 21
@@ -275,7 +275,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 9
       end
       object FolderGameSnapshotsButtonSelect: TBitBtn
-        Left = 235
+        Left = 228
         Top = 228
         Width = 43
         Height = 21
@@ -287,7 +287,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderGameSnapshotsButtonSelectClick
       end
       object FolderNVRAM: TEdit
-        Left = 304
+        Left = 295
         Top = 228
         Width = 217
         Height = 21
@@ -302,7 +302,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 11
       end
       object FolderNVRAMButtonSelect: TBitBtn
-        Left = 523
+        Left = 514
         Top = 228
         Width = 43
         Height = 21
@@ -315,7 +315,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderArtworks: TEasyListview
         Tag = 1
-        Left = 304
+        Left = 295
         Top = 137
         Width = 262
         Height = 44
@@ -376,7 +376,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderArtworksButtonUp: TBitBtn
         Tag = 1
-        Left = 304
+        Left = 295
         Top = 183
         Width = 43
         Height = 21
@@ -389,7 +389,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonUpClick
       end
       object FolderArtworksButtonDown: TBitBtn
-        Left = 347
+        Left = 338
         Top = 183
         Width = 43
         Height = 21
@@ -402,7 +402,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonUpClick
       end
       object FolderArtworksButtonSelect: TBitBtn
-        Left = 394
+        Left = 385
         Top = 183
         Width = 43
         Height = 21
@@ -414,7 +414,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonSelectClick
       end
       object FolderArtworksButtonEdit: TBitBtn
-        Left = 437
+        Left = 428
         Top = 183
         Width = 43
         Height = 21
@@ -424,7 +424,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonEditClick
       end
       object FolderArtworksButtonDelete: TBitBtn
-        Left = 480
+        Left = 471
         Top = 183
         Width = 43
         Height = 21
@@ -434,7 +434,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonDeleteClick
       end
       object FolderArtworksButtonClear: TBitBtn
-        Left = 523
+        Left = 514
         Top = 183
         Width = 43
         Height = 21
@@ -446,7 +446,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderArtworksButtonClearClick
       end
       object FolderInputDeviceLogs: TEdit
-        Left = 303
+        Left = 294
         Top = 274
         Width = 217
         Height = 21
@@ -461,7 +461,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 20
       end
       object FolderInputDeviceLogsButtonSelect: TBitBtn
-        Left = 522
+        Left = 513
         Top = 274
         Width = 43
         Height = 21
@@ -474,7 +474,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderIniFiles: TEasyListview
         Tag = 1
-        Left = 15
+        Left = 8
         Top = 137
         Width = 262
         Height = 44
@@ -535,7 +535,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
       object FolderIniFilesButtonUp: TBitBtn
         Tag = 1
-        Left = 15
+        Left = 8
         Top = 183
         Width = 43
         Height = 21
@@ -548,7 +548,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderIniFilesButtonUpClick
       end
       object FolderIniFilesButtonDown: TBitBtn
-        Left = 58
+        Left = 51
         Top = 183
         Width = 43
         Height = 21
@@ -561,7 +561,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderIniFilesButtonUpClick
       end
       object FolderIniFilesButtonSelect: TBitBtn
-        Left = 105
+        Left = 98
         Top = 183
         Width = 43
         Height = 21
@@ -573,7 +573,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderIniFilesButtonSelectClick
       end
       object FolderIniFilesButtonEdit: TBitBtn
-        Left = 148
+        Left = 141
         Top = 183
         Width = 43
         Height = 21
@@ -583,7 +583,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderIniFilesButtonEditClick
       end
       object FolderIniFilesButtonDelete: TBitBtn
-        Left = 191
+        Left = 184
         Top = 183
         Width = 43
         Height = 21
@@ -593,7 +593,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnClick = FolderIniFilesButtonDeleteClick
       end
       object FolderIniFilesButtonClear: TBitBtn
-        Left = 234
+        Left = 227
         Top = 183
         Width = 43
         Height = 21
@@ -610,7 +610,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       Top = 0
       Caption = 'Video and Audio'
       object LabelVideoOutputMode: TAdvGroupBox
-        Left = 16
+        Left = 8
         Top = 15
         Width = 141
         Height = 165
@@ -801,7 +801,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object FullScreenBox: TAdvGroupBox
-        Left = 420
+        Left = 412
         Top = 15
         Width = 125
         Height = 63
@@ -835,7 +835,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object PerformanceGroupBox: TAdvGroupBox
-        Left = 172
+        Left = 164
         Top = 15
         Width = 233
         Height = 63
@@ -911,7 +911,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object Mouse: TAdvOfficeCheckBox
-        Left = 172
+        Left = 164
         Top = 162
         Width = 97
         Height = 20
@@ -923,7 +923,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object Joystick: TAdvOfficeCheckBox
-        Left = 308
+        Left = 300
         Top = 162
         Width = 99
         Height = 20
@@ -935,7 +935,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object SkipGameInfo: TAdvOfficeCheckBox
-        Left = 420
+        Left = 412
         Top = 115
         Width = 103
         Height = 20
@@ -947,7 +947,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object Cheat: TAdvOfficeCheckBox
-        Left = 420
+        Left = 412
         Top = 135
         Width = 105
         Height = 20
@@ -959,7 +959,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object LabelScreenRotation: TAdvGroupBox
-        Left = 172
+        Left = 164
         Top = 91
         Width = 233
         Height = 63
@@ -1017,7 +1017,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object ReadConfigFiles: TAdvOfficeCheckBox
-        Left = 420
+        Left = 412
         Top = 95
         Width = 113
         Height = 20
@@ -1031,7 +1031,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object GroupBoxAudio: TAdvGroupBox
-        Left = 372
+        Left = 364
         Top = 192
         Width = 189
         Height = 84
@@ -1134,7 +1134,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object VectorGroupBox: TAdvGroupBox
-        Left = 16
+        Left = 8
         Top = 192
         Width = 328
         Height = 84
@@ -1216,7 +1216,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     end
   end
   object ButtonReadFile: TBitBtn
-    Left = 16
+    Left = 8
     Top = 383
     Width = 89
     Height = 25
@@ -1226,7 +1226,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 379
+    Left = 370
     Top = 383
     Width = 89
     Height = 25
@@ -1236,7 +1236,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     TabOrder = 2
   end
   object ButtonCancel: TBitBtn
-    Left = 477
+    Left = 468
     Top = 383
     Width = 89
     Height = 25
@@ -1261,7 +1261,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 493
+      Width = 477
       Height = 26
       AutoSize = False
       Caption = 
@@ -1284,7 +1284,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     object LabelEmulatorVersion: TShadowLabel
       Left = 86
       Top = 28
-      Width = 580
+      Width = 370
       Height = 25
       AutoSize = False
       Caption = 
@@ -1319,7 +1319,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 469
+      Left = 453
       Top = 26
       Width = 110
       Height = 27
@@ -1342,7 +1342,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     end
   end
   object ToolBarPages: TToolBar
-    Left = 381
+    Left = 365
     Top = 60
     Width = 200
     Height = 21
@@ -1389,7 +1389,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     end
   end
   object ButtonResetToDefault: TBitBtn
-    Left = 109
+    Left = 101
     Top = 383
     Width = 89
     Height = 25
@@ -1399,7 +1399,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     OnClick = ButtonResetToDefaultClick
   end
   object ButtonReadFileHelp: TBitBtn
-    Left = 202
+    Left = 194
     Top = 388
     Width = 15
     Height = 15
@@ -1415,7 +1415,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     OnClick = ButtonReadFileHelpClick
   end
   object ButtonHelpSaveValidateAllCustomFiles: TBitBtn
-    Left = 160
+    Left = 144
     Top = 62
     Width = 15
     Height = 15
@@ -1431,7 +1431,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     OnClick = ButtonHelpSaveValidateAllCustomFilesClick
   end
   object SaveValidateAllCustomFiles: TAdvOfficeCheckBox
-    Left = 178
+    Left = 162
     Top = 60
     Width = 195
     Height = 20

@@ -26,7 +26,6 @@ type
     FullScreen: TAdvOfficeCheckBox;
     MultiTexture: TAdvOfficeCheckBox;
     InputGroupBox: TAdvGroupBox;
-    LabelInputSystem: TLabel;
     InputSystem: TComboBox;
     ButtonConfigInput: TBitBtn;
     EnableForceFeedback: TAdvOfficeCheckBox;
@@ -48,9 +47,6 @@ type
     PowerPCFrequencyCustom: TEdit;
     Multithreading: TAdvOfficeCheckBox;
     GPUMultithreading: TAdvOfficeCheckBox;
-    DisableVSync: TAdvOfficeCheckBox;
-    LabelCrosshairs: TLabel;
-    Crosshairs: TComboBox;
     ButtonReadFile: TBitBtn;
     LabelReadFileIni: TShadowLabel;
     ButtonOk: TBitBtn;
@@ -68,6 +64,12 @@ type
     LabelGameTitle: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     LabelGameStatus: TShadowLabel;
+    LabelVideo3DEngine: TLabel;
+    Video3DEngine: TComboBox;
+    Crosshairs: TComboBox;
+    LabelCrosshairs: TLabel;
+    Label1: TLabel;
+    DisableVSync: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -102,12 +104,14 @@ type
   private
     { Private declarations }
     //procedure PopulateScreenResolution;
-    procedure ReadSupermodelIni(iniFile: String);
-    procedure WriteSupermodelIni(iniFile: String);
+    procedure ReadSupermodelIni(const iniFile: String; IsCustom: Boolean);
+    procedure WriteSupermodelIni(const iniFile: String; IsCustom: Boolean);
   public
     { Public declarations }
-    emuIni: String;
-    GameIni: String;
+    emuIni,
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
   end;
 
 var
@@ -134,11 +138,12 @@ begin
   FreeAndNil(ScreenResolutions);
 end;}
 
-procedure TFormSupermodelSettings.ReadSupermodelIni(iniFile: String);
+procedure TFormSupermodelSettings.ReadSupermodelIni(const iniFile: String; IsCustom: Boolean);
 var
   elCFG, emuFile: TMemIniFile;
   StrValue: String;
   IntValue: Integer;
+  CustomEntryList: TStringList;
 
   function GetInputSystemIndex(const InputStr: String): Integer;
   begin
@@ -156,82 +161,172 @@ var
        Result:= 3;
   end;
 
+  function CustomSettingExist(const EntryStr: String): Boolean;
+  begin
+    case IsCustom of
+      True : Result:= CustomEntryList.IndexOf(EntryStr) <> -1;
+      False: Result:= True; // always return TRUE; default settings is being read!!!
+    end;
+  end;
+
 begin
-  //if FormSupermodelSettings.Tag = 0 then
-  //   begin
-       // ROMs folders only available on emulator default settings
-       try
-         elCFG:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'folders_emulators.ini');
-         StrValue:= elCFG.ReadString(FormMain.GetSystemIniSection(idSupermodel), 'roms_path', 'roms');
-       finally
-          FreeAndNil(elCFG);
-       end;
-       FormMain.ClearListView(FolderROMs);
-       if StrValue = '' then
-          StrValue:= 'roms';
-       if StrValue <> '' then
-          FormMain.ExtractROMsFolders(StrValue, idSupermodel, FolderROMs);
-  //   end;
+  try
+    elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+    StrValue:= elCFG.ReadString(FormMain.GetSystemIniSection(idSupermodel), 'roms_path', 'roms');
+  finally
+     FreeAndNil(elCFG);
+  end;
+  FormMain.ClearListView(FolderROMs);
+  if StrValue = '' then
+     StrValue:= 'roms';
+  if StrValue <> '' then
+     FormMain.ExtractROMsFolders(StrValue, idSupermodel, FolderROMs);
+
   if not FileExists(iniFile) then
      Exit;
+
   emuFile:= TMemIniFile.Create(iniFile);
-  Multithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'Multithreading', 1));
-  GPUMultithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'GPUMultithreading', 1));
 
-  IntValue:= emuFile.ReadInteger('Emulation', 'PowerPCFrequency', 5);
-  if not (IntValue in [0..8]) then
-     IntValue:= 5; // 50 MHz (default)
-  PowerPCFrequency.Position:= IntValue;
-  StrValue:= emuFile.ReadString('Emulation', 'PowerPCFrequencyCustom', '');
-  PowerPCFrequencyCustom.Text:= StrValue;
+  if IsCustom then
+  begin
+    CustomEntryList:= TStringList.Create;
+    CustomEntryList.LoadFromFile(iniFile);
+    CustomEntryList.BeginUpdate;
+    for IntValue:=CustomEntryList.Count-1 downto 0 do
+    begin
+      StrValue:= CustomEntryList[IntValue];
+      if StrValue <> '' then
+      begin
+        if StrValue[1] = '[' then
+           CustomEntryList.Delete(IntValue)
+        else
+        if PosEx('=', StrValue) <> 0 then
+           CustomEntryList[IntValue]:= CustomEntryList.Names[IntValue];
+      end;
+    end;
+    CustomEntryList.EndUpdate;
+  end;
 
-  StrValue:= emuFile.ReadString('Video', 'Resolution', 'auto');
-  IntValue:= ScreenResolution.Items.IndexOf(StrValue);
-  if IntValue <> -1 then
-     ScreenResolution.ItemIndex:= IntValue
-  else
-     ScreenResolution.ItemIndex:= 0;
+  if CustomSettingExist('Multithreading') then
+     Multithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'Multithreading', 1));
 
-  FullScreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'FullScreen', 0));
-  Widescreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'Widescreen', 0));
-  MultiTexture.Checked:= Boolean(emuFile.ReadInteger('Video', 'MultiTexture', 1));
-  DisableThrottle.Checked:= Boolean(emuFile.ReadInteger('Video', 'DisableThrottle', 0));
-  ShowFPS.Checked:= Boolean(emuFile.ReadInteger('Video', 'ShowFPS', 0));
+  if CustomSettingExist('GPUMultithreading') then
+     GPUMultithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'GPUMultithreading', 1));
 
-  DisableSound.Checked:= Boolean(emuFile.ReadInteger('Audio', 'DisableSound', 0));
-  DisableMusic.Checked:= Boolean(emuFile.ReadInteger('Audio', 'DisableMusic', 0));
-  FlipStereo.Checked:= Boolean(emuFile.ReadInteger('Audio', 'FlipStereo', 0));
+  if CustomSettingExist('PowerPCFrequency') then
+     begin
+       IntValue:= emuFile.ReadInteger('Emulation', 'PowerPCFrequency', 5);
+       if not (IntValue in [0..8]) then
+          IntValue:= 5; // 50 MHz (default)
+       PowerPCFrequency.Position:= IntValue;
+     end;
+  if CustomSettingExist('PowerPCFrequencyCustom') then
+     begin
+       StrValue:= emuFile.ReadString('Emulation', 'PowerPCFrequencyCustom', '');
+       PowerPCFrequencyCustom.Text:= StrValue;
+     end;
 
-  IntValue:= emuFile.ReadInteger('Audio', 'SoundVolume', 100);
-  if (IntValue < SoundVolume.Min) or (IntValue > SoundVolume.Max) then
-     IntValue:= 100;
-  SoundVolume.Position:= IntValue;
+  if CustomSettingExist('Resolution') then
+     begin
+       StrValue:= emuFile.ReadString('Video', 'Resolution', 'auto');
+       IntValue:= ScreenResolution.Items.IndexOf(StrValue);
+       if IntValue <> -1 then
+          ScreenResolution.ItemIndex:= IntValue
+       else
+          ScreenResolution.ItemIndex:= 0;
+     end;
 
-  IntValue:= emuFile.ReadInteger('Audio', 'MusicVolume', 100);
-  if (IntValue < MusicVolume.Min) or (IntValue > MusicVolume.Max) then
-     IntValue:= 100;
-  MusicVolume.Position:= IntValue;
+  if CustomSettingExist('New3DEngine') then
+     begin
+       Video3DEngine.ItemIndex:= emuFile.ReadInteger('Video', 'New3DEngine', 1);
+       if Video3DEngine.ItemIndex = -1 then
+          Video3DEngine.ItemIndex:= 1; // new 3D engine is the default
+     end;
 
-  IntValue:= emuFile.ReadInteger('Audio', 'Balance', 0);
-  if (IntValue < AudioBalanceFrontRear.Min) or (IntValue > AudioBalanceFrontRear.Max) then
-     IntValue:= 0;
-  AudioBalanceFrontRear.Position:= IntValue;
+  if CustomSettingExist('FullScreen') then
+     FullScreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'FullScreen', 0));
 
-  StrValue:= emuFile.ReadString('Controls', 'InputSystem', 'dinput');
-  InputSystem.ItemIndex:= GetInputSystemIndex(StrValue);
+  if CustomSettingExist('Widescreen') then
+     Widescreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'Widescreen', 0));
 
-  EnableForceFeedback.Checked:= Boolean(emuFile.ReadInteger('Controls', 'EnableForceFeedback', 0));
+  if CustomSettingExist('MultiTexture') then
+     MultiTexture.Checked:= Boolean(emuFile.ReadInteger('Video', 'MultiTexture', 1));
 
-  VertexShader.Text:= emuFile.ReadString('Debug', 'VertexShader', '');
-  FragmentShader.Text:= emuFile.ReadString('Debug', 'FragmentShader', '');
-  
+  if CustomSettingExist('DisableThrottle') then
+     DisableThrottle.Checked:= Boolean(emuFile.ReadInteger('Video', 'DisableThrottle', 0));
+
+  if CustomSettingExist('DisableVSync') then
+     DisableVSync.Checked:= Boolean(emuFile.ReadInteger('Video', 'DisableVSync', 0));
+
+  if CustomSettingExist('ShowFPS') then
+     ShowFPS.Checked:= Boolean(emuFile.ReadInteger('Video', 'ShowFPS', 0));
+
+  if CustomSettingExist('DisableSound') then
+     DisableSound.Checked:= Boolean(emuFile.ReadInteger('Audio', 'DisableSound', 0));
+
+  if CustomSettingExist('DisableMusic') then
+     DisableMusic.Checked:= Boolean(emuFile.ReadInteger('Audio', 'DisableMusic', 0));
+
+  if CustomSettingExist('FlipStereo') then
+     FlipStereo.Checked:= Boolean(emuFile.ReadInteger('Audio', 'FlipStereo', 0));
+
+  if CustomSettingExist('SoundVolume') then
+     begin
+       IntValue:= emuFile.ReadInteger('Audio', 'SoundVolume', 100);
+       if (IntValue < SoundVolume.Min) or (IntValue > SoundVolume.Max) then
+          IntValue:= 100;
+       SoundVolume.Position:= IntValue;
+     end;
+
+  if CustomSettingExist('MusicVolume') then
+     begin
+       IntValue:= emuFile.ReadInteger('Audio', 'MusicVolume', 100);
+       if (IntValue < MusicVolume.Min) or (IntValue > MusicVolume.Max) then
+          IntValue:= 100;
+       MusicVolume.Position:= IntValue;
+     end;
+
+  if CustomSettingExist('Balance') then
+     begin
+       IntValue:= emuFile.ReadInteger('Audio', 'Balance', 0);
+       if (IntValue < AudioBalanceFrontRear.Min) or (IntValue > AudioBalanceFrontRear.Max) then
+          IntValue:= 0;
+       AudioBalanceFrontRear.Position:= IntValue;
+     end;
+
+  if CustomSettingExist('InputSystem') then
+     begin
+       StrValue:= emuFile.ReadString('Controls', 'InputSystem', 'dinput');
+       InputSystem.ItemIndex:= GetInputSystemIndex(StrValue);
+     end;
+
+  if CustomSettingExist('Crosshairs') then
+     begin
+       Crosshairs.ItemIndex:= emuFile.ReadInteger('Controls', 'Crosshairs', 0); // 0 = none (default)
+       if Crosshairs.ItemIndex = -1 then
+          Crosshairs.ItemIndex:= 0;
+     end;
+
+  if CustomSettingExist('EnableForceFeedback') then
+     EnableForceFeedback.Checked:= Boolean(emuFile.ReadInteger('Controls', 'EnableForceFeedback', 0));
+
+  if CustomSettingExist('VertexShader') then
+     VertexShader.Text:= emuFile.ReadString('Debug', 'VertexShader', '');
+
+  if CustomSettingExist('FragmentShader') then
+     FragmentShader.Text:= emuFile.ReadString('Debug', 'FragmentShader', '');
+
   FreeAndNil(emuFile);
+  if IsCustom then
+     FreeAndNil(CustomEntryList);
 end;
 
-procedure TFormSupermodelSettings.WriteSupermodelIni(iniFile: String);
+procedure TFormSupermodelSettings.WriteSupermodelIni(const iniFile: String; IsCustom: Boolean);
 var
   elCFG, emuFile: TMemIniFile;
   StrValue: String;
+  IntValue: Integer;
+  CustomEntryList: TStringList;
 
   function GetInputSystemName: String;
   begin
@@ -244,7 +339,15 @@ var
       Result:= 'dinput';
     end;
   end;
-  
+
+  function CheckEmulatorIniValue(const EntryStr, EntryValue: String): Boolean;
+  begin
+    case IsCustom of
+      True : Result:= CustomEntryList.IndexOf(EntryStr+'='+EntryValue) = -1;
+      False: Result:= True; // always return TRUE; default settings is being written!!!
+    end;
+  end;
+
 begin
   if FormSupermodelSettings.Tag = 0 then
      begin
@@ -253,45 +356,125 @@ begin
         if StrValue = '' then
            StrValue:= 'roms';
         try
-          elCFG:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'folders_emulators.ini');
+          elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
           elCFG.WriteString(FormMain.GetSystemIniSection(idSupermodel), 'roms_path', StrValue);
           elCFG.UpdateFile;
         finally
           FreeAndNil(elCFG);
         end;
      end;
+
+  if IsCustom then
+  begin
+    CustomEntryList:= TStringList.Create;
+    CustomEntryList.LoadFromFile(emuIni);
+    CustomEntryList.BeginUpdate;
+    for IntValue:=CustomEntryList.Count-1 downto 0 do
+    begin
+      StrValue:= CustomEntryList[IntValue];
+      if StrValue <> '' then
+      begin
+        if StrValue[1] = '[' then
+           CustomEntryList.Delete(IntValue);
+      end;
+    end;
+    CustomEntryList.EndUpdate;
+  end;
+
   CheckAndCreateFolder(ExtractFilePath(iniFile));
+  if FileExists(iniFile) then
+     DeleteFile(iniFile);
   emuFile:= TMemIniFile.Create(iniFile);
 
-  emuFile.WriteInteger('Emulation', 'Multithreading', Ord(Multithreading.Checked));
-  emuFile.WriteInteger('Emulation', 'GPUMultithreading', Ord(GPUMultithreading.Checked));
+  if CheckEmulatorIniValue('Multithreading', IntToStr(Ord(Multithreading.Checked))) then
+     emuFile.WriteInteger('Emulation', 'Multithreading', Ord(Multithreading.Checked));
 
-  emuFile.WriteInteger('Emulation', 'PowerPCFrequency', PowerPCFrequency.Position);
-  emuFile.WriteString('Emulation', 'PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text);
+  if CheckEmulatorIniValue('GPUMultithreading', IntToStr(Ord(GPUMultithreading.Checked))) then
+     emuFile.WriteInteger('Emulation', 'GPUMultithreading', Ord(GPUMultithreading.Checked));
 
-  emuFile.WriteString('Video', 'Resolution', LowerCase(ScreenResolution.Text));
-  emuFile.WriteInteger('Video', 'FullScreen', Ord(FullScreen.Checked));
-  emuFile.WriteInteger('Video', 'Widescreen', Ord(Widescreen.Checked));
-  emuFile.WriteInteger('Video', 'MultiTexture', Ord(MultiTexture.Checked));
+  if CheckEmulatorIniValue('PowerPCFrequency', IntToStr(PowerPCFrequency.Position)) then
+     emuFile.WriteInteger('Emulation', 'PowerPCFrequency', PowerPCFrequency.Position);
 
-  emuFile.WriteInteger('Video', 'DisableThrottle', Ord(DisableThrottle.Checked));
-  emuFile.WriteInteger('Video', 'ShowFPS', Ord(ShowFPS.Checked));
+  if PowerPCFrequencyCustom.Text = '' then
+     PowerPCFrequencyCustom.Text:= '1000'
+  else
+  if StrToInt(PowerPCFrequencyCustom.Text) < 1 then
+     PowerPCFrequencyCustom.Text:= '1'
+  else
+  if StrToInt(PowerPCFrequencyCustom.Text) > 1000 then
+     PowerPCFrequencyCustom.Text:= '1000';
 
-  emuFile.WriteInteger('Audio', 'DisableSound', Ord(DisableSound.Checked));
-  emuFile.WriteInteger('Audio', 'DisableMusic', Ord(DisableMusic.Checked));
-  emuFile.WriteInteger('Audio', 'FlipStereo', Ord(FlipStereo.Checked));
-  emuFile.WriteInteger('Audio', 'SoundVolume', SoundVolume.Position);
-  emuFile.WriteInteger('Audio', 'MusicVolume', MusicVolume.Position);
-  emuFile.WriteInteger('Audio', 'Balance', AudioBalanceFrontRear.Position);
+  if CheckEmulatorIniValue('PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text) then
+     emuFile.WriteString('Emulation', 'PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text);
 
-  emuFile.WriteString('Controls', 'InputSystem', GetInputSystemName);
-  emuFile.WriteInteger('Controls', 'EnableForceFeedback', Ord(EnableForceFeedback.Checked));
+  StrValue:= ScreenResolution.Text;
+  if Strvalue = '' then
+     StrValue:= 'auto';
 
-  emuFile.WriteString('Debug', 'VertexShader', VertexShader.Text);
-  emuFile.WriteString('Debug', 'FragmentShader', FragmentShader.Text);
+  if CheckEmulatorIniValue('Resolution', StrValue) then
+     emuFile.WriteString('Video', 'Resolution', StrValue);
+
+  if Video3DEngine.ItemIndex = -1 then
+     Video3DEngine.ItemIndex:= 1;
+
+  if CheckEmulatorIniValue('New3DEngine', IntToStr(Video3DEngine.ItemIndex)) then
+     emuFile.WriteInteger('Video', 'New3DEngine', Video3DEngine.ItemIndex);
+
+  if CheckEmulatorIniValue('FullScreen', IntToStr(Ord(FullScreen.Checked))) then
+     emuFile.WriteInteger('Video', 'FullScreen', Ord(FullScreen.Checked));
+
+  if CheckEmulatorIniValue('Widescreen', IntToStr(Ord(Widescreen.Checked))) then
+     emuFile.WriteInteger('Video', 'Widescreen', Ord(Widescreen.Checked));
+
+  if CheckEmulatorIniValue('MultiTexture', IntToStr(Ord(MultiTexture.Checked))) then
+     emuFile.WriteInteger('Video', 'MultiTexture', Ord(MultiTexture.Checked));
+
+  if CheckEmulatorIniValue('DisableThrottle', IntToStr(Ord(DisableThrottle.Checked))) then
+     emuFile.WriteInteger('Video', 'DisableThrottle', Ord(DisableThrottle.Checked));
+
+  if CheckEmulatorIniValue('DisableVSync', IntToStr(Ord(DisableVSync.Checked))) then
+     emuFile.WriteInteger('Video', 'DisableVSync', Ord(DisableVSync.Checked));
+
+  if CheckEmulatorIniValue('ShowFPS', IntToStr(Ord(ShowFPS.Checked))) then
+     emuFile.WriteInteger('Video', 'ShowFPS', Ord(ShowFPS.Checked));
+
+  if CheckEmulatorIniValue('DisableSound', IntToStr(Ord(DisableSound.Checked))) then
+     emuFile.WriteInteger('Audio', 'DisableSound', Ord(DisableSound.Checked));
+
+  if CheckEmulatorIniValue('DisableMusic', IntToStr(Ord(DisableMusic.Checked))) then
+     emuFile.WriteInteger('Audio', 'DisableMusic', Ord(DisableMusic.Checked));
+
+  if CheckEmulatorIniValue('FlipStereo', IntToStr(Ord(FlipStereo.Checked))) then
+     emuFile.WriteInteger('Audio', 'FlipStereo', Ord(FlipStereo.Checked));
+
+  if CheckEmulatorIniValue('SoundVolume', IntToStr(SoundVolume.Position)) then
+     emuFile.WriteInteger('Audio', 'SoundVolume', SoundVolume.Position);
+
+  if CheckEmulatorIniValue('MusicVolume', IntToStr(MusicVolume.Position)) then
+     emuFile.WriteInteger('Audio', 'MusicVolume', MusicVolume.Position);
+
+  if CheckEmulatorIniValue('Balance', IntToStr(AudioBalanceFrontRear.Position)) then
+     emuFile.WriteInteger('Audio', 'Balance', AudioBalanceFrontRear.Position);
+
+  if CheckEmulatorIniValue('InputSystem', GetInputSystemName) then
+     emuFile.WriteString('Controls', 'InputSystem', GetInputSystemName);
+
+  if CheckEmulatorIniValue('Crosshairs', IntToStr(Crosshairs.ItemIndex)) then
+     emuFile.WriteInteger('Controls', 'Crosshairs', Crosshairs.ItemIndex); // 0 = none (default)
+
+  if CheckEmulatorIniValue('EnableForceFeedback', IntToStr(Ord(EnableForceFeedback.Checked))) then
+     emuFile.WriteInteger('Controls', 'EnableForceFeedback', Ord(EnableForceFeedback.Checked));
+
+  if CheckEmulatorIniValue('VertexShader', VertexShader.Text) then
+     emuFile.WriteString('Debug', 'VertexShader', VertexShader.Text);
+
+  if CheckEmulatorIniValue('FragmentShader', FragmentShader.Text) then
+     emuFile.WriteString('Debug', 'FragmentShader', FragmentShader.Text);
 
   emuFile.UpdateFile;
-  FreeAndNil(emuFile);  
+  FreeAndNil(emuFile);
+  if IsCustom then
+     FreeAndNil(CustomEntryList);
 end;
 
 procedure TFormSupermodelSettings.FormShow(Sender: TObject);
@@ -299,7 +482,7 @@ begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
   FormMain.IL_Systems.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
   //FormMain.LoadSystemThumbIcon(SystemIcon, 6);
-  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idSupermodel);
+  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idSupermodel, emuVersionStr);
   //LabelEmulatorVersion.Visible:= Tag = 1;
   //if FormMain.EmulatorVersion[idSupermodel] <> '' then
   //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idSupermodel]
@@ -308,8 +491,9 @@ begin
 
   if Tag = 0 then
      begin
-       LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSupermodel]+#13#10+LabelReadFileIni.Caption;
-       LabelReadFileIni.Visible:= False;       
+       //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSupermodel]+#13#10+LabelReadFileIni.Caption;
+       LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
+       LabelReadFileIni.Visible:= False;
        TopBar.Color1:= $00dccdc0;
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
@@ -320,8 +504,8 @@ begin
   else
   if Tag = 1 then
      begin
-       if FormMain.EmulatorVersion[idSupermodel] <> '' then
-          LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idSupermodel]
+       if emuVersionStr <> '' then
+          LabelEmulatorVersion.Caption:= emuVersionStr
        else
           LabelEmulatorVersion.Caption:= '';
 
@@ -374,8 +558,8 @@ begin
        if ModalResult = mrOk then
           begin
             case FormSupermodelSettings.Tag of
-              0: WriteSupermodelIni(emuIni); // default options
-              1: WriteSupermodelIni(GameIni); // game options
+              0: WriteSupermodelIni(emuIni, False); // default options
+              1: WriteSupermodelIni(GameIni, True); // game options
             end;
           end;
        SetCurrentDir(FormMain.FrontendPath);
@@ -397,9 +581,9 @@ end;
 
 procedure TFormSupermodelSettings.ButtonReadFileClick(Sender: TObject);
 begin
-  ReadSupermodelIni(emuIni);
+  ReadSupermodelIni(emuIni, False);
   if Tag = 1 then
-     ReadSupermodelIni(GameIni);
+     ReadSupermodelIni(GameIni, True);
 end;
 
 procedure TFormSupermodelSettings.FolderROMsKeyAction(
@@ -465,18 +649,8 @@ end;
 procedure TFormSupermodelSettings.PowerPCFrequencyCustomKeyPress(
   Sender: TObject; var Key: Char);
 begin
-  if not (Key in ['1'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0)
-  else
-     begin
-       if PowerPCFrequencyCustom.Text = '' then
-          Exit;
-       if StrToInt(PowerPCFrequencyCustom.Text) < 1 then
-          PowerPCFrequencyCustom.Text:= '1'
-       else
-       if StrToInt(PowerPCFrequencyCustom.Text) > 1000 then
-          PowerPCFrequencyCustom.Text:= '1000';
-     end;
+  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+     Key:= Char(0);
 end;
 
 procedure TFormSupermodelSettings.ButtonSelectVertexShaderClick(
@@ -493,7 +667,7 @@ end;
 
 procedure TFormSupermodelSettings.SoundVolumeChange(Sender: TObject);
 begin
-  LabelSoundVolume.Caption:= Format(LabelSoundVolume.Hint, [SoundVolume.Position]);
+  LabelSoundVolume.Caption:= Format(LabelSoundVolume.Hint, [SoundVolume.Position])+' %]';
   if SoundVolume.Position <> 100 then
      begin
        if LabelSoundVolume.Font.Color <> clRed then
@@ -505,7 +679,7 @@ end;
 
 procedure TFormSupermodelSettings.MusicVolumeChange(Sender: TObject);
 begin
-  LabelMusicVolume.Caption:= Format(LabelMusicVolume.Hint, [MusicVolume.Position]);
+  LabelMusicVolume.Caption:= Format(LabelMusicVolume.Hint, [MusicVolume.Position])+' %]';
   if MusicVolume.Position <> 100 then
      begin
        if LabelMusicVolume.Font.Color <> clRed then
@@ -538,7 +712,7 @@ end;
 procedure TFormSupermodelSettings.AudioBalanceFrontRearChange(
   Sender: TObject);
 begin
-  LabelAudioBalanceFrontRear.Caption:= Format(LabelAudioBalanceFrontRear.Hint, [AudioBalanceFrontRear.Position])+'%]';
+  LabelAudioBalanceFrontRear.Caption:= Format(LabelAudioBalanceFrontRear.Hint, [AudioBalanceFrontRear.Position])+' %]';
   if AudioBalanceFrontRear.Position <> 0 then
      begin
        if LabelAudioBalanceFrontRear.Font.Color <> clRed then

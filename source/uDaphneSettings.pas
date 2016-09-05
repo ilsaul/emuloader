@@ -68,8 +68,10 @@ type
     procedure WriteIni(const customIniFileStr: String);
   public
     { Public declarations }
-    emuIni: String;
-    GameIni: String;
+    emuIni,
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
   end;
 
 var
@@ -197,8 +199,8 @@ begin
   FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idDaphne, SystemIcon.Picture.Icon);
   FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
-  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idDaphne);
-  LabelEmulatorFile.Caption:= FormMain.EmulatorFile[idDaphne];
+  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idDaphne, emuVersionStr);
+  LabelEmulatorFile.Caption:= emuFileExec; //FormMain.EmulatorFile[idDaphne];
   //if FormMain.EmulatorVersion[idDaphne] <> '' then
   //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idDaphne]
   //else

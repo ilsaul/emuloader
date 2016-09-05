@@ -431,11 +431,11 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
     object ShadowLabel2: TShadowLabel
       Left = 1
       Top = 0
-      Width = 430
+      Width = 316
       Height = 15
       Caption = 
-        '--            /                   /                            /' +
-        '        /                  /        --'
+        '--            /                             /                  /' +
+        '         --'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -473,58 +473,8 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseEnter = ShadowLabel1MouseEnter
       OnMouseLeave = ShadowLabel1MouseLeave
     end
-    object ShadowLabel3: TShadowLabel
-      Left = 69
-      Top = 0
-      Width = 75
-      Height = 15
-      Cursor = crHandPoint
-      Hint = 'http://mameplus.sourceforge.net'
-      Caption = 'MAME Plus!'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
-    end
-    object ShadowLabel4: TShadowLabel
-      Left = 271
-      Top = 0
-      Width = 29
-      Height = 15
-      Cursor = crHandPoint
-      Hint = 'http://mamedev.emulab.it/haze/'
-      Caption = 'UME'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
-    end
     object ShadowLabel5: TShadowLabel
-      Left = 309
+      Left = 192
       Top = 0
       Width = 69
       Height = 15
@@ -549,7 +499,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel6: TShadowLabel
-      Left = 388
+      Left = 271
       Top = 0
       Width = 27
       Height = 15
@@ -576,7 +526,7 @@ object FormEmulatorsSetup: TFormEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel7: TShadowLabel
-      Left = 151
+      Left = 69
       Top = 0
       Width = 112
       Height = 15

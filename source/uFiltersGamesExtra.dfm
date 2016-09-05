@@ -75,15 +75,6 @@ object FormFiltersExtra: TFormFiltersExtra
     ShowAccelChar = False
     Transparent = True
   end
-  object Label1: TLabel
-    Left = 208
-    Top = 163
-    Width = 147
-    Height = 30
-    Caption = 'Uncheck Categories to Hide'#13#10'(catver.ini required)'
-    ShowAccelChar = False
-    Transparent = True
-  end
   object LabelSTVMultiSlot: TLabel
     Left = 24
     Top = 240
@@ -123,10 +114,19 @@ object FormFiltersExtra: TFormFiltersExtra
     ShowAccelChar = False
     Transparent = True
   end
+  object LabelSaveState: TLabel
+    Left = 208
+    Top = 152
+    Width = 53
+    Height = 15
+    Caption = 'Save State'
+    ShowAccelChar = False
+    Transparent = True
+  end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
     Left = 8
     Top = 324
-    Width = 129
+    Width = 122
     Height = 20
     Hint = 'Enable/disable the main cpu filter bar'
     ShowHint = True
@@ -301,146 +301,6 @@ object FormFiltersExtra: TFormFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object CategoryCasino: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 208
-    Top = 204
-    Width = 57
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 9
-    Alignment = taLeftJustify
-    Caption = 'Casino'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryFruitMachines: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 208
-    Top = 224
-    Width = 102
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 10
-    Alignment = taLeftJustify
-    Caption = 'Fruit Machines'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryRhythm: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 208
-    Top = 244
-    Width = 63
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 11
-    Alignment = taLeftJustify
-    Caption = 'Rhythm'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryMature: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 320
-    Top = 204
-    Width = 60
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 12
-    Alignment = taLeftJustify
-    Caption = 'Mature'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryMahjong: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 320
-    Top = 224
-    Width = 71
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 13
-    Alignment = taLeftJustify
-    Caption = 'Mahjong'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryTabletop: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 320
-    Top = 244
-    Width = 69
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 14
-    Alignment = taLeftJustify
-    Caption = 'Tabletop'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryPinMAME: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 208
-    Top = 264
-    Width = 84
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 15
-    Alignment = taLeftJustify
-    Caption = 'Mechanical'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object CategoryQuiz: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 320
-    Top = 264
-    Width = 49
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 16
-    Alignment = taLeftJustify
-    Caption = 'Quiz'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
-  end
-  object ButtonCategoriesToHideInfo: TBitBtn
-    Left = 319
-    Top = 179
-    Width = 16
-    Height = 16
-    Hint = 'Categories to hide info'
-    Caption = '?'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 17
-    OnClick = ButtonCategoriesToHideInfoClick
-  end
   object HideGamesWithCHDFiles: TAdvOfficeCheckBox
     Left = 8
     Top = 264
@@ -450,7 +310,7 @@ object FormFiltersExtra: TFormFiltersExtra
       'Check to hide all games that have CHD files'#13#10'(use main games fil' +
       'ter to only show CHD games)'
     ShowHint = True
-    TabOrder = 18
+    TabOrder = 9
     Alignment = taLeftJustify
     Caption = 'Hide Games With CHD Files'
     ReturnIsTab = False
@@ -466,7 +326,7 @@ object FormFiltersExtra: TFormFiltersExtra
       'Check it to show only Neo-Geo games compatible with multi-slot m' +
       'achines'#13#10'MAME v0.154 minimum required'
     ShowHint = True
-    TabOrder = 19
+    TabOrder = 10
     Alignment = taLeftJustify
     Caption = 'Show Only Neo-Geo MVS'
     ReturnIsTab = False
@@ -482,7 +342,7 @@ object FormFiltersExtra: TFormFiltersExtra
       'Check it to show only ST-V games compatible with multi-slot mach' +
       'ines'#13#10'MAME v0.154 minimum required'
     ShowHint = True
-    TabOrder = 20
+    TabOrder = 11
     Alignment = taLeftJustify
     Caption = 'Show Only ST-V Multi-Slot'
     ReturnIsTab = False
@@ -499,26 +359,10 @@ object FormFiltersExtra: TFormFiltersExtra
     ItemHeight = 15
     ItemIndex = 0
     ParentCtl3D = False
-    TabOrder = 21
+    TabOrder = 12
     Text = 'List All'
     Items.Strings = (
       'List All')
-  end
-  object CategoryUtilities: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 320
-    Top = 284
-    Width = 62
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 22
-    Alignment = taLeftJustify
-    Caption = 'Utilities'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
-    Themed = True
   end
   object ScreenOrientation: TComboBox
     Left = 8
@@ -530,7 +374,7 @@ object FormFiltersExtra: TFormFiltersExtra
     ItemHeight = 15
     ItemIndex = 0
     ParentCtl3D = False
-    TabOrder = 23
+    TabOrder = 13
     Text = 'List All'
     Items.Strings = (
       'List All'
@@ -547,27 +391,11 @@ object FormFiltersExtra: TFormFiltersExtra
       'Check to show only clone sets merged into parent sets (MAME/HBMA' +
       'ME)'#13#10'Merged sets are not fully supported!'
     ShowHint = True
-    TabOrder = 24
+    TabOrder = 14
     Alignment = taLeftJustify
     Caption = 'Show Merged Sets Only'
     ReturnIsTab = False
     ShadowColor = clSilver
-    Themed = True
-  end
-  object CategoryLightGun: TAdvOfficeCheckBox
-    Tag = 1
-    Left = 208
-    Top = 284
-    Width = 73
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 25
-    Alignment = taLeftJustify
-    Caption = 'Light Gun'
-    ReturnIsTab = False
-    ShadowColor = clSilver
-    State = cbChecked
     Themed = True
   end
   object HideNoDumpROMsGames: TAdvOfficeCheckBox
@@ -579,11 +407,210 @@ object FormFiltersExtra: TFormFiltersExtra
       'Check to hide games that have all ROMs/CHDs tagged as "nodump" o' +
       'r without CRC32/SHA1 checksum'
     ShowHint = True
-    TabOrder = 26
+    TabOrder = 15
     Alignment = taLeftJustify
     Caption = 'Hide "No Dump" Games'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+  end
+  object SaveState: TComboBox
+    Left = 208
+    Top = 169
+    Width = 185
+    Height = 23
+    Style = csDropDownList
+    Ctl3D = True
+    ItemHeight = 15
+    ItemIndex = 0
+    ParentCtl3D = False
+    TabOrder = 16
+    Text = 'List All'
+    Items.Strings = (
+      'List All'
+      'Supported'
+      'Unsupported'
+      'Unknown')
+  end
+  object CategoryFiltersGroupBox: TAdvGroupBox
+    Left = 208
+    Top = 200
+    Width = 185
+    Height = 147
+    RoundEdges = True
+    Caption = 'Category (uncheck to hide) '
+    Ctl3D = True
+    TabOrder = 17
+    object Label1: TLabel
+      Left = 6
+      Top = 19
+      Width = 171
+      Height = 16
+      Caption = 'category.ini or catver.ini required'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object ButtonCategoriesToHideInfo: TBitBtn
+      Left = 154
+      Top = 1
+      Width = 16
+      Height = 16
+      Hint = 'Categories to hide info'
+      Caption = '?'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = ButtonCategoriesToHideInfoClick
+    end
+    object CategoryCasino: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 44
+      Width = 57
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 1
+      Alignment = taLeftJustify
+      Caption = 'Casino'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryFruitMachines: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 64
+      Width = 102
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 2
+      Alignment = taLeftJustify
+      Caption = 'Fruit Machines'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryRhythm: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 84
+      Width = 63
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 3
+      Alignment = taLeftJustify
+      Caption = 'Rhythm'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryMature: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 110
+      Top = 44
+      Width = 60
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 4
+      Alignment = taLeftJustify
+      Caption = 'Mature'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryMahjong: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 110
+      Top = 64
+      Width = 71
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 5
+      Alignment = taLeftJustify
+      Caption = 'Mahjong'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryTabletop: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 110
+      Top = 84
+      Width = 69
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 6
+      Alignment = taLeftJustify
+      Caption = 'Tabletop'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryPinMAME: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 104
+      Width = 84
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 7
+      Alignment = taLeftJustify
+      Caption = 'Mechanical'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryQuiz: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 110
+      Top = 104
+      Width = 49
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 8
+      Alignment = taLeftJustify
+      Caption = 'Quiz'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryUtilities: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 110
+      Top = 124
+      Width = 62
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 9
+      Alignment = taLeftJustify
+      Caption = 'Utilities'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
   end
 end

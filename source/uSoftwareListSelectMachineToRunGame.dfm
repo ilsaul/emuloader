@@ -3,9 +3,9 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   Top = 357
   BorderIcons = []
   BorderStyle = bsSingle
-  Caption = 'Select a Machine to Run The Game With'
-  ClientHeight = 401
-  ClientWidth = 619
+  Caption = 'Select a Machine to Run the Game With'
+  ClientHeight = 501
+  ClientWidth = 799
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,10 +23,10 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSoftwarelistTitle: TShadowLabel
+  object LabelSoftwarelistTitleW: TShadowLabel
     Left = 79
     Top = 63
-    Width = 460
+    Width = 710
     Height = 14
     Alignment = taCenter
     AutoSize = False
@@ -65,8 +65,8 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   end
   object PanelMessages: TPanelEx
     Left = 0
-    Top = 360
-    Width = 619
+    Top = 460
+    Width = 799
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -78,7 +78,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 419
+      Left = 599
       Top = 8
       Width = 89
       Height = 25
@@ -89,7 +89,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       TabOrder = 0
     end
     object ButtonNo: TBitBtn
-      Left = 522
+      Left = 702
       Top = 8
       Width = 89
       Height = 25
@@ -112,16 +112,16 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       OnClick = ButtonResetToCurrentClick
     end
     object ShowAvailableMachinesOnly: TAdvOfficeCheckBox
-      Left = 55
+      Left = 111
       Top = 11
-      Width = 181
+      Width = 130
       Height = 20
       Hint = 'Check to hide all machines you don'#39't have ROMs for'
       ShowHint = True
       TabOrder = 3
       OnClick = ShowAvailableMachinesOnlyClick
       Alignment = taLeftJustify
-      Caption = 'Show Available Machines Only'
+      Caption = 'Show Available Only'
       ReturnIsTab = False
       Themed = True
     end
@@ -139,11 +139,23 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       ReturnIsTab = False
       Themed = True
     end
+    object ButtonResetToDefault: TBitBtn
+      Left = 56
+      Top = 8
+      Width = 47
+      Height = 25
+      Hint = 'Reset selection to default machine'
+      Caption = 'Default'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = ButtonResetToDefaultClick
+    end
   end
   object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 619
+    Width = 799
     Height = 60
     Align = alTop
     Color1 = 16445669
@@ -164,7 +176,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     object LabelTitle: TShadowLabel
       Left = 56
       Top = 1
-      Width = 555
+      Width = 735
       Height = 27
       AutoSize = False
       Caption = 
@@ -205,7 +217,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     object LabelUsage: TShadowLabel
       Left = 56
       Top = 41
-      Width = 537
+      Width = 717
       Height = 13
       AutoSize = False
       Caption = 'usage:'
@@ -226,8 +238,8 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   object MachinesListView: TEasyListview
     Left = 8
     Top = 79
-    Width = 603
-    Height = 271
+    Width = 783
+    Height = 371
     CellSizes.Report.Height = 20
     Color = clWhite
     DisabledBlendAlpha = 0
@@ -250,7 +262,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
-      0600000005000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
       0006000000800800010100010000000000000123010000FFFFFF1F0001000000
       01000000070000004D0061006300680069006E00650000000000000000000000
       0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
@@ -262,15 +274,19 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       617379436F6C756D6E53746F726564FFFECE0006000000800800010100010300
       00000000012D000000FFFFFF1F0001000000010000000200000048007A000000
       00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-      FECE000600000080000001010001040000000000015F000000FFFFFF1F000100
+      FECE000600000080080001010001040000000000015F000000FFFFFF1F000100
       0000010000000800000043006C006F006E00650020006F006600000000000000
+      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+      000000800800010100010500000000000155000000FFFFFF1F00010000000100
+      00000A0000005300610076006500200053007400610074006500000000000000
       000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True

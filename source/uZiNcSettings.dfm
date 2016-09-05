@@ -1,11 +1,11 @@
 object FormZiNcSettings: TFormZiNcSettings
-  Left = 593
-  Top = 241
+  Left = 774
+  Top = 490
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 528
-  ClientWidth = 776
+  ClientHeight = 489
+  ClientWidth = 715
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,8 +23,8 @@ object FormZiNcSettings: TFormZiNcSettings
   PixelsPerInch = 96
   TextHeight = 15
   object LabelReadFileIni: TShadowLabel
-    Left = 116
-    Top = 496
+    Left = 108
+    Top = 464
     Width = 88
     Height = 16
     Caption = 'LabelReadFileIni'
@@ -41,43 +41,43 @@ object FormZiNcSettings: TFormZiNcSettings
     Transparent = True
   end
   object LabelControllerZNC: TLabel
-    Left = 16
-    Top = 211
-    Width = 53
+    Left = 8
+    Top = 197
+    Width = 104
     Height = 15
-    Caption = 'Controller'
+    Caption = 'Controller [.znc file]'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelRendererZNC: TLabel
-    Left = 16
-    Top = 259
-    Width = 47
+    Left = 8
+    Top = 243
+    Width = 98
     Height = 15
-    Caption = 'Renderer'
+    Caption = 'Renderer [.znc file]'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelControllerConfigFile: TLabel
-    Left = 320
-    Top = 211
-    Width = 163
+    Left = 288
+    Top = 197
+    Width = 142
     Height = 15
-    Caption = 'Znx Controller Config (Default)'
+    Caption = 'Controller Config [.cfg file]'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelRendererConfigFile: TLabel
-    Left = 320
-    Top = 259
-    Width = 86
+    Left = 288
+    Top = 243
+    Width = 136
     Height = 15
-    Caption = 'Renderer Config'
+    Caption = 'Renderer Config [.cfg file]'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelROMsFolders: TLabel
-    Left = 16
+    Left = 8
     Top = 67
     Width = 73
     Height = 15
@@ -90,7 +90,7 @@ object FormZiNcSettings: TFormZiNcSettings
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 776
+    Width = 715
     Height = 60
     Align = alTop
     Color1 = 15792869
@@ -111,7 +111,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 680
+      Width = 619
       Height = 26
       AutoSize = False
       Caption = 
@@ -134,7 +134,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object LabelEmulatorVersion: TShadowLabel
       Left = 86
       Top = 28
-      Width = 508
+      Width = 505
       Height = 25
       AutoSize = False
       Caption = 
@@ -162,7 +162,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 660
+      Left = 599
       Top = 26
       Width = 110
       Height = 27
@@ -185,55 +185,45 @@ object FormZiNcSettings: TFormZiNcSettings
     end
   end
   object AudioBox: TAdvGroupBox
-    Left = 599
+    Left = 567
     Top = 67
-    Width = 161
-    Height = 196
+    Width = 141
+    Height = 152
+    CheckBox.Checked = True
+    CheckBox.Action = caNone
+    CheckBox.Hint = 'Turns sound on/off'
+    CheckBox.State = cbChecked
+    CheckBox.Visible = True
     RoundEdges = True
     ShadowColor = clSilver
-    Caption = 'Audio'
+    Caption = 'Enable Sound'
     Ctl3D = True
     TabOrder = 1
     object Label12: TLabel
-      Left = 8
-      Top = 104
-      Width = 100
+      Left = 24
+      Top = 106
+      Width = 63
       Height = 15
-      Caption = 'Sound Filter Cutoff'
+      Caption = 'Filter Cutoff'
       ShowAccelChar = False
       Transparent = True
     end
     object LabelSoundLiteSurroundMultiplier: TLabel
-      Left = 8
-      Top = 152
-      Width = 96
+      Left = 116
+      Top = 60
+      Width = 12
       Height = 15
-      Hint = 'Lite-Surround [%u]'
-      Caption = 'Lite-Surround [40]'
+      Caption = '40'
       ShowAccelChar = False
       Transparent = False
     end
-    object Sound: TAdvOfficeCheckBox
-      Left = 8
-      Top = 20
-      Width = 57
-      Height = 20
-      Hint = 'Turns sound on/off'
-      Checked = True
-      TabOrder = 0
-      Alignment = taLeftJustify
-      Caption = 'Sound'
-      ReturnIsTab = False
-      State = cbChecked
-      Themed = True
-    end
     object SoundFilter: TAdvOfficeCheckBox
       Left = 8
-      Top = 40
-      Width = 89
+      Top = 86
+      Width = 85
       Height = 20
       Hint = 'Provides a quality increase with a tiny amount more CPU'
-      TabOrder = 1
+      TabOrder = 0
       Alignment = taLeftJustify
       Caption = 'Sound Filter'
       ReturnIsTab = False
@@ -241,13 +231,13 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object SoundStereoExciter: TAdvOfficeCheckBox
       Left = 8
-      Top = 60
-      Width = 97
+      Top = 20
+      Width = 92
       Height = 20
       Hint = 
         'Enables "stereo exciter" which widens the stereo image. Try it a' +
         'nd listen :)'
-      TabOrder = 2
+      TabOrder = 1
       Alignment = taLeftJustify
       Caption = 'Stereo Exciter'
       ReturnIsTab = False
@@ -255,20 +245,20 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object SoundLiteSurround: TAdvOfficeCheckBox
       Left = 8
-      Top = 80
+      Top = 40
       Width = 132
       Height = 20
       Hint = 'Enables "Lite-Surround". Try it and listen :)'
-      TabOrder = 3
+      TabOrder = 2
       Alignment = taLeftJustify
       Caption = 'Lite-Surround Sound'
       ReturnIsTab = False
       Themed = True
     end
     object SoundFilterCutoff: TComboBox
-      Left = 8
-      Top = 120
-      Width = 145
+      Left = 24
+      Top = 122
+      Width = 75
       Height = 21
       Hint = 'Sets the filter cutoff frequency'
       Style = csDropDownList
@@ -282,7 +272,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 4
+      TabOrder = 3
       Text = '22050 Hz'
       Items.Strings = (
         '11025 Hz'
@@ -291,23 +281,24 @@ object FormZiNcSettings: TFormZiNcSettings
         '48000 Hz')
     end
     object SoundLiteSurroundMultiplier: TGaugeBar
-      Left = 8
-      Top = 168
-      Width = 145
+      Left = 24
+      Top = 58
+      Width = 89
       Height = 20
-      Hint = 'Adjusts how powerful the lite-surround is'
+      Hint = 'Multiplier. Adjusts how powerful the lite-surround is'
       Color = clWindow
       Backgnd = bgPattern
       ButtonSize = 12
+      LargeChange = 10
       ShowHandleGrip = True
       Position = 40
       OnChange = SoundLiteSurroundMultiplierChange
     end
   end
   object AdvGroupBox3: TAdvGroupBox
-    Left = 598
-    Top = 275
-    Width = 162
+    Left = 566
+    Top = 243
+    Width = 141
     Height = 197
     RoundEdges = True
     ShadowColor = clSilver
@@ -333,7 +324,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object SlowGeometry: TAdvOfficeCheckBox
       Left = 8
       Top = 20
-      Width = 105
+      Width = 102
       Height = 20
       Hint = 
         'Uses slower but more accurate geometry calculations. If you see ' +
@@ -348,7 +339,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object MemoryPrediction: TAdvOfficeCheckBox
       Left = 8
       Top = 40
-      Width = 125
+      Width = 123
       Height = 20
       TabOrder = 1
       Alignment = taLeftJustify
@@ -370,7 +361,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object Rotate: TComboBox
       Left = 8
       Top = 100
-      Width = 146
+      Width = 125
       Height = 21
       Hint = 'Overrides ZiNc'#39's default screen rotation setting'
       Style = csDropDownList
@@ -406,7 +397,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object NetGameConnect: TEdit
       Left = 8
       Top = 168
-      Width = 146
+      Width = 125
       Height = 21
       TabStop = False
       AutoSize = False
@@ -417,10 +408,10 @@ object FormZiNcSettings: TFormZiNcSettings
     end
   end
   object OpenGLD3DRendererBox: TAdvGroupBox
-    Left = 16
-    Top = 312
-    Width = 567
-    Height = 160
+    Left = 8
+    Top = 288
+    Width = 483
+    Height = 157
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'OpenGL / Direct3D Renderer'
@@ -437,7 +428,7 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object Label1: TLabel
       Left = 8
-      Top = 68
+      Top = 66
       Width = 64
       Height = 15
       Caption = 'Color Depth'
@@ -446,7 +437,7 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object Label2: TLabel
       Left = 8
-      Top = 116
+      Top = 112
       Width = 49
       Height = 15
       Caption = 'Scanlines'
@@ -454,7 +445,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Transparent = True
     end
     object Label3: TLabel
-      Left = 147
+      Left = 98
       Top = 20
       Width = 47
       Height = 15
@@ -463,57 +454,76 @@ object FormZiNcSettings: TFormZiNcSettings
       Transparent = True
     end
     object LabelFramerateManual: TLabel
-      Left = 288
-      Top = 116
-      Width = 125
+      Left = 325
+      Top = 112
+      Width = 96
+      Height = 15
+      Caption = 'Manual Framerate'
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = False
+      Transparent = True
+    end
+    object LabelTurnDisplay: TLabel
+      Left = 98
+      Top = 130
+      Width = 86
+      Height = 15
+      Caption = 'Turn the Display'
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = False
+      Transparent = False
+    end
+    object LabelFramerateManualRange: TLabel
+      Left = 372
+      Top = 130
+      Width = 55
       Height = 15
       Hint = 'Framerate Manual [%u]'
-      Caption = 'Framerate Manual [100]'
+      Caption = '(0 to 1000)'
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = False
+      Transparent = False
+    end
+    object LabelTextureSettings: TLabel
+      Left = 237
+      Top = 20
+      Width = 84
+      Height = 15
+      Caption = 'Texture Settings'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
       Transparent = False
     end
     object Label4: TLabel
-      Left = 288
-      Top = 20
-      Width = 68
+      Left = 237
+      Top = 38
+      Width = 26
       Height = 15
-      Caption = 'Texture Type'
+      Caption = 'Type'
       ShowAccelChar = False
       Transparent = True
     end
     object LabelTextureCache: TLabel
-      Left = 429
-      Top = 20
-      Width = 92
+      Left = 325
+      Top = 38
+      Width = 33
       Height = 15
-      Hint = 'Texture Cache [%u]'
-      Caption = 'Texture Cache [2]'
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = False
-      Transparent = False
-    end
-    object LabelTurnDisplay: TLabel
-      Left = 429
-      Top = 68
-      Width = 83
-      Height = 15
-      Hint = 'Turn Display [%u]'
-      Caption = 'Turn Display [1]'
+      Caption = 'Cache'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
       Transparent = False
     end
     object LabelTextureFilter: TLabel
-      Left = 429
-      Top = 116
-      Width = 85
+      Left = 405
+      Top = 38
+      Width = 26
       Height = 15
-      Hint = 'Texture Filter [%u]'
-      Caption = 'Texture Filter [3]'
+      Caption = 'Filter'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
@@ -522,7 +532,7 @@ object FormZiNcSettings: TFormZiNcSettings
     object Resolution: TComboBox
       Left = 8
       Top = 36
-      Width = 129
+      Width = 80
       Height = 21
       Hint = 'Specifies an exact resolution to run in'
       Style = csDropDownList
@@ -538,9 +548,9 @@ object FormZiNcSettings: TFormZiNcSettings
       TabOrder = 0
     end
     object FullScreen: TAdvOfficeCheckBox
-      Left = 147
-      Top = 68
-      Width = 86
+      Left = 98
+      Top = 85
+      Width = 78
       Height = 20
       Hint = 'Run in full screen or in window'
       TabOrder = 1
@@ -551,8 +561,8 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object ColorDepth: TComboBox
       Left = 8
-      Top = 84
-      Width = 129
+      Top = 82
+      Width = 80
       Height = 21
       Hint = 'Full screen color depth'
       Style = csDropDownList
@@ -574,8 +584,8 @@ object FormZiNcSettings: TFormZiNcSettings
     end
     object Scanlines: TComboBox
       Left = 8
-      Top = 132
-      Width = 129
+      Top = 128
+      Width = 80
       Height = 21
       Hint = 'Emulate scanlines'
       Style = csDropDownList
@@ -597,7 +607,7 @@ object FormZiNcSettings: TFormZiNcSettings
         'Bright')
     end
     object Blending: TComboBox
-      Left = 147
+      Left = 98
       Top = 36
       Width = 129
       Height = 21
@@ -621,23 +631,21 @@ object FormZiNcSettings: TFormZiNcSettings
         'Direct3D')
     end
     object Dithering: TAdvOfficeCheckBox
-      Left = 147
-      Top = 90
-      Width = 78
+      Left = 98
+      Top = 65
+      Width = 112
       Height = 20
-      Hint = 'Image dithering'
-      Checked = True
+      Hint = 'Image dithering (only needed in 16 bit color depth)'
       TabOrder = 5
       Alignment = taLeftJustify
-      Caption = 'Dithering'
+      Caption = 'Dithering (16-bit)'
       ReturnIsTab = False
-      State = cbChecked
       Themed = True
     end
     object ShowFPS: TAdvOfficeCheckBox
-      Left = 147
-      Top = 114
-      Width = 78
+      Left = 237
+      Top = 65
+      Width = 73
       Height = 20
       Hint = 'FPS display on startup'
       Checked = True
@@ -649,9 +657,9 @@ object FormZiNcSettings: TFormZiNcSettings
       Themed = True
     end
     object FrameLimitation: TAdvOfficeCheckBox
-      Left = 147
-      Top = 136
-      Width = 118
+      Left = 325
+      Top = 85
+      Width = 112
       Height = 20
       Hint = 'Limit fps to monitor refresh rate'
       Checked = True
@@ -663,9 +671,9 @@ object FormZiNcSettings: TFormZiNcSettings
       Themed = True
     end
     object FrameSkip: TAdvOfficeCheckBox
-      Left = 288
-      Top = 68
-      Width = 82
+      Left = 237
+      Top = 85
+      Width = 81
       Height = 20
       Hint = 'Skip frames to increase speed'
       Checked = True
@@ -677,8 +685,8 @@ object FormZiNcSettings: TFormZiNcSettings
       Themed = True
     end
     object FramerateDetection: TAdvOfficeCheckBox
-      Left = 288
-      Top = 90
+      Left = 325
+      Top = 65
       Width = 128
       Height = 20
       Hint = 'Auto framerate detection'
@@ -690,12 +698,114 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object TextureType: TComboBox
-      Left = 288
-      Top = 36
-      Width = 129
+    object TurnDisplay: TComboBox
+      Left = 187
+      Top = 128
+      Width = 40
       Height = 21
-      Hint = 'Textures color format'
+      Hint = 'Rotate the whole display'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 13
+      ItemIndex = 1
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 10
+      Text = '1'
+      Items.Strings = (
+        '0'
+        '1'
+        '2')
+    end
+    object FramerateManual: TEdit
+      Left = 325
+      Top = 128
+      Width = 45
+      Height = 21
+      Hint = 'Set a manual framerate (0 to 1000)'
+      TabStop = False
+      AutoSize = False
+      Color = clWhite
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 11
+      Text = '100'
+      OnKeyPress = FramerateManualKeyPress
+    end
+    object EnableKeys: TAdvOfficeCheckBox
+      Left = 98
+      Top = 105
+      Width = 131
+      Height = 20
+      Hint = 'Enables keys for the fps menu/pause'
+      Checked = True
+      TabOrder = 12
+      Alignment = taLeftJustify
+      Caption = 'Enable Renderer Keys'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object TextureType: TComboBox
+      Left = 267
+      Top = 36
+      Width = 54
+      Height = 21
+      Hint = 'Textures color format ("Auto" = card'#39's default)'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 13
+      ItemIndex = 0
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 13
+      Text = 'Auto'
+      Items.Strings = (
+        'Auto'
+        '4-bit'
+        '5-bit'
+        '8-bit')
+    end
+    object TextureCache: TComboBox
+      Left = 361
+      Top = 36
+      Width = 40
+      Height = 21
+      Hint = 'Level of texture caching'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 13
+      ItemIndex = 2
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 14
+      Text = '2'
+      Items.Strings = (
+        '0'
+        '1'
+        '2')
+    end
+    object TextureFilter: TComboBox
+      Left = 435
+      Top = 36
+      Width = 40
+      Height = 21
+      Hint = 'Texture filtering (may cause glitches!)'
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -707,76 +817,18 @@ object FormZiNcSettings: TFormZiNcSettings
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 10
-      Text = '8-bit'
+      TabOrder = 15
+      Text = '3'
       Items.Strings = (
-        'Default'
-        '4-bit'
-        '5-bit'
-        '8-bit')
-    end
-    object TextureCache: TGaugeBar
-      Left = 429
-      Top = 36
-      Width = 129
-      Height = 20
-      Hint = 'Level of texture caching'
-      Color = clWindow
-      Backgnd = bgPattern
-      ButtonSize = 12
-      Max = 2
-      ShowHandleGrip = True
-      Position = 2
-      OnChange = TextureCacheChange
-    end
-    object TurnDisplay: TGaugeBar
-      Left = 429
-      Top = 84
-      Width = 129
-      Height = 20
-      Hint = 'Rotate the whole display'
-      Color = clWindow
-      Backgnd = bgPattern
-      ButtonSize = 12
-      Max = 2
-      ShowHandleGrip = True
-      Position = 1
-      OnChange = TurnDisplayChange
-    end
-    object TextureFilter: TGaugeBar
-      Left = 429
-      Top = 132
-      Width = 129
-      Height = 20
-      Hint = 'Texture filtering'
-      Color = clWindow
-      Backgnd = bgPattern
-      ButtonSize = 12
-      Max = 3
-      ShowHandleGrip = True
-      Position = 3
-      OnChange = TextureFilterChange
-    end
-    object FramerateManual: TGaugeBar
-      Tag = 14
-      Left = 288
-      Top = 132
-      Width = 129
-      Height = 20
-      Hint = 'Set a manual framerate'
-      Color = clWindow
-      Backgnd = bgPattern
-      ButtonSize = 12
-      LargeChange = 50
-      Max = 255
-      ShowHandleGrip = True
-      Position = 100
-      OnChange = FramerateManualChange
+        '0'
+        '1'
+        '2'
+        '3')
     end
   end
   object ButtonReadFile: TBitBtn
-    Left = 16
-    Top = 490
+    Left = 8
+    Top = 458
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -785,8 +837,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 574
-    Top = 490
+    Left = 521
+    Top = 458
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -795,8 +847,8 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 5
   end
   object ControllerZNC: TEdit
-    Left = 16
-    Top = 227
+    Left = 8
+    Top = 213
     Width = 219
     Height = 21
     Hint = 'Choose controller plugin'
@@ -806,10 +858,11 @@ object FormZiNcSettings: TFormZiNcSettings
     ParentShowHint = False
     ShowHint = True
     TabOrder = 7
+    OnChange = ControllerZNCChange
   end
   object ControllerZNCButtonSelect: TBitBtn
-    Left = 237
-    Top = 227
+    Left = 229
+    Top = 213
     Width = 43
     Height = 21
     Hint = 'Click here to select a controller file'
@@ -820,8 +873,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = ControllerZNCButtonSelectClick
   end
   object RendererZNC: TEdit
-    Left = 16
-    Top = 275
+    Left = 8
+    Top = 259
     Width = 219
     Height = 21
     Hint = 'Choose renderer to use'
@@ -834,8 +887,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnChange = RendererZNCChange
   end
   object RendererZNCButtonSelect: TBitBtn
-    Left = 237
-    Top = 275
+    Left = 229
+    Top = 259
     Width = 43
     Height = 21
     Hint = 'Click here to select a renderer file'
@@ -846,8 +899,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = RendererZNCButtonSelectClick
   end
   object ControllerConfigFile: TEdit
-    Left = 320
-    Top = 227
+    Left = 288
+    Top = 213
     Width = 219
     Height = 21
     Hint = 
@@ -861,8 +914,8 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 11
   end
   object ControllerConfigFileButtonSelect: TBitBtn
-    Left = 541
-    Top = 227
+    Left = 509
+    Top = 213
     Width = 43
     Height = 21
     Hint = 'Click here to select a controller config file'
@@ -873,8 +926,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = ControllerConfigFileButtonSelectClick
   end
   object RendererConfigFile: TEdit
-    Left = 320
-    Top = 275
+    Left = 288
+    Top = 259
     Width = 219
     Height = 21
     Hint = 'Gets renderer config info from the filename specified'
@@ -886,8 +939,8 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 13
   end
   object RendererConfigFileButtonSelect: TBitBtn
-    Left = 541
-    Top = 275
+    Left = 509
+    Top = 259
     Width = 43
     Height = 21
     Hint = 'Click here to select a renderer config file'
@@ -899,9 +952,9 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object FolderROMs: TEasyListview
     Tag = 1
-    Left = 16
+    Left = 8
     Top = 83
-    Width = 567
+    Width = 543
     Height = 83
     Hint = 'ROMs Folders'
     BackGround.Enabled = True
@@ -916,7 +969,7 @@ object FormZiNcSettings: TFormZiNcSettings
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000133020000FFFFFF1F0001000000
+      000600000080080001010001000000000000011B020000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Draggable = False
     Header.FixedSingleColumn = True
@@ -959,7 +1012,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ButtonUp: TBitBtn
     Tag = 1
-    Left = 16
+    Left = 8
     Top = 167
     Width = 43
     Height = 21
@@ -972,7 +1025,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = ButtonUpClick
   end
   object ButtonDown: TBitBtn
-    Left = 59
+    Left = 51
     Top = 167
     Width = 43
     Height = 21
@@ -985,7 +1038,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = ButtonUpClick
   end
   object FolderROMButtonSelect: TBitBtn
-    Left = 412
+    Left = 380
     Top = 167
     Width = 43
     Height = 21
@@ -997,7 +1050,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = FolderROMButtonSelectClick
   end
   object FolderROMsButtonEdit: TBitBtn
-    Left = 455
+    Left = 423
     Top = 167
     Width = 43
     Height = 21
@@ -1009,7 +1062,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = FolderROMsButtonEditClick
   end
   object FolderROMsButtonDelete: TBitBtn
-    Left = 498
+    Left = 466
     Top = 167
     Width = 43
     Height = 21
@@ -1021,7 +1074,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = FolderROMsButtonDeleteClick
   end
   object FolderROMsButtonClear: TBitBtn
-    Left = 541
+    Left = 509
     Top = 167
     Width = 43
     Height = 21
@@ -1033,8 +1086,8 @@ object FormZiNcSettings: TFormZiNcSettings
     OnClick = FolderROMsButtonClearClick
   end
   object ButtonCancel: TBitBtn
-    Left = 672
-    Top = 490
+    Left = 619
+    Top = 458
     Width = 89
     Height = 25
     Hint = 'Close without updating'

@@ -449,7 +449,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.AddGamesToList;
 var
-  Loop: Integer;
+  Loop, SelectionIndex: Integer;
   gItem, addItem: TEasyItem;
   GameIsMerged, FoundROMs, FoundCHDs, FoundCFGs: Boolean;
   HaveROMs, HaveCHDs, HaveCFGs, HaveMerged, HaveBiosSets, HaveClones, HaveCategory, HaveDriverName: Boolean;
@@ -529,6 +529,7 @@ begin
   GamesList.Items.ReIndexDisable:= True;
 
   gItem:= FormMain.GamesListView.Selection.First;
+  SelectionIndex:= 1;
   repeat
     FormMain.FillTempGameInfo(gItem);
     tempFilesList.Clear;
@@ -558,8 +559,14 @@ begin
             HaveCategory:= True;
          if uMain.TEasyGameInfo(gItem).eDriverName <> '' then
             HaveDriverName:= True;
-       end;       
-    gItem:= FormMain.GamesListView.Selection.Next(gItem);
+       end;
+
+    gItem:= FormMain.ELV_GetNextSelected(FormMain.GamesListView, gItem, SelectionIndex);
+    //if SelectionIndex < FormMain.GamesListView.Selection.Count then
+    //   gItem:= FormMain.GamesListView.Selection.Next(gItem)
+    //else
+    //   gItem:= nil;
+    //Inc(SelectionIndex);
     Application.ProcessMessages;
   until gItem = nil;
 

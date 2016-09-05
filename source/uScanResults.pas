@@ -56,7 +56,7 @@ type
   public
     property eImageIndex: Integer read fImageIndex write fImageIndex;
     property eSystem: Integer read fSystem write fSystem;
-    property eSystemType: ShortInt read fSystemType write fSystemType; // 0 -> arcade; 1 -> MESS (everything not arcade machines); requires category_home.ini from AntoPISA
+    property eSystemType: ShortInt read fSystemType write fSystemType; // 0 -> arcade; 1 -> MESS (everything not arcade machines); requires "mess.ini" from AntoPISA
     property eLineMode: ShortInt read fLineMode write fLineMode;
     // 0 -> system
     // 1 -> game title
@@ -862,7 +862,7 @@ function TFormScanResults.ROMsListViewItemCompare(
   Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
 begin
   DoDefault:= False;
-  Result:=-1;
+  Result:= -1;
 end;
 
 procedure TFormScanResults.ROMsListViewItemSelectionChanged(

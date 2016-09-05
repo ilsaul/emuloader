@@ -8,6 +8,9 @@ uses
   MPCommonObjects, EasyListview, uCommon, ImgList,
   PanelEx, AdvOfficeButtons, ShadowLabel, GR32_Image, GraphicEx;
 
+// March 08, 2016
+// NOTE: it's ONE color for each category; this color is used for ALL systems; eg.: in-game snaps color is the same for ALL systems
+
 type
   TLayoutInfo = record
     lImage1_imgCategory,
@@ -16,7 +19,7 @@ type
     lImage2_Enabled,
     lImage3_Enabled: Boolean;
   end;
-  
+
 type
   TFormCategoryLayoutSettings = class(TForm)
     IL_Layouts: TImageList;
@@ -56,7 +59,6 @@ type
     ButtonHelp: TBitBtn;
     ButtonClose: TBitBtn;
     PanelEnabledScr1_AlwaysEnabled: TAdvOfficeCheckBox;
-    LabelWarning: TShadowLabel;
     FrameIconLayScr1: TShape;
     FrameIconLayScr2: TShape;
     FrameIconLayScr3: TShape;
@@ -67,6 +69,7 @@ type
     LabelLayoutTitle: TShadowLabel;
     PanelCategoryTitle: TPanelEx;
     LabelCategoryTitle: TShadowLabel;
+    ButtonAbort: TBitBtn;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LayoutListViewItemCheckChange(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -106,12 +109,16 @@ type
     LayoutSelectedItem: TEasyItem;
     LayoutInfo: packed array[0..8] of TLayoutInfo;
 
+    TempImgFolder: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)-1] of String;
+
     procedure LoadLayoutIcons;
     procedure ELV_SetFocus;
     procedure UpdateSnapDir_MAME;
+    procedure PopulateCatFolderVarsRAM;
     procedure SelectCategoryClick(var CategoryHolder: ShortInt; IconLayoutHolder: TImage; LabelLayout: TShadowLabel);
 
     procedure SetImageCategoryValues;
+    procedure UpdateImageCategories;
     procedure LoadLayouts;
     procedure UpdateLayouts;
     procedure LoadLayoutImage(Index: ShortInt);
@@ -155,6 +162,17 @@ begin
   FormMain.UpdateMAMEsnapDir(FormMain.imgFolder[idHBMAME, 1], idHBMAME);
 end;
 
+procedure TFormCategoryLayoutSettings.PopulateCatFolderVarsRAM;
+var
+  LoopSys, LoopCategory: Integer;
+begin
+  for LoopSys:= 1 to MaxArcadeSystems do
+  begin
+    for LoopCategory:= 0 to High(ImageCategoryArray)-1 do
+        TempImgFolder[LoopSys, LoopCategory]:= FormMain.imgFolder[LoopSys, LoopCategory];
+  end;
+end;
+
 procedure TFormCategoryLayoutSettings.SetImageCategoryValues;
 begin
   if not FormMain.CheckSelected(ImageCategory_Selector) then
@@ -162,8 +180,40 @@ begin
   if ImageCategory_Selector.Tag < High(ImageCategoryArray) then
      begin
        ImageCategoryBackgroundColor.Selected:= ImageCategory_Selector.Selection.First.Tag;
-       ImageCategoryFolder.Text:= FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag];
+       //ImageCategoryFolder.Text:= FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag]; // not used here anymore!!! March 14, 2016
+       ImageCategoryFolder.Text:= TempImgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag];
      end;
+end;
+
+procedure TFormCategoryLayoutSettings.UpdateImageCategories;
+var
+  LoopSys, LoopCategory: Integer;
+  Item: TEasyItem;
+begin
+  for LoopSys:= 1 to MaxArcadeSystems do
+  begin
+    for LoopCategory:=0 to High(ImageCategoryArray)-1 do
+    begin
+      if FormMain.imgFolder[LoopSys, LoopCategory] <> TempImgFolder[LoopSys, LoopCategory] then
+         FormMain.imgFolder[LoopSys, LoopCategory]:= TempImgFolder[LoopSys, LoopCategory];
+    end;
+  end;
+
+  FormMain.PopupMenuImageCategories.BeginUpdate;
+  Item:= ImageCategory_Selector.Groups.FirstItem;
+  repeat
+    if FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Tag <> Item.Tag then
+       FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Tag:= Item.Tag;
+
+    FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Visible:= Item.Checked; // show/hide categories in images buttons tool bar
+
+    Item:= ImageCategory_Selector.Groups.NextItem(Item);
+  until Item = nil;
+
+  FormMain.PopupMenuImageCategories.EndUpdate;
+
+  // update FormMain.imgFolder[] arrays from TempImgFolder[] arrays
+  // update category background colors (from EasyListView to FormMain.PopupMenuImageCategories)
 end;
 
 procedure TFormCategoryLayoutSettings.LoadLayouts;
@@ -264,7 +314,7 @@ begin
     begin
       ImageIndex:= Loop;
       StrTitle:= GetScrLayoutSection(Loop);
-      PosIndex:= Pos(' ', StrTitle);
+      PosIndex:= PosEx(' ', StrTitle);
       if PosIndex <> 0 then
          StrTitle:= Trim(Copy(StrTitle, 1, PosIndex))+#13#10+Trim(Copy(StrTitle, PosIndex, Length(StrTitle)));
       Caption:= StringReplace(StrTitle, '[Layout ', '[lay ', [rfReplaceAll]);//StrTitle;
@@ -295,7 +345,17 @@ procedure TFormCategoryLayoutSettings.FormCloseQuery(Sender: TObject;
 begin
   if not CanClose then
      Exit;
-  UpdateSnapDir_MAME;
+  if ModalResult = mrCancel then
+     Exit;
+
+  // need to update
+  // FormMain.PopupMenuImageCategories.Items[img_catID].Tag ////// ImageCategory_Selector.Selection.First.ImageIndex].Tag
+  // with "ImageCategory_Selector.Items.First.Tag" tags of each category in the EasyListView category list
+  //FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Selection.First.ImageIndex].Tag:= ImageCategoryBackgroundColor.Selected;
+
+  // need to update FormMain.imgFolder[sysID, img_catID]; with the new TempImgFolder[sysID, img_catID];
+  UpdateImageCategories;
+  UpdateSnapDir_MAME; // only if user click "Apply" button
   UpdateLayouts; // update .ini settings only (do not apply setting at main screen)
   // no need to update hints if layouts is enabled, I think... see uMain.SetImageLayout;
 end;
@@ -470,8 +530,7 @@ begin
   LabelEmuTitle.Caption:= UpperCase(FormMain.GetEmulatorDescription(Item.ImageIndex));
   // check if category is selected and apply it's selected item ???
   // maybe select one by code ???
-  SetImageCategoryValues; // this is wrong!!! ??
-  // not sure about this event... it seems to be working fine!!!! (May 2009)
+  SetImageCategoryValues;
 end;
 
 procedure TFormCategoryLayoutSettings.ImageCategory_SelectorItemCheckChange(
@@ -482,7 +541,8 @@ begin
        if not Item.Checked then
           Item.Checked:= True;
      end;
-  FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Visible:= Item.Checked;
+  // FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Visible:= Item.Checked; // cannot be here...
+  // ... need to update this only if user clicks "Apply" button
   case Item.Checked of
     True : Item.State:= Item.State-[esosGhosted];
     False: Item.State:= Item.State+[esosGhosted];
@@ -546,18 +606,27 @@ end;
 procedure TFormCategoryLayoutSettings.ImageCategoryBackgroundColorSelect(
   Sender: TObject);
 begin
+  // do not change the color .Tag in FormMain.PopupMenuImageCategories;
+  // this will only be done if user clicks OK button; clicking Abort button does not update it
+  // I can use "ImageCategory_Selector.Selection.First.Tag" to hold the new value instead of using a new array var
   if FormMain.CheckSelected(ImageCategory_Selector) then
      begin
        ImageCategory_Selector.Selection.First.Tag:= ImageCategoryBackgroundColor.Selected;
-       FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Selection.First.ImageIndex].Tag:= ImageCategoryBackgroundColor.Selected;
+       //FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Selection.First.ImageIndex].Tag:= ImageCategoryBackgroundColor.Selected;
+       // comment the above line... PopupMenuImageCategories will only be updated if users clicks "Apply" button!!! (March 10, 2016)
      end;
 end;
 
 procedure TFormCategoryLayoutSettings.ImageCategoryFolderChange(
   Sender: TObject);
 begin
-  if FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag] <> TEdit(Sender).Text then
-     FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag]:= TEdit(Sender).Text;
+  // new RAM var so user can abort changes (March 10, 2016)
+  if TempImgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag] <> TEdit(Sender).Text then
+     TempImgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag]:= TEdit(Sender).Text;
+
+  // comment/remove this FormMain.imgFolder[]; it will only be updated if user click "Apply" button
+  //if FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag] <> TEdit(Sender).Text then
+  //   FormMain.imgFolder[ImageCategorySystem_Selector.Tag, ImageCategory_Selector.Tag]:= TEdit(Sender).Text;
 end;
 
 procedure TFormCategoryLayoutSettings.ButtonImageCategoryFolderClick(
@@ -664,7 +733,7 @@ begin
   FormMain.AddMsgText('1. Click on ');
   FormMain.AddMsgText('Categories', $00a65300, [fsBold]);
   FormMain.AddMsgText(' button tab to show the image categories panel.'+#13#10+
-                      '2. To setup folders, select a system, a category, then a folder where images are.'+#13#10+
+                      '2. To setup folders, select a system, a category, then a folder where images are. Relative path is relative to the emulator directory.'+#13#10+
                       '3. Repeat step ');
   FormMain.AddMsgText('#2', clBlack, [fsBold]);
   FormMain.AddMsgText(' for all categories and systems.'+#13#10+
@@ -686,7 +755,12 @@ begin
                       '5. Repeat the process from step ');
   FormMain.AddMsgText('#2', clBlack, [fsBold]);
   FormMain.AddMsgText(' for other layouts.'+#13#10+
-                      '6. To hide a layout, clear the checkbox in the layout list.');
+                      '6. To hide a layout, clear the checkbox in the layout list.'+#13#10+#13#10+
+                      '    When you''re done, click ');
+  FormMain.AddMsgText('Apply', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' button to save and apply changes or click ');
+  FormMain.AddMsgText('Abort', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' button to cancel any changes you''ve made.');
   GenerateMessage('Help', 'How to setup images and layouts.', '', 2);
 end;
 
@@ -699,6 +773,8 @@ begin
   FormMain.LoadCategoriesIcons(IL_ImageCategory, True);
   FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge, True);
   LoadLayoutIcons;
+
+  PopulateCatFolderVarsRAM; // load categories folders for each system into a temp var in RAM "TempImgFolder[sysID, catID]"
 
   FormMain.ELV_PopulateSystems(ImageCategorySystem_Selector, True, True, 1);
   //FormMain.ELV_SystemsShortTitle(ImageCategorySystem_Selector);

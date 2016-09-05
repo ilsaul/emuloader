@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, ComCtrls, IniFiles, Buttons, FileCtrl,
   MPCommonObjects, EasyListview, uCommon, ImgList, ToolWin,
-  AdvGroupBox, ShadowLabel, PanelEx, AdvOfficeButtons, ShellAPI;
+  ShadowLabel, PanelEx, AdvOfficeButtons, ShellAPI;
 
 type
   TFormEmulatorsSetup = class(TForm)
@@ -35,8 +35,6 @@ type
     PanelMAMEEmulatorsText: TPanelEx;
     ShadowLabel1: TShadowLabel;
     ShadowLabel2: TShadowLabel;
-    ShadowLabel3: TShadowLabel;
-    ShadowLabel4: TShadowLabel;
     ShadowLabel5: TShadowLabel;
     ShadowLabel6: TShadowLabel;
     ButtonSetOptionsAlterMAME: TBitBtn;
@@ -114,9 +112,9 @@ begin
   if AlterMAME_exec.Text = '' then
      Exit;
   sFile:= LowerCase(AlterMAME_exec.Text);
-  IsExeMAME:= Pos('mame', sFile) <> 0;
+  IsExeMAME:= PosEx('mame', sFile) <> 0;
   if not IsExeMAME then
-     IsExeMAME:= Pos('ume', sFile) <> 0;
+     IsExeMAME:= PosEx('ume', sFile) <> 0;
   ButtonSetOptionsAlterMAME.Enabled:= IsExeMAME;
 end;
 
@@ -275,7 +273,7 @@ begin
   FormMain.MainMenuOptions.Tag:= 0;
 
   FormEmulatorsSetup.Hide;
-  elIni:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'folders_emulators.ini');
+  elIni:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
 
   for Loop:= 1 to MaxArcadeSystems do
   begin
@@ -296,7 +294,7 @@ begin
        FormMain.AlterMAMEDateTime:= newAlterMAMEDateTime;
        FormMain.buildAlterMAME:= newbuildAlterMAME;
      end;
-  if not FormMain.CheckReadOnly(FormMain.GetIniFilesFolder+'folders_emulators.ini') then
+  if not FormMain.CheckReadOnly(FormMain.GetFoldersEmulatorsFile) then
      elIni.UpdateFile;
   FreeAndNil(elIni);
   Close;
@@ -324,7 +322,7 @@ begin
   //     if not FileExists(FormMain.GetEmuIniFileName(SystemSelector.Tag, newEmulatorFile[SystemSelector.Tag])) then
   //        FormMain.CreateMAMEIniFile(newEmulatorFile[SystemSelector.Tag]);
   //   end;
-  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], SystemSelector.Tag, False, newBuildMAME);//
+  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, newBuildMAME);
 end;
 
 {procedure TFormEmulatorsSetup.ClearEmulatorIcon(AlterMAME: Boolean);
@@ -626,7 +624,7 @@ begin
        if not FileExists(FormMain.GetEmuIniFileName(SystemSelector.Tag, newAlterMAMEFile)) then
           FormMain.CreateMAMEIniFile(newAlterMAMEFile);
      end;
-  FormMain.CallEmulatorOptions(newAlterMAMEFile, SystemSelector.Tag, True, newbuildAlterMAME);
+  FormMain.CallEmulatorOptions(newAlterMAMEFile, newAlterMAMEVersion, SystemSelector.Tag, True, newbuildAlterMAME);
 end;
 
 end.

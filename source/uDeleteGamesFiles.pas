@@ -148,7 +148,7 @@ begin
            FillBlank:= '104'
         else
            FillBlank:= '107';
-        Result:= 'Size: '+eFileSizeText+'  Date/Time: '+eDateTimeText;
+        Result:= 'Size: '+eFileSizeText+'  Date Modified: '+eDateTimeText;
         if eMediaType > 0 then
            begin
              if eHeaderVerCHD > 0 then
@@ -639,22 +639,29 @@ begin
       begin
         CallMessageBox;
         FormMain.ShowGameNameEntryMsgBox;
+        FormMain.AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
+        FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
 
-        FormMain.AddMsgText(FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True)+#13#10, clGray, [fsBold, fsItalic], taCenter);
         if FormMain.MemGameInfo.eSoftwareName <> '' then
-           FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, $000053a6, [fsBold], taCenter, 9);
+           begin
+             FormMain.AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
+             FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+           end;
+        FormMain.AddMsgText(#13#10);
 
         if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then // .Count > 0
            begin
-             FormMain.AddMsgText(#13#10+'    No files were found to ');
+             FormMain.AddMsgText('    No files were found to ');
              FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
            end
         else
            begin
-             FormMain.AddMsgText(#13#10+'    This game does not use any ROMs. There are no extra files to ');
+             FormMain.AddMsgText('    This game does not use any ROMs. There are no extra files to ');
              FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
            end;
         FormMain.AddMsgText('.');//+#13#10+#13#10);
+        FormMain.AddMsgText(#13#10+#13#10+'Emulator File: ');
+        FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold]);
 
         //FormMain.AddMsgText('Emulator File: ');
         //FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], clBlack, [fsBold]);

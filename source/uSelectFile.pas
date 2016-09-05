@@ -132,7 +132,7 @@ begin
        FilesListView.EndUpdate;
        if FilesListView.Scrollbars.VertBarVisible then
           begin
-            FilesListView.Header.Columns[0].Width:= FilesListView.Header.Columns[0].Width-16;
+            FilesListView.Header.Columns[0].Width:= FilesListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);//16;
             FilesListView.Sort.SortAll;
           end;
      end;
@@ -157,6 +157,10 @@ end;
 procedure TFormSelectFile.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(FilesListView);
+  LoadFilesList;
+  Exit;
+
+  // none of the below code is used anymore (March 16, 2016)
   if not (FormSelectFile.Tag in [26, 28, 29, 31]) then
      begin
        //FormMain.GetGameROMIcon(GameIcon);
@@ -180,7 +184,7 @@ procedure TFormSelectFile.NewFilenameKeyPress(Sender: TObject;
   var Key: Char);
 begin
   if Key in ['\', '/', ':', '*', '?', '"', '<', '>', '|'] then
-     Key:= Char(0)
+     Key:= Char(0);
 end;
 
 procedure TFormSelectFile.FilesListViewItemSelectionChanged(

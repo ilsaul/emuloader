@@ -77,9 +77,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelFileType: TShadowLabel
     Left = 216
     Top = 76
-    Width = 345
+    Width = 285
     Height = 19
-    Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
+    Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -13

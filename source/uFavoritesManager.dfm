@@ -5,7 +5,7 @@ object FormFavoritesManager: TFormFavoritesManager
   BorderStyle = bsDialog
   Caption = 'Favorites Manager'
   ClientHeight = 402
-  ClientWidth = 614
+  ClientWidth = 619
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,7 +24,7 @@ object FormFavoritesManager: TFormFavoritesManager
   object ToolbarButtons: TToolBar
     Left = 0
     Top = 0
-    Width = 614
+    Width = 619
     Height = 22
     AutoSize = True
     ButtonWidth = 163
@@ -106,7 +106,7 @@ object FormFavoritesManager: TFormFavoritesManager
   object FavoritesList: TEasyListview
     Left = 0
     Top = 44
-    Width = 614
+    Width = 619
     Height = 358
     Align = alClient
     CellSizes.Tile.Width = 254
@@ -137,10 +137,10 @@ object FormFavoritesManager: TFormFavoritesManager
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
       00010100000000000142000000FFFFFF1F000100000001000000050000004700
       61006D0065007300000000000000000000000000110000005445617379436F6C
-      756D6E53746F726564FFFECE0006000000800800010100010200000000000194
+      756D6E53746F726564FFFECE0006000000800800010100010200000000000192
       000000FFFFFF1F00010000000100000008000000460069006C0065006E006100
       6D006500000000000000000000000000110000005445617379436F6C756D6E53
-      746F726564FFFECE0006000000800800010100010300000000000182000000FF
+      746F726564FFFECE0006000000800800010100010300000000000189000000FF
       FFFF1F0001000000010000000D000000440061007400650020004D006F006400
       69006600690065006400000000000000000000000000}
     Header.Draggable = False
@@ -200,7 +200,7 @@ object FormFavoritesManager: TFormFavoritesManager
   object NewFavoritePanel: TPanelEx
     Left = 0
     Top = 22
-    Width = 614
+    Width = 619
     Height = 22
     Align = alTop
     Color1 = 16445669

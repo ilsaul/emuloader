@@ -179,7 +179,7 @@ procedure TFormDeleteCloneImages.DeleteFiles(SelectedOnly: Boolean = False);
 var
   Item, ItemToDelete: TEasyItem;
   FileStr, FileExt, SoftNameFolderStr: String;
-  Loop: Integer;
+  Loop, selItem: Integer;
   imgDeleted: Boolean;
 begin
   if not FormMain.CheckTotal(DeleteClonesList) then
@@ -201,6 +201,7 @@ begin
     True : Item:= DeleteClonesList.Selection.First;
     False: Item:= DeleteClonesList.Groups.LastItem;
   end;
+  selItem:= 1;
   repeat
     imgDeleted:= False;
     ItemToDelete:= nil;
@@ -236,7 +237,8 @@ begin
         begin
           if not imgDeleted then
              Item.Selected:= False;
-          Item:= DeleteClonesList.Selection.Next(Item);
+          Item:= FormMain.ELV_GetNextSelected(DeleteClonesList, Item, selItem);
+          //Item:= DeleteClonesList.Selection.Next(Item);
         end;
       False:
         begin

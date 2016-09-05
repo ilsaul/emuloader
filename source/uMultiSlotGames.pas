@@ -20,8 +20,6 @@ type
     procedure GamesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure GamesListColumnPaintText(Sender: TCustomEasyListview;
-      Column: TEasyColumn; ACanvas: TCanvas);
     procedure GamesListItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ButtonUpClick(Sender: TObject);
@@ -73,11 +71,11 @@ var
     GamesList.Header.Columns[ColumnIndex].AutoSizeToFit;
     GamesList.Header.Columns[ColumnIndex].Width:= GamesList.Header.Columns[ColumnIndex].Width-GamesList.ImagesSmall.Width;
     case ColumnIndex of
-      2: MinSize:= 39;
-      3: MinSize:= 52;
-      4: MinSize:= 44;
-      5: MinSize:= 47;
-      //6: MinSize:= 34;
+      2: MinSize:= 44;
+      3: MinSize:= 57;
+      4: MinSize:= 47;
+      5: MinSize:= 49;
+      6: MinSize:= 35;
     end;
     if GamesList.Header.Columns[ColumnIndex].Width < MinSize then
        GamesList.Header.Columns[ColumnIndex].Width:= MinSize;
@@ -89,6 +87,7 @@ begin
   SetColAutoFit(3);
   SetColAutoFit(4);
   SetColAutoFit(5);
+  SetColAutoFit(6);
 
   iTotalW:= 0;
   for iLoop:=0 to GamesList.Header.Columns.Count-1 do
@@ -108,8 +107,12 @@ begin
 
   if GamesList.Scrollbars.HorzBarVisible then
      begin
-       // resolution is smaller than 800x600... headers scroll bar needed
+       // resolution is smaller than 800x600... headers scroll bar needed ????
        GamesList.Height:= GamesList.Height+GetSystemMetrics(SM_CXHSCROLL);
+       ButtonUp.Top:= ButtonUp.Top+GetSystemMetrics(SM_CXHSCROLL);
+       ButtonDown.Top:= ButtonUp.Top;
+       ButtonRemoveFromList.Top:= ButtonUp.Top;
+       LabelHelpText.Top:= LabelHelpText.Top+GetSystemMetrics(SM_CXHSCROLL);
      end;
 end;
 
@@ -117,8 +120,8 @@ procedure TFormMultiSlotGames.iAdjustSize;
 var
   wDiff: Integer;
 begin
-  //wDiff:= 160;
-  if Screen.Width > 800 then
+  //wDiff:= 160; // for debugging only; do not enable this
+  if Screen.Width >= 800 then
      Exit;
   if Screen.Width = 720 then
      wDiff:= 80
@@ -130,6 +133,7 @@ begin
   ButtonNo.Left:= ButtonNo.Left-(wDiff div 2);
   LabelHelpText.Left:= LabelHelpText.Left-(wDiff div 2);
   GamesList.Width:= GamesList.Width-wDiff;
+  GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-wDiff;
   FormMultiSlotGames.ClientWidth:= FormMultiSlotGames.ClientWidth-wDiff;
 end;
 
@@ -181,7 +185,7 @@ begin
                                     Item.StateImageIndexes[7],
                                     Item.Captions[3], ACanvas);
      end;
-    4: ACanvas.Font.Size:= 7;
+    //4: ACanvas.Font.Size:= 7;
   end;
 end;
 
@@ -192,13 +196,6 @@ begin
     #13: ButtonOk.Click;
     #27: ButtonNo.Click;
   end;
-end;
-
-procedure TFormMultiSlotGames.GamesListColumnPaintText(
-  Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
-begin
-  //if Column.Index in [6..10] then
-  //   ACanvas.Font.Size:= 7;
 end;
 
 procedure TFormMultiSlotGames.GamesListItemSelectionChanged(

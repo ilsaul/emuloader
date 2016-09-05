@@ -165,7 +165,9 @@ type
   public
     { Public declarations }
     emuIni,
-    GameIni: String;
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
     IsAlterMAME: Boolean;
     BuildNumber: Integer;
@@ -356,7 +358,7 @@ var
              cResolution:= Value
           else
           begin
-            Position:= Pos('@', Value);
+            Position:= PosEx('@', Value);
             if Position <> 0 then
                cRefreshRate:= Copy(Value, Position+1, Length(Value)-Position);
             TempString:= '';
@@ -476,7 +478,7 @@ begin
                begin
                  Value:= GetStringValue;
                  if SameText(Value, '<NULL> (not set)') then
-                    Value:= '.;ini';
+                    Value:= 'ini';
                  FormMain.ExtractMultiFolders(Value, sysID, FolderIniFiles);
                end;
             // # CORE OUTPUT DIRECTORY OPTIONS
@@ -877,7 +879,7 @@ begin
               if FormMain.CheckTotal(FolderROMs) then
                  UpdateMAMELine('inipath', FormMain.MountFoldersListMAME(FolderIniFiles))
               else
-                 UpdateMAMELine('inipath', '.;ini');
+                 UpdateMAMELine('inipath', 'ini');
             end
          else
          // # CORE OUTPUT DIRECTORY OPTIONS
@@ -1139,7 +1141,7 @@ begin
     if strLine <> '' then
        if strLine[1] <> '#' then
           begin
-            iPos:= Pos(' ', strLine);
+            iPos:= PosEx(' ', strLine);
             if iPos <> 0 then
                ListHolder[Loop]:= Copy(strLine, 1, iPos-1)+'='+Trim(Copy(strLine, iPos, Length(strLine)));
           end;
@@ -1284,8 +1286,8 @@ begin
   IsSDLMAME:= False;
 
   case SystemIcon.Tag of
-    0: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, sysID, IsAlterMAME);
-    1: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(False, sysID, IsAlterMAME);
+    0: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, sysID, emuVersionStr, IsAlterMAME);
+    1: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(False, sysID, emuVersionStr, IsAlterMAME);
   end;
 
   if (Tag = 0) or (SystemIcon.Tag = 1) then
@@ -1466,10 +1468,10 @@ begin
                       '- debug.ini'+#13#10+
                       '- vertical.ini (if screen game is vertical)'+#13#10+
                       '- horizont.ini (if screen game is horizontal)'+#13#10+
-                      '- arcade.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- console.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- computer.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- othersys.ini (UME / MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
+                      '- arcade.ini (MAME v0.163 and newer)'+#13#10+
+                      '- console.ini (MAME v0.163 and newer)'+#13#10+
+                      '- computer.ini (MAME v0.163 and newer)'+#13#10+
+                      '- othersys.ini (MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
                       '- vector.ini (if game is vector)'+#13#10+
                       '- source\sourcefile.ini or sourcefile.ini'+#13#10+
                       '- biosname.ini'+#13#10+

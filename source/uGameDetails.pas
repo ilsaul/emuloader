@@ -217,7 +217,7 @@ var
   ZipName, ZipParent, ZipBios, ZipExtension, SampleName, ZipDevice, tmpString, SamplesFolder: String;
   IsBiosGame, FileFound, IsSegaModel2, NoROMs: Boolean;
   ImgIndex: ShortInt;
-  ListSamples: THashedStringList;
+  ListSamples, SamplesPathList: THashedStringList;
   Loop: Integer;
 
   function AddControlsList(const ctrlList: String): Boolean;
@@ -341,8 +341,11 @@ begin
   else
      TextPos:= LabelYear.Top;
   IsSegaModel2:= FormMain.MemGameInfo.eSystemID = idSegaModel2;
- 
+
   AddEntry2('Manufacturer', FormMain.MemGameInfo.eManufacturer);
+
+  // AddEntry2('Alternate Title', Utf8Decode('グラディウス'));
+  // maybe ????? April 25, 2016
 
   case FormMain.MemGameInfo.eAudioType of
     0: AddEntry2('Audio', 'Standard Audio (chip)');
@@ -356,11 +359,13 @@ begin
              SampleName:= ListSamples.Values[FormMain.MemGameInfo.eName];
              if SampleName <> '' then
                 begin
-                  tmpString:= '';
                   FileFound:= False;
-                  for Loop:=0 to FormMain.SamplesDir[Ord(FormMain.MemGameInfo.eSystemID = idMAME)].Count-1 do
+                  tmpString:= FormMain.LoadFolderSpecial_MAME(FormMain.MemGameInfo.eSystemID, FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], 2);
+                  FormMain.ExtractFolders2MAME(FormMain.MemGameInfo.eSystemID, tmpString, SamplesPathList);
+                  tmpString:= '';
+                  for Loop:=0 to SamplesPathList.Count-1 do
                   begin
-                    SamplesFolder:= FormMain.SamplesDir[Ord(FormMain.MemGameInfo.eSystemID = idMAME)].Strings[Loop];
+                    SamplesFolder:= SamplesPathList[Loop];
 
                     ZipExtension:= '.zip';
                     FileFound:= FileExists(SamplesFolder+SampleName+ZipExtension);
@@ -372,6 +377,7 @@ begin
                     if FileFound then
                        Break;
                   end;
+                  FreeAndNil(SamplesPathList);
                   tmpString:= SampleName;
                   if FileFound then
                      tmpString:= tmpString+ZipExtension+' ('+
@@ -384,7 +390,7 @@ begin
              FreeAndNil(ListSamples);
            end
         else
-           AddEntry2('Audio', 'Samples'); // for systems other than MAME, this will never be execute but still...
+           AddEntry2('Audio', 'Samples'); // for systems other than MAME, this will never be execute, but still...
       end;
   end;
 
@@ -413,7 +419,7 @@ begin
   if FormMain.MemGameInfo.eScreenRefreshRate <> '' then
      begin
        if tmpString <> '' then
-          tmpString:= tmpString+' at ';
+          tmpString:= tmpString+' @ ';
        tmpString:= tmpString+FormMain.MemGameInfo.eScreenRefreshRate+' Hz';
      end;
   if tmpString <> '' then
@@ -442,6 +448,20 @@ begin
   ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eDriverStatus);
   AddEntry2('Driver Status', aStatus[FormMain.MemGameInfo.eDriverStatus], ImgIndex);
   AddDriverStatus;
+
+  if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) and (FormMain.MemGameInfo.eSoftwareName = '') then
+     begin
+       // -1 -> unknown (empty); 0 -> unsupported; 1 -> supported
+       tmpString:= '';
+       case FormMain.MemGameInfo.eSaveState of
+        //-1: tmpString:= 'Unknown';
+         0: tmpString:= 'Unsupported';
+         1: tmpString:= 'Supported';
+        end;
+        if tmpString <> '' then
+           AddEntry2('Save State', tmpString);
+     end;
+
   //if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) and (FormMain.MemGameInfo.eSoftwareName = '') then
   //   begin
   //     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
@@ -467,29 +487,43 @@ begin
   AddEntry2('Compatibility', FormMain.MemGameInfo.eSoftwareCompatible);
   AddEntry2('Usage', FormMain.MemGameInfo.eSoftwareUsageTip);
 
-  AddEntry2('# of Players', FormMain.GetNumberPlayersInfo(FormMain.MemGameInfo.eNumberPlayers, FormMain.MemGameInfo.eNumberPlayersIni));
   AddEntry2('Main CPU Chip', FormMain.MemGameInfo.eChipCPU);
-  //if FormMain.MemGameInfo.eLanguage <> '' then
-     AddEntry2('Language', FormMain.MemGameInfo.eLanguage);
+
+  AddEntry2('Language', FormMain.MemGameInfo.eLanguage);
+
+  AddEntry2('# of Players', FormMain.GetNumberPlayersInfo(FormMain.MemGameInfo.eNumberPlayers, FormMain.MemGameInfo.eNumberPlayersIni));
 
   if (FormMain.MemGameInfo.eSystemID = idZiNc) and (not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification)) then // ZinC game index
      AddEntry2('Game Index', IntToStr(FormMain.MemGameInfo.eScreenType));
 
+  AddControlsList(FormMain.MemGameInfo.eControls);
+
   if FormMain.MemGameInfo.eMechanical then
      AddEntry2('Mechanical', 'Yes');
 
-  AddControlsList(FormMain.MemGameInfo.eControls);
+  if FormMain.MemGameInfo.ePlayedDate <> 0 then
+     AddEntry2('Last Played', FormMain.GetDateTimeStr(FormMain.MemGameInfo.ePlayedDate, True, True));
 
-  if FormMain.MemGameInfo.ePlayed > 0 then
-     begin
-       tmpString:= IntToStr(FormMain.MemGameInfo.ePlayed)+'x';
-       if FormMain.MemGameInfo.ePlayedDate <> 0 then
-          tmpString:= tmpString+' ('+FormMain.GetDateTimeStr(FormMain.MemGameInfo.ePlayedDate, True, True)+')';
-       AddEntry2('Played', tmpString);
-     end;
   tmpString:= '';
+  if FormMain.MemGameInfo.ePlayed > 0 then
+     tmpString:= IntToStr(FormMain.MemGameInfo.ePlayed)+'x  ';
   if FormMain.MemGameInfo.eTotalPlaytime > 0 then
-     AddEntry2('Playtime', GetPlayTime(FormMain.MemGameInfo.eTotalPlaytime, True));
+     tmpString:= tmpString+GetPlayTime(FormMain.MemGameInfo.eTotalPlaytime, True);
+  if tmpString <> '' then
+     AddEntry2('Playtime', tmpString);
+  tmpString:= '';
+
+
+  //if FormMain.MemGameInfo.ePlayed > 0 then
+  //   begin
+  //     tmpString:= IntToStr(FormMain.MemGameInfo.ePlayed)+'x';
+  //     if FormMain.MemGameInfo.ePlayedDate <> 0 then
+  //        tmpString:= tmpString+' ('+FormMain.GetDateTimeStr(FormMain.MemGameInfo.ePlayedDate, True, True)+')';
+  //     AddEntry2('Played', tmpString);
+  //   end;
+
+  //if FormMain.MemGameInfo.eTotalPlaytime > 0 then
+  //   AddEntry2('Playtime', GetPlayTime(FormMain.MemGameInfo.eTotalPlaytime, True));
 
   if FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID] <> '' then
      LabelEmulatorVersion.Caption:= LabelEmulatorVersion.Caption+#13#10+
@@ -884,7 +918,7 @@ var
             tmpString:= ''; // holds CHD name
             tmpString2:= ''; // holds Parent CHD name
             // extract the _"parentchd"_ and get the CHD filename (discard parent CHD name)
-            sIndex:= Pos('_"parentchd"_', romName);
+            sIndex:= PosEx('_"parentchd"_', romName);
             if sIndex = 0 then
                tmpString:= romName // ROM Name
             else
@@ -1046,6 +1080,9 @@ begin
               for Loop:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
               begin
                 iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[Loop];
+                // 3 -> Game CHD File
+                // 4 -> Bios CHD File
+                // 5 -> Device CHD File
                 if iROM[1] in ['3', '4', '5'] then
                    begin
                      iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Names[Loop];
@@ -1129,7 +1166,7 @@ begin
   //if FormGameDetails.ClientHeight > 400 then
   //   FormGameDetails.ClientHeight:= 400;
 
-  // no used anymore ???? is this a debug stuff ?
+  // no used anymore ???? is this a debug stuff ? ... can't remember what this is (May 23, 2016)
   //BottomPos:= ROMsListView.Header.Columns[0].Width+ROMsListView.Header.Columns[1].Width+ROMsListView.Header.Columns[2].Width;
   //Caption:= 'header: '+IntToStr(BottomPos)+'  -> ELV width: '+IntToStr(ROMsListView.ClientWidth);
 end;

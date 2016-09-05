@@ -1,11 +1,11 @@
 object FormSupermodelSettings: TFormSupermodelSettings
-  Left = 564
-  Top = 185
+  Left = 925
+  Top = 612
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 564
-  ClientWidth = 650
+  ClientHeight = 523
+  ClientWidth = 614
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -20,18 +20,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelCrosshairs: TLabel
-    Left = 360
-    Top = 470
-    Width = 126
-    Height = 15
-    Caption = 'Crosshairs (Gun Games)'
-    ShowAccelChar = False
-    Transparent = True
-  end
   object LabelReadFileIni: TShadowLabel
-    Left = 116
-    Top = 531
+    Left = 108
+    Top = 495
     Width = 300
     Height = 16
     AutoSize = False
@@ -49,7 +40,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Transparent = True
   end
   object LabelFolderROMs: TLabel
-    Left = 16
+    Left = 8
     Top = 69
     Width = 73
     Height = 15
@@ -57,10 +48,20 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ShowAccelChar = False
     Transparent = True
   end
+  object Label1: TLabel
+    Left = 337
+    Top = 440
+    Width = 258
+    Height = 15
+    Caption = 'Load Graphics State From Save State File (Debug)'
+    ShowAccelChar = False
+    Transparent = True
+    Visible = False
+  end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 650
+    Width = 614
     Height = 60
     Align = alTop
     Color1 = 15792869
@@ -88,7 +89,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 555
+      Width = 519
       Height = 26
       AutoSize = False
       Caption = 
@@ -111,7 +112,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object LabelEmulatorVersion: TShadowLabel
       Left = 87
       Top = 27
-      Width = 430
+      Width = 414
       Height = 25
       AutoSize = False
       Caption = 
@@ -132,7 +133,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 532
+      Left = 496
       Top = 26
       Width = 110
       Height = 27
@@ -155,10 +156,10 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
   end
   object VideoGroupBox: TAdvGroupBox
-    Left = 16
-    Top = 183
-    Width = 317
-    Height = 199
+    Left = 8
+    Top = 158
+    Width = 312
+    Height = 215
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
@@ -175,19 +176,28 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object LabelVertexShader: TLabel
       Left = 8
-      Top = 105
-      Width = 189
+      Top = 124
+      Width = 192
       Height = 15
-      Caption = '3D Vertex Shader (Extreme Caution!)'
+      Caption = '3D Vertex Shader (Legacy 3D Engine)'
       ShowAccelChar = False
       Transparent = True
     end
     object LabelFragmentShader: TLabel
       Left = 8
-      Top = 153
-      Width = 208
+      Top = 170
+      Width = 211
       Height = 15
-      Caption = '3D Fragment Shader (Extreme Caution!)'
+      Caption = '3D Fragment Shader (Legacy 3D Engine)'
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object LabelVideo3DEngine: TLabel
+      Left = 184
+      Top = 20
+      Width = 53
+      Height = 15
+      Caption = '3D Engine'
       ShowAccelChar = False
       Transparent = True
     end
@@ -206,9 +216,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 0
     end
     object DisableThrottle: TAdvOfficeCheckBox
-      Left = 200
-      Top = 20
-      Width = 110
+      Left = 184
+      Top = 100
+      Width = 105
       Height = 20
       Hint = 'Disable 60Hz frame rate limit (not recommended!)'
       ShowHint = True
@@ -219,9 +229,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object ShowFPS: TAdvOfficeCheckBox
-      Left = 200
-      Top = 40
-      Width = 81
+      Left = 8
+      Top = 100
+      Width = 72
       Height = 20
       Hint = 'Display frame rate in window title bar'
       ShowHint = True
@@ -233,8 +243,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object VertexShader: TEdit
       Left = 8
-      Top = 121
-      Width = 256
+      Top = 140
+      Width = 251
       Height = 21
       Hint = 'Load 3D vertex shader from external file'
       AutoSize = False
@@ -244,8 +254,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object FragmentShader: TEdit
       Left = 8
-      Top = 169
-      Width = 256
+      Top = 186
+      Width = 251
       Height = 21
       Hint = 'Load 3D fragment shader from external file'
       AutoSize = False
@@ -254,8 +264,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 4
     end
     object ButtonSelectVertexShader: TBitBtn
-      Left = 266
-      Top = 121
+      Left = 261
+      Top = 140
       Width = 43
       Height = 21
       Caption = 'Select'
@@ -263,8 +273,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnClick = ButtonSelectVertexShaderClick
     end
     object ButtonSelectFragmentShader: TBitBtn
-      Left = 266
-      Top = 169
+      Left = 261
+      Top = 186
       Width = 43
       Height = 21
       Caption = 'Select'
@@ -298,9 +308,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object MultiTexture: TAdvOfficeCheckBox
-      Left = 200
+      Left = 184
       Top = 60
-      Width = 97
+      Width = 94
       Height = 20
       Hint = 
         'Use 8 texture maps for accurate decoding (disable to decode to a' +
@@ -317,7 +327,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object GPUMultithreading: TAdvOfficeCheckBox
       Left = 8
       Top = 80
-      Width = 129
+      Width = 127
       Height = 20
       Hint = 
         'Run graphics rendering in separate thread (disable to run in mai' +
@@ -331,14 +341,35 @@ object FormSupermodelSettings: TFormSupermodelSettings
       State = cbChecked
       Themed = True
     end
-    object DisableVSync: TAdvOfficeCheckBox
-      Left = 200
-      Top = 80
-      Width = 105
-      Height = 20
-      Hint = 'Disable monitor'#39's vertical syncronization'
+    object Video3DEngine: TComboBox
+      Left = 184
+      Top = 36
+      Width = 121
+      Height = 23
+      Hint = 
+        'Choose between the new 3D Engine by Ian Curtis (recommended) or ' +
+        'the old one'
+      Style = csDropDownList
+      Ctl3D = True
+      ItemHeight = 15
+      ItemIndex = 1
+      ParentCtl3D = False
+      ParentShowHint = False
       ShowHint = True
       TabOrder = 11
+      Text = 'New 3D Engine'
+      Items.Strings = (
+        'Legacy 3D Engine'
+        'New 3D Engine')
+    end
+    object DisableVSync: TAdvOfficeCheckBox
+      Left = 184
+      Top = 80
+      Width = 101
+      Height = 20
+      Hint = 'Do not lock to vertical refresh rate'
+      ShowHint = True
+      TabOrder = 12
       Alignment = taLeftJustify
       Caption = 'Disable V-Sync'
       ReturnIsTab = False
@@ -346,28 +377,28 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
   end
   object InputGroupBox: TAdvGroupBox
-    Left = 16
-    Top = 392
-    Width = 317
-    Height = 87
+    Left = 8
+    Top = 381
+    Width = 312
+    Height = 102
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Input'
     Ctl3D = True
     TabOrder = 2
-    object LabelInputSystem: TLabel
+    object LabelCrosshairs: TLabel
       Left = 8
-      Top = 20
-      Width = 69
+      Top = 76
+      Width = 126
       Height = 15
-      Caption = 'Input System'
+      Caption = 'Crosshairs (Gun Games)'
       ShowAccelChar = False
       Transparent = True
     end
     object InputSystem: TComboBox
       Left = 8
-      Top = 36
-      Width = 256
+      Top = 21
+      Width = 251
       Height = 23
       Style = csDropDownList
       ItemHeight = 15
@@ -384,8 +415,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
         'SDL (non-Windows builds)')
     end
     object ButtonConfigInput: TBitBtn
-      Left = 266
-      Top = 36
+      Left = 261
+      Top = 21
       Width = 43
       Height = 23
       Hint = 'Open emulator'#39's config input window (select input system first!)'
@@ -397,7 +428,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object EnableForceFeedback: TAdvOfficeCheckBox
       Left = 8
-      Top = 60
+      Top = 50
       Width = 256
       Height = 20
       TabOrder = 2
@@ -406,12 +437,33 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
+    object Crosshairs: TComboBox
+      Left = 136
+      Top = 72
+      Width = 138
+      Height = 23
+      Hint = 'Crosshairs configuration for gun games'
+      Style = csDropDownList
+      Ctl3D = True
+      ItemHeight = 15
+      ItemIndex = 0
+      ParentCtl3D = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Text = 'None'
+      Items.Strings = (
+        'None'
+        'Player 1 Only'
+        'Player 2 Only'
+        'Player 1 and Player 2')
+    end
   end
   object AudioGroupBox: TAdvGroupBox
-    Left = 360
-    Top = 183
-    Width = 273
-    Height = 200
+    Left = 337
+    Top = 158
+    Width = 268
+    Height = 197
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Audio'
@@ -419,40 +471,42 @@ object FormSupermodelSettings: TFormSupermodelSettings
     TabOrder = 3
     object LabelSoundVolume: TLabel
       Left = 8
-      Top = 68
-      Width = 107
+      Top = 63
+      Width = 221
       Height = 15
-      Hint = 'Sound Volume [%u]'
-      Caption = 'Sound Volume [100]'
+      Hint = 'Volume of SCSP Generated Sound [%u'
+      Caption = 'Volume of SCSP Generated Sound [100 %]'
       ShowAccelChar = False
       Transparent = False
     end
     object LabelMusicVolume: TLabel
       Left = 8
-      Top = 116
-      Width = 105
+      Top = 108
+      Width = 229
       Height = 15
-      Hint = 'Music Volume [%u]'
-      Caption = 'Music Volume [100]'
+      Hint = 'Music Volume, Digital Sound Board [%u'
+      Caption = 'Music Volume, Digital Sound Board [100 %]'
       ShowAccelChar = False
       Transparent = False
     end
     object LabelAudioBalanceFrontRear: TLabel
       Left = 8
-      Top = 156
+      Top = 153
       Width = 130
       Height = 15
-      Hint = 'Front/Rear Balance (%d'
-      Caption = 'Front/Rear Balance (0 %)'
+      Hint = 'Front/Rear Balance [%d'
+      Caption = 'Front/Rear Balance [0 %]'
       ShowAccelChar = False
       Transparent = False
     end
     object SoundVolume: TGaugeBar
       Left = 8
-      Top = 84
+      Top = 79
       Width = 233
       Height = 20
-      Hint = 'Adjust sound volume (mouse right-click for default)'
+      Hint = 
+        'Adjust colume of SCSP-generated sound, applies only when Digital' +
+        ' Sound Board is present (mouse right-click for default)'
       Color = clWhite
       Backgnd = bgPattern
       ButtonSize = 12
@@ -490,10 +544,12 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object MusicVolume: TGaugeBar
       Left = 8
-      Top = 132
+      Top = 124
       Width = 233
       Height = 20
-      Hint = 'Adjust music volume (mouse right-click for default)'
+      Hint = 
+        'Adjust Digital Sound Board volume (mouse right-click for default' +
+        ')'
       Color = clWhite
       Backgnd = bgPattern
       ButtonSize = 12
@@ -506,9 +562,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnMouseDown = MusicVolumeMouseDown
     end
     object FlipStereo: TAdvOfficeCheckBox
-      Left = 184
+      Left = 179
       Top = 20
-      Width = 81
+      Width = 77
       Height = 20
       Hint = 'Swaps the left and right audio channels'
       ShowHint = True
@@ -520,7 +576,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
     object AudioBalanceFrontRear: TGaugeBar
       Left = 8
-      Top = 172
+      Top = 169
       Width = 233
       Height = 20
       Hint = 
@@ -539,16 +595,16 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
   end
   object PowerPCFrequencyBox: TAdvGroupBox
-    Left = 360
-    Top = 392
-    Width = 273
-    Height = 70
+    Left = 337
+    Top = 363
+    Width = 268
+    Height = 69
     RoundEdges = True
     Caption = 'PowerPC Bus Frequency (PPC)'
     Ctl3D = True
     TabOrder = 4
     object LabelPowerPCFrequency: TLabel
-      Left = 101
+      Left = 96
       Top = 23
       Width = 40
       Height = 15
@@ -557,7 +613,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Transparent = False
     end
     object Label3: TLabel
-      Left = 151
+      Left = 146
       Top = 23
       Width = 88
       Height = 15
@@ -566,7 +622,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Transparent = True
     end
     object Label4: TLabel
-      Left = 242
+      Left = 237
       Top = 41
       Width = 25
       Height = 15
@@ -577,7 +633,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object PowerPCFrequency: TGaugeBar
       Left = 8
       Top = 21
-      Width = 89
+      Width = 84
       Height = 20
       Hint = 'Set PowerPC frequency in MHz [Default: 50]'
       Color = clWhite
@@ -590,7 +646,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = PowerPCFrequencyChange
     end
     object PowerPCFrequencyCustom: TEdit
-      Left = 151
+      Left = 146
       Top = 39
       Width = 89
       Height = 22
@@ -601,9 +657,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
   end
   object Multithreading: TAdvOfficeCheckBox
-    Left = 16
-    Top = 485
-    Width = 105
+    Left = 337
+    Top = 453
+    Width = 101
     Height = 20
     Hint = 'Uncheck it to disable multi-threading entirely'
     Checked = True
@@ -615,62 +671,41 @@ object FormSupermodelSettings: TFormSupermodelSettings
     State = cbChecked
     Themed = True
   end
-  object Crosshairs: TComboBox
-    Left = 360
-    Top = 487
-    Width = 145
-    Height = 23
-    Hint = 'Crosshairs configuration for gun games'
-    Style = csDropDownList
-    Ctl3D = True
-    ItemHeight = 15
-    ItemIndex = 0
-    ParentCtl3D = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 6
-    Text = 'None'
-    Items.Strings = (
-      'None'
-      'Player 1 Only'
-      'Player 2 Only'
-      'Player 1 and Player 2')
-  end
   object ButtonReadFile: TBitBtn
-    Left = 16
-    Top = 526
+    Left = 8
+    Top = 490
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
     Caption = 'Reload Settings'
-    TabOrder = 7
+    TabOrder = 6
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 447
-    Top = 526
+    Left = 419
+    Top = 490
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
     Caption = 'Ok'
     ModalResult = 1
-    TabOrder = 8
+    TabOrder = 7
   end
   object ButtonCancel: TBitBtn
-    Left = 545
-    Top = 526
+    Left = 517
+    Top = 490
     Width = 89
     Height = 25
     Hint = 'Close without updating'
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 9
+    TabOrder = 8
   end
   object FolderROMs: TEasyListview
     Tag = 1
-    Left = 16
+    Left = 8
     Top = 85
-    Width = 617
+    Width = 461
     Height = 65
     Hint = 'ROMs Folders'
     BackGround.Enabled = True
@@ -686,7 +721,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000165020000FFFFFF1F0001000000
+      00060000008008000101000100000000000001C9010000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Draggable = False
     Header.FixedSingleColumn = True
@@ -721,7 +756,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
-    TabOrder = 10
+    TabOrder = 9
     View = elsReport
     OnItemEdited = FolderROMsItemEdited
     OnItemEditEnd = FolderROMsItemEditEnd
@@ -729,77 +764,77 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonUp: TBitBtn
     Tag = 1
-    Left = 16
-    Top = 151
+    Left = 471
+    Top = 84
     Width = 43
     Height = 21
     Hint = 'Move selected folder up'
     Caption = 'Up'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 11
+    TabOrder = 10
     TabStop = False
     OnClick = ButtonUpClick
   end
   object ButtonDown: TBitBtn
-    Left = 59
-    Top = 151
+    Left = 471
+    Top = 105
     Width = 43
     Height = 21
     Hint = 'Move selected folder down'
     Caption = 'Down'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 12
+    TabOrder = 11
     TabStop = False
     OnClick = ButtonUpClick
   end
   object FolderROMButtonSelect: TBitBtn
-    Left = 462
-    Top = 151
+    Left = 520
+    Top = 84
     Width = 43
     Height = 21
     Hint = 'Click here to add folders'
     Caption = 'Add'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 13
+    TabOrder = 12
     OnClick = FolderROMButtonSelectClick
   end
   object FolderROMsButtonEdit: TBitBtn
-    Left = 505
-    Top = 151
+    Left = 563
+    Top = 84
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
     Caption = 'Edit'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 14
+    TabOrder = 13
     OnClick = FolderROMsButtonEditClick
   end
   object FolderROMsButtonDelete: TBitBtn
-    Left = 548
-    Top = 151
+    Left = 520
+    Top = 105
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
     Caption = 'Delete'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 15
+    TabOrder = 14
     OnClick = FolderROMsButtonDeleteClick
   end
   object FolderROMsButtonClear: TBitBtn
-    Left = 591
-    Top = 151
+    Left = 563
+    Top = 105
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'
     Caption = 'Clear'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 16
+    TabOrder = 15
     OnClick = FolderROMsButtonClearClick
   end
 end

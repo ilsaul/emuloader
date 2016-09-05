@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ImgList, ComCtrls, Buttons, IniFiles,
   ExtCtrls, GR32_RangeBars, uGR32Extra, MPCommonObjects, EasyListview,
-  Registry, uCommon, PanelEx, AdvOfficeButtons, AdvGroupBox,
+  MPCommonUtilities, Registry, uCommon, PanelEx, AdvOfficeButtons, AdvGroupBox,
   ShadowLabel, ExTrackBar, ToolWin;
 
 type
@@ -64,7 +64,7 @@ type
     WriteConfigFiles: TAdvOfficeCheckBox;
     AutoSave: TAdvOfficeCheckBox;
     Cheat: TAdvOfficeCheckBox;
-    Label1: TLabel;
+    LabelRAMSize: TLabel;
     RAMSize: TEdit;
     ConfirmQuit: TAdvOfficeCheckBox;
     DebugGroupBox: TAdvGroupBox;
@@ -72,14 +72,12 @@ type
     OSLog: TAdvOfficeCheckBox;
     Verbose: TAdvOfficeCheckBox;
     UpdateInPause: TAdvOfficeCheckBox;
-    LabelVideoOutputMode: TAdvGroupBox;
+    VideoRenderOptionsGroupBox: TAdvGroupBox;
     WindowMode: TAdvOfficeCheckBox;
     MaximizeWindow: TAdvOfficeCheckBox;
     KeepAspectRatio: TAdvOfficeCheckBox;
     WaitVerticalSync: TAdvOfficeCheckBox;
     BilinearFilter: TAdvOfficeCheckBox;
-    HardwareStretch: TAdvOfficeCheckBox;
-    VideoOutputMode: TComboBox;
     UIActive: TAdvOfficeCheckBox;
     ButtonReadFile: TBitBtn;
     ButtonOk: TBitBtn;
@@ -87,7 +85,7 @@ type
     ToolBarPages: TToolBar;
     ButtonPageFolders: TToolButton;
     ButtonPageVideo1: TToolButton;
-    ButtonPageVideo2Audio: TToolButton;
+    ButtonPageVideo2: TToolButton;
     ButtonPageInput: TToolButton;
     ButtonPageMisc: TToolButton;
     FolderROMsDisksBox: TLabel;
@@ -167,14 +165,6 @@ type
     DebuggerScript: TEdit;
     DebuggerScriptBrowse: TBitBtn;
     LabelDebuggerScript: TLabel;
-    AutobootBox: TAdvGroupBox;
-    LabelAutobootCommand: TLabel;
-    LabelAutobootDelay: TLabel;
-    LabelAutobootLuaScript: TLabel;
-    AutobootCommand: TEdit;
-    AutobootDelay: TGaugeBar;
-    AutobootLuaScript: TEdit;
-    AutobootLuaScriptSelectButton: TBitBtn;
     DRC: TAdvOfficeCheckBox;
     DRCUseC: TAdvOfficeCheckBox;
     HTTPServer: TAdvGroupBox;
@@ -188,7 +178,6 @@ type
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameStatus: TShadowLabel;
-    AutobootCommandButtonClear: TBitBtn;
     RAMSizeButtonClear: TBitBtn;
     ButtonPageSDLMAMEInput: TToolButton;
     SDKKeyboardMappingBox: TAdvGroupBox;
@@ -299,7 +288,6 @@ type
     SDL2KeyboardMapping8Custom: TEdit;
     LabelWatchdog: TLabel;
     Watchdog: TEdit;
-    EnableEmulatorLUAConsole: TAdvOfficeCheckBox;
     Debugger: TComboBox;
     Label4: TLabel;
     DRCLogUML: TAdvOfficeCheckBox;
@@ -312,21 +300,6 @@ type
     FolderFontFiles: TEdit;
     FolderFontFilesButtonSelect: TBitBtn;
     ButtonHelpSaveValidateAllCustomFiles: TBitBtn;
-    HLSL_GroupBox: TAdvGroupBox;
-    LabelShadowMaskTexture: TLabel;
-    LabelHLSLPath: TLabel;
-    LabelHLSLIniFile: TLabel;
-    Label5: TLabel;
-    HLSLEnable: TAdvOfficeCheckBox;
-    YIQEnable: TAdvOfficeCheckBox;
-    ShadowMaskTexture: TEdit;
-    ButtonSelectShadowMaskTexture: TBitBtn;
-    HLSLPath: TEdit;
-    ButtonSelectHLSLPath: TBitBtn;
-    ReadCustomHLSLFile: TAdvOfficeCheckBox;
-    WriteCustomHLSLFile: TAdvOfficeCheckBox;
-    HLSLIniFile: TEdit;
-    HLSLIniFileButtonReset: TBitBtn;
     PerformanceGroupBox: TAdvGroupBox;
     LabelSpeed: TLabel;
     LabelFrameskip: TLabel;
@@ -344,7 +317,221 @@ type
     ThreadPriority: TComboBox;
     NumberProcessors: TComboBox;
     Benchmark: TGaugeBar;
-    GLSL_GroupBox: TAdvGroupBox;
+    LabelScreenRotation: TAdvGroupBox;
+    FlipX: TAdvOfficeCheckBox;
+    FlipY: TAdvOfficeCheckBox;
+    RotateRight: TAdvOfficeCheckBox;
+    RotateLeft: TAdvOfficeCheckBox;
+    AutoRotateRight: TAdvOfficeCheckBox;
+    AutoRotateLeft: TAdvOfficeCheckBox;
+    ScreenOptionsBox: TAdvGroupBox;
+    LabelBrightness: TLabel;
+    LabelPrescale_ScaleScreen: TLabel;
+    LabelContrast: TLabel;
+    LabelGamma: TLabel;
+    LabelPauseBrightness: TLabel;
+    Prescale_ScaleScreen: TGaugeBar;
+    Brightness: TGaugeBar2;
+    Contrast: TGaugeBar2;
+    Gamma: TGaugeBar2;
+    PauseBrightness: TGaugeBar2;
+    FullScreenBox: TAdvGroupBox;
+    LabelFullScreenBrightness: TLabel;
+    LabelFullScreenContrast: TLabel;
+    LabelFullScreenGamma: TLabel;
+    TripleBuffer: TAdvOfficeCheckBox;
+    SwitchResolution: TAdvOfficeCheckBox;
+    FullScreenBrightness: TGaugeBar2;
+    FullScreenContrast: TGaugeBar2;
+    FullScreenGamma: TGaugeBar2;
+    FolderControllerDefinitions: TEdit;
+    FolderCrosshairFiles: TEdit;
+    FolderDebuggerCommentsButtonSelect: TBitBtn;
+    FolderDebuggerComments: TEdit;
+    LabelFolderDebuggerComments: TLabel;
+    SaveValidateAllCustomFiles: TAdvOfficeCheckBox;
+    SecondsToRun: TGaugeBar;
+    LabelSecondsToRun: TLabel;
+    SDLVideoPerformance: TAdvOfficeCheckBox;
+    SDLOutputModeBox: TAdvGroupBox;
+    LabelSDLScaleMode: TLabel;
+    SDLCenterHorizontally: TAdvOfficeCheckBox;
+    SDLCenterVertically: TAdvOfficeCheckBox;
+    SDLScaleMode: TComboBox;
+    SDLSplitFullScreenMonitors: TAdvOfficeCheckBox;
+    SDLLowLevelDriver: TAdvGroupBox;
+    LabelSDLVideoDriverToUse: TLabel;
+    LabelSDL2RenderDriverToUse: TLabel;
+    LabelSDLAudioDriverToUse: TLabel;
+    LabelSDLAlternativeLibGLToUse: TLabel;
+    SDLVideoDriverToUse: TComboBox;
+    SDL2RenderDriverToUse: TComboBox;
+    SDLAudioDriverToUse: TComboBox;
+    SDLAlternativeLibGLToUse: TComboBox;
+    SDLAlternativeLibGLToUseCustom: TEdit;
+    ButtonSDLAlternativeLibGLToUseCustom: TBitBtn;
+    ButtonResetHTTPServer: TBitBtn;
+    LabelSaveStateName: TLabel;
+    SaveStateName: TEdit;
+    ButtonSaveStateNameReset: TBitBtn;
+    LabelSoftwareListTitle: TShadowLabel;
+    UIModeBox: TAdvGroupBox;
+    LabelUIModeKeyCustom: TLabel;
+    UIModeKeyCustom: TEdit;
+    ButtonUIModeKeyDetectKey: TBitBtn;
+    CommOptionsBox: TAdvGroupBox;
+    LabelCommLocalHost: TLabel;
+    CommLocalHost: TEdit;
+    LabelCommLocalPort: TLabel;
+    CommLocalPort: TEdit;
+    LabelCommRemoteHost: TLabel;
+    CommRemoteHost: TEdit;
+    LabelCommRemotePort: TLabel;
+    CommRemotePort: TEdit;
+    CommLocalHostButtonReset: TBitBtn;
+    CommLocalPortButtonReset: TBitBtn;
+    CommRemoteHostButtonReset: TBitBtn;
+    CommRemotePortButtonReset: TBitBtn;
+    EnableGlobalInputs: TAdvOfficeCheckBox;
+    VectorBeamWidthMin: TGaugeBar2;
+    LabelVectorBeamWidthMin: TLabel;
+    LabelVectorBeamWidthMax: TLabel;
+    VectorBeamWidthMax: TGaugeBar2;
+    LabelVectorBeamIntensityWeight: TLabel;
+    VectorBeamIntensityWeight: TGaugeBar2;
+    FolderLanguageFilesButtonSelect: TBitBtn;
+    FolderLanguageFiles: TEdit;
+    LabelFolderLanguageFiles: TLabel;
+    FolderPluginFilesButtonSelect: TBitBtn;
+    FolderPluginFiles: TEdit;
+    LabelFolderPluginFiles: TLabel;
+    RecordInputTimecodeFile: TAdvOfficeCheckBox;
+    LabelRecordInputTimecodeFile: TShadowLabel;
+    LabelExitAfterInputPlayback: TShadowLabel;
+    ExitAfterInputPlayback: TAdvOfficeCheckBox;
+    LabelTypeUserInterface: TLabel;
+    TypeUserInterface: TComboBox;
+    LabelDisplayLanguage: TLabel;
+    DisplayLanguageList: TEasyListview;
+    ButtonPageLUA_Audio: TToolButton;
+    AutobootBox: TAdvGroupBox;
+    LabelAutobootCommand: TLabel;
+    LabelAutobootDelay: TLabel;
+    LabelAutobootLuaScript: TLabel;
+    AutobootCommand: TEdit;
+    AutobootDelay: TGaugeBar;
+    AutobootLuaScript: TEdit;
+    AutobootLuaScriptSelectButton: TBitBtn;
+    AutobootCommandButtonClear: TBitBtn;
+    EnableEmulatorLUAConsole: TAdvOfficeCheckBox;
+    EnableLUAPluginSupport: TAdvOfficeCheckBox;
+    LabelLUAPluginsToEnable: TLabel;
+    UnevenStretchX: TAdvOfficeCheckBox;
+    IntegerScaleFactorHorizontal: TEdit;
+    LabelIntegerScaleFactorVertical: TLabel;
+    IntegerScaleFactorVertical: TEdit;
+    LabelIntegerScaleFactorHorizontal: TLabel;
+    LUAPluginsToEnable: TEasyListview;
+    LabelLUAPluginsToEnable2: TLabel;
+    LabelSnapshotsBox: TAdvGroupBox;
+    LabelSnapshotNameFormat: TLabel;
+    LabelSnapshotView: TLabel;
+    LabelSnapSizeCustomX: TLabel;
+    SnapBurnIn: TAdvOfficeCheckBox;
+    ButtonSnapNameDefault: TBitBtn;
+    SnapView: TComboBox;
+    ButtonSnapViewDefault: TBitBtn;
+    SnapSizeAuto: TAdvOfficeCheckBox;
+    SnapSizeWidth: TEdit;
+    SnapSizeHeight: TEdit;
+    SnapName: TEdit;
+    SnapBilinear: TAdvOfficeCheckBox;
+    EffectOverlay: TEdit;
+    EffectOverlayBrowse: TBitBtn;
+    Label9: TLabel;
+    IntegerScaleOverscan: TAdvOfficeCheckBox;
+    ScreensBox: TAdvGroupBox;
+    LabelScreenName: TLabel;
+    LabelScreenAspectRatio: TLabel;
+    LabelScreenResolution: TLabel;
+    LabelScreenRefreshRate_Custom: TLabel;
+    LabelScreenView: TLabel;
+    LabelScreensSelector: TLabel;
+    ScreenName: TComboBox;
+    ScreenAspectRatio: TComboBox;
+    ScreenResolution: TComboBox;
+    ScreenRefreshRate: TComboBox;
+    ScreenView: TComboBox;
+    NumberScreens: TExTrackBar;
+    ScreensSelector: TComboBox;
+    ButtonScreenDefaultSettings: TBitBtn;
+    VideoOutputMode: TComboBox;
+    ButtonHelpVideoOutputMode: TBitBtn;
+    LabelVideoOutputMode: TLabel;
+    GroupBoxAudio: TAdvGroupBox;
+    LabelAudioLatency: TLabel;
+    LabelSampleRate: TLabel;
+    LabelVolume: TLabel;
+    LabelSoundOutputMethod: TLabel;
+    Samples: TAdvOfficeCheckBox;
+    AudioLatency: TComboBox;
+    SampleRate: TComboBox;
+    Volume: TGaugeBar;
+    ButtonAudioLatencyReset: TBitBtn;
+    SoundOutputMethod: TComboBox;
+    OSDInputOptionsGroupBox: TAdvGroupBox;
+    LabelOSDInputKeyboardProvider: TLabel;
+    OSDInputKeyboardProvider: TComboBox;
+    LabelOSDInputMouseProvider: TLabel;
+    OSDInputMouseProvider: TComboBox;
+    LabelOSDInputLightgunProvider: TLabel;
+    OSDInputLightgunProvider: TComboBox;
+    LabelOSDInputJoystickProvider: TLabel;
+    OSDInputJoystickProvider: TComboBox;
+    Antialias: TAdvOfficeCheckBox;
+    Rotate: TAdvOfficeCheckBox;
+    NotebookVideoPostProcessingEffectsPages: TNotebook;
+    ToolBarVideoPostProcessingEffectsPages: TToolBar;
+    ButtonPageVideoEffectsBGFX: TToolButton;
+    ButtonPageVideoEffectsHLSL: TToolButton;
+    ButtonPageVideoEffectsGLSL: TToolButton;
+    LabelShadowMaskTexture: TLabel;
+    LabelHLSLPath: TLabel;
+    Label7: TLabel;
+    LabelHLSLUpscaleSnapshot: TLabel;
+    LabelShadowMaskTileMode: TLabel;
+    LabelBloomBlendMode: TLabel;
+    HLSLEnable: TAdvOfficeCheckBox;
+    YIQEnable: TAdvOfficeCheckBox;
+    ShadowMaskTexture: TEdit;
+    ButtonSelectShadowMaskTexture: TBitBtn;
+    HLSLPath: TEdit;
+    ButtonSelectHLSLPath: TBitBtn;
+    ReadCustomHLSLFile: TAdvOfficeCheckBox;
+    WriteCustomHLSLFile: TAdvOfficeCheckBox;
+    HLSLIniFile: TEdit;
+    HLSLIniFileButtonReset: TBitBtn;
+    HLSLUpscaleSnapX: TEdit;
+    HLSLUpscaleSnapY: TEdit;
+    ButtonHLSLUpscaleSnapReset: TBitBtn;
+    HLSLOversampling: TAdvOfficeCheckBox;
+    ShadowMaskTileMode: TComboBox;
+    BloomBlendMode: TComboBox;
+    ShadowMaskTextureButtonReset: TBitBtn;
+    LabelBGFXPath: TLabel;
+    Label14: TLabel;
+    LabelBGFXShadowMaskTextureName: TLabel;
+    LabelBGFXScreenShaderChains: TLabel;
+    BGFXPath: TEdit;
+    BGFXPathButtonSelect: TBitBtn;
+    BGFXBackend: TComboBox;
+    BGFXDebug: TAdvOfficeCheckBox;
+    BGFXShadowMaskTextureName: TEdit;
+    BGFXShadowMaskTextureNameButtonSelect: TBitBtn;
+    BGFXShadowMaskTextureNameButtonReset: TBitBtn;
+    BGFXScreenShaderChains: TEdit;
+    BGFXScreenShaderChainsButtonReload: TBitBtn;
+    BGFXScreenShaderChainsButtonSelect: TBitBtn;
     LabelEnableOpenGLFilterNotFF: TLabel;
     LabelGLSL_Shader_MAME: TLabel;
     LabelGLSL_Shader_Screen: TLabel;
@@ -414,149 +601,24 @@ type
     ButtonGLSL_Shader_MAME8: TBitBtn;
     GLSL_Shader_MAME9: TEdit;
     ButtonGLSL_Shader_MAME9: TBitBtn;
-    LabelScreenRotation: TAdvGroupBox;
-    FlipX: TAdvOfficeCheckBox;
-    FlipY: TAdvOfficeCheckBox;
-    Rotate: TAdvOfficeCheckBox;
-    RotateRight: TAdvOfficeCheckBox;
-    RotateLeft: TAdvOfficeCheckBox;
-    AutoRotateRight: TAdvOfficeCheckBox;
-    AutoRotateLeft: TAdvOfficeCheckBox;
-    ScreenOptionsBox: TAdvGroupBox;
-    LabelBrightness: TLabel;
-    LabelPrescale_ScaleScreen: TLabel;
-    LabelContrast: TLabel;
-    LabelGamma: TLabel;
-    LabelPauseBrightness: TLabel;
-    Prescale_ScaleScreen: TGaugeBar;
-    Brightness: TGaugeBar2;
-    Contrast: TGaugeBar2;
-    Gamma: TGaugeBar2;
-    PauseBrightness: TGaugeBar2;
-    FullScreenBox: TAdvGroupBox;
-    LabelFullScreenBrightness: TLabel;
-    LabelFullScreenContrast: TLabel;
-    LabelFullScreenGamma: TLabel;
-    TripleBuffer: TAdvOfficeCheckBox;
-    SwitchResolution: TAdvOfficeCheckBox;
-    FullScreenBrightness: TGaugeBar2;
-    FullScreenContrast: TGaugeBar2;
-    FullScreenGamma: TGaugeBar2;
-    FolderControllerDefinitions: TEdit;
-    FolderCrosshairFiles: TEdit;
-    FolderDebuggerCommentsButtonSelect: TBitBtn;
-    FolderDebuggerComments: TEdit;
-    LabelFolderDebuggerComments: TLabel;
-    SaveValidateAllCustomFiles: TAdvOfficeCheckBox;
-    SecondsToRun: TGaugeBar;
-    LabelSecondsToRun: TLabel;
-    ScreensBox: TAdvGroupBox;
-    LabelScreenName: TLabel;
-    LabelScreenAspectRatio: TLabel;
-    LabelScreenResolution: TLabel;
-    LabelScreenRefreshRate_Custom: TLabel;
-    LabelScreenView: TLabel;
-    ScreenName: TComboBox;
-    ScreenAspectRatio: TComboBox;
-    ScreenResolution: TComboBox;
-    ScreenRefreshRate: TComboBox;
-    ScreenView: TComboBox;
-    NumberScreens: TExTrackBar;
-    LabelEffectOverlayBox: TAdvGroupBox;
-    EffectOverlay: TEdit;
-    EffectOverlayBrowse: TBitBtn;
-    EffectOverlayNone: TBitBtn;
-    GroupBoxAudio: TAdvGroupBox;
-    LabelAudioLatency: TLabel;
-    LabelSampleRate: TLabel;
-    LabelVolume: TLabel;
-    LabelSoundOutputMethod: TLabel;
-    Samples: TAdvOfficeCheckBox;
-    AudioLatency: TComboBox;
-    SampleRate: TComboBox;
-    Volume: TGaugeBar;
-    ButtonAudioLatencyReset: TBitBtn;
-    SoundOutputMethod: TComboBox;
-    LabelScreensSelector: TLabel;
-    ScreensSelector: TComboBox;
-    ButtonScreenDefaultSettings: TBitBtn;
-    LabelNumberScreens: TLabel;
-    LabelSnapshotsBox: TAdvGroupBox;
-    LabelSnapshotNameFormat: TLabel;
-    LabelSnapshotView: TLabel;
-    LabelSnapSizeCustomX: TLabel;
-    LabelSnaphotResolution: TLabel;
-    SnapBurnIn: TAdvOfficeCheckBox;
-    ButtonSnapNameDefault: TBitBtn;
-    SnapView: TComboBox;
-    ButtonSnapViewDefault: TBitBtn;
-    SnapSizeAuto: TAdvOfficeCheckBox;
-    SnapSizeWidth: TEdit;
-    SnapSizeHeight: TEdit;
-    SnapName: TEdit;
-    SnapBilinear: TAdvOfficeCheckBox;
-    SDLVideoPerformance: TAdvOfficeCheckBox;
-    SDLOutputModeBox: TAdvGroupBox;
-    LabelSDLScaleMode: TLabel;
-    SDLCenterHorizontally: TAdvOfficeCheckBox;
-    SDLCenterVertically: TAdvOfficeCheckBox;
-    SDLScaleMode: TComboBox;
-    SDLSplitFullScreenMonitors: TAdvOfficeCheckBox;
-    SDLLowLevelDriver: TAdvGroupBox;
-    LabelSDLVideoDriverToUse: TLabel;
-    LabelSDL2RenderDriverToUse: TLabel;
-    LabelSDLAudioDriverToUse: TLabel;
-    LabelSDLAlternativeLibGLToUse: TLabel;
-    SDLVideoDriverToUse: TComboBox;
-    SDL2RenderDriverToUse: TComboBox;
-    SDLAudioDriverToUse: TComboBox;
-    SDLAlternativeLibGLToUse: TComboBox;
-    SDLAlternativeLibGLToUseCustom: TEdit;
-    ButtonSDLAlternativeLibGLToUseCustom: TBitBtn;
-    ButtonResetHTTPServer: TBitBtn;
-    DummyWriteSnapshot: TAdvOfficeCheckBox;
-    Label7: TLabel;
-    HLSLUpscaleSnapX: TEdit;
-    HLSLUpscaleSnapY: TEdit;
-    LabelHLSLUpscaleSnapshot: TLabel;
-    LabelHLSLPrescaleOverride: TLabel;
-    LabelHLSLPrescaleOverrideX: TLabel;
-    HLSLPrescaleOverrideX: TComboBox;
-    LabelHLSLPrescaleOverrideY: TLabel;
-    HLSLPrescaleOverrideY: TComboBox;
-    ButtonHLSLUpscaleSnapReset: TBitBtn;
-    LabelSaveStateName: TLabel;
-    SaveStateName: TEdit;
-    ButtonSaveStateNameReset: TBitBtn;
-    LabelSoftwareListTitle: TShadowLabel;
-    UIModeBox: TAdvGroupBox;
-    LabelUIModeKeyCustom: TLabel;
-    UIModeKeyCustom: TEdit;
-    ButtonUIModeKeyDetectKey: TBitBtn;
-    CommOptionsBox: TAdvGroupBox;
-    LabelCommLocalHost: TLabel;
-    CommLocalHost: TEdit;
-    LabelCommLocalPort: TLabel;
-    CommLocalPort: TEdit;
-    LabelCommRemoteHost: TLabel;
-    CommRemoteHost: TEdit;
-    LabelCommRemotePort: TLabel;
-    CommRemotePort: TEdit;
-    CommLocalHostButtonReset: TBitBtn;
-    CommLocalPortButtonReset: TBitBtn;
-    CommRemoteHostButtonReset: TBitBtn;
-    CommRemotePortButtonReset: TBitBtn;
-    Label6: TLabel;
-    Label8: TLabel;
-    EnableGlobalInputs: TAdvOfficeCheckBox;
-    VectorBeamWidthMin: TGaugeBar2;
-    LabelVectorBeamWidthMin: TLabel;
-    LabelVectorBeamWidthMax: TLabel;
-    VectorBeamWidthMax: TGaugeBar2;
-    LabelVectorBeamIntensityWeight: TLabel;
-    VectorBeamIntensityWeight: TGaugeBar2;
-    AntialiasVectorBkPanel: TPanelEx;
-    Antialias: TAdvOfficeCheckBox;
+    OSDOutputOptionsBox: TAdvGroupBox;
+    LabelOSDOutputProvider: TLabel;
+    OSDOutputProvider: TComboBox;
+    BGFXScreenShaderChains_ListView: TEasyListview;
+    BGFXScreenShaderChains_ListViewButtonAdd: TBitBtn;
+    BGFXScreenShaderChains_ListViewButtonSelect: TBitBtn;
+    LabelBGFXScreenShaderChainsDetailsHTML: TLabel;
+    LabelBGFXScreenShaderChainsHelp: TLabel;
+    BGFXScreenShaderChainsButtonReset: TBitBtn;
+    VectorPostProcessingBox: TAdvGroupBox;
+    VectorBeamSmooth: TGaugeBar2;
+    LabelVectorBeamSmooth: TLabel;
+    VectorMaximumAttenuation: TGaugeBar2;
+    LabelVectorMaximumAttenuation: TLabel;
+    VectorMinimumLengthAttenuation: TGaugeBar2;
+    LabelVectorMinimumLengthAttenuation: TLabel;
+    UnevenStretchY: TAdvOfficeCheckBox;
+    AutoUnevenStretchXY: TAdvOfficeCheckBox;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -624,7 +686,6 @@ type
     procedure FolderArtworksButtonEditClick(Sender: TObject);
     procedure FolderArtworksButtonDeleteClick(Sender: TObject);
     procedure FolderArtworksButtonClearClick(Sender: TObject);
-    procedure EffectOverlayNoneClick(Sender: TObject);
     procedure FolderCheatFilesButtonSelectClick(Sender: TObject);
     procedure FolderHashFilesButtonSelectClick(Sender: TObject);
     procedure ButtonSelectShadowMaskTextureClick(Sender: TObject);
@@ -729,6 +790,39 @@ type
     procedure VectorBeamWidthMinChange(Sender: TObject);
     procedure VectorBeamWidthMaxChange(Sender: TObject);
     procedure VectorBeamIntensityWeightChange(Sender: TObject);
+    procedure ButtonHelpVideoOutputModeClick(Sender: TObject);
+    procedure FolderLanguageFilesButtonSelectClick(Sender: TObject);
+    procedure FolderPluginFilesButtonSelectClick(Sender: TObject);
+    procedure IntegerScaleFactorHorizontalKeyPress(Sender: TObject;
+      var Key: Char);
+    procedure IntegerScaleFactorVerticalKeyPress(Sender: TObject;
+      var Key: Char);
+    procedure RAMSizeKeyPress(Sender: TObject; var Key: Char);
+    procedure BGFXShadowMaskTextureNameButtonResetClick(Sender: TObject);
+    procedure BGFXScreenShaderChainsButtonReloadClick(Sender: TObject);
+    procedure BGFXScreenShaderChainsButtonSelectClick(Sender: TObject);
+    procedure ShadowMaskTextureButtonResetClick(Sender: TObject);
+    procedure ButtonPageVideoEffectsBGFXClick(Sender: TObject);
+    function BGFXScreenShaderChains_ListViewItemCompare(
+      Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+      Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+    procedure BGFXScreenShaderChains_ListViewItemPaintText(
+      Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+      ACanvas: TCanvas);
+    procedure LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter(Sender: TObject);
+    procedure LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave(Sender: TObject);
+    procedure LabelBGFXScreenShaderChainsDetailsHTMLClick(Sender: TObject);
+    procedure BGFXScreenShaderChains_ListViewButtonSelectClick(
+      Sender: TObject);
+    procedure BGFXScreenShaderChains_ListViewButtonAddClick(
+      Sender: TObject);
+    procedure BGFXScreenShaderChains_ListViewDblClick(
+      Sender: TCustomEasyListview; Button: TCommonMouseButton;
+      MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
+    procedure BGFXScreenShaderChainsButtonResetClick(Sender: TObject);
+    procedure VectorBeamSmoothChange(Sender: TObject);
+    procedure VectorMaximumAttenuationChange(Sender: TObject);
+    procedure VectorMinimumLengthAttenuationChange(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -737,8 +831,15 @@ type
     function  RemoveQuotes(const DataString: String): String;
     procedure PopulateNumberProcessors;
     procedure LoadBiosList(const SelectBiosName: String);
+    procedure EnableSettingsIniMAME;
     procedure PopulateVideoOutputMode;
-    function  GetCustomIniFile(FileID: ShortInt): String;
+    procedure PopulateDisplayLanguage;
+    //procedure PopulateBGFXBackend;
+    procedure PopulateLUAPlugins_ListView;
+    procedure ReadPluginIni(const CustomPluginString: String = '');
+    procedure WritePluginIni;
+    procedure PopulateBGFXShaderChains_ListView;
+    //function  GetCustomIniFile(FileID: ShortInt): String;
     procedure LoadIniToStringList(FileID: ShortInt; var ListHolder: THashedStringList);
     procedure LoadCustomSettingsFiles;
     procedure LoadCustomFilesArray;
@@ -750,7 +851,9 @@ type
   public
     { Public declarations }
     emuIni,
-    GameIni: String;
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
     IsAlterMAME: Boolean;
   end;
@@ -819,10 +922,163 @@ begin
   NumberProcessors.Items.EndUpdate;
 end;
 
-procedure TFormMAMESettings.PopulateVideoOutputMode;
+procedure TFormMAMESettings.EnableSettingsIniMAME;
 var
   mameIni: THashedStringList;
   Loop: Integer;
+  EntryString: String;
+begin
+  if not (sysID in [idMAME, idHBMAME]) then
+     Exit;
+  if not FileExists(emuIni) then
+     Exit;
+
+  mameIni:= THashedStringList.Create;
+  mameIni.LoadFromFile(emuIni);
+  for Loop:=0 to mameIni.Count-1 do
+  begin
+    EntryString:= XML_GetEntryName(mameIni[Loop]);
+    if EntryString <> '' then
+    begin
+      EntryString:= EntryString+' ';
+      if EntryString = 'hlsl_ini_read ' then // for MAME 0.149
+         begin
+           ReadCustomHLSLFile.Enabled:= True;
+           WriteCustomHLSLFile.Enabled:= True;
+           HLSLIniFile.Enabled:= True;
+         end
+      else
+      if EntryString =  'sdlvideofps ' then
+         IsSDLMAME:= True
+      else
+      if EntryString =  'gl_glsl ' then
+         ButtonPageVideoEffectsGLSL.Enabled:= True // GLSL_GroupBox.Enabled:= True
+      else
+      if EntryString =  'hlsl_enable ' then
+         ButtonPageVideoEffectsHLSL.Enabled:= True // HLSL_GroupBox.Enabled:= True
+      else
+      if EntryString =  'bgfx_backend ' then
+         ButtonPageVideoEffectsBGFX.Enabled:= True // BGFX_GroupBox.Enabled:= True
+      else
+      //if EntryString =  'hlsl_prescale_x ' then
+      //   begin
+      //     LabelHLSLPrescaleOverride.Enabled:= True;
+      //     LabelHLSLPrescaleOverrideX.Enabled:= True;
+      //     HLSLPrescaleOverrideX.Enabled:= True;
+      //     LabelHLSLPrescaleOverrideY.Enabled:= True;
+      //     HLSLPrescaleOverrideY.Enabled:= True;
+      //   end
+      //else
+      // # CORE RENDER OPTIONS
+      if (EntryString = 'unevenstretch ') or
+         (EntryString = 'ues ') then
+         UnevenStretch.Enabled:= True
+      else
+      if (EntryString = 'unevenstretchx ') or
+         (EntryString = 'uesx ') then
+         UnevenStretchX.Enabled:= True
+      else
+      if (EntryString = 'unevenstretchy ') or
+         (EntryString = 'uesy ') then
+         UnevenStretchY.Enabled:= True
+      else
+      if (EntryString = 'autostretchxy ') or
+         (EntryString = 'asxy ') then
+         AutoUnevenStretchXY.Enabled:= True
+      else
+      if (EntryString = 'intoverscan ') or
+         (EntryString = 'ios') then
+         IntegerScaleOverscan.Enabled:= True
+      else
+      if (EntryString = 'intscalex ') or
+         (EntryString = 'sx ') then
+         begin
+           IntegerScaleFactorHorizontal.Enabled:= True;
+           LabelIntegerScaleFactorHorizontal.Enabled:= True;
+         end
+      else
+      if (EntryString = 'intscaley ') or
+         (EntryString = 'sy ') then
+         begin
+           IntegerScaleFactorVertical.Enabled:= True;
+           LabelIntegerScaleFactorVertical.Enabled:= True;
+         end
+      else
+      if (EntryString = 'antialias ') or
+         (EntryString = 'aa ') then
+         Antialias.Enabled:= True
+      else
+      if EntryString =  'beam ' then
+         begin
+           LabelVectorBeamWidthMin.Hint:= 'Beam Width [%2.2f]';
+           LabelVectorBeamWidthMin.Caption:= 'Beam Width [1.00]';
+           VectorBeamWidthMin.Hint:= 'Set vector beam width';
+           LabelVectorBeamWidthMax.Enabled:= False;
+           VectorBeamWidthMax.Enabled:= False;
+           LabelVectorBeamIntensityWeight.Enabled:= False;
+           VectorBeamIntensityWeight.Enabled:= False;
+         end
+      else
+      if (EntryString = 'vector_beam_smooth ') or
+         (EntryString = 'vecsmooth ') then
+         VectorPostProcessingBox.Enabled:= True
+      else
+      if EntryString =  'http ' then
+         HTTPServer.Enabled:= True
+      else
+      if EntryString =  'console ' then
+         EnableEmulatorLUAConsole.Enabled:= True
+      else
+      if (EntryString = 'autoboot_script ') or
+         (EntryString = 'script ') then
+         AutobootBox.Enabled:= True
+      else
+      if EntryString =  'plugins ' then
+         begin
+           EnableLUAPluginSupport.Enabled:= True;
+           LUAPluginsToEnable.Enabled:= True;
+           LabelLUAPluginsToEnable.Enabled:= True;
+           LabelLUAPluginsToEnable2.Enabled:= True;
+         end
+      else
+      if (EntryString =  'language ') or
+         (EntryString =  'lang ') then
+         begin
+           LabelDisplayLanguage.Enabled:= True;
+           DisplayLanguageList.Enabled:= True;
+         end
+      else
+      if EntryString =  'useallheads ' then
+         SDLSplitFullScreenMonitors.Enabled:= True
+      else
+      if EntryString =  'skip_gameinfo ' then
+         SkipGameInfo.Enabled:= True
+      else
+      if EntryString =  'uifont ' then
+         begin
+           UIFont.Enabled:= True;
+           LabelUIFont.Enabled:= True;
+           UIFontSelectFontButton.Enabled:= True;
+         end
+      else
+      if EntryString =  'ui_mouse ' then
+         UIMouse.Enabled:= True
+      else
+      if (EntryString =  'multithreading ') or
+         (EntryString =  'mt ') then
+         Multithreading.Enabled:= True
+      else
+      if EntryString = 'keyboardprovider ' then
+         OSDInputOptionsGroupBox.Enabled:= True;
+    end;
+  end;
+  FreeAndNil(mameIni);
+end;
+
+procedure TFormMAMESettings.PopulateVideoOutputMode;
+//var
+//  mameIni: THashedStringList;
+//  Loop: Integer;
 begin
   if VideoOutputMode.Items.Count > 0 then
      Exit;
@@ -830,28 +1086,10 @@ begin
 
   if sysID in [idMAME, idHBMAME] then
      begin
-       if sysID = idMAME then
-          begin
-            case IsAlterMAME of
-              True:
-                begin
-                  if Pos('sdl', LowerCase(FormMain.AlterMAMEFile)) <> 0 then
-                     IsSDLMAME:= True;
-                end;
-              False:
-                begin
-                  if Pos('sdl', LowerCase(FormMain.EmulatorFile[sysID])) <> 0 then
-                     IsSDLMAME:= True;
-                end;
-            end;
-          end
-       else
-          begin
-            if Pos('sdl', LowerCase(FormMain.EmulatorFile[sysID])) <> 0 then
-               IsSDLMAME:= True;
-          end;
+       if PosEx('sdl', LowerCase(emuFileExec)) <> 0 then
+          IsSDLMAME:= True;
 
-       if FileExists(emuIni) then
+       {if FileExists(emuIni) then
           begin
             mameIni:= THashedStringList.Create;
             mameIni.LoadFromFile(emuIni);
@@ -872,6 +1110,21 @@ begin
                    HLSL_GroupBox.Enabled:= True;
                  end
               else
+              if SameText(Copy(mameIni[Loop], 1, 13), 'bgfx_backend ') then
+                 begin
+                   BGFX_GroupBox.Enabled:= True;
+                 end
+              else
+
+              //if SameText(Copy(mameIni[Loop], 1, 16), 'hlsl_prescale_x ') then
+              //   begin
+              //     LabelHLSLPrescaleOverride.Enabled:= True;
+              //     LabelHLSLPrescaleOverrideX.Enabled:= True;
+              //     HLSLPrescaleOverrideX.Enabled:= True;
+              //     LabelHLSLPrescaleOverrideY.Enabled:= True;
+              //     HLSLPrescaleOverrideY.Enabled:= True;
+              //   end
+              //else
               if SameText(Copy(mameini[Loop], 1, 5), 'beam ') then
                  begin
                    LabelVectorBeamWidthMin.Hint:= 'Beam Width [%2.2f]';
@@ -887,10 +1140,39 @@ begin
                  HTTPServer.Enabled:= True
               else
               if SameText(Copy(mameini[Loop], 1, 8), 'console ') then
-                 EnableEmulatorLUAConsole.Enabled:= True;
+                 EnableEmulatorLUAConsole.Enabled:= True
+              else
+              if SameText(Copy(mameini[Loop], 1, 8), 'plugins ') then
+                 EnableLUAPluginSupport.Enabled:= True
+              else
+              if SameText(Copy(mameini[Loop], 1, 9), 'language ') or
+                 SameText(Copy(mameini[Loop], 1, 5), 'lang ') then
+                 begin
+                   LabelDisplayLanguage.Enabled:= True;
+                   DisplayLanguageList.Enabled:= True;
+                 end
+              else
+              if SameText(Copy(mameini[Loop], 1, 12), 'useallheads ') then
+                 SDLSplitFullScreenMonitors.Enabled:= True
+              else
+              if SameText(Copy(mameini[Loop], 1, 14), 'skip_gameinfo ') then
+                 SkipGameInfo.Enabled:= True
+              else
+              if SameText(Copy(mameini[Loop], 1, 7), 'uifont ') then
+                 begin
+                   UIFont.Enabled:= True;
+                   LabelUIFont.Enabled:= True;
+                   UIFontSelectFontButton.Enabled:= True;
+                 end
+              else
+              if SameText(Copy(mameini[Loop], 1, 9), 'ui_mouse ') then
+                 UIMouse.Enabled:= True
+              if SameText(Copy(mameini[Loop], 1, 15), 'multithreading ') or
+                 SameText(Copy(mameini[Loop], 1, 3), 'mt ') or
+                 Multithreading.Enabled:= True;
             end;
             FreeAndNil(mameIni);
-          end;
+          end;}
      end;
 
   VideoOutputMode.Items.Add('Auto');
@@ -918,6 +1200,505 @@ begin
   end;
   VideoOutputMode.ItemIndex:= 0;
 end;
+
+procedure TFormMAMESettings.PopulateDisplayLanguage;
+var
+  mameIni: THashedStringList;
+  Loop: Integer;
+  lFullPath, EntryStr: String;
+  SearchW: TSearchRecW;
+
+  function AddFolderEntry(const FolderTitle: WideString; InsertDefault: Boolean = False): Boolean;
+  var
+    Item: TEasyItem;
+    FixedTitle: WideString;
+    tagPos: Integer;
+  begin
+    FixedTitle:= FolderTitle;
+    tagPos:= Pos('_', FixedTitle);
+    if tagPos <> 0 then
+    begin
+      FixedTitle:= StringReplaceW(FixedTitle, '_', ' (', [rfIgnoreCase]);
+      FixedTitle:= FixedTitle+')';
+    end;
+
+    case InsertDefault of
+      True : Item:= DisplayLanguageList.Items.Insert(0);
+      False: Item:= DisplayLanguageList.Items.Add;
+    end;
+    //Item.ImageIndex:= 8;
+    Item.Caption:= FixedTitle;//FolderTitle;
+    Item.Bold:= InsertDefault;
+    //Item.Captions[1]:= SetName;
+  end;
+
+begin
+  if not FileExists(emuIni) then
+     Exit;
+
+  lFullPath:= '';
+  mameIni:= THashedStringList.Create;
+  mameIni.LoadFromFile(emuIni);
+
+  for Loop:=0 to mameIni.Count-1 do
+  begin
+    EntryStr:= Trim(mameIni[Loop]);
+    if Copy(EntryStr, 1, 13) = 'languagepath ' then
+       begin
+         lFullPath:= Trim(Copy(EntryStr, 13, Length(EntryStr)));
+         Break;
+       end;
+  end;
+  FreeAndNil(mameIni);
+  if lFullPath = '' then
+     Exit;
+
+  lFullPath:= FormMain.FullFolderFix(lFullPath, emuFileExec);
+  //lFullPath:= FullEmuFolderFix(lFullPath, sysID, False, IsAlterMAME); // old, causes crash on a fresh install
+  if not DirectoryExists(lFullPath) then
+     Exit;
+
+  FormMain.ClearListView(DisplayLanguageList);
+  DisplayLanguageList.BeginUpdate;
+
+  if FindFirstW(lFullPath+'*', $37, SearchW) = 0 then
+  begin
+    repeat
+      // It's a directory?
+      if (SearchW.Attr and $10 = $10) and (SearchW.Name <> '.') and (SearchW.Name <> '..') then
+         AddFolderEntry(SearchW.Name, (WideLowerCase(SearchW.Name) = 'english'));
+
+     until FindNextW(SearchW) <> 0;
+  end;
+  FindCloseW(SearchW);
+  DisplayLanguageList.EndUpdate;
+  DisplayLanguageList.Selection.InvalidateVisibleSelected(False);
+end;
+
+{procedure TFormMAMESettings.PopulateBGFXBackend;
+var
+  mameIni: THashedStringList;
+  lFullPath: String;
+  SearchW: TSearchRecW;
+begin
+  if not FileExists(emuIni) then
+     Exit;
+
+  lFullPath:= '';
+  mameIni:= THashedStringList.Create;
+  mameIni.LoadFromFile(emuIni);
+
+  for Loop:=0 to mameIni.Count-1 do
+  begin
+    EntryStr:= Trim(mameIni[Loop]);
+    if Copy(EntryStr, 1, 10) = 'bgfx_path ' then
+       begin
+         lFullPath:= Trim(Copy(EntryStr, 10, Length(EntryStr)));
+         Break;
+       end;
+  end;
+  FreeAndNil(mameIni);
+  if lFullPath = '' then
+     Exit;
+
+  lFullPath:= FormMain.FullFolderFix(lFullPath, emuFileExec)+'shaders\';
+  //lFullPath:= FullEmuFolderFix(lFullPath, sysID, False, IsAlterMAME); // old, causes crash on a fresh install
+  if not DirectoryExists(lFullPath) then
+     Exit;
+
+  if FindFirstW(lFullPath+'*', $37, SearchW) = 0 then
+  begin
+    repeat
+      // It's a directory?
+      if (SearchW.Attr and $10 = $10) and (SearchW.Name <> '.') and (SearchW.Name <> '..') then
+      begin
+        //IncludeTrailingPathDelimiter() ????
+        pPluginPath:= lFullPath+SearchW.Name+'\';
+        if FileExists(pPluginPath+'plugin.json') then
+        begin
+          PluginFile:= THashedStringList.Create;
+          PluginFile.LoadFromFile(pPluginPath+'plugin.json');
+          AddPluginEntry:= True;
+          for Loop:=0 to PluginFile.Count -1 do
+          begin
+            EntryStr:= TrimLeft(PluginFile[Loop]);
+
+            begin
+              if not GetFieldData(PluginFile[Loop]) then
+                 AddPluginEntry:= False;
+            end;
+          //GetDataStrings;
+          end;
+          FreeAndNil(PluginFile);
+          if AddPluginEntry then
+             AddPluginListView;
+             // call AddPluginEntry_ListView...........................
+             //AddFolderEntry(SearchW.Name, (WideLowerCase(SearchW.Name) = 'english'));
+        end;
+      end;
+    until FindNextW(SearchW) <> 0;
+  end;
+  FindCloseW(SearchW);
+end;}
+
+procedure TFormMAMESettings.PopulateLUAPlugins_ListView;
+var
+  mameIni, PluginFile: THashedStringList;
+  Loop: Integer;
+  AddPluginEntry: Boolean;
+
+  lFullPath, pPluginPath, EntryStr: String;
+  sName, sVersion, sAuthor: String;
+  SearchW: TSearchRecW;
+  sTitle: WideString;
+
+  function GetFieldData(const DataLineStr: String): Boolean;
+  var
+    fNameStr, fValueStr: String;
+    fPos1, fPos2: Integer;
+  begin
+    Result:= True;
+    fPos1:= PosEx('"', DataLineStr);
+    fPos2:= PosEx('"', DataLineStr, fPos1+1);
+    fNameStr:= LowerCase(Copy(DataLineStr, fPos1+1, (fPos2-fPos1)-1));
+    if not SameText(fNameStr, 'plugin') then
+    begin
+      fPos1:= PosEx('"', DataLineStr, fPos2+1);
+      fPos2:= PosEx('"', DataLineStr, fPos1+1);
+      fValueStr:= Copy(DataLineStr, fPos1+1, (fPos2-fPos1)-1);
+
+      if SameText(fNameStr, 'type') then
+         begin
+           if not SameText(fValueStr, 'plugin') then
+              Result:= False;
+         end;
+      if fNameStr = 'name' then
+         sName:= fValueStr
+      else
+      if fNameStr = 'description' then
+         sTitle:= fValueStr
+      else
+      if fNameStr = 'version' then
+         sVersion:= fValueStr
+      else
+      if fNameStr = 'author' then
+         sAuthor:= fValueStr;
+    end;
+  end;
+
+  function AddPluginListView: Boolean;
+  var
+    wStr: WideString;
+  begin
+    wStr:= Utf8Decode(sTitle);
+    if wStr <> '' then
+       sTitle:= wStr;
+
+    with LUAPluginsToEnable.Items.Add do
+    begin
+      Caption:= sTitle;
+      Captions[1]:= sName;
+      Captions[2]:= sVersion;
+      Captions[3]:= sAuthor;
+    end;
+  end;
+
+begin
+  if not FileExists(emuIni) then
+     Exit;
+
+  lFullPath:= '';
+  mameIni:= THashedStringList.Create;
+  mameIni.LoadFromFile(emuIni);
+
+  for Loop:=0 to mameIni.Count-1 do
+  begin
+    // EntryStr:= XML_GetEntryName(EntryStr);
+    EntryStr:= Trim(mameIni[Loop]);
+    if Copy(EntryStr, 1, 12) = 'pluginspath ' then
+       begin
+         lFullPath:= Trim(Copy(EntryStr, 12, Length(EntryStr)));
+         Break;
+       end;
+  end;
+  FreeAndNil(mameIni);
+  if lFullPath = '' then
+     Exit;
+
+  lFullPath:= FormMain.FullFolderFix(lFullPath, emuFileExec);
+  if not DirectoryExists(lFullPath) then
+     Exit;
+
+  FormMain.ClearListView(LUAPluginsToEnable);
+  //FormMain.ClearListView(LUAPluginsToDisable);
+
+  LUAPluginsToEnable.BeginUpdate;
+  //LUAPluginsToDisable.BeginUpdate;
+
+  if FindFirstW(lFullPath+'*', $37, SearchW) = 0 then
+  begin
+    repeat
+      // It's a directory?
+      if (SearchW.Attr and $10 = $10) and (SearchW.Name <> '.') and (SearchW.Name <> '..') then
+      begin
+        //IncludeTrailingPathDelimiter() ????
+        pPluginPath:= lFullPath+SearchW.Name+'\';
+        if FileExists(pPluginPath+'plugin.json') then
+        begin
+          PluginFile:= THashedStringList.Create;
+          PluginFile.LoadFromFile(pPluginPath+'plugin.json');
+          AddPluginEntry:= True;
+          for Loop:=0 to PluginFile.Count -1 do
+          begin
+            EntryStr:= TrimLeft(PluginFile[Loop]);
+            if (EntryStr[1] <> '{') and (EntryStr[1] <> '}') then
+            begin
+              if not GetFieldData(PluginFile[Loop]) then
+                 AddPluginEntry:= False;
+            end;
+          //GetDataStrings;
+          end;
+          FreeAndNil(PluginFile);
+          if AddPluginEntry then
+             AddPluginListView;
+             // call AddPluginEntry_ListView...........................
+             //AddFolderEntry(SearchW.Name, (WideLowerCase(SearchW.Name) = 'english'));
+        end;
+      end;
+    until FindNextW(SearchW) <> 0;
+  end;
+  FindCloseW(SearchW);
+  if FormMain.CheckTotal(LUAPluginsToEnable) then
+     LUAPluginsToEnable.Sort.SortAll;
+  LUAPluginsToEnable.EndUpdate;
+
+  //LUAPluginsToDisable.EndUpdate;
+  //DisplayLanguageList.Selection.InvalidateVisibleSelected(False);
+end;
+
+procedure TFormMAMESettings.ReadPluginIni(const CustomPluginString: String = '');
+var
+  pIniFile: THashedStringList;
+  Loop: Integer;
+  {LineStr, }NameStr, ValueStr: String;
+  PluginChecked: Boolean;
+
+  function SetCheckStateListView: Boolean;
+  var
+    LoopListView: Integer;
+  begin
+    for LoopListView:=0 to LUAPluginsToEnable.Items.Count-1 do
+    begin
+      if LUAPluginsToEnable.Items[LoopListView].Captions[1] = NameStr then
+         begin
+           LUAPluginsToEnable.Items[LoopListView].Checked:= PluginChecked;
+           Break;
+         end;
+    end;
+  end;
+
+begin
+  if not EnableLUAPluginSupport.Enabled then
+     Exit;
+  if not FormMain.CheckTotal(LUAPluginsToEnable) then
+     Exit;
+  if CustomPluginString = '' then
+  begin
+    // this will only be used for emulator default settings
+    NameStr:= FormMain.GetMAMEPluginFile(sysID, emuFileExec);
+    //if not FileExists(ExtractFilePath(emuFileExec)+'plugin.ini') then
+    if not FileExists(NameStr) then
+       Exit;
+    LUAPluginsToEnable.BeginUpdate;
+    pIniFile:= THashedStringList.Create;
+    //pIniFile.LoadFromFile(ExtractFilePath(emuFileExec)+'plugin.ini');
+    pIniFile.LoadFromFile(NameStr);
+    for Loop:=0 to pIniFile.Count-1 do
+    begin
+      NameStr:= XML_GetEntryName(pIniFile[Loop]);
+      if NameStr <> '' then
+      begin
+        NameStr:= LowerCase(NameStr);
+        ValueStr:= pIniFile[Loop];
+        Delete(ValueStr, 1, Length(NameStr));
+        ValueStr:= Trim(ValueStr);
+        if ValueStr <> '' then
+        begin
+          PluginChecked:= Boolean(StrToInt(ValueStr));
+          SetCheckStateListView;
+        end;
+      end;
+    end;
+    LUAPluginsToEnable.EndUpdate;
+    FreeAndNil(pIniFile);
+  end
+  else
+  begin
+    // this will only be used for custom settings
+    LUAPluginsToEnable.BeginUpdate;
+    LUAPluginsToEnable.CheckManager.UnCheckAll;
+    PluginChecked:= True;
+    Loop:= PosEx(',', CustomPluginString);
+    if Loop <> 0 then
+    begin
+      NameStr:= Copy(CustomPluginString, 1, Loop-1);
+      SetCheckStateListView;
+      repeat
+        Loop:= PosEx(',', CustomPluginString, Loop+1);
+        if Loop <> 0 then
+           begin
+             NameStr:= Copy(CustomPluginString, 1, Loop-1);
+             SetCheckStateListView;
+           end;
+      until Loop = 0;
+    end
+    else
+    begin
+      // only one plugin listed
+      NameStr:= CustomPluginString;
+      SetCheckStateListView;
+    end;
+
+    LUAPluginsToEnable.EndUpdate;
+  end;
+end;
+
+procedure TFormMAMESettings.WritePluginIni;
+var
+  pIniFile: THashedStringList;
+  Loop, LoopListView: Integer;
+  NameStr: String;
+  PluginChecked: Boolean;
+begin
+  if not EnableLUAPluginSupport.Enabled then
+     Exit;
+  if not FormMain.CheckTotal(LUAPluginsToEnable) then
+     Exit;
+
+  NameStr:= FormMain.GetMAMEPluginFile(sysID, emuFileExec);
+  //DeleteFile(ExtractFilePath(emuFileExec)+'plugin.ini');
+  DeleteFile(NameStr);
+  pIniFile:= THashedStringList.Create;
+  pIniFile.BeginUpdate;
+  pIniFile.Add('#');
+  pIniFile.Add('# PLUGINS OPTIONS');
+  pIniFile.Add('#');
+
+  for Loop:=0 to LUAPluginsToEnable.Items.Count-1 do
+      pIniFile.Add(Format('%-25s %s', [LUAPluginsToEnable.Items[Loop].Captions[1], IntToStr(Ord(LUAPluginsToEnable.Items[Loop].Checked))]));
+
+  pIniFile.EndUpdate;
+  //pIniFile.SaveToFile(ExtractFilePath(emuFileExec)+'plugin.ini');
+  pIniFile.SaveToFile(NameStr);
+  FreeAndNil(pIniFile);
+end;
+
+procedure TFormMAMESettings.PopulateBGFXShaderChains_ListView;
+var
+  FilesList, ChainFile: THashedStringList;
+  Loop, iPos: Integer;
+
+  lFullPath, EntryStr: String;
+  sName, sAuthor: String;
+  wStr, sTitle: WideString;
+  SearchW: TSearchRecW;
+
+  function GetFieldData(const DataLineStr: String; StartPos: Integer): String;
+  var
+    fNameStr, fValueStr: String;
+    fPos1, fPos2: Integer;
+  begin
+    Result:= '';
+    fPos1:= PosEx('"', DataLineStr, StartPos);
+    fPos2:= PosEx('"', DataLineStr, fPos1+1);
+    Result:= Copy(DataLineStr, fPos1+1, (fPos2-fPos1)-1);
+  end;
+
+  function AddPluginListView: Boolean;
+  var
+    wStr: WideString;
+  begin
+    wStr:= Utf8Decode(sTitle);
+    if wStr <> '' then
+       sTitle:= wStr;
+
+    with BGFXScreenShaderChains_ListView.Items.Add do
+    begin
+      Caption:= sTitle;
+      Captions[1]:= sName;
+      Captions[2]:= sAuthor;
+    end;
+  end;
+
+begin
+  if BGFXPath.Text = '' then
+     BGFXPath.Text:= 'bgfx';
+  lFullPath:= BGFXPath.Text;
+  lFullPath:= FormMain.FullFolderFix(lFullPath, emuFileExec)+'chains\';
+
+  if not DirectoryExists(lFullPath) then
+     Exit;
+
+  FormMain.ClearListView(BGFXScreenShaderChains_ListView);
+
+  BGFXScreenShaderChains_ListView.BeginUpdate;
+
+  if FindFirstW(lFullPath+'*', $37, SearchW) = 0 then
+  begin
+    repeat
+      // It's a directory?
+      if (SearchW.Attr and $10 <> $10) and (SearchW.Name <> '.') and (SearchW.Name <> '..') then
+      begin
+        //IncludeTrailingPathDelimiter() ????
+        if SameText(ExtractFileExt(SearchW.Name), '.json') then
+        begin
+          sName:= ChangeFileExt(SearchW.Name, '');
+          ChainFile:= THashedStringList.Create;
+          ChainFile.LoadFromFile(lFullPath+SearchW.Name);
+
+          sTitle:= '';
+          sAuthor:= '';
+          for Loop:=0 to ChainFile.Count -1 do
+          begin
+            EntryStr:= TrimLeft(ChainFile[Loop]);
+            iPos:= PosEx('"name":', EntryStr);
+            if iPos <> 0 then
+               sTitle:= GetFieldData(EntryStr, iPos+6)
+            else
+            begin
+              iPos:= PosEx('"author":', EntryStr);
+              if iPos <> 0 then
+                 sAuthor:= GetFieldData(EntryStr, iPos+8);
+            end;
+            if (sTitle <> '') and (sAuthor <> '') then
+               Break;
+          end;
+          FreeAndNil(ChainFile);
+          wStr:= Utf8Decode(sTitle);
+          if wStr <> '' then
+             sTitle:= wStr;
+          AddPluginListView;
+             // call AddPluginEntry_ListView...........................
+             //AddFolderEntry(SearchW.Name, (WideLowerCase(SearchW.Name) = 'english'));
+        end;
+      end;
+    until FindNextW(SearchW) <> 0;
+  end;
+  FindCloseW(SearchW);
+  if FormMain.CheckTotal(BGFXScreenShaderChains_ListView) then
+     BGFXScreenShaderChains_ListView.Sort.SortAll;
+  BGFXScreenShaderChains_ListView.EndUpdate;
+end;
+
+
+// for MAME v0.171 and newer... support for a new ui.ini file (some settings moved from mame.ini to this new file...)
+// ... damn... :_((
+// -#include "ui/moptions.h"
+// -
+// +#include "options.h"
+// see this link
+// http://git.redump.net/mame/commit/?id=d0162765cdd23c2cb015118b75c87689a839de40
+
 
 // from src\emu\emuopts.h
 // command-line options are HIGH priority
@@ -952,7 +1733,6 @@ end;
 // parentgame.ini // parent_ini (if current game is clone)
 // gamename.ini   // driver_ini
 
-
 procedure TFormMAMESettings.ReadMAMEIniFile(const IniFile: String; EmuDefaultSettings: Boolean = False);
 var
   TextLine, Value, EntryString: String;
@@ -983,7 +1763,7 @@ var
         end;
       False:
         begin
-          Position:= Pos('@', Value);
+          Position:= PosEx('@', Value);
           if Position <> 0 then
              cRefreshRate:= Copy(Value, Position+1, Length(Value)-Position);
           TempString:= '';
@@ -1134,7 +1914,7 @@ begin
                begin
                  Value:= GetStringValue;
                  FolderControllerDefinitions.Text:= Value;
-                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList); // add to HashedStringList in RAM with FULL path...
+                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, emuFileExec); // add to HashedStringList in RAM with FULL path...
                  if FoldersList.Count > 0 then
                     begin
                       for Loop2:= 0 to FoldersList.Count-1 do
@@ -1167,6 +1947,12 @@ begin
                 (EntryString = 'crosshairpath ')) and EmuDefaultSettings then
                FolderCrosshairFiles.Text:= GetStringValue
             else
+            if (EntryString = 'pluginspath ') and EmuDefaultSettings then
+               FolderPluginFiles.Text:= GetStringValue
+            else
+            if (EntryString = 'languagepath ') and EmuDefaultSettings then
+               FolderLanguageFiles.Text:= GetStringValue
+            else
             // # CORE OUTPUT DIRECTORY OPTIONS
             if (EntryString = 'cfg_directory ') and EmuDefaultSettings then
                FolderGamesConfigurations.Text:= GetStringValue
@@ -1197,13 +1983,21 @@ begin
             if EntryString = 'autosave ' then
                AutoSave.Checked:= GetBooleanValue
             else
+            if EntryString = 'record_timecode ' then
+               RecordInputTimecodeFile.Checked:= GetBooleanValue
+            else
+            if EntryString = 'exit_after_playback ' then
+               ExitAfterInputPlayback.Checked:= GetBooleanValue
+            else
             if EntryString = 'snapname ' then
                SnapName.Text:= GetStringValue
             else
             if EntryString = 'snapsize ' then
                begin
-                 LabelSnaphotResolution.Hint:= LowerCase(GetStringValue);
-                 SnapSizeAuto.Checked:= LabelSnaphotResolution.Hint = 'auto';
+                 LabelSnapSizeCustomX.Hint:= LowerCase(GetStringValue);
+                 SnapSizeAuto.Checked:= LabelSnapSizeCustomX.Hint = 'auto';
+                 //LabelSnaphotResolution.Hint:= LowerCase(GetStringValue);
+                 //SnapSizeAuto.Checked:= LabelSnaphotResolution.Hint = 'auto';
                  case SnapSizeAuto.Checked of
                    True:
                      begin
@@ -1212,13 +2006,16 @@ begin
                      end;
                    False:
                      begin
-                       Loop2:= Pos('x', LabelSnaphotResolution.Hint);
+                       //Loop2:= Pos('x', LabelSnaphotResolution.Hint);
+                       Loop2:= PosEx('x', LabelSnapSizeCustomX.Hint);
                        if Loop2 = 0 then
                           SnapSizeAuto.Checked:= True
                        else
                           begin
-                            SnapSizeWidth.Text:= Copy(LabelSnaphotResolution.Hint, 1, Loop2-1);
-                            SnapSizeHeight.Text:= Copy(LabelSnaphotResolution.Hint, Loop2+1, Length(LabelSnaphotResolution.Hint));
+                            SnapSizeWidth.Text:= Copy(LabelSnapSizeCustomX.Hint, 1, Loop2-1);
+                            SnapSizeHeight.Text:= Copy(LabelSnapSizeCustomX.Hint, Loop2+1, Length(LabelSnapSizeCustomX.Hint));
+                            //SnapSizeWidth.Text:= Copy(LabelSnaphotResolution.Hint, 1, Loop2-1);
+                            //SnapSizeHeight.Text:= Copy(LabelSnaphotResolution.Hint, Loop2+1, Length(LabelSnaphotResolution.Hint));
                           end;
                      end;
                  end;
@@ -1242,9 +2039,9 @@ begin
             if EntryString = 'burnin ' then
                SnapBurnIn.Checked:= GetBooleanValue
             else
-            if EntryString = 'dummywrite ' then
-               DummyWriteSnapshot.Checked:= GetBooleanValue
-            else
+            //if EntryString = 'dummywrite ' then // this setting needs a MAME compiled with DEBUG enabled
+            //   DummyWriteSnapshot.Checked:= GetBooleanValue
+            //else
             // # CORE PERFORMANCE OPTIONS
             if (EntryString = 'autoframeskip ') or
                (EntryString = 'afs ') then
@@ -1271,6 +2068,49 @@ begin
                (EntryString = 'rs ') then
                RefreshSpeed.Checked:= GetBooleanValue
             else
+            // # CORE RENDER OPTIONS
+            if (EntryString = 'keepaspect ') or
+               (EntryString = 'ka ') then
+               KeepAspectRatio.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'unevenstretch ') or
+               (EntryString = 'ues ') then
+               UnevenStretch.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'unevenstretchx ') or
+               (EntryString = 'uesx ') then
+               UnevenStretchX.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'unevenstretchy ') or
+               (EntryString = 'uesy ') then
+               UnevenStretchY.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'autostretchxy ') or
+               (EntryString = 'asxy ') then
+               AutoUnevenStretchXY.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'intoverscan ') or
+               (EntryString = 'ios') then
+               IntegerScaleOverscan.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'intscalex ') or
+               (EntryString = 'sx ') then
+               begin
+                 Value:= GetStringValue;
+                 if Value = '' then
+                    Value:= '0';
+                 IntegerScaleFactorHorizontal.Text:= Value;
+               end
+            else
+            if (EntryString = 'intscaley ') or
+               (EntryString = 'sy ') then
+               begin
+                 Value:= GetStringValue;
+                 if Value = '' then
+                    Value:= '0';
+                 IntegerScaleFactorVertical.Text:= Value;
+               end
+            else            
             // # CORE ROTATION OPTIONS
             if EntryString = 'rotate ' then
                Rotate.Checked:= GetBooleanValue
@@ -1373,8 +2213,11 @@ begin
                       if Value = 'dsound' then
                          SoundOutputMethod.ItemIndex:= 1
                       else
-                      if Value = 'sdl' then
+                      if Value = 'xaudio2' then
                          SoundOutputMethod.ItemIndex:= 2
+                      else
+                      if Value = 'sdl' then
+                         SoundOutputMethod.ItemIndex:= 3
                       else
                       if Value = 'none' then
                          SoundOutputMethod.ItemIndex:= SoundOutputMethod.Items.Count-1;//2;
@@ -1507,6 +2350,98 @@ begin
                  UIModeKeyCustom.Text:= GetStringValue;
                end
             else
+
+            // # OSD OUTPUT OPTIONS
+            if EntryString = 'output ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    OSDOutputProvider.ItemIndex:= 0
+                 else
+                 if Value = 'console' then
+                    OSDOutputProvider.ItemIndex:= 1
+                 else
+                 if Value = 'network' then
+                    OSDOutputProvider.ItemIndex:= 2
+                 else
+                 if Value = 'windows' then
+                    OSDOutputProvider.ItemIndex:= 3
+                 else
+                 if Value = 'none' then
+                    OSDOutputProvider.ItemIndex:= 4
+                 else
+                    OSDOutputProvider.ItemIndex:= 0; // default to 'auto
+               end;
+
+            // # OSD INPUT OPTIONS
+            if EntryString = 'keyboardprovider ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    OSDInputKeyboardProvider.ItemIndex:= 0
+                 else
+                 if Value = 'rawinput' then
+                    OSDInputKeyboardProvider.ItemIndex:= 1
+                 else
+                 if Value = 'dinput' then
+                    OSDInputKeyboardProvider.ItemIndex:= 2
+                 else
+                 if Value = 'win32' then
+                    OSDInputKeyboardProvider.ItemIndex:= 3
+                 else
+                 if Value = 'none' then
+                    OSDInputKeyboardProvider.ItemIndex:= 4;
+               end
+            else
+            if EntryString = 'mouseprovider ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    OSDInputMouseProvider.ItemIndex:= 0
+                 else
+                 if Value = 'rawinput' then
+                    OSDInputMouseProvider.ItemIndex:= 1
+                 else
+                 if Value = 'dinput' then
+                    OSDInputMouseProvider.ItemIndex:= 2
+                 else
+                 if Value = 'win32' then
+                    OSDInputMouseProvider.ItemIndex:= 3
+                 else
+                 if Value = 'none' then
+                    OSDInputMouseProvider.ItemIndex:= 4;
+               end
+            else
+            if EntryString = 'lightgunprovider ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    OSDInputMouseProvider.ItemIndex:= 0
+                 else
+                 if Value = 'win32' then
+                    OSDInputMouseProvider.ItemIndex:= 1
+                 else
+                 if Value = 'none' then
+                    OSDInputMouseProvider.ItemIndex:= 2;
+               end
+            else
+            if EntryString = 'joystickprovider ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    OSDInputMouseProvider.ItemIndex:= 0
+                 else
+                 if Value = 'dinput' then
+                    OSDInputMouseProvider.ItemIndex:= 1
+                 else
+                 if Value = 'xinput' then
+                    OSDInputMouseProvider.ItemIndex:= 2
+                 else
+                 if Value = 'none' then
+                    OSDInputMouseProvider.ItemIndex:= 3;
+               end
+            else
+
             // # CORE INPUT AUTOMATIC ENABLE OPTIONS
             if (EntryString = 'paddle_device ') or
                (EntryString = 'paddle ') then
@@ -1599,8 +2534,9 @@ begin
                  if Value = 'none' then
                     Debugger.ItemIndex:= 3
                  else
-                    GenerateMessage('OOPS', 'Debugger option unknown.', 'This setting is not supported by the frontend. Please notify the author:'+
-                                    #13#10+#13#10+'entry: debugger'+#13#10+'value: '+Value, 2);
+                    Debugger.ItemIndex:= 0; // set it default to "auto" if option is unknown (March 17, 2016)
+                    //GenerateMessage('OOPS', 'Debugger option unknown.', 'This setting is not supported by the frontend. Please notify the author:'+
+                    //                #13#10+#13#10+'entry: debugger'+#13#10+'value: '+Value, 2);
                end
             else
             if (EntryString = 'debug_internal ') or // MAME 0.153 and lower
@@ -1658,6 +2594,15 @@ begin
                (EntryString = 'c ') then
                Cheat.Checked:= GetBooleanValue
             else
+            if EntryString = 'ui ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'cabinet' then
+                    TypeUserInterface.ItemIndex:= 1
+                 else
+                    TypeUserInterface.ItemIndex:= 0;
+               end
+            else
             if EntryString = 'skip_gameinfo ' then
                SkipGameInfo.Checked:= GetBooleanValue
             else
@@ -1714,6 +2659,48 @@ begin
             else
             if EntryString = 'console ' then
                EnableEmulatorLUAConsole.Checked:= GetBooleanValue
+            else
+            if EntryString = 'plugins ' then
+               EnableLUAPluginSupport.Checked:= GetBooleanValue
+            else
+            // disabled for now...
+            if EntryString = 'plugin ' then
+               begin
+                 if FormMAMESettings.Tag = 1 then
+                    begin
+                      // list of plugins to enable... separated by comma (  ;  )
+                      // only used for custom game/machine settings!!!
+                      Value:= GetStringValue;
+                      ReadPluginIni(Value);
+                    end;
+               end
+            else
+            //if EntryString = 'noplugin ' then
+            //   begin
+            //     // list of plugins to disable... separated by comma (  ;  )
+            //   end
+            //else            
+            if (EntryString = 'language ') or
+               (EntryString = 'lang ') then
+               begin
+                 Value:= GetStringValue;
+                 if FormMain.CheckTotal(DisplayLanguageList) then
+                 begin
+                   if SameText(Value, 'English') then
+                      FormMain.ELV_SelectItem(DisplayLanguageList, 0)
+                   else
+                   begin
+                     if Value[1] = '"' then
+                        begin
+                          Delete(Value, 1, 1);
+                          Delete(Value, Length(Value), 1);
+                        end;
+                     FormMain.ELV_SelectItem(DisplayLanguageList, 0, Value);
+                     if not FormMain.CheckSelected(DisplayLanguageList) then
+                        FormMain.ELV_SelectItem(DisplayLanguageList, 0);
+                   end;
+                 end;
+               end
             else
             if EntryString = 'uifontprovider ' then
                begin
@@ -1843,6 +2830,26 @@ begin
                           VideoOutputMode.ItemIndex:= 0; // default is 'd3d'
                      end;
                  end;
+                 if Value = 'bgfx' then
+                    begin
+                      if not ButtonPageVideoEffectsBGFX.Down then
+                      begin
+                        ButtonPageVideoEffectsBGFX.Down:= True;
+                        ButtonPageVideoEffectsHLSL.Down:= False;
+                        ButtonPageVideoEffectsBGFX.Click;
+                      end;
+                    end
+                 else
+                 if Value = 'opengl' then
+                    begin
+                      if not ButtonPageVideoEffectsGLSL.Down then
+                      begin
+                        ButtonPageVideoEffectsGLSL.Down:= True;
+                        ButtonPageVideoEffectsHLSL.Down:= False;
+                        ButtonPageVideoEffectsGLSL.Click;
+                      end;
+                    end;
+
                end
             else
             if EntryString = 'numscreens ' then
@@ -1855,14 +2862,6 @@ begin
             if (EntryString = 'maximize ') or
                (EntryString = 'max ') then
                MaximizeWindow.Checked:= GetBooleanValue
-            else
-            if (EntryString = 'keepaspect ') or
-               (EntryString = 'ka ') then
-               KeepAspectRatio.Checked:= GetBooleanValue
-            else
-            if (EntryString = 'unevenstretch ') or
-               (EntryString = 'ues ') then
-               UnevenStretch.Checked:= GetBooleanValue
             else
             if EntryString = 'centerh ' then // SDLMAME
                SDLCenterHorizontally.Checked:= GetBooleanValue
@@ -1912,11 +2911,11 @@ begin
                     SDLScaleMode.ItemIndex:= 0;
                end
             else
-            // # DIRECTDRAW-SPECIFIC OPTIONS
-            if (EntryString = 'hwstretch ') or
-               (EntryString = 'hws ') then
-               HardwareStretch.Checked:= GetBooleanValue
-            else
+            //// # DIRECTDRAW-SPECIFIC OPTIONS
+            //if (EntryString = 'hwstretch ') or
+            //   (EntryString = 'hws ') then
+            //   HardwareStretch.Checked:= GetBooleanValue
+            //else
             // # DIRECT3D-SPECIFIC OPTIONS
             if (EntryString = 'filter ') or
                (EntryString = 'd3dfilter ') or
@@ -1928,6 +2927,9 @@ begin
             if EntryString = 'hlsl_enable ' then
                HLSLEnable.Checked:= GetBooleanValue
             else
+            if EntryString = 'hlsl_oversampling ' then
+               HLSLOversampling.Checked:= GetBooleanValue
+            else
             if EntryString = 'hlslpath ' then
                HLSLPath.Text:= GetStringValue
             else
@@ -1937,20 +2939,38 @@ begin
             if EntryString = 'yiq_enable ' then
                YIQEnable.Checked:= GetBooleanValue
             else
-            if EntryString = 'hlsl_prescale_x ' then
-               HLSLPrescaleOverrideX.ItemIndex:= GetIntegerValue
+            if (EntryString = 'vector_beam_smooth') or
+               (EntryString = 'vecsmooth') then
+               VectorBeamSmooth.Position:= GetFloatValue('%1.2f')
             else
-            if EntryString = 'hlsl_prescale_y ' then
-               HLSLPrescaleOverrideY.ItemIndex:= GetIntegerValue
+            if (EntryString = 'vector_length_scale') or
+               (EntryString = 'vecscale') then
+               VectorMaximumAttenuation.Position:= GetFloatValue('%1.2f')
             else
+            if (EntryString = 'vector_length_ratio') or
+               (EntryString = 'vecratio') then
+               VectorMinimumLengthAttenuation.Position:= GetFloatValue('%1.3f')
+            else
+            //if EntryString = 'hlsl_prescale_x ' then
+            //   HLSLPrescaleOverrideX.ItemIndex:= GetIntegerValue
+            //else
+            //if EntryString = 'hlsl_prescale_y ' then
+            //   HLSLPrescaleOverrideY.ItemIndex:= GetIntegerValue
+            //else
             //if EntryString = 'hlsl_preset ' then
             //   HLSLPresetToUse.ItemIndex:= GetIntegerValue+1
-            //else
+            //else        
             if EntryString = 'hlsl_snap_width ' then
                HLSLUpscaleSnapX.Text:= GetStringValue
             else
             if EntryString = 'hlsl_snap_height ' then
                HLSLUpscaleSnapY.Text:= GetStringValue
+            else
+            if EntryString = 'shadow_mask_tile_mode ' then
+               ShadowMaskTileMode.ItemIndex:= GetIntegerValue
+            else
+            if EntryString = 'bloom_blend_mode ' then
+               BloomBlendMode.ItemIndex:= GetIntegerValue
             else
             if EntryString = 'hlsl_ini_read ' then // for MAME 0.149
                ReadCustomHLSLFile.Checked:= GetBooleanValue
@@ -2041,6 +3061,50 @@ begin
             if EntryString = 'glsl_shader_screen9 ' then
                GetGLSLShaderMAME(GLSL_Shader_Screen9)
             else
+
+            // # BGFX POST-PROCESSING OPTIONS
+            if EntryString = 'bgfx_path ' then
+               BGFXPath.Text:= GetStringValue
+            else
+            if EntryString = 'bgfx_backend ' then
+               begin
+                 Value:= LowerCase(GetStringValue);
+                 if Value = 'auto' then
+                    BGFXBackend.ItemIndex:= 0
+                 else
+                 if Value = 'd3d9' then
+                    BGFXBackend.ItemIndex:= 1
+                 else
+                 if Value = 'd3d11' then
+                    BGFXBackend.ItemIndex:= 2
+                 else
+                 if Value = 'opengl' then
+                    BGFXBackend.ItemIndex:= 3
+                 else
+                 if Value = 'gles' then
+                    BGFXBackend.ItemIndex:= 4
+                 else
+                    BGFXBackend.ItemIndex:= 0; // default to 'auto'
+               end
+            else
+            if EntryString = 'bgfx_debug ' then
+               BGFXDebug.Checked:= GetBooleanValue
+            else
+            if EntryString = 'bgfx_screen_chains ' then
+               begin
+                 BGFXScreenShaderChains.Text:= GetStringValue;
+               end
+            else
+            if EntryString = 'bgfx_shadow_mask ' then
+               BGFXShadowMaskTextureName.Text:= GetStringValue
+            else
+            //if EntryString = 'bgfx_avi_name ' then
+            //   begin
+            //     BGFX_RecordRenderedVideoAVI.Text:= GetStringValue;
+            //     if BGFX_RecordRenderedVideoAVI.Text = '' then
+            //        BGFX_RecordRenderedVideoAVIButtonReset.Click;
+            //   end
+            //else
 
             // # PER-WINDOW VIDEO OPTIONS
             if EntryString = 'screen ' then
@@ -2341,7 +3405,7 @@ begin
 
   for Loop:= (ActiveFileID-1) downto 1 do
   begin
-    strFile:= GetCustomIniFile(Loop);
+    strFile:= FormMain.GetCustomIniFileMAME(Loop);
     if strFile <> '' then
     begin
       if IsAlterMAME then
@@ -2371,7 +3435,7 @@ end;
 procedure TFormMAMESettings.WriteMAMEIniFile(const customIni: String; CustomGameOption: Boolean);
 var
   MAMEIniFile, GameIniFile: THashedStringList;
-  Loop: Integer;
+  Loop, LoopPlugin: Integer;
   Value, tmpEntryStr, EntryString: String;
 
   //if (data->data != NULL)
@@ -2624,6 +3688,12 @@ begin
              (tmpEntryStr = 'crosshairpath ')) and (not CustomGameOption) then
             UpdateMAMELine(EntryString, FolderCrosshairFiles.Text)
          else
+         if (tmpEntryStr = 'pluginspath ') and (not CustomGameOption)  then
+            UpdateMAMELine(EntryString, FolderPluginFiles.Text)
+         else
+         if (tmpEntryStr = 'languagepath ') and (not CustomGameOption)  then
+            UpdateMAMELine(EntryString, FolderLanguageFiles.Text)
+         else
          // # CORE OUTPUT DIRECTORY OPTIONS
          if (tmpEntryStr = 'cfg_directory ') and (not CustomGameOption) then
             UpdateMAMELine(EntryString, FolderGamesConfigurations.Text)
@@ -2653,6 +3723,12 @@ begin
          // # CORE STATE/PLAYBACK OPTIONS
          if tmpEntryStr = 'autosave ' then
             UpdateMAMELine(EntryString, GetBooleanValue(AutoSave.Checked))
+         else
+         if tmpEntryStr = 'record_timecode ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(RecordInputTimecodeFile.Checked))
+         else
+         if tmpEntryStr = 'exit_after_playback ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(ExitAfterInputPlayback.Checked))
          else
          if tmpEntryStr = 'snapname ' then
             begin
@@ -2696,9 +3772,9 @@ begin
          if tmpEntryStr = 'burnin ' then
             UpdateMAMELine(EntryString, GetBooleanValue(SnapBurnIn.Checked))
          else
-         if tmpEntryStr = 'dummywrite ' then
-            UpdateMAMELine(EntryString, GetBooleanValue(DummyWriteSnapshot.Checked))
-         else
+         //if tmpEntryStr = 'dummywrite ' then // this setting needs a MAME compiled with DEBUG enabled
+         //   UpdateMAMELine(EntryString, GetBooleanValue(DummyWriteSnapshot.Checked))
+         //else
          // # CORE PERFORMANCE OPTIONS
          if (tmpEntryStr = 'autoframeskip ') or
             (tmpEntryStr = 'afs ') then
@@ -2724,6 +3800,49 @@ begin
          if (tmpEntryStr = 'refreshspeed ') or
             (tmpEntryStr = 'rs ') then
             UpdateMAMELine(EntryString, GetBooleanValue(RefreshSpeed.Checked))
+         else
+         // # CORE RENDER OPTIONS
+         if (tmpEntryStr = 'keepaspect ') or
+            (tmpEntryStr = 'ka') then
+            UpdateMAMELine(EntryString, GetBooleanValue(KeepAspectRatio.Checked))
+         else
+         if (tmpEntryStr = 'unevenstretch ') or
+            (tmpEntryStr = 'ues ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(UnevenStretch.Checked))
+         else
+         if (tmpEntryStr = 'unevenstretchx ') or
+            (tmpEntryStr = 'uesx ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(UnevenStretchX.Checked))
+         else
+         if (tmpEntryStr = 'unevenstretchy ') or
+            (tmpEntryStr = 'uesy ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(UnevenStretchY.Checked))
+         else
+         if (tmpEntryStr = 'autostretchxy ') or
+            (tmpEntryStr = 'asxy ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(AutoUnevenStretchXY.Checked))
+         else
+         if (tmpEntryStr = 'intoverscan ') or
+            (tmpEntryStr = 'ios') then
+            UpdateMAMELine(EntryString, GetBooleanValue(IntegerScaleOverscan.Checked))
+         else
+         if (tmpEntryStr = 'intscalex ') or
+            (tmpEntryStr = 'sx ') then
+            begin
+              Value:= IntegerScaleFactorHorizontal.Text;
+              if Value = '' then
+                 Value:= '0';
+              UpdateMAMELine(EntryString, IntegerScaleFactorHorizontal.Text)
+            end
+         else
+         if (tmpEntryStr = 'intscaley ') or
+            (tmpEntryStr = 'sy ') then
+            begin
+              Value:= IntegerScaleFactorVertical.Text;
+              if Value = '' then
+                 Value:= '0';
+              UpdateMAMELine(EntryString, IntegerScaleFactorVertical.Text)
+            end
          else
          // # CORE ROTATION OPTIONS
          if tmpEntryStr = 'rotate ' then
@@ -2824,8 +3943,9 @@ begin
                          case SoundOutputMethod.ItemIndex of
                            0: Value:= 'auto';
                            1: Value:= 'dsound';
-                           2: Value:= 'sdl';
-                           3: Value:= 'none';
+                           2: Value:= 'xaudio2';
+                           3: Value:= 'sdl';
+                           4: Value:= 'none';
                          end;
                        end;
                      False:
@@ -2833,7 +3953,8 @@ begin
                          case SoundOutputMethod.ItemIndex of
                            0: Value:= 'auto';
                            1: Value:= 'dsound';
-                           2: Value:= 'none';
+                           2: Value:= 'xaudio2';
+                           3: Value:= 'none';
                          end;
                        end;
                    end;
@@ -2847,28 +3968,6 @@ begin
                    end;
                  end;
               UpdateMAMELine(EntryString, Value);
-              {if (Value = '0') or (Value = '1') then
-                 begin
-                   case SoundOutputMethod.ItemIndex of
-                     0: Value:= '1';
-                     1: Value:= '0';
-                   end;
-                 end
-              else
-                 begin
-                   case SoundOutputMethod.ItemIndex of
-                     0: Value:= 'auto';
-                     1:
-                       begin
-                         case IsSDLMAME of
-                           True : Value:= 'sdl';
-                           False: Value:= 'dsound';
-                         end;
-                       end;
-                     2: Value:= 'none';
-                   end;
-                 end;
-              UpdateMAMELine(EntryString, Value);}
             end
          else
          if (tmpEntryStr = 'samplerate ') or
@@ -3087,6 +4186,14 @@ begin
             (tmpEntryStr = 'c ') then
             UpdateMAMELine(EntryString, GetBooleanValue(Cheat.Checked))
          else
+         if tmpEntryStr = 'ui ' then
+            begin
+              Value:= LowerCase(TypeUserInterface.Text);
+              if Value = '' then
+                 Value:= 'cabinet';
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
          if tmpEntryStr = 'skip_gameinfo ' then
             UpdateMAMELine(EntryString, GetBooleanValue(SkipGameInfo.Checked))
          else
@@ -3129,6 +4236,57 @@ begin
          if tmpEntryStr = 'console ' then
             UpdateMAMELine(EntryString, GetBooleanValue(EnableEmulatorLUAConsole.Checked))
          else
+         if tmpEntryStr = 'plugins ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(EnableLUAPluginSupport.Checked))
+         else
+         // disabled for now...
+         if tmpEntryStr = 'plugin ' then
+            begin
+              if FormMAMESettings.Tag = 1 then
+                 begin
+                   // list of plugins to enable... separated by comma (  ,  )
+                   // only used for custom game/machine settings!!!
+                   // emulator default settings store list in "plugin.ini" file!!!
+                   Value:= '';
+                   if FormMain.CheckTotal(LUAPluginsToEnable) then
+                   begin
+                     for LoopPlugin:= 0 to LUAPluginsToEnable.Items.Count-1 do
+                     begin
+                       if LUAPluginsToEnable.Items[LoopPlugin].Checked then
+                       begin
+                         if Value <> '' then
+                            Value:= Value+',';
+                         Value:= Value+LUAPluginsToEnable.Items[LoopPlugin].Captions[1];
+                       end;
+                     end;
+                     UpdateMAMELine(EntryString, Value);
+                   end;
+                 end;
+            end
+         else
+         //if tmpEntryStr = 'noplugin ' then
+         //   begin
+         //     // list of plugins to disable... separated by comma (  ,  )
+         //   end
+         //else
+         if (tmpEntryStr = 'language ') or
+            (tmpEntryStr = 'lang ') then
+            begin
+              if FormMain.CheckSelected(DisplayLanguageList) then
+                 begin
+                   Value:= DisplayLanguageList.Selection.First.Caption;
+                   if Value = '' then
+                      Value:= 'English'
+                   else
+                   if (PosEx(' ', Value) <> 0) then
+                      Value:= '"'+Value+'"';
+                 end
+              else
+                 Value:= 'English';
+                 
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
          if tmpEntryStr = 'uifontprovider ' then
             begin
               Value:= 'auto';
@@ -3141,7 +4299,74 @@ begin
               end;
               UpdateMAMELine(EntryString, Value)
             end
-          else
+         else
+
+         // # OSD OUTPUT OPTIONS
+         if tmpEntryStr = 'output ' then
+            begin
+              Value:= 'auto';
+              case OSDOutputProvider.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'console';
+                2: Value:= 'network';
+                3: Value:= 'windows';
+                4: Value:= 'none';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         
+         // # OSD INPUT OPTIONS
+         if tmpEntryStr = 'keyboardprovider ' then
+            begin
+              Value:= 'auto';
+              case OSDInputKeyboardProvider.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'rawinput';
+                2: Value:= 'dinput';
+                3: Value:= 'win32';
+                4: Value:= 'none';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         if tmpEntryStr = 'mouseprovider ' then
+            begin
+              Value:= 'auto';
+              case OSDInputMouseProvider.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'rawinput';
+                2: Value:= 'dinput';
+                3: Value:= 'win32';
+                4: Value:= 'none';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         if tmpEntryStr = 'lightgunprovider ' then
+            begin
+              Value:= 'auto';
+              case OSDInputLightgunProvider.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'win32';
+                2: Value:= 'none';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         if tmpEntryStr = 'joystickprovider ' then
+            begin
+              Value:= 'auto';
+              case OSDInputJoystickProvider.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'dinput';
+                2: Value:= 'xinput';
+                3: Value:= 'none';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+
          // # WINDOWS DEBUGGING OPTIONS
          if tmpEntryStr = 'oslog ' then
             UpdateMAMELine(EntryString, GetBooleanValue(OSLog.Checked))
@@ -3228,14 +4453,6 @@ begin
             (tmpEntryStr = 'max ') then
             UpdateMAMELine(EntryString, GetBooleanValue(MaximizeWindow.Checked))
          else
-         if (tmpEntryStr = 'keepaspect ') or
-            (tmpEntryStr = 'ka') then
-            UpdateMAMELine(EntryString, GetBooleanValue(KeepAspectRatio.Checked))
-         else
-         if (tmpEntryStr = 'unevenstretch ') or
-            (tmpEntryStr = 'ues ') then
-            UpdateMAMELine(EntryString, GetBooleanValue(UnevenStretch.Checked))
-         else
          if tmpEntryStr = 'centerh ' then // SDLMAME
             UpdateMAMELine(EntryString, GetBooleanValue(SDLCenterHorizontally.Checked))
          else
@@ -3270,11 +4487,11 @@ begin
               UpdateMAMELine(EntryString, Value);
             end
          else
-         // # DIRECTDRAW-SPECIFIC OPTIONS
-         if (tmpEntryStr = 'hwstretch ') or
-            (tmpEntryStr = 'hws ') then
-            UpdateMAMELine(EntryString, GetBooleanValue(HardwareStretch.Checked))
-         else
+         //// # DIRECTDRAW-SPECIFIC OPTIONS
+         //if (tmpEntryStr = 'hwstretch ') or
+         //   (tmpEntryStr = 'hws ') then
+         //   UpdateMAMELine(EntryString, GetBooleanValue(HardwareStretch.Checked))
+         //else
          // # DIRECT3D-SPECIFIC OPTIONS
          if (tmpEntryStr = 'filter ') or
             (tmpEntryStr = 'd3dfilter ') or
@@ -3286,6 +4503,9 @@ begin
          if tmpEntryStr = 'hlsl_enable ' then
             UpdateMAMELine(EntryString, GetBooleanValue(HLSLEnable.Checked))
          else
+         if tmpEntryStr = 'hlsl_oversampling ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(HLSLOversampling.Checked))
+         else
          if tmpEntryStr = 'hlslpath ' then
             UpdateMAMELine(EntryString, HLSLPath.Text)
          else
@@ -3295,12 +4515,24 @@ begin
          if tmpEntryStr = 'yiq_enable ' then
             UpdateMAMELine(EntryString, GetBooleanValue(YIQEnable.Checked))
          else
-         if tmpEntryStr = 'hlsl_prescale_x ' then
-            UpdateMAMELine(EntryString, IntToStr(HLSLPrescaleOverrideX.ItemIndex))
+         if (tmpEntryStr = 'vector_beam_smooth') or
+            (tmpEntryStr = 'vecsmooth') then
+            UpdateMAMELine(EntryString, Format('%1.2f', [VectorBeamSmooth.Position]), True)
          else
-         if tmpEntryStr = 'hlsl_prescale_y ' then
-            UpdateMAMELine(EntryString, IntToStr(HLSLPrescaleOverrideY.ItemIndex))
+         if (EntryString = 'vector_length_scale') or
+            (EntryString = 'vecscale') then
+            UpdateMAMELine(EntryString, Format('%1.2f', [VectorMaximumAttenuation.Position]), True)
          else
+         if (EntryString = 'vector_length_ratio') or
+            (EntryString = 'vecratio') then
+            UpdateMAMELine(EntryString, Format('%1.3f', [VectorMinimumLengthAttenuation.Position]), True)
+         else
+         //if tmpEntryStr = 'hlsl_prescale_x ' then
+         //   UpdateMAMELine(EntryString, IntToStr(HLSLPrescaleOverrideX.ItemIndex))
+         //else
+         //if tmpEntryStr = 'hlsl_prescale_y ' then
+         //   UpdateMAMELine(EntryString, IntToStr(HLSLPrescaleOverrideY.ItemIndex))
+         //else
          //if tmpEntryStr = 'hlsl_preset ' then
          //   UpdateMAMELine(EntryString, IntToStr(HLSLPresetToUse.ItemIndex-1))
          //else
@@ -3310,6 +4542,13 @@ begin
          if tmpEntryStr = 'hlsl_snap_height ' then
             UpdateMAMELine(EntryString, HLSLUpscaleSnapY.Text)
          else
+         if tmpEntryStr = 'shadow_mask_tile_mode ' then
+            UpdateMAMELine(EntryString, IntToStr(ShadowMaskTileMode.ItemIndex))
+         else
+         if tmpEntryStr = 'bloom_blend_mode ' then
+            UpdateMAMELine(EntryString, IntToStr(BloomBlendMode.ItemIndex))
+         else
+
          if tmpEntryStr = 'hlsl_ini_read ' then // for MAME 0.149
             UpdateMAMELine(EntryString, GetBooleanValue(ReadCustomHLSLFile.Checked))
          else
@@ -3496,6 +4735,53 @@ begin
          if tmpEntryStr = 'audio_latency ' then
             UpdateMAMELine(EntryString, IntToStr(AudioLatency.ItemIndex+1))
          else
+
+         // # BGFX POST-PROCESSING OPTIONS
+         if tmpEntryStr = 'bgfx_path ' then
+            begin
+              if BGFXPath.Text = '' then
+                 BGFXPath.Text:= 'bgfx';
+              UpdateMAMELine(EntryString, BGFXPath.Text);
+            end
+         else
+         if tmpEntryStr = 'bgfx_backend ' then
+            begin
+              Value:= 'auto';
+              case BGFXBackend.ItemIndex of
+                0: Value:= 'auto';
+                1: Value:= 'd3d9';
+                2: Value:= 'd3d11';
+                3: Value:= 'opengl';
+                4: Value:= 'gles';
+              end;
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         if tmpEntryStr = 'bgfx_debug ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(BGFXDebug.Checked))
+         else
+         if tmpEntryStr = 'bgfx_screen_chains ' then
+            begin
+              if BGFXScreenShaderChains.Text = '' then
+                 BGFXScreenShaderChains.Text:= 'default';
+              UpdateMAMELine(EntryString, BGFXScreenShaderChains.Text);
+            end
+         else
+         if tmpEntryStr = 'bgfx_shadow_mask ' then
+            begin
+              if BGFXShadowMaskTextureName.Text = '' then
+                 BGFXShadowMaskTextureName.Text:= 'slot-mask.png';
+              UpdateMAMELine(EntryString, BGFXShadowMaskTextureName.Text);
+            end
+         else
+         //if tmpEntryStr = 'bgfx_avi_name ' then
+         //   begin
+         //     if BGFX_RecordRenderedVideoAVI.Text = '' then
+         //        BGFX_RecordRenderedVideoAVI.Text:= 'bgfx.avi';
+         //     UpdateMAMELine(EntryString, BGFX_RecordRenderedVideoAVI.Text);
+         //   end
+         //else
+         
          // # INPUT DEVICE OPTIONS
          //if tmpEntryStr = 'hide_cursor ' then // deprecated setting
          //   UpdateMAMELine(EntryString, GetBooleanValue(HideCursor.Checked))
@@ -3729,7 +5015,7 @@ var
 
 begin
   BiosSetsListView.BeginUpdate;
-  if FormMain.MemGameInfo.eBiosName = '' then
+  if (FormMain.MemGameInfo.eBiosName = '') or (FormMAMESettings.Tag = 0) then
      begin
        AddBiosEntry('[Use Default]', '', False);
        BiosSetsListView.EndUpdate;
@@ -3781,6 +5067,8 @@ begin
           begin
             FormMain.PopupCustomMAME.Tag:= Ord(SaveValidateAllCustomFiles.Checked);
             WriteMAMEIniFile(GameIni, Boolean(Tag));// update all mame.ini options
+            if FormMAMESettings.Tag = 0 then
+               WritePluginIni; // only if saving emulator settings....
           end;
        SetCurrentDir(FormMain.FrontendPath);
      end;
@@ -3792,7 +5080,7 @@ begin
      ButtonCancel.Click;
 end;
 
-function TFormMAMESettings.GetCustomIniFile(FileID: ShortInt): String;
+{function TFormMAMESettings.GetCustomIniFile(FileID: ShortInt): String;
 begin
   Result:= '';
   case FileID of
@@ -3830,7 +5118,7 @@ begin
     11: Result:= FormMain.MemGameInfo.eClone;    // parentgame.ini // parent_ini (if current game is clone)
     12: Result:= FormMain.MemGameInfo.eName;     // gamename.ini   // driver_ini
   end;
-end;
+end;}
 
 // IniFileList: packed array[1..12] of THashedStringList;
 procedure TFormMAMESettings.LoadIniToStringList(FileID: ShortInt; var ListHolder: THashedStringList);
@@ -3839,7 +5127,7 @@ var
   Loop, iPos: Integer;
   strLine, strFile, FileFolder: String;
 begin
-  strFile:= GetCustomIniFile(FileID);
+  strFile:= FormMain.GetCustomIniFileMAME(FileID);
   if strFile = '' then
      Exit;
 
@@ -3872,12 +5160,13 @@ begin
     if strLine <> '' then
        if strLine[1] <> '#' then
           begin
-            iPos:= Pos(' ', strLine);
+            iPos:= PosEx(' ', strLine);
             if iPos <> 0 then
                ListHolder[Loop]:= Copy(strLine, 1, iPos-1)+'='+Trim(Copy(strLine, iPos, Length(strLine)));
           end;
   end;
   ListHolder.EndUpdate;
+  // for debugging only!!! August 17, 2016
   //ShowMessage(ListHolder.Text);
   //ListHolder.SaveToFile('D:\emulators\mame\ume\ume-modified-for-emuloader.ini');
   //FreeAndNil(mameFile);
@@ -3891,11 +5180,11 @@ begin
   if ActiveFileID = -1 then
      Exit;
 
-  for Loop:= 1 to 12 do
+  for Loop:= 1 to MaxIniCountMAME do
   begin
-    if Loop < ActiveFileID  then
+    if Loop <= ActiveFileID  then
     begin
-      strFile:= GetCustomIniFile(Loop);
+      strFile:= FormMain.GetCustomIniFileMAME(Loop);
       if strFile <> '' then
       begin
         if IsAlterMAME then
@@ -3903,7 +5192,7 @@ begin
         else
            FileFolder:= FormMain.IniFilesDir[sysID];
 
-        if Loop = 9 then
+        if Loop = 9 then // drivername.ini
            begin
              if FileExists(FileFolder+strFile+'.ini') then
                 strFile:= FileFolder+strFile+'.ini'
@@ -3927,8 +5216,7 @@ procedure TFormMAMESettings.ButtonReadFileClick(Sender: TObject);
 begin
   ReadMAMEIniFile(emuIni, True); // read all mame.ini options
   if Tag = 1 then
-     LoadCustomSettingsFiles;
-     //ReadMAMEIniFile(GameIni); // read all gamename.ini options
+     LoadCustomSettingsFiles; // read all gamename.ini options
   ScreensSelector.OnSelect(Self);
 end;
 
@@ -3945,13 +5233,13 @@ begin
      GameStr:= FormMain.GetSystemIniSection(sysID)
   else
      GameStr:= ChangeFileExt(ExtractFileName(GameIni), '');
-  if not FormMain.SelectFileName(28, FileStr, FolderStr) then
+  if not FormMain.SelectFileName(28, sysID, emuFileExec, FileStr, FolderStr) then
      Exit;
   EffectOverlay.Text:= FileStr;
   if EffectOverlay.Text <> '' then
      begin
        EffectOverlay.Text:= ChangeFileExt(ExtractFileName(EffectOverlay.Text), '');
-       if Pos(' ', EffectOverlay.Text) <> 0 then
+       if PosEx(' ', EffectOverlay.Text) <> 0 then
           EffectOverlay.Text:= '"'+EffectOverlay.Text+'"';
      end;
 end;
@@ -4006,6 +5294,16 @@ end;
 procedure TFormMAMESettings.DebuggerScriptBrowseClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a debugger script file', DebuggerScript, False, True, DebuggerScript.Text);
+end;
+
+procedure TFormMAMESettings.FolderLanguageFilesButtonSelectClick(Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(FolderLanguageFiles, False);
+end;
+
+procedure TFormMAMESettings.FolderPluginFilesButtonSelectClick(Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(FolderPluginFiles, False);
 end;
 
 procedure TFormMAMESettings.FolderROMsButtonClearClick(
@@ -4192,25 +5490,21 @@ begin
 end;
 
 procedure TFormMAMESettings.EnableDisableControls;
-//var
-//  Loop: Integer;
 begin
-  if not HLSL_GroupBox.Enabled then
-     begin
-       FormMain.SetGroupBoxState(HLSL_GroupBox, False, True);
-       //for Loop:= 0 to HLSL_GroupBox.ControlCount-1 do
-       //    HLSL_GroupBox.Controls[Loop].Enabled:= False;
-       //HLSL_GroupBox.Font.Color:= clBtnShadow;
-       //HLSL_GroupBox.Enabled:= False;
-     end;
-  if not GLSL_GroupBox.Enabled then
-     begin
-       FormMain.SetGroupBoxState(GLSL_GroupBox, False, True);
-       //for Loop:= 0 to GLSL_GroupBox.ControlCount-1 do
-       //    GLSL_GroupBox.Controls[Loop].Enabled:= False;
-       //GLSL_GroupBox.Font.Color:= clBtnShadow;
-       //GLSL_GroupBox.Enabled:= False;
-     end;
+  //if not HLSL_GroupBox.Enabled then
+  //   FormMain.SetGroupBoxState(HLSL_GroupBox, False, True);
+  //if not GLSL_GroupBox.Enabled then
+  //   FormMain.SetGroupBoxState(GLSL_GroupBox, False, True);
+  //if not BGFX_GroupBox.Enabled then
+  //   FormMain.SetGroupBoxState(BGFX_GroupBox, False, True);
+  if not OSDInputOptionsGroupBox.Enabled then
+     FormMain.SetGroupBoxState(OSDInputOptionsGroupBox, False, True);
+  if not AutobootBox.Enabled then
+     FormMain.SetGroupBoxState(AutobootBox, False, True);
+
+  if not VectorPostProcessingBox.Enabled then
+     FormMain.SetGroupBoxState(VectorPostProcessingBox, False, True);
+
   case IsSDLMAME of
     True:
       begin
@@ -4227,8 +5521,10 @@ begin
       end;
     False:
       begin
-        HLSL_GroupBox.DoubleBuffered:= True;
-        GLSL_GroupBox.DoubleBuffered:= True;
+        NotebookVideoPostProcessingEffectsPages.DoubleBuffered:= True;
+        //HLSL_GroupBox.DoubleBuffered:= True;
+        //GLSL_GroupBox.DoubleBuffered:= True;
+        //BGFX_GroupBox.DoubleBuffered:= True;
         //ButtonPageSDLMAMEVideoAudio.Enabled:= False;
         ButtonPageSDLMAMEInput.Visible:= False;//Enabled:= False;
       end;
@@ -4241,6 +5537,7 @@ var
   iStr: String;
 begin
   VectorGroupBox.DoubleBuffered:= True;
+  VectorPostProcessingBox.DoubleBuffered:= True;
   PerformanceGroupBox.DoubleBuffered:= True;
   GroupBoxAudio.DoubleBuffered:= True;
   ScreenOptionsBox.DoubleBuffered:= True;
@@ -4261,33 +5558,39 @@ begin
   FormMain.ELV_ResetNormalColors(FolderIniFiles);
   FormMain.ELV_ResetNormalColors(FolderArtworks);
   FormMain.ELV_ResetNormalColors(BiosSetsListView);
+  FormMain.ELV_ResetNormalColors(DisplayLanguageList);
+  FormMain.ELV_ResetNormalColors(LUAPluginsToEnable);
+  FormMain.ELV_ResetNormalColors(BGFXScreenShaderChains_ListView);
 
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
   if IsAlterMAME then
      FormMAMESettings.Caption:= 'AlterMAME '+FormMAMESettings.Caption;
   IsSDLMAME:= False;
   PopulateVideoOutputMode;
+  EnableSettingsIniMAME; //
   if IsSDLMAME then
      begin
        Debugger.Items.BeginUpdate;
        Debugger.Items[2]:= 'QT';
        Debugger.Items.EndUpdate;
        SoundOutputMethod.Items.BeginUpdate;
-       SoundOutputMethod.Items.Insert(2, 'SDL');
+       SoundOutputMethod.Items.Insert(3, 'SDL');
        SoundOutputMethod.Items.EndUpdate;
      end;
   case SystemIcon.Tag of
-    0: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, sysID, IsAlterMAME);
-    1: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(False, sysID, IsAlterMAME);
+    0: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, sysID, emuVersionStr, IsAlterMAME);
+    1: LabelGameTitle.Caption:= FormMain.GetGameSysTitle(False, sysID, emuVersionStr, IsAlterMAME);
   end;
 
   if (Tag = 0) or (SystemIcon.Tag = 1) then
      begin
-       case IsAlterMAME of
-         True : LabelEmulatorVersion.Caption:= FormMain.AlterMAMEFile+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-         False: LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[sysID]+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-       end;
-       //LabelReadFileIni.Visible:= False;
+       LabelEmulatorVersion.Caption:= emuFileExec+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
+       // old code, use "emuFileExec" var (March 16, 2016)
+       //case IsAlterMAME of
+       //  True : LabelEmulatorVersion.Caption:= FormMain.AlterMAMEFile+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
+       //  False: LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[sysID]+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
+       //end;
+
        case sysID of
          idMAME  : TopBar.Color1:= clSkyBlue; // MAME
          idHBMAME: TopBar.Color1:= $00b4bf8f;//$00bfb490; // HBMAME
@@ -4306,6 +5609,8 @@ begin
   else
   if Tag = 1 then
      begin
+       // is game custom options... this case will never be used by emulator default settings!!! (March 16, 2016)
+       //iStr:= emuVersionStr;
        case IsAlterMAME of
          True : iStr:= FormMain.AlterMAMEVersion;
          False: iStr:= FormMain.EmulatorVersion[sysID];
@@ -4351,8 +5656,13 @@ begin
 
   LoadBiosList('');
   PopulateNumberProcessors;
-
   EnableDisableControls;
+  PopulateDisplayLanguage;
+
+  PopulateLUAPlugins_ListView;
+  ReadPluginIni; // read from plugin.ini (if exists)
+
+  PopulateBGFXShaderChains_ListView; // read all .json files from mamedir\bgfx\chains\ folder and add to the ListView...
 
   ButtonResetToDefault.Visible:= not ButtonPageFolders.Visible;
   if not ButtonResetToDefault.Visible then
@@ -4364,6 +5674,10 @@ begin
   ButtonReadFile.Click;
   if FormMain.CheckSelected(BiosSetsListView) then
      BiosSetsListView.Selection.First.ImageIndex:= 8;
+
+  LabelBGFXScreenShaderChains.Hint:= BGFXScreenShaderChains.Text; // this will hold shader chain's current value
+  if LabelBGFXScreenShaderChains.Hint = '' then
+     LabelBGFXScreenShaderChains.Hint:= 'default';
   Screen.Cursor:= crDefault;
 end;
 
@@ -4401,8 +5715,17 @@ end;
 procedure TFormMAMESettings.SnapSizeWidthKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
+end;
+
+procedure TFormMAMESettings.SnapSizeHeightKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 procedure TFormMAMESettings.SnapViewDefaultButtonClick(Sender: TObject);
@@ -4533,11 +5856,6 @@ begin
   FormMain.ClearListView(FolderArtworks);
 end;
 
-procedure TFormMAMESettings.EffectOverlayNoneClick(Sender: TObject);
-begin
-  EffectOverlay.Clear;
-end;
-
 procedure TFormMAMESettings.FolderCheatFilesButtonSelectClick(
   Sender: TObject);
 begin
@@ -4564,12 +5882,12 @@ begin
      GameStr:= FormMain.GetSystemIniSection(sysID)
   else
      GameStr:= ChangeFileExt(ExtractFileName(GameIni), '');
-  if not FormMain.SelectFileName(31, FileStr, FolderStr) then
+  if not FormMain.SelectFileName(31, sysID, emuFileExec, FileStr, FolderStr) then
      Exit;
   ShadowMaskTexture.Text:= FileStr;
   if ShadowMaskTexture.Text <> '' then
      begin
-       if Pos(' ', ShadowMaskTexture.Text) <> 0 then
+       if PosEx(' ', ShadowMaskTexture.Text) <> 0 then
           ShadowMaskTexture.Text:= '"'+ShadowMaskTexture.Text+'"';
      end;
 end;
@@ -4584,21 +5902,24 @@ procedure TFormMAMESettings.UIFontSelectFontButtonClick(Sender: TObject);
 var
   FileStr, FolderList, GameStr: String;
 begin
-  FolderList:= ExtractFilePath(FormMain.EmulatorFile[sysID]);
-  if not DirectoryExists(FolderList) then
-     Exit;
+  FolderList:= FolderFontFiles.Text;
+  if FolderList = '' then
+     FolderList:= ExtractFilePath(emuFileExec); // ExtractFilePath(FormMain.EmulatorFile[sysID]);
+  //if not DirectoryExists(FolderList) then
+  //   Exit;
   if FormMAMESettings.Tag = 0 then
      GameStr:= FormMain.GetSystemIniSection(sysID)
   else
      GameStr:= ChangeFileExt(ExtractFileName(GameIni), '');
-  if not FormMain.SelectFileName(29+Tag, FileStr, FolderList) then
+
+  if not FormMain.SelectFileName(29+Tag, sysID, emuFileExec, FileStr, FolderList) then
      Exit;
   if SameText(FileStr, 'ui') then
      FileStr:= 'default';
   UIFont.Text:= FileStr;
   if UIFont.Text <> '' then
      begin
-       if Pos(' ', UIFont.Text) <> 0 then
+       if PosEx(' ', UIFont.Text) <> 0 then
           UIFont.Text:= '"'+UIFont.Text+'"';
      end;
 end;
@@ -4729,9 +6050,9 @@ var
   sFile, sFolder: String;
 begin
   if EditHolder.Text <> '' then
-     sFolder:= ExtractFilePath(Editholder.Text);
+     sFolder:= ExtractFilePath(EditHolder.Text);
   if (sFolder <> '') and (not DirectoryExists(sFolder)) then
-     sFolder:= FormMain.EmulatorFile[sysID];
+     sFolder:= ExtractFilePath(emuFileExec); // sFolder:= FormMain.EmulatorFile[sysID];
   case IsMAMEFile of
     True : sFile:= FormMain.DialogOpenFile(12, 'Select a GLSL shader MAME file', EditHolder, False, True, sFolder);
     False: sFile:= FormMain.DialogOpenFile(12, 'Select a GLSL shader screen file', EditHolder, False, True, sFolder);
@@ -4858,15 +6179,9 @@ end;
 procedure TFormMAMESettings.WatchdogKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
-end;
-
-procedure TFormMAMESettings.SnapSizeHeightKeyPress(Sender: TObject;
-  var Key: Char);
-begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 procedure TFormMAMESettings.SDL2MouseMapping1Select(Sender: TObject);
@@ -5027,7 +6342,10 @@ end;
 procedure TFormMAMESettings.FormActivate(Sender: TObject);
 begin
   if BiosSetsListView.Scrollbars.VertBarVisible then
-     BiosSetsListView.Header.Columns[0].Width:= BiosSetsListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);//17;
+     BiosSetsListView.Header.Columns[0].Width:= BiosSetsListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+
+  if FolderROMs.Scrollbars.VertBarVisible then
+     FolderROMs.Header.Columns[0].Width:= FolderROMs.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
 
   SaveValidateAllCustomFiles.Visible:= not ButtonPageFolders.Visible;
   ButtonHelpSaveValidateAllCustomFiles.Visible:= SaveValidateAllCustomFiles.Visible;
@@ -5073,10 +6391,10 @@ begin
                       '- debug.ini'+#13#10+
                       '- vertical.ini (if screen game is vertical)'+#13#10+
                       '- horizont.ini (if screen game is horizontal)'+#13#10+
-                      '- arcade.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- console.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- computer.ini (UME / MAME v0.163 and newer)'+#13#10+
-                      '- othersys.ini (UME / MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
+                      '- arcade.ini (MAME v0.163 and newer)'+#13#10+
+                      '- console.ini (MAME v0.163 and newer)'+#13#10+
+                      '- computer.ini (MAME v0.163 and newer)'+#13#10+
+                      '- othersys.ini (MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
                       '- raster.ini (if screen game is raster)'+#13#10+
                       '- vector.ini (if screen game is vector)'+#13#10+
                       '- source\sourcefile.ini or sourcefile.ini'+#13#10+
@@ -5151,14 +6469,16 @@ end;
 
 procedure TFormMAMESettings.HLSLUpscaleSnapXKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 procedure TFormMAMESettings.HLSLUpscaleSnapYKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 procedure TFormMAMESettings.ButtonHLSLUpscaleSnapResetClick(
@@ -5231,6 +6551,172 @@ procedure TFormMAMESettings.VectorBeamIntensityWeightChange(
   Sender: TObject);
 begin
   LabelVectorBeamIntensityWeight.Caption:= Format(LabelVectorBeamIntensityWeight.Hint, [VectorBeamIntensityWeight.Position]);
+end;
+
+procedure TFormMAMESettings.ButtonHelpVideoOutputModeClick(
+  Sender: TObject);
+begin
+  CallMessageBox;
+  FormMain.AddMsgText('OpenGL', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' video mode is only supported in SDLMAME and starting from MAME v0.159.'+#13#10);
+  FormMain.AddMsgText('DirectDraw', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' video mode is only supported in MAME v0.170 and lower versions.'+#13#10+#13#10+
+                      'In doubt, leave this setting in ');
+  FormMain.AddMsgText('Auto', $00a65300, [fsBold]);
+  FormMain.AddMsgText('.');
+  GenerateMessage('Info', 'Video output mode.');
+end;
+
+procedure TFormMAMESettings.IntegerScaleFactorHorizontalKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+end;
+
+procedure TFormMAMESettings.IntegerScaleFactorVerticalKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+end;
+
+procedure TFormMAMESettings.RAMSizeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+end;
+
+procedure TFormMAMESettings.BGFXShadowMaskTextureNameButtonResetClick(Sender: TObject);
+begin
+  BGFXShadowMaskTextureName.Text:= 'slot-mask.png';
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChainsButtonReloadClick(
+  Sender: TObject);
+begin
+  BGFXScreenShaderChains.Text:= LabelBGFXScreenShaderChains.Hint; // this will hold shader chain's current value
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChainsButtonResetClick(Sender: TObject);
+begin
+  BGFXScreenShaderChains.Text:= 'default';
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChainsButtonSelectClick(Sender: TObject);
+var
+  fullPath, bFile: String;
+begin
+  if BGFXPath.Text = '' then
+     BGFXPath.Text:= 'bgfx';
+  fullPath:= BGFXPath.Text;
+  fullPath:= FormMain.FullFolderFix(fullPath, emuFileExec)+'chains\';
+
+  if DirectoryExists(fullPath) then
+     begin
+       bFile:= FormMain.DialogOpenFile(21, 'Select a BGFX shader chain files', BGFXScreenShaderChains, False, True, fullPath);
+       if bFile <> '' then
+       begin
+         bFile:= ChangeFileExt(ExtractFileName(bfile), '');
+         BGFXScreenShaderChains.Text:= bFile;
+       end;
+     end;
+end;
+
+procedure TFormMAMESettings.ShadowMaskTextureButtonResetClick(
+  Sender: TObject);
+begin
+  ShadowMaskTexture.Text:= 'shadow-mask.png';
+end;
+
+procedure TFormMAMESettings.ButtonPageVideoEffectsBGFXClick(Sender: TObject);
+begin
+  NotebookVideoPostProcessingEffectsPages.PageIndex:= TToolButton(Sender).Tag;
+
+  if ToolBarVideoPostProcessingEffectsPages.Tag <> NotebookVideoPostProcessingEffectsPages.PageIndex then
+     ToolBarVideoPostProcessingEffectsPages.Buttons[ToolBarVideoPostProcessingEffectsPages.Tag].ImageIndex:= 500;
+  ToolBarVideoPostProcessingEffectsPages.Tag:= TToolButton(Sender).Tag;
+  TToolButton(Sender).ImageIndex:= 1;
+
+end;
+
+function TFormMAMESettings.BGFXScreenShaderChains_ListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+begin
+  if (Item1.Captions[1] <> 'default') and
+     (Item2.Captions[1] = 'default') then
+     begin
+       Result:= -1;
+     end;
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChains_ListViewItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if Item.Captions[1] = 'default' then
+     ACanvas.Font.Style:= [fsBold];
+end;
+
+procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter(Sender: TObject);
+begin
+  TLabel(Sender).Font.Color:= clBlue;
+  TLabel(Sender).Font.Style:= [fsUnderline];
+end;
+
+procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave(Sender: TObject);
+begin
+  TLabel(Sender).Font.Color:= clNavy;
+  TLabel(Sender).Font.Style:= [];
+end;
+
+procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLClick(Sender: TObject);
+begin
+  CallShellExecute(Sender);
+  //ShellExecute(Handle, 'open', PChar(TLabel(Sender).Hint), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChains_ListViewButtonSelectClick(
+  Sender: TObject);
+begin
+  if FormMain.CheckSelected(BGFXScreenShaderChains_ListView) then
+     BGFXScreenShaderChains.Text:= BGFXScreenShaderChains_ListView.Selection.First.Captions[1];
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChains_ListViewButtonAddClick(
+  Sender: TObject);
+begin
+  if not FormMain.CheckSelected(BGFXScreenShaderChains_ListView) then
+     Exit;
+  if BGFXScreenShaderChains.Text <> '' then
+     BGFXScreenShaderChains.Text:= BGFXScreenShaderChains.Text+','+BGFXScreenShaderChains_ListView.Selection.First.Captions[1]
+  else
+     BGFXScreenShaderChains.Text:= BGFXScreenShaderChains_ListView.Selection.First.Captions[1];
+end;
+
+procedure TFormMAMESettings.BGFXScreenShaderChains_ListViewDblClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
+begin
+  BGFXScreenShaderChains_ListViewButtonSelect.Click;
+end;
+
+
+
+procedure TFormMAMESettings.VectorBeamSmoothChange(Sender: TObject);
+begin
+  LabelVectorBeamSmooth.Caption:= Format(LabelVectorBeamSmooth.Hint, [VectorBeamSmooth.Position]);
+end;
+
+procedure TFormMAMESettings.VectorMaximumAttenuationChange(
+  Sender: TObject);
+begin
+  LabelVectorMaximumAttenuation.Caption:= Format(LabelVectorMaximumAttenuation.Hint, [VectorMaximumAttenuation.Position]);
+end;
+
+procedure TFormMAMESettings.VectorMinimumLengthAttenuationChange(
+  Sender: TObject);
+begin
+  LabelVectorMinimumLengthAttenuation.Caption:= Format(LabelVectorMinimumLengthAttenuation.Hint, [VectorMinimumLengthAttenuation.Position]);
 end;
 
 end.

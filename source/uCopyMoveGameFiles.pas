@@ -385,7 +385,7 @@ begin
                            tmpFileSize:= GetFileSize(tmpFileName);
                            FileSizeText:= FormMain.GetSizeType(tmpFileSize, False);
                            DateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
-                           LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date/Time: '+DateTimeText;
+                           LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date Modified: '+DateTimeText;
 
                            iTotalFilesSizeLeft:= iTotalFilesSizeLeft-tmpFileSize;
 
@@ -502,7 +502,7 @@ begin
                       tmpFileSize:= GetFileSize(tmpFileName);
                       FileSizeText:= FormMain.GetSizeType(tmpFileSize, False);
                       DateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
-                      LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date/Time: '+DateTimeText;
+                      LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date Modified: '+DateTimeText;
 
                       iTotalFilesSizeLeft:= iTotalFilesSizeLeft-tmpFileSize;
 

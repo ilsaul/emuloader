@@ -39,10 +39,10 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     object LabelImageCategoryFolder: TShadowLabel
       Left = 12
       Top = 310
-      Width = 114
+      Width = 162
       Height = 15
-      Hint = 'Folder [%s]'
-      Caption = 'Folder [.png; .jpg]'
+      Hint = 'Images Folder [%s]'
+      Caption = 'Images Folder [.png; .jpg]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -842,27 +842,8 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Height = 2
       Style = bsRaised
     end
-    object LabelWarning: TShadowLabel
-      Left = 262
-      Top = 15
-      Width = 166
-      Height = 19
-      Alignment = taCenter
-      Caption = 'Changes cannot be undone!'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-    end
     object ButtonHelp: TBitBtn
-      Left = 445
+      Left = 349
       Top = 11
       Width = 89
       Height = 25
@@ -874,16 +855,28 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       OnClick = ButtonHelpClick
     end
     object ButtonClose: TBitBtn
-      Left = 543
+      Left = 445
       Top = 11
       Width = 89
       Height = 25
       Hint = 'Close and update settings'
-      Caption = 'Close'
+      Caption = 'Apply'
       ModalResult = 1
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+    end
+    object ButtonAbort: TBitBtn
+      Left = 543
+      Top = 11
+      Width = 89
+      Height = 25
+      Hint = 'Close and abort changes'
+      Caption = 'Abort'
+      ModalResult = 2
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
     end
   end
   object IL_Layouts: TImageList

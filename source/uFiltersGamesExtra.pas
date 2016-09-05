@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, uCommon, Buttons,
-  AdvOfficeButtons, PanelEx;
+  AdvOfficeButtons, PanelEx, AdvGroupBox;
 
 type
   TFormFiltersExtra = class(TForm)
@@ -26,17 +26,6 @@ type
     LabelBios: TLabel;
     Bios: TComboBox;
     HideBiosSets: TAdvOfficeCheckBox;
-    Label1: TLabel;
-    CategoryFruitMachines: TAdvOfficeCheckBox;
-    CategoryRhythm: TAdvOfficeCheckBox;
-    CategoryMature: TAdvOfficeCheckBox;
-    CategoryMahjong: TAdvOfficeCheckBox;
-    CategoryTabletop: TAdvOfficeCheckBox;
-    CategoryCasino: TAdvOfficeCheckBox;
-    CategoryPinMAME: TAdvOfficeCheckBox;
-    CategoryQuiz: TAdvOfficeCheckBox;
-    CategoryUtilities: TAdvOfficeCheckBox;
-    ButtonCategoriesToHideInfo: TBitBtn;
     HideGamesWithCHDFiles: TAdvOfficeCheckBox;
     ButtonDefaultOptions: TBitBtn;
     LabelSTVMultiSlot: TLabel;
@@ -47,8 +36,21 @@ type
     ScreenOrientation: TComboBox;
     LabelScreenOrientation: TLabel;
     ShowMergedSetsOnly: TAdvOfficeCheckBox;
-    CategoryLightGun: TAdvOfficeCheckBox;
     HideNoDumpROMsGames: TAdvOfficeCheckBox;
+    SaveState: TComboBox;
+    LabelSaveState: TLabel;
+    CategoryFiltersGroupBox: TAdvGroupBox;
+    Label1: TLabel;
+    ButtonCategoriesToHideInfo: TBitBtn;
+    CategoryCasino: TAdvOfficeCheckBox;
+    CategoryFruitMachines: TAdvOfficeCheckBox;
+    CategoryRhythm: TAdvOfficeCheckBox;
+    CategoryMature: TAdvOfficeCheckBox;
+    CategoryMahjong: TAdvOfficeCheckBox;
+    CategoryTabletop: TAdvOfficeCheckBox;
+    CategoryPinMAME: TAdvOfficeCheckBox;
+    CategoryQuiz: TAdvOfficeCheckBox;
+    CategoryUtilities: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -76,10 +78,15 @@ uses uMain, uStatus;
 procedure TFormFiltersExtra.ELV_PopulateControlType;
 var
   Loop: Integer;
+  cStr: String;
 begin
   ControlType_New.Items.BeginUpdate;
   for Loop:=0 to FormMain.ControlType.Count-1 do
-      ControlType_New.Items.Add(FormMain.ControlType.ValueFromIndex[Loop]);
+  begin
+    cStr:= FormMain.ControlType.ValueFromIndex[Loop];
+    if cStr <> '' then
+       ControlType_New.Items.Add(cStr);
+  end;
   ControlType_New.Items.EndUpdate;
 end;
 
@@ -125,13 +132,13 @@ begin
   CategoryPinMAME.Checked:= True;
   CategoryQuiz.Checked:= True;
   CategoryUtilities.Checked:= True;
-  CategoryLightGun.Checked:= True;
   HideGamesWithCHDFiles.Checked:= False;
   HideNoDumpROMsGames.Checked:= False;
   NeoGeoMVS.Checked:= False;
   STVMultiSlot.Checked:= False;
   ScreenOrientation.ItemIndex:= 0;
   ShowMergedSetsOnly.Checked:= False;
+  SaveState.ItemIndex:= 0;
 end;
 
 procedure TFormFiltersExtra.FormKeyPress(Sender: TObject; var Key: Char);
@@ -145,12 +152,21 @@ procedure TFormFiltersExtra.ButtonCategoriesToHideInfoClick(
 begin
   CallMessageBox;
   FormMain.AddMsgText('    To be able to use those filters you must place ');
+  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' from AntoPISA or ');
   FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' file in ');
-  FormMain.AddMsgText(FormMain.FrontendPath+'ini_files\', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' in ');
+  FormMain.AddMsgText(FormMain.FrontendPath+'ini_files\', clMaroon { $00a65300 }, [fsBold]);
   FormMain.AddMsgText(' folder and restart the frontend, so categories can be loaded into the games list.'+
-                      #13#10+#13#10+'You can find this file at Progetto EMMA: http://www.progettoemma.net/history/catlist.php');
+                      #13#10+#13#10+'You can find both ');
+  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' and ');
+  FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' at AntoPISA renameSET page: http://www.progettosnaps.net/renameset/'+#13#10+#13#10+'File ');
+  FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' is also available at Progetto EMMA: http://www.progettoemma.net/history/catlist.php');
   GenerateMessage('Help', 'Hide categories based on an external file.', '', 2);
 end;
+
 
 end.

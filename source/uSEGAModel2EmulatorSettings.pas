@@ -89,9 +89,12 @@ type
     //procedure PopulateScreenResolution;
   public
     { Public declarations }
-    emuIni: String;
+    emuIni,
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
     SaveCfg: Boolean;
-    GameIni: String;
+
     procedure ReadEmulatorIniFile(const IniFile: String);
     procedure WriteEmulatorIniFile(const CustomIni: String);
   end;
@@ -125,7 +128,7 @@ var
             Value:= DefaultValue
          else
             begin
-              cIndex:= Pos(';', Value);
+              cIndex:= PosEx(';', Value);
               if cIndex <> 0 then
                  Delete(Value, cIndex, Length(Value));
               Value:= Trim(Value);
@@ -347,7 +350,7 @@ var
        Exit; // entry doesn't exist... skip it
 
     iComment:= '';
-    cPos:= Pos(';', Model2Ini[eIndex]);
+    cPos:= PosEx(';', Model2Ini[eIndex]);
     if cPos <> 0 then
        begin
          iComment:= Copy(Model2Ini[eIndex], cPos, Length(Model2Ini[eIndex]));
@@ -389,8 +392,8 @@ begin
   if FullScreenResolution.ItemIndex > 3 then
      begin
        UpdateSetting('FullMode', '4');
-       UpdateSetting('FullScreenWidth', Copy(FullScreenResolution.Text, 1, Pos('x', FullScreenResolution.Text)-1));
-       UpdateSetting('FullScreenHeight', Copy(FullScreenResolution.Text, Pos('x', FullScreenResolution.Text)+1, Length(FullScreenResolution.Text)));
+       UpdateSetting('FullScreenWidth', Copy(FullScreenResolution.Text, 1, PosEx('x', FullScreenResolution.Text)-1));
+       UpdateSetting('FullScreenHeight', Copy(FullScreenResolution.Text, PosEx('x', FullScreenResolution.Text)+1, Length(FullScreenResolution.Text)));
      end
   else
      UpdateSetting('FullMode', IntToStr(FullScreenResolution.ItemIndex));
@@ -556,9 +559,10 @@ end;}
 procedure TFormSEGAModel2EmulatorSettings.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
-  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idSegaModel2);
+  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idSegaModel2, emuVersionStr);
 
-  LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSegaModel2]+#13#10+LabelReadFileIni.Caption;
+  //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSegaModel2]+#13#10+LabelReadFileIni.Caption;
+  LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
 
   //if FormMain.EmulatorVersion[idSegaModel2] <> '' then
   //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idSegaModel2]

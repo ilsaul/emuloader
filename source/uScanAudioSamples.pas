@@ -190,7 +190,8 @@ end;
 
 procedure TFormScanAudioSamples.AddGamesToList;
 var
-  SamplesFiles, GamesSamples, AddedSampleName: array[0..1] of THashedStringList; // 0 -> HBMAME; 1 -> MAME
+  SamplesFiles, GamesSamples, AddedSampleName, GameNameIndex: array[0..1] of THashedStringList; // 0 -> HBMAME; 1 -> MAME
+  SamplesDirMAME: array[0..1] of String; // 0 -> HBMAME; 1 -> MAME
   HaveMAME, HaveHBMAME: Boolean;
   samName, FileExt: String;
   addItem, gItem: TEasyItem;
@@ -200,26 +201,36 @@ var
   var
     sLoop: Integer;
     tmpStr: String;
+    SamplesPathList: THashedStringList;
+
   begin
+    //tmpStr:= FormMain.LoadFolderSpecial_MAME(SystemIndex, FormMain.EmulatorFile[SystemIndex], 2); // can't be executed here (March 17, 2016)
+    FormMain.ExtractFolders2MAME(SystemIndex, SamplesDirMAME[SystemIndex], SamplesPathList);
+
     SamplesFiles[SystemIndex]:= THashedStringList.Create;
-    for sLoop:=0 to FormMain.SamplesDir[SystemIndex].Count-1 do
+    for sLoop:=0 to SamplesPathList.Count-1 do
     begin
       // for MAME
-      tmpStr:= FormMain.SamplesDir[SystemIndex].Strings[sLoop];
+      tmpStr:= SamplesPathList[sLoop];
       GetFilesList(tmpStr, '.zip', '*.zip', SamplesFiles[SystemIndex], False, False, True);
       GetFilesList(tmpStr, '.7z', '*.7z', SamplesFiles[SystemIndex], False, False, True);
     end;
+    FreeAndNil(SamplesPathList);
     Result:= SamplesFiles[SystemIndex].Count > 0;
     if Result then
        begin
+         GameNameIndex[SystemIndex]:= THashedStringList.Create;
+         GameNameIndex[SystemIndex].BeginUpdate;
          SamplesFiles[SystemIndex].Sorted:= False;
          SamplesFiles[SystemIndex].BeginUpdate;
          for sLoop:=0 to SamplesFiles[SystemIndex].Count-1 do
          begin
            tmpStr:= ExtractFileName(SamplesFiles[SystemIndex].Strings[sLoop]);
            SamplesFiles[SystemIndex].Strings[sLoop]:= tmpStr+'='+SamplesFiles[SystemIndex].Strings[sLoop];
+           GameNameIndex[SystemIndex].Add(tmpStr);
          end;
          SamplesFiles[SystemIndex].EndUpdate;
+         GameNameIndex[SystemIndex].EndUpdate;
          AddedSampleName[SystemIndex]:= THashedStringList.Create;
          AddedSampleName[SystemIndex].BeginUpdate;
        end
@@ -233,8 +244,10 @@ var
     sFileFound: Boolean;
   begin
     sysIndex:= Ord(FormMain.TempGameVars.eSystemID = idMAME); // 1-> MAME; 0-> HBMAME
-    if not Assigned(SamplesFiles[sysIndex]) then
+    if SamplesFiles[sysIndex] = nil then
        Exit;
+    //if not Assigned(SamplesFiles[sysIndex]) then
+    //   Exit;
 
     //Result:= (FormMain.TempGameVars.eSystemID in [idMAME, idHBMAME]) and (FormMain.TempGameVars.eAudioType = 2);
     //if Result then
@@ -246,15 +259,26 @@ var
 
     samName:= GamesSamples[sysIndex].Values[FormMain.TempGameVars.eName];
 
+
     FileExt:= '.zip';
-    sysIndex:= SamplesFiles[sysIndex].IndexOfName(samName+FileExt);
+    sysIndex:= GameNameIndex[sysIndex].IndexOf(samName+FileExt);
     if sysIndex = -1 then
        begin
          FileExt:= '.7z';
-         sysIndex:= SamplesFiles[sysIndex].IndexOfName(samName+FileExt);
+         sysIndex:= GameNameIndex[sysIndex].IndexOf(samName+FileExt);
        end;
     if sysIndex = -1 then
        FileExt:= ''; // no sample file was found (.zip; .7z)
+
+    //FileExt:= '.zip';
+    //sysIndex:= SamplesFiles[sysIndex].IndexOfName(samName+FileExt);
+    //if sysIndex = -1 then
+    //   begin
+    //     FileExt:= '.7z';
+    //     sysIndex:= SamplesFiles[sysIndex].IndexOfName(samName+FileExt);
+    //   end;
+    //if sysIndex = -1 then
+    //   FileExt:= ''; // no sample file was found (.zip; .7z)
 
     sFileFound:= sysIndex <> -1;
     if sFileFound then
@@ -309,7 +333,10 @@ begin
 
   HaveMAME:= FileExists(FormMain.GetAudioSamplesFile(idMAME));
   if HaveMAME then
-     HaveMAME:= Assigned(FormMain.SamplesDir[1]) and (FormMain.SamplesDir[1].Count > 0);
+     begin
+       SamplesDirMAME[1]:= FormMain.LoadFolderSpecial_MAME(idMAME, FormMain.EmulatorFile[idMAME], 2);
+       HaveMAME:= SamplesDirMAME[1] <> '';
+     end;
   if HaveMAME then
      begin
        GamesSamples[1]:= THashedStringList.Create;
@@ -318,7 +345,10 @@ begin
 
   HaveHBMAME:= FileExists(FormMain.GetAudioSamplesFile(idHBMAME));
   if HaveHBMAME then
-     HaveHBMAME:= Assigned(FormMain.SamplesDir[0]) and (FormMain.SamplesDir[0].Count > 0);
+     begin
+       SamplesDirMAME[0]:= FormMain.LoadFolderSpecial_MAME(idHBMAME, FormMain.EmulatorFile[idHBMAME], 2);
+       HaveHBMAME:= SamplesDirMAME[0] <> '';
+     end;
   if HaveHBMAME then
      begin
        GamesSamples[0]:= THashedStringList.Create;
@@ -340,12 +370,12 @@ begin
        HaveMAME:= FormMain.IsSystemAvailable(idMAME);
        HaveHBMAME:= FormMain.IsSystemAvailable(idHBMAME);
        if HaveMAME then
-          samName:= 'MAME samples folders:'+#13#10+FormMain.SamplesDir[1].Text;
+          samName:= 'MAME samples folders:'+#13#10+SamplesDirMAME[1];// FormMain.SamplesDir[1].Text;
        if HaveHBMAME then
           begin
             if samName <> '' then
                samName:= samName+#13#10+#13#10;
-            samName:= samName+'HBMAME samples folders:'+#13#10+FormMain.SamplesDir[0].Text;
+            samName:= samName+'HBMAME samples folders:'+#13#10+SamplesDirMAME[0];//FormMain.SamplesDir[0].Text;
           end;
        GenerateMessage('Info', FormScanAudioSamples.Caption, '    No files were found for MAME and/or HBMAME. All games '+
                        'are missing samples. Emu Loader only support zipped / 7-zipped sample sets (no .wav; .flac). Aborting...'
@@ -353,9 +383,11 @@ begin
        PostMessage(Handle, wm_Close, 0, 0);
        FreeStringList(GamesSamples[1]);
        FreeStringList(SamplesFiles[1]);
+       FreeStringList(GameNameIndex[1]);
        FreeStringList(AddedSampleName[1]);
        FreeStringList(GamesSamples[0]);
        FreeStringList(SamplesFiles[0]);
+       FreeStringList(GameNameIndex[0]);
        FreeStringList(AddedSampleName[0]);
        Exit;
      end;
@@ -392,10 +424,12 @@ begin
     False: SetFilter;
   end;
   FreeStringList(SamplesFiles[1]); // MAME
+  FreeStringList(GameNameIndex[1]);
   FreeStringList(GamesSamples[1]);
   FreeStringList(AddedSampleName[1]);
 
   FreeStringList(SamplesFiles[0]); // HBMAME
+  FreeStringList(GameNameIndex[0]);
   FreeStringList(GamesSamples[0]);
   FreeStringList(AddedSampleName[0]);
 

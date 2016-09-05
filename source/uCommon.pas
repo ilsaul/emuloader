@@ -8,10 +8,11 @@ uses
   Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
   Graphics, SysUtils, ShlObj, Forms, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
-  uMessageBox, uSelectDirectory, Math, MPCommonUtilities;//, ActiveX; //, TlHelp32;
+  uMessageBox, uSelectDirectory, Math, MPCommonUtilities, ShadowLabel;//, ActiveX; //, TlHelp32;
 
 const
   MaxArcadeSystems = 8;
+  MaxIniCountMAME: Byte = 12; // MAME .ini files array ... see more in uMain.GetCustomIniFileMAME() function
 
   idMAME       = 1;
   idSupermodel = 2;
@@ -36,18 +37,18 @@ const
   SystemStr: String[1] = '"';
   CommandPromptStr: String = 'cmd.exe /c ';
 
-  ImageCategoryArray: packed array[0..9] of packed array[0..3] of String = (
-    //IconFileName, IniSectionName, NotAvailableName, default folder
-     ('image_00_titlesnap', 'TitleSnapshot', 'title.png', 'titles'),
-     ('image_01_gamesnap', 'GameSnapshot', 'ingame.png', 'snap'),
-     ('image_02_marquee', 'Marquee', 'marquee.png', 'marquees'),
-     ('image_03_flyer', 'Flyer', 'flyer.png', 'flyers'),
-     ('image_04_cabinet', 'Cabinet', 'cabinet.png', 'cabinets'),
-     ('image_05_cpanel', 'ControlPanel', 'controlpanel.png', 'cpanel'),
-     ('image_06_cpanellayout', 'ControlPanelLayout', 'controlpanellayout.png', 'cplayout'),
-     ('image_07_pcb', 'PCB', 'pcb.png', 'pcb'),
-     ('image_08_gameartwork', 'GameArtwork', 'ingameartwork.png', 'snapartwork'),
-     ('image_09_maws', 'MAWS', '', ''));
+  ImageCategoryArray: packed array[0..9] of packed array[0..4] of String = (
+    //IconFileName, IniSectionName, NotAvailableName, default folder, mame.ini entry name
+     ('image_00_titlesnap', 'TitleSnapshot', 'title.png', 'titles', 'titles_directory'),
+     ('image_01_gamesnap', 'GameSnapshot', 'ingame.png', 'snap', 'snapshot_directory'),
+     ('image_02_marquee', 'Marquee', 'marquee.png', 'marquees', 'marquees_directory'),
+     ('image_03_flyer', 'Flyer', 'flyer.png', 'flyers', 'flyers_directory'),
+     ('image_04_cabinet', 'Cabinet', 'cabinet.png', 'cabinets', 'cabinets_directory'),
+     ('image_05_cpanel', 'ControlPanel', 'controlpanel.png', 'cpanel', 'cpanels_directory'),
+     ('image_06_cover', 'SoftwareCover', 'softwarecover.png', 'covers', 'covers_directory'),
+     ('image_07_pcb', 'PCB', 'pcb.png', 'pcb', 'pcbs_directory'),
+     ('image_08_gameartwork', 'GameArtwork', 'ingameartwork.png', 'artpreview', 'artwork_preview_directory'),
+     ('image_09_internet', 'InternetGameInfo', '', '', ''));
 
   aColumns: packed array[0..23] of packed array[0..1] of String = (
      //IniEntryName, ColumnTitle
@@ -59,7 +60,7 @@ const
      ('Resolution', 'Resolution'),            // 04
      ('RefreshRate', 'Refresh Rate'),         // 05
 
-     ('Category', 'Category'), // catver.ini (MAME arcade); category_home.ini (MESS machines -listxml); softlist <description> (hash\softwarelist.xml files)
+     ('Category', 'Category'), // catver.ini (MAME arcade); mess.ini (version.ini pack from AntoPISA); non-arcade machines -listxml; softlist <description> (hash\softwarelist.xml files)
      ('VersionAdded', 'Version Added'),       // 07
 
      ('Name', 'Game Name'),                   // 08
@@ -85,11 +86,11 @@ const
   aColumnsWidth: packed array[0..23] of Integer = ( //           13  14  15  16
     400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 130, 115, 130, 110, 200);
 
-  aColumnsMachinesList: packed array[0..5] of String =
-     ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver'); // Machines List Side Panel
+  aColumnsMachinesList: packed array[0..6] of String =
+     ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // Machines List Side Panel
 
-  aColumnsWidthMachinesList: packed array[0..5] of Integer =         // Machines List Side Panel
-     (250, 45, 120, 85, 85, 95);
+  aColumnsWidthMachinesList: packed array[0..6] of Integer =         // Machines List Side Panel
+     (250, 45, 120, 85, 85, 95, 90);
 
   aColumnsSoftwareListOrder: packed array[0..13] of Integer =
      ( 0,  // 00 -> title
@@ -117,6 +118,16 @@ const
      ($00fcdbc1, $00c1dbfc),  // 2 -> gradient color bottom
      ($00cea27d, $007da2ce),  // 3 -> gradient border color
      ($00cc6600, $000066cc)); // 4 -> font color
+
+     // Windows 10 selection bar colors
+     // $00e8a766 // border color (blue)
+     // $00ffe8d1 // bar single color (blue)
+
+     // $0066a7e8 // border color (red)
+     // $00d1e8ff // bar single color (red)
+
+     // $00dedede // border color (gray)
+     // $00f7f7f7 // bar single color (gray)
 
   ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red)
@@ -173,6 +184,8 @@ function  UpperCase(const S: String): String; overload;
 procedure Move(const Source; var Dest; count: Integer); overload;
 // end of file functions (from the old uFilesUtil.pas)
 
+procedure CallShellExecute(Sender: TObject; Visibility: Word = SW_SHOWNORMAL);
+
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: String; const DescriptionMessage: String = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                           IconIndex: Integer = 0): Integer;
@@ -191,13 +204,16 @@ function  ExtractMAMEIniValue(const MAMEOption: String): String;
 function  GetGameHistory(const GameName, StringLine: String; TagLength: Integer): Boolean;
 
 // SHA-1 / MD5 routines
+function  ComputeHashValueMemoryStream(Mode: Integer; const mStreamHolder: TMemoryStream): String;
 function  ComputeHashValue(Mode: Integer; const FileName: String): String;
+function  GetSHA1_ValueMemoryStream(const mStream: TMemoryStream): String;
 function  GetSHA1_Value(const strFileName: String): String;
 function  GetMD5_Value(const strFileName: String): String;
 
 function  CheckAndCreateFolder(const FolderString: String): Boolean;
 function  CompareIntValue(const A, B: Int64): ShortInt;
 function  CompareFloatValue(const A, B: Extended): ShortInt;
+function  CompareTDateTime(const A, B: TDateTime): Integer;
 procedure SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
 procedure SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
 procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox);
@@ -915,6 +931,19 @@ asm
 end;
 // end of file functions (from old uFilesUtil.pas)
 
+procedure CallShellExecute(Sender: TObject; Visibility: Word = SW_SHOWNORMAL);
+var
+  LinkStr: String;
+begin
+  if Sender is TLabel then
+     LinkStr:= TLabel(Sender).Hint
+  else
+  if Sender is TShadowLabel then
+     LinkStr:= TShadowLabel(Sender).Hint;
+
+  ShellExecute(Application.Handle, 'open', PChar(LinkStr), nil, nil, Visibility);
+end;
+
 function GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 begin
   CallMessageBox;
@@ -1312,6 +1341,34 @@ hour = temp / 3600;
      end;
 end;
 
+function ComputeHashValueMemoryStream(Mode: Integer; const mStreamHolder: TMemoryStream): String;
+var
+  Checksum: TMessageDigest;
+  Stream: TMemoryStream;
+begin
+  // "No Authentication" mode
+  Result:= '';
+
+  if ((Mode < Low(ChecksumMode)) or (Mode > High(ChecksumMode))) or
+     (mStreamHolder = nil) then
+     Exit;
+  try
+    Checksum:= ChecksumMode[Mode].Create;
+    Stream:= TMemoryStream.Create;
+    Stream.LoadFromStream(mStreamHolder);
+    Stream.Seek(0, soFromBeginning);
+    Checksum.TransformStream(Stream);
+    Checksum.Complete;
+    FreeAndNil(Stream);
+    Result:= LowerCase(Checksum.HashValue);
+    FreeAndNil(Checksum);
+  except
+    FreeAndNil(Stream);
+    FreeAndNil(Checksum);
+  end;
+end;
+
+
 function ComputeHashValue(Mode: Integer; const FileName: String): String;
 var
   Checksum: TMessageDigest;
@@ -1334,6 +1391,18 @@ begin
   except
     FreeAndNil(Stream);
     FreeAndNil(Checksum);
+  end;
+end;
+
+function GetSHA1_ValueMemoryStream(const mStream: TMemoryStream): String;
+begin
+  Result:= '';
+  if mStream = nil then
+     Exit;
+  try
+    Result:= ComputeHashValueMemoryStream(3, mStream);
+  except
+    Result:= '';
   end;
 end;
 
@@ -1381,6 +1450,17 @@ begin
 end;
 
 function CompareFloatValue(const A, B: Extended): ShortInt;
+begin
+  if A = B then
+     Result:= 0 // equal value
+  else
+  if A < B then
+     Result:= -1
+  else
+     Result:= 1;
+end;
+
+function CompareTDateTime(const A, B: TDateTime): Integer;
 begin
   if A = B then
      Result:= 0 // equal value
@@ -2860,7 +2940,7 @@ begin
      Exit;
 
   elIni:= TMemIniFile.Create(iPath+'EmuLoader.ini');
-  Result:= Boolean(elIni.ReadInteger('Preferences', 'AllowOneInstance', 0));
+  Result:= Boolean(elIni.ReadInteger('Preferences', 'AllowOneInstance', 1));
   FreeAndNil(elIni);
   if not Result then
      Exit;

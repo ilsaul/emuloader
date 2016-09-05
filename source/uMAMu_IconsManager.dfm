@@ -449,7 +449,7 @@ object FormMAMu_IconsManager: TFormMAMu_IconsManager
         Width = 345
         Height = 26
         Hint = 'Click here to select a system'
-        Caption = 'HBMAME: HomeBrew Multiple Arcade Machine Emulator'
+        Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -12

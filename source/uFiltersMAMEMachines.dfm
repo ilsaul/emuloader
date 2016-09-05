@@ -55,13 +55,13 @@ object FormFiltersMAMEMachines: TFormFiltersMAMEMachines
     Transparent = True
   end
   object LabelCategoryIniForMESS: TLabel
-    Left = 33
+    Left = 47
     Top = 331
-    Width = 329
+    Width = 299
     Height = 13
     Cursor = crHandPoint
     Hint = 'http://www.progettosnaps.net/renameset/'
-    Caption = 'click here to download category.ini for MESS (renameSET page)'
+    Caption = 'click here to download version.ini pack (renameSET page)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clNavy
     Font.Height = -11
@@ -94,9 +94,9 @@ object FormFiltersMAMEMachines: TFormFiltersMAMEMachines
   object LabelMAMEMachinesIniMESSRequired: TLabel
     Left = 196
     Top = 118
-    Width = 182
+    Width = 127
     Height = 15
-    Caption = '(file "category_home.ini" required)'
+    Caption = '(file "mess.ini" required)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
     Font.Height = -12
@@ -128,8 +128,8 @@ object FormFiltersMAMEMachines: TFormFiltersMAMEMachines
     Height = 26
     AutoSize = False
     Caption = 
-      '     Thanks to AntoPISA for creating "category_home.ini". Machin' +
-      'es filters would never be possible without it!'
+      '     Thanks to AntoPISA for creating "mess.ini". Non-arcade mach' +
+      'ines filters would never be possible without it!'
     Font.Charset = ANSI_CHARSET
     Font.Color = clOlive
     Font.Height = -11
@@ -163,11 +163,11 @@ object FormFiltersMAMEMachines: TFormFiltersMAMEMachines
     OnMouseLeave = LabelCategoryIniForMESSMouseLeave
   end
   object Label3: TLabel
-    Left = 54
+    Left = 79
     Top = 345
-    Width = 288
+    Width = 236
     Height = 16
-    Caption = '(place "category_home.ini" file in "eldir\ini_files\" folder)'
+    Caption = '(place "mess.ini" file in "eldir\ini_files\" folder)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -11
@@ -210,6 +210,22 @@ object FormFiltersMAMEMachines: TFormFiltersMAMEMachines
   object Label2: TLabel
     Left = 247
     Top = 210
+    Width = 131
+    Height = 15
+    Caption = '(other filters are ignored)'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clGray
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    ShowAccelChar = False
+    Transparent = True
+    Visible = False
+  end
+  object Label4: TLabel
+    Left = 247
+    Top = 256
     Width = 131
     Height = 15
     Caption = '(other filters are ignored)'

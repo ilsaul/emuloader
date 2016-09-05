@@ -1,6 +1,6 @@
 object FormMAMESettings: TFormMAMESettings
-  Left = 539
-  Top = 231
+  Left = 851
+  Top = 431
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -45,7 +45,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object NotebookPages: TNotebook
     Left = 0
-    Top = 72
+    Top = 80
     Width = 868
     Height = 454
     Color = 15856113
@@ -57,7 +57,7 @@ object FormMAMESettings: TFormMAMESettings
       Caption = 'Folders'
       object FolderROMsDisksBox: TLabel
         Left = 16
-        Top = 20
+        Top = 13
         Width = 169
         Height = 15
         Caption = 'Path to ROM Sets and CHD Files'
@@ -66,7 +66,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderIniFiles: TLabel
         Left = 16
-        Top = 189
+        Top = 140
         Width = 80
         Height = 15
         Caption = 'Path to Ini Files'
@@ -77,7 +77,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderGameSnapshots: TLabel
         Left = 303
-        Top = 189
+        Top = 140
         Width = 155
         Height = 15
         Caption = 'Directory to Save Screenshots'
@@ -86,7 +86,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderGamesConfigurations: TLabel
         Left = 303
-        Top = 293
+        Top = 346
         Width = 171
         Height = 15
         Caption = 'Directory to Save Configurations'
@@ -95,7 +95,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderCheatFiles: TLabel
         Left = 590
-        Top = 138
+        Top = 131
         Width = 98
         Height = 15
         Caption = 'Path to Cheat Files'
@@ -104,7 +104,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderMemoryCards: TLabel
         Left = 590
-        Top = 401
+        Top = 394
         Width = 216
         Height = 15
         Caption = 'Directory to Save Memory Card Contents'
@@ -113,7 +113,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderDiff: TLabel
         Left = 590
-        Top = 86
+        Top = 79
         Width = 200
         Height = 15
         Caption = 'Directory to Save CHD Difference Files'
@@ -122,7 +122,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderSaveStates: TLabel
         Left = 304
-        Top = 241
+        Top = 296
         Width = 123
         Height = 15
         Caption = 'Directory to Save States'
@@ -131,7 +131,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderNVRAM: TLabel
         Left = 303
-        Top = 345
+        Top = 394
         Width = 185
         Height = 15
         Caption = 'Directory to Save NVRAM Contents'
@@ -139,8 +139,8 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
       end
       object LabelFolderHashFiles: TLabel
-        Left = 590
-        Top = 241
+        Left = 16
+        Top = 394
         Width = 94
         Height = 15
         Caption = 'Path to Hash Files'
@@ -149,7 +149,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderArtworks: TLabel
         Left = 16
-        Top = 286
+        Top = 252
         Width = 219
         Height = 15
         Caption = 'Path to Artwork Files / Effect Overlay Files'
@@ -158,7 +158,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderSamples: TLabel
         Left = 16
-        Top = 401
+        Top = 346
         Width = 104
         Height = 15
         Caption = 'Path to Sample Sets'
@@ -166,8 +166,8 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
       end
       object LabelFolderInputDeviceLogs: TLabel
-        Left = 303
-        Top = 401
+        Left = 590
+        Top = 338
         Width = 186
         Height = 15
         Caption = 'Directory to Save Input Device Logs'
@@ -176,7 +176,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderControllerDefinitions: TLabel
         Left = 590
-        Top = 189
+        Top = 182
         Width = 154
         Height = 15
         Caption = 'Path to Controller Definitions'
@@ -185,7 +185,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderCrosshairFiles: TLabel
         Left = 590
-        Top = 293
+        Top = 234
         Width = 116
         Height = 15
         Caption = 'Path to Crosshair Files'
@@ -194,7 +194,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderFontFiles: TLabel
         Left = 590
-        Top = 345
+        Top = 286
         Width = 91
         Height = 15
         Caption = 'Path to Font Files'
@@ -205,19 +205,37 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderDebuggerComments: TLabel
         Left = 590
-        Top = 34
+        Top = 27
         Width = 206
         Height = 15
         Caption = 'Directory to Save Debugger Comments'
         ParentShowHint = False
         ShowHint = False
       end
+      object LabelFolderLanguageFiles: TLabel
+        Left = 303
+        Top = 192
+        Width = 119
+        Height = 15
+        Caption = 'Path to Language Files'
+        ParentShowHint = False
+        ShowHint = False
+      end
+      object LabelFolderPluginFiles: TLabel
+        Left = 303
+        Top = 244
+        Width = 101
+        Height = 15
+        Caption = 'Path to Plugin Files'
+        ParentShowHint = False
+        ShowHint = False
+      end
       object FolderROMs: TEasyListview
         Tag = 1
         Left = 16
-        Top = 38
-        Width = 504
-        Height = 140
+        Top = 31
+        Width = 460
+        Height = 98
         Hint = 'Path To ROM Sets And Hard Disk Images'
         BackGround.Enabled = True
         CellSizes.Report.Height = 18
@@ -232,7 +250,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000001F4010000FFFFFF1F0001000000
+          00060000008008000101000100000000000001C8010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -275,8 +293,8 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderROMsButtonUp: TBitBtn
         Tag = 1
-        Left = 522
-        Top = 37
+        Left = 478
+        Top = 30
         Width = 43
         Height = 21
         Hint = 'Move selected folder up'
@@ -288,8 +306,8 @@ object FormMAMESettings: TFormMAMESettings
         OnClick = FolderROMsButtonUpClick
       end
       object FolderROMsButtonDown: TBitBtn
-        Left = 522
-        Top = 58
+        Left = 478
+        Top = 51
         Width = 43
         Height = 21
         Hint = 'Move selected folder down'
@@ -302,7 +320,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderROMsButtonSelect: TBitBtn
         Left = 522
-        Top = 93
+        Top = 30
         Width = 43
         Height = 21
         Hint = 'Click here to select folders'
@@ -314,7 +332,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderROMsButtonEdit: TBitBtn
         Left = 522
-        Top = 114
+        Top = 51
         Width = 43
         Height = 21
         Hint = 'Click here to edit the selected folder [F2]'
@@ -324,7 +342,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderROMsButtonDelete: TBitBtn
         Left = 522
-        Top = 135
+        Top = 72
         Width = 43
         Height = 21
         Hint = 'Click here to delete selected folders [DEL]'
@@ -334,7 +352,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderROMsButtonClear: TBitBtn
         Left = 522
-        Top = 156
+        Top = 93
         Width = 43
         Height = 21
         Hint = 'Click here to clear folders list'
@@ -346,7 +364,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderSamples: TEdit
         Left = 16
-        Top = 419
+        Top = 364
         Width = 217
         Height = 21
         Hint = 'Path to Sample Sets'
@@ -361,7 +379,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderSamplesButtonSelect: TBitBtn
         Left = 235
-        Top = 419
+        Top = 364
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -373,7 +391,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderGameSnapshots: TEdit
         Left = 303
-        Top = 207
+        Top = 158
         Width = 217
         Height = 21
         Hint = 'Directory For Screenshots (.png Format)'
@@ -388,7 +406,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderGameSnapshotsButtonSelect: TBitBtn
         Left = 522
-        Top = 207
+        Top = 158
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -400,7 +418,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderGamesConfigurations: TEdit
         Left = 303
-        Top = 311
+        Top = 364
         Width = 217
         Height = 21
         Hint = 'Directory To Save Configurations'
@@ -415,7 +433,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderGamesConfigurationsButtonSelect: TBitBtn
         Left = 522
-        Top = 311
+        Top = 364
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -427,7 +445,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCheatFiles: TEdit
         Left = 590
-        Top = 156
+        Top = 149
         Width = 217
         Height = 21
         Hint = 'Path To Cheat Files'
@@ -442,7 +460,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCheatFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 156
+        Top = 149
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -454,7 +472,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderMemoryCards: TEdit
         Left = 590
-        Top = 419
+        Top = 412
         Width = 217
         Height = 21
         Hint = 'Directory To Save Memory Card Contents'
@@ -469,7 +487,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderMemoryCardsButtonSelect: TBitBtn
         Left = 809
-        Top = 419
+        Top = 412
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -481,7 +499,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDiff: TEdit
         Left = 590
-        Top = 104
+        Top = 97
         Width = 217
         Height = 21
         Hint = 'Directory For Hard Drive Image Difference Files'
@@ -496,7 +514,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDiffButtonSelect: TBitBtn
         Left = 809
-        Top = 104
+        Top = 97
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -508,7 +526,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderSaveStates: TEdit
         Left = 303
-        Top = 259
+        Top = 314
         Width = 217
         Height = 21
         Hint = 'Directory To Save States'
@@ -523,7 +541,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderSaveStatesButtonSelect: TBitBtn
         Left = 522
-        Top = 259
+        Top = 314
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -535,7 +553,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderNVRAM: TEdit
         Left = 303
-        Top = 363
+        Top = 412
         Width = 217
         Height = 21
         Hint = 'Directory To Save NVRAM Contents'
@@ -550,7 +568,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderNVRAMButtonSelect: TBitBtn
         Left = 522
-        Top = 363
+        Top = 412
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -561,8 +579,8 @@ object FormMAMESettings: TFormMAMESettings
         OnClick = FolderNVRAMButtonSelectClick
       end
       object FolderHashFiles: TEdit
-        Left = 590
-        Top = 259
+        Left = 16
+        Top = 412
         Width = 217
         Height = 21
         Hint = 'Path To Hash Files'
@@ -576,8 +594,8 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 23
       end
       object FolderHashFilesButtonSelect: TBitBtn
-        Left = 809
-        Top = 259
+        Left = 235
+        Top = 412
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -590,9 +608,9 @@ object FormMAMESettings: TFormMAMESettings
       object FolderArtworks: TEasyListview
         Tag = 1
         Left = 16
-        Top = 304
+        Top = 270
         Width = 262
-        Height = 62
+        Height = 44
         Hint = 'Path to Artwork Files / Path to Effect Overlay Files'
         BackGround.Enabled = True
         CellSizes.Report.Height = 18
@@ -651,7 +669,7 @@ object FormMAMESettings: TFormMAMESettings
       object FolderArtworksButtonUp: TBitBtn
         Tag = 1
         Left = 16
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Move selected folder up'
@@ -664,7 +682,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderArtworksButtonDown: TBitBtn
         Left = 59
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Move selected folder down'
@@ -677,7 +695,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderArtworksButtonSelect: TBitBtn
         Left = 106
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Click here to select folders'
@@ -689,7 +707,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderArtworksButtonEdit: TBitBtn
         Left = 149
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Click here to edit the selected folder [F2]'
@@ -699,7 +717,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderArtworksButtonDelete: TBitBtn
         Left = 192
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Click here to delete selected folders [DEL]'
@@ -709,7 +727,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderArtworksButtonClear: TBitBtn
         Left = 235
-        Top = 368
+        Top = 316
         Width = 43
         Height = 21
         Hint = 'Click here to clear folders list'
@@ -722,9 +740,9 @@ object FormMAMESettings: TFormMAMESettings
       object FolderIniFiles: TEasyListview
         Tag = 1
         Left = 16
-        Top = 207
+        Top = 158
         Width = 262
-        Height = 44
+        Height = 62
         Hint = 'Path to ini files'
         BackGround.Enabled = True
         CellSizes.Report.Height = 18
@@ -783,7 +801,7 @@ object FormMAMESettings: TFormMAMESettings
       object FolderIniFilesButtonUp: TBitBtn
         Tag = 1
         Left = 16
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Move selected folder up'
@@ -796,7 +814,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderIniFilesButtonDown: TBitBtn
         Left = 59
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Move selected folder down'
@@ -809,7 +827,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderIniFilesButtonSelect: TBitBtn
         Left = 106
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Click here to select folders'
@@ -821,7 +839,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderIniFilesButtonEdit: TBitBtn
         Left = 149
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Click here to edit the selected folder [F2]'
@@ -831,7 +849,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderIniFilesButtonDelete: TBitBtn
         Left = 192
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Click here to delete selected folders [DEL]'
@@ -841,7 +859,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderIniFilesButtonClear: TBitBtn
         Left = 235
-        Top = 253
+        Top = 222
         Width = 43
         Height = 21
         Hint = 'Click here to clear folders list'
@@ -852,8 +870,8 @@ object FormMAMESettings: TFormMAMESettings
         OnClick = FolderIniFilesButtonClearClick
       end
       object FolderInputDeviceLogs: TEdit
-        Left = 303
-        Top = 419
+        Left = 590
+        Top = 356
         Width = 217
         Height = 21
         Hint = 'Directory For Recordings (Input Device Logs)'
@@ -867,8 +885,8 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 39
       end
       object FolderInputDeviceLogsButtonSelect: TBitBtn
-        Left = 522
-        Top = 419
+        Left = 809
+        Top = 356
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -880,7 +898,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderControllerDefinitionsButtonSelect: TBitBtn
         Left = 809
-        Top = 207
+        Top = 200
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -892,7 +910,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCrosshairFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 311
+        Top = 252
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -904,7 +922,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderFontFiles: TEdit
         Left = 590
-        Top = 363
+        Top = 304
         Width = 217
         Height = 21
         Hint = 'Path to font files'
@@ -919,7 +937,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderFontFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 363
+        Top = 304
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -931,7 +949,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderControllerDefinitions: TEdit
         Left = 590
-        Top = 207
+        Top = 200
         Width = 217
         Height = 21
         Hint = 'Directory For Preconfigured Controller Keys'
@@ -946,7 +964,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCrosshairFiles: TEdit
         Left = 590
-        Top = 311
+        Top = 252
         Width = 217
         Height = 21
         Hint = 'Path To Crosshair Files'
@@ -961,7 +979,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDebuggerCommentsButtonSelect: TBitBtn
         Left = 809
-        Top = 52
+        Top = 45
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -973,7 +991,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDebuggerComments: TEdit
         Left = 590
-        Top = 52
+        Top = 45
         Width = 217
         Height = 21
         Hint = 'Directory to Save Debugger Comments'
@@ -986,15 +1004,67 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 48
       end
+      object FolderLanguageFilesButtonSelect: TBitBtn
+        Left = 522
+        Top = 210
+        Width = 43
+        Height = 21
+        Hint = 'Click here to select a folder'
+        Caption = 'Select'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 49
+        OnClick = FolderLanguageFilesButtonSelectClick
+      end
+      object FolderLanguageFiles: TEdit
+        Left = 303
+        Top = 210
+        Width = 217
+        Height = 21
+        TabStop = False
+        AutoSize = False
+        Color = clWhite
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 50
+      end
+      object FolderPluginFilesButtonSelect: TBitBtn
+        Left = 522
+        Top = 262
+        Width = 43
+        Height = 21
+        Hint = 'Click here to select a folder'
+        Caption = 'Select'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 51
+        OnClick = FolderPluginFilesButtonSelectClick
+      end
+      object FolderPluginFiles: TEdit
+        Left = 303
+        Top = 262
+        Width = 217
+        Height = 21
+        TabStop = False
+        AutoSize = False
+        Color = clWhite
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 52
+      end
     end
     object TPage
       Left = 0
       Top = 0
       Caption = 'Video and Audio'
       object ArtworkGroupBox: TAdvGroupBox
-        Left = 16
-        Top = 232
-        Width = 145
+        Left = 544
+        Top = 214
+        Width = 121
         Height = 144
         RoundEdges = True
         Caption = 'Artwork'
@@ -1005,7 +1075,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 80
           Width = 77
           Height = 20
-          Hint = 'Enable backdrops if artwork is enabled and available'
+          Hint = 'Enable the display of backdrops'
           Checked = True
           TabOrder = 0
           Alignment = taLeftJustify
@@ -1019,7 +1089,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 100
           Width = 57
           Height = 20
-          Hint = 'Enable bezels if artwork is enabled and available'
+          Hint = 'Enable the display of bezels'
           Checked = True
           TabOrder = 1
           Alignment = taLeftJustify
@@ -1033,7 +1103,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 40
           Width = 68
           Height = 20
-          Hint = 'Enable overlays if artwork is enabled and available'
+          Hint = 'Enable the display of overlays'
           Checked = True
           TabOrder = 2
           Alignment = taLeftJustify
@@ -1059,7 +1129,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 60
           Width = 99
           Height = 20
-          Hint = 'Enable control panel if artwork is enabled and available'
+          Hint = 'Enable the display of control panels'
           Checked = True
           TabOrder = 4
           Alignment = taLeftJustify
@@ -1073,7 +1143,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 120
           Width = 75
           Height = 20
-          Hint = 'Enable marquee if artwork is enabled and available'
+          Hint = 'Enable the display of marquees'
           Checked = True
           TabOrder = 5
           Alignment = taLeftJustify
@@ -1083,18 +1153,38 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object LabelVideoOutputMode: TAdvGroupBox
+      object VideoRenderOptionsGroupBox: TAdvGroupBox
         Left = 16
-        Top = 20
+        Top = 12
         Width = 145
-        Height = 200
+        Height = 242
         RoundEdges = True
-        Caption = 'Output Mode'
+        Caption = 'Render Options'
         ParentCtl3D = True
         TabOrder = 2
+        object LabelIntegerScaleFactorVertical: TLabel
+          Left = 82
+          Top = 223
+          Width = 21
+          Height = 15
+          Caption = 'Vert'
+          Enabled = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelIntegerScaleFactorHorizontal: TLabel
+          Left = 24
+          Top = 223
+          Width = 20
+          Height = 15
+          Caption = 'Hor'
+          Enabled = False
+          ShowAccelChar = False
+          Transparent = True
+        end
         object WindowMode: TAdvOfficeCheckBox
           Left = 8
-          Top = 56
+          Top = 20
           Width = 101
           Height = 20
           Hint = 'Run games in a window instead of full screen'
@@ -1106,8 +1196,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object MaximizeWindow: TAdvOfficeCheckBox
           Left = 8
-          Top = 76
-          Width = 117
+          Top = 40
+          Width = 119
           Height = 20
           Hint = 'Start emulation with window maximized (window mode only)'
           Checked = True
@@ -1120,7 +1210,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object KeepAspectRatio: TAdvOfficeCheckBox
           Left = 8
-          Top = 96
+          Top = 60
           Width = 117
           Height = 20
           Hint = 'Enables aspect ratio enforcement, so games look like they should'
@@ -1134,7 +1224,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object WaitVerticalSync: TAdvOfficeCheckBox
           Left = 8
-          Top = 136
+          Top = 100
           Width = 116
           Height = 20
           Hint = 'Enables v-sync to reduce tearing'
@@ -1146,12 +1236,10 @@ object FormMAMESettings: TFormMAMESettings
         end
         object BilinearFilter: TAdvOfficeCheckBox
           Left = 8
-          Top = 116
+          Top = 80
           Width = 113
           Height = 20
-          Hint = 
-            'Enable bilinear filtering on screen output (Direct3D / OpenGL / ' +
-            'SDL2 Accel)'
+          Hint = 'Enable bilinear filtering on screen output'
           Checked = True
           TabOrder = 4
           Alignment = taLeftJustify
@@ -1160,67 +1248,120 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object HardwareStretch: TAdvOfficeCheckBox
-          Left = 8
-          Top = 156
-          Width = 113
-          Height = 20
-          Hint = 
-            'Enable screen stretching by using your video card (DirectDraw on' +
-            'ly)'
-          Checked = True
-          TabOrder = 5
-          Alignment = taLeftJustify
-          Caption = 'Hardware Stretch'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object VideoOutputMode: TComboBox
-          Left = 8
-          Top = 24
-          Width = 129
-          Height = 21
-          Hint = 'Video output method'
-          Style = csDropDownList
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ItemHeight = 13
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-        end
         object UnevenStretch: TAdvOfficeCheckBox
           Left = 8
-          Top = 176
-          Width = 113
+          Top = 120
+          Width = 104
           Height = 20
           Hint = 'Allow non-integer stretch factors'
           Checked = True
-          TabOrder = 7
+          Enabled = False
+          TabOrder = 5
           Alignment = taLeftJustify
           Caption = 'Uneven Stretch'
           ReturnIsTab = False
           State = cbChecked
           Themed = True
         end
+        object UnevenStretchX: TAdvOfficeCheckBox
+          Left = 8
+          Top = 140
+          Width = 132
+          Height = 20
+          Hint = 'Allow non-integer stretch factors only on horizontal axis'
+          Enabled = False
+          TabOrder = 6
+          Alignment = taLeftJustify
+          Caption = 'Uneven Stretch (Hor)'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object IntegerScaleFactorHorizontal: TEdit
+          Left = 47
+          Top = 220
+          Width = 30
+          Height = 21
+          Hint = 'Set horizontal integer scale factor'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+          OnKeyPress = IntegerScaleFactorHorizontalKeyPress
+        end
+        object IntegerScaleFactorVertical: TEdit
+          Left = 106
+          Top = 220
+          Width = 30
+          Height = 21
+          Hint = 'Set vertical integer scale factor'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 8
+          OnKeyPress = IntegerScaleFactorVerticalKeyPress
+        end
+        object IntegerScaleOverscan: TAdvOfficeCheckBox
+          Left = 8
+          Top = 200
+          Width = 138
+          Height = 20
+          Hint = 'Allow overscan on integer scaled targets'
+          Enabled = False
+          TabOrder = 9
+          Alignment = taLeftJustify
+          Caption = 'Integer Scale Overscan'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object UnevenStretchY: TAdvOfficeCheckBox
+          Left = 8
+          Top = 160
+          Width = 132
+          Height = 20
+          Hint = 'Allow non-integer stretch factors only on vertical axis'
+          Enabled = False
+          TabOrder = 10
+          Alignment = taLeftJustify
+          Caption = 'Uneven Stretch (Vert)'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object AutoUnevenStretchXY: TAdvOfficeCheckBox
+          Left = 8
+          Top = 180
+          Width = 130
+          Height = 20
+          Hint = 
+            'Automatically apply uneven stretch hor/vert based on source nati' +
+            've orientation'
+          Enabled = False
+          TabOrder = 11
+          Alignment = taLeftJustify
+          Caption = 'Auto Uneven Stretch'
+          ReturnIsTab = False
+          Themed = True
+        end
       end
       object VectorGroupBox: TAdvGroupBox
         Left = 360
-        Top = 236
+        Top = 214
         Width = 169
-        Height = 207
+        Height = 213
         RoundEdges = True
         Caption = 'Vector'
         ParentCtl3D = True
         TabOrder = 1
         object LabelVectorFlickerEffect: TLabel
           Left = 8
-          Top = 20
+          Top = 40
           Width = 121
           Height = 15
           Hint = 'Flicker Effect [%3.2f]'
@@ -1233,7 +1374,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelVectorBeamWidthMin: TLabel
           Left = 8
-          Top = 68
+          Top = 83
           Width = 145
           Height = 15
           Hint = 'Beam Min Width [%2.2f]'
@@ -1246,7 +1387,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelVectorBeamWidthMax: TLabel
           Left = 8
-          Top = 116
+          Top = 126
           Width = 145
           Height = 15
           Hint = 'Beam Max Width [%2.2f]'
@@ -1259,7 +1400,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelVectorBeamIntensityWeight: TLabel
           Left = 8
-          Top = 164
+          Top = 169
           Width = 158
           Height = 15
           Hint = 'Beam Intensity Weight [%1.2f]'
@@ -1272,7 +1413,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object VectorFlickerEffect: TGaugeBar2
           Left = 8
-          Top = 36
+          Top = 56
           Width = 153
           Height = 20
           Hint = 'Set vector flicker effect'
@@ -1286,7 +1427,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object VectorBeamWidthMin: TGaugeBar2
           Left = 8
-          Top = 84
+          Top = 99
           Width = 153
           Height = 20
           Hint = 'Set minimum vector beam width'
@@ -1302,7 +1443,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object VectorBeamWidthMax: TGaugeBar2
           Left = 8
-          Top = 132
+          Top = 142
           Width = 153
           Height = 20
           Hint = 'Set maximum vector beam width'
@@ -1318,7 +1459,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object VectorBeamIntensityWeight: TGaugeBar2
           Left = 8
-          Top = 180
+          Top = 185
           Width = 153
           Height = 20
           Hint = 'Set maximum vector beam width'
@@ -1331,47 +1472,34 @@ object FormMAMESettings: TFormMAMESettings
           SmallChange = 0.009999999776482582
           OnChange = VectorBeamIntensityWeightChange
         end
-        object AntialiasVectorBkPanel: TPanelEx
-          Left = 88
-          Top = 0
-          Width = 71
-          Height = 22
-          Color1 = 15856113
-          Color2 = clSilver
-          Color3 = clYellow
-          Color4 = clTeal
-          ColorFrame = clGreen
-          Frames = []
-          ParentBackground = False
-          Style = vgSolid
-          object Antialias: TAdvOfficeCheckBox
-            Left = 5
-            Top = 0
-            Width = 65
-            Height = 19
-            Hint = 'Use antialiasing when drawing vectors'
-            Checked = True
-            TabOrder = 0
-            Alignment = taLeftJustify
-            Caption = 'Antialias'
-            ReturnIsTab = False
-            State = cbChecked
-            Themed = True
-          end
+        object Antialias: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 65
+          Height = 19
+          Hint = 'Use antialiasing when drawing vectors'
+          Checked = True
+          Enabled = False
+          TabOrder = 4
+          Alignment = taLeftJustify
+          Caption = 'Antialias'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
         end
       end
       object ScreenOptionsBox: TAdvGroupBox
         Left = 176
-        Top = 20
+        Top = 12
         Width = 169
-        Height = 256
+        Height = 279
         RoundEdges = True
         Caption = 'Game Screen'
         Ctl3D = True
         TabOrder = 5
         object LabelBrightness: TLabel
           Left = 8
-          Top = 68
+          Top = 63
           Width = 153
           Height = 15
           Hint = 'Brightness Correction [%1.2f]'
@@ -1397,7 +1525,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelContrast: TLabel
           Left = 8
-          Top = 116
+          Top = 106
           Width = 153
           Height = 15
           Hint = 'Contrast Correction [%1.2f]'
@@ -1410,7 +1538,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelGamma: TLabel
           Left = 8
-          Top = 164
+          Top = 149
           Width = 153
           Height = 15
           Hint = 'Gamma Correction [%1.2f]'
@@ -1423,7 +1551,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelPauseBrightness: TLabel
           Left = 8
-          Top = 212
+          Top = 192
           Width = 153
           Height = 15
           Hint = 'Pause Brightness [%1.2f]'
@@ -1434,12 +1562,21 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = False
         end
+        object Label9: TLabel
+          Left = 8
+          Top = 235
+          Width = 133
+          Height = 15
+          Caption = 'Visual Effects Overlay File'
+        end
         object Prescale_ScaleScreen: TGaugeBar
           Left = 8
           Top = 36
           Width = 153
           Height = 20
-          Hint = 'Scale screen rendering (1x for game'#39's original scale)'
+          Hint = 
+            'Scale screen resolution rendering (1x for game'#39's original resolu' +
+            'tion)'
           Color = clWhite
           Backgnd = bgPattern
           ButtonSize = 12
@@ -1451,7 +1588,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Brightness: TGaugeBar2
           Left = 8
-          Top = 84
+          Top = 79
           Width = 153
           Height = 20
           Hint = 
@@ -1469,7 +1606,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Contrast: TGaugeBar2
           Left = 8
-          Top = 132
+          Top = 122
           Width = 153
           Height = 20
           Hint = 
@@ -1487,7 +1624,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Gamma: TGaugeBar2
           Left = 8
-          Top = 180
+          Top = 165
           Width = 153
           Height = 20
           Hint = 
@@ -1505,7 +1642,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object PauseBrightness: TGaugeBar2
           Left = 8
-          Top = 228
+          Top = 208
           Width = 153
           Height = 20
           Hint = 'Additional pause brightness'
@@ -1519,19 +1656,45 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0.649999976158142100
           OnChange = PauseBrightnessChange
         end
+        object EffectOverlay: TEdit
+          Left = 8
+          Top = 251
+          Width = 108
+          Height = 21
+          Hint = 'Name of a PNG file to use for visual effects'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+        end
+        object EffectOverlayBrowse: TBitBtn
+          Left = 118
+          Top = 251
+          Width = 43
+          Height = 21
+          Hint = 'Click here to select a file'
+          Caption = 'Select'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          OnClick = EffectOverlayBrowseClick
+        end
       end
       object FullScreenBox: TAdvGroupBox
         Left = 360
-        Top = 20
+        Top = 12
         Width = 169
-        Height = 204
+        Height = 193
         RoundEdges = True
         Caption = 'Full Screen'
         ParentCtl3D = True
         TabOrder = 6
         object LabelFullScreenBrightness: TLabel
           Left = 8
-          Top = 64
+          Top = 63
           Width = 153
           Height = 15
           Hint = 'Brightness Correction [%1.2f]'
@@ -1544,7 +1707,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFullScreenContrast: TLabel
           Left = 8
-          Top = 112
+          Top = 106
           Width = 153
           Height = 15
           Hint = 'Contrast Correction [%1.2f]'
@@ -1557,7 +1720,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFullScreenGamma: TLabel
           Left = 8
-          Top = 160
+          Top = 149
           Width = 153
           Height = 15
           Hint = 'Gamma Correction [%1.2f]'
@@ -1594,7 +1757,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenBrightness: TGaugeBar2
           Left = 8
-          Top = 80
+          Top = 79
           Width = 153
           Height = 20
           Hint = 'Brightness value in full screen mode (entire screen)'
@@ -1610,7 +1773,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenContrast: TGaugeBar2
           Left = 8
-          Top = 128
+          Top = 122
           Width = 153
           Height = 20
           Hint = 'Contrast value in full screen mode (entire screen)'
@@ -1626,7 +1789,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FullScreenGamma: TGaugeBar2
           Left = 8
-          Top = 176
+          Top = 165
           Width = 153
           Height = 20
           Hint = 'Gamma value in full screen mode (entire screen)'
@@ -1643,9 +1806,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object PerformanceGroupBox: TAdvGroupBox
         Left = 544
-        Top = 20
+        Top = 12
         Width = 308
-        Height = 204
+        Height = 194
         Transparent = False
         RoundEdges = True
         Caption = 'Performance'
@@ -1653,7 +1816,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 3
         object LabelSpeed: TLabel
           Left = 8
-          Top = 112
+          Top = 107
           Width = 120
           Height = 15
           Hint = 'Gameplay Speed [%3.2f]'
@@ -1665,7 +1828,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelFrameskip: TLabel
           Left = 108
-          Top = 64
+          Top = 63
           Width = 54
           Height = 15
           Caption = 'Frameskip'
@@ -1676,7 +1839,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelThreadPriority: TLabel
           Left = 208
-          Top = 64
+          Top = 63
           Width = 78
           Height = 15
           Caption = 'Thread Priority'
@@ -1687,7 +1850,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelNumberProcessors: TLabel
           Left = 8
-          Top = 64
+          Top = 63
           Width = 80
           Height = 15
           Caption = '# of Processors'
@@ -1698,7 +1861,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelBenchmark: TLabel
           Left = 158
-          Top = 112
+          Top = 107
           Width = 118
           Height = 15
           Hint = 'sec'
@@ -1710,7 +1873,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelSecondsToRun: TLabel
           Left = 8
-          Top = 160
+          Top = 150
           Width = 275
           Height = 15
           Hint = 'sec'
@@ -1770,6 +1933,7 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 
             'Enable multithreading; this enables rendering and blitting on a ' +
             'separate thread'
+          Enabled = False
           TabOrder = 3
           Alignment = taLeftJustify
           Caption = 'Multithreading'
@@ -1808,7 +1972,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Speed: TGaugeBar2
           Left = 8
-          Top = 128
+          Top = 123
           Width = 142
           Height = 20
           Hint = 
@@ -1827,7 +1991,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Frameskip: TComboBox
           Left = 108
-          Top = 80
+          Top = 79
           Width = 93
           Height = 21
           Hint = 'Set frameskip to fixed value (autoframeskip must be disabled)'
@@ -1859,7 +2023,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ThreadPriority: TComboBox
           Left = 208
-          Top = 80
+          Top = 79
           Width = 92
           Height = 21
           Hint = 'Thread priority for the main game thread'
@@ -1895,7 +2059,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object NumberProcessors: TComboBox
           Left = 8
-          Top = 80
+          Top = 79
           Width = 93
           Height = 21
           Hint = 
@@ -1922,7 +2086,7 @@ object FormMAMESettings: TFormMAMESettings
         object Benchmark: TGaugeBar
           Tag = 14
           Left = 158
-          Top = 128
+          Top = 123
           Width = 142
           Height = 20
           Hint = 'Implies: -video none -sound none -nothrottle'
@@ -1938,7 +2102,7 @@ object FormMAMESettings: TFormMAMESettings
         object SecondsToRun: TGaugeBar
           Tag = 14
           Left = 8
-          Top = 176
+          Top = 166
           Width = 293
           Height = 20
           Hint = 'Time to Run Before Automatically Exiting ['
@@ -1954,9 +2118,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelScreenRotation: TAdvGroupBox
         Left = 176
-        Top = 288
+        Top = 299
         Width = 169
-        Height = 155
+        Height = 123
         RoundEdges = True
         Caption = 'Screen Rotation'
         ParentCtl3D = True
@@ -1985,29 +2149,13 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object Rotate: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 105
-          Height = 20
-          Hint = 
-            'Rotate the game screen according to the game'#39's orientation needs' +
-            ' it'
-          Checked = True
-          TabOrder = 2
-          Alignment = taLeftJustify
-          Caption = 'Auto Rotate'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
         object RotateRight: TAdvOfficeCheckBox
           Left = 86
           Top = 40
           Width = 51
           Height = 20
           Hint = 'Rotate screen clockwise 90 degrees'
-          TabOrder = 3
+          TabOrder = 2
           Alignment = taLeftJustify
           Caption = 'Right'
           ReturnIsTab = False
@@ -2019,7 +2167,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 41
           Height = 20
           Hint = 'Rotate screen counterclockwise 90 degrees'
-          TabOrder = 4
+          TabOrder = 3
           Alignment = taLeftJustify
           Caption = 'Left'
           ReturnIsTab = False
@@ -2031,7 +2179,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 81
           Height = 20
           Hint = 'Automatically rotate screen clockwise 90 degrees if vertical'
-          TabOrder = 5
+          TabOrder = 4
           Alignment = taLeftJustify
           Caption = 'Auto Right'
           ReturnIsTab = False
@@ -2045,1289 +2193,230 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 
             'Automatically rotate screen counterclockwise 90 degrees if verti' +
             'cal'
-          TabOrder = 6
+          TabOrder = 5
           Alignment = taLeftJustify
           Caption = 'Auto Left'
           ReturnIsTab = False
           Themed = True
         end
+        object Rotate: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 46
+          Height = 19
+          Hint = 
+            'Rotate the game screen according to the game'#39's orientation needs' +
+            ' it'
+          Checked = True
+          TabOrder = 6
+          Alignment = taLeftJustify
+          Caption = 'Auto'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
       end
-      object GroupBoxAudio: TAdvGroupBox
-        Left = 630
-        Top = 236
-        Width = 222
-        Height = 161
+      object LabelSnapshotsBox: TAdvGroupBox
+        Left = 16
+        Top = 261
+        Width = 145
+        Height = 180
         RoundEdges = True
-        ShadowColor = clSilver
-        Caption = 'Audio'
+        Caption = 'Snapshots / Movies'
         ParentCtl3D = True
         TabOrder = 7
-        object LabelAudioLatency: TLabel
-          Left = 95
-          Top = 116
-          Width = 76
-          Height = 15
-          Caption = 'Audio Latency'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelSampleRate: TLabel
+        object LabelSnapshotNameFormat: TLabel
           Left = 8
-          Top = 116
-          Width = 65
+          Top = 20
+          Width = 73
           Height = 15
-          Caption = 'Sample Rate'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelVolume: TLabel
-          Left = 8
-          Top = 68
-          Width = 138
-          Height = 15
-          Hint = 'Volume Attenuation [%ddB]'
-          Caption = 'Volume Attenuation [0dB]'
+          Caption = 'Name Format'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
-          Transparent = False
-        end
-        object LabelSoundOutputMethod: TLabel
-          Left = 8
-          Top = 20
-          Width = 109
-          Height = 15
-          Caption = 'Sound Output Mode'
-          ShowAccelChar = False
           Transparent = True
         end
-        object Samples: TAdvOfficeCheckBox
-          Left = 130
-          Top = 36
-          Width = 87
+        object LabelSnapshotView: TLabel
+          Left = 8
+          Top = 64
+          Width = 25
+          Height = 15
+          Caption = 'View'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
+        object LabelSnapSizeCustomX: TLabel
+          Left = 94
+          Top = 114
+          Width = 7
+          Height = 15
+          Caption = 'X'
+          Enabled = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
+        object SnapBurnIn: TAdvOfficeCheckBox
+          Left = 7
+          Top = 157
+          Width = 113
           Height = 20
-          Hint = 'Enable the use of external samples if available'
-          Checked = True
+          Hint = 'Create burn-in snapshots for each screen'
           TabOrder = 0
           Alignment = taLeftJustify
-          Caption = 'Use Samples'
+          Caption = 'Burn-in Snapshot'
           ReturnIsTab = False
-          State = cbChecked
           Themed = True
         end
-        object AudioLatency: TComboBox
-          Left = 95
-          Top = 132
-          Width = 81
-          Height = 21
-          Hint = 
-            'Set audio latency (increase to reduce glitches, decrease for res' +
-            'ponsiveness)'
-          Style = csDropDownList
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 1
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-          Text = '2/5 ~ 3/5'
-          Items.Strings = (
-            '1/5 ~ 2/5'
-            '2/5 ~ 3/5'
-            '3/5 ~ 4/5'
-            '4/5 ~ 5/5')
-        end
-        object SampleRate: TComboBox
-          Left = 8
-          Top = 132
-          Width = 80
-          Height = 21
-          Hint = 'Set sound output sample rate'
-          Style = csDropDownList
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 3
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-          Text = '48000 Hz'
-          Items.Strings = (
-            '11025 Hz'
-            '22050 Hz'
-            '44100 Hz'
-            '48000 Hz'
-            '96000 Hz'
-            '192000 Hz')
-        end
-        object Volume: TGaugeBar
-          Left = 8
-          Top = 84
-          Width = 150
-          Height = 20
-          Hint = 'Sound volume in decibels (-32 -> low, 0 -> normal)'
-          Color = clWhite
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 5
-          Max = 0
-          Min = -32
-          ShowHandleGrip = True
-          Position = 0
-          OnChange = VolumeChange
-        end
-        object ButtonAudioLatencyReset: TBitBtn
-          Left = 177
-          Top = 132
+        object ButtonSnapNameDefault: TBitBtn
+          Left = 101
+          Top = 36
           Width = 38
           Height = 21
-          Hint = 'Set default latency'
+          Hint = 'Set default snapshot name'
           Caption = 'Reset'
-          TabOrder = 4
-          OnClick = ButtonAudioLatencyResetClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = ButtonSnapNameDefaultClick
         end
-        object SoundOutputMethod: TComboBox
+        object SnapView: TComboBox
+          Left = 8
+          Top = 80
+          Width = 91
+          Height = 21
+          Hint = 
+            'Specify snapshot/movie view'#13#10'Select the default '#39'internal'#39' to us' +
+            'e internal pixel-aspect views'
+          Style = csDropDownList
+          Ctl3D = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentCtl3D = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          Text = 'Internal'
+          Items.Strings = (
+            'Internal'
+            'Auto'
+            'Standard'
+            'Native'
+            'Pixel Aspect'
+            'Cocktail')
+        end
+        object ButtonSnapViewDefault: TBitBtn
+          Left = 100
+          Top = 80
+          Width = 38
+          Height = 21
+          Hint = 'Set default snapshot / movie view'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = ButtonSnapViewDefaultClick
+        end
+        object SnapSizeAuto: TAdvOfficeCheckBox
+          Left = 8
+          Top = 111
+          Width = 48
+          Height = 20
+          Hint = 'Set resolution to game'#39's original size (raw pixels)'
+          Checked = True
+          TabOrder = 4
+          OnClick = SnapSizeAutoClick
+          Alignment = taLeftJustify
+          Caption = 'Auto'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object SnapSizeWidth: TEdit
+          Left = 60
+          Top = 111
+          Width = 33
+          Height = 21
+          Hint = 'Custom resolution width'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+          OnKeyPress = SnapSizeWidthKeyPress
+        end
+        object SnapSizeHeight: TEdit
+          Left = 104
+          Top = 111
+          Width = 33
+          Height = 21
+          Hint = 'Custom resolution height'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          OnKeyPress = SnapSizeHeightKeyPress
+        end
+        object SnapName: TEdit
           Left = 8
           Top = 36
-          Width = 115
+          Width = 91
           Height = 21
-          Style = csDropDownList
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentFont = False
+          Hint = 
+            'Override the default snapshot naming; %g == gamename, %i == inde' +
+            'x'
+          AutoSize = False
+          Color = clWhite
           ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-          Text = 'Auto'
-          Items.Strings = (
-            'Auto'
-            'DirectSound'
-            'None')
-        end
-      end
-    end
-    object TPage
-      Left = 0
-      Top = 0
-      Caption = 'Video 2'
-      object HLSL_GroupBox: TAdvGroupBox
-        Left = 16
-        Top = 20
-        Width = 196
-        Height = 421
-        RoundEdges = True
-        Caption = 'Direct3D Post-Processing Effects'
-        Enabled = False
-        ParentCtl3D = True
-        TabOrder = 0
-        object LabelShadowMaskTexture: TLabel
-          Left = 8
-          Top = 123
-          Width = 115
-          Height = 15
-          Caption = 'Shadow Mask Texture'
-          ParentShowHint = False
-          ShowAccelChar = False
           ShowHint = False
-          Transparent = True
+          TabOrder = 7
         end
-        object LabelHLSLPath: TLabel
+        object SnapBilinear: TAdvOfficeCheckBox
           Left = 8
-          Top = 75
-          Width = 94
-          Height = 15
-          Caption = 'Path to HLSL Files'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelHLSLIniFile: TLabel
-          Left = 8
-          Top = 377
-          Width = 64
-          Height = 15
-          Caption = 'HLSL Ini File'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object Label5: TLabel
-          Left = 22
-          Top = 317
-          Width = 151
-          Height = 15
-          Caption = '-- MAME v0.149 and older --'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clSilver
-          Font.Height = -12
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object Label7: TLabel
-          Left = 52
-          Top = 237
-          Width = 7
-          Height = 15
-          Caption = 'X'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelHLSLUpscaleSnapshot: TLabel
-          Left = 8
-          Top = 219
-          Width = 159
-          Height = 15
-          Caption = 'Upscaled Snapshot Resolution'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelHLSLPrescaleOverride: TLabel
-          Left = 8
-          Top = 171
-          Width = 157
-          Height = 15
-          Caption = 'HLSL Prescale Override Factor'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelHLSLPrescaleOverrideX: TLabel
-          Left = 8
-          Top = 189
-          Width = 7
-          Height = 15
-          Hint = 'Scale Screen '#39'Prescale'#39' [%ux]'
-          Caption = 'X'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelHLSLPrescaleOverrideY: TLabel
-          Left = 80
-          Top = 189
-          Width = 7
-          Height = 15
-          Hint = 'Scale Screen '#39'Prescale'#39' [%ux]'
-          Caption = 'Y'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object Label8: TLabel
-          Left = 26
-          Top = 38
-          Width = 126
-          Height = 11
-          Caption = 'Select '#39'Direct3D'#39' Output Mode'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = 10900224
-          Font.Height = -9
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object HLSLEnable: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 88
-          Height = 20
-          Hint = 'Enables HLSL post-processing (Pixel Shader 3.0 required)'
-          TabOrder = 0
-          OnClick = HLSLEnableClick
-          Alignment = taLeftJustify
-          Caption = 'Enable HLSL'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object YIQEnable: TAdvOfficeCheckBox
-          Left = 8
-          Top = 51
-          Width = 141
+          Top = 137
+          Width = 123
           Height = 20
           Hint = 
-            'Enables YIQ-colorspace post-processing. Causes a performance dro' +
-            'p but gives a much more authentic'#13#10'NTSC TV appearance on TV-base' +
-            'd systems when configured properly'
-          TabOrder = 1
-          Alignment = taLeftJustify
-          Caption = 'Enable YIQ Colorspace'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object ShadowMaskTexture: TEdit
-          Left = 8
-          Top = 139
-          Width = 135
-          Height = 21
-          Hint = 'A PNG that defines the shadow mask for each pixel'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          TabOrder = 3
-        end
-        object ButtonSelectShadowMaskTexture: TBitBtn
-          Left = 145
-          Top = 139
-          Width = 43
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = 'Select'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 4
-          OnClick = ButtonSelectShadowMaskTextureClick
-        end
-        object HLSLPath: TEdit
-          Left = 8
-          Top = 91
-          Width = 135
-          Height = 21
-          Hint = 'Path to the .fx files that are in use'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object ButtonSelectHLSLPath: TBitBtn
-          Left = 145
-          Top = 91
-          Width = 43
-          Height = 21
-          Hint = 'Click here to select a folder'
-          Caption = 'Select'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-          OnClick = ButtonSelectHLSLPathClick
-        end
-        object ReadCustomHLSLFile: TAdvOfficeCheckBox
-          Left = 8
-          Top = 333
-          Width = 145
-          Height = 20
-          Hint = 'Enable HLSL ini reading'
-          TabOrder = 6
-          Alignment = taLeftJustify
-          Caption = 'Read Custom HLSL File'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object WriteCustomHLSLFile: TAdvOfficeCheckBox
-          Left = 8
-          Top = 353
-          Width = 145
-          Height = 20
-          Hint = 'Enable HLSL ini writing'
-          TabOrder = 7
-          Alignment = taLeftJustify
-          Caption = 'Write Custom HLSL File'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object HLSLIniFile: TEdit
-          Left = 8
-          Top = 393
-          Width = 135
-          Height = 21
-          Hint = 'HLSL ini file name for this game'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
+            'Specify if the snapshot/movie should have bilinear filtering app' +
+            'lied'
+          Checked = True
           TabOrder = 8
-        end
-        object HLSLIniFileButtonReset: TBitBtn
-          Left = 145
-          Top = 393
-          Width = 43
-          Height = 21
-          Hint = 'Click here to reset HLSL filename to default'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 9
-          OnClick = HLSLIniFileButtonResetClick
-        end
-        object HLSLUpscaleSnapX: TEdit
-          Left = 8
-          Top = 235
-          Width = 41
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 10
-          OnKeyPress = HLSLUpscaleSnapXKeyPress
-        end
-        object HLSLUpscaleSnapY: TEdit
-          Left = 62
-          Top = 235
-          Width = 41
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 11
-          OnKeyPress = HLSLUpscaleSnapYKeyPress
-        end
-        object HLSLPrescaleOverrideX: TComboBox
-          Tag = -1
-          Left = 18
-          Top = 187
-          Width = 54
-          Height = 21
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          TabOrder = 12
-          Text = 'Auto'
-          Items.Strings = (
-            'Auto'
-            '1'
-            '2'
-            '3'
-            '4'
-            '5'
-            '6'
-            '7'
-            '8')
-        end
-        object HLSLPrescaleOverrideY: TComboBox
-          Tag = -1
-          Left = 90
-          Top = 187
-          Width = 54
-          Height = 21
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          TabOrder = 13
-          Text = 'Auto'
-          Items.Strings = (
-            'Auto'
-            '1'
-            '2'
-            '3'
-            '4'
-            '5'
-            '6'
-            '7'
-            '8')
-        end
-        object ButtonHLSLUpscaleSnapReset: TBitBtn
-          Left = 145
-          Top = 235
-          Width = 43
-          Height = 21
-          Hint = 'Click here to set default upscale resolution'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 14
-          OnClick = ButtonHLSLUpscaleSnapResetClick
-        end
-      end
-      object GLSL_GroupBox: TAdvGroupBox
-        Left = 383
-        Top = 20
-        Width = 469
-        Height = 327
-        RoundEdges = True
-        Caption = 'OpenGL Post-Processing Effects'
-        Ctl3D = True
-        Enabled = False
-        TabOrder = 1
-        object LabelEnableOpenGLFilterNotFF: TLabel
-          Left = 265
-          Top = 58
-          Width = 188
-          Height = 11
-          Caption = 'Checked: Bilinear (Default); Unchecked: Plain'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = 10900224
-          Font.Height = -9
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME: TLabel
-          Left = 18
-          Top = 84
-          Width = 191
-          Height = 13
-          Caption = 'Custom OpenGL GLSL Shader Set MAME'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen: TLabel
-          Left = 249
-          Top = 84
-          Width = 176
-          Height = 13
-          Caption = 'Custom OpenGL GLSL Shader Screen'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen0: TLabel
-          Left = 240
-          Top = 103
-          Width = 6
-          Height = 15
-          Caption = '0'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen1: TLabel
-          Left = 240
-          Top = 125
-          Width = 6
-          Height = 15
-          Caption = '1'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen2: TLabel
-          Left = 240
-          Top = 147
-          Width = 6
-          Height = 15
-          Caption = '2'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen3: TLabel
-          Left = 240
-          Top = 169
-          Width = 6
-          Height = 15
-          Caption = '3'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen4: TLabel
-          Left = 240
-          Top = 191
-          Width = 6
-          Height = 15
-          Caption = '4'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen5: TLabel
-          Left = 240
-          Top = 213
-          Width = 6
-          Height = 15
-          Caption = '5'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen6: TLabel
-          Left = 240
-          Top = 235
-          Width = 6
-          Height = 15
-          Caption = '6'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen7: TLabel
-          Left = 240
-          Top = 257
-          Width = 6
-          Height = 15
-          Caption = '7'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen8: TLabel
-          Left = 240
-          Top = 279
-          Width = 6
-          Height = 15
-          Caption = '8'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_Screen9: TLabel
-          Left = 240
-          Top = 301
-          Width = 6
-          Height = 15
-          Caption = '9'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME0: TLabel
-          Left = 8
-          Top = 103
-          Width = 6
-          Height = 15
-          Caption = '0'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME1: TLabel
-          Left = 8
-          Top = 125
-          Width = 6
-          Height = 15
-          Caption = '1'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME2: TLabel
-          Left = 8
-          Top = 147
-          Width = 6
-          Height = 15
-          Caption = '2'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME3: TLabel
-          Left = 8
-          Top = 169
-          Width = 6
-          Height = 15
-          Caption = '3'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME4: TLabel
-          Left = 8
-          Top = 191
-          Width = 6
-          Height = 15
-          Caption = '4'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME5: TLabel
-          Left = 8
-          Top = 213
-          Width = 6
-          Height = 15
-          Caption = '5'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME6: TLabel
-          Left = 8
-          Top = 235
-          Width = 6
-          Height = 15
-          Caption = '6'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME7: TLabel
-          Left = 8
-          Top = 257
-          Width = 6
-          Height = 15
-          Caption = '7'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME8: TLabel
-          Left = 8
-          Top = 279
-          Width = 6
-          Height = 15
-          Caption = '8'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelGLSL_Shader_MAME9: TLabel
-          Left = 8
-          Top = 301
-          Width = 6
-          Height = 15
-          Caption = '9'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object Label6: TLabel
-          Left = 96
-          Top = 24
-          Width = 124
-          Height = 11
-          Caption = 'Select '#39'OpenGL'#39' Output Mode'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = 10900224
-          Font.Height = -9
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBox
-          Left = 8
-          Top = 40
-          Width = 172
-          Height = 20
-          Hint = 
-            'Always use only power-of-2 sized textures'#13#10'Can cause graphic cor' +
-            'ruption on recent video cards!'
-          TabOrder = 0
           Alignment = taLeftJustify
-          Caption = 'Force Power of Two Textures'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBox
-          Left = 247
-          Top = 20
-          Width = 214
-          Height = 20
-          Hint = 'Can cause graphic corruption on recent video cards!'
-          TabOrder = 1
-          Alignment = taLeftJustify
-          Caption = 'Don'#39't Use GL_ARB Texture Rectangle'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object EnableOpenGL_VBO: TAdvOfficeCheckBox
-          Left = 8
-          Top = 60
-          Width = 81
-          Height = 20
-          Hint = 'Enable OpenGL VBO, if available'
-          Checked = True
-          TabOrder = 2
-          Alignment = taLeftJustify
-          Caption = 'Enable VBO'
+          Caption = 'Apply Bilinear Filter'
           ReturnIsTab = False
           State = cbChecked
           Themed = True
-        end
-        object EnableOpenGL_PBO: TAdvOfficeCheckBox
-          Left = 132
-          Top = 60
-          Width = 82
-          Height = 20
-          Hint = 'Enable OpenGL PBO, if available'
-          Checked = True
-          TabOrder = 3
-          Alignment = taLeftJustify
-          Caption = 'Enable PBO'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object EnableGLSL: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 89
-          Height = 20
-          Hint = 'Enable OpenGL GLSL, if available'
-          TabOrder = 4
-          OnClick = EnableGLSLClick
-          Alignment = taLeftJustify
-          Caption = 'Enable GLSL'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object EnableOpenGLFilterNotFF: TAdvOfficeCheckBox
-          Left = 247
-          Top = 40
-          Width = 214
-          Height = 20
-          Checked = True
-          TabOrder = 5
-          Alignment = taLeftJustify
-          Caption = 'Use OpenGL Filter Instead of FF Filter'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object GLSL_Shader_Screen0: TEdit
-          Left = 249
-          Top = 100
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 6
-        end
-        object ButtonGLSL_Shader_Screen0: TBitBtn
-          Left = 441
-          Top = 100
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 7
-          OnClick = ButtonGLSL_Shader_Screen0Click
-        end
-        object GLSL_Shader_Screen1: TEdit
-          Left = 249
-          Top = 122
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 8
-        end
-        object ButtonGLSL_Shader_Screen1: TBitBtn
-          Left = 441
-          Top = 122
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 9
-          OnClick = ButtonGLSL_Shader_Screen1Click
-        end
-        object GLSL_Shader_Screen2: TEdit
-          Left = 249
-          Top = 144
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 10
-        end
-        object ButtonGLSL_Shader_Screen2: TBitBtn
-          Left = 441
-          Top = 144
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 11
-          OnClick = ButtonGLSL_Shader_Screen2Click
-        end
-        object GLSL_Shader_Screen3: TEdit
-          Left = 249
-          Top = 166
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 12
-        end
-        object ButtonGLSL_Shader_Screen3: TBitBtn
-          Left = 441
-          Top = 166
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 13
-          OnClick = ButtonGLSL_Shader_Screen3Click
-        end
-        object GLSL_Shader_Screen4: TEdit
-          Left = 249
-          Top = 188
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 14
-        end
-        object ButtonGLSL_Shader_Screen4: TBitBtn
-          Left = 441
-          Top = 188
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 15
-          OnClick = ButtonGLSL_Shader_Screen4Click
-        end
-        object GLSL_Shader_Screen5: TEdit
-          Left = 249
-          Top = 210
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 16
-        end
-        object ButtonGLSL_Shader_Screen5: TBitBtn
-          Left = 441
-          Top = 210
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 17
-          OnClick = ButtonGLSL_Shader_Screen5Click
-        end
-        object GLSL_Shader_Screen6: TEdit
-          Left = 249
-          Top = 232
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 18
-        end
-        object ButtonGLSL_Shader_Screen6: TBitBtn
-          Left = 441
-          Top = 232
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 19
-          OnClick = ButtonGLSL_Shader_Screen6Click
-        end
-        object GLSL_Shader_Screen7: TEdit
-          Left = 249
-          Top = 254
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 20
-        end
-        object ButtonGLSL_Shader_Screen7: TBitBtn
-          Left = 441
-          Top = 254
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 21
-          OnClick = ButtonGLSL_Shader_Screen7Click
-        end
-        object GLSL_Shader_Screen8: TEdit
-          Left = 249
-          Top = 276
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 22
-        end
-        object ButtonGLSL_Shader_Screen8: TBitBtn
-          Left = 441
-          Top = 276
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 23
-          OnClick = ButtonGLSL_Shader_Screen8Click
-        end
-        object GLSL_Shader_Screen9: TEdit
-          Left = 249
-          Top = 298
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 24
-        end
-        object ButtonGLSL_Shader_Screen9: TBitBtn
-          Left = 441
-          Top = 298
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 25
-          OnClick = ButtonGLSL_Shader_Screen9Click
-        end
-        object GLSL_Shader_MAME0: TEdit
-          Left = 17
-          Top = 100
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 26
-        end
-        object ButtonGLSL_Shader_MAME0: TBitBtn
-          Left = 209
-          Top = 100
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 27
-          OnClick = ButtonGLSL_Shader_MAME0Click
-        end
-        object GLSL_Shader_MAME1: TEdit
-          Left = 17
-          Top = 122
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 28
-        end
-        object ButtonGLSL_Shader_MAME1: TBitBtn
-          Left = 209
-          Top = 122
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 29
-          OnClick = ButtonGLSL_Shader_MAME1Click
-        end
-        object GLSL_Shader_MAME2: TEdit
-          Left = 17
-          Top = 144
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 30
-        end
-        object ButtonGLSL_Shader_MAME2: TBitBtn
-          Left = 209
-          Top = 144
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 31
-          OnClick = ButtonGLSL_Shader_MAME2Click
-        end
-        object GLSL_Shader_MAME3: TEdit
-          Left = 17
-          Top = 166
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 32
-        end
-        object ButtonGLSL_Shader_MAME3: TBitBtn
-          Left = 209
-          Top = 166
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 33
-          OnClick = ButtonGLSL_Shader_MAME3Click
-        end
-        object GLSL_Shader_MAME4: TEdit
-          Left = 17
-          Top = 188
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 34
-        end
-        object ButtonGLSL_Shader_MAME4: TBitBtn
-          Left = 209
-          Top = 188
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 35
-          OnClick = ButtonGLSL_Shader_MAME4Click
-        end
-        object GLSL_Shader_MAME5: TEdit
-          Left = 17
-          Top = 210
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 36
-        end
-        object ButtonGLSL_Shader_MAME5: TBitBtn
-          Left = 209
-          Top = 210
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 37
-          OnClick = ButtonGLSL_Shader_MAME5Click
-        end
-        object GLSL_Shader_MAME6: TEdit
-          Left = 17
-          Top = 232
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 38
-        end
-        object ButtonGLSL_Shader_MAME6: TBitBtn
-          Left = 209
-          Top = 232
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 39
-          OnClick = ButtonGLSL_Shader_MAME6Click
-        end
-        object GLSL_Shader_MAME7: TEdit
-          Left = 17
-          Top = 254
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 40
-        end
-        object ButtonGLSL_Shader_MAME7: TBitBtn
-          Left = 209
-          Top = 254
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 41
-          OnClick = ButtonGLSL_Shader_MAME7Click
-        end
-        object GLSL_Shader_MAME8: TEdit
-          Left = 17
-          Top = 276
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 42
-        end
-        object ButtonGLSL_Shader_MAME8: TBitBtn
-          Left = 209
-          Top = 276
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 43
-          OnClick = ButtonGLSL_Shader_MAME8Click
-        end
-        object GLSL_Shader_MAME9: TEdit
-          Left = 17
-          Top = 298
-          Width = 190
-          Height = 21
-          AutoSize = False
-          TabOrder = 44
-        end
-        object ButtonGLSL_Shader_MAME9: TBitBtn
-          Left = 209
-          Top = 298
-          Width = 21
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = '...'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 45
-          OnClick = ButtonGLSL_Shader_MAME9Click
         end
       end
       object ScreensBox: TAdvGroupBox
-        Left = 227
-        Top = 20
-        Width = 141
-        Height = 301
+        Left = 677
+        Top = 214
+        Width = 176
+        Height = 193
+        Transparent = False
         RoundEdges = True
         Caption = 'Screens'
         ParentCtl3D = True
-        TabOrder = 2
+        TabOrder = 8
         object LabelScreenName: TLabel
           Left = 8
-          Top = 112
+          Top = 60
           Width = 32
           Height = 15
           Hint = 'Explicit name of'
@@ -3338,8 +2427,8 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = True
         end
         object LabelScreenAspectRatio: TLabel
-          Left = 8
-          Top = 256
+          Left = 101
+          Top = 104
           Width = 66
           Height = 15
           Hint = 'Aspect ratio of'
@@ -3351,7 +2440,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelScreenResolution: TLabel
           Left = 8
-          Top = 208
+          Top = 148
           Width = 56
           Height = 15
           Hint = 'Preferred resolution of'
@@ -3363,15 +2452,15 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelScreenRefreshRate_Custom: TLabel
           Left = 85
-          Top = 208
+          Top = 148
           Width = 14
           Height = 15
           Caption = 'Hz'
           Transparent = True
         end
         object LabelScreenView: TLabel
-          Left = 8
-          Top = 160
+          Left = 7
+          Top = 104
           Width = 25
           Height = 15
           Hint = 'Preferred view for'
@@ -3382,8 +2471,8 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = True
         end
         object LabelScreensSelector: TLabel
-          Left = 8
-          Top = 64
+          Left = 81
+          Top = 16
           Width = 80
           Height = 15
           Hint = 'Explicit name of'
@@ -3393,23 +2482,10 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = True
         end
-        object LabelNumberScreens: TLabel
-          Left = 8
-          Top = 24
-          Width = 61
-          Height = 30
-          Hint = 'Explicit name of'
-          Caption = 'Number of Screens'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-          WordWrap = True
-        end
         object ScreenName: TComboBox
           Left = 8
-          Top = 128
-          Width = 103
+          Top = 76
+          Width = 89
           Height = 21
           Style = csDropDownList
           Ctl3D = True
@@ -3425,10 +2501,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
-          Text = 'auto'
+          Text = 'Auto'
           OnSelect = ScreenNameSelect
           Items.Strings = (
-            'auto'
+            'Auto'
             '\\.\DISPLAY1'
             '\\.\DISPLAY2'
             '\\.\DISPLAY3'
@@ -3439,8 +2515,8 @@ object FormMAMESettings: TFormMAMESettings
             '\\.\DISPLAY8')
         end
         object ScreenAspectRatio: TComboBox
-          Left = 8
-          Top = 272
+          Left = 101
+          Top = 120
           Width = 68
           Height = 21
           Style = csDropDownList
@@ -3457,10 +2533,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-          Text = 'auto'
+          Text = 'Auto'
           OnSelect = ScreenAspectRatioSelect
           Items.Strings = (
-            'auto'
+            'Auto'
             '16:9'
             '4:3'
             '16:10'
@@ -3471,7 +2547,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ScreenResolution: TComboBox
           Left = 8
-          Top = 224
+          Top = 164
           Width = 76
           Height = 21
           Style = csDropDownList
@@ -3488,10 +2564,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
-          Text = 'auto'
+          Text = 'Auto'
           OnSelect = ScreenResolutionSelect
           Items.Strings = (
-            'auto'
+            'Auto'
             '0x0'
             '320x200'
             '320x240'
@@ -3526,7 +2602,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ScreenRefreshRate: TComboBox
           Left = 85
-          Top = 224
+          Top = 164
           Width = 48
           Height = 21
           Hint = 'Screen refresh rate'
@@ -3544,10 +2620,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 3
-          Text = 'auto'
+          Text = 'Auto'
           OnSelect = ScreenRefreshRateSelect
           Items.Strings = (
-            'auto'
+            'Auto'
             '50'
             '59'
             '60'
@@ -3566,8 +2642,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ScreenView: TComboBox
           Left = 8
-          Top = 176
-          Width = 103
+          Top = 120
+          Width = 89
           Height = 21
           Style = csDropDownList
           Ctl3D = True
@@ -3583,23 +2659,23 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 4
-          Text = 'auto'
+          Text = 'Auto'
           OnSelect = ScreenViewSelect
           Items.Strings = (
-            'auto'
+            'Auto'
             'Standard'
             'Native'
             'Pixel Aspect'
             'Cocktail')
         end
         object NumberScreens: TExTrackBar
-          Left = 72
-          Top = 20
-          Width = 67
+          Left = 4
+          Top = 16
+          Width = 50
           Height = 41
           Hint = 
-            'Number of screens to create'#13#10'Multi-screen games can have differe' +
-            'nt screen settings'
+            'Number of screens to create (usually you want just one)'#13#10'Multi-s' +
+            'creen games can have different screen settings'
           Max = 4
           Min = 1
           PageSize = 1
@@ -3620,8 +2696,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ScreensSelector: TComboBox
           Tag = -1
-          Left = 8
-          Top = 82
+          Left = 81
+          Top = 32
           Width = 86
           Height = 21
           Hint = 'Select the screen you want to configure'
@@ -3647,8 +2723,8 @@ object FormMAMESettings: TFormMAMESettings
             'Screen 4')
         end
         object ButtonScreenDefaultSettings: TBitBtn
-          Left = 96
-          Top = 82
+          Left = 129
+          Top = 56
           Width = 38
           Height = 21
           Hint = 'Set default values for the selected screen'
@@ -3657,140 +2733,1944 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonScreenDefaultSettingsClick
         end
       end
-      object LabelEffectOverlayBox: TAdvGroupBox
-        Left = 696
-        Top = 361
-        Width = 153
-        Height = 77
-        RoundEdges = True
-        Caption = 'Visual Effects Overlay File'
-        ParentCtl3D = True
+    end
+    object TPage
+      Left = 0
+      Top = 0
+      Caption = 'Video 2'
+      object LabelVideoOutputMode: TLabel
+        Left = 595
+        Top = 19
+        Width = 105
+        Height = 15
+        Caption = 'Video Output Mode'
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object VideoOutputMode: TComboBox
+        Left = 704
+        Top = 16
+        Width = 129
+        Height = 21
+        Style = csDropDownList
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemHeight = 13
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object ButtonHelpVideoOutputMode: TBitBtn
+        Left = 834
+        Top = 16
+        Width = 21
+        Height = 21
+        Hint = 'Why ???'
+        Caption = '?'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnClick = ButtonHelpVideoOutputModeClick
+      end
+      object NotebookVideoPostProcessingEffectsPages: TNotebook
+        Left = 16
+        Top = 40
+        Width = 833
+        Height = 393
+        PageIndex = 1
+        TabOrder = 2
+        object TPage
+          Left = 0
+          Top = 0
+          Caption = 'BGFX'
+          object LabelBGFXPath: TLabel
+            Left = 8
+            Top = 56
+            Width = 95
+            Height = 15
+            Caption = 'Path to BGFX Files'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object Label14: TLabel
+            Left = 8
+            Top = 12
+            Width = 81
+            Height = 15
+            Caption = 'Backend to Use'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelBGFXShadowMaskTextureName: TLabel
+            Left = 8
+            Top = 100
+            Width = 115
+            Height = 15
+            Caption = 'Shadow Mask Texture'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelBGFXScreenShaderChains: TLabel
+            Left = 8
+            Top = 144
+            Width = 113
+            Height = 15
+            Caption = 'Screen Shader Chains'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelBGFXScreenShaderChainsDetailsHTML: TLabel
+            Left = 469
+            Top = 145
+            Width = 138
+            Height = 14
+            Hint = 
+              'http://docs.mamedev.org/advanced/bgfx.html#configuration-setting' +
+              's'
+            Caption = '(click here for usage details)'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = True
+            Transparent = True
+            OnClick = LabelBGFXScreenShaderChainsDetailsHTMLClick
+            OnMouseEnter = LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter
+            OnMouseLeave = LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave
+          end
+          object LabelBGFXScreenShaderChainsHelp: TLabel
+            Left = 126
+            Top = 145
+            Width = 209
+            Height = 14
+            Caption = 'select a shader in the list or type in edit box'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clMaroon
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object BGFXPath: TEdit
+            Left = 8
+            Top = 72
+            Width = 312
+            Height = 21
+            Hint = 'Path to BGFX related files'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+          object BGFXPathButtonSelect: TBitBtn
+            Left = 322
+            Top = 72
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a folder'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object BGFXBackend: TComboBox
+            Left = 8
+            Top = 28
+            Width = 129
+            Height = 21
+            Style = csDropDownList
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ItemHeight = 13
+            ItemIndex = 0
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+            Text = 'Auto'
+            Items.Strings = (
+              'Auto'
+              'Direct3D 9'
+              'Direct3D 11'
+              'OpenGL'
+              'OpenGL ES')
+          end
+          object BGFXDebug: TAdvOfficeCheckBox
+            Left = 384
+            Top = 10
+            Width = 167
+            Height = 20
+            Hint = 'Debug for advance users'
+            TabOrder = 3
+            Alignment = taLeftJustify
+            Caption = 'Enable Debugging Statistics'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object BGFXShadowMaskTextureName: TEdit
+            Left = 8
+            Top = 116
+            Width = 269
+            Height = 21
+            Hint = 'Shadow mask texture filename'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object BGFXShadowMaskTextureNameButtonSelect: TBitBtn
+            Left = 279
+            Top = 116
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a folder'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+          end
+          object BGFXShadowMaskTextureNameButtonReset: TBitBtn
+            Left = 322
+            Top = 116
+            Width = 43
+            Height = 21
+            Hint = 'Click here to set default filename'
+            Caption = 'Reset'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 6
+            OnClick = BGFXShadowMaskTextureNameButtonResetClick
+          end
+          object BGFXScreenShaderChains: TEdit
+            Left = 8
+            Top = 160
+            Width = 508
+            Height = 21
+            Hint = 
+              'Comma-delimited list of screen chain JSON names (without file ex' +
+              'tension), colon-delimited per-window'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 7
+          end
+          object BGFXScreenShaderChainsButtonReload: TBitBtn
+            Left = 518
+            Top = 160
+            Width = 47
+            Height = 21
+            Hint = 'Click here to reset shader to current value'
+            Caption = 'Reload'
+            TabOrder = 8
+            OnClick = BGFXScreenShaderChainsButtonReloadClick
+          end
+          object BGFXScreenShaderChainsButtonSelect: TBitBtn
+            Left = 565
+            Top = 350
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 9
+            Visible = False
+            OnClick = BGFXScreenShaderChainsButtonSelectClick
+          end
+          object BGFXScreenShaderChains_ListView: TEasyListview
+            Left = 8
+            Top = 184
+            Width = 601
+            Height = 164
+            BackGround.Enabled = True
+            CellSizes.Report.Height = 19
+            Color = clWhite
+            EditManager.Font.Charset = ANSI_CHARSET
+            EditManager.Font.Color = clBlack
+            EditManager.Font.Height = -12
+            EditManager.Font.Name = 'Segoe UI'
+            EditManager.Font.Style = []
+            UseDockManager = False
+            HintType = ehtToolTip
+            Header.Columns.Items = {
+              0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
+              00060000008008000101000100000000000000FA000000FFFFFF1F0001000000
+              01000000050000005400690074006C0065000000000000000000000000001100
+              00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+              00010100000000000096000000FFFFFF1F000100000001000000040000004E00
+              61006D006500000000000000000000000000110000005445617379436F6C756D
+              6E53746F726564FFFECE00060000008008000101000102000000000000B40000
+              00FFFFFF1F0001000000010000000600000041007500740068006F0072000000
+              00000000000000000000}
+            Header.Draggable = False
+            Header.Height = 23
+            Header.Sizeable = False
+            Header.Visible = True
+            IncrementalSearch.Enabled = True
+            IncrementalSearch.ResetTime = 1000
+            IncrementalSearch.StartType = eissFocusedNode
+            PaintInfoColumn.Border = 2
+            PaintInfoColumn.CaptionIndent = 0
+            PaintInfoGroup.Expandable = False
+            PaintInfoGroup.MarginBottom.CaptionIndent = 4
+            PaintInfoItem.BorderColor = 16370824
+            PaintInfoItem.ShowBorder = False
+            ParentShowHint = False
+            ShowHint = True
+            Selection.BlendColorSelRect = 10902593
+            Selection.BlendIcon = False
+            Selection.BorderColor = 10902593
+            Selection.BorderColorSelRect = 10902593
+            Selection.Color = 10902593
+            Selection.FullCellPaint = True
+            Selection.FullItemPaint = True
+            Selection.FullRowSelect = True
+            Selection.Gradient = True
+            Selection.GradientColorBottom = 16506264
+            Selection.GradientColorTop = 15582647
+            Selection.InactiveBorderColor = 10902593
+            Selection.InactiveColor = 15582647
+            Selection.MouseButton = [cmbLeft, cmbRight]
+            Selection.RoundRectRadius = 2
+            Selection.TextColor = clBlack
+            Selection.UseFocusRect = False
+            TabOrder = 10
+            View = elsReport
+            OnDblClick = BGFXScreenShaderChains_ListViewDblClick
+            OnItemCompare = BGFXScreenShaderChains_ListViewItemCompare
+            OnItemPaintText = BGFXScreenShaderChains_ListViewItemPaintText
+          end
+          object BGFXScreenShaderChains_ListViewButtonAdd: TBitBtn
+            Left = 56
+            Top = 350
+            Width = 43
+            Height = 21
+            Hint = 'Add selected shader to the list (for multiple screens games)'
+            Caption = 'Add'
+            TabOrder = 11
+            OnClick = BGFXScreenShaderChains_ListViewButtonAddClick
+          end
+          object BGFXScreenShaderChains_ListViewButtonSelect: TBitBtn
+            Left = 8
+            Top = 350
+            Width = 47
+            Height = 21
+            Hint = 
+              'Click here to set selected shader active (mouse double-click in ' +
+              'the list)'
+            Caption = 'Select'
+            TabOrder = 12
+            OnClick = BGFXScreenShaderChains_ListViewButtonSelectClick
+          end
+          object BGFXScreenShaderChainsButtonReset: TBitBtn
+            Left = 565
+            Top = 160
+            Width = 43
+            Height = 21
+            Hint = 'Click here to reset shader to default value'
+            Caption = 'Reset'
+            TabOrder = 13
+            OnClick = BGFXScreenShaderChainsButtonResetClick
+          end
+        end
+        object TPage
+          Left = 0
+          Top = 0
+          HelpContext = 1
+          Caption = 'Direct3D'
+          object LabelShadowMaskTexture: TLabel
+            Left = 8
+            Top = 98
+            Width = 115
+            Height = 15
+            Caption = 'Shadow Mask Texture'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelHLSLPath: TLabel
+            Left = 8
+            Top = 54
+            Width = 94
+            Height = 15
+            Caption = 'Path to HLSL Files'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object Label7: TLabel
+            Left = 52
+            Top = 224
+            Width = 7
+            Height = 15
+            Caption = 'X'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelHLSLUpscaleSnapshot: TLabel
+            Left = 8
+            Top = 206
+            Width = 136
+            Height = 15
+            Caption = 'Upscaled Snap Resolution'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelShadowMaskTileMode: TLabel
+            Left = 8
+            Top = 146
+            Width = 129
+            Height = 15
+            Caption = 'Shadow Mask Tile Mode'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelBloomBlendMode: TLabel
+            Left = 235
+            Top = 150
+            Width = 102
+            Height = 15
+            Caption = 'Bloom Blend Mode'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object HLSLEnable: TAdvOfficeCheckBox
+            Left = 8
+            Top = 12
+            Width = 88
+            Height = 20
+            Hint = 'Enables HLSL post-processing (Pixel Shader 3.0 required)'
+            TabOrder = 0
+            OnClick = HLSLEnableClick
+            Alignment = taLeftJustify
+            Caption = 'Enable HLSL'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object YIQEnable: TAdvOfficeCheckBox
+            Left = 195
+            Top = 32
+            Width = 141
+            Height = 20
+            Hint = 
+              'Enables YIQ-colorspace post-processing. Causes a performance dro' +
+              'p but gives a much more authentic'#13#10'NTSC TV appearance on TV-base' +
+              'd systems when configured properly'
+            TabOrder = 1
+            Alignment = taLeftJustify
+            Caption = 'Enable YIQ Colorspace'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object ShadowMaskTexture: TEdit
+            Left = 8
+            Top = 114
+            Width = 269
+            Height = 21
+            Hint = 'A PNG that defines the shadow mask for each pixel'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            TabOrder = 2
+          end
+          object ButtonSelectShadowMaskTexture: TBitBtn
+            Left = 279
+            Top = 114
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+            OnClick = ButtonSelectShadowMaskTextureClick
+          end
+          object HLSLPath: TEdit
+            Left = 8
+            Top = 70
+            Width = 312
+            Height = 21
+            Hint = 'Path to the .fx files that are in use'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+          end
+          object ButtonSelectHLSLPath: TBitBtn
+            Left = 322
+            Top = 70
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a folder'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 5
+            OnClick = ButtonSelectHLSLPathClick
+          end
+          object ReadCustomHLSLFile: TAdvOfficeCheckBox
+            Left = 8
+            Top = 260
+            Width = 112
+            Height = 20
+            Hint = 'Enable custom HLSL ini reading'
+            Enabled = False
+            TabOrder = 6
+            Alignment = taLeftJustify
+            Caption = 'Read Custom File'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object WriteCustomHLSLFile: TAdvOfficeCheckBox
+            Left = 124
+            Top = 260
+            Width = 114
+            Height = 20
+            Hint = 'Enable custom HLSL ini writing'
+            Enabled = False
+            TabOrder = 7
+            Alignment = taLeftJustify
+            Caption = 'Write Custom File'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object HLSLIniFile: TEdit
+            Left = 239
+            Top = 259
+            Width = 84
+            Height = 21
+            Hint = 'HLSL ini file name for this game'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            Enabled = False
+            ParentCtl3D = False
+            TabOrder = 8
+          end
+          object HLSLIniFileButtonReset: TBitBtn
+            Left = 325
+            Top = 259
+            Width = 39
+            Height = 21
+            Hint = 'Click here to reset HLSL custom filename to default'
+            Caption = 'Reset'
+            Enabled = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 9
+            OnClick = HLSLIniFileButtonResetClick
+          end
+          object HLSLUpscaleSnapX: TEdit
+            Left = 8
+            Top = 222
+            Width = 41
+            Height = 21
+            Hint = 'Width'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 10
+            OnKeyPress = HLSLUpscaleSnapXKeyPress
+          end
+          object HLSLUpscaleSnapY: TEdit
+            Left = 62
+            Top = 222
+            Width = 41
+            Height = 21
+            Hint = 'Height'
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 11
+            OnKeyPress = HLSLUpscaleSnapYKeyPress
+          end
+          object ButtonHLSLUpscaleSnapReset: TBitBtn
+            Left = 113
+            Top = 222
+            Width = 43
+            Height = 21
+            Hint = 'Click here to set default upscale resolution'
+            Caption = 'Reset'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 12
+            OnClick = ButtonHLSLUpscaleSnapResetClick
+          end
+          object HLSLOversampling: TAdvOfficeCheckBox
+            Left = 8
+            Top = 32
+            Width = 162
+            Height = 20
+            Hint = 
+              'Render the image in a resolution twice as high, which can help t' +
+              'o reduces moir'#233'-effects'
+            TabOrder = 13
+            Alignment = taLeftJustify
+            Caption = 'Enable HLSL Oversampling'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object ShadowMaskTileMode: TComboBox
+            Left = 8
+            Top = 162
+            Width = 129
+            Height = 21
+            Style = csDropDownList
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ItemHeight = 13
+            ItemIndex = 0
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 14
+            Text = 'Screen Based'
+            Items.Strings = (
+              'Screen Based'
+              'Source Based')
+          end
+          object BloomBlendMode: TComboBox
+            Left = 235
+            Top = 166
+            Width = 129
+            Height = 21
+            Style = csDropDownList
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ItemHeight = 13
+            ItemIndex = 0
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 15
+            Text = 'Brighten'
+            Items.Strings = (
+              'Brighten'
+              'Darken')
+          end
+          object ShadowMaskTextureButtonReset: TBitBtn
+            Left = 323
+            Top = 114
+            Width = 43
+            Height = 21
+            Hint = 'Click here to set default filename'
+            Caption = 'Reset'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 16
+            OnClick = ShadowMaskTextureButtonResetClick
+          end
+          object VectorPostProcessingBox: TAdvGroupBox
+            Left = 432
+            Top = 54
+            Width = 330
+            Height = 107
+            RoundEdges = True
+            Caption = 'Vector Post-Processing'
+            Ctl3D = True
+            Enabled = False
+            TabOrder = 17
+            object LabelVectorBeamSmooth: TLabel
+              Left = 8
+              Top = 20
+              Width = 119
+              Height = 15
+              Hint = 'Beam Smooth [%1.2f]'
+              AutoSize = False
+              Caption = 'Beam Smooth [0.00]'
+              ParentShowHint = False
+              ShowAccelChar = False
+              ShowHint = False
+              Transparent = False
+            end
+            object LabelVectorMaximumAttenuation: TLabel
+              Left = 169
+              Top = 20
+              Width = 156
+              Height = 15
+              Hint = 'Maximum Attenuation [%1.2f]'
+              AutoSize = False
+              Caption = 'Maximum Attenuation [0.50]'
+              ParentShowHint = False
+              ShowAccelChar = False
+              ShowHint = False
+              Transparent = False
+            end
+            object LabelVectorMinimumLengthAttenuation: TLabel
+              Left = 8
+              Top = 63
+              Width = 203
+              Height = 15
+              Hint = 'Minimum Attenuation Length [%1.3f]'
+              AutoSize = False
+              Caption = 'Minimum Attenuation Length [0.500]'
+              ParentShowHint = False
+              ShowAccelChar = False
+              ShowHint = False
+              Transparent = False
+            end
+            object VectorBeamSmooth: TGaugeBar2
+              Left = 8
+              Top = 36
+              Width = 153
+              Height = 20
+              Hint = 'The vector beam smoothness'
+              Backgnd = bgPattern
+              ButtonSize = 12
+              LargeChange = 0.100000001490116100
+              Max = 1.000000000000000000
+              ShowHandleGrip = True
+              SmallChange = 0.009999999776482582
+              OnChange = VectorBeamSmoothChange
+            end
+            object VectorMaximumAttenuation: TGaugeBar2
+              Left = 169
+              Top = 36
+              Width = 153
+              Height = 20
+              Hint = 'The maximum vector attenuation'
+              Backgnd = bgPattern
+              ButtonSize = 12
+              LargeChange = 0.100000001490116100
+              Max = 1.000000000000000000
+              ShowHandleGrip = True
+              SmallChange = 0.009999999776482582
+              Position = 0.500000000000000000
+              OnChange = VectorMaximumAttenuationChange
+            end
+            object VectorMinimumLengthAttenuation: TGaugeBar2
+              Left = 8
+              Top = 79
+              Width = 313
+              Height = 20
+              Hint = 
+                'The minimum vector length (vector length to screen size ratio) t' +
+                'hat is affected by the attenuation'
+              Backgnd = bgPattern
+              ButtonSize = 12
+              LargeChange = 0.009999999776482582
+              Max = 1.000000000000000000
+              Min = 0.001000000047497451
+              ThreeDecimalDigits = True
+              ShowHandleGrip = True
+              SmallChange = 0.001000000047497451
+              Position = 0.500000000000000000
+              OnChange = VectorMinimumLengthAttenuationChange
+            end
+          end
+        end
+        object TPage
+          Left = 0
+          Top = 0
+          HelpContext = 2
+          Caption = 'OpenGL'
+          object LabelEnableOpenGLFilterNotFF: TLabel
+            Left = 253
+            Top = 50
+            Width = 188
+            Height = 11
+            Caption = 'Checked: Bilinear (Default); Unchecked: Plain'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = 10900224
+            Font.Height = -9
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME: TLabel
+            Left = 18
+            Top = 76
+            Width = 191
+            Height = 13
+            Caption = 'Custom OpenGL GLSL Shader Set MAME'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen: TLabel
+            Left = 239
+            Top = 76
+            Width = 176
+            Height = 13
+            Caption = 'Custom OpenGL GLSL Shader Screen'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen0: TLabel
+            Left = 230
+            Top = 95
+            Width = 6
+            Height = 15
+            Caption = '0'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen1: TLabel
+            Left = 230
+            Top = 117
+            Width = 6
+            Height = 15
+            Caption = '1'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen2: TLabel
+            Left = 230
+            Top = 139
+            Width = 6
+            Height = 15
+            Caption = '2'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen3: TLabel
+            Left = 230
+            Top = 161
+            Width = 6
+            Height = 15
+            Caption = '3'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen4: TLabel
+            Left = 230
+            Top = 183
+            Width = 6
+            Height = 15
+            Caption = '4'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen5: TLabel
+            Left = 230
+            Top = 205
+            Width = 6
+            Height = 15
+            Caption = '5'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen6: TLabel
+            Left = 230
+            Top = 227
+            Width = 6
+            Height = 15
+            Caption = '6'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen7: TLabel
+            Left = 230
+            Top = 249
+            Width = 6
+            Height = 15
+            Caption = '7'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen8: TLabel
+            Left = 230
+            Top = 271
+            Width = 6
+            Height = 15
+            Caption = '8'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_Screen9: TLabel
+            Left = 230
+            Top = 293
+            Width = 6
+            Height = 15
+            Caption = '9'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME0: TLabel
+            Left = 8
+            Top = 103
+            Width = 6
+            Height = 15
+            Caption = '0'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME1: TLabel
+            Left = 8
+            Top = 125
+            Width = 6
+            Height = 15
+            Caption = '1'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME2: TLabel
+            Left = 8
+            Top = 147
+            Width = 6
+            Height = 15
+            Caption = '2'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME3: TLabel
+            Left = 8
+            Top = 169
+            Width = 6
+            Height = 15
+            Caption = '3'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME4: TLabel
+            Left = 8
+            Top = 191
+            Width = 6
+            Height = 15
+            Caption = '4'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME5: TLabel
+            Left = 8
+            Top = 213
+            Width = 6
+            Height = 15
+            Caption = '5'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME6: TLabel
+            Left = 8
+            Top = 235
+            Width = 6
+            Height = 15
+            Caption = '6'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME7: TLabel
+            Left = 8
+            Top = 257
+            Width = 6
+            Height = 15
+            Caption = '7'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME8: TLabel
+            Left = 8
+            Top = 279
+            Width = 6
+            Height = 15
+            Caption = '8'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object LabelGLSL_Shader_MAME9: TLabel
+            Left = 8
+            Top = 301
+            Width = 6
+            Height = 15
+            Caption = '9'
+            ShowAccelChar = False
+            Transparent = True
+          end
+          object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBox
+            Left = 8
+            Top = 32
+            Width = 172
+            Height = 20
+            Hint = 
+              'Always use only power-of-2 sized textures'#13#10'Can cause graphic cor' +
+              'ruption on recent video cards!'
+            TabOrder = 0
+            Alignment = taLeftJustify
+            Caption = 'Force Power of Two Textures'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBox
+            Left = 235
+            Top = 12
+            Width = 214
+            Height = 20
+            Hint = 'Can cause graphic corruption on recent video cards!'
+            TabOrder = 1
+            Alignment = taLeftJustify
+            Caption = 'Don'#39't Use GL_ARB Texture Rectangle'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object EnableOpenGL_VBO: TAdvOfficeCheckBox
+            Left = 8
+            Top = 52
+            Width = 81
+            Height = 20
+            Hint = 'Enable OpenGL VBO, if available'
+            Checked = True
+            TabOrder = 2
+            Alignment = taLeftJustify
+            Caption = 'Enable VBO'
+            ReturnIsTab = False
+            State = cbChecked
+            Themed = True
+          end
+          object EnableOpenGL_PBO: TAdvOfficeCheckBox
+            Left = 132
+            Top = 52
+            Width = 82
+            Height = 20
+            Hint = 'Enable OpenGL PBO, if available'
+            Checked = True
+            TabOrder = 3
+            Alignment = taLeftJustify
+            Caption = 'Enable PBO'
+            ReturnIsTab = False
+            State = cbChecked
+            Themed = True
+          end
+          object EnableGLSL: TAdvOfficeCheckBox
+            Left = 8
+            Top = 12
+            Width = 89
+            Height = 20
+            Hint = 'Enable OpenGL GLSL, if available'
+            TabOrder = 4
+            OnClick = EnableGLSLClick
+            Alignment = taLeftJustify
+            Caption = 'Enable GLSL'
+            ReturnIsTab = False
+            Themed = True
+          end
+          object EnableOpenGLFilterNotFF: TAdvOfficeCheckBox
+            Left = 235
+            Top = 32
+            Width = 214
+            Height = 20
+            Checked = True
+            TabOrder = 5
+            Alignment = taLeftJustify
+            Caption = 'Use OpenGL Filter Instead of FF Filter'
+            ReturnIsTab = False
+            State = cbChecked
+            Themed = True
+          end
+          object GLSL_Shader_Screen0: TEdit
+            Left = 239
+            Top = 92
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 6
+          end
+          object ButtonGLSL_Shader_Screen0: TBitBtn
+            Left = 421
+            Top = 92
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 7
+            OnClick = ButtonGLSL_Shader_Screen0Click
+          end
+          object GLSL_Shader_Screen1: TEdit
+            Left = 239
+            Top = 114
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 8
+          end
+          object ButtonGLSL_Shader_Screen1: TBitBtn
+            Left = 421
+            Top = 114
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 9
+            OnClick = ButtonGLSL_Shader_Screen1Click
+          end
+          object GLSL_Shader_Screen2: TEdit
+            Left = 239
+            Top = 136
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 10
+          end
+          object ButtonGLSL_Shader_Screen2: TBitBtn
+            Left = 421
+            Top = 136
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 11
+            OnClick = ButtonGLSL_Shader_Screen2Click
+          end
+          object GLSL_Shader_Screen3: TEdit
+            Left = 239
+            Top = 158
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 12
+          end
+          object ButtonGLSL_Shader_Screen3: TBitBtn
+            Left = 421
+            Top = 158
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 13
+            OnClick = ButtonGLSL_Shader_Screen3Click
+          end
+          object GLSL_Shader_Screen4: TEdit
+            Left = 239
+            Top = 180
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 14
+          end
+          object ButtonGLSL_Shader_Screen4: TBitBtn
+            Left = 421
+            Top = 180
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 15
+            OnClick = ButtonGLSL_Shader_Screen4Click
+          end
+          object GLSL_Shader_Screen5: TEdit
+            Left = 239
+            Top = 202
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 16
+          end
+          object ButtonGLSL_Shader_Screen5: TBitBtn
+            Left = 421
+            Top = 202
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 17
+            OnClick = ButtonGLSL_Shader_Screen5Click
+          end
+          object GLSL_Shader_Screen6: TEdit
+            Left = 239
+            Top = 224
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 18
+          end
+          object ButtonGLSL_Shader_Screen6: TBitBtn
+            Left = 421
+            Top = 224
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 19
+            OnClick = ButtonGLSL_Shader_Screen6Click
+          end
+          object GLSL_Shader_Screen7: TEdit
+            Left = 239
+            Top = 246
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 20
+          end
+          object ButtonGLSL_Shader_Screen7: TBitBtn
+            Left = 421
+            Top = 246
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 21
+            OnClick = ButtonGLSL_Shader_Screen7Click
+          end
+          object GLSL_Shader_Screen8: TEdit
+            Left = 239
+            Top = 268
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 22
+          end
+          object ButtonGLSL_Shader_Screen8: TBitBtn
+            Left = 421
+            Top = 268
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 23
+            OnClick = ButtonGLSL_Shader_Screen8Click
+          end
+          object GLSL_Shader_Screen9: TEdit
+            Left = 239
+            Top = 290
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 24
+          end
+          object ButtonGLSL_Shader_Screen9: TBitBtn
+            Left = 421
+            Top = 290
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 25
+            OnClick = ButtonGLSL_Shader_Screen9Click
+          end
+          object GLSL_Shader_MAME0: TEdit
+            Left = 17
+            Top = 92
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 26
+          end
+          object ButtonGLSL_Shader_MAME0: TBitBtn
+            Left = 199
+            Top = 92
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 27
+            OnClick = ButtonGLSL_Shader_MAME0Click
+          end
+          object GLSL_Shader_MAME1: TEdit
+            Left = 17
+            Top = 114
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 28
+          end
+          object ButtonGLSL_Shader_MAME1: TBitBtn
+            Left = 199
+            Top = 114
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 29
+            OnClick = ButtonGLSL_Shader_MAME1Click
+          end
+          object GLSL_Shader_MAME2: TEdit
+            Left = 17
+            Top = 136
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 30
+          end
+          object ButtonGLSL_Shader_MAME2: TBitBtn
+            Left = 199
+            Top = 136
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 31
+            OnClick = ButtonGLSL_Shader_MAME2Click
+          end
+          object GLSL_Shader_MAME3: TEdit
+            Left = 17
+            Top = 158
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 32
+          end
+          object ButtonGLSL_Shader_MAME3: TBitBtn
+            Left = 199
+            Top = 158
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 33
+            OnClick = ButtonGLSL_Shader_MAME3Click
+          end
+          object GLSL_Shader_MAME4: TEdit
+            Left = 17
+            Top = 180
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 34
+          end
+          object ButtonGLSL_Shader_MAME4: TBitBtn
+            Left = 199
+            Top = 180
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 35
+            OnClick = ButtonGLSL_Shader_MAME4Click
+          end
+          object GLSL_Shader_MAME5: TEdit
+            Left = 17
+            Top = 202
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 36
+          end
+          object ButtonGLSL_Shader_MAME5: TBitBtn
+            Left = 199
+            Top = 202
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 37
+            OnClick = ButtonGLSL_Shader_MAME5Click
+          end
+          object GLSL_Shader_MAME6: TEdit
+            Left = 17
+            Top = 224
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 38
+          end
+          object ButtonGLSL_Shader_MAME6: TBitBtn
+            Left = 199
+            Top = 224
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 39
+            OnClick = ButtonGLSL_Shader_MAME6Click
+          end
+          object GLSL_Shader_MAME7: TEdit
+            Left = 17
+            Top = 246
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 40
+          end
+          object ButtonGLSL_Shader_MAME7: TBitBtn
+            Left = 199
+            Top = 246
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 41
+            OnClick = ButtonGLSL_Shader_MAME7Click
+          end
+          object GLSL_Shader_MAME8: TEdit
+            Left = 17
+            Top = 268
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 42
+          end
+          object ButtonGLSL_Shader_MAME8: TBitBtn
+            Left = 199
+            Top = 268
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 43
+            OnClick = ButtonGLSL_Shader_MAME8Click
+          end
+          object GLSL_Shader_MAME9: TEdit
+            Left = 17
+            Top = 290
+            Width = 180
+            Height = 21
+            AutoSize = False
+            TabOrder = 44
+          end
+          object ButtonGLSL_Shader_MAME9: TBitBtn
+            Left = 199
+            Top = 290
+            Width = 21
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = '...'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 45
+            OnClick = ButtonGLSL_Shader_MAME9Click
+          end
+        end
+      end
+      object ToolBarVideoPostProcessingEffectsPages: TToolBar
+        Tag = 1
+        Left = 16
+        Top = 16
+        Width = 549
+        Height = 21
+        Align = alNone
+        ButtonWidth = 184
+        EdgeBorders = [ebBottom]
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Images = FormMain.IL_MenuPopup
+        List = True
+        ParentFont = False
+        ShowCaptions = True
         TabOrder = 3
-        object EffectOverlay: TEdit
+        Transparent = True
+        Wrapable = False
+        object ButtonPageVideoEffectsBGFX: TToolButton
+          Left = 0
+          Top = 0
+          AutoSize = True
+          Caption = 'BGFX Post-Processing Effects'
+          Enabled = False
+          Grouped = True
+          ImageIndex = 500
+          Style = tbsCheck
+          OnClick = ButtonPageVideoEffectsBGFXClick
+        end
+        object ButtonPageVideoEffectsHLSL: TToolButton
+          Tag = 1
+          Left = 172
+          Top = 0
+          AutoSize = True
+          Caption = 'Direct3D Post-Processing Effects'
+          Down = True
+          Enabled = False
+          Grouped = True
+          ImageIndex = 1
+          Style = tbsCheck
+          OnClick = ButtonPageVideoEffectsBGFXClick
+        end
+        object ButtonPageVideoEffectsGLSL: TToolButton
+          Tag = 2
+          Left = 360
+          Top = 0
+          AutoSize = True
+          Caption = 'OpenGL Post-Processing Effects'
+          Enabled = False
+          Grouped = True
+          ImageIndex = 500
+          Style = tbsCheck
+          OnClick = ButtonPageVideoEffectsBGFXClick
+        end
+      end
+    end
+    object TPage
+      Left = 0
+      Top = 0
+      Caption = 'LUA'
+      object LabelLUAPluginsToEnable: TLabel
+        Left = 16
+        Top = 35
+        Width = 151
+        Height = 15
+        Caption = 'List of LUA Plugins to Enable'
+        Enabled = False
+        Transparent = True
+      end
+      object LabelLUAPluginsToEnable2: TLabel
+        Left = 171
+        Top = 36
+        Width = 107
+        Height = 14
+        Caption = '(check plugins to use)'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object AutobootBox: TAdvGroupBox
+        Left = 16
+        Top = 289
+        Width = 297
+        Height = 152
+        RoundEdges = True
+        Caption = 'Auto-boot (LUA Scripts)'
+        Ctl3D = True
+        Enabled = False
+        TabOrder = 0
+        object LabelAutobootCommand: TLabel
           Left = 8
-          Top = 24
-          Width = 137
+          Top = 20
+          Width = 206
+          Height = 15
+          Caption = 'Execute Command After Machine Boot'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelAutobootDelay: TLabel
+          Left = 8
+          Top = 64
+          Width = 121
+          Height = 15
+          Hint = 'Delay Timer [%s]'
+          HelpType = htKeyword
+          HelpKeyword = 'sec'
+          Caption = 'Delay Timer [00:00 sec]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = False
+        end
+        object LabelAutobootLuaScript: TLabel
+          Left = 8
+          Top = 107
+          Width = 218
+          Height = 15
+          Hint = 'Delay Timer [%u sec]'
+          Caption = 'LUA Script to Execute After Machine Boot'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object AutobootCommand: TEdit
+          Left = 8
+          Top = 36
+          Width = 236
           Height = 21
-          Hint = 'Name of a PNG file to use for visual effects'
+          Hint = 'Command to execute after machine boot'
           AutoSize = False
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 0
+        end
+        object AutobootDelay: TGaugeBar
+          Left = 8
+          Top = 80
+          Width = 281
+          Height = 20
+          Hint = 'Timer delay to trigger command execution on auto-boot'
           Color = clWhite
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 5
+          Max = 180
+          ShowHandleGrip = True
+          Position = 0
+          OnChange = AutobootDelayChange
+        end
+        object AutobootLuaScript: TEdit
+          Left = 8
+          Top = 123
+          Width = 236
+          Height = 21
+          Hint = 'Script for debugger'
+          TabStop = False
+          AutoSize = False
           Ctl3D = True
           ParentCtl3D = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 0
+          TabOrder = 2
         end
-        object EffectOverlayBrowse: TBitBtn
-          Left = 8
-          Top = 47
+        object AutobootLuaScriptSelectButton: TBitBtn
+          Left = 246
+          Top = 123
           Width = 43
-          Height = 22
+          Height = 21
           Hint = 'Click here to select a file'
           Caption = 'Select'
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
-          OnClick = EffectOverlayBrowseClick
+          TabOrder = 3
+          OnClick = AutobootLuaScriptSelectButtonClick
         end
-        object EffectOverlayNone: TBitBtn
-          Left = 102
-          Top = 47
+        object AutobootCommandButtonClear: TBitBtn
+          Left = 246
+          Top = 36
           Width = 43
-          Height = 22
-          Hint = 'Click here to disable this feature'
-          Caption = 'None'
+          Height = 21
+          Hint = 'Click here to clear the parameters'
+          Caption = 'Clear'
+          TabOrder = 4
+          OnClick = AutobootCommandButtonClearClick
+        end
+      end
+      object EnableEmulatorLUAConsole: TAdvOfficeCheckBox
+        Left = 16
+        Top = 268
+        Width = 179
+        Height = 20
+        Hint = 
+          'Start emulator with LUA console enabled'#13#10'For MAME v0.154 and new' +
+          'er'
+        Enabled = False
+        TabOrder = 1
+        Alignment = taLeftJustify
+        Caption = 'Enable Emulator LUA Console'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object EnableLUAPluginSupport: TAdvOfficeCheckBox
+        Left = 16
+        Top = 13
+        Width = 163
+        Height = 20
+        Checked = True
+        Enabled = False
+        TabOrder = 2
+        Alignment = taLeftJustify
+        Caption = 'Enable LUA Plugin Support'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+      end
+      object LUAPluginsToEnable: TEasyListview
+        Left = 16
+        Top = 51
+        Width = 601
+        Height = 164
+        BackGround.Enabled = True
+        CellSizes.Report.Height = 19
+        Color = clWhite
+        EditManager.Font.Charset = ANSI_CHARSET
+        EditManager.Font.Color = clBlack
+        EditManager.Font.Height = -12
+        EditManager.Font.Name = 'Segoe UI'
+        EditManager.Font.Style = []
+        Enabled = False
+        UseDockManager = False
+        HintType = ehtToolTip
+        Header.Columns.Items = {
+          0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
+          00060000008008000101000100000000000000E6000000FFFFFF1F0001000000
+          01000000050000005400690074006C0065000000000000000000000000001100
+          00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+          00010100000000000064000000FFFFFF1F000100000001000000040000004E00
+          61006D006500000000000000000000000000110000005445617379436F6C756D
+          6E53746F726564FFFECE00060000008008000101000102000000000000460000
+          00FFFFFF1F00010000000100000007000000560065007200730069006F006E00
+          000000000000000000000000110000005445617379436F6C756D6E53746F7265
+          64FFFECE00060000008008000101000103000000000000B4000000FFFFFF1F00
+          01000000010000000600000041007500740068006F0072000000000000000000
+          00000000}
+        Header.Draggable = False
+        Header.Height = 23
+        Header.Sizeable = False
+        Header.Visible = True
+        IncrementalSearch.Enabled = True
+        IncrementalSearch.ResetTime = 1000
+        IncrementalSearch.StartType = eissFocusedNode
+        PaintInfoColumn.Border = 2
+        PaintInfoColumn.CaptionIndent = 0
+        PaintInfoGroup.Expandable = False
+        PaintInfoGroup.MarginBottom.CaptionIndent = 4
+        PaintInfoItem.BorderColor = 16370824
+        PaintInfoItem.CheckType = ectBox
+        PaintInfoItem.ShowBorder = False
+        ParentShowHint = False
+        ShowHint = True
+        Selection.BlendColorSelRect = 10902593
+        Selection.BlendIcon = False
+        Selection.BorderColor = 10902593
+        Selection.BorderColorSelRect = 10902593
+        Selection.Color = 10902593
+        Selection.FullCellPaint = True
+        Selection.FullItemPaint = True
+        Selection.FullRowSelect = True
+        Selection.Gradient = True
+        Selection.GradientColorBottom = 16506264
+        Selection.GradientColorTop = 15582647
+        Selection.InactiveBorderColor = 10902593
+        Selection.InactiveColor = 15582647
+        Selection.MouseButton = [cmbLeft, cmbRight]
+        Selection.MultiSelect = True
+        Selection.RoundRectRadius = 2
+        Selection.TextColor = clBlack
+        Selection.UseFocusRect = False
+        TabOrder = 3
+        View = elsReport
+      end
+      object GroupBoxAudio: TAdvGroupBox
+        Left = 632
+        Top = 289
+        Width = 222
+        Height = 152
+        RoundEdges = True
+        ShadowColor = clSilver
+        Caption = 'Audio'
+        ParentCtl3D = True
+        TabOrder = 4
+        object LabelAudioLatency: TLabel
+          Left = 95
+          Top = 107
+          Width = 76
+          Height = 15
+          Caption = 'Audio Latency'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelSampleRate: TLabel
+          Left = 8
+          Top = 107
+          Width = 65
+          Height = 15
+          Caption = 'Sample Rate'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelVolume: TLabel
+          Left = 8
+          Top = 64
+          Width = 138
+          Height = 15
+          Hint = 'Volume Attenuation [%ddB]'
+          Caption = 'Volume Attenuation [0dB]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = False
+        end
+        object LabelSoundOutputMethod: TLabel
+          Left = 8
+          Top = 20
+          Width = 109
+          Height = 15
+          Caption = 'Sound Output Mode'
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object Samples: TAdvOfficeCheckBox
+          Left = 130
+          Top = 36
+          Width = 87
+          Height = 20
+          Hint = 'Enable the use of external samples if available'
+          Checked = True
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Use Samples'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object AudioLatency: TComboBox
+          Left = 95
+          Top = 123
+          Width = 81
+          Height = 21
+          Hint = 
+            'Set audio latency (increase to reduce glitches, decrease for res' +
+            'ponsiveness)'
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 1
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          Text = '2/5'
+          Items.Strings = (
+            '1/5'
+            '2/5'
+            '3/5'
+            '4/5'
+            '5/5')
+        end
+        object SampleRate: TComboBox
+          Left = 8
+          Top = 123
+          Width = 80
+          Height = 21
+          Hint = 'Set sound output sample rate'
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 3
+          ParentFont = False
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
-          OnClick = EffectOverlayNoneClick
+          Text = '48000 Hz'
+          Items.Strings = (
+            '11025 Hz'
+            '22050 Hz'
+            '44100 Hz'
+            '48000 Hz'
+            '96000 Hz'
+            '192000 Hz')
         end
-      end
-      object LabelSnapshotsBox: TAdvGroupBox
-        Left = 227
-        Top = 359
-        Width = 451
-        Height = 84
-        RoundEdges = True
-        Caption = 'Snapshots / Movies'
-        ParentCtl3D = True
-        TabOrder = 4
-        object LabelSnapshotNameFormat: TLabel
+        object Volume: TGaugeBar
           Left = 8
-          Top = 20
-          Width = 73
-          Height = 15
-          Caption = 'Name Format'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelSnapshotView: TLabel
-          Left = 160
-          Top = 20
-          Width = 25
-          Height = 15
-          Caption = 'View'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelSnapSizeCustomX: TLabel
-          Left = 397
-          Top = 39
-          Width = 7
-          Height = 15
-          Caption = 'X'
-          Enabled = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelSnaphotResolution: TLabel
-          Left = 312
-          Top = 20
-          Width = 56
-          Height = 15
-          Caption = 'Resolution'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object SnapBurnIn: TAdvOfficeCheckBox
-          Left = 159
-          Top = 60
-          Width = 113
+          Top = 80
+          Width = 150
           Height = 20
-          Hint = 'Create burn-in snapshots for each screen'
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Burn-in Snapshot'
-          ReturnIsTab = False
-          Themed = True
+          Hint = 'Sound volume in decibels (-32 -> low, 0 -> normal)'
+          Color = clWhite
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 5
+          Max = 0
+          Min = -32
+          ShowHandleGrip = True
+          Position = 0
+          OnChange = VolumeChange
         end
-        object ButtonSnapNameDefault: TBitBtn
-          Left = 109
-          Top = 36
-          Width = 43
+        object ButtonAudioLatencyReset: TBitBtn
+          Left = 177
+          Top = 123
+          Width = 38
           Height = 21
-          Hint = 'Set default snapshot name'
+          Hint = 'Set default latency'
           Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-          OnClick = ButtonSnapNameDefaultClick
+          TabOrder = 4
+          OnClick = ButtonAudioLatencyResetClick
         end
-        object SnapView: TComboBox
-          Left = 160
+        object SoundOutputMethod: TComboBox
+          Left = 8
           Top = 36
-          Width = 100
+          Width = 115
           Height = 21
-          Hint = 
-            'Specify snapshot/movie view or '#39'internal'#39' to use internal pixel-' +
-            'aspect views'
           Style = csDropDownList
-          Ctl3D = True
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -3798,120 +4678,16 @@ object FormMAMESettings: TFormMAMESettings
           Font.Style = []
           ItemHeight = 13
           ItemIndex = 0
-          ParentCtl3D = False
           ParentFont = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 2
-          Text = 'Internal'
-          Items.Strings = (
-            'Internal'
-            'Auto'
-            'Standard'
-            'Native'
-            'Pixel Aspect'
-            'Cocktail')
-        end
-        object ButtonSnapViewDefault: TBitBtn
-          Left = 261
-          Top = 36
-          Width = 43
-          Height = 21
-          Hint = 'Set default snapshot / movie view'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-          OnClick = ButtonSnapViewDefaultClick
-        end
-        object SnapSizeAuto: TAdvOfficeCheckBox
-          Left = 312
-          Top = 36
-          Width = 46
-          Height = 20
-          Hint = 'Set resolution to original size (minimal size)'
-          Checked = True
-          TabOrder = 4
-          OnClick = SnapSizeAutoClick
-          Alignment = taLeftJustify
-          Caption = 'Auto'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object SnapSizeWidth: TEdit
-          Left = 358
-          Top = 36
-          Width = 37
-          Height = 21
-          Hint = 'Custom width'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 5
-          OnKeyPress = SnapSizeWidthKeyPress
-        end
-        object SnapSizeHeight: TEdit
-          Left = 406
-          Top = 36
-          Width = 37
-          Height = 21
-          Hint = 'Custom height'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-          OnKeyPress = SnapSizeHeightKeyPress
-        end
-        object SnapName: TEdit
-          Left = 8
-          Top = 36
-          Width = 100
-          Height = 21
-          Hint = 
-            'Override the default snapshot naming; %g == gamename, %i == inde' +
-            'x'
-          AutoSize = False
-          Color = clWhite
-          ParentShowHint = False
-          ShowHint = False
-          TabOrder = 7
-        end
-        object SnapBilinear: TAdvOfficeCheckBox
-          Left = 8
-          Top = 60
-          Width = 123
-          Height = 20
-          Hint = 
-            'Specify if the snapshot/movie should have bilinear filtering app' +
-            'lied'
-          Checked = True
-          TabOrder = 8
-          Alignment = taLeftJustify
-          Caption = 'Apply Bilinear Filter'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object DummyWriteSnapshot: TAdvOfficeCheckBox
-          Left = 300
-          Top = 60
-          Width = 146
-          Height = 20
-          Hint = 'Create snaphots of each frame without writing them to a file'
-          TabOrder = 9
-          Alignment = taLeftJustify
-          Caption = 'Dummy Snapshot Write'
-          ReturnIsTab = False
-          Themed = True
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'DirectSound'
+            'XAudio2 (Win8+)'
+            'None')
         end
       end
     end
@@ -3921,7 +4697,7 @@ object FormMAMESettings: TFormMAMESettings
       Caption = 'Input'
       object LabelCoinImpulse: TLabel
         Left = 168
-        Top = 128
+        Top = 120
         Width = 100
         Height = 15
         Caption = 'Coin Impulse Time'
@@ -3930,16 +4706,50 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelControllerDefinitions: TLabel
         Left = 16
-        Top = 128
+        Top = 120
         Width = 113
         Height = 15
         Caption = 'Controller Definitions'
         ShowAccelChar = False
         Transparent = True
       end
+      object LabelRecordInputTimecodeFile: TShadowLabel
+        Left = 344
+        Top = 238
+        Width = 147
+        Height = 15
+        Caption = '(to be used with record input)'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+      end
+      object LabelExitAfterInputPlayback: TShadowLabel
+        Left = 344
+        Top = 278
+        Width = 158
+        Height = 15
+        Caption = '(to be used with playback input)'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+      end
       object MultiKeyboard: TAdvOfficeCheckBox
         Left = 16
-        Top = 60
+        Top = 52
         Width = 105
         Height = 20
         Hint = 'Enable separate input from each keyboard device (if present)'
@@ -3951,7 +4761,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object Mouse: TAdvOfficeCheckBox
         Left = 16
-        Top = 20
+        Top = 12
         Width = 65
         Height = 20
         Hint = 'Enable mouse input'
@@ -3963,7 +4773,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object MultiMouse: TAdvOfficeCheckBox
         Left = 16
-        Top = 40
+        Top = 32
         Width = 89
         Height = 20
         Hint = 'Enable separate input from each mouse device (if present)'
@@ -3975,7 +4785,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LightGun: TAdvOfficeCheckBox
         Left = 168
-        Top = 20
+        Top = 12
         Width = 73
         Height = 20
         Hint = 'Enable lightgun input'
@@ -3987,7 +4797,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DualLightGun: TAdvOfficeCheckBox
         Left = 168
-        Top = 40
+        Top = 32
         Width = 100
         Height = 20
         Hint = 'Enable dual lightgun input'
@@ -3999,7 +4809,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LightGunOffScreenReload: TAdvOfficeCheckBox
         Left = 168
-        Top = 60
+        Top = 52
         Width = 121
         Height = 20
         Hint = 'Convert lightgun button 2 into offscreen reload'
@@ -4011,7 +4821,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object NaturalKeyboard: TAdvOfficeCheckBox
         Left = 16
-        Top = 80
+        Top = 72
         Width = 113
         Height = 20
         Hint = 'Specifies whether to use a natural keyboard mode or not'
@@ -4023,7 +4833,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SteadyKey: TAdvOfficeCheckBox
         Left = 168
-        Top = 80
+        Top = 72
         Width = 81
         Height = 20
         Hint = 'Use a different handling for multiple keys presses at once'
@@ -4035,7 +4845,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object CoinLockout: TAdvOfficeCheckBox
         Left = 168
-        Top = 100
+        Top = 92
         Width = 97
         Height = 20
         Hint = 'Enable coin lockouts to actually lock out coins'
@@ -4049,7 +4859,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIMouse: TAdvOfficeCheckBox
         Left = 564
-        Top = 331
+        Top = 323
         Width = 212
         Height = 20
         Hint = 
@@ -4063,16 +4873,16 @@ object FormMAMESettings: TFormMAMESettings
       end
       object JoystickBox: TAdvGroupBox
         Left = 16
-        Top = 173
+        Top = 163
         Width = 297
-        Height = 89
+        Height = 85
         RoundEdges = True
         Caption = 'Joystick'
         ParentCtl3D = True
         TabOrder = 10
         object LabelJoystickDeadzone: TLabel
           Left = 8
-          Top = 44
+          Top = 42
           Width = 136
           Height = 15
           Hint = 'Joystick Deadzone [%1.2f]'
@@ -4084,8 +4894,8 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = False
         end
         object LabelJoystickSaturation: TLabel
-          Left = 153
-          Top = 44
+          Left = 152
+          Top = 42
           Width = 136
           Height = 15
           Hint = 'Joystick Saturation [%1.2f]'
@@ -4098,8 +4908,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object JoystickDeadzone: TGaugeBar2
           Left = 8
-          Top = 60
-          Width = 136
+          Top = 58
+          Width = 137
           Height = 20
           Hint = 
             'Center deadzone range for joystick where change is ignored (0.0 ' +
@@ -4128,7 +4938,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object JoystickContradictory: TAdvOfficeCheckBox
-          Left = 152
+          Left = 151
           Top = 20
           Width = 138
           Height = 20
@@ -4142,9 +4952,9 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object JoystickSaturation: TGaugeBar2
-          Left = 153
-          Top = 60
-          Width = 136
+          Left = 152
+          Top = 58
+          Width = 137
           Height = 20
           Hint = 
             'End of axis saturation range for joystick where change is ignore' +
@@ -4161,9 +4971,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelAnalogSettings: TAdvGroupBox
         Left = 562
-        Top = 20
+        Top = 12
         Width = 289
-        Height = 202
+        Height = 197
         RoundEdges = True
         Caption = 'Automatic Device Selection [Analog Controls]'
         ParentCtl3D = True
@@ -4179,7 +4989,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_Joystick: TLabel
           Left = 8
-          Top = 65
+          Top = 64
           Width = 82
           Height = 15
           Caption = 'Analog Joystick'
@@ -4188,7 +4998,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_LightGun: TLabel
           Left = 152
-          Top = 110
+          Top = 108
           Width = 52
           Height = 15
           Caption = 'Light Gun'
@@ -4206,7 +5016,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_Dial: TLabel
           Left = 152
-          Top = 65
+          Top = 64
           Width = 20
           Height = 15
           Caption = 'Dial'
@@ -4215,7 +5025,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_Trackball: TLabel
           Left = 152
-          Top = 155
+          Top = 152
           Width = 48
           Height = 15
           Caption = 'Trackball'
@@ -4224,7 +5034,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_Positional: TLabel
           Left = 8
-          Top = 110
+          Top = 108
           Width = 52
           Height = 15
           Caption = 'Positional'
@@ -4233,7 +5043,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelAnalog_Mouse: TLabel
           Left = 8
-          Top = 155
+          Top = 152
           Width = 36
           Height = 15
           Caption = 'Mouse'
@@ -4270,7 +5080,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_Joystick: TComboBox
           Left = 8
-          Top = 81
+          Top = 80
           Width = 129
           Height = 21
           Hint = 'Enable it if an analog joystick control is present'
@@ -4298,7 +5108,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_LightGun: TComboBox
           Left = 152
-          Top = 126
+          Top = 124
           Width = 129
           Height = 21
           Hint = 'Enable it if a lightgun control is present'
@@ -4354,7 +5164,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_Dial: TComboBox
           Left = 152
-          Top = 81
+          Top = 80
           Width = 129
           Height = 21
           Hint = 'Enable it if a dial control is present'
@@ -4382,7 +5192,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_Trackball: TComboBox
           Left = 152
-          Top = 171
+          Top = 168
           Width = 129
           Height = 21
           Hint = 'Enable it if a trackball control is present'
@@ -4410,7 +5220,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_Positional: TComboBox
           Left = 8
-          Top = 126
+          Top = 124
           Width = 129
           Height = 21
           Hint = 'Enable it if a positional control is present'
@@ -4438,7 +5248,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Analog_Mouse: TComboBox
           Left = 8
-          Top = 171
+          Top = 168
           Width = 129
           Height = 21
           Hint = 'Enable it if a mouse control is present'
@@ -4467,7 +5277,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIActive: TAdvOfficeCheckBox
         Left = 564
-        Top = 311
+        Top = 303
         Width = 272
         Height = 20
         Hint = 
@@ -4481,7 +5291,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object CoinImpulse: TComboBox
         Left = 168
-        Top = 144
+        Top = 136
         Width = 145
         Height = 21
         Hint = 'Set coin impulse time'
@@ -4514,7 +5324,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object ControllerDefinitions: TComboBox
         Left = 16
-        Top = 144
+        Top = 136
         Width = 145
         Height = 21
         Hint = 'Pre-configure for specified controller'
@@ -4534,123 +5344,18 @@ object FormMAMESettings: TFormMAMESettings
         Items.Strings = (
           '(None)')
       end
-      object AutobootBox: TAdvGroupBox
-        Left = 16
-        Top = 283
-        Width = 297
-        Height = 154
-        RoundEdges = True
-        Caption = 'Auto-boot'
-        Ctl3D = True
-        TabOrder = 15
-        object LabelAutobootCommand: TLabel
-          Left = 8
-          Top = 20
-          Width = 206
-          Height = 15
-          Caption = 'Execute Command After Machine Boot'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object LabelAutobootDelay: TLabel
-          Left = 8
-          Top = 65
-          Width = 121
-          Height = 15
-          Hint = 'Delay Timer [%s]'
-          HelpType = htKeyword
-          HelpKeyword = 'sec'
-          Caption = 'Delay Timer [00:02 sec]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = False
-        end
-        object LabelAutobootLuaScript: TLabel
-          Left = 8
-          Top = 107
-          Width = 215
-          Height = 15
-          Hint = 'Delay Timer [%u sec]'
-          Caption = 'Lua Script to Execute After Machine Boot'
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object AutobootCommand: TEdit
-          Left = 8
-          Top = 36
-          Width = 236
-          Height = 21
-          Hint = 'Command to execute after machine boot'
-          AutoSize = False
-          ParentShowHint = False
-          ShowHint = False
-          TabOrder = 0
-        end
-        object AutobootDelay: TGaugeBar
-          Left = 8
-          Top = 81
-          Width = 281
-          Height = 20
-          Hint = 'Timer delay to trigger command execution on auto-boot'
-          Color = clWhite
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 5
-          Max = 180
-          ShowHandleGrip = True
-          Position = 2
-          OnChange = AutobootDelayChange
-        end
-        object AutobootLuaScript: TEdit
-          Left = 8
-          Top = 123
-          Width = 236
-          Height = 21
-          Hint = 'Script for debugger'
-          TabStop = False
-          AutoSize = False
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object AutobootLuaScriptSelectButton: TBitBtn
-          Left = 246
-          Top = 123
-          Width = 43
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = 'Select'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-          OnClick = AutobootLuaScriptSelectButtonClick
-        end
-        object AutobootCommandButtonClear: TBitBtn
-          Left = 246
-          Top = 36
-          Width = 43
-          Height = 21
-          Hint = 'Click here to clear the parameters'
-          Caption = 'Clear'
-          TabOrder = 4
-          OnClick = AutobootCommandButtonClearClick
-        end
-      end
       object HTTPServer: TAdvGroupBox
-        Left = 358
-        Top = 371
-        Width = 495
-        Height = 66
+        Left = 562
+        Top = 372
+        Width = 289
+        Height = 65
         CheckBox.Hint = 'Enable local http server'
         CheckBox.Visible = True
         RoundEdges = True
         Caption = 'Enable HTTP Server'
         Enabled = False
         ParentCtl3D = True
-        TabOrder = 16
+        TabOrder = 15
         object Label2: TLabel
           Left = 8
           Top = 20
@@ -4662,7 +5367,7 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = True
         end
         object Label3: TLabel
-          Left = 103
+          Left = 56
           Top = 20
           Width = 91
           Height = 15
@@ -4674,7 +5379,7 @@ object FormMAMESettings: TFormMAMESettings
         object HTTPPort: TEdit
           Left = 8
           Top = 36
-          Width = 80
+          Width = 45
           Height = 21
           Hint = 'HTTP server listener port'
           TabStop = False
@@ -4686,9 +5391,9 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 0
         end
         object HTTPPath: TEdit
-          Left = 103
+          Left = 57
           Top = 36
-          Width = 339
+          Width = 178
           Height = 21
           TabStop = False
           AutoSize = False
@@ -4699,7 +5404,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 1
         end
         object ButtonResetHTTPServer: TBitBtn
-          Left = 445
+          Left = 238
           Top = 36
           Width = 43
           Height = 21
@@ -4712,30 +5417,15 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonResetHTTPServerClick
         end
       end
-      object EnableEmulatorLUAConsole: TAdvOfficeCheckBox
-        Left = 358
-        Top = 311
-        Width = 179
-        Height = 20
-        Hint = 
-          'Start emulator with LUA console enabled'#13#10'For UME/MAME v0.153ex5 ' +
-          'and newer'
-        Enabled = False
-        TabOrder = 17
-        Alignment = taLeftJustify
-        Caption = 'Enable Emulator LUA Console'
-        ReturnIsTab = False
-        Themed = True
-      end
       object UIModeBox: TAdvGroupBox
         Left = 562
-        Top = 232
+        Top = 224
         Width = 289
-        Height = 71
+        Height = 69
         RoundEdges = True
         Caption = 'Full Keyboard Emulation (User Interface Disabled)'
         ParentCtl3D = True
-        TabOrder = 18
+        TabOrder = 16
         object LabelUIModeKeyCustom: TLabel
           Left = 8
           Top = 24
@@ -4775,13 +5465,13 @@ object FormMAMESettings: TFormMAMESettings
       end
       object CommOptionsBox: TAdvGroupBox
         Left = 328
-        Top = 20
+        Top = 12
         Width = 219
-        Height = 200
+        Height = 197
         RoundEdges = True
         Caption = 'Comm Options'
         Ctl3D = True
-        TabOrder = 19
+        TabOrder = 17
         object LabelCommLocalHost: TLabel
           Left = 8
           Top = 20
@@ -4793,7 +5483,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelCommLocalPort: TLabel
           Left = 8
-          Top = 65
+          Top = 64
           Width = 108
           Height = 15
           Caption = 'Local Port to Bind to'
@@ -4802,7 +5492,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelCommRemoteHost: TLabel
           Left = 8
-          Top = 110
+          Top = 108
           Width = 128
           Height = 15
           Caption = 'Local Address to Bind to'
@@ -4811,7 +5501,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelCommRemotePort: TLabel
           Left = 8
-          Top = 155
+          Top = 152
           Width = 108
           Height = 15
           Caption = 'Local Port to Bind to'
@@ -4836,7 +5526,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommLocalPort: TEdit
           Left = 8
-          Top = 81
+          Top = 80
           Width = 157
           Height = 21
           Hint = '15112'
@@ -4852,7 +5542,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommRemoteHost: TEdit
           Left = 8
-          Top = 126
+          Top = 124
           Width = 157
           Height = 21
           Hint = '127.0.0.1'
@@ -4868,7 +5558,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommRemotePort: TEdit
           Left = 8
-          Top = 171
+          Top = 168
           Width = 157
           Height = 21
           Hint = '15112'
@@ -4896,7 +5586,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommLocalPortButtonReset: TBitBtn
           Left = 168
-          Top = 81
+          Top = 80
           Width = 43
           Height = 21
           Hint = 'Reset to default port'
@@ -4908,7 +5598,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommRemoteHostButtonReset: TBitBtn
           Left = 168
-          Top = 126
+          Top = 124
           Width = 43
           Height = 21
           Hint = 'Reset to default address'
@@ -4920,7 +5610,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object CommRemotePortButtonReset: TBitBtn
           Left = 168
-          Top = 171
+          Top = 168
           Width = 43
           Height = 21
           Hint = 'Reset to default port'
@@ -4933,33 +5623,228 @@ object FormMAMESettings: TFormMAMESettings
       end
       object EnableGlobalInputs: TAdvOfficeCheckBox
         Left = 16
-        Top = 100
+        Top = 92
         Width = 128
         Height = 20
         Hint = 'Read inputs even when the MAME window is not in focus'
-        TabOrder = 20
+        TabOrder = 18
         Alignment = taLeftJustify
         Caption = 'Enable Global Inputs'
         ReturnIsTab = False
         Themed = True
+      end
+      object RecordInputTimecodeFile: TAdvOfficeCheckBox
+        Left = 328
+        Top = 220
+        Width = 185
+        Height = 18
+        TabOrder = 19
+        Alignment = taLeftJustify
+        Caption = 'Record an Input Timecode File'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object ExitAfterInputPlayback: TAdvOfficeCheckBox
+        Left = 328
+        Top = 260
+        Width = 200
+        Height = 18
+        TabOrder = 20
+        Alignment = taLeftJustify
+        Caption = 'Exit Emulator After Input Playback'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object OSDInputOptionsGroupBox: TAdvGroupBox
+        Left = 16
+        Top = 256
+        Width = 297
+        Height = 109
+        Transparent = False
+        RoundEdges = True
+        Caption = 'OSD Input Options'
+        Ctl3D = True
+        Enabled = False
+        TabOrder = 21
+        object LabelOSDInputKeyboardProvider: TLabel
+          Left = 8
+          Top = 20
+          Width = 97
+          Height = 15
+          Caption = 'Keyboard Provider'
+          Transparent = True
+        end
+        object LabelOSDInputMouseProvider: TLabel
+          Left = 8
+          Top = 64
+          Width = 83
+          Height = 15
+          Caption = 'Mouse Provider'
+          Transparent = True
+        end
+        object LabelOSDInputLightgunProvider: TLabel
+          Left = 152
+          Top = 20
+          Width = 95
+          Height = 15
+          Caption = 'Lightgun Provider'
+          Transparent = True
+        end
+        object LabelOSDInputJoystickProvider: TLabel
+          Left = 152
+          Top = 64
+          Width = 88
+          Height = 15
+          Caption = 'Joystick Provider'
+          Transparent = True
+        end
+        object OSDInputKeyboardProvider: TComboBox
+          Left = 8
+          Top = 36
+          Width = 137
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 0
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'Raw Input'
+            'DirectInput'
+            'Win32 Input'
+            'None')
+        end
+        object OSDInputMouseProvider: TComboBox
+          Left = 8
+          Top = 80
+          Width = 137
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 1
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'Raw Input'
+            'DirectInput'
+            'Win32 Input'
+            'None')
+        end
+        object OSDInputLightgunProvider: TComboBox
+          Left = 152
+          Top = 36
+          Width = 137
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 2
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'Win32 Input'
+            'None')
+        end
+        object OSDInputJoystickProvider: TComboBox
+          Left = 152
+          Top = 80
+          Width = 137
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 3
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'DirectInput'
+            'XInput'
+            'None')
+        end
+      end
+      object OSDOutputOptionsBox: TAdvGroupBox
+        Left = 328
+        Top = 300
+        Width = 217
+        Height = 65
+        RoundEdges = True
+        Caption = 'OSD Output Options'
+        Ctl3D = True
+        TabOrder = 22
+        object LabelOSDOutputProvider: TLabel
+          Left = 8
+          Top = 20
+          Width = 85
+          Height = 15
+          Caption = 'Output Provider'
+        end
+        object OSDOutputProvider: TComboBox
+          Left = 8
+          Top = 36
+          Width = 137
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 0
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'Console'
+            'Network'
+            'Windows'
+            'None')
+        end
       end
     end
     object TPage
       Left = 0
       Top = 0
       Caption = 'Miscellaneous'
-      object Label1: TLabel
+      object LabelRAMSize: TLabel
         Left = 252
-        Top = 112
-        Width = 49
+        Top = 96
+        Width = 173
         Height = 15
-        Caption = 'RAM Size'
+        Caption = 'RAM Size (if supported by driver)'
         ShowAccelChar = False
         Transparent = True
       end
       object LabelSystemBios: TLabel
         Left = 465
-        Top = 24
+        Top = 14
         Width = 156
         Height = 15
         Caption = 'Select the System BIOS to Use'
@@ -4967,36 +5852,53 @@ object FormMAMESettings: TFormMAMESettings
         Transparent = True
       end
       object LabelUIFont: TLabel
-        Left = 16
-        Top = 164
-        Width = 38
+        Left = 96
+        Top = 188
+        Width = 95
         Height = 15
-        Caption = 'UI Font'
+        Caption = 'User Inteface Font'
+        Enabled = False
         ShowAccelChar = False
         Transparent = True
       end
       object LabelUIFontProvider: TLabel
-        Left = 252
-        Top = 164
-        Width = 103
+        Left = 16
+        Top = 188
+        Width = 44
         Height = 15
-        Caption = 'Provider for UI Font'
+        Caption = 'Provider'
       end
       object LabelSaveStateName: TLabel
         Left = 16
-        Top = 112
+        Top = 96
         Width = 88
         Height = 15
         Caption = 'Save State Name'
         ShowAccelChar = False
         Transparent = True
       end
+      object LabelTypeUserInterface: TLabel
+        Left = 16
+        Top = 142
+        Width = 115
+        Height = 15
+        Caption = 'Type of User Interface'
+      end
+      object LabelDisplayLanguage: TLabel
+        Left = 252
+        Top = 142
+        Width = 168
+        Height = 15
+        Caption = 'User Interface Display Language'
+        Enabled = False
+      end
       object SkipGameInfo: TAdvOfficeCheckBox
         Left = 138
-        Top = 20
+        Top = 12
         Width = 105
         Height = 20
         Hint = 'Skip displaying the information screen at startup'
+        Enabled = False
         TabOrder = 0
         Alignment = taLeftJustify
         Caption = 'Skip Game Info'
@@ -5005,7 +5907,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object ReadConfigFiles: TAdvOfficeCheckBox
         Left = 16
-        Top = 20
+        Top = 12
         Width = 115
         Height = 20
         Hint = 'Enable loading of configuration files'
@@ -5019,7 +5921,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object WriteConfigFiles: TAdvOfficeCheckBox
         Left = 16
-        Top = 40
+        Top = 32
         Width = 121
         Height = 20
         Hint = 'Writes configuration to (driver).ini on exit'
@@ -5031,7 +5933,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object AutoSave: TAdvOfficeCheckBox
         Left = 16
-        Top = 80
+        Top = 72
         Width = 105
         Height = 20
         Hint = 
@@ -5045,7 +5947,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object Cheat: TAdvOfficeCheckBox
         Left = 138
-        Top = 40
+        Top = 32
         Width = 105
         Height = 20
         Hint = 'Enable cheat subsystem'
@@ -5057,16 +5959,17 @@ object FormMAMESettings: TFormMAMESettings
       end
       object RAMSize: TEdit
         Left = 252
-        Top = 128
-        Width = 145
+        Top = 112
+        Width = 153
         Height = 21
         Hint = 'Size of RAM (if supported by driver)'
         AutoSize = False
         TabOrder = 5
+        OnKeyPress = RAMSizeKeyPress
       end
       object ConfirmQuit: TAdvOfficeCheckBox
         Left = 16
-        Top = 60
+        Top = 52
         Width = 97
         Height = 20
         Hint = 'Display quit confirmation dialog on exit'
@@ -5078,9 +5981,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DebugGroupBox: TAdvGroupBox
         Left = 16
-        Top = 294
-        Width = 297
-        Height = 143
+        Top = 251
+        Width = 220
+        Height = 186
         CheckBox.Action = caNone
         CheckBox.Hint = 'Enable/disable debugger'
         CheckBox.Visible = True
@@ -5090,7 +5993,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 7
         object LabelDebuggerScript: TLabel
           Left = 8
-          Top = 96
+          Top = 138
           Width = 85
           Height = 15
           Caption = 'Debugger Script'
@@ -5098,8 +6001,8 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = True
         end
         object LabelWatchdog: TLabel
-          Left = 168
-          Top = 86
+          Left = 8
+          Top = 69
           Width = 116
           Height = 15
           Hint = 
@@ -5108,8 +6011,8 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Watchdog             secs'
         end
         object Label4: TLabel
-          Left = 168
-          Top = 20
+          Left = 8
+          Top = 92
           Width = 91
           Height = 15
           Caption = 'Debugger To Use'
@@ -5129,9 +6032,9 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object OSLog: TAdvOfficeCheckBox
-          Left = 8
-          Top = 60
-          Width = 115
+          Left = 104
+          Top = 40
+          Width = 112
           Height = 20
           Hint = 'Output error.log data to the system debugger'
           TabOrder = 1
@@ -5153,11 +6056,11 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object UpdateInPause: TAdvOfficeCheckBox
-          Left = 168
-          Top = 60
-          Width = 115
+          Left = 104
+          Top = 20
+          Width = 109
           Height = 20
-          Hint = 'keep calling video updates while in pause'
+          Hint = 'Keep calling video updates while in pause'
           TabOrder = 3
           Alignment = taLeftJustify
           Caption = 'Update In Pause'
@@ -5166,8 +6069,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object DebuggerScript: TEdit
           Left = 8
-          Top = 114
-          Width = 236
+          Top = 156
+          Width = 160
           Height = 21
           Hint = 'Script for debugger'
           TabStop = False
@@ -5179,8 +6082,8 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 4
         end
         object DebuggerScriptBrowse: TBitBtn
-          Left = 246
-          Top = 114
+          Left = 169
+          Top = 156
           Width = 43
           Height = 21
           Hint = 'Click here to select a file'
@@ -5191,8 +6094,8 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = DebuggerScriptBrowseClick
         end
         object Watchdog: TEdit
-          Left = 227
-          Top = 84
+          Left = 67
+          Top = 67
           Width = 32
           Height = 21
           Hint = 
@@ -5204,8 +6107,8 @@ object FormMAMESettings: TFormMAMESettings
           OnKeyPress = WatchdogKeyPress
         end
         object Debugger: TComboBox
-          Left = 168
-          Top = 36
+          Left = 8
+          Top = 108
           Width = 123
           Height = 21
           Style = csDropDownList
@@ -5230,9 +6133,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object BiosSetsListView: TEasyListview
         Left = 465
-        Top = 40
+        Top = 30
         Width = 385
-        Height = 397
+        Height = 407
         BackGround.Enabled = True
         CellSizes.Report.Height = 19
         Color = clWhite
@@ -5296,29 +6199,31 @@ object FormMAMESettings: TFormMAMESettings
         OnItemCompare = BiosSetsListViewItemCompare
       end
       object UIFont: TEdit
-        Left = 16
-        Top = 180
-        Width = 169
+        Left = 96
+        Top = 204
+        Width = 95
         Height = 21
         Hint = 'Specify a font to use'
         AutoSize = False
         Ctl3D = True
+        Enabled = False
         ParentCtl3D = False
         TabOrder = 9
       end
       object UIFontSelectFontButton: TBitBtn
-        Left = 187
-        Top = 180
+        Left = 193
+        Top = 204
         Width = 43
         Height = 21
         Hint = 'Click here to select a font'
         Caption = 'Select'
+        Enabled = False
         TabOrder = 10
         OnClick = UIFontSelectFontButtonClick
       end
       object DRC: TAdvOfficeCheckBox
         Left = 252
-        Top = 20
+        Top = 12
         Width = 145
         Height = 20
         Hint = 'Enable DRC cpu core if available'
@@ -5332,7 +6237,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DRCUseC: TAdvOfficeCheckBox
         Left = 252
-        Top = 40
+        Top = 32
         Width = 169
         Height = 20
         Hint = 'Force DRC use C backend'
@@ -5343,8 +6248,8 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
       end
       object RAMSizeButtonClear: TBitBtn
-        Left = 399
-        Top = 128
+        Left = 407
+        Top = 112
         Width = 43
         Height = 21
         Hint = 'Click here to clear RAM size'
@@ -5354,7 +6259,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DRCLogUML: TAdvOfficeCheckBox
         Left = 252
-        Top = 60
+        Top = 52
         Width = 194
         Height = 20
         TabOrder = 14
@@ -5365,7 +6270,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DRCLogNative: TAdvOfficeCheckBox
         Left = 252
-        Top = 80
+        Top = 72
         Width = 201
         Height = 20
         TabOrder = 15
@@ -5375,10 +6280,11 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
       end
       object UIFontProvider: TComboBox
-        Left = 252
-        Top = 180
-        Width = 145
+        Left = 16
+        Top = 204
+        Width = 78
         Height = 21
+        Hint = 'Provider for user interface font'
         Style = csDropDownList
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -5399,8 +6305,8 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveStateName: TEdit
         Left = 16
-        Top = 128
-        Width = 169
+        Top = 112
+        Width = 175
         Height = 21
         Hint = 'Override of the default state subfolder naming; %g == gamename'
         AutoSize = False
@@ -5409,8 +6315,8 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 17
       end
       object ButtonSaveStateNameReset: TBitBtn
-        Left = 187
-        Top = 128
+        Left = 193
+        Top = 112
         Width = 43
         Height = 21
         Hint = 'Set default save state name'
@@ -5419,6 +6325,83 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = True
         TabOrder = 18
         OnClick = ButtonSaveStateNameResetClick
+      end
+      object TypeUserInterface: TComboBox
+        Left = 16
+        Top = 158
+        Width = 119
+        Height = 21
+        Style = csDropDownList
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ItemHeight = 13
+        ItemIndex = 1
+        ParentFont = False
+        TabOrder = 19
+        Text = 'Cabinet'
+        Items.Strings = (
+          'Simple'
+          'Cabinet')
+      end
+      object DisplayLanguageList: TEasyListview
+        Left = 252
+        Top = 158
+        Width = 197
+        Height = 279
+        BackGround.Enabled = True
+        CellSizes.Report.Height = 19
+        Color = clWhite
+        EditManager.Font.Charset = ANSI_CHARSET
+        EditManager.Font.Color = clBlack
+        EditManager.Font.Height = -12
+        EditManager.Font.Name = 'Segoe UI'
+        EditManager.Font.Style = []
+        Enabled = False
+        UseDockManager = False
+        HintType = ehtToolTip
+        Header.Columns.Items = {
+          0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+          00060000008008000101000100000000000000B1000000FFFFFF1F0001000000
+          010000001A0000004C0061006E00670075006100670065002000280064006500
+          6600610075006C007400200069006E00200062006F006C006400290000000000
+          0000000000000000}
+        Header.Draggable = False
+        Header.Height = 23
+        Header.Sizeable = False
+        IncrementalSearch.Enabled = True
+        IncrementalSearch.ResetTime = 1000
+        IncrementalSearch.StartType = eissFocusedNode
+        ImagesSmall = FormMain.IL_MenuPopup
+        PaintInfoColumn.Border = 2
+        PaintInfoColumn.CaptionIndent = 0
+        PaintInfoGroup.Expandable = False
+        PaintInfoGroup.MarginBottom.CaptionIndent = 4
+        PaintInfoItem.BorderColor = 16370824
+        PaintInfoItem.ShowBorder = False
+        ParentShowHint = False
+        ShowHint = True
+        Selection.BlendColorSelRect = 10902593
+        Selection.BlendIcon = False
+        Selection.BorderColor = 10902593
+        Selection.BorderColorSelRect = 10902593
+        Selection.Color = 10902593
+        Selection.FullCellPaint = True
+        Selection.FullItemPaint = True
+        Selection.FullRowSelect = True
+        Selection.Gradient = True
+        Selection.GradientColorBottom = 16506264
+        Selection.GradientColorTop = 15582647
+        Selection.InactiveBorderColor = 10902593
+        Selection.InactiveColor = 15582647
+        Selection.MouseButton = [cmbLeft, cmbRight]
+        Selection.RoundRectRadius = 2
+        Selection.TextColor = clBlack
+        Selection.UseFocusRect = False
+        TabOrder = 20
+        View = elsReport
       end
     end
     object TPage
@@ -7249,14 +8232,14 @@ object FormMAMESettings: TFormMAMESettings
         Left = 16
         Top = 166
         Width = 249
-        Height = 89
+        Height = 87
         RoundEdges = True
         Caption = 'Output Mode'
         ParentCtl3D = True
         TabOrder = 6
         object LabelSDLScaleMode: TLabel
           Left = 8
-          Top = 44
+          Top = 42
           Width = 196
           Height = 15
           Caption = 'Scale Mode (Software Renderer Only)'
@@ -7293,7 +8276,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object SDLScaleMode: TComboBox
           Left = 8
-          Top = 60
+          Top = 58
           Width = 233
           Height = 21
           Style = csDropDownList
@@ -7320,7 +8303,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SDLSplitFullScreenMonitors: TAdvOfficeCheckBox
         Left = 16
-        Top = 264
+        Top = 262
         Width = 231
         Height = 20
         Hint = 'Multi-monitors (X11 only)'
@@ -7333,9 +8316,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SDLLowLevelDriver: TAdvGroupBox
         Left = 16
-        Top = 330
+        Top = 334
         Width = 331
-        Height = 113
+        Height = 109
         RoundEdges = True
         Caption = 'SDL Low Level Driver'
         Ctl3D = True
@@ -7369,7 +8352,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelSDLAlternativeLibGLToUse: TLabel
           Left = 8
-          Top = 68
+          Top = 64
           Width = 102
           Height = 15
           Caption = 'Alternative libGL.so'
@@ -7442,7 +8425,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object SDLAlternativeLibGLToUse: TComboBox
           Left = 8
-          Top = 84
+          Top = 80
           Width = 103
           Height = 21
           Style = csDropDownList
@@ -7463,7 +8446,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object SDLAlternativeLibGLToUseCustom: TEdit
           Left = 114
-          Top = 84
+          Top = 80
           Width = 165
           Height = 21
           AutoSize = False
@@ -7472,7 +8455,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ButtonSDLAlternativeLibGLToUseCustom: TBitBtn
           Left = 281
-          Top = 84
+          Top = 80
           Width = 43
           Height = 21
           Hint = 'Click here to select a file'
@@ -7613,12 +8596,12 @@ object FormMAMESettings: TFormMAMESettings
     end
   end
   object ToolBarPages: TToolBar
-    Left = 418
+    Left = 367
     Top = 60
-    Width = 450
+    Width = 501
     Height = 21
     Align = alNone
-    ButtonWidth = 104
+    ButtonWidth = 97
     Color = clBtnFace
     Constraints.MaxWidth = 900
     EdgeBorders = [ebBottom]
@@ -7652,15 +8635,15 @@ object FormMAMESettings: TFormMAMESettings
       Left = 66
       Top = 0
       AutoSize = True
-      Caption = 'Video and Audio'
+      Caption = 'Video'
       Grouped = True
       ImageIndex = 500
       Style = tbsCheck
       OnClick = ButtonPageFoldersClick
     end
-    object ButtonPageVideo2Audio: TToolButton
+    object ButtonPageVideo2: TToolButton
       Tag = 2
-      Left = 174
+      Left = 123
       Top = 0
       AutoSize = True
       Caption = 'Video 2'
@@ -7669,9 +8652,20 @@ object FormMAMESettings: TFormMAMESettings
       Style = tbsCheck
       OnClick = ButtonPageFoldersClick
     end
-    object ButtonPageInput: TToolButton
+    object ButtonPageLUA_Audio: TToolButton
       Tag = 3
-      Left = 240
+      Left = 189
+      Top = 0
+      AutoSize = True
+      Caption = 'LUA and Audio'
+      Grouped = True
+      ImageIndex = 501
+      Style = tbsCheck
+      OnClick = ButtonPageFoldersClick
+    end
+    object ButtonPageInput: TToolButton
+      Tag = 4
+      Left = 290
       Top = 0
       AutoSize = True
       Caption = 'Input'
@@ -7681,8 +8675,8 @@ object FormMAMESettings: TFormMAMESettings
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageMisc: TToolButton
-      Tag = 4
-      Left = 297
+      Tag = 5
+      Left = 347
       Top = 0
       AutoSize = True
       Caption = 'Miscellaneous'
@@ -7692,8 +8686,8 @@ object FormMAMESettings: TFormMAMESettings
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageSDLMAMEInput: TToolButton
-      Tag = 5
-      Left = 393
+      Tag = 6
+      Left = 443
       Top = 0
       AutoSize = True
       Caption = 'SDL'

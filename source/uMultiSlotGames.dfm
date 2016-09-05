@@ -22,10 +22,10 @@ object FormMultiSlotGames: TFormMultiSlotGames
   PixelsPerInch = 96
   TextHeight = 15
   object LabelHelpText: TLabel
-    Left = 213
+    Left = 196
     Top = 290
-    Width = 345
-    Height = 26
+    Width = 380
+    Height = 28
     Alignment = taCenter
     AutoSize = False
     Caption = 
@@ -33,7 +33,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
       'minimum required'
     Font.Charset = ANSI_CHARSET
     Font.Color = clNavy
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Verdana'
     Font.Style = []
     ParentFont = False
@@ -44,34 +44,24 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Left = 4
     Top = 4
     Width = 763
-    Height = 229
+    Height = 231
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 20
     Color = clWhite
     DisabledBlendAlpha = 0
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -11
-    EditManager.Font.Name = 'Tahoma'
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
     ImagesState = FormMain.IL_GroupedMode
     UseDockManager = False
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    GroupFont.Charset = ANSI_CHARSET
-    GroupFont.Color = clBlack
-    GroupFont.Height = -12
-    GroupFont.Name = 'Segoe UI'
-    GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000008000000110000005445617379436F6C756D6E53746F726564FFFECE
       0006000000800801010100010000000000000017000000FFFFFF1F0001000000
       00000000000000000000000000000000110000005445617379436F6C756D6E53
-      746F726564FFFECE000600000080080001010001010000000000004A010000FF
+      746F726564FFFECE0006000000800800010100010100000000000047010000FF
       FFFF1F000100000001000000050000005400690074006C006500000000000000
       000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
       00000080080001010001020000000000005F000000FFFFFF1F00010000000100
@@ -82,20 +72,17 @@ object FormMultiSlotGames: TFormMultiSlotGames
       6F6C756D6E53746F726564FFFECE000600000080080001010001040000000000
       0078000000FFFFFF1F0001000000010000000600000050006C00610079006500
       6400000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE000600000080080001010001050000000000002F000000FFFFFF
+      726564FFFECE0006000000800800010100010500000000000031000000FFFFFF
       1F0001000000010000000700000050006C006100790065007200730000000000
       0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010600000000000022000000FFFFFF1F0001000000
+      0006000000800800010100010600000000000023000000FFFFFF1F0001000000
       0100000004000000590065006100720000000000000000000000000011000000
       5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
       0700000000000011000000FFFFFF1F0001000000010000000000000000000000
       0000000000000000}
     Header.Draggable = False
-    Header.Font.Charset = ANSI_CHARSET
-    Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
+    Header.Height = 23
+    Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
@@ -113,7 +100,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     PaintInfoItem.BorderColor = 16370824
     PaintInfoItem.ImageIndent = 0
     PaintInfoItem.ShowBorder = False
-    ParentFont = False
     ParentShowHint = False
     ShowHint = True
     Selection.BlendAlphaImage = 0
@@ -137,7 +123,6 @@ object FormMultiSlotGames: TFormMultiSlotGames
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
-    OnColumnPaintText = GamesListColumnPaintText
     OnItemPaintText = GamesListItemPaintText
     OnItemSelectionChanged = GamesListItemSelectionChanged
     OnKeyAction = GamesListKeyAction
@@ -182,7 +167,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
   object ButtonUp: TBitBtn
     Tag = 1
     Left = 4
-    Top = 240
+    Top = 242
     Width = 125
     Height = 25
     Hint = 'Move selected game to upper slot [Ctrl+Up Arrow]'
@@ -194,7 +179,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
   end
   object ButtonDown: TBitBtn
     Left = 141
-    Top = 240
+    Top = 242
     Width = 125
     Height = 25
     Hint = 'Move selected game to lower slot [Ctrl+Down Arrow]'
@@ -206,7 +191,7 @@ object FormMultiSlotGames: TFormMultiSlotGames
   end
   object ButtonRemoveFromList: TBitBtn
     Left = 277
-    Top = 240
+    Top = 242
     Width = 125
     Height = 25
     Hint = 'Remove selected games from the list [Delete]'

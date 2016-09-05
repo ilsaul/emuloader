@@ -1,0 +1,2238 @@
+unit uRunExtraMAME;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  Dialogs, IniFiles, uCommon, StdCtrls, Buttons, AdvGroupBox,
+  AdvOfficeButtons, ShadowLabel, ExtCtrls, PanelEx, MPCommonObjects,
+  MPCommonUtilities, EasyListview, Menus, BarMenus;
+
+type
+  TFileInfo = class(TEasyItemStored)
+  private
+    //fImageIndex: Integer;
+    fFileName: String;
+    fFileFolder: String;
+    fFileFolderRelative: String;
+    fSize: Int64;
+    fSizeText: String;
+    fDateTime: Integer;
+    fDateTimeText: String;
+    fIsGameSubFolder: Boolean;
+  protected
+    function GetCaptions(Column: Integer): WideString; override;
+    //function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
+  public
+    //property eImageIndex: Integer read fImageIndex write fImageIndex;
+    property eFileName: String read fFileName write fFileName;
+    property eFileFolder: String read fFileFolder write fFileFolder;
+    property eFileFolderRelative: String read fFileFolderRelative write fFileFolderRelative;
+    property eSize: Int64 read fSize write fSize;
+    property eSizeText: String read fSizeText write fSizeText;
+    property eDateTime: Integer read fDateTime write fDateTime;
+    property eDateTimeText: String read fDateTimeText write fDateTimeText;
+    property eIsGameSubFolder: Boolean read fIsGameSubFolder write fIsGameSubFolder;
+  end;
+
+type
+  TFormRunGameExtraMAME = class(TForm)
+    PanelTop: TPanelEx;
+    GameIcon: TImage;
+    LabelTitle: TShadowLabel;
+    LabelGameNameCloneOf: TShadowLabel;
+    PanelMessages: TPanelEx;
+    ButtonOk: TBitBtn;
+    ButtonAbort: TBitBtn;
+    Label3: TLabel;
+    SystemIcon: TImage;
+    LabelSoftwareListTitle: TShadowLabel;
+    NotebookPages: TNotebook;
+    PageButtonInput: TSpeedButton;
+    PageButtonSaveState: TSpeedButton;
+    PageButtonMemoryCard: TSpeedButton;
+    PageButtonRecordMovie: TSpeedButton;
+    PagesButtonBottomLine: TBevel;
+    Enabled_PlaybackRecordInput: TAdvOfficeCheckBox;
+    InputPlayback: TAdvOfficeRadioButton;
+    InputFileName: TEdit;
+    InputRecord: TAdvOfficeRadioButton;
+    InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBox;
+    InputRecordTimecodeFile: TAdvOfficeCheckBox;
+    ButtonInputResetFileName: TBitBtn;
+    InputListView: TEasyListview;
+    LabelInputSelectedFileFolder: TShadowLabel;
+    SaveStateListView: TEasyListview;
+    Enabled_LoadSaveState: TAdvOfficeCheckBox;
+    Enabled_InsertMemoryCard: TAdvOfficeCheckBox;
+    Enabled_RecordMovie: TAdvOfficeCheckBox;
+    LabelInsertMemoryCard_Slot1: TLabel;
+    LabelInsertMemoryCard_Slot2: TLabel;
+    InsertMemoryCard_Slot1: TEdit;
+    InsertMemoryCard_Slot2: TEdit;
+    ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtn;
+    ButtonInsertMemoryCard_Slot1_Clear: TBitBtn;
+    ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtn;
+    ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtn;
+    ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtn;
+    ButtonInsertMemoryCard_Slot2_Clear: TBitBtn;
+    ButtonRecordMovieUsageInfo: TBitBtn;
+    ButtonRecordMovieResetFileName: TBitBtn;
+    ButtonRecordMovieSelectFile: TBitBtn;
+    RecordMovieFileName: TEdit;
+    RecordMovieWAV: TAdvOfficeRadioButton;
+    RecordMovieMNG: TAdvOfficeRadioButton;
+    RecordMovieAVI: TAdvOfficeRadioButton;
+    InputListViewFileFolderFrame: TShape;
+    LabelInputFileName: TLabel;
+    LabelSaveStateSelectedFileFolder: TShadowLabel;
+    SaveStateListViewFileFolderFrame: TShape;
+    LabelLoadSaveStateNotSupportedMsg: TLabel;
+    LabelMachineInUse: TShadowLabel;
+    PopupELV: TBcBarPopupMenu;
+    PopupInputRenameFile: TMenuItem;
+    PopupInputDeleteFile: TMenuItem;
+    RecordMovieListView: TEasyListview;
+    ShadowLabel1: TShadowLabel;
+    Shape1: TShape;
+    PanelDisabledInput: TPanel;
+    PanelDisabledSaveState: TPanel;
+    PanelDisabledMemoryCard: TPanel;
+    PanelDisabledRecordMovie: TPanel;
+    PopupMemoryCardAssignToSlot1: TMenuItem;
+    PopupMemoryCardAssignToSlot2: TMenuItem;
+    N1: TMenuItem;
+    LabelMemoryCardSelectedFileFolder: TShadowLabel;
+    MemoryCardListViewFileFolderFrame: TShape;
+    MemoryCardListView: TEasyListview;
+    AutoSaveState: TAdvOfficeCheckBox;
+    PanelDisabledSaveStateNotSupportedMsg: TPanel;
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure InputPlaybackClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot1_LastUsedClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot2_LastUsedClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot1_ClearClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot2_ClearClick(Sender: TObject);
+    procedure PageButtonInputClick(Sender: TObject);
+    procedure Enabled_PlaybackRecordInputClick(Sender: TObject);
+    procedure InputFileNameKeyPress(Sender: TObject; var Key: Char);
+    procedure InputListViewColumnClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; ShiftState: TShiftState;
+      const Column: TEasyColumn);
+    function InputListViewItemCompare(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
+      var DoDefault: Boolean): Integer;
+    procedure InputListViewItemSelectionChanged(
+      Sender: TCustomEasyListview; Item: TEasyItem);
+    procedure InputListViewKeyAction(Sender: TCustomEasyListview;
+      var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+    procedure ButtonInputResetFileNameClick(Sender: TObject);
+    procedure SaveStateListViewColumnClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; ShiftState: TShiftState;
+      const Column: TEasyColumn);
+    function SaveStateListViewItemCompare(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
+      var DoDefault: Boolean): Integer;
+    procedure SaveStateListViewItemSelectionChanged(
+      Sender: TCustomEasyListview; Item: TEasyItem);
+    procedure SaveStateListViewKeyAction(Sender: TCustomEasyListview;
+      var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+    procedure Enabled_LoadSaveStateClick(Sender: TObject);
+    procedure InputListViewItemEditEnd(Sender: TCustomEasyListview;
+      Item: TEasyItem);
+    procedure InputListViewItemEdited(Sender: TCustomEasyListview;
+      Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure SaveStateListViewItemEdited(Sender: TCustomEasyListview;
+      Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
+    procedure SaveStateListViewItemEditEnd(Sender: TCustomEasyListview;
+      Item: TEasyItem);
+    procedure Enabled_InsertMemoryCardClick(Sender: TObject);
+    procedure MemoryCardListViewColumnClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; ShiftState: TShiftState;
+      const Column: TEasyColumn);
+    function MemoryCardListViewItemCompare(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
+      var DoDefault: Boolean): Integer;
+    procedure MemoryCardListViewItemEditEnd(Sender: TCustomEasyListview;
+      Item: TEasyItem);
+    procedure MemoryCardListViewItemEdited(Sender: TCustomEasyListview;
+      Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
+    procedure MemoryCardListViewItemSelectionChanged(
+      Sender: TCustomEasyListview; Item: TEasyItem);
+    procedure MemoryCardListViewKeyAction(Sender: TCustomEasyListview;
+      var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+    procedure PopupELVPopup(Sender: TObject);
+    procedure Enabled_RecordMovieClick(Sender: TObject);
+    procedure PopupInputRenameFileClick(Sender: TObject);
+    procedure PopupInputDeleteFileClick(Sender: TObject);
+    procedure MemoryCardListViewDblClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; MousePos: TPoint;
+      ShiftState: TShiftState; var Handled: Boolean);
+    procedure PopupMemoryCardAssignToSlot1Click(Sender: TObject);
+    procedure InsertMemoryCard_Slot1KeyPress(Sender: TObject;
+      var Key: Char);
+    procedure InsertMemoryCard_Slot2KeyPress(Sender: TObject;
+      var Key: Char);
+    procedure ButtonInsertMemoryCard_Slot1_SelectFileClick(
+      Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot2_SelectFileClick(
+      Sender: TObject);
+  private
+    { Private declarations }
+    FolderInput, FolderState, FolderMemoryCard, FolderRecordMovie: String;
+    InputPlayback_CurrentFile, InputRecord_CurrentFile: String;
+    InputExitEmuAfterPlay_LastChecked, InputRecTimeCodeFile_LastChecked, SaveStateAuto_LastChecked: Boolean;
+    SoftwareListFolder, MachineNameFolder: String;
+    ActiveFileID: Integer; // what set type is this (gamename, clone, bios)
+    FoundInputExtra: Boolean; // sets to FALSE is settings "record_timecode" and "exit_after_playback" do not exist in mame.ini
+    procedure GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
+    //procedure SelectFileDialog(FeatureIndex: Byte);
+    procedure SetDoubleBufferGroupBox(BoxName: TAdvGroupBox);
+    procedure CheckMemoryCardSupport;
+    procedure UpdateLastMemoryCardUsed;
+    procedure CheckSaveStateSupport;
+    procedure DisablePage(PageIndex: Byte);
+    procedure ParseMAMEIni;
+    procedure ReadMAMESettings(const iniFile: String; IsMAMEDefaultSettings: Boolean = False);
+    procedure ELV_SelectItem(ELV_Holder: TEasyListView; ItemHolder: TEasyItem);
+    procedure ReSelectInputFile;
+    procedure ReSelectSaveStateFile;
+    procedure EditFileName(ELV_Holder: TEasyListView);
+    procedure EditFileName_EndEdit_ELV(ELV_Holder: TEasyListView);
+    procedure DeleteFileName(ELV_Holder: TEasyListView);
+    procedure ValidateKeyActions_ELV(ELV_Holder: TEasyListView; var CharCode: Word; var Shift: TShiftState);
+    function  GetItem_ELV(const FileFullPath: String; ELV_Holder: TEasyListView; CheckFullPath: Boolean = True): TEasyItem;
+    procedure AddMemoryCardToSlot(SlotIndex: ShortInt = -1);
+    function  MountCommandLine: Boolean;
+    procedure AdjustWindow;
+    procedure SetBottomButtons(IsEnabled: Boolean);
+  public
+    { Public declarations }
+    MachineNameToRun, CommandLine, EmulatorFileName: String;
+    IsMultiSlotGame: Boolean;
+  end;
+
+var
+  FormRunGameExtraMAME: TFormRunGameExtraMAME;
+
+implementation
+
+uses uMain;
+
+{$R *.dfm}
+
+function TFileInfo.GetCaptions(Column: Integer): WideString;
+begin
+  case Column of
+    //0:
+    //  begin
+    //    // need to show msx1_cart\gamename.inp
+    //    // need to show msx1_cart\gamename\anyfilename.inp
+    //    case eIsGameSubFolder of
+    //      True : Result:= FormMain.MemGameInfo.eName+'\'+eFileName;
+    //      False: Result:= eFileName;
+    //    end;
+    //  end;
+    0: Result:= eFileName;
+    1: Result:= eSizeText;
+    2: Result:= eDateTimeText;
+    3: Result:= eFileFolderRelative;
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
+
+  function AddFile_ELV(ELV_Holder: TEasyListView; const iFileName, iFolderName: String; IsGameSubFolder: Boolean): Boolean;
+  var
+    Item: TEasyItem;
+    iRelative: String;
+  begin
+    case FeatureIndex of
+      20,21: iRelative:= FolderInput;
+      22: iRelative:= FolderState;
+      32: iRelative:= FolderMemoryCard;
+    end;
+
+    iRelative:= StringReplace(iFolderName, iRelative, '', [rfIgnoreCase]);
+    Item:= ELV_Holder.Items.AddCustom(TFileInfo, nil);
+    {case FormSelectFile.Tag of
+      20, 21: TFileInfo(Item).eImageIndex:= 18; // Input
+          22: TFileInfo(Item).ImageIndex:= 16; // Save state
+          23: TFileInfo(Item).eImageIndex:= 00; // Wave
+      24, 25: TFileInfo(Item).eImageIndex:= 06; // MNG, AVI
+      26, 29, 30: TFileInfo(Item).eImageIndex:= 07; // Left panel filter, Select Font File
+      27, 28, 31: TFileInfo(Item).eImageIndex:= 06; // PNG
+      32:  // Memory Card files
+    end;}
+    TFileInfo(Item).eFileName:= iFileName;
+    TFileInfo(Item).eFileFolder:= iFolderName;
+    TFileInfo(Item).eFileFolderRelative:= iRelative;
+    TFileInfo(Item).eSize:= GetFileSize(iFolderName+iFileName);
+    TFileInfo(Item).eSizeText:= FormMain.GetSizeType(TFileInfo(Item).eSize, False);
+    TFileInfo(Item).eDateTime:= FileAge(iFolderName+iFileName);
+    TFileInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TFileInfo(Item).eDateTime);
+    TFileInfo(Item).eIsGameSubFolder:= IsGameSubFolder;
+  end;
+
+  function ELV_StartAdd(ELV_Holder: TEasyListView): Boolean;
+  begin
+    Result:= True;
+    ELV_Holder.BeginUpdate;
+    ELV_Holder.Items.ReIndexDisable:= True;
+  end;
+
+  function ELV_EndAdd(ELV_Holder: TEasyListView): Boolean;
+  begin
+    Result:= True;
+    ELV_Holder.Items.ReIndexDisable:= False;
+    ELV_Holder.Sort.SortAll;
+    ELV_Holder.EndUpdate;
+    if ELV_Holder.Scrollbars.VertBarVisible then
+       begin
+         ELV_Holder.Header.Columns[0].Width:= ELV_Holder.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);//16;
+         ELV_Holder.Sort.SortAll;
+       end;
+  end;
+
+  function GetFilesMulti(const FolderStr, FileMaskStr: String): Boolean;
+  var
+    Search: TSearchRec;
+  begin
+    if FindFirst(FolderStr+FileMaskStr, $37, Search) = 0 then
+    begin
+      repeat
+        if (Search.Name <> '.') and (Search.Name <> '..') then
+        begin
+          //if not (Search.Attr and $10 = $10) then // is is a sub-folder inside the main folder ??? ignore it...
+          if (Search.Attr and $10 <> $10) then
+          begin
+            case FeatureIndex of
+              20, 21: AddFile_ELV(InputListView, Search.Name, FolderStr, True); // input
+              22: AddFile_ELV(SaveStateListView, Search.Name, FolderStr, True); // save state
+              32: AddFile_ELV(MemoryCardListView, Search.Name, FolderStr, True); // memory card
+            end;
+          end;
+        end;
+      until (FindNext(Search) <> 0);
+    end;
+    FindClose(Search);
+  end;
+
+var
+  iFolder, iFileMask, iFileExtension, iFolderRelative: String;
+  iMachineFolderStr, iSoftListFolderStr: String;
+begin
+  iFolder:= '';
+  case FeatureIndex of
+    20, 21: // input
+      begin
+        iFolder:= FolderInput;
+        iFileMask:= '*.inp';
+        iFileExtension:= '.inp';
+      end;
+    22: // save state
+      begin
+        iFolder:= FolderState;
+        iFileMask:= '*.sta';
+        iFileExtension:= '.sta';
+      end;
+    32: // memory card
+      begin
+        iFolder:= FolderMemoryCard;
+        iFileMask:= '*.mc';
+        iFileExtension:= '.mc';
+      end;
+  end;
+  if iFolder = '' then
+     Exit;
+  iFolderRelative:= iFolder;
+
+  case FeatureIndex of
+    20, 21: ELV_StartAdd(InputListView); // input
+    22: ELV_StartAdd(SaveStateListView); // save state
+    32: ELV_StartAdd(MemoryCardListView); // memory card
+  end;
+
+  // MachineNameFolder is empty for arcade games/machines
+  iFolder:= iFolder+MachineNameFolder; // "inp_dir\arcade_gamename.inp" (arcade game)
+  // EL will not allow softlist games to be in the "inp_dir\expert11\" folder because you might run a MSX1 game with a MSX2 machine
+  // this is for arcade games only
+  // "memcard\psu\gamefile.mc" -> for PlayStation non-arcade memory cards (software lists)
+  if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension) then
+     begin
+       case FeatureIndex of
+         20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input
+         //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // save state // MAME doesn't support this, files must be in "\gamename\" subfolder!!!!!
+         32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // memory card
+       end;
+     end;
+  if FeatureIndex in [20, 21, 32] then
+  begin
+    if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+       begin
+         case FeatureIndex of
+           20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "inputdir\gametitle.inp"; "inputdir\gooniesb\gametitle.inp"
+           32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "memcard\psu\gametitle.mc"
+         end;
+       end;
+  end;
+
+  if FeatureIndex = 32 then
+  begin
+    // memory cards
+    if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension+'1') then
+       AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension+'1', iFolder, False); // for "memcard\psu\gamename.mc1"
+    if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension+'2') then
+       AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension+'2', iFolder, False); // for "memcard\psu\gamename.mc2"
+
+    //if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+    //   AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "memcard\psu\gametitle.mc"
+    if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension+'1') then
+       AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'1', iFolder, False); // for "memcard\psu\gametitle.mc1"
+    if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension+'2') then
+       AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'2', iFolder, False); // for "memcard\psu\gametitle.mc2"
+  end;
+
+  if SoftwareListFolder <> '' then
+     begin
+       // "inp_dir\expert11\msx1_cart\gooniesb.inp"
+       // "sta_dir\expert11\msx1_cart\gooniesb\gooniesb.sta"
+
+       // "memcard_dir\machine_name\softlist_name\memcard-filename.mc
+       //
+       // "memcard_dir\psu\psx\wildarms.mc"
+       // "memcard_dir\psu\psx\wildarms.mc1"
+       // "memcard_dir\psu\psx\wildarms.mc2"
+       // "memcard_dir\psu\psx\wildarms\wildarms.mc"
+       // "memcard_dir\psu\psx\wildarms\wildarms.mc1"
+       // "memcard_dir\psu\psx\wildarms\wildarms.mc2"
+       // "memcard_dir\psu\psx\Wild Arms (USA).mc" -> game title
+       // "memcard_dir\psu\psx\Wild Arms (USA).mc1" -> game title
+       // "memcard_dir\psu\psx\Wild Arms (USA).mc2" -> game title
+       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc" -> game title
+       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc1" -> game title
+       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc2" -> game title
+       if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension) then
+          begin
+            case FeatureIndex of
+              20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // input
+              //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // save state .... MAME doesn't support this! August 25, 2016
+            end;
+          end;
+       if FeatureIndex in [20, 21, 32] then
+       begin
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+            begin
+              case FeatureIndex of
+                20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "inputdir\expert11\msx1_cart\gametitle.inp"
+                32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "memcard\psu\psx\gametitle.mc"
+              end;
+            end;
+       end;
+
+       if FeatureIndex = 32 then
+       begin
+         // memory cards
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension+'1') then
+            AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension+'1', iFolder+SoftwareListFolder, False); // for gamename.mc1
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension+'2') then
+            AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension+'2', iFolder+SoftwareListFolder, False); // for gamename.mc2
+
+         //if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+         //   AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // for gametitle.mc
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension+'1') then
+            AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'1', iFolder+SoftwareListFolder, False); // for gametitle.mc1
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension+'2') then
+            AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'2', iFolder+SoftwareListFolder, False); // for gametitle.mc2
+
+         GetFilesMulti(iFolder+FormMain.MemGameInfo.eName+'\', iFileMask+'*'); // for "memcard\gamename\*.mc*"...
+       end;
+       iFolder:= iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
+     end
+  else
+     iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\gamename\multi_filenames.inp" (arcade game)
+
+  if FeatureIndex = 32 then
+     GetFilesMulti(iFolder, iFileMask+'*') // for "memcard\gamename\*.mc*"... or "memcard\psu\psx\gamename\*.mc*" (for softlists)
+  else
+     GetFilesMulti(iFolder, iFileMask);
+
+  case FeatureIndex of
+    20, 21: ELV_EndAdd(InputListView); // input
+    22: ELV_EndAdd(SaveStateListView); // save state
+    32: ELV_EndAdd(MemoryCardListVieW); // memory card
+  end;
+end;
+
+{
+procedure TFormRunGameExtraMAME.SelectFileDialog(FeatureIndex: Byte);
+var
+  selFile: String;
+begin
+  // this is the old dialog... will probably not be used anymore (August 25, 2016)
+  // -1: none... invalid!
+  // 20: playback input
+  // 21: record input
+  // 22: load a save state
+  // 23: record wave
+  // 24: record mng
+  // 25: record avi
+  // 26: * left panel file select (not used anymore!!!)
+  // 27: play and use an effect overlay
+  // 28: Select Effect Overlay (MAME Settings)
+  // 29: Select Font Files, emulator (BDF)
+  // 30: Select Font Files, game, driver (BDF)
+  // 31: Select Shadow Mask Texture (MAME Settings)
+  // all these options are now MAME exclusive features
+  case FormMain.SelectFileName(FeatureIndex, FormMain.MemGameInfo.eSystemID, EmulatorFileName, selFile) of //FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], selFile) of
+     True:
+       begin
+         case FeatureIndex of
+           20, 21:
+             begin
+               if (FormMain.GetMAMEBuild in [0..58]) then // if GetMAMEBuild < 59 then // version "-1" means could not get version info... assume it's latest MAME builds!!! July 25, 2016
+                  selFile:= ChangeFileExt(selFile, ''); // previous to v0.59; MAME adds a .inp extension automatically!!!
+               //if MAME_ExtraSetting = 20 then
+               //   CommandLine:= CommandLine+' -playback '+NewOption
+               //else
+               //   CommandLine:= CommandLine+' -record '+NewOption;
+             if selFile <> '' then
+                begin
+                  InputPlayback_CurrentFile:= selFile;
+                  InputFileName.Text:= selFile;
+                end;
+             end;
+           //20:
+           //  begin
+           //    if GetMAMEBuild < 59 then
+           //       NewOption:= ChangeFileExt(NewOption, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
+           //    CommandLine:= CommandLine+' -playback '+NewOption;
+           //  end;
+           //21:
+           //  begin
+           //    if GetMAMEBuild < 59 then
+           //       NewOption:= ChangeFileExt(NewOption, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
+           //    CommandLine:= CommandLine+' -record '+NewOption;
+           //  end;
+           // not used anymore!!!!!! //22: CommandLine:= CommandLine+' -noautosave -state '+NewOption;
+
+           //22: CommandLine:= CommandLine+' -state '+NewOption; // save state must contain the .sta file extension!!!!
+           //23: CommandLine:= CommandLine+' -wavwrite "'+NewOption+'"';
+           //24: CommandLine:= CommandLine+' -mngwrite "'+NewOption+'"';
+           //25: CommandLine:= CommandLine+' -aviwrite "'+NewOption+'"';
+
+
+           //27: CommandLine:= CommandLine+' -effect '+NewOption;
+         end;
+       end;
+     False:
+       begin
+         //ResetSettings;
+         //Exit;
+       end;
+   end;
+end;
+}
+   // -1: none... invalid!
+   // 20: playback input
+   // 21: record input
+   // 22: load a save state
+   // 23: record wave
+   // 24: record mng
+   // 25: record avi
+   // 26: * left panel file select (not used anymore!!!)
+   // 27: play and use an effect overlay
+   // 28: Select Effect Overlay (MAME Settings)
+   // 29: Select Font Files, emulator (BDF)
+   // 30: Select Font Files, game, driver (BDF)
+   // 31: Select Shadow Mask Texture (MAME Settings)
+   // all these options are now MAME exclusive features
+{
+   case MAME_ExtraSetting of
+     20, 21:
+       begin
+         iDir:= LoadFolderSpecial_MAME(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], 1);
+         if iDir = '' then
+            begin
+              GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Input folder is blank.',
+                              '    In order to playback / record input files, you need to select a folder '+
+                              'in '+GetSystemShortTitle(MemGameInfo.eSystemID)+' default settings screen.', 2, False, 1);
+              ResetSettings;
+              Exit;
+            end
+         else
+            begin
+              iDir:= FullFolderFix(iDir, EmulatorFile[MemGameInfo.eSystemID]);
+              if MAME_ExtraSetting = 20 then
+                 begin
+                   if not DirectoryExists(iDir) then
+                      begin
+                        CallMessageBox;
+                        ShowGameNameEntryMsgBox;
+                        AddMsgText('    Folder ');
+                        AddMsgText(iDir, $00a65300, [fsBold]);
+                        AddMsgText(' was not found. There are no input files to load. Select a valid input folder in '+
+                                   GetSystemShortTitle(MemGameInfo.eSystemID)+' default settings screen or record an input for the selected '+
+                                   'game first.'+#13#10+'Aborting...');
+                        GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Input folder doesn''t exist.', '', 2, False, 1);
+                        ResetSettings;
+                        Exit;
+                      end;
+                 end
+              else
+                 begin
+                   if not ForceDirectories(iDir) then
+                      begin
+                        CallMessageBox;
+                        ShowGameNameEntryMsgBox;
+                        AddMsgText('    Folder ');
+                        AddMsgText(iDir, $00a65300, [fsBold]);
+                        AddMsgText(' was not found and could not be created. Create the input folder manually or '+
+                                   'select another folder in '+GetSystemShortTitle(MemGameInfo.eSystemID)+
+                                   ' default settings screen.'+#13#10+'Aborting...');
+                        GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Input folder doesn''t exist.', '', 2, False, 1);
+                        ResetSettings;
+                        Exit;
+                      end;
+                 end;
+            end;
+       end;
+     22:
+       begin
+         iDir:= LoadFolderSpecial_MAME(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], 3);
+         if iDir = '' then
+            begin
+              GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Save state folder is blank.',
+                              '    In order to load save state files , you need to select a folder '+
+                              'in '+GetSystemShortTitle(MemGameInfo.eSystemID)+' default settings screen.', 2, False, 1);
+              ResetSettings;
+              Exit;
+            end;
+         //if SaveStateDir = '' then
+         //   begin
+         //     GenerateMessage(ErrorMsgTitle, Format('Save state folder is blank [%s].', [GetEmulatorDescription(MemGameInfo.eSystemID)]),
+         //                     Format('In order to load save state files, you need to select a folder '+
+         //                     'on %s default settings screen.', [GetEmulatorDescription(MemGameInfo.eSystemID)]), 2, False, 1);
+         //     ResetSettings;
+         //     Exit;
+         //   end;
+       end;
+     23, 24, 25:
+       begin
+         NewOption:= GetFolderFull(1, MemGameInfo.eSystemID);
+         if NewOption = '' then
+            begin
+              GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Multimedia folder is blank.',
+                              '    In order to record wav/mng/avi files you must select a snapshot folder in Emulator Default '+
+                              'Settings screen.', 2, False, 1);
+              ResetSettings;
+              Exit;
+            end
+         else
+            begin
+              if not ForceDirectories(NewOption+'multimedia_files\'+SoftwareNameFolder) then
+                 begin
+                   CallMessageBox;
+                   ShowGameNameEntryMsgBox;
+                   AddMsgText('    Folder ');
+                   AddMsgText(NewOption+'multimedia_files\'+SoftwareNameFolder, $00a65300, [fsBold]);
+                   AddMsgText('was not found and could not be created. Try again or create the folder manually. '+
+                              'This folder is exclusive to Emu Loader, not part of '+GetSystemShortTitle(MemGameInfo.eSystemID)+
+                              '.'+#13#10+'Aborting...');
+                   GenerateMessage(ErrorMsgTitle, EmulatorTitle+#13#10+'Multimedia folder doesn''t exist.', '', 2, False, 1);
+                   ResetSettings;
+                   Exit;
+                 end;
+              //'multimedia_files\'
+            end;
+       end;
+     27:
+       begin
+         // use an effect overlay
+         // nothing for now...
+       end;
+   end;
+   case SelectFileName(MAME_ExtraSetting, MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], NewOption) of
+     True:
+       begin
+         case MAME_ExtraSetting of
+           20, 21:
+             begin
+               if (GetMAMEBuild in [0..58]) then // if GetMAMEBuild < 59 then // version "-1" means could not get version info... assume it's latest MAME builds!!! July 25, 2016
+                  NewOption:= ChangeFileExt(NewOption, ''); // previous to v0.59; MAME adds a .inp extension automatically!!!
+               if MAME_ExtraSetting = 20 then
+                  CommandLine:= CommandLine+' -playback '+NewOption
+               else
+                  CommandLine:= CommandLine+' -record '+NewOption;
+             end;
+           //20:
+           //  begin
+           //    if GetMAMEBuild < 59 then
+           //       NewOption:= ChangeFileExt(NewOption, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
+           //    CommandLine:= CommandLine+' -playback '+NewOption;
+           //  end;
+           //21:
+           //  begin
+           //    if GetMAMEBuild < 59 then
+           //       NewOption:= ChangeFileExt(NewOption, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
+           //    CommandLine:= CommandLine+' -record '+NewOption;
+           //  end;
+           //22: CommandLine:= CommandLine+' -noautosave -state '+NewOption;
+           22: CommandLine:= CommandLine+' -state '+NewOption;
+           23: CommandLine:= CommandLine+' -wavwrite "'+NewOption+'"';
+           24: CommandLine:= CommandLine+' -mngwrite "'+NewOption+'"';
+           25: CommandLine:= CommandLine+' -aviwrite "'+NewOption+'"';
+           27: CommandLine:= CommandLine+' -effect '+NewOption;
+         end;
+       end;
+     False:
+       begin
+         ResetSettings;
+         Exit;
+       end;
+   end;
+
+}
+
+procedure TFormRunGameExtraMAME.SetDoubleBufferGroupBox(BoxName: TAdvGroupBox);
+begin
+  if BoxName.Enabled then
+     BoxName.DoubleBuffered:= True;
+end;
+
+procedure TFormRunGameExtraMAME.CheckMemoryCardSupport;
+var
+  MemCardSlots: TStringList;
+  sectionStr: String;
+  Loop: Integer;
+  MemcardFile: TMemIniFile;
+begin
+  if (FormMain.MemGameInfo.eSoftwareName <> '') and (MachineNameToRun = '') then
+     begin
+       DisablePage(2); //InsertMemoryCard_Box);
+       Exit;
+     end;
+  if not FileExists(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID)) then
+     begin
+       DisablePage(2); //InsertMemoryCard_Box);
+       Exit;
+     end;
+  MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
+  //MemcardFile:= THashedStringList.Create;
+  //MemcardFile.LoadFromFile(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
+  if FormMain.MemGameInfo.eSoftwareName = '' then
+     begin
+       if FormMain.IsNeoGeoDriver(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eDriverName, FormMain.MemGameInfo.eBiosName, True) then
+          sectionStr:= 'neogeo'
+       else
+          sectionStr:= FormMain.MemGameInfo.eName
+     end
+  else
+     begin
+       sectionStr:= MachineNameToRun;
+       // var MachineNameToRun comes from uMain.ExecuteGame()
+     end;
+
+  MemCardSlots:= TStringList.Create;
+  MemCardFile.ReadSectionValues(sectionStr, MemCardSlots);
+  FreeAndNil(MemcardFile);
+
+  if MemCardSlots.Count = 0 then
+     DisablePage(2) //InsertMemoryCard_Box)
+  else
+     begin
+       for Loop:=0 to MemCardSlots.Count-1 do
+       begin
+         case Loop of
+           0: LabelInsertMemoryCard_Slot1.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
+           1:
+             begin
+               LabelInsertMemoryCard_Slot2.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
+               LabelInsertMemoryCard_Slot2.Enabled:= LabelInsertMemoryCard_Slot2.Hint <> '';
+               InsertMemoryCard_Slot2.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
+               ButtonInsertMemoryCard_Slot2_SelectFile.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
+               ButtonInsertMemoryCard_Slot2_LastUsed.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
+               ButtonInsertMemoryCard_Slot2_Clear.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
+             end;
+         end;
+       end;
+       if FileExists(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID)) then
+       begin
+         MemCardSlots.Clear;
+         MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID));
+         MemCardFile.ReadSectionValues(FormMain.MemGameInfo.eName, MemCardSlots);
+         FreeAndNil(MemCardFile);
+         InsertMemoryCard_Slot1.Hint:= MemcardSlots.Values['slot1'];
+         InsertMemoryCard_Slot2.Hint:= MemcardSlots.Values['slot2'];
+         InsertMemoryCard_Slot1.Text:= InsertMemoryCard_Slot1.Hint;
+         InsertMemoryCard_Slot2.Text:= InsertMemoryCard_Slot2.Hint;
+       end;
+     end;
+  FreeAndNil(MemcardSlots);
+end;
+
+procedure TFormRunGameExtraMAME.UpdateLastMemoryCardUsed;
+var
+  MemCardLastUsed: TMemIniFile;
+begin
+  if not Enabled_InsertMemoryCard.Checked then
+     Exit;
+  if (InsertMemoryCard_Slot1.Text = '') and (InsertMemoryCard_Slot2.Text = '') then
+     Exit;
+
+  MemCardLastUsed:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID));
+  MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot1', InsertMemoryCard_Slot1.Text);
+  if InsertMemoryCard_Slot2.Enabled then
+     MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot2', InsertMemoryCard_Slot2.Text);
+  MemCardLastUsed.UpdateFile;
+  FreeAndNil(MemCardLastUsed);
+end;
+
+procedure TFormRunGameExtraMAME.CheckSaveStateSupport;
+var
+  Group: TEasyGroup;
+  Item: TEasyItem;
+  GameFound: Boolean;
+begin
+  if FormMain.MemGameInfo.eSoftwareName = '' then
+     begin
+       if FormMain.MemGameInfo.eSaveState <> 1 then
+          LabelLoadSaveStateNotSupportedMsg.Visible:= True;
+     end
+  else
+     begin
+       if MachineNameToRun = '' then
+          begin
+            // there is no MAME machine selected to run the software list game....
+            DisablePage(1);
+            Exit;
+          end;
+     end;
+  GameFound:= False;
+  if FormMain.IsGroupedView then
+    begin
+      Group:= FormMain.GamesListView.Groups.FirstGroup;
+      repeat
+        if (uMain.TGroupInfo(Group).eSystemID = FormMain.MemGameInfo.eSystemID) and (uMain.TGroupInfo(Group).eSoftwareName = '') then
+        begin
+          Item:= FormMain.GamesListView.Groups.FirstInGroup(Group);
+          repeat
+            if uMain.TEasyGameInfo(Item).eName = MachineNameToRun then
+               begin
+                 LabelMachineInUse.Hint:= uMain.TEasyGameInfo(Item).eTitle;
+                 GameFound:= True;
+                 if uMain.TEasyGameInfo(Item).eSaveState <> 1 then
+                    LabelLoadSaveStateNotSupportedMsg.Visible:= True;
+               end;
+            Item:= FormMain.GamesListView.Groups.NextInGroup(Group, Item);
+          until (Item = nil) or GameFound;
+        end;
+        Group:= FormMain.GamesListView.Groups.NextGroup(Group);
+      until (Group = nil) or GameFound;
+    end
+    else
+    begin
+      Item:= FormMain.GamesListView.Groups.FirstItem;
+      repeat
+        if (uMain.TEasyGameInfo(Item).eSystemID = FormMain.MemGameInfo.eSystemID) and (uMain.TEasyGameInfo(Item).eSoftwareName = '') then
+           begin
+             if uMain.TEasyGameInfo(Item).eName = MachineNameToRun then
+                begin
+                  LabelMachineInUse.Hint:= uMain.TEasyGameInfo(Item).eTitle;
+                  GameFound:= True;
+                  if uMain.TEasyGameInfo(Item).eSaveState <> 1 then
+                     LabelLoadSaveStateNotSupportedMsg.Visible:= True;
+                end;
+           end;
+        Item:= FormMain.GamesListView.Groups.NextItem(Item);
+      until (Item = nil) or GameFound;
+    end;
+end;
+
+procedure TFormRunGameExtraMAME.DisablePage(PageIndex: Byte);
+begin
+  case PageIndex of
+    0:
+      begin
+        PageButtonInput.Enabled:= False;
+        Enabled_PlaybackRecordInput.Checked:= False;
+      end;
+    1:
+      begin
+        PageButtonSaveState.Enabled:= False;
+        Enabled_LoadSaveState.Checked:= False;
+      end;
+    2:
+      begin
+        PageButtonMemoryCard.Enabled:= False;
+        Enabled_InsertMemoryCard.Checked:= False;
+      end;
+    3:
+      begin
+        PageButtonRecordMovie.Enabled:= False;
+        Enabled_RecordMovie.Checked:= False;
+      end;
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.ParseMAMEIni;
+var
+  Loop: Integer;
+  strFile: String;
+begin
+  strFile:= FormMain.GetEmuIniFileName(FormMain.MemGameInfo.eSystemID, EmulatorFileName);//FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]);
+  ReadMAMESettings(strFile, True); // read mame.ini first...
+
+  ActiveFileID:= -1;
+
+  if FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification) then
+     ActiveFileID:= 10
+  else
+  begin
+    case FormMain.GameIsClone(FormMain.MemGameInfo.eClone) of
+      True : ActiveFileID:= 11;
+      False: ActiveFileID:= 12;
+    end;
+  end;
+
+  for Loop:= 1 to MaxIniCountMAME do
+  begin
+    if Loop <= ActiveFileID  then
+    begin
+      strFile:= FormMain.GetCustomIniFileMAME(Loop);
+      if strFile <> '' then
+      begin
+        if Loop = 9 then // drivername.ini
+           begin
+             if FileExists(FormMain.IniFilesDir[FormMain.MemGameInfo.eSystemID]+strFile+'.ini') then
+                strFile:= FormMain.IniFilesDir[FormMain.MemGameInfo.eSystemID]+strFile+'.ini'
+             else
+                strFile:= FormMain.IniFilesDir[FormMain.MemGameInfo.eSystemID]+'source\'+strFile+'.ini';
+           end
+        else
+           strFile:= FormMain.IniFilesDir[FormMain.MemGameInfo.eSystemID]+strFile+'.ini';
+
+        ReadMAMESettings(strFile); // read all gamename.ini options
+      end;
+    end
+    else
+       Break;
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.ReadMAMESettings(const iniFile: String; IsMAMEDefaultSettings: Boolean = False);
+var
+  MAMEIniFile: THashedStringList;
+  TextLine, EntryString, iFolder: String;
+  Loop: Integer;
+begin
+  if not FileExists(EmulatorFileName) then //FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]) then
+     Exit;
+
+  if not FileExists(iniFile) then
+     Exit;
+
+  //if IsMAMEDefaultSettings then
+  //   begin
+  //     //FolderInput:= 'inp';
+  //     //FolderState:= 'sta';
+  //     //FolderMemoryCard:= 'memcard';
+  //     //FolderRecordMovie:= FormMain.imgFolder[FormMain.MemGameInfo.eSystemID, 1]; // this will be the same as snap directory, plus "\videosnaps\" sub-folder
+  //   end;
+
+  MAMEIniFile:= THashedStringList.Create;
+  MAMEIniFile.LoadFromFile(iniFile);
+  for Loop:=0 to MAMEIniFile.Count -1 do
+  begin
+    TextLine:= MAMEIniFile[Loop];
+    if TextLine <> '' then
+       begin
+         EntryString:= XML_GetEntryName(TextLine);
+         if EntryString <> '' then
+            EntryString:= EntryString+' ';
+
+         if (EntryString = 'input_directory ') and IsMAMEDefaultSettings then
+            begin
+              iFolder:= ExtractMAMEIniValue(TextLine);
+              if iFolder <> '' then
+                 FolderInput:= iFolder;
+            end
+         else
+         if (EntryString = 'state_directory ') and IsMAMEDefaultSettings then
+            begin
+              iFolder:= ExtractMAMEIniValue(TextLine);
+              if iFolder <> '' then
+                 FolderState:= iFolder;
+            end
+         else
+         if EntryString = 'autosave ' then
+            begin
+              AutoSaveState.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)));
+              if IsMAMEDefaultSettings then
+                 begin
+                   AutoSaveState.Visible:= True;
+                   SaveStateAuto_LastChecked:= AutoSaveState.Checked;
+                 end;
+            end
+         else
+         if EntryString = 'record_timecode ' then
+            begin
+              InputRecordTimecodeFile.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)));
+              InputRecTimeCodeFile_LastChecked:= InputRecordTimecodeFile.Checked;
+              if IsMAMEDefaultSettings then
+                 FoundInputExtra:= True;
+            end
+         else
+         if EntryString = 'exit_after_playback ' then
+            begin
+              InputExitEmulatorAfterInputPlayback.Checked:= Boolean(StrToInt(ExtractMAMEIniValue(TextLine)));
+              InputExitEmuAfterPlay_LastChecked:= InputExitEmulatorAfterInputPlayback.Checked;
+              if IsMAMEDefaultSettings then
+                 FoundInputExtra:= True;
+            end;
+       end;
+  end;
+  FreeAndNil(MAMEIniFile);
+  //FormMain.imgFolder[FormMain.MemGameInfo.eSystemID, 1]; // in-game snapshot folder!!!
+
+  //if iniDirString <> '' then
+  //   iniDirString:= FullEmuFolderFix(iniDirString, SystemID, False, IsAlterMAME)
+end;
+
+procedure TFormRunGameExtraMAME.ELV_SelectItem(ELV_Holder: TEasyListView; ItemHolder: TEasyItem);
+begin
+  if ItemHolder = nil then
+     Exit;
+  ELV_Holder.Selection.ClearAll;
+  ItemHolder.Selected:= True;
+  //TEasyGameInfo(EasyItemIndex).Selected:= True;
+  ELV_Holder.Selection.FocusedItem:= ItemHolder;
+  ItemHolder.MakeVisible(emvMiddle);//(emvAuto);
+end;
+
+procedure TFormRunGameExtraMAME.ReSelectInputFile;
+var
+  Item: TEasyItem;
+  GameFound: Boolean;
+  iFileStr, ItemFileStr: String;
+begin
+  if not FormMain.CheckTotal(InputListView) then
+     Exit;
+  InputListView.Selection.ClearAll;
+  GameFound:= False;
+  case InputListView.Tag of
+    0: iFileStr:= InputPlayback_CurrentFile;
+    1: iFileStr:= InputRecord_CurrentFile;
+  end;
+  if iFileStr = '' then
+     begin
+       Item:= InputListView.Groups.FirstItem;
+       GameFound:= True;
+     end
+  else
+  begin
+    Item:= InputListView.Groups.FirstItem;
+    repeat
+      ItemFileStr:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+      if SameText(TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName, iFileStr) then
+         GameFound:= True
+      else
+         Item:= InputListView.Groups.NextItem(Item);
+    until (Item = nil) or GameFound;
+  end;
+  if GameFound then
+     ELV_SelectItem(InputListView, Item)
+  else
+     if InputListView.Tag = 1 then
+        begin
+          InputFileName.Text:= iFileStr;
+        end;
+
+  InputListView.SetFocus;
+end;
+
+procedure TFormRunGameExtraMAME.ReSelectSaveStateFile;
+//var
+//  iFileStr: String;
+begin
+  if not FormMain.CheckTotal(SaveStateListView) then
+     Exit;
+
+  SaveStateListView.Selection.ClearAll;
+  ELV_SelectItem(SaveStateListView, SaveStateListView.Groups.FirstItem);
+
+  SaveStateListView.SetFocus;
+  //Exit;
+
+  //iFileStr:= '';
+  //if FormMain.CheckSelected(SaveStateListView) then
+  //   iFileStr:= TFileInfo(SaveStateListView.Selection.First).eFileFolder+TFileInfo(SaveStateListView.Selection.First).eFileName;
+  //SaveStateListView.Selection.ClearAll;
+end;
+
+procedure TFormRunGameExtraMAME.EditFileName(ELV_Holder: TEasyListView);
+begin
+  if not FormMain.CheckSelected(ELV_Holder) then
+     Exit;
+
+  FormMain.SetFormKeyPreview(FormRunGameExtraMAME); // disable Form.KeyPreview to focus on TEasyListView key presses
+  SetBottomButtons(False);
+  FormMain.ELV_EnableEdit(ELV_Holder);
+end;
+
+procedure TFormRunGameExtraMAME.EditFileName_EndEdit_ELV(ELV_Holder: TEasyListView);
+begin
+  FormMain.ELV_SetEditManager(ELV_Holder, False);
+  FormMain.SetFormKeyPreview(FormRunGameExtraMAME);
+  SetBottomButtons(True);
+end;
+
+procedure TFormRunGameExtraMAMe.DeleteFileName(ELV_Holder: TEasyListView);
+var
+  Item, NearItem: TEasyItem;
+  FileStr, FileCategory: String;
+begin
+  if not FormMain.CheckSelected(ELV_Holder) then
+     Exit;
+  case NotebookPages.Tag of
+    1: FileCategory:= 'an input';
+    2: FileCategory:= 'a save state';
+    3: FileCategory:= 'a memory card';
+    4: FileCategory:= 'a movie';
+  end;
+  Item:= ELV_Holder.Selection.First;
+  NearItem:= ELV_Holder.Groups.PrevItem(Item);
+  if NearItem = nil then
+     NearItem:= ELV_Holder.Groups.NextItem(Item);
+  FileStr:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+  CallMessageBox;
+  //ShowGameNameEntryMsgBox;
+  FormMain.AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
+  FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+
+  if FormMain.MemGameInfo.eSoftwareName <> '' then
+     begin
+       FormMain.AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
+       FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+     end;
+  FormMain.AddMsgText(#13#10);
+
+  FormMain.AddMsgText('File:'+#13#10, clBlack, [fsBold]);
+  FormMain.AddMsgText(FileStr+#13#10, $00600000, [], taLeftJustify, 10, 'Lucida Console');
+  FormMain.AddMsgText('Size: ', clBlack, [fsBold]);
+  FormMain.AddMsgText(TFileInfo(Item).eSizeText+#13#10);
+  FormMain.AddMsgText('Date modified: ', clBlack, [fsBold]);
+  FormMain.AddMsgText(TFileInfo(Item).eDateTimeText+#13#10);
+
+  FormMain.AddMsgText(#13#10+'   Are you sure you want to delete this file ? Recycle bin is not supported...');
+
+  if GenerateMessage('Delete File', 'You''re about to delete '+FileCategory+' file.', '', 1, False, 2) = mrNo then
+     Exit;
+
+  DeleteFile(TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName);
+  FileStr:= ChangeFileExt(FileStr, '.timecode'); // for input files
+  if FileExists(FileStr) then
+     DeleteFile(FileStr);
+  Sleep(100);
+  ELV_Holder.Groups.DeleteItem(Item);
+  ELV_SelectItem(ELV_Holder, NearItem);
+  //ELV_Holder.Selection.ClearAll;
+  //if NearItem <> nil then
+  //   begin
+  //     ELV_SelectItem(ELV_Holder, NearItem);
+  //     //NearItem.Selected:= True;
+  //     //ELV_Holder.Selection.FocusedItem:= NearItem;
+  //     //NearItem.MakeVisible(emvMiddle);
+  //   end;
+end;
+
+procedure TFormRunGameExtraMAME.ValidateKeyActions_ELV(ELV_Holder: TEasyListView; var CharCode: Word; var Shift: TShiftState);
+begin
+  if FormMain.ELV_IsEditing(ELV_Holder) then
+     begin
+       CharCode:= 0;
+       Exit;
+     end;
+  case CharCode of
+    VK_RETURN:
+      begin
+        if ELV_Holder = MemoryCardListView then
+           AddMemoryCardToSlot;
+      end;
+    VK_F2: EditFileName(ELV_Holder);
+    VK_DELETE: DeleteFileName(ELV_Holder);
+  end;
+end;
+
+function TFormRunGameExtraMAME.GetItem_ELV(const FileFullPath: String; ELV_Holder: TEasyListView; CheckFullPath: Boolean = True): TEasyItem;
+var
+  rItem: TEasyItem;
+begin
+ Result:= nil;
+ if not FormMain.CheckTotal(ELV_Holder) then
+    Exit;
+ rItem:= ELV_Holder.Groups.FirstItem;
+ repeat
+   if SameText(TFileInfo(rItem).eFileFolder+TFileInfo(rItem).eFileName, FileFullPath) then
+      Result:= rItem
+   else
+      rItem:= ELV_Holder.Groups.NextItem(rItem);
+ until (rItem = nil) or (Result <> nil);
+end;
+
+procedure TFormRunGameExtraMAME.AddMemoryCardToSlot(SlotIndex: ShortInt = -1);
+var
+  Item: TEasyItem;
+  FileExt: String;
+  SlotID: Byte;
+begin
+  // SlotIndex = -1 means auto detection (mouse double-click)
+  if not FormMain.CheckSelected(MemoryCardListView) then
+    Exit;
+  Item:= MemoryCardListView.Selection.First;
+  if SlotIndex = -1 then
+     begin
+       if InsertMemoryCard_Slot2.Enabled then
+       begin
+         FileExt:= ExtractFileExt(TFileInfo(Item).eFileName);
+         if SameText('.mc2', FileExt) then
+            SlotID:= 2
+         else
+            SlotID:= 1;
+       end
+       else
+         SlotID:= 1;
+     end
+  else
+     SlotID:= SlotIndex;
+
+  case SlotID of
+    1: InsertMemoryCard_Slot1.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+    2: InsertMemoryCard_Slot2.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+  end;
+end;
+
+function TFormRunGameExtraMAME.MountCommandLine: Boolean;
+var
+  tmpCmd, RelativePathStr, RecFileName: String;
+  selItem, RecordFileNameItem: TEasyItem;
+  AddParam: Boolean;
+begin
+  Result:= True;
+  if Enabled_PlaybackRecordInput.Checked then
+  begin
+    AddParam:= False;
+    selItem:= InputListView.Selection.First;
+    if selItem <> nil then
+       RelativePathStr:= TFileInfo(selItem).eFileFolder+TFileInfo(selItem).eFileName;
+    case InputPlayback.Checked of
+      True:
+        begin
+          // error... need to check if ELV has files... if not, even if feature is enabled, ignore this!!!!
+          if selItem = nil then
+          begin
+            if FormMain.CheckTotal(InputListView) then
+               begin
+                 GenerateMessage('Error', 'Filename is blank.', '    Playback input filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
+                 Result:= False;
+                 Exit;
+               end
+            else
+               AddParam:= False;
+          end
+          else
+            AddParam:= True;
+          RelativePathStr:= StringReplace(RelativePathStr, FolderInput, '', [rfIgnoreCase]);
+        end;
+      False:
+        begin
+          RecFileName:= InputFileName.Text;
+          if RecFileName <> '' then
+             RecFileName:= ChangeFileExt(InputFileName.Text, '.inp')
+          else
+             begin
+               GenerateMessage('Error', 'Filename is blank.', 'Record input filename is empty. Select a file in the list or type a new filename in the edit box.');
+               Result:= False;
+             end;
+          if selItem <> nil then
+             begin
+               AddParam:= True;
+               case SameText(TFileInfo(selItem).eFileName, RecFileName) of
+                 True:
+                   begin
+                     RelativePathStr:= StringReplace(RelativePathStr, FolderInput, '', [rfIgnoreCase]);
+                   end;
+                 False:
+                   begin
+                     RecordFileNameItem:= GetItem_ELV(RecFileName, InputListView, False);
+                     if RecordFileNameItem = nil then
+                        begin
+                          if FormMain.MemGameInfo.eSoftwareName = '' then
+                             RelativePathStr:= FolderInput
+                          else
+                             begin
+                               RelativePathStr:= FolderInput+MachineNameFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'\'+RecFileName;
+                               RelativePathStr:= StringReplace(RelativePathStr, FolderInput, '', [rfIgnoreCase]);
+                             end;
+                        end
+                     else
+                        begin
+                          RelativePathStr:= TFileInfo(RecordFileNameItem).eFileFolder+TFileInfo(RecordFileNameItem).eFileName;
+                          RelativePathStr:= StringReplace(RelativePathStr, FolderInput, '', [rfIgnoreCase]);
+                        end;
+                   end;
+               end;
+             end;
+        end;
+    end;
+    // must surround .inp file with quotes or MAME will fail to load if filename contain space chars
+    if AddParam then
+    begin
+      case InputPlayback.Checked of
+        True : tmpCmd:= ' -playback "';
+        False: tmpCmd:= ' -record "';
+      end;
+      if FormMain.GetMAMEBuild < 59 then
+         RelativePathStr:= ChangeFileExt(RelativePathStr, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
+
+      tmpCmd:= tmpCmd+RelativePathStr+'"';
+      case InputPlayback.Checked of
+        True:
+          begin
+            if InputExitEmuAfterPlay_LastChecked <> InputExitEmulatorAfterInputPlayback.Checked then
+               tmpCmd:= tmpCmd+' -exit_after_playback';
+          end;
+        False:
+          begin
+            if InputRecTimeCodeFile_LastChecked <> InputRecordTimecodeFile.Checked then
+               tmpCmd:= tmpCmd+' -record_timecode';
+          end;
+      end;
+      CommandLine:= CommandLine+tmpCmd;
+    end;
+  end;
+
+  RelativePathStr:= '';
+  RecFileName:= '';
+  if Enabled_LoadSaveState.Checked then
+  begin
+    AddParam:= True;
+    selItem:= SaveStateListView.Selection.First;
+    if selItem = nil then
+       begin
+         if FormMain.CheckTotal(SaveStateListView) then
+            begin
+              GenerateMessage('Error', 'Filename is blank.', 'Load save state filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
+              Result:= False;
+              Exit;
+            end
+         else
+            AddParam:= False;
+       end;
+
+    if AddParam then
+    begin
+      RecFileName:= ChangeFileExt(TFileInfo(selItem).eFileName, '');
+      //if FormMain.MemGameInfo.eSoftwareName <> '' then
+      //   RelativePathStr:= StringReplace(TFileInfo(selItem).eFileFolder, FolderSaveState, '', [rfIgnoreCase]);
+
+      tmpCmd:= ' -state "'+RecFileName+'"';
+      //if RelativePathStr <> '' then
+      //   tmpCmd:= tmpCmd+' -statename '+RelativePathStr;
+      if SaveStateAuto_LastChecked <> AutoSaveState.Checked then
+         begin
+           case AutoSaveState.Checked of
+             True : tmpCmd:= tmpCmd+' -autosave';
+             False: tmpCmd:= tmpCmd+' -noautosave';
+           end;
+         end;
+
+      CommandLine:= CommandLine+tmpCmd;
+    end;
+  end;
+
+  RelativePathStr:= '';
+  RecFileName:= '';
+  tmpCmd:= '';
+  if Enabled_InsertMemoryCard.Checked then
+  begin
+    if InsertMemoryCard_Slot1.Enabled then
+    begin
+      RecFileName:= InsertMemoryCard_Slot1.Text;
+      if RecFileName <> '' then
+         tmpCmd:= ' -'+LabelInsertMemoryCard_Slot1.Hint+' "'+RecFileName+'"';
+    end;
+    if InsertMemoryCard_Slot2.Enabled then
+    begin
+      RecFileName:= InsertMemoryCard_Slot2.Text;
+      if RecFileName <> '' then
+         tmpCmd:= tmpCmd+' -'+LabelInsertMemoryCard_Slot2.Hint+' "'+RecFileName+'"';
+    end;
+
+    if tmpCmd <> '' then
+       CommandLine:= CommandLine+tmpCmd;
+  end;
+
+  
+  //if CommandLine <> '' then
+  //   ShowMessage(CommandLine);
+end;
+
+procedure TFormRunGameExtraMAME.SetBottomButtons(IsEnabled: Boolean);
+begin
+  ButtonOk.Enabled:= IsEnabled;
+  ButtonAbort.Enabled:= IsEnabled;
+end;
+
+procedure TFormRunGameExtraMAME.AdjustWindow;
+var
+  iWidth, iWidthDec, iHeight: Integer;
+begin
+  if Screen.Width >= 1024 then
+     Exit;
+
+  if Screen.Height = 480 then
+     begin
+       iWidth:= 635;
+       iHeight:= 100;
+     end
+  else
+  if Screen.Width = 800 then
+     begin
+       iWidth:= 790;
+       iHeight:= 0;
+     end;
+
+  iWidthDec:= FormRunGameExtraMAME.Width-iWidth+10;
+
+end;
+
+procedure TFormRunGameExtraMAME.FormShow(Sender: TObject);
+
+  function AdjustDisabledPanel(PanelHolder: TPanel): Boolean;
+  begin
+    Result:= True;
+    PanelHolder.Left:= 8;
+    PanelHolder.Top:= 22;
+    PanelHolder.Width:= NotebookPages.Width-16;
+    PanelHolder.Height:= NotebookPages.Height-22-8;
+    PanelHolder.ParentBackground:= False;
+    PanelHolder.Color:= NotebookPages.Color;// clBlue;
+    //PanelHolder.Visible:= True;
+    //PanelHolder.Color:= clSilver;
+  end;
+
+begin
+  FormMain.ELV_ResetNormalColors(InputListView);
+  FormMain.ELV_ResetNormalColors(SaveStateListView);
+  FormMain.ELV_ResetNormalColors(MemoryCardListView);
+  FormMain.ELV_ResetNormalColors(RecordMovieListView);
+
+  AdjustWindow;
+  
+  CommandLine:= '';
+  FolderInput:= 'inp';
+  FolderState:= 'sta';
+  FolderMemoryCard:= 'memcard';
+  FolderRecordMovie:= FormMain.imgFolder[FormMain.MemGameInfo.eSystemID, 1]; // this will be the same as snap directory, plus "\videosnaps\" sub-folder
+
+  FoundInputExtra:= False;
+  MachineNameFolder:= MachineNameToRun;
+  if MachineNameFolder <> '' then
+     MachineNameFolder:= MachineNameFolder+'\';
+
+  SoftwareListFolder:= FormMain.MemGameInfo.eSoftwareName;
+  if SoftwareListFolder <> '' then
+     SoftwareListFolder:= SoftwareListFolder+'\';
+
+  //InputExitEmulatorAfterInputPlayback.Left:= 150;
+  InputRecordTimecodeFile.Left:= 170;
+  //InputRecordTimecodeFile.Top:= InputExitEmulatorAfterInputPlayback.Top;
+  //InsertMemoryCard_Box.Enabled:= False;
+  //InsertMemoryCard_Box.Font.Color:= clMedGray;
+  LabelTitle.Caption:= FormMain.MemGameInfo.eTitle;
+  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                              GameIcon.Picture.Icon);
+
+  FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
+
+  LabelSoftwareListTitle.Visible:= FormMain.MemGameInfo.eSoftwareName <> '';
+  if LabelSoftwareListTitle.Visible then
+     LabelSoftwareListTitle.Caption:= 'software list: '+FormMain.MemGameInfo.eCategory;
+
+  LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
+
+  // Call adjust form for higher resolutions
+  // ... it must be called before the AdjustDisabledPanel() functions!!!!
+
+  AdjustDisabledPanel(PanelDisabledInput);
+  AdjustDisabledPanel(PanelDisabledSaveState);
+  AdjustDisabledPanel(PanelDisabledMemoryCard);
+  PanelDisabledSaveStateNotSupportedMsg.Left:= 95;
+  PanelDisabledSaveStateNotSupportedMsg.Height:= 17;
+  PanelDisabledSaveStateNotSupportedMsg.Width:= (NotebookPages.Width-PanelDisabledSaveStateNotSupportedMsg.Left)-10;
+  PanelDisabledSaveStateNotSupportedMsg.ParentBackground:= False;
+  PanelDisabledSaveStateNotSupportedMsg.Color:= NotebookPages.Color;
+
+  AdjustDisabledPanel(PanelDisabledRecordMovie);
+
+  LabelInputSelectedFileFolder.Caption:= '';
+  InputPlayback_CurrentFile:= '';
+  InputRecord_CurrentFile:= '';
+
+  LabelSaveStateSelectedFileFolder.Caption:= '';
+
+  ParseMAMEIni;
+  if FolderInput <> '' then
+     FolderInput:= FormMain.FullEmuFolderFix(FolderInput, FormMain.MemGameInfo.eSystemID, False);
+     
+  if FolderState <> '' then
+     FolderState:= FormMain.FullEmuFolderFix(FolderState, FormMain.MemGameInfo.eSystemID, False);
+
+  FolderMemoryCard:= FormMain.FullEmuFolderFix(FolderMemoryCard, FormMain.MemGameInfo.eSystemID, False);
+
+  if not FoundInputExtra then
+     InputExitEmulatorAfterInputPlayback.Visible:= False;
+  CheckMemoryCardSupport;
+  CheckSaveStateSupport;
+
+  LabelMachineInUse.Visible:= LabelSoftwareListTitle.Visible;
+  if LabelMachineInUse.Visible then
+     begin
+       LabelSoftwareListTitle.Left:= 86;
+       LabelMachineInUse.Caption:= 'Run with machine ['+MachineNameToRun+']: '+LabelMachineInUse.Hint;
+       LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+12;
+       PanelTop.Height:= PanelTop.Height+17;
+       FormRunGameExtraMAME.ClientHeight:= FormRunGameExtraMAME.ClientHeight+15;
+       NotebookPages.Top:= NotebookPages.Top+15;
+       PageButtonInput.Top:= PageButtonInput.Top+15;
+       PageButtonSaveState.Top:= PageButtonSaveState.Top+15;
+       PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+15;
+       PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+15;
+       PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+15;
+     end;
+
+  //SetDoubleBufferGroupBox(PlaybackRecordInput_Box);
+  //SetDoubleBufferGroupBox(LoadSaveState_Box);
+  //SetDoubleBufferGroupBox(InsertMemoryCard_Box);
+  //SetDoubleBufferGroupBox(RecordMovie_Box);
+
+  //NotebookPages.DoubleBuffered:= True;
+
+  // this has to be done on code or ELV crashes... :_((
+  InputListView.Header.Columns[0].SortDirection:= esdNone;
+  InputListView.Header.Columns[2].SortDirection:= esdDescending;
+
+  SaveStateListView.Header.Columns[0].SortDirection:= esdNone;
+  SaveStateListView.Header.Columns[2].SortDirection:= esdDescending;
+
+  MemoryCardListView.Header.Columns[0].SortDirection:= esdNone;
+  MemoryCardListView.Header.Columns[2].SortDirection:= esdDescending;
+
+  RecordMovieListView.Header.Columns[0].SortDirection:= esdNone;
+  RecordMovieListView.Header.Columns[2].SortDirection:= esdDescending;
+end;
+
+procedure TFormRunGameExtraMAME.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  {case FormMain.MenuArcadeBrowseGames.Tag of
+    0:
+      begin
+        case Key of
+          #13: ButtonOk.Click;
+          #27: ButtonAbort.Click;
+        end;
+      end;
+    else
+      begin
+        case Key of
+         'S', 's': ButtonOk.Click;
+         'Q', 'q': ButtonAbort.Click;
+        end;
+      end;
+  end;}
+end;
+
+procedure TFormRunGameExtraMAME.InputPlaybackClick(Sender: TObject);
+begin
+  ButtonInputResetFileName.Enabled:= TAdvOfficeRadioButton(Sender).Tag = 1;
+  if FoundInputExtra then
+     begin
+       // only for new MAME builds that support these settings...
+       InputExitEmulatorAfterInputPlayback.Visible:= TAdvOfficeRadioButton(Sender).Tag = 0;
+       InputRecordTimecodeFile.Visible:= ButtonInputResetFileName.Enabled;
+     end;
+     
+  InputListView.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+
+  InputFileName.Enabled:= InputListView.Tag = 1;
+  LabelInputFileName.Enabled:= InputFileName.Enabled;
+  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
+  if TAdvOfficeRadioButton(Sender).Tag = 0 then
+     begin
+       InputRecord.Font.Style:= [];
+       LabelInputFileName.Caption:= 'Selected File (file extension optional)';
+     end
+  else
+     begin
+       InputPlayback.Font.Style:= [];
+       LabelInputFileName.Caption:= 'New File (file extension optional)';
+     end;
+  //InputFileName.Tag:= 1;
+  ReselectInputFile;
+  //InputFileName.Tag:= 0;
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot1_LastUsedClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot1.Text:= InsertMemoryCard_Slot1.Hint;
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot2_LastUsedClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot2.Text:= InsertMemoryCard_Slot2.Hint;
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot1_ClearClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot1.Text:= '';
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot2_ClearClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot2.Text:= '';
+end;
+
+procedure TFormRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
+
+  function UncheckButton(ButtonHolder: TSpeedButton): Boolean;
+  begin
+    Result:= TSpeedButton(ButtonHolder).Top = TSpeedButton(Sender).Top;
+    if Result then
+       begin
+         TSpeedButton(ButtonHolder).Top:= TSpeedButton(ButtonHolder).Top+3;
+         TSpeedButton(ButtonHolder).Height:= TSpeedButton(ButtonHolder).Height-3;
+         TSpeedButton(ButtonHolder).Font.Color:= $00323232;
+       end;
+  end;
+
+begin
+  if TSpeedButton(Sender).Tag = NotebookPages.Tag then
+     Exit;
+  TSpeedButton(Sender).Top:= TSpeedButton(Sender).Top-3;
+  TSpeedButton(Sender).Height:= TSpeedButton(Sender).Height+3;
+  TSpeedButton(Sender).Font.Color:= clBlack;
+
+  case TSpeedButton(Sender).Tag of
+    1:
+      begin
+        UncheckButton(PageButtonSaveState);
+        UncheckButton(PageButtonMemoryCard);
+        UncheckButton(PageButtonRecordMovie);
+      end;
+    2:
+      begin
+        UncheckButton(PageButtonInput);
+        UncheckButton(PageButtonMemoryCard);
+        UncheckButton(PageButtonRecordMovie);
+      end;
+    3:
+      begin
+        UncheckButton(PageButtonInput);
+        UncheckButton(PageButtonSaveState);
+        UncheckButton(PageButtonRecordMovie);
+      end;
+    4:
+      begin
+        UncheckButton(PageButtonInput);
+        UncheckButton(PageButtonSaveState);
+        UncheckButton(PageButtonMemoryCard);
+      end;
+  end;
+
+  NotebookPages.Tag:= TSpeedButton(Sender).Tag;
+  NoteBookPages.PageIndex:= TSpeedButton(Sender).Tag-1;
+
+  //TAdvOfficeRadioButton(Sender).Font.Color:= clMaroon;
+  //TAdvOfficeRadioButton(Sender).ShadowColor:= $00c0c0dc;
+  //TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold, fsUnderline];
+
+//  LabelEmulatorFile.Caption:= Format(LabelEmulatorFile.Hint, [PanelEmulators.Tag]);
+//  LabelEmuTitle.Caption:= Format(LabelEmuTitle.Hint, [PanelEmulators.Tag]);
+
+
+//  ShowEmulatorDetails(PanelEmulators.Tag);
+end;
+
+procedure TFormRunGameExtraMAME.Enabled_PlaybackRecordInputClick(
+  Sender: TObject);
+begin
+  if TAdvOfficeCheckBox(Sender).Checked then
+     begin
+       if not FormMain.CheckTotal(InputListView) then
+          GetFiles(20, True);
+     end;
+  case TAdvOfficeCheckBox(Sender).Checked of
+    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;//clBlue;//clNavy;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+  end;
+  PanelDisabledInput.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+
+  ReselectInputFile;
+end;
+
+procedure TFormRunGameExtraMAME.InputFileNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // playback/record input cannot have full path!!!
+  if Key in ['/', '*', '?', '<', '>', '|', ':', ';', '\', '"'] then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+  if (InputListView.Tag = 1) and (InputFileName.Tag = 0) then
+     InputRecord_CurrentFile:= InputFileName.Text;
+end;
+
+procedure TFormRunGameExtraMAME.InputListViewColumnClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  ShiftState: TShiftState; const Column: TEasyColumn);
+begin
+  if Button = cmbLeft then
+     begin
+       InputListView.BeginUpdate;
+       InputListView.Sort.SortAll;
+       InputListView.EndUpdate(False);
+     end;
+end;
+
+function TFormRunGameExtraMAME.InputListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+var
+  gItem1, gItem2: TEasyItem;
+begin
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
+  if SameText(TFileInfo(gItem2).eFileName, FormMain.MemGameInfo.eName+'.inp') and (not TFileInfo(gItem2).eIsGameSubFolder) then
+     Result:= -1
+  else
+  if SameText(TFileInfo(gItem1).eFileName, FormMain.MemGameInfo.eName+'.inp') and (not TFileInfo(gItem1).eIsGameSubFolder) then
+     Result:= 0
+  else
+  case Column.Index of
+    0: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileName, TFileInfo(gItem2).eFileName);
+    1: Result:= CompareIntValue(TFileInfo(gItem1).eSize, TFileInfo(gItem2).eSize);
+    2: Result:= CompareIntValue(TFileInfo(gItem1).eDateTime, TFileInfo(gItem2).eDateTime);
+    3: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileFolder, TFileInfo(gItem2).eFileFolder);
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.InputListViewItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Selected then
+     begin
+       InputFileName.Text:= TFileInfo(InputListView.Selection.First).eFileName;
+       LabelInputSelectedFileFolder.Caption:= TFileInfo(InputListView.Selection.First).eFileFolder;
+       case InputListView.Tag of
+         0: InputPlayback_CurrentFile:= TFileInfo(InputListView.Selection.First).eFileFolder+TFileInfo(InputListView.Selection.First).eFileName;
+         1: InputRecord_CurrentFile:= TFileInfo(InputListView.Selection.First).eFileFolder+TFileInfo(InputListView.Selection.First).eFileName;
+       end;
+     end;
+       //NewFilename.Text:= TFileInfo(Item).eFileName;
+       //if FormSelectFile.Tag in [27..31] then
+       //   FilesFolder.Caption:= TFileInfo(Item).eFileFolder;
+end;
+
+procedure TFormRunGameExtraMAME.InputListViewKeyAction(
+  Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
+  var DoDefault: Boolean);
+begin
+  ValidateKeyActions_ELV(InputListView, CharCode, Shift);
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInputResetFileNameClick(
+  Sender: TObject);
+begin
+  InputRecord_CurrentFile:= FolderInput+MachineNameFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'.inp';
+  ReselectInputFile;
+end;
+
+procedure TFormRunGameExtraMAME.SaveStateListViewColumnClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  ShiftState: TShiftState; const Column: TEasyColumn);
+begin
+  if Button = cmbLeft then
+     begin
+       SaveStateListView.BeginUpdate;
+       SaveStateListView.Sort.SortAll;
+       SaveStateListView.EndUpdate(False);
+     end;
+end;
+
+function TFormRunGameExtraMAME.SaveStateListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+var
+  gItem1, gItem2: TEasyItem;
+begin
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
+  case Column.Index of
+    0: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileName, TFileInfo(gItem2).eFileName);
+    1: Result:= CompareIntValue(TFileInfo(gItem1).eSize, TFileInfo(gItem2).eSize);
+    2: Result:= CompareIntValue(TFileInfo(gItem1).eDateTime, TFileInfo(gItem2).eDateTime);
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.SaveStateListViewItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Selected then
+     begin
+       LabelSaveStateSelectedFileFolder.Caption:= TFileInfo(SaveStateListView.Selection.First).eFileFolder;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.SaveStateListViewKeyAction(
+  Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
+  var DoDefault: Boolean);
+begin
+  ValidateKeyActions_ELV(SaveStateListView, CharCode, Shift);
+end;
+
+procedure TFormRunGameExtraMAME.Enabled_LoadSaveStateClick(
+  Sender: TObject);
+begin
+  if TAdvOfficeCheckBox(Sender).Checked then
+     begin
+       if not FormMain.CheckTotal(SaveStateListView) then
+          GetFiles(22, True);
+     end;
+  case TAdvOfficeCheckBox(Sender).Checked of
+    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+  end;
+
+  PanelDisabledSaveState.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+  PanelDisabledSaveStateNotSupportedMsg.Visible:= PanelDisabledSaveState.Visible;
+
+  ReSelectSaveStateFile;
+end;
+
+procedure TFormRunGameExtraMAME.InputListViewItemEditEnd(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  EditFileName_EndEdit_ELV(InputListView);
+  //FormMain.ELV_SetEditManager(InputListView, False);
+  //FormMain.SetFormKeyPreview(FormRunGameExtraMAME);
+  //SetBottomButtons(True);
+end;
+
+procedure TFormRunGameExtraMAME.InputListViewItemEdited(
+  Sender: TCustomEasyListview; Item: TEasyItem; var NewValue: Variant;
+  var Accept: Boolean);
+var
+  oldFile, newFile: String;
+  iRename: Boolean;
+  RemoveItem: TEasyItem;
+begin
+  oldFile:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+
+  if NewValue = '' then
+     begin
+       Accept:= False;
+       Exit;
+     end;
+     
+  NewValue:= ChangeFileExt(NewValue, '.inp');
+  newFile:= TFileInfo(Item).eFileFolder+NewValue;
+  iRename:= False;
+  RemoveItem:= nil;
+  if not SameText(NewValue, TFileInfo(Item).eFileName) then
+     begin
+       if FileExists(newFile) then
+          begin
+            RemoveItem:= GetItem_ELV(newFile, InputListView);
+
+            CallMessageBox;
+            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
+            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
+            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
+                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
+
+            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+            else
+            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+            else
+               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+
+            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(' and overwrite the file above ?');
+
+            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
+               begin
+                 iRename:= True;
+               end;
+          end
+       else
+          iRename:= True;
+     end;
+  if Accept then
+     begin
+       if iRename then
+          begin
+            if RenameFile(oldFile, newFile) then//TFileInfo(Item).eFileFolder+NewValue);
+               TFileInfo(Item).eFileName:= NewValue;
+
+            // rename the .timecode file as well
+            oldFile:= ChangeFileExt(oldFile, '.timecode');
+            if FileExists(oldFile) then
+               begin
+                 newFile:= ChangeFileExt(newFile, '.timecode');
+                 RenameFile(oldFile, newFile);
+               end;
+            Sleep(100);
+            InputListView.Groups.DeleteItem(RemoveItem);
+            //UpdateFileNameInfo(oFile, NewValue, True);
+          end;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  CanClose:= not FormMain.ELV_IsEditing(InputListView);
+  if CanClose then
+     CanClose:= not FormMain.ELV_IsEditing(SaveStateListView);
+  if CanClose then
+     CanClose:= not FormMain.ELV_IsEditing(MemoryCardListView);
+  if CanClose then
+     CanClose:= not FormMain.ELV_IsEditing(RecordMovieListView);
+
+  if CanClose then
+     begin
+       if FormRunGameExtraMAME.ModalResult = mrYes then
+          begin
+            if MountCommandLine then
+               UpdateLastMemoryCardUsed
+            else
+               CanClose:= False;
+          end;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.SaveStateListViewItemEditEnd(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  EditFileName_EndEdit_ELV(SaveStateListView);
+  //FormMain.ELV_SetEditManager(SaveStateListView, False);
+  //FormMain.SetFormKeyPreview(FormRunGameExtraMAME);
+  //SetBottomButtons(True);
+end;
+
+procedure TFormRunGameExtraMAME.SaveStateListViewItemEdited(
+  Sender: TCustomEasyListview; Item: TEasyItem; var NewValue: Variant;
+  var Accept: Boolean);
+var
+  oldFile, newFile: String;
+  iRename: Boolean;
+  RemoveItem: TEasyItem;
+begin
+  oldFile:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+
+  if NewValue = '' then
+     begin
+       Accept:= False;
+       Exit;
+     end;
+
+  NewValue:= ChangeFileExt(NewValue, '.sta');
+  newFile:= TFileInfo(Item).eFileFolder+NewValue;
+  iRename:= False;
+  RemoveItem:= nil;
+  if not SameText(NewValue, TFileInfo(Item).eFileName) then
+     begin
+       if FileExists(newFile) then
+          begin
+            RemoveItem:= GetItem_ELV(newFile, SaveStateListView);
+
+            CallMessageBox;
+            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
+            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
+            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
+                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
+
+            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+            else
+            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+            else
+               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+
+            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(' and overwrite the file above ?');
+
+            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
+               begin
+                 iRename:= True;
+               end;
+          end
+       else
+          iRename:= True;
+     end;
+  if Accept then
+     begin
+       if iRename then
+          begin
+            if RenameFile(oldFile, newFile) then//TFileInfo(Item).eFileFolder+NewValue);
+               TFileInfo(Item).eFileName:= NewValue;
+
+            Sleep(100);
+            SaveStateListView.Groups.DeleteItem(RemoveItem);
+            //UpdateFileNameInfo(oFile, NewValue, True);
+          end;
+     end;
+end;
+
+
+procedure TFormRunGameExtraMAME.Enabled_InsertMemoryCardClick(
+  Sender: TObject);
+begin
+  if TAdvOfficeCheckBox(Sender).Checked then
+     begin
+       if not FormMain.CheckTotal(MemoryCardListView) then
+          begin
+            GetFiles(32, True);
+            // get last used memcard slot 1
+            // get last used memcard slot 2
+          end;
+     end;
+  case TAdvOfficeCheckBox(Sender).Checked of
+    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;//clBlue;//clNavy;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+  end;
+  PanelDisabledMemoryCard.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+
+  //ReselectInputFile;
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewColumnClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  ShiftState: TShiftState; const Column: TEasyColumn);
+begin
+  if Button = cmbLeft then
+     begin
+       MemoryCardListView.BeginUpdate;
+       MemoryCardListView.Sort.SortAll;
+       MemoryCardListView.EndUpdate(False);
+     end;
+end;
+
+function TFormRunGameExtraMAME.MemoryCardListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+var
+  gItem1, gItem2: TEasyItem;
+begin
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
+  case Column.Index of
+    0: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileName, TFileInfo(gItem2).eFileName);
+    1: Result:= CompareIntValue(TFileInfo(gItem1).eSize, TFileInfo(gItem2).eSize);
+    2: Result:= CompareIntValue(TFileInfo(gItem1).eDateTime, TFileInfo(gItem2).eDateTime);
+    3: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileFolder, TFileInfo(gItem2).eFileFolder);
+  end;
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewItemEditEnd(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  EditFileName_EndEdit_ELV(MemoryCardListView);
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewItemEdited(
+  Sender: TCustomEasyListview; Item: TEasyItem; var NewValue: Variant;
+  var Accept: Boolean);
+var
+  oldFile, newFile, fileExt, fileExt_NewValue: String;
+  iRename: Boolean;
+  RemoveItem: TEasyItem;
+begin
+  oldFile:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+
+  if NewValue = '' then
+     begin
+       Accept:= False;
+       Exit;
+     end;
+
+  fileExt:= ExtractFileExt(TFileInfo(Item).eFileName); // it can be .mc; .mc1; .mc2
+  fileExt_NewValue:= ExtractFileExt(NewValue);
+  if fileExt_NewValue = '' then
+     NewValue:= ChangeFileExt(NewValue, fileExt);
+  newFile:= TFileInfo(Item).eFileFolder+NewValue;
+  iRename:= False;
+  RemoveItem:= nil;
+  if not SameText(NewValue, TFileInfo(Item).eFileName) then
+     begin
+       if FileExists(newFile) then
+          begin
+            RemoveItem:= GetItem_ELV(newFile, MemoryCardListView);
+
+            CallMessageBox;
+            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
+            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
+            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
+                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
+
+            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+            else
+            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
+               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+            else
+               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+
+            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(' and overwrite the file above ?');
+
+            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
+               begin
+                 iRename:= True;
+               end;
+          end
+       else
+          iRename:= True;
+     end;
+  if Accept then
+     begin
+       if iRename then
+          begin
+            if RenameFile(oldFile, newFile) then//TFileInfo(Item).eFileFolder+NewValue);
+               TFileInfo(Item).eFileName:= NewValue;
+
+            Sleep(100);
+            MemoryCardListView.Groups.DeleteItem(RemoveItem);
+            //UpdateFileNameInfo(oFile, NewValue, True);
+          end;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Selected then
+     begin
+       LabelMemoryCardSelectedFileFolder.Caption:= TFileInfo(MemoryCardListView.Selection.First).eFileFolder;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewKeyAction(
+  Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
+  var DoDefault: Boolean);
+begin
+  ValidateKeyActions_ELV(MemoryCardListView, CharCode, Shift);
+end;
+
+procedure TFormRunGameExtraMAME.PopupELVPopup(Sender: TObject);
+begin
+  PopupMemoryCardAssignToSlot1.Visible:= PopupELV.PopupComponent = MemoryCardListView;
+  PopupMemoryCardAssignToSlot2.Visible:= (PopupMemoryCardAssignToSlot1.Visible) and (InsertMemoryCard_Slot2.Enabled);
+  PopupInputRenameFile.Enabled:= FormMain.CheckTotal(PopupELV.PopupComponent as TEasyListView);
+  PopupInputDeleteFile.Enabled:= PopupInputRenameFile.Enabled;
+end;
+
+procedure TFormRunGameExtraMAME.Enabled_RecordMovieClick(Sender: TObject);
+begin
+  if TAdvOfficeCheckBox(Sender).Checked then
+     begin
+       if not FormMain.CheckTotal(InputListView) then
+          GetFiles(23, True); // 23 - WAV; 24 - MNG; 25 - AVI
+     end;
+  case TAdvOfficeCheckBox(Sender).Checked of
+    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;//clBlue;//clNavy;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+  end;
+  PanelDisabledRecordMovie.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+
+  //ReselectInputFile;
+end;
+
+procedure TFormRunGameExtraMAME.PopupInputRenameFileClick(Sender: TObject);
+begin
+  if SameText(PopupELV.PopupComponent.ClassName, 'TEasyListView') then
+     EditFileName(PopupELV.PopupComponent as TEasyListView);
+  //if PopupELV.PopupComponent = InputListView then
+  //   EditFileName(InputListView);
+end;
+
+procedure TFormRunGameExtraMAME.PopupInputDeleteFileClick(Sender: TObject);
+begin
+  if SameText(PopupELV.PopupComponent.ClassName, 'TEasyListView') then
+     DeleteFileName(PopupELV.PopupComponent as TEasyListView);
+end;
+
+procedure TFormRunGameExtraMAME.MemoryCardListViewDblClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
+begin
+  if Button = cmbLeft then
+     AddMemoryCardToSlot;
+end;
+
+procedure TFormRunGameExtraMAME.PopupMemoryCardAssignToSlot1Click(
+  Sender: TObject);
+begin
+  AddMemoryCardToSlot(TMenuItem(Sender).Tag);
+end;
+
+procedure TFormRunGameExtraMAME.InsertMemoryCard_Slot1KeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  // there can't be surround quotes...
+  if Key in ['/', '*', '?', '<', '>', '|', ';', '"'] then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.InsertMemoryCard_Slot2KeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  // there can't be surround quotes...
+  if Key in ['/', '*', '?', '<', '>', '|', ';', '"'] then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot1_SelectFileClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 1', InsertMemoryCard_Slot1, False, True, FolderMemoryCard);
+end;
+
+procedure TFormRunGameExtraMAME.ButtonInsertMemoryCard_Slot2_SelectFileClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 2', InsertMemoryCard_Slot2, False, True, FolderMemoryCard);
+end;
+
+end.

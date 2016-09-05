@@ -163,7 +163,7 @@ begin
     2:
       begin
         Result:= 'Size: '+eFileSizeText;
-        Result:= Result+'  Date/Time: '+eDateTimeText; // Format('  Date/Time: %s', [eDateTimeText]);
+        Result:= Result+'  Date Modified: '+eDateTimeText; // Format('  Date/Time: %s', [eDateTimeText]);
         if eMediaType > 0 then
            begin
              if eHeaderVerCHD > 0 then
@@ -216,13 +216,14 @@ procedure TFormDeleteMultipleGamesViewFiles.AddGames(var GroupToFocus: TEasyGrou
 var
   Item, addItem: TEasyItem;
   addGroup: TEasyGroup;
-  Loop, tmpMediaType, tmpFileType, IsParentCHD, fixFileType: Integer;
+  Loop, tmpMediaType, tmpFileType, IsParentCHD, fixFileType, selIndex: Integer;
   tmpFileName, ChecksumCHD: String;
   GroupGameTitle: WideString;
   GroupSoftwareName: String;
   HeaderVerCHD: Byte;
   GhostItem: Boolean;
 begin
+  selIndex:= 1;
   case FormDeleteMultipleGamesViewFiles.Tag of
     0: Item:=  FormDeleteMultipleGamesFiles.GamesList.Groups.FirstItem; // all games
     1: Item:=  FormDeleteMultipleGamesFiles.GamesList.Selection.First; // all games
@@ -337,8 +338,9 @@ begin
          end;
        end;
     case FormDeleteMultipleGamesViewFiles.Tag of
-      0: Item:=  FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item); // all games
-      1: Item:=  FormDeleteMultipleGamesFiles.GamesList.Selection.Next(Item); // all games
+      0: Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item); // all games
+      1: Item:= FormMain.ELV_GetNextSelected(FormDeleteMultipleGamesFiles.GamesList, Item, selIndex); // all games
+      //1: Item:= FormDeleteMultipleGamesFiles.GamesList.Selection.Next(Item); // all games
     end;
   until Item = nil;
 end;

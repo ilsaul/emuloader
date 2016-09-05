@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
   MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
-  AdvGroupBox, ShadowLabel, ExtCtrls;
+  ShadowLabel, ExtCtrls;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -528,10 +528,12 @@ var
 
   function AddGameHashedList: Boolean;
   begin
-    if FormMain.TempGameVars.eSoftwareName = '' then
-       mGamesList.Add(FormMain.TempGameVars.eName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True))
-    else
-       mGamesList.Add(FormMain.TempGameVars.eName+'_'+FormMain.TempGameVars.eSoftwareName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
+    //error! update to 'softlistname\gamename=?????'
+    mGamesList.Add(FormMain.GetPlayedGamesNameEntry(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName)+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
+    //if FormMain.TempGameVars.eSoftwareName = '' then
+    //   mGamesList.Add(FormMain.TempGameVars.eName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True))
+    //else
+    //   mGamesList.Add(FormMain.TempGameVars.eName+'_'+FormMain.TempGameVars.eSoftwareName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
     Result:= True;
   end;
 
@@ -702,10 +704,11 @@ begin
     repeat
       Item:= FormMain.GamesListView.Groups.FirstInGroup(Group);
       repeat
-        if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
-           StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
-        else
-           StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+        StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+        //if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
+        //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
+        //else
+        //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
         if tIndex > 0 then
            uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
         else
@@ -720,10 +723,11 @@ begin
   begin
     Item:= FormMain.GamesListView.Groups.FirstItem;
     repeat
-      if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
-         StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
-      else
-         StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+      StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+      //if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
+      //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
+      //else
+      //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
       if tIndex > 0 then
          uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
       else
@@ -924,8 +928,8 @@ procedure TFormFavoritesManager.FavoritesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Position = 3 then
-     ACanvas.Font.Size:= 8;
+  //if Position = 3 then
+  //   ACanvas.Font.Size:= 8;
 end;
 
 end.

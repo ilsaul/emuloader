@@ -152,7 +152,7 @@ var
   Item, addItem: TEasyItem;
   Continue: Boolean;
   zIcon: TIcon;
-  addIndex: Integer;
+  addIndex, selItem: Integer;
 begin
   if not FormMain.CheckTotal(FormMAMu_IconsManager.MissingIconsList) then
      Exit;
@@ -179,6 +179,7 @@ begin
        addItem.Details[1]:= 1;
      end;
 
+  selItem:= 1;
   case LabelHotkeys.Tag of
     0, 2: Item:= FormMAMu_IconsManager.MissingIconsList.Groups.FirstItem; // delete files / update "zzz.ico" to all "not working" games
     1: Item:= FormMAMu_IConsManager.MissingIconsList.Selection.First; // copy "zzz.ico" to selected games
@@ -225,7 +226,8 @@ begin
        end;
     case LabelHotkeys.Tag of
       0, 2: Item:= FormMAMu_IconsManager.MissingIconsList.Groups.NextItem(Item); // delete files
-      1: Item:= FormMAMu_IConsManager.MissingIconsList.Selection.Next(Item); // copy / update "zzz.ico" to selected games
+      1: Item:= FormMain.ELV_GetNextSelected(FormMAMu_IConsManager.MissingIconsList, Item, selItem); // copy / update "zzz.ico" to selected games
+      //1: Item:= FormMAMu_IConsManager.MissingIconsList.Selection.Next(Item); // copy / update "zzz.ico" to selected games
     end;
   until Item = nil;
   NotWorkingIcons.EndUpdate;

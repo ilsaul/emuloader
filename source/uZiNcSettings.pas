@@ -16,7 +16,6 @@ type
     LabelGameTitle: TShadowLabel;
     AudioBox: TAdvGroupBox;
     AdvGroupBox3: TAdvGroupBox;
-    Sound: TAdvOfficeCheckBox;
     SoundFilter: TAdvOfficeCheckBox;
     SoundStereoExciter: TAdvOfficeCheckBox;
     SoundLiteSurround: TAdvOfficeCheckBox;
@@ -38,10 +37,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     LabelFramerateManual: TLabel;
-    Label4: TLabel;
-    LabelTextureCache: TLabel;
     LabelTurnDisplay: TLabel;
-    LabelTextureFilter: TLabel;
     Resolution: TComboBox;
     FullScreen: TAdvOfficeCheckBox;
     ColorDepth: TComboBox;
@@ -52,11 +48,6 @@ type
     FrameLimitation: TAdvOfficeCheckBox;
     FrameSkip: TAdvOfficeCheckBox;
     FramerateDetection: TAdvOfficeCheckBox;
-    TextureType: TComboBox;
-    TextureCache: TGaugeBar;
-    TurnDisplay: TGaugeBar;
-    TextureFilter: TGaugeBar;
-    FramerateManual: TGaugeBar;
     LabelEmulatorVersion: TShadowLabel;
     SystemIcon: TImage;
     ButtonReadFile: TBitBtn;
@@ -84,19 +75,26 @@ type
     FolderROMsButtonDelete: TBitBtn;
     FolderROMsButtonClear: TBitBtn;
     LabelGameStatus: TShadowLabel;
+    TurnDisplay: TComboBox;
+    FramerateManual: TEdit;
+    LabelFramerateManualRange: TLabel;
+    EnableKeys: TAdvOfficeCheckBox;
+    LabelTextureSettings: TLabel;
+    Label4: TLabel;
+    TextureType: TComboBox;
+    LabelTextureCache: TLabel;
+    TextureCache: TComboBox;
+    TextureFilter: TComboBox;
+    LabelTextureFilter: TLabel;
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SoundLiteSurroundMultiplierChange(Sender: TObject);
-    procedure TextureCacheChange(Sender: TObject);
-    procedure TurnDisplayChange(Sender: TObject);
-    procedure TextureFilterChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure RendererZNCChange(Sender: TObject);
     procedure ControllerZNCButtonSelectClick(Sender: TObject);
     procedure ControllerConfigFileButtonSelectClick(Sender: TObject);
     procedure RendererZNCButtonSelectClick(Sender: TObject);
     procedure RendererConfigFileButtonSelectClick(Sender: TObject);
-    procedure FramerateManualChange(Sender: TObject);
     procedure FolderROMButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonEditClick(Sender: TObject);
     procedure FolderROMsButtonDeleteClick(Sender: TObject);
@@ -111,13 +109,17 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonUpClick(Sender: TObject);
+    procedure FramerateManualKeyPress(Sender: TObject; var Key: Char);
+    procedure ControllerZNCChange(Sender: TObject);
   private
     { Private declarations }
     procedure ReadZiNc_cfg(iniFile: String);
     procedure WriteZiNc_cfg(const customIniFile: String);
   public
-    emuIni: String;
-    GameIni: String;
+    emuIni,
+    GameIni,
+    emuFileExec,
+    emuVersionStr: String;
     { Public declarations }
   end;
 
@@ -139,7 +141,7 @@ var
 
   function FixValueString(StringValue: String): String;
   begin
-    Position:= Pos(';', StringValue);
+    Position:= PosEx(';', StringValue);
     if Position <> 0 then
        Result:= Copy(StringValue, 1, Position-1);
     Result:= Trim(Result);
@@ -154,7 +156,7 @@ var
 
 begin
   try
-    elCFG:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'folders_emulators.ini');
+    elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
     cmdString:= elCFG.ReadString(FormMain.GetSystemIniSection(idZiNc), 'roms_path', 'roms');
   finally
      FreeAndNil(elCFG);
@@ -174,7 +176,7 @@ begin
   if FileExists(iniFile) then
      begin
        ZiNcFileCfg.LoadFromFile(iniFile);
-       Position:= Pos(' ', ZiNcFileCfg[0]);
+       Position:= PosEx(' ', ZiNcFileCfg[0]);
      end;
 
   if Position <> 0 then
@@ -205,7 +207,8 @@ begin
   for Loop:=0 to ZiNcFileCfg.Count-1 do
   begin
     if ZiNcFileCfg.Names[Loop] = '--use-sound' then
-       Sound.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
+       AudioBox.CheckBox.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
+       //Sound.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
     else
     if ZiNcFileCfg.Names[Loop] = '--renderer' then
        RendererZNC.Text:= ShortToLongPath(ZiNcFileCfg.ValueFromIndex[Loop])
@@ -260,7 +263,7 @@ begin
   if FormMain.ValidateFile(RendererConfigFile.Text) then
      begin
        ZiNcFileCfg.Clear;
-       if Pos(':', RendererConfigFile.Text) = 0 then
+       if PosEx(':', RendererConfigFile.Text) = 0 then
           ZiNcFileCfg.LoadFromFile(ExtractFilePath(FormMain.EmulatorFile[idZiNc])+RendererConfigFile.Text)
        else
           ZiNcFileCfg.LoadFromFile(RendererConfigFile.Text);
@@ -283,7 +286,7 @@ begin
             Scanlines.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'Filtering' then
-            TextureFilter.Position:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
+            TextureFilter.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'Blending' then
             Blending.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
@@ -304,16 +307,29 @@ begin
             FramerateDetection.Checked:= Boolean(StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop])))
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'FramerateManual' then
-            FramerateManual.Position:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
+            begin
+              FramerateManual.Text:= FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]);
+              if FramerateManual.Text = '' then
+                 FramerateManual.Text:= '100'
+              else
+                 begin
+                   Position:= StrToInt(FramerateManual.Text);
+                   if (Position < 0) or (Position > 1000) then
+                      FramerateManual.Text:= '100';
+                 end;
+            end
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'TextureType' then
             TextureType.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
          else
-         if Trim(ZiNcFileCfg.Names[Loop]) = 'TextureType' then
-            TextureCache.Position:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
+         if Trim(ZiNcFileCfg.Names[Loop]) = 'TextureCaching' then
+            TextureCache.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'TurnDisplay' then
-            TurnDisplay.Position:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]));
+            TurnDisplay.ItemIndex:= StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]))
+         else
+         if Trim(ZiNcFileCfg.Names[Loop]) = 'EnableKeys' then
+            EnableKeys.Checked:= Boolean(StrToInt(FixValueString(ZiNcFileCfg.ValueFromIndex[Loop])))
        end;
        if (xResolution <> '') and (yResolution <> '') then
           begin
@@ -359,7 +375,7 @@ begin
         if cmdString = '' then
            cmdString:= 'roms';
         try
-          elCFG:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'folders_emulators.ini');
+          elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
           elCFG.WriteString(FormMain.GetSystemIniSection(idZiNc), 'roms_path', cmdString);
           elCFG.UpdateFile;
         finally
@@ -368,7 +384,7 @@ begin
         cmdString:= '';
      end;
 
-  if not Sound.Checked then
+  if not AudioBox.CheckBox.Checked then // Sound.Checked then
      AddSetting('--use-sound=no');
 
   if (RendererZNC.Text <> '') and (LowerCase(RendererZNC.Text) <> 'renderer.znc') then
@@ -390,7 +406,7 @@ begin
      AddSetting('--sound-filter-enable=yes');
 
   if SoundFilteRCutoff.Text <> '22050 Hz' then
-     AddSetting('--sound-filter-cutoff='+Copy(SoundFilteRCutoff.Text, 1, (Pos(' ', SoundFilteRCutoff.Text)-1)));
+     AddSetting('--sound-filter-cutoff='+Copy(SoundFilteRCutoff.Text, 1, (PosEx(' ', SoundFilteRCutoff.Text)-1)));
 
   if SoundLiteSurround.Checked then
      AddSetting('--sound-surround-lite-enable=yes');
@@ -426,7 +442,7 @@ begin
 
   ZiNcFileCfg.Add('; renderer settings');
   ZiNcFileCfg.Add('');
-  Position:= Pos('x', Resolution.Text);
+  Position:= PosEx('x', Resolution.Text);
   xResolution:= Copy(Resolution.Text, 1, Position-1);
   yResolution:= Copy(Resolution.Text, Position+1, Length(Resolution.Text)-Position);
   ZiNcFileCfg.Add(WriteRendererLine('XSize', xResolution, 'window/fullscreen X size'));
@@ -437,18 +453,20 @@ begin
     1: ZiNcFileCfg.Add(WriteRendererLine('ColorDepth', '32', 'Fullscreen color depth: 16/32'));
   end;
   ZiNcFileCfg.Add(WriteRendererLine('ScanLines', IntToStr(Scanlines.ItemIndex), 'Scannlines: 0=none, 1=black, 2=bright'));
-  ZiNcFileCfg.Add(WriteRendererLine('Filtering', IntToStr(TextureFilter.Position), 'Texture filtering: 0-3'));
+  ZiNcFileCfg.Add(WriteRendererLine('Filtering', IntToStr(TextureFilter.ItemIndex), 'Texture filtering: 0-3'));
   ZiNcFileCfg.Add(WriteRendererLine('Blending', IntToStr(Blending.ItemIndex), 'Enhanced color blend: ogl: 0/1; D3D: 0-2'));
   ZiNcFileCfg.Add(WriteRendererLine('Dithering', IntToStr(Ord(Dithering.Checked)), 'Dithering: 0/1'));
   ZiNcFileCfg.Add(WriteRendererLine('ShowFPS', IntToStr(Ord(ShowFPS.Checked)), 'FPS display on startup: 0/1'));
   ZiNcFileCfg.Add(WriteRendererLine('FrameLimitation', IntToStr(Ord(FrameLimitation.Checked)), 'Frame limit: 0/1'));
   ZiNcFileCfg.Add(WriteRendererLine('FrameSkipping', IntToStr(Ord(FrameSkip.Checked)), 'Frame skip: 0/1'));
   ZiNcFileCfg.Add(WriteRendererLine('FramerateDetection', IntToStr(Ord(FramerateDetection.Checked)), 'Auto framerate detection: 0/1'));
-  ZiNcFileCfg.Add(WriteRendererLine('FramerateManual', IntToStr(FramerateManual.Position), 'Manual framerate: 0-1000'));
+  ZiNcFileCfg.Add(WriteRendererLine('FramerateManual', FramerateManual.Text, 'Manual framerate: 0-1000'));
   ZiNcFileCfg.Add(WriteRendererLine('TextureType', IntToStr(TextureType.ItemIndex), 'Textures: 0=default, 1=4 bit, 2=5bit, 3=8bit'));
-  ZiNcFileCfg.Add(WriteRendererLine('TextureCaching', IntToStr(TextureCache.Position), 'Caching type: 0-2'));
-  ZiNcFileCfg.Add(WriteRendererLine('TurnDisplay', IntToStr(TurnDisplay.Position), 'Turn the whole display (0-2, 0=default)'));
-  if Pos(':', RendererConfigFile.Text) = 0 then
+  ZiNcFileCfg.Add(WriteRendererLine('TextureCaching', IntToStr(TextureCache.ItemIndex), 'Caching type: 0-2'));
+  ZiNcFileCfg.Add(WriteRendererLine('TurnDisplay', IntToStr(TurnDisplay.ItemIndex), 'Turn the whole display (0-2, 0=default)'));
+  ZiNcFileCfg.Add(WriteRendererLine('EnableKeys', IntToStr(Ord(EnableKeys.Checked)), 'Enable renderer keys: 0/1, def=1 (enables keys for the fps menu/pause)'));
+
+  if PosEx(':', RendererConfigFile.Text) = 0 then
      tempFileName:= ExtractFilePath(FormMain.EmulatorFile[idZiNc])+RendererConfigFile.Text
   else
      tempFileName:= RendererConfigFile.Text;
@@ -459,7 +477,7 @@ begin
 
   if RendererConfigFile.Text <> '' then
      begin
-       if Pos(':', RendererConfigFile.Text) = 0 then
+       if PosEx(':', RendererConfigFile.Text) = 0 then
           tempFileName:= ExtractFilePath(FormMain.EmulatorFile[idZiNc])+RendererConfigFile.Text
        else
           tempFileName:= RendererConfigFile.Text;
@@ -484,7 +502,8 @@ begin
   //FormMain.IL_Systems.GetIcon(idZiNc, SystemIcon.Picture.Icon);
   //FormMain.IL_ArcadeSystem_Large.GetIcon(idZiNc, SystemIcon.Picture.Icon);
   //FormMain.LoadSystemThumbIcon(SystemIcon, 2);
-  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idZiNc);
+  LabelGameTitle.Caption:= FormMain.GetGameSysTitle(Tag = 1, idZiNc, emuVersionStr);
+
   //if FormMain.EmulatorVersion[idZiNc] <> '' then
   //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idZiNc]
   //else
@@ -492,7 +511,8 @@ begin
 
   if Tag = 0 then
      begin
-       LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idZiNc]+#13#10+LabelReadFileIni.Caption;
+       //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idZiNc]+#13#10+LabelReadFileIni.Caption;
+       LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
        TopBar.Color1:= $00c0cddc;
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idZiNc, SystemIcon.Picture.Icon);
@@ -502,8 +522,8 @@ begin
   else
   if Tag = 1 then
      begin
-       if FormMain.EmulatorVersion[idZiNc] <> '' then
-          LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idZiNc]
+       if emuVersionStr <> '' then
+          LabelEmulatorVersion.Caption:= emuVersionStr
        else
           LabelEmulatorVersion.Caption:= '';
 
@@ -544,22 +564,7 @@ end;
 procedure TFormZiNcSettings.SoundLiteSurroundMultiplierChange(
   Sender: TObject);
 begin
-  LabelSoundLiteSurroundMultiplier.Caption:= Format(LabelSoundLiteSurroundMultiplier.Hint, [SoundLiteSurroundMultiplier.Position]);
-end;
-
-procedure TFormZiNcSettings.TextureCacheChange(Sender: TObject);
-begin
-  LabelTextureCache.Caption:= Format(LabelTextureCache.Hint, [TextureCache.Position]);
-end;
-
-procedure TFormZiNcSettings.TurnDisplayChange(Sender: TObject);
-begin
-  LabelTurnDisplay.Caption:= Format(LabelTurnDisplay.Hint, [TurnDisplay.Position]);
-end;
-
-procedure TFormZiNcSettings.TextureFilterChange(Sender: TObject);
-begin
-  LabelTextureFilter.Caption:= Format(LabelTextureFilter.Hint, [TextureFilter.Position]);
+  LabelSoundLiteSurroundMultiplier.Caption:= IntToStr(SoundLiteSurroundMultiplier.Position);
 end;
 
 procedure TFormZiNcSettings.FormCloseQuery(Sender: TObject;
@@ -579,12 +584,25 @@ begin
      end;
 end;
 
+procedure TFormZiNcSettings.ControllerZNCChange(Sender: TObject);
+//var
+//  iFolder: String;
+begin
+// disabled for now!!!!! March 14, 2016
+//  iFolder:= FormMain.FullFolderFix(ControllerZNC.Text, FormMain.EmulatorFile[idZiNc]);
+//  case FileExists(iFolder) of
+//    True : LabelControllerZNC.Caption:= 'Controller ['+GetFileInfo2(iFolder, VersionInfo[2])+']';
+//    False: LabelControllerZNC.Caption:= 'Controller';
+//  end;
+end;
+
 procedure TFormZiNcSettings.RendererZNCChange(Sender: TObject);
 begin
-  case FileExists(RendererZNC.Text) of
-    True : LabelRendererZNC.Caption:= 'Renderer ['+GetFileInfo2(RendererZNC.Text, VersionInfo[2])+']';
-    False: LabelRendererZNC.Caption:= 'Renderer';
-  end;
+// disabled for now!!!!! March 14, 2016
+//  case FileExists(RendererZNC.Text) of
+//    True : LabelRendererZNC.Caption:= 'Renderer ['+GetFileInfo2(RendererZNC.Text, VersionInfo[2])+']';
+//    False: LabelRendererZNC.Caption:= 'Renderer';
+//  end;
 end;
 
 procedure TFormZiNcSettings.ControllerZNCButtonSelectClick(
@@ -608,11 +626,6 @@ procedure TFormZiNcSettings.RendererConfigFileButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(10, 'Select a video renderer config file', RendererConfigFile, False);
-end;
-
-procedure TFormZiNcSettings.FramerateManualChange(Sender: TObject);
-begin
-  LabelFramerateManual.Caption:= Format(LabelFramerateManual.Hint, [FramerateManual.Position]);
 end;
 
 procedure TFormZiNcSettings.FolderROMButtonSelectClick(Sender: TObject);
@@ -683,5 +696,13 @@ procedure TFormZiNcSettings.ButtonUpClick(Sender: TObject);
 begin
   FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
 end;
+
+procedure TFormZiNcSettings.FramerateManualKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+     Key:= Char(0);
+end;
+
 
 end.

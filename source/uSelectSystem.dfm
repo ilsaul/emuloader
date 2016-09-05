@@ -1,6 +1,6 @@
 object FormSelectSystem: TFormSelectSystem
-  Left = 526
-  Top = 361
+  Left = 619
+  Top = 509
   ActiveControl = SystemsListView
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -55,11 +55,11 @@ object FormSelectSystem: TFormSelectSystem
     Transparent = True
   end
   object LabelQuickScan: TLabel
-    Left = 314
+    Left = 276
     Top = 204
-    Width = 218
+    Width = 256
     Height = 15
-    Caption = '(search for game files only, no validation)'
+    Caption = '(search for .zip;.7z game files only, no validation)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clNavy
     Font.Height = -12
@@ -344,8 +344,8 @@ object FormSelectSystem: TFormSelectSystem
     end
     object LabelCustomizeSoftwareList: TShadowLabel
       Left = 6
-      Top = 25
-      Width = 34
+      Top = 24
+      Width = 40
       Height = 13
       Cursor = crHandPoint
       Hint = 'Customize software list'
@@ -353,7 +353,7 @@ object FormSelectSystem: TFormSelectSystem
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -9
-      Font.Name = 'Arial'
+      Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
       ParentShowHint = False

@@ -4,8 +4,8 @@ object FormDaphneSettings: TFormDaphneSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 418
-  ClientWidth = 577
+  ClientHeight = 404
+  ClientWidth = 561
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,7 +25,7 @@ object FormDaphneSettings: TFormDaphneSettings
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 577
+    Width = 561
     Height = 60
     Align = alTop
     Color1 = 12639452
@@ -105,10 +105,10 @@ object FormDaphneSettings: TFormDaphneSettings
     end
   end
   object GeneralBox: TAdvGroupBox
-    Left = 16
+    Left = 8
     Top = 67
     Width = 313
-    Height = 198
+    Height = 195
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'General'
@@ -140,7 +140,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object Daphne_NoJoysticks: TAdvOfficeCheckBox
       Left = 8
-      Top = 114
+      Top = 111
       Width = 87
       Height = 20
       Hint = 
@@ -155,7 +155,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object SRAMContinuousUpdate: TAdvOfficeCheckBox
       Left = 8
-      Top = 134
+      Top = 131
       Width = 161
       Height = 20
       Hint = 
@@ -170,7 +170,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object FastBoot: TAdvOfficeCheckBox
       Left = 8
-      Top = 154
+      Top = 151
       Width = 81
       Height = 20
       Hint = 
@@ -185,7 +185,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object StopLaserdiscPlayer: TAdvOfficeCheckBox
       Left = 8
-      Top = 174
+      Top = 171
       Width = 137
       Height = 20
       Hint = 
@@ -200,7 +200,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object Daphne_NoLog: TAdvOfficeCheckBox
       Left = 168
-      Top = 114
+      Top = 111
       Width = 137
       Height = 20
       Hint = 'Avoid creating a log when running the emulator'
@@ -215,7 +215,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object Daphne_NoWarnings: TAdvOfficeCheckBox
       Left = 168
-      Top = 134
+      Top = 131
       Width = 90
       Height = 20
       Hint = 'Don'#39't display warnings about game driver problems'
@@ -228,7 +228,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object SendUsageStatistics: TAdvOfficeCheckBox
       Left = 168
-      Top = 154
+      Top = 151
       Width = 137
       Height = 20
       Hint = 
@@ -245,7 +245,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object EnableCheat: TAdvOfficeCheckBox
       Left = 168
-      Top = 174
+      Top = 171
       Width = 97
       Height = 20
       Hint = 
@@ -292,10 +292,10 @@ object FormDaphneSettings: TFormDaphneSettings
     end
   end
   object AdvGroupBox4: TAdvGroupBox
-    Left = 376
+    Left = 368
     Top = 67
     Width = 185
-    Height = 198
+    Height = 195
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
@@ -330,7 +330,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object Daphne_FullScreen: TAdvOfficeCheckBox
       Left = 8
-      Top = 68
+      Top = 65
       Width = 81
       Height = 20
       Hint = 'Runs Daphne in fullscreen mode instead of windowed mode'
@@ -343,7 +343,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object FullScale: TAdvOfficeCheckBox
       Left = 8
-      Top = 88
+      Top = 85
       Width = 97
       Height = 20
       Hint = 'Scale the game overlay graphics to the virtual screen dimension'
@@ -356,7 +356,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object IgnoreAspectRatio: TAdvOfficeCheckBox
       Left = 8
-      Top = 108
+      Top = 105
       Width = 137
       Height = 20
       Hint = 
@@ -371,7 +371,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object Daphne_OpenGL: TAdvOfficeCheckBox
       Left = 8
-      Top = 128
+      Top = 125
       Width = 65
       Height = 20
       Hint = 
@@ -387,7 +387,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object BlankSearches: TAdvOfficeCheckBox
       Left = 8
-      Top = 148
+      Top = 145
       Width = 105
       Height = 20
       Hint = 'Forces the screen to go blank during searches. VLDP only'
@@ -400,7 +400,7 @@ object FormDaphneSettings: TFormDaphneSettings
     end
     object BlankSkips: TAdvOfficeCheckBox
       Left = 8
-      Top = 168
+      Top = 165
       Width = 97
       Height = 20
       Hint = 'Forces the screen to go blank during skips. VLDP only'
@@ -413,8 +413,8 @@ object FormDaphneSettings: TFormDaphneSettings
     end
   end
   object AudioBox: TAdvGroupBox
-    Left = 16
-    Top = 275
+    Left = 8
+    Top = 273
     Width = 233
     Height = 85
     RoundEdges = True
@@ -478,8 +478,8 @@ object FormDaphneSettings: TFormDaphneSettings
     end
   end
   object ButtonReadFile: TBitBtn
-    Left = 16
-    Top = 380
+    Left = 8
+    Top = 372
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -490,8 +490,8 @@ object FormDaphneSettings: TFormDaphneSettings
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 376
-    Top = 380
+    Left = 366
+    Top = 372
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -502,8 +502,8 @@ object FormDaphneSettings: TFormDaphneSettings
     TabOrder = 5
   end
   object ButtonCancel: TBitBtn
-    Left = 474
-    Top = 380
+    Left = 464
+    Top = 372
     Width = 89
     Height = 25
     Hint = 'Close without updating'

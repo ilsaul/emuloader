@@ -18,11 +18,12 @@ type
     LabelGameNameCloneOf: TShadowLabel;
     MachinesListView: TEasyListview;
     LabelUsage: TShadowLabel;
-    LabelSoftwarelistTitle: TShadowLabel;
+    LabelSoftwarelistTitleW: TShadowLabel;
     ButtonResetToCurrent: TBitBtn;
     ShowAvailableMachinesOnly: TAdvOfficeCheckBox;
     HidePreliminaryMachines: TAdvOfficeCheckBox;
     LabelTotalMachines: TShadowLabel;
+    ButtonResetToDefault: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -36,14 +37,17 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MachinesListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
+    procedure ButtonResetToDefaultClick(Sender: TObject);
   private
     { Private declarations }
     //SelectedMachineName: String;
+    procedure AdjustWindow;
     procedure ReselectItem(const MachineName: String);
     procedure ChangeFilters;
     procedure ReadWriteSettings(ReadMode: Boolean);
   public
     { Public declarations }
+    CurrentMachineName, DefaultMachineName: String;
   end;
 
 var
@@ -89,6 +93,40 @@ begin
   end;
 end;
 
+procedure TFormSoftwareListMachineToRunGame.AdjustWindow;
+var
+  iWidth, iHeight, iWidthDec: Integer;
+begin
+  if Screen.Width >= 1024 then
+     Exit;
+
+  if Screen.Height = 480 then
+     begin
+       iWidth:= 635;
+       iHeight:= 100;
+     end
+  else
+  if Screen.Width = 800 then
+     begin
+       iWidth:= 790;
+       iHeight:= 0;
+       MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width-5;
+       MachinesListView.Header.Columns[1].Width:= MachinesListView.Header.Columns[1].Width-10;
+       MachinesListView.Header.Columns[4].Width:= MachinesListView.Header.Columns[4].Width-10;
+     end;
+
+  iWidthDec:= FormSoftwareListMachineToRunGame.Width-iWidth+10;
+
+  FormSoftwareListMachineToRunGame.Width:= FormSoftwareListMachineToRunGame.Width-iWidthDec;
+  FormSoftwareListMachineToRunGame.Height:= FormSoftwareListMachineToRunGame.Height-iHeight;
+  MachinesListView.Width:= MachinesListView.Width-iWidthDec;
+  MachinesListView.Height:= MachinesListView.Height-iHeight;
+  LabelTitle.Width:= LabelTitle.Width-iWidthDec;
+  ButtonYes.Left:= ButtonYes.Left-iWidthDec;
+  ButtonNo.Left:= ButtonNo.Left-iWidthDec;
+  LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width-iWidthDec;
+end;
+
 procedure TFormSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
 begin
   if PanelMessages.Tag = 1 then
@@ -116,7 +154,7 @@ begin
        //LabelUsage.Visible:= True;
      end;
 
-  LabelSoftwarelistTitle.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
+  LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
   BringToFront;
 end;
 
@@ -150,6 +188,7 @@ end;
 procedure TFormSoftwareListMachineToRunGame.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(MachinesListView);
+  AdjustWindow;
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;
   MachinesListView.BeginUpdate;
@@ -158,8 +197,8 @@ begin
      MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   MachinesListView.EndUpdate(False);
 
-  if LabelSoftwarelistTitle.Hint <> '' then
-     ReselectItem(LabelSoftwarelistTitle.Hint);
+  if CurrentMachineName <> '' then
+     ReselectItem(CurrentMachineName);
 
   FormSoftwareListMachineToRunGame.Tag:= 0;
   ChangeFilters;
@@ -182,7 +221,7 @@ procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.GetCanvasFontCustom(Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
-  if Item.Captions[1] = LabelSoftwarelistTitle.Hint then
+  if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
        ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
@@ -218,7 +257,7 @@ begin
   if MachinesListView.Selection.First <> nil then
      SelectedName:= MachinesListView.Selection.First.Captions[1]
   else
-     SelectedName:= LabelSoftwarelistTitle.Hint;
+     SelectedName:= CurrentMachineName;
   MachinesListView.Selection.ClearAll;
   MachinesListView.BeginUpdate;
   MachinesListView.Groups.MakeAllVisible;
@@ -226,7 +265,7 @@ begin
   Item:= MachinesListView.Groups.FirstItem;
   repeat
     KeepGame:= True;
-    if (Item.Captions[1] <> SelectedName) and (Item.Captions[1] <> LabelSoftwarelistTitle.Hint) then
+    if (Item.Captions[1] <> SelectedName) and (Item.Captions[1] <> CurrentMachineName) then
     begin
       if ShowAvailableMachinesOnly.Checked then
          KeepGame:= Item.Tag = 0; // Tag holds eGameSetStatus field
@@ -254,7 +293,7 @@ end;
 procedure TFormSoftwareListMachineToRunGame.ButtonResetToCurrentClick(
   Sender: TObject);
 begin
-  ReselectItem(LabelSoftwarelistTitle.Hint);
+  ReselectItem(CurrentMachineName);
 end;
 
 procedure TFormSoftwareListMachineToRunGame.FormCloseQuery(Sender: TObject;
@@ -271,5 +310,11 @@ begin
      FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
 end;
 
+
+procedure TFormSoftwareListMachineToRunGame.ButtonResetToDefaultClick(
+  Sender: TObject);
+begin
+  ReselectItem(DefaultMachineName);
+end;
 
 end.

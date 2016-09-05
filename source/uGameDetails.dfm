@@ -124,8 +124,8 @@ object FormGameDetails: TFormGameDetails
       Height = 25
       AutoSize = False
       Caption = 
-        'game: gamename [clone of parentname] [bios: biosname]'#13#10'HBMAME: H' +
-        'omeBrew Multiple Arcade Machine Emulator v0.151 (Dec 14 2013)'
+        'game: gamename [clone of parentname] [bios: biosname]'#13#10'Supermode' +
+        'l: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 2012)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9

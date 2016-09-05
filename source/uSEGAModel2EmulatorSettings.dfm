@@ -1,11 +1,11 @@
 object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
-  Left = 581
-  Top = 215
+  Left = 887
+  Top = 451
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 535
-  ClientWidth = 644
+  ClientHeight = 420
+  ClientWidth = 619
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,7 +24,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   PixelsPerInch = 96
   TextHeight = 15
   object Label1: TLabel
-    Left = 16
+    Left = 8
     Top = 67
     Width = 501
     Height = 15
@@ -35,9 +35,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     Transparent = True
   end
   object LabelReadFileIni: TShadowLabel
-    Left = 112
-    Top = 501
-    Width = 319
+    Left = 104
+    Top = 393
+    Width = 314
     Height = 16
     AutoSize = False
     Caption = 'LabelReadFileIni'
@@ -69,7 +69,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 550
+      Width = 526
       Height = 26
       AutoSize = False
       Caption = 
@@ -127,7 +127,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 529
+      Left = 505
       Top = 26
       Width = 110
       Height = 27
@@ -151,10 +151,10 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMs: TEasyListview
     Tag = 1
-    Left = 16
+    Left = 8
     Top = 84
-    Width = 612
-    Height = 98
+    Width = 466
+    Height = 65
     BackGround.Enabled = True
     CellSizes.Report.Height = 18
     Color = clWhite
@@ -167,7 +167,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000160020000FFFFFF1F0001000000
+      00060000008008000101000100000000000001CE010000FFFFFF1F0001000000
       010000000600000046006F006C00640065007200000000000000000000000000
       110000005445617379436F6C756D6E53746F726564FFFECE0006000000800000
       010100010100000000000105020000FFFFFF1F00010000000100000006000000
@@ -215,8 +215,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object ButtonUp: TBitBtn
     Tag = 1
-    Left = 16
-    Top = 182
+    Left = 476
+    Top = 83
     Width = 43
     Height = 21
     Hint = 'Move selected folder up'
@@ -228,8 +228,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = ButtonUpClick
   end
   object ButtonDown: TBitBtn
-    Left = 59
-    Top = 182
+    Left = 476
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Move selected folder down'
@@ -241,8 +241,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = ButtonUpClick
   end
   object FolderROMButtonSelect: TBitBtn
-    Left = 409
-    Top = 182
+    Left = 525
+    Top = 83
     Width = 43
     Height = 21
     Hint = 'Click here to add folders'
@@ -253,8 +253,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = FolderROMButtonSelectClick
   end
   object FolderROMsButtonEdit: TBitBtn
-    Left = 452
-    Top = 182
+    Left = 568
+    Top = 83
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
@@ -263,8 +263,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = FolderROMsButtonEditClick
   end
   object FolderROMsButtonDelete: TBitBtn
-    Left = 542
-    Top = 182
+    Left = 525
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
@@ -273,8 +273,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = FolderROMsButtonDeleteClick
   end
   object FolderROMsButtonClear: TBitBtn
-    Left = 585
-    Top = 182
+    Left = 568
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'
@@ -285,20 +285,20 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = FolderROMsButtonClearClick
   end
   object FolderROMsButtonSetActiveInactive: TBitBtn
-    Left = 495
-    Top = 182
-    Width = 47
+    Left = 476
+    Top = 129
+    Width = 43
     Height = 21
-    Hint = 'Click here to toggle selected folder [active/inactive]'
+    Hint = 'Click here to toggle selected folder active/inactive'
     Caption = 'Enable'
     TabOrder = 5
     OnClick = FolderROMsButtonSetActiveInactiveClick
   end
   object GroupBox2: TAdvGroupBox
-    Left = 16
-    Top = 214
-    Width = 361
-    Height = 265
+    Left = 8
+    Top = 157
+    Width = 601
+    Height = 130
     RoundEdges = True
     Caption = 'Video'
     Ctl3D = True
@@ -311,15 +311,15 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Caption = 'Full Screen Resolution'
     end
     object LabelWidescreenWindow: TLabel
-      Left = 8
-      Top = 116
-      Width = 147
+      Left = 284
+      Top = 20
+      Width = 66
       Height = 15
-      Caption = 'Window Mode Aspect Ratio'
+      Caption = 'Aspect Ratio'
     end
     object LabelFrameskip: TLabel
-      Left = 8
-      Top = 164
+      Left = 176
+      Top = 20
       Width = 54
       Height = 15
       Caption = 'Frameskip'
@@ -327,8 +327,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Transparent = True
     end
     object Label2: TLabel
-      Left = 8
-      Top = 212
+      Left = 392
+      Top = 20
       Width = 85
       Height = 15
       Caption = 'Textures Format'
@@ -336,7 +336,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object FullScreenResolution: TComboBox
       Left = 8
       Top = 36
-      Width = 169
+      Width = 160
       Height = 23
       Style = csDropDownList
       ItemHeight = 15
@@ -344,9 +344,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     end
     object AutoSwitchFullScreen: TAdvOfficeCheckBox
       Left = 8
-      Top = 68
-      Width = 163
-      Height = 17
+      Top = 66
+      Width = 162
+      Height = 20
       Hint = 'Go to full screen automatically after loading games'
       TabOrder = 1
       Alignment = taLeftJustify
@@ -355,10 +355,10 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object ForceSync: TAdvOfficeCheckBox
-      Left = 8
-      Top = 92
-      Width = 163
-      Height = 17
+      Left = 176
+      Top = 66
+      Width = 93
+      Height = 20
       Hint = 'Match vertical sync to the monitor sync'
       TabOrder = 2
       Alignment = taLeftJustify
@@ -367,9 +367,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object WidescreenWindow: TComboBox
-      Left = 8
-      Top = 132
-      Width = 169
+      Left = 284
+      Top = 36
+      Width = 100
       Height = 23
       Hint = 'Set widescreen in window mode'
       Style = csDropDownList
@@ -383,9 +383,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '16:10')
     end
     object Frameskip: TComboBox
-      Left = 8
-      Top = 180
-      Width = 169
+      Left = 176
+      Top = 36
+      Width = 100
       Height = 23
       Hint = 'Set frameskip to fixed value'
       Style = csDropDownList
@@ -407,9 +407,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '9')
     end
     object ForceManagedTextures: TComboBox
-      Left = 8
-      Top = 228
-      Width = 169
+      Left = 392
+      Top = 36
+      Width = 160
       Height = 23
       Hint = 
         'Leave it on dynamic. Set to managed textures if the emulator cra' +
@@ -424,9 +424,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         'Force Managed textures')
     end
     object SoftwareVertexProcessing: TAdvOfficeCheckBox
-      Left = 184
-      Top = 19
-      Width = 169
+      Left = 8
+      Top = 106
+      Width = 161
       Height = 20
       Hint = 
         'Leave it checked if you have an ATI card, unchecking it causes b' +
@@ -439,9 +439,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object Wireframe: TAdvOfficeCheckBox
-      Left = 184
-      Top = 43
-      Width = 169
+      Left = 424
+      Top = 106
+      Width = 149
       Height = 20
       Hint = 'Disables polygon filling (for debug purposes, don'#39't change)'
       TabOrder = 7
@@ -451,8 +451,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object FakeGouraud: TAdvOfficeCheckBox
-      Left = 184
-      Top = 67
+      Left = 176
+      Top = 86
       Width = 97
       Height = 20
       Hint = 
@@ -465,8 +465,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object BilinearFiltering: TAdvOfficeCheckBox
-      Left = 184
-      Top = 91
+      Left = 424
+      Top = 66
       Width = 113
       Height = 20
       Hint = 'Enables bilinear filtering of textures'
@@ -479,8 +479,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object FilterTilemaps: TAdvOfficeCheckBox
-      Left = 184
-      Top = 139
+      Left = 176
+      Top = 106
       Width = 105
       Height = 20
       Hint = 
@@ -493,9 +493,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object TrilinearFiltering: TAdvOfficeCheckBox
-      Left = 184
-      Top = 115
-      Width = 113
+      Left = 424
+      Top = 86
+      Width = 110
       Height = 20
       Hint = 
         'Enables mipmap usage and trilinear filtering (doesn'#39't work with ' +
@@ -507,9 +507,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object AutoMipMap: TAdvOfficeCheckBox
-      Left = 184
-      Top = 163
-      Width = 129
+      Left = 280
+      Top = 66
+      Width = 125
       Height = 20
       Hint = 'Enables Direct3D Automipmap generation'
       TabOrder = 12
@@ -519,9 +519,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object MeshTransparency: TAdvOfficeCheckBox
-      Left = 184
-      Top = 187
-      Width = 127
+      Left = 280
+      Top = 86
+      Width = 125
       Height = 20
       Hint = 
         'Enabled meshed polygons for translucency. Requires PS3.0 capable' +
@@ -533,22 +533,22 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object Crosshair: TAdvOfficeCheckBox
-      Left = 184
-      Top = 211
-      Width = 174
+      Left = 280
+      Top = 106
+      Width = 135
       Height = 20
       Hint = 'Show crosshair in gun games'
       Checked = True
       TabOrder = 14
       Alignment = taLeftJustify
-      Caption = 'Show Crosshair (Gun Games)'
+      Caption = 'Show Crosshair (Gun)'
       ReturnIsTab = False
       State = cbChecked
       Themed = True
     end
     object FSAA: TAdvOfficeCheckBox
-      Left = 184
-      Top = 235
+      Left = 8
+      Top = 86
       Width = 152
       Height = 20
       Hint = 'Enable full screen antialiasing in Direct3D'
@@ -560,10 +560,10 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     end
   end
   object EnableSound: TAdvOfficeCheckBox
-    Left = 392
-    Top = 456
-    Width = 105
-    Height = 25
+    Left = 520
+    Top = 327
+    Width = 94
+    Height = 20
     Checked = True
     TabOrder = 10
     Alignment = taLeftJustify
@@ -573,17 +573,17 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     Themed = True
   end
   object AdvGroupBox1: TAdvGroupBox
-    Left = 392
-    Top = 214
-    Width = 237
-    Height = 193
+    Left = 8
+    Top = 295
+    Width = 493
+    Height = 78
     RoundEdges = True
     Caption = 'Input'
     Ctl3D = True
     TabOrder = 11
     object ReturnToNeutral: TAdvOfficeCheckBox
-      Left = 9
-      Top = 20
+      Left = 280
+      Top = 15
       Width = 152
       Height = 20
       Hint = 
@@ -597,9 +597,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     end
     object UseRawInput: TAdvGroupBox
       Left = 9
-      Top = 48
-      Width = 220
-      Height = 85
+      Top = 20
+      Width = 265
+      Height = 49
       CheckBox.Hint = 
         'Read mouse through raw input, allowing 2 mice to be used (useful' +
         ' for shooting games)'
@@ -616,16 +616,16 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         Caption = 'Player 1'
       end
       object LabelRawDevicePlayer2: TLabel
-        Left = 8
-        Top = 56
+        Left = 140
+        Top = 24
         Width = 41
         Height = 15
         Caption = 'Player 2'
       end
       object RawDevicePlayer1: TComboBox
-        Left = 56
+        Left = 52
         Top = 20
-        Width = 158
+        Width = 75
         Height = 23
         Style = csDropDownList
         ItemHeight = 15
@@ -639,9 +639,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
           'Mouse 4')
       end
       object RawDevicePlayer2: TComboBox
-        Left = 56
-        Top = 52
-        Width = 158
+        Left = 184
+        Top = 20
+        Width = 75
         Height = 23
         Style = csDropDownList
         ItemHeight = 15
@@ -656,9 +656,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       end
     end
     object ForceFeedbackEnable: TAdvOfficeCheckBox
-      Left = 8
-      Top = 168
-      Width = 145
+      Left = 280
+      Top = 55
+      Width = 140
       Height = 20
       Hint = 'Enable force feedback effects'
       TabOrder = 2
@@ -668,9 +668,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
     object XInput: TAdvOfficeCheckBox
-      Left = 8
-      Top = 144
-      Width = 214
+      Left = 280
+      Top = 35
+      Width = 211
       Height = 20
       Hint = 
         'XInput support. XInput allows direct access to XBox360 compatibl' +
@@ -683,8 +683,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     end
   end
   object ButtonReadFile: TBitBtn
-    Left = 16
-    Top = 496
+    Left = 8
+    Top = 388
     Width = 89
     Height = 25
     Hint = 'Read "emulator.ini"'
@@ -695,8 +695,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 437
-    Top = 496
+    Left = 425
+    Top = 388
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -705,8 +705,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 13
   end
   object ButtonCancel: TBitBtn
-    Left = 541
-    Top = 496
+    Left = 523
+    Top = 388
     Width = 89
     Height = 25
     Hint = 'Close without updating'

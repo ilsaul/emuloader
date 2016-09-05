@@ -821,7 +821,7 @@ var
     Result:= False;
     gamesItem:= MissingIconsList.Groups.FirstItem;
     repeat
-      IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID,
+      IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
                                                TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
       if (TMissingIconInfo(gamesItem).eName = TNotWorkingGameInfo(Item).eName) and
          (TMissingIconInfo(gamesItem).eSoftwareName = TNotWorkingGameInfo(Item).eSoftwareName) then
@@ -849,7 +849,7 @@ begin
      begin
        if not FormMain.CheckSelected(MissingIconsList) then
           Exit;
-       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID,
+       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
                                                 TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
        if not FileExists(FormMain.MAMu_Folder+'zzz.ico') then
           begin
@@ -904,7 +904,7 @@ begin
        begin
          GameSelected:= False;
          // need to add SoftwareName here!!!!!!!!
-         FileStr:= FormMain.GetMAMu_IconFolder(FormDeleteMAMu_NotWorkingIcons.Tag)+
+         FileStr:= FormMain.GetMAMu_IconFolder(FormDeleteMAMu_NotWorkingIcons.Tag, False)+
                    TNotWorkingGameInfo(Item).eName+'.ico';
          case ActionIndex of
            0: // delete files
@@ -1072,7 +1072,7 @@ begin
   // scan icon files
   FormStatus.MessageStr('Building icons files list');
   tempList:= THashedStringList.Create;
-  GetFilesList(FormMain.GetMAMu_IconFolder(ButtonSystem.Tag), '.ico', '*.ico', tempList, False, False, True);
+  GetFilesList(FormMain.GetMAMu_IconFolder(ButtonSystem.Tag, False), '.ico', '*.ico', tempList, False, False, True);
   Loop2:= Ord(tempList.Count > 0);
   case Boolean(Loop2) of
     True:
@@ -1138,7 +1138,7 @@ begin
       begin
         GenerateMessage('Error', FormMain.GetEmulatorDescription(ButtonSystem.Tag),
                         'Could not find any icon files in the following folders.'+#13#10+
-                        FormMain.GetMAMu_IconFolder(ButtonSystem.Tag), 2);
+                        FormMain.GetMAMu_IconFolder(ButtonSystem.Tag, False), 2);
       end;
   end;
   FreeAndNil(tempList);
@@ -1265,7 +1265,7 @@ begin
   case FileExists(BlankIcon) of
     True:
       begin
-        IconFullPath:= FormMain.GetMAMu_IconFolder(sysID);
+        IconFullPath:= FormMain.GetMAMu_IconFolder(sysID, False);
         SoftNameFolder:= '';
         if SoftwareName <> '' then
            SoftNameFolder:= SoftwareName+'\';

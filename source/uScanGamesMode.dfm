@@ -59,11 +59,11 @@ object FormScanGamesMode: TFormScanGamesMode
   object Label2: TLabel
     Left = 32
     Top = 138
-    Width = 404
+    Width = 453
     Height = 15
     Caption = 
       'This mode does not validate ROMs/CHDs. It only searches for the ' +
-      'game files.'
+      'game files (.zip; .7z).'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -152,11 +152,11 @@ object FormScanGamesMode: TFormScanGamesMode
   object Label5: TLabel
     Left = 32
     Top = 154
-    Width = 413
+    Width = 483
     Height = 15
     Caption = 
-      'Important: bios, device, parent sets are ignored; merged sets ar' +
-      'e not supported.'
+      'Important: bios/device sets included; parent sets are ignored; m' +
+      'erged sets are not supported.'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -12
@@ -188,6 +188,7 @@ object FormScanGamesMode: TFormScanGamesMode
     ParentFont = False
     ShowAccelChar = False
     Transparent = True
+    Visible = False
   end
   object FullScan: TAdvOfficeRadioButton
     Left = 16
@@ -258,8 +259,8 @@ object FormScanGamesMode: TFormScanGamesMode
     Style = vgSimple
     object LabelCustomizeSoftwareList: TShadowLabel
       Left = 6
-      Top = 22
-      Width = 34
+      Top = 21
+      Width = 40
       Height = 13
       Cursor = crHandPoint
       Hint = 'Customize software list'
@@ -267,7 +268,7 @@ object FormScanGamesMode: TFormScanGamesMode
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -9
-      Font.Name = 'Arial'
+      Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
       ParentShowHint = False

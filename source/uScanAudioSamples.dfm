@@ -3,7 +3,7 @@ object FormScanAudioSamples: TFormScanAudioSamples
   Top = 272
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Scan Audio Samples'
+  Caption = 'Scan Missing Audio Samples'
   ClientHeight = 515
   ClientWidth = 884
   Color = 15856113
