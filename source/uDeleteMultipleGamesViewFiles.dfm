@@ -5,8 +5,8 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Multiple Games [Viewing Files Details]'
-  ClientHeight = 512
-  ClientWidth = 584
+  ClientHeight = 508
+  ClientWidth = 619
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,11 +25,11 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
   object FilesListView: TEasyListview
     Left = 0
     Top = 0
-    Width = 584
-    Height = 452
+    Width = 619
+    Height = 448
     Align = alClient
     BorderStyle = bsNone
-    CellSizes.Tile.Width = 582
+    CellSizes.Tile.Width = 617
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -49,7 +49,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000177020000FFFFFF1F0001000000
+      000600000080080001010001000000000000018D020000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
@@ -72,7 +72,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     PaintInfoGroup.MarginBottom.Size = 10
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Size = 40
-    PaintInfoItem.ImageIndent = 30
+    PaintInfoItem.ImageIndent = 20
     PaintInfoItem.TileDetailCount = 3
     ParentFont = False
     ParentShowHint = False
@@ -82,7 +82,6 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
     Selection.RoundRectRadius = 2
@@ -97,8 +96,8 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
   end
   object BottomBar: TPanelEx
     Left = 0
-    Top = 452
-    Width = 584
+    Top = 448
+    Width = 619
     Height = 60
     Align = alBottom
     Color1 = 15856113
@@ -123,7 +122,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
       Transparent = True
     end
     object LabelGhostedFiles: TShadowLabel
-      Left = 208
+      Left = 222
       Top = 12
       Width = 261
       Height = 37
@@ -156,7 +155,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
       OnClick = ButtonShowFileTypesClick
     end
     object ButtonClose: TBitBtn
-      Left = 508
+      Left = 543
       Top = 27
       Width = 68
       Height = 25

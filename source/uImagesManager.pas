@@ -12,6 +12,7 @@ type
   TMissingImageInfo = class(TEasyItemStored)
   private
     fROMIdentification: Integer;
+    fSystemID: ShortInt;
     fSystemType: ShortInt;
     fImageCategory: ShortInt;
     fTitle: WideString;
@@ -26,6 +27,7 @@ type
     fColorStatus: ShortInt;
     fSoundStatus: ShortInt;
     fGraphicStatus: ShortInt;
+    fIsFavorite: Boolean;
     fGameStatus: ShortInt; // 0 - have or miss; 1 - missing ROMs/CHDs
     fFoundImageMissingGame: String;
   protected
@@ -34,6 +36,7 @@ type
     function GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
+    property eSystemID: ShortInt read fSystemID write fSystemID;
     property eSystemType: ShortInt read fSystemType write fSystemType;
     property eImageCategory: ShortInt read fImageCategory write fImageCategory;
     property eTitle: WideString read fTitle write fTitle;
@@ -48,6 +51,7 @@ type
     property eColorStatus: ShortInt read fColorStatus write fColorStatus;
     property eSoundStatus: ShortInt read fSoundStatus write fSoundStatus;
     property eGraphicStatus: ShortInt read fGraphicStatus write fGraphicStatus;
+    property eIsFavorite: Boolean read fIsFavorite write fIsFavorite;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus;
     property eFoundImageMissingGame: String read fFoundImageMissingGame write fFoundImageMissingGame;
   end;
@@ -282,6 +286,13 @@ function TMissingImageInfo.GetStateImageIndexes(Column: Integer): TCommonImageIn
 begin
   Result:= -1;
   case Column of
+    0:
+      begin
+        case eIsFavorite of
+          True : Result:= 3;
+          False: Result:= 100; // non-existing index to show an empty space in place of the fav icon
+        end;
+      end;
     5: Result:= eDriverStatus;
     6: Result:= eEmulationStatus;
     7: Result:= eColorStatus;
@@ -423,6 +434,9 @@ begin
 end;
 
 procedure TFormImagesManager.ShowPreviewImage;
+var
+  iFileExt: String;
+  iType: TImageType;
 begin
   if FormImageFoundMissingGame = nil then
      Exit;
@@ -431,7 +445,10 @@ begin
   if not FileExists(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame) then
      Exit;
 
-  SnapPreview.Bitmap.LoadFromFile(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame);
+  iType:= FormMain.LoadPreviewImage(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame, SnapPreview);
+  iFileExt:= ExtractFileExtW(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame);
+
+  //SnapPreview.Bitmap.LoadFromFile(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame);
   if FormImageFoundMissingGame.Tag = 1 then
      begin
        FormImageFoundMissingGame.ClientWidth:= SnapPreview.Bitmap.Width;
@@ -470,7 +487,8 @@ end;
 
 function TFormImagesManager.LoadGamesToMissingList(ShowFolderMessage: Boolean = True): Boolean;
 var
-  tempFolder: String; //, SoftwareNameDir: String;
+  tempFolder, ExtraFolderStrMAME, SoftwareNameDir: String;
+  NewMAMESnapName: String; // used by in-game snapshot only "gamename\0000.png"
   ImageFound, SearchFile: Boolean;
   ELFormat: String;
 
@@ -517,11 +535,32 @@ var
        
     if SearchFile then
        begin
-         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0, FormMain.TempGameVars.eSoftwareName);
+         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
+         SoftwareNameDir:= FormMain.TempGameVars.eSoftwareName;
+         if SoftwareNameDir <> '' then
+            SoftwareNameDir:= SoftwareNameDir+'\';
+         NewMAMESnapName:= ''; // used by in-game snapshot only "gamename\0000.png"
          // EL format
-         ImageFound:= FileExists(tempFolder+ELFormat+'.png'); // search unzipped image
+         ImageFound:= FileExists(tempFolder+SoftwareNameDir+ELFormat+'.png'); // search unzipped image
          if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
-            ImageFound:= FileExists(tempFolder+ELFormat+'.jpg');
+            ImageFound:= FileExists(tempFolder+SoftwareNameDir+ELFormat+'.jpg');
+
+         if (not ImageFound) and FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
+            begin
+              ImageFound:= FileExists(tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.png'); // search unzipped image
+              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                 ImageFound:= FileExists(tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.jpg');
+
+              if (not ImageFound) and (ButtonImageCategory.Tag = 1) then
+              begin
+                // for game snapshots only
+                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
+
+                ImageFound:= FileExists(tempFolder+SoftwareNameDir+NewMAMESnapName+'.png'); // search unzipped image
+                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                   ImageFound:= FileExists(tempFolder+SoftwareNameDir+NewMAMESnapName+'.jpg');
+              end;
+            end;
        end;
 
     if not ImageFound then
@@ -529,6 +568,7 @@ var
          FormMain.TempGameVars.eImageIndex:= FormMain.TempGameVars.eROMIdentification;
          Item:= MissingImagesList.Items.AddCustom(TMissingImageInfo, nil);
          TMissingImageInfo(Item).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
+         TMissingImageInfo(Item).eSystemID:= FormMain.TempGameVars.eSystemID;
          TMissingImageInfo(Item).eSystemType:= FormMain.TempGameVars.eSystemType;
          TMissingImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
          TMissingImageInfo(Item).eTitle:= FormMain.TempGameVars.eTitle;
@@ -549,6 +589,7 @@ var
          TMissingImageInfo(Item).eColorStatus:= FormMain.TempGameVars.eColorStatus;
          TMissingImageInfo(Item).eSoundStatus:= FormMain.TempGameVars.eSoundStatus;
          TMissingImageInfo(Item).eGraphicStatus:= FormMain.TempGameVars.eGraphicStatus;
+         TMissingImageInfo(Item).eIsFavorite:= FormMain.TempGameVars.eIsFavorite;
          TMissingImageInfo(Item).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
          TMissingImageInfo(Item).eFoundImageMissingGame:= ''; // not used in this function!
          Item.Details[1]:= 20;
@@ -573,6 +614,8 @@ begin
   LabelTotalItemsMissing.Tag:= 0;
   FormStatus.MessageStr('Scanning for games with missing images');
   tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME); // [imgType, sysID]
+
+  ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
 
   ButtonNotUsedImagesDeleteFiles.Visible:= False;
   FormMain.ClearListView(MissingImagesList);
@@ -637,8 +680,6 @@ procedure TFormImagesManager.CreateImagePanelForm;
     sIni:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
 
     FormImageFoundMissingGame.Tag:= sIni.ReadInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', 1);
-    if FormImageFoundMissingGame.Tag = 0 then
-       SnapPreview.ScaleMode:= smResize;
     FormImageFoundMissingGame.Width:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenWidth', 320);
     FormImageFoundMissingGame.Height:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenHeight', 240);
     FormImageFoundMissingGame.Left:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
@@ -667,6 +708,7 @@ begin
        SnapPreview.Parent:= FormImageFoundMissingGame;
        SnapPreview.Align:= alClient;
        SnapPreview.Color:= clBlack;
+       SnapPreview.ScaleMode:= smResize;
        //SnapPreview.Bitmap.DrawMode:= dmBlend;
 
        FormImageFoundMissingGame.FormStyle:= fsStayOnTop;
@@ -717,9 +759,9 @@ end;
 
 function TFormImagesManager.ScanNotUsedImagesToMissingList(ShowFolderMessage: Boolean = True): Boolean;
 var
-  tempFolder: String; //, SoftwareNameDir: String;
+  tempFolder, ExtraFolderStrMAME, SoftwareNameDir, FileFullPath: String;
   ImageFound, SearchFile: Boolean;
-  ELFormat: String;
+  ELFormat, NewMAMESnapName: String;
 
   gItem, Item: TEasyItem;
   gGroup: TEasyGroup;
@@ -764,23 +806,46 @@ var
        
     if SearchFile then
        begin
-         ELFormat:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0, FormMain.TempGameVars.eSoftwareName);
+         ELFormat:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
+         SoftwareNameDir:= FormMain.TempGameVars.eSoftwareName;
+         if SoftwareNameDir <> '' then
+            SoftwareNameDir:= SoftwareNameDir+'\';
+         NewMAMESnapName:= ''; // used by in-game snapshot only "gamename\0000.png"
+         FileFullPath:= '';
+
          // EL format
-         ImageFound:= FileExists(tempFolder+ELFormat+'.png'); // search unzipped image
-         case ImageFound of
-           True : ELFormat:= tempFolder+ELFormat+'.png';
-           False:
-             begin
-               if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
-                  begin
-                    ImageFound:= FileExists(tempFolder+ELFormat+'.jpg');
-                    if ImageFound then
-                       ELFormat:= tempFolder+ELFormat+'.jpg';
-                  end;
-             end;
-         end;
-         //if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
-         //   ImageFound:= FileExists(tempFolder+ELFormat+'.jpg');
+         FileFullPath:= tempFolder+SoftwareNameDir+ELFormat+'.png';
+         ImageFound:= FileExists(FileFullPath); // search unzipped image
+         if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+            begin
+              FileFullPath:= tempFolder+SoftwareNameDir+ELFormat+'.jpg';
+              ImageFound:= FileExists(FileFullPath);
+            end;
+
+         if (not ImageFound) and FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
+            begin
+              FileFullPath:= tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.png';
+              ImageFound:= FileExists(FileFullPath); // search unzipped image
+              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                 begin
+                   FileFullPath:= tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.jpg';
+                   ImageFound:= FileExists(FileFullPath);
+                 end;
+
+              if (not ImageFound) and (ButtonImageCategory.Tag = 1) then
+              begin
+                // for game snapshots only
+                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
+
+                FileFullPath:= tempFolder+SoftwareNameDir+NewMAMESnapName+'.png';
+                ImageFound:= FileExists(FileFullPath); // search unzipped image
+                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                   begin
+                     FileFullPath:= tempFolder+SoftwareNameDir+NewMAMESnapName+'.jpg';
+                     ImageFound:= FileExists(FileFullPath);
+                   end;
+              end;
+            end;
        end;
 
     if ImageFound then
@@ -788,6 +853,7 @@ var
          FormMain.TempGameVars.eImageIndex:= FormMain.TempGameVars.eROMIdentification;
          Item:= MissingImagesList.Items.AddCustom(TMissingImageInfo, nil);
          TMissingImageInfo(Item).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
+         TMissingImageInfo(Item).eSystemID:= FormMain.TempGameVars.eSystemID;
          TMissingImageInfo(Item).eSystemType:= FormMain.TempGameVars.eSystemType;
          TMissingImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
          TMissingImageInfo(Item).eTitle:= FormMain.TempGameVars.eTitle;
@@ -808,8 +874,9 @@ var
          TMissingImageInfo(Item).eColorStatus:= FormMain.TempGameVars.eColorStatus;
          TMissingImageInfo(Item).eSoundStatus:= FormMain.TempGameVars.eSoundStatus;
          TMissingImageInfo(Item).eGraphicStatus:= FormMain.TempGameVars.eGraphicStatus;
+         TMissingImageInfo(Item).eIsFavorite:= FormMain.TempGameVars.eIsFavorite;
          TMissingImageInfo(Item).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
-         TMissingImageInfo(Item).eFoundImageMissingGame:= ELFormat;
+         TMissingImageInfo(Item).eFoundImageMissingGame:= FileFullPath;
          Item.Details[1]:= 20;
        end;
     Application.ProcessMessages;
@@ -831,6 +898,8 @@ begin
   LabelTotalItemsMissing.Tag:= 1;
   FormStatus.MessageStr('Scanning available images on missing games');
   tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME); // [imgType, sysID]
+
+  ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
 
   ButtonNotUsedImagesDeleteFiles.Visible:= False;
   FormMain.ClearListView(MissingImagesList);
@@ -870,7 +939,7 @@ begin
   case Result of
     True:
       begin
-        MissingImagesList.Groups.FirstGroup.Caption:= ButtonImageCategory.Caption+' [Scan Not Used Images]';;
+        MissingImagesList.Groups.FirstGroup.Caption:= ButtonImageCategory.Caption+' [Scan Images of Missing Games]';
         MissingImagesList.Groups.FirstGroup.ImageIndex:= ButtonImageCategory.Tag;
         ButtonNotUsedImagesDeleteFiles.Visible:= True;
         CreateImagePanelForm;
@@ -945,46 +1014,55 @@ end;
 
 procedure TFormImagesManager.ScanFiles(ShowFolderMessage: Boolean = True);
 var
-  el_GamesList, tempList: THashedStringList;
+  el_GamesList, FilesList: THashedStringList;
   WindowTitleError, ActiveFolder, AddToFolder: String;
   gItem, Item: TEasyItem;
   gGroup: TEasyGroup;
   MainFolderGroup, Group: TEasyGroup;
-  Loop2, iPos: Integer;
+  Loop2, iPos, TotalGamesCount: Integer;
   strName, strCloneOf, strSoftwareName, Folder: String;
+  ExtraFolderStrMAME, SoftwareNameDir: String;
+  NewMAMESnapName, NewMAMESnapCloneName: String; // used by in-game snapshot only "gamename\0000.png"
 
-  function CheckGameFiles(FileIndex: Integer; ImageExt: String): Boolean;
+  function CheckGameFiles(FileIndex: Integer; iGameName: String): Boolean;
   var
-    iLoop: Byte;
+    imgCatLoop: Byte;
     tempString: String;
+    iImageName: String;
   begin
     Result:= True;
     //strName:= el_GamesList.Names[FileIndex];
     //strSoftwareName:= el_GamesList.ValueFromIndex[FileIndex];
-    for iLoop:=1 to 10 do
+    for imgCatLoop:=1 to MaxImagePerCategory do
     begin
-      tempString:= Folder+
-                   Format('%s%s', [FormMain.GetImageName(strName, iLoop, 0, strSoftwareName), ImageExt]);
+      iImageName:= FormMain.GetImageName(iGameName, imgCatLoop, 0);//, strSoftwareName)
+      tempString:= Folder+SoftwareNameDir+iImageName;//+'.png';
+      FileIndex:= FilesList.IndexOf(tempString+'.png');
+      if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+         FileIndex:= FilesList.IndexOf(tempString+'.jpg');
 
-      FileIndex:= tempList.IndexOf(tempString);
-      if FileIndex <> -1 then
-         tempList.Delete(FileIndex)
-      else
+      if (FileIndex = -1) then //and FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
          begin
-           if (iLoop = 1) and (strCloneOf <> '') then
-           begin
-             tempString:= Folder+
-                          Format('%s%s', [FormMain.GetImageName(strCloneOf, iLoop, 0, strSoftwareName), ImageExt]);
-             FileIndex:= tempList.IndexOf(tempString);
-             if FileIndex = -1 then
-                Break;
-           end
-           else
-              Break;
+           tempString:= Folder+ExtraFolderStrMAME+SoftwareNameDir+iImageName;
+           FileIndex:= FilesList.IndexOf(tempString+'.png');
+           if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+              FileIndex:= FilesList.IndexOf(tempString+'.jpg');
          end;
-         // stop scan since files need to be sequential
-         // valid  : gamename.png; gamename0000.png; gamename0001.png; gamename0002.png
-         // invalid: gamename.png; gamename0000.png; gamename0002.png
+
+      if (FileIndex = -1) and (ButtonImageCategory.Tag = 1) then
+         begin
+           NewMAMESnapName:= FormMain.GetImageName(iGameName, imgCatLoop, 1);//, strSoftwareName); // used by in-game snapshot only "gamename\0000.png"
+           tempString:= Folder+SoftwareNameDir+NewMAMESnapName;
+           FileIndex:= FilesList.IndexOf(tempString+'.png');
+           if FileIndex = -1 then
+              begin
+                tempString:= Folder+ExtraFolderStrMAME+SoftwareNameDir+NewMAMESnapName;
+                FileIndex:= FilesList.IndexOf(tempString+'.png');
+              end;
+         end;
+
+      if FileIndex <> -1 then
+         FilesList.Delete(FileIndex);
     end;
   end;
 
@@ -1058,7 +1136,6 @@ begin
              el_GamesList.Add(TEasyGameInfo(gItem).eName+'='+TEasyGameInfo(gItem).eSoftwareName);
         end;
         gItem:= FormMain.GamesListView.Groups.NextInGroup(gGroup, gItem);
-
       until gItem = nil;
       gGroup:= FormMain.GamesListView.Groups.NextGroup(gGroup);
     until gGroup = nil;
@@ -1085,18 +1162,21 @@ begin
   // scan image files
   FormStatus.MessageStr('Building images files list');
   Folder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME);
-  tempList:= THashedStringList.Create;
-  GetFilesList(Folder, '.png', '*.*', tempList, True, False, True);
+  FilesList:= THashedStringList.Create;
+  GetFilesList(Folder, '.png', '*.*', FilesList, True, False, True);
   if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
-     GetFilesList(Folder, '.jpg', '*.*', tempList, True, False, True);
+     GetFilesList(Folder, '.jpg', '*.*', FilesList, True, False, True);
 
-  Loop2:= Ord(tempList.Count > 0);
+  Loop2:= Ord(FilesList.Count > 0);
   case Boolean(Loop2) of
     True:
       begin
-        //tempList.SaveToFile(FormMain.FrontendPath+'not_used_images.txt');
-        tempList.BeginUpdate;
-        FormStatus.MessageStr('Validating files (up to 10 images per game)');
+        ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
+        FilesList.BeginUpdate;
+        FormStatus.MessageStr('Validating '+IntToStr(el_GamesList.Count)+' games (up to '+IntToStr(MaxImagePerCategory)+' images per game)'+#13#10+
+                              'Image category: '+FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption);
+
+        TotalGamesCount:= el_GamesList.Count;
         for Loop2:=0 to el_GamesList.Count-1 do
         begin
           strName:= el_GamesList.Names[Loop2];
@@ -1109,36 +1189,42 @@ begin
           else
              strCloneOf:= '';
           strSoftwareName:= el_GamesList.ValueFromIndex[Loop2];
+          SoftwareNameDir:= strSoftwareName;
+          if SoftwareNameDir <> '' then
+             SoftwareNameDir:= SoftwareNameDir+'\';
 
-          CheckGameFiles(Loop2, '.png');
-          if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
-             CheckGameFiles(Loop2, '.jpg');
+          CheckGameFiles(Loop2, strName);
+          if FormMain.GameIsClone(strCloneOf) then
+             CheckGameFiles(Loop2, strCloneOf);
+             
           FormStatus.UpdateProgressBar(Loop2, el_GamesList.Count-1);
           Application.ProcessMessages;
         end;
-        tempList.EndUpdate;
-        if tempList.Count > 0 then
+        FormStatus.LabelSoftwareScanCount.Visible:= False;
+        FilesList.EndUpdate;
+        if FilesList.Count > 0 then
            begin
+             //FilesList.SaveToFile(FormMain.FrontendPath+'invalid_images.txt');
              FormMain.ClearListView(NotUsedImagesList);
              NotUsedImagesList.BeginUpdate;
              NotUsedImagesList.Items.ReIndexDisable:= True;
              ActiveFolder:= '';
              AddToFolder:= '';
-             for Loop2:=0 to tempList.Count-1 do
+             for Loop2:=0 to FilesList.Count-1 do
              begin
-               AddToFolder:= ExtractFilePath(tempList[Loop2]);
+               AddToFolder:= ExtractFilePath(FilesList[Loop2]);
                if ActiveFolder = '' then
                   ActiveFolder:= AddToFolder;
 
-               Item:= AddToGroup(tempList[Loop2]);
+               Item:= AddToGroup(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eImageLoaded:= False;
                TNotUsedImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
-               TNotUsedImageInfo(Item).eFileName:= ExtractFileName(tempList[Loop2]);
-               TNotUsedImageInfo(Item).eSize:= GetFileSize(tempList[Loop2]);
+               TNotUsedImageInfo(Item).eFileName:= ExtractFileName(FilesList[Loop2]);
+               TNotUsedImageInfo(Item).eSize:= GetFileSize(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eSizeText:= FormMain.GetSizeType(TNotUsedImageInfo(Item).eSize, False);
-               TNotUsedImageInfo(Item).eDateTime:= FileAge(tempList[Loop2]);
+               TNotUsedImageInfo(Item).eDateTime:= FileAge(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TNotUsedImageInfo(Item).eDateTime);
-               TNotUsedImageInfo(Item).eFullPath:= ExtractFilePath(tempList[Loop2]);
+               TNotUsedImageInfo(Item).eFullPath:= ExtractFilePath(FilesList[Loop2]);
                if Length(TNotUsedImageInfo(Item).eFullPath) > 36 then
                   TNotUsedImageInfo(Item).eFullPathText:= ShortDirString(TNotUsedImageInfo(Item).eFullPath, 36)
                else
@@ -1173,7 +1259,7 @@ begin
         end;
       end;
   end;
-  FreeAndNil(tempList);
+  FreeAndNil(FilesList);
   FreeAndNil(el_GamesList);
   UpdateTotalFilesLabelNotUsed;
   if ShowFolderMessage then
@@ -1182,13 +1268,15 @@ end;
 
 function TFormImagesManager.LoadImageNotUsed(const ImageName: String): Integer;
 var
-  ImageToLoad, DestImage: TBitmap32;
+  DestImage: TBitmap32;
   newWidth,
   newHeight,
   leftPos,
   topPos,
   IconSize: Integer;
   addImage: TBitmap;
+  ImageToLoad: TImage32;
+  iType: TImageType;
 
   procedure MakeThumbNail(aSource: TBitmap32; iWidth, iHeight: Integer);
   begin
@@ -1202,19 +1290,26 @@ var
   end;
 
 begin
+  if ImageName ='D:\EmuLoader\snap\a2600\a2600 - Copy.png' then
+     beep;
   IconSize:= IL_NotUsedImages.Width;
-  ImageToLoad:= TBitmap32.Create;
-  ImageToLoad.Clear;
-  TKernelResampler.Create(ImageToLoad);
-  TKernelResampler(ImageToLoad.Resampler).Kernel:=
+  //ImageToLoad:= TBitmap32.Create;
+  //ImageToLoad.Clear;
+  //TKernelResampler.Create(ImageToLoad);
+  //TKernelResampler(ImageToLoad.Resampler).Kernel:=
+  //           TCustomKernelClass(THermiteKernel).Create; // Hermite (used to be Lanczos filter)
+
+  ImageToLoad:= TImage32.Create(nil);
+  TKernelResampler.Create(ImageToLoad.Bitmap);
+  TKernelResampler(ImageToLoad.Bitmap.Resampler).Kernel:=
              TCustomKernelClass(THermiteKernel).Create; // Hermite (used to be Lanczos filter)
 
-  ImageToLoad.LoadFromFile(ImageName);
-  if (ImageToLoad.Width/ImageToLoad.Height) <= (IconSize/IconSize) then
+  iType:= FormMain.LoadPreviewImage(ImageName, ImageToLoad);
+  if (ImageToLoad.Bitmap.Width/ImageToLoad.Bitmap.Height) <= (IconSize/IconSize) then
      begin
        // stretch height to match
-       NewWidth:= MulDiv(IconSize, ImageToLoad.Width, ImageToLoad.Height);
-       MakeThumbNail(ImageToLoad, NewWidth, IconSize);
+       NewWidth:= MulDiv(IconSize, ImageToLoad.Bitmap.Width, ImageToLoad.Bitmap.Height);
+       MakeThumbNail(ImageToLoad.Bitmap, NewWidth, IconSize);
        // center horizontally
        leftPos:= Trunc((IconSize-DestImage.Width) div 2);
        topPos:= 0;
@@ -1222,8 +1317,8 @@ begin
   else
      begin
        // stretch width to match
-       NewHeight:= MulDiv(IconSize, ImageToLoad.Height, ImageToLoad.Width);
-       MakeThumbNail(ImageToLoad, IconSize, NewHeight);
+       NewHeight:= MulDiv(IconSize, ImageToLoad.Bitmap.Height, ImageToLoad.Bitmap.Width);
+       MakeThumbNail(ImageToLoad.Bitmap, IconSize, NewHeight);
        // center vertically
        leftPos:= 0;
        topPos:= Trunc((IconSize-DestImage.Height) div 2);
@@ -1237,6 +1332,7 @@ begin
   Result:= IL_NotUsedImages.Add(addImage, addImage);
   FreeAndNil(DestImage);
   FreeAndNil(addImage);
+  ImageToLoad.Bitmap:= nil;
   FreeAndNil(ImageToLoad);
 end;
 
@@ -1382,7 +1478,9 @@ procedure TFormImagesManager.MissingImagesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(TMissingImageInfo(Item).eGameStatus,
+  FormMain.GetCanvasFontCustom(
+                TMissingImageInfo(Item).eSystemID,
+                TMissingImageInfo(Item).eGameStatus,
                 TMissingImageInfo(Item).eDriverStatus,
                 TMissingImageInfo(Item).eClone, ACanvas, True);
   if MissingImagesList.View = elsTile then
@@ -1407,8 +1505,11 @@ procedure TFormImagesManager.MissingImagesListItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       SelectedItemMissing:= Item;
-       SetSelectedMissingGame;
+       if Item <> SelectedItemMissing then
+          begin
+            SelectedItemMissing:= Item;
+            SetSelectedMissingGame;
+          end;
      end;
 end;
 
@@ -1463,6 +1564,8 @@ begin
   RunGame:= True;
   FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME,
                                                                       TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
+  if Assigned(FormImageFoundMissingGame) then
+     FormImageFoundMissingGame.Hide;
   if GameEasy <> nil then
      begin
        case GameEasy.Visible of
@@ -1483,6 +1586,9 @@ begin
        Application.ProcessMessages;
        FormMain.ExecuteGame;
      end;
+  if Assigned(FormImageFoundMissingGame) then
+     FormImageFoundMissingGame.Show;
+  //FormImageFoundMissingGame.FormStyle:= fsStayOnTop;
   MissingImagesList.SetFocus;
 end;
 
@@ -1641,17 +1747,19 @@ end;
 
 procedure TFormImagesManager.NotUsedImagesListItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
+var
+  iType: TImageType;
 begin
   if Item.Selected and (NotUsedImagesList.Selection.Count = 1) then
      begin
        SelectedItemNotUsed:= Item;
        FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedImageInfo(Item).eFileName, TNotUsedImageInfo(Item).eNameOriginal))),
                                     NotUsedImagesList);
-       try
-         ImagePreview.Bitmap.LoadFromFile(TNotUsedImageInfo(Item).eFullPath+TNotUsedImageInfo(Item).eFileName);
-       except
-         ImagePreview.Bitmap:= nil;
-       end;
+
+       iType:= FormMain.LoadPreviewImage(TNotUsedImageInfo(Item).eFullPath+TNotUsedImageInfo(Item).eFileName, ImagePreview);
+
+       if iType = ifUnknown then
+          ImagePreview.Bitmap:= nil;
      end;
 end;
 
@@ -1786,13 +1894,13 @@ var
 begin
   if not FormMain.CheckTotal(NotUsedImagesList) then
      Exit;
-  FileStr:= FormMain.DialogSaveFile(4, 'Save Not Used Images List To a File');
+  FileStr:= FormMain.DialogSaveFile(4, 'Save Images List of Missing Games To a File');
   if FileStr = '' then
      Exit;
 
   ListOutput:= THashedStringList.Create;
   ListOutput.BeginUpdate;
-  ListOutput.Add('----------> Not Used Images <----------'+#13#10);
+  ListOutput.Add('----------> Images of Missing Games <----------'+#13#10);
   ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(idMAME));
   ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TNotUsedImageInfo(Item).eImageCategory].Caption);
   ListOutput.Add('     Total Files: '+IntToStr(NotUsedImagesList.Groups.ItemCount)+#13#10);
@@ -2045,8 +2153,6 @@ begin
      Allow:= False;
 end;
 
-
-
 procedure TFormImagesManager.ButtonNotUsedImagesDeleteFilesClick(
   Sender: TObject);
 var
@@ -2086,6 +2192,7 @@ begin
    UpdateTotalGamesLabelMissing;
    NotUsedImagesList.SetFocus;
 end;
+
 
 end.
 

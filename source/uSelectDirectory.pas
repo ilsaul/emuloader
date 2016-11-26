@@ -64,9 +64,18 @@ procedure TFormSelectDirectory.FormKeyPress(Sender: TObject;
   var Key: Char);
 begin
   case Key of
-    #13: ButtonOk.Click;
-    #27: ButtonCancel.Click;
+    #13:
+      begin
+        Key:= #0;
+        ButtonOk.Click;
+      end;
+    #27:
+      begin
+        Key:= #0;
+        ButtonCancel.Click;
+      end;
   end;
+
 end;
 
 procedure TFormSelectDirectory.ShellTreeChange(Sender: TObject;

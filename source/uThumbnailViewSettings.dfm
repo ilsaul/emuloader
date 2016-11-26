@@ -6,7 +6,7 @@ object FormThumbnailView: TFormThumbnailView
   BorderStyle = bsDialog
   Caption = 'Thumbnail Settings'
   ClientHeight = 262
-  ClientWidth = 393
+  ClientWidth = 473
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -28,10 +28,17 @@ object FormThumbnailView: TFormThumbnailView
     Width = 106
     Height = 15
     Hint = 'Grid Size [%u pixels]'
-    Caption = 'Grid Size [125 pixels]'
+    Caption = 'Grid Size [152 pixels]'
+  end
+  object LabelSystemIconSize: TLabel
+    Left = 339
+    Top = 141
+    Width = 87
+    Height = 15
+    Caption = 'System Icon Size'
   end
   object ButtonGridDefault: TBitBtn
-    Left = 327
+    Left = 407
     Top = 8
     Width = 49
     Height = 23
@@ -45,20 +52,20 @@ object FormThumbnailView: TFormThumbnailView
   object GridSize: TExTrackBar
     Left = 8
     Top = 32
-    Width = 377
+    Width = 457
     Height = 45
     LineSize = 5
     Max = 400
-    Min = 100
+    Min = 152
     PageSize = 15
     Frequency = 5
-    Position = 125
+    Position = 152
     TabOrder = 0
     OnChange = GridSizeChange
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Lucida Console'
+    Font.Height = -12
+    Font.Name = 'Consolas'
     Font.Style = []
     ParentFont = False
     LabelsFactor = 1
@@ -69,7 +76,7 @@ object FormThumbnailView: TFormThumbnailView
   object BorderColor: TColorBox
     Left = 8
     Top = 112
-    Width = 185
+    Width = 201
     Height = 22
     Hint = 'Select a border color'
     DefaultColorColor = 10902593
@@ -96,7 +103,7 @@ object FormThumbnailView: TFormThumbnailView
     Themed = True
   end
   object BorderColorDefault: TBitBtn
-    Left = 200
+    Left = 216
     Top = 112
     Width = 49
     Height = 22
@@ -124,7 +131,7 @@ object FormThumbnailView: TFormThumbnailView
     Themed = True
   end
   object ButtonApply: TBitBtn
-    Left = 99
+    Left = 179
     Top = 228
     Width = 89
     Height = 25
@@ -136,7 +143,7 @@ object FormThumbnailView: TFormThumbnailView
     OnClick = ButtonApplyClick
   end
   object ButtonClose: TBitBtn
-    Left = 293
+    Left = 373
     Top = 228
     Width = 89
     Height = 25
@@ -149,7 +156,7 @@ object FormThumbnailView: TFormThumbnailView
   end
   object ButtonConfirm: TBitBtn
     Tag = 1
-    Left = 195
+    Left = 275
     Top = 228
     Width = 89
     Height = 25
@@ -174,16 +181,90 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
   end
-  object ShowImageGameDocsPanel: TAdvOfficeCheckBox
-    Left = 8
-    Top = 187
-    Width = 193
+  object ShowSystemIcon: TAdvOfficeCheckBox
+    Left = 210
+    Top = 141
+    Width = 121
     Height = 20
+    Checked = True
     ShowHint = True
     TabOrder = 10
     Alignment = taLeftJustify
-    Caption = 'Show Images/Game Docs Panel'
+    Caption = 'Show System Icon'
     ReturnIsTab = False
+    State = cbChecked
+    Themed = True
+  end
+  object ShowFavoriteIcon: TAdvOfficeCheckBox
+    Left = 210
+    Top = 164
+    Width = 121
+    Height = 20
+    ShowHint = True
+    TabOrder = 11
+    Alignment = taLeftJustify
+    Caption = 'Show Favorite Icon'
+    ReturnIsTab = False
+    Themed = True
+  end
+  object AlphaBlendedIcons: TAdvOfficeCheckBox
+    Left = 10
+    Top = 219
+    Width = 133
+    Height = 20
+    Hint = 'Don'#39't show the white background'
+    Checked = True
+    ShowHint = True
+    TabOrder = 12
+    Visible = False
+    Alignment = taLeftJustify
+    Caption = 'Alpha Blended Icons'
+    ReturnIsTab = False
+    State = cbChecked
+    Themed = True
+  end
+  object SystemIconSize: TComboBox
+    Left = 339
+    Top = 157
+    Width = 127
+    Height = 23
+    Style = csDropDownList
+    ItemHeight = 15
+    ItemIndex = 1
+    TabOrder = 13
+    Text = 'Large (32x32)'
+    Items.Strings = (
+      'Medium (24x24)'
+      'Large (32x32)'
+      'Extra Large (48x48)')
+  end
+  object ShowGameIcon: TAdvOfficeCheckBox
+    Left = 210
+    Top = 187
+    Width = 114
+    Height = 20
+    Checked = True
+    ShowHint = True
+    TabOrder = 14
+    Alignment = taLeftJustify
+    Caption = 'Show Game Icon'
+    ReturnIsTab = False
+    State = cbChecked
+    Themed = True
+  end
+  object ShowPreviewScreenshotsPanel: TAdvOfficeCheckBox
+    Left = 10
+    Top = 187
+    Width = 167
+    Height = 20
+    Hint = 'Enable '
+    Checked = True
+    ShowHint = True
+    TabOrder = 15
+    Alignment = taLeftJustify
+    Caption = 'Show Preview Images Panel'
+    ReturnIsTab = False
+    State = cbChecked
     Themed = True
   end
 end

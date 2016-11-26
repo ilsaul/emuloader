@@ -170,7 +170,7 @@ type
     emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
     IsAlterMAME: Boolean;
-    BuildNumber: Integer;
+    iVersion: Integer;
   end;
 
 var
@@ -640,13 +640,14 @@ begin
       if Loop = 9 then
          begin
            // driver .ini file
-           if FileExists(FileFolder+strFile+'.ini') then
-              strFile:= FileFolder+strFile+'.ini'
-           else
+           if iVersion > 118 then
               begin
-                if BuildNumber > 118 then
-                   strFile:= FileFolder+'source\'+strFile+'.ini'; // from 0.37b15 (v0.51) to 0.118 there is no "ini\source\" sub-folder support!
-              end;
+                strFile:= FileFolder+'source\'+strFile+'.ini'; // from 0.37b15 (v0.51) to 0.118 there is no "ini\source\" sub-folder support!
+                if not FileExists(strFile) then
+                   strFile:= FileFolder+strFile+'.ini'
+              end
+           else
+              strFile:= FileFolder+strFile+'.ini';
          end
       else
          strFile:= FileFolder+strFile+'.ini';
@@ -673,7 +674,7 @@ var
 
   function WriteLine(const Entry, Value: String): String;
   begin
-    if BuildNumber > 106 then
+    if iVersion > 106 then
        Result:= Format('%-25s %s', [Entry, Value]) // 0.107 changed .ini files format
     else
        Result:= Format('%-23s %s', [Entry, Value]);
@@ -1174,10 +1175,20 @@ begin
 
         if Loop = 9 then
            begin
-             if FileExists(FileFolder+strFile+'.ini') then
-                strFile:= FileFolder+strFile+'.ini'
+             // driver custom settings is for MAME/HBMAME only
+             // starting from MAME 0.179, all driver .ini files must be in the "inidir\source\source_name.ini" sub-folder ("inidir\source\")
+             // ... no more support for "inidir\source_name.ini"
+             if iVersion > 118 then
+             begin
+               strFile:= FileFolder+'source\'+strFile+'.ini';
+               if iVersion < 179 then
+               begin
+                 if not FileExists(strFile) then
+                    strFile:= FileFolder+strFile+'.ini'
+               end;
+             end
              else
-                strFile:= FileFolder+'source\'+strFile+'.ini';
+                strFile:= FileFolder+strFile+'.ini';
            end
         else
            strFile:= FileFolder+strFile+'.ini';

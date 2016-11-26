@@ -374,7 +374,6 @@ type
     LabelSaveStateName: TLabel;
     SaveStateName: TEdit;
     ButtonSaveStateNameReset: TBitBtn;
-    LabelSoftwareListTitle: TShadowLabel;
     UIModeBox: TAdvGroupBox;
     LabelUIModeKeyCustom: TLabel;
     UIModeKeyCustom: TEdit;
@@ -619,6 +618,8 @@ type
     LabelVectorMinimumLengthAttenuation: TLabel;
     UnevenStretchY: TAdvOfficeCheckBox;
     AutoUnevenStretchXY: TAdvOfficeCheckBox;
+    LabelMonitorProvider: TLabel;
+    MonitorProvider: TComboBox;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -856,6 +857,7 @@ type
     emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
     IsAlterMAME: Boolean;
+    iVersion: Integer;
   end;
 
 var
@@ -1243,11 +1245,14 @@ begin
   for Loop:=0 to mameIni.Count-1 do
   begin
     EntryStr:= Trim(mameIni[Loop]);
-    if Copy(EntryStr, 1, 13) = 'languagepath ' then
-       begin
-         lFullPath:= Trim(Copy(EntryStr, 13, Length(EntryStr)));
-         Break;
-       end;
+    if EntryStr <> '' then
+    begin
+      if Copy(EntryStr, 1, 13) = 'languagepath ' then
+         begin
+           lFullPath:= Trim(Copy(EntryStr, 13, Length(EntryStr)));
+           Break;
+         end;
+    end;
   end;
   FreeAndNil(mameIni);
   if lFullPath = '' then
@@ -1415,11 +1420,14 @@ begin
   begin
     // EntryStr:= XML_GetEntryName(EntryStr);
     EntryStr:= Trim(mameIni[Loop]);
-    if Copy(EntryStr, 1, 12) = 'pluginspath ' then
-       begin
-         lFullPath:= Trim(Copy(EntryStr, 12, Length(EntryStr)));
-         Break;
-       end;
+    if EntryStr <> '' then
+    begin
+      if Copy(EntryStr, 1, 12) = 'pluginspath ' then
+         begin
+           lFullPath:= Trim(Copy(EntryStr, 12, Length(EntryStr)));
+           Break;
+         end;
+    end;
   end;
   FreeAndNil(mameIni);
   if lFullPath = '' then
@@ -1451,10 +1459,13 @@ begin
           for Loop:=0 to PluginFile.Count -1 do
           begin
             EntryStr:= TrimLeft(PluginFile[Loop]);
-            if (EntryStr[1] <> '{') and (EntryStr[1] <> '}') then
+            if EntryStr <> '' then
             begin
-              if not GetFieldData(PluginFile[Loop]) then
-                 AddPluginEntry:= False;
+              if (EntryStr[1] <> '{') and (EntryStr[1] <> '}') then
+              begin
+                if not GetFieldData(PluginFile[Loop]) then
+                   AddPluginEntry:= False;
+              end;
             end;
           //GetDataStrings;
           end;
@@ -1661,17 +1672,20 @@ begin
           for Loop:=0 to ChainFile.Count -1 do
           begin
             EntryStr:= TrimLeft(ChainFile[Loop]);
-            iPos:= PosEx('"name":', EntryStr);
-            if iPos <> 0 then
-               sTitle:= GetFieldData(EntryStr, iPos+6)
-            else
+            if EntryStr <> '' then
             begin
-              iPos:= PosEx('"author":', EntryStr);
+              iPos:= PosEx('"name":', EntryStr);
               if iPos <> 0 then
-                 sAuthor:= GetFieldData(EntryStr, iPos+8);
+                 sTitle:= GetFieldData(EntryStr, iPos+6)
+              else
+              begin
+                iPos:= PosEx('"author":', EntryStr);
+                if iPos <> 0 then
+                   sAuthor:= GetFieldData(EntryStr, iPos+8);
+              end;
+              if (sTitle <> '') and (sAuthor <> '') then
+                 Break;
             end;
-            if (sTitle <> '') and (sAuthor <> '') then
-               Break;
           end;
           FreeAndNil(ChainFile);
           wStr:= Utf8Decode(sTitle);
@@ -1700,7 +1714,7 @@ end;
 // http://git.redump.net/mame/commit/?id=d0162765cdd23c2cb015118b75c87689a839de40
 
 
-// from src\emu\emuopts.h
+// from src\frontend\mame\emuopts.h
 // command-line options are HIGH priority
 // OPTION_PRIORITY_CMDLINE = OPTION_PRIORITY_HIGH,
 
@@ -2880,6 +2894,24 @@ begin
                (EntryString = 'srf ') then
                SyncronizeRefreshRate.Checked:= GetBooleanValue
             else
+            if EntryString = 'monitorprovider ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    MonitorProvider.ItemIndex:= 0
+                 else
+                 if Value = 'win32' then
+                    MonitorProvider.ItemIndex:= 1
+                 else
+                 if Value = 'dxgi' then
+                    MonitorProvider.ItemIndex:= 3
+                 else
+                 if Value = 'sdl' then
+                    MonitorProvider.ItemIndex:= 4
+                 else
+                    MonitorProvider.ItemIndex:= 0; // set default to 'auto'
+               end
+            else
             if (EntryString = 'scalemode ') or // SDLMAME
                (EntryString = 'sm ') then // SDLMAME
                begin
@@ -3415,10 +3447,12 @@ begin
 
       if Loop = 9 then
          begin
-           if FileExists(FileFolder+strFile+'.ini') then
-              strFile:= FileFolder+strFile+'.ini'
-           else
-              strFile:= FileFolder+'source\'+strFile+'.ini';
+           // driver custom settings is for MAME/HBMAME only
+           // starting from MAME 0.179, all driver .ini files must be in the "inidir\source\source_name.ini" sub-folder ("inidir\source\")
+           // ... no more support for "inidir\source_name.ini"
+           strFile:= FileFolder+'source\'+strFile+'.ini';
+           //if (not FileExists(strFile)) and (iVersion < 179) then
+           //   strFile:= FileFolder+strFile+'.ini' // no more support for "inidir\sourcename.ini" (October 26, 2016)
          end
       else
          strFile:= FileFolder+strFile+'.ini';
@@ -3734,7 +3768,7 @@ begin
             begin
               Value:= SnapName.Text;
               if Value = '' then
-                 Value:= '%g';
+                 Value:= '%g/%i';
               UpdateMAMELine(EntryString, Value);
             //SetSnapViewOption(EntryString)
             end
@@ -4470,6 +4504,14 @@ begin
             (tmpEntryStr = 'srf ') then
             UpdateMAMELine(EntryString, GetBooleanValue(SyncronizeRefreshRate.Checked))
          else
+         if tmpEntryStr = 'monitorprovider ' then
+            begin
+              Value:= MonitorProvider.Text;
+              if Value = '' then
+                 Value:= 'auto';
+              UpdateMAMELine(EntryString, LowerCase(Value));
+            end
+         else
          if (tmpEntryStr = 'scalemode ') or // SDLMAME
             (tmpEntryStr = 'sm ') then // SDLMAME
             begin
@@ -5194,10 +5236,20 @@ begin
 
         if Loop = 9 then // drivername.ini
            begin
-             if FileExists(FileFolder+strFile+'.ini') then
-                strFile:= FileFolder+strFile+'.ini'
+             // driver custom settings is for MAME/HBMAME only
+             // starting from MAME 0.179, all driver .ini files must be in the "inidir\source\source_name.ini" sub-folder ("inidir\source\")
+             // ... no more support for "inidir\source_name.ini"
+             if iVersion > 118 then
+             begin
+               strFile:= FileFolder+'source\'+strFile+'.ini';
+               if iVersion < 179 then
+               begin
+                 if not FileExists(strFile) then
+                    strFile:= FileFolder+strFile+'.ini'
+               end;
+             end
              else
-                strFile:= FileFolder+'source\'+strFile+'.ini';
+                strFile:= FileFolder+strFile+'.ini';
            end
         else
            strFile:= FileFolder+strFile+'.ini';
@@ -5637,11 +5689,11 @@ begin
                                                    SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       if FormMain.MemGameInfo.eSoftwareName <> '' then
-          begin
-            LabelSoftwareListTitle.Visible:= True;
-            LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
-          end;
+       //if FormMain.MemGameInfo.eSoftwareName <> '' then
+       //   begin
+       //     LabelSoftwareListTitle.Visible:= True;
+       //     LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
+       //   end;
 
        //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
        //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, GameIcon.Picture.Icon);
@@ -5709,7 +5761,7 @@ end;
 
 procedure TFormMAMESettings.SnapNameDefaultButtonClick(Sender: TObject);
 begin
-  SnapName.Text:= '%g';
+  SnapName.Text:= '%g/%i';
 end;
 
 procedure TFormMAMESettings.SnapSizeWidthKeyPress(Sender: TObject;
@@ -5955,7 +6007,7 @@ end;
 
 procedure TFormMAMESettings.AutobootLuaScriptSelectButtonClick(Sender: TObject);
 begin
-  FormMain.DialogOpenFile(16, 'Select a lua script file', AutobootLuaScript, False, True, '');
+  FormMain.DialogOpenFile(16, 'Select a LUA script file', AutobootLuaScript, False, True, '');
 end;
 
 procedure TFormMAMESettings.ButtonSnapViewDefaultClick(Sender: TObject);
@@ -6331,7 +6383,7 @@ end;
 
 procedure TFormMAMESettings.ButtonSnapNameDefaultClick(Sender: TObject);
 begin
-  SnapName.Text:= '%g';
+  SnapName.Text:= '%g/%i';
 end;
 
 procedure TFormMAMESettings.ButtonSaveStateNameResetClick(Sender: TObject);

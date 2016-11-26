@@ -60,15 +60,15 @@ object FormStatus: TFormStatus
     end
     object LabelTimer: TShadowLabel
       Left = 567
-      Top = 436
+      Top = 433
       Width = 56
-      Height = 13
+      Height = 16
       Alignment = taCenter
       Caption = '00:00:00'
       Font.Charset = ANSI_CHARSET
       Font.Color = clLime
-      Font.Height = -12
-      Font.Name = 'Lucida Console'
+      Font.Height = -13
+      Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False

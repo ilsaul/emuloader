@@ -20,7 +20,13 @@ type
     ButtonApply: TBitBtn;
     ButtonConfirm: TBitBtn;
     KeepAspectRatio: TAdvOfficeCheckBox;
-    ShowImageGameDocsPanel: TAdvOfficeCheckBox;
+    ShowSystemIcon: TAdvOfficeCheckBox;
+    ShowFavoriteIcon: TAdvOfficeCheckBox;
+    AlphaBlendedIcons: TAdvOfficeCheckBox;
+    SystemIconSize: TComboBox;
+    LabelSystemIconSize: TLabel;
+    ShowGameIcon: TAdvOfficeCheckBox;
+    ShowPreviewScreenshotsPanel: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);
     procedure ButtonApplyClick(Sender: TObject);
@@ -55,7 +61,7 @@ end;
 
 procedure TFormThumbnailView.ButtonGridDefaultClick(Sender: TObject);
 begin
-  GridSize.Position:= 125;
+  GridSize.Position:= 152;
 end;
 
 procedure TFormThumbnailView.ButtonApplyClick(Sender: TObject);
@@ -63,14 +69,29 @@ begin
   FormMain.MenuThumbnailKeepAspectRatio.Checked:= KeepAspectRatio.Checked;
   FormMain.PopupThumbnailKeepAspectRatio.Checked:= KeepAspectRatio.Checked;
 
-  FormMain.MenuThumbnailShowImagesGameDocsPanel.Checked:= ShowImageGameDocsPanel.Checked;
-  FormMain.MenuThumbnailShowImagesGameDocsPanel.OnClick(Self);
-  //FormMain.PopupThumbnailShowImagesGameDocsPanel.Checked:= ShowImageGameDocsPanel.Checked;
+  FormMain.MenuShowFavoriteIconinGamesList.Checked:= ShowFavoriteIcon.Checked;
+
+  FormMain.MenuThumbnailShowSystemIcon.Checked:= ShowSystemIcon.Checked;
+  FormMain.MenuThumbnailShowGameIcon.Checked:= ShowGameIcon.Checked;
+  
+  FormMain.MenuThumbnailAlphaBlendedIcons.Checked:= AlphaBlendedIcons.Checked;
+  //FormMain.PopupThumbnailsAlphaBlendedIcons.Checked:= AlphaBlendedIcons.Checked;
+
+  if FormMain.MenuShowImages.Checked <> ShowPreviewScreenshotsPanel.Checked then
+     begin
+       FormMain.MenuShowImages.Checked:= ShowPreviewScreenshotsPanel.Checked;
+       FormMain.MenuShowImages.OnClick(Self);
+     end;
+
+  if SystemIconSize.ItemIndex = -1 then
+     SystemIconSize.ItemIndex:= 0;
+  FormMain.MenuThumbnailSystemIconSize.Tag:= SystemIconSize.ItemIndex;
+  FormMain.MenuThumbnailSystemIconSize.Items[SystemIconSize.ItemIndex].Checked:= True;
 
   FormMain.SetThumbGridSize(GridSize.Position);
   FormMain.ELV_MakeVisible;
   if FormMain.CheckSelected(FormMain.GamesListView) then
-     FormMain.ResetThumbnails(True); // generates memory leaks!!!!!!!!! :_((
+     FormMain.ResetThumbnails(True);
 
   if TBitBtn(Sender).Tag = 1 then
      Close;
@@ -83,7 +104,14 @@ begin
   ShowBorder.Checked:= FormMain.GamesListView.PaintInfoItem.ShowBorder;
   ShowGameTitles.Checked:= not FormMain.GamesListView.PaintInfoItem.HideCaption;
   KeepAspectRatio.Checked:= FormMain.MenuThumbnailKeepAspectRatio.Checked;
-  ShowImageGameDocsPanel.Checked:= FormMain.MenuThumbnailShowImagesGameDocsPanel.Checked;
+
+  ShowSystemIcon.Checked:= FormMain.MenuThumbnailShowSystemIcon.Checked;
+  SystemIconSize.ItemIndex:= FormMain.MenuThumbnailSystemIconSize.Tag;
+  ShowGameIcon.Checked:= FormMain.MenuThumbnailShowGameIcon.Checked;
+  ShowFavoriteIcon.Checked:= FormMain.MenuShowFavoriteIconinGamesList.Checked;
+  AlphaBlendedIcons.Checked:= FormMain.MenuThumbnailAlphaBlendedIcons.Checked;
+
+  ShowPreviewScreenshotsPanel.Checked:= FormMain.MenuShowImages.Checked;
   //RectWidth( Item.View.ItemRect(Item, nil, ertIcon));
 end;
 

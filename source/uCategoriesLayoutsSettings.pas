@@ -52,7 +52,7 @@ type
     LabelImageBackgroundColor: TShadowLabel;
     ImageCategoryBackgroundColor: TColorBox;
     ButtonImageCategoryBackgroundColor: TBitBtn;
-    PanelEx1: TPanelEx;
+    PanelBottomButtons: TPanelEx;
     ButtonCategories: TSpeedButton;
     ButtonLayouts: TSpeedButton;
     Bevel1: TBevel;
@@ -63,13 +63,14 @@ type
     FrameIconLayScr2: TShape;
     FrameIconLayScr3: TShape;
     IL_ImageCategory_ExtraLarge: TImageList;
-    ButtonCategoryToggleVisibility: TBitBtn;
     ButtonLayoutToggleVisibility: TBitBtn;
     PanelLayoutTitle: TPanelEx;
     LabelLayoutTitle: TShadowLabel;
     PanelCategoryTitle: TPanelEx;
     LabelCategoryTitle: TShadowLabel;
     ButtonAbort: TBitBtn;
+    PanelShowHideCategories: TPanelEx;
+    LabelShowHideCategories: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LayoutListViewItemCheckChange(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -103,7 +104,9 @@ type
     procedure FormShow(Sender: TObject);
     procedure ButtonImageCategoryBackgroundColorClick(Sender: TObject);
     procedure ButtonCategoriesClick(Sender: TObject);
-    procedure ButtonCategoryToggleVisibilityClick(Sender: TObject);
+    procedure LabelShowHideCategoriesClick(Sender: TObject);
+    procedure LabelShowHideCategoriesMouseLeave(Sender: TObject);
+    procedure LabelShowHideCategoriesMouseEnter(Sender: TObject);
   private
     { Private declarations }
     LayoutSelectedItem: TEasyItem;
@@ -356,6 +359,7 @@ begin
   // need to update FormMain.imgFolder[sysID, img_catID]; with the new TempImgFolder[sysID, img_catID];
   UpdateImageCategories;
   UpdateSnapDir_MAME; // only if user click "Apply" button
+  FormMain.WriteImageCategories(True, False);
   UpdateLayouts; // update .ini settings only (do not apply setting at main screen)
   // no need to update hints if layouts is enabled, I think... see uMain.SetImageLayout;
 end;
@@ -765,6 +769,8 @@ begin
 end;
 
 procedure TFormCategoryLayoutSettings.FormShow(Sender: TObject);
+var
+  iDiff: Integer;
 begin
   FormMain.ELV_ResetNormalColors(ImageCategorySystem_Selector);
   FormMain.ELV_ResetNormalColors(ImageCategory_Selector);
@@ -777,11 +783,33 @@ begin
   PopulateCatFolderVarsRAM; // load categories folders for each system into a temp var in RAM "TempImgFolder[sysID, catID]"
 
   FormMain.ELV_PopulateSystems(ImageCategorySystem_Selector, True, True, 1);
-  //FormMain.ELV_SystemsShortTitle(ImageCategorySystem_Selector);
 
   FormMain.ELV_PopulateImageCategory(ImageCategory_Selector, 1);
 
   PanelLayouts.Left:= 0;
+  if Screen.Height < 600 then
+     begin
+       iDiff:= ImageCategory_Selector.CellSizes.Tile.Height;
+       FormCategoryLayoutSettings.ClientHeight:=FormCategoryLayoutSettings.ClientHeight-iDiff;
+       PanelCategories.Height:= PanelCategories.Height-iDiff;
+
+       PanelBottomButtons.Top:= PanelBottomButtons.Top-iDiff;
+
+       ImageCategoryFolder.Top:= ImageCategoryFolder.Top-iDiff;
+       ButtonImageCategoryFolder.Top:= ButtonImageCategoryFolder.Top-iDiff;
+       LabelImageCategoryFolder.Top:= LabelImageCategoryFolder.Top-iDiff;
+
+       ImageCategoryBackgroundColor.Top:= ImageCategoryBackgroundColor.Top-iDiff;
+       LabelImageBackgroundColor.Top:= LabelImageBackgroundColor.Top-iDiff;
+       ButtonImageCategoryBackgroundColor.Top:= ButtonImageCategoryBackgroundColor.Top-iDiff;
+
+       PanelImageCategorySelector.Height:= PanelImageCategorySelector.Height-iDiff;
+       ImageCategory_Selector.Height:= ImageCategory_Selector.Height-iDiff;
+
+       PanelCategoryTitle.Top:= PanelCategoryTitle.Top-iDiff;
+       PanelShowHideCategories.Top:= PanelShowHideCategories.Top-iDiff;
+     end;
+
   FormCategoryLayoutSettings.ClientWidth:= PanelCategories.Width;
 end;
 
@@ -826,7 +854,8 @@ begin
   ELV_SetFocus;
 end;
 
-procedure TFormCategoryLayoutSettings.ButtonCategoryToggleVisibilityClick(Sender: TObject);
+procedure TFormCategoryLayoutSettings.LabelShowHideCategoriesClick(
+  Sender: TObject);
 var
   Item: TEasyItem;
 begin
@@ -838,12 +867,26 @@ begin
     Item:= ImageCategory_Selector.Groups.NextItem(Item);
   until Item = nil;
   ImageCategory_Selector.EndUpdate;
-  TBitBtn(Sender).Tag:= Ord(not Boolean(TBitBtn(Sender).Tag));
-  case TBitBtn(Sender).Tag of
-    0: TBitBtn(Sender).Caption:= 'Hide All'+#13#10+'Categories';
-    1: TBitBtn(Sender).Caption:= 'Show All'+#13#10+'Categories';
+  TShadowLabel(Sender).Tag:= Ord(not Boolean(TShadowLabel(Sender).Tag));
+  case TShadowLabel(Sender).Tag of
+    0: TShadowLabel(Sender).Caption:= 'CLICK HERE TO HIDE ALL CATEGORIES';
+    1: TShadowLabel(Sender).Caption:= 'CLICK HERE TO SHOW ALL CATEGORIES';
   end;
   ELV_SetFocus;
+end;
+
+procedure TFormCategoryLayoutSettings.LabelShowHideCategoriesMouseEnter(
+  Sender: TObject);
+begin
+  TShadowLabel(Sender).Font.Color:= clBlue;
+  //TShadowLabel(Sender).Font.Style:= [fsUnderline];
+end;
+
+procedure TFormCategoryLayoutSettings.LabelShowHideCategoriesMouseLeave(
+  Sender: TObject);
+begin
+  TShadowLabel(Sender).Font.Color:= $00a65300;
+  //TShadowLabel(Sender).Font.Style:= [];
 end;
 
 

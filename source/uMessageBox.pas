@@ -27,7 +27,7 @@ type
     RichEditHeight: Integer;
     procedure WMSysCommand(var MSG: TWMSysCommand); message WM_SYSCOMMAND;
   public
-    LabelMessageTitle: String;
+    LabelMessageTitle: WideString;
     { Public declarations }
   end;
 

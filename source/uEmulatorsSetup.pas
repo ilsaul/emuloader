@@ -70,7 +70,7 @@ type
     newEmulatorDateTime: packed array[1..MaxArcadeSystems] of Integer;
     newAlterMAMEFile, newAlterMAMEVersion: String;
     newAlterMAMEDateTime: Integer;
-    newbuildMAME, newbuildAlterMAME: String;
+    newbuildMAME, newbuildAlterMAME, newbuildHBMAME: String;
     IsExeMAME: Boolean; // for AlterMAME default settings button
     elIni: TMemIniFile;
     function  VerifyEmulator(SystemID: Byte): Boolean;
@@ -97,8 +97,15 @@ uses uMain, uPreferences, uStatus;
 {$R *.DFM}
 
 procedure TFormEmulatorsSetup.GetEmulatorDefaultDescription(SystemID: Byte; UpdateLabel: Boolean = True);
+var
+  iVersion: String;
 begin
-  FormMain.GetEmulatorVersion(SystemID, newEmulatorFile[SystemID], newEmulatorVersion[SystemID], newbuildMAME);
+  case SystemID of
+    idMAME:   FormMain.GetEmulatorVersion(SystemID, newEmulatorFile[SystemID], newEmulatorVersion[SystemID], newbuildMAME);
+    idHBMAME: FormMain.GetEmulatorVersion(SystemID, newEmulatorFile[SystemID], newEmulatorVersion[SystemID], newbuildHBMAME);
+  else
+    FormMain.GetEmulatorVersion(SystemID, newEmulatorFile[SystemID], newEmulatorVersion[SystemID], iVersion);
+  end;
   if UpdateLabel then
      Arcade_versioninfo.Text:= newEmulatorVersion[SystemID];
 end;
@@ -174,6 +181,8 @@ begin
   newAlterMAMEVersion:= FormMain.AlterMAMEVersion;
   newAlterMAMEDateTime:= FormMain.AlterMAMEDateTime;
   newbuildAlterMAME:= FormMain.buildAlterMAME;
+  newbuildHBMAME:= FormMain.buildHBMAME;
+
   AlterMAME_versioninfo.Text:= newAlterMAMEVersion;
   AlterMAME_Autorun.Tag:= 1;
   AlterMAME_Autorun.Checked:= FormMain.PopupAutorunGameAlterMAME.Checked;
@@ -199,7 +208,7 @@ begin
        elIni.DeleteKey(SectionString, 'emu_VersionInfo');
        elIni.DeleteKey(SectionString, 'emu_DateTime');
        elIni.DeleteKey(SectionString, 'emu_Checksum');
-       if SystemID = idMAME then
+       if FormMain.IsMAMEBasedSys(SystemID) then
           begin
             elIni.DeleteKey(SectionString, 'emu_ListXML');
             elIni.DeleteKey(SectionString, 'emu_Build');
@@ -207,26 +216,29 @@ begin
        Exit;
      end;
 
-  if newEmulatorDateTime[SystemID] <> FormMain.EmulatorDateTime[SystemID] then
-     begin
+  //if newEmulatorDateTime[SystemID] <> FormMain.EmulatorDateTime[SystemID] then
+  //   begin
        case FormMain.IsMAMEBasedSys(SystemID) of
          True : Result:= FormMain.CheckMAMEIniFile(emuFile, SystemID);
          False: Result:= True;
        end;
        if Result then
-          begin
-            if (SameText(newEmulatorVersion[SystemID], FormMain.EmulatorVersion[SystemID])) or
-               (newEmulatorVersion[SystemID] = '') then
-               GetEmulatorDefaultDescription(SystemID, False);
-          end;
+          GetEmulatorDefaultDescription(SystemID, False);
+       //   begin
+       //     if (SameText(newEmulatorVersion[SystemID], FormMain.EmulatorVersion[SystemID])) or
+       //        (newEmulatorVersion[SystemID] = '') then
+       //        GetEmulatorDefaultDescription(SystemID, False);
+       //   end;
        SectionString:= FormMain.GetSystemIniSection(SystemID);
        elIni.WriteString(SectionString, 'emu_FileName', newEmulatorFile[SystemID]);
        elIni.WriteString(SectionString, 'emu_VersionInfo', newEmulatorVersion[SystemID]);
        elIni.WriteInteger(SectionString, 'emu_DateTime', newEmulatorDateTime[SystemID]);
 
-       if SystemID = idMAME then
-          elIni.WriteString(SectionString, 'emu_Build', newbuildMAME);
-     end;
+       case SystemID of
+         idMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildMAME);
+         idHBMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildHBMAME);
+       end;
+  //   end;
 end;
 
 function TFormEmulatorsSetup.VerifyAlterMAME: Boolean;
@@ -273,20 +285,22 @@ begin
   FormMain.MainMenuOptions.Tag:= 0;
 
   FormEmulatorsSetup.Hide;
-  elIni:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+  elIni:= TMemIniFile.Create(FormMain.GetEmulatorsFile);
 
   for Loop:= 1 to MaxArcadeSystems do
   begin
-    VerifyEmulator(Loop);
     FormMain.EmulatorFile[Loop]:= newEmulatorFile[Loop];
     FormMain.EmulatorVersion[Loop]:= newEmulatorVersion[Loop];
     FormMain.EmulatorDateTime[Loop]:= newEmulatorDateTime[Loop];
+    VerifyEmulator(Loop);
   end;
   FormMain.buildMAME:= newbuildMAME;
   FormMain.AlterMAMEFile:= '';
   FormMain.AlterMAMEVersion:= '';
   FormMain.AlterMAMEDateTime:= -1;
   FormMain.buildAlterMAME:= '';
+  FormMain.buildHBMAME:= newbuildHBMAME;
+
   if VerifyAlterMAME then
      begin
        FormMain.AlterMAMEFile:= newAlterMAMEFile;
@@ -294,7 +308,7 @@ begin
        FormMain.AlterMAMEDateTime:= newAlterMAMEDateTime;
        FormMain.buildAlterMAME:= newbuildAlterMAME;
      end;
-  if not FormMain.CheckReadOnly(FormMain.GetFoldersEmulatorsFile) then
+  if not FormMain.CheckReadOnly(FormMain.GetEmulatorsFile) then
      elIni.UpdateFile;
   FreeAndNil(elIni);
   Close;
@@ -308,6 +322,8 @@ begin
 end;
 
 procedure TFormEmulatorsSetup.ButtonSetOptionsClick(Sender: TObject);
+var
+  iVersion: String;
 begin
   if not FormMain.CheckSelected(SystemSelector) then
      Exit;
@@ -322,7 +338,13 @@ begin
   //     if not FileExists(FormMain.GetEmuIniFileName(SystemSelector.Tag, newEmulatorFile[SystemSelector.Tag])) then
   //        FormMain.CreateMAMEIniFile(newEmulatorFile[SystemSelector.Tag]);
   //   end;
-  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, newBuildMAME);
+  case SystemSelector.Tag of
+    idMAME:   iVersion:= newBuildMAME;
+    idHBMAME: iVersion:= newBuildHBMAME;
+  else
+    iVersion:= '';
+  end;
+  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, iVersion);//newBuildMAME);
 end;
 
 {procedure TFormEmulatorsSetup.ClearEmulatorIcon(AlterMAME: Boolean);
@@ -484,9 +506,10 @@ begin
   newEmulatorVersion[SystemSelector.Tag]:= '';
   Arcade_versioninfo.Text:= '';
   newEmulatorDateTime[SystemSelector.Tag]:= -1;
-  if SystemSelector.Tag = idMAME then
-     newbuildMAME:= '';
-
+  case SystemSelector.Tag of
+    idMAME  : newbuildMAME:= '';
+    idHBMAME: newbuildHBMAME:= '';
+  end;
   //ClearEmulatorIcon(False);
   if LabelAlterMAME.Enabled then
      ButtonClearAlterMAME.Click;

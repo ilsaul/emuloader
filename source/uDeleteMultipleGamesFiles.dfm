@@ -4,7 +4,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   BorderStyle = bsDialog
   Caption = 'Delete Games Files'
   ClientHeight = 525
-  ClientWidth = 876
+  ClientWidth = 1136
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,7 +23,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   object GamesList: TEasyListview
     Left = 0
     Top = 0
-    Width = 876
+    Width = 1136
     Height = 427
     Align = alClient
     BorderStyle = bsNone
@@ -48,37 +48,38 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000009000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000100012C010000FFFFFF1F0001000000
+      0006000000800800010100010000000001000190010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000150000000FFFFFF1F000100000001000000040000004E00
-      61006D006500000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE00060000008008000101000102000000000001500000
-      00FFFFFF1F0001000000010000000800000043006C006F006E00650020006F00
-      6600000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE0006000000800800010100010300000000000150000000FFFFFF
-      1F00010000000100000009000000420069006F00730020004E0061006D006500
-      000000000000000000000000110000005445617379436F6C756D6E53746F7265
-      64FFFECE0006000000800800010100010400000000000196000000FFFFFF1F00
-      01000000010000000D00000053006F0066007400770061007200650020004C00
-      690073007400000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE000600000080080001010001050000000000015F0000
-      00FFFFFF1F000100000001000000060000004400720069007600650072000000
-      00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-      FECE000600000080080001010001060000000000011E000000FFFFFF1F000100
-      0000010000000300000052004F004D000000000001000000FFFFFFFF00000000
-      110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
-      01010001070000000000011E000000FFFFFF1F00010000000100000003000000
-      430048004400000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE000600000080080001010001080000000000011E0000
-      00FFFFFF1F000100000001000000030000004300460047000000000000000000
-      00000000}
+      00010100000000000164000000FFFFFF1F000100000001000000090000004700
+      61006D00650020004E0061006D00650000000000000000000000000011000000
+      5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+      0200000000000164000000FFFFFF1F0001000000010000000800000043006C00
+      6F006E00650020006F0066000000000000000000000000001100000054456173
+      79436F6C756D6E53746F726564FFFECE00060000008008000101000103000000
+      0000016E000000FFFFFF1F00010000000100000009000000420069006F007300
+      20004E0061006D00650000000000000000000000000011000000544561737943
+      6F6C756D6E53746F726564FFFECE000600000080080001010001040000000000
+      01C8000000FFFFFF1F0001000000010000000D00000053006F00660074007700
+      61007200650020004C0069007300740000000000000000000000000011000000
+      5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+      0500000000000187000000FFFFFF1F0001000000010000000B00000044007200
+      690076006500720020004E0061006D0065000000000000000000000000001100
+      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+      0001060000000000011E000000FFFFFF1F000100000001000000030000005200
+      4F004D000000000001000000FFFFFFFF00000000110000005445617379436F6C
+      756D6E53746F726564FFFECE000600000080080001010001070000000000011E
+      000000FFFFFF1F00010000000100000003000000430048004400000000000000
+      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+      00000080080001010001080000000000011E000000FFFFFF1F00010000000100
+      000003000000430046004700000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
@@ -97,7 +98,6 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
     Selection.RoundRectRadius = 2
@@ -116,7 +116,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   object PanelOptions: TPanelEx
     Left = 0
     Top = 475
-    Width = 876
+    Width = 1136
     Height = 50
     Align = alBottom
     Color1 = clWhite
@@ -128,7 +128,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     ParentBackground = False
     Style = vgSimple
     object LabelSearchGameName: TShadowLabel
-      Left = 234
+      Left = 248
       Top = 3
       Width = 107
       Height = 16
@@ -142,7 +142,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
       Top = 1
-      Width = 218
+      Width = 232
       Height = 41
       Hint = 'Check File Types to %'
       CaptionPosition = cpTopCenter
@@ -154,16 +154,16 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ParentColor = False
       TabOrder = 0
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
-        Left = 115
+        Left = 122
         Top = 18
-        Width = 100
-        Height = 16
+        Width = 107
+        Height = 18
         Hint = 'Check this option to process game config/RAM files'
         HelpContext = 2
         Checked = True
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -179,13 +179,13 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       object DeleteROMs: TAdvOfficeCheckBox
         Left = 8
         Top = 18
-        Width = 52
-        Height = 16
+        Width = 55
+        Height = 18
         Hint = 'Check this option to process the gamename .zip/.7z file'
         Checked = True
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -199,17 +199,17 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         Themed = True
       end
       object DeleteCHDs: TAdvOfficeCheckBox
-        Left = 63
+        Left = 67
         Top = 18
-        Width = 50
-        Height = 16
+        Width = 53
+        Height = 18
         Hint = 
           'Check this option to process CHD files (if supported by the game' +
           ')'
         HelpContext = 1
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -224,7 +224,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
     object ButtonDeleteFiles: TBitBtn
       Tag = 1
-      Left = 687
+      Left = 947
       Top = 9
       Width = 89
       Height = 35
@@ -236,7 +236,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonDeleteFilesClick
     end
     object ButtonNo: TBitBtn
-      Left = 781
+      Left = 1041
       Top = 9
       Width = 89
       Height = 35
@@ -249,7 +249,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
     object ButtonHelp: TBitBtn
       Tag = 1
-      Left = 647
+      Left = 907
       Top = 16
       Width = 33
       Height = 23
@@ -261,7 +261,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonHelpClick
     end
     object PanelSearchGameName: TPanel
-      Left = 234
+      Left = 248
       Top = 19
       Width = 145
       Height = 24
@@ -333,7 +333,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   object PanelDestinationFolder: TPanelEx
     Left = 0
     Top = 427
-    Width = 876
+    Width = 1136
     Height = 48
     Align = alBottom
     Color1 = clWhite
@@ -359,13 +359,13 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object DestinationFolder: TEdit
       Left = 8
       Top = 22
-      Width = 334
+      Width = 361
       Height = 21
       AutoSize = False
       TabOrder = 0
     end
     object ButtonSelectROMsFolder: TBitBtn
-      Left = 344
+      Left = 371
       Top = 22
       Width = 43
       Height = 21
@@ -377,7 +377,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonSelectROMsFolderClick
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
-      Left = 394
+      Left = 421
       Top = 22
       Width = 142
       Height = 20

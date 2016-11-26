@@ -11,10 +11,10 @@ uses
 type
   TFormSelectImageCategory = class(TForm)
     IL_ImageCategory: TImageList;
-    PanelEx1: TPanelEx;
+    PanelImageCategories: TPanelEx;
     LabelEmuTitle: TShadowLabel;
     CategoriesListView: TEasyListview;
-    PanelEx2: TPanelEx;
+    PanelBottomButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);

@@ -112,7 +112,6 @@ object FormImagesManager: TFormImagesManager
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
@@ -233,7 +232,6 @@ object FormImagesManager: TFormImagesManager
       Selection.FullCellPaint = True
       Selection.FullItemPaint = True
       Selection.FullRowSelect = True
-      Selection.Gradient = True
       Selection.MouseButton = [cmbLeft, cmbRight]
       Selection.MultiSelect = True
       Selection.RoundRectRadius = 2
@@ -360,7 +358,7 @@ object FormImagesManager: TFormImagesManager
       OnClick = ButtonScanMissingClick
     end
     object ButtonScanInvalidImages: TBitBtn
-      Left = 443
+      Left = 489
       Top = 2
       Width = 118
       Height = 26
@@ -372,7 +370,7 @@ object FormImagesManager: TFormImagesManager
       OnClick = ButtonScanInvalidImagesClick
     end
     object ButtonHelp: TBitBtn
-      Left = 590
+      Left = 620
       Top = 2
       Width = 38
       Height = 26
@@ -386,10 +384,10 @@ object FormImagesManager: TFormImagesManager
     object ButtonScanNotUsedImages: TBitBtn
       Left = 311
       Top = 2
-      Width = 128
+      Width = 174
       Height = 26
       Hint = 'Click here to search available images for missing games'
-      Caption = 'Scan Not Used Images'
+      Caption = 'Scan Images of Missing Games'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4

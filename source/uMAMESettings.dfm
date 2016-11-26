@@ -1,6 +1,6 @@
 object FormMAMESettings: TFormMAMESettings
-  Left = 851
-  Top = 431
+  Left = 996
+  Top = 454
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -23,26 +23,6 @@ object FormMAMESettings: TFormMAMESettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSoftwareListTitle: TShadowLabel
-    Left = 87
-    Top = 58
-    Width = 105
-    Height = 14
-    Caption = 'Software List Title'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = 21414
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 16112579
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-    Layout = tlCenter
-    Visible = False
-  end
   object NotebookPages: TNotebook
     Left = 0
     Top = 80
@@ -275,7 +255,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -650,7 +629,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -782,7 +760,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -1061,6 +1038,17 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Video and Audio'
+      object LabelMonitorProvider: TLabel
+        Left = 544
+        Top = 390
+        Width = 90
+        Height = 15
+        Caption = 'Monitor Provider'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = False
+        Transparent = True
+      end
       object ArtworkGroupBox: TAdvGroupBox
         Left = 544
         Top = 214
@@ -2733,6 +2721,33 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonScreenDefaultSettingsClick
         end
       end
+      object MonitorProvider: TComboBox
+        Left = 544
+        Top = 406
+        Width = 121
+        Height = 21
+        Hint = 'Monitor Discovery Method'
+        Style = csDropDownList
+        Ctl3D = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ItemHeight = 13
+        ItemIndex = 0
+        ParentCtl3D = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 9
+        Text = 'Auto'
+        Items.Strings = (
+          'Auto'
+          'Win32'
+          'DXGI'
+          'SDL')
+      end
     end
     object TPage
       Left = 0
@@ -3061,7 +3076,6 @@ object FormMAMESettings: TFormMAMESettings
             Selection.FullCellPaint = True
             Selection.FullItemPaint = True
             Selection.FullRowSelect = True
-            Selection.Gradient = True
             Selection.GradientColorBottom = 16506264
             Selection.GradientColorTop = 15582647
             Selection.InactiveBorderColor = 10902593
@@ -4508,7 +4522,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -6185,7 +6198,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -6391,7 +6403,6 @@ object FormMAMESettings: TFormMAMESettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593

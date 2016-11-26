@@ -12,9 +12,8 @@ uses
 type
   TGameInfo = class(TEasyItemStored)
   private
-    fROMIdentification: Integer;
     fSystemID: ShortInt;
-    // fSystemType: ShortInt; // no needed here ??? maybe just for info "arcade / non-arcade"
+    fROMIdentification: Integer;
     fMediaType: ShortInt;
     fTitle: WideString;
     fName: String;
@@ -34,8 +33,8 @@ type
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
     function GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
-    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: ShortInt read fSystemID write fSystemID;
+    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eMediaType: ShortInt read fMediaType write fMediaType;
     property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
@@ -52,11 +51,9 @@ type
     property eCategory: String read fCategory write fCategory;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have 1 - miss; 2 - missing ROMs/CHDs
     property eGameFiles: THashedStringList read fGameFiles write fGameFiles;
-    // game files.... file type ("filetype" ONLY if media type is "-1"!!!)
-    // mediatype=filetype fullpath_filename
-    //  0 -> ROM
-    //  1 -> CHD
-    // -1 -> config files
+    // CHD file found...
+    // media_type FileID IsParentCHD filename
+    // 00 -> rom; 01 -> CHD; -1 -> config files
 
     // MAME based (0 -> CFG; -> 1 -> NVRAM, EEPROM, FLASH and maybe others (MAME gamename config folder);
     // ZiNc (0 -> CFG);
@@ -250,10 +247,11 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.SearchROMsFiles(eROMsList: TStringList; var MergedSetVar: Boolean; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean);
 var
-  FileFullPath, ZiNcFilePath: String;
+  FileFullPath, ZiNcFilePath, ROMFullInfo: String;
   IsZiNcSystem, IsParentCHD: Boolean;
   Loop: Integer;
-  chdName, chdParentName, DiskFile, romName, romCRC: String;
+  chdName, chdParentName, DiskFile, romName, romCRC32, romSHA1: String;
+  CHDFileID: ShortInt;
 begin
   IsZiNcSystem:= FormMain.TempGameVars.eSystemID = idZiNc;
   ZiNcFilePath:= '';
@@ -276,7 +274,7 @@ begin
   if FileFullPath <> '' then
      begin
        // found gamename.zip or parentname.zip for merged sets
-       tempFilesList.Add('0='+FileFullPath);
+       tempFilesList.Add('00000 '+FileFullPath);
        if IsZiNcSystem then
           ZiNcFilePath:= ExtractFilePath(FileFullPath);
        HaveROMsVar:= True;
@@ -293,19 +291,23 @@ begin
   begin
     for Loop:=0 to eROMsList.Count-1 do
     begin
-      romCRC:= eROMsList.Names[Loop];
-      romName:= eROMsList.ValueFromIndex[Loop];
-      if (romName[1] = '3') and (romCRC <> '') then
+      DiskFile:= eROMsList[Loop];
+      FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(FormMain.TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName);
+      //if (romName[1] = '3') and (romCRC <> '') then
+      CHDFileID:= StrToInt(DiskFile[1]+DiskFile[2]);
+      if (CHDFileID >= 12) and (DiskFile[3] = '1') and (romSHA1 <> '') then
          begin
-           Delete(romName, 1, 2);
-           FormMain.GetCHDName(romName, FormMain.GameIsClone(FormMain.TempGameVars.eClone), chdName, chdParentName); // get correct chdName and chdParentName (for MAME)
-           DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.TempGameVars.eSystemID, romName, FormMain.TempGameVars.eName, FormMain.TempGameVars.eClone, FormMain.TempGameVars.eBiosName, FormMain.TempGameVars.eSoftwareName);
-
+           DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.TempGameVars.eSystemID, romName, chdParentName, FormMain.TempGameVars.eName, FormMain.TempGameVars.eClone, FormMain.TempGameVars.eBiosName, FormMain.TempGameVars.eSoftwareName);
            if DiskFile <> '' then
               begin
                 // CHD file found...
+                // 00 -> rom; 01 -> CHD; -1 -> config files
+                // media_type FileID IsParentCHD filename
+                // 01120 simpbowl.chd
+                // 00000 elvator.rom
+                // -1000 elvator.cfg
                 IsParentCHD:= FormMain.GameIsClone(FormMain.TempGameVars.eClone) and (not SameText(chdName+'.chd', ExtractFileName(DiskFile)));
-                tempFilesList.Add('1='+Format('%d %s', [Ord(IsParentCHD), DiskFile]));
+                tempFilesList.Add('01'+Format('%.2u%d %s', [CHDFileID, Ord(IsParentCHD), DiskFile]));
                 HaveCHDsVar:= True;
                 CHDsTotalSize:= CHDsTotalSize+GetFileSize(DiskFile);
                 Inc(CHDsTotalFiles);
@@ -343,7 +345,7 @@ var
   function AddItem_ELV(FileType: ShortInt): Boolean;
   var
     haveMAMEnvram: Boolean;
-    Loop: Integer;
+    Loop, fixFileType: Integer;
   begin
     Result:= False;
     haveMAMEnvram:= False;
@@ -404,7 +406,7 @@ var
          case FileType of
            0, 2, 3, 4: // .input (segamodel2); .cfg; .eeprom; .sram; .flash
              begin
-               tempFilesList.Add('-1='+Format('%d %s', [FileType, FileFullPath]));
+               tempFilesList.Add('-1'+Format('%.2u0 %s', [FileType, FileFullPath]));
                HaveCFGsVar:= True;
                CFGsTotalSize:= CFGsTotalSize+GetFileSize(FileFullPath);
                Inc(CFGsTotalFiles);
@@ -413,7 +415,8 @@ var
              begin
                if not haveMAMEnvram then // .nv; .dat
                   begin
-                    tempFilesList.Add('-1=1 '+FileFullPath);
+                    // this is for old MAME buids that have gamename.nv and for other emulators
+                    tempFilesList.Add('-1010 '+FileFullPath);
                     HaveCFGsVar:= True;
                     CFGsTotalSize:= CFGsTotalSize+GetFileSize(FileFullPath);
                     Inc(CFGsTotalFiles);
@@ -424,9 +427,11 @@ var
                     // nvram\gamename\*.* (not known filename or extension)
                     for Loop:=0 to nvram_MAME.Count-1 do
                     begin
-                        tempFilesList.Add('-1=1 '+nvram_MAME[Loop]);
-                        CFGsTotalSize:= CFGsTotalSize+GetFileSize(nvram_MAME[Loop]);
-                        Inc(CFGsTotalFiles);
+                      fixFileType:= FormMain.FixMAMENVRAMFileType(nvram_MAME[Loop]);
+                      tempFilesList.Add('-1'+Format('%.2u0 %s', [fixFileType, nvram_MAME[Loop]]));
+                      //tempFilesList.Add('-1010 '+nvram_MAME[Loop]);
+                      CFGsTotalSize:= CFGsTotalSize+GetFileSize(nvram_MAME[Loop]);
+                      Inc(CFGsTotalFiles);
                     end;
                     FreeAndNil(nvram_MAME);
                     HaveCFGsVar:= True;
@@ -449,7 +454,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.AddGamesToList;
 var
-  Loop, SelectionIndex: Integer;
+  Loop, Loop2, SelectionIndex: Integer;
   gItem, addItem: TEasyItem;
   GameIsMerged, FoundROMs, FoundCHDs, FoundCFGs: Boolean;
   HaveROMs, HaveCHDs, HaveCFGs, HaveMerged, HaveBiosSets, HaveClones, HaveCategory, HaveDriverName: Boolean;
@@ -501,6 +506,14 @@ var
     GamesList.Header.Columns[ColumnIndex].Visible:= False;
   end;
 
+  function AutoSizeColumn(const iColumnIndex, iMinimumSize: Integer): Boolean;
+  begin
+    Result:= True;
+    GamesList.Header.Columns[iColumnIndex].AutoSizeToFit;
+    if GamesList.Header.Columns[iColumnIndex].Width < iMinimumSize then
+       GamesList.Header.Columns[iColumnIndex].Width:= iMinimumSize;
+  end;
+
 begin
   HaveROMs:= False;
   HaveCHDs:= False;
@@ -541,6 +554,8 @@ begin
     if ActionMode = 0 then
        SearchConfigFiles(FoundCFGs);
     tempFilesList.EndUpdate;
+    //ShowMessage(tempFilesList.Text); // for debugging only; keep it disabled
+
     if AddGame then
        begin
          if FoundROMs then
@@ -587,9 +602,31 @@ begin
                      'No files found. There are no files to be processed.', 2, False, 1)
   else
     begin
+      if Screen.Width < 1000 then
+         begin
+           AutoSizeColumn(1, 80);
+           if HaveClones then
+              AutoSizeColumn(2, 60);
+
+           if HaveBiosSets then
+              AutoSizeColumn(3, 70);
+
+           if HaveCategory then
+              begin
+                AutoSizeColumn(4, 80);
+                if GamesList.Header.Columns[4].Width > 200 then
+                   GamesList.Header.Columns[4].Width:= 200;
+              end;
+
+           if HaveDriverName then
+              AutoSizeColumn(5, 80);
+           AutoSizeColumn(0, 200);
+         end;
+
       //GamesList.BeginUpdate;
       //if not HaveMerged then
       //   HideColumn(8);
+
       Loop:= GamesList.Width;
       if not HaveCFGs then
          HideColumn(8);
@@ -606,17 +643,30 @@ begin
       if not HaveClones then
          HideColumn(2);
 
-      if Loop < 620 then
+      SelectionIndex:=0;
+      for Loop2:=0 to GamesList.Header.Columns.Count-1 do
+      begin
+        if GamesList.Header.Columns[Loop2].Visible then
+           SelectionIndex:= SelectionIndex+GamesList.Header.Columns[Loop2].Width;
+      end;
+      if SelectionIndex < 620 then
          begin
-           GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+(620-Loop)-5;
-           Loop:= 620-5;
+           GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+(620-SelectionIndex-1);
+           Loop:= 620;
          end;
+
+      //if Loop < 620 then
+      //   begin
+      //     GamesList.Header.Columns[0].Width:= GamesList.Header.Columns[0].Width+(620-Loop)-5;
+      //     Loop:= 620-5;
+      //   end;
 
       ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
       ButtonNo.Left:= ButtonNo.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
       ButtonHelp.Left:= ButtonHelp.Left-(FormDeleteMultipleGamesFiles.Width-Loop)+5;
       FormDeleteMultipleGamesFiles.ClientWidth:= Loop;
-      
+
+      // useless code... should remove it later... ?
       {if not HaveCHDs then
          begin
            FormDeleteMultipleGamesFiles.Width:= FormDeleteMultipleGamesFiles.Width-GamesList.Header.Columns[6].Width;
@@ -714,10 +764,21 @@ begin
 
   if FormdeleteMultipleGamesFiles.Width > iScreenWidth then
      begin
+       // if Screen.Width < 1280, shrink columns width
        ButtonHelp.Left:= ButtonHelp.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
        ButtonDeleteFiles.Left:= ButtonDeleteFiles.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
        ButtonNo.Left:= ButtonNo.Left-(FormdeleteMultipleGamesFiles.Width-iScreenWidth);
        FormdeleteMultipleGamesFiles.Width:= iScreenWidth;
+
+       GamesList.Header.Columns[0].Width:= 300;
+       GamesList.Header.Columns[1].Width:= 80;
+       GamesList.Header.Columns[2].Width:= 80;
+       GamesList.Header.Columns[3].Width:= 80;
+       GamesList.Header.Columns[4].Width:= 150;
+       GamesList.Header.Columns[5].Width:= 95;
+       GamesList.Header.Columns[6].Width:= 30;
+       GamesList.Header.Columns[7].Width:= 30;
+       GamesList.Header.Columns[8].Width:= 30;
      end;
 
   if PanelDestinationFolder.Visible then
@@ -862,10 +923,12 @@ procedure TFormDeleteMultipleGamesFiles.GamesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(TGameInfo(Item).eGameStatus,
+  FormMain.GetCanvasFontCustom(TGameInfo(Item).eSystemID, TGameInfo(Item).eGameStatus,
                          TGameInfo(Item).eDriverStatus,
-                         TGameInfo(Item).eClone, ACanvas, True);                         
-  if Position > 0 then
+                         TGameInfo(Item).eClone, ACanvas, True);
+  //if GamesList.Width > 1000 then
+  //   Exit;
+  if (Position > 0) and (Position <> 4) then
      begin
        ACanvas.Font.Name:= 'Tahoma';
        ACanvas.Font.Size:= 8;
@@ -1044,12 +1107,26 @@ begin
        Exit;
      end;
 
+  if ActionMode <> 0 then
+     begin
+       if DestinationFolder.Text = '' then
+       begin
+         CallMessageBox;
+         FormMain.ShowGameNameEntryMsgBox;
+         GenerateMessage('Error', FormDeleteMultipleGamesFiles.Caption, '    You haven''t selected a destination '+
+                         'folder. Use only full paths. Cannot continue.', 2, False, -1);
+         Exit;
+       end;
+     end;
+
   FileTypeStr:= '';
   if ActionMode <> 0 then
      begin
         FileTypeStr:= Trim(ExtractFileDrive(DestinationFolder.Text));
         if FileTypeStr = '' then
            begin
+             CallMessageBox;
+             FormMain.ShowGameNameEntryMsgBox;
              GenerateMessage('Error', FormDeleteMultipleGamesFiles.Caption, '    Could not detect the destination drive letter. '+
                              'Please make sure you enter a full destination path.', 2, False, 1);
              Exit;
@@ -1234,7 +1311,10 @@ procedure TFormDeleteMultipleGamesFiles.GamesListColumnPaintText(
   Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
 begin
   if Column.Index > 5 then
-     ACanvas.Font.Name:= 'Consolas';
+     begin
+       ACanvas.Font.Name:= 'Consolas';
+       ACanvas.Font.Size:= ACanvas.Font.Size-1;
+     end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.ButtonFindGameNameClick(

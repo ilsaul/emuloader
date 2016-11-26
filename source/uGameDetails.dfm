@@ -5,7 +5,7 @@ object FormGameDetails: TFormGameDetails
   BorderStyle = bsDialog
   Caption = 'Game Details'
   ClientHeight = 563
-  ClientWidth = 676
+  ClientWidth = 968
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -61,7 +61,7 @@ object FormGameDetails: TFormGameDetails
   object FrameROMsListView: TShape
     Left = 297
     Top = 69
-    Width = 373
+    Width = 664
     Height = 488
     Brush.Color = 15856113
     Pen.Color = 7891291
@@ -69,7 +69,7 @@ object FormGameDetails: TFormGameDetails
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 676
+    Width = 968
     Height = 60
     Align = alTop
     Color1 = 15792869
@@ -90,7 +90,7 @@ object FormGameDetails: TFormGameDetails
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 583
+      Width = 875
       Height = 26
       AutoSize = False
       Caption = 
@@ -120,7 +120,7 @@ object FormGameDetails: TFormGameDetails
     object LabelEmulatorVersion: TShadowLabel
       Left = 86
       Top = 28
-      Width = 440
+      Width = 715
       Height = 25
       AutoSize = False
       Caption = 
@@ -141,7 +141,7 @@ object FormGameDetails: TFormGameDetails
       WordWrap = True
     end
     object LabelScanMode: TShadowLabel
-      Left = 563
+      Left = 853
       Top = 26
       Width = 106
       Height = 27
@@ -167,22 +167,23 @@ object FormGameDetails: TFormGameDetails
     Tag = 1
     Left = 298
     Top = 70
-    Width = 371
+    Width = 662
     Height = 486
     BackGround.Enabled = True
     BorderStyle = bsNone
-    CellSizes.Report.Height = 18
+    CellSizes.Report.Height = 20
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -11
-    EditManager.Font.Name = 'Tahoma'
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
+    ImagesState = FormMain.IL_LeftPanel
     UseDockManager = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clBlack
@@ -191,24 +192,28 @@ object FormGameDetails: TFormGameDetails
     GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
-      0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000101000100000000000000BE000000FFFFFF1F0001000000
+      0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000101000100000000000001BE000000FFFFFF1F0001000000
       01000000040000004E0061006D00650000000000000000000000000011000000
       5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-      010000000000003C000000FFFFFF1F0001000000010000000800000043006800
-      650063006B00730075006D000000000000000000000000001100000054456173
-      79436F6C756D6E53746F726564FFFECE00060000008008000101000102000000
-      00000078000000FFFFFF1F000100000001000000060000005300740061007400
-      75007300000000000000000000000000}
+      0100000000000140000000FFFFFF1F0001000000010000000500000043005200
+      430033003200000000000000000000000000110000005445617379436F6C756D
+      6E53746F726564FFFECE00060000008008000101000102000000000001200100
+      00FFFFFF1F000100000001000000050000005300480041002D00310000000000
+      0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0006000000800800010100010300000000000178000000FFFFFF1F0001000000
+      0100000006000000530074006100740075007300000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Sizeable = False
     Header.Visible = True
     ImagesSmall = FormMain.IL_LeftPanel
+    PaintInfoColumn.Border = 2
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoColumn.HotTrack = False
     PaintInfoGroup.Expandable = False
@@ -227,7 +232,6 @@ object FormGameDetails: TFormGameDetails
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
@@ -238,7 +242,13 @@ object FormGameDetails: TFormGameDetails
     Selection.UseFocusRect = False
     TabOrder = 1
     View = elsReport
+    OnColumnClick = ROMsListViewColumnClick
+    OnItemCompare = ROMsListViewItemCompare
     OnItemPaintText = ROMsListViewItemPaintText
     OnItemSelectionChanged = ROMsListViewItemSelectionChanged
+  end
+  object IL_FileType: TImageList
+    Left = 248
+    Top = 96
   end
 end

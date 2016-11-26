@@ -1,11 +1,11 @@
 object FormDeleteGamesFiles: TFormDeleteGamesFiles
-  Left = 607
-  Top = 321
+  Left = 560
+  Top = 439
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Game Files'
-  ClientHeight = 518
-  ClientWidth = 614
+  ClientHeight = 520
+  ClientWidth = 764
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -22,33 +22,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSoftwareListTitle: TShadowLabel
-    Left = 8
-    Top = 60
-    Width = 598
-    Height = 14
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'Software List: softlist title'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = 21414
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 16112579
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-    Layout = tlCenter
-    Visible = False
-  end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 614
-    Height = 60
+    Width = 764
+    Height = 69
     Align = alTop
     Color1 = 15792869
     Color2 = clWhite
@@ -75,7 +53,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
-      Width = 520
+      Width = 670
       Height = 26
       AutoSize = False
       Caption = 
@@ -96,7 +74,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 496
+      Left = 646
       Top = 26
       Width = 110
       Height = 27
@@ -147,14 +125,49 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShowAccelChar = False
       Transparent = True
     end
+    object LabelSoftwareListTitle: TShadowLabel
+      Left = 154
+      Top = 51
+      Width = 79
+      Height = 14
+      Caption = '[softlist title] '
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 21414
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 12632284
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+      Visible = False
+    end
+    object LabelSoftwareList: TLabel
+      Left = 86
+      Top = 52
+      Width = 65
+      Height = 12
+      Caption = 'software list:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 3289650
+      Font.Height = -9
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+      Visible = False
+    end
   end
   object FilesListView: TEasyListview
     Left = 1
     Top = 69
-    Width = 613
-    Height = 346
+    Width = 763
+    Height = 348
     BorderStyle = bsNone
-    CellSizes.Tile.Width = 612
+    CellSizes.Tile.Width = 762
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -189,7 +202,6 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     Selection.Color = 10902593
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
     Selection.RectSelect = True
@@ -204,8 +216,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 463
-    Width = 614
+    Top = 465
+    Width = 764
     Height = 55
     Align = alBottom
     Color1 = clWhite
@@ -255,7 +267,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object ButtonNo: TBitBtn
-      Left = 517
+      Left = 667
       Top = 14
       Width = 89
       Height = 34
@@ -267,7 +279,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       TabOrder = 0
     end
     object ButtonYes: TBitBtn
-      Left = 416
+      Left = 566
       Top = 14
       Width = 89
       Height = 34
@@ -281,7 +293,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
       Top = 6
-      Width = 218
+      Width = 232
       Height = 41
       CaptionPosition = cpTopCenter
       RoundEdges = True
@@ -292,16 +304,16 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ParentColor = False
       TabOrder = 2
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
-        Left = 115
+        Left = 122
         Top = 18
-        Width = 101
-        Height = 16
+        Width = 106
+        Height = 18
         Hint = 'Use this option to check/uncheck game config/RAM files'
         HelpContext = 2
         Checked = True
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -318,13 +330,13 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       object DeleteROMs: TAdvOfficeCheckBox
         Left = 8
         Top = 18
-        Width = 52
-        Height = 16
+        Width = 55
+        Height = 18
         Hint = 'Use this option to check/uncheck the gamename .zip/.7z file'
         Checked = True
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -339,17 +351,17 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
       object DeleteCHDs: TAdvOfficeCheckBox
-        Left = 63
+        Left = 67
         Top = 18
-        Width = 50
-        Height = 16
+        Width = 53
+        Height = 18
         Hint = 
           'Use this option to check/uncheck CHD files (if supported by the ' +
           'game)'
         HelpContext = 1
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
@@ -366,8 +378,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   end
   object PanelDestinationFolder: TPanelEx
     Left = 0
-    Top = 415
-    Width = 614
+    Top = 417
+    Width = 764
     Height = 48
     Align = alBottom
     Color1 = clWhite

@@ -165,13 +165,13 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
     end
     object LabelSoftwareListTitle: TShadowLabel
       Left = 511
-      Top = 52
-      Width = 72
-      Height = 13
+      Top = 51
+      Width = 79
+      Height = 14
       Caption = '[softlist title] '
       Font.Charset = ANSI_CHARSET
       Font.Color = 21414
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -185,12 +185,12 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
     object LabelMachineInUse: TShadowLabel
       Left = 176
       Top = 52
-      Width = 245
-      Height = 13
+      Width = 281
+      Height = 14
       Caption = 'Run with machine [machinename]: Machine Title'
       Font.Charset = ANSI_CHARSET
       Font.Color = 21414
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -505,7 +505,6 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -653,7 +652,6 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -1018,7 +1016,6 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -1312,7 +1309,6 @@ object FormRunGameExtraMAME: TFormRunGameExtraMAME
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593

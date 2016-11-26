@@ -1,11 +1,11 @@
 object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   Left = 569
   Top = 357
-  BorderIcons = []
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'Select a Machine to Run the Game With'
   ClientHeight = 501
-  ClientWidth = 799
+  ClientWidth = 816
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -46,14 +46,14 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   end
   object LabelTotalMachines: TShadowLabel
     Left = 8
-    Top = 65
+    Top = 63
     Width = 66
-    Height = 12
+    Height = 15
     Caption = 'Total 000'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Lucida Console'
+    Font.Height = -12
+    Font.Name = 'Consolas'
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
@@ -66,7 +66,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   object PanelMessages: TPanelEx
     Left = 0
     Top = 460
-    Width = 799
+    Width = 816
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -78,7 +78,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 599
+      Left = 616
       Top = 8
       Width = 89
       Height = 25
@@ -89,7 +89,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       TabOrder = 0
     end
     object ButtonNo: TBitBtn
-      Left = 702
+      Left = 719
       Top = 8
       Width = 89
       Height = 25
@@ -155,7 +155,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 799
+    Width = 816
     Height = 60
     Align = alTop
     Color1 = 16445669
@@ -238,7 +238,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
   object MachinesListView: TEasyListview
     Left = 8
     Top = 79
-    Width = 783
+    Width = 800
     Height = 371
     CellSizes.Report.Height = 20
     Color = clWhite
@@ -262,7 +262,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
-      0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
       0006000000800800010100010000000000000123010000FFFFFF1F0001000000
       01000000070000004D0061006300680069006E00650000000000000000000000
       0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
@@ -279,7 +279,9 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
       000000800800010100010500000000000155000000FFFFFF1F00010000000100
       00000A0000005300610076006500200053007400610074006500000000000000
-      000000000000}
+      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+      000000800800010100010600000000000011000000FFFFFF1F00010000000000
+      0000000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
@@ -302,6 +304,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Size = 20
     PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.ImageIndent = 0
     PaintInfoItem.ShowBorder = False
     ParentFont = False
     ParentShowHint = False
@@ -315,7 +318,6 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
@@ -327,6 +329,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
     TabOrder = 2
     View = elsReport
     OnColumnClick = MachinesListViewColumnClick
+    OnDblClick = MachinesListViewDblClick
     OnItemPaintText = MachinesListViewItemPaintText
     OnItemSelectionChanged = MachinesListViewItemSelectionChanged
   end

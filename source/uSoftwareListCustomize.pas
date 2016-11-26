@@ -121,11 +121,11 @@ var
   addItem: TEasyItem;
   Continue: Boolean;
   iName: String;
-  iTitle{, wStr}: WideString;
+  iTitle, wStr: WideString;
   ExcludeFiles: THashedStringList;
 begin
   FormSoftwareListCustomize.Tag:= 1;
-  Continue:= FormMain.GetSoftListFilesToAudit(SoftListsAll);
+  Continue:= FormMain.GetSoftListFilesToAudit(idMAME, SoftListsAll);
   if not Continue then
      begin
        FormSoftwareListCustomize.Close;
@@ -133,11 +133,11 @@ begin
      end;
 
   FormMain.ReadMAMEHashFolder(idMAME, FormMain.EmulatorFile[idMAME], HashFolder);
-  ButtonResetToCurrent.Enabled:= FormMain.ValidateFile(FormMain.GetSoftListExcludeFile);
+  ButtonResetToCurrent.Enabled:= FormMain.ValidateFile(FormMain.GetSoftListExcludeFile(idMAME));
   if ButtonResetToCurrent.Enabled then //FormMain.ValidateFile(FormMain.GetSoftListExcludeFile) then
      begin
        ExcludeFiles:= THashedStringList.Create;
-       ExcludeFiles.LoadFromFile(FormMain.GetSoftListExcludeFile);
+       ExcludeFiles.LoadFromFile(FormMain.GetSoftListExcludeFile(idMAME));
      end;
 
   SoftwareLists.BeginUpdate;
@@ -145,13 +145,10 @@ begin
   for Loop:=0 to SoftListsAll.Count-1 do
   begin
     iName:= SoftListsAll[Loop];
-
     iTitle:= GetXMLTitle(iName);
-    //wStr:= Utf8Decode(iTitle); // there are no softlist.xml files with Unicode title... so far! 
-    //if wStr <> '' then
-    //   iTitle:= wStr
-    //else
-    //   ShowMessageW('This software list file have a Unicode title'+#13#10+'File: '+HashFolder+iName+'.xml');
+    wStr:= Utf8Decode(iTitle);
+    if wStr <> '' then
+       iTitle:= wStr;
 
     addItem:= SoftwareLists.Items.AddCustom(TSoftwareInfo, nil);
     TSoftwareInfo(addItem).eImageIndex:= -1;
@@ -362,7 +359,7 @@ begin
   if SoftwareLists.CheckManager.Count = 0 then
      Exit;
 
-  DeleteFile(FormMain.GetSoftListExcludeFile);
+  DeleteFile(FormMain.GetSoftListExcludeFile(idMAME));
 
 
   SoftListsAll:= TStringList.Create;
@@ -376,7 +373,7 @@ begin
   SoftListsAll.Sort;
   SoftListsAll.EndUpdate;
   if SoftListsAll.Count > 0 then
-     SoftListsAll.SaveToFile(FormMain.GetSoftListExcludeFile);
+     SoftListsAll.SaveToFile(FormMain.GetSoftListExcludeFile(idMAME));
   FreeAndNil(SoftListsAll);
 end;
 

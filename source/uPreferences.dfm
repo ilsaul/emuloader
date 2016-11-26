@@ -326,7 +326,7 @@ object FormPreferences: TFormPreferences
       Caption = 'Games List Appearance'
       object LabelMAMu_IconsFolder: TLabel
         Left = 50
-        Top = 312
+        Top = 344
         Width = 391
         Height = 15
         Caption = 
@@ -343,14 +343,14 @@ object FormPreferences: TFormPreferences
       end
       object MAMu_Icon: TImage
         Left = 16
-        Top = 316
+        Top = 348
         Width = 32
         Height = 32
         Transparent = True
       end
       object LabelDisableNaturalSorting: TLabel
         Left = 264
-        Top = 99
+        Top = 79
         Width = 185
         Height = 16
         Caption = 'Use ASCII sorting (1, 10, 11, 2, 20, 3)'
@@ -365,7 +365,7 @@ object FormPreferences: TFormPreferences
       end
       object LabelGameMultilineCaptions: TLabel
         Left = 264
-        Top = 67
+        Top = 47
         Width = 226
         Height = 16
         Caption = 'Show full caption (32x32 and 48x48 icon size)'
@@ -378,9 +378,24 @@ object FormPreferences: TFormPreferences
         ShowAccelChar = False
         Transparent = True
       end
+      object LabelDisableDeleteSelectedGames: TLabel
+        Left = 32
+        Top = 327
+        Width = 213
+        Height = 16
+        Caption = 'safeguard your ROMs from naughty kiddies'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
       object ButtonCustomizeGameFonts: TBitBtn
         Left = 248
-        Top = 122
+        Top = 106
         Width = 166
         Height = 23
         Caption = 'Customize Game Fonts'
@@ -408,7 +423,7 @@ object FormPreferences: TFormPreferences
       end
       object MAMu_IconsFolder: TEdit
         Left = 50
-        Top = 328
+        Top = 360
         Width = 385
         Height = 21
         Hint = 'Select MAMu_ Icons Folder'
@@ -419,25 +434,13 @@ object FormPreferences: TFormPreferences
       end
       object ButtonMAMu_IconsFolderSelect: TBitBtn
         Left = 436
-        Top = 328
+        Top = 360
         Width = 49
         Height = 21
         Hint = 'Click here to select a folder'
         Caption = 'Select'
         TabOrder = 3
         OnClick = ButtonMAMu_IconsFolderSelectClick
-      end
-      object GameSelectionDarkFont: TAdvOfficeCheckBox
-        Left = 248
-        Top = 32
-        Width = 144
-        Height = 18
-        Hint = 'Enable this option if you'#39're using a white font for games list'
-        TabOrder = 4
-        Alignment = taLeftJustify
-        Caption = 'Dark Font Selection Bar'
-        ReturnIsTab = False
-        Themed = True
       end
       object ColumnsSettings: TAdvGroupBox
         Left = 16
@@ -448,7 +451,7 @@ object FormPreferences: TFormPreferences
         RoundEdges = True
         Caption = 'Details/Grouped Columns Settings'
         Ctl3D = True
-        TabOrder = 5
+        TabOrder = 4
         object DisableCloneIndent: TAdvOfficeCheckBox
           Left = 8
           Top = 20
@@ -540,7 +543,7 @@ object FormPreferences: TFormPreferences
         RoundEdges = True
         Caption = 'Background'
         Ctl3D = True
-        TabOrder = 6
+        TabOrder = 5
         object GamesBackgroundColor: TColorBox
           Left = 8
           Top = 20
@@ -642,11 +645,11 @@ object FormPreferences: TFormPreferences
       end
       object DisableNaturalSorting: TAdvOfficeCheckBox
         Left = 248
-        Top = 84
+        Top = 64
         Width = 237
         Height = 18
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
-        TabOrder = 7
+        TabOrder = 6
         OnClick = DisableNaturalSortingClick
         Alignment = taLeftJustify
         Caption = 'Disable Natural Sorting (1, 2, 3, 10, 11, 20)'
@@ -655,10 +658,10 @@ object FormPreferences: TFormPreferences
       end
       object GameMultilineCaptions: TAdvOfficeCheckBox
         Left = 248
-        Top = 52
+        Top = 32
         Width = 242
         Height = 18
-        TabOrder = 8
+        TabOrder = 7
         OnClick = GameMultilineCaptionsClick
         Alignment = taLeftJustify
         Caption = 'Multiline Captions (Details/Grouped View)'
@@ -672,7 +675,7 @@ object FormPreferences: TFormPreferences
         Height = 150
         RoundEdges = True
         Caption = 'Status Bar Colors'
-        TabOrder = 9
+        TabOrder = 8
         object LabelGamesListStatusBarBottomColor: TLabel
           Left = 8
           Top = 73
@@ -786,6 +789,19 @@ object FormPreferences: TFormPreferences
           TabOrder = 5
           OnSelect = GamesListStatusBarFrameColorSelect
         end
+      end
+      object DisableDeleteSelectedGames: TAdvOfficeCheckBox
+        Left = 16
+        Top = 312
+        Width = 237
+        Height = 18
+        Hint = 'Don'#39't want games sorted like Windows Explorer ?'
+        TabOrder = 9
+        OnClick = DisableDeleteSelectedGamesClick
+        Alignment = taLeftJustify
+        Caption = 'Disable "Delete/Copy/Move Games Files"'
+        ReturnIsTab = False
+        Themed = True
       end
     end
     object TPage
@@ -1284,7 +1300,6 @@ object FormPreferences: TFormPreferences
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -1568,7 +1583,6 @@ object FormPreferences: TFormPreferences
           Selection.Color = 10902593
           Selection.FullCellPaint = True
           Selection.FullItemPaint = True
-          Selection.Gradient = True
           Selection.GradientColorBottom = 16506264
           Selection.GradientColorTop = 15582647
           Selection.InactiveBorderColor = 10902593

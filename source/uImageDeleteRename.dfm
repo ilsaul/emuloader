@@ -1,11 +1,11 @@
 object FormImageDeleteRename: TFormImageDeleteRename
-  Left = 557
-  Top = 268
+  Left = 1204
+  Top = 820
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Image File'
-  ClientHeight = 269
-  ClientWidth = 579
+  ClientHeight = 316
+  ClientWidth = 699
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,26 +23,26 @@ object FormImageDeleteRename: TFormImageDeleteRename
   PixelsPerInch = 96
   TextHeight = 15
   object Shape1: TShape
-    Left = 201
-    Top = 116
+    Left = 258
+    Top = 154
     Width = 50
     Height = 47
     Pen.Color = 15856113
     Shape = stRoundRect
   end
   object LabelFilename: TShadowLabel
-    Left = 260
-    Top = 121
-    Width = 301
-    Height = 23
+    Left = 261
+    Top = 116
+    Width = 428
+    Height = 31
     AutoSize = False
     Caption = 'd:\EmuLoader\snap\elevator.png'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = 10900224
-    Font.Height = -11
-    Font.Name = 'Lucida Console'
-    Font.Style = []
+    Font.Height = -13
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
     ParentColor = False
     ParentFont = False
     ParentShowHint = False
@@ -54,28 +54,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
     WordWrap = True
   end
-  object LabelFileSize: TShadowLabel
-    Left = 260
-    Top = 149
-    Width = 308
-    Height = 12
-    AutoSize = False
-    Caption = '0000.00 KBytes         Jan/01/2016 00:00:00'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Lucida Console'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-    Layout = tlCenter
-  end
-  object LabelFileType: TShadowLabel
-    Left = 216
+  object LabelSystemTitle: TShadowLabel
+    Left = 261
     Top = 76
     Width = 285
     Height = 19
@@ -93,8 +73,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object ShadowNewName: TShadowLabel
-    Left = 209
-    Top = 192
+    Left = 320
+    Top = 232
     Width = 159
     Height = 16
     Caption = 'New Name (no file extension)'
@@ -111,15 +91,15 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object ImageCategoryIcon: TImage
-    Left = 214
-    Top = 119
+    Left = 271
+    Top = 157
     Width = 24
     Height = 24
     Transparent = True
   end
   object LabelImageCategory: TShadowLabel
-    Left = 204
-    Top = 148
+    Left = 261
+    Top = 186
     Width = 44
     Height = 12
     Alignment = taCenter
@@ -138,9 +118,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelSoftwareListTitle: TShadowLabel
-    Left = 216
+    Left = 261
     Top = 93
-    Width = 345
+    Width = 428
     Height = 14
     AutoSize = False
     Caption = 'Software List Title'
@@ -158,10 +138,86 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Layout = tlCenter
     Visible = False
   end
+  object LabelFileSize: TShadowLabel
+    Left = 320
+    Top = 156
+    Width = 370
+    Height = 15
+    AutoSize = False
+    Caption = 'Size: 331 Bytes'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Consolas'
+    Font.Style = []
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clSilver
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+  end
+  object LabelDateTime: TShadowLabel
+    Left = 320
+    Top = 173
+    Width = 370
+    Height = 15
+    AutoSize = False
+    Caption = 'Date/Time: 11/11/11'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Consolas'
+    Font.Style = []
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clSilver
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+  end
+  object LabelFileType: TShadowLabel
+    Left = 320
+    Top = 190
+    Width = 370
+    Height = 15
+    AutoSize = False
+    Caption = 'File Type: Joint Photographic Experts Group (JPEG)'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Consolas'
+    Font.Style = []
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clSilver
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+  end
+  object LabelFileTypeMismatch: TShadowLabel
+    Left = 397
+    Top = 207
+    Width = 255
+    Height = 16
+    Caption = 'Warning: file type does not match file extension!'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clSilver
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    Visible = False
+  end
   object PanelEx1: TPanelEx
     Left = 0
-    Top = 228
-    Width = 579
+    Top = 275
+    Width = 699
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -173,7 +229,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtn
-      Left = 384
+      Left = 504
       Top = 8
       Width = 89
       Height = 25
@@ -186,7 +242,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
       OnClick = ButtonOkClick
     end
     object ButtonCancel: TBitBtn
-      Left = 482
+      Left = 602
       Top = 8
       Width = 89
       Height = 25
@@ -202,7 +258,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 579
+    Width = 699
     Height = 60
     Align = alTop
     Color1 = 15792869
@@ -216,7 +272,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     object LabelGameTitle: TShadowLabel
       Left = 56
       Top = 4
-      Width = 516
+      Width = 636
       Height = 26
       AutoSize = False
       Caption = 
@@ -237,7 +293,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 498
+      Left = 618
       Top = 33
       Width = 71
       Height = 14
@@ -282,9 +338,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     end
   end
   object RenameImageEditBox: TEdit
-    Left = 369
-    Top = 190
-    Width = 200
+    Left = 320
+    Top = 248
+    Width = 240
     Height = 21
     AutoSize = False
     TabOrder = 0
@@ -293,9 +349,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object ImagePreviewFrame: TPanelEx
     Left = 8
-    Top = 77
-    Width = 184
-    Height = 184
+    Top = 69
+    Width = 239
+    Height = 239
     Color1 = clSilver
     Color2 = clSilver
     Color3 = clYellow
@@ -307,8 +363,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     object ImagePreview: TImage32
       Left = 2
       Top = 2
-      Width = 180
-      Height = 180
+      Width = 235
+      Height = 235
       Bitmap.DrawMode = dmBlend
       Bitmap.ResamplerClassName = 'TKernelResampler'
       Bitmap.Resampler.KernelClassName = 'THermiteKernel'

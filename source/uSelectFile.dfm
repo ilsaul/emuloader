@@ -123,7 +123,6 @@ object FormSelectFile: TFormSelectFile
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593

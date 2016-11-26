@@ -63,7 +63,6 @@ object FormToolBarEditor: TFormToolBarEditor
     Selection.Color = 10902593
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593

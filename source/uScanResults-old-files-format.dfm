@@ -5,7 +5,7 @@ object FormScanResults: TFormScanResults
   BorderStyle = bsDialog
   Caption = 'Games with Missing ROMs/CHDs'
   ClientHeight = 615
-  ClientWidth = 809
+  ClientWidth = 761
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,7 +25,7 @@ object FormScanResults: TFormScanResults
     Tag = 1
     Left = 0
     Top = 33
-    Width = 809
+    Width = 761
     Height = 541
     Align = alClient
     BackGround.Enabled = True
@@ -34,15 +34,14 @@ object FormScanResults: TFormScanResults
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Segoe UI'
+    EditManager.Font.Height = -11
+    EditManager.Font.Name = 'Tahoma'
     EditManager.Font.Style = []
-    ImagesState = IL_ScanResults
     UseDockManager = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
+    Font.Height = -11
+    Font.Name = 'Tahoma'
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clMaroon
@@ -50,34 +49,36 @@ object FormScanResults: TFormScanResults
     GroupFont.Name = 'Trebuchet MS'
     GroupFont.Style = [fsBold, fsItalic]
     HintType = ehtToolTip
+    Header.AutoSizeHeight = False
+    Header.AutoSizeHeightMargin = 5
     Header.Columns.Items = {
       0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
       0006000000800800010100010000000000000051010000FFFFFF1F0001000000
       0100000015000000200020002000200020002000200020002000200020002000
       200020002000200020004E0061006D0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000040000000FFFFFF1F000100000001000000050000004300
+      0001010000000000003C000000FFFFFF1F000100000001000000050000004300
       5200430033003200000000000000000000000000110000005445617379436F6C
-      756D6E53746F726564FFFECE0006000000800800010100010200000000000020
-      010000FFFFFF1F000100000001000000050000005300480041002D0031000000
+      756D6E53746F726564FFFECE00060000008008000101000102000000000000FA
+      000000FFFFFF1F000100000001000000050000005300480041002D0031000000
       00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-      FECE0006000000800800010100010300000000000078000000FFFFFF1F000100
+      FECE0006000000800800010100010300000000000072000000FFFFFF1F000100
       0000010000000600000053007400610074007500730000000000000000000000
       0000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -12
-    Header.Font.Name = 'Segoe UI'
+    Header.Font.Height = -11
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Height = 23
+    Header.Height = 19
     Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
     ImagesGroup = FormMain.IL_StandardIconsSmall
-    ImagesSmall = FormMain.IL_LeftPanel
+    ImagesSmall = IL_ScanResults
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoColumn.HotTrack = False
     PaintInfoGroup.BandBlended = False
@@ -104,6 +105,7 @@ object FormScanResults: TFormScanResults
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
+    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
@@ -122,7 +124,7 @@ object FormScanResults: TFormScanResults
   object CoolBarTop: TCoolBar
     Left = 0
     Top = 0
-    Width = 809
+    Width = 761
     Height = 33
     BandBorderStyle = bsNone
     BandMaximize = bmNone
@@ -133,7 +135,7 @@ object FormScanResults: TFormScanResults
         FixedSize = True
         ImageIndex = -1
         MinHeight = 52
-        Width = 809
+        Width = 761
       end>
     EdgeBorders = []
     EdgeInner = esNone
@@ -143,7 +145,7 @@ object FormScanResults: TFormScanResults
     object Panel1: TPanel
       Left = 0
       Top = 0
-      Width = 809
+      Width = 761
       Height = 52
       Align = alClient
       BevelOuter = bvNone
@@ -207,7 +209,7 @@ object FormScanResults: TFormScanResults
         Transparent = True
       end
       object SystemSelectorToolBar: TToolBar
-        Left = 589
+        Left = 541
         Top = 1
         Width = 220
         Height = 30
@@ -298,7 +300,7 @@ object FormScanResults: TFormScanResults
   object BottomBar: TPanelEx
     Left = 0
     Top = 574
-    Width = 809
+    Width = 761
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -340,7 +342,7 @@ object FormScanResults: TFormScanResults
       OnClick = ButtonToggleTreeClick
     end
     object ButtonClose: TBitBtn
-      Left = 713
+      Left = 665
       Top = 9
       Width = 89
       Height = 25

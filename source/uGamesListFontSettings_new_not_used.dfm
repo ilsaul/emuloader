@@ -41,7 +41,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000000015F020000FFFFFF1F0001000000
+      000600000080080001010001000000000000015D020000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Draggable = False
     Header.FixedSingleColumn = True
@@ -68,6 +68,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
+    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593

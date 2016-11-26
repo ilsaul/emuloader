@@ -206,6 +206,7 @@ type
     RecordMovieAVI_CurrentFile, RecordMovieWAV_CurrentFile, RecordMovieMNG_CurrentFile: String;
     InputExitEmuAfterPlay_LastChecked, InputRecTimeCodeFile_LastChecked, SaveStateAuto_LastChecked: Boolean;
     SoftwareListFolder, MachineNameFolder: String;
+    MemCardLastUsed_MachineName: String;
     ActiveFileID: Integer; // what set type is this (gamename, clone, bios)
     FoundInputExtra: Boolean; // sets to FALSE is settings "record_timecode" and "exit_after_playback" do not exist in mame.ini
     procedure GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
@@ -753,7 +754,7 @@ end;
 procedure TFormRunGameExtraMAME.CheckMemoryCardSupport;
 var
   MemCardSlots: TStringList;
-  sectionStr: String;
+  sectionStr, MemCardLastUsed_MachineName: String;
   Loop: Integer;
   MemcardFile: TMemIniFile;
 begin
@@ -770,6 +771,7 @@ begin
   MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
   //MemcardFile:= THashedStringList.Create;
   //MemcardFile.LoadFromFile(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
+  
   if FormMain.MemGameInfo.eSoftwareName = '' then
      begin
        if FormMain.IsNeoGeoDriver(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eDriverName, FormMain.MemGameInfo.eBiosName, True) then
@@ -782,13 +784,17 @@ begin
        sectionStr:= MachineNameToRun;
        // var MachineNameToRun comes from uMain.ExecuteGame()
      end;
+  MemCardLastUsed_MachineName:= sectionStr;
 
   MemCardSlots:= TStringList.Create;
   MemCardFile.ReadSectionValues(sectionStr, MemCardSlots);
   FreeAndNil(MemcardFile);
 
   if MemCardSlots.Count = 0 then
-     DisablePage(2) //InsertMemoryCard_Box)
+     begin
+       DisablePage(2); //InsertMemoryCard_Box)
+       MemCardLastUsed_MachineName:= '';
+     end
   else
      begin
        for Loop:=0 to MemCardSlots.Count-1 do
@@ -806,10 +812,10 @@ begin
              end;
          end;
        end;
-       if FileExists(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID)) then
+       if FileExists(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID, MemCardLastUsed_MachineName)) then
        begin
          MemCardSlots.Clear;
-         MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID));
+         MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID, MemCardLastUsed_MachineName));
          MemCardFile.ReadSectionValues(FormMain.MemGameInfo.eName, MemCardSlots);
          FreeAndNil(MemCardFile);
          InsertMemoryCard_Slot1.Hint:= MemcardSlots.Values['slot1'];
@@ -824,13 +830,18 @@ end;
 procedure TFormRunGameExtraMAME.UpdateLastMemoryCardUsed;
 var
   MemCardLastUsed: TMemIniFile;
+  mFolder: String;
 begin
   if not Enabled_InsertMemoryCard.Checked then
      Exit;
   if (InsertMemoryCard_Slot1.Text = '') and (InsertMemoryCard_Slot2.Text = '') then
      Exit;
 
-  MemCardLastUsed:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID));
+  mFolder:= FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID, MemCardLastUsed_MachineName);
+  if mFolder = '' then
+     Exit;
+  ForceDirectories(ExtractFilePath(mFolder)); // make sure the destination folder already exists...
+  MemCardLastUsed:= TMemIniFile.Create(FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID, MemCardLastUsed_MachineName));
   MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot1', InsertMemoryCard_Slot1.Text);
   if InsertMemoryCard_Slot2.Enabled then
      MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot2', InsertMemoryCard_Slot2.Text);
@@ -1398,7 +1409,7 @@ begin
         True : tmpCmd:= ' -playback "';
         False: tmpCmd:= ' -record "';
       end;
-      if FormMain.GetMAMEBuild < 59 then
+      if FormMain.GetMAMEBuild(FormMain.MemGameInfo.eSystemID)  < 59 then
          RelativePathStr:= ChangeFileExt(RelativePathStr, ''); // previous to v0.59 MAME adds a .inp extension automatically!!!
 
       tmpCmd:= tmpCmd+RelativePathStr+'"';
@@ -1675,6 +1686,7 @@ begin
   
   CommandLine:= '';
 
+  MemCardLastUsed_MachineName:= '';
   MachineNameFolder:= MachineNameToRun;
   if MachineNameFolder <> '' then
      MachineNameFolder:= MachineNameFolder+'\';

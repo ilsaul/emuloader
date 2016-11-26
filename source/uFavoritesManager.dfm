@@ -4,7 +4,7 @@ object FormFavoritesManager: TFormFavoritesManager
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Favorites Manager'
-  ClientHeight = 402
+  ClientHeight = 405
   ClientWidth = 619
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -107,7 +107,7 @@ object FormFavoritesManager: TFormFavoritesManager
     Left = 0
     Top = 44
     Width = 619
-    Height = 358
+    Height = 361
     Align = alClient
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 22
@@ -146,9 +146,10 @@ object FormFavoritesManager: TFormFavoritesManager
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
@@ -178,7 +179,6 @@ object FormFavoritesManager: TFormFavoritesManager
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593

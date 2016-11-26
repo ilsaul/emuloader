@@ -1,8 +1,8 @@
 object FormMain: TFormMain
-  Left = 1103
-  Top = 651
-  Width = 1000
-  Height = 570
+  Left = 924
+  Top = 772
+  Width = 1009
+  Height = 654
   Caption = 'Emu Loader'
   Color = clBtnFace
   Constraints.MinHeight = 400
@@ -27,7 +27,7 @@ object FormMain: TFormMain
     Tag = 1
     Left = 0
     Top = 0
-    Width = 984
+    Width = 993
     Height = 47
     AutoSize = True
     BandBorderStyle = bsNone
@@ -37,7 +37,7 @@ object FormMain: TFormMain
         Control = ToolBarButtons
         ImageIndex = -1
         MinHeight = 47
-        Width = 766
+        Width = 775
       end
       item
         Break = False
@@ -173,7 +173,7 @@ object FormMain: TFormMain
       end
     end
     object ToolBarFilterTitle: TToolBar
-      Left = 766
+      Left = 775
       Top = 11
       Width = 218
       Height = 24
@@ -299,17 +299,17 @@ object FormMain: TFormMain
   object PanelGameImages: TPanel
     Left = 0
     Top = 47
-    Width = 984
-    Height = 485
+    Width = 993
+    Height = 569
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
     object Splitter: TSplitterEx
-      Left = 608
+      Left = 617
       Top = 0
       Width = 6
-      Height = 485
+      Height = 569
       Align = alRight
       OnMoved = SplitterMoved
       Appearance.BorderColor = clNone
@@ -326,8 +326,8 @@ object FormMain: TFormMain
     object PanelList: TPanel
       Left = 0
       Top = 0
-      Width = 608
-      Height = 485
+      Width = 617
+      Height = 569
       Align = alClient
       BevelOuter = bvNone
       ParentColor = True
@@ -336,7 +336,7 @@ object FormMain: TFormMain
         Left = 230
         Top = 24
         Width = 6
-        Height = 441
+        Height = 525
         Visible = False
         Appearance.BorderColor = clNone
         Appearance.BorderColorHot = clNone
@@ -353,7 +353,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 24
         Width = 230
-        Height = 441
+        Height = 525
         Align = alLeft
         BevelOuter = bvNone
         TabOrder = 6
@@ -362,7 +362,7 @@ object FormMain: TFormMain
           Left = 0
           Top = 0
           Width = 230
-          Height = 441
+          Height = 525
           Align = alClient
           CellSizes.Report.Height = 20
           Color = clWhite
@@ -426,7 +426,6 @@ object FormMain: TFormMain
           Selection.FullCellPaint = True
           Selection.FullItemPaint = True
           Selection.FullRowSelect = True
-          Selection.Gradient = True
           Selection.GradientColorBottom = 16506264
           Selection.GradientColorTop = 15582647
           Selection.InactiveBorderColor = 10902593
@@ -449,8 +448,8 @@ object FormMain: TFormMain
       object GamesListView: TEasyListview
         Left = 236
         Top = 24
-        Width = 372
-        Height = 441
+        Width = 381
+        Height = 525
         Align = alClient
         CellSizes.SmallIcon.Height = 20
         CellSizes.Tile.Width = 254
@@ -476,7 +475,7 @@ object FormMain: TFormMain
         GroupFont.Style = []
         HintType = ehtToolTip
         Header.Columns.Items = {
-          0600000018000000110000005445617379436F6C756D6E53746F726564FFFECE
+          0600000017000000110000005445617379436F6C756D6E53746F726564FFFECE
           0006000000800800010100010000000001000190010000FFFFFF1F0001000000
           01000000050000005400690074006C0065000000000000000000000000001100
           00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
@@ -532,21 +531,18 @@ object FormMain: TFormMain
           0006000000800800010100011200000000000164000000FFFFFF1F0001000000
           01000000080000004C0061006E00670075006100670065000000000000000000
           00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-          00800800010100011300000000000182000000FFFFFF1F000100000001000000
-          0B000000470061006D0065002000530074006100740075007300000000000000
-          000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-          000000800800010100011400000000000173000000FFFFFF1F00010000000100
-          000009000000470061006D0065002000530069007A0065000000000000000000
+          00800800010100011300000000000173000000FFFFFF1F000100000001000000
+          09000000470061006D0065002000530069007A00650000000000000000000000
+          0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
+          0800010100011400000000000182000000FFFFFF1F0001000000010000000B00
+          00004C00610073007400200050006C0061007900650064000000000000000000
           00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-          00800800010100011500000000000182000000FFFFFF1F000100000001000000
-          0B0000004C00610073007400200050006C006100790065006400000000000000
-          000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-          00000080080001010001160000000000016E000000FFFFFF1F00010000000100
-          00000E00000054006F00740061006C00200050006C0061007900740069006D00
-          6500000000000000000000000000110000005445617379436F6C756D6E53746F
-          726564FFFECE00060000008008000101000117000000000001C8000000FFFFFF
-          1F00010000000100000005000000550073006100670065000000000000000000
-          00000000}
+          0080080001010001150000000000016E000000FFFFFF1F000100000001000000
+          0E00000054006F00740061006C00200050006C0061007900740069006D006500
+          000000000000000000000000110000005445617379436F6C756D6E53746F7265
+          64FFFECE0006000000800800010100011600000000000182000000FFFFFF1F00
+          01000000010000000D00000053006F0066007400770061007200650020004E00
+          61006D006500000000000000000000000000}
         Header.Draggable = False
         Header.Font.Charset = ANSI_CHARSET
         Header.Font.Color = clBlack
@@ -586,7 +582,6 @@ object FormMain: TFormMain
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -616,8 +611,8 @@ object FormMain: TFormMain
       object StatusBarPanel: TPanelEx
         Tag = 1
         Left = 0
-        Top = 465
-        Width = 608
+        Top = 549
+        Width = 617
         Height = 20
         Align = alBottom
         Color1 = 15391180
@@ -647,7 +642,7 @@ object FormMain: TFormMain
           Transparent = True
         end
         object StatusBar_GamesGameName: TShadowLabel
-          Left = 109
+          Left = 129
           Top = 2
           Width = 378
           Height = 16
@@ -668,17 +663,26 @@ object FormMain: TFormMain
         end
         object IconGameStatus: TImage
           Tag = -1
+          Left = 108
+          Top = 2
+          Width = 16
+          Height = 16
+          Transparent = True
+        end
+        object IconDriverStatus: TImage
+          Tag = -1
           Left = 90
           Top = 2
           Width = 16
           Height = 16
+          Hint = 'Driver status'
           Transparent = True
         end
       end
       object ToolBarFilterByMainCPU: TToolBar
         Left = 0
         Top = 0
-        Width = 608
+        Width = 617
         Height = 24
         EdgeBorders = []
         EdgeInner = esNone
@@ -791,8 +795,8 @@ object FormMain: TFormMain
         end
       end
       object ButtonUnicodeFunctions: TBitBtn
-        Left = 424
-        Top = 350
+        Left = 440
+        Top = 206
         Width = 129
         Height = 25
         Caption = 'Unicode Functions'
@@ -801,8 +805,8 @@ object FormMain: TFormMain
         OnClick = ButtonUnicodeFunctionsClick
       end
       object ButtonGetEmuVersion: TBitBtn
-        Left = 424
-        Top = 379
+        Left = 440
+        Top = 235
         Width = 137
         Height = 25
         Caption = 'Get Emu Version'
@@ -811,9 +815,9 @@ object FormMain: TFormMain
         OnClick = ButtonGetEmuVersionClick
       end
       object ButtonNoGameROMsWithDevROMs: TBitBtn
-        Left = 424
-        Top = 408
-        Width = 169
+        Left = 440
+        Top = 264
+        Width = 153
         Height = 25
         Caption = 'no ROMs, have dev ROMs'
         TabOrder = 4
@@ -821,17 +825,17 @@ object FormMain: TFormMain
         OnClick = ButtonNoGameROMsWithDevROMsClick
       end
       object BitBtn1: TBitBtn
-        Left = 432
-        Top = 304
-        Width = 75
+        Left = 440
+        Top = 176
+        Width = 137
         Height = 25
-        Caption = 'BitBtn1'
+        Caption = 'Get list "<display" tag'
         TabOrder = 7
         Visible = False
         OnClick = BitBtn1Click
       end
       object BitBtn2: TBitBtn
-        Left = 456
+        Left = 440
         Top = 144
         Width = 75
         Height = 25
@@ -841,17 +845,17 @@ object FormMain: TFormMain
         OnClick = BitBtn2Click
       end
       object BitBtn3: TBitBtn
-        Left = 480
+        Left = 440
         Top = 80
-        Width = 75
+        Width = 137
         Height = 25
-        Caption = 'BitBtn3'
+        Caption = 'Get CRC32 duplicates'
         TabOrder = 9
         Visible = False
         OnClick = BitBtn3Click
       end
       object BitBtn4: TBitBtn
-        Left = 448
+        Left = 440
         Top = 112
         Width = 105
         Height = 25
@@ -860,12 +864,42 @@ object FormMain: TFormMain
         Visible = False
         OnClick = BitBtn4Click
       end
+      object BitBtn5: TBitBtn
+        Left = 440
+        Top = 296
+        Width = 161
+        Height = 25
+        Caption = 'Check Weird Soft Exec Name'
+        TabOrder = 11
+        Visible = False
+        OnClick = BitBtn5Click
+      end
+      object BitBtn6: TBitBtn
+        Left = 440
+        Top = 328
+        Width = 161
+        Height = 25
+        Caption = 'All ROMs "nodump" ?'
+        TabOrder = 12
+        Visible = False
+        OnClick = BitBtn6Click
+      end
+      object BitBtn7: TBitBtn
+        Left = 440
+        Top = 368
+        Width = 161
+        Height = 25
+        Caption = 'Direct .zip image search'
+        TabOrder = 13
+        Visible = False
+        OnClick = BitBtn7Click
+      end
     end
     object PanelScreenshotsArea: TPanelEx
-      Left = 614
+      Left = 623
       Top = 0
       Width = 370
-      Height = 485
+      Height = 569
       Align = alRight
       BevelOuter = bvNone
       Color1 = clBtnFace
@@ -878,7 +912,7 @@ object FormMain: TFormMain
       Style = vgSolid
       object PanelWebBrowser: TPanel
         Left = 0
-        Top = 317
+        Top = 432
         Width = 370
         Height = 137
         BevelOuter = bvNone
@@ -1042,8 +1076,45 @@ object FormMain: TFormMain
             PopupMenu = PopupMenuImages
             Scale = 1.000000000000000000
             ScaleMode = smResize
-            ShowHint = True
+            ShowHint = False
             TabOrder = 0
+            OnMouseEnter = ImagesMouseEnter
+            OnMouseLeave = ImagesMouseLeave
+            object ImageHintPanel: TPanelEx
+              Tag = -1
+              Left = 20
+              Top = 20
+              Width = 151
+              Height = 41
+              Color1 = 16750899
+              Color2 = clSilver
+              Color3 = clYellow
+              Color4 = clTeal
+              ColorFrame = 16750899
+              Frames = [frLeft, frTop, frRight, frBottom]
+              Opacity = 200
+              ParentBackground = False
+              Style = vgSolid
+              Visible = False
+              object ImageHintText: TShadowLabel
+                Left = 8
+                Top = 8
+                Width = 135
+                Height = 25
+                Caption = 'Game Snapshot'
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clWhite
+                Font.Height = -19
+                Font.Name = 'Trebuchet MS'
+                Font.Style = [fsItalic]
+                ParentFont = False
+                ShowAccelChar = False
+                ShadowColor = clBlack
+                ShadowEnabled = True
+                EllipsType = etNone
+                Transparent = True
+              end
+            end
           end
         end
         object PanelGameDocuments: TPanel
@@ -1108,8 +1179,10 @@ object FormMain: TFormMain
           Left = 2
           Top = 0
           Hint = 'Enable threads (load images faster)'
+          Down = True
           ImageIndex = 10
           Style = tbsCheck
+          Visible = False
         end
         object ButtonImageViewMode: TToolButton
           Left = 33
@@ -1237,7 +1310,7 @@ object FormMain: TFormMain
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
     Left = 640
-    Top = 112
+    Top = 152
     object PopupImageStretch: TMenuItem
       Tag = 1
       AutoCheck = True
@@ -1310,6 +1383,7 @@ object FormMain: TFormMain
     end
     object PopupImageCategoryLayoutSettings: TMenuItem
       Caption = 'Category / Layout Settings'
+      Hint = 'Setup folders and layouts'
       OnClick = MenuImageCategoryLayoutSettingsClick
     end
   end
@@ -1433,28 +1507,28 @@ object FormMain: TFormMain
     object PopupCustomSettings: TMenuItem
       Caption = 'Custom Settings'
       object PopupSetCustomOptions: TMenuItem
-        Caption = 'Set [gamename] Custom Options'
-        Hint = 'Set [%s] Custom Options'
+        Caption = 'Set [gamename] Custom Game Options'
+        Hint = 'Set [%s] Custom Game Options'
         ImageIndex = 7
         OnClick = PopupSetCustomOptionsClick
       end
       object PopupDeleteCustomOptions: TMenuItem
         Tag = 1
-        Caption = 'Delete [gamename] Custom Options'
-        Hint = 'Delete [%s] Custom Options'
+        Caption = 'Delete [gamename] Custom Game Options'
+        Hint = 'Delete [%s] Custom Game Options'
         ImageIndex = 14
         OnClick = PopupSetCustomOptionsClick
       end
       object PopupSetGameDriverCustomOptions: TMenuItem
-        Caption = 'Set [drivername] Custom Options'
-        Hint = 'Set [%s] Custom Options'
+        Caption = 'Set [drivername] Custom Driver Options'
+        Hint = 'Set [%s] Custom Driver Options'
         ImageIndex = 7
         OnClick = PopupSetGameDriverCustomOptionsClick
       end
       object PopupDeleteGameDriverCustomOptions: TMenuItem
         Tag = 1
-        Caption = 'Delete [drivername] Custom Options'
-        Hint = 'Delete [%s] Custom Options'
+        Caption = 'Delete [drivername] Custom Driver Options'
+        Hint = 'Delete [%s] Custom Driver Options'
         ImageIndex = 14
         OnClick = PopupSetGameDriverCustomOptionsClick
       end
@@ -1953,6 +2027,17 @@ object FormMain: TFormMain
     end
     object PopupThumbnails: TMenuItem
       Caption = 'Thumbnails'
+      object PopupThumbnailShowImages: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Images'
+        Checked = True
+        Hint = 'Enable preview screenshots panel'
+        ShortCut = 117
+        OnClick = PopupThumbnailShowImagesClick
+      end
+      object N8: TMenuItem
+        Caption = '-'
+      end
       object PopupThumbnailShowParentThumbs: TMenuItem
         AutoCheck = True
         Caption = 'Show Parent Thumbails'
@@ -1965,12 +2050,6 @@ object FormMain: TFormMain
         Caption = 'Keep Aspect Ratio'
         Checked = True
         OnClick = PopupThumbnailKeepAspectRatioClick
-      end
-      object PopupThumbnailShowImagesGameDocsPanel: TMenuItem
-        AutoCheck = True
-        Caption = 'Show Images/Game Docs Panel'
-        Hint = 'Enable preview images/game docs'
-        OnClick = PopupThumbnailShowImagesGameDocsPanelClick
       end
       object PopupThumbnailSettings: TMenuItem
         Caption = 'Customize'
@@ -1992,11 +2071,11 @@ object FormMain: TFormMain
       object N52: TMenuItem
         Caption = '-'
       end
-      object PopupThumbDeleteSelectedGameSnapshots: TMenuItem
-        Caption = 'Delete Selected Game Snapshots'
+      object PopupThumbDeleteSelectedGameSnapshot: TMenuItem
+        Caption = 'Delete Selected Game Snapshot'
         ImageIndex = 14
         ShortCut = 24660
-        OnClick = PopupThumbDeleteSelectedGameSnapshotsClick
+        OnClick = PopupThumbDeleteSelectedGameSnapshotClick
       end
     end
     object PopupShowToolBar: TMenuItem
@@ -2233,6 +2312,28 @@ object FormMain: TFormMain
     object ButtonViewModeThumbnailSettings: TMenuItem
       Caption = 'Thumbnail Settings'
       SubMenuImages = IL_MenuPopup
+      object MenuThumbnailShowImages: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Images'
+        Checked = True
+        Hint = 'Enable preview screenshots panel'
+        OnClick = MenuThumbnailShowImagesClick
+      end
+      object N11: TMenuItem
+        Caption = '-'
+      end
+      object MenuThumbnailShowSystemIcon: TMenuItem
+        AutoCheck = True
+        Caption = 'Show System Icon'
+        Checked = True
+        OnClick = MenuThumbnailShowSystemIconClick
+      end
+      object MenuThumbnailShowGameIcon: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Game Icon'
+        Checked = True
+        OnClick = MenuThumbnailShowSystemIconClick
+      end
       object MenuThumbnailShowParentThumbs: TMenuItem
         AutoCheck = True
         Caption = 'Show Parent Thumbails'
@@ -2246,11 +2347,37 @@ object FormMain: TFormMain
         Checked = True
         OnClick = MenuThumbnailKeepAspectRatioClick
       end
-      object MenuThumbnailShowImagesGameDocsPanel: TMenuItem
+      object MenuThumbnailAlphaBlendedIcons: TMenuItem
         AutoCheck = True
-        Caption = 'Show Images/Game Docs Panel'
-        Hint = 'Enable preview images/game docs'
-        OnClick = MenuThumbnailShowImagesGameDocsPanelClick
+        Caption = 'Alpha Blended Icons'
+        Checked = True
+        Hint = 'No white background'
+        Visible = False
+      end
+      object MenuThumbnailSystemIconSize: TMenuItem
+        Tag = 1
+        Caption = 'System Icon Size'
+        object MenuThumbnailSystemIconSize_Default24x24: TMenuItem
+          AutoCheck = True
+          Caption = 'Medium (24x24)'
+          RadioItem = True
+          OnClick = MenuThumbnailSystemIconSize_Default24x24Click
+        end
+        object MenuThumbnailSystemIconSize_Large32x32: TMenuItem
+          Tag = 1
+          AutoCheck = True
+          Caption = 'Large (32x32)'
+          Checked = True
+          RadioItem = True
+          OnClick = MenuThumbnailSystemIconSize_Default24x24Click
+        end
+        object MenuThumbnailSystemIconSize_ExtraLarge48x48: TMenuItem
+          Tag = 2
+          AutoCheck = True
+          Caption = 'Extra Large (48x48)'
+          RadioItem = True
+          OnClick = MenuThumbnailSystemIconSize_Default24x24Click
+        end
       end
       object N37: TMenuItem
         Caption = '-'
@@ -2648,10 +2775,74 @@ object FormMain: TFormMain
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
     end
+    object ButtonShowEnd: TMenuItem
+      AutoCheck = True
+      Caption = 'End'
+      Hint = 'End'
+      ImageIndex = 9
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowBoss: TMenuItem
+      AutoCheck = True
+      Caption = 'Boss'
+      Hint = 'Boss'
+      ImageIndex = 10
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowLogo: TMenuItem
+      AutoCheck = True
+      Caption = 'Logo'
+      Hint = 'Logo'
+      ImageIndex = 11
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowScore: TMenuItem
+      AutoCheck = True
+      Caption = 'Score'
+      Hint = 'Score'
+      ImageIndex = 12
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowVersus: TMenuItem
+      AutoCheck = True
+      Caption = 'Versus'
+      Hint = 'Versus'
+      ImageIndex = 13
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowGameOver: TMenuItem
+      AutoCheck = True
+      Caption = 'Game Over'
+      Hint = 'Game Over'
+      ImageIndex = 14
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowHowToPlay: TMenuItem
+      AutoCheck = True
+      Caption = 'How to Play'
+      Hint = 'How to Play'
+      ImageIndex = 15
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
+    object ButtonShowSelect: TMenuItem
+      AutoCheck = True
+      Caption = 'Select'
+      Hint = 'Select'
+      ImageIndex = 16
+      RadioItem = True
+      OnClick = ButtonShowGameSnapshotClick
+    end
     object ButtonShowInternetGameInfo: TMenuItem
       AutoCheck = True
       Caption = 'Internet Game Info'
-      ImageIndex = 9
+      ImageIndex = 17
       RadioItem = True
       OnClick = ButtonShowGameSnapshotClick
     end
@@ -2994,8 +3185,16 @@ object FormMain: TFormMain
       RadioItem = True
       OnClick = FilterGameTitle_TitleClick
     end
-    object FilterGameTitle_NumberofPlayers: TMenuItem
+    object FilterGameTitle_SoftwareListName: TMenuItem
       Tag = 11
+      AutoCheck = True
+      Caption = 'Software List Name'
+      Hint = 'List supported machines of a software list'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_NumberofPlayers: TMenuItem
+      Tag = 12
       AutoCheck = True
       Caption = '# of Players'
       Hint = 'nplayers.ini optional'
@@ -3682,8 +3881,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 704
-    Top = 120
+    Left = 696
+    Top = 152
     object CenterSplitter1: TMenuItem
       Caption = 'Center This Splitter'
       OnClick = CenterSplitter1Click
@@ -3754,11 +3953,11 @@ object FormMain: TFormMain
     object N46: TMenuItem
       Caption = '-'
     end
-    object MenuShowFavoriteIconinGamesList: TMenuItem
+    object MenuShowFavoriteIconInGamesList: TMenuItem
       AutoCheck = True
       Caption = 'Show Favorite Icon in Games'
       Hint = 'Enable favorite icon (details/thumbnail view)'
-      OnClick = MenuShowFavoriteIconinGamesListClick
+      OnClick = MenuShowFavoriteIconInGamesListClick
     end
   end
   object IL_MiscToolBarSmall: TImageList
@@ -3985,6 +4184,31 @@ object FormMain: TFormMain
       Caption = 'Reset Columns Width'
       OnClick = PopupMachinesListSidePanelResetColumnsWidthClick
     end
+    object PopupMachinesListSidePanelIconSize: TMenuItem
+      Tag = 2
+      Caption = 'Icon Size'
+      object PopupMachinesListSidePanelLarge32x32: TMenuItem
+        AutoCheck = True
+        Caption = 'Large (32x32)'
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelSmall16x16Click
+      end
+      object PopupMachinesListSidePanelStandard242x4: TMenuItem
+        Tag = 1
+        AutoCheck = True
+        Caption = 'Standard (242x4)'
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelSmall16x16Click
+      end
+      object PopupMachinesListSidePanelSmall16x16: TMenuItem
+        Tag = 2
+        AutoCheck = True
+        Caption = 'Small (16x16)'
+        Checked = True
+        RadioItem = True
+        OnClick = PopupMachinesListSidePanelSmall16x16Click
+      end
+    end
   end
   object PopupSearchBarControlsFilter: TBcBarPopupMenu
     Tag = 1
@@ -4014,7 +4238,13 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 688
+    Left = 680
     Top = 8
+  end
+  object IL_StandardIconsThumbnail: TImageList
+    Height = 128
+    Width = 128
+    Left = 104
+    Top = 176
   end
 end

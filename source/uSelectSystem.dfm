@@ -111,9 +111,9 @@ object FormSelectSystem: TFormSelectSystem
     WordWrap = True
   end
   object ScanModeCurrentTaskOnly: TAdvOfficeCheckBox
-    Left = 417
+    Left = 415
     Top = 145
-    Width = 113
+    Width = 115
     Height = 20
     Hint = 
       'The selected mode will be used only for the current task'#13#10'Unchec' +
@@ -275,7 +275,6 @@ object FormSelectSystem: TFormSelectSystem
       Selection.Color = 10902593
       Selection.FullCellPaint = True
       Selection.FullItemPaint = True
-      Selection.Gradient = True
       Selection.GradientColorBottom = 16506264
       Selection.GradientColorTop = 15582647
       Selection.InactiveBorderColor = 10902593

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Classes, Graphics, Controls, Forms, GR32_Image, StdCtrls, ExtCtrls,
-  PanelEx, ShadowLabel, uCommon, SysUtils, Buttons;
+  PanelEx, ShadowLabel, uCommon, SysUtils, Buttons, GraphicEx;
 
 type
   TFormImageDeleteRename = class(TForm)
@@ -15,10 +15,9 @@ type
     ImagePreviewFrame: TPanelEx;
     ImagePreview: TImage32;
     LabelGameStatus: TShadowLabel;
-    LabelFileSize: TShadowLabel;
     GameIcon: TImage;
     LabelGameDetails: TShadowLabel;
-    LabelFileType: TShadowLabel;
+    LabelSystemTitle: TShadowLabel;
     PanelEx1: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
@@ -27,6 +26,10 @@ type
     LabelImageCategory: TShadowLabel;
     Shape1: TShape;
     LabelSoftwareListTitle: TShadowLabel;
+    LabelFileSize: TShadowLabel;
+    LabelDateTime: TShadowLabel;
+    LabelFileType: TShadowLabel;
+    LabelFileTypeMismatch: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure RenameImageEditBoxKeyPress(Sender: TObject; var Key: Char);
@@ -49,7 +52,23 @@ uses uMain;
 {$R *.dfm}
 
 procedure TFormImageDeleteRename.FormShow(Sender: TObject);
+var
+  iFileExt: String;
+  iType: TImageType;
 begin
+  if Screen.Width < 720 then
+     begin
+       LabelGameTitle.Width:= 556;
+       LabelGameStatus.Left:= 538;
+       LabelSoftwareListTitle.Width:= 348;
+       LabelFilename.Width:= 348;
+       LabelFileSize.Width:= 290;
+       LabelDateTime.Width:= 290;
+       LabelFileType.Width:= 290;
+       LabelFileTypeMismatch.Left:= 355;
+       ButtonOk.Left:= 424;
+       ButtonCancel.Left:= 522;
+     end;
   FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
                                               GameIcon.Picture.Icon);
   //FormMain.LoadGameIDThumbIcon(GameIcon, FormMain.MemGameInfo.eROMIdentification);
@@ -65,30 +84,49 @@ begin
        LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
      end;
 
-  LabelFileType.Caption:= FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True); // GetFileTypeStr(LabelFilename.Hint);
+  LabelSystemTitle.Caption:= FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True); // GetFileTypeStr(LabelFilename.Hint);
   LabelGameStatus.Caption:= LabelGameStatus.Caption+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
   LabelFilename.Caption:= LabelFilename.Hint;
-  ImagePreview.Bitmap.LoadFromFile(LabelFilename.Caption);
 
+  iType:= FormMain.LoadPreviewImage(LabelFilename.Caption, ImagePreview);
+  iFileExt:= ExtractFileExtW(LabelFilename.Caption);
 
+  case iType of
+    ifPNG:
+      begin
+        LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.png');
+        LabelFileType.Caption:= 'File Type: Portable Network Graphics (PNG)';
+      end;
+    ifJPG:
+      begin
+        LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.jpg');
+        LabelFileType.Caption:= 'File Type: Joint Photographic Experts Group (JPEG)';
+      end;
+    ifGIF:
+      begin
+        LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.gif');
+        LabelFileType.Caption:= 'File Type: Graphics Interchange Format (GIF)';
+      end;
+    ifBMP:
+      begin
+        LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.bmp');
+        LabelFileType.Caption:= 'File Type: Bitmap Image (BMP)';
+      end;
+  end;
 
-  LabelFileSize.Caption:= FormMain.GetSizeType(GetFileSize(LabelFilename.Hint), False);
-  LabelFileSize.Caption:= LabelFileSize.Caption+
-                          Format('%'+IntToStr(43-Length(LabelFileSize.Caption))+'s',
-                                 [FormMain.GetDateTimeStr(FileAge(LabelFilename.Hint))]);
-
-  //LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSize(LabelFilename.Hint), False);
-  //LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAge(LabelFilename.Hint));
+  LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSizeW(LabelFilename.Caption), False);
+  LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAgeW(LabelFilename.Caption));
 
   FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
   case ImageCategoryIcon.Tag of
     0: LabelImageCategory.Caption:= 'Title';
     1: LabelImageCategory.Caption:= 'Snap';
     5: LabelImageCategory.Caption:= 'CPanel';
-    6: LabelImageCategory.Caption:= 'CP Layout';
+    6: LabelImageCategory.Caption:= 'Cover';
     8: LabelImageCategory.Caption:= 'Game Art';
+    15: LabelImageCategory.Caption:= 'How To';
   else
        LabelImageCategory.Caption:= ImageCategoryArray[ImageCategoryIcon.Tag, 1];
   end;
@@ -120,7 +158,7 @@ end;
 procedure TFormImageDeleteRename.RenameImageEditBoxKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if Key in ['/', '\', '*', '?', '<', '>', '|', ':', ';'] then
+  if Key in ['/', '\', '*', '?', '<', '>', '|', ':', ';', '"'] then
      begin
        Key:= Char(0);
        Exit;

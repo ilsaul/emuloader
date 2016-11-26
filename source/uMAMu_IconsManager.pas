@@ -1345,7 +1345,9 @@ procedure TFormMAMu_IconsManager.MissingIconsListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(TMissingIconInfo(Item).eGameStatus,
+  FormMain.GetCanvasFontCustom(
+                TMissingIconInfo(Item).eSystemID,
+                TMissingIconInfo(Item).eGameStatus,
                 TMissingIconInfo(Item).eDriverStatus,
                 TMissingIconInfo(Item).eClone, ACanvas, True);
   if MissingIconsList.View = elsTile then

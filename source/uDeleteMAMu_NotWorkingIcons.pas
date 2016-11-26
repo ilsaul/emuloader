@@ -243,7 +243,9 @@ procedure TFormDeleteMAMu_NotWorkingIcons.NotWorkingIconsItemPaintText(
 begin
   if not (CheckNameZZZ(TNotWorkingGameInfo(Item).eName)) then
      begin
-       FormMain.GetCanvasFontCustom(TNotWorkingGameInfo(Item).eGameStatus,
+       FormMain.GetCanvasFontCustom(
+                      TNotWorkingGameInfo(Item).eSystemID,
+                      TNotWorkingGameInfo(Item).eGameStatus,
                       TNotWorkingGameInfo(Item).eDriverStatus,
                       TNotWorkingGameInfo(Item).eClone, ACanvas, True);
      end

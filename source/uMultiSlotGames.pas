@@ -41,7 +41,7 @@ var
 
 implementation
 
-uses uMain;
+uses uMain, uCommon;
 
 {$R *.dfm}
 
@@ -181,7 +181,8 @@ begin
      end;
     1:
      begin
-       FormMain.GetCanvasFontCustom(Item.Tag,
+       FormMain.GetCanvasFontCustom(idMAME,
+                                    Item.Tag,
                                     Item.StateImageIndexes[7],
                                     Item.Captions[3], ACanvas);
      end;

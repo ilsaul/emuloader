@@ -13,6 +13,7 @@ type
   TEasyGameInfo_dc = class(TEasyItemStored)
   private
     fROMIdentification: Integer;
+    fIsFavorite: Boolean;
     fTitle: WideString;
     fName,
     fClone,
@@ -27,6 +28,7 @@ type
     function GetCaptions(Column: Integer): WideString; override;
   public
     property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
+    property eIsFavorite: Boolean read fIsFavorite write fIsFavorite;
     property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
@@ -377,6 +379,7 @@ var
     addItem:= DeleteClonesList.Items.AddCustom(TEasyGameInfo_dc, nil);
     addItem.ImageIndex:= FormMain.GetMAMEImageIndex(FormMain.TempGameVars.eROMIdentification, FormMain.TempGameVars.eSoftwareName);
     addItem.StateImageIndexes[0]:= FormMain.TempGameVars.eSystemID;
+    TEasyGameInfo_dc(addItem).eIsFavorite:= FormMain.TempGameVars.eIsFavorite;
     TEasyGameInfo_dc(addItem).eTitle:= FormMain.TempGameVars.eTitle;
     TEasyGameInfo_dc(addItem).eName:= FormMain.TempGameVars.eName;
     TEasyGameInfo_dc(addItem).eClone:= FormMain.TempGameVars.eClone;
@@ -482,7 +485,9 @@ procedure TFormDeleteCloneImages.DeleteClonesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(TEasyGameInfo_dc(Item).eGameStatus,
+  FormMain.GetCanvasFontCustom(
+                TEasyGameInfo_dc(Item).eSystem,
+                TEasyGameInfo_dc(Item).eGameStatus,
                 TEasyGameInfo_dc(Item).eDriverStatus,
                 TEasyGameInfo_dc(Item).eClone, ACanvas, True);
 end;

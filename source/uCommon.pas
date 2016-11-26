@@ -8,11 +8,12 @@ uses
   Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
   Graphics, SysUtils, ShlObj, Forms, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
-  uMessageBox, uSelectDirectory, Math, MPCommonUtilities, ShadowLabel;//, ActiveX; //, TlHelp32;
+  uMessageBox, uSelectDirectory, Math, MPCommonUtilities, ShadowLabel;
 
 const
   MaxArcadeSystems = 8;
   MaxIniCountMAME: Byte = 12; // MAME .ini files array ... see more in uMain.GetCustomIniFileMAME() function
+  MaxImagePerCategory = 30;
 
   idMAME       = 1;
   idSupermodel = 2;
@@ -23,6 +24,10 @@ const
   idSegaModel2 = 7;
   idZiNc       = 8;
   idMultiSys   = 500;
+
+  //idFontParent      = 0;
+  //idFontClone       = 1;
+  //idFontMissingROMs = 2;
   
   aOrientation: packed array[-1..1] of String = ('', 'Horizontal', 'Vertical');
   aStatus: packed array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
@@ -37,54 +42,62 @@ const
   SystemStr: String[1] = '"';
   CommandPromptStr: String = 'cmd.exe /c ';
 
-  ImageCategoryArray: packed array[0..9] of packed array[0..4] of String = (
-    //IconFileName, IniSectionName, NotAvailableName, default folder, mame.ini entry name
-     ('image_00_titlesnap', 'TitleSnapshot', 'title.png', 'titles', 'titles_directory'),
-     ('image_01_gamesnap', 'GameSnapshot', 'ingame.png', 'snap', 'snapshot_directory'),
-     ('image_02_marquee', 'Marquee', 'marquee.png', 'marquees', 'marquees_directory'),
-     ('image_03_flyer', 'Flyer', 'flyer.png', 'flyers', 'flyers_directory'),
-     ('image_04_cabinet', 'Cabinet', 'cabinet.png', 'cabinets', 'cabinets_directory'),
-     ('image_05_cpanel', 'ControlPanel', 'controlpanel.png', 'cpanel', 'cpanels_directory'),
-     ('image_06_cover', 'SoftwareCover', 'softwarecover.png', 'covers', 'covers_directory'),
-     ('image_07_pcb', 'PCB', 'pcb.png', 'pcb', 'pcbs_directory'),
-     ('image_08_gameartwork', 'GameArtwork', 'ingameartwork.png', 'artpreview', 'artwork_preview_directory'),
-     ('image_09_internet', 'InternetGameInfo', '', '', ''));
+  ImageCategoryArray: packed array[0..17] of packed array[0..4] of String = (
+    //IconFileName,           IniSectionName,     NotAvailableName,    default path, ui.ini / mame.ini entry name
+     ('image_00_titlesnap',   'TitleSnapshot',    'title.png',         'titles',     'titles_directory'),
+     ('image_01_gamesnap',    'GameSnapshot',     'ingame.png',        'snap',       'snapshot_directory'),
+     ('image_02_marquee',     'Marquee',          'marquee.png',       'marquees',   'marquees_directory'),
+     ('image_03_flyer',       'Flyer',            'flyer.png',         'flyers',     'flyers_directory'),
+     ('image_04_cabinet',     'Cabinet',          'cabinet.png',       'cabinets',   'cabinets_directory'),
+     ('image_05_cpanel',      'ControlPanel',     'controlpanel.png',  'cpanel',     'cpanels_directory'),
+     ('image_06_cover',       'SoftwareCover',    'softwarecover.png', 'covers',     'covers_directory'),
+     ('image_07_pcb',         'PCB',              'pcb.png',           'pcb',        'pcbs_directory'),
+     ('image_08_gameartwork', 'GameArtwork',      'ingameartwork.png', 'artpreview', 'artwork_preview_directory'),
+     ('image_09_end',         'End',              'end.png',           'ends',       'ends_directory'),
+     ('image_10_boss',        'Boss',             'boss.png',          'bosses',     'bosses_directory'),
+     ('image_11_logo',        'Logo',             'logo.png',          'logo',       'logos_directory'),
+     ('image_12_score',       'Score',            'score.png',         'scores',     'scores_directory'),
+     ('image_13_versus',      'Versus',           'versus.png',        'versus',     'versus_directory'),
+     ('image_14_gameover',    'GameOver',         'gameover.png',      'gameover',   'gameover_directory'),
+     ('image_15_howto',       'HowToPlay',        'howtoplay.png',     'howto',      'howto_directory'),
+     ('image_16_select',      'Select',           'select.png',        'select',     'select_directory'),
+     ('image_internet',       'InternetGameInfo', '', '', ''));
 
-  aColumns: packed array[0..23] of packed array[0..1] of String = (
-     //IniEntryName, ColumnTitle
-     ('Title', 'Title'),                      // 00
-     ('Year', 'Year'),                        // 01
-     ('Manufacturer', 'Manufacturer'),        // 02
+  aColumns: packed array[0..22] of packed array[0..1] of String = (
+     //IniEntryName,     ColumnTitle
+     ('Title',           'Title'),            // 00
+     ('Year',            'Year'),             // 01
+     ('Manufacturer',    'Manufacturer'),     // 02
 
-     ('Orientation', 'Orientation'),          // 03
-     ('Resolution', 'Resolution'),            // 04
-     ('RefreshRate', 'Refresh Rate'),         // 05
+     ('Orientation',     'Orientation'),      // 03
+     ('Resolution',      'Resolution'),       // 04
+     ('RefreshRate',     'Refresh Rate'),     // 05
 
-     ('Category', 'Category'), // catver.ini (MAME arcade); mess.ini (version.ini pack from AntoPISA); non-arcade machines -listxml; softlist <description> (hash\softwarelist.xml files)
-     ('VersionAdded', 'Version Added'),       // 07
+     ('Category',        'Category'),         // 06 catver.ini (MAME arcade); mess.ini (version.ini pack from AntoPISA); non-arcade machines -listxml; softlist <description> (hash\softwarelist.xml files)
+     ('VersionAdded',    'Version Added'),    // 07
 
-     ('Name', 'Game Name'),                   // 08
-     ('Clone', 'Clone of'),                   // 09
-     ('DriverName', 'Driver Name'),           // 10
+     ('Name',            'Game Name'),        // 08
+     ('Clone',           'Clone of'),         // 09
+     ('DriverName',      'Driver Name'),      // 10
 
-     ('NumPlayers', 'Players'),               // 11
+     ('NumPlayers',      'Players'),          // 11
 
-     ('DriverStatus', 'Driver Status'),
+     ('DriverStatus',    'Driver Status'),    // 12
      ('EmulationStatus', 'Emulation Status'), // 13
-     ('ColorStatus', 'Color Status'),         // 14
-     ('SoundStatus', 'Sound Status'),         // 15
-     ('GraphicStatus', 'Graphic Status'),     // 16
+     ('ColorStatus',     'Color Status'),     // 14
+     ('SoundStatus',     'Sound Status'),     // 15
+     ('GraphicStatus',   'Graphic Status'),   // 16
 
-     ('Played', 'Played'),                    // 17
-     ('Language', 'Language'),                // 18
-     ('GameStatus', 'Game Status'),           // 19
-     ('GameSize', 'Game Size'),               // 20
-     ('LastPlayed', 'Last Played'),           // 21
-     ('Playtime', 'Playtime'),                // 22
-     ('Usage', 'Usage'));                     // 23
+     ('Played',          'Played'),           // 17
+     ('Language',        'Language'),         // 18
 
-  aColumnsWidth: packed array[0..23] of Integer = ( //           13  14  15  16
-    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 130, 115, 130, 110, 200);
+     ('GameSize',        'Game Size'),        // 19
+     ('LastPlayed',      'Last Played'),      // 20
+     ('Playtime',        'Playtime'),         // 21
+     ('SoftwareName',    'Software Name'));   // 22
+
+  aColumnsWidth: packed array[0..22] of Integer = ( //           13  14  15  16           19   20   21   22
+    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 115, 130, 110, 130);
 
   aColumnsMachinesList: packed array[0..6] of String =
      ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // Machines List Side Panel
@@ -92,34 +105,45 @@ const
   aColumnsWidthMachinesList: packed array[0..6] of Integer =         // Machines List Side Panel
      (250, 45, 120, 85, 85, 95, 90);
 
-  aColumnsSoftwareListOrder: packed array[0..13] of Integer =
+  aColumnsSoftwareListOrder: packed array[0..11] of Integer =
      ( 0,  // 00 -> title
        1,  // 01 -> year
        2,  // 02 -> manufacturer
        6,  // 03 -> category
-      23,  // 04 -> usage tip
-      17,  // 05 -> times played
-      21,  // 06 -> last played date/time
-      22,  // 07 -> total playtime
-       8,  // 08 -> game name
-       9,  // 09 -> clone of
-      12,  // 10 -> driver status
-      13,  // 11 -> emulation status
-      20,  // 12 -> game size
-      19); // 13 -> game set status
+      17,  // 04 -> times played
+      20,  // 05 -> last played date/time
+      21,  // 06 -> total playtime
+       8,  // 07 -> game name
+       9,  // 08 -> clone of
+      12,  // 09 -> driver status
+      13,  // 10 -> emulation status
+      19); // 11 -> game size
 
   ChecksumMode: array [0..4] of TMessageDigestClass = (
     TMD2, TMD4, TMD5, TSHA1, TRIPEMD160);
 
   ListSelectionColors: packed array[0..4] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red),
-    (($00a65c41, $00415ca6),  // 0 -> bar single color
+    //(($00fcdcc3, $00c3dcfc), // new single color (October 26, 2016)
+    // old single color (($00a65c41, $00415ca6),  // 0 -> bar single color
+    (($00fcdbc1, $00c1dbfc),  // 0 -> bar single color
      ($00fcebdc, $00dcebfc),  // 1 -> gradient color top
      ($00fcdbc1, $00c1dbfc),  // 2 -> gradient color bottom
-     ($00cea27d, $007da2ce),  // 3 -> gradient border color
-     ($00cc6600, $000066cc)); // 4 -> font color
+     ($00b98c64, $00648cb9),  // 3 -> gradient border color (new - October 26, 2016) R:100 G:140 B:185
+     //($00cea27d, $007da2ce),  // 3 -> gradient border color
+     (clBlack  , clMaroon));
+     //($006c0000, $0000006c)); // 4 -> font color (new color - October 26, 2016)
+     //($00cc6600, $000066cc)); // 4 -> font color
 
-     // Windows 10 selection bar colors
+  // Windows 10 selection bar colors
+  {ListSelectionColors: packed array[0..4] of packed array[0..1] of Integer =
+    // normal colors (blue), missing ROMs/CHDs colors (red),
+    (($00ffe8cc, $00cce8ff),  // 0 -> bar single color
+     ($00ffe8cc, $00cce8ff),  // 1 -> gradient color top
+     ($00ffe2bf, $00bfe2ff),  // 2 -> gradient color bottom
+     ($00ffd199, $0099d1ff),  // 3 -> gradient border color
+     (clBlack  , clMaroon));}
+
      // $00e8a766 // border color (blue)
      // $00ffe8d1 // bar single color (blue)
 
@@ -131,10 +155,18 @@ const
 
   ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red)
+    (($00d2d2c8, $00c8d2d2), // 0 -> inactive single color R:222 G:222 B:222
+     ($00dcdcdc, $00dcdcdc), // 1 -> inactive color, gradient mode(same as gradient color top)
+     ($008e8e8e, $008e8e8e), // 2 -> inactive border color, gradient mode (same as bar single color) R:142 G:142: B:142
+     (clBlack, clBlack));      // 3 -> inactive font color
+
+  {ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
+    // normal colors (blue), missing ROMs/CHDs colors (red)
     (($00d2d2c8, $00c8d2d2), // 0 -> inactive single color
+    // ($00f7f7f7, $00f7f7f7), // 1 -> inactive color, gradient mode(same as gradient color top)
      ($00dcdcdc, $00dcdcdc), // 1 -> inactive color, gradient mode(same as gradient color top)
      ($00cdcdcd, $00cdcdcd), // 2 -> inactive border color, gradient mode (same as bar single color)
-     (clGray, clGray));      // 3 -> inactive font color
+     (clSilver, clSilver));      // 3 -> inactive font color}
 
   // too light colors... better on a dark background
   //ListSelectionColorInactiveMachinesList: packed array[0..3] of packed array[0..1] of Integer =
@@ -173,8 +205,10 @@ function  GetFileSize(const AFileName: String): Int64;
 function  ShortToLongFileName(const ShortName: String): String;
 function  ShortToLongPath(const ShortName: String): String;
 function  LongToShortFileName(const LongName: String): String;
-function  LongToShortPath(const LongName: String): String;
+//function  LongToShortPath(const LongName: String): String; // this function doesn't work, use ExtractShortPathName() instead!!! October 10, 2016
 {$ENDIF WIN32}
+
+function  ExtractShortPathName(const FileName: string): string; // function from Delphi XE 10 Seattle source code
 
 function  Pos(const substr, str: WideString): Integer; overload;
 function  PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
@@ -187,7 +221,7 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 procedure CallShellExecute(Sender: TObject; Visibility: Word = SW_SHOWNORMAL);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
-function  GenerateMessage(const WindowMessage, TitleMessage: String; const DescriptionMessage: String = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
+function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                           IconIndex: Integer = 0): Integer;
 procedure CallMessageBox;
 procedure FreeMessageBox;
@@ -260,7 +294,7 @@ function  GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; Repl
 function  GetExtIcon(const FileExtension: String; ImageListHolder: TImageList): Integer;
 function  GetAssociatedApp(fileExtension: String; ReturnExeFileOnly: Boolean = False): String;
 
-function GetFileTypeStr(const strFilename: String): String;
+function  GetFileTypeStr(const strFilename: String): String;
 
 function  GetWinTempDir: String;
 function  GetWindowsDir: String;
@@ -464,29 +498,49 @@ begin
          LastSlash:= StrRScan(TempPathPtr, '\');
        end;
   end;
-  Result:= TempPathPtr+Result;
+  Result:= TempPathPtr + Result;
 end;
 
-function LongToShortPath(const LongName: String): String;
-var
-  LastSlash: PChar;
-  TempPathPtr: PChar;
-begin
-  Result:= '';
-  TempPathPtr:= PChar(LongName);
-  LastSlash:= StrRScan(TempPathPtr, '\');
-  while LastSlash <> nil do
-  begin
-    Result:= '\' + LongToShortFileName(TempPathPtr) + Result;
-    if LastSlash <> nil then
-       begin
-         LastSlash^:= Char(0);
-         LastSlash:= StrRScan(TempPathPtr, '\');
-       end;
-  end;
-  Result:= TempPathPtr+Result;
-end;
+// this function doesn't work, use ExtractShortPathName() instead!!! October 10, 2016
+//function LongToShortPath(const LongName: String): String;
+//var
+//  LastSlash: PChar;
+//  TempPathPtr: PChar;
+//begin
+//  Result:= '';
+//  TempPathPtr:= PChar(LongName);
+//  LastSlash:= StrRScan(TempPathPtr, '\');
+//  while LastSlash <> nil do
+//  begin
+//    Result:= '\' + LongToShortFileName(TempPathPtr) + Result;
+//    if LastSlash <> nil then
+//       begin
+//         LastSlash^:= Char(0);
+//         LastSlash:= StrRScan(TempPathPtr, '\');
+//       end;
+//  end;
+//  Result:= TempPathPtr+Result;
+//end;
 {$ENDIF WIN32}
+
+function ExtractShortPathName(const FileName: string): string; // function from Delphi XE 10 Seattle source code
+var
+  Buffer: array[0..MAX_PATH - 1] of Char;
+  Len: Integer;
+begin
+  // param "FileName" can be only path (with or without "\") or with a filename at the end
+  Len := GetShortPathName(PChar(FileName), Buffer, Length(Buffer));
+  if Len <= Length(Buffer) then
+    SetString(Result, Buffer, Len)
+  else
+    if Len > 0 then
+    begin
+      SetLength(Result, Len);
+      Len := GetShortPathName(PChar(FileName), PChar(Result), Len);
+      if Len < Length(Result) then
+        SetLength(Result, Len);
+    end;
+end;
 
 // delphi 2006 assembly functions!
 function Pos(const substr, str: WideString): Integer; overload;
@@ -961,7 +1015,7 @@ begin
   FreeMessageBox;
 end;
 
-function GenerateMessage(const WindowMessage, TitleMessage: String; const DescriptionMessage: String = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
+function GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                          IconIndex: Integer = 0): Integer;
 begin
   // icon index:
@@ -2935,7 +2989,7 @@ var
   iPath: String;
 begin
   Result:= False;
-  iPath:= ShortToLongPath(ExtractFilePath(Application.ExeName));
+  iPath:= ExtractFilePath(Application.ExeName);
   if not FileExists(iPath+'EmuLoader.ini') then
      Exit;
 

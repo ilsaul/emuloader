@@ -243,7 +243,6 @@ object FormDeleteCloneImages: TFormDeleteCloneImages
       Selection.FullCellPaint = True
       Selection.FullItemPaint = True
       Selection.FullRowSelect = True
-      Selection.Gradient = True
       Selection.MultiSelect = True
       Selection.RoundRectRadius = 2
       Selection.TextColor = clBlack

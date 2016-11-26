@@ -4,7 +4,7 @@ object FormColumnsEditor: TFormColumnsEditor
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Columns (Details / Grouped)'
-  ClientHeight = 416
+  ClientHeight = 445
   ClientWidth = 460
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -106,11 +106,11 @@ object FormColumnsEditor: TFormColumnsEditor
     ParentFont = False
     Transparent = True
   end
-  object Shape2: TShape
+  object ColumnsListVertBorder: TShape
     Left = 211
     Top = 0
     Width = 1
-    Height = 416
+    Height = 445
     Brush.Color = clBtnFace
     Pen.Color = 7891291
   end
@@ -144,7 +144,7 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object Label3: TLabel
     Left = 222
-    Top = 320
+    Top = 322
     Width = 231
     Height = 52
     AutoSize = False
@@ -166,20 +166,21 @@ object FormColumnsEditor: TFormColumnsEditor
     Left = 0
     Top = 0
     Width = 211
-    Height = 416
+    Height = 445
     BackGround.Enabled = True
+    CellSizes.Report.Height = 19
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Trebuchet MS'
+    EditManager.Font.Height = -13
+    EditManager.Font.Name = 'Consolas'
     EditManager.Font.Style = []
     UseDockManager = False
     DragManager.Enabled = True
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
+    Font.Height = -13
+    Font.Name = 'Consolas'
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clBlack
@@ -227,7 +228,6 @@ object FormColumnsEditor: TFormColumnsEditor
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
@@ -358,7 +358,7 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object PanelButtons: TPanelEx
     Left = 212
-    Top = 375
+    Top = 404
     Width = 248
     Height = 41
     Color1 = 15856113

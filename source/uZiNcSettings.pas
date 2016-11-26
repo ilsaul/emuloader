@@ -115,6 +115,7 @@ type
     { Private declarations }
     procedure ReadZiNc_cfg(iniFile: String);
     procedure WriteZiNc_cfg(const customIniFile: String);
+    procedure RemovePathFromFileName(EditHolder: TEdit);
   public
     emuIni,
     GameIni,
@@ -156,7 +157,7 @@ var
 
 begin
   try
-    elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+    elCFG:= TMemIniFile.Create(FormMain.GetEmulatorsFile);
     cmdString:= elCFG.ReadString(FormMain.GetSystemIniSection(idZiNc), 'roms_path', 'roms');
   finally
      FreeAndNil(elCFG);
@@ -375,7 +376,7 @@ begin
         if cmdString = '' then
            cmdString:= 'roms';
         try
-          elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+          elCFG:= TMemIniFile.Create(FormMain.GetEmulatorsFile);
           elCFG.WriteString(FormMain.GetSystemIniSection(idZiNc), 'roms_path', cmdString);
           elCFG.UpdateFile;
         finally
@@ -388,19 +389,27 @@ begin
      AddSetting('--use-sound=no');
 
   if (RendererZNC.Text <> '') and (LowerCase(RendererZNC.Text) <> 'renderer.znc') then
-     AddSetting('--renderer='+LongToShortPath(RendererZNC.Text));
+     AddSetting('--renderer='+ExtractShortPathName(RendererZNC.Text));
+     //AddSetting('--renderer='+LongToShortPath(RendererZNC.Text));
+
+
 
   if (RendererConfigFile.Text <> '') and (LowerCase(RendererConfigFile.Text) <> 'renderer.cfg') then
-     AddSetting('--use-renderer-cfg-file='+LongToShortPath(RendererConfigFile.Text));
+     AddSetting('--use-renderer-cfg-file='+ExtractShortPathName(RendererConfigFile.Text));
+     //AddSetting('--use-renderer-cfg-file='+LongToShortPath(RendererConfigFile.Text));
 
   if Rotate.ItemIndex > 0 then
      AddSetting('--rotate='+IntToStr(Rotate.ItemIndex));
 
   if (ControllerZNC.Text <> '') and (LowerCase(ControllerZNC.Text) <> 'controller.znc') then
-     AddSetting('--controller='+LongToShortPath(ControllerZNC.Text));
+     AddSetting('--controller='+ExtractShortPathName(ControllerZNC.Text));
+     //AddSetting('--controller='+LongToShortPath(ControllerZNC.Text));
 
   if ControllerConfigFile.Text <> '' then
-     AddSetting('--use-controller-cfg-file='+LongToShortPath(ControllerConfigFile.Text));
+     AddSetting('--use-controller-cfg-file='+ExtractShortPathName(ControllerConfigFile.Text));
+     //AddSetting('--use-controller-cfg-file='+LongToShortPath(ControllerConfigFile.Text));
+
+
 
   if SoundFilter.Checked then
      AddSetting('--sound-filter-enable=yes');
@@ -596,6 +605,22 @@ begin
 //  end;
 end;
 
+procedure TFormZiNcSettings.RemovePathFromFileName(EditHolder: TEdit);
+var
+  iFile, iEmuPath, iFilePath: String;
+begin
+  if EditHolder.Text = '' then
+     Exit;
+
+  iFilePath:= ExtractFilePath(EditHolder.Text);
+  if iFilePath = '' then
+     Exit;
+
+  iEmuPath:= ExtractFilePath(emuFileExec);
+  if SameText(iFilePath, iEmuPath) then
+     EditHolder.Text:= ExtractFileName(EditHolder.Text);
+end;
+
 procedure TFormZiNcSettings.RendererZNCChange(Sender: TObject);
 begin
 // disabled for now!!!!! March 14, 2016
@@ -609,23 +634,27 @@ procedure TFormZiNcSettings.ControllerZNCButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(9, 'Select a controller plugin', ControllerZNC, False);
+  RemovePathFromFileName(ControllerZNC);
 end;
 
 procedure TFormZiNcSettings.ControllerConfigFileButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(10, 'Select a controller config file', ControllerConfigFile, False);
+  RemovePathFromFileName(ControllerConfigFile);
 end;
 
 procedure TFormZiNcSettings.RendererZNCButtonSelectClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(9, 'Select a video renderer plugin', RendererZNC, False);
+  RemovePathFromFileName(RendererZNC);
 end;
 
 procedure TFormZiNcSettings.RendererConfigFileButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(10, 'Select a video renderer config file', RendererConfigFile, False);
+  RemovePathFromFileName(RendererConfigFile);
 end;
 
 procedure TFormZiNcSettings.FolderROMButtonSelectClick(Sender: TObject);

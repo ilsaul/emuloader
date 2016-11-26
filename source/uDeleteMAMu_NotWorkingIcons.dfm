@@ -110,7 +110,6 @@ object FormDeleteMAMu_NotWorkingIcons: TFormDeleteMAMu_NotWorkingIcons
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
     Selection.RoundRectRadius = 2

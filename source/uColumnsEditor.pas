@@ -26,7 +26,7 @@ type
     LabelButtonDefaultSize: TLabel;
     LabelButtonResetSize: TLabel;
     LabelButtonReloadProfileDefaultSettings: TLabel;
-    Shape2: TShape;
+    ColumnsListVertBorder: TShape;
     PanelButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
@@ -138,7 +138,7 @@ begin
            ImageIndex:= ColIndex;
            case ColIndex of
              17: Caption:= aColumns[ColIndex, 1]+' (count)';
-             21: Caption:= aColumns[ColIndex, 1]+' (date)';
+             20: Caption:= aColumns[ColIndex, 1]+' (date)';
            else
                  Caption:= aColumns[ColIndex, 1];
            end;
@@ -161,7 +161,7 @@ begin
           ImageIndex:= gColumn.Index; // 'gColumn.Index' never changes its value!!
           case gColumn.Index of
             17: Caption:= aColumns[gColumn.Index, 1]+' (count)';
-            21: Caption:= aColumns[gColumn.Index, 1]+' (date)';
+            20: Caption:= aColumns[gColumn.Index, 1]+' (date)';
           else
                 Caption:= aColumns[gColumn.Index, 1];
           end;
@@ -177,15 +177,6 @@ begin
                 Checked:= gColumn.Visible;
               end;
           end;
-
-          {if IsMachinesList then
-          begin
-            if not FormMain.IsValidSoftwareListColumn(gColumn.Index) then
-               begin
-                 Enabled:= False;
-                 Bold:= True;
-               end;
-          end;}
         end;
       end;
       case DefaultSettings of
@@ -200,14 +191,19 @@ begin
 end;
 
 procedure TFormColumnsEditor.Resize480Height;
+var
+  iDiff: Integer;
 begin
   if Screen.Height > 480 then
      Exit;
 
-  ColumnsListView.Height:= ColumnsListView.Height-62;
+  iDiff:= ColumnsListView.Height-402;
+
+  ColumnsListView.Height:= ColumnsListView.Height-iDiff;
+  ColumnsListVertBorder.Height:= ColumnsListVertBorder.Height-iDiff;
   ColumnsListView.Header.Columns[0].Width:= ColumnsListView.Header.Columns[0].Width-19;
 
-  PanelButtons.Top:= PanelButtons.Top-62;
+  PanelButtons.Top:= PanelButtons.Top-iDiff;
   FormColumnsEditor.ClientHeight:= 402;
 end;
 
@@ -251,18 +247,6 @@ begin
 
       end;
   end;
-
-{  gColumn:= FormMain.GamesListView.Header.FirstColumn;
-  repeat
-    if gColumn.Position <> gColumn.Index then
-       gColumn.Position:= gColumn.Index;
-    if gColumn.Width <> aColumnsWidth[gColumn.Index] then
-       gColumn.Width:= aColumnsWidth[gColumn.Index];
-    if not gColumn.Visible then
-       gColumn.Visible:= True;
-    gColumn:= FormMain.GamesListView.Header.NextColumn(gColumn);
-  until gColumn = nil;}
-
   FormMain.GamesListView.EndUpdate;
 end;
 
@@ -626,5 +610,6 @@ procedure TFormColumnsEditor.ButtonCustomizeColumnHeaderFontSetDefaultClick(Send
 begin
   FormMain.PopupDefaultHeaderFont.Click;
 end;
+
 
 end.

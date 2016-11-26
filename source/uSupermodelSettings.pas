@@ -171,7 +171,7 @@ var
 
 begin
   try
-    elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+    elCFG:= TMemIniFile.Create(FormMain.GetEmulatorsFile);
     StrValue:= elCFG.ReadString(FormMain.GetSystemIniSection(idSupermodel), 'roms_path', 'roms');
   finally
      FreeAndNil(elCFG);
@@ -356,7 +356,7 @@ begin
         if StrValue = '' then
            StrValue:= 'roms';
         try
-          elCFG:= TMemIniFile.Create(FormMain.GetFoldersEmulatorsFile);
+          elCFG:= TMemIniFile.Create(FormMain.GetEmulatorsFile);
           elCFG.WriteString(FormMain.GetSystemIniSection(idSupermodel), 'roms_path', StrValue);
           elCFG.UpdateFile;
         finally

@@ -246,13 +246,9 @@ var
     sysIndex:= Ord(FormMain.TempGameVars.eSystemID = idMAME); // 1-> MAME; 0-> HBMAME
     if SamplesFiles[sysIndex] = nil then
        Exit;
-    //if not Assigned(SamplesFiles[sysIndex]) then
-    //   Exit;
 
-    //Result:= (FormMain.TempGameVars.eSystemID in [idMAME, idHBMAME]) and (FormMain.TempGameVars.eAudioType = 2);
-    //if Result then
-       Result:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification) or
-                FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus);
+    Result:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification) or
+             FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus);
 
     if not Result then
        Exit;
@@ -494,6 +490,7 @@ procedure TFormScanAudioSamples.FilesListViewItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.GetCanvasFontCustom(
+                      TFileInfo(Item).eSystemID,
                       TFileInfo(Item).eGameStatus,
                       TFileInfo(Item).eDriverStatus,
                       TFileInfo(Item).eClone, ACanvas, True);

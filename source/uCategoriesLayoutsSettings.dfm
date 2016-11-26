@@ -1,10 +1,10 @@
 object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
-  Left = 369
-  Top = 215
+  Left = 1125
+  Top = 812
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Categories Settings'
-  ClientHeight = 397
+  ClientHeight = 473
   ClientWidth = 1300
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -27,7 +27,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     Left = 0
     Top = 0
     Width = 640
-    Height = 355
+    Height = 431
     Color1 = 15856113
     Color2 = 16448250
     Color3 = 12632284
@@ -38,7 +38,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     Style = vgSolid
     object LabelImageCategoryFolder: TShadowLabel
       Left = 12
-      Top = 310
+      Top = 390
       Width = 162
       Height = 15
       Hint = 'Images Folder [%s]'
@@ -57,7 +57,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     end
     object LabelImageBackgroundColor: TShadowLabel
       Left = 361
-      Top = 310
+      Top = 390
       Width = 112
       Height = 15
       Hint = 'Folder [%s]'
@@ -170,7 +170,6 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         Selection.Color = 10902593
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -186,7 +185,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       Left = 0
       Top = 125
       Width = 640
-      Height = 170
+      Height = 261
       Color1 = clWhite
       Color2 = clSilver
       Color3 = clYellow
@@ -199,8 +198,8 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         Tag = 1
         Left = 8
         Top = 8
-        Width = 642
-        Height = 152
+        Width = 632
+        Height = 228
         BorderStyle = bsNone
         CellSizes.Tile.Height = 76
         CellSizes.Tile.Width = 102
@@ -264,7 +263,6 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -279,27 +277,9 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         OnItemPaintText = ImageCategory_SelectorItemPaintText
         OnItemSelectionChanged = ImageCategory_SelectorItemSelectionChanged
       end
-      object ButtonCategoryToggleVisibility: TBitBtn
-        Left = 491
-        Top = 98
-        Width = 64
-        Height = 42
-        Hint = 'Toggle visible / not visible for all categories'
-        Caption = 'Hide All'#13#10'Categories'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-        OnClick = ButtonCategoryToggleVisibilityClick
-      end
       object PanelCategoryTitle: TPanelEx
         Left = 418
-        Top = 153
+        Top = 244
         Width = 222
         Height = 16
         Color1 = clWhite
@@ -315,6 +295,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
           Top = 0
           Width = 222
           Height = 16
+          Align = alClient
           Alignment = taCenter
           AutoSize = False
           Caption = 'CATEGORY TITLE'
@@ -334,10 +315,52 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
           Layout = tlCenter
         end
       end
+      object PanelShowHideCategories: TPanelEx
+        Left = 0
+        Top = 244
+        Width = 270
+        Height = 16
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = 7891291
+        Frames = []
+        ParentBackground = False
+        Style = vgSolid
+        object LabelShowHideCategories: TShadowLabel
+          Left = 0
+          Top = 0
+          Width = 270
+          Height = 16
+          Cursor = crHandPoint
+          Align = alClient
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'CLICK HERE TO HIDE ALL CATEGORIES'
+          Color = 16448250
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 10900224
+          Font.Height = -13
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsBold, fsItalic]
+          ParentColor = False
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = 14540253
+          ShadowEnabled = True
+          EllipsType = etNone
+          Transparent = False
+          Layout = tlCenter
+          OnClick = LabelShowHideCategoriesClick
+          OnMouseEnter = LabelShowHideCategoriesMouseEnter
+          OnMouseLeave = LabelShowHideCategoriesMouseLeave
+        end
+      end
     end
     object ImageCategoryFolder: TEdit
       Left = 8
-      Top = 328
+      Top = 408
       Width = 227
       Height = 21
       AutoSize = False
@@ -353,7 +376,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     end
     object ButtonImageCategoryFolder: TBitBtn
       Left = 236
-      Top = 328
+      Top = 408
       Width = 47
       Height = 21
       Hint = 'Click here to select a folder'
@@ -365,7 +388,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     end
     object ImageCategoryBackgroundColor: TColorBox
       Left = 357
-      Top = 327
+      Top = 408
       Width = 227
       Height = 22
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
@@ -383,7 +406,7 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
     object ButtonImageCategoryBackgroundColor: TBitBtn
       Tag = 1
       Left = 585
-      Top = 327
+      Top = 408
       Width = 47
       Height = 21
       Hint = 'Default background color'
@@ -687,7 +710,6 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
         Selection.FullCellPaint = True
         Selection.FullItemPaint = True
         Selection.FullRowSelect = True
-        Selection.Gradient = True
         Selection.GradientColorBottom = 16506264
         Selection.GradientColorTop = 15582647
         Selection.InactiveBorderColor = 10902593
@@ -794,9 +816,9 @@ object FormCategoryLayoutSettings: TFormCategoryLayoutSettings
       TabOrder = 0
     end
   end
-  object PanelEx1: TPanelEx
+  object PanelBottomButtons: TPanelEx
     Left = 0
-    Top = 355
+    Top = 431
     Width = 640
     Height = 42
     Color1 = 15856113

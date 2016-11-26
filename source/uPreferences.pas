@@ -26,7 +26,6 @@ type
     LabelMAMu_IconsFolder: TLabel;
     MAMu_IconsFolder: TEdit;
     ButtonMAMu_IconsFolderSelect: TBitBtn;
-    GameSelectionDarkFont: TAdvOfficeCheckBox;
     ImageEnableGripIcon: TAdvOfficeCheckBox;
     MAMu_Icon: TImage;
     ShadowLabel1: TShadowLabel;
@@ -137,6 +136,8 @@ type
     Label6: TLabel;
     LabelSnapDirAutoSearch: TShadowLabel;
     ButtonSnaplDirAutoSearchHelp: TBitBtn;
+    DisableDeleteSelectedGames: TAdvOfficeCheckBox;
+    LabelDisableDeleteSelectedGames: TLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -205,6 +206,7 @@ type
     procedure InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
     procedure InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
     procedure ButtonSnaplDirAutoSearchHelpClick(Sender: TObject);
+    procedure DisableDeleteSelectedGamesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -256,6 +258,7 @@ end;
 procedure TFormPreferences.GamesBackgroundColorSelect(Sender: TObject);
 begin
   FormMain.GamesListView.Color:= GamesBackgroundColor.Selected;
+  FormMain.MachinesListSidePanel.Color:= FormMain.GamesListView.Color;
 end;
 
 procedure TFormPreferences.ButtonGameDocumentsFontClick(
@@ -276,8 +279,8 @@ end;
 procedure TFormPreferences.ButtonGameDocumentsDefaultClick(Sender: TObject);
 begin
   FormMain.MAMEInfoTextHolder.Font.Color:= clBlack;
-  FormMain.MAMEInfoTextHolder.Font.Name:= 'Lucida Console';
-  FormMain.MAMEInfoTextHolder.Font.Size:= 8;
+  FormMain.MAMEInfoTextHolder.Font.Name:= 'Consolas';
+  FormMain.MAMEInfoTextHolder.Font.Size:= 9;
   FormMain.MAMEInfoTextHolder.Font.Style:= [];
   FormMain.SetSelectedColorBox(GameDocumentsBackgroundColor, GameDocumentsBackgroundColor.DefaultColorColor);
 end;
@@ -549,7 +552,7 @@ end;
 procedure TFormPreferences.ButtonSelectVideoPreviewMediaPlayerClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(2, 'Select a media player executable', VideoPreviewMediaPlayerExecutable, False);
-  FormMain.ReadVideoPreviewIni(True, True, False, False);
+  FormMain.ReadVideoPreviewIni(False, True, False);
 end;
 
 procedure TFormPreferences.ButtonClearVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -570,6 +573,8 @@ begin
                InternetMAMESoftwareListGameInfoLinkButtonDefault.Click;
             FormMain.UpdateVideoPreviewIni;
             FormMain.SetVideoPreviewState;
+
+            FormMain.WriteImageCategories(False, True);
           end;
      end;
 end;
@@ -624,7 +629,7 @@ end;
 procedure TFormPreferences.ButtonResetVideoPreviewMediaPlayerParametersClick(
   Sender: TObject);
 begin
-  FormMain.ReadVideoPreviewIni(False, True, False, False);
+  FormMain.ReadVideoPreviewIni(False, True, False);
 end;
 
 procedure TFormPreferences.ButtonHelpVideoPreviewMediaPlayerParametersClick(Sender: TObject);
@@ -705,6 +710,8 @@ begin
        if FormMain.PopupGameIconSize.Tag in [0, 1] then
           FormMain.GamesListView.PaintInfoItem.CaptionLines:= Ord(GameMultilineCaptions.Checked)+1;
      end;
+  if FormMain.PopupMachinesListSidePanelIconSize.Tag in [0] then //, 1] then
+     FormMain.MachinesListSidePanel.PaintInfoItem.CaptionLines:= Ord(GameMultilineCaptions.Checked)+1;
 end;
 
 procedure TFormPreferences.ButtonHelpVideoPreviewPlayDummyVideoClick(
@@ -722,7 +729,8 @@ begin
   FormMain.AddMsgText(' is empty, the media player parameters will be used automatically.'+#13#10+#13#10+
                       '    As a bonus, current playing video will be stopped when you want to start a game or exit the frontend.'+#13#10+
                       'Make sure the file ');
-  FormMain.AddMsgText('resources\images\no_image\novideo.avi', $00a65300, [fsBold]);
+  FormMain.AddMsgText('resources\images\novideo.avi', $00a65300, [fsBold]);
+  //FormMain.AddMsgText('resources\images\no_image\novideo.avi', $00a65300, [fsBold]);
   FormMain.AddMsgText(' exists or the dummy video will not load.');
   
   GenerateMessage('Help', 'Play Dummy Video to Stop Current Playback');
@@ -735,7 +743,7 @@ end;
 
 procedure TFormPreferences.ButtonResetVideoPreviewDummyVideoParametersClick(Sender: TObject);
 begin
-  FormMain.ReadVideoPreviewIni(False, False, True, False);
+  FormMain.ReadVideoPreviewIni(False, False, True);
 end;
 
 procedure TFormPreferences.ImagePanelOuterFrameColorSelect(
@@ -827,6 +835,12 @@ begin
                       '    Note that even if you select a custom folder for your video files, if not '+
                       'found, the files will also be searched in these folders!');
   GenerateMessage('Help', 'What is Snap Dir Auto-Search ?');
+end;
+
+procedure TFormPreferences.DisableDeleteSelectedGamesClick(Sender: TObject);
+begin
+  FormMain.PopupDeleteSelectedGames.Enabled:= not DisableDeleteSelectedGames.Checked;
+  FormMain.PopupExtraCopyMoveSelectedGames.Enabled:= FormMain.PopupDeleteSelectedGames.Enabled;
 end;
 
 end.

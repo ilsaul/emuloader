@@ -38,6 +38,9 @@ type
     procedure MachinesListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure ButtonResetToDefaultClick(Sender: TObject);
+    procedure MachinesListViewDblClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; MousePos: TPoint;
+      ShiftState: TShiftState; var Handled: Boolean);
   private
     { Private declarations }
     //SelectedMachineName: String;
@@ -220,7 +223,8 @@ procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
+  //FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
+  FormMain.GetCanvasFontCustom(FormMain.MemGameInfo.eSystemID, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
   if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
@@ -272,7 +276,7 @@ begin
       if KeepGame then
          begin
            if HidePreliminaryMachines.Checked then
-              KeepGame:= Item.StateImageIndex <> 2;
+              KeepGame:= Item.StateImageIndexes[6] <> 2;
          end;
     end;
     Item.Visible:= KeepGame;
@@ -310,11 +314,17 @@ begin
      FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
 end;
 
-
 procedure TFormSoftwareListMachineToRunGame.ButtonResetToDefaultClick(
   Sender: TObject);
 begin
   ReselectItem(DefaultMachineName);
+end;
+
+procedure TFormSoftwareListMachineToRunGame.MachinesListViewDblClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
+begin
+  ButtonYes.Click;
 end;
 
 end.

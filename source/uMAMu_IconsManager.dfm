@@ -154,7 +154,6 @@ object FormMAMu_IconsManager: TFormMAMu_IconsManager
       Selection.FullCellPaint = True
       Selection.FullItemPaint = True
       Selection.FullRowSelect = True
-      Selection.Gradient = True
       Selection.MouseButton = [cmbLeft, cmbRight]
       Selection.MultiSelect = True
       Selection.RoundRectRadius = 2
@@ -390,7 +389,6 @@ object FormMAMu_IconsManager: TFormMAMu_IconsManager
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
     Selection.RoundRectRadius = 2

@@ -16,9 +16,11 @@ type
     // SEGA Model 2 (0; INPUT; 1 -> NVDATA);
     // Demul (2 -> EEPROM; 3 -> SRAM; 4 -> FLASH);
     // Supermodel: SEGA Model 3 ( 1 -> NVRAM);
-    fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
     fSystemID: ShortInt;
+    fROMIdentification: Integer;
     fMediaType: ShortInt; // 0 -> ROM; >= 1 -> CHD (for ROMs and CHD only)... -1 -> game config file
+    fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
+                         // 12, 13, 14 -> HDD/general CHD;  15, 16, 17 -> CD;  18, 19, 20 -> Compact Flash Card
     {fName: String;
     fClone: String;
     fDriverName: String;
@@ -38,8 +40,9 @@ type
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
     property eSystemID: ShortInt read fSystemID write fSystemID;
-    property eFileType: ShortInt read fFileType write fFileType;
+    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eMediaType: ShortInt read fMediaType write fMediaType;
+    property eFileType: ShortInt read fFileType write fFileType;
     {property eName: String read fName write fName;
     property eClone: String read fClone write fClone;
     property eDriverName: String read fDriverName write fDriverName;
@@ -57,8 +60,8 @@ type
 
   TViewGameInfoGroup = class(TEasyGroupStored)
   private
-    fROMIdentification: Integer;
     fSystemID: ShortInt;
+    fROMIdentification: Integer;
     fMediaType: ShortInt;
     fTitle: WideString;
     fName: String;
@@ -75,8 +78,8 @@ type
     //function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
     //function GetStateImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
-    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eSystemID: ShortInt read fSystemID write fSystemID;
+    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
     property eMediaType: ShortInt read fMediaType write fMediaType;
     property eTitle: WideString read fTitle write fTitle;
     property eName: String read fName write fName;
@@ -137,6 +140,7 @@ uses uMain, uStatus, uDeleteMultipleGamesFiles;
 function TViewFileInfo.GetCaptions(Column: Integer): WideString;
 var
   extraStr: String;
+  ExtraCount, VertBar: Integer;
 begin
   case Column of
     0:
@@ -148,17 +152,48 @@ begin
         if eMediaType = 0 then
            begin
              if eMerged then
-                extraStr:= '[Merged Set] ';
+                extraStr:= 'Merged Set';
            end
         else
            begin
+             extraStr:= '';
+             if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
+             begin
+               case eFileType of
+                 13, 16, 19: extraStr:= 'Device';
+                 14, 17, 20: extraStr:= 'Bios';
+               end;
+             end;
+
              if eParentFile then
-                extraStr:= '[Parent CHD] ';
+                begin
+                  if extraStr = '' then
+                     extraStr:= 'Parent'
+                  else
+                     extraStr:= 'Parent '+extraStr;
+                end;
            end;
+        case FormDeleteMultipleGamesViewFiles.FilesListView.Scrollbars.VertBarVisible of
+          True : VertBar:= 2;
+          False: VertBar:= 0;
+        end;
+        ExtraCount:= 71-VertBar;
         if extraStr <> '' then
-           Result:= Format(extraStr+'%-59s', [ShortDirString(eFileName, 59)])
+           begin
+             extraStr:= '['+extraStr+'] ';
+             ExtraCount:= ExtraCount-Length(extraStr);
+           end;
+        Result:= Format(extraStr+'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
+
+        {if extraStr <> '' then
+           begin
+             extraStr:= '['+extraStr+'] ';
+             ExtraCount:= 71-Length(extraStr);
+             Result:= Format(extraStr+'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
+             //Result:= Format(extraStr+'%-59s', [ShortDirString(eFileName, 59)])
+           end
         else
-           Result:= Format('%-73s', [ShortDirString(eFileName, 73)]);
+           Result:= Format('%-71s', [ShortDirString(eFileName, 71)]);}
       end;
     2:
       begin
@@ -180,9 +215,22 @@ begin
   if Column = 0 then
      begin
        if eMediaType <> -1 then
-          Result:= eMediaType // rom or CHD files
+          begin
+            // rom or CHD files
+            case eMediaType of
+              0: Result:= eMediaType;
+              1:
+                begin
+                  case eFileType of
+                    12, 13, 14: Result:= eMediaType;
+                    15, 16, 17: Result:= eMediaType+1;
+                    18, 19, 20: Result:= eMediaType+2;
+                  end;
+                end;
+            end;
+          end
        else
-          Result:= eFileType+2; // game config files
+          Result:= eFileType+4; // game config files
      end
   else
      Result:= -1;
@@ -205,19 +253,22 @@ begin
   for Loop:=Low(aMediaType)+1 to High(aMediaType) do
       FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType);
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);  // 2
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 3
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 4
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 5
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 6
+  FormMain.AddDefaultIcons('chd_cd.ico', Folder, IL_MediaType);     // 2
+  FormMain.AddDefaultIcons('chd_cfcard.ico', Folder, IL_MediaType); // 3
+
+  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);   // 4
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);  // 5
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);  // 6
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);  // 7
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);  // 8
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.AddGames(var GroupToFocus: TEasyGroup);
 var
   Item, addItem: TEasyItem;
   addGroup: TEasyGroup;
-  Loop, tmpMediaType, tmpFileType, IsParentCHD, fixFileType, selIndex: Integer;
-  tmpFileName, ChecksumCHD: String;
+  Loop, tmpMediaType, tmpFileType, IsParentCHD, selIndex: Integer;
+  tmpFileName, ChecksumCHD, tmpStr: String;
   GroupGameTitle: WideString;
   GroupSoftwareName: String;
   HeaderVerCHD: Byte;
@@ -274,39 +325,32 @@ begin
        begin
          for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count-1 do
          begin
-           tmpFileType:= -1;
-           IsParentCHD:= 0;
-           tmpMediaType:= StrToInt(uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Names[Loop]);
-           tmpFileName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.ValueFromIndex[Loop];
-           case tmpMediaType of
-             -1: // file type and CHD
-               begin
-                 // config files
-                 tmpFileType:= StrToInt(tmpFileName[1]);
-                 Delete(tmpFileName, 1, 2);
-               end;
-             1: // CHDs
-               begin
-                 IsParentCHD:= StrToInt(tmpFileName[1]);
-                 Delete(tmpFileName, 1, 2);
-               end;
-           end;
+           // 00 -> rom; 01 -> CHD; -1 -> config files
+           // media_type FileID IsParentCHD filename
+           // 01120 simpbowl.chd
+           // 00000 elvator.rom
+           // -1000 elvator.cfg
+
+           tmpStr:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles[Loop];
+           tmpMediaType:= StrToInt(tmpStr[1]+tmpStr[2]);
+           tmpFileType:= StrToInt(tmpStr[3]+tmpStr[4]);
+           IsParentCHD:= StrToInt(tmpStr[5]);
+
+           tmpFileName:= tmpStr;
+           Delete(tmpFileName, 1, 6);
 
            addItem:= FilesListView.Items.AddCustom(TViewFileInfo, addGroup);
+           TViewFileInfo(addItem).eROMIdentification:= TViewGameInfoGroup(addGroup).eROMIdentification;
            TViewFileInfo(addItem).eSystemID:= TViewGameInfoGroup(addGroup).eSystemID;
             // 0 - .cfg; .input
             // 1 - .dat; .nv; nvram
             // 2 - .eeprom
             // 3 - .sram
             // 4 - .flash
-           fixFileType:= tmpFileType;
-           if FormMain.IsMAMEBasedSys(TViewGameInfoGroup(addGroup).eSystemID) then
-              begin
-                if (tmpMediaType = -1) and (tmpFileType = 1) then
-                   fixFileType:= FormMain.FixMAMENVRAMFileType(tmpFileName);
-              end;
-           TViewFileInfo(addItem).eFileType:= fixFileType;
+            // 12-20 CHD file IDs
+
            TViewFileInfo(addItem).eMediaType:= tmpMediaType;
+           TViewFileInfo(addItem).eFileType:= tmpFileType;
            TViewFileInfo(addItem).eSoftwareName:= TViewGameInfoGroup(addGroup).eSoftwareName; // might not be needed!!
            TViewFileInfo(addItem).eGameStatus:= TViewGameInfoGroup(addGroup).eGameStatus; // might not be needed!!
            TViewFileInfo(addItem).eFileName:= tmpFileName;
@@ -340,7 +384,6 @@ begin
     case FormDeleteMultipleGamesViewFiles.Tag of
       0: Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item); // all games
       1: Item:= FormMain.ELV_GetNextSelected(FormDeleteMultipleGamesFiles.GamesList, Item, selIndex); // all games
-      //1: Item:= FormDeleteMultipleGamesFiles.GamesList.Selection.Next(Item); // all games
     end;
   until Item = nil;
 end;
@@ -349,9 +392,9 @@ procedure TFormDeleteMultipleGamesViewFiles.UpdateTotalFilesLabel;
 begin
   LabelTotalItems.Caption:= IntToStr(FilesListView.Groups.VisibleCount)+' Games';
   if FilesListView.Scrollbars.VertBarVisible then
-     FilesListView.CellSizes.Tile.Width:= 565
+     FilesListView.CellSizes.Tile.Width:= 617-GetSystemMetrics(SM_CXVSCROLL)// 565
   else
-     FilesListView.CellSizes.Tile.Width:= 582;
+     FilesListView.CellSizes.Tile.Width:= 617;// 582;
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.FormShow(Sender: TObject);
@@ -362,7 +405,12 @@ begin
   FormMain.ELV_ResetNormalColors(FilesListView);
   LoadMediaIcons;
   if Screen.Height = 480 then
-     FormDeleteMultipleGamesViewFiles.ClientHeight:= 402;
+     begin
+       FormDeleteMultipleGamesViewFiles.ClientHeight:= 402;
+     end;
+
+  FormDeleteMultipleGamesViewFiles.Left:= (Screen.Width shr 1)-((FormDeleteMultipleGamesViewFiles.Width shr 1)-1); // to center the form
+
 
   // add all files in the list
   FilesListView.BeginUpdate;
@@ -371,6 +419,10 @@ begin
   FormMain.ELV_RemoveDefaultGroup(FilesListView);
   FilesListView.Items.ReIndexDisable:= False;
 
+  //if FilesListView.Scrollbars.VertBarVisible then
+  //   FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);
+
+  FilesListView.Invalidate;
   FilesListView.EndUpdate;
   FilesListView.SetFocus;
 
@@ -398,13 +450,15 @@ begin
       end;
     1:
       begin
-        ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
-        ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
+        ACanvas.Font.Name:= 'Consolas';
+        //ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
+        //ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
-        ACanvas.Font.Name:= 'Verdana';//'Consolas';
-        ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
+        ACanvas.Font.Name:= 'Consolas';
+        //ACanvas.Font.Name:= 'Verdana';
+        //ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then

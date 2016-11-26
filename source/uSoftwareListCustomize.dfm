@@ -4,7 +4,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
   BorderStyle = bsDialog
   Caption = 'Customize Software List'
   ClientHeight = 382
-  ClientWidth = 604
+  ClientWidth = 619
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -20,16 +20,16 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
   PixelsPerInch = 96
   TextHeight = 15
   object LabelTotalSoftwareList: TShadowLabel
-    Left = 435
-    Top = 45
+    Left = 450
+    Top = 43
     Width = 157
-    Height = 12
+    Height = 15
     Alignment = taRightJustify
     Caption = 'Checked 00000 of 00000'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Lucida Console'
+    Font.Height = -12
+    Font.Name = 'Consolas'
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
@@ -40,7 +40,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
     Layout = tlCenter
   end
   object ShadowLabel1: TShadowLabel
-    Left = 31
+    Left = 38
     Top = 4
     Width = 542
     Height = 31
@@ -65,7 +65,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
   object SoftwareLists: TEasyListview
     Left = 8
     Top = 59
-    Width = 587
+    Width = 602
     Height = 278
     CellSizes.Report.Height = 20
     Color = clWhite
@@ -82,7 +82,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
       00060000008008000101000100000000010001B2010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000196000000FFFFFF1F0001000000010000000D0000005300
+      000101000000000001A5000000FFFFFF1F0001000000010000000D0000005300
       6F0066007400770061007200650020004E0061006D0065000000000000000000
       00000000}
     Header.Draggable = False
@@ -114,7 +114,6 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
-    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
@@ -133,7 +132,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
   object PanelMessages: TPanelEx
     Left = 0
     Top = 341
-    Width = 604
+    Width = 619
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -145,7 +144,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 403
+      Left = 418
       Top = 8
       Width = 89
       Height = 25
@@ -158,7 +157,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
       OnClick = ButtonYesClick
     end
     object ButtonNo: TBitBtn
-      Left = 506
+      Left = 521
       Top = 8
       Width = 89
       Height = 25
@@ -181,7 +180,7 @@ object FormSoftwareListCustomize: TFormSoftwareListCustomize
       OnClick = ButtonResetToCurrentClick
     end
     object FilterShowUncheckedOnly: TAdvOfficeCheckBox
-      Left = 156
+      Left = 164
       Top = 11
       Width = 141
       Height = 20

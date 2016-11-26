@@ -1,12 +1,12 @@
 object FormSelectImageCategory: TFormSelectImageCategory
-  Left = 676
-  Top = 429
+  Left = 1662
+  Top = 1025
   ActiveControl = CategoriesListView
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Select Image Category'
-  ClientHeight = 333
-  ClientWidth = 268
+  ClientHeight = 334
+  ClientWidth = 520
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,10 +23,10 @@ object FormSelectImageCategory: TFormSelectImageCategory
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelEx1: TPanelEx
+  object PanelImageCategories: TPanelEx
     Left = 0
     Top = 0
-    Width = 271
+    Width = 523
     Height = 285
     Color1 = clWhite
     Color2 = clSilver
@@ -39,8 +39,9 @@ object FormSelectImageCategory: TFormSelectImageCategory
     object LabelEmuTitle: TShadowLabel
       Left = 0
       Top = 268
-      Width = 268
+      Width = 520
       Height = 16
+      Align = alCustom
       Alignment = taCenter
       AutoSize = False
       Caption = 'IMAGE CATEGORY'
@@ -63,7 +64,7 @@ object FormSelectImageCategory: TFormSelectImageCategory
       Tag = -1
       Left = 8
       Top = 8
-      Width = 271
+      Width = 523
       Height = 252
       BorderStyle = bsNone
       CellSizes.Icon.Height = 85
@@ -123,7 +124,6 @@ object FormSelectImageCategory: TFormSelectImageCategory
       Selection.FullCellPaint = True
       Selection.FullItemPaint = True
       Selection.FullRowSelect = True
-      Selection.Gradient = True
       Selection.GradientColorBottom = 16506264
       Selection.GradientColorTop = 15582647
       Selection.InactiveBorderColor = 10902593
@@ -140,11 +140,12 @@ object FormSelectImageCategory: TFormSelectImageCategory
       OnKeyAction = CategoriesListViewKeyAction
     end
   end
-  object PanelEx2: TPanelEx
+  object PanelBottomButtons: TPanelEx
     Left = 0
-    Top = 284
-    Width = 268
+    Top = 285
+    Width = 520
     Height = 49
+    Align = alBottom
     Color1 = 15856113
     Color2 = 14540253
     Color3 = clYellow
@@ -154,7 +155,7 @@ object FormSelectImageCategory: TFormSelectImageCategory
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtn
-      Left = 41
+      Left = 166
       Top = 13
       Width = 89
       Height = 25
@@ -166,7 +167,7 @@ object FormSelectImageCategory: TFormSelectImageCategory
       TabOrder = 0
     end
     object ButtonCancel: TBitBtn
-      Left = 139
+      Left = 264
       Top = 13
       Width = 89
       Height = 25

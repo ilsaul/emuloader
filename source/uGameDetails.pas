@@ -5,8 +5,9 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, ComCtrls, IniFiles, ToolWin, Buttons,
-  uCommon, MPCommonObjects, EasyListview, ShadowLabel, PanelEx, // Internal error: U752 :_((( line '8'
-  GraphicEx, Dialogs;
+  uCommon, MPCommonObjects, MPCommonUtilities, EasyListview, ShadowLabel,
+  PanelEx, // Internal error: U752 :_((( line '8'
+  GraphicEx, Dialogs, ImgList;
 
 const
   aGameStatus: String = 'Game Status';
@@ -26,6 +27,7 @@ type
     GameIcon: TImage;
     LabelEmulatorVersion: TShadowLabel;
     LabelScanMode: TShadowLabel;
+    IL_FileType: TImageList;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure ROMsListViewItemPaintText(Sender: TCustomEasyListview;
@@ -33,12 +35,19 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure ROMsListViewItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
+    procedure ROMsListViewColumnClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; ShiftState: TShiftState;
+      const Column: TEasyColumn);
+    function ROMsListViewItemCompare(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
+      var DoDefault: Boolean): Integer;
   private
     { Private declarations }
-    missFile: TMemIniFile;
+    //missFilesList: THashedStringList;
     IsZiNcSystem: Boolean;
     ZiNcFilePath: String;
-    TextPos, LeftPanelSize, LeftPanelMinimumTextSize, LeftPanelLastText: Integer;
+    TextPos, LeftPanelSize, LeftPanelMinimumTextSize, LeftPanelLastText, LeftPanelLastTextHeight: Integer;
+    missFile: TMemIniFile;
     function  FindZiNcFile(const NameString: String): String;
     function  CreateLabelTitle(const lTitle: String): TShadowLabel;
     function  CreateLabelValue(const tValue: String; DriverIndex: ShortInt = -1): TShadowLabel;
@@ -155,6 +164,33 @@ begin
   LeftPanelLastText:= newLabelValue.Top;
 end;
 
+{procedure TFormGameDetails.Wrap_Label(ALabel:TLabel;AText:string);
+var
+  i:integer;
+  s:string;
+  WrappedText:string;
+begin
+  // to simulate a WordWrap in strings without spaces....
+  // need to give a max size in pixels to improve this function
+  s:='';
+  WrappedText:='';
+  ALabel.caption:='';
+  i:=1;
+  while i<=Length(AText) do begin
+    s:=s+AText[i];
+    if ALabel.Canvas.TextWidth(s)>ALabel.ClientWidth then begin
+      System.Delete(s,Length(s),1);
+      WrappedText:=WrappedText+s+#13#10;
+      s:='';
+    end
+    else
+      inc(i);
+  end;
+
+  ALabel.Caption:=WrappedText;
+
+end;}
+
 function TFormGameDetails.AddEntry2(const sLabelTitle: String; sValue: WideString = ''; sImageIndex: ShortInt = -1): Boolean;
 var
   LabelTemp: TShadowLabel;
@@ -188,16 +224,20 @@ begin
        LeftPanelSize:= LeftTextMaxSize;
        // enable WordWrap and create a 2 lines label
        // for manufacturer, category and maybe game file (CPS3 has a really huge .chd filename)
+       // DOESN'T work for filenames without spaces (September 16, 2016)
+
        LabelTemp.AutoSize:= False;
        LabelTemp.Width:= LeftPanelSize;
-       LabelTemp.Height:= LabelTemp.Height+5;
+       LabelTemp.Height:= LabelTemp.Height+8;
        LabelTemp.WordWrap:= True;
        LabelTemp.AutoSize:= True;
        LabelTemp.AutoSize:= False;
        LabelTemp.Width:= LeftPanelSize;
        //TextPos:= TextPos+LabelTemp.Height;
      end;
-  TextPos:= TextPos+LabelTemp.Height;
+  LeftPanelLastTextHeight:= LabelTemp.Height;
+  TextPos:= TextPos+LeftPanelLastTextHeight;
+  //TextPos:= TextPos+LabelTemp.Height;
 end;
 
 function TFormGameDetails.GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
@@ -314,6 +354,26 @@ var
     if FormMain.MemGameInfo.eDriverStatus < 1 then //= -1 then
        Exit; // driver is "good" or "none" then don't add extra status texts
 
+    {
+    // this is for the experimental EasyListView left panel!!!! September 16, 2016
+    if FormMain.MemGameInfo.eEmulationStatus <> -1 then
+       AddEntry2('', 'Emulation', FormMain.MemGameInfo.eEmulationStatus);
+    if FormMain.MemGameInfo.eColorStatus <> -1 then
+       AddEntry2('', 'Color', FormMain.MemGameInfo.eColorStatus);
+    if FormMain.MemGameInfo.eSoundStatus <> -1 then
+       AddEntry2('', 'Sound', FormMain.MemGameInfo.eSoundStatus);
+    if FormMain.MemGameInfo.eGraphicStatus <> -1 then
+       AddEntry2('', 'Graphic', FormMain.MemGameInfo.eGraphicStatus);
+    }
+
+    {case DriverIndex of
+      1: ValueStr:= aStatus[FormMain.MemGameInfo.eEmulationStatus];
+      2: ValueStr:= aStatus[FormMain.MemGameInfo.eColorStatus];
+      3: ValueStr:= aStatus[FormMain.MemGameInfo.eSoundStatus];
+      4: ValueStr:= aStatus[FormMain.MemGameInfo.eGraphicStatus];
+    end;}
+
+
     iLabelDriver:= nil;
     if FormMain.MemGameInfo.eEmulationStatus <> -1 then
        iLabelDriver:= CreateLabelValue('   Emulation', 1);
@@ -330,6 +390,7 @@ var
 begin
   LeftPanelSize:= 0;
   LeftPanelLastText:= 0;
+  LeftPanelLastTextHeight:= LabelYearValue.Height;
   LabelYearValue.Visible:= FormMain.MemGameInfo.eYear <> '';
   LabelYear.Visible:= LabelYearValue.Visible;
   NoROMs:= False;
@@ -581,7 +642,7 @@ begin
      ((TEasyGameInfo(FormMain.SelectedEasyItem).eHaveGameROMs = 0) and (FormMain.MemGameInfo.eSystemID <> idDaphne)) then
      begin
        NoROMs:= True;
-       AddEntry2('   Game Set', 'Set with no ROMs', 1) // special case for sets with no ROMs
+       AddEntry2('   Game Set', 'Set with no Game ROMs', 1) // special case for sets with no ROMs
      end
   else
   begin
@@ -726,6 +787,8 @@ var
   //Have, Miss: Integer;
   romMissStatus: ShortInt;
   ValidCHD: Boolean;
+  //missFile: TMemIniFile;
+  StatusImageIndex: Integer;
 
   function GetROM_ImageIndex: ShortInt;
   begin
@@ -735,25 +798,25 @@ var
           if FormMain.MemGameInfo.eScanMode = 0 then
              begin
                case FormMain.MemGameInfo.eGameSetStatus of
-                 1: Item.ImageIndex:= 0;
-                 0: Item.ImageIndex:= 0;//(Ord(FormMain.IsROM_Miss(FormMain.MemGameInfo.eROMIdentification)));
-                 2: Item.ImageIndex:= 1;
+                 1: StatusImageIndex:= 0;
+                 0: StatusImageIndex:= 0;//(Ord(FormMain.IsROM_Miss(FormMain.MemGameInfo.eROMIdentification)));
+                 2: StatusImageIndex:= 1;
                end;
              end
           else
              begin
                // for quick scan and force available
                case FormMain.MemGameInfo.eGameSetStatus of
-                 1: Item.ImageIndex:= 1; // missing ROMs/CHDs
-                 0: Item.ImageIndex:= 0; // all good
-                 2: Item.ImageIndex:= 1; // missing all files
+                 1: StatusImageIndex:= 1; // missing ROMs/CHDs
+                 0: StatusImageIndex:= 0; // all good
+                 2: StatusImageIndex:= 1; // missing all files
                 end;
              end;
         end;
-      0: Item.ImageIndex:= 1; // file Missing
-      1: Item.ImageIndex:= 2; // CHD file found with bad SHA-1
+      0: StatusImageIndex:= 1; // file Missing
+      1: StatusImageIndex:= 2; // CHD file found with bad SHA-1
     end;
-    Result:= Item.ImageIndex;
+    Result:= StatusImageIndex;
   end;
 
   function GetCHD_NewImageIndex(IsChecksumOk: Boolean): ShortInt;
@@ -763,16 +826,116 @@ var
        Result:= Result+1; // Check not OK
   end;
 
-  function CheckEmptyVar(VarStr: String): String;
+  function CheckEmptyVar(VarStr: String; AddCommaSeparator: Boolean = False): String;
   begin
     Result:= '';
     if VarStr <> '' then
-       Result:= VarStr+', ';
+       begin
+         case AddCommaSeparator of
+           True : Result:= VarStr+', ';
+           False: Result:= VarStr+' ';
+         end;
+       end;
   end;
 
-  function GetROM_Status(const CRCString: String; const ROMTag: ShortInt; CHDHeaderVersion: Byte = 0): String;
+  function GetROM_Status(const CRC32String, SHA1String: String; const ROMTag: ShortInt; IsCHDFile, IsBadDump: Boolean; CHDHeaderVersion: Byte = 0): String;
   var
     StrCHD: String;
+    iChecksum: String;
+  begin
+    Result:= '';
+    StrCHD:= '';
+    case ROMTag of
+      //12, 15, 18: StrCHD:= 'CHD ';
+      13, 16, 19: StrCHD:= 'Dev ';
+      14, 17, 20: StrCHD:= 'Bios ';
+    end;
+    if ROMTag >= 12 then
+       begin
+         if (CRC32String = '') and (SHA1String <> '') then
+            iChecksum:= SHA1String // for the new file format
+         else
+         if (CRC32String = '') and (SHA1String = '') then
+            iChecksum:= ''
+         else
+            iChecksum:= CRC32String; // fallback to the old file format (EL v8.2.1) ????
+       end
+    else
+       iChecksum:= CRC32String;
+
+    case ROMTag of
+      1, 4, 7, 10: // device ROM
+        begin
+          if not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification) then
+             Result:= 'Device';
+        end;
+      2, 5, 8, 11: // bios ROM
+        begin
+          if not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification) then
+             begin
+               if FormMain.MemGameInfo.eSystemID = idSegaModel2 then
+                  begin
+                    if FormMain.MemGameInfo.eName <> 'model2' then
+                       Result:= 'Board ROM';
+                  end
+               else
+                  Result:= 'Bios';
+             end;
+        end;
+    end;
+    if (FormMain.MemGameInfo.eScanMode = 0) or (ROMTag >= 12) then // (ROMTag in [3, 4, 5]) then
+    begin
+      //if (ROMTag in [3, 4, 5]) and (StatusImageIndex <> 1) and (iChecksum <> '') then// (CRC32String <> '') then
+      if IsCHDFile and (StatusImageIndex <> 1) and (iChecksum <> '') then
+      //if (ROMTag >= 12) and (StatusImageIndex <> 1) and (iChecksum <> '') then
+         begin
+           if CHDHeaderVersion > 0 then
+              Result:= StrCHD+CheckEmptyVar(Result)+'v'+IntToStr(CHDHeaderVersion)
+           else
+              Result:= StrCHD+CheckEmptyVar(Result)+'v ?';
+         end;
+      //else
+      //   Result:=  CheckEmptyVar(Result);
+
+      case StatusImageIndex of
+        0:
+          begin
+            if iChecksum <> '' then //CRC32String <> '' then
+               Result:= CheckEmptyVar(Result)+'Ok';
+          end;
+        1:
+          begin
+            if iChecksum <> '' then //CRC32String <> '' then
+               Result:= CheckEmptyVar(Result)+'Missing'
+            else
+               begin
+                 if FormMain.MemGameInfo.eGameSetStatus = 1 then
+                    StatusImageIndex:= 0;
+               end;
+          end;
+        2:
+          begin
+            // 'Bad Checksum'; // for CHDs only...
+            Result:= CheckEmptyVar(Result);
+            if Length(iChecksum) > 32 then //CRC32String) > 32 then
+               Result:= Result+'Bad SHA-1'
+            else
+               Result:= Result+'Bad MD5';
+               //Result:= CheckEmptyVar(Result)+'SHA-1';
+          end;
+      end;
+    end;
+    if iChecksum = '' then //CRC32String = '' then
+       Result:= CheckEmptyVar(Result, True)+'No Dump'
+    else
+    if IsBadDump then
+       Result:= CheckEmptyVar(Result, True)+'Bad Dump';
+  end;
+
+  {function GetROM_Status(const CRC32String, SHA1String: String; const ROMTag: ShortInt; CHDHeaderVersion: Byte = 0): String;
+  var
+    StrCHD: String;
+    iChecksum: String;
   begin
     Result:= '';
     StrCHD:= '';
@@ -781,6 +944,18 @@ var
       4: StrCHD:= 'Bios CHD ';
       5: StrCHD:= 'Dev CHD ';
     end;
+    if ROMTag > 2 then
+       begin
+         if (CRC32String = '') and (SHA1String <> '') then
+            iChecksum:= SHA1String // for the new file format
+         else
+         if (CRC32String = '') and (SHA1String = '') then
+            iChecksum:= ''
+         else
+            iChecksum:= CRC32String; // fallback in the old file format ????
+       end
+    else
+       iChecksum:= CRC32String;
 
     case ROMTag of
       1: // device ROM
@@ -804,7 +979,7 @@ var
     end;
     if (FormMain.MemGameInfo.eScanMode = 0) or (ROMTag in [3, 4, 5]) then
     begin
-      if (ROMTag in [3, 4, 5]) and (Item.ImageIndex <> 1) and (CRCString <> '') then
+      if (ROMTag in [3, 4, 5]) and (StatusImageIndex <> 1) and (iChecksum <> '') then// (CRC32String <> '') then
          begin
            if CHDHeaderVersion > 0 then
               Result:= StrCHD+CheckEmptyVar(Result)+'v'+IntToStr(CHDHeaderVersion)
@@ -816,27 +991,27 @@ var
       //else
       //   Result:=  CheckEmptyVar(Result);
 
-      case Item.ImageIndex of
+      case StatusImageIndex of
         0:
           begin
-            if CRCString <> '' then
+            if iChecksum <> '' then //CRC32String <> '' then
                Result:= CheckEmptyVar(Result)+'Ok';
           end;
         1:
           begin
-            if CRCString <> '' then
+            if iChecksum <> '' then //CRC32String <> '' then
                Result:= CheckEmptyVar(Result)+'Missing'
             else
                begin
                  if FormMain.MemGameInfo.eGameSetStatus = 1 then
-                    Item.ImageIndex:= 0;
+                    StatusImageIndex:= 0;
                end;
           end;
         2:
           begin
             // 'Bad Checksum'; // for CHDs only...
             Result:= CheckEmptyVar(Result);
-            if Length(CRCString) > 32 then
+            if Length(iChecksum) > 32 then //CRC32String) > 32 then
                Result:= Result+'Bad SHA-1'
             else
                Result:= Result+'Bad MD5';
@@ -844,18 +1019,21 @@ var
           end;
       end;
     end;
-    if CRCString = '' then
+    if iChecksum = '' then //CRC32String = '' then
        Result:= CheckEmptyVar(Result)+'No Dump';
-  end;
+  end;}
 
   function AddROMs: Boolean;
   var
     LoopROMs, sIndex: Integer;
     isCHD: Boolean;
-    tmpString, tmpString2, CHDFile, CHDInfo, CHDChecksum: String;
+    tmpString, tmpString2, CHDFile, CHDInfo, CHDChecksum, LineStr: String;
     HeaderVerCHD: Byte;
-    romName, romCRC: String;
+    romName, romCRC32, romSHA1: String;
     romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
+    IsCRC32Collision, IsNewFileFormat, IsBadDump: Boolean;
+    iTempStr: String;
+    iTempInt: Integer;
 
     function AddMissCHDExtra(CHDFound: Boolean; ParentCHDName: String): Boolean;
     begin
@@ -881,57 +1059,72 @@ var
 
     for LoopROMs:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
     begin
-      romName:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[LoopROMs];
-      romTagIndex:= 0;
-      //romIsDevice:= False;
-      //romIsBios:= False;
-      if FormMain.IsROMsListBasedSys(FormMain.MemGameInfo.eSystemID) then
+      LineStr:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[LoopROMs];
+      IsNewFileFormat:= PosEx('<name>', LineStr) <> 0;
+      if IsNewFileFormat then
          begin
-           romTagIndex:= StrToInt(romName[1]);
-           Delete(romName, 1, 2);
+           // FileID MediaType IsCRC32Collision IsBadDump<name>Filename/><crc>CRC32/><sha1>/SHA-1 or MD5/>
+           //   12       3           4             5
+           romTagIndex:= StrToInt(LineStr[1]+LineStr[2]);
+           IsCHD:= Boolean(StrToInt(LineStr[3])); // the position 3 now holds the media type; 0 -> rom/cart/flop/cass; 1 -> CHDs
+           IsCRC32Collision:= Boolean(StrToInt(LineStr[4]));
+           if LineStr[5] <> '<' then // start of <name> tag on EL v8.2.2 "sysname.elrom" file format...
+              IsBadDump:= Boolean(StrToInt(LineStr[5]))
+           else
+              IsBadDump:= False; // is EL v8.2.2 old "sysname.elrom" file format
+
+           FormMain.GetROMDetailsInfo(LineStr, FormMain.GameIsClone(FormMain.MemGameInfo.eClone), romName, romCRC32, romSHA1, tmpString2);
+           //IsCHD:= romTagIndex >= 12;
+           //if not IsCHD then
+
+           //if not IsCHD then
+           //   IsCHD:= ((romCRC32 = '') and (romSHA1 <> '')) or
+           //           (SameText(ExtractFileExt(romName), '.chd'));
          end;
-      romCRC:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Names[LoopROMs];
+         
       tmpString:= '';
       romMissStatus:= -1;
 
-      isCHD:= (Length(romCRC) > 8) or
-              (SameText(ExtractFileExt(romName), '.chd') );
-
-      if not IsCHD then
-         IsCHD:= romTagIndex in [3, 4, 5];
-
-      if Assigned(missfile) then
+      if Assigned(missFile) then
          begin
-           case isCHD of
-             True : romMissStatus:= missFile.ReadInteger(FormMain.MemGameInfo.eName, romName, -1); // CHD file
-             False: romMissStatus:= missFile.ReadInteger(FormMain.MemGameInfo.eName, romCRC, -1); // ROM file
-           end;
+           // crc32;sha1=ikaruga.chd
+           iTempStr:= FormMain.GetMissCheckEntry(romCRC32, romSHA1);
+           romMissStatus:= missFile.ReadInteger(FormMain.MemGameInfo.eName, iTempStr, -1);
          end;
 
       Item:= ROMsListView.Items.Add;
       GetROM_ImageIndex;
-      
+
       case isCHD of
         True:
           begin
             HeaderVerCHD:= 0;
             tmpString:= ''; // holds CHD name
-            tmpString2:= ''; // holds Parent CHD name
-            // extract the _"parentchd"_ and get the CHD filename (discard parent CHD name)
-            sIndex:= PosEx('_"parentchd"_', romName);
-            if sIndex = 0 then
-               tmpString:= romName // ROM Name
-            else
-               begin
-                 // for MAME/HB MAME only since other systems do not have a parentchd entry!!!!
-                 tmpString:= Copy(romName, 1, sIndex-1);
-                 tmpString2:= romName;
-                 Delete(tmpString2, 1, sIndex+12); // tmpString2 is the parent CHD name!!!
-                 if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) then
-                    Delete(tmpString2, 1, 2); // for MAME/HBMAME only!
-               end;
+            //tmpString2:= ''; // holds Parent CHD name; info got from code above...
 
-            Item.Caption:= tmpString;
+            if IsNewFileFormat then
+               begin
+                 tmpString:= romName; // tmpString holds the name of the CHD
+                 //tmpString2:= SoftListGetEntryValue(LineStr, 'parentname'); // tmpString2 is the parent CHD name!!!... info got from code above
+               end;
+            //  False:
+            //    begin
+                  // old code; must remove it later....
+                  {sIndex:= PosEx('_"parentchd"_', romName);
+                  if sIndex = 0 then
+                     tmpString:= romName // ROM Name
+                  else
+                     begin
+                       // for MAME/HB MAME only since other systems do not have a parentchd entry!!!!
+                       tmpString:= Copy(romName, 1, sIndex-1);
+                       tmpString2:= romName;
+                       Delete(tmpString2, 1, sIndex+12); // tmpString2 is the parent CHD name!!!
+                       if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) then
+                          Delete(tmpString2, 1, 2); // for MAME/HBMAME only!
+                     end;}
+            //    end;
+
+            Item.Caption:= tmpString; // tmpString holds the name of the CHD
 
             case IsZiNcSystem of
               True : CHDFile:= FormMain.SearchZiNcCHDFolder(tmpString, FormMain.MemGameInfo.eName, ZiNcFilePath);
@@ -940,33 +1133,50 @@ var
             CHDInfo:= tmpString;
             if CHDFile <> '' then
                begin
-                 if romCRC <> '' then
-                    ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romCRC, CHDChecksum, HeaderVerCHD)
-                 else
-                    ValidCHD:= True; // no dump...
-
-                 Item.ImageIndex:= GetCHD_NewImageIndex(ValidCHD);
+                 if IsNewFileFormat then
+                    begin
+                      if romSHA1 <> '' then
+                         ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romSHA1, CHDChecksum, HeaderVerCHD)
+                      else
+                         ValidCHD:= True; // no dump...
+                    end;
+                   //False:
+                   //  begin
+                       //if romCRC32 <> '' then
+                       //   ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romCRC32, CHDChecksum, HeaderVerCHD)
+                       //else
+                       //   ValidCHD:= True; // no dump...
+                   //  end;
+                 StatusImageIndex:= GetCHD_NewImageIndex(ValidCHD);
                  Item.Captions[1]:= CHDChecksum;
                end
             else
                begin
-                 if romCRC <> '' then
-                    Item.ImageIndex:= 1 // file missing
+                 if romSHA1 <> '' then
+                    StatusImageIndex:= 1 // file missing
                  else
                     begin
                       //if FormMain.MemGameInfo.eGameSetStatus = 1 then
                       if FormMain.MemGameInfo.eGameSetStatus <> 2 then
-                         Item.ImageIndex:= 0 // file not found but it's a "no dump"...
+                         StatusImageIndex:= 0 // file not found but it's a "no dump"...
                       else
-                         Item.ImageIndex:= 1;
+                         StatusImageIndex:= 1;
                     end;
                end;
 
             //showMessage('rom tag: '+IntToStr(romTagIndex));
             case romTagIndex of
-              3: AddEntry2('   CHD', CHDInfo, Ord(CHDFile <> ''));
-              4: AddEntry2('   Bios CHD', CHDInfo, Ord(CHDFile <> ''));
-              5: AddEntry2('   Device CHD', CHDInfo, Ord(CHDFile <> ''));
+              12, 15, 18: AddEntry2('   CHD', CHDInfo, Ord(CHDFile <> ''));
+              13, 16, 19: AddEntry2('   Bios CHD', CHDInfo, Ord(CHDFile <> ''));
+              14, 17, 20: AddEntry2('   Device CHD', CHDInfo, Ord(CHDFile <> ''));
+
+              //15: AddEntry2('   CD', CHDInfo, Ord(CHDFile <> ''));
+              //16: AddEntry2('   Bios CD', CHDInfo, Ord(CHDFile <> ''));
+              //17: AddEntry2('   Device CD', CHDInfo, Ord(CHDFile <> ''));
+
+              //18: AddEntry2('   Flash', CHDInfo, Ord(CHDFile <> ''));
+              //19: AddEntry2('   Bios Flash', CHDInfo, Ord(CHDFile <> ''));
+              //20: AddEntry2('   Device Flash', CHDInfo, Ord(CHDFile <> ''));
             end;
             AddMissCHDExtra(CHDFile <> '', tmpString2);
 
@@ -979,24 +1189,35 @@ var
                  CHDInfo:= tmpString2;
                  if CHDFile <> '' then
                     begin
-                      if romCRC <> '' then
-                         ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romCRC, CHDChecksum, HeaderVerCHD)
-                      else
-                         ValidCHD:= True;
+                      if IsNewFileFormat then
+                         begin
+                           if romSHA1 <> '' then
+                              ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romSHA1, CHDChecksum, HeaderVerCHD)
+                           else
+                              ValidCHD:= True;
+                         end;
+                        //False:
+                        //  begin
+                            // old code; must remove it later....
+                            //if romCRC32 <> '' then
+                            //   ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romCRC32, CHDChecksum, HeaderVerCHD)
+                            //else
+                            //   ValidCHD:= True;
+                        //  end;
                       Item.Caption:= tmpString2;
-                      Item.ImageIndex:= GetCHD_NewImageIndex(ValidCHD);
+                      StatusImageIndex:= GetCHD_NewImageIndex(ValidCHD);
                       Item.Captions[1]:= CHDChecksum;
                     end
                  else
                     begin
-                      if romCRC <> '' then
-                         Item.ImageIndex:= 1 // file missing
+                      if romCRC32 <> '' then
+                         StatusImageIndex:= 1 // file missing
                       else
                          begin
                            if FormMain.MemGameInfo.eGameSetStatus = 1 then
-                              Item.ImageIndex:= 0 // file not found but it's a "no dump"...
+                              StatusImageIndex:= 0 // file not found but it's a "no dump"...
                            else
-                              Item.ImageIndex:= 1;
+                              StatusImageIndex:= 1;
                          end;
                     end;
                  AddEntry2('   Parent CHD', tmpString2, Ord(CHDFile <> ''));
@@ -1007,13 +1228,80 @@ var
             Item.Caption:= romName; // ROM Name
           end;
       end;
-      Item.Captions[1]:= romCRC; // ROM Checksum
-      Item.Captions[2]:= GetROM_Status(romCRC, romTagIndex, HeaderVerCHD); // ROM Status
+      Item.Tag:= Ord(IsCHD); // 0 -> ROM; 1 -> CHD
+      Item.StateImageIndex:= StatusImageIndex;
+      case isCHD of
+        True:
+          begin
+            case romTagIndex of
+              12, 13, 14: Item.ImageIndex:= 19; // HDD (also general CHD)
+              15, 16, 17: Item.ImageIndex:= 20; // CD
+              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card
+            end;
+            //Item.ImageIndex:= 16;
+          end;
+        False:
+          begin
+            case romTagIndex of
+              00, 01, 02: Item.ImageIndex:= 15; // ROM
+              03, 04, 05: Item.ImageIndex:= 16; // Cartridge
+              06, 07, 08: Item.ImageIndex:= 17; // Floppy Disk
+              09, 10, 11: Item.ImageIndex:= 18; // Cassette Tape
+              12, 13, 14: Item.ImageIndex:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+              15, 16, 17: Item.ImageIndex:= 20; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
+              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
+            end;
+
+            {if FormMain.MemGameInfo.eSoftwareName = '' then
+               begin
+                 if FormMain.IsDecoCassMachine(FormMain.MemGameInfo.eDriverName) then
+                    begin
+                      case SameText(ExtractFileExt(romName), '.cas') of
+                        True : Item.ImageIndex:= 19;
+                        False: Item.ImageIndex:= 15;
+                      end;
+                    end
+                 else
+                 if FormMain.IsSEGASystem24Machine(FormMain.MemGameInfo.eDriverName) then
+                    begin
+                      case SameText(ExtractFileExt(romName), '.img') of
+                        True : Item.ImageIndex:= 18;
+                        False: Item.ImageIndex:= 15;
+                      end;
+                    end
+                 else
+                    Item.ImageIndex:= 15 // ROM icon
+               end
+            else
+               begin
+                 if PosEx('cart', FormMain.MemGameInfo.eSoftwareExecParameter) <> 0 then
+                    Item.ImageIndex:= 17
+                 else
+                 if PosEx('flop', FormMain.MemGameInfo.eSoftwareExecParameter) <> 0 then
+                    Item.ImageIndex:= 18
+                 else
+                 if PosEx('cass', FormMain.MemGameInfo.eSoftwareExecParameter) <> 0 then
+                    Item.ImageIndex:= 19
+                 else
+                    Item.ImageIndex:= 15; // ROM image
+               end;}
+          end;
+      end;
+      //Item.ImageIndex:= StatusImageIndex;
+      //case isCHD of
+      //  True : Item.StateImageIndex:= 16;
+      //  False: Item.StateImageIndex:= 15;
+      //end;
+      Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
+      Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
+      Item.Captions[3]:= GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, HeaderVerCHD); // ROM Status
+
       //case Item.ImageIndex of
       //  0, 2: Inc(Have);
       //  1: Inc(Miss);
       //end;
     end;
+
     ROMsListView.Items.ReIndexDisable:= False;
     ROMsListView.EndUpdate;
   end;
@@ -1030,6 +1318,7 @@ begin
   sFile:= FormMain.GetGamesFolderEL(Ord(FormMain.MemGameInfo.eSoftwareName <> ''))+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 3, FormMain.MemGameInfo.eSoftwareName);
   if FileExists(sFile) then
      missFile:= TMemIniFile.Create(sFile);
+     
   AddROMs;
   FreeAndNil(missFile);
 end;
@@ -1038,7 +1327,7 @@ procedure TFormGameDetails.FormShow(Sender: TObject);
 var
   Loop: Integer;
   CHDsAllNoDump: Boolean;
-  iROM: String;
+  iROM, iSHA1: String;
 
   ROMsCount, BottomPos, HeaderSize, iROMsHeight: Integer;
 begin
@@ -1079,14 +1368,15 @@ begin
             begin
               for Loop:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
               begin
-                iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[Loop];
-                // 3 -> Game CHD File
-                // 4 -> Bios CHD File
-                // 5 -> Device CHD File
-                if iROM[1] in ['3', '4', '5'] then
+                iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[Loop];
+                //iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[Loop];
+                // 12 and higher = CHD files
+                if StrToInt(iROM[1]+iROM[2]) >= 12 then //in ['12', '13', '14'] then
                    begin
-                     iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Names[Loop];
-                     if iROM <> '' then
+                     iSHA1:= SoftListGetEntryValue(iROM, 'sha1');
+                     if iSHA1 = '' then
+                        iSHA1:= SoftListGetEntryValue(iROM, 'md5'); // for old MAME builds
+                     if iSHA1 <> '' then
                         begin
                           CHDsAllNoDump:= False;
                           Break;
@@ -1098,11 +1388,11 @@ begin
        if not CHDsAllNoDump then
           begin
             LeftPanelMinimumTextSize:= 0;
-            FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+186;
-            ROMsListView.Header.Columns[1].Width:= 248;
-            ROMsListView.Header.Columns[2].Width:= 119;
-            ROMsListView.Width:= ROMsListView.Width+186;
-            FrameROMsListView.Width:= FrameROMsListView.Width+186;
+            //FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+186;
+            //ROMsListView.Header.Columns[1].Width:= 248;
+            //ROMsListView.Header.Columns[2].Width:= 119;
+            //ROMsListView.Width:= ROMsListView.Width+186;
+            //FrameROMsListView.Width:= FrameROMsListView.Width+186;
           end;
      end;
 
@@ -1113,6 +1403,15 @@ begin
   FillGameTree;
   Application.ProcessMessages;
   FillROMsTree;
+
+  //if Screen.Width >= 1024 then
+  //   begin
+  //     ROMsListView.Width:= ROMsListView.Width+250;
+  //     FrameROMsListView.Width:= FrameROMsListView.Width+250;
+  //     FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+250;
+  //     LabelGameTitle.Width:= LabelGameTitle.Width+250;
+  //     LabelScanMode.Left:= LabelScanMode.Left+250;
+  //   end;
 
   if LeftPanelSize < LeftTextMaxSize then // 198
      begin
@@ -1128,14 +1427,18 @@ begin
   LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
   LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
 
-  BottomPos:= LeftPanelLastText+LabelYearValue.Height;
+  BottomPos:= LeftPanelLastText+LeftPanelLastTextHeight;//LabelYearValue.Height;
 
   HeaderSize:= ROMsListView.Header.Height+2+4; // +4 for the bottom border
   ROMsCount:= ROMsListView.Groups.ItemCount;
-  iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
+  if ROMsCount <= 25 then
+     iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height)
+  else
+     iROMsHeight:= HeaderSize+(25*ROMsListView.CellSizes.Report.Height);
+
   //iFormHeight:= LeftPanelLastText+LabelYearValue.Height+6; // 6 for the border
 
-  if ROMsCount < 26 then // 25 files visible max!
+  //if ROMsCount <= 25 then // 25 files visible max!
      begin
        if BottomPos < (iROMsHeight+ROMsListView.Top) then
           BottomPos:= iROMsHeight+ROMsListView.Top;
@@ -1144,10 +1447,22 @@ begin
 
   ROMsListView.Height:= BottomPos-ROMsListView.Top;//HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);//+4;
   FrameROMsListView.Height:= ROMsListView.Height+2;
+  Loop:= ROMsListView.Header.Columns[3].Width;
+  ROMsListView.BeginUpdate;
+  ROMsListView.Header.Columns[3].AutoSizeToFit;
+  if ROMsListView.Header.Columns[3].Width < 50 then
+     ROMsListView.Header.Columns[3].Width:= 50;
+
+  if ROMsListView.Header.Columns[3].Width <> Loop then
+     ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width+(Loop-ROMsListView.Header.Columns[3].Width);
   if ROMsListView.Groups.ItemCount > 0 then
      ROMsListView.Header.Columns[0].Caption:= 'Name'+Format('%25s', [IntToStr(ROMsListView.Groups.VisibleItemCount)+' files']);
+
   if ROMsListView.Scrollbars.VertBarVisible then
-     ROMsListView.Header.Columns[2].Width:= ROMsListView.Header.Columns[2].Width-GetSystemMetrics(SM_CXVSCROLL);//16;
+     ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+
+  //ROMsListView.Header.Columns[3].Width:= ROMsListView.Header.Columns[3].Width-16;
+  ROMsListView.EndUpdate;
 
   //LabelNoROMs.Top:= FrameROMsListView.Top+16;
   //if not FormMain.CheckTotal(ROMsListView) then
@@ -1156,32 +1471,72 @@ begin
   Inc(BottomPos, 7); // add 7 pixels to make the 6 pixels border
 
   //FormGameDetails.ClientHeight:= 400;//
-  if FormGameDetails.ClientHeight > BottomPos then
+
+  if FormGameDetails.ClientHeight <> BottomPos then
      FormGameDetails.ClientHeight:= BottomPos;
 
-  FormGameDetails.VertScrollBar.Visible:= True;
-  FormGameDetails.HorzScrollBar.Visible:= True;
+  //FormGameDetails.VertScrollBar.Visible:= True;
+  //FormGameDetails.HorzScrollBar.Visible:= True;
   //if FormGameDetails.ClientWidth > 620 then
   //   FormGameDetails.ClientWidth:= 620;
   //if FormGameDetails.ClientHeight > 400 then
   //   FormGameDetails.ClientHeight:= 400;
 
-  // no used anymore ???? is this a debug stuff ? ... can't remember what this is (May 23, 2016)
+  // no used anymore ???? is this a debug stuff ? ... what this is, remember can't I (May 23, 2016)
   //BottomPos:= ROMsListView.Header.Columns[0].Width+ROMsListView.Header.Columns[1].Width+ROMsListView.Header.Columns[2].Width;
   //Caption:= 'header: '+IntToStr(BottomPos)+'  -> ELV width: '+IntToStr(ROMsListView.ClientWidth);
+
+  if (Screen.Height = 480) or (Screen.Height = 600) then
+     begin
+       if FormGameDetails.Width > (Screen.Width-6) then
+       begin
+         with HorzScrollBar do
+         begin
+           // Set the range to twice the ClientWidth of the form
+           // This means that the form’’s logical size is twice as big
+           // as the physical window.
+           // Note that Range must always be larger than the ClientWidth
+           Range:= FormGameDetails.ClientWidth;
+           Position:= 0;
+           Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+           Tracking:= True;
+           Visible:= True;  { Show the scrollbar }
+         end;
+         FormGameDetails.Width:= Screen.Width-6;
+       end;
+
+       if FormGameDetails.Height > (Screen.Height-60) then
+       begin
+          with VertScrollBar do
+          begin
+            Range:= FormGameDetails.ClientHeight;
+            Position:= 0;
+            Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+            Tracking:= True;
+            Visible:= True;  { Show the scrollbar }
+          end;
+          FormGameDetails.Height:= Screen.Height-60;
+       end;
+     end;
 end;
 
 procedure TFormGameDetails.ROMsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Item.ImageIndex = 2 then
+  if Item.StateImageIndex = 2 then
      ACanvas.Font.Color:= clRed;   // wrong checksum (for CHDs only)
   case Position of
-    1: ACanvas.Font.Name:= 'Consolas';
-    2:
+    1, 2:
+      begin
+        ACanvas.Font.Name:= 'Consolas';
+        ACanvas.Font.Size:= 9;
+      end;
+    3:
      begin
-       if (FormMain.MemGameInfo.eGameSetStatus = 1) and (Item.ImageIndex = 1) then
+       //ACanvas.Font.Name:= 'Tahoma';
+       //ACanvas.Font.Size:= 9;
+       if (FormMain.MemGameInfo.eGameSetStatus = 1) and (Item.StateImageIndex = 1) then
           ACanvas.Font.Color:= clRed;
      end;
   end;
@@ -1197,7 +1552,43 @@ procedure TFormGameDetails.ROMsListViewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Selected then
-     FormMain.ELV_SetSelectRibbon(Ord(Item.ImageIndex = 2), ROMsListView);
+     FormMain.ELV_SetSelectRibbon(Ord(Item.StateImageIndex = 2), ROMsListView);
 end;
 
+procedure TFormGameDetails.ROMsListViewColumnClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  ShiftState: TShiftState; const Column: TEasyColumn);
+begin
+  if Button = cmbLeft then
+     begin
+       ROMsListView.BeginUpdate;
+       ROMsListView.Sort.SortAll;
+       ROMsListView.EndUpdate(False);
+     end;
+end;
+
+function TFormGameDetails.ROMsListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+var
+  gItem1, gItem2: TEasyItem;
+begin
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
+  case Column.Index of
+    0: Result:= FormMain.iCompare(gItem1.Caption, gItem2.Caption);
+    1: Result:= FormMain.iCompare(gItem1.Captions[1], gItem2.Captions[1]);
+    2: Result:= FormMain.iCompare(gItem1.Captions[2], gItem2.Captions[2]);
+    3: Result:= FormMain.iCompare(gItem1.Captions[3], gItem2.Captions[3]);
+  end;
+  // try to put CHD files at the bottom ????? what for ? some games have device ROMs after CHD files
+  //if (gItem1.Tag = 0) and (gItem2.Tag = 1) then
+  //   Result:= -1
+  //else
+  //if (gItem1.Tag = 1) and (gItem2.Tag = 0) then
+  //   Result:= 1;
+end;
+
+
 end.
+

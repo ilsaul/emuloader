@@ -16,9 +16,11 @@ type
     // SEGA Model 2 (0-> INPUT; 1 -> NVDATA);
     // Demul (2 -> EEPROM; 3 -> SRAM; 4 -> FLASH);
     // Supermodel: SEGA Model 3 ( 1 -> NVRAM);
-    fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
     fSystemID: ShortInt;
+    fROMIdentification: Integer;
     fMediaType: ShortInt; // 0 -> ROM; >= 1 -> CHD (for ROMs and CHD only)... -1 -> game config file
+    fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
+                         // 12, 13, 14 -> HDD/general CHD;  15, 16, 17 -> CD;  18, 19, 20 -> Compact Flash Card
     fSoftwareName: String;
     fGameStatus: ShortInt;
 
@@ -34,8 +36,9 @@ type
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
   public
     property eSystemID: ShortInt read fSystemID write fSystemID;
-    property eFileType: ShortInt read fFileType write fFileType;
-    property eMediaType: ShortInt read fMediaType write fMediaType;
+    property eROMIdentification: Integer read fROMIdentification write fROMIdentification;
+    property eMediaType: ShortInt read fMediaType write fMediaType; // 0 -> ROMs; 1 -> CHD; -1 -> config files
+    property eFileType: ShortInt read fFileType write fFileType; // what file ID the media_type is (for config files and CHDs)
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eGameStatus: ShortInt read fGameStatus write fGameStatus; // 0 - have; 1 - miss; 2 - missing ROMs/CHDs
     property eFileName: String read fFileName write fFileName;
@@ -73,6 +76,7 @@ type
     LabelGameDetails: TLabel;
     LabelEmulatorVersion: TLabel;
     LabelSoftwareListTitle: TShadowLabel;
+    LabelSoftwareList: TLabel;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -118,29 +122,52 @@ function TGameInfo.GetCaptions(Column: Integer): WideString;
 var
   extraStr: String;
   FillBlank: String;
+  ExtraCount, VertBar: Integer;
 begin
-
   case Column of
     0:
       begin
-        Result:= FormMain.GetFileTypeText(eSystemID, eMediaType, eFileType);
+        Result:= FormMain.GetFileTypeText(eSystemID, eMediaType, eFileType); // need to make sure this is OK...
       end;
     1:
       begin
         if eMediaType = 0 then
            begin
              if eMerged then
-                extraStr:= '[Merged Set] ';
+                extraStr:= 'Merged Set';
            end
         else
            begin
+             extraStr:= '';
+             if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
+             begin
+               case eFileType of
+                 13, 16, 19: extraStr:= 'Device';
+                 14, 17, 20: extraStr:= 'Bios';
+               end;
+             end;
+
              if eParentFile then
-                extraStr:= '[Parent CHD] ';
+                begin
+                  if extraStr = '' then
+                     extraStr:= 'Parent'
+                  else
+                     extraStr:= 'Parent '+extraStr;
+                end;
            end;
+
+        case FormDeleteGamesFiles.FilesListView.Scrollbars.VertBarVisible of
+          True : VertBar:= 2;
+          False: VertBar:= 0;
+        end;
+
+        ExtraCount:= 71-VertBar;
         if extraStr <> '' then
-           Result:= Format(extraStr+'%-59s', [ShortDirString(eFileName, 59)])
-        else
-           Result:= Format('%-73s', [ShortDirString(eFileName, 73)]);
+           begin
+             extraStr:= '['+extraStr+'] ';
+             ExtraCount:= ExtraCount-Length(extraStr);
+           end;
+        Result:= Format(extraStr+'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
       end;
     2:
       begin
@@ -166,9 +193,22 @@ begin
   if Column = 0 then
      begin
        if eMediaType <> -1 then
-          Result:= eMediaType // rom or CHD files
+          begin
+            if eFileType = 0 then
+               Result:= eMediaType // ROM
+            else
+               begin
+                 case eFileType of
+                   0: Result:= eMediaType; // ROM (.zip file)
+                   15, 16, 17: Result:= 2;
+                   18, 19, 20: Result:= 3;
+                 else
+                    Result:= 1;
+                 end;
+               end;
+          end
        else
-          Result:= eFileType+2; // game config files
+          Result:= eFileType+4; // game config files
      end
   else
      Result:= -1;
@@ -211,11 +251,14 @@ begin
   for Loop:=Low(aMediaType)+1 to High(aMediaType) do
       FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType);
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);  // 2
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 3
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 4
+  FormMain.AddDefaultIcons('chd_cd.ico', Folder, IL_MediaType);    // 2
+  FormMain.AddDefaultIcons('chd_cfcard.ico', Folder, IL_MediaType);// 3
+
+  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);  // 4
   FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 5
   FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 6
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 7
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType); // 8
 end;
 
 procedure TFormDeleteGamesFiles.AddFiles;
@@ -224,7 +267,8 @@ var
   FileFullPath: String;
   GameIsMerged, IsZiNcSystem: Boolean;
   Loop: Integer;
-  chdName, chdParentName, DiskFile, ChecksumCHD, romName, romCRC: String;
+  FileID: ShortInt;
+  chdParentName, DiskFile, ChecksumCHD, romName, romCRC32, romSHA1: String;
   HeaderVerCHD: Byte;
 begin
   IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
@@ -246,7 +290,10 @@ begin
      begin
        // add .zip file
        addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
+       TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
+       TGameInfo(addItem).eROMIdentification:= FormMain.MemGameInfo.eROMIdentification;
        TGameInfo(addItem).eMediaType:= 0;
+       TGameInfo(addItem).eFileType:= 0;
        TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
        TGameInfo(addItem).eMerged:= GameIsMerged;
        TGameInfo(addItem).eFileName:= FileFullPath;
@@ -270,37 +317,47 @@ begin
        begin
          for Loop:=0 to uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
          begin
-           romCRC:= uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Names[Loop];
-           romName:= uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[Loop];
-           if (romName[1] = '3') and (romCRC <> '') then
-              begin
-                Delete(romName, 1, 2);
-                FormMain.GetCHDName(romName, FormMain.GameIsClone(FormMain.MemGameInfo.eClone), chdName, chdParentName); // get correct chdName and chdParentName (for MAME)
-                DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.MemGameInfo.eSystemID, romName, FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eClone,
-                                                        FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eSoftwareName);
-                if DiskFile <> '' then
-                   begin
-                     // file found...
-                     // read version and SHA-1 from CHD's header
-                     FormMain.CreateCHD_SHA1(DiskFile, '', ChecksumCHD, HeaderVerCHD);
+           DiskFile:= uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[Loop];
+           if DiskFile[3] = '1' then // is CHD file ? (3rd position is 0 -> ROM/Cart/Floppy/Cass; 1 -> CHD... "<rom" and "<disk" entries from -listxml output
+           begin
+             FileID:= StrToInt(DiskFile[1]+DiskFile[2]);
+             FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eName), romName, romCRC32, romSHA1, chdParentName);
+             // [konam80a]
+             // 1510<name>826aaa01.chd/><sha1>be5f8b31fd18ba631fe98c2132c56abf20193419/><parentname>826eaa01.chd/>
 
-                     addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
-                     TGameInfo(addItem).eMediaType:= 1;
-                     TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
-                     TGameInfo(addItem).eMerged:= False;
-                     TGameInfo(addItem).eFileName:= DiskFile;
-                     TGameInfo(addItem).eFileSize:= GetFileSize(DiskFile);
-                     TGameInfo(addItem).eFileSizeText:= FormMain.GetSizeType(TGameInfo(addItem).eFileSize, False);
-                     TGameInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAge(DiskFile));
-                     TGameInfo(addItem).eParentFile:= FormMain.GameIsClone(FormMain.MemGameInfo.eClone) and (not SameText(chdName+'.chd', ExtractFileName(DiskFile)));
-                     TGameInfo(addItem).eHeaderVerCHD:= HeaderVerCHD;
-                     addItem.Details[1]:= 1;
-                     addItem.Details[2]:= 2;
-                     addItem.Checked:=  Boolean(DeleteCHDs.Checked);
-                     if not addItem.Checked then
-                        addItem.State:= addItem.State+[esosGhosted];
-                   end;
-              end;
+             //if (romName[1] = '3') and (romCRC <> '') then
+             //if (StrToInt(DiskFile[1]) > 2) and (romSHA1 <> '') then
+             if romSHA1 <> '' then
+                begin
+                  DiskFile:= FormMain.SearchCHDSimpleScan(FormMain.MemGameInfo.eSystemID, romName, chdParentName, FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eClone,
+                                                          FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eSoftwareName);
+                  if DiskFile <> '' then
+                     begin
+                       // file found...
+                       // read version and SHA-1 from CHD's header
+                       FormMain.CreateCHD_SHA1(DiskFile, '', ChecksumCHD, HeaderVerCHD);
+
+                       addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
+                       TGameInfo(addItem).eROMIdentification:= FormMain.MemGameInfo.eROMIdentification;
+                       TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
+                       TGameInfo(addItem).eMediaType:= 1;
+                       TGameInfo(addItem).eFileType:= FileID;
+                       TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
+                       TGameInfo(addItem).eMerged:= False;
+                       TGameInfo(addItem).eFileName:= DiskFile;
+                       TGameInfo(addItem).eFileSize:= GetFileSize(DiskFile);
+                       TGameInfo(addItem).eFileSizeText:= FormMain.GetSizeType(TGameInfo(addItem).eFileSize, False);
+                       TGameInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAge(DiskFile));
+                       TGameInfo(addItem).eParentFile:= FormMain.GameIsClone(FormMain.MemGameInfo.eClone) and (not SameText(romName, ExtractFileName(DiskFile)));
+                       TGameInfo(addItem).eHeaderVerCHD:= HeaderVerCHD;
+                       addItem.Details[1]:= 1;
+                       addItem.Details[2]:= 2;
+                       addItem.Checked:=  Boolean(DeleteCHDs.Checked);
+                       if not addItem.Checked then
+                          addItem.State:= addItem.State+[esosGhosted];
+                     end;
+                end;
+           end;
          end;
        end;
      end;
@@ -432,9 +489,9 @@ var
     if Result then
        begin
           addItem:= FilesListView.Items.AddCustom(TGameInfo, nil);
-          TGameInfo(addItem).eFileType:= FileType;
           TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
           TGameInfo(addItem).eMediaType:= -1; // for config files
+          TGameInfo(addItem).eFileType:= FileType;
           TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
           TGameInfo(addItem).eMerged:= False;
           TGameInfo(addItem).eFileName:= FileFullPath;
@@ -458,9 +515,10 @@ var
            fixFileType:= FileType;
            if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) then
               fixFileType:= FormMain.FixMAMENVRAMFileType(nvram_MAME[Loop]);
-           TGameInfo(addItem).eFileType:= fixFileType;
+           TGameInfo(addItem).eROMIdentification:= FormMain.MemGameInfo.eSystemID;
            TGameInfo(addItem).eSystemID:= FormMain.MemGameInfo.eSystemID;
            TGameInfo(addItem).eMediaType:= -1; // for config files
+           TGameInfo(addItem).eFileType:= fixFileType;
            TGameInfo(addItem).eSoftwareName:= FormMain.MemGameInfo.eSoftwareName;
            TGameInfo(addItem).eMerged:= False;
            TGameInfo(addItem).eFileName:= nvram_MAME[Loop];
@@ -498,7 +556,7 @@ end;
 procedure TFormDeleteGamesFiles.FormShow(Sender: TObject);
 var
   HeightDiff: Integer;
-  Screen480: Boolean;
+  Screen480, ScreenHighRes: Boolean;
 
   {function RemovePixels(PixelsToShrink: Integer): Boolean;
   begin
@@ -516,7 +574,7 @@ var
     ButtonNo.Left:= ButtonNo.Left-PixelsToShrink;
     FormDeleteGamesFiles.Width:= FormDeleteGamesFiles.Width-PixelsToShrink;
   end;}
-  
+
 begin
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
   FormMain.ELV_ResetNormalColors(FilesListView);
@@ -527,7 +585,31 @@ begin
 
   //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
   //FormMain.IL_ArcadeSystem_Large.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+  
+  ScreenHighRes:= Screen.Height > 800;
+  Screen480:= Screen.Height = 480;
+  //Screen480:= True; // for debugging (October 27, 2016)
 
+  if Screen.Width < 800 then
+     begin
+       HeightDiff:= FormDeleteGamesFiles.Width-(Screen.Width-15); //635; 715
+       //HeightDiff:= FormDeleteGamesFiles.Width-(640-15); // for debugging only
+       LabelGameTitle.Width:= LabelGameTitle.Width-HeightDiff;
+       LabelGameStatus.Left:= LabelGameStatus.Left-HeightDiff;
+       ButtonYes.Left:= ButtonYes.Left-HeightDiff;
+       ButtonNo.Left:= ButtonNo.Left-HeightDiff;
+       FilesListView.Width:= FilesListView.Width-HeightDiff;
+       FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-HeightDiff;
+       FormDeleteGamesFiles.Width:= FormDeleteGamesFiles.Width-HeightDiff;
+     end
+  else
+  if ScreenHighRes then
+     begin
+       HeightDiff:= FilesListView.CellSizes.Tile.Height*2;
+       FilesListView.Height:= FilesListView.Height+HeightDiff;
+       FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height+HeightDiff;
+     end;
+     
   LabelGameDetails.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
   if FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID] <> '' then
      LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]
@@ -538,10 +620,9 @@ begin
      end;
   if FormMain.MemGameInfo.eSoftwareName <> '' then
      begin
+       LabelSoftwareList.Visible:= True;
        LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
        LabelSoftwareListTitle.Visible:= True;
-       FilesListView.Height:= FilesListView.Height-6;
-       FilesListView.Top:= FilesListView.Top+6;
      end;
 
   GameChanged:= False;
@@ -568,7 +649,7 @@ begin
      begin
        //LabelWarning.Caption:= 'Uncheck files you do NOT want to '+LowerCase(ActionString)+'. Network paths are not supported!';
        ButtonYes.Caption:= ActionString+' Files';
-       DeleteCFGsNVRAMs.Font.Color:= clGray;
+       DeleteCFGsNVRAMs.Font.Color:= clSilver;
        DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
@@ -590,8 +671,6 @@ begin
   //   FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-16;
   FilesListView.EndUpdate;
 
-  Screen480:= Screen.Height = 480;
-  //Screen480:= True;
   if Screen480 then
      begin
        if FilesListView.Groups.ItemCount > 4 then
@@ -602,6 +681,15 @@ begin
             FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height-HeightDiff;
           end;
      end;
+  //else
+  //if ScreenHighRes then
+  //   begin
+  //     HeightDiff:= FilesListView.Height;
+  //     FilesListView.Height:= FilesListView.Height+(FilesListView.CellSizes.Tile.Height*2);
+  //     HeightDiff:= FilesListView.Height-HeightDiff;
+  //     FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height+HeightDiff;
+  //   end;
+     
   {case Screen.Width of
     720: RemovePixels(20);
     640: RemovePixels(90);
@@ -610,14 +698,21 @@ begin
 
   if FilesListView.Scrollbars.VertBarVisible then
      begin
-       FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);//16;
+       FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);
        FilesListView.HotTrack.Enabled:= False; // disable to fix hot track painting bug :_((
      end
   else
      begin
        // try to adjust the height of the files list and the window height...
-       if ((not Screen480) and (FilesListView.Groups.Count < 6)) or
-          ((Screen480) and (FilesListView.Groups.Count < 4)) then
+       // 480p = 4 files
+       // 600p = 6 files
+       // 720p = 8 files
+       // 768p = 9 files
+       // higher = ? files (all files, no limit)
+       if FormMain.CheckTotal(FilesListView) then
+       if ((not Screen480) and (not ScreenHighRes) and (FilesListView.Groups.ItemCount < 6)) or
+          ((ScreenHighRes) and (FilesListView.Groups.ItemCount < 8)) or
+          ((Screen480) and (FilesListView.Groups.ItemCount < 4)) then
        //if FilesListView.Groups.Count < 6 then
           begin
             HeightDiff:= FilesListView.Height;
@@ -625,6 +720,14 @@ begin
             HeightDiff:= HeightDiff-FilesListView.Height;
             FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height-HeightDiff;
           end;
+       //else
+       //if Screen.Height > 600 then
+       //   begin
+       //     HeightDiff:= FilesListView.Height;
+       //     FilesListView.Height:= FilesListView.Height+(FilesListView.CellSizes.Tile.Height*2);
+       //     HeightDiff:= FilesListView.Height-HeightDiff;
+       //     FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height+HeightDiff;
+       //   end;
      end;
   // end of add files functions
 
@@ -641,13 +744,13 @@ begin
         FormMain.ShowGameNameEntryMsgBox;
         FormMain.AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
         FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+        FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold], taCenter);
 
         if FormMain.MemGameInfo.eSoftwareName <> '' then
            begin
              FormMain.AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
-             FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+             FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
            end;
-        FormMain.AddMsgText(#13#10);
 
         if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then // .Count > 0
            begin
@@ -660,8 +763,10 @@ begin
              FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
            end;
         FormMain.AddMsgText('.');//+#13#10+#13#10);
-        FormMain.AddMsgText(#13#10+#13#10+'Emulator File: ');
-        FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold]);
+        //FormMain.AddMsgText(#13#10+#13#10+'Emulator File: ');
+        //FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold]);
+
+        
 
         //FormMain.AddMsgText('Emulator File: ');
         //FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID], clBlack, [fsBold]);
@@ -704,13 +809,15 @@ begin
       end;
     1:
       begin
-        ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
-        ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
+        ACanvas.Font.Name:= 'Consolas';
+        //ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
+        //ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
-        ACanvas.Font.Name:= 'Verdana';//'Lucida Console';//'Consolas';
-        ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
+        ACanvas.Font.Name:= 'Consolas';
+        //ACanvas.Font.Name:= 'Verdana';
+        //ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then
@@ -795,6 +902,18 @@ begin
        GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle, '    You haven''t checked '+
                        'any files. Please select at least one.', 2, False, -1);
        Exit;
+     end;
+
+  if ActionMode <> 0 then
+     begin
+       if DestinationFolder.Text = '' then
+       begin
+         CallMessageBox;
+         FormMain.ShowGameNameEntryMsgBox;
+         GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle, '    You haven''t selected a destination '+
+                         'folder. Use only full paths. Cannot continue.', 2, False, -1);
+         Exit;
+       end;
      end;
 
   GetFilesCountSize;

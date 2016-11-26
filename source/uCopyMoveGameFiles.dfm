@@ -1,6 +1,6 @@
 object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
-  Left = 624
-  Top = 325
+  Left = 774
+  Top = 474
   BorderStyle = bsDialog
   Caption = 'Copy Games Files'
   ClientHeight = 377
@@ -252,8 +252,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Caption = 'd:\mame_roms\elevator.zip'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Lucida Console'
+      Font.Height = -13
+      Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -272,8 +272,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Caption = 'Size: 0000.00 KBytes  Date/Time: Jan/01/2016 00:00:00'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -9
-      Font.Name = 'Verdana'
+      Font.Height = -12
+      Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -286,7 +286,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelFileType: TShadowLabel
       Left = 95
       Top = 2
-      Width = 402
+      Width = 500
       Height = 21
       AutoSize = False
       Caption = 'Electrically Erasable Programmable Read-Only Memory'
