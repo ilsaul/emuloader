@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Classes, Graphics, Controls, Forms, GR32_Image, StdCtrls, ExtCtrls,
-  PanelEx, ShadowLabel, uCommon, SysUtils, Buttons, GraphicEx;
+  PanelEx, ShadowLabel, uCommon, uCommonCustom, SysUtils, Buttons, GraphicEx;
 
 type
   TFormImageDeleteRename = class(TForm)
@@ -30,6 +30,9 @@ type
     LabelDateTime: TShadowLabel;
     LabelFileType: TShadowLabel;
     LabelFileTypeMismatch: TShadowLabel;
+    LabelWarningUnicodeFileName: TShadowLabel;
+    MediaTypeIcon: TImage;
+    procedure ResizeForm;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure RenameImageEditBoxKeyPress(Sender: TObject; var Key: Char);
@@ -40,6 +43,7 @@ type
   public
     { Public declarations }
     mmResult: Integer;
+    ImageFileName: WideString;
   end;
 
 var
@@ -51,10 +55,7 @@ uses uMain;
 
 {$R *.dfm}
 
-procedure TFormImageDeleteRename.FormShow(Sender: TObject);
-var
-  iFileExt: String;
-  iType: TImageType;
+procedure TFormImageDeleteRename.ResizeForm;
 begin
   if Screen.Width < 720 then
      begin
@@ -69,12 +70,35 @@ begin
        ButtonOk.Left:= 424;
        ButtonCancel.Left:= 522;
      end;
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                              GameIcon.Picture.Icon);
+end;
+
+procedure TFormImageDeleteRename.FormShow(Sender: TObject);
+var
+  iFileExt: String;
+  iType: TImageType;
+begin
+  ResizeForm;
+
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True:
+      begin
+        FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, GameIcon.Picture.Icon);
+        LabelGameDetails.Caption:= 'filename: ';
+      end;
+    False:
+      begin
+        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                                    GameIcon.Picture.Icon);
+        LabelGameDetails.Caption:= 'name: ';
+      end;
+  end;
+
+  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, MediaTypeIcon, FormMain.MemGameInfo.eSoftwareExecParameter);
+
   //FormMain.LoadGameIDThumbIcon(GameIcon, FormMain.MemGameInfo.eROMIdentification);
   //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
 
-  LabelGameDetails.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+  LabelGameDetails.Caption:= LabelGameDetails.Caption+FormMain.StatusBar_GamesGameName.Caption;
   if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
      LabelGameDetails.Caption:= LabelGameDetails.Caption+#13#10+'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
 
@@ -84,14 +108,19 @@ begin
        LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
      end;
 
-  LabelSystemTitle.Caption:= FormMain.GetEmulatorDescription(FormMain.MemGameInfo.eSystemID, True); // GetFileTypeStr(LabelFilename.Hint);
-  LabelGameStatus.Caption:= LabelGameStatus.Caption+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True : LabelSystemTitle.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]; // GetFileTypeStr(LabelFilename.Hint);
+    False: LabelSystemTitle.Caption:= FormMain.GetArcadeEmulatorDescription(FormMain.MemGameInfo.eSystemID, True); // GetFileTypeStr(LabelFilename.Hint);
+  end;
+  LabelGameStatus.Visible:= not FormMain.MemGameInfo.eIsCustomGame;
+  if LabelGameStatus.Visible then
+     LabelGameStatus.Caption:= LabelGameStatus.Caption+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
-  LabelFilename.Caption:= LabelFilename.Hint;
+  LabelFilename.Caption:= ImageFileName; // LabelFilename.Hint;
 
-  iType:= FormMain.LoadPreviewImage(LabelFilename.Caption, ImagePreview);
-  iFileExt:= ExtractFileExtW(LabelFilename.Caption);
+  iType:= FormMain.LoadPreviewImage(ImageFileName, ImagePreview); //LabelFilename.Caption, ImagePreview);
+  iFileExt:= ExtractFileExtW(ImageFileName); //LabelFilename.Caption);
 
   case iType of
     ifPNG:
@@ -116,8 +145,8 @@ begin
       end;
   end;
 
-  LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSizeW(LabelFilename.Caption), False);
-  LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAgeW(LabelFilename.Caption));
+  LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSizeW(ImageFileName), False);
+  LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAgeW(ImageFileName));
 
   FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
   case ImageCategoryIcon.Tag of
@@ -144,7 +173,7 @@ begin
     begin
       Caption:= 'Rename Image File';
       ButtonOk.Caption:= 'Rename File';
-      RenameImageEditBox.Text:= ChangeFileExt(ExtractFileName(LabelFilename.Caption), '');
+      RenameImageEditBox.Text:= ChangeFileExtW(ExtractFileNameW(ImageFileName), '');
       RenameImageEditBox.SetFocus;
     end;
 end;
@@ -167,6 +196,7 @@ begin
     #13: ButtonOk.Click;
     #27: ButtonCancel.Click;
   end;
+  Key:= #0; // remove the "ding" sound when pressing ESC/ENTER keys
 end;
 
 procedure TFormImageDeleteRename.FormKeyPress(Sender: TObject;

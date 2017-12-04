@@ -138,7 +138,6 @@ object FormGameDetails: TFormGameDetails
       EllipsType = etNone
       Transparent = True
       Layout = tlCenter
-      WordWrap = True
     end
     object LabelScanMode: TShadowLabel
       Left = 853
@@ -171,7 +170,7 @@ object FormGameDetails: TFormGameDetails
     Height = 486
     BackGround.Enabled = True
     BorderStyle = bsNone
-    CellSizes.Report.Height = 20
+    CellSizes.Report.Height = 22
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack

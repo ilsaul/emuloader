@@ -158,6 +158,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Top = 4
       Width = 32
       Height = 32
+      HelpContext = -2
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
@@ -186,11 +187,11 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelGameNameCloneOf: TShadowLabel
       Left = 40
       Top = 34
-      Width = 456
+      Width = 455
       Height = 13
       Caption = 
-        'name: gamename [clone of gamename] [bios: biosname] [merged] [xm' +
-        'l file: softwarename]'
+        'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
+        'ftlist: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9
@@ -201,6 +202,15 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      Transparent = True
+    end
+    object Image1: TImage
+      Tag = -50
+      Left = 20
+      Top = 44
+      Width = 24
+      Height = 24
+      HelpContext = -2
       Transparent = True
     end
   end
@@ -241,6 +251,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Top = 4
       Width = 48
       Height = 48
+      HelpContext = -2
       Transparent = True
     end
     object LabelGameFile: TShadowLabel

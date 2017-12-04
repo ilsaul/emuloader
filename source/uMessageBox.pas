@@ -17,6 +17,9 @@ type
     MessageIcon: TImage;
     LabelTitle: TShadowLabel;
     LabelGameNameCloneOf: TShadowLabel;
+    ButtonYestoAll: TBitBtn;
+    ButtonAbort: TBitBtn;
+    IconMediaType: TImage;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure LabelMessageURLClick(Sender: TObject; const URL: String);
@@ -84,7 +87,7 @@ end;
 
 procedure TFormMessageBox.FormShow(Sender: TObject);
 var
-  newHeight, scrMaxHeight: Integer;
+  newHeight, scrMaxHeight, MediaTypeIconID: Integer;
 begin
   // icon index:
   // -1 -> Game ID Icon
@@ -123,9 +126,26 @@ begin
   // $00e5fafa // yellow
   // $00eeeeee // silver
 
+  if IconMediaType.Tag <> -1 then
+     FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter);
+
+  //if not IconMediaType.Visible then
+  //   begin
+  //     if MessageIcon.Height = 41 then
+  //        LabelMessage.Top:= 50
+  //     else
+  //        LabelMessage.Top:= 57;
+  //   end;
+
   if (PanelMessages.Tag = -1) or (LabelGameNameCloneOf.Visible and (PanelMessages.Tag <> 4)) then
-     FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                                 MessageIcon.Picture.Icon)
+     begin
+       case FormMain.MemGameInfo.eIsCustomGame of
+         True : FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID,
+                                                            MessageIcon.Picture.Icon);
+         False: FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                                            MessageIcon.Picture.Icon);
+       end;
+     end
   else
   if PanelMessages.Tag = 4 then // for Multi-cart loading systems...
      FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
@@ -171,7 +191,8 @@ end;
 procedure TFormMessageBox.LabelMessageURLClick(Sender: TObject;
   const URL: String);
 begin
-  ShellExecute(Handle, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
+  CallShellExecute(Sender, URL);
+  //ShellExecute(Handle, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
 end;
     
 procedure TFormMessageBox.LabelMessageResizeRequest(Sender: TObject;

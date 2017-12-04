@@ -65,7 +65,7 @@ type
   private
     procedure MoveColumn(MoveUp: Boolean);
     procedure ResetColumns(DefaultSettings: Boolean = False);
-    procedure Resize480Height;
+    procedure ResizeForm;
     procedure SetDefaultProfile;
     //procedure LoadProfile;
     function  SaveProfile: Boolean;
@@ -190,7 +190,7 @@ begin
   ColumnsListView.SetFocus;
 end;
 
-procedure TFormColumnsEditor.Resize480Height;
+procedure TFormColumnsEditor.ResizeForm;
 var
   iDiff: Integer;
 begin
@@ -261,7 +261,7 @@ end;
 
 procedure TFormColumnsEditor.FormShow(Sender: TObject);
 begin
-  Resize480Height;
+  ResizeForm;
   FormMain.ELV_ResetNormalColors(ColumnsListView);
   if FormMain.PanelMachinesList.Visible then
      FormColumnsEditor.Caption:= 'Customize Software List Columns (Details / Grouped)';

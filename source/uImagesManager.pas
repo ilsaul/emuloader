@@ -423,10 +423,10 @@ begin
   if Result then
      Exit;
 
-  if GenerateMessage('Error', FormMain.GetEmulatorDescription(idMAME),
+  if GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
                      'No folder is selected for '+ButtonImageCategory.Caption+'. Would you like to select one now ?', 1) = mrYes then
      begin
-       FormMain.MenuImageCategoryLayoutSettings.Click;
+       FormMain.MenuImageCategorySettings.Click;
        ValidateImageFolder;
        //tmpFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, ButtonSystem.Tag);
        //Result:= DirectoryExists(tmpFolder);
@@ -661,7 +661,7 @@ begin
     False:
       begin
         FormMain.ClearListView(MissingImagesList);
-        GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(idMAME),
+        GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                            '    Scan complete, but it seems that all games have images. If you want to more scan options, '+
                            'open the popup menu (mouse right-click).', 2);
       end;
@@ -950,7 +950,7 @@ begin
       begin
         FormMain.ClearListView(MissingImagesList);
         FreeImagePanelForm;
-        GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(idMAME),
+        GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                            '    Scan complete, but no images were found for missing games. If you want to more scan options, '+
                            'open the popup menu (mouse right-click).', 2);
       end;
@@ -1241,7 +1241,7 @@ begin
            end
         else
            begin
-             GenerateMessage(FormImagesManager.Caption, FormMain.GetEmulatorDescription(idMAME),
+             GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                              'Scanning complete but nothing was found.', 2);
            end;
       end;
@@ -1250,11 +1250,11 @@ begin
         case DirectoryExists(Folder) of
           True : GenerateMessage(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetEmulatorDescription(idMAME),
+                        FormMain.GetArcadeEmulatorDescription(idMAME),
                         '    No files were found in '+Folder, 2);
           False: GenerateMessage(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetEmulatorDescription(idMAME),
+                        FormMain.GetArcadeEmulatorDescription(idMAME),
                         '    No files were found in '+Folder+#13#10+'Folder does not exist.', 2);
         end;
       end;
@@ -1347,7 +1347,7 @@ begin
 
   imgFile:= TNotUsedImageInfo(SelectedItemNotUsed).eFullPath+TNotUsedImageInfo(SelectedItemNotUsed).eFileName;
   if FileExists(imgFile) then
-     ShellExecute(Handle, 'open', PChar(imgFile), nil, nil, SW_SHOWNORMAL);
+     CallShellExecute(nil, imgFile); // ShellExecute(Handle, 'open', PChar(imgFile), nil, nil, SW_SHOWNORMAL);
      {begin
        imgFile:= '%SystemRoot%\System32\rundll32.exe "%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll", ImageView_Fullscreen '+imgFile; // this is the one!!!!!!
        //imgFile:= 'rundll32.exe "%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll", '+imgFile;
@@ -1549,7 +1549,7 @@ var
 
   function ShowGameNotFoundMsg: Boolean;
   begin
-    GenerateMessage('Error', FormMain.GetEmulatorDescription(idMAME),
+    GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
                     '    Could not find the game in main games list. For this feature to work, '+
                     'the game must be valid and visible on the main screen. Make sure the games list for '+
                     'this system is loaded.', 2, False, 1);
@@ -1562,7 +1562,7 @@ begin
      Exit;
 
   RunGame:= True;
-  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME,
+  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME, False,
                                                                       TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
   if Assigned(FormImageFoundMissingGame) then
      FormImageFoundMissingGame.Hide;
@@ -1709,7 +1709,7 @@ begin
   ListOutput:= THashedStringList.Create;
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Missing Images <----------'+#13#10);
-  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(idMAME));
+  ListOutput.Add('  -> System: '+FormMain.GetArcadeEmulatorDescription(idMAME));
   ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TMissingImageInfo(Item).eImageCategory].Caption);
   ListOutput.Add('     Total Games: '+IntToStr(MissingImagesList.Groups.ItemCount)+#13#10);
   ListOutput.Add(Format('%16s %16s %s', ['[Name]', '[Clone of]', '[Title]']));
@@ -1901,7 +1901,7 @@ begin
   ListOutput:= THashedStringList.Create;
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Images of Missing Games <----------'+#13#10);
-  ListOutput.Add('  -> System: '+FormMain.GetEmulatorDescription(idMAME));
+  ListOutput.Add('  -> System: '+FormMain.GetArcadeEmulatorDescription(idMAME));
   ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TNotUsedImageInfo(Item).eImageCategory].Caption);
   ListOutput.Add('     Total Files: '+IntToStr(NotUsedImagesList.Groups.ItemCount)+#13#10);
   Item:= NotUsedImagesList.Groups.FirstItem;

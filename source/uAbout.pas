@@ -9,7 +9,6 @@ uses
 type
   TFormAbout = class(TForm)
     ImageAbout: TImage32;
-    LabelVersion: TShadowLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ImageAboutClick(Sender: TObject);
@@ -32,7 +31,6 @@ procedure TFormAbout.FormCreate(Sender: TObject);
 begin
   if FileExists(FormMain.GetFolderFull(35)+'about.png') then
      ImageAbout.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'about.png');
-  LabelVersion.Caption:= FormMain.FrontendVersion;
 end;
 
 procedure TFormAbout.FormKeyPress(Sender: TObject; var Key: Char);

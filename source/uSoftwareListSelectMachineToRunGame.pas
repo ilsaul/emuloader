@@ -23,7 +23,7 @@ type
     ShowAvailableMachinesOnly: TAdvOfficeCheckBox;
     HidePreliminaryMachines: TAdvOfficeCheckBox;
     LabelTotalMachines: TShadowLabel;
-    ButtonResetToDefault: TBitBtn;
+    IconMediaType: TImage;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -37,20 +37,19 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MachinesListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
-    procedure ButtonResetToDefaultClick(Sender: TObject);
     procedure MachinesListViewDblClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
   private
     { Private declarations }
     //SelectedMachineName: String;
-    procedure AdjustWindow;
+    procedure ResizeForm;
     procedure ReselectItem(const MachineName: String);
     procedure ChangeFilters;
     procedure ReadWriteSettings(ReadMode: Boolean);
   public
     { Public declarations }
-    CurrentMachineName, DefaultMachineName: String;
+    CurrentMachineName: String;
   end;
 
 var
@@ -58,7 +57,7 @@ var
 
 implementation
 
-uses uMain, uCommon;
+uses uMain, uCommon, uCommonCustom;
 
 {$R *.dfm}
 
@@ -96,7 +95,7 @@ begin
   end;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.AdjustWindow;
+procedure TFormSoftwareListMachineToRunGame.ResizeForm;
 var
   iWidth, iHeight, iWidthDec: Integer;
 begin
@@ -143,11 +142,29 @@ begin
   // $00e5fafa // yellow
   // $00eeeeee // silver
 
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                              MessageIcon.Picture.Icon);
+  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter);
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True:
+      begin
+        LabelSoftwarelistTitleW.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+' - '+MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
+        //FormSoftwareListMachineToRunGame.Caption:= 'Select a Machine to Run the Custom Game With';
+        FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, MessageIcon.Picture.Icon);
+        LabelGameNameCloneOf.Canvas.Lock;
+        LabelGameNameCloneOf.Caption:= MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
+        LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+'; file extension '+ExtractFileExt(FormMain.MemGameInfo.eName);
+        LabelGameNameCloneOf.Canvas.Unlock;
+      end;
+    False:
+      begin
+        LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
+        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+                                                       MessageIcon.Picture.Icon);
+        LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+      end;
+  end;
 
   LabelTitle.Caption:= FormMain.MemGameInfo.eTitle;
-  LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+  //LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
 
   if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
      begin
@@ -155,9 +172,11 @@ begin
                                       'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
        //LabelUsage.Caption:= 'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
        //LabelUsage.Visible:= True;
-     end;
+     end
+  else
+     LabelGameNameCloneOf.Top:= IconMediaType.Top+1;
 
-  LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
+  //LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
   BringToFront;
 end;
 
@@ -191,7 +210,7 @@ end;
 procedure TFormSoftwareListMachineToRunGame.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(MachinesListView);
-  AdjustWindow;
+  ResizeForm;
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;
   MachinesListView.BeginUpdate;
@@ -224,7 +243,10 @@ procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   ACanvas: TCanvas);
 begin
   //FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
-  FormMain.GetCanvasFontCustom(FormMain.MemGameInfo.eSystemID, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True : FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
+    False: FormMain.GetCanvasFontCustom(FormMain.MemGameInfo.eSystemID, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
+  end;
   if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
@@ -312,12 +334,6 @@ procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemSelectionChanged
 begin
   if Item.Selected then
      FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
-end;
-
-procedure TFormSoftwareListMachineToRunGame.ButtonResetToDefaultClick(
-  Sender: TObject);
-begin
-  ReselectItem(DefaultMachineName);
 end;
 
 procedure TFormSoftwareListMachineToRunGame.MachinesListViewDblClick(

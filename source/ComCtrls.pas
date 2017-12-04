@@ -1380,6 +1380,7 @@ type
     FMax: Integer;
     FFrequency: Integer;
     FPosition: Integer;
+    FLastPosition: Integer;
     FSelStart: Integer;
     FSelEnd: Integer;
     FOnChange: TNotifyEvent;
@@ -10016,6 +10017,7 @@ begin
   FMin := 0;
   FMax := 10;
   FPosition := 0;
+  FLastPosition := -500;
   FLineSize := 1;
   FPageSize := 2;
   FFrequency := 1;
@@ -10267,7 +10269,16 @@ end;
 
 procedure TTrackBar.Changed;
 begin
-  if Assigned(FOnChange) then FOnChange(Self);
+  //if Assigned(FOnChange) then FOnChange(Self);
+  // added by Ciro Alfredo Consentino to fix OnChange() event being fired 3 times after changing .Position
+  if Assigned(FOnChange) then
+     begin
+       if FLastPosition <> FPosition Then
+          begin
+            FOnChange(Self);
+            FLastPosition := FPosition;
+          end;
+     end;
 end;
 
 procedure TTrackBar.CNNotify(var Message: TWMNotify);

@@ -65,8 +65,8 @@ object FormMessageBox: TFormMessageBox
       WordWrap = True
     end
     object LabelGameNameCloneOf: TShadowLabel
-      Left = 56
-      Top = 33
+      Left = 76
+      Top = 34
       Width = 285
       Height = 13
       Caption = 'name: gamename [clone of gamename] [bios: biosname]'
@@ -80,6 +80,15 @@ object FormMessageBox: TFormMessageBox
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      Transparent = True
+      Visible = False
+    end
+    object IconMediaType: TImage
+      Left = 56
+      Top = 33
+      Width = 16
+      Height = 16
+      IncrementalDisplay = True
       Transparent = True
       Visible = False
     end
@@ -139,6 +148,34 @@ object FormMessageBox: TFormMessageBox
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+    end
+    object ButtonYestoAll: TBitBtn
+      Left = 124
+      Top = 8
+      Width = 89
+      Height = 25
+      Hint = 
+        'Click here to create the list for all systems'#13#10'(this message wil' +
+        'l no longer appear)'
+      Caption = 'Yes to All'
+      ModalResult = 10
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Visible = False
+    end
+    object ButtonAbort: TBitBtn
+      Left = 424
+      Top = 8
+      Width = 89
+      Height = 25
+      Hint = 'Click here to abort it completely'
+      Caption = 'Abort'
+      ModalResult = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Visible = False
     end
   end
 end

@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
-  Graphics, SysUtils, ShlObj, Forms, Controls, IniFiles, ShellAPI,
+  Graphics, SysUtils, ShlObj, Forms, Menus, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, MPCommonUtilities, ShadowLabel;
 
@@ -28,7 +28,8 @@ const
   //idFontParent      = 0;
   //idFontClone       = 1;
   //idFontMissingROMs = 2;
-  
+
+  aScreenType: packed array[-1..4] of String = ('', 'Raster', 'Vector', 'LCD', 'SVG', 'Unknown');  
   aOrientation: packed array[-1..1] of String = ('', 'Horizontal', 'Vertical');
   aStatus: packed array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
   aSaveState: packed array[-1..1] of String = ('', 'Unsupported', 'Supported');
@@ -175,12 +176,81 @@ const
   //   ($00fef8f0, $00f0f8fe), // 1 -> inactive color, gradient mode(same as gradient color top)
   //   ($00fef1e0, $00e0f1fe), // 2 -> inactive border color, gradient mode (same as bar single color)
   //   (clGray, clGray));      // 3 -> inactive font color
-     
+
   VersionInfo: array [1..9] of String = ('CompanyName', 'FileDescription', 'FileVersion', 'InternalName',
     'LegalCopyRight', 'OriginalFileName', 'ProductName', 'ProductVersion',
     'SpecialBuild');
 
   Model3PowerPCFrequency: packed array [0..8] of Byte = (16, 20, 25, 33, 40, 50, 60, 66, 75); // for Supermodel 3 emulator
+
+  CRC32Table: array[0..255] of DWORD =
+   ($00000000, $77073096, $EE0E612C, $990951BA,
+    $076DC419, $706AF48F, $E963A535, $9E6495A3,
+    $0EDB8832, $79DCB8A4, $E0D5E91E, $97D2D988,
+    $09B64C2B, $7EB17CBD, $E7B82D07, $90BF1D91,
+    $1DB71064, $6AB020F2, $F3B97148, $84BE41DE,
+    $1ADAD47D, $6DDDE4EB, $F4D4B551, $83D385C7,
+    $136C9856, $646BA8C0, $FD62F97A, $8A65C9EC,
+    $14015C4F, $63066CD9, $FA0F3D63, $8D080DF5,
+    $3B6E20C8, $4C69105E, $D56041E4, $A2677172,
+    $3C03E4D1, $4B04D447, $D20D85FD, $A50AB56B,
+    $35B5A8FA, $42B2986C, $DBBBC9D6, $ACBCF940,
+    $32D86CE3, $45DF5C75, $DCD60DCF, $ABD13D59,
+    $26D930AC, $51DE003A, $C8D75180, $BFD06116,
+    $21B4F4B5, $56B3C423, $CFBA9599, $B8BDA50F,
+    $2802B89E, $5F058808, $C60CD9B2, $B10BE924,
+    $2F6F7C87, $58684C11, $C1611DAB, $B6662D3D,
+
+    $76DC4190, $01DB7106, $98D220BC, $EFD5102A,
+    $71B18589, $06B6B51F, $9FBFE4A5, $E8B8D433,
+    $7807C9A2, $0F00F934, $9609A88E, $E10E9818,
+    $7F6A0DBB, $086D3D2D, $91646C97, $E6635C01,
+    $6B6B51F4, $1C6C6162, $856530D8, $F262004E,
+    $6C0695ED, $1B01A57B, $8208F4C1, $F50FC457,
+    $65B0D9C6, $12B7E950, $8BBEB8EA, $FCB9887C,
+    $62DD1DDF, $15DA2D49, $8CD37CF3, $FBD44C65,
+    $4DB26158, $3AB551CE, $A3BC0074, $D4BB30E2,
+    $4ADFA541, $3DD895D7, $A4D1C46D, $D3D6F4FB,
+    $4369E96A, $346ED9FC, $AD678846, $DA60B8D0,
+    $44042D73, $33031DE5, $AA0A4C5F, $DD0D7CC9,
+    $5005713C, $270241AA, $BE0B1010, $C90C2086,
+    $5768B525, $206F85B3, $B966D409, $CE61E49F,
+    $5EDEF90E, $29D9C998, $B0D09822, $C7D7A8B4,
+    $59B33D17, $2EB40D81, $B7BD5C3B, $C0BA6CAD,
+
+    $EDB88320, $9ABFB3B6, $03B6E20C, $74B1D29A,
+    $EAD54739, $9DD277AF, $04DB2615, $73DC1683,
+    $E3630B12, $94643B84, $0D6D6A3E, $7A6A5AA8,
+    $E40ECF0B, $9309FF9D, $0A00AE27, $7D079EB1,
+    $F00F9344, $8708A3D2, $1E01F268, $6906C2FE,
+    $F762575D, $806567CB, $196C3671, $6E6B06E7,
+    $FED41B76, $89D32BE0, $10DA7A5A, $67DD4ACC,
+    $F9B9DF6F, $8EBEEFF9, $17B7BE43, $60B08ED5,
+    $D6D6A3E8, $A1D1937E, $38D8C2C4, $4FDFF252,
+    $D1BB67F1, $A6BC5767, $3FB506DD, $48B2364B,
+    $D80D2BDA, $AF0A1B4C, $36034AF6, $41047A60,
+    $DF60EFC3, $A867DF55, $316E8EEF, $4669BE79,
+    $CB61B38C, $BC66831A, $256FD2A0, $5268E236,
+    $CC0C7795, $BB0B4703, $220216B9, $5505262F,
+    $C5BA3BBE, $B2BD0B28, $2BB45A92, $5CB36A04,
+    $C2D7FFA7, $B5D0CF31, $2CD99E8B, $5BDEAE1D,
+
+    $9B64C2B0, $EC63F226, $756AA39C, $026D930A,
+    $9C0906A9, $EB0E363F, $72076785, $05005713,
+    $95BF4A82, $E2B87A14, $7BB12BAE, $0CB61B38,
+    $92D28E9B, $E5D5BE0D, $7CDCEFB7, $0BDBDF21,
+    $86D3D2D4, $F1D4E242, $68DDB3F8, $1FDA836E,
+    $81BE16CD, $F6B9265B, $6FB077E1, $18B74777,
+    $88085AE6, $FF0F6A70, $66063BCA, $11010B5C,
+    $8F659EFF, $F862AE69, $616BFFD3, $166CCF45,
+    $A00AE278, $D70DD2EE, $4E048354, $3903B3C2,
+    $A7672661, $D06016F7, $4969474D, $3E6E77DB,
+    $AED16A4A, $D9D65ADC, $40DF0B66, $37D83BF0,
+    $A9BCAE53, $DEBB9EC5, $47B2CF7F, $30B5FFE9,
+    $BDBDF21C, $CABAC28A, $53B39330, $24B4A3A6,
+    $BAD03605, $CDD70693, $54DE5729, $23D967BF,
+    $B3667A2E, $C4614AB8, $5D681B02, $2A6F2B94,
+    $B40BBE37, $C30C8EA1, $5A05DF1B, $2D02EF8D);
 
 type
   TWideFileName = type WideString;
@@ -194,6 +264,38 @@ type
     FindHandle: THandle;
     FindData: TWin32FindDataW;
   end;
+
+  TWideFileStream = class(THandleStream)
+  public
+    constructor Create(const FileName: WideString; Mode: Word);
+    destructor Destroy; override;
+  end;
+
+  TWideMemoryStream = class(TMemoryStream)
+  public
+    procedure LoadFromFile(const FileName: WideString);
+    procedure SaveToFile(const FileName: WideString);
+  end;
+
+  TWideResourceStream = class(TCustomMemoryStream)
+  private
+    HResInfo: HRSRC;
+    HGlobal: THandle;
+    procedure Initialize(Instance: THandle; Name, ResType: PWideChar);
+  public
+    constructor Create(Instance: THandle; const ResName: WideString; ResType: PWideChar);
+    constructor CreateFromID(Instance: THandle; ResID: Word; ResType: PWideChar);
+    destructor Destroy; override;
+    function Write(const Buffer; Count: Longint): Longint; override;
+    procedure SaveToFile(const FileName: WideString);
+  end;
+
+function  WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
+function  WideSysErrorMessage(ErrorCode: Integer): WideString;
+
+function  WideFileCreate(const FileName: WideString): Integer;
+function  WideExpandFileName(const FileName: WideString): WideString;
+function  WideFileOpen(const FileName: WideString; Mode: LongWord): Integer;
 
 function  StrCmpLogicalW(psz1, psz2: PWideChar{WideString}): Integer; stdcall; external 'shlwapi.dll';
 
@@ -218,7 +320,7 @@ function  UpperCase(const S: String): String; overload;
 procedure Move(const Source; var Dest; count: Integer); overload;
 // end of file functions (from the old uFilesUtil.pas)
 
-procedure CallShellExecute(Sender: TObject; Visibility: Word = SW_SHOWNORMAL);
+procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -234,6 +336,8 @@ procedure GetFoldersList(Folder: String; ListHolder: THashedStringList; ClearLis
 
 function  GetPlayTime(Milliseconds: Int64; ShowHoursDays: Boolean = False; HideSeconds: Boolean = False): String;
 function  ExtractMAMEIniValue(const MAMEOption: String): String;
+
+function  GetContrastColor(ABGColor: TColor): TColor;
 
 function  GetGameHistory(const GameName, StringLine: String; TagLength: Integer): Boolean;
 
@@ -271,6 +375,7 @@ function  GetScrLayoutDefaultType(LayoutIndex, ImageIndex: Byte): ShortInt;
 //function  GetWindowsVersion: String;
 
 function  FileExists(const FileName: String): Boolean;
+//function  CopyFile(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
 function  RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
 function  MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
 
@@ -285,6 +390,9 @@ function  IsEditEditing(EditHolder: TEdit): Boolean;
 //procedure BrowseEditBkColor(EditHolder: TEdit);
 
 function  ShortDirString(const FileFullPath: String; MaxLength: Integer): String;
+
+function  LengthW(const ws: WideString): Integer;
+function  ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): WideString;
 
 function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: string; var FileName: string;
                              MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
@@ -322,6 +430,8 @@ procedure FindCloseW(var F: TSearchRecW);
 function  GetFileSizeW(const aFileName: WideString): Int64;
 function  FileAgeW(const FileName: WideString): Integer;
 procedure DeleteAllFilesW(const FolderName: WideString; RecursiveFolders: Boolean = False);
+function  RenameFileW(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
+function  MoveFileW(const OldName, NewName: WideString; OverwriteExisting: Boolean): Boolean;
 function  GetShortFileNameW(const FileName: WideString): String;
 
 procedure ShowMessageW(const MessageStr: WideString; TitleStr: String = '');
@@ -344,12 +454,185 @@ function  IsWideCharAlphaNumeric(WC: WideChar): Boolean;
 function  StringReplaceW(const S, OldPattern, NewPattern: WideString;
                          Flags: TReplaceFlags; WholeWord: Boolean = False): WideString;
 
+procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean; MediaTypeID: Integer);
+
 //function  ProcessExists(const exeFileName: string): Boolean;
 
 function  CheckAppOneInstance: Boolean;
 
+procedure CalcCRC32(p: Pointer; ByteCount: DWORD; var CRCValue: DWORD);
+function  CalcStringCRC32(s: string; out CRC32: DWORD): Boolean;
+function  CalcFileCRC32(FromName: WideString): String;
+
 implementation
 
+function WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
+var
+  Len: Integer;
+  //AnsiResult: AnsiString;
+  Flags: Cardinal;
+begin
+  Flags := FORMAT_MESSAGE_FROM_SYSTEM or FORMAT_MESSAGE_IGNORE_INSERTS or FORMAT_MESSAGE_ARGUMENT_ARRAY;
+  if Dll <> 0 then
+    Flags := Flags or FORMAT_MESSAGE_FROM_HMODULE;
+
+  SetLength(Result, 256);
+  Len := FormatMessageW(Flags, Pointer(Dll), ErrorCode, 0, PWideChar(Result), Length(Result), nil);
+  SetLength(Result, Len);
+
+  if Trim(Result) = '' then
+    Result := WideFormat('Unspecified error (%d) from %s.', [ErrorCode, LibName]);
+end;
+
+function WideSysErrorMessage(ErrorCode: Integer): WideString;
+begin
+  Result := WideLibraryErrorMessage('system', 0, ErrorCode);
+end;
+
+function WideFileCreate(const FileName: WideString): Integer;
+begin
+  Result := Integer(CreateFileW(PWideChar(FileName), GENERIC_READ or GENERIC_WRITE,
+    0, nil, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0))
+end;
+
+function WideExpandFileName(const FileName: WideString): WideString;
+var
+  FName: PWideChar;
+  Buffer: array[0..MAX_PATH - 1] of WideChar;
+begin
+  SetString(Result, Buffer, GetFullPathNameW(PWideChar(FileNamE), MAX_PATH, Buffer, FName));
+  //SetString(Result, Buffer, Tnt_GetFullPathNameW(PWideChar(FileName), MAX_PATH, Buffer, FName)); // original from TNT_Unicode
+end;
+
+function WideFileOpen(const FileName: WideString; Mode: LongWord): Integer;
+const
+  AccessMode: array[0..2] of LongWord = (
+    GENERIC_READ,
+    GENERIC_WRITE,
+    GENERIC_READ or GENERIC_WRITE);
+  ShareMode: array[0..4] of LongWord = (
+    0,
+    0,
+    FILE_SHARE_READ,
+    FILE_SHARE_WRITE,
+    FILE_SHARE_READ or FILE_SHARE_WRITE);
+begin
+  Result := Integer(CreateFileW(PWideChar(FileName), AccessMode[Mode and 3],
+    ShareMode[(Mode and $F0) shr 4], nil, OPEN_EXISTING,
+      FILE_ATTRIBUTE_NORMAL, 0));
+end;
+
+// WideFileStream
+constructor TWideFileStream.Create(const FileName: WideString; Mode: Word);
+var
+  CreateHandle: Integer;
+  ErrorMessage: WideString;
+begin
+  if Mode = fmCreate then
+  begin
+    CreateHandle := WideFileCreate(FileName);
+    if CreateHandle < 0 then
+       begin
+         ErrorMessage := WideSysErrorMessage(GetLastError);
+         raise EFCreateError.CreateFmt(SFCreateErrorEx, [WideExpandFileName(FileName), ErrorMessage]);
+       end;
+  end else
+  begin
+    CreateHandle := WideFileOpen(FileName, Mode);
+    if CreateHandle < 0 then
+       begin
+         ErrorMessage := WideSysErrorMessage(GetLastError);
+         raise EFOpenError.CreateFmt(SFOpenErrorEx, [WideExpandFileName(FileName), ErrorMessage]);
+       end;
+  end;
+  inherited Create(CreateHandle);
+end;
+
+destructor TWideFileStream.Destroy;
+begin
+  if Handle >= 0 then FileClose(Handle);
+end;
+
+// TWideMemoryStream
+
+procedure TWideMemoryStream.LoadFromFile(const FileName: WideString);
+var
+  Stream: TStream;
+begin
+  Stream := TWideFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure TWideMemoryStream.SaveToFile(const FileName: WideString);
+var
+  Stream: TStream;
+begin
+  Stream := TWideFileStream.Create(FileName, fmCreate);
+  try
+    SaveToStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+// TWideResourceStream
+
+constructor TWideResourceStream.Create(Instance: THandle; const ResName: WideString;
+  ResType: PWideChar);
+begin
+  inherited Create;
+  Initialize(Instance, PWideChar(ResName), ResType);
+end;
+
+constructor TWideResourceStream.CreateFromID(Instance: THandle; ResID: Word;
+  ResType: PWideChar);
+begin
+  inherited Create;
+  Initialize(Instance, PWideChar(ResID), ResType);
+end;
+
+procedure TWideResourceStream.Initialize(Instance: THandle; Name, ResType: PWideChar);
+
+  procedure Error;
+  begin
+    raise EResNotFound.CreateFmt(SResNotFound, [Name]);
+  end;
+
+begin
+  HResInfo := FindResourceW(Instance, Name, ResType);
+  if HResInfo = 0 then Error;
+  HGlobal := LoadResource(Instance, HResInfo);
+  if HGlobal = 0 then Error;
+  SetPointer(LockResource(HGlobal), SizeOfResource(Instance, HResInfo));
+end;
+
+destructor TWideResourceStream.Destroy;
+begin
+  UnlockResource(HGlobal);
+  FreeResource(HGlobal); // Technically this is not necessary (MS KB #193678)
+  inherited Destroy;
+end;
+
+function TWideResourceStream.Write(const Buffer; Count: Longint): Longint;
+begin
+  raise EStreamError.CreateRes(PResStringRec(@SCantWriteResourceStreamError));
+end;
+
+procedure TWideResourceStream.SaveToFile(const FileName: WideString);
+var
+  Stream: TStream;
+begin
+  Stream := TWideFileStream.Create(FileName, fmCreate);
+  try
+    SaveToStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
 
 function GetVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 var
@@ -985,17 +1268,24 @@ asm
 end;
 // end of file functions (from old uFilesUtil.pas)
 
-procedure CallShellExecute(Sender: TObject; Visibility: Word = SW_SHOWNORMAL);
+procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 var
   LinkStr: String;
 begin
+  if FileToOpen <> '' then
+     LinkStr:= FileToOpen
+  else
   if Sender is TLabel then
      LinkStr:= TLabel(Sender).Hint
   else
   if Sender is TShadowLabel then
-     LinkStr:= TShadowLabel(Sender).Hint;
+     LinkStr:= TShadowLabel(Sender).Hint
+  else
+  if Sender is TMenuItem then
+     LinkStr:= TMenuItem(Sender).Hint;
 
-  ShellExecute(Application.Handle, 'open', PChar(LinkStr), nil, nil, Visibility);
+  if LinkStr <> '' then
+     ShellExecute(Application.Handle, 'open', PChar(LinkStr), nil, nil, Visibility);
 end;
 
 function GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
@@ -1106,27 +1396,6 @@ begin
     5: Result:= Result+'.elsoftlist';
   end;
 end;
-
-{function GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
-begin
-  Result:= '';
-  case SystemID of
-    idMAME      :
-                  begin
-                    if SoftwareList = '' then
-                       Result:= 'mame.elrom'
-                    else
-                       Result:= SoftwareList+'.elrom';
-                  end;
-    idSupermodel: Result:= 'supermodelsegamodel3.elrom';
-    //idDaphne: this system have no ROMs database in EL
-    idDemul     : Result:= 'demul.elrom';
-    idHBMAME    : Result:= 'hbmame.elrom';
-    idDICE      : Result:= 'dice.elrom';
-    idSegaModel2: Result:= 'segamodel2.elrom';
-    idZiNc      : Result:= 'zinc.elrom';
-  end;
-end;}
 
 procedure GenerateControllerDefinitionsFilesList(Folder: String; ListHolder: THashedStringList; ClearList: Boolean = False);
 var
@@ -1250,6 +1519,7 @@ begin
        until (FindNext(Search) <> 0);
      end;
   FindClose(Search);
+  ListHolder.Sorted:= False;
   ListHolder.EndUpdate;
 end;
 
@@ -1592,14 +1862,12 @@ begin
   Result:= '';
   if strLine <> '' then
      begin
-       //strPosition:= Pos(EntryName+'="', strLine);
        strPosition:= PosEx(EntryName+'="', strLine);
        if strPosition <> 0 then
           begin
             strPosition:= strPosition+(Length(EntryName)+1);
             Result:= strLine;
             Delete(Result, 1, strPosition);
-            //Result:= Copy(Result, 1, Pos('"', Result)-1);
             Result:= Copy(Result, 1, PosEx('"', Result)-1);
             if Result = '' then
                Result:= '';
@@ -1615,7 +1883,6 @@ begin
   if strLine <> '' then
      begin
        strPosition:= PosEx(EntryName+' ', strLine);
-       //strPosition:= Pos(EntryName+' ', strLine);
        if strPosition <> 0 then
           begin
             strPosition:= strPosition+(Length(EntryName)+1);
@@ -1906,6 +2173,20 @@ begin
   // Code will never return negative values!!!
 end;
 
+// doesn't work!!! (October 28, 2017)
+//function CopyFile(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
+//var
+//  rFlags: Cardinal;
+//  CopyCancel: Boolean;
+//begin
+//  CopyCancel:= False;
+//  rFlags:= MOVEFILE_COPY_ALLOWED+MOVEFILE_WRITE_THROUGH;
+//  if OverwriteExistingFile then
+//     rFlags:= rFlags+MOVEFILE_REPLACE_EXISTING;
+//
+//  Result:= CopyFileExW(PWideChar(OldName), PWideChar(NewName), nil, nil, @CopyCancel, rFlags);
+//end;
+
 // RenameFile fix for Windows 7 (Delphi 7 function fails constantly)
 function RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
 var
@@ -1916,10 +2197,10 @@ begin
      rFlags:= rFlags+MOVEFILE_REPLACE_EXISTING;
 
   Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName), rFlags);
-           //MOVEFILE_COPY_ALLOWED
-           //+MOVEFILE_REPLACE_EXISTING
-           //+MOVEFILE_WRITE_THROUGH);
+
+
 end;
+// note: RenameFileW() function for Unicode alredy exists! MoveFileW() does not (March 07, 2017)
 
 function MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
 var
@@ -1993,6 +2274,30 @@ begin
        Exit;
      end;
   FileName:= ExtractFileName(FileFullPath);
+  NewLength:= MaxLength-Length(FileName);
+  NewPathStr:= Copy(FileFullPath, 1, NewLength)+'...\'+FileName;
+  Result:= NewPathStr;
+end;
+
+function LengthW(const ws: WideString): Integer;
+begin
+  Result:= 0;
+  if ws <> '' then
+     Result:= Length(ws) * SizeOf(ws[1]);
+end;
+
+function ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): WideString;
+var
+  NewPathStr, FileName: WideString;
+  NewLength: Integer;
+begin
+
+  if Length(FileFullPath) <= MaxLength then
+     begin
+       Result:= FileFullPath;
+       Exit;
+     end;
+  FileName:= ExtractFileNameW(FileFullPath);
   NewLength:= MaxLength-Length(FileName);
   NewPathStr:= Copy(FileFullPath, 1, NewLength)+'...\'+FileName;
   Result:= NewPathStr;
@@ -2269,15 +2574,48 @@ begin
   Result := (B shl 16) + (G shl 8) + R;
 end;
 
+function GetContrastColor(ABGColor: TColor): TColor;
+var
+  ADouble: Double;
+  R, G, B: Byte;
+begin
+  if ABGColor <= 0 then
+  begin
+    Result := clWhite;
+    Exit; // *** EXIT RIGHT HERE ***
+  end;
+
+  if ABGColor = clWhite then
+  begin
+    Result := clBlack;
+    Exit; // *** EXIT RIGHT HERE ***
+  end;
+
+  // Get RGB from Color
+  R := GetRValue(ABGColor);
+  G := GetGValue(ABGColor);
+  B := GetBValue(ABGColor);
+
+  // Counting the perceptive luminance - human eye favors green color...
+  ADouble := 1 - (0.299 * R + 0.587 * G + 0.114 * B) / 255;
+
+  if (ADouble < 0.5) then
+    Result := clBlack  // bright colors - black font
+  else
+    Result := clWhite;  // dark colors - white font
+end;
+
 function GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
 var
   appIcon: TIcon;
   //wIc: Word;
 begin
   Result:= -1;
+
   appIcon:= TIcon.Create;
   appIcon.Width:= ImageListHolder.Width;
   appIcon.Height:= ImageListHolder.Height;
+
   appIcon.Handle:= ExtractIcon(Application.Handle, PChar(appEmuFile), 0);
   if not appIcon.Empty then
      begin
@@ -2796,6 +3134,33 @@ begin
   FindCloseW(Search);
 end;
 
+function RenameFileW(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
+var
+  rFlags: Cardinal;
+begin
+  rFlags:= MOVEFILE_COPY_ALLOWED+MOVEFILE_WRITE_THROUGH;
+  if OverwriteExistingFile then
+     rFlags:= rFlags+MOVEFILE_REPLACE_EXISTING;
+
+  Result:= MoveFileExW(PWideChar(OldName), PWideChar(NewName), rFlags);
+           //MOVEFILE_COPY_ALLOWED
+           //+MOVEFILE_REPLACE_EXISTING
+           //+MOVEFILE_WRITE_THROUGH);
+end;
+
+function MoveFileW(const OldName, NewName: WideString; OverwriteExisting: Boolean): Boolean;
+var
+  flags: Cardinal;
+begin
+  flags:= MOVEFILE_COPY_ALLOWED+MOVEFILE_WRITE_THROUGH;
+  if OverwriteExisting then
+     flags:= flags+MOVEFILE_REPLACE_EXISTING;
+  Result:= MoveFileExW(PWideChar(OldName), PWideChar(NewName),
+           flags);//MOVEFILE_COPY_ALLOWED
+           //+MOVEFILE_REPLACE_EXISTING
+           //+MOVEFILE_WRITE_THROUGH);
+end;
+
 //function WStrPas(const Str: PWideChar): WideString;
 //begin
 //  Result := Str;
@@ -2982,6 +3347,67 @@ begin
   result:=dst;
 end;
 
+procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean; MediaTypeID: Integer);
+var
+  SearchW: TSearchRecW;
+  iName, iStrDOS: String;
+  UnicodeStr: Boolean;
+begin
+  // list format
+  //MediaType filename_fullPath
+  // this is for console/computer games (EmuCon), NOT to be used by arcade systems!
+  if Folder = '' then
+     Exit;
+  ListHolder.BeginUpdate;
+  //ListHolder.Sorted:= True;
+  //ListHolder.Duplicates:= dupIgnore;
+  Folder:= IncludeTrailingPathDelimiter(Folder);
+
+  if FindFirstW(Folder+'*', $37, SearchW) = 0 then
+     begin
+       repeat
+         // It's a directory?
+         if (SearchW.Name <> '.') and (SearchW.Name <> '..') then
+            begin
+              if (SearchW.Attr and $10 = $10) and (SubDirectories) then
+                 GetGamesFilesListW(Folder+SearchW.Name, FileType, ListHolder, SubDirectories, MediaTypeID)
+              else
+                 begin
+                   if (SearchW.Attr and $10 <> $10) then
+                      begin
+                        iStrDOS:= '';
+                        iName:= SearchW.Name;
+                        UnicodeStr:= iName <> SearchW.Name;
+                        if UnicodeStr then
+                           begin
+                             iName:= Utf8Encode(SearchW.Name);
+                             iStrDOS:= '='+SearchW.DOSName;
+                           end;
+                        if (FileType <> '') then
+                           begin
+                             if SameText(ExtractFileExtW(iName), FileType) then
+                                ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS)
+                           end
+                        else
+                           begin
+                             ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS);
+                             //ListHolder.Add(IntToStr(MediaTypeID)+Folder+iName);
+                           end;
+                        if UnicodeStr then
+                           begin
+                             //ShowMessage('iName encoded: '+iName);
+                           //MessageBoxW(Application.Handle, PWideChar(SearchW.Name+#13#10+iName+#13#10+Utf8Decode(iName)), 'New MessageBoxW', mb_Ok);
+                           end;
+                      end;
+                 end;
+            end;
+       until FindNextW(SearchW) <> 0;
+     end;
+  FindCloseW(SearchW);
+  ListHolder.EndUpdate;
+  //ShowMessage('files'+#13#10+ListHolder.Text);
+end;
+
 function CheckAppOneInstance: Boolean;
 var
   Mutex: THandle;
@@ -3006,6 +3432,76 @@ begin
                             #13#10+#13#10+'Aborting...', '', mb_Ok+mb_IconExclamation)
   else
      Result:= False;
+end;
+
+// Use CalcCRC32 as a procedure so CRCValue can be passed in but
+  // also returned. This allows multiple calls to CalcCRC32 for
+  // the "same" CRC-32 calculation.
+procedure CalcCRC32(p: Pointer; ByteCount: DWORD; var CRCValue: DWORD);
+  // The following is a little cryptic (but executes very quickly).
+  // The algorithm is as follows:
+  // 1. exclusive-or the input byte with the low-order byte of
+  // the CRC register to get an INDEX
+  // 2. shift the CRC register eight bits to the right
+  // 3. exclusive-or the CRC register with the contents of Table[INDEX]
+  // 4. repeat steps 1 through 3 for all bytes
+var
+  i: DWORD;
+  q: ^BYTE;
+begin
+  q:= p;
+  for i:= 0 to ByteCount-1 do
+  begin
+    CRCvalue:= (CRCvalue shr 8) xor
+      CRC32Table[q^ xor (CRCvalue and $000000FF)];
+    Inc(q);
+  end
+end;
+
+function CalcStringCRC32(S: string; out CRC32: DWORD): Boolean;
+var
+  iCRC32Table: DWORD;
+begin
+  // Verify the table used to compute the CRCs has not been modified.
+  // Thanks to Gary Williams for this suggestion, Jan. 2003.
+  iCRC32Table:= $FFFFFFFF;
+  CalcCRC32(Addr(CRC32Table[0]), SizeOf(CRC32Table), iCRC32Table);
+  iCRC32Table:= not iCRC32Table;
+
+  if iCRC32Table <> $6FCF9E13 then
+     ShowMessageW('CRC32 Table CRC32 is '+IntToHex(iCRC32Table, 8)+', expecting $6FCF9E13')
+  else
+  begin
+    CRC32:= $FFFFFFFF; // To match PKZIP
+    if Length(S) > 0 then  // Avoid access violation in D4
+       CalcCRC32(Addr(s[1]), Length(s), CRC32);
+    CRC32:= not CRC32; // To match PKZIP
+  end;
+end;
+
+function CalcFileCRC32(FromName: WideString): String;
+var
+  Stream: TWideMemoryStream;
+  CRCvalue: DWORD;
+  Error: WORD;
+begin
+  Error:= 0;
+  CRCValue:= $FFFFFFFF;
+  Stream:= TWideMemoryStream.Create;
+  try
+    try
+      Stream.LoadFromFile(FromName);
+      if Stream.Size > 0 then
+         CalcCRC32(Stream.Memory, Stream.Size, CRCvalue)
+    except
+      on E: EReadError do
+        Error:= 1
+    end;
+    CRCvalue:= not CRCvalue;
+  finally
+    Stream.Free;
+  end;
+  Result:= LowerCase(IntToHex(CRCvalue, 8));
 end;
 
 

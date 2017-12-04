@@ -1,12 +1,12 @@
 object FormFavoritesManager: TFormFavoritesManager
-  Left = 644
-  Top = 354
-  BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
+  Left = 974
+  Top = 635
+  Width = 797
+  Height = 440
+  BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Favorites Manager'
-  ClientHeight = 405
-  ClientWidth = 619
   Color = clWhite
+  Constraints.MinWidth = 635
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -15,7 +15,6 @@ object FormFavoritesManager: TFormFavoritesManager
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -24,7 +23,7 @@ object FormFavoritesManager: TFormFavoritesManager
   object ToolbarButtons: TToolBar
     Left = 0
     Top = 0
-    Width = 619
+    Width = 781
     Height = 22
     AutoSize = True
     ButtonWidth = 163
@@ -42,8 +41,16 @@ object FormFavoritesManager: TFormFavoritesManager
     Transparent = True
     Wrapable = False
     OnCustomDraw = ToolbarButtonsCustomDraw
-    object ToolButtonNew: TToolButton
+    object ToolButtonFavSettings: TToolButton
       Left = 2
+      Top = 0
+      Hint = 'Settings'
+      AutoSize = True
+      ImageIndex = 7
+      OnClick = ToolButtonFavSettingsClick
+    end
+    object ToolButtonNew: TToolButton
+      Left = 36
       Top = 0
       Hint = 'Create a new favorites list'
       AutoSize = True
@@ -52,7 +59,7 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object ToolButtonClearGames: TToolButton
       Tag = 2
-      Left = 43
+      Left = 77
       Top = 0
       Hint = 'Empty games list of selected favorites'
       AutoSize = True
@@ -61,7 +68,7 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object ToolButtonRemoveInvalidEntries: TToolButton
       Tag = 1
-      Left = 126
+      Left = 160
       Top = 0
       Hint = 'Remove invalid entries from selected favorites'
       AutoSize = True
@@ -70,7 +77,7 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object ToolButtonDuplicate: TToolButton
       Tag = 3
-      Left = 184
+      Left = 218
       Top = 0
       Hint = 'Create a copy of selected favorites'
       AutoSize = True
@@ -79,7 +86,7 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object ToolButtonDelete: TToolButton
       Tag = 4
-      Left = 249
+      Left = 283
       Top = 0
       Hint = 'Terminate selected favorites [Delete key]'
       AutoSize = True
@@ -87,14 +94,14 @@ object FormFavoritesManager: TFormFavoritesManager
       OnClick = ToolButtonNewClick
     end
     object ToolButton3: TToolButton
-      Left = 299
+      Left = 333
       Top = 0
       AutoSize = True
       Caption = '              '
       Enabled = False
     end
     object ToolBarSetSelectedProfileActive: TToolButton
-      Left = 352
+      Left = 386
       Top = 0
       Hint = 'Change favorites list to selected [Space Bar key]'
       AutoSize = True
@@ -106,8 +113,8 @@ object FormFavoritesManager: TFormFavoritesManager
   object FavoritesList: TEasyListview
     Left = 0
     Top = 44
-    Width = 619
-    Height = 361
+    Width = 781
+    Height = 358
     Align = alClient
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 22
@@ -132,17 +139,17 @@ object FormFavoritesManager: TFormFavoritesManager
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000101000100000000010001FA000000FFFFFF1F0001000000
+      000600000080080001010001000000000100012C010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000142000000FFFFFF1F000100000001000000050000004700
-      61006D0065007300000000000000000000000000110000005445617379436F6C
-      756D6E53746F726564FFFECE0006000000800800010100010200000000000192
-      000000FFFFFF1F00010000000100000008000000460069006C0065006E006100
-      6D006500000000000000000000000000110000005445617379436F6C756D6E53
-      746F726564FFFECE0006000000800800010100010300000000000189000000FF
-      FFFF1F0001000000010000000D000000440061007400650020004D006F006400
-      69006600690065006400000000000000000000000000}
+      00010100000000000146000000FFFFFF1F000100000001000000050000004700
+      61006D0065007300000000000100000000000000000000001100000054456173
+      79436F6C756D6E53746F726564FFFECE00060000008008000101000102000000
+      000001FA000000FFFFFF1F00010000000100000008000000460069006C006500
+      6E0061006D006500000000000000000000000000110000005445617379436F6C
+      756D6E53746F726564FFFECE000600000080080001010001030000000000019B
+      000000FFFFFF1F0001000000010000000D000000440061007400650020004D00
+      6F00640069006600690065006400000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
@@ -150,7 +157,6 @@ object FormFavoritesManager: TFormFavoritesManager
     Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
     Header.Height = 23
-    Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
@@ -190,17 +196,17 @@ object FormFavoritesManager: TFormFavoritesManager
     TabOrder = 1
     View = elsReport
     OnColumnClick = FavoritesListColumnClick
+    OnColumnSizeChanging = FavoritesListColumnSizeChanging
     OnDblClick = FavoritesListDblClick
     OnItemCompare = FavoritesListItemCompare
     OnItemEdited = FavoritesListItemEdited
     OnItemEditEnd = FavoritesListItemEditEnd
-    OnItemPaintText = FavoritesListItemPaintText
     OnKeyAction = FavoritesListKeyAction
   end
   object NewFavoritePanel: TPanelEx
     Left = 0
     Top = 22
-    Width = 619
+    Width = 781
     Height = 22
     Align = alTop
     Color1 = 16445669
@@ -253,7 +259,7 @@ object FormFavoritesManager: TFormFavoritesManager
     end
   end
   object PanelUpdatingFavTagInGames: TPanelEx
-    Left = 132
+    Left = 317
     Top = 176
     Width = 350
     Height = 41
@@ -285,5 +291,129 @@ object FormFavoritesManager: TFormFavoritesManager
       EllipsType = etNone
       Transparent = True
     end
+  end
+  object PanelFavSettings: TPanelEx
+    Left = 4
+    Top = 226
+    Width = 301
+    Height = 87
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    Frames = [frLeft, frTop, frRight, frBottom]
+    ParentBackground = False
+    ShowHint = True
+    Style = vgSolid
+    Visible = False
+    object Label1: TLabel
+      Left = 24
+      Top = 24
+      Width = 38
+      Height = 15
+      Caption = '9 pixels'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object Label2: TLabel
+      Left = 120
+      Top = 24
+      Width = 44
+      Height = 15
+      Caption = '12 pixels'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object Label3: TLabel
+      Left = 232
+      Top = 24
+      Width = 44
+      Height = 15
+      Caption = '14 pixels'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object ButtonClosePanelFavSettings: TBitBtn
+      Left = 218
+      Top = 56
+      Width = 75
+      Height = 23
+      Caption = 'Close'
+      TabOrder = 0
+      OnClick = ButtonClosePanelFavSettingsClick
+    end
+    object ButtonCenterPanelFavSettings: TBitBtn
+      Left = 8
+      Top = 56
+      Width = 75
+      Height = 23
+      Hint = 'Align window to center screen'
+      Caption = 'Center'
+      TabOrder = 1
+      OnClick = ButtonCenterPanelFavSettingsClick
+    end
+    object FavSettingSmallFont: TAdvOfficeRadioButton
+      Left = 8
+      Top = 8
+      Width = 78
+      Height = 18
+      TabOrder = 2
+      TabStop = True
+      OnClick = FavSettingSmallFontClick
+      Alignment = taLeftJustify
+      Caption = 'Small Font'
+      Checked = True
+      ReturnIsTab = False
+      Themed = True
+    end
+    object FavSettingLargeFont: TAdvOfficeRadioButton
+      Tag = 2
+      Left = 216
+      Top = 8
+      Width = 78
+      Height = 18
+      TabOrder = 3
+      OnClick = FavSettingSmallFontClick
+      Alignment = taLeftJustify
+      Caption = 'Large Font'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object FavSettingMediumFont: TAdvOfficeRadioButton
+      Tag = 1
+      Left = 104
+      Top = 8
+      Width = 93
+      Height = 18
+      TabOrder = 4
+      OnClick = FavSettingSmallFontClick
+      Alignment = taLeftJustify
+      Caption = 'Medium Font'
+      ReturnIsTab = False
+      Themed = True
+    end
+  end
+  object IL_SystemType: TImageList
+    Left = 160
+    Top = 88
   end
 end

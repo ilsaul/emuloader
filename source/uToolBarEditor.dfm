@@ -1,11 +1,11 @@
 object FormToolBarEditor: TFormToolBarEditor
-  Left = 646
-  Top = 296
+  Left = 885
+  Top = 417
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Tool Bar'
   ClientHeight = 350
-  ClientWidth = 437
+  ClientWidth = 618
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,10 +23,12 @@ object FormToolBarEditor: TFormToolBarEditor
   object ToolBarListView: TEasyListview
     Left = 0
     Top = 0
-    Width = 454
+    Width = 640
     Height = 301
+    AllowHiddenCheckedItems = True
     BorderStyle = bsNone
-    CellSizes.Tile.Height = 50
+    CellSizes.Tile.Height = 60
+    CellSizes.Tile.Width = 206
     Color = clWhite
     DisabledBlendColor = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -53,6 +55,7 @@ object FormToolBarEditor: TFormToolBarEditor
     PaintInfoItem.CaptionIndent = 0
     PaintInfoItem.CheckType = ectBox
     PaintInfoItem.ShowBorder = False
+    PaintInfoItem.TileDetailCount = 2
     ParentShowHint = False
     ShowThemedBorder = False
     ShowHint = True
@@ -79,8 +82,9 @@ object FormToolBarEditor: TFormToolBarEditor
   object PanelEx1: TPanelEx
     Left = 0
     Top = 301
-    Width = 437
+    Width = 618
     Height = 49
+    Align = alBottom
     Color1 = clWhite
     Color2 = 15856113
     Color3 = clYellow
@@ -119,7 +123,7 @@ object FormToolBarEditor: TFormToolBarEditor
       Themed = True
     end
     object ButtonDefault: TBitBtn
-      Left = 241
+      Left = 422
       Top = 16
       Width = 89
       Height = 25
@@ -131,7 +135,7 @@ object FormToolBarEditor: TFormToolBarEditor
       OnClick = ButtonDefaultClick
     end
     object ButtonClose: TBitBtn
-      Left = 339
+      Left = 520
       Top = 16
       Width = 89
       Height = 25
@@ -146,7 +150,7 @@ object FormToolBarEditor: TFormToolBarEditor
       Top = 24
       Width = 100
       Height = 20
-      Hint = 'Use large icons or small icons in main tool bar'
+      Hint = 'Use large icons (44x40) or small icons (28x22)'
       ShowHint = True
       TabOrder = 4
       OnClick = SmallToolBarClick

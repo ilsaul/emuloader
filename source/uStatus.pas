@@ -22,6 +22,7 @@ type
   private
     { Private declarations }
     procedure ResetTimerLabel;
+    procedure ResizeForm;
   public
     { Public declarations }
     procedure StartThreadClock;
@@ -114,6 +115,43 @@ begin
      ProgressBar.Position:= CalculatePosition;
 end;
 
+procedure TFormStatus.ResizeForm;
+begin
+  if Screen.Height < 600 then
+     begin
+       LabelStatusType.Font.Name:= 'Segoe UI';
+       LabelStatusType.Font.Size:= 7;
+       LabelStatusType.Font.Style:= [fsBold];
+       LabelStatusType.Left:= 35;
+       LabelStatusType.Top:= 272;
+       LabelStatusType.Width:= 440;
+       LabelStatusType.Height:= 13;
+
+       LabelMessage.Font.Name:= 'Arial';
+       LabelMessage.Font.Size:= 7;
+       LabelMessage.Font.Style:= [fsBold];
+       LabelMessage.Left:= 23;
+       LabelMessage.Top:= 286;
+       LabelMessage.Width:= 425;
+       LabelMessage.Height:= 23;
+
+       LabelTimer.Font.Size:= 7;
+       LabelTimer.Left:= 405;
+       LabelTimer.Top:= 310;
+
+       ProgressBar.Width:= 401;
+       ProgressBar.Height:= 9;
+       ProgressBar.Left:= 2;
+       ProgressBar.Top:= 311;
+
+       LabelVersion.Font.Name:= 'Arial';
+       LabelVersion.Font.Size:= 7;
+       LabelVersion.Font.Style:= [fsBold];
+       LabelVersion.Left:= 135;
+       LabelVersion.Top:= 32;
+     end;
+end;
+
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
   //DoubleBuffered:= True; // not needed anymore as the windows is no longer multiplexed
@@ -124,39 +162,7 @@ begin
   if not Application.Terminated then
      begin
        LabelSoftwareScanCount.Left:= 554;
-       if Screen.Height < 600 then
-          begin
-            LabelStatusType.Font.Name:= 'Segoe UI';
-            LabelStatusType.Font.Size:= 7;
-            LabelStatusType.Font.Style:= [fsBold];
-            LabelStatusType.Left:= 35;
-            LabelStatusType.Top:= 272;
-            LabelStatusType.Width:= 440;
-            LabelStatusType.Height:= 13;
-
-            LabelMessage.Font.Name:= 'Arial';
-            LabelMessage.Font.Size:= 7;
-            LabelMessage.Font.Style:= [fsBold];
-            LabelMessage.Left:= 23;
-            LabelMessage.Top:= 286;
-            LabelMessage.Width:= 425;
-            LabelMessage.Height:= 23;
-
-            LabelTimer.Font.Size:= 7;
-            LabelTimer.Left:= 405;
-            LabelTimer.Top:= 310;
-
-            ProgressBar.Width:= 401;
-            ProgressBar.Height:= 9;
-            ProgressBar.Left:= 2;
-            ProgressBar.Top:= 311;
-
-            LabelVersion.Font.Name:= 'Arial';
-            LabelVersion.Font.Size:= 7;
-            LabelVersion.Font.Style:= [fsBold];
-            LabelVersion.Left:= 135;
-            LabelVersion.Top:= 32;
-          end;
+       ResizeForm;
      end;
 end;
 

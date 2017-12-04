@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
   MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
-  ShadowLabel, ExtCtrls;
+  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -41,6 +41,17 @@ type
     LabelTaskMessage: TShadowLabel;
     PanelUpdatingFavTagInGames: TPanelEx;
     LabelHotkeyKeys: TShadowLabel;
+    IL_SystemType: TImageList;
+    PanelFavSettings: TPanelEx;
+    ToolButtonFavSettings: TToolButton;
+    ButtonClosePanelFavSettings: TBitBtn;
+    ButtonCenterPanelFavSettings: TBitBtn;
+    FavSettingSmallFont: TAdvOfficeRadioButton;
+    FavSettingLargeFont: TAdvOfficeRadioButton;
+    FavSettingMediumFont: TAdvOfficeRadioButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     procedure ToolbarButtonsCustomDraw(Sender: TToolBar;
       const ARect: TRect; var DefaultDraw: Boolean);
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
@@ -62,15 +73,21 @@ type
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure FavoritesListItemPaintText(Sender: TCustomEasyListview;
-      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure ToolButtonFavSettingsClick(Sender: TObject);
+    procedure ButtonClosePanelFavSettingsClick(Sender: TObject);
+    procedure FavoritesListColumnSizeChanging(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Width, NewWidth: Integer; var Allow: Boolean);
+    procedure ButtonCenterPanelFavSettingsClick(Sender: TObject);
+    procedure FavSettingSmallFontClick(Sender: TObject);
   private
     { Private declarations }
     UpdateFavStatusInGames: Boolean;
     LastActiveFavFilter: String;
     ActiveProfileItem: TEasyItem;
+    FullFavFilesList: THashedStringList;
     procedure UpdateDateTime(destItem: TEasyItem; const fFile: String);
     function  ELV_AddItem(const fFile: String): TEasyItem;
+    procedure GetFavFilesList;
     procedure LoadFavoritesProfiles;
     procedure SelectCurrentProfile;
     function  CheckIfAvailable(iStr: String; IsTitle: Boolean): Boolean;
@@ -81,6 +98,9 @@ type
     procedure EditTitleFileName(ColumnIndex: Integer);
     procedure RemoveInvalidEntries;
     function  ValidateGamesActiveProfile: Boolean;
+    procedure ShowUpdateFavGamesListPanel;
+    procedure ReadSettings;
+    procedure WriteSettings;
   public
     { Public declarations }
   end;
@@ -92,7 +112,7 @@ implementation
 
 {$R *.dfm}
 
-uses uMain, uCommon;
+uses uMain, uCommon, uCommonCustom;
 
 function TFavFileInfo.GetCaptions(Column: Integer): WideString;
 begin
@@ -115,9 +135,13 @@ var
   Item: TEasyItem;
   favList: THashedStringList;
   HaveTitle: Integer;
+  FoundTxt: Boolean;
 begin
   favList:= THashedStringList.Create;
-  favList.LoadFromFile(FormMain.GetFavoritesFolder+fFile);
+  FoundTxt:= FileExists(FormMain.GetFavoritesFolder+fFile);
+  if FoundTxt then
+     favList.LoadFromFile(FormMain.GetFavoritesFolder+fFile);
+
   Item:= FavoritesList.Items.AddCustom(TFavFileInfo, nil);
   Item.ImageIndex:= -1;
   if FormMain.IsFavoriteDefault(fFile) then
@@ -128,55 +152,84 @@ begin
      end
   else
      begin
-       TFavFileInfo(Item).eTitle:= favList.Values['favorite_title'];
+       if FoundTxt then
+          TFavFileInfo(Item).eTitle:= favList.Values['favorite_title'];
        if TFavFileInfo(Item).eTitle = '' then
           TFavFileInfo(Item).eTitle:= ChangeFileExt(fFile, '');
-       HaveTitle:= Ord(favList.IndexOfName('favorite_title') <> -1);
-       if HaveTitle = 0 then
-          begin
-            // favorites profile have no title so, give it one!!!!
-            favList.Insert(0, 'favorite_title='+TFavFileInfo(Item).eTitle);
-            favList.SaveToFile(FormMain.GetFavoritesFolder+fFile);
-            HaveTitle:= 1;
-          end;
+
+       if FoundTxt then
+       begin
+         HaveTitle:= Ord(favList.IndexOfName('favorite_title') <> -1);
+         if HaveTitle = 0 then
+            begin
+              // favorites profile have no title so, give it one!!!!
+              favList.Insert(0, 'favorite_title='+TFavFileInfo(Item).eTitle);
+              favList.SaveToFile(FormMain.GetFavoritesFolder+fFile);
+              HaveTitle:= 1;
+            end;
+       end;
      end;
 
   TFavFileInfo(Item).eFileName:= fFile;
-  UpdateDateTime(Item, FormMain.GetFavoritesFolder+fFile);
-  TFavFileInfo(Item).eGamesCount:= favList.Count-HaveTitle;
+  if FoundTxt then
+     begin
+       UpdateDateTime(Item, FormMain.GetFavoritesFolder+fFile);
+       TFavFileInfo(Item).eGamesCount:= favList.Count-HaveTitle;
+     end;
+
   FreeAndNil(favList);
   Result:= Item;
 end;
 
+procedure TFormFavoritesManager.GetFavFilesList;
+begin
+  FullFavFilesList:= THashedStringList.Create;
+  FullFavFilesList.Sorted:= True;
+  FullFavFilesList.Duplicates:= dupIgnore;
+  GetFilesList(FormMain.GetFavoritesFolder, '.txt', '*.txt', FullFavFilesList, False, True, False);
+  FullFavFilesList.Sorted:= False;
+
+  if FullFavFilesList.Count = 0 then
+     FreeAndNil(FullFavFilesList);
+end;
+
 procedure TFormFavoritesManager.LoadFavoritesProfiles;
 var
-  favFiles: THashedStringList;
+  //favFiles: THashedStringList;
   Loop: Integer;
   fFileStr: String;
+  defaultProfileAdded: Boolean;
 begin
-  favFiles:= THashedStringList.Create;
-  GetFilesList(FormMain.GetFavoritesFolder, '.ini', '*.ini', favFiles, False, True, False);
-  if favFiles.Count = 0 then
+  GetFavFilesList;
+  defaultProfileAdded:= False;
+  if FullFavFilesList.Count = 0 then
      begin
-       fFileStr:= CreateNewValidFileName(''); // this will create the default profile favorites.ini
+       fFileStr:= CreateNewValidFileName(''); // this will create the default profile favorites.txt
        if fFileStr <> '' then
-          favFiles.Add(fFileStr) // add default profile favorites.ini to the files list
+          begin
+            if not defaultProfileAdded then
+               begin
+                 FullFavFilesList.Add(fFileStr); // add default profile favorites.txt to the files list
+                 defaultProfileAdded:= True;
+               end;
+          end
        else
           begin
             GenerateMessage('Error', 'No files found.', '    No favorites files were found an failed to '+
-                            'create the default profile favorites.ini!', 2, False, 1);
-            FreeAndNil(favFiles);
+                            'create the default profile favorites.txt!', 2, False, 1);
+            FreeAndNil(FullFavFilesList);
             Exit;
           end;
      end;
 
   FavoritesList.BeginUpdate;
   FavoritesList.Items.ReIndexDisable:= True;
-  favFiles.Sorted:= False;
-  for Loop:=0 to favFiles.Count-1 do
-      ELV_AddItem(favFiles[Loop]);
+  //favFiles.Sorted:= False;
+  for Loop:=0 to FullFavFilesList.Count-1 do
+      ELV_AddItem(FullFavFilesList[Loop]);
 
-  FreeAndNil(favFiles);
+  FreeAndNil(FullFavFilesList);
+  //FreeAndNil(favFiles);
   FavoritesList.Items.ReIndexDisable:= False;
   FavoritesList.EndUpdate;
   FavoritesList.Sort.SortAll;
@@ -217,7 +270,7 @@ begin
      end;
   Result:= True;
   Item:= FavoritesList.Groups.FirstItem;
-  fileStr:= ChangeFileExt(iStr, '.ini');
+  fileStr:= ChangeFileExt(iStr, '.txt');
   repeat
     case IsTitle of
       True:
@@ -239,64 +292,97 @@ procedure TFormFavoritesManager.UpdateTitleInfo(newStr, favFileName: String; Sho
 var
   favFile: THashedStringList;
   tIndex: Integer;
+  UpdTxt: Boolean;
+
+  function UpdateFavFile: Boolean;
+  begin
+    Result:= True;
+    favFile:= THashedStringList.Create;
+    favFile.LoadFromFile(FormMain.GetFavoritesFolder+favFileName);
+    tIndex:= favFile.IndexOfName('favorite_title');
+    if tIndex <> -1 then
+       favFile[tIndex]:= 'favorite_title='+newStr
+    else
+       favFile.Insert(0, 'favorite_title='+newStr);
+    favFile.SaveToFile(FormMain.GetFavoritesFolder+favFileName);
+    FreeAndNil(favFile);
+    UpdateDateTime(FavoritesList.Selection.First, FormMain.GetFavoritesFolder+favFileName);
+  end;
+
 begin
   if FormMain.IsFavoriteDefault(favFileName) then
-     Exit; // default profile favorites.ini have a fixed "Default" title
-  if not FileExists(FormMain.GetFavoritesFolder+favFileName) then
+     Exit; // default profile favorites.txt have a fixed "Default" title
+  UpdTxt:= FileExists(FormMain.GetFavoritesFolder+favFileName);
+
+  if not UpdTxt then
      begin
        if ShowErrorMessage then
           begin
             CallMessageBox;
             FormMain.AddMsgText('    File ');
-            FormMain.AddMsgText(FormMain.GetFavoritesFolder+favFileName, $00a65300,[fsBold]);
+            FormMain.AddMsgText(favFileName, $00a65300,[fsBold]);
             FormMain.AddMsgText(' was not found. Cannot change title.'+#13#10+'Aborting...');
             GenerateMessage('Error', 'Change favorite title.', '', 2, False, 1);
           end;
        Exit;
      end;
-  favFile:= THashedStringList.Create;
-  favFile.LoadFromFile(FormMain.GetFavoritesFolder+favFileName);
-  tIndex:= favFile.IndexOfName('favorite_title');
-  if tIndex <> -1 then
-     favFile[tIndex]:= 'favorite_title='+newStr
-  else
-     favFile.Insert(0, 'favorite_title='+newStr);
-  favFile.SaveToFile(FormMain.GetFavoritesFolder+favFileName);
-  FreeAndNil(favFile);
-  UpdateDateTime(FavoritesList.Selection.First, FormMain.GetFavoritesFolder+favFileName);
+
+  if UpdTxt then
+     UpdateFavFile;
+
   if FormMain.FavoriteProfile[1] = favFileName then
      FormMain.FavoriteProfile[0]:= newStr;
 end;
 
 procedure TFormFavoritesManager.UpdateFileNameInfo(OldFile, NewFile: String; ShowErrorMessage: Boolean = False);
+var
+  UpdTxt, RenamedTxt, RenamedConsoleComputer, ErrorMsg: Boolean;
 begin
-  if RenameFile(FormMain.GetFavoritesFolder+OldFile, FormMain.GetFavoritesFolder+NewFile) then
+  UpdTxt:= FileExists(FormMain.GetFavoritesFolder+OldFile);
+
+  RenamedTxt:= not UpdTxt;
+  ErrorMsg:= False;
+
+  if UpdTxt then
+     begin
+       if RenameFile(FormMain.GetFavoritesFolder+OldFile, FormMain.GetFavoritesFolder+NewFile) then
+          RenamedTxt:= True;
+     end;
+
+  if (UpdTxt and RenamedTxt) then
      begin
        if FormMain.FavoriteProfile[1] = oldFile then
           FormMain.FavoriteProfile[1]:= NewFile;
        if LastActiveFavFilter = oldFile then
           LastActiveFavFilter:= NewFile;
-     end
-  else
-     if ShowErrorMessage then
-        begin
-          CallMessageBox;
-          FormMain.AddMsgText('    Failed to rename a file.'+#13#10+'From ');
-          FormMain.AddMsgText(FormMain.GetFavoritesFolder+OldFile, $00a65300,[fsBold]);
-          FormMain.AddMsgText(#13#10+'to ');
-          FormMain.AddMsgText(FormMain.GetFavoritesFolder+NewFile, $00a65300,[fsBold]);
-          FormMain.AddMsgText(#13#10+#13#10+'Please try again.');
-          GenerateMessage('Error', 'Rename file.', '', 2, False, 1);
-        end;
+     end;
+
+  if UpdTxt and (not RenamedTxt) then
+     ErrorMsg:= True;
+
+  if ErrorMsg and ShowErrorMessage then
+     begin
+       CallMessageBox;
+       if not RenamedTxt then
+          begin
+            FormMain.AddMsgText('    Failed to rename a file.'+#13#10+'From ');
+            FormMain.AddMsgText(FormMain.GetFavoritesFolder+OldFile, $00a65300,[fsBold]);
+            FormMain.AddMsgText(#13#10+'to ');
+            FormMain.AddMsgText(FormMain.GetFavoritesFolder+NewFile, $00a65300,[fsBold]);
+          end;
+       FormMain.AddMsgText(#13#10+#13#10+'Please try again.');
+       GenerateMessage('Error', 'Rename file.', '', 2, False, 1);
+     end;
 end;
 
 function TFormFavoritesManager.CreateNewValidFileName(DuplicateFile: String): String;
 var
   fIndex, titleIndex: Integer;
-  fExt, defFile: String;
+  fExt, defFile, DestinationFileName: String;
   gFile: THashedStringList;
+  IsDefaultProfile, FoundTxt: Boolean;
 
-  procedure CreateFileFav(Index: Integer);
+  function CreateFileFav(Index: Integer): Boolean;
   begin
     gFile:= THashedStringList.Create;
     if Index <> -1 then
@@ -313,49 +399,65 @@ var
   end;
   
 begin
-  fExt:= '.ini';
+  fExt:= '.txt';
   if DuplicateFile = '' then
      defFile:= 'favorites'
   else
      deffile:= DuplicateFile;
   Result:= '';
-  if not FileExists(FormMain.GetFavoritesFolder+defFile+fExt) then
+
+  FoundTxt:= FileExists(FormMain.GetFavoritesFolder+defFile+fExt);
+
+  if not FoundTxt then
      begin
-       // mostly, this case fall on create a new file, and for favorites.ini... I hope
-       // copy a file will never enter this case
+       // mostly, this case fall on create a new file, and for favorites.txt... I hope
+       // copy a file (DuplicateFile) will never enter this case
        CreateFileFav(-1);
        Result:= defFile+fExt;
        Exit;
      end
   else
-  begin
-    for fIndex:= 1 to 1000 do
-    begin
-      if not FileExists(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt) then
-         begin
-           if DuplicateFile = '' then
-              CreateFileFav(fIndex) // create new profile only
-           else
-              begin
-                // copy files only
-                CopyFile(PChar(FormMain.GetFavoritesFolder+DuplicateFile+fExt), PChar(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt), False);
-                Sleep(50);
-                gFile:= THashedStringList.Create;
-                gFile.LoadFromFile(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt);
-                titleIndex:= gFile.IndexOfName('favorite_title');
-                if titleIndex = -1 then
-                   gFile.Insert(0, 'favorite_title='+defFile+IntToStr(fIndex))
-                else
-                   gFile[titleIndex]:= 'favorite_title='+defFile+IntToStr(fIndex);
-                gFile.SaveToFile(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt);
-                FreeAndNil(gFile);
-              end;
-           Result:= defFile+IntToStr(fIndex)+fExt;
-           Break;
-         end;
-    end;
-  end;
+     begin
+       // if one of the files is found, must create a new profile ("favorite1.ini" to "favorite1000.ini")
+       for fIndex:= 1 to 1000 do
+       begin
+         FoundTxt:= FileExists(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt);
+         if not FoundTxt then
+            begin
+              if DuplicateFile = '' then
+                 begin
+                   CreateFileFav(fIndex); // create new profile only
+                 end
+              else
+                 begin
+                   // if DuplicateFile is not empty, it mens the user wants to copy an existing profile
+                   // copy files only
+                   DestinationFileName:= FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt;
+                   if FileExists(FormMain.GetFavoritesFolder+DuplicateFile+fExt) then
+                      CopyFile(PChar(FormMain.GetFavoritesFolder+DuplicateFile+fExt), PChar(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt), False)
+                   else
+                      CreateFileFav(fIndex); // file doesn't exist, create a new one
+                      
+                   Sleep(50); // give Windows some time to fush HDD write
+
+                   // check if "favorite_title" entry exists... if not, add one at the top of the file
+                   gFile:= THashedStringList.Create;
+                   gFile.LoadFromFile(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt);
+                   titleIndex:= gFile.IndexOfName('favorite_title');
+                   if titleIndex = -1 then
+                      gFile.Insert(0, 'favorite_title='+defFile+IntToStr(fIndex))
+                   else
+                      gFile[titleIndex]:= 'favorite_title='+defFile+IntToStr(fIndex);
+                   gFile.SaveToFile(FormMain.GetFavoritesFolder+defFile+IntToStr(fIndex)+fExt);
+                   FreeAndNil(gFile);
+                 end;
+              Result:= defFile+IntToStr(fIndex)+fExt;
+              Break;
+            end;
+       end;
+     end;
 end;
+
 
 procedure TFormFavoritesManager.ExecuteFavAction(ActionIndex: Integer);
 const
@@ -370,10 +472,11 @@ var
   Item: TEasyItem;
   favList: THashedStringList;
   DeleteActiveProfile: Boolean;
+  FoundTxtFile, DeleteTxtFile: Boolean;
 begin
   if FormMain.PopupEnableFavorites.Checked then
      Exit; // is favorites filter is enabled, can't anything than selecting a different favorites profile!!!
-     
+
   ////////////////////////////// still need to finish messages in here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Action index
   // 0 -> create new favorites profile
@@ -390,8 +493,11 @@ begin
           begin
             if not FormMain.CheckSelected(FavoritesList) then
                begin
-                 GenerateMessage('Info', 'No profile selected.', '    You haven''t selected a profile to '+ActionString[ActionIndex]+
-                                 '. Please select one and try again.', 2);
+                 CallMessageBox;
+                 FormMain.AddMsgText('    You haven''t selected a profile to ');
+                 FormMain.AddMsgText(ActionString[ActionIndex], clBlack, [fsBold]);
+                 FormMain.AddMsgText('. Please select one and try again.');
+                 GenerateMessage('Info', 'No profile selected.', '', 2);
                  Exit;
                end
             else
@@ -414,8 +520,11 @@ begin
           end
        else
           begin
-            GenerateMessage('Error', 'Create profile.', '    Failed to create a new profile... you have more than 1000 files named '+
-                            'favorites????.ini in your favorites folder! Rename or delete a few before creating new ones.', 2, False, 1);
+            CallMessageBox;
+            FormMain.AddMsgText('    Failed to create a new profile... you have more than 1000 files named ');
+            FormMain.AddMsgText('favorites????.txt', $00a65300, [fsBold]);
+            FormMain.AddMsgText(' in your favorites folder! Rename or delete a few before creating new ones.');
+            GenerateMessage('Error', 'Create favorites profile.', '', 2, False, 1);
             Exit;
           end;
      end
@@ -423,8 +532,10 @@ begin
      begin
        if not FormMain.CheckSelected(FavoritesList) then
           begin
-            GenerateMessage('Info', 'No profile selected.', '    You haven''t selected a profile to '+ActionString[ActionIndex]+
-                            '. Please select one and try again.', 2);
+            FormMain.AddMsgText('    You haven''t selected a profile to ');
+            FormMain.AddMsgText(ActionString[ActionIndex], clBlack, [fsBold]);
+            FormMain.AddMsgText('. Please select one and try again.');
+            GenerateMessage('Info', 'No profile selected.', '', 2);
             Exit;
           end;
        Item:= FavoritesList.Selection.First;
@@ -435,49 +546,84 @@ begin
            end;
          2: // clear all games in favorites file
            begin
-             if GenerateMessage('Purge', 'Clear game entries.', '    This task will delete all game entries from the file, except "favorite_title".'+#13#10+#13#10+
-                TFavFileInfo(Item).eTitle+#13#10+'File: '+TFavFileInfo(Item).eFileName+#13#10+
-                'Date Modified: '+TFavFileInfo(Item).eDateTimeText+#13#10+#13#10+'Are you sure ?', 1, True, 2) = mrYes then
+             FoundTxtFile:= FileExists(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
+
+             CallMessageBox;
+             FormMain.AddMsgText('    This task will delete all game entries from the file, except ');
+             FormMain.AddMsgText('favorite_title', clBlack,[fsBold]);
+             FormMain.AddMsgText('.'+#13#10+#13#10+'Title: ');
+             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, $00a65300, [fsBold]);
+             FormMain.AddMsgText(#13#10+'File: ');
+             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, $00a65300, [fsBold]);
+             if FoundTxtFile then
                 begin
-                  favList:= THashedStringList.Create;
-                  favList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
-                  if not FormMain.IsFavoriteDefault(TFavFileInfo(Item).eFileName) then
+                  FormMain.AddMsgText(#13#10+'Date Modified: ');
+                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, $00a65300, [fsBold]);
+                end;
+             FormMain.AddMsgText(#13#10+#13#10+'Are you sure ?');
+             if GenerateMessage('Purge', 'Clear game entries.', '', 1, False, 2) = mrYes then
+                begin
+                  if FoundTxtFile then
+                  begin
+                    favList:= THashedStringList.Create;
+                    favList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
+                    if not FormMain.IsFavoriteDefault(TFavFileInfo(Item).eFileName) then
+                       begin
+                         NewFile:= favList.Values['favorite_title'];
+                         if NewFile = '' then
+                            NewFile:= ChangeFileExt(TFavFileInfo(Item).eFileName, '');
+                       end;
+                    favList.Clear;
+                    if FormMain.IsFavoriteDefault(TFavFileInfo(Item).eFileName) then
+                       favList.Add('favorite_title='+NewFile);
+                    favList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
+                    FreeAndNil(favList);
+                    UpdateDateTime(Item, TFavFileInfo(Item).eFileName);
+                    TFavFileInfo(Item).eGamesCount:= 0;
+                  end;
+
+                  if FoundTxtFile then
                      begin
-                       NewFile:= favList.Values['favorite_title'];
-                       if NewFile = '' then
-                          NewFile:= ChangeFileExt(TFavFileInfo(Item).eFileName, '');
+                       if LastActiveFavFilter = TFavFileInfo(Item).eFileName then
+                          UpdateFavStatusInGames:= True;
+                       GenerateMessage('Purge', 'Clear game entries. ', 'All game entries were deleted. File '+TFavFileInfo(Item).eFileName+
+                                       ' is clear.', 2);
                      end;
-                  favList.Clear;
-                  if FormMain.IsFavoriteDefault(TFavFileInfo(Item).eFileName) then
-                     favList.Add('favorite_title='+NewFile);
-                  favList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
-                  FreeAndNil(favList);
-                  UpdateDateTime(Item, TFavFileInfo(Item).eFileName);
-                  TFavFileInfo(Item).eGamesCount:= 0;
-
-                  if LastActiveFavFilter = TFavFileInfo(Item).eFileName then
-                     UpdateFavStatusInGames:= True;
-
-                  GenerateMessage('Purge', 'Clear game entries. ', 'All game entries were deleted. File '+TFavFileInfo(Item).eFileName+
-                                  ' is clean.', 2);
                 end;
            end;
          4: // delete selected profile
            begin
              if FormMain.IsFavoriteDefault(TFavFileInfo(Item).eFileName) then
                 begin
-                  GenerateMessage('Error, Cannot Compute', 'Delete profile.', '    You are trying to terminate the default favorites profile. Wel... you can''t.'+#13#10+
+                  GenerateMessage('Error, Cannot Compute', 'Delete profile.', '    You are trying to terminate the default favorites profile. Well... you can''t.'+#13#10+
                                   'If you want to empty this profile, please use "Clear Games", or select another profile.'+#13#10+#13#10+
-                                  '    There must be at least one favorites profile for this feature to work properly.', 2);
+                                  '    There must be at least one custom favorites profile for this feature to work properly.', 2);
                   Exit;
                 end;
-             if GenerateMessage('Delete File', 'Delete profile', '   You are about to delete a favorites profile.'+#13#10+#13#10+
-                TFavFileInfo(Item).eTitle+#13#10+'file: '+TFavFileInfo(Item).eFileName+#13#10+
-                'Games count: '+IntToStr(TFavFileInfo(Item).eGamesCount)+#13#10+
-                'Date modified: '+TFavFileInfo(Item).eDateTimeText+#13#10+#13#10+
-                '    If this is the active profile, the previous listed profile will be set active.'+#13#10+'Are you sure ?', 1, True, 2) = mrYes then
+             FoundTxtFile:= FileExists(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
+
+             CallMessageBox;
+             FormMain.AddMsgText('    You are about to delete a favorites profile.');
+             FormMain.AddMsgText('.'+#13#10+#13#10+'Title: ');
+             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, $00a65300, [fsBold]);
+             FormMain.AddMsgText(#13#10+'File: ');
+             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, $00a65300, [fsBold]);
+             if FoundTxtFile then
                 begin
-                  if DeleteFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName) then
+                  FormMain.AddMsgText(#13#10+'Games Count: ');
+                  FormMain.AddMsgText(IntToStr(TFavFileInfo(Item).eGamesCount), $00a65300, [fsBold]);
+
+                  FormMain.AddMsgText(#13#10+'Date Modified: ');
+                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, $00a65300, [fsBold]);
+                end;
+             FormMain.AddMsgText(#13#10+#13#10+'    If this is the active profile, the previous listed profile will be set active.'+#13#10+'Are you sure ?');
+             if GenerateMessage('Delete File', 'Delete favorites profile.', '', 1, True, 2) = mrYes then
+                begin
+                  if FoundTxtFile then
+                     DeleteTxtFile:= DeleteFile(FormMain.GetFavoritesFolder+TFavFileInfo(Item).eFileName);
+
+                  //if DeleteFile(FormMain.GetFavoritesFolder(True)+TFavFileInfo(Item).eFileName) then
+                  if DeleteTxtFile then
                      begin
                        DeleteActiveProfile:= Item = ActiveProfileItem;
                        if LastActiveFavFilter = TFavFileInfo(Item).eFileName then
@@ -520,63 +666,133 @@ end;
 
 procedure TFormFavoritesManager.RemoveInvalidEntries;
 var
-  FavoriteGamesList, mGamesList: THashedStringList;
-  Loop, GameIndex, TitleIndex, RemovedCount: Integer;
+  GamesListFull, FavoriteGamesList: THashedStringList;
+  Loop, RemovedCount, TitleIndex: Integer;
   ErrorMsgTitle, FavMsgTitle: String;
   gItem, favItem: TEasyItem;
   gGroup: TEasyGroup;
+  UpdTxt, HaveTitle: Boolean;
+  favStr: String;
+
+  function SearchAndDelete: Boolean;
+  var
+    favIndex: Integer;
+  begin
+    favStr:= '';
+
+    if UpdTxt then
+       begin
+         if FormMain.TempGameVars.eIsCustomGame then
+            begin
+              if FormMain.TempGameVars.eIsUnicode then
+                 favStr:= Utf8Encode(FormMain.TempGameVars.eName)
+              else
+                 favStr:= FormMain.TempGameVars.eName;
+              favStr:= Format('%.3u %u', [FormMain.TempGameVars.eCustomSystemID, FormMain.TempGameVars.eCustomMediaType])+' <file>'+favStr;
+            end
+         else
+            favStr:= FormMain.GetPlayedGamesNameEntry(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName)+'='+FormMain.GetArcadeSystemIniSection(FormMain.TempGameVars.eSystemID, True);
+
+         if favStr <> '' then
+            begin
+              favIndex:= FavoriteGamesList.IndexOf(favStr);
+              if favIndex <> -1 then
+                 begin
+                   Inc(RemovedCount);
+                   FavoriteGamesList.Delete(favIndex);
+                 end;
+            end;
+       end;
+  end;
 
   function AddGameHashedList: Boolean;
+  var
+    tStr: String;
   begin
     //error! update to 'softlistname\gamename=?????'
-    mGamesList.Add(FormMain.GetPlayedGamesNameEntry(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName)+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
-    //if FormMain.TempGameVars.eSoftwareName = '' then
-    //   mGamesList.Add(FormMain.TempGameVars.eName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True))
-    //else
-    //   mGamesList.Add(FormMain.TempGameVars.eName+'_'+FormMain.TempGameVars.eSoftwareName+'='+FormMain.GetSystemIniSection(FormMain.TempGameVars.eSystemID, True));
+    tStr:= '';
+    if FormMain.TempGameVars.eIsCustomGame then
+       begin
+         if FormMain.TempGameVars.eIsUnicode then
+            tStr:= Utf8Encode(FormMain.TempGameVars.eName)
+          else
+            tStr:= FormMain.TempGameVars.eName;
+          tStr:= Format('%.3u %u', [FormMain.TempGameVars.eCustomSystemID, FormMain.TempGameVars.eCustomMediaType])+' <file>'+tStr;
+       end
+    else
+       tStr:= FormMain.GetPlayedGamesNameEntry(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName)+'='+FormMain.GetArcadeSystemIniSection(FormMain.TempGameVars.eSystemID, True);
+
+    GamesListFull.Add(tStr);
     Result:= True;
   end;
 
 begin
+  // this new function is all wrong!
+  // need to create a list of valid games and then search for them in the fav.ini files...
   if not FormMain.CheckSelected(FavoritesList) then
      Exit;
+  ErrorMsgTitle:= 'Error: Cleanse';
+  FavMsgTitle:= 'Cleanse';
+
   if not FormMain.CheckTotal(FormMain.GamesListView) then
-     Exit;
+     begin
+       GenerateMessage(ErrorMsgTitle, 'No games list found.', '    Failed to parse games list to validate games. '+
+                       'The main games list is empty.'+#13#10+'Aborting...', 2, False, 1);
+       Exit;
+     end;
 
   favItem:= FavoritesList.Selection.First;
 
-  ErrorMsgTitle:= 'Error: Cleanse';
-  FavMsgTitle:= 'Cleanse';
   // Button Maintenance !
-  if not FileExists(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName) then
+  UpdTxt:= FileExists(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
+
+  if not UpdTxt then
      begin
-       GenerateMessage(ErrorMsgTitle, 'Could not access the file.', '    File '+TFavFileInfo(favItem).eFileName+
-                       ' was not found. The list cannot be cleansed. Aborting...', 2, False, 1);
+       CallMessageBox;
+       FormMain.AddMsgText('    File ');
+       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(' was not found. The list cannot be cleansed. Aborting...');
+       GenerateMessage(ErrorMsgTitle, 'Could not access the file.', '', 2, False, 1);
        Exit;
      end;
 
   if FormMain.CheckReadOnly(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName) then
      begin
-       GenerateMessage(ErrorMsgTitle, 'A file that needs to be updated cannot be opened.', '    File '+
-                       TFavFileInfo(favItem).eFileName+' is marked read-only. Cannot continue...', 2);
+       CallMessageBox;
+       FormMain.AddMsgText('    File ');
+       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(' is marked read-only. Cannot continue...');
+       GenerateMessage(ErrorMsgTitle, 'A file that needs to be updated cannot be opened.', '', 2);
        Exit;
      end;
 
-  if GenerateMessage(FavMsgTitle, 'A file is about to be changed.',
-                     '    File '+TFavFileInfo(favItem).eFileName+
-                     ' will be cleansed of all impurities, based on current games list. '+#13#10+
+  CallMessageBox;
+  FormMain.AddMsgText('    File ');
+  FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
+  FormMain.AddMsgText(' will be cleansed of all impurities, based on current games list.'+#13#10);
+  FormMain.AddMsgText('(arcade/console/computer)', $00a65300,[fsBold, fsItalic]);
+  FormMain.AddMsgText('.'+#13#10+'Valid game entries of systems that are not available anymore will also be removed. Click ');
+  FormMain.AddMsgText('No', $00a65300,[fsBold]);
+  FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
+  if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrNo then
+     Exit;
+
+
+  {if GenerateMessage(FavMsgTitle, 'A file is about to be changed.',
+                     '    File "'+TFavFileInfo(favItem).eFileName+'"'+
+                     ' will be cleansed of all impurities, based on current games list (arcade/console/computer). '+#13#10+
                      'Valid game entries of systems that are not available anymore will also be removed.'+
                      'Click No button if you want to abort.'+
                       #13#10+'Continue ?', 1, False, 2) = mrNo then
-     Exit;
+     Exit;}
 
   LabelTaskMessage.Caption:= 'Cleansing favorite file of impurities, please wait...';
-  PanelUpdatingFavTagInGames.Visible:= True;
+  ShowUpdateFavGamesListPanel;
   Application.ProcessMessages;
   Screen.Cursor:= crHourGlass;
-  
-  mGamesList:= THashedStringList.Create;
-  mGamesList.BeginUpdate;
+
+  GamesListFull:= THashedStringList.Create;
+  GamesListFull.BeginUpdate;
 
   if FormMain.IsGroupedView then
   begin
@@ -600,64 +816,83 @@ begin
       gItem:= FormMain.GamesListView.Groups.NextItem(gItem);
     until gItem = nil;
   end;
+  GamesListFull.EndUpdate;
+  Application.ProcessMessages;
+  //GamesListFull.SaveToFile(FormMain.FrontendPath+'fav.txt');
 
-  mGamesList.EndUpdate;
-  if mGamesList.Count = 0 then
-     begin
-       PanelUpdatingFavTagInGames.Visible:= False;
-       Screen.Cursor:= crDefault;
-       FreeAndNil(mGamesList);
-       GenerateMessage('Error', 'Main games list is empty.', '    Failed to parse games list to validate games. '+
-                       'Somehow the main games list is empty.'+#13#10+'Aborting...', 2, False, 1);
-       Exit;
-     end;
-  FavoriteGamesList:= THashedStringList.Create;
-  FavoriteGamesList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
-
-  TitleIndex:= FavoriteGamesList.IndexOfName('favorite_title');
   RemovedCount:= 0;
+  HaveTitle:= False;
 
-  FavoriteGamesList.BeginUpdate;
-  for Loop:=FavoriteGamesList.Count-1 downto 0 do
-  begin
-    if Loop <> TitleIndex then
+  if UpdTxt then
+     begin
+       FavoriteGamesList:= THashedStringList.Create;
+       FavoriteGamesList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
+       TitleIndex:= FavoriteGamesList.IndexOfName('favorite_title');
+       HaveTitle:= TitleIndex <> -1;
+       FavoriteGamesList.BeginUpdate;
+       for Loop:= FavoriteGamesList.Count-1 downto 0 do
        begin
-         GameIndex:= mGamesList.IndexOf(FavoriteGamesList[Loop]);
-         if GameIndex = -1 then
+         if Loop <> TitleIndex then
             begin
-              Inc(RemovedCount);
-              FavoriteGamesList.Delete(Loop);
+            if GamesListFull.IndexOf(FavoriteGamesList[Loop]) = -1 then
+               begin
+                 Inc(RemovedCount);
+                 FavoriteGamesList.Delete(Loop);
+               end;
             end;
        end;
-  end;
-  FavoriteGamesList.EndUpdate;
-  FreeAndNil(mGamesList);
-  if TitleIndex = -1 then
-     TitleIndex:= 0
-  else
-     TitleIndex:= 1;
+       FavoriteGamesList.EndUpdate;
+     end;
 
   PanelUpdatingFavTagInGames.Visible:= False;
   Screen.Cursor:= crDefault;
   Application.ProcessMessages;
+
+  if UpdTxt then
+  begin
+    if RemovedCount > 0 then
+       begin
+         FavoriteGamesList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
+         TFavFileInfo(favItem).eGamesCount:= FavoriteGamesList.Count-Ord(HaveTitle);
+         //CallMessageBox;
+         //FormMain.AddMsgText('    File ');
+         //FormMain.AddMsgText(FormMain.GetFavoritesFolder(True)+TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
+         //FormMain.AddMsgText(' was successfully cleansed of ');
+         //FormMain.AddMsgText(IntToStr(RemovedCountArcade), $00a65300,[fsBold]);
+         //FormMain.AddMsgText(' impurities! ');
+         //GenerateMessage(FavMsgTitle, 'The contents of a file have changed.', '', 2);
+       end;
+    //else
+    //   GenerateMessage(FavMsgTitle, 'No changes have been made.',
+    //                   '    No impurities were found in file '+FormMain.GetFavoritesFolder(True)+TFavFileInfo(favItem).eFileName, 2);
+    FreeAndNil(FavoriteGamesList);
+  end;
+
+  FreeAndNil(GamesListFull);
+
+  if RemovedCount = 0 then
+     begin
+       CallMessageBox;
+       FormMain.AddMsgText('    No impurities were found in file ');
+       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(' is marked read-only. Cannot continue...');
+       GenerateMessage(FavMsgTitle, 'No changes have been made.', '', 2);
+     end
+  else
   if RemovedCount > 0 then
      begin
-       FavoriteGamesList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
-       TFavFileInfo(favItem).eGamesCount:= FavoriteGamesList.Count-TitleIndex;
-       if LastActiveFavFilter = TFavFileInfo(favItem).eFileName then
-          UpdateFavStatusInGames:= True;
        CallMessageBox;
        FormMain.AddMsgText('    File ');
-       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
+       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
        FormMain.AddMsgText(' was successfully cleansed of ');
        FormMain.AddMsgText(IntToStr(RemovedCount), $00a65300,[fsBold]);
        FormMain.AddMsgText(' impurities! ');
+
        GenerateMessage(FavMsgTitle, 'The contents of a file have changed.', '', 2);
-     end
-  else
-     GenerateMessage(FavMsgTitle, 'No changes have been made.',
-                     '    No impurities were found in file '+TFavFileInfo(favItem).eFileName, 2);
-  FreeAndNil(FavoriteGamesList);
+
+       if LastActiveFavFilter = TFavFileInfo(favItem).eFileName then
+          UpdateFavStatusInGames:= True;
+     end;
 end;
 
 function TFormFavoritesManager.ValidateGamesActiveProfile: Boolean;
@@ -667,14 +902,19 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
   StrToSearch: String;
+  FoundTxtFile: Boolean;
 begin
-  Result:= FileExists(FormMain.GetFavoritesFile);
+  FoundTxtFile:= FileExists(FormMain.GetFavoritesFile);
+  Result:= FoundTxtFile;
   if not Result then
      begin
-       GenerateMessage('Error', 'File not found.', '    The active favorites profile file was '+
-                       'not found but is listed anyway. Please make sure to select a valid profile.'+#13#10+#13#10+
-                       FormMain.FavoriteProfile[0]+#13#10+
-                       'File: '+FormMain.FavoriteProfile[1], 2, False, 1);
+       CallMessageBox;
+       FormMain.AddMsgText('    The .txt file for the active favorites profile was not found but is listed anyway.'+
+                           ' Please make sure to select a valid profile.'+#13#10+#13#10+'Title: ');
+       FormMain.AddMsgText(FormMain.FavoriteProfile[0], $00a65300, [fsBold]);
+       FormMain.AddMsgText(#13#10+'File: ');
+       FormMain.AddMsgText(FormMain.FavoriteProfile[1], $00a65300, [fsBold]);
+       GenerateMessage('Error', 'File not found.', '', 2, False, 1);
        Exit;
      end;
   if not FormMain.CheckTotal(FormMain.GamesListView) then
@@ -684,7 +924,7 @@ begin
      Exit;
 
   LabelTaskMessage.Caption:= 'Updating favorite tags in games list, please wait...';
-  PanelUpdatingFavTagInGames.Visible:= True;
+  ShowUpdateFavGamesListPanel;
   Application.ProcessMessages;
   Screen.Cursor:= crHourGlass;
 
@@ -704,11 +944,19 @@ begin
     repeat
       Item:= FormMain.GamesListView.Groups.FirstInGroup(Group);
       repeat
-        StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
-        //if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
-        //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
-        //else
-        //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+        if uMain.TEasyGameInfo(Item).eIsCustomGame then
+           begin
+             if FormMain.TempGameVars.eIsUnicode then
+                StrToSearch:= Utf8Encode(uMain.TEasyGameInfo(Item).eName)
+             else
+               StrToSearch:= uMain.TEasyGameInfo(Item).eName;
+             StrToSearch:= Format('%.3u %u', [uMain.TEasyGameInfo(Item).eCustomSystemID, uMain.TEasyGameInfo(Item).eCustomMediaType])+' <file>'+StrToSearch;
+           end
+        else
+           begin
+             StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetArcadeSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+           end;
+
         if tIndex > 0 then
            uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
         else
@@ -723,11 +971,19 @@ begin
   begin
     Item:= FormMain.GamesListView.Groups.FirstItem;
     repeat
-      StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
-      //if uMain.TEasyGameInfo(Item).eSoftwareName = '' then
-      //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True)
-      //else
-      //   StrToSearch:= uMain.TEasyGameInfo(Item).eName+'_'+uMain.TEasyGameInfo(Item).eSoftwareName+'='+FormMain.GetSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+      if uMain.TEasyGameInfo(Item).eIsCustomGame then
+         begin
+           if FormMain.TempGameVars.eIsUnicode then
+              StrToSearch:= Utf8Encode(uMain.TEasyGameInfo(Item).eName)
+           else
+             StrToSearch:= uMain.TEasyGameInfo(Item).eName;
+           StrToSearch:= Format('%.3u %u', [uMain.TEasyGameInfo(Item).eCustomSystemID, uMain.TEasyGameInfo(Item).eCustomMediaType])+' <file>'+StrToSearch;
+         end
+      else
+         begin
+           StrToSearch:= FormMain.GetPlayedGamesNameEntry(uMain.TEasyGameInfo(Item).eName, uMain.TEasyGameInfo(Item).eSoftwareName)+'='+FormMain.GetArcadeSystemIniSection(uMain.TEasyGameInfo(Item).eSystemID, True);
+         end;
+
       if tIndex > 0 then
          uMain.TEasyGameInfo(Item).eIsFavorite:= (favFile.IndexOf(StrToSearch) <> -1)
       else
@@ -744,10 +1000,23 @@ begin
   PanelUpdatingFavTagInGames.Visible:= False;
 end;
 
+procedure TFormFavoritesManager.ShowUpdateFavGamesListPanel;
+var
+  iLeft, iTop: Integer;
+begin
+  iLeft:= (FormFavoritesManager.Width-PanelUpdatingFavTagInGames.Width) div 2;
+  iTop:= (FormFavoritesManager.Height-PanelUpdatingFavTagInGames.Height) div 2;
+  if PanelUpdatingFavTagInGames.Left <> iLeft then
+     PanelUpdatingFavTagInGames.Left:= iLeft;
+  if PanelUpdatingFavTagInGames.Top <> iTop then
+     PanelUpdatingFavTagInGames.Top:= iTop;
+  PanelUpdatingFavTagInGames.Visible:= True;
+end;
+
 procedure TFormFavoritesManager.ToolbarButtonsCustomDraw(Sender: TToolBar;
   const ARect: TRect; var DefaultDraw: Boolean);
 begin
-  FormMain.PaintToolBarTheme(Sender);
+  FormMain.PaintToolBarTheme(Sender, True);
 end;
 
 procedure TFormFavoritesManager.FavoritesListKeyAction(
@@ -812,6 +1081,17 @@ procedure TFormFavoritesManager.FormShow(Sender: TObject);
 var
   Loop: Byte;
 begin
+  LoadCustomMAMEIconToForm(TForm(Sender), 3);
+  FormMain.AddDefaultIcons('systemtype_arcade.ico', FormMain.GetFolderFull(32), IL_SystemType);
+  FormMain.AddDefaultIcons('systemtype_computer.ico', FormMain.GetFolderFull(32), IL_SystemType);
+  PanelFavSettings.Left:= 4;
+  PanelFavSettings.Top:= 26;
+
+  ReadSettings;
+
+  if (Screen.Width < 960) and (FormFavoritesManager.WindowState <> wsMaximized) then
+     FormFavoritesManager.Width:= Screen.Width-5;
+
   if FormMain.PopupEnableFavorites.Checked then
      begin
        FormFavoritesManager.Caption:= 'Select a Favorites Profile';
@@ -863,7 +1143,7 @@ begin
              Accept:= False;
              Exit;
            end;
-        NewValue:= ChangeFileExt(NewValue, '.ini');
+        NewValue:= ChangeFileExt(NewValue, '.txt');
         if SameText(NewValue, TFavFileInfo(Item).eFileName) then
            TFavFileInfo(Item).eFileName:= NewValue
         else
@@ -922,14 +1202,158 @@ begin
   CanClose:= not FormMain.ELV_IsEditing(FavoritesList);
   if CanClose then
      CanClose:= ValidateGamesActiveProfile;
+  if CanClose then
+     WriteSettings;
 end;
 
-procedure TFormFavoritesManager.FavoritesListItemPaintText(
-  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
-  ACanvas: TCanvas);
+procedure TFormFavoritesManager.ToolButtonFavSettingsClick(
+  Sender: TObject);
 begin
-  //if Position = 3 then
-  //   ACanvas.Font.Size:= 8;
+  case FormFavoritesManager.WindowState of
+    wsNormal:
+      begin
+        if not ButtonCenterPanelFavSettings.Enabled then
+           ButtonCenterPanelFavSettings.Enabled:= True;
+      end;
+    wsMaximized: ButtonCenterPanelFavSettings.Enabled:= False;
+  end;
+  PanelFavSettings.Visible:= True;
+
 end;
+
+procedure TFormFavoritesManager.ButtonClosePanelFavSettingsClick(Sender: TObject);
+begin
+  PanelFavSettings.Visible:= False;
+end;
+
+procedure TFormFavoritesManager.FavoritesListColumnSizeChanging(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Width,
+  NewWidth: Integer; var Allow: Boolean);
+begin
+  if Column.Index = 1 then
+     Allow:= False;
+end;
+
+procedure TFormFavoritesManager.ButtonCenterPanelFavSettingsClick(Sender: TObject);
+begin
+  if FormFavoritesManager.WindowState = wsNormal then
+     begin
+       FormFavoritesManager.Left:= (Screen.Width shr 1)-(FormFavoritesManager.Width shr 1)-1;
+       FormFavoritesManager.Top:= (Screen.Height shr 1)-(FormFavoritesManager.Height shr 1)-1;
+     end;
+end;
+
+procedure TFormFavoritesManager.ReadSettings;
+var
+  iniFile: TMemIniFile;
+begin
+  iniFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+
+  FormFavoritesManager.Tag:= Ord(iniFile.ReadString('FavoritesManager', 'WindowState', 'Normal') = 'Maximized');
+
+  FormFavoritesManager.Width:= iniFile.ReadInteger('FavoritesManager', 'ScreenWidth', 797);
+  FormFavoritesManager.Height:= iniFile.ReadInteger('FavoritesManager', 'ScreenHeight', 440);
+  //FormFavoritesManager.Left:= iniFile.ReadInteger('FavoritesManager', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
+  //FormFavoritesManager.Top:= iniFile.ReadInteger('FavoritesManager', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
+
+  FavoritesList.Header.Columns[0].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnTitleWidth', 300);
+  FavoritesList.Header.Columns[1].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnGamesCountWidth', 70);
+  FavoritesList.Header.Columns[2].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnFileNameWidth', 250);
+  FavoritesList.Header.Columns[3].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnDateModifiedWidth', 155);
+
+  case iniFile.ReadInteger('FavoritesManager', 'FavoritesListFontSize', 0) of
+    0: FavSettingSmallFont.Checked:= True;
+    1: FavSettingMediumFont.Checked:= True;
+    2: FavSettingLargeFont.Checked:= True;
+  end;
+
+  FreeAndNil(iniFile);
+  if FormFavoritesManager.Tag = 1 then
+     FormFavoritesManager.WindowState:= wsMaximized
+  else
+     begin
+       FormFavoritesManager.Top:= (Screen.Height-FormFavoritesManager.Height) div 2;
+       FormFavoritesManager.Left:= (Screen.Width-FormFavoritesManager.Width) div 2;
+
+       //if ((FormFavoritesManager.Top = 0) and (FormFavoritesManager.Left = 0)) then
+       //   begin
+       //     FormFavoritesManager.Top:= (Screen.Height-FormFavoritesManager.Height) div 2;
+       //     FormFavoritesManager.Left:= (Screen.Width-FormFavoritesManager.Width) div 2;
+       //   end;
+     end;
+end;
+
+procedure TFormFavoritesManager.WriteSettings;
+var
+  iniFile: TMemIniFile;
+  tmpString: String;
+begin
+  if FormMain.CheckReadOnly(FormMain.FrontendPath+'el_extras.ini') then
+     Exit;
+
+  iniFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+
+  tmpString:= 'Normal';
+  if FormFavoritesManager.WindowState = wsMaximized then
+     tmpString:= 'Maximized';
+
+  iniFile.WriteString('FavoritesManager', 'WindowState', tmpString);
+  tmpString:= '';
+
+  if FormFavoritesManager.WindowState <> wsMaximized then
+     begin
+       //iniFile.WriteInteger('FavoritesManager', 'ScreenTop', FormFavoritesManager.Top);
+       //iniFile.WriteInteger('FavoritesManager', 'ScreenLeft', FormFavoritesManager.Left);
+       iniFile.WriteInteger('FavoritesManager', 'ScreenWidth', FormFavoritesManager.Width);
+       iniFile.WriteInteger('FavoritesManager', 'ScreenHeight', FormFavoritesManager.Height);
+     end;
+
+  iniFile.WriteInteger('FavoritesManager', 'ColumnTitleWidth', FavoritesList.Header.Columns[0].Width);
+  iniFile.WriteInteger('FavoritesManager', 'ColumnGamesCountWidth', FavoritesList.Header.Columns[1].Width);
+  iniFile.WriteInteger('FavoritesManager', 'ColumnFileNameWidth', FavoritesList.Header.Columns[2].Width);
+  iniFile.WriteInteger('FavoritesManager', 'ColumnDateModifiedWidth', FavoritesList.Header.Columns[3].Width);
+
+  tmpString:= '0';
+  if FavSettingSmallFont.Checked then
+     tmpString:= IntToStr(FavSettingSmallFont.Tag)
+  else
+  if FavSettingMediumFont.Checked then
+     tmpString:= IntToStr(FavSettingMediumFont.Tag)
+  else
+  if FavSettingLargeFont.Checked then
+     tmpString:= IntToStr(FavSettingLargeFont.Tag);
+  iniFile.WriteString('FavoritesManager', 'FavoritesListFontSize', tmpString);
+
+  iniFile.UpdateFile;
+  FreeAndNil(iniFile);
+end;
+
+procedure TFormFavoritesManager.FavSettingSmallFontClick(Sender: TObject);
+begin
+  FavoritesList.BeginUpdate;
+  case TAdvOfficeRadioButton(Sender).Tag of
+    0:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 22;
+        FavoritesList.Font.Size:= 9;
+        FavoritesList.Header.Font.Size:= 9;
+      end;
+    1:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 28;
+        FavoritesList.Font.Size:= 12;
+        FavoritesList.Header.Font.Size:= 12;
+      end;
+    2:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 32;
+        FavoritesList.Font.Size:= 14;
+        FavoritesList.Header.Font.Size:= 12;
+      end;
+  end;
+  FavoritesList.EndUpdate;
+end;
+
+
 
 end.

@@ -29,7 +29,6 @@ type
     procedure SmallToolBarClick(Sender: TObject);
   private
     { Private declarations }
-    procedure LoadIcons;
   public
     { Public declarations }
   end;
@@ -42,26 +41,6 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
-
-procedure TFormToolBarEditor.LoadIcons;
-var
-  tempFolder: String;
-begin
-  tempFolder:= FormMain.GetFolderFull(32);
-  FormMain.AddDefaultIcons('EmuLoader_Orb.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('viewmode_01_details.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filterarcade_00_listall.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('arcade_filters\favorites.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('arcade_filters\allgames.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter2_01_both.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter3_01_listall.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter4_01_all.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter5_machines.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('mamu_.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter_extra.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('filter_text.ico', tempFolder, IL_ToolBarButtonsEditor);
-  FormMain.AddDefaultIcons('toolbar.ico', tempFolder, IL_ToolBarButtonsEditor);
-end;
 
 procedure TFormToolBarEditor.ButtonDefaultClick(Sender: TObject);
 var
@@ -84,6 +63,13 @@ procedure TFormToolBarEditor.ToolBarListViewItemPaintText(
 begin
   if Item.Ghosted then
      ACanvas.Font.Color:= clGray;
+  if Position = 1 then
+     begin
+       ACanvas.Font.Name:= 'Verdana';
+       ACanvas.Font.Size:= 7;
+       ACanvas.Font.Color:= clGray;
+       ACanvas.Font.Style:= [fsItalic];
+     end;
 end;
 
 procedure TFormToolBarEditor.ToolBarListViewItemCheckChange(
@@ -118,19 +104,35 @@ end;
 procedure TFormToolBarEditor.FormShow(Sender: TObject);
 var
   Loop: ShortInt;
+  iPos: Integer;
+  iTitle, iDetail: String;
 begin
-  LoadIcons;
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
   begin
+    iTitle:= FormMain.ToolBarButtons.Buttons[Loop].Caption;
+    iDetail:= '';
+    iPos:= PosEx('-', iTitle);
+    if iPos <> 0 then
+       begin
+         iDetail:= Copy(iTitle, iPos+1, Length(iTitle));
+         Delete(iTitle, iPos, Length(iTitle));
+       end;
+
     with ToolBarListView.Items.Add do
     begin
       ImageIndex:= Loop;
-      Caption:= FormMain.ToolBarButtons.Buttons[Loop].Caption;
+      Caption:= iTitle;
+      Captions[1]:= iDetail;
+
       Checked:= FormMain.ToolBarButtons.Buttons[Loop].Visible;
       if not Checked then
          State:= State+[esosGhosted];
+
+      Details[1]:= 1;
+      //Captions[1]:= 'Arcade';
+      //Details[1]:= 1;
     end;
   end;
   with ToolBarListView.Items.Add do
@@ -140,6 +142,9 @@ begin
     Checked:= FormMain.ToolBarFilterTitle.Visible;
     if not Checked then
        State:= State+[esosGhosted];
+
+    //Captions[1]:= 'Arcade';
+    //Details[1]:= 1;
   end;
 
   ToolBarListView.EndUpdate;

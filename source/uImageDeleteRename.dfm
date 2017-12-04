@@ -214,6 +214,25 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
     Visible = False
   end
+  object LabelWarningUnicodeFileName: TShadowLabel
+    Left = 481
+    Top = 232
+    Width = 203
+    Height = 16
+    Caption = 'Unicode filename cannot be renamed!'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clSilver
+    ShadowEnabled = False
+    EllipsType = etNone
+    Transparent = True
+    Visible = False
+  end
   object PanelEx1: TPanelEx
     Left = 0
     Top = 275
@@ -319,7 +338,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
       Transparent = True
     end
     object LabelGameDetails: TShadowLabel
-      Left = 56
+      Left = 76
       Top = 33
       Width = 37
       Height = 13
@@ -334,6 +353,13 @@ object FormImageDeleteRename: TFormImageDeleteRename
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      Transparent = True
+    end
+    object MediaTypeIcon: TImage
+      Left = 56
+      Top = 32
+      Width = 16
+      Height = 16
       Transparent = True
     end
   end

@@ -253,7 +253,7 @@ begin
   case Column.Index of
     0: Result:= FormMain.iCompare(TFileInfo(gItem1).eFileName, TFileInfo(gItem2).eFileName);
     1: Result:= CompareIntValue(TFileInfo(gItem1).eSize, TFileInfo(gItem2).eSize);
-    2: CompareIntValue(TFileInfo(gItem1).eDateTime, TFileInfo(gItem2).eDateTime);
+    2: Result:= CompareIntValue(TFileInfo(gItem1).eDateTime, TFileInfo(gItem2).eDateTime);
   end;
 end;
 

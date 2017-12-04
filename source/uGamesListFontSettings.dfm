@@ -2,12 +2,12 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   Left = 1442
   Top = 935
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
+  BorderStyle = bsSingle
   Caption = 
     'Games List Font Settings [Mouse Double-click / ENTER Key to Cust' +
     'omize]'
-  ClientHeight = 392
-  ClientWidth = 619
+  ClientHeight = 489
+  ClientWidth = 924
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -17,19 +17,21 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
+  OnResize = FormResize
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object GamesFont: TEasyListview
-    Left = 4
-    Top = 4
-    Width = 611
-    Height = 302
-    BackGround.Enabled = True
+    Left = 0
+    Top = 0
+    Width = 924
+    Height = 435
+    Align = alClient
+    CellSizes.Tile.Height = 62
+    CellSizes.Tile.Width = 358
     CellSizes.Report.Height = 40
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -40,26 +42,33 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     UseDockManager = False
     HintType = ehtToolTip
     Header.Columns.Items = {
-      0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000000015F020000FFFFFF1F0001000000
-      00000000000000000000000000000000}
+      0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000101000100000000000000FC010000FFFFFF1F0001000000
+      0100000006000000530079007300740065006D00000000000000000000000000
+      110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+      01010001010000000000006C000000FFFFFF1F0001000000010000000B000000
+      46006F006E007400200048006500690067006800740000000000000000000000
+      0000}
     Header.Draggable = False
-    Header.FixedSingleColumn = True
     Header.Height = 23
+    Header.Sizeable = False
+    Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
-    ImagesGroup = FormMain.IL_ArcadeSystem_Large
-    ImagesSmall = IL_FontSettings
+    ImagesExLarge = IL_FontSettings
+    PaintInfoColumn.HotTrack = False
     PaintInfoGroup.Expandable = False
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoItem.Border = 20
     PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.CaptionIndent = 2
     PaintInfoItem.ShowBorder = False
+    PaintInfoItem.TileCaptionLines = 1
+    PaintInfoItem.TileDetailCount = 2
     ParentShowHint = False
-    ShowGroupMargins = True
+    PopupMenu = PopupFontSettings
+    ShowThemedBorder = False
     ShowHint = True
+    Selection.BlendAlphaImage = 0
     Selection.BlendColorSelRect = 10902593
     Selection.BlendIcon = False
     Selection.BorderColor = 10902593
@@ -73,33 +82,153 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     Selection.InactiveBorderColor = 10902593
     Selection.InactiveColor = 15582647
     Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.MultiSelect = True
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 0
-    View = elsReport
+    View = elsTile
     OnDblClick = GamesFontDblClick
     OnItemPaintText = GamesFontItemPaintText
     OnItemSelectionChanged = GamesFontItemSelectionChanged
     OnKeyAction = GamesFontKeyAction
   end
-  object PanelBottomButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
-    Top = 351
-    Width = 619
-    Height = 41
+    Top = 435
+    Width = 924
+    Height = 54
     Align = alBottom
     Color1 = 15856113
     Color2 = 14540253
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = clGreen
-    Frames = []
+    ColorFrame = 7891291
+    Frames = [frTop]
     ParentBackground = False
     Style = vgSimple
+    object LabelBackgroundColor: TShadowLabel
+      Left = 8
+      Top = 6
+      Width = 99
+      Height = 16
+      Caption = 'Background Color'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object Label1: TLabel
+      Left = 608
+      Top = 2
+      Width = 34
+      Height = 15
+      Caption = 'Label1'
+      Transparent = True
+      Visible = False
+    end
+    object GamesBackgroundColor: TColorBox
+      Left = 8
+      Top = 23
+      Width = 188
+      Height = 22
+      DefaultColorColor = clWhite
+      NoneColorColor = clWhite
+      Selected = clWhite
+      Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+      ItemHeight = 16
+      TabOrder = 0
+      OnSelect = GamesBackgroundColorSelect
+    end
+    object ButtonDefaultBkSortedColor: TBitBtn
+      Left = 200
+      Top = 23
+      Width = 47
+      Height = 21
+      Hint = 'Set default values'
+      Caption = 'Default'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = ButtonDefaultBkSortedColorClick
+    end
+    object GamesBackgroundImageEnable: TAdvOfficeCheckBox
+      Left = 285
+      Top = 4
+      Width = 121
+      Height = 18
+      TabOrder = 2
+      OnClick = GamesBackgroundImageEnableClick
+      Alignment = taLeftJustify
+      Caption = 'Show Image [.png]'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object GamesBackgroundImage: TEdit
+      Left = 285
+      Top = 23
+      Width = 300
+      Height = 21
+      AutoSize = False
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 3
+    end
+    object GamesTileBackground: TAdvOfficeCheckBox
+      Left = 547
+      Top = 4
+      Width = 40
+      Height = 18
+      Hint = 'Tile the background image on the entire games list canvas'
+      Checked = True
+      TabOrder = 4
+      OnClick = GamesTileBackgroundClick
+      Alignment = taLeftJustify
+      Caption = 'Tile'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object GamesBackgroundImageButtonUpdate: TBitBtn
+      Left = 587
+      Top = 23
+      Width = 49
+      Height = 21
+      Hint = 'Click here to load the image if you'#39've made a manual change'
+      Caption = 'Update'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      OnClick = GamesBackgroundImageButtonUpdateClick
+    end
+    object GamesBackgroundImageButtonSelect: TBitBtn
+      Left = 636
+      Top = 23
+      Width = 49
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      OnClick = GamesBackgroundImageButtonSelectClick
+    end
     object ButtonOk: TBitBtn
-      Left = 216
-      Top = 8
+      Left = 727
+      Top = 17
       Width = 89
       Height = 25
       Hint = 'Close and update settings'
@@ -107,11 +236,11 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ModalResult = 1
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 0
+      TabOrder = 7
     end
     object ButtonCancel: TBitBtn
-      Left = 314
-      Top = 8
+      Left = 825
+      Top = 17
       Width = 89
       Height = 25
       Hint = 'Close without updating'
@@ -119,76 +248,102 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ModalResult = 2
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
-    end
-  end
-  object PanelBottomListButtons: TPanelEx
-    Left = 0
-    Top = 310
-    Width = 619
-    Height = 41
-    Align = alBottom
-    Color1 = 15856113
-    Color2 = clSilver
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = 7891291
-    Frames = [frTop]
-    ParentBackground = False
-    Style = vgSolid
-    object ButtonClearSelection: TBitBtn
-      Left = 394
-      Top = 8
-      Width = 89
-      Height = 25
-      Hint = 'De-select items in the list for a better view'
-      Caption = 'Clear Selection'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      OnClick = ButtonClearSelectionClick
-    end
-    object ButtonCopyParentFont: TBitBtn
-      Left = 265
-      Top = 8
-      Width = 89
-      Height = 25
-      Hint = 'Copy parent font on all other categories'
-      Caption = 'Copy Parent'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-      OnClick = ButtonCopyParentFontClick
-    end
-    object ButtonDefaultFont: TBitBtn
-      Left = 137
-      Top = 8
-      Width = 89
-      Height = 25
-      Hint = 'Set all fonts to default settings'
-      Caption = 'Default'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-      OnClick = ButtonDefaultFontClick
-    end
-    object ButtonResetFont: TBitBtn
-      Left = 9
-      Top = 8
-      Width = 89
-      Height = 25
-      Hint = 'Reset all fonts to current settings'
-      Caption = 'Reset'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 3
-      OnClick = ButtonResetFontClick
+      TabOrder = 8
     end
   end
   object IL_FontSettings: TImageList
-    Height = 32
-    Width = 32
+    Height = 48
+    Width = 48
     Left = 360
     Top = 48
+  end
+  object PopupFontSettings: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = FormMain.IL_MenuPopup
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = FormMain.BcDrawModule
+    OnMeasureMenuItem = PopupFontSettingsMeasureMenuItem
+    Left = 72
+    Top = 128
+    object PopupResetSelectedToCurrentFonts: TMenuItem
+      Tag = 1
+      Caption = 'Reset Selected to Current Fonts'
+      OnClick = PopupSetSelectedToDefaultFontsClick
+    end
+    object PopupResetAllToCurrentFonts: TMenuItem
+      Tag = 1
+      Caption = 'Reset All to Current Fonts'
+      OnClick = PopupSetAllToDefaultFontsClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object PopupSetSelectedToDefaultFonts: TMenuItem
+      Caption = 'Set Selected to Default Font'
+      OnClick = PopupSetSelectedToDefaultFontsClick
+    end
+    object PopupSetAllToDefaultFonts: TMenuItem
+      Caption = 'Set All to Default Fonts'
+      OnClick = PopupSetAllToDefaultFontsClick
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object SetFontsToMatchAllSystemsFont1: TMenuItem
+      Caption = 'Set Selected To "All Systems" Font'
+      OnClick = SetFontsToMatchAllSystemsFont1Click
+    end
+    object CopyFromParent1: TMenuItem
+      Tag = 1
+      Caption = 'Set Selected To "Arcade Parent Game" Font'
+      OnClick = SetFontsToMatchAllSystemsFont1Click
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object SetAllConsoleComputerSystemsFontsToAllSystems1: TMenuItem
+      Caption = 'Set All Console/Computer To "All Systems" Font'
+      OnClick = SetAllConsoleComputerSystemsFontsToAllSystems1Click
+    end
+    object SetAllToArcadeParentGameFont1: TMenuItem
+      Tag = 1
+      Caption = 'Set All Console/Computer To "Arcade Parent Game" Font'
+      OnClick = SetAllConsoleComputerSystemsFontsToAllSystems1Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object PopupShowAvailableSystemsOnly: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Available Systems Only'
+      OnClick = PopupShowAvailableSystemsOnlyClick
+    end
+    object PopupHelp: TMenuItem
+      Caption = 'Help'
+      OnClick = PopupHelpClick
+    end
   end
 end

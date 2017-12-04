@@ -1,6 +1,6 @@
 object FormAbout: TFormAbout
-  Left = 705
-  Top = 316
+  Left = 1356
+  Top = 886
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
   Caption = 'About...'
@@ -36,23 +36,5 @@ object FormAbout: TFormAbout
     ScaleMode = smNormal
     TabOrder = 0
     OnClick = ImageAboutClick
-    object LabelVersion: TShadowLabel
-      Left = 573
-      Top = 227
-      Width = 44
-      Height = 14
-      Alignment = taRightJustify
-      Caption = 'v12.0.0'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clOlive
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShadowColor = clNavy
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-    end
   end
 end

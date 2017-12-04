@@ -100,15 +100,15 @@ object FormStatus: TFormStatus
       Layout = tlCenter
     end
     object LabelVersion: TShadowLabel
-      Left = 189
-      Top = 46
-      Width = 44
-      Height = 14
+      Left = 2
+      Top = 433
+      Width = 50
+      Height = 15
       Alignment = taRightJustify
       Caption = 'v12.0.0'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clOlive
-      Font.Height = -11
+      Font.Color = clWhite
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
@@ -139,9 +139,9 @@ object FormStatus: TFormStatus
       Visible = False
     end
     object ProgressBar: TProgressBar
-      Left = 3
+      Left = 57
       Top = 435
-      Width = 560
+      Width = 506
       Height = 12
       TabOrder = 0
     end

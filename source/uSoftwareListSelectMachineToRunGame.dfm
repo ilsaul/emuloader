@@ -139,18 +139,6 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       ReturnIsTab = False
       Themed = True
     end
-    object ButtonResetToDefault: TBitBtn
-      Left = 56
-      Top = 8
-      Width = 47
-      Height = 25
-      Hint = 'Reset selection to default machine'
-      Caption = 'Default'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 5
-      OnClick = ButtonResetToDefaultClick
-    end
   end
   object PanelTop: TPanelEx
     Left = 0
@@ -197,7 +185,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       WordWrap = True
     end
     object LabelGameNameCloneOf: TShadowLabel
-      Left = 56
+      Left = 76
       Top = 28
       Width = 198
       Height = 13
@@ -215,7 +203,7 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       Transparent = True
     end
     object LabelUsage: TShadowLabel
-      Left = 56
+      Left = 76
       Top = 41
       Width = 717
       Height = 13
@@ -233,6 +221,14 @@ object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
       EllipsType = etNone
       Transparent = True
       Visible = False
+    end
+    object IconMediaType: TImage
+      Left = 56
+      Top = 33
+      Width = 16
+      Height = 16
+      IncrementalDisplay = True
+      Transparent = True
     end
   end
   object MachinesListView: TEasyListview

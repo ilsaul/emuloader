@@ -95,11 +95,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
       WordWrap = True
     end
-    object LabelGameDetails: TLabel
+    object LabelGameDetails: TShadowLabel
       Left = 86
       Top = 28
-      Width = 287
-      Height = 12
+      Width = 290
+      Height = 13
       Caption = 'game: gamename [clone of parentname] [bios: biosname]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
@@ -108,13 +108,16 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
     end
-    object LabelEmulatorVersion: TLabel
+    object LabelEmulatorVersion: TShadowLabel
       Left = 86
       Top = 40
-      Width = 85
-      Height = 12
+      Width = 88
+      Height = 13
       Caption = 'Emulator version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
@@ -123,6 +126,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
     end
     object LabelSoftwareListTitle: TShadowLabel
@@ -144,11 +150,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
       Visible = False
     end
-    object LabelSoftwareList: TLabel
+    object LabelSoftwareList: TShadowLabel
       Left = 86
       Top = 52
-      Width = 65
-      Height = 12
+      Width = 68
+      Height = 13
       Caption = 'software list:'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
@@ -157,6 +163,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
       Visible = False
     end
@@ -278,18 +287,6 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonYes: TBitBtn
-      Left = 566
-      Top = 14
-      Width = 89
-      Height = 34
-      Hint = 'Click here to process all checked files'
-      Caption = 'Delete Files'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-      OnClick = ButtonYesClick
-    end
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
       Top = 6
@@ -298,7 +295,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       CaptionPosition = cpTopCenter
       RoundEdges = True
       ShadowColor = clMedGray
-      Caption = ' Auto-Check File Types '
+      Caption = ' Auto-Check Arcade File Types '
       Color = clBtnFace
       Ctl3D = True
       ParentColor = False
@@ -375,6 +372,83 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
     end
+    object DeleteGameFromGamesList: TAdvOfficeCheckBox
+      Tag = -1
+      Left = 392
+      Top = 13
+      Width = 200
+      Height = 18
+      Hint = 'Use this option to delete the game entry from main games list'
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 10900224
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 3
+      Visible = False
+      OnClick = DeleteCHDsClick
+      Alignment = taLeftJustify
+      Caption = 'Delete Game From Games List'
+      DisabledFontColor = clSilver
+      ReturnIsTab = False
+      ShadowColor = 14540253
+      State = cbChecked
+      Themed = True
+    end
+    object DeleteGameFileFromDisk: TAdvOfficeCheckBox
+      Left = 392
+      Top = 29
+      Width = 184
+      Height = 18
+      Hint = 
+        'Auto-check the game file to be deleted (recycle bin not supporte' +
+        'd!)'
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 10900224
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 4
+      Visible = False
+      OnClick = DeleteCHDsClick
+      Alignment = taLeftJustify
+      Caption = 'Delete Game File From Disk'
+      DisabledFontColor = clSilver
+      ReturnIsTab = False
+      ShadowColor = 14540253
+      State = cbChecked
+      Themed = True
+    end
+    object ButtonYes: TBitBtn
+      Left = 566
+      Top = 14
+      Width = 89
+      Height = 34
+      Hint = 'Click here to process all checked files'
+      Caption = 'Delete Files'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = ButtonYesClick
+    end
+    object ButtonHelp: TBitBtn
+      Left = 524
+      Top = 20
+      Width = 33
+      Height = 23
+      Hint = 'A litte help on how to use this feature'
+      Caption = 'Help'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = ButtonHelpClick
+    end
   end
   object PanelDestinationFolder: TPanelEx
     Left = 0
@@ -393,9 +467,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object LabelCopyMoveDestination: TShadowLabel
       Left = 8
       Top = 4
-      Width = 323
+      Width = 413
       Height = 16
-      Caption = 'Select a destination folder. Full paths only, no network paths!'
+      Caption = 
+        'Select a destination folder. Full paths only, no network paths. ' +
+        'ANSI paths only!'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False

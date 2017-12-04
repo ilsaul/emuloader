@@ -251,8 +251,8 @@ object FormSelectFile: TFormSelectFile
       Height = 13
       AutoSize = False
       Caption = 
-        'name: gamename [clone of gamename] [bios: biosname] [merged] [xm' +
-        'l file: softwarename]'
+        'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
+        'ftlist: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -9
