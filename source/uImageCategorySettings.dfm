@@ -70,6 +70,29 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Transparent = False
     Layout = tlCenter
   end
+  object LabelSystemNotAvailable: TShadowLabel
+    Left = 697
+    Top = 410
+    Width = 203
+    Height = 16
+    Caption = 'THIS SYSTEM IS NOT AVAILABLE'
+    Color = 16448250
+    Constraints.MaxHeight = 16
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold, fsItalic]
+    ParentColor = False
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 14540253
+    ShadowEnabled = True
+    EllipsType = etNone
+    Transparent = False
+    Layout = tlCenter
+    Visible = False
+  end
   object Systems: TEasyListview
     Tag = -1
     Left = 0
@@ -350,9 +373,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnClick = ButtonClearImageCategoryFolderClick
       end
       object ButtonImageCategoryFolder: TBitBtn
-        Left = 178
-        Top = 7
-        Width = 43
+        Left = 310
+        Top = 29
+        Width = 47
         Height = 21
         Hint = 'Click here to select a folder'
         Caption = 'Select'
@@ -365,7 +388,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         Tag = 1
         Left = 8
         Top = 29
-        Width = 350
+        Width = 299
         Height = 21
         Hint = 'Select a Folder for Game Snapshots'
         AutoSize = False
@@ -450,6 +473,21 @@ object FormImageCategorySettings: TFormImageCategorySettings
         TabOrder = 9
       end
     end
+  end
+  object SystemTitlePanel: TPanelEx
+    Left = 680
+    Top = 344
+    Width = 100
+    Height = 41
+    Color1 = clBlue
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
   end
   object IL_Systems: TImageList
     Height = 48

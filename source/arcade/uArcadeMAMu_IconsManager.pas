@@ -1249,7 +1249,7 @@ procedure TFormArcadeMAMu_IconsManager.SelectSystem;
 var
   selSys: ShortInt;
 begin
-  selSys:= FormMain.CallSelectSystem(0, ButtonSystem.Tag);
+  selSys:= FormMain.CallSelectArcadeSystem(0, ButtonSystem.Tag);
   if selSys = -1 then
      Exit;
   ButtonSystem.Tag:= selSys;
@@ -1432,7 +1432,7 @@ begin
      Exit;
 
   RunGame:= True;
-  FormMain.FindGameName(TMissingIconInfo(SelectedItemMissing).eName, TMissingIconInfo(SelectedItemMissing).eSystemID, False,
+  FormMain.FindGameName(TMissingIconInfo(SelectedItemMissing).eName, TMissingIconInfo(SelectedItemMissing).eSystemID, -1, False,
                                                                      TMissingIconInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
 
   if GameEasy <> nil then

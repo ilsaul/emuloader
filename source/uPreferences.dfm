@@ -81,25 +81,12 @@ object FormPreferences: TFormPreferences
       Flat = True
       OnClick = ButtonGeneralClick
     end
-    object ButtonVideoPreview: TSpeedButton
-      Tag = 4
-      Left = 1
-      Top = 205
-      Width = 70
-      Height = 50
-      GroupIndex = 1
-      Caption = 'Video'#13#10'Preview'
-      Flat = True
-      Visible = False
-      OnClick = ButtonGeneralClick
-    end
   end
   object PageOptions: TNotebook
     Left = 73
     Top = 0
     Width = 546
     Height = 392
-    PageIndex = 1
     TabOrder = 0
     object TPage
       Left = 0
@@ -1037,7 +1024,7 @@ object FormPreferences: TFormPreferences
       Caption = 'Game Documents'
       object LabelAppearanceGameDocuments: TLabel
         Left = 94
-        Top = 205
+        Top = 187
         Width = 96
         Height = 15
         Caption = 'Background Color'
@@ -1062,8 +1049,8 @@ object FormPreferences: TFormPreferences
         EllipsType = etNone
       end
       object LabelGoToMAMEInfo: TShadowLabel
-        Left = 155
-        Top = 256
+        Left = 19
+        Top = 336
         Width = 198
         Height = 14
         Cursor = crHandPoint
@@ -1087,8 +1074,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMARP: TShadowLabel
-        Left = 147
-        Top = 272
+        Left = 315
+        Top = 368
         Width = 214
         Height = 14
         Cursor = crHandPoint
@@ -1112,8 +1099,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMAMEScore: TShadowLabel
-        Left = 181
-        Top = 288
+        Left = 315
+        Top = 336
         Width = 146
         Height = 14
         Cursor = crHandPoint
@@ -1137,8 +1124,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMAMEHistory: TShadowLabel
-        Left = 172
-        Top = 304
+        Left = 315
+        Top = 352
         Width = 164
         Height = 14
         Cursor = crHandPoint
@@ -1162,8 +1149,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMESSInfo: TShadowLabel
-        Left = 147
-        Top = 320
+        Left = 19
+        Top = 352
         Width = 212
         Height = 14
         Cursor = crHandPoint
@@ -1187,8 +1174,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToGameInit: TShadowLabel
-        Left = 115
-        Top = 336
+        Left = 19
+        Top = 368
         Width = 275
         Height = 14
         Cursor = crHandPoint
@@ -1211,20 +1198,6 @@ object FormPreferences: TFormPreferences
         OnMouseEnter = LabelGoToMAMEInfoMouseEnter
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
-      object Label1: TLabel
-        Left = 113
-        Top = 178
-        Width = 223
-        Height = 18
-        Caption = 'More settings in docs panel popup menu'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsItalic]
-        ParentFont = False
-        Transparent = True
-      end
       object ShadowLabel3: TShadowLabel
         Left = 94
         Top = 32
@@ -1237,9 +1210,56 @@ object FormPreferences: TFormPreferences
         EllipsType = etNone
         Transparent = True
       end
+      object LabelGameDocsDisplayMode: TShadowLabel
+        Left = 94
+        Top = 238
+        Width = 75
+        Height = 16
+        Caption = 'Display Mode'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+      end
+      object LabelGameDocsDisplayModeSinglePanel: TShadowLabel
+        Left = 110
+        Top = 271
+        Width = 190
+        Height = 17
+        Caption = 'Show images and game docs together'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+      end
+      object LabelGameDocsDisplayModeTabs: TShadowLabel
+        Left = 110
+        Top = 305
+        Width = 238
+        Height = 17
+        Caption = 'Show images and game docs in separate panels'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+      end
       object GameDocumentsBackgroundColor: TColorBox
         Left = 94
-        Top = 223
+        Top = 205
         Width = 215
         Height = 22
         DefaultColorColor = clWhite
@@ -1252,7 +1272,7 @@ object FormPreferences: TFormPreferences
       end
       object ButtonGameDocumentsFont: TBitBtn
         Left = 311
-        Top = 222
+        Top = 204
         Width = 47
         Height = 23
         Hint = 'Select font for window texts'
@@ -1262,7 +1282,7 @@ object FormPreferences: TFormPreferences
       end
       object ButtonGameDocumentsDefault: TBitBtn
         Left = 362
-        Top = 222
+        Top = 204
         Width = 47
         Height = 23
         Hint = 'Set background color / font default values'
@@ -1289,7 +1309,7 @@ object FormPreferences: TFormPreferences
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000105010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000103010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -1360,12 +1380,33 @@ object FormPreferences: TFormPreferences
         TabOrder = 6
         OnClick = ButtonResetAutoGameInfoOrderClick
       end
-    end
-    object TPage
-      Left = 0
-      Top = 0
-      HelpContext = 4
-      Caption = 'Video Preview'
+      object GameDocsDisplayModeTabs: TAdvOfficeRadioButton
+        Tag = 1
+        Left = 94
+        Top = 290
+        Width = 225
+        Height = 18
+        TabOrder = 7
+        OnClick = GameDocsDisplayModeSinglePanelClick
+        Alignment = taLeftJustify
+        Caption = 'Images and Game Docs Tabbed Panels'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton
+        Left = 94
+        Top = 256
+        Width = 213
+        Height = 18
+        TabOrder = 8
+        TabStop = True
+        OnClick = GameDocsDisplayModeSinglePanelClick
+        Alignment = taLeftJustify
+        Caption = 'Images and Game Docs Single Panel'
+        Checked = True
+        ReturnIsTab = False
+        Themed = True
+      end
     end
   end
 end

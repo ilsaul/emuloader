@@ -464,7 +464,7 @@ object FormImagesManager: TFormImagesManager
     end
     object PopupScanArcadeMachines: TMenuItem
       AutoCheck = True
-      Caption = 'Scan Arcade Games/Machines'
+      Caption = 'Scan Arcade Games'
       Checked = True
     end
     object PopupScanSoftwareListGames: TMenuItem

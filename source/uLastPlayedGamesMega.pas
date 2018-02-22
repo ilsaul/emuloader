@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ImgList, MPCommonObjects, MPCommonUtilities,
   EasyListview, ExtCtrls, PanelEx, Buttons, ShadowLabel, IniFiles,
-  SplitterEx, Menus, BarMenus;
+  SplitterEx, Menus, BarMenus, AdvOfficeButtons;
 
 type
   TPlayedGameInfo = class(TEasyItemStored)
@@ -17,10 +17,13 @@ type
     fCustomMediaType: ShortInt;
     fIsUnicode: Boolean;
     fTitle: WideString;
+    //fYear: String;
+    //fManufacturer: WideString;
     fName: WideString;
     fMediaType: ShortInt;
     fSoftwareName: String;
     fSoftwareExecParam: String;
+    fSoftwareTitle: WideString;
 
     fIsFavorite: Boolean;
     fPlayed: Cardinal;
@@ -30,6 +33,8 @@ type
     fTotalPlaytimeText: String;
 
     fIsCustomGame: Boolean;
+
+    fReadDataFromMainList: Boolean; // this var is to improve speed when adding extra game info from main games list
   protected
     function GetCaptions(Column: Integer): WideString; override;
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
@@ -40,10 +45,13 @@ type
     property eCustomMediaType: ShortInt read fCustomMediaType write fCustomMediaType;
     property eIsUnicode: Boolean read fIsUnicode write fIsUnicode;
     property eTitle: WideString read fTitle write fTitle;
+    //property eYear: String read fYear write fYear;
+    //property eManufacturer: WideString read fManufacturer write fManufacturer;
     property eName: WideString read fName write fName;
     property eMediaType: ShortInt read fMediaType write fMediaType;
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eSoftwareExecParam: String read fSoftwareExecParam write fSoftwareExecParam;
+    property eSoftwareTitle: WideString read fSoftwareTitle write fSoftwareTitle;
     property eIsFavorite: Boolean read fIsFavorite write fIsFavorite;
     property ePlayed: Cardinal read fPlayed write fPlayed;
     property ePlayedDate: Integer read fPlayedDate write fPlayedDate;
@@ -51,6 +59,7 @@ type
     property eTotalPlaytime: Int64 read fTotalPlaytime write fTotalPlaytime; // total playtime in milliseconds
     property eTotalPlaytimeText: String read fTotalPlaytimeText write fTotalPlaytimeText; // formatted playtime in "x days, 00:00:00" format
     property eIsCustomGame: Boolean read fIsCustomGame write fIsCustomGame;
+    property eReadDataFromMainList: Boolean read fReadDataFromMainList write fReadDataFromMainList;
   end;
 
 type
@@ -69,12 +78,13 @@ type
     Systems: TEasyListview;
     LabelSystemTitle: TShadowLabel;
     LabelSystemType: TShadowLabel;
-    Label1: TLabel;
+    LabelSoftwareNameCaption: TLabel;
     ButtonSelectGameExit: TBitBtn;
     PopupLastPlayed: TBcBarPopupMenu;
     PopupDetailsView: TMenuItem;
     PopupTilesView: TMenuItem;
     N1: TMenuItem;
+    LabelGameNameCaption: TLabel;
     procedure ButtonSelectGameClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -97,8 +107,10 @@ type
     procedure PopupDetailsViewClick(Sender: TObject);
   private
     { Private declarations }
+    LastSelectedStateImageIndex: ShortInt;
     procedure LoadSystemsFilter;
     procedure AddGamesMRU;
+    procedure FillGameDataFromMainGamesList;
     procedure FilterMRUGames(SystemID: Byte; IsCustomGame: Boolean);
     procedure SelectGameToPlay(Item_Source: TEasyItem; ExitDialog: Boolean);
     procedure ResizeForm;
@@ -123,13 +135,16 @@ begin
   //strMediaType:= MediaTypeArray[eMediaType, 0]; // MediaType[] or MediaTypeCustom[]
   case Column of
     0: Result:= eTitle;
-    1: Result:= eSoftwareName;
-    2: Result:= ePlayedDateText;
-    3:
+    1: Result:= eName;
+    2:
       begin
-        if FormLastPlayedGamesMega.LastPlayedList.Header.Columns[2].Visible then
-           Result:= eTotalPlaytimeText+' ('+IntToStr(ePlayed)+'x)';
+        if eSoftwareTitle <> '' then
+           Result:= eSoftwareTitle
+        else
+           Result:= eSoftwareName;
       end;
+    3: Result:= ePlayedDateText;
+    4: Result:= eTotalPlaytimeText+' ('+IntToStr(ePlayed)+'x)';
     10:
       begin
         Result:= 'Played: '+ePlayedDateText+'     Playtime: '+eTotalPlaytimeText+' ('+IntToStr(ePlayed)+'x)';
@@ -141,17 +156,6 @@ begin
         else
            Result:= 'Software List: '+eSoftwareName;
       end;
-    //1: GetDateTimeStr(TEasyGameInfo(addItem).ePlayedDate, True, FormPreferences.LastPlayedHideSeconds.Checked);
-    {1: Result:= strSize;
-    2: Result:= strMediaType;
-    3: Result:= SystemsList[eSystemID, 0];
-    20: // for tiles view
-      begin
-        if StrSize <> '' then
-           Result:= strSize+' '+strMediaType
-        else
-           Result:= strMediaType;
-      end;}
   end;
 end;
 
@@ -187,15 +191,9 @@ end;
 
 procedure TFormLastPlayedGamesMega.LoadSystemsFilter;
 begin
-  //FormMain.ELV_PopulateSystems(Systems, -1, -1, True); // for debugging only!!!!
-  //Exit;
-  //ELV_PopulateCustomSystems(Systems, -1, 2, True);
-
                                                          // False -> it should hide systems without last played games lists
   FormMain.ELV_PopulateSystemsMulti(Systems, 2, True, True, False);
   FormMain.ELV_FindSelectedSystemMulti(Systems, FormMain.SelectedEasyItem, False);
-
-  //FormMain.ELV_SelectItem(Systems, 0);
 end;
 
 procedure TFormLastPlayedGamesMega.AddGamesMRU;
@@ -206,7 +204,7 @@ var
   PlayedList: THashedStringList;
   iGameTitle, iGameName: WideString;
   iMediaType: Integer;
-  iSoftwareExecParam: String;
+  //iSoftwareExecParam: String;
   iPlayed: Cardinal;
   iLastPlayed, TotalLines: Integer;
   iTotalPlaytime: Int64;
@@ -230,17 +228,14 @@ begin
          PlayedList:= THashedStringList.Create;
          PlayedList.LoadFromFile(FormMain.GetGamesPlayedIniFile(SysLoop));
          TotalLines:= PlayedList.Count-1;
-         for Loop:= 0 to 24 do //PlayedList.Count-1 do
+         for Loop:= 0 to 24 do
          begin
            if (Loop <= TotalLines) and (PlayedList[Loop] <> '') then
              begin
-               iGameTitle:= SoftListGetEntryValue(PlayedList[Loop], 'title');
-               iGameTitle:= FormMain.DecodeUnicodeStr(iGameTitle);
+               iMediaType:= 0; // set it to ROM media type
 
-               ValueStr:= SoftListGetEntryValue(PlayedList[Loop], 'media');
-               iMediaType:= 0;
-               if ValueStr <> '' then
-                  iMediaType:= StrToInt(ValueStr);
+               //if ValueStr <> '' then
+               //   iMediaType:= StrToInt(ValueStr);
 
                StrToSearch:= '';
                UnicodeFileName:= PlayedList.Names[Loop];
@@ -253,11 +248,6 @@ begin
                     Delete(StrToSearch, iPlayed, Length(StrToSearch));
                   end;
 
-               if iGameTitle = '' then
-                  iGameTitle:= UnicodeFileName;
-
-               iSoftwareExecParam:= SoftListGetEntryValue(PlayedList[Loop], 'execparam');
-
                iPlayed:= 0;
                ValueStr:= PlayedList.ValueFromIndex[Loop];
                FormMain.GetPlayedGameInfoIni(ValueStr, iPlayed, iLastPlayed, iTotalPlaytime);
@@ -269,14 +259,12 @@ begin
                TPlayedGameInfo(addItem).eIsCustomGame:= False;
                TPlayedGameInfo(addItem).eIsUnicode:= False;
 
-               TPlayedGameInfo(addItem).eTitle:= iGameTitle;
+               TPlayedGameInfo(addItem).eTitle:= UnicodeFileName;
 
                TPlayedGameInfo(addItem).eName:= UnicodeFileName;
                TPlayedGameInfo(addItem).eSoftwareName:= StrToSearch;
-               TPlayedGameInfo(addItem).eSoftwareExecParam:= iSoftwareExecParam;
 
                TPlayedGameInfo(addItem).eCustomMediaType:= -1;
-               TPlayedGameInfo(addItem).eMediaType:= iMediaType;
 
                TPlayedGameInfo(addItem).ePlayed:= iPlayed;
 
@@ -305,12 +293,10 @@ begin
                else
                   addItem.StateImageIndex:= 500; // bogus image index to show an empty space
 
+               TPlayedGameInfo(addItem).eReadDataFromMainList:= False;
+
                addItem.Details[1]:= 10;
                addItem.Details[2]:= 11;
-
-               //addItem.Visible:= False;
-               //if Loop > 23 then // indexes are from 0 to 24
-               //   Break;
              end;
          end;
          FreeAndNil(PlayedList);
@@ -319,16 +305,13 @@ begin
 
   for SysLoop:=1 to MaxConsoleComputerSystems do
   begin
-    //error... need to create a proper function to read played info from file (both arcade and console/computer)
     if FileExists(GetCustomGamePlayedFile(SysLoop)) then
        begin
          PlayedList:= THashedStringList.Create;
          PlayedList.LoadFromFile(GetCustomGamePlayedFile(SysLoop));
          TotalLines:= PlayedList.Count-1;
-         for Loop:= 0 to 24 do //PlayedList.Count-1 do
+         for Loop:= 0 to 24 do
          begin
-           // need to get the custom title for the new EmuCon games editor... still in development
-           // will use game filename for now...
            if (Loop <= TotalLines) and (PlayedList[Loop] <> '') then
               begin
                UnicodeFileName:= SoftListGetEntryValue(PlayedList[Loop], 'file');
@@ -337,7 +320,6 @@ begin
                iGameTitle:= FormMain.DecodeUnicodeStr(iGameTitle);
 
                ValueStr:= PlayedList[Loop];
-               //FormMain.GetPlayedGameInfoIni(tStr, TempGameVars.ePlayed, TempGameVars.ePlayedDate, TempGameVars.eTotalPlaytime);
                GetPlayedGameInfoIniCustom(ValueStr, iPlayed, iLastPlayed, iTotalPlaytime);
 
                Delete(ValueStr, 1, PosEx('/>', ValueStr)+1);
@@ -385,11 +367,10 @@ begin
                else
                   addItem.StateImageIndex:= 500; // bogus image index to show an empty space
 
+               TPlayedGameInfo(addItem).eReadDataFromMainList:= False;
+               
                addItem.Details[1]:= 10;
                addItem.Details[2]:= 11;
-               //addItem.Visible:= False;
-               //if Loop > 23 then // indexes are from 0 to 24
-               //   Break;
               end;
          end;
          FreeAndNil(PlayedList);
@@ -398,6 +379,99 @@ begin
   LastPlayedList.Items.ReIndexDisable:= False;
   LastPlayedList.EndUpdate(False);
   FreeAndNil(FavoriteList);
+end;
+
+procedure TFormLastPlayedGamesMega.FillGameDataFromMainGamesList;
+var
+  elvItem, LastPlayedItem: TEasyItem;
+  elvGroup: TEasyGroup;
+
+  function FindLastPlayedItem: Boolean;
+  begin
+    Result:= False;
+    LastPlayedItem:= LastPlayedList.Groups.FirstItem;
+    repeat
+      if not TPlayedGameInfo(LastPlayedItem).eReadDataFromMainList then
+         begin
+           if TPlayedGameInfo(LastPlayedItem).eIsCustomGame = uMain.TEasyGameInfo(elvItem).eIsCustomGame then
+           begin
+             if uMain.TEasyGameInfo(elvItem).eIsCustomGame then
+             begin
+               if (TPlayedGameInfo(LastPlayedItem).eCustomSystemID = uMain.TEasyGameInfo(elvItem).eCustomSystemID) and
+                  (TPlayedGameInfo(LastPlayedItem).eCustomMediaType = uMain.TEasyGameInfo(elvItem).eCustomMediaType) and
+                  (TPlayedGameInfo(LastPlayedItem).eName = uMain.TEasyGameInfo(elvItem).eName) then
+                  Result:= True;
+             end
+             else
+             begin
+               if (TPlayedGameInfo(LastPlayedItem).eSystemID = uMain.TEasyGameInfo(elvItem).eSystemID) and
+                  (TPlayedGameInfo(LastPlayedItem).eName = uMain.TEasyGameInfo(elvItem).eName) and
+                  (TPlayedGameInfo(LastPlayedItem).eSoftwareName = uMain.TEasyGameInfo(elvItem).eSoftwareName) then
+                  Result:= True;
+             end;
+           end;
+         end;
+
+      if not Result then
+         LastPlayedItem:= LastPlayedList.Groups.NextItem(LastPlayedItem);
+    until Result or (LastPlayedItem = nil);
+  end;
+
+  function FillGameDetails: Boolean;
+  begin
+    Result:= True;
+    if not TPlayedGameInfo(LastPlayedItem).eIsCustomGame then
+       begin
+         TPlayedGameInfo(LastPlayedItem).eMediaType:= uMain.TEasyGameInfo(elvItem).eMediaType;
+         TPlayedGameInfo(LastPlayedItem).eSoftwareExecParam:= uMain.TEasyGameInfo(elvItem).eSoftwareExecParameter;
+         if TPlayedGameInfo(LastPlayedItem).eSoftwareName <> '' then
+            TPlayedGameInfo(LastPlayedItem).eSoftwareTitle:= uMain.TEasyGameInfo(elvItem).eCategory;
+       end;
+
+    if TPlayedGameInfo(LastPlayedItem).eTitle <> uMain.TEasyGameInfo(elvItem).eTitle then
+       TPlayedGameInfo(LastPlayedItem).eTitle:= uMain.TEasyGameInfo(elvItem).eTitle;
+    //TPlayedGameInfo(LastPlayedItem).eYear:= uMain.TEasyGameInfo(elvItem).eYear;
+    //TPlayedGameInfo(LastPlayedItem).eManufacturer:= uMain.TEasyGameInfo(elvItem).eManufacturer;
+    //TPlayedGameInfo(LastPlayedItem).eSoftwareName:= uMain.TEasyGameInfo(elvItem).eSoftwareName;
+
+    TPlayedGameInfo(LastPlayedItem).eReadDataFromMainList:= True;
+  end;
+
+begin
+  if not FormMain.CheckTotal(FormMain.GamesListView) then
+     Exit;
+  if not FormMain.CheckTotal(LastPlayedList) then
+     Exit;
+
+  LastPlayedList.BeginUpdate;
+  case FormMain.IsGroupedView of
+    True:
+      begin
+        elvGroup:= FormMain.GamesListView.Groups.FirstGroup;
+        repeat
+          elvItem:= FormMain.GamesListView.Groups.FirstInGroup(elvGroup);
+          repeat
+            if FindLastPlayedItem then
+               FillGameDetails;
+
+            elvItem:= FormMain.GamesListView.Groups.NextInGroup(elvGroup, elvItem);
+          until elvItem = nil;
+          elvGroup:= FormMain.GamesListView.Groups.NextGroup(elvGroup);
+        until elvGroup = nil;
+
+      end;
+    False:
+      begin
+        elvItem:= FormMain.GamesListView.Groups.FirstItem;
+        repeat
+          if FindLastPlayedItem then
+             FillGameDetails;
+
+          elvItem:= FormMain.GamesListView.Groups.NextItem(elvItem);
+        until elvItem = nil;
+      end;
+  end;
+  LastPlayedList.EndUpdate;
 end;
 
 procedure TFormLastPlayedGamesMega.FilterMRUGames(SystemID: Byte; IsCustomGame: Boolean);
@@ -439,7 +513,7 @@ procedure TFormLastPlayedGamesMega.SelectGameToPlay(Item_Source: TEasyItem; Exit
 var
   Item_MainGamesList: TEasyItem;
 begin
-  FormMain.FindGameName(TPlayedGameInfo(Item_Source).eName, Systems.Tag, TPlayedGameInfo(Item_Source).eIsCustomGame,
+  FormMain.FindGameName(TPlayedGameInfo(Item_Source).eName, Systems.Tag, TPlayedGameInfo(Item_Source).eMediaType, TPlayedGameInfo(Item_Source).eIsCustomGame,
                         TPlayedGameInfo(Item_Source).eSoftwareName, Item_MainGamesList, False);
 
   if Item_MainGamesList = nil then
@@ -471,22 +545,68 @@ end;
 
 procedure TFormLastPlayedGamesMega.ResizeForm;
 var
-  ScreenWidth, ScreenHeight, ItemsLineCount, ItemsColumnCount, iDiff: Integer;
+  iScreenWidth, iScreenHeight, ItemsLineCount, ItemsColumnCount, iDiff: Integer;
   ScrollBarsVisible: Boolean;
+
+  function UpdateGamesColumnsTitle: Boolean;
+  begin
+    LabelGameNameCaption.Left:= LastPlayedList.Header.Columns[0].Width+12;
+
+    LabelSoftwareNameCaption.Left:= LastPlayedList.Header.Columns[0].Width+8+LastPlayedList.Header.Columns[1].Width+4;
+    LabelLastPlayed.Left:= LastPlayedList.Header.Columns[0].Width+8+LastPlayedList.Header.Columns[1].Width+4+LastPlayedList.Header.Columns[2].Width;
+    LabelTotalPlaytime.Left:= LastPlayedList.Header.Columns[0].Width+8+LastPlayedList.Header.Columns[1].Width+4+LastPlayedList.Header.Columns[2].Width+LastPlayedList.Header.Columns[3].Width;
+  end;
+
 begin
   // adjust both controls so the scrollbar doesn't show
-  //ScreenWidth:= 1680;
-  //ScreenHeight:= 1050;
-  ScreenWidth:= Screen.Width;
-  ScreenHeight:= Screen.Height;
+  //iScreenWidth:= 2560;
+  //iScreenHeight:= 1440;
+
+  iScreenWidth:= Screen.Width;
+  iScreenHeight:= Screen.Height;
+
   ItemsColumnCount:= 19; // default columns count value!!!
   ItemsLineCount:= 4; // default lines count value!!!
   ScrollBarsVisible:= False;
 
-  //Form ClientWidth:= 1202
 
-  case ScreenWidth of
-    1024, 1152: // 1024x768 (4:3) // 1152x864 (4:3)
+  case iScreenWidth of
+    2560, 3840:
+      begin
+        //ItemsColumnCount:= 18; // default columns count value!!!
+        IL_Systems.Width:= 68;
+        IL_Systems.Height:= 68;
+        Systems.CellSizes.Icon.Width:= 78;
+        Systems.CellSizes.Icon.Height:= 105;
+
+        Systems.Font.Name:= 'Verdana';
+        Systems.Width:= (Systems.CellSizes.Icon.Width*ItemsColumnCount)+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+        FormLastPlayedGamesMega.ClientWidth:= Systems.CellSizes.Icon.Width*ItemsColumnCount;
+        iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
+        Systems.Height:= iDiff;
+        PanelSystems.Height:= Systems.Height+LabelSystemTitle.Height;
+        FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottomButtons.Height;
+        iDiff:= FormLastPlayedGamesMega.ClientWidth-LastPlayedList.Width;
+        LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth;
+        LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+(iDiff div 2);
+        LastPlayedList.Header.Columns[2].Width:= LastPlayedList.Header.Columns[2].Width+(iDiff div 2);
+
+        UpdateGamesColumnsTitle;
+      end;
+    {3840:
+      begin
+        IL_Systems.Width:= 128;
+        IL_Systems.Height:= 128;
+        Systems.CellSizes.Icon.Width:= 144;
+        Systems.CellSizes.Icon.Height:= 174;
+        UpdateGamesColumnsTitle;
+      end;}
+  end;
+  FormMain.LoadSystemsIcons(IL_Systems, False);
+  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
+
+  case iScreenWidth of
+    1024, 1152:
       begin
         ItemsColumnCount:= 16;
         ItemsLineCount:= 2;
@@ -494,21 +614,44 @@ begin
       end;
   end;
 
-  case ScreenHeight of
-    720, 768, 864, 900:
+  case iScreenHeight of
+    720..960:
       begin
         ItemsLineCount:= 2;
-        ScrollBarsVisible:= True;
+        if iScreenHeight <> 900 then
+           ScrollBarsVisible:= True;
+      end;
+    1024:
+      begin
+        ItemsLineCount:= 3;
       end;
   end;
 
   if ItemsColumnCount = 19 then
      begin
        Systems.Width:= Systems.Width+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
-       LastPlayedList.Width:=LastPlayedList.Width+LastPlayedList.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+       LastPlayedList.Width:= Systems.Width; //LastPlayedList.Width+LastPlayedList.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
      end
   else
-     Systems.Width:= (Systems.CellSizes.Icon.Width*ItemsColumnCount)+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+     begin
+       //iDiff:= FormLastPlayedGamesMega.ClientWidth;
+       FormLastPlayedGamesMega.ClientWidth:= (Systems.CellSizes.Icon.Width*ItemsColumnCount);
+       Systems.Width:= FormLastPlayedGamesMega.ClientWidth+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+       //iDiff:= iDiff-FormLastPlayedGamesMega.ClientWidth;
+       iDiff:= LastPlayedList.Width;
+       LastPlayedList.Width:= Systems.Width;
+       iDiff:= LastPlayedList.Width-iDiff;
+       case iScreenWidth of
+         1024, 1152:
+          begin
+            LastPlayedList.Header.Columns[1].Width:= LastPlayedList.Header.Columns[1].Width-20;
+            LastPlayedList.Header.Columns[4].Width:= LastPlayedList.Header.Columns[4].Width-5;
+            LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+iDiff;// (iDiff div 2)-20;
+            UpdateGamesColumnsTitle;
+          end;
+       end;
+       //Systems.Width:= (Systems.CellSizes.Icon.Width*ItemsColumnCount)+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+     end;
 
   // use this to calculate the lines count depending on the visible systems count and the systems per line
   if (Systems.Groups.VisibleItemCount < (MaxArcadeSystems+MaxConsoleComputerSystems)) or (ItemsColumnCount <> 19) or (ItemsLineCount <> 4) then
@@ -535,22 +678,54 @@ begin
         if Systems.Scrollbars.VertBarVisible then
            begin
              Systems.Width:= Systems.Width-2;//Systems.PaintInfoItem.Border; // must remove right border before the vertical scrollbar!!!
+             iDiff:= FormLastPlayedGamesMega.ClientWidth;
              FormLastPlayedGamesMega.ClientWidth:= Systems.Width;
+             iDiff:= FormLastPlayedGamesMega.ClientWidth-iDiff;
+             LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth+Systems.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+             LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+iDiff;
            end;
      end;
 
-  if FormLastPlayedGamesMega.Height > (ScreenHeight-55) then
+  if FormLastPlayedGamesMega.Height > (iScreenHeight-55) then
      begin
-       FormLastPlayedGamesMega.Height:= ScreenHeight-55;
+       FormLastPlayedGamesMega.Height:= iScreenHeight-55;
        PanelGames.Height:= FormLastPlayedGamesMega.ClientHeight-PanelSystems.Height-PanelBottomButtons.Height;
        LastPlayedList.Height:= PanelGames.Height-PanelPlayedListHeader.Height;
      end;
 
-  if LastPlayedList.Scrollbars.VertBarVisible then
+  LastPlayedList.BeginUpdate;
+  if (LastPlayedList.Scrollbars.VertBarVisible and ScrollBarsVisible) or LastPlayedList.Scrollbars.HorzBarVisible then
      begin
-       LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
        LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth;
+       if LastPlayedList.Scrollbars.HorzBarVisible then
+          begin
+            iDiff:= 0;
+            for ItemsColumnCount:= 0 to LastPlayedList.Header.Columns.Count-1 do
+                iDiff:= iDiff+LastPlayedList.Header.Columns[ItemsColumnCount].Width;
+
+            iDiff:= iDiff-LastPlayedList.Width;
+            if iDiff > 0 then
+               LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width-iDiff-(LastPlayedList.BorderWidth*2);//LastPlayedList.PaintInfoItem.Border;
+          end;
+       if LastPlayedList.Scrollbars.VertBarVisible then
+          begin
+            if iScreenHeight < 900 then
+               begin
+                 LastPlayedList.HotTrack.Enabled:= False;
+                 LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+               end
+            else
+               LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width-(LastPlayedList.BorderWidth*4);
+          end;
+       UpdateGamesColumnsTitle;
      end;
+  LastPlayedList.EndUpdate;
+
+  LabelSystemType.Top:= LabelSystemTitle.Top;
+
+  ButtonSelectGameExit.Left:= (PanelBottomButtons.Width div 2) - (ButtonSelectGameExit.Width div 2);
+  ButtonSelectGame.Left:= ButtonSelectGameExit.Left-ButtonSelectGame.Width-6;
+  ButtonClose.Left:= ButtonSelectGameExit.Left+ButtonSelectGameExit.Width+6;
 end;
 
 procedure TFormLastPlayedGamesMega.FormShow(Sender: TObject);
@@ -558,28 +733,63 @@ begin
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(LastPlayedList);
 
-  FormMain.LoadSystemsIcons(IL_Systems, False);
-  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
-
+  LastSelectedStateImageIndex:= -5; // set to "unknown" or "not set"
   AddGamesMRU;
+  FillGameDataFromMainGamesList;
   LoadSystemsFilter;
   ResizeForm;
+  FormLastPlayedGamesMega.Tag:= 1;
+  FormMain.HideFilterMsgBox;
+  if Systems.Selection.Count = 1 then
+     Systems.OnItemSelectionChanged(Systems, Systems.Selection.First);
   Systems.SetFocus;
 end;
 
 procedure TFormLastPlayedGamesMega.SystemsItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 var
-  newSysTag: Integer;
+  newSysTag, NewColumnWidth: Integer;
 begin
+  if FormLastPlayedGamesMega.Tag = 0 then
+     Exit;
   if Item.Selected then
      begin
        newSysTag:= FormMain.ELV_GetSystemTagMulti(Systems);
-       if newsysTag <> Systems.Tag then
+       if (newsysTag <> Systems.Tag) or (LastSelectedStateImageIndex <> Item.StateImageIndex) then
           begin
             Systems.Tag:= newSysTag;
+            LastSelectedStateImageIndex:= Item.StateImageIndex;
             FormMain.ELV_GetSystemTitle(Systems, Item, LabelSystemTitle, LabelSystemType);
             FilterMRUGames(Systems.Tag, FormMain.ELV_IsArcadeSystemMulti(Item));
+
+            if FormMain.ELV_IsArcadeSystemMulti(Item) then
+               begin
+                 if not LastPlayedList.Header.Columns[2].Visible then
+                    begin
+                      LabelGameNameCaption.Caption:= 'Game Name';
+                      LabelGameNameCaption.Left:= LabelGameNameCaption.Left+100;
+                      LabelSoftwareNameCaption.Visible:= True;
+                      LastPlayedList.BeginUpdate;
+                      LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+100;
+                      LastPlayedList.Header.Columns[1].Width:= LastPlayedList.Header.Columns[1].Width-LastPlayedList.Header.Columns[2].Width-100;
+                      LastPlayedList.Header.Columns[2].Visible:= True;
+                      LastPlayedList.EndUpdate;
+                    end
+               end
+            else
+               begin
+                 if LastPlayedList.Header.Columns[2].Visible then
+                    begin
+                      LabelGameNameCaption.Caption:= 'Game File';
+                      LabelGameNameCaption.Left:= LabelGameNameCaption.Left-100;
+                      LabelSoftwareNameCaption.Visible:= False;
+                      LastPlayedList.BeginUpdate;
+                      LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width-100;
+                      LastPlayedList.Header.Columns[1].Width:= LastPlayedList.Header.Columns[1].Width+LastPlayedList.Header.Columns[2].Width+100;
+                      LastPlayedList.Header.Columns[2].Visible:= False;
+                      LastPlayedList.EndUpdate;
+                    end;
+               end;
           end;
      end;
 end;
@@ -603,7 +813,7 @@ procedure TFormLastPlayedGamesMega.LastPlayedListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if LastPlayedList.View = elsTile then
+  {if LastPlayedList.View = elsTile then
      begin
        if Position = 1 then
           begin
@@ -611,7 +821,7 @@ begin
             ACanvas.Font.Size:= 8;
             //ACanvas.Font.Color:= clGray;
           end;
-     end;
+     end;}
   //if Item.Index mod 2 = 1 then
   //   ACanvas.Font.Color:= $00323232;
 end;
@@ -649,7 +859,7 @@ begin
   if TMenuItem(Sender).Tag = 0 then
      LastPlayedList.View:= elsReport
   else
-     LastPlayedList.View:=elsTile ;
+     LastPlayedList.View:=elsTile;
 end;
 
 end.

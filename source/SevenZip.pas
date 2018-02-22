@@ -14,6 +14,10 @@
 (* V1.2                                                                         *)
 (* Small changes and updates by Ciro Alfredo Consentino (June 09, 2013)         *)
 (* - added support to read CRC32                                                *)
+(*                                                                              *)
+(* Small changes and updates by Ciro Alfredo Consentino (Januery 17, 2018       *)
+(* - added more CLSID_ entries in the CLASSES definitions to match              *)
+(*   Project JEDI list in "sevenzip.pas"                                        *)
 (********************************************************************************)
 
 unit sevenzip;
@@ -39,7 +43,7 @@ type
 
 const
   kpidNoProperty       = 0;
-
+  kpidMainSubfile      = 1;  // added by Ciro Alfredo Consentino (January 17, 2018) - to match Project JEDI "sevenzip.pas"
   kpidHandlerItemIndex = 2;
   kpidPath             = 3;  // VT_BSTR
   kpidName             = 4;  // VT_BSTR
@@ -88,14 +92,22 @@ const
   kpidCharacts         = 47; // VT_BSTR
   kpidVa               = 48; // VT_UI8
 
+  // added from Project JEDI "sevenzip.pas" (January 17, 2018)
+  kpidId               = 49;
+  kpidShortName        = 50; // VT_BSTR
+  kpidCreatorApp       = 51;
+  kpidSectorSize       = 52;
+  kpidPosixAttrib      = 53;
+  kpidLink             = 54;
+  // end of constants from Project JEDI "sevenzip.pas" (January 17, 2018)
 
   kpidTotalSize        = $1100; // VT_UI8
-  kpidFreeSpace        = kpidTotalSize + 1; // VT_UI8
-  kpidClusterSize      = kpidFreeSpace + 1; // VT_UI8
-  kpidVolumeName       = kpidClusterSize + 1; // VT_BSTR
+  kpidFreeSpace        = kpidTotalSize + 1; // VT_UI8     -> $1101;
+  kpidClusterSize      = kpidFreeSpace + 1; // VT_UI8     -> $1102;
+  kpidVolumeName       = kpidClusterSize + 1; // VT_BSTR  -> $1103;
 
   kpidLocalName        = $1200; // VT_BSTR
-  kpidProvider         = kpidLocalName + 1; // VT_BSTR
+  kpidProvider         = kpidLocalName + 1; // VT_BSTR    -> $1201;
 
   kpidUserDefined      = $10000;
 
@@ -262,7 +274,7 @@ type
     function Open(stream: IInStream; const maxCheckStartPosition: PInt64;
         openArchiveCallback: IArchiveOpenCallback): HRESULT; stdcall;
     function Close: HRESULT; stdcall;
-    function GetNumberOfItems(var numItems: CArdinal): HRESULT; stdcall;
+    function GetNumberOfItems(var numItems: Cardinal): HRESULT; stdcall;
     function GetProperty(index: Cardinal; propID: PROPID; var value: OleVariant): HRESULT; stdcall;
     function Extract(indices: PCardArray; numItems: Cardinal;
         testMode: Integer; extractCallback: IArchiveExtractCallback): HRESULT; stdcall;
@@ -284,8 +296,8 @@ type
   IArchiveUpdateCallback = interface(IProgress)
   ['{23170F69-40C1-278A-0000-000600800000}']
     function GetUpdateItemInfo(index: Cardinal;
-        newData: PInteger; // 1 - new data, 0 - old data
-        newProperties: PInteger; // 1 - new properties, 0 - old properties
+        newData: PInteger;        // 1 - new data, 0 - old data
+        newProperties: PInteger;  // 1 - new properties, 0 - old properties
         indexInArchive: PCardinal // -1 if there is no in archive, or if doesn't matter
         ): HRESULT; stdcall;
     function GetProperty(index: Cardinal; propID: PROPID; var value: OleVariant): HRESULT; stdcall;
@@ -342,18 +354,19 @@ type
 const
 //NCoderPropID::
   kDictionarySize    = $400;
-  kUsedMemorySize    = kDictionarySize + 1;
-  kOrder             = kUsedMemorySize + 1;
+  kUsedMemorySize    = kDictionarySize + 1; // $401;
+  kOrder             = kUsedMemorySize + 1; // $402;
+  kBlockSize         = $403; // added by Ciro Alfredo Consentino from Project JEDI "sevenzip.pas" (January 17, 2018)
   kPosStateBits      = $440;
-  kLitContextBits    = kPosStateBits + 1;
-  kLitPosBits        = kLitContextBits + 1;
+  kLitContextBits    = kPosStateBits + 1;   // $441;
+  kLitPosBits        = kLitContextBits + 1; // $442;
   kNumFastBytes      = $450;
-  kMatchFinder       = kNumFastBytes + 1;
-  kMatchFinderCycles = kMatchFinder + 1;
+  kMatchFinder       = kNumFastBytes + 1;   // $451;
+  kMatchFinderCycles = kMatchFinder + 1;    // $452;
   kNumPasses         = $460;
   kAlgorithm         = $470;
   kMultiThread       = $480;
-  kNumThreads        = kMultiThread + 1;
+  kNumThreads        = kMultiThread + 1;    // $481;
   kEndMarker         = $490;
 
 type
@@ -580,6 +593,32 @@ type
   function CreateOutArchive(const classid: TGUID; const lib: string = '7z.dll'): I7zOutArchive;
 
 const
+  // added from Project JEDI "sevenzip.pas" (January 17, 2018)
+  CLSID_CCodec          : TGUID = '{23170F69-40C1-2790-0000-000000000000}';
+  CLSID_CCodecBCJ2      : TGUID = '{23170F69-40C1-2790-1B01-030300000000}'; // BCJ2 0303011B
+  CLSID_CCodecBCJ       : TGUID = '{23170F69-40C1-2790-0301-030300000000}'; // BCJ  03030103
+  CLSID_CCodecSWAP2     : TGUID = '{23170F69-40C1-2790-0203-030000000000}'; // swap2 020302
+  CLSID_CCodecSWAP4     : TGUID = '{23170F69-40C1-2790-0403-020000000000}'; // swap4 020304
+  CLSID_CCodecBPPC      : TGUID = '{23170F69-40C1-2790-0502-030300000000}'; // branch ppc 03030205
+  CLSID_CCodecBIA64     : TGUID = '{23170F69-40C1-2790-0104-030300000000}'; // branch IA64 03030401
+  CLSID_CCodecBARM      : TGUID = '{23170F69-40C1-2790-0105-030300000000}'; // branch ARM  03030501
+  CLSID_CCodecBARMT     : TGUID = '{23170F69-40C1-2790-0107-030300000000}'; // branch ARM Thumb 03030701
+  CLSID_CCodecBARMS     : TGUID = '{23170F69-40C1-2790-0508-030300000000}'; // branch ARM Sparc 03030805
+  CLSID_CCodecBZIP      : TGUID = '{23170F69-40C1-2790-0202-040000000000}'; // bzip2 040202
+  CLSID_CCodecCOPY      : TGUID = '{23170F69-40C1-2790-0000-000000000000}'; // copy 0
+  CLSID_CCodecDEF64     : TGUID = '{23170F69-40C1-2790-0901-040000000000}'; // deflate64 040109
+  CLSID_CCodecDEFNSIS   : TGUID = '{23170F69-40C1-2790-0109-040000000000}'; // deflate nsis 040901
+  CLSID_CCodecDEFREG    : TGUID = '{23170F69-40C1-2790-0801-040000000000}'; // deflate register 040108
+  CLSID_CCodecLZMA      : TGUID = '{23170F69-40C1-2790-0101-030000000000}'; // lzma 030101
+  CLSID_CCodecPPMD      : TGUID = '{23170F69-40C1-2790-0104-030000000000}'; // ppmd 030401
+  CLSID_CCodecRAR1      : TGUID = '{23170F69-40C1-2790-0103-040000000000}'; // rar1 040301
+  CLSID_CCodecRAR2      : TGUID = '{23170F69-40C1-2790-0203-040000000000}'; // rar2 040302
+  CLSID_CCodecRAR3      : TGUID = '{23170F69-40C1-2790-0303-040000000000}'; // rar3 040303
+  CLSID_CAESCodec       : TGUID = '{23170F69-40C1-2790-0107-F10600000000}'; // AES 06F10701
+
+  CLSID_CArchiveHandler : TGUID = '{23170F69-40C1-278A-1000-000110000000}';
+  // end of constants from Project JEDI "sevenzip.pas" (January 17, 2018)
+
   CLSID_CFormatZip      : TGUID = '{23170F69-40C1-278A-1000-000110010000}'; // zip jar xpi
   CLSID_CFormatBZ2      : TGUID = '{23170F69-40C1-278A-1000-000110020000}'; // bz2 bzip2 tbz2 tbz
   CLSID_CFormatRar      : TGUID = '{23170F69-40C1-278A-1000-000110030000}'; // rar r00
@@ -593,6 +632,20 @@ const
   CLSID_CFormatLzma86   : TGUID = '{23170F69-40C1-278A-1000-0001100B0000}'; // lzma 86
   CLSID_CFormatXz       : TGUID = '{23170F69-40C1-278A-1000-0001100C0000}'; // xz
   CLSID_CFormatPpmd     : TGUID = '{23170F69-40C1-278A-1000-0001100D0000}'; // ppmd
+
+  // added from Project JEDI "sevenzip.pas" (January 17, 2018)
+  CLSID_CFormatExt      : TGUID = '{23170F69-40C1-278A-1000-000110C70000}';
+  CLSID_CFormatVMDK     : TGUID = '{23170F69-40C1-278A-1000-000110C80000}';
+  CLSID_CFormatVDI      : TGUID = '{23170F69-40C1-278A-1000-000110C90000}';
+  CLSID_CFormatQcow     : TGUID = '{23170F69-40C1-278A-1000-000110CA0000}';
+  CLSID_CFormatGPT      : TGUID = '{23170F69-40C1-278A-1000-000110CB0000}';
+  CLSID_CFormatRar5     : TGUID = '{23170F69-40C1-278A-1000-000110CC0000}';
+  CLSID_CFormatIHex     : TGUID = '{23170F69-40C1-278A-1000-000110CD0000}';
+  CLSID_CFormatHxs      : TGUID = '{23170F69-40C1-278A-1000-000110CE0000}';
+  CLSID_CFormatTE       : TGUID = '{23170F69-40C1-278A-1000-000110CF0000}';
+  CLSID_CFormatUEFIc    : TGUID = '{23170F69-40C1-278A-1000-000110D00000}';
+  CLSID_CFormatUEFIs    : TGUID = '{23170F69-40C1-278A-1000-000110D10000}';
+  // end of constants from Project JEDI "sevenzip.pas" (January 17, 2018)
 
   CLSID_CFormatSquashFS : TGUID = '{23170F69-40C1-278A-1000-000110D20000}';
   CLSID_CFormatCramFS   : TGUID = '{23170F69-40C1-278A-1000-000110D30000}';
@@ -616,7 +669,7 @@ const
   CLSID_CFormatCompound : TGUID = '{23170F69-40C1-278A-1000-000110E50000}'; // msi doc xls ppt
   CLSID_CFormatWim      : TGUID = '{23170F69-40C1-278A-1000-000110E60000}'; // wim swm
   CLSID_CFormatIso      : TGUID = '{23170F69-40C1-278A-1000-000110E70000}'; // iso
-  CLSID_CFormatBkf      : TGUID = '{23170F69-40C1-278A-1000-000110E80000}';
+  CLSID_CFormatBkf      : TGUID = '{23170F69-40C1-278A-1000-000110E80000}'; // this is not present in v4.57 DLL
   CLSID_CFormatChm      : TGUID = '{23170F69-40C1-278A-1000-000110E90000}'; // chm chi chq chw hxs hxi hxr hxq hxw lit
   CLSID_CFormatSplit    : TGUID = '{23170F69-40C1-278A-1000-000110EA0000}'; // 001
   CLSID_CFormatRpm      : TGUID = '{23170F69-40C1-278A-1000-000110EB0000}'; // rpm

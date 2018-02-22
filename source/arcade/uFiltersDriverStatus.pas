@@ -9,7 +9,7 @@ uses
 
 type
   TFormArcadeFiltersDriverStatus = class(TForm)
-    PanelEx1: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
     LabelSelectCategory: TLabel;

@@ -8,9 +8,6 @@ uses
   MPCommonObjects, EasyListview, uCommon, ImgList,
   PanelEx, AdvOfficeButtons, ShadowLabel, GR32_Image, GraphicEx;
 
-// March 08, 2016
-// NOTE: it's ONE color for each category; this color is used for ALL systems; eg.: in-game snaps color is the same for ALL systems
-
 type
   TLayoutInfo = record
     lImage1_imgCategory,
@@ -107,7 +104,7 @@ var
   tmpFolder: String;
 begin
   tmpFolder:= FormMain.GetFolderFull(32);
-  for Loop:=0 to 8 do
+  for Loop:=0 to MaxImageLayouts do
       FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts);
 end;
 
@@ -162,7 +159,9 @@ begin
   layoutIni:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'screenshot_layouts.ini');
   repeat
     if Item.ImageIndex > 0 then
-       FormMain.PopupScreenshotLayouts.Items[Item.ImageIndex].Visible:= Item.Checked;
+       FormMain.PopupScreenshotLayouts.Items[Item.ImageIndex].Visible:= Item.Checked
+    else
+       FormMain.ButtonImageCategory.HelpContext:= LayoutInfo[Item.ImageIndex].lImage1_imgCategory;
     SectionStr:= GetScrLayoutSection(Item.ImageIndex);
     layoutIni.WriteInteger(SectionStr, 'image1_category', LayoutInfo[Item.ImageIndex].lImage1_imgCategory);
     if Item.ImageIndex > 0 then
@@ -225,8 +224,6 @@ end;
 procedure TFormImageLayoutSettings.LoadLayoutIcon(LayoutImgHolder: TImage; ImgCategory: ShortInt);
 begin
   FormMain.LoadImageCategoryThumbIcon(LayoutImgHolder, ImgCategory);
-  //LayoutImgHolder.Picture.Icon:= nil;
-  //IL_ImageCategory.GetIcon(ImgCategory, LayoutImgHolder.Picture.Icon);
 end;
 
 //procedure TFormCategoryLayoutSettings.LoadLayoutIcon(LayoutImgHolder: TImage; ImgCategory: ShortInt);
@@ -242,13 +239,6 @@ begin
      Exit;
   if ModalResult = mrCancel then
      Exit;
-
-  // need to update
-  // FormMain.PopupMenuImageCategories.Items[img_catID].Tag ////// ImageCategory_Selector.Selection.First.ImageIndex].Tag
-  // with "ImageCategory_Selector.Items.First.Tag" tags of each category in the EasyListView category list
-  //FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Selection.First.ImageIndex].Tag:= ImageCategoryBackgroundColor.Selected;
-
-  // need to update FormMain.imgFolder[sysID, img_catID]; with the new TempImgFolder[sysID, img_catID];
 
   UpdateLayouts; // update .ini settings only (do not apply setting at main screen)
   // no need to update hints if layouts is enabled, I think... see uMain.SetImageLayout;
@@ -294,7 +284,7 @@ begin
   IconLayScr1.Picture.Icon:= nil;
   IconLayScr2.Picture.Icon:= nil;
   IconLayScr3.Picture.Icon:= nil;
-  //FormMain.ELV_SetSelectRibbon(Ord(Item.Ghosted), LayoutListView);
+  //FormMain.ELV_SetSelectRibbon(Ord(Item.Ghosted), LayoutListView); // show red selection ribbon for disabled layouts ???? NO! (February 09, 2018)
   LoadLayoutImage(LayoutSelectedItem.ImageIndex);
   LoadLayoutIcon(IconLayScr1, LayoutInfo[LayoutSelectedItem.ImageIndex].lImage1_imgCategory);
   LabelLayScr1.Caption:= FormMain.PopupMenuImageCategories.Items[LayoutInfo[LayoutSelectedItem.ImageIndex].lImage1_imgCategory].Caption;
@@ -509,13 +499,11 @@ begin
 end;
 
 procedure TFormImageLayoutSettings.FormShow(Sender: TObject);
-var
-  iDiff: Integer;
 begin
   FormMain.ELV_ResetNormalColors(LayoutListView);
 
-  FormMain.LoadCategoriesIcons(IL_ImageCategory, True);
-  FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge, True);
+  FormMain.LoadCategoriesIcons(IL_ImageCategory);
+  FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
   LoadLayoutIcons;
 end;
 

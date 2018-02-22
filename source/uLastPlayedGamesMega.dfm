@@ -66,19 +66,22 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       GroupFont.Style = []
       HintType = ehtToolTip
       Header.Columns.Items = {
-        0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000000000CE020000FFFFFF1F0001000000
+        0600000005000000110000005445617379436F6C756D6E53746F726564FFFECE
+        000600000080080001010001000000000000003F020000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-        000101000000000000B4000000FFFFFF1F0001000000010000000D0000005300
-        6F0066007400770061007200650020004E0061006D0065000000000000000000
-        00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-        0080080001010001020000000100007D000000FFFFFF1F000100000001000000
-        0B0000004C00610073007400200050006C006100790065006400000000000000
-        000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-        000000800800010100010300000000000093000000FFFFFF1F00010000000100
-        00000E00000054006F00740061006C00200050006C0061007900740069006D00
-        6500000000000000000000000000}
+        0001010000000000018C000000FFFFFF1F000100000001000000040000004E00
+        61006D006500000000000000000000000000110000005445617379436F6C756D
+        6E53746F726564FFFECE00060000008008000101000102000000000000B40000
+        00FFFFFF1F0001000000010000000D00000053006F0066007400770061007200
+        650020004E0061006D0065000000000000000000000000001100000054456173
+        79436F6C756D6E53746F726564FFFECE00060000008008000101000103000000
+        0100007D000000FFFFFF1F0001000000010000000B0000004C00610073007400
+        200050006C006100790065006400000000000000000000000000110000005445
+        617379436F6C756D6E53746F726564FFFECE0006000000800800010100010400
+        000000000096000000FFFFFF1F0001000000010000000E00000054006F007400
+        61006C00200050006C0061007900740069006D00650000000000000000000000
+        0000}
       Header.Draggable = False
       Header.Font.Charset = ANSI_CHARSET
       Header.Font.Color = clBlack
@@ -96,7 +99,6 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       PaintInfoItem.TileDetailCount = 3
       ParentFont = False
       ParentShowHint = False
-      PopupMenu = PopupLastPlayed
       ShowThemedBorder = False
       ShowHint = True
       Selection.BlendIcon = False
@@ -171,12 +173,27 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         ShowAccelChar = False
         Transparent = True
       end
-      object Label1: TLabel
+      object LabelSoftwareNameCaption: TLabel
         Left = 730
         Top = 4
         Width = 88
         Height = 13
         Caption = 'Software Name'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelGameNameCaption: TLabel
+        Left = 591
+        Top = 4
+        Width = 71
+        Height = 13
+        Caption = 'Game Name'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -228,7 +245,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     end
     object LabelSystemType: TShadowLabel
       Left = 32
-      Top = 411
+      Top = 329
       Width = 51
       Height = 16
       Caption = 'ARCADE'
@@ -326,7 +343,9 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       Top = 8
       Width = 89
       Height = 25
-      Hint = 'Select current game in main games list'
+      Hint = 
+        'Select current game in main games list'#13#10'(ENTER key or mouse doub' +
+        'le-click shortcuts)'
       Caption = 'Select Game'
       ParentShowHint = False
       ShowHint = True
@@ -338,8 +357,8 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       Top = 8
       Width = 89
       Height = 25
-      Hint = 'Close without selecing anything'
-      Caption = 'Abort'
+      Hint = 'Close this dialog'
+      Caption = 'Close'
       ModalResult = 1
       ParentShowHint = False
       ShowHint = True

@@ -345,7 +345,11 @@ begin
   FormMain.ELV_ResetNormalColors(FolderCassetteTape);
   FormMain.ELV_ResetNormalColors(FolderHardDiskDrive);
   InitializeFoldersVariablesTemp;
-  ELV_PopulateCustomSystems(Systems, FormMain.GetSystemIDGamesList(True), -1, True);
+  ELV_PopulateCustomSystems(Systems, Systems.Tag, -1, True);
+  //if Systems.Tag = -1 then
+  //   ELV_PopulateCustomSystems(Systems, FormMain.GetSystemIDGamesList(True), -1, True)
+  //else
+  //   ELV_PopulateCustomSystems(Systems, Systems.Tag, -1, True);
 end;
 
 procedure TFormConsCompGamesFolders.SystemsItemSelectionChanged(

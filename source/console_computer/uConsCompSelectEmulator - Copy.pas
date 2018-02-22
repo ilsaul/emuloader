@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  StdCtrls, uCommon, uCommonCustom, ImgList, MPCommonObjects, EasyListview,
-  MPCommonUtilities, ExtCtrls, Buttons;
+  StdCtrls, uCommon, uCommonCustom, ImgList, MPCommonObjects, EasyListview, ExtCtrls,
+  Buttons;
 
 type
   TFormConsCompSelectEmulator = class(TForm)
@@ -25,15 +25,7 @@ type
     procedure EmulatorsListItemCheckChange(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure EmulatorsListGroupImageDrawIsCustom(
-      Sender: TCustomEasyListview; Group: TEasyGroup;
-      var IsCustom: Boolean);
-    procedure EmulatorsListGroupImageGetSize(Sender: TCustomEasyListview;
-      Group: TEasyGroup; var ImageWidth, ImageHeight: Integer);
-    procedure EmulatorsListGroupImageDraw(Sender: TCustomEasyListview;
-      Group: TEasyGroup; ACanvas: TCanvas;
-      const RectArray: TEasyRectArrayObject;
-      AlphaBlender: TEasyAlphaBlender);
+    procedure FormCreate(Sender: TObject);
   private
     newEmulatorIndexToUseCustom: packed array[1..MaxConsoleComputerSystems] of ShortInt; // emulator index to use 1..4
     procedure AddEmulatorsList;
@@ -125,13 +117,8 @@ begin
   begin
     sysID:= StrToInt(sysList.ValueFromIndex[Loop]);
     Group:= EmulatorsList.Groups.Add;
-
     Group.ImageIndex:= sysID;
     Group.Caption:= SystemsListCustom[sysID, 0];
-    Group.Captions[1]:= '      '+LowerCase(GetSystemTypeTitle(sysID, False));
-    Group.Details[1]:= 1;
-    Group.DetailCount:= 2;
-
     Group.Tag:= newEmulatorIndexToUseCustom[sysID];
     //Group.Tag:= FormMain.EmulatorIndexToUse[sysID]; // this holds the selected emulator... [-1, 1, 2, 3, 4]
 
@@ -178,7 +165,6 @@ end;
 procedure TFormConsCompSelectEmulator.FormShow(Sender: TObject);
 begin
   Screen.Cursor:= crHourGlass;
-  ResizeForm;
   FormMain.ELV_ResetNormalColors(EmulatorsList);
   AddEmulatorsList;
   if EmulatorsList.Scrollbars.VertBarVisible then
@@ -201,8 +187,8 @@ begin
      end;
   if Position = 1 then
      begin
-       ACanvas.Font.Name:= 'Verdana';//'Tahoma';
-       ACanvas.Font.Size:= 8;//ACanvas.Font.Size-1;
+       ACanvas.Font.Name:= 'Tahoma';
+       ACanvas.Font.Size:= ACanvas.Font.Size-1;
        ACanvas.Font.Color:= $00606060; //clGray;
      end;
 end;
@@ -213,7 +199,7 @@ begin
   ACanvas.Font.Size:= ACanvas.Font.Size+2;
   ACanvas.Font.Name:= 'Trebuchet MS';
   ACanvas.Font.Color:= clMaroon;
-  ACanvas.Font.Style:= [fsBold, fsItalic];
+  ACanvas.Font.Style:= [fsItalic];
 end;
 
 procedure TFormConsCompSelectEmulator.EmulatorsListItemCheckChange(
@@ -267,114 +253,41 @@ end;
 
 procedure TFormConsCompSelectEmulator.ResizeForm;
 var
-  iScreenWidth, iScreenHeight, iDiff: Integer;
+  iSize: Integer;
 begin
-  iScreenWidth:= Screen.Width;
-  iScreenHeight:= Screen.Height;
+  //error... move this to .FormCreate() and add support for 4K resolution (increase form size, font sizes, icon sizes)
+  if Screen.Width = 640 then
+   begin
+     iSize:= 25;
+     EmulatorsList.CellSizes.Tile.Width:= EmulatorsList.CellSizes.Tile.Width-iSize;
+     EmulatorsList.Width:= EmulatorsList.Width-iSize;
+     BottomFrame.Width:= BottomFrame.Width-iSize;
+     ButtonOk.Left:= ButtonOk.Left-iSize;
+     ButtonCancel.Left:= ButtonCancel.Left-iSize;
+     FormConsCompSelectEmulator.Width:= FormConsCompSelectEmulator.Width-iSize;
+   end;
 
-  //iScreenWidth:= 1280;
-  //iScreenHeight:= 1024;
-
-  //if (iScreenWidth > 720) and (iScreenHeight > 600) then
-  //   Exit;
-
-  iDiff:= -1;
-  case iScreenHeight of
-    480: iDiff:= 400-FormConsCompSelectEmulator.Height;
-    600: iDiff:= 620-FormConsCompSelectEmulator.Height;
-  else
-    begin
-      if iScreenHeight > 900 then
-         iDiff:= 800-FormConsCompSelectEmulator.Height;
-    end;
+  iSize:= -1;
+  case Screen.Height of
+    480: iSize:= 220;
+    600: iSize:= 100;
   end;
-  if iDiff <> -1 then
+  //iSize:= 220; // debug only, do not enable
+  if iSize <> -1 then
      begin
-       EmulatorsList.Height:= EmulatorsList.Height+iDiff;
-       BottomFrame.Top:= BottomFrame.Top+iDiff;
-       LabelTips.Top:= LabelTips.Top+iDiff;
-       ButtonOk.Top:= ButtonOk.Top+iDiff;
-       ButtonCancel.Top:= ButtonCancel.Top+iDiff;
-       FormConsCompSelectEmulator.Height:= FormConsCompSelectEmulator.Height+iDiff;
-     end;
-
-  iDiff:= -1;
-  case iScreenWidth of
-    640: iDiff:= 620-FormConsCompSelectEmulator.Width;
-  else
-    begin
-      if iScreenWidth > 800 then
-         iDiff:= 820-FormConsCompSelectEmulator.Width;
-    end;
-  end;
-
-  if iDiff <> -1 then
-     begin
-       EmulatorsList.CellSizes.Tile.Width:= EmulatorsList.CellSizes.Tile.Width+iDiff;
-       EmulatorsList.Width:= EmulatorsList.Width+iDiff;
-       BottomFrame.Width:= BottomFrame.Width+iDiff;
-       ButtonOk.Left:= ButtonOk.Left+iDiff;
-       ButtonCancel.Left:= ButtonCancel.Left+iDiff;
-       FormConsCompSelectEmulator.Width:= FormConsCompSelectEmulator.Width+iDiff;
+       EmulatorsList.Height:= EmulatorsList.Height-iSize;
+       BottomFrame.Top:= BottomFrame.Top-iSize;
+       ButtonOk.Top:= ButtonOk.Top-iSize;
+       ButtonCancel.Top:= ButtonCancel.Top-iSize;
+       LabelTips.Top:= LabelTips.Top-iSize;
+       FormConsCompSelectEmulator.Height:= FormConsCompSelectEmulator.Height-iSize;
      end;
 end;
 
-procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageDrawIsCustom(
-  Sender: TCustomEasyListview; Group: TEasyGroup; var IsCustom: Boolean);
+procedure TFormConsCompSelectEmulator.FormCreate(Sender: TObject);
 begin
-  IsCustom:= True;
+  ResizeForm;
 end;
 
-procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageGetSize(
-  Sender: TCustomEasyListview; Group: TEasyGroup; var ImageWidth,
-  ImageHeight: Integer);
-begin
-  ImageWidth:= EmulatorsList.ImagesGroup.Width;
-  ImageHeight:= EmulatorsList.ImagesGroup.Height;
-end;
-
-procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageDraw(
-  Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas;
-  const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
-var
-  iLeft, iTop, iSysTypeIndex: Integer;
-begin
-  ACanvas.Lock;
-
-  iLeft:= RectArray.IconRect.Left;
-  iTop:=  RectArray.IconRect.Top+5; // -> +5 is to be the same as "no custom icon drawing"
-
-  EmulatorsList.ImagesGroup.Draw(ACanvas, iLeft, iTop, Group.ImageIndex);
-
-  iSysTypeIndex:= ACanvas.Pen.Color;
-  ACanvas.Pen.Color:= clMedGray;
-  ACanvas.MoveTo(iLeft-5, iTop+EmulatorsList.ImagesGroup.Height+2);
-  ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+EmulatorsList.ImagesGroup.Height+2);
-  ACanvas.Pen.Color:= iSysTypeIndex;
-
-
-  iLeft:= iLeft+(EmulatorsList.width div 2)-50;// EmulatorsList.ImagesGroup.Width+250;
-  iTop:= iTop+(EmulatorsList.ImagesGroup.Height-FormMain.IL_MenuPopup.Height) div 2;
-
-  iSysTypeIndex:= -1;
-  if SystemIsConsole(Group.ImageIndex) then
-     iSysTypeIndex:= 25 // index 25 is "console" icon
-  else
-  if SystemIsComputer(Group.ImageIndex) then
-     iSysTypeIndex:= 26 // index 26 is "computer" icon
-  else
-  if SystemIsHandheld(Group.ImageIndex) then
-     iSysTypeIndex:= 27; // index 27 is "handheld" icon
-
-  if iSysTypeIndex <> -1 then
-     FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
-
-  ACanvas.Font.Name:= 'Segoe UI';
-  ACAnvas.Font.Size:= 9;
-  ACanvas.Font.Style:= [fsItalic];
-  ACanvas.Font.Color:= clBlack;
-  ACanvas.TextOut(iLeft+20, iTop, GetSystemTypeTitle(Group.ImageIndex, False));
-  ACanvas.UnLock;
-end;
 
 end.

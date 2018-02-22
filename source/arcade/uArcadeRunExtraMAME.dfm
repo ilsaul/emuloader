@@ -734,13 +734,37 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Top = 0
       HelpContext = 2
       Caption = 'MemoryCard'
-      object MemoryCardListViewFileFolderFrame: TShape
+      object LabelInsertMemoryCard_Slot4: TLabel
         Left = 8
-        Top = 312
-        Width = 803
-        Height = 25
-        Brush.Style = bsClear
-        Pen.Color = 11775403
+        Top = 109
+        Width = 29
+        Height = 15
+        Caption = 'Slot 4'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelInsertMemoryCard_Slot3: TLabel
+        Left = 8
+        Top = 82
+        Width = 29
+        Height = 15
+        Caption = 'Slot 3'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
       end
       object LabelInsertMemoryCard_Slot1: TLabel
         Left = 8
@@ -773,24 +797,147 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ShowAccelChar = False
         Transparent = True
       end
-      object LabelMemoryCardSelectedFileFolder: TShadowLabel
-        Left = 12
-        Top = 315
-        Width = 795
-        Height = 19
-        AutoSize = False
-        Caption = 'Folder of selected file...'
+      object ButtonInsertMemoryCard_Slot4_Clear: TBitBtn
+        Left = 768
+        Top = 107
+        Width = 43
+        Height = 21
+        Hint = 'Click here to empty this memcard slot'
+        Caption = 'Clear'
+        Enabled = False
         Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
+        Font.Color = clBlack
         Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clSilver
-        ShadowEnabled = False
-        EllipsType = etPathEllips
-        Transparent = True
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 18
+        OnClick = ButtonInsertMemoryCard_Slot4_ClearClick
+      end
+      object ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtn
+        Left = 704
+        Top = 107
+        Width = 64
+        Height = 21
+        Hint = 'Select last used memory card file (might not be the newest)'
+        Caption = 'Last Used'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 16
+        OnClick = ButtonInsertMemoryCard_Slot4_LastUsedClick
+      end
+      object ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtn
+        Left = 656
+        Top = 107
+        Width = 47
+        Height = 21
+        Hint = 'Click here to select a file'
+        Caption = 'Select'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 15
+        OnClick = ButtonInsertMemoryCard_Slot4_SelectFileClick
+      end
+      object ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtn
+        Left = 704
+        Top = 80
+        Width = 64
+        Height = 21
+        Hint = 'Select last used memory card file (might not be the newest)'
+        Caption = 'Last Used'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 14
+        OnClick = ButtonInsertMemoryCard_Slot3_LastUsedClick
+      end
+      object ButtonInsertMemoryCard_Slot3_Clear: TBitBtn
+        Left = 768
+        Top = 80
+        Width = 43
+        Height = 21
+        Hint = 'Click here to empty this memcard slot'
+        Caption = 'Clear'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 13
+        OnClick = ButtonInsertMemoryCard_Slot3_ClearClick
+      end
+      object ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtn
+        Left = 656
+        Top = 80
+        Width = 47
+        Height = 21
+        Hint = 'Click here to select a file'
+        Caption = 'Select'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 12
+        OnClick = ButtonInsertMemoryCard_Slot3_SelectFileClick
+      end
+      object InsertMemoryCard_Slot4: TEdit
+        Left = 40
+        Top = 107
+        Width = 614
+        Height = 21
+        AutoSize = False
+        Color = clWhite
+        Enabled = False
+        TabOrder = 4
+        OnKeyPress = InsertMemoryCard_Slot4KeyPress
+      end
+      object InsertMemoryCard_Slot3: TEdit
+        Left = 40
+        Top = 80
+        Width = 614
+        Height = 21
+        AutoSize = False
+        Color = clWhite
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        OnKeyPress = InsertMemoryCard_Slot3KeyPress
       end
       object Enabled_InsertMemoryCard: TAdvOfficeCheckBox
         Left = 24
@@ -829,12 +976,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         AutoSize = False
         Color = clWhite
         Enabled = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        ParentFont = False
         TabOrder = 2
         OnKeyPress = InsertMemoryCard_Slot2KeyPress
       end
@@ -853,7 +994,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 5
         OnClick = ButtonInsertMemoryCard_Slot1_SelectFileClick
       end
       object ButtonInsertMemoryCard_Slot1_Clear: TBitBtn
@@ -871,7 +1012,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 4
+        TabOrder = 6
         OnClick = ButtonInsertMemoryCard_Slot1_ClearClick
       end
       object ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtn
@@ -889,7 +1030,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 5
+        TabOrder = 7
         OnClick = ButtonInsertMemoryCard_Slot1_LastUsedClick
       end
       object ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtn
@@ -908,7 +1049,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 6
+        TabOrder = 8
         OnClick = ButtonInsertMemoryCard_Slot2_SelectFileClick
       end
       object ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtn
@@ -927,7 +1068,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 7
+        TabOrder = 9
         OnClick = ButtonInsertMemoryCard_Slot2_LastUsedClick
       end
       object ButtonInsertMemoryCard_Slot2_Clear: TBitBtn
@@ -946,102 +1087,138 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 8
+        TabOrder = 10
         OnClick = ButtonInsertMemoryCard_Slot2_ClearClick
       end
-      object MemoryCardListView: TEasyListview
+      object MemoryCardFileFolderPanel: TPanelEx
         Left = 8
-        Top = 80
+        Top = 135
         Width = 803
-        Height = 233
-        CellSizes.Report.Height = 20
-        Color = clWhite
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000001000162010000FFFFFF1F0001000000
-          01000000040000004E0061006D00650000000000000000000000000011000000
-          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-          0100000000000178000000FFFFFF1F0001000000010000000400000053006900
-          7A006500000000000000000000000000110000005445617379436F6C756D6E53
-          746F726564FFFECE000600000080080001010001020000000000017D000000FF
-          FFFF1F0001000000010000000D000000440061007400650020004D006F006400
-          6900660069006500640000000000000000000000000011000000544561737943
-          6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
-          01CA000000FFFFFF1F0001000000010000000600000046006F006C0064006500
-          7200000000000000000000000000}
-        Header.Draggable = False
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        Header.Visible = True
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.Border = 2
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        ParentFont = False
-        ParentShowHint = False
-        PopupMenu = PopupELV
-        ShowHint = False
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 10
-        View = elsReport
-        OnColumnClick = MemoryCardListViewColumnClick
-        OnDblClick = MemoryCardListViewDblClick
-        OnItemCompare = MemoryCardListViewItemCompare
-        OnItemEdited = MemoryCardListViewItemEdited
-        OnItemEditEnd = MemoryCardListViewItemEditEnd
-        OnItemSelectionChanged = MemoryCardListViewItemSelectionChanged
-        OnKeyAction = MemoryCardListViewKeyAction
+        Height = 202
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = 11775403
+        Frames = [frLeft, frRight, frBottom]
+        ParentBackground = False
+        Style = vgSolid
+        object LabelMemoryCardSelectedFileFolder: TShadowLabel
+          Left = 0
+          Top = 177
+          Width = 803
+          Height = 25
+          Align = alBottom
+          AutoSize = False
+          Caption = ' Folder of selected file...'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etPathEllips
+          Transparent = True
+          Layout = tlCenter
+        end
+        object MemoryCardListView: TEasyListview
+          Left = 0
+          Top = 0
+          Width = 803
+          Height = 177
+          Align = alClient
+          CellSizes.Report.Height = 20
+          Color = clWhite
+          EditManager.Font.Charset = ANSI_CHARSET
+          EditManager.Font.Color = clBlack
+          EditManager.Font.Height = -12
+          EditManager.Font.Name = 'Segoe UI'
+          EditManager.Font.Style = []
+          UseDockManager = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          GroupFont.Charset = ANSI_CHARSET
+          GroupFont.Color = clBlack
+          GroupFont.Height = -12
+          GroupFont.Name = 'Segoe UI'
+          GroupFont.Style = []
+          HintType = ehtToolTip
+          Header.Columns.Items = {
+            0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
+            0006000000800800010100010000000001000162010000FFFFFF1F0001000000
+            01000000040000004E0061006D00650000000000000000000000000011000000
+            5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+            0100000000000178000000FFFFFF1F0001000000010000000400000053006900
+            7A006500000000000000000000000000110000005445617379436F6C756D6E53
+            746F726564FFFECE000600000080080001010001020000000000017D000000FF
+            FFFF1F0001000000010000000D000000440061007400650020004D006F006400
+            6900660069006500640000000000000000000000000011000000544561737943
+            6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
+            01CA000000FFFFFF1F0001000000010000000600000046006F006C0064006500
+            7200000000000000000000000000}
+          Header.Draggable = False
+          Header.Font.Charset = ANSI_CHARSET
+          Header.Font.Color = clBlack
+          Header.Font.Height = -12
+          Header.Font.Name = 'Segoe UI'
+          Header.Font.Style = []
+          Header.Height = 23
+          Header.Sizeable = False
+          Header.Visible = True
+          IncrementalSearch.Enabled = True
+          IncrementalSearch.ResetTime = 1000
+          IncrementalSearch.StartType = eissFocusedNode
+          PaintInfoColumn.Border = 2
+          PaintInfoColumn.CaptionIndent = 0
+          PaintInfoGroup.Expandable = False
+          PaintInfoGroup.MarginBottom.CaptionIndent = 4
+          PaintInfoItem.BorderColor = 16370824
+          PaintInfoItem.ShowBorder = False
+          ParentFont = False
+          ParentShowHint = False
+          PopupMenu = PopupELV
+          ShowHint = False
+          Selection.BlendColorSelRect = 10902593
+          Selection.BlendIcon = False
+          Selection.BorderColor = 10902593
+          Selection.BorderColorSelRect = 10902593
+          Selection.Color = 10902593
+          Selection.FullCellPaint = True
+          Selection.FullItemPaint = True
+          Selection.FullRowSelect = True
+          Selection.GradientColorBottom = 16506264
+          Selection.GradientColorTop = 15582647
+          Selection.InactiveBorderColor = 10902593
+          Selection.InactiveColor = 15582647
+          Selection.MouseButton = [cmbLeft, cmbRight]
+          Selection.RoundRectRadius = 2
+          Selection.TextColor = clBlack
+          Selection.UseFocusRect = False
+          TabOrder = 0
+          View = elsReport
+          OnColumnClick = MemoryCardListViewColumnClick
+          OnDblClick = MemoryCardListViewDblClick
+          OnItemCompare = MemoryCardListViewItemCompare
+          OnItemEdited = MemoryCardListViewItemEdited
+          OnItemEditEnd = MemoryCardListViewItemEditEnd
+          OnItemSelectionChanged = MemoryCardListViewItemSelectionChanged
+          OnKeyAction = MemoryCardListViewKeyAction
+        end
       end
       object PanelDisabledMemoryCard: TPanel
-        Left = 100
-        Top = 1
+        Left = 104
+        Top = 0
         Width = 89
         Height = 11
         BevelOuter = bvNone
         Color = clSilver
-        TabOrder = 9
+        TabOrder = 11
       end
     end
     object TPage
@@ -1378,6 +1555,16 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     object PopupMemoryCardAssignToSlot2: TMenuItem
       Tag = 2
       Caption = 'Assign to Slot 2'
+      OnClick = PopupMemoryCardAssignToSlot1Click
+    end
+    object PopupMemoryCardAssignToSlot3: TMenuItem
+      Tag = 3
+      Caption = 'Assign to Slot 3'
+      OnClick = PopupMemoryCardAssignToSlot1Click
+    end
+    object PopupMemoryCardAssignToSlot4: TMenuItem
+      Tag = 4
+      Caption = 'Assign to Slot 4'
       OnClick = PopupMemoryCardAssignToSlot1Click
     end
     object N1: TMenuItem

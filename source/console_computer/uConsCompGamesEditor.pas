@@ -455,6 +455,15 @@ begin
   until Item = nil;
   CustomGamesList.EndUpdate(False);
   UpdateTotalGamesLabel;
+
+  Item:= CustomGamesList.Selection.First;
+  if Item <> nil then
+     begin
+       if Item.Visible then
+          Item.MakeVisible(emvMiddle)
+       else
+          CustomGamesList.Selection.ClearAll; // clear all selected games because they are invisible
+     end;
 end;
 
 function TFormConsCompGamesEditor.GetHorizontalBarPos: Integer;
@@ -763,13 +772,22 @@ begin
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(CustomGamesList);
 
-  ELV_PopulateCustomSystems(Systems, -1, -1);
-  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
-
   //ReadEmulatorsInfo;
   FormStatus.MessageStr('Loading console/computer games.');
   LoadGamesInList;
-  UpdateTotalGamesLabel;
+  //UpdateTotalGamesLabel;
+
+  ELV_PopulateCustomSystems(Systems, -1, -1);
+  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
+
+  if FormMain.CheckSelected(FormMain.GamesListView) then
+     begin
+       if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eIsCustomGame then
+          begin
+            FormMain.ELV_SelectItem(CustomGamesList, 0, uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eTitle);
+            CustomGamesList.SetFocus;
+          end;
+     end;
   FormStatus.Close;
 end;
 

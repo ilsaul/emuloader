@@ -18,6 +18,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   OldCreateOrder = False
   Scaled = False
   OnActivate = FormActivate
+  OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 15
@@ -124,8 +125,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
-    Left = 8
-    Top = 284
+    Left = 408
+    Top = 121
     Width = 122
     Height = 20
     Hint = 'Enable/disable the main cpu filter bar'
@@ -741,5 +742,18 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
+  end
+  object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox
+    Left = 8
+    Top = 294
+    Width = 217
+    Height = 20
+    ShowHint = True
+    TabOrder = 18
+    Alignment = taLeftJustify
+    Caption = 'Show Only Sets With CRC32 Collision'
+    ReturnIsTab = False
+    ShadowColor = clSilver
+    Themed = True
   end
 end

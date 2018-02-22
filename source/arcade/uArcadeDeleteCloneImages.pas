@@ -332,7 +332,7 @@ procedure TFormArcadeDeleteCloneImages.SelectSystem;
 var
   selSys: ShortInt;
 begin
-  selSys:= FormMain.CallSelectSystem(0, SystemIcon.Tag);
+  selSys:= FormMain.CallSelectArcadeSystem(0, SystemIcon.Tag);
   if selSys = -1 then
      Exit;
   SystemIcon.Tag:= selSys;

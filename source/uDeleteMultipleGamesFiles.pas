@@ -113,6 +113,7 @@ type
     DeleteGameConsoleComputerIcon: TImage;
     GamesList: TEasyListview;
     Panel1: TPanel;
+    CopyMoveAddSystemFolder: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonHelpClick(Sender: TObject);
@@ -335,7 +336,7 @@ var
   IsZiNcSystem, IsParentCHD: Boolean;
   Loop: Integer;
   FileFullPath: WideString;
-  chdName, chdParentName, DiskFile, romName, romCRC32, romSHA1: String;
+  chdName, chdParentName, DiskFile, romName, romCRC32, romSHA1, romDeviceName: String;
   CHDFileID: ShortInt;
   tmpFileSize: Int64;
 begin
@@ -408,8 +409,10 @@ begin
   if FormMain.TempGameVars.eIsCustomGame then
      Exit;
 
-  if FormMain.TempGameVars.eMediaType = 0 then
+  if not FormMain.IsMediaTypeCHD(FormMain.TempGameVars.eMediaType, False) then
      Exit;
+  //if FormMain.TempGameVars.eMediaType = 0 then
+  //   Exit;
 
   if FormMain.TempGameVars.eCHDsCount = 0 then
      Exit;
@@ -419,7 +422,7 @@ begin
     for Loop:=0 to eROMsList.Count-1 do
     begin
       DiskFile:= eROMsList[Loop];
-      FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(FormMain.TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName);
+      FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(FormMain.TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName, romDeviceName);
       //if (romName[1] = '3') and (romCRC <> '') then
       CHDFileID:= StrToInt(DiskFile[1]+DiskFile[2]);
       if (CHDFileID >= 12) and (DiskFile[3] = '1') and (romSHA1 <> '') then
@@ -843,6 +846,7 @@ begin
   FormCopyMoveGameFiles.iTotalFilesSize:= 0;
   FormCopyMoveGameFiles.iTotalFilesSizeLeft:= 0;
   FormCopyMoveGameFiles.OverwriteFiles:= CopyMoveOverwriteFiles.Checked;
+  FormCopyMoveGameFiles.AddSystemFolder:= CopyMoveAddSystemFolder.Checked;
 
   if DeleteROMs.Checked then
      begin

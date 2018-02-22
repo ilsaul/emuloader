@@ -5,7 +5,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Console/Computer Emulators Setup'
-  ClientHeight = 656
+  ClientHeight = 672
   ClientWidth = 984
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -24,16 +24,60 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
+  object LabelVideoPreviewSystem: TShadowLabel
+    Left = 0
+    Top = 0
+    Width = 558
+    Height = 16
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'ATARI 5200 SUPERSYSTEM'
+    Color = 16448250
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -13
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold, fsItalic]
+    ParentColor = False
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 14540253
+    ShadowEnabled = True
+    EllipsType = etNone
+    Transparent = False
+    Layout = tlCenter
+  end
+  object LabelSystemType: TShadowLabel
+    Left = 32
+    Top = 0
+    Width = 51
+    Height = 16
+    Caption = 'ARCADE'
+    Color = 16448250
+    Constraints.MaxHeight = 16
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold, fsItalic]
+    ParentColor = False
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 14540253
+    ShadowEnabled = True
+    EllipsType = etNone
+    Transparent = False
+    Layout = tlCenter
+  end
   object Systems: TEasyListview
     Tag = -1
     Left = 0
-    Top = 0
+    Top = 16
     Width = 577
     Height = 656
     BorderStyle = bsNone
     CellSizes.Icon.Height = 82
     CellSizes.Icon.Width = 62
-    CellSizes.Tile.Height = 44
     CellSizes.Tile.Width = 186
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -82,6 +126,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 1
+    OnItemPaintText = SystemsItemPaintText
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
   object PanelEmulators: TPanelEx
@@ -89,7 +134,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Left = 558
     Top = 0
     Width = 426
-    Height = 656
+    Height = 672
     Color1 = 15856113
     Color2 = 15132390
     Color3 = 1117964
@@ -1090,9 +1135,10 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     end
     object PanelBottomButtons: TPanelEx
       Left = 0
-      Top = 615
-      Width = 488
+      Top = 631
+      Width = 426
       Height = 41
+      Align = alBottom
       Color1 = 15856113
       Color2 = 14540253
       Color3 = 14540253

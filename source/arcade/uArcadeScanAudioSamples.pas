@@ -560,7 +560,7 @@ begin
   if TFileInfo(SelectedItem).eSampleStatus = -1 then
      Exit;
   RunGame:= True;
-  FormMain.FindGameName(TFileInfo(SelectedItem).eName, TFileInfo(SelectedItem).eSystemID, False, TFileInfo(SelectedItem).eSoftwareName, GameEasy, False);
+  FormMain.FindGameName(TFileInfo(SelectedItem).eName, TFileInfo(SelectedItem).eSystemID, -1, False, TFileInfo(SelectedItem).eSoftwareName, GameEasy, False);
 
   if GameEasy <> nil then
      begin

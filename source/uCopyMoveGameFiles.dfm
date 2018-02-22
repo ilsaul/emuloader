@@ -68,9 +68,9 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Transparent = True
     end
     object LabelCanceledByUser: TShadowLabel
-      Left = 224
+      Left = 124
       Top = 69
-      Width = 300
+      Width = 400
       Height = 19
       Alignment = taRightJustify
       AutoSize = False
@@ -202,15 +202,6 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
-      Transparent = True
-    end
-    object Image1: TImage
-      Tag = -50
-      Left = 20
-      Top = 44
-      Width = 24
-      Height = 24
-      HelpContext = -2
       Transparent = True
     end
   end

@@ -62,7 +62,6 @@ type
     SkipGameInfo: TAdvOfficeCheckBox;
     ReadConfigFiles: TAdvOfficeCheckBox;
     WriteConfigFiles: TAdvOfficeCheckBox;
-    AutoSave: TAdvOfficeCheckBox;
     Cheat: TAdvOfficeCheckBox;
     LabelRAMSize: TLabel;
     RAMSize: TEdit;
@@ -85,7 +84,7 @@ type
     ToolBarPages: TToolBar;
     ButtonPageFolders: TToolButton;
     ButtonPageVideo1: TToolButton;
-    ButtonPageVideo2: TToolButton;
+    ButtonPageVideo3: TToolButton;
     ButtonPageInput: TToolButton;
     ButtonPageMisc: TToolButton;
     FolderROMsDisksBox: TLabel;
@@ -300,23 +299,6 @@ type
     FolderFontFiles: TEdit;
     FolderFontFilesButtonSelect: TBitBtn;
     ButtonHelpSaveValidateAllCustomFiles: TBitBtn;
-    PerformanceGroupBox: TAdvGroupBox;
-    LabelSpeed: TLabel;
-    LabelFrameskip: TLabel;
-    LabelThreadPriority: TLabel;
-    LabelNumberProcessors: TLabel;
-    LabelBenchmark: TLabel;
-    AutoFrameskip: TAdvOfficeCheckBox;
-    Throttle: TAdvOfficeCheckBox;
-    Sleep: TAdvOfficeCheckBox;
-    Multithreading: TAdvOfficeCheckBox;
-    RefreshSpeed: TAdvOfficeCheckBox;
-    SyncronizeRefreshRate: TAdvOfficeCheckBox;
-    Speed: TGaugeBar2;
-    Frameskip: TComboBox;
-    ThreadPriority: TComboBox;
-    NumberProcessors: TComboBox;
-    Benchmark: TGaugeBar;
     LabelScreenRotation: TAdvGroupBox;
     FlipX: TAdvOfficeCheckBox;
     FlipY: TAdvOfficeCheckBox;
@@ -350,8 +332,6 @@ type
     FolderDebuggerComments: TEdit;
     LabelFolderDebuggerComments: TLabel;
     SaveValidateAllCustomFiles: TAdvOfficeCheckBox;
-    SecondsToRun: TGaugeBar;
-    LabelSecondsToRun: TLabel;
     SDLVideoPerformance: TAdvOfficeCheckBox;
     SDLOutputModeBox: TAdvGroupBox;
     LabelSDLScaleMode: TLabel;
@@ -371,9 +351,6 @@ type
     SDLAlternativeLibGLToUseCustom: TEdit;
     ButtonSDLAlternativeLibGLToUseCustom: TBitBtn;
     ButtonResetHTTPServer: TBitBtn;
-    LabelSaveStateName: TLabel;
-    SaveStateName: TEdit;
-    ButtonSaveStateNameReset: TBitBtn;
     UIModeBox: TAdvGroupBox;
     LabelUIModeKeyCustom: TLabel;
     UIModeKeyCustom: TEdit;
@@ -449,21 +426,6 @@ type
     EffectOverlayBrowse: TBitBtn;
     Label9: TLabel;
     IntegerScaleOverscan: TAdvOfficeCheckBox;
-    ScreensBox: TAdvGroupBox;
-    LabelScreenName: TLabel;
-    LabelScreenAspectRatio: TLabel;
-    LabelScreenResolution: TLabel;
-    LabelScreenRefreshRate_Custom: TLabel;
-    LabelScreenView: TLabel;
-    LabelScreensSelector: TLabel;
-    ScreenName: TComboBox;
-    ScreenAspectRatio: TComboBox;
-    ScreenResolution: TComboBox;
-    ScreenRefreshRate: TComboBox;
-    ScreenView: TComboBox;
-    NumberScreens: TExTrackBar;
-    ScreensSelector: TComboBox;
-    ButtonScreenDefaultSettings: TBitBtn;
     VideoOutputMode: TComboBox;
     ButtonHelpVideoOutputMode: TBitBtn;
     LabelVideoOutputMode: TLabel;
@@ -618,8 +580,6 @@ type
     LabelVectorMinimumLengthAttenuation: TLabel;
     UnevenStretchY: TAdvOfficeCheckBox;
     AutoUnevenStretchXY: TAdvOfficeCheckBox;
-    LabelMonitorProvider: TLabel;
-    MonitorProvider: TComboBox;
     PortAudioSettingsGroupBox: TAdvGroupBox;
     LabelPortAudioAPI: TLabel;
     LabelPortAudioDevice: TLabel;
@@ -630,6 +590,57 @@ type
     ButtonClearPortAudioDevice: TBitBtn;
     PortAudioLatency: TEdit;
     ButtonResetPortAudioLatency: TBitBtn;
+    SaveNVRAMOnExit: TAdvOfficeCheckBox;
+    Label1: TLabel;
+    AutoSave: TAdvOfficeCheckBox;
+    EnableSaveStateRewind: TAdvOfficeCheckBox;
+    LabelSaveStateRewindBufferSize: TLabel;
+    SaveStateRewindBufferSize: TGaugeBar;
+    SaveStateName: TEdit;
+    LabelSaveStateName: TLabel;
+    ButtonSaveStateNameReset: TBitBtn;
+    LabelFallbackArtwork: TLabel;
+    FallbackArtwork: TEdit;
+    ButtonPageVideo2: TToolButton;
+    PerformanceGroupBox: TAdvGroupBox;
+    LabelSpeed: TLabel;
+    LabelFrameskip: TLabel;
+    LabelThreadPriority: TLabel;
+    LabelNumberProcessors: TLabel;
+    LabelBenchmark: TLabel;
+    LabelSecondsToRun: TLabel;
+    AutoFrameskip: TAdvOfficeCheckBox;
+    Throttle: TAdvOfficeCheckBox;
+    Sleep: TAdvOfficeCheckBox;
+    Multithreading: TAdvOfficeCheckBox;
+    RefreshSpeed: TAdvOfficeCheckBox;
+    SyncronizeRefreshRate: TAdvOfficeCheckBox;
+    Speed: TGaugeBar2;
+    Frameskip: TComboBox;
+    ThreadPriority: TComboBox;
+    NumberProcessors: TComboBox;
+    Benchmark: TGaugeBar;
+    SecondsToRun: TGaugeBar;
+    ScreensBox: TAdvGroupBox;
+    LabelScreenName: TLabel;
+    LabelScreenAspectRatio: TLabel;
+    LabelScreenResolution: TLabel;
+    LabelScreenRefreshRate_Custom: TLabel;
+    LabelScreenView: TLabel;
+    LabelScreensSelector: TLabel;
+    ScreenName: TComboBox;
+    ScreenAspectRatio: TComboBox;
+    ScreenResolution: TComboBox;
+    ScreenRefreshRate: TComboBox;
+    ScreenView: TComboBox;
+    NumberScreens: TExTrackBar;
+    ScreensSelector: TComboBox;
+    ButtonScreenDefaultSettings: TBitBtn;
+    LabelMonitorProvider: TLabel;
+    MonitorProvider: TComboBox;
+    LabelSnapSizeCustom: TLabel;
+    LabelOverrideArtwork: TLabel;
+    OverrideArtwork: TEdit;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -836,6 +847,7 @@ type
     procedure VectorMinimumLengthAttenuationChange(Sender: TObject);
     procedure PortAudioLatencyKeyPress(Sender: TObject; var Key: Char);
     procedure HTTPPortKeyPress(Sender: TObject; var Key: Char);
+    procedure SaveStateRewindBufferSizeChange(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -1018,6 +1030,18 @@ begin
          begin
            IntegerScaleFactorVertical.Enabled:= True;
            LabelIntegerScaleFactorVertical.Enabled:= True;
+         end
+      else
+      if EntryString = 'fallback_artwork ' then
+         begin
+           FallbackArtwork.Enabled:= True;
+           LabelFallbackArtwork.Enabled:= True;
+         end
+      else
+      if EntryString = 'override_artwork ' then
+         begin
+           OverrideArtwork.Enabled:= True;
+           LabelOverrideArtwork.Enabled:= True;
          end
       else
       if (EntryString = 'antialias ') or
@@ -1279,6 +1303,7 @@ begin
 
   FormMain.ClearListView(DisplayLanguageList);
   DisplayLanguageList.BeginUpdate;
+  DisplayLanguageList.Groups.ReIndexDisable:= True;
 
   if FindFirstW(lFullPath+'*', $37, SearchW) = 0 then
   begin
@@ -1290,7 +1315,9 @@ begin
      until FindNextW(SearchW) <> 0;
   end;
   FindCloseW(SearchW);
+  DisplayLanguageList.Groups.ReIndexDisable:= False;
   DisplayLanguageList.EndUpdate;
+  DisplayLanguageList.Header.Columns[0].Width:= DisplayLanguageList.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   DisplayLanguageList.Selection.InvalidateVisibleSelected(False);
 end;
 
@@ -2038,6 +2065,23 @@ begin
             if EntryString = 'autosave ' then
                AutoSave.Checked:= GetBooleanValue
             else
+            if EntryString = 'rewind ' then
+               EnableSaveStateRewind.Checked:= GetBooleanValue
+            else
+            if EntryString = 'rewind_capacity ' then
+               begin
+                 Value:= GetStringValue;
+                 if Value = '' then
+                    Value:= '100';
+                 Loop2:= StrToInt(Value);
+                 if Loop2 < 1 then
+                    Loop2:= 1
+                 else
+                 if Loop2 > 2048 then
+                    Loop2:= 2048;
+                 SaveStateRewindBufferSize.Position:= Loop2;
+               end
+            else
             if EntryString = 'record_timecode ' then
                RecordInputTimecodeFile.Checked:= GetBooleanValue
             else
@@ -2212,6 +2256,20 @@ begin
             if (EntryString = 'use_marquees ') or
                (EntryString = 'marquee ') then
                ArtworkMarquees.Checked:= GetBooleanValue
+            else
+            if EntryString = 'fallback_artwork ' then
+               begin
+                 FallbackArtwork.Text:= GetStringValue;
+                 //if SameText('default', FallbackArtwork.Text) then
+                 //   FallbackArtwork.Text:= '';
+               end
+            else
+            if EntryString = 'override_artwork ' then
+               begin
+                 OverrideArtwork.Text:= GetStringValue;
+                 //if SameText('default', OverrideArtwork.Text) then
+                 //   OverrideArtwork.Text:= '';
+               end
             else
             // # CORE SCREEN OPTIONS
             if EntryString = 'brightness ' then
@@ -2738,7 +2796,8 @@ begin
                  HTTPPort.Text:= Value;
                end
             else
-            if EntryString = 'http_path ' then
+            if (EntryString = 'http_root ') or
+               (EntryString = 'http_path ') then
                begin
                  Value:= GetStringValue;
                  if Value = '' then
@@ -2752,7 +2811,6 @@ begin
             if EntryString = 'plugins ' then
                EnableLUAPluginSupport.Checked:= GetBooleanValue
             else
-            // disabled for now...
             if EntryString = 'plugin ' then
                begin
                  if FormMAMESettings.Tag = 1 then
@@ -2764,6 +2822,7 @@ begin
                     end;
                end
             else
+            // disabled for now...
             //if EntryString = 'noplugin ' then
             //   begin
             //     // list of plugins to disable... separated by comma (  ;  )
@@ -2790,6 +2849,10 @@ begin
                    end;
                  end;
                end
+            else
+            if (EntryString = 'nvram_save ') or
+               (EntryString = 'nvwrite ') then
+               SaveNVRAMOnExit.Checked:= GetBooleanValue
             else
             if EntryString = 'uifontprovider ' then
                begin
@@ -3848,6 +3911,12 @@ begin
          if tmpEntryStr = 'autosave ' then
             UpdateMAMELine(EntryString, GetBooleanValue(AutoSave.Checked))
          else
+         if tmpEntryStr = 'rewind ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(EnableSaveStateRewind.Checked))
+         else
+         if tmpEntryStr = 'rewind_capacity ' then
+            UpdateMAMELine(EntryString, IntToStr(SaveStateRewindBufferSize.Position))
+         else
          if tmpEntryStr = 'record_timecode ' then
             UpdateMAMELine(EntryString, GetBooleanValue(RecordInputTimecodeFile.Checked))
          else
@@ -4014,6 +4083,20 @@ begin
          if (tmpEntryStr = 'use_marquees ') or
             (tmpEntryStr = 'marquee ') then
             UpdateMAMELine(EntryString, GetBooleanValue(ArtworkMarquees.Checked))
+         else
+         if tmpEntryStr = 'fallback_artwork ' then
+            begin
+              //if SameText('default', FallbackArtwork.Text) then
+              //   FallbackArtwork.Text:= '';
+              UpdateMAMELine(EntryString, FallbackArtwork.Text)
+            end
+         else
+         if tmpEntryStr = 'override_artwork ' then
+            begin
+              //if SameText('default', OverrideArtwork.Text) then
+              //   OverrideArtwork.Text:= '';
+              UpdateMAMELine(EntryString, OverrideArtwork.Text)
+            end
          else
          // # CORE SCREEN OPTIONS
          if tmpEntryStr = 'brightness ' then
@@ -4372,6 +4455,7 @@ begin
          if tmpEntryStr = 'ui_mouse ' then
             UpdateMAMELine(EntryString, GetBooleanValue(UIMouse.Checked))
          else
+         // # SCRIPTING OPTIONS
          if (tmpEntryStr = 'autoboot_command ') or
             (tmpEntryStr = 'ab ') then
             UpdateMAMELine(EntryString, AutobootCommand.Text)
@@ -4383,22 +4467,12 @@ begin
             (tmpEntryStr = 'script ') then
             UpdateMAMELine(EntryString, AutobootLuaScript.Text)
          else
-         if tmpEntryStr = 'http ' then
-            UpdateMAMELine(EntryString, GetBooleanValue(HTTPServer.CheckBox.Checked))
-         else
-         if tmpEntryStr = 'http_port ' then
-            UpdateMAMELine(EntryString, HTTPPort.Text)
-         else
-         if tmpEntryStr = 'http_path ' then
-            UpdateMAMELine(EntryString, HTTPPath.Text)
-         else
          if tmpEntryStr = 'console ' then
             UpdateMAMELine(EntryString, GetBooleanValue(EnableEmulatorLUAConsole.Checked))
          else
          if tmpEntryStr = 'plugins ' then
             UpdateMAMELine(EntryString, GetBooleanValue(EnableLUAPluginSupport.Checked))
          else
-         // disabled for now...
          if tmpEntryStr = 'plugin ' then
             begin
               if FormMAMESettings.Tag = 1 then
@@ -4423,11 +4497,23 @@ begin
                  end;
             end
          else
+         // disabled for now...
          //if tmpEntryStr = 'noplugin ' then
          //   begin
          //     // list of plugins to disable... separated by comma (  ,  )
          //   end
          //else
+         // # HTTP SERVER OPTIONS
+         if tmpEntryStr = 'http ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(HTTPServer.CheckBox.Checked))
+         else
+         if tmpEntryStr = 'http_port ' then
+            UpdateMAMELine(EntryString, HTTPPort.Text)
+         else
+         if (tmpEntryStr = 'http_root ') or
+            (tmpEntryStr = 'http_path ') then
+            UpdateMAMELine(EntryString, HTTPPath.Text)
+         else
          if (tmpEntryStr = 'language ') or
             (tmpEntryStr = 'lang ') then
             begin
@@ -4442,9 +4528,13 @@ begin
                  end
               else
                  Value:= 'English';
-                 
+
               UpdateMAMELine(EntryString, Value);
             end
+         else
+         if (tmpEntryStr = 'nvram_save ') or
+            (tmpEntryStr = 'nvwrite ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(SaveNVRAMOnExit.Checked))
          else
          if tmpEntryStr = 'uifontprovider ' then
             begin
@@ -5845,6 +5935,7 @@ begin
   SnapSizeWidth.Enabled:= not SnapSizeAuto.Checked;
   SnapSizeHeight.Enabled:= not SnapSizeAuto.Checked;
   LabelSnapSizeCustomX.Enabled:= not SnapSizeAuto.Checked;
+  LabelSnapSizeCustom.Enabled:= not SnapSizeAuto.Checked;
 end;
 
 procedure TFormMAMESettings.SnapNameDefaultButtonClick(Sender: TObject);
@@ -6091,7 +6182,7 @@ end;
 
 procedure TFormMAMESettings.AutobootLuaScriptSelectButtonClick(Sender: TObject);
 begin
-  FormMain.DialogOpenFile(16, 'Select a LUA script file', AutobootLuaScript, False, True, '');
+  FormMain.DialogOpenFile(16, 'Select a LUA script file', AutobootLuaScript, False);
 end;
 
 procedure TFormMAMESettings.ButtonSnapViewDefaultClick(Sender: TObject);
@@ -6448,13 +6539,13 @@ end;
 procedure TFormMAMESettings.ButtonSDLAlternativeLibGLToUseCustomClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(12, 'Select an alternative libGL.so file to use', SDLAlternativeLibGLToUseCustom, False, True, '');
+  FormMain.DialogOpenFile(12, 'Select an alternative libGL.so file to use', SDLAlternativeLibGLToUseCustom, False);
 end;
 
 procedure TFormMAMESettings.ButtonSDLKeymapFilenameSelectClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(19, 'Select a keymap file', SDLKeymapFilename, False, True, '');
+  FormMain.DialogOpenFile(19, 'Select a keymap file', SDLKeymapFilename, False);
 end;
 
 procedure TFormMAMESettings.ButtonSDLKeymapFilenameResetClick(
@@ -6860,6 +6951,12 @@ procedure TFormMAMESettings.HTTPPortKeyPress(Sender: TObject;
   var Key: Char);
 begin
   Key:= FormMain.KeyPressValidateNumbers(Key);
+end;
+
+procedure TFormMAMESettings.SaveStateRewindBufferSizeChange(
+  Sender: TObject);
+begin
+  LabelSaveStateRewindBufferSize.Caption:= Format(LabelSaveStateRewindBufferSize.Hint, [SaveStateRewindBufferSize.Position]);
 end;
 
 end.

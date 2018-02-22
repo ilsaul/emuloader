@@ -84,7 +84,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Height = 22
     Transparent = True
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 249
     Width = 250
@@ -153,13 +153,13 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     ParentCtl3D = False
     ParentFont = False
     TabOrder = 0
-    Text = 'Driver Status (General)'
+    Text = 'Driver Status (All Systems)'
     Items.Strings = (
-      'Driver Status (General)'
-      'Emulation Status'
-      'Color Status'
-      'Sound Status'
-      'Graphic Status')
+      'Driver Status (All Systems)'
+      'Emulation Status (MAME Only)'
+      'Color Status (MAME Only)'
+      'Sound Status (MAME Only)'
+      'Graphic Status (MAME Only)')
   end
   object GoodImperfect: TAdvOfficeRadioButton
     Tag = 1

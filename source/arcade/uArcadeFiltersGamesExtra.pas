@@ -59,19 +59,23 @@ type
     CategoryMAMEConsoleMachines: TAdvOfficeCheckBox;
     CategoryMAMEComputerMachines: TAdvOfficeCheckBox;
     CategoryMAMEHandheldMachines: TAdvOfficeCheckBox;
+    ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonDefaultOptionsClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonCategoriesToHideInfoClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     { Private declarations }
     procedure ELV_PopulateControlType;
+    procedure UpdateSettings;
   public
     { Public declarations }
     mResult: Integer;
     ControlName: String;
+    ApplyFilter_Misc: Boolean;
   end;
 
 var
@@ -98,13 +102,203 @@ begin
   ControlType_New.Items.EndUpdate;
 end;
 
+procedure TFormArcadeFiltersExtra.UpdateSettings;
+var
+  ValueStr: String;
+
+  function FilterChanged(CurrentValue, NewValue: Integer): Boolean;
+  begin
+    Result:= NewValue <> CurrentValue;
+    if Result then
+       ApplyFilter_Misc:= True;
+  end;
+
+  function ResetFilterCheckBox(CheckBoxHolder: TAdvOfficeCheckBox): Boolean;
+  begin
+    Result:= True;
+    if CheckBoxHolder.Checked <> (Boolean(CheckBoxHolder.Tag)) then
+       CheckBoxHolder.Checked:= Boolean(CheckBoxHolder.Tag);
+  end;
+
+begin
+  ValueStr:= ''; // new selection, control type
+  if ControlType_New.ItemIndex > 0 then
+     ValueStr:= FormMain.ControlType.Names[ControlType_New.ItemIndex-1];
+
+  case mResult of
+    mrOk:
+      begin
+        // ApplyFilter_Misc:= False; // not needed as it is defined in OnActivate() event
+
+        if ControlName <> ValueStr then
+           begin
+             ControlName:= ValueStr;
+             ApplyFilter_Misc:= True;
+           end;
+
+        FilterChanged(LabelBios.Tag, Bios.ItemIndex);
+        LabelBios.Tag:= Bios.ItemIndex;
+
+        FilterChanged(HideBiosSets.Tag, Ord(HideBiosSets.Checked));
+        HideBiosSets.Tag:= Ord(HideBiosSets.Checked);
+
+        FilterChanged(LabelInterfaceType.Tag, InterfaceType.ItemIndex);
+        LabelInterfaceType.Tag:= InterfaceType.ItemIndex;
+
+        FilterChanged(LabelAudioType.Tag, AudioType.ItemIndex);
+        LabelAudioType.Tag:= AudioType.ItemIndex;
+
+        FilterChanged(LabelDeviceROMs.Tag, DeviceROMs.ItemIndex);
+        LabelDeviceROMs.Tag:= DeviceROMs.ItemIndex;
+
+        FilterChanged(HideDeviceSets.Tag, Ord(HideDeviceSets.Checked));
+        HideDeviceSets.Tag:= Ord(HideDeviceSets.Checked);
+
+        //FilterChanged(HideDeviceSetsNoROMs.Tag, Ord(HideDeviceSetsNoROMs.Checked)); // no longer used used (December 24, 2017)
+        //HideDeviceSetsNoROMs.Tag:= Ord(HideDeviceSetsNoROMs.Checked); // no longer used used (December 24, 2017)
+
+        FilterChanged(LabelGamesROMs.Tag, GamesROMs.ItemIndex);
+        LabelGamesROMs.Tag:= GamesROMs.ItemIndex;
+
+        FilterChanged(CategoryCasino.Tag, Ord(CategoryCasino.Checked));
+        CategoryCasino.Tag:= Ord(CategoryCasino.Checked);
+
+        FilterChanged(CategoryFruitMachines.Tag, Ord(CategoryFruitMachines.Checked));
+        CategoryFruitMachines.Tag:= Ord(CategoryFruitMachines.Checked);
+
+        FilterChanged(CategoryRhythm.Tag, Ord(CategoryRhythm.Checked));
+        CategoryRhythm.Tag:= Ord(CategoryRhythm.Checked);
+
+        FilterChanged(CategoryMature.Tag, Ord(CategoryMature.Checked));
+        CategoryMature.Tag:= Ord(CategoryMature.Checked);
+
+        FilterChanged(CategoryMahjong.Tag, Ord(CategoryMahjong.Checked));
+        CategoryMahjong.Tag:= Ord(CategoryMahjong.Checked);
+
+        FilterChanged(CategoryTabletop.Tag, Ord(CategoryTabletop.Checked));
+        CategoryTabletop.Tag:= Ord(CategoryTabletop.Checked);
+
+        FilterChanged(CategoryPinMAME.Tag, Ord(CategoryPinMAME.Checked));
+        CategoryPinMAME.Tag:= Ord(CategoryPinMAME.Checked);
+
+        FilterChanged(CategoryQuiz.Tag, Ord(CategoryQuiz.Checked));
+        CategoryQuiz.Tag:= Ord(CategoryQuiz.Checked);
+
+        FilterChanged(CategoryUtilities.Tag, Ord(CategoryUtilities.Checked));
+        CategoryUtilities.Tag:= Ord(CategoryUtilities.Checked);
+
+        FilterChanged(CategoryCalculator.Tag, Ord(CategoryCalculator.Checked));
+        CategoryCalculator.Tag:= Ord(CategoryCalculator.Checked);
+
+        FilterChanged(CategoryEducational.Tag, Ord(CategoryEducational.Checked));
+        CategoryEducational.Tag:= Ord(CategoryEducational.Checked);
+
+        FilterChanged(CategoryElectronic.Tag, Ord(CategoryElectronic.Checked));
+        CategoryElectronic.Tag:= Ord(CategoryElectronic.Checked);
+
+        FilterChanged(CategoryPrinters.Tag, Ord(CategoryPrinters.Checked));
+        CategoryPrinters.Tag:= Ord(CategoryPrinters.Checked);
+
+        FilterChanged(CategoryMAMEConsoleMachines.Tag, Ord(CategoryMAMEConsoleMachines.Checked));
+        CategoryMAMEConsoleMachines.Tag:= Ord(CategoryMAMEConsoleMachines.Checked);
+
+        FilterChanged(CategoryMAMEComputerMachines.Tag, Ord(CategoryMAMEComputerMachines.Checked));
+        CategoryMAMEComputerMachines.Tag:= Ord(CategoryMAMEComputerMachines.Checked);
+
+        FilterChanged(CategoryMAMEHandheldMachines.Tag, Ord(CategoryMAMEHandheldMachines.Checked));
+        CategoryMAMEHandheldMachines.Tag:= Ord(CategoryMAMEHandheldMachines.Checked);
+
+        FilterChanged(HideGamesWithCHDFiles.Tag, Ord(HideGamesWithCHDFiles.Checked));
+        HideGamesWithCHDFiles.Tag:= Ord(HideGamesWithCHDFiles.Checked);
+
+        FilterChanged(HideNoDumpROMsGames.Tag, Ord(HideNoDumpROMsGames.Checked));
+        HideNoDumpROMsGames.Tag:= Ord(HideNoDumpROMsGames.Checked);
+
+        FilterChanged(LabelScreenOrientation.Tag, ScreenOrientation.ItemIndex);
+        LabelScreenOrientation.Tag:= ScreenOrientation.ItemIndex;
+
+        FilterChanged(LabelSaveState.Tag, SaveState.ItemIndex);
+        LabelSaveState.Tag:= SaveState.ItemIndex;
+
+        FilterChanged(NeoGeoMVS.Tag, Ord(NeoGeoMVS.Checked));
+        NeoGeoMVS.Tag:= Ord(NeoGeoMVS.Checked);
+
+        FilterChanged(STVMultiSlot.Tag, Ord(STVMultiSlot.Checked));
+        STVMultiSlot.Tag:= Ord(STVMultiSlot.Checked);
+
+        FilterChanged(ShowMergedSetsOnly.Tag, Ord(ShowMergedSetsOnly.Checked));
+        ShowMergedSetsOnly.Tag:= Ord(ShowMergedSetsOnly.Checked);
+
+        FilterChanged(ShowOnlySetsCRC32Collision.Tag, Ord(ShowOnlySetsCRC32Collision.Checked));
+        ShowOnlySetsCRC32Collision.Tag:= Ord(ShowOnlySetsCRC32Collision.Checked);
+      end;
+    mrCancel:
+      begin
+        if ValueStr <> ControlName then
+           begin
+             if ControlName = '' then
+                SetSelectedComboBox(0, ControlType_New)
+             else
+                SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
+           end;
+
+        FormMain.SetExtraFilter(LabelBios, Bios);
+        ResetFilterCheckBox(HideBiosSets);
+
+        FormMain.SetExtraFilter(LabelInterfaceType, InterfaceType);
+        FormMain.SetExtraFilter(LabelAudioType, AudioType);
+
+        FormMain.SetExtraFilter(LabelDeviceROMs, DeviceROMs);
+        ResetFilterCheckBox(HideDeviceSets);
+        //ResetFilterCheckBox(FormFiltersExtra.HideDeviceSetsNoROMs); // no longer used (December 24, 2017)
+
+        ResetFilterCheckBox(CategoryCasino);
+        ResetFilterCheckBox(CategoryFruitMachines);
+        ResetFilterCheckBox(CategoryRhythm);
+        ResetFilterCheckBox(CategoryMature);
+        ResetFilterCheckBox(CategoryMahjong);
+        ResetFilterCheckBox(CategoryTabletop);
+        ResetFilterCheckBox(CategoryPinMAME);
+        ResetFilterCheckBox(CategoryQuiz);
+
+        ResetFilterCheckBox(CategoryUtilities);
+        ResetFilterCheckBox(CategoryCalculator);
+        ResetFilterCheckBox(CategoryEducational);
+        ResetFilterCheckBox(CategoryElectronic);
+        ResetFilterCheckBox(CategoryPrinters);
+        ResetFilterCheckBox(CategoryPhones);
+        ResetFilterCheckBox(CategoryMAMEConsoleMachines);
+        ResetFilterCheckBox(CategoryMAMEComputerMachines);
+        ResetFilterCheckBox(CategoryMAMEHandheldMachines);
+
+        FormMain.SetExtraFilter(LabelGamesROMs, GamesROMs);
+
+        ResetFilterCheckBox(HideGamesWithCHDFiles);
+
+        ResetFilterCheckBox(HideNoDumpROMsGames);
+
+        FormMain.SetExtraFilter(LabelScreenOrientation, ScreenOrientation);
+
+        FormMain.SetExtraFilter(LabelSaveState, SaveState);
+
+        ResetFilterCheckBox(NeoGeoMVS);
+        ResetFilterCheckBox(STVMultiSlot);
+
+        ResetFilterCheckBox(ShowMergedSetsOnly);
+
+        ResetFilterCheckBox(ShowOnlySetsCRC32Collision);
+      end;
+  end;
+end;
+
 procedure TFormArcadeFiltersExtra.FormActivate(Sender: TObject);
 begin
   if Tag = 1 then
      Exit;
   Tag:= 1;
+  ApplyFilter_Misc:= False; // set default to FALSE; only set to TRUE if user click "Apply" button AND only if any of the filters changed
   ELV_PopulateControlType;
-  //SetComboBoxEx(ControlType, FormMain.ControlType.IndexOfName(ControlName)+1, True);
+  //SetComboBoxEx(ControlType, FormMain.ControlType.IndexOfName(ControlName)+1, True); // no longer used, all controls are TComboBox
   SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
 end;
 
@@ -112,7 +306,7 @@ procedure TFormArcadeFiltersExtra.FilterGamesMainCPUClick(Sender: TObject);
 begin
   FormMain.ToolBarFilterByMainCPU.Visible:= FilterGamesMainCPU.Checked;
   if FormMain.ToolBarFilterByMainCPU.Visible then
-     FormMain.ToolBarPanel.Top:= 0;
+     FormMain.ToolBarButtons.Top:= 0;
 end;
 
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);
@@ -156,6 +350,7 @@ begin
   STVMultiSlot.Checked:= False;
   ScreenOrientation.ItemIndex:= 0;
   ShowMergedSetsOnly.Checked:= False;
+  ShowOnlySetsCRC32Collision.Checked:= False;
   SaveState.ItemIndex:= 0;
 end;
 
@@ -172,10 +367,12 @@ begin
   FormMain.AddMsgText('    To use these MAME/HBMAME filters you must place ');
   FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
   FormMain.AddMsgText(', ');
+  FormMain.AddMsgText('mature.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(', ');
   FormMain.AddMsgText('category_hb.ini', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' from AntoPISA or ');
+  FormMain.AddMsgText(' or ');
   FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' in ');
+  FormMain.AddMsgText(' from AntoPISA in ');
   FormMain.AddMsgText(FormMain.GetFolderFull(43), clMaroon { $00a65300 }, [fsBold]);
   FormMain.AddMsgText(' folder and restart the frontend to load the new info in the games list.'+
                       #13#10+#13#10+'You can find ');
@@ -185,6 +382,10 @@ begin
   FormMain.AddMsgText(' and ');
   FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
   FormMain.AddMsgText(' at AntoPISA renameSET page: http://www.progettosnaps.net/renameset/'+#13#10+#13#10+'File ');
+  FormMain.AddMsgText('mature.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText(' is at http://www.progettosnaps.net/catver/ and is required so the frontend can properly filter adult/mature games if you''re using ');
+  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('. File ');
   FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
   FormMain.AddMsgText(' is also available at Progetto EMMA: http://www.progettoemma.net/history/catlist.php'+#13#10+#13#10+
                       'The ');
@@ -196,6 +397,14 @@ begin
   FormMain.AddMsgText(' filters will show/hide MAME machines only (from -listxml output). Software lists are not included.');
 
   GenerateMessage('Help', 'Hide categories based on an external file.', '', 2);
+end;
+
+
+procedure TFormArcadeFiltersExtra.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if CanClose then
+     UpdateSettings;
 end;
 
 

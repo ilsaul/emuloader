@@ -93,6 +93,12 @@ object FormToolBarEditor: TFormToolBarEditor
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    object GamesSearchBarIcon: TImage
+      Left = 274
+      Top = 8
+      Width = 32
+      Height = 32
+    end
     object BoundToGamesPanel: TAdvOfficeCheckBox
       Left = 8
       Top = 3
@@ -156,6 +162,20 @@ object FormToolBarEditor: TFormToolBarEditor
       OnClick = SmallToolBarClick
       Alignment = taLeftJustify
       Caption = 'Small Tool Bar'
+      ReturnIsTab = False
+      ShadowColor = clSkyBlue
+      Themed = True
+    end
+    object GamesSearchBar: TAdvOfficeCheckBox
+      Left = 256
+      Top = 14
+      Width = 158
+      Height = 20
+      ShowHint = True
+      TabOrder = 5
+      OnClick = GamesSearchBarClick
+      Alignment = taLeftJustify
+      Caption = '             Games Search Bar'
       ReturnIsTab = False
       ShadowColor = clSkyBlue
       Themed = True

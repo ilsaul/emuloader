@@ -97,36 +97,60 @@ end;
 
 procedure TFormSoftwareListMachineToRunGame.ResizeForm;
 var
-  iWidth, iHeight, iWidthDec: Integer;
+  iScreenWidth, iScreenHeight, iWidth, iHeight, iWidthDec: Integer;
 begin
-  if Screen.Width >= 1024 then
-     Exit;
+  iScreenWidth:= Screen.Width;
+  iScreenHeight:= Screen.Height;
 
-  if Screen.Height = 480 then
+  iWidth:= 0;
+  iHeight:= 0;
+  iWidthDec:= 0;
+
+  if iScreenHeight = 480 then
      begin
        iWidth:= 635;
-       iHeight:= 100;
+       iHeight:= -100;
      end
   else
-  if Screen.Width = 800 then
+  if iScreenHeight >= 720 then
+     begin
+       if MachinesListView.Scrollbars.VertBarVisible then
+          iHeight:= 100;
+     end;
+
+  if iScreenWidth = 800 then
      begin
        iWidth:= 790;
        iHeight:= 0;
-       MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width-5;
+       MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width-10;
        MachinesListView.Header.Columns[1].Width:= MachinesListView.Header.Columns[1].Width-10;
+       MachinesListView.Header.Columns[2].Width:= MachinesListView.Header.Columns[2].Width-12;
        MachinesListView.Header.Columns[4].Width:= MachinesListView.Header.Columns[4].Width-10;
+     end
+  else
+  if iScreenWidth >= 1152 then
+     begin
+       iWidth:= 200;
+       MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width+75;
+       MachinesListView.Header.Columns[1].Width:= MachinesListView.Header.Columns[1].Width+25;
+       MachinesListView.Header.Columns[2].Width:= MachinesListView.Header.Columns[2].Width+75;
+       MachinesListView.Header.Columns[4].Width:= MachinesListView.Header.Columns[4].Width+25;
      end;
 
-  iWidthDec:= FormSoftwareListMachineToRunGame.Width-iWidth+10;
+  if iScreenWidth <= 800 then
+     iWidthDec:= -(FormSoftwareListMachineToRunGame.Width-iWidth+10)
+  else
+  if iScreenWidth >= 1152 then
+     iWidthDec:= iWidth;//(FormSoftwareListMachineToRunGame.Width+iWidth+10);
 
-  FormSoftwareListMachineToRunGame.Width:= FormSoftwareListMachineToRunGame.Width-iWidthDec;
-  FormSoftwareListMachineToRunGame.Height:= FormSoftwareListMachineToRunGame.Height-iHeight;
-  MachinesListView.Width:= MachinesListView.Width-iWidthDec;
-  MachinesListView.Height:= MachinesListView.Height-iHeight;
-  LabelTitle.Width:= LabelTitle.Width-iWidthDec;
-  ButtonYes.Left:= ButtonYes.Left-iWidthDec;
-  ButtonNo.Left:= ButtonNo.Left-iWidthDec;
-  LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width-iWidthDec;
+  FormSoftwareListMachineToRunGame.Width:= FormSoftwareListMachineToRunGame.Width+iWidthDec;
+  FormSoftwareListMachineToRunGame.Height:= FormSoftwareListMachineToRunGame.Height+iHeight;
+  MachinesListView.Width:= MachinesListView.Width+iWidthDec;
+  MachinesListView.Height:= MachinesListView.Height+iHeight;
+  LabelTitle.Width:= LabelTitle.Width+iWidthDec;
+  ButtonYes.Left:= ButtonYes.Left+iWidthDec;
+  ButtonNo.Left:= ButtonNo.Left+iWidthDec;
+  LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width+iWidthDec;
 end;
 
 procedure TFormSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
@@ -149,10 +173,12 @@ begin
         LabelSoftwarelistTitleW.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+' - '+MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
         //FormSoftwareListMachineToRunGame.Caption:= 'Select a Machine to Run the Custom Game With';
         FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, MessageIcon.Picture.Icon);
-        LabelGameNameCloneOf.Canvas.Lock;
-        LabelGameNameCloneOf.Caption:= MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
-        LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+'; file extension '+ExtractFileExt(FormMain.MemGameInfo.eName);
-        LabelGameNameCloneOf.Canvas.Unlock;
+        //LabelGameNameCloneOf.Canvas.Lock;
+        LabelGameNameCloneOf.Caption:= 'file: '+FormMain.MemGameInfo.eName;
+
+        //LabelGameNameCloneOf.Caption:= MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
+        //LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+'; file extension '+ExtractFileExt(FormMain.MemGameInfo.eName);
+        //LabelGameNameCloneOf.Canvas.Unlock;
       end;
     False:
       begin
@@ -242,7 +268,6 @@ procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  //FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
   case FormMain.MemGameInfo.eIsCustomGame of
     True : FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
     False: FormMain.GetCanvasFontCustom(FormMain.MemGameInfo.eSystemID, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);

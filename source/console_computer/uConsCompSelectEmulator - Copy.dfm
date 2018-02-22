@@ -5,7 +5,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
   BorderStyle = bsDialog
   Caption = 'Select Emulator To Be Used For Each System (Console/Computer)'
   ClientHeight = 612
-  ClientWidth = 684
+  ClientWidth = 644
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -18,6 +18,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
   Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -45,7 +46,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
   object BottomFrame: TShape
     Left = 0
     Top = 563
-    Width = 684
+    Width = 644
     Height = 1
     Pen.Color = 7891291
   end
@@ -53,7 +54,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     Tag = -1
     Left = 6
     Top = 7
-    Width = 678
+    Width = 638
     Height = 552
     BackGround.Enabled = True
     BackGround.OffsetX = -17
@@ -61,7 +62,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     BackGround.Tile = False
     BorderStyle = bsNone
     CellSizes.Tile.Height = 38
-    CellSizes.Tile.Width = 655
+    CellSizes.Tile.Width = 615
     CellSizes.Report.Height = 26
     CellSizes.Report.Width = 466
     EditManager.Font.Charset = ANSI_CHARSET
@@ -100,15 +101,12 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
-    OnGroupImageDraw = EmulatorsListGroupImageDraw
-    OnGroupImageGetSize = EmulatorsListGroupImageGetSize
-    OnGroupImageDrawIsCustom = EmulatorsListGroupImageDrawIsCustom
     OnGroupPaintText = EmulatorsListGroupPaintText
     OnItemCheckChange = EmulatorsListItemCheckChange
     OnItemPaintText = EmulatorsListItemPaintText
   end
   object ButtonOk: TBitBtn
-    Left = 478
+    Left = 438
     Top = 576
     Width = 89
     Height = 25
@@ -118,7 +116,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     TabOrder = 1
   end
   object ButtonCancel: TBitBtn
-    Left = 584
+    Left = 544
     Top = 576
     Width = 89
     Height = 25

@@ -86,6 +86,8 @@ type
     EmuHardDiskDriveParameter: TEdit;
     EmuHardDiskDriveParameter2: TEdit;
     BitBtn1: TBitBtn;
+    LabelVideoPreviewSystem: TShadowLabel;
+    LabelSystemType: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure EmulatorFileChange(Sender: TObject);
     procedure EmuDescriptionChange(Sender: TObject);
@@ -121,6 +123,8 @@ type
     procedure EmuHardDiskDriveParameterChange(Sender: TObject);
     procedure EmuHardDiskDriveParameter2Change(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure SystemsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
     newEmulatorFileCustom,
@@ -779,7 +783,7 @@ end;
 procedure TFormConsCompEmulatorsSetup.SetResetParameterIcon(IconHolder: TImage; ButtonPressed: Boolean = False);
 begin
   IconHolder.Picture.Icon:= nil;
-  // re-enable these later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! December 29, 2016
+  // re-enable these later... HUH ? December 11, 2017
   //if ButtonPressed then
   //   FormMain.IL_PopupMenu.GetIcon(3, IconHolder.Picture.Icon, dsSelected, itImage)
   //else
@@ -787,15 +791,21 @@ begin
 end;
 
 procedure TFormConsCompEmulatorsSetup.ResizeForm;
+var
+  iDiff: Integer;
 begin
   if Screen.Height = 720 then
      begin
+       iDiff:= FormConsCompEmulatorsSetup.Height-670;
        FormConsCompEmulatorsSetup.Height:= 670;
        Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= FormConsCompEmulatorsSetup.ClientHeight;
+       Systems.Height:= FormConsCompEmulatorsSetup.ClientHeight-LabelVideoPreviewSystem.Height;
        PanelEmulators.Left:= PanelEmulators.Left+Systems.CellSizes.Icon.Width;
+       PanelEmulators.Height:= PanelEmulators.Height-iDiff;
        FormConsCompEmulatorsSetup.ClientWidth:= PanelEmulators.Left+PanelEmulators.Width;
-       PanelBottomButtons.Top:= PanelBottomButtons.Top-12;
+       LabelVideoPreviewSystem.Width:= PanelEmulators.Left-1;
+       PanelBottomButtons.Align:= alNone;
+       PanelBottomButtons.Top:= PanelBottomButtons.Top+5;
      end;
 end;
 
@@ -807,7 +817,7 @@ begin
   GetExtIcon('.exe', IL_EmulatorIcon); // .exe files
   GetExtIcon('.bat', IL_EmulatorIcon); // .bat files
   GetExtIcon('.exe', IL_EmulatorIcon); // emulator executable files
-  GetExtIcon('.exe', IL_EmulatorIcon); // virtual drive executable files 
+  GetExtIcon('.exe', IL_EmulatorIcon); // virtual drive executable files
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
 
@@ -994,10 +1004,10 @@ begin
   FormMain.AddMsgText('. Do not use the same emulator filename more than once in the same system.'+#13#10+#13#10+
                      '    The ');
   FormMain.AddMsgText('Boot Disc Parameter', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' setting is only required for CD/DVD images mounted on a virtual drive ');
+  FormMain.AddMsgText(' setting is used for CD/DVD images mounted on a virtual drive ');
   FormMain.AddMsgText('(Daemon Tools / Virtual CloneDrive / Alcohol 120%)', $00323232, [fsItalic]);
   FormMain.AddMsgText('.'+#13#10+
-                     'Not all emulators can load CDs from the command line, like ePSXe (PSX) and SSF (Sega Saturn).'+#13#10+#13#10+'    ');
+                     'Some emulators, like SSF (Sega Saturn), do not support loading games from a CD image.'+#13#10+#13#10+'    ');
   FormMain.AddMsgText('Parameter 2', $00a65300, [fsBold]);
   FormMain.AddMsgText(' is optional. You can use it to launch a game with different parameters. Most emulators don''t need this.');
 
@@ -1012,6 +1022,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= Systems.Selection.First.ImageIndex;
+       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelVideoPreviewSystem, LabelSystemType);
        ToggleControls(Systems.Tag);
        if PanelEmulators.Tag <> 1 then
           begin
@@ -1195,15 +1206,13 @@ begin
   ResetParametersToDefault(TImage(Sender).Tag);
 end;
 
-
-
 procedure TFormConsCompEmulatorsSetup.BitBtn1Click(Sender: TObject);
 begin
   if TBitBtn(Sender).Tag = 0 then
      begin
        TBitBtn(Sender).Tag:= 1;
-       IL_Systems.Width:= 32;
-       IL_Systems.Height:= 32;
+       //IL_Systems.Width:= 32;
+       //IL_Systems.Height:= 32;
      end
   else
      begin
@@ -1217,6 +1226,7 @@ begin
   if TBitBtn(Sender).Tag = 0 then
      begin
        Systems.View:= elsIcon;
+       Systems.PaintInfoItem.TileDetailCount:= 1;
        Systems.Font.Name:= 'Tahoma';
        Systems.Font.Size:= 7;
 
@@ -1225,7 +1235,24 @@ begin
      begin
        Systems.View:= elsTile;
        Systems.Font.Name:= 'Trebuchet MS';
+       Systems.PaintInfoItem.TileDetailCount:= 2;
        Systems.Font.Size:= 9;
+     end;
+end;
+
+procedure TFormConsCompEmulatorsSetup.SystemsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if Systems.View = elsTile then
+     begin
+       if Position = 1 then
+         begin
+           ACanvas.Font.Name:= 'Segoe UI';
+           ACAnvas.Font.Size:= 9;
+           ACanvas.Font.Style:= [fsItalic];
+           ACanvas.Font.Color:= clMedGray;
+         end;
      end;
 end;
 

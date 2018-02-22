@@ -266,7 +266,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
       Left = 421
       Top = 22
-      Width = 142
+      Width = 98
       Height = 20
       Hint = 
         'Check this option to ovewrite existing files in the destination ' +
@@ -274,8 +274,25 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ShowHint = True
       TabOrder = 2
       Alignment = taLeftJustify
-      Caption = 'Overwrite Existing Files'
+      Caption = 'Overwrite Files'
       ReturnIsTab = False
+      Themed = True
+    end
+    object CopyMoveAddSystemFolder: TAdvOfficeCheckBox
+      Left = 525
+      Top = 22
+      Width = 120
+      Height = 20
+      Hint = 
+        'Use this option to include a "system name" sub-folder in the des' +
+        'tination path'
+      Checked = True
+      ShowHint = True
+      TabOrder = 3
+      Alignment = taLeftJustify
+      Caption = 'Add System Folder'
+      ReturnIsTab = False
+      State = cbChecked
       Themed = True
     end
   end

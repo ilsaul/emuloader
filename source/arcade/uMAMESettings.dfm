@@ -1037,122 +1037,19 @@ object FormMAMESettings: TFormMAMESettings
     object TPage
       Left = 0
       Top = 0
-      Caption = 'Video and Audio'
-      object LabelMonitorProvider: TLabel
-        Left = 544
-        Top = 390
-        Width = 90
-        Height = 15
-        Caption = 'Monitor Provider'
-        ParentShowHint = False
-        ShowAccelChar = False
-        ShowHint = False
-        Transparent = True
-      end
-      object ArtworkGroupBox: TAdvGroupBox
-        Left = 544
-        Top = 214
-        Width = 121
-        Height = 144
-        RoundEdges = True
-        Caption = 'Artwork'
-        ParentCtl3D = True
-        TabOrder = 0
-        object ArtworkBackdrops: TAdvOfficeCheckBox
-          Left = 8
-          Top = 80
-          Width = 77
-          Height = 20
-          Hint = 'Enable the display of backdrops'
-          Checked = True
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Backdrops'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object ArtworkBezels: TAdvOfficeCheckBox
-          Left = 8
-          Top = 100
-          Width = 57
-          Height = 20
-          Hint = 'Enable the display of bezels'
-          Checked = True
-          TabOrder = 1
-          Alignment = taLeftJustify
-          Caption = 'Bezels'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object ArtworkOverlays: TAdvOfficeCheckBox
-          Left = 8
-          Top = 40
-          Width = 68
-          Height = 20
-          Hint = 'Enable the display of overlays'
-          Checked = True
-          TabOrder = 2
-          Alignment = taLeftJustify
-          Caption = 'Overlays'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object ArtworkCrop: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 49
-          Height = 20
-          Hint = 'Crop artwork to game screen size'
-          TabOrder = 3
-          Alignment = taLeftJustify
-          Caption = 'Crop'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object ArtworkControlPanels: TAdvOfficeCheckBox
-          Left = 8
-          Top = 60
-          Width = 99
-          Height = 20
-          Hint = 'Enable the display of control panels'
-          Checked = True
-          TabOrder = 4
-          Alignment = taLeftJustify
-          Caption = 'Control Panels'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object ArtworkMarquees: TAdvOfficeCheckBox
-          Left = 8
-          Top = 120
-          Width = 75
-          Height = 20
-          Hint = 'Enable the display of marquees'
-          Checked = True
-          TabOrder = 5
-          Alignment = taLeftJustify
-          Caption = 'Marquees'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-      end
+      Caption = 'Video'
       object VideoRenderOptionsGroupBox: TAdvGroupBox
         Left = 16
         Top = 12
-        Width = 145
-        Height = 242
+        Width = 169
+        Height = 417
         RoundEdges = True
         Caption = 'Render Options'
         ParentCtl3D = True
         TabOrder = 2
         object LabelIntegerScaleFactorVertical: TLabel
-          Left = 82
-          Top = 223
+          Left = 92
+          Top = 225
           Width = 21
           Height = 15
           Caption = 'Vert'
@@ -1162,7 +1059,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelIntegerScaleFactorHorizontal: TLabel
           Left = 24
-          Top = 223
+          Top = 225
           Width = 20
           Height = 15
           Caption = 'Hor'
@@ -1266,8 +1163,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object IntegerScaleFactorHorizontal: TEdit
           Left = 47
-          Top = 220
-          Width = 30
+          Top = 222
+          Width = 40
           Height = 21
           Hint = 'Set horizontal integer scale factor'
           AutoSize = False
@@ -1281,9 +1178,9 @@ object FormMAMESettings: TFormMAMESettings
           OnKeyPress = IntegerScaleFactorHorizontalKeyPress
         end
         object IntegerScaleFactorVertical: TEdit
-          Left = 106
-          Top = 220
-          Width = 30
+          Left = 116
+          Top = 222
+          Width = 40
           Height = 21
           Hint = 'Set vertical integer scale factor'
           AutoSize = False
@@ -1299,7 +1196,7 @@ object FormMAMESettings: TFormMAMESettings
         object IntegerScaleOverscan: TAdvOfficeCheckBox
           Left = 8
           Top = 200
-          Width = 138
+          Width = 140
           Height = 20
           Hint = 'Allow overscan on integer scaled targets'
           Enabled = False
@@ -1339,7 +1236,7 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object VectorGroupBox: TAdvGroupBox
-        Left = 360
+        Left = 384
         Top = 214
         Width = 169
         Height = 213
@@ -1477,14 +1374,14 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object ScreenOptionsBox: TAdvGroupBox
-        Left = 176
+        Left = 200
         Top = 12
         Width = 169
         Height = 279
         RoundEdges = True
         Caption = 'Game Screen'
         Ctl3D = True
-        TabOrder = 5
+        TabOrder = 4
         object LabelBrightness: TLabel
           Left = 8
           Top = 63
@@ -1672,14 +1569,14 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object FullScreenBox: TAdvGroupBox
-        Left = 360
+        Left = 384
         Top = 12
         Width = 169
         Height = 193
         RoundEdges = True
         Caption = 'Full Screen'
         ParentCtl3D = True
-        TabOrder = 6
+        TabOrder = 5
         object LabelFullScreenBrightness: TLabel
           Left = 8
           Top = 63
@@ -1792,8 +1689,454 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = FullScreenGammaChange
         end
       end
+      object LabelSnapshotsBox: TAdvGroupBox
+        Left = 568
+        Top = 227
+        Width = 169
+        Height = 200
+        RoundEdges = True
+        Caption = 'Snapshots / Movies'
+        ParentCtl3D = True
+        TabOrder = 6
+        object LabelSnapshotNameFormat: TLabel
+          Left = 8
+          Top = 20
+          Width = 73
+          Height = 15
+          Caption = 'Name Format'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
+        object LabelSnapshotView: TLabel
+          Left = 8
+          Top = 64
+          Width = 25
+          Height = 15
+          Caption = 'View'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
+        object LabelSnapSizeCustomX: TLabel
+          Left = 111
+          Top = 134
+          Width = 7
+          Height = 15
+          Caption = 'X'
+          Enabled = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          Transparent = True
+        end
+        object LabelSnapSizeCustom: TLabel
+          Left = 24
+          Top = 134
+          Width = 42
+          Height = 15
+          Caption = 'Custom'
+          Enabled = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object SnapBurnIn: TAdvOfficeCheckBox
+          Left = 7
+          Top = 176
+          Width = 113
+          Height = 20
+          Hint = 'Create burn-in snapshots for each screen'
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Burn-in Snapshot'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object ButtonSnapNameDefault: TBitBtn
+          Left = 125
+          Top = 36
+          Width = 38
+          Height = 21
+          Hint = 'Set default snapshot name'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = ButtonSnapNameDefaultClick
+        end
+        object SnapView: TComboBox
+          Left = 8
+          Top = 80
+          Width = 115
+          Height = 21
+          Hint = 
+            'Specify snapshot/movie view'#13#10'Select the default '#39'internal'#39' to us' +
+            'e internal pixel-aspect views'
+          Style = csDropDownList
+          Ctl3D = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentCtl3D = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          Text = 'Internal'
+          Items.Strings = (
+            'Internal'
+            'Auto'
+            'Standard'
+            'Native'
+            'Pixel Aspect'
+            'Cocktail')
+        end
+        object ButtonSnapViewDefault: TBitBtn
+          Left = 124
+          Top = 80
+          Width = 38
+          Height = 21
+          Hint = 'Set default snapshot / movie view'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = ButtonSnapViewDefaultClick
+        end
+        object SnapSizeAuto: TAdvOfficeCheckBox
+          Left = 8
+          Top = 111
+          Width = 106
+          Height = 20
+          Hint = 'Set resolution to game'#39's original size (raw pixels)'
+          Checked = True
+          TabOrder = 4
+          OnClick = SnapSizeAutoClick
+          Alignment = taLeftJustify
+          Caption = 'Auto Resolution'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object SnapSizeWidth: TEdit
+          Left = 68
+          Top = 131
+          Width = 40
+          Height = 21
+          Hint = 'Custom resolution width'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+          OnKeyPress = SnapSizeWidthKeyPress
+        end
+        object SnapSizeHeight: TEdit
+          Left = 122
+          Top = 131
+          Width = 40
+          Height = 21
+          Hint = 'Custom resolution height'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          OnKeyPress = SnapSizeHeightKeyPress
+        end
+        object SnapName: TEdit
+          Left = 8
+          Top = 36
+          Width = 115
+          Height = 21
+          Hint = 
+            'Override the default snapshot naming; %g == gamename, %i == inde' +
+            'x'
+          AutoSize = False
+          Color = clWhite
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 7
+        end
+        object SnapBilinear: TAdvOfficeCheckBox
+          Left = 8
+          Top = 156
+          Width = 123
+          Height = 20
+          Hint = 
+            'Specify if the snapshot/movie should have bilinear filtering app' +
+            'lied'
+          Checked = True
+          TabOrder = 8
+          Alignment = taLeftJustify
+          Caption = 'Apply Bilinear Filter'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+      end
+      object ArtworkGroupBox: TAdvGroupBox
+        Left = 568
+        Top = 12
+        Width = 169
+        Height = 181
+        RoundEdges = True
+        Caption = 'Artwork'
+        ParentCtl3D = True
+        TabOrder = 0
+        object LabelFallbackArtwork: TLabel
+          Left = 8
+          Top = 88
+          Width = 88
+          Height = 15
+          Caption = 'Fallback Artwork'
+          Enabled = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelOverrideArtwork: TLabel
+          Left = 8
+          Top = 136
+          Width = 90
+          Height = 15
+          Caption = 'Override Artwork'
+          Enabled = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object ArtworkBackdrops: TAdvOfficeCheckBox
+          Left = 88
+          Top = 40
+          Width = 77
+          Height = 20
+          Hint = 'Enable the display of backdrops'
+          Checked = True
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Backdrops'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object ArtworkBezels: TAdvOfficeCheckBox
+          Left = 110
+          Top = 60
+          Width = 53
+          Height = 20
+          Hint = 'Enable the display of bezels'
+          Checked = True
+          TabOrder = 1
+          Alignment = taLeftJustify
+          Caption = 'Bezels'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object ArtworkOverlays: TAdvOfficeCheckBox
+          Left = 8
+          Top = 40
+          Width = 68
+          Height = 20
+          Hint = 'Enable the display of overlays'
+          Checked = True
+          TabOrder = 2
+          Alignment = taLeftJustify
+          Caption = 'Overlays'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object ArtworkCrop: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 49
+          Height = 20
+          Hint = 'Crop artwork to game screen size'
+          TabOrder = 3
+          Alignment = taLeftJustify
+          Caption = 'Crop'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object ArtworkControlPanels: TAdvOfficeCheckBox
+          Left = 8
+          Top = 60
+          Width = 99
+          Height = 20
+          Hint = 'Enable the display of control panels'
+          Checked = True
+          TabOrder = 4
+          Alignment = taLeftJustify
+          Caption = 'Control Panels'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object ArtworkMarquees: TAdvOfficeCheckBox
+          Left = 88
+          Top = 20
+          Width = 75
+          Height = 20
+          Hint = 'Enable the display of marquees'
+          Checked = True
+          TabOrder = 5
+          Alignment = taLeftJustify
+          Caption = 'Marquees'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object FallbackArtwork: TEdit
+          Left = 8
+          Top = 104
+          Width = 153
+          Height = 23
+          Hint = 
+            'Fallback artwork if no external artwork or internal driver layou' +
+            't defined'
+          Enabled = False
+          TabOrder = 6
+        end
+        object OverrideArtwork: TEdit
+          Left = 8
+          Top = 152
+          Width = 153
+          Height = 23
+          Hint = 'Override artwork for external artwork and internal driver layout'
+          Enabled = False
+          TabOrder = 7
+        end
+      end
+      object LabelScreenRotation: TAdvGroupBox
+        Left = 200
+        Top = 297
+        Width = 169
+        Height = 131
+        RoundEdges = True
+        Caption = 'Screen Rotation'
+        ParentCtl3D = True
+        TabOrder = 3
+        object FlipX: TAdvOfficeCheckBox
+          Left = 8
+          Top = 84
+          Width = 96
+          Height = 20
+          Hint = 'Flip screen left-right'
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Flip Left-Right'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object FlipY: TAdvOfficeCheckBox
+          Left = 8
+          Top = 104
+          Width = 112
+          Height = 20
+          Hint = 'Flip screen upside-down'
+          TabOrder = 1
+          Alignment = taLeftJustify
+          Caption = 'Flip Upside-Down'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object RotateRight: TAdvOfficeCheckBox
+          Left = 88
+          Top = 40
+          Width = 51
+          Height = 20
+          Hint = 'Rotate screen clockwise 90 degrees'
+          TabOrder = 2
+          Alignment = taLeftJustify
+          Caption = 'Right'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object RotateLeft: TAdvOfficeCheckBox
+          Left = 8
+          Top = 40
+          Width = 41
+          Height = 20
+          Hint = 'Rotate screen counterclockwise 90 degrees'
+          TabOrder = 3
+          Alignment = taLeftJustify
+          Caption = 'Left'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object AutoRotateRight: TAdvOfficeCheckBox
+          Left = 88
+          Top = 60
+          Width = 81
+          Height = 20
+          Hint = 'Automatically rotate screen clockwise 90 degrees if vertical'
+          TabOrder = 4
+          Alignment = taLeftJustify
+          Caption = 'Auto Right'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object AutoRotateLeft: TAdvOfficeCheckBox
+          Left = 8
+          Top = 60
+          Width = 73
+          Height = 20
+          Hint = 
+            'Automatically rotate screen counterclockwise 90 degrees if verti' +
+            'cal'
+          TabOrder = 5
+          Alignment = taLeftJustify
+          Caption = 'Auto Left'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object Rotate: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 45
+          Height = 19
+          Hint = 
+            'Rotate the game screen according to the game'#39's orientation needs' +
+            ' it'
+          Checked = True
+          TabOrder = 6
+          Alignment = taLeftJustify
+          Caption = 'Auto'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+      end
+    end
+    object TPage
+      Left = 0
+      Top = 0
+      Caption = 'Video 2'
+      object LabelMonitorProvider: TLabel
+        Left = 336
+        Top = 13
+        Width = 90
+        Height = 15
+        Caption = 'Monitor Provider'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = False
+        Transparent = True
+      end
       object PerformanceGroupBox: TAdvGroupBox
-        Left = 544
+        Left = 16
         Top = 12
         Width = 308
         Height = 194
@@ -1801,7 +2144,7 @@ object FormMAMESettings: TFormMAMESettings
         RoundEdges = True
         Caption = 'Performance'
         ParentCtl3D = True
-        TabOrder = 3
+        TabOrder = 0
         object LabelSpeed: TLabel
           Left = 8
           Top = 107
@@ -2104,304 +2447,16 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = SecondsToRunChange
         end
       end
-      object LabelScreenRotation: TAdvGroupBox
-        Left = 176
-        Top = 299
-        Width = 169
-        Height = 123
-        RoundEdges = True
-        Caption = 'Screen Rotation'
-        ParentCtl3D = True
-        TabOrder = 4
-        object FlipX: TAdvOfficeCheckBox
-          Left = 8
-          Top = 80
-          Width = 96
-          Height = 20
-          Hint = 'Flip screen left-right'
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Flip Left-Right'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object FlipY: TAdvOfficeCheckBox
-          Left = 8
-          Top = 100
-          Width = 113
-          Height = 20
-          Hint = 'Flip screen upside-down'
-          TabOrder = 1
-          Alignment = taLeftJustify
-          Caption = 'Flip Upside-Down'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object RotateRight: TAdvOfficeCheckBox
-          Left = 86
-          Top = 40
-          Width = 51
-          Height = 20
-          Hint = 'Rotate screen clockwise 90 degrees'
-          TabOrder = 2
-          Alignment = taLeftJustify
-          Caption = 'Right'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object RotateLeft: TAdvOfficeCheckBox
-          Left = 8
-          Top = 40
-          Width = 41
-          Height = 20
-          Hint = 'Rotate screen counterclockwise 90 degrees'
-          TabOrder = 3
-          Alignment = taLeftJustify
-          Caption = 'Left'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object AutoRotateRight: TAdvOfficeCheckBox
-          Left = 86
-          Top = 60
-          Width = 81
-          Height = 20
-          Hint = 'Automatically rotate screen clockwise 90 degrees if vertical'
-          TabOrder = 4
-          Alignment = taLeftJustify
-          Caption = 'Auto Right'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object AutoRotateLeft: TAdvOfficeCheckBox
-          Left = 8
-          Top = 60
-          Width = 73
-          Height = 20
-          Hint = 
-            'Automatically rotate screen counterclockwise 90 degrees if verti' +
-            'cal'
-          TabOrder = 5
-          Alignment = taLeftJustify
-          Caption = 'Auto Left'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object Rotate: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 46
-          Height = 19
-          Hint = 
-            'Rotate the game screen according to the game'#39's orientation needs' +
-            ' it'
-          Checked = True
-          TabOrder = 6
-          Alignment = taLeftJustify
-          Caption = 'Auto'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-      end
-      object LabelSnapshotsBox: TAdvGroupBox
-        Left = 16
-        Top = 261
-        Width = 145
-        Height = 180
-        RoundEdges = True
-        Caption = 'Snapshots / Movies'
-        ParentCtl3D = True
-        TabOrder = 7
-        object LabelSnapshotNameFormat: TLabel
-          Left = 8
-          Top = 20
-          Width = 73
-          Height = 15
-          Caption = 'Name Format'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelSnapshotView: TLabel
-          Left = 8
-          Top = 64
-          Width = 25
-          Height = 15
-          Caption = 'View'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object LabelSnapSizeCustomX: TLabel
-          Left = 94
-          Top = 114
-          Width = 7
-          Height = 15
-          Caption = 'X'
-          Enabled = False
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          Transparent = True
-        end
-        object SnapBurnIn: TAdvOfficeCheckBox
-          Left = 7
-          Top = 157
-          Width = 113
-          Height = 20
-          Hint = 'Create burn-in snapshots for each screen'
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Burn-in Snapshot'
-          ReturnIsTab = False
-          Themed = True
-        end
-        object ButtonSnapNameDefault: TBitBtn
-          Left = 101
-          Top = 36
-          Width = 38
-          Height = 21
-          Hint = 'Set default snapshot name'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-          OnClick = ButtonSnapNameDefaultClick
-        end
-        object SnapView: TComboBox
-          Left = 8
-          Top = 80
-          Width = 91
-          Height = 21
-          Hint = 
-            'Specify snapshot/movie view'#13#10'Select the default '#39'internal'#39' to us' +
-            'e internal pixel-aspect views'
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-          Text = 'Internal'
-          Items.Strings = (
-            'Internal'
-            'Auto'
-            'Standard'
-            'Native'
-            'Pixel Aspect'
-            'Cocktail')
-        end
-        object ButtonSnapViewDefault: TBitBtn
-          Left = 100
-          Top = 80
-          Width = 38
-          Height = 21
-          Hint = 'Set default snapshot / movie view'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-          OnClick = ButtonSnapViewDefaultClick
-        end
-        object SnapSizeAuto: TAdvOfficeCheckBox
-          Left = 8
-          Top = 111
-          Width = 48
-          Height = 20
-          Hint = 'Set resolution to game'#39's original size (raw pixels)'
-          Checked = True
-          TabOrder = 4
-          OnClick = SnapSizeAutoClick
-          Alignment = taLeftJustify
-          Caption = 'Auto'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object SnapSizeWidth: TEdit
-          Left = 60
-          Top = 111
-          Width = 33
-          Height = 21
-          Hint = 'Custom resolution width'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-          OnKeyPress = SnapSizeWidthKeyPress
-        end
-        object SnapSizeHeight: TEdit
-          Left = 104
-          Top = 111
-          Width = 33
-          Height = 21
-          Hint = 'Custom resolution height'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-          OnKeyPress = SnapSizeHeightKeyPress
-        end
-        object SnapName: TEdit
-          Left = 8
-          Top = 36
-          Width = 91
-          Height = 21
-          Hint = 
-            'Override the default snapshot naming; %g == gamename, %i == inde' +
-            'x'
-          AutoSize = False
-          Color = clWhite
-          ParentShowHint = False
-          ShowHint = False
-          TabOrder = 7
-        end
-        object SnapBilinear: TAdvOfficeCheckBox
-          Left = 8
-          Top = 137
-          Width = 123
-          Height = 20
-          Hint = 
-            'Specify if the snapshot/movie should have bilinear filtering app' +
-            'lied'
-          Checked = True
-          TabOrder = 8
-          Alignment = taLeftJustify
-          Caption = 'Apply Bilinear Filter'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-      end
       object ScreensBox: TAdvGroupBox
-        Left = 677
-        Top = 214
+        Left = 16
+        Top = 222
         Width = 176
         Height = 193
         Transparent = False
         RoundEdges = True
         Caption = 'Screens'
         ParentCtl3D = True
-        TabOrder = 8
+        TabOrder = 1
         object LabelScreenName: TLabel
           Left = 8
           Top = 60
@@ -2439,7 +2494,7 @@ object FormMAMESettings: TFormMAMESettings
           Transparent = True
         end
         object LabelScreenRefreshRate_Custom: TLabel
-          Left = 85
+          Left = 101
           Top = 148
           Width = 14
           Height = 15
@@ -2536,7 +2591,7 @@ object FormMAMESettings: TFormMAMESettings
         object ScreenResolution: TComboBox
           Left = 8
           Top = 164
-          Width = 76
+          Width = 89
           Height = 21
           Style = csDropDownList
           Ctl3D = True
@@ -2589,9 +2644,9 @@ object FormMAMESettings: TFormMAMESettings
             '2048x1536')
         end
         object ScreenRefreshRate: TComboBox
-          Left = 85
+          Left = 101
           Top = 164
-          Width = 48
+          Width = 68
           Height = 21
           Hint = 'Screen refresh rate'
           Style = csDropDownList
@@ -2724,8 +2779,8 @@ object FormMAMESettings: TFormMAMESettings
         end
       end
       object MonitorProvider: TComboBox
-        Left = 544
-        Top = 406
+        Left = 336
+        Top = 29
         Width = 121
         Height = 21
         Hint = 'Monitor Discovery Method'
@@ -2742,7 +2797,7 @@ object FormMAMESettings: TFormMAMESettings
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 9
+        TabOrder = 2
         Text = 'Auto'
         Items.Strings = (
           'Auto'
@@ -2754,7 +2809,7 @@ object FormMAMESettings: TFormMAMESettings
     object TPage
       Left = 0
       Top = 0
-      Caption = 'Video 2'
+      Caption = 'Video 3'
       object LabelVideoOutputMode: TLabel
         Left = 595
         Top = 19
@@ -2775,7 +2830,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 0
+        ItemHeight = 13
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
@@ -5481,9 +5536,9 @@ object FormMAMESettings: TFormMAMESettings
         object Label3: TLabel
           Left = 56
           Top = 20
-          Width = 91
+          Width = 119
           Height = 15
-          Caption = 'Path to Web Files'
+          Caption = 'Root Path to Web Files'
           Enabled = False
           ShowAccelChar = False
           Transparent = True
@@ -5951,10 +6006,10 @@ object FormMAMESettings: TFormMAMESettings
       Caption = 'Miscellaneous'
       object LabelRAMSize: TLabel
         Left = 252
-        Top = 96
-        Width = 173
+        Top = 100
+        Width = 124
         Height = 15
-        Caption = 'RAM Size (if supported by driver)'
+        Caption = 'RAM Size (if supported)'
         ShowAccelChar = False
         Transparent = True
       end
@@ -5968,8 +6023,8 @@ object FormMAMESettings: TFormMAMESettings
         Transparent = True
       end
       object LabelUIFont: TLabel
-        Left = 96
-        Top = 188
+        Left = 252
+        Top = 398
         Width = 95
         Height = 15
         Caption = 'User Inteface Font'
@@ -5978,35 +6033,47 @@ object FormMAMESettings: TFormMAMESettings
         Transparent = True
       end
       object LabelUIFontProvider: TLabel
-        Left = 16
-        Top = 188
+        Left = 372
+        Top = 354
         Width = 44
         Height = 15
         Caption = 'Provider'
       end
-      object LabelSaveStateName: TLabel
-        Left = 16
-        Top = 96
-        Width = 88
-        Height = 15
-        Caption = 'Save State Name'
-        ShowAccelChar = False
-        Transparent = True
-      end
       object LabelTypeUserInterface: TLabel
-        Left = 16
-        Top = 142
+        Left = 252
+        Top = 354
         Width = 115
         Height = 15
         Caption = 'Type of User Interface'
       end
       object LabelDisplayLanguage: TLabel
-        Left = 252
-        Top = 142
+        Left = 16
+        Top = 220
         Width = 168
         Height = 15
         Caption = 'User Interface Display Language'
         Enabled = False
+      end
+      object LabelSaveStateRewindBufferSize: TLabel
+        Left = 16
+        Top = 132
+        Width = 187
+        Height = 15
+        Hint = 'Rewind Buffer Size [%u MegaBytes]'
+        Caption = 'Rewind Buffer Size [100 MegaBytes]'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = False
+        Transparent = False
+      end
+      object LabelSaveStateName: TLabel
+        Left = 16
+        Top = 176
+        Width = 88
+        Height = 15
+        Caption = 'Save State Name'
+        ShowAccelChar = False
+        Transparent = True
       end
       object SkipGameInfo: TAdvOfficeCheckBox
         Left = 138
@@ -6047,27 +6114,13 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object AutoSave: TAdvOfficeCheckBox
-        Left = 16
-        Top = 72
-        Width = 105
-        Height = 20
-        Hint = 
-          'Enable automatic restore at startup, and automatic save at exit ' +
-          'time'
-        TabOrder = 3
-        Alignment = taLeftJustify
-        Caption = 'Auto Save State'
-        ReturnIsTab = False
-        Themed = True
-      end
       object Cheat: TAdvOfficeCheckBox
         Left = 138
         Top = 32
         Width = 105
         Height = 20
         Hint = 'Enable cheat subsystem'
-        TabOrder = 4
+        TabOrder = 3
         Alignment = taLeftJustify
         Caption = 'Cheats Enabled'
         ReturnIsTab = False
@@ -6075,12 +6128,12 @@ object FormMAMESettings: TFormMAMESettings
       end
       object RAMSize: TEdit
         Left = 252
-        Top = 112
+        Top = 116
         Width = 153
         Height = 21
         Hint = 'Size of RAM (if supported by driver)'
         AutoSize = False
-        TabOrder = 5
+        TabOrder = 4
         OnKeyPress = RAMSizeKeyPress
       end
       object ConfirmQuit: TAdvOfficeCheckBox
@@ -6089,27 +6142,28 @@ object FormMAMESettings: TFormMAMESettings
         Width = 97
         Height = 20
         Hint = 'Display quit confirmation dialog on exit'
-        TabOrder = 6
+        TabOrder = 5
         Alignment = taLeftJustify
         Caption = 'Confirm Quit'
         ReturnIsTab = False
         Themed = True
       end
       object DebugGroupBox: TAdvGroupBox
-        Left = 16
-        Top = 251
-        Width = 220
-        Height = 186
+        Left = 252
+        Top = 146
+        Width = 197
+        Height = 156
         CheckBox.Action = caNone
         CheckBox.Hint = 'Enable/disable debugger'
         CheckBox.Visible = True
+        Transparent = False
         RoundEdges = True
         Caption = 'Enable Debugger'
         ParentCtl3D = True
-        TabOrder = 7
+        TabOrder = 6
         object LabelDebuggerScript: TLabel
           Left = 8
-          Top = 138
+          Top = 110
           Width = 85
           Height = 15
           Caption = 'Debugger Script'
@@ -6118,22 +6172,32 @@ object FormMAMESettings: TFormMAMESettings
         end
         object LabelWatchdog: TLabel
           Left = 8
-          Top = 69
-          Width = 116
+          Top = 64
+          Width = 55
           Height = 15
           Hint = 
             'Creates new thread that kills the application after a few second' +
             's'
-          Caption = 'Watchdog             secs'
+          Caption = 'Watchdog'
         end
         object Label4: TLabel
-          Left = 8
-          Top = 92
+          Left = 92
+          Top = 64
           Width = 91
           Height = 15
           Caption = 'Debugger To Use'
           ShowAccelChar = False
           Transparent = True
+        end
+        object Label1: TLabel
+          Left = 55
+          Top = 83
+          Width = 22
+          Height = 15
+          Hint = 
+            'Creates new thread that kills the application after a few second' +
+            's'
+          Caption = 'secs'
         end
         object Log: TAdvOfficeCheckBox
           Left = 8
@@ -6148,7 +6212,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object OSLog: TAdvOfficeCheckBox
-          Left = 104
+          Left = 81
           Top = 40
           Width = 112
           Height = 20
@@ -6172,7 +6236,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
         object UpdateInPause: TAdvOfficeCheckBox
-          Left = 104
+          Left = 81
           Top = 20
           Width = 109
           Height = 20
@@ -6185,8 +6249,8 @@ object FormMAMESettings: TFormMAMESettings
         end
         object DebuggerScript: TEdit
           Left = 8
-          Top = 156
-          Width = 160
+          Top = 128
+          Width = 137
           Height = 21
           Hint = 'Script for debugger'
           TabStop = False
@@ -6198,8 +6262,8 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 4
         end
         object DebuggerScriptBrowse: TBitBtn
-          Left = 169
-          Top = 156
+          Left = 146
+          Top = 128
           Width = 43
           Height = 21
           Hint = 'Click here to select a file'
@@ -6210,9 +6274,9 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = DebuggerScriptBrowseClick
         end
         object Watchdog: TEdit
-          Left = 67
-          Top = 67
-          Width = 32
+          Left = 11
+          Top = 80
+          Width = 40
           Height = 21
           Hint = 
             'Creates new thread that kills the application after a few second' +
@@ -6223,9 +6287,9 @@ object FormMAMESettings: TFormMAMESettings
           OnKeyPress = WatchdogKeyPress
         end
         object Debugger: TComboBox
-          Left = 8
-          Top = 108
-          Width = 123
+          Left = 92
+          Top = 80
+          Width = 97
           Height = 21
           Style = csDropDownList
           Font.Charset = ANSI_CHARSET
@@ -6309,31 +6373,31 @@ object FormMAMESettings: TFormMAMESettings
         Selection.RoundRectRadius = 2
         Selection.TextColor = clBlack
         Selection.UseFocusRect = False
-        TabOrder = 8
+        TabOrder = 7
         View = elsReport
         OnItemCompare = BiosSetsListViewItemCompare
       end
       object UIFont: TEdit
-        Left = 96
-        Top = 204
-        Width = 95
+        Left = 252
+        Top = 414
+        Width = 153
         Height = 21
         Hint = 'Specify a font to use'
         AutoSize = False
         Ctl3D = True
         Enabled = False
         ParentCtl3D = False
-        TabOrder = 9
+        TabOrder = 8
       end
       object UIFontSelectFontButton: TBitBtn
-        Left = 193
-        Top = 204
+        Left = 407
+        Top = 414
         Width = 43
         Height = 21
         Hint = 'Click here to select a font'
         Caption = 'Select'
         Enabled = False
-        TabOrder = 10
+        TabOrder = 9
         OnClick = UIFontSelectFontButtonClick
       end
       object DRC: TAdvOfficeCheckBox
@@ -6343,7 +6407,7 @@ object FormMAMESettings: TFormMAMESettings
         Height = 20
         Hint = 'Enable DRC cpu core if available'
         Checked = True
-        TabOrder = 11
+        TabOrder = 10
         Alignment = taLeftJustify
         Caption = 'Enable DRC CPU Core'
         ReturnIsTab = False
@@ -6356,7 +6420,7 @@ object FormMAMESettings: TFormMAMESettings
         Width = 169
         Height = 20
         Hint = 'Force DRC use C backend'
-        TabOrder = 12
+        TabOrder = 11
         Alignment = taLeftJustify
         Caption = 'Force DRC Use C Backend'
         ReturnIsTab = False
@@ -6364,12 +6428,12 @@ object FormMAMESettings: TFormMAMESettings
       end
       object RAMSizeButtonClear: TBitBtn
         Left = 407
-        Top = 112
+        Top = 116
         Width = 43
         Height = 21
         Hint = 'Click here to clear RAM size'
         Caption = 'Clear'
-        TabOrder = 13
+        TabOrder = 12
         OnClick = RAMSizeButtonClearClick
       end
       object DRCLogUML: TAdvOfficeCheckBox
@@ -6377,7 +6441,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 52
         Width = 194
         Height = 20
-        TabOrder = 14
+        TabOrder = 13
         Alignment = taLeftJustify
         Caption = 'Write DRC UML Disassembly Log'
         ReturnIsTab = False
@@ -6388,15 +6452,15 @@ object FormMAMESettings: TFormMAMESettings
         Top = 72
         Width = 201
         Height = 20
-        TabOrder = 15
+        TabOrder = 14
         Alignment = taLeftJustify
         Caption = 'Write DRC Native Disassembly Log'
         ReturnIsTab = False
         Themed = True
       end
       object UIFontProvider: TComboBox
-        Left = 16
-        Top = 204
+        Left = 372
+        Top = 370
         Width = 78
         Height = 21
         Hint = 'Provider for user interface font'
@@ -6409,7 +6473,7 @@ object FormMAMESettings: TFormMAMESettings
         ItemHeight = 13
         ItemIndex = 0
         ParentFont = False
-        TabOrder = 16
+        TabOrder = 15
         Text = 'Auto'
         Items.Strings = (
           'Auto'
@@ -6418,32 +6482,9 @@ object FormMAMESettings: TFormMAMESettings
           'SDL'
           'OSX')
       end
-      object SaveStateName: TEdit
-        Left = 16
-        Top = 112
-        Width = 175
-        Height = 21
-        Hint = 'Override of the default state subfolder naming; %g == gamename'
-        AutoSize = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 17
-      end
-      object ButtonSaveStateNameReset: TBitBtn
-        Left = 193
-        Top = 112
-        Width = 43
-        Height = 21
-        Hint = 'Set default save state name'
-        Caption = 'Reset'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 18
-        OnClick = ButtonSaveStateNameResetClick
-      end
       object TypeUserInterface: TComboBox
-        Left = 16
-        Top = 158
+        Left = 252
+        Top = 370
         Width = 119
         Height = 21
         Style = csDropDownList
@@ -6455,17 +6496,17 @@ object FormMAMESettings: TFormMAMESettings
         ItemHeight = 13
         ItemIndex = 1
         ParentFont = False
-        TabOrder = 19
+        TabOrder = 16
         Text = 'Cabinet'
         Items.Strings = (
           'Simple'
           'Cabinet')
       end
       object DisplayLanguageList: TEasyListview
-        Left = 252
-        Top = 158
-        Width = 197
-        Height = 279
+        Left = 16
+        Top = 238
+        Width = 220
+        Height = 199
         BackGround.Enabled = True
         CellSizes.Report.Height = 19
         Color = clWhite
@@ -6479,7 +6520,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000000B1000000FFFFFF1F0001000000
+          00060000008008000101000100000000000000D9000000FFFFFF1F0001000000
           010000001A0000004C0061006E00670075006100670065002000280064006500
           6600610075006C007400200069006E00200062006F006C006400290000000000
           0000000000000000}
@@ -6514,8 +6555,89 @@ object FormMAMESettings: TFormMAMESettings
         Selection.RoundRectRadius = 2
         Selection.TextColor = clBlack
         Selection.UseFocusRect = False
-        TabOrder = 20
+        TabOrder = 17
         View = elsReport
+      end
+      object SaveNVRAMOnExit: TAdvOfficeCheckBox
+        Left = 16
+        Top = 72
+        Width = 128
+        Height = 20
+        Hint = 
+          'Enable automatic restore at startup, and automatic save at exit ' +
+          'time'
+        Checked = True
+        TabOrder = 18
+        Alignment = taLeftJustify
+        Caption = 'Save NVRAM on Exit'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+      end
+      object AutoSave: TAdvOfficeCheckBox
+        Left = 16
+        Top = 92
+        Width = 103
+        Height = 20
+        Hint = 
+          'Enable automatic restore at startup, and automatic save at exit ' +
+          'time'
+        TabOrder = 19
+        Alignment = taLeftJustify
+        Caption = 'Auto Save State'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object EnableSaveStateRewind: TAdvOfficeCheckBox
+        Left = 16
+        Top = 112
+        Width = 152
+        Height = 20
+        Hint = 'Enable rewind save states'
+        TabOrder = 20
+        Alignment = taLeftJustify
+        Caption = 'Enable Save State Rewind'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object SaveStateRewindBufferSize: TGaugeBar
+        Left = 16
+        Top = 148
+        Width = 220
+        Height = 20
+        Hint = 'Rewind buffer size in megabytes'
+        Color = clWhite
+        Backgnd = bgPattern
+        ButtonSize = 12
+        LargeChange = 5
+        Max = 2048
+        Min = 1
+        ShowHandleGrip = True
+        Position = 100
+        OnChange = SaveStateRewindBufferSizeChange
+      end
+      object SaveStateName: TEdit
+        Left = 16
+        Top = 192
+        Width = 175
+        Height = 21
+        Hint = 'Override of the default state subfolder naming; %g == gamename'
+        AutoSize = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 22
+      end
+      object ButtonSaveStateNameReset: TBitBtn
+        Left = 193
+        Top = 192
+        Width = 43
+        Height = 21
+        Hint = 'Set default save state name'
+        Caption = 'Reset'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 23
+        OnClick = ButtonSaveStateNameResetClick
       end
     end
     object TPage
@@ -8710,9 +8832,9 @@ object FormMAMESettings: TFormMAMESettings
     end
   end
   object ToolBarPages: TToolBar
-    Left = 367
+    Left = 300
     Top = 60
-    Width = 501
+    Width = 568
     Height = 21
     Align = alNone
     ButtonWidth = 97
@@ -8761,14 +8883,24 @@ object FormMAMESettings: TFormMAMESettings
       Top = 0
       AutoSize = True
       Caption = 'Video 2'
+      ImageIndex = 500
+      Style = tbsCheck
+      OnClick = ButtonPageFoldersClick
+    end
+    object ButtonPageVideo3: TToolButton
+      Tag = 3
+      Left = 189
+      Top = 0
+      AutoSize = True
+      Caption = 'Video 3'
       Grouped = True
       ImageIndex = 500
       Style = tbsCheck
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageLUA_Audio: TToolButton
-      Tag = 3
-      Left = 189
+      Tag = 4
+      Left = 255
       Top = 0
       AutoSize = True
       Caption = 'LUA and Audio'
@@ -8778,8 +8910,8 @@ object FormMAMESettings: TFormMAMESettings
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageInput: TToolButton
-      Tag = 4
-      Left = 290
+      Tag = 5
+      Left = 356
       Top = 0
       AutoSize = True
       Caption = 'Input'
@@ -8789,8 +8921,8 @@ object FormMAMESettings: TFormMAMESettings
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageMisc: TToolButton
-      Tag = 5
-      Left = 347
+      Tag = 6
+      Left = 413
       Top = 0
       AutoSize = True
       Caption = 'Miscellaneous'
@@ -8800,8 +8932,8 @@ object FormMAMESettings: TFormMAMESettings
       OnClick = ButtonPageFoldersClick
     end
     object ButtonPageSDLMAMEInput: TToolButton
-      Tag = 6
-      Left = 443
+      Tag = 7
+      Left = 509
       Top = 0
       AutoSize = True
       Caption = 'SDL'

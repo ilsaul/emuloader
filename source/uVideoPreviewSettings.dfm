@@ -67,6 +67,29 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Transparent = False
     Layout = tlCenter
   end
+  object LabelSystemNotAvailable: TShadowLabel
+    Left = 697
+    Top = 410
+    Width = 203
+    Height = 16
+    Caption = 'THIS SYSTEM IS NOT AVAILABLE'
+    Color = 16448250
+    Constraints.MaxHeight = 16
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold, fsItalic]
+    ParentColor = False
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 14540253
+    ShadowEnabled = True
+    EllipsType = etNone
+    Transparent = False
+    Layout = tlCenter
+    Visible = False
+  end
   object PanelButtons: TPanelEx
     Left = 0
     Top = 596
@@ -104,7 +127,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 1
     end
     object ButtonVideoPreviewHelp: TBitBtn
-      Left = 880
+      Left = 8
       Top = 8
       Width = 43
       Height = 25

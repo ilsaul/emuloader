@@ -91,9 +91,10 @@ uses uMain;
 
 procedure TFormArcadeSelectSystem.SetSystemsState;
 var
-  ShowItem: Boolean;
+  ShowItem, HaveSystemsEnabled: Boolean;
   Item: TEasyItem;
 begin
+  HaveSystemsEnabled:= False;
   SystemsListView.BeginUpdate;
   Item:= SystemsListView.Groups.FirstItem;
   repeat
@@ -111,11 +112,21 @@ begin
            3: ShowItem:= not (Item.ImageIndex in [idDaphne, idDICE]); // ROMs paths, no Daphne; no DICE
            5: ShowItem:= Item.ImageIndex <> idDaphne; // scan games with missing ROMs/CHDs, no Daphne
          end;
+         if Item.ImageIndex > 0 then
+            HaveSystemsEnabled:= True;
        end;
     if (not ShowItem) and (Item.ImageIndex > 0) then
        Item.State:= Item.State+[esosGhosted];
     Item:= SystemsListView.Groups.NextItem(Item);
   until Item = nil;
+  if not HaveSystemsEnabled then
+     begin
+       if SystemsListView.Selection.MultiSelect then // stars on zero if multi systems
+          begin
+            Item:= SystemsListView.Groups.FirstItem;
+            Item.State:= Item.State+[esosGhosted];
+          end;
+     end;
   SystemsListView.EndUpdate(False);
   FormMain.ELV_SelectItem(SystemsListView, selSysID);//-SystemsListView.Groups.FirstItem.ImageIndex);
 end;
@@ -278,7 +289,6 @@ begin
        ButtonCancel.Left:= ButtonCancel.Left-39;
        LabelMultiSelect.Visible:= False;
      end;
-
   if ActionMode in [1..5] then
      Caption:= Caption+' ['+ActionModeStr[ActionMode]+']';
 

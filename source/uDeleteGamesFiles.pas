@@ -22,7 +22,7 @@ type
     fMediaType: ShortInt; // 0 -> ROM; >= 1 -> CHD (for ROMs and CHD only)... -1 -> game config file
     fCustomMediaType: ShortInt; // 0 -> ROM; 1 -> Cartridge; 2 -> Disc Image; 3 -> Floppy; 4 -> Cassette; 5 -> Hard Disk Drive
     fFileType: ShortInt; // cfg; nvram; eeprom (game config files)
-                         // 12, 13, 14 -> HDD/general CHD;  15, 16, 17 -> CD;  18, 19, 20 -> Compact Flash Card
+                         // 12, 13, 14 -> HDD/general CHD;  15, 16, 17 -> CD;  18, 19, 20 -> Compact Flash Card; 21, 22, 23 -> Video Tape (VHS)
     fSoftwareName: String;
     fGameStatus: ShortInt;
 
@@ -88,6 +88,7 @@ type
     DeleteGameFromGamesList: TAdvOfficeCheckBox;
     DeleteGameFileFromDisk: TAdvOfficeCheckBox;
     ButtonHelp: TBitBtn;
+    CopyMoveAddSystemFolder: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -143,7 +144,8 @@ begin
       end;
     1:
       begin
-        if eMediaType = 0 then
+        //if eMediaType = 0 then
+        if not FormMain.IsMediaTypeCHD(eMediaType, False) then
            begin
              if eMerged then
                 extraStr:= 'Merged Set';
@@ -156,8 +158,8 @@ begin
                if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
                begin
                  case eFileType of
-                   13, 16, 19: extraStr:= 'Device';
-                   14, 17, 20: extraStr:= 'Bios';
+                   13, 16, 19, 22: extraStr:= 'Device';
+                   14, 17, 20, 23: extraStr:= 'Bios';
                  end;
                end;
 
@@ -257,6 +259,7 @@ begin
                      0: Result:= eMediaType; // ROM (.zip file)
                      15, 16, 17: Result:= 2;
                      18, 19, 20: Result:= 3;
+                     21, 22, 23: Result:= 14;
                    else
                       Result:= 1;
                    end;
@@ -331,6 +334,8 @@ begin
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
+
+  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);       // 14
 end;
 
 procedure TFormDeleteGamesFiles.AddFiles;
@@ -340,7 +345,7 @@ var
   GameIsMerged, IsZiNcSystem: Boolean;
   Loop: Integer;
   FileID: ShortInt;
-  chdParentName, DiskFile, ChecksumCHD, romName, romCRC32, romSHA1, StrDOSName: String;
+  chdParentName, DiskFile, ChecksumCHD, romName, romCRC32, romSHA1, StrDOSName, romDeviceName: String;
   HeaderVerCHD: Byte;
 begin
   IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
@@ -420,7 +425,7 @@ begin
                  if DiskFile[3] = '1' then // is CHD file ? (3rd position is 0 -> ROM/Cart/Floppy/Cass; 1 -> CHD... "<rom" and "<disk" entries from -listxml output
                  begin
                    FileID:= StrToInt(DiskFile[1]+DiskFile[2]);
-                   FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eName), romName, romCRC32, romSHA1, chdParentName);
+                   FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eName), romName, romCRC32, romSHA1, chdParentName, romDeviceName);
                    // [konam80a]
                    // 1510<name>826aaa01.chd/><sha1>be5f8b31fd18ba631fe98c2132c56abf20193419/><parentname>826eaa01.chd/>
 
@@ -479,6 +484,7 @@ begin
   FormCopyMoveGameFiles.iTotalFilesSize:= 0;
   FormCopyMoveGameFiles.iTotalFilesSizeLeft:= 0;
   FormCopyMoveGameFiles.OverwriteFiles:= CopyMoveOverwriteFiles.Checked;
+  FormCopyMoveGameFiles.AddSystemFolder:= CopyMoveAddSystemFolder.Checked;
 
   FormCopyMoveGameFiles.iTotalFiles:= FormCopyMoveGameFiles.iTotalFiles+ROMsTotalFiles+CHDsTotalFiles+CFGsTotalFiles;
   FormCopyMoveGameFiles.iTotalFilesSize:= FormCopyMoveGameFiles.iTotalFilesSize+ROMsTotalSize+CHDsTotalSize+CFGsTotalSize;
@@ -733,6 +739,7 @@ begin
        ButtonHelp.Left:= ButtonHelp.Left-HeightDiff;
        FilesListView.Width:= FilesListView.Width-HeightDiff;
        FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-HeightDiff;
+       CopyMoveAddSystemFolder.Caption:= 'Add Sys Folder';
        FormDeleteGamesFiles.Width:= FormDeleteGamesFiles.Width-HeightDiff;
      end
   else

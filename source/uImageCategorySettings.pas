@@ -31,6 +31,8 @@ type
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
     LabelSystemType: TShadowLabel;
+    LabelSystemNotAvailable: TShadowLabel;
+    SystemTitlePanel: TPanelEx;
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ImageCategoryFolderChange(Sender: TObject);
@@ -171,6 +173,7 @@ begin
        Systems.Tag:= FormMain.ELV_GetSystemTagMulti(Systems); // Systems.Tag:= Item.ImageIndex;
        FormMain.ELV_GetSystemTitle(Systems, Item, LabelEmuTitle, LabelSystemType);
        SetImageCategoryValues;
+       LabelSystemNotAvailable.Visible:= Item.Ghosted; 
      end;
 end;
 
@@ -223,16 +226,39 @@ begin
 end;
 
 procedure TFormImageCategorySettings.ResizeForm;
+var
+  iDiff: Integer;
 begin
   if Screen.Height = 720 then
      begin
+       iDiff:= FormImageCategorySettings.Height-675;
        FormImageCategorySettings.Height:= 675; // 694;
+
        Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= FormImageCategorySettings.ClientHeight;
+       Systems.Height:= Systems.Height-iDiff+LabelEmuTitle.Height;// FormImageCategorySettings.ClientHeight;
        PanelImageCategories.Left:= PanelImageCategories.Left+Systems.CellSizes.Icon.Width-1;
        //PanelImageCategorySelector.Height:= PanelImageCategorySelector.Height-19;
        FormImageCategorySettings.ClientWidth:= FormImageCategorySettings.ClientWidth+Systems.CellSizes.Icon.Width;
        //PanelBottomButtons.Top:= PanelBottomButtons.Top-19;//82;
+
+       SystemTitlePanel.Color1:= clWhite;
+       SystemTitlePanel.Width:= 432;
+       SystemTitlePanel.Height:= 40;
+       SystemTitlePanel.Top:= PanelImageCategories.Top-SystemTitlePanel.Height;
+       SystemTitlePanel.Left:= 568;
+       SystemTitlePanel.Visible:= True;
+
+       LabelEmuTitle.Parent:= SystemTitlePanel;
+       LabelSystemType.Parent:= SystemTitlePanel;
+       LabelSystemNotAvailable.Parent:= SystemTitlePanel;
+
+       LabelSystemType.Top:= 0;
+       LabelSystemNotAvailable.Top:= 0;
+       LabelSystemNotAvailable.Left:= SystemTitlePanel.Width-LabelSystemNotAvailable.Width-32;
+
+       ButtonZippedImages.Left:= ButtonZippedImages.Left+Systems.CellSizes.Icon.Width;
+       ButtonOk.Left:= ButtonOk.Left+Systems.CellSizes.Icon.Width;
+       ButtonCancel.Left:= ButtonCancel.Left+Systems.CellSizes.Icon.Width;
 
        //LabelRelativePathsTip.Top:= LabelRelativePathsTip.Top-12;
        //LabelZippedFilesTip.Top:= LabelZippedFilesTip.Top-12;
@@ -256,7 +282,7 @@ begin
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
 
-  FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge, True);
+  FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
 
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(ImageCategory_Selector);
@@ -464,7 +490,7 @@ begin
      Exit;
 
   FormMain.ELV_FindSelectedSystemMulti(Systems, FormMain.SelectedEasyItem);
-  if FormMain.MenuImageViewMode.Tag = 0 then
+  if FormMain.IsSingleImageLayout then
      FormMain.ELV_SelectItem(ImageCategory_Selector, FormMain.ButtonImageCategory.Tag)
   else
      FormMain.ELV_SelectItem(ImageCategory_Selector, 1);

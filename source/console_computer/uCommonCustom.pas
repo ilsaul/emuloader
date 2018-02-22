@@ -202,7 +202,8 @@ function  SystemIsConsole(sysID: Integer): Boolean;
 function  SystemIsComputer(sysID: Integer): Boolean;
 function  SystemIsHandheld(sysID: Integer): Boolean;
 function  GetSystemTypeTitle(sysID: Integer; IsArcadeSystem: Boolean): String;
-//function  IsCustomSystemAvailable(const sysID: Integer): Boolean;
+
+function  ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil): String;
 procedure ELV_PopulateCustomSystems(ELV_Holder: TEasyListView; SelectSystemID: Integer = 0; ActionMode: ShortInt = -1; HideAllSystemsItem: Boolean = False);
 
 function  GetMiscSettingsFile: String;
@@ -414,6 +415,16 @@ end;
 //  //Result:= FormMain.ValidateFile(FormMain.GetCustomGamesFolder+SystemsListCustom[sysID, 2]);
 //end;
 
+function ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil): String;
+begin
+  Result:= SystemsListCustom[SelectedItem.ImageIndex, 0]; // .ImageIndex because there's only console/computer/handheld systems (from EmuCon)
+  if SystemType <> nil then
+     SystemType.Caption:= UpperCase(GetSystemTypeTitle(ELV_Holder.Tag, False));
+
+  if EmulatorTitle <> nil then
+     EmulatorTitle.Caption:= UpperCase(Result);
+end;
+
 procedure ELV_PopulateCustomSystems(ELV_Holder: TEasyListView; SelectSystemID: Integer = 0; ActionMode: ShortInt = -1; HideAllSystemsItem: Boolean = False);
 var
   Loop: Integer;
@@ -452,7 +463,7 @@ begin
   //  1 -> set visible available system ROMs foldes only (create games list)
   //  2 -> MRU list (last played games)
   //  3 -> Add/Remove Disc Games (only systems with disc / image support!) ... this is not used anymore!!!!
-  //  4 -> all systems, add sysID ImageIndex + 6 for game custom fonts dialog
+  //  4 -> game custom fonts dialog, all systems, add sysID ImageIndex + 6
 
   ELV_Holder.BeginUpdate;
   ELV_Holder.Items.ReIndexDisable:= True;
@@ -465,15 +476,20 @@ begin
            0: ShowSystem:= FormMain.IsSystemAvailable(Loop, True);
            1: ShowSystem:= CheckFolders(Loop);
            2: ShowSystem:= FormMain.ValidateFile(GetCustomGamePlayedFile(Loop));
-           //2: ShowSystem:= FormMain.IsSystemAvailable(Loop, True) and
-           //                FormMain.ValidateFile(GetCustomGamePlayedFile(Loop));
          end;
        end;
 
     selItem:= ELV_Holder.Items.Add; // this is the real system ID... (arcade/console/computer can have same tags)
 
     if ActionMode <> 4 then
-       selItem.ImageIndex:= Loop
+       begin
+         selItem.ImageIndex:= Loop;
+         //if AddSystemTypeLabel then
+         begin
+           selItem.Captions[1]:= '      '+LowerCase(GetSystemTypeTitle(Loop, False));
+           selItem.Details[1]:= 1;
+         end;
+       end
     else
        begin
          selItem.ImageIndex:= Loop+5; // to display correct system icons in game custom font screen

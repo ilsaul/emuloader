@@ -27,13 +27,12 @@ type
     LabelSystemTitle: TShadowLabel;
     PopupSoftList: TBcBarPopupMenu;
     PopupMoveSelectedToDestination: TMenuItem;
-    GamesListPanelCustomBackgroundColor: TPanel;
-    GamesListBackgroundColor: TColorBox;
-    ButtonGamesListFont: TBitBtn;
     PanelBottomSoftListAssignedToSystem: TPanelEx;
     LabelSoftListAssignedToSystem: TLabel;
     SoftListAssignedToSystem: TEasyListview;
     IL_MediaType: TImageList;
+    ButtonGamesListFont: TBitBtn;
+    GamesListBackgroundColor: TColorBox;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
@@ -68,6 +67,7 @@ type
       Sender: TCustomEasyListview; Column: TEasyColumn);
     procedure SoftListFilesNotAssignedColumnSizeChanged(
       Sender: TCustomEasyListview; Column: TEasyColumn);
+    procedure SplitterMoved(Sender: TObject);
   private
     { Private declarations }
     SystemsSoftList: array[1..MaxConsoleComputerSystems] of THashedStringList; // holds softlist names for each system
@@ -636,6 +636,8 @@ begin
        FormConsCompSystemsEditor.Left:= (Screen.Width-FormConsCompSystemsEditor.Width) div 2;
      end;
 
+  Splitter.OnMoved(Self);
+
   LoadCustomMAMEIconToForm(TForm(Sender));
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
 
@@ -892,6 +894,12 @@ procedure TFormConsCompSystemsEditor.SoftListFilesNotAssignedColumnSizeChanged(
 begin
   if SoftListAssignedToSystem.Header.Columns[Column.Index].Width <> Column.Width then
      SoftListAssignedToSystem.Header.Columns[Column.Index].Width:= Column.Width;
+end;
+
+procedure TFormConsCompSystemsEditor.SplitterMoved(Sender: TObject);
+begin
+  ButtonCancel.Left:= PanelButtons.Width-ButtonCancel.Width-8;
+  ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-6;
 end;
 
 end.

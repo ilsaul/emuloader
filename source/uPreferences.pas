@@ -34,7 +34,6 @@ type
     ButtonGamesList: TSpeedButton;
     ButtonImages: TSpeedButton;
     ButtonGameDocuments: TSpeedButton;
-    ButtonVideoPreview: TSpeedButton;
     ColumnsSettings: TAdvGroupBox;
     DisableCloneIndent: TAdvOfficeCheckBox;
     DisableDriverStatusIcons: TAdvOfficeCheckBox;
@@ -77,7 +76,6 @@ type
     ButtonUp: TBitBtn;
     ButtonDown: TBitBtn;
     ButtonResetAutoGameInfoOrder: TBitBtn;
-    Label1: TLabel;
     ShadowLabel3: TShadowLabel;
     AllowOnlyOneInstance: TAdvOfficeCheckBox;
     ShadowLabel4: TShadowLabel;
@@ -109,6 +107,11 @@ type
     DisableDeleteSelectedGames: TAdvOfficeCheckBox;
     LabelDisableDeleteSelectedGames: TLabel;
     IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox;
+    GameDocsDisplayModeTabs: TAdvOfficeRadioButton;
+    GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton;
+    LabelGameDocsDisplayMode: TShadowLabel;
+    LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
+    LabelGameDocsDisplayModeTabs: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -161,6 +164,7 @@ type
     procedure InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
     procedure InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
     procedure DisableDeleteSelectedGamesClick(Sender: TObject);
+    procedure GameDocsDisplayModeSinglePanelClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -586,6 +590,30 @@ begin
   FormMain.PopupDeleteSelectedGames.Enabled:= not DisableDeleteSelectedGames.Checked;
   FormMain.PopupExtraCopyMoveSelectedGames.Enabled:= FormMain.PopupDeleteSelectedGames.Enabled;
   FormMain.PopupDeleteSelectedGamesFromGamesList.Enabled:= FormMain.PopupDeleteSelectedGames.Enabled;
+end;
+
+procedure TFormPreferences.GameDocsDisplayModeSinglePanelClick(
+  Sender: TObject);
+begin
+  // LabelGameDocsDisplayMode.Tag
+  // 0 -> Single Panel
+  // 1 -> Tabbed Panels
+
+  if (TAdvOfficeRadioButton(Sender).Tag = LabelGameDocsDisplayMode.Tag) and (not FormMain.IsStartup) then
+     Exit;
+
+  FormMain.ButtonImagePanelToggle.Visible:= not GameDocsDisplayModeSinglePanel.Checked;
+  FormMain.ButtonDocsPanelToggle.Visible:= not GameDocsDisplayModeSinglePanel.Checked;
+
+  if FormMain.IsStartup then
+     Exit;
+
+  LabelGameDocsDisplayMode.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+
+  //if GameDocsDisplayModeSinglePanel.Checked then
+  //   begin
+  //     // perhaps reload images / game docs of selected game ????
+  //   end;
 end;
 
 end.

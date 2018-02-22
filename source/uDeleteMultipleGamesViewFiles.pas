@@ -173,7 +173,8 @@ begin
         extraStr:= '';
         if not eIsCustomGame then
         begin
-          if eMediaType = 0 then
+          //if eMediaType = 0 then
+          if not FormMain.IsMediaTypeCHD(eMediaType, False) then
              begin
                if eMerged then
                   extraStr:= 'Merged Set';
@@ -183,8 +184,8 @@ begin
                if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
                begin
                  case eFileType of
-                   13, 16, 19: extraStr:= 'Device';
-                   14, 17, 20: extraStr:= 'Bios';
+                   13, 16, 19, 22: extraStr:= 'Device';
+                   14, 17, 20, 23: extraStr:= 'Bios';
                  end;
                end;
 
@@ -258,17 +259,33 @@ begin
          if eMediaType <> -1 then
             begin
               // rom or CHD files
-              case eMediaType of
-                0: Result:= eMediaType;
-                1:
+              case FormMain.IsMediaTypeCHD(eMediaType, False) of
+                True:
                   begin
                     case eFileType of
                       12, 13, 14: Result:= eMediaType;
                       15, 16, 17: Result:= eMediaType+1;
                       18, 19, 20: Result:= eMediaType+2;
+                      21, 22, 23: Result:= 14; // this will need to be updated!!! (December 28, 2017)
                     end;
                   end;
+                False:
+                  begin
+                    Result:= eMediaType;
+                  end;
               end;
+
+              //case eMediaType of
+              //  0: Result:= eMediaType;
+              //  1:
+              //    begin
+              //      case eFileType of
+              //        12, 13, 14: Result:= eMediaType;
+              //        15, 16, 17: Result:= eMediaType+1;
+              //        18, 19, 20: Result:= eMediaType+2;
+              //      end;
+              //    end;
+              //end;
             end
          else
             Result:= eFileType+4; // game config files
@@ -306,6 +323,8 @@ begin
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
+
+  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType); // 14
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.AddGames(var GroupToFocus: TEasyGroup);
@@ -440,11 +459,13 @@ begin
              TViewFileInfo(addItem).eFileSizeText:= FormMain.GetSizeType(TViewFileInfo(addItem).eFileSize, False);
              TViewFileInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
              TViewFileInfo(addItem).eMerged:= False; // always false
-             if tmpMediaType = 0 then
+             //if tmpMediaType = 0 then
+             if not FormMain.IsMediaTypeCHD(tmpMediaType, False) then
                 TViewFileInfo(addItem).eMerged:= TViewGameInfoGroup(addGroup).eMerged; // only set this to true for .zip files!!!
              TViewFileInfo(addItem).eParentFile:= False; // always false, used by CHDs only
              HeaderVerCHD:= 0; // temp var to hold CHD header version...
-             if tmpMediaType = 1 then
+
+             if FormMain.IsMediaTypeCHD(tmpMediaType, False) then //if tmpMediaType = 1 then
                 begin
                   TViewFileInfo(addItem).eParentFile:= Boolean(IsParentCHD);
                   FormMain.CreateCHD_SHA1(tmpFileName, '', ChecksumCHD, HeaderVerCHD); // read version and SHA-1 from CHD's header

@@ -25,6 +25,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     Width = 6
     Height = 920
     ResizeStyle = rsUpdate
+    OnMoved = SplitterMoved
     Appearance.BorderColor = clNone
     Appearance.BorderColorHot = clNone
     Appearance.Color = clBtnFace
@@ -74,38 +75,6 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       BevelOuter = bvNone
       ParentColor = True
       TabOrder = 0
-      object GamesListPanelCustomBackgroundColor: TPanel
-        Left = 0
-        Top = 0
-        Width = 607
-        Height = 31
-        Align = alTop
-        BevelOuter = bvNone
-        ParentColor = True
-        TabOrder = 0
-        object GamesListBackgroundColor: TColorBox
-          Left = 224
-          Top = 4
-          Width = 225
-          Height = 22
-          Hint = 'Games list background color'
-          DefaultColorColor = clWhite
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          ItemHeight = 16
-          TabOrder = 0
-          OnSelect = GamesListBackgroundColorSelect
-        end
-        object ButtonGamesListFont: TBitBtn
-          Left = 180
-          Top = 4
-          Width = 43
-          Height = 22
-          Caption = 'Font'
-          TabOrder = 1
-          OnClick = ButtonGamesListFontClick
-        end
-      end
       object PanelBottomSoftListAssignedToSystem: TPanelEx
         Left = 0
         Top = 427
@@ -135,9 +104,9 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       end
       object SoftListAssignedToSystem: TEasyListview
         Left = 0
-        Top = 31
+        Top = 0
         Width = 607
-        Height = 396
+        Height = 427
         Align = alClient
         CellSizes.Report.Height = 22
         Color = clWhite
@@ -191,7 +160,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Selection.RoundRectRadius = 2
         Selection.TextColor = clBlack
         Selection.UseFocusRect = False
-        TabOrder = 2
+        TabOrder = 1
         View = elsReport
         OnColumnSizeChanged = SoftListAssignedToSystemColumnSizeChanged
         OnDblClick = SoftListAssignedToSystemDblClick
@@ -318,7 +287,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Style = vgSimple
       object ButtonOk: TBitBtn
         Tag = 1
-        Left = 8
+        Left = 414
         Top = 8
         Width = 89
         Height = 25
@@ -328,7 +297,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         TabOrder = 0
       end
       object ButtonCancel: TBitBtn
-        Left = 106
+        Left = 512
         Top = 8
         Width = 89
         Height = 25
@@ -336,6 +305,28 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Caption = 'Cancel'
         ModalResult = 2
         TabOrder = 1
+      end
+      object ButtonGamesListFont: TBitBtn
+        Left = 8
+        Top = 10
+        Width = 43
+        Height = 22
+        Caption = 'Font'
+        TabOrder = 2
+        OnClick = ButtonGamesListFontClick
+      end
+      object GamesListBackgroundColor: TColorBox
+        Left = 52
+        Top = 10
+        Width = 225
+        Height = 22
+        Hint = 'Games list background color'
+        DefaultColorColor = clWhite
+        Selected = clWhite
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+        ItemHeight = 16
+        TabOrder = 3
+        OnSelect = GamesListBackgroundColorSelect
       end
     end
   end

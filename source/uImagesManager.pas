@@ -21,14 +21,14 @@ type
     fCloneParent: String;
     fDriverName: String;
     fSoftwareName: String;
-    fSoftwareTitle: String;
+    fSoftwareTitle: WideString;
     fDriverStatus: ShortInt;
     fEmulationStatus: ShortInt;
     fColorStatus: ShortInt;
     fSoundStatus: ShortInt;
     fGraphicStatus: ShortInt;
     fIsFavorite: Boolean;
-    fGameStatus: ShortInt; // 0 - have or miss; 1 - missing ROMs/CHDs
+    fGameStatus: ShortInt; // 0 - have; 1 - missing ROMs/CHDs; 2 - miss
     fFoundImageMissingGame: String;
   protected
     function GetCaptions(Column: Integer): WideString; override;
@@ -45,7 +45,7 @@ type
     property eCloneParent: String read fCloneParent write fCloneParent;
     property eDriverName: String read fDriverName write fDriverName;
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
-    property eSoftwareTitle: String read fSoftwareTitle write fSoftwareTitle;
+    property eSoftwareTitle: WideString read fSoftwareTitle write fSoftwareTitle;
     property eDriverStatus: ShortInt read fDriverStatus write fDriverStatus;
     property eEmulationStatus: ShortInt read fEmulationStatus write fEmulationStatus;
     property eColorStatus: ShortInt read fColorStatus write fColorStatus;
@@ -442,7 +442,7 @@ begin
      Exit;
   if TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame = '' then
      Exit;
-  if not FileExists(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame) then
+  if not FileExistsW(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame) then
      Exit;
 
   iType:= FormMain.LoadPreviewImage(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame, SnapPreview);
@@ -1290,8 +1290,8 @@ var
   end;
 
 begin
-  if ImageName ='D:\EmuLoader\snap\a2600\a2600 - Copy.png' then
-     beep;
+  //if ImageName ='D:\EmuLoader\snap\a2600\a2600 - Copy.png' then
+  //   beep;
   IconSize:= IL_NotUsedImages.Width;
   //ImageToLoad:= TBitmap32.Create;
   //ImageToLoad.Clear;
@@ -1562,8 +1562,8 @@ begin
      Exit;
 
   RunGame:= True;
-  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME, False,
-                                                                      TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
+  FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME, -1, False,
+                        TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
   if Assigned(FormImageFoundMissingGame) then
      FormImageFoundMissingGame.Hide;
   if GameEasy <> nil then
@@ -1716,7 +1716,7 @@ begin
 
   Item:= MissingImagesList.Groups.FirstItem;
   repeat
-    ListOutput.Add(Format('%-16s %-16s %s', [TMissingImageInfo(Item).eName, TMissingImageInfo(Item).eClone, TMissingImageInfo(Item).eTitle]));
+    ListOutput.Add(Format('%-16s %-16s ', [TMissingImageInfo(Item).eName, TMissingImageInfo(Item).eClone])+FormMain.EncodeUnicodeStr(TMissingImageInfo(Item).eTitle));
     Item:= MissingImagesList.Groups.NextItem(Item);
   until Item = nil;
   ListOutput.EndUpdate;

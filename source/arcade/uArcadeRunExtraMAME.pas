@@ -101,14 +101,26 @@ type
     PopupMemoryCardAssignToSlot1: TMenuItem;
     PopupMemoryCardAssignToSlot2: TMenuItem;
     N1: TMenuItem;
-    LabelMemoryCardSelectedFileFolder: TShadowLabel;
-    MemoryCardListViewFileFolderFrame: TShape;
-    MemoryCardListView: TEasyListview;
     AutoSaveState: TAdvOfficeCheckBox;
     PanelDisabledSaveStateNotSupportedMsg: TPanel;
     ButtonInputResetFileNameTitle: TBitBtn;
     LabelRecordMovieFileName: TLabel;
     LabelRecordMovieRootFolder: TShadowLabel;
+    MemoryCardFileFolderPanel: TPanelEx;
+    MemoryCardListView: TEasyListview;
+    LabelMemoryCardSelectedFileFolder: TShadowLabel;
+    LabelInsertMemoryCard_Slot3: TLabel;
+    LabelInsertMemoryCard_Slot4: TLabel;
+    InsertMemoryCard_Slot3: TEdit;
+    InsertMemoryCard_Slot4: TEdit;
+    ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtn;
+    ButtonInsertMemoryCard_Slot3_Clear: TBitBtn;
+    ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtn;
+    ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtn;
+    ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtn;
+    ButtonInsertMemoryCard_Slot4_Clear: TBitBtn;
+    PopupMemoryCardAssignToSlot3: TMenuItem;
+    PopupMemoryCardAssignToSlot4: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure InputPlaybackClick(Sender: TObject);
@@ -199,6 +211,18 @@ type
     procedure ButtonRecordMovieResetFileNameClick(Sender: TObject);
     procedure RecordMovieFileNameChange(Sender: TObject);
     procedure RecordMovieFileNameKeyPress(Sender: TObject; var Key: Char);
+    procedure InsertMemoryCard_Slot3KeyPress(Sender: TObject;
+      var Key: Char);
+    procedure InsertMemoryCard_Slot4KeyPress(Sender: TObject;
+      var Key: Char);
+    procedure ButtonInsertMemoryCard_Slot3_SelectFileClick(
+      Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot4_SelectFileClick(
+      Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot3_LastUsedClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot4_LastUsedClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot3_ClearClick(Sender: TObject);
+    procedure ButtonInsertMemoryCard_Slot4_ClearClick(Sender: TObject);
   private
     { Private declarations }
     FolderInput, FolderState, FolderMemoryCard, FolderRecordMovie: String;
@@ -207,6 +231,8 @@ type
     InputExitEmuAfterPlay_LastChecked, InputRecTimeCodeFile_LastChecked, SaveStateAuto_LastChecked: Boolean;
     SoftwareListFolder, MachineNameFolder: String;
     MemCardLastUsed_MachineName: String;
+    MemCardFileExtFilter: String;
+    MemCardFileExtArray: array of String;
     ActiveFileID: Integer; // what set type is this (gamename, clone, bios)
     FoundInputExtra: Boolean; // sets to FALSE is settings "record_timecode" and "exit_after_playback" do not exist in mame.ini
     procedure GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
@@ -232,13 +258,15 @@ type
     function  MountCommandLine: Boolean;
     procedure ResizeForm;
     procedure SetBottomButtons(IsEnabled: Boolean);
+    function  CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
   public
     { Public declarations }
     MachineNameToRun, CommandLine, EmulatorFileName: String;
     IsMultiSlotGame: Boolean;
   end;
 
-const RecordMovieSubDir: String = 'record_video\';
+const
+  RecordMovieSubDir: String = 'record_video\';
 var
   FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME;
 
@@ -251,15 +279,6 @@ uses uMain;
 function TFileInfo.GetCaptions(Column: Integer): WideString;
 begin
   case Column of
-    //0:
-    //  begin
-    //    // need to show msx1_cart\gamename.inp
-    //    // need to show msx1_cart\gamename\anyfilename.inp
-    //    case eIsGameSubFolder of
-    //      True : Result:= FormMain.MemGameInfo.eName+'\'+eFileName;
-    //      False: Result:= eFileName;
-    //    end;
-    //  end;
     0: Result:= eFileName;
     1: Result:= eSizeText;
     2: Result:= eDateTimeText;
@@ -317,7 +336,7 @@ procedure TFormArcadeRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameName
     ELV_Holder.EndUpdate;
     if ELV_Holder.Scrollbars.VertBarVisible then
        begin
-         ELV_Holder.Header.Columns[0].Width:= ELV_Holder.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);//16;
+         ELV_Holder.Header.Columns[0].Width:= ELV_Holder.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
          ELV_Holder.Sort.SortAll;
        end;
   end;
@@ -386,8 +405,8 @@ begin
     32: // memory card
       begin
         iFolder:= FolderMemoryCard;
-        iFileMask:= '*.mc';
-        iFileExtension:= '.mc';
+        iFileMask:= '*.*'; // '*.mc';
+        iFileExtension:= '.*';//'.mc';
       end;
   end;
   if iFolder = '' then
@@ -406,29 +425,58 @@ begin
      iFolder:= iFolder+MachineNameFolder; // "inp_dir\arcade_gamename.inp" (arcade game)
   // EL will not allow softlist games to be in the "inp_dir\expert11\" folder because you might run a MSX1 game with a MSX2 machine
   // this is for arcade games only
-  // "memcard\psu\gamefile.mc" -> for PlayStation non-arcade memory cards (software lists)
-  if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension) then
+  // "memcard\psu\gamefile.*" -> for PlayStation non-arcade memory cards (software lists)
+
+  case FeatureIndex of
+    32:
+      begin
+        GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\gamename.*"...
+        GetFilesMulti(iFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\game_title.*"...
+      end;
+    23, 24, 25:
+      begin
+        if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension) then
+           AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
+
+        if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+           AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
+
+        //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input // will not allow "mame_inpdir\expert11\gooniesb.inp" file!!!!!
+        //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // save state // MAME doesn't support this, files must be in "\gamename\" subfolder!!!!!
+      end;
+  end;
+  
+  if FeatureIndex = 32 then
      begin
-       case FeatureIndex of
-         //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input // will not allow "mame_inpdir\expert11\gooniesb.inp" file!!!!!
-         //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // save state // MAME doesn't support this, files must be in "\gamename\" subfolder!!!!!
-         23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
-         32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // memory card
-       end;
-     end;
-  if FeatureIndex in [23, 24, 25, 32] then // [20, 21, 23, 24, 25, 32] then
+       GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\gamename.*"...
+       GetFilesMulti(iFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\game_title.*"...
+     end
+  else
   begin
-    if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+    if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension) then
        begin
          case FeatureIndex of
-           //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "inputdir\gametitle.inp"; "inputdir\expert11\gametitle.inp"
-           23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
-           32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "memcard\psu\gametitle.mc"
+           //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input // will not allow "mame_inpdir\expert11\gooniesb.inp" file!!!!!
+           //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // save state // MAME doesn't support this, files must be in "\gamename\" subfolder!!!!!
+           23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
+           // no longer used! 32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // memory card
          end;
        end;
+    if FeatureIndex in [23, 24, 25] then //, 32] then // [20, 21, 23, 24, 25, 32] then
+    begin
+      if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+         begin
+           case FeatureIndex of
+             //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "inputdir\gametitle.inp"; "inputdir\expert11\gametitle.inp"
+             23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
+             // no longer used! 32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder, False); // for "memcard\psu\gametitle.mc"
+           end;
+         end;
+    end;
   end;
 
-  if FeatureIndex = 32 then
+  // no longer required....
+  {if FeatureIndex = 32 then
   begin
     // memory cards
     if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension+'1') then
@@ -442,48 +490,49 @@ begin
        AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'1', iFolder, False); // for "memcard\psu\gametitle.mc1"
     if FileExists(iFolder+FormMain.MemGameInfo.eTitle+iFileExtension+'2') then
        AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'2', iFolder, False); // for "memcard\psu\gametitle.mc2"
-  end;
+  end;}
 
   if SoftwareListFolder <> '' then
      begin
        // "inp_dir\expert11\msx1_cart\gooniesb.inp"
        // "sta_dir\expert11\msx1_cart\gooniesb\gooniesb.sta"
 
-       // "memcard_dir\machine_name\softlist_name\memcard-filename.mc
-       //
-       // "memcard_dir\psu\psx\wildarms.mc"
-       // "memcard_dir\psu\psx\wildarms.mc1"
-       // "memcard_dir\psu\psx\wildarms.mc2"
-       // "memcard_dir\psu\psx\wildarms\wildarms.mc"
-       // "memcard_dir\psu\psx\wildarms\wildarms.mc1"
-       // "memcard_dir\psu\psx\wildarms\wildarms.mc2"
-       // "memcard_dir\psu\psx\Wild Arms (USA).mc" -> game title
-       // "memcard_dir\psu\psx\Wild Arms (USA).mc1" -> game title
-       // "memcard_dir\psu\psx\Wild Arms (USA).mc2" -> game title
-       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc" -> game title
-       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc1" -> game title
-       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).mc2" -> game title
-       if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension) then
-          begin
-            case FeatureIndex of
-              20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // input "inpdir\expert11\msx1_cart\gooniesb.inp"
-              23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // record movie (.avi; .wav; .mng)
-              //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // save state .... MAME doesn't support this! August 25, 2016
-            end;
-          end;
-       if FeatureIndex in [20, 21, 23, 24, 25, 32] then
+       // "memcard_dir\machine_name\softlist_name\memcard-filename.*
+       
+       // "memcard_dir\psu\psx\wildarms.*" -> game name
+       // "memcard_dir\psu\psx\Wild Arms (USA).*" -> game title
+       // "memcard_dir\psu\psx\wildarms\wildarms.*" -> gam name
+       // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).*" -> game title
+       if FeatureIndex = 32 then
        begin
-         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+         GetFilesMulti(iFolder+SoftwareListFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\psx\gamename.*"...
+         GetFilesMulti(iFolder+SoftwareListFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\psx\game_title.*"...
+       end
+       else
+       begin
+         if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension) then
             begin
               case FeatureIndex of
-                20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "inputdir\expert11\msx1_cart\gametitle.inp"
-                23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // record movie (.avi; .wav; .mng)
-                32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "memcard\psu\psx\gametitle.mc"
+                20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // input "inpdir\expert11\msx1_cart\gooniesb.inp"
+                23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // record movie (.avi; .wav; .mng)
+                //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder+SoftwareListFolder, False); // save state .... MAME doesn't support this! August 25, 2016
               end;
             end;
+         if FeatureIndex in [20, 21, 23, 24, 25] then //, 32] then
+         begin
+           if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eTitle+iFileExtension) then
+              begin
+                case FeatureIndex of
+                  20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "inputdir\expert11\msx1_cart\gametitle.inp"
+                  23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // record movie (.avi; .wav; .mng)
+                  // no longer used! 32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension, iFolder+SoftwareListFolder, False); // "memcard\psu\psx\gametitle.mc"
+                end;
+              end;
+         end;
        end;
 
-       if FeatureIndex = 32 then
+       // no longer required!!!
+       {if FeatureIndex = 32 then
        begin
          // memory cards
          if FileExists(iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+iFileExtension+'1') then
@@ -499,7 +548,8 @@ begin
             AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eTitle+iFileExtension+'2', iFolder+SoftwareListFolder, False); // for gametitle.mc2
 
          GetFilesMulti(iFolder+FormMain.MemGameInfo.eName+'\', iFileMask+'*'); // for "memcard\psu\gamename\*.mc*"...
-       end;
+
+       end;}
        case FeatureIndex of
          20, 21, 32: iFolder:= iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
          23, 24, 25: iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
@@ -509,9 +559,10 @@ begin
      iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\gamename\multi_filenames.inp" (arcade game)
 
   if FeatureIndex = 32 then
-     GetFilesMulti(iFolder, iFileMask+'*') // for "memcard\gamename\*.mc*"... or "memcard\psu\psx\gamename\*.mc*" (for softlists)
+     GetFilesMulti(iFolder, iFileMask) // for "memcard\gamename\*.*"... or "memcard\psu\psx\gamename\*.*" (for softlists)
+     //GetFilesMulti(iFolder, iFileMask+'*') // for "memcard\gamename\*.mc*"... or "memcard\psu\psx\gamename\*.mc*" (for softlists)
   else
-     GetFilesMulti(iFolder, iFileMask);
+     GetFilesMulti(iFolder, iFileMask); // input, save state, record movie must be in a "\gamename\" sub-folder... ?!
 
   case FeatureIndex of
     20, 21: ELV_EndAdd(InputListView); // input
@@ -754,10 +805,11 @@ end;
 procedure TFormArcadeRunGameExtraMAME.CheckMemoryCardSupport;
 var
   MemCardSlots: TStringList;
-  sectionStr, MemCardLastUsed_MachineName: String;
-  Loop: Integer;
+  sectionStr, MemCardLastUsed_MachineName, FileExtStr: String;
+  Loop, iTop, iHeight: Integer;
   MemcardFile: TMemIniFile;
 begin
+  MemCardFileExtFilter:= '';
   if (FormMain.MemGameInfo.eSoftwareName <> '') and (MachineNameToRun = '') then
      begin
        DisablePage(2); //InsertMemoryCard_Box);
@@ -797,11 +849,41 @@ begin
      end
   else
      begin
-       for Loop:=0 to MemCardSlots.Count-1 do
+       MemCardFileExtFilter:= MemCardSlots[0];
+       Loop:= PosEx(';', MemCardFileExtFilter); // first "  ;  " char in the string
+       if Loop = 0 then
+          begin
+            //SetLength(MemCardFileExtArray, 1);
+            //MemCardFileExtArray[1]:= '.'+MemCardFileExtFilter;
+            MemCardFileExtFilter:= '*.'+MemCardFileExtFilter+'?';
+            //MemCardFileExtFilter:= '('+MemCardFileExtFilter+')|'+MemCardFileExtFilter;
+          end
+       else
+          begin
+
+
+            MemCardFileExtfilter:= StringReplace(MemCardFileExtFilter, ';', '?;*.', [rfReplaceAll]);
+            MemCardFileExtfilter:= '*.'+MemCardFileExtfilter+'?'
+          end;
+       MemCardFileExtFilter:= 'Memory Card Files ('+MemCardFileExtFilter+')|'+MemCardFileExtFilter+'|All Files (*.*)|*.*';
+
+       Loop:= MemCardSlots.Count-1; // -1 because the first entry is the file extension (can be multiple extensions)
+       if Loop < 4 then
+          begin
+            case Loop of
+              1: iTop:= 53;
+              2: iTop:= 80;
+              3: iTop:= 105;
+            end;
+            iHeight:= MemoryCardFileFolderPanel.Top-iTop;
+            MemoryCardFileFolderPanel.Top:= iTop;
+            MemoryCardFileFolderPanel.Height:= MemoryCardFileFolderPanel.Height+iHeight;
+          end;
+       for Loop:=1 to MemCardSlots.Count-1 do
        begin
          case Loop of
-           0: LabelInsertMemoryCard_Slot1.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
-           1:
+           1: LabelInsertMemoryCard_Slot1.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
+           2:
              begin
                LabelInsertMemoryCard_Slot2.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
                LabelInsertMemoryCard_Slot2.Enabled:= LabelInsertMemoryCard_Slot2.Hint <> '';
@@ -809,6 +891,24 @@ begin
                ButtonInsertMemoryCard_Slot2_SelectFile.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
                ButtonInsertMemoryCard_Slot2_LastUsed.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
                ButtonInsertMemoryCard_Slot2_Clear.Enabled:= LabelInsertMemoryCard_Slot2.Enabled;
+             end;
+           3:
+             begin
+               LabelInsertMemoryCard_Slot3.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
+               LabelInsertMemoryCard_Slot3.Enabled:= LabelInsertMemoryCard_Slot3.Hint <> '';
+               InsertMemoryCard_Slot3.Enabled:= LabelInsertMemoryCard_Slot3.Enabled;
+               ButtonInsertMemoryCard_Slot3_SelectFile.Enabled:= LabelInsertMemoryCard_Slot3.Enabled;
+               ButtonInsertMemoryCard_Slot3_LastUsed.Enabled:= LabelInsertMemoryCard_Slot3.Enabled;
+               ButtonInsertMemoryCard_Slot3_Clear.Enabled:= LabelInsertMemoryCard_Slot3.Enabled;
+             end;
+           4:
+             begin
+               LabelInsertMemoryCard_Slot4.Hint:= MemCardSlots[Loop]; // get MAME's parameter string for the selected machine
+               LabelInsertMemoryCard_Slot4.Enabled:= LabelInsertMemoryCard_Slot4.Hint <> '';
+               InsertMemoryCard_Slot4.Enabled:= LabelInsertMemoryCard_Slot4.Enabled;
+               ButtonInsertMemoryCard_Slot4_SelectFile.Enabled:= LabelInsertMemoryCard_Slot4.Enabled;
+               ButtonInsertMemoryCard_Slot4_LastUsed.Enabled:= LabelInsertMemoryCard_Slot4.Enabled;
+               ButtonInsertMemoryCard_Slot4_Clear.Enabled:= LabelInsertMemoryCard_Slot4.Enabled;
              end;
          end;
        end;
@@ -820,8 +920,12 @@ begin
          FreeAndNil(MemCardFile);
          InsertMemoryCard_Slot1.Hint:= MemcardSlots.Values['slot1'];
          InsertMemoryCard_Slot2.Hint:= MemcardSlots.Values['slot2'];
+         InsertMemoryCard_Slot3.Hint:= MemcardSlots.Values['slot3'];
+         InsertMemoryCard_Slot4.Hint:= MemcardSlots.Values['slot4'];
          InsertMemoryCard_Slot1.Text:= InsertMemoryCard_Slot1.Hint;
          InsertMemoryCard_Slot2.Text:= InsertMemoryCard_Slot2.Hint;
+         InsertMemoryCard_Slot3.Text:= InsertMemoryCard_Slot3.Hint;
+         InsertMemoryCard_Slot4.Text:= InsertMemoryCard_Slot4.Hint;
        end;
      end;
   FreeAndNil(MemcardSlots);
@@ -834,7 +938,8 @@ var
 begin
   if not Enabled_InsertMemoryCard.Checked then
      Exit;
-  if (InsertMemoryCard_Slot1.Text = '') and (InsertMemoryCard_Slot2.Text = '') then
+  if (InsertMemoryCard_Slot1.Text = '') and (InsertMemoryCard_Slot2.Text = '') and
+     (InsertMemoryCard_Slot3.Text = '') and (InsertMemoryCard_Slot4.Text = '') then
      Exit;
 
   mFolder:= FormMain.GetMemcardLastUsedFile(FormMain.MemGameInfo.eSystemID, MemCardLastUsed_MachineName);
@@ -845,6 +950,10 @@ begin
   MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot1', InsertMemoryCard_Slot1.Text);
   if InsertMemoryCard_Slot2.Enabled then
      MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot2', InsertMemoryCard_Slot2.Text);
+  if InsertMemoryCard_Slot3.Enabled then
+     MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot3', InsertMemoryCard_Slot3.Text);
+  if InsertMemoryCard_Slot4.Enabled then
+     MemCardLastUsed.WriteString(FormMain.MemGameInfo.eName, 'slot4', InsertMemoryCard_Slot4.Text);
   MemCardLastUsed.UpdateFile;
   FreeAndNil(MemCardLastUsed);
 end;
@@ -1336,6 +1445,8 @@ begin
   case SlotID of
     1: InsertMemoryCard_Slot1.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
     2: InsertMemoryCard_Slot2.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+    3: InsertMemoryCard_Slot3.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
+    4: InsertMemoryCard_Slot4.Text:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
   end;
 end;
 
@@ -1485,6 +1596,18 @@ begin
       if RecFileName <> '' then
          tmpCmd:= tmpCmd+' -'+LabelInsertMemoryCard_Slot2.Hint+' "'+RecFileName+'"';
     end;
+    if InsertMemoryCard_Slot3.Enabled then
+    begin
+      RecFileName:= InsertMemoryCard_Slot3.Text;
+      if RecFileName <> '' then
+         tmpCmd:= tmpCmd+' -'+LabelInsertMemoryCard_Slot3.Hint+' "'+RecFileName+'"';
+    end;
+    if InsertMemoryCard_Slot4.Enabled then
+    begin
+      RecFileName:= InsertMemoryCard_Slot4.Text;
+      if RecFileName <> '' then
+         tmpCmd:= tmpCmd+' -'+LabelInsertMemoryCard_Slot4.Hint+' "'+RecFileName+'"';
+    end;
 
     if tmpCmd <> '' then
        CommandLine:= CommandLine+tmpCmd;
@@ -1525,7 +1648,6 @@ begin
          AddParam:= True;
          RelativePathStr:= FolderRecordMovie+FormMain.MemGameInfo.eName+'\'+RecFileName;
        end;
-
 
     if AddParam then
     begin
@@ -1614,14 +1736,16 @@ begin
   LabelLoadSaveStateNotSupportedMsg.Left:= LabelLoadSaveStateNotSupportedMsg.Left-iWidthDec;
 
   // insert memory card
-  MemoryCardListView.Width:= MemoryCardListView.Width-iWidthDec;
-  MemoryCardListView.Height:= MemoryCardListView.Height-iHeight;
+  MemoryCardFileFolderPanel.Width:= MemoryCardFileFolderPanel.Width-iWidthDec;
+  MemoryCardFileFolderPanel.Height:= MemoryCardFileFolderPanel.Width-iHeight;
+  //MemoryCardListView.Width:= MemoryCardListView.Width-iWidthDec;
+  //MemoryCardListView.Height:= MemoryCardListView.Height-iHeight;
 
-  MemoryCardListViewFileFolderFrame.Top:= MemoryCardListViewFileFolderFrame.Top-iHeight;
-  MemoryCardListViewFileFolderFrame.Width:= MemoryCardListViewFileFolderFrame.Width-iWidthDec;
+  //MemoryCardListViewFileFolderFrame.Top:= MemoryCardListViewFileFolderFrame.Top-iHeight;
+  //MemoryCardListViewFileFolderFrame.Width:= MemoryCardListViewFileFolderFrame.Width-iWidthDec;
 
-  LabelMemoryCardSelectedFileFolder.Top:= LabelMemoryCardSelectedFileFolder.Top-iHeight;
-  LabelMemoryCardSelectedFileFolder.Width:= LabelMemoryCardSelectedFileFolder.Width-iWidthDec;
+  //LabelMemoryCardSelectedFileFolder.Top:= LabelMemoryCardSelectedFileFolder.Top-iHeight;
+  //LabelMemoryCardSelectedFileFolder.Width:= LabelMemoryCardSelectedFileFolder.Width-iWidthDec;
 
   InsertMemoryCard_Slot1.Width:= InsertMemoryCard_Slot1.Width-iWidthDec;
   ButtonInsertMemoryCard_Slot1_SelectFile.Left:= ButtonInsertMemoryCard_Slot1_SelectFile.Left-iWidthDec;
@@ -1632,6 +1756,16 @@ begin
   ButtonInsertMemoryCard_Slot2_SelectFile.Left:= ButtonInsertMemoryCard_Slot2_SelectFile.Left-iWidthDec;
   ButtonInsertMemoryCard_Slot2_LastUsed.Left:= ButtonInsertMemoryCard_Slot2_LastUsed.Left-iWidthDec;
   ButtonInsertMemoryCard_Slot2_Clear.Left:= ButtonInsertMemoryCard_Slot2_Clear.Left-iWidthDec;
+
+  InsertMemoryCard_Slot3.Width:= InsertMemoryCard_Slot3.Width-iWidthDec;
+  ButtonInsertMemoryCard_Slot3_SelectFile.Left:= ButtonInsertMemoryCard_Slot3_SelectFile.Left-iWidthDec;
+  ButtonInsertMemoryCard_Slot3_LastUsed.Left:= ButtonInsertMemoryCard_Slot3_LastUsed.Left-iWidthDec;
+  ButtonInsertMemoryCard_Slot3_Clear.Left:= ButtonInsertMemoryCard_Slot3_Clear.Left-iWidthDec;
+
+  InsertMemoryCard_Slot4.Width:= InsertMemoryCard_Slot4.Width-iWidthDec;
+  ButtonInsertMemoryCard_Slot4_SelectFile.Left:= ButtonInsertMemoryCard_Slot4_SelectFile.Left-iWidthDec;
+  ButtonInsertMemoryCard_Slot4_LastUsed.Left:= ButtonInsertMemoryCard_Slot4_LastUsed.Left-iWidthDec;
+  ButtonInsertMemoryCard_Slot4_Clear.Left:= ButtonInsertMemoryCard_Slot4_Clear.Left-iWidthDec;
 
   // record movie
   RecordMovieListView.Width:= RecordMovieListView.Width-iWidthDec;
@@ -1875,6 +2009,18 @@ begin
   InsertMemoryCard_Slot2.Text:= InsertMemoryCard_Slot2.Hint;
 end;
 
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot3_LastUsedClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot3.Text:= InsertMemoryCard_Slot3.Hint;
+end;
+
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot4_LastUsedClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot4.Text:= InsertMemoryCard_Slot4.Hint;
+end;
+
 procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot1_ClearClick(
   Sender: TObject);
 begin
@@ -1885,6 +2031,18 @@ procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot2_ClearClick(
   Sender: TObject);
 begin
   InsertMemoryCard_Slot2.Text:= '';
+end;
+
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot3_ClearClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot3.Text:= '';
+end;
+
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot4_ClearClick(
+  Sender: TObject);
+begin
+  InsertMemoryCard_Slot4.Text:= '';
 end;
 
 procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
@@ -2423,7 +2581,7 @@ procedure TFormArcadeRunGameExtraMAME.MemoryCardListViewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       LabelMemoryCardSelectedFileFolder.Caption:= TFileInfo(MemoryCardListView.Selection.First).eFileFolder;
+       LabelMemoryCardSelectedFileFolder.Caption:= ' '+TFileInfo(MemoryCardListView.Selection.First).eFileFolder;
      end;
 end;
 
@@ -2438,6 +2596,8 @@ procedure TFormArcadeRunGameExtraMAME.PopupELVPopup(Sender: TObject);
 begin
   PopupMemoryCardAssignToSlot1.Visible:= PopupELV.PopupComponent = MemoryCardListView;
   PopupMemoryCardAssignToSlot2.Visible:= (PopupMemoryCardAssignToSlot1.Visible) and (InsertMemoryCard_Slot2.Enabled);
+  PopupMemoryCardAssignToSlot3.Visible:= (PopupMemoryCardAssignToSlot3.Visible) and (InsertMemoryCard_Slot3.Enabled);
+  PopupMemoryCardAssignToSlot4.Visible:= (PopupMemoryCardAssignToSlot4.Visible) and (InsertMemoryCard_Slot4.Enabled);
   PopupInputRenameFile.Enabled:= FormMain.CheckTotal(PopupELV.PopupComponent as TEasyListView);
   PopupInputDeleteFile.Enabled:= PopupInputRenameFile.Enabled;
 end;
@@ -2528,22 +2688,55 @@ begin
   AddMemoryCardToSlot(TMenuItem(Sender).Tag);
 end;
 
+function TFormArcadeRunGameExtraMAME.CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
+begin
+  Result:= iKey in ['/', '*', '?', '<', '>', '|', ';', '"'];
+end;
+
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot1KeyPress(
   Sender: TObject; var Key: Char);
 begin
   // there can't be surround quotes...
-  if Key in ['/', '*', '?', '<', '>', '|', ';', '"'] then
+  if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
        Exit;
      end;
+
+  //if Key in ['/', '*', '?', '<', '>', '|', ';', '"'] then
+  //   begin
+  //     Key:= Char(0);
+  //     Exit;
+  //   end;
 end;
 
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot2KeyPress(
   Sender: TObject; var Key: Char);
 begin
   // there can't be surround quotes...
-  if Key in ['/', '*', '?', '<', '>', '|', ';', '"'] then
+  if CheckInvalidEditBoxKeyPress(Key) then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+end;
+
+procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot3KeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  // there can't be surround quotes...
+  if CheckInvalidEditBoxKeyPress(Key) then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+end;
+
+procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot4KeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  // there can't be surround quotes...
+  if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
        Exit;
@@ -2553,13 +2746,25 @@ end;
 procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot1_SelectFileClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 1', InsertMemoryCard_Slot1, False, True, FolderMemoryCard);
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 1', InsertMemoryCard_Slot1, False, True, FolderMemoryCard, MemCardFileExtFilter);
 end;
 
 procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot2_SelectFileClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 2', InsertMemoryCard_Slot2, False, True, FolderMemoryCard);
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 2', InsertMemoryCard_Slot2, False, True, FolderMemoryCard, MemCardFileExtFilter);
+end;
+
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot3_SelectFileClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 3', InsertMemoryCard_Slot3, False, True, FolderMemoryCard, MemCardFileExtFilter);
+end;
+
+procedure TFormArcadeRunGameExtraMAME.ButtonInsertMemoryCard_Slot4_SelectFileClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(22, 'Select a memory card file for SLOT 4', InsertMemoryCard_Slot4, False, True, FolderMemoryCard, MemCardFileExtFilter);
 end;
 
 procedure TFormArcadeRunGameExtraMAME.RecordMovieAVIClick(Sender: TObject);

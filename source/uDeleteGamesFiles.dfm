@@ -490,7 +490,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
       Left = 430
       Top = 20
-      Width = 142
+      Width = 99
       Height = 20
       Hint = 
         'Check this option to ovewrite existing files in the destination ' +
@@ -498,7 +498,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShowHint = True
       TabOrder = 1
       Alignment = taLeftJustify
-      Caption = 'Overwrite Existing Files'
+      Caption = 'Overwrite Files'
       ReturnIsTab = False
       Themed = True
     end
@@ -513,6 +513,23 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShowHint = True
       TabOrder = 2
       OnClick = ButtonSelectROMsFolderClick
+    end
+    object CopyMoveAddSystemFolder: TAdvOfficeCheckBox
+      Left = 534
+      Top = 20
+      Width = 121
+      Height = 20
+      Hint = 
+        'Use this option to include a "system name" sub-folder in the des' +
+        'tination path'
+      Checked = True
+      ShowHint = True
+      TabOrder = 3
+      Alignment = taLeftJustify
+      Caption = 'Add System Folder'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
     end
   end
   object IL_MediaType: TImageList

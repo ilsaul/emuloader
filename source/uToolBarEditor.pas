@@ -17,6 +17,8 @@ type
     ButtonDefault: TBitBtn;
     ButtonClose: TBitBtn;
     SmallToolBar: TAdvOfficeCheckBox;
+    GamesSearchBar: TAdvOfficeCheckBox;
+    GamesSearchBarIcon: TImage;
     procedure ButtonDefaultClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ToolBarListViewItemPaintText(Sender: TCustomEasyListview;
@@ -27,6 +29,7 @@ type
     procedure BoundToGamesPanelClick(Sender: TObject);
     procedure ShowHideToolBarClick(Sender: TObject);
     procedure SmallToolBarClick(Sender: TObject);
+    procedure GamesSearchBarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -85,20 +88,13 @@ procedure TFormToolBarEditor.ToolBarListViewItemCheckChange(
   end;
 
 begin
-  if Item = nil then
-     Exit;
-
-  if Item.Index < FormMain.ToolBarButtons.ButtonCount then
+  if Item <> nil then
      begin
        FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
        SetGhostItem;
-     end
-  else
-     begin
-       if Item.Checked <> FormMain.ToolBarFilterTitle.Visible then
-          FormMain.ToolBarFilterTitle.Visible:= Item.Checked;
-       SetGhostItem;
      end;
+  FormMain.ToolBarButtons.Repaint;
+  //FormMain.PaintToolBarTheme(FormMain.ToolBarButtons, FormMain.MenuBoundToGamesPanel.Checked);
 end;
 
 procedure TFormToolBarEditor.FormShow(Sender: TObject);
@@ -107,6 +103,8 @@ var
   iPos: Integer;
   iTitle, iDetail: String;
 begin
+  FormMain.LoadIconIntoImage('filter_text', GamesSearchBarIcon);
+  GamesSearchBar.Checked:= FormMain.ToolBarFilterTitle.Visible;
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
@@ -135,7 +133,7 @@ begin
       //Details[1]:= 1;
     end;
   end;
-  with ToolBarListView.Items.Add do
+  {with ToolBarListView.Items.Add do
   begin
     ImageIndex:= FormMain.ToolBarButtons.ButtonCount;
     Caption:= 'Search Bar';
@@ -145,7 +143,7 @@ begin
 
     //Captions[1]:= 'Arcade';
     //Details[1]:= 1;
-  end;
+  end;}
 
   ToolBarListView.EndUpdate;
   FormMain.ELV_SelectItem(ToolBarListView, 0);
@@ -171,6 +169,12 @@ procedure TFormToolBarEditor.SmallToolBarClick(Sender: TObject);
 begin
   if BoundToGamesPanel.Tag = 0 then
      FormMain.MenuSmallToolbar.Click;
+end;
+
+procedure TFormToolBarEditor.GamesSearchBarClick(Sender: TObject);
+begin
+  if GamesSearchBar.Checked <> FormMain.ToolBarFilterTitle.Visible then
+     FormMain.ToolBarFilterTitle.Visible:= GamesSearchBar.Checked;
 end;
 
 end.

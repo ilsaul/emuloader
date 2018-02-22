@@ -685,7 +685,7 @@ var
          if FormMain.TempGameVars.eIsCustomGame then
             begin
               if FormMain.TempGameVars.eIsUnicode then
-                 favStr:= Utf8Encode(FormMain.TempGameVars.eName)
+                 favStr:= UTF8Encode(FormMain.TempGameVars.eName)
               else
                  favStr:= FormMain.TempGameVars.eName;
               favStr:= Format('%.3u %u', [FormMain.TempGameVars.eCustomSystemID, FormMain.TempGameVars.eCustomMediaType])+' <file>'+favStr;
@@ -714,7 +714,7 @@ var
     if FormMain.TempGameVars.eIsCustomGame then
        begin
          if FormMain.TempGameVars.eIsUnicode then
-            tStr:= Utf8Encode(FormMain.TempGameVars.eName)
+            tStr:= UTF8Encode(FormMain.TempGameVars.eName)
           else
             tStr:= FormMain.TempGameVars.eName;
           tStr:= Format('%.3u %u', [FormMain.TempGameVars.eCustomSystemID, FormMain.TempGameVars.eCustomMediaType])+' <file>'+tStr;
@@ -947,7 +947,7 @@ begin
         if uMain.TEasyGameInfo(Item).eIsCustomGame then
            begin
              if FormMain.TempGameVars.eIsUnicode then
-                StrToSearch:= Utf8Encode(uMain.TEasyGameInfo(Item).eName)
+                StrToSearch:= UTF8Encode(uMain.TEasyGameInfo(Item).eName)
              else
                StrToSearch:= uMain.TEasyGameInfo(Item).eName;
              StrToSearch:= Format('%.3u %u', [uMain.TEasyGameInfo(Item).eCustomSystemID, uMain.TEasyGameInfo(Item).eCustomMediaType])+' <file>'+StrToSearch;
@@ -974,7 +974,7 @@ begin
       if uMain.TEasyGameInfo(Item).eIsCustomGame then
          begin
            if FormMain.TempGameVars.eIsUnicode then
-              StrToSearch:= Utf8Encode(uMain.TEasyGameInfo(Item).eName)
+              StrToSearch:= UTF8Encode(uMain.TEasyGameInfo(Item).eName)
            else
              StrToSearch:= uMain.TEasyGameInfo(Item).eName;
            StrToSearch:= Format('%.3u %u', [uMain.TEasyGameInfo(Item).eCustomSystemID, uMain.TEasyGameInfo(Item).eCustomMediaType])+' <file>'+StrToSearch;

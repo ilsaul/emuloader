@@ -506,7 +506,7 @@ var
   function AddGame: Boolean;
   var
     LoopROMs, BaseIconIndex: Integer;
-    LineStr, iNameEntry, romName, romCRC32, romSHA1, chdParentName: String;
+    LineStr, iNameEntry, romName, romCRC32, romSHA1, chdParentName, romDeviceName: String;
     romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file (game, bios, device)
     IsParentROM: Boolean;
     IsCHD: Boolean;
@@ -585,7 +585,7 @@ var
          romTagIndex:= StrToInt(LineStr[1]+LineStr[2]);
 
       IsParentROM:= LineStr[6] = '1';
-      FormMain.GetROMDetailsInfo(LineStr, FormMain.GameIsClone(TEasyGameInfo(checkItem).eClone), romName, romCRC32, romSHA1, chdParentName);
+      FormMain.GetROMDetailsInfo(LineStr, FormMain.GameIsClone(TEasyGameInfo(checkItem).eClone), romName, romCRC32, romSHA1, chdParentName, romDeviceName);
       IsCHD:= Boolean(StrToInt(LineStr[3])); // LineStr[4] is CRC32_collision
       //IsCHD:= ((romCRC32 = '') and (romSHA1 <> '')) or
       //        (SameText(ExtractFileExt(romName), '.chd'));
@@ -613,6 +613,7 @@ var
               12, 13, 14: tmpFileID:= BaseIconIndex+5; // HDD (also general CHD)
               15, 16, 17: tmpFileID:= BaseIconIndex+6; // CD
               18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card
+              21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS)
 
               //12, 13, 14: tmpFileID:= 19; // HDD (also general CHD)
               //15, 16, 17: tmpFileID:= 20; // CD
@@ -628,6 +629,7 @@ var
               06, 07, 08: tmpFileID:= BaseIconIndex+3; // Floppy Disk
               09, 10, 11: tmpFileID:= BaseIconIndex+4; // Cassette Tape
               18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card (but it's not a CHD file)
+              21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS) (but it's not a CHD file)
 
               //00, 01, 02: tmpFileID:= 15; // ROM
               //03, 04, 05: tmpFileID:= 16; // Cartridge
@@ -637,67 +639,7 @@ var
             end;
           end;
       end;
-      {case isCHD of
-        True:
-          begin
-            case romTagIndex of
-              12, 13, 14: Item.ImageIndex:= 19; // HDD (also general CHD)
-              15, 16, 17: Item.ImageIndex:= 20; // CD
-              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card
-            end;
-            //Item.ImageIndex:= 16;
-          end;
-        False:
-          begin
-            case romTagIndex of
-              00, 01, 02: Item.ImageIndex:= 15; // ROM
-              03, 04, 05: Item.ImageIndex:= 16; // Cartridge
-              06, 07, 08: Item.ImageIndex:= 17; // Floppy Disk
-              09, 10, 11: Item.ImageIndex:= 18; // Cassette Tape
-              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)
-            end;
-          end;
-      end;}
-      {
-      if romTag > 2 then
-         tmpFileID:= 16
-      else
-         begin
-           if FormMain.TempGameVars.eSoftwareName = '' then
-              begin
-                if FormMain.IsDecoCassMachine(FormMain.TempGameVars.eDriverName) then
-                   begin
-                     case SameText(ExtractFileExt(romName), '.cas') of
-                       True : tmpFileID:= 19;
-                       False: tmpFileID:= 15;
-                     end;
-                   end
-                else
-                if FormMain.IsSEGASystem24Machine(FormMain.MemGameInfo.eDriverName) then
-                   begin
-                     case SameText(ExtractFileExt(romName), '.img') of
-                       True : tmpFileID:= 18;
-                       False: tmpFileID:= 15;
-                     end;
-                   end
-                else
-                   tmpFileID:= 15
-              end
-           else
-              begin
-                if PosEx('cart', FormMain.TempGameVars.eSoftwareExecParameter) <> 0 then
-                   tmpFileID:= 17
-                else
-                if PosEx('flop', FormMain.TempGameVars.eSoftwareExecParameter) <> 0 then
-                   tmpFileID:= 18
-                else
-                if PosEx('cass', FormMain.TempGameVars.eSoftwareExecParameter) <> 0 then
-                   tmpFileID:= 19
-                else
-                   tmpFileID:= 15; // ROM image
-              end;
-         end;
-      }
+      
       TEasyScanInfo(addItem).eImageIndex:= tmpFileID;
       TEasyScanInfo(addItem).eLineMode:= 6;
       TEasyScanInfo(addItem).eIsDevice:= TEasyScanGroupInfo(addGroup).eIsDevice;
@@ -878,6 +820,7 @@ begin
   FormMain.AddDefaultIcons('chd.ico', tempFolder, IL_ScanResults);                      // 16 -> this is also used for "Hard Disk Drive" media type... 
   FormMain.AddDefaultIcons('media_disc.ico', tempFolder, IL_ScanResults);               // 17
   FormMain.AddDefaultIcons('media_flashcard.ico', tempFolder, IL_ScanResults);          // 18
+  FormMain.AddDefaultIcons('media_vhs.ico', tempFolder, IL_ScanResults);                // 19
 
   for Loop:=0 to SystemSelectorToolBar.ButtonCount-1 do
       SystemSelectorToolBar.Buttons[Loop].Hint:= FormMain.GetArcadeEmulatorDescription(SystemSelectorToolBar.Buttons[Loop].ImageIndex);

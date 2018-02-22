@@ -56,8 +56,8 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       Transparent = True
     end
     object ButtonOk: TBitBtn
-      Left = 617
-      Top = 19
+      Left = 619
+      Top = 21
       Width = 89
       Height = 25
       Hint = 'Close and enable the quick filter'
@@ -68,8 +68,8 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       TabOrder = 0
     end
     object ButtonCancel: TBitBtn
-      Left = 715
-      Top = 19
+      Left = 717
+      Top = 21
       Width = 89
       Height = 25
       Hint = 'Close without changing filters'
@@ -79,21 +79,21 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonReset: TBitBtn
-      Left = 8
-      Top = 19
+    object ButtonReload: TBitBtn
+      Left = 6
+      Top = 21
       Width = 89
       Height = 25
-      Hint = 'Reset filter selection(s) to current'
-      Caption = 'Reset'
+      Hint = 'Reload quick filter selection(s) to current'
+      Caption = 'Reload'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
-      OnClick = ButtonResetClick
+      OnClick = ButtonReloadClick
     end
     object ButtonHelp: TBitBtn
-      Left = 568
-      Top = 19
+      Left = 570
+      Top = 21
       Width = 43
       Height = 25
       Hint = 'Why another systems filter ?'
@@ -102,6 +102,21 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShowHint = True
       TabOrder = 3
       OnClick = ButtonHelpClick
+    end
+    object ResetToMachineTypeSystemsMegaFilter: TBitBtn
+      Tag = 1
+      Left = 99
+      Top = 21
+      Width = 129
+      Height = 25
+      Hint = 
+        'Disable quick filter and reset to machine type / systems full fi' +
+        'lter'
+      Caption = 'Reset To Default'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = ResetToMachineTypeSystemsMegaFilterClick
     end
   end
   object ConsCompSystemsListView: TEasyListview
@@ -157,6 +172,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     PaintInfoItem.TileDetailCount = 2
     ParentFont = False
     ParentShowHint = False
+    PopupMenu = PopupSystems
     ShowThemedBorder = False
     ShowHint = True
     Selection.BlendColorSelRect = 10902593
@@ -191,5 +207,87 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     Width = 32
     Left = 56
     Top = 56
+  end
+  object PopupSystems: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -11
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = []
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = FormMain.BcDrawModule
+    OnMeasureMenuItem = PopupSystemsMeasureMenuItem
+    Left = 120
+    Top = 248
+    object PopupCheckAllArcadeSystems: TMenuItem
+      Tag = 1
+      Caption = 'Select All Arcade Systems'
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object PopupUncheckAllArcadeSystems: TMenuItem
+      Caption = 'Unselect All Arcade Systems'
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object PopupCheckAllConsoleSystems: TMenuItem
+      Tag = 1
+      Caption = 'Select All Console Systems'
+      HelpContext = 2
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object PopupUncheckAllConsoleSystems: TMenuItem
+      Caption = 'Unselect All Console Systems'
+      HelpContext = 2
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object PopupCheckAllComputerSystems: TMenuItem
+      Tag = 1
+      Caption = 'Select All Computer Systems'
+      HelpContext = 3
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object PopupUncheckAllComputerSystems: TMenuItem
+      Caption = 'Unselect All Computer Systems'
+      HelpContext = 3
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object PopupCheckAllHandheldSystems: TMenuItem
+      Tag = 1
+      Caption = 'Select All Handheld Systems'
+      HelpContext = 4
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
+    object PopupUncheckAllHandheldSystems: TMenuItem
+      Caption = 'Unselect All Handheld Systems'
+      HelpContext = 4
+      OnClick = PopupCheckAllArcadeSystemsClick
+    end
   end
 end

@@ -68,6 +68,9 @@ type
       Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
       const RectArray: TEasyRectArrayObject;
       AlphaBlender: TEasyAlphaBlender);
+    procedure PopupSystemsMeasureMenuItem(Sender: TObject;
+      AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
+      ABarVisible: Boolean; var DefaultMeasure: Boolean);
   private
     { Private declarations }
     tmpFilterSysArcade: array[0..MaxArcadeSystems] of Boolean; // multiple systems filter
@@ -242,7 +245,7 @@ begin
        FormSelectFilterSystemMega.ClientWidth:= FormSelectFilterSystemMega.ClientWidth+GetSystemMetrics(SM_CXVSCROLL);
      end;
 
-  ButtonCancel.Left:= (FormSelectFilterSystemMega.ClientWidth-ButtonCancel.Width)-4;
+  ButtonCancel.Left:= (FormSelectFilterSystemMega.ClientWidth-ButtonCancel.Width)-6;
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
 
   if ScreenWidthTest > 640 then
@@ -777,6 +780,13 @@ begin
 
   if Item.Ghosted then
      AlphaBlender.BasicBlend(Sender, ACanvas, RectArray.IconRect, Sender.Color);
+end;
+
+procedure TFormSelectFilterSystemMega.PopupSystemsMeasureMenuItem(
+  Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
+  Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
+begin
+  FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
 end;
 
 end.

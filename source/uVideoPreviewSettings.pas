@@ -42,6 +42,7 @@ type
     SystemsVideoPreview: TEasyListview;
     ButtonVideoPreviewHelp: TBitBtn;
     ButtonVideoPreviewAutoPlayHelp: TBitBtn;
+    LabelSystemNotAvailable: TShadowLabel;
     procedure SystemsVideoPreviewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure VideoPreviewFolderChange(Sender: TObject);
@@ -108,10 +109,9 @@ procedure TFormVideoPreviewSettings.SystemsVideoPreviewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       SystemsVideoPreview.Tag:= FormMain.ELV_GetSystemTagMulti(SystemsVideoPreview); // Systems.Tag:= Item.ImageIndex;
+       SystemsVideoPreview.Tag:= FormMain.ELV_GetSystemTagMulti(SystemsVideoPreview);
        FormMain.ELV_GetSystemTitle(SystemsVideoPreview, Item, LabelVideoPreviewSystem, LabelSystemType);
-       //LabelVideoPreviewSystem.Caption:= FormMain.elv GetEmulatorDescription(Item.ImageIndex);
-       //Sender.Tag:= Item.ImageIndex;
+       LabelSystemNotAvailable.Visible:= Item.Ghosted;
        if FormMain.ELV_IsArcadeSystemSelected(SystemsVideoPreview) then
           VideoPreviewFolder.Text:= FormMain.ArcadeVideoPreviewDir[Sender.Tag]
        else

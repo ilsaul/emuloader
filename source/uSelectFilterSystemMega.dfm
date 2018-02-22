@@ -61,7 +61,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     ParentBackground = False
     Style = vgSimple
     object LabelCategoryIniForMESS: TLabel
-      Left = 160
+      Left = 180
       Top = 8
       Width = 202
       Height = 13
@@ -83,7 +83,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       OnMouseLeave = LabelCategoryIniForMESSMouseLeave
     end
     object LabelCategoryIniFolderForMESS: TLabel
-      Left = 140
+      Left = 160
       Top = 21
       Width = 242
       Height = 16
@@ -122,9 +122,9 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       TabOrder = 1
     end
     object ButtonReset: TBitBtn
-      Left = 8
+      Left = 6
       Top = 10
-      Width = 43
+      Width = 89
       Height = 25
       Hint = 'Reset filter selection(s) to current'
       Caption = 'Reset'
@@ -134,7 +134,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       OnClick = ButtonResetClick
     end
     object ButtonHelp: TBitBtn
-      Left = 63
+      Left = 99
       Top = 10
       Width = 47
       Height = 25
@@ -342,6 +342,8 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     MenuFont.Style = []
     MenuStyle = msWindowsXP
     UseSystemFont = False
+    DrawModule = FormMain.BcDrawModule
+    OnMeasureMenuItem = PopupSystemsMeasureMenuItem
     Left = 120
     Top = 248
     object PopupCheckAllArcadeSystems: TMenuItem

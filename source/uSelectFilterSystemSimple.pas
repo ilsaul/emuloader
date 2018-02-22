@@ -5,18 +5,31 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
-  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList;
+  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, Menus, BarMenus;
 
 type
   TFormSelectFilterSystemSimple = class(TForm)
     PanelButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
-    ButtonReset: TBitBtn;
+    ButtonReload: TBitBtn;
     ConsCompSystemsListView: TEasyListview;
     LabelMultiSelect: TShadowLabel;
     IL_Systems: TImageList;
     ButtonHelp: TBitBtn;
+    ResetToMachineTypeSystemsMegaFilter: TBitBtn;
+    PopupSystems: TBcBarPopupMenu;
+    PopupCheckAllArcadeSystems: TMenuItem;
+    PopupUncheckAllArcadeSystems: TMenuItem;
+    N1: TMenuItem;
+    PopupCheckAllConsoleSystems: TMenuItem;
+    PopupUncheckAllConsoleSystems: TMenuItem;
+    N2: TMenuItem;
+    PopupCheckAllComputerSystems: TMenuItem;
+    PopupUncheckAllComputerSystems: TMenuItem;
+    N3: TMenuItem;
+    PopupCheckAllHandheldSystems: TMenuItem;
+    PopupUncheckAllHandheldSystems: TMenuItem;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormActivate(Sender: TObject);
     procedure ConsCompSystemsListViewItemSelectionChanged(
@@ -27,7 +40,7 @@ type
     procedure ConsCompSystemsListViewDblClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
-    procedure ButtonResetClick(Sender: TObject);
+    procedure ButtonReloadClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ConsCompSystemsListViewItemImageDrawIsCustom(
       Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
@@ -43,10 +56,16 @@ type
       Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
       ACanvas: TCanvas);
     procedure ButtonHelpClick(Sender: TObject);
+    procedure ResetToMachineTypeSystemsMegaFilterClick(Sender: TObject);
+    procedure PopupCheckAllArcadeSystemsClick(Sender: TObject);
+    procedure PopupSystemsMeasureMenuItem(Sender: TObject;
+      AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
+      ABarVisible: Boolean; var DefaultMeasure: Boolean);
   private
     { Private declarations }
     procedure ResizeForm;
     procedure SetSelectedSystems;
+    procedure SelectUnselectAll(SystemTypeIndex: Integer; SelectItems: Boolean);
   public
     { Public declarations }
   end;
@@ -65,7 +84,7 @@ var
   HeightDiff, VisibleCount, ItemsLineCount, ColumnsCount, MaxHeight: Integer;
   ScreenHeightTest: Integer;
 begin
-  ButtonReset.Click; // this might not be needed anymore...
+  ButtonReload.Click; // this might not be needed anymore...
 
   //if SystemsListView.Groups.VisibleItemCount < (MaxArcadeSystems+1) then
 
@@ -185,7 +204,7 @@ begin
     False: FormSelectFilterSystemSimple.ClientWidth:= FormSelectFilterSystemSimple.ClientWidth-20;
   end;
 
-  ButtonCancel.Left:= (FormSelectFilterSystemSimple.ClientWidth-ButtonCancel.Width)-8;
+  ButtonCancel.Left:= (FormSelectFilterSystemSimple.ClientWidth-ButtonCancel.Width)-6;
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
   ButtonHelp.Left:= ButtonOk.Left-ButtonHelp.Width-4;
   LabelMultiSelect.Left:= (PanelButtons.Width div 2) - (LabelMultiSelect.Width div 2);
@@ -213,6 +232,44 @@ begin
   ConsCompSystemsListView.EndUpdate;
 end;
 
+procedure TFormSelectFilterSystemSimple.SelectUnselectAll(SystemTypeIndex: Integer; SelectItems: Boolean);
+var
+  Item: TEasyItem;
+begin
+  if not FormMain.CheckTotal(ConsCompSystemsListView) then
+     Exit;
+
+  ConsCompSystemsListView.BeginUpdate;
+  Item:= ConsCompSystemsListView.Groups.FirstItem;
+  repeat
+    case SystemTypeIndex of
+      0: // All Arcade Systems
+        begin
+          if FormMain.ELV_IsArcadeSystemMulti(Item) then
+             Item.Selected:= SelectItems;
+        end;
+      2: // All Console Systems
+        begin
+          if SystemIsConsole(Item.StateImageIndex) then
+             Item.Selected:= SelectItems;
+        end;
+      3: // All Computer Systems
+        begin
+          if SystemIsComputer(Item.StateImageIndex) then
+             Item.Selected:= SelectItems;
+        end;
+      4: // All Handheld Systems
+        begin
+          if SystemIsHandheld(Item.StateImageIndex) then
+             Item.Selected:= SelectItems;
+        end;
+    end;
+
+    Item:= ConsCompSystemsListView.Groups.NextItem(Item);
+  until Item = nil;
+  ConsCompSystemsListView.EndUpdate;
+end;
+
 procedure TFormSelectFilterSystemSimple.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   case Key of
@@ -231,7 +288,7 @@ begin
 
   ResizeForm;
   SetSelectedSystems;
-  
+
   FormSelectFilterSystemSimple.Tag:= 1;
 end;
 
@@ -270,7 +327,7 @@ begin
   if ButtonOk.Enabled then ButtonOk.Click;
 end;
 
-procedure TFormSelectFilterSystemSimple.ButtonResetClick(Sender: TObject);
+procedure TFormSelectFilterSystemSimple.ButtonReloadClick(Sender: TObject);
 var
   Item: TEasyItem;
 begin
@@ -394,7 +451,10 @@ begin
   FormMain.AddMsgText(' button. ');
   FormMain.AddMsgText('Machine Type / Systems', clBlack, [fsItalic]);
   FormMain.AddMsgText(' full filter will be bypassed automatically, no additional configuration required.'+#13#10+
-                      '    To restore the full filter again, open ');
+                      '    To restore the full filter again, either click on the ');
+  FormMain.AddMsgText('Reset To Default', $00a65300, [fsBold]);
+
+  FormMain.AddMsgText(' button or open ');
   FormMain.AddMsgText('Machine Type / Systems', $00a65300, [fsBold]);
   FormMain.AddMsgText(' filter and click ');
   FormMain.AddMsgText('Apply', $00a65300, [fsBold]);
@@ -418,9 +478,32 @@ begin
   FormMain.AddMsgText('GREEN', clGreen, [fsBold, fsItalic]);
   FormMain.AddMsgText(' stripe, showing that the filter is ');
   FormMain.AddMsgText('active', clBlack, [fsBold]);
-  FormMain.AddMsgText(#13#10+'The filter is disabled by default.');
+  FormMain.AddMsgText('. The filter is disabled by default.'+#13#10#13#10+
+                      '    There are more select/unselect options in the popup menu (mouse right-click). '+
+                      'Make sure to call the popup menu on top of a selected system so you don''t lose current selections.');
 
   GenerateMessage('Info', 'Systems Quick Filter', '');
+  ConsCompSystemsListView.SetFocus;
+end;
+
+procedure TFormSelectFilterSystemSimple.ResetToMachineTypeSystemsMegaFilterClick(
+  Sender: TObject);
+begin
+  FormSelectFilterSystemSimple.Tag:= 500;
+  Close;
+end;
+
+procedure TFormSelectFilterSystemSimple.PopupCheckAllArcadeSystemsClick(
+  Sender: TObject);
+begin
+  SelectUnselectAll(TMenuItem(Sender).HelpContext, Boolean(TMenuItem(Sender).Tag));
+end;
+
+procedure TFormSelectFilterSystemSimple.PopupSystemsMeasureMenuItem(
+  Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
+  Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
+begin
+  FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
 end;
 
 end.

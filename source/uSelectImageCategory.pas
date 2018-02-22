@@ -65,7 +65,7 @@ end;
 procedure TFormSelectImageCategory.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(CategoriesListView);
-  FormMain.LoadCategoriesIcons(IL_ImageCategory, True);
+  FormMain.LoadCategoriesIcons(IL_ImageCategory);
 end;
 
 procedure TFormSelectImageCategory.FormActivate(Sender: TObject);

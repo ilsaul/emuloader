@@ -14,6 +14,7 @@ const
   MaxArcadeSystems = 8;
   MaxIniCountMAME: Byte = 12; // MAME .ini files array ... see more in uMain.GetCustomIniFileMAME() function
   MaxImagePerCategory = 30;
+  MaxImageLayouts = 8; //
 
   idMAME       = 1;
   idSupermodel = 2;
@@ -43,7 +44,7 @@ const
   SystemStr: String[1] = '"';
   CommandPromptStr: String = 'cmd.exe /c ';
 
-  ImageCategoryArray: packed array[0..17] of packed array[0..4] of String = (
+  ImageCategoryArray: packed array[0..16] of packed array[0..4] of String = (
     //IconFileName,           IniSectionName,     NotAvailableName,    default path, ui.ini / mame.ini entry name
      ('image_00_titlesnap',   'TitleSnapshot',    'title.png',         'titles',     'titles_directory'),
      ('image_01_gamesnap',    'GameSnapshot',     'ingame.png',        'snap',       'snapshot_directory'),
@@ -61,8 +62,7 @@ const
      ('image_13_versus',      'Versus',           'versus.png',        'versus',     'versus_directory'),
      ('image_14_gameover',    'GameOver',         'gameover.png',      'gameover',   'gameover_directory'),
      ('image_15_howto',       'HowToPlay',        'howtoplay.png',     'howto',      'howto_directory'),
-     ('image_16_select',      'Select',           'select.png',        'select',     'select_directory'),
-     ('image_internet',       'InternetGameInfo', '', '', ''));
+     ('image_16_select',      'Select',           'select.png',        'select',     'select_directory'));
 
   aColumns: packed array[0..22] of packed array[0..1] of String = (
      //IniEntryName,     ColumnTitle
@@ -290,6 +290,21 @@ type
     procedure SaveToFile(const FileName: WideString);
   end;
 
+  PRGB = ^TRGB;
+  TRGB = record b, g, r: Byte;
+  end;
+  PRGBArray = ^TRGBArray;
+  TRGBARRAY = array[0..0] of TRGB;
+
+  TRIVERTEX = packed record
+    X, Y: DWORD;
+    Red, Green, Blue, Alpha: Word;
+  end;
+
+function GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
+                      pMesh: Pointer; dwNumMesh, dwMode: DWORD): DWord; stdcall;
+                      external 'msimg32.dll';
+
 function  WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
 function  WideSysErrorMessage(ErrorCode: Integer): WideString;
 
@@ -298,6 +313,9 @@ function  WideExpandFileName(const FileName: WideString): WideString;
 function  WideFileOpen(const FileName: WideString; Mode: LongWord): Integer;
 
 function  StrCmpLogicalW(psz1, psz2: PWideChar{WideString}): Integer; stdcall; external 'shlwapi.dll';
+
+procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
+//procedure WinGradient(ACanvas: TCanvas);
 
 function  GetVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 function  GetFileInfo2(FName, InfoType: String): String;
@@ -632,6 +650,30 @@ begin
   finally
     Stream.Free;
   end;
+end;
+
+procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
+var
+  Vertexs: array[0..1] of TTriVertex;
+  GRect: TGradientRect;
+
+  function SetVertex(var Vertex: TTriVertex; X, Y: Integer; Color: TColor): Boolean;
+  begin
+    Result:= True;
+    Vertex.X      := X;
+    Vertex.Y      := Y;
+    Vertex.Red    := (Color and $000000FF) shl 8;
+    Vertex.Green  := (Color and $0000FF00);
+    Vertex.Blue   := (Color and $00FF0000) shr 8;
+    Vertex.Alpha  := 0;
+  end;
+
+begin
+  SetVertex(Vertexs[0], ARect.Left, ARect.Top, FColor1);
+  SetVertex(Vertexs[1], ARect.Right, ARect.Bottom, FColor2);
+  GRect.UpperLeft := 0;
+  GRect.LowerRight := 1;
+  GradientFill(ACanvas.Handle, @Vertexs, 2, @GRect, 1, GRADIENT_FILL_RECT_V);
 end;
 
 function GetVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
@@ -1364,12 +1406,13 @@ end;
 function GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 begin
   // FileID
-  // 0 -> games list             "system_name.el'
-  // 1 -> ROMs list              "system_name.elrom'
-  // 2 -> games set status       "system_name.elstatus'
-  // 3 -> missing files          "system_name.miss'
-  // 4 -> wav/flac audio samples "system_name.elsamples'
-  // 5 -> machines list+softlist "system_name.elsoftlist'
+  // 0 -> games list             "system_name.el"
+  // 1 -> ROMs list              "system_name.elrom"
+  // 2 -> games set status       "system_name.elstatus"
+  // 3 -> missing files          "system_name.miss"
+  // 4 -> wav/flac audio samples "system_name.elsamples"
+  // 5 -> machines list+softlist "system_name.elsoftlist"
+  // 9 -> CRC32 collisions list  "system_name_crc32collision.txt"
   Result:= '';
   case SystemID of
     idMAME      :
@@ -1394,6 +1437,7 @@ begin
     3: Result:= Result+'.miss';
     4: Result:= Result+'.elsamples';
     5: Result:= Result+'.elsoftlist';
+    9: Result:= Result+'_crc32collision.txt'; // id "9" to give some room for future expansion (February 15, 2018)
   end;
 end;
 
@@ -3380,13 +3424,13 @@ begin
                         UnicodeStr:= iName <> SearchW.Name;
                         if UnicodeStr then
                            begin
-                             iName:= Utf8Encode(SearchW.Name);
+                             iName:= UTF8Encode(SearchW.Name);
                              iStrDOS:= '='+SearchW.DOSName;
                            end;
                         if (FileType <> '') then
                            begin
                              if SameText(ExtractFileExtW(iName), FileType) then
-                                ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS)
+                                ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS);
                            end
                         else
                            begin
@@ -3495,7 +3539,7 @@ begin
          CalcCRC32(Stream.Memory, Stream.Size, CRCvalue)
     except
       on E: EReadError do
-        Error:= 1
+         Error:= 1;
     end;
     CRCvalue:= not CRCvalue;
   finally
