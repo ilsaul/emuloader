@@ -219,20 +219,13 @@ begin
           False:
             begin
               Result:= 'name: '+eName;
-             if eClone <> '' then
-                Result:= Result+' [clone of '+eClone+']';
-             if eSoftwareName <> '' then
-                Result:= Result+' [softlist: '+eSoftwareName+']';
-             if eDriverName <> '' then
-                Result:= Result+' [driver: '+eDriverName+']';
-             Result:= Format('%-'+IntToStr(ExtraCount)+'s', [Result]);
-
-              //if extraStr <> '' then
-              //   begin
-              //     extraStr:= '['+extraStr+'] ';
-              //     ExtraCount:= ExtraCount-Length(extraStr);
-              //   end;
-              //Result:= Format({extraStr+}'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
+              if eClone <> '' then
+                 Result:= Result+' [clone of '+eClone+']';
+              if eSoftwareName <> '' then
+                 Result:= Result+' [softlist: '+eSoftwareName+']';
+              if eDriverName <> '' then
+                 Result:= Result+' [driver: '+eDriverName+']';
+              Result:= Format('%-'+IntToStr(ExtraCount)+'s', [Result]);
             end;
         end;
       end;
@@ -411,8 +404,6 @@ begin
 
   if not FormMain.IsMediaTypeCHD(FormMain.TempGameVars.eMediaType, False) then
      Exit;
-  //if FormMain.TempGameVars.eMediaType = 0 then
-  //   Exit;
 
   if FormMain.TempGameVars.eCHDsCount = 0 then
      Exit;
@@ -449,7 +440,6 @@ begin
                 HaveCHDsVar:= True;
 
                 tmpFileSize:= GetFileSize(DiskFile);
-
 
                 CHDFilesTotalSizeVar:= CHDFilesTotalSizeVar+tmpFileSize; // this is a game local var...
                 Inc(CHDFilesCountVar);
@@ -663,9 +653,9 @@ var
     end;
     if not Result then
        Exit;
-    //Result:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification); // comment this line to add all selected games
+    //Result:= FormMain.IsROM_Have(FormMain.TempGameVars.eROMIdentification); // uncomment this line to add only available games
     //if not Result then
-    //   Result:= FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus);
+    //   Result:= FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus); // uncomment these lines to add only found games with missing ROMs/CHDs
 
     addItem:= GamesList.Items.AddCustom(TGameInfo, nil);
     TGameInfo(addItem).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
@@ -807,11 +797,6 @@ begin
        end;
 
     gItem:= FormMain.ELV_GetNextSelected(FormMain.GamesListView, gItem, SelectionIndex);
-    //if SelectionIndex < FormMain.GamesListView.Selection.Count then
-    //   gItem:= FormMain.GamesListView.Selection.Next(gItem)
-    //else
-    //   gItem:= nil;
-    //Inc(SelectionIndex);
     Application.ProcessMessages;
   until gItem = nil;
 
@@ -948,7 +933,7 @@ begin
     Item:= GamesList.Groups.NextItem(Item);
   until Item = nil;
 
-  // check if "\console_computer\games\sysname.txt" files were changed and save them to disk
+  // check if "\console_computer\games\sysname.txt" contents were changed, then save them to disk
   for Loop:=Low(delList) to High(delList) do
   begin
     if delList[Loop] then
@@ -1146,9 +1131,9 @@ begin
 
   if GamesList.Scrollbars.VertBarVisible then
      begin
-       GamesList.Width:= GamesList.Width-2; // this is to remove a redundant 2 extra pixels next to the vertical scroll bar... WEIRD BUG!!! :_((
+       GamesList.Width:= GamesList.Width-2; // this is to remove a redundant 2 extra pixels next to the vertical scroll bar... WEIRD BUG!!!
        FormDeleteMultipleGamesFiles.ClientWidth:= GamesList.Width;//FormDeleteMultipleGamesFiles.ClientWidth+GetSystemMetrics(SM_CXVSCROLL)+2;
-       //GamesList.HotTrack.Enabled:= False; // disable to fix hot track painting bug :_((
+       //GamesList.HotTrack.Enabled:= False; // disable to fix hot track painting bug
      end;
 
   if FormDeleteMultipleGamesFiles.ClientWidth <> 1230 then
@@ -1681,7 +1666,7 @@ begin
   if Assigned(SoftListAffected) then
      FreeAndNil(SoftListAffected);
   Application.ProcessMessages;
-  //ButtonClose.Click; // won't be closing the dialog after process is concluded... no sir!
+  //ButtonClose.Click; // won't be closing the dialog after process is concluded... no Sir!
 end;
 
 procedure TFormDeleteMultipleGamesFiles.ButtonSelectROMsFolderClick(
@@ -1835,12 +1820,6 @@ begin
        //iTop:= (iTop+GamesList.ImagesExLarge.Height)-IL_DeleteGameIcons.Height; //FormMain.IL_StandardIconsSmall.Height;
 
        IL_DeleteGameIcons.Draw(ACanvas, iLeft, iTop, 17+TGameInfo(Item).eCustomMediaType); // show EmuCon icon
-
-       //IL_DeleteGameIcons.Draw(ACanvas, iLeft, iTop, 0); // show EmuCon icon
-       //FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 23); // load EmuCon icon
-
-       //FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26, Group.BoundsRectTopMargin.Top+8,
-       //                                       MaxGameID+TViewGameInfoGroup(Group).eCustomSystemID);
      end
   else
      begin

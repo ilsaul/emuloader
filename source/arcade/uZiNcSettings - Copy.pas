@@ -105,6 +105,8 @@ type
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure FolderROMsItemEdited(Sender: TCustomEasyListview;
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
+    procedure FolderROMsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonUpClick(Sender: TObject);
     procedure FramerateManualKeyPress(Sender: TObject; var Key: Char);
@@ -389,6 +391,8 @@ begin
   if (RendererZNC.Text <> '') and (LowerCase(RendererZNC.Text) <> 'renderer.znc') then
      AddSetting('--renderer='+GetShortFileNameW(RendererZNC.Text)); // ExtractShortPathName(RendererZNC.Text));
      //AddSetting('--renderer='+LongToShortPath(RendererZNC.Text));
+
+
 
   if (RendererConfigFile.Text <> '') and (LowerCase(RendererConfigFile.Text) <> 'renderer.cfg') then
      AddSetting('--use-renderer-cfg-file='+GetShortFileNameW(RendererConfigFile.Text)); // ExtractShortPathName(RendererConfigFile.Text));
@@ -700,6 +704,13 @@ begin
        if Item.Caption <> NewValue then
           Item.Caption:= NewValue;
      end;
+end;
+
+procedure TFormZiNcSettings.FolderROMsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  //FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas); // not needed anymore
 end;
 
 procedure TFormZiNcSettings.FormKeyPress(Sender: TObject; var Key: Char);

@@ -2830,7 +2830,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 13
+        ItemHeight = 0
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
@@ -4881,8 +4881,8 @@ object FormMAMESettings: TFormMAMESettings
         Transparent = True
       end
       object LabelRecordInputTimecodeFile: TShadowLabel
-        Left = 344
-        Top = 238
+        Left = 32
+        Top = 398
         Width = 147
         Height = 15
         Caption = '(to be used with record input)'
@@ -4898,8 +4898,8 @@ object FormMAMESettings: TFormMAMESettings
         EllipsType = etNone
       end
       object LabelExitAfterInputPlayback: TShadowLabel
-        Left = 344
-        Top = 278
+        Left = 232
+        Top = 398
         Width = 158
         Height = 15
         Caption = '(to be used with playback input)'
@@ -5635,7 +5635,7 @@ object FormMAMESettings: TFormMAMESettings
         Left = 328
         Top = 12
         Width = 219
-        Height = 197
+        Height = 236
         RoundEdges = True
         Caption = 'Comm Options'
         Ctl3D = True
@@ -5788,6 +5788,17 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 7
           OnClick = CommRemotePortButtonResetClick
         end
+        object CommSyncFrame: TAdvOfficeCheckBox
+          Left = 8
+          Top = 200
+          Width = 120
+          Height = 20
+          TabOrder = 8
+          Alignment = taLeftJustify
+          Caption = 'Syncronize Frames'
+          ReturnIsTab = False
+          Themed = True
+        end
       end
       object EnableGlobalInputs: TAdvOfficeCheckBox
         Left = 16
@@ -5802,8 +5813,8 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
       end
       object RecordInputTimecodeFile: TAdvOfficeCheckBox
-        Left = 328
-        Top = 220
+        Left = 16
+        Top = 380
         Width = 185
         Height = 18
         TabOrder = 19
@@ -5813,8 +5824,8 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
       end
       object ExitAfterInputPlayback: TAdvOfficeCheckBox
-        Left = 328
-        Top = 260
+        Left = 216
+        Top = 380
         Width = 200
         Height = 18
         TabOrder = 20

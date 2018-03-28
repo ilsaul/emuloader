@@ -9,17 +9,15 @@ uses
   AdvGroupBox;
 
 const
-  ActionModeStr: array[-1..7] of String = (
+  ActionModeStr: array[-1..6] of String = (
     '', // -1 (all systems, available or not)
     '', // 0 (available only, emu + games)
     'Create MAME/Arcade Games List', // 1 (available emu only)
     'MAME/Arcade Emulator Default Settings', // 2 (available emu only)
-    'MAME/Arcade Games ROMs Paths', // 3 (available emu only) // July 14, 2015 -> THIS MODE IS NO LONGER USED!!!!!!!!!
+    'MAME/Arcade Games ROMs Paths', // 3 (available emu only) ... this is no longer used by anything ? (March 15, 2018)
     'Scan MAME/Arcade Games', // 4 (available system, emu + games)
-    'Scan MAME/Arcade Games With Missing ROMs/CHDs', // 5 only systems that have the 'sysname.miss' file
-    // no longer used by anything... already done in #4!!!!!!! 'Scan MAME/Arcade Games', // 5 (available system, emu + games... except Daphne)
-    '', // 6 (available games only)
-    'Scan MAME/Arcade Games With Missing ROMs/CHDs' // this is no longer used!!!!!! August 27, 2017!!!!!!!!!!!!!!!! 7 only systems that have the 'sysname.miss' file
+    'Scan MAME/Arcade Games With Missing ROMs/CHDs', // 5 (only systems that have 'sysname.miss' file)
+    'Create Software Games List' // 6 (create MAME/HBMAME software lists only... option selected in main menu "Arcade") 
     );
 
 type
@@ -30,27 +28,35 @@ type
     PanelButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
-    FullScan: TAdvOfficeRadioButton;
-    LabelFullScan: TLabel;
-    QuickScan: TAdvOfficeRadioButton;
-    LabelQuickScan: TLabel;
-    ForceAllAvailable: TAdvOfficeRadioButton;
-    LabelForceAllAvailable: TLabel;
-    LabelSelectMode: TLabel;
-    ScanModeCurrentTaskOnly: TAdvOfficeCheckBox;
-    ScanModeIcon: TImage;
-    CreateMAMESoftwareListGames: TAdvOfficeCheckBox;
+    LabelMultiSelect: TShadowLabel;
+    AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox;
+    MAMESoftwareListBox: TAdvGroupBox;
+    MAMESoftwareList_Disabled: TAdvOfficeRadioButton;
+    MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButton;
+    MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButton;
+    ShadowLabel1: TShadowLabel;
+    ShadowLabel2: TShadowLabel;
+    ShadowLabel3: TShadowLabel;
     ButtonHelpCreateMAMESoftwareListGames: TBitBtn;
+    LabelCustomizeMAMESoftwareList: TShadowLabel;
+    ImageMAMESoftwareList: TImage;
     LabelCreateSoftwareListGames: TShadowLabel;
+    ScanModeBox: TAdvGroupBox;
+    LabelForceAllAvailable: TLabel;
+    LabelQuickScan: TLabel;
+    LabelFullScan: TLabel;
+    ScanModeIcon: TImage;
+    ScanModeCurrentTaskOnly: TAdvOfficeCheckBox;
+    QuickScan: TAdvOfficeRadioButton;
+    FullScan: TAdvOfficeRadioButton;
     ScanMAMESetsBox: TAdvGroupBox;
+    ImageScanMAME: TImage;
     ScanMAMEAllSets: TAdvOfficeRadioButton;
     ScanMAMEArcadeMachines: TAdvOfficeRadioButton;
     ScanMAMESoftwareListGames: TAdvOfficeRadioButton;
-    ImageScanMAME: TImage;
-    AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox;
-    LabelAddMAMEDeviceSetWithNoROMs: TShadowLabel;
-    LabelMultiSelect: TShadowLabel;
-    LabelCustomizeMAMESoftwareList: TShadowLabel;
+    Shape1: TShape;
+    Shape2: TShape;
+    ForceAllAvailable: TAdvOfficeRadioButton;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -64,13 +70,14 @@ type
     procedure SystemsListViewDblClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
-    procedure CreateMAMESoftwareListGamesClick(Sender: TObject);
     procedure ScanMAMEAllSetsClick(Sender: TObject);
     procedure AddMAMEDeviceSetWithNoROMsClick(Sender: TObject);
     procedure ButtonHelpCreateMAMESoftwareListGamesClick(Sender: TObject);
     procedure LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
     procedure LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
     procedure LabelCustomizeMAMESoftwareListClick(Sender: TObject);
+    procedure MAMESoftwareList_EnabledUpdateClick(Sender: TObject);
+    procedure FullScanClick(Sender: TObject);
   private
     { Private declarations }
     procedure SetSystemsState;
@@ -100,23 +107,28 @@ begin
   repeat
     ShowItem:= True;
     case ActionMode of
-      1, 2, 3: ShowItem:= FormMain.ValidateArcadeEmulatorFile(Item.ImageIndex);
-      //0, 4, 5: ShowItem:= FormMain.IsSystemAvailable(Item.ImageIndex);
+      1, 2, 3, 6: ShowItem:= FormMain.ValidateArcadeEmulatorFile(Item.ImageIndex);
       0, 4: ShowItem:= FormMain.ValidateArcadeEmulatorFile(Item.ImageIndex) and FormMain.IsSystemAvailable(Item.ImageIndex);
       5: ShowItem:= FormMain.ValidateArcadeEmulatorFile(Item.ImageIndex) and FormMain.IsSystemAvailable(Item.ImageIndex) and FormMain.ValidateFile(FormMain.GetGamesFolderEL+GetSystemFileName(Item.ImageIndex, 3));
     end;
     if ShowItem then
        begin
          case ActionMode of
-           2: ShowItem:= not (Item.ImageIndex in [idDemul, idDICE{, idSegaModel2}]); // default settings, no Demul / DICE emu settings screen
+           2: ShowItem:= not (Item.ImageIndex in [idDemul, idDICE]); // default settings; no settings screen for Demul / DICE emulators
            3: ShowItem:= not (Item.ImageIndex in [idDaphne, idDICE]); // ROMs paths, no Daphne; no DICE
-           5: ShowItem:= Item.ImageIndex <> idDaphne; // scan games with missing ROMs/CHDs, no Daphne
+           5: ShowItem:= Item.ImageIndex <> idDaphne; // scan games with missing ROMs/CHDs; no Daphne
+           6: ShowItem:= Item.ImageIndex = selSysID; 
          end;
          if Item.ImageIndex > 0 then
             HaveSystemsEnabled:= True;
        end;
     if (not ShowItem) and (Item.ImageIndex > 0) then
-       Item.State:= Item.State+[esosGhosted];
+       begin
+         if ActionMode <> 6 then
+            Item.State:= Item.State+[esosGhosted]
+         else
+            Item.Enabled:= False; // create MAME/HBMAME software games list
+       end;
     Item:= SystemsListView.Groups.NextItem(Item);
   until Item = nil;
   if not HaveSystemsEnabled then
@@ -128,7 +140,7 @@ begin
           end;
      end;
   SystemsListView.EndUpdate(False);
-  FormMain.ELV_SelectItem(SystemsListView, selSysID);//-SystemsListView.Groups.FirstItem.ImageIndex);
+  FormMain.ELV_SelectItem(SystemsListView, selSysID);
 end;
 
 procedure TFormArcadeSelectSystem.FormKeyPress(Sender: TObject; var Key: Char);
@@ -140,6 +152,8 @@ begin
 end;
 
 procedure TFormArcadeSelectSystem.ResizeForm;
+var
+  iScreenWidth, iScreenHeight: Integer;
 
   function MoveSettingsLeft(PixelsToMove: Integer): Boolean;
   begin
@@ -151,38 +165,37 @@ procedure TFormArcadeSelectSystem.ResizeForm;
     FullScan.Left:= FullScan.Left-PixelsToMove;
     LabelFullScan.Left:= LabelFullScan.Left-PixelsToMove;
     ScanModeIcon.Left:= ScanModeIcon.Left-PixelsToMove;
-    LabelSelectMode.Left:= LabelSelectMode.Left-PixelsToMove;
     ScanModeCurrentTaskOnly.Left:= ScanModeCurrentTaskOnly.Left-PixelsToMove;
     ScanMAMESetsBox.Left:= ScanMAMESetsBox.Left-PixelsToMove;
   end;
 
 begin
-  if Screen.Width > 720 then
+  Exit; // will do nothing for now... (March 19, 2018)
+  iScreenWidth:= Screen.Width;
+  iScreenHeight:= Screen.Height;
+
+  if iScreenWidth > 720 then
      Exit;
 
-  if Screen.Width = 720 then
+  if iScreenWidth = 720 then
      begin
        if SystemsListView.Width = 720 then
           begin
              SystemsListView.Left:= 1;
-             //LabelMultiSelect.Left:= LabelMultiSelect.Left-14;
-             //ButtonOk.Left:= ButtonOk.Left-7;
-             //ButtonCancel.Left:= ButtonCancel.Left-7;
 
              AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-14;
-             LabelAddMAMEDeviceSetWithNoROMs.Left:= LabelAddMAMEDeviceSetWithNoROMs.Left-14;
 
              MoveSettingsLeft(14);
              FormArcadeSelectSystem.ClientWidth:= 704;
           end;
      end
   else
-  if Screen.Width = 640 then
+  if iScreenWidth = 640 then
      begin
        //if ActionMode <> 2 then
        begin
          // Emulator default settings; Show ROMs Paths
-         SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge; //FormMain.IL_Systems
+         SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge;
          SystemsListView.CellSizes.Icon.Width:= 58;
          SystemsListView.CellSizes.Icon.Height:= 72;
          SystemsListView.Font.Name:= 'Tahoma';
@@ -197,7 +210,6 @@ begin
        FullScan.Top:= FullScan.Top-20;//+92;
        LabelFullScan.Top:= LabelFullScan.Top-20;//+92;
        ScanModeIcon.Top:= ScanModeIcon.Top-20;//+92;
-       LabelSelectMode.Top:= LabelSelectMode.Top-20;//+92;
        ScanModeCurrentTaskOnly.Top:= ScanModeCurrentTaskOnly.Top-20;//+92;
        LabelMultiSelect.Top:= LabelMultiSelect.Top-20;
 
@@ -208,14 +220,12 @@ begin
        SystemsListView.Height:= SystemsListView.Height-20;//+92;
        if SystemsListView.Width = 720 then
           begin
-            //LabelMultiSelect.Left:= LabelMultiSelect.Left-180;//-234;
             ButtonOk.Left:= ButtonOk.Left-48;//117;
             ButtonOk.Width:= 63;
             ButtonCancel.Left:= ButtonCancel.Left-78;//117;
             ButtonCancel.Width:= 63;
 
             AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-173;
-            LabelAddMAMEDeviceSetWithNoROMs.Left:= LabelAddMAMEDeviceSetWithNoROMs.Left-173;
 
             MoveSettingsLeft(90);//(117);
             SystemsListView.Width:= SystemsListView.Width-180;//-234;
@@ -227,7 +237,7 @@ begin
             ButtonOk.Left:= ButtonOk.Left-78;
             ButtonCancel.Left:= ButtonCancel.Left-78;
             AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-170;
-            LabelAddMAMEDeviceSetWithNoROMs.Left:= LabelAddMAMEDeviceSetWithNoROMs.Left-170;
+
             MoveSettingsLeft(51);//(78);
             SystemsListView.Width:= SystemsListView.Width-160;//102;//156;
             FormArcadeSelectSystem.ClientWidth:= FormArcadeSelectSystem.ClientWidth-160;//102;//-156;
@@ -240,24 +250,28 @@ end;
 procedure TFormArcadeSelectSystem.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(SystemsListView);
-  CreateMAMESoftwareListGames.Visible:= ActionMode = 1; // create games list "ActionMode" only
-  LabelCreateSoftwareListGames.Visible:= CreateMAMESoftwareListGames.Visible;
-  ButtonHelpCreateMAMESoftwareListGames.Visible:= CreateMAMESoftwareListGames.Visible;
-  LabelCustomizeMAMESoftwareList.Visible:= CreateMAMESoftwareListGames.Visible;
+  MAMESoftwareListBox.Tag:= FormMain.MenuCreateMAMESoftwareListGames.Tag; // set MAME Software List mode
+  MAMESoftwareListBox.Visible:= ActionMode in [1, 6]; // create games list / create MAME/HBMAME software list "ActionMode" only
 
-  AddMAMEDeviceSetWithNoROMs.Visible:= CreateMAMESoftwareListGames.Visible;
-  LabelAddMAMEDeviceSetWithNoROMs.Visible:= AddMAMEDeviceSetWithNoROMs.Visible;
+  //LabelCreateSoftwareListGames.Visible:= MAMESoftwareListBox.Visible;
+  //ButtonHelpCreateMAMESoftwareListGames.Visible:= MAMESoftwareListBox.Visible;
+  //LabelCustomizeMAMESoftwareList.Visible:= MAMESoftwareListBox.Visible;
 
-  if CreateMAMESoftwareListGames.Visible then
-     CreateMAMESoftwareListGames.Checked:= Boolean(FormMain.MenuCreateMAMESoftwareListGames.Tag);
+  AddMAMEDeviceSetWithNoROMs.Visible:= MAMESoftwareListBox.Visible and (ActionMode <> 6); // only visible when creating games list
+
+  if MAMESoftwareListBox.Visible then
+     begin
+       case MAMESoftwareListBox.Tag of
+         0: MAMESoftwareList_Disabled.Checked:= True;
+         2: MAMESoftwareList_EnabledOverwrite.Checked:= True;
+       end;
+     end;
 
   if AddMAMEDeviceSetWithNoROMs.Visible then
      AddMAMEDeviceSetWithNoROMs.Checked:= Boolean(FormMain.MenuAddMAMEDeviceSetsWithNoROMs.Tag);
 
   ScanMAMESetsBox.Tag:= FormMain.MenuCreateMAMESoftwareListGames.HelpContext;
   ScanMAMESetsBox.Visible:= (ActionMode in [1, 4, 5]);
-  //if ScanMAMESetsBox.Visible then
-  //   ScanMAMESetsBox.Visible:= FormMain.IsSystemAvailable(idMAME) and FileExists(FormMain.GetMAMEMachineSoftListFile(False));
 
   case ScanMAMESetsBox.Visible of
     True:
@@ -271,9 +285,8 @@ begin
       end;
     False:
       begin
-        //if ActionMode in [4, 5] then
-        //   ScanMAMEAllSets.Checked:= True; // reset to all sets since mame.elsoftlist doesn't exist (older than MAME v0.162...)
-        ClientHeight:= ClientHeight-46;
+        // ClientHeight:= ClientHeight-46; // hide "Scan MAME Sets" panel, lowering form height
+        // do nothing here since layout has changed (March 19, 2018)
       end;
   end;
 
@@ -281,15 +294,16 @@ begin
   if not SystemsListView.Selection.MultiSelect then
      begin
        Caption:= 'Select a System';
-       ClientWidth:= ClientWidth-SystemsListView.CellSizes.Icon.Width;//78;
+       ClientWidth:= 250;//ClientWidth-SystemsListView.CellSizes.Icon.Width;//78;
        //Width:= Width-78;
-       SystemsListView.Width:= SystemsListView.Width-SystemsListView.CellSizes.Icon.Width;//-78;
-       LabelEmuTitle.Width:= ClientWidth;//LabelEmuTitle.Width+78;
-       ButtonOk.Left:= ButtonOk.Left-39;
-       ButtonCancel.Left:= ButtonCancel.Left-39;
+       //SystemsListView.Width:= SystemsListView.Width-SystemsListView.CellSizes.Icon.Width;//-78;
+       //LabelEmuTitle.Width:= ClientWidth;//LabelEmuTitle.Width+78;
+       ButtonOk.Left:= ButtonOk.Left-189;
+       ButtonCancel.Left:= ButtonCancel.Left-189;
        LabelMultiSelect.Visible:= False;
      end;
-  if ActionMode in [1..5] then
+
+  if ActionMode > 0 then //in [1..5] then
      Caption:= Caption+' ['+ActionModeStr[ActionMode]+']';
 
   if ScanMAMESetsBox.Visible then
@@ -297,20 +311,22 @@ begin
        FormMain.IL_StandardIconsSmall.GetIcon(MaxGameID+MaxConsoleComputerSystems+1, ImageScanMAME.Picture.Icon);
        case ScanMAMESetsBox.Tag of
          1: ScanMAMEArcadeMachines.Checked:= True;
-         2: ScanMAMESoftwareListGames.Checked:= True;  
+         2: ScanMAMESoftwareListGames.Checked:= True;
        end;
      end;
-     
-  if ActionMode in [1, 4, 5] then
+
+  if MAMESoftwareListBox.Visible then
+     FormMain.LoadIconIntoImage('emu_ume', ImageMAMESoftwareList);
+
+  if ActionMode in [1, 4, 5, 6] then
      begin
        FormMain.IL_MenuPopup.GetIcon(8, ScanModeIcon.Picture.Icon);
        case FormMain.PopupSelectScanGamesMode.Tag of
          1: QuickScan.Checked:= True;
          2: ForceAllAvailable.Checked:= True;
        end;
-     end
-  else
-     ClientHeight:= 180; // only scan games and create games list can show the scan mode settings
+     end;
+     
   ResizeForm;
 end;
 
@@ -319,11 +335,9 @@ begin
   if FormArcadeSelectSystem.Tag = 1 then
      Exit;
 
-  FormMain.ELV_PopulateSystems(SystemsListView, True, True, Ord(not SystemsListView.Selection.MultiSelect));//1); stars on zero if multi systems
+  FormMain.ELV_PopulateSystems(SystemsListView, True, True, Ord(not SystemsListView.Selection.MultiSelect));// stars on zero if multi systems
   SystemsListView.BeginUpdate;
-  //SystemsListView.Items.Items[SystemsListView.Groups.ItemCount-2].Caption:= 'Model 2';
   SystemsListView.EndUpdate;
-  //FormMain.ELV_SystemsShortTitle(SystemsListView);
   SetSystemsState;
   FormArcadeSelectSystem.Tag:= 1;
 end;
@@ -334,8 +348,7 @@ procedure TFormArcadeSelectSystem.SystemsListViewItemPaintText(
 begin
   if Item.Ghosted then
      begin
-       ACanvas.Font.Color:= clMedGray;//clSilver;
-       //ACanvas.Font.Style:= [fsStrikeOut];
+       ACanvas.Font.Color:= clMedGray;
      end;
 end;
 
@@ -373,14 +386,6 @@ procedure TFormArcadeSelectSystem.SystemsListViewDblClick(
   MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
 begin
   if ButtonOk.Enabled then ButtonOk.Click;
-end;
-
-procedure TFormArcadeSelectSystem.CreateMAMESoftwareListGamesClick(Sender: TObject);
-begin
-  if CreateMAMESoftwareListGames.Checked then
-     CreateMAMESoftwareListGames.Font.Color:= clBlack
-  else
-     CreateMAMESoftwareListGames.Font.Color:= $0078695b;
 end;
 
 procedure TFormArcadeSelectSystem.ScanMAMEAllSetsClick(Sender: TObject);
@@ -421,12 +426,28 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    Starting from v0.162, you can run ');
   FormMain.AddMsgText('non-arcade', clBlack, [fsBold]);
-  FormMain.AddMsgText(' games with MAME (consoles/computers).'+#13#10+
-                      'There is one important rule you must follow to use software list games with Emu Loader:'+#13#10+#13#10);
-  FormMain.AddMsgText('    Game files must be in sub-folders with the same name as XML filenames from ', clBlack, [fsBold]);
+  FormMain.AddMsgText(' games with MAME (consoles/computers).'+
+                      ' One important rule you must follow to use software list games with Emu Loader:'+#13#10+#13#10);
+  FormMain.AddMsgText('    Game files must be in sub-folders named the same name as XML filenames from ', clBlack, [fsBold]);
   FormMain.AddMsgText('mamedir\hash\', $00a65300, [fsBold, fsItalic]);
   FormMain.AddMsgText(' folder.', clBlack, [fsBold]);
-  FormMain.AddMsgText(#13#10+#13#10+'    Say you have ');
+  FormMain.AddMsgText(#13#10+#13#10+'    There are three options to choose from:'+#13#10);
+  FormMain.AddMsgText('1. ', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Disable', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': software lists will not be created and all frontend games list files deleted.'+#13#10);
+  FormMain.AddMsgText('2. ', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Enable, Update Mode', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': new software lists will be created and current ones updated only if ');
+  FormMain.AddMsgText('CRC32 checksum', clBlack, [fsItalic]);
+  FormMain.AddMsgText(' of MAME ');
+  FormMain.AddMsgText('softlist.xml', clBlack, [fsItalic]);
+  FormMain.AddMsgText(' file is different than the checksum in frontend ');
+  FormMain.AddMsgText('softlist.el', clBlack, [fsItalic]);
+  FormMain.AddMsgText(' file.'+#13#10);
+  FormMain.AddMsgText('3. ', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Enable, Overwrite Mode', $00a65300, [fsBold]);
+  FormMain.AddMsgText(': all software lists will be created, overwriting current frontend lists even if file checksums match.'+#13#10+#13#10+
+                      '    Say you have ');
   FormMain.AddMsgText('rompath d:\emu\mame_roms;d:\emu\mess_roms', $00a65300, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText(' in ');
   FormMain.AddMsgText('mame.ini', clBlack, [fsItalic]);
@@ -457,7 +478,7 @@ begin
                       'Go here for more details:'+#13#10);
   FormMain.AddMsgText('http://www.mameworld.info/ubbthreads/showthreaded.php?Cat=&Number=341588&page=0&view=collapsed&sb=5&o=&fpart=1&vc=1&new=',
                       $00a65300);
-  GenerateMessage('Help', 'Create Software List Games');
+  GenerateMessage('Help', 'Software List Games');
 end;
 
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
@@ -475,6 +496,53 @@ end;
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListClick(Sender: TObject);
 begin
   FormMain.MenuCustomizeMAMESoftwareList.Click;
+end;
+
+procedure TFormArcadeSelectSystem.MAMESoftwareList_EnabledUpdateClick(
+  Sender: TObject);
+begin
+  MAMESoftwareListBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButton(Sender).Tag of
+    0:
+      begin
+        MAMESoftwareList_EnabledUpdate.Font.Style:= [];
+        MAMESoftwareList_EnabledOverwrite.Font.Style:= [];
+      end;
+    1:
+      begin
+        MAMESoftwareList_Disabled.Font.Style:= [];
+        MAMESoftwareList_EnabledOverwrite.Font.Style:= [];
+      end;
+    2:
+      begin
+        MAMESoftwareList_Disabled.Font.Style:= [];
+        MAMESoftwareList_EnabledUpdate.Font.Style:= [];
+      end;
+  end;
+end;
+
+procedure TFormArcadeSelectSystem.FullScanClick(Sender: TObject);
+begin
+  ScanModeBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButton(Sender).Tag of
+    0:
+      begin
+        QuickScan.Font.Style:= [];
+        ForceAllAvailable.Font.Style:= [];
+      end;
+    1:
+      begin
+        FullScan.Font.Style:= [];
+        ForceAllAvailable.Font.Style:= [];
+      end;
+    2:
+      begin
+        FullScan.Font.Style:= [];
+        QuickScan.Font.Style:= [];
+      end;
+  end;
 end;
 
 end.

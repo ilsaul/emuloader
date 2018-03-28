@@ -157,7 +157,6 @@ begin
     2: ActionStr:= 'Moving';
   end;
 
-  //LabelRemainingFiles.Caption:= Format('Remaining %.0n (%s)', [(TotalFilesLeft*1.0), FormMain.GetSizeType(iTotalFilesSizeLeft, False, True)]);
   LabelCopyToTitle.Caption:= Format('%s %.0n files (%s)', [ActionStr, (iTotalFiles*1.0), FormMain.GetSizeType(iTotalFilesSize, False, True)]);
   if FormCopyMoveGameFiles.Tag <> 0 then
      LabelCopyToTitle.Caption:= LabelCopyToTitle.Caption+' to';
@@ -364,7 +363,7 @@ begin
             Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item);
           until Item = nil;
           FilesListMAME.EndUpdate;
-          //ShowMessageW('Files list:'+#13#10+FilesListMAME.Text);
+
           if FilesListMAME.Count = 0 then
              FreeAndNil(FilesListMAME)
         end;
@@ -564,12 +563,12 @@ begin
                                 CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID)+'\';
                              CopyMoveToDir:= CopyMoveToDir+SoftwareNameDir;
 
-                             // old code
+                             // old code... remove it ? (February 25, 2018)
                              //CopyMoveToDir:= DestinationFullPath+SoftwareNameDir;
                              //if MultiSystems or AddSystemFolder then
                              //   CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID)+'\';
 
-                             if FormMain.IsMediaTypeCHD(tmpMediaType, False) then //if tmpMediaType = 1 then
+                             if FormMain.IsMediaTypeCHD(tmpMediaType, False) then
                                 CopyMoveToDir:= CopyMoveToDir+'chd_files\';
 
                              tmpFileSize:= GetFileSize(tmpFileName);
@@ -663,7 +662,7 @@ begin
           end;
           Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item);
           Application.ProcessMessages;
-          //sleep(1200); // for testing/debugging only
+          //sleep(3000); // for testing/debugging only
         until (Item = nil) or (ButtonCancel.ModalResult = mrCancel);
         // end of loop thru the games to process
         if Assigned(FilesListMAME) then
@@ -711,7 +710,7 @@ begin
                         if tmpMediaType > 0 then // there is no media type ZERO!!!!
                            CopyMoveToDir:= CopyMoveToDir+MediaTypeCustom[tmpMediaType, 2]+'\';
 
-                        // old code
+                        // old code, remove it ? (February 25, 2018)
                         //CopyMoveToDir:= DestinationFullPath;
                         //if tmpMediaType > 0 then // there is no media type ZERO!!!!
                         //   CopyMoveToDir:= CopyMoveToDir+SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+'\'+MediaTypeCustom[tmpMediaType, 2]+'\';
@@ -792,7 +791,7 @@ begin
             Item:= FormDeleteGamesFiles.FilesListView.Groups.NextItem(Item);
             Application.ProcessMessages;
             //ShowMessage('stop');
-            //sleep(1300); // for testing/debugging only
+            //sleep(3000); // for testing/debugging only
           until (Item = nil) or (ButtonCancel.ModalResult = mrCancel);
           CheckCancelButton;
           Application.ProcessMessages;
@@ -830,7 +829,7 @@ begin
                            CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteGamesFiles.TGameInfo(Item).eSystemID)+'\';
                         CopyMoveToDir:= CopyMoveToDir+SoftwareNameDir;
 
-                        // old code
+                        // old code, remove it ? (February 25, 2018)
                         //if AddSystemFolder then
                         //   CopyMoveToDir:= DestinationFullPath+FormMain.GetArcadeSystemIniSection(uDeleteGamesFiles.TGameInfo(Item).eSystemID)+'\'+SoftwareNameDir
                         //else
@@ -919,7 +918,7 @@ begin
             Item:= FormDeleteGamesFiles.FilesListView.Groups.NextItem(Item);
             Application.ProcessMessages;
             //ShowMessage('stop');
-            //sleep(1300); // for testing/debugging only
+            //sleep(3000); // for testing/debugging only
           until (Item = nil) or (ButtonCancel.ModalResult = mrCancel);
           CheckCancelButton;
           Application.ProcessMessages;

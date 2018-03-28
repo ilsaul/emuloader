@@ -1249,7 +1249,7 @@ procedure TFormArcadeMAMu_IconsManager.SelectSystem;
 var
   selSys: ShortInt;
 begin
-  selSys:= FormMain.CallSelectArcadeSystem(0, ButtonSystem.Tag);
+  selSys:= FormMain.CallSelectArcadeSystem(0, ButtonSystem.Tag-1);
   if selSys = -1 then
      Exit;
   ButtonSystem.Tag:= selSys;

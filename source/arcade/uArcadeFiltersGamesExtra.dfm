@@ -6,7 +6,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   BorderStyle = bsToolWindow
   Caption = 'Miscellaneous Filters (MAME and Arcade Only)'
   ClientHeight = 362
-  ClientWidth = 601
+  ClientWidth = 621
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,16 +23,16 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   PixelsPerInch = 96
   TextHeight = 15
   object LabelControlType: TLabel
-    Left = 408
+    Left = 418
     Top = 56
-    Width = 69
+    Width = 108
     Height = 15
-    Caption = 'Control Type'
+    Caption = 'MAME Control Type'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelInterfaceType: TLabel
-    Left = 208
+    Left = 213
     Top = 56
     Width = 131
     Height = 15
@@ -50,7 +50,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object LabelGamesROMs: TLabel
-    Left = 408
+    Left = 418
     Top = 8
     Width = 66
     Height = 15
@@ -59,20 +59,20 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object LabelDeviceROMs: TLabel
-    Left = 208
+    Left = 213
     Top = 8
-    Width = 40
+    Width = 70
     Height = 15
-    Caption = 'Devices'
+    Caption = 'Device ROMs'
     ShowAccelChar = False
     Transparent = True
   end
   object LabelBios: TLabel
     Left = 8
     Top = 8
-    Width = 25
+    Width = 60
     Height = 15
-    Caption = 'BIOS'
+    Caption = 'BIOS ROMs'
     ShowAccelChar = False
     Transparent = True
   end
@@ -116,7 +116,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object LabelSaveState: TLabel
-    Left = 208
+    Left = 213
     Top = 104
     Width = 53
     Height = 15
@@ -125,16 +125,16 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
-    Left = 408
+    Left = 418
     Top = 121
-    Width = 122
+    Width = 166
     Height = 20
     Hint = 'Enable/disable the main cpu filter bar'
     ShowHint = True
     TabOrder = 0
     OnClick = FilterGamesMainCPUClick
     Alignment = taLeftJustify
-    Caption = 'Filter by Main CPU'
+    Caption = 'Enable Main CPU Filter Bar'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
@@ -142,7 +142,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object PanelEx1: TPanelEx
     Left = 0
     Top = 321
-    Width = 601
+    Width = 621
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -154,7 +154,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtn
-      Left = 406
+      Left = 426
       Top = 8
       Width = 89
       Height = 25
@@ -167,7 +167,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       OnClick = ButtonOkClick
     end
     object ButtonCancel: TBitBtn
-      Left = 504
+      Left = 524
       Top = 8
       Width = 89
       Height = 25
@@ -193,9 +193,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
   end
   object InterfaceType: TComboBox
-    Left = 208
+    Left = 213
     Top = 73
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -212,7 +212,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object AudioType: TComboBox
     Left = 8
     Top = 73
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -228,9 +228,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Flac/Wave Sample Audio')
   end
   object GamesROMs: TComboBox
-    Left = 408
+    Left = 418
     Top = 25
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -241,26 +241,26 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Text = 'List All'
     Items.Strings = (
       'List All'
-      'Games With ROMs (any set)'
-      'Games With No ROMs'
+      'Games With ROMs (any ROM)'
+      'Games With No ROMs/CHDs'
       'Games With No Main Set')
   end
   object HideDeviceSets: TAdvOfficeCheckBox
-    Left = 272
+    Left = 303
     Top = 6
-    Width = 121
+    Width = 105
     Height = 20
     TabOrder = 5
     Alignment = taRightJustify
-    Caption = 'Hide All Device Sets'
+    Caption = 'Hide Device Sets'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
   end
   object DeviceROMs: TComboBox
-    Left = 208
+    Left = 213
     Top = 25
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -271,13 +271,13 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Text = 'List Both'
     Items.Strings = (
       'List Both'
-      'Games With Device Sets'
-      'Games With No Device Sets')
+      'Games With Device ROMs'
+      'Games With No Device ROMs')
   end
   object Bios: TComboBox
     Left = 8
     Top = 25
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -288,17 +288,17 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Text = 'List Both'
     Items.Strings = (
       'List Both'
-      'Games With BIOS Sets'
-      'Games With No BIOS Sets')
+      'Games With BIOS ROMs'
+      'Games With No BIOS ROMs')
   end
   object HideBiosSets: TAdvOfficeCheckBox
-    Left = 82
+    Left = 108
     Top = 6
-    Width = 111
+    Width = 95
     Height = 19
     TabOrder = 8
     Alignment = taRightJustify
-    Caption = 'Hide All BIOS Sets'
+    Caption = 'Hide BIOS Sets'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
@@ -352,9 +352,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Themed = True
   end
   object ControlType_New: TComboBox
-    Left = 408
+    Left = 418
     Top = 73
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -369,7 +369,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object ScreenOrientation: TComboBox
     Left = 8
     Top = 121
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -390,7 +390,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Width = 145
     Height = 20
     Hint = 
-      'Check to show only clone sets merged into parent sets (MAME/HBMA' +
+      'Check to only show clone sets merged into parent sets (MAME/HBMA' +
       'ME)'#13#10'Merged sets are not fully supported!'
     ShowHint = True
     TabOrder = 14
@@ -417,9 +417,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Themed = True
   end
   object SaveState: TComboBox
-    Left = 208
+    Left = 213
     Top = 121
-    Width = 185
+    Width = 195
     Height = 23
     Style = csDropDownList
     Ctl3D = True
@@ -435,10 +435,10 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Unknown')
   end
   object CategoryFiltersGroupBox: TAdvGroupBox
-    Left = 208
+    Left = 213
     Top = 152
-    Width = 385
-    Height = 135
+    Width = 400
+    Height = 152
     RoundEdges = True
     Caption = 'Category (uncheck to hide)       '
     Ctl3D = True
@@ -448,7 +448,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Top = 0
       Width = 177
       Height = 16
-      Caption = ' category.ini or catver.ini required '
+      Caption = ' catver.ini or category.ini required '
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -11
@@ -632,7 +632,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryEducational: TAdvOfficeCheckBox
       Tag = 1
-      Left = 212
+      Left = 229
       Top = 28
       Width = 84
       Height = 20
@@ -648,7 +648,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryElectronic: TAdvOfficeCheckBox
       Tag = 1
-      Left = 302
+      Left = 322
       Top = 28
       Width = 73
       Height = 20
@@ -664,7 +664,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryPrinters: TAdvOfficeCheckBox
       Tag = 1
-      Left = 212
+      Left = 229
       Top = 48
       Width = 63
       Height = 20
@@ -680,7 +680,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryPhones: TAdvOfficeCheckBox
       Tag = 1
-      Left = 302
+      Left = 322
       Top = 48
       Width = 62
       Height = 20
@@ -696,7 +696,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryMAMEConsoleMachines: TAdvOfficeCheckBox
       Tag = 1
-      Left = 212
+      Left = 229
       Top = 68
       Width = 157
       Height = 20
@@ -712,7 +712,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryMAMEComputerMachines: TAdvOfficeCheckBox
       Tag = 1
-      Left = 212
+      Left = 229
       Top = 88
       Width = 168
       Height = 20
@@ -728,7 +728,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryMAMEHandheldMachines: TAdvOfficeCheckBox
       Tag = 1
-      Left = 212
+      Left = 229
       Top = 108
       Width = 166
       Height = 20
@@ -742,16 +742,33 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
+    object CategoryMusic: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 128
+      Width = 55
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 18
+      Alignment = taLeftJustify
+      Caption = 'Music'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
   end
   object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox
     Left = 8
-    Top = 294
-    Width = 217
+    Top = 284
+    Width = 191
     Height = 20
+    Hint = 'Check it to hide all sets that do not have CRC32 collisions'
     ShowHint = True
     TabOrder = 18
     Alignment = taLeftJustify
-    Caption = 'Show Only Sets With CRC32 Collision'
+    Caption = 'Show CRC32 Collision Sets Only'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True

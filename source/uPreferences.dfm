@@ -92,6 +92,21 @@ object FormPreferences: TFormPreferences
       Left = 0
       Top = 0
       Caption = 'General'
+      object Label1: TLabel
+        Left = 142
+        Top = 325
+        Width = 264
+        Height = 18
+        Caption = 'Do not display errors after exiting the emulator'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
       object DisableMinimize: TAdvOfficeCheckBox
         Left = 126
         Top = 12
@@ -105,7 +120,7 @@ object FormPreferences: TFormPreferences
       end
       object GroupBoxSplitters: TAdvGroupBox
         Left = 126
-        Top = 146
+        Top = 164
         Width = 293
         Height = 133
         RoundEdges = True
@@ -246,28 +261,32 @@ object FormPreferences: TFormPreferences
         Left = 126
         Top = 56
         Width = 293
-        Height = 81
+        Height = 99
         RoundEdges = True
         Caption = 'Hide Command Prompt Box'
         Ctl3D = True
         TabOrder = 2
         object ShadowLabel2: TShadowLabel
           Left = 24
-          Top = 59
-          Width = 242
-          Height = 13
-          Caption = 'Don'#39't run emulator in windowed mode or it will be invisible'
+          Top = 57
+          Width = 248
+          Height = 37
+          AutoSize = False
+          Caption = 
+            'Do not run emulator in windowed mode or it will be invisible to ' +
+            'Windows task bar'
           Font.Charset = ANSI_CHARSET
           Font.Color = clMaroon
-          Font.Height = -9
-          Font.Name = 'Arial'
-          Font.Style = []
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsItalic]
           ParentFont = False
           ShowAccelChar = False
           ShadowColor = clGray
           ShadowEnabled = False
           EllipsType = etNone
           Transparent = True
+          WordWrap = True
         end
         object HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox
           Left = 8
@@ -286,7 +305,7 @@ object FormPreferences: TFormPreferences
           Left = 8
           Top = 40
           Width = 275
-          Height = 18
+          Height = 20
           TabOrder = 1
           Alignment = taLeftJustify
           Caption = 'Run Game (Full Screen. Use it at Your Own Risk!)'
@@ -309,7 +328,7 @@ object FormPreferences: TFormPreferences
       end
       object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox
         Left = 126
-        Top = 288
+        Top = 308
         Width = 289
         Height = 20
         Checked = True
@@ -318,6 +337,17 @@ object FormPreferences: TFormPreferences
         Caption = 'Ignore Exit Code 1: Invalid Function (KEGA Fusion)'
         ReturnIsTab = False
         State = cbChecked
+        Themed = True
+      end
+      object RestoreInternetGameInfoStartup: TAdvOfficeCheckBox
+        Left = 126
+        Top = 344
+        Width = 230
+        Height = 20
+        TabOrder = 5
+        Alignment = taLeftJustify
+        Caption = 'Restore "Internet Game Info" at Startup'
+        ReturnIsTab = False
         Themed = True
       end
     end
@@ -352,13 +382,13 @@ object FormPreferences: TFormPreferences
       end
       object LabelDisableNaturalSorting: TLabel
         Left = 264
-        Top = 79
-        Width = 185
-        Height = 16
+        Top = 83
+        Width = 198
+        Height = 18
         Caption = 'Use ASCII sorting (1, 10, 11, 2, 20, 3)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsItalic]
         ParentFont = False
@@ -367,13 +397,13 @@ object FormPreferences: TFormPreferences
       end
       object LabelGameMultilineCaptions: TLabel
         Left = 264
-        Top = 47
-        Width = 226
-        Height = 16
+        Top = 49
+        Width = 249
+        Height = 18
         Caption = 'Show full caption (32x32 and 48x48 icon size)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsItalic]
         ParentFont = False
@@ -381,14 +411,14 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object LabelDisableDeleteSelectedGames: TLabel
-        Left = 32
-        Top = 327
-        Width = 213
-        Height = 16
-        Caption = 'safeguard your ROMs from naughty kiddies'
+        Left = 264
+        Top = 319
+        Width = 237
+        Height = 18
+        Caption = 'Safeguard your ROMs from naughty kiddies'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsItalic]
         ParentFont = False
@@ -647,7 +677,7 @@ object FormPreferences: TFormPreferences
       end
       object DisableNaturalSorting: TAdvOfficeCheckBox
         Left = 248
-        Top = 64
+        Top = 66
         Width = 237
         Height = 18
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
@@ -662,7 +692,7 @@ object FormPreferences: TFormPreferences
         Left = 248
         Top = 32
         Width = 242
-        Height = 18
+        Height = 20
         TabOrder = 7
         OnClick = GameMultilineCaptionsClick
         Alignment = taLeftJustify
@@ -672,7 +702,7 @@ object FormPreferences: TFormPreferences
       end
       object GamesListStatusBarBox: TAdvGroupBox
         Left = 248
-        Top = 154
+        Top = 141
         Width = 244
         Height = 150
         RoundEdges = True
@@ -793,10 +823,10 @@ object FormPreferences: TFormPreferences
         end
       end
       object DisableDeleteSelectedGames: TAdvOfficeCheckBox
-        Left = 16
-        Top = 312
+        Left = 248
+        Top = 302
         Width = 237
-        Height = 18
+        Height = 20
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
         TabOrder = 9
         OnClick = DisableDeleteSelectedGamesClick
@@ -817,6 +847,36 @@ object FormPreferences: TFormPreferences
         Width = 171
         Height = 15
         Caption = 'Images Panel Outer Frame Color'
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelFixRetroArchImageFileNames: TLabel
+        Left = 123
+        Top = 369
+        Width = 238
+        Height = 18
+        Caption = 'Replace & * '#39' < > ? | chars by _ (underscore)'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelImageDisableThreadedLoading: TLabel
+        Left = 123
+        Top = 331
+        Width = 280
+        Height = 18
+        Caption = 'Prevent delay and "invalid pointer operation" error'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
         ShowAccelChar = False
         Transparent = True
       end
@@ -923,7 +983,7 @@ object FormPreferences: TFormPreferences
       end
       object GroupBoxInternetGameInfo: TAdvGroupBox
         Left = 16
-        Top = 184
+        Top = 180
         Width = 473
         Height = 125
         Caption = 'Internet Game Info'
@@ -1015,6 +1075,28 @@ object FormPreferences: TFormPreferences
           TabOrder = 3
           OnClick = InternetMAMESoftwareListGameInfoLinkButtonDefaultClick
         end
+      end
+      object FixRetroArchImageFileNames: TAdvOfficeCheckBox
+        Left = 107
+        Top = 352
+        Width = 298
+        Height = 20
+        TabOrder = 4
+        Alignment = taLeftJustify
+        Caption = 'Fix RetroArch Image File Names (Show Images Only)'
+        ReturnIsTab = False
+        Themed = True
+      end
+      object ImageDisableThreadedLoading: TAdvOfficeCheckBox
+        Left = 107
+        Top = 314
+        Width = 244
+        Height = 20
+        TabOrder = 5
+        Alignment = taLeftJustify
+        Caption = 'Disable Threaded Preview Images Loading'
+        ReturnIsTab = False
+        Themed = True
       end
     end
     object TPage
@@ -1224,13 +1306,13 @@ object FormPreferences: TFormPreferences
       end
       object LabelGameDocsDisplayModeSinglePanel: TShadowLabel
         Left = 110
-        Top = 271
-        Width = 190
-        Height = 17
+        Top = 273
+        Width = 208
+        Height = 19
         Caption = 'Show images and game docs together'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsItalic]
         ParentFont = False
@@ -1242,13 +1324,13 @@ object FormPreferences: TFormPreferences
       end
       object LabelGameDocsDisplayModeTabs: TShadowLabel
         Left = 110
-        Top = 305
-        Width = 238
-        Height = 17
+        Top = 309
+        Width = 262
+        Height = 19
         Caption = 'Show images and game docs in separate panels'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
-        Font.Height = -11
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsItalic]
         ParentFont = False
@@ -1309,7 +1391,7 @@ object FormPreferences: TFormPreferences
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000103010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000105010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -1383,9 +1465,9 @@ object FormPreferences: TFormPreferences
       object GameDocsDisplayModeTabs: TAdvOfficeRadioButton
         Tag = 1
         Left = 94
-        Top = 290
+        Top = 292
         Width = 225
-        Height = 18
+        Height = 20
         TabOrder = 7
         OnClick = GameDocsDisplayModeSinglePanelClick
         Alignment = taLeftJustify
@@ -1397,7 +1479,7 @@ object FormPreferences: TFormPreferences
         Left = 94
         Top = 256
         Width = 213
-        Height = 18
+        Height = 20
         TabOrder = 8
         TabStop = True
         OnClick = GameDocsDisplayModeSinglePanelClick

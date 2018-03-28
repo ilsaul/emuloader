@@ -157,10 +157,12 @@ begin
              begin
                if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
                begin
-                 case eFileType of
-                   13, 16, 19, 22: extraStr:= 'Device';
-                   14, 17, 20, 23: extraStr:= 'Bios';
-                 end;
+                 // for CHDs only
+                 if FormMain.IsFileID_DeviceCHD(eFileType) then
+                    extraStr:= 'Device'
+                 else
+                 if FormMain.IsFileID_BiosCHD(eFileType) then
+                    extraStr:= 'Bios';
                end;
 
                if eParentFile then
@@ -256,10 +258,10 @@ begin
               else
                  begin
                    case eFileType of
-                     0: Result:= eMediaType; // ROM (.zip file)
-                     15, 16, 17: Result:= 2;
-                     18, 19, 20: Result:= 3;
-                     21, 22, 23: Result:= 14;
+                     0: Result:= eMediaType;  // ROM (.zip file)
+                     15, 16, 17: Result:= 2;  // Disc
+                     18, 19, 20: Result:= 3;  // Compact Flash Card
+                     21, 22, 23: Result:= 14; // Video Tape (VHS)
                    else
                       Result:= 1;
                    end;
@@ -783,9 +785,9 @@ begin
   //LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
   
   case FormMain.MemGameInfo.eGameSetStatus of
-    0: TopBar.Color1:= $00f0fae5; // green
-    1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-    2: TopBar.Color1:= $00eeeeee; // silver (base on green)
+    0: TopBar.Color1:= $00f0fae5; // green                  - good
+    1: TopBar.Color1:= $00e5f0fa; // red (based on green)   - found with missing ROMs/CHDs
+    2: TopBar.Color1:= $00eeeeee; // silver (base on green) - missing
   end;
   case ActionMode of
     0: ActionString:= 'Delete';
@@ -835,25 +837,11 @@ begin
             FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height-HeightDiff;
           end;
      end;
-  //else
-  //if ScreenHighRes then
-  //   begin
-  //     HeightDiff:= FilesListView.Height;
-  //     FilesListView.Height:= FilesListView.Height+(FilesListView.CellSizes.Tile.Height*2);
-  //     HeightDiff:= FilesListView.Height-HeightDiff;
-  //     FormDeleteGamesFiles.Height:= FormDeleteGamesFiles.Height+HeightDiff;
-  //   end;
-     
-  {case Screen.Width of
-    720: RemovePixels(20);
-    640: RemovePixels(90);
-  end;
-  RemovePixels(90);}
 
   if FilesListView.Scrollbars.VertBarVisible then
      begin
        FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);
-       FilesListView.HotTrack.Enabled:= False; // disable to fix hot track painting bug :_((
+       FilesListView.HotTrack.Enabled:= False; // disable to fix hot track painting bug
      end
   else
      begin
@@ -925,7 +913,7 @@ begin
                    FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
                  end;
 
-              if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then // .Count > 0
+              if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
                  begin
                    FormMain.AddMsgText('    No files were found to ');
                    FormMain.AddMsgText(LowerCase(ActionString), $00a65300, [fsBold]);
@@ -1151,12 +1139,7 @@ begin
 
   if GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle, '', 1, True, -1) = mrNo then
      Exit;
-  //if GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle,
-  //                   '    You are about to '+LowerCase(ActionString)+' the checked files of the selected game.'+#13#10+
-  //                   '    Click "No" button if you want to go back and review the files to '+LowerCase(ActionString)+', or '+
-  //                   'click "Yes" button to continue.'+#13#10+#13#10+
-  //                   'Continue. Are you sure ?', 1, True, 2) = mrNo then
-  //   Exit;
+     
   GameChanged:= ProcessGamesFiles;
   Close;
 end;

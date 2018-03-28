@@ -599,7 +599,6 @@ object FormMain: TFormMain
       TabOrder = 0
       View = elsReport
       OnColumnClick = GamesListViewColumnClick
-      OnColumnPaintText = GamesListViewColumnPaintText
       OnColumnSizeChanging = GamesListViewColumnSizeChanging
       OnDblClick = GamesListViewDblClick
       OnIncrementalSearch = GamesListViewIncrementalSearch
@@ -836,22 +835,12 @@ object FormMain: TFormMain
     object BitBtn3: TBitBtn
       Left = 360
       Top = 232
-      Width = 137
+      Width = 169
       Height = 25
-      Caption = 'Get CRC32 duplicates'
+      Caption = 'Get CRC32 duplicate game ROM'
       TabOrder = 6
       Visible = False
       OnClick = BitBtn3Click
-    end
-    object BitBtn4: TBitBtn
-      Left = 360
-      Top = 264
-      Width = 168
-      Height = 25
-      Caption = 'Unzip to Stream, CRC collision'
-      TabOrder = 7
-      Visible = False
-      OnClick = BitBtn4Click
     end
     object BitBtn5: TBitBtn
       Left = 360
@@ -859,9 +848,19 @@ object FormMain: TFormMain
       Width = 161
       Height = 25
       Caption = 'Check Weird Soft Exec Name'
-      TabOrder = 8
+      TabOrder = 7
       Visible = False
       OnClick = BitBtn5Click
+    end
+    object BitBtn2: TBitBtn
+      Left = 360
+      Top = 264
+      Width = 161
+      Height = 25
+      Caption = 'CRC32 New and Old XML'
+      TabOrder = 8
+      Visible = False
+      OnClick = BitBtn2Click
     end
   end
   object PanelScreenshotsArea: TPanelEx
@@ -1051,7 +1050,7 @@ object FormMain: TFormMain
           Align = alClient
           Bitmap.DrawMode = dmBlend
           Bitmap.ResamplerClassName = 'TKernelResampler'
-          Bitmap.Resampler.KernelClassName = 'THermiteKernel'
+          Bitmap.Resampler.KernelClassName = 'TCosineKernel'
           Bitmap.Resampler.KernelMode = kmDynamic
           Bitmap.Resampler.TableSize = 32
           BitmapAlign = baCenter
@@ -3493,7 +3492,12 @@ object FormMain: TFormMain
       end
       object MenuCreateMAMESoftwareListGames: TMenuItem
         Tag = 1
-        Caption = 'Create MAME Software List Games'
+        Caption = 'Create MAME Software Games List'
+        OnClick = MenuCreateMAMESoftwareListGamesClick
+      end
+      object MenuCreateHBMAMESoftwareListGames: TMenuItem
+        Tag = 50
+        Caption = 'Create HBMAME Software Games List'
         OnClick = MenuCreateMAMESoftwareListGamesClick
       end
       object N55: TMenuItem
@@ -3827,18 +3831,26 @@ object FormMain: TFormMain
           AutoCheck = True
           Caption = 'Linear'
           HelpContext = 1
-          Hint = 'Blurry, fast'
+          Hint = 'Blurry, interpolation, fast'
+          RadioItem = True
+          OnClick = MenuImageFilterOffClick
+        end
+        object MenuImageFilterCosine: TMenuItem
+          Tag = 2
+          AutoCheck = True
+          Caption = 'Cosine'
+          Checked = True
+          Default = True
+          Hint = 'Sharp, precise, slow'
           RadioItem = True
           OnClick = MenuImageFilterOffClick
         end
         object MenuImageFilterHermite: TMenuItem
-          Tag = 2
+          Tag = 3
           AutoCheck = True
           Caption = 'Hermite'
-          Checked = True
-          Default = True
           HelpContext = 8
-          Hint = 'Sharp, slow'
+          Hint = 'Sharp, color bleed, slower'
           RadioItem = True
           OnClick = MenuImageFilterOffClick
         end

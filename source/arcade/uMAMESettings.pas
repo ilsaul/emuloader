@@ -641,6 +641,7 @@ type
     LabelSnapSizeCustom: TLabel;
     LabelOverrideArtwork: TLabel;
     OverrideArtwork: TEdit;
+    CommSyncFrame: TAdvOfficeCheckBox;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -2710,6 +2711,9 @@ begin
             if EntryString = 'comm_remoteport ' then
                CommRemotePort.Text:= GetStringValue
             else
+            if EntryString = 'comm_framesync ' then
+               CommSyncFrame.Checked:= GetBooleanValue
+            else
             // # CORE MISC OPTIONS
             if EntryString = 'drc ' then
                DRC.Checked:= GetBooleanValue
@@ -4403,6 +4407,9 @@ begin
          if tmpEntryStr = 'comm_remoteport ' then
             UpdateMAMELine(EntryString, CommRemotePort.Text)
          else
+         if tmpEntryStr = 'comm_framesync ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(CommSyncFrame.Checked))
+         else
          // # CORE MISC OPTIONS
          if tmpEntryStr = 'drc ' then
             UpdateMAMELine(EntryString, GetBooleanValue(DRC.Checked))
@@ -5769,6 +5776,8 @@ procedure TFormMAMESettings.FormShow(Sender: TObject);
 var
   iStr: String;
 begin
+  FormMain.ResizeFormAddScrollBars(FormMAMESettings);
+
   VectorGroupBox.DoubleBuffered:= True;
   VectorPostProcessingBox.DoubleBuffered:= True;
   PerformanceGroupBox.DoubleBuffered:= True;

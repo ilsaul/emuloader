@@ -60,6 +60,7 @@ type
     CategoryMAMEComputerMachines: TAdvOfficeCheckBox;
     CategoryMAMEHandheldMachines: TAdvOfficeCheckBox;
     ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox;
+    CategoryMusic: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -199,6 +200,9 @@ begin
         FilterChanged(CategoryPrinters.Tag, Ord(CategoryPrinters.Checked));
         CategoryPrinters.Tag:= Ord(CategoryPrinters.Checked);
 
+        FilterChanged(CategoryMusic.Tag, Ord(CategoryMusic.Checked));
+        CategoryMusic.Tag:= Ord(CategoryMusic.Checked);
+
         FilterChanged(CategoryMAMEConsoleMachines.Tag, Ord(CategoryMAMEConsoleMachines.Checked));
         CategoryMAMEConsoleMachines.Tag:= Ord(CategoryMAMEConsoleMachines.Checked);
 
@@ -267,6 +271,8 @@ begin
         ResetFilterCheckBox(CategoryElectronic);
         ResetFilterCheckBox(CategoryPrinters);
         ResetFilterCheckBox(CategoryPhones);
+        ResetFiltercheckBox(CategoryMusic);
+
         ResetFilterCheckBox(CategoryMAMEConsoleMachines);
         ResetFilterCheckBox(CategoryMAMEComputerMachines);
         ResetFilterCheckBox(CategoryMAMEHandheldMachines);
@@ -340,6 +346,8 @@ begin
   CategoryElectronic.Checked:= True;
   CategoryPrinters.Checked:= True;
   CategoryPhones.Checked:= True;
+  CategoryMusic.Checked:= True;
+
   CategoryMAMEConsoleMachines.Checked:= True;
   CategoryMAMEConsoleMachines.Checked:= True;
   CategoryMAMEHandheldMachines.Checked:= True;

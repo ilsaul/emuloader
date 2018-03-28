@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
-  ShadowLabel, ExtCtrls, PanelEx, ImgList;
+  ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -67,6 +67,7 @@ type
     procedure PopulateFolders;
     //procedure UpdateFolders;
     procedure UpdateImageCategories;
+    procedure UpdateCategorySettingsIni;
     procedure UpdateSnapDir_MAME;
     procedure SetImageCategoryValues;
   public
@@ -141,6 +142,25 @@ begin
   // update category background colors (from EasyListView to FormMain.PopupMenuImageCategories)
 end;
 
+procedure TFormImageCategorySettings.UpdateCategorySettingsIni;
+var
+  ImgIniFile: TMemIniFile;
+  Loop: Integer;
+begin
+  // image category settings
+  ImgIniFile:= TMemIniFile.Create(FormMain.GetImageCategorySettingsFile);
+
+  for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+  begin
+    ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.PopupMenuImageCategories.Items[Loop].Tag);
+    if Loop <> 1 then
+       ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', Ord(FormMain.PopupMenuImageCategories.Items[Loop].Visible));
+  end;
+
+  ImgIniFile.UpdateFile;
+  FreeAndNil(ImgIniFile);
+end;
+  
 procedure TFormImageCategorySettings.UpdateSnapDir_MAME;
 begin
   FormMain.UpdateMAMEsnapDir(FormMain.imgFolder[idMAME, 1], idMAME);
@@ -314,6 +334,7 @@ begin
        UpdateSnapDir_MAME; // only if user click "Apply" button (MAME/arcade only)
        FormMain.WriteImageCategories(True, False); // save category folders for MAME/arcade
        UpdateCustomSysImageFolders; // save changes to "sysimagefolders.ini" for console/computer
+       UpdateCategorySettingsIni; // must be called AFTER "UpdateImageCategories" function
      end;
 end;
 

@@ -193,10 +193,18 @@ begin
        Exit;
      end;
   case Key of
-    #13: ButtonOk.Click;
-    #27: ButtonCancel.Click;
+    #13:
+      begin
+        Key:= #0; // remove the "ding" sound when pressing ESC/ENTER keys
+        ButtonOk.Click;
+      end;
+    #27:
+      begin
+        Key:= #0; // remove the "ding" sound when pressing ESC/ENTER keys
+        ButtonCancel.Click;
+      end;
   end;
-  Key:= #0; // remove the "ding" sound when pressing ESC/ENTER keys
+
 end;
 
 procedure TFormImageDeleteRename.FormKeyPress(Sender: TObject;

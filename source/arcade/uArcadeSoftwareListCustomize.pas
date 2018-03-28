@@ -202,12 +202,11 @@ var
   iFolder: String;
   iName: String;
 begin
-  FormStatus.MessageStr('Searching MAME software lists.');
-
   FormMain.ReadMAMEHashFolder(idMAME, FormMain.EmulatorFile[idMAME], iFolder);
   if iFolder = '' then
      Exit;
 
+  FormStatus.MessageStr('Searching MAME software lists.');
   iFiles:= THashedStringList.Create;
   GetFilesList(iFolder, '.xml', '*.xml', iFiles, False, True, True);
   if iFiles.Count > 0 then

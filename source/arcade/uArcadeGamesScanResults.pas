@@ -50,6 +50,7 @@ type
     fROMTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
 
     fROMIsFromParentSet: Boolean;
+    fROMDeviceName: String;
 
     fSoftwareTitle,
     fSoftwareName: String;
@@ -99,12 +100,13 @@ type
     //property eDeviceSizeText: String read fDeviceSizeText write fDeviceSizeText;
 
     property eROMName: String read fROMName write fROMName;
-    //property eROMChecksum: String read fROMChecksum write fROMChecksum;
     property eROMCRC32: String read fROMCRC32 write fROMCRC32;
     property eROMSHA1: String read fROMSHA1 write fROMSHA1;
-    property eROMTagIndex: Byte read fROMTagIndex write fROMTagIndex; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
+    property eROMTagIndex: Byte read fROMTagIndex write fROMTagIndex;
 
     property eROMIsFromParentSet: Boolean read fROMIsFromParentSet write fROMIsFromParentSet; // for clone games... and for game ROMs only (no CHDs, bios/device ROMs)
+    property eROMDeviceName: String read fROMDeviceName write fROMDeviceName; // for
+
     property eSoftwareTitle: String read fSoftwareTitle write fSoftwareTitle;
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
   end;
@@ -250,14 +252,7 @@ begin
     1:
       begin
         case eLineMode of
-          //2: Result:= eNameZipStatus;
-          //3: Result:= eParentZipStatus;
-          //4: Result:= eBiosZipStatus;
-          //5: Result:= eSoftwareTitle;
           6: Result:= eROMCRC32;
-        //else
-        //  if eLineMode > 6 then
-        //     Result:= eDeviceZipStatus
         else
            Result:= '';
         end;
@@ -281,26 +276,51 @@ begin
       begin
         if eLineMode = 6 then
            begin
-             case eROMTagIndex of
-               1, 4, 7, 10: // device ROM
-                 begin
-                   if not eIsDevice then
-                      Result:= 'Device';
-                 end;
-               2, 5, 8, 11: // bios ROM
-                 begin
-                   if not eIsBios then
-                      begin
-                        if eSystem = idSegaModel2 then
-                           begin
-                             if eGameName  <> 'model2' then
-                                Result:= 'Board ROM';
-                           end
-                        else
-                           Result:= 'Bios';
-                      end;
-                 end;
-             end;
+             if FormMain.IsFileID_DeviceROM(eROMTagIndex) then
+                begin // device ROM
+                  if not eIsDevice then
+                     begin
+                       if eROMDeviceName <> '' then
+                          Result:= 'Device '+eROMDeviceName
+                       else
+                          Result:= 'Device';
+
+                     end;
+                end
+             else
+             if FormMain.IsFileID_BiosROM(eROMTagIndex) then
+                begin // bios ROM
+                  if not eIsBios then
+                     begin
+                       if eSystem = idSegaModel2 then
+                          begin
+                            if eGameName  <> 'model2' then
+                               Result:= 'Board ROM';
+                          end
+                       else
+                          Result:= 'Bios';
+                     end;
+                end;
+             //case eROMTagIndex of
+             //  1, 4, 7, 10: // device ROM
+             //    begin
+             //      if not eIsDevice then
+             //         Result:= 'Device';
+             //    end;
+             //  2, 5, 8, 11: // bios ROM
+             //    begin
+             //      if not eIsBios then
+             //         begin
+             //           if eSystem = idSegaModel2 then
+             //              begin
+             //                if eGameName  <> 'model2' then
+             //                   Result:= 'Board ROM';
+             //              end
+             //           else
+             //              Result:= 'Bios';
+             //         end;
+             //    end;
+             //end;
 
              if (eROMCRC32 = '') and (eROMSHA1 = '') then
                 Result:= FormArcadeGamesScanResults.CheckEmptyVar(Result)+'No Dump'
@@ -324,9 +344,12 @@ begin
                            Result:= Result+'Bad MD5';
                       end;
                  end;
-               //MaxArcadeSystems+3: Result:= FormScanResults.CheckEmptyVar(Result)+'Bad Checksum';
              end;
-             if eROMIsFromParentSet then
+
+             if eROMIsFromParentSet and
+                (not eIsDevice) and
+                (not eIsBios) and
+                FormMain.IsFileID_GameROM(eROMTagIndex) and FormMain.IsFileID_GameCHD(eROMTagIndex) then
                 Result:= 'Parent '+Result;
            end
         else
@@ -410,7 +433,7 @@ var
   tmpString, MissingROMsFileName: String;
   addGroup, checkGroup: TEasyGroup;
   addItem, checkItem: TEasyItem;
-  IsSegaModel2: Boolean;
+  IsSegaModel2, HaveMultipleDeviceSets: Boolean;
   tmpFileID: Integer;
 
   function GetZipStatusText(const Data_String: String; Data_FileStatus: Boolean): String;
@@ -501,13 +524,14 @@ var
     TEasyScanInfo(addItem).eROMCRC32:= '';
     TEasyScanInfo(addItem).eROMSHA1:= '';
     TEasyScanInfo(addItem).eROMTagIndex:= 0;
+    TEasyScanInfo(addItem).eROMDeviceName:= '';
   end;
 
   function AddGame: Boolean;
   var
     LoopROMs, BaseIconIndex: Integer;
     LineStr, iNameEntry, romName, romCRC32, romSHA1, chdParentName, romDeviceName: String;
-    romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file (game, bios, device)
+    romTagIndex: Byte;
     IsParentROM: Boolean;
     IsCHD: Boolean;
   begin
@@ -575,6 +599,8 @@ var
             end;
        end;
 
+    HaveMultipleDeviceSets:= Assigned(TEasyGameInfo(checkItem).eDeviceSets) and (TEasyGameInfo(checkItem).eDeviceSets.Count > 1);
+
     BaseIconIndex:= MaxArcadeSystems+3; // from IL_ScanResults index... 0 + MaxArcadeSytems + 3 (result OK, result Not Found, result Bad CRC)
     // add ROMs entries ELV
     for LoopROMs:=0 to TEasyGameInfo(checkItem).eROMInfo.Count-1 do
@@ -587,8 +613,7 @@ var
       IsParentROM:= LineStr[6] = '1';
       FormMain.GetROMDetailsInfo(LineStr, FormMain.GameIsClone(TEasyGameInfo(checkItem).eClone), romName, romCRC32, romSHA1, chdParentName, romDeviceName);
       IsCHD:= Boolean(StrToInt(LineStr[3])); // LineStr[4] is CRC32_collision
-      //IsCHD:= ((romCRC32 = '') and (romSHA1 <> '')) or
-      //        (SameText(ExtractFileExt(romName), '.chd'));
+      
       // crc32;sha1=ikaruga.chd
       iNameEntry:= FormMain.GetMissCheckEntry(romCRC32, romSHA1);
 
@@ -614,12 +639,7 @@ var
               15, 16, 17: tmpFileID:= BaseIconIndex+6; // CD
               18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card
               21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS)
-
-              //12, 13, 14: tmpFileID:= 19; // HDD (also general CHD)
-              //15, 16, 17: tmpFileID:= 20; // CD
-              //18, 19, 20: tmpFileID:= 21; // Compact Flash Card
             end;
-            //Item.ImageIndex:= 16;
           end;
         False:
           begin
@@ -630,12 +650,6 @@ var
               09, 10, 11: tmpFileID:= BaseIconIndex+4; // Cassette Tape
               18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card (but it's not a CHD file)
               21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS) (but it's not a CHD file)
-
-              //00, 01, 02: tmpFileID:= 15; // ROM
-              //03, 04, 05: tmpFileID:= 16; // Cartridge
-              //06, 07, 08: tmpFileID:= 17; // Floppy Disk
-              //09, 10, 11: tmpFileID:= 18; // Cassette Tape
-              //18, 19, 20: tmpFileID:= 21; // Compact Flash Card (but it's not a CHD file)
             end;
           end;
       end;
@@ -649,10 +663,13 @@ var
       TEasyScanInfo(addItem).eBiosName:= '';
       TEasyScanInfo(addItem).eGameTitle:= '';
       TEasyScanInfo(addItem).eROMName:= romName;
-      //TEasyScanInfo(addItem).eROMChecksum:= romCRC;
       TEasyScanInfo(addItem).eROMCRC32:= romCRC32;
       TEasyScanInfo(addItem).eROMSHA1:= romSHA1;
       TEasyScanInfo(addItem).eROMTagIndex:= romTagIndex;
+      if HaveMultipleDeviceSets then
+         TEasyScanInfo(addItem).eROMDeviceName:= romDeviceName
+      else
+         TEasyScanInfo(addItem).eROMDeviceName:= '';
       TEasyScanInfo(addItem).eROMIsFromParentSet:= IsParentROM;
       TEasyScanInfo(addItem).eSoftwareName:= TEasyScanGroupInfo(addGroup).eSoftwareName;
       TEasyScanInfo(addItem).eSoftwareTitle:= TEasyScanGroupInfo(addGroup).eSoftwareTitle;
@@ -758,6 +775,11 @@ begin
 
        IL_ScanResults.Width:=  24;
        IL_ScanResults.Height:= 24;
+
+       MAMEMachinesFilterIcon.Left:= MAMEMachinesFilterIcon.Left-8;
+       MAMEMachinesFilterIcon.Top:= MAMEMachinesFilterIcon.Top-8;
+       MAMEMachinesFilterIcon.Width:= 24;
+       MAMEMachinesFilterIcon.Height:= 24;
 
        Exit;
      end;
@@ -935,7 +957,7 @@ begin
         2: ShowItem:= TEasyScanGroupInfo(vGroup).eSoftwareName <> '';
       end;
     end;
-    vGroup.Visible:= ShowItem; //vGroup.Visible:= TEasyScanGroupInfo(vGroup).eSystem = SystemSelectorToolBar.Tag;
+    vGroup.Visible:= ShowItem;
 
     vGroup:= ROMsListView.Groups.NextGroup(vGroup);
   until vGroup = nil;
@@ -992,9 +1014,6 @@ begin
            begin
              ACanvas.Font.Name:= 'Consolas';
            end;
-        //if not (TEasyScanInfo(Item).eLineMode in [2..5]) then
-        //if TEasyScanInfo(Item).eLineMode <> 5 then
-        //ACanvas.Font.Size:= 9;
       end;
     2: // SHA-1 (new September 14, 2016)
       begin
@@ -1006,7 +1025,6 @@ begin
     3: // Status
       begin
         // MarArcadeSystems+1
-        //if (TEasyScanInfo(Item).eLineMode > 5) then//and (TEasyScanInfo(Item).eImageIndex = MaxArcadeSystems+1) then
         if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
            ACanvas.Font.Color:= clRed;
         LowerFontSize;
@@ -1042,7 +1060,6 @@ function TFormArcadeGamesScanResults.ROMsListViewGroupCompare(
 var
   Item1Bios, Item2Bios, Item1Device, Item2Device, Item1Game, Item2Game: Boolean;
   Item1Title, Item2Title: String;
-  //Item1Sys, Item2Sys: Byte;
 begin
   // list device sets A..Z first, then bios A..Z, then games A..Z
   Item1Device:= TEasyScanGroupInfo(Item1).eIsDevice;
@@ -1060,7 +1077,6 @@ begin
 
   if Item1Game and Item2Game then
      Result:= FormMain.iCompare(Item1Title, Item2Title)
-     //Result:= CompareText(Item1Title, Item2Title)
   else
   if (not Item1Game) and (not Item1Game) then
      begin
@@ -1071,24 +1087,12 @@ begin
           Result:= 1
        else
           Result:= FormMain.iCompare(Item1Title, Item2Title);
-          //Result:= CompareText(Item1Title, Item2Title)
      end
   else
   if (not Item1Game) and Item2Game then
      Result:= -1
   else
      Result:= 1;
-
-  {if (not Item1Bios) and (not Item2Bios) then
-     Result:= CompareText(Item1Title, Item2Title)
-  else
-  if Item1Bios and Item2Bios then
-     Result:= CompareText(Item1Title, Item2Title)
-  else
-  if Item1Bios and (not Item2Bios) then
-     Result:= -1
-  else
-     Result:= 1;}
 end;
 
 

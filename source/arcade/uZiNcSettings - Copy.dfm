@@ -1006,6 +1006,7 @@ object FormZiNcSettings: TFormZiNcSettings
     View = elsReport
     OnItemEdited = FolderROMsItemEdited
     OnItemEditEnd = FolderROMsItemEditEnd
+    OnItemPaintText = FolderROMsItemPaintText
     OnKeyAction = FolderROMsKeyAction
   end
   object ButtonUp: TBitBtn

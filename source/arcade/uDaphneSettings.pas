@@ -149,6 +149,7 @@ procedure TFormDaphneSettings.WriteIni(const customIniFileStr: String);
 var
   IniFile: TMemIniFile;
 begin
+  CheckAndCreateFolder(ExtractFilePath(customIniFileStr)); // make sure the destination path exists
   IniFile:= TMemIniFile.Create(customIniFileStr);
   IniFile.WriteString('General', 'LaserdiscType', LaserdiscTypeList[LaserDiscType.ItemIndex, 0]);
   IniFile.WriteInteger('General', 'NoCreateLogFile', Ord(Daphne_NoLog.Checked));

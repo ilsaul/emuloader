@@ -1412,20 +1412,26 @@ begin
   // 3 -> missing files          "system_name.miss"
   // 4 -> wav/flac audio samples "system_name.elsamples"
   // 5 -> machines list+softlist "system_name.elsoftlist"
+  // 6 -> softlist requirement   "system_name.elsoftlistreq"
   // 9 -> CRC32 collisions list  "system_name_crc32collision.txt"
   Result:= '';
   case SystemID of
-    idMAME      :
-                  begin
-                    if SoftwareList = '' then
-                       Result:= 'mame'
-                    else
-                       Result:= SoftwareList;
-                  end;
+    idMAME, idHBMAME:
+      begin
+        if SoftwareList = '' then
+           begin
+             if SystemID = idMAME then
+                Result:= 'mame'
+             else
+                Result:= 'hbmame';
+           end
+        else
+           Result:= SoftwareList;
+      end;
     idSupermodel: Result:= 'supermodelsegamodel3';
     idDaphne    : Result:= 'daphne';
     idDemul     : Result:= 'demul';
-    idHBMAME    : Result:= 'hbmame';
+    //idHBMAME    : Result:= 'hbmame';
     idDICE      : Result:= 'dice';
     idSegaModel2: Result:= 'segamodel2';
     idZiNc      : Result:= 'zinc';
@@ -1437,6 +1443,7 @@ begin
     3: Result:= Result+'.miss';
     4: Result:= Result+'.elsamples';
     5: Result:= Result+'.elsoftlist';
+    6: Result:= Result+'.elsoftlistreq';
     9: Result:= Result+'_crc32collision.txt'; // id "9" to give some room for future expansion (February 15, 2018)
   end;
 end;
@@ -1972,7 +1979,6 @@ begin
             Result:= Copy(strLine, strPosition, (strPosition2-strPosition));
           end;
      end;
-
 end;
 
 // this function is used by the resolution list in SEGA Model 2 Emulator settings screen!

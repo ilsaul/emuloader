@@ -367,18 +367,21 @@ begin
   if IsCustom then
   begin
     CustomEntryList:= TStringList.Create;
-    CustomEntryList.LoadFromFile(emuIni);
-    CustomEntryList.BeginUpdate;
-    for IntValue:=CustomEntryList.Count-1 downto 0 do
+    if FileExists(emuIni) then // in case the file doesn't exist
     begin
-      StrValue:= CustomEntryList[IntValue];
-      if StrValue <> '' then
+      CustomEntryList.LoadFromFile(emuIni);
+      CustomEntryList.BeginUpdate;
+      for IntValue:=CustomEntryList.Count-1 downto 0 do
       begin
-        if StrValue[1] = '[' then
-           CustomEntryList.Delete(IntValue);
+        StrValue:= CustomEntryList[IntValue];
+        if StrValue <> '' then
+        begin
+          if StrValue[1] = '[' then
+             CustomEntryList.Delete(IntValue);
+        end;
       end;
+      CustomEntryList.EndUpdate;
     end;
-    CustomEntryList.EndUpdate;
   end;
 
   CheckAndCreateFolder(ExtractFilePath(iniFile));

@@ -945,7 +945,6 @@ type
     PopupMachinesListSidePanelFiltersSaveState_Unknown: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_ListAll: TMenuItem;
     BitBtn3: TBitBtn;
-    BitBtn4: TBitBtn;
     BitBtn5: TBitBtn;
     FilterGameTitle_SoftwareListName: TMenuItem;
     IL_StandardIconsThumbnail: TImageList;
@@ -1057,6 +1056,9 @@ type
     TabbedImageGameDocSeparator: TToolButton;
     ToolButton1: TToolButton;
     WebButtonPlayVideoPreview: TToolButton;
+    MenuCreateHBMAMESoftwareListGames: TMenuItem;
+    BitBtn2: TBitBtn;
+    MenuImageFilterCosine: TMenuItem;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1231,8 +1233,6 @@ type
     procedure MenuShowPlayersInfoFromNplayersIniOnlyClick(Sender: TObject);
     procedure ButtonPlayVideoPreviewClick(Sender: TObject);
     procedure MenuSmallToolBarClick(Sender: TObject);
-    procedure GamesListViewColumnPaintText(Sender: TCustomEasyListview;
-      Column: TEasyColumn; ACanvas: TCanvas);
     procedure MenuShowGamesStatusBarClick(Sender: TObject);
     procedure FilterGameTitleEnter(Sender: TObject);
     procedure FilterGameTitleExit(Sender: TObject);
@@ -1291,7 +1291,6 @@ type
     procedure PopupPlayGameExtraParametersMAMEClick(Sender: TObject);
     procedure PopupMachinesListSidePanelFiltersSaveState_ListAllClick(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
-    procedure BitBtn4Click(Sender: TObject);
     procedure BitBtn5Click(Sender: TObject);
     procedure ImagesMouseEnter(Sender: TObject);
     procedure ImagesMouseLeave(Sender: TObject);
@@ -1335,7 +1334,9 @@ type
       var DefaultDraw: Boolean);
     procedure ButtonImagePanelToggleClick(Sender: TObject);
     procedure ButtonDocsPanelToggleClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
 
+  { Private declarations }
   private
     //FileIcon: TIcon;
     LastColumnSorted: Integer;
@@ -1390,7 +1391,10 @@ type
     procedure UpdateEmuConPlayedGamesTags;
     procedure UpdateArcadeVideoPreviewSection;
     //procedure UpdateOldGamesListFiles; // update old Emu Loader games list files to latest one (systemname.el; systemname.elrom; systemname.elstatus; systemname.miss)
+    procedure SplitImageCategoriesIniSettings;
+    procedure LoadImageCategoryLayoutSettings;
 
+    procedure LoadMAMESoftList(sysID: Integer; var SoftListVar: THashedStringList; RemoveFileExtension: Boolean);
     procedure LoadGames(LoadArcade, LoadSoftwareListMESS, LoadCustomGames: Boolean; ClearGamesList: Boolean = False);
     //procedure LoadGames; // load games from files into EasyListView (no filtering, all games visible)
 
@@ -1449,6 +1453,8 @@ type
     procedure ImagePreviewMouseEnter(Sender: TObject);
     procedure ImagePreviewMouseLeave(Sender: TObject);
 
+    function  FixRetroArchImageFileNames(const ImageFileNameStr: String): String;
+
     procedure SelectRandomGame(ELV_Holder: TEasyListview; var CurrentSelection: TEasyItem);
 
     // games filters routines
@@ -1464,7 +1470,7 @@ type
     procedure HideGroupsFilter(ELV_Holder: TEasyListView);
     function  CheckGameControlType(sysID: ShortInt; const ControlsStrHolder, ControlName, SoftwareName: String; ButtonsCount: Byte): Boolean;
     function  VerifyArcadeGamesSys(sysID: ShortInt; const SoftwareName: String = ''): Boolean;
-    function  VerifyGamesMAMESoftlist: Boolean;
+    function  VerifyGamesMAMESoftlist(sysID: ShortInt): Boolean;
     function  FixDriverSourceName(const DriverStr: String): String;
 
     procedure SetCustomGameTitle(ItemHolder: TEasyItem);
@@ -1492,7 +1498,6 @@ type
     function  ScanGames(SingleScan: Boolean; ScanResultsIni: TMemIniFile; ItemAudit: TEasyItem; RefreshMode: ShortInt): Boolean;
 
     procedure UpdateScreenshotsPanel;
-    procedure ToggleGameDocumentsDisplayMode;
     procedure ToggleGameDocuments(Enabled: Boolean);
     procedure ResetGameDocsQuickMenus;
     function  ShowGameInfoValidate: Boolean;
@@ -1553,10 +1558,6 @@ type
     procedure CycleImageCategory(MoveForward: Boolean);
     procedure CycleImageLayout(MoveForward: Boolean);
 
-    //procedure AutoRenameSnapshots;
-
-    procedure HideMenuItemsViewMode;
-
     procedure SetScanModePopupHint(ScanMode: Byte);
 
     procedure CallSetDeleteOptions(const FileName: String; MenuHolder: TMenuItem; IsDriver: Boolean = False; IsAlterMAME: Boolean = False);
@@ -1565,6 +1566,8 @@ type
     function  UpdateMAMu_ScanFolder: Boolean;
 
     procedure UpdateHeaderFont(ELV_Holder: TEasyListView);
+
+    function  GetSoftListGameRequiredParam(sysID: Integer; const GameName: WideString; const SoftwareName: String): String; // for software list games "requirement" tag
 
     // Machines List Side Panel
     procedure ToggleMachinesListSidePanel;
@@ -1613,7 +1616,7 @@ type
 
     procedure AddRequestThumbExtraction(Item: TEasyItem);
 
-    { Private declarations }
+    { Public declarations }
   public
     IsWin7, IsStartup, CreatingGamesList: Boolean;
 
@@ -1698,6 +1701,8 @@ type
     function  ReadCustomCommandLine(const sFileFullPath: WideString; RunningGame: Boolean = False): WideString;
     procedure DeleteCustomCommandLine(const sFileName: WideString);
 
+    procedure ResizeFormAddScrollBars(FormSource: TForm);
+
     procedure PaintToolBarTheme(Sender: TToolBar; IsMainBar: Boolean);
     procedure PaintToolBarTheme2(RectToPaint: TRect; CanvasToPaint: TCanvas; IsMainBar: Boolean);
     procedure SetFormKeyPreview(FormHolder: TForm);
@@ -1728,7 +1733,7 @@ type
     //procedure SetDefaultFont(var tFont: TFont; FontID: ShortInt);
     procedure SetDefaultFont(tFont: TFont; FontID: ShortInt);
     function  GetArcadeFolder: String;
-    function  GetGamesFolderEL(SystemType: ShortInt = 0): String;
+    function  GetGamesFolderEL(SystemType: ShortInt = 0; sysID: ShortInt = idMAME): String;
     //function  GetFolderSoftwareList(sysID: Byte): String;
     function  LoadMultiSlotList(sysID: ShortInt; const MachineName: String; ArrayIndex: ShortInt): Boolean;
     function  LoadMultiSlotArray(sysID: ShortInt): Boolean;
@@ -1760,9 +1765,8 @@ type
     procedure LoadListCPU(BoxHolder: TComboBox);
     function  GetMAMEImageIndex(CurrentImageIndex: Integer; const SoftwareName: String; IsMAMu_IconLoaded: Boolean = False): Integer;
 
-    function  GetSoftwareListTitle(const SoftwareName: String): WideString;
-    function  GetLastUsedMachineSoftwareList(const SoftwareName: String): String;
-    //function  GetDefaultMachineNameToUse(sysID: ShortInt; SoftwareName: String): String;
+    function  GetSoftwareListTitle(const SoftwareName: String; sysID: ShortInt): WideString;
+    function  GetLastUsedMachineSoftwareList(const SoftwareName: String; sysID: ShortInt): String;
 
     function  GetLastUsedMachineCustomGame(CustomSystemID, CustomMediaTypeID: Integer): String;
 
@@ -1804,9 +1808,11 @@ type
     function  ScanMainFilterMachinesList: Boolean;
     procedure ApplyFiltersMachinesList; // filters for Machines List side panel // added by Ciro Alfredo Consentino (July 18, 2015)
 
-    function  GetSoftListFilesToAudit(sysID: ShortInt; var ListHolder: TStringList): Boolean;
+    function  GetSoftListFilesToAudit(sysID: ShortInt; var ListHolder: THashedStringList): Boolean;
     procedure SoftListGetExcludedList(sysID: ShortInt; ListHolder: THashedStringList);
-    procedure SoftListRemoveExcludedList(sysID: ShortInt; var ListHolder: TStringList);
+    procedure SoftListRemoveExcludedList(sysID: ShortInt; var ListHolder: THashedStringList);
+    procedure SoftListValidateListsXML(sysID: ShortInt; var ListHolder: THashedStringList);
+    procedure SoftListDeleteGamesFiles(sysID: Integer; CreateListMode: Integer; SourceList: TStringList = nil);
 
     function  GetGameTypeString(sysID, sysType: ShortInt; const SoftwareName: String): String;
 
@@ -1838,7 +1844,7 @@ type
 
     procedure UpdateStatusBarGame;
     function  SearchZIPFolder(const GameName: String; sysID: ShortInt; const SoftwareList: String = ''): String;
-    function  SearchCHDFolder(const DiskImageFileName, GameName, BiosName: String; sysID: ShortInt; const SoftwareList: String = ''): String;
+    function  SearchCHDFolder(const DiskImageFileName, GameName, BiosName, CloneOfName: String; sysID: ShortInt; const SoftwareList: String = ''): String;
     function  SearchZiNcCHDFolder(const CHDFileName, GameName, GameFilePath: String): String;
 
     function  SearchCHDSimpleScan(SystemID: Integer; const chdName, chdParentName, GameName, CloneOf, BiosName: String; SoftwareList: String = ''): String;
@@ -1964,11 +1970,11 @@ type
     procedure LoadImage1(Data: Pointer); // threads for images
     procedure LoadImage2(Data: Pointer); // threads for images
     procedure LoadImage3(Data: Pointer); // threads for images
-    function  GetImageType(iMemStream: TWideMemoryStream): TImageType;
+    function  GetImageType(iMemStream: TWideMemoryStream; ScreenIndex: Integer = 0): TImageType;
     function  LoadPreviewImage(const iFile: WideString; ImageHolder: TImage32): TImageType;
     procedure LoadScreenshot(ScreenIndex: ShortInt); // required to load using threads...
 
-    function  DisplayImage: Boolean;
+    procedure DisplayImage;
     procedure SetGripIcon(var SplitterHolder: TSplitterEx; ShowGrip: Boolean);
     procedure UpdateSplitterStyle(SplitterHolder: TSplitterEx; NewSplitterStyle: TTMSStyle; SingleColor, SingleColorHot: TColor);
     procedure UpdateImageLayoutSplittersStyle;
@@ -1981,10 +1987,9 @@ type
     procedure CheckSevenZip(sysID: Integer);
     function  ValidateSevenZipDLL: Boolean;
     function  CallScanGames(RefreshMode: ShortInt; CreatingList: Boolean; sysID: ShortInt; SoftwareList: String = ''; IsMultiSys: Boolean = False): Integer; // result = Games Changed Count
-    function  ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean): Integer;
+    function  ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt): Integer;
 
-    procedure GetFileCRC32SHA1List2018(sysID: Integer; const GameName: String; IsCRC32Collision: Boolean; CRC32ListDestination: THashedStringList);
-
+    function  ReadAtari800CartTypeTag(iFileName: WideString): Boolean;
     function  CreateCHD_SHA1(const DiskFileName, DiskSHA1: String; out RealSHA1Value: String; out HeaderVersion: Byte): Boolean;
 
     function  GetSizeType(Value: Extended; Bits: Boolean; ShortTag: Boolean = False): String;
@@ -2030,9 +2035,10 @@ type
     function  GetArcadeEmulatorsFile: String;
     function  GetImageCategoriesFile: String;
     function  GetImageLayoutsFile: String;
+    function  GetImageCategorySettingsFile: String;
 
     function  GetColumnProfile(IsSoftwareList: Boolean = False): String;
-    function  GetControlTypeFile: String;
+    function  GetControlTypeFile(sysID: Integer): String;
     function  GetAudioSamplesFile(sysID: Byte): String;
     function  GetDeviceSetsFile(sysID: Byte): String;
     function  GetBiosSetFile(sysID: Byte): String;
@@ -2043,11 +2049,14 @@ type
     function  GetGamesPlayedIniFile(sysID: Integer): String;
     function  GetPlayedGamesNameEntry(const GameName, SoftwareListName: String): String;
     function  GetMultiCartFileName(sysID: Byte; const MachineName: String; ReturnFilePath: Boolean; IsSoftwareList: Boolean = False): String;
-    function  GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt = idMAME): String; // get a list of software list files with their supported MESS machine names
-    function  GetMAMEMachineCustomGames: String;
+    function  GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt): String; // get a list of software list files with their supported MESS machine names
+    function  GetMAMEMachineCustomGames(sysID: ShortInt): String;
     function  GetSoftListExcludeFile(sysID: ShortInt): String;
+    function  GetSoftListRequirementFile(sysID: Integer): String;
     function  GetSoftwareNameFolder(const iSoftwareName: String): String;
     function  GetMAMEPluginFile(sysID: ShortInt; const EmuFileName: String): String;
+
+    procedure SoftListGetRequirementInfo(sysID: Integer; GameName, SoftwareName: String; out VarReqSetName: String; out VarReqSoftwareName: String);
 
     function  GetSystemsSoftwareListFile(sysID: ShortInt): String; //; const EmuFileName: String): String;
 
@@ -2085,6 +2094,18 @@ type
     function  IsROM_HaveMissROMs(const GameStatus: ShortInt): Boolean;
     function  IsROM_UseDeviceROMs(const UseDeviceROMs: Byte): Boolean;
 
+    function  IsFileID_GameROM(const FileID: Byte): Boolean;
+    function  IsFileID_BiosROM(const FileID: Byte): Boolean;
+    function  IsFileID_DeviceROM(const FileID: Byte): Boolean;
+
+    function  IsFileID_GameCHD(const FileID: Byte): Boolean;
+    function  IsFileID_BiosCHD(const FileID: Byte): Boolean;
+    function  IsFileID_DeviceCHD(const FileID: Byte): Boolean;
+
+    //function  IsFileID_Game(const FileID: Byte): Boolean;
+    //function  IsFileID_Bios(const FileID: Byte): Boolean;
+    //function  IsFileID_Device(const FileID: Byte): Boolean;
+
     function  GetArcadeGameSysTitle(IsGameConfig: Boolean; sysID: Byte; const CustomVersionInfoStr: String = ''; IsAlterMAME: Boolean = False): String;
     function  FixMAMENVRAMFileType(const FileName: String): Integer;
     function  GetFileTypeText(sysID, MediaType, FileID: ShortInt; IsConsoleComputerSystem: Boolean; MediaTypeConsoleComputer: ShortInt = -1): String;
@@ -2106,7 +2127,7 @@ type
     procedure ELV_ItemPaintText_General(EasyListViewHolder: TCustomEasyListView; ELV_Item: TEasyItem; out CanvasHolder: TCanvas);
     procedure ELV_CheckItemVisible(ELV_Holder: TEasyListView; Item: TEasyItem; ShowInTheMiddle: Boolean);
     procedure ELV_SetGhostedIcon(ELV_Item: TEasyItem);
-    function  ELV_SetGhostedIconText(ELV_Item: TEasyItem; ELV_Source: TEasyListView; CanvasDestination: TCanvas): TColor;
+    procedure ELV_SetGhostedIconText(ELV_Item: TEasyItem; ELV_Source: TEasyListView; CanvasDestination: TCanvas);
     procedure ELV_MakeVisible(ListHolder: TEasyListView = nil; Item: TEasyItem = nil; CenterSelected: Boolean = True);
     function  ELV_SelectItem(DestListView: TEasyListView; Index: Integer; strCaption: WideString = ''; ColumnIndex: Byte = 0): Boolean;
     procedure ELV_BlinkEdit(EditHolder: TEasyListView);
@@ -2586,9 +2607,6 @@ begin
   if SoftwareName = '' then
      Result:= CurrentImageIndex
   else
-  //if CurrentImageIndex > MaxGameID then // not used as software list games will NOT use MAMu_ icons
-  //   Result:= CurrentImageIndex
-  //else
      begin
        case CurrentImageIndex of
          00: Result:= 44; // MAME parent have
@@ -2616,12 +2634,15 @@ begin
   FormArcadeSelectSystem.selSysID:= SelectSysID;
 
   // PopupScanGames.HelpContext will hold last fixed MAME Scan Sets mode so it can be restored later...
-  if FeatureType in [1, 4, 5] then // create games list, scan games feature
+  // 1    -> create games list
+  // 4, 5 -> scan games feature
+  // 6    -> create MAME/HBMAME software list
+  if FeatureType in [1, 4, 5, 6] then
      PopupScanGames.HelpContext:= MenuCreateMAMESoftwareListGames.HelpContext;
   if FormArcadeSelectSystem.ShowModal = mrOk then
      begin
-       if FormArcadeSelectSystem.CreateMAMESoftwareListGames.Visible then
-          MenuCreateMAMESoftwareListGames.Tag:= Ord(FormArcadeSelectSystem.CreateMAMESoftwareListGames.Checked);
+       if FormArcadeSelectSystem.MAMESoftwareListBox.Visible then
+          MenuCreateMAMESoftwareListGames.Tag:= FormArcadeSelectSystem.MAMESoftwareListBox.Tag; // Ord(FormArcadeSelectSystem.CreateMAMESoftwareListGames.Checked);
 
        if FormArcadeSelectSystem.ScanMAMESetsBox.Visible then
           MenuCreateMAMESoftwareListGames.HelpContext:= FormArcadeSelectSystem.ScanMAMESetsBox.Tag;
@@ -2632,7 +2653,7 @@ begin
        case FormArcadeSelectSystem.SystemsListView.Selection.MultiSelect of
          True:
            begin
-             if FeatureType in [1, 4, 5] then
+             if FeatureType in [1, 4, 5, 6] then
                 begin
                   // create games list, scan games feature
                   // .HelpContext will hold last fixed scan mode so it can be restored later...
@@ -2642,14 +2663,15 @@ begin
                   else
                      PopupScanGames.HelpContext:= -1; // avoid tag from being changed since "For This Task Only" is selected (for create games list feature)
 
-                  if FormArcadeSelectSystem.FullScan.Checked then
-                     PopupSelectScanGamesMode.Tag:= 0
-                  else
-                  if FormArcadeSelectSystem.QuickScan.Checked then
-                     PopupSelectScanGamesMode.Tag:= 1
-                  else
-                  if FormArcadeSelectSystem.ForceAllAvailable.Checked then
-                     PopupSelectScanGamesMode.Tag:= 2;
+                  PopupSelectScanGamesMode.Tag:= FormArcadeSelectSystem.ScanModeBox.Tag;
+                  //if FormArcadeSelectSystem.FullScan.Checked then
+                  //   PopupSelectScanGamesMode.Tag:= 0
+                  //else
+                  //if FormArcadeSelectSystem.QuickScan.Checked then
+                  //   PopupSelectScanGamesMode.Tag:= 1
+                  //else
+                  //if FormArcadeSelectSystem.ForceAllAvailable.Checked then
+                  //   PopupSelectScanGamesMode.Tag:= 2;
                 end;
              Item:= FormArcadeSelectSystem.SystemsListView.Selection.First;
              if Item <> nil then // make sure a system is selected to avoid errors (double-check mode ON)
@@ -2662,7 +2684,7 @@ begin
                        begin
                          StrResult:= '';
                          repeat
-                           if not Item.Ghosted then // (esosGhosted in Item.State) then // check if system is NOT disabled!!!
+                           if not Item.Ghosted then // check if system is NOT disabled!!!
                               StrResult:= StrResult+IntToStr(Item.ImageIndex);
                            Item:= FormArcadeSelectSystem.SystemsListView.Selection.Next(Item);
                          until Item = nil;
@@ -2676,13 +2698,13 @@ begin
                     StrResult:= '';
                     Item:= FormArcadeSelectSystem.SystemsListView.Groups.NextItem(Item);
                     repeat
-                      if not Item.Ghosted then // (esosGhosted in Item.State) then // check if system is NOT disabled!!!
+                      if not Item.Ghosted then // check if system is NOT disabled!!!
                          StrResult:= StrResult+IntToStr(Item.ImageIndex);
                       Item:= FormArcadeSelectSystem.SystemsListView.Groups.NextItem(Item);
                     until Item = nil;
                     if StrResult <> '' then // must check if there is any system available (user select "all systems" and NO system is enabled!!!
                        Result:= StrToInt(StrResult);
-                    //ShowMessage(StrResult);
+                    //ShowMessage(StrResult); // debugging only, do not enable
                   end;
              end;
            end;
@@ -2798,179 +2820,6 @@ begin
   inherited Destroy;
 end;
 
-{procedure TMyThreadRequest.MakeThumbNail(aSource: TPNGGraphic; iWidth, iHeight: Integer); // using Scanline mode... fastest :)
-type
-  PRGB24 = ^TRGB24;
-  TRGB24 = packed record
-    B: Byte;
-    G: Byte;
-    R: Byte;
-  end;
-var
-  x, y, ix, iy,
-  x1, x2, x3: Integer;
-
-  xscale, yscale: Single;
-  iRed, iGrn, iBlu, iRatio: Longword;
-  p, c1, c2, c3, c4, c5: tRGB24;
-  pt, pt1: pRGB24;
-  iSrc, iDst, s1,
-  i, j, r, g, b, tmpY: Integer;
-
-  RowDest, RowSource, RowSourceStart,
-  w, h,
-  dxmin, dymin,
-  ny1, ny2, ny3,
-  dx, dy, dxy_multiple: Integer;
-  lutX, lutY: array of Integer;
-  aDest: TPNGGraphic;
-
-begin
-  if (aSource.Width <= iWidth) and (aSource.Height <= iHeight) then
-     Exit;
-
-  if aSource.PixelFormat <> pf24bit then
-     aSource.PixelFormat:= pf24bit;
-
-  aDest:= TPNGGraphic.Create;
-  aDest.PixelFormat:= pf24bit;
-  aDest.Width:= iWidth;
-  aDest.Height:= iHeight;
-  aDest.Canvas.Lock;
-  w:= iWidth;
-  h:= iHeight;
-
-  //if (aSource.Width <= iWidth) and (aSource.Height <= iHeight) then
-  //   begin
-  //     FreeAndNil(aDest);
-  //     Exit;
-  //   end;
-
-  iDst:= (w * 24 + 31) and not 31;
-  iDst:= iDst div 8;
-  iSrc:= (aSource.Width * 24 + 31) and not 31;
-  iSrc:= iSrc div 8;
-
-  xscale:= 1 / (w / aSource.Width);
-  yscale:= 1 / (h / aSource.Height);
-
-  SetLength(lutX, w);
-  x1:= 0;
-  x2:= Trunc(xscale);
-  for x:= 0 to w-1 do
-  begin
-    lutX[x]:= x2-x1;
-    x1:= x2;
-    x2:= Trunc((x+2) * xscale);
-  end;
-
-  SetLength(lutY, h);
-  x1:= 0;
-  x2:= Trunc(yscale);
-  for x:= 0 to h-1 do
-  begin
-    lutY[x]:= x2-x1;
-    x1:= x2;
-    x2:= Trunc((x+2) * yscale);
-  end;
-
-  Dec(w);
-  Dec(h);
-  RowDest:= Integer(aDest.Scanline[0]);
-  RowSourceStart:= Integer(aSource.Scanline[0]);
-  RowSource:= RowSourceStart;
-  for y:= 0 to h do
-  begin
-    dy:= lutY[y];
-    x1:= 0;
-    x3:= 0;
-    for x:= 0 to w do
-    begin
-      dx:= lutX[x];
-      iRed:= 0;
-      iGrn:= 0;
-      iBlu:= 0;
-      RowSource:= RowSourceStart;
-      for iy:= 1 to dy do
-      begin
-        pt:= PRGB24(RowSource+x1);
-        for ix:= 1 to dx do
-        begin
-          iRed:= iRed+pt.R;
-          iGrn:= iGrn+pt.G;
-          iBlu:= iBlu+pt.B;
-          Inc(pt);
-        end;
-        RowSource:= RowSource-iSrc;
-      end;
-      dxy_multiple:= dx*dy;
-      if dxy_multiple = 0 then
-         dxy_multiple:= 1; // this is to avoid "divided by zero" error if aspect ratio is OFF
-      iRatio:= 65535 div dxy_multiple;
-      //iRatio:= 65535 div (dx*dy);
-      pt1:= PRGB24(RowDest+x3);
-      pt1.R:= (iRed*iRatio) shr 16;
-      pt1.G:= (iGrn*iRatio) shr 16;
-      pt1.B:= (iBlu*iRatio) shr 16;
-      x1:= x1+3*dx;
-      Inc(x3, 3);
-    end;
-    RowDest:= RowDest-iDst;
-    RowSourceStart:= RowSource;
-  end;
-
-  if aDest.Height < 3 then
-     begin
-       FreeAndNil(aDest);
-       Exit;
-     end;
-
-  // Sharpening
-  s1:= Integer(aDest.ScanLine[0]);
-  iDst:= Integer(aDest.ScanLine[1])-s1;
-  ny1:= Integer(s1);
-  ny2:= ny1+iDst;
-  ny3:= ny2+iDst;
-  for y:= 1 to aDest.Height-2 do
-  begin
-    for x:= 0 to aDest.Width-3 do
-    begin
-      x1:= x*3;
-      x2:= x1+3;
-      x3:= x1+6;
-
-      c1:= pRGB24(ny1+x1)^;
-      c2:= pRGB24(ny1+x3)^;
-      c3:= pRGB24(ny2+x2)^;
-      c4:= pRGB24(ny3+x1)^;
-      c5:= pRGB24(ny3+x3)^;
-
-      r:= (c1.R+c2.R+(c3.R*-12)+c4.R+c5.R) div -8;
-      g:= (c1.G+c2.G+(c3.G*-12)+c4.G+c5.G) div -8;
-      b:= (c1.B+c2.B+(c3.B*-12)+c4.B+c5.B) div -8;
-
-      if r < 0 then r:= 0 else if r > 255 then r:= 255;
-
-      if g < 0 then g:= 0 else if g > 255 then g:= 255;
-
-      if b < 0 then b:= 0 else if b > 255 then b:= 255;
-
-      pt1:= pRGB24(ny2+x2);
-      pt1.R:= r;
-      pt1.G:= g;
-      pt1.B:= b;
-    end;
-    Inc(ny1, iDst);
-    Inc(ny2, iDst);
-    Inc(ny3, iDst);
-  end;
-  aDest.Canvas.UnLock;
-  aSource.Width:= iWidth;
-  aSource.Height:= iHeight;
-  aSource.Assign(aDest);
-  FreeAndNil(aDest);
-end;}
-
 function TMyThreadRequest.GetImageType(iMemStream: TWideMemoryStream): TImageType;
 const
   JPG_HEADER: array[0..2] of byte  = ($FF, $D8, $FF);
@@ -3019,14 +2868,14 @@ begin
          Result:= ifTIF;
     end;
   finally
-    MemStr.Free;
-    MemStr:= nil;
+    FreeAndNil(MemStr);
+    //MemStr.Free;
+    //MemStr:= nil;
   end;
   iMemStream.Position:= 0;
 end;
 
 procedure TMyThreadRequest.MakeThumbNail(abmp: TPNGGraphic; NuWidth, NuHeight: Integer); // using Scanline mode... fastest :)
-//procedure SmoothResize2(abmp: TPNGGraphic; NuWidth, NuHeight: Integer);
 type
   TRGBArray = array[0..32767] of TRGBTriple;
   pRGBArray = ^TRGBArray;
@@ -3049,12 +2898,6 @@ var
   // offset increment
   liSize, loSize: integer;
 begin
-  //aDest:= TPNGGraphic.Create;
-  //aDest.PixelFormat:= pf24bit;
-  //aDest.Width:= iWidth;
-  //aDest.Height:= iHeight;
-  //aDest.Canvas.Lock;
-
   abmp.PixelFormat:= pf24bit;
   bTmp:= TPNGGraphic.Create;
   bTmp.PixelFormat:= pf24bit;
@@ -3064,58 +2907,56 @@ begin
   xscale:= bTmp.Width / (abmp.Width - 1);
   yscale:= bTmp.Height / (abmp.Height - 1);
   liPByte:= abmp.Scanline[0];
-  liSize:= integer(abmp.Scanline[1]) - integer(liPByte);
+  liSize:= Integer(abmp.Scanline[1]) - Integer(liPByte);
   loPByte:= bTmp.Scanline[0];
-  loSize:= integer(bTmp.Scanline[1]) - integer(loPByte);
-  for to_y := 0 to bTmp.Height - 1 do
+  loSize:= Integer(bTmp.Scanline[1]) - Integer(loPByte);
+  for to_y:= 0 to bTmp.Height - 1 do
   begin
-    sfrom_y := to_y / yscale;
-    ifrom_y := Trunc(sfrom_y);
-    weight_y[1] := sfrom_y - ifrom_y;
-    weight_y[0] := 1 - weight_y[1];
-    for to_x := 0 to bTmp.Width - 1 do
+    sfrom_y:= to_y / yscale;
+    ifrom_y:= Trunc(sfrom_y);
+    weight_y[1]:= sfrom_y - ifrom_y;
+    weight_y[0]:= 1 - weight_y[1];
+    for to_x:= 0 to bTmp.Width - 1 do
     begin
-      sfrom_x := to_x / xscale;
-      ifrom_x := Trunc(sfrom_x);
-      weight_x[1] := sfrom_x - ifrom_x;
-      weight_x[0] := 1 - weight_x[1];
-      total_red := 0.0;
-      total_green := 0.0;
-      total_blue := 0.0;
-      for ix := 0 to 1 do
+      sfrom_x:= to_x / xscale;
+      ifrom_x:= Trunc(sfrom_x);
+      weight_x[1]:= sfrom_x - ifrom_x;
+      weight_x[0]:= 1 - weight_x[1];
+      total_red:= 0.0;
+      total_green:= 0.0;
+      total_blue:= 0.0;
+      for ix:= 0 to 1 do
       begin
-        for iy := 0 to 1 do
+        for iy:= 0 to 1 do
         begin
-          p := liPByte;
+          p:= liPByte;
           Inc(p, liSize * (ifrom_y + iy));
-          sli := pRGBArray(p);
-          new_red := sli[ifrom_x + ix].rgbtRed;
-          new_green := sli[ifrom_x + ix].rgbtGreen;
-          new_blue := sli[ifrom_x + ix].rgbtBlue;
-          weight := weight_x[ix] * weight_y[iy];
-          total_red := total_red + new_red * weight;
-          total_green := total_green + new_green * weight;
-          total_blue := total_blue + new_blue * weight;
+          sli:= pRGBArray(p);
+          new_red:= sli[ifrom_x + ix].rgbtRed;
+          new_green:= sli[ifrom_x + ix].rgbtGreen;
+          new_blue:= sli[ifrom_x + ix].rgbtBlue;
+          weight:= weight_x[ix] * weight_y[iy];
+          total_red:= total_red + new_red * weight;
+          total_green:= total_green + new_green * weight;
+          total_blue:= total_blue + new_blue * weight;
         end;
       end;
-      p := loPByte;
+      p:= loPByte;
       Inc(p, loSize * to_y);
-      slo := pRGBArray(p);
-      slo[to_x].rgbtRed := Round(total_red);
-      slo[to_x].rgbtGreen := Round(total_green);
-      slo[to_x].rgbtBlue := Round(total_blue);
+      slo:= pRGBArray(p);
+      slo[to_x].rgbtRed:= Round(total_red);
+      slo[to_x].rgbtGreen:= Round(total_green);
+      slo[to_x].rgbtBlue:= Round(total_blue);
     end;
   end;
   bTmp.Canvas.UnLock;
   abmp.Width:= bTmp.Width;
   abmp.Height:= bTmp.Height;
-  //abmp.Canvas.Assign(bTmp);
   abmp.Canvas.Draw(0, 0, bTmp);
   FreeAndNil(bTmp);
-  //bTmp.Free;
 end;
 
-procedure TMyThreadRequest.BiReSample(Src: TPNGGraphic; NuWidth, NuHeight: Integer; Sharpen: Boolean); // RMK
+procedure TMyThreadRequest.BiReSample(Src: TPNGGraphic; NuWidth, NuHeight: Integer; Sharpen: Boolean);
 type
   PRGB24 = ^TRGB24;
   TRGB24 = record
@@ -3145,102 +2986,107 @@ begin
   Dest.Canvas.Lock;
 
   // ScanLine buffer for Source
-  sDst := Integer(src.Scanline[0]);
-  sDstOff := Integer(src.Scanline[1]) - sDst;
-  for i := 0 to src.Height - 1 do
+  sDst:= Integer(src.Scanline[0]);
+  sDstOff:= Integer(src.Scanline[1]) - sDst;
+  for i:= 0 to src.Height - 1 do
   begin
-    sScanLine[i] := PRGBArray(sDst);
-    sDst := sDst + sDstOff;
+    sScanLine[i]:= PRGBArray(sDst);
+    sDst:= sDst + sDstOff;
   end;
   // ScanLine for Destiantion
-  sDst := Integer(Dest.Scanline[0]);
-  y1 := sDst; // only for sharpening...
-  sDstOff := Integer(Dest.Scanline[1]) - sDst;
+  sDst:= Integer(Dest.Scanline[0]);
+  y1:= sDst; // only for sharpening...
+  sDstOff:= Integer(Dest.Scanline[1]) - sDst;
   // Ratio is same for width and height
-  Ratio := ((src.Width - 1) shl 15) div Dest.Width;
-  py := 0;
-  for y := 0 to Dest.Height - 1 do
+  Ratio:= ((src.Width - 1) shl 15) div Dest.Width;
+  py:= 0;
+  for y:= 0 to Dest.Height - 1 do
   begin
-    i := py shr 15;
+    i:= py shr 15;
     if i > src.Height - 1 then
-      i := src.Height - 1;
-    Src1 := sScanLine[i];
+       i:= src.Height - 1;
+    Src1:= sScanLine[i];
     if i < src.Height - 1 then
-      Src2 := sScanLine[i + 1]
+       Src2:= sScanLine[i + 1]
     else
-      Src2 := Src1;
-    z2 := py and $7FFF;
-    iz2 := $8000 - z2;
-    px := 0;
-    for x := 0 to Dest.Width - 1 do
+       Src2:= Src1;
+    z2:= py and $7FFF;
+    iz2:= $8000 - z2;
+    px:= 0;
+    for x:= 0 to Dest.Width - 1 do
     begin
-      x1 := px shr 15;
-      x2 := x1 + 1;
-      C1 := Src1[x1];
-      C2 := Src2[x1];
-      z := px and $7FFF;
-      w2 := (z * iz2) shr 15;
-      w1 := iz2 - w2;
-      w4 := (z * z2) shr 15;
-      w3 := z2 - w4;
-      C.R := (C1.R * w1 + Src1[x2].R * w2 + C2.R * w3 + Src2[x2].R * w4) shr 15;
-      C.G := (C1.G * w1 + Src1[x2].G * w2 + C2.G * w3 + Src2[x2].G * w4) shr 15;
-      C.B := (C1.B * w1 + Src2[x2].B * w2 + C2.B * w3 + Src2[x2].B * w4) shr 15;
+      x1:= px shr 15;
+      x2:= x1 + 1;
+      C1:= Src1[x1];
+      C2:= Src2[x1];
+      z:= px and $7FFF;
+      w2:= (z * iz2) shr 15;
+      w1:= iz2 - w2;
+      w4:= (z * z2) shr 15;
+      w3:= z2 - w4;
+      C.R:= (C1.R * w1 + Src1[x2].R * w2 + C2.R * w3 + Src2[x2].R * w4) shr 15;
+      C.G:= (C1.G * w1 + Src1[x2].G * w2 + C2.G * w3 + Src2[x2].G * w4) shr 15;
+      C.B:= (C1.B * w1 + Src2[x2].B * w2 + C2.B * w3 + Src2[x2].B * w4) shr 15;
       // Set destination pixel
-      PRGBArray(sDst)[x] := C;
-      inc(px, Ratio);
+      PRGBArray(sDst)[x]:= C;
+      Inc(px, Ratio);
     end;
-    sDst := sDst + sDstOff;
-    inc(py, Ratio);
+    sDst:= sDst + sDstOff;
+    Inc(py, Ratio);
   end;
 
   if not Sharpen then
     Exit;
 
   // Sharpening...
-  y2 := y1 + sDstOff;
-  y3 := y2 + sDstOff;
-  for y := 1 to Dest.Height - 2 do
+  y2:= y1 + sDstOff;
+  y3:= y2 + sDstOff;
+  for y:= 1 to Dest.Height - 2 do
   begin
-    for x := 0 to Dest.Width - 3 do
+    for x:= 0 to Dest.Width - 3 do
     begin
-      x1 := x * 3;
-      x2 := x1 + 3;
-      x3 := x1 + 6;
-      p1 := PRGB24(y1 + x1);
-      p2 := PRGB24(y1 + x3);
-      p3 := PRGB24(y2 + x2);
-      p4 := PRGB24(y3 + x1);
-      p5 := PRGB24(y3 + x3);
+      x1:= x * 3;
+      x2:= x1 + 3;
+      x3:= x1 + 6;
+      p1:= PRGB24(y1 + x1);
+      p2:= PRGB24(y1 + x3);
+      p3:= PRGB24(y2 + x2);
+      p4:= PRGB24(y3 + x1);
+      p5:= PRGB24(y3 + x3);
       // -15 -11                       // -17 - 13
-      iRed := (p1.R + p2.R + (p3.R * -15) + p4.R + p5.R) div -11;
-      iGrn := (p1.G + p2.G + (p3.G * -15) + p4.G + p5.G) div -11;
-      iBlu := (p1.B + p2.B + (p3.B * -15) + p4.B + p5.B) div -11;
+      iRed:= (p1.R + p2.R + (p3.R * -15) + p4.R + p5.R) div -11;
+      iGrn:= (p1.G + p2.G + (p3.G * -15) + p4.G + p5.G) div -11;
+      iBlu:= (p1.B + p2.B + (p3.B * -15) + p4.B + p5.B) div -11;
       if iRed < 0 then
-        iRed := 0
-      else if iRed > 255 then
-        iRed := 255;
+         iRed:= 0
+      else
+      if iRed > 255 then
+         iRed:= 255;
+
       if iGrn < 0 then
-        iGrn := 0
-      else if iGrn > 255 then
-        iGrn := 255;
+         iGrn:= 0
+      else
+      if iGrn > 255 then
+         iGrn:= 255;
+
       if iBlu < 0 then
-        iBlu := 0
-      else if iBlu > 255 then
-        iBlu := 255;
-      PRGB24(y2 + x2).R := iRed;
-      PRGB24(y2 + x2).G := iGrn;
-      PRGB24(y2 + x2).B := iBlu;
+         iBlu:= 0
+      else
+      if iBlu > 255 then
+         iBlu:= 255;
+
+      PRGB24(y2 + x2).R:= iRed;
+      PRGB24(y2 + x2).G:= iGrn;
+      PRGB24(y2 + x2).B:= iBlu;
     end;
-    inc(y1, sDstOff);
-    inc(y2, sDstOff);
-    inc(y3, sDstOff);
+    Inc(y1, sDstOff);
+    Inc(y2, sDstOff);
+    Inc(y3, sDstOff);
   end;
 
   Dest.Canvas.UnLock;
   Src.Width:= Dest.Width;
   Src.Height:= Dest.Height;
-  //abmp.Canvas.Assign(bTmp);
   Src.Canvas.Draw(0, 0, Dest);
   FreeAndNil(Dest);
 end;
@@ -3292,7 +3138,6 @@ var
   jpgPic: TJPEGImage;
   gifPic: TGIFGraphic;
   bmpPic: TBitmap;
-  //ArchiveItem: TZFArchiveItem;
 begin
   // Do the extraction here.... NOTICE this IS in the context of the thread so
   // think thread safety. If you have to access the form you will get into trouble.
@@ -3343,7 +3188,7 @@ begin
              try
                Image.LoadFromStream(ZipStream);
              except
-               Result:= False;
+               //Result:= False;
              end;
            end;
          ifJPG:
@@ -3354,7 +3199,7 @@ begin
                 Image.Assign(jpgPic);
                 FreeAndNil(jpgPic);
               except
-                Result:= False;
+                //Result:= False;
               end;
            end;
          ifGIF:
@@ -3365,7 +3210,7 @@ begin
                 Image.Assign(gifPic);
                 FreeAndNil(gifPic);
               except
-                Result:= False;
+                //Result:= False;
               end;
            end;
          ifBMP:
@@ -3376,12 +3221,12 @@ begin
                 Image.Assign(bmpPic);
                 FreeAndNil(bmpPic);
               except
-                Result:= False;
+                //Result:= False;
               end;
            end;
        else
          begin
-           Result:= False;
+           //Result:= False;
          end;
        end;
      end;
@@ -3438,7 +3283,7 @@ begin
   if not SystemIcon.Empty then
      begin
        Image.Canvas.Draw(xPosFav, yPosFav, SystemIcon);
-       yPosFav:= SystemIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+       yPosFav:= SystemIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height)
      end;
 
   if not GameIcon.Empty then
@@ -3467,7 +3312,7 @@ begin
              end;
          end;
 
-         //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+         //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height)
          //if imgHeightLeft
        end;
        Image.Canvas.Draw(xPosFav, yPosFav, GameIcon);
@@ -3548,7 +3393,7 @@ begin
        GameIcon.Assign(TMyThreadRequest(Source).GameIcon);
        
        LeftAlignIcons:= TMyThreadRequest(Source).LeftAlignIcons;
-       //AlphaBlendIcon:= TMyThreadRequest(Source).AlphaBlendIcon;
+       //AlphaBlendIcon:= TMyThreadRequest(Source).AlphaBlendIcon; // setting no longer valid
 
        Width:= TMyThreadRequest(Source).Width;
        Height:= TMyThreadRequest(Source).Height;
@@ -3573,6 +3418,7 @@ var
   function SearchImageFile(IsNewImageNamingMAME: Boolean; SearchInZip: Boolean = False): Boolean;
   begin
     fileExt:= '.png';
+    Result:= False;
     case SearchInZip of
       True:
         begin
@@ -3672,10 +3518,6 @@ var
         end;
     end;
 
-    //case IsNewImageNamingMAME of
-    //  True : fileScan:= TEasyGameInfo(Item).eName+'\0000.png';
-    //  False: fileScan:= TEasyGameInfo(Item).eName+'.png';
-    //end;
     Result:= SearchImageFile(IsNewImageNamingMAME, SearchInZip);
     if not TEasyGameInfo(Item).eIsCustomGame then
     begin
@@ -3684,10 +3526,9 @@ var
            if GameIsClone(TEasyGameInfo(Item).eClone) then
               begin
                 case IsNewImageNamingMAME of
-                  True : fileScan:= TEasyGameInfo(Item).eClone+'\0000';//.png';
-                  False: fileScan:= TEasyGameInfo(Item).eClone;//'.png';
+                  True : fileScan:= TEasyGameInfo(Item).eClone+'\0000';
+                  False: fileScan:= TEasyGameInfo(Item).eClone;
                 end;
-                //fileScan:= TEasyGameInfo(Item).eClone+'.png';
                 Result:= SearchImageFile(IsNewImageNamingMAME, SearchInZip);
               end;
          end;
@@ -3697,7 +3538,7 @@ var
 begin
   FoundZipped:= False;
   FoundZippedSoftList:= False;
-  //Continue:= True;
+
   case TEasyGameInfo(Item).eIsCustomGame of
     True : folderScan:= FullFolderFix(SnapshotFolderCustom[TEasyGameInfo(Item).eCustomSystemID, 1]);
     False: folderScan:= GetFolderFull(1, TEasyGameInfo(Item).eSystemID);
@@ -3746,17 +3587,14 @@ begin
                 begin
                   Continue:= ((SoftListZipFile <> '') and (FileExists(SoftListZipFile))) or
                              FileExists(zipFile);
-                  //case FileExists(zipFile) of
+
                   case Continue of
                     True:
                       begin
                         Continue:= GetImageFileName(False, True);
                         if not Continue then
-                           Exit;
-                        //if GetImageFileName(False, True) then // search for zipped image
-                        //   FoundZipped:= True
-                        //else
-                        //   Exit; // exit and do not load thumb for the current game as there is nothing to load
+                           Exit; // there's nothing to load
+
                       end;
                     False: Exit; // exit and do not load thumb for the current game as there is nothing to load
                   end;
@@ -3766,20 +3604,11 @@ begin
      end;
 
   TEasyGameInfo(Item).eThumbnailIsZipped:= FoundZipped or FoundZippedSoftList;
-  //if FoundZipped then
-  //   begin
-  //     // this is for debugging only... DO NOT enable!!!!
-  //     Sleep(5);
-  //     LoadZippedThumbnail(Item, SoftwareDir+fileScan, zipFile);
-  //     Exit; // do not start thread since image file is zipped
-  //   end;
 
   Request:= TMyThreadRequest.Create;
   Request.Item:= Item;    // Save what Item this request is for
   Request.ID:= 1; // Allows us to distinguish between user defined requests
   Request.Window:= GamesListView; // This MUST be set to the Listview as this is used to direct the messages back to the correct window
-
-  // Item.View.ItemRect(Item, nil, ertLabel) ... this is nothing... remove it later (April 11, 2017)
 
   Request.Width:= RectWidth(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
   Request.Height:= RectHeight(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
@@ -3795,10 +3624,6 @@ begin
   else
      begin
        Request.FileName:= folderScan+ExtraFolderStrMAME+SoftwareDir+fileScan+fileExt;
-       //case Request.IsUnicode of
-       //  True : Request.FileName:= GetShortFileNameW(folderScan+ExtraFolderStrMAME+SoftwareDir+fileScan+fileExt); // convert this to DOS 8.3 filename is game has IsUnicode tag!!!!
-       //  False: Request.FileName:= folderScan+ExtraFolderStrMAME+SoftwareDir+fileScan+fileExt;
-       //end;
      end;
      
   Request.SoftwareName:= TEasyGameInfo(Item).eSoftwareName;
@@ -3807,14 +3632,13 @@ begin
   Request.ZipFile:= zipFile;
   Request.IsZipped:= FoundZipped or FoundZippedSoftList;
   Request.SystemIconSize:= 0;
-  //Request.AlphaBlendIcon:= MenuThumbnailAlphaBlendedIcons.Checked;
+  //Request.AlphaBlendIcon:= MenuThumbnailAlphaBlendedIcons.Checked; // setting no longer valid
 
   Request.LeftAlignIcons:= ThumbnailSettings.LeftAlignIcons;
 
   if ThumbnailSettings.ShowSystemIcon then
      begin
        case ThumbnailSettings.SystemIconSize of
-         //0: Request.SystemIconSize:= IL_StandardIconsSmall.Height;
          0: Request.SystemIconSize:= IL_ArcadeSystem_Small.Height; // 24x24
          1: Request.SystemIconSize:= IL_ArcadeSystem_Large.Height; // 32x32
          2: Request.SystemIconSize:= IL_ArcadeSystem_ExtraLarge.Height; // 48x48
@@ -3824,7 +3648,6 @@ begin
          True:
            begin
              case ThumbnailSettings.SystemIconSize of
-               // 0:
                0: IL_StandardIconsSmall.GetIcon(MaxGameID+TEasyGameInfo(Item).eCustomSystemID, Request.SystemIcon);
                1: IL_StandardIconsLarge.GetIcon(MaxGameID+TEasyGameInfo(Item).eCustomSystemID, Request.SystemIcon);
                2: IL_StandardIconsExtraLarge.GetIcon(MaxGameID+TEasyGameInfo(Item).eCustomSystemID, Request.SystemIcon);
@@ -3833,7 +3656,6 @@ begin
          False:
            begin
              case ThumbnailSettings.SystemIconSize of
-               //0: IL_StandardIconsSmall.GetIcon(TEasyGameInfo(Item).eSystemID, Request.SystemIcon);
                0: IL_ArcadeSystem_Small.GetIcon(TEasyGameInfo(Item).eSystemID, Request.SystemIcon);
                1: IL_ArcadeSystem_Large.GetIcon(TEasyGameInfo(Item).eSystemID, Request.SystemIcon);
                2: IL_ArcadeSystem_ExtraLarge.GetIcon(TEasyGameInfo(Item).eSystemID, Request.SystemIcon);
@@ -3892,96 +3714,6 @@ begin
   GlobalThreadManager.AddRequest(Request, True);
 end;
 
-{procedure TFormMain.MakeThumbNailZip(abmp: TPNGGraphic; NuWidth, NuHeight: Integer); // using Scanline mode... fastest :)
-//procedure SmoothResize2(abmp: TPNGGraphic; NuWidth, NuHeight: Integer);
-type
-  TRGBArray = array[0..32767] of TRGBTriple;
-  pRGBArray = ^TRGBArray;
-var
-  xscale, yscale: Single;
-  sfrom_y, sfrom_x: Single;
-  ifrom_y, ifrom_x: Integer;
-  to_y, to_x: Integer;
-  weight_x, weight_y: array[0..1] of Single;
-  weight: Single;
-  new_red, new_green: Integer;
-  new_blue: Integer;
-  total_red, total_green: Single;
-  total_blue: Single;
-  ix, iy: Integer;
-  bTmp: TPNGGraphic;
-  sli, slo: pRGBArray;
-  // pointers for scanline access
-  liPByte, loPByte, p: PByte;
-  // offset increment
-  liSize, loSize: integer;
-begin
-  //aDest:= TPNGGraphic.Create;
-  //aDest.PixelFormat:= pf24bit;
-  //aDest.Width:= iWidth;
-  //aDest.Height:= iHeight;
-  //aDest.Canvas.Lock;
-
-  abmp.PixelFormat:= pf24bit;
-  bTmp:= TPNGGraphic.Create;
-  bTmp.PixelFormat:= pf24bit;
-  bTmp.Width:= NuWidth;
-  bTmp.Height:= NuHeight;
-  bTmp.Canvas.Lock;
-  xscale:= bTmp.Width / (abmp.Width - 1);
-  yscale:= bTmp.Height / (abmp.Height - 1);
-  liPByte:= abmp.Scanline[0];
-  liSize:= integer(abmp.Scanline[1]) - integer(liPByte);
-  loPByte:= bTmp.Scanline[0];
-  loSize:= integer(bTmp.Scanline[1]) - integer(loPByte);
-  for to_y := 0 to bTmp.Height - 1 do
-  begin
-    sfrom_y := to_y / yscale;
-    ifrom_y := Trunc(sfrom_y);
-    weight_y[1] := sfrom_y - ifrom_y;
-    weight_y[0] := 1 - weight_y[1];
-    for to_x := 0 to bTmp.Width - 1 do
-    begin
-      sfrom_x := to_x / xscale;
-      ifrom_x := Trunc(sfrom_x);
-      weight_x[1] := sfrom_x - ifrom_x;
-      weight_x[0] := 1 - weight_x[1];
-      total_red := 0.0;
-      total_green := 0.0;
-      total_blue := 0.0;
-      for ix := 0 to 1 do
-      begin
-        for iy := 0 to 1 do
-        begin
-          p := liPByte;
-          Inc(p, liSize * (ifrom_y + iy));
-          sli := pRGBArray(p);
-          new_red := sli[ifrom_x + ix].rgbtRed;
-          new_green := sli[ifrom_x + ix].rgbtGreen;
-          new_blue := sli[ifrom_x + ix].rgbtBlue;
-          weight := weight_x[ix] * weight_y[iy];
-          total_red := total_red + new_red * weight;
-          total_green := total_green + new_green * weight;
-          total_blue := total_blue + new_blue * weight;
-        end;
-      end;
-      p := loPByte;
-      Inc(p, loSize * to_y);
-      slo := pRGBArray(p);
-      slo[to_x].rgbtRed := Round(total_red);
-      slo[to_x].rgbtGreen := Round(total_green);
-      slo[to_x].rgbtBlue := Round(total_blue);
-    end;
-  end;
-  bTmp.Canvas.UnLock;
-  abmp.Width:= bTmp.Width;
-  abmp.Height:= bTmp.Height;
-  //abmp.Canvas.Assign(bTmp);
-  abmp.Canvas.Draw(0, 0, bTmp);
-  FreeAndNil(bTmp);
-  //bTmp.Free;
-end;}
-
 function TFormMain.GetFontHeightSize(iFont: TFont): Integer;
 var
   FontSize: TSize;
@@ -3991,19 +3723,8 @@ begin
 end;
 
 function TFormMain.GetFontHeightPixels(iFont: TFont): Integer;
-//var
-//  lBmp: TBitmap;
 begin
   Result:= Round(iFont.Size*iFont.PixelsPerInch/72);
-//  ShowMessage(IntToStr(Result));
-//  lBmp:= TBitmap.Create;
-//  try
-//    lBmp.Canvas.Font:= iFont;
-//    Result:= lBmp.Canvas.TextHeight('Áçg');
-//  finally
-//    lBmp.Free;
-//  end;
-//  ShowMessage(IntToStr(Result));
 end;
 
 function TFormMain.GetLargerGameFont(FontVar: TFont; ELV_Source: TEasyListView = nil): Integer;
@@ -4035,7 +3756,8 @@ var
 
   function UpdateELV(iFont: TFont): Boolean;
   begin
-    if EasyListView_Dest <> nil then
+    Result:= EasyListView_Dest <> nil;
+    if Result then
        EasyListView_Dest.Font:= iFont;
   end;
 
@@ -4078,38 +3800,7 @@ begin
   FormMain.GamesListView.BeginUpdate;
   GamesListView.CellSizes.Thumbnail.Width:= WidthSizeIndex;
   GamesListView.CellSizes.Thumbnail.Height:= HeightSizeIndex;
-
-  {if GamesListView.PaintInfoItem.HideCaption then
-     GamesListView.CellSizes.Thumbnail.Height:= HeightSizeIndex
-  else
-     begin
-       iFontSize:= GetFontHeightPixels(Font_Parent);
-       iFontPixels:= GetFontHeightPixels(Font_Clone);
-       if iFontPixels > iFontSize then
-          begin
-            iFontSize:= iFontPixels;
-            //GamesListView.Font:= Font_Clone;
-          end;
-       iFontPixels:= GetFontHeightPixels(Font_Preliminary);
-       if iFontPixels > iFontSize then
-          iFontSize:= iFontPixels;
-       iFontPixels:= GetFontHeightPixels(Font_MissingROMs);
-       if iFontPixels > iFontSize then
-          iFontSize:= iFontPixels;
-       iFontPixels:= GetFontHeightPixels(Font_MissingROMsPreliminary);
-       if iFontPixels > iFontSize then
-          iFontSize:= iFontPixels;
-
-       GamesListView.CellSizes.Thumbnail.Height:= HeightSizeIndex+(GamesListView.PaintInfoItem.Border*2)+(iFontSize*2)-2; // updated April 09, 2017
-
-       //GamesListView.CellSizes.Thumbnail.Height:= GamesListView.CellSizes.Thumbnail.Width+(iFontSize*2)-2;
-
-       //Scale:= GamesListView.CellSizes.Thumbnail.Width/GamesListView.CellSizes.Thumbnail.Height;
-       //GamesListView.CellSizes.Thumbnail.Height:= Round(GamesListView.CellSizes.Thumbnail.Width / Scale);
-     end;}
   FormMain.GamesListView.EndUpdate;
-  //FormMain.Caption:= IntToStr(GamesListView.CellSizes.Thumbnail.Width)+'x'+IntToStr(GamesListView.CellSizes.Thumbnail.Height)+
-  //                   '  - pixels per inch:'+ IntToStr(FormMain.Font_Parent.PixelsPerInch); // for debug only, do not enable!
   if IsThumbnailView then
      ResetThumbnails;
 end;
@@ -4337,7 +4028,6 @@ begin
      GetLastSelectedItem(NewEasyItem);
   if NewEasyItem <> nil then
      begin
-       //if ButtonGameFilterArcade.Tag = idMultiSys then
        SelectedGameName:= TEasyGameInfo(NewEasyItem).eName;
        SelectedGameIsCustom:= TEasyGameInfo(NewEasyItem).eIsCustomGame;
        case SelectedGameIsCustom of
@@ -4526,48 +4216,6 @@ begin
      Result:= FormatByteSize(Value)+TagStr
   else
      Result:= '0 '+TagStr;
-
-  // old code. not 100% accurate!
-  {if Bits then
-     Value:= Value * 8; // convert bytes to bits
-
-  if Trunc(Value / 1024) > 0 then
-     begin
-       Value:= Value / 1024; // convert bits to Kb
-       if Trunc(Value / 1024) > 0 then
-          begin
-            Value:= Value / 1024; // convert Kb to Mb
-            if Trunc(Value / 1024) > 0 then
-               begin
-                 Value:= Value / 1024; // convert Mb to Gb
-                 Result:= FormatText(Value)+' G';
-               end
-            else
-               Result:= FormatText(Value)+' M';
-          end
-       else
-          Result:= FormatText(Value)+' K';
-     end
-  else
-     Result:= FormatText(Value)+' ';
-
-  case ShortTag of
-    True:
-      begin
-        case Bits of
-          True : Result:= Result+'b';
-          False: Result:= Result+'B';
-        end;
-      end;
-    False:
-      begin
-        case Bits of
-          True : Result:= Result+'bits';
-          False: Result:= Result+'Bytes';
-        end;
-      end;
-  end;
-  Result:= Result+' = '+quick;}
 end;
 
 procedure TFormMain.UpdateTotalEntriesLabel;
@@ -4580,20 +4228,15 @@ begin
   Result:= FrontendPath+'arcade\';
 end;
 
-function TFormMain.GetGamesFolderEL(SystemType: ShortInt = 0): String;
+function TFormMain.GetGamesFolderEL(SystemType: ShortInt = 0; sysID: ShortInt = idMAME): String;
 begin
   case SystemType of
-    0: Result:= GetArcadeFolder+'games\'; // FrontendPath+'arcade\games\';
-    1: Result:= GetArcadeFolder+'mame_softwarelist_games\';
-    2: Result:= GetConsoleComputerFolder+'games\';
+    0: Result:= GetArcadeFolder+'games\'; // FrontendPath+'arcade\
+    1: Result:= GetArcadeFolder+GetArcadeSystemIniSection(sysID, True)+'_softwarelist_games\'; //1: Result:= GetArcadeFolder+'mame_softwarelist_games\';
+    2: Result:= GetConsoleComputerFolder+'games\'; // FrontendPath+'console_computer\
     3: Result:= GetConsoleComputerFolder+'games_extra_data\';
   end;
 end;
-
-//function TFormMain.GetFolderSoftwareList(sysID: Byte): String;
-//begin
-//  Result:= FrontendPath+'arcade\softwarelist\'+GetSystemIniSection(sysID, True)+'\';
-//end;
 
 function TFormMain.LoadMultiSlotList(sysID: ShortInt; const MachineName: String; ArrayIndex: ShortInt): Boolean;
 begin
@@ -4637,13 +4280,13 @@ begin
   FileName:= GetSystemFileName(sysID, 0, SoftwareList);
   FileNameStatus:= GetSystemFileName(sysID, 2, SoftwareList);
   HolderStrings.BeginUpdate;
-  Result:= FileExists(GetGamesFolderEL(SystemType)+FileName) and FileExists(GetGamesFolderEL(SystemType)+FileNameStatus);
+  Result:= FileExists(GetGamesFolderEL(SystemType, sysID)+FileName) and FileExists(GetGamesFolderEL(SystemType, sysID)+FileNameStatus);
   if Result then
      begin
        TempFile:= THashedStringList.Create;
-       TempFile.LoadFromFile(GetGamesFolderEL(SystemType)+FileName);
+       TempFile.LoadFromFile(GetGamesFolderEL(SystemType, sysID)+FileName);
        TempFileStatus:= THashedStringList.Create;
-       TempFileStatus.LoadFromFile(GetGamesFolderEL(SystemType)+FileNameStatus);
+       TempFileStatus.LoadFromFile(GetGamesFolderEL(SystemType, sysID)+FileNameStatus);
        if TempFile.Count > 0 then
           begin
             TempFile.BeginUpdate;
@@ -4690,11 +4333,11 @@ end;
 function TFormMain.GetGamesListCustom(HolderStrings: THashedStringList; const sysID: Integer; SoftwareList: String = ''): Boolean;
 var
   TempFile: THashedStringList;
-  FileName: String; //, SoftwareTitle, sGameName, StatusStr: String;
+  FileName: String;
   Loop: Integer;
   tmpString: String;
 begin
-  // no need for the SystemType here anymore...
+  // no need for the SystemType here
   FileName:= SystemsListCustom[sysID, 2];
 
   HolderStrings.BeginUpdate;
@@ -4720,69 +4363,6 @@ begin
      end;
   HolderStrings.EndUpdate;
 end;
-
-{function TFormMain.GetGamesList(HolderStrings: THashedStringList; const sysID: Integer; SystemType: ShortInt = 0; SoftwareList: String = ''): Boolean;
-var
-  TempFile, TempFileStatus: THashedStringList;
-  FileName, FileNameStatus, SoftwareTitle, sGameName, StatusStr: String;
-  Loop, iPos: Integer;
-  tmpString: String;
-begin
-  // no need for the SystemType here anymore...
-  FileName:= GetSystemFileName(sysID, 0, SoftwareList);
-  FileNameStatus:= GetSystemFileName(sysID, 2, SoftwareList);
-  HolderStrings.BeginUpdate;
-  Result:= FileExists(GetGamesFolderEL(SystemType)+FileName) and FileExists(GetGamesFolderEL(SystemType)+FileNameStatus);
-  if Result then
-     begin
-       TempFile:= THashedStringList.Create;
-       TempFile.LoadFromFile(GetGamesFolderEL(SystemType)+FileName);
-       TempFileStatus:= THashedStringList.Create;
-       TempFileStatus.LoadFromFile(GetGamesFolderEL(SystemType)+FileNameStatus);
-       if TempFile.Count > 0 then
-          begin
-            TempFile.BeginUpdate;
-            if TempFile[0] = '[info_file]' then
-               begin
-                 if SoftwareList <> '' then
-                    SoftwareTitle:= TempFile.ValueFromIndex[1];
-                 TempFile.Delete(3);
-                 TempFile.Delete(2);
-                 TempFile.Delete(1);
-                 TempFile.Delete(0);
-               end;
-            for Loop:=TempFile.Count-1 downto 0 do
-            begin
-              tmpString:= TempFile[Loop];
-              if (tmpString = '') or (tmpString[1] = '[') then
-                 TempFile.Delete(Loop)
-              else
-              begin
-                sGameName:= TempFile.Names[Loop];
-                StatusStr:= TempFileStatus.Values[sGameName];
-                if SoftwareList = '' then
-                   StatusStr:= StatusStr+'¬';
-                iPos:= Pos('=', tmpString);
-                Insert(StatusStr, tmpString, iPos+1);
-                TempFile[Loop]:= tmpString;
-                if SoftwareList <> '' then
-                   TempFile[Loop]:= TempFile[Loop]+'<softfile>'+SoftwareList+'</softfile><softtitle>'+SoftwareTitle+'</softtitle>';
-              end;
-            end;
-            TempFile.EndUpdate;
-            if TempFile.Count > 0 then
-               begin
-                 HolderStrings.AddStrings(TempFile);
-                 //if sysVersion <> '' then
-                 //   PopupGameArcadeFilters.Items[sysID].Hint:= sysVersion; // MAYBE ????????
-               end;
-          end;
-       FreeAndNil(TempFile);
-       FreeAndNil(TempFileStatus);
-     end;
-  HolderStrings.EndUpdate;
-end;}
-
 
 procedure TFormMain.InitializeEmulatorVariables;
 var
@@ -4901,7 +4481,7 @@ begin
     Result:= Result+MountGameInfoFieldStr('drvname', TempGameVars.eDriverName);
     Result:= Result+MountGameInfoFieldStr('nplayer', TempGameVars.eNumberPlayers);
     if TempGameVars.eMechanical then
-       Result:= Result+'<mech>';//MountGameInfoFieldStr('mechanic', IntToStr(Ord(TempGameVars.eMechanical)));
+       Result:= Result+'<mech>';
 
     if TempGameVars.eGameSize <> 0 then
        Result:= Result+MountGameInfoFieldStr('size', IntToStr(TempGameVars.eGameSize));
@@ -4918,43 +4498,10 @@ begin
          end;
       Result:= Result+MountGameInfoFieldStr('sta', IntToStr(TempGameVars.eSaveState));
     end;
-
-    // MAME arcade and other arcade emulators
-    //Result:= Format('%.2u', [TempGameVars.eROMIdentification])+'¬'+
-    //         IntToStr(TempGameVars.eGameSetStatus)+'¬'+
-    //         IntToStr(TempGameVars.eScanMode)+'¬'+
-    //         IntToStr(TempGameVars.eMediaType)+'¬'+
-    //         TempGameVars.eTitle+'¬'+
-    {Result:= IntToStr(TempGameVars.eMediaType)+'¬'+
-             TempGameVars.eTitle+'¬'+
-             TempGameVars.eYear+'¬'+
-             TempGameVars.eManufacturer+'¬'+
-             TempGameVars.eControls+'¬'+
-             IntToStr(TempGameVars.eButtonsCount)+'¬'+
-             IntToStr(TempGameVars.eScreenType)+'¬'+
-             IntToStr(TempGameVars.eScreenOrientation)+'¬'+
-             TempGameVars.eScreenResolution+'¬'+
-             TempGameVars.eScreenRefreshRate+'¬'+
-             IntToStr(TempGameVars.eAudioType)+'¬'+
-             IntToStr(TempGameVars.eDriverStatus)+'¬'+
-             TempGameVars.eBiosName+'¬'+
-             TempGameVars.eClone+'¬'+
-             TempGameVars.eDriverName+'¬'+
-             TempGameVars.eNumberPlayers+'¬'+
-             IntToStr(Ord(TempGameVars.eMechanical))+'¬'+
-             IntToStr(TempGameVars.eGameSize)+'¬';
-
-    if TempGameVars.eSystemID in [idMAME, idHBMAME] then
-       Result:= Result+
-                IntToStr(TempGameVars.eEmulationStatus)+'¬'+
-                IntToStr(TempGameVars.eColorStatus)+'¬'+
-                IntToStr(TempGameVars.eSoundStatus)+'¬'+
-                IntToStr(TempGameVars.eGraphicStatus)+'¬'
-                ;}
   end
   else
   begin
-    // for MESS software list games
+    // for MAME software list games
     Result:= IntToStr(TempGameVars.eMediaType)+ // 1 char; position 1
              IntToStr(TempGameVars.eDriverStatus)+ // 1 char; position 2
              IntToStr(TempGameVars.eEmulationStatus) // 1 char; position 3
@@ -4976,8 +4523,6 @@ begin
 end;
 
 function TFormMain.PopulateROMLineCustom: String;
-//var
-//  iTitle: WideString;
 begin
   // SystemID MediaType IsUnicode <file>Game Filename (no path)/> <size>file size (bytes)/>
   Result:= Format('%.3u', [TempGameVars.eCustomSystemID])+
@@ -4985,19 +4530,6 @@ begin
            IntToStr(Ord(TempGameVars.eIsUnicode))+
            MountGameInfoFieldStr('file', TempGameVars.eName)+
            MountGameInfoFieldStr('size', IntToStr(TempGameVars.eGameSize));
-           //'<file>'+TempGameVars.eName+'/>'+
-           //'<size>'+IntToStr(TempGameVars.eGameSize)+'/>';
-
-  {if MemGameVariables.eTitle = '' then
-     iTitle:= ''
-  else
-     iTitle:= '<title>'+MemGameVariables.eTitle+'</title>';
-  Result:= Format('%.3u', [MemGameVariables.eSystemID])+
-           Format('%.2u', [MemGameVariables.eMediaType])+
-           IntToStr(Ord(MemGameVariables.eIsUnicode))+
-           '<file>'+MemGameVariables.eGameFileName+'</file>'+
-           '<size>'+IntToStr(MemGameVariables.eGameSize)+'</size>'+
-           iTitle;}
 end;
 
 // this function should not be needed here as this is a job for EmuCon frontend
@@ -5043,27 +4575,11 @@ end;
 
 procedure TFormMain.UpdateTimesPlayedIni;
 var
-  Loop: Integer; //, LoopFavList, FavHeaderIndex: Integer;
+  Loop: Integer;
   oldFile: String;
   playedTxtFile: THashedStringList;
   TempIni: TMemIniFile;
   DestFolderCreated: Boolean;
-
-  //function GetCharLastPos(const StrName: String): Integer;
-  //var
-  // cLoop: Integer;
-  //begin
-  //  Result:= -1;
-  //  for cLoop:= Length(StrName) downto 1 do
-  //  begin
-  //    if StrName[cLoop] = '_' then
-  //       begin
-  //         Result:= cLoop;
-  //         Break;
-  //       end;
-  //  end;
-  //end;
-
 begin
   oldFile:= GetIniFilesFolder+'games_played.ini';
   if not ValidateFile(oldFile) then
@@ -5105,7 +4621,7 @@ var
   IniFile, PathString: String;
   Loop: Integer;
 begin
-  // this is used by "Category/Layout Settings" screen only!!!! (August 07, 2016)
+  // this is used by "Image Category Settings" screen only!!!! (August 07, 2016)
   if not ValidateArcadeEmulatorFile(SystemID) then
      Exit;
   iniFile:= GetArcadeEmuIniFileName(SystemID, EmulatorFile[SystemID]);
@@ -5167,15 +4683,6 @@ var
 begin
   Result:= '';
   //save file
-  {case FilterType of
-    0: SaveDialog.Filter:= 'MAME Input files (*.inp)|*.inp';
-    1: SaveDialog.Filter:= 'MAME Save State Files (*.sta)|*.sta';
-    2: SaveDialog.Filter:= 'Data files (*.dat; *.el)|*.dat; *.el';
-    3: SaveDialog.Filter:= 'Initialization files (*.ini)|*.ini';
-    4: SaveDialog.Filter:= 'Text files (*.txt)|*.txt';
-    5: SaveDialog.Filter:= 'All files (*.*)|*.*';
-  end;}
-
   case FilterType of
      0: FilterStr:= 'Executable Files (*.exe)|*.exe';
      1: FilterStr:= 'MAME Input Files (*.inp)|*.inp';
@@ -5199,7 +4706,7 @@ begin
     19: FilterStr:= 'Data Files (*.dat)|*.dat';
     20: FilterStr:= 'C++ Files (*.cpp)|*.cpp';
     21: FilterStr:= 'JavaScript Object Notation (*.json)|*.json';
-    22: FilterStr:= MemoryCardFilter;//'Memory Card Files (*.mc?)|*.mc?';
+    22: FilterStr:= MemoryCardFilter;
   end;
   case FilterType of
      0: DefaultExtension:= 'exe';
@@ -5224,7 +4731,7 @@ begin
     19: DefaultExtension:= 'dat';
     20: DefaultExtension:= 'cpp';
     21: DefaultExtension:= 'json';
-    22: DefaultExtension:= '';//'mc?';
+    22: DefaultExtension:= '';
   end;
   if DefaultDirectory <> '' then
      DefaultDirectory:= IncludeTrailingPathDelimiter(DefaultDirectory); // last backlash is required to show desired folder correctly!!!
@@ -5456,6 +4963,7 @@ begin
   GameInfoVar.eROMsAllNoDump:= TEasyGameInfo(SelectedEasyItem).eROMsAllNoDump; // for arcade only
   GameInfoVar.eCRC32Duplicates:= TEasyGameInfo(SelectedEasyItem).eCRC32Duplicates;
 
+  // these cannot be here (February 25, 2018)
   //SetLength(GameInfoVar.eDeviceSets, Length(TEasyGameInfo(SelectedEasyItem).eDeviceSets));
   //GameInfoVar.eDeviceSets:= TEasyGameInfo(SelectedEasyItem).eDeviceSets;
 end;
@@ -5472,15 +4980,15 @@ begin
   GameInfoVar.eIsCustomGame:= False;
   GameInfoVar.eIsUnicode:= False; // for EmuCon systems (console/computer/handheld)
 
-  GameInfoVar.eIconLoaded:= False;
+  GameInfoVar.eIconLoaded:= False; // for MAMu_ icons
   GameInfoVar.eTitle:= '';
   GameInfoVar.eYear:= '';
   GameInfoVar.eManufacturer:= '';
   GameInfoVar.eControls:= '';
   gameInfoVar.eButtonsCount:= 0; // zero means no buttons are used
   GameInfoVar.eAudioType:= 0;
-  GameInfoVar.eScreenType:= -1; // unknown or non-existant for the game/machine
-  GameInfoVar.eScreenOrientation:= -1; // unknown or non-existant for the game/machine
+  GameInfoVar.eScreenType:= -1; // unknown or non-existant
+  GameInfoVar.eScreenOrientation:= -1; // unknown or non-existant for
   GameInfoVar.eScreenResolution:= '';
   GameInfoVar.eScreenRefreshRate:= '';
 
@@ -5508,22 +5016,22 @@ begin
   GameInfoVar.eMechanical:= False; // set to NOT mechanical interface
   GameInfoVar.eSaveState:= -1; // always set as "not defined"
   GameInfoVar.eIsFavorite:= False;
-  GameInfoVar.eGameSetStatus:= 2; // set status to "OK" 0 - have; 1 - missing ROMs/CHDs; 2 - missing
+  GameInfoVar.eGameSetStatus:= 2; // set status to "MISSING" 0 - have; 1 - missing ROMs/CHDs; 2 - missing
   GameInfoVar.eGameSize:= 0;
   GameInfoVar.eGameSizeText:= '';
   GameInfoVar.eHaveGameROMs:= 0;
 
-  GameInfoVar.eSoftwareName:= ''; // for MESS games 'softwarelist.xml' files
-  GameInfoVar.eSoftwareExecParameter:= ''; // for MESS games 'softwarelist.xml'
-  GameInfoVar.eSoftwareCompatible:= ''; // for MESS games 'softwarelist.xml'
-  GameInfoVar.eSoftwareUsageTip:= ''; // for MESS games 'softwarelist.xml'
+  GameInfoVar.eSoftwareName:= ''; // for MAME 'softwarelist.xml' files
+  GameInfoVar.eSoftwareExecParameter:= ''; // for MAME 'softwarelist.xml'
+  GameInfoVar.eSoftwareCompatible:= ''; // for MAME 'softwarelist.xml'
+  GameInfoVar.eSoftwareUsageTip:= ''; // for MAME 'softwarelist.xml'
 
   GameInfoVar.eScanMode:= 0; // always full scan (ROMs/CHDs validation)
   GameInfoVar.eIsMerged:= False;
   GameInfoVar.eCHDsCount:= 0; // always zero CHDs
   GameInfoVar.eROMsAllNoDump:= True; // always to false
   GameInfoVar.eCRC32Duplicates:= False; // always to false
-  //SetLength(GameInfoVar.eDeviceSets, 0);
+  //SetLength(GameInfoVar.eDeviceSets, 0); // cannot be initialized here (February 25, 2018)
 end;
 
 procedure TFormMain.FillTempGameInfo(ELV_Item: TEasyItem);
@@ -5581,18 +5089,18 @@ begin
   TempGameVars.eGameSizeText:= TEasyGameInfo(ELV_Item).eGameSizeText;
   TempGameVars.eHaveGameROMs:= TEasyGameInfo(ELV_Item).eHaveGameROMs;
 
-  TempGameVars.eSoftwareName:= TEasyGameInfo(ELV_Item).eSoftwareName; // for MESS games 'softwarelist.xml' files
-  TempGameVars.eSoftwareExecParameter:= TEasyGameInfo(ELV_Item).eSoftwareExecParameter; // for MESS games 'softwarelist.xml' files
-  TempGameVars.eSoftwareCompatible:= TEasyGameInfo(ELV_Item).eSoftwareCompatible; // for MESS games 'softwarelist.xml' files
-  TempGameVars.eSoftwareUsageTip:= TEasyGameInfo(ELV_Item).eSoftwareUsageTip; // for MESS games 'softwarelist.xml' files
+  TempGameVars.eSoftwareName:= TEasyGameInfo(ELV_Item).eSoftwareName; // for MAME 'softwarelist.xml' files
+  TempGameVars.eSoftwareExecParameter:= TEasyGameInfo(ELV_Item).eSoftwareExecParameter; // for MAME 'softwarelist.xml' files
+  TempGameVars.eSoftwareCompatible:= TEasyGameInfo(ELV_Item).eSoftwareCompatible; // for MAME 'softwarelist.xml' files
+  TempGameVars.eSoftwareUsageTip:= TEasyGameInfo(ELV_Item).eSoftwareUsageTip; // for MAME 'softwarelist.xml' files
 
   TempGameVars.eScanMode:= TEasyGameInfo(ELV_Item).eScanMode;
   TempGameVars.eIsMerged:= TEasyGameInfo(ELV_Item).eIsMerged;
   TempGameVars.eCHDsCount:= TEasyGameInfo(ELV_Item).eCHDsCount;
   TempGameVars.eROMsAllNoDump:= TEasyGameInfo(ELV_Item).eROMsAllNoDump;
   TempGameVars.eCRC32Duplicates:= TEasyGameInfo(ELV_Item).eCRC32Duplicates;
-  //SetLength(TempGameVars.eDeviceSets, Length(TEasyGameInfo(ELV_Item).eDeviceSets));
-  //TempGameVars.eDeviceSets:= TEasyGameInfo(ELV_Item).eDeviceSets;
+  //SetLength(TempGameVars.eDeviceSets, Length(TEasyGameInfo(ELV_Item).eDeviceSets)); // cannot be initialized here (February 25, 2018)
+  //TempGameVars.eDeviceSets:= TEasyGameInfo(ELV_Item).eDeviceSets; // cannot be initialized here (February 25, 2018)
 end;
 
 function TFormMain.ValidateVideoPreviewSnapFolder(const FilePath: WideString): WideString;
@@ -5626,7 +5134,7 @@ begin
   if VideoPreviewMediaPlayerExecutable = '' then
      Exit;
 
-  Folder:= ''; // this is the custom folder defined in preferences screen (values stored in VideoPreviewDir[] array)
+  Folder:= ''; // var to generate the full path from "ArcadeVideoPreviewDir[]" and "ConsoleComputerVideoPreviewDir[]" arrays
   if IsCustomGame then
      begin
        FileStr:= ChangeFileExtW(GameName, '');
@@ -5680,9 +5188,7 @@ begin
             Result:= FolderVideoSnap+FolderSoftware+Search.Name
          else
             begin
-              //if FindFirst(FolderSnap+FolderSoftware+GameName+'.*', $37, Search) = 0 then
-              //   Result:= FolderSnap+FolderSoftware+Search.Name
-              FileToLoad:= ValidateVideoPreviewSnapFolder(FolderSnap+FolderSoftware+FileStr);//GameName);
+              FileToLoad:= ValidateVideoPreviewSnapFolder(FolderSnap+FolderSoftware+FileStr);
               if FileToLoad <> '' then
                  Result:= FileToLoad
               else
@@ -5699,8 +5205,6 @@ begin
                               FileToLoad:= ValidateVideoPreviewSnapFolder(FolderSnap+FolderSoftware+CloneOfName);
                               if FileToLoad <> '' then
                                  Result:= FileToLoad;
-                              //if FindFirst(FolderSnap+FolderSoftware+CloneOfName+'.*', $37, Search) = 0 then
-                              //   Result:= FolderSnap+FolderSoftware+Search.Name
                             end;
                        end;
                  end;
@@ -5807,7 +5311,7 @@ begin
   end;
 end;
 
-function TFormMain.ELV_SetGhostedIconText(ELV_Item: TEasyItem; ELV_Source: TEasyListView; CanvasDestination: TCanvas): TColor;
+procedure TFormMain.ELV_SetGhostedIconText(ELV_Item: TEasyItem; ELV_Source: TEasyListView; CanvasDestination: TCanvas);
 begin
   if ELV_Source.PaintInfoItem.CheckType = ectNone then
      begin
@@ -5972,7 +5476,6 @@ end;
 
 //TFileInfo(Item).eDatePlayed:= read from played.ini (integer)
 //TFileInfo(Item).eDatePlayedText:= FormMain.GetDateWStr(TFileInfo(Item).eDatePlayed);
-
 function TFormMain.GetDateStr(dtInfo: Integer; EmuVersionInfo: Boolean = False): String;
 begin
   if EmuVersionInfo then
@@ -6009,7 +5512,6 @@ end;
 
 procedure TFormMain.SetSelectedMachineList;
 begin
-  //ELV_SetSelectRibbon(TMachineGameInfo(SelectedMachineItem).eGameSetStatus, MachinesListSidePanel);
   Screen.Cursor:= crHourGlass;
   SelectedMachineListName:= TMachineGameInfo(SelectedMachineItem).eName;
 
@@ -6017,114 +5519,9 @@ begin
      Exit;
 
   ELV_CheckItemVisible(MachinesListSidePanel, SelectedMachineItem, False);
-  //SelectedMachineItem.MakeVisible(emvAuto);
   SetGameType(False);
   Screen.Cursor:= crDefault;
 end;
-
-{function TFormMain.RunProcess(AppPath: String; MustWait: Boolean=False;
-  Visibility: Word=SW_SHOWNORMAL; RunningGame: Boolean=True): DWORD;
-var
-  SI: TStartupInfo;
-  PI: TProcessInformation;
-  Proc: THandle;
-  zFileName: array[0..1023] of Char;
-  ErrorMsg: DWORD;
-begin
-  if Length(AppPath) > 1023 then
-     begin
-       GenerateMessage('Error', 'Command line is too long.',
-                       'The command line has more than 1023 chars - ['+IntToStr(Length(AppPath))+']', 2, False, 1);
-       Exit;
-     end;
-
-  FillChar(SI, SizeOf(SI), 0);
-  SI.cb:= SizeOf(SI);
-  SI.dwFlags:= StartF_UseShowWindow;
-  SI.wShowWindow:= Visibility;
-  StrPCopy(zFileName, AppPath);
-
-  if not CreateProcess(nil, zFileName,
-     nil, nil, False, Create_New_Console+Normal_Priority_Class, nil, nil, SI, PI) then
-     begin
-       ErrorMsg:= GetLastError;
-       GenerateMessage('Error', 'Failed to create the process.',
-                       AppPath+#13#10+#13#10+
-                       'Error Code '+IntToStr(GetLastError)+': '+SysErrorMessage(ErrorMsg), 2, False, 1);
-     end;
-
-
-  Proc:= PI.hProcess;
-  CloseHandle(PI.hThread);
-
-  if RunningGame then
-     begin
-       if not FormPreferences.DisableMinimize.Checked then
-          ShowWindow(Handle, SW_MINIMIZE);
-          //Application.Minimize;
-     end;
-
-  if MustWait then
-     begin
-       GetExitCodeProcess(Proc, Result);
-        while (Result = STILL_ACTIVE) do
-        begin
-          Application.ProcessMessages;
-          if WaitForSingleObject(Proc, 10) <> Wait_Failed then
-             GetExitCodeProcess(Proc, Result);
-        end;
-     end;
-  CloseHandle(Proc);
-  Sleep(10); // give some milliseconds to update the screen after exiting the emulator
-  if RunningGame then
-     begin
-       if not FormPreferences.DisableMinimize.Checked then
-          begin
-            ShowWindow(Handle, SW_RESTORE);
-            Application.BringToFront;
-            SetActiveWindow(Application.Handle);
-          end;
-       Application.BringToFront;
-       Application.Restore;
-       FormMain.SetFocus;
-     end;}
-
-{---PARAMETERS------------------------------------------------------------------
-AppPath: The full path and Application Name to run ie. c:winnt notepad.exe
-
-MustWait: true if the code must be paused until the termination of the launched
-  Application. false if the code must run directly after launching the app.
-
-AppParams: Commandline params to send to the app.
-
-Visibility:
-Can have any of the following values:
-  Value Meaning
-  SW_HIDE Hides the window and activates another window.
-  SW_MAXIMIZE Maximizes the specified window.
-  SW_MINIMIZE Minimizes the specified window and activates the next top-level
-    window in the Z order.
-  SW_RESTORE Activates and displays the window. If the window is minimized or
-    maximized, Windows restores it to its original size and position. An
-    application should specify this flag when restoring a minimized window.
-  SW_SHOW Activates the window and displays it in its current size and position.
-  SW_SHOWDEFAULT Sets the show state based on the SW_ flag specified in the
-    STARTUPINFO structure passed to the CreateProcess function by the program
-    that started the application.
-  SW_SHOWMAXIMIZED Activates the window and displays it as a maximized window.
-  SW_SHOWMINIMIZED Activates the window and displays it as a minimized window.
-  SW_SHOWMINNOACTIVE Displays the window as a minimized window. The active
-    window remains active.
-  SW_SHOWNA Displays the window in its current state. The active window remains
-    active.
-  SW_SHOWNOACTIVATE Displays a window in its most recent size and position.
-    The active window remains active.
-  SW_SHOWNORMAL Activates and displays a window. If the window is minimized or
-    maximized, Windows restores it to its original size and position. An
-    application should specify this flag when displaying the window for the
-    first time.
--------------------------------------------------------------------------------}
-//end;
 
 function TFormMain.KeyPressValidateNumbers(const PressedKey: Char; RecognizeDotChar: Boolean = False): Char;
 begin
@@ -6210,11 +5607,6 @@ begin
        AddMsgText(#13#10+'Error Code ');
        AddMsgText(IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg), clBlack, [fsBold]);
        GenerateMessage('Error', 'Run Process', '', 2, False, 1);
-
-       //ErrorMsg:= GetLastError;
-       //GenerateMessage('Error', 'Failed to create the process.',
-       //                AppPath+#13#10+#13#10+
-       //                'Error Code '+IntToStr(GetLastError)+': '+SysErrorMessage(ErrorMsg), 2, False, 1);
      end;
 
   Proc:= PI.hProcess;
@@ -6378,7 +5770,6 @@ end;
 
 function TFormMain.GetWindowStateRunGame(sysID: ShortInt): Integer;
 begin
-  //if not (sysID in [idMAME, idHBMAME, idZiNc]) then
   if not IsMAMEBasedSys(sysID) then
      Result:= SW_SHOWNORMAL
   else
@@ -6393,7 +5784,7 @@ var
   CommandLine, VersionDescription, tempFile, fDateStr, fVersion: String;
   BatchFile: THashedStringList;
   Continue, IsStatusOpened: Boolean;
-  {Loop, iPos, }fDate: Integer;
+  fDate: Integer;
 begin
   isStatusOpened:= FormStatus.Visible;
   SetCurrentDir(FrontendPath);
@@ -6479,9 +5870,6 @@ begin
                     VersionDescription:= Trim(Copy(VersionDescription, PosEx(')', VersionDescription)+1, Length(VersionDescription)));
                     VersionDescription:= FormMain.GetArcadeEmulatorDescription(idDemul, False, strEmuFile)+' '+VersionDescription;
                     VersionDescription:= VersionDescription+' ('+Copy(BatchFile[1], 13, Length(BatchFile[1]))+')';
-                    //VersionDescription:= Format('%s (%s)', [VersionDescription, Copy(BatchFile[1], 13, Length(BatchFile[1]))]);
-                    //Delete(VersionDescription, (Pos('(', VersionDescription)-1), 18);
-                    //VersionDescription:= Format('%s (%s)', [VersionDescription, Copy(BatchFile[1], 13, Length(BatchFile[1]))]);
                   end;
               end;
               FreeAndNil(BatchFile);
@@ -6885,25 +6273,8 @@ begin
 
     buildAlterMAME:= INIFile.ReadString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild', '');
 
-    //PopupAutoRunGameAlterMAME.Checked:= Boolean(INIFile.ReadInteger(GetSystemIniSection(idMAME), 'emu_AlterMAMEAutoRun', 0));
-
     for Loop:=1 to MaxArcadeSystems do
     begin
-      // ... for debugging only
-      //if not ShowErrorMsg then
-      //   begin
-      //     CallMessageBox;
-      //     ShowErrorMsg:= True;
-      //   end
-      //else
-      //   AddMsgText(#13#10+#13#10);
-
-      //AddMsgText('    '+GetEmulatorDescription(Loop, True)+#13#10, clBlack, [fsBold]);
-      //AddMsgText('File not found: ');
-      //AddMsgText(EmulatorFile[Loop], clMaroon);
-      //Result:= False;
-      // ... end of debugging lines
-
       if (EmulatorFile[Loop] <> '') and (not FileExists(EmulatorFile[Loop])) then
          begin
            if not ShowErrorMsg then
@@ -6983,8 +6354,6 @@ var
   end;
 
   procedure WriteEmulatorVariables(SystemID: Integer);
-  //var
-  //  SectionString: String;
   begin
     if EmulatorFile[SystemID] <> '' then
        begin
@@ -7045,10 +6414,6 @@ begin
          INIFile.DeleteKey(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion')
       else
          INIFile.WriteString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion', AlterMAMEVersion);
-      //if AlterMAMEFile = '' then
-      //   INIFile.DeleteKey(GetSystemIniSection(idMAME), 'emu_AlterMAMEAutoRun')
-      //else
-      //   INIFile.WriteInteger(GetSystemIniSection(idMAME), 'emu_AlterMAMEAutoRun', Ord(PopupAutoRunGameAlterMAME.Checked));
     end;
   finally
      for Loop:=1 to MaxArcadeSystems do
@@ -7065,7 +6430,6 @@ end;
 
 
 function TFormMain.ReadImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean): Boolean;
-//function TFormMain.ReadEmuFoldersEmulatorsIni(LoadImagesSettings, LoadEmulatorsSettings: Boolean; ExitApplication: Boolean = False): Boolean;
 var
   INIFile: TMemIniFile;
   Loop: ShortInt;
@@ -7318,7 +6682,6 @@ begin
 end;
 
 procedure TFormMain.WriteImageCategories(WriteImagesSettings, WriteMAMu_Setting: Boolean);
-//procedure TFormMain.UpdateEmuFoldersEmulatorsIni(WriteImagesSettings, WriteEmulatorsSettings: Boolean);
 var
   INIFile: TMemIniFile;
   Loop: Integer;
@@ -7423,9 +6786,8 @@ var
                   FileMAME_ui[LoopUI]:= WriteLineMAME_uiIni(sysID, 5, EntryStringUI);
                 end
              else
-             if tmpEntryStr = (ImageCategoryArray[6, 4]+' ') then // ui.ini //if tmpEntryStr = 'pcbs_directory ' then // ui.ini
+             if tmpEntryStr = (ImageCategoryArray[6, 4]+' ') then // ui.ini //if tmpEntryStr = 'covers_directory ' then // ui.ini
                 begin
-                  // category ID = 6 is the new "software cover"!
                   FileMAME_ui[LoopUI]:= WriteLineMAME_uiIni(sysID, 6, EntryStringUI);
                 end
              else
@@ -7513,37 +6875,21 @@ var
 
     Section:= GetArcadeSystemIniSection(SystemID);
 
-    //if (not Result) and IsMAMEBasedSys(SystemID) then
-    //   INIFile.EraseSection(Section);
-
-
     UpdateImgIni:= True;
     Section:= GetArcadeSystemIniSection(SystemID);
     for imgLoop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
-      //if (SystemID in [idMAME, idHBMAME]) and (imgLoop = 1) then
-      //   INIFile.DeleteKey(Section, ImageCategoryArray[imgLoop, 1]+'_folder')
-      //else
-      //if not ((SystemID in [idMAME, idHBMAME]) and (imgLoop = 1)) then
       if not (IsMAMEBasedSys(SystemID) and (imgLoop = 1)) then
       begin
         if imgFolder[SystemID, imgLoop] <> '' then
            INIFile.WriteString(Section, ImageCategoryArray[imgLoop, 4], imgFolder[SystemID, imgLoop])
         else
            INIFile.DeleteKey(Section, ImageCategoryArray[imgLoop, 4]);
-
-        //if imgFolder[SystemID, imgLoop] <> '' then
-        //   INIFile.WriteString(Section, ImageCategoryArray[imgLoop, 1]+'_folder', imgFolder[SystemID, imgLoop])
-        //else
-        //   INIFile.DeleteKey(Section, ImageCategoryArray[imgLoop, 1]+'_folder');
       end;
     end;
   end;
 
 begin
-  //if WriteEmulatorsSettings then
-  //   DeleteFile(GetFoldersEmulatorsFile);
-
   INIFile:= TMemIniFile.Create(GetImageCategoriesFile);
   UpdateImgIni:= False;
 
@@ -7599,6 +6945,7 @@ var
 
   function ReadEntry(const EntryTitle: String; DestinationFont: TFont; DefaultFontColor: TColor; const DefaultFontName: String; DefaultFontSize: Integer; DefaultFontStyle: Byte): Boolean;
   begin
+    Result:= True;
     DestinationFont.Color:= FontIniFile.ReadInteger(EntryTitle, 'FontColor', DefaultFontColor);
     DestinationFont.Name:= FontIniFile.ReadString(EntryTitle, 'FontName', DefaultFontName);
     DestinationFont.Size:= FontIniFile.ReadInteger(EntryTitle, 'FontSize', DefaultFontSize);
@@ -7632,11 +6979,7 @@ begin
     begin
       ReadEntry(SystemsListCustom[Loop, 0], tmpFont, GamesListView.Font.Color, GamesListView.Font.Name, GamesListView.Font.Size, Byte(GamesListView.Font.Style));
       if not (IsSameFont(GamesListView.Font, tmpFont)) then
-         begin
-           //if not Assigned(Font_ConsoleComputer[Loop]) then
-           //   Font_ConsoleComputer[Loop]:= TFont.Create;
-           SetFont(tmpFont, Font_ConsoleComputer[Loop], True);
-         end
+         SetFont(tmpFont, Font_ConsoleComputer[Loop], True)
       else
          FreeAndNil(Font_ConsoleComputer[Loop]); // free TFont var from RAM
     end;
@@ -7653,6 +6996,7 @@ var
 
   function WriteEntry(EntryTitle: String; SourceFont: TFont): Boolean;
   begin
+    Result:= True;
     FontIniFile.WriteInteger(EntryTitle, 'FontColor', SourceFont.Color);
     FontIniFile.WriteString(EntryTitle,  'FontName',  SourceFont.Name);
     FontIniFile.WriteInteger(EntryTitle, 'FontSize',  SourceFont.Size);
@@ -7712,6 +7056,90 @@ begin
   //   SelectImageMenu(PopupMenuImageCategories.Items[ButtonImageCategory.Tag]);
 end;
 
+procedure TFormMain.SplitImageCategoriesIniSettings;
+var
+  elIniFile, ImagesCatLayIniFile: TMemIniFile;
+  Loop: Integer;
+  IntData, BoolData: Integer;
+begin
+  if ValidateFile(GetImageCategorySettingsFile) then
+     Exit;
+
+  if not ValidateFile(FrontendPath+'EmuLoader.ini') then
+     Exit;
+
+  elIniFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
+  ImagesCatLayIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile); // file "ini_files\image_category.ini"
+
+  // first, read the data from EmuLoader.ini and store on temp vars
+  // then, save the new data in the new file with new section names and new key names
+
+  // image category settings
+  for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+  begin
+    // read data
+    IntData:= elIniFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
+    if Loop <> 1 then
+       BoolData:= elIniFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_enabled', 1);
+
+    // write data
+    ImagesCatLayIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', IntData);
+    if Loop <> 1 then // in-game snapshots is always enabled; it cannot be disabled
+       ImagesCatLayIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', BoolData);
+  end;
+
+  ImagesCatLayIniFile.UpdateFile;
+  FreeAndNil(ImagesCatLayIniFile);
+
+  ImagesCatLayIniFile:= TMemIniFile.Create(GetImageLayoutsFile); // file "ini_files\screenshot_layouts.ini"
+
+  // image layout settings (visibility)
+  for Loop:=1 to MaxImageLayouts do // Loop starts at index 1 because single image layout cannot be set invisible
+  begin
+    // read data
+    BoolData:= elIniFile.ReadInteger('Images_Layout', 'layout'+IntToStr(Loop)+'_visible', 1);
+
+    // write data
+    ImagesCatLayIniFile.WriteInteger(GetScrLayoutSection(Loop), 'visible', BoolData);
+  end;
+  ImagesCatLayIniFile.UpdateFile;
+  FreeAndNil(ImagesCatLayIniFile);
+  FreeAndNil(elIniFile);
+end;
+
+procedure TFormMain.LoadImageCategoryLayoutSettings;
+var
+  ImgIniFile: TMemIniFile;
+  Loop, iValue: Integer;
+begin
+  // called only from uMain.ReadIniFile
+  if ValidateFile(GetImageCategorySettingsFile) then
+     begin
+       ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+       // set image category settings
+         for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+         begin
+           PopupMenuImageCategories.Items[Loop].Tag:= ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
+           if Loop <> 1 then
+              PopupMenuImageCategories.Items[Loop].Visible:= Boolean(ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', 1));
+         end;
+       FreeAndNil(ImgIniFile);
+     end;
+
+  if ValidateFile(GetImageLayoutsFile) then
+     begin
+       ImgIniFile:= TMemIniFile.Create(GetImageLayoutsFile);
+       // set image layout settings
+       for Loop:=1 to MaxImageLayouts do // must start with index #1 since single image layout cannot be set invisible
+       begin
+         iValue:= ImgIniFile.ReadInteger(GetScrLayoutSection(Loop), 'visible', 1);
+         if PopupScreenshotLayouts.Items[Loop].Visible <> Boolean(iValue) then
+            PopupScreenshotLayouts.Items[Loop].Visible:= Boolean(iValue);
+       end;
+       FreeAndNil(ImgIniFile);
+     end;
+end;
+
 procedure TFormMain.ReadIniFile;
 const
   ReadIniFileMsg: String = 'Reading initialization file.';
@@ -7736,6 +7164,7 @@ begin
   if FormStatus.Visible then
      FormStatus.MessageStr(ReadIniFileMsg);
 
+  LoadImageCategoryLayoutSettings; // image category "bkcolor/visible" and image layout "visible" settings
   ReadSingleLayoutCategory(True);
   
   if not ValidateFile(FrontendPath+'EmuLoader.ini') then
@@ -7744,7 +7173,7 @@ begin
   try
     INIFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
     MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'BoundToGamesPanel', 0);
-    MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag); // Boolean(INIFile.ReadInteger('ToolBar', 'BoundToGamesPanel', 0));
+    MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
     MenuBoundToGamesPanel.OnClick(Self);
 
     // read Games Font Type and Color
@@ -7779,7 +7208,6 @@ begin
           Font_MissingROMsPreliminary.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'MissingROMsPreliminaryGameFontStyle', 8)));
 
           GamesListView.Font:= Font_Parent;
-          //SetFont(Font_Parent, GamesListView.Font);
           UpdateCustomGameFontFile; // create "ini_files\systemsfonts.ini"
        end;
 
@@ -7895,6 +7323,8 @@ begin
     FormArcadeFiltersExtra.CategoryElectronic.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryElectronic', 1);
     FormArcadeFiltersExtra.CategoryPrinters.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryPrinters', 1);
     FormArcadeFiltersExtra.CategoryPhones.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryPhones', 1);
+    FormArcadeFiltersExtra.CategoryMusic.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryMusic', 1);
+
     FormArcadeFiltersExtra.CategoryMAMEConsoleMachines.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryMAMEConsoleMachines', 1);
     FormArcadeFiltersExtra.CategoryMAMEComputerMachines.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryMAMEComputerMachines', 1);
     FormArcadeFiltersExtra.CategoryMAMEHandheldMachines.Tag:= INIFile.ReadInteger('ListFilter', 'CategoryMAMEHandheldMachines', 1);
@@ -7940,6 +7370,8 @@ begin
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryElectronic);
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryPrinters);
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryPhones);
+    SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryMusic);
+
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryMAMEConsoleMachines);
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryMAMEComputerMachines);
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.CategoryMAMEHandheldMachines);
@@ -8040,9 +7472,6 @@ begin
     if ThumbnailSettings.Height in [0, 1] then
        ThumbnailSettings.Height:= 174;
 
-    //GamesListView.CellSizes.Thumbnail.Width:= INIFile.ReadInteger('Thumbnails', 'WidthSize', 152); // set thumbnails grid size directly in EasListView (April 05, 2017)
-    //GamesListView.CellSizes.Thumbnail.Height:= INIFile.ReadInteger('Thumbnails', 'HeightSize', 152); // set thumbnails grid size directly in EasListView (April 05, 2017)
-
     GamesListView.PaintInfoItem.BorderColor:= INIFile.ReadInteger('Thumbnails', 'BorderColor', 10902593);
     GamesListView.PaintInfoItem.ShowBorder:= Boolean(INIFile.ReadInteger('Thumbnails', 'ShowBorder', 0));
 
@@ -8072,8 +7501,7 @@ begin
     if PopupTilesViewGameIconsSize.Tag <> 3 then
        PopupTilesViewGameIconsSize.Items[PopupTilesViewGameIconsSize.Tag].Click;
 
-    // columns settings
-    ReadColumnProfile;
+    ReadColumnProfile; // load columns settings
 
     SelectedGameSysID:= INIFile.ReadInteger('Selected', 'LastSelectedSysID', -1);
     SelectedGameMediaType:= INIFile.ReadInteger('Selected', 'LastSelectedMediaType', -1);
@@ -8113,7 +7541,10 @@ begin
     PopupSelectScanGamesMode.Tag:= INIFile.ReadInteger('Preferences', 'ScanGamesMode', 0); // 0 -> full; 1 -> simple; 2 -> set all available
     SetScanModePopupHint(PopupSelectScanGamesMode.Tag);
 
-    MenuCreateMAMESoftwareListGames.Tag:= INIFile.ReadInteger('Preferences', 'CreateMAMESoftwareListGames', 1); // 0 -> don't create softlists; 1 -> create softlist games
+    // 0 -> disabled, don't create softlists;
+    // 1 -> update mode: create softlist games and update existing ones
+    // 2 -> overwrite mode: delete all softlists and create new ones
+    MenuCreateMAMESoftwareListGames.Tag:= INIFile.ReadInteger('Preferences', 'CreateMAMESoftwareListGames', 1);
     MenuCreateMAMESoftwareListGames.HelpContext:= INIFile.ReadInteger('Preferences', 'ScanSetsModeMAME', 0); // 0 -> all sets; 1 -> arcade/machines only; 2 -> soflist games only
 
     MenuAddMAMEDeviceSetsWithNoROMs.Tag:= INIFile.ReadInteger('Preferences', 'AddMAMEDeviceSetsWithNoROMs', 0);
@@ -8159,9 +7590,13 @@ begin
       //FolderGamesFAQ.Text:= INIFile.ReadString('Folders', 'GamesFAQ', '');
       //FolderPCBInfo.Text:= INIFile.ReadString('Folders', 'PCBInfo', '');
 
-      FormPreferences.InternetGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameInfoLink', 'http://www.progettoemma.net/gioco.php?game=%s');
-      FormPreferences.InternetMAMESoftwareListGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameSoftwareListInfoLink', 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s');
+      InternetGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameInfoLink', 'http://www.progettoemma.net/gioco.php?game=%s');
+      InternetMAMESoftwareListGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameSoftwareListInfoLink', 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s');
     end;
+
+    FormPreferences.RestoreInternetGameInfoStartup.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'RestoreInternetGameInfoStartup', 0));
+    if FormPreferences.RestoreInternetGameInfoStartup.Checked then
+       ButtonInternetGameInfo.Down:= Boolean(INIFile.ReadInteger('Preferences', 'InternetGameInfoStartup', 0));
 
     // Machines List Side Panel
     SelectedMachineListName:= INIFile.ReadString('MachinesList_SidePanel', 'LastSelectedMachine', '');
@@ -8188,24 +7623,6 @@ begin
       2: PopupMachinesListSidePanelStandard242x4.Click;
     end;
 
-    // set image type settings
-    for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-    begin
-      PopupMenuImageCategories.Items[Loop].Tag:= INIFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
-      if Loop <> 1 then
-         PopupMenuImageCategories.Items[Loop].Visible:= Boolean(INIFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_enabled', 1));
-    end;
-
-    for Loop:=0 to MaxImageLayouts do
-    begin
-      if Loop > 0 then
-         begin
-           tmpString:= INIFile.ReadString('Images_Layout', 'layout'+IntToStr(Loop)+'_visible', '1');
-           if PopupScreenshotLayouts.Items[Loop].Visible <> Boolean(StrToInt(tmpString)) then
-              PopupScreenshotLayouts.Items[Loop].Visible:= Boolean(StrToInt(tmpString));
-         end;
-    end;
-
     FormPreferences.ImagePanelOuterFrameColor.Selected:= INIFile.ReadInteger('Images', 'PanelOuterFrameColor', 0);
     PanelImage.Color:= FormPreferences.ImagePanelOuterFrameColor.Selected;
 
@@ -8228,19 +7645,6 @@ begin
     FormPreferences.ImageLayoutSplitterSingleColor.Selected:= INIFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.DefaultColorColor);
     FormPreferences.ImageLayoutSplitterSingleColorHot.Selected:= INIFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.DefaultColorColor);
 
-    //Loop:= INIFile.ReadInteger('Images', 'ViewMode', 0);
-    //case Loop of
-    //  0:
-    //    begin
-    //      MenuImageViewMode.Tag:= Loop;
-    //      ToggleImageViewMode;
-    //    end;
-    //  1:
-    //    begin
-    //      //MenuImageViewMode.Tag:= 1;
-    //      MenuImageViewModeLayouts.Click;
-    //    end;
-    //end;
     if IsSingleImageLayout then
        SetImageCategoryButtonsVisible // this will set image category tool bar buttons visible/invisible
     else
@@ -8272,6 +7676,9 @@ begin
        PopupImageShowSplitterGrip.Click;
        
     MenuShowImages.Tag:= INIFile.ReadInteger('Images', 'ShowImages', 1);
+
+    FormPreferences.ImageDisableThreadedLoading.Checked:= Boolean(INIFile.ReadInteger('Images', 'DisableThreadedLoading', 0));
+    FormPreferences.FixRetroArchImageFileNames.Checked:= Boolean(INIFile.ReadInteger('Images', 'FixRetroArchImageFileNames', 0));
 
     MenuArcadeControlSlikStik_SwapStick.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ArcadeSlikStik_Swap2ndStick', 0));
     MenuArcadeBrowseGames.Tag:= INIFile.ReadInteger('Preferences', 'BrowseGameWithArcadeControl', 0);
@@ -8379,10 +7786,6 @@ begin
 
       INIFile.WriteInteger('Thumbnails', 'ImageListSize', IL_StandardIconsThumbnail.Width);
 
-      //INIFile.WriteInteger('Thumbnails', 'WidthSize', GamesListView.CellSizes.Thumbnail.Width); // set thumbnails grid size directly in EasListView (April 05, 2017)
-      //INIFile.WriteInteger('Thumbnails', 'HeightSize', GamesListView.CellSizes.Thumbnail.Height); // set thumbnails grid size directly in EasListView (April 05, 2017)
-
-      //INIFile.WriteInteger('Thumbnails', 'GridSize', GamesListView.CellSizes.Thumbnail.Width); // not used anymore (April 09, 2017)
       INIFile.WriteInteger('Thumbnails', 'BorderColor', GamesListView.PaintInfoItem.BorderColor);
       INIFile.WriteInteger('Thumbnails', 'ShowBorder', Ord(GamesListView.PaintInfoItem.ShowBorder));
       INIFile.WriteInteger('Thumbnails', 'ShowParent', Ord(MenuThumbnailShowParentThumbs.Checked));
@@ -8457,7 +7860,7 @@ begin
           INIFile.WriteInteger('ListFilter_ConsoleComputerQuick', SystemsListCustom[Loop, 0], Ord(FilterSysConsCompQuick[Loop]));
 
       INIFile.WriteInteger('ListFilter', 'SystemQuickFilterEnabled', Ord(IsSystemQuickFilterEnabled));
-      
+
       INIFile.WriteString('ListFilter', 'ArcadeGames', SelectedFilterName);
       INIFile.WriteString('ListFilter', 'ArcadeGames_LastFilter', LastFilterName);
       INIFile.WriteInteger('ListFilter', 'ParentClone', ButtonGameFilterParentClone.Tag);
@@ -8467,7 +7870,6 @@ begin
       if FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex = -1 then
          FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex:= 0;
       INIFile.WriteInteger('ListFilter', 'DriverStatusCategory', FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex);
-
 
       // Machine Type Filters
       INIFile.WriteInteger('ListFilter', 'MachineTypeArcadeSystems', Ord(FilterMachineType.ArcadeSystems_Enabled));
@@ -8505,6 +7907,8 @@ begin
       INIFile.WriteInteger('ListFilter', 'CategoryElectronic', Ord(FormArcadeFiltersExtra.CategoryElectronic.Checked));
       INIFile.WriteInteger('ListFilter', 'CategoryPrinters', Ord(FormArcadeFiltersExtra.CategoryPrinters.Checked));
       INIFile.WriteInteger('ListFilter', 'CategoryPhones', Ord(FormArcadeFiltersExtra.CategoryPhones.Checked));
+      INIFile.WriteInteger('ListFilter', 'CategoryMusic', Ord(FormArcadeFiltersExtra.CategoryMusic.Checked));
+
       INIFile.WriteInteger('ListFilter', 'CategoryMAMEConsoleMachines', Ord(FormArcadeFiltersExtra.CategoryMAMEConsoleMachines.Checked));
       INIFile.WriteInteger('ListFilter', 'CategoryMAMEComputerMachines', Ord(FormArcadeFiltersExtra.CategoryMAMEComputerMachines.Checked));
       INIFile.WriteInteger('ListFilter', 'CategoryMAMEHandheldMachines', Ord(FormArcadeFiltersExtra.CategoryMAMEHandheldMachines.Checked));
@@ -8534,31 +7938,6 @@ begin
 
       INIFile.WriteInteger('Appearance', 'GamesListBackgroundColor', FormPreferences.GamesBackgroundColor.Selected);
 
-      {INIFile.WriteInteger('Appearance', 'ParentGameFontColor', Font_Parent.Color);
-      INIFile.WriteString('Appearance', 'ParentGameFontName', Font_Parent.Name);
-      INIFile.WriteInteger('Appearance', 'ParentGameFontSize', Font_Parent.Size);
-      INIFile.WriteInteger('Appearance', 'ParentGameFontStyle', Byte(Font_Parent.Style));
-
-      INIFile.WriteInteger('Appearance', 'CloneGameFontColor', Font_Clone.Color);
-      INIFile.WriteString('Appearance', 'CloneGameFontName', Font_Clone.Name);
-      INIFile.WriteInteger('Appearance', 'CloneGameFontSize', Font_Clone.Size);
-      INIFile.WriteInteger('Appearance', 'CloneGameFontStyle', Byte(Font_Clone.Style));
-
-      INIFile.WriteInteger('Appearance', 'PreliminaryGameFontColor', Font_Preliminary.Color);
-      INIFile.WriteString('Appearance', 'PreliminaryGameFontName', Font_Preliminary.Name);
-      INIFile.WriteInteger('Appearance', 'PreliminaryGameFontSize', Font_Preliminary.Size);
-      INIFile.WriteInteger('Appearance', 'PreliminaryGameFontStyle', Byte(Font_Preliminary.Style));
-
-      INIFile.WriteInteger('Appearance', 'MissingROMsGameFontColor', Font_MissingROMs.Color);
-      INIFile.WriteString('Appearance', 'MissingROMsGameFontName', Font_MissingROMs.Name);
-      INIFile.WriteInteger('Appearance', 'MissingROMsGameFontSize', Font_MissingROMs.Size);
-      INIFile.WriteInteger('Appearance', 'MissingROMsGameFontStyle', Byte(Font_MissingROMs.Style));
-
-      INIFile.WriteInteger('Appearance', 'MissingROMsPreliminaryGameFontColor', Font_MissingROMsPreliminary.Color);
-      INIFile.WriteString('Appearance', 'MissingROMsPreliminaryGameFontName', Font_MissingROMsPreliminary.Name);
-      INIFile.WriteInteger('Appearance', 'MissingROMsPreliminaryGameFontSize', Font_MissingROMsPreliminary.Size);
-      INIFile.WriteInteger('Appearance', 'MissingROMsPreliminaryGameFontStyle', Byte(Font_MissingROMsPreliminary.Style));}
-
       INIFile.WriteInteger('Appearance', 'TileBackground', Ord(FormPreferences.GamesTileBackground.Checked));
       INIFile.WriteInteger('Appearance', 'BackgroundImageEnabled', Ord(FormPreferences.GamesBackgroundImageEnable.Checked));
       INIFile.WriteString('Appearance', 'BackgroundImage', FormPreferences.GamesBackgroundImage.Text);
@@ -8585,7 +7964,11 @@ begin
       INIFile.WriteInteger('MAMu_', 'ForceGameDriverIcons', Ord(PopupShowGameDriverIcons.Checked));
 
       INIFile.WriteInteger('Preferences', 'ScanGamesMode', PopupSelectScanGamesMode.Tag); // 0 -> full; 1 -> quick; 2 -> force available
-      INIFile.WriteInteger('Preferences', 'CreateMAMESoftwareListGames', MenuCreateMAMESoftwareListGames.Tag); // 0 -> don't create softlists; 1 -> create softlist games
+
+      // 0 -> disabled, don't create softlists;
+      // 1 -> update mode: create softlist games and update existing ones
+      // 2 -> overwrite mode: delete all softlists and create new ones
+      INIFile.WriteInteger('Preferences', 'CreateMAMESoftwareListGames', MenuCreateMAMESoftwareListGames.Tag);
       INIFile.WriteInteger('Preferences', 'ScanSetsModeMAME', MenuCreateMAMESoftwareListGames.HelpContext); // 0 -> all sets; 1 -> arcade/machines only; 2 -> soflist games only
 
       INIFile.WriteInteger('Preferences', 'AddMAMEDeviceSetsWithNoROMs', MenuAddMAMEDeviceSetsWithNoROMs.Tag);
@@ -8629,6 +8012,13 @@ begin
 
       INIFile.WriteInteger('Preferences', 'MAMESettings_ValidateAllCustomFiles', PopupCustomMAME.Tag);
 
+      INIFile.WriteInteger('Preferences', 'RestoreInternetGameInfoStartup', Ord(FormPreferences.RestoreInternetGameInfoStartup.Checked));
+      Loop:= 0;
+      if FormPreferences.RestoreInternetGameInfoStartup.Checked then
+         Loop:= Ord(ButtonInternetGameInfo.Down);
+
+      INIFile.WriteInteger('Preferences', 'InternetGameInfoStartup', Loop);
+
       // Machines List Side Panel
       INIFile.WriteString('MachinesList_SidePanel', 'LastSelectedMachine', SelectedMachineListName);
       INIFile.WriteInteger('MachinesList_SidePanel', 'PanelSize', PanelMachinesList.Width);
@@ -8648,15 +8038,6 @@ begin
 
       INIFile.WriteInteger('MachinesList_SidePanel', 'GameIconSize', PopupMachinesListSidePanelIconSize.Tag);
 
-      for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-          INIFile.WriteInteger('Images', ImageCategoryArray[Loop, 1]+'_bkcolor', PopupMenuImageCategories.Items[Loop].Tag);
-
-      for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-      begin
-        if Loop <> 1 then // in-game snapshots is always enabled; it cannot be disabled!!!
-           INIFile.WriteInteger('Images', ImageCategoryArray[Loop, 1]+'_enabled', Ord(PopupMenuImageCategories.Items[Loop].Visible));
-      end;
-
       INIFile.WriteInteger('Images', 'PanelOuterFrameColor', FormPreferences.ImagePanelOuterFrameColor.Selected);
 
       INIFile.WriteInteger('Images', 'Stretch', Ord(PopupImageStretch.Checked));
@@ -8673,6 +8054,8 @@ begin
 
       INIFile.WriteInteger('Images', 'LayoutIndex',  ButtonScreenshotLayouts.Tag);
 
+      {
+      // deprecated code, REMOVE ME!
       for Loop:=0 to MaxImageLayouts do
       begin
         if Loop > 0 then
@@ -8683,13 +8066,17 @@ begin
              end;
            end;
       end;
+      }
 
       INIFile.WriteInteger('Images', 'ShowSplitterGrip', Ord(PopupImageShowSplitterGrip.Checked));
       INIFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.Selected);
       INIFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
       INIFile.WriteInteger('Images', 'ShowLayoutDimensions', Ord(PopupImageShowLayoutDimensions.Checked));
 
-      INIFile.WriteInteger('ToolBar', 'BoundToGamesPanel', MenuBoundToGamesPanel.Tag); // Ord(MenuBoundToGamesPanel.Checked));
+      INIFile.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
+      INIFile.WriteInteger('Images', 'FixRetroArchImageFileNames', Ord(FormPreferences.FixRetroArchImageFileNames.Checked));
+
+      INIFile.WriteInteger('ToolBar', 'BoundToGamesPanel', MenuBoundToGamesPanel.Tag);
       INIFile.WriteInteger('ToolBar', 'SmallToolBar', Ord(MenuSmallToolBar.Checked));
 
       INIFile.WriteInteger('ToolBar', 'Visible_TextBar', Ord(ToolBarFilterTitle.Visible));
@@ -8772,13 +8159,6 @@ begin
      end;
   if MissingIni then
      CreateMAMEIniFile(EmulatorFileName);
-
-  // old code... no support for "ui.ini"
-  //if Result then
-  //   begin
-  //     if (not FileExists(GetEmuIniFileName(SystemID, EmulatorFileName))) then
-  //        CreateMAMEIniFile(EmulatorFileName);
-  //   end;
 end;
 
 function TFormMain.GetArcadeEmuIniFileName(sysID: ShortInt; const EmulatorFileName: String = ''): String;
@@ -8847,7 +8227,7 @@ begin
           idSegaModel2: // SEGA Model 2 (Elsemi emulator)
             begin
               if EmulatorFile[sysID] <> '' then
-                 Result:= ExtractFilePath(EmulatorFile[sysID])+'emulator.ini'; //SEGA Model 2 (Elsemi emulators)
+                 Result:= ExtractFilePath(EmulatorFile[sysID])+'emulator.ini';
             end;
           idZiNc: Result:= 'zinc_el.cfg';
         end;
@@ -8884,7 +8264,6 @@ var
   fVersion, iHelp, tempFile, CommandLine: String;
   iFile: TStringList;
   iPos, iPos2: Integer;
-  //fVersion: WideString;
 begin
   Result:= '';
   if not FileExists(EmulatorFileName) then
@@ -8892,16 +8271,12 @@ begin
 
   if IsExeBatchFile(EmulatorFileName) then
      Exit;
-  fVersion:= GetVersion(EmulatorFileName, True);//True);
-  //fVersion:= GetFileInfo2(EmulatorFileName, VersionInfo[3]); // File Version (00.000 format only)
+  fVersion:= GetVersion(EmulatorFileName, True);
 
-  //ShowMessage(fVersion);
   if fVersion <> '' then
      begin
        Result:= fVersion;
        Exit;
-       //iPos:= PosEx('.', fVersion, 3); // invalid code (October 02, 2016)
-       //Result:= Copy(fVersion, 1, iPos-1); // invalid code (October 02, 2016)
      end;
      
   if not VerifyTempDirectory then
@@ -8914,16 +8289,13 @@ begin
        tempFile:= FrontendPath+'temp\iMAMEVersion.tmp';
        CommandLine:= SystemStr+EmulatorFileName+SystemStr+' -help > '+SystemStr+tempFile+SystemStr;
        SetCurrentDir(EmulatorFileName);
-       RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, 1{GetWindowStateEmulator});//, False);//SW_SHOWMINIMIZED, False); // WinXP / Sev7n / 8ight
+       RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, GetWindowStateEmulator);
+       //RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, 1{GetWindowStateEmulator});//, False);//SW_SHOWMINIMIZED, False); // WinXP / Sev7n / 8ight
        SetCurrentDir(FrontendPath);
      end
   else
      tempFile:= viFile; // file already created in .GetEmulatorVersion() function or is from -listxml output: <mame build="0000"
 
-  //CommandLine:= SystemStr+EmulatorFileName+SystemStr+' -help > '+SystemStr+tempFile+SystemStr;
-  //SetCurrentDir(EmulatorFileName);
-  //RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, SW_SHOWMINIMIZED, False); // WinXP / Sev7n / 8ight
-  //SetCurrentDir(FrontendPath);
   if IsFile then
      begin
        if not ValidateFile(tempFile) then
@@ -8958,19 +8330,17 @@ function TFormMain.GetFolderArcadeEmulatorIni(sysID: ShortInt; BasePathOnly: Boo
 var
   BasePath: String;
 begin
-  // function used for systems that do not have support for a MAME stardard
-  // game config folder
+  // function used for emulators that do not have support for a game custom config file
   BasePath:= GetArcadeFolder+'emulator_ini\';
-  //BasePath:= FrontendPath+'emulator_ini\';
   if BasePathOnly then
      begin
        Result:= BasePath;
        Exit;
      end;
   case sysID of
-    idSupermodel: Result:= BasePath+'supermodel_ini\'; //ExtractFilePath(EmulatorFile[sysID])+'config\'; // "emufolder\config\"
+    idSupermodel: Result:= BasePath+'supermodel_ini\';
     //idDemul: Result:= BasePath+'demul_ini\'; // Demul... maybe for the future ???
-    //idSegaModel2: Result:= BasePath+'segamodel2_ini\';
+    //idSegaModel2: Result:= BasePath+'segamodel2_ini\'; // not sure if this emulator requires game custom config
     idZiNc: Result:= BasePath+'zinc_cfg\';
   end;
 end;
@@ -9013,14 +8383,14 @@ end;
 procedure TFormMain.CreateMAMEIniFile(const EmulatorFileName: String);
 begin
   SetCurrentDir(ExtractFilePath(EmulatorFileName));
-  RunProcess(SystemStr+EmulatorFileName+SystemStr+' -createconfig', True, GetWindowStateEmulator);//, False);//SW_SHOWMINIMIZED, False);
+  RunProcess(SystemStr+EmulatorFileName+SystemStr+' -createconfig', True, GetWindowStateEmulator);
   SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormMain.CreateSupermodelGamesDatFile;
 var
-  FileToRead: String;//, FileToSave: String;
-  MainLoop, Index, LineIndex, TotalLines: Integer; // DataIndex,
+  FileToRead: String;
+  MainLoop, Index, LineIndex, TotalLines: Integer;
   StrLine, tmpStr: String;
   sFile, NewXMLFile: THashedStringList;
   IsNewGame: Boolean;
@@ -9054,6 +8424,7 @@ var
   end;
 
 begin
+  // this function is no longer necessary as newer emulator builds have the Config\Games.xml file with a full games list (February 26, 2018)
   FileToRead:= DialogOpenFile(20, 'Select a "Games.cpp" file to parse Supermodel games list and generate the XML dat file',
                              nil, False);
   if FileToRead = '' then
@@ -9315,6 +8686,9 @@ var
     INPUT_FISHING         = 0x00200000, // fishing controls
     INPUT_ALL             = 0x003FFFFF
     }
+
+    // February 26, 2018 - better control list and description can be read from "source\Inputs\Input.cpp"
+    //                   - new file "arcade\filters\supermodelsegamodel3_control_type.ini" with all controls names=descriptions
     ctrlString:= XML_GetEntryValue(LineStr, 'type');
     Result:= ctrlString <> '';
     if not Result then
@@ -9341,7 +8715,7 @@ var
     romOffset:= XML_GetEntryValue(FileLine, 'offset');
 
     TempString:= '';
-    TempString:= XML_GetEntryValue(FileLine, 'size'); // this tag is not present in the new "Config\Games.xml" file... :_((
+    TempString:= XML_GetEntryValue(FileLine, 'size'); // this tag is not present in the new "Config\Games.xml" file...
     if TempString <> '' then
        TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
     TempString:= '';
@@ -9380,7 +8754,7 @@ var
     for LoopROMParent:= 0 to tmpParentROMs.Count-1 do
     begin
       SearchStrParent:= tmpParentROMs[LoopROMParent];
-      SearchStrParent[6]:= '1'; // this ROM is from the parent set and it must be tagged as such!!!!!
+      SearchStrParent[6]:= '1'; // this ROM is from the parent set and it must be tagged as such
       tmpParentROMs[LoopROMParent]:= SearchStrParent;
 
       rPos:= PosEx('<region>', SearchStrParent);
@@ -9476,10 +8850,9 @@ begin
   SetCurrentDir(FrontendPath);
   FileLine:= '';
 
-  // need to copy stuff from the ClrMAME XML function here...
   if FormMain.Visible then
      FormMain.Refresh;
-     
+
   CheckAndCreateFolder(GetGamesFolderEL);
 
   tmpEmuVersion:= '';
@@ -9510,30 +8883,6 @@ begin
 
     FormStatus.MessageStr('Parsing "'+tempFile+'" (1st pass).'+#13#10+
                             'Creating parent sets list.');
-
-    {tmpList:= THashedStringList.Create;
-    tmpList.BeginUpdate;
-    tmpList.Add('[info_file]');
-    tmpList.Add('description=');
-    tmpList.Add('version=');
-
-    for MainLoop:=0 to ListXML.Count -1 do
-    begin
-      FileLine:= TrimLeft(ListXML[MainLoop]);
-      if XML_CheckData(FileLine, '<game ') then
-         begin
-           if IsParentGame(FileLine) then
-              begin
-                TempGameVars.eName:= XML_GetEntryValue(FileLine, 'name');
-                tmpList.Add(' ');
-                tmpList.Add('['+TempGameVars.eName+']');
-                tmpList.Add(TempGameVars.eName+'=');
-              end;
-         end;
-    end;
-    tmpList.EndUpdate;
-    tmpList.SaveToFile(GetGamesFolderEL+GetSystemFileName(idSupermodel));
-    FreeAndNil(tmpList);}
 
     ListGames:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(idSupermodel));
     ROMsList:= THashedStringList.Create;
@@ -9695,7 +9044,6 @@ begin
 
            if XML_CheckData(FileLine, '</game>') then
               begin
-                // must verify if is clone or parent ??? not necessary here but I'll leave it for now...
                 if TempGameVars.eClone = '' then
                    TempGameVars.eROMIdentification:= 10 // it's a parent game... Supermodel: SEGA Model 3
                 else
@@ -9789,8 +9137,6 @@ begin
        fExt:= LowerCase(ExtractFileExt(emuFile));
        Result:= (fExt = '.bat') or (fExt = '.cmd');
      end;
-  //Result:= (emuFile <> '') and (LowerCase(ExtractFileExt(emuFile)) <> '.exe');
-  //Result:= (emuFile <> '') and (LowerCase(ExtractFileExt(emuFile)) <> '.exe');
 end;
 
 function TFormMain.IsZipFile(const GameFile: WideString): Boolean;
@@ -9803,7 +9149,7 @@ begin
   FileExt:= ExtractFileExtW(GameFile);
   Result:= SameText(FileExt, '.zip') or
            SameText(FileExt, '.7z');// or
-           //SameText(FileExt, '.rar');
+           //SameText(FileExt, '.rar');... yeah, you wish!
 end;
 
 procedure TFormMain.ShowGameNameEntryMsgBox(MultiSlot: Boolean = False; const MultiSlotMachineName: String = '');
@@ -9833,11 +9179,6 @@ begin
   FormMessageBox.LabelTitle.Top:= 4;
 end;
 
-// the new driver "neogeo_noslot.c" is for the regular arcade machine (driver renamed to "neopcb.cpp" in MAME v0.174)!!!! April 29, 2016
-// Neo-Geo 6 slots machine (drivername: neogeo; this requires the software list to work neogeo.xml
-// usage (MAME v0.154 ana newer)
-// ume64 neogeo -cart1 fatfury1 -cart2 fatfury2 -cart3 fatfursp -cart4 rbffspec -cart5 rbff2 -cart6 garou
-
 function TFormMain.GetNumberPlayersInfo(nPlayers, nPlayersIni: String): String;
 begin
   case MenuShowPlayersInfoFromNplayersIniOnly.Checked of
@@ -9851,44 +9192,16 @@ begin
    end;
 end;
 
-{procedure TFormMain.ELV_GetFirstSelected(BitBtn3Click(Sender: TObject);
-//
-// Gets the first Selected item
-//
-var
-  Item, FirstSel: TEasyItem;
-  Group: TEasyGroup;
-  cStart: Integer;
-begin
-  //GamesListView.Selection.First; // this is actually faster than this call when in grouped view mode!!!!
-  GamesListView.Groups.VisibleCount
-  cStart:= GetTickCount;
-  FirstSel := nil;
-  Group:= GamesListView.Groups.FirstVisibleGroup;
-  repeat
-    Item:= GamesListView.Groups.FirstVisibleInGroup(Group);
-    repeat
-      if Item.Selected then
-         FirstSel:= Item;
-      Item:= GamesListView.Groups.NextVisibleInGroup(Group, Item);
-    until (FirstSel <> nil) or (Item = nil);
-
-    //while not Assigned(FirstSel) and Assigned(Item) do
-    //begin
-    //  if Item.Selected then
-    //    FirstSel := Item;
-    //  Item := GamesListView.Groups.NextVisibleItem(Item);
-    //end;
-    Group:= GamesListView.Groups.NextVisibleGroup(Group);
-  until (Group = nil) or (FirstSel <> nil);
-  ShowMessage(IntToStr(GetTickCount-cStart));
-end;}
+// the new driver "neogeo_noslot.c" is for the regular arcade machine (driver renamed to "neopcb.cpp" in MAME v0.174)!!!! April 29, 2016
+// Neo-Geo 6 slots machine (drivername: neogeo; this requires the software list to work neogeo.xml
+// usage (MAME v0.154 ana newer)
+// ume64 neogeo -cart1 fatfury1 -cart2 fatfury2 -cart3 fatfursp -cart4 rbffspec -cart5 rbff2 -cart6 garou
 
 function TFormMain.ValidateMultiSlot(sysID: ShortInt; const MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
 var
   selItem: TEasyItem;
   HaveClones: Boolean;
-  {iDriverName, iFile, }cmdLine: String;
+  cmdLine: String;
   iCount, SlotsMax: Byte;
   iItemIndex, iIndex: Integer;
   //cStart: Integer;
@@ -9900,7 +9213,6 @@ var
 
   function AddGameELV: Boolean;
   var
-    //addItem: TEasyItem;
     tStr: String;
   begin
     tStr:= '';
@@ -9909,11 +9221,7 @@ var
       Tag:= TEasyGameInfo(selItem).eGameSetStatus;
       ImageIndexes[1]:= TEasyGameInfo(selItem).eROMIdentification;
       case TEasyGameInfo(selItem).eIsFavorite of
-        True:
-          begin
-            //HaveFavorites:= True;
-            StateImageIndexes[1]:= 3;
-          end;
+        True : StateImageIndexes[1]:= 3;
         False: StateImageIndexes[1]:= 500;
       end;
       Captions[1]:= TEasyGameInfo(selItem).eTitle;
@@ -9937,7 +9245,6 @@ var
   end;
 
 begin
-  //Result:= sysID = idMAME; // HBMAME doesn't support multi-slot loading ???
   Result:= sysID in [idMAME, idHBMAME];
   if not Result then
      Exit;
@@ -9981,14 +9288,12 @@ begin
        FormArcadeMultiSlotGames.Caption:= 'Sega Titan Video Game System (ST-V)';
      end;
   FormArcadeMultiSlotGames.LabelHelpText.Caption:= Format(FormArcadeMultiSlotGames.LabelHelpText.Caption, [SlotsMax, '0.154']);
-  //HaveFavorites:= False;
   HaveClones:= False;
 
   FormArcadeMultiSlotGames.GamesList.BeginUpdate;
   FormArcadeMultiSlotGames.GamesList.Items.ReIndexDisable:= True;
 
   iCount:= 0;
-  //iSelectionCount:= GamesListView.Selection.Count;
   selItem:= GamesListView.Selection.First;
   iItemIndex:= 1;
   repeat
@@ -10006,7 +9311,6 @@ begin
                    idMAME:   iIndex:= MultiCartListMAME[0].IndexOf(TEasyGameInfo(selItem).eName);
                    idHBMAME: iIndex:= MultiCartListHBMAME[0].IndexOf(TEasyGameInfo(selItem).eName);
                  end;
-                 //if MultiCartList[0].IndexOf(TEasyGameInfo(selItem).eName) <> -1 then
                  if iIndex <> -1 then
                     begin
                       Inc(iCount);
@@ -10026,7 +9330,6 @@ begin
                    idMAME:   iIndex:= MultiCartListMAME[1].IndexOf(TEasyGameInfo(selItem).eName);
                    idHBMAME: iIndex:= MultiCartListHBMAME[1].IndexOf(TEasyGameInfo(selItem).eName);
                  end;
-                 //if MultiCartList[1].IndexOf(TEasyGameInfo(selItem).eName) <> -1 then
                  if iIndex <> -1 then
                     begin
                       Inc(iCount);
@@ -10046,7 +9349,7 @@ begin
                end;
           end;
         end;
-        {if MachineName = 'megatech' then
+        {if MachineName = 'megatech' then // for the future (February 16, 2018) 
         begin
           if TEasyGameInfo(selItem).eName <> 'megatech' then
           begin
@@ -10060,11 +9363,6 @@ begin
       end;
     end;
     selItem:= FormMain.ELV_GetNextSelected(GamesListView, selItem, iItemIndex);
-    //if iItemIndex < iSelectionCount then
-    //   selItem:= GamesListView.Selection.Next(selItem)
-    //else
-    //   selItem:= nil;
-    //Inc(iItemIndex);
   until (selItem = nil) or (iCount >= SlotsMax);
   FormArcadeMultiSlotGames.GamesList.Items.ReIndexDisable:= False;
   FormArcadeMultiSlotGames.GamesList.EndUpdate(False);
@@ -10193,8 +9491,7 @@ begin
     end;
 end;
 
-// new ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
-// Jan 30, 2014
+// ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
 function TFormMain.ExecuteGame(MAME_ExtraSetting: ShortInt = -1; MAME_ExtraPamars: Boolean = False): Integer;
 var
   msgboxTitle, EmulatorTitle, MachineNameStr, SoftwareNameFolder, MAME_ExtraParamsCommandLine: String;
@@ -10582,23 +9879,10 @@ var
     Result:= tmpFile.ReadString('info_file', 'version', '');
     FreeAndNil(tmpFile);
   end;
-  
-  //function CheckPrecisionXAfterburner: Boolean;
-  //begin
-  //  AddMsgText(#13#10);
-  //  AddMsgText(#13#10+'If you have "MSI Afterburner" or "eVGA Precision X" running, close it and try running the game again.');
-  //  Result:= True;
-  //  Exit;
-  //  // check if eVGA Precision X or MSI Afterburner is running
-  //  //if ProcessExists('MSIAfterburner.exe') then
-  //  //   AddTextMsg('    You have "MSI Afterburner" running. Please close it and try running the game again.')
-  //  //else
-  //  //if ProcessExists('EVGAPrecision.exe') then
-  //  //   AddTextMsg('    You have "eVGA Precision X" running. Please close it and try running the game again.');
-  //end;
 
 begin
   // AlterMAME extra setting value is now "1"!!!
+  Result:= 0; // all is well
   if not ValidateSelectedGame then
      Exit;
   if MemGameInfo.eIsCustomGame then
@@ -10614,7 +9898,6 @@ begin
   ErrorMsgTitle:= 'Error: '+msgboxTitle;
   ExitCode:= 0; // all is well
   ExitCodeAlterMAME:= 0; // all is well
-  Result:= 0; // all is well
   TryAgainAlterMAME:= False;
   IsDemulEmptySystem:= False;
   IsBatchFile:= False;
@@ -10774,7 +10057,7 @@ begin
               MachineNameStr:= SelectedMachineListName;
          end;
       if MachineNameStr = '' then
-         MachineNameStr:= GetLastUsedMachineSoftwareList(MemGameInfo.eSoftwareName);
+         MachineNameStr:= GetLastUsedMachineSoftwareList(MemGameInfo.eSoftwareName, MemGameInfo.eSystemID);
 
       if MachineNameStr = '' then
          begin
@@ -10801,13 +10084,21 @@ begin
          end;
 
       MachineToUse_Title:= GetTitleMachineToUse(MemGameInfo.eSystemID, MachineNameStr, MemGameInfo.eName, MemGameInfo.eSoftwareName, MAMEMachineItem);
-      //if MachineNameStr <> '' then
-         CommandLine:= CommandLine+MachineNameStr+' ';
+
+      CommandLine:= CommandLine+MachineNameStr+' ';
+
+      TempStr:= GetSoftListGameRequiredParam(MemGameInfo.eSystemID, MemGameInfo.eName, MemGameInfo.eSoftwareName);
+      if TempStr <> '' then
+         CommandLine:= CommandLine+TempStr+' '; // must add the required parameter BEFORE the game (Atari 2600 Cassetes do not run otherwise)
+
       if MemGameInfo.eSoftwareExecParameter <> '' then
          CommandLine:= CommandLine+'-'+MemGameInfo.eSoftwareExecParameter+' '+TempGameVars.eName
       else
          CommandLine:= CommandLine+TempGameVars.eName;
 
+      //TempStr:= GetSoftListGameRequiredParam(MemGameInfo.eSystemID, MemGameInfo.eName, MemGameInfo.eSoftwareName);
+      //if TempStr <> '' then
+      //   CommandLine:= CommandLine+' '+TempStr;
       SoftwareNameFolder:= MemGameInfo.eSoftwareName+'\';
     end
     else
@@ -10877,7 +10168,7 @@ begin
                    if SameText(MAME_ExtraParamsCommandLine, 'abort') then
                       begin
                         ResetSettings;
-                        Exit;
+                        Exit; // "Abort. For the 1000th time... ABORT!!!" :)
                       end;
                    //ShowMessage('"->'+MAME_ExtraParamsCommandLine+'<-"'); // for debugging only!!!
                  end;
@@ -10888,7 +10179,6 @@ begin
                 idSupermodel:
                   begin
                     // Supermodel, need to add options before game, and it's .zip file with full path!
-                    // need to create a function to merge these two here....!!!!!! Jan 26, 2014 --- huh ? ---
                     NewOption:= ReadSupermodelIni(MemGameInfo.eName+'.ini');
                     if NewOption = 'invalid_resolution' then
                        Exit
@@ -10929,7 +10219,7 @@ begin
                   begin
                     // ZiNc, needs special parameters before the game name
                     if MemGameInfo.eScreenType <> -1 then
-                       CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc has game index in ScreenType
+                       CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc has game index in "eScreenType" var
                     else
                        begin
                          CallMessageBox;
@@ -10962,20 +10252,20 @@ begin
                     // function "LongToShortPath()" cannot have last slash '\' or it does not work... the filename is also lost!!!!!
                     // NewOption will hold the .cfg file with full path!!! October 10, 2016
                     NewOption:= GetShortFileNameW(NewOption);
-                    //NewOption:= ExtractShortPathName(NewOption); // this doesn't work!!!!!!!! :_((
+                    //NewOption:= ExtractShortPathName(NewOption); // this doesn't work (do not remove this comment!)
                     if ValidateFile(NewOption+NewOption2) then
                        CommandLine:= CommandLine+' --use-config-file='+NewOption+NewOption2;
 
                     // get game.zip or parent.zip folder
                     NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
                     if NewOption <> '' then
-                       NewOption:= GetShortFileNameW(ExtractFilePath(NewOption)) //NewOption:= ExtractShortPathName(ExtractFilePath(NewOption)) // this doesn't work!!!!!!!! :_((
+                       NewOption:= GetShortFileNameW(ExtractFilePath(NewOption)) //NewOption:= ExtractShortPathName(ExtractFilePath(NewOption)) // this doesn't work (do not remove this comment!)
                     else
                     if GameIsClone(MemGameInfo.eClone) then
                        begin
                          NewOption:= SearchZIPFolder(MemGameInfo.eClone, MemGameInfo.eSystemID);
                          if NewOption <> '' then
-                            NewOption:= GetShortFileNameW(ExtractFilePath(NewOption)); //NewOption:= ExtractShortPathName(ExtractFilePath(NewOption)); // this doesn't work!!!!!!!! :_((
+                            NewOption:= GetShortFileNameW(ExtractFilePath(NewOption)); //NewOption:= ExtractShortPathName(ExtractFilePath(NewOption)); // this doesn't work (do not remove this comment!)
                        end;
                     if NewOption <> '' then
                        CommandLine:= CommandLine+' --roms-directory='+NewOption;
@@ -11001,7 +10291,6 @@ begin
            begin
              // fix game snap name full folder path for software list games (path_mame.ini\softlist_name\gamename\)
              CommandLine:= CommandLine+' -statename '+MachineNameStr+'/'+MemGameInfo.eSoftwareName+'/'+MemGameInfo.eName;
-             //CommandLine:= CommandLine+' -statename '+MemGameInfo.eSoftwareName+'/'+MemGameInfo.eName;//+'/%i'; // old code, invalid for MAME!!!!
              CommandLine:= CommandLine+' -snapname '+MemGameInfo.eSoftwareName+'/'+MemGameInfo.eName+'/%i';
              // fix state name full folder path for software list games (path_mame.ini\machine_name\softlist_name\gamename\)
            end;
@@ -11089,7 +10378,7 @@ begin
               begin
                 AddMsgText(#13#10+#13#10);
                 AddMsgText('AlterMAME will be used to run "'+MemGameInfo.eName+'" if it fails '+
-                           'to load with MAME.'+#13#10);//, clBlack, [], taLeftJustify, 9, 'Segoe UI');
+                           'to load with MAME.'+#13#10);
                 AddMsgText(#13#10+'AlterMAME Emulator  ', $000053a6, [fsItalic, fsBold], taCenter);
                 AddMsgText(AlterMAMEVersion+#13#10, clGray, [fsItalic, fsBold], taCenter);
 
@@ -11190,7 +10479,7 @@ begin
          ZipForgeIcons.CloseArchive;
 
       IsRunningGame:= True;
-      ExitCode:= RunProcess(CommandLine, True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game!!!
+      ExitCode:= RunProcess(CommandLine, True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game
 
       if ExitCode <> 0 then // = 2 ? // files are missing error code
          begin
@@ -11201,7 +10490,7 @@ begin
                 if IsBatchFileAlterMAME then
                    CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
                 SetCurrentDir(ExtractFilePath(AlterMAMEFile));
-                ExitCodeAlterMAME:= RunProcess(CommandLine, True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable!!!
+                ExitCodeAlterMAME:= RunProcess(CommandLine, True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
               end;
          end;
       IsRunningGame:= False;
@@ -11228,8 +10517,6 @@ begin
            begin
              if IsMAMEBasedSys(MemGameInfo.eSystemID) then
                 begin
-                  //if not IsAlterMAME then
-                  //   AutoRenameSnapshots; // this is outdated code, no longer used! (October 30, 2016)
                   NewOption:= '';
                 end;
              if ImageDetails[1].NoImageLoaded then
@@ -11239,7 +10526,7 @@ begin
                   ImageDetails[1].NewImageLoaded:= False;
                 end;
              ToggleImagesPanel(True); // will force to reload snapshot, this is just in case user takes a new screenshots while gaming
-             //MenuShowImages.OnClick(Self); // avoid this as EL was re-initializing the zipped image lists!!!!!
+             //MenuShowImages.OnClick(Self); // avoid this as EL was re-initializing the zipped image lists
            end;
          end
       else
@@ -11291,8 +10578,7 @@ begin
 
            AddMsgText(#13#10+'Error '+IntToStr(ExitCode), $00000060, [fsBold]);
            AddMsgText(': '+SysErrorMessage(ExitCode)+'.');
-           //if ExitCode = 3221225786 then
-           //   CheckPrecisionXAfterburner; // why, why, WHY ?
+           
            // check this link for most common error messages:
            // http://www.febooti.com/products/automation-workshop/online-help/events/run-dos-cmd-command/exit-codes/
            if ExitCode = 2 then
@@ -11302,6 +10588,15 @@ begin
                   True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
                   False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
                 end;
+              end;
+
+           if MemGameInfo.eSystemID = idZiNc then
+              begin
+                if ExitCode = 1 then
+                   AddMsgText(#13#10+#13#10+'    Make sure all sets required by this game are on the same folder and that you have '+
+                              'the "d3d-ogl12.zip" plugin installed. Emu Loader supports multiple ROMs folders in case you like to separate '+
+                              'your games by system, but ZiNc emulator can only load a game if all sets are located on the same place '+
+                              '(bios set + game set + clone set).');
               end;
 
            if IsAlterMAME and TryAgainAlterMAME then
@@ -11315,9 +10610,7 @@ begin
                    begin
                      AddMsgText(#13#10+'Error '+IntToStr(ExitCodeAlterMAME), $00000060, [fsBold]);
                      AddMsgText(': '+SysErrorMessage(ExitCodeAlterMAME)+'.');
-                     //AddMsgText(#13#10+'Error '+IntToStr(ExitCodeAlterMAME)+': '+SysErrorMessage(ExitCodeAlterMAME)+'.'+#13#10);
-                     //if ExitCodeAlterMAME = 3221225786 then
-                     //   CheckPrecisionXAfterburner;
+                     
                      if ExitCodeAlterMAME = 2 then
                         begin
                           AddMsgText(#13#10);
@@ -11388,9 +10681,6 @@ begin
        begin
          if MountImage then
             LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+'; mount on virtual drive';
-         //else
-         //   LabelMediaTypeParameters.Caption:= LabelMediaTypeParameters.Caption+
-         //               '; parameter '+IntToStr(EmulatorParameterIndexToUse[MemGameInfo.eSystemID, MemGameInfo.eMediaType]);
        end;
 
     if CheckMultipleSelected(GamesListView) then
@@ -11466,7 +10756,7 @@ var
   EmulatorString, ErrorMsgTitle,
   MountImageStr, UnmountImageStr: String;
   GameFileExt, TempStr: String;
-  Continue, UseVirtualDrive, IsBatchFile, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;//, IsMESSEmu: Boolean;
+  Continue, UseVirtualDrive, IsBatchFile, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;
   ExtraParameters, ExtraDefaultParameters: TMemIniFile;
   IsJavaPSPEmu, IsWinApeEmu: Boolean;
   ExitCode: DWORD;
@@ -11477,7 +10767,7 @@ var
   function GetEmulatorFile: Boolean;
   begin
     EmulatorString:= EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]];
-    Result:= (EmulatorString <> '') and FileExists(EmulatorString);
+    Result:= (EmulatorString <> '') and FileExistsW(EmulatorString);
   end;
 
   function GetExecParameters(ParameterIndex: Byte; MountImagePCE: Boolean = False): Boolean;
@@ -11510,14 +10800,13 @@ var
        end;
     //ShowMessage(SystemsList[MemGameInfo.eSystemID, 0]+#13#10+
     //            ExtractFileName(ChangeFileExt(EmulatorString, ''))+
-    //            GetMediaTypeName(mediaIdx, ParameterIndex, True)+#13#10+EmuParameters);
+    //            GetMediaTypeName(mediaIdx, ParameterIndex, True)+#13#10+EmuParameters); // for debugging only
   end;
 
   function GetROMTypeAtari800: Boolean;
   var
     tmpCartStr: String;
     tmpFileSize: Integer;
-    //cFileExt: String;
 
     function IsExecutableFile: Boolean;
     begin
@@ -11527,16 +10816,14 @@ var
 
     function IsCARFile: Boolean;
     begin
-      // .car files already have the cart type in the header
-      // for Atari800, Atari800Win, Altirra
-      Result:= SameText('.car', GameFileExt);
+      // read first 4 bytes of file to validate 'C' 'A' 'R' 'T' tag for Atari800, Atari800Win, Altirra
+      Result:= ReadAtari800CartTypeTag(TempGameVars.eName);
     end;
 
   begin
     Result:= (MemGameInfo.eCustomSystemID = 48) and (MemGameInfo.eCustomMediaType = 1);
     if not Result then Exit;
 
-    //cFileExt:= ExtractFileExtW(MemGameVariables.eGameFileName);
     tmpFileSize:= MemGameInfo.eGameSize div 1024;
     if IsAtari800Emu(ExtractFileName(EmulatorString)) then
     begin
@@ -11651,7 +10938,7 @@ var
     Result:= MemGameInfo.eCustomSystemID = 59;
     if Result then
        begin
-         // restore WinAPE cartridge... OS ROM!!!
+         // restore WinAPE cartridge "OS ROM" in emulator config file !!!
          if IsWinApeEmu then
             WinApeEditIni(MemGameInfo.eCustomMediaType, EmulatorString, WinApeCurrentROM, '', '', '');
        end;
@@ -11685,7 +10972,6 @@ var
     SetCurrentDir(FrontendPath);
     FocusGamesList;
     Application.ProcessMessages;
-    //ProcessingConsole:= False;
   end;
 
 begin
@@ -11698,7 +10984,7 @@ begin
     False: ErrorMsgTitle:= 'Error: Run Game ['+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+']';
   end;
   if (not MultiFloppy) and (MemGameInfo.eIsCustomGame) then
-    begin // doesn't allow this for MAME software lists... only custom games from EmuCon are supported!!!
+    begin // doesn't allow this for MAME software lists... only games from EmuCon are supported!!!
       if Boolean(PlayWithAssociatedEmulator[MemGameInfo.eCustomSystemID]) then
          begin
            ExecuteGameAssociatedApp;
@@ -11747,7 +11033,6 @@ begin
 
   ExitCode:= 0; // all is well
   IsFileFound:= False;
-  //ProcessingConsole:= False;
   UseVirtualDrive:= False;
   TempGameVars.eName:= '';
 
@@ -11782,14 +11067,13 @@ begin
   case MultiFloppy of
     True:
       begin
-        if (MemGameInfo.eCustomSystemID in [39, 49, 56, 59]) then // and (MemGameInfo.eMediaType = IsFloppy) then
+        if (MemGameInfo.eCustomSystemID in [39, 49, 56, 59]) then
            begin
              // for Commodore 64, 128, VIC-20, Amstrad CPC
              // the first floppy will be added normally in the command line (Commodore 64, 128, VIC-20 WinVice emulator)
              // I think I'll just do it all in the MountMultiFloppyCommandLine function anyway... like the other systems!!!
              TempGameVars.eName:= MemGameInfo.eName; // floppy disk
              IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName);
-             //IsFileFound:= SearchGameFile(TempGameVars.eName);
              if not IsFileFound then
                 begin
                   CallMessageBox;
@@ -11820,7 +11104,6 @@ begin
         case MemGameInfo.eCustomMediaType of
           2: // disc images
             begin
-              // disc images!!!!
               UseVirtualDrive:= EmulatorMountVirtualDrive[MemGameInfo.eCustomSystemID];
               if UseVirtualDrive then
                  begin
@@ -11927,7 +11210,7 @@ begin
                           CallMessageBox;
                           EnableMsgMediaTypeLabel(UseVirtualDrive);
                           AddEmulatorHeader;
-                          AddMsgText('    File extension ');//not supported. Valid file extensions are: ');
+                          AddMsgText('    File extension ');
                           AddMsgText(GameFileExt, $00a65300, [fsBold]);
                           AddMsgText(' not supported. Valid file extensions are: ');
                           AddMsgText('.gxb', $00a65300, [fsBold]);
@@ -11975,8 +11258,7 @@ begin
              case MultiFloppy of
                True:
                  begin
-                   //if not (MemGameInfo.eSystemID in [39, 49, 56]) then
-                      CommandLine:= SystemStr+EmulatorString+SystemStr+' '+EmuParameters;
+                   CommandLine:= SystemStr+EmulatorString+SystemStr+' '+EmuParameters;
                  end;
                False:
                  begin
@@ -12059,6 +11341,7 @@ begin
      begin
        // replace entries for multi-floppy disks loading
        case MemGameInfo.eCustomSystemID of
+         //39: CommandLine:= CommandLine+' '+MultiFloppyParameter; // Commodore64 "WinVICE" emulator only... not used anymore ? (February 27, 2018)
          44: // Amiga
            begin
              case IsWinUAE of
@@ -12069,7 +11352,6 @@ begin
                                                   MultiFloppyParameter, [rfIgnoreCase]); // Amiga FS-UAE
              end;
            end;
-         //39: CommandLine:= CommandLine+' '+MultiFloppyParameter; // Commodore64 "WinVICE" emulator only
          48: // Atari 400/800/XL
            begin
              if IsAltirra(ExtractFileName(EmulatorString)) then
@@ -12168,9 +11450,9 @@ begin
   if UseVirtualDrive then
      begin
        // unmount first to be sure no image is mounted in virtual drive
-       RunProcess(UnmountImageStr, True, SW_SHOWNORMAL);//, False);
-       Sleep(10);
-       RunProcess(MountImageStr, True, SW_SHOWNORMAL);//, False);
+       RunProcess(UnmountImageStr, True, SW_SHOWNORMAL);
+       Sleep(10); // give it some time for virtual drive to update its status (10 ms)
+       RunProcess(MountImageStr, True, SW_SHOWNORMAL);
      end;
 
   IsRunningGame:= True;
@@ -12178,16 +11460,16 @@ begin
   IsRunningGame:= False;
   
   if UseVirtualDrive then
-     RunProcess(UnmountImageStr, True, SW_SHOWNORMAL);//, False); // unmount image after exiting the emulator
+     RunProcess(UnmountImageStr, True, SW_SHOWNORMAL); // unmount image after exiting the emulator
 
   case MemGameInfo.eIsCustomGame of
     True : UpdatePlayedCustomGame(iPlayTime, SelectedEasyItem);
     False: UpdatePlayedGameArcade(iPlayTime, SelectedEasyItem);
   end;
 
+  // restore config settings to current
   ResetWinApeIni;
   ResetAppleIIgs;
-
 
   if ExitCode <> 0 then
      begin
@@ -12207,13 +11489,13 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);
              AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);
              AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, clGray, [fsItalic, fsBold], taCenter);
 
              AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
@@ -12223,8 +11505,6 @@ begin
        AddEmulatorHeader;
        AddMsgText(#13#10+'Error '+IntToStr(ExitCode), $00000060, [fsBold]);
        AddMsgText(': '+SysErrorMessage(ExitCode)+'.');
-       //if ExitCode = 3221225786 then
-       //   CheckPrecisionXAfterburner; // why, why, WHY ?
        // check this link for most common error messages:
        // http://www.febooti.com/products/automation-workshop/online-help/events/run-dos-cmd-command/exit-codes/
        if ExitCode = 2 then
@@ -12264,14 +11544,6 @@ begin
   if not ValidateSelectedGame then
      Exit;
 
-  // not valid anymore!!!!!!!!
-  //if MemGameInfo.eMediaType <> 1 then
-  //   begin
-  //     ExecuteGame;
-  //     Exit;
-  //   end;
-  // end of not valid!!!!!
-  //IsFileFound:= False;
   TempGameVars.eName:= MemGameInfo.eName;
 
   ErrorMsgTitle:= 'Error: Run '+GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Game ['+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+']';
@@ -12281,7 +11553,6 @@ begin
        AppTitle:= 'error';
        CallMessageBox;
        EnableMsgMediaTypeLabel(False, True);
-       //SetRunGameMsg;
        AddEmulatorHeader;
        AddMsgText('File extension');
        AddMsgText(ExtractFileExt(MemGameInfo.eName), $00a65300, [fsBold]);
@@ -12307,7 +11578,6 @@ begin
        FormMessageBox.ButtonYes.Caption:= 'Execute';
        FormMessageBox.ButtonNo.Caption:= 'Abort';
        EnableMsgMediaTypeLabel(False, True);
-       //SetRunGameMsg;
        AddEmulatorHeader;
        AddMsgText('    File ');
        AddMsgText(MemGameInfo.eName, $00a65300, [fsBold]);
@@ -12323,10 +11593,8 @@ begin
   if MenuViewEmulatorFullCommandLine.Checked then
      begin
        ErrorMsgTitle:= 'Run '+GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Game ['+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+']';
-       //ErrorMsgTitle:= 'Run Game With Associated Application';
        CallMessageBox;
        EnableMsgMediaTypeLabel(False, True);
-       //SetRunGameMsg;
        AddEmulatorHeader;
        AddMsgText('    You have chosen to run a game with the associated application.'+#13#10+
                   'The application executable was read from Windows registry.'+#13#10+#13#10);
@@ -12336,32 +11604,9 @@ begin
             ResetToFrontend;
             Exit;
           end;
-       
-       {txtString:= txtString+'System: '+SystemsList[MemGameInfo.eSystemID, 0]+#13#10+
-                   'Media type: '+DiscTypeArray[MemGameInfo.eMediaType, 0]+#13#10+#13#10;
-
-       txtString:= txtString+'    You have chosen to run a game with the associated application.'+#13#10+
-                             'The application executable was read from Windows registry.'+#13#10+#13#10;
-
-       txtString:= txtString+CommandLine+#13#10; // emulator exec command line
-
-       txtString:= txtString+#13#10+'Execute command(s) above. Continue ?';
-       //txtString:= txtString+#13#10+'    You have chosen to run a game with the associated application.'+#13#10+
-       //                             'The Windows API "ShellExecute" will be used.'+#13#10+#13#10+
-       //                             'Execute command(s) above. Continue ?';
-
-       if GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle,
-                                  txtString, 1) = mrNo then
-          begin
-            ResetToFrontend;
-            Exit;
-          end;}
-
-       //Continue:= ShowMessageApp(ErrorMsgTitle, MemGameInfo.eTitle+#13#10+#13#10+
-       //                          txtString, True, 2) = mrYes; // no, no, no, no, no!!!
      end;
 
-  //SetCurrentDir(ExtractFilePath(EmulatorString));
+  //SetCurrentDir(ExtractFilePath(EmulatorString)); // not needed ? (February 27, 2018)
 
   iPlayTime:= GetTickCount;
   RunProcess(CommandLine, True);
@@ -12471,9 +11716,6 @@ begin
 
   StrToAdd:= IntToStr(TEasyGameInfo(ELV_ItemToUpdate).ePlayed)+';'+IntToStr(TEasyGameInfo(ELV_ItemToUpdate).ePlayedDate)+';'+
              IntToStr(TEasyGameInfo(ELV_ItemToUpdate).eTotalPlaytime);
-
-  //if TEasyGameInfo(ELV_ItemToUpdate).eSoftwareExecParameter <> '' then
-  //   StrToAdd:= StrToAdd+'<execparam>'+TEasyGameInfo(ELV_ItemToUpdate).eSoftwareExecParameter+'/>';
 
   PlayedList.Insert(0, iGameName+'='+StrToAdd);
 
@@ -12651,7 +11893,7 @@ begin
         if MenuItemHolder <> nil then
            begin
              MenuItemHolder.Caption:= 'Edit Flip List File with notepad.exe';
-             MenuItemHolder.Hint:= '.vfl'; //ChangeFileExt(MemGameInfo.eGameFileName, '.vfl'); // WinVice flip list file
+             MenuItemHolder.Hint:= '.vfl'; // WinVice flip list file
 
            end;
       end;
@@ -12677,19 +11919,15 @@ begin
         if MenuItemHolder <> nil then
            begin
              MenuItemHolder.Caption:= 'Edit Game Config File with notepad.exe';
-             MenuItemHolder.Hint:= FileExt; //ChangeFileExt(MemGameInfo.eGameFileName, '.vfl'); // WinVice flip list file
+             MenuItemHolder.Hint:= FileExt; // WinVice flip list file
            end;
       end;
   end;
-  //if MenuItemHolder <> nil then
-  //   MenuPlaySeparatorCommodore.Hint:= SystemsList[MemGameInfo.eSystemID, 0];
-
-  //Result:= FileExists(GetFolderID(7)+SystemsList[MemGameInfo.eSystemID, 0]+'\'+cfgFile);
 end;
 
 function CompareDescending(List: TStringList; Index1, Index2: Integer): Integer;
 begin
-  // this must be natural sorting to sort filenames correctly 1, 2, 11, 20...
+  // it must be natural sorting to sort filenames correctly, instead of "1, 2, 11, 20"...
   Result:= NaturalCompareText(List[Index2], List[Index1]);
 end;
 
@@ -12709,7 +11947,6 @@ begin
        GenerateMessage('Error', SystemsListCustom[MemGameInfo.eCustomSystemID, 0]);
        Exit;
      end;
-  // re-enable these later
   if not Assigned(FormConsCompSystemRules) then
      FormConsCompSystemRules:= TFormConsCompSystemRules.Create(nil);
   IL_StandardIconsExtraLarge.GetIcon(MaxGameID+MemGameInfo.eCustomSystemID, FormConsCompSystemRules.SystemIcon.Picture.Icon);
@@ -12765,7 +12002,7 @@ var
     Result:= True;
     AddMsgText('    Emulator in use not supported for multiple disks: '+#13#10);
     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, $00a65300, [fsBold]);
-    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, clGray { $00a65300 }, [fsBold, fsItalic]);
+    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, clGray, [fsBold, fsItalic]);
   end;
 
 begin
@@ -12830,7 +12067,7 @@ begin
        Exit;
      end;
 
-  MediaType:= IsFloppy; // floppy disks only!!!
+  MediaType:= IsFloppy; // floppy disks only
   emuFile:= ExtractFileName(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]]);
   case sysID of
     39, 49, 56: // Commodore 64 / Commodore 128 / VIC-20
@@ -12878,7 +12115,7 @@ begin
              Exit;
            end;
       end;
-    48: // Atari 400/800/XL (for Altirra only!!!)
+    48: // Atari 400/800/XL (Altirra only)
       begin
         if (not IsAltirra(emuFile)) and
            (not IsAtariPlusPlus(emuFile)) then
@@ -12902,7 +12139,6 @@ begin
       end;
     52: // Apple II
       begin
-        //if (not SameText(emuFile, 'AppleWin.exe')) and
         if (not IsAppleWinEmu(emuFile)) and
            (not SameText(emuFile, 'jace.bat')) and
            (not SameText(emuFile, 'jace.cmd')) then
@@ -13028,7 +12264,7 @@ begin
                ImageIndex:= -1;
                ImageIndexes[1]:= TEasyGameInfo(selItem).eCustomSystemID;
                case TEasyGameInfo(selItem).eIsFavorite of
-                 True : StateImageIndexes[1]:= 0; //5;
+                 True : StateImageIndexes[1]:= 0;
                  False: StateImageIndexes[1]:= 500;
                end;
                StateImageIndexes[4]:= 3;
@@ -13090,14 +12326,14 @@ begin
       begin
         isWinUAE:= SameText(emuFile, 'WinUAE.exe');
         case isWinUAE of
-          True : FloppyCommand:= '"%s"';// FloppyCommand:='-diskswapper="%s"';//  oldCODE ???('-s diskimage%u="%s"';) // WinUAE disk swapper (up to 20 drives!)
+          True : FloppyCommand:= '"%s"'; // FloppyCommand:='-diskswapper="%s"';//  oldCODE ???('-s diskimage%u="%s"';) // WinUAE disk swapper (up to 20 drives!)
           False: FloppyCommand:= '--floppy_image_%u="%s"'; // FS-UAE
         end;
         DriveIndex:= 0; // starts with zero!
       end;
     48: // Atari 400/800/XL
       begin
-        DriveIndex:= 1; // Atari++ starts with one!
+        DriveIndex:= 1; // Atari++ starts with drive #1
         if IsAltirra(emuFile) then
            FloppyCommand:= '/disk "%s"' // Altirra v2.60 beta 9 and newer
         else
@@ -13109,7 +12345,7 @@ begin
           True : FloppyCommand:= '-d%u "%s"'; // AppleWin emulator
           False: FloppyCommand:= '-s6.d%u "%s"'; // JACE emulator
         end;
-        DriveIndex:= 1; // starts with one!
+        DriveIndex:= 1; // starts with drive #1
       end;
     53: // Apple IIGS
       begin
@@ -13117,8 +12353,8 @@ begin
       end;
     59: // Amstrad CPC
       begin
-        FloppyCommand:= ''; // not needed here!!!
-        DriveIndex:= 0; // starts with zero!
+        FloppyCommand:= ''; // parameter not needed here
+        DriveIndex:= 0; // starts with driver #0
       end;
   end;
   FormConsCompMultiFloppyGames.GamesList.Sort.SortAll;
@@ -13140,7 +12376,7 @@ begin
        GamesFiles:= TStringList.Create;
        GamesFiles.BeginUpdate;
      end;
-  // mount command line / write to custom emulator ini files...
+  // mount command line / write to custom emulator ini files
   selItem:= FormConsCompMultiFloppyGames.GamesList.Groups.FirstItem;
   repeat
     case sysID of
@@ -13180,7 +12416,7 @@ begin
           else
              begin
                if DriveIndex = 1 then
-                  CmdLineVar:= CmdLineVar+WideFormat('"%s"', [selItem.Captions[6]]) // first image can't have the -image param
+                  CmdLineVar:= CmdLineVar+WideFormat('"%s"', [selItem.Captions[6]]) // first image can't have the "-image" param
                else
                   CmdLineVar:= CmdLineVar+WideFormat(FloppyCommand, [DriveIndex, selItem.Captions[6]]);
              end;
@@ -13193,11 +12429,11 @@ begin
         end;
       53: // Apple IIGS
         begin
-          GamesFiles.Add(selItem.Captions[6]);//[Loop]:= FileFullPath;
+          GamesFiles.Add(selItem.Captions[6]);
         end;
       59:// Amstrad CPC
         begin
-          GamesFiles.Add(selItem.Captions[6]);// [Loop]:= FileFullPath;
+          GamesFiles.Add(selItem.Captions[6]);
         end;
     end;
     Inc(DriveIndex);
@@ -13218,8 +12454,7 @@ begin
          FloppyCommand:= GetFolderFull(38)+SystemsListCustom[sysID, 0]+'\';
          ForceDirectories(FloppyCommand);
          FileFullPath:= FloppyCommand+ExtractFileName(ChangeFileExt(FileFullPath, '.vfl'));
-         //ShowMessage('save flip list file: '+#13#10+FileFullPath);
-         GamesFiles.SaveToFile(FileFullPath); // save the flip list file!!!!!
+         GamesFiles.SaveToFile(FileFullPath); // save the flip list file
        except
          CallMessageBox;
          EnableMsgMediaTypeLabel(False);
@@ -13237,11 +12472,11 @@ begin
 
   if sysID = 59 then // Amstrad CPC
      begin
-       WinApeGetCartridgeFile(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]], StrDOSName); // FileFullPath
-       WinApeEditIni(4, EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]], StrDOSName, GamesFiles[0], GamesFiles[1], ''); // FileFullPath
+       WinApeGetCartridgeFile(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]], StrDOSName);
+       WinApeEditIni(4, EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]], StrDOSName, GamesFiles[0], GamesFiles[1], '');
      end;
 
-  //ShowMessageW(CmdLineVar);
+  //ShowMessageW(CmdLineVar); // for debugging only
   FreeAndNil(GamesFiles);
   FreeAndNil(FormConsCompMultiFloppyGames);
 end;
@@ -13281,7 +12516,7 @@ begin
        Exit;
      end;
   emuIni:= TMemIniFile.Create(iniStr);
-  emuIni.WriteString('ROMS', 'Cartridge', CartridgeFile); // should reset to OS ROM
+  emuIni.WriteString('ROMS', 'Cartridge', CartridgeFile); // must reset to "OS ROM"
   emuIni.WriteString('Tape', 'File Name', CassetteFile);
 
   emuIni.WriteString('Drives', 'Drive(0)', Floppy0File);
@@ -13290,73 +12525,6 @@ begin
   emuIni.UpdateFile;
   FreeAndNil(emuIni);
 end;
-
-// this function is no longer used... November 30, 2017
-{procedure TFormMain.AutoRenameSnapshots;
-var
-  Loop: Integer;
-  FilesList, gameFiles: THashedStringList;
-  newName, srcFolder, destFolder: String;
-  lastIndex: Byte;
-
-  procedure ResetFeature;
-  begin
-    FreeAndNil(FilesList);
-    SetCurrentDir(FrontendPath);
-  end;
-
-begin
-  if not ImagesAutoRenameSnaps.Checked then
-     Exit;
-  if MemGameInfo.eSoftwareName <> '' then
-     Exit; // no renaming for software list games
-  destFolder:= GetFolderFull(1, MemGameInfo.eSystemID);
-  srcFolder:= destFolder+MemGameInfo.eName+'\';
-  if not DirectoryExists(srcFolder) then
-     Exit;
-  FilesList:= THashedStringList.Create;
-  GetFilesList(srcFolder, '.png', '*.png', FilesList, False, True, True);
-  if FilesList.Count = 0 then
-     begin
-       ResetFeature;
-       Exit;
-     end;
-  case FileExists(destFolder+MemGameInfo.eName+'.png') of
-    True:
-      begin
-        // max filename index is "gamename0099.png" (support for 100 images!!!!)
-        gameFiles:= THashedStringList.Create;
-        GetFilesList(destFolder, '.png', MemGameInfo.eName+'00??.png', gameFiles, False, True, False);
-        if gameFiles.Count = 0 then
-           lastIndex:= 2 // gamename0000.png
-        else
-           begin
-             newName:= gameFiles[gameFiles.Count-1];
-             newName:= Copy(newName, Length(newName)-7, 4);
-             // add 3 to the last index to build the new filename without overwriting files
-             lastIndex:= StrToInt(newName)+3;
-           end;
-        FreeAndNil(gameFiles);
-      end;
-    False:
-      begin
-        // 1st image not found, will overwrite all existing files and start from zero
-        lastIndex:= 1;
-      end;
-  end;
-
-  for Loop:=0 to FilesList.Count-1 do
-  begin
-    newName:= GetImageName(MemGameInfo.eName, lastIndex, 0)+'.png';
-    CopyFile(PChar(FilesList[Loop]), PChar(destFolder+newName), False);
-    if ImagesAutoDeleteSnaps.Checked then
-       DeleteFile(FilesList[Loop]);
-    Inc(lastIndex);
-  end;
-  if ImagesAutoDeleteSnaps.Checked then
-     RemoveDir(srcFolder);
-  ResetFeature;
-end;}
 
 function TFormMain.FixDescriptionFormat(sysID: Byte; const tGameTitle: String; IsMechanical: Boolean): String;
 var
@@ -13467,13 +12635,7 @@ end;
 
 procedure TFormMain.SetCustomGameTitle(ItemHolder: TEasyItem);
 var
-  //GameTitleStr, SoftNameStr, sysName, LineStr: String;
-  //Item: TEasyItem;
-  //Group: TEasyGroup;
   iPos: Integer;
-  //SoftList: THashedStringList;
-  //IsArcadeEntry: Boolean;
-  //sysID: ShortInt;
 
   function GetShortTitle: WideString;
   begin
@@ -13486,9 +12648,7 @@ var
 
 begin
   if ItemHolder = nil then
-     Exit; // no item to work with... I'm outta here!!!
-
-  //WorkTitle:= TEasyGameInfo(ItemHolder).eTitle;
+     Exit; // no item to work with... I'm outta here!
 
   case MenuGameTitleExtraInfo.Tag of
     0: TEasyGameInfo(ItemHolder).eTitleShort:= ''; // full title (empty eTitleShort to free RAM usage)
@@ -13542,12 +12702,11 @@ begin
        else
           Result:= ExtractFilePath(EmulatorFile[SysID])+FolderString;
      end;
-  case CheckZipExtension of
+  case CheckZipExtension of // current being used by zipped images only...
     True:
       begin
-        // current being used by zipped images only...
         if (PosEx('.zip', LowerCase(Result)) = 0) then// and
-           //(PosEx('.7z',  LowerCase(Result)) = 0) then
+           //(PosEx('.7z',  LowerCase(Result)) = 0) then // future expansion if games start to use this function (February 27, 2018)
            Result:= IncludeTrailingPathDelimiter(Result);
       end;
     False: Result:= IncludeTrailingPathDelimiter(Result);
@@ -13780,6 +12939,37 @@ begin
   Result:= UseDeviceROMs = 1; // 0 - false; 1 - true -> for game sets , "NOT" device sets  
 end;
 
+// FileID is the ID of each file in "system_name.elrom" (see "docs\arcade\el-romsdatabaseformat.txt" for detials)
+function TFormMain.IsFileID_GameROM(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [0, 3, 6, 9];
+end;
+
+function TFormMain.IsFileID_DeviceROM(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [1, 4, 7, 10];
+end;
+
+function TFormMain.IsFileID_BiosROM(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [2, 5, 8, 11];
+end;
+
+function TFormMain.IsFileID_GameCHD(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [12, 15, 18, 21];
+end;
+
+function TFormMain.IsFileID_DeviceCHD(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [13, 16, 19, 22];
+end;
+
+function TFormMain.IsFileID_BiosCHD(const FileID: Byte): Boolean;
+begin
+  Result:= FileID in [14, 17, 20, 23];
+end;
+
 function TFormMain.GetArcadeGameSysTitle(IsGameConfig: Boolean; sysID: Byte; const CustomVersionInfoStr: String = ''; IsAlterMAME: Boolean = False): String;
 begin
   Result:= '';
@@ -13792,7 +12982,7 @@ begin
         else
         case IsAlterMAME of
           True : Result:= AlterMAMEVersion;
-          False: Result:= EmulatorVersion[sysID];//Result:= 'Emulator: '+EmulatorFile[sysID];
+          False: Result:= EmulatorVersion[sysID];
         end;
       end;
   end;
@@ -13911,7 +13101,7 @@ begin
     1: // for arcade games
       begin
         Result:= '  Compressed Hunks of Data: ';
-        case FileID of //FileID of
+        case FileID of
           12, 13, 14: Result:= Result+'Hard Drive';
           15, 16, 17: Result:= Result+'Disc';
           18, 19, 20: Result:= Result+'Compact Flash Card';
@@ -14011,7 +13201,6 @@ begin
   end;
   CanvasHolder.Font:= tmpFont;
   FreeAndNil(tmpFont);
-  //tmpFont.Free;
 end;
 
 function TFormMain.ELV_GetNextSelected(ListHolder: TEasyListView; CurrentItem: TEasyItem; var SelectedIndex: Integer): TEasyItem;
@@ -14091,7 +13280,7 @@ var
   Item: TEasyItem;
   strToSearch: WideString;
 begin
-  // column 0 (zero) is only for the main games list when ELV is in virtual mode!!!!!!
+  // column 0 (zero) is only for the main games list
   Result:= False;
   if not CheckTotalVisible(DestListView) then
      Exit;
@@ -14127,7 +13316,7 @@ begin
      begin
        Item.Selected:= True;
        DestListView.Selection.FocusedItem:= Item;
-       Item.MakeVisible(emvMiddle);//(emvAuto);
+       Item.MakeVisible(emvMiddle);
      end;
 end;
 
@@ -14166,7 +13355,7 @@ var
   CurrentColor, BlinkColor: TColor;
 begin
   CurrentColor:= EditHolder.EditManager.Color;
-  BlinkColor:= $7878e6; // 7895270 -> RGB(230,120,120)........ $001E1EEB; // 1973995 -> RGB(235, 30, 30)
+  BlinkColor:= $7878e6; // 7895270 -> RGB(230, 120, 120)........ $001e1eeb; // 1973995 -> RGB(235, 30, 30)
   EditHolder.EditManager.Color:= BlinkColor;
   Application.ProcessMessages;
   Sleep(300);
@@ -14196,7 +13385,7 @@ begin
       ImageIndex:= Loop;
       Tag:= PopupMenuImageCategories.Items[ImageIndex].Tag; // background color
       case CaptionType of
-        -1: Caption:= PopupMenuImageCategories.Items[Loop].Caption; // full title
+        -1: Caption:= PopupMenuImageCategories.Items[Loop].Caption; // category full title
          0: Caption:= ''; // empty title
          1:
            begin
@@ -14328,17 +13517,14 @@ begin
   begin
     case ShowDisabledMode of
       0: SysHave:= True; // same as TRUE
-      1: SysHave:= IsSystemAvailable(Loop, True); // games list only... emulator files are no included
+      1: SysHave:= IsSystemAvailable(Loop, True); // validate games list only, emulator file is not included
       2: SysHave:= FormMain.ValidateFile(GetCustomGamePlayedFile(Loop));
     end;
     ShowItem:= SysHave;
 
-    //if not ShowUnavailableSystems then
-    //   ShowItem:= SysHave;
-
     with DestListView.Items.Add do
     begin
-      Caption:= SystemsListCustom[Loop, 0]; // EmuCon systems cannot be shortened yet!!!
+      Caption:= SystemsListCustom[Loop, 0]; // EmuCon systems titles cannot be shortened yet!!!
       //case ShortTitle of
       //  True : Caption:= GetSystemShortTitle(Loop);
       //  False: Caption:= SystemsListCustom[Loop, 0];
@@ -14361,14 +13547,6 @@ begin
            else
               Visible:= False;
          end;
-
-      //if ShowItem then
-      //   begin
-      //     if (not SysHave) and UnavailableSystemsGhostedIcon then
-      //        State:= State+[esosGhosted]
-      //   end
-      //else
-      //   Visible:= False;
     end;
   end;
   DestListView.Items.ReIndexDisable:= False;
@@ -14401,15 +13579,10 @@ begin
     end;
     ShowItem:= SysHave;
 
-    //SysHave:= IsSystemAvailable(Loop); //FormMain.ValidateEmulatorFile(Loop) and IsSystemAvailable(Loop);
-    //ShowItem:= ShowUnavailableSystems;
-    //if not ShowUnavailableSystems then
-    //   ShowItem:= SysHave;
-
     with DestListView.Items.Insert(0) do
     begin
       Caption:= GetArcadeSystemShortTitle(Loop);
-      //case ShortTitle of
+      //case ShortTitle of // cannot show full system title here as it doesn't fit in icon/thumbnail view mode, maybe in the future (February 28, 2018)
       //  True : Caption:= GetSystemShortTitle(Loop);
       //  False: Caption:= GetEmulatorDescription(Loop);
       //end;
@@ -14431,14 +13604,6 @@ begin
            else
               Visible:= False;
          end;
-
-      //if ShowItem then
-      //   begin
-      //     if (not SysHave) and UnavailableSystemsGhostedIcon then
-      //        State:= State+[esosGhosted]
-      //   end
-      //else
-      //   Visible:= False;
     end;
   end;
 
@@ -14456,7 +13621,7 @@ begin
               Details[1]:= 1;
             end;
          //if not ShowItem then
-         //   State:= State+[esosGhosted];
+         //   State:= State+[esosGhosted]; // why show ghosted icon here ?
        end;
        with DestListView.Items.Insert(0) do
        begin
@@ -14470,7 +13635,7 @@ begin
               Details[1]:= 1;
             end;
          //if not ShowItem then
-         //   State:= State+[esosGhosted];
+         //   State:= State+[esosGhosted]; // why show ghosted icon here ?
        end;
      end;
 
@@ -14612,7 +13777,7 @@ begin
   //   1 -> missing ROMs/CHDs
   //   2 -> missing (no ROMs found)
   if State = 2 then
-     State:= 0; // reset since the selection ribbon for missing games is the same as "game OK"
+     State:= 0; // set to zero since the selection ribbon for missing games is the same as "game OK"
   if (State = EasyListViewHolder.HelpContext) and (not ForceUpdate) then
      Exit;
 
@@ -14623,11 +13788,11 @@ begin
   EasyListViewHolder.Selection.BorderColor:= ListSelectionColors[3, State];
   EasyListViewHolder.Selection.BlendColorSelRect:= EasyListViewHolder.Selection.BorderColor;
   EasyListViewHolder.Selection.BorderColorSelRect:= EasyListViewHolder.Selection.BorderColor;
-  //EasyListViewHolder.Selection.TextColor:= clBlack; // this doesn't work... call ELV_ItemPaintText_General() function instead
+  //EasyListViewHolder.Selection.TextColor:= clBlack; // this doesn't work, call ELV_ItemPaintText_General() function instead
 
   EasyListViewHolder.Selection.InactiveColor:= ListSelectionColorInactive[0, State];
   EasyListViewHolder.Selection.InactiveBorderColor:= ListSelectionColorInactive[2, State];
-  EasyListViewHolder.Selection.InactiveTextColor:= ListSelectionColorInactive[3, State]; // this doesn't work... call ELV_ItemPaintText_General() function instead
+  EasyListViewHolder.Selection.InactiveTextColor:= ListSelectionColorInactive[3, State]; // this doesn't work, call ELV_ItemPaintText_General() function instead
 end;
 
 procedure TFormMain.ELV_ResetNormalColors(ELV_Holder: TEasyListView; UpdateSelection: Boolean = True);
@@ -14661,7 +13826,7 @@ end;
 
 procedure TFormMain.ELV_RemoveDefaultGroup(ELV_Holder: TEasyListView);
 begin
-  // this function should be called BEFORE sorting the list and enabling ItemReindex
+  // this function must be called BEFORE sorting the list and enabling ItemReindex
   ELV_Holder.Groups.DeleteGroup(ELV_Holder.Groups.FirstGroup);
 end;
 
@@ -14685,7 +13850,7 @@ var
 begin
   PopupScreenshotLayouts.BeginUpdate;
   PopupScreenshotLayouts.Items[0].Caption:= GetScrLayoutSection(0);
-  for Loop:=1 to 8 do
+  for Loop:=1 to MaxImageLayouts do
   begin
     AddMenuItem(PopupScreenshotLayouts.Items, GetScrLayoutSection(Loop), '', False, True, True, PopupScreenshotLayouts.Items[0].ImageIndex+Loop);
     PopupScreenshotLayouts.Items[Loop].Tag:= Loop;
@@ -14694,46 +13859,31 @@ begin
   PopupScreenshotLayouts.EndUpdate;
 end;
 
-function TFormMain.GetSoftwareListTitle(const SoftwareName: String): WideString;
+function TFormMain.GetSoftwareListTitle(const SoftwareName: String; sysID: ShortInt): WideString;
 var
   sIni: TStringList;
 begin
   Result:= '';
-  if not FileExists(GetGamesFolderEL(1)+SoftwareName+'.el') then
+  if not FileExists(GetGamesFolderEL(1, sysID)+SoftwareName+'.el') then
      Exit;
   sIni:= TStringList.Create;
-  sIni.LoadFromFile(GetGamesFolderEL(1)+SoftwareName+'.el');
+  sIni.LoadFromFile(GetGamesFolderEL(1, sysID)+SoftwareName+'.el');
   Result:= sIni.Values['description'];
   FreeAndNil(sIni);
 end;
 
-function TFormMain.GetLastUsedMachineSoftwareList(const SoftwareName: String): String;
+function TFormMain.GetLastUsedMachineSoftwareList(const SoftwareName: String; sysID: ShortInt): String;
 var
   MachinesIni: THashedStringList;
 begin
   Result:= '';
-  if not FileExists(GetMAMEMachineSoftListFile(True)) then
+  if not FileExists(GetMAMEMachineSoftListFile(True, sysID)) then
      Exit;
   MachinesIni:= THashedStringList.Create;
-  MachinesIni.LoadFromFile(GetMAMEMachineSoftListFile(True));
+  MachinesIni.LoadFromFile(GetMAMEMachineSoftListFile(True, sysID));
   Result:= MachinesIni.Values[SoftwareName];
   FreeAndNil(MachinesIni);
 end;
-
-//function TFormMain.GetDefaultMachineNameToUse(sysID: ShortInt; SoftwareName: String): String;
-//var
-//  DefaultMachines: THashedStringList;
-//  mIndex: Integer;
-//begin
-//  // get first machine name entry of "\arcade\mame_machines.ini" file
-//  Result:= '';
-//  DefaultMachines:= THashedStringList.Create;
-//  DefaultMachines.LoadFromFile(GetMAMEMachineSoftListFile(False, sysID));
-//  mIndex:= DefaultMachines.IndexOf('['+SoftwareName+']');
-//  if mIndex <> -1 then
-//     Result:= DefaultMachines[mIndex+1];
-//  FreeAndNil(DefaultMachines);
-//end;
 
 function TFormMain.GetLastUsedMachineCustomGame(CustomSystemID, CustomMediaTypeID: Integer): String;
 var
@@ -14744,81 +13894,18 @@ begin
   iSystemStr:= SystemsListCustom[CustomSystemID, 0];
   iMediaStr:= MediaTypeCustom[CustomMediaTypeID, 2];
 
-  if FileExists(GetMAMEMachineCustomGames) then
+  if FileExists(GetMAMEMachineCustomGames(idMAME)) then
      begin
-       MachinesIni:= TMemIniFile.Create(GetMAMEMachineCustomGames);
+       MachinesIni:= TMemIniFile.Create(GetMAMEMachineCustomGames(idMAME));
        Result:= MachinesIni.ReadString(iSystemStr, iMediaStr, '');
        FreeAndNil(MachinesIni);
      end;
 end;
 
-{procedure TFormMain.PopulateMachineToUsePopupMenu(const SoftwareName: String);
-var
-  Loop, LastUsedIndex: Integer;
-  MachinesIni: TMemIniFile;
-  mList: TStringList;
-  mTitle, LastUsedStr: String;
-begin
-  if not CheckSelected(GamesListView) then
-     Exit;
-  if not FileExists(GetMAMEMachineSoftListFile(False)) then
-     Exit;
-
-  if MemGameInfo.eSoftwareName <> SoftwareName then
-  begin
-    if PopupMachineToRunGame.Count > 0 then
-    begin
-      PopupMenuGamesList.BeginUpdate;
-      for Loop:= PopupMachineToRunGame.Count-1 downto 0 do
-          PopupMachineToRunGame.Delete(Loop);
-      PopupMenuGamesList.EndUpdate;
-    end;
-  end;
-
-  MachinesIni:= TMemIniFile.Create(GetMAMEMachineSoftListFile(False));
-  mList:= TStringList.Create;
-  MachinesIni.ReadSectionValues(MemGameInfo.eSoftwareName, mList);
-  FreeAndNil(MachinesIni);
-  if mList.Count >  0 then
-  begin
-    LastUsedStr:= mList.ValueFromIndex[0]; // must get this from "mame_machineslast.ini" instead!!!
-    for Loop:=1 to mList.Count-1 do
-    begin
-      mTitle:= '';
-      LastUsedIndex:= -1;
-      if Assigned(MachinesTitle) then
-         mTitle:= MachinesTitle.Values[mList[Loop]];
-      if mTitle = '' then
-         mTitle:= mList[Loop];
-      AddMenuItem(PopupMachineToRunGame, mTitle, mList[Loop], False);
-      //PopupMachineToRunGame.Items[Loop].Tag:= Loop;
-      //PopupMachineToRunGame.Items[Loop].OnClick:= PopupScrLayoutSingleClick;
-    end;
-    if LastUsedIndex = -1 then
-       LastUsedIndex:= 0;
-    PopupMachineToRunGame.Items[LastUsedIndex].Checked:= True;
-  end;
-  FreeAndNil(mList);
-end;}
-
 function TFormMain.GetConsoleComputerFolder: String;
 begin
   Result:= FrontendPath+'console_computer\';
 end;
-
-// this function is not used... invalid filename
-//function TFormMain.GetCustomGamesPlayedIniFile: String;
-//begin
-//  Result:= GetConsCompGamesFolder+'games_played.ini';
-//end;
-
-//function TFormMain.GetPlayedCustomGamesNameEntry(CustomSystemID, CustomMediaType: Integer; const GameName: WideString): String;
-//begin
-//  if SoftwareListName = '' then
-//     Result:= GameName
-//  else
-//     Result:= SoftwareListName+'\'+GameName;
-//end;
 
 function TFormMain.GetIniFilesFolder: String;
 begin
@@ -14865,13 +13952,18 @@ end;
 
 function TFormMain.GetImageCategoriesFile: String;
 begin
-  Result:= GetArcadeFolder+'image_categories.ini';
-  //Result:= GetIniFilesFolder+'image_categories.ini';
+  //Result:= GetArcadeFolder+'image_categories.ini';
+  Result:= GetArcadeFolder+'sysimagefolders_arcade.ini';
 end;
 
 function TFormMain.GetImageLayoutsFile: String;
 begin
   Result:= GetIniFilesFolder+'screenshot_layouts.ini'
+end;
+
+function TFormMain.GetImageCategorySettingsFile: String;
+begin
+  Result:= GetIniFilesFolder+'image_category.ini';
 end;
 
 function TFormMain.GetColumnProfile(IsSoftwareList: Boolean = False): String;
@@ -14882,10 +13974,9 @@ begin
   end;
 end;
 
-function TFormMain.GetControlTypeFile: String;
+function TFormMain.GetControlTypeFile(sysID: Integer): String;
 begin
-  //Result:= GetIniFilesFolder+GetSystemIniSection(idMAME, True)+'_control_type.ini';
-  Result:= GetFolderFull(43)+GetArcadeSystemIniSection(idMAME, True)+'_control_type.ini';
+  Result:= GetFolderFull(43)+GetArcadeSystemIniSection(sysID, True)+'_control_type.ini';
 end;
 
 function TFormMain.GetAudioSamplesFile(sysID: Byte): String;
@@ -14934,7 +14025,6 @@ function TFormMain.GetGamesPlayedIniFile(sysID: Integer): String;
 begin
   // this is for arcade systems only
   Result:= GetFolderFull(41)+GetArcadeSystemIniSection(sysID, True)+'.txt';
-  //Result:= GetIniFilesFolder+'games_played.ini';
 end;
 
 function TFormMain.GetPlayedGamesNameEntry(const GameName, SoftwareListName: String): String;
@@ -14947,33 +14037,37 @@ end;
 
 function TFormMain.GetMultiCartFileName(sysID: Byte; const MachineName: String; ReturnFilePath: Boolean; IsSoftwareList: Boolean = False): String;
 begin
-  // this makes it possible to support hbmame...
   Result:= GetArcadeSystemIniSection(sysID, True)+'_multicart_'+MachineName+'.ini';
   if not ReturnFilePath then
      Exit;
   // GetGamesFolderEL()
-  // System Type = 0 -> arcade : "el_dir\arcade\"
-  //               1 -> console: "el_dir\softwarelist\"
-  Result:= GetGamesFolderEL(Ord(IsSoftwareList))+Result;
+  // System Type = 0 -> arcade : "el_dir\arcade\games\"
+  //               1 -> console: "el_dir\arcade\sysname_softwarelist_games\"
+  Result:= GetGamesFolderEL+Result;
+  //Result:= GetGamesFolderEL(Ord(IsSoftwareList))+Result;
 end;
 
-function TFormMain.GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt = idMAME): String;
+function TFormMain.GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt): String;
 begin
   case UserCustomMachinesFile of
-    //True : Result:= GetIniFilesFolder+GetSystemIniSection(sysID, True)+'_machines_usercustom.ini';
     True : Result:= GetArcadeFolder+GetArcadeSystemIniSection(sysID, True)+'_machines_usercustom.ini';
     False: Result:= GetGamesFolderEL+GetArcadeSystemIniSection(sysID, True)+'_machines.ini';
   end;
 end;
 
-function TFormMain.GetMAMEMachineCustomGames: String;
+function TFormMain.GetMAMEMachineCustomGames(sysID: ShortInt): String;
 begin
-  Result:= GetConsoleComputerFolder+GetArcadeSystemIniSection(idMAME, True)+'_machines_customgames.ini';
+  Result:= GetConsoleComputerFolder+GetArcadeSystemIniSection(sysID, True)+'_machines_customgames.ini';
 end;
 
 function TFormMain.GetSoftListExcludeFile(sysID: ShortInt): String;
 begin
   Result:= GetArcadeFolder+GetArcadeSystemIniSection(sysID, True)+'_softlist_exclude.txt';
+end;
+
+function TFormMain.GetSoftListRequirementFile(sysID: Integer): String;
+begin
+  Result:= GetGamesFolderEL(0, sysID)+GetSystemFileName(sysID, 6); // "\arcade\games\mame.elsoftlistreq"
 end;
 
 function TFormMain.GetSoftwareNameFolder(const iSoftwareName: String): String;
@@ -15007,6 +14101,33 @@ end;
 function TFormMain.GetCustomCommandLineFolder: String;
 begin
   Result:= FrontendPath+'cmdline\';
+end;
+
+procedure TFormMain.SoftListGetRequirementInfo(sysID: Integer; GameName, SoftwareName: String; out VarReqSetName: String; out VarReqSoftwareName: String);
+var
+  RequirementIni: TMemIniFile;
+  tmpString: String;
+  iPos: Integer;
+begin
+  VarReqSetName:= '';
+  VarReqSoftwareName:= '';
+  if not FileExistsW(GetSoftListRequirementFile(sysID)) then
+     Exit;
+
+  RequirementIni:= TMemIniFile.Create(GetSoftListRequirementFile(sysID));
+  tmpString:= RequirementIni.ReadString(SoftwareName, GameName, '');
+  FreeAndNil(RequirementIni);
+  if tmpString <> '' then
+     begin
+       iPos:= PosEx(':', tmpString);
+       if iPos <> 0 then
+          begin
+            VarReqSoftwareName:= Copy(tmpString, 1, iPos-1);
+            VarReqSetName:= Copy(tmpString, iPos+1, Length(tmpString));
+          end
+       else
+          VarReqSetName:= tmpString;
+     end;
 end;
 
 function TFormMain.AddToSpecialList(AddToFavorites: Boolean): Boolean;
@@ -15080,8 +14201,6 @@ begin
          ClearThumb(gItem);
          gItem.Initialized:= False; // cause the Initialized event to be called again when the control needs the info
        end;
-    //else
-    //   gItem.Invalidate(True);
 
     FillTempGameInfo(gItem);
     tStr:= '';
@@ -15116,7 +14235,6 @@ begin
        end;
 
     gItem:= ELV_GetNextSelected(GamesListView, gItem, selIndex);
-    //gItem:= FormMain.GamesListView.Selection.Next(gItem);
   until gItem = nil;
   GamesListView.EndUpdate(False);
 
@@ -15251,8 +14369,6 @@ begin
          ClearThumb(gItem);
          gItem.Initialized:= False; // cause the Initialized event to be called again when the control needs the info
        end;
-    //else
-    //   gItem.Invalidate(True);
 
     gItem:= ELV_GetNextSelected(GamesListView, gItem, selIndex);
   until gItem = nil;
@@ -15264,8 +14380,6 @@ begin
       begin
         if RemoveGame then
         begin
-          //if FavTitleStr <> '' then
-          //   FavList.Insert(0, 'favorite_title='+FavTitleStr); // shouldn't be here... 2017
           FavList.SaveToFile(GetFavoritesFile);
         end;
         FreeAndNil(FavList);
@@ -15320,11 +14434,6 @@ begin
   end;
 
   iniFile:= GetArcadeEmuIniFileName(SystemID, ExeFileStr);
-
-  //if IsAlterMAME then
-  //   iniFile:= GetEmuIniFileName(SystemID, AlterMAMEFile)
-  //else
-  //   iniFile:= GetEmuIniFileName(SystemID, EmulatorFile[SystemID]);
   if not FileExists(iniFile) then
      Exit;
 
@@ -15351,44 +14460,6 @@ begin
                    Folder:= 'roms';
               end
            else
-           //if (EntryString = 'hashpath ') or
-           //   (EntryString = 'hash_directory ') or
-           //   (EntryString = 'hash ') then // not used!!!!!!! 2014
-           //   begin
-           //     HashDir[Ord(SystemID = idMAME)]:= ExtractMAMEIniValue(TextLine);
-           //     if HashDir[Ord(SystemID = idMAME)] = '' then
-           //        HashDir[Ord(SystemID = idMAME)]:= 'hash';
-           //   end
-           //else
-
-           //if (EntryString = 'samplepath ') or
-           //   (EntryString = 'sp ') then // not needed anymore!!!!!! (March 17, 2016)
-           //   begin
-           //     Folder2:= ExtractMAMEIniValue(TextLine);
-           //     if Folder2 = '' then
-           //        Folder2:= 'samples';
-           //     ExtractFolders2MAME(SystemID, Folder2, SamplesDir[Ord(SystemID = idMAME)], ExeFileStr);
-           //   end
-           //else
-
-
-           //if (EntryString = 'artpath ') or
-           //   (EntryString = 'artwork_directory ') then // not used anymore!!!!!! (March 17, 2016)
-           //   begin
-           //     Folder2:= ExtractMAMEIniValue(TextLine);
-           //     if Folder2 = '' then
-           //        Folder2:= 'artwork';
-           //     ExtractFolders2MAME(SystemID, Folder2, ArtworksDir[Ord(SystemID = idMAME)], ExeFileStr);
-           //   end
-           //else
-
-           //if EntryString = 'input_directory ' then // not used anymore!!!!!! (March 17, 2016)
-           //   begin
-           //     InputDir[Ord(SystemID = idMAME)]:= ExtractMAMEIniValue(TextLine);
-           //     if InputDir[Ord(SystemID = idMAME)] = '' then
-           //        InputDir[Ord(SystemID = idMAME)]:= 'inp';
-           //   end
-           //else
            if EntryString = 'snapshot_directory ' then
               begin
                 if imgFolder[SystemID, 1] = '' then
@@ -15445,7 +14516,6 @@ begin
      AlterMAMEIniFilesDir:= iniDirString
   else
      IniFilesDir[SystemID]:= iniDirString;
-  //IniFilesDir[SystemID]:= FullEmuFolderFix(IniFilesDir[SystemID], SystemID, False); // no longer used (October 30, 2016)
 end;
 
 // what is this function used for ? October 30, 2016
@@ -15495,14 +14565,11 @@ begin
            end;
            1: // input directory (single path)
            begin
-             //if not IsAlterMAME then
-             //begin
              if EntryString = 'input_directory ' then
                 begin
                   Folder:= ExtractMAMEIniValue(TextLine);
                   Break;
                 end;
-             //end;
            end;
            2: // samples directory (multiple paths)
            begin
@@ -15529,9 +14596,6 @@ begin
 
   if Folder <> '' then
      Result:= Folder;
-
-  //if iniDirString <> '' then
-  //   iniDirString:= FullEmuFolderFix(iniDirString, SystemID, False, IsAlterMAME)
 end;
 
 procedure TFormMain.LoadFoldersArcade2(sysID: Integer; EmuFileNameStr: String = '');
@@ -15598,8 +14662,6 @@ begin
            end;
         if Folder = '' then
            Folder:= FullFolderFix('roms', ExeFileStr);
-           //Folder:= ExtractFilePath(ExeFileStr)+'roms';
-           //Folder:= ExtractFilePath(EmulatorFile[idDemul])+'roms';
       end;
     idSegaModel2:
       begin
@@ -15927,7 +14989,7 @@ begin
   end;
 end;
 
-function TFormMain.SearchCHDFolder(const DiskImageFileName, GameName, BiosName: String; sysID: ShortInt; const SoftwareList: String = ''): String;
+function TFormMain.SearchCHDFolder(const DiskImageFileName, GameName, BiosName, CloneOfName: String; sysID: ShortInt; const SoftwareList: String = ''): String;
 var
   Loop: Integer;
   FolderStr, FolderSoftListStr: String;
@@ -15944,7 +15006,44 @@ begin
   for Loop:=0 to emuROMsFolders[sysID].Count -1 do
   begin
     FolderStr:= FullFolderFix(emuROMsFolders[sysID].Strings[Loop], EmulatorFile[sysID]);
-    case FileExists(FolderStr+FolderSoftListStr+DiskImageFileName) of
+    if FileExistsW(FolderStr+FolderSoftListStr+DiskImageFileName) then // romsdir\softlistname\chdfilename.chd
+       begin
+         Result:= FolderStr+FolderSoftListStr+DiskImageFileName;
+         Break;
+       end
+    else
+    if FileExistsW(FolderStr+FolderSoftListStr+GameName+'\'+DiskImageFileName) then // romsdir\softlistname\gamename\chdfilename.chd
+       begin
+         Result:= FolderStr+FolderSoftListStr+GameName+'\'+DiskImageFileName;
+         Break;
+       end
+    else
+    if GameIsClone(CloneOfName) then
+       begin
+         if FileExistsW(FolderStr+FolderSoftListStr+CloneOfName+'\'+DiskImageFileName) then // romsdir\softlistname\parent_gamename\chdfilename.chd
+            begin
+              Result:= FolderStr+FolderSoftListStr+CloneOfName+'\'+DiskImageFileName;
+              Break;
+            end
+       end;
+
+    if Result = '' then
+    begin
+      if IsMAMEBasedSys(sysID) and (SoftwareList = '') then
+         begin
+           if FormMain.ValidateBiosName(BiosName, GameName) then
+              begin
+                if FileExistsW(FolderStr+BiosName+'\'+DiskImageFileName) then // romsdir\biosname\gamename\chdfilename.chd
+                   begin
+                     Result:= FolderStr+BiosName+'\'+DiskImageFileName;
+                     Break;
+                   end
+              end;
+         end;
+
+    end;
+    {
+    case FileExistsW(FolderStr+FolderSoftListStr+DiskImageFileName) of
       True:
         begin
           Result:= FolderStr+FolderSoftListStr+DiskImageFileName;
@@ -15952,7 +15051,7 @@ begin
         end;
       False:
         begin
-          if FileExists(FolderStr+FolderSoftListStr+GameName+'\'+DiskImageFileName) then
+          if FileExistsW(FolderStr+FolderSoftListStr+GameName+'\'+DiskImageFileName) then
              begin
                Result:= FolderStr+FolderSoftListStr+GameName+'\'+DiskImageFileName;
                Break;
@@ -15962,7 +15061,7 @@ begin
              begin
                if FormMain.ValidateBiosName(BiosName,GameName) then
                   begin
-                    if FileExists(FolderStr+BiosName+'\'+DiskImageFileName) then
+                    if FileExistsW(FolderStr+BiosName+'\'+DiskImageFileName) then
                        begin
                          Result:= FolderStr+BiosName+'\'+DiskImageFileName;
                          Break;
@@ -15971,6 +15070,7 @@ begin
              end;
         end;
     end;
+    }
   end;
 end;
 
@@ -16001,12 +15101,12 @@ begin
      end;
 end;
 
-function TFormMain.VerifyGamesMAMESoftlist: Boolean;
+function TFormMain.VerifyGamesMAMESoftlist(sysID: ShortInt): Boolean;
 var
   Search: TSearchRecW;
   FolderStr: WideString;
 begin
-  FolderStr:= GetGamesFolderEL(1);
+  FolderStr:= GetGamesFolderEL(1, sysID);
   Result:= FindFirstW(FolderStr+'*.el', faAnyFile, Search) = 0; // first_file.el
   FindCloseW(Search);
   if Result then
@@ -16068,7 +15168,7 @@ begin
        end
     else
        begin
-         SetString(tmp,pp-1, pe-pp+1);
+         SetString(tmp, pp-1, pe-pp+1);
          case PosEx(tmp, ChrMapStr) of
             1: Result[j]:= '"';
             7: Result[j]:= '<';
@@ -16221,9 +15321,7 @@ begin
   FormStatus.SetProgressPos(0);
   CheckAndCreateFolder(GetGamesFolderEL);
 
-  //tempFile:= GetSystemIniSection(sysID, True)+'_listxml.xml';
   FormStatus.TitleStr('Create Games List: '+EmuTitle);
-  //FormStatus.MessageStr('Creating "'+tempFile+'" file.');
 
   if not FormStatus.Visible then
      FormStatus.Show;
@@ -16235,29 +15333,26 @@ begin
   EmulatorDateTime[sysID]:= FileAge(EmulatorFile[sysID]); // get emulator date/time stamp
   GetArcadeEmulatorVersion(sysID, EmulatorFile[sysID], EmulatorVersion[sysID], iVersion);
 
-  if IsMAMEBasedSys(sysID) then // sanity check ? this will always be TRUE (October 30, 2016)
-     begin
-       if iVersion = '' then
-          iVersion:= GetMAMEBinaryVersion(EmulatorFile[sysID]);
-       case sysID of
-         idMAME:
-           begin
-             if buildMAME <> iVersion then
-                buildMAME:= iVersion;//Copy(iVersion, 3, 3);
-           end;
-         idHBMAME:
-           begin
-             if buildHBMAME <> iVersion then
-                buildHBMAME:= iVersion;//Copy(iVersion, 3, 3);
-           end;
-       end;
+  if iVersion = '' then
+     iVersion:= GetMAMEBinaryVersion(EmulatorFile[sysID]);
+  case sysID of
+    idMAME:
+      begin
+        if buildMAME <> iVersion then
+           buildMAME:= iVersion;
+      end;
+    idHBMAME:
+      begin
+        if buildHBMAME <> iVersion then
+           buildHBMAME:= iVersion;
+      end;
+  end;
 
-       iMAME:= GetMAMEBuild(sysID);
-     end;
+  iMAME:= GetMAMEBuild(sysID);
 
   // call GetMAMEBuild(FALSE) ;;IsAlterMAME;; starting from version 70, MAME uses listxml; 0.69 still use -listinfo!!!!
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // DO NOT try to create games list with -listinfo if version if 70 or higher!!!!!!!!!!!!!!!!!!!
+  // DO NOT try to create games list with -listinfo if version is 70 or higher!!!!!!!!!!!!!!!!!!!
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // in this case, if the -listxml output is empty, return an error message to the user saying EL failed to create the file
   // to parse the games list...........
@@ -16273,12 +15368,12 @@ begin
 
     FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
     SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);//, False); //SW_SHOWMINIMIZED, False); // WinXP / Sev7n
+    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
     SetCurrentDir(FrontendPath);
     FileLine:= '';
 
-    Sleep(50); // small pause ???
+    Sleep(50); // small pause
     Result:= Check_Temp_Files(GetGamesFolderEL+tempFile, (sysID = idHBMAME));
 
     if not Result then
@@ -16292,33 +15387,33 @@ begin
     FormStatus.MessageStr('Creating "'+tempFile+'" file.');
     FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listinfo > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
     SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);//, False); //SW_SHOWMINIMIZED, False); // WinXP / Sev7n
+    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
     SetCurrentDir(FrontendPath);
     FileLine:= '';
     if FormMain.Visible then
        FormMain.Refresh;
 
-    Sleep(50); // small pause ???
+    Sleep(50); // small pause
     Result:= Check_Temp_Files(GetGamesFolderEL+tempFile, True);
 
     if not Result then
        Exit;
 
-    // it's the old MAME!!! yikes!
+    // it's the old MAME, yikes!
     // create -listdetails to get driver name for each game...
     tempFile2:= GetArcadeSystemIniSection(sysID, True)+'_listdetails.txt';
     FormStatus.MessageStr('Creating "'+tempFile2+'" file.');
     FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listdetails > '+SystemStr+GetGamesFolderEL+tempFile2+SystemStr;
     SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);//, False); //SW_SHOWMINIMIZED, False); // WinXP / Sev7n
+    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
     SetCurrentDir(FrontendPath);
     FileLine:= '';
     if FormMain.Visible then
        FormMain.Refresh;
 
-    Sleep(50); // small pause ???
+    Sleep(50); // small pause
     Result:= Check_Temp_Files(GetGamesFolderEL+tempFile2, True);
 
     if not Result then
@@ -16333,38 +15428,43 @@ begin
   FormStatus.MessageStr('Deleting games list files.');
 
   DeleteFile(GetDeviceSetsFile(sysID));
-  if sysID = idMAME then
-     DeleteFile(GetMAMEMachineSoftListFile(False)); // mame_machines.ini; hbmame_machines.ini
+  //if sysID = idMAME then
+  DeleteFile(GetMAMEMachineSoftListFile(False, sysID)); // mame_machines.ini; hbmame_machines.ini
 
   DeleteFile(GetBiosSetFile(sysID));
   DeleteFile(GetAudioSamplesFile(sysID));
   DeleteFile(GetMemcardListFile(sysID));
 
-  if sysID = idMAME then
-     begin
-       DeleteFile(GetMultiCartFileName(idMAME, 'neogeo', True)); // no software list support, keep it arcade games only
-       DeleteFile(GetMultiCartFileName(idMAME, 'stv', True));    // no software list support, keep it arcade games only
-     end;
+  DeleteFile(GetMultiCartFileName(sysID, 'neogeo', True)); // no software list support, keep it arcade games only
+  DeleteFile(GetMultiCartFileName(sysID, 'stv', True));    // no software list support, keep it arcade games only
 
   DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID));
     for Loop:=0 to 5 do
         DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID, Loop));
 
-  Sleep(5); // a little pause
+  Sleep(5); // a tiny pause
 
-  // delete all files from "eldir\softwarelist\" folder (for MAME only!!!)
+  // delete all files from "eldir\arcade\sysname_softwarelist_games\" folder (MAME/HBMAME)
 
-  if sysID = idMAME then
-     DeleteAllFilesW(GetGamesFolderEL(1));
-  Sleep(5); // a little pause
+  if not IsXML then
+     SoftListDeleteGamesFiles(sysID, 0); // delete all software games list files
+  //else
+  //   SoftListDeleteGamesFiles(sysID, MenuCreateMAMESoftwareListGames.Tag); // this doesn't work here, must be called in CreateGamesListXML() function
+
+  //if MenuCreateMAMESoftwareListGames.Tag = 1 then // 0 -> no software list games; 1 -> yes, create software list games
+  //   begin
+  //     //SoftListDeleteGamesFiles(sysID, 0);
+  //     DeleteFile(GetSoftListRequirementFile(sysID)); // delete "system_name.elsoftlistreq"
+  //     DeleteAllFilesW(GetGamesFolderEL(1, sysID));
+  //     Sleep(5); // a tiny pause
+  //   end;
 
   FormStatus.TitleStr('Create Games List: '+EmulatorVersion[sysID]);
-
   Application.ProcessMessages;
   if IsXML then
-     Result:= CreateGamesListXML(sysID, iMAME) // MAME based emulators (MAME and HBMAME)
+     Result:= CreateGamesListXML(sysID, iMAME) // (MAME and HBMAME v0.70 and up)
   else
-     Result:= CreateGamesList_ListInfo(sysID); // for MAME only!!! (old builds "-listinfo" parameter)
+     Result:= CreateGamesList_ListInfo(sysID); // for old MAME builds ("-listinfo" parameter)
 end;
 
 function TFormMain.IsMultiSlotSoftwareList(const SoftListName: String): Boolean;
@@ -16429,7 +15529,7 @@ begin
         if (PosEx('cassette', RegionStr) <> 0) then
            begin
              if DriverNameStr = 'ksys573' then
-                newID:= FileID+18 // Konami System 573 uses flash cards, not cassette tapes, even though the region says "cassette:game:eeprom"
+                newID:= FileID+18 // Konami System 573 use flash cards, not cassette tapes, even though the region says "cassette:game:eeprom"
              else
                 newID:= FileID+9;
            end;
@@ -16466,7 +15566,7 @@ begin
         if SameText('vhs', RegionStr) then
            newID:= FileID+9; // 12+9=21 -> from Game CHD to Game Video Tape (VHS)
         //else
-        //      ShowMessageW('Unknown CHD region tag: "'+RegionStr+'"'+#13#10+'gamename: '+TempGameVars.eName);
+        //      ShowMessageW('Unknown CHD region tag: "'+RegionStr+'"'+#13#10+'gamename: '+TempGameVars.eName); // for debugging only
       end;
   end;
   Result:= newID;
@@ -16490,7 +15590,7 @@ var
   tmpList, DeviceSetSize: THashedStringList;
   HasROMs, ROMsHeaderAdded, IsDiscreteAudio, SoftListHeaderAdded: Boolean;
   SoftList, GameStatusList: TStringList;
-  SoftwareListsToCreate: TStringList;//THashedStringList;
+  SoftwareListsToCreate: THashedStringList;
   NeoGeoMemcardAdded: Boolean;
   MemCardMachineList: TStringList;
   MemcardsCount: Byte;
@@ -16500,8 +15600,7 @@ var
   CRC32CollisionFile: TStringList;
   IsCRC32Collision: Boolean;
 
-  // HasROMs var is used to not add device sets with no ROMs... nothing else, and it doesn't include CHD files!!!
-  //IsMESS: Boolean; // no longer used!!! June 09, 2015
+  // HasROMs var is used to avoid adding device sets with no ROMs... nothing else, and it doesn't include CHD files!!!
 
   function GetStatusIndex(const StatusString: String): ShortInt;
   begin
@@ -16545,20 +15644,6 @@ var
             end
          else
             WarningMessagesList.Add('New screen type found: '+ScreenTypeString);
-
-         {CallMessageBox;
-         AddMsgText('New screen type found: ');
-         AddMsgText(ScreenTypeString, $00a65300, [fsBold]);
-         AddMsgText(#13#10+'Game: ');
-         AddMsgText(TempGameVars.eTitle, $00a65300, [fsBold]);
-         AddMsgText(#13#10+'Name: ');
-         AddMsgText(TempGameVars.eName, $00a65300, [fsBold]);
-         AddMsgText(#13#10+'Driver: ');
-         AddMsgText(TempGameVars.eDriverName, $00a65300, [fsBold]);
-         AddMsgText(#13#10+#13#10+'   This type is not yet supported. Please contact the author '+
-                         'with this new info. In the mean time, the screen type for this '+
-                         'game will be set as "none".');
-         GenerateMessage(TitleErrorMsg, 'Screen type', '', 2);}
        end;
   end;
 
@@ -16590,9 +15675,8 @@ var
     if WaysStr = 'vertical2' then
        Result:= 'vjoy2way'
     else
-    if WaysStr = 'strange2' then
+    if WaysStr = 'strange2' then // uncommon control name (game: name="bmcpokr" title="Dongfang Shenlong")
        Result:= 'joy2way'
-       //Result:= 'joystrange2' // huh??? I don't know what this means!!!! game: name="bmcpokr" title="Dongfang Shenlong"
     else
        Result:= 'joy'+WaysStr+'way';
   end;
@@ -16615,11 +15699,6 @@ var
                ctrlString:= 'doublejoy,';
                ctrl2:= FixControlTag(XML_GetEntryValue(FileLine, 'ways2'));
                ctrlString:= ctrlString+ctrl1+','+ctrl2;
-               //if ctrl1 <> ctrl2 then
-               //   begin
-               //     ShowMessage('doublejoy has different values!'+#13#10+'name: '+TempGameVars.eName+#13#10+'title: '+TempGameVars.eTitle+#13#10+
-               //     'ways: '+ctrl1+#13#10+'ways2: '+ctrl2);
-               //   end;
              end
           else
           if ctrlString = 'triplejoy' then
@@ -16628,11 +15707,6 @@ var
                ctrl2:= FixControlTag(XML_GetEntryValue(FileLine, 'ways2'));
                ctrl3:= FixControlTag(XML_GetEntryValue(FileLine, 'ways3'));
                ctrlString:= ctrlString+ctrl1+','+ctrl2+','+ctrl3;
-               //if (ctrl1 <> ctrl2) and (ctrl1 <> ctrl3) and (ctrl2 <> ctrl3) then
-               //   begin
-               //     ShowMessage('triplejoy has different values!'+#13#10+'name: '+TempGameVars.eName+#13#10+'title: '+TempGameVars.eTitle+#13#10+
-               //     'ways: '+ctrl1+#13#10+'ways2: '+ctrl2+#13#10+'ways3: '+ctrl3);
-               //   end;
              end
           else
              ctrlString:= ctrl1;
@@ -16642,7 +15716,7 @@ var
     if ctrlString = 'only_buttons' then // from MAME v0.173... to avoid duplicate "Buttons" control type
        ctrlString:= 'buttons';
 
-    Result:= True; // need to force TRUE result; will be set to false if there are more controls in "eControls" var and they are NOT already added!
+    Result:= True; // need to force TRUE result; will be set to false if there are more controls in "eControls" var and they are not already added!
     if TempGameVars.eControls <> '' then
        begin
          // only add a new control if it doesn't already exist
@@ -16678,6 +15752,7 @@ var
        end;
   end;
 
+  // this function might still be useful in the future, do not delete (February 28, 2018)
   {function CheckDeviceTag(IsDevice: Boolean = False): Boolean;
   begin
     // TagID
@@ -16719,6 +15794,7 @@ var
     IsNeoGeo: Boolean;
     LoopMemCardExt: Integer;
   begin
+    Result:= True;
     IsNeoGeo:= IsNeoGeoDriver(TempGameVars.eSystemID, TempGameVars.eDriverName, TempGameVars.eBiosName, True);
     if IsNeoGeo and NeoGeoMemcardAdded then
        Exit;
@@ -16763,7 +15839,7 @@ var
     if MemcardsCount = 0 then
        begin
          if MemCardMachineList.Count > 0 then
-            MemCardMachineList.Add(''); // an empty line
+            MemCardMachineList.Add(''); // add an empty line to separate [sections]
          case IsNeoGeo of
            True:
              begin
@@ -16796,25 +15872,23 @@ var
          SoftList.Add('['+TempGameVars.eName+']');
          SoftListHeaderAdded:= True;
        end;
-    SoftList.Add(SoftwareListName);//+'='+Filter); // region tags will not be supported anymore!!!!!!! but they will be added just in case
+    SoftList.Add(SoftwareListName);
   end;
 
   function AddSoftwareListMachine(const SoftwareNameSection, MachineName: String): Boolean;
   begin
     // mame_machines.ini
     if not Assigned(SoftNameMachinesList) then
-       SoftNameMachinesList:= TMemIniFile.Create(GetMAMEMachineSoftListFile(False));
+       SoftNameMachinesList:= TMemIniFile.Create(GetMAMEMachineSoftListFile(False, sysID));
     SoftNameMachinesList.WriteString(SoftwareNameSection, MachineName, '');
   end;
 
   function AddToListSoftwareListXML(const slName: String): Boolean;
   begin
-    //if IsMultiSlotSoftwareList(slName) and (TempGameVars.eName <> 'vectrex') then
-    //   Exit;
     // temp list to create software list games
     if not Assigned(SoftwareListsToCreate) then
        begin
-         SoftwareListsToCreate:= TStringList.Create;
+         SoftwareListsToCreate:= THashedStringList.Create;
          SoftwareListsToCreate.Sorted:= True;
          SoftwareListsToCreate.Duplicates:= dupIgnore;
          SoftwareListsToCreate.BeginUpdate;
@@ -16854,7 +15928,7 @@ var
     if not Result then
        begin
          if not IsDeviceSet then
-            Result:= PosEx('runnable="no"', FileLine) <> 0; // MAME 0.106u9 to 0.75 ?
+            Result:= PosEx('runnable="no"', FileLine) <> 0; // double-ckeck for MAME 0.106u9 to 0.75 since they don't have device sets
        end;
   end;
 
@@ -16882,12 +15956,6 @@ var
       iPos:= PosEx(CharToReplace, iText);
     end;
   end;
-  //function ReplaceChar(s:string;c:char;charrep:char):string;
-  //begin
-  //  while pos(c,s)>0 do
-  //      s[pos(c,s)]:=charrep;
-  //   ReplaceChar:=s;
-  //end;
 
   function ParseVideoEntry: Boolean;
   begin
@@ -16987,7 +16055,7 @@ var
     TempString:= XML_GetEntryValue(FileLine, 'type');
     if SameText(TempString, 'sound') then
        begin
-         if TempGameVars.eSoundStatus = -1 then // <driver entry always comes first... if that changes, hell with brake loose!!!
+         if TempGameVars.eSoundStatus = -1 then
             begin
               FeatureStr:= XML_GetEntryValue(FileLine, 'status');
               if FeatureStr = '' then
@@ -17004,7 +16072,7 @@ var
     else
     if SameText(TempString, 'graphics') then
        begin
-         if TempGameVars.eGraphicStatus = -1 then // <driver entry always comes first... if that changes, hell with brake loose!!!
+         if TempGameVars.eGraphicStatus = -1 then
             begin
               FeatureStr:= XML_GetEntryValue(FileLine, 'status');
               if FeatureStr = '' then
@@ -17021,7 +16089,7 @@ var
     else
     if SameText(TempString, 'palette') then
        begin
-         if TempGameVars.eColorStatus = -1 then // <driver entry always comes first... if that changes, hell with brake loose!!!
+         if TempGameVars.eColorStatus = -1 then
             begin
               FeatureStr:= XML_GetEntryValue(FileLine, 'status');
               if FeatureStr = '' then
@@ -17054,7 +16122,7 @@ var
   begin
     Result:= True;
     if IsDiscreteAudio then
-       Exit; // if game is tagged as discrete audio, there's no need to check it again... it saves some CPU cycles !!! :)
+       Exit; // if game is tagged as discrete audio, there's no need to check it again... it saves some CPU cycles
     TempString:= XML_GetEntryValue(FileLine, 'name');
     if SameText(TempString, 'discrete') then
        begin
@@ -17097,10 +16165,10 @@ var
                      ROMsList.Add('['+TempGameVars.eName+']');
                      ROMsHeaderAdded:= True;
                    end;
-                // add the device ROM into the game set; this must contain the full new ROM info from "ROMInfoFull" var
-                // the ROMInfoFull var is filled and added to "ListROMsDeviceSet" in ParseROMDiskEntry() function
-                // added a "<devicename>devicename_str/>" new tag to know what device set is the ROM from (February 19, 2018)
-                // ... this is needed for the 2018 new MAME/HBMAME audit scan (device/bios .zip arrays in RAM)
+                // add the device ROM into the game set; this must contain the full ROM info from "ROMInfoFull" var
+                // ROMInfoFull var is filled and added to "ListROMsDeviceSet" in ParseROMDiskEntry() function
+                // (February 19, 2018) added a "<devicename>devicename_str/>" new tag to know what device set is the ROM from
+                //                     ... this is needed for the 2018 new MAME/HBMAME audit scan (device/bios .zip arrays in RAM)
                 ROMsList.Add(ListROMsDeviceSet[LoopDevice]+'<devicename>'+TempString+'/>');
               end;
          end;
@@ -17137,7 +16205,7 @@ var
        end;
   end;
 
-  function ParseROMDiskEntry(FileID: ShortInt): Boolean; // FileID (type of ROM being scanned) -> 1: Device; 2: BIOS; 0: Game
+  function ParseROMDiskEntry(FileID: ShortInt): Boolean; // "FileID", type of ROM being scanned -> 1: Device; 2: BIOS; 0: Game
   var
     FixedID, newFileID, IsBadDump: ShortInt; //IndexCHD
     ROMInfoFull, BiosInfoROM: String;
@@ -17159,9 +16227,6 @@ var
     romNameMerge:= XML_GetEntryValue(FileLine, 'merge'); // name of the file (ROM/CHD/Cart/Floppy/Cassette/Disc...) from parent game
     romNameMerge:= DecodeHTML(romNameMerge);
 
-    //if IsUnicodeStr(romName) then
-    //   ShowMessage('unicode ROM name: '+romName+#13#10+'game name: '+TempGameVars.eName);
-
     if not IsCHDFile then
     begin
       if MAMEVersionNumber >= 130 then
@@ -17182,14 +16247,12 @@ var
          RegionTagStr:= XML_GetEntryValue(FileLine, 'region');
          // 1: Device; 2: BIOS; 0: Game
          case FileID of
-           0: newFileID:= 12; // IndexCHD:= 12; // Game CHD files have '3' in front
+           0: newFileID:= 12; // IndexCHD:= 12; // Game CHD files have   '3' in front
            1: newFileID:= 13; // IndexCHD:= 13; // Device CHD files have '5' in front
-           2: newFileID:= 14; // IndexCHD:= 14; // BIOS CHD files have '4' in front
+           2: newFileID:= 14; // IndexCHD:= 14; // BIOS CHD files have   '4' in front
          else
               newFileID:= 12; // IndexCHD:= 12; // default value is Game CHD!
          end;
-
-         // romName:= IndexCHD+romName; // CHD files have '#' in front // '3 wargods.chd' (commented September 07, 2016)
 
          TempGameVars.eMediaType:= 1;
          if romNameMerge <> '' then
@@ -17207,10 +16270,6 @@ var
        begin
          if (FileID in [1, 2]) and CheckFileCRC32Collision(romCRC32, romSHA1) then
             CRC32CollisionFile.Add(TempGameVars.eName);
-         // FileID -> 1: Device; 2: BIOS; 0: Game
-         // (commented September 07, 2016)
-         //if FileID <> 0 then // device/bios sets parsing (1st, 2nd pass parse)
-         //   romName:= IntToStr(FileID)+' '+romName; // '1 ' in front means it's a Device ROM
        end;
 
     TempString:= '';
@@ -17230,13 +16289,12 @@ var
             begin
               // here, I need to check for "BiosInfoROM=BiosName"
               BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eBiosName;
-              //if ListROMsBiosSet.IndexOf(TempString+'='+TempGameVars.eBiosName) <> -1 then
               if ListROMsBiosSet.IndexOf(BiosInfoROM) <> -1 then
                  begin
                    // ROMInfoFull:= 01 ; 02; 03; 04;... 20 (two chars, pos1 and pos2)
                    case IsCHDFile of
-                     True : newFileID:= 14; // ROMInfoFull[2]:= '4'; // it's a bios CHD, change ID to #14
-                     False: newFileID:= 02; // ROMInfoFull[2]:= '2';// it's a bios ROM, change ID to #2
+                     True : newFileID:= 14; // it's a bios CHD, change ID to #14
+                     False: newFileID:= 02; // it's a bios ROM, change ID to #02
                    end;
                  end
               else
@@ -17254,7 +16312,7 @@ var
                  newFileID:= 00;
 
               if romNameMerge <> '' then
-                 ROMInfoFull[6]:= '1';
+                 ROMInfoFull[6]:= '1'; // ROM is from the parent set; change tag index in position 6
             end;
          if newFileID <> FixedID then
             begin
@@ -17275,17 +16333,17 @@ var
             begin
               ROMsList.Add('');
               case FileID of
-                1: ListROMsDeviceSet.Add(''); // temp device ROMs list!!!
-                2: ListROMsBiosSet.Add(''); // temp bios ROMs list!!!
+                1: ListROMsDeviceSet.Add(''); // temp device ROMs list
+                2: ListROMsBiosSet.Add('');   // temp bios ROMs list
               end;
             end;
          ROMsList.Add('['+TempGameVars.eName+']');
-         if FileID = 1 then // for Device parse only
-            ListROMsDeviceSet.Add('['+TempGameVars.eName+']'); // temp device ROMs list!!!
+         if FileID = 1 then // for Device sets parse only
+            ListROMsDeviceSet.Add('['+TempGameVars.eName+']'); // temp device ROMs list
          ROMsHeaderAdded:= True;
        end;
 
-    // here I need to check the region="" tag and change it
+    // check the region="" tag and change it if necessary
     if RegionTagStr <> '' then
        begin
          FixedID:= FixFileIDRegionROMCHD(newFileID, RegionTagStr, iDriver, IsCHDFile, MediaTypeTagExtra);
@@ -17311,20 +16369,13 @@ var
        ROMInfoFull:= ROMInfoFull+MountGameInfoFieldStr('mediatype_tag', MediaTypeTagExtra); // new feature, mostly for "Disc" media type (CD, DVD, LaserDisc, CED VideoDisc, GD-ROM)
 
     ROMsList.Add(ROMInfoFull);
-    
-       //ROMsList.Add(ROMInfoFull+'<parentname>'+romNameMerge+'/>');
-       // [konam80a]
-       // 1510<name>826aaa01.chd/><sha1>be5f8b31fd18ba631fe98c2132c56abf20193419/><parentname>826eaa01.chd/>
-                                                                    // TempString here is the SHA-1 / MD5 checksum
-       //ROMsList.Add(romName+'_"parentchd"_'+DiskMergeFileName+'='+TempString);
 
     case FileID of
-      1: ListROMsDeviceSet.Add(ROMInfoFull); // temp device ROMs list!!! This must contain the full new ROM info from "ROMInfoFull" var
-      2: ListROMsBiosSet.Add(BiosInfoROM); // 04399ab8=neogeo ----temp bios ROMs list (CRC32 only, MD5 for MAME 0.159 and newer... CHDs)!!!
+      1: ListROMsDeviceSet.Add(ROMInfoFull); // temp device ROMs list; this must contain the full new ROM info from "ROMInfoFull" var
+      2: ListROMsBiosSet.Add(BiosInfoROM); // 04399ab8=neogeo ----temp bios ROMs list (CRC32 only, MD5 for MAME 0.159 and newer... CHDs)
     end;
-    //ListROMsBiosSet: --> <name>sp-u2.sp1<crc>e72943de<sha1>5c6bba07d2ec8ac95776aa3511109f5e1e2e92eb=neogeo
 
-    if FileID = 1 then // changed June 03, 2015
+    if FileID = 1 then
        HasROMs:= True; // this is used only when creating device sets list!!!!!
   end;
 
@@ -17333,8 +16384,6 @@ begin
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
   FormStatus.SetProgressPos(0);
-  //FormStatus.TitleStr('Create Games List: '+EmulatorVersion[sysID]);
-
   tempFile:= GetArcadeSystemIniSection(sysID, True)+'_listxml.xml';
   IsGameEntry:= True;
 
@@ -17358,7 +16407,7 @@ begin
 
   ListROMsDeviceSet:= THashedStringList.Create; // will hold a temp list of ROMs for each device set
 
-  DeviceSetSize:= THashedStringList.Create; // will hold device sets with their ROMs size "devicename=size"
+  DeviceSetSize:= THashedStringList.Create; // will hold device sets with their ROMs size "devicename=size" so bios/games can have proper "Game Size" info with device ROMs size included
   ListDeviceROMsGame:= TMemIniFile.Create(GetDeviceSetsFile(sysID));
   ListROMsBiosSet:= THashedStringList.Create; // will hold a temp list of ROMs for each bios set
 
@@ -17371,10 +16420,6 @@ begin
   FormStatus.SetFocus;
   if ListXML.Count > 0 then
   begin
-    //DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID));
-    //for MainLoop:=1 to 4 do
-    //    DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID, MainLoop));
-
     GameStatusList:= TStringList.Create;
     GameStatusList.BeginUpdate;
     ListGames:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID));
@@ -17386,12 +16431,10 @@ begin
     GetScreenRes:= False;
     CPUisAdded:= False;
 
-    // start parsing device sets here!!!!
-
     CRC32CollisionFile:= TStringList.Create; // this is for "sysname_crc32collision.txt" with set names (device/bios sets only)
     CRC32CollisionFile.BeginUpdate;
-    CRC32CollisionList:= THashedStringList.Create; // this is temp list to hold CRC32 list and check against new ROM files (device/bios sets only)
-    SHA1CollisionList:= THashedStringList.Create;  // this is temp list to hold SHA-1 list and check against new ROM files (device/bios sets only)
+    CRC32CollisionList:= THashedStringList.Create; // a temp list with CRC32 list to check against new ROM files (device/bios sets only)
+    SHA1CollisionList:= THashedStringList.Create;  // a temp list with SHA-1 list to check against new ROM files (device/bios sets only)
 
     IsResource:= False;
     ListROMsDeviceSet.BeginUpdate;
@@ -17419,12 +16462,12 @@ begin
 
                 Delete(FileLine, 1, 6);
                 TempGameVars.eName:= XML_GetEntryValue(FileLine, 'name');
-                // fix driver name only for device sets!!!!!
-                TempGameVars.eDriverName:= FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile'));
 
-                TempGameVars.eMechanical:= IsMechanical;//(FileLine);
+                TempGameVars.eDriverName:= FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile')); // fix driver name only for device sets
+
+                TempGameVars.eMechanical:= IsMechanical;
                 SampleName:= XML_GetEntryValue(FileLine, 'sampleof');
-                TempGameVars.eGameSetStatus:= 2; // missing
+                TempGameVars.eGameSetStatus:= 2; // set to missing
 
                 TempGameVars.eClone:= XML_GetEntryValue(FileLine, 'cloneof');
                 ROMOf:= XML_GetEntryValue(FileLine, 'romof');
@@ -17462,8 +16505,8 @@ begin
                 TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 15, PosEx('</manufacturer>', FileLine)-15));
               end
            else
-           // detection of CHD for device sets... MAME 0.159 - February 28, 2015
-           if XML_CheckData(FileLine, '<rom ') or XML_CheckData(FileLine, '<disk ') then // device "<disk" entry for MAME 0.159 and newer
+           // detection of CHD for device sets starting from MAME 0.159 - February 28, 2015
+           if XML_CheckData(FileLine, '<rom ') or XML_CheckData(FileLine, '<disk ') then
               ParseROMDiskEntry(1)
            else
            if XML_CheckData(FileLine, '<sample ') then
@@ -17497,9 +16540,9 @@ begin
                 TempString:= XML_GetEntryValue(FileLine, 'type');
                 if TempString <> '' then
                 begin
-                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry!!!
-                     GetButtonsEntry(True); // for MAME v0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons frp, keypad, keyboard, mahjong)
-                     // only add if control is not found in "eControls" to avoid duplicating buttons count!!!! April 27, 2016
+                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry
+                     GetButtonsEntry(True); // for MAME 0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons frp, keypad, keyboard, mahjong)
+                     // only add if control is not found in "eControls" to avoid duplicating buttons count (April 27, 2016)
                 end;
               end
            else
@@ -17509,11 +16552,6 @@ begin
            if XML_CheckData(FileLine, '<feature ') then
               ParseFeatureInfo
            else
-           //if CheckDeviceTag(True) then // no longer used!!!! June 09, 2015
-           //   begin
-           //     TempGameVars.eSystemType:= 1;
-           //   end
-           //else
            //if XML_CheckData(FileLine, '<softwarelist ') then // no need to check for software lists in device sets... yet!
            //   begin
            //   end
@@ -17531,14 +16569,14 @@ begin
                      ListSamples.Add(TempGameVars.eName+'='+SampleName);
                    end;
 
-                if HasROMs or (MenuAddMAMEDeviceSetsWithNoROMs.Tag = 1) then // prevent from adding device sets with no ROMs... pointless to Emu Loader
+                if HasROMs or (MenuAddMAMEDeviceSetsWithNoROMs.Tag = 1) then // prevent from adding device sets with no ROMs
                    begin
-                     ROMDataLine:= PopulateROMDataLineArcade; // new populate with new list format
+                     ROMDataLine:= PopulateROMDataLineArcade;
                      ListGames.WriteString('devices', TempGameVars.eName, ROMDataLine);
                      GameStatusList.Add(PopulateGameStatusDataLine);
                                         
                      if TempGameVars.eGameSize > 0 then
-                        DeviceSetSize.Add(TempGameVars.eName+'='+IntToStr(TempGameVars.eGameSize)); // fix May 17, 2015 (add game size of device set for games later)
+                        DeviceSetSize.Add(TempGameVars.eName+'='+IntToStr(TempGameVars.eGameSize)); // add game size of device set for games later (May 17, 2015)
                    end;
                    
                 ListDuplicateROMs.Clear;
@@ -17558,7 +16596,6 @@ begin
     FormStatus.MessageStr('Parsing "'+tempFile+'" (2nd pass).'+#13#10+
                         'Creating BIOS sets list.');
 
-    //FormStatus.SetProgressPos(0);
     IsResource:= False;
     for MainLoop:=0 to ListXML.Count-1 do
     begin
@@ -17591,7 +16628,7 @@ begin
                 DefaultBiosAdded:= False;
                 ROMsHeaderAdded:= False;
                 IsDiscreteAudio:= False;
-                TempGameVars.eDriverName:= XML_GetEntryValue(FileLine, 'sourcefile');// FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile'));
+                TempGameVars.eDriverName:= XML_GetEntryValue(FileLine, 'sourcefile'); // no need to fix driver name here (yet) // FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile'));
                 SampleName:= XML_GetEntryValue(FileLine, 'sampleof');
 
                 iDriver:= ChangeFileExt(TempGameVars.eDriverName, '');
@@ -17682,36 +16719,25 @@ begin
                 TempString:= XML_GetEntryValue(FileLine, 'type');
                 if TempString <> '' then
                 begin
-                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry!!!
-                     GetButtonsEntry(True); // for MAME v0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons from keypad, keyboard, mahjong)
-                      // only add if control is not found in "eControls" to avoid duplicating buttons count!!!! April 27, 2016
+                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry
+                     GetButtonsEntry(True); // for MAME 0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons from keypad, keyboard, mahjong)
+                      // only add if control is not found in "eControls" to avoid duplicating buttons count (April 27, 2016)
                 end;
               end
            else
-           {if XML_CheckData(FileLine, '<dipswitch ') then
-              begin
-                // it makes no difference (June 06, 2016)
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else
-           if XML_CheckData(FileLine, '</dipswitch>') then
-              begin
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else}
            if XML_CheckData(FileLine, '<driver ') then
               ParseDriverStatusInfo
            else
            if XML_CheckData(FileLine, '<feature ') then
               ParseFeatureInfo
            else
-           //if XML_CheckData(FileLine, '<softwarelist ') then // no need to check for software lists in BIOS sets... yet!
+           //if XML_CheckData(FileLine, '<softwarelist ') then // no need to check for software lists in BIOS sets (yet)
            //   begin
            //   end
            //else
            if XML_CheckData(FileLine, '</machine>') or XML_CheckData(FileLine, '</game>') then
               begin
-                AddButtonsControl; // add the buttons entry only if controls is empty!!!
+                AddButtonsControl; // add the buttons entry only if controls is empty
                 // bios ID
                 case sysID of
                   idMAME  : TempGameVars.eROMIdentification:= 06; // MAME
@@ -17722,12 +16748,10 @@ begin
                      TempGameVars.eAudioType:= 2;
                      ListSamples.Add(TempGameVars.eName+'='+SampleName);
                    end;
-                ROMDataLine:= PopulateROMDataLineArcade; // new populate with new list format
+                ROMDataLine:= PopulateROMDataLineArcade;
                 ListGames.WriteString('bios', TempGameVars.eName, ROMDataLine);
                 GameStatusList.Add(PopulateGameStatusDataLine);
 
-                //if ListDuplicateROMs.Count > 0 then
-                //   ShowMessage('bios "'+TempGameVars.eName+'": '+TempGameVars.eTitle+#13#10+#13#10+ListDuplicateROMs.Text);
                 ListDuplicateROMs.Clear;
                 ListDuplicateROMs.EndUpdate;
 
@@ -17741,13 +16765,13 @@ begin
     BiosSet.UpdateFile;
     ListGames.UpdateFile;
 
-    FreeAndNil(ListGames); // new code November 23
+    FreeAndNil(ListGames);
 
     CRC32CollisionFile.EndUpdate;
-    FreeAndNil(CRC32CollisionList); // games do not have CRC32 collisions... yet! (February 15, 2018)
+    FreeAndNil(CRC32CollisionList); // games do not have CRC32 collisions, yet! (February 15, 2018)
     FreeAndNil(SHA1CollisionList);
     if CRC32CollisionFile.Count > 0 then
-       CRC32CollisionFile.SaveToFile(GetCRC32CollisionFile(sysID)); // (GetGamesFolderEL+GetsystemFileName(sysID, 9));
+       CRC32CollisionFile.SaveToFile(GetCRC32CollisionFile(sysID));
     FreeAndNil(CRC32CollisionFile);
 
     tmpList:= THashedStringList.Create;
@@ -17755,12 +16779,12 @@ begin
     tmpList.BeginUpdate;
 
     // get name, cloneof, romof fields
-    // if romof, check if a bios is part of the game (parent games only!)
+    // if romof, check if a bios is part of the game (parent games only)
     FormStatus.MessageStr('Parsing "'+tempFile+'" (3rd pass).'+#13#10+
                           'Creating parent games sections and a temporary list of parent games with BIOS.');
-    games_bios:= THashedStringList.Create; // this will hold parent games that have bios
+    games_bios:= THashedStringList.Create; // this is a temp list of parent games that have bios
     games_bios.BeginUpdate;
-    //FormStatus.SetProgressPos(0);
+
     for MainLoop:=0 to ListXML.Count -1 do
     begin
       FileLine:= TrimLeft(ListXML[MainLoop]);
@@ -17780,11 +16804,8 @@ begin
                    end;
               end;
          end;
-      //FormStatus.UpdateProgressBar(MainLoop, ListXML.Count-1); // no need as 3rd pass is very fast (June 06, 2016)
-      //Application.ProcessMessages; // re-enabled this!!!! ???????????????????????????????????????????
     end;
     games_bios.EndUpdate;
-    //ListGames.UpdateFile;
     tmpList.EndUpdate;
     tmpList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID));
     FreeAndNil(tmpList);
@@ -17794,9 +16815,8 @@ begin
                           'Creating games list.');
     FormStatus.SetProgressPos(0);
 
-    // now, the normal games, but no resources this time (bios)
+    // now, the games, excluding device/bios
     IsGameEntry:= False;
-    //IsMAME0107:= False;
     GetScreenRes:= False;
     CPUisAdded:= False;
     NeoGeoMemcardAdded:= False;
@@ -17804,7 +16824,6 @@ begin
     begin
       FileLine:= TrimLeft(ListXML[MainLoop]);
       if XML_CheckData(FileLine, '<machine ') or XML_CheckData(FileLine, '<game ') then
-      //if (Pos('<game ', FileLine) <> 0) then
          begin
            if ((not IsBiosSet) and
                (not IsDeviceSet)) then
@@ -17819,15 +16838,15 @@ begin
                 TempGameVars.eClone:= XML_GetEntryValue(FileLine, 'cloneof');
                 ROMOf:= XML_GetEntryValue(FileLine, 'romof');
                 SampleName:= XML_GetEntryValue(FileLine, 'sampleof');
-                TempGameVars.eDriverName:= XML_GetEntryValue(FileLine, 'sourcefile');//FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile'));
+                TempGameVars.eDriverName:= XML_GetEntryValue(FileLine, 'sourcefile'); // no need to fix driver name (yet) //FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile'));
                 TempGameVars.eMechanical:= IsMechanical;
-                TempGameVars.eGameSetStatus:= 2; // missing
+                TempGameVars.eGameSetStatus:= 2; // set to missing
                 ROMsHeaderAdded:= False;
                 SoftListHeaderAdded:= False;
                 MemcardsCount:= 0;
                 IsGameEntry:= True;
                 CPUisAdded:= False;
-                IsDiscreteAudio:= PosEx('discrete', LowerCase(TempGameVars.eDriverName)) <> 0; // for UME and MAME v0.162+
+                IsDiscreteAudio:= PosEx('discrete', LowerCase(TempGameVars.eDriverName)) <> 0; // for UME and MAME 0.162+
                 if IsDiscreteAudio then
                    TempGameVars.eAudioType:= 1; // 0 -> chip (normal) -- 1 -> discrete
                 GetScreenRes:= False;
@@ -17903,34 +16922,18 @@ begin
                 TempString:= XML_GetEntryValue(FileLine, 'type');
                 if TempString <> '' then
                 begin
-                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry!!!
-                     GetButtonsEntry(True); // for MAME v0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons from keypad, keyboard, mahjong)
-                      // only add if control is not found in "eControls" to avoid duplicating buttons count!!!! April 27, 2016
+                  if GetNewControlTags(TempString) then // will get new control tags "joy" "ways=?" only if there is "type" in <control entry
+                     GetButtonsEntry(True); // for MAME 0.173 and newer (no more buttons="" tag in "<input" entry need to sum all buttons (includes buttons from keypad, keyboard, mahjong)
+                      // only add if control is not found in "eControls" to avoid duplicating buttons count (April 27, 2016)
                 end;
               end
            else
-           {if XML_CheckData(FileLine, '<dipswitch ') then
-              begin
-                // it makes no difference (June 06, 2016)
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else
-           if XML_CheckData(FileLine, '</dipswitch>') then
-              begin
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else}
            if XML_CheckData(FileLine, '<driver ') then
               ParseDriverStatusInfo
            else
            if XML_CheckData(FileLine, '<feature ') then
               ParseFeatureInfo
            else
-           {if CheckDeviceTag then // no longer used...? June 06, 2016
-              begin
-                TempGameVars.eSystemType:= 1;
-              end
-           else}
            if XML_CheckData(FileLine, '<device type="memcard" ') then
               ParseMemCardDeviceTag(MainLoop)
            else
@@ -17940,7 +16943,6 @@ begin
                 TempString2:= XML_GetEntryValue(FileLine, 'filter');
                 if not IsMultiSlotSoftwareList(TempString) then
                    begin
-                     //TempGameVars.eSystemType:= 1;
                      AddSoftListEntry(TempString, TempString2); // add to machines list
                      AddToListSoftwareListXML(TempString);
 
@@ -17989,8 +16991,6 @@ begin
 
                 GameStatusList.Add(PopulateGameStatusDataLine);
 
-                //if ListDuplicateROMs.Count > 0 then
-                //   ShowMessage('game "'+TempGameVars.eName+'": '+TempGameVars.eTitle+#13#10+#13#10+ListDuplicateROMs.Text);
                 iDriver:= '';
                 ListDuplicateROMs.Clear;
                 ListDuplicateROMs.EndUpdate;
@@ -18017,20 +17017,16 @@ begin
   WarningMessagesList.EndUpdate;
   if WarningMessagesList.Count > 0 then
      begin
-       GenerateMessage('Warning', 'Warning messages.', WarningMessagesList.Text); 
+       GenerateMessage('Warning', 'Warning messages.', WarningMessagesList.Text);
      end;
   FormStatus.MessageStr('Saving files and freeing memory.');
 
   FreeAndNil(WarningMessagesList);
   FreeAndNil(ListDuplicateROMs); // free this THashedStringList here since it will not be used for software list games....
 
-
-  ListCPU.SaveToFile(GetMainCPUFile(sysID));//GetIniFilesFolder+'cpu.ini');
+  ListCPU.SaveToFile(GetMainCPUFile(sysID));
   ListSamples.SaveToFile(GetAudioSamplesFile(sysID));
-  
-  //SoftList.EndUpdate;
-  //if SoftList.Count > 0 then
-  //   SoftList.SaveToFile(FrontendPath+'SoftList.txt'); // no longer used...? June 06, 2016
+
   Application.ProcessMessages;
   ListGames.WriteString('info_file', 'description', EmuTitle+' Games List');
   ListGames.WriteString('info_file', 'version', EmulatorVersion[sysID]);
@@ -18038,21 +17034,19 @@ begin
   ListGames.UpdateFile;
   GameStatusList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 2));
 
-  DeleteFile(GetGamesFolderEL+tempFile); // delete temp listxml.xml file
+  DeleteFile(GetGamesFolderEL+tempFile); // delete temp "listxml.xml" file
 
-  if sysID = idMAME then
-  begin
-    if Assigned(SoftList) then
-       begin
-         if SoftList.Count > 0 then
-            SoftList.SaveToFile(GetGamesFolderEL+GetSystemFileName(idMAME, 5));
-       end;
-  end;
+  if Assigned(SoftList) then
+     begin
+       if SoftList.Count > 0 then
+          SoftList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 5));
+     end;
+     
   if Assigned(SoftNameMachinesList) then
      SoftNameMachinesList.UpdateFile;
 
   if Assigned(MemCardMachineList) then
-     begin
+     begin                                
        MemCardMachineList.EndUpdate;
        if MemCardMachineList.Count > 0 then
           MemCardMachineList.SaveToFile(GetMemcardListFile(sysID));
@@ -18074,32 +17068,30 @@ begin
 
   if MAMEVersionNumber >= 177 then
      CheckCRC32Collisions(sysID);
-     
-  if sysID = idMAME then
-  begin
-    // this loop will remove the = sign from the machine names
-    if FileExists(GetMAMEMachineSoftListFile(False)) then
+
+  // this loop will remove the = sign from the machine names
+  if FileExists(GetMAMEMachineSoftListFile(False, sysID)) then
+     begin
+       SoftList:= TStringList.Create;
+       SoftList.LoadFromFile(GetMAMEMachineSoftListFile(False, sysID));
+       SoftList.BeginUpdate;
+
+       for MainLoop:= SoftList.Count-1 downto 0 do
        begin
-         SoftList:= TStringList.Create;
-         SoftList.LoadFromFile(GetMAMEMachineSoftListFile(False));
-         SoftList.BeginUpdate;
-
-         for MainLoop:= SoftList.Count-1 downto 0 do
+         TempString:= SoftList[MainLoop];
+         if (TempString <> '') and (TempString[1] <> '[') then
          begin
-           TempString:= SoftList[MainLoop];
-           if (TempString <> '') and (TempString[1] <> '[') then
-           begin
-             TempString:= Copy(TempString, 1, Length(TempString)-1);
-             SoftList[MainLoop]:= TempString;
-           end;
+           TempString:= Copy(TempString, 1, Length(TempString)-1);
+           SoftList[MainLoop]:= TempString;
          end;
-
-         SoftList.EndUpdate;
-         SoftList.SaveToFile(GetMAMEMachineSoftListFile(False));
-         FreeAndNil(SoftList);
        end;
-  end;
 
+       SoftList.EndUpdate;
+       SoftList.SaveToFile(GetMAMEMachineSoftListFile(False, sysID));
+       FreeAndNil(SoftList);
+     end;
+
+  // remove the '=0' from device set names
   case ValidateFile(GetDeviceSetsFile(sysID)) of
     True:
       begin
@@ -18127,60 +17119,56 @@ begin
   end;
 
   Application.ProcessMessages;
-  if IsMAMEBasedSys(sysID) then
-     begin
-       FormStatus.TitleStr('Create Software List: '+EmuTitle);
-       CreateSoftwareListXML(sysID, 'neogeo', True);
-       CreateSoftwareListXML(sysID, 'stv', True);
-       //CreateSoftwareListXML(idMAME, 'neogeo', True);
-       //CreateSoftwareListXML(idMAME, 'stv', True);
-     end;
 
-  if sysID = idMAME then
+  FormStatus.TitleStr('Create Multi-Slot Software List: '+EmuTitle);
+  CreateSoftwareListXML(sysID, 'neogeo', True);
+  CreateSoftwareListXML(sysID, 'stv', True);
+
+  if MenuCreateMAMESoftwareListGames.Tag = 0 then
+     SoftListDeleteGamesFiles(sysID, 0) // delete all sofware games list files since there are no software lists in "SoftwareListsToCreate" var
+  else
+  if Assigned(SoftwareListsToCreate) then
      begin
+       // this holds a list of all MAME software lists to create their games list; 'eldir\softwarelist' folder
+       case MenuCreateMAMESoftwareListGames.Tag of
+         1: FormStatus.TitleStr('Create '+EmuTitle+' Software Games Lists (Update Mode)');
+         2: FormStatus.TitleStr('Create '+EmuTitle+' Software Games Lists (Overwrite Mode)');
+       end;
+
        //FormStatus.TitleStr('Create Software List: '+EmuTitle);
-       //CreateSoftwareListXML(idMAME, 'neogeo', True);
-       //CreateSoftwareListXML(idMAME, 'stv', True);
 
-       if Assigned(SoftwareListsToCreate) then
+       // 0 -> disabled, don't create softlists;
+       // 1 -> update mode: create softlist games and update existing ones
+       // 2 -> overwrite mode: delete all softlists and create new ones
+       if SoftwareListsToCreate.Count > 0 then
           begin
-            // this holds a list of all MESS software lists to create their games list; 'eldir\softwarelist' folder
-            if MenuCreateMAMESoftwareListGames.Tag = 1 then // 0 -> no software list games; 1 -> yes, create software list games
-            begin
-              if SoftwareListsToCreate.Count > 0 then
-                 begin
-                   SoftListRemoveExcludedList(sysID, SoftwareListsToCreate);
-
-                   iCount:= SoftwareListsToCreate.Count;
-                   if iCount > 1 then
-                      FormStatus.LabelSoftwareScanCount.Visible:= True;
-
-                   for MainLoop:= 0 to SoftwareListsToCreate.Count-1 do
-                   begin
-                     if FormStatus.LabelSoftwareScanCount.Visible then
-                        FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [MainLoop+1, iCount]);
-                     CreateSoftwareListXML(sysID, SoftwareListsToCreate[MainLoop], False);
-                   end;
-                   FormStatus.LabelSoftwareScanCount.Visible:= False;
-                 end;
-            end;
-            FreeAndNil(SoftwareListsToCreate);
+            SoftListRemoveExcludedList(sysID, SoftwareListsToCreate);
+            SoftListValidateListsXML(sysID, SoftwareListsToCreate);
+            SoftListDeleteGamesFiles(sysID, MenuCreateMAMESoftwareListGames.Tag, SoftwareListsToCreate); // delete softlist files from '\arcade\games\mame_softwarelist_games\"
           end;
+       if SoftwareListsToCreate.Count > 0 then
+          begin
+            iCount:= SoftwareListsToCreate.Count;
+            if iCount > 1 then
+               FormStatus.LabelSoftwareScanCount.Visible:= True;
+
+            for MainLoop:= 0 to SoftwareListsToCreate.Count-1 do
+            begin
+              if FormStatus.LabelSoftwareScanCount.Visible then
+                 FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [MainLoop+1, iCount]);
+              CreateSoftwareListXML(sysID, SoftwareListsToCreate[MainLoop], False);
+            end;
+            FormStatus.LabelSoftwareScanCount.Visible:= False;
+          end;
+       FreeAndNil(SoftwareListsToCreate);
      end;
-  //else
-  //if sysID = idHBMAME then
-  //   begin
-  //     FormStatus.TitleStr('Create Software List: '+EmuTitle);
-  //     CreateSoftwareListXML(idHBMAME, 'neogeo', True);
-  //     CreateSoftwareListXML(idHBMAME, 'stv', True);
-  //   end;
 end;
 
 function TFormMain.CreateGamesList_ListInfo(sysID: Byte): Boolean;
 var
   ListXML, ROMsList, games_bios, ListCPU, ListSamples, ListROMsBiosSet, ListDrivers: THashedStringList;
-  FileLine, ROMsDetailsLine, TempString, ROMDataLine, ROMOf{, DiskMergeFileName}: String;
-  MainLoop{, LoopDevice, DeviceIndex}: Integer;
+  FileLine, ROMsDetailsLine, TempString, ROMDataLine, ROMOf: String;
+  MainLoop: Integer;
   IsResource, IsGameEntry, IsCHDFile, GetScreenRes: Boolean;
   BiosSet: TMemIniFile;
   tempFile, tempDriverFile, romName, romCRC32, romSHA1, SampleName: String;
@@ -18190,7 +17178,6 @@ var
   HasROMs, ROMsHeaderAdded, IsDiscreteAudio: Boolean;
   GameStatusList: TStringList;
   IsBadDump: ShortInt;
-  //iVersion: String;
 
   function GetStatusIndex(const StatusString: String): ShortInt;
   begin
@@ -18244,7 +17231,7 @@ var
   begin
     Result:= -1;
     TempString:= '';
-    TempString:= ListInfo_GetEntryValue(FileLine, strValue, ' '); //XML_GetEntryValue(FileLine, strValue);
+    TempString:= ListInfo_GetEntryValue(FileLine, strValue, ' ');
     if TempString <> '' then
        begin
          case DriverStatus of
@@ -18283,7 +17270,7 @@ var
     FreeAndNil(GameStatusList);
     FreeAndNil(ListCPU);
     FreeAndNil(games_bios);
-    FreeAndNil(ListROMsBiosSet); // new Jan 10, 2014
+    FreeAndNil(ListROMsBiosSet);
     FreeAndNil(ListSamples);
     Result:= False;
   end;
@@ -18300,12 +17287,6 @@ var
       iPos:= PosEx(CharToReplace, iText);
     end;
   end;
-  //function ReplaceChar(s:string;c:char;charrep:char):string;
-  //begin
-  //  while pos(c,s)>0 do
-  //      s[pos(c,s)]:=charrep;
-  //   ReplaceChar:=s;
-  //end;
 
   function ParseVideoEntry: Boolean;
   begin
@@ -18353,7 +17334,7 @@ var
   begin
     Result:= True;
     if IsDiscreteAudio then
-       Exit; // is game is tagged as discrete audio, there's no need to check it again... it saves some CPU cycles !!! :)
+       Exit; // if game is tagged as discrete audio, there's no need to check it again; it saves some CPU cycles
     if PosEx('discrete', LowerCase(FileLine)) <> 0 then
        begin
          IsDiscreteAudio:= True;
@@ -18366,16 +17347,13 @@ var
     ROMInfoFull, BiosInfoROM: String;
     IndexCHD: ShortInt;
   begin
-    //DiskMergeFileName:= '';
-    romName:= ListInfo_GetEntryValue(FileLine, 'name', ' '); //name of the ROM // XML_GetEntryValue(FileLine, 'name');
+    romName:= ListInfo_GetEntryValue(FileLine, 'name', ' '); //name of the ROM
     romName:= DecodeHTML(romName);
 
-    romCRC32:= ListInfo_GetEntryValue(FileLine, 'crc', ' '); // XML_GetEntryValue(FileLine, 'crc');
-    romSHA1:= ListInfo_GetEntryValue(FileLine, 'sha1', ' '); // XML_GetEntryValue(FileLine, 'sha1');
+    romCRC32:= ListInfo_GetEntryValue(FileLine, 'crc', ' ');
+    romSHA1:= ListInfo_GetEntryValue(FileLine, 'sha1', ' ');
     
-    //romName:= FixROMNameEqualSign(romName); // remove equal sign from file name
-
-    IsCHDFile:= IsDisk;//Pos('<disk ', FileLine) <> 0;
+    IsCHDFile:= IsDisk;
 
     if IsCHDFile then
        begin
@@ -18383,16 +17361,12 @@ var
          if not SameText(ExtractFileExt(romName), '.chd') then
             romName:= romName+'.chd';
          IndexCHD:= 12; // it's a normal CHD file... old MAME builds do not have the region="" tag...
-         //romName:= '3 '+romName;
 
          if romSHA1 = '' then // for MAME 0.159 and newer
             romSHA1:= ListInfo_GetEntryValue(FileLine, 'md5', ' '); // for MAME 0.77 down to 0.69
        end;
 
     // FileID -> 1: Device (not used by -listinfo); 2: BIOS; 0: Game
-    //if FileID <> 0 then // device/bios sets parsing (1st, 2nd pass parse)
-    //   romName:= IntToStr(FileID)+' '+romName; // '2 ' in front means it's a BIOS ROM
-
     TempString:= '';
     TempString:= ListInfo_GetEntryValue(FileLine, 'size', ' ');
     if TempString <> '' then
@@ -18407,22 +17381,18 @@ var
 
     if (FileID = 0) and (not IsCHDFile) then
        begin
-         // check is ROM is a BIOS ROM or normal ROM ... for games parsing only (4th pass parse)
+         // check is ROM is a BIOS ROM or normal ROM, for games parsing only (4th pass parse)
          BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eBiosName;
 
          if FormMain.ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName) then
             begin
-              //if ListROMsBiosSet.IndexOf(TempString+'='+TempGameVars.eBiosName) <> -1 then
               if ListROMsBiosSet.IndexOf(BiosInfoROM) <> -1 then
                  ROMInfoFull[2]:= '2' // yes, it's a BIOS ROM, it contains the '2' in front
-                 //romName:= '2 '+romName // yes, it's a BIOS ROM, it contains the '2' in front
               else
                  ROMInfoFull[2]:= '0'; // no, it's a game ROM... it contains the '0' in front
-                 //romName:= '0 '+romName; // no, it's a game ROM... it contains the '0' in front
             end
          else
             ROMInfoFull[2]:= '0'; // set game ID tag
-            //romName:= '0 '+romName; // set game ID tag
        end;
 
     if FileID = 2 then // parsing BIOS sets
@@ -18434,15 +17404,12 @@ var
             begin
               ROMsList.Add(' ');
               if FileID = 2 then
-                 ListROMsBiosSet.Add(' '); // temp bios ROMs list!!!
+                 ListROMsBiosSet.Add(' '); // temp bios ROMs list
             end;
          ROMsList.Add('['+TempGameVars.eName+']');
-         //if FileID = 1 then // for Device parse only
-         //   ListROMsDeviceSet.Add('['+TempGameVars.eName+']'); // temp device ROMs list!!! // not used by -listinfo
          ROMsHeaderAdded:= True;
        end;
 
-    //ROMsList.Add(romName+'='+TempString); // add ROM to ROMs list
     ROMsList.Add(ROMInfoFull); // add ROM to ROMs list
     if FileID = 2 then
        ListROMsBiosSet.Add(BiosInfoROM); // 04399ab8=neogeo ----temp bios ROMs list (CRC32 only, MD5 for MAME 0.159 and newer... CHDs)!!!
@@ -18457,12 +17424,10 @@ begin
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
   FormStatus.SetProgressPos(0);
-  //CheckAndCreateFolder(GetGamesFolderEL);
 
   tempFile:= GetArcadeSystemIniSection(sysID, True)+'_listinfo.txt';
   tempDriverFile:= GetArcadeSystemIniSection(sysID, True)+'_listdetails.txt';
   IsGameEntry:= True;
-  //FormStatus.TitleStr('Create Games List: '+EmuTitle);
 
   Result:= True;
   FormStatus.MessageStr('Parsing "'+tempDriverFile+'"');
@@ -18474,39 +17439,16 @@ begin
   ListDrivers.EndUpdate;
 
   FormStatus.MessageStr('Parsing "'+tempFile+'" (1st pass).'+#13#10+
-                          'Creating BIOS sets list.');
+                        'Creating BIOS sets list.');
   
   ListXML:= THashedStringList.Create;
   ListXML.LoadFromFile(GetGamesFolderEL+tempFile);
 
   ListCPU:= THashedStringList.Create;
-  //if FileExists(GetIniFilesFolder+'cpu.ini') then
-  //   begin
-  //     tempCPU:= TMemIniFile.Create(GetIniFilesFolder+'cpu.ini');
-  //     if tempCPU.SectionExists(GetSystemIniSection(sysID, True)) then
-  //        begin
-  //          tempCPU.EraseSection(GetSystemIniSection(sysID, True));
-  //          tempCPU.UpdateFile;
-  //        end;
-  //     FreeAndNil(tempCPU);
-  //     ListCPU.LoadFromFile(GetIniFilesFolder+'cpu.ini');
-  //     if ListCPU.Count > 0 then
-  //        begin
-  //          if ListCPU[ListCPU.Count-1] <> '' then
-  //             ListCPU.Add(' ');
-  //        end;
-  //   end;
-  //ListCPU.Add('['+GetSystemIniSection(sysID, True)+']');
-
-  //DeleteFile(GetBiosSetFile);
-  //DeleteFile(GetDeviceSetsFile(sysID)); // -listinfo doesn't have device sets
-
-  //DeleteFile(GetGamesFolderEL+'multicart_neogeo.ini'); // no software list support
-  //DeleteFile(GetGamesFolderEL+'multicart_stv.ini'); // no software list support
 
   ListSamples:= THashedStringList.Create;
   ListSamples.BeginUpdate;
-  ListROMsBiosSet:= THashedStringList.Create; // will hold a temp list of ROMs for each bios set
+  ListROMsBiosSet:= THashedStringList.Create; // a temp list of ROMs for each bios set
 
   BiosSet:= TMemIniFile.Create(GetBiosSetFile(sysID));
 
@@ -18514,10 +17456,6 @@ begin
   FormStatus.SetFocus;
   if ListXML.Count > 0 then
   begin
-    //DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID));
-    //for MainLoop:=1 to 4 do
-    //    DeleteFile(GetGamesFolderEL+GetSystemFileName(sysID, MainLoop));
-
     GameStatusList:= TStringList.Create;
     GameStatusList.BeginUpdate;
 
@@ -18535,8 +17473,8 @@ begin
     ListROMsBiosSet.BeginUpdate;
 
     // the tricky part, get all bios sets before games
-    // there's nothing beyond rom () entry... no need to check for them!!!!!!!!!! April 04, 2015
-    //FormStatus.SetProgressPos(0);
+    // there's nothing beyond rom () entry... no need to check for them (April 04, 2015)
+
     IsResource:= False;
     for MainLoop:=0 to ListXML.Count-1 do
     begin
@@ -18549,7 +17487,7 @@ begin
            TempString:= '';
            SampleName:= '';
            ROMOf:= '';
-           TempGameVars.eGameSetStatus:= 2; // missing
+           TempGameVars.eGameSetStatus:= 2; // set to missing
            IsResource:= True;
            CPUisAdded:= False;
            GetScreenRes:= False;
@@ -18564,7 +17502,7 @@ begin
            if XML_CheckData(FileLine, 'name ') then
               begin
                 Delete(FileLine, 1, 5);
-                TempGameVars.eName:= FileLine;// ListInfo_GetEntryValue(FileLine, 'name', ' ');
+                TempGameVars.eName:= FileLine;
                 TempGameVars.eBiosName:= TempGameVars.eName;
                 TempGameVars.eDriverName:= TempGameVars.eName+'.c';// ListDrivers.Values[TempGameVars.eName]; // bios drivers not listed in -listdetails!!!
               end
@@ -18573,62 +17511,30 @@ begin
               begin
                 TempGameVars.eTitle:= DecodeHTML(Copy(FileLine, 14, Length(FileLine)-14));
                 TempGameVars.eTitle:= FixDescriptionFormat(sysID, TempGameVars.eTitle, False);
-                BiosSet.WriteString('Descriptions', TempGameVars.eName, TempGameVars.eTitle); // write description
+                BiosSet.WriteString('Descriptions', TempGameVars.eName, TempGameVars.eTitle);
                 BiosTitleAdded:= True;
               end
            else
            if XML_CheckData(FileLine, 'year ') then
               begin
                 Delete(FileLine, 1, 5);
-                TempGameVars.eYear:= FileLine;  // Copy(FileLine, 7, Pos('</year>', FileLine)-7)
+                TempGameVars.eYear:= FileLine;
               end
            else
            if XML_CheckData(FileLine, 'manufacturer ') then
-              TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 15, Length(FileLine)-15)) //Pos('</manufacturer>', FileLine)-15));
+              TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 15, Length(FileLine)-15))
            else
            if XML_CheckData(FileLine, 'history ') then
               begin
-                // do nothing... added this check to make parsing a little bit faster
+                // do nothing, added this check to make parsing faster (it does make a difference)
               end
            else
-           if XML_CheckData(FileLine, 'rom ') then // bios "<disk" entry for MAME 0.159 and newer
+           if XML_CheckData(FileLine, 'rom ') then
               ParseROMDiskEntry(2)
            else
-           {if XML_CheckData(FileLine, 'sample ') then
-              begin
-                if SampleName = '' then
-                   SampleName:= TempGameVars.eName;
-              end
-           else
-           if XML_CheckData(FileLine, 'chip ( type cpu ') then
-              ParseMainCPUInfo
-           else
-           if XML_CheckData(FileLine, 'chip ( type audio ') then
-              ParseAudioDiscrete
-           else
-           if XML_CheckData(FileLine, 'video ') then
-              ParseVideoEntry
-           else
-           if XML_CheckData(FileLine, 'input ') then
-              begin
-                // previous 0.107 gets the controls from "<input" entry
-                TempGameVars.eNumberPlayers:= ListInfo_GetEntryValue(FileLine, 'players', ' ');
-                TempGameVars.eControls:= ListInfo_GetEntryValue(FileLine, 'control', ' ');
-                GetButtonsEntry; // get buttons count
-              end
-           else
-           if XML_CheckData(FileLine, 'driver ') then
-              ParseDriverStatusInfo
-           else}
-           {if XML_CheckData(FileLine, 'dipswitch ') then
-              begin
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else}
            if FileLine = ')' then
-           //if XML_CheckData(FileLine, '</game>') then
               begin
-                AddButtonsControl; // add the buttons entry only if controls is empty!!!
+                AddButtonsControl; // add the buttons entry only if controls is empty
                 // bios ID
                 TempGameVars.eROMIdentification:= 06; // MAME
                 if SampleName <> '' then
@@ -18636,13 +17542,10 @@ begin
                      TempGameVars.eAudioType:= 2;
                      ListSamples.Add(TempGameVars.eName+'='+SampleName);
                    end;
-                ROMDataLine:= PopulateROMDataLineArcade; // new populate with new list format
+                ROMDataLine:= PopulateROMDataLineArcade;
                 ListGames.WriteString('bios', TempGameVars.eName, ROMDataLine);
 
                 GameStatusList.Add(PopulateGameStatusDataLine);
-                                        //TempGameVars.eName+'='+IntToStr(TempGameVars.eROMIdentification)+
-                                        //                       IntToStr(TempGameVars.eGameSetStatus+
-                                        //                       IntToStr(TempGameVars.eScanMode)); // new, experimental !!!!!!
                 IsResource:= False;
               end;
          end;
@@ -18658,12 +17561,12 @@ begin
     tmpList.BeginUpdate;
 
     // get name, cloneof, romof fields
-    // if romof, check if a bios is part of the game (parent games only!)
+    // if romof, check if a bios is part of the game (parent games only)
     FormStatus.MessageStr('Parsing "'+tempFile+'" (2nd pass).'+#13#10+
                           'Creating parent games sections and a temporary list of parent games with BIOS.');
-    games_bios:= THashedStringList.Create; // this will hold parent games that have bios
+    games_bios:= THashedStringList.Create; // a parent games list that have bios
     games_bios.BeginUpdate;
-    //FormStatus.SetProgressPos(0);
+
     for MainLoop:=0 to ListXML.Count -1 do
     begin
       FileLine:= TrimLeft(ListXML[MainLoop]);
@@ -18680,12 +17583,12 @@ begin
            if XML_CheckData(FileLine, 'name ') then
               begin
                 Delete(FileLine, 1, 5);
-                TempGameVars.eName:= FileLine;// ListInfo_GetEntryValue(FileLine, 'name', ' ');
+                TempGameVars.eName:= FileLine;
               end
            else
            if XML_CheckData(FileLine, 'history ') then
               begin
-                // do nothing...
+                // do nothing, added this check to make parsing faster (it does make a difference)
               end
            else
            if XML_CheckData(FileLine, 'cloneof ') then
@@ -18700,11 +17603,6 @@ begin
                 ROMOf:= FileLine;
               end
            else
-           {if XML_CheckData(FileLine, 'dipswitch ') then
-              begin
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else}
            if FileLine = ')' then
               begin
                 IsResource:= False;
@@ -18719,27 +17617,13 @@ begin
                    end;
               end;
          end;
-           {if (Pos('cloneof="', FileLine) = 0) then
-              begin
-                if (not IsBiosSet) and (not IsDeviceSet) then
-                   begin
-                     TempGameVars.eName:= XML_GetEntryValue(FileLine, 'name');
-                     tmpList.Add('');
-                     tmpList.Add('['+TempGameVars.eName+']');
-                     tmpList.Add(TempGameVars.eName+'=');
-                     ROMOf:= XML_GetEntryValue(FileLine, 'romof');
-                     if ROMOf <> '' then
-                        games_bios.Add(TempGameVars.eName+'='+ROMOf);
-                   end;
-              end;}
       //FormStatus.UpdateProgressBar(MainLoop, ListXML.Count-1);
       //Application.ProcessMessages;
     end;
     games_bios.EndUpdate;
-    //ListGames.UpdateFile;
     tmpList.EndUpdate;
     tmpList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID));
-    //ShowMessage(tmpList.Text);
+
     FreeAndNil(tmpList);
     ListGames:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID));
 
@@ -18747,7 +17631,7 @@ begin
                           'Creating games list.');
     FormStatus.SetProgressPos(0);
 
-    // now, the normal games, but no resources this time (BIOS)
+    // now, the parent and clone games (no device/bios)
     IsGameEntry:= False;
     GetScreenRes:= False;
     CPUisAdded:= False;
@@ -18762,7 +17646,7 @@ begin
            ROMsDetailsLine:= '';
            TempString:= '';
            ROMOf:= '';
-           TempGameVars.eGameSetStatus:= 2; // missing
+           TempGameVars.eGameSetStatus:= 2; // set to missing
            ROMsHeaderAdded:= False;
            IsGameEntry:= True;
            CPUisAdded:= False;
@@ -18775,7 +17659,7 @@ begin
            if XML_CheckData(FileLine, 'name ') then
               begin
                 Delete(FileLine, 1, 5);
-                TempGameVars.eName:= FileLine;// ListInfo_GetEntryValue(FileLine, 'name', ' ');
+                TempGameVars.eName:= FileLine;
                 TempGameVars.eDriverName:= ListDrivers.Values[TempGameVars.eName];
               end
            else
@@ -18788,15 +17672,15 @@ begin
            if XML_CheckData(FileLine, 'year ') then
               begin
                 Delete(FileLine, 1, 5);
-                TempGameVars.eYear:= FileLine; // Copy(FileLine, 7, Pos('</year>', FileLine)-7)
+                TempGameVars.eYear:= FileLine;
               end
            else
            if XML_CheckData(FileLine, 'manufacturer ') then
-              TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 15, Length(FileLine)-15)) //Pos('</manufacturer>', FileLine)-15));
+              TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 15, Length(FileLine)-15))
            else
            if XML_CheckData(FileLine, 'history ') then
               begin
-                // do nothing... added this check to make parsing a little bit faster
+                // do nothing, added this check to make parsing faster (it does make a difference)
               end
            else
            if XML_CheckData(FileLine, 'cloneof ') then
@@ -18831,7 +17715,7 @@ begin
            if XML_CheckData(FileLine, 'sampleof ') then
               begin
                 Delete(FileLine, 1, 9);
-                SampleName:= FileLine; // ListInfo_GetEntryValue(FileLine, 'sampleof', ' ')
+                SampleName:= FileLine;
               end
            else
            if XML_CheckData(FileLine, 'sample ') then
@@ -18857,18 +17741,12 @@ begin
                 GetButtonsEntry; // get buttons count
               end
            else
-           {if XML_CheckData(FileLine, 'dipswitch ') then
-              begin
-                // do nothing... added this check to make parsing a little bit faster
-              end
-           else}
            if XML_CheckData(FileLine, 'driver ') then
               ParseDriverStatusInfo
            else
            if FileLine = ')' then
-           //if XML_CheckData(FileLine, '</game>') then
               begin
-                AddButtonsControl; // add the buttons entry only if controls is empty!!!
+                AddButtonsControl; // add the buttons entry only if controls is empty
                 if TempGameVars.eClone <> '' then
                    TempGameVars.eBiosName:= games_bios.Values[TempGameVars.eClone]
                 else
@@ -18881,7 +17759,7 @@ begin
                        end;
                    end;
 
-                // must verify if is clone or parent, neogeo or classic, raster or vector
+                // must verify if is clone or parent
                 if TempGameVars.eClone = '' then
                    TempGameVars.eROMIdentification:= 04 // MAME Parent
                 else
@@ -18899,9 +17777,6 @@ begin
                    ListGames.WriteString(TempGameVars.eClone, TempGameVars.eName, ROMDataLine);
 
                 GameStatusList.Add(PopulateGameStatusDataLine);
-                                   //TempGameVars.eName+'='+IntToStr(TempGameVars.eROMIdentification)+
-                                   //                       IntToStr(TempGameVars.eGameSetStatus+
-                                   //                       IntToStr(TempGameVars.eScanMode)); // new, experimental !!!!!!
                 IsGameEntry:= False;
               end;
          end;
@@ -18912,35 +17787,20 @@ begin
     GameStatusList.EndUpdate;
   end;
   FormStatus.MessageStr('Saving files and freeing memory.');
-  ListCPU.SaveToFile(GetMainCPUFile(sysID));// GetIniFilesFolder+'cpu.ini');
+  ListCPU.SaveToFile(GetMainCPUFile(sysID));
 
   ListSamples.SaveToFile(GetGamesFolderEL+GetArcadeSystemIniSection(sysID, True)+'_samples.el');
-  //FormStatus.MessageStr('Extracting emulator version.');
-  //GetEmulatorVersion(sysID, EmulatorFile[sysID], EmulatorVersion[sysID], iVersion);
-  //if tmpEmuVersion = '' then
-  //   begin
-  //     FormStatus.MessageStr('Extracting emulator version.');
-  //     GetEmulatorVersion(sysID, EmulatorFile[sysID], EmulatorVersion[sysID]);
-  //   end
-  //else
-  //   EmulatorVersion[sysID]:= tmpEmuVersion;
+
   Application.ProcessMessages;
   ListGames.WriteString('info_file', 'description', EmuTitle+' Games List');
   ListGames.WriteString('info_file', 'version', EmulatorVersion[sysID]);
-  //if sysID = idMAME then
-  //   begin
-  //     if buildMAME <> iVersion then
-  //        buildMAME:= iVersion;//Copy(iVersion, 3, 3);
-  //   end;
+
   ListGames.UpdateFile;
 
   GameStatusList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 2));
 
   DeleteFile(GetGamesFolderEL+tempFile); // delete temp lisinfo.txt file
   DeleteFile(GetGamesFolderEL+tempDriverFile);
-
-  //GameStatusList.SaveToFile(GetGamesFolderEL+GetSystemIniSection(1, True)+'_gamestatus.el');
-  //FreeAndNil(GameStatusList);
 
   Application.ProcessMessages;
   if (Assigned(ROMsList)) and (ROMsList.Count > 0) then
@@ -18963,7 +17823,6 @@ var
   Loop, CollisionIndex, FirstROMIndex: Integer;
   LineStr, PrevLineStr, romCRC32, romSHA1, SetName, ChecksumStr: String;
   IsModified, NewGame: Boolean;
-  //SetsList: THashedStringList;
 begin
   if not FileExists(GetGamesFolderEL+GetSystemFileName(sysID, 1)) then
      Exit;
@@ -18984,10 +17843,6 @@ begin
   FullChecksumList:= THashedStringList.Create;
   FullChecksumList.BeginUpdate;
 
-  //SetsList:= THashedStringList.Create;
-  //SetsList.Duplicates:= dupIgnore;
-  //SetsList.Sorted:= True;
-  //SetsList.BeginUpdate;
   for Loop:=0 to ROMsFileDB.Count-1 do
   begin
     LineStr:= ROMsFileDB[Loop];
@@ -19004,12 +17859,10 @@ begin
       romSHA1:= SoftListGetEntryValue(LineStr, 'sha1');
       ChecksumStr:= romCRC32+'='+romSHA1;
 
-      if StrToInt(LineStr[1]+LineStr[2]) < 12 then // only check ROMs... avoid wasting time with CHD files
+      if StrToInt(LineStr[1]+LineStr[2]) < 12 then // only check ROMs
       begin
         if romCRC32 <> '' then
         begin
-          //romSHA1:= SoftListGetEntryValue(LineStr, 'sha1');
-          //ChecksumStr:= romCRC32+'='+romSHA1;
           if FullChecksumList.IndexOf(ChecksumStr) = -1 then
           begin
             CollisionIndex:= CRC32List.IndexOf(romCRC32);
@@ -19024,13 +17877,12 @@ begin
                    ROMsFileDB[FirstROMIndex+CollisionIndex]:= PrevLineStr;
                  end;
               IsModified:= True;
-              //SetsList.Add(SetName+'=mame'); // for the favorites list
             end;
           end;
         end;
       end;
 
-      // always add the current ROM being scanned AFTER the collision check... ALL ROMs and CHD files must be added or the CollisionIndex will be messed up!
+      // always add the current ROM being scanned AFTER the collision check; all ROMs and CHD files must be added or the CollisionIndex will be messed up!
       CRC32List.Add(romCRC32);
       FullChecksumList.Add(ChecksumStr);
     end
@@ -19067,15 +17919,6 @@ begin
   if IsModified then
      ROMsFileDB.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 1));
   FreeAndNil(ROMsFileDB);
-  //SetsList.EndUpdate;
-
-  //if not FormStatus.Visible then
-  //begin
-  //  if SetsList.Count > 0 then
-  //     SetsList.SaveToFile(FrontendPath+'Sets with CRC32 Collision.txt');
-  //  //ShowMessage('done'); // this is for debugging only... make sure it's COMMENTED OUT
-  //end;
-  //FreeAndNil(SetsList);
 end;
 
 function TFormMain.CreateGamesListDaphne: Boolean;
@@ -19206,12 +18049,11 @@ begin
                         TempGameVars.eROMIdentification:= 15; // it's a clone game
 
                      TempGameVars.eDriverName:= strMainDriverName+'.c';
-                     // set values non-existant on xml file :_(
+                     // set values non-existant on xml file
                      TempGameVars.eMediaType:= 1; // laserdisc
                      TempGameVars.eScreenType:= 0; // raster
                      TempGameVars.eScreenOrientation:= 0; // horizontal
 
-                     //TempGameVars.eNumberPlayers:= '1';
                      TempGameVars.eDriverStatus:= 0; // good
                      TempGameVars.eGameSetStatus:= 2; // missing
 
@@ -19227,9 +18069,6 @@ begin
                      end;
 
                      GameStatusList.Add(PopulateGameStatusDataLine);
-                                        //TempGameVars.eName+'='+IntToStr(TempGameVars.eROMIdentification)+
-                                        //                       IntToStr(TempGameVars.eGameSetStatus+
-                                        //                       IntToStr(TempGameVars.eScanMode)); // new, experimental !!!!!!
                    end
                  else
                  if XML_CheckData(FileLine, '</game>') then
@@ -19332,7 +18171,6 @@ var
 
   function FixDemulBiosTitle: String;
   begin
-    // to show preetiee set titles
     if TempGameVars.eName = 'crp' then
        Result:= 'CRP Bios'
     else
@@ -19352,7 +18190,6 @@ var
        Result:= 'Aurora BIOS'
     else
     if TempGameVars.eName = 'mie' then
-       //Result:= 'MIE Bios'
        Result:= 'Sega 315-6146 MIE'
     else
     if TempGameVars.eName = 'hikaru' then
@@ -19370,7 +18207,7 @@ var
   function FixDemulBiosName: Boolean;
   begin
     // required due to a discrepancy between Demul's internal bios name set
-    // and the listxml output :_((
+    // and the listxml output
     Result:= (sysID = idDemul) and (ROMOf <> '');
     if not Result then
        Exit;
@@ -19390,7 +18227,7 @@ var
     crcLoop: Integer;
   begin
     Result:= CRC32String;
-    if sysID <> idDemul then // for Demul only!!!!!
+    if sysID <> idDemul then // for Demul only
        Exit;
 
     if Result = '' then
@@ -19408,7 +18245,7 @@ var
     end;
   end;
 
-  procedure SetDefaultSettings(const sysID: Byte);
+  procedure SetDefaultSettings(sysID: Byte);
   var
     FoundMAMEList: Boolean;
   begin
@@ -19417,7 +18254,7 @@ var
          TempGameVars.eDriverStatus:= 0; // good
          TempGameVars.eScreenType:= 0; // raster
          TempGameVars.eGameSize:= 0;
-         Exit; // do not get extra info for DICE games....
+         Exit; // do not get extra info for DICE games
        end;
     FoundMAMEList:= Assigned(MAMEGames);
     if FoundMAMEList then
@@ -19427,7 +18264,7 @@ var
             GetROMFields(MAMEGames, tmpIndex, sysID);
        end;
     TempGameVars.eDriverStatus:= 0;
-    TempGameVars.eGameSetStatus:= 2; // missing
+    TempGameVars.eGameSetStatus:= 2; // set to missing
     TempGameVars.eGameSize:= 0;
     case sysID of
       idZiNc:
@@ -19468,8 +18305,6 @@ var
              TempGameVars.eScreenRefreshRate:= '60.000000';
           if TempGameVars.eDriverName = '' then
              TempGameVars.eDriverName:= 'model3.cpp';
-
-          // nothing more ?
         end;
     end;
     TempGameVars.eSystemID:= sysID;
@@ -19531,7 +18366,6 @@ var
   end;
 
 begin
-  // still need to get xml version info!!!!!!!
   TitleErrorMsg:= 'Error: Create Games List ['+GetArcadeEmulatorDescription(sysID)+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
@@ -19589,9 +18423,9 @@ begin
           begin
             // Demul, generate listxml with -listxml cmdline parameter
             tempFile:= FrontendPath+'temp\demul-listxml.dat';
-            FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+tempFile+SystemStr; // -listxml
+            FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+tempFile+SystemStr;
             SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-            RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator); // WinXP / Sev7n
+            RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
             SetCurrentDir(FrontendPath);
             if not FileExists(tempFile) then
                begin
@@ -19627,16 +18461,16 @@ begin
      FormMain.Refresh;
 
   MAMEGames:= THashedStringList.Create;
-  if not GetGamesList(MAMEGames, 1) then
+  if not GetGamesList(MAMEGames, idMAME) then
      FreeAndNil(MAMEGames);
 
   if sysID = idDemul then
      begin
-       // this is for Demul emulator only... others don't need this (maybe Supermodel3 emu one day... MAYBE!)
-       CRC32CollisionFile:= TStringList.Create; // this is for "sysname_crc32collision.txt" with set names (device/bios sets only)
+       // for Demul emulator only, for now
+       CRC32CollisionFile:= TStringList.Create; // "sysname_crc32collision.txt" with set names (device/bios sets)
        CRC32CollisionFile.BeginUpdate;
-       CRC32CollisionList:= THashedStringList.Create; // this is temp list to hold CRC32 list and check against new ROM files (device/bios sets only)
-       SHA1CollisionList:= THashedStringList.Create;  // this is temp list to hold SHA-1 list and check against new ROM files (device/bios sets only)
+       CRC32CollisionList:= THashedStringList.Create; // a temp list with CRC32 list to check against new ROM files (device/bios sets)
+       SHA1CollisionList:= THashedStringList.Create;  // a temp list with SHA-1 list to check against new ROM files (device/bios sets)
      end;
 
   FormStatus.MessageStr('Parsing "'+tempFile+'" (1st pass).'+#13#10+
@@ -19644,12 +18478,12 @@ begin
   ListXML:= THashedStringList.Create;
   ListXML.LoadFromFile(tempFile);
 
-  BiosSet:= THashedStringList.Create; // temporary list of bios sets, to handle romof="gameset" entry
-  ListROMsBiosSet:= THashedStringList.Create; // will hold a temp list of ROMs for each bios set
+  BiosSet:= THashedStringList.Create; // list of bios sets, to handle romof="gameset" entry
+  ListROMsBiosSet:= THashedStringList.Create; // a temp list of ROMs for each bios set
   ListROMsBiosSet.BeginUpdate;
 
   if sysID = idDemul then
-     ListDuplicateROMs:= THashedStringList.Create; // will hold a temp list of ROMs to check for duplicates (CHDs are out of this list)
+     ListDuplicateROMs:= THashedStringList.Create; // a temp list of ROMs to check for duplicates (no CHDs)
                                                    // romname == CRC32 == SHA1
 
   FormStatus.SetFocus;
@@ -19688,7 +18522,7 @@ begin
                 TempGameVars.eName:= XML_GetEntryValue(FileLine, 'name');
                 SetDefaultSettings(sysID); // parse info from MAME
                 if sysID <> idSupermodel then
-                   TempGameVars.eDriverName:= FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile')); // for DICE and ZiNc...
+                   TempGameVars.eDriverName:= FixDriverSourceName(XML_GetEntryValue(FileLine, 'sourcefile')); // for DICE and ZiNc
 
                 TempGameVars.eBiosName:= TempGameVars.eName;
                 ROMsHeaderAdded:= False;
@@ -19702,7 +18536,6 @@ begin
                    end;
 
                 iDriver:= ChangeFileExt(TempGameVars.eDriverName, '');
-
                 IsResource:= True;
               end;
          end
@@ -19739,7 +18572,7 @@ begin
            //     BiosSet.WriteString(MemGameVariables.eName, ROMsDetailsLine, TempString);
            //   end
            //else
-           if XML_CheckData(FileLine, '<rom ') or XML_CheckData(FileLine, '<disk ') then // device "<disk" entry for Demul v0.7 (August 18, 2016) and newer
+           if XML_CheckData(FileLine, '<rom ') or XML_CheckData(FileLine, '<disk ') then
               begin
                 ROMInfoFull:= '';
                 MediaTypeTagExtra:= '';
@@ -19757,14 +18590,14 @@ begin
                    TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
                 TempString:= '';
 
-                newFileID:= 2; // newFileID is the that will be used to generate the final "ROMInfoFull" string
+                newFileID:= 2; // newFileID is the var that will be used to generate the final "ROMInfoFull" string
                 BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eName;
 
                 IsCHDFile:= PosEx('<disk ', FileLine) <> 0; // this will always be false because there is no bios CHD files
                 if sysID <> idSupermodel then
-                   newFileID:= 2 // is BIOS ROM, Supermodel 3 uses no BIOS sets...
+                   newFileID:= 2 // is BIOS ROM, Supermodel 3 uses no BIOS sets
                 else
-                   newFileID:= 0; // set game ROM for Supermodel 3... just in case
+                   newFileID:= 0; // set game ROM for Supermodel 3, just in case
 
                 if (sysID = idDemul) and (not IsCHDFile) then
                    begin
@@ -19772,11 +18605,11 @@ begin
                       if ListDuplicateROMs.IndexOf(TempString) = -1 then
                          ListDuplicateROMs.Add(TempString)
                       else
-                         Exit; // file already added in the ROMs list... skip it
+                         Exit; // file already added in the ROMs list, skip it
                     end;
 
                 if sysID <> idSupermodel then
-                   ListROMsBiosSet.Add(BiosInfoROM); // ----temp bios ROMs list (CRC32 only)!!!
+                   ListROMsBiosSet.Add(BiosInfoROM); // ----temp bios ROMs list
 
                 if sysID = idDemul then
                    begin
@@ -19787,7 +18620,7 @@ begin
                 // this will go last
                 IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
                 ROMInfoFull:= MountROMInfo(newfileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
-                //ROMsDetailsLine:= TempString;
+
                 if not ROMsHeaderAdded then
                    begin
                      if ROMsList.Count > 0 then
@@ -19820,7 +18653,7 @@ begin
            else
            if XML_CheckData(FileLine, '</game>') then
               begin
-                AddButtonsControl; // add the buttons entry only if controls is empty!!!
+                AddButtonsControl; // add the buttons entry only if controls is empty
                 // bios ID
                 case sysID of
                   idDemul: TempGameVars.eROMIdentification:= 21; // Demul
@@ -19848,10 +18681,10 @@ begin
     if sysID = idDemul then
        begin
          CRC32CollisionFile.EndUpdate;
-         FreeAndNil(CRC32CollisionList); // games do not have CRC32 collisions... yet! (February 15, 2018)
+         FreeAndNil(CRC32CollisionList); // games do not have CRC32 collisions, yet! (February 15, 2018)
          FreeAndNil(SHA1CollisionList);
          if CRC32CollisionFile.Count > 0 then
-            CRC32CollisionFile.SaveToFile(GetCRC32CollisionFile(sysID)); // (GetGamesFolderEL+GetsystemFileName(sysID, 9));
+            CRC32CollisionFile.SaveToFile(GetCRC32CollisionFile(sysID));
          FreeAndNil(CRC32CollisionFile);
        end;
 
@@ -19859,12 +18692,12 @@ begin
     // if romof, check if a bios is part of the game (parent games only!)
     FormStatus.MessageStr('Parsing "'+tempFile+'" (2nd pass).'+#13#10+
                           'Creating parent games sections in .ini file and a temporary list with parent games.');
-    games_bios:= THashedStringList.Create; // this will hold parent games that have bios
+    games_bios:= THashedStringList.Create; // a list of parent games that have bios
     games_bios.BeginUpdate;
     FormStatus.SetProgressPos(0);
     if sysID = idDemul then
        begin
-         DemulDriverName:= THashedStringList.Create; // this will hold parent game and their driver names (machine name for Demul)
+         DemulDriverName:= THashedStringList.Create; // a list of parent game and their driver names (machine name for Demul)
          DemulDriverName.BeginUpdate;
        end;
     for MainLoop:=0 to ListXML.Count -1 do
@@ -19889,7 +18722,7 @@ begin
                                TempGameVars.eDriverName:= ROMOf+'.c';
                                DemulDriverName.Add(TempGameVars.eName+'='+TempGameVars.eDriverName);
                              end;
-                          FixDemulBiosName; // fix bios name from "awave" "awbios" and NaomiGD/Naomi2GD (Demul only)
+                          FixDemulBiosName; // fix bios name from "awave" to "awbios" and NaomiGD/Naomi2GD (Demul only)
                           if BiosSet.IndexOf(ROMOf) <> -1 then
                              games_bios.Add(TempGameVars.eName+'='+ROMOf); // add parent game to the temp list
                         end;
@@ -19906,7 +18739,7 @@ begin
     FormStatus.SetProgressPos(0);
     FormStatus.MessageStr('Parsing "'+tempFile+'" (3rd and final pass).'+#13#10+
                           'Creating games list.');
-    // now, the normal games, but no resources this time (BIOS)
+    // now, the games
     IsGameEntry:= False;
 
     for MainLoop:=0 to ListXML.Count -1 do
@@ -19977,7 +18810,7 @@ begin
            if XML_CheckData(FileLine, '<description>') then
               begin
                 TempGameVars.eTitle:= DecodeHTML(Copy(FileLine, 14, PosEx('</description>', FileLine)-14));
-                if sysID = idDemul then // Demul stil need to fix "Kind of Fighters, The" :_((
+                if sysID = idDemul then // Demul still need this fix: "Kind of Fighters, The"
                   TempGameVars.eTitle:= FixDescriptionFormat(idDemul, TempGameVars.eTitle, False);
               end
            else
@@ -19995,11 +18828,11 @@ begin
                 romName:= XML_GetEntryValue(FileLine, 'name'); // name of the ROM or CHD
                 romName:= DecodeHTML(romName);
 
-                romNameMerge:= XML_GetEntryValue(FileLine, 'merge'); // name of the file (ROM/CHD/Cart/Floppy/Cassette/Disc/HD/Flash Card/Video Tape...) from parent game
+                romNameMerge:= XML_GetEntryValue(FileLine, 'merge'); // name of the file (ROM/CHD/Cart/Floppy/Cassette/Disc/HD/Flash Card/Video Tape) from parent game
                 romNameMerge:= DecodeHTML(romNameMerge);
 
                 romCRC32:= XML_GetEntryValue(FileLine, 'crc');
-                romCRC32:= FixCRCEmptySpaces(romCRC32); // for Demul emulator only
+                romCRC32:= FixCRCEmptySpaces(romCRC32); // for Demul emulator
                 romSHA1:= XML_GetEntryValue(FileLine, 'sha1');
 
                 IsCHDFile:= PosEx('<disk ', FileLine) <> 0;
@@ -20010,13 +18843,13 @@ begin
                    TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
                 TempString:= '';
 
-                newFileID:= 0; // newFileID is the that will be used to generate the final "ROMInfoFull" string
+                newFileID:= 0; // newFileID is the var that will be used to generate the final "ROMInfoFull" string
 
                 if IsCHDFile then
                    begin
-                     TempGameVars.eMediaType:= 1; // must set media type to DISC!!! Fixed on December 29, 2017
+                     TempGameVars.eMediaType:= 1; // must set media type to DISC (December 29, 2017)
 
-                     newFileID:= 12; // CHD files have '12' in frontend, it's not a device ROM or a bios ROM
+                     newFileID:= 12; // it's a game CHD file, not a ROMs
 
                      if sysID = idZiNc then
                         begin
@@ -20034,21 +18867,19 @@ begin
                         romName:= romName+'.chd';
                    end;
 
-
-                //BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eBiosName;
                 if sysID = idSegaModel2 then
                    begin
                      BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'=model2';
                      if TempGameVars.eName <> 'model2' then
                         begin
                           if ListROMsBiosSet.IndexOf(BiosInfoROM) <> -1 then
-                             newFileID:= 2 // yes, it's a board ROM, it contains the '2' in front
+                             newFileID:= 2 // yes, it's a board ROM
                           else
-                             newFileID:= 0; // no, it's a game ROM... it contains the '0' in front
+                             newFileID:= 0; // no, it's a game ROM
                         end
                      else
                         begin
-                          newFileID:= 2; // is Board ROM, SEGA Model 2 uses this internally as a bios... kinda
+                          newFileID:= 2; // it's a Board ROM but the frontend uses this internally as a bios... kinda
                           BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eName;
                           ListROMsBiosSet.Add(BiosInfoROM); // add the bios ROM from the model2.zip file (board ROMs)
                         end;
@@ -20061,14 +18892,14 @@ begin
                      else
                         begin
                         if not IsCHDFile then
-                        // check if ROM is a bios ROM or nor... Supermodel 3 emulator doesn't have any bios sets
+                        // check if ROM is a bios ROM or not, Supermodel 3 emulator doesn't have any bios ROMs
                            begin
                              if FormMain.ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName) then
                                 begin
                                   if ListROMsBiosSet.IndexOf(BiosInfoROM) <> -1 then
-                                     newFileID:= 2 // yes, it's a bios ROM, it contains the '2' in front
+                                     newFileID:= 2 // yes, it's a bios ROM
                                   else
-                                     newFileID:= 0; // no, it's a game ROM... it contains the '0' in front
+                                     newFileID:= 0; // no, it's a game ROM
                                 end
                              else
                                 newFileID:= 0;
@@ -20093,11 +18924,12 @@ begin
                 IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
                 ROMInfoFull:= MountROMInfo(newFileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
 
-                if romNameMerge <> '' then
+
+                if (romNameMerge <> '') and (newFileID = 0) then // newFileID = 0 -> for game ROM only
                    ROMInfoFull[6]:= '1'; // it's a file from the parent set
 
                 if SameText(romNameMerge, romName) then
-                   romNameMerge:= ''; // set to emtpy since the name is the same as of the file from parent game
+                   romNameMerge:= ''; // set to emtpy since the filename is the same from parent game
 
                 if romNameMerge <> '' then
                    ROMInfoFull:= ROMInfoFull+MountGameInfoFieldStr('parentname', romNameMerge);
@@ -20105,7 +18937,6 @@ begin
                 if MediaTypeTagExtra <> '' then
                    ROMInfoFull:= ROMInfoFull+MountGameInfoFieldStr('mediatype_tag', MediaTypeTagExtra);
 
-                //ROMsDetailsLine:= TempString;
                 if not ROMsHeaderAdded then
                    begin
                      if ROMsList.Count > 0 then
@@ -20193,7 +19024,7 @@ begin
   FormStatus.MessageStr('Saving files and freeing memory.');
 
   if sysID = idDemul then
-     FreeAndNil(ListDuplicateROMs); // free this THashedStringList here
+     FreeAndNil(ListDuplicateROMs);
 
   EmulatorDateTime[sysID]:= FileAge(EmulatorFile[sysID]);
   if tmpEmuVersion = '' then
@@ -20264,11 +19095,12 @@ begin
   if HashFolderVar = '' then
      HashFolderVar:= 'hash';
 
-  HashFolderVar:= FullFolderFix(HashFolderVar, EmulatorFileName); //HashFolderVar:= FullEmuFolderFix(HashFolderVar, sysID, False);
+  HashFolderVar:= FullFolderFix(HashFolderVar, EmulatorFileName);
 end;
 
 function TFormMain.FixMediaParameterStr(const ParamStr: string): String;
 begin
+  // for MAME/HBMAME
   Result:= ParamStr;
   if (ParamStr = 'cart') or (ParamStr = 'flop') or (ParamStr = 'cass') or
      (ParamStr = 'hard')  then
@@ -20303,11 +19135,14 @@ var
   IsGameEntry, GetGameFiles, IsComment, ParseData: Boolean;
   tempFile, romName, romCRC32, romSHA1: String;
   PartName, PartTitle: String;
+  Requirement: String;
   TitleErrorMsg, EmuTitle: String;
   tmpList: THashedStringList;
   HasROMs, ROMsHeaderAdded, MediaTypeAdded: Boolean;
   gFileFullPath, HashFolder: String;
   GameStatusList: TStringList;
+  RequirementList: TMemIniFile;
+  iPos: Integer;
 
   function ParseROMDiskEntry(FileID: ShortInt): Boolean; // FileID (type of ROM being scanned) -> 0: <rom; 3: <disk
   var
@@ -20315,15 +19150,9 @@ var
     newID, FixedID, IsBadDump: ShortInt;
     IsCHDFile: Boolean;
   begin
-    // FileID for software list games (console/handheld/computer) ?????????????? July 19, 2015 ... I think NOT!
-    // 0: cartridge
-    // 1: disc/cd/image
-    // 2: floppy disk
-    // 3: cassette
-    // 4: executable ??? xegs.xml (Atari 800) ... NO!
     Result:= True;
     ROMInfoFull:= '';
-    romName:= XML_GetEntryValue(FileLine, 'name'); // name of the ROM or CHD/ISO/Disk/Disc
+    romName:= XML_GetEntryValue(FileLine, 'name'); // name of the ROM or CHD
     romName:= DecodeHTML(romName);
 
     romCRC32:= XML_GetEntryValue(FileLine, 'crc');
@@ -20331,15 +19160,15 @@ var
 
     newID:= FileID;
     IsCHDFile:= FileID = 3;
-    if IsCHDFile then // game CHD
+    if IsCHDFile then
        begin
-         newID:= 12; // CHD game...
+         newID:= 12; // game CHD file type
          TempGameVars.eMediaType:= 1;
          if not SameText(ExtractFileExt(romName), '.chd') then
             romName:= romName+'.chd';
 
          if romSHA1 = '' then
-            romSHA1:= XML_GetEntryValue(FileLine, 'md5'); // for MAME 0.77 down to 0.69 .... whaa? MD5 will never be found in software list games ("mamedir\hash\" folder)
+            romSHA1:= XML_GetEntryValue(FileLine, 'md5'); // for MAME 0.77 down to 0.69 .... MD5 will never be found in software list games ("mamedir\hash\" folder)
        end;
 
     TempString:= '';
@@ -20398,8 +19227,8 @@ var
        end;
     ROMsList.Add(ROMInfoFull);
 
-    PartName:= '';  // force to clear this var for multi disks/cassettes
-    PartTitle:= ''; // force to clear this var for multi disks/cassettes
+    PartName:= '';  // clear this var for multi disks/cassettes
+    PartTitle:= ''; // clear this var for multi disks/cassettes
     HasROMs:= True;
   end;
 
@@ -20424,18 +19253,10 @@ var
       iPos:= PosEx(CharToReplace, iText);
     end;
   end;
-  // old function... not used anymore
-  //function ReplaceChar(s:string;c:char;charrep:char):string;
-  //begin
-  //  while pos(c,s)>0 do
-  //      s[pos(c,s)]:=charrep;
-  //   ReplaceChar:=s;
-  //end;
 
   function CheckCommentInOut(const LineStr: String): Boolean;
   var
     commentInStr, commentOutStr: String;
-
   begin
     Result:= LineStr <> '';
     if LineStr = '<!--' then
@@ -20488,12 +19309,12 @@ begin
   if not FormStatus.Visible then
      FormStatus.Show;
   if not IsMultiSlot then // no need for neogeo, stv as this function will be called when creating MAME games list
-     FormStatus.StartThreadClock; // only for MESS softwarelist.xml files (mamedir\hash\ folder)
+     FormStatus.StartThreadClock; // only for MAME softwarelist.xml files (mamedir\hash\ folder)
 
   ListXML:= THashedStringList.Create;
   ListXML.LoadFromFile(tempFile);
 
-  gFileFullPath:= GetGamesFolderEL(Ord(not IsMultiSlot));
+  gFileFullPath:= GetGamesFolderEL(Ord(not IsMultiSlot), sysID);
   FormStatus.SetFocus;
 
   if IsMultiSlot then
@@ -20531,9 +19352,7 @@ begin
   end
   else
   begin
-    // generates a list of games with full info and ROMs list (vectrex and others from mamedir\hash folder... only if MESS machine have softwarelist tag!
-    // will have to support Ansi title and Unicode titles... possibly manufacturer field as well ?
-    // usage have HTML texts... it needs DecodeHTML();
+    // generates a list of games with full info and ROMs list (vectrex and others from mamedir\hash folder, only if MAME machine have softwarelist tag)
     if ListXML.Count > 0 then
     begin
       CheckAndCreateFolder(gFileFullPath);
@@ -20548,13 +19367,13 @@ begin
 
       tmpList.Add('[info_file]');
       tmpList.Add('description=');
-      tmpList.Add('filedatetime='+IntToStr(FileAgeW(tempFile)));
+      tmpList.Add('xmlfile_datetime='+IntToStr(FileAgeW(tempFile)));
+      tmpList.Add('xmlfile_crc32='+CalcFileCRC32(tempFile));
 
       GameStatusList:= TStringList.Create;
       GameStatusList.BeginUpdate;
 
-      // 1st pass. create EL's games list file with parent sets and their .ini sections
-
+      // 1st pass: create EL's games list file with parent sets and their .ini sections
       for MainLoop:=0 to ListXML.Count -1 do
       begin
         FileLine:= TrimLeft(ListXML[MainLoop]);
@@ -20596,6 +19415,8 @@ begin
       ROMsList:= THashedStringList.Create;
       ROMsList.BeginUpdate;
 
+      RequirementList:= TMemIniFile.Create(GetSoftListRequirementFile(sysID)); // file "system_name.elsoftlistreq'
+
       IsGameEntry:= False;
       ParseData:= False;
       IsComment:= False;
@@ -20627,7 +19448,7 @@ begin
                    ClearMemGameInfo(TempGameVars);
                    HasROMs:= False;
                    TempGameVars.eSystemID:= sysID;
-                   TempGameVars.eSystemType:= 1; // is non-arcade 0: arcade; 1: mess machines/software lists
+                   TempGameVars.eSystemType:= 1; // is non-arcade - 0: arcade; 1: MAME machines/software lists
                    TempGameVars.eName:= XML_GetEntryValue(FileLine, 'name');
                    TempGameVars.eClone:= XML_GetEntryValue(FileLine, 'cloneof');
                    // driver status
@@ -20636,14 +19457,14 @@ begin
                    TempGameVars.eEmulationStatus:= 0;
                    if PosEx('supported="no"', FileLine) <> 0 then
                       begin
-                        // means the game support is preliminary and might not work; set to Impefect driver and emulation
+                        // the game support is preliminary and might not work; set driver/emulation to Preliminary
                         TempGameVars.eDriverStatus:= 2;
                         TempGameVars.eEmulationStatus:= 2;
                       end
                    else
                    if PosEx('supported="partial"', FileLine) <> 0 then
                       begin
-                        // means the game support is imperfect and might not work; set to Impefect driver and emulation
+                        // the game support is imperfect and might not work; set driver/emulation to Impefect
                         TempGameVars.eDriverStatus:= 1;
                         TempGameVars.eEmulationStatus:= 1;
                       end;
@@ -20660,6 +19481,7 @@ begin
                    MediaTypeAdded:= False;
                    PartName:= '';
                    PartTitle:= '';
+                   Requirement:= '';
                  end
               else
               if IsGameEntry then
@@ -20677,10 +19499,38 @@ begin
                       TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 12, PosEx('</publisher>', FileLine)-12))
                    else
                    if XML_CheckData(FileLine, '<info name="alt_title"') then
-                      TempGameVars.ePlayedDateText:= XML_GetEntryValue(FileLine, 'value') // usually this is a Unicode string
+                      TempGameVars.ePlayedDateText:= XML_GetEntryValue(FileLine, 'value')
                    else
                    if XML_CheckData(FileLine, '<sharedfeat name="compatibility"') then
                       TempGameVars.eSoftwareCompatible:= XML_GetEntryValue(FileLine, 'value')
+                   else
+                   if XML_CheckData(FileLine, '<sharedfeat name="requirement"') then
+                      begin
+                        // <sharedfeat name="requirement" value="scdsys"/>
+                        if Requirement = '' then
+                           Requirement:= XML_GetEntryValue(FileLine, 'value');
+                        //else
+                        //   beep; // for debugging only
+                        if Requirement <> '' then
+                           begin
+                             if SameText('a2600_cass', SoftwareListName) then
+                                Requirement:= 'a2600:'+Requirement
+                             else
+                             if SameText('segacd', SoftwareListName) then
+                                begin
+                                  if SameText('32x', Requirement) then
+                                     Requirement:= ''; // Sega CD games that require 32X hardware must be run with a "Sega CD with 32X" machine (there's no extra param!)
+                                end
+                             else
+                             begin
+                               iPos:= PosEx(' -', Requirement);
+                               if iPos <> 0 then
+                                  Requirement:= StringReplace(Requirement, ' -', ':', [rfIgnoreCase]);
+                             end;
+                             if Requirement <> '' then
+                                RequirementList.WriteString(SoftwareListName, TempGameVars.eName, Requirement);
+                           end;
+                      end
                    else
                    // <info name="usage" value="Requires a Japanese system" />
                    // <info name="usage" value="Requires an Arabic MSX2" />
@@ -20738,28 +19588,26 @@ begin
                    else
                    if XML_CheckData(FileLine, '</software>') then
                       begin
-                        // must verify if is clone or parent, neogeo or classic, raster or vector
-                        // HBMAME doesn't have software lists and it seems it never will
+                        // must verify if is clone or parent
                         if TempGameVars.eClone = '' then
                            begin
                              // it's a parent game
-                             TempGameVars.eROMIdentification:= 04; // MAME Parent
-                             //case sysID of
-                             //  idMAME  : TempGameVars.eROMIdentification:= 04; // MAME Parent
-                             //  idHBMAME: TempGameVars.eROMIdentification:= 26; // HBMAME Parent
-                             //end;
+                             case sysID of
+                               idMAME  : TempGameVars.eROMIdentification:= 04; // MAME Parent
+                               idHBMAME: TempGameVars.eROMIdentification:= 26; // HBMAME Parent
+                             end;
                            end
                         else
                            begin
                              // it's a clone game
-                             TempGameVars.eROMIdentification:= 05; // MAME Clone
-                             //case sysID of
-                             //  idMAME  : TempGameVars.eROMIdentification:= 05; // MAME Clone
-                             //  idHBMAME: TempGameVars.eROMIdentification:= 27; // HBMAME Clone
-                             //end;
+                             case sysID of
+                               idMAME  : TempGameVars.eROMIdentification:= 05; // MAME Clone
+                               idHBMAME: TempGameVars.eROMIdentification:= 27; // HBMAME Clone
+                             end;
                            end;
 
-                        ROMDataLine:= PopulateROMDataLineArcade(1); // PopulateGameLine;
+                        ROMDataLine:= PopulateROMDataLineArcade(1);
+
                         if TempGameVars.eClone = '' then
                            ListGames.WriteString(TempGameVars.eName, TempGameVars.eName, ROMDataLine)
                         else
@@ -20768,7 +19616,7 @@ begin
                         GameStatusList.Add(PopulateGameStatusDataLine);
                       
                         IsGameEntry:= False;
-                        MediaTypeAdded:= False; // really need to be here ??? I think not, but...
+                        MediaTypeAdded:= False;
                       end;
                  end;
               //FormStatus.UpdateProgressBar(MainLoop, ListXML.Count-1); // do not uncomment this, it causes massive flickering; don't remove it either...
@@ -20784,9 +19632,11 @@ begin
     Application.ProcessMessages;
     GameStatusList.SaveToFile(gFileFullPath+GetSystemFileName(sysID, 2, SoftwareListName));
 
-    // software lists do not have ROMs list... at least not yet!
     if (Assigned(ROMsList)) and (ROMsList.Count > 0) then
        ROMsList.SaveToFile(gFileFullPath+GetSystemFileName(sysID, 1, SoftwareListName));
+
+    RequirementList.UpdateFile;
+    FreeAndNil(RequirementList);
   end;
   FreeMemVariables;
   Application.ProcessMessages;
@@ -20823,7 +19673,7 @@ begin
   TempField:= '';
   TempGameVars.eName:= ListHolder.Names[Index];
   TempGameVars.eMechanical:= False; // reset mechanical tag to FALSE to avoid errors
-  TempGameVars.eGameSize:= 0; // set to zero just in case...
+  TempGameVars.eGameSize:= 0; // set to zero just in case
   tmpString:= ListHolder.ValueFromIndex[Index];
   Result:= tmpString <> '';
   if not Result then
@@ -20831,10 +19681,10 @@ begin
 
   BiosEmptyMsg:= False;
 
-  IsArcadeEntry:= PosEx('<softfile>', tmpString) = 0; // </softfile> tag is always added to software list games... and not for games from -listxml output!!!!
+  IsArcadeEntry:= PosEx('<softfile>', tmpString) = 0; // </softfile> tag is always added to software list games
 
   // ROM_ID GameSetStatus ScanMode MergedSet are merged into the final string (uMain.GetGamesList())
-  // for arcade games and MESS softwarelist games
+  // for arcade games and MAME software list
   TempGameVars.eROMIdentification:= StrToInt(tmpString[1]+tmpString[2]);
   TempGameVars.eGameSetStatus:= StrToInt(tmpString[3]); // 0 - have; 1 - missing ROMs/CHDs; 2 - missing
   TempGameVars.eScanMode:= StrToInt(tmpString[4]); // 0 -> full scan; 1 -> quick scan; 2 -> force available
@@ -20843,21 +19693,21 @@ begin
   if ForceSysID = -1 then
   begin
     case TempGameVars.eROMIdentification of
-          -1: TempGameVars.eSystemID:= -1; // Unknown, error... this case will NEVER happen!!!
-      00..07: TempGameVars.eSystemID:= idMAME;      //1;  // MAME
-      08..11: TempGameVars.eSystemID:= idSupermodel;//2;  // Supermodel: SEGA Model 3
-      12..15: TempGameVars.eSystemID:= idDaphne;    //3;  // Daphne
-      16..21: TempGameVars.eSystemID:= idDemul;     //4;  // Demul
-      22..29: TempGameVars.eSystemID:= idHBMAME;    //5;  // HBMAME
-      30..33: TempGameVars.eSystemID:= idDICE;      //6;  // DICE
-      34..37: TempGameVars.eSystemID:= idSegaModel2;//7;  // SEGA Model 2
-      38..43: TempGameVars.eSystemID:= idZiNc;      //8;  // ZiNc
+          -1: TempGameVars.eSystemID:= -1; // Unknown, error... this case should NEVER happen
+      00..07: TempGameVars.eSystemID:= idMAME;
+      08..11: TempGameVars.eSystemID:= idSupermodel;
+      12..15: TempGameVars.eSystemID:= idDaphne;
+      16..21: TempGameVars.eSystemID:= idDemul;
+      22..29: TempGameVars.eSystemID:= idHBMAME;
+      30..33: TempGameVars.eSystemID:= idDICE;
+      34..37: TempGameVars.eSystemID:= idSegaModel2;
+      38..43: TempGameVars.eSystemID:= idZiNc;
     end;
   end;
 
   if IsArcadeEntry then
   begin
-    TempGameVars.eMediaType:= StrToInt(tmpString[6]); // 0 -> roms; 1 -> CHD
+    TempGameVars.eMediaType:= StrToInt(tmpString[6]); // 0 -> ROM; 1 -> CHD
 
     TempGameVars.eTitle:= SoftListGetEntryValue(tmpString, 'title');
     TempGameVars.eYear:= SoftListGetEntryValue(tmpString, 'year');
@@ -20901,13 +19751,14 @@ begin
     if TempGameVars.eSystemID = idDaphne then
        begin
          TempGameVars.eROMsAllNoDump:= False;
-         TempGameVars.eHaveGameROMs:= 1; // game have ROMs... this is needed so EL can search for gamename.zip files...!!! (October 10, 2017)
+         TempGameVars.eHaveGameROMs:= 1; // game have ROMs; this is needed so EL can search for gamename.zip files (October 10, 2017)
        end;
 
-    if TempGameVars.eSystemID in [idMAME, idHBMAME] then
+    if IsMAMEBasedSys(TempGameVars.eSystemID) then
     begin
-      if TempGameVars.eDriverStatus = 0 then // good
+      if TempGameVars.eDriverStatus = 0 then
       begin
+        // set all to good
         TempGameVars.eEmulationStatus:= 0;
         TempGameVars.eColorStatus:= 0;
         TempGameVars.eSoundStatus:= 0;
@@ -20915,32 +19766,31 @@ begin
       end
       else
       begin
-        TempField:= SoftListGetEntryValue(tmpString, 'emustat'); // MAME and HBMAME only
+        TempField:= SoftListGetEntryValue(tmpString, 'emustat');
         if TempField <> '' then
-           TempGameVars.eEmulationStatus:= StrToInt(TempField); // MAME and HBMAME only
+           TempGameVars.eEmulationStatus:= StrToInt(TempField);
 
-        TempField:= SoftListGetEntryValue(tmpString, 'clrstat'); // MAME and HBMAME only
+        TempField:= SoftListGetEntryValue(tmpString, 'clrstat');
         if TempField <> '' then
-           TempGameVars.eColorStatus:= StrToInt(TempField); // MAME and HBMAME only
+           TempGameVars.eColorStatus:= StrToInt(TempField);
 
-        TempField:= SoftListGetEntryValue(tmpString, 'sndstat'); // MAME and HBMAME only
+        TempField:= SoftListGetEntryValue(tmpString, 'sndstat');
         if TempField <> '' then
-           TempGameVars.eSoundStatus:= StrToInt(TempField); // MAME and HBMAME only
+           TempGameVars.eSoundStatus:= StrToInt(TempField);
 
-        TempField:= SoftListGetEntryValue(tmpString, 'grpstat'); // MAME and HBMAME only
+        TempField:= SoftListGetEntryValue(tmpString, 'grpstat');
         if TempField <> '' then
-           TempGameVars.eGraphicStatus:= StrToInt(TempField); // MAME and HBMAME only
+           TempGameVars.eGraphicStatus:= StrToInt(TempField);
       end;
-      TempField:= SoftListGetEntryValue(tmpString, 'sta'); // MAME and HBMAME only
+      TempField:= SoftListGetEntryValue(tmpString, 'sta');
       if TempField <> '' then
-         TempGameVars.eSaveState:= StrToInt(TempField); // MAME and HBMAME only
+         TempGameVars.eSaveState:= StrToInt(TempField);
     end;
   end
   else
   begin
-    // MESS games from software lists (mame\hash\ folder)
-    // MESS machines are handled as arcade since they are from mame -listxml output
-    // title, publisher might have Unicode strings and the ¬ cannot be used to separate fields
+    // software lists games (mame\hash\ folder)
+    // MAME machines are handled as arcade since they are from mame -listxml output
 
     // gamename = MediaType (1 char) <title>.........
     // polepos=1<title>Pole Position</title><year>1983</year><publisher>GCE / Namco Ltd.</publisher><media>cart</media>
@@ -20950,8 +19800,8 @@ begin
     TempGameVars.eDriverStatus:= StrToInt(tmpString[7]); // 0 -> good; 1 -> imperfect; 2 -> preliminary (game="mygame" supported="no" supported="partial")
     TempGameVars.eEmulationStatus:= StrToInt(tmpString[8]);
 
-    //TempGameVars.eScreenType:= StrToInt(tmpString[9]+tmpString[10]); // for future improvements if software list games have the screen type tag ??
-    //TempGameVars.eScreenOrientation:= StrToInt(tmpString[11]+tmpString[12]); // for future improvements if software list games have the screen orientation tag ??
+    //TempGameVars.eScreenType:= StrToInt(tmpString[9]+tmpString[10]); // for future improvement ? software list games doesn't have the screen type tag
+    //TempGameVars.eScreenOrientation:= StrToInt(tmpString[11]+tmpString[12]); // for future improvement ? software list games don't have the screen orientation tag
 
     TempGameVars.eTitle:= SoftListGetEntryValue(tmpString, 'title');
     TempGameVars.eYear:= SoftListGetEntryValue(tmpString, 'year');
@@ -20960,7 +19810,7 @@ begin
     TempGameVars.eScreenType:= 0; // set to raster by default
     TempGameVars.eScreenOrientation:= 0; // set to horizontal by default
 
-    TempGameVars.eAudioType:= 0; // set to chip audio by default; there are no wav samples or discrete audio in software list games
+    TempGameVars.eAudioType:= 0; // set to "audio chip" by default; there are no wav samples or discrete audio in software list games
 
     TempGameVars.eClone:= SoftListGetEntryValue(tmpString, 'cloneof');
 
@@ -20973,14 +19823,14 @@ begin
     TempGameVars.eSoftwareExecParameter:= SoftListGetEntryValue(tmpString, 'media');
     TempGameVars.eSoftwareCompatible:= SoftListGetEntryValue(tmpString, 'compat');
     TempGameVars.eSoftwareUsageTip:= SoftListGetEntryValue(tmpString, 'usage');
-    TempGameVars.eCategory:= SoftListGetEntryValue(tmpString, 'softtitle'); // description of software list files...
+    TempGameVars.eCategory:= SoftListGetEntryValue(tmpString, 'softtitle'); // description of software list files
 
-    TempGameVars.eSystemType:= 1; // is non-arcade since game is from MESS software lists (mame\hash\ folder)
+    TempGameVars.eSystemType:= 1; // is non-arcade since game is from MAME software lists (mame\hash\ folder)
 
     if TempGameVars.eSoftwareName = 'vectrex' then
        begin
-         TempGameVars.eScreenType:= 1; // (Vectrex is vector screen type);
-         TempGameVars.eScreenOrientation:= 1; // Vextrex is a vertical oriented videogame)
+         TempGameVars.eScreenType:= 1; // Vectrex is vector screen type
+         TempGameVars.eScreenOrientation:= 1; // Vextrex is a vertical oriented video game
        end;
   end;
 
@@ -20994,7 +19844,7 @@ begin
             if TempGameVars.eBiosName <> TempGameVars.eName then
                begin
                  BiosEmptyMsg:= True;
-                 TempGameVars.eBiosName:= TempGameVars.eName; // this is a bios game, set bios name = game name, for MAMu_ icons (no needed anymore!!!!!)
+                 TempGameVars.eBiosName:= TempGameVars.eName; // this is a bios set, set biosname = setname, for MAMu_ icons
                end;
           end;
      end;
@@ -21020,9 +19870,8 @@ begin
 
   if TempGameVars.eSystemID = idDICE then
      begin
-       // maybe do this when creating games lists ?
        // DICE doesn't have bios sets
-       // version added is stored in the bios name, that's all (May 18, 2015)
+       // version added is stored in the BiosName tag, that's all (May 18, 2015)
        TempGameVars.eVersionAdded:= TempGameVars.eBiosName;
        TempGameVars.eBiosName:= '';
      end;
@@ -21174,8 +20023,8 @@ begin
        AntoPISA_matureIni:= THashedStringList.Create;
        AntoPISA_matureIni.LoadFromFile(GetFolderFull(43)+'mature'+ExtraStr+'.ini');
      end;
-  ParseIni('category'+ExtraStr+'.ini', True); // category for MESS/MAME arcade
-  ParseIni('version'+ExtraStr+'.ini', False); // added version for MESS/MAME arcade
+  ParseIni('category'+ExtraStr+'.ini', True); // category for MAME arcade
+  ParseIni('version'+ExtraStr+'.ini', False); // added version for MAME arcade
   if Assigned(CatListHolder) then
      begin
        if CatListHolder.Count = 0 then
@@ -21243,29 +20092,26 @@ var
   IsNewFileFormat: Boolean;
 begin
   if not IsROMsListBasedSys(sysID) then
-     begin
-       if sysID = idDaphne then
-          begin
-            TEasyGameInfo(addedItem).eROMsAllNoDump:= False; // this will NEVER be set to "True"
-            TEasyGameInfo(addedItem).eHaveGameROMs:= 1; // game have ROMs... this is needed so EL can search for gamename.zip files...!!! (October 10, 2017)
-          end;
+     begin // for Daphne
+       TEasyGameInfo(addedItem).eROMsAllNoDump:= False; // this will NEVER be set to "True"
+       TEasyGameInfo(addedItem).eHaveGameROMs:= 1; // game have ROMs, this is needed so EL can search for gamename.zip files (October 10, 2017)
        Exit;
      end;
 
   if (sysID <> LoadedDBsysID) or (SoftwareList <> LoadedDBSoftwareList) then
      begin
        FreeAndNil(ListROMs);
-       ListROMs:= TMemIniFile.Create(GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 1, SoftwareList));
+       ListROMs:= TMemIniFile.Create(GetGamesFolderEL(Ord(SoftwareList <> ''), sysID)+GetSystemFileName(sysID, 1, SoftwareList));
        LoadedDBsysID:= sysID;
        LoadedDBSoftwareList:= SoftwareList;
      end;
 
-   TEasyGameInfo(addedItem).eROMsAllNoDump:= True; // will be false if at least one ROM has CRC checksum (will be false for Taito Type X games!)
+   TEasyGameInfo(addedItem).eROMsAllNoDump:= True; // will be FALSE if at least one ROM has CRC checksum (will be false for Taito Type X games)
    CountROM:= 0; // this means ALL ROMs: game ROMs; device ROMs; bios ROMs; ".eHaveGameROMs" is only for game ROMs (device/bios ROMs are excluded)
    CountCHD:= 0;
 
    ListROMs.ReadSectionValues(TEasyGameInfo(addedItem).eName, ROMsListHolder);
-   TEasyGameInfo(addedItem).eHaveGameROMs:= 1; // have game ROMs... set to TRUE for all systems
+   TEasyGameInfo(addedItem).eHaveGameROMs:= 1; // have game ROMs, set to TRUE for all systems
 
    if not (TEasyGameInfo(addedItem).eSystemID in [idSupermodel, idDICE, idSegaModel2]) then
       begin
@@ -21277,6 +20123,8 @@ begin
       end;
 
    HaveROMs:= ROMsListHolder.Count > 0;
+   //if ROMsListHolder.Count > 25 then
+   //   ShowMessage(TEasyGameInfo(addedItem).eTitle+#13#10+TEasyGameInfo(addedItem).eName+#13#10+'count: '+IntToStr(ROMsListHolder.Count));
    if HaveROMs then
    begin
      TEasyGameInfo(addedItem).eROMInfo:= TStringList.Create;
@@ -21290,7 +20138,7 @@ begin
 
      // fileID always at index 1 and 2; MediaType at index 3; IsCRCCollision at position 4
      // if there is no CRC / SHA-1 / MD5... these tags will not appear in the ROM info
-     // <mediatype_title> is mostly used for "Disc" media type since it can hold different media types, not just CD... this is for EL v8.4.1 and newer (December 28, 2017) 
+     // <mediatype_title> is mostly used for "Disc" media type since it can have different media types, not just CD; for EL v8.4.1 and newer (December 28, 2017)
 
      // 00   Game ROM
      // 01   Device ROM
@@ -21324,7 +20172,7 @@ begin
      // 22   Device Video Tape (VHS)
      // 23   BIOS Video Tape (VHS)
 
-     // Konami System 573 and old Demul v5.8.2 (naomigd2, naomigd) have ROMs with CHD "fileID" tags!!!!!!
+     // Konami System 573 and old Demul v5.8.2 (naomigd2, naomigd) have ROMs with CHD "fileID" tags
      TEasyGameInfo(addedItem).eROMInfo.BeginUpdate;
      for Loop:=0 to ROMsListHolder.Count-1 do
      begin
@@ -21334,18 +20182,6 @@ begin
            begin
              FileID:= StrToInt(LineStr[1]+LineStr[2]);
              MediaTypeID:= StrToInt(LineStr[3]); // 0 -> ROM/Cart/Flop/Cass; 1 -> CHDs
-             // this code is no longer used; CRC32 collisions are detected while creating games lists (February 16, 2018)
-             //if (LineStr[4] = '1') and (not IsCRC32Duplicate) then
-             //   begin
-             //     if FormMain.IsROM_Device(TEasyGameInfo(addedItem).eROMIdentification) or
-             //        FormMain.IsROM_Bios(TEasyGameInfo(addedItem).eROMIdentification) then
-             //        IsCRC32Duplicate:= True
-             //     else
-             //        begin
-             //          if FileID in [0, 3, 6, 9, 12, 15, 18, 21] then
-             //             IsCRC32Duplicate:= True;
-             //        end;
-             //   end;
              romCRC32:= SoftListGetEntryValue(LineStr, 'crc');
              romSHA1:= SoftListGetEntryValue(LineStr, 'sha1');
              TEasyGameInfo(addedItem).eROMInfo.Add(LineStr);
@@ -21365,15 +20201,15 @@ begin
        // 1 -> all CHDs (HDD, CD, Flash Card, VHS)
        if not (TEasyGameInfo(addedItem).eSystemID in [idSupermodel, idDICE, idSegaModel2]) then
           begin
-            if (FileID in [0, 3, 6, 9]) or
-               ((FileID in [12, 15, 18, 21]) and (MediaTypeID = 0)) then // this will check for "<rom" entries that are HDD, CD, Compact Flash Cards, Video Tape (they are not CHD files!) Konami System 573 games use this and old Demul v5.8.2 (naomigd, naomigd2 games)!!!
+            if IsFileID_GameROM(FileID) or
+               (IsFileID_GameCHD(FileID) and (MediaTypeID = 0)) then // this will check for "<rom" entries that are HDD, CD, Compact Flash Cards, Video Tape (they are not CHD files) Konami System 573 games use this and old Demul v5.8.2 (naomigd, naomigd2 games)
                TEasyGameInfo(addedItem).eHaveGameROMs:= 1
             else
             if (MediaTypeID = 1) and (FileID >= 12) then
                Inc(CountCHD);
           end;
 
-       // what if all ROMs and all CHDs are "nodump" ??? the .eROMsAllNoDump doesn't include CHD files!!! September 26, 2016
+       // what if all ROMs and all CHDs are "nodump" ? the .eROMsAllNoDump doesn't include CHD files (September 26, 2016)
        if (MediaTypeID = 0) and TEasyGameInfo(addedItem).eROMsAllNoDump then
           begin
             // for Konami System 573 and old Demul v5.8.2 (naomigd2, naomigd) games
@@ -21389,12 +20225,10 @@ begin
         begin
           if (CountROM = 0) and (CountCHD > 0) then
           begin
-             TEasyGameInfo(addedItem).eROMsAllNoDump:= False; // if game is CHD only ("ZERO" game/device/bios ROMs), set this to false!!!!!! September 26, 2016
+             TEasyGameInfo(addedItem).eROMsAllNoDump:= False; // if game is CHD only ("ZERO" game/device/bios ROMs), set this to false
              // this is for softlist games and arcade games with only CHD files
           end;
         end;
-
-     //TEasyGameInfo(addedItem).eCRC32Duplicates:= IsCRC32Duplicate; // no longer used; CRC32 collisions are detected while creating games lists (February 16, 2018)
 
      TEasyGameInfo(addedItem).eROMInfo.EndUpdate;
      TEasyGameInfo(addedItem).eCHDsCount:= CountCHD;
@@ -21450,8 +20284,8 @@ end;
 
 function TFormMain.FixUnicodeGameTitle(TitleIn: WideString): WideString;
 begin
-  // for MSX1 games... this is to make games sorting and ELV incremental search easier
-  // and because PC keyboards do not have an "alpha" key in them...
+  // for MSX games, to make games sorting and ELV incremental search easier
+  // and because PC keyboards do not have an "alpha" key in them
   if Copy(TitleIn, 1, 2) = 'Î±' then
      Result:= 'Alpha '+Copy(TitleIn, 3, Length(TitleIn))
   else
@@ -21459,8 +20293,6 @@ begin
 end;
 
 function TFormMain.EncodeUnicodeStr(const iUnicodeStr: WideString): String;
-var
-  aStr: String;
 begin
   if iUnicodeStr = '' then
      begin
@@ -21504,6 +20336,8 @@ var
   DeviceSysID: ShortInt;
   PlayedArcadeSysID, PlayedCustomSysID, CustomGameExtraInfoSysID, CRC32CollisionSysID: Integer;
   FavList: THashedStringList;
+  requirementList: TStringList;
+  reqCount: Integer;
 
   MAMESoftListCustomSystems: array[1..MaxConsoleComputerSystems] of THashedStringList;
 
@@ -21531,11 +20365,11 @@ var
     CRC32Count:= 0;
     CRC32CollisionSysID:= ArcadeSystemID;
     FreeAndNil(CRC32CollisionGames);
-    Result:= ValidateFile(GetCRC32CollisionFile(ArcadeSystemID)); // (GetGamesFolderEL+GetsystemFileName(ArcadeSystemID, 9));
+    Result:= ValidateFile(GetCRC32CollisionFile(ArcadeSystemID));
     if Result then
       begin
         CRC32CollisionGames:= THashedStringList.Create;
-        CRC32CollisionGames.LoadFromFile(GetCRC32CollisionFile(ArcadeSystemID)); // (GetGamesFolderEL+GetsystemFileName(ArcadeSystemID, 9));
+        CRC32CollisionGames.LoadFromFile(GetCRC32CollisionFile(ArcadeSystemID));
       end;
   end;
 
@@ -21617,8 +20451,8 @@ var
        begin
          if not GameIsClone(TempGameVars.eClone) then
             begin
-              // create game title ELV group for grouped view mode!!!!!
-              //GamesListView.Groups.Move(addItem, nil); move from custom TEasyGroup to single default group ??? // DOESN'T WORK!!!! :_((
+              // create game title ELV group for grouped view mode
+              //GamesListView.Groups.Move(addItem, nil); // move from custom TEasyGroup to single default group ? // DOESN'T WORK!!!
               addGroup:= GamesListView.Groups.AddCustom(TGroupInfo, nil);
               TGroupInfo(addGroup).eImageIndex:= TempGameVars.eROMIdentification;
               TGroupInfo(addGroup).eSystemID:= TempGameVars.eSystemID;
@@ -21639,18 +20473,18 @@ var
     end;
 
     Inc(GameLastAddedIndex);
-    //TEasyGameInfo(addItem).eSortIndex:= GameLastAddedIndex; // no longer used... scanning games do not need this anymore (August 20, 2015)
+
     TEasyGameInfo(addItem).eImageIndex:= TempGameVars.eROMIdentification;
     TEasyGameInfo(addItem).eROMIdentification:= TempGameVars.eROMIdentification;
     TEasyGameInfo(addItem).eMediaType:= TempGameVars.eMediaType;
     TEasyGameInfo(addItem).eSystemID:= TempGameVars.eSystemID;
-    TEasyGameInfo(addItem).eSystemType:= TempGameVars.eSystemType; // 0 -> Arcade; 1 -> MESS -listxml output and MESS software list games
+    TEasyGameInfo(addItem).eSystemType:= TempGameVars.eSystemType; // 0 -> Arcade; 1 -> MAME -listxml output and MAME software list games
     TEasyGameInfo(addItem).eCustomSystemID:= TempGameVars.eCustomSystemID;
     TEasyGameInfo(addItem).eCustomMediaType:= TempGameVars.eCustomMediaType;
     TEasyGameInfo(addItem).eIsCustomGame:= TempGameVars.eIsCustomGame;
     TEasyGameInfo(addItem).eIsUnicode:= TempGameVars.eIsUnicode;
 
-    //TEasyGameInfo(addItem).eIcon:= nil; // for future improvement ?
+    //TEasyGameInfo(addItem).eIcon:= nil; // for future improvement, instead of using TImageList (March 01, 2018)
     TEasyGameInfo(addItem).eIconLoaded:= False;
     TEasyGameInfo(addItem).eThumbnailLoaded:= False;
     TEasyGameInfo(addItem).eThumbnailFileName:= '';
@@ -21713,7 +20547,7 @@ var
     TEasyGameInfo(addItem).eIsMerged:= TempGameVars.eIsMerged;
     TEasyGameInfo(addItem).eCRC32Duplicates:= TempGameVars.eCRC32Duplicates;
 
-    //TEasyGameInfo(addItem).eROMInfo:= TStringList.Create; // cannot create this here!!! Do not remove this line, it's here to remind me about this comment!
+    //TEasyGameInfo(addItem).eROMInfo:= TStringList.Create; // cannot create this here. do not remove this line, it's here to remind me about this comment
 
     if not TempGameVars.eIsCustomGame then
     begin
@@ -21732,11 +20566,10 @@ var
            if TempSoftList.Count > 0 then
               begin
                 TempGameVars.eSystemType:= 1;
-                TEasyGameInfo(addItem).eSystemType:= TempGameVars.eSystemType; // force system as non-arcade if there are softwarename entries!!!!
+                TEasyGameInfo(addItem).eSystemType:= TempGameVars.eSystemType; // force system type as non-arcade if there are softwarename entries
                 SetLength(TEasyGameInfo(addItem).fSoftwareList, tempSoftList.Count);
 
                 TEasyGameInfo(addItem).eSoftwareList:= TEasyGameInfo(addItem).fSoftwareList;
-                //SetLength(TEasyGameInfo(addItem).eSoftwareList, tempSoftList.Count); // DOESN'T WORK!
                 for LoopSoft:=0 to TempSoftList.Count-1 do
                     TEasyGameInfo(addItem).eSoftwareList[LoopSoft]:= tempSoftList[LoopSoft];
 
@@ -21750,7 +20583,7 @@ var
       LoadROMsDatabase(addItem, TempGameVars.eSystemID, LoadedROMsSysID, TempGameVars.eName, TempGameVars.eSoftwareName, LoadedROMsSoftwareList, ROMsTemp);
     end;
 
-    addItem.Details[1]:= 50;
+    addItem.Details[1]:= 50; // 50 is a bogus column index so texts in tile view mode can be shown
   end;
 
 begin
@@ -21775,7 +20608,7 @@ begin
   tStr:= '';
 
   if FileExists(GetFolderFull(43)+'catver.ini') then
-     CategoriesList:= TMemIniFile.Create(GetFolderFull(43)+'catver.ini'); // for MAME only
+     CategoriesList:= TMemIniFile.Create(GetFolderFull(43)+'catver.ini'); // MAME only
 
   if FileExists(GetFolderFull(43)+'nplayers.ini') then
      begin
@@ -21795,7 +20628,7 @@ begin
      end;
 
   LoadLanguagesList(LanguagesList); // load languages from languages.ini into a HashedStringList "gamename=language"
-  LoadControlTypeList; // reload control type list into memory... just in case
+  LoadControlTypeList; // reload control type list into memory, just in case
 
   if FileExists(GetGamesFolderEL+GetSystemFileName(idMAME, 5)) then
      begin
@@ -21814,13 +20647,17 @@ begin
   if FileExists(GetFolderFull(43)+'mess.ini') then
      begin
       // AntoPISA file listing non-arcade machines, require to filter out non-arcade machines
-      // Require MAME 0.171 or newer to work; older MAME builds are no longer supported!!!!
+      // Require MAME 0.171 or newer to work; older MAME builds are no longer supported
       NonArcadeMESSIni:= THashedStringList.Create;
       NonArcadeMESSIni.LoadFromFile(GetFolderFull(43)+'mess.ini');
      end;
 
-  //if Assigned(CategoryAntoPISA) then ShowMessage(CategoryAntoPISA.Text); // for debugging...
-  //if Assigned(VersionAntoPISA) then ShowMessage(VersionAntoPISA.Text);   // for debugging...
+  //if Assigned(CategoryAntoPISA) then ShowMessage(CategoryAntoPISA.Text); // for debugging
+  //if Assigned(VersionAntoPISA) then ShowMessage(VersionAntoPISA.Text);   // for debugging
+
+  reqCount:= 0;
+  requirementList:= TStringList.Create;
+  requirementList.BeginUpdate;
 
   // Initialize virtual data
   SoftwareListMsgActive:= False;
@@ -21838,7 +20675,6 @@ begin
   GamesListView.BeginUpdate;
   GamesListView.Items.ReIndexDisable:= True;
 
-  //iLongerName:= 0;
   for Loop:=0 to CompleteGamesList.Count-1 do
   begin
     ClearMemGameInfo(TempGameVars);
@@ -21848,6 +20684,12 @@ begin
       case GetROMFields(CompleteGamesList, Loop) of
         True:
           begin
+            tStr:= SoftListGetEntryValue(CompleteGamesList[Loop], 'requirement');
+            if tStr <> '' then
+               begin
+                 requirementList.Add(TempGameVars.eSoftwareName+'\'+TempGameVars.eName+'='+tStr);
+                 Inc(reqCount);
+               end;
             if TempGameVars.eSoftwareName <> '' then
                begin
                  if not SoftwareListMsgActive then
@@ -21862,7 +20704,7 @@ begin
 
             if TempGameVars.eSoftwareName <> '' then
                begin
-                 TempGameVars.eTitle:= FixUnicodeGameTitle(TempGameVars.eTitle); // mostly for MSX1 games (AlphaRoid, Alpha Squadron)
+                 TempGameVars.eTitle:= FixUnicodeGameTitle(TempGameVars.eTitle); // mostly for MSX games (AlphaRoid, Alpha Squadron)
                  TempGameVars.eManufacturer:= DecodeUnicodeStr(TempGameVars.eManufacturer);
 
                  GetSoftListCustomSystemID(TempGameVars.eSoftwareName);
@@ -21870,20 +20712,13 @@ begin
                end;
             TempGameVars.eTitle:= DecodeUnicodeStr(TempGameVars.eTitle);
 
-            // for debugging purposes...
-            //if Length(TempGameVars.eName) > iLongerName then
-            //   begin
-            //       iLongerName:= Length(TempGameVars.eName);
-            //       if iLongerName 15 8 then
-            //          ShowMessage(TempGameVars.eName+#13#10+GetSystemShortTitle(TempGameVars.eSystemID)+#13#10+'size: '+IntToStr(iLongerName));
-            //   end;
             TempGameVars.eImageIndex:= TempGameVars.eROMIdentification;
             SetDescriptionFormat(True);
 
             if TempGameVars.eSoftwareName = '' then
             begin
-              // only get these info if not software list game... they are not for software list games, only MAME -listxml; and other arcade emulators!!!
-              // arcade emulators and MAME games/MESS machines from -listxml do NOT have software list entries
+              // not for software list games, only MAME -listxml and other arcade emulators
+              // arcade emulators and MAME arcade games from -listxml do NOT have software list entries
               if IsMAMEBasedSys(TempGameVars.eSystemID) then
                  begin
                    if TempGameVars.eSystemID = idHBMAME then
@@ -21908,8 +20743,8 @@ begin
                    if Assigned(NonArcadeMESSIni) then
                       begin
                         if NonArcadeMESSIni.IndexOf(TempGameVars.eName) <> -1 then
-                           TempGameVars.eSystemType:= 1; // set to MESS machine if AntoPISA 'mess.ini' is loaded and its game name is found
-                           // eSystemType is for games filtering only... selecting games DON'T need to use SystemType!!!
+                           TempGameVars.eSystemType:= 1; // set to MAME machine if AntoPISA 'mess.ini' is loaded and its game name is found
+                           // eSystemType is for games filtering only, selecting games don't T need to use SystemType
                       end;
                  end;
 
@@ -21958,18 +20793,17 @@ begin
                       begin
                         TempGameVars.eCRC32Duplicates:= CRC32CollisionGames.IndexOf(TempGameVars.eName) <> -1;
                         if TempGameVars.eCRC32Duplicates then
-                           Inc(CRC32Count); // this var is to stop CRC32 collision continuous check after total sets were set (for speed!)
+                           Inc(CRC32Count); // this var is to stop CRC32 collision continuous check after all sets were processed (for speed!)
                       end;
                  end;
             end;
             
             if Assigned(FavList) then
                begin
-                 // games from software lists format is: gamename_softlistname=system_name (MAME only)
+                 // games from software lists format is: gamename_softlistname=system_name (MAME/HBMAME)
                  TempGameVars.eIsFavorite:= FavList.IndexOf(GetPlayedGamesNameEntry(TempGameVars.eName, TempGameVars.eSoftwareName)+'='+GetArcadeSystemIniSection(TempGameVars.eSystemID, True)) <> -1;
                end;
 
-            // added April 03, 2017... new played games files and new code
             LoadPlayedFileArcade(TempGameVars.eSystemID);
             if Assigned(PlayedListArcadeGames) then
                begin
@@ -21988,7 +20822,7 @@ begin
 
             if TempGameVars.eSoftwareName = '' then
             begin
-              // get softwarelist files for each MESS machine
+              // get softwarelist files for each MAME machine
               if Assigned(SoftwareListMESS) then
                  begin
                    tempSoftList.Clear; // might not be needed as it's cleaned in .ReadSectionValues;
@@ -22002,7 +20836,7 @@ begin
           begin
             if IsGroupedView then
                begin
-                 // ListView grouped only!!!
+                 // ListView grouped mode only
                  TempGameVars.eTitle:= 'Game Info Parse Error!';
                  AddGameListView;
                end;
@@ -22012,7 +20846,7 @@ begin
     end
     else
     begin
-      // custom games from EmuCon
+      // games from EmuCon
       if not CustomGamesMsgActive then
          begin
            CustomGamesMsgActive:= True;
@@ -22083,6 +20917,13 @@ begin
     Application.ProcessMessages;
   end;
 
+  requirementList.EndUpdate;
+  //if reqCount > 0 then // for debugging only, do not enable (March 28, 2018)
+  //   begin
+  //     requirementList.SaveToFile(FrontendPath+'softlist-requirement-list.txt');
+  //     ShowMessage('requirement count: '+IntToStr(reqCount));
+  //   end;
+  FreeAndNil(requirementList);
   FreeAndNil(CategoriesList);
   FreeAndNil(iniNumPlayers);
   FreeAndNil(GameCPU_MAME);
@@ -22105,10 +20946,10 @@ begin
   FreeAndNil(ListROMs);
 
   FreeAndNil(PlayedListArcadeGames); // for arcade games
-  FreeAndNil(CRC32CollisionGames); // for arcade games, excludes MAME software lists as well
+  FreeAndNil(CRC32CollisionGames);   // for arcade games, excludes MAME software lists as well
 
   FreeAndNil(PlayedListCustomGames); // for EmuCon games
-  FreeAndNil(CustomGamesExtraInfo); // for EmuCon games
+  FreeAndNil(CustomGamesExtraInfo);  // for EmuCon games
 
   for Loop:= Low(MAMESoftListCustomSystems) to High(MAMESoftListCustomSystems) do
       FreeAndNil(MAMESoftListCustomSystems[Loop]);
@@ -22168,7 +21009,7 @@ begin
 
   for Loop:= Low(SoftListCustomSystems) to High(SoftListCustomSystems) do
       SoftListCustomSystems[Loop]:= THashedStringList.Create;
-  tStr:= GetSystemsSoftwareListFile(idMAME);//, FormMain.EmulatorFile[idMAME]);
+  tStr:= GetSystemsSoftwareListFile(idMAME);
   if FileExists(tStr) then
      begin
        iCatFile:= TMemIniFile.Create(tStr);
@@ -22305,41 +21146,16 @@ end;}
 
 function TFormMain.CheckGameControlType(sysID: ShortInt; const ControlsStrHolder, ControlName, SoftwareName: String; ButtonsCount: Byte): Boolean;
 begin
-  // this is used in uMain.ApplyFilters; function only... FormFiltersExtra Controls filter is
-  // not automatically executed in extra filters or machines side list filter
-  // ... this is necessary so the search bar "controls" filter is not executed along with the controls filter in FormFiltersExtra
-  // May 18, 2016: perhaps make it run in ApplyFiltersExtra
+  // this is used in uMain.ApplyFilters; function only.
+  // FormFiltersExtra Controls filter is not automatically executed in extra filters or machines side list filter.
+  // this is necessary so the search bar "controls" filter is not executed along with the controls filter in FormFiltersExtra
 
-  // If its purpose is to check if the selected control in FormFiltersExtra.ControlName var exists in MemGameInfo.eControls var,
-  // then it can be done with PosEx() function
-  // also, if the control selected in FormFiltersExtra.ControlName is "none", need to check for an empty MemGameInfo.eControls var
-  // May 18, 2016
   // this function is only called inside uMain.ApplyFilters; function (other filter calls might use this function)...
-
-  // I also needto update all control filter calls to validate control name (".eControls" var)... May 18, 2016
   Result:= False;
-  //if not IsMAMEBasedSys()
-  //if StringHolder = '' then
-  //   Exit;
-
-  //if not IsMAMEBasedSys(sysID) then
-  //   Exit;
-
-  //if ControlStr <> '' then
-  //            KeepGame:= PosEx(ControlStr, MemGameInfo.eControls) <> 0
-  //         else
-  //            begin
-  //              KeepGame:= IsMAMEBasedSys(MemGameInfo.eSystemID);
-  //              if KeepGame then
-  //                 KeepGame:= (MemGameInfo.eControls = '') and (MemGameInfo.eButtonsCount = 0) and (MemGameInfo.eSoftwareName = ''); // only for arcades; softlist games must be excluded!!!!
-  //            end;
-
-
-  //TempString:= FormFiltersExtra.ControlName;
   case SameText('none', ControlName) of
     True:
       begin
-        // user selected "(none or empty)" control... only valid if eControls var is empty
+        // user selected "(none or empty)" control, only valid if eControls var is empty
         if (ControlsStrHolder = '') and (SoftwareName = '') and (ButtonsCount = 0) then
            Result:= True;
       end;
@@ -22388,8 +21204,6 @@ begin
        Exit;
      end;
   // IconGameStatus -> 0 -> have; 1 -> have with missing ROMs/CHDs; 2 -> miss
-  // this is not used anymore... October 25, 2016
-
   if IconGameStatus.Picture.Icon.Empty then
      IconGameStatus.Tag:= -1;
 
@@ -22411,7 +21225,7 @@ begin
 
   GetMediaTypeIconMsgBox(MemGameInfo.eCustomMediaType, MemGameInfo.eIsCustomGame, MemGameInfo.eMediaType, IconGameMediaType, MemGameInfo.eSoftwareExecParameter);
 
-  // original code for the driver status icon
+  // original code for the driver status icon (March 01, 2018)
   //if UpdateIconStatus then
   //   IL_LeftPanel.GetIcon(IconGameStatus.Tag, IconGameStatus.Picture.Icon);
 
@@ -22431,7 +21245,6 @@ begin
   StatusBar_GamesGameName.Canvas.UnLock;
 end;
 
-// images functions
 procedure TFormMain.SetImageScaleMode;
 
   procedure UpdateScale(ImageHolder: TImage32);
@@ -22486,7 +21299,7 @@ begin
   if SoftwareName <> '' then
      SoftwareFolder:= SoftwareName+'\';
   case FormatIndex of
-    0: // Emu Loader Filename Format [elevator0005.png]
+    0: // Emu Loader Format [elevator0005.png]
       begin
         if ImageIndex = 1 then
            Result:= SoftwareFolder+GameName
@@ -22563,14 +21376,13 @@ begin
     //31: Result:= FormPreferences.FolderGamesFAQ.Text; // index for future use ?
     32: Result:= FrontendPath+'resources\main_icons\'; // Frontend Icons Folder
     33: Result:= FrontendPath+'resources\gameslist_icons\'; // Default Game Icons
-    34: Result:= GetConsoleComputerFolder+'system_icons\'; // for console/computer systems from EmuCon!!! (January 01, 2017)
+    34: Result:= GetConsoleComputerFolder+'system_icons\'; // for console/computer systems from EmuCon (January 01, 2017)
     35: Result:= FrontendPath+'resources\images\'; // Images Folder
-    36: Result:= GetConsoleComputerFolder+'icons\'; // for custom emulators feature!!! (January 02, 2017)
+    36: Result:= GetConsoleComputerFolder+'icons\'; // for custom emulators feature (January 02, 2017)
     37: Result:= FrontendPath+'docs\console_computer\special_rules\'; // special system rules (EmuCon)
     38: Result:= GetConsoleComputerFolder+'game_cfg\';
     39: Result:= GetConsoleComputerFolder+'played_games\';
     40: Result:= FrontendPath+'resources\main_icons\toolbar_filters\'; // frontend tool bar filter icons
-    // 40: Result:= GetConsoleComputerFolder+'filters\'; // for console/computer systems from EmuCon!!! this is no longer valid for Emu Loader!!! (November 20, 2017)
     41: Result:= GetArcadeFolder+'played_games\';
     42: Result:= GetArcadeFolder+'db_xml\';
     43: Result:= GetArcadeFolder+'filters\'; // for arcade systems (April 03, 2017)
@@ -22578,13 +21390,13 @@ begin
   if not (FolderType > 31) then //  in [32..35]) then
      begin
        if (Result <> '') and (SystemID <> -1) then
-          Result:= FullEmuFolderFix(Result, SystemID, True); // for zipped images...
+          Result:= FullEmuFolderFix(Result, SystemID, True); // for zipped images
      end;
 end;
 
 procedure TFormMain.ClearImageInfo(const ScreenIndex: ShortInt);
 begin
-  // ImageCategoryIndex CANNOT be reset here. only when loading a new image layout!!!
+  // ImageCategoryIndex CANNOT be reset here. only when loading a new image layout
   ImageDetails[ScreenIndex].FileName:= '';
   ImageDetails[ScreenIndex].SystemID:= -1;
   ImageDetails[ScreenIndex].NoImageLoaded:= True;
@@ -22713,6 +21525,26 @@ begin
   PopupImageCenterAllSplitters.Enabled:= not IsSingleImageLayout;
 end;
 
+function TFormMain.FixRetroArchImageFileNames(const ImageFileNameStr: String): String;
+var
+  iLoop: Integer;
+begin
+  Result:= ImageFileNameStr;
+  if not FormPreferences.FixRetroArchImageFileNames.Checked then
+     Exit;
+  if Result = '' then
+     Exit;
+  // replace the following chars by underscore " _ " for RetroArch
+  // &*/:`<>?\|
+  for iLoop:= 1 to Length(Result) do
+  begin
+    if (Result[iLoop] = '&') or (Result[iLoop] = '*') or (Result[iLoop] = '`') or
+       (Result[iLoop] = '<') or (Result[iLoop] = '>') or (Result[iLoop] = '?') or
+       (Result[iLoop] = '|') then
+       Result[iLoop]:= '_';
+  end;
+end;
+
 function TFormMain.ImagesPNGOnly(imgType: ShortInt): Boolean;
 begin
   Result:= imgType in [0, 1, 8..16];
@@ -22723,7 +21555,7 @@ begin
   Result:= imgType in [8];
 end;
 
-// load images with threads...
+// load images with threads
 procedure TFormMain.LoadImage1(Data: Pointer);
 begin
   LoadScreenshot(1);
@@ -22738,9 +21570,9 @@ procedure TFormMain.LoadImage3(Data: Pointer);
 begin
   LoadScreenshot(3);
 end;
-// end of load images with threads...
+// end of load images with threads
 
-function TFormMain.GetImageType(iMemStream: TWideMemoryStream): TImageType;
+function TFormMain.GetImageType(iMemStream: TWideMemoryStream; ScreenIndex: Integer = 0): TImageType;
 const
   JPG_HEADER: array[0..2] of byte  = ($FF, $D8, $FF);
   GIF_HEADER: array[0..2] of byte  = ($47, $49, $46);
@@ -22749,16 +21581,16 @@ const
   TIF_HEADER: array[0..2] of byte  = ($49, $49, $2A);
   TIF_HEADER2: array[0..2] of byte = (77, 77, 00); // special case ? I don't know what this is for or if it's even used (February 17, 2018)
 var
-  MemStr: TWideMemoryStream;
+  MemStr: array[0..3] of TWideMemoryStream;
 begin
   Result:= ifUnknown;
   if iMemStream = nil then
      Exit;
-  MemStr:= TWideMemoryStream.Create;
+  MemStr[ScreenIndex]:= TWideMemoryStream.Create;
   try
     iMemStream.Position:= 0;
-    MemStr.CopyFrom(iMemStream, 5);
-    if MemStr.Size > 4 then
+    MemStr[ScreenIndex].CopyFrom(iMemStream, 5);
+    if MemStr[ScreenIndex].Size > 4 then
       begin
       // uncomment these lines to detect unsupported image types, except "ShowMessage" commands
       // MemStr.Position:=0;
@@ -22769,26 +21601,26 @@ begin
       // MemStr.Read(buf,1);
       // ShowMessage(inttostr(ord(buf)));
 
-      if CompareMem(MemStr.Memory, @JPG_HEADER, SizeOf(JPG_HEADER)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @JPG_HEADER, SizeOf(JPG_HEADER)) then
          Result:= ifJPG
       else
-      if CompareMem(MemStr.Memory, @GIF_HEADER, SizeOf(GIF_HEADER)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @GIF_HEADER, SizeOf(GIF_HEADER)) then
          Result:= ifGIF
       else
-      if CompareMem(MemStr.Memory, @PNG_HEADER, SizeOf(PNG_HEADER)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @PNG_HEADER, SizeOf(PNG_HEADER)) then
          Result:= ifPNG
       else
-      if CompareMem(MemStr.Memory, @BMP_HEADER, SizeOf(BMP_HEADER)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @BMP_HEADER, SizeOf(BMP_HEADER)) then
          Result:= ifBMP
       else
-      if CompareMem(MemStr.Memory, @TIF_HEADER, SizeOf(TIF_HEADER)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @TIF_HEADER, SizeOf(TIF_HEADER)) then
          Result:= ifTIF
       else
-      if CompareMem(MemStr.Memory, @TIF_HEADER2, SizeOf(TIF_HEADER2)) then
+      if CompareMem(MemStr[ScreenIndex].Memory, @TIF_HEADER2, SizeOf(TIF_HEADER2)) then
          Result:= ifTIF;
     end;
   finally
-    MemStr.Free;
+    MemStr[ScreenIndex].Free;
   end;
   iMemStream.Position:= 0;
 end;
@@ -22846,8 +21678,7 @@ begin
   end;
   ImageHolder.Canvas.UnLock;
 
-  iMemStream.Free;
-  iMemStream:= nil;
+  FreeAndNil(iMemStream);
 end;
 
 procedure TFormMain.ResetImageTagTo1;
@@ -22863,7 +21694,6 @@ begin
   ImageDetails[3].ImageCurrentTag:= 1;
 end;
 
-// new screenshot display routine for both arcade and console/computer (EmuCon) systems
 procedure TFormMain.LoadScreenshot(ScreenIndex: ShortInt);
 var
   Folder, FolderSnap, ImageExt, ExtraFolderStrMAME,
@@ -22873,7 +21703,12 @@ var
   ImageTypeDetected: packed array[1..3] of TImageType;
   CurrentSystemID, CurrentImageCategoryID, CurrentCustomSystemID: packed array[1..3] of Integer;
   iImageTag: packed array[1..3] of Integer;
-  NewMAMESnapName, NewMAMESnapCloneName: String; // for gamename\0000.png
+  NewMAMESnapName, NewMAMESnapCloneName: array[1..3] of String; // for "gamename\0000.png"
+
+  //pngImg: packed array[1..3] of TPNGGraphic;
+  //jpgImg: packed array[1..3] of TJPEGImage;
+  //gifImg: packed array[1..3] of TGIFGraphic;
+  //bmpImg: packed array[1..3] of TBitmap;
 
   function FixBlendMode: Boolean;
   begin
@@ -22899,9 +21734,11 @@ var
     gifImg: TGIFGraphic;
     bmpImg: TBitmap;
   begin
-    // for zipped images only
     Result:= True;
-    ImageTypeDetected[ScreenIndex]:= GetImageType(FileStream[ScreenIndex]);
+    if FileStream[ScreenIndex].Size = 0 then
+       Exit;
+
+    ImageTypeDetected[ScreenIndex]:= GetImageType(FileStream[ScreenIndex], ScreenIndex);
     ImageHolder.Canvas.Lock;
     try
       case ImageTypeDetected[ScreenIndex] of
@@ -22956,7 +21793,7 @@ var
           ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
           if not ContinueImg[ScreenIndex] then
              begin
-               // search "snap\softlist\softlist.zip"
+               // search "snap\softwarename\softlist.zip"
                zFile[ScreenIndex]:= ImageDetails[ScreenIndex].SoftwareName+'\'+ImageDetails[ScreenIndex].SoftwareName+'.zip';
                ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
              end;
@@ -23124,7 +21961,7 @@ var
                      end;
                    end;
 
-                // not found in "snap\softlistname.zip" or (snap\softlistname\softlistname.zip"... fallback to "snap\snap.zip"
+                // not found in "snap\softlistname.zip" or "snap\softlistname\softlistname.zip", fallback to "snap\snap.zip"
                 if not ContinueImg[ScreenIndex] then
                    begin
                      ContinueImg[ScreenIndex]:= Assigned(imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex]);
@@ -23158,7 +21995,7 @@ var
                 ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
                 if not ContinueImg[ScreenIndex] then
                    begin
-                     // check img extra folder...
+                     // check img extra folder
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                          ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
                                          NameString+ImageExt[ScreenIndex]);
@@ -23172,7 +22009,7 @@ var
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
                      if not ContinueImg[ScreenIndex] then
                         begin
-                          // check img extra folder...
+                          // check img extra folder
                           ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                               ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
                                               NameString+ImageExt[ScreenIndex]);
@@ -23190,7 +22027,7 @@ var
               end;
             False:
               begin
-                // create a new FoundInExtraFolder[] array ? only necessary for "load with threads"... not sure if needed, seems to work fine
+                // create a new FoundInExtraFolder[] array ? only necessary for "load with threads"; not sure if needed but seems to work fine
                 ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
                 ExtraFolderStrMAME[ScreenIndex]:= '';
                 if (not ContinueImg[ScreenIndex]) then
@@ -23236,9 +22073,9 @@ var
     begin
       if (not ContinueImg[ScreenIndex]) and (not SearchInZip) and (ImageDetails[ScreenIndex].ImageCategoryIndex in [1]) then
          begin
-           if NewMAMESnapName = '' then
-              NewMAMESnapName:= GetImageName(MemGameInfo.eName, iImageTag[ScreenIndex], 1);
-           SearchImageFile(True, NewMAMESnapName, SearchInZip);
+           if NewMAMESnapName[ScreenIndex] = '' then
+              NewMAMESnapName[ScreenIndex]:= GetImageName(MemGameInfo.eName, iImageTag[ScreenIndex], 1);
+           SearchImageFile(True, NewMAMESnapName[ScreenIndex], SearchInZip);
           end;
 
       if (not ContinueImg[ScreenIndex]) and PopupImageDisplayParent.Checked then
@@ -23251,9 +22088,9 @@ var
 
                 if (not ContinueImg[ScreenIndex]) and (not SearchInZip) and (ImageDetails[ScreenIndex].ImageCategoryIndex in [1]) then
                    begin
-                     if NewMAMESnapCloneName = '' then
-                        NewMAMESnapCloneName:= GetImageName(MemGameInfo.eClone, iImageTag[ScreenIndex], 1);
-                     SearchImageFile(False, NewMAMESnapCloneName, SearchInZip);
+                     if NewMAMESnapCloneName[ScreenIndex] = '' then
+                        NewMAMESnapCloneName[ScreenIndex]:= GetImageName(MemGameInfo.eClone, iImageTag[ScreenIndex], 1);
+                     SearchImageFile(False, NewMAMESnapCloneName[ScreenIndex], SearchInZip);
                    end;
               end;
          end;
@@ -23284,7 +22121,7 @@ begin
   UnzipActive[ScreenIndex]:= True;
   FoundImage[ScreenIndex]:= False;
   FoundInSoftListZipFile[ScreenIndex]:= False;
-  FoundZipCustomGameInSnapDir[ScreenIndex]:= False; // this is for EmuCon games only
+  FoundZipCustomGameInSnapDir[ScreenIndex]:= False; // for EmuCon games only
 
   ImageDetails[ScreenIndex].SoftwareName:= MemGameInfo.eSoftwareName;
 
@@ -23305,7 +22142,7 @@ begin
       end;
   end;
 
-  Sleep(5); // delay to fix application crash, images are loaded in a separate thread
+  Sleep(5); // delay to fix application crash, images are loaded in a separate thread ??? Not sure if this helps anything anymore (March 16, 2018)
 
   ImageParentName[ScreenIndex]:= '';
   case ScreenIndex of
@@ -23320,8 +22157,12 @@ begin
     False: ImageName[ScreenIndex]:= GetImageName(MemGameInfo.eName, iImageTag[ScreenIndex], 0);
   end;
 
-  NewMAMESnapName:= ''; // used by in-game snapshot only "gamename\0000.png"
-  NewMAMESnapCloneName:= ''; // used by in-game snapshot only "parent_gamename\0000.png"
+  if MemGameInfo.eIsCustomGame then
+     if FormPreferences.FixRetroArchImageFileNames.Checked then
+        ImageName[ScreenIndex]:= FixRetroArchImageFileNames(ImageName[ScreenIndex]);
+
+  NewMAMESnapName[ScreenIndex]:= ''; // used by in-game snapshot only "gamename\0000.png"
+  NewMAMESnapCloneName[ScreenIndex]:= ''; // used by in-game snapshot only "parent_gamename\0000.png"
 
   // save current image details (sysID, imgCategory, SoftwareName, Image FileName)
   CurrentSystemID[ScreenIndex]:= ImageDetails[ScreenIndex].SystemID;
@@ -23355,7 +22196,7 @@ begin
 
   if ContinueImg[ScreenIndex] then
      begin
-       // this means the image file was already found, unzipped or zipped!
+       // this means the image file was already found, unzipped or zipped
        ImageDetails[ScreenIndex].SystemID:= MemGameInfo.eSystemID;
        ImageDetails[ScreenIndex].CustomSystemID:= MemGameInfo.eCustomSystemID;
        if (ImageDetails[ScreenIndex].FileName = CurrentImageZip[ScreenIndex]) and
@@ -23415,27 +22256,9 @@ begin
   UnzipActive[ScreenIndex]:= False;
 end;
 
-function TFormMain.DisplayImage: Boolean;
-
-  function CallImageLoad(const ScreenIndex: Integer): Boolean;
-  begin
-    if UnzipActive[ScreenIndex] then
-       Exit;
-    if ScreenIndex = 1 then
-       Result:= True
-    else
-       Result:= Assigned(ImageScr[ScreenIndex]);
-    if not Result then
-       Exit;
-
-    case ScreenIndex of
-      1: RunInThread(LoadImage1, nil);
-      2: RunInThread(LoadImage2, nil);
-      3: RunInThread(LoadImage3, nil);
-    end;
-    Result:= True;
-  end;
-
+procedure TFormMain.DisplayImage;
+var
+  ScreenIndex: Integer;
 begin
   if IsStartup or CreatingGamesList then
      Exit;
@@ -23449,16 +22272,30 @@ begin
           ImageSoftNameIndex:= imgSoftwareNameZipList.IndexOf(MemGameInfo.eSoftwareName);
      end;
 
-  Result:= CallImageLoad(1);
-  if CallImageLoad(2) then
-     Result:= True;
-  if CallImageLoad(3) then
-     Result:= True;
+  for ScreenIndex:=1 to 3 do
+  begin
+    if not UnzipActive[ScreenIndex] then
+    begin
+      if (ScreenIndex = 1) or ((ScreenIndex > 1) and Assigned(ImageScr[ScreenIndex])) then
+      begin
+        if not FormPreferences.ImageDisableThreadedLoading.Checked then
+        begin
+          case ScreenIndex of
+            1: RunInThread(LoadImage1, nil);
+            2: RunInThread(LoadImage2, nil);
+            3: RunInThread(LoadImage3, nil);
+          end;
+        end
+        else
+          LoadScreenshot(ScreenIndex); // load image without thread
+      end;
+    end;
+  end;
 end;
 
 procedure TFormMain.CallCreateArcadeGames(sysID: Integer; MultiSys: String = '');
 var
-  Continue, IsMultiSys, AuditSoftwareLists: Boolean;
+  Continue, IsMultiSys, AuditMAMESoftwareList, AuditHBMAMESoftwareList: Boolean;
   Loop, CurrentSystem: Integer;
   CreateSys: array[1..MaxArcadeSystems] of Boolean;
   FailedStr, PassedStr: String;
@@ -23477,9 +22314,9 @@ var
               begin
                 if SystemID = idSupermodel then
                    begin
-                     Result:= ParseSupermodelGamesXMLFile; // create games list based on new "supermodel3_dir\Config\Games.xml" file (SVN 592 and newer!)
+                     Result:= ParseSupermodelGamesXMLFile; // create games list based on new "supermodel3_dir\Config\Games.xml" file (SVN 592 and newer)
                      if not Result then
-                        Result:= CreateGamesClrMAMEProXML(SystemID); // this is for SVN 591 and older...
+                        Result:= CreateGamesClrMAMEProXML(SystemID); // this is for SVN 591 and older
                    end
                 else
                    Result:= CreateGamesClrMAMEProXML(SystemID);
@@ -23495,14 +22332,15 @@ var
   end;
 
 begin
-  // this function is only called at main menu 'Create Games List'!!!
+  // this function is only called at main menu 'Create Games List'
   if sysID = -1 then
      Exit;
   if (sysID = idMultiSys) and (MultiSys = '') then
      Exit;
 
   Continue:= False;
-  AuditSoftwareLists:= False;
+  AuditMAMESoftwareList:= False;
+  AuditHBMAMESoftwareList:= False;
   ChangedGames:= False;
   IsMultiSys:= sysID = idMultiSys;
   case IsMultiSys of
@@ -23530,7 +22368,7 @@ begin
                if FailedStr <> '' then
                   FailedStr:= FailedStr+#13#10;
                FailedStr:= FailedStr+GetArcadeSystemShortTitle(CurrentSystem)+': Emulator file invalid.';
-               CreateSys[Loop]:= False; // set system to false since emulator validation failed!
+               CreateSys[Loop]:= False; // set system to false since emulator validation failed
              end;
         end;
         if Continue then
@@ -23570,7 +22408,7 @@ begin
                          if FailedStr <> '' then
                             FailedStr:= FailedStr+#13#10;
                          FailedStr:= FailedStr+GetArcadeSystemShortTitle(Loop)+': Failed to create games list.';
-                         CreateSys[Loop]:= False; // failed to create games list... no audit games possible!
+                         CreateSys[Loop]:= False; // failed to create games list, no audit games possible
                        end;
                   end;
              end;
@@ -23589,16 +22427,25 @@ begin
   if Continue then
      begin
        Application.ProcessMessages;
-       // first I need to load the games list, then audit games!!!!!!!!!
+       // first need to load the games list, then audit games
        if not IsStartup then
           begin
-            CreatingGamesList:= True; // new line July 01, 2015 to avoid setting filters on every created games list (for softlist mostly)
-            SetGameType(True); // load the games list first!
+            CreatingGamesList:= True;
+            SetGameType(True); // load the games list first
             case IsMultiSys of
               True:
                 begin
-                  if CreateSys[idMAME] and (MenuCreateMAMESoftwareListGames.Tag = 1) then // 0 -> no software list games; 1 -> yes, create software list games)
-                     AuditSoftwareLists:= True; // need to check if user enabled the new "Create Softwarelist Games" checkbox in systems selection or scan mode dialog
+                  // 0 -> disabled, don't create softlists;
+                  // 1 -> update mode: create softlist games and update existing ones
+                  // 2 -> overwrite mode: delete all softlists and create new ones
+                  if MenuCreateMAMESoftwareListGames.Tag > 0 then
+                     begin
+                       if CreateSys[idMAME] then
+                          AuditMAMESoftwareList:= True; // need to check if user enabled the new "Create Softwarelist Games" checkbox in systems selection or scan mode dialog
+                       if CreateSys[idHBMAME] then
+                          AuditHBMAMESoftwareList:= True; // need to check if user enabled the new "Create Softwarelist Games" checkbox in systems selection or scan mode dialog
+                     end;
+
                   GamesListView.BeginUpdate;
                   for Loop:=Low(CreateSys) to High(CreateSys) do
                   begin
@@ -23618,19 +22465,32 @@ begin
                 begin
                   if CallScanGames(0, True, sysID) > 0 then
                      ChangedGames:= True;
-                  if (sysID = idMAME) and (MenuCreateMAMESoftwareListGames.Tag = 1) then
-                     AuditSoftwareLists:= True;
+
+                  if MenuCreateMAMESoftwareListGames.Tag > 0 then
+                     begin
+                       case sysID of
+                         idMAME  : AuditMAMESoftwareList:= True;
+                         idHBMAME: AuditHBMAMESoftwareList:= True;
+                       end;
+                     end;
                 end;
             end;
-            if AuditSoftwareLists then
+            if AuditMAMESoftwareList then
             begin
-              if ScanSoftListGames(0, True) > 0 then
+              if ScanSoftListGames(0, True, idMAME) > 0 then
                  ChangedGames:= True;
               // get all software list files
             end;
+            if AuditHBMAMESoftwareList then
+            begin
+              if ScanSoftListGames(0, True, idHBMAME) > 0 then
+                 ChangedGames:= True;
+              // get all software list files
+            end;
+
             SetSortAudit(False);
-            CreatingGamesList:= False; // new line July 01, 2015 (to avoid apply filters on every new system/software list
-            SetGameType(False); // apply filters only...
+            CreatingGamesList:= False; // to avoid apply filters on every new system/software list
+            SetGameType(False); // apply filters only
           end;
        LoadListCPU(FilterCPUList);
        ResetNoImageLoaded;
@@ -23656,204 +22516,6 @@ begin
     False: GamesListview.EndUpdate(False);
   end;
 end;
-
-{
-function TFormMain.GetDeviceROMsList(sysID: Integer; const GameName: String = ''): Boolean;
-var
-  ArchiveItem: TZFArchiveItem;
-  ArchiveItemSevenZ: I7zInArchive;
-  Loop7z: Integer;
-  TempDevsList: TStringList;
-  MAMEList: TMemIniFile;
-  Loop: Integer;
-  ZipFileName, iDeviceName: String;
-  ROMFileMemoryStream: TWideMemoryStream;
-  CRC32CollisionList: THashedStringList;
-
-  function GenerateStreamSHA1: Boolean;
-  var
-    FileSHA1: String;
-  begin
-    Result:= ROMFileMemoryStream.Size > 0;
-    if not Result then
-       Exit;
-    FileSHA1:= '';
-    try
-      ROMFileMemoryStream.Position:= 0;
-      FileSHA1:= GetSHA1_ValueMemoryStream(ROMFileMemoryStream);
-    except
-      Result:= False;
-    end;
-    ROMFileMemoryStream.Clear;
-    if FileSHA1 <> '' then
-       DeviceSetsSHA1ZipContents.Add(iDeviceName+'='+FileSHA1);
-  end;
-
-begin
-  // function called only at uMain.ScanGames()
-  Result:= IsMAMEBasedSys(sysID);
-  if not Result then
-     Exit;
-  if GameName = '' then
-     begin
-        MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID));
-        TempDevsList:= TStringList.Create;
-        TempDevsList.BeginUpdate;
-        MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file
-        TempDevsList.EndUpdate;
-        FreeAndNil(MAMEList);
-     end
-  else
-     begin
-       // single game audit fixed (February 19, 2018)
-       if FormMain.IsROM_Device(TEasyGameInfo(SelectedEasyItem).eROMIdentification) then
-          begin
-            TempDevsList:= TStringList.Create;
-            TempDevsList.Add(TEasyGameInfo(SelectedEasyItem).eName);
-          end
-       else
-          begin
-            if TEasyGameInfo(SelectedEasyItem).eDeviceSets = nil then
-               begin
-                 Result:= False;
-                 Exit;
-               end
-            else
-               begin
-                 TempDevsList:= TStringList.Create;
-                 TempDevsList.AddStrings(TEasyGameInfo(SelectedEasyItem).eDeviceSets);
-               end;
-          end;
-
-       //if (not FormMain.IsROM_Device(TEasyGameInfo(SelectedEasyItem).eROMIdentification)) and
-       //   (TEasyGameInfo(SelectedEasyItem).eDeviceSets = nil) then
-       //   begin
-       //     Result:= False;
-       //     Exit;
-       //   end;
-       //TempDevsList:= TStringList.Create;
-       //TempDevsList.AddStrings(TEasyGameInfo(SelectedEasyItem).eDeviceSets);
-     end;
-  Result:= TempDevsList.Count > 0;
-  if not Result then
-     begin
-       FreeAndNil(TempDevsList);
-       Exit;
-     end;
-
-  if ValidateFile(GetCRC32CollisionFile(sysID)) then
-     begin
-       CRC32CollisionList:= THashedStringList.Create;
-       CRC32CollisionList.LoadFromFile(GetCRC32CollisionFile(sysID));
-       DeviceSetsSHA1ZipContents:= THashedStringList.Create;
-       DeviceSetsSHA1ZipContents.BeginUpdate;
-       ROMFileMemoryStream:= TWideMemoryStream.Create;
-     end;
-     
-  DeviceSetsZipContents:= THashedStringList.Create;
-  DeviceSetsZipContents.BeginUpdate;
-  for Loop:=0 to TempDevsList.Count-1 do
-  begin
-    iDeviceName:= TempDevsList[Loop];
-    ZipFileName:= FormMain.SearchZIPFolder(iDeviceName, sysID);
-    if ZipFileName <> '' then
-       begin
-         ROMFileMemoryStream.Clear;
-         if SameText(ExtractFileExt(ZipFileName), '.zip') then
-            begin
-              // .zip file
-              with ZipForge do
-              begin
-                FileName:= ZipFileName;
-                // Open existing archive file
-                try
-                  OpenArchive(fmOpenRead or fmShareDenyNone);
-                  Result:= FileCount > 0;
-                  if Result then
-                     begin
-                       // Search text files stored inside the archive
-                       if FindFirst('*.*', ArchiveItem) then
-                          begin
-                            repeat
-                              DeviceSetsZipContents.Add(TempDevsList[Loop]+'='+LowerCase(IntToHex(ArchiveItem.CRC, 8)));
-                              if CRC32CollisionList.IndexOf(iDeviceName) <> -1 then
-                                 begin
-                                   ExtractToStream(ArchiveItem.FileName, ROMFileMemoryStream);
-                                   GenerateStreamSHA1;
-                                 end;
-                            until (not FindNext(ArchiveItem));
-                          end;
-                     end;
-                  CloseArchive;
-                  ZipForge.FileName:= '';
-                except
-                  CloseArchive;
-                  ZipForge.FileName:= '';
-                end;
-              end;
-            end
-         else
-            begin
-              // .7z file
-              try
-                ArchiveItemSevenZ:= CreateInArchive(CLSID_CFormat7z);
-              except
-                Result:= False;
-                Exit;
-              end;
-
-              with ArchiveItemSevenZ do
-              begin
-                // Open existing archive file
-                try
-                  OpenFile(ZipFileName);
-                  Result:= NumberOfItems > 0;
-                  if Result then
-                     begin
-                       // Search text files stored inside the archive
-                       for Loop7z:= 0 to NumberOfItems-1 do
-                       begin
-                         if not ItemIsFolder[Loop7z] then
-                            begin
-                              DeviceSetsZipContents.Add(TempDevsList[Loop]+'='+LowerCase(IntToHex(ItemCRC[Loop7z], 8)));
-                              if CRC32CollisionList.IndexOf(iDeviceName) <> -1 then
-                                 begin
-                                   ExtractItem(Loop7z, ROMFileMemoryStream, False);
-                                   GenerateStreamSHA1;
-                                 end;
-                            end;
-                       end;
-                     end;
-                  Close;
-                except
-                  Result:= False;
-                  Close;
-                end;
-              end;
-            end;
-       end;
-  end;
-  DeviceSetsZipContents.EndUpdate;
-  Result:= DeviceSetsZipContents.Count > 0;
-  if not Result then
-     FreeAndNil(DeviceSetsZipContents);
-  //else
-  //   DeviceSetsZipContents.SaveToFile(FrontendPath+'device-zip-list.txt'); // for debugging only, do not enable (February 19, 2018)
-
-  if Assigned(DeviceSetsSHA1ZipContents) then
-     begin
-       DeviceSetsSHA1ZipContents.EndUpdate;
-       if DeviceSetsSHA1ZipContents.Count = 0 then
-          FreeAndNil(DeviceSetsSHA1ZipContents);
-       //else
-       //   ShowMessage(DeviceSetsSHA1ZipContents.Text); // for debugging only, do not enable (February 19, 2018)
-     end;
-  ROMFileMemoryStream.Clear;
-  FreeAndNil(TempDevsList);
-  FreeAndNil(ROMFileMemoryStream);
-  FreeAndNil(CRC32CollisionList);
-end;
-}
 
 function TFormMain.SystemUseSevenZip(sysID: Integer): Boolean;
 begin
@@ -23893,8 +22555,7 @@ function TFormMain.CallScanGames(RefreshMode: ShortInt; CreatingList: Boolean; s
 var
   NumGamesChanged, TotalGamesCount, CurrentIndex, iStatusGamesCount, iStatusCurrentIndex, SelectedIndex: Integer;
   UpdateList: Boolean;
-  FileGames, MissingROMsFileName: String;//, LastParentSet, LastSoftwareName: String;
-  //LastParentSysID: Integer;
+  FileGames, MissingROMsFileName: String;
   MissingROMs: TMemIniFile;
   checkItem: TEasyItem;
   checkGroup: TEasyGroup;
@@ -23906,14 +22567,13 @@ var
 
   function ELV_UpdateGameInfo(ItemToUpdate: TEasyItem): Boolean;
   begin
-    // check for software list games being audited and update the correct file ?????
     Result:= True;
     TEasyGameInfo(ItemToUpdate).eROMIdentification:= TempGameVars.eROMIdentification;
     TEasyGameInfo(ItemToUpdate).eGameSetStatus:= TempGameVars.eGameSetStatus;
     TEasyGameInfo(ItemToUpdate).eScanMode:= TempGameVars.eScanMode;
     TEasyGameInfo(ItemToUpdate).eIsMerged:= TempGamevars.eIsMerged;
     if TEasyGameInfo(ItemToUpdate).eImageIndex <= MaxGameID then
-       TEasyGameInfo(ItemToUpdate).eImageIndex:= TempGameVars.eROMIdentification;//GetMAMEImageIndex(TempGameVars.eROMIdentification, TempGameVars.eSoftwareName);
+       TEasyGameInfo(ItemToUpdate).eImageIndex:= TempGameVars.eROMIdentification;
   end;
 
   function CheckSystemROM_ID: Boolean;
@@ -23954,10 +22614,9 @@ var
 
   procedure FreeMemoryVars;
   begin
-    //if sysID = 1 then
     FreeAndNil(MissingROMs);
-    FreeAndNil(CompleteGamesList); // June 18, 2015
-    FreeAndNil(ScanGameStatusList); // March 03, 2016
+    FreeAndNil(CompleteGamesList);
+    FreeAndNil(ScanGameStatusList);
 
     FreeAndNil(ZipContents);
     FreeAndNil(ParentZipContents);
@@ -24031,7 +22690,7 @@ var
     end;
   end;
 
-  function GetDeviceBiosROMsList(SetType: ShortInt; TempSetsList, DestinationCRC32List, DestinationSHA1List: THashedStringList): Boolean; //IsDevice(ItemSource: TEasyItem = nil): Boolean;
+  function GetDeviceBiosROMsList(SetType: ShortInt; TempSetsList, DestinationCRC32List, DestinationSHA1List: THashedStringList): Boolean;
   var
     ArchiveItem: TZFArchiveItem;
     ArchiveItemSevenZ: I7zInArchive;
@@ -24043,54 +22702,6 @@ var
     CRC32CollisionList: THashedStringList;
   begin
     // this function will get CRC32 / SHA-1 from .zip files and store in lists (device and bios)
-    {
-    Result:= IsMAMEBasedSys(sysID) or (sysID = idDemul) or (sysID = idSegaModel2) or (sysID = idZiNc);
-    if not Result then
-       Exit;
-    if ItemSource = nil then
-       begin
-          MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID));
-          if IsMAMEBasedSys(sysID) then
-             begin
-               TempDevsList:= THashedStringList.Create;
-               MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file... TMemIniFile.ReadSection() already have .BeginUpdate and .EndUpdate
-             end;
-          TempBiosList:= THashedStringList.Create;
-          MAMEList.ReadSection('bios', TempBiosList);
-          FreeAndNil(MAMEList);
-       end
-    else
-       begin
-         // single game audit fixed (February 19, 2018)
-         if FormMain.IsROM_Device(TEasyGameInfo(ItemSource).eROMIdentification) then
-            begin
-              TempDevsList:= THashedStringList.Create;
-              TempDevsList.Add(TEasyGameInfo(ItemSource).eName);
-            end
-         else
-            begin
-              if TEasyGameInfo(ItemSource).eDeviceSets = nil then
-                 begin
-                   Result:= False;
-                   Exit;
-                 end
-              else
-                 begin
-                   TempDevsList:= THashedStringList.Create;
-                   TempDevsList.AddStrings(TEasyGameInfo(ItemSource).eDeviceSets);
-                 end;
-            end;
-       end;
-
-    Result:= (TempDevsList.Count > 0) or (TempBiosList.Count > 0);
-    if not Result then
-       begin
-         FreeAndNil(TempDevsList);
-         FreeAndNil(TempBiosList);
-         Exit;
-       end;
-    }
-
     Result:= TempSetsList.Count > 0;
     if not Result then
        Exit;
@@ -24154,12 +22765,7 @@ var
            else
               begin
                 // .7z file
-                try
-                  ArchiveItemSevenZ:= CreateInArchive(CLSID_CFormat7z);
-                except
-                  Result:= False;
-                  Exit;
-                end;
+                ArchiveItemSevenZ:= CreateInArchive(CLSID_CFormat7z);
                 with ArchiveItemSevenZ do
                 begin
                   // Open existing archive file
@@ -24198,7 +22804,6 @@ var
     Result:= DestinationCRC32List.Count > 0;
     //if Result then
     //   DestinationCRC32List.SaveToFile(FrontendPath+'zinc-bios-zip-list.txt'); // for debugging only, do not enable (February 20, 2018)
-
     //if DestinationSHA1List.Count > 0 then
     //   ShowMessage(DestinationSHA1List.Text); // for debugging only, do not enable (February 20, 2018)
 
@@ -24217,14 +22822,14 @@ begin
   if EmulatorFile[sysID] = '' then
      Exit;
   if (RefreshMode = 3) and (not CheckSelected(GamesListView)) then
-     Exit; // single game audit... if no game is selected, can't do anything
+     Exit; // single game audit
 
   if (RefreshMode = 5) and (not CheckMultipleSelected(GamesListView)) then
      Exit; // multiple selected games audit, if only 1 or no game is selected, can't do anything
 
   FormStatus.SetProgressPos(0);
 
-  if (sysID = idMAME) and (not CreatingList) and (not (RefreshMode in [3, 5])) then
+  if IsMAMEBasedSys(sysID) and (not CreatingList) and (not (RefreshMode in [3, 5])) then // (sysID = idMAME)
      begin
        if SoftwareList = '' then
        begin
@@ -24238,7 +22843,7 @@ begin
        end;
      end;
 
-  FileGames:= GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 2, SoftwareList); // "systemname.elstatus"!!!!!!!
+  FileGames:= GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 2, SoftwareList); // "systemname.elstatus"
   if not ValidateFile(FileGames) then
      Exit;
 
@@ -24257,6 +22862,14 @@ begin
     1: MissingROMsFileName:= 'Quick Scan '+MissingROMsFileName;
     2: MissingROMsFileName:= 'Force '+MissingROMsFileName+' Available';
   end;
+
+  if SoftwareList <> '' then
+     begin
+       case MenuCreateMAMESoftwareListGames.Tag of
+         1: MissingROMsFileName:= MissingROMsFileName+' (Update Mode)';
+         2: MissingROMsFileName:= MissingROMsFileName+' (Overwrite Mode)';
+       end;
+     end;
   CheckSevenZip(sysID);
   if UseSevenZip then
      MissingROMsFileName:= MissingROMsFileName+' [.zip; .7z]'
@@ -24267,13 +22880,13 @@ begin
 
   if IsROMsListBasedSys(sysID) then
      begin
-       MissingROMsFileName:= GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 3, SoftwareList); // "systemname.miss"!!!!!!
+       MissingROMsFileName:= GetGamesFolderEL(Ord(SoftwareList <> ''), sysID)+GetSystemFileName(sysID, 3, SoftwareList); // "systemname.miss"
        if RefreshMode = 0 then
-          DeleteFile(MissingROMsFileName); // scan all MAME files, delete system.miss
+          DeleteFile(MissingROMsFileName); // scan all MAME files, delete "systemname.miss"
        if SoftwareList = '' then
           FormStatus.TitleStr(': '+GetArcadeEmulatorDescription(sysID, True), True)
        else
-          FormStatus.TitleStr(': '+GetSoftwareListTitle(SoftwareList), True);
+          FormStatus.TitleStr(': '+GetSoftwareListTitle(SoftwareList, sysID), True);
        MissingROMs:= TMemIniFile.Create(MissingROMsFileName);
      end;
 
@@ -24282,15 +22895,13 @@ begin
        FormStatus.Show;
        FormStatus.StartThreadClock;
      end;
-  //FormStatus.MessageStr('Loading files to memory.');
 
   NumGamesChanged:= 0;
   UpdateList:= False;
   CompleteGamesList:= THashedStringList.Create;
-  CompleteGamesList.LoadFromFile(FileGames); // status games list file "systemname.elstatus" June 18, 2015
+  CompleteGamesList.LoadFromFile(FileGames); // status games list file "systemname.elstatus"
 
-  ScanGameStatusList:= THashedStringList.Create; // March 03, 2016... needed for faster game name searching containing only gamename... HashedStringList.IndexOf()
-                                                 // CompleteGamesList... HashedStringList.IndexOfName() is way to SLOW! gamename=status_data
+  ScanGameStatusList:= THashedStringList.Create; // needed for faster game name searching containing only gamename; HashedStringList.IndexOf()
   ScanGameStatusList.LoadFromFile(FileGames);
   ScanGameStatusList.BeginUpdate;
   for CurrentIndex:=0 to ScanGameStatusList.Count-1 do
@@ -24303,7 +22914,7 @@ begin
 
   LoadROMFolders(sysID);
 
-  if (PopupSelectScanGamesMode.Tag = 0) and (SoftwareList = '') and // only if scan mode is Full Scan and no MAME software lists
+  if (PopupSelectScanGamesMode.Tag = 0) and (SoftwareList = '') and // only if scan mode is Full Scan and "no" MAME software lists
      (IsMAMEBasedSys(sysID) or (sysID = idDemul) or (sysID = idZiNc)) then
   begin
     FormStatus.MessageStr('Generating device/bios lists to be scanned.');
@@ -24315,9 +22926,9 @@ begin
     if RefreshMode = 0 then
     begin
       // scan all games
-      MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID));
+      MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID)); // only MAME/arcade, NO software lists (March 01, 2018)
       if IsMAMEBasedSys(sysID) then
-         MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file... TMemIniFile.ReadSection() already have .BeginUpdate and .EndUpdate
+         MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file; note: TMemIniFile.ReadSection() already have .BeginUpdate and .EndUpdate
 
       MAMEList.ReadSection('bios', TempBiosList);
       FreeAndNil(MAMEList);
@@ -24325,7 +22936,6 @@ begin
     else
     if RefreshMode = 3 then // single game audit
     begin
-      // single game audit fixed (February 19, 2018)
       if FormMain.IsROM_Device(TEasyGameInfo(SelectedEasyItem).eROMIdentification) then
          TempDevsList.Add(TEasyGameInfo(SelectedEasyItem).eName)
       else
@@ -24340,7 +22950,7 @@ begin
     end
     else
     begin
-      // scan everything else (have/miss games; selected games)... must go thru all games and get devices list and bios list
+      // scan everything else (have/miss games; selected games); must go thru all games and get devices list and bios list
       case RefreshMode of
         1, 2, 4: // all "have" or "miss" games
           begin
@@ -24470,7 +23080,7 @@ begin
        if (SoftwareList = '') or ((SoftwareList <> '') and (FormStatus.LabelMessage.Caption = '')) then
        begin
          case PopupSelectScanGamesMode.Tag of
-           0: FormStatus.MessageStr('Searching games files to validate ROMs (CRC32) and CHDs (SHA-1 / MD5).');
+           0: FormStatus.MessageStr('Searching games files to validate ROMs and CHDs (CRC32 / SHA-1 / MD5).');
            1: FormStatus.MessageStr('Searching games files (game sets, bios sets, device sets, CHDs).');
            2: FormStatus.MessageStr('Setting games available no matter what. No validation or file search is being done.');
          end;
@@ -24478,23 +23088,6 @@ begin
      end
   else
      FormStatus.MessageStr('Searching for game files.');
-
-  {if IsMAMEBasedSys(sysID) then
-     begin
-       // those two are needed to add info in system.miss file
-       if (PopupSelectScanGamesMode.Tag = 0) and (SoftwareList = '') then // only if scan mode is Full Scan and MAME machines only (no software lists)
-          begin
-            if RefreshMode <> 3 then
-               GetDeviceBiosROMsList
-            else
-               GetDeviceBiosROMsList(SelectedEasyItem);
-
-            //if RefreshMode <> 3 then
-            //   GetDeviceROMsList(sysID) // load device ROMs list (actual files from .zip files)
-            //else
-            //   GetDeviceROMsList(sysID, TEasyGameInfo(SelectedEasyItem).eName);
-          end;
-     end;}
 
   if not IsMultiSys then
      GamesListView.BeginUpdate;
@@ -24522,7 +23115,7 @@ begin
                           True: // game is ok -> 0
                             begin
                               // this only gets executed if game is ok and NEEDS to be updated.
-                              // otherwise, it returns False to the ScanGames();
+                              // otherwise, it returns False to the ScanGames()
                               Inc(NumGamesChanged);
                               ELV_UpdateGameInfo(checkItem);
                               UpdateList:= True;
@@ -24569,7 +23162,7 @@ begin
                         True: // game is ok -> 0
                           begin
                             // this only gets executed if game is ok and NEEDS to be updated.
-                            // otherwise, it returns False to the ScanGames();
+                            // otherwise, it returns False to the ScanGames()
                             Inc(NumGamesChanged);
                             ELV_UpdateGameInfo(checkItem);
                             UpdateList:= True;
@@ -24617,7 +23210,7 @@ begin
             end;
         end;
       end;
-    5: // multiple selected games. only ONE system will be scanned (based on first selection), even if others are selected!
+    5: // multiple selected games. only ONE system will be scanned (based on first selection), even if others are selected
       begin
         TotalGamesCount:= GamesListView.Selection.Count;
         CurrentIndex:= 0;
@@ -24631,7 +23224,7 @@ begin
                  True: // game is ok -> 0
                    begin
                      // this only gets executed if game is ok and NEEDS to be updated.
-                     // otherwise, it returns False to the ScanGames();
+                     // otherwise, it returns False to the ScanGames()
                      Inc(NumGamesChanged);
                      ELV_UpdateGameInfo(checkItem);
                      UpdateList:= True;
@@ -24663,9 +23256,9 @@ begin
        if SoftwareList = '' then
           FormStatus.MessageStr('Updating files.');
        CompleteGamesList.SaveToFile(FileGames);
-       //ListGames.UpdateFile; // no longer necessary ?
+
        //if (not CreatingList) and (iUpdatedGames.Count > 0) then
-       //   GenerateMessage('INFO', 'Scan games change log.', IntToStr(iUpdatedGames.Count)+' games were updated: '+#13#10+#13#10+iUpdatedGames.Text, 2);
+       //   GenerateMessage('INFO', 'Scan games change log.', IntToStr(iUpdatedGames.Count)+' games were updated: '+#13#10+#13#10+iUpdatedGames.Text, 2); // for debuggig only
      end;
 
   //FreeAndNil(iUpdatedGames);
@@ -24689,32 +23282,32 @@ begin
   if RefreshMode <> 3 then
      SetSortAudit(False);
 
-  case CreatingList of
-    //True: SetGameType(False); // do not load list again, not necessary as games list is loaded after CallCreateArcadeGames()
-    False:
-      begin
-        // only apply filters as info in GamesListView already updated
-        if RefreshMode = 3 then
-           begin
-             FillMemGameInfo(MemGameInfo); // single game scan only
-             if UpdateList then
-                begin
-                  if ButtonGameFilterHaveMiss.Tag <> 0 then
-                     SetGameType(False)
-                  else
-                     SetSelectedGame(True);
-                end;
-           end;
-        //else
-        //   begin
-        //     if NumGamesChanged <> 0 then
-        //        begin
-        //          //SetGameType(False); // no need as this will be called in the PopupScanAllGamesClick() function (onClick)
-        //          //SetSelectedGame; // not needed here as it WILL be called in ApplyFilters() funciton
-        //        end;
-        //   end;
-      end;
+  // NOTE: CreatingList = True: SetGameType(False); // do not load list again, not necessary as games list is loaded after CallCreateArcadeGames()
+  if not CreatingList then
+  begin
+    // only apply filters as info in GamesListView already updated
+    if RefreshMode = 3 then
+       begin
+         FillMemGameInfo(MemGameInfo); // single game scan only
+         if UpdateList then
+            begin
+              if ButtonGameFilterHaveMiss.Tag <> 0 then
+                 SetGameType(False) // apply filters to show/hide the single selected game
+              else
+                 SetSelectedGame(True); // reload game info to RAM, just in case
+            end;
+       end;
+    //else // NOTE: do not delete this; it's a reminder for a future improvement, show a list of changed games to the user
+    //   begin
+    //     if NumGamesChanged <> 0 then
+    //        begin
+    //          //SetGameType(False); // no need as this will be called in the PopupScanAllGamesClick() function (onClick)
+    //          //SetSelectedGame; // not needed here as it WILL be called in ApplyFilters() funciton
+    //        end;
+    //   end;
+
   end;
+
   if (not IsStartup) and (not IsMultiSys) then
      FormStatus.Close;
 end;
@@ -24725,7 +23318,7 @@ var
   MissingROMsHeader, IsZiNcSystem, IsSupermodelSystem, IsSegaModel2, ContinueAudit: Boolean;
   ROMDataLine: String;
   ZipFile, CloneZipFile, BiosZipFile, DiskFile, ZiNcFilePath, CHDLine, ParentCHDLine: String;
-  StatusCHD: ShortInt; // 0 -> file missing; 1-> found with bad SHA-1; 2-> file found and ok; ... for Taito G-NET only!!!!!!!
+  StatusCHD: ShortInt; // 0 -> file missing; 1-> found with bad SHA-1; 2-> file found and ok
   mIndex, CurrentGameStatus: Integer;
   CurrentScanMode: Byte;
   DeviceSetsList: TStringList;
@@ -24736,7 +23329,7 @@ var
   var
     gIndex: Integer;
   begin
-    // this function should update "system_name.elstatus" - June 18, 2015
+    // this function should update "system_name.elstatus"
     ChangeGameStatus:= False;
     if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
        TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
@@ -24745,7 +23338,7 @@ var
 
     ROMDataLine:= PopulateGameStatusDataLine;
 
-    gIndex:= ScanGameStatusList.IndexOf(TempGameVars.eName); // for faster game name searching!!! March 03, 2016
+    gIndex:= ScanGameStatusList.IndexOf(TempGameVars.eName); // for faster gamename searching
     if gIndex <> -1 then
        CompleteGamesList[gIndex]:= ROMDataLine
     else
@@ -24756,6 +23349,7 @@ var
   var
     ArchiveItem: TZFArchiveItem;
   begin
+    // "ParentZipContents" could be removed, ROMs of both parent set + clone set could be added to the same list ZipContents (March 11, 2018)
     case GameMode of
       0, 2: // game (February 20, 2018) ...bios/device is no more
         begin
@@ -24785,7 +23379,7 @@ var
              if FindFirst('*.*', ArchiveItem) then
                 begin
                   case GameMode of
-                    0, 2: // game, bios, device
+                    0, 2: // game (February 20, 2018) ...bios/device is no more
                       begin
                         repeat
                           ZipContents.Add(LowerCase(IntToHex(ArchiveItem.CRC, 8)));
@@ -24890,7 +23484,7 @@ var
     AddGame: Boolean;
     Loop: ShortInt;
   begin
-    // romStatus = 0 -> file missing; 1 -> CHD file found with bad SHA-1!!!
+    // romStatus = 0 -> file missing; 1 -> CHD file found with bad SHA-1
     AddGame:= GameFound;
     if not AddGame then
        begin
@@ -24919,7 +23513,6 @@ var
                  ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_game', Ord(GameFound));
               if GameIsClone(TempGameVars.eClone) then
                  begin
-                   //if not IsSupermodelSystem then // Supermodel clone games need ALL ROMs to be in clonename.zip file!!!
                    if GameHaveROMs(TempGameVars.eHaveGameROMs) then
                       ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_parentgame', Ord(ParentGameFound));
                  end;
@@ -24961,42 +23554,36 @@ var
     chdName, chdParentName, chdChecksum: String;
     chdHeaderVersion: Byte;
     romDeviceName, romName, romCRC32, romSHA1, LineStr: String;
-    romIsDevice, romIsBios, romIsCHD: Integer; // for MAME/HBMAME only
+    romIsDevice, romIsBios, romIsCHD: Integer; // MAME/HBMAME only
     FoundCHD: Integer;
     IsCRC32Collision: Boolean;
   begin
-    // this function is only called in the "Full Scan" mode... quick scan mode never uses this function!!!! (September 11, 2016)
+    // this function is only called in the "Full Scan" mode, quick scan mode never uses this function
     // ScanMode always default to 0: Full Scan
     Continue:= GameFound;
     case ScanMode of
       0:
         begin
-          // full scan mode only!
+          // full scan mode only
           if (not Continue) and IsClone then
-             begin
-               //if not IsSupermodelSystem then
-                  Continue:= ParentGameFound;
-             end;
+             Continue:= ParentGameFound;
+
           if (not Continue) and (not IsSegaModel2) then
              Continue:= BiosFound; // only continues if is not SegaModel2 system as model2 board ROMs is fixed! (to avoid mark a game as missing ROMs if no parent or clone sets are found)
         end;
       1:
         begin
-          //if not Continue and
-          // this situation will never happen!!! September 25, 2016
+          // this situation should never happen (September 25, 2016)
         end;
     end;
 
     FoundCHD:= 0;
     StatusCHD:= 0; // all CHD files are missing ; 0: missing; 1: found with bad SHA-1; 2: found and OK
-    //IsCHDOnly:= False;
     if not Continue then
        begin
          if IsMAMEBasedSys(TempGameVars.eSystemID) then
             begin
-              // no game ROMs, but have CHDs... create a count of CHDs and later check if all are missing
-              //if ((not GameHaveROMs(TempGameVars.eHaveGameROMs)) and (TempGameVars.eMediaType = 1)) or
-              //   (TempGameVars.eROMsAllNoDump and (TempGameVars.eMediaType = 1))  then
+              // no game ROMs, but have CHDs; create a count of CHDs and later check if all are missing
               if ((not GameHaveROMs(TempGameVars.eHaveGameROMs)) and IsMediaTypeCHD(TempGameVars.eMediaType, False)) or
                  (TempGameVars.eROMsAllNoDump and IsMediaTypeCHD(TempGameVars.eMediaType, False))  then
                  Continue:= TempGameVars.eCHDsCount > 0;
@@ -25010,7 +23597,6 @@ var
        end;
 
     Result:= Continue;
-
     if not Continue then
        begin
          TempGameVars.eGameSetStatus:= 2; // missing (no .zip files found)
@@ -25031,50 +23617,37 @@ var
              // FileID MediaType CRC32_collision IsBadDump <name>...
              // 15100<name>simpbowl.chd/><sha1>72b32a863e6891ad3bfc1fdfe9cb90a2bd334d71/>
 
-             //romTagIndex:= StrToInt(LineStr[1]);
              IsCRC32Collision:= Boolean(StrToInt(LineStr[4]));
              romIsCHD:= StrToInt(LineStr[3]);
              GetROMDetailsInfo(LineStr, IsClone, romName, romCRC32, romSHA1, chdParentName, romDeviceName);
 
              if IsROMsListBasedSys(TempGameVars.eSystemID) then
                 begin
-                  // only for MAME and HBMAME!!!
                   chdIndexPos:= StrToInt(LineStr[1]+LineStr[2]);
-                  case chdIndexPos of
-                    1, 4, 7, 10, 13, 16, 19, 22: romIsDevice:= 1;
-                    2, 5, 8, 11, 14, 17, 20, 23: romIsBios:= 1;
-                    //3, 4, 5: romIsCHD:= 1;
-                  end;
-
-                  //case chdIndexPos of
-                  //  1: romIsDevice:= 1;
-                  //  2: romIsBios:= 1;
-                  //  3, 4, 5: romIsCHD:= 1;
-                  //end;
+                  if IsFileID_DeviceROM(chdIndexPos) or IsFileID_DeviceCHD(chdIndexPos) then
+                     romIsDevice:= 1
+                  else
+                  if IsFileID_BiosROM(chdIndexPos) or IsFileID_BiosCHD(chdIndexPos) then
+                     romIsBios:= 1;
                 end;
              case romIsCHD of
-               0: Continue:= romCRC32 <> ''; // need to set this to true or games won't be audited correctly!!!
-               1: Continue:= romSHA1 <> '';  // Continue is FALSE is ROM/CHD is tagged "nodump" (no CRC32 or SHA1 checksums)
+               0: Continue:= romCRC32 <> ''; // need to set this to TRUE or games won't be audited correctly
+               1: Continue:= romSHA1 <> '';  // Continue is FALSE if ROM/CHD is tagged "nodump" (no CRC32 or SHA1 checksums)
              end;
            end;
 
         if Continue then
            begin
-             //error! need a complete rewrite, this thing does...
-             if romIsCHD = 1 then //if Length(romCRC32) > 8 then
+             if romIsCHD = 1 then
                 begin
-                  // validate CHD files
-                  // continue to update from here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                  chdName:= romName; // got it upstairs... (August 2017)
-                  //chdParentName:= GetROMDetailsInfo(LineStr GetCHDParentName(LineStr); // got it upstairs... (August 2017)
-                  //GetROMDetailsInfo(LineStr, true, chdName, romCRC32, romSHA1, chdParentName); // got it upstairs... (August 2017)
+                  chdName:= romName; // got it upstairs (August 2017)
                   DiskFile:= SearchCHDSimpleScan(TempGameVars.eSystemID, chdName, chdParentName, TempGameVars.eName, TempGameVars.eClone, TempGameVars.eBiosName, TempGameVars.eSoftwareName);
                   Continue:= DiskFile = '';
 
                   case Continue of
                     True:
                       begin
-                        // CHD not found!!!!
+                        // CHD not found
                         Result:= False;
                         case GameHaveROMs(TempGameVars.eHaveGameROMs) of
                           True:
@@ -25082,9 +23655,9 @@ var
                               case ScanMode of
                                 0: // full scan
                                   begin
-                                    AddMissingROM(chdName, romCRC32, romSHA1, 0, True); //AddMissingROM(chdName, 0, True); // deprecated code
+                                    AddMissingROM(chdName, romCRC32, romSHA1, 0, True);
                                     if chdParentName <> '' then
-                                       AddMissingROM(chdParentName, romCRC32, romSHA1, 0, True); //AddMissingROM(chdParentName, 0, True); // deprecated code
+                                       AddMissingROM(chdParentName, romCRC32, romSHA1, 0, True);
                                   end;
                                 1: // quick scan
                                   begin
@@ -25096,14 +23669,13 @@ var
                           False:
                             begin
                               // no need to be here as StatusCHD is already set to 0 above
-                              //StatusCHD:= 0; // missing CHD // this is for TaitoGNET and others -> have bios+chd but no game set required!
+                              //StatusCHD:= 0; // missing CHD // this is for TaitoGNET and others -> have bios+chd but no game set required
                             end;
                         end;
                       end;
                     False:
                       begin
-                        // file found...
-                        // read version and SHA-1/MD5 from CHD's header
+                        // file found, read version and SHA-1/MD5 from CHD's header
                         Inc(FoundCHD);
                         case ScanMode of
                           0: // full scan
@@ -25119,30 +23691,14 @@ var
                                     Result:= False;
                                     // invalid header TAG/version or bad SHA-1 checksum
                                     // 'chdChecksum' holds the SHA-1/MD5 from .chd header (not from MAME)
-                                    AddMissingROM(ExtractFileName(DiskFile), romCRC32, romSHA1, 1, True); //AddMissingROM(ExtractFileName(DiskFile), 1, True); // deprecated code
-                                    StatusCHD:= 2; // found with bad SHA-1/MD5
+                                    AddMissingROM(ExtractFileName(DiskFile), romCRC32, romSHA1, 1, True);
+                                    StatusCHD:= 2; // file found with bad SHA-1/MD5
                                   end;
                               end;
                             end;
                           1: // quick scan
                             begin
-                              StatusCHD:= 1; // file found... SHA-1 / MD5 is not checked here
-                              // code not used... September 21, 2017
-                              //case CreateCHD_SHA1(DiskFile, romSHA1, chdChecksum, chdHeaderVersion) of
-                              //  True:
-                              //    begin
-                              //      if StatusCHD <> 2 then
-                              //         StatusCHD:= 1; // found and Ok
-                              //    end;
-                              //  False:
-                              //    begin
-                              //      Result:= False;
-                              //      // invalid header TAG/version or bad SHA-1 checksum
-                              //      // 'chdChecksum' holds the SHA-1/MD5 from .chd header (not from MAME)
-                              //      StatusCHD:= 2; // found with bad SHA-1/MD5
-                              //      TempGameVars.eGameSetStatus:= 1; // found with bad SHA-1/MD5
-                              //    end;
-                              //end;
+                              StatusCHD:= 1; // file found but SHA-1 / MD5 is not validated here
                             end;
                         end;
                       end;
@@ -25150,7 +23706,7 @@ var
                 end
              else
                 begin
-                  // regular ROMs
+                  // ROMs
                   if ScanMode = 0 then
                      begin
                         // full scan
@@ -25181,7 +23737,7 @@ var
 
                                  end;
                              end;
-                          // there is no CRC32 collision checks for game ROMs; as of MAME 0.194, there are no game ROMs with CRC32 collision (need to double-click this!!!) 
+                          // there is no CRC32 collision checks for game ROMs (verified until MAME 0.195) as there are no game ROMs with CRC32 collision (March 01, 2018)
                         end
                         else
                         begin
@@ -25228,43 +23784,10 @@ var
                              end;
                         end;
 
-                        // if not found then the code below should not run if "IsCRC32Collision = TRUE"
-                        {if not IsCRC32Collision then
-                        begin
-                          // cannot run this code if not CRC32 collision
-                          if Continue then
-                             begin
-                               if (romIsDevice = 1) and (
-                             and (not IsROM_Device(TempGameVars.eROMIdentification)) then
-                             begin
-
-                             end;
-                          if Continue then
-                             begin
-                               if Assigned(ZipContents) then
-                                  Continue:= ZipContents.IndexOf(romCRC32) = -1;
-                             end;
-                          if Continue and IsClone then
-                             begin
-                               if Assigned(ParentZipContents) then
-                                  Continue:= ParentZipContents.IndexOf(romCRC32) = -1;
-                             end;
-
-                          // deprecated code; device/bios ROMs should be validated first in device/bios .zip StringLists
-                          //if Continue and (not IsROM_Device(TempGameVars.eROMIdentification)) then // (TempGameVars.eDeviceSet = 0) then
-                          //   begin
-                          //     if (romIsDevice = 1) and (not IsCRC32Collision) then
-                          //        begin
-                          //          if Assigned(DeviceSetsZipContents) then
-                          //             Continue:= DeviceSetsZipContents.IndexOf(romDeviceName+'='+romCRC32) = -1; // modified February 19, 2018
-                          //        end;
-                          //   end;
-                        end;}
-
                         if Continue then
                            begin
                              Result:= False;
-                             AddMissingROM(romName, romCRC32, romSHA1, 0, False); //AddMissingROM(romCRC32, 0, False); // deprecated code
+                             AddMissingROM(romName, romCRC32, romSHA1, 0, False);
                            end;
                      end;
                 end;
@@ -25280,8 +23803,7 @@ var
            begin
              if GameIsClone(TempGameVars.eClone) then
              begin
-               // merged sets only for MAME/HBMAME; sets without gamename.zip like Taito G-NET must be excluded!!!!!!
-               //if (TempGameVars.eMediaType = 0) and GameHaveROMs(TempGameVars.eHaveGameROMs) and
+               // merged sets only for MAME/HBMAME; sets without gamename.zip like Taito G-NET must be excluded
                if IsMediaTypeCHD(TempGameVars.eMediaType, False) and GameHaveROMs(TempGameVars.eHaveGameROMs) and
                   (not GameFound) and (ParentGameFound) and (not TempGameVars.eROMsAllNoDump) then
                 TempGameVars.eIsMerged:= True;
@@ -25293,7 +23815,6 @@ var
        begin
          if IsMAMEBasedSys(TempGameVars.eSystemID) then
             begin
-              //if TempGameVars.eMediaType = 1 then
               if IsMediaTypeCHD(TempGameVars.eMediaType, False) then
                  begin
                    case GameHaveROMs(TempGameVars.eHaveGameROMs) of
@@ -25338,7 +23859,7 @@ begin
   TempGameVars.eGameSetStatus:= 0;
   TempGameVars.eIsMerged:= False;
   case PopupSelectScanGamesMode.Tag of
-    2: ValidateStatus:= True; // set all games available
+    2: ValidateStatus:= True; // set all games available ("Force Games Available" scan mode)
     1: // quick scan
       begin
         ContinueAudit:= True;
@@ -25352,36 +23873,26 @@ begin
 
         if IsROMsListBasedSys(TempGameVars.eSystemID) then
            begin
-             if TEasyGameInfo(ItemAudit).eROMInfo = nil then // if TEasyGameInfo(ItemAudit).eROMInfo.Count = 0 then
+             if TEasyGameInfo(ItemAudit).eROMInfo = nil then
                 begin
-                  // there are no ROMs for the current set
-                  // for MAME / HBMAME... sets like "a2600", "nes"
-                  // for DICE emulator
-                  // support for all other emulators... just in case
+                  // there are no ROMs for the current set (MAME sets like "a2600", "nes")
+                  // also for DICE emulator
                   TempGameVars.eGameSetStatus:= 0;
                   ValidateStatus:= True;
-                  ContinueAudit:= False; // no need further .zip validation, set as available (no ROMs detected!)
+                  ContinueAudit:= False; // no need further .zip search, set as available (no ROMs detected)
                 end
              else
              begin
                if TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount = 0) then
                   begin
-                    // all ROMs no dump should make the set tagged as "missing", not "good and available"??? September 26, 2016
-                    TempGameVars.eGameSetStatus:= 0;
+                    TempGameVars.eGameSetStatus:= 0; // game is set as "good"
                     ValidateStatus:= True;
-                    ContinueAudit:= False; // no need gameset validation as "ALL" ROMs are tagged nodump... there's nothing to validate
-                    //... need to check if set has "game roms"... if yes, EL SHOULD search for the gamename.zip file
-                    //... if bios/device set, then do it as well...
+                    ContinueAudit:= False; // no need gameset validation as all ROMs are tagged nodump... there's nothing to validate
                   end;
              end;
            end;
         if ContinueAudit then
           begin
-            // need to check this for MAME
-            // FormMain.GameHaveROMs(TempGameVars.eHaveGameROMs)
-            // if yes, look for gamename.zip and there's no need to check for bios sets and device sets ???
-            // if not, check if there are bios sets, device sets, CHD files. just search for files, nothing more...
-
             // for all games with ROMs lists
             if GameHaveROMs(TempGameVars.eHaveGameROMs) then
                ZipFile:= SearchZIPFolder(TempGameVars.eName, TempGameVars.eSystemID, TempGameVars.eSoftwareName)
@@ -25391,8 +23902,8 @@ begin
             GameFound:= ZipFile <> '';
             if (not GameFound) and GameHaveROMs(TempGameVars.eHaveGameROMs) and (TempGameVars.eCHDsCount = 0) then
                begin
-                 // game have ROMs but gamename.zip is not found; no point in checking other files bios, device, CHDs
-                 // this is also to avoid setting clone games as available
+                 // game have ROMs but gamename.zip is not found; do not look for other files: bios, device, CHDs
+                 // necessary to avoid setting clone games as available
                  ContinueAudit:= False;
                end;
             if ContinueAudit then
@@ -25400,8 +23911,8 @@ begin
               case IsROMsListBasedSys(TempGameVars.eSystemID) of
                 True:
                   begin
-                    // check for bios set
-                    ParentGameFound:= False; // this is not used by quick scan!
+                    // search for bios set
+                    ParentGameFound:= False; // this is not used by quick scan
                     BiosFound:= False;
 
                     if GameFound then
@@ -25411,7 +23922,7 @@ begin
                        end;
 
                     if IsSegaModel2 then
-                       BiosFound:= True // need to get contents of model2.zip
+                       BiosFound:= True // need to detect model2.zip (Board ROMs) or "SEGA Model 2 Emulator" games do not run
                     else
                        BiosFound:= ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName);
                     if BiosFound then
@@ -25446,8 +23957,7 @@ begin
                     end;
                     if ContinueAudit then
                     begin
-                      // need to check for TempGameVars.eCHDsCount
-                      // and search them
+                      // look for CHD files
                       if TempGameVars.eCHDsCount > 0 then
                       begin
                         if TEasyGameInfo(ItemAudit).eROMInfo <> nil then
@@ -25456,13 +23966,12 @@ begin
                           begin
                             CHDLine:= TEasyGameInfo(ItemAudit).eROMInfo[mIndex];
                             if CHDLine[3] = '1' then // if CHDLine[3] = '0' means it's "<rom" entry, not "<disk"
-                               // this IS necessary because a <rom entry can be "compact flash card" type; this type can also be a <disk entry!!!
+                               // this is necessary because a <rom entry can be "compact flash card" type; this type can also be a <disk entry!!!
                             begin
                               if StrToInt(CHDLine[1]+CHDLine[2]) >= 12 then
                                  begin
                                    ParentCHDLine:= SoftListGetEntryValue(CHDLine, 'parentname');
                                    CHDLine:= SoftListGetEntryValue(CHDLine, 'name');
-                                   //GetROMDetailsInfo(CHDLine, GameIsClone(TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName); // no longer used ? (December 28, 2017)
                                    DiskFile:= SearchCHDSimpleScan(TempGameVars.eSystemID, CHDLine, ParentCHDLine, TempGameVars.eName, TempGameVars.eClone, TempGameVars.eBiosName, TempGameVars.eSoftwareName);
                                    if DiskFile = '' then
                                       begin
@@ -25487,8 +23996,8 @@ begin
           end;
         if ContinueAudit then
            begin
-             TempGameVars.eGameSetStatus:= 0; // set it to available!!!
-             ValidateStatus:= True; // all required files found...
+             TempGameVars.eGameSetStatus:= 0; // set it to available
+             ValidateStatus:= True; // all required files found
            end;
       end;
     0: // full scan
@@ -25502,37 +24011,30 @@ begin
         IsSupermodelSystem:= TempGameVars.eSystemID = idSupermodel;
         IsSegaModel2:= TempGameVars.eSystemID = idSegaModel2;
 
-        //FreeAndNil(ParentZipContents); // always free last opened parent zip contents THashedStringList!!!!! July 11, 2015
-
         if IsROMsListBasedSys(TempGameVars.eSystemID) then
            begin
              if TEasyGameInfo(ItemAudit).eROMInfo = nil then
                 begin
-                  // there are no ROMs for the current set
-                  // for MAME / HBMAME... sets like "a2600", "nes"
-                  // for DICE emulator
-                  // support for all other emulators... just in case
+                  // there are no ROMs for the current set (MAME sets like "a2600", "nes")
+                  // also for DICE emulator
                   TempGameVars.eGameSetStatus:= 0;
                   ValidateStatus:= True;
-                  ContinueAudit:= False; // no need further .zip validation, set as available (no ROMs detected!)
+                  ContinueAudit:= False; // no need further .zip validation, set as available (no ROMs detected)
                 end
              else
              begin
                if TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount = 0) then
                   begin
-                    // all ROMs no dump should make the set tagged as "missing", not "good and available"??? September 26, 2016
-                    TempGameVars.eGameSetStatus:= 0;
+                    TempGameVars.eGameSetStatus:= 0; // game is set as "good"
                     ValidateStatus:= True;
-                    ContinueAudit:= False; // no need gameset validation as "ALL" ROMs are tagged nodump... there's nothing to validate
-                    //... need to check if set has "game roms"... if yes, EL SHOULD search for the gamename.zip file
-                    //... if bios/device set, then do it as well...
+                    ContinueAudit:= False; // no need gameset validation as all ROMs are tagged nodump... there's nothing to validate
                   end;
              end;
            end;
         if ContinueAudit then
           begin
-            // for all games with ROMs lists
-            if GameHaveROMs(TempGameVars.eHaveGameROMs) then // device/bios sets HAVE ROMs...
+            // games with ROMs
+            if GameHaveROMs(TempGameVars.eHaveGameROMs) then // device/bios sets are set as "Have ROMs"
                ZipFile:= SearchZIPFolder(TempGameVars.eName, TempGameVars.eSystemID, TempGameVars.eSoftwareName)
             else
                ZipFile:= '';
@@ -25542,8 +24044,8 @@ begin
             BiosFound:= False;
             if TEasyGameInfo(ItemAudit).eDeviceSets <> nil then
                begin
-                 // only for full scan mode
-                 // this is only used to show info in system.miss file!!!
+                 // full scan mode
+                 // this is only used to show info in "systemname.miss" file
                  DeviceSetsList:= TStringList.Create;
                  DeviceSetsList.BeginUpdate;
                  DeviceSetsList.AddStrings(TEasyGameInfo(ItemAudit).eDeviceSets);
@@ -25557,10 +24059,10 @@ begin
                begin
                  if IsROMsListBasedSys(TempGameVars.eSystemID) then
                     begin
-                      ZipContents:= THashedStringList.Create; // crc32
+                      ZipContents:= THashedStringList.Create;
                       if (not IsROM_Device(TempGameVars.eROMIdentification)) and (not IsROM_Bios(TempGameVars.eROMIdentification)) then
                       begin
-                        // if device/bios set, there's no need to load this as they are in device/bios ZipContents vars already 
+                        // if device/bios set, there's no need to load this as they are in device/bios ZipContents vars already (February 18, 2018)
                         if SameText(ExtractFileExt(ZipFile), '.7z') then
                            GetSevenZipContents(ZipFile, 0) // parent sets and device sets
                         else
@@ -25623,20 +24125,6 @@ begin
                      end;
                  end;
                  BiosFound:= BiosZipFile <> '';
-
-                 // deprecated code as the .zip file is already loaded in the "bios ZipContents" var
-                 //if BiosFound then
-                 //   begin
-                 //     if IsROMsListBasedSys(TempGameVars.eSystemID) then
-                 //        begin
-                 //          if not Assigned(ZipContents) then
-                 //             ZipContents:= THashedStringList.Create; // crc32
-                 //          if SameText(ExtractFileExt(BiosZipFile), '.7z') then
-                 //             GetSevenZipContents(BiosZipFile, 2) // bios
-                 //          else
-                 //             GetZipContents(BiosZipFile, 2); // bios
-                 //        end;
-                 //   end;
                end;
 
             case GameIsClone(TempGameVars.eClone) of
@@ -25652,10 +24140,10 @@ begin
                            end
                         else
                            begin
-                             //TempGameVars.eHaveGameROMs
                              if GameFound or ParentGameFound or BiosFound or
                                 (TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) or
-                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil))
+                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil)) or // for Alto-II (no game ROMs but with device ROMs)
+                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) // no game set but have CHDs
                                 then
                                 ValidateStatus:= ValidateROMs(True, PopupSelectScanGamesMode.Tag);
                            end;
@@ -25682,7 +24170,8 @@ begin
                            begin
                              if GameFound or BiosFound or
                                 (TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) or
-                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil)) // for Alto-II (no game ROMs but with device ROMs)
+                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil)) or // for Alto-II (no game ROMs but with device ROMs)
+                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) // no game set but have CHDs
                                 then
                                 ValidateStatus:= ValidateROMs(False, PopupSelectScanGamesMode.Tag);
                            end;
@@ -25699,7 +24188,7 @@ begin
           end;
         FreeAndNil(DeviceSetsList);
         FreeAndNil(ZipContents);
-        FreeAndNil(ParentZipContents); // always free last opened parent zip contents THashedStringList!!!!! July 11, 2015
+        FreeAndNil(ParentZipContents);
       end;
   end;
 
@@ -25707,7 +24196,7 @@ begin
     idDaphne: // no ROMs list
       begin
         if ValidateStatus then
-           TempGameVars.eGameSetStatus:= 0; // found gamename.zip file (no ROMs list to audit!!!!)
+           TempGameVars.eGameSetStatus:= 0; // found gamename.zip file (no ROMs list to audit)
       end;
   end;
 
@@ -25758,11 +24247,6 @@ begin
            begin
              if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
                 TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
-             //if IsROMsListBasedSys(TempGameVars.eSystemID) then // no longer used here (February 14, 2018)
-             //   begin
-             //     if Assigned(ScanResultsIni) then
-             //        ScanResultsIni.EraseSection(TempGameVars.eName); // delete from MissingROMs
-             //   end;
            end;
       end;
     False:
@@ -25814,21 +24298,14 @@ begin
         end;
       end;
   end;
-  // ValidateStatus... this function returns
-  // True  -> game is OK
-  // False -> game has missing ROMs / CHD
-
-  // January 2012
-  // need to change the .miss here and set the "game status" here too...
-
-
-  // True : the game info needs to be updated (file and games list...)
-  // False: game needs no updates (has not changed status!!!!!!!)
+  // ValidateStatus: this function returns
+  // True : game is OK, the game info needs to be updated (file and games list...)
+  // False: game has missing ROMs / CHD, game needs no updates (has not changed status!!!!!!!)
   //if Result then // for debugging only
   //   showMessage('set '+TempGameVars.eName+#13#10+'title '+TempGameVars.eTitle+#13#10+'has changed.');
 
 
-  if ChangeGameStatus and (RefreshMode <> 0) then // RefreshMode 0 -> all games... no need to delete from 'system_name.miss' file!!!
+  if ChangeGameStatus and (RefreshMode <> 0) then // RefreshMode 0 -> all games (no need to delete from 'system_name.miss' file)
   begin
     if TempGameVars.eGameSetStatus in [0, 2] then // 0 -> game is good; 2 -> game is missing (zero files found)
     begin
@@ -25843,7 +24320,7 @@ begin
   Result:= ChangeGameStatus;
 
   if ChangeGameStatus then
-     UpdateGameInfoFile; // update "system_name.elstatus" file!!!
+     UpdateGameInfoFile; // update "system_name.elstatus" file
 
   //if Result then
   //   begin
@@ -25859,14 +24336,146 @@ begin
   //     iUpdatedGames.Add(iUpdateGamesText);
   //   end;
 end;
-// end of audit function Jan 11, 2014... updated Jan 24, 2014 (MAME audit is 99.8% accurate now!!!!!)
 
 function TFormMain.IsSystemAvailable(sysID: ShortInt; IsConsoleComputerSystem: Boolean = False): Boolean;
 begin
   case IsConsoleComputerSystem of
     True : Result:= ValidateFile(GetCustomGamesFile(sysID)); // console/computer systems
-    False: Result:= VerifyArcadeGamesSys(sysID); // ValidateEmulatorFile(sysID) and VerifyGamesSys(sysID); // arcade systems
+    False: Result:= VerifyArcadeGamesSys(sysID); // arcade systems
   end;
+end;
+
+function TFormMain.ReadAtari800CartTypeTag(iFileName: WideString): Boolean;
+type
+  THeaderVersionCart = record
+    Tag: array[0..3] of Char; // 'C' 'A' 'R' 'T'
+  end;
+
+var
+  TestFile: TFileStream;
+  HeaderVInfo: THeaderVersionCart;
+  CartMemoryStream: TWideMemoryStream;
+
+  ArchiveItem: TZFArchiveItem;
+  ArchiveItemSevenZ: I7zInArchive;
+  Loop7z: Integer;
+  FoundZipped: Boolean;
+  FileExt: String;
+
+const
+  HexTable: String = '0123456789ABCDEF';
+
+  function ByteToHex(Value: Byte): String;
+  var
+    zwVal: Byte;
+  begin
+    zwVal := (Value and $0F); //first mask (Lo) Byte of Value
+    Result:= HexTable[zwVal + 1]; //from HexTable to Result
+    zwVal := (Value and $F0) shr 4; //second mask (Hi) Byte of Value and 4Bits to the right shift
+    Result:= HexTable[zwVal + 1] + Result; //add from HexTable to Result
+  end;
+
+begin
+  // this will read the first 4 bytes to check for "CART" tag. The format is first 4 bytes containing 'C' 'A' 'R' 'T'.
+  Result:= FileExistsW(iFileName);
+  if not Result then
+     Exit;
+
+  if IsZipFile(iFileName) then
+     begin
+       CartMemoryStream:= TWideMemoryStream.Create;
+       if SameText(ExtractFileExt(iFileName), '.zip') then
+          begin
+            // .zip file
+            with ZipForge do
+            begin
+              FileName:= iFileName;
+              // Open existing archive file
+              try
+                OpenArchive(fmOpenRead or fmShareDenyNone);
+                Result:= FileCount > 0;
+                if Result then
+                   begin
+                     // Search text files stored inside the archive
+                     FoundZipped:= False;
+                     if FindFirst('*', ArchiveItem) then
+                        begin
+                          repeat
+                            FileExt:= ExtractFileExt(ArchiveItem.FileName);
+                            if SameText(FileExt, '.car') or SameText(FileExt, '.bin') or SameText(FileExt, '.rom') then
+                               begin
+                                 FoundZipped:= True;
+                                 ExtractToStream(ArchiveItem.FileName, CartMemoryStream);
+                                 Sleep(10);
+                               end;
+                          until FoundZipped or (not FindNext(ArchiveItem));
+                        end;
+                   end;
+                CloseArchive;
+                ZipForge.FileName:= '';
+              except
+                CloseArchive;
+                ZipForge.FileName:= '';
+              end;
+            end;
+          end
+       else
+          begin
+            // .7z file
+            try
+              ArchiveItemSevenZ:= CreateInArchive(CLSID_CFormat7z);
+              with ArchiveItemSevenZ do
+              begin
+                // Open existing archive file
+                try
+                  OpenFile(iFileName);
+                  Result:= NumberOfItems > 0;
+                  if Result then
+                     begin
+                       // Search text files stored inside the archive
+                       for Loop7z:= 0 to NumberOfItems-1 do
+                       begin
+                         if not ItemIsFolder[Loop7z] then
+                            begin
+                              FileExt:= ExtractFileExt(ItemPath[Loop7z]);
+                              if SameText(FileExt, '.car') or SameText(FileExt, '.bin') or SameText(FileExt, '.rom') then
+                                 begin
+                                   FoundZipped:= True;
+                                   ExtractItem(Loop7z, CartMemoryStream, False);
+                                   Sleep(10);
+                                   Break;
+                                 end;
+                            end;
+                       end;
+                     end;
+                  Close;
+                except
+                  Result:= False;
+                  Close;
+                end;
+              end;
+            except
+              //Result:= False;
+            end;
+          end;
+
+       Result:= FoundZipped;
+       if FoundZipped then
+          begin
+            CartMemoryStream.Position:= 0;
+            CartMemoryStream.ReadBuffer(HeaderVInfo, SizeOf(HeaderVInfo));
+            Result:= SameText(HeaderVInfo.Tag, 'CART');
+          end;
+       FreeAndNil(CartMemoryStream);
+     end
+  else
+     begin
+       // check for any file extension
+       TestFile:= TFileStream.Create(iFileName, (fmOpenRead or fmShareDenyNone));
+       TestFile.ReadBuffer(HeaderVInfo, SizeOf(HeaderVInfo));
+       Result:= SameText(HeaderVInfo.Tag, 'CART');
+       FreeAndNil(TestFile);
+     end;
 end;
 
 function TFormMain.CreateCHD_SHA1(const DiskFileName, DiskSHA1: String; out RealSHA1Value: String; out HeaderVersion: Byte): Boolean;
@@ -25960,12 +24569,11 @@ var
   Loop: ShortInt;
 
   HeaderVInfo: THeaderVersionInfoCHD; // to check header version only
-  HeaderInfo1: THeader1InfoCHD; // for MAME old builds... MD5 only
-  HeaderInfo2: THeader2InfoCHD; // for MAME old builds... MD5 only
-  HeaderInfo3: THeader3InfoCHD; // for ZiNc CHD files and MAME... SHA-1 only
-  HeaderInfo4: THeader4InfoCHD; // for MAME... SHA-1 only
-  HeaderInfo5: THeader5InfoCHD; // for MAME v0.145u1+, HBMAME and Demul 0.7+ (August 18, 2016)... SHA-1 only
-  //ChecksumStartPoint: Byte;
+  HeaderInfo1: THeader1InfoCHD; // for MAME old builds, MD5 only
+  HeaderInfo2: THeader2InfoCHD; // for MAME old builds, MD5 only
+  HeaderInfo3: THeader3InfoCHD; // for ZiNc CHD files and MAME, SHA-1 only
+  HeaderInfo4: THeader4InfoCHD; // for MAME, SHA-1 only
+  HeaderInfo5: THeader5InfoCHD; // for MAME v0.145u1+, HBMAME and Demul 0.7+, SHA-1 only (August 18, 2016)
 
 const
   HexTable: String = '0123456789ABCDEF';
@@ -26083,28 +24691,28 @@ begin
 
   case SystemID = idZiNc of
     True : DiskFile:= SearchZiNcCHDFolder(chdName, GameName, ZiNcFilePath);
-    False: DiskFile:= SearchCHDFolder(chdName, GameName, BiosName, SystemID, SoftwareList);
+    False: DiskFile:= SearchCHDFolder(chdName, GameName, BiosName, CloneOf, SystemID, SoftwareList);
   end;
   Continue:= DiskFile = '';
   if Continue and IsClone then
      begin
        case SystemID = idZiNc of
          True : DiskFile:= SearchZiNcCHDFolder(chdName, CloneOf, ZiNcFilePath);
-         False: DiskFile:= SearchCHDFolder(chdName, CloneOf, BiosName, SystemID, SoftwareList);
+         False: DiskFile:= SearchCHDFolder(chdName, CloneOf, BiosName, CloneOf, SystemID, SoftwareList);
        end;
        Continue:= DiskFile = '';
        if Continue and (chdParentName <> '') then
           begin
             case SystemID = idZiNc of
               True : DiskFile:= SearchZiNcCHDFolder(chdParentName, GameName, ZiNcFilePath);
-              False: DiskFile:= SearchCHDFolder(chdParentName, GameName, BiosName, SystemID, SoftwareList);
+              False: DiskFile:= SearchCHDFolder(chdParentName, GameName, BiosName, CloneOf, SystemID, SoftwareList);
             end;
             Continue:= DiskFile = '';
             if Continue then
                begin
                  case SystemID = idZiNc of
                    True : DiskFile:= SearchZiNcCHDFolder(chdParentName, CloneOf, ZiNcFilePath);
-                   False: DiskFile:= SearchCHDFolder(chdParentName, CloneOf, BiosName, SystemID, SoftwareList);
+                   False: DiskFile:= SearchCHDFolder(chdParentName, CloneOf, BiosName, CloneOf, SystemID, SoftwareList);
                  end;
                  Continue:= DiskFile = '';
                end;
@@ -26151,1862 +24759,6 @@ function TFormMain.IsSEGASystem24Machine(const DriverName: String): Boolean;
 begin
   Result:= PosEx('segas24', DriverName) <> 0;
 end;
-
-{
-function TFormMain.ScanGames(SingleScan: Boolean; ScanResultsIni: TMemIniFile; ItemAudit: TEasyItem; RefreshMode: ShortInt): Boolean;
-var
-  GameFound, ParentGameFound, BiosFound, ChangeGameStatus, ValidateStatus,
-  MissingROMsHeader, IsZiNcSystem, IsSupermodelSystem, IsSegaModel2, ContinueAudit: Boolean;
-  ROMDataLine: String;
-  ZipFile, CloneZipFile, BiosZipFile, DiskFile, ZiNcFilePath, CHDLine, ParentCHDLine: String;
-  StatusCHD: ShortInt; // 0 -> file missing; 1-> found with bad SHA-1; 2-> file found and ok; ... for Taito G-NET only!!!!!!!
-  mIndex, CurrentGameStatus: Integer;
-  CurrentScanMode: Byte;
-  DeviceSetsList: TStringList;
-  IsNewFileFormat: Boolean;
-  //iUpdateGamesText: String;
-
-  procedure UpdateGameInfoFile;
-  var
-    gIndex: Integer;
-  begin
-    // this function should update "system_name.elstatus" - June 18, 2015
-    ChangeGameStatus:= False;
-    if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
-       TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
-    if TempGameVars.eScanMode <> PopupSelectScanGamesMode.Tag then
-       TempGameVars.eScanMode:= PopupSelectScanGamesMode.Tag;
-
-    ROMDataLine:= PopulateGameStatusDataLine;
-
-    gIndex:= ScanGameStatusList.IndexOf(TempGameVars.eName); // for faster game name searching!!! March 03, 2016
-    if gIndex <> -1 then
-       CompleteGamesList[gIndex]:= ROMDataLine
-    else
-       CompleteGamesList.Add(ROMDataLine); // this should NEVER happen, but to avoid game not updating...
-  end;
-
-  function GetZipContents(ZipFileName: String; const GameMode: ShortInt): Boolean;
-  var
-    ArchiveItem: TZFArchiveItem;
-  begin
-    case GameMode of
-      0, 2: // game, bios, device
-        begin
-          ZipContents.BeginUpdate;
-          if GameMode = 0 then
-             ZipContents.Clear;
-        end;
-      1: // parent
-        begin
-          ParentZipContents.BeginUpdate;
-          ParentZipContents.Clear;
-        end;
-    end;
-
-    with ZipForge do
-    begin
-      FileName:= ZipFileName;
-
-      // Open existing archive file
-      try
-        OpenArchive(fmOpenRead or fmShareDenyNone);
-
-        Result:= FileCount > 0;
-        if Result then
-           begin
-             // Search text files stored inside the archive
-             if FindFirst('*.*', ArchiveItem) then
-                begin
-                  case GameMode of
-                    0, 2: // game, bios, device
-                      begin
-                        repeat
-                          ZipContents.Add(LowerCase(IntToHex(ArchiveItem.CRC, 8)));
-                        until (not FindNext(ArchiveItem));
-                      end;
-                    1: // parent
-                      begin
-                        repeat
-                          ParentZipContents.Add(LowerCase(IntToHex(ArchiveItem.CRC, 8)));
-                        until (not FindNext(ArchiveItem));
-                      end;
-                  end;
-                end
-             else
-                Result:= False;
-           end;
-        CloseArchive;
-        ZipForge.FileName:= '';
-      except
-        Result:= False;
-        CloseArchive;
-        ZipForge.FileName:= '';
-      end;
-    end;
-    case GameMode of
-      0, 2: ZipContents.EndUpdate; // game, bios, device
-      1: ParentZipContents.EndUpdate; // parent
-    end;
-  end;
-
-  function GetSevenZipContents(SevenZipFileName: String; const GameMode: ShortInt): Boolean;
-  var
-    ArchiveItem: I7zInArchive;
-    Loop7z: Integer;
-  begin
-    case GameMode of
-      0, 2: // game, bios, device
-        begin
-          ZipContents.BeginUpdate;
-          if GameMode = 0 then
-             ZipContents.Clear;
-        end;
-      1: // parent
-        begin
-          ParentZipContents.BeginUpdate;
-          ParentZipContents.Clear;
-        end;
-    end;
-
-    try
-      ArchiveItem:= CreateInArchive(CLSID_CFormat7z);
-    except
-      case GameMode of
-        0, 2: ZipContents.EndUpdate; // game, bios, device
-        1: ParentZipContents.EndUpdate; // parent
-      end;
-      Result:= False;
-      Exit;
-    end;
-
-    with ArchiveItem do
-    begin
-      // Open existing archive file
-      try
-        OpenFile(SevenZipFileName);
-
-        Result:= NumberOfItems > 0;
-        if Result then
-           begin
-             // Search text files stored inside the archive
-             for Loop7z:= 0 to NumberOfItems-1 do
-             begin
-               if not ItemIsFolder[Loop7z] then
-                  begin
-                    case GameMode of
-                      0, 2: // game / device, bios
-                        begin
-                          ZipContents.Add(LowerCase(IntToHex(ItemCRC[Loop7z], 8)));
-                        end;
-                      1: // parent
-                        begin
-                          ParentZipContents.Add(LowerCase(IntToHex(ItemCRC[Loop7z], 8)));
-                        end;
-                    end;
-                  end;
-             end;
-           end;
-        Close;
-      except
-        Result:= False;
-        Close;
-      end;
-    end;
-    case GameMode of
-      0, 2: ZipContents.EndUpdate; // game, bios, device
-      1: ParentZipContents.EndUpdate; // parent
-    end;
-  end;
-
-  function AddMissingROM(const miss_romName, miss_romCRC32, miss_romSHA1: String; romStatus: ShortInt; IsCHDFile: Boolean): Boolean;
-  var
-    AddGame: Boolean;
-    Loop: ShortInt;
-  begin
-    // romStatus = 0 -> file missing; 1 -> CHD file found with bad SHA-1!!!
-    AddGame:= GameFound;
-    if not AddGame then
-       begin
-         if not GameHaveROMs(TempGameVars.eHaveGameROMs) then // for Taito GNET and others
-            begin
-              AddGame:= BiosFound or (romStatus = 1);
-            end
-         else
-         begin
-           if TempGameVars.eROMsAllNoDump and IsCHDFile then
-              begin
-                AddGame:= romStatus = 1;
-                StatusCHD:= 1;
-              end;
-         end;
-       end;
-    Result:= AddGame;
-    if AddGame then
-       begin
-         if not MissingROMsHeader then
-            begin
-              ScanResultsIni.EraseSection(TempGameVars.eName);
-              MissingROMsHeader:= True;
-
-              if GameHaveROMs(TempGameVars.eHaveGameROMs) then
-                 ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_game', Ord(GameFound));
-              if GameIsClone(TempGameVars.eClone) then
-                 begin
-                   //if not IsSupermodelSystem then // Supermodel clone games need ALL ROMs to be in clonename.zip file!!!
-                   if GameHaveROMs(TempGameVars.eHaveGameROMs) then
-                      ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_parentgame', Ord(ParentGameFound));
-                 end;
-              if IsSegaModel2 then
-                 begin
-                   if ValidateBiosName('model2', TempGameVars.eName) then
-                      ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_bios', Ord(BiosFound));
-                 end
-              else
-              if ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName) then
-                 ScanResultsIni.WriteInteger(TempGameVars.eName, 'zip_bios', Ord(BiosFound));
-              if (not IsROM_Device(TempGameVars.eROMIdentification)) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil) then
-                 begin
-                   for Loop:=0 to DeviceSetsList.Count-1 do
-                   begin
-                     ScanResultsIni.WriteString(TempGameVars.eName, 'device'+IntToStr(Loop+1), DeviceSetsList.Names[Loop]);
-                     ScanResultsIni.WriteString(TempGameVars.eName, 'zip_device'+IntToStr(Loop+1), DeviceSetsList.ValueFromIndex[Loop]);
-                   end;
-                 end;
-            end;
-         // romStatus (updated info to EL v5.7.5)
-         // 0 -> file not found (ROM or CHD)
-         // 1 -> CHD file found with bad checksum or invalid header
-
-         // crc;sha1=0
-         ScanResultsIni.WriteInteger(TempGameVars.eName, FormMain.GetMissCheckEntry(miss_romCRC32, miss_romSHA1), romStatus);
-         TempGameVars.eGameSetStatus:= 1; // gamename.zip found with missing ROMs/CHDs or bad CHD checksum
-       end
-    else
-       begin
-         TempGameVars.eGameSetStatus:= 2;
-       end;
-  end;
-
-  function ValidateROMs(const IsClone: Boolean; ScanMode: Byte): Boolean;
-  var
-    Loop, chdIndexPos: Integer;
-    Continue: Boolean;
-    chdName, chdParentName, chdChecksum: String;
-    chdHeaderVersion: Byte;
-    romDeviceName, romName, romCRC32, romSHA1, LineStr: String;
-    romIsDevice, romIsBios, romIsCHD: Integer; // for MAME/HBMAME only
-    FoundCHD: Integer;
-    IsCRC32Collision: Boolean;
-  begin
-    // this function is only called in the "Full Scan" mode... quick scan mode never uses this function!!!! (September 11, 2016)
-    // ScanMode always default to 0: Full Scan
-    Continue:= GameFound;
-    case ScanMode of
-      0:
-        begin
-          // full scan mode only!
-          if (not Continue) and IsClone then
-             begin
-               //if not IsSupermodelSystem then
-                  Continue:= ParentGameFound;
-             end;
-          if (not Continue) and (not IsSegaModel2) then
-             Continue:= BiosFound; // only continues if is not SegaModel2 system as model2 board ROMs is fixed! (to avoid mark a game as missing ROMs if no parent or clone sets are found)
-        end;
-      1:
-        begin
-          //if not Continue and
-          // this situation will never happen!!! September 25, 2016
-        end;
-    end;
-
-    FoundCHD:= 0;
-    StatusCHD:= 0; // all CHD files are missing ; 0: missing; 1: found with bad SHA-1; 2: found and OK
-    //IsCHDOnly:= False;
-    if not Continue then
-       begin
-         if IsMAMEBasedSys(TempGameVars.eSystemID) then
-            begin
-              // no game ROMs, but have CHDs... create a count of CHDs and later check if all are missing
-              //if ((not GameHaveROMs(TempGameVars.eHaveGameROMs)) and (TempGameVars.eMediaType = 1)) or
-              //   (TempGameVars.eROMsAllNoDump and (TempGameVars.eMediaType = 1))  then
-              if ((not GameHaveROMs(TempGameVars.eHaveGameROMs)) and IsMediaTypeCHD(TempGameVars.eMediaType, False)) or
-                 (TempGameVars.eROMsAllNoDump and IsMediaTypeCHD(TempGameVars.eMediaType, False))  then
-                 Continue:= TempGameVars.eCHDsCount > 0;
-              if not Continue then
-                 begin
-                   // for machine sets with no ROMs but with device ROMs (Alto-II)
-                   if (not GameHaveROMs(TempGameVars.eHaveGameROMs)) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil) then
-                      Continue:= True;
-                 end;
-            end;
-       end;
-
-    Result:= Continue;
-
-    if not Continue then
-       begin
-         TempGameVars.eGameSetStatus:= 2; // missing (no .zip files found)
-         Exit;
-       end;
-
-    if TEasyGameInfo(ItemAudit).eROMInfo <> nil then
-    begin
-      IsNewFileFormat:= PosEx('<name>', TEasyGameInfo(ItemAudit).eROMInfo[0]) <> 0;
-      for Loop:=0 to TEasyGameInfo(ItemAudit).eROMInfo.Count-1 do
-      begin
-        LineStr:= TEasyGameInfo(ItemAudit).eROMInfo[Loop];
-        romIsDevice:= 0;
-        romIsBios:= 0;
-        romIsCHD:= 0;
-        if IsNewFileFormat then
-           begin
-             // FileID MediaType CRC32_collision IsBadDump <name>...
-             // 15100<name>simpbowl.chd/><sha1>72b32a863e6891ad3bfc1fdfe9cb90a2bd334d71/>
-
-             //romTagIndex:= StrToInt(LineStr[1]);
-             IsCRC32Collision:= Boolean(StrToInt(LineStr[4]));
-             romIsCHD:= StrToInt(LineStr[3]);
-             GetROMDetailsInfo(LineStr, IsClone, romName, romCRC32, romSHA1, chdParentName, romDeviceName);
-
-             if IsROMsListBasedSys(TempGameVars.eSystemID) then
-                begin
-                  // only for MAME and HBMAME!!!
-                  chdIndexPos:= StrToInt(LineStr[1]+LineStr[2]);
-                  case chdIndexPos of
-                    1, 4, 7, 10, 13, 16, 19, 22: romIsDevice:= 1;
-                    2, 5, 8, 11, 14, 17, 20, 23: romIsBios:= 1;
-                    //3, 4, 5: romIsCHD:= 1;
-                  end;
-
-                  //case chdIndexPos of
-                  //  1: romIsDevice:= 1;
-                  //  2: romIsBios:= 1;
-                  //  3, 4, 5: romIsCHD:= 1;
-                  //end;
-                end;
-             case romIsCHD of
-               0: Continue:= romCRC32 <> ''; // need to set this to true or games won't be audited correctly!!!
-               1: Continue:= romSHA1 <> '';  // Continue is FALSE is ROM/CHD is tagged "nodump" (no CRC32 or SHA1 checksums)
-             end;
-           end;
-
-        if Continue then
-           begin
-             //error! need a complete rewrite, this thing does...
-             if romIsCHD = 1 then //if Length(romCRC32) > 8 then
-                begin
-                  // validate CHD files
-                  // continue to update from here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                  chdName:= romName; // got it upstairs... (August 2017)
-                  //chdParentName:= GetROMDetailsInfo(LineStr GetCHDParentName(LineStr); // got it upstairs... (August 2017)
-                  //GetROMDetailsInfo(LineStr, true, chdName, romCRC32, romSHA1, chdParentName); // got it upstairs... (August 2017)
-                  DiskFile:= SearchCHDSimpleScan(TempGameVars.eSystemID, chdName, chdParentName, TempGameVars.eName, TempGameVars.eClone, TempGameVars.eBiosName, TempGameVars.eSoftwareName);
-                  Continue:= DiskFile = '';
-
-                  case Continue of
-                    True:
-                      begin
-                        // CHD not found!!!!
-                        Result:= False;
-                        case GameHaveROMs(TempGameVars.eHaveGameROMs) of
-                          True:
-                            begin
-                              case ScanMode of
-                                0: // full scan
-                                  begin
-                                    AddMissingROM(chdName, romCRC32, romSHA1, 0, True); //AddMissingROM(chdName, 0, True); // deprecated code
-                                    if chdParentName <> '' then
-                                       AddMissingROM(chdParentName, romCRC32, romSHA1, 0, True); //AddMissingROM(chdParentName, 0, True); // deprecated code
-                                  end;
-                                1: // quick scan
-                                  begin
-                                    if GameFound then
-                                       TempGameVars.eGameSetStatus:= 1; // gamename.zip found but one or more CHDs are missing
-                                  end;
-                              end;
-                            end;
-                          False:
-                            begin
-                              // no need to be here as StatusCHD is already set to 0 above
-                              //StatusCHD:= 0; // missing CHD // this is for TaitoGNET and others -> have bios+chd but no game set required!
-                            end;
-                        end;
-                      end;
-                    False:
-                      begin
-                        // file found...
-                        // read version and SHA-1/MD5 from CHD's header
-                        Inc(FoundCHD);
-                        case ScanMode of
-                          0: // full scan
-                            begin
-                              case CreateCHD_SHA1(DiskFile, romSHA1, chdChecksum, chdHeaderVersion) of
-                                True :
-                                  begin
-                                    if StatusCHD <> 2 then
-                                       StatusCHD:= 1; // found and OK
-                                  end;
-                                False:
-                                  begin
-                                    Result:= False;
-                                    // invalid header TAG/version or bad SHA-1 checksum
-                                    // 'chdChecksum' holds the SHA-1/MD5 from .chd header (not from MAME)
-                                    AddMissingROM(ExtractFileName(DiskFile), romCRC32, romSHA1, 1, True); //AddMissingROM(ExtractFileName(DiskFile), 1, True); // deprecated code
-                                    StatusCHD:= 2; // found with bad SHA-1/MD5
-                                  end;
-                              end;
-                            end;
-                          1: // quick scan
-                            begin
-                              StatusCHD:= 1; // file found... SHA-1 / MD5 is not checked here
-                              // code not used... September 21, 2017
-                              //case CreateCHD_SHA1(DiskFile, romSHA1, chdChecksum, chdHeaderVersion) of
-                              //  True:
-                              //    begin
-                              //      if StatusCHD <> 2 then
-                              //         StatusCHD:= 1; // found and Ok
-                              //    end;
-                              //  False:
-                              //    begin
-                              //      Result:= False;
-                              //      // invalid header TAG/version or bad SHA-1 checksum
-                              //      // 'chdChecksum' holds the SHA-1/MD5 from .chd header (not from MAME)
-                              //      StatusCHD:= 2; // found with bad SHA-1/MD5
-                              //      TempGameVars.eGameSetStatus:= 1; // found with bad SHA-1/MD5
-                              //    end;
-                              //end;
-                            end;
-                        end;
-                      end;
-                  end;
-                end
-             else
-                begin
-                  // regular ROMs
-                  if ScanMode = 0 then
-                     begin
-                        // full scan
-                        if (romIsDevice = 1) and (IsCRC32Collision) then
-                           begin
-                             if Assigned(DeviceSetsSHA1ZipContents) then
-                             begin
-                                if IsROM_Device(TempGameVars.eROMIdentification) then
-                                   Continue:= DeviceSetsSHA1ZipContents.IndexOf(TempGameVars.eName+'='+romSHA1) = -1
-                                else
-                                   Continue:= DeviceSetsSHA1ZipContents.IndexOf(romDeviceName+'='+romSHA1) = -1;
-                             end;
-                           end;
-
-                        // ... for Bios ROMs with CRC32 collision
-                        // must check if "romIsBios = 1" and  IsCRC32Collision and validate Bios ROM file
-
-                        // if not found then the code below should not run if "IsCRC32Collision = TRUE"
-                        if not IsCRC32Collision then
-                        begin
-                          // cannot run this code if not CRC32 collision
-                          if Continue then
-                             begin
-                               if Assigned(ZipContents) then
-                                  Continue:= ZipContents.IndexOf(romCRC32) = -1;
-                             end;
-                          if Continue and IsClone then
-                             begin
-                               if Assigned(ParentZipContents) then
-                                  Continue:= ParentZipContents.IndexOf(romCRC32) = -1;
-                             end;
-                          if Continue and (not IsROM_Device(TempGameVars.eROMIdentification)) then // (TempGameVars.eDeviceSet = 0) then
-                             begin
-                               if (romIsDevice = 1) and (not IsCRC32Collision) then
-                                  begin
-                                    if Assigned(DeviceSetsZipContents) then
-                                       Continue:= DeviceSetsZipContents.IndexOf(romDeviceName+'='+romCRC32) = -1; // modified February 19, 2018
-                                  end;
-                             end;
-                        end;
-
-                        // if Continue and (not IsROM_Bios(TempGameVars.eROMIdentification)) then
-                        //   begin
-                        //     if (romIsBios = 1) and (not IsCRC32Collision) then
-                        //        begin
-                        //          if Assigned(BiosSetsZipContents) then
-                        //             Continue:= BiosSetsZipContents.IndexOf(TempGameVars.eBiosName+'='+romCRC32) = -1; // modified February 19, 2018
-                        //        end;
-                        //   end;
-                        // must check if "romIsBios = 1" and  IsCRC32Collision and validate Bios ROM file
-
-                        if Continue then
-                           begin
-                             Result:= False;
-                             AddMissingROM(romName, romCRC32, romSHA1, 0, False); //AddMissingROM(romCRC32, 0, False); // deprecated code
-                           end;
-                     end;
-                end;
-           end;
-      end;
-    end;
-    if Result then
-       begin
-         TempGameVars.eGameSetStatus:= 0; // game is ok
-         if PopupSelectScanGamesMode.Tag = 0 then // full scan
-         begin
-           if IsMAMEBasedSys(TempGameVars.eSystemID) or (TempGameVars.eSystemID = idSupermodel) then
-           begin
-             if GameIsClone(TempGameVars.eClone) then
-             begin
-               // merged sets only for MAME/HBMAME; sets without gamename.zip like Taito G-NET must be excluded!!!!!!
-               //if (TempGameVars.eMediaType = 0) and GameHaveROMs(TempGameVars.eHaveGameROMs) and
-               if IsMediaTypeCHD(TempGameVars.eMediaType, False) and GameHaveROMs(TempGameVars.eHaveGameROMs) and
-                  (not GameFound) and (ParentGameFound) and (not TempGameVars.eROMsAllNoDump) then
-                TempGameVars.eIsMerged:= True;
-             end;
-           end;
-         end;
-       end
-    else
-       begin
-         if IsMAMEBasedSys(TempGameVars.eSystemID) then
-            begin
-              //if TempGameVars.eMediaType = 1 then
-              if IsMediaTypeCHD(TempGameVars.eMediaType, False) then
-                 begin
-                   case GameHaveROMs(TempGameVars.eHaveGameROMs) of
-                     True:
-                       begin
-                         if ScanMode = 1 then
-                         begin
-                           if not GameFound then
-                              TempGameVars.eGameSetStatus:= 2 // game must be set as missing
-                           else
-                              begin
-                                if FoundCHD <> TempGameVars.eCHDsCount then
-                                   TempGameVars.eGameSetStatus:= 1; // found gamename.zip but one or more CHD files are missing
-                              end;
-                         end;
-                       end;
-                     False:
-                       begin
-                         if FoundCHD = 0 then
-                            TempGameVars.eGameSetStatus:= 2; // game must be set as missing since no CHD files were found
-                       end;
-                   end;
-                 end;
-            end;
-       end;
-  end;
-
-  function FindZiNcFile(const NameString: String): String;
-  begin
-    Result:= '';
-    if ZiNcFilePath <> '' then
-       begin
-         if FileExists(ZiNcFilePath+NameString+'.zip') then
-            Result:= ZiNcFilePath+NameString+'.zip';
-       end;
-  end;
-
-begin
-  CurrentGameStatus:= TempGameVars.eGameSetStatus;
-  //iUpdateGamesText:= '';
-  CurrentScanMode:= TEasyGameInfo(ItemAudit).eScanMode;
-  TempGameVars.eGameSetStatus:= 0;
-  TempGameVars.eIsMerged:= False;
-  case PopupSelectScanGamesMode.Tag of
-    2: ValidateStatus:= True; // set all games available
-    1: // quick scan
-      begin
-        ContinueAudit:= True;
-        ValidateStatus:= False;
-        TempGameVars.eGameSetStatus:= 2;
-        MissingROMsHeader:= False;
-        ZiNcFilePath:= '';
-        IsZiNcSystem:= TempGameVars.eSystemID = idZiNc;
-        IsSupermodelSystem:= TempGameVars.eSystemID = idSupermodel;
-        IsSegaModel2:= TempGameVars.eSystemID = idSegaModel2;
-
-        if IsROMsListBasedSys(TempGameVars.eSystemID) then
-           begin
-             if TEasyGameInfo(ItemAudit).eROMInfo = nil then // if TEasyGameInfo(ItemAudit).eROMInfo.Count = 0 then
-                begin
-                  // there are no ROMs for the current set
-                  // for MAME / HBMAME... sets like "a2600", "nes"
-                  // for DICE emulator
-                  // support for all other emulators... just in case
-                  TempGameVars.eGameSetStatus:= 0;
-                  ValidateStatus:= True;
-                  ContinueAudit:= False; // no need further .zip validation, set as available (no ROMs detected!)
-                end
-             else
-             begin
-               if TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount = 0) then
-                  begin
-                    // all ROMs no dump should make the set tagged as "missing", not "good and available"??? September 26, 2016
-                    TempGameVars.eGameSetStatus:= 0;
-                    ValidateStatus:= True;
-                    ContinueAudit:= False; // no need gameset validation as "ALL" ROMs are tagged nodump... there's nothing to validate
-                    //... need to check if set has "game roms"... if yes, EL SHOULD search for the gamename.zip file
-                    //... if bios/device set, then do it as well...
-                  end;
-             end;
-           end;
-        if ContinueAudit then
-          begin
-            // need to check this for MAME
-            // FormMain.GameHaveROMs(TempGameVars.eHaveGameROMs)
-            // if yes, look for gamename.zip and there's no need to check for bios sets and device sets ???
-            // if not, check if there are bios sets, device sets, CHD files. just search for files, nothing more...
-
-            // for all games with ROMs lists
-            if GameHaveROMs(TempGameVars.eHaveGameROMs) then
-               ZipFile:= SearchZIPFolder(TempGameVars.eName, TempGameVars.eSystemID, TempGameVars.eSoftwareName)
-            else
-               ZipFile:= '';
-
-            GameFound:= ZipFile <> '';
-            if (not GameFound) and GameHaveROMs(TempGameVars.eHaveGameROMs) and (TempGameVars.eCHDsCount = 0) then
-               begin
-                 // game have ROMs but gamename.zip is not found; no point in checking other files bios, device, CHDs
-                 // this is also to avoid setting clone games as available
-                 ContinueAudit:= False;
-               end;
-            if ContinueAudit then
-            begin
-              case IsROMsListBasedSys(TempGameVars.eSystemID) of
-                True:
-                  begin
-                    // check for bios set
-                    ParentGameFound:= False; // this is not used by quick scan!
-                    BiosFound:= False;
-
-                    if GameFound then
-                       begin
-                         if IsZiNcSystem then
-                            ZiNcFilePath:= ExtractFilePath(ZipFile);
-                       end;
-
-                    if IsSegaModel2 then
-                       BiosFound:= True // need to get contents of model2.zip
-                    else
-                       BiosFound:= ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName);
-                    if BiosFound then
-                       begin
-                         case IsZiNcSystem of
-                           True : BiosZipFile:= FindZiNcFile(TempGameVars.eBiosName);
-                           False:
-                             begin
-                               if IsSegaModel2 then
-                                  BiosZipFile:= SearchZIPFolder('model2', TempGameVars.eSystemID)
-                               else
-                                  BiosZipFile:= SearchZIPFolder(TempGameVars.eBiosName, TempGameVars.eSystemID, TempGameVars.eSoftwareName);
-                             end;
-                         end;
-                         BiosFound:= BiosZipFile <> '';
-                         if not BiosFound then
-                            ContinueAudit:= False;
-                       end;
-                    if ContinueAudit then
-                    begin
-                      if TEasyGameInfo(ItemAudit).eDeviceSets <> nil then
-                      begin
-                        for mIndex:=0 to TEasyGameInfo(ItemAudit).eDeviceSets.Count-1 do
-                        begin
-                          if SearchZIPFolder(TEasyGameInfo(ItemAudit).eDeviceSets[mIndex], TempGameVars.eSystemID) = '' then
-                             begin
-                               ContinueAudit:= False;
-                               Break;
-                             end;
-                        end;
-                      end;
-                    end;
-                    if ContinueAudit then
-                    begin
-                      // need to check for TempGameVars.eCHDsCount
-                      // and search them
-                      if TempGameVars.eCHDsCount > 0 then
-                      begin
-                        if TEasyGameInfo(ItemAudit).eROMInfo <> nil then
-                        begin
-                          for mIndex:=0 to TEasyGameInfo(ItemAudit).eROMInfo.Count-1 do
-                          begin
-                            CHDLine:= TEasyGameInfo(ItemAudit).eROMInfo[mIndex];
-                            if CHDLine[3] = '1' then // if CHDLine[3] = '0' means it's "<rom" entry, not "<disk"
-                               // this IS necessary because a <rom entry can be "compact flash card" type; this type can also be a <disk entry!!!
-                            begin
-                              if StrToInt(CHDLine[1]+CHDLine[2]) >= 12 then
-                                 begin
-                                   ParentCHDLine:= SoftListGetEntryValue(CHDLine, 'parentname');
-                                   CHDLine:= SoftListGetEntryValue(CHDLine, 'name');
-                                   //GetROMDetailsInfo(CHDLine, GameIsClone(TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName); // no longer used ? (December 28, 2017)
-                                   DiskFile:= SearchCHDSimpleScan(TempGameVars.eSystemID, CHDLine, ParentCHDLine, TempGameVars.eName, TempGameVars.eClone, TempGameVars.eBiosName, TempGameVars.eSoftwareName);
-                                   if DiskFile = '' then
-                                      begin
-                                        ContinueAudit:= False;
-                                        Break;
-                                      end;
-                                 end;
-                            end;
-                          end;
-                        end;
-                      end;
-                    end;
-                  end;
-                False:
-                  begin
-                    case TempGameVars.eSystemID of
-                      idDaphne: ValidateStatus:= GameFound; // Daphne
-                    end;
-                  end;
-              end;
-            end;
-          end;
-        if ContinueAudit then
-           begin
-             TempGameVars.eGameSetStatus:= 0; // set it to available!!!
-             ValidateStatus:= True; // all required files found...
-           end;
-      end;
-    0: // full scan
-      begin
-        ContinueAudit:= True;
-        ValidateStatus:= False;
-        TempGameVars.eGameSetStatus:= 2;
-        MissingROMsHeader:= False;
-        ZiNcFilePath:= '';
-        IsZiNcSystem:= TempGameVars.eSystemID = idZiNc;
-        IsSupermodelSystem:= TempGameVars.eSystemID = idSupermodel;
-        IsSegaModel2:= TempGameVars.eSystemID = idSegaModel2;
-
-        FreeAndNil(ParentZipContents); // always free last opened parent zip contents THashedStringList!!!!! July 11, 2015
-
-        if IsROMsListBasedSys(TempGameVars.eSystemID) then
-           begin
-             if TEasyGameInfo(ItemAudit).eROMInfo = nil then
-                begin
-                  // there are no ROMs for the current set
-                  // for MAME / HBMAME... sets like "a2600", "nes"
-                  // for DICE emulator
-                  // support for all other emulators... just in case
-                  TempGameVars.eGameSetStatus:= 0;
-                  ValidateStatus:= True;
-                  ContinueAudit:= False; // no need further .zip validation, set as available (no ROMs detected!)
-                end
-             else
-             begin
-               if TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount = 0) then
-                  begin
-                    // all ROMs no dump should make the set tagged as "missing", not "good and available"??? September 26, 2016
-                    TempGameVars.eGameSetStatus:= 0;
-                    ValidateStatus:= True;
-                    ContinueAudit:= False; // no need gameset validation as "ALL" ROMs are tagged nodump... there's nothing to validate
-                    //... need to check if set has "game roms"... if yes, EL SHOULD search for the gamename.zip file
-                    //... if bios/device set, then do it as well...
-                  end;
-             end;
-           end;
-        if ContinueAudit then
-          begin
-            // for all games with ROMs lists
-            if GameHaveROMs(TempGameVars.eHaveGameROMs) then // device/bios sets HAVE ROMs...
-               ZipFile:= SearchZIPFolder(TempGameVars.eName, TempGameVars.eSystemID, TempGameVars.eSoftwareName)
-            else
-               ZipFile:= '';
-            //ZipFile:= SearchZIPFolder(TempGameVars.eName, TempGameVars.eSystemID, TempGameVars.eSoftwareName);
-            GameFound:= ZipFile <> '';
-            ParentGameFound:= False;
-            BiosFound:= False;
-            if TEasyGameInfo(ItemAudit).eDeviceSets <> nil then
-               begin
-                 // only for full scan mode
-                 // this is only used to show info in system.miss file!!!
-                 DeviceSetsList:= TStringList.Create;
-                 DeviceSetsList.BeginUpdate;
-                 DeviceSetsList.AddStrings(TEasyGameInfo(ItemAudit).eDeviceSets);
-
-                 for mIndex:=0 to DeviceSetsList.Count-1 do
-                     DeviceSetsList[mIndex]:= DeviceSetsList[mIndex]+'='+IntToStr(Ord(SearchZIPFolder(DeviceSetsList[mIndex], TempGameVars.eSystemID) <> ''));
-                 DeviceSetsList.EndUpdate;
-               end;
-
-            if GameFound then
-               begin
-                 if IsROMsListBasedSys(TempGameVars.eSystemID) then
-                    begin
-                      ZipContents:= THashedStringList.Create; // crc32
-                      if SameText(ExtractFileExt(ZipFile), '.7z') then
-                         GetSevenZipContents(ZipFile, 0) // parent sets and device sets
-                      else
-                         GetZipContents(ZipFile, 0); // parent sets and device sets
-                      if IsZiNcSystem then
-                         ZiNcFilePath:= ExtractFilePath(ZipFile);
-                    end;
-               end;
-
-            if GameIsClone(TempGameVars.eClone) then
-               begin
-                 case IsROMsListBasedSys(TempGameVars.eSystemID) of
-                   True:
-                     begin
-                       // Supermodel SVN 591 and older need ALL ROMs inside clone .zip file
-                       // Supermodel SVN 592 and newer can have all child ROMs in child set or all child ROMs in the parent set (full merged only)
-                       if ParentZipContents = nil then
-                          begin
-                            case IsZiNcSystem of
-                              True : CloneZipFile:= FindZiNcFile(TempGameVars.eClone);
-                              False: CloneZipFile:= SearchZIPFolder(TempGameVars.eClone, TempGameVars.eSystemID, TempGameVars.eSoftwareName);
-                            end;
-                            ParentGameFound:= CloneZipFile <> '';
-                            if ParentGameFound then
-                               begin
-                                 ParentZipContents:= THashedStringList.Create;
-                                 if SameText(ExtractFileExt(CloneZipFile), '.7z') then
-                                    GetSevenZipContents(CloneZipFile, 1) // clones
-                                 else
-                                    GetZipContents(CloneZipFile, 1); // clones
-                               end;
-                          end
-                       else
-                          begin
-                            ParentGameFound:= True;
-                          end;
-                     end;
-                   False:
-                     begin
-                       ParentGameFound:= (SearchZIPFolder(TempGameVars.eClone, TempGameVars.eSystemID) <> '');
-                     end;
-                 end;
-               end;
-
-            if IsSegaModel2 then
-               BiosFound:= True // need to get contents of model2.zip
-            else
-               BiosFound:= ValidateBiosName(TempGameVars.eBiosName, TempGameVars.eName);
-            if BiosFound then
-               begin
-                 case IsZiNcSystem of
-                   True : BiosZipFile:= FindZiNcFile(TempGameVars.eBiosName);
-                   False:
-                     begin
-                       if IsSegaModel2 then
-                          BiosZipFile:= SearchZIPFolder('model2', TempGameVars.eSystemID)
-                       else
-                          BiosZipFile:= SearchZIPFolder(TempGameVars.eBiosName, TempGameVars.eSystemID, TempGameVars.eSoftwareName);
-                     end;
-                 end;
-                 BiosFound:= BiosZipFile <> '';
-                 if BiosFound then
-                    begin
-                      if IsROMsListBasedSys(TempGameVars.eSystemID) then
-                         begin
-                           if not Assigned(ZipContents) then
-                              ZipContents:= THashedStringList.Create; // crc32
-                           if SameText(ExtractFileExt(BiosZipFile), '.7z') then
-                              GetSevenZipContents(BiosZipFile, 2) // bios
-                           else
-                              GetZipContents(BiosZipFile, 2); // bios
-                         end;
-                    end;
-               end;
-
-            case GameIsClone(TempGameVars.eClone) of
-              True:
-                begin
-                  case IsROMsListBasedSys(TempGameVars.eSystemID) of
-                    True:
-                      begin
-                        if IsSegaModel2 then
-                           begin
-                             if GameFound or ParentGameFound then
-                                ValidateStatus:= ValidateROMs(True, PopupSelectScanGamesMode.Tag);
-                           end
-                        else
-                           begin
-                             //TempGameVars.eHaveGameROMs
-                             if GameFound or ParentGameFound or BiosFound or
-                                (TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) or
-                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil))
-                                then
-                                ValidateStatus:= ValidateROMs(True, PopupSelectScanGamesMode.Tag);
-                           end;
-                      end;
-                    False:
-                      begin
-                        case TempGameVars.eSystemID of
-                          idDaphne: ValidateStatus:= GameFound and ParentGameFound; // Daphne
-                        end;
-                      end;
-                  end;
-                end;
-              False:
-                begin
-                  case IsROMsListBasedSys(TempGameVars.eSystemID) of
-                    True:
-                      begin
-                        if IsSegaModel2 then
-                           begin
-                             if GameFound then
-                                ValidateStatus:= ValidateROMs(False, PopupSelectScanGamesMode.Tag);
-                           end
-                        else
-                           begin
-                             if GameFound or BiosFound or
-                                (TEasyGameInfo(ItemAudit).eROMsAllNoDump and (TEasyGameInfo(ItemAudit).eCHDsCount > 0)) or
-                                ((TEasyGameInfo(ItemAudit).eHaveGameROMs = 0) and (TEasyGameInfo(ItemAudit).eDeviceSets <> nil)) // for Alto-II (no game ROMs but with device ROMs)
-                                then
-                                ValidateStatus:= ValidateROMs(False, PopupSelectScanGamesMode.Tag);
-                           end;
-                      end;
-                    False:
-                      begin
-                        case TempGameVars.eSystemID of
-                          idDaphne: ValidateStatus:= GameFound;
-                        end;
-                      end;
-                  end;
-                end;
-            end;
-          end;
-        FreeAndNil(DeviceSetsList);
-        FreeAndNil(ZipContents);
-      end;
-  end;
-
-  case TempGameVars.eSystemID of
-    idDaphne: // no ROMs list
-      begin
-        if ValidateStatus then
-           TempGameVars.eGameSetStatus:= 0; // found gamename.zip file (no ROMs list to audit!!!!)
-      end;
-  end;
-
-  ChangeGameStatus:= True;
-  case ValidateStatus of
-    True:
-      begin
-        // game found and it's all ok - change "miss" to "have"
-        case TempGameVars.eROMIdentification of
-          04: TempGameVars.eROMIdentification:= 00; // MAME Parent
-          05: TempGameVars.eROMIdentification:= 01; // MAME Clone
-          06: TempGameVars.eROMIdentification:= 02; // MAME BIOS
-          07: TempGameVars.eROMIdentification:= 03; // MAME Device
-
-          10: TempGameVars.eROMIdentification:= 08; // Supermodel: SEGA Model 3 Parent
-          11: TempGameVars.eROMIdentification:= 09; // Supermodel: SEGA Model 3 Clone
-
-          14: TempGameVars.eROMIdentification:= 12; // Daphne Parent
-          15: TempGameVars.eROMIdentification:= 13; // Daphne Clone
-
-          19: TempGameVars.eROMIdentification:= 16; // Demul Parent
-          20: TempGameVars.eROMIdentification:= 17; // Demul Clone
-          21: TempGameVars.eROMIdentification:= 18; // Demul BIOS
-
-          26: TempGameVars.eROMIdentification:= 22; // HBMAME Parent
-          27: TempGameVars.eROMIdentification:= 23; // HBMAME Clone
-          28: TempGameVars.eROMIdentification:= 24; // HBMAME BIOS
-          29: TempGameVars.eROMIdentification:= 25; // HBMAME Device
-
-          32: TempGameVars.eROMIdentification:= 30; // DICE Parent
-          33: TempGameVars.eROMIdentification:= 31; // DICE Clone
-
-          36: TempGameVars.eROMIdentification:= 34; // SEGA Model 2 Parent
-          37: TempGameVars.eROMIdentification:= 35; // SEGA Model 2 Clone
-
-          41: TempGameVars.eROMIdentification:= 38; // ZiNc Parent
-          42: TempGameVars.eROMIdentification:= 39; // ZiNc Clone
-          43: TempGameVars.eROMIdentification:= 40; // ZiNc BIOS
-        else
-          begin
-            if (TEasyGameInfo(ItemAudit).eGameSetStatus = TempGameVars.eGameSetStatus) and
-               (TEasyGameInfo(ItemAudit).eScanMode = PopupSelectScanGamesMode.Tag) and
-               (TEasyGameInfo(ItemAudit).eIsMerged = TempGameVars.eIsMerged) then
-               ChangeGameStatus:= False;
-          end;
-        end;
-        if ChangeGameStatus then
-           begin
-             if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
-                TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
-             //if IsROMsListBasedSys(TempGameVars.eSystemID) then // no longer used here (February 14, 2018)
-             //   begin
-             //     if Assigned(ScanResultsIni) then
-             //        ScanResultsIni.EraseSection(TempGameVars.eName); // delete from MissingROMs
-             //   end;
-           end;
-      end;
-    False:
-      begin
-        // game not found, or game found with missing ROMs/CHDs
-        // move from "have" to "miss"
-        case TempGameVars.eROMIdentification of
-          00: TempGameVars.eROMIdentification:= 04; // MAME Parent
-          01: TempGameVars.eROMIdentification:= 05; // MAME Clone
-          02: TempGameVars.eROMIdentification:= 06; // MAME BIOS
-          03: TempGameVars.eROMIdentification:= 07; // MAME Device
-
-          08: TempGameVars.eROMIdentification:= 10; // Supermodel: SEGA Model 3 Parent
-          09: TempGameVars.eROMIdentification:= 11; // Supermodel: SEGA Model 3 Clone
-
-          12: TempGameVars.eROMIdentification:= 14; // Daphne Parent
-          13: TempGameVars.eROMIdentification:= 15; // Daphne Clone
-
-          16: TempGameVars.eROMIdentification:= 19; // Demul Parent
-          17: TempGameVars.eROMIdentification:= 20; // Demul Clone
-          18: TempGameVars.eROMIdentification:= 21; // Demul BIOS
-
-          22: TempGameVars.eROMIdentification:= 26; // HBMAME Parent
-          23: TempGameVars.eROMIdentification:= 27; // HBMAME Clone
-          24: TempGameVars.eROMIdentification:= 28; // HBMAME BIOS
-          25: TempGameVars.eROMIdentification:= 29; // HBMAME Device
-
-          30: TempGameVars.eROMIdentification:= 32; // DICE Parent
-          31: TempGameVars.eROMIdentification:= 33; // DICE Clone
-
-          34: TempGameVars.eROMIdentification:= 36; // SEGA Model 2 Parent
-          35: TempGameVars.eROMIdentification:= 37; // SEGA Model 2 Clone
-
-          38: TempGameVars.eROMIdentification:= 41; // ZiNc Parent
-          39: TempGameVars.eROMIdentification:= 42; // ZiNc Clone
-          40: TempGameVars.eROMIdentification:= 43; // ZiNc BIOS
-        else
-          begin
-            if (TEasyGameInfo(ItemAudit).eGameSetStatus = TempGameVars.eGameSetStatus) and
-               (TEasyGameInfo(ItemAudit).eScanMode = PopupSelectScanGamesMode.Tag) and
-               (TEasyGameInfo(ItemAudit).eIsMerged = TempGameVars.eIsMerged) then
-               ChangeGameStatus:= False;
-          end;
-          if ChangeGameStatus then
-             begin
-               if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
-                  TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
-             end;
-        end;
-      end;
-  end;
-  // ValidateStatus... this function returns
-  // True  -> game is OK
-  // False -> game has missing ROMs / CHD
-
-  // January 2012
-  // need to change the .miss here and set the "game status" here too...
-
-
-  // True : the game info needs to be updated (file and games list...)
-  // False: game needs no updates (has not changed status!!!!!!!)
-  //if Result then // for debugging only
-  //   showMessage('set '+TempGameVars.eName+#13#10+'title '+TempGameVars.eTitle+#13#10+'has changed.');
-
-
-  if ChangeGameStatus and (RefreshMode <> 0) then // RefreshMode 0 -> all games... no need to delete from 'system_name.miss' file!!!
-  begin
-    if TempGameVars.eGameSetStatus in [0, 2] then // 0 -> game is good; 2 -> game is missing (zero files found)
-    begin
-      if IsROMsListBasedSys(TempGameVars.eSystemID) then
-      begin
-        if Assigned(ScanResultsIni) then
-           ScanResultsIni.EraseSection(TempGameVars.eName);
-      end;
-    end;
-  end;
-
-  Result:= ChangeGameStatus;
-
-  if ChangeGameStatus then
-     UpdateGameInfoFile; // update "system_name.elstatus" file!!!
-
-  //if Result then
-  //   begin
-  //     if CurrentGameStatus <> TempGameVars.eGameSetStatus then
-  //        iUpdateGamesText:= ' -- from "'+GetGameStatusText(CurrentGameStatus, MemGameInfo.eROMIdentification)+'" to "'+
-  //                           GetGameStatusText(TempGameVars.eGameSetStatus, MemGameInfo.eROMIdentification);
-
-  //     if GameIsClone(TempGameVars.eClone) then
-  //        iUpdateGamesText:= FormMain.GetSystemIniSection(TempGameVars.eSystemID, True)+': '+TempGameVars.eName+' [clone of '+TempGameVars.eClone+']'+iUpdateGamesText
-  //     else
-  //        iUpdateGamesText:= FormMain.GetSystemIniSection(TempGameVars.eSystemID, True)+': '+TempGameVars.eName+iUpdateGamesText;
-
-  //     iUpdatedGames.Add(iUpdateGamesText);
-  //   end;
-end;
-// end of audit function Jan 11, 2014... updated Jan 24, 2014 (MAME audit is 99.8% accurate now!!!!!)
-}
-
-// new MAME and arcade validation system (February 14, 2018)
-procedure TFormMain.GetFileCRC32SHA1List2018(sysID: Integer; const GameName: String; IsCRC32Collision: Boolean; CRC32ListDestination: THashedStringList);
-var
-  ArchiveItem: TZFArchiveItem;
-  ArchiveItemSevenZ: I7zInArchive;
-  Loop7z: Integer;
-  Loop: Integer;
-  ZipFileName: String;
-  ROMFileMemoryStream: TWideMemoryStream;
-
-  function GenerateStreamSHA1: Boolean;
-  var
-    FileSHA1: String;
-  begin
-    Result:= True;
-    FileSHA1:= '';
-    try
-      ZipForge.ExtractToStream(ArchiveItem.FileName, ROMFileMemoryStream);
-      FileSHA1:= GetSHA1_ValueMemoryStream(ROMFileMemoryStream);
-    except
-      Result:= False;
-      ROMFileMemoryStream.Clear;
-    end;
-    if FileSHA1 <> '' then
-       CRC32ListDestination.Add(FileSHA1);
-  end;
-
-begin
-  // function called only at CallScanGames2018()
-  ZipFileName:= SearchZIPFolder(GameName, sysID);
-  if ZipFileName = '' then
-     Exit; // file not found...
-
-  CRC32ListDestination:= THashedStringList.Create;
-  CRC32ListDestination.BeginUpdate;
-
-  if IsCRC32Collision then
-     ROMFileMemoryStream:= TWideMemoryStream.Create;
-
-  if SameText(ExtractFileExt(ZipFileName), '.zip') then
-     begin
-       // .zip file
-       with ZipForge do
-       begin
-         FileName:= ZipFileName;
-         // Open existing archive file
-         try
-           OpenArchive(fmOpenRead or fmShareDenyNone);
-           if FileCount > 0 then
-              begin
-                // Search text files stored inside the archive
-                if FindFirst('*.*', ArchiveItem) then
-                   begin
-                     repeat
-                       CRC32ListDestination.Add(LowerCase(IntToHex(ArchiveItem.CRC, 8)));
-                       if IsCRC32Collision then
-                          GenerateStreamSHA1;
-                     until (not FindNext(ArchiveItem));
-                   end;
-              end;
-           CloseArchive;
-           ZipForge.FileName:= '';
-         except
-           CloseArchive;
-           ZipForge.FileName:= '';
-         end;
-       end;
-     end
-  else
-     begin
-       // .7z file
-       ArchiveItemSevenZ:= CreateInArchive(CLSID_CFormat7z);
-       if ArchiveItemSevenZ <> nil then
-       begin
-         with ArchiveItemSevenZ do
-         begin
-           // Open existing archive file
-           try
-             OpenFile(ZipFileName);
-             if NumberOfItems > 0 then
-                begin
-                  // Search text files stored inside the archive
-                  for Loop7z:= 0 to NumberOfItems-1 do
-                  begin
-                    if not ItemIsFolder[Loop7z] then
-                       begin
-                         CRC32ListDestination.Add(LowerCase(IntToHex(ItemCRC[Loop7z], 8)));
-                         if IsCRC32Collision then
-                            GenerateStreamSHA1;
-                       end;
-                  end;
-                end;
-             Close;
-           except
-             Close;
-           end;
-         end;
-       end;
-     end;
-
-  CRC32ListDestination.EndUpdate;
-  if CRC32ListDestination.Count = 0 then
-     FreeAndNil(CRC32ListDestination);
-  if IsCRC32Collision then
-     begin
-       ROMFileMemoryStream.Clear;
-       FreeAndNil(ROMFileMemoryStream);
-     end;
-end;
-
-// this one will create 2 arrays: one for device sets and one for bios sets... maybe a 3rd for parent sets to improve audit speed ???
-{
-function TFormMain.CallScanGames2018(RefreshMode: ShortInt; CreatingList: Boolean; sysID: ShortInt; SoftwareList: String = ''; IsMultiSys: Boolean = False): Integer;
-var
-  NumGamesChanged, TotalGamesCount, CurrentIndex, iStatusGamesCount, iStatusCurrentIndex, SelectedIndex: Integer;
-  UpdateList: Boolean;
-  FileGames, MissingROMsFileName, iName: String;
-  MissingROMs: TMemIniFile;
-  checkItem: TEasyItem;
-  checkGroup: TEasyGroup;
-
-  DeviceArrayIndexes, BiosArrayIndexes: THashedStringList;
-  DeviceListCRC32Collision, BiosListCRC32Collision: THashedStringList; // these are to list all sets with CRC32 collision before creating the device/bios .zip array
-  LoopMain: Integer;
-  TempString: String;
-  FileListCRC32: THashedStringList;
-
-  function ELV_UpdateGameInfo(ItemToUpdate: TEasyItem): Boolean;
-  begin
-    // check for software list games being audited and update the correct file ?????
-    Result:= True;
-    TEasyGameInfo(ItemToUpdate).eROMIdentification:= TempGameVars.eROMIdentification;
-    TEasyGameInfo(ItemToUpdate).eGameSetStatus:= TempGameVars.eGameSetStatus;
-    TEasyGameInfo(ItemToUpdate).eScanMode:= TempGameVars.eScanMode;
-    TEasyGameInfo(ItemToUpdate).eIsMerged:= TempGamevars.eIsMerged;
-    if TEasyGameInfo(ItemToUpdate).eImageIndex <= MaxGameID then
-       TEasyGameInfo(ItemToUpdate).eImageIndex:= TempGameVars.eROMIdentification;
-  end;
-
-  function CheckSystemROM_ID: Boolean;
-  begin
-    Result:= (RefreshMode = 0) or
-       // MAME
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [04..07]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [04..07])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [00..03])) or // have
-       // Supermodel: SEGA Model 3
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [10, 11]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [10, 11])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [08..09])) or // have
-       // Daphne
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [14, 15])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [12, 13])) or // have
-       // Demul
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [19..21]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [19..21])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [16..18])) or // have
-       // HBMAME
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [26..29]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [26..29])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [22..25])) or // have
-       // DICE
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [32, 33]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [32, 33])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [30, 31])) or // have
-       // SEGA Model 2
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [36, 37]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [36..37])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [34..35])) or // have
-       // ZiNc
-       ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [41..43]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
-       ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [41..43])) or // miss
-       ((RefreshMode = 1) and (TempGameVars.eROMIdentification in [38..40])); // have
-  end;
-
-  function AddDeviceBiosArray: Boolean; //(ItemToProcess: TEasyItem): Boolean;
-  var
-    LoopArray: Integer;
-    iArrayName: String;
-  begin
-    if IsROM_Device(TempGameVars.eROMIdentification) then
-    begin
-      DeviceArrayIndexes.Add(TEasyGameInfo(checkItem).eName);
-      if TEasyGameInfo(checkItem).eCRC32Duplicates then
-         DeviceListCRC32Collision.Add(TEasyGameInfo(checkItem).eName);
-    end
-    else
-    if IsROM_Bios(TempGameVars.eROMIdentification) then
-    begin
-       BiosArrayIndexes.Add(TEasyGameInfo(checkItem).eName);
-       if TEasyGameInfo(checkItem).eCRC32Duplicates then
-          BiosListCRC32Collision.Add(TEasyGameInfo(checkItem).eName);
-
-       // some bios sets have device sets in them
-       if TEasyGameInfo(checkItem).eDeviceSets <> nil then
-       begin
-         for LoopArray:=0 to TEasyGameInfo(checkItem).eDeviceSets.Count-1 do
-         begin
-           iArrayName:= TEasyGameInfo(checkItem).eDeviceSets[LoopArray];
-           if DeviceArrayIndexes.IndexOf(iArrayName) = -1 then
-              begin
-                DeviceArrayIndexes.Add(iArrayName);
-                if FileListCRC32.IndexOf(iArrayName) <> -1 then
-                   DeviceListCRC32Collision.Add(iArrayName);
-              end;
-         end;
-         iArrayName:= '';
-       end;
-    end
-    else
-    begin
-      // game set (parent or clone)... need to get the device/bios sets the game uses (scan all games doesn't need this!!!)
-      if RefreshMode <> 0 then
-      begin
-        // only for "scan available", "scan missing", "scan incomplete" scan modes...
-        if TEasyGameInfo(checkItem).eDeviceSets <> nil then
-        begin
-          for LoopArray:=0 to TEasyGameInfo(checkItem).eDeviceSets.Count-1 do
-          begin
-            iArrayName:= TEasyGameInfo(checkItem).eDeviceSets[LoopArray];
-            if DeviceArrayIndexes.IndexOf(iArrayName) = -1 then
-               begin
-                 DeviceArrayIndexes.Add(iArrayName);
-                 if FileListCRC32.IndexOf(iArrayName) <> -1 then
-                    DeviceListCRC32Collision.Add(iArrayName);
-
-                 //if TEasyGameInfo(checkItem).eCRC32Duplicates then // this is wrong, it doesn't work! games are not tagged as CRC32 collision (yet)
-                 //   DeviceListCRC32Collision.Add(TEasyGameInfo(checkItem).eName); // this is wrong, it doesn't work! games are not tagged as CRC32 collision (yet)
-               end;
-          end;
-          iArrayName:= '';
-        end;
-        if TEasyGameInfo(checkItem).eBiosName <> '' then
-        begin
-          if BiosArrayIndexes.IndexOf(TEasyGameInfo(checkItem).eBiosName) = -1 then
-             begin
-               BiosArrayIndexes.Add(TEasyGameInfo(checkItem).eBiosName);
-               if FileListCRC32.IndexOf(TEasyGameInfo(checkItem).eBiosName) <> -1 then
-                  BiosListCRC32Collision.Add(TEasyGameInfo(checkItem).eBiosName);
-               //if TEasyGameInfo(checkItem).eCRC32Duplicates then // this is wrong, it doesn't work! games are not tagged as CRC32 collision (yet)
-               //   BiosListCRC32Collision.Add(TEasyGameInfo(checkItem).eName); // this is wrong, it doesn't work! games are not tagged as CRC32 collision (yet)
-             end;
-        end;
-      end;
-    end;
-  end;
-
-  procedure FreeMemoryVars;
-  begin
-    FreeAndNil(MissingROMs);
-    FreeAndNil(CompleteGamesList);
-    FreeAndNil(ScanGameStatusList);
-
-    FreeAndNil(ZipContents);
-    FreeAndNil(ParentZipContents);
-
-    FreeAndNil(DeviceSetsZipContents);
-
-    SetCurrentDir(FrontendPath);
-  end;
-
-begin
-  // new scanning process for 2018... to achieve 100% audit accuracy! ^-^
-  // 1. go thru all games in main games list to be scanned and get count of device sets, bios sets;
-  //    ???? ...at same time create three THashedStringList for CRC32 collision: device, bios, games (parents and clones)
-
-  // 2. define size of two dynamic arrays of THashedStringList (devices and bios) with SetLength(), based on sets count
-  //    ... also create two THashedStringList vars to hold the array indexes for each "setname" (device and bios)
-
-  // 3. go thru all "to be scanned" device sets and bios sets in main games list, search and open their setname.zip or setname.7z and extract CRC32 list for all of them...
-  //    -> add each set to the fixed THashedStringList for index access as they are added in device/bios arrays
-  //    ...if set is tagged "CRC32 collision", extract each file to TMemoryStream a create SHA-1 checksum and add to the dynamic array (for proper ROM validation!!!)
-
-  // 4. go thru all "to be scanned" games in main games list and scan games like it was doing for regular CallScanGames() and ScanGames() functions
-  //    -> if not creating a new list, make a scanning results to know which sets were changed ??? this only works if a games list already exists (that was not just created)
-  //       ... perhaps make this a new setting "Show Scanning Results"
-  Result:= 0;
-  if sysID = -1 then
-     Exit;
-  if not CheckTotal(GamesListView) then
-     Exit;
-  if EmulatorFile[sysID] = '' then
-     Exit;
-  if (RefreshMode = 3) and (not CheckSelected(GamesListView)) then
-     Exit; // single game audit... if no game is selected, can't do anything
-
-  if (RefreshMode = 5) and (not CheckMultipleSelected(GamesListView)) then
-     Exit; // multiple selected games audit, if only 1 or no game is selected, can't do anything
-
-  FormStatus.SetProgressPos(0);
-
-  if (sysID = idMAME) and (not CreatingList) and (not (RefreshMode in [3, 5])) then
-     begin
-       if SoftwareList = '' then
-       begin
-         if MenuCreateMAMESoftwareListGames.HelpContext = 2 then
-            Exit; // scan only if Scan MAME is "all sets" or "arcade/machines only"
-       end
-       else
-       begin
-         if MenuCreateMAMESoftwareListGames.HelpContext = 1 then
-            Exit; // scan only if Scan MAME is "all sets" or "software list games only"
-       end;
-     end;
-
-  FileGames:= GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 2, SoftwareList); // "systemname.elstatus"!!!!!!!
-  if not ValidateFile(FileGames) then
-     Exit;
-
-  //iUpdatedGames:= THashedStringList.Create;
-  //iUpdatedGames.BeginUpdate;
-  case RefreshMode of
-    0: MissingROMsFileName:= 'All Games';
-    1: MissingROMsFileName:= 'Available Games';
-    2: MissingROMsFileName:= 'Missing Games';
-    3: MissingROMsFileName:= 'Single Game';
-    4: MissingROMsFileName:= 'Incomplete Games';
-    5: MissingROMsFileName:= 'Multiple Games';
-  end;
-  case PopupSelectScanGamesMode.Tag of
-    0: MissingROMsFileName:= 'Full Scan '+MissingROMsFileName;
-    1: MissingROMsFileName:= 'Quick Scan '+MissingROMsFileName;
-    2: MissingROMsFileName:= 'Force '+MissingROMsFileName+' Available';
-  end;
-  CheckSevenZip(sysID);
-  if UseSevenZip then
-     MissingROMsFileName:= MissingROMsFileName+' [.zip; .7z]'
-  else
-     MissingROMsFileName:= MissingROMsFileName+' [.zip]';
-  FormStatus.TitleStr(MissingROMsFileName);
-  MissingROMsFileName:= '';
-
-  if IsROMsListBasedSys(sysID) then
-     begin
-       MissingROMsFileName:= GetGamesFolderEL(Ord(SoftwareList <> ''))+GetSystemFileName(sysID, 3, SoftwareList); // "systemname.miss"!!!!!!
-       if RefreshMode = 0 then
-          DeleteFile(MissingROMsFileName); // scan all MAME files, delete system.miss
-       if SoftwareList = '' then
-          FormStatus.TitleStr(': '+GetArcadeEmulatorDescription(sysID, True), True)
-       else
-          FormStatus.TitleStr(': '+GetSoftwareListTitle(SoftwareList), True);
-       MissingROMs:= TMemIniFile.Create(MissingROMsFileName);
-     end;
-
-  if not FormStatus.Visible then
-     begin
-       FormStatus.Show;
-       FormStatus.StartThreadClock;
-     end;
-
-  NumGamesChanged:= 0;
-  UpdateList:= False;
-  CompleteGamesList:= THashedStringList.Create;
-  CompleteGamesList.LoadFromFile(FileGames); // status games list file "systemname.elstatus" June 18, 2015
-
-  ScanGameStatusList:= THashedStringList.Create; // March 03, 2016... needed for faster game name searching containing only gamename... HashedStringList.IndexOf()
-                                                 // CompleteGamesList... HashedStringList.IndexOfName() is way to SLOW! gamename=status_data
-  ScanGameStatusList.LoadFromFile(FileGames);
-  ScanGameStatusList.BeginUpdate;
-  for CurrentIndex:=0 to ScanGameStatusList.Count-1 do
-      ScanGameStatusList[CurrentIndex]:= ScanGameStatusList.Names[CurrentIndex];
-  ScanGameStatusList.EndUpdate;
-  //ScanGameStatusList.SaveToFile('d:\EmuLoader\test-status-gamename.txt'); // for debugging only, do not enable it
-
-  iStatusGamesCount:= CompleteGamesList.Count;
-  CompleteGamesList.BeginUpdate;
-
-  LoadROMFolders(sysID);
-  FormStatus.MessageStr('Scanning device/bios sets in games list and creating array indexes.');
-
-  if (SoftwareList = '') and (PopupSelectScanGamesMode.Tag = 0) then
-  begin
-    // MAME software lists do not need this; also only if scan mode is "Full Scan"
-    DeviceArrayIndexes:= THashedStringList.Create;
-    DeviceArrayIndexes.BeginUpdate;
-    BiosArrayIndexes:= THashedStringList.Create;
-    BiosArrayIndexes.BeginUpdate;
-    DeviceListCRC32Collision:= THashedStringList.Create;
-    BiosListCRC32Collision:= THashedStringList.Create;
-    DeviceListCRC32Collision.BeginUpdate;
-    BiosListCRC32Collision.BeginUpdate;
-
-    FileListCRC32:= THashedStringList.Create;
-    if ValidateFile(GetCRC32CollisionFile(sysID)) then
-       FileListCRC32.LoadFromFile(GetCRC32CollisionFile(sysID));
-
-    case RefreshMode of
-      0..2, 4: // multiple games
-        begin
-          TotalGamesCount:= GamesListView.Groups.ItemCount;
-          CurrentIndex:= 0;
-          iStatusCurrentIndex:= 0;
-          if IsGroupedView then
-          begin
-            checkGroup:= GamesListView.Groups.FirstGroup;
-            repeat
-              checkItem:= GamesListView.Groups.FirstInGroup(checkGroup);
-              repeat
-                if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = '') then
-                   begin
-                     Inc(iStatusCurrentIndex);
-                     TempGameVars.eROMIdentification:= TEasyGameInfo(checkItem).eROMIdentification;
-                     TempGameVars.eGameSetStatus:= TEasyGameInfo(checkItem).eGameSetStatus;
-                     if CheckSystemROM_ID then
-                        begin
-                          AddDeviceBiosArray;
-                          Application.ProcessMessages;
-                        end;
-                   end;
-                TempGameVars.eROMIdentification:= -1; // set to default (just in case)
-                TempGameVars.eGameSetStatus:= 2; // set to default (just in case)
-
-                checkItem:= GamesListView.Groups.NextInGroup(checkGroup, checkItem);
-                Inc(CurrentIndex);
-                FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount); // avoid slow software list games scanning
-              until (checkItem = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-
-              checkGroup:= GamesListView.Groups.NextGroup(checkGroup);
-            until (checkGroup = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-          end
-          else
-          begin
-            // all other view modes
-            checkItem:= GamesListView.Groups.FirstItem;
-            repeat
-              if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = '') then
-                 begin
-                   Inc(iStatusCurrentIndex);
-                   TempGameVars.eROMIdentification:= TEasyGameInfo(checkItem).eROMIdentification;
-                   TempGameVars.eGameSetStatus:= TEasyGameInfo(checkItem).eGameSetStatus;
-                   if CheckSystemROM_ID then
-                      begin
-                        AddDeviceBiosArray;
-                        Application.ProcessMessages;
-                      end;
-                 end;
-              TempGameVars.eROMIdentification:= -1; // set to default (just in case)
-              TempGameVars.eGameSetStatus:= 2; // set to default (just in case)
-              checkItem:= GamesListView.Groups.NextItem(checkItem);
-              Inc(CurrentIndex);
-              if SoftwareList = '' then
-                 FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount); // avoid slow software list games scanning
-            until (checkItem = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-          end;
-        end;
-      3: // single game
-        begin
-          checkItem:= SelectedEasyItem;
-          FillTempGameInfo(SelectedEasyItem);
-          AddDeviceBiosArray;
-          Application.ProcessMessages;
-        end;
-      5: // multiple selected games. only ONE system will be scanned, based on first selection; other systems are ignored
-        begin
-          TotalGamesCount:= GamesListView.Selection.Count;
-          CurrentIndex:= 0;
-          SelectedIndex:= 1;
-          checkItem:= GamesListView.Selection.First;
-          repeat
-            if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = SoftwareList) then
-               begin
-                 FillTempGameInfo(checkItem);
-                 AddDeviceBiosArray;
-                 Application.ProcessMessages;
-               end;
-            checkItem:= ELV_GetNextSelected(GamesLisTView, checkItem, SelectedIndex);
-            Inc(CurrentIndex);
-            FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount);
-          until checkItem = nil;
-          ClearMemGameInfo(TempGameVars);
-        end;
-    end;
-
-    // set length of ZipContentsArrayDevice and ZipContentsArrayBios arrays
-    DeviceArrayIndexes.EndUpdate;
-    BiosArrayIndexes.EndUpdate;
-    DeviceListCRC32Collision.EndUpdate;
-    BiosListCRC32Collision.EndUpdate;
-
-    if DeviceArrayIndexes.Count = 0 then
-       FreeAndNil(DeviceArrayIndexes); // should it be freed from RAM ? Might not work with ScanGames2018() function if not assigned!!!
-    if BiosArrayIndexes.Count = 0 then
-       FreeAndNil(BiosArrayIndexes); // should it be freed from RAM ? Might not work with ScanGames2018() function if not assigned!!!
-
-    TempString:= '';
-    if UseSevenZip then
-       TempString:= '[.zip; .7z]'
-    else
-       TempString:= '[.zip]';
-
-    if Assigned(DeviceArrayIndexes) then
-    begin
-      // open all devicename.zip files and get CRC32 checksum (THashedStringList)
-      // ...also extract to TMemoryStream and generate SHA-1 checksum for sets tagged as "CRC32 collision"
-      FormStatus.MessageStr('Scanning device files and generating CRC32 / SHA-1 checksum array in RAM. '+TempString);
-      SetLength(ZipContentsArrayDevice, DeviceArrayIndexes.Count);
-      for LoopMain:=0 to DeviceArrayIndexes.Count-1 do
-      begin
-        UpdateList:= Assigned(DeviceListCRC32Collision);
-        if UpdateList then
-           begin
-             TempString:= DeviceArrayIndexes[LoopMain]; // for debugging purposes
-             UpdateList:= DeviceListCRC32Collision.IndexOf(TempString) <> -1;
-           end;
-             //UpdateList:= DeviceListCRC32Collision.IndexOf(DeviceArrayIndexes[LoopMain]) <> -1;
-        GetFileCRC32SHA1List2018(sysID, DeviceArrayIndexes[LoopMain], UpdateList, ZipContentsArrayDevice[LoopMain]);
-      end;
-    end;
-
-    if Assigned(BiosArrayIndexes) then
-    begin
-      // open all biosname.zip files and get CRC32 checksum (THashedStringList)
-      // ...also extract to TMemoryStream and generate SHA-1 checksum for sets tagged as "CRC32 collision"
-      FormStatus.MessageStr('Scanning bios files and generating CRC32 / SHA-1 checksum array in RAM. '+TempString);
-      SetLength(ZipContentsArrayBios, BiosArrayIndexes.Count);
-      for LoopMain:=0 to BiosArrayIndexes.Count-1 do
-      begin
-        UpdateList:= Assigned(BiosListCRC32Collision);
-        if UpdateList then
-           begin
-             TempString:= BiosArrayIndexes[LoopMain]; // for debugging purposes
-             UpdateList:= BiosListCRC32Collision.IndexOf(TempString) <> -1;
-           end;
-           //UpdateList:= BiosListCRC32Collision.IndexOf(BiosArrayIndexes[LoopMain]) <> -1;
-        GetFileCRC32SHA1List2018(sysID, BiosArrayIndexes[LoopMain], UpdateList, ZipContentsArrayBios[LoopMain]);
-      end;
-    end;
-
-    // there's no need for these vars anymore as each ROM listed in "sysname.elrom" have a "IsCRC32Collision" tag
-    FreeAndNil(DeviceListCRC32Collision);
-    FreeAndNil(BiosListCRC32Collision);
-    FreeAndNil(FileListCRC32);
-  end; // end of step 1 and 2 (create device/bios sets array, get CRC32/SHA-1 from all device/bios sets into the array of THashedStringList)
-
-  if RefreshMode <> 3 then
-     begin
-       SetSortAudit(True);
-       if (SoftwareList = '') or ((SoftwareList <> '') and (FormStatus.LabelMessage.Caption = '')) then
-       begin
-         case PopupSelectScanGamesMode.Tag of
-           0: FormStatus.MessageStr('Scanning games files to validate ROMs (CRC32 / SHA-1) and CHDs (SHA-1 / MD5).');
-           1: FormStatus.MessageStr('Searching games files (game sets, bios sets, device sets, CHDs).');
-           2: FormStatus.MessageStr('Setting games available no matter what. No validation or file search is done.');
-         end;
-       end;
-     end
-  else
-     FormStatus.MessageStr('Scanning game files.');
-
-  if not IsMultiSys then
-     GamesListView.BeginUpdate;
-
-  // step 3: here is where games list will be audited
-  case RefreshMode of
-    0..2, 4: // multiple games
-      begin
-        TotalGamesCount:= GamesListView.Groups.ItemCount;
-        CurrentIndex:= 0;
-        iStatusCurrentIndex:= 0;
-        if IsGroupedView then
-        begin
-          checkGroup:= GamesListView.Groups.FirstGroup;
-          repeat
-            checkItem:= GamesListView.Groups.FirstInGroup(checkGroup);
-            repeat
-              if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = SoftwareList) then
-                 begin
-                   Inc(iStatusCurrentIndex);
-                   TempGameVars.eROMIdentification:= TEasyGameInfo(checkItem).eROMIdentification;
-                   TempGameVars.eGameSetStatus:= TEasyGameInfo(checkItem).eGameSetStatus;
-                   if CheckSystemROM_ID then
-                      begin
-                        FillTempGameInfo(checkItem);
-                        //FormStatus.MessageStr('Validating game: '+TempGameVars.eName); // for debugging, do not enable (flickering nightmare)
-                        case ScanGames2018(False, MissingROMs, checkItem, RefreshMode, DeviceArrayIndexes, BiosArrayIndexes) of
-                          True: // game is ok -> 0
-                            begin
-                              // this only gets executed if game is ok and NEEDS to be updated.
-                              // otherwise, it returns False to the ScanGames();
-                              Inc(NumGamesChanged);
-                              ELV_UpdateGameInfo(checkItem);
-                              UpdateList:= True;
-                            end;
-                          False: // missing ROMs/CHDs -> 1; missing -> 2
-                            begin
-                              // change if set status changes between 0 - have; 1 - missing ROMs/CHD; 2 - missing (no .zip files found)
-                              if TEasyGameInfo(checkItem).eGameSetStatus <> TempGameVars.eGameSetStatus then
-                                 begin
-                                   Inc(NumGamesChanged);
-                                   ELV_UpdateGameInfo(checkItem);
-                                   UpdateList:= True;
-                                 end;
-                            end;
-                        end;
-                        Application.ProcessMessages;
-                      end;
-                 end;
-
-              ClearMemGameInfo(TempGameVars);
-              checkItem:= GamesListView.Groups.NextInGroup(checkGroup, checkItem);
-              Inc(CurrentIndex);
-              if SoftwareList = '' then
-                 FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount); // avoid slow software list games scanning
-            until (checkItem = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-
-            checkGroup:= GamesListView.Groups.NextGroup(checkGroup);
-          until (checkGroup = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-        end
-        else
-        begin
-          // all other view modes
-          checkItem:= GamesListView.Groups.FirstItem;
-          //checkItem:= GamesListView.Groups.FirstItem;
-          repeat
-            if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = SoftwareList) then
-               begin
-                 Inc(iStatusCurrentIndex);
-                 TempGameVars.eROMIdentification:= TEasyGameInfo(checkItem).eROMIdentification;
-                 TempGameVars.eGameSetStatus:= TEasyGameInfo(checkItem).eGameSetStatus;
-                 if CheckSystemROM_ID then
-                    begin
-                      FillTempGameInfo(checkItem);
-                      //FormStatus.MessageStr('Validating game: '+TempGameVars.eName); // for debugging...
-                      case ScanGames2018(False, MissingROMs, checkItem, RefreshMode, DeviceArrayIndexes, BiosArrayIndexes) of
-                        True: // game is ok -> 0
-                          begin
-                            // this only gets executed if game is ok and NEEDS to be updated.
-                            // otherwise, it returns False to the ScanGames();
-                            Inc(NumGamesChanged);
-                            ELV_UpdateGameInfo(checkItem);
-                            UpdateList:= True;
-                          end;
-                        False: // missing ROMs/CHDs -> 1; missing -> 2
-                          begin
-                            // change if set status changes between 0 - have; 1 - missing ROMs/CHD; 2 - missing (no .zip files found)
-                            if TEasyGameInfo(checkItem).eGameSetStatus <> TempGameVars.eGameSetStatus then
-                               begin
-                                 Inc(NumGamesChanged);
-                                 ELV_UpdateGameInfo(checkItem);
-                                 UpdateList:= True;
-                               end;
-                          end;
-                      end;
-                      Application.ProcessMessages;
-                    end;
-               end;
-
-            ClearMemGameInfo(TempGameVars);
-            checkItem:= GamesListView.Groups.NextItem(checkItem);
-            Inc(CurrentIndex);
-            if SoftwareList = '' then
-               FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount); // avoid slow software list games scanning
-          until (checkItem = nil) or (iStatusCurrentIndex = iStatusGamesCount);
-        end;
-      end;
-    3: // single game
-      begin
-        checkItem:= SelectedEasyItem;
-        FillTempGameInfo(SelectedEasyItem);
-        case ScanGames2018(True, MissingROMs, checkItem, RefreshMode, DeviceArrayIndexes, BiosArrayIndexes) of
-          True:
-            begin
-              ELV_UpdateGameInfo(checkItem);
-              UpdateList:= True;
-            end;
-          False:
-            begin
-              if TEasyGameInfo(checkItem).eGameSetStatus <> TempGameVars.eGameSetStatus then
-                begin
-                  ELV_UpdateGameInfo(checkItem);
-                  UpdateList:= True;
-                end;
-            end;
-        end;
-      end;
-    5: // multiple selected games. only ONE system will be scanned (based on first selection), even if others are selected!
-      begin
-        TotalGamesCount:= GamesListView.Selection.Count;
-        CurrentIndex:= 0;
-        SelectedIndex:= 1;
-        checkItem:= GamesListView.Selection.First;
-        repeat
-          if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = SoftwareList) then
-             begin
-               FillTempGameInfo(checkItem);
-               case ScanGames2018(False, MissingROMs, checkItem, RefreshMode, DeviceArrayIndexes, BiosArrayIndexes) of
-                 True: // game is ok -> 0
-                   begin
-                     // this only gets executed if game is ok and NEEDS to be updated.
-                     // otherwise, it returns False to the ScanGames();
-                     Inc(NumGamesChanged);
-                     ELV_UpdateGameInfo(checkItem);
-                     UpdateList:= True;
-                   end;
-                 False: // missing ROMs/CHDs -> 1; missing (no gamename.zip found) -> 2
-                   begin
-                     if TEasyGameInfo(checkItem).eGameSetStatus <> TempGameVars.eGameSetStatus then
-                        begin
-                          Inc(NumGamesChanged);
-                          ELV_UpdateGameInfo(checkItem);
-                          UpdateList:= True;
-                        end;
-                   end;
-               end;
-               Application.ProcessMessages;
-             end;
-          checkItem:= ELV_GetNextSelected(GamesLisTView, checkItem, SelectedIndex);
-          Inc(CurrentIndex);
-          FormStatus.UpdateProgressBar(CurrentIndex, TotalGamesCount);
-        until checkItem = nil;
-        ClearMemGameInfo(TempGameVars);
-      end;
-  end;
-  //iUpdatedGames.EndUpdate;
-  CompleteGamesList.EndUpdate;
-  FormStatus.SetProgressPos(0);
-  if UpdateList then
-     begin
-       if SoftwareList = '' then
-          FormStatus.MessageStr('Updating files.');
-       CompleteGamesList.SaveToFile(FileGames);
-       //ListGames.UpdateFile;
-       //if (not CreatingList) and (iUpdatedGames.Count > 0) then
-       //   GenerateMessage('INFO', 'Scan games change log.', IntToStr(iUpdatedGames.Count)+' games were updated: '+#13#10+#13#10+iUpdatedGames.Text, 2);
-     end;
-
-  //FreeAndNil(iUpdatedGames);
-  if Assigned(MissingROMs) then
-     MissingROMs.UpdateFile; // update missing ROMs file to avoid errors when game already is set as missing
-
-  Result:= NumGamesChanged;
-  if not IsMultiSys then
-     GamesListView.EndUpdate(False);
-  FreeMemoryVars;
-  ClearMemGameInfo(TempGameVars);
-  if not ValidateFile(MissingROMsFileName) then
-     DeleteFile(MissingROMsFileName);
-  if IsStartup then
-     begin
-       // if is startup, do nothing else... get the hell out of here!
-       SetSortAudit(False);
-       ClearMemGameInfo(MemGameInfo);
-       Exit;
-     end;
-  if RefreshMode <> 3 then
-     SetSortAudit(False);
-
-  case CreatingList of
-    //True: SetGameType(False); // do not load list again, not necessary as games list is loaded after CallCreateArcadeGames()
-    False:
-      begin
-        // only apply filters as info in GamesListView already updated
-        if RefreshMode = 3 then
-           begin
-             FillMemGameInfo(MemGameInfo); // single game scan only
-             if UpdateList then
-                begin
-                  if ButtonGameFilterHaveMiss.Tag <> 0 then
-                     SetGameType(False)
-                  else
-                     SetSelectedGame(True);
-                end;
-           end;
-        //else
-        //   begin
-        //     if NumGamesChanged <> 0 then
-        //        begin
-        //          //SetGameType(False); // no need as this will be called in the PopupScanAllGamesClick() function (onClick)
-        //          //SetSelectedGame; // not needed here as it WILL be called in ApplyFilters() funciton
-        //        end;
-        //   end;
-      end;
-  end;
-  if (not IsStartup) and (not IsMultiSys) then
-     FormStatus.Close;
-end;
-}
 
 function TFormMain.ValidateIniFilesDir(sysID: ShortInt; const windowCaption: String; IsAlterMAME: Boolean = False): Boolean;
 var
@@ -28084,7 +24836,7 @@ var
 
   function SetFormCaption: String;
   begin
-    Result:= 'Settings: ';//+GameName;
+    Result:= 'Settings: ';
     if Assigned(FormMAMESettings) then
        FormMAMESettings.SystemIcon.Tag:= 1
     else
@@ -28095,36 +24847,19 @@ var
        Result:= SetFileID(9, 'Driver '+Result)
     else
     if SameText('horizont', GameName) then
-       begin
-         Result:= SetFileID(3, 'Horizontal Game '+Result);
-         //Result:= 'Horizontal Game '+Result;
-         //SetFileID(3);
-       end
+       Result:= SetFileID(3, 'Horizontal Game '+Result)
     else
     if SameText('vertical', GameName) then
-       begin
-         Result:= SetFileID(2, 'Vertical Game '+Result);
-         //Result:= 'Vertical Game '+Result;
-         //SetFileID(2);
-       end
+       Result:= SetFileID(2, 'Vertical Game '+Result)
     else
     if SameText('vector', GameName) then
-       begin
-         Result:= SetFileID(8, 'Vector Game '+Result);
-         //Result:= 'Vector Game '+Result;
-         //SetFileID(8);
-       end
+       Result:= SetFileID(8, 'Vector Game '+Result)
     else
     if SameText('debug', GameName) then
-       begin
-         Result:= SetFileID(1, 'Debug '+Result);
-         //Result:= 'Debug '+Result;
-         //SetFileID(2);
-       end
+       Result:= SetFileID(1, 'Debug '+Result)
     else
     if SameText('arcade', GameName) then
        Result:= SetFileID(4, 'Arcade Game '+Result)
-       //Result:= 'Arcade Game '+Result
     else
     if SameText('console', GameName) then
        Result:= SetFileID(5, 'Console Game '+Result)
@@ -28141,7 +24876,6 @@ var
     if FormMain.IsROM_Bios(MemGameInfo.eROMIdentification) then
        begin
          Result:= SetFileID(10, 'BIOS '+Result);
-         //Result:= 'Bios '+Result;
          if Assigned(FormMAMESettings) then
             FormMAMESettings.SystemIcon.Tag:= 0
          else
@@ -28154,7 +24888,6 @@ var
            True : Result:= SetFileID(12, 'Game '+Result); // clone game
            False: Result:= SetFileID(11, 'Game '+Result); // parent game
          end;
-         //Result:= 'Game '+Result;
          if Assigned(FormMAMESettings) then
             FormMAMESettings.SystemIcon.Tag:= 0
          else
@@ -28206,13 +24939,10 @@ begin
         else
            CreateBasic;
 
-        //if not Assigned(FormMAMESettings) then
-        //   FormMAMESettings:= TFormMAMESettings.Create(nil);
-
         if Assigned(FormMAMESettings) then
            begin
              FormMAMESettings.sysID:= MemGameInfo.eSystemID;
-             FormMAMESettings.Tag:= 1; // means custom options
+             FormMAMESettings.Tag:= 1; // "1" is custom options
              case IsAlterMAME of
                True:
                  begin
@@ -28226,7 +24956,7 @@ begin
                  end;
              end;
              FormMAMESettings.IsAlterMAME:= IsAlterMAME;
-             FormMAMESettings.ActiveFileID:= -1; // means that no custom settings ID was set!
+             FormMAMESettings.ActiveFileID:= -1; // no custom settings ID was set
              FormMAMESettings.iVersion:= iVersion;
              FormMAMESettings.Caption:= SetFormCaption;
 
@@ -28238,7 +24968,6 @@ begin
              FormMAMESettings.GameIni:= FormMAMESettings.GameIni+iSourcePath+GameName+'.ini';
 
              FormMAMESettings.emuIni:= iniFile;
-             //FormMAMESettings.LabelReadFileIni.Caption:= FormMAMESettings.GameIni;
              FormMAMESettings.Caption:= FormMAMESettings.Caption+FormMAMESettings.GameIni;
              FormMAMESettings.ShowModal;
              FreeAndNil(FormMAMESettings);
@@ -28247,7 +24976,7 @@ begin
         if Assigned(FormMAMESettings_SimpleMode) then
            begin
              FormMAMESettings_SimpleMode.sysID:= MemGameInfo.eSystemID;
-             FormMAMESettings_SimpleMode.Tag:= 1; // means custom options
+             FormMAMESettings_SimpleMode.Tag:= 1; // "1" is custom options
              case IsAlterMAME of
                True:
                  begin
@@ -28261,7 +24990,7 @@ begin
                  end;
              end;
              FormMAMESettings_SimpleMode.IsAlterMAME:= IsAlterMAME;
-             FormMAMESettings_SimpleMode.ActiveFileID:= -1; // means that no custom settings ID was set!
+             FormMAMESettings_SimpleMode.ActiveFileID:= -1; // no custom settings ID was set
              FormMAMESettings_SimpleMode.Caption:= SetFormCaption;
 
              if IsAlterMAME then
@@ -28272,7 +25001,6 @@ begin
              FormMAMESettings_SimpleMode.GameIni:= FormMAMESettings_SimpleMode.GameIni+iSourcePath+GameName+'.ini';
 
              FormMAMESettings_SimpleMode.emuIni:= iniFile;
-             //FormMAMESettings_SimpleMode.LabelReadFileIni.Caption:= FormMAMESettings.GameIni;
              FormMAMESettings_SimpleMode.Caption:= FormMAMESettings_SimpleMode.Caption+FormMAMESettings_SimpleMode.GameIni;
              FormMAMESettings_SimpleMode.ShowModal;
              FreeAndNil(FormMAMESettings_SimpleMode);
@@ -28289,7 +25017,7 @@ begin
             begin
                if not Assigned(FormSupermodelSettings) then
                  FormSupermodelSettings:= TFormSupermodelSettings.Create(nil);
-              FormSupermodelSettings.Tag:= 1; // means custom options
+              FormSupermodelSettings.Tag:= 1; // "1" is custom options
               FormSupermodelSettings.emuFileExec:= EmulatorFile[MemGameInfo.eSystemID];
               FormSupermodelSettings.emuVersionStr:= EmulatorVersion[MemGameInfo.eSystemID];
               iniFile:= GetFolderArcadeEmulatorIni(MemGameInfo.eSystemID)+FormMain.GetArcadeEmuIniFileName(MemGameInfo.eSystemID);
@@ -28305,7 +25033,7 @@ begin
             begin
               if not Assigned(FormZiNcSettings) then
                  FormZiNcSettings:= TFormZiNcSettings.Create(nil);
-              FormZiNcSettings.Tag:= 1; // means custom options
+              FormZiNcSettings.Tag:= 1; // "1" is custom options
               FormZiNcSettings.emuFileExec:= EmulatorFile[MemGameInfo.eSystemID];
               FormZiNcSettings.emuVersionStr:= EmulatorVersion[MemGameInfo.eSystemID];
               iniFile:= GetArcadeEmuIniFileName(MemGameInfo.eSystemID);
@@ -28350,7 +25078,7 @@ begin
            begin
              iniFile:= GetFolderArcadeEmulatorIni(MemGameInfo.eSystemID)+GameName;
              if MemGameInfo.eSystemID = idZiNc then
-                iniFile:= iniFile+'.cfg' // ZiNc
+                iniFile:= iniFile+'.cfg'  // ZiNc
              else
                 iniFile:= iniFile+'.ini'; // Supermodel: SEGA Model 3
            end;
@@ -28367,15 +25095,7 @@ begin
      end;
 end;
 
-// for MAME v0.171 and newer... support for a new ui.ini file (some settings moved from mame.ini to this new file...)
-// ... damn... :_((
-// -#include "ui/moptions.h"
-// -
-// +#include "options.h"
-// see this link
-// http://git.redump.net/mame/commit/?id=d0162765cdd23c2cb015118b75c87689a839de40
-
-
+// MAME v0.171 and newer: ... support for a new ui.ini file
 // from "src\frontend\mame\emuopts.h" (MAME 0.191 and newer) ... October 29, 2017
 // from src\emu\emuopts.h (older MAME builds)
 
@@ -28430,26 +25150,26 @@ begin
      4:
        begin
          if (MemGameInfo.eSoftwareName = '') or (MemGameInfo.eSystemType = 0) then
-            Result:= 'arcade';   // UME / MAME v0.163 and newer
+            Result:= 'arcade';   // MAME v0.163 and newer
        end;
      5:
        begin
          if (MemGameInfo.eSoftwareName <> '') or (MemGameInfo.eSystemType = 1) then
-            Result:= 'console';  // UME / MAME v0.163 and newer
+            Result:= 'console';  // MAME v0.163 and newer
        end;
      6:
        begin
          if (MemGameInfo.eSoftwareName <> '') or (MemGameInfo.eSystemType = 1) then
-            Result:= 'computer'; // UME / MAME v0.163 and newer
+            Result:= 'computer'; // MAME v0.163 and newer
        end;
      7:
        begin
          if (MemGameInfo.eSoftwareName <> '') or (MemGameInfo.eSystemType = 1) then
-            Result:= 'othersys'; // othersys // systype_ini ?????? UME / MAME v0.163 and newer
+            Result:= 'othersys'; // othersys // systype_ini for MAME v0.163 and newer
        end;
      8:
        begin
-         //  -1 -> none; 0 -> raster; 1 -> vector; 2 -> LCD; 2 -> SVG; 4 -> unknown
+         //  -1 -> none; 0 -> raster; 1 -> vector; 2 -> LCD; 3 -> SVG; 4 -> unknown
          // MAME v0.167 and newer
          case MemGameInfo.eScreenType of
            0: Result:= 'raster';
@@ -28459,8 +25179,6 @@ begin
          else
               Result:= 'raster';
          end;
-         //if FormMain.MemGameInfo.eScreenType = 1 then
-         //   Result:= 'vector';
        end;
      9: Result:= ChangeFileExt(MemGameInfo.eDriverName, ''); // source\sourcefile.ini or sourcefile.ini // source_ini
     10: Result:= MemGameInfo.eBiosName; // biosname.ini   // grandparent_ini
@@ -28486,7 +25204,7 @@ begin
   ColumnsPosList[0]:= 0;
   if IsMachinesSidePanel then
   begin
-    // set default positions in the temp array...
+    // set default positions in the temp array
     for Loop:=1 to GamesListView.Header.Columns.Count-1 do
     begin
       ColPos:= -1;
@@ -28496,18 +25214,15 @@ begin
          ColumnsPosList[ColPos]:= Loop;
     end;
   end;
-  //!error... need to get positions correctly!!!!!!!!!
+  // need to get positions correctly
   for Loop:=1 to Length(ColumnsPosList)-1 do
   begin
     case IsMachinesSidePanel of
       True:
         begin
-          //if IsValidSoftwareListColumn(Loop) then
-             begin
-               ColPos:= IniFileName.ReadInteger('Position_SoftwareList', aColumns[Loop, 0], -1);//GetSoftwareListDefaultColumnPos(Loop));
-               if ColPos <> -1 then
-                  ColumnsPosList[ColPos]:= Loop;
-             end;
+          ColPos:= IniFileName.ReadInteger('Position_SoftwareList', aColumns[Loop, 0], -1);
+          if ColPos <> -1 then
+             ColumnsPosList[ColPos]:= Loop;
         end;
       False:
         begin
@@ -28525,7 +25240,7 @@ begin
   end;
   if not Result then
      begin
-       // column index out of range... need to restore default settings
+       // column index out of range, need to restore default settings
        for Loop:=1 to Length(ColumnsPosList)-1 do
            ColumnsPosList[Loop]:= Loop;
        Result:= True;
@@ -28564,7 +25279,7 @@ begin
     GamesListView.Header.Columns[LastColumnSorted].SortDirection:= esdNone; // reset current sort column
     LastColumnSorted:= columnFile.ReadInteger('Sort', 'ColumnIndex', 0);
     iSortDirection:= columnFile.ReadInteger('Sort', 'Direction', 0);
-    LastColumnSortDirection:= TEasySortDirection(iSortDirection+1); // +1 for EasyListview!!!
+    LastColumnSortDirection:= TEasySortDirection(iSortDirection+1); // +1 for EasyListView component
     GamesListView.Header.Columns[LastColumnSorted].SortDirection:= LastColumnSortDirection;
 
     GamesListView.EndUpdate;
@@ -28585,7 +25300,7 @@ begin
   if IsStartup then
      Exit;
   if PanelMachinesList.Visible then
-     Exit; // do not update columns profile if machines list side panel is enabled!!!
+     Exit; // do not update columns profile if machines list side panel is enabled
 
   columnFile:= TMemIniFile.Create(GetColumnProfile);
   columnFile.EraseSection('Position');
@@ -28611,9 +25326,7 @@ begin
 
   if (LastColumnSorted = 0) and (LastColumnSortDirection = esdAscending) then
      begin
-       // do nothing...
-       //if not EmptyFile then
-       //   columnFile.EraseSection('Sort');
+       // do nothing
      end
   else
      begin
@@ -28629,7 +25342,7 @@ end;
 // procedures to load icons into TImageList
 procedure TFormMain.SetIcon(SourceHolder, Source2Holder, DestHolder: TImageList; SourceIndex, DestIndex: Integer);
 var
-  FileIcon: TIcon; // this was defined in "private" section, but this is the only place this var is used!!!!!
+  FileIcon: TIcon;
   iImageList: TImageList;
 begin
   iImageList:= SourceHolder;
@@ -28655,7 +25368,7 @@ begin
   else
      GenerateMessage('Error', 'Set ImageList Icon. Size mismatch.',
                      '    Icon size of source imagelist and destination imagelist are not the same!'+#13#10+
-                     'Source: '+iImageList{SourceHolder}.Name+#13#10+'Destination: '+DestHolder.Name, 2, False, 1);
+                     'Source: '+iImageList.Name+#13#10+'Destination: '+DestHolder.Name, 2, False, 1);
 end;
 
 procedure TFormMain.LoadFrontendIcons;
@@ -28670,8 +25383,8 @@ var
   tmpIcon: TIcon;
   icoLoop: Integer;
 begin
-  // for 68x68 game icons only...
-  // might be useful for tiles view with 68x68 icons and for thumbnails view (currently showing 48x48 icons)
+  // for 48x48 game icons only
+  // perhaps add support for 68x68 icons in tiles/thumbnails view ?
   fIcon:= TExIcon.Create;
   fIcon.LoadFromFile(GetFolderFull(33)+GetELGameIconFileName(GameID));
   for icoLoop:=0 to fIcon.ImageCount-1 do
@@ -28697,9 +25410,6 @@ var
   tmpIcon: TIcon;
   icoLoop: Integer;
 begin
-  // for 68x68 game icons only...
-  // might be useful for tiles view with 68x68 icons and for thumbnails view (currently showing 48x48 icons)
-
   fIcon:= TExIcon.Create;
   fIcon.LoadFromFile(GetFolderFull(32)+ImageCategoryArray[CategoryIndex, 0]+'.ico');
   for icoLoop:=0 to fIcon.ImageCount-1 do
@@ -28713,7 +25423,7 @@ begin
   end;
   tmpIcon:= TIcon.Create;
   tmpIcon.Handle:= fIcon.Handle;
-  ImageHolder.Picture.Icon:= nil; // clear it first!
+  ImageHolder.Picture.Icon:= nil; // clear it first
   ImageHolder.Picture.Icon:= tmpIcon;
   FreeAndNil(tmpIcon);
   fIcon.Releasehandle;
@@ -28726,8 +25436,6 @@ var
   tmpIcon: TIcon;
   icoLoop: Integer;
 begin
-  // for 68x68 game icons only...
-  // might be useful for tiles view with 68x68 icons and for thumbnails view (currently showing 48x48 icons)
   if not FileExists(GetFolderFull(32)+IconFileName+'.ico') then
      Exit;
   fIcon:= TExIcon.Create;
@@ -28743,7 +25451,7 @@ begin
   end;
   tmpIcon:= TIcon.Create;
   tmpIcon.Handle:= fIcon.Handle;
-  DestImageHolder.Picture.Icon:= nil; // clear it first!
+  DestImageHolder.Picture.Icon:= nil; // clear it first
   DestImageHolder.Picture.Icon:= tmpIcon;
   FreeAndNil(tmpIcon);
   fIcon.Releasehandle;
@@ -28760,7 +25468,6 @@ var
   tempFolder: String;
   Loop: ShortInt;
 begin
-  //(MaxGameID+1)+MaxArcadeSystems
   tempFolder:= GetFolderFull(33);
   for Loop:=0 to MaxGameID do
       AddGameIcons(GetELGameIconFileName(Loop), tempFolder);
@@ -28814,11 +25521,6 @@ var
   tempFolder: String;
   Loop: ShortInt;
 begin
-  // internet game info is no longer part of image categories! (January 29, 2018)
-  //case IncludeInternetInfo of
-  //  True : MaxIndex:= High(ImageCategoryArray);
-  //  False: MaxIndex:= High(ImageCategoryArray)-1;
-  //end;
   tempFolder:= FormMain.GetFolderFull(32);
   for Loop:= Low(ImageCategoryArray) to High(ImageCategoryArray) do
       AddDefaultIcons(ImageCategoryArray[Loop, 0]+'.ico', tempFolder, IL_Holder);
@@ -28867,19 +25569,19 @@ begin
   AddDefaultIcons('option_check.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 0
   AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 1
   AddDefaultIcons('multidisks.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 2
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 3 -> associated app icon!!!
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 3 -> associated app icon
 
   GetExtIcon('.exe', IL_PopupPlayCustomEmulators); // index 4 -> executable default icon
   GetExtIcon('.bat', IL_PopupPlayCustomEmulators); // index 5 -> batch default icon
 
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 6 -> emulator 1 icon!!!
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 7 -> emulator 2 icon!!!
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 8 -> emulator 3 icon!!!
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 9 -> emulator 4 icon!!!
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 6 -> emulator 1 icon
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 7 -> emulator 2 icon
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 8 -> emulator 3 icon
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 9 -> emulator 4 icon
 
   AddDefaultIcons('usagerules.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 10 -> usage rules
 
-  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 11 -> console/computer system!!!
+  AddDefaultIcons('reserved.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 11 -> console/computer system
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       AddDefaultIcons(MediaTypeCustom[Loop, 1], tempFolder, IL_PopupPlayCustomEmulators); // 12, 13, 14, 15, 16
@@ -28908,8 +25610,7 @@ begin
   AddMainScrIcons('viewmode_05_tile.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
   AddMainScrIcons('viewmode_06_thumbnail.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
 
-  // Arcade Games Filter
-  // ...icons are loaded dynamically
+  // Arcade Games Filter, icons are loaded dynamically
 
   // Parent/Clone Filter
   ClearImageList(IL_FilterParentClone_Large);
@@ -28948,7 +25649,6 @@ begin
   LoadToolBarButtons(IL_ToolBarButtons);
 
   // Screenshots Layouts 24x24
-  //if not Reload then
   ClearImageList(IL_ScreenshotLayouts_Small);
   for Loop:=0 to MaxImageLayouts do
       AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tempFolder, IL_ScreenshotLayouts_Small);
@@ -28972,8 +25672,8 @@ begin
 
   // Miscellaneous Menu / Popup Icons 24x24
   ClearImageList(IL_MiscToolBarPopup);
-  AddDefaultIcons('option_check.ico', tempFolder, IL_MiscToolBarPopup); // 00 // use this for check/not checked items!!!!!
-  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MiscToolBarPopup); // 01 // use this for radio groups checked items!!!
+  AddDefaultIcons('option_check.ico', tempFolder, IL_MiscToolBarPopup); // 00 // use this for check/not checked items
+  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MiscToolBarPopup); // 01 // use this for radio groups checked items
   AddDefaultIcons('information.ico', tempFolder, IL_MiscToolBarPopup); // 02
   AddDefaultIcons('refresh.ico', tempFolder, IL_MiscToolBarPopup); // 03
   AddDefaultIcons('stop.ico', tempFolder, IL_MiscToolBarPopup); // 04
@@ -28993,8 +25693,8 @@ begin
 
   // IL_MiscToolBarSmall (28x22) for tool bar buttons, mostly
   ClearImageList(IL_MiscToolBarSmall);
-  AddDefaultIcons('option_check.ico', tempFolder, IL_MiscToolBarSmall); // 00 // use this for check/not checked items!!!!!
-  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MiscToolBarSmall); // 01 // use this for radio groups checked items!!!
+  AddDefaultIcons('option_check.ico', tempFolder, IL_MiscToolBarSmall); // 00 // use this for check/not checked items
+  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MiscToolBarSmall); // 01 // use this for radio groups checked items
   AddDefaultIcons('folder.ico', tempFolder, IL_MiscToolBarSmall); // 02
   AddDefaultIcons('refresh.ico', tempFolder, IL_MiscToolBarSmall); // 03
   AddDefaultIcons('settings.ico', tempFolder, IL_MiscToolBarSmall); // 04
@@ -29006,8 +25706,8 @@ begin
   if not Reload then
     begin
     ClearImageList(IL_MenuPopup);
-    AddDefaultIcons('option_check.ico', tempFolder, IL_MenuPopup); // 00 // use this for check/not checked items!!!!!
-    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MenuPopup); // 01 // use this for radio groups checked items!!!
+    AddDefaultIcons('option_check.ico', tempFolder, IL_MenuPopup); // 00 // use this for check/not checked items
+    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MenuPopup); // 01 // use this for radio groups checked items
     AddDefaultIcons('exit.ico', tempFolder, IL_MenuPopup); // 2
     AddDefaultIcons('favorite_user.ico', tempFolder, IL_MenuPopup); // 3
     AddDefaultIcons('folder.ico', tempFolder, IL_MenuPopup); // 4
@@ -29020,7 +25720,7 @@ begin
 
     AddDefaultIcons('image.ico', tempFolder, IL_MenuPopup); // 11
     AddDefaultIcons('zipfile.ico', tempFolder, IL_MenuPopup); // 12
-    AddDefaultIcons('video_preview.ico', tempFolder, IL_MenuPopup); // 13 // used to be input.ico
+    AddDefaultIcons('video_preview.ico', tempFolder, IL_MenuPopup); // 13
     AddDefaultIcons('delete.ico', tempFolder, IL_MenuPopup); // 14
     AddDefaultIcons('refresh.ico', tempFolder, IL_MenuPopup); // 15
     AddDefaultIcons('savestate.ico', tempFolder, IL_MenuPopup); // 16
@@ -29039,8 +25739,8 @@ begin
     AddDefaultIcons('systemtype_handheld.ico', tempFolder, IL_MenuPopup); // 27
 
     ClearImageList(IL_MainMenuOptions);
-    AddDefaultIcons('option_check.ico', tempFolder, IL_MainMenuOptions); // 00 // use this for check/not checked items!!!!!
-    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MainMenuOptions); // 01 // use this for radio groups checked items!!!
+    AddDefaultIcons('option_check.ico', tempFolder, IL_MainMenuOptions); // 00 // use this for check/not checked items
+    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MainMenuOptions); // 01 // use this for radio groups checked items
     AddDefaultIcons('exit.ico', tempFolder, IL_MainMenuOptions); // 2
     AddDefaultIcons('favorite_user.ico', tempFolder, IL_MainMenuOptions); // 3
     AddDefaultIcons('folder.ico', tempFolder, IL_MainMenuOptions); // 4
@@ -29073,22 +25773,11 @@ begin
   end;
 end;
 
-{procedure TFormMain.LoadMAMESettingsIcons(IconList: TImageList);
-var
-  tempFolder: String;
-begin
-  // icons 20x20 in size...
-  ClearImageList(IconList);
-  tempFolder:= GetFolderFull(32);
-  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IconList);
-  AddDefaultIcons('scanresult_ok.ico', tempFolder, IconList);
-end;}
-
 procedure TFormMain.LoadLeftPanelIcons;
 var
   tempFolder: String;
 begin
-  // search bar now uses the IL_MenuPopup ImageList...
+  // search bar now use the IL_MenuPopup ImageList
   ClearImageList(IL_LeftPanel);
   tempFolder:= GetFolderFull(32);
   AddDefaultIcons('scanresult_ok.ico', tempFolder, IL_LeftPanel);
@@ -29096,7 +25785,7 @@ begin
   AddDefaultIcons('scanresult_badcrc.ico', tempFolder, IL_LeftPanel);
   AddDefaultIcons('scanresult_missroms.ico', tempFolder, IL_LeftPanel);
   AddDefaultIcons('folder.ico', tempFolder, IL_LeftPanel);
-  AddDefaultIcons('help.ico', tempFolder, IL_LeftPanel); // ???
+  AddDefaultIcons('help.ico', tempFolder, IL_LeftPanel); // ?
   AddDefaultIcons('search.ico', tempFolder, IL_LeftPanel); // for left panel editor
   AddDefaultIcons('refresh.ico', tempFolder, IL_LeftPanel); // for internet game info
   AddDefaultIcons('zipfile.ico', tempFolder, IL_LeftPanel); // 08
@@ -29117,9 +25806,7 @@ begin
   AddDefaultIcons('chd.ico', tempFolder, IL_LeftPanel);                // 19
   AddDefaultIcons('media_disc.ico', tempFolder, IL_LeftPanel);         // 20
   AddDefaultIcons('media_flashcard.ico', tempFolder, IL_LeftPanel);    // 21
-
   AddDefaultIcons('media_harddisk.ico', tempFolder, IL_LeftPanel);     // 22
-
   AddDefaultIcons('media_vhs.ico', tempFolder, IL_LeftPanel);          // 23
 
   AddDefaultIcons('video_preview.ico', tempFolder, IL_LeftPanel);      // 24 -> for Internet Game Info bar
@@ -29131,7 +25818,7 @@ var
   tempFolder: String;
   Loop: Integer;
 begin
-  // search bar now uses the IL_MenuPopup ImageList...
+  // search bar now use the IL_MenuPopup ImageList
   if ClearImageList then
      IconList.Clear;
   tempFolder:= GetFolderFull(32);
@@ -29420,14 +26107,6 @@ begin
 
   for Loop:= Ord(HideAllSystems) to MaxConsoleComputerSystems do
       AddDefaultIcons(SystemsListCustom[Loop, 1], tempFolder, IL_Holder);
-
-  // load non-arcade media type icons... MediaTypeNonArcade[] array (uCommon.pas)
-  //if not IsFilter then
-  //   begin
-  //     tempFolder:= GetFolderID(6);
-  //     for Loop:= 1 to Length(MediaTypeArray) do
-  //         AddDefaultIcons(MediaTypeArray[Loop, 1], tempFolder, IL_Holder);
-  //   end;
 end;
 
 procedure TFormMain.SetGroupBoxState(BoxHolder: TAdvGroupBox; BoxEnabled: Boolean; ExecuteAnyway: Boolean = False);
@@ -29454,8 +26133,8 @@ function TFormMain.GetMAMu_IconFolder(sysID: Byte; AddExtraIconPath: Boolean; co
 begin
   Result:= MAMu_Folder; // for all systems, single folder
   case sysID of
-    idDICE: Result:= Result+'dice\'; // for DICE... sub-folder "icons\dice\"
-    idZiNc: Result:= Result+'zinc\'; // for ZiNc... sub-folder "icons\zinc\"
+    idDICE: Result:= Result+'dice\'; // for DICE - sub-folder "icons\dice\"
+    idZiNc: Result:= Result+'zinc\'; // for ZiNc - sub-folder "icons\zinc\"
   end;
   if AddExtraIconPath then
      Result:= Result+'icons\';
@@ -29473,12 +26152,9 @@ begin
 end;
 
 function TFormMain.ScanFoldersIcon(const IconName, SoftwareName: String; sysID: Byte; out FileFullPath: String; ZippedIcon: Boolean): Boolean;
-//const
-//  IconExtraFolder: String = 'icons\';
 var
   FileStr, Folder: String;
 begin
-  // need to add software list folder here...
   case ZippedIcon of
     True:
       begin
@@ -29606,7 +26282,7 @@ var
 
 begin
   Result:= '';
-  if SoftwareName <> '' then Exit; // there will be no MAMu_ icons support for software list games!!!!
+  if SoftwareName <> '' then Exit; // there will be no MAMu_ icons support for software list games
   if PopupForceGameBiosIcons.Checked then
      Result:= LoadBiosIcon;
 
@@ -29646,12 +26322,12 @@ var
         ExtractToStream(IconFile, MAMu_FileStream);
       except
         Result:= False;
-        //CloseArchive; // cannot close icons.zip to avoid slow unzip
+        //CloseArchive; // cannot close icons.zip to avoid slow unzip (do not uncomment or remove this)
         FileName:= '';
         MAMu_FileStream.Clear;
         Exit;
       end;
-      //CloseArchive; // cannot close icons.zip to avoid slow unzip
+      //CloseArchive; // cannot close icons.zip to avoid slow unzip (do not uncomment or remove this)
       FileName:= '';
     end;
     MAMu_FileStream.Position:= 0;
@@ -29703,7 +26379,7 @@ begin
   IconIndex:= -1;
   if IconSize = 48 then
      begin
-       // ImageList.Width = 48 !!!!!!!!
+       // ImageList.Width = 48
        IconIndex:= Index32Bit_48x;
        if IconIndex = -1 then
           IconIndex:= Index24Bit_48x;
@@ -29723,39 +26399,6 @@ begin
   Result:= IconIndex <> -1;
 end;
 
-// for the status screen!
-// not used anymore June 25, 2015
-{procedure TFormMain.PremultiplyBitmap(Bitmap: TBitmap);
-var
-  Row, Col: integer;
-  p: PRGBQuad;
-  PreMult: array[Byte, Byte] of Byte;
-begin
-  // precalculate all possible values of a*b
-  for Row:= 0 to 255 do
-    for Col:= Row to 255 do
-    begin
-      PreMult[Row, Col]:= Row*Col div 255;
-      if (Row <> Col) then
-        PreMult[Col, Row]:= PreMult[Row, Col]; // a*b = b*a
-    end;
-
-  for Row:= 0 to Bitmap.Height-1 do
-  begin
-    Col:= Bitmap.Width;
-    p:= Bitmap.ScanLine[Row];
-    while (Col > 0) do
-    begin
-      p.rgbBlue:= PreMult[p.rgbReserved, p.rgbBlue];
-      p.rgbGreen:= PreMult[p.rgbReserved, p.rgbGreen];
-      p.rgbRed:= PreMult[p.rgbReserved, p.rgbRed];
-      Inc(p);
-      Dec(Col);
-    end;
-  end;
-end;}
-
-// latest function (2011), ALL ICONS SHOWING CORRECTLY!!!!!!
 function TFormMain.AddMAMu_Icon(sysID: Byte; romID: Integer; const GameName, CloneName, DriverName, BiosName, SoftwareName: String; IconList: TImageList): Integer;
 var
   Icon32: TExIcon;
@@ -29815,9 +26458,8 @@ var
 
 begin
   Result:= -1;
-  if SoftwareName <> '' then Exit; // there will be no MAMu_ icons support for software list games!!!!!
-  //if (GameName = 'goonies') and (SoftwareName = 'msx1_cart') then
-  //   beep; // for debugging... futurue improvement ?????
+  if SoftwareName <> '' then Exit; // there will be no MAMu_ icons support for software list games
+
   FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, False);
   if FileToLoad = '' then
      begin
@@ -29854,8 +26496,9 @@ begin
   FormPreferences.ShowModal;
   if UpdateMAMu_ScanFolder then
      begin
-       // this will execute only if user selected another folder for MAMu_ Icons... (compared with "uMain.MAMu_Folder" string var)
+       // this will execute only if user selected another folder for MAMu_ Icons  (compared with "uMain.MAMu_Folder" string var)
        // it will if user change MAME binary in Emulator Setup screen!
+       WriteImageCategories(False, True); // save MAMEu_ folder setting to MAME's "ui.ini" or "eldir\arcade\image_categories.ini" file
        case PopupEnableMAMu_Icons.Checked of
          True : ResetMAMu_ImageList(True);
          False: PopupEnableMAMu_Icons.Enabled:= DirectoryExists(MAMu_Folder);
@@ -29870,11 +26513,12 @@ begin
 
   elIni:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
   elIni.WriteInteger('Preferences', 'AllowOneInstance', Ord(FormPreferences.AllowOnlyOneInstance.Checked));
+  elIni.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
   elIni.UpdateFile;
   FreeAndNil(elIni);
 
   if IsStartup then
-     Exit; // sanity check ??? I still need to double-check if preferences is called at startup or on a clean install
+     Exit; // sanity check ??? I still need to double-check if preferences is called at startup or on a clean install (March 01, 2018)
   if FormPreferences.GameDocsDisplayModeSinglePanel.Checked <> CurrentGameDocsSingleDisplayPanel then
      begin
        GameDocsDisplayTabsToggleButtons;
@@ -29920,17 +26564,16 @@ begin
   FreeAndNil(ControlType);
   ClearPopupSearchBar;
   ControlType:= THashedStringList.Create;
-  if not FileExists(GetControlTypeFile) then
+  if not FileExists(GetControlTypeFile(idMAME)) then
      Exit;
 
-  ControlType.LoadFromFile(GetControlTypeFile);
+  ControlType.LoadFromFile(GetControlTypeFile(idMAME));
   if ControlType.Count = 0 then
      Exit;
 
   PopupSearchBarControlsFilter.BeginUpdate;
   with AddMenuItem(PopupSearchBarControlsFilter.Items, 'Include Tool Bar Filters', '', True, True, False, 5) do
   begin
-    //Name:= 'FilterSearchBarControlsIncludeToolBarFilters';
     Checked:= Boolean(PopupSearchBarControlsFilter.Tag);
     OnClick:= PopupSearchBarControlsFilterIncludeMainFiltersClick;
   end;
@@ -29942,13 +26585,10 @@ begin
     begin
       cName:= ControlType.Names[Loop];
       cTitle:= ControlType.ValueFromIndex[Loop];
-      //AddMenuItem(PopupSearchBarControlsFilter.Items, cTitle, cName, False, False, False);
       with AddMenuItem(PopupSearchBarControlsFilter.Items, cTitle, cName, False, False, False) do
       begin
         OnClick:= PopupSearchBarControlsFilterSelectionClick;
       end;
-      //PopupSearchBarControlsFilter.Items[Loop].Tag:= Loop; // .Tag is not used by anything... for now
-      //PopupSearchBarControlsFilter.Items[Loop+2].OnClick:= PopupSearchBarControlsFilterSelectionClick;
     end;
   end;
   PopupSearchBarControlsFilter.EndUpdate;
@@ -29968,10 +26608,10 @@ begin
   FilterGameTitle.Text:= TMenuItem(Sender).Hint;
   FilterGameTitle.Font.Color:= clBlack;
 
-  ButtonFilterControls.Tag:= 1; // represents searching a text with the new controls search bar button
+  ButtonFilterControls.Tag:= 1; // represents searching a text with the "controls" search bar button
   FilterGameTitle.Refresh;
   ApplyFilterSearchBar;
-  ButtonFilterControls.Tag:= 0; // restore searching text with search bar options, not the new control search button
+  ButtonFilterControls.Tag:= 0; // restore searching text with search bar options, not "controls" search button
 end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
@@ -29997,7 +26637,7 @@ begin
   // Win8 should be dwMinorVersion 2 (major 6)
   // Win8.1 should be dwMinorVersion 3 (major 6)
   
-  HideAppFormTaskBarButton; // for Windows 7 / Windows 8 / Windows 10 (WinXP needs it too!!)
+  HideAppFormTaskBarButton; // for Windows 7 / Windows 8 / Windows 10 (WinXP needs it too!)
 
   if Win32Platform in [0, 1] then
      begin
@@ -30008,14 +26648,13 @@ begin
      end;
 
   FrontendPath:= ExtractFilePath(Application.ExeName);
-  //FrontendPath:= ShortToLongPath(ExtractFilePath(Application.ExeName));
   FrontendVersion:= 'v'+GetFileInfo2(Application.ExeName, VersionInfo[3]);
   if PosEx('.0.0', FrontendVersion) = 0 then
      Delete(FrontendVersion, Length(FrontendVersion)-1, 2)
   else
      Delete(FrontendVersion, Length(FrontendVersion)-3, 4);
 
-  MenuRestoreMainScreenDefaultScreenSizePosition.Click; // need to restore initial form size... dunno why it gets enlarged at runtime!!!!
+  MenuRestoreMainScreenDefaultScreenSizePosition.Click; // need to restore initial form size, dunno why it gets enlarged at runtime
 
   Application.ProcessMessages;
 
@@ -30052,35 +26691,32 @@ begin
 
   CheckAndCreateFolder(GetFolderFull(38)); // "console_computer\game_cfg\" folder
 
-  //if DirectoryExists(GetGamesFolderEL+'zinc_cfg\') then
-  //   RenameFile(GetGamesFolderEL+'zinc_cfg\', FormMain.GetFolderEmulatorIni(idZiNc));
-
-  //if FileExists(GetGamesFolderEL+'multicart_neogeo.ini') then // added August 11, 2016
-  //   RenameFile(GetGamesFolderEL+'multicart_neogeo.ini', GetGamesFolderEL+'mame_multicart_neogeo.ini');
-
-  //if FileExists(GetGamesFolderEL+'multicart_stv.ini') then // added August 11, 2016
-  //   RenameFile(GetGamesFolderEL+'multicart_stv.ini', GetGamesFolderEL+'mame_multicart_stv.ini');
-
   if DirectoryExists(FrontendPath+'softwarelist') then
-     MoveFileW(FrontendPath+'softwarelist', GetGamesFolderEL(1), True);
+     MoveFileW(FrontendPath+'softwarelist', GetGamesFolderEL(1), True); // MAME only (February 28, 2018)
 
   UpdateTimesPlayedIni; // remove "games_played.ini" and create "eldir\arcade\played_games\" folder with "sysname.txt" files for each system
-  UpdateEmuConPlayedGamesTags; // replace <game> tags by <file> tags... this function should not be here, it belongs to EmuCon frontend !!!!! August 24, 2017
+  UpdateEmuConPlayedGamesTags; // replace <game> tags by <file> tags (August 24, 2017)
 
   ValidateEmuImgCat_IniFile; // split "eldir\ini_files\folders_emulators.ini" into "arcade\emulators.ini" and "arcade\image_categories.ini"
+
+  // rename "image_categories.ini" to "sysimagefolders_arcade.ini" (March 12, 2018)
+  if FileExists(GetArcadeFolder+'image_categories.ini') then
+     MoveFileW(GetArcadeFolder+'image_categories.ini', GetImageCategoriesFile, True);
+
+  SplitImageCategoriesIniSettings; // split image category "bkcolor" / "visible" settings and image layout visibility settings to new file (removed from EmuLoader.ini)
 
   UpdateArcadeVideoPreviewSection; // read "ini_files\videopreview.ini" and rename [Folders] section to [Arcade Folders]
 
   PanelImagesDocuments.Align:= alClient;
   PanelWebBrowser.Align:= alClient;
-  PanelWebBrowser.Visible:= False; // force hide, just in case...
+  PanelWebBrowser.Visible:= False; // force hide, just in case
   ZipForge.Active:= False;
   SortAuditGames:= False;
   GameLastAddedIndex:= -1;
   ProcessingGameDocuments:= False;
   Caption:= Caption+' '+FrontendVersion;
 
-  StatusBar_GamesGameName.Caption:= ''; // set to no caption to avoid junk text while loading games lists at startup
+  StatusBar_GamesGameName.Caption:= ''; // emtpy string to avoid junk text at startup
    
   if FileExists(FrontendPath+'EmuLoader.ini') then
      begin
@@ -30117,7 +26753,7 @@ begin
   LoadCustomEmulatorsIconsPopupMenu; // for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
 
   FormStatus.MessageStr('Initializing memory variables.');
-  SelectedFilterName:= 'allgames'; // set default filter to "All Games" (for MAME and arcade emulators only)
+  SelectedFilterName:= 'allgames'; // set default filter to "All Games" (MAME and arcade only)
 
   InitializeEmulatorVariables;
 
@@ -30135,9 +26771,9 @@ begin
   SetDefaultFont(Font_MissingROMsPreliminary, 4);
 
   Font_TilesViewDetailsText:= TFont.Create;
-  Font_TilesViewDetailsText.Name:= 'Trebuchet MS';//'Verdana';
+  Font_TilesViewDetailsText.Name:= 'Trebuchet MS';
   Font_TilesViewDetailsText.Size:= 9;
-  Font_TilesViewDetailsText.Style:= [];//[fsItalic];
+  Font_TilesViewDetailsText.Style:= [];
   Font_TilesViewDetailsText.Color:= clBlack;
 
   CheckDefaultFavProfile;
@@ -30145,7 +26781,7 @@ begin
   FavoriteProfile[1]:= 'favorites.txt';
   PopupEnableFavorites.Hint:= FavoriteProfile[0];
   MAMEInfoTextHolder.Color:= clNone;
-  LoadControlTypeList; // populate controls list in the search bar tool bar button 
+  LoadControlTypeList; // populate controls list in the search bar tool bar button (Supermodel 3 emulator controls file is NOT included) 
 
   PlayDummyVideoPreview:= False;
 end;
@@ -30171,7 +26807,7 @@ begin
        if SystemID = idSupermodel then
           begin
             if not ParseSupermodelGamesXMLFile then // create games list based on new "supermodel3_dir\Config\Games.xml" file (SVN 592 and newer!)
-               CreateGamesClrMAMEProXML(SystemID); // this is for SVN 591 and older...
+               CreateGamesClrMAMEProXML(SystemID); // this is for SVN 591 and older
           end
        else
           CreateGamesClrMAMEProXML(SystemID);
@@ -30221,15 +26857,12 @@ end;
 procedure TFormMain.FormShow(Sender: TObject);
 var
   GamesListFound: packed array[1..MaxArcadeSystems] of Boolean;
-  //CustomGamesListFound: packed array[1..MaxConsoleComputerSystems] of Boolean;
   Loop, NewDateTime: Integer;
   ErrorStr, ErrorMsgTitle: String;
   tmpString: String;
   Continue, ScanModeSelected, IsFirstTimeRun: Boolean;
   iVersion: String;
   CreateListArcade, CreateListConsoleComputer: Boolean;
-  //IsFreshInstall: Boolean;
-  //MachinesList: TStringList;
 
   function ShowScanModeSelectDialog: Boolean;
   begin
@@ -30243,7 +26876,7 @@ var
 
   function SetMAMEBuild(sysID: Byte; IsAlterMAME: Boolean = False): Boolean;
   begin
-    Result:= IsMAMEBasedSys(sysID); // sysID = idMAME;
+    Result:= IsMAMEBasedSys(sysID);
     if not Result then
        Exit;
     case IsAlterMAME of
@@ -30300,9 +26933,7 @@ var
 
   function CallCreateGamesList(SystemID: ShortInt): Boolean;
   begin
-    // for fresh install, create games list call
-    // for MAME/HBMAME
-
+    // for fresh install, create games list call (MAME/HBMAME)
     Result:= True;
     case ValidateArcadeEmulatorFile(SystemID) of
       True : SetCurrentDir(ExtractFilePath(EmulatorFile[SystemID]));
@@ -30329,7 +26960,7 @@ var
   begin
     Result:= True;
     case IsMAMEBasedSys(SystemID) of
-      True : CallCreateGamesList(SystemID); // MAME based only
+      True : CallCreateGamesList(SystemID); // (MAME/HBMAME)
       False: CallCreateGames2(SystemID); // other arcade systems
     end;
   end;
@@ -30413,15 +27044,11 @@ begin
      
   ScanModeSelected:= False;
   ErrorMsgTitle:= 'Error: Startup';
-  //AbortExecution:= True;
   IsFirstTimeRun:= False;
   CreateListArcade:= False;
   CreateListConsoleComputer:= False;
   for Loop:=1 to MaxArcadeSystems do
       GamesListFound[Loop]:= True;
-
-  //for Loop:=1 to MaxConsoleComputerSystems do
-  //    CustomGamesListFound[Loop]:= True; // this is not needed since EmuCon games do not need ROM/CHD validation
 
   ResetNoImageLoaded;
   if not FileExists(GetFrontendExtraIniFile) then
@@ -30441,23 +27068,26 @@ begin
 
   ReadDaemonToolsSettings(True); // for console/computer emulators/games (EmuCon)
 
-  //if not Continue then
-  //   Continue:= ValidateFile(GetEmulatorsFile); // check for "arcade\emulators.ini" ... "emulators.ini" is no longer required for a clean install (August 24, 2017)
-
-  Continue:= False; // it means it's a clean install (August 24, 2017)
+  Continue:= False; // it's a clean install (August 24, 2017)
 
   for Loop:=1 to MaxArcadeSystems do
   begin
     if VerifyArcadeGamesSys(Loop) then
        begin
          Continue:= True;
-         Break; // no need to check all systems; if ONE is found, then it's not a clean install (August 24, 2017)
+         Break; // no need to check all systems; if one is found then it's not a clean install (August 24, 2017)
        end;
   end;
 
   if not Continue then
      begin
-       if VerifyGamesMAMESoftlist then
+       if VerifyGamesMAMESoftlist(idMAME) then
+          Continue:= True;
+     end;
+
+  if not Continue then
+     begin
+       if VerifyGamesMAMESoftlist(idHBMAME) then
           Continue:= True;
      end;
 
@@ -30503,56 +27133,20 @@ begin
              ForceApplicationTerminate;
              Exit;
            end;
-        //FreeAndNil(FormCleanInstallGuide); // cannot free this yet!!!
+        //FreeAndNil(FormCleanInstallGuide); // cannot free this yet (do not remove this line)
 
         tmpString:= '';
-
-        //CallMessageBox;
-        //AddMsgText('    You may select arcade emulators or console/computer emulators and games folders. '+#13#10+#13#10+
-        //           'To create ');
-        //AddMsgText('arcade', $00a65300, [fsBold]);
-        //AddMsgText(' games lists you must select emulator executables.'+#13#10+
-        //           'To create ');
-        //AddMsgText('console/computer', $00a65300, [fsBold]);
-        //AddMsgText(' games lists you must select games folders. Emulators executables are optional.'+#13#10+#13#10+
-        //           '    Several frontend features are exclusive to MAME emulator. MAME software list games are supported, but are NOT'+
-        //           ' handled as console/computer games by the frontend.'+#13#10+#13#10+
-        //           '    Would you like to view the ');
-        //AddMsgText('quick setup guide now', clBlack, [fsBold]);
-        //AddMsgText(' ?');
-
-        //if GenerateMessage('Startup', 'Greetings program!', '', 1, False, 2) = mrYes then
-        //   begin
-        //     case FileExists(FrontendPath+'docs\el-quick-setup-quide.txt') of
-        //       True : ShellExecute(Handle, 'open', PChar(FrontendPath+'docs\el-quick-setup-quide.txt'), nil, nil, SW_SHOWNORMAL);
-        //       False: GenerateMessage(ErrorMsgTitle, 'File access error.',
-        //                              'The file "'+FrontendPath+'docs\el-quick-setup-quide.txt " was not found. ', 2, False, 1);
-        //     end;
-        //   end;
-
-        //AbortExecution:= True; // useless variable (September 05, 2017)
-        //FormMain.Left:= (Screen.Width shr 1)-(FormMain.Width shr 1)-1; // code not used anymore (September 05, 2017)
-        //FormMain.Top:= (Screen.Height shr 1)-(FormMain.Height shr 1)-1; // code not used anymore (September 05, 2017)
-
-        // check if user selected to create arcade games list, if yes and not selected emulator setup, then check if "arcade\emulators.ini" exist
-        // ... if not, ask user "if it wants to select emulators now ?" ???
 
         if FormCleanInstallGuide.Option_SelectArcadeEmulators.Checked then
            MenuArcadeEmulatorSetup.Click;
 
         if FormCleanInstallGuide.Option_CreateArcadeGamesList.Checked then
            begin
-             if ValidateFile(GetArcadeEmulatorsFile) then // only create MAME/arcade games list if file "eldir\arcade\emulators.ini" exists; arcade emulators require it!
+             if ValidateFile(GetArcadeEmulatorsFile) then // only create MAME/arcade games list if file "eldir\arcade\emulators.ini" exists; arcade emulators require it
                 begin
                   CreateListArcade:= True;
-                  //ShowScanModeSelectDialog; // only call this function if user selected to create arcade games list...
-                  // no need to call this here as it will be called in "CallCreateGamesList()" sub-function
                 end;
            end;
-
-        //if FormMain.MainMenuOptions.Tag = 0 then
-        //   CreateListArcade:= True;
-        // select EmuCon emulators
 
         if FormCleanInstallGuide.Option_SelectConsoleComputerEmulators.Checked then
            MenuCustomEmulatorsSetup.Click;
@@ -30562,81 +27156,48 @@ begin
 
         if FormCleanInstallGuide.Option_CreateConsoleComputerGamesList.Checked then
            begin
-             if ValidateFile(GetSysGameFolders) then // only create console/computer games list if file "eldir\console_computer\sysgamefolders.ini" exists; console/computer games require it!
+             if ValidateFile(GetSysGameFolders) then // only create console/computer games list if file "eldir\console_computer\sysgamefolders.ini" exists; console/computer games require it
                 CreateListConsoleComputer:= True;
            end;
 
         WriteSettingsCleanInstall; // update el_extra.ini with clean install dialog settings
         FreeAndNil(FormCleanInstallGuide);
-
-        //if FormMain.MainMenuOptions.Tag = 0 then
-        //   CreateListConsoleComputer:= True;
-
+        
         FormStatus.TitleStr('Initializing'); 
         FormStatus.StartThreadClock;
         FormStatus.Show;
 
         FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
-        ReadCustomGamesFolders; // parse from EmuCon.ini or new .ini file
-        ReadCustomEmulatorsInfo; // parse from EmuCon.ini or new .ini file
-        ReadCustomSysImageFolders; // parse from EmuCon.ini or new .ini file
+        ReadCustomGamesFolders;
+        ReadCustomEmulatorsInfo;
+        ReadCustomSysImageFolders;
 
         if CreateListArcade then
            begin
              FormStatus.MessageStr('Loading arcade folders to RAM.');
-             LoadFoldersAllArcadeSystems; // force loading arcade emulator files and ROMs folders in case user clicked "Cancel" button in "MenuEmulatorSetup.Click"...
+             LoadFoldersAllArcadeSystems; // force loading arcade emulator files and ROMs folders in case user clicked "Cancel" button in "MenuEmulatorSetup.Click"
               for Loop:=1 to MaxArcadeSystems do
                   CreateGamesFirstRunArcade(Loop);
            end;
 
         if CreateListConsoleComputer then
            CreateGamesFirstRunConsoleComputer;
-
-        // no longer used... September 13, 2017
-        //case MainMenuOptions.Tag of
-        //  0:
-        //    begin
-        //      //LoadFoldersAllSystems;
-        //      for Loop:=1 to MaxArcadeSystems do
-        //          CreateGamesFirstRun(Loop);
-        //    end;
-        //  1:
-        //    begin
-        //      // user clicked "Cancel" button in Emulator Setup screen... force exiting the frontend
-        //      // should check for "arcade\emulators.ini" and if it doesn't exist, then cancel the create games list, if selected
-        //      ForceApplicationTerminate; // do not terminate application!!! (September 05, 2017)
-        //      Exit;
-        //    end;
-        //end;
       end;
     False:
       begin
         FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
-        ReadCustomGamesFolders; // parse from EmuCon.ini or new .ini file
-        ReadCustomEmulatorsInfo; // parse from EmuCon.ini or new .ini file
-        ReadCustomSysImageFolders; // parse from EmuCon.ini or new .ini file
+        ReadCustomGamesFolders;
+        ReadCustomEmulatorsInfo;
+        ReadCustomSysImageFolders;
 
         ReadIniFile;
 
-        Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again...
-
-        //// if emulators were selected but .exe files were not found... first time will ask user if wants to select emulators (Arcade EmulatorS Setup screen)
-        //Continue:= ReadArcadeEmulatorExecutable(True);
-        //if not Continue then
-        //   Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again...
-
+        Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again
         if Continue then
            begin
-             // file emulators were selected and .exe files exist... check for mame.ini files and try to create them...
+             // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
              ErrorStr:= '';
              CheckAllMAMEIniFiles;
-             //if not CheckAllMAMEIniFiles then
-             //   MenuEmulatorSetup.Click;
-             //if MainMenuOptions.Tag = 1 then
-             //   begin
-             //     ForceApplicationTerminate;
-             //     Exit;
-             //   end
            end;
 
         // load ROMs folders and update emulator .exe info in case user updated .exe files before starting Emu Loader
@@ -30658,7 +27219,7 @@ begin
   end;
 
   FormStatus.TitleStr('Finalizing Setup');
-  //FormStatus.MessageStr('Loading games icons.'); // no need; icons are loaded very fast...
+
   if not ValidateFile(FrontendPath+'EmuLoader.ini') then
      begin
        Application.ProcessMessages;
@@ -30672,16 +27233,12 @@ begin
 
   ReadImageCategories(True, True);
 
-  // new code, January 02, 2012
-  // need to load the games list here first, before using "CallScanGames()"
-
   ToggleMachinesListSidePanel;
 
-  SetGameType(True);
+  SetGameType(True); // need to load the games list first, before using "CallScanGames()"
 
   if IsFirstTimeRun then
      begin
-       //FormStatus.MessageStr('Validating games list.');
        if CreateListArcade then
        begin
          for Loop:=1 to MaxArcadeSystems do
@@ -30689,14 +27246,13 @@ begin
            if not GamesListFound[Loop] then
            begin
              CallScanGames(0, False, Loop); // scan all games, since ALL games are "missing" (status = 2)
-             if Loop = idMAME then
-                ScanSoftListGames(0, False);
+             if IsMAMEBasedSys(Loop) then // include both MAME and HBMAME
+                ScanSoftListGames(0, False, Loop);
            end;
          end;
        end;
      end;
   SortAuditGames:= False;
-
 
   if PopupEnableMAMu_Icons.Tag = 1 then
      PopupEnableMAMu_Icons.Click;
@@ -30711,21 +27267,18 @@ begin
   FormStatus.MessageStr('Initializing images variables.');
   LoadListCPU(FilterCPUList);
 
-  ReadCustomGameFontFile; // read default font for GamesListView (all systems) and custom font for each system (before reading "EmuCon.ini"...)
-
-  //FormStatus.MessageStr('Loading custom emulators data to RAM');
-  //ReadEmulatorsInfo;
+  ReadCustomGameFontFile; // read default font for GamesListView (all systems) and custom font for each system, before reading "EmuCon.ini"
 end;
 
 procedure TFormMain.InitImgZipThumbnail(FreeList: Boolean = False);
 var
-  sysID: Integer; // imgLoop, iID
+  sysID: Integer;
   Continue: Boolean;
 begin
   case FreeList of
     True:
       begin
-        Continue:= True; // true = free THashedStringList lists...
+        Continue:= True; // true = free THashedStringList lists
         if MenuShowImages.Checked then
            begin
              Continue:= ImageDetails[1].ImageCategoryIndex <> 1; // check others is category different than in-game snapshots
@@ -30742,23 +27295,23 @@ begin
            end;
         if Continue then
         begin
-          // none of the 3 images are in-game snapshots, free zipped lists.. or "Show Images" is disabled (main menu "Images"
+          // none of the 3 images are in-game snapshots or "Show Images" is disabled (main menu "Images"), free zipped lists
           for sysID:= 1 to MaxArcadeSystems do
-              FreeAndNil(imgZipFileList[sysID, 1]); // free in-game snapshots only (snap.zip)... for all arcde systems
+              FreeAndNil(imgZipFileList[sysID, 1]); // free in-game snapshots only (snap.zip) for all arcde systems
 
           if Length(imgZipFileSoftList) > 0 then
              begin
                for sysID:= Low(imgZipFileSoftList) to High(imgZipFileSoftList) do
-                   FreeAndNil(imgZipFileSoftList[sysID, 1]); // free in-game snapshots only (softname.zip)... for all softare lists
+                   FreeAndNil(imgZipFileSoftList[sysID, 1]); // free in-game snapshots only (softname.zip) for all softare lists
              end;
 
           for sysID:= 1 to MaxConsoleComputerSystems do
-              FreeandNil(imgZipFileListConsComp[sysID, 1]); // free in-game snapshots only (snap.zip)... for all console/computer systems (EmuCon)
+              FreeandNil(imgZipFileListConsComp[sysID, 1]); // free in-game snapshots only (snap.zip) for all console/computer systems (EmuCon)
         end;
       end;
     False:
       begin
-        // even if one of the 3 images is using, the list will be re-initialized and reloaded (contents of snap.zip will be updated!)
+        // even if one of the 3 images is using, the list will be re-initialized and reloaded (contents of snap.zip will be updated)
         if not IsStartup then
            FormStatus.Show;
         FormStatus.TitleStr('Initializing Zipped Images Cache');
@@ -30766,7 +27319,7 @@ begin
         begin
           if Assigned(imgZipFileList[sysID, 1]) then
              imgZipFileList[sysID, 1].Clear;
-            ImgZipParseFilesList(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip)... for all arcade systems
+            ImgZipParseFilesList(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip) for all arcade systems
         end;
 
         LoadImgSoftwareListNames;
@@ -30784,7 +27337,7 @@ begin
         begin
           if Assigned(imgZipFileListConsComp[sysID, 1]) then
              imgZipFileListConsComp[sysID, 1].Clear;
-            ImgZipParseFilesListConsComp(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip)... for all console/computer systems (EmuCon)
+            ImgZipParseFilesListConsComp(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip) for all console/computer systems (EmuCon)
         end;
 
         if not IsStartup then
@@ -30816,25 +27369,9 @@ begin
   for sysLoop:=1 to MaxArcadeSystems do
       InitImgZipSystem(sysLoop, FreeLists);
 
-  //for sysLoop:=1 to MaxArcadeSystems do
-  //begin
-  //  if Boolean(ButtonImageCategory.Tag = High(ImageCategoryArray)) then
-  //     InitImgZipSystem(sysLoop, True) // view internet game info!!!!
-  //  else
-  //     InitImgZipSystem(sysLoop, FreeLists);
-  //end;
-
   // console/computer systems (EmuCon)
   for sysLoop:=1 to MaxConsoleComputerSystems do
       InitImgZipSystemConsComp(sysLoop, FreeLists);
-
-  //for sysLoop:=1 to MaxConsoleComputerSystems do
-  //begin
-  //  if Boolean(ButtonImageCategory.Tag = High(ImageCategoryArray)) then
-  //     InitImgZipSystemConsComp(sysLoop, True) // view internet game info!!!!
-  //  else
-  //     InitImgZipSystemConsComp(sysLoop, FreeLists);
-  //end;
 end;
 
 procedure TFormMain.InitImgZipSystem(sysID: Integer; FreeList: Boolean = False);
@@ -30849,8 +27386,7 @@ begin
       end;
     False:
       begin
-        //ImgZipParseFilesList(sysID, ImageDetails[1].ImageCategoryIndex); ... this shouldn't be executed without the validation below
-        if ImageDetails[1].ImageCategoryIndex <> -1 then // validate first!!!! Novermber 10, 2016
+        if ImageDetails[1].ImageCategoryIndex <> -1 then
            ImgZipParseFilesList(sysID, ImageDetails[1].ImageCategoryIndex);
 
         if Assigned(ImageScr[2]) then
@@ -30918,7 +27454,7 @@ begin
                 repeat
                   if (not ArchiveItem.ExternalFileAttributes and $10 = $10) then // do not add folders into the list
                   imgZipFileList[sysID, imageCategoryID].Add(LowerCase(ArchiveItem.StoredPath+ArchiveItem.FileName));
-                until (not FindNext(ArchiveItem));                     // StoredPath is for softwarename\gamename format...
+                until (not FindNext(ArchiveItem));                     // "StoredPath" is for "softwarename\gamename" file format
               end;
          end;
     except
@@ -30931,17 +27467,17 @@ begin
   imgZipFileList[sysID, imageCategoryID].EndUpdate;
   ZipForge.CloseArchive;
   ZipForge.FileName:= '';
-  // for debugging only... leave it commented!
+  // for debugging only... leave it commented
   //if (sysID = idMAME) and (imageCategoryID = 1) then
   //   imgZipFileList[sysID, imageCategoryID].SaveToFile(FrontendPath+'snap-zip_contents.txt');
 end;
 
-// for software lists... "snap\msx1_cart.zip"; instead of having "msx1_cart\gamename.png" inside the main "snap.zip"
-//                 added "snap\msx1_cart\msx1_cart.zip" support (February 12, 2018)
+// for software lists: "snap\msx1_cart.zip"; instead of having "msx1_cart\gamename.png" inside the main "snap.zip"
+//              added: "snap\msx1_cart\msx1_cart.zip" support (February 12, 2018)
 
 function TFormMain.LoadImgSoftwareListNames: Boolean;
 var
-  SoftLists: TStringList;
+  SoftLists: THashedStringList;
 begin
   Result:= False;
   case Assigned(imgSoftwareNameZipList) of
@@ -30956,7 +27492,7 @@ begin
     False: imgSoftwareNameZipList:= THashedStringList.Create;
   end;
 
-  SoftLists:= TStringList.Create;
+  SoftLists:= THashedStringList.Create;
   if not GetSoftListFilesToAudit(idMAME, SoftLists) then
      begin
        FreeAndNil(SoftLists);
@@ -31021,7 +27557,6 @@ begin
       end;
     False:
       begin
-        //ImgZipParseFilesList(sysID, ImageDetails[1].ImageCategoryIndex);
         if ImageDetails[1].ImageCategoryIndex <> -1 then
            ImgZipParseFilesSoftwareList(sysID, ImageDetails[1].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
 
@@ -31063,11 +27598,11 @@ begin
        Exit;
      end;
 
-  imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'.zip';//GetImgZipFileName(imageCategoryID);
+  imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'.zip';
   tResult:= FileExists(imgFile);
   if not tResult then
      begin
-       imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'\'+SoftwareName+'.zip';//GetImgZipFileName(imageCategoryID);
+       imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'\'+SoftwareName+'.zip';
        tResult:= FileExists(imgFile);
      end;
 
@@ -31132,7 +27667,7 @@ end;
 
 function TFormMain.GetImgZipFileName(imageCategoryID: Integer): String;
 begin
-  // must get the zip filename from this array since it's the same as MAME's default image folder names!!!! August 04, 2016
+  // must get the zip filename from this array since it's the same as MAME's default image folder names (August 04, 2016)
   Result:= ImageCategoryArray[imageCategoryID, 3]+'.zip';
 end;
 
@@ -31145,7 +27680,7 @@ begin
   case FreeList of
     True:
       begin
-        //Continue:= True; // true = free THashedStringList lists... this is from Emu Loader... not used in EmuCon
+        //Continue:= True; // true = free THashedStringList lists
         Continue:= ImageDetails[1].ImageCategoryIndex <> 1; // check others is category different than in-game snapshots
         if Continue then
            begin
@@ -31160,19 +27695,19 @@ begin
 
         if Continue then
         begin
-          // none of the 3 images are in-game snapshots, free zipped lists.. or "Show Images" is disabled (main menu "Images"
+          // none of the 3 images are in-game snapshots or "Show Images" is disabled (main menu "Images"), free zipped lists 
           for sysID:= 1 to MaxConsoleComputerSystems do
           begin
             for imgLoop:=Low(imgZipFileListConsComp[sysID]) to High(imgZipFileListConsComp[sysID]) do
-                FreeAndNil(imgZipFileListConsComp[sysID, 1]); // free in-game snapshots only (snap.zip)... for all console/computer systems (EmuCon)
+                FreeAndNil(imgZipFileListConsComp[sysID, 1]); // free in-game snapshots only (snap.zip), for all console/computer systems (EmuCon)
           end;
         end;
       end;
     False:
       begin
-        // even if one of the 3 images is using, the list will be re-initialized and reloaded (contents of snap.zip will be updated!)
+        // even if one of the 3 images is using, the list will be re-initialized and reloaded (contents of snap.zip will be updated)
         for sysID:= 1 to MaxConsoleComputerSystems do
-            ImgZipParseFilesListConsComp(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip)... for all console/computer systems (EmuCon)
+            ImgZipParseFilesListConsComp(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip),  for all console/computer systems (EmuCon)
       end;
   end;
 end;
@@ -31206,15 +27741,6 @@ begin
   end;
 end;
 
-// not needed.. ??? EL can initialize .zip lists of all system types in InitImgZipLists() function (arcade/console/computer)
-//procedure TFormMain.InitImgZipListsConsComp(FreeLists: Boolean = False);
-//var
-//  sysLoop: Integer;
-//begin
-//  for sysLoop:=1 to MaxCustomSystems do
-//      InitImgZipSystemConsComp(sysLoop, FreeLists);
-//end;
-
 procedure TFormMain.ImgZipParseFilesListConsComp(sysID, imageCategoryID: Integer);
 var
   imgFile: String;
@@ -31227,18 +27753,13 @@ begin
           begin
             if (imageCategoryID <> 1) and (SnapshotFolderCustom[sysID, 1] = '') then
                begin
-                 // all .zip files can also be in "in-game snap" dir!!!! January 2016
+                 // all .zip files can also be in "in-game snap" dir (January 2016)
                  FreeAndNil(imgZipFileListConsComp[sysID, imageCategoryID]);
                  Exit;
                end;
           end;
      end;
 
-  //if (not IsCustomSystemAvailable(sysID)) or (SnapshotFolder[sysID, 1] = '') then // all .zip files must be in in-game snap dir!!!! January 2016
-  //   begin
-  //     FreeAndNil(imgZipFileList[sysID, imageCategoryID]);
-  //     Exit;
-  //   end;
   if ZipForge.Active then
      begin
        CallMessageBox;
@@ -31278,14 +27799,13 @@ begin
       OpenArchive(fmOpenRead or fmShareDenyNone);
       if FileCount > 0 then
          begin
-           imgZipFileListConsComp[sysID, imageCategoryID].Add(imgFile); // first line always contains .zip filename!!! ????????????
+           imgZipFileListConsComp[sysID, imageCategoryID].Add(imgFile); // first line always contains .zip filename
            // Search text files stored inside the archive
-           if FindFirst('*', ArchiveItem) then // '*.*'
+           if FindFirst('*', ArchiveItem) then
               begin
                 repeat
-                  if (not ArchiveItem.ExternalFileAttributes and $10 = $10) then // do not add folders into the list ????????? June 09, 2016
+                  if (not ArchiveItem.ExternalFileAttributes and $10 = $10) then // do not add folders into the list
                      imgZipFileListConsComp[sysID, imageCategoryID].Add(ArchiveItem.FileName);
-                     //imgZipFileList[sysID, imageCategoryID].Add(LowerCase(ArchiveItem.FileName));
                 until (not FindNext(ArchiveItem));
               end;
          end;
@@ -31375,7 +27895,7 @@ begin
                    Result:= Item;
               end;
          end;
-        if Result = nil then // this code line should be removed since "Result" is not changed when game is found!!!
+        if Result = nil then
            Item:= GamesListView.Groups.NextVisibleInGroup(Group, Item);
       until (Item = nil) or (Result <> nil);
 
@@ -31402,7 +27922,7 @@ begin
                    Result:= Item;
               end;
          end;
-      if Result = nil then // this code line should be removed since "Result" is not changed when game is found!!!
+      if Result = nil then
          Item:= GamesListView.Groups.NextVisibleItem(Item);
     until (Item = nil) or (Result <> nil);
   end;
@@ -31410,7 +27930,7 @@ begin
      Result:= GamesListView.Groups.FirstVisibleItem;
 end;
 
-procedure TFormMain.SelectEasyItem(EasyItemIndex: TEasyItem); // ELV_Holder: TEasyListView = GamesListView
+procedure TFormMain.SelectEasyItem(EasyItemIndex: TEasyItem);
 begin
   if not CheckTotal(GamesListView) then
      Exit;
@@ -31423,7 +27943,7 @@ begin
      Exit;
   TEasyGameInfo(EasyItemIndex).Selected:= True;
   GamesListView.Selection.FocusedItem:= EasyItemIndex;
-  EasyItemIndex.MakeVisible(emvMiddle);//(emvAuto);
+  EasyItemIndex.MakeVisible(emvMiddle);
 end;
 
 procedure TFormMain.SelectCurrentGame;
@@ -31467,7 +27987,7 @@ begin
          Result:= True
       else
          begin
-           if MemGameInfo.eSystemType = 0 then // only it it's arcade (systype = 0 -> arcade; 1 -> mess
+           if MemGameInfo.eSystemType = 0 then // only if it's arcade (systype = 0 -> arcade; 1 -> mess)
               begin
                  if not FilterSysArcade[MemGameInfo.eSystemID] then
                     begin
@@ -31482,70 +28002,70 @@ begin
       end;
 
   case MemGameInfo.eROMIdentification of
-    00: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Parent (have)
+    00: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // MAME Parent (have)
     01: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // MAME Clone (have)
     02: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Bios (have)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // MAME Bios (have)
     03: Result:= (not FormArcadeFiltersExtra.HideDeviceSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Device Set (have)
-    04: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Parent (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // MAME Device Set (have)
+    04: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // MAME Parent (miss)
     05: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // MAME Clone (miss)
     06: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Bios (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // MAME Bios (miss)
     07: Result:= (not FormArcadeFiltersExtra.HideDeviceSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Device Set (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // MAME Device Set (miss)
 
-    08: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // Supermodel SEGA Model 3 Parent (have)
+    08: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // Supermodel SEGA Model 3 Parent (have)
     09: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // Supermodel SEGA Model 3 Clone (have)
-    10: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // Supermodel SEGA Model 3 Parent (miss)
+    10: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // Supermodel SEGA Model 3 Parent (miss)
     11: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // Supermodel SEGA Model 3 Clone (miss)
 
-    12: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // Daphne Parent (have)
-    13: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // Daphne Clone (have)    
-    14: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // Daphne Parent (miss)
+    12: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // Daphne Parent (have)
+    13: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // Daphne Clone (have)
+    14: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // Daphne Parent (miss)
     15: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // Daphne Clone (miss)
 
-    16: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // Demul Parent (have)
+    16: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // Demul Parent (have)
     17: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // Demul Clone (have)
     18: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // // Demul Bios (have)
-                 
-    19: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // Demul Parent (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // Demul Bios (have)
+
+    19: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // Demul Parent (miss)
     20: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // Demul Clone (miss)
     21: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // Demul Bios (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // Demul Bios (miss)
 
-    22: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // HBMAME Parent (have)
+    22: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // HBMAME Parent (have)
     23: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // HBMAME Clone (have)
     24: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // HBMAME Bios (have)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // HBMAME Bios (have)
     25: Result:= (not FormArcadeFiltersExtra.HideDeviceSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // HBMAME Device (have)
-    26: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // HBMAME Parent (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // HBMAME Device (have)
+    26: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // HBMAME Parent (miss)
     27: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // HBMAME Clone (miss)
     28: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // HBMAME Bios (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // HBMAME Bios (miss)
     29: Result:= (not FormArcadeFiltersExtra.HideDeviceSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // HBMAME Device (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // HBMAME Device (miss)
 
-    30: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // DICE Parent (have)
+    30: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // DICE Parent (have)
     31: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // DICE Clone (have)
-    32: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // DICE Parent (miss)
+    32: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // DICE Parent (miss)
     33: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // DICE Clone (miss)
 
-    34: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // SEGA Model 2 Parent (have)
+    34: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // SEGA Model 2 Parent (have)
     35: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // SEGA Model 2 Clone (have)
-    36: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // SEGA Model 2 Parent (miss)
+    36: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // SEGA Model 2 Parent (miss)
     37: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // SEGA Model 2 Clone (miss)
 
-    38: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // ZiNc Parent (have)
+    38: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // ZiNc Parent (have)
     39: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // ZiNc Clone (have)
     40: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // ZiNc Bios (have)
-    41: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // ZiNc Parent (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);  // ZiNc Bios (have)
+    41: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // ZiNc Parent (miss)
     42: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // ZiNc Clone (miss)
     43: Result:= (not FormArcadeFiltersExtra.HideBiosSets.Checked) and
-                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // ZiNc Bios (miss)
+                 (not PopupShowClone.Checked) and (not PopupShowHave.Checked);  // ZiNc Bios (miss)
     else
        Result:= True;
   end;
@@ -31554,12 +28074,6 @@ end;
 function TFormMain.CheckConsCompSystemFilter: Boolean;
 begin
   // Check Console/Computer/Handheld systems filters
-  // new filter, enable when "ButtonGameFilterConsoleComputerSystems" tool bar is removed (October 31, 2017)
-
-  //Result:= MemGameInfo.eIsCustomGame;
-  //if not Result then
-  //   Exit;
-
   if IsSystemQuickFilterEnabled then
     begin
       if not FilterSysConsCompQuick[MemGameInfo.eCustomSystemID] then
@@ -31595,9 +28109,6 @@ begin
      end;
 end;
 
-//function TFormMain.IsNeoGeoDriver(const GameDriverName: String; RemoveExtension: Boolean = False): Boolean;
-//var
-//  iDriverStr: String;
 function TFormMain.IsNeoGeoDriver(sysID: ShortInt; const GameDriverName, GameBiosName: String; RemoveExtension: Boolean = False): Boolean;
 begin
   Result:= False;
@@ -31607,19 +28118,6 @@ begin
        if not Result then
           Result:= SameText(ChangeFileExt(GameDriverName, ''), 'neopcb');
      end;
-
-  {if RemoveExtension then
-     iDriverStr:= ChangeFileExt(GameDriverName, '')
-  else
-     iDriverStr:= GameDriverName;
-  Result:= (iDriverStr = 'neogeo') or (iDriverStr = 'neodrvr') or (iDriverStr = 'neogeo_noslot') or (iDriverStr = 'neopcb') or (iDriverStr = 'neodriv');
-  if not Result then
-     begin
-       // for all those HBMAME hacks and new Neo-Geo driver names for MAME v0.174+. Neo-Geo has lots of different source names
-       //if sysID in [idMAME, idHBMAME] then
-       if IsMAMEBasedSys(sysID) then
-          Result:= SameText(GameBiosName, 'neogeo');
-     end;}
 end;
 
 function TFormMain.FilterGamesList(const FilterName: String): Boolean;
@@ -31652,7 +28150,7 @@ var
 begin
   // these filters are for arcade systems only (no EmuCon games)
   DeleteGame:= False;
-  iDriverName:= ChangeFileExt(MemGameInfo.eDriverName, ''); // remove the file extension since MAME is using different ones now, not only ".c" (November 11, 2013)
+  iDriverName:= ChangeFileExt(MemGameInfo.eDriverName, ''); // remove the file extension since it's not fixed to ".c"
 
   if FilterName = 'neogeo' then // Neo-Geo
      DeleteGame:= not IsNeoGeoDriver(MemGameInfo.eSystemID, iDriverName, MemGameInfo.eBiosName)
@@ -31662,8 +28160,7 @@ begin
                   (MemGameInfo.eSystemID <> idMAME) // Vector
   else
   if FilterName = 'chd' then
-     DeleteGame:= not IsMediaTypeCHD(MemGameInfo.eMediaType, False) //or (MemGameInfo.eSystemID = idDaphne) // Compressed Hunks of Data (CHD)
-     //DeleteGame:= (MemGameInfo.eMediaType = 0) //or (MemGameInfo.eSystemID = idDaphne) // Compressed Hunks of Data (CHD)
+     DeleteGame:= not IsMediaTypeCHD(MemGameInfo.eMediaType, False) // Compressed Hunks of Data (CHD)
   else
   if FilterName = 'pgm' then
      //CheckDriverFilter
@@ -31677,9 +28174,6 @@ begin
      begin
        DeleteGame:= ValidateDriver('arcadia') and // Arcadia System (home computers and video games ?)
                     ValidateDriver('arsystems');  // Arcadia System (arcade games)
-       //CheckDriverFilter; // Arcadia System (home computers and video games ?)
-       //if not DeleteGame then
-       //   DeleteGame:= ValidateDriver('arsystems'); // Arcadia System (arcade games)
      end
   else
   if FilterName = 'decocass' then
@@ -31768,7 +28262,6 @@ begin
      begin
        DeleteGame:= ValidateDriver('cps1') and // Capcom Play System 1 (CPS-1)
                     ValidateDriver('cps1mis'); // for HBMAME CPS-1 hacks
-     //CheckDriverFilter; // Capcom Play System 1 (CPS-1)
      end
   else
   if FilterName = 'cps2' then
@@ -31785,36 +28278,12 @@ begin
                        ExcludeBiosGames('cpzn2') or    // Capcom ZN-2 (up to MAME v0.177)
                        ExcludeBiosGames('coh1000t') or // Taito FX-1 (MAME v0.178 and newer)
                        ExcludeBiosGames('taitofx1'); // Taito FX-1 (up to MAME v0.177)
-
-       {DeleteGame:= CheckBiosFilter('coh1000c') and // Capcom ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('cpzn1') and    // CapcomZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1000a') and // Acclaim PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('acpsx') and    // Acclaim PSX ZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1000w') and // Atari PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('atpsx') and    // Atari PSX ZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1001l') and // Atlus PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('atluspsx') and // Atlus PSX ZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1002e') and // PS Arcade 95 PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('psarc95') and  // PS Arcade 95 PSX ZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1002m') and // TPS Tecmo PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('tps') and      // TPS Tecmo PSX ZN-1 (up to MAME v0.177)
-
-                    CheckBiosFilter('coh1002v') and // Video System PSX ZN-1 (MAME v0.178 and newer)
-                    CheckBiosFilter('vspsx');       // Video System PSX PSX ZN-1 (up to MAME v0.177)}
-
-       //CheckBiosFilter('cpzn1') // Capcom ZN-1
      end
   else
   if FilterName = 'cpzn2' then
      begin
        DeleteGame:= CheckBiosFilter('coh3002c') and // Capcom ZN-2 (MAME v0.178 and newer)
                     CheckBiosFilter('cpzn2');       // Capcom ZN-2 (up to MAME v0.177)
-       //CheckBiosFilter('cpzn2') // Capcom ZN-2
      end
   else
   if FilterName = 'capcom_oldschool' then
@@ -31906,11 +28375,6 @@ begin
   if FilterName = 'segac2' then
      CheckDriverFilter // Sega System C/C2 Driver
   else
-  //if FilterName = 'megatech_megaplay' then
-  //   begin
-  //     DeleteGame:= ValidateDriver('megatech') and // Sega MegaTech
-  //                  ValidateDriver('megaplay'); // Sega MegaPlay
-  //   end
   if FilterName = 'megatech' then
      CheckDriverFilter // Sega Mega-Tech System
   else
@@ -32366,25 +28830,30 @@ begin
          3: KeepGame:= MemGameInfo.eScreenOrientation = -1; // unknown
        end;
      end;
-     
-  //if KeepGame and (MemGameInfo.eMediaType = 1) then
+
   if KeepGame and IsMediaTypeCHD(MemGameInfo.eMediaType, False) then
      KeepGame:= not FormArcadeFiltersExtra.HideGamesWithCHDFiles.Checked;
 
   if KeepGame and FormArcadeFiltersExtra.HideNoDumpROMsGames.Checked then
      KeepGame:= not MemGameInfo.eROMsAllNoDump;
-     //KeepGame:= MemGameInfo.eROMsAllNoDump; // this is to SHOW games with all ROMs marked as "nodump" 
+     //KeepGame:= MemGameInfo.eROMsAllNoDump; // this is to SHOW games with all ROMs marked as "nodump" (do not uncomment, do not remove)
 
   if KeepGame and FormArcadeFiltersExtra.ShowMergedSetsOnly.Checked then
      KeepGame:= MemGameInfo.eIsMerged;
 
   if KeepGame and FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision.Checked then
      KeepGame:= MemGameInfo.eCRC32Duplicates;
-     
+
+  if KeepGame and IsROM_Device(MemGameInfo.eROMIdentification) then
+     KeepGame:= not FormArcadeFiltersExtra.HideDeviceSets.Checked;
+
+  if KeepGame and IsROM_Bios(MemGameInfo.eROMIdentification) then
+     KeepGame:= not FormArcadeFiltersExtra.HideBiosSets.Checked;
+
   if KeepGame then
      begin
        case FormArcadeFiltersExtra.LabelBios.Tag of
-         1: KeepGame:= MemGameInfo.eBiosName <> '';
+         1: KeepGame:= (MemGameInfo.eBiosName <> '') or IsROM_Bios(MemGameInfo.eROMIdentification); // added IsROM_Bios() in filter (March 19, 2018)
          2: KeepGame:= MemGameInfo.eBiosName = '';
        end;
      end;
@@ -32397,9 +28866,8 @@ begin
        end;
      end;
 
-  if KeepGame and (IsMAMEBasedSys(MemGameInfo.eSystemID)) then
+  if KeepGame and IsMAMEBasedSys(MemGameInfo.eSystemID) then
      begin
-       //KeepGame:= IsMAMEBasedSys(MemGameInfo.eSystemID);
        if KeepGame and (FormArcadeFiltersExtra.LabelSaveState.Tag <> 0) then
        begin
          if MemGameInfo.eSoftwareName = '' then
@@ -32422,7 +28890,7 @@ begin
        case FormArcadeFiltersExtra.LabelInterfaceType.Tag of
          1: // classic (-listxml and catver.ini)
            begin
-             KeepGame:= (not MemGameInfo.eMechanical); // = 0;
+             KeepGame:= (not MemGameInfo.eMechanical);
              if KeepGame then
                 begin
                   if CategoryStr <> '' then
@@ -32433,7 +28901,7 @@ begin
            end;
          2: // mechanical (-listxml and catver.ini)
            begin
-             KeepGame:= MemGameInfo.eMechanical; // = 1;
+             KeepGame:= MemGameInfo.eMechanical;
            end;
        end;
      end;
@@ -32445,82 +28913,70 @@ begin
          2: KeepGame:= MemGameInfo.eAudioType = 1; // discrete audio
          3: KeepGame:= MemGameInfo.eAudioType = 2; // wave samples
          else
-            KeepGame:= True; // -1 or 4 (this can be removed on a future version!)
+            KeepGame:= True; // -1 or 4 (this can be removed in a future version!)
        end;
-     end;
-
-  if KeepGame and IsROM_Device(MemGameInfo.eROMIdentification) then
-     begin
-       KeepGame:= not FormArcadeFiltersExtra.HideDeviceSets.Checked;
-       //if KeepGame and FormArcadeFiltersExtra.HideDeviceSetsNoROMs.Checked then
-       //   KeepGame:= TEasyGameInfo(SelectedEasyItem).eROMInfo <> nil; // TEasyGameInfo(SelectedEasyItem).eROMInfo.Count > 0;
      end;
 
   if KeepGame then
      begin
+       // Game ROMs filter
        case FormArcadeFiltersExtra.LabelGamesROMs.Tag of
-         1: KeepGame:= (MemGameInfo.eSystemID = 3) or (TEasyGameInfo(SelectedEasyItem).eROMInfo <> nil);
-         2: KeepGame:= (MemGameInfo.eSystemID <> 3) and (TEasyGameInfo(SelectedEasyItem).eROMInfo = nil);
-         3: KeepGame:= (MemGameInfo.eHaveGameROMs = 0) and (TEasyGameInfo(SelectedEasyItem).eROMInfo <> nil) and
-                       (not IsROM_Bios(MemGameInfo.eROMIdentification)) and
-                       (not IsROM_Device(MemGameInfo.eROMIdentification));
-
-         //1: KeepGame:= (MemGameInfo.eSystemID = 3) or (TEasyGameInfo(SelectedEasyItem).eROMInfo.Count > 0);
-         //2: KeepGame:= (MemGameInfo.eSystemID <> 3) and (TEasyGameInfo(SelectedEasyItem).eROMInfo.Count = 0);
-         //3: KeepGame:= (MemGameInfo.eHaveGameROMs = 0) and (TEasyGameInfo(SelectedEasyItem).eROMInfo.Count > 0) and
-         //              (not IsROM_Bios(MemGameInfo.eROMIdentification)) and
-         //              (not IsROM_Device(MemGameInfo.eROMIdentification));
-       end;
-         //Item.Visible:= FormMain.IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) and (TEasyGameInfo(Item).eHaveGameROMs = 0) and
-         //          (TEasyGameInfo(Item).eROMInfo.Count > 0) and (not IsROM_Bios(TEasyGameInfo(Item).eROMIdentification)) and
-         //          (not IsROM_Device(TEasyGameInfo(Item).eROMIdentification));
-     end;
-
-  if KeepGame and (FormArcadeFiltersExtra.NeoGeoMVS.Checked) and IsMAMEBasedSys(MemGameInfo.eSystemID) then //(MemGameInfo.eSystemID in [idMAME, idHBMAME]) then
-     begin
-       // for MAME/HBMAME
-       case MemGameInfo.eSystemID of
-         idMAME:
-           begin
-             if MultiCartListMAME[0] <> nil then
-                begin
-                  if IsNeoGeoDriver(MemGameInfo.eSystemID, MemGameInfo.eDriverName, MemGameInfo.eBiosName, True) then
-                     KeepGame:= MultiCartListMAME[0].IndexOf(MemGameInfo.eName) <> -1; // Neo-Geo MVS multi-slot machine only
-                end;
-           end;
-         idHBMAME:
-           begin
-             if MultiCartListHBMAME[0] <> nil then
-                begin
-                  if IsNeoGeoDriver(MemGameInfo.eSystemID, MemGameInfo.eDriverName, MemGameInfo.eBiosName, True) then
-                     KeepGame:= MultiCartListHBMAME[0].IndexOf(MemGameInfo.eName) <> -1; // Neo-Geo MVS multi-slot machine only
-                end;
-           end;
+         1: KeepGame:= (MemGameInfo.eSystemID = idDaphne) or (TEasyGameInfo(SelectedEasyItem).eROMInfo <> nil); // Games With ROMs (any ROM type)
+         2: KeepGame:= (MemGameInfo.eSystemID <> idDaphne) and (TEasyGameInfo(SelectedEasyItem).eROMInfo = nil); // Games With No ROMs (not a single ROM/CHD)
+         3: KeepGame:= (MemGameInfo.eHaveGameROMs = 0) and (TEasyGameInfo(SelectedEasyItem).eROMInfo <> nil) and // Games With no Main Set, excluding bios/device sets
+                       (not IsROM_Bios(MemGameInfo.eROMIdentification)) and // ...no game ROMs but with device/bios ROMs/CHDs; do not include bios sets
+                       (not IsROM_Device(MemGameInfo.eROMIdentification));  // ...no game ROMs but with device/bios ROMs/CHDs) do not include device sets
        end;
      end;
 
-  if KeepGame and (FormArcadeFiltersExtra.STVMultiSlot.Checked) and (MemGameInfo.eSystemID in [idMAME, idHBMAME]) then
-     begin
-       // for MAME/HBMAME
-       case MemGameInfo.eSystemID of
-         idMAME:
-           begin
-             if MultiCartListMAME[1] <> nil then
-                begin
-                  if ChangeFileExt(MemGameInfo.eDriverName, '') = 'stv' then
-                     KeepGame:= MultiCartListMAME[1].IndexOf(MemGameInfo.eName) <> -1; // ST-V multi-slot machine only
-                end;
-           end;
-         idHBMAME:
-           begin
-             if MultiCartListHBMAME[1] <> nil then
-                begin
-                  if ChangeFileExt(MemGameInfo.eDriverName, '') = 'stv' then
-                     KeepGame:= MultiCartListHBMAME[1].IndexOf(MemGameInfo.eName) <> -1; // ST-V multi-slot machine only
-                end;
-           end;
+  if IsMAMEBasedSys(MemGameInfo.eSystemID) then
+  begin
+    if KeepGame and (FormArcadeFiltersExtra.NeoGeoMVS.Checked) then
+       begin
+         // for MAME/HBMAME
+         case MemGameInfo.eSystemID of
+           idMAME:
+             begin
+               if MultiCartListMAME[0] <> nil then
+                  begin
+                    if IsNeoGeoDriver(MemGameInfo.eSystemID, MemGameInfo.eDriverName, MemGameInfo.eBiosName, True) then
+                       KeepGame:= MultiCartListMAME[0].IndexOf(MemGameInfo.eName) <> -1; // Neo-Geo MVS multi-slot machine only
+                  end;
+             end;
+           idHBMAME:
+             begin
+               if MultiCartListHBMAME[0] <> nil then
+                  begin
+                    if IsNeoGeoDriver(MemGameInfo.eSystemID, MemGameInfo.eDriverName, MemGameInfo.eBiosName, True) then
+                       KeepGame:= MultiCartListHBMAME[0].IndexOf(MemGameInfo.eName) <> -1; // Neo-Geo MVS multi-slot machine only
+                  end;
+             end;
+         end;
        end;
-     end;
+
+    if KeepGame and (FormArcadeFiltersExtra.STVMultiSlot.Checked) then
+       begin
+         // for MAME/HBMAME
+         case MemGameInfo.eSystemID of
+           idMAME:
+             begin
+               if MultiCartListMAME[1] <> nil then
+                  begin
+                    if ChangeFileExt(MemGameInfo.eDriverName, '') = 'stv' then
+                       KeepGame:= MultiCartListMAME[1].IndexOf(MemGameInfo.eName) <> -1; // ST-V multi-slot machine only
+                  end;
+             end;
+           idHBMAME:
+             begin
+               if MultiCartListHBMAME[1] <> nil then
+                  begin
+                    if ChangeFileExt(MemGameInfo.eDriverName, '') = 'stv' then
+                       KeepGame:= MultiCartListHBMAME[1].IndexOf(MemGameInfo.eName) <> -1; // ST-V multi-slot machine only
+                  end;
+             end;
+         end;
+       end;
+  end;
 
   if KeepGame and (CategoryStr <> '') then
      begin
@@ -32541,6 +28997,8 @@ begin
 
        VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryPrinters, 'printer');
        VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryPhones, 'phone');
+       VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryMusic, 'music');
+
        VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryMAMEConsoleMachines, 'console');
        VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryMAMEComputerMachines, 'computer');
        VerifyCategoryFilter(FormArcadeFiltersExtra.CategoryMAMEHandheldMachines, 'handheld');
@@ -32553,8 +29011,8 @@ begin
   Result:= 0;
   if FormMain.Visible and (IsDetailsView or IsGroupedView) then
      begin
-          if GamesListView.Scrollbars.HorzBarVisible then
-             Result:= GamesListView.Scrollbars.OffsetX;
+       if GamesListView.Scrollbars.HorzBarVisible then
+          Result:= GamesListView.Scrollbars.OffsetX;
      end;
 end;
 
@@ -32570,10 +29028,8 @@ begin
                GamesListView.Scrollbars.OffsetX:= ScrollBarPosition;
           end;
      end;
-
 end;
 
-//procedure TFormMain.ApplyFilters(const FilterName: String; SelectItem: Boolean);
 procedure TFormMain.ApplyFilters;
 var
   KeepGame: Boolean;
@@ -32606,7 +29062,7 @@ var
       if KeepGame and (ButtonGameFilterDriverStatus.Tag > 0) then
          begin
            if FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex > 0 then
-              KeepGame:= MemGameInfo.eSystemID in [idMAME, idHBMAME]; // other systems only support "Driver Status"!!!
+              KeepGame:= IsMAMEBasedSys(MemGameInfo.eSystemID); // other systems only support "Driver Status"
 
            if KeepGame then
               begin
@@ -32681,9 +29137,6 @@ var
          if KeepGame and (SelectedFilterName <> 'favorites') then
             KeepGame:= not FilterGamesList(SelectedFilterName);
 
-         //if KeepGame and (ButtonGameFilterOrientation.Tag <> 0) then
-         //   KeepGame:= (MemGameInfo.eScreenOrientation+1) = ButtonGameFilterOrientation.Tag;
-
          if KeepGame and (FormArcadeFiltersExtra.ControlName <> '') then
             KeepGame:= CheckGameControlType(MemGameInfo.eSystemID, MemGameInfo.eControls, FormArcadeFiltersExtra.ControlName, MemGameInfo.eSoftwareName, MemGameInfo.eButtonsCount);
        end;
@@ -32698,18 +29151,17 @@ begin
 
   sbPos:= GetHorizontalBarPos;
 
-  LoadMultiSlotArray(idMAME);   // load NeoGeo MVS and ST-V multi-slow compatible games list
-  LoadMultiSlotArray(idHBMAME); // load NeoGeo MVS and ST-V multi-slow compatible games list
+  LoadMultiSlotArray(idMAME);   // load NeoGeo MVS and ST-V multi-slow compatible games list (arcade only)
+  LoadMultiSlotArray(idHBMAME);
 
-  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush cache... just in case
+  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush cache, just in case
   SelectedEasyItem:= nil;
   GamesListView.BeginUpdate;
   case IsGroupedView of
     True:
       begin
-        // need to set all groups visible first!!!!!!
-        GamesListView.Groups.MakeAllVisible;
-        GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+        GamesListView.Groups.MakeAllVisible; // set all visible first
+        GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
         Application.ProcessMessages;
         elvGroup:= GamesListView.Groups.LastGroup;
         repeat
@@ -32727,20 +29179,18 @@ begin
                end;
             SelectedEasyItem:= GamesListView.Groups.NextInGroup(elvGroup, SelectedEasyItem);
           until SelectedEasyItem = nil;
-          //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here!!!!!!!!
+          //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here (do not remove this)
           elvGroup:= GamesListView.Groups.PrevGroup(elvGroup);
         until elvGroup = nil;
-        GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
-        HideGroupsFilter(GamesListView); // need to hide groups with no visible items for last!!!!
+        GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
+        HideGroupsFilter(GamesListView); // hide groups with no visible items for last
       end;
     False:
       begin
         if GamesListView.Groups.VisibleItemCount = 0 then
            begin
-             // if they are invisible already... they are not shown anymore so,
-             // need to force them all to be visible before applying the filters again
-             GamesListView.Groups.MakeAllVisible;
-             GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+             GamesListView.Groups.MakeAllVisible; // set all visible before applying the filters again
+             GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
            end;
         SelectedEasyItem:= GamesListView.Groups.FirstItem;
         repeat
@@ -32759,7 +29209,7 @@ begin
   FreeAndNil(MultiCartListMAME[1]);
   FreeAndNil(MultiCartListHBMAME[0]);
   FreeAndNil(MultiCartListHBMAME[1]);
-  ReselectItem(True); // UpdateStatusBarGame; is already called in ReselectItem()
+  ReselectItem(True);
   if not CheckTotalVisible(GamesListView) then
      begin
        ClearScreenshots;
@@ -32778,7 +29228,6 @@ begin
      
   for Loop:=0 to Length(MachinesList)-1 do
   begin
-    //if Copy(MachinesList[Loop], 1, (Pos('=', MachinesList[Loop])-1)) = MachineName then
     if MachinesList[Loop] = MachineName then
     begin
       Result:= Loop;
@@ -32796,14 +29245,14 @@ begin
      Exit;
 
   case MemGameInfo.eROMIdentification of
-    00: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Parent (have)
-    01: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked); // MAME Clone (have)
+    00: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);   // MAME Parent (have)
+    01: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked);  // MAME Clone (have)
     //02: Result:= (not FormFiltersExtra.HideBiosSets.Checked) and
     //             (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Bios (have)
     //03: Result:= (not FormFiltersExtra.HideDeviceSets.Checked) and
     //             (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Device Set (have)
-    04: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Parent (miss)
-    05: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked); // MAME Clone (miss)
+    04: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);   // MAME Parent (miss)
+    05: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked);  // MAME Clone (miss)
     //06: Result:= (not FormFiltersExtra.HideBiosSets.Checked) and
     //             (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Bios (miss)
     //07: Result:= (not FormFiltersExtra.HideDeviceSets.Checked) and
@@ -32840,7 +29289,7 @@ var
     if KeepGame and (ButtonGameFilterDriverStatus.Tag > 0) then
        begin
          if FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex > 0 then
-            KeepGame:= MemGameInfo.eSystemID = idMAME; // other systems only support "Driver Status"!!! HBMAME doesn't have machines list with software list games
+            KeepGame:= MemGameInfo.eSystemID = idMAME; // other systems only support "Driver Status"; also for now, machines list is MAME only; HBMAME needs more work
 
          if KeepGame then
             begin
@@ -32859,12 +29308,6 @@ var
 
     if KeepGame and (SelectedFilterName = 'favorites') then
        KeepGame:= MemGameInfo.eIsFavorite;
-
-    //if KeepGame then
-    //   KeepGame:= ApplyMiscFilters(KeepGame); // no MISC filters support in softlist games... what for ????!!
-
-    //if KeepGame and (SelectedFilterName <> 'favorites') then
-    //   KeepGame:= not FilterGamesList(SelectedFilterName); // this is for arcade filters only!!!
   end;
 
 begin
@@ -32876,16 +29319,15 @@ begin
 
   sbPos:= GetHorizontalBarPos;
 
-  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush cache... just in case... this is for thumbnails view only!!!
+  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush cache just in case (thumbnails view only)
 
   SelectedEasyItem:= nil;
   GamesListView.BeginUpdate;
   case IsGroupedView of
     True:
       begin
-        // need to set all groups visible first!!!!!!
-        GamesListView.Groups.MakeAllVisible;
-        GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+        GamesListView.Groups.MakeAllVisible; // set all visible first
+        GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
         elvGroup:= GamesListView.Groups.LastGroup;
         repeat
           SelectedEasyItem:= GamesListView.Groups.FirstInGroup(elvGroup);
@@ -32902,20 +29344,18 @@ begin
                end;
             SelectedEasyItem:= GamesListView.Groups.NextInGroup(elvGroup, SelectedEasyItem);
           until SelectedEasyItem = nil;
-          //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here!!!!!!!!
+          //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here (do not remove this)
           elvGroup:= GamesListView.Groups.PrevGroup(elvGroup);
         until elvGroup = nil;
-        GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
-        HideGroupsFilter(GamesListView); // need to hide groups with no visible items for last!!!!
+        GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
+        HideGroupsFilter(GamesListView); // hide groups with no visible items for last
       end;
     False:
       begin
         if GamesListView.Groups.VisibleItemCount = 0 then
            begin
-             // if they are invisible already... they are not shown anymore so,
-             // need to force them all to be visible before applying the filters again
-             GamesListView.Groups.MakeAllVisible;
-             GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+             GamesListView.Groups.MakeAllVisible; // set all visibile before applying the filters again
+             GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
            end;
         SelectedEasyItem:= GamesListView.Groups.FirstItem;
         repeat
@@ -32930,7 +29370,7 @@ begin
   GamesListView.EndUpdate(False);
   UpdateTotalEntriesLabel;
 
-  ReselectItem(True); // UpdateStatusBarGame; and SetSelectedGame; is already called in ReselectItem()
+  ReselectItem(True);
   if not CheckTotalVisible(GamesListView) then
      begin
        ClearScreenshots;
@@ -32951,27 +29391,9 @@ begin
   until elvGroup = nil;
 end;
 
-{procedure TFormMain.MountControlTypeFilters;
-var
-  Loop: ShortInt;
-begin
-  MainMenu.BeginUpdate;
-  for Loop:=Low(aControlType) to High(aControlType) do
-  begin
-    AddMenuItem(MenuGameFilterControlType, aControlType[Loop, 0],
-                aControlType[Loop, 1], False);
-  end;
-  for Loop:=Low(aControlType) to High(aControlType) do
-  begin
-    MenuGameFilterControlType.Items[Loop+1].Tag:= Loop;
-    MenuGameFilterControlType.Items[Loop+1].OnClick:= MenuGameFilterControlTypeListAllClick;
-  end;
-  MainMenu.EndUpdate;
-end;}
-
 function TFormMain.GetCustomMediaTypeID(const MAMESoftListExecParameter: String): Integer;
 begin
-  // this is to assign non-arcade MediaArrayCustom[] into software list games, to run MAME softlist games with custom emulators
+  // assign non-arcade MediaArrayCustom[] into software list games, to run MAME softlist games with EmuCon emulators
   Result:= 1;
   if MAMESoftListExecParameter = 'cart1' then
      Result:= 1
@@ -33000,61 +29422,76 @@ begin
   if IconHolder <> nil then
      Continue:= IconHolder.Tag <> -1;
 
-  // "IconHolder = nil" is only used in "Last Played Games (MRU)"... for now! 
+  // "IconHolder = nil" is only used in "Last Played Games (MRU)" 
   if not Continue then
      Exit;
 
-  //if IconHolder.Tag <> -1 then
-  //   begin
-       if CustomMediaTypeIndex <> -1 then
-       begin
-         // for EmuCon games only
-         case CustomMediaTypeIndex of
-           1: Result:= 16;
-           2: Result:= 20;
-           3: Result:= 17;
-           4: Result:= 18;
-           5: Result:= 22;
-         end;
-       end
-       else
-       begin
-         if not IsCustomGame then
+  if CustomMediaTypeIndex <> -1 then
+  begin
+    // for EmuCon games only
+    case CustomMediaTypeIndex of
+      1: Result:= 16;
+      2: Result:= 20;
+      3: Result:= 17;
+      4: Result:= 18;
+      5: Result:= 22;
+    end;
+  end
+  else
+  begin
+    if not IsCustomGame then
+    begin
+      // MAME and arcade games only
+      if MAMESoftListExecParameter <> '' then
          begin
-           // for MAME and arcade games only
-           if MAMESoftListExecParameter <> '' then
-              begin
-                Result:= GetCustomMediaTypeID(MAMESoftListExecParameter);
-                case Result of
-                  1: Result:= 16;
-                  2: Result:= 20;
-                  3: Result:= 17;
-                  4: Result:= 18;
-                  5: Result:= 22;
-                end;
-              end
-           else
-              begin
-                case ArcadeMediaType of
-                  0: Result:= 15;
-                  1: Result:= 19;
-                end;
-              end;
+           Result:= GetCustomMediaTypeID(MAMESoftListExecParameter);
+           case Result of
+             1: Result:= 16;
+             2: Result:= 20;
+             3: Result:= 17;
+             4: Result:= 18;
+             5: Result:= 22;
+           end;
+         end
+      else
+         begin
+           case ArcadeMediaType of
+             0: Result:= 15;
+             1: Result:= 19;
+           end;
          end;
-       end;
+    end;
+  end;
 
-       if Result = -1 then
-          Result:= 15; // default to "ROM" media type
+  if Result = -1 then
+     Result:= 15; // default to "ROM" media type
 
-       if IconHolder <> nil then
-          IL_LeftPanel.GetIcon(Result, IconHolder.Picture.Icon);
-  //   end;
+  if IconHolder <> nil then
+     IL_LeftPanel.GetIcon(Result, IconHolder.Picture.Icon);
 end;
 
-// load games from files into EasyListView (no filtering, all games visible)
+// load games from files into main games list
+
+procedure TFormMain.LoadMAMESoftList(sysID: Integer; var SoftListVar: THashedStringList; RemoveFileExtension: Boolean);
+var
+  Loop: Integer;
+begin
+  GetFilesList(GetGamesFolderEL(1, sysID), '.el', '*.el', SoftListVar, False, True, False);
+  if SoftListVar.Count = 0 then
+     Exit;
+
+  if RemoveFileExtension then
+     begin
+       SoftListVar.Sorted:= False;
+       SoftListVar.BeginUpdate;
+       for Loop:=0 to SoftListVar.Count-1 do
+           SoftListVar[Loop]:= ChangeFileExt(SoftListVar[Loop], '');
+       SoftListVar.EndUpdate;
+     end;
+end;
+
 procedure TFormMain.LoadGames(LoadArcade, LoadSoftwareListMESS, LoadCustomGames: Boolean; ClearGamesList: Boolean = False);
 var
-  //tempString: String;
   Loop: Integer;
   SoftwareGames: THashedStringList;
 begin
@@ -33066,16 +29503,15 @@ begin
   FormStatus.SetProgressPos(0);
   if CheckTotal(GamesListView) then
      begin
-       GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // just in case...
+       GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush cache just in case
        if ClearGamesList then
           ClearListView(GamesListView);
        Application.ProcessMessages;
      end;
   if PopupEnableMAMu_Icons.Checked then
-     ResetMAMu_ImageList(True); // this will reset EL's default games icons (no need to reset item icons!!!)
+     ResetMAMu_ImageList(True); // reset EL's default games icons; no need to reset item icons
 
   CompleteGamesList:= THashedStringList.Create;
-  //CompleteGamesList.BeginUpdate; // no need as this is done in GetGamesList() function
 
   if LoadArcade then
   begin
@@ -33085,20 +29521,39 @@ begin
 
   if LoadSoftwareListMESS then
   begin
-    FormStatus.MessageStr('Loading software list games.');
+    FormStatus.MessageStr('Loading MAME software list games.');
     SoftwareGames:= THashedStringList.Create;
-    GetFilesList(GetGamesFolderEL(1), '.el', '*.el', SoftwareGames, False, True, False);
+    LoadMAMESoftList(idMAME, SoftwareGames, True);
+    //GetFilesList(GetGamesFolderEL(1, idMAME), '.el', '*.el', SoftwareGames, False, True, False);
     if SoftwareGames.Count > 0 then
        begin
-         SoftwareGames.Sorted:= False;
-         SoftwareGames.BeginUpdate;
-         for Loop:=0 to SoftwareGames.Count-1 do
-             SoftwareGames[Loop]:= ChangeFileExt(SoftwareGames[Loop], '');
-         SoftwareGames.EndUpdate;
-
+         //SoftwareGames.Sorted:= False;
+         //SoftwareGames.BeginUpdate;
+         //for Loop:=0 to SoftwareGames.Count-1 do
+         //    SoftwareGames[Loop]:= ChangeFileExt(SoftwareGames[Loop], '');
+         //SoftwareGames.EndUpdate;
          for Loop:=0 to SoftwareGames.Count-1 do
          begin
            GetGamesList(CompleteGamesList, idMAME, 1, SoftwareGames[Loop]);
+           Application.ProcessMessages;
+         end;
+       end;
+    FreeAndNil(SoftwareGames);
+
+    FormStatus.MessageStr('Loading HBMAME software list games.');
+    SoftwareGames:= THashedStringList.Create;
+    LoadMAMESoftList(idHBMAME, SoftwareGames, True);
+    //GetFilesList(GetGamesFolderEL(1, idHBMAME), '.el', '*.el', SoftwareGames, False, True, False);
+    if SoftwareGames.Count > 0 then
+       begin
+         //SoftwareGames.Sorted:= False;
+         //SoftwareGames.BeginUpdate;
+         //for Loop:=0 to SoftwareGames.Count-1 do
+         //    SoftwareGames[Loop]:= ChangeFileExt(SoftwareGames[Loop], '');
+         //SoftwareGames.EndUpdate;
+         for Loop:=0 to SoftwareGames.Count-1 do
+         begin
+           GetGamesList(CompleteGamesList, idHBMAME, 1, SoftwareGames[Loop]);
            Application.ProcessMessages;
          end;
        end;
@@ -33112,11 +29567,11 @@ begin
         GetGamesListCustom(CompleteGamesList, Loop);
   end;
 
-  //CompleteGamesList.EndUpdate; // no need; done in GetGamesList() function... do not remove this line, it's here for information
+  //CompleteGamesList.EndUpdate; // no need; done in GetGamesList() function; do not remove this line, it's here for information
   //CompleteGamesList.SaveToFile('d:\EmuLoader\completelist.txt'); ShowMessage('stop'); // for debugging only
 
   FormStatus.MessageStr('Adding games to games list.');
-  AddGames; // add games to EasyListView
+  AddGames;
   FreeAndNil(CompleteGamesList);
 
   if FormStatus.Visible then
@@ -33189,7 +29644,6 @@ procedure TFormMain.ResetFavoriteSettings;
 begin
   PopupEnableFavorites.Checked:= SelectedFilterName = 'favorites';
   ButtonGameFilterFavorites.Down:= PopupEnableFavorites.Checked;
-  //PopupFavoritesManager.Enabled:= not PopupEnableFavorites.Checked; // no longer needed; profiles can be changed with favorites enabled (August 12, 2015)
   PopupScanGames.Enabled:= ButtonGameFilterHaveMiss.Enabled;
   ButtonGameFilterMain.Enabled:= (not PopupEnableFavorites.Checked) and (not PanelMachinesList.Visible);
 end;
@@ -33237,29 +29691,8 @@ end;
 
 procedure TFormMain.ButtonViewImage(ButtonCode: ShortInt);
 var
-  iImageTag: array[1..3] of Integer; // this var will hold current Tag value in case the Tag in TImage32 control needs to be restored
-  iImageReset: array[1..3] of Boolean; // was the Tag in TImage32 reset (min/max boundaries check)
-
-  {function CheckAutoCycle: Boolean;
-  begin
-    // this function is no longer used, feature disabled (January 24, 2018)
-    case IsImageLayoutView of
-      False: // classic view
-        begin
-          Result:= MenuImageCategoryPrevNextAutoSwitch.Checked;
-          if Result then
-             CycleImageCategory(Boolean(ButtonCode));
-        end;
-      True: // layout view
-        begin
-          Result:= MenuImageLayoutPrevNextAutoSwitch.Checked;
-          if Result then
-             CycleImageLayout(Boolean(ButtonCode));
-        end;
-      else
-        Result:= False;
-    end;
-  end;}
+  iImageTag: array[1..3] of Integer; // current ".Tag" value in case the tag in TImage32 control needs to be restored
+  iImageReset: array[1..3] of Boolean; // was the ".Tag" in TImage32 reset ? (min/max boundaries check)
 
   function ChangeImageTagCount(ImageSource: TImage32; ValueInt: Integer): Boolean;
   begin
@@ -33312,8 +29745,7 @@ var
 
   function ResetImageTag(ImageSource: TImage32; ImageIndex: Integer): Boolean;
   begin
-    // it previous / next image is not loaded, it will reset its Tag value
-    // not needed as this is done in uMain.LoadScreenshot() function
+    // if previous / next image is not loaded, it will reset its .Tag value
     Result:= Assigned(ImageSource);
     if Result then
        begin
@@ -33353,105 +29785,19 @@ begin
         Images.Tag:= Images.Tag+1; // next Button
         ChangeImageTagCount(ImageScr[2], 1);
         ChangeImageTagCount(ImageScr[3], 1);
-        //if Images.Tag > MaxImagePerCategory then
-        //   begin
-        //     Images.Tag:= MaxImagePerCategory;
-        //     if CheckAutoCycle then
-        //        Exit;
-        //   end;
       end;
     0:
       begin
         Images.Tag:= Images.Tag-1; // previous Button
         ChangeImageTagCount(ImageScr[2], -1);
         ChangeImageTagCount(ImageScr[3], -1);
-        //if Images.Tag < 1 then
-        //   begin
-        //     Images.Tag:= 1;
-        //     if CheckAutoCycle then
-        //        Exit;
-        //   end;
       end;
   end;
   ValidateTagBoundaries(Images);
   ValidateTagBoundaries(ImageScr[2]);
   ValidateTagBoundaries(ImageScr[3]);
-  //if ValidateTagBoundaries(Images) then
-  //   begin
-  //     if CheckAutoCycle then
-  //        Exit;
-  //   end;
 
   DisplayImage;
-  //Exit; // for now, the auto cycle feature will be disabled... remove from the source code in the future
-
-  {if (not ImageDetails[1].NewImageLoaded) and (not ImageDetails[1].NoImageLoaded) then
-     ResetImageTag(Images, 1);
-  if (not ImageDetails[2].NewImageLoaded) and (not ImageDetails[2].NoImageLoaded) then
-     ResetImageTag(ImageScr[2], 2);
-  if (not ImageDetails[3].NewImageLoaded) and (not ImageDetails[3].NoImageLoaded) then
-     ResetImageTag(ImageScr[3], 3);}
-
-  {if ImageDetails[1].NewImageLoaded or ImageDetails[2].NewImageLoaded or ImageDetails[3].NewImageLoaded then
-     Exit;
-
-  //if CheckAutoCycle then
-  //   Exit; // no longer used
-
-  exit;
-  case Images.Tag of
-    1:
-      begin
-        if ButtonCode = 1 then
-           Images.Tag:= Images.Tag-1; // next button
-      end;
-    MaxImagePerCategory:
-      begin
-        if ButtonCode = 0 then
-           Images.Tag:= 1; // previous button
-      end;
-    else
-      begin
-       case ButtonCode of
-         1: Images.Tag:= Images.Tag-1; // next button
-         0: Images.Tag:= Images.Tag+1; // previous button
-       end;
-     end;
-  end;
-
-  ShowMessage('1: '+ImageDetails[1].FileName+#13#10+
-              '2: '+ImageDetails[2].FileName+#13#10+
-              '3: '+ImageDetails[3].FileName+#13#10+#13#10+
-              '1: '+IntToStr(Ord(ImageDetails[1].NewImageLoaded))+#13#10+
-              '2: '+IntToStr(Ord(ImageDetails[2].NewImageLoaded))+#13#10+
-              '3: '+IntToStr(Ord(ImageDetails[3].NewImageLoaded)));}
-
-
-  {if not DisplayImage then
-     begin
-       if not CheckAutoCycle then
-          begin
-            case Images.Tag of
-              1:
-                begin
-                  if ButtonCode = 1 then
-                     Images.Tag:= Images.Tag-1; // next button
-                end;
-              MaxImagePerCategory:
-                begin
-                  if ButtonCode = 0 then
-                     Images.Tag:= 1; // previous button
-                end;
-              else
-                begin
-                 case ButtonCode of
-                   1: Images.Tag:= Images.Tag-1; // next button
-                   0: Images.Tag:= Images.Tag+1; // previous button
-                 end;
-               end;
-            end;
-          end;
-     end;}
 end;
 
 procedure TFormMain.MenuAboutClick(Sender: TObject);
@@ -33473,14 +29819,11 @@ begin
   Font_TilesViewDetailsText.Color:= GetContrastColor(GamesListView.Color);
   SetMainToolBarIcon(ButtonViewMode);
   SetMainToolBarIcon(ButtonSystemsQuickFilter);
-  //SetMainToolBarIcon(ButtonGameFilterArcadeSystems);
-  //SetMainToolBarIcon(ButtonGameFilterConsoleComputerSystems);
   ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
   SetMainToolBarIcon(ButtonGameFilterMain);
   SetMainToolBarIcon(ButtonGameFilterParentClone);
   SetMainToolBarIcon(ButtonGameFilterHaveMiss);
   SetMainToolBarIcon(ButtonGameFilterDriverStatus);
-  //SetMainToolBarIcon(ButtonGameFilterOrientation); // no longer used; filter moved to MISC filters dialog
 
   GetGameDataListView(SelectedEasyItem);
 
@@ -33502,53 +29845,38 @@ begin
 
   LoadImgSoftwareListNames;
 
-  SetThumbGridSize(ThumbnailSettings.Width, ThumbnailSettings.Height); // Only set grid size... need to call ResetThumbnails below, if in thumbnails view
-  //SetThumbGridSize(GamesListView.CellSizes.Thumbnail.Width, GamesListView.CellSizes.Thumbnail.Height); // Only set grid size... need to call ResetThumbnails below, if in thumbnails view
+  SetThumbGridSize(ThumbnailSettings.Width, ThumbnailSettings.Height); // only set grid size, need to call ResetThumbnails below (thumbnails view only)
+
   if not IsDetailsView then
      begin
        PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
-     end
-  else
-     begin
-       //if MenuShowImages.Checked then
-       //   begin
-       //     InitImgZipLists;
-       //     InitImgSoftwareNameZipLists;
-       //   end;
      end;
 
   if MenuShowImages.Checked then
-     begin
-       // if ButtonImageCategory.Tag < High(ImageCategoryArray) then // this function call must be validated properly and perhaps avoid calling it ?
-                                                                     // ... or maybe just initialize at frontend startup no matter what (always show images at frontend startup)
-          InitZippedImagesCache;
-     end;
+     InitZippedImagesCache;
 
   if PopupImageShowLayoutDimensions.Checked then
      PopupImageShowLayoutDimensions.OnClick(Self);
 
-  IsStartup:= False; // means function in .OnActivate should not execute anymore!!!!
-  //SetThumbGridSize(PopupThumbnails.Tag);
-  //PopupThumbnails.Tag:= 0;
+  if FormPreferences.RestoreInternetGameInfoStartup.Checked then
+     if ButtonInternetGameInfo.Down then
+        ButtonInternetGameInfo.Click; // re-enable Internet Game Info button
+
+  IsStartup:= False; // code in FormMain.OnActivate should not execute anymore
 
   // need to set games view mode AFTER image view mode
-  // re-enable this later ??? April 05, 2017
 
   if IsThumbnailView then
-     begin
-       //SetThumbGridSize(GamesListView.CellSizes.Thumbnail.Width); // called before changing the EasyListView view mode
-       ResetThumbnails; // need to reset thumbs here or they do not show at startup
-     end;
+     ResetThumbnails; // reset thumbs here or they do not show at startup
 
   FocusGamesList;
 
-  //ELV_MakeVisible;
   if CheckSelected(GamesListView) then
      begin
        FormStatus.MessageStr('Loading selected game details.');
-       // fix for the selected game not loading MAMu_ icon :_((
+       // fix for the selected game not loading MAMu_ icon
        GamesListView.BeginUpdate;
-       Sleep(50); // a little delay to prevent memory leaks in thumbnails view with images panel enabled (when load image with thread is enabled!!) HUH?! :_((
+       Sleep(50); // a small delay to prevent memory leaks in thumbnails view with images panel enabled; only happens at startup
        if PopupEnableMAMu_Icons.Checked and (not IsThumbnailView) then
           begin
             TEasyGameInfo(SelectedEasyItem).eIconLoaded:= False;
@@ -33558,18 +29886,12 @@ begin
 
        Application.ProcessMessages;
 
-       SetSelectedGame(True); // reload selected game info, just to make sure!!!!
+       SetSelectedGame(True); // reload selected game info, just to make sure
 
      end;
   UpdateStatusBarGame;
-  HideMenuItemsViewMode;
-
-  //if PopupImageShowLayoutDimensions.Checked then
-  //   GamesListView.Invalidate; // force games list to repaint and re-focus if layout dimensions screen is enabled
 
   PopupEnableFavorites.Hint:= FavoriteProfile[0];
-  //FontDialog.Font:= MAMEInfoTextHolder.Font; // huh ????!
-  //MAMEInfoTextHolder.Font:= FontDialog.Font; // huh ????!
 
   if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
      buildMAME:= GetMAMEBinaryVersion(EmulatorFile[idMAME]);
@@ -33591,12 +29913,12 @@ var
   Loop, Loop2: Integer;
 begin
   PlayDummyVideo(True);
-  // free any created vars, arrays, etc...
-  FreeAndNil(FDrawBuffer); // free this!
+  // free any created vars, arrays, etc
+  FreeAndNil(FDrawBuffer);
   FreeAndNil(FDrawBufferBottom);
   FreeAndNil(ControlType);
 
-  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START);
+  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush images threads cache (opened/pending threads)
 
   ZipForge.CloseArchive; // make sure there are no .zip files opened
   ZipForge.FileName:= '';
@@ -33609,7 +29931,7 @@ begin
        UpdateIniFile;
 
        if FileExists(GetSysEmulators) then
-          UpdateCustomEmulatorsInfo(False); // update emulator to use, param index... never update emulators filenames here!!!!
+          UpdateCustomEmulatorsInfo(False); // update emulator to use, param index, never update emulators filenames here
 
        if not PanelMachinesList.Visible then
           UpdateColumnProfile
@@ -33632,10 +29954,6 @@ begin
     FreeAndNil(Font_ConsoleComputer[Loop]);
   end;
 
-
-  //FreeAndNil(SamplesDir[1]); // MAME
-  //FreeAndNil(SamplesDir[0]); // HBMAME
-
   if not TerminateEmuLoader then
      begin
        if Assigned(FormLayoutDimensions) then
@@ -33648,7 +29966,7 @@ begin
           end;
      end;
 
-  // games list must be cleared here, not above or below... or app crash in thumbnails view (November 20, 2016)
+  // games list must be cleared here, not above or below, or frontend crashes in thumbnails view (November 20, 2016)
   FormMain.ClearMemGameInfo(MemGameInfo);
   FormMain.ClearMemGameInfo(TempGameVars);
 
@@ -33751,7 +30069,7 @@ begin
            
         if Assigned(FormMAMESettings) then
            begin
-             FormMAMESettings.Tag:= 0; // means default options
+             FormMAMESettings.Tag:= 0; // default options
              FormMAMESettings.emuFileExec:= EmulatorFileName;
              if EmulatorVersionInfoStr <> '' then
                 FormMAMESettings.emuVersionStr:= EmulatorVersionInfoStr
@@ -33773,7 +30091,7 @@ begin
         else
         if Assigned(FormMAMESettings_SimpleMode) then
            begin
-             FormMAMESettings_SimpleMode.Tag:= 0; // means default options
+             FormMAMESettings_SimpleMode.Tag:= 0; // default options
              FormMAMESettings_SimpleMode.emuFileExec:= EmulatorFileName;
              if EmulatorVersionInfoStr <> '' then
                 FormMAMESettings_SimpleMode.emuVersionStr:= EmulatorVersionInfoStr
@@ -33791,9 +30109,7 @@ begin
              FormMAMESettings_SimpleMode.ShowModal;
              FreeAndNil(FormMAMESettings_SimpleMode);
            end;
-        //FormMAMESettings.Caption:= 'Emulator Settings ['+GetEmulatorDescription(sysID, True)+']';
-        //FormMAMESettings.Caption:= FormMAMESettings.Caption+iniFile;
-        //FormMAMESettings.LabelReadFileIni.Caption:= iniFile;
+           
         LoadFolders_MAME(sysID, EmulatorFileName);
         if sysID = idMAME then
            LoadFolders_MAME(sysID, EmulatorFileName, True);
@@ -33807,11 +30123,9 @@ begin
               //iniFile:= GetEmuIniFileName(sysID, EmulatorFileName); // for the future ??... when options are stored in "Config\Supermodel.ini"
               if not Assigned(FormSupermodelSettings) then
                  FormSupermodelSettings:= TFormSupermodelSettings.Create(nil);
-              FormSupermodelSettings.Tag:= 0; // means default options
+              FormSupermodelSettings.Tag:= 0; // default options
               FormSupermodelSettings.emuIni:= iniFile;
-              //FormSupermodelSettings.Caption:= 'Emulator Settings ['+GetEmulatorDescription(sysID)+']';
               FormSupermodelSettings.LabelReadFileIni.Caption:= iniFile;
-
               FormSupermodelSettings.emuFileExec:= EmulatorFileName;
               if EmulatorVersionInfoStr <> '' then
                  FormSupermodelSettings.emuVersionStr:= EmulatorVersionInfoStr
@@ -33827,14 +30141,13 @@ begin
               iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID);
               if not Assigned(FormDaphneSettings) then
                  FormDaphneSettings:= TFormDaphneSettings.Create(nil);
-              FormDaphneSettings.Tag:= 0; // means default options
+              FormDaphneSettings.Tag:= 0; // default options
               FormDaphneSettings.emuFileExec:= EmulatorFileName;
               if EmulatorVersionInfoStr <> '' then
                  FormDaphneSettings.emuVersionStr:= EmulatorVersionInfoStr
               else
                  FormDaphneSettings.emuVersionStr:= EmulatorVersion[sysID];
 
-              //FormDaphneSettings.Caption:= 'Emulator Settings ['+GetEmulatorDescription(sysID)+']';
               FormDaphneSettings.emuIni:= iniFile;
               FormDaphneSettings.LabelReadFileIni.Caption:= iniFile;
               FormDaphneSettings.ShowModal;
@@ -33846,7 +30159,7 @@ begin
               iniFile:= ExtractFilePath(EmulatorFileName)+'emulator.ini';
               if not Assigned(FormSEGAModel2EmulatorSettings) then
                  FormSEGAModel2EmulatorSettings:= TFormSEGAModel2EmulatorSettings.Create(nil);
-              //FormSEGAModel2EmulatorSettings.Tag:= 0; // means default options
+              //FormSEGAModel2EmulatorSettings.Tag:= 0; // default options
               FormSEGAModel2EmulatorSettings.emuIni:= iniFile;
               FormSEGAModel2EmulatorSettings.LabelReadFileIni.Caption:= iniFile;
 
@@ -33856,9 +30169,6 @@ begin
               else
                  FormSEGAModel2EmulatorSettings.emuVersionStr:= EmulatorVersion[sysID];
 
-              //FormSEGAModel2EmulatorSettings.Caption:= 'Emulator Settings ['+GetEmulatorDescription(sysID)+']';
-              //FormSEGAModel2EmulatorSettings.ReadFileIni.Caption:= iniFile;
-              //FormSEGAModel2EmulatorSettings.ButtonReadFile.Hint:= Format('Read "%s"', [iniFile]);
               FormSEGAModel2EmulatorSettings.ShowModal;
               FreeAndNil(FormSEGAModel2EmulatorSettings);
               LoadFoldersArcade2(sysID);
@@ -33868,7 +30178,7 @@ begin
               iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID);
               if not Assigned(FormZiNcSettings) then
                  FormZiNcSettings:= TFormZiNcSettings.Create(nil);
-              FormZiNcSettings.Tag:= 0; // means default options
+              FormZiNcSettings.Tag:= 0; // default options
 
               FormZiNcSettings.emuFileExec:= EmulatorFileName;
               if EmulatorVersionInfoStr <> '' then
@@ -33876,7 +30186,6 @@ begin
               else
                  FormZiNcSettings.emuVersionStr:= EmulatorVersion[sysID];
 
-              //FormZiNcSettings.Caption:= 'Emulator Settings ['+GetEmulatorDescription(sysID)+']';
               FormZiNcSettings.emuIni:= iniFile;
               FormZiNcSettings.LabelReadFileIni.Caption:= iniFile;
               FormZiNcSettings.ShowModal;
@@ -33915,7 +30224,7 @@ end;
 
 procedure TFormMain.ChangeImageCategory(CategoryIndex: ShortInt);
 begin
-  // this function is only used by single image layout (it was used by classic view mode, not layouts mode)
+  // this function is only used by single image layout
   ResetImageTagTo1;
 
   ImageDetails[1].NoImageLoaded:= False;
@@ -33924,9 +30233,6 @@ begin
   ImageDetails[2].PrevNoImageLoaded:= False;
   ImageDetails[3].NoImageLoaded:= False;
   ImageDetails[3].PrevNoImageLoaded:= False;
-
-  //if not PanelImagesDocuments.Visible then
-  //   PanelImagesDocuments.Visible:= True; // why ? this function only change image category and reload zipped image THashedStringList vars, nothing more
 
   if IsSingleImageLayout then
      begin
@@ -33959,7 +30265,7 @@ begin
   SetIcon(IL_ImagesCategory_Small, nil, IL_ImagesToolBarButtons, ButtonImageCategory.Tag, 2);
 
   if (not FormStatus.Visible) and IsSingleImageLayout then
-     MenuShowImages.OnClick(Self); // make sure layouts is in single image; force load the new image category for selected game ?
+     MenuShowImages.OnClick(Self); // make sure image layout is in single image, force load the new image category for selected game
 
   FocusGamesList;
 end;
@@ -34045,7 +30351,7 @@ begin
         FreeMAMu_ZipVars;
       end;
   end;
-  ResetMAMu_ImageList(not PopupEnableMAMu_Icons.Checked); // reload EL default game icons
+  ResetMAMu_ImageList(not PopupEnableMAMu_Icons.Checked); // reload frontend default game icons
 end;
 
 procedure TFormMain.FreeMAMu_ZipVars;
@@ -34057,7 +30363,6 @@ begin
        FreeAndNil(ZipForgeIcons);
      end;
   FreeAndNil(MAMu_IconsList);
-  //MAMu_FileStream.Clear;
   FreeAndNil(MAMu_FileStream);
 end;
 
@@ -34080,10 +30385,8 @@ begin
   if not CheckTotal(GamesListView) then
      Exit;
 
-  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // is this for thumbs view only (it uses threads)
+  GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // clear image threads cache (thumbnails view)
 
-  //if (not PopupEnableMAMu_Icons.Checked) and (not ForceResetIconIndexes) then
-  //   Exit;
   GamesListView.BeginUpdate;
   if IsGroupedView then
   begin
@@ -34120,10 +30423,8 @@ begin
      begin
        if not CheckTotal(GamesListView) then
           begin
-            case PopupEnableMAMu_Icons.Tag of
-              0: PopupEnableMAMu_Icons.Click; // disable feature as no games are loaded in the list
-              //1: SetGameIconSize; // what is this for ???? (August 20, 2015)... it's been disabled for ages!
-            end;
+            if PopupEnableMAMu_Icons.Tag = 0 then
+               PopupEnableMAMu_Icons.Click; // disable feature as no games are loaded in the list
           end;
      end;
   if PopupEnableMAMu_Icons.Tag = 1 then
@@ -34150,7 +30451,6 @@ var
 begin
   if IsStartup then
      Exit;
-  //if not SelectedOnly then
 
   if not CheckTotal(GamesListView) then
      Exit;
@@ -34198,11 +30498,6 @@ end;
 
 procedure TFormMain.MenuShowImagesClick(Sender: TObject);
 begin
-  //if not IsStartup then
-  //   InitImgZipLists(not MenuShowImages.Checked); // init or free zip lists
-  //if (not MenuShowImages.Checked) and (not IsStartUp) then
-  //   FreeImageZipVars;
-
   if MenuThumbnailShowImages.Checked <> MenuShowImages.Checked then
      MenuThumbnailShowImages.Checked:= MenuShowImages.Checked;
 
@@ -34214,7 +30509,7 @@ begin
        if IsThumbnailView then
        begin
          if MenuShowImages.Checked then
-            InitZippedImagesCache; // do not allow to free zip lists while in thumbnails view!!!
+            InitZippedImagesCache; // do not allow to free zip lists while in thumbnails view
        end
        else
        begin
@@ -34228,13 +30523,10 @@ begin
      end;
   if (not MenuShowImages.Checked) and (not IsStartUp) then
      begin
-       //if not IsThumbnailView then
-          begin
-            if not IsSingleImageLayout then // single image layout is saved right after changing image category...
-               UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // if user disable images, save current multiple layout
-            if not IsThumbnailView then
-               FreeImageZipVars;
-          end;
+       if not IsSingleImageLayout then // single image layout is saved right after changing image category
+          UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // if user disable images, save current multiple layout
+       if not IsThumbnailView then
+          FreeImageZipVars;
      end;
   ToggleImagesPanel;
 end;
@@ -34295,7 +30587,7 @@ begin
         if IsGameDocsSinglePanelDisplay then
            begin
              ResetNoImageLoaded;
-             // ResetImageTagTo1; // cannot be here (January 25, 2018) ... if reset tag to 1, calling delete/rename image will reset (wrong)
+             // ResetImageTagTo1; // cannot be here; if reset tag to 1, calling delete/rename image will reset (wrong) (January 25, 2018)
              DisplayImage;
            end
         else
@@ -34365,12 +30657,6 @@ begin
   DestroyImageScr(2);
   DestroyImageScr(3);
   DestroyImagePnl;
-
-  //ImagePnl: TPanel;
-  //ImageScr: array[2..3] of TImage32;
-  //SplitterImg: array[1..2] of TSplitterEx;
-  //ImageHintPanel2: array[2..3] of TPanelEx;
-  //ImageHintText2: array[2..3] of TShadowLabel;
 end;
 
 
@@ -34384,19 +30670,25 @@ begin
      begin
        case MenuImageResampler.Tag of
          0: R:= TCustomResamplerClass(TNearestResampler).Create(ImageHolder.Bitmap); // off
-         1: R:= TCustomResamplerClass(TLinearResampler).Create(ImageHolder.Bitmap); // Linear
-         2: // Hermite
+         1: R:= TCustomResamplerClass(TLinearResampler).Create(ImageHolder.Bitmap);  // Linear
+         2: // Cosine (sharp, retains more details of original iimage)
+           begin
+             R:= TCustomResamplerClass(TKernelResampler).Create(ImageHolder.Bitmap);
+             TKernelResampler(ImageHolder.Bitmap.Resampler).Kernel:= TCustomKernelClass(TCosineKernel).Create;
+           end;
+         3: // Hermite (over-sharpening, color bleed)
            begin
              R:= TCustomResamplerClass(TKernelResampler).Create(ImageHolder.Bitmap);
              TKernelResampler(ImageHolder.Bitmap.Resampler).Kernel:= TCustomKernelClass(THermiteKernel).Create;
            end;
+
        end;
      end
   else
      begin
        // resampler for uStatus screen
        R:= TCustomResamplerClass(TKernelResampler).Create(ImageHolder.Bitmap);
-       TKernelResampler(ImageHolder.Bitmap.Resampler).Kernel:= TCustomKernelClass(THermiteKernel).Create;
+       TKernelResampler(ImageHolder.Bitmap.Resampler).Kernel:= TCustomKernelClass(TCosineKernel).Create;
      end;
   ImageHolder.Repaint;
   ImageHolder.Bitmap.EndUpdate;
@@ -34462,7 +30754,7 @@ end;
 
 procedure TFormMain.PopupMenuGamesListPopup(Sender: TObject);
 var
-  GameDriver, GameSystem, strDriver, strDriverAlt{, MachineNameStr}: String;
+  GameDriver, GameSystem, strDriver, strDriverAlt: String;
   MultiSelected, IsMAMEAvailable: Boolean;
   selCount, iLoop, iVersion, iVersionAlt: Integer;
 
@@ -34498,8 +30790,6 @@ var
               PopupDeleteName.Visible:= FileExists(GetFolderArcadeEmulatorIni(MemGameInfo.eSystemID)+FileName);
          end;
     end;
-    //if not PopupDeleteName.Visible then
-    //   PopupDeleteName.Visible:= True;
     Result:= PopupDeleteName.Visible;
   end;
 
@@ -34553,13 +30843,8 @@ begin
   end;
 
   PopupPlayGameWithCustomSystem.Enabled:= MemGameInfo.eIsCustomGame or
-             ((MemGameInfo.eCustomSystemID <> -1) and GameHaveROMs(MemGameInfo.eHaveGameROMs) and (not MemGameInfo.eROMsAllNoDump));// (MemGameInfo.eSoftwareName <> '');
+             ((MemGameInfo.eCustomSystemID <> -1) and GameHaveROMs(MemGameInfo.eHaveGameROMs) and (not MemGameInfo.eROMsAllNoDump));
   PopupPlayGameWithCustomSystem.Visible:= PopupPlayGameWithCustomSystem.Enabled;
-  //if PopupPlayGameWithCustomSystem.Enabled then
-  //   SetPopupCustomEmulators(MemGameInfo.eCustomSystemID);
-
-  //error
-  //need to check for AlterMAME and stuff... in arcade games, it is not showing!!!!
   
   if (MemGameInfo.eSystemID = idMAME) or MemGameInfo.eIsCustomGame then
      iVersionAlt:= GetMAMEBuild(MemGameInfo.eSystemID, True);
@@ -34577,7 +30862,7 @@ begin
       end;
     False:
       begin
-        PopupMachineToRunGame.Visible:= IsMAMEBasedSys(MemGameInfo.eSystemID) and // (MemGameInfo.eSystemID = idMAME) and
+        PopupMachineToRunGame.Visible:= IsMAMEBasedSys(MemGameInfo.eSystemID) and
                                         (selCount = 1) and (MemGameInfo.eSoftwareName <> '') and (not PanelMachinesList.Visible);
 
         PopupPlayGameStandard.Visible:= ValidateArcadeEmulatorFile(MemGameInfo.eSystemID);
@@ -34606,12 +30891,8 @@ begin
            end;
        end;
      end;
-  //if MemGameInfo.eIsCustomGame and PopupAutoRunGameAlterMAME.Visible then
-  //   PopupAutoRunGameAlterMAME.Visible:= PopupEnableAutoRunCustomGamesWithMAME.Checked and ((iVersionAlt >= 162) or (iVersionAlt = -1));
 
-  PopupRunGameWithAlterMAME.Visible:= PopupAutoRunGameAlterMAME.Visible;// and ((iVersionAlt >= 162) or (iVersionAlt = -1));
-  //if PopupRunGameWithAlterMAME.Visible and MemGameInfo.eIsCustomGame then
-  //   PopupRunGameWithAlterMAME.Visible:= ((iVersionAlt >= 162) or (iVersionAlt = -1));
+  PopupRunGameWithAlterMAME.Visible:= PopupAutoRunGameAlterMAME.Visible;
 
   PopupRunConsoleComputerGameWithAlterMAME.Visible:= (not PopupRunGameWithAlterMAME.Visible) and ((iVersionAlt >= 162) or (iVersionAlt = -1) and (AlterMAMEFile <> ''));
   if PopupRunConsoleComputerGameWithAlterMAME.Visible then
@@ -34626,7 +30907,7 @@ begin
        if IsROM_Device(MemGameInfo.eROMIdentification) or IsROM_Bios(MemGameInfo.eROMIdentification) then
           PopupPlayGameExtraParametersMAME.Visible:= False;
      end;
-  //PopupPlayExtraMAME.Visible:= IsMAMEBasedSys(MemGameInfo.eSystemID) and ValidateEmulatorFile(MemGameInfo.eSystemID);
+
   PopupCustomSettings.Visible:= PopupPlayGameStandard.Visible and
                                 (not (MemGameInfo.eSystemID in [idDaphne, idDemul, idDICE, idSegaModel2])) and (MemGameInfo.eSoftwareName = '') and (not MemGameInfo.eIsCustomGame);
 
@@ -34649,11 +30930,7 @@ begin
   PopupScanGames.Visible:= PopupPlayGameStandard.Visible and (not MemGameInfo.eIsCustomGame);
 
   MultiSelected:= selCount > 1;// CheckMultipleSelected(GamesListView);
-  //PopupSelectParentGame.Visible:= GameIsClone(MemGameInfo.eClone) and (ButtonGameFilterParentClone.Tag <> 2);
-  //if PopupSelectParentGame.Visible then
-  //   PopupSelectParentGame.Caption:= Format(PopupSelectParentGame.Hint, [MemGameInfo.eClone]);
 
-  //PopupSelectBiosSet
   PopupSelectSet.Clear;
 
   if GameIsClone(MemGameInfo.eClone) and (ButtonGameFilterParentClone.Tag <> 2) then
@@ -34667,24 +30944,12 @@ begin
      TMenuItem(AddMenuItem(PopupSelectSet, 'Select BIOS ['+MemGameInfo.eBiosName+']',
                MemGameInfo.eBiosName, True, False, False)).OnClick:= PopupSelectSetExtra;
 
-  // this doesn't work! EL tried to search "machine name" with eSoftwareName too (can't do that...)
-  //if (MemGameInfo.eSoftwareName <> '') and (not PanelMachinesList.Visible) then
-  //   begin
-  //     MachineNameStr:= GetLastUsedMachineSoftwareList(MemGameInfo.eSoftwareName);
-  //     if MachineNameStr <> '' then
-  //     begin
-  //        TMenuItem(AddMenuItem(PopupSelectSet, 'Select Machine ['+MachineNameStr+']',
-  //                  MachineNameStr, True, False, False)).OnClick:= PopupSelectSetExtra;
-  //     end;
-  //   end;
-
   if TEasyGameInfo(SelectedEasyItem).eDeviceSets <> nil then
      begin
        for iLoop:=0 to TEasyGameInfo(SelectedEasyItem).eDeviceSets.Count-1 do
        begin
-         //Select Device [%s]
          TMenuItem(AddMenuItem(PopupSelectSet, 'Select Device ['+TEasyGameInfo(SelectedEasyItem).eDeviceSets[iLoop]+']',
-                       TEasyGameInfo(SelectedEasyItem).eDeviceSets[iLoop], True, False, False)).OnClick:= PopupSelectSetExtra;
+                               TEasyGameInfo(SelectedEasyItem).eDeviceSets[iLoop], True, False, False)).OnClick:= PopupSelectSetExtra;
        end;
      end;
 
@@ -34745,7 +31010,7 @@ begin
           ToggleOptions(MemGameInfo.eName+'.cfg',
                         PopupSetCustomOptions, PopupDeleteCustomOptions);
 
-       PopupSetGameDriverCustomOptions.Visible:= (GameDriver <> '') and (IsMAMEBasedSys(MemGameInfo.eSystemID)); // only MAME, HBMAME!
+       PopupSetGameDriverCustomOptions.Visible:= (GameDriver <> '') and (IsMAMEBasedSys(MemGameInfo.eSystemID)); // MAME, HBMAME
        PopupDeleteGameDriverCustomOptions.Visible:= PopupSetGameDriverCustomOptions.Visible;
        case IsMAMEBasedSys(MemGameInfo.eSystemID) of
          True:
@@ -34756,8 +31021,7 @@ begin
                 PopupDeleteCustomOptions.Caption:= Format(PopupDeleteCustomOptions.Hint, [MemGameInfo.eName+'.ini']);
              if GameDriver <> '' then
                 begin
-                  //strDriver:= '';
-                  //check for GameName = DriverName and do not show it...
+                  //check for GameName = DriverName and do not show it
                   ToggleOptions(strDriver+GameDriver+'.ini',
                                 PopupSetGameDriverCustomOptions, PopupDeleteGameDriverCustomOptions);
 
@@ -34820,7 +31084,7 @@ begin
        ToggleOptionsMAME(PopupSetOtherSysIniCustomOptions, PopupDeleteOtherSysIniCustomOptions);
      end;
 
-  // for AlterMAME
+  // AlterMAME
   if PopupAlterMAMECustomSettings.Visible then
      begin
        if MemGameInfo.eSoftwareName <> '' then
@@ -34832,7 +31096,7 @@ begin
           ToggleOptions(MemGameInfo.eName+'.ini',
                         PopupSetCustomOptionsAlterMAME, PopupDeleteCustomOptionsAlterMAME, True);
 
-       PopupSetGameDriverCustomOptionsAlterMAME.Visible:= (GameDriver <> ''); // and (IsMAMEBasedSys(MemGameInfo.eSystemID)); // only MAME, HBMAME!
+       PopupSetGameDriverCustomOptionsAlterMAME.Visible:= (GameDriver <> '');
        PopupDeleteGameDriverCustomOptionsAlterMAME.Visible:= PopupSetGameDriverCustomOptionsAlterMAME.Visible;
 
        if PopupSetCustomOptionsAlterMAME.Visible then
@@ -34841,7 +31105,6 @@ begin
           PopupDeleteCustomOptionsAlterMAME.Caption:= Format(PopupDeleteCustomOptionsAlterMAME.Hint, [MemGameInfo.eName+'.ini']);
        if GameDriver <> '' then
           begin
-            //strDriverAlt:= '';
             ToggleOptions(strDriverAlt+GameDriver+'.ini',
                           PopupSetGameDriverCustomOptionsAlterMAME, PopupDeleteGameDriverCustomOptionsAlterMAME, True);
 
@@ -34905,7 +31168,6 @@ begin
 
   PopupScanResultsSelectedGame.Visible:= IsROMsListBasedSys(MemGameInfo.eSystemID) and
                                          (GamesListView.Selection.Count = 1) and
-                                         //IsROM_Miss(MemGameInfo.eROMIdentification) and
                                          (MemGameInfo.eGameSetStatus = 1) and (not MemGameInfo.eIsCustomGame); // only with Missing ROMs/CHDs
 
   PopupThumbnails.Visible:= IsThumbnailView;
@@ -34915,12 +31177,10 @@ begin
   if PopupThumbDeleteSelectedGameSnapshot.Visible then
      PopupThumbDeleteSelectedGameSnapshot.Caption:= 'Delete Selected '+PopupMenuImageCategories.Items[1].Caption;
 
-  //PopupAutomaticGameInformation.Visible:= not PopupThumbnails.Visible;
-
   if not PopupEnableMAMu_Icons.Checked then
      PopupEnableMAMu_Icons.Enabled:= DirectoryExists(MAMu_Folder);
 
-  PopupScanAllSelectedGames.Enabled:= (selCount > 0) and (not MemGameInfo.eIsCustomGame);// CheckSelected(GamesListView);// MultiSelected;
+  PopupScanAllSelectedGames.Enabled:= (selCount > 0) and (not MemGameInfo.eIsCustomGame);
   PopupScanForceSelectedGamesAvailable.Enabled:= PopupScanAllSelectedGames.Enabled;
   if PopupScanAllSelectedGames.Enabled then
      begin
@@ -34976,9 +31236,8 @@ end;
 
 procedure TFormMain.PopupShowFirstImageClick(Sender: TObject);
 begin
-  ResetImageTagTo1; // Images.Tag:= 1;
+  ResetImageTagTo1;
   ToggleImagesPanel(True);
-  //MenuShowImages.OnClick(Self); // no longer used (January 23, 2018)
 end;
 
 procedure TFormMain.PopupRenameCurrentImageClick(Sender: TObject);
@@ -34994,7 +31253,7 @@ begin
      FormImageDeleteRename:= TFormImageDeleteRename.Create(nil);
   FormImageDeleteRename.Tag:= 1; // 0 -> delete image; 1 -> rename image
   FormImageDeleteRename.ImageFileName:= ImageDetails[PopupMenuImages.Tag].FileName;
-  //FormImageDeleteRename.LabelFilename.Hint:= ImageDetails[PopupMenuImages.Tag].FileName;
+
   FileExtensionStr:= ExtractFileExtW(ImageDetails[PopupMenuImages.Tag].FileName);
   FormImageDeleteRename.ImageCategoryIcon.Tag:= ImageDetails[PopupMenuImages.Tag].ImageCategoryIndex;
 
@@ -35009,16 +31268,11 @@ begin
           end;
        Result:= ChangeFileExtW(Result, FileExtensionStr); // make sure the file extension is the same
 
-       //if not SameText(ExtractFileExt(Result), FileExtensionStr) then
-       //   Result:= ChangeFileExt(Result, FileExtensionStr); // make sure the file extension is the same
-
        if not SameText(Result, ExtractFileName(ImageDetails[PopupMenuImages.Tag].FileName)) then
           begin
             RenameFileW(ImageDetails[PopupMenuImages.Tag].FileName, ExtractFilePathW(ImageDetails[PopupMenuImages.Tag].FileName)+Result);
-            //RenameFile(ImageDetails[PopupMenuImages.Tag].FileName, ExtractFilePath(ImageDetails[PopupMenuImages.Tag].FileName)+Result);
             Sleep(50);
             ToggleImagesPanel(True);
-            //MenuShowImages.OnClick(Self);
           end;
      end;
   FreeAndNil(FormImageDeleteRename);
@@ -35035,7 +31289,6 @@ begin
      FormImageDeleteRename:= TFormImageDeleteRename.Create(nil);
   FormImageDeleteRename.Tag:= 0; // 0 -> delete image; 1 -> rename image
   FormImageDeleteRename.ImageFileName:= ImageDetails[PopupMenuImages.Tag].FileName;
-  //FormImageDeleteRename.LabelFilename.Hint:= ImageDetails[PopupMenuImages.Tag].FileName;
   FormImageDeleteRename.ImageCategoryIcon.Tag:= ImageDetails[PopupMenuImages.Tag].ImageCategoryIndex;
   FormImageDeleteRename.ShowModal;
   if FormImageDeleteRename.mmResult = mrOk then
@@ -35043,7 +31296,6 @@ begin
        DeleteFileW(PWideChar(ImageDetails[PopupMenuImages.Tag].FileName));
        Sleep(50);
        ToggleImagesPanel(True);
-       //MenuShowImages.OnClick(Self);
      end;
   FreeAndNil(FormImageDeleteRename);
 end;
@@ -35054,7 +31306,6 @@ var
   tmpIcon: TIcon;
   Loop: Integer;
   iFolder: String;
-  //ColorDepth: TPixelFormat;
 begin
   iFolder:= GetFolderFull(32);
   if not IsMainIconFolder then
@@ -35127,7 +31378,7 @@ end;
 
 procedure TFormMain.CallSetDeleteOptions(const FileName: String; MenuHolder: TMenuItem; IsDriver: Boolean = False; IsAlterMAME: Boolean = False);
 begin
-  // FileName has NO extension!!!!
+  // FileName has NO extension
   if not ValidateSelectedGame then
      Exit;
   case IsDriver of
@@ -35181,11 +31432,11 @@ begin
      reFontSize:= ARichEdit.Font.Size;
 
   ARichEdit.SelStart:= ARichEdit.GetTextLen;
-  Result:= ARichEdit.Lines.Count; // line index of added text!!!
+  Result:= ARichEdit.Lines.Count; // line index of added text
   ARichEdit.SelLength:= 0;
 
   //if ATextBackgroundColor <> Graphics.clNone then
-  //   ARichEdit.TextBKColor(ATextBackGroundColor);
+  //   ARichEdit.TextBKColor(ATextBackGroundColor); // doesn't work ? (March 01, 2018)
 
   if AAlignment <> taLeftJustify then
      ARichEdit.Paragraph.Alignment:= AALignment;
@@ -35201,7 +31452,7 @@ begin
      ARichEdit.SelAttributes.Size:= AFontSize;
   ARichEdit.SelText:= AText;
 
-  // restore defaults or next texts will have format of last added text :_((
+  // restore defaults or next texts will have format of last added text
   if AAlignment <> taLeftJustify then
      ARichEdit.Paragraph.Alignment:= taLeftJustify;
   if AFontName <> 'default' then
@@ -35218,14 +31469,13 @@ end;
 
 procedure TFormMain.UpdateScreenshotsPanel;
 begin
-  // only executed when toggle "images" and "game docs" on/off, NOWHERE ELSE!!!
+  // only executed when toggle "images" and "game docs" on/off, nowhere else
   case IsGameDocsSinglePanelDisplay of
     True: // images and game docs in same panel
       begin
         case MenuShowImages.Checked of
           True:
             begin
-              //case PanelGameDocuments.Visible of
               case PopupAutomaticGameInformation.Checked of
                 True:
                   begin
@@ -35248,7 +31498,6 @@ begin
             end;
           False:
             begin
-              //case PanelGameDocuments.Visible of
               case PopupAutomaticGameInformation.Checked of
                 True:
                   begin
@@ -35280,12 +31529,6 @@ begin
         PanelGameDocuments.Align:= alClient;
       end;
   end;
-end;
-
-procedure TFormMain.ToggleGameDocumentsDisplayMode;
-begin
-  //UpdateScreenshotsPanel;
-//  why this ??? might not be needed after all
 end;
 
 procedure TFormMain.ToggleGameDocuments(Enabled: Boolean);
@@ -35415,9 +31658,8 @@ begin
         MAMEInfoTextHolder.Lines.Clear;
         SplitterMAMEInfo.Visible:= False;
         PanelGameDocuments.Visible:= False;
-        // this code must change; adapt according to user settings (single panel/docs position or tabbed panels)
-        // ... or it should be changed only if user change settings (February 09, 2018)
-        if PanelGameDocuments.Align = alClient then // is this to check if "Images" is disabled ????
+
+        if PanelGameDocuments.Align = alClient then
            begin
              PanelGameDocuments.Align:= alTop;
              if PanelGameDocuments.Tag <> 1 then
@@ -35466,7 +31708,6 @@ var
   function AddTitleTextLine(const TextLine: String): Integer;
   begin
     Result:= AppendText(MAMEInfoTextHolder, TextLine, MAMEInfoTextHolder.Font.Color, [fsBold], taCenter);
-    //Result:= AppendText(MAMEInfoTextHolder, TextLine, MAMEInfoTextHolder.Font.Color, [fsBold], taCenter, 'Tahoma');
   end;
 
   function InformationData: Boolean;
@@ -35514,18 +31755,6 @@ var
     GameDocsGoToInformation.Visible:= GameDocsGoToInformation.Tag <> -1;// Result;
   end;
 
-  // old function, doesn't work anymore
-  //function AddHistoryURL(const strLine: String): Boolean;
-  //var
-  //  titleText, linkText: String;
-  //begin
-  //  titleText:= XML_GetEntryValue(strLine, 'title');
-  //  linkText:= XML_GetEntryValue(strLine, 'href');
-  //  Result:= (titleText <> '') and (linkText <> '');
-  //  if Result then
-  //     AddTextLine(titleText+': '+linkText);
-  //end;
-
   function AddHistoryURL(const strLine: String; linkIndex: Integer): Boolean;
   var
     titleText, linkText: String;
@@ -35533,12 +31762,10 @@ var
   begin
     if linkIndex > 0 then
        titleText:= Copy(strLine, 1, linkIndex-1);
-    //titleText:= XML_GetEntryValue(strLine, 'title');
-    //linkText:= XML_GetEntryValue(strLine, 'href');
-    endLink:= PosEx('">', strLine);
-    linkText:= 'http://www.arcade-history.com/index.php'+Copy(strLine, linkIndex+9, endLink-linkindex-9);
 
-    //showmessage('link text: '+linkText);
+    endLink:= PosEx('">', strLine);
+    linkText:= 'http://www.arcade-history.com/index.php'+Copy(strLine, linkIndex+9, endLink-linkIndex-9);
+
     titleText:= TitleText+Copy(strLine, endLink+2, Length(strLine));
     endLink:= PosEx('</a>', titleText);
     if endLink <> 0 then
@@ -35569,12 +31796,11 @@ var
          TagEndInfo:= '$end';
          for Loop:=0 to AutoHistoryDATFile.Count -1 do
          begin
-           if Copy(AutoHistoryDATFile[Loop], 1, TagStrSize) = TagString then //'$info' then
+           if Copy(AutoHistoryDATFile[Loop], 1, TagStrSize) = TagString then
               begin
                 Result:= GetGameHistory(MemGameInfo.eName, AutoHistoryDATFile[Loop], TagStrSize);
                 if Result then
                    begin
-                     //Result:= True;
                      Loop2:= Loop+1;
                      GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------'+#13#10);
                      while Trim(AutoHistoryDATFile[Loop2]) <> TagEndInfo do
@@ -35582,18 +31808,12 @@ var
                        case AddLine of
                          False:
                            begin
-                             //if Pos('<a href=', AutoHistoryDATFile[Loop2]) <> 0 then
-                             //   AddHistoryURL(AutoHistoryDATFile[Loop2])
-                             //if (Copy(AutoHistoryDATFile[Loop2], 1, 8) = '$<a href') then
-                             //   AddHistoryURL(AutoHistoryDATFile[Loop2])
-                             //else
-                                if Trim(AutoHistoryDATFile[Loop2]) = '$bio' then
-                                   AddLine:= True;
+                             if Trim(AutoHistoryDATFile[Loop2]) = '$bio' then
+                                AddLine:= True;
                            end;
                          True:
                            begin
                              webIndex:= PosEx('<a href=', AutoHistoryDATFile[Loop2]);
-
                              if webIndex <> 0 then
                                 AddHistoryURL(AutoHistoryDATFile[Loop2], webIndex)
                              else
@@ -35607,12 +31827,10 @@ var
                    end;
               end;
            if FoundData then
-              Break; // get out of the "history.dat" loop or EL will go all the down to the end of the file!!!
+              Break; // get out of the "history.dat" loop or the function will will go all the down to the end of the file
          end;
        end;
-    GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1; //Result;
-    //if not GameDocsGoToHistory.Visible then
-    //   beep;
+    GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
 
   function GameDriverData: Boolean;
@@ -35649,7 +31867,7 @@ var
               end;
          end;
     end;
-    GameDocsGoToDriverInfo.Visible:= GameDocsGoToDriverInfo.Tag <> -1; // Result;
+    GameDocsGoToDriverInfo.Visible:= GameDocsGoToDriverInfo.Tag <> -1;
   end;
 
   function StoryData: Boolean;
@@ -35687,7 +31905,7 @@ var
               end;
          end;
     end;
-    GameDocsGoToStory.Visible:= GameDocsGoToStory.Tag <> -1; // Result;
+    GameDocsGoToStory.Visible:= GameDocsGoToStory.Tag <> -1;
   end;
 
   function MarpData: Boolean;
@@ -35724,7 +31942,7 @@ var
               end;
          end;
     end;
-    GameDocsGoToMarp.Visible:= GameDocsGoToMarp.Tag <> -1; // Result;
+    GameDocsGoToMarp.Visible:= GameDocsGoToMarp.Tag <> -1;
   end;
 
   function GameInitData: Boolean;
@@ -35769,7 +31987,7 @@ var
               end;
          end;
     end;
-    GameDocsGoToGameInit.Visible:= GameDocsGoToGameInit.Tag <> -1;// Result;
+    GameDocsGoToGameInit.Visible:= GameDocsGoToGameInit.Tag <> -1;
   end;
 
   procedure LoadText(Index: Integer);
@@ -35796,7 +32014,7 @@ begin
   if not ValidateSelectedGame(False) then
      Exit;
 
-  if not IsMAMEBasedSys(MemGameInfo.eSystemID) then //not (MemGameInfo.eSystemID in [idMAME, idHBMAME]) then
+  if not IsMAMEBasedSys(MemGameInfo.eSystemID) then
      begin
        ClearGameInfoRichEdit;
        Exit;
@@ -35869,7 +32087,6 @@ end;
 
 procedure TFormMain.ButtonGameFilterMainClick(Sender: TObject);
 begin
-  // take a look at the "OnDeactivate" event... this might work! :)
   if not FileExists(GetFolderFull(43)+'mame_filters.ini') then
      begin
        CallMessageBox;
@@ -35877,9 +32094,6 @@ begin
        AddMsgText(GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
        AddMsgText(' was not found. Filters list cannot be built.'+#13#10+'Aborting...');
        GenerateMessage('Error', 'Main filter', '', 2, False, 1);
-
-       //GenerateMessage('ERROR', 'Main filter', 'File "'+GetFolderFull(43)+'mame_filters.ini" was not found. '+
-       //                'Filters list cannot be parsed.'+#13#10+'Aborting...', 2, False, 1);
        Exit;
      end;
   if not Assigned(FormArcadeGamesFilter) then
@@ -35901,16 +32115,6 @@ begin
      FreeAndNil(FormArcadeGamesFilter);
   UpdateGamesFilterHint;
 end;
-
-{procedure TForm1.FormCreate(Sender: TObject);
-var
-  I : integer;
-begin
-  For I :=0 to ComponentCount-1 do
-    If Components[I] is TLabel then
-      SetFontSmoothing( TLabel( Components[I] ).Font );
-end;}
-
 
 {
 themes
@@ -35978,7 +32182,7 @@ const
 
   menu_background_color: Integer = $00fafafa;
   hint_line_color: Integer = $00c5c5c5;
-  hint_text_color: Integer = $00993300; // $006e1500;
+  hint_text_color: Integer = $00993300;
   item_caption_active_color: Integer = clBlack;
   item_caption_disabled_color: Integer = $00c5c5c5;
   item_shortcut_color: Integer = $006e1500;
@@ -35986,17 +32190,15 @@ const
   checked_framecolor: Integer = $00399bf7;
   selection_frame_color: Integer = $0000b7ff;
   selection_singlecolor: Integer = $0000b7ff;
-  selection_uppergradient_colorstart: Integer = $00daecfd; // $00e5f1fd; //$00dceefd; // new color Mar 21, 2012
-  selection_uppergradient_colorend: Integer = $00bde0fd; //$0074d3ff;//$0075d1ff; // new color Mar 21, 2012
-  selection_lowergradient_colorstart: Integer = $0069ceff; // $006fd0ff; // new color Mar 21, 2012
-  selection_lowergradient_colorend: Integer = $009af6ff; //$00c1faff; // new color Mar 21, 2012
+  selection_uppergradient_colorstart: Integer = $00daecfd;
+  selection_uppergradient_colorend: Integer = $00bde0fd;
+  selection_lowergradient_colorstart: Integer = $0069ceff;
+  selection_lowergradient_colorend: Integer = $009af6ff;
 var
   R, IconR, HelpTextR: TRect;
   ImageList: TCustomImageList;
   strShortCut, strHelpText: String;
-  //HelpTextFont: TFont; // not used for anything ? August 05, 2015
   ShowHelpText, IsEnabled: Boolean;
-  // outBmp: TBitmap;
 
   procedure DrawCheckedPattern(Inflate: Boolean);
   var
@@ -36018,7 +32220,7 @@ var
               16: CheckRect.Right:= 24;
             end;
           end;
-        False: CheckRect.Right:= 24;//IconR.Right:= 26;
+        False: CheckRect.Right:= 24;
       end;
       InflateRect(CheckRect, -2, -2);
       ACanvas.Brush.Style:= bsClear; // round corners
@@ -36059,13 +32261,9 @@ begin
 
   IsEnabled:= not ((odDisabled in State) or (odGrayed in State));
 
-  //if ShowHelpText then
-  //   ShowHelpText:= not SameText(strHelpText, AMenuItem.Caption);
-
   if (AMenuItem.Caption = cLineCaption) then
   begin
-    // draw line with hints
-    // background
+    // draw line with hints, background
     ACanvas.Brush.Color:= menu_background_color;
     case Assigned(ImageList) of
       True:
@@ -36117,14 +32315,14 @@ begin
         InflateRect(R, -1, -1);
         Brush.Color:= selection_singlecolor;
 
-        // ACanvas.FillRect(R); // no gradient sel color
+        // ACanvas.FillRect(R); // solid background color
         DrawGradient(ACanvas, R, gsVertical, True,
                      selection_uppergradient_colorstart, selection_uppergradient_colorend,
                      selection_lowergradient_colorstart, selection_lowergradient_colorend,
                      $00f4f9fe);
 
         // single pixels to make selection border frame more round-ish
-        // needs to be draw AFTER calling DrawGradient!!!!
+        // needs to be draw AFTER calling DrawGradient
         Pixels[R.Left, R.Top]:= $0000dcff;
         Pixels[R.Right-1, R.Top]:= $0000dcff;
         Pixels[R.Left, R.Bottom-1]:= $0000dcff;
@@ -36196,10 +32394,9 @@ begin
            HelpTextR:= R;
            InflateRect(R, 0, -2);
            DrawText(Handle, PChar(AMenuItem.Caption), Length(AMenuItem.Caption), R, 0);
-           //HelpTextFont:= ACanvas.Font; // not used for anything ? August 05, 2015
            ACanvas.Font.Size:= ACanvas.Font.Size-1;
            if ACanvas.Font.Color <> item_caption_disabled_color then
-              ACanvas.Font.Color:= clGray; // paint help text with disabled color!!!!!!!!!
+              ACanvas.Font.Color:= clGray; // paint help text with gray color
            if AMenuItem.Default then
               ACanvas.Font.Style:= [];
 
@@ -36221,7 +32418,7 @@ begin
            else
               R.Left:= R.Right-(ACanvas.TextWidth(strShortCut)+12);
 
-           //ACanvas.Font.Size:= ACanvas.Font.Size-1; // removed this so shortcut text will right-align correctly... (August 23, 2016)
+           //ACanvas.Font.Size:= ACanvas.Font.Size-1; // commented this so shortcut text will right-align correctly (do not remove)
            if (odDisabled in State) or (odGrayed in State) then
               ACanvas.Font.Color:= item_caption_disabled_color
            else
@@ -36243,18 +32440,15 @@ begin
            begin
              if ImageIndex <> -1 then
                 begin
-                  //if (AMenuItem = PopupAddToFavorites) or (AMenuItem = PopupRemoveFromFavorites) or
-                  //   (AMenuItem = MenuCustomPlayReadUsageRules) or (AMenuItem = PopupPlayVideoPreview) or
-                  //   (AMenuItem = PopupDeleteSelectedGames) or (AMenuItem = MenuCustomPlayWithAssociatedApplication) then
                   if (AMenuItem = MenuCustomPlayReadUsageRules) or (AMenuItem = MenuCustomPlayEditFlipListFile) then
                      begin
-                       // show 16x16 icons instead of the 24x24 ones... for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
+                       // show 16x16 icons instead of 24x24 for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
                        ImageList:= IL_MenuPopup; // set custom image before drawing it!
-                       ImageList.Draw(ACanvas, ARect.Left + 4, // 11
+                       ImageList.Draw(ACanvas, ARect.Left + 4,
                                       ARect.Top + (ARect.Bottom - ARect.Top - ImageList.Height) div 2, ImageIndex, IsEnabled);
-                     end // 11
+                     end
                   else
-                  ImageList.Draw(ACanvas, ARect.Left + 4, // 11
+                  ImageList.Draw(ACanvas, ARect.Left + 4,
                     ARect.Top + (ARect.Bottom - ARect.Top - ImageList.Height) div 2, ImageIndex, IsEnabled);
                 end
              else
@@ -36264,7 +32458,7 @@ begin
                        case AMenuItem.RadioItem of
                          True : ImageList.Draw(ACanvas, ARect.Left + 4,
                                                ARect.Top + (ARect.Bottom - ARect.Top - ImageList.Height) div 2, 01, IsEnabled); // radio group
-                         False: ImageList.Draw(ACanvas, ARect.Left + 4, // 3 // 11
+                         False: ImageList.Draw(ACanvas, ARect.Left + 4,
                                                ARect.Top + (ARect.Bottom - ARect.Top - ImageList.Height) div 2, 00, IsEnabled); // check box
                        end;
                      end;
@@ -36301,14 +32495,10 @@ begin
   if AMenuItem.Caption = cLineCaption then
      Exit;
   FullWidth:= Width;
-  //ACanvas.TextWidth(strShortCut)+12
 
   if AMenuItem = PopupScanForceSelectedGamesAvailable then
      begin
        FullWidth:= Width;
-       //strShortCut:= ShortCutToText(AMenuItem.ShortCut);
-       //CaptionWidth:= ACanvas.TextWidth(AMenuItem.Caption);
-       //CaptionWidth:= CaptionWidth+ACanvas.TextWidth(strShortCut);
      end
   else
   if AMenuItem.Hint <> '' then
@@ -36322,7 +32512,7 @@ begin
             if strShortCut <> '' then
                CaptionWidth:= CaptionWidth+ACanvas.TextWidth(strShortCut);
           end;
-       if FullWidth > CaptionWidth then //ACanvas.TextWidth(AMenuItem.Caption) then
+       if FullWidth > CaptionWidth then
           FullWidth:= FullWidth-10 // add -10 to reduce width a little bit
        else
           FullWidth:= Width;
@@ -36334,10 +32524,7 @@ begin
       begin
         if (AMenuItem.Parent = PopupPlayGameWithCustomSystem) then
         begin
-          //if (AMenuItem = PopupHiddenGamesEnabled) then //or (AMenuItem.GetParentMenu = PopupFavorites) then
-          //   Height:= 34
-          //else
-          if (AMenuItem.HelpContext = 50) then // or (AMenuItem = MenuPlayEditFlipListFile) then
+          if (AMenuItem.HelpContext = 50) then
              Height:= 22
           else
           if AMenuItem.Hint = '' then
@@ -36349,8 +32536,6 @@ begin
         begin
           if (AMenuItem = PopupSelectScanGamesMode) or (AMenuItem = PopupAutoRunGameAlterMAME) or (AMenuItem = PopupPlayVideoPreview) or
              (AMenuItem = PopupEnableAutoRunCustomGamesWithMAME) or
-             //(AMenuItem = PopupMachineToRunGame) or ?????????????
-             //(AMenuItem = PopupGameIconSize) then // this cannot be uncommented... old deprecated code!
              (AMenuItem.Parent = PopupGameIconSize) or (AMenuItem.Parent = PopupTilesViewGameIconsSize) or (AMenuItem = PopupDeleteSelectedGamesFromGamesList) then
              Height:= 32
           else
@@ -36365,12 +32550,6 @@ begin
              end
           else
              SetItemHeight;
-          //case ImageList.Width of
-          //  32: Height:= 38; // nothing to be done here ? March 2014
-          //  28: Height:= 32;
-          //  24: Height:= 34;
-          //  16: Height:= 22; // nothing to be done here ? March 2014
-          //end;
         end;
         Width:= FullWidth+ImageList.Width;
       end;
@@ -36389,7 +32568,7 @@ var
   Loop: Integer;
   iDir: String;
 begin
-  // FeatureIndex (all MAME related!)
+  // FeatureIndex (all MAME related)
   // 20: Playback Input
   // 21: Record Input
   // 22: Load Save State (not used anymore)...............
@@ -36406,7 +32585,7 @@ begin
   // March 16, 2016 -> I need to pass sysID, emulator filename (not just from uMain.EmulatorFile[] array)
   // this feature is used only in the uMain.ExecuteGame() function and in MAME settings screen, and the MemGameInfo var is filled with current
   // selected game
-  // the "GameName" parameter here is NOT needed!!!!
+  // the "GameName" parameter here is NOT needed
   Result:= False;
   SelectedFileName:= '';
   destFolder:= '';
@@ -36456,7 +32635,7 @@ begin
     25: GetFilesList(GetFolderFull(1, MemGameInfo.eSystemID)+'multimedia_files\'+SoftwareNameFolder, '.avi', '*.avi', tempList, False, True, True);
     {26:
       begin
-        // load a left panel file... not used anymore. need to delete this!!!
+        // load a left panel file... not used anymore. need to delete this
         GetFilesList(GetLeftPanelFolder, '.ini', '*.ini', tempList, False, True, True);
         if tempList.Count = 0 then
            begin
@@ -36616,7 +32795,6 @@ begin
   end;
 end;
 
-
 // EasyListView functions
 function TFormMain.IsDetailsView: Boolean;
 begin
@@ -36648,13 +32826,6 @@ begin
   Result:= ButtonViewMode.Tag = 5;
 end;
 
-procedure TFormMain.HideMenuItemsViewMode;
-begin
-  //MainMenuOptions.BeginUpdate;
-  //MenuImages.Visible:= (not IsThumbnailView) and (not MenuViewFullScreen.Checked);
-  //MainMenuOptions.EndUpdate;
-end;
-
 procedure TFormMain.ViewModeToggle;
 
   function SetColumnState(Enabled: Boolean): Boolean;
@@ -36675,45 +32846,9 @@ begin
   IsMultiColumnSort:= False;
   if IsThumbnailView then
      begin
-       InitImgZipThumbnail; // if needed, initialize zipped in-game snapshots... this is needed, not matter what!
+       InitImgZipThumbnail; // initialize zipped in-game snapshots
        AddGamesSystemsIcons(IL_StandardIconsThumbnail, False);
      end;
-  //case IsThumbnailView of
-  //  True:
-  //    begin
-  //      InitImgZipThumbnail; // if needed, initialize zipped in-game snapshots... this is needed, not matter what!
-  //      AddGamesSystemsIcons(IL_StandardIconsThumbnail, False);
-
-        {if MenuThumbnailShowImagesGameDocsPanel.Checked then
-           begin
-             if (MenuShowImages.Checked) or
-                (PopupAutomaticGameInformation.Checked) then
-                begin
-                  if not PanelScreenshotsArea.Visible then
-                     begin
-                       PanelScreenshotsArea.Visible:= True;
-                       Splitter.Visible:= True;
-                     end;
-                end;
-           end
-        else
-           begin
-              if Splitter.Visible then
-                 Splitter.Visible:= False;
-              if PanelScreenshotsArea.Visible then
-                 PanelScreenshotsArea.Visible:= False;
-           end;}
-  //    end;
-  //  False:
-  //    begin
-  //      if (MenuShowImages.Checked) or
-  //         (PopupAutomaticGameInformation.Checked) then
-  //         begin
-  //           PanelScreenshotsArea.Visible:= True;
-  //           Splitter.Visible:= True;
-  //         end;
-  //    end;
-  //end;
 
   case ButtonViewMode.Tag of
     0, 1: if GamesListView.View <> elsReport then GamesListView.View:= elsReport; // details, grouped view
@@ -36728,7 +32863,6 @@ begin
   end;
   SetGamesImageList;
   SetColumnState(ButtonViewMode.Tag <> 1);
-  //Application.ProcessMessages;
 end;
 
 procedure TFormMain.ButtonViewModeDetailsClick(Sender: TObject);
@@ -36738,7 +32872,7 @@ begin
   case IsStartup of
     True:
       begin
-        // will be executed only when starting the frontend!!!!!
+        // frontend startup only
         if ButtonViewMode.Tag <> TMenuItem(Sender).ImageIndex then
            ButtonViewMode.Tag:= TMenuItem(Sender).ImageIndex;
         PopupMenuViewMode.Items[TMenuItem(Sender).ImageIndex].Checked:= TMenuItem(Sender).Checked;
@@ -36767,16 +32901,14 @@ begin
                   FormStatus.StartThreadClock;
                   SetGameType(True); // ResetMAMu_ImageList() is done here
                   FormStatus.Close;
-                  //HideFilterMsgBox;
-                  //ApplyFilterMsgBox.Visible:= False;
                 end
              else
                 begin
-                  ResetMAMu_ImageList(True, (LastViewIndex = 5)); // this function already have a ELV FlushMessageCache call!!!
+                  ResetMAMu_ImageList(True, (LastViewIndex = 5)); // this function already have a ELV FlushMessageCache call
                   if CheckSelected(GamesListView) then
                      begin
-                       if (LastViewIndex <> 5) or IsThumbnailView then // IsThumbnailView -> ButtonViewMode.Tag = 5
-                          SelectedEasyItem.MakeVisible(emvMiddle) // emvAuto)
+                       if (LastViewIndex <> 5) or IsThumbnailView then
+                          SelectedEasyItem.MakeVisible(emvMiddle)
                        else
                           SetSelectedGame(True);
                      end;
@@ -36785,7 +32917,6 @@ begin
       end;
   end;
   SetMainToolBarIcon(ButtonViewMode);
-  HideMenuItemsViewMode; // there is nothing being executed here... delete this function ? June 14, 2016 
 end;
 
 procedure TFormMain.SetGamesImageList;
@@ -36801,15 +32932,15 @@ begin
  if IsThumbnailView then
      ValidateIL_ExtraLarge(IL_StandardIconsThumbnail)
   else
-  {if IsTileView then
-     begin
-       case PopupTilesViewGameIconsSize.Tag of
-         0: ValidateIL_ExtraLarge(IL_StandardIconsThumbnail); // insane... 128x128
-         1: ValidateIL_ExtraLarge(IL_StandardIconsMegaLarge); // extra large 68x68
-         2: ValidateIL_ExtraLarge(IL_StandardIconsExtraLarge); // standard 48x48
-       end;
-     end
-  else}
+  //if IsTileView then
+  //   begin
+  //     case PopupTilesViewGameIconsSize.Tag of
+  //       0: ValidateIL_ExtraLarge(IL_StandardIconsThumbnail); // insane... 128x128
+  //       1: ValidateIL_ExtraLarge(IL_StandardIconsMegaLarge); // extra large 68x68
+  //       2: ValidateIL_ExtraLarge(IL_StandardIconsExtraLarge); // standard 48x48
+  //     end;
+  //   end
+  //else
   if IsDetailsView or IsGroupedView then
      begin
        if GamesListView.CellSizes.Report.Height <> ELV_CellSize[PopupGameIconSize.Tag] then
@@ -36850,8 +32981,6 @@ var
 
 begin
   // need to set GamesListView.Font to the higher font so thumbs look the same no matter what font is used
-  // GamesListView.BeginUpdate;
-
   //AddGamesSystemsIcons(IL_StandardIconsMegaLarge, False);
   //ClearImageList(IL_StandardIconsMegaLarge);
   case PopupTilesViewGameIconsSize.Tag of
@@ -36883,8 +33012,7 @@ begin
         ValidateCellSize;
         Font_TilesViewDetailsText.Size:= 9;
       end;
-  end;  
-  //GamesListView.EndUpdate;
+  end;
 end;
 
 procedure TFormMain.PopupIconSizeStandardClick(Sender: TObject);
@@ -36913,8 +33041,6 @@ begin
 end;
 
 procedure TFormMain.SetMachinesImagesList;
-//const
-//  CellSize: array[0..2] of Integer = (36, 28, 22); //(52, 36, 28, 20);
 begin
   if MachinesListSidePanel.CellSizes.Report.Height <> ELV_CellSize[PopupMachinesListSidePanelIconSize.Tag] then
      MachinesListSidePanel.CellSizes.Report.Height:= ELV_CellSize[PopupMachinesListSidePanelIconSize.Tag];
@@ -36951,14 +33077,12 @@ begin
            ToolbarPanel.Visible:= False;
         if StatusBarPanel.Visible then
            StatusBarPanel.Visible:= False;
-        //if StatusBarPanel.Tag = 1 then
-        //   StatusBarPanel.Visible:= False;
 
         SetWindowLong(FormMain.Handle, GWL_STYLE, GetWindowLong(FormMain.Handle, GWL_STYLE) and not WS_CAPTION);
         SetWindowPos(FormMain.Handle, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN),
                      GetSystemMetrics(SM_CYSCREEN), SWP_SHOWWINDOW or SWP_NOACTIVATE);
-        //SetForegroundWindow(Application.Handle); // new October 11, 2015... this was NOT in the original function!!!
-        SetForegroundWindow(FormMain.Handle);
+
+        SetForegroundWindow(FormMain.Handle); //SetForegroundWindow(Application.Handle); // this was not in the original function (October 11, 2015)
 
         SetActiveWindow(Application.Handle);
       end;
@@ -36968,8 +33092,8 @@ begin
         SetWindowLong(FormMain.Handle, GWL_STYLE, GetWindowLong(FormMain.Handle, GWL_STYLE) or WS_CAPTION);
         SetWindowPos(FormMain.Handle, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN),
                      GetSystemMetrics(SM_CYSCREEN), SWP_SHOWWINDOW or SWP_NOACTIVATE);
-        //SetForegroundWindow(Application.Handle); // new October 11, 2015... this was NOT in the original function!!!
-        SetForegroundWindow(FormMain.Handle);
+
+        SetForegroundWindow(FormMain.Handle); //SetForegroundWindow(Application.Handle); // this was not in the original function (October 11, 2015)
         SetActiveWindow(Application.Handle);
         LockWindowUpdate(FormMain.Handle);
         FormMain.WindowState:= wsNormal;
@@ -37112,7 +33236,6 @@ end;
 procedure TFormMain.SetMAMu_Folder(const FolderString: String);
 begin
   MAMu_Folder:= FullEmuFolderFix(FolderString, idMAME, False);
-  //MAMu_Folder:= FullFolderFix(FolderString, EmulatorFile[idMAME]);
 end;
 
 function TFormMain.UpdateMAMu_ScanFolder: Boolean;
@@ -37134,16 +33257,15 @@ end;
 
 procedure TFormMain.PopupGameDetailsClick(Sender: TObject);
 begin
-  if not ValidateSelectedGame then
-     Exit;
-//  if FormMain.MemGameInfo.eIsCustomGame then
-//     Exit;
-  FormGameDetails:= TFormGameDetails.Create(nil);
-  FormGameDetails.ShowModal;
-  FreeAndNil(FormGameDetails);
+  if ValidateSelectedGame then
+     begin
+       FormGameDetails:= TFormGameDetails.Create(nil);
+       FormGameDetails.ShowModal;
+       FreeAndNil(FormGameDetails);
+     end;
 end;
 
-function TFormMain.ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean): Integer;
+function TFormMain.ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt): Integer;
 var
   iLoop, iCount, ChangedGamesCount: Integer;
   SoftListFiles: THashedStringList;
@@ -37152,12 +33274,25 @@ begin
   Result:= 0;
   ChangedGamesCount:= 0;
   SoftListFiles:= THashedStringList.Create;
-  GetFilesList(GetGamesFolderEL(1), '.el', '*.el', SoftListFiles, False, False, False);
+  GetFilesList(GetGamesFolderEL(1, sysID), '.el', '*.el', SoftListFiles, False, False, False);
   iCount:= SoftListFiles.Count;
-  //ShowMessage('count to audit: '+IntToStr(iCount)+#13#10+#13#10+SoftListFiles.Text);
+  if iCount > 0 then
+  begin
+    SoftListFiles.BeginUpdate;
+    for iLoop:=0 to iCount-1 do
+        SoftListfiles[iLoop]:= ChangeFileExt(SoftListFiles[iLoop], '');
+    SoftListFiles.EndUpdate;
+
+    SoftListRemoveExcludedList(sysID, SoftListfiles);
+    if MenuCreateMAMESoftwareListGames.Tag = 1 then // update mode, must remove exclude list and remove software lists with same CRC32
+       begin
+         SoftListValidateListsXML(sysID, SoftListfiles);
+       end;
+  end;
+
+  iCount:= SoftListFiles.Count;
   if iCount > 0 then
      begin
-       //ShowMessageW(SoftListFiles.Text);
        FormStatus.LabelMessage.Caption:= '';
        if not FormStatus.Visible then
           begin
@@ -37166,10 +33301,11 @@ begin
           end;
        FormStatus.LabelSoftwareScanCount.Visible:= True;
        GamesListView.BeginUpdate;
-       for iLoop:=0 to SoftListFiles.Count-1 do
+       for iLoop:=0 to iCount-1 do
        begin;
          FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [iLoop+1, iCount]);
-         ChangedGamesCount:= CallScanGames(RefreshMode, IsCreatingGames, idMAME, ChangeFileExt(SoftListFiles[iLoop], ''), True);
+         ChangedGamesCount:= CallScanGames(RefreshMode, IsCreatingGames, sysID, SoftListFiles[iLoop], True);
+         //ChangedGamesCount:= CallScanGames(RefreshMode, IsCreatingGames, sysID, ChangeFileExt(SoftListFiles[iLoop], ''), True);
          Inc(Result, ChangedGamesCount);
        end;
        GamesListView.EndUpdate(False);
@@ -37184,12 +33320,13 @@ var
   Loop, iItemIndex, sysID: Integer;
   SysStr: String;
   ChangedGames: Boolean;
-  SysToAudit: array[1..MaxArcadeSystems] of Integer;
+  //SysToAudit: array[1..MaxArcadeSystems] of Integer; // improvement for the future ? (March 22, 2018)
 
   function AllowScan(sysID: ShortInt; IsSoftwareList: Boolean): Boolean;
   begin
     Result:= True;
-    if sysID = idMAME then
+    // if sysID = idMAME then
+    if IsMAMEBasedSys(sysID) then
        begin
          // 0 -> scan all; 1 -> arcade/machines only; 2 -> software list games only
          if IsSoftwareList then
@@ -37238,9 +33375,12 @@ begin
                     SysStr:= GetArcadeSystemShortTitle(sysID)
                  else
                     SysStr:= GetArcadeSystemShortTitle(sysID)+' (software list: '+SysStr+')';
-                 if GenerateMessage('Info', 'Scan Selected Games', '    There are games from multiple systems selected. '+
-                                 'Only the sets from '+SysStr+' will be processed.'+#13#10+
-                                 'Do you want to continue ?', 1, False, 2) = mrNo then
+
+                 CallMessageBox;
+                 AddMsgText('    There are games from multiple systems selected. Only ');
+                 AddMsgText(SysStr, $00a65300, [fsBold]);
+                 AddMsgText(' sets will be processed.'+#13#10+'Do you want to continue ?');
+                 if GenerateMessage('Info', 'Scan Selected Games', '', 1, False, 2) = mrNo then
                     Exit;
                end;
             Item:= GamesListView.Selection.First;
@@ -37276,7 +33416,7 @@ begin
           Exit; // user hit cancel button
        if Loop <= MaxArcadeSystems then
           begin
-            if AllowScan(Loop, False) then
+            if AllowScan(Loop, False) then // AllowScan() function is for MAME/HBMAME only
             begin
               if Loop = idMAME then
                  GamesListView.BeginUpdate;
@@ -37285,11 +33425,12 @@ begin
               if Loop = idMAME then
                  GamesListView.EndUpdate(False);
             end;
-            if Loop = idMAME then
+
+            if IsMAMEBasedSys(Loop) then
             begin
               if AllowScan(Loop, True) then
               begin
-                if ScanSoftListGames(TMenuItem(Sender).Tag, False) > 0 then
+                if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then
                    ChangedGames:= True;
               end;
             end;
@@ -37305,11 +33446,11 @@ begin
                 if CallScanGames(TMenuItem(Sender).Tag, False, StrToInt(SysStr[Loop]), '', True) > 0 then
                    ChangedGames:= True;
               end;
-              if Loop = idMAME then
+              if IsMAMEBasedSys(Loop) then
               begin
                 if AllowScan(Loop, True) then
                 begin
-                  if ScanSoftListGames(TMenuItem(Sender).Tag, False) > 0 then
+                  if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then
                      ChangedGames:= True;
                 end;
               end;
@@ -37350,6 +33491,7 @@ var
   pbPos, SnapsDownloaded, TotalGamesVisible: Integer;
   Item: TEasyItem;
 begin
+  // hidden feature for my personal use, found in "About" main menu
   if not CheckTotalVisible(GamesListView) then
      Exit;
   pbPos:= 0;
@@ -37394,6 +33536,7 @@ function TFormMain.GetGameTypeString(sysID, sysType: ShortInt; const SoftwareNam
 //var
 //  tmpString: String;
 begin
+  // for a future improvement ? (March 03, 2018)
   {tmpString:= 'this set is a ';
   if IsSegaModel2 and IsBiosGame then
      tmpString:= tmpString+'bios'
@@ -37451,7 +33594,7 @@ begin
        Exit;
      end;
 
-  sFile:= GetGamesFolderEL(Ord(MemGameInfo.eSoftwareName <> ''))+GetSystemFileName(MemGameInfo.eSystemID, 3, MemGameInfo.eSoftwareName);
+  sFile:= GetGamesFolderEL(Ord(MemGameInfo.eSoftwareName <> ''), MemGameInfo.eSystemID)+GetSystemFileName(MemGameInfo.eSystemID, 3, MemGameInfo.eSoftwareName);
   case FileExists(sFile) of
     True:
       begin
@@ -37498,8 +33641,6 @@ end;
 
 procedure TFormMain.WebButtonExitClick(Sender: TObject);
 begin
-  //WebBrowser.Navigate('about:blank');
-  //SetActiveWindow(Application.Handle);
   ButtonInternetGameInfo.Down:= False;
   ButtonInternetGameInfo.Click;
 end;
@@ -37517,7 +33658,6 @@ procedure TFormMain.MAMEInfoTextHolderURLClick(Sender: TObject;
   const URL: String);
 begin
   CallShellExecute(nil, URL);
-  //ShellExecute(Handle, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
 end;
 
 function TFormMain.CenterImageSplitter(SplitterHolder: TSplitterEx; CenterAll: Boolean = False): Boolean;
@@ -37541,7 +33681,7 @@ var
   function GetImageAlignAllClient: TImage32;
   begin
     // function for tripple layout [1] and [2]
-    // only to resize when both splitters are visible!!!
+    // only to resize when both splitters are visible
     if Images.Align = alClient then
        Result:= Images
     else
@@ -37690,7 +33830,7 @@ var
 begin
   layoutIni:= TMemIniFile.Create(GetIniFilesFolder+'screenshot_layouts.ini');
   SectionStr:= GetScrLayoutSection(LayoutIndex);
-  // multi-panel layouts cannot change image categories, only in "Layout Settings" screen
+  // multi-panel layouts cannot change image categories, only in "Layout Settings" screen and/or in single image layout
   case LayoutIndex of
     0: // single layout; update "image1_category" entry only (January 25, 2018)
       begin
@@ -37824,7 +33964,7 @@ var
   begin
     if SplitterImg[Index] = nil then
        begin
-         SplitterImg[Index]:= TSplitterEx.Create(nil);//Self);
+         SplitterImg[Index]:= TSplitterEx.Create(nil);
          SplitterImg[Index].Parent:= imgParentComponent;
          SplitterImg[Index].Style:= TTMSStyle(tsSolidColor);
          case FormPreferences.ImageEnableGripIcon.Checked of
@@ -37881,7 +34021,7 @@ var
          if ImageDetails[Index].ImageCategoryIndex > -1 then
             begin
               ImageScr[Index].Color:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Tag;
-              //ImageScr[Index].Hint:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Caption;
+              //ImageScr[Index].Hint:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Caption; // not used anymore ? (March 03, 2018)
             end;
          ImageScr[Index].ShowHint:= False;
          ImageScr[Index].BitmapAlign:= baCenter;
@@ -37917,12 +34057,6 @@ var
     if Images.Align <> imgAlignment then
        Images.Align:= imgAlignment;
     Images.Color:= PopupMenuImageCategories.Items[ImageDetails[1].ImageCategoryIndex].Tag;
-    //PanelImage.Color:= Images.Color;
-    //PanelScreenshotsArea.Color1:= PanelImage.Color;
-    //if ButtonScreenshotLayouts.Tag = 0 then
-    //   Images.Hint:= ''
-    //else
-    //   Images.Hint:= PopupMenuImageCategories.Items[ImageDetails[1].ImageCategoryIndex].Caption;
     Result:= True;
   end;
 
@@ -37941,17 +34075,13 @@ var
   end;
 
 begin
-  //if IsStartup then
-  //   Exit;
   Continue:= True;
   if not IsStartup then
      begin
        FreeImageZipVars;
-       InitImgZipLists(True); // clear zip images arrays
+       InitImgZipLists(True); // de-init zip images arrays
        InitImgSoftwareNameZipLists(True);
      end;
-
-  //ImagesToolbarButtons.DoubleBuffered:= True;
 
   if IsSingleImageLayout then
      begin
@@ -37961,6 +34091,7 @@ begin
        ImageDetails[1].ImageCategoryIndex:= ButtonImageCategory.Tag;
        Images.Hint:= '';
        UpdateImageHintPanelText(1);
+       Images.Color:= PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Tag; // change background color
        PanelScreenshotsArea.Canvas.Unlock;
        if MenuShowImages.Checked then
           MenuShowImages.OnClick(Self);
@@ -38000,6 +34131,7 @@ begin
             begin
               AlignMainImage(alNone, PanelImage);
               DestroyAll;
+              
               case ImageEnabled[0] of
                 True:
                   begin
@@ -38007,7 +34139,6 @@ begin
                     Images.Height:= ImgSize[0];
                     CreateSplitter(1, alTop, PanelImage, Images);
                     CreateImage(2, alClient, PanelImage);
-                    //CreateImageHintPanel(2);
                   end;
                 False:
                   begin
@@ -38019,6 +34150,7 @@ begin
             begin
               AlignMainImage(alNone, PanelImage);
               DestroyAll;
+
               case ImageEnabled[0] of
                 True:
                   begin
@@ -38026,7 +34158,6 @@ begin
                     Images.Width:= ImgSize[0];
                     CreateSplitter(1, alLeft, PanelImage, Images);
                     CreateImage(2, alClient, PanelImage);
-                    //CreateImageHintPanel(2);
                   end;
                 False:
                   begin
@@ -38037,8 +34168,9 @@ begin
           3:
             begin
               // triple, layout 1
-              AlignMainImage(alTop, PanelImage); // image_1 is always top aligned!!!
+              AlignMainImage(alTop, PanelImage); // image_1 is always top aligned
               DestroyAll;
+
               Images.Height:= ImgSize[0];
               CreateSplitter(1, alTop, PanelImage, Images);
               if ImageEnabled[0] and ImageEnabled[1] then
@@ -38047,28 +34179,24 @@ begin
                    ImageScr[3].Height:= ImgSize[1];
                    CreateSplitter(2, alBottom, PanelImage, ImageScr[3]);
                    CreateImage(2, alClient, PanelImage);
-
-                   //CreateImageHintPanel(2);
-                   //CreateImageHintPanel(3);
                  end
               else
               if ImageEnabled[0] then
                  begin
                    CreateImage(2, alClient, PanelImage);
-                   //CreateImageHintPanel(2);
                  end
               else
               if ImageEnabled[1] then
                  begin
                    CreateImage(3, alClient, PanelImage);
-                   //CreateImageHintPanel(3);
                  end;
             end;
           4:
             begin
               // triple, layout 2
-              AlignMainImage(alLeft, PanelImage); // image_1 is always left aligned!!!
+              AlignMainImage(alLeft, PanelImage); // image_1 is always left aligned
               DestroyAll;
+
               Images.Width:= ImgSize[0];
               CreateSplitter(1, alLeft, PanelImage, Images);
               if ImageEnabled[0] and ImageEnabled[1] then
@@ -38077,9 +34205,6 @@ begin
                    ImageScr[3].Width:= ImgSize[1];
                    CreateSplitter(2, alRight, PanelImage, ImageScr[3]);
                    CreateImage(2, alClient, PanelImage);
-
-                   //CreateImageHintPanel(2);
-                   //CreateImageHintPanel(3);
                  end
               else
               if ImageEnabled[0] then
@@ -38099,9 +34224,9 @@ begin
                    AlignMainImage(alLeft, PanelImage);
                    Images.Width:= ImgSize[0];
                    CreateSplitter(1, alLeft, PanelImage, Images);
-                   CreateImage(3, alTop, PanelImage); // only difference!!!!!!
+                   CreateImage(3, alTop, PanelImage); // only difference from "tripple layout 4"
                    ImageScr[3].Height:= ImgSize[1];
-                   CreateSplitter(2, alTop, PanelImage, ImageScr[3]); // only difference!!!!!!
+                   CreateSplitter(2, alTop, PanelImage, ImageScr[3]); // only difference from "tripple layout 4"
                    CreateImage(2, alClient, PanelImage);
                  end
               else
@@ -38115,7 +34240,7 @@ begin
               else
               if ImageEnabled[1] then
                  begin
-                   CreateImage(3, alTop, PanelImage); // only difference!!!!!!
+                   CreateImage(3, alTop, PanelImage); // only difference from "tripple layout 4"
                    ImageScr[3].Height:= ImgSize[1];
                    CreateSplitter(1, alTop, PanelImage, ImageScr[3]);
                    AlignMainImage(alClient, PanelImage);
@@ -38126,14 +34251,15 @@ begin
               // triple, layout 4
               AlignMainImage(alNone, PanelImage);
               DestroyAll;
+
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
                    AlignMainImage(alLeft, PanelImage);
                    Images.Width:= ImgSize[0];
                    CreateSplitter(1, alLeft, PanelImage, Images);
-                   CreateImage(3, alBottom, PanelImage); // only difference!!!!!!
+                   CreateImage(3, alBottom, PanelImage); // only difference from "tripple layout 3"
                    ImageScr[3].Height:= ImgSize[1];
-                   CreateSplitter(2, alBottom, PanelImage, ImageScr[3]); // only difference!!!!!!
+                   CreateSplitter(2, alBottom, PanelImage, ImageScr[3]); // only difference from "tripple layout 3"
                    CreateImage(2, alClient, PanelImage);
                  end
               else
@@ -38147,7 +34273,7 @@ begin
               else
               if ImageEnabled[1] then
                  begin
-                   CreateImage(3, alBottom, PanelImage); // only difference!!!!!!
+                   CreateImage(3, alBottom, PanelImage); // only difference from "tripple layout 3"
                    ImageScr[3].Height:= ImgSize[1];
                    CreateSplitter(1, alBottom, PanelImage, ImageScr[3]);
                    AlignMainImage(alClient, PanelImage);
@@ -38195,10 +34321,6 @@ begin
 
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
-                   // need to change this... ??? not sure if still needed (Feb 03, 2014)
-                   // 1. make ImageScr[3].Align = alRight and set its width
-                   // 2. make Splitter(2) Aligh = alRight for ImageScr[3]
-                   // 3. make ImagePnl.Align = alClient
                    CreateImage(3, alRight, PanelImage);
                    ImageScr[3].Width:= ImgSize[1];
                    CreateSplitter(2, alRight, PanelImage, ImageScr[3]);
@@ -38239,9 +34361,7 @@ begin
      begin
        if not IsStartUp then
           InitZippedImagesCache;
-
-       // check if using "Game Docs Display Mode with Tabs" and avoid calling this function ????
-       ToggleImagesPanel(True); // added True parameter to avoid calling uMain.UpdateScreenshotsPanel function (January 30, 2018)
+       ToggleImagesPanel(True); // added TRUE parameter to avoid calling uMain.UpdateScreenshotsPanel function (January 30, 2018)
      end;
 end;
 
@@ -38297,8 +34417,7 @@ begin
      TMenuItem(Sender).Checked:= True;
   if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
      UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
-  MenuImageLayoutSettings.Tag:= 1; // need to set Tag=1 to allow
-  // saving layout settings next time layout changes
+  MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
   ButtonScreenshotLayouts.Tag:= TMenuItem(Sender).Tag;
   SetIcon(IL_ScreenshotLayouts_Small, nil, IL_ImagesToolBarButtons, ButtonScreenshotLayouts.Tag, 5);
 
@@ -38306,15 +34425,9 @@ begin
   ImagePreviewMouseLeave(Images);
   ImagePreviewMouseLeave(ImageScr[2]);
   ImagePreviewMouseLeave(ImageScr[3]);
-  //if not IsStartUp then // already done in "SetImageLayout" function call
-  //   begin
-  //     FreeImageZipVars;
-  //     InitImgZipLists(True); // clear zip images arrays
-  //     InitImgSoftwareNameZipLists(True);
-  //   end;
-  //UpdateImageHintPanelText(1);
+  
   SetImageCategoryButtonsVisible;
-  ResetImageTagTo1; // Images.Tag:= 1;
+  ResetImageTagTo1;
   SetImageLayout;
 
   if Assigned(FormLayoutDimensions) then
@@ -38335,9 +34448,9 @@ var
     if not Result then
        begin
          case ImageIndex of
-           1: FormLayoutDimensions.LabelImage1Dimensions.Caption:= 'Hidden';
-           2: FormLayoutDimensions.LabelImage2Dimensions.Caption:= 'Hidden';
-           3: FormLayoutDimensions.LabelImage3Dimensions.Caption:= 'Hidden';
+           1: FormLayoutDimensions.LabelImage1Dimensions.Caption:= 'Disabled';
+           2: FormLayoutDimensions.LabelImage2Dimensions.Caption:= 'Disabled';
+           3: FormLayoutDimensions.LabelImage3Dimensions.Caption:= 'Disabled';
          end;
          Exit;
        end;
@@ -38386,10 +34499,10 @@ begin
   TEasyGameInfo(Item).eThumbnail.Free;
   TEasyGameInfo(Item).eThumbnail:= nil;
   FreeAndNil(TEasyGameInfo(Item).fThumbnail);
-  
-  
-  //TEasyGameInfo(Item).eIcon.Free; // for future improvement ? can't make EL show icons correctly without using a TImageList component :_(( 
-  //TEasyGameInfo(Item).eIcon:= nil; // for future improvement ?
+
+  // for future improvement ? can't make EL show icons correctly without using a TImageList component
+  //TEasyGameInfo(Item).eIcon.Free;
+  //TEasyGameInfo(Item).eIcon:= nil;
 
   if TEasyGameInfo(Item).eROMInfo <> nil then
      begin
@@ -38425,8 +34538,7 @@ begin
           SelectedEasyItem:= Item;
        if GetGameDataListView(SelectedEasyItem) then
           begin
-            //if not IsStartup then
-               SetSelectedGame(False); // it cannot be ELV.MakeVisible(MIDDLE) because user might be scrolling UP/DOWN key; it must be AUTO or the scrolling will be BUGGED!!!
+            SetSelectedGame(False); // it cannot be ELV.MakeVisible(MIDDLE) because user might be scrolling UP/DOWN key; it must be AUTO or the scrolling will be BUGGED
           end;
      end;
 end;
@@ -38443,7 +34555,7 @@ begin
   end;
   Handled:= MenuIncrementalSearch.Tag = 1;
   CompareResult:= WideIncrementalSearch(EntryText, SearchBuffer);
-  //CompareResult := AnsiStrLIComp(PChar(SearchBuffer), PChar(EntryText), Length(SearchBuffer)); // from VirtualTreeView
+  //CompareResult := AnsiStrLIComp(PChar(SearchBuffer), PChar(EntryText), Length(SearchBuffer)); // from VirtualTreeView component
 end;
 
 procedure TFormMain.GamesListViewItemPaintText(Sender: TCustomEasyListview;
@@ -38466,21 +34578,6 @@ begin
             ACanvas.Font:= Font_TilesViewDetailsText;
             if ACanvas.Font.Size > CurrentFontSize then
                ACanvas.Font.Size:= CurrentFontSize;
-            {case PopupTilesViewGameIconsSize.Tag of
-              0: // insane 128x128
-                begin
-
-                end;
-              1: // extra large 68x68
-                begin
-
-                end;
-              2:
-                begin
-                  ACanvas.Font.Size:= ACanvas.Font.Size-1;
-                  ACanvas.Font.Style:= ACanvas.Font.Style+[fsItalic];
-                end;
-            end;}
           end;
      end;
   ELV_ItemPaintText_General(Sender, Item, ACanvas);
@@ -38504,7 +34601,7 @@ begin
            Exit;
 
         if ButtonViewMode.Tag = 5 then
-           Exit; // Added April 03, 2017... if is thumbnails view, do nothing (this only happens at startup)        
+           Exit; // if is thumbnails view, do nothing; this condition only applies at startup (April 03, 2017)         
 
         if (not TEasyGameInfo(Item).eIsCustomGame) and (not TEasyGameInfo(Item).eIconLoaded) then
            begin
@@ -38581,20 +34678,10 @@ end;
 procedure TFormMain.MenuImageLayoutSettingsClick(Sender: TObject);
 var
   RefreshSettings: Boolean;
-
-  // what is this function for ??? Is ImageHolder.Hint updated somewhere else ? October 02, 2017
-  //function UpdateImageHint(ScreenIndex: ShortInt; ImageHolder: TImage32): Boolean;
-  //begin
-  //  Result:= Assigned(ImageHolder);
-  //  if Result then
-  //     ImageHolder.Hint:= PopupMenuImageCategories.Items[ImageDetails[ScreenIndex].ImageCategoryIndex].Caption;
-  //end;
-
 begin
   if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
      UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
-  MenuImageLayoutSettings.Tag:= 1; // need to set Tag=1 to allow
-  // saving layout settings next time layout changes
+  MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
 
   ButtonImageCategory.HelpContext:= -1; // set to undefined single layout category
   FormImageLayoutSettings:= TFormImageLayoutSettings.Create(nil);
@@ -38631,7 +34718,7 @@ begin
   // Unpack the Request from the Structure
   Request:= TMyThreadRequest(Msg.Request);
   Item:= TEasyGameInfo(Request.Item);
-  // Is it a Thumbnail Request?
+  // is it a Thumbnail Request?
   case Request.ID of
     1: // thumbs
      begin
@@ -38666,7 +34753,7 @@ begin
            end;
          False:
            begin
-             // why these are here ???
+             // why these are here ? (March 03, 2018)
              Item.eThumbnailLoaded:= False;
              Item.eThumbnailIsZipped:= False;
              Item.eThumbnailFileName:= Request.FileName;
@@ -38746,7 +34833,6 @@ begin
           FormImageDeleteRename:= TFormImageDeleteRename.Create(nil);
        FormImageDeleteRename.Tag:= 0; // 0 -> delete image; 1 -> rename image
        FormImageDeleteRename.ImageFileName:= TEasyGameInfo(SelectedEasyItem).eThumbnailFileName;
-       //FormImageDeleteRename.LabelFilename.Hint:= TEasyGameInfo(SelectedEasyItem).eThumbnailFileName;
        FormImageDeleteRename.ImageCategoryIcon.Tag:= 1; // always "in-game snapshot" image category
        FormImageDeleteRename.ShowModal;
        if FormImageDeleteRename.mmResult = mrOk then
@@ -38791,10 +34877,8 @@ begin
   if CreatingGamesList then
      Exit;
   iSystem:= CallSelectArcadeSystem(1);
-  if iSystem = -1 then // user abort
+  if iSystem = -1 then // aborted by user
      Exit;
-  //FormMain.Hide;
-  //MenuCreateGamesList.Enabled:= False;
 
   CreatingGamesList:= True;
   if iSystem > MaxArcadeSystems then
@@ -38802,14 +34886,13 @@ begin
   else
      CallCreateArcadeGames(iSystem);
 
-  // restore fixed scan mode as user had selected "for this task only" option
+  // restore fixed scan mode as user selected "for this task only" option
   if PopupSelectScanGamesMode.HelpContext <> -1 then
      PopupSelectScanGamesMode.Tag:= PopupSelectScanGamesMode.HelpContext
   else
      SetScanModePopupHint(PopupSelectScanGamesMode.Tag);
   PopupSelectScanGamesMode.HelpContext:= -1; // set to null so next time sys selection screen loads the default scan mode
 
-  //FormMain.Show;
   if PopupScanGames.HelpContext <> -1 then
      begin
        // restore "Scan MAME Sets" setting since "For This Task Only" was checked
@@ -38817,8 +34900,7 @@ begin
        PopupScanGames.HelpContext:= -1;
      end;
   CreatingGamesList:= False;
-  //MenuCreateGamesList.Enabled:= True;
-  // this function CallCreateArcadeGames() is only used here in this main menu!!!!!!
+  // this function CallCreateArcadeGames() is only used here in this main menu
 end;
 
 procedure TFormMain.MenuArcadeEmulatorDefaultSettingsClick(Sender: TObject);
@@ -38944,42 +35026,10 @@ var
        PopupMenuViewMode.Items[ButtonViewMode.Tag+1].Click;
   end;
 
-  {function CheckNumPadKeys: Boolean;
-  begin
-    // for X-Arcade and HotRod SE only...
-    Result:= CharCode in [VK_NUMPAD8, VK_NUMPAD2, VK_NUMPAD4, VK_NUMPAD6];
-    if not Result then
-       Exit;
-    case CharCode of
-      VK_NUMPAD8: // Numpad Up key
-        begin
-          if Shift = [ssShift] then
-             KeyBd_Event(VK_PRIOR, 0, 0, KEYEVENTF_KEYUP) // Simutate a "Page Up" key pressing
-          else
-          if Shift = [ssCtrl] then
-             KeyBd_Event(VK_HOME, 0, 0, KEYEVENTF_KEYUP) // Simutate a "Home Key" key pressing
-          else
-             KeyBd_Event(VK_UP, 0, 0, KEYEVENTF_KEYUP); // Simutate a "Numpad Up (8)" key pressing
-        end;
-      VK_NUMPAD2: // Numpad Down key
-        begin
-          if Shift = [ssShift] then
-             KeyBd_Event(VK_NEXT, 0, 0, KEYEVENTF_KEYUP) // Simutate a "Page Down" key pressing
-          else
-          if Shift = [ssCtrl] then
-             KeyBd_Event(VK_END, 0, 0, KEYEVENTF_KEYUP) // Simutate a "End Key" key pressing
-          else
-             KeyBd_Event(VK_DOWN, 0, 0, KEYEVENTF_KEYUP); // Simutate a "Numpad Down (2)" key pressing
-        end;
-      VK_NUMPAD4: KeyBd_Event(VK_LEFT, 0, 0, KEYEVENTF_KEYUP); // Simutate a "Numpad Left (4)" key pressing
-      VK_NUMPAD6: KeyBd_Event(VK_RIGHT, 0, 0, KEYEVENTF_KEYUP); // Simutate a "Numpad Right (6)" key pressing
-    end;
-  end;}
-
   function CheckGeneralArcadeKeys: Boolean;
   begin
     Result:= True;
-    if CharCode = Ord('1') then // Player 1 Start button starts game with default options
+    if CharCode = Ord('1') then // "Player 1 Start" button starts game with default options
        begin
          case MemGameInfo.eIsCustomGame of
            True : ExecuteGameCustom;
@@ -38993,14 +35043,14 @@ var
             begin
               case IsSingleImageLayout of
                 True : CycleImageCategory(False); // single image layout
-                False: CycleImageLayout(False); // multiple images layouts
+                False: CycleImageLayout(False);   // multiple images layouts
               end;
             end
          else
             begin
               case IsSingleImageLayout of
                 True : CycleImageCategory(MenuArcadeControlSlikStik_SwapStick.Checked); // single image layout
-                False: CycleImageLayout(MenuArcadeControlSlikStik_SwapStick.Checked); // multiple images layouts
+                False: CycleImageLayout(MenuArcadeControlSlikStik_SwapStick.Checked);   // multiple images layouts
               end;
             end;
        end
@@ -39011,14 +35061,14 @@ var
             begin
               case IsSingleImageLayout of
                 True : CycleImageCategory(True); // single image layout
-                False: CycleImageLayout(True); // multiple images layouts
+                False: CycleImageLayout(True);   // multiple images layouts
               end;
             end
          else
             begin
               case IsSingleImageLayout of
                 True : CycleImageCategory(not MenuArcadeControlSlikStik_SwapStick.Checked); // single image layout
-                False: CycleImageLayout(not MenuArcadeControlSlikStik_SwapStick.Checked); // multiple images layouts
+                False: CycleImageLayout(not MenuArcadeControlSlikStik_SwapStick.Checked);   // multiple images layouts
               end;
             end;
        end
@@ -39033,13 +35083,14 @@ var
        MenuViewFullScreen.Click
     else
     if CharCode = Ord('W') then
-       PopupEnableMAMu_Icons.Click // Simulate use MAMu_ icons pressing
+       PopupEnableMAMu_Icons.Click // toggle MAMu_ icons (enabled/disabled)
     else
     if CharCode = Ord('A') then
-       PopupAutomaticGameInformation.Click // Simulate auto game info pressing (hotkey F3)
+       PopupAutomaticGameInformation.Click // toggle Auto Game Info (hotkey F3)
     else
     if CharCode = VK_SPACE then
        begin
+         // no longer used (March 03, 2018)
          //ButtonLeftPanelFilters.Down:= not ButtonLeftPanelFilters.Down;
          //ButtonLeftPanelFilters.Click; // Toggle Left Panel ON/OFF
        end
@@ -39048,7 +35099,7 @@ var
     //   ButtonImageViewMode.Click // Toggle between images categories and images layouts
     //else
     if CharCode = Ord('W') then
-       PopupEnableMAMu_Icons.Click // Toggle MAMu_ icons (enabled/disabled)
+       PopupEnableMAMu_Icons.Click // toggle MAMu_ icons (enabled/disabled)
     else
     if (CharCode = VK_UP) and (Shift = [ssShift]) then
        KeyBd_Event(VK_PRIOR, 0, 0, KEYEVENTF_KEYUP) // Simutate a "Page Up" key pressing
@@ -39087,7 +35138,7 @@ begin
            begin          
              case IsSingleImageLayout of
                True : CycleImageCategory(False); // single image layout
-               False: CycleImageLayout(False); // multiple images layouts
+               False: CycleImageLayout(False);   // multiple images layouts
              end;
            end
         else
@@ -39095,7 +35146,7 @@ begin
            begin
              case IsSingleImageLayout of
                True : CycleImageCategory(True); // single image layout
-               False: CycleImageLayout(True);// multiple images layouts
+               False: CycleImageLayout(True);   // multiple images layouts
              end;
            end
         else
@@ -39123,11 +35174,6 @@ begin
       end;
     2, 4: // HotRod SE and X-Arcade
       begin
-        {if CheckNumPadKeys then
-           begin
-             // do nothing as NumPad key press was detected
-           end
-        else}
         if (CharCode in [VK_NUMPAD8, VK_NUMPAD2, VK_NUMPAD4, VK_NUMPAD6]) then
            begin
              case CharCode of
@@ -39156,34 +35202,27 @@ begin
              end;
            end
         else
-        //if (CharCode = Ord('5')) and (MenuArcadeBrowseGames.Tag = 4) then
         if ((CharCode = Ord('5')) and (MenuArcadeBrowseGames.Tag = 4)) or // for X-Arcade
            ((CharCode = Ord('2')) and (MenuArcadeBrowseGames.Tag = 2)) // for HotRod SE
          then
            begin
              SelectParentSet;
-             //if PopupSelectSet.Count > 0 then
-             //begin
-             //  if PopupSelectSet.Items[0].ImageIndex = 1000 then // select parent game menu item has ImageIndex:= 1000;
-             //     PopupSelectSet.Items[0].Click;
-             //end;
            end
         else
         if CharCode = Ord('3') then
            ToggleGamesViewMode // cycle between games view modes
         else
         if CharCode = Ord('4') then
-           PopupEnableFavorites.Click // Togle favorites / normal filter
+           PopupEnableFavorites.Click // togle favorites / normal filter
         else
         if CharCode = Ord('C') then
            PopupSelectaRandomGame.Click // Simulate a "Random Game" click
-           //SelectRandomGame(GamesListView, SelectedEasyItem) // Simulate a "Random Game" click
         else
         if CharCode = Ord('E') then
-           MenuShowImages.Click // Toggle images ON/OFF
+           MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('{') then
-           ButtonGameFilterMain.Click // Select games filter
+           ButtonGameFilterMain.Click // select games filter
         else
         if CharCode = VK_SPACE then
            ButtonPlayVideoPreview.Click // play video preview
@@ -39197,7 +35236,7 @@ begin
            ToggleGamesViewMode // cycle between games view modes
         else
         if CharCode = Ord('5') then
-           PopupEnableFavorites.Click //ButtonGameFilterFavorites.Click // Togle favorites / normal filter
+           PopupEnableFavorites.Click // togle favorites / normal filter
         else
         if CharCode = Ord('7') then
            KeyBd_Event(VK_HOME, 0, 0, KEYEVENTF_KEYUP) // Simutate a "Home Key" key pressing
@@ -39207,23 +35246,17 @@ begin
         else
         if CharCode = Ord('H') then
            PopupSelectaRandomGame.Click // Simulate a "Random Game" click
-           //SelectRandomGame(GamesListView, SelectedEasyItem) // Simulate a "Random Game" click
         else
         if CharCode = Ord('2') then
            begin
              SelectParentSet;
-             //if PopupSelectSet.Count > 0 then
-             //begin
-             //  if PopupSelectSet.Items[0].ImageIndex = 1000 then // select parent game menu item has ImageIndex:= 1000;
-             //     PopupSelectSet.Items[0].Click;
-             //end;
            end
         else
         if CharCode = Ord('I') then
-           MenuShowImages.Click // Toggle images ON/OFF
+           MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('K') then
-           ButtonGameFilterMain.Click // Select games filter
+           ButtonGameFilterMain.Click // select games filter
         else
         if CharCode = Ord('9') then
            ButtonPlayVideoPreview.Click // play video preview
@@ -39237,26 +35270,20 @@ begin
            ToggleGamesViewMode // cycle between games view modes
         else
         if CharCode = Ord('L') then
-           PopupEnableFavorites.Click // Togle favorites / normal filter
+           PopupEnableFavorites.Click // togle favorites / normal filter
         else
         if CharCode = Ord('K') then
            PopupSelectaRandomGame.Click // Simulate a "Random Game" click
-           //SelectRandomGame(GamesListView, SelectedEasyItem) // Simulate a "Random Game" click
         else
         if CharCode = Ord('I') then
-           MenuShowImages.Click // Toggle images ON/OFF
+           MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('5') then
-           ButtonGameFilterMain.Click // Select games filter
+           ButtonGameFilterMain.Click // select games filter
         else
         if CharCode = Ord('2') then
            begin
              SelectParentSet;
-             //if PopupSelectSet.Count > 0 then
-             //begin
-             //  if PopupSelectSet.Items[0].ImageIndex = 1000 then // select parent game menu item has ImageIndex:= 1000;
-             //     PopupSelectSet.Items[0].Click;
-             //end;
            end
         else
         if CharCode = VK_SPACE then
@@ -39337,14 +35364,6 @@ var
           //AddDefaultIcons('scanresult_missroms.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);
           //AddDefaultIcons('scanresult_badcrc.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);
        end;
-    //else
-    //if Assigned(FormDeleteGamesFiles) then
-    //   begin
-    //     tempFolder:= GetFolderFull(32);
-    //     for Loop:=Low(aMediaType)+1 to High(aMediaType) do
-    //         AddDefaultIcons(aMediaType[Loop, 1]+'.ico', tempFolder, FormDeleteGamesFiles.IL_DeleteGameIcons);
-    //     AddDefaultIcons('settings.ico', tempFolder, FormDeleteGamesFiles.IL_DeleteGameIcons);
-    //   end;
   end;
 
   function CheckDelSettings(ReadMode: Boolean): Boolean;
@@ -39429,7 +35448,7 @@ begin
   CheckDelCHD:= (TMenuItem(Sender).Tag > 0); // default value; delete = false; copy/move = true
   CheckDelCFG:= True; // default value
   CheckDelGameFromGamesList:= True; // default value; this is for console/computer systems only
-  CheckDelGameFileFromDisk:= True; // default value; this is for console/computer systems only
+  CheckDelGameFileFromDisk:= True;  // default value; this is for console/computer systems only
   sValue:= '';
   bValue:= False;
   AddSysFolder:= True;
@@ -39447,12 +35466,6 @@ begin
        if not Assigned(FormDeleteMultipleGamesFiles) then
           FormDeleteMultipleGamesFiles:= TFormDeleteMultipleGamesFiles.Create(nil);
        CheckDelSettings(True);
-       //if Screen.Height < 1024 then
-       //   begin
-       //     //FormDeleteMultipleGamesFiles.GamesList.ImagesSmall:= FormMain.IL_StandardIconsStandard; // no longer used
-       //     //FormDeleteMultipleGamesFiles.GamesList.CellSizes.Report.Height:= 28; // no longer used
-       //     //FormDeleteMultipleGamesFiles.GamesList.PaintInfoItem.CaptionLines:= 1; // no longer used; this is the default value!!!
-       //   end;
 
        LoadIcons;
 
@@ -39499,8 +35512,8 @@ begin
 
   if not ValidateSelectedGame then
      Exit;
-  // now for single selected game
 
+  // now for single selected game
   Continue:= True;
   case MemGameInfo.eIsCustomGame of
     True:
@@ -39515,7 +35528,7 @@ begin
              AddMsgText(#13#10+'    There is nothing to do as the game folder is not selected.'+#13#10);
              GenerateMessage(TMenuItem(Sender).Caption, MemGameInfo.eTitle, '', 2, False, -1);
              FocusGamesList;
-             Exit; // games with no folders selected cannot be deleted/copied/moved!!!
+             Exit; // games with no folders selected cannot be deleted/copied/moved
            end;
       end;
     False: ROMsContinue:= (Assigned(emuROMsFolders[MemGameInfo.eSystemID])) and
@@ -39524,7 +35537,7 @@ begin
 
   if not MemGameInfo.eIsCustomGame then
   begin
-    // for MAME arcade systems only!!! October 02, 2017 
+    // for MAME and arcade systems only (October 02, 2017) 
     if TMenuItem(Sender).Tag > 0 then
        begin
          if not ROMsContinue then
@@ -39535,14 +35548,14 @@ begin
               AddMsgText(#13#10+'    There is nothing to do as this game uses no ROMs or CHDs files.');
               GenerateMessage(TMenuItem(Sender).Caption, MemGameInfo.eTitle, '', 2, False, -1);
               FocusGamesList;
-              Exit; // games with no ROMs cannot be deleted/copied/moved!!!
+              Exit; // games with no ROMs cannot be deleted/copied/moved
             end;
        end;
 
     if MemGameInfo.eSystemID = idDaphne then
        begin
          // special case. ROMs folder cannot be customized and there is no need
-         // to load the DeleteGameFiles form if gamename.zip is not found!!!
+         // to load the DeleteGameFiles form if gamename.zip is not found
           if ROMsContinue then
              begin
                dCFG:= IncludeTrailingPathDelimiter(emuROMsFolders[idDaphne].Strings[0])+MemGameInfo.eName+'.zip';
@@ -39615,7 +35628,7 @@ begin
                         #13#10+'Please make sure the emulator is properly configured before using this feature.');
              GenerateMessage(TMenuItem(Sender).Caption, MemGameInfo.eTitle, '', 2, False, -1);
              FocusGamesList;
-             Exit; // no ROMs, CHDs or config folders are set... cannot continue
+             Exit; // no ROMs, CHDs or config folders are set; cannot continue
            end;
       end;
     end; // end of arcade only handling (console/computer EmuCon systems only have game filenames)
@@ -39623,20 +35636,16 @@ begin
   if not Assigned(FormDeleteGamesFiles) then
      FormDeleteGamesFiles:= TFormDeleteGamesFiles.Create(nil);
   CheckDelSettings(True);
-  //LoadIcons; // not used anymore... July 26, 2015
-  FormDeleteGamesFiles.DeleteROMs.Tag:= 0;//MaxGameID+MaxArcadeSystems+1;
-  FormDeleteGamesFiles.DeleteCHDs.Tag:= 1;//MaxGameID+MaxArcadeSystems+2;
-  FormDeleteGamesFiles.DeleteCFGsNVRAMs.Tag:= 2;//MaxGameID+MaxArcadeSystems+3;
+
+  FormDeleteGamesFiles.DeleteROMs.Tag:= 0; //MaxGameID+MaxArcadeSystems+1;
+  FormDeleteGamesFiles.DeleteCHDs.Tag:= 1; //MaxGameID+MaxArcadeSystems+2;
+  FormDeleteGamesFiles.DeleteCFGsNVRAMs.Tag:= 2; //MaxGameID+MaxArcadeSystems+3;
   FormDeleteGamesFiles.DeleteROMs.Checked:= CheckDelROM;
   FormDeleteGamesFiles.DeleteCHDs.Checked:= CheckDelCHD;
   FormDeleteGamesFiles.DeleteCFGsNVRAMs.Checked:= CheckDelCFG;
 
   FormDeleteGamesFiles.DeleteGameFromGamesList.Checked:= CheckDelGameFromGamesList;
   FormDeleteGamesFiles.DeleteGameFileFromDisk.Checked:= CheckDelGameFileFromDisk;
-
-  // already set in FormDeleteGamesFiles form
-  //FormDeleteGamesFiles.DeleteGameFromGamesList.Enabled:= TMenuItem(Sender).Tag = 0; // delete game option only
-  //FormDeleteGamesFiles.DeleteGameFileFromDisk.Enabled:= TMenuItem(Sender).Tag = 0; // delete game option only
 
   FormDeleteGamesFiles.FolderCFG:= dCFG;
   FormDeleteGamesFiles.FolderNVRAM:= dNVRAM;
@@ -39674,11 +35683,11 @@ begin
                 begin
                   FillTempGameInfo(GamesListView.Selection.First);
                   DeleteSingleGameFromGamesListConsoleComputer(False);
-                  //ClearMemGameInfo(TempGameVars); // no need; this is called in the function above
+                  //ClearMemGameInfo(TempGameVars); // no need, this is called in the function above
                 end;
            end
         else
-           PopupScanAllSelectedGames.Click; // MAME/arcade only; single scan as only one game is selected!!!!
+           PopupScanAllSelectedGames.Click; // MAME/arcade only, single scan since only one game is selected
       end;
     False: FreeAndNil(FormDeleteGamesFiles);
   end;
@@ -39687,14 +35696,13 @@ end;
 
 function TFormMain.DeleteSingleGameFromGamesListConsoleComputer(ShowDeleteMessage: Boolean): Boolean;
 var
-  Item: TEasyItem;
   SelectionIndex: Integer;
   ValidGames: Boolean;
   gList: array[1..MaxConsoleComputerSystems] of THashedStringList;
   sysFile, SingleGameEntryStr, EntryStr: String;
 
 begin
-  // for single selected game only and for the "Delete Selected Game" single selection dialog!
+  // for single selected game only and for the "Delete Selected Game" single selection dialog
   sysFile:= GetGamesFolderEL(2)+SystemsListCustom[TempGameVars.eCustomSystemID, 2];
   if (not FileExists(sysFile)) and ShowDeleteMessage then
      begin
@@ -39727,7 +35735,6 @@ begin
        begin
          ValidGames:= True;
          gList[TempGameVars.eCustomSystemID].Delete(SelectionIndex);
-         //Sleep(2000);
          Break;
        end;
   end;
@@ -39738,7 +35745,7 @@ begin
 
   if ValidGames and CheckSingleSelected(GamesListView) then
      begin
-       // try to delete the
+       // try to remove the EmuCon game from main games list (cannot hide it)
        GamesListView.BeginUpdate;
        GamesListView.Items.ReIndexDisable:= True;
        GamesListView.Selection.DeleteSelected(True);
@@ -39769,8 +35776,6 @@ var
   Item: TEasyItem;
   SelectionIndex: Integer;
   ValidGames: Boolean;
-  //gList: array[1..MaxConsoleComputerSystems] of THashedStringList;
-  //sysFile, SingleGameEntryStr, EntryStr: String;
 
   function LoadIcons: Boolean;
   var
@@ -39808,7 +35813,6 @@ var
   end;
        
 begin
-  //DeleteConsCompGameFromGamesList();
   Item:= GamesListView.Selection.First;
   SelectionIndex:= 1;
   ValidGames:= False;
@@ -39841,12 +35845,6 @@ begin
 
        LoadIcons;
 
-       //FormDeleteMultipleGamesFiles.FileTypesGroupBox.Visible:= False;
-
-       //FormDeleteMultipleGamesFiles.DeleteGameFromGamesList.Visible:= False;
-       //FormDeleteMultipleGamesFiles.DeleteGameFileFromDisk.Visible:= False;
-       //FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Visible:= False;
-
        FormDeleteMultipleGamesFiles.ActionMode:= TMenuItem(Sender).Tag;
        FormDeleteMultipleGamesFiles.Hint:= TMenuItem(Sender).Caption;
        FormDeleteMultipleGamesFiles.Caption:= TMenuItem(Sender).Caption;
@@ -39858,10 +35856,10 @@ begin
        Exit;
      end;
 
-  // now for single selected game
   if not ValidateSelectedGame then
      Exit;
 
+  // now for single selected game
   FillTempGameInfo(Item);
   CallMessageBox;
   FormMain.AddMsgText('    You are about to ');
@@ -39881,70 +35879,6 @@ begin
      end;
 
   DeleteSingleGameFromGamesListConsoleComputer(True);
-
-  {sysFile:= GetGamesFolderEL(2)+SystemsListCustom[TempGameVars.eCustomSystemID, 2];
-  if not FileExists(sysFile) then
-     begin
-       CallMessageBox;
-       FormMain.AddMsgText('The file ');
-       FormMain.AddMsgText(sysFile, $00a65300, [fsBold]);
-       FormMain.AddMsgText(' was not found. Cannot delete game from games list.');
-       GenerateMessage('Error', TMenuItem(Sender).Caption, '', 2, False, 1);
-       ClearMemGameInfo(TempGameVars);
-       Exit;
-     end;
-
-  SingleGameEntryStr:= Format('%.3u', [TempGameVars.eCustomSystemID])+
-                       IntToStr(TempGameVars.eCustomMediaType)+
-                       IntToStr(Ord(TempGameVars.eIsUnicode));
-  if TempGameVars.eIsUnicode then
-     SingleGameEntryStr:= SingleGameEntryStr+MountGameInfoFieldStr('file', UTF8Encode(TempGameVars.eName))
-  else
-     SingleGameEntryStr:= SingleGameEntryStr+MountGameInfoFieldStr('file', TempGameVars.eName);
-
-  gList[TempGameVars.eCustomSystemID]:= THashedStringList.Create;
-  gList[TempGameVars.eCustomSystemID].LoadFromFile(sysFile);
-  gList[TempGameVars.eCustomSystemID].BeginUpdate;
-
-  ValidGames:= False;
-  for SelectionIndex:=0 to gList[TempGameVars.eCustomSystemID].Count-1 do
-  begin
-    EntryStr:= gList[TempGameVars.eCustomSystemID].Strings[SelectionIndex];
-    if PosEx(SingleGameEntryStr, EntryStr) <> 0 then
-       begin
-         ValidGames:= True;
-         gList[TempGameVars.eCustomSystemID].Delete(SelectionIndex);
-         //Sleep(2000);
-         Break;
-       end;
-  end;
-  gList[TempGameVars.eCustomSystemID].EndUpdate;
-  if ValidGames then
-     gList[TempGameVars.eCustomSystemID].SaveToFile(sysFile);
-  FreeAndNil(gList[TempGameVars.eCustomSystemID]);
-
-  if ValidGames then
-     begin
-       // try to delete the
-       GamesListView.BeginUpdate;
-       GamesListView.Items.ReIndexDisable:= True;
-       GamesListView.Selection.DeleteSelected(True);
-       GamesListView.Items.ReIndexDisable:= False;
-       GamesListView.EndUpdate;
-       FocusGamesList;
-     end;
-
-  CallMessageBox;
-  FormMain.AddMsgText('    Game deleted...');
-  FormMain.AddMsgText(#13#10+#13#10+'System: ');
-  FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], $00a65300, [fsBold]);
-  FormMain.AddMsgText(#13#10+'Title: ');
-  FormMain.AddMsgText(TempGameVars.eTitle, clBlack, [fsBold]);
-  FormMain.AddMsgText(#13#10+'Media Type: ');
-  FormMain.AddMsgText(MediaTypeCustom[TempGameVars.eCustomMediaType, 0], clBlack, [fsBold]);
-
-  GenerateMessage('Info', TMenuItem(Sender).Caption, '');
-  ClearMemGameInfo(TempGameVars);}
 end;
 
 procedure TFormMain.GamesListViewDblClick(Sender: TCustomEasyListview;
@@ -39952,30 +35886,14 @@ procedure TFormMain.GamesListViewDblClick(Sender: TCustomEasyListview;
   var Handled: Boolean);
 begin
   if ssShift in ShiftState then
-           begin
-             if PopupRunGameWithAlterMAME.Visible then
-                PopupRunGameWithAlterMAME.Click
-             else
-                PopupPlayGameStandard.Click;
-           end
-        else
-           PopupPlayGameStandard.Click;
-
-  {case MemGameInfo.eIsCustomGame of
-    True : PopupPlayGameStandard.Click; //ExecuteGameCustom;
-    False:
-      begin
-        if ssShift in ShiftState then
-           begin
-             if PopupRunGameWithAlterMAME.Visible then
-                PopupRunGameWithAlterMAME.Click
-             else
-                PopupPlayGameStandard.Click;
-           end
-        else
-           PopupPlayGameStandard.Click;
-      end;
-  end;}
+     begin
+       if PopupRunGameWithAlterMAME.Visible then
+          PopupRunGameWithAlterMAME.Click
+       else
+          PopupPlayGameStandard.Click;
+     end
+  else
+     PopupPlayGameStandard.Click;
 end;
 
 procedure TFormMain.MenuArcadeControllersLayoutClick(Sender: TObject);
@@ -39990,7 +35908,6 @@ procedure TFormMain.ButtonFilterCPUApplyClick(Sender: TObject);
 var
   Item, FirstItem: TEasyItem;
   Group: TEasyGroup;
-  KeepGame: Boolean;
   SearchStrCPU: String;
 
   function ValidateGameCPU: Boolean;
@@ -39999,7 +35916,7 @@ var
     if IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) then
        begin
          if SearchStrCPU <> '' then
-            Result:= PosEx(SearchStrCPU, LowerCase(TEasyGameInfo(Item).eChipCPU)) <> 0 //KeepGame:= CompareText(TEasyGameInfo(Item).eChipCPU, FilterCPU.Text) = 0
+            Result:= PosEx(SearchStrCPU, LowerCase(TEasyGameInfo(Item).eChipCPU)) <> 0
          else
             begin
               if FilterCPUList.ItemIndex > 0 then
@@ -40031,10 +35948,10 @@ begin
        case IsGroupedView of
          True:
            begin
-             // need to set all groups visible first!!!!!!
+             // set all visible first
              ShowFilterMsgBox('Games Filters', 'Applying CPU filters, please wait...');
              GamesListView.Groups.MakeAllVisible;
-             GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+             GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
              Application.ProcessMessages;
              Group:= GamesListView.Groups.LastGroup;
              repeat
@@ -40049,31 +35966,29 @@ begin
                     end;
                  Item:= GamesListView.Groups.NextInGroup(Group, Item);
                until Item = nil;
-               //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here!!!!!!!!
+               //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here (do not delete this)
                Group:= GamesListView.Groups.PrevGroup(Group);
              until Group = nil;
-             GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
-             HideGroupsFilter(GamesListView); // need to hide groups with no visible items for last!!!!
+             GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
+             HideGroupsFilter(GamesListView); // hide groups with no visible items for last
              HideFilterMsgBox;
            end;
          False:
            begin
-             // need to set all groups visible first!!!!!!
-             GamesListView.Groups.MakeAllVisible;
-             GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+             GamesListView.Groups.MakeAllVisible; // set all visible first
+             GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
              Item:= GamesListView.Groups.FirstItem;
              repeat
                Item.Visible:= ValidateGameCPU;
                Item:= GamesListView.Groups.NextItem(Item);
              until Item = nil;
-             //GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
            end;
        end;
        GamesListView.EndUpdate;
 
        ClearMemGameInfo(MemGameInfo);
        case CheckTotalVisible(GamesListView) of
-         True : ReselectItem(True); // SetSelectedGame is called in this function!!!
+         True : ReselectItem(True); // "SetSelectedGame" is called in this function
          False: ClearScreenshots;
        end;
        UpdateStatusBarGame;
@@ -40269,7 +36184,7 @@ begin
   
   sbPos:= GetHorizontalBarPos;
 
-  LoadMultiSlotArray(idMAME);   // load NeoGeo MVS and ST-V multi-slow compatible games list
+  LoadMultiSlotArray(idMAME);   // load NeoGeo MVS and ST-V multi-slow compatible games list (for arcade only)
   LoadMultiSlotArray(idHBMAME);
   GlobalThreadManager.FlushMessageCache(GamesListView, TID_START);
 
@@ -40282,9 +36197,8 @@ begin
 
   if IsGroupedView then
   begin
-    // need to set all groups visible first
-    GamesListView.Groups.MakeAllVisible;
-    GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+    GamesListView.Groups.MakeAllVisible; // set all visible first
+    GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
     elvGroup:= GamesListView.Groups.LastGroup;
     repeat
       SelectedEasyItem:= GamesListView.Groups.FirstInGroup(elvGroup);
@@ -40301,17 +36215,16 @@ begin
            end;
         SelectedEasyItem:= GamesListView.Groups.NextInGroup(elvGroup, SelectedEasyItem);
       until SelectedEasyItem = nil;
-      //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here; do not remove this line!
+      //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here (do not remove this)
       elvGroup:= GamesListView.Groups.PrevGroup(elvGroup);
     until elvGroup = nil;
-    GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
-    HideGroupsFilter(GamesListView); // need to hide groups with no visible items for last
+    GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
+    HideGroupsFilter(GamesListView); // hide groups with no visible items for last
   end
   else
   begin
-    // need to set all groups visible first
-    GamesListView.Groups.MakeAllVisible;
-    GamesListView.Groups.Rebuild(True); // need to rebuild or list gets messed up
+    GamesListView.Groups.MakeAllVisible; // set all visible first
+    GamesListView.Groups.Rebuild(True); // rebuild groups or list gets messed up
     SelectedEasyItem:= GamesListView.Groups.FirstItem;
     repeat
       ClearMemGameInfo(MemGameInfo);
@@ -40320,8 +36233,8 @@ begin
       SelectedEasyItem.Visible:= KeepGame;
       SelectedEasyItem:= GamesListView.Groups.NextItem(SelectedEasyItem);
     until SelectedEasyItem = nil;
-    GamesListView.Groups.Rebuild(True); // need to rebuild to list gets messed up
-    HideGroupsFilter(GamesListView); // need to hide groups with no visible items for last
+    GamesListView.Groups.Rebuild(True); // rebuild groups to list gets messed up
+    HideGroupsFilter(GamesListView); // hide groups with no visible items for last
   end;
 
   GamesListView.EndUpdate(False);
@@ -40349,7 +36262,7 @@ begin
   UpdateTotalEntriesLabel;
   RestoreHorizontalBarPos(sbPos);
   FocusGamesList;
-  //ShowMessage('time: '+IntToStr(GetTickCount-cStart));
+  //ShowMessage('time: '+IntToStr(GetTickCount-cStart)); // for debugging only
 end;
 
 procedure TFormMain.FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
@@ -40497,13 +36410,6 @@ var
   end;
 
 begin
-  //if SortAuditGames then
-  //   begin
-  //     // this will sort the list as they were added to the list (parent followed by its clones)
-  //     DoDefault:= False;
-  //     Result:= CompareIntValue(TEasyGameInfo(Item1).eSortIndex, TEasyGameInfo(Item2).eSortIndex);
-  //   end
-  //else
   if IsDetailsView then
      begin
        DoDefault:= False;
@@ -40684,7 +36590,7 @@ begin
 
 
   AddMsgText('catver.ini', $00a65300, [fsBold, fsItalic]);
-  AddMsgText(' can be used as an alternative to all the .ini files above (no HBMAME support though)'+#13#10+'     ');
+  AddMsgText(' can be used as an alternative to all the .ini files above (no HBMAME support)'+#13#10+'     ');
   AddMsgText('languages.ini', $00a65300, [fsBold, fsItalic]);
   AddMsgText(' required for language'+#13#10+'     ');
   AddMsgText('nplayers.ini', $00a65300, [fsBold, fsItalic]);
@@ -40740,7 +36646,7 @@ begin
      Exit;
   CheckControl:= Assigned(ControlType);
 
-  tempFile:= 'D:\emulators\mame\binary\listxml0176.xml';// GetGamesFolderEL+'mame_listxml.xml';
+  tempFile:= 'D:\emulators\mame\binary\listxml0176.xml';
   if not ValidateFile(tempFile) then
      Exit;
   FormStatus.TitleStr('Search New CHD Media And Control Types');
@@ -40844,7 +36750,7 @@ begin
   if Item.Selected then
      begin
         if IsLargeIconView then
-           Item.Invalidate(False); // fix so the icon of the selected game is updated on startup and when changing to large icons view mode
+           Item.Invalidate(False); // fix so the icon of selected game is updated on startup and when changing to large icons view mode
      end;
 end;
 
@@ -40923,7 +36829,7 @@ begin
         if ToolBarPanel.Parent <> PanelList then
            ToolBarPanel.Parent:= PanelList;
 
-        ToolBarFilterByMainCPU.Top:= ToolBarPanel.Top+ToolBarPanel.Height+1; // fix: move this tool bar below main tool bar buttons        
+        ToolBarFilterByMainCPU.Top:= ToolBarPanel.Top+ToolBarPanel.Height+1; // fix: move this tool bar below main tool bar buttons (February 09, 2018)
       end;
     False:
       begin
@@ -41144,7 +37050,7 @@ begin
   begin
     NewRect:= Sender.ClientRect;
     //if not IsMainBar then
-    //   NewRect.Top:= NewRect.Top-GetSystemMetrics(SM_CYMENU); // mostly for main images tool bar if main tool bar is NOT bound to games list panel (seamless images tool bar Win theme paiting)
+    //   NewRect.Top:= NewRect.Top-GetSystemMetrics(SM_CYMENU); // mostly for main images tool bar if main tool bar is NOT bound to games list panel (for seamless images tool bar Win theme paiting)
     ElementDetails:= ThemeServices.GetElementDetails(trRebarRoot);
     ThemeServices.DrawElement(Sender.Canvas.Handle, ElementDetails, NewRect);
   end;
@@ -41159,7 +37065,7 @@ begin
   begin
     NewRect:= RectToPaint;
     //if not IsMainBar then
-    //   NewRect.Top:= NewRect.Top-GetSystemMetrics(SM_CYMENU); // mostly for main images tool bar if main tool bar is NOT bound to games list panel (seamless images tool bar Win theme paiting)
+    //   NewRect.Top:= NewRect.Top-GetSystemMetrics(SM_CYMENU); // mostly for main images tool bar if main tool bar is NOT bound to games list panel (for seamless images tool bar Win theme paiting)
 
     ElementDetails:= ThemeServices.GetElementDetails(trRebarRoot);
     ThemeServices.DrawElement(CanvasToPaint.Handle, ElementDetails, NewRect);
@@ -41169,11 +37075,7 @@ end;
 procedure TFormMain.ImagesToolbarButtonsCustomDraw(Sender: TToolBar;
   const ARect: TRect; var DefaultDraw: Boolean);
 begin
-  //WinGradient(Sender.Canvas, ARect, clBlue, clGreen);
-  //Sender.Canvas.UnLock;
   PaintToolBarTheme(Sender, MenuBoundToGamesPanel.Checked);
-  //Sender.Canvas.Brush.Color:= clBlue;
-  //Sender.Canvas.Rectangle(ARect);
 end;
 
 procedure TFormMain.WebBrowserBeforeNavigate2(Sender: TObject;
@@ -41194,28 +37096,13 @@ procedure TFormMain.PopupSelectScanGamesModeClick(Sender: TObject);
 begin
   if not Assigned(FormArcadeScanGamesMode) then
      FormArcadeScanGamesMode:= TFormArcadeScanGamesMode.Create(nil);
-  case PopupSelectScanGamesMode.Tag of
-    1: FormArcadeScanGamesMode.QuickScan.Checked:= True;
-    2: FormArcadeScanGamesMode.ForceAllAvailable.Checked:= True;
-  end;
-
-  FormArcadeScanGamesMode.CreateSoftwareListGames.Checked:= Boolean(MenuCreateMAMESoftwareListGames.Tag);
-  FormArcadeScanGamesMode.AddMAMEDeviceSetWithNoROMs.Checked:= Boolean(MenuAddMAMEDeviceSetsWithNoROMs.Tag);
 
   FormArcadeScanGamesMode.ShowModal;
-  if FormArcadeScanGamesMode.FullScan.Checked then
-     PopupSelectScanGamesMode.Tag:= 0
-  else
-  if FormArcadeScanGamesMode.QuickScan.Checked then
-     PopupSelectScanGamesMode.Tag:= 1
-  else
-  if FormArcadeScanGamesMode.ForceAllAvailable.Checked then
-     PopupSelectScanGamesMode.Tag:= 2;
+  PopupSelectScanGamesMode.Tag:= FormArcadeScanGamesMode.ScanModeBox.Tag;
+  MenuCreateMAMESoftwareListGames.HelpContext:= FormArcadeScanGamesMode.ScanMAMESetsBox.Tag; // "Scan MAME Sets" options
 
-  MenuCreateMAMESoftwareListGames.Tag:= Ord(FormArcadeScanGamesMode.CreateSoftwareListGames.Checked);
+  MenuCreateMAMESoftwareListGames.Tag:= FormArcadeScanGamesMode.MAMESoftwareListBox.Tag;
   MenuAddMAMEDeviceSetsWithNoROMs.Tag:= Ord(FormArcadeScanGamesMode.AddMAMEDeviceSetWithNoROMs.Checked);
-
-  MenuCreateMAMESoftwareListGames.HelpContext:= FormArcadeScanGamesMode.ScanMAMESetsBox.Tag;
 
   FreeAndNil(FormArcadeScanGamesMode);
   SetScanModePopupHint(PopupSelectScanGamesMode.Tag);
@@ -41320,8 +37207,6 @@ begin
 end;
 
 procedure TFormMain.MenuSmallToolBarClick(Sender: TObject);
-//var
-//  tempString: String;
 
   procedure ResizeImgLst(ImgListName: TImageList; Small: Boolean);
   begin
@@ -41363,53 +37248,15 @@ begin
 
   if IsStartup then
      Exit;
-  // execute these lines only if not initializing...
 
+  // execute these lines only if not initializing
   SetMainToolBarIcon(ButtonViewMode);
-  //SetMainToolBarIcon(ButtonGameFilterArcadeSystems);
-  //SetMainToolBarIcon(ButtonGameFilterConsoleComputerSystems);
   SetMainToolBarIcon(ButtonSystemsQuickFilter);
   ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
   SetMainToolBarIcon(ButtonGameFilterMain);
   SetMainToolBarIcon(ButtonGameFilterParentClone);
   SetMainToolBarIcon(ButtonGameFilterHaveMiss);
   SetMainToolBarIcon(ButtonGameFilterDriverStatus);
-  //SetMainToolBarIcon(ButtonGameFilterOrientation);
-end;
-
-procedure TFormMain.GamesListViewColumnPaintText(
-  Sender: TCustomEasyListview; Column: TEasyColumn; ACanvas: TCanvas);
-begin
-  {case Column.Index of
-    8:
-      begin
-        ACanvas.Font.Name:= 'Arial';
-        ACanvas.Font.Color:= clMaroon;
-        ACanvas.Font.Size:= 8;
-        ACanvas.Font.Style:= [fsItalic, fsBold];
-      end;
-    9:
-      begin
-        ACanvas.Font.Name:= 'Trebuchet MS';
-        ACanvas.Font.Color:= clGreen;
-        ACanvas.Font.Size:= 7;
-        ACanvas.Font.Style:= [fsBold];
-      end;
-    12..16:
-     begin
-       //ACanvas.Font.Name:= 'Arial';
-       ACanvas.Font.Size:= 6;
-       ACanvas.Font.Color:= clBlue;
-     end;
-    18:
-      begin
-        ACanvas.Font.Name:= 'Tahoma';
-        ACanvas.Font.Color:= clOlive;
-        ACanvas.Font.Size:= 8;
-        ACanvas.Refresh;
-        ACanvas.Font.Style:= [fsBold];
-      end;
-  end;}
 end;
 
 procedure TFormMain.MenuShowGamesStatusBarClick(Sender: TObject);
@@ -41438,7 +37285,8 @@ end;
 
 procedure TFormMain.FilterGameTitleClick(Sender: TObject);
 begin
-  // no longer used... this SendMessage can be used to remove pixels from the end of a TEdit control
+  // no longer used, do not remove this code (March 03, 2018)
+  // this SendMessage call can be used to remove pixels from the end of a TEdit control
   //if TEdit(Sender).Tag = 0 then
   //   begin
   //     SendMessage(FilterGameTitle.Handle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, MakeLong(0, 16));
@@ -41476,7 +37324,6 @@ var
 begin
   if not ValidateSelectedGame then
      Exit;
-               // MemGameInfo.eBiosName
 
   case MemGameInfo.eIsCustomGame of
     True:
@@ -41493,18 +37340,6 @@ begin
   FindGameName(TMenuItem(Sender).Hint, sysID, MediaType, MemGameInfo.eIsCustomGame, MemGameInfo.eSoftwareName, lvItem, False);
   if lvItem <> nil then
      SelectEasyItem(lvItem);
-
-  // check if text exists in an 'array of string'
-  //AnsiIndexText(
-
-  // from select parent game...
-  {if not ValidateSelectedGame then
-     Exit;
-  //if not GameIsClone(MemGameInfo.eClone) then // not needed as this menu item will never show up for non-clone games!!!
-  //   Exit;
-  FindGameName(MemGameInfo.eClone, MemGameInfo.eSystemID, lvItem, False);
-  if lvItem <> nil then
-     SelectEasyItem(lvItem);}
 end;
 
 procedure TFormMain.UpdateHeaderFont(ELV_Holder: TEasyListView);
@@ -41551,7 +37386,6 @@ procedure TFormMain.FontDialogShow(Sender: TObject);
 var
   iTitle: PChar;
 begin
-  //iTitle:= 'Select a Font';
   iTitle:= '';
   if TFontDialog(Sender).Tag <> -1 then
   begin
@@ -41564,7 +37398,7 @@ begin
        5: iTitle:= ': Columns Header';
        6: iTitle:= ': Game Docs';
        7: iTitle:= ': MAME Debugger';
-       8: iTitle:= ': Console/Computer Games Editor'; // Custom Games Editor ???
+       8: iTitle:= ': Console/Computer Games Editor'; // EmuCon Games Editor
     end;
   end;
   SendMessage(TFontDialog(Sender).Handle, WM_SETTEXT, 0, Integer('Select a Font'+iTitle));
@@ -41599,7 +37433,6 @@ begin
             end;
        end;
     Item:= GamesListView.Groups.NextItem(Item);
-    //TEasyGameInfo(Item).eDeviceSets
   until Item = nil;
   gList.EndUpdate;
   gList.SaveToFile(FrontendPath+'noGameROMs-withROMs.txt');
@@ -41609,25 +37442,27 @@ end;
 
 procedure TFormMain.MainMenuOptionsPopup(Sender: TObject);
 begin
-  MenuCreateMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idMAME) and FileExists(GetMAMEMachineSoftListFile(False));
+  MenuCreateMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idMAME) and FileExists(GetMAMEMachineSoftListFile(False, idMAME));
+  MenuCreateHBMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idHBMAME) and FileExists(GetMAMEMachineSoftListFile(False, idHBMAME));
+
   MenuCustomizeColumns.Visible:= (IsDetailsView or IsGroupedView);
   MenuCustomizeColumnsHeaderFont.Visible:= (IsDetailsView or IsGroupedView);
 end;
 
-function TFormMain.GetSoftListFilesToAudit(sysID: ShortInt; var ListHolder: TStringList): Boolean;
+function TFormMain.GetSoftListFilesToAudit(sysID: ShortInt; var ListHolder: THashedStringList): Boolean;
 var
   TempFile: TMemIniFile;
 begin
-  Result:= ValidateFile(GetMAMEMachineSoftListFile(False));
+  Result:= ValidateFile(GetMAMEMachineSoftListFile(False, sysID));
   if not Result then
      begin
        FreeAndNil(ListHolder);
        Exit;
      end;
   if not Assigned(ListHolder) then
-     ListHolder:= TStringList.Create;
+     ListHolder:= THashedStringList.Create;
 
-  TempFile:= TMemIniFile.Create(GetMAMEMachineSoftListFile(False));
+  TempFile:= TMemIniFile.Create(GetMAMEMachineSoftListFile(False, sysID));
   TempFile.ReadSections(ListHolder);
   FreeAndNil(TempFile);
   Result:= ListHolder.Count > 0;
@@ -41645,11 +37480,9 @@ procedure TFormMain.SoftListGetExcludedList(sysID: ShortInt; ListHolder: THashed
 begin
   if ValidateFile(GetSoftListExcludeFile(sysID)) then
      ListHolder.LoadFromFile(GetSoftListExcludeFile(sysID));
-  //ListHolder:= THashedStringList.Create;
-  //ListHolder.LoadFromFile(GetSoftListExcludeFile(sysID));
 end;
 
-procedure TFormMain.SoftListRemoveExcludedList(sysID: ShortInt; var ListHolder: TStringList);
+procedure TFormMain.SoftListRemoveExcludedList(sysID: ShortInt; var ListHolder: THashedStringList);
 var
   ExcludedList: THashedStringList;
   Loop: Integer;
@@ -41675,59 +37508,187 @@ begin
   //ShowMessageW('total items before: '+IntToStr(ListHolder.Count));
 end;
 
+procedure TFormMain.SoftListValidateListsXML(sysID: ShortInt; var ListHolder: THashedStringList);
+var
+  iFiles: THashedStringList;
+  Loop: Integer;
+  FolderXML, GameFolder, FileXML, SoftNameStr, GameCRC32, XMLCRC32: String;
+  iStr: String;
+  XMLFileSize, GameFileSize: Integer;
+
+  function GetGameFileCRC32: Boolean;
+  begin
+    Result:= FileExists(GameFolder+SoftNameStr+'.el');
+    if not Result then
+       Exit;
+    iFiles:= THashedStringList.Create;
+    iFiles.LoadFromFile(GameFolder+SoftNameStr+'.el');
+    iStr:= iFiles.Values['xmlfile_crc32'];
+    Result:= iStr <> '';
+    GameCRC32:= iStr;
+    FreeAndNil(iFiles);
+  end;
+
+begin
+  // - remove MAME software lists from frontend't list if CRC32 is the same or if MAME's XML file is not found
+  // - this function is only used when creating MAME/HBMAME software lists, and it must be called AFTER the function
+  //   that removes "disabled" softlists
+
+  if ListHolder.Count = 0 then
+     Exit;
+
+  if MenuCreateMAMESoftwareListGames.Tag <> 1 then
+     Exit;
+
+  ReadMAMEHashFolder(sysID, EmulatorFile[sysID], FolderXML);
+  if FolderXML = '' then
+     Exit;
+
+  FormStatus.MessageStr('Validating '+GetArcadeSystemIniSection(sysID)+' software lists.');
+  GameFolder:= GetGamesFolderEL(1, sysID); // for "\arcade\mame_softwarelist_games\softwarename.el"
+  ListHolder.BeginUpdate;
+  for Loop:=ListHolder.Count-1 downto 0 do // ListHolder is the var list softlists to be created
+  begin
+    SoftNameStr:= ListHolder[Loop];
+    if FileExists(FolderXML+SoftNameStr+'.xml') then
+       begin
+         if GetGameFileCRC32 then
+         begin
+           XMLCRC32:= CalcFileCRC32(FolderXML+SoftNameStr+'.xml');
+           if SameText(XMLCRC32, GameCRC32) then
+              ListHolder.Delete(Loop); // CRC32 is the same "mamedir\hash\softwarename.xml" and "eldir\arcade\mame_softwarelist_games\softwarename.xml", remove it
+         end;
+       end
+    else
+       ListHolder.Delete(Loop); // "mamedir\hash\softwarename.xml" not found, cannot create a games list for it, remove the softlist from frontend's list
+  end;
+  ListHolder.EndUpdate;
+end;
+
+procedure TFormMain.SoftListDeleteGamesFiles(sysID: Integer; CreateListMode: Integer; SourceList: TStringList = nil);
+var
+  GamesFolder, SoftNameStr, FileToDelete: WideString;
+  Loop, LoopFileType: Integer;
+  SoftListReqFile: TMemIniFile;
+  FoundReqFile: Boolean;
+begin
+  // CreateListMode
+  // 0 -> disabled, delete all software list files
+  // 1 -> create, update mode, delete software list files only from "SourceList" list var
+  // 2 -> create, overwrite mode, delete all software list files
+  GamesFolder:= GetGamesFolderEL(1, sysID);
+  if CreateListMode in [0, 2] then
+     begin
+       DeleteAllFilesW(GamesFolder);
+       DeleteFile(GetSoftListRequirementFile(sysID)); // delete "system_name.elsoftlistreq"
+     end
+  else
+     begin
+       if SourceList.Count = 0 then
+          Exit; // there is nothing to do here, software list var is empty
+       FoundReqFile:= ValidateFile(GetSoftListRequirementFile(sysID));
+       if FoundReqFile then
+          SoftListReqFile:= TMemIniFile.Create(GetSoftListRequirementFile(sysID)); // delete selective softwarename entries from "system_name.elsoftlistreq"
+       for Loop:=0 to SourceList.Count-1 do
+       begin
+         SoftNameStr:= SourceList[Loop];
+         for LoopFileType:=0 to 3 do // .el; .elrom; .elstatus; .elmiss
+         begin
+           FileToDelete:= GetSystemFileName(sysID, LoopFileType, SoftNameStr);
+           DeleteFileW(PWideChar(FileToDelete));
+         end;
+         if FoundReqFile then
+            SoftListReqFile.EraseSection(SoftNameStr);
+       end;
+       if FoundReqFile then
+          begin
+            SoftListReqFile.UpdateFile;
+            FreeAndNil(SoftListReqFile);
+          end;
+     end;
+
+  Sleep(5); // // a tiny pause
+end;
+
 procedure TFormMain.MenuCreateMAMESoftwareListGamesClick(Sender: TObject);
 var
   Loop, iCount: Integer;
-  MachinesList: TStringList;
+  MachinesList: THashedStringList;
+  sysID: Byte;
+  iScanMAMESetsMode, iSoftwareMode: Integer;
 begin
   if CreatingGamesList then
      Exit;
-  if not VerifyArcadeGamesSys(idMAME) then
+
+  if TMenuItem(Sender).Tag <> 50 then
+     sysID:= idMAME
+  else
+     sysID:= idHBMAME;
+
+  if not VerifyArcadeGamesSys(sysID) then
      Exit;
-  MachinesList:= TStringList.Create;
-  if not GetSoftListFilesToAudit(idMAME, MachinesList) then
+  MachinesList:= THashedStringList.Create;
+  if not GetSoftListFilesToAudit(sysID, MachinesList) then
      begin
        FreeAndNil(MachinesList);
-     Exit;
+       Exit;
      end;
-  SoftListRemoveExcludedList(idMAME, MachinesList);
-  //FreeAndNil(MachinesList);
-  //Exit;
 
-  //MachinesList:= TStringList.Create;
-  //TempFile:= TMemIniFile.Create(GetMAMEMachineSoftListFile);
-  //TempFile.ReadSections(MachinesList);
-  //FreeAndNil(TempFile);
-  //if MachinesList.Count = 0 then
-  //   begin
-  //     FreeAndNil(MachinesList);
-  //     Exit;
-  //   end;
+  //if CallSelectArcadeSystem(6, sysID) = -1 then
+  //   Exit; // -1 = aborted by user
 
-  FormStatus.TitleStr('Create Software List: '+GetArcadeEmulatorDescription(idMAME, True));
+  // to scan games files this must be set to zero (Scan All MAME Sets)
+  iScanMAMESetsMode:= MenuCreateMAMESoftwareListGames.HelpContext;
+  MenuCreateMAMESoftwareListGames.HelpContext:= 0;
+
+  // if software list mode is "disable", then it will be set to "enable"
+  iSoftwareMode:= MenuCreateMAMESoftwareListGames.Tag;
+  if MenuCreateMAMESoftwareListGames.Tag = 0 then
+     MenuCreateMAMESoftwareListGames.Tag:= 1; // set to enable (update mode)
+
+  case MenuCreateMAMESoftwareListGames.Tag of
+    1: FormStatus.TitleStr('Create '+GetArcadeEmulatorDescription(sysID, True)+' Software Games Lists (Update Mode)');
+    2: FormStatus.TitleStr('Create '+GetArcadeEmulatorDescription(sysID, True)+' Software Games Lists (Overwrite Mode)');
+  end;
+
   FormStatus.Show;
   FormStatus.StartThreadClock;
-  DeleteAllFilesW(GetGamesFolderEL(1));
-  Sleep(5); // a little pause
-  //MachinesList.SaveToFile(FrontendPath+'machines_create.txt');
-  CreatingGamesList:= True;
 
+  SoftListRemoveExcludedList(sysID, MachinesList);
+  SoftListValidateListsXML(sysID, MachinesList);
+  SoftListDeleteGamesFiles(sysID, MenuCreateMAMESoftwareListGames.Tag, MachinesList);
+
+  Sleep(5); // a tiny pause
+
+  CreatingGamesList:= True;
   iCount:= MachinesList.Count;
   if iCount > 1 then
      FormStatus.LabelSoftwareScanCount.Visible:= True;
-  for Loop:= 0 to MachinesList.Count-1 do
+
+  if iCount > 0 then // if all softlist files are removed from the list then there's no point creating games list for softwarelist
   begin
-    if FormStatus.LabelSoftwareScanCount.Visible then
-       FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [Loop+1, iCount]);
-      CreateSoftwareListXML(idMAME, MachinesList[Loop], False);
+    for Loop:= 0 to MachinesList.Count-1 do
+    begin
+      if FormStatus.LabelSoftwareScanCount.Visible then
+         FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [Loop+1, iCount]);
+      CreateSoftwareListXML(sysID, MachinesList[Loop], False);
+    end;
   end;
   FreeAndNil(MachinesList);
   FormStatus.LabelSoftwareScanCount.Visible:= False;
-  SetGameType(True); // load the games list first!
-  Application.ProcessMessages;
-  ScanSoftListGames(0, False);
+  if iCount > 0 then
+     begin
+       SetGameType(True); // load the games list first
+       Application.ProcessMessages;
+       ScanSoftListGames(0, False, sysID);
+     end;
+
+  MenuCreateMAMESoftwareListGames.HelpContext:= iScanMAMESetsMode; // restore "Scan MAME Sets" mode to previous state
+  MenuCreateMAMESoftwareListGames.Tag:= iSoftwareMode; // restore "Software List Games" mode to previous state
+
   CreatingGamesList:= False;
-  SetGameType(False); // apply filters even if nothing has changed...
+  if iCount > 0 then
+     SetGameType(False); // apply filters even if nothing has changed
 
   ResetNoImageLoaded;
   ReselectItem(True);
@@ -41845,7 +37806,7 @@ begin
 
   SystemStr:= SystemsListCustom[CustomSystemID, 0];
   MediaTypeStr:= MediaTypeCustom[CustomMediaType, 2];
-  LastUsedIniFile:= GetMAMEMachineCustomGames;
+  LastUsedIniFile:= GetMAMEMachineCustomGames(idMAME);
   iCurrentMachineName:= GetLastUsedMachineCustomGame(CustomSystemID, CustomMediaType);
   //if FileExists(LastUsedIniFile) then
   //   begin
@@ -41943,7 +37904,6 @@ var
   var
     Loop: Byte;
   begin
-    //Result:= TEasyGameInfo(Item).eSystemID = idMAME;
     Result:= TEasyGameInfo(Item).eSystemID = MemGameInfo.eSystemID; // to support MAME and HBMAME
     //if Result then
     //   Result:= IsROM_Have(TEasyGameInfo(Item).eROMIdentification); // machines you don't have are also added to the list...
@@ -41954,7 +37914,6 @@ var
       for Loop:= Low(TEasyGameInfo(Item).eSoftwareList) to High(TEasyGameInfo(Item).eSoftwareList) do
       begin
         mName:= TEasyGameInfo(Item).eSoftwareList[Loop];
-        //mName:= Copy(TEasyGameInfo(Item).eSoftwareList[Loop], 1, Pos('=', TEasyGameInfo(Item).eSoftwareList[Loop])-1);
         if mName = slName then
         begin
           with FormSoftwareListMachineToRunGame.MachinesListView.Items.Add do
@@ -42098,190 +38057,84 @@ end;
 procedure TFormMain.PopupMachineToRunGameClick(Sender: TObject);
 var
   iMachineName: String;
-{var
-  Item: TEasyItem;
-  Group: TEasyGroup;
-  slName, mName, iCurrentMachineName, iDefaultMachineName: String;
-  LastUsedMachine: THashedStringList;
-  LastUsedIndex: Integer;
-  iStr: String;
-
-  function AddMachineToList: Boolean;
-  var
-    Loop: Byte;
-  begin
-    //Result:= TEasyGameInfo(Item).eSystemID = idMAME;
-    Result:= TEasyGameInfo(Item).eSystemID = MemGameInfo.eSystemID; // to support MAME and HBMAME
-    //if Result then
-    //   Result:= IsROM_Have(TEasyGameInfo(Item).eROMIdentification); // machines you don't have are also added to the list...
-    if Result then
-       Result:= Length(TEasyGameInfo(Item).eSoftwareList) > 0;
-    if Result then
-    begin
-      for Loop:= Low(TEasyGameInfo(Item).eSoftwareList) to High(TEasyGameInfo(Item).eSoftwareList) do
-      begin
-        mName:= TEasyGameInfo(Item).eSoftwareList[Loop];
-        //mName:= Copy(TEasyGameInfo(Item).eSoftwareList[Loop], 1, Pos('=', TEasyGameInfo(Item).eSoftwareList[Loop])-1);
-        if mName = slName then
-        begin
-          with FormSoftwareListMachineToRunGame.MachinesListView.Items.Add do
-          begin
-            Tag:= uMain.TEasyGameInfo(Item).eGameSetStatus;
-            ImageIndex:= GetMAMEImageIndex(TEasyGameInfo(Item).eROMIdentification, TEasyGameInfo(Item).eSoftwareName);
-            case TEasyGameInfo(Item).eIsFavorite of
-              True:
-                begin
-                  StateImageIndexes[0]:= 3;
-                end;
-              False: StateImageIndexes[0]:= 500;
-            end;
-            StateImageIndexes[6]:= TEasyGameInfo(Item).eDriverStatus;
-            
-            Caption:= TEasyGameInfo(Item).eTitle;
-            Captions[1]:= TEasyGameInfo(Item).eName;
-            Captions[2]:= TEasyGameInfo(Item).eManufacturer;
-            iStr:= TEasyGameInfo(Item).eScreenRefreshRate;
-            if iStr <> '' then
-            begin
-              iStr:= FloatToStr(Round(StrToFloat(iStr)));
-              iStr:= iStr+' Hz';
-            end;
-            Captions[3]:= iStr;
-            Captions[4]:= TEasyGameInfo(Item).eClone;
-            Captions[5]:= aSaveState[TEasyGameInfo(Item).eSaveState];
-          end;
-        end;
-      end;
-    end;
-  end;
-
-  function ELV_PopulateSoftwareMachineToUse: Boolean;
-  begin
-    Result:= True;
-    slName:= MemGameInfo.eSoftwareName;
-    FormSoftwareListMachineToRunGame.MachinesListView.BeginUpdate;
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= True;
-    if IsGroupedView then
-    begin
-      Group:= GamesListView.Groups.FirstGroup;
-      repeat
-        if (TGroupInfo(Group).eSoftwareName = '') and (TGroupInfo(Group).eSystemID = MemGameInfo.eSystemID) then
-        begin
-          Item:= GamesListView.Groups.FirstInGroup(Group);
-          repeat
-            AddMachineToList;
-            Item:= GamesListView.Groups.NextInGroup(Group, Item);
-          until (Item = nil);
-        end;
-        Group:= GamesListView.Groups.NextGroup(Group);
-      until Group = nil;
-    end
-    else
-    begin
-      Item:= GamesListView.Groups.FirstItem;
-      repeat
-        if TEasyGameInfo(Item).eSoftwareName = '' then
-           AddMachineToList;
-        Item:= GamesListView.Groups.NextItem(Item);
-      until Item = nil;
-    end;
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= False;
-    FormSoftwareListMachineToRunGame.MachinesListView.EndUpdate;
-  end;}
-
 begin
   case MemGameInfo.eIsCustomGame of
     True : CheckMachineToRun_CustomGame(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, iMachineName, True);
     False: SelectMachineToRun(iMachineName, True);
   end;
+end;
 
-  //if MemGameInfo.eIsCustomGame then
-  //   begin
-  //     CheckMachineToRun_CustomGame(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, iMachineName, True);
-  //     Exit;
-  //   end;
 
-  //SelectMachineToRun(iMachineName);
+// here goes the function to get media type -cart1 ; -flop1 ; -cass1 for softlist games with "requirement" tag
+function TFormMain.GetSoftListGameRequiredParam(sysID: Integer; const GameName: WideString; const SoftwareName: String): String;
+var
+  ExecParam: String;
+  ReqSoftwareName: String;
+  ReqSetName: String;
+  GotMediaType: Boolean;
+  sFileName, TempStr: String;
+  SoftGamesList: THashedStringList;
+begin
+  GotMediaType:= False;
+  ExecParam:= '';
+  Result:= '';
+  SoftListGetRequirementInfo(sysID, GameName, SoftwareName, ReqSetName, ReqSoftwareName);
 
-  {ShowFilterMsgBox('Select Machine to Run Software List Game', 'Building compatible machines list, please wait...');
-  LastUsedMachine:= THashedStringList.Create;
-  iCurrentMachineName:= '';
-  LastUsedIndex:= -1;
+  if (ReqSetName = '') and (ReqSoftwareName = '') then
+     Exit; // there is no extra requirement for this game
 
-  iDefaultMachineName:= GetDefaultMachineNameToUse(MemGameInfo.eSystemID, MemGameInfo.eSoftwareName);
-
-  if FileExists(GetMAMEMachineSoftListFile(True, MemGameInfo.eSystemID)) then
+  if ReqSoftwareName <> '' then
      begin
-       LastUsedMachine.LoadFromFile(GetMAMEMachineSoftListFile(True, MemGameInfo.eSystemID));
-       LastUsedIndex:= LastUsedMachine.IndexOfName(MemGameInfo.eSoftwareName);
-       if LastUsedIndex <> -1 then
-          iCurrentMachineName:= LastUsedMachine.Values[MemGameInfo.eSoftwareName];
-     end;
-
-  if iCurrentMachineName = '' then
-     iCurrentMachineName:= iDefaultMachineName;
-
-  if not Assigned(FormSoftwareListMachineToRunGame) then
-     FormSoftwareListMachineToRunGame:= TFormSoftwareListMachineToRunGame.Create(nil);
-
-  FormSoftwareListMachineToRunGame.Tag:= 1;
-  FormSoftwareListMachineToRunGame.CurrentMachineName:= iCurrentMachineName;
-  FormSoftwareListMachineToRunGame.DefaultMachineName:= iDefaultMachineName;
-
-  ELV_PopulateSoftwareMachineToUse;
-
-  HideFilterMsgBox;
-  if CheckTotal(FormSoftwareListMachineToRunGame.MachinesListView) then
-     begin
-       if FormSoftwareListMachineToRunGame.MachinesListView.Groups.ItemCount > 1 then
-       begin
-         if iDefaultMachineName = '' then // this case should never happen!!!! May 02, 2016
-            begin
-              iDefaultMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1];
-              FormSoftwareListMachineToRunGame.DefaultMachineName:= iDefaultMachineName;
-            end;
-
-         if FormSoftwareListMachineToRunGame.ShowModal = mrYes then
-         begin
-           if CheckSelected(FormSoftwareListMachineToRunGame.MachinesListView) then
-              iCurrentMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Selection.First.Captions[1];
-
-           if iCurrentMachineName <> iDefaultMachineName then
-           begin
-             LastUsedMachine.BeginUpdate;
-             if LastUsedIndex <> -1 then
-                LastUsedMachine[LastUsedIndex]:= MemGameInfo.eSoftwareName+'='+iCurrentMachineName // update the current entry...
-             else
-                LastUsedMachine.Add(MemGameInfo.eSoftwareName+'='+iCurrentMachineName); // add a new softwarename=selected_machinename
-             LastUsedMachine.EndUpdate;
-             LastUsedMachine.SaveToFile(GetMAMEMachineSoftListFile(True, MemGameInfo.eSystemID));
-           end
-           else
-           begin
-             if LastUsedIndex <> -1 then
-                begin
-                  LastUsedMachine.BeginUpdate;
-                  LastUsedMachine.Delete(LastUsedIndex); // remove the entry from user custom list because it's the same as the default machine name
-                  LastUsedMachine.EndUpdate;
-                  LastUsedMachine.SaveToFile(GetMAMEMachineSoftListFile(True, MemGameInfo.eSystemID));
-                end;
-           end;
-         end;
-       end
+       if PosEx('_cart', ReqSoftwareName) <> 0 then
+          begin
+            GotMediaType:= True;
+            ExecParam:= '-cart1 ';
+          end
        else
-       GenerateMessage('Info', 'Select Machine to Run Software List Game',
-                     '    There is only one machine compatible with this software list game and it''s already selected.'+#13#10+#13#10+
-                     'Software List: '+MemGameInfo.eCategory+' ['+MemGameInfo.eSoftwareName+']'+#13#10+
-                     'Machine: '+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Caption+
-                                 ' ['+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1]+']');
+       if PosEx('_flop', ReqSoftwareName) <> 0 then
+          begin
+            GotMediaType:= True;
+            ExecParam:= '-flop1 ';
+          end
+       else
+       if PosEx('_cass', ReqSoftwareName) <> 0 then
+          begin
+            GotMediaType:= True;
+            ExecParam:= '-cass1 ';
+          end;
+
+       if not GotMediaType then
+       begin
+         // must open "\arcade\games\mame_softwarelist_games\softwarename.el" file and get the exec param there
+         sFileName:= GetGamesFolderEL(1, sysID)+GetSystemFileName(sysID, 0, ReqSoftwareName);
+         if FileExistsW(sFileName) then
+         begin
+           SoftGamesList:= THashedStringList.Create;
+           SoftGamesList.LoadFromFile(sFileName);
+           TempStr:= SoftGamesList.Values[ReqSetName];
+           FreeAndNil(SoftGamesList);
+           if TempStr <> '' then
+              ExecParam:= SoftListGetEntryValue(TempStr, 'media');
+           GotMediaType:= ExecParam <> '';
+           if GotMediaType then
+              ExecParam:= '-'+ExecParam+' '; // "-cart "
+         end;
+       end;
      end
   else
-     GenerateMessage('Info', 'Select Machine to Run Software List Game',
-                     '    No available machine sets were found. Make sure you have the ROMs for the supported machines.'+#13#10+
-                     'Software List: '+MemGameInfo.eCategory+' ['+MemGameInfo.eSoftwareName+']');
-  ClearListView(FormSoftwareListMachineToRunGame.MachinesListView);
-  FreeAndNil(FormSoftwareListMachineToRunGame);
-  FreeAndNil(LastUsedMachine);}
+     begin
+       if SameText('pcecd', SoftwareName) then
+          begin
+            GotMediaType:= True;
+            ExecParam:= '-cart1 '; // manual set the media type for "PC Engine CD" games
+          end
+       else
+          begin
+
+          end;
+     end;
+
+  Result:= ExecParam+ReqSetName;
 end;
 
 function TFormMain.GetSoftwareListDefaultColumnPos(iColumnIndex: Integer): Integer;
@@ -42967,7 +38820,7 @@ procedure TFormMain.MenuCustomizeMAMESoftwareListClick(Sender: TObject);
 begin
   FormApplyFilterMsgBox.Show;
   FormApplyFilterMsgBox.LabelMsgGroupedView.Visible:= False;
-  FormApplyFilterMsgBox.LabelBoxMessageTitle.Caption:= 'Customize Software List';
+  FormApplyFilterMsgBox.LabelBoxMessageTitle.Caption:= 'Customize MAME Software List';
   FormApplyFilterMsgBox.LabelBoxMessage.Caption:= 'Loading software lists info, please wait...';
   FormApplyFilterMsgBox.Show;
   Application.ProcessMessages;
@@ -43069,7 +38922,10 @@ begin
        end;
   end;
   if not Continue then
-     Continue:= VerifyGamesMAMESoftlist;
+     Continue:= VerifyGamesMAMESoftlist(idMAME);
+     
+  if not Continue then
+     Continue:= VerifyGamesMAMESoftlist(idHBMAME);
 
   if not Continue then
      begin
@@ -43087,6 +38943,45 @@ begin
   HideFilterMsgBox;
 end;
 
+procedure TFormMain.ResizeFormAddScrollBars(FormSource: TForm);
+var
+  iScreenWidth, iScreenHeight: Integer;
+begin
+  iScreenHeight:= Screen.Height;
+  if iScreenHeight > 1000 then
+     Exit;
+
+  iScreenWidth:= Screen.Width;
+  if FormSource.Width > (iScreenWidth-6) then
+  begin
+    with FormSource.HorzScrollBar do
+    begin
+      // Set the range to twice the ClientWidth of the form
+      // This means that the form’’s logical size is twice as big
+      // as the physical window.
+      // Note that Range must always be larger than the ClientWidth
+      Range:= FormSource.ClientWidth;//+GetSystemMetrics(SM_CXHSCROLL);
+      Position:= 0;
+      Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+      Tracking:= True;
+      Visible:= True;  { Show the scrollbar }
+    end;
+    FormSource.Width:= iScreenWidth-6;
+  end;
+
+  if FormSource.Height > (iScreenHeight-60) then
+  begin
+     with FormSource.VertScrollBar do
+     begin
+       Range:= FormSource.ClientHeight+GetSystemMetrics(SM_CXVSCROLL);
+       Position:= 0;
+       Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+       Tracking:= True;
+       Visible:= True;  { Show the scrollbar }
+     end;
+     FormSource.Height:= iScreenHeight-60;
+  end;
+end;
 
 procedure TFormMain.CreateSupermodelXMLdatFromSourceFile1Click(
   Sender: TObject);
@@ -43197,11 +39092,12 @@ end;
 procedure TFormMain.BitBtn3Click(Sender: TObject);
 var
   Item: TEasyItem;
-  ROMsList, DuplicateList: THashedStringList;
-  romCRC32, romName: String;
-  Loop: Integer;
+  ROMsList, SHA1List, DuplicateList: THashedStringList;
+  romCRC32, romSHA1, romName: String;
+  Loop, FileID, iIndex: Integer;
 begin
   ROMsList:= THashedStringList.Create;
+  SHA1List:= THashedStringList.Create;
   DuplicateList:= THashedStringList.Create;
   DuplicateList.BeginUpdate;
   DuplicateList.Sorted:= True;
@@ -43209,86 +39105,59 @@ begin
   Item:= GamesListView.Groups.FirstItem;
   repeat
     FillTempGameInfo(Item);
-    if (TempGameVars.eSystemID = idMAME) and (TempGameVars.eSoftwareName = '') then
+    if (TempGameVars.eSystemID = idMAME) and (TempGameVars.eSoftwareName = '') and (not FormMain.IsROM_Device(TempGameVars.eROMIdentification)) and (not FormMain.IsROM_bios(TempGameVars.eROMIdentification)) then
     begin
       if TEasyGameInfo(Item).eROMInfo <> nil then
       begin
         //ShowMessage(TEasyGameInfo(Item).eROMInfo.Text);
         ROMsList.Clear;
         ROMsList.BeginUpdate;
+        SHA1List.Clear;
+        SHA1List.BeginUpdate;
         for Loop:=0 to TEasyGameInfo(Item).eROMInfo.Count-1 do
         begin
-          romName:= TEasyGameInfo(Item).eROMInfo.ValueFromIndex[Loop];
-          romCRC32:= TEasyGameInfo(Item).eROMInfo.Names[Loop];
-          if romCRC32 <> '' then
+          romName:= TEasyGameInfo(Item).eROMInfo[Loop];
+          FileID:= StrToInt(romName[1]+romName[2]);
+          //if FileID in [0, 3, 6, 9] then
+          if IsFileID_GameROM(FileID) then
           begin
-            if ROMsList.IndexOf(TEasyGameInfo(Item).eROMInfo[Loop]) = -1 then
-               ROMsList.Add(TEasyGameInfo(Item).eROMInfo[Loop])
-            //if ROMsList.IndexOf(romCRC32) = -1 then
-            //   ROMsList.Add(romCRC32)
-            else
-               DuplicateList.Add(TempGameVars.eName);
+            // game ROM only
+            romCRC32:= SoftListGetEntryValue(romName, 'crc');
+            if romCRC32 <> '' then
+            begin
+              romSHA1:= SoftListGetEntryValue(romName, 'sha1');
+              //if ROMsList.IndexOf(TEasyGameInfo(Item).eROMInfo[Loop]) = -1 then
+              //   ROMsList.Add(TEasyGameInfo(Item).eROMInfo[Loop])
+              iIndex:= ROMsList.IndexOf(romCRC32);
+              if iIndex = -1 then
+                 begin
+                   ROMsList.Add(romCRC32);
+                   SHA1List.Add(romSHA1);
+                 end
+              else
+                begin
+                  if SHA1List[iIndex] <> romSHA1 then
+                  begin
+                    DuplicateList.Add(TempGameVars.eName);
+                    Break;
+                  end;
+                end;
+            end;
           end;
         end;
 
         ROMsList.EndUpdate;
+        SHA1List.EndUpdate;
       end;
     end;
     Item:= GamesListView.Groups.NextItem(Item);
   until Item = nil;
   FreeAndNil(ROMsList);
+  FreeAndNil(SHA1List);
   DuplicateList.EndUpdate;
   DuplicateList.SaveToFile(FrontendPath+'duplicate_file_crc32.txt');
   FreeAndNil(DuplicateList);
   ShowMessage('Done');
-end;
-
-procedure TFormMain.BitBtn4Click(Sender: TObject);
-var
-  ArchiveItem: TZFArchiveItem;
-  fileZip: String;
-  mStream: TMemoryStream;
-  iSHA1: String;
-  iChecksum: TStringList;
-begin
-  fileZip:= 'D:\mame_roms\mslug3.zip';
-  mStream:= TMemoryStream.Create;
-  iChecksum:= TStringList.Create;
-  iChecksum.BeginUpdate;
-
-  with ZipForge do
-  begin
-    FileName:= fileZip;
-    // Open existing archive file
-    try
-      OpenArchive(fmOpenRead or fmShareDenyNone);
-
-      if FileCount > 0 then
-         begin
-           // Search text files stored inside the archive
-           if FindFirst('*.*', ArchiveItem) then
-              begin
-                repeat
-                  mStream.Clear;
-                  ZipForge.ExtractToStream(ArchiveItem.FileName, mStream);
-                  iSHA1:= GetSHA1_ValueMemoryStream(mStream);
-                  iChecksum.Add('crc="'+LowerCase(IntToHex(ArchiveItem.CRC, 8))+'" sha1="'+iSHA1+'"');
-                until (not FindNext(ArchiveItem));
-              end;
-         end;
-      CloseArchive;
-      ZipForge.FileName:= '';
-    except
-      CloseArchive;
-      ZipForge.FileName:= '';
-    end;
-  end;
-  iChecksum.EndUpdate;
-  mStream.Clear;
-  FreeAndNil(mStream);
-  iChecksum.SaveToFile(FrontendPath+'checksum_'+ChangeFileExt(ExtractFileName(fileZip), '.txt'));
-  ShowMessage(iChecksum.Text);
-  FreeAndNil(iChecksum);
 end;
 
 procedure TFormMain.BitBtn5Click(Sender: TObject);
@@ -43939,7 +39808,7 @@ var
              begin
                if not ItemIsFolder[Loop7z] then
                   begin
-                    ListCustomGameName.Add(ItemPath[Loop7z]);
+                    ListCustomGameName.Add(ItemPath[Loop7z]); // ItemName[] does NOT return the filename, it's always empty! (February 28, 2018)
                     ListCustomGameSize.Add(IntToStr(ItemSize[Loop7z]));
                   end;
              end;
@@ -44806,7 +40675,8 @@ begin
 
        IsSystemQuickFilterEnabled:= True;
        SetMainToolBarIcon(ButtonSystemsQuickFilter);
-       ApplyFilters;
+       SetGameType(False);
+       //ApplyFilters;
      end;
 end;
 
@@ -44950,6 +40820,18 @@ begin
        if ShowGameInfoValidate then
           ShowGameInfoAll;
      end;
+end;
+
+procedure TFormMain.BitBtn2Click(Sender: TObject);
+var
+  NewFile, OldFile, CRC32Newfile, CRC32OldFile: String;
+begin
+  NewFile:= 'D:\emulators\mame\binary\hash\aleste.xml';
+  OldFile:= 'D:\emulators\mame\mame0187b_64bit\hash\aleste.xml';
+
+  CRC32Newfile:= CalcFileCRC32(NewFile);
+  CRC32OldFile:= CalcFileCRC32(OldFile);
+  ShowMessage(NewFile+#13#10+CRC32NewFile+#13#10+#13#10+OldFile+#13#10+CRC32OldFile);
 end;
 
 end.

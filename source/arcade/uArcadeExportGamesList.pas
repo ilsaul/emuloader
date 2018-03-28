@@ -280,7 +280,6 @@ var
           // selected games (full format)
           if ((SelIndex = 0) and ValidateGameFilter and IsGameEntry) or ((SelIndex = 0) and (not IsGameEntry)) or (SelIndex <> 0) then
           begin
-            //StrToAdd:= GetArcadeSystemIniSection(TempGameVars.eSystemID)+': '+FixUnicodeGameTitle+' [';
             FullGameInfoStr:= '';
             if GameInfoToExport_UseGamesListVisibleColumns.Checked then
             begin
@@ -348,13 +347,6 @@ var
                       02: MountExcelFormatStr(FormMain.TempGameVars.eManufacturer);
                       03: MountExcelFormatStr(aOrientation[FormMain.TempGameVars.eScreenOrientation]);
                       06: MountExcelFormatStr(FormMain.TempGameVars.eCategory); // category / software name title
-                        //begin
-                        //  if FormMain.TempGameVars.eSoftwareName <> '' then
-                        //     MountExcelFormatStr(FormMain.TempGameVars.eCategory) // software name title -> category
-                        //  else
-                        //     MountExcelFormatStr(''); // all other games are arcade...
-                        //
-                        //end;
                       08: MountExcelFormatStr(FormMain.TempGameVars.eName);
                       09: MountExcelFormatStr(FormMain.TempGameVars.eClone);
                       //10: MountExcelFormatStr(FormMain.TempGameVars.eDriverName);
@@ -395,25 +387,9 @@ var
                ExportGames.Add(FullGameInfoStr)
             else
                ExportGames.Insert(0, FullGameInfoStr);
+               // this line doesn't work... it adds crap the the beginning of the file; do not remove it, it reminds me of this mistake!
                //ExportGames.Insert(0, Char($EF)+Char($BB)+Char($BF)+FullGameInfoStr); // this will save the file as UTF-8 format :-)) -> Char($EF)+Char($BB)+Char($BF)
-
-            // old code "SYSNAME: game_title [gamename] [clone of gamename]"
-            {
-            StrToAdd:= GetArcadeSystemIniSection(TempGameVars.eSystemID)+': '+EncodeUnicodeStr(TempGameVars.eTitle)+' [';
-            if TempGameVars.eSoftwareName <> '' then
-               StrToAdd:= StrToAdd+TempGameVars.eSoftwareName+'\'+TempGameVars.eName
-            else
-               StrToAdd:= StrToAdd+TempGameVars.eName;
-
-            if GameIsClone(TempGameVars.eClone) then
-               StrToAdd:= StrToAdd+'; cloneof '+TempGameVars.eClone;
-            StrToAdd:= StrToAdd+']';
-
-            ExportGames.Add(StrToAdd);}
           end;
-
-          //ExportGames.Add(Format('%s, %s [%s]', [GetEmulatorDescription(TempGameVars.eSystemID, True),
-          //                       TempGameVars.eTitle, TempGameVars.eName]));
         end;
       2, 3, 5: // short format
         begin
@@ -422,12 +398,6 @@ var
           // selected games (gamename=system name)
           if ((SelIndex = 2) and ValidateGameFilter) or (SelIndex <> 2) then
              begin
-               //if FormMain.TempGameVars.eSoftwareName <> '' then
-               //   FullGameInfoStr:= FormMain.TempGameVars.eSoftwareName+'\'+FormMain.TempGameVars.eName
-               //else
-               //   FullGameInfoStr:= FormMain.TempGameVars.eName;
-               //FullGameInfoStr:= FullGameInfoStr+'='+FormMain.GetArcadeSystemIniSection(FormMain.TempGameVars.eSystemID, True);
-
                FullGameInfoStr:= FormMain.GetPlayedGamesNameEntry(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName)+
                                  '='+FormMain.GetArcadeSystemIniSection(FormMain.TempGameVars.eSystemID, True);
                ExportGames.Add(FullGameInfoStr);

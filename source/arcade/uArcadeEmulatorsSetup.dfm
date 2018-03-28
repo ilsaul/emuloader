@@ -96,9 +96,11 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   object LabelAlterMAME_Autorun: TLabel
     Left = 197
     Top = 316
-    Width = 288
+    Width = 331
     Height = 13
-    Caption = '(Run game again with AlterMAME if fails with primary MAME)'
+    Caption = 
+      '(Run game again with another MAME build if fails with primary MA' +
+      'ME)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
     Font.Height = -11

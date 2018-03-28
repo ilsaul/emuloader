@@ -112,6 +112,12 @@ type
     LabelGameDocsDisplayMode: TShadowLabel;
     LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
     LabelGameDocsDisplayModeTabs: TShadowLabel;
+    FixRetroArchImageFileNames: TAdvOfficeCheckBox;
+    LabelFixRetroArchImageFileNames: TLabel;
+    RestoreInternetGameInfoStartup: TAdvOfficeCheckBox;
+    ImageDisableThreadedLoading: TAdvOfficeCheckBox;
+    LabelImageDisableThreadedLoading: TLabel;
+    Label1: TLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);

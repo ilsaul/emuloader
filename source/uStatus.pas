@@ -201,4 +201,39 @@ begin
      end;
 end;
 
+// not used anymore (June 25, 2015)
+// this makes transparent non rectangular shapes
+{
+procedure PremultiplyBitmap(Bitmap: TBitmap);
+var
+  Row, Col: integer;
+  p: PRGBQuad;
+  PreMult: array[Byte, Byte] of Byte;
+begin
+  // precalculate all possible values of a*b
+  for Row:= 0 to 255 do
+    for Col:= Row to 255 do
+    begin
+      PreMult[Row, Col]:= Row*Col div 255;
+      if (Row <> Col) then
+        PreMult[Col, Row]:= PreMult[Row, Col]; // a*b = b*a
+    end;
+
+  for Row:= 0 to Bitmap.Height-1 do
+  begin
+    Col:= Bitmap.Width;
+    p:= Bitmap.ScanLine[Row];
+    while (Col > 0) do
+    begin
+      p.rgbBlue:= PreMult[p.rgbReserved, p.rgbBlue];
+      p.rgbGreen:= PreMult[p.rgbReserved, p.rgbGreen];
+      p.rgbRed:= PreMult[p.rgbReserved, p.rgbRed];
+      Inc(p);
+      Dec(Col);
+    end;
+  end;
+end;
+}
+
+
 end.

@@ -156,13 +156,18 @@ begin
   if Item = nil then
      Exit;
   FormMain.PopupScreenshotLayouts.BeginUpdate;
-  layoutIni:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'screenshot_layouts.ini');
+  layoutIni:= TMemIniFile.Create(FormMain.GetImageLayoutsFile);
+  //layoutIni:= TMemIniFile.Create(FormMain.GetIniFilesFolder+'screenshot_layouts.ini');
   repeat
+    SectionStr:= GetScrLayoutSection(Item.ImageIndex);
     if Item.ImageIndex > 0 then
-       FormMain.PopupScreenshotLayouts.Items[Item.ImageIndex].Visible:= Item.Checked
+       begin
+         FormMain.PopupScreenshotLayouts.Items[Item.ImageIndex].Visible:= Item.Checked;
+         layoutIni.WriteInteger(SectionStr, 'visible', Ord(Item.Checked));
+       end
     else
        FormMain.ButtonImageCategory.HelpContext:= LayoutInfo[Item.ImageIndex].lImage1_imgCategory;
-    SectionStr:= GetScrLayoutSection(Item.ImageIndex);
+
     layoutIni.WriteInteger(SectionStr, 'image1_category', LayoutInfo[Item.ImageIndex].lImage1_imgCategory);
     if Item.ImageIndex > 0 then
        layoutIni.WriteInteger(SectionStr, 'image2_category', LayoutInfo[Item.ImageIndex].lImage2_imgCategory);
@@ -241,6 +246,8 @@ begin
      Exit;
 
   UpdateLayouts; // update .ini settings only (do not apply setting at main screen)
+  //UpdateImgLayoutIni; // update layout visible .ini from TMenuItem list in main screen
+
   // no need to update hints if layouts is enabled, I think... see uMain.SetImageLayout;
 end;
 

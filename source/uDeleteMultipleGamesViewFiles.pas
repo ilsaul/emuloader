@@ -183,10 +183,15 @@ begin
              begin
                if (not FormMain.IsROM_Bios(eROMIdentification)) and (not FormMain.IsROM_Device(eROMIdentification)) then
                begin
-                 case eFileType of
-                   13, 16, 19, 22: extraStr:= 'Device';
-                   14, 17, 20, 23: extraStr:= 'Bios';
-                 end;
+                 if FormMain.IsFileID_DeviceCHD(eFileType) then
+                    extraStr:= 'Device'
+                 else
+                 if FormMain.IsFileID_BiosCHD(eFileType) then
+                    extraStr:= 'Bios';
+                 //case eFileType of
+                 //  13, 16, 19, 22: extraStr:= 'Device';
+                 //  14, 17, 20, 23: extraStr:= 'Bios';
+                 //end;
                end;
 
                if eParentFile then
@@ -465,7 +470,7 @@ begin
              TViewFileInfo(addItem).eParentFile:= False; // always false, used by CHDs only
              HeaderVerCHD:= 0; // temp var to hold CHD header version...
 
-             if FormMain.IsMediaTypeCHD(tmpMediaType, False) then //if tmpMediaType = 1 then
+             if FormMain.IsMediaTypeCHD(tmpMediaType, False) then
                 begin
                   TViewFileInfo(addItem).eParentFile:= Boolean(IsParentCHD);
                   FormMain.CreateCHD_SHA1(tmpFileName, '', ChecksumCHD, HeaderVerCHD); // read version and SHA-1 from CHD's header
