@@ -580,42 +580,42 @@ begin
   FormMain.AddMsgText('    Use this feature to create a ');
   FormMain.AddMsgText('.txt', clBlack, [fsBold]);
   FormMain.AddMsgText(' file of the current games list. There are three output formats to choose from:'+#13#10+#13#10);
-  FormMain.AddMsgText('  Full Format', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  Full Format', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': this mode is suitable to use with an external app like a file viewer or Microsoft Excel.'+#13#10);
-  FormMain.AddMsgText('Game Info to Export', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Game Info to Export', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' settings are only used in this output format. You can change what game info will be inluded, '+
                       'their order and visibility. Optionally, you can create the .txt file in a format that can be imported in ');
   FormMain.AddMsgText('Excel', clBlack, [fsItalic]);
   FormMain.AddMsgText(' by checking the ');
-  FormMain.AddMsgText('Microsoft Excel Format', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Microsoft Excel Format', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' option.'+#13#10+#13#10);
 
-  FormMain.AddMsgText('  Short Format', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  Short Format', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': this output mode can be used to quickly create favorites profiles for MAME and arcade systems, or for another reason.'+#13#10+#13#10);
 
-  FormMain.AddMsgText('  MAME Content Manager Plus', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  MAME Content Manager Plus', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': use this mode if you want to create a .txt file compatible with ');
   FormMain.AddMsgText('MCM+', clBlack, [fsItalic]);
   FormMain.AddMsgText(' application. Only MAME and HBMAME games will be added even if you have other systems selected.'+#13#10+#13#10+
                       '    Each output more have three options to choose:'+#13#10+#13#10);
 
-  FormMain.AddMsgText('  Export All Games', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  Export All Games', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': this option will export all visible/invisible games in main games list.'+#13#10+
                       'You can customize what systems will be inluded in the ');
-  FormMain.AddMsgText('Export All Games', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Export All Games', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' options panel.'+#13#10+#13#10);
 
-  FormMain.AddMsgText('  Export Visible Games', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  Export Visible Games', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': use this one to export only visible games in main games list. First, change the main games filters the way you like. ');
-  FormMain.AddMsgText('Game Info to Export', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Game Info to Export', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' settings are applied to the list.'+#13#10+#13#10);
 
-  FormMain.AddMsgText('  Export Selected Games', $00a65300, [fsBold]);
+  FormMain.AddMsgText('  Export Selected Games', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': You can export only the games you manually selected in main games list. ');
-  FormMain.AddMsgText('Game Info to Export', clMaroon, [fsBold]);
+  FormMain.AddMsgText('Game Info to Export', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' settings are applied to the list.'+#13#10+#13#10+
                       '    All settings are saved in ');
-  FormMain.AddMsgText(FormMain.GetFrontendExtraIniFile, $00a65300, [fsBold]);
+  FormMain.AddMsgText(FormMain.GetFrontendExtraIniFile, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file and are restored later so you won''t have to customize this feature all over again.');
 
   GenerateMessage('Help', 'How to watch game video previews.');
@@ -626,18 +626,18 @@ procedure TFormArcadeExportGamesList.ButtonHelp_GameInfoToExport_MicrosoftExcelF
 begin
   CallMessageBox;
   FormMain.AddMsgText('    You can use this setting to create a games list compatible with the ');
-  FormMain.AddMsgText('Import', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Import', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' feature in ');
   FormMain.AddMsgText('Microsoft Excel', clBlack, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10+'Make sure you select the following parameters in Excel:'+#13#10);
-  FormMain.AddMsgText('1.', clMaroon, [fsBold]);
+  FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Select ');
-  FormMain.AddMsgText('Comma', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Comma', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' as ');
   FormMain.AddMsgText('delimiter', clBlack, [fsBold]);
-  FormMain.AddMsgText(#13#10+'2.', clMaroon, [fsBold]);
+  FormMain.AddMsgText(#13#10+'2.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Select ');
-  FormMain.AddMsgText('Double Quote', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Double Quote', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' as ');
   FormMain.AddMsgText(' text qualifier', clBlack, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'  Double quotes for each game info is required because you can have the comma char in a text or a number. '+

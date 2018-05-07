@@ -25,7 +25,6 @@ uses
   uArcadeGamesScanResults in 'arcade\uArcadeGamesScanResults.pas' {FormArcadeGamesScanResults},
   uImageLayoutSettings in 'uImageLayoutSettings.pas' {FormImageLayoutSettings},
   uThumbnailViewSettings in 'uThumbnailViewSettings.pas' {FormThumbnailView},
-  uSelectImageCategory in 'uSelectImageCategory.pas' {FormSelectImageCategory},
   uArcadeFileVersions in 'arcade\uArcadeFileVersions.pas' {FormArcadeFileVersions},
   uSelectDirectory in 'uSelectDirectory.pas' {FormSelectDirectory},
   uArcadeROMsFolders in 'arcade\uArcadeROMsFolders.pas' {FormArcadeROMsFolders},
@@ -42,7 +41,7 @@ uses
   uArcadeDeleteMAMu_NotWorkingIcons in 'arcade\uArcadeDeleteMAMu_NotWorkingIcons.pas' {FormArcadeDeleteMAMu_NotWorkingIcons},
   uArcadeSelectIconFile in 'arcade\uArcadeSelectIconFile.pas' {FormArcadeSelectIconFile},
   uImageDeleteRename in 'uImageDeleteRename.pas' {FormImageDeleteRename},
-  uLayoutDimensions in 'uLayoutDimensions.pas' {FormLayoutDimensions},
+  uImageLayoutDimensions in 'uImageLayoutDimensions.pas' {FormImageLayoutDimensions},
   uDaphneSettings in 'arcade\uDaphneSettings.pas' {FormDaphneSettings},
   uDeleteMultipleGamesViewFiles in 'uDeleteMultipleGamesViewFiles.pas' {FormDeleteMultipleGamesViewFiles},
   uCopyMoveGameFiles in 'uCopyMoveGameFiles.pas' {FormCopyMoveGameFiles},
@@ -52,7 +51,7 @@ uses
   uFiltersDriverStatus in 'arcade\uFiltersDriverStatus.pas' {FormArcadeFiltersDriverStatus},
   uArcadeMultiSlotGames in 'arcade\uArcadeMultiSlotGames.pas' {FormArcadeMultiSlotGames},
   uMAMESettings_SimpleMode in 'arcade\uMAMESettings_SimpleMode.pas' {FormMAMESettings_SimpleMode},
-  uSoftwareListSelectMachineToRunGame in 'uSoftwareListSelectMachineToRunGame.pas' {FormSoftwareListMachineToRunGame},
+  uArcadeSoftwareListSelectMachineToRunGame in 'arcade\uArcadeSoftwareListSelectMachineToRunGame.pas' {FormArcadeSoftwareListMachineToRunGame},
   uArcadeSoftwareListCustomize in 'arcade\uArcadeSoftwareListCustomize.pas' {FormArcadeSoftwareListCustomize},
   uApplyFilterMsgBox in 'uApplyFilterMsgBox.pas' {FormApplyFilterMsgBox},
   uArcadeExportGamesList in 'arcade\uArcadeExportGamesList.pas' {FormArcadeExportGamesList},
@@ -73,7 +72,9 @@ uses
   uLastPlayedGamesMega in 'uLastPlayedGamesMega.pas' {FormLastPlayedGamesMega},
   uSelectFile in 'uSelectFile.pas' {FormSelectFile},
   uConsCompSystemRules in 'console_computer\uConsCompSystemRules.pas' {FormConsCompSystemRules},
-  uSelectFilterSystemSimple in 'uSelectFilterSystemSimple.pas' {FormSelectFilterSystemSimple};
+  uSelectFilterSystemSimple in 'uSelectFilterSystemSimple.pas' {FormSelectFilterSystemSimple},
+  uImageLayoutSelector in 'uImageLayoutSelector.pas' {FormImageLayoutSelector},
+  uImageCategorySelector in 'uImageCategorySelector.pas' {FormImageCategorySelector};
 
 {$R *.RES}
 
@@ -86,8 +87,6 @@ begin
   Application.HintColor:= $00f8f4f3;//$00EEEBE6;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPreferences, FormPreferences);
-  Application.CreateForm(TFormConsCompSystemRules, FormConsCompSystemRules);
-  Application.CreateForm(TFormSelectFilterSystemSimple, FormSelectFilterSystemSimple);
   Application.Run;
 end.
 

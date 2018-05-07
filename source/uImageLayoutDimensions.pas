@@ -1,4 +1,4 @@
-unit uLayoutDimensions;
+unit uImageLayoutDimensions;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   GraphicEx, GR32_Image;
 
 type
-  TFormLayoutDimensions = class(TForm)
+  TFormImageLayoutDimensions = class(TForm)
     PanelEx2: TPanelEx;
     LabelImagesPanel: TShadowLabel;
     LabelImagesPanelDimensions: TShadowLabel;
@@ -20,6 +20,8 @@ type
     LabelImage3Dimensions: TShadowLabel;
     ImageScrLayout: TImage32;
     LabelLayoutTitle: TShadowLabel;
+    LabelImage4: TShadowLabel;
+    LabelImage4Dimensions: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
   private
@@ -32,7 +34,7 @@ type
   end;
 
 var
-  FormLayoutDimensions: TFormLayoutDimensions;
+  FormImageLayoutDimensions: TFormImageLayoutDimensions;
 
 implementation
 
@@ -40,43 +42,43 @@ implementation
 
 uses uMain;
 
-procedure TFormLayoutDimensions.ReadSettings;
+procedure TFormImageLayoutDimensions.ReadSettings;
 var
   strFile: TMemIniFile;
 begin
   try
     strFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
-    FormLayoutDimensions.Left:= strFile.ReadInteger('Layout Dimensions', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
-    FormLayoutDimensions.Top:= strFile.ReadInteger('Layout Dimensions', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
+    FormImageLayoutDimensions.Left:= strFile.ReadInteger('Layout Dimensions', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
+    FormImageLayoutDimensions.Top:= strFile.ReadInteger('Layout Dimensions', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
   finally
     FreeAndNil(strFile);
   end;
 end;
 
-procedure TFormLayoutDimensions.SaveSettings;
+procedure TFormImageLayoutDimensions.SaveSettings;
 var
   strFile: TMemIniFile;
 begin
   try
     strFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
-    strFile.WriteInteger('Layout Dimensions', 'ScreenLeft', FormLayoutDimensions.Left);
-    strFile.WriteInteger('Layout Dimensions', 'ScreenTop', FormLayoutDimensions.Top);
+    strFile.WriteInteger('Layout Dimensions', 'ScreenLeft', FormImageLayoutDimensions.Left);
+    strFile.WriteInteger('Layout Dimensions', 'ScreenTop', FormImageLayoutDimensions.Top);
   finally
     strFile.UpdateFile;
     FreeAndNil(strFile);
   end;
 end;
 
-procedure TFormLayoutDimensions.FormCloseQuery(Sender: TObject;
+procedure TFormImageLayoutDimensions.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   SaveSettings;
   FormMain.PopupImageShowLayoutDimensions.Checked:= False;
-  FormLayoutDimensions.Release;
-  FormLayoutDimensions:= nil;
+  FormImageLayoutDimensions.Release;
+  FormImageLayoutDimensions:= nil;
 end;
 
-procedure TFormLayoutDimensions.FormShow(Sender: TObject);
+procedure TFormImageLayoutDimensions.FormShow(Sender: TObject);
 begin
   if Tag = 0 then
      begin

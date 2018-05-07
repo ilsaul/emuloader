@@ -4,7 +4,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Arcade Emulators Setup'
-  ClientHeight = 418
+  ClientHeight = 392
   ClientWidth = 640
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -93,21 +93,22 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     EllipsType = etNone
     Transparent = True
   end
-  object LabelAlterMAME_Autorun: TLabel
-    Left = 197
-    Top = 316
-    Width = 331
-    Height = 13
-    Caption = 
-      '(Run game again with another MAME build if fails with primary MA' +
-      'ME)'
+  object LabelAlterMAME_Autorun: TShadowLabel
+    Left = 225
+    Top = 315
+    Width = 295
+    Height = 16
+    Caption = '(Run game with AlterMAME if fails with primary MAME)'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clGray
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsItalic]
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clWhite
+    ShadowEnabled = True
+    EllipsType = etNone
     Transparent = True
   end
   object ShadowLabel3: TShadowLabel
@@ -150,42 +151,6 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     EllipsType = etNone
     Transparent = True
   end
-  object ButtonSetOptions: TBitBtn
-    Left = 143
-    Top = 347
-    Width = 110
-    Height = 25
-    Hint = 'Set emulator'#39's default settings'
-    Caption = 'Default Settings'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 0
-    OnClick = ButtonSetOptionsClick
-  end
-  object ButtonUpdateSystem: TBitBtn
-    Left = 265
-    Top = 347
-    Width = 110
-    Height = 25
-    Hint = 'Update emulator checksum and version info'
-    Caption = 'Update System'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 1
-    OnClick = ButtonUpdateSystemClick
-  end
-  object ButtonClearSystem: TBitBtn
-    Left = 387
-    Top = 347
-    Width = 110
-    Height = 25
-    Hint = 'Clear select emulator'#39's info'
-    Caption = 'Clear System'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
-    OnClick = ButtonClearSystemClick
-  end
   object ButtonBrowseArcade_exec: TBitBtn
     Left = 586
     Top = 156
@@ -195,7 +160,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Caption = 'Select'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 4
+    TabOrder = 1
     OnClick = ButtonBrowseArcade_execClick
   end
   object Arcade_versioninfo: TEdit
@@ -216,7 +181,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     ParentFont = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 5
+    TabOrder = 2
     OnChange = Arcade_versioninfoChange
   end
   object AlterMAME_exec: TEdit
@@ -237,7 +202,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     ParentFont = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 6
+    TabOrder = 3
     OnChange = AlterMAME_execChange
   end
   object ButtonBrowseAlterMAME: TBitBtn
@@ -249,7 +214,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Caption = 'Select'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 7
+    TabOrder = 4
     OnClick = ButtonBrowseAlterMAMEClick
   end
   object ButtonClearAlterMAME: TBitBtn
@@ -261,7 +226,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Caption = 'Clear'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 8
+    TabOrder = 5
     OnClick = ButtonClearAlterMAMEClick
   end
   object ButtonHelpAlterMAME: TBitBtn
@@ -273,7 +238,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Caption = '?'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 9
+    TabOrder = 6
     OnClick = ButtonHelpAlterMAMEClick
   end
   object PanelSystemsSelect: TPanelEx
@@ -356,7 +321,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       IncrementalSearch.Enabled = True
       IncrementalSearch.ResetTime = 1000
       IncrementalSearch.StartType = eissFocusedNode
-      ImagesLarge = FormMain.IL_Systems
+      ImagesLarge = IL_Systems
       PaintInfoGroup.Expandable = False
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
       PaintInfoItem.BorderColor = 16370824
@@ -388,11 +353,17 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   object AlterMAME_Autorun: TAdvOfficeCheckBox
     Left = 8
     Top = 314
-    Width = 190
+    Width = 213
     Height = 20
     Hint = 'Run selected game with AlterMAME executable if fails with MAME'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
     ShowHint = True
-    TabOrder = 10
+    TabOrder = 7
     OnClick = AlterMAME_AutorunClick
     Alignment = taLeftJustify
     Caption = 'Autorun Game With AlterMAME'
@@ -401,7 +372,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   end
   object PanelButtons: TPanelEx
     Left = 0
-    Top = 377
+    Top = 351
     Width = 640
     Height = 41
     Align = alBottom
@@ -415,7 +386,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Style = vgSimple
     object ButtonOk: TBitBtn
       Tag = 1
-      Left = 226
+      Left = 446
       Top = 8
       Width = 89
       Height = 25
@@ -425,7 +396,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnClick = ButtonOkClick
     end
     object ButtonCancel: TBitBtn
-      Left = 324
+      Left = 544
       Top = 8
       Width = 89
       Height = 25
@@ -433,6 +404,42 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = ButtonCancelClick
+    end
+    object ButtonSetOptions: TBitBtn
+      Left = 8
+      Top = 8
+      Width = 110
+      Height = 25
+      Hint = 'Set emulator'#39's default settings'
+      Caption = 'Default Settings'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ButtonSetOptionsClick
+    end
+    object ButtonUpdateSystem: TBitBtn
+      Left = 127
+      Top = 8
+      Width = 110
+      Height = 25
+      Hint = 'Detect emulator file checksum and version info'
+      Caption = 'Reset System'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = ButtonUpdateSystemClick
+    end
+    object ButtonClearSystem: TBitBtn
+      Left = 246
+      Top = 8
+      Width = 110
+      Height = 25
+      Hint = 'Clear select emulator'#39's info'
+      Caption = 'Clear System'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = ButtonClearSystemClick
     end
   end
   object AlterMAME_versioninfo: TEdit
@@ -453,7 +460,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     ParentFont = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 13
+    TabOrder = 10
     OnChange = AlterMAME_versioninfoChange
   end
   object PanelMAMEEmulatorsText: TPanelEx
@@ -567,13 +574,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnMouseLeave = ShadowLabel1MouseLeave
     end
     object ShadowLabel7: TShadowLabel
-      Left = 69
+      Left = 70
       Top = 0
-      Width = 112
+      Width = 111
       Height = 15
       Cursor = crHandPoint
-      Hint = 'http://ashura.altervista.org'
-      Caption = 'MAME (Ash build)'
+      Hint = 'http://hbmame.1emulation.com'
+      Caption = 'HomeBrew MAME'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -12
@@ -610,7 +617,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     ParentFont = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 3
+    TabOrder = 0
     OnChange = Arcade_execChange
   end
   object ButtonSetOptionsAlterMAME: TBitBtn
@@ -622,7 +629,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Caption = 'Default Settings'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 15
+    TabOrder = 12
     OnClick = ButtonSetOptionsAlterMAMEClick
+  end
+  object IL_Systems: TImageList
+    Height = 68
+    Width = 68
+    Left = 552
+    Top = 136
   end
 end

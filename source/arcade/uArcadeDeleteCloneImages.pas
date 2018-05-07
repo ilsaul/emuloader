@@ -320,12 +320,12 @@ procedure TFormArcadeDeleteCloneImages.SelectImageCategory;
 var
   selCat: ShortInt;
 begin
-  selCat:= FormMain.CallSelectImageCategory(ImageCategoryIcon.Tag);
+  selCat:= FormMain.CallSelectImageCategory(ImageCategoryIcon.Tag, False, True, True);
   if selCat = -1 then
      Exit;
   ImageCategoryIcon.Tag:= selCat;
-  LabelImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Caption;
-  FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
+  LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
 end;
 
 procedure TFormArcadeDeleteCloneImages.SelectSystem;
@@ -456,7 +456,7 @@ end;
 
 procedure TFormArcadeDeleteCloneImages.FixBackgroundColor;
 begin
-  ImageScr1.Color:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Tag;
+  ImageScr1.Color:= FormMain.ImageCategorySettings[ImageCategoryIcon.Tag].BackgroundColor;
   ImageParentScr1.Color:= ImageScr1.Color;
 end;
 
@@ -468,10 +468,10 @@ end;
 procedure TFormArcadeDeleteCloneImages.FormShow(Sender: TObject);
 begin
   FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
-  FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
 
   LabelSystem.Caption:= FormMain.GetArcadeSystemShortTitle(SystemIcon.Tag);
-  LabelImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ImageCategoryIcon.Tag].Caption;
+  LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
 
   WindowTitleError:= 'Error: '+FormArcadeDeleteCloneImages.Caption;
 

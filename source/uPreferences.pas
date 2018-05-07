@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles,
   Buttons, BarMenus, GraphicEx,  MPCommonObjects, EasyListview,
-  SplitterEx, AdvOfficeButtons, AdvGroupBox, ShadowLabel, PanelEx, ShellAPI;
+  SplitterEx, AdvOfficeButtons, AdvGroupBox, ShadowLabel, PanelEx, ShellAPI,
+  GR32_RangeBars;
 
 type
   TFormPreferences = class(TForm)
@@ -118,6 +119,23 @@ type
     ImageDisableThreadedLoading: TAdvOfficeCheckBox;
     LabelImageDisableThreadedLoading: TLabel;
     Label1: TLabel;
+    HintBoxSettings: TAdvGroupBox;
+    LabelHintBox_Color: TLabel;
+    HintBox_Color: TColorBox;
+    LabelHintBox_FrameColor: TLabel;
+    HintBox_FrameColor: TColorBox;
+    HintBox_FrameEnabled: TAdvOfficeCheckBox;
+    LabelHintBox_Opacity: TLabel;
+    HintBox_Opacity: TGaugeBar;
+    ButtonDefaultHintBox_Opacity: TBitBtn;
+    LabelHintBox_TextColor: TLabel;
+    LabelHintBox_TextShadowColor: TLabel;
+    HintBox_TextShadowColor: TColorBox;
+    HintBox_TextColor: TColorBox;
+    ButtonHintBoxDefaultColors: TBitBtn;
+    ButtonHintTextDefaultColors: TBitBtn;
+    HintBox_TextShadowEnabled: TAdvOfficeCheckBox;
+    HintBox_IconEnabled: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -171,6 +189,10 @@ type
     procedure InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
     procedure DisableDeleteSelectedGamesClick(Sender: TObject);
     procedure GameDocsDisplayModeSinglePanelClick(Sender: TObject);
+    procedure HintBox_OpacityChange(Sender: TObject);
+    procedure ButtonDefaultHintBox_OpacityClick(Sender: TObject);
+    procedure ButtonHintBoxDefaultColorsClick(Sender: TObject);
+    procedure ButtonHintTextDefaultColorsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -434,6 +456,11 @@ end;
 procedure TFormPreferences.ButtonGeneralClick(Sender: TObject);
 begin
   PageOptions.PageIndex:= TSpeedButton(Sender).Tag;
+  ButtonGeneral.Font.Style:= [];
+  ButtonGamesList.Font.Style:= [];
+  ButtonImages.Font.Style:= [];
+  ButtonGameDocuments.Font.Style:= [];
+  TSpeedButton(Sender).Font.Style:= [fsBold];
 end;
 
 procedure TFormPreferences.ButtonMAMu_IconsFolderSelectClick(
@@ -461,8 +488,6 @@ begin
                InternetMAMESoftwareListGameInfoLinkButtonDefault.Click;
             FormMain.UpdateVideoPreviewIni;
             FormMain.SetVideoPreviewState;
-
-            FormMain.WriteImageCategories(False, True);
           end;
      end;
 end;
@@ -620,6 +645,33 @@ begin
   //   begin
   //     // perhaps reload images / game docs of selected game ????
   //   end;
+end;
+
+procedure TFormPreferences.HintBox_OpacityChange(Sender: TObject);
+begin
+  LabelHintBox_Opacity.Caption:= 'Opacity ['+IntToStr(HintBox_Opacity.Position)+']';
+end;
+
+procedure TFormPreferences.ButtonDefaultHintBox_OpacityClick(
+  Sender: TObject);
+begin
+  HintBox_Opacity.Position:= 200;
+end;
+
+procedure TFormPreferences.ButtonHintBoxDefaultColorsClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(HintBox_Color);
+  SetDefaultColorBox(HintBox_FrameColor);
+  HintBox_FrameEnabled.Checked:= True;
+end;
+
+procedure TFormPreferences.ButtonHintTextDefaultColorsClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(HintBox_TextColor);
+  SetDefaultColorBox(HintBox_TextShadowColor);
+  HintBox_TextShadowEnabled.Checked:= True;
 end;
 
 end.

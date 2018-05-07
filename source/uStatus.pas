@@ -26,7 +26,7 @@ type
   public
     { Public declarations }
     procedure StartThreadClock;
-    procedure StopThreadClock;
+    procedure StopThreadClock(ForceStop: Boolean = False);
     procedure TitleStr(const TitleText: String; MergeCurrentText: Boolean = False);
     procedure MessageStr(const MessageText: String; Refresh: Boolean = True);
     procedure SetProgressPos(Position: Integer);
@@ -66,9 +66,9 @@ begin
   mmResult:= TimeSetEvent(1000, 0, @TimeCallBack, 0, TIME_PERIODIC);
 end;
 
-procedure TFormStatus.StopThreadClock;
+procedure TFormStatus.StopThreadClock(ForceStop: Boolean = False);
 begin
-  if not FormMain.IsStartup then
+  if (not FormMain.IsStartup) or (ForceStop) then
      begin
        TimeKillEvent(mmResult);
        ResetTimerLabel;
@@ -92,11 +92,6 @@ begin
   LabelMessage.Canvas.UnLock;
   if Refresh then
      Application.ProcessMessages; // this one is the real flickering fix...
-  {if Refresh then
-     begin
-       LabelStatusType.Refresh;
-       LabelMessage.Refresh;
-     end;}
 end;
 
 procedure TFormStatus.SetProgressPos(Position: Integer);
@@ -154,7 +149,6 @@ end;
 
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
-  //DoubleBuffered:= True; // not needed anymore as the windows is no longer multiplexed
   mmResult:= 0;
   LabelStatusType.Caption:= '';
   LabelMessage.Caption:= '';

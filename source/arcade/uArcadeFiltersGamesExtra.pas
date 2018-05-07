@@ -373,40 +373,41 @@ procedure TFormArcadeFiltersExtra.ButtonCategoriesToHideInfoClick(
 begin
   CallMessageBox;
   FormMain.AddMsgText('    To use these MAME/HBMAME filters you must place ');
-  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
-  FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('mature.ini', $00a65300, [fsBold]);
-  FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('category_hb.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' or ');
-  FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(' / ');
+  FormMain.AddMsgText('mature.ini', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(', ');
+  FormMain.AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold]);
+
   FormMain.AddMsgText(' from AntoPISA in ');
-  FormMain.AddMsgText(FormMain.GetFolderFull(43), clMaroon { $00a65300 }, [fsBold]);
+  FormMain.AddMsgText(FormMain.GetFolderFull(43), MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' folder and restart the frontend to load the new info in the games list.'+
                       #13#10+#13#10+'You can find ');
-  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('category_hb.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold]);
+
   FormMain.AddMsgText(' at AntoPISA renameSET page: http://www.progettosnaps.net/renameset/'+#13#10+#13#10+'File ');
-  FormMain.AddMsgText('mature.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('mature.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' is at http://www.progettosnaps.net/catver/ and is required so the frontend can properly filter adult/mature games if you''re using ');
-  FormMain.AddMsgText('category.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. File ');
-  FormMain.AddMsgText('catver.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' is also available at Progetto EMMA: http://www.progettoemma.net/history/catlist.php'+#13#10+#13#10+
                       'The ');
-  FormMain.AddMsgText('MAME Console Machines', $00a65300, [fsBold]);
+  FormMain.AddMsgText('MAME Console Machines', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('MAME Computer Machines', $00a65300, [fsBold]);
+  FormMain.AddMsgText('MAME Computer Machines', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('MAME Handheld Machines', $00a65300, [fsBold]);
+  FormMain.AddMsgText('MAME Handheld Machines', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' filters will show/hide MAME machines only (from -listxml output). Software lists are not included.');
 
   GenerateMessage('Help', 'Hide categories based on an external file.', '', 2);
 end;
-
 
 procedure TFormArcadeFiltersExtra.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);

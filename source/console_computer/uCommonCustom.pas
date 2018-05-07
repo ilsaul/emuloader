@@ -180,7 +180,7 @@ var
   SnapshotFolderCustom: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
   // see uCommon.ImageCategoryArray[] for the image category indexes
 
-  imgZipFileListConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)-1] of THashedStringList;
+  imgZipFileListConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of THashedStringList;
 
   VirtualDriveFile, VirtualDriveMount, VirtualDriveUnmount: String;
 
@@ -779,13 +779,9 @@ begin
   begin
     // do not assign a default folder path... leave it empty if user hasn't selected one!!!! March 02, 2017
     // this is to prevent mixing up with arcade "snap.zip" files (other categories too)
-    for ImgCatLoop:=0 to High(ImageCategoryArray)-1 do
+    for ImgCatLoop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
         SnapshotFolderCustom[sysLoop, ImgCatLoop]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[ImgCatLoop, 4], ''); //, ImageCategoryArray[ImgCatLoop, 3]);
   end;
-    //SnapshotFolderCustom[sysLoop, 0]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[0, 4], ImageCategoryArray[0, 3]);
-    //SnapshotFolderCustom[sysLoop, 1]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[1, 4], ImageCategoryArray[0, 3]);
-    //SnapshotFolderCustom[sysLoop, 2]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[2, 4], ImageCategoryArray[0, 3]);
-  //end;
   FreeAndNil(IniFileName);
 end;
 
@@ -798,20 +794,8 @@ begin
   IniFileName:= TMemIniFile.Create(GetSysImageFolders);//AppPath+'sysimagefolders.ini');
   for sysLoop:=1 to MaxConsoleComputerSystems do
   begin
-    for sysCategory:= 0 to High(ImageCategoryArray)-1 do
+    for sysCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray)-1 do
         IniFileName.WriteString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[sysCategory, 4], SnapshotFolderCustom[sysLoop, sysCategory]);
-    //begin
-    //  if SnapshotFolderCustom[sysLoop, sysCategory] <> '' then
-    //     IniFileName.WriteString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[sysCategory, 4], SnapshotFolderCustom[sysLoop, sysCategory]);
-    //end;
-
-    // old code from EmuCon, no longer used (February 11, 2017)
-    //if SnapshotFolderCustom[sysLoop, 0] <> '' then
-    //   IniFileName.WriteString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[0, 4], SnapshotFolderCustom[sysLoop, 0]);
-    //if SnapshotFolderCustom[sysLoop, 1] <> '' then
-    //   IniFileName.WriteString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[1, 4], SnapshotFolderCustom[sysLoop, 1]);
-    //if SnapshotFolderCustom[sysLoop, 2] <> '' then
-    //   IniFileName.WriteString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[2, 4], SnapshotFolderCustom[sysLoop, 2]);
   end;
   IniFileName.UpdateFile;
   FreeAndNil(IniFileName);

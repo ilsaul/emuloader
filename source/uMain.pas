@@ -100,13 +100,21 @@ type
     SystemID: ShortInt;
     CustomSystemID: ShortInt; // for console/computer games (EmuCon)
     SoftwareName: String; // for softwarelist games (msx1_cart; a800; vectrex; nes; c64; etc...)
-    ImageCategoryIndex: ShortInt; // rename this to "ImageCategoryIndex_Arcade" (Novermber 26, 2017)
+
+    ImageCategoryIndex: ShortInt; // the value of this var changes depending on "all sytems" and "console/computer" category index (if "Use Custom Category for Console/Computer" is enabled)
+    ImageCategoryIndex_AllSystems: ShortInt;
+    ImageCategoryIndex_ConsComp: ShortInt; // alternate category for console/computer, includes MAME software lists (April 15, 2018)
+    //ImageCategoryIndex_AltLayout: ShortInt; // future expansion; alternate layout for vertical arcade games; no console/computer support! (April 15, 2018)
+
     IsZipped: Boolean;
-    IsCustomGame: Boolean;
+    IsCustomGame: Boolean; // console/computer game; EmuCon
     NewImageLoaded: Boolean; // if an image is loaded, set this to TRUE; this property will be checked to "image category auto-cycle" with prev/next image buttons (image tool bar buttons)
     ImageCurrentTag: Integer;
-    //IsCategoryAllSystems: Boolean; // if you choose machine type "all systems" or machine type "custom" ("MAME and arcade" / "console/computer/handheld")
-    //ImageCategoryIndex_ConsComp: ShortInt; // for machine type "custom" in "Image Layout Settings" screen
+  end;
+
+  TImageCategorySettingsRecord = packed record
+    BackgroundColor: TColor;
+    Visible: Boolean;
   end;
 
   TThumbnailSettings = packed record
@@ -143,7 +151,6 @@ type
     MAMESoftwareListGames_Enabled,
     MAMEMachinesFilterPanel_Enabled: Boolean;
   end;
-
 
   // for future optimization when drawing menu items... might not be necessary anymore.
   {TMenuFontHeight = packed record
@@ -511,13 +518,6 @@ type
     FontDialog: TFontDialog;
     ToolBarPanel: TCoolBar;
     PopupExitApplication: TMenuItem;
-    ButtonShowTitleSnapshot: TMenuItem;
-    ButtonShowGameSnapshot: TMenuItem;
-    ButtonShowMarquee: TMenuItem;
-    ButtonShowFlyer: TMenuItem;
-    ButtonShowCabinet: TMenuItem;
-    ButtonShowControlPanel: TMenuItem;
-    ButtonShowSoftwareCover: TMenuItem;
     PopupGameFilterHaveMiss: TBcBarPopupMenu;
     PopupShowHaveMiss: TMenuItem;
     PopupShowHave: TMenuItem;
@@ -563,7 +563,6 @@ type
     IL_StandardIconsSmall: TImageList;
     IL_ArcadeSystem_Large: TImageList;
     IL_ArcadeSystem_Small: TImageList;
-    IL_ImagesCategory_Small: TImageList;
     IL_FilterWorkingNonWorking_Small: TImageList;
     IL_FilterWorkingNonWorking_Large: TImageList;
     IL_FilterHaveMiss_Small: TImageList;
@@ -609,7 +608,6 @@ type
     N25: TMenuItem;
     PopupShowCloneIcons: TMenuItem;
     NewTitleFormat: TMenuItem;
-    ButtonShowInGameArtwork: TMenuItem;
     PopupDisplayGameSnapshotifGameArtworkNotFound: TMenuItem;
     ButtonViewModeLargeIcons: TMenuItem;
     PopupSetFoldersMAMu_: TMenuItem;
@@ -627,10 +625,6 @@ type
     PopupScanResultsSelectedGame: TMenuItem;
     IL_LeftPanel: TImageList;
     N47: TMenuItem;
-    PopupMenuImageCategories: TBcBarPopupMenu;
-    ButtonShowPCB: TMenuItem;
-    PopupScreenshotLayouts: TBcBarPopupMenu;
-    PopupScrLayoutSingle: TMenuItem;
     ImagePanelSeparator: TMenuItem;
     PopupImageCenterAllSplitters: TMenuItem;
     N5: TMenuItem;
@@ -655,10 +649,8 @@ type
     MenuThumbnailSettings: TMenuItem;
     MenuThumbnailShowParentThumbs: TMenuItem;
     PopupIconSizeExtraLarge: TMenuItem;
-    IL_ImagesCategory_Large: TImageList;
     N6: TMenuItem;
     PopupShowMissROMs: TMenuItem;
-    IL_ScreenshotLayouts_Small: TImageList;
     IL_ImagesToolBarButtons: TImageList;
     IL_MiscToolBarPopup: TImageList;
     N27: TMenuItem;
@@ -690,8 +682,6 @@ type
     PopupThumbnailSettings: TMenuItem;
     N52: TMenuItem;
     PopupThumbnailShowParentThumbs: TMenuItem;
-    N36: TMenuItem;
-    PopupSetupCategoryFolders: TMenuItem;
     ToolBarFilterTitle: TToolBar;
     ButtonFilterTitleApply: TToolButton;
     ButtonFilterTitleReset: TToolButton;
@@ -719,7 +709,6 @@ type
     N39: TMenuItem;
     PanelTextBarFilter: TPanel;
     FilterGameTitle: TEdit;
-    IL_Systems: TImageList;
     FilterGameTitle_BiosName: TMenuItem;
     MenuValidateMAMECHDTypes: TMenuItem;
     PopupScanAllSelectedGames: TMenuItem;
@@ -862,7 +851,6 @@ type
     PopupCustomizeColumnsHeaderFont: TMenuItem;
     PopupDefaultHeaderFont: TMenuItem;
     ShadowLabel1: TShadowLabel;
-    ButtonNoGameROMsWithDevROMs: TBitBtn;
     MenuCreateMAMESoftwareListGames: TMenuItem;
     PopupMachineToRunGame: TMenuItem;
     PopupSetConsoleIniCustomOptions: TMenuItem;
@@ -934,7 +922,6 @@ type
     PopupDeleteMAMELCDGameOptionsAlterMAME: TMenuItem;
     CreateSupermodelXMLdatFromSourceFile1: TMenuItem;
     HelpMAMEDocumentation: TMenuItem;
-    BitBtn1: TBitBtn;
     MAMEInfoTextHolder: TRichEditURL;
     ButtonFilterControls: TToolButton;
     PopupSearchBarControlsFilter: TBcBarPopupMenu;
@@ -944,20 +931,10 @@ type
     PopupMachinesListSidePanelFiltersSaveState_Unsupported: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_Unknown: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_ListAll: TMenuItem;
-    BitBtn3: TBitBtn;
-    BitBtn5: TBitBtn;
     FilterGameTitle_SoftwareListName: TMenuItem;
     IL_StandardIconsThumbnail: TImageList;
     MenuThumbnailAlphaBlendedIcons: TMenuItem;
     IconDriverStatus: TImage;
-    ButtonShowEnd: TMenuItem;
-    ButtonShowBoss: TMenuItem;
-    ButtonShowLogo: TMenuItem;
-    ButtonShowScore: TMenuItem;
-    ButtonShowVersus: TMenuItem;
-    ButtonShowGameOver: TMenuItem;
-    ButtonShowHowToPlay: TMenuItem;
-    ButtonShowSelect: TMenuItem;
     ImageHintPanel: TPanelEx;
     ImageHintText: TShadowLabel;
     PopupMachinesListSidePanelIconSize: TMenuItem;
@@ -1057,8 +1034,15 @@ type
     ToolButton1: TToolButton;
     WebButtonPlayVideoPreview: TToolButton;
     MenuCreateHBMAMESoftwareListGames: TMenuItem;
-    BitBtn2: TBitBtn;
     MenuImageFilterCosine: TMenuItem;
+    ImageHintIcon: TImage;
+    N62: TMenuItem;
+    PanelInitZipFile: TPanelEx;
+    LabelInitZipTitle: TShadowLabel;
+    LabelInitZipFile: TShadowLabel;
+    LabelInitZipSystemTitle: TShadowLabel;
+    LabelInitZipImageCategory: TShadowLabel;
+    InitZipSystemIcon: TImage;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1081,7 +1065,6 @@ type
     procedure WebButtonRefreshClick(Sender: TObject);
     procedure WebBrowserStatusTextChange(Sender: TObject;
       const Text: WideString);
-    procedure ButtonShowGameSnapshotClick(Sender: TObject);
     procedure PopupShowFirstImageClick(Sender: TObject);
     procedure PopupRenameCurrentImageClick(Sender: TObject);
     procedure PopupDeleteCurrentImageClick(Sender: TObject);
@@ -1127,7 +1110,6 @@ type
     procedure MenuROMsFoldersClick(Sender: TObject);
     procedure MAMEInfoTextHolderURLClick(Sender: TObject;
       const URL: String);
-    procedure PopupScrLayoutSingleClick(Sender: TObject);
     procedure PopupImageCenterAllSplittersClick(Sender: TObject);
     procedure GamesListViewItemFreeing(Sender: TCustomEasyListview;
       Item: TEasyItem);
@@ -1250,7 +1232,6 @@ type
     procedure ZipForgeProcessFileFailure(Sender: TObject; FileName: String;
       Operation: TZFProcessOperation; NativeError, ErrorCode: Integer;
       ErrorMessage: String; var Action: TZFAction);
-    procedure ButtonNoGameROMsWithDevROMsClick(Sender: TObject);
     procedure MainMenuOptionsPopup(Sender: TObject);
     procedure MenuCreateMAMESoftwareListGamesClick(Sender: TObject);
     procedure PopupMachineToRunGameClick(Sender: TObject);
@@ -1286,12 +1267,9 @@ type
     procedure MenuShowFavoriteIconInGamesListClick(Sender: TObject);
     procedure MenuExportGamesListTextFileClick(Sender: TObject);
     procedure CreateSupermodelXMLdatFromSourceFile1Click(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
     procedure FilterCPUKeyPress(Sender: TObject; var Key: Char);
     procedure PopupPlayGameExtraParametersMAMEClick(Sender: TObject);
     procedure PopupMachinesListSidePanelFiltersSaveState_ListAllClick(Sender: TObject);
-    procedure BitBtn3Click(Sender: TObject);
-    procedure BitBtn5Click(Sender: TObject);
     procedure ImagesMouseEnter(Sender: TObject);
     procedure ImagesMouseLeave(Sender: TObject);
     procedure PopupMachinesListSidePanelSmall16x16Click(Sender: TObject);
@@ -1334,7 +1312,8 @@ type
       var DefaultDraw: Boolean);
     procedure ButtonImagePanelToggleClick(Sender: TObject);
     procedure ButtonDocsPanelToggleClick(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
+    procedure ButtonImageCategoryClick(Sender: TObject);
+    procedure ButtonScreenshotLayoutsClick(Sender: TObject);
 
   { Private declarations }
   private
@@ -1354,19 +1333,24 @@ type
     ProcessingGameDocuments: Boolean; // required to avoid crashes when game docs is enabled and you change between games too fast...
     GameLastAddedIndex: Integer;
     FormMainWidth, FormMainHeight, FormMainTop, FormMainLeft: Integer;
+
     ImageSoftwareName: String;
     ImageSoftNameIndex: Integer;
-    ImageDetails: packed array[1..3] of TImageDetailsRecord;
+    ImageDetails: packed array[1..MaxImagePanels] of TImageDetailsRecord;
     ImagePnl: TPanel;
-    ImageScr: array[2..3] of TImage32;
-    SplitterImg: array[1..2] of TSplitterEx;
-    ImageHintPanel2: array[2..3] of TPanelEx;
-    ImageHintText2: array[2..3] of TShadowLabel;
+    ImagePnlQuadVert: TPanel; // only used in "Quad Layout 1 Vert"
 
+    ImageScr: array[2..MaxImagePanels] of TImage32;
+    SplitterImg: array[1..3] of TSplitterEx;
+    ImageHintPanel2: array[2..MaxImagePanels] of TPanelEx;
+    ImageHintText2: array[2..MaxImagePanels] of TShadowLabel;
+    ImageHintIcon2: array[2..MaxImagePanels] of TImage;
+
+    LayoutUseAltCategory_ConsComp: Boolean; //, LayoutAltVertGames: Boolean;
     // load image in threads
-    FileStream: array[1..3] of TWideMemoryStream;
-    UnZipActive: array[1..3] of Boolean;
-    ZipForgeImg: array[2..3] of TZipForge;
+    FileStream: array[1..MaxImagePanels] of TWideMemoryStream;
+    UnZipActive: array[1..MaxImagePanels] of Boolean;
+    ZipForgeImg: array[2..MaxImagePanels] of TZipForge;
     ZipForgeIcons: TZipForge;
 
     MAMu_IconsList: THashedStringList;
@@ -1394,11 +1378,15 @@ type
     procedure SplitImageCategoriesIniSettings;
     procedure LoadImageCategoryLayoutSettings;
 
+    procedure LoadImagePanelColorSettings;
+    procedure UpdateImagePanelColorSettings;
+
     procedure LoadMAMESoftList(sysID: Integer; var SoftListVar: THashedStringList; RemoveFileExtension: Boolean);
     procedure LoadGames(LoadArcade, LoadSoftwareListMESS, LoadCustomGames: Boolean; ClearGamesList: Boolean = False);
     //procedure LoadGames; // load games from files into EasyListView (no filtering, all games visible)
 
     procedure ReloadCustomSystemsMAMESoftLists;
+
     procedure SetMainToolBarIcon(const ButtonName: TToolButton); // change tool bar button icon
     procedure ResetFavoriteSettings;
 
@@ -1407,6 +1395,7 @@ type
     procedure InitMAMu_Zip;
     procedure FreeMAMu_ZipVars;
     procedure ResetMAMu_ImageList(ReloadDefaultIcons: Boolean; ResetThumbnails: Boolean = False);
+    procedure SetImageCategoryToDisplay(IsConsoleComputerGame: Boolean);
 
     procedure PopupSelectSetExtra(Sender: TObject);
 
@@ -1441,8 +1430,8 @@ type
 
     procedure LoadCustomEmulatorsIconsPopupMenu;
 
-    procedure UpdateImageHintPanelText(Index: ShortInt);
-    procedure ChangeImageCategory(CategoryIndex: ShortInt);
+    procedure UpdateImageHintPanelText(Index: ShortInt; ForceUpdate: Boolean = False);
+    procedure ChangeImageCategory(CategoryIndex: Integer);
 
     procedure LoadInternetGameInfo(const GameName, SoftwareName: WideString; IsCustomGame: Boolean);
 
@@ -1476,10 +1465,10 @@ type
     procedure SetCustomGameTitle(ItemHolder: TEasyItem);
 
     //procedure GenerateLastUsedMachines;
-    function  CreateGamesListMAME(sysID: Byte): Boolean; // sysID is for MAME based emulator (MAME and HBMAME)
+    function  CreateGamesListMAME(sysID: Byte; SoftwareListsToProcess: THashedStringList): Boolean; // sysID is for MAME based emulator (MAME and HBMAME)
     function  IsMultiSlotSoftwareList(const SoftListName: String): Boolean;
     function  FixFileIDRegionROMCHD(FileID: ShortInt; const RegionStr, DriverNameStr: String; IsDiskFile: Boolean; out MediaTypeTagStr: String): ShortInt;
-    function  CreateGamesListXML(sysID: Byte; MAMEVersionNumber: Integer): Boolean; // MAME based emulators
+    function  CreateGamesListXML(sysID: Byte; MAMEVersionNumber: Integer; SoftwareListsToProcess: THashedStringList): Boolean; // MAME based emulators
     function  CreateGamesList_ListInfo(sysID: Byte): Boolean; // for old MAME builds!
     procedure CheckCRC32Collisions(sysID: Byte);
     function  CreateGamesListDaphne: Boolean;
@@ -1504,8 +1493,11 @@ type
     procedure ShowGameInfoAll;
     procedure GameDocsDisplayTabsToggleButtons; // added February 03, 2018
 
-    procedure ResetImageTagTo1; // this will reset Images.Tag; ImageScr[2].Tag; ImageScr[3].Tag back to "1"
+    procedure ResetImageTagTo1; // this will reset Images.Tag; ImageScr[???].Tag; back to "1"
     // zipped images functions
+
+    procedure ShowInitZipImageMsgBox(IsStartupApp: Boolean = False);
+    procedure HideInitZipImageMsgBox;
     procedure InitZippedImagesCache(FreeLists: Boolean = False);
     procedure InitImgZipLists(FreeLists: Boolean = False); // initialize ALL systems
     procedure InitImgZipSystem(sysID: Integer; FreeList: Boolean = False); // initialize a specific system
@@ -1545,12 +1537,19 @@ type
     procedure PopupSearchBarControlsFilterIncludeMainFiltersClick(Sender: TObject);
     procedure PopupSearchBarControlsFilterSelectionClick(Sender: TObject);
 
-    procedure PopulatePopupLayouts;
+    procedure CallSelectImageLayout(SelectLayoutIndex: Integer; ShowSelectorDialog: Boolean);
+    
     //procedure PopulateMachineToUsePopupMenu(const SoftwareName: String);
+    procedure CenterImageSplitterQuad(SplitterHolder: TSplitterEx; CenterAll: Boolean = False);
+
     function  CenterImageSplitter(SplitterHolder: TSplitterEx; CenterAll: Boolean = False): Boolean;
     procedure ReadScreenshotLayout(LayoutIndex: Byte; out strVar: array of Integer; out boolVar: array of Boolean);
     procedure UpdateScreenshotLayout(LayoutIndex: Byte);
     procedure ImageSplitterMovedUpd(Sender: TObject);
+    //procedure SetImageHintBoxColors(PanelToChange: TPanelEx; TextToChange: TShadowLabel);
+    procedure SetImageHintBoxColors(ImageIndex: Integer);
+
+    function  IsQuadImageLayout: Boolean;
     procedure SetImageLayout;
     procedure LoadImageLayoutPreview(LayoutIndex: ShortInt);
 
@@ -1662,6 +1661,9 @@ type
     imgZipFileSoftList: packed array of packed array[0..High(ImageCategoryArray)] of THashedStringList;
     imgSoftwareNameZipList: THashedStringList; // will contain a list of all software lists (index for imgZipFileSoftList[] array)
 
+    ImageCategorySettings: packed array [Low(ImageCategoryArray)..High(ImageCategoryArray)] of TImageCategorySettingsRecord;
+    ImageLayoutVisible: array[1..MaxImageLayouts] of Boolean;
+
     FrontendPath, FrontendVersion: String;
     //AbortExecution: Boolean;
 
@@ -1707,7 +1709,10 @@ type
     procedure PaintToolBarTheme2(RectToPaint: TRect; CanvasToPaint: TCanvas; IsMainBar: Boolean);
     procedure SetFormKeyPreview(FormHolder: TForm);
     function  CallSelectArcadeSystem(FeatureType: ShortInt = -1; SelectSysID: ShortInt = 0): Integer;
-    function  CallSelectImageCategory(SelectCategoryID: ShortInt = 1): ShortInt;
+
+    procedure ChangeImageCategoryIcon(CategoryIndex: Integer; DestinationImageList: TImageList; PositionIndex: Integer);
+    function  CallSelectImageCategory(SelectCategoryID: ShortInt; GhostDisabled, ShowDisabled: Boolean; ShowSelectorDialog: Boolean; IsToolBarFilter: Boolean = False): ShortInt;
+
     procedure BlinkBkEdit(EditHolder: TEdit);
 
     procedure GetLastSelectedItem(out EasyItemVar: TEasyItem);
@@ -1827,7 +1832,7 @@ type
     procedure EnableMsgMediaTypeLabel(MountImage: Boolean; AssociatedApplication: Boolean = False);
     //function  ValidateNeoGeoMVS(sysID: Byte; var CommandLineVar: String; iCloseWindow: Boolean = True): Boolean;
     function  GetNumberPlayersInfo(nPlayers, nPlayersIni: String): String;
-    function  ValidateMultiSlot(sysID: ShortInt; const MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
+    function  ValidateMultiSlot(sysID: ShortInt; var MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
     function  RunMAMEExtraParameters(sysID: Byte; const iEmulatorFile, SoftlistMachineName: String): String;
     function  GetTitleMachineToUse(sysID: Integer; const iMachineName, GameName, SoftwareName: String; var ItemHolder: TEasyItem): WideString;
     function  ExecuteGame(MAME_ExtraSetting: ShortInt = -1; MAME_ExtraPamars: Boolean = False): Integer;
@@ -1878,11 +1883,10 @@ type
 
     procedure LoadMediaTypeIcons(IconList: TImageList; ClearImageList: Boolean);
 
-    procedure LoadFrontendIcons;
-    procedure LoadGameIDThumbIcon(ImageHolder: TImage; GameID: ShortInt); // load 68x68 game icons
     procedure LoadImageCategoryThumbIcon(ImageHolder: TImage; CategoryIndex: ShortInt);
+    procedure LoadImageLayoutThumbIcon(ImageHolder: TImage; LayoutIndex: ShortInt);
     procedure LoadThumbnailFavIcon(Size: Integer; IconHolder: TIcon; IsAlphaBlend: Boolean); // to load fav icon into thumbnail image
-    procedure LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage);
+    procedure LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; IsConsoleComputerSys: Boolean = False);
     function  GameHaveROMs(HaveROMsTag: ShortInt): Boolean;
 
     procedure SetIcon(SourceHolder, Source2Holder, DestHolder: TImageList; SourceIndex, DestIndex: Integer);
@@ -1895,7 +1899,7 @@ type
     function  GetMAMEBuild(sysID: Byte; IsAlterMAME: Boolean = False): Integer;
     function  GetWindowStateEmulator: Integer;
     function  GetWindowStateRunGame(sysID: ShortInt): Integer;
-    function  GetArcadeEmulatorVersion(const SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
+    function  GetArcadeEmulatorVersion(SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
     function  GetArcadeEmuVersionXML(sysID: Byte): String;
     procedure SetSelectedColorBox(ColorBoxHolder: TColorBox; Color: TColor);
     procedure FixEmptyValue(TextHolder: TEdit; StringValue: String);
@@ -1908,7 +1912,7 @@ type
 
     procedure ValidateEmuImgCat_IniFile;
     function  ReadArcadeEmulatorExecutable(ShowFileNotFoundMessage: Boolean = False): Boolean;
-    procedure WriteArcadeEmulatorExecutable(UpdateEmulatorInfo, UpdateFolderInfo: Boolean);
+    //procedure WriteArcadeEmulatorExecutable(UpdateEmulatorInfo, UpdateEmulatorExecutable, UpdateFolderInfo: Boolean); // no longer needed; function moved to FormMain.OnShow() event
 
     function  ReadImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean): Boolean;
     procedure WriteImageCategories(WriteImagesSettings, WriteMAMu_Setting: Boolean);
@@ -1970,6 +1974,7 @@ type
     procedure LoadImage1(Data: Pointer); // threads for images
     procedure LoadImage2(Data: Pointer); // threads for images
     procedure LoadImage3(Data: Pointer); // threads for images
+    procedure LoadImage4(Data: Pointer); // threads for images
     function  GetImageType(iMemStream: TWideMemoryStream; ScreenIndex: Integer = 0): TImageType;
     function  LoadPreviewImage(const iFile: WideString; ImageHolder: TImage32): TImageType;
     procedure LoadScreenshot(ScreenIndex: ShortInt); // required to load using threads...
@@ -1987,7 +1992,7 @@ type
     procedure CheckSevenZip(sysID: Integer);
     function  ValidateSevenZipDLL: Boolean;
     function  CallScanGames(RefreshMode: ShortInt; CreatingList: Boolean; sysID: ShortInt; SoftwareList: String = ''; IsMultiSys: Boolean = False): Integer; // result = Games Changed Count
-    function  ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt): Integer;
+    function  ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt; SoftwareListsToProcess: THashedStringList = nil): Integer;
 
     function  ReadAtari800CartTypeTag(iFileName: WideString): Boolean;
     function  CreateCHD_SHA1(const DiskFileName, DiskSHA1: String; out RealSHA1Value: String; out HeaderVersion: Byte): Boolean;
@@ -2048,6 +2053,7 @@ type
     function  GetCRC32CollisionFile(sysID: Integer): String;
     function  GetGamesPlayedIniFile(sysID: Integer): String;
     function  GetPlayedGamesNameEntry(const GameName, SoftwareListName: String): String;
+    function  GetArcadeMultiSlotFile(sysID: Integer): String;
     function  GetMultiCartFileName(sysID: Byte; const MachineName: String; ReturnFilePath: Boolean; IsSoftwareList: Boolean = False): String;
     function  GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt): String; // get a list of software list files with their supported MESS machine names
     function  GetMAMEMachineCustomGames(sysID: ShortInt): String;
@@ -2131,8 +2137,12 @@ type
     procedure ELV_MakeVisible(ListHolder: TEasyListView = nil; Item: TEasyItem = nil; CenterSelected: Boolean = True);
     function  ELV_SelectItem(DestListView: TEasyListView; Index: Integer; strCaption: WideString = ''; ColumnIndex: Byte = 0): Boolean;
     procedure ELV_BlinkEdit(EditHolder: TEasyListView);
-    procedure ELV_PopulateImageCategory(const DestListView: TEasyListView; CaptionType: Integer = -1);
+
+    procedure ELV_PopulateImageCategory(const DestListView: TEasyListView; GhostDisabled, HideDisabled: Boolean; CaptionType: Integer = -1);
     procedure ELV_ImageCategoriesShortTitle(const DestListView: TEasyListView);
+
+    procedure ELV_PopulateImageLayouts(const DestListView: TEasyListView; MinLayoutIndex: Integer; LayoutTypeIndex: Integer = -1; CaptionType: Integer = -1);
+
     procedure ELV_PopulateSystems(const DestListView: TEasyListView; ShowDisabled: Boolean = True; ShortTitle: Boolean = False; MinIndex: ShortInt = 0; MaxIndex: ShortInt = MaxArcadeSystems);
     procedure ELV_ArcadeSystemsShortTitle(const DestListView: TEasyListView);
 
@@ -2168,11 +2178,11 @@ type
     procedure LoadSystemsIcons(IL_Holder: TImageList; EmptyImageList: Boolean = True);
     procedure LoadCategoriesIcons(IL_Holder: TImageList);
 
-    function  AppendText(ARichEdit: TRichEditURL; const AText: String; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+    function  AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
                          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
                          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 
-    procedure AddMsgText(const iTextToAdd: String; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
+    procedure AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
                                iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 
     // BcBarMenus
@@ -2215,23 +2225,24 @@ uses
   uDeleteMultipleGamesFiles,
   uArcadeSelectSystem, uArcadeScanAudioSamples,
   uArcadeGamesScanResults,
-  uThumbnailViewSettings, uSelectImageCategory,
+  uThumbnailViewSettings,
   uArcadeFileVersions, uImageLayoutSettings,
   uSelectDirectory, uArcadeROMsFolders, uGamesListFontSettings, // uZipFilesNotUsed,
   uArcadeDeleteCloneImages, uDeleteGamesFiles,
   uArcadeMAMu_IconsManager, uImagesManager,
   uSupermodelSettings, uArcadeFiltersGamesExtra, uImageDeleteRename,
-  uLayoutDimensions, uDaphneSettings, uArcadeScanGamesMode,
+  uImageLayoutDimensions, uDaphneSettings, uArcadeScanGamesMode,
   uFavoritesManager, uSEGAModel2EmulatorSettings, uFiltersDriverStatus,
   uArcadeMultiSlotGames, uMAMESettings_SimpleMode,
-  uSoftwareListSelectMachineToRunGame,
+  uArcadeSoftwareListSelectMachineToRunGame,
   uArcadeSoftwareListCustomize, uApplyFilterMsgBox, uArcadeExportGamesList,
   uArcadeRunExtraMAME, uConsCompGamesEditor, uConsCompEmulatorsSetup, uConsCompSystemsEditor,
   uConsCompGamesFolders, uConsCompMultiFloppyGames, uConsCompSystemSelector,
   uConsCompSelectEmulator, uCustomCommandLine, uCleanInstallGuide,
   uImageCategorySettings, uVideoPreviewSettings,
   uSelectFilterSystemMega, uLastPlayedGamesMega, uSelectFile,
-  uConsCompSystemRules, uSelectFilterSystemSimple;
+  uConsCompSystemRules, uSelectFilterSystemSimple, uImageLayoutSelector,
+  uImageCategorySelector;
 
 {$R *.dfm}
 
@@ -2642,7 +2653,7 @@ begin
   if FormArcadeSelectSystem.ShowModal = mrOk then
      begin
        if FormArcadeSelectSystem.MAMESoftwareListBox.Visible then
-          MenuCreateMAMESoftwareListGames.Tag:= FormArcadeSelectSystem.MAMESoftwareListBox.Tag; // Ord(FormArcadeSelectSystem.CreateMAMESoftwareListGames.Checked);
+          MenuCreateMAMESoftwareListGames.Tag:= FormArcadeSelectSystem.MAMESoftwareListBox.Tag;
 
        if FormArcadeSelectSystem.ScanMAMESetsBox.Visible then
           MenuCreateMAMESoftwareListGames.HelpContext:= FormArcadeSelectSystem.ScanMAMESetsBox.Tag;
@@ -2663,15 +2674,10 @@ begin
                   else
                      PopupScanGames.HelpContext:= -1; // avoid tag from being changed since "For This Task Only" is selected (for create games list feature)
 
+                  // 0 -> full scan
+                  // 1 -> quick scan
+                  // 2 -> force all available
                   PopupSelectScanGamesMode.Tag:= FormArcadeSelectSystem.ScanModeBox.Tag;
-                  //if FormArcadeSelectSystem.FullScan.Checked then
-                  //   PopupSelectScanGamesMode.Tag:= 0
-                  //else
-                  //if FormArcadeSelectSystem.QuickScan.Checked then
-                  //   PopupSelectScanGamesMode.Tag:= 1
-                  //else
-                  //if FormArcadeSelectSystem.ForceAllAvailable.Checked then
-                  //   PopupSelectScanGamesMode.Tag:= 2;
                 end;
              Item:= FormArcadeSelectSystem.SystemsListView.Selection.First;
              if Item <> nil then // make sure a system is selected to avoid errors (double-check mode ON)
@@ -2710,22 +2716,26 @@ begin
            end;
          False:
            begin
+             if FeatureType = 6 then
+                begin
+                  // create MAME/HBMAME software games list
+                  // .HelpContext will hold last fixed scan mode so it can be restored later...
+                  PopupSelectScanGamesMode.HelpContext:= -1;
+                  if FormArcadeSelectSystem.ScanModeCurrentTaskOnly.Checked then
+                     PopupSelectScanGamesMode.HelpContext:= PopupSelectScanGamesMode.Tag
+                  else
+                     PopupScanGames.HelpContext:= -1; // avoid tag from being changed since "For This Task Only" is selected
+
+                  // 0 -> full scan
+                  // 1 -> quick scan
+                  // 2 -> force all available
+                  PopupSelectScanGamesMode.Tag:= FormArcadeSelectSystem.ScanModeBox.Tag;
+                end;
              Result:= FormArcadeSelectSystem.SystemsListView.Selection.First.ImageIndex; // single selection
            end;
        end;
      end;
   FreeAndNil(FormArcadeSelectSystem);
-end;
-
-function TFormMain.CallSelectImageCategory(SelectCategoryID: ShortInt = 1): ShortInt;
-begin
-  Result:= -1;
-  if not Assigned(FormSelectImageCategory) then
-     FormSelectImageCategory:= TFormSelectImageCategory.Create(nil);
-  FormSelectImageCategory.selCategoryID:= SelectCategoryID;
-  if FormSelectImageCategory.ShowModal = mrOk then
-     Result:= FormSelectImageCategory.CategoriesListView.Selection.First.ImageIndex;
-  FreeAndNil(FormSelectImageCategory);
 end;
 
 procedure TFormMain.BlinkBkEdit(EditHolder: TEdit);
@@ -2822,12 +2832,12 @@ end;
 
 function TMyThreadRequest.GetImageType(iMemStream: TWideMemoryStream): TImageType;
 const
-  JPG_HEADER: array[0..2] of byte  = ($FF, $D8, $FF);
-  GIF_HEADER: array[0..2] of byte  = ($47, $49, $46);
-  BMP_HEADER: array[0..1] of byte  = ($42, $4D);
-  PNG_HEADER: array[0..3] of byte  = ($89, $50, $4E, $47);
-  TIF_HEADER: array[0..2] of byte  = ($49, $49, $2A);
-  TIF_HEADER2: array[0..2] of byte = (77, 77, 00); // special case ???
+  JPG_HEADER: array[0..2] of Byte  = ($FF, $D8, $FF);
+  GIF_HEADER: array[0..2] of Byte  = ($47, $49, $46);
+  BMP_HEADER: array[0..1] of Byte  = ($42, $4D);
+  PNG_HEADER: array[0..3] of Byte  = ($89, $50, $4E, $47);
+  TIF_HEADER: array[0..2] of Byte  = ($49, $49, $2A);
+  TIF_HEADER2: array[0..2] of Byte = (77, 77, 00); // special case ?
 var
   MemStr: TWideMemoryStream;
 begin
@@ -2869,8 +2879,6 @@ begin
     end;
   finally
     FreeAndNil(MemStr);
-    //MemStr.Free;
-    //MemStr:= nil;
   end;
   iMemStream.Position:= 0;
 end;
@@ -3312,8 +3320,7 @@ begin
              end;
          end;
 
-         //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height)
-         //if imgHeightLeft
+         //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height)... do not remove this (March 29, 2018)
        end;
        Image.Canvas.Draw(xPosFav, yPosFav, GameIcon);
      end;
@@ -3357,7 +3364,7 @@ begin
                 begin
                   if imgHeightLeft < 0 then
                      begin
-                       xPosFav:= xPosFav-28;// SystemIconSize+iRightAlignDiff+6;
+                       xPosFav:= xPosFav-28;
                        yPosFav:= 2;
                      end
                   else
@@ -3367,9 +3374,8 @@ begin
           end
        else
           xPosFav:= xPosFav+iRightAlignDiff;
-          //yPosFav:= yPosFav+24+4;
+
        Image.Canvas.Draw(xPosFav, yPosFav, FavoriteIcon);
-       //Image.Canvas.Draw(2, yPosFav, FavoriteIcon);
      end;
 
   Image.Canvas.Unlock;
@@ -3613,7 +3619,7 @@ begin
   Request.Width:= RectWidth(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
   Request.Height:= RectHeight(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
   Request.MaintainAspectRatio:= ThumbnailSettings.MaintainAspectRatio;
-  Request.BkColor:= 16637593;
+  Request.BkColor:= 16637593; // cyan, light blue
   Request.IsUnicode:= TEasyGameInfo(Item).eIsUnicode;
 
   if FoundZipped then
@@ -3666,9 +3672,9 @@ begin
   else
      Request.SystemIconSize:= IL_ArcadeSystem_Small.Height; // must set this to 24 pixels or icons will not show if system icon is disabled! (October 25, 2017)
 
-  if TEasyGameInfo(Item).eIsFavorite and ThumbnailSettings.ShowFavoriteIcon then // (MenuShowFavoriteIconInGamesList.Checked) then
+  if TEasyGameInfo(Item).eIsFavorite and ThumbnailSettings.ShowFavoriteIcon then
      begin
-       LoadThumbnailFavIcon(24, Request.FavoriteIcon, True); // always load alpha blended fav icon!
+       LoadThumbnailFavIcon(24, Request.FavoriteIcon, True); // always load alpha blended fav icon
        //case Request.AlphaBlendIcon of
        //  True:
        //    begin
@@ -3699,7 +3705,7 @@ begin
   //if ThumbnailSettings.ShowGameIcon and (not TEasyGameInfo(Item).eIsCustomGame) then
   //   IL_StandardIconsStandard.GetIcon(GetMAMEImageIndex(TEasyGameInfo(Item).eImageIndex, TEasyGameInfo(Item).eSoftwareName, False), Request.GameIcon);
 
-  if ThumbnailSettings.ShowGameIcon then //and (not TEasyGameInfo(Item).eIsCustomGame) then
+  if ThumbnailSettings.ShowGameIcon then
      begin
        case TEasyGameInfo(Item).eIsCustomGame of
          True:
@@ -4094,7 +4100,7 @@ begin
        DrawBufferBottom.Height:= (RectHeight(ARect)-TopGradHeight)-2;
        //ShowMessage('total height: '+IntToStr(RectHeight(ARect))+#13#10+
        //             'grad top height: '+IntToStr(TopGradHeight)+#13#10+
-       //             'grad bottom height: '+IntToStr(DrawBufferBottom.Height));
+       //             'grad bottom height: '+IntToStr(DrawBufferBottom.Height)); // for debugging only, do not delete/uncomment (March 29, 2018)
        DrawBufferBottom.Width:= RectWidth(ARect)-2;
        BarMenus.DrawGradient(DrawBufferBottom, nil, BitmapRect(DrawBufferBottom),
                              LowerGradientColorStart,
@@ -4241,7 +4247,7 @@ end;
 function TFormMain.LoadMultiSlotList(sysID: ShortInt; const MachineName: String; ArrayIndex: ShortInt): Boolean;
 begin
   // ArrayIndex = 0 -> Neo-Geo
-  // ArrayIndex = 1 - > ST-V
+  // ArrayIndex = 1 -> ST-V
   Result:= FileExists(GetMultiCartFileName(sysID, MachineName, True));
   if Result then
      begin
@@ -4274,9 +4280,8 @@ var
   TempFile, TempFileStatus: THashedStringList;
   FileName, FileNameStatus, SoftwareTitle, sGameName, StatusStr: String;
   Loop, iPos: Integer;
-  tmpString{, sysVersion}: String;
+  tmpString: String;
 begin
-  // no need for the SystemType here anymore...
   FileName:= GetSystemFileName(sysID, 0, SoftwareList);
   FileNameStatus:= GetSystemFileName(sysID, 2, SoftwareList);
   HolderStrings.BeginUpdate;
@@ -4320,8 +4325,6 @@ begin
             if TempFile.Count > 0 then
                begin
                  HolderStrings.AddStrings(TempFile);
-                 //if sysVersion <> '' then
-                 //   PopupGameArcadeFilters.Items[sysID].Hint:= sysVersion; // MAYBE ????????
                end;
           end;
        FreeAndNil(TempFile);
@@ -4337,7 +4340,6 @@ var
   Loop: Integer;
   tmpString: String;
 begin
-  // no need for the SystemType here
   FileName:= SystemsListCustom[sysID, 2];
 
   HolderStrings.BeginUpdate;
@@ -4391,22 +4393,47 @@ begin
       for Loop2:=0 to High(imgFolder[1]) do
           imgFolder[Loop, Loop2]:= '';
     end;
+
     for Loop:=Low(ImageScr) to High(ImageScr) do
         ImageScr[Loop]:= nil;
     ImagePnl:= nil;
+
     for Loop:=Low(SplitterImg) to High(SplitterImg) do
         SplitterImg[Loop]:= nil;
+
+    for Loop:=Low(ImageLayoutVisible) to High(ImageLayoutVisible) do
+        ImageLayoutVisible[Loop]:= True;
+        
     for Loop:=Low(ImageDetails) to High(ImageDetails) do
     begin
       ImageDetails[Loop].SystemID:= -1;
       //ImageDetails[Loop].SystemType:= 0; // always reset to arcade
-      ImageDetails[Loop].ImageCategoryIndex:= -1;
+      if Loop <> Low(ImageDetails) then
+         begin
+           ImageDetails[Loop].ImageCategoryIndex:= -1; // variable index (either "all systems" or "custom index for console/computer")
+           ImageDetails[Loop].ImageCategoryIndex_AllSystems:= -1;
+           ImageDetails[Loop].ImageCategoryIndex_ConsComp:= -1;
+         end
+      else
+         begin
+           // set to in-game snap by default, needed for a clean install (April 30, 2018)
+           ImageDetails[Loop].ImageCategoryIndex:= 0;
+           ImageDetails[Loop].ImageCategoryIndex_AllSystems:= 0;
+           ImageDetails[Loop].ImageCategoryIndex_ConsComp:= 0;
+         end;
+         
       ImageDetails[Loop].NoImageLoaded:= False;
       ImageDetails[Loop].PrevNoImageLoaded:= False;
       ImageDetails[Loop].IsZipped:= False;
       ImageDetails[Loop].NewImageLoaded:= False;
-
     end;
+
+    for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+    begin
+      ImageCategorySettings[Loop].BackgroundColor:= clBlack;
+      ImageCategorySettings[Loop].Visible:= True;
+    end;
+
     for Loop:=Low(UnZipActive) to High(UnZipActive) do
         UnZipActive[Loop]:= False;
     MAMu_Folder:= '';
@@ -4441,9 +4468,9 @@ function TFormMain.PopulateGameStatusDataLine: String;
 begin
   // for MAME and arcade only
   Result:= TempGameVars.eName+'='+Format('%.2u', [TempGameVars.eROMIdentification])+ // 2 chars; position 1 and 2
-                                  IntToStr(TempGameVars.eGameSetStatus)+ // 1 char; position 3
-                                  IntToStr(TempGameVars.eScanMode)+ // 1 char; position 4
-                                  IntToStr(Ord(TempGameVars.eIsMerged)); // 1 char; position 5
+                                  IntToStr(TempGameVars.eGameSetStatus)+             // 1 char;  position 3
+                                  IntToStr(TempGameVars.eScanMode)+                  // 1 char;  position 4
+                                  IntToStr(Ord(TempGameVars.eIsMerged));             // 1 char;  position 5
 end;
 
 function TFormMain.MountGameInfoFieldStr(const FieldTagStr, FieldValue: String): String;
@@ -4502,8 +4529,8 @@ begin
   else
   begin
     // for MAME software list games
-    Result:= IntToStr(TempGameVars.eMediaType)+ // 1 char; position 1
-             IntToStr(TempGameVars.eDriverStatus)+ // 1 char; position 2
+    Result:= IntToStr(TempGameVars.eMediaType)+      // 1 char; position 1
+             IntToStr(TempGameVars.eDriverStatus)+   // 1 char; position 2
              IntToStr(TempGameVars.eEmulationStatus) // 1 char; position 3
              //Format('%.2u', [TempGameVars.eScreenType]) // 2 chars; position 3 and 4         // for future expansion ????
              //Format('%.2u', [TempGameVars.eScreenOrientation]) // 2 chars; position 3 and 4  // for future expansion ????
@@ -4621,7 +4648,7 @@ var
   IniFile, PathString: String;
   Loop: Integer;
 begin
-  // this is used by "Image Category Settings" screen only!!!! (August 07, 2016)
+  // this is used by "Image Category Settings" screen only (August 07, 2016)
   if not ValidateArcadeEmulatorFile(SystemID) then
      Exit;
   iniFile:= GetArcadeEmuIniFileName(SystemID, EmulatorFile[SystemID]);
@@ -4670,7 +4697,7 @@ begin
   end;
   FileStr:= InitialFileName;
   if DefaultDirectory <> '' then
-     DefaultDirectory:= IncludeTrailingPathDelimiter(DefaultDirectory); // last backlash is required to show desired folder correctly!!!
+     DefaultDirectory:= IncludeTrailingPathDelimiter(DefaultDirectory); // last backlash is required to show desired folder correctly
   if OpenSaveFileDialog(self, DefaultExtension, FilterStr, DefaultDirectory, DialogTitle, FileStr, False, False, True, False) then
      Result:= FileStr;
 
@@ -4734,7 +4761,7 @@ begin
     22: DefaultExtension:= '';
   end;
   if DefaultDirectory <> '' then
-     DefaultDirectory:= IncludeTrailingPathDelimiter(DefaultDirectory); // last backlash is required to show desired folder correctly!!!
+     DefaultDirectory:= IncludeTrailingPathDelimiter(DefaultDirectory); // last backlash is required to show desired folder correctly
   if OpenSaveFileDialog(self, DefaultExtension, FilterStr, DefaultDirectory, DialogTitle, FileStr, IsOpenDialog, False, True, IsOpenDialog) then
      begin
        if EditHolder <> nil then
@@ -4809,7 +4836,7 @@ var
       Caption:= strCaption;
       if ListHolder.Header.Columns.Count > 1 then
          begin
-           // for Sega Model 2 emu only...
+           // for Sega Model 2 emu only
            case ActiveFolder of
              True : Captions[1]:= 'Active';
              False: Captions[1]:= 'Inactive';
@@ -4929,38 +4956,38 @@ begin
   GameInfoVar.eSoundStatus:= TEasyGameInfo(SelectedEasyItem).eSoundStatus;
   GameInfoVar.eGraphicStatus:= TEasyGameInfo(SelectedEasyItem).eGraphicStatus;
 
-  GameInfoVar.eCategory:= TEasyGameInfo(SelectedEasyItem).eCategory; // for MAME/HBMAME only
-  GameInfoVar.eVersionAdded:= TEasyGameInfo(SelectedEasyItem).eVersionAdded; // for MAME/HBMAME only
-  GameInfoVar.eLanguage:= TEasyGameInfo(SelectedEasyItem).eLanguage; // for MAME only
+  GameInfoVar.eCategory:= TEasyGameInfo(SelectedEasyItem).eCategory; // MAME/HBMAME only
+  GameInfoVar.eVersionAdded:= TEasyGameInfo(SelectedEasyItem).eVersionAdded; // MAME/HBMAME only
+  GameInfoVar.eLanguage:= TEasyGameInfo(SelectedEasyItem).eLanguage; // MAME only
   GameInfoVar.eName:= TEasyGameInfo(SelectedEasyItem).eName;
   GameInfoVar.eClone:= TEasyGameInfo(SelectedEasyItem).eClone;
   GameInfoVar.eDriverName:= TEasyGameInfo(SelectedEasyItem).eDriverName;
   GameInfoVar.eBiosName:= TEasyGameInfo(SelectedEasyItem).eBiosName;
   GameInfoVar.eNumberPlayers:= TEasyGameInfo(SelectedEasyItem).eNumberPlayers;
-  GameInfoVar.eNumberPlayersIni:= TEasyGameInfo(SelectedEasyItem).eNumberPlayersIni; // for MAME/HBMAME only
-  GameInfoVar.eChipCPU:= TEasyGameInfo(SelectedEasyItem).eChipCPU; // for MAME/HBMAME only
+  GameInfoVar.eNumberPlayersIni:= TEasyGameInfo(SelectedEasyItem).eNumberPlayersIni; // MAME/HBMAME only
+  GameInfoVar.eChipCPU:= TEasyGameInfo(SelectedEasyItem).eChipCPU; // MAME/HBMAME only
   GameInfoVar.ePlayed:= TEasyGameInfo(SelectedEasyItem).ePlayed;
   GameInfoVar.ePlayedDate:= TEasyGameInfo(SelectedEasyItem).ePlayedDate;
   GameInfoVar.ePlayedDateText:= TEasyGameInfo(SelectedEasyItem).ePlayedDateText;
   GameInfoVar.eTotalPlaytime:= TEasyGameInfo(SelectedEasyItem).eTotalPlaytime;
   GameInfoVar.eTotalPlaytimeText:= TEasyGameInfo(SelectedEasyItem).eTotalPlaytimeText;
-  GameInfoVar.eMechanical:= TEasyGameInfo(SelectedEasyItem).eMechanical; // for arcade only
-  GameInfoVar.eSaveState:= TEasyGameInfo(SelectedEasyItem).eSaveState; // for MAME/HBMAME only
+  GameInfoVar.eMechanical:= TEasyGameInfo(SelectedEasyItem).eMechanical; // arcade only
+  GameInfoVar.eSaveState:= TEasyGameInfo(SelectedEasyItem).eSaveState; // MAME/HBMAME only
   GameInfoVar.eIsFavorite:= TEasyGameInfo(SelectedEasyItem).eIsFavorite;
   GameInfoVar.eGameSetStatus:= TEasyGameInfo(SelectedEasyItem).eGameSetStatus; // for arcade only
   GameInfoVar.eGameSize:= TEasyGameInfo(SelectedEasyItem).eGameSize;
   GameInfoVar.eGameSizeText:= TEasyGameInfo(SelectedEasyItem).eGameSizeText;
-  GameInfoVar.eHaveGameROMs:= TEasyGameInfo(SelectedEasyItem).eHaveGameROMs; // for arcade only
+  GameInfoVar.eHaveGameROMs:= TEasyGameInfo(SelectedEasyItem).eHaveGameROMs; // arcade only
 
-  GameInfoVar.eSoftwareName:= TEasyGameInfo(SelectedEasyItem).eSoftwareName; // for MESS games 'softwarelist_name.xml'
-  GameInfoVar.eSoftwareExecParameter:= TEasyGameInfo(SelectedEasyItem).eSoftwareExecParameter; // for MESS games 'softwarelist_name.xml'
-  GameInfoVar.eSoftwareCompatible:= TEasyGameInfo(SelectedEasyItem).eSoftwareCompatible; // for MESS games 'softwarelist_name.xml'
-  GameInfoVar.eSoftwareUsageTip:= TEasyGameInfo(SelectedEasyItem).eSoftwareUsageTip; // for MESS games 'softwarelist_name.xml'
+  GameInfoVar.eSoftwareName:= TEasyGameInfo(SelectedEasyItem).eSoftwareName; // MAME games 'softwarelist_name.xml'
+  GameInfoVar.eSoftwareExecParameter:= TEasyGameInfo(SelectedEasyItem).eSoftwareExecParameter; // MAME games 'softwarelist_name.xml'
+  GameInfoVar.eSoftwareCompatible:= TEasyGameInfo(SelectedEasyItem).eSoftwareCompatible; // MAME games 'softwarelist_name.xml'
+  GameInfoVar.eSoftwareUsageTip:= TEasyGameInfo(SelectedEasyItem).eSoftwareUsageTip; // MAME games 'softwarelist_name.xml'
 
-  GameInfoVar.eScanMode:= TEasyGameInfo(SelectedEasyItem).eScanMode; // for MAME and arcade only
-  GameInfoVar.eIsMerged:= TEasyGameInfo(SelectedEasyItem).eIsMerged; // for MAME and Supermodel 3 only
-  GameInfoVar.eCHDsCount:= TEasyGameInfo(SelectedEasyItem).eCHDsCount; // for arcade only
-  GameInfoVar.eROMsAllNoDump:= TEasyGameInfo(SelectedEasyItem).eROMsAllNoDump; // for arcade only
+  GameInfoVar.eScanMode:= TEasyGameInfo(SelectedEasyItem).eScanMode; // MAME and arcade only
+  GameInfoVar.eIsMerged:= TEasyGameInfo(SelectedEasyItem).eIsMerged; // MAME and Supermodel 3 only
+  GameInfoVar.eCHDsCount:= TEasyGameInfo(SelectedEasyItem).eCHDsCount; // arcade only
+  GameInfoVar.eROMsAllNoDump:= TEasyGameInfo(SelectedEasyItem).eROMsAllNoDump; // arcade only
   GameInfoVar.eCRC32Duplicates:= TEasyGameInfo(SelectedEasyItem).eCRC32Duplicates;
 
   // these cannot be here (February 25, 2018)
@@ -4974,7 +5001,7 @@ begin
   GameInfoVar.eROMIdentification:= -1;
   GameInfoVar.eMediaType:= 0;
   GameInfoVar.eSystemID:= -1;
-  GameInfoVar.eSystemType:= 0; // arcade system type by default!
+  GameInfoVar.eSystemType:= 0; // arcade system type by default
   GameInfoVar.eCustomSystemID:= -1; // -1 means it's not a custom game or a MAME software list doesn't belong to any custom system
   GameInfoVar.eCustomMediaType:= -1; // -1 means it's not a custom game; this field is for custom games only (from EmuCon)...
   GameInfoVar.eIsCustomGame:= False;
@@ -5029,7 +5056,7 @@ begin
   GameInfoVar.eScanMode:= 0; // always full scan (ROMs/CHDs validation)
   GameInfoVar.eIsMerged:= False;
   GameInfoVar.eCHDsCount:= 0; // always zero CHDs
-  GameInfoVar.eROMsAllNoDump:= True; // always to false
+  GameInfoVar.eROMsAllNoDump:= True; // always to True
   GameInfoVar.eCRC32Duplicates:= False; // always to false
   //SetLength(GameInfoVar.eDeviceSets, 0); // cannot be initialized here (February 25, 2018)
 end;
@@ -5251,7 +5278,6 @@ begin
     False: iParams:= StringReplaceW(iParams, '%1', '"'+iFileName+'"', [rfIgnoreCase]);
   end;
 
-  //iParams:= StringReplace(iParams, '%1', '"'+ButtonPlayVideoPreview.HelpKeyword+'"', [rfIgnoreCase]); // old code, not used (February 09, 2018)
   cmdLine:= SystemStr+VideoPreviewMediaPlayerExecutable+SystemStr+' ';
   cmdLine:= cmdLine+iParams;
 
@@ -5261,7 +5287,7 @@ begin
   if VideoPreviewPlayDummyVideo then
      PlayDummyVideoPreview:= not StopCurrentPlayback;
 
-  RunProcess(cmdLine, False, SW_SHOWNORMAL);//, False);
+  RunProcess(cmdLine, False, SW_SHOWNORMAL);
 end;
 
 procedure TFormMain.PlayDummyVideo(ForcePlayback: Boolean = False);
@@ -5288,8 +5314,8 @@ begin
   if not ContainsRect(ELV_Holder.ClientInViewportCoords, R) then
      begin
        case ShowInTheMiddle of
-         True : Item.MakeVisible(emvMiddle); // this will only be used when changing filters or creating games lists!!!!
-         False: Item.MakeVisible(emvAuto);   // it must be Auto to avoid bug when scrolling the list with UP/DOWN arrow keys!!!!
+         True : Item.MakeVisible(emvMiddle); // this will only be used when changing filters or creating games lists
+         False: Item.MakeVisible(emvAuto);   // it must be Auto to avoid bug when scrolling the list with UP/DOWN arrow keys
        end;
      end;
 end;
@@ -5381,26 +5407,12 @@ begin
   if MemGameInfo.eIsCustomGame then
      ClearGameInfoRichEdit;
 
-  if VideoPreviewEnabled then
-     begin
-       VideoPreviewFile:= FindVideoPreviewFile(MemGameInfo.eSystemID, MemGameInfo.eCustomSystemID, MemGameInfo.eIsCustomGame, MemGameInfo.eName, MemGameInfo.eClone, MemGameInfo.eSoftwareName);
-       ButtonPlayVideoPreview.Enabled:= VideoPreviewFile <> '';
-       PopupPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
-       WebButtonPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
-       PlayDummyVideo;
-
-       if ButtonPlayVideoPreview.Enabled and (VideoPreviewAutoPlay) then
-          begin
-            CallPlayVideoPreview;
-          end;
-     end;
-
   PopulateMenuItemCustomEmuParameter;
   ShowRulesButton;
   if ForceMakeVisible then
      ELV_CheckItemVisible(GamesListView, SelectedEasyItem, True);
 
-  ResetImageTagTo1; // always reset image tags to 1, so image filenames can be "gamename.???", even if "Images" is disabled!
+  ResetImageTagTo1; // always reset image tags to 1, so image filenames can be "gamename.???", even if "Images" is disabled
   if PanelScreenshotsArea.Visible then
      begin
        if ButtonInternetGameInfo.Down then
@@ -5431,6 +5443,21 @@ begin
             end;
        end;
      end;
+
+  if VideoPreviewEnabled then
+     begin
+       VideoPreviewFile:= FindVideoPreviewFile(MemGameInfo.eSystemID, MemGameInfo.eCustomSystemID, MemGameInfo.eIsCustomGame, MemGameInfo.eName, MemGameInfo.eClone, MemGameInfo.eSoftwareName);
+       ButtonPlayVideoPreview.Enabled:= VideoPreviewFile <> '';
+       PopupPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
+       WebButtonPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
+       PlayDummyVideo;
+
+       if ButtonPlayVideoPreview.Enabled and (VideoPreviewAutoPlay) then
+          begin
+            CallPlayVideoPreview;
+          end;
+     end;
+     
   UpdateStatusBarGame;
 end;
 
@@ -5603,7 +5630,7 @@ begin
        ErrorMsg:= GetLastError;
        CallMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
-       AddMsgText(AppPath, $00a65300, [fsBold]);
+       AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(#13#10+'Error Code ');
        AddMsgText(IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg), clBlack, [fsBold]);
        GenerateMessage('Error', 'Run Process', '', 2, False, 1);
@@ -5779,7 +5806,7 @@ begin
   end;
 end;
 
-function TFormMain.GetArcadeEmulatorVersion(const SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
+function TFormMain.GetArcadeEmulatorVersion(SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
 var
   CommandLine, VersionDescription, tempFile, fDateStr, fVersion: String;
   BatchFile: THashedStringList;
@@ -6239,13 +6266,14 @@ var
 begin
   // this function only executes at startup, when it's not a clean install...
   ShowErrorMsg:= False;
-  if FormStatus.Visible then
-     FormStatus.MessageStr('Loading emulators info.');
 
   Result:= FileExists(GetArcadeEmulatorsFile);
   if not Result then
      Exit;
 
+  if FormStatus.Visible then
+     FormStatus.MessageStr('Loading emulators info.');
+     
   try
     INIFile:= TMemIniFile.Create(GetArcadeEmulatorsFile);
     for Loop:=1 to MaxArcadeSystems do
@@ -6293,7 +6321,7 @@ begin
            begin
              AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, clBlack, [fsBold]);
              AddMsgText('File not found: ');
-             AddMsgText(EmulatorFile[Loop], clMaroon);
+             AddMsgText(EmulatorFile[Loop], MsgTxtColors.colorWarning);
 
              AddMsgText(#13#10+#13#10+'Would you like to select an emulator executable now ? Not doing so, emulators settings will not be loaded '+
                         'and the frontend will not work properly.');
@@ -6325,7 +6353,8 @@ begin
   //LoadFoldersAllSystems; // no need to be here as this is called later in FormMain.OnShow()... when it's not a clean install
 end;
 
-procedure TFormMain.WriteArcadeEmulatorExecutable(UpdateEmulatorInfo, UpdateFolderInfo: Boolean);
+{
+procedure TFormMain.WriteArcadeEmulatorExecutable(UpdateEmulatorInfo, UpdateEmulatorExecutable, UpdateFolderInfo: Boolean);
 var
   INIFile: TMemIniFile;
   Loop: Integer;
@@ -6358,7 +6387,8 @@ var
     if EmulatorFile[SystemID] <> '' then
        begin
          SectionString:= GetArcadeSystemIniSection(SystemID);
-         INIFile.WriteString(SectionString, 'emu_FileName', EmulatorFile[SystemID]);
+         if UpdateEmulatorExecutable then
+            INIFile.WriteString(SectionString, 'emu_FileName', EmulatorFile[SystemID]);
          INIFile.WriteString(SectionString, 'emu_VersionInfo', EmulatorVersion[SystemID]);
          INIFile.WriteInteger(SectionString, 'emu_DateTime', EmulatorDateTime[SystemID]);
 
@@ -6372,7 +6402,6 @@ var
          INIFile.DeleteKey(SectionString, 'emu_FileName');
          INIFile.DeleteKey(SectionString, 'emu_VersionInfo');
          INIFile.DeleteKey(SectionString, 'emu_DateTime');
-         //INIFile.DeleteKey(SectionString, 'emu_Checksum');
          case SystemID of
            idMAME: INIFile.DeleteKey(SectionString, 'emu_Build');
            idHBMAME: INIFile.DeleteKey(SectionString, 'emu_Build');
@@ -6381,6 +6410,7 @@ var
   end;
 
 begin
+  // this function only executes at startup... it should not save the emulator filename back...
   try
     INIFile:= TMemIniFile.Create(GetArcadeEmulatorsFile);
     // Systems sections options
@@ -6406,7 +6436,8 @@ begin
          end
       else
          begin
-           INIFile.WriteString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEFile', AlterMAMEFile);
+           if UpdateEmulatorExecutable then
+              INIFile.WriteString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEFile', AlterMAMEFile);
            INIFile.WriteString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild', buildAlterMAME);
            INIFile.WriteInteger(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime', AlterMAMEDateTime);
          end;
@@ -6416,18 +6447,18 @@ begin
          INIFile.WriteString(GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion', AlterMAMEVersion);
     end;
   finally
-     for Loop:=1 to MaxArcadeSystems do
-     begin
-       SectionString:= GetArcadeSystemIniSection(Loop);
-       if not INIFile.SectionExists(SectionString) then
-          INIFile.EraseSection(SectionString);
-     end;
+     //for Loop:=1 to MaxArcadeSystems do
+     //begin
+     //  SectionString:= GetArcadeSystemIniSection(Loop);
+     //  if not INIFile.SectionExists(SectionString) then
+     //     INIFile.EraseSection(SectionString);
+     //end;
 
      INIFile.UpdateFile;
   end;
   FreeAndNil(INIFile);
 end;
-
+}
 
 function TFormMain.ReadImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean): Boolean;
 var
@@ -6610,7 +6641,7 @@ var
                 end
            end;
 
-           if LoadMAMu_Setting then
+           if LoadMAMu_Setting and (sysID = idMAME) then
            begin
              if tmpEntryStr = 'icons_directory ' then
                 begin
@@ -7037,23 +7068,29 @@ end;
 procedure TFormMain.ReadSingleLayoutCategory(SetCategoryPopupMenu: Boolean);
 var
   INIFile: TMemIniFile;
+  iCategory: Integer;
 begin
+  iCategory:= -1;
   if ValidateFile(GetImageLayoutsFile) then
      begin
        // get image category index for single image layout
        INIFile:= TMemIniFile.Create(GetImageLayoutsFile);
-       ButtonImageCategory.Tag:= INIFile.ReadInteger(GetScrLayoutSection(0), 'image1_category', GetScrLayoutDefaultType(0, 1));
+       iCategory:= INIFile.ReadInteger(GetScrLayoutSection(0), 'image1_category', GetScrLayoutDefaultType(0, 1));
        FreeAndNil(INIFile);
      end;
+
+  if iCategory = -1 then
+     iCategory:= GetScrLayoutDefaultType(0, 1);
+
   if SetCategoryPopupMenu then
      begin
-       case PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Checked of
-         True : ChangeImageCategory(PopupMenuImageCategories.Items[ButtonImageCategory.Tag].ImageIndex);
-         False: PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Click;
-       end;
-     end;
-  //if SetCategoryPopupMenu then
-  //   SelectImageMenu(PopupMenuImageCategories.Items[ButtonImageCategory.Tag]);
+       if ButtonImageCategory.Tag = iCategory then
+          ChangeImageCategory(ButtonImageCategory.Tag)
+       else
+          CallSelectImageCategory(iCategory, True, False, False, True)
+     end
+  else
+     ButtonImageCategory.Tag:= iCategory;
 end;
 
 procedure TFormMain.SplitImageCategoriesIniSettings;
@@ -7119,9 +7156,9 @@ begin
        // set image category settings
          for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
          begin
-           PopupMenuImageCategories.Items[Loop].Tag:= ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
+           ImageCategorySettings[Loop].BackgroundColor:= ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
            if Loop <> 1 then
-              PopupMenuImageCategories.Items[Loop].Visible:= Boolean(ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', 1));
+              ImageCategorySettings[Loop].Visible:= Boolean(ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', 1));
          end;
        FreeAndNil(ImgIniFile);
      end;
@@ -7131,13 +7168,75 @@ begin
        ImgIniFile:= TMemIniFile.Create(GetImageLayoutsFile);
        // set image layout settings
        for Loop:=1 to MaxImageLayouts do // must start with index #1 since single image layout cannot be set invisible
-       begin
-         iValue:= ImgIniFile.ReadInteger(GetScrLayoutSection(Loop), 'visible', 1);
-         if PopupScreenshotLayouts.Items[Loop].Visible <> Boolean(iValue) then
-            PopupScreenshotLayouts.Items[Loop].Visible:= Boolean(iValue);
-       end;
+           ImageLayoutVisible[Loop]:= Boolean(ImgIniFile.ReadInteger(GetScrLayoutSection(Loop), 'visible', 1));
        FreeAndNil(ImgIniFile);
      end;
+end;
+
+procedure TFormMain.LoadImagePanelColorSettings;
+var
+  ImgIniFile: TMemIniFile;
+begin
+  if ValidateFile(GetImageCategorySettingsFile) then
+  begin
+    ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+
+    FormPreferences.ImagePanelOuterFrameColor.Selected:= ImgIniFile.ReadInteger('Images', 'PanelOuterFrameColor', 0);
+    PanelImage.Color:= FormPreferences.ImagePanelOuterFrameColor.Selected;
+
+    FormPreferences.ImageLayoutSplitterSingleColor.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.DefaultColorColor);
+    FormPreferences.ImageLayoutSplitterSingleColorHot.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.DefaultColorColor);
+
+    if not Boolean(ImgIniFile.ReadInteger('Images', 'ShowSplitterGrip', 1)) then
+       PopupImageShowSplitterGrip.Click;
+
+    FormPreferences.HintBox_Color.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.DefaultColorColor);
+    FormPreferences.HintBox_FrameColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.DefaultColorColor);
+    FormPreferences.HintBox_FrameEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 1));
+
+    FormPreferences.HintBox_Opacity.Position:= ImgIniFile.ReadInteger('Images', 'HintBox_Opacity', 200);
+
+    FormPreferences.HintBox_TextColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.DefaultColorColor);
+    FormPreferences.HintBox_TextShadowColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.DefaultColorColor);
+    FormPreferences.HintBox_TextShadowEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 1));
+
+    FormPreferences.HintBox_IconEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_IconEnabled', 1));
+    FreeAndNil(ImgIniFile);
+  end;
+
+  SetImageHintBoxColors(1);
+  UpdateImageHintPanelText(1);
+end;
+
+procedure TFormMain.UpdateImagePanelColorSettings;
+var
+  ImgIniFile: TMemIniFile;
+begin
+  if CheckReadOnly(GetImageCategorySettingsFile) then
+     Exit;
+
+  ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+
+  ImgIniFile.WriteInteger('Images', 'PanelOuterFrameColor', FormPreferences.ImagePanelOuterFrameColor.Selected);
+
+  ImgIniFile.WriteInteger('Images', 'ShowSplitterGrip', Ord(PopupImageShowSplitterGrip.Checked));
+  ImgIniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.Selected);
+  ImgIniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+
+  ImgIniFile.WriteInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.Selected);
+  ImgIniFile.WriteInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.Selected);
+  ImgIniFile.WriteInteger('Images', 'HintBox_FrameEnabled', Ord(FormPreferences.HintBox_FrameEnabled.Checked));
+
+  ImgIniFile.WriteInteger('Images', 'HintBox_Opacity', FormPreferences.HintBox_Opacity.Position);
+
+  ImgIniFile.WriteInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.Selected);
+  ImgIniFile.WriteInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.Selected);
+  ImgIniFile.WriteInteger('Images', 'HintBox_TextShadowEnabled', Ord(FormPreferences.HintBox_TextShadowEnabled.Checked));
+
+  ImgIniFile.WriteInteger('Images', 'HintBox_IconEnabled', Ord(FormPreferences.HintBox_IconEnabled.Checked));
+
+  ImgIniFile.UpdateFile;
+  FreeAndNil(ImgIniFile);
 end;
 
 procedure TFormMain.ReadIniFile;
@@ -7164,9 +7263,10 @@ begin
   if FormStatus.Visible then
      FormStatus.MessageStr(ReadIniFileMsg);
 
+  LoadImagePanelColorSettings; // image panel color settings (image panel outer frame color, image splitter colors, image hint box settings
   LoadImageCategoryLayoutSettings; // image category "bkcolor/visible" and image layout "visible" settings
   ReadSingleLayoutCategory(True);
-  
+
   if not ValidateFile(FrontendPath+'EmuLoader.ini') then
      Exit;
 
@@ -7538,7 +7638,7 @@ begin
          PopupStartupGameSelectionGameSelected.Caption:= SelectGameStartup.Title;
        end;
 
-    PopupSelectScanGamesMode.Tag:= INIFile.ReadInteger('Preferences', 'ScanGamesMode', 0); // 0 -> full; 1 -> simple; 2 -> set all available
+    PopupSelectScanGamesMode.Tag:= INIFile.ReadInteger('Preferences', 'ScanGamesMode', 0); // 0 -> full scan; 1 -> quick simple; 2 -> force all available
     SetScanModePopupHint(PopupSelectScanGamesMode.Tag);
 
     // 0 -> disabled, don't create softlists;
@@ -7578,6 +7678,8 @@ begin
 
       // Miscellaneous
       MenuViewEmulatorFullCommandLine.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShowEmulatorFullCommandLine', 1));
+      IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'MessageBoxNightMode', 0));
+      PopulateMsgColors;
 
       SplitterGripIcon.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShowSplitterGrip', 1));
       //SplitterGripIcon.OnClick(Self);
@@ -7623,9 +7725,6 @@ begin
       2: PopupMachinesListSidePanelStandard242x4.Click;
     end;
 
-    FormPreferences.ImagePanelOuterFrameColor.Selected:= INIFile.ReadInteger('Images', 'PanelOuterFrameColor', 0);
-    PanelImage.Color:= FormPreferences.ImagePanelOuterFrameColor.Selected;
-
     Loop:= INIFile.ReadInteger('Images', 'ImageResampler', 2);
     if Loop <> 2 then
        begin
@@ -7639,16 +7738,15 @@ begin
 
     // images layouts view mode (multi-screenshots)
     ButtonScreenshotLayouts.Tag:= INIFile.ReadInteger('Images', 'LayoutIndex', 0);
-    // MenuImageCategoryLayoutSettings.Tag:= INIFile.ReadInteger('Images', 'LayoutIndex', 0); // original code!!!!!!!!
-    PopupImageShowLayoutDimensions.Checked:= Boolean(INIFile.ReadInteger('Images', 'ShowLayoutDimensions', 0));
+    //PopupImageShowLayoutDimensions.Checked:= Boolean(INIFile.ReadInteger('Images', 'ShowLayoutDimensions', 0));
 
-    FormPreferences.ImageLayoutSplitterSingleColor.Selected:= INIFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.DefaultColorColor);
-    FormPreferences.ImageLayoutSplitterSingleColorHot.Selected:= INIFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.DefaultColorColor);
-
-    if IsSingleImageLayout then
-       SetImageCategoryButtonsVisible // this will set image category tool bar buttons visible/invisible
-    else
-       PopupScreenshotLayouts.Items[ButtonScreenshotLayouts.Tag].Click;
+    if not IsStartup then
+    begin
+      if IsSingleImageLayout then
+         SetImageCategoryButtonsVisible // this will set image category tool bar buttons visible/invisible
+      else
+         CallSelectImageLayout(ButtonScreenshotLayouts.Tag, False);
+    end;
 
     // need to set games view mode AFTER image view mode
     //if not IsDetailsView then
@@ -7672,9 +7770,7 @@ begin
         end;
       1: PopupImageStretch.Tag:= 0;
     end;
-    if not Boolean(INIFile.ReadInteger('Images', 'ShowSplitterGrip', 1)) then
-       PopupImageShowSplitterGrip.Click;
-       
+
     MenuShowImages.Tag:= INIFile.ReadInteger('Images', 'ShowImages', 1);
 
     FormPreferences.ImageDisableThreadedLoading.Checked:= Boolean(INIFile.ReadInteger('Images', 'DisableThreadedLoading', 0));
@@ -7942,7 +8038,7 @@ begin
       INIFile.WriteInteger('Appearance', 'BackgroundImageEnabled', Ord(FormPreferences.GamesBackgroundImageEnable.Checked));
       INIFile.WriteString('Appearance', 'BackgroundImage', FormPreferences.GamesBackgroundImage.Text);
 
-      INIFile.WriteInteger('Appearance', 'GamesFontDialogShowAvailableOnly', MenuFontSettings.Tag); 
+      INIFile.WriteInteger('Appearance', 'GamesFontDialogShowAvailableOnly', MenuFontSettings.Tag);
 
       INIFile.WriteInteger('Appearance', 'SelectionAlphaBlendEnabled', Ord(FormPreferences.GameSelectionAlphaBlend.Checked));
 
@@ -7963,7 +8059,7 @@ begin
       INIFile.WriteInteger('MAMu_', 'ForceGameBiosIcons', Ord(PopupShowGameBiosIcons.Checked));
       INIFile.WriteInteger('MAMu_', 'ForceGameDriverIcons', Ord(PopupShowGameDriverIcons.Checked));
 
-      INIFile.WriteInteger('Preferences', 'ScanGamesMode', PopupSelectScanGamesMode.Tag); // 0 -> full; 1 -> quick; 2 -> force available
+      INIFile.WriteInteger('Preferences', 'ScanGamesMode', PopupSelectScanGamesMode.Tag); // 0 -> full scan; 1 -> quick scan; 2 -> force all available
 
       // 0 -> disabled, don't create softlists;
       // 1 -> update mode: create softlist games and update existing ones
@@ -8005,6 +8101,7 @@ begin
       end;
 
       INIFile.WriteInteger('Preferences', 'ShowEmulatorFullCommandLine', Ord(MenuViewEmulatorFullCommandLine.Checked));
+      INIFile.WriteInteger('Preferences', 'MessageBoxNightMode', Ord(IsNightMode));
 
       INIFile.WriteInteger('Preferences', 'BrowseGameWithArcadeControl', MenuArcadeBrowseGames.Tag);
       INIFile.WriteInteger('Preferences', 'ArcadeSlikStik_Swap2ndStick', Ord(MenuArcadeControlSlikStik_SwapStick.Checked));
@@ -8038,8 +8135,6 @@ begin
 
       INIFile.WriteInteger('MachinesList_SidePanel', 'GameIconSize', PopupMachinesListSidePanelIconSize.Tag);
 
-      INIFile.WriteInteger('Images', 'PanelOuterFrameColor', FormPreferences.ImagePanelOuterFrameColor.Selected);
-
       INIFile.WriteInteger('Images', 'Stretch', Ord(PopupImageStretch.Checked));
       INIFile.WriteInteger('Images', 'StretchLargerImages', Ord(PopupImageStretchLarger.Checked));
 
@@ -8054,24 +8149,7 @@ begin
 
       INIFile.WriteInteger('Images', 'LayoutIndex',  ButtonScreenshotLayouts.Tag);
 
-      {
-      // deprecated code, REMOVE ME!
-      for Loop:=0 to MaxImageLayouts do
-      begin
-        if Loop > 0 then
-           begin
-             case PopupScreenshotLayouts.Items[Loop].Visible of
-               True : INIFile.DeleteKey('Images_Layout', 'layout'+IntToStr(Loop)+'_visible');
-               False: INIFile.WriteInteger('Images_Layout', 'layout'+IntToStr(Loop)+'_visible', Ord(PopupScreenshotLayouts.Items[Loop].Visible));
-             end;
-           end;
-      end;
-      }
-
-      INIFile.WriteInteger('Images', 'ShowSplitterGrip', Ord(PopupImageShowSplitterGrip.Checked));
-      INIFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.Selected);
-      INIFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
-      INIFile.WriteInteger('Images', 'ShowLayoutDimensions', Ord(PopupImageShowLayoutDimensions.Checked));
+      //INIFile.WriteInteger('Images', 'ShowLayoutDimensions', Ord(PopupImageShowLayoutDimensions.Checked));
 
       INIFile.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
       INIFile.WriteInteger('Images', 'FixRetroArchImageFileNames', Ord(FormPreferences.FixRetroArchImageFileNames.Checked));
@@ -8122,7 +8200,7 @@ begin
 
              AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, clBlack, [fsBold]);
              AddMsgText('File: ');
-             AddMsgText(EmulatorFile[Loop]+#13#10, clMaroon);
+             AddMsgText(EmulatorFile[Loop]+#13#10, MsgTxtColors.colorWarning);
              AddMsgText('Initialization file is missing and failed to be created.', clBlack, [fsItalic]);
 
              Result:= False;
@@ -8214,6 +8292,9 @@ begin
         case sysID of
           idSupermodel: // Supermodel: SEGA Model 3
             begin
+              if EmulatorFileName <> '' then
+                 Result:= ExtractFileName(ChangeFileExt(EmulatorFileName, '.ini'))
+              else
               if EmulatorFile[sysID] <> '' then
                  Result:= ExtractFileName(ChangeFileExt(EmulatorFile[sysID], '.ini'));
               // NOTE: the .ini files will be in "el\arcade\supermodel_cfg\" sub-folder!!!!!!
@@ -8221,11 +8302,17 @@ begin
           idDaphne: Result:= GetFolderArcadeEmulatorIni(idDaphne, True)+'daphne_el.ini';
           idDemul: // Demul
             begin
+              if EmulatorFileName <> '' then
+                 Result:= ExtractFileName(ChangeFileExt(EmulatorFileName, '.ini'))
+              else
               if EmulatorFile[sysID] <> '' then
                  Result:= ChangeFileExt(EmulatorFile[sysID], '.ini');
             end;
           idSegaModel2: // SEGA Model 2 (Elsemi emulator)
             begin
+              if EmulatorFileName <> '' then
+                 Result:= ExtractFilePath(EmulatorFileName)+'emulator.ini'
+              else
               if EmulatorFile[sysID] <> '' then
                  Result:= ExtractFilePath(EmulatorFile[sysID])+'emulator.ini';
             end;
@@ -9099,7 +9186,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('ROMs list file ');
-       AddMsgText(GetGamesFolderEL+GetSystemFileName(idSupermodel, 1), $00a65300, [fsBold]);
+       AddMsgText(GetGamesFolderEL+GetSystemFileName(idSupermodel, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
        GenerateMessage(TitleErrorMsg, 'File error.', '', 2);
      end;
@@ -9197,13 +9284,15 @@ end;
 // usage (MAME v0.154 ana newer)
 // ume64 neogeo -cart1 fatfury1 -cart2 fatfury2 -cart3 fatfursp -cart4 rbffspec -cart5 rbff2 -cart6 garou
 
-function TFormMain.ValidateMultiSlot(sysID: ShortInt; const MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
+function TFormMain.ValidateMultiSlot(sysID: ShortInt; var MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
 var
   selItem: TEasyItem;
   HaveClones: Boolean;
-  cmdLine: String;
+  cmdLine, tmpStr, MachineToRun: String;
   iCount, SlotsMax: Byte;
-  iItemIndex, iIndex: Integer;
+  iItemIndex, iIndex, EmulatorBuild: Integer;
+  MachinesIni: TStringList;
+
   //cStart: Integer;
 
   function CheckDriver(const DriverName, SelectedDriverName: String): Boolean;
@@ -9248,6 +9337,7 @@ begin
   Result:= sysID in [idMAME, idHBMAME];
   if not Result then
      Exit;
+
   Result:= CheckMultipleSelected(GamesListView);
   if not Result then
      Exit;
@@ -9263,9 +9353,26 @@ begin
           Exit;
      end;
 
+
+  cmdLine:= '';
+  EmulatorBuild:= -1;
+  case sysID of
+    idMAME: cmdLine:= buildMAME;
+    idHBMAME: cmdLine:= buildHBMAME;
+  end;
+  if cmdLine <> '' then
+     begin
+       Delete(cmdLine, 1, 2);
+       EmulatorBuild:= StrToInt(cmdLine);
+     end;
+  if EmulatorBuild < 154 then
+     Exit;
+
   //cStart:= GetTickCount;
   if not Assigned(FormArcadeMultiSlotGames) then
      FormArcadeMultiSlotGames:= TFormArcadeMultiSlotGames.Create(nil);
+
+  FormArcadeMultiSlotGames.Tag:= sysID;
 
   if MachineName = 'neogeo' then
      SlotsMax:= 6
@@ -9369,6 +9476,8 @@ begin
 
   if MachineName = 'neogeo' then
      begin
+       FormArcadeMultiSlotGames.PanelNeoGeoMVS.Visible:= True;
+
        case sysID of
          idMAME  : FreeAndNil(MultiCartListMAME[0]);
          idHBMAME: FreeAndNil(MultiCartListHBMAME[0]);
@@ -9390,10 +9499,12 @@ begin
   if not HaveClones then
      FormArcadeMultiSlotGames.GamesList.Header.Columns[3].Visible:= False;
 
+  FormArcadeMultiSlotGames.LabelMultiSlotMachines.Tag:= SlotsMax;
   //ShowMessage(IntToStr(GetTickCount-cStart));
-  Result:= FormArcadeMultiSlotGames.ShowModal = mrYes;
+  Result:= FormArcadeMultiSlotGames.ShowModal = mrOk;
   if Result then
      begin
+       MachineToRun:= MachineName;
        cmdLine:= '';
        iCount:= 1;
        selItem:= FormArcadeMultiSlotGames.GamesList.Groups.FirstItem;
@@ -9401,12 +9512,40 @@ begin
          cmdLine:= cmdLine+' -cart'+IntToStr(iCount)+' '+selItem.Captions[2];
          Inc(iCount);
          selItem:= FormArcadeMultiSlotGames.GamesList.Groups.NextItem(selItem);
-       until selItem = nil;
-       // MachineName is 'neogeo'; 'megatech'; 'playch10'; 'stvbios'...
-       if MachineName <> 'stv' then
-          CommandLineVar:= CommandLineVar+MachineName+cmdLine
+
+       until (selItem = nil) or (iCount > FormarcadeMultiSlotGames.LabelMultiSlotMachines.Tag);
+       // MachineName is 'neogeo'; 'megatech'; 'playch10'; 'stvbios'; "Neo-Geo MVS" can have other machine names (April 28, 2018)
+       if MachineName = 'neogeo' then
+          begin
+            MachineToRun:= FormArcadeMultiSlotGames.LabelMultiSlotMachines.Hint;
+            MachinesIni:= TStringList.Create;
+
+            MachinesIni.LoadFromFile(GetArcadeMultiSlotFile(sysID)); //(FormMain.GetArcadeFolder+'mame_multislot_machines.txt');
+            iCount:= MachinesIni.IndexOf('[lastused]');
+            if iCount > 0 then
+            begin
+              for iCount:= iCount+1 to MachinesIni.Count-1 do
+              begin
+                if MachinesIni.Names[iCount] = MachineName then
+                   begin
+                     MachinesIni[iCount]:= MachineName+'='+MachineToRun;
+                     MachinesIni.SaveToFile(GetArcadeMultiSlotFile(sysID)); // (FormMain.GetArcadeFolder+'mame_multislot_machines.txt');
+                     Break;
+                   end;
+              end;
+            end;
+            FreeAndnil(MachinesIni);
+            MachineName:= MachineToRun;
+          end
        else
-          CommandLineVar:= CommandLineVar+'stvbios'+cmdLine;
+       if MachineName = 'stv' then
+          MachineToRun:= 'stvbios';
+       CommandLineVar:= CommandLineVar+MachineToRun+cmdLine; // CommandLineVar:= CommandLineVar+MachineName+cmdLine
+
+       //if MachineName <> 'stv' then
+       //   CommandLineVar:= CommandLineVar+MachineToRun+cmdLine // CommandLineVar:= CommandLineVar+MachineName+cmdLine
+       //else
+       //   CommandLineVar:= CommandLineVar+'stvbios'+cmdLine;
      end;
   if iCloseWindow then
      FreeAndNil(FormArcadeMultiSlotGames);
@@ -9885,6 +10024,7 @@ begin
   Result:= 0; // all is well
   if not ValidateSelectedGame then
      Exit;
+
   if MemGameInfo.eIsCustomGame then
      EmulatorTitle:= SystemsListCustom[MemGameInfo.eCustomSystemID, 0]
   else
@@ -9975,7 +10115,7 @@ begin
               EnableMsgMediaTypeLabel(False);
               AddEmulatorHeader;
               AddMsgText('    Game file ');
-              AddMsgText(MemGameInfo.eName, $00a65300, [fsBold]);
+              AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
               AddMsgText(' was not found!');
               if not GameFoldersFound(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType) then
                  AddMsgText(' Games folders are empty or not selected.');
@@ -10074,7 +10214,7 @@ begin
          begin
            if PanelMachinesList.Visible then
               GenerateMessage(ErrorMsgTitle, EmulatorTitle,
-                              '    Cannot execute because there is no MAME machine selected in the machines list (left panel). Aborting...', 2, False, 1)
+                              '    Cannot execute because there is no MAME machine selected in the machines list. Aborting...', 2, False, 1)
            else
               GenerateMessage(ErrorMsgTitle, EmulatorTitle,
                               '    Cannot execute because the MAME machine name is blank. '+
@@ -10109,6 +10249,7 @@ begin
       if not (MemGameInfo.eSystemID in [idSupermodel, idDemul, idZiNc]) then
          begin
            MultiSlotMachineName:= ChangeFileExt(MemGameInfo.eDriverName, '');
+           MachineNameStr:= MultiSlotMachineName;
            if IsNeoGeoDriver(MemGameInfo.eSystemID, MultiSlotMachineName, MemGameInfo.eBiosName) then
               MultiSlotMachineName:= 'neogeo';
            IsMultiSlot:= ValidateMultiSlot(MemGameInfo.eSystemID, MultiSlotMachineName, CommandLine, not MenuViewEmulatorFullCommandLine.Checked);
@@ -10116,7 +10257,7 @@ begin
               begin
                 MultiSlotMachineName:= '';
                 if FormArcadeMultiSlotGames <> nil then
-                if FormArcadeMultiSlotGames.ModalResult = mrNo then
+                if FormArcadeMultiSlotGames.ModalResult = mrCancel then
                    begin
                      FreeAndNil(FormArcadeMultiSlotGames);
                      ResetSettings;
@@ -10125,6 +10266,7 @@ begin
                 CommandLine:= CommandLine+TempGameVars.eName; // regular command line --> "emulator.exe gamename"
                 // Supermodel, Demul, ZiNc need special parameters...
               end;
+           MachineToUse_Title:= GetTitleMachineToUse(MemGameInfo.eSystemID, MultiSlotMachineName, MemGameInfo.eName, MemGameInfo.eSoftwareName, MAMEMachineItem);
          end;
     end;
   end;
@@ -10311,39 +10453,52 @@ begin
              True :
                begin
                  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
              False:
                begin
-                 AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
            end;
 
            case IsAlterMAME of
              True:
                begin
-                 AddMsgText('AlterMAME Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-                 AddMsgText(AlterMAMEVersion+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                 AddMsgText(AlterMAMEVersion+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
              False:
                begin
-                 AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-                 AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                 AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
            end;
             if IsMultiSlot then
               begin
+                if MachineToUse_Title <> '' then
+                   begin
+                     AddMsgText(#13#10+'Multi-slot Machine   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                     AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                   end;
+                //AddMsgText(#13#10+'Multi-slot Machine   ', txtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                //AddMsgText(FormArcadeMultiSlotGames.Caption+#13#10, txtColors.colorKeyValue, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+                //if MachineToUse_Title <> '' then
+                //   AddMsgText(MachineToUse_Title+#13#10, txtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+
                 msItem:= FormArcadeMultiSlotGames.GamesList.Groups.FirstItem;
                 repeat
-                  if msItem.Index < 11 then
-                     NewOption:= '0'+IntToStr(msItem.Index+1)
-                  else
-                     NewOption:= IntToStr(msItem.Index+1);
+                  if not msItem.Ghosted then
+                  begin
+                    if msItem.Index < 11 then // 11 ? msItem.Index starts at ZERO
+                       NewOption:= '0'+IntToStr(msItem.Index+1)
+                    else
+                       NewOption:= IntToStr(msItem.Index+1);
 
-                  AddMsgText(#13#10+NewOption+' ', clOlive, [fsBold], taLeftJustify, 8, 'Tahoma');
-                  AddMsgText(msItem.Captions[1], clBlack, [fsBold], taLeftJustify, 8, 'Tahoma');
+                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [fsBold], taLeftJustify);//, 8, 'Tahoma');
+                    AddMsgText(msItem.Captions[1], clBlack, [fsBold], taLeftJustify);//, 8, 'Tahoma');
+                  end;
 
                   msItem:= FormArcadeMultiSlotGames.GamesList.Groups.NextItem(msItem);
                 until msItem = nil;
@@ -10355,18 +10510,18 @@ begin
               begin
                  if MemGameInfo.eSoftwareName <> '' then
                     begin
-                      AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, $000053a6, [fsItalic, fsBold], taCenter);
-                      AddMsgText(MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                      AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                      AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                     end;
               end
            else
               begin
-                AddMsgText(#13#10+'MAME Machine   ', $000053a6, [fsItalic, fsBold], taCenter);
-                AddMsgText(MachineToUse_Title+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'MAME Machine   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
               end;
-              
+
            if not IsDemulEmptySystem then
-              AddMsgText(#13#10+CommandLine, $00600000, [], taLeftJustify, 10, 'Consolas')
+              AddMsgText(#13#10+CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas')
            else
               AddMsgText(#13#10+'    The system name is blank, Demul cannot run games without it. If this is a playable game, '+
                          'please post a message in the forum or contact by e-mail.'+#13#10+#13#10+
@@ -10379,14 +10534,14 @@ begin
                 AddMsgText(#13#10+#13#10);
                 AddMsgText('AlterMAME will be used to run "'+MemGameInfo.eName+'" if it fails '+
                            'to load with MAME.'+#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator  ', $000053a6, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME Emulator  ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                AddMsgText(AlterMAMEVersion+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile, [rfIgnoreCase]);
                 if IsBatchFileAlterMAME then
                    NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
 
-                AddMsgText(#13#10+NewOption, $00600000, [], taLeftJustify, 10, 'Consolas');
+                AddMsgText(#13#10+NewOption, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
               end;
            if not IsMultiSlot then
               begin
@@ -10396,14 +10551,14 @@ begin
                      begin
                        AddMsgText(#13#10);
                        AddMsgText(#13#10+'WARNING: One on more ROMs/CHDs are missing, "'+
-                                  MemGameInfo.eName+'" might not run properly!'+#13#10, clMaroon, [fsItalic], taCenter, 10);
+                                  MemGameInfo.eName+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
                      end
                   else
                      if (MemGameInfo.eSystemID = idZiNc) and (NewOption = '') then
                         begin
                           AddMsgText(#13#10);
                           AddMsgText(#13#10+'WARNING: Zip file was not found. "'+MemGameInfo.eName+'" cannot be run!'+
-                                     #13#10+'ZiNc might return "Error 1: Incorrect Function" message.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
+                                     #13#10+'ZiNc might return "Error 1: Incorrect Function" message.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
                         end;
                 end;
 
@@ -10413,7 +10568,7 @@ begin
                         AddMsgText(#13#10+#13#10);
 
                      AddMsgText('WARNING: One on more ROMs/CHDs are missing, "'+
-                                MachineNameStr+'" machine might not run properly!'+#13#10, clMaroon, [fsItalic], taCenter, 10);
+                                MachineNameStr+'" machine might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
                    end;
               end;
 
@@ -10428,25 +10583,25 @@ begin
                  else
                     begin
                       MsgType:= 4; // set this so msgbox shows the system icon...
-                      if MultiSlotMachineName = 'neogeo' then
+                      if MachineNameStr{MultiSlotMachineName} = 'neogeo' then
                          begin
                            NewOption:= 'Neo-Geo Multi Video System';
                            //MsgType:= 4;
                          end
                       else
-                      if MultiSlotMachineName = 'megatech' then
+                      if MachineNameStr{MultiSlotMachineName} = 'megatech' then
                          begin
                            NewOption:= 'Sega Mega-Tech System';
                            //MsgType:= 5;
                          end
                       else
-                      if MultiSlotMachineName = 'playch10' then
+                      if MachineNameStr{MultiSlotMachineName} = 'playch10' then
                          begin
                            NewOption:= 'Nintendo PlayChoice-10';
                            //MsgType:= 6;
                          end
                       else
-                      if MultiSlotMachineName = 'stv' then
+                      if MachineNameStr{MultiSlotMachineName} = 'stv' then
                          begin
                            NewOption:= 'Sega Titan Video Game System';
                            //MsgType:= 7;
@@ -10541,52 +10696,52 @@ begin
              True:
                begin
                  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
              False:
                begin
-                 AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
            end;
 
            if (IsAlterMAME and (not TryAgainAlterMAME)) then
               begin
-                AddMsgText('AlterMAME Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                AddMsgText(AlterMAMEVersion+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
               end
            else
               begin
-                AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
               end;
 
            if not MemGameInfo.eIsCustomGame then
               begin
                 if MemGameInfo.eSoftwareName <> '' then
                    begin
-                     AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, $000053a6, [fsItalic, fsBold], taCenter);
-                     AddMsgText(MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                     AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                     AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                    end;
               end
            else
               begin
-                AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, $000053a6, [fsItalic, fsBold], taCenter);
-                AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+                AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
               end;
 
-           AddMsgText(#13#10+'Error '+IntToStr(ExitCode), $00000060, [fsBold]);
+           AddMsgText(#13#10+'Error '+IntToStr(ExitCode), MsgTxtColors.colorExitCode, [fsBold]);
            AddMsgText(': '+SysErrorMessage(ExitCode)+'.');
-           
+
            // check this link for most common error messages:
            // http://www.febooti.com/products/automation-workshop/online-help/events/run-dos-cmd-command/exit-codes/
            if ExitCode = 2 then
               begin
                 AddMsgText(#13#10);
                 case MemGameInfo.eIsCustomGame of
-                  True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
-                  False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
+                  True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                  False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
                 end;
               end;
 
@@ -10603,20 +10758,20 @@ begin
               begin
                 if ExitCode <> 2 then
                    AddMsgText(#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator   ', $000053a6, [fsItalic, fsBold], taCenter); // RGB(0, 83, 166)
-                AddMsgText(AlterMAMEVersion+#13#10, clGray, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter); // RGB(0, 83, 166)
+                AddMsgText(AlterMAMEVersion+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
                 if ExitCodeAlterMAME <> 0 then
                    begin
-                     AddMsgText(#13#10+'Error '+IntToStr(ExitCodeAlterMAME), $00000060, [fsBold]);
+                     AddMsgText(#13#10+'Error '+IntToStr(ExitCodeAlterMAME), MsgTxtColors.colorExitCode, [fsBold]);
                      AddMsgText(': '+SysErrorMessage(ExitCodeAlterMAME)+'.');
-                     
+
                      if ExitCodeAlterMAME = 2 then
                         begin
                           AddMsgText(#13#10);
                           case MemGameInfo.eIsCustomGame of
-                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
-                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter, 10);
+                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
                           end;
                         end
                      else
@@ -10625,7 +10780,7 @@ begin
                    end
                 else
                    begin
-                     AddMsgText(#13#10+'Success '+IntToStr(ExitCode), $00000060, [fsBold]);
+                     AddMsgText(#13#10+'Success '+IntToStr(ExitCode), MsgTxtColors.colorExitCode, [fsBold]);
                      AddMsgText(' :'+SysErrorMessage(ExitCodeAlterMAME)+'.');
                    end;
               end;
@@ -10639,7 +10794,7 @@ begin
                    begin
                      // need to use MAMEMachineItem var here and use TempGameVars variables in GameDetails screen...
                      AddMsgText(#13#10+'Please check for missing ROMs/CHDs and make sure the machine ');
-                     AddMsgText(MachineToUse_Title, clNavy, [fsItalic]);
+                     AddMsgText(MachineToUse_Title, MsgTxtColors.colorMachineName{ colorMachineMultiSlot}, [fsItalic]);
                      AddMsgText(' ('+MachineNameStr+') ');
                      AddMsgText('doesn''t have missing ROMs/CHDs. Would you like to view ROMs/CHDs details now ?');
                    end;
@@ -10740,11 +10895,11 @@ end;
 
 procedure TFormMain.AddEmulatorHeader(const iEmulatorFile: String = '');
 begin
-  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', $000053a6, [fsItalic, fsBold], taCenter);
+  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
   if iEmulatorFile = '' then
-     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, clGray, [fsItalic, fsBold], taCenter)
+     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter)
   else
-     AddMsgText(iEmulatorFile+#13#10, clGray, [fsItalic, fsBold], taCenter);
+     AddMsgText(iEmulatorFile+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
   AddMsgText(#13#10);
 end;
 
@@ -11003,7 +11158,7 @@ begin
         EnableMsgMediaTypeLabel(((MemGameInfo.eCustomMediaType = 2) and (EmulatorMountVirtualDrive[MemGameInfo.eCustomSystemID])));
         AddEmulatorHeader;
         AddMsgText('    File ');
-        AddMsgText(GetEmuParametersFile, $00a65300, [fsBold]);
+        AddMsgText(GetEmuParametersFile, MsgTxtColors.colorFileName, [fsBold]);
         AddMsgText(' was not found! The frontend can''t function properly without it. Aborting...');
         GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
         Exit;
@@ -11017,7 +11172,7 @@ begin
        if EmulatorString <> '' then
           begin
             AddEmulatorHeader;
-            AddMsgText(EmulatorString+#13#10, $00600000, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText(EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
             AddMsgText(#13#10+'    Emulator file not found! Please make sure the file exists or select another emulator before running games.');
           end
        else
@@ -11080,7 +11235,7 @@ begin
                   EnableMsgMediaTypeLabel(False);
                   AddEmulatorHeader;
                   AddMsgText('    Game file ');
-                  AddMsgText(MemGameInfo.eName, $00a65300, [fsBold]);
+                  AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
                   AddMsgText(' was not found! The main floppy disk could not be located.');
                   if not GameFoldersFound(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType) then
                      AddMsgText(' Games folders are empty or not selected.');
@@ -11119,11 +11274,11 @@ begin
                         AddMsgText(' screen to select a file.'+#13#10+#13#10+
                                    '    Officially supported virtual drive tools are:'+#13#10);
                         AddMsgText('Daemon Tools ', clBlack, [fsBold]);
-                        AddMsgText('http://www.daemon-tools.cc', $00a65300);
+                        AddMsgText('http://www.daemon-tools.cc', MsgTxtColors.colorFileName);
                         AddMsgText(#13#10+'Elby Virtual CloneDrive ', clBlack, [fsBold]);
-                        AddMsgText('http://www.slysoft.com', $00a65300);
+                        AddMsgText('http://www.slysoft.com', MsgTxtColors.colorFileName);
                         AddMsgText(#13#10+'Alcohol 120% ', clBlack, [fsBold]);
-                        AddMsgText('http://www.alcohol-soft.com', $00a65300);
+                        AddMsgText('http://www.alcohol-soft.com', MsgTxtColors.colorFileName);
                         AddMsgText(#13#10+#13#10+'This feature is for disc images only. Aborting...');
 
                         GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
@@ -11171,7 +11326,7 @@ begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              AddEmulatorHeader;
              AddMsgText('    Game file ');
-             AddMsgText(MemGameInfo.eName, $00a65300, [fsBold]);
+             AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' was not found!');
              case MemGameInfo.eIsCustomGame of
                True:
@@ -11211,13 +11366,13 @@ begin
                           EnableMsgMediaTypeLabel(UseVirtualDrive);
                           AddEmulatorHeader;
                           AddMsgText('    File extension ');
-                          AddMsgText(GameFileExt, $00a65300, [fsBold]);
+                          AddMsgText(GameFileExt, MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText(' not supported. Valid file extensions are: ');
-                          AddMsgText('.gxb', $00a65300, [fsBold]);
+                          AddMsgText('.gxb', MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText('; ');
-                          AddMsgText('.fxe', $00a65300, [fsBold]);
+                          AddMsgText('.fxe', MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText('; ');
-                          AddMsgText('.smc', $00a65300, [fsBold]);
+                          AddMsgText('.smc', MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText(#13#10+#13#10+'Aborting...');
                           GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
                           ResetToFrontend;
@@ -11319,7 +11474,7 @@ begin
         CallMessageBox;
         EnableMsgMediaTypeLabel(UseVirtualDrive);
         AddEmulatorHeader;
-        AddMsgText(EmulatorString+#13#10, $00600000, [], taLeftJustify, 10, 'Consolas');
+        AddMsgText(EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
         AddMsgText(#13#10+'    No parameters were found. Please make sure the emulator parameter is not empty. '+
                    'Also check the selected parameter (1 or 2) in the main tool bar buttons.'+#13#10+#13#10+
                    'If the game is a disc image, check if the emulator requires or not a parameter to load the game.');
@@ -11397,17 +11552,17 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
-             AddMsgText(MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
            end;
        end;
        
@@ -11417,18 +11572,18 @@ begin
 
        if UseVirtualDrive then
           begin
-            AddMsgText('Unmount Image From Virtual Drive'+#13#10, $000053a6, [], taCenter);
-            AddMsgText(UnmountImageStr+#13#10+#13#10, $00600000, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Mount Image On Virtual Drive'+#13#10, $000053a6, [], taCenter);
-            AddMsgText(MountImageStr+#13#10#13#10, $00600000, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Execute Emulator'+#13#10, $000053a6, [], taCenter);
-            AddMsgText(CommandLine+#13#10, $00600000, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, $000053a6, [], taCenter);
-            AddMsgText(UnmountImageStr, $00600000, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText('Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText(UnmountImageStr+#13#10+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText('Mount Image On Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText(MountImageStr+#13#10#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText('Execute Emulator'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText(CommandLine+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText(UnmountImageStr, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
           end
        else
           begin
-            AddMsgText(CommandLine, $00600000, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
           end;
 
        Continue:= GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle,
@@ -11489,28 +11644,28 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, $000053a6, [fsItalic, fsBold], taCenter);
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', $000053a6, [fsItalic, fsBold], taCenter);
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
-             AddMsgText(MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
            end;
        end;
        AddEmulatorHeader;
-       AddMsgText(#13#10+'Error '+IntToStr(ExitCode), $00000060, [fsBold]);
+       AddMsgText(#13#10+'Error '+IntToStr(ExitCode), MsgTxtColors.colorExitCode, [fsBold]);
        AddMsgText(': '+SysErrorMessage(ExitCode)+'.');
        // check this link for most common error messages:
        // http://www.febooti.com/products/automation-workshop/online-help/events/run-dos-cmd-command/exit-codes/
        if ExitCode = 2 then
           begin
             AddMsgText(#13#10);
-            AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, clMaroon, [fsItalic], taCenter);
+            AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter);
           end;
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle, '', 2);
      end;
@@ -11523,11 +11678,11 @@ var
   IsFileFound: Boolean;
   CommandLine, ErrorMsgTitle, AppTitle, AssociatedApp, StrDOSName: String;
   iPlayTime: Cardinal;
-  
+
   function AddEmulatorHeader: Boolean;
   begin
-    AddMsgText('Associated Application'+#13#10, $000053a6, [], taCenter);
-    AddMsgText(AppTitle+#13#10, clGray, [fsItalic, fsBold], taCenter);
+    AddMsgText('Associated Application'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+    AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
     AddMsgText(#13#10);
   end;
   
@@ -11555,11 +11710,11 @@ begin
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('File extension');
-       AddMsgText(ExtractFileExt(MemGameInfo.eName), $00a65300, [fsBold]);
+       AddMsgText(ExtractFileExt(MemGameInfo.eName), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' is not associated with any application!'+#13#10+#13#10+
                   '    Please associate your games files in Windows with the emulator of your choice (unzipped only).'+
                    #13#10+#13#10+'    You can disable the');
-       AddMsgText('Play With Associated Emulator', $00a65300 {clBlack}, [fsBold]);
+       AddMsgText('Play With Associated Emulator', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('setting in games popup menu (mouse right-click).');
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
        ResetToFrontend;
@@ -11580,7 +11735,7 @@ begin
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('    File ');
-       AddMsgText(MemGameInfo.eName, $00a65300, [fsBold]);
+       AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found! If game is located on a removable media, insert it and try again...'+#13#10+
                    'Folders list might also be blank. Select at least one folder to point the location of your games.');
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
@@ -11598,7 +11753,7 @@ begin
        AddEmulatorHeader;
        AddMsgText('    You have chosen to run a game with the associated application.'+#13#10+
                   'The application executable was read from Windows registry.'+#13#10+#13#10);
-       AddMsgText(CommandLine, $00600000, [], taLeftJustify, 10, 'Consolas');
+       AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
        if GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle, '', 1) = mrNo then
           begin
             ResetToFrontend;
@@ -11782,11 +11937,11 @@ begin
             AddMsgtext(' emulators do not support loading disks from the command line. Disk file names '+
                        'must be added manually in the config file.'+#13#10+#13#10+
                        '    Please make sure file ');
-            AddMsgText('config.kegs', $00a65300, [fsBold]);
+            AddMsgText('config.kegs', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgtext(' exist for ');
             AddMsgText('KEGS32', clBlack, [fsBold]);
             AddMsgtext(' emulator or ');
-            AddMsgText('config.txt', $00a65300, [fsBold]);
+            AddMsgText('config.txt', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgtext(' exist for ');
             AddMsgText('GSport', clBlack, [fsBold]);
             AddMsgtext(' emulator.'+#13#10+#13#10+'Aborting...');
@@ -11942,7 +12097,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    File ');
-       AddMsgText(rFile, $00a65300, [fsBold]);
+       AddMsgText(rFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found! Cannot display the system''s usage rules.');
        GenerateMessage('Error', SystemsListCustom[MemGameInfo.eCustomSystemID, 0]);
        Exit;
@@ -12001,8 +12156,8 @@ var
   begin
     Result:= True;
     AddMsgText('    Emulator in use not supported for multiple disks: '+#13#10);
-    AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, $00a65300, [fsBold]);
-    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, clGray, [fsBold, fsItalic]);
+    AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyTitle{ $00a65300 }, [fsBold]);
+    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold, fsItalic]);
   end;
 
 begin
@@ -12024,44 +12179,44 @@ begin
        else
           AddMsgText('    '+MediaTypeCustom[MemGameInfo.eCustomMediaType, 0]+' game selected. '+
                      'Multiple floppy disks loading is only supported on following ');
-       AddMsgText('systems', $00a65300, [fsBold]); AddMsgText('/'); AddMsgText('emulators', clBlack, [fsBold]);
+       AddMsgText('systems', MsgTxtColors.colorBoldTitle, [fsBold]); AddMsgText('/'); AddMsgText('emulators', clBlack, [fsBold]);
        AddMsgText(':'+#13#10+#13#10);
-       AddMsgText('Amiga', $00a65300, [fsBold]);
+       AddMsgText('Amiga', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('FS-UAE', clBlack, [fsBold]);
        AddMsgText(' / ');
        AddMsgText('WinUAE'+#13#10, clBlack, [fsBold]);
-       AddMsgText('Commodore 64 / 128 / VIC-20', $00a65300, [fsBold]);
+       AddMsgText('Commodore 64 / 128 / VIC-20', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('WinVICE'+#13#10, clBlack, [fsBold]);
-       AddMsgText('Atari 400/800/XL', $00a65300, [fsBold]);
+       AddMsgText('Atari 400/800/XL', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('Altirra', clBlack, [fsBold]);
        AddMsgText(' (15 disks max) / ');
        AddMsgText('Atari++', clBlack, [fsBold]);
        AddMsgText(' (4 disks max)'+#13#10+' / ');
-       AddMsgText('Apple II', $00a65300, [fsBold]);
+       AddMsgText('Apple II', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('AppleWin', clBlack, [fsBold]);
        AddMsgText(' / ');
        AddMsgText('JACE', clBlack, [fsBold]);
        AddMsgText(' (2 disks max)'+#13#10);
-       AddMsgText('Apple IIGS', $00a65300, [fsBold]);
+       AddMsgText('Apple IIGS', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('GSport', clBlack, [fsBold]);
        AddMsgText(' / ');
        AddMsgText('KEGS32', clBlack, [fsBold]);
        AddMsgText(' (11 disks max)'+#13#10);
-       AddMsgText('Amstrad CPC', $00a65300, [fsBold]);
+       AddMsgText('Amstrad CPC', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(': ');
        AddMsgText('WinAPE', clBlack, [fsBold]);
        AddMsgText(' (2 disks max)'+#13#10+#13#10+
                   '    For ');
        AddMsgText('MSX', clBlack, [fsBold]);
        AddMsgText(' multiple disks, use the ');
-       AddMsgText('v-DRIVE', $00a65300, [fsBold]);
+       AddMsgText('v-DRIVE', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' feature from ');
-       AddMsgText('blueMSX', $00a65300, [fsBold]);
+       AddMsgText('blueMSX', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' emulator'+#13#10+#13#10+'Aborting...');
        ShowMsg;
        Exit;
@@ -12078,14 +12233,14 @@ begin
              CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
-             AddMsgText('WinVICE', $00a65300, [fsBold]);
+             AddMsgText('WinVICE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulator can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, WinVICE filename must be one of the following:'+#13#10);
-             AddMsgText('x64.exe        x64sc.exe        x128.exe        x64dtv.exe'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('x64.exe        x64sc.exe        x128.exe        x64dtv.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+'    Also, a ');
-             AddMsgText('flip list file', $00a65300, [fsBold]);
+             AddMsgText('flip list file', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' will be created by EmuCon, named the same as the first disk, but with a ');
-             AddMsgText('.vfl', $00a65300, [fsBold]);
+             AddMsgText('.vfl', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' extension. This file only needs to be created once and it is required '+
                         'by WinVICE for disk swap during the game.'+#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
@@ -12102,12 +12257,12 @@ begin
              CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
-             AddMsgText('FS-UAE', $00a65300, [fsBold]);
+             AddMsgText('FS-UAE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' and ');
-             AddMsgText('WinUAE', $00a65300, [fsBold]);
+             AddMsgText('WinUAE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('FS-UAE.exe        WinUAE.exe'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('FS-UAE.exe        WinUAE.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -12124,12 +12279,12 @@ begin
              CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
-             AddMsgText('Altirra', $00a65300, [fsBold]);
+             AddMsgText('Altirra', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' and ');
-             AddMsgText('Atari++', $00a65300, [fsBold]);
+             AddMsgText('Atari++', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('Altirra.exe        Altirra64.exe        atari++.exe'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('Altirra.exe        Altirra64.exe        atari++.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -12147,12 +12302,12 @@ begin
              CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
-             AddMsgText('AppleWin', $00a65300, [fsBold]);
+             AddMsgText('AppleWin', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' and ');
-             AddMsgText('JACE', $00a65300, [fsBold]);
+             AddMsgText('JACE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks (2 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('AppleWin.exe        jace.bat        jace.cmd'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('AppleWin.exe        jace.bat        jace.cmd'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -12168,12 +12323,12 @@ begin
              CallMessageBox;
              AddMsgText('    Only ');
              GetSelectedEmulatorMulti;
-             AddMsgText('KEGS32', $00a65300, [fsBold]);
+             AddMsgText('KEGS32', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' and ');
-             AddMsgText('GSport', $00a65300, [fsBold]);
+             AddMsgText('GSport', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks (11 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('KEGS32.exe        GSport.exe'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('KEGS32.exe        GSport.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -12189,10 +12344,10 @@ begin
              CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
-             AddMsgText('WinApe', $00a65300, [fsBold]);
+             AddMsgText('WinApe', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulator can be used to load multiple floppy disks (2 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('WinApe.exe'+#13#10, $00a65300, [fsBold], taCenter);
+             AddMsgText('WinApe.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -12460,7 +12615,7 @@ begin
          EnableMsgMediaTypeLabel(False);
          AddEmulatorHeader(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]]);
          AddMsgText('    Flip list file ');
-         AddMsgText(FileFullPath, $00a65300, [fsBold]);
+         AddMsgText(FileFullPath, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(' could not be saved. Please make sure the destination folder exists and try again. Aborting...');
          GenerateMessage(iMsgTitle, MemGameInfo.eTitle);
        end;
@@ -12509,7 +12664,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    File ');
-       AddMsgText(iniStr, $00a65300, [fsBold]);
+       AddMsgText(iniStr, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. Unable to edit file.'+
                         #13#10+#13#10+'The game cannot be run!');
        GenerateMessage('Warning', 'Edit .ini file');
@@ -13369,7 +13524,7 @@ begin
   Application.ProcessMessages;
 end;
 
-procedure TFormMain.ELV_PopulateImageCategory(const DestListView: TEasyListView; CaptionType: Integer = -1);
+procedure TFormMain.ELV_PopulateImageCategory(const DestListView: TEasyListView; GhostDisabled, HideDisabled: Boolean; CaptionType: Integer = -1);
 var
   Loop: ShortInt;
   IsCheckBox: Boolean;
@@ -13383,9 +13538,9 @@ begin
     with DestListView.Items.Add do
     begin
       ImageIndex:= Loop;
-      Tag:= PopupMenuImageCategories.Items[ImageIndex].Tag; // background color
+      Tag:= ImageCategorySettings[ImageIndex].BackgroundColor; // background color
       case CaptionType of
-        -1: Caption:= PopupMenuImageCategories.Items[Loop].Caption; // category full title
+        -1: Caption:= GetImageCategoryTitle(Loop); // category full title
          0: Caption:= ''; // empty title
          1:
            begin
@@ -13402,11 +13557,19 @@ begin
              end;
            end;
       end;
-      if not PopupMenuImageCategories.Items[Loop].Visible then
-         State:= State+[esosGhosted];
+      if not ImageCategorySettings[Loop].Visible then
+         begin
+           if GhostDisabled then
+              State:= State+[esosGhosted];
+           if not IsCheckBox then
+              begin
+                if HideDisabled then
+                   Visible:= ImageCategorySettings[Loop].Visible;
+              end;
+         end;
 
       if IsCheckBox then
-         Checked:= PopupMenuImageCategories.Items[Loop].Visible;
+         Checked:= ImageCategorySettings[Loop].Visible;
     end;
   end;
   DestListView.Items.ReIndexDisable:= False;
@@ -13433,6 +13596,76 @@ begin
     end;
     Item:= DestListView.Groups.NextItem(Item);
   until Item = nil;
+  DestListView.Items.ReIndexDisable:= False;
+  DestListView.EndUpdate;
+end;
+
+procedure TFormMain.ELV_PopulateImageLayouts(const DestListView: TEasyListView; MinLayoutIndex: Integer; LayoutTypeIndex: Integer = -1; CaptionType: Integer = -1);
+var
+  IsCheckBox, Continue: Boolean;
+
+  PosIndex: ShortInt;
+  Loop: Byte;
+  StrTitle: String;
+
+begin
+  IsCheckBox:= DestListView.PaintInfoItem.CheckType = ectBox;
+  DestListView.BeginUpdate;
+  DestListView.Items.ReIndexDisable:= True;
+
+  for Loop:=MinLayoutIndex to MaxImageLayouts do
+  begin
+    Continue:= False;
+    case LayoutTypeIndex of
+      -1: Continue:= True; // add all layouts
+       0:
+         begin
+           if Loop = 0 then
+              Continue:= True // single layout cannot be set invisible
+           else
+              Continue:= ImageLayoutVisible[Loop]; // only visible layouts
+         end;
+       2: Continue:= Loop in [1, 2]; // add dual layouts only
+       3: Continue:= Loop in [3..8]; // add triple layouts only
+       4: Continue:= Loop > 8;       // add quad layouts only
+    end;
+
+    if Continue and (Loop <> 0) then
+       Continue:= ImageLayoutVisible[Loop];
+    if Continue then
+    begin
+      with DestListView.Items.Add do
+      begin
+        ImageIndex:= Loop;
+        case CaptionType of
+          -1: Caption:= GetScrLayoutSection(Loop); // layout full title
+           0: Caption:= ''; // empty title
+           {1: // this is not used anywhere
+             begin
+               // short title
+               case ImageIndex of
+                 0: Caption:= 'Title';
+                 1: Caption:= 'Snap';
+                 5: Caption:= 'CPanel';
+                 6: Caption:= 'Cover';
+                 8: Caption:= 'Game Artwork';
+                 15: Caption:= 'How To';
+               else
+                    Caption:= ImageCategoryArray[ImageIndex, 1];
+               end;
+             end;}
+        end;
+
+        if IsCheckBox then
+           begin
+             if Loop = 0 then
+                Checked:= True
+             else
+                Checked:= ImageLayoutVisible[Loop];
+           end;
+      end;
+    end;
+  end;
   DestListView.Items.ReIndexDisable:= False;
   DestListView.EndUpdate;
 end;
@@ -13797,7 +14030,7 @@ end;
 
 procedure TFormMain.ELV_ResetNormalColors(ELV_Holder: TEasyListView; UpdateSelection: Boolean = True);
 begin
-  FormMain.ELV_SetSelectRibbon(0, ELV_Holder, True);
+  ELV_SetSelectRibbon(0, ELV_Holder, True);
   if not UpdateSelection then
      Exit;
   if ELV_Holder <> GamesListView then
@@ -13842,21 +14075,6 @@ begin
     Group:= ELV_Holder.Groups.NextGroup(Group);
   until Group = nil;
   ELV_Holder.EndUpdate;
-end;
-
-procedure TFormMain.PopulatePopupLayouts;
-var
-  Loop: Byte;
-begin
-  PopupScreenshotLayouts.BeginUpdate;
-  PopupScreenshotLayouts.Items[0].Caption:= GetScrLayoutSection(0);
-  for Loop:=1 to MaxImageLayouts do
-  begin
-    AddMenuItem(PopupScreenshotLayouts.Items, GetScrLayoutSection(Loop), '', False, True, True, PopupScreenshotLayouts.Items[0].ImageIndex+Loop);
-    PopupScreenshotLayouts.Items[Loop].Tag:= Loop;
-    PopupScreenshotLayouts.Items[Loop].OnClick:= PopupScrLayoutSingleClick;
-  end;
-  PopupScreenshotLayouts.EndUpdate;
 end;
 
 function TFormMain.GetSoftwareListTitle(const SoftwareName: String; sysID: ShortInt): WideString;
@@ -13952,7 +14170,6 @@ end;
 
 function TFormMain.GetImageCategoriesFile: String;
 begin
-  //Result:= GetArcadeFolder+'image_categories.ini';
   Result:= GetArcadeFolder+'sysimagefolders_arcade.ini';
 end;
 
@@ -14033,6 +14250,11 @@ begin
      Result:= GameName
   else
      Result:= SoftwareListName+'\'+GameName;
+end;
+
+function TFormMain.GetArcadeMultiSlotFile(sysID: Integer): String;
+begin
+  Result:= GetArcadeFolder+GetArcadeSystemIniSection(sysID, True)+'_multislot_machines.txt';
 end;
 
 function TFormMain.GetMultiCartFileName(sysID: Byte; const MachineName: String; ReturnFilePath: Boolean; IsSoftwareList: Boolean = False): String;
@@ -14263,7 +14485,7 @@ begin
        AddMsgText('No games were added, already in the list.'+#13#10+#13#10);
        AddMsgText(FavTitleStr+#13#10, clBlack, [fsBold]);
        AddMsgText('File: ');
-       AddMsgText(FavoriteProfile[1], $00a65300, [fsBold]);
+       AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold]);
        GenerateMessage('Info', MsgTitle);
      end;
 end;
@@ -14304,7 +14526,7 @@ begin
                         'Games cannot be removed from the favorites list.'+#13#10+#13#10);
              AddMsgText(FavoriteProfile[0]+#13#10, clBlack, [fsBold]);
              AddMsgText('File: ');
-             AddMsgText(FavoriteProfile[1], $00a65300, [fsBold]);
+             AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold]);
              GenerateMessage('Info', MsgTitle);
              Exit;
            end;
@@ -14318,7 +14540,7 @@ begin
         //     AddMsgText('    File not found. '+
         //                'Games cannot be removed from the hidden list.'+#13#10+#13#10);
         //     AddMsgText('File: ');
-        //     AddMsgText(GetHiddenGamesFile, $00a65300, [fsBold]);
+        //     AddMsgText(GetHiddenGamesFile, MsgTxtColors.colorFileName, [fsBold]);
         //     GenerateMessage('Info', MsgTitle, '', 2, 1);
         //     Exit;
         //   end;
@@ -14399,7 +14621,7 @@ begin
         AddMsgText('No games were removed from the favorites list.'+#13#10+#13#10);
         AddMsgText(FavTitleStr+#13#10, clBlack, [fsBold]);
         AddMsgText('File: ');
-        AddMsgText(FavoriteProfile[1], $00a65300, [fsBold]);
+        AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold]);
         GenerateMessage('Info', MsgTitle);
       end;
   end;
@@ -14499,7 +14721,6 @@ begin
      begin
        ExtractROMsFolders(Folder, SystemID);
      end;
-
 
   if iniDirString <> '' then
      iniDirString:= FullFolderFix(iniDirString, ExeFileStr)
@@ -15264,7 +15485,7 @@ begin
   // 03100<name>area51mx.chd/><sha1>5ff10f4e87094d4449eabf3de7549564ca568c7e/>
 end;
 
-function TFormMain.CreateGamesListMAME(sysID: Byte): Boolean;
+function TFormMain.CreateGamesListMAME(sysID: Byte; SoftwareListsToProcess: THashedStringList): Boolean;
 var
   EmuTitle, TitleErrorMsg, FileLine, tempFile, tempFile2, iVersion: String;
   IsXML: Boolean;
@@ -15283,7 +15504,7 @@ var
                   begin
                     CallMessageBox;
                     AddMsgText('File ');
-                    AddMsgText(tempFileName, $00a65300, [fsBold]);
+                    AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
                     AddMsgText(' is empty! Aborting...');
                     GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
                   end;
@@ -15296,7 +15517,7 @@ var
              Exit;
           CallMessageBox;
           AddMsgText('File ');
-          AddMsgText(tempFileName, $00a65300, [fsBold]);
+          AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText(' was not found! Aborting...');
           GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
         end;
@@ -15311,7 +15532,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('File ');
-       AddMsgText(EmulatorFile[sysID], $00a65300, [fsBold]);
+       AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
        GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
        Result:= False;
@@ -15462,7 +15683,7 @@ begin
   FormStatus.TitleStr('Create Games List: '+EmulatorVersion[sysID]);
   Application.ProcessMessages;
   if IsXML then
-     Result:= CreateGamesListXML(sysID, iMAME) // (MAME and HBMAME v0.70 and up)
+     Result:= CreateGamesListXML(sysID, iMAME, SoftwareListsToProcess) // (MAME and HBMAME v0.70 and up)
   else
      Result:= CreateGamesList_ListInfo(sysID); // for old MAME builds ("-listinfo" parameter)
 end;
@@ -15574,7 +15795,7 @@ end;
 
 // check region="" tags for MAME v0.130 and newer; older MAME builds do not have useful info in the region="" tag
 // this is the MAME build where region="" tag was added to all games...
-function TFormMain.CreateGamesListXML(sysID: Byte; MAMEVersionNumber: Integer): Boolean;
+function TFormMain.CreateGamesListXML(sysID: Byte; MAMEVersionNumber: Integer; SoftwareListsToProcess: THashedStringList): Boolean;
 var
   ListXML, ROMsList, games_bios, ListCPU, ListSamples, ListROMsDeviceSet, ListROMsBiosSet, ListDuplicateROMs: THashedStringList;
   FileLine, ROMsDetailsLine, TempString, TempString2, ROMDataLine, ROMOf: String;
@@ -15590,7 +15811,7 @@ var
   tmpList, DeviceSetSize: THashedStringList;
   HasROMs, ROMsHeaderAdded, IsDiscreteAudio, SoftListHeaderAdded: Boolean;
   SoftList, GameStatusList: TStringList;
-  SoftwareListsToCreate: THashedStringList;
+  //SoftwareListsToCreate: THashedStringList;
   NeoGeoMemcardAdded: Boolean;
   MemCardMachineList: TStringList;
   MemcardsCount: Byte;
@@ -15885,15 +16106,14 @@ var
 
   function AddToListSoftwareListXML(const slName: String): Boolean;
   begin
-    // temp list to create software list games
-    if not Assigned(SoftwareListsToCreate) then
+    // list var parameter to mount a list of softwarenames
+    if not SoftwareListsToProcess.Sorted then
        begin
-         SoftwareListsToCreate:= THashedStringList.Create;
-         SoftwareListsToCreate.Sorted:= True;
-         SoftwareListsToCreate.Duplicates:= dupIgnore;
-         SoftwareListsToCreate.BeginUpdate;
+         SoftwareListsToProcess.Sorted:= True;
+         SoftwareListsToProcess.Duplicates:= dupIgnore;
+         SoftwareListsToProcess.BeginUpdate;
        end;
-    SoftwareListsToCreate.Add(slName);
+    SoftwareListsToProcess.Add(slName);
   end;
 
   function FreeMemVariables: Boolean;
@@ -16474,7 +16694,7 @@ begin
 
                 if (TempGameVars.eClone = '') and (ROMOf <> '') then
                    TempGameVars.eClone:= ROMOf;
-                   
+
                 HasROMs:= False;
                 GetScreenRes:= False;
                 ROMsHeaderAdded:= False;
@@ -17007,11 +17227,13 @@ begin
     if Assigned(SoftList) then
        SoftList.EndUpdate;
 
-    if Assigned(SoftwareListsToCreate) then
-       begin
-         SoftwareListsToCreate.EndUpdate;
-         SoftwareListsToCreate.Sorted:= False;
-       end;
+    SoftwareListsToProcess.EndUpdate;
+    SoftwareListsToProcess.Sorted:= False;
+    //if Assigned(SoftwareListsToCreate) then
+    //   begin
+    //     SoftwareListsToCreate.EndUpdate;
+    //     SoftwareListsToCreate.Sorted:= False;
+    //   end;
   end;
 
   WarningMessagesList.EndUpdate;
@@ -17060,7 +17282,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('ROMs list file ');
-       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), $00a65300, [fsBold]);
+       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
        GenerateMessage(TitleErrorMsg, 'File error.', '', 2);
      end;
@@ -17127,7 +17349,7 @@ begin
   if MenuCreateMAMESoftwareListGames.Tag = 0 then
      SoftListDeleteGamesFiles(sysID, 0) // delete all sofware games list files since there are no software lists in "SoftwareListsToCreate" var
   else
-  if Assigned(SoftwareListsToCreate) then
+  if Assigned(SoftwareListsToProcess) then
      begin
        // this holds a list of all MAME software lists to create their games list; 'eldir\softwarelist' folder
        case MenuCreateMAMESoftwareListGames.Tag of
@@ -17140,27 +17362,27 @@ begin
        // 0 -> disabled, don't create softlists;
        // 1 -> update mode: create softlist games and update existing ones
        // 2 -> overwrite mode: delete all softlists and create new ones
-       if SoftwareListsToCreate.Count > 0 then
+       if SoftwareListsToProcess.Count > 0 then
           begin
-            SoftListRemoveExcludedList(sysID, SoftwareListsToCreate);
-            SoftListValidateListsXML(sysID, SoftwareListsToCreate);
-            SoftListDeleteGamesFiles(sysID, MenuCreateMAMESoftwareListGames.Tag, SoftwareListsToCreate); // delete softlist files from '\arcade\games\mame_softwarelist_games\"
+            SoftListRemoveExcludedList(sysID, SoftwareListsToProcess);
+            SoftListValidateListsXML(sysID, SoftwareListsToProcess);
+            SoftListDeleteGamesFiles(sysID, MenuCreateMAMESoftwareListGames.Tag, SoftwareListsToProcess); // delete softlist files from '\arcade\games\mame_softwarelist_games\"
           end;
-       if SoftwareListsToCreate.Count > 0 then
+       if SoftwareListsToProcess.Count > 0 then
           begin
-            iCount:= SoftwareListsToCreate.Count;
+            iCount:= SoftwareListsToProcess.Count;
             if iCount > 1 then
                FormStatus.LabelSoftwareScanCount.Visible:= True;
 
-            for MainLoop:= 0 to SoftwareListsToCreate.Count-1 do
+            for MainLoop:= 0 to SoftwareListsToProcess.Count-1 do
             begin
               if FormStatus.LabelSoftwareScanCount.Visible then
                  FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [MainLoop+1, iCount]);
-              CreateSoftwareListXML(sysID, SoftwareListsToCreate[MainLoop], False);
+              CreateSoftwareListXML(sysID, SoftwareListsToProcess[MainLoop], False);
             end;
             FormStatus.LabelSoftwareScanCount.Visible:= False;
           end;
-       FreeAndNil(SoftwareListsToCreate);
+       // FreeAndNil(SoftwareListsToCreate); // cannot free this here (March 29, 2018)
      end;
 end;
 
@@ -17213,13 +17435,13 @@ var
        begin
          CallMessageBox;
          AddMsgText('New screen type found: ');
-         AddMsgText(ScreenTypeString, $00a65300, [fsBold]);
+         AddMsgText(ScreenTypeString, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(#13#10+'Game: ');
-         AddMsgText(TempGameVars.eTitle, $00a65300, [fsBold]);
+         AddMsgText(TempGameVars.eTitle, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(#13#10+'Name: ');
-         AddMsgText(TempGameVars.eName, $00a65300, [fsBold]);
+         AddMsgText(TempGameVars.eName, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(#13#10+'Driver: ');
-         AddMsgText(TempGameVars.eDriverName, $00a65300, [fsBold]);
+         AddMsgText(TempGameVars.eDriverName, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(#13#10+#13#10+'   This type is not yet supported. Please contact the author '+
                          'with this new info. In the mean time, the screen type for this '+
                          'game will be set as "none".');
@@ -17809,7 +18031,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('ROMs list file ');
-       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), $00a65300, [fsBold]);
+       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
        GenerateMessage(TitleErrorMsg, 'File error.', '', 2);
      end;
@@ -17940,7 +18162,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('File ');
-       AddMsgText(TempString, $00a65300, [fsBold]);
+       AddMsgText(TempString, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found or is blank. Aborting...');
        GenerateMessage('Error', GetArcadeEmulatorDescription(idDaphne)+#13#10+'File access error.', '', 2, False, 1);
        Result:= False;
@@ -18132,7 +18354,7 @@ var
              begin
                CallMessageBox;
                AddMsgText('File ');
-               AddMsgText(tempFileName, $00a65300, [fsBold]);
+               AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
                AddMsgText(' is empty! Aborting...');
                GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
                DeleteFile(tempFileName);
@@ -18142,7 +18364,7 @@ var
         begin
           CallMessageBox;
           AddMsgText('File ');
-          AddMsgText(tempFileName, $00a65300, [fsBold]);
+          AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText(' was not found! Aborting...');
           GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
         end;
@@ -18371,7 +18593,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('File ');
-       AddMsgText(EmulatorFile[sysID], $00a65300, [fsBold]);
+       AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
        GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
        Result:= False;
@@ -18394,11 +18616,11 @@ begin
           begin
             CallMessageBox;
             AddMsgText('ClrMAME XML database file ');
-            AddMsgText(tempFile, $00a65300, [fsBold]);
+            AddMsgText(tempFile, MsgTxtColors.colorFileName, [fsBold]);
             AddMsgText(' was not found. Make sure the file exists and click ');
-            AddMsgText('Yes', $00a65300, [fsBold]);
+            AddMsgText('Yes', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgText(' to try again or ');
-            AddMsgText('No', $00a65300, [fsBold]);
+            AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgText(' to abort.'+#13#10+#13#10+'Continue ?');
             if GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 1, False, 1) = mrNo then
                begin
@@ -18411,7 +18633,7 @@ begin
                     begin
                       CallMessageBox;
                       AddMsgText('ClrMAME XML database file ');
-                      AddMsgText(tempFile, $00a65300, [fsBold]);
+                      AddMsgText(tempFile, MsgTxtColors.colorFileName, [fsBold]);
                       AddMsgText(' still was not found. This task will be terminated...');
                       GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
                       Result:= False;
@@ -19053,7 +19275,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('ROMs list file ');
-       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), $00a65300, [fsBold]);
+       AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
        GenerateMessage(TitleErrorMsg, 'File error.', '', 2);
      end;
@@ -19287,7 +19509,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('File ');
-       AddMsgText(EmulatorFile[sysID], $00a65300, [fsBold]);
+       AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
        GenerateMessage(TitleErrorMsg, 'Invalid file.', '', 2, False, 1);
        Result:= False;
@@ -19852,19 +20074,19 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    This is a BIOS set but ');
-       AddMsgText('eBiosName', $00a65300, [fsBold]);
+       AddMsgText('eBiosName', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' field is blank! Emu Loader requires this field to have the same value as ');
-       AddMsgText('eName', $00a65300, [fsBold]);
+       AddMsgText('eName', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' field, except for DICE. '+#13#10+
                   'Please contact the author with details about this error.'+#13#10+#13#10+
                   'Title: ');
-       AddMsgText(TempGameVars.eTitle, $00a65300, [fsBold]);
+       AddMsgText(TempGameVars.eTitle, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(#13#10+'Name: ');
-       AddMsgText(TempGameVars.eName, $00a65300, [fsBold]);
+       AddMsgText(TempGameVars.eName, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(#13#10+'Driver: ');
-       AddMsgText(TempGameVars.eDriverName, $00a65300, [fsBold]);
+       AddMsgText(TempGameVars.eDriverName, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(#13#10+'System: ');
-       AddMsgText(GetArcadeSystemShortTitle(TempGameVars.eSystemID), $00a65300, [fsBold]);
+       AddMsgText(GetArcadeSystemShortTitle(TempGameVars.eSystemID), MsgTxtColors.colorFileName, [fsBold]);
        GenerateMessage('Warning', 'BIOS set name is blank.', '', 2, False, 1);
      end;
 
@@ -21246,6 +21468,8 @@ begin
 end;
 
 procedure TFormMain.SetImageScaleMode;
+var
+  iLoop: Integer;
 
   procedure UpdateScale(ImageHolder: TImage32);
   begin
@@ -21285,10 +21509,11 @@ procedure TFormMain.SetImageScaleMode;
 
 begin
   UpdateScale(Images);
-  if Assigned(ImageScr[2]) then
-     UpdateScale(ImageScr[2]);
-  if Assigned(ImageScr[3]) then
-     UpdateScale(ImageScr[3]);
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+  begin
+    if Assigned(ImageScr[iLoop]) then
+       UpdateScale(ImageScr[iLoop]);
+  end;
 end;
 
 function TFormMain.GetImageName(const GameName: String; ImageIndex: ShortInt; FormatIndex: ShortInt; SoftwareName: String = ''): String;
@@ -21326,7 +21551,7 @@ begin
       True: // next type
         begin
           Inc(ImgIndex);
-          if ImgIndex = High(ImageCategoryArray) then
+          if ImgIndex > High(ImageCategoryArray) then
              ImgIndex:= 0;
         end;
       False: // previous type
@@ -21336,9 +21561,9 @@ begin
              ImgIndex:= High(ImageCategoryArray);
         end;
     end;
-    CategoryEnabled:= PopupMenuImageCategories.Items[ImgIndex].Visible;
+    CategoryEnabled:= ImageCategorySettings[ImgIndex].Visible;
     if CategoryEnabled then
-       PopupMenuImageCategories.Items[ImgIndex].Click;
+       CallSelectImageCategory(ImgIndex, True, False, False, True);
   until CategoryEnabled;
 end;
 
@@ -21483,21 +21708,27 @@ begin
       begin
         if PopupMenuImages.PopupComponent = Images then
            begin
-             ImagePanelSeparator.Hint:= PopupMenuImageCategories.Items[ImageDetails[1].ImageCategoryIndex].Caption;// Images.Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[1].ImageCategoryIndex); // Images.Hint;
              PopupMenuImages.Tag:= 1;
            end
         else
         if PopupMenuImages.PopupComponent = ImageScr[2] then
            begin
-             ImagePanelSeparator.Hint:= PopupMenuImageCategories.Items[ImageDetails[2].ImageCategoryIndex].Caption;// ImageScr[2].Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[2].ImageCategoryIndex); // ImageScr[2].Hint;
              PopupMenuImages.Tag:= 2;
            end
         else
         if PopupMenuImages.PopupComponent = ImageScr[3] then
            begin
-             ImagePanelSeparator.Hint:= PopupMenuImageCategories.Items[ImageDetails[3].ImageCategoryIndex].Caption;// ImageScr[3].Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[3].ImageCategoryIndex); // ImageScr[3].Hint;
              PopupMenuImages.Tag:= 3;
-           end;
+           end
+        else
+        if PopupMenuImages.PopupComponent = ImageScr[4] then
+           begin
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[4].ImageCategoryIndex); // ImageScr[3].Hint;
+             PopupMenuImages.Tag:= 4;
+           end
       end;
     False: PopupMenuImages.Tag:= 1;
   end;
@@ -21515,7 +21746,7 @@ begin
   if PopupMenuImages.Tag = 1 then
      PopupShowFirstImage.Enabled:= Images.Tag > 1
   else
-  if PopupMenuImages.Tag in [2, 3] then
+  if PopupMenuImages.Tag in [2..MaxImagePanels] then
      PopupShowFirstImage.Enabled:= ImageScr[PopupMenuImages.Tag].Tag > 1
   else
      PopupShowFirstImage.Enabled:= False;
@@ -21570,6 +21801,11 @@ procedure TFormMain.LoadImage3(Data: Pointer);
 begin
   LoadScreenshot(3);
 end;
+
+procedure TFormMain.LoadImage4(Data: Pointer);
+begin
+  LoadScreenshot(4);
+end;
 // end of load images with threads
 
 function TFormMain.GetImageType(iMemStream: TWideMemoryStream; ScreenIndex: Integer = 0): TImageType;
@@ -21581,7 +21817,7 @@ const
   TIF_HEADER: array[0..2] of byte  = ($49, $49, $2A);
   TIF_HEADER2: array[0..2] of byte = (77, 77, 00); // special case ? I don't know what this is for or if it's even used (February 17, 2018)
 var
-  MemStr: array[0..3] of TWideMemoryStream;
+  MemStr: array[0..MaxImagePanels] of TWideMemoryStream;
 begin
   Result:= ifUnknown;
   if iMemStream = nil then
@@ -21682,57 +21918,56 @@ begin
 end;
 
 procedure TFormMain.ResetImageTagTo1;
+var
+  iLoop: Integer;
 begin
   Images.Tag:= 1;
-  if Assigned(ImageScr[2]) then
-     ImageScr[2].Tag:= 1;
-  if Assigned(ImageScr[3]) then
-     ImageScr[3].Tag:= 1;
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+  begin
+    if Assigned(ImageScr[iLoop]) then
+       ImageScr[iLoop].Tag:= 1;
+  end;
 
-  ImageDetails[1].ImageCurrentTag:= 1;
-  ImageDetails[2].ImageCurrentTag:= 1;
-  ImageDetails[3].ImageCurrentTag:= 1;
+  for iLoop:= Low(ImageDetails) to High(ImageDetails) do
+      ImageDetails[iLoop].ImageCurrentTag:= 1;
 end;
 
 procedure TFormMain.LoadScreenshot(ScreenIndex: ShortInt);
 var
   Folder, FolderSnap, ImageExt, ExtraFolderStrMAME,
-  CurrentImageZip, NoImageFile, SoftwareNameString: packed array[1..3] of String;
-  ImageName, ImageParentName: packed array[1..3] of WideString;
-  FoundImage, FoundInSoftListZipFile, FoundZipCustomGameInSnapDir, ContinueImg: packed array[1..3] of Boolean;
-  ImageTypeDetected: packed array[1..3] of TImageType;
-  CurrentSystemID, CurrentImageCategoryID, CurrentCustomSystemID: packed array[1..3] of Integer;
-  iImageTag: packed array[1..3] of Integer;
-  NewMAMESnapName, NewMAMESnapCloneName: array[1..3] of String; // for "gamename\0000.png"
-
-  //pngImg: packed array[1..3] of TPNGGraphic;
-  //jpgImg: packed array[1..3] of TJPEGImage;
-  //gifImg: packed array[1..3] of TGIFGraphic;
-  //bmpImg: packed array[1..3] of TBitmap;
+  CurrentImageZip, NoImageFile, SoftwareNameString: packed array[1..MaxImagePanels] of String;
+  ImageName, ImageParentName: packed array[1..MaxImagePanels] of WideString;
+  FoundImage, FoundInSoftListZipFile, FoundZipCustomGameInSnapDir, ContinueImg: packed array[1..MaxImagePanels] of Boolean;
+  ImageTypeDetected: packed array[1..MaxImagePanels] of TImageType;
+  CurrentSystemID, CurrentImageCategoryID, CurrentCustomSystemID: packed array[1..MaxImagePanels] of Integer;
+  iImageTag: packed array[1..MaxImagePanels] of Integer;
+  NewMAMESnapName, NewMAMESnapCloneName: array[1..MaxImagePanels] of String; // for "gamename\0000.png"
 
   function FixBlendMode: Boolean;
   begin
     Result:= True;
-    case ScreenIndex of
-      1:
-        begin
-          if Images.Bitmap.DrawMode <> dmBlend then
-             Images.Bitmap.DrawMode:= dmBlend;
-        end;
-      2, 3:
-        begin
-          if ImageScr[ScreenIndex].Bitmap.DrawMode <> dmBlend then
-             ImageScr[ScreenIndex].Bitmap.DrawMode:= dmBlend;
-        end;
-    end;
+    if ScreenIndex = 1 then
+       begin
+         if Images.Bitmap.DrawMode <> dmBlend then
+            Images.Bitmap.DrawMode:= dmBlend;
+       end
+    else
+       begin
+         if ImageScr[ScreenIndex].Bitmap.DrawMode <> dmBlend then
+            ImageScr[ScreenIndex].Bitmap.DrawMode:= dmBlend;
+       end;
   end;
 
   function LoadImageFromStream(var ImageHolder: TImage32): Boolean;
   var
-    pngImg: TPNGGraphic;
-    jpgImg: TJPEGImage;
-    gifImg: TGIFGraphic;
-    bmpImg: TBitmap;
+    //pngImg: TPNGGraphic;
+    //jpgImg: TJPEGImage;
+    //gifImg: TGIFGraphic;
+    //bmpImg: TBitmap;
+    pngImg: array[1..MaxImagePanels] of TPNGGraphic;
+    jpgImg: array[1..MaxImagePanels] of TJPEGImage;
+    gifImg: array[1..MaxImagePanels] of TGIFGraphic;
+    bmpImg: array[1..MaxImagePanels] of TBitmap;
   begin
     Result:= True;
     if FileStream[ScreenIndex].Size = 0 then
@@ -21744,38 +21979,36 @@ var
       case ImageTypeDetected[ScreenIndex] of
         ifPNG:
           begin
-            pngImg:= TPNGGraphic.Create;
-            pngImg.LoadFromStream(FileStream[ScreenIndex]);
-            ImageHolder.Bitmap.Assign(pngImg);
+            pngImg[ScreenIndex]:= TPNGGraphic.Create;
+            pngImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
+            ImageHolder.Bitmap.Assign(pngImg[ScreenIndex]);
+            FreeAndNil(pngImg[ScreenIndex]);
           end;
         ifJPG:
           begin
-            jpgImg:= TJPEGImage.Create;
-            jpgImg.LoadFromStream(FileStream[ScreenIndex]);
-            ImageHolder.Bitmap.Assign(jpgImg);
+            jpgImg[ScreenIndex]:= TJPEGImage.Create;
+            jpgImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
+            ImageHolder.Bitmap.Assign(jpgImg[ScreenIndex]);
+            FreeandNil(jpgImg[ScreenIndex]);
           end;
         ifGIF:
            begin
-             gifImg:= TGIFGraphic.Create;
-             gifImg.LoadFromStream(FileStream[ScreenIndex]);
-             ImageHolder.Bitmap.Assign(gifImg);
+             gifImg[ScreenIndex]:= TGIFGraphic.Create;
+             gifImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
+             ImageHolder.Bitmap.Assign(gifImg[ScreenIndex]);
+             FreeAndNil(gifImg[ScreenIndex]);
            end;
          ifBMP:
            begin
-             bmpImg:= TBitmap.Create;
-             bmpImg.LoadFromStream(FileStream[ScreenIndex]);
-             ImageHolder.Bitmap.Assign(bmpImg);
+             bmpImg[ScreenIndex]:= TBitmap.Create;
+             bmpImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
+             ImageHolder.Bitmap.Assign(bmpImg[ScreenIndex]);
+             FreeAndNil(bmpImg[ScreenIndex]);
            end;
       end;
     except
       ImageHolder.Bitmap:= nil; // ensures that there's no image loaded
       Result:= False;
-    end;
-    case ImageTypeDetected[ScreenIndex] of
-      ifPNG: FreeAndNil(pngImg);
-      ifJPG: FreeandNil(jpgImg);
-      ifGIF: FreeAndNil(gifImg);
-      ifBMP: FreeAndNil(bmpImg);
     end;
     ImageHolder.Canvas.Unlock;
     FileStream[ScreenIndex].Clear;
@@ -21783,7 +22016,7 @@ var
 
   function LoadZippedImage(var ZipForgeHolder: TZipForge): Boolean;
   var
-    zFile: array[1..3] of String;
+    zFile: array[1..MaxImagePanels] of String;
   begin
     FixBlendMode;
     case FoundInSoftListZipFile[ScreenIndex] of
@@ -21851,10 +22084,10 @@ var
       FileName:= '';
     end;
 
-    case ScreenIndex of
-      1: LoadImageFromStream(Images);
-      2, 3: LoadImageFromStream(ImageScr[ScreenIndex]);
-    end;
+    if ScreenIndex = 1 then
+       LoadImageFromStream(Images)
+    else
+       LoadImageFromStream(ImageScr[ScreenIndex]);
 
     ImageDetails[ScreenIndex].IsZipped:= ContinueImg[ScreenIndex];
   end;
@@ -21870,10 +22103,10 @@ var
 
       FileStream[ScreenIndex].LoadFromFile(ImageDetails[ScreenIndex].FileName);
 
-      case ScreenIndex of
-        1: LoadImageFromStream(Images);
-        2, 3: LoadImageFromStream(ImageScr[ScreenIndex]);
-      end;
+      if ScreenIndex = 1 then
+         LoadImageFromStream(Images)
+      else
+         LoadImageFromStream(ImageScr[ScreenIndex]);
     except
       Result:= False;
       ContinueImg[ScreenIndex]:= False;
@@ -21881,8 +22114,6 @@ var
   end;
 
   function LoadNotAvailableImg: Boolean;
-  var
-    iFound: packed array[1..3] of Boolean;
   begin
     Result:= True;
     NoImageFile[ScreenIndex]:= GetFolderFull(35, MemGameInfo.eSystemID)+'emuloader.png';
@@ -21894,10 +22125,11 @@ var
             FileStream[ScreenIndex]:= TWideMemoryStream.Create;
 
          FileStream[ScreenIndex].LoadFromFile(NoImageFile[ScreenIndex]);
-         case ScreenIndex of
-           1: LoadImageFromStream(Images);
-           2, 3: LoadImageFromStream(ImageScr[ScreenIndex]);
-         end;
+         if ScreenIndex = 1 then
+            LoadImageFromStream(Images)
+         else
+            LoadImageFromStream(ImageScr[ScreenIndex]);
+
          ImageDetails[ScreenIndex].PrevNoImageLoaded:= True;
        end
     else
@@ -22118,6 +22350,8 @@ var
 
 begin
   // start of LoadScreenshot() code
+  if ScreenIndex = 4 then
+     beep;
   UnzipActive[ScreenIndex]:= True;
   FoundImage[ScreenIndex]:= False;
   FoundInSoftListZipFile[ScreenIndex]:= False;
@@ -22142,15 +22376,13 @@ begin
       end;
   end;
 
-  Sleep(5); // delay to fix application crash, images are loaded in a separate thread ??? Not sure if this helps anything anymore (March 16, 2018)
+  Sleep(5); // delay to fix application crash, images are loaded in a separate thread, not sure if this helps anything anymore (March 16, 2018)
 
   ImageParentName[ScreenIndex]:= '';
-  case ScreenIndex of
-    1: iImageTag[ScreenIndex]:= Images.Tag;
-    2: iImageTag[ScreenIndex]:= ImageScr[2].Tag;
-    3: iImageTag[ScreenIndex]:= ImageScr[3].Tag;
-  end;
-
+  if ScreenIndex = 1 then
+     iImageTag[ScreenIndex]:= Images.Tag
+  else
+     iImageTag[ScreenIndex]:= ImageScr[ScreenIndex].Tag;
 
   case MemGameInfo.eIsCustomGame of
     True : ImageName[ScreenIndex]:= ChangeFileExtW(MemGameInfo.eName, '');
@@ -22211,10 +22443,10 @@ begin
             case ImageDetails[ScreenIndex].IsZipped of
               True:
                 begin
-                  case ScreenIndex of
-                    1: LoadZippedImage(ZipForge);
-                    2, 3: LoadZippedImage(ZipForgeImg[ScreenIndex]);
-                  end;
+                  if ScreenIndex = 1 then
+                     LoadZippedImage(ZipForge)
+                  else
+                     LoadZippedImage(ZipForgeImg[ScreenIndex]);
                 end;
               False: LoadUnzippedImage;
             end;
@@ -22232,11 +22464,10 @@ begin
           // need to restore TImage32.Tag value to what is was (no image found)... this is used by "prev/next" image buttons
           if iImageTag[ScreenIndex] <> ImageDetails[ScreenIndex].ImageCurrentTag then
              begin
-               case ScreenIndex of
-                 1: Images.Tag:= ImageDetails[ScreenIndex].ImageCurrentTag;
-                 2: ImageScr[2].Tag:= ImageDetails[2].ImageCurrentTag;
-                 3: ImageScr[3].Tag:= ImageDetails[3].ImageCurrentTag;
-               end;
+               if ScreenIndex = 1 then
+                  Images.Tag:= ImageDetails[ScreenIndex].ImageCurrentTag
+               else
+                  ImageScr[ScreenIndex].Tag:= ImageDetails[ScreenIndex].ImageCurrentTag;
              end;
         end;
       end;
@@ -22253,7 +22484,47 @@ begin
           end;
      end;
 
+  if FormPreferences.HintBox_IconEnabled.Checked then
+  begin
+    if ScreenIndex = 1 then
+       begin
+         if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon.Tag then
+            begin
+              ImageHintIcon.Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
+              case ImageHintIcon.Tag of
+                0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
+                1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
+              end;
+            end;
+       end
+    else
+       begin
+         if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon2[ScreenIndex].Tag then
+            begin
+              ImageHintIcon2[ScreenIndex].Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
+              case ImageHintIcon2[ScreenIndex].Tag of
+                0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[ScreenIndex].Picture.Icon); // unzipped image
+                1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[ScreenIndex].Picture.Icon); // zipped image
+              end;
+            end;
+       end;
+  end;
   UnzipActive[ScreenIndex]:= False;
+end;
+
+procedure TFormMain.SetImageCategoryToDisplay(IsConsoleComputerGame: Boolean);
+var
+  iLoop: Integer;
+begin
+  if IsSingleImageLayout then
+     Exit; // single layout already does this for ImageDetails[1].ImageCategoryIndex at startup or when switching layouts
+  for iLoop:=Low(ImageDetails) to High(ImageDetails) do
+  begin
+    if IsConsoleComputerGame and LayoutUseAltCategory_ConsComp then
+       ImageDetails[iLoop].ImageCategoryIndex:= ImageDetails[iLoop].ImageCategoryIndex_ConsComp
+    else
+       ImageDetails[iLoop].ImageCategoryIndex:= ImageDetails[iLoop].ImageCategoryIndex_AllSystems;
+  end;
 end;
 
 procedure TFormMain.DisplayImage;
@@ -22272,7 +22543,8 @@ begin
           ImageSoftNameIndex:= imgSoftwareNameZipList.IndexOf(MemGameInfo.eSoftwareName);
      end;
 
-  for ScreenIndex:=1 to 3 do
+  SetImageCategoryToDisplay(MemGameInfo.eIsCustomGame or (MemGameInfo.eSoftwareName <> '')); // added April 15, 2018
+  for ScreenIndex:=1 to MaxImagePanels do
   begin
     if not UnzipActive[ScreenIndex] then
     begin
@@ -22284,6 +22556,7 @@ begin
             1: RunInThread(LoadImage1, nil);
             2: RunInThread(LoadImage2, nil);
             3: RunInThread(LoadImage3, nil);
+            4: RunInThread(LoadImage4, nil);
           end;
         end
         else
@@ -22300,13 +22573,26 @@ var
   CreateSys: array[1..MaxArcadeSystems] of Boolean;
   FailedStr, PassedStr: String;
   ChangedGames: Boolean;
+  MAMESoftwareListsToProcess, HBMAMESoftwareListsToProcess: THashedStringList;
 
   function CreateList(SystemID: Integer): Boolean;
   begin
     Result:= False;
     FormStatus.SetProgressPos(0);
     case IsMAMEBasedSys(SystemID) of
-      True: Result:= CreateGamesListMAME(SystemID);
+      True:
+        begin
+          if SystemID = idMAME then
+             begin
+               MAMESoftwareListsToProcess:= THashedStringList.Create;
+               Result:= CreateGamesListMAME(SystemID, MAMESoftwareListsToProcess);
+             end
+          else
+             begin
+               HBMAMESoftwareListsToProcess:= THashedStringList.Create;
+               Result:= CreateGamesListMAME(SystemID, HBMAMESoftwareListsToProcess);
+             end;
+        end;
       False:
         begin
           case IsClrMAMEProBasedSys(SystemID) of
@@ -22477,14 +22763,16 @@ begin
             end;
             if AuditMAMESoftwareList then
             begin
-              if ScanSoftListGames(0, True, idMAME) > 0 then
+              if ScanSoftListGames(0, True, idMAME, MAMESoftwareListsToProcess) > 0 then
                  ChangedGames:= True;
+              FreeAndNil(MAMESoftwareListsToProcess);
               // get all software list files
             end;
             if AuditHBMAMESoftwareList then
             begin
-              if ScanSoftListGames(0, True, idHBMAME) > 0 then
+              if ScanSoftListGames(0, True, idHBMAME, HBMAMESoftwareListsToProcess) > 0 then
                  ChangedGames:= True;
+              FreeAndNil(HBMAMESoftwareListsToProcess);
               // get all software list files
             end;
 
@@ -22578,7 +22866,12 @@ var
 
   function CheckSystemROM_ID: Boolean;
   begin
-    Result:= (RefreshMode = 0) or
+    // 1 -> Scan Available Games
+    // 2 -> Scan Missing Games
+    // 3 -> Scan Single Game
+    // 4 -> Scan Incomplete Games
+    // 5 -> Scan Multiple Selected Games
+    Result:= (RefreshMode = 0) or 
        // MAME
        ((RefreshMode = 4) and (TempGameVars.eROMIdentification in [04..07]) and IsROM_HaveMissROMs(TempGameVars.eGameSetStatus)) or // missing ROMs/CHDs
        ((RefreshMode = 2) and (TempGameVars.eROMIdentification in [04..07])) or // miss
@@ -22871,10 +23164,10 @@ begin
        end;
      end;
   CheckSevenZip(sysID);
-  if UseSevenZip then
-     MissingROMsFileName:= MissingROMsFileName+' [.zip; .7z]'
-  else
-     MissingROMsFileName:= MissingROMsFileName+' [.zip]';
+  //if UseSevenZip then
+  //   MissingROMsFileName:= MissingROMsFileName+' [.zip; .7z]'
+  //else
+  //   MissingROMsFileName:= MissingROMsFileName+' [.zip]';
   FormStatus.TitleStr(MissingROMsFileName);
   MissingROMsFileName:= '';
 
@@ -23023,11 +23316,10 @@ begin
                  begin
                    TempGameVars.eROMIdentification:= TEasyGameInfo(checkItem).eROMIdentification;
                    TempGameVars.eGameSetStatus:= TEasyGameInfo(checkItem).eGameSetStatus;
-                   if CheckSystemROM_ID then
-                      begin
-                        AddDeviceBiosArray(checkItem, TempDevsList, TempBiosList);
-                        Application.ProcessMessages;
-                      end;
+
+                   AddDeviceBiosArray(checkItem, TempDevsList, TempBiosList);
+                   Application.ProcessMessages;
+
                    TempGameVars.eROMIdentification:= -1; // set to default (just in case)
                    TempGameVars.eGameSetStatus:= 2; // set to default (just in case)
                  end;
@@ -24602,9 +24894,9 @@ begin
        FreeAndNil(TestFile);
        CallMessageBox;
        AddMsgText('    Invalid header. The ');
-       AddMsgText('MComprHD', $00a65300, [fsBold]);
+       AddMsgText('MComprHD', MsgTxtColors.colorWarning, [fsBold]);
        AddMsgText(' tag of ');
-       AddMsgText(DiskFileName, $00a65300, [fsBold]);
+       AddMsgText(DiskFileName, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file was not found! Header version and checksum cannot be read.');
        GenerateMessage('Error', 'Parse CHD file header.', '', 2, False, 1);
        Exit;
@@ -24624,9 +24916,9 @@ begin
           FreeAndNil(TestFile);
           CallMessageBox;
           AddMsgText('File: ');
-          AddMsgText(DiskFileName, $00a65300, [fsBold]);
+          AddMsgText(DiskFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText('Header version found: ');
-          AddMsgText(IntToStr(HeaderVInfo.Version[High(HeaderVInfo.Version)]), $00a65300, [fsBold]);
+          AddMsgText(IntToStr(HeaderVInfo.Version[High(HeaderVInfo.Version)]), MsgTxtColors.colorWarning, [fsBold]);
           AddMsgText(#13#10+'    This version is not supported by the frontend. '+
                      'Only versions 1, 2, 3, 4 and 5 are valid. File checksum cannot be validated.');
           GenerateMessage('Error', 'Parse CHD file header.', '', 2, False, 1);
@@ -24640,7 +24932,7 @@ begin
     AddMsgText('    An error occurred while reading the chd file. '+
                'Header version and file checksum cannot be validated.'+#13#10+
                'File: ');
-    AddMsgText(DiskFileName, $00a65300, [fsBold]);
+    AddMsgText(DiskFileName, MsgTxtColors.colorFileName, [fsBold]);
     GenerateMessage('Error', 'Parse CHD file header.', '', 2, False, 1);
     Exit;
   end;
@@ -25088,7 +25380,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    Are you sure you want to delete ');
-       AddMsgText(iniFile, $00a65300, [fsBold]);
+       AddMsgText(iniFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file ? Recycle bin is not supported. Click No to abort.');
        if GenerateMessage('Delete File', 'Delete custom settings file.', '', 1, False, 2) = mrYes then
           DeleteFile(iniFile);
@@ -25371,45 +25663,14 @@ begin
                      'Source: '+iImageList.Name+#13#10+'Destination: '+DestHolder.Name, 2, False, 1);
 end;
 
-procedure TFormMain.LoadFrontendIcons;
-begin
-  LoadMainScreenIcons;
-  LoadSystemsIcons(IL_Systems);
-end;
-
-procedure TFormMain.LoadGameIDThumbIcon(ImageHolder: TImage; GameID: ShortInt);
-var
-  fIcon: TExIcon;
-  tmpIcon: TIcon;
-  icoLoop: Integer;
-begin
-  // for 48x48 game icons only
-  // perhaps add support for 68x68 icons in tiles/thumbnails view ?
-  fIcon:= TExIcon.Create;
-  fIcon.LoadFromFile(GetFolderFull(33)+GetELGameIconFileName(GameID));
-  for icoLoop:=0 to fIcon.ImageCount-1 do
-  begin
-    if (fIcon.Images[icoLoop].Width = 48) and
-       (fIcon.Images[icoLoop].Height = 48) then
-       begin
-         fIcon.CurrentImage:= icoLoop;
-         Break;
-       end;
-  end;
-  tmpIcon:= TIcon.Create;
-  tmpIcon.Handle:= fIcon.Handle;
-  ImageHolder.Picture.Icon:= tmpIcon;
-  FreeAndNil(tmpIcon);
-  fIcon.Releasehandle;
-  FreeAndNil(fIcon);
-end;
-
 procedure TFormMain.LoadImageCategoryThumbIcon(ImageHolder: TImage; CategoryIndex: ShortInt);
 var
   fIcon: TExIcon;
   tmpIcon: TIcon;
   icoLoop: Integer;
 begin
+  if CategoryIndex = -1 then
+     Exit;
   fIcon:= TExIcon.Create;
   fIcon.LoadFromFile(GetFolderFull(32)+ImageCategoryArray[CategoryIndex, 0]+'.ico');
   for icoLoop:=0 to fIcon.ImageCount-1 do
@@ -25430,16 +25691,53 @@ begin
   FreeAndNil(fIcon);
 end;
 
-procedure TFormMain.LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage);
+procedure TFormMain.LoadImageLayoutThumbIcon(ImageHolder: TImage; LayoutIndex: ShortInt);
 var
   fIcon: TExIcon;
   tmpIcon: TIcon;
   icoLoop: Integer;
 begin
-  if not FileExists(GetFolderFull(32)+IconFileName+'.ico') then
+  if LayoutIndex = -1 then
+     Exit;
+  fIcon:= TExIcon.Create;                                                 //.ico
+  fIcon.LoadFromFile(GetFolderFull(32)+GetScrLayoutImageFile(LayoutIndex, False));
+  for icoLoop:=0 to fIcon.ImageCount-1 do
+  begin
+    if (fIcon.Images[icoLoop].Width = ImageHolder.Width) and
+       (fIcon.Images[icoLoop].Height = ImageHolder.Height) then
+       begin
+         fIcon.CurrentImage:= icoLoop;
+         Break;
+       end;
+  end;
+  tmpIcon:= TIcon.Create;
+  tmpIcon.Handle:= fIcon.Handle;
+  ImageHolder.Picture.Icon:= nil; // clear it first
+  ImageHolder.Picture.Icon:= tmpIcon;
+  FreeAndNil(tmpIcon);
+  fIcon.Releasehandle;
+  FreeAndNil(fIcon);
+end;
+
+
+procedure TFormMain.LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; IsConsoleComputerSys: Boolean = False);
+var
+  fIcon: TExIcon;
+  tmpIcon: TIcon;
+  icoLoop: Integer;
+  fExt: String;
+begin
+  if IsConsoleComputerSys then
+     icoLoop:= 34
+  else
+     icoLoop:= 32;
+  fExt:= '.ico';
+  if PosEx('.ico', IconFileName) <> 0 then
+     fExt:= '';
+  if not FileExists(GetFolderFull(icoLoop)+IconFileName+fExt) then
      Exit;
   fIcon:= TExIcon.Create;
-  fIcon.LoadFromFile(GetFolderFull(32)+IconFileName+'.ico');
+  fIcon.LoadFromFile(GetFolderFull(icoLoop)+IconFileName+fExt);
   for icoLoop:=0 to fIcon.ImageCount-1 do
   begin
     if (fIcon.Images[icoLoop].Width = DestImageHolder.Width) and
@@ -25640,18 +25938,7 @@ begin
   AddMainScrIcons('filter4_04_imperfect.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
   AddMainScrIcons('filter4_05_preliminary.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
 
-  ClearImageList(IL_ImagesCategory_Large);
-  if not Reload then
-     ClearImageList(IL_ImagesCategory_Small);
-  for Loop:= Low(ImageCategoryArray) to High(ImageCategoryArray) do
-      AddMainScrIcons(ImageCategoryArray[Loop, 0]+'.ico', tempFolder, IL_ImagesCategory_Large, IL_ImagesCategory_Small, Reload);
-
   LoadToolBarButtons(IL_ToolBarButtons);
-
-  // Screenshots Layouts 24x24
-  ClearImageList(IL_ScreenshotLayouts_Small);
-  for Loop:=0 to MaxImageLayouts do
-      AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tempFolder, IL_ScreenshotLayouts_Small);
 
   // Images Tool Bar Buttons 24x24
   ClearImageList(IL_ImagesToolBarButtons);
@@ -26511,11 +26798,23 @@ begin
   if not VideoPreviewPlayDummyVideo then
      PlayDummyVideoPreview:= False;
 
-  elIni:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
-  elIni.WriteInteger('Preferences', 'AllowOneInstance', Ord(FormPreferences.AllowOnlyOneInstance.Checked));
-  elIni.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
-  elIni.UpdateFile;
-  FreeAndNil(elIni);
+  if not CheckReadOnly(FrontendPath+'EmuLoader.ini') then
+  begin
+    elIni:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
+    elIni.WriteInteger('Preferences', 'AllowOneInstance', Ord(FormPreferences.AllowOnlyOneInstance.Checked));
+    elIni.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
+    elIni.UpdateFile;
+
+    FreeAndNil(elIni);
+  end;
+
+  UpdateImagePanelColorSettings; // image panel color settings (image panel outer frame color, image splitter colors, image hint box settings
+  SetImageHintBoxColors(1); // update ImageHintPanel
+  SetImageHintBoxColors(2); // update ImageHintPanel2[2]
+  SetImageHintBoxColors(3); // update ImageHintPanel2[3]
+  UpdateImageHintPanelText(1, True);
+  UpdateImageHintPanelText(2, True);
+  UpdateImageHintPanelText(3, True);
 
   if IsStartup then
      Exit; // sanity check ??? I still need to double-check if preferences is called at startup or on a clean install (March 01, 2018)
@@ -26639,6 +26938,7 @@ begin
   
   HideAppFormTaskBarButton; // for Windows 7 / Windows 8 / Windows 10 (WinXP needs it too!)
 
+  IsNightMode:= False;
   if Win32Platform in [0, 1] then
      begin
        TerminateEmuLoader:= True;
@@ -26659,7 +26959,7 @@ begin
   Application.ProcessMessages;
 
   FormStatus:= TFormStatus.Create(Self);
-  FormApplyFilterMsgBox:= TFormApplyFilterMsgBox.Create(Self);
+
   if Screen.Height < 600 then
      begin
        SetResampler(FormStatus.ImageBk, 50);
@@ -26722,18 +27022,23 @@ begin
      begin
        INIFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
        MenuSmallToolBar.Checked:= Boolean(INIFile.ReadInteger('ToolBar', 'SmallToolBar', 0));
+       IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'MessageBoxNightMode', 0));
        FreeAndNil(INIFile);
      end;
 
-  PopulatePopupLayouts; // images tool bar button
+  PopulateMsgColors;
+  LayoutUseAltCategory_ConsComp:= False;
+  //LayoutAltVertGames:= False;
 
   ELV_ResetNormalColors(GamesListView);
   ELV_ResetNormalColors(MachinesListSidePanel);
 
-  if not Assigned(FormArcadeFiltersExtra) then
+  FormApplyFilterMsgBox:= TFormApplyFilterMsgBox.Create(Self);
+  
+  //if not Assigned(FormArcadeFiltersExtra) then
      FormArcadeFiltersExtra:= TFormArcadeFiltersExtra.Create(nil);
 
-  if not Assigned(FormArcadeFiltersDriverStatus) then
+  //if not Assigned(FormArcadeFiltersDriverStatus) then
      FormArcadeFiltersDriverStatus:= TFormArcadeFiltersDriverStatus.Create(nil);
 
   FormStatus.MessageStr('Loading main screen icons.');
@@ -26742,7 +27047,6 @@ begin
      MenuSmallToolBar.OnClick(Self);
   FormStatus.MessageStr('Loading miscellaneous icons.');
   LoadLeftPanelIcons;
-  LoadSystemsIcons(IL_Systems);
 
   IL_FilterWorkingNonWorking_Small.GetIcon(0, FormArcadeFiltersDriverStatus.IconListAll.Picture.Icon);
   IL_FilterWorkingNonWorking_Small.GetIcon(1, FormArcadeFiltersDriverStatus.IconGoodImperfect.Picture.Icon);
@@ -26752,11 +27056,10 @@ begin
 
   LoadCustomEmulatorsIconsPopupMenu; // for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
 
-  FormStatus.MessageStr('Initializing memory variables.');
+  FormStatus.MessageStr('Initializing variables in RAM.');
   SelectedFilterName:= 'allgames'; // set default filter to "All Games" (MAME and arcade only)
 
   InitializeEmulatorVariables;
-
   InitializeCustomEmulatorVariables; // for EmuCon emulators
 
   Font_Parent:= TFont.Create;
@@ -26792,8 +27095,8 @@ begin
   if not Result then
      begin
        CallMessageBox;
-       AddMsgText('The folder ');
-       AddMsgText(FrontendPath+'temp', $00a65300, [fsBold]);
+       AddMsgText('Folder ');
+       AddMsgText(FrontendPath+'temp', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' could not be created.'+#13#10+'Please create the temp '+
                   'folder manually and then click OK button to continue.');
        GenerateMessage('Error', 'Failed to create a folder.', '', 2, False, 1);
@@ -26856,13 +27159,15 @@ end;
 
 procedure TFormMain.FormShow(Sender: TObject);
 var
-  GamesListFound: packed array[1..MaxArcadeSystems] of Boolean;
+  GamesListFound, UpdateArcadeVersionInfo: packed array[1..MaxArcadeSystems] of Boolean;
+  UpdateAlterMAMEVersionInfo: Boolean;
   Loop, NewDateTime: Integer;
   ErrorStr, ErrorMsgTitle: String;
   tmpString: String;
   Continue, ScanModeSelected, IsFirstTimeRun: Boolean;
   iVersion: String;
   CreateListArcade, CreateListConsoleComputer: Boolean;
+  MAMESoftwareListsToProcess, HBMAMESoftwareListsToProcess: THashedStringList;
 
   function ShowScanModeSelectDialog: Boolean;
   begin
@@ -26914,6 +27219,7 @@ var
          Result:= AlterMAMEDateTime <> NewDateTime;
          if Result then
          begin
+           UpdateAlterMAMEVersionInfo:= True;
            AlterMAMEDateTime:= NewDateTime;
            GetArcadeEmulatorVersion(sysID, AlterMAMEFile, AlterMAMEVersion, iVersion);
            SetMAMEBuild(sysID, True);
@@ -26924,12 +27230,50 @@ var
          Result:= EmulatorDateTime[sysID] <> NewDateTime;
          if Result then
          begin
+           UpdateArcadeVersionInfo[sysID]:= True;
            EmulatorDateTime[sysID]:= NewDateTime;
            GetArcadeEmulatorVersion(sysID, EmulatorFile[sysID], EmulatorVersion[sysID], iVersion);
            SetMAMEBuild(sysID);
          end;
        end;
   end;
+
+  function SaveEmuVersionIniFile: Boolean;
+  var
+    vIniFile: TMemIniFile;
+    vLoop: Integer;
+    //vSectionString: String;
+  begin
+    Result:= True;
+    if CheckReadOnly(GetArcadeEmulatorsFile) then
+       Exit;
+    vIniFile:= TMemIniFile.Create(GetArcadeEmulatorsFile);
+    
+    for vLoop:=Low(UpdateArcadeVersionInfo) to High(UpdateArcadeVersionInfo) do
+    begin
+      if UpdateArcadeVersionInfo[vLoop] then
+      begin
+        tmpString:= GetArcadeSystemIniSection(vLoop);
+        vIniFile.WriteString(tmpString, 'emu_VersionInfo', EmulatorVersion[vLoop]);
+        vIniFile.WriteInteger(tmpString, 'emu_DateTime', EmulatorDateTime[vLoop]);
+        case vLoop of
+          idMAME:   vIniFile.WriteString(tmpString, 'emu_Build', buildMAME);
+          idHBMAME: vIniFile.WriteString(tmpString, 'emu_Build', buildHBMAME);
+        end;
+
+      end;
+    end;
+    if UpdateAlterMAMEVersionInfo then
+    begin
+      tmpString:= GetArcadeSystemIniSection(idMAME);
+      vIniFile.WriteString(tmpString, 'emu_AlterMAMEVersion', AlterMAMEVersion);
+      vIniFile.WriteInteger(tmpString, 'emu_AlterMAMEDateTime', AlterMAMEDateTime);
+      vIniFile.WriteString(tmpString, 'emu_AlterMAMEBuild', buildAlterMAME);
+    end;
+    vIniFile.UpdateFile;
+    FreeAndNil(vIniFile);
+  end;
+
 
   function CallCreateGamesList(SystemID: ShortInt): Boolean;
   begin
@@ -26941,7 +27285,18 @@ var
     end;
 
     ShowScanModeSelectDialog;
-    CreateGamesListMAME(SystemID);
+    if SystemID = idMAME then
+       begin
+         MAMESoftwareListsToProcess:= THashedStringList.Create;
+         CreateGamesListMAME(SystemID, MAMESoftwareListsToProcess);
+       end
+    else
+    if SystemID = idHBMAME then
+       begin
+         HBMAMESoftwareListsToProcess:= THashedStringList.Create;
+         CreateGamesListMAME(SystemID, HBMAMESoftwareListsToProcess);
+       end;
+    //CreateGamesListMAME(SystemID);
     GamesListFound[SystemID]:= False;
 
     SetCurrentDir(FrontendPath);
@@ -27048,7 +27403,11 @@ begin
   CreateListArcade:= False;
   CreateListConsoleComputer:= False;
   for Loop:=1 to MaxArcadeSystems do
-      GamesListFound[Loop]:= True;
+  begin
+    GamesListFound[Loop]:= True;
+    UpdateArcadeVersionInfo[Loop]:= False;
+  end;
+  UpdateAlterMAMEVersionInfo:= False;
 
   ResetNoImageLoaded;
   if not FileExists(GetFrontendExtraIniFile) then
@@ -27106,23 +27465,25 @@ begin
   if not Continue then
      IsFirstTimeRun:= True;
 
-  //IsFirstTimeRun:= True; // for debugging only... do not enable this line!
+  // IsFirstTimeRun:= True; // for debugging only... do not enable this line!
   case IsFirstTimeRun of
     True:
       begin
-        if not Assigned(FormCleanInstallGuide) then
+        //if not Assigned(FormCleanInstallGuide) then
            FormCleanInstallGuide:= TFormCleanInstallGuide.Create(nil);
 
         ReadSettingsCleanInstall;
         if not ValidateFile(GetArcadeEmulatorsFile) then
            begin
              FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= clMaroon;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= clRed;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.ShadowColor:= clMaroon;
            end;
         if not ValidateFile(GetSysImageFolders) then
            begin
              FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= clMaroon;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= clRed;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clMaroon;
            end;
         FormStatus.Close; // close FormStatus to avoid the clean guide dialog to be hidden behind it (December 31, 2017)
         if FormCleanInstallGuide.ShowModal = mrCancel then
@@ -27159,14 +27520,13 @@ begin
              if ValidateFile(GetSysGameFolders) then // only create console/computer games list if file "eldir\console_computer\sysgamefolders.ini" exists; console/computer games require it
                 CreateListConsoleComputer:= True;
            end;
-
         WriteSettingsCleanInstall; // update el_extra.ini with clean install dialog settings
         FreeAndNil(FormCleanInstallGuide);
         
         FormStatus.TitleStr('Initializing'); 
         FormStatus.StartThreadClock;
         FormStatus.Show;
-
+        
         FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
         ReadCustomGamesFolders;
         ReadCustomEmulatorsInfo;
@@ -27178,6 +27538,9 @@ begin
              LoadFoldersAllArcadeSystems; // force loading arcade emulator files and ROMs folders in case user clicked "Cancel" button in "MenuEmulatorSetup.Click"
               for Loop:=1 to MaxArcadeSystems do
                   CreateGamesFirstRunArcade(Loop);
+
+              FreeAndNil(MAMESoftwareListsToProcess);
+              FreeAndNil(HBMAMESoftwareListsToProcess);
            end;
 
         if CreateListConsoleComputer then
@@ -27197,14 +27560,15 @@ begin
            begin
              // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
              ErrorStr:= '';
-             CheckAllMAMEIniFiles;
+             //CheckAllMAMEIniFiles;
            end;
 
+        CheckAllMAMEIniFiles;
         // load ROMs folders and update emulator .exe info in case user updated .exe files before starting Emu Loader
         FormStatus.MessageStr('Loading arcade folders to RAM.');
         LoadFoldersAllArcadeSystems;
         Continue:= False;
-        FormStatus.MessageStr('Validating and updating emulators version info.');
+        FormStatus.MessageStr('Validating and updating arcade emulators version info.');
         for Loop:=1 to MaxArcadeSystems do
         begin
           if UpdateEmulatorVersionInfo(Loop) then
@@ -27214,7 +27578,7 @@ begin
            Continue:= True;
 
         if Continue then
-           WriteArcadeEmulatorExecutable(True, False);
+           SaveEmuVersionIniFile; //WriteArcadeEmulatorExecutable(True, False, False);
       end;
   end;
 
@@ -27247,7 +27611,7 @@ begin
            begin
              CallScanGames(0, False, Loop); // scan all games, since ALL games are "missing" (status = 2)
              if IsMAMEBasedSys(Loop) then // include both MAME and HBMAME
-                ScanSoftListGames(0, False, Loop);
+                ScanSoftListGames(0, False, Loop); // there's no need to enter a softwarename list since it's a clean install, all softlists are processed (March 29, 2018)
            end;
          end;
        end;
@@ -27259,7 +27623,7 @@ begin
 
   if PopupAutomaticGameInformation.Tag = 1 then
      begin
-       FormStatus.MessageStr('Initializing external game documents files.');
+       FormStatus.MessageStr('Initializing external MAME game documents files.');
        PopupAutomaticGameInformation.Tag:= 0;
        PopupAutomaticGameInformation.Click;
      end;
@@ -27281,15 +27645,20 @@ begin
         Continue:= True; // true = free THashedStringList lists
         if MenuShowImages.Checked then
            begin
-             Continue:= ImageDetails[1].ImageCategoryIndex <> 1; // check others is category different than in-game snapshots
+             Continue:= ImageDetails[1].ImageCategoryIndex_AllSystems <> 1; // check others is category different than in-game snapshots
              if Continue then
                 begin
                   if Assigned(ImageScr[2]) then
-                     Continue:= ImageDetails[2].ImageCategoryIndex <> 1;
+                     Continue:= ImageDetails[2].ImageCategoryIndex_AllSystems <> 1;
                   if Continue then
                      begin
                        if Assigned(ImageScr[3]) then
-                          Continue:= ImageDetails[3].ImageCategoryIndex <> 1;
+                          Continue:= ImageDetails[3].ImageCategoryIndex_AllSystems <> 1;
+                     end;
+                  if Continue then
+                     begin
+                       if Assigned(ImageScr[4]) then
+                          Continue:= ImageDetails[4].ImageCategoryIndex_AllSystems <> 1;
                      end;
                 end;
            end;
@@ -27312,9 +27681,13 @@ begin
     False:
       begin
         // even if one of the 3 images is using, the list will be re-initialized and reloaded (contents of snap.zip will be updated)
-        if not IsStartup then
-           FormStatus.Show;
-        FormStatus.TitleStr('Initializing Zipped Images Cache');
+        
+        //if not IsStartup then
+        //   FormStatus.Show;
+        //FormStatus.TitleStr('Initializing Zipped Images Contents List');
+        //if not IsStartup then
+           ShowInitZipImageMsgBox;
+
         for sysID:= 1 to MaxArcadeSystems do
         begin
           if Assigned(imgZipFileList[sysID, 1]) then
@@ -27340,25 +27713,86 @@ begin
             ImgZipParseFilesListConsComp(sysID, 1); // init THashedStringList lists for in-game snapshots (snap.zip) for all console/computer systems (EmuCon)
         end;
 
-        if not IsStartup then
-           FormStatus.Close;
+        //if not IsStartup then
+        //   FormStatus.Close;
+        HideInitZipImageMsgBox;
       end;
   end;
 end;
 
+procedure TFormMain.ShowInitZipImageMsgBox;
+var
+  AddHeight: Integer;
+begin
+  if not IsStartup then
+  begin
+    //if not Assigned(FormImageInitZipMsgBox) then
+    //   FormImageInitZipMsgBox:= TFormImageInitZipMsgBox.Create(Self);
+  end;
+
+  if PanelScreenshotsArea.Visible then
+     begin
+       if PanelInitZipFile.Parent <> PanelScreenshotsArea then
+          PanelInitZipFile.Parent:= PanelScreenshotsArea;
+       PanelInitZipFile.Left:= 10; //+Splitter.Width+10;
+       if ImagesToolBarButtons.Visible then
+          AddHeight:= ImagesToolbarButtons.Height+1
+       else
+          AddHeight:= 0;
+       PanelInitZipFile.Top:= {FormMain.Top+28+}10+AddHeight;
+     end
+  else
+     begin
+       if PanelInitZipFile.Parent <> GamesListView then
+          PanelInitZipFile.Parent:= GamesListView;
+
+       if ToolBarPanel.Visible then
+          AddHeight:= ToolBarPanel.Height+1
+       else
+          AddHeight:= 0;
+       PanelInitZipFile.Top:= GamesListView.Top+10; //AddHeightFormMain.Top+28+10+AddHeight;
+       PanelInitZipFile.Left:= (GamesListView.Width-PanelInitZipFile.Width) div 2; // FormMain.Left+((FormMain.Width shr 1)-(FormImageInitZipMsgBox.Width shr 1)-1);
+       //FormImageInitZipMsgBox.Left:= (Screen.Width shr 1)-(FormImageInitZipMsgBox.Width shr 1)-1;
+     end;
+  PanelInitZipFile.Visible:= True;
+  //if not IsStartup then
+  //   FormImageInitZipMsgBox.Show;
+end;
+
+procedure TFormMain.HideInitZipImageMsgBox;
+begin
+  PanelInitZipFile.Visible:= False;
+  {if IsStartup then
+     begin
+       if not IsThumbnailView then
+          PanelInitZipFile.Visible:= False;
+          //FreeAndNil(FormImageInitZipMsgBox);
+     end
+  else
+     PanelInitZipFile.Visible:= False;}
+     //FreeAndNil(FormImageInitZipMsgBox);
+end;
+
 procedure TFormMain.InitZippedImagesCache(FreeLists: Boolean = False);
 begin
-  if (not IsStartup) and (not FreeLists) then
-     begin
-       FormStatus.TitleStr('Initializing Zipped Images Cache');
-       FormStatus.Show;
-     end;
+  //if (not IsStartup) and (not FreeLists) then
+  //   begin
+  //     //FormStatus.TitleStr('Initializing Zipped Images Contents List');
+  //     //FormStatus.Show;
+  //     ShowInitZipImageMsgBox;
+  //   end;
+
+  if not FreeLists then
+     ShowInitZipImageMsgBox;
 
   InitImgZipLists;
   InitImgSoftwareNameZipLists;
 
-  if (not IsStartup) and (not FreeLists) then
-     FormStatus.Close;
+  //if (not IsStartup) and (not FreeLists) then
+  //   FormStatus.Close;
+
+  if not FreeLists then
+     HideInitZipImageMsgBox;
 end;
 
 procedure TFormMain.InitImgZipLists(FreeLists: Boolean = False);
@@ -27386,19 +27820,16 @@ begin
       end;
     False:
       begin
-        if ImageDetails[1].ImageCategoryIndex <> -1 then
-           ImgZipParseFilesList(sysID, ImageDetails[1].ImageCategoryIndex);
-
-        if Assigned(ImageScr[2]) then
-           begin
-             if ImageDetails[2].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesList(sysID, ImageDetails[2].ImageCategoryIndex);
-           end;
-        if Assigned(ImageScr[3]) then
-           begin
-             if ImageDetails[3].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesList(sysID, ImageDetails[3].ImageCategoryIndex);
-           end;
+        if ImageDetails[1].ImageCategoryIndex_AllSystems <> -1 then
+           ImgZipParseFilesList(sysID, ImageDetails[1].ImageCategoryIndex_AllSystems);
+        for imgLoop:=2 to MaxImagePanels do
+        begin
+          if Assigned(ImageScr[imgLoop]) then
+             begin
+               if ImageDetails[imgLoop].ImageCategoryIndex_AllSystems <> -1 then
+                   ImgZipParseFilesList(sysID, ImageDetails[imgLoop].ImageCategoryIndex_AllSystems);
+             end;
+        end;
       end;
   end;
 end;
@@ -27418,7 +27849,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    Unable to open ');
-       AddMsgText(GetImgZipFileName(imageCategoryID), $00a65300, [fsBold]);
+       AddMsgText(GetImgZipFileName(imageCategoryID), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file as there is another .zip file already opened.');
        GenerateMessage('Error! ImgZipParseFilesList()', GetArcadeEmulatorDescription(sysID, True));
        Exit;
@@ -27431,9 +27862,38 @@ begin
        FreeAndNil(imgZipFileList[sysID, imageCategoryID]);
        Exit;
      end;
-  if FormStatus.Visible then
-     FormStatus.MessageStr(GetArcadeEmulatorDescription(sysID, True)+#13#10+
-                           'Loading "'+GetImgZipFileName(imageCategoryID)+'" contents in RAM for fast access.');
+  //if FormStatus.Visible then
+  //   FormStatus.MessageStr(GetArcadeEmulatorDescription(sysID, True)+#13#10+
+  //                         'Loading "'+GetImgZipFileName(imageCategoryID)+'" contents in RAM for fast access.');
+
+  if PanelInitZipFile.Visible then
+     begin
+       if InitZipSystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage(GetArcadeSystemIconFileName(sysID, ''), InitZipSystemIcon);
+            InitZipSystemIcon.Tag:= sysID;
+          end;
+       LabelInitZipSystemTitle.Caption:= GetArcadeEmulatorDescription(sysID, True);
+       LabelInitZipImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       LabelInitZipFile.Caption:= 'Parsing "'+GetImgZipFileName(imageCategoryID)+LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;
+
+  {if Assigned(FormImageInitZipMsgBox) then
+     begin
+       if FormImageInitZipMsgBox.SystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage(GetArcadeSystemIconFileName(sysID, ''), FormImageInitZipMsgBox.SystemIcon);
+            FormImageInitZipMsgBox.SystemIcon.Tag:= sysID;
+          end;
+       FormImageInitZipMsgBox.LabelInitSystemTitle.Caption:= GetArcadeEmulatorDescription(sysID, True);
+       FormImageInitZipMsgBox.LabelInitImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       FormImageInitZipMsgBox.LabelInitZipFile.Caption:= 'Parsing "'+GetImgZipFileName(imageCategoryID)+FormImageInitZipMsgBox.LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;}
+  
   case Assigned(imgZipFileList[sysID, imageCategoryID]) of
     True : imgZipFileList[sysID, imageCategoryID].Clear;
     False: imgZipFileList[sysID, imageCategoryID]:= THashedStringList.Create;
@@ -27529,6 +27989,11 @@ begin
         if ExcludedList.Count = 0 then
            FreeAndNil(ExcludedList);
 
+        if PanelInitZipFile.Visible then
+           InitZipSystemIcon.Tag:= -1;
+        //if Assigned(FormImageInitZipMsgBox) then
+        //   FormImageInitZipMsgBox.SystemIcon.Tag:= -1;
+
         for Loop:=0 to imgSoftwareNameZipList.Count-1 do
         begin
           case Assigned(ExcludedList) of
@@ -27557,19 +28022,53 @@ begin
       end;
     False:
       begin
-        if ImageDetails[1].ImageCategoryIndex <> -1 then
-           ImgZipParseFilesSoftwareList(sysID, ImageDetails[1].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
+        if sysID = 3 then
+           beep;
 
-        if Assigned(ImageScr[2]) then
-           begin
-             if ImageDetails[2].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesSoftwareList(sysID, ImageDetails[2].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
-           end;
-        if Assigned(ImageScr[3]) then
-           begin
-             if ImageDetails[3].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesSoftwareList(sysID, ImageDetails[3].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
-           end;
+        if LayoutUseAltCategory_ConsComp then
+        begin
+          if ImageDetails[1].ImageCategoryIndex_ConsComp <> -1 then
+             ImgZipParseFilesSoftwareList(sysID, ImageDetails[1].ImageCategoryIndex_ConsComp, SoftwareNameIndex, SoftwareName);
+
+          for imgLoop:=2 to MaxImagePanels do
+          begin
+            if Assigned(ImageScr[imgLoop]) then
+               begin
+                 if ImageDetails[imgLoop].ImageCategoryIndex_ConsComp <> -1 then
+                    ImgZipParseFilesSoftwareList(sysID, ImageDetails[imgLoop].ImageCategoryIndex_ConsComp, SoftwareNameIndex, SoftwareName);
+               end;
+          end;
+
+          {if Assigned(ImageScr[2]) then
+             begin
+               if ImageDetails[2].ImageCategoryIndex <> -1 then
+                  ImgZipParseFilesSoftwareList(sysID, ImageDetails[2].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
+             end;
+          if Assigned(ImageScr[3]) then
+             begin
+               if ImageDetails[3].ImageCategoryIndex <> -1 then
+                  ImgZipParseFilesSoftwareList(sysID, ImageDetails[3].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
+             end;
+          if Assigned(ImageScr[4]) then
+             begin
+               if ImageDetails[4].ImageCategoryIndex <> -1 then
+                  ImgZipParseFilesSoftwareList(sysID, ImageDetails[4].ImageCategoryIndex, SoftwareNameIndex, SoftwareName);
+             end;}
+        end
+        else
+        begin
+          if ImageDetails[1].ImageCategoryIndex_AllSystems <> -1 then
+             ImgZipParseFilesSoftwareList(sysID, ImageDetails[1].ImageCategoryIndex_AllSystems, SoftwareNameIndex, SoftwareName);
+
+          for imgLoop:=2 to MaxImagePanels do
+          begin
+            if Assigned(ImageScr[imgLoop]) then
+               begin
+                 if ImageDetails[imgLoop].ImageCategoryIndex_AllSystems <> -1 then
+                    ImgZipParseFilesSoftwareList(sysID, ImageDetails[imgLoop].ImageCategoryIndex_AllSystems, SoftwareNameIndex, SoftwareName);
+               end;
+          end;
+        end;
       end;
   end;
 end;
@@ -27582,6 +28081,8 @@ var
 begin
   //       "snap\msx1_cart.zip"
   // added "snap\msx1_cart\msx1_cart.zip" support (February 12, 2018)
+  if (sysID = 3) and (imageCategoryID = 6) then
+     beep;
   if (not IsSystemAvailable(sysID)) or (imgFolder[sysID, imageCategoryID] = '') then
      begin
        FreeAndNil(imgZipFileSoftList[SoftwareIndex, imageCategoryID]);
@@ -27592,7 +28093,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    Unable to open ');
-       AddMsgText(SoftwareName+'.zip', $00a65300, [fsBold]);
+       AddMsgText(SoftwareName+'.zip', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('( '+ImageCategoryArray[imageCategoryID, 3]+') file, another .zip file is already opened.');
        GenerateMessage('Error! ImgZipParseFilesSoftwareList()', GetArcadeEmulatorDescription(sysID, True));
        Exit;
@@ -27611,9 +28112,37 @@ begin
        FreeAndNil(imgZipFileSoftList[SoftwareIndex, imageCategoryID]);
        Exit;
      end;
-  if FormStatus.Visible then
-     FormStatus.MessageStr(GetArcadeEmulatorDescription(sysID, True)+#13#10+
-                           'Loading '+SoftwareName+'.zip ('+ImageCategoryArray[imageCategoryID, 3]+') contents in RAM for fast access.');
+  //if FormStatus.Visible then
+  //   FormStatus.MessageStr(GetArcadeEmulatorDescription(sysID, True)+#13#10+
+  //                         'Loading '+SoftwareName+'.zip ('+ImageCategoryArray[imageCategoryID, 3]+') contents in RAM for fast access.');
+
+  if PanelInitZipFile.Visible then
+     begin
+       if InitZipSystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage('emu_ume', InitZipSystemIcon);
+            InitZipSystemIcon.Tag:= sysID;
+          end;
+       LabelInitZipSystemTitle.Caption:= GetArcadeEmulatorDescription(sysID, True)+' Software List';
+       LabelInitZipImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       LabelInitZipFile.Caption:= 'Parsing "'+SoftwareName+'.zip'+LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;
+
+  {if Assigned(FormImageInitZipMsgBox) then
+     begin
+       if FormImageInitZipMsgBox.SystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage('emu_ume', FormImageInitZipMsgBox.SystemIcon);
+            FormImageInitZipMsgBox.SystemIcon.Tag:= sysID;
+          end;
+       FormImageInitZipMsgBox.LabelInitSystemTitle.Caption:= GetArcadeEmulatorDescription(sysID, True)+' Software List';
+       FormImageInitZipMsgBox.LabelInitImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       FormImageInitZipMsgBox.LabelInitZipFile.Caption:= 'Parsing "'+SoftwareName+'.zip'+FormImageInitZipMsgBox.LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;}
 
   case Assigned(imgZipFileSoftList[SoftwareIndex, imageCategoryID]) of
     True : imgZipFileSoftList[SoftwareIndex, imageCategoryID].Clear;
@@ -27655,14 +28184,25 @@ begin
 end;
 
 procedure TFormMain.FreeImageZipVars;
+var
+  iLoop: Integer;
 begin
-  FreeAndNil(FileStream[1]);
-  FreeAndNil(FileStream[2]);
-  FreeAndNil(FileStream[3]);
-  if Assigned(ZipForgeImg[2]) then
-     FreeAndNil(ZipForgeImg[2]);
-  if Assigned(ZipForgeImg[3]) then
-     FreeAndNil(ZipForgeImg[3]);
+  for iLoop:= Low(FileStream) to High(FileStream) do
+      FreeAndNil(FileStream[iLoop]);
+
+  for iLoop:= Low(ZipForgeImg) to High(ZipForgeImg) do
+  begin
+    if Assigned(ZipForgeImg[iLoop]) then
+       FreeAndNil(ZipForgeImg[iLoop]);
+  end;
+
+  //FreeAndNil(FileStream[1]);
+  //FreeAndNil(FileStream[2]);
+  //FreeAndNil(FileStream[3]);
+  //if Assigned(ZipForgeImg[2]) then
+  //   FreeAndNil(ZipForgeImg[2]);
+  //if Assigned(ZipForgeImg[3]) then
+  //   FreeAndNil(ZipForgeImg[3]);
 end;
 
 function TFormMain.GetImgZipFileName(imageCategoryID: Integer): String;
@@ -27681,21 +28221,48 @@ begin
     True:
       begin
         //Continue:= True; // true = free THashedStringList lists
-        Continue:= ImageDetails[1].ImageCategoryIndex <> 1; // check others is category different than in-game snapshots
-        if Continue then
-           begin
-             if Assigned(ImageScr[2]) then
-                Continue:= ImageDetails[2].ImageCategoryIndex <> 1;
-             if Continue then
-                begin
-                  if Assigned(ImageScr[3]) then
-                     Continue:= ImageDetails[3].ImageCategoryIndex <> 1;
-                end;
-           end;
+        if LayoutUseAltCategory_ConsComp then
+        begin
+          Continue:= ImageDetails[1].ImageCategoryIndex_ConsComp <> 1; // check others is category different than in-game snapshots
+          if Continue then
+             begin
+               if Assigned(ImageScr[2]) then
+                  Continue:= ImageDetails[2].ImageCategoryIndex_ConsComp <> 1;
+               if Continue then
+                  begin
+                    if Assigned(ImageScr[3]) then
+                       Continue:= ImageDetails[3].ImageCategoryIndex_ConsComp <> 1;
+                  end;
+               if Continue then
+                  begin
+                    if Assigned(ImageScr[4]) then
+                       Continue:= ImageDetails[4].ImageCategoryIndex_ConsComp <> 1;
+                  end;
+             end;
+        end
+        else
+        begin
+          Continue:= ImageDetails[1].ImageCategoryIndex_AllSystems <> 1; // check others is category different than in-game snapshots
+          if Continue then
+             begin
+               if Assigned(ImageScr[2]) then
+                  Continue:= ImageDetails[2].ImageCategoryIndex_AllSystems <> 1;
+               if Continue then
+                  begin
+                    if Assigned(ImageScr[3]) then
+                       Continue:= ImageDetails[3].ImageCategoryIndex_AllSystems <> 1;
+                  end;
+               if Continue then
+                  begin
+                    if Assigned(ImageScr[4]) then
+                       Continue:= ImageDetails[4].ImageCategoryIndex_AllSystems <> 1;
+                  end;
+             end;
+        end;
 
         if Continue then
         begin
-          // none of the 3 images are in-game snapshots or "Show Images" is disabled (main menu "Images"), free zipped lists 
+          // none of the 3 images are in-game snapshots or "Show Images" is disabled (main menu "Images"), free zipped lists
           for sysID:= 1 to MaxConsoleComputerSystems do
           begin
             for imgLoop:=Low(imgZipFileListConsComp[sysID]) to High(imgZipFileListConsComp[sysID]) do
@@ -27724,19 +28291,39 @@ begin
       end;
     False:
       begin
-        if ImageDetails[1].ImageCategoryIndex <> -1 then
-           ImgZipParseFilesListConsComp(sysID, ImageDetails[1].ImageCategoryIndex);
+        if PanelInitZipFile.Visible then
+           InitZipSystemIcon.Tag:= -1;
+        //if Assigned(FormImageInitZipMsgBox) then
+        //   FormImageInitZipMsgBox.SystemIcon.Tag:= -1;
+        if LayoutUseAltCategory_ConsComp then
+        begin
+          if ImageDetails[1].ImageCategoryIndex_ConsComp <> -1 then
+             ImgZipParseFilesListConsComp(sysID, ImageDetails[1].ImageCategoryIndex_ConsComp);
 
-        if Assigned(ImageScr[2]) then
-           begin
-             if ImageDetails[2].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesListConsComp(sysID, ImageDetails[2].ImageCategoryIndex);
-           end;
-        if Assigned(ImageScr[3]) then
-           begin
-             if ImageDetails[3].ImageCategoryIndex <> -1 then
-                ImgZipParseFilesListConsComp(sysID, ImageDetails[3].ImageCategoryIndex);
-           end;
+          for imgLoop:=2 to MaxImagePanels do
+          begin
+            if Assigned(ImageScr[imgLoop]) then
+               begin
+                 if ImageDetails[imgLoop].ImageCategoryIndex_ConsComp <> -1 then
+                    ImgZipParseFilesListConsComp(sysID, ImageDetails[imgLoop].ImageCategoryIndex_ConsComp);
+               end;
+          end;
+        end
+        else
+        begin
+          if ImageDetails[1].ImageCategoryIndex_AllSystems <> -1 then
+             ImgZipParseFilesListConsComp(sysID, ImageDetails[1].ImageCategoryIndex_AllSystems);
+
+          for imgLoop:=2 to MaxImagePanels do
+          begin
+            if Assigned(ImageScr[imgLoop]) then
+               begin
+                 if ImageDetails[imgLoop].ImageCategoryIndex_AllSystems <> -1 then
+                    ImgZipParseFilesListConsComp(sysID, ImageDetails[imgLoop].ImageCategoryIndex_AllSystems);
+               end;
+          end;
+        end;
+
       end;
   end;
 end;
@@ -27764,7 +28351,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    Unable to open ');
-       AddMsgText(GetImgZipFileName(imageCategoryID), $00a65300, [fsBold]);
+       AddMsgText(GetImgZipFileName(imageCategoryID), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file as there is another .zip file already opened.');
        GenerateMessage('Error! ImgZipParseFilesListConsComp()', SystemsListCustom[sysID, 0]);
        Exit;
@@ -27782,9 +28369,38 @@ begin
        FreeAndNil(imgZipFileListConsComp[sysID, imageCategoryID]);
        Exit;
      end;
-  if FormStatus.Visible then
-     FormStatus.MessageStr(SystemsListCustom[sysID, 0]+#13#10+
-                           'Loading "'+GetImgZipFileName(imageCategoryID)+'" contents in RAM for fast access.');
+  //if FormStatus.Visible then
+  //   FormStatus.MessageStr(SystemsListCustom[sysID, 0]+#13#10+
+  //                         'Loading "'+GetImgZipFileName(imageCategoryID)+'" contents in RAM for fast access.');
+
+  if PanelInitZipFile.Visible then
+     begin
+       if InitZipSystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage(SystemsListCustom[sysID, 1], InitZipSystemIcon, True);
+            InitZipSystemIcon.Tag:= sysID;
+          end;
+       LabelInitZipSystemTitle.Caption:= SystemsListCustom[sysID, 0];
+       LabelInitZipImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       LabelInitZipFile.Caption:= 'Parsing "'+GetImgZipFileName(imageCategoryID)+LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;
+
+  {if Assigned(FormImageInitZipMsgBox) then
+     begin
+       if FormImageInitZipMsgBox.SystemIcon.Tag <> sysID then
+          begin
+            LoadIconIntoImage(SystemsListCustom[sysID, 1], FormImageInitZipMsgBox.SystemIcon, True);
+            FormImageInitZipMsgBox.SystemIcon.Tag:= sysID;
+          end;
+       FormImageInitZipMsgBox.LabelInitSystemTitle.Caption:= SystemsListCustom[sysID, 0];
+       FormImageInitZipMsgBox.LabelInitImageCategory.Caption:= GetImageCategoryTitle(imageCategoryID);
+       FormImageInitZipMsgBox.LabelInitZipFile.Caption:= 'Parsing "'+GetImgZipFileName(imageCategoryID)+FormImageInitZipMsgBox.LabelInitZipFile.Hint;
+       Application.ProcessMessages;
+       //Sleep(2000);
+     end;}
+
   case Assigned(imgZipFileListConsComp[sysID, imageCategoryID]) of
     True : imgZipFileListConsComp[sysID, imageCategoryID].Clear;
     False: imgZipFileListConsComp[sysID, imageCategoryID]:= THashedStringList.Create;
@@ -29247,16 +29863,9 @@ begin
   case MemGameInfo.eROMIdentification of
     00: Result:= (not PopupShowClone.Checked) and (not PopupShowMiss.Checked);   // MAME Parent (have)
     01: Result:= (not PopupShowParent.Checked) and (not PopupShowMiss.Checked);  // MAME Clone (have)
-    //02: Result:= (not FormFiltersExtra.HideBiosSets.Checked) and
-    //             (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Bios (have)
-    //03: Result:= (not FormFiltersExtra.HideDeviceSets.Checked) and
-    //             (not PopupShowClone.Checked) and (not PopupShowMiss.Checked); // MAME Device Set (have)
+
     04: Result:= (not PopupShowClone.Checked) and (not PopupShowHave.Checked);   // MAME Parent (miss)
     05: Result:= (not PopupShowParent.Checked) and (not PopupShowHave.Checked);  // MAME Clone (miss)
-    //06: Result:= (not FormFiltersExtra.HideBiosSets.Checked) and
-    //             (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Bios (miss)
-    //07: Result:= (not FormFiltersExtra.HideDeviceSets.Checked) and
-    //             (not PopupShowClone.Checked) and (not PopupShowHave.Checked); // MAME Device Set (miss)
     else
        Result:= True;
   end;
@@ -29285,7 +29894,7 @@ var
 
     if KeepGame then
        KeepGame:= MachinesListIndexOf(MemGameInfo.eSoftwareName, TMachineGameInfo(SelectedMachineItem).eSoftwareList) <> -1;
-       
+
     if KeepGame and (ButtonGameFilterDriverStatus.Tag > 0) then
        begin
          if FormArcadeFiltersDriverStatus.DriverStatusCategory.ItemIndex > 0 then
@@ -29303,8 +29912,16 @@ var
             end;
        end;
 
-    if KeepGame and (ButtonGameFilterHaveMiss.Tag = 3) then
-       KeepGame:= MemGameInfo.eGameSetStatus = 1;
+    if KeepGame then
+       begin
+         case ButtonGameFilterHaveMiss.Tag of
+           2: KeepGame:= MemGameInfo.eGameSetStatus = 2; // missing games
+           3: KeepGame:= MemGameInfo.eGameSetStatus = 1; // found with missing ROMs/CHDs
+           4: KeepGame:= MemGameInfo.eGameSetStatus in [1, 2]; // missing games and found with missing ROMs/CHDs
+         end;
+       end;
+    //if KeepGame and (ButtonGameFilterHaveMiss.Tag = 3) then
+    //   KeepGame:= MemGameInfo.eGameSetStatus = 1;
 
     if KeepGame and (SelectedFilterName = 'favorites') then
        KeepGame:= MemGameInfo.eIsFavorite;
@@ -29605,9 +30222,15 @@ begin
   if ButtonName = ButtonSystemsQuickFilter then
      begin
        if IsSystemQuickFilterEnabled then
-          SetToolBarIcon('filter_systems_quick_enabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3)
+          begin
+            SetToolBarIcon('filter_systems_quick_enabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3);
+            ButtonSystemsQuickFilter.Hint:= 'Select systems filter, quick mode (enabled)';
+          end
        else
-          SetToolBarIcon('filter_systems_quick_disabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3);
+          begin
+            SetToolBarIcon('filter_systems_quick_disabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3);
+            ButtonSystemsQuickFilter.Hint:= 'Select systems filter, quick mode (disabled)';
+          end;
      end
   else
   if ButtonName = ButtonGameFilterMain then
@@ -29678,6 +30301,8 @@ begin
   if CreatingGamesList then
      Exit;
 
+  if IsStartup then
+     Exit; // do not apply filters to restore last selected game (do this at FormMain.OnActivate() event)
   if not PanelMachinesList.Visible then
      ApplyFilters
   else
@@ -29691,8 +30316,9 @@ end;
 
 procedure TFormMain.ButtonViewImage(ButtonCode: ShortInt);
 var
-  iImageTag: array[1..3] of Integer; // current ".Tag" value in case the tag in TImage32 control needs to be restored
-  iImageReset: array[1..3] of Boolean; // was the ".Tag" in TImage32 reset ? (min/max boundaries check)
+  iImageTag: array[1..4] of Integer; // current ".Tag" value in case the tag in TImage32 control needs to be restored
+  iImageReset: array[1..4] of Boolean; // was the ".Tag" in TImage32 reset ? (min/max boundaries check)
+  iLoop: Integer;
 
   function ChangeImageTagCount(ImageSource: TImage32; ValueInt: Integer): Boolean;
   begin
@@ -29770,32 +30396,48 @@ begin
      iImageTag[2]:= ImageScr[2].Tag
   else
      iImageTag[2]:= -1;
+
   if Assigned(ImageScr[3]) then
      iImageTag[3]:= ImageScr[3].Tag
   else
      iImageTag[3]:= -1;
+     
+  if Assigned(ImageScr[4]) then
+     iImageTag[4]:= ImageScr[4].Tag
+  else
+     iImageTag[4]:= -1;
 
-  iImageReset[1]:= False;
-  iImageReset[2]:= False;
-  iImageReset[3]:= False;
+  for iLoop:= Low(iImageReset) to High(iImageReset) do
+      iImageReset[iLoop]:= False;
+
+  //iImageReset[1]:= False;
+  //iImageReset[2]:= False;
+  //iImageReset[3]:= False;
+  //iImageReset[4]:= False;
 
   case ButtonCode of
     1:
       begin
         Images.Tag:= Images.Tag+1; // next Button
-        ChangeImageTagCount(ImageScr[2], 1);
-        ChangeImageTagCount(ImageScr[3], 1);
+        for iLoop:= Low(ImageScr) to High(ImageScr) do
+            ChangeImageTagCount(ImageScr[iLoop], 1);
+        //ChangeImageTagCount(ImageScr[2], 1);
+        //ChangeImageTagCount(ImageScr[3], 1);
       end;
     0:
       begin
         Images.Tag:= Images.Tag-1; // previous Button
-        ChangeImageTagCount(ImageScr[2], -1);
-        ChangeImageTagCount(ImageScr[3], -1);
+        for iLoop:= Low(ImageScr) to High(ImageScr) do
+            ChangeImageTagCount(ImageScr[iLoop], -1);
+        //ChangeImageTagCount(ImageScr[2], -1);
+        //ChangeImageTagCount(ImageScr[3], -1);
       end;
   end;
   ValidateTagBoundaries(Images);
-  ValidateTagBoundaries(ImageScr[2]);
-  ValidateTagBoundaries(ImageScr[3]);
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+      ValidateTagBoundaries(ImageScr[iLoop]);
+  //ValidateTagBoundaries(ImageScr[2]);
+  //ValidateTagBoundaries(ImageScr[3]);
 
   DisplayImage;
 end;
@@ -29837,11 +30479,20 @@ begin
             FormMain.Left:= (Screen.Width-FormMain.Width) div 2;
           end;
      end;
-  if MenuViewFullScreen.Tag = 1 then
-     MenuViewFullScreen.Click;
+
+  //if MenuViewFullScreen.Tag = 1 then
+  //   MenuViewFullScreen.Click;
 
   if MenuShowImages.Tag = 0 then
      MenuShowImages.Click;
+
+  if MenuViewFullScreen.Tag = 1 then
+     MenuViewFullScreen.Click;
+     
+  //if MenuShowImages.Tag = 0 then
+  //   MenuShowImages.Click;
+
+  //GetGameDataListView(SelectedEasyItem);
 
   LoadImgSoftwareListNames;
 
@@ -29852,28 +30503,47 @@ begin
        PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
      end;
 
+  //FormStatus.StopThreadClock(True);
+  //FormStatus.Close;
+  
+  // must set image layout after main form size is set to last used or layout splitter do not work correctly (April 12, 2018)
+  if IsSingleImageLayout then
+     SetImageCategoryButtonsVisible // this will set image category tool bar buttons visible/invisible
+  else
+     CallSelectImageLayout(ButtonScreenshotLayouts.Tag, False);
+
   if MenuShowImages.Checked then
      InitZippedImagesCache;
 
-  if PopupImageShowLayoutDimensions.Checked then
-     PopupImageShowLayoutDimensions.OnClick(Self);
+  //if not IsDetailsView then
+  //   begin
+  //     PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
+  //   end;
 
   if FormPreferences.RestoreInternetGameInfoStartup.Checked then
      if ButtonInternetGameInfo.Down then
         ButtonInternetGameInfo.Click; // re-enable Internet Game Info button
 
+  //if MenuViewFullScreen.Tag = 1 then
+  //   MenuViewFullScreen.Click;
+
   IsStartup:= False; // code in FormMain.OnActivate should not execute anymore
 
   // need to set games view mode AFTER image view mode
 
+  //if (not MenuShowImages.Checked) and (not IsThumbnailView) then
+  HideInitZipImageMsgBox;
+     
   if IsThumbnailView then
      ResetThumbnails; // reset thumbs here or they do not show at startup
 
-  FocusGamesList;
-
+  // FocusGamesList; // not needed as it's called in SetGameType() function
+  SetGameType(False); // apply games filters
+  
   if CheckSelected(GamesListView) then
      begin
-       FormStatus.MessageStr('Loading selected game details.');
+       if FormStatus.Visible then
+          FormStatus.MessageStr('Loading selected game details.');
        // fix for the selected game not loading MAMu_ icon
        GamesListView.BeginUpdate;
        Sleep(50); // a small delay to prevent memory leaks in thumbnails view with images panel enabled; only happens at startup
@@ -29886,9 +30556,9 @@ begin
 
        Application.ProcessMessages;
 
-       SetSelectedGame(True); // reload selected game info, just to make sure
-
+       //SetSelectedGame(True); // reload selected game info, just to make sure... no need for this as it's called in SetGameType(False) above (April 25, 2018)
      end;
+
   UpdateStatusBarGame;
 
   PopupEnableFavorites.Hint:= FavoriteProfile[0];
@@ -29927,6 +30597,7 @@ begin
 
   if not TerminateEmuLoader then
      begin
+       UpdateImagePanelColorSettings;
        UpdateExtraIni;
        UpdateIniFile;
 
@@ -29956,8 +30627,8 @@ begin
 
   if not TerminateEmuLoader then
      begin
-       if Assigned(FormLayoutDimensions) then
-          FormLayoutDimensions.Close;
+       if Assigned(FormImageLayoutDimensions) then
+          FormImageLayoutDimensions.Close;
 
        if not ButtonInternetGameInfo.Down then // web mode save current image layout settings before enabled
           begin
@@ -30119,7 +30790,7 @@ begin
         case sysID of
           idSupermodel: // Supermodel: SEGA Model 3
             begin
-              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID);
+              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID, EmulatorFileName);
               //iniFile:= GetEmuIniFileName(sysID, EmulatorFileName); // for the future ??... when options are stored in "Config\Supermodel.ini"
               if not Assigned(FormSupermodelSettings) then
                  FormSupermodelSettings:= TFormSupermodelSettings.Create(nil);
@@ -30134,11 +30805,11 @@ begin
 
               FormSupermodelSettings.ShowModal;
               FreeAndNil(FormSupermodelSettings);
-              LoadFoldersArcade2(sysID);
+              LoadFoldersArcade2(sysID, EmulatorFileName);
             end;
           idDaphne:
             begin
-              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID);
+              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID, EmulatorFileName);
               if not Assigned(FormDaphneSettings) then
                  FormDaphneSettings:= TFormDaphneSettings.Create(nil);
               FormDaphneSettings.Tag:= 0; // default options
@@ -30152,7 +30823,7 @@ begin
               FormDaphneSettings.LabelReadFileIni.Caption:= iniFile;
               FormDaphneSettings.ShowModal;
               FreeAndNil(FormDaphneSettings);
-              LoadFoldersArcade2(sysID);
+              LoadFoldersArcade2(sysID, EmulatorFileName);
             end;
           idSegaModel2:
             begin
@@ -30171,11 +30842,11 @@ begin
 
               FormSEGAModel2EmulatorSettings.ShowModal;
               FreeAndNil(FormSEGAModel2EmulatorSettings);
-              LoadFoldersArcade2(sysID);
+              LoadFoldersArcade2(sysID, EmulatorFileName);
             end;
           idZiNc:
             begin
-              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID);
+              iniFile:= GetFolderArcadeEmulatorIni(sysID)+GetArcadeEmuIniFileName(sysID, EmulatorFileName);
               if not Assigned(FormZiNcSettings) then
                  FormZiNcSettings:= TFormZiNcSettings.Create(nil);
               FormZiNcSettings.Tag:= 0; // default options
@@ -30190,7 +30861,7 @@ begin
               FormZiNcSettings.LabelReadFileIni.Caption:= iniFile;
               FormZiNcSettings.ShowModal;
               FreeAndNil(FormZiNcSettings);
-              LoadFoldersArcade2(sysID);
+              LoadFoldersArcade2(sysID, EmulatorFileName);
             end;
         end;
       end;
@@ -30198,45 +30869,78 @@ begin
   SetCurrentDir(FrontendPath);
 end;
 
-procedure TFormMain.UpdateImageHintPanelText(Index: ShortInt);
+procedure TFormMain.UpdateImageHintPanelText(Index: ShortInt; ForceUpdate: Boolean = False);
+var
+  IconSize: Integer;
 begin
   if ImageDetails[Index].ImageCategoryIndex = -1 then
      Exit
   else
      begin
+       if FormPreferences.HintBox_IconEnabled.Checked then
+          IconSize:= 20
+       else
+          IconSize:= 0;
        case Index of
          1:
            begin
-             ImageHintText.Caption:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Caption;
-             ImageHintPanel.Width:= ImageHintText.Width+16;
+             if (ImageHintText.Caption = GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and (not ForceUpdate) then
+                Exit;
+
+             ImageHintText.Left:= 8+IconSize;
+             ImageHintText.Caption:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
+             ImageHintIcon.Picture.Icon:= nil;
+             if FormPreferences.HintBox_IconEnabled.Checked then
+                begin
+                  case ImageHintIcon.Tag of
+                    0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
+                    1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
+                  end;
+                end;
+             ImageHintPanel.Width:= ImageHintText.Width+16+IconSize;
            end;
-         2, 3:
+         2..4:
            begin
              if Assigned(ImageHintPanel2[Index]) then
                 begin
-                  ImageHintText2[Index].Caption:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Caption;
-                  ImageHintPanel2[Index].Width:= ImageHintText2[Index].Width+16;
+                  if (ImageHintText2[Index].Caption = GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and (not ForceUpdate) then
+                     Exit;
+
+                  ImageHintText2[Index].Left:= 8+IconSize;
+                  ImageHintIcon2[Index].Picture.Icon:= nil;
+                  if FormPreferences.HintBox_IconEnabled.Checked then
+                     begin
+                       case ImageHintIcon2[Index].Tag of
+                         0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[Index].Picture.Icon); // unzipped image
+                         1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[Index].Picture.Icon); // zipped image
+                       end;
+                     end;
+                  ImageHintText2[Index].Caption:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
+                  ImageHintPanel2[Index].Width:= ImageHintText2[Index].Width+16+IconSize;
                 end;
            end;
        end;
      end;
 end;
 
-procedure TFormMain.ChangeImageCategory(CategoryIndex: ShortInt);
+procedure TFormMain.ChangeImageCategory(CategoryIndex: Integer);
+var
+  iLoop: Integer;
 begin
   // this function is only used by single image layout
   ResetImageTagTo1;
 
-  ImageDetails[1].NoImageLoaded:= False;
-  ImageDetails[1].PrevNoImageLoaded:= False;
-  ImageDetails[2].NoImageLoaded:= False;
-  ImageDetails[2].PrevNoImageLoaded:= False;
-  ImageDetails[3].NoImageLoaded:= False;
-  ImageDetails[3].PrevNoImageLoaded:= False;
+  for iLoop:= Low(ImageDetails) to High(ImageDetails) do
+  begin
+    ImageDetails[iLoop].NoImageLoaded:= False;
+    ImageDetails[iLoop].PrevNoImageLoaded:= False;
+  end;
 
   if IsSingleImageLayout then
      begin
        ImageDetails[1].ImageCategoryIndex:= CategoryIndex;
+       ImageDetails[1].ImageCategoryIndex_AllSystems:= CategoryIndex;
+       ImageDetails[1].ImageCategoryIndex_ConsComp:= CategoryIndex;
        UpdateImageHintPanelText(1);
 
        ImagePreviewMouseLeave(Images);
@@ -30244,7 +30948,7 @@ begin
           begin
             // free cache THashedStringList vars; will load it again in MenuImages.OnClick() event
             FreeImageZipVars;
-            InitImgZipLists(True);
+            InitImgZipLists(True); // for MAME/arcade/EmuCon systems
             InitImgSoftwareNameZipLists(True);
           end;
      end;
@@ -30254,15 +30958,17 @@ begin
                      'Cannot set filename to update the image icon in tool bar buttons.'+#13#10+'Index: '+IntToStr(CategoryIndex), 2, False, 1)
   else
   if ImageCategoryArray[CategoryIndex, 0] = '' then
-     GenerateMessage('Image Preview', 'Image category filename is blank.', 'Invalid filename for "'+PopupMenuImageCategories.Items[CategoryIndex].Caption+'".', 2, False, 1);
+     GenerateMessage('Image Preview', 'Image category filename is blank.', 'Invalid filename for "'+GetImageCategoryTitle(CategoryIndex)+'".', 2, False, 1);
 
   ButtonImageCategory.Tag:= CategoryIndex;
 
   if IsSingleImageLayout then
-     Images.Color:= PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Tag; // change background color
+     Images.Color:= ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
 
-  ButtonImageCategory.Hint:= 'Category -> '+PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption+' <-';
-  SetIcon(IL_ImagesCategory_Small, nil, IL_ImagesToolBarButtons, ButtonImageCategory.Tag, 2);
+  ButtonImageCategory.Hint:= 'Category -> '+GetImageCategoryTitle(ButtonImageCategory.Tag)+' <-';
+
+  ChangeImageCategoryIcon(ButtonImageCategory.Tag, IL_ImagesToolBarButtons, 2); // update image category button iccon
+  //SetIcon(IL_ImagesCategory_Small, nil, IL_ImagesToolBarButtons, ButtonImageCategory.Tag, 2);
 
   if (not FormStatus.Visible) and IsSingleImageLayout then
      MenuShowImages.OnClick(Self); // make sure image layout is in single image, force load the new image category for selected game
@@ -30283,7 +30989,7 @@ var
 begin
   if FormStatus.Visible then
      FormStatus.MessageStr('MAMu_ Icons'+#13#10+
-                           'Loading "icons.zip" files list in RAM for fast access.');
+                           'Parsing "icons.zip" list in RAM for fast access.');
 
   iconsFile:= MAMu_Folder+'icons.zip';
   Result:= FileExists(iconsFile);
@@ -30514,11 +31220,17 @@ begin
        else
        begin
          if MenuShowImages.Checked then
-            FormStatus.Show;
+            begin
+              //FormStatus.Show;
+              ShowInitZipImageMsgBox;
+            end;
          InitImgZipLists(not MenuShowImages.Checked); // init or free zip lists
          InitImgSoftwareNameZipLists(not MenuShowImages.Checked);
          if MenuShowImages.Checked then
-            FormStatus.Close;
+            begin
+              //FormStatus.Close;
+              HideInitZipImageMsgBox;
+            end;
        end;
      end;
   if (not MenuShowImages.Checked) and (not IsStartUp) then
@@ -30587,7 +31299,7 @@ begin
         if IsGameDocsSinglePanelDisplay then
            begin
              ResetNoImageLoaded;
-             // ResetImageTagTo1; // cannot be here; if reset tag to 1, calling delete/rename image will reset (wrong) (January 25, 2018)
+             // ResetImageTagTo1; // DO NOT ENABLE! if reset image tags to 1, calling delete/rename image will not delete the correct image index per panel (wrong) (January 25, 2018)
              DisplayImage;
            end
         else
@@ -30595,7 +31307,7 @@ begin
              if ButtonImagePanelToggle.Down then
              begin
                ResetNoImageLoaded;
-               // ResetImageTagTo1;
+               // ResetImageTagTo1; // DO NOT ENABLE! commented code left here to remind that it should NOT execute
                DisplayImage;
              end;
            end;
@@ -30606,15 +31318,19 @@ begin
         ClearScreenshots;
       end;
   end;
-  ELV_MakeVisible(nil, nil, False);
+  if not IsStartup then
+     ELV_MakeVisible(nil, nil, False);
 end;
 
 procedure TFormMain.DestroyImageLayoutControls;
+var
+  iLoop: Integer;
 
   function DestroyImageHintPanel(Index: ShortInt): Boolean;
   begin
     if Assigned(ImageHintPanel2[Index]) then
        begin
+         FreeAndNil(ImageHintIcon2[Index]);
          FreeAndNil(ImageHintText2[Index]);
          FreeAndNil(ImageHintPanel2[Index]);
        end;
@@ -30635,6 +31351,13 @@ procedure TFormMain.DestroyImageLayoutControls;
     Result:= not Assigned(ImagePnl);
   end;
 
+  function DestroyImagePnlQuadVert: Boolean;
+  begin
+    if Assigned(ImagePnlQuadVert) then
+       FreeAndNil(ImagePnlQuadVert);
+    Result:= not Assigned(ImagePnlQuadVert);
+  end;
+
   function DestroyImageScr(Index: ShortInt): Boolean;
   begin
     DestroyImageHintPanel(Index);
@@ -30648,15 +31371,17 @@ procedure TFormMain.DestroyImageLayoutControls;
   end;
 
 begin
-  DestroySplitter(1);
-  DestroySplitter(2);
+  // this is called in uMain.SetImageLayout function and in FormMain.OnCloseQuery() event
+  if IsStartup then
+     Exit;
+  for iLoop:= Low(SplitterImg) to High(SplitterImg) do
+      DestroySplitter(iLoop);
 
-  DestroyImageHintPanel(1);
-  DestroyImageHintPanel(2);
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+      DestroyImageScr(iLoop);
 
-  DestroyImageScr(2);
-  DestroyImageScr(3);
   DestroyImagePnl;
+  DestroyImagePnlQuadVert;
 end;
 
 
@@ -30695,6 +31420,8 @@ begin
 end;
 
 procedure TFormMain.MenuImageFilterOffClick(Sender: TObject);
+var
+  iLoop: Integer;
 begin
   if TMenuItem(Sender).Tag = MenuImageResampler.Tag then
      begin
@@ -30706,11 +31433,12 @@ begin
      MenuImageResampler.Tag:= TMenuItem(Sender).Tag;
 
   SetResampler(Images);
-  if Assigned(ImageScr[2]) then
-     SetResampler(ImageScr[2]);
-  if Assigned(ImageScr[3]) then
-     SetResampler(ImageScr[3]);
-     
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+  begin
+    if Assigned(ImageScr[iLoop]) then
+       SetResampler(ImageScr[iLoop]);
+  end;
+
   if not IsStartup then
      if ValidateSelectedGame then
         DisplayImage;
@@ -31175,7 +31903,7 @@ begin
   if PopupThumbDeleteSelectedGameSnapshot.Visible then
      PopupThumbDeleteSelectedGameSnapshot.Visible:= TEasyGameInfo(SelectedEasyItem).eThumbnailLoaded and (not TEasyGameInfo(SelectedEasyItem).eThumbnailIsZipped);
   if PopupThumbDeleteSelectedGameSnapshot.Visible then
-     PopupThumbDeleteSelectedGameSnapshot.Caption:= 'Delete Selected '+PopupMenuImageCategories.Items[1].Caption;
+     PopupThumbDeleteSelectedGameSnapshot.Caption:= 'Delete Selected '+GetImageCategoryTitle(1);
 
   if not PopupEnableMAMu_Icons.Checked then
      PopupEnableMAMu_Icons.Enabled:= DirectoryExists(MAMu_Folder);
@@ -31219,19 +31947,6 @@ begin
   else
   if not WebBrowserStatusPanel.Visible then
      WebBrowserStatusPanel.Visible:= True;
-end;
-
-procedure TFormMain.ButtonShowGameSnapshotClick(Sender: TObject);
-begin
-  if TMenuItem(Sender).ImageIndex = ButtonImageCategory.Tag then
-     begin
-       TMenuItem(Sender).Checked:= True;
-       if not IsStartup then
-          Exit;
-     end;
-  ChangeImageCategory(TMenuItem(Sender).ImageIndex);
-  if (not IsStartup) and IsSingleImageLayout then
-     UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // force update the image category settings in single layout
 end;
 
 procedure TFormMain.PopupShowFirstImageClick(Sender: TObject);
@@ -31416,7 +32131,7 @@ begin
   CallSetDeleteOptions(TMenuItem(Sender).Hint, TMenuItem(Sender));
 end;
 
-function TFormMain.AppendText(ARichEdit: TRichEditURL; const AText: String; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+function TFormMain.AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 var
@@ -31461,10 +32176,67 @@ begin
      ARichEdit.SelAttributes.Size:= reFontSize;
 end;
 
-procedure TFormMain.AddMsgText(const iTextToAdd: String; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
+procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
                                iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 begin
+  if (iFontColor = clBlack) and IsNightMode then
+     iFontColor:= FormMessageBox.LabelMessage.Font.Color;
   AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
+end;
+
+procedure TFormMain.SetSinglePanelLayoutGameDocuments;
+
+  procedure SetAllNone;
+  begin
+    SplitterMAMEInfo.Align:= alNone;
+    PanelImage.Align:= alNone;
+    PanelGameDocuments.Align:= alNone;
+  end;
+
+begin
+  if (PanelGameDocuments.Align = alClient) and (not MenuShowImages.Checked) then
+     Exit;
+
+  if not IsGameDocsSinglePanelDisplay then
+     Exit;
+
+  SetAllNone;
+
+  case PanelGameDocuments.Tag of
+    0: // info top, images bottom
+      begin
+        PanelGameDocuments.Align:= alTop;
+        PanelGameDocuments.Height:= GameDocumentsLayout1_Top.Tag;
+        SplitterMAMEInfo.Height:= 7;
+        SplitterMAMEInfo.Top:= PanelGameDocuments.Height+7;
+        SplitterMAMEInfo.Align:= alTop;
+      end;
+    1: // info bottom, images top
+      begin
+        PanelGameDocuments.Align:= alBottom;
+        PanelGameDocuments.Height:= GameDocumentsLayout2_Bottom.Tag;
+        SplitterMAMEInfo.Height:= 7;
+        SplitterMAMEInfo.Top:= PanelGameDocuments.Top-7;
+        SplitterMAMEInfo.Align:= alBottom;
+      end;
+    2: // info left, images right
+      begin
+        PanelGameDocuments.Align:= alLeft;
+        PanelGameDocuments.Width:= GameDocumentsLayout3_Left.Tag;
+        SplitterMAMEInfo.Width:= 7;
+        SplitterMAMEInfo.Left:= PanelGameDocuments.Width+7;
+        SplitterMAMEInfo.Align:= alLeft;
+      end;
+    3: // info right, images left
+      begin
+        PanelGameDocuments.Align:= alRight;
+        PanelGameDocuments.Width:= GameDocumentsLayout4_Right.Tag;
+        SplitterMAMEInfo.Width:= 7;
+        SplitterMAMEInfo.Left:= PanelGameDocuments.Left-7;
+        SplitterMAMEInfo.Align:= alRight;
+      end;
+  end;
+  PanelImage.Align:= alClient;
 end;
 
 procedure TFormMain.UpdateScreenshotsPanel;
@@ -31505,7 +32277,8 @@ begin
                     SplitterMAMEInfo.Visible:= False;
                     PanelGameDocuments.Align:= alClient;
                     PanelGameDocuments.Visible:= True;
-                    MAMEInfoTextHolder.Refresh;
+                    if not IsStartup then
+                       MAMEInfoTextHolder.Refresh;
                     if not PanelScreenshotsArea.Visible then
                        PanelScreenshotsArea.Visible:= True;
                     if not Splitter.Visible then
@@ -32091,7 +32864,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    File ');
-       AddMsgText(GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
+       AddMsgText(GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. Filters list cannot be built.'+#13#10+'Aborting...');
        GenerateMessage('Error', 'Main filter', '', 2, False, 1);
        Exit;
@@ -32378,6 +33151,7 @@ begin
         ACanvas.FillRect(R);
         //DrawGradient(ACanvas, ARect, 16777215, 15657958, gsHorizontal); // gradient menu bk
         DrawCheckedPattern(True);
+
         case IsInTopMainMenu(AMenuItem) of
           True : Inc(R.Left, 6);
           False: Inc(R.Left, 0); // leave space for menuitem image
@@ -32407,7 +33181,7 @@ begin
          end
       else
          begin
-           InflateRect(R, 0, -((R.Bottom - R.Top - TextHeight(AMenuItem.Caption) {- 1}) div 2));
+           InflateRect(R, 0, -((R.Bottom - R.Top - TextHeight(AMenuItem.Caption)) div 2));
            DrawText(Handle, PChar(AMenuItem.Caption), Length(AMenuItem.Caption), R, 0);
          end;
 
@@ -32580,7 +33354,8 @@ begin
   // 28: Select Effect Overlay (MAME Settings)... uses "ArtworkDir"
   // 29: Select Font Files, .BDF (MAME Settings, emulator settings)
   // 30: Select Font Files, game, driver, .BDF (MAME Settings)
-  // 31: Select Shadow Mask Texture (MAME Settings)... uses "ArtworkDir"
+  // 31: Select HLSL Shadow Mask Texture (MAME Settings)... uses "ArtworkDir"
+  // 32: Select BGFX Shadow Mask Texture (MAME Settings)... uses "ArtworkDir"
 
   // March 16, 2016 -> I need to pass sysID, emulator filename (not just from uMain.EmulatorFile[] array)
   // this feature is used only in the uMain.ExecuteGame() function and in MAME settings screen, and the MemGameInfo var is filled with current
@@ -32591,7 +33366,7 @@ begin
   destFolder:= '';
   destFile:= '';
   SoftwareNameFolder:= '';
-  if not (FeatureIndex in [26, 28..31]) then
+  if not (FeatureIndex in [26, 28..32]) then
      begin
        if not ValidateSelectedGame then
           Exit;
@@ -32602,7 +33377,7 @@ begin
           Exit;
      end;
 
-  if FeatureIndex in [20, 21, 22, 23..31] then
+  if FeatureIndex in [20, 21, 22, 23..32] then
      tempList:= THashedStringList.Create;
 
   if FeatureIndex in [20, 21, 22, 23, 24, 25] then
@@ -32646,10 +33421,10 @@ begin
              Exit;
            end;
       end;}
-    27..31:
+    27..32:
       begin
         case FeatureIndex of
-          27, 28, 31:
+          27, 28, 31, 32:
             begin
               //ListFolders:= THashedStringList.Create;
               //ListFolders.AddStrings(ArtworksDir[Ord(sysID = idMAME)]); // ArtworksDir[] array is not used anymore (March 17, 2016)
@@ -32669,7 +33444,7 @@ begin
                if DirectoryExists(ListFolders[Loop]) then
                   begin
                     case FeatureIndex of
-                      27, 28, 31: GetFilesList(ListFolders[Loop], '.png', '*.png', tempList, False, False, True);
+                      27, 28, 31, 32: GetFilesList(ListFolders[Loop], '.png', '*.png', tempList, False, False, True);
                       29, 30: GetFilesList(ListFolders[Loop], '.bdf', '*.bdf', tempList, False, False, True);
                     end;
                   end;
@@ -32680,7 +33455,7 @@ begin
   end;
 
   case FeatureIndex of
-    20..22, 23..31:
+    20..22, 23..32:
       begin
         // 20: Playback Input... uses "iDir"
         // 21: Record Input ... uses "iDir"
@@ -32693,7 +33468,8 @@ begin
         // 28: Select Effect Overlay (MAME Settings)... uses "iDir"
         // 29: Select Font Files, .BDF (MAME Settings, emulator settings)
         // 30: Select Font Files, game, driver, .BDF (MAME Settings)
-        // 31: Select Shadow Mask Texture (MAME Settings)... uses "iDir"
+        // 31: Select HLSL Shadow Mask Texture (MAME Settings)... uses "iDir"
+        // 32: Select BGFX Shadow Mask Texture (MAME Settings)... uses "ArtworkDir"
         FormSelectFile:= TFormSelectFile.Create(nil);
         FormSelectFile.Tag:= FeatureIndex;
         if FormSelectFile.Tag = 20 then
@@ -32712,7 +33488,7 @@ begin
               FormSelectFile.LabelGameTitle.Caption:= MemGameInfo.eTitle;
               FormSelectFile.LabelGameNameCloneOf.Caption:= 'name: '+StatusBar_GamesGameName.Caption;
             end;
-          28..31:
+          28..32:
             begin
               // select a file in MAME Settings screen... can be from a game or MAME
               // these indexes are not used anywhere else!!!
@@ -32747,7 +33523,7 @@ begin
           //    FormSelectFile.LabelNewFilename.Visible:= False;
           //    FormSelectFile.NewFilename.Visible:= False;
           //  end;
-          27, 28..31, 22:
+          27, 28..32, 22:
             begin
               FormSelectFile.LabelNewFilename.Visible:= False;
               FormSelectFile.NewFilename.Visible:= False;
@@ -32770,7 +33546,8 @@ begin
           27: FormSelectFile.Caption:= 'Run Game with Effect Overlay File';
           28: FormSelectFile.Caption:= 'Select an Effect Overlay File';
           29, 30: FormSelectFile.Caption:= 'Select an User Interface Font File';
-          31: FormSelectFile.Caption:= 'Select a Shadow Mask Texture File';
+          31: FormSelectFile.Caption:= 'Select a HLSL Shadow Mask Texture File';
+          32: FormSelectFile.Caption:= 'Select a BGFX Shadow Mask Texture File';
         end;
 
         FormSelectFile.ShowModal;
@@ -33110,6 +33887,9 @@ begin
            FormMain.WindowState:= wsMaximized;
       end;
   end;
+
+  if IsStartup then
+     Exit;
   Application.BringToFront;
   Application.ProcessMessages;
   FormMain.BringToFront;
@@ -33144,61 +33924,6 @@ begin
   FontDialog.Font:= MAMEInfoTextHolder.Font;
   if FontDialog.Execute then
      MAMEInfoTextHolder.Font:= FontDialog.Font;
-end;
-
-procedure TFormMain.SetSinglePanelLayoutGameDocuments;
-
-  procedure SetAllNone;
-  begin
-    SplitterMAMEInfo.Align:= alNone;
-    PanelImage.Align:= alNone;
-    PanelGameDocuments.Align:= alNone;
-  end;
-
-begin
-  if (PanelGameDocuments.Align = alClient) and (not MenuShowImages.Checked) then
-     Exit;
-
-  if not IsGameDocsSinglePanelDisplay then
-     Exit;
-
-  SetAllNone;
-
-  case PanelGameDocuments.Tag of
-    0: // info top, images bottom
-      begin
-        PanelGameDocuments.Align:= alTop;
-        PanelGameDocuments.Height:= GameDocumentsLayout1_Top.Tag;
-        SplitterMAMEInfo.Height:= 7;
-        SplitterMAMEInfo.Top:= PanelGameDocuments.Height+7;
-        SplitterMAMEInfo.Align:= alTop;
-      end;
-    1: // info bottom, images top
-      begin
-        PanelGameDocuments.Align:= alBottom;
-        PanelGameDocuments.Height:= GameDocumentsLayout2_Bottom.Tag;
-        SplitterMAMEInfo.Height:= 7;
-        SplitterMAMEInfo.Top:= PanelGameDocuments.Top-7;
-        SplitterMAMEInfo.Align:= alBottom;
-      end;
-    2: // info left, images right
-      begin
-        PanelGameDocuments.Align:= alLeft;
-        PanelGameDocuments.Width:= GameDocumentsLayout3_Left.Tag;
-        SplitterMAMEInfo.Width:= 7;
-        SplitterMAMEInfo.Left:= PanelGameDocuments.Width+7;
-        SplitterMAMEInfo.Align:= alLeft;
-      end;
-    3: // info right, images left
-      begin
-        PanelGameDocuments.Align:= alRight;
-        PanelGameDocuments.Width:= GameDocumentsLayout4_Right.Tag;
-        SplitterMAMEInfo.Width:= 7;
-        SplitterMAMEInfo.Left:= PanelGameDocuments.Left-7;
-        SplitterMAMEInfo.Align:= alRight;
-      end;
-  end;
-  PanelImage.Align:= alClient;
 end;
 
 procedure TFormMain.MenuImagesEnableToolBarClick(Sender: TObject);
@@ -33265,29 +33990,36 @@ begin
      end;
 end;
 
-function TFormMain.ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt): Integer;
+function TFormMain.ScanSoftListGames(RefreshMode: Integer; IsCreatingGames: Boolean; sysID: ShortInt; SoftwareListsToProcess: THashedStringList = nil): Integer;
 var
   iLoop, iCount, ChangedGamesCount: Integer;
   SoftListFiles: THashedStringList;
+  RemoveSoftLists: Boolean;
 begin
   // get all software list files
   Result:= 0;
   ChangedGamesCount:= 0;
   SoftListFiles:= THashedStringList.Create;
-  GetFilesList(GetGamesFolderEL(1, sysID), '.el', '*.el', SoftListFiles, False, False, False);
-  iCount:= SoftListFiles.Count;
-  if iCount > 0 then
+  RemoveSoftLists:= Assigned(SoftwareListsToProcess);
+  if RemovesoftLists then
+     SoftListFiles.AddStrings(SoftwareListsToProcess) // get a pre-built software list; this is only assigned when creating games lists
+  else
   begin
-    SoftListFiles.BeginUpdate;
-    for iLoop:=0 to iCount-1 do
-        SoftListfiles[iLoop]:= ChangeFileExt(SoftListFiles[iLoop], '');
-    SoftListFiles.EndUpdate;
+    GetFilesList(GetGamesFolderEL(1, sysID), '.el', '*.el', SoftListFiles, False, False, False); // get all files
+    iCount:= SoftListFiles.Count;
+    if iCount > 0 then
+    begin
+      SoftListFiles.BeginUpdate;
+      for iLoop:=0 to iCount-1 do
+          SoftListfiles[iLoop]:= ChangeFileExt(SoftListFiles[iLoop], '');
+      SoftListFiles.EndUpdate;
 
-    SoftListRemoveExcludedList(sysID, SoftListfiles);
-    if MenuCreateMAMESoftwareListGames.Tag = 1 then // update mode, must remove exclude list and remove software lists with same CRC32
-       begin
-         SoftListValidateListsXML(sysID, SoftListfiles);
-       end;
+      SoftListRemoveExcludedList(sysID, SoftListfiles);
+      //if MenuCreateMAMESoftwareListGames.Tag = 1 then // update mode, must remove exclude list and remove software lists with same CRC32
+      //   begin
+      //     SoftListValidateListsXML(sysID, SoftListfiles); // no need to do this here as this is either a clean install or all softlists must be processed (March 29, 2018)
+      //   end;
+    end;
   end;
 
   iCount:= SoftListFiles.Count;
@@ -33305,7 +34037,6 @@ begin
        begin;
          FormStatus.LabelSoftwareScanCount.Caption:= Format('[%.3u of %u]', [iLoop+1, iCount]);
          ChangedGamesCount:= CallScanGames(RefreshMode, IsCreatingGames, sysID, SoftListFiles[iLoop], True);
-         //ChangedGamesCount:= CallScanGames(RefreshMode, IsCreatingGames, sysID, ChangeFileExt(SoftListFiles[iLoop], ''), True);
          Inc(Result, ChangedGamesCount);
        end;
        GamesListView.EndUpdate(False);
@@ -33378,7 +34109,7 @@ begin
 
                  CallMessageBox;
                  AddMsgText('    There are games from multiple systems selected. Only ');
-                 AddMsgText(SysStr, $00a65300, [fsBold]);
+                 AddMsgText(SysStr, MsgTxtColors.colorFileName, [fsBold]);
                  AddMsgText(' sets will be processed.'+#13#10+'Do you want to continue ?');
                  if GenerateMessage('Info', 'Scan Selected Games', '', 1, False, 2) = mrNo then
                     Exit;
@@ -33430,7 +34161,7 @@ begin
             begin
               if AllowScan(Loop, True) then
               begin
-                if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then
+                if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then // no need for a softwarename list since all softlists must be processed (user is only auditing games)
                    ChangedGames:= True;
               end;
             end;
@@ -33450,7 +34181,7 @@ begin
               begin
                 if AllowScan(Loop, True) then
                 begin
-                  if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then
+                  if ScanSoftListGames(TMenuItem(Sender).Tag, False, Loop) > 0 then // no need for a softwarename list since all softlists must be processed (user is only auditing games)
                      ChangedGames:= True;
                 end;
               end;
@@ -33660,10 +34391,310 @@ begin
   CallShellExecute(nil, URL);
 end;
 
+procedure TFormMain.CenterImageSplitterQuad(SplitterHolder: TSplitterEx; CenterAll: Boolean = False);
+var
+  BorderSize: Integer;
+  ImageToAdjust: TImage32;
+  PanelToAdjust: TPanel;
+  BothSplittersVisible: Boolean;
+  quad_Width, quad_Height, quad_alClient_Width, quad_alClient_Height: Integer;
+  Continue: Boolean;
+
+  function CheckImageAlignment(ImageHolder: TImage32): Boolean;
+  begin
+    Result:= False;
+    if not Assigned(ImageHolder) then
+       Exit;
+    if ImageHolder.Align = SplitterHolder.Align then
+       begin
+         Result:= True;
+         ImageToAdjust:= ImageHolder;
+
+         if ButtonScreenshotLayouts.Tag > 8 then
+         begin
+           case SplitterHolder.Align of
+             alLeft, alRight: quad_Width:= ImageHolder.Width; // vertical splitter
+             alTop, alBottom: quad_Height:= ImageHolder.Height; // horizontal splitter
+           end;
+         end;
+       end;
+  end;
+
+  function GetImageAlignAllClient: TImage32;
+  begin
+    // function for tripple layout [1] and [2]
+    // only to resize when both splitters are visible
+    if Images.Align = alClient then
+       Result:= Images
+    else
+    if ImageScr[2].Align = alClient then
+       Result:= ImageScr[2]
+    else
+       Result:= ImageScr[3];
+  end;
+
+  function CheckPanelAlignment_Quad(PanelHolder: TPanel): Boolean;
+  begin
+    Result:= False;
+    if not Assigned(PanelHolder) then
+       Exit;
+    if PanelHolder.Align = SplitterHolder.Align then
+       begin
+         Result:= True;
+         PanelToAdjust:= PanelHolder;
+         case SplitterHolder.Align of
+           alLeft, alRight: quad_Width:= PanelHolder.Width; // vertical splitter
+           alTop, alBottom: quad_Height:= PanelHolder.Height; // horizontal splitter
+         end;
+       end;
+  end;
+
+  function GetPanelAlignAllClient_Quad: TPanel;
+  begin
+    Result:= nil;
+    if Assigned(ImagePnl) then
+       begin
+         if ImagePnl.Align = alClient then
+            Result:= ImagePnl;
+       end;
+    if Result = nil then
+       begin
+         if Assigned(ImagePnlQuadVert) then
+         begin
+           if ImagePnlQuadVert.Align = alClient then
+              Result:= ImagePnlQuadVert;
+         end;
+       end;
+    if Result <> nil then
+       begin
+         case SplitterHolder.Align of
+           alLeft, alRight: quad_alClient_Width:= Result.Width; // vertical splitter
+           alTop, alBottom: quad_alClient_Height:= Result.Height; // horizontal splitter
+         end;
+       end;
+  end;
+
+  function GetImageAlignAllClient_Quad: TImage32;
+  begin
+    Result:= nil;
+    if Images.Align = alClient then
+       Result:= Images
+    else
+    if ImageScr[2].Align = alClient then
+       Result:= ImageScr[2]
+    else
+    if ImageScr[3].Align = alClient then
+       Result:= ImageScr[3]
+    else
+       Result:= ImageScr[4];
+
+    if Result <> nil then
+       begin
+         case SplitterHolder.Align of
+           alLeft, alRight: quad_alClient_Width:= Result.Width; // vertical splitter
+           alTop, alBottom: quad_alClient_Height:= Result.Height; // horizontal splitter
+         end;
+       end;
+  end;
+
+begin
+  BorderSize:= 0;
+  if PanelImage.BorderWidth > 0 then
+     BorderSize:= 14;
+
+  if CenterAll then
+  begin
+    // if there are 3 splitters with same "Align" in the same panel (hor or vert splitters), must increase BorderSize
+    // BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+    case ButtonScreenshotLayouts.Tag of
+      09: // quad, layout 1 horizontal
+        begin
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 2; // align alLeft
+          ImagePnl.Height:= (PanelImage.Height-7-BorderSize) div 2; // align alBottom
+          ImageScr[3].Width:= Images.Width; // same as Images.Width, align alTop
+        end;
+      10: // quad, layout 1 vertical
+        begin
+          // this will require an extra "ImagePnlQuadVert" component to align image panels correctly; it's the ONLY layout that uses the extra panel
+          ImagePnl.Width:= (PanelImage.Width-7-BorderSize) div 2; // align alLeft
+          Images.Height:= (PanelImage.Height-7-BorderSize) div 2; // align alTop
+          ImageScr[2].Height:= Images.Height; // same as Images.Height
+        end;
+      11, 12: // quad, layout 2 >---< quad, layout 3
+        begin
+          ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 2; // align alTop (layout 3 is alBottom)
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 3; // align alLeft
+          ImageScr[3].Width:= Images.Width; // same as Images, align alRight
+        end;
+      13, 14: // quad, layout 4 >---< quad, layout 5
+        begin
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 2; // align alLeft (layout 5 is alRight)
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          ImageScr[2].Height:= (PanelImage.Height-7-BorderSize) div 3; // align alTop
+          ImageScr[4].Height:= ImageScr[2].Height; // same as ImageScr[2], align alBottom
+        end;
+      15, 16, 17, 18: // quad, layout 6 >---< quad, layout 7 >---< quad, layout 8 >---< quad, layout 9
+        begin
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 3; // align alLeft (layout 6, 7) (alRight for Layout 8, 9)
+          ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 3; // align alTop (layout 6, 8) (alBottom for layout 7, 9)
+          ImageScr[2].Width:= (PanelImage.Width-7-BorderSize) div 3; // align alLeft (all layouts)
+        end;
+      19, 20, 21, 22: // quad, layout 10 >---< quad, layout 11 >---< quad, layout 12 >---< quad, layout 13
+        begin
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 2; // align alLeft (layout 10, 12) (alRight for Layout 11, 13)
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 3; // align alTop (layout 10, 11) (alBottom for Layout 12, 13)
+          ImageScr[2].Height:= ImageScr[4].Height; // same as ImageScr[4], align alTop (all layouts)
+        end;
+      23: // quad, layout 14
+        begin
+          Images.Height:= (PanelImage.Height-7-BorderSize) div 2; // align alTop
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          ImageScr[3].Width:= (PanelImage.Width-7-BorderSize) div 3; // align alLeft
+          ImageScr[4].Width:= ImageScr[3].Width; // same as ImageScr[3], align alRight
+        end;
+      24: // quad, layout 15
+        begin
+          Images.Width:= (PanelImage.Width-7-BorderSize) div 2; // align alLeft
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          ImageScr[3].Height:= (PanelImage.Height-7-BorderSize) div 3; // align alTop
+          ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 3; // align alBottom
+        end;
+      25, 26: // quad, layout 16 >---< quad, layout 17
+        begin
+          ImageScr[3].Height:= (PanelImage.Width-7-BorderSize) div 2; // align alTop
+          BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+          Images.Width:= Trunc((PanelImage.Width-7-BorderSize) / 2.5); // align alLeft (layout 16) (alRight for layout 17)
+          ImagePnl.Width:= Trunc((PanelImage.Width-7-BorderSize) / 4.5); // align alRight
+        end;
+    end;
+  end
+  else
+  begin
+    Continue:= False;
+    BorderSize:= 0;
+    if PanelImage.BorderWidth > 0 then
+       BorderSize:= 14;
+    //if ButtonScreenshotLayouts.Tag in [3, 4] then
+    //   begin
+    //     BothSplittersVisible:= Assigned(SplitterImg[1]) and Assigned(SplitterImg[2]);
+    //     // tripple layout [1] and [2]
+    //     if BothSplittersVisible then
+    //        BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
+    //   end;
+
+    case ButtonScreenshotLayouts.Tag of
+      9: // quad, layout 1 horizontal
+        begin
+          if SplitterHolder = SplitterImg[1] then // vert
+             Images.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then // hor
+             ImagePnl.Height:= (PanelImage.Height-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then // vert
+             ImageScr[3].Width:= (PanelImage.Width-7-BorderSize) div 2;
+        end;
+      10: // quad, layout 1 vertical
+        begin
+          // this will require an extra "ImagePnlQuadVert" component to align image panels correctly; it's the ONLY layout that uses the extra panel
+          if SplitterHolder = SplitterImg[1] then // hor
+             Images.Height:= (PanelImage.Height-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then // vert
+             ImagePnl.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then // hor
+             ImageScr[2].Height:= (PanelImage.Height-7-BorderSize) div 2;
+        end;
+      11, 12: // quad, layout 2 >---< quad, layout 3
+        begin
+          if SplitterHolder = SplitterImg[1] then // vert
+             Images.Width:= (Images.Width+ImageScr[2].Width) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then // vert
+             ImageScr[3].Width:= (ImageScr[3].Width+ImageScr[2].Width) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then // hor
+             ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 2;
+        end;
+      13, 14: // quad, layout 4 >---< quad, layout 5
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImageScr[2].Height:= (ImageScr[3].Height+ImageScr[2].Height) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[4].Height:= (ImageScr[4].Height+ImageScr[3].Height) div 2;
+        end;
+      15, 16, 17, 18: // quad, layout 6 >---< quad, layout 7 >---< quad, layout 8 >---< quad, layout 9
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImageScr[2].Width:= (ImageScr[3].Width+ImageScr[2].Width) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 2;
+        end;
+      19, 20, 21, 22: // quad, layout 10 >---< quad, layout 11 >---< quad, layout 12 >---< quad, layout 13
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImageScr[2].Height:= (ImageScr[3].Height+ImageScr[2].Height) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[4].Height:= (PanelImage.Height-7-BorderSize) div 2;
+        end;
+      23: // quad, layout 14
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Height:= (PanelImage.Height-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImageScr[3].Width:= (Images.Width+ImageScr[3].Width) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[4].Width:= (Images.Width+ImageScr[4].Width) div 2;
+        end;
+      24: // quad, layout 15
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Width:= (PanelImage.Width-7-BorderSize) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImageScr[3].Height:= (Images.Height+ImageScr[3].Height) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[4].Height:= (Images.Height+ImageScr[4].Height) div 2;
+        end;
+      25, 26: // quad, layout 16 >---< quad, layout 17
+        begin
+          if SplitterHolder = SplitterImg[1] then
+             Images.Width:= (Images.Width+ImageScr[2].Width) div 2
+          else
+          if SplitterHolder = SplitterImg[2] then
+             ImagePnl.Width:= (ImageScr[2].Width+ImagePnl.Width) div 2
+          else
+          if SplitterHolder = SplitterImg[3] then
+             ImageScr[3].Height:= (PanelImage.Height-7-BorderSize) div 2;
+        end;
+    end;
+  end;
+end;
+
 function TFormMain.CenterImageSplitter(SplitterHolder: TSplitterEx; CenterAll: Boolean = False): Boolean;
 var
   BorderSize: Integer;
   ImageToAdjust: TImage32;
+  PanelToAdjust: TPanel;
   BothSplittersVisible: Boolean;
 
   function CheckImageAlignment(ImageHolder: TImage32): Boolean;
@@ -33707,14 +34738,17 @@ begin
           BorderSize:= BorderSize+7; // needs to be divided by 3 and count the extra splitter pixels
      end;
 
-  if CheckImageAlignment(Images) then
-     Result:= True
-  else
-  if CheckImageAlignment(ImageScr[2]) then
-     Result:= True
-  else
-  if CheckImageAlignment(ImageScr[3]) then
-     Result:= True;
+  if not Result then
+  begin
+    if CheckImageAlignment(Images) then
+       Result:= True
+    else
+    if CheckImageAlignment(ImageScr[2]) then
+       Result:= True
+    else
+    if CheckImageAlignment(ImageScr[3]) then
+       Result:= True;
+  end;
 
   if not Result then
      Exit;
@@ -33804,22 +34838,124 @@ begin
         tmpInt:= layoutIni.ReadInteger(SectionStr, 'width3', Trunc(PanelImage.Width/2));
         strVar[1]:= tmpInt;
       end;
+    9: // quad, layout 1 horizontal
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Width/2)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width3', Trunc(PanelImage.Width/2)); // ImageScr[3].Width
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height3', Trunc(PanelImage.Height/2)); // ImageScr[3].Height
+        strVar[2]:= tmpInt;
+      end;
+    10: // quad, layout 1 vertical
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Width/2)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height1', Trunc(PanelImage.Height/2)); // Images.Height
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height2', Trunc(PanelImage.Height/2)); // ImageScr[2].Height
+        strVar[2]:= tmpInt;
+      end;
+    11, 12: // quad, layout 2 >---< quad, layout 3
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Width/3)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width3', Trunc(PanelImage.Width/3)); // ImageScr[3].Width
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height4', Trunc(PanelImage.Height/3)); // ImageScr[4].Height
+        strVar[2]:= tmpInt;
+      end;
+    13, 14: // quad, layout 4 >---< quad, layout 5
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Height/2)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height2', Trunc(PanelImage.Height/3)); // ImageScr[2].Height
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height4', Trunc(PanelImage.Width/3)); // ImageScr[4].Height
+        strVar[2]:= tmpInt;
+      end;
+    15, 16, 17, 18: // quad, layout 6 >---< quad, layout 7 >---< quad, layout 8 >---< quad, layout 9
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Height/3)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width2', Trunc(PanelImage.Height/3)); // ImageScr[2].Width
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height4', Trunc(PanelImage.Width/3)); // ImageScr[4].Height
+        strVar[2]:= tmpInt;
+      end;
+    19, 20, 21, 22: // quad, layout 10 >---< quad, layout 11 >---< quad, layout 12 >---< quad, layout 13
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Height/2)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height2', Trunc(PanelImage.Height/3)); // ImageScr[2].Height
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height4', Trunc(PanelImage.Width/3)); // ImageScr[4].Height
+        strVar[2]:= tmpInt;
+      end;
+    23: // quad, layout 14
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height1', Trunc(PanelImage.Height/2)); // Images.Height
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width3', Trunc(PanelImage.Height/3)); // ImageScr[3].Width
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width4', Trunc(PanelImage.Width/3)); // ImageScr[4].Width
+        strVar[2]:= tmpInt;
+      end;
+    24: // quad, layout 15
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Height/2)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height3', Trunc(PanelImage.Height/3)); // ImageScr[3].Height
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height4', Trunc(PanelImage.Width/3)); // ImageScr[4].Height
+        strVar[2]:= tmpInt;
+      end;
+    25, 26: // quad, layout 16 >---< quad, layout 17
+      begin
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width1', Trunc(PanelImage.Width/2.5)); // Images.Width
+        strVar[0]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'width3', Trunc(PanelImage.Width/4.5)); // ImageScr[3].Width
+        strVar[1]:= tmpInt;
+        tmpInt:= layoutIni.ReadInteger(SectionStr, 'height3', Trunc(PanelImage.Height/2)); // ImageScr[3].Height
+        strVar[2]:= tmpInt;
+      end;
   end;
 
   ImageDetails[1].ImageCategoryIndex:= layoutIni.ReadInteger(SectionStr, 'image1_category', GetScrLayoutDefaultType(LayoutIndex, 1));
+  ImageDetails[1].ImageCategoryIndex_ConsComp:= layoutIni.ReadInteger(SectionStr, 'image1conscomp_category', GetScrLayoutDefaultType(LayoutIndex, 1));
+  ImageDetails[1].ImageCategoryIndex_AllSystems:= ImageDetails[1].ImageCategoryIndex;
+
   UpdateImageHintPanelText(1);
+
   if LayoutIndex > 0 then
      begin
        ImageDetails[2].ImageCategoryIndex:= layoutIni.ReadInteger(SectionStr, 'image2_category', GetScrLayoutDefaultType(LayoutIndex, 2));
-       boolVar[0]:= Boolean(layoutIni.ReadInteger(SectionStr, 'image2_enabled', 1));
+       ImageDetails[2].ImageCategoryIndex_ConsComp:= layoutIni.ReadInteger(SectionStr, 'image2conscomp_category', GetScrLayoutDefaultType(LayoutIndex, 2));
+       ImageDetails[2].ImageCategoryIndex_AllSystems:= ImageDetails[2].ImageCategoryIndex;
+       if LayoutIndex < 9 then // no visibility for quad layouts
+          boolVar[0]:= Boolean(layoutIni.ReadInteger(SectionStr, 'image2_enabled', 1));
        UpdateImageHintPanelText(2);
      end;
-  if LayoutIndex > 2 then
+  if LayoutIndex > 2 then // tripple, quad layouts only
      begin
        ImageDetails[3].ImageCategoryIndex:= layoutIni.ReadInteger(SectionStr, 'image3_category', GetScrLayoutDefaultType(LayoutIndex, 3));
-       boolVar[1]:= Boolean(layoutIni.ReadInteger(SectionStr, 'image3_enabled', 1));
+       ImageDetails[3].ImageCategoryIndex_ConsComp:= layoutIni.ReadInteger(SectionStr, 'image3conscomp_category', GetScrLayoutDefaultType(LayoutIndex, 3));
+       ImageDetails[3].ImageCategoryIndex_AllSystems:= ImageDetails[3].ImageCategoryIndex;
+       if LayoutIndex < 9 then // no visibility for quad layouts
+          boolVar[1]:= Boolean(layoutIni.ReadInteger(SectionStr, 'image3_enabled', 1));
        UpdateImageHintPanelText(3);
      end;
+  if LayoutIndex > 8 then // quad layouts only
+     begin
+       ImageDetails[4].ImageCategoryIndex:= layoutIni.ReadInteger(SectionStr, 'image4_category', GetScrLayoutDefaultType(LayoutIndex, 4));
+       ImageDetails[4].ImageCategoryIndex_ConsComp:= layoutIni.ReadInteger(SectionStr, 'image4conscomp_category', GetScrLayoutDefaultType(LayoutIndex, 4));
+       ImageDetails[4].ImageCategoryIndex_AllSystems:= ImageDetails[4].ImageCategoryIndex;
+       //boolVar[2]:= Boolean(layoutIni.ReadInteger(SectionStr, 'image4_enabled', 1)); // not valid
+       UpdateImageHintPanelText(4);
+     end;
+
+  LayoutUseAltCategory_ConsComp:= Boolean(layoutIni.ReadInteger('settings', 'UseCustomCategoryConsoleComputer', 0));
+
   FreeAndNil(layoutIni);
 end;
 
@@ -33870,6 +35006,60 @@ begin
         if Assigned(ImageScr[3]) then
            layoutIni.WriteInteger(SectionStr, 'width3', ImageScr[3].Width);
       end;
+    9: // quad, layout 1 horizontal
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'width3', ImageScr[3].Width);
+        layoutIni.WriteInteger(SectionStr, 'height3', ImageScr[3].Height);
+      end;
+    10: // quad, layout 1 vertical
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'height1', Images.Height);
+        layoutIni.WriteInteger(SectionStr, 'height2', ImageScr[2].Height);
+      end;
+    11, 12: // quad, layout 2 >---< quad, layout 3
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'width3', ImageScr[3].Width);
+        layoutIni.WriteInteger(SectionStr, 'height4', ImageScr[4].Height);
+      end;
+    13, 14: // quad, layout 4 >---< quad, layout 5
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'height2', ImageScr[2].Height);
+        layoutIni.WriteInteger(SectionStr, 'height4', ImageScr[4].Height);
+      end;
+    15, 16, 17, 18: // quad, layout 6 >---< quad, layout 7 >---< quad, layout 8 >---< quad, layout 9
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'width2', ImageScr[2].Width);
+        layoutIni.WriteInteger(SectionStr, 'height4', ImageScr[4].Height);
+      end;
+    19, 20, 21, 22: // quad, layout 10 >---< quad, layout 11 >---< quad, layout 12 >---< quad, layout 13
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'height2', ImageScr[2].Height);
+        layoutIni.WriteInteger(SectionStr, 'height4', ImageScr[4].Height);
+      end;
+    23: // quad, layout 14
+      begin
+        layoutIni.WriteInteger(SectionStr, 'height1', Images.Height);
+        layoutIni.WriteInteger(SectionStr, 'width3', ImageScr[3].Width);
+        layoutIni.WriteInteger(SectionStr, 'width4', ImageScr[4].Width);
+      end;
+    24: // quad, layout 15
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'height3', ImageScr[3].Height);
+        layoutIni.WriteInteger(SectionStr, 'height4', ImageScr[4].Height);
+      end;
+    25: // quad, layout 16 >---< quad, layout 17
+      begin
+        layoutIni.WriteInteger(SectionStr, 'width1', Images.Width);
+        layoutIni.WriteInteger(SectionStr, 'width3', ImageScr[3].Width);
+        layoutIni.WriteInteger(SectionStr, 'height3', ImageScr[3].Height);
+      end;
   end;
   layoutIni.UpdateFile;
   FreeAndNil(layoutIni);
@@ -33880,47 +35070,51 @@ begin
   UpdateImageDimensionsInfo;
 end;
 
+procedure TFormMain.SetImageHintBoxColors(ImageIndex: Integer);
+begin
+  if ImageIndex = 1 then
+     begin
+       // read settings from Preferences screen
+       ImageHintPanel.Color1:= FormPreferences.HintBox_Color.Selected;
+       ImageHintPanel.ColorFrame:= FormPreferences.HintBox_FrameColor.Selected;
+       if FormPreferences.HintBox_FrameEnabled.Checked then
+          ImageHintPanel.Frames:= [frLeft, frTop, frRight, frBottom]
+       else
+          ImageHintPanel.Frames:= [];
+       ImageHintPanel.Opacity:= FormPreferences.HintBox_Opacity.Position;
+
+       ImageHintText.Font.Color:= FormPreferences.HintBox_TextColor.Selected;
+       ImageHintText.ShadowColor:= FormPreferences.HintBox_TextShadowColor.Selected;
+       ImageHintText.ShadowEnabled:= FormPreferences.HintBox_TextShadowEnabled.Checked;
+     end
+  else
+     begin
+       if not Assigned(ImageHintPanel2[ImageIndex]) then
+          Exit;
+
+       // read settings from ImageHintPanel
+       ImageHintPanel2[ImageIndex].Color1:= ImageHintPanel.Color1;
+       ImageHintPanel2[ImageIndex].ColorFrame:= ImageHintPanel.ColorFrame;
+       ImageHintPanel2[ImageIndex].Frames:= ImageHintPanel.Frames;
+
+       ImageHintPanel2[ImageIndex].Opacity:= ImageHintPanel.Opacity;
+
+       ImageHintText2[ImageIndex].Font.Color:= ImageHintText.Font.Color;
+       ImageHintText2[ImageIndex].ShadowColor:= ImageHintText.ShadowColor;
+       ImageHintText2[ImageIndex].ShadowEnabled:= ImageHintText.ShadowEnabled;
+     end;
+end;
+
+function TFormMain.IsQuadImageLayout: Boolean;
+begin
+  Result:= ButtonScreenshotLayouts.Tag > 8;
+end;
+
 procedure TFormMain.SetImageLayout;
 var
-  ImgSize: array[0..1] of Integer;
-  ImageEnabled: array[0..1] of Boolean;
+  ImgSize: array[0..2] of Integer; // must add third value for quad layouts (April 10, 2018)
+  ImageEnabled: array[0..1] of Boolean; // quad layouts are not supported here (April 10, 2018)
   Continue: Boolean;
-
-  function DestroyImageHintPanel(Index: ShortInt): Boolean;
-  begin
-    if Assigned(ImageHintPanel2[Index]) then
-       begin
-         FreeAndNil(ImageHintText2[Index]);
-         FreeAndNil(ImageHintPanel2[Index]);
-       end;
-    Result:= not Assigned(ImageHintPanel2[Index]);
-  end;
-
-  function DestroySplitter(Index: ShortInt): Boolean;
-  begin
-    if Assigned(SplitterImg[Index]) then
-       FreeAndNil(SplitterImg[Index]);
-    Result:= not Assigned(SplitterImg[Index]);
-  end;
-
-  function DestroyImagePnl: Boolean;
-  begin
-    if Assigned(ImagePnl) then
-       FreeAndNil(ImagePnl);
-    Result:= not Assigned(ImagePnl);
-  end;
-
-  function DestroyImageScr(Index: ShortInt): Boolean;
-  begin
-    DestroyImageHintPanel(Index);
-    
-    if Assigned(ImageScr[Index]) then
-       begin
-         ImageScr[Index].Bitmap:= nil;
-         FreeAndNil(ImageScr[Index]);
-       end;
-    Result:= not Assigned(ImageScr[Index]);
-  end;
 
   function CreateImageHintPanel(Index: ShortInt): Boolean;
   begin
@@ -33930,12 +35124,12 @@ var
          ImageHintPanel2[Index].ParentBackground:= False;
          ImageHintPanel2[Index].Parent:= ImageScr[Index];
          ImageHintPanel2[Index].Style:= ImageHintPanel.Style;
-         ImageHintPanel2[Index].Frames:= [frLeft, frTop, frRight, frBottom];
+         ImageHintPanel2[Index].Frames:= ImageHintPanel.Frames;
          ImageHintPanel2[Index].Color1:= ImageHintPanel.Color1;
          ImageHintPanel2[Index].ColorFrame:= ImageHintPanel.ColorFrame;
          ImageHintPanel2[Index].Opacity:= ImageHintPanel.Opacity;
          ImageHintPanel2[Index].Visible:= False;
-         ImageHintPanel2[Index].Left:= 20;
+         ImageHintPanel2[Index].Left:= ImageHintPanel.Left; // 20;
          ImageHintPanel2[Index].Width:= ImageHintPanel.Width;
          ImageHintPanel2[Index].Height:= ImageHintPanel.Height;
          ImageHintPanel2[Index].Tag:= -1;
@@ -33946,9 +35140,18 @@ var
          ImageHintText2[Index].ShowAccelChar:= False;
          ImageHintText2[Index].Font:= ImageHintText.Font;
          ImageHintText2[Index].ShadowColor:= ImageHintText.ShadowColor;
-         ImageHintText2[Index].Left:= 8;
-         ImageHintText2[Index].Top:= 8;
+         ImageHintText2[Index].ShadowEnabled:= ImageHintText.ShadowEnabled;
+         ImageHintText2[Index].Left:= ImageHintText.Left;
+         ImageHintText2[Index].Top:= ImageHintText.Top;
          ImageHintText2[Index].Visible:= True;
+
+         ImageHintIcon2[Index]:= TImage.Create(Self);
+         ImageHintIcon2[Index].Parent:= ImageHintPanel2[Index];
+         ImageHintIcon2[Index].Transparent:= True;
+         ImageHintIcon2[Index].Left:= ImageHintIcon.Left;
+         ImageHintIcon2[Index].Top:= ImageHintIcon.Top;
+         ImageHintIcon2[Index].Width:= ImageHintIcon.Width;
+         ImageHintIcon2[Index].Height:= ImageHintIcon.Height;
        end
     else
        begin
@@ -33957,7 +35160,10 @@ var
        end;
     Result:= Assigned(ImageHintPanel2[Index]);
     if Result then
-       UpdateImageHintPanelText(Index);
+       begin
+         ImageHintText2[Index].Tag:= 0;
+         UpdateImageHintPanelText(Index);
+       end;
   end;
 
   function CreateSplitter(Index: ShortInt; imgAlignment: TAlign; imgParentComponent, AlignComponent: TWinControl): Boolean;
@@ -33991,6 +35197,7 @@ var
     if SplitterImg[Index].Align <> imgAlignment then
        SplitterImg[Index].Align:= imgAlignment;
 
+    SplitterImg[Index].ResizeStyle:= rsUpdate;
     Result:= Assigned(SplitterImg[Index]);
   end;
 
@@ -34012,16 +35219,37 @@ var
     Result:= Assigned(ImagePnl);
   end;
 
+  function CreatePanelQuadVert(imgAlignment: TAlign): Boolean;
+  begin
+    if ImagePnlQuadVert = nil then
+       begin
+         ImagePnlQuadVert:= TPanel.Create(Self);
+         ImagePnlQuadVert.Parent:= PanelImage;
+         ImagePnlQuadVert.BevelOuter:= bvNone;
+         ImagePnlQuadVert.Caption:= '';
+         ImagePnlQuadVert.Align:= imgAlignment;
+       end
+    else
+       begin
+         if ImagePnlQuadVert.Align <> imgAlignment then
+            ImagePnlQuadVert.Align:= imgAlignment;
+       end;
+    Result:= Assigned(ImagePnlQuadVert);
+  end;
+
   function CreateImage(Index: ShortInt; imgAlignment: TAlign; imgParentComponent: TWinControl): Boolean;
   begin
     if ImageScr[Index] = nil then
        begin
          ImageScr[Index]:= TImage32.Create(Self);
          ImageScr[Index].Parent:= imgParentComponent;
+         //if ImageDetails[Index].ImageCategoryIndex < Low(ImageCategoryArray) then // category not defined ?
+         //   ImageDetails[Index].ImageCategoryIndex:= 1; // make sure it is set to "in-game snapshot"
+
          if ImageDetails[Index].ImageCategoryIndex > -1 then
             begin
-              ImageScr[Index].Color:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Tag;
-              //ImageScr[Index].Hint:= PopupMenuImageCategories.Items[ImageDetails[Index].ImageCategoryIndex].Caption; // not used anymore ? (March 03, 2018)
+              ImageScr[Index].Color:= ImageCategorySettings[ImageDetails[Index].ImageCategoryIndex].BackgroundColor;
+              //ImageScr[Index].Hint:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex); // not used anymore (March 03, 2018)
             end;
          ImageScr[Index].ShowHint:= False;
          ImageScr[Index].BitmapAlign:= baCenter;
@@ -34056,22 +35284,12 @@ var
        Images.Parent:= imgParentComponent;
     if Images.Align <> imgAlignment then
        Images.Align:= imgAlignment;
-    Images.Color:= PopupMenuImageCategories.Items[ImageDetails[1].ImageCategoryIndex].Tag;
+
+    //if ImageDetails[1].ImageCategoryIndex < Low(ImageCategoryArray) then // category not defined ?
+    //   ImageDetails[1].ImageCategoryIndex:= 1; // make sure it is set to "in-game snapshot"
+    if ImageDetails[1].ImageCategoryIndex > -1 then
+       Images.Color:= ImageCategorySettings[ImageDetails[1].ImageCategoryIndex].BackgroundColor;
     Result:= True;
-  end;
-
-  function DestroyAll: Boolean;
-  begin
-    Result:= True;
-    DestroySplitter(1);
-    DestroySplitter(2);
-
-    DestroyImageHintPanel(2);
-    DestroyImageHintPanel(3);
-
-    DestroyImageScr(2);
-    DestroyImageScr(3);
-    DestroyImagePnl;
   end;
 
 begin
@@ -34087,11 +35305,13 @@ begin
      begin
        PanelScreenshotsArea.Canvas.Lock;
        AlignMainImage(alClient, PanelImage);
-       DestroyAll;
+       DestroyImageLayoutControls;
        ImageDetails[1].ImageCategoryIndex:= ButtonImageCategory.Tag;
+       ImageDetails[1].ImageCategoryIndex_AllSystems:= ImageDetails[1].ImageCategoryIndex;
+       ImageDetails[1].ImageCategoryIndex_ConsComp:= ImageDetails[1].ImageCategoryIndex;
        Images.Hint:= '';
        UpdateImageHintPanelText(1);
-       Images.Color:= PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Tag; // change background color
+       Images.Color:= ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
        PanelScreenshotsArea.Canvas.Unlock;
        if MenuShowImages.Checked then
           MenuShowImages.OnClick(Self);
@@ -34116,6 +35336,7 @@ begin
         if not Continue then
            AlignMainImage(alClient, PanelImage);
       end;
+    // quad layouts cannot hide image panels, no reason to validate them here (April 10, 2018)
   end;
 
   case Continue of
@@ -34125,12 +35346,12 @@ begin
           0: // single
             begin
               AlignMainImage(alClient, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
             end;
           1: // dual, layout 1
             begin
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
               
               case ImageEnabled[0] of
                 True:
@@ -34149,7 +35370,7 @@ begin
           2: // dual, layout 2
             begin
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               case ImageEnabled[0] of
                 True:
@@ -34169,7 +35390,7 @@ begin
             begin
               // triple, layout 1
               AlignMainImage(alTop, PanelImage); // image_1 is always top aligned
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               Images.Height:= ImgSize[0];
               CreateSplitter(1, alTop, PanelImage, Images);
@@ -34195,7 +35416,7 @@ begin
             begin
               // triple, layout 2
               AlignMainImage(alLeft, PanelImage); // image_1 is always left aligned
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               Images.Width:= ImgSize[0];
               CreateSplitter(1, alLeft, PanelImage, Images);
@@ -34217,7 +35438,7 @@ begin
             begin
               // triple, layout 3
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
@@ -34250,7 +35471,7 @@ begin
             begin
               // triple, layout 4
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
@@ -34283,7 +35504,7 @@ begin
             begin
               // triple, layout 5
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
@@ -34317,7 +35538,7 @@ begin
             begin
               // triple, layout 6
               AlignMainImage(alNone, PanelImage);
-              DestroyAll;
+              DestroyImageLayoutControls;
 
               if ImageEnabled[0] and ImageEnabled[1] then
                  begin
@@ -34347,16 +35568,404 @@ begin
                    AlignMainImage(alClient, PanelImage);
                  end;
             end;
+          9:
+            begin
+              // quad, layout 1 horizontal
+              AlignMainImage(alNone, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreatePanel(alBottom); // "ImagePnl"
+              ImagePnl.Height:= ImgSize[2];
+
+              AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreateImage(2, alClient, PanelImage);
+              CreateSplitter(2, alBottom, PanelImage, ImagePnl);
+
+              CreateImage(3, alLeft, ImagePnl);
+              ImageScr[3].Width:= ImgSize[1];
+
+              CreateSplitter(3, alLeft, ImagePnl, ImageScr[3]);
+
+              CreateImage(4, alClient, ImagePnl);
+            end;
+          10:
+            begin
+              // quad, layout 1 vertical
+              // this will require an extra "ImagePnlQuadVert" component to align image panels correctly; it's the ONLY layout that uses the extra panel
+              AlignMainImage(alNone, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreatePanel(alLeft); // "ImagePnl"
+              ImagePnl.Width:= ImgSize[0];
+
+              AlignMainImage(alTop, ImagePnl);
+              Images.Height:= ImgSize[1];
+              CreateSplitter(1, alTop, ImagePnl, Images);
+
+              CreateImage(3, alClient, ImagePnl);
+
+              CreateSplitter(2, alLeft, PanelImage, ImagePnl);
+
+              CreatePanelQuadVert(alClient);
+
+              CreateImage(2, alTop, ImagePnlQuadVert);
+              ImageScr[2].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, ImagePnlQuadVert, ImageScr[2]);
+
+              CreateImage(4, alClient, ImagePnlQuadVert);
+            end;
+          11:
+            begin
+              // quad, layout 2
+              AlignMainImage(alNone, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alTop, PanelImage);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, PanelImage, ImageScr[4]);
+
+              AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreateImage(3, alRight, PanelImage);
+              ImageScr[3].Width:= ImgSize[1];
+              CreateSplitter(2, alRight, PanelImage, ImageScr[3]);
+
+              CreateImage(2, alClient, PanelImage);
+            end;
+          12:
+            begin
+              // quad, layout 3
+              AlignMainImage(alNone, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alBottom, PanelImage); // only difference from "quad layout 2"
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, PanelImage, ImageScr[4]);
+
+              AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreateImage(3, alRight, PanelImage);
+              ImageScr[3].Width:= ImgSize[1];
+              CreateSplitter(2, alRight, PanelImage, ImageScr[3]);
+
+              CreateImage(2, alClient, PanelImage);
+            end;
+          13:
+            begin
+              // quad, layout 4
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(4, alBottom, ImagePnl);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, ImagePnl, ImageScr[4]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          14:
+            begin
+              // quad, layout 5
+              AlignMainImage(alRight, PanelImage); // only difference from "quad layout 4"
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(4, alBottom, ImagePnl);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, ImagePnl, ImageScr[4]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          15:
+            begin
+              // quad, layout 6
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(4, alTop, ImagePnl);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, ImagePnl, ImageScr[4]);
+
+              CreateImage(2, alLeft, ImagePnl);
+              ImageScr[2].Width:= ImgSize[1];
+              CreateSplitter(2, alLeft, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          16:
+            begin
+              // quad, layout 7
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(4, alBottom, ImagePnl); // only difference from "quad layout 6"
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, ImagePnl, ImageScr[4]);
+
+              CreateImage(2, alLeft, ImagePnl);
+              ImageScr[2].Width:= ImgSize[1];
+              CreateSplitter(2, alLeft, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          17:
+            begin
+              // quad, layout 8
+              AlignMainImage(alRight, PanelImage); // only difference from "quad layout 6"
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(4, alTop, ImagePnl);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, ImagePnl, ImageScr[4]);
+
+              CreateImage(2, alLeft, ImagePnl);
+              ImageScr[2].Width:= ImgSize[1];
+              CreateSplitter(2, alLeft, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          18:
+            begin
+              // quad, layout 9
+              AlignMainImage(alRight, PanelImage); // only difference from "quad layout 7"
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(4, alBottom, ImagePnl);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, ImagePnl, ImageScr[4]);
+
+              CreateImage(2, alLeft, ImagePnl);
+              ImageScr[2].Width:= ImgSize[1];
+              CreateSplitter(2, alLeft, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          19:
+            begin
+              // quad, layout 10
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alTop, PanelImage);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, PanelImage, ImageScr[4]);
+
+              //AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          20:
+            begin
+              // quad, layout 11
+              AlignMainImage(alRight, PanelImage); // only difference from "quad layout 10"
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alTop, PanelImage);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, PanelImage, ImageScr[4]);
+
+              //AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          21:
+            begin
+              // quad, layout 12
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alBottom, PanelImage); // only difference from "quad layout 10"
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, PanelImage, ImageScr[4]);
+
+              //AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          22:
+            begin
+              // quad, layout 13
+              AlignMainImage(alRight, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(4, alBottom, PanelImage); // only difference from "quad layout 11"
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, PanelImage, ImageScr[4]);
+
+              //AlignMainImage(alLeft, PanelImage);
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alClient); // "ImagePnl"
+
+              CreateImage(2, alTop, ImagePnl);
+              ImageScr[2].Height:= ImgSize[1];
+              CreateSplitter(2, alTop, ImagePnl, ImageScr[2]);
+
+              CreateImage(3, alClient, ImagePnl);
+            end;
+          23:
+            begin
+              // quad, layout 14
+              AlignMainImage(alNone, PanelImage);
+              DestroyImageLayoutControls;
+
+              CreateImage(3, alLeft, PanelImage);
+              ImageScr[3].Width:= ImgSize[1];
+              CreateSplitter(2, alLeft, PanelImage, ImageScr[3]);
+
+              CreateImage(4, alRight, PanelImage);
+              ImageScr[4].Width:= ImgSize[2];
+              CreateSplitter(3, alRight, PanelImage, ImageScr[4]);
+
+              CreatePanel(alClient); // "ImagePnl"
+              AlignMainImage(alTop, ImagePnl);
+              Images.Height:= ImgSize[0];
+              CreateSplitter(1, alTop, ImagePnl, Images);
+              CreateImage(2, alClient, ImagePnl);
+            end;
+          24:
+            begin
+              // quad, layout 15
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreateImage(3, alTop, PanelImage);
+              ImageScr[3].Height:= ImgSize[1];
+              CreateSplitter(2, alTop, PanelImage, ImageScr[3]);
+
+              CreateImage(4, alBottom, PanelImage);
+              ImageScr[4].Height:= ImgSize[2];
+              CreateSplitter(3, alBottom, PanelImage, ImageScr[4]);
+
+              CreateImage(2, alClient, PanelImage);
+            end;
+          25:
+            begin
+              // quad, layout 16
+              AlignMainImage(alLeft, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alLeft, PanelImage, Images);
+
+              CreatePanel(alRight); // "ImagePnl"
+              CreateSplitter(2, alRight, PanelImage, ImagePnl);
+              ImagePnl.Width:= ImgSize[1];
+
+              CreateImage(2, alClient, PanelImage);
+              
+              CreateImage(3, alTop, ImagePnl);
+              ImageScr[3].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, ImagePnl, ImageScr[3]);
+
+              CreateImage(4, alClient, ImagePnl);
+            end;
+          26:
+            begin
+              // quad, layout 17
+              AlignMainImage(alRight, PanelImage);
+              DestroyImageLayoutControls;
+
+              Images.Width:= ImgSize[0];
+              CreateSplitter(1, alRight, PanelImage, Images);
+
+              CreatePanel(alLeft); // "ImagePnl"
+              CreateSplitter(2, alLeft, PanelImage, ImagePnl);
+              ImagePnl.Width:= ImgSize[1];
+
+              CreateImage(2, alClient, PanelImage);
+
+              CreateImage(3, alTop, ImagePnl);
+              ImageScr[3].Height:= ImgSize[2];
+              CreateSplitter(3, alTop, ImagePnl, ImageScr[3]);
+
+              CreateImage(4, alClient, ImagePnl);
+            end;
         end;
       end;
     False:
       begin
-        DestroyAll;
+        DestroyImageLayoutControls;
       end;
   end;
-  ButtonScreenshotLayouts.Hint:= 'Layout -> '+PopupScreenshotLayouts.Items[ButtonScreenshotLayouts.Tag].Caption+' <-';
+
+  ButtonscreenshotLayouts.Hint:= 'Layout -> '+GetScrLayoutSection(ButtonScreenshotLayouts.Tag)+' <-';
   UpdateImageLayoutSplittersStyle;
   PanelScreenshotsArea.Canvas.Unlock;
+
   if MenuShowImages.Checked then
      begin
        if not IsStartUp then
@@ -34392,17 +36001,30 @@ begin
 end;
 
 procedure TFormMain.UpdateImageLayoutSplittersStyle;
+var
+  iLoop: Integer;
 begin
   if not IsSingleImageLayout then
      begin
-       UpdateSplitterStyle(SplitterImg[1], TTMSStyle(tsSolidColor),
+       for iLoop:= Low(SplitterImg) to High(SplitterImg) do
+       begin
+         UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(tsSolidColor),
+                             FormPreferences.ImageLayoutSplitterSingleColor.Selected,
+                             FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+
+         SetGripIcon(SplitterImg[iLoop], PopupImageShowSplitterGrip.Checked);
+
+       end;
+       {UpdateSplitterStyle(SplitterImg[1], TTMSStyle(tsSolidColor),
                            FormPreferences.ImageLayoutSplitterSingleColor.Selected,
                            FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+
        UpdateSplitterStyle(SplitterImg[2], TTMSStyle(tsSolidColor),
                            FormPreferences.ImageLayoutSplitterSingleColor.Selected,
                            FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+
        SetGripIcon(SplitterImg[1], PopupImageShowSplitterGrip.Checked);
-       SetGripIcon(SplitterImg[2], PopupImageShowSplitterGrip.Checked);
+       SetGripIcon(SplitterImg[2], PopupImageShowSplitterGrip.Checked);}
      end;
 end;
 
@@ -34411,36 +36033,139 @@ begin
   Result:= ButtonScreenshotLayouts.Tag = 0; // 0 -> single layout
 end;
 
-procedure TFormMain.PopupScrLayoutSingleClick(Sender: TObject);
+procedure TFormMain.ChangeImageCategoryIcon(CategoryIndex: Integer; DestinationImageList: TImageList; PositionIndex: Integer);
 begin
-  if TMenuItem(Sender).Tag = ButtonScreenshotLayouts.Tag then
-     TMenuItem(Sender).Checked:= True;
+  SetToolBarIcon(ImageCategoryArray[CategoryIndex, 0], GetFolderFull(32), DestinationImageList, PositionIndex);
+end;
+
+procedure TFormMain.CallSelectImageLayout(SelectLayoutIndex: Integer; ShowSelectorDialog: Boolean);
+var
+  OutBounds: Integer;
+  Continue: Boolean;
+  iLoop: Integer;
+begin
+  iLoop:= SelectLayoutIndex;
+
+  if ShowSelectorDialog then
+  begin
+    if not Assigned(FormImageLayoutSelector) then
+       FormImageLayoutSelector:= TFormImageLayoutSelector.Create(nil);
+
+    FormImageLayoutSelector.Left:= FormMain.Left+PanelScreenshotsArea.Left+ButtonScreenshotLayouts.Left+10;
+    OutBounds:= FormImageLayoutSelector.Left+FormImageLayoutSelector.Width;
+    if OutBounds > Screen.Width then
+       FormImageLayoutSelector.Left:= FormImageLayoutSelector.Left-(OutBounds-Screen.Width)-10;
+
+    FormImageLayoutSelector.Top:= FormMain.Top+28+10+PanelScreenshotsArea.Top+ImagesToolbarButtons.Height+1;
+    FormImageLayoutSelector.LayoutsListView.Tag:= SelectLayoutIndex;
+
+    Continue:= FormImageLayoutSelector.ShowModal = mrOk;
+
+    if Continue then
+       begin
+         iLoop:= FormImageLayoutSelector.LayoutsListView.Selection.First.ImageIndex;
+         Continue:= (iLoop <> ButtonScreenshotLayouts.Tag) and (iLoop <> -1);
+       end;
+    FreeAndNil(FormImageLayoutSelector);
+  end
+  else
+  begin
+    Continue:= iLoop <> -1;
+  end;
+
+  if not Continue then
+     Exit;
+
   if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
      UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
   MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
-  ButtonScreenshotLayouts.Tag:= TMenuItem(Sender).Tag;
-  SetIcon(IL_ScreenshotLayouts_Small, nil, IL_ImagesToolBarButtons, ButtonScreenshotLayouts.Tag, 5);
+  ButtonScreenshotLayouts.Tag:= iLoop;
+
+  SetToolBarIcon(GetScrLayoutImageFile(ButtonScreenshotLayouts.Tag, False), GetFolderFull(32), IL_ImagesToolBarButtons, 5);
 
   ClearScreenshots;
   ImagePreviewMouseLeave(Images);
-  ImagePreviewMouseLeave(ImageScr[2]);
-  ImagePreviewMouseLeave(ImageScr[3]);
-  
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+      ImagePreviewMouseLeave(ImageScr[iLoop]);
+
   SetImageCategoryButtonsVisible;
   ResetImageTagTo1;
   SetImageLayout;
 
-  if Assigned(FormLayoutDimensions) then
+  if Assigned(FormImageLayoutDimensions) then
      begin
        LoadImageLayoutPreview(ButtonScreenshotLayouts.Tag);
        UpdateImageDimensionsInfo;
      end;
 end;
 
+function TFormMain.CallSelectImageCategory(SelectCategoryID: ShortInt; GhostDisabled, ShowDisabled: Boolean; ShowSelectorDialog: Boolean;  IsToolBarFilter: Boolean = False): ShortInt;
+var
+  OutBounds: Integer;
+  Continue: Boolean;
+  iLoop: Integer;
+begin
+  Result:= -1;
+  iLoop:= SelectCategoryID;
+
+  if ShowSelectorDialog then
+  begin
+    if not Assigned(FormImageCategorySelector) then
+       FormImageCategorySelector:= TFormImageCategorySelector.Create(nil);
+
+    if IsToolBarFilter then
+       begin
+         FormImageCategorySelector.BorderStyle:= bsToolWindow;
+         FormImageCategorySelector.BorderIcons:= [];
+         FormImageCategorySelector.Height:= FormImageCategorySelector.Height-4;
+         FormImageCategorySelector.Left:= FormMain.Left+PanelScreenshotsArea.Left+ButtonImageCategory.Left+10;
+         OutBounds:= FormImageCategorySelector.Left+FormImageCategorySelector.Width;
+         if OutBounds > Screen.Width then
+            FormImageCategorySelector.Left:= FormImageCategorySelector.Left-(OutBounds-Screen.Width)-10;
+
+         FormImageCategorySelector.Top:= FormMain.Top+28+10+PanelScreenshotsArea.Top+ImagesToolbarButtons.Height+1;
+       end
+    else
+       FormImageCategorySelector.Position:= poScreenCenter;
+
+
+    FormImageCategorySelector.selCategoryID:= SelectCategoryID;
+    Continue:= FormImageCategorySelector.ShowModal = mrOk;
+    if Continue then
+       begin
+         Result:= FormImageCategorySelector.CategoriesListView.Selection.First.ImageIndex;
+         iLoop:= Result;
+       end;
+    FreeAndNil(FormImageCategorySelector);
+  end
+  else
+  begin
+    Continue:= iLoop <> -1;
+    if Continue then
+       Result:= iLoop
+    else
+       Exit;
+  end;
+
+  if Continue and IsToolBarFilter then
+  begin
+    if iLoop = ButtonImageCategory.Tag then
+       begin
+         if not IsStartup then
+            Exit;
+       end;
+       
+    ChangeImageCategory(iLoop);
+    if (not IsStartup) and IsSingleImageLayout then
+       UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // force update the image category settings in single layout
+  end;
+end;
+
 procedure TFormMain.UpdateImageDimensionsInfo;
 var
   SizeString: String;
   BorderSize: Integer;
+  iLoop: Integer;
 
   function GetImgSize(ImageHolder: TImage32; ImageIndex: Integer): Boolean;
   begin
@@ -34448,48 +36173,62 @@ var
     if not Result then
        begin
          case ImageIndex of
-           1: FormLayoutDimensions.LabelImage1Dimensions.Caption:= 'Disabled';
-           2: FormLayoutDimensions.LabelImage2Dimensions.Caption:= 'Disabled';
-           3: FormLayoutDimensions.LabelImage3Dimensions.Caption:= 'Disabled';
+           1: FormImageLayoutDimensions.LabelImage1Dimensions.Caption:= 'Disabled';
+           2: FormImageLayoutDimensions.LabelImage2Dimensions.Caption:= 'Disabled';
+           3: FormImageLayoutDimensions.LabelImage3Dimensions.Caption:= 'Disabled';
+           4: FormImageLayoutDimensions.LabelImage4Dimensions.Caption:= 'Disabled';
          end;
          Exit;
        end;
 
     SizeString:= Format('%ux%u pixels', [ImageHolder.Width, ImageHolder.Height]);
     case ImageIndex of
-      1: FormLayoutDimensions.LabelImage1Dimensions.Caption:= SizeString;
-      2: FormLayoutDimensions.LabelImage2Dimensions.Caption:= SizeString;
-      3: FormLayoutDimensions.LabelImage3Dimensions.Caption:= SizeString;
+      1: FormImageLayoutDimensions.LabelImage1Dimensions.Caption:= SizeString;
+      2: FormImageLayoutDimensions.LabelImage2Dimensions.Caption:= SizeString;
+      3: FormImageLayoutDimensions.LabelImage3Dimensions.Caption:= SizeString;
+      4: FormImageLayoutDimensions.LabelImage4Dimensions.Caption:= SizeString;
     end;
   end;
 
 begin
-  if not Assigned(FormLayoutDimensions) then
+  if not Assigned(FormImageLayoutDimensions) then
      Exit;
 
-  if FormLayoutDimensions.LabelLayoutTitle.Tag <>  ButtonScreenshotLayouts.Tag then
+  if FormImageLayoutDimensions.LabelLayoutTitle.Tag <>  ButtonScreenshotLayouts.Tag then
      begin
-       FormLayoutDimensions.LabelLayoutTitle.Tag:= ButtonScreenshotLayouts.Tag;
-       FormLayoutDimensions.LabelImage2.Visible:= ButtonScreenshotLayouts.Tag > 0;
-       FormLayoutDimensions.LabelImage2Dimensions.Visible:= FormLayoutDimensions.LabelImage2.Visible;
-       FormLayoutDimensions.LabelImage3.Visible:= ButtonScreenshotLayouts.Tag > 2;
-       FormLayoutDimensions.LabelImage3Dimensions.Visible:= FormLayoutDimensions.LabelImage3.Visible;
+       FormImageLayoutDimensions.LabelLayoutTitle.Tag:= ButtonScreenshotLayouts.Tag;
+       FormImageLayoutDimensions.LabelImage2.Visible:= ButtonScreenshotLayouts.Tag > 0;
+       FormImageLayoutDimensions.LabelImage2Dimensions.Visible:= FormImageLayoutDimensions.LabelImage2.Visible;
+       FormImageLayoutDimensions.LabelImage3.Visible:= ButtonScreenshotLayouts.Tag > 2;
+       FormImageLayoutDimensions.LabelImage3Dimensions.Visible:= FormImageLayoutDimensions.LabelImage3.Visible;
+       FormImageLayoutDimensions.LabelImage4.Visible:= ButtonScreenshotLayouts.Tag > 8;
+       FormImageLayoutDimensions.LabelImage4Dimensions.Visible:= FormImageLayoutDimensions.LabelImage4.Visible;
      end;
      
   if PanelImage.BorderWidth = 0 then
      BorderSize:= 0
   else
      BorderSize:= 14;
-  FormLayoutDimensions.LabelImagesPanelDimensions.Caption:= Format('%ux%u pixels', [PanelImage.Width-BorderSize, PanelImage.Height-BorderSize]);
+  FormImageLayoutDimensions.LabelImagesPanelDimensions.Caption:= Format('%ux%u pixels', [PanelImage.Width-BorderSize, PanelImage.Height-BorderSize]);
   GetImgSize(Images, 1);
-  GetImgSize(ImageScr[2], 2);
-  GetImgSize(ImageScr[3], 3);
+  for iLoop:= Low(ImageScr) to High(ImageScr) do
+      GetImgSize(ImageScr[iLoop], iLoop);
 end;
 
 procedure TFormMain.PopupImageCenterAllSplittersClick(Sender: TObject);
+var
+  iLoop: Integer;
 begin
-  CenterImageSplitter(SplitterImg[1], True);
-  CenterImageSplitter(SplitterImg[2], True);
+  if IsQuadImageLayout then
+     begin
+       CenterImageSplitterQuad(nil, True);
+     end
+  else
+  begin
+    for iLoop:= Low(SplitterImg) to High(SplitterImg) do
+        CenterImageSplitter(SplitterImg[iLoop], True);
+  end;
+      
   UpdateImageDimensionsInfo;
 end;
 
@@ -34654,19 +36393,24 @@ begin
       True:
         begin
           Inc(Index);
-          if Index > 8 then
+          if Index > MaxImageLayouts then
              Index:= 0;
         end;
       False:
         begin
           Dec(Index);
           if Index < 0 then
-             Index:= 8;
+             Index:= MaxImageLayouts;
         end;
     end;
-    LayoutEnabled:= PopupScreenshotLayouts.Items[Index].Visible;
+    if Index = 0 then
+       LayoutEnabled:= True
+    else
+       LayoutEnabled:= ImageLayoutVisible[Index];
+
     if LayoutEnabled then
-       PopupScreenshotLayouts.Items[Index].Click;
+       CallSelectImageLayout(Index, False);
+
   until LayoutEnabled;
 end;
 
@@ -34679,29 +36423,31 @@ procedure TFormMain.MenuImageLayoutSettingsClick(Sender: TObject);
 var
   RefreshSettings: Boolean;
 begin
-  if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
-     UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
-  MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
-
   ButtonImageCategory.HelpContext:= -1; // set to undefined single layout category
   FormImageLayoutSettings:= TFormImageLayoutSettings.Create(nil);
   RefreshSettings:= FormImageLayoutSettings.ShowModal = mrOk;
 
+  if RefreshSettings then
+     LayoutUseAltCategory_ConsComp:= FormImageLayoutSettings.GroupBoxCategoryConsoleComputer.CheckBox.Checked;
   FreeAndNil(FormImageLayoutSettings);
   if not RefreshSettings then
      Exit;
   Screen.Cursor:= crHourGlass;
 
-  if not PopupMenuImageCategories.Items[ButtonImageCategory.HelpContext].Checked then
-     PopupMenuImageCategories.Items[ButtonImageCategory.HelpContext].Click; // update category for single image layout
+  if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
+     UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
+  MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
+
+  if ButtonImageCategory.HelpContext <> ButtonImageCategory.Tag then
+     CallSelectImageCategory(ButtonImageCategory.HelpContext, True, False, False, True); // update category for single image layout
 
   ButtonImageCategory.HelpContext:= -1; // reset to undefined single layout category
 
   if not IsSingleImageLayout then
      begin
-       case PopupScreenshotLayouts.Items[ButtonScreenshotLayouts.Tag].Visible of
+       case ImageLayoutVisible[ButtonScreenshotLayouts.Tag] of
          True : SetImageLayout; // reload everything, including categoy indexes
-         False: PopupScrLayoutSingle.Click;
+         False: CallSelectImageLayout(0, False); // multi-image layout is not visible, reset to single layout
        end;
      end;
 
@@ -35432,14 +37178,14 @@ var
 
   function AddMsgEmulatorInfo: Boolean;
   begin
-    AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-    AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+    AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+    AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
     AddMsgText(EmulatorFile[MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold], taCenter);
 
     if MemGameInfo.eSoftwareName <> '' then
        begin
-         AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
-         AddMsgText(MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+         AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+         AddMsgText(MemGameInfo.eCategory+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter, 9);
        end;
   end;
 
@@ -35523,8 +37269,8 @@ begin
            begin
              CallMessageBox;
              EnableMsgMediaTypeLabel(False);
-             AddMsgText('System   ', $000053a6, [fsItalic, fsBold], taCenter);
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+             AddMsgText('System   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
              AddMsgText(#13#10+'    There is nothing to do as the game folder is not selected.'+#13#10);
              GenerateMessage(TMenuItem(Sender).Caption, MemGameInfo.eTitle, '', 2, False, -1);
              FocusGamesList;
@@ -35566,7 +37312,7 @@ begin
                     AddMsgEmulatorInfo;
                     AddMsgText('    File does not exist, you haven''t selected a Daphne '+
                                     'executable or the ROMs folder could not be found.'+#13#10+#13#10+'Search file: ');
-                    AddMsgText(dCFG, $00a65300, [fsBold]);
+                    AddMsgText(dCFG, MsgTxtColors.colorFileName, [fsBold]);
                     GenerateMessage(TMenuItem(Sender).Caption, MemGameInfo.eTitle, '', 2, False, -1);
                     FocusGamesList;
                     Exit; // file not found or ROMs folder doesn't exist
@@ -35707,8 +37453,8 @@ begin
   if (not FileExists(sysFile)) and ShowDeleteMessage then
      begin
        CallMessageBox;
-       FormMain.AddMsgText('The file ');
-       FormMain.AddMsgText(sysFile, $00a65300, [fsBold]);
+       FormMain.AddMsgText('File ');
+       FormMain.AddMsgText(sysFile, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' was not found. Cannot delete game from games list.');
        GenerateMessage('Error', 'Delete Selected Game From Games List', '', 2, False, 1);
        ClearMemGameInfo(TempGameVars);
@@ -35759,7 +37505,7 @@ begin
        CallMessageBox;
        FormMain.AddMsgText('    Game deleted...');
        FormMain.AddMsgText(#13#10+#13#10+'System: ');
-       FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], $00a65300, [fsBold]);
+       FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(#13#10+'Title: ');
        FormMain.AddMsgText(TempGameVars.eTitle, clBlack, [fsBold]);
        FormMain.AddMsgText(#13#10+'Media Type: ');
@@ -35863,9 +37609,9 @@ begin
   FillTempGameInfo(Item);
   CallMessageBox;
   FormMain.AddMsgText('    You are about to ');
-  FormMain.AddMsgText(LowerCase(TMenuItem(Sender).Caption), $00a65300, [fsBold]);
+  FormMain.AddMsgText(LowerCase(TMenuItem(Sender).Caption), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'System: ');
-  FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], $00a65300, [fsBold]);
+  FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'Title: ');
   FormMain.AddMsgText(TempGameVars.eTitle, clBlack, [fsBold]);
   FormMain.AddMsgText(#13#10+'Media Type: ');
@@ -36566,37 +38312,36 @@ procedure TFormMain.FilterSearchBarHelpClick(Sender: TObject);
 begin
   //$00a65300
   CallMessageBox;
-  AddMsgText('1.', clMaroon, [fsBold]);
-  AddMsgText(' Type what you want to search for in teh text bar and press ');
+  AddMsgText('1', MsgTxtColors.colorWarning, [fsBold]);
+  AddMsgText('. Type what you want to search for in teh text bar and press ');
   AddMsgText('ENTER', clBlack, [fsBold]);
   AddMsgText(' key or click ');
   AddMsgText('Apply', clBlack, [fsBold]);
   AddMsgText(' button.'+#13#10+#13#10);
-  AddMsgText('2', clMaroon, [fsBold]);
+  AddMsgText('2', MsgTxtColors.colorWarning, [fsBold]);
   AddMsgText('. You can select another search criteria. Click on settings button and select another option.'+#13#10+'     ');
-  AddMsgText('category.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  AddMsgText(' (MAME) or ');
+  AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' + ');
-  AddMsgText('mature.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('mature.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' (MAME), ');
-  AddMsgText('version.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('version.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' (MAME), ');
-  AddMsgText('category_hb.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' + ');
-  AddMsgText('mature_hb.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('mature_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' (HBMAME), '+#13#10+'     ');
-  AddMsgText('version_hb.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('version_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' (HBMAME) '+
              'required for category and version added'+#13#10+'     ');
 
-
-  AddMsgText('catver.ini', $00a65300, [fsBold, fsItalic]);
-  AddMsgText(' can be used as an alternative to all the .ini files above (no HBMAME support)'+#13#10+'     ');
-  AddMsgText('languages.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('languages.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' required for language'+#13#10+'     ');
-  AddMsgText('nplayers.ini', $00a65300, [fsBold, fsItalic]);
+  AddMsgText('nplayers.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   AddMsgText(' is optional for # of players'+#13#10+#13#10);
 
-  AddMsgText('3', clMaroon, [fsBold]);
+  AddMsgText('3', MsgTxtColors.colorWarning, [fsBold]);
   AddMsgText('. You can use the ');
   AddMsgText('Controls', clBlack, [fsBold]);
   AddMsgText(' button to filter games by control. This filter ignores the search criteria and the controls selection'+
@@ -36604,12 +38349,12 @@ begin
   AddMsgText('Misc', clBlack, [fsBold]);
   AddMsgText(' main filter button. Just select a control and the filter will apply immediately.'+#13#10+#13#10);
 
-  AddMsgText('4', clMaroon, [fsBold]);
+  AddMsgText('4', MsgTxtColors.colorWarning, [fsBold]);
   AddMsgText('. Click on ');
   AddMsgText('Reset', clBlack, [fsBold]);
   AddMsgText(' button to reset filters to default settings (main tool bar buttons).'+#13#10+#13#10);
 
-  AddMsgText('5', clMaroon, [fsBold]);
+  AddMsgText('5', MsgTxtColors.colorWarning, [fsBold]);
   AddMsgText('. Check ');
   AddMsgText('Include Tool Bar Filters', clBlack, [fsBold]);
   AddMsgText(' button to include main filters in the search.'+#13#10+
@@ -36858,10 +38603,29 @@ end;
 procedure TFormMain.CenterSplitter1Click(Sender: TObject);
 begin
   if PopupSplitters.PopupComponent = SplitterImg[1] then
-     CenterImageSplitter(SplitterImg[1])
+     begin
+       if IsQuadImageLayout then
+          CenterImageSplitterQuad(SplitterImg[1])
+       else
+          CenterImageSplitter(SplitterImg[1]);
+     end
   else
   if PopupSplitters.PopupComponent = SplitterImg[2] then
-     CenterImageSplitter(SplitterImg[2]);
+     begin
+       if IsQuadImageLayout then
+          CenterImageSplitterQuad(SplitterImg[2])
+       else
+          CenterImageSplitter(SplitterImg[2]);
+     end
+  else
+  if PopupSplitters.PopupComponent = SplitterImg[3] then
+     begin
+       if IsQuadImageLayout then
+          CenterImageSplitterQuad(SplitterImg[3])
+       else
+          CenterImageSplitter(SplitterImg[3]);
+     end;
+
   UpdateImageDimensionsInfo;
 end;
 
@@ -36869,13 +38633,13 @@ procedure TFormMain.LoadImageLayoutPreview(LayoutIndex: ShortInt);
 var
   layFile: String;
 begin
-  if not Assigned(FormLayoutDimensions) then
+  if not Assigned(FormImageLayoutDimensions) then
      Exit;
-  FormLayoutDimensions.LabelLayoutTitle.Caption:= GetScrLayoutSection(LayoutIndex);
+  FormImageLayoutDimensions.LabelLayoutTitle.Caption:= GetScrLayoutSection(LayoutIndex);
   layFile:= GetScrLayoutImageFile(LayoutIndex);
-  FormLayoutDimensions.ImageScrLayout.Bitmap:= nil;
+  FormImageLayoutDimensions.ImageScrLayout.Bitmap:= nil;
   if FileExists(GetFolderFull(35)+'img_layouts\'+layFile) then
-     FormLayoutDimensions.ImageScrLayout.Bitmap.LoadFromFile(GetFolderFull(35)+'img_layouts\'+layFile);
+     FormImageLayoutDimensions.ImageScrLayout.Bitmap.LoadFromFile(GetFolderFull(35)+'img_layouts\'+layFile);
 end;
 
 procedure TFormMain.PopupImageShowLayoutDimensionsClick(Sender: TObject);
@@ -36883,18 +38647,18 @@ begin
   case PopupImageShowLayoutDimensions.Checked of
     True:
       begin
-        if not Assigned(FormLayoutDimensions) then
-           FormLayoutDimensions:= TFormLayoutDimensions.Create(nil);
+        if not Assigned(FormImageLayoutDimensions) then
+           FormImageLayoutDimensions:= TFormImageLayoutDimensions.Create(nil);
 
         LoadImageLayoutPreview(ButtonScreenshotLayouts.Tag);
         UpdateImageDimensionsInfo;
-        FormLayoutDimensions.FormStyle:= fsStayOnTop;
-        FormLayoutDimensions.Show;
+        FormImageLayoutDimensions.FormStyle:= fsStayOnTop;
+        FormImageLayoutDimensions.Show;
       end;
     False:
       begin
-        FormLayoutDimensions.Release;
-        FormLayoutDimensions:= nil;
+        FormImageLayoutDimensions.Release;
+        FormImageLayoutDimensions:= nil;
       end;
   end;
 end;
@@ -36919,6 +38683,7 @@ procedure TFormMain.PopupImageShowSplitterGripClick(Sender: TObject);
 begin
   SetGripIcon(SplitterImg[1], TMenuItem(Sender).Checked);
   SetGripIcon(SplitterImg[2], TMenuItem(Sender).Checked);
+  SetGripIcon(SplitterImg[3], TMenuItem(Sender).Checked);
   PopupShowSplitterGrip.Checked:= TMenuItem(Sender).Checked;
   FormPreferences.ImageEnableGripIcon.Tag:= 1;
   FormPreferences.ImageEnableGripIcon.Checked:= TMenuItem(Sender).Checked;
@@ -37413,33 +39178,6 @@ begin
      Action:= fxaAbort;
 end;
 
-procedure TFormMain.ButtonNoGameROMsWithDevROMsClick(Sender: TObject);
-var
-  Item: TEasyItem;
-  gList: TStringList;
-begin
-  gList:= TStringList.Create;
-  gList.BeginUpdate;
-  Item:= GamesListView.Groups.FirstItem;
-  repeat
-    if (not FormMain.IsROM_Bios(TEasyGameInfo(Item).eROMIdentification)) and
-       (not FormMain.IsROM_Device(TEasyGameInfo(Item).eROMIdentification)) then
-       begin
-         if TEasyGameInfo(Item).eCHDsCount = 0 then
-            begin
-              if (TEasyGameInfo(Item).eHaveGameROMs = 0) and (TEasyGameInfo(Item).eROMInfo <> nil) and
-                 (not ValidateBiosName(TEasyGameInfo(Item).eBiosName, TEasyGameInfo(Item).eName)) then
-                 gList.Add(TEasyGameInfo(Item).eName+'='+TEasyGameInfo(Item).eTitle);
-            end;
-       end;
-    Item:= GamesListView.Groups.NextItem(Item);
-  until Item = nil;
-  gList.EndUpdate;
-  gList.SaveToFile(FrontendPath+'noGameROMs-withROMs.txt');
-  FreeAndNil(gList);
-  ShowMessage('done');
-end;
-
 procedure TFormMain.MainMenuOptionsPopup(Sender: TObject);
 begin
   MenuCreateMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idMAME) and FileExists(GetMAMEMachineSoftListFile(False, idMAME));
@@ -37634,8 +39372,11 @@ begin
        Exit;
      end;
 
-  //if CallSelectArcadeSystem(6, sysID) = -1 then
-  //   Exit; // -1 = aborted by user
+  if CallSelectArcadeSystem(6, sysID) = -1 then // for a future expansion, let user select create/scan options ?
+     begin
+       FreeAndNil(MachinesList);
+       Exit; // -1 = aborted by user
+     end;
 
   // to scan games files this must be set to zero (Scan All MAME Sets)
   iScanMAMESetsMode:= MenuCreateMAMESoftwareListGames.HelpContext;
@@ -37674,18 +39415,34 @@ begin
       CreateSoftwareListXML(sysID, MachinesList[Loop], False);
     end;
   end;
-  FreeAndNil(MachinesList);
+
   FormStatus.LabelSoftwareScanCount.Visible:= False;
   if iCount > 0 then
      begin
        SetGameType(True); // load the games list first
        Application.ProcessMessages;
-       ScanSoftListGames(0, False, sysID);
+       ScanSoftListGames(0, False, sysID, MachinesList); // pass a list of valid softwarename to audit (March 29, 2018)
      end;
+  FreeAndNil(MachinesList);
 
   MenuCreateMAMESoftwareListGames.HelpContext:= iScanMAMESetsMode; // restore "Scan MAME Sets" mode to previous state
   MenuCreateMAMESoftwareListGames.Tag:= iSoftwareMode; // restore "Software List Games" mode to previous state
 
+  // from "Create Arcade Games List" main menu
+  // restore fixed scan mode as user selected "for this task only" option
+  if PopupSelectScanGamesMode.HelpContext <> -1 then
+     PopupSelectScanGamesMode.Tag:= PopupSelectScanGamesMode.HelpContext
+  else
+     SetScanModePopupHint(PopupSelectScanGamesMode.Tag);
+  PopupSelectScanGamesMode.HelpContext:= -1; // set to null so next time sys selection screen loads the default scan mode
+
+  if PopupScanGames.HelpContext <> -1 then
+     begin
+       // restore "Scan MAME Sets" setting since "For This Task Only" was checked
+       MenuCreateMAMESoftwareListGames.HelpContext:= PopupScanGames.HelpContext;
+       PopupScanGames.HelpContext:= -1;
+     end;
+     
   CreatingGamesList:= False;
   if iCount > 0 then
      SetGameType(False); // apply filters even if nothing has changed
@@ -37710,7 +39467,7 @@ var
   var
     Loop: Byte;
   begin
-    Result:= TEasyGameInfo(Item).eSystemID = idMAME; //MemGameInfo.eSystemID; // to support MAME and HBMAME
+    Result:= TEasyGameInfo(Item).eSystemID = idMAME; //MemGameInfo.eSystemID; // to support MAME and HBMAME ? No, this is to run EmuCon games with MAME (April 01, 2018)
     //if Result then
     //   Result:= IsROM_Have(TEasyGameInfo(Item).eROMIdentification); // uncomment this to only add machines you have
     if Result then
@@ -37723,7 +39480,7 @@ var
         if (AssignedSoftLists.IndexOf(mName) <> -1) and (ELV_AddedMachineNames.IndexOf(uMain.TEasyGameInfo(Item).eName) = -1) then
         begin
           ELV_AddedMachineNames.Add(uMain.TEasyGameInfo(Item).eName);
-          with FormSoftwareListMachineToRunGame.MachinesListView.Items.Add do
+          with FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.Add do
           begin
             Tag:= uMain.TEasyGameInfo(Item).eGameSetStatus;
             ImageIndex:= GetMAMEImageIndex(TEasyGameInfo(Item).eROMIdentification, TEasyGameInfo(Item).eSoftwareName);
@@ -37759,8 +39516,8 @@ var
     Result:= True;
     ELV_AddedMachineNames:= THashedStringList.Create;
     ELV_AddedMachineNames.BeginUpdate;
-    FormSoftwareListMachineToRunGame.MachinesListView.BeginUpdate;
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= True;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.BeginUpdate;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= True;
 
     if IsGroupedView then
     begin
@@ -37795,8 +39552,8 @@ var
 
     ELV_AddedMachineNames.EndUpdate;
     FreeandNil(ELV_AddedMachineNames);
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= False;
-    FormSoftwareListMachineToRunGame.MachinesListView.EndUpdate;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= False;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.EndUpdate;
   end;
 
 begin
@@ -37808,18 +39565,10 @@ begin
   MediaTypeStr:= MediaTypeCustom[CustomMediaType, 2];
   LastUsedIniFile:= GetMAMEMachineCustomGames(idMAME);
   iCurrentMachineName:= GetLastUsedMachineCustomGame(CustomSystemID, CustomMediaType);
-  //if FileExists(LastUsedIniFile) then
-  //   begin
-  //     LastUsedMachine:= TMemIniFile.Create(LastUsedIniFile);
-  //     iCurrentMachineName:= LastUsedMachine.ReadString(SystemStr, MediaTypeStr, '');
-  //     FreeAndNil(LastUsedMachine);
-  //   end;
-
-
 
   // need to get all assigned software lists for this system and get the first MAME machine name
   // ... only scan softlists based on the media type (cart/flop/cass/disc/hard)
-  iFileStr:= GetSystemsSoftwareListFile(idMAME);//, FormMain.EmulatorFile[idMAME]);
+  iFileStr:= GetSystemsSoftwareListFile(idMAME);
   AssignedSoftLists:= THashedStringList.Create;
   if FileExists(iFileStr) then
   begin
@@ -37830,29 +39579,29 @@ begin
   if AssignedSoftLists.Count = 0 then
      begin
        FreeAndNil(AssignedSoftLists);
-       //ShowMessageW('Error! There are no assigned MAME software lists for this system!!!');
+       //ShowMessageW('Error! There are no assigned MAME software lists for this system.'); // for debugging, do not remove (April 01, 2018)
        Exit;
      end;
 
   // start of new form to select a MAME machine
-  if not Assigned(FormSoftwareListMachineToRunGame) then
-     FormSoftwareListMachineToRunGame:= TFormSoftwareListMachineToRunGame.Create(nil);
+  if not Assigned(FormArcadeSoftwareListMachineToRunGame) then
+     FormArcadeSoftwareListMachineToRunGame:= TFormArcadeSoftwareListMachineToRunGame.Create(nil);
 
-  FormSoftwareListMachineToRunGame.Caption:= 'Select a MAME Machine to Run the '+GetSystemTypeTitle(CustomSystemID, False)+' Game With';
-  FormSoftwareListMachineToRunGame.Tag:= 1;
-  FormSoftwareListMachineToRunGame.CurrentMachineName:= iCurrentMachineName;
+  FormArcadeSoftwareListMachineToRunGame.Caption:= 'Select a MAME Machine to Run the '+GetSystemTypeTitle(CustomSystemID, False)+' Game With';
+  FormArcadeSoftwareListMachineToRunGame.Tag:= 1;
+  FormArcadeSoftwareListMachineToRunGame.CurrentMachineName:= iCurrentMachineName;
 
   ELV_PopulateSoftwareMachineToUse;
 
   HideFilterMsgBox;
-  if CheckTotal(FormSoftwareListMachineToRunGame.MachinesListView) then
+  if CheckTotal(FormArcadeSoftwareListMachineToRunGame.MachinesListView) then
      begin
-       if FormSoftwareListMachineToRunGame.MachinesListView.Groups.ItemCount > 1 then
+       if FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.ItemCount > 1 then
        begin
-         if FormSoftwareListMachineToRunGame.ShowModal = mrYes then
+         if FormArcadeSoftwareListMachineToRunGame.ShowModal = mrYes then
          begin
-           if CheckSelected(FormSoftwareListMachineToRunGame.MachinesListView) then
-              iCurrentMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Selection.First.Captions[1];
+           if CheckSelected(FormArcadeSoftwareListMachineToRunGame.MachinesListView) then
+              iCurrentMachineName:= FormArcadeSoftwareListMachineToRunGame.MachinesListView.Selection.First.Captions[1];
 
            LastUsedMachine:= TMemIniFile.Create(LastUsedIniFile);
            LastUsedMachine.WriteString(SystemStr, MediaTypeStr, iCurrentMachineName);
@@ -37864,7 +39613,7 @@ begin
        begin
          if iCurrentMachineName = '' then
             begin
-              iCurrentMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1];
+              iCurrentMachineName:= FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1];
               LastUsedMachine:= TMemIniFile.Create(LastUsedIniFile);
               LastUsedMachine.WriteString(SystemStr, MediaTypeStr, iCurrentMachineName);
               LastUsedMachine.UpdateFile;
@@ -37875,16 +39624,16 @@ begin
             GenerateMessage('Info', 'Select MAME Machine to Run '+GetSystemTypeTitle(CustomSystemID, False)+' Game',
                             '    There is only one machine compatible with this system and it''s already selected.'+#13#10+#13#10+
                             'System: '+SystemStr+#13#10+
-                            'Machine: '+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Caption+
-                                      ' ['+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1]+']');
+                            'Machine: '+FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Caption+
+                                      ' ['+FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1]+']');
        end;
      end
   else
      GenerateMessage('Info', 'Select Machine to Run '+GetSystemTypeTitle(CustomSystemID, False)+' Game',
                      '    No MAME machine sets were found. Make sure you have a MAME games list.'+#13#10+
                      'System: '+SystemStr);
-  ClearListView(FormSoftwareListMachineToRunGame.MachinesListView);
-  FreeAndNil(FormSoftwareListMachineToRunGame);
+  ClearListView(FormArcadeSoftwareListMachineToRunGame.MachinesListView);
+  FreeAndNil(FormArcadeSoftwareListMachineToRunGame);
   FreeAndNil(AssignedSoftLists);
   // end of new form to select a MAME machine
 
@@ -37916,7 +39665,7 @@ var
         mName:= TEasyGameInfo(Item).eSoftwareList[Loop];
         if mName = slName then
         begin
-          with FormSoftwareListMachineToRunGame.MachinesListView.Items.Add do
+          with FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.Add do
           begin
             Tag:= uMain.TEasyGameInfo(Item).eGameSetStatus;
             ImageIndex:= GetMAMEImageIndex(TEasyGameInfo(Item).eROMIdentification, TEasyGameInfo(Item).eSoftwareName);
@@ -37951,8 +39700,8 @@ var
   begin
     Result:= True;
     slName:= MemGameInfo.eSoftwareName;
-    FormSoftwareListMachineToRunGame.MachinesListView.BeginUpdate;
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= True;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.BeginUpdate;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= True;
     if IsGroupedView then
     begin
       Group:= GamesListView.Groups.FirstGroup;
@@ -37977,8 +39726,8 @@ var
         Item:= GamesListView.Groups.NextItem(Item);
       until Item = nil;
     end;
-    FormSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= False;
-    FormSoftwareListMachineToRunGame.MachinesListView.EndUpdate;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.Items.ReIndexDisable:= False;
+    FormArcadeSoftwareListMachineToRunGame.MachinesListView.EndUpdate;
   end;
 
 begin
@@ -37995,23 +39744,23 @@ begin
           iCurrentMachineName:= LastUsedMachine.Values[MemGameInfo.eSoftwareName];
      end;
 
-  if not Assigned(FormSoftwareListMachineToRunGame) then
-     FormSoftwareListMachineToRunGame:= TFormSoftwareListMachineToRunGame.Create(nil);
+  if not Assigned(FormArcadeSoftwareListMachineToRunGame) then
+     FormArcadeSoftwareListMachineToRunGame:= TFormArcadeSoftwareListMachineToRunGame.Create(nil);
 
-  FormSoftwareListMachineToRunGame.Tag:= 1;
-  FormSoftwareListMachineToRunGame.CurrentMachineName:= iCurrentMachineName;
+  FormArcadeSoftwareListMachineToRunGame.Tag:= 1;
+  FormArcadeSoftwareListMachineToRunGame.CurrentMachineName:= iCurrentMachineName;
 
   ELV_PopulateSoftwareMachineToUse;
 
   HideFilterMsgBox;
-  if CheckTotal(FormSoftwareListMachineToRunGame.MachinesListView) then
+  if CheckTotal(FormArcadeSoftwareListMachineToRunGame.MachinesListView) then
      begin
-       if FormSoftwareListMachineToRunGame.MachinesListView.Groups.ItemCount > 1 then
+       if FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.ItemCount > 1 then
        begin
-         if FormSoftwareListMachineToRunGame.ShowModal = mrYes then
+         if FormArcadeSoftwareListMachineToRunGame.ShowModal = mrYes then
          begin
-           if CheckSelected(FormSoftwareListMachineToRunGame.MachinesListView) then
-              iCurrentMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Selection.First.Captions[1];
+           if CheckSelected(FormArcadeSoftwareListMachineToRunGame.MachinesListView) then
+              iCurrentMachineName:= FormArcadeSoftwareListMachineToRunGame.MachinesListView.Selection.First.Captions[1];
 
            LastUsedMachine.BeginUpdate;
            if LastUsedIndex <> -1 then
@@ -38027,8 +39776,7 @@ begin
          if iCurrentMachineName = '' then
             begin
               // no machine is selected or there is only one machine for the selected MAME software list
-
-              iCurrentMachineName:= FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1];
+              iCurrentMachineName:= FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1];
               LastUsedMachine.BeginUpdate;
               LastUsedMachine.Add(MemGameInfo.eSoftwareName+'='+iCurrentMachineName); // add a new softwarename=selected_machinename
               LastUsedMachine.EndUpdate;
@@ -38039,19 +39787,19 @@ begin
             GenerateMessage('Info', 'Select Machine to Run Software List Game',
                             '    There is only one machine compatible with this software list game and it''s already selected.'+#13#10+#13#10+
                             'Software List: '+MemGameInfo.eCategory+' ['+MemGameInfo.eSoftwareName+']'+#13#10+
-                            'Machine: '+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Caption+
-                                      ' ['+FormSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1]+']');
+                            'Machine: '+FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Caption+
+                                      ' ['+FormArcadeSoftwareListMachineToRunGame.MachinesListView.Groups.FirstItem.Captions[1]+']');
        end;
      end
   else
      GenerateMessage('Info', 'Select Machine to Run Software List Game',
                      '    No machine sets were found. Make sure you have a MAME games list.'+#13#10+
                      'Software List: '+MemGameInfo.eCategory+' ['+MemGameInfo.eSoftwareName+']');
-  ClearListView(FormSoftwareListMachineToRunGame.MachinesListView);
-  FreeAndNil(FormSoftwareListMachineToRunGame);
+  ClearListView(FormArcadeSoftwareListMachineToRunGame.MachinesListView);
+  FreeAndNil(FormArcadeSoftwareListMachineToRunGame);
   FreeAndNil(LastUsedMachine);
 
-  MachineNameVar:= iCurrentMachineName; // this will be used in the uMain.ExecuteGame command line... MAME only!
+  MachineNameVar:= iCurrentMachineName; // this will be used in the uMain.ExecuteGame command line... MAME/HBMAME only!
 end;
 
 procedure TFormMain.PopupMachineToRunGameClick(Sender: TObject);
@@ -38063,7 +39811,6 @@ begin
     False: SelectMachineToRun(iMachineName, True);
   end;
 end;
-
 
 // here goes the function to get media type -cart1 ; -flop1 ; -cass1 for softlist games with "requirement" tag
 function TFormMain.GetSoftListGameRequiredParam(sysID: Integer; const GameName: WideString; const SoftwareName: String): String;
@@ -38172,20 +39919,6 @@ begin
 
   for Loop:= 1 to GamesListView.Header.Columns.Count-1 do
       GamesListView.Header.Columns[Loop].Visible:= IsValidSoftwareListColumn(Loop);
-      //GamesListView.Header.Columns[Loop].Visible:= Loop in [0, 1, 2, 6, 8, 9, 12, 13, 17, 19, 20, 21, 22, 23];
-
-  // set software list columns to default positions first... then custom position can be applied!
-  {GamesListView.Header.Columns[01].Position:= 1; // year
-  GamesListView.Header.Columns[02].Position:= 2; // manufacturer
-  GamesListView.Header.Columns[06].Position:= 3; // category
-  GamesListView.Header.Columns[17].Position:= 4; // times played
-  GamesListView.Header.Columns[21].Position:= 5; // last played date/time
-  GamesListView.Header.Columns[22].Position:= 6; // total playtime
-  GamesListView.Header.Columns[08].Position:= 7; // game name
-  GamesListView.Header.Columns[09].Position:= 8; // clone of
-  GamesListView.Header.Columns[12].Position:= 9; // driver status
-  GamesListView.Header.Columns[13].Position:= 10; // emulation status
-  GamesListView.Header.Columns[20].Position:= 11; // game size}
 
   if FileExists(GetColumnProfile) then
   begin
@@ -38204,23 +39937,10 @@ begin
       if ColumnsPosList[Loop] = 0 then
          Break
       else
-      if GamesListView.Header.Columns[ColumnsPosList[Loop]].Position <> Loop then//ColumnsPosList[Loop] then
-         GamesListView.Header.Columns[ColumnsPosList[Loop]].Position:= Loop;//ColumnsPosList[Loop];
+      if GamesListView.Header.Columns[ColumnsPosList[Loop]].Position <> Loop then
+         GamesListView.Header.Columns[ColumnsPosList[Loop]].Position:= Loop;
     end;
 
-    {for Loop:=1 to GamesListView.Header.Columns.Count-1 do
-    begin
-      if IsValidSoftwareListColumn(Loop) then
-      begin
-        GamesListView.Header.Columns[Loop].Visible:= Boolean(columnFile.ReadInteger('Visible_SoftwareList', aColumns[Loop, 0], 1));
-        if ColumnsArray then
-        begin
-          if GamesListView.Header.Columns[ColumnsPosList[Loop]].Position <> Loop then
-             GamesListView.Header.Columns[ColumnsPosList[Loop]].Position:= Loop;
-        end;
-      end;
-    end;
-    FreeAndNil(columnFile);}
     if ColumnsArray then
        begin
          for Loop:=0 to Length(ColumnsPosList) do
@@ -38261,14 +39981,6 @@ begin
         if (gColumn.Position <> gColumn.Index) and (gColumn.Index <> aColumnsSoftwareListOrder[gColumn.Position]) then
            columnFile.WriteInteger('Position_SoftwareList', aColumns[gColumn.Index, 0], gColumn.Position);
       end;
-      //if (Item.Index <> Item.ImageIndex) and (Item.ImageIndex <> aColumnsSoftwareListOrder[Item.Index]) then
-      //            begin
-      //              columnFile.WriteInteger('Position_SoftwareList', aColumns[Item.ImageIndex, 0], Item.Index);
-      //              Result:= True;
-      //            end;
-
-      //if gColumn.Width <> aColumnsWidth[gColumn.Index] then
-      //   columnFile.WriteInteger('Width_SoftwareList', aColumns[gColumn.Index, 0], gColumn.Width);
     end;
     gColumn:= GamesListView.Header.NextColumn(gColumn);
   until gColumn = nil;
@@ -38297,7 +40009,7 @@ begin
              ReadColumnsProfileMachinesList;
              // modify games list columns...
              // load machines into machines list EasyListView
-             // select last selected machine name without applying????... but DO NOT apply filters since there will be no machine selected to filter
+             // select last selected machine name without applying ?... but DO NOT apply filters since there will be no machine selected to filter
              // perhaps create a new entry in EmuLoader.ini to store last selected game in machines list side panel ?
              // ...perhaps hide all games from games list
            end;
@@ -38312,7 +40024,7 @@ begin
            begin
              UpdateColumnsProfileMachinesList;
              PanelMachinesList.Visible:= False;
-             // SelectedMachineListName; // this var contains the last selected machine name in the machines list side panel...
+             // SelectedMachineListName; // this var contains the last selected machine name in the machines list side panel
              ClearListView(MachinesListSidePanel);
              GamesListView.Header.Columns[06].Caption:= aColumns[6, 1];
            end;
@@ -38327,10 +40039,6 @@ begin
   MenuColumns.Visible:= not PanelMachinesList.Visible;
   ButtonGameFilterMain.Enabled:= (not PanelMachinesList.Visible) and (not PopupEnableFavorites.Checked);
   ButtonExtraFilters.Enabled:= not PanelMachinesList.Visible;
-
-  // need to load/save machines list columns width and games list columns width...
-  // also, need to re-arrange and hide games list columns
-  // also, restore normal games list columns
 end;
 
 procedure TFormMain.FindGameNameMachineList(const MachineName: String; var pEasyItem: TEasyItem; ReturnFirstVisible: Boolean = True);
@@ -38354,39 +40062,13 @@ begin
       if TMachineGameInfo(Item).eName = MachineName then
          Result:= Item;
 
-      if Result = nil then // this code line should be removed since "Result" is not changed when game is found!!!
+      if Result = nil then
          Item:= MachinesListSidePanel.Groups.NextVisibleInGroup(Group, Item);
     until (Item = nil) or (Result <> nil);
 
     Group:= MachinesListSidePanel.Groups.NextVisibleGroup(Group);
   until (Group = nil) or (Result <> nil);
 
-  {if IsGroupedView then
-  begin
-    Group:= MachinesListSidePanel.Groups.FirstVisibleGroup;
-    repeat
-      Item:= MachinesListSidePanel.Groups.FirstVisibleInGroup(Group);
-      repeat
-        if TMachineGameInfo(Item).eName = MachineName then
-           Result:= Item;
-
-        if Result = nil then // this code line should be removed since "Result" is not changed when game is found!!!
-           Item:= MachinesListSidePanel.Groups.NextVisibleInGroup(Group, Item);
-      until (Item = nil) or (Result <> nil);
-
-      Group:= MachinesListSidePanel.Groups.NextVisibleGroup(Group);
-    until (Group = nil) or (Result <> nil);
-  end
-  else
-  begin
-    Item:= MachinesListSidePanel.Groups.FirstVisibleItem;
-    repeat
-      if TMachineGameInfo(Item).eName = MachineName then
-         Result:= Item;
-      if Result = nil then // this code line should be removed since "Result" is not changed when game is found!!!
-         Item:= MachinesListSidePanel.Groups.NextVisibleItem(Item);
-    until (Item = nil) or (Result <> nil);
-  end;}
   if (Result = nil) and ReturnFirstVisible then
      Result:= MachinesListSidePanel.Groups.FirstVisibleItem;
 end;
@@ -38422,7 +40104,7 @@ begin
      Exit;
 
   MachinesIni:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(idMAME, 5));
-  
+
   CompleteGamesList:= THashedStringList.Create;
   GetGamesList(CompleteGamesList, idMAME);
 
@@ -38444,7 +40126,7 @@ begin
       begin
         if not GameIsClone(TempGameVars.eClone) then
         begin
-          // create game title ELV group for grouped view mode!!!!!
+          // create game title ELV group for grouped view mode
           addGroup:= MachinesListSidePanel.Groups.AddCustom(TGroupInfo, nil);
           TGroupInfo(addGroup).eImageIndex:= TempGameVars.eROMIdentification;
           TGroupInfo(addGroup).eSystemID:= idMAME;
@@ -38486,18 +40168,13 @@ begin
   FreeAndNil(MachinesIni);
   FreeAndNil(CompleteGamesList);
   ELV_RemoveDefaultGroup(MachinesListSidePanel);
-  //FixSortTitle(MachinesListSidePanel.Header.Columns.Columns[LastColumnSorted]); // no need for this grouped view mode!!!
+  //FixSortTitle(MachinesListSidePanel.Header.Columns.Columns[LastColumnSorted]); // no need for this in grouped view mode, do not remove this line (April 01, 2018)
   if CheckTotal(MachinesListSidePanel) then
      MachinesListSidePanel.Sort.SortAll;
   MachinesListSidePanel.Items.ReIndexDisable:= False;
   MachinesListSidePanel.EndUpdate(False);
-  //UpdateTotalMachinesLabel;
+
   ApplyMachinesListFilter;
-
-  //if SelectedMachineListName <> '' then
-  //   FindGameNameMachineList(SelectedMachineListName, SelectedMachineItem);
-
-  //SelectEasyItemMachineList(SelectedMachineItem);
 end;
 
 procedure TFormMain.UpdateTotalMachinesLabel;
@@ -38520,9 +40197,9 @@ begin
      Exit;
 
   MachinesListSidePanel.BeginUpdate;
-  // need to set all groups visible first!!!!!!
+  // set all groups visible first
   MachinesListSidePanel.Groups.MakeAllVisible;
-  MachinesListSidePanel.Groups.Rebuild(True); // need to rebuild or list gets messed up
+  MachinesListSidePanel.Groups.Rebuild(True); // rebuild or list gets messed up
   elvGroup:= MachinesListSidePanel.Groups.LastGroup;
   repeat
     elvItem:= MachinesListSidePanel.Groups.FirstInGroup(elvGroup);
@@ -38565,8 +40242,8 @@ begin
        FirstItem.Visible:= True;
     elvGroup:= MachinesListSidePanel.Groups.PrevGroup(elvGroup);
   until elvGroup = nil;
-  MachinesListSidePanel.Groups.Rebuild(True); // need to rebuild or list gets messed up
-  HideGroupsFilter(MachinesListSidePanel); // need to hide groups with no visible items for last!!!!
+  MachinesListSidePanel.Groups.Rebuild(True); // rebuild or list gets messed up
+  HideGroupsFilter(MachinesListSidePanel); // hide groups with no visible items for last
   MachinesListSidePanel.EndUpdate(False);
   UpdateTotalMachinesLabel;
 
@@ -38632,7 +40309,7 @@ begin
        if SelectedMachineItem <> Item then
           SelectedMachineItem:= Item;
        ELV_SetSelectRibbon(TMachineGameInfo(Item).eGameSetStatus, MachinesListSidePanel);
-       // SetSelectedMachineList; // thiz cannotz beez heerez!!!
+       // SetSelectedMachineList; // thiz cannotz beez heerez!
      end;
 end;
 
@@ -38674,8 +40351,8 @@ end;
 
 procedure TFormMain.PopupGamesColumnsPopup(Sender: TObject);
 begin
-  PopupCustomizeColumns.Visible:= (IsDetailsView or IsGroupedView);// and (not PanelMachinesList.Visible);// and (not ButtonViewMode.Visible) or (not ToolBarPanel.Visible);
-  PopupCustomizeColumnsHeaderFont.Visible:= (IsDetailsView or IsGroupedView);//PopupCustomizeColumns.Visible;
+  PopupCustomizeColumns.Visible:= (IsDetailsView or IsGroupedView);
+  PopupCustomizeColumnsHeaderFont.Visible:= (IsDetailsView or IsGroupedView);
 end;
 
 procedure TFormMain.PopupResetColumnsToDefaultClick(Sender: TObject);
@@ -38871,25 +40548,6 @@ begin
   GamesListView.EndUpdate;
 end;
 
-{procedure TFormMain.KillProcessApp;
-var
-  h: THandle;
-  pID: DWORD;
-begin
-  try
-    pID:= VideoPreviewHandle; //Process ID
-    h:= OpenProcess(PROCESS_TERMINATE, false, pID);
-    try
-      if h <> 0 then TerminateProcess(h, 0);
-    finally
-      CloseHandle(h);
-    end;
-  except
-    ShowMessage('Error');
-  end;
-  //CallPlayVideoPreview(True);
-end;}
-
 procedure TFormMain.MenuShowFavoriteIconInGamesListClick(Sender: TObject);
 begin
   if IsStartup then
@@ -38962,9 +40620,9 @@ begin
       // Note that Range must always be larger than the ClientWidth
       Range:= FormSource.ClientWidth;//+GetSystemMetrics(SM_CXHSCROLL);
       Position:= 0;
-      Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+      Increment:= 10; // clicking the scroll arrows moves the form 10 pixels
       Tracking:= True;
-      Visible:= True;  { Show the scrollbar }
+      Visible:= True;
     end;
     FormSource.Width:= iScreenWidth-6;
   end;
@@ -38975,9 +40633,9 @@ begin
      begin
        Range:= FormSource.ClientHeight+GetSystemMetrics(SM_CXVSCROLL);
        Position:= 0;
-       Increment:= 10;  { clicking the scroll arrows moves the form 10 pixels }
+       Increment:= 10; // clicking the scroll arrows moves the form 10 pixels
        Tracking:= True;
-       Visible:= True;  { Show the scrollbar }
+       Visible:= True;
      end;
      FormSource.Height:= iScreenHeight-60;
   end;
@@ -38987,47 +40645,6 @@ procedure TFormMain.CreateSupermodelXMLdatFromSourceFile1Click(
   Sender: TObject);
 begin
   CreateSupermodelGamesDatFile;
-end;
-
-procedure TFormMain.BitBtn1Click(Sender: TObject);
-var
-  DisplayTagNameList, ListXMLFile: THashedStringList;
-  Loop: Integer;
-  FileStr, TagStr: String;
-begin
-  FileStr:= DialogOpenFile(12, 'Select a listxml.xml file', nil, False);
-  if FileStr = '' then
-     Exit;
-
-  ListXMLFile:= THashedStringList.Create;
-  ListXMLFile.LoadFromFile(FileStr);
-  DisplayTagNameList:= THashedStringList.Create;
-  DisplayTagNameList.Sorted:= True;
-  DisplayTagNameList.Duplicates:= dupIgnore;
-  DisplayTagNameList.BeginUpdate;
-
-  for Loop:=0 to ListXMLFile.Count-1 do
-  begin
-    FileStr:= ListXMLFile[Loop];
-    if FileStr <> '' then
-    begin
-      FileStr:= TrimLeft(FileStr);
-      if XML_CheckData(FileStr, '<display ') then
-      begin
-        TagStr:= XML_GetEntryValue(FileStr, 'tag');
-        if TagStr <> '' then
-           DisplayTagNameList.Add(TagStr);
-      end;
-    end;
-    Application.ProcessMessages;
-  end;
-
-  DisplayTagNameList.EndUpdate;
-  DisplayTagNameList.Sorted:= False;
-  DisplayTagNameList.SaveToFile('d:\EmuLoader\DisplayTag_List.txt');
-  FreeAndNil(DisplayTagNameList);
-  FreeAndNil(ListXMLFile);
-  ShowMessage('done');
 end;
 
 procedure TFormMain.FilterCPUKeyPress(Sender: TObject; var Key: Char);
@@ -39046,33 +40663,8 @@ begin
 end;
 
 procedure TFormMain.PopupPlayGameExtraParametersMAMEClick(Sender: TObject);
-//var
-//  MachineNameStr: String;
 begin
   ExecuteGame(-1, True); // for AlterMAME -> ExecuteGame(1, True);
-
-  //if ValidateSelectedGame then // no need to validate here anymore... done directly in ExecuteGame() function
-  //   ExecuteGame(-1, True); // for AlterMAME -> ExecuteGame(1, True);
-
-  {if CheckSelected(GamesListView) then
-     begin
-       if IsMAMEBasedSys(MemGameInfo.eSystemID) then
-       begin
-         // the machine name is parsed in uMain.ExecuteGame() function... this is only for testing...
-         // comment these lines....
-         MachineNameStr:= '';
-         if MemGameInfo.eSoftwareName <> '' then
-         begin
-           MachineNameStr:= GetLastUsedMachineSoftwareList(MemGameInfo.eSoftwareName);
-           if MachineNameStr = '' then
-              MachineNameStr:= GetDefaultMachineNameToUse(MemGameInfo.eSystemID, MemGameInfo.eSoftwareName);
-         end;
-         // the machine name is parsed in uMain.ExecuteGame() function... this is only for testing...
-
-
-         RunMAMEExtraParameters(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], MachineNameStr);
-       end;
-     end;}
 end;
 
 procedure TFormMain.PopupMachinesListSidePanelFiltersSaveState_ListAllClick(Sender: TObject);
@@ -39089,121 +40681,37 @@ begin
      end;
 end;
 
-procedure TFormMain.BitBtn3Click(Sender: TObject);
-var
-  Item: TEasyItem;
-  ROMsList, SHA1List, DuplicateList: THashedStringList;
-  romCRC32, romSHA1, romName: String;
-  Loop, FileID, iIndex: Integer;
-begin
-  ROMsList:= THashedStringList.Create;
-  SHA1List:= THashedStringList.Create;
-  DuplicateList:= THashedStringList.Create;
-  DuplicateList.BeginUpdate;
-  DuplicateList.Sorted:= True;
-  DuplicateList.Duplicates:= dupIgnore;
-  Item:= GamesListView.Groups.FirstItem;
-  repeat
-    FillTempGameInfo(Item);
-    if (TempGameVars.eSystemID = idMAME) and (TempGameVars.eSoftwareName = '') and (not FormMain.IsROM_Device(TempGameVars.eROMIdentification)) and (not FormMain.IsROM_bios(TempGameVars.eROMIdentification)) then
-    begin
-      if TEasyGameInfo(Item).eROMInfo <> nil then
-      begin
-        //ShowMessage(TEasyGameInfo(Item).eROMInfo.Text);
-        ROMsList.Clear;
-        ROMsList.BeginUpdate;
-        SHA1List.Clear;
-        SHA1List.BeginUpdate;
-        for Loop:=0 to TEasyGameInfo(Item).eROMInfo.Count-1 do
-        begin
-          romName:= TEasyGameInfo(Item).eROMInfo[Loop];
-          FileID:= StrToInt(romName[1]+romName[2]);
-          //if FileID in [0, 3, 6, 9] then
-          if IsFileID_GameROM(FileID) then
-          begin
-            // game ROM only
-            romCRC32:= SoftListGetEntryValue(romName, 'crc');
-            if romCRC32 <> '' then
-            begin
-              romSHA1:= SoftListGetEntryValue(romName, 'sha1');
-              //if ROMsList.IndexOf(TEasyGameInfo(Item).eROMInfo[Loop]) = -1 then
-              //   ROMsList.Add(TEasyGameInfo(Item).eROMInfo[Loop])
-              iIndex:= ROMsList.IndexOf(romCRC32);
-              if iIndex = -1 then
-                 begin
-                   ROMsList.Add(romCRC32);
-                   SHA1List.Add(romSHA1);
-                 end
-              else
-                begin
-                  if SHA1List[iIndex] <> romSHA1 then
-                  begin
-                    DuplicateList.Add(TempGameVars.eName);
-                    Break;
-                  end;
-                end;
-            end;
-          end;
-        end;
-
-        ROMsList.EndUpdate;
-        SHA1List.EndUpdate;
-      end;
-    end;
-    Item:= GamesListView.Groups.NextItem(Item);
-  until Item = nil;
-  FreeAndNil(ROMsList);
-  FreeAndNil(SHA1List);
-  DuplicateList.EndUpdate;
-  DuplicateList.SaveToFile(FrontendPath+'duplicate_file_crc32.txt');
-  FreeAndNil(DuplicateList);
-  ShowMessage('Done');
-end;
-
-procedure TFormMain.BitBtn5Click(Sender: TObject);
-var
-  Item: TEasyItem;
-  ExecParamList: THashedStringList;
-  iParam: String;
-begin
-  ExecParamList:= THashedStringList.Create;
-  ExecParamList.Sorted:= True;
-  ExecParamList.Duplicates:= dupIgnore;
-  ExecParamList.BeginUpdate;
-  Item:= GamesListView.Groups.FirstItem;
-  repeat
-    iParam:= TEasyGameInfo(Item).eSoftwareExecParameter;
-    if iParam <> '' then
-    begin
-       ExecParamList.Add(TEasyGameInfo(Item).eSoftwareExecParameter);//+'='+TEasyGameInfo(Item).eSoftwareName);
-    end;
-
-    Item:= GamesListView.Groups.NextItem(Item);
-  until Item = nil;
-
-  ExecParamList.EndUpdate;
-  ExecParamList.Sorted:= False;
-  ExecParamList.SaveToFile(FrontendPath+'softlist-exec-param-list.txt');
-  FreeAndNil(ExecParamList);
-  ShowMessage('done');
-end;
-
 procedure TFormMain.ImagePreviewMouseEnter(Sender: TObject);
 var
   PanelHolder: TPanelEx;
 begin
   if TImage32(Sender) = Images then
-     PanelHolder:= ImageHintPanel
+     begin
+       PanelHolder:= ImageHintPanel;
+       UpdateImageHintPanelText(1);
+     end
   else
   if TImage32(Sender) = ImageScr[2] then
-     PanelHolder:= ImageHintPanel2[2]
+     begin
+       PanelHolder:= ImageHintPanel2[2];
+       UpdateImageHintPanelText(2);
+     end
   else
   if TImage32(Sender) = ImageScr[3] then
-     PanelHolder:= ImageHintPanel2[3];
+     begin
+       PanelHolder:= ImageHintPanel2[3];
+       UpdateImageHintPanelText(3);
+     end
+  else
+  if TImage32(Sender) = ImageScr[4] then
+     begin
+       PanelHolder:= ImageHintPanel2[4];
+       UpdateImageHintPanelText(4);
+     end;
 
   if not PanelHolder.Visible then
      begin
-       PanelHolder.Top:= TImage32(Sender).Height div 2; //TImage32(Sender).ScreenToClient(Mouse.CursorPos).Y;
+       PanelHolder.Top:= TImage32(Sender).Height div 2;
        PanelHolder.Visible:= True;
      end;
 end;
@@ -39223,7 +40731,13 @@ begin
      begin
        if ImageHintPanel2[3] <> nil then
           ImageHintPanel2[3].Visible:= False;
-     end;
+     end
+  else
+  if TImage32(Sender) = ImageScr[4] then
+     begin
+       if ImageHintPanel2[4] <> nil then
+          ImageHintPanel2[4].Visible:= False;
+     end
 end;
 
 procedure TFormMain.ImagesMouseEnter(Sender: TObject);
@@ -39349,50 +40863,11 @@ begin
      end;
 
   ButtonCustomEmuParameterToUse.Enabled:= MenuParametersCustomSystemTitle.Hint <> '';
-
-  //if MemGameInfo.eSystemID <> 60 then
-  //   begin
-  //     ButtonEmuParameterToUse.Enabled:= (MenuParametersSystemTitle.Hint <> '') and
-  //                                       SameText(ExtractFileExt(MenuParametersSystemTitle.Hint), '.exe');
-  //   end
-  //else
-  //   begin
-  //     ButtonEmuParameterToUse.Enabled:= MenuParametersSystemTitle.Hint <> '';
-  //   end;
-
-  //ButtonEmuParameterToUse.Enabled:= (MenuParametersSystemTitle.Hint <> '') and
-  //                                  SameText(ExtractFileExt(MenuParametersSystemTitle.Hint), '.exe');
-
-
-  // old code
-  //ButtonEmuParameterToUse.Enabled:= (EmulatorFile[MemGameInfo.eSystemID, 1] <> '') or
-  //                                  (EmulatorFile[MemGameInfo.eSystemID, 2] <> '');
-
-///  if (MenuCustomEmuParameters.Tag <> MemGameInfo.eCustomSystemID) then// or (MenuEmuParameters.HelpContext <> MemGameInfo.eMediaType) then
-///     begin
-///       SetIcon(IL_StandardIconsStandard, nil, IL_PopupPlayCustomEmulators, MaxArcadeSystems+MemGameInfo.eCustomSystemID, 10);
-///     end;
-  //   begin
-  //     ButtonEmuParameterToUse.Enabled:= (MenuParametersSystemTitle.Hint <> '') and
-  //                                       SameText(ExtractFileExt(MenuParametersSystemTitle.Hint), '.exe');
-  //   end
-  //else
-  //   begin
-  //     ButtonEmuParameterToUse.Enabled:= MenuParametersSystemTitle.Hint <> '';
-  //   end;
-
-  //ButtonEmuParameterToUse.Enabled:= (MenuParametersSystemTitle.Hint <> '') and
-  //                                  SameText(ExtractFileExt(MenuParametersSystemTitle.Hint), '.exe');
-
-
-  // old code
-  //ButtonEmuParameterToUse.Enabled:= (EmulatorFile[MemGameInfo.eSystemID, 1] <> '') or
-  //                                  (EmulatorFile[MemGameInfo.eSystemID, 2] <> '');
 end;
 
 procedure TFormMain.SetPopupCustomEmulators(const CustomSystemID: Integer);
 var
-  EmuTitle{, AssociatedApp}: String;
+  EmuTitle: String;
   IsDiscGame: Boolean;
   selCount: Integer;
   AssociatedApp: WideString;
@@ -39402,11 +40877,10 @@ var
     if EmulatorFileCustom[CustomSystemID, EmulatorIndex] <> '' then
        begin
          //if IsExeBatchFile(EmulatorFile[SystemID, EmulatorIndex]) then
-         //   beep; // for debugging only...
+         //   beep; // for debugging only, do not remove (April 01, 2018)
          Result:= GetAppIcon(EmulatorFileCustom[CustomSystemID, EmulatorIndex], IL_PopupPlayCustomEmulators, 5+EmulatorIndex);
          if Result = -1 then
-            Result:= 4+Ord(IsExeBatchFile(EmulatorFileCustom[CustomSystemID, EmulatorIndex]));//2]));
-            //Result:= 4+Ord(SameText(ExtractFileExt(EmulatorFile[SystemID, 2]), '.bat'));
+            Result:= 4+Ord(IsExeBatchFile(EmulatorFileCustom[CustomSystemID, EmulatorIndex]));
        end
     else
        begin
@@ -39458,9 +40932,6 @@ var
   end;
 
 begin
-  //if (PopupGames.Tag = SystemID) and
-  //   (PopupGames.HelpContext = 0) then
-  //   Exit;
   PopupMenuGamesList.Tag:= CustomSystemID;
   PopupMenuGamesList.HelpContext:= 0;
   selCount:= GamesListView.Selection.Count;
@@ -39607,7 +41078,7 @@ begin
        if FormStatus.Visible then
           FormStatus.MessageStr('Scannig for files: '+MediaTypeCustom[MediaTypeID, 0]);
        for Counter:=0 to FoldersHolder.Count - 1 do
-           GetGamesFilesListW(FoldersHolder[Counter], '', GamesHolder, True, MediaTypeID); // scan sub-folders too!!!
+           GetGamesFilesListW(FoldersHolder[Counter], '', GamesHolder, True, MediaTypeID); // scan sub-folders too
      end;
 end;
 
@@ -39644,11 +41115,10 @@ begin
                      Result:= 0 // if All Systems filter is selected, set result to 0
                   else
                      begin
-                       Result:= idMultiSys;// 500; // high number for the multiple filters selected
+                       Result:= idMultiSys; // high number for the multiple filters selected
                        if (FeatureType = 1) and (MultiListVar <> nil) then
                           begin
                             // create games list
-                            //MultiListVar:= TStringList.Create;
                             MultiListVar.BeginUpdate;
                             Item:= FormConsCompSystemSelector.Systems.Selection.First;
                             repeat
@@ -39669,7 +41139,7 @@ end;
 function TFormMain.CreateCustomGamesList(SystemID: Integer; IsMultiList: Boolean; IgnoreFileExtensionVar: THashedStringList; NoFoldersDefinedMessage: Boolean = True): Boolean;
 var
   Loop, CounterGame: Integer;
-  AddGame{, iUnicode}: Boolean;
+  AddGame: Boolean;
   FileExtension, MsgTitle, FileFullPath, SystemFileName: String;
   FilesListCustom, ExistingGames: THashedStringList;
   msgFlags: Integer;
@@ -39835,7 +41305,7 @@ begin
        IL_StandardIconsExtraLarge.GetIcon(SystemID, FormMessageBox.MessageIcon.Picture.Icon);
 
        AddMsgText('    Option ');
-       AddMsgText('Create New List', $00a65300, [fsBold]);
+       AddMsgText('Create New List', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' is enabled. '+#13#10+
                    'The list for the current system will be overwritten!'+#13#10+#13#10+
                    '    To add more games into an existing list, ');
@@ -39843,24 +41313,24 @@ begin
        AddMsgText(' this option in the select systems dialog...'+#13#10+#13#10+
                    '    Choose what to do:'+#13#10+
                    '- Click ');
-       AddMsgText('Yes', $00a65300, [fsBold]);
+       AddMsgText('Yes', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to overwrite the current list (or ');
-       AddMsgText('Enter', $00a65300, [fsBold]);
+       AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' key)'+#13#10+
                   '- Click ');
-       AddMsgText('Yes To All', $00a65300, [fsBold]);
+       AddMsgText('Yes To All', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to overwrite the list for all selected systems ');
        AddMsgText('(away with this message!)', clBlack, [fsItalic]);
        AddMsgText(#13#10+
                   '- Click ');
-       AddMsgText('No', $00a65300, [fsBold]);
+       AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to avoid creating the list for the current system (or ');
-       AddMsgText('Esc', $00a65300, [fsBold]);
+       AddMsgText('Esc', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' key; title''s bar ');
        AddMsgText('Close', clBlack, [fsBold, fsItalic]);
        AddMsgText(' button)'+#13#10+
                  '- Click ');
-       AddMsgText('Abort', $00a65300, [fsBold]);
+       AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to cancel this procedure for all systems'+#13#10+#13#10+
                   '    Continue with this operation ?');
        msgFlags:= GenerateMessage('Create Games List', SystemsListCustom[SystemID, 0], '', 3);
@@ -39897,9 +41367,9 @@ begin
        ResetVars;
        Exit;
      end;
-  //ShowMessage(FilesList.Text);
+  //ShowMessage(FilesList.Text); // for debugging only (April 01, 2018)
 
-  // only load /delete current games list if there are games to add into the list!!!
+  // only load /delete current games list if there are games to add into the list
   FormStatus.MessageStr('Processing files and creating the games list.');
   case MenuCreateCustomGamesList.Tag of
     1: // Tag = 1 - > Create New List
@@ -39907,9 +41377,9 @@ begin
         if FileExists(SystemFileName) then
            DeleteFile(SystemFileName);
       end;
-    0: GetActualGamesList; // Tag = 0 -> Add New Games To Existing List... lists game filenames only
+    0: GetActualGamesList; // Tag = 0 -> Add New Games To Existing List; lists game filenames only
   end;
-  CheckSevenZip(idMAME); // make sure that 7z.dll is found
+  CheckSevenZip(idMAME); // make sure 7z.dll is found
   CompleteGamesList:= THashedStringList.Create;
   if (MenuCreateCustomGamesList.Tag = 0) and FileExists(SystemFileName) then
      CompleteGamesList.LoadFromFile(SystemFileName);
@@ -39933,13 +41403,7 @@ begin
         FileFullPath:= FilesListCustom.Names[Loop];
         Delete(FileFullPath, 1, 2);
         TempGameVars.eName:= ExtractFileName(FileFullPath);
-        // need to double-check the FileFullPath var... make it WideString ??? How this work ????
         FileFullPath:= StringReplace(FileFullPath, TempGameVars.eName, FilesListCustom.ValueFromIndex[Loop], [rfIgnoreCase]);
-
-        //NameDOS:= FilesList.ValueFromIndex[Loop];
-        //FileFullPath:= FilesList.Names[Loop];
-        //MemGameVariables.eGameFileName:= ExtractFileName(FileFullPath);
-        //NameDOS:= StringReplace(FileFullPath, MemGameVariables.eGameFileName, NameDOS);
       end
    else
       begin
@@ -39951,7 +41415,7 @@ begin
 
    TempGameVars.eGameSize:= 0;
 
-   if IsZipFile(FileFullPath) then // this is from EmuCon
+   if IsZipFile(FileFullPath) then
       begin
         if SameText(FileExtension, '.zip') then
            AddGame:= GetContentsCustom(FileFullPath, True)
@@ -40031,7 +41495,7 @@ begin
      begin
        if MenuCustomPlayReadUsageRules.Visible then
           MenuCustomPlayReadUsageRules.Visible:= False;
-       //MenuViewUsageRules2.Visible:= False; // should be in main menu ???
+       //MenuViewUsageRules2.Visible:= False; // should be in main menu ?
        Exit;
      end;
   if not SystemHasRules(MemGameInfo.eCustomSystemID) then
@@ -40104,7 +41568,7 @@ begin
       end;
     False:
       begin
-        FormConsCompGamesFolders.Systems.Tag:= GetSystemIDGamesList(True); // only get system ID if an EmuCon game is selected!
+        FormConsCompGamesFolders.Systems.Tag:= GetSystemIDGamesList(True); // only get system ID if an EmuCon game is selected
       end;
   end;
   FormConsCompGamesFolders.ShowModal;
@@ -40257,7 +41721,7 @@ begin
      begin
        CallMessageBox;
        AddMsgText('    File ');
-       AddMsgText(GetEmuParametersFile, $00a65300, [fsBold]);
+       AddMsgText(GetEmuParametersFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('was not found! Emulator parameters must be '+
                   'placed in this file. Cannot show parameters...');
        GenerateMessage('Show Emulator Parameters', MemGameInfo.eTitle, '', 2, False, 1);
@@ -40398,9 +41862,20 @@ begin
   Screen.Cursor:= crHourGlass;
   if IsSingleImageLayout then
      begin
-       case PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Visible of
+       case ImageCategorySettings[ButtonImageCategory.Tag].Visible of
          True : ChangeImageCategory(ButtonImageCategory.Tag);
-         False: ButtonShowGameSnapshot.Click;
+         False: CallSelectImageCategory(1, True, False, False, True); // selected category is not visible, reset to game snapshot
+       end;
+     end
+  else
+     begin
+       if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
+          UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
+       MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
+
+       case ImageLayoutVisible[ButtonScreenshotLayouts.Tag] of
+         True : SetImageLayout; // reload everything, including category indexes
+         False: CallSelectImageLayout(0, False); // multi-image layout is not visible, reset to single layout
        end;
      end;
   UpdateImageDimensionsInfo;
@@ -40462,15 +41937,15 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    This function will copy and covert favorite profiles to the new format required by Emu Loader v8.3 and newer.'+#13#10+
                       'Emu Loader and EmuCon frontend profiles that have the same filename are merged into a single profile, saved in ');
-  FormMain.AddMsgText(GetFavoritesFolder, $00a65300, [fsBold], taLeftJustify, -1, 'Consolas');
+  FormMain.AddMsgText(GetFavoritesFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
   FormMain.AddMsgText(' new folder. Existing files in this folder will be overwritten.'+#13#10+#13#10+
                       '    If you have EmuCon profiles that you want to use, make sure to copy them in ');
-  FormMain.AddMsgText(ConsCompFavFolder, $00a65300, [fsBold], taLeftJustify, -1, 'Consolas');
+  FormMain.AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
   FormMain.AddMsgText(' folder. Make sure EmuCon profiles are already updated to EmuCon version 2.7.6 or newer (with .txt file extension).'+#13#10+#13#10+
                       '    Files from ');
-  FormMain.AddMsgText(OldArcadeFavFolder, $00a65300, [fsBold], taLeftJustify, -1, 'Consolas');
+  FormMain.AddMsgText(OldArcadeFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText(ConsCompFavFolder, $00a65300, [fsBold], taLeftJustify, -1, 'Consolas');
+  FormMain.AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
 
   FormMain.AddMsgText(' folders will not be deleted after the conversion is completed. Make sure to manually delete those two folders (or not) '+
                       'as they will not be used anymore.'+#13#10+#13#10+'Do you want to continue ?');
@@ -40554,11 +42029,11 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    Here''s what happened... :)'+#13#10+#13#10+
                       'Arcade profiles copied: ');
-  FormMain.AddMsgText(IntToStr(ArcadeFilesCopied), $00a65300, [fsBold]);
+  FormMain.AddMsgText(IntToStr(ArcadeFilesCopied), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'Console/computer profiles copied: ');
-  FormMain.AddMsgText(IntToStr(ConsCompFilesCopied), $00a65300, [fsBold]);
+  FormMain.AddMsgText(IntToStr(ConsCompFilesCopied), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'Console/computer profiles merged with arcade profiles: ');
-  FormMain.AddMsgText(IntToStr(ConsCompProfilesMerged), $00a65300, [fsBold]);
+  FormMain.AddMsgText(IntToStr(ConsCompProfilesMerged), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'    Restart the frontend so the active favorites profile can be properly loaded in the games list.');
   GenerateMessage('Info', 'Convert Favorite Profiles to New Format');
 end;
@@ -40676,7 +42151,6 @@ begin
        IsSystemQuickFilterEnabled:= True;
        SetMainToolBarIcon(ButtonSystemsQuickFilter);
        SetGameType(False);
-       //ApplyFilters;
      end;
 end;
 
@@ -40712,7 +42186,7 @@ end;
 procedure TFormMain.ButtonInternetGameInfoClick(Sender: TObject);
 begin
   if not IsStartup and ButtonInternetGameInfo.Down then
-     UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // force update the image category/layout settings... just in case
+     UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // force update the image category/layout settings, just in case
 
   if ButtonInternetGameInfo.Down then
      begin
@@ -40735,7 +42209,7 @@ begin
        PanelImagesDocuments.Visible:= True; // show images panel
 
        // restore images/game docs panel and reload images/game doc for selected game
-       ToggleImagesPanel(True); // don't validate images/game docs panels!!! (February 09, 2018)
+       ToggleImagesPanel(True); // don't validate images/game docs panels (February 09, 2018)
 
        if ShowGameInfoValidate then
           ShowGameInfoAll;
@@ -40750,7 +42224,7 @@ var
 begin
   PaintToolBarTheme(Sender, MenuBoundToGamesPanel.Checked);
 
-  // hide themed tool bar left/right borders to have a continuous images tool bar background  
+  // trick to hide themed tool bar left/right borders and have a continuous images tool bar background  
   r1:= ARect;
   r2:= ARect;
 
@@ -40822,19 +42296,16 @@ begin
      end;
 end;
 
-procedure TFormMain.BitBtn2Click(Sender: TObject);
-var
-  NewFile, OldFile, CRC32Newfile, CRC32OldFile: String;
+procedure TFormMain.ButtonImageCategoryClick(Sender: TObject);
 begin
-  NewFile:= 'D:\emulators\mame\binary\hash\aleste.xml';
-  OldFile:= 'D:\emulators\mame\mame0187b_64bit\hash\aleste.xml';
+  CallSelectImageCategory(ButtonImageCategory.Tag, True, False, True, True);
+end;
 
-  CRC32Newfile:= CalcFileCRC32(NewFile);
-  CRC32OldFile:= CalcFileCRC32(OldFile);
-  ShowMessage(NewFile+#13#10+CRC32NewFile+#13#10+#13#10+OldFile+#13#10+CRC32OldFile);
+procedure TFormMain.ButtonScreenshotLayoutsClick(Sender: TObject);
+begin
+  CallSelectImageLayout(ButtonScreenshotLayouts.Tag, True);
 end;
 
 end.
-
 
 

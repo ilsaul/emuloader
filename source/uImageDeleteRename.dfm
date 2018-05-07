@@ -24,15 +24,15 @@ object FormImageDeleteRename: TFormImageDeleteRename
   TextHeight = 15
   object Shape1: TShape
     Left = 258
-    Top = 154
-    Width = 50
-    Height = 47
+    Top = 144
+    Width = 76
+    Height = 76
     Pen.Color = 15856113
-    Shape = stRoundRect
+    Shape = stSquare
   end
   object LabelFilename: TShadowLabel
     Left = 261
-    Top = 116
+    Top = 108
     Width = 428
     Height = 31
     AutoSize = False
@@ -56,7 +56,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelSystemTitle: TShadowLabel
     Left = 261
-    Top = 76
+    Top = 72
     Width = 285
     Height = 19
     Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
@@ -73,11 +73,11 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object ShadowNewName: TShadowLabel
-    Left = 320
+    Left = 261
     Top = 232
-    Width = 159
+    Width = 210
     Height = 16
-    Caption = 'New Name (no file extension)'
+    Caption = 'New Name (file extension not required)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -91,35 +91,15 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object ImageCategoryIcon: TImage
-    Left = 271
-    Top = 157
-    Width = 24
-    Height = 24
-    Transparent = True
-  end
-  object LabelImageCategory: TShadowLabel
-    Left = 261
-    Top = 186
-    Width = 44
-    Height = 12
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'CP Layout'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -9
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
-    EllipsType = etNone
+    Left = 262
+    Top = 148
+    Width = 68
+    Height = 68
     Transparent = True
   end
   object LabelSoftwareListTitle: TShadowLabel
     Left = 261
-    Top = 93
+    Top = 89
     Width = 428
     Height = 14
     AutoSize = False
@@ -139,9 +119,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Visible = False
   end
   object LabelFileSize: TShadowLabel
-    Left = 320
-    Top = 156
-    Width = 370
+    Left = 342
+    Top = 161
+    Width = 348
     Height = 15
     AutoSize = False
     Caption = 'Size: 331 Bytes'
@@ -158,12 +138,12 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelDateTime: TShadowLabel
-    Left = 320
-    Top = 173
-    Width = 370
+    Left = 342
+    Top = 177
+    Width = 348
     Height = 15
     AutoSize = False
-    Caption = 'Date/Time: 11/11/11'
+    Caption = 'Date/Time: mmm/dd/yyyy hh:nn:ss'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -177,12 +157,12 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileType: TShadowLabel
-    Left = 320
-    Top = 190
-    Width = 370
+    Left = 342
+    Top = 193
+    Width = 348
     Height = 15
     AutoSize = False
-    Caption = 'File Type: Joint Photographic Experts Group (JPEG)'
+    Caption = 'Type: Joint Photographic Experts Group (JPEG)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -196,11 +176,11 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileTypeMismatch: TShadowLabel
-    Left = 397
-    Top = 207
-    Width = 255
+    Left = 385
+    Top = 208
+    Width = 199
     Height = 16
-    Caption = 'Warning: file type does not match file extension!'
+    Caption = 'file type does not match file extension'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -12
@@ -214,24 +194,23 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
     Visible = False
   end
-  object LabelWarningUnicodeFileName: TShadowLabel
-    Left = 481
-    Top = 232
-    Width = 203
-    Height = 16
-    Caption = 'Unicode filename cannot be renamed!'
+  object LabelDimensions: TShadowLabel
+    Left = 342
+    Top = 145
+    Width = 150
+    Height = 15
+    Caption = 'Dimensions: 1000x1000'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
+    Font.Color = clBlack
     Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
+    Font.Name = 'Consolas'
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = clSilver
     ShadowEnabled = False
     EllipsType = etNone
     Transparent = True
-    Visible = False
   end
   object PanelEx1: TPanelEx
     Left = 0
@@ -364,9 +343,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     end
   end
   object RenameImageEditBox: TEdit
-    Left = 320
+    Left = 261
     Top = 248
-    Width = 240
+    Width = 315
     Height = 21
     AutoSize = False
     TabOrder = 0

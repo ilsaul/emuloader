@@ -5,7 +5,7 @@ interface
 uses
   Windows, Classes, Graphics, Controls, Forms,
   StdCtrls, MPCommonObjects, EasyListview, ComCtrls, ExtCtrls,
-  ShadowLabel, PanelEx;
+  ShadowLabel, PanelEx, ImgList;
 
 type
   TFormArcadeROMsFolders = class(TForm)
@@ -13,6 +13,7 @@ type
     PanelList: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     SystemsListView: TEasyListview;
+    IL_Systems: TImageList;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure SystemsListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -75,7 +76,7 @@ procedure TFormArcadeROMsFolders.ResizeForm;
 begin
   if Screen.Width < 720 then
      begin
-       SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge; //FormMain.IL_Systems
+       SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge;
        SystemsListView.CellSizes.Icon.Width:= 58;
        SystemsListView.CellSizes.Icon.Height:= 72;
        SystemsListView.Font.Name:= 'Tahoma';
@@ -109,6 +110,7 @@ procedure TFormArcadeROMsFolders.FormShow(Sender: TObject);
 begin
   ResizeForm;
   FormMain.ELV_ResetNormalColors(SystemsListView);
+  FormMain.LoadSystemsIcons(IL_Systems, False);
 
   FormMain.ELV_PopulateSystems(SystemsListView, True, True, 1);
   if Screen.Width < 720 then
@@ -117,7 +119,7 @@ begin
        SystemsListView.Items.Items[SystemsListView.Groups.ItemCount-2].Caption:= 'Model 2';
        SystemsListView.EndUpdate;
      end;
-  //FormMain.ELV_SystemsShortTitle(SystemsListView);
+
   SetSystemState;
   FormMain.ELV_SelectItem(SystemsListView, 0);
 end;

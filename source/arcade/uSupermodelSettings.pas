@@ -351,7 +351,7 @@ var
 begin
   if FormSupermodelSettings.Tag = 0 then
      begin
-        // default emulator settings only!
+        // save ROMs folders in '\arcade\emulators.ini'; for default emulator settings only
         StrValue:= FormMain.MountFoldersListMAME(FolderROMs);
         if StrValue = '' then
            StrValue:= 'roms';
@@ -384,7 +384,9 @@ begin
     end;
   end;
 
-  CheckAndCreateFolder(ExtractFilePath(iniFile));
+  StrValue:= ExtractFilePath(iniFile);
+  CheckAndCreateFolder(StrValue);
+
   if FileExists(iniFile) then
      DeleteFile(iniFile);
   emuFile:= TMemIniFile.Create(iniFile);
@@ -483,8 +485,6 @@ end;
 procedure TFormSupermodelSettings.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
-  FormMain.IL_Systems.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
-  //FormMain.LoadSystemThumbIcon(SystemIcon, 6);
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSupermodel, emuVersionStr);
   //LabelEmulatorVersion.Visible:= Tag = 1;
   //if FormMain.EmulatorVersion[idSupermodel] <> '' then
@@ -500,8 +500,6 @@ begin
        TopBar.Color1:= $00dccdc0;
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
-       //FormMain.IL_Systems.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
-       //FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
      end
   else
@@ -530,8 +528,7 @@ begin
        FolderROMsButtonClear.Enabled:= False;
        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
-       //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
-       //FormMain.IL_ArcadeSystem_Large.GetIcon(idSupermodel, GameIcon.Picture.Icon);
+
        case FormMain.MemGameInfo.eGameSetStatus of
          0: TopBar.Color1:= $00f0fae5; // green
          1: TopBar.Color1:= $00e5f0fa; // red (based on green)

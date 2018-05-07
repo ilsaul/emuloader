@@ -29,6 +29,7 @@ object FormMain: TFormMain
     Width = 6
     Height = 554
     Align = alRight
+    ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
     Appearance.BorderColor = clNone
     Appearance.BorderColorHot = clNone
@@ -120,7 +121,7 @@ object FormMain: TFormMain
       object ButtonSystemsQuickFilter: TToolButton
         Left = 153
         Top = 0
-        Hint = 'Select systems filter (quick mode)'
+        Hint = 'Select systems filter, quick mode (disabled)'
         Caption = 'Systems Quick Filter'
         ImageIndex = 3
         OnClick = ButtonSystemsQuickFilterClick
@@ -361,7 +362,7 @@ object FormMain: TFormMain
       Height = 510
       Align = alLeft
       BevelOuter = bvNone
-      TabOrder = 4
+      TabOrder = 3
       Visible = False
       object MachinesListSidePanel: TEasyListview
         Left = 0
@@ -769,7 +770,7 @@ object FormMain: TFormMain
         Height = 23
         Hint = 
           'Enter CPU title (not short name). Partial strings are supported'#13 +
-          #10'You can hit the "ENTER" hot-key or press the "Apply" button'
+          #10'Press "ENTER" hot-key or click "Apply" button'
         AutoSize = False
         BevelKind = bkFlat
         BevelOuter = bvNone
@@ -811,56 +812,6 @@ object FormMain: TFormMain
         ImageIndex = 12
         OnClick = ButtonFilterCPUCloseClick
       end
-    end
-    object ButtonNoGameROMsWithDevROMs: TBitBtn
-      Left = 360
-      Top = 360
-      Width = 153
-      Height = 25
-      Caption = 'no ROMs, have dev ROMs'
-      TabOrder = 2
-      Visible = False
-      OnClick = ButtonNoGameROMsWithDevROMsClick
-    end
-    object BitBtn1: TBitBtn
-      Left = 360
-      Top = 296
-      Width = 137
-      Height = 25
-      Caption = 'Get list "<display" tag'
-      TabOrder = 5
-      Visible = False
-      OnClick = BitBtn1Click
-    end
-    object BitBtn3: TBitBtn
-      Left = 360
-      Top = 232
-      Width = 169
-      Height = 25
-      Caption = 'Get CRC32 duplicate game ROM'
-      TabOrder = 6
-      Visible = False
-      OnClick = BitBtn3Click
-    end
-    object BitBtn5: TBitBtn
-      Left = 360
-      Top = 392
-      Width = 161
-      Height = 25
-      Caption = 'Check Weird Soft Exec Name'
-      TabOrder = 7
-      Visible = False
-      OnClick = BitBtn5Click
-    end
-    object BitBtn2: TBitBtn
-      Left = 360
-      Top = 264
-      Width = 161
-      Height = 25
-      Caption = 'CRC32 New and Old XML'
-      TabOrder = 8
-      Visible = False
-      OnClick = BitBtn2Click
     end
   end
   object PanelScreenshotsArea: TPanelEx
@@ -1068,7 +1019,7 @@ object FormMain: TFormMain
             Tag = -1
             Left = 20
             Top = 20
-            Width = 151
+            Width = 171
             Height = 41
             Color1 = 16750899
             Color2 = clSilver
@@ -1081,11 +1032,11 @@ object FormMain: TFormMain
             Style = vgSolid
             Visible = False
             object ImageHintText: TShadowLabel
-              Left = 8
+              Left = 28
               Top = 8
-              Width = 135
+              Width = 133
               Height = 25
-              Caption = 'Game Snapshot'
+              Caption = 'Category Name'
               Font.Charset = ANSI_CHARSET
               Font.Color = clWhite
               Font.Height = -19
@@ -1096,6 +1047,13 @@ object FormMain: TFormMain
               ShadowColor = clBlack
               ShadowEnabled = True
               EllipsType = etNone
+              Transparent = True
+            end
+            object ImageHintIcon: TImage
+              Left = 8
+              Top = 13
+              Width = 16
+              Height = 16
               Transparent = True
             end
           end
@@ -1196,8 +1154,8 @@ object FormMain: TFormMain
         HelpContext = -1
         AutoSize = True
         Caption = 'Image Category'
-        DropdownMenu = PopupMenuImageCategories
         ImageIndex = 2
+        OnClick = ButtonImageCategoryClick
       end
       object ButtonNextCategory: TToolButton
         Tag = 1
@@ -1223,8 +1181,8 @@ object FormMain: TFormMain
         Top = 0
         Hint = 'Layout [Single]'
         AutoSize = True
-        DropdownMenu = PopupScreenshotLayouts
         ImageIndex = 5
+        OnClick = ButtonScreenshotLayoutsClick
       end
       object ButtonNextLayout: TToolButton
         Tag = 1
@@ -1286,6 +1244,106 @@ object FormMain: TFormMain
         Style = tbsCheck
         Visible = False
         OnClick = ButtonDocsPanelToggleClick
+      end
+    end
+    object PanelInitZipFile: TPanelEx
+      Left = 10
+      Top = 304
+      Width = 374
+      Height = 96
+      Color1 = 5832704
+      Color2 = 1
+      Color3 = 7891291
+      Color4 = 16750899
+      ColorFrame = 16750899
+      Frames = [frLeft, frTop, frRight, frBottom]
+      ParentBackground = False
+      Style = vgSimple
+      Visible = False
+      object LabelInitZipTitle: TShadowLabel
+        Left = 60
+        Top = 8
+        Width = 304
+        Height = 17
+        Caption = 'Initializing Zipped Images Contents Array'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clYellow
+        Font.Height = -13
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold, fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clMaroon
+        ShadowEnabled = True
+        EllipsType = etNone
+        Transparent = True
+      end
+      object LabelInitZipFile: TShadowLabel
+        Left = 11
+        Top = 72
+        Width = 325
+        Height = 15
+        Hint = '" list in RAM for fast access.'
+        AutoSize = False
+        Caption = 'Parsing "artpreview.zip" list in RAM for fast access.'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clMaroon
+        ShadowEnabled = True
+        EllipsType = etNone
+        Transparent = True
+        WordWrap = True
+      end
+      object LabelInitZipSystemTitle: TShadowLabel
+        Left = 60
+        Top = 32
+        Width = 305
+        Height = 17
+        AutoSize = False
+        Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clNavy
+        ShadowEnabled = True
+        EllipsType = etNone
+        Transparent = True
+      end
+      object LabelInitZipImageCategory: TShadowLabel
+        Left = 60
+        Top = 56
+        Width = 305
+        Height = 15
+        AutoSize = False
+        Caption = 'Game Snapshot'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 15856113
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clMaroon
+        ShadowEnabled = True
+        EllipsType = etNone
+        Transparent = True
+      end
+      object InitZipSystemIcon: TImage
+        Tag = -1
+        Left = 6
+        Top = 6
+        Width = 48
+        Height = 48
+        Transparent = True
       end
     end
   end
@@ -1362,7 +1420,7 @@ object FormMain: TFormMain
     end
     object N5: TMenuItem
       Caption = '-'
-      Hint = 'Layouts view mode'
+      Hint = 'Layouts'
     end
     object PopupImageCenterAllSplitters: TMenuItem
       Caption = 'Center All Splitters'
@@ -2700,12 +2758,6 @@ object FormMain: TFormMain
     Left = 328
     Top = 112
   end
-  object IL_ImagesCategory_Small: TImageList
-    Height = 24
-    Width = 24
-    Left = 232
-    Top = 112
-  end
   object IL_FilterWorkingNonWorking_Small: TImageList
     Height = 22
     Width = 28
@@ -2874,226 +2926,6 @@ object FormMain: TFormMain
     Left = 40
     Top = 432
   end
-  object PopupMenuImageCategories: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = IL_ImagesCategory_Small
-    OwnerDraw = True
-    TrackButton = tbLeftButton
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = ANSI_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'Tahoma'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = BcDrawModule
-    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 360
-    Top = 208
-    object ButtonShowTitleSnapshot: TMenuItem
-      AutoCheck = True
-      Caption = 'Title Snapshot'
-      Hint = 'Title Snapshot'
-      ImageIndex = 0
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowGameSnapshot: TMenuItem
-      AutoCheck = True
-      Caption = 'Game Snapshot'
-      Checked = True
-      Default = True
-      Hint = 'Game Snapshot'
-      ImageIndex = 1
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowMarquee: TMenuItem
-      AutoCheck = True
-      Caption = 'Marquee'
-      Hint = 'Marquee'
-      ImageIndex = 2
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowFlyer: TMenuItem
-      AutoCheck = True
-      Caption = 'Flyer'
-      Hint = 'Flyer'
-      ImageIndex = 3
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowCabinet: TMenuItem
-      AutoCheck = True
-      Caption = 'Cabinet'
-      Hint = 'Cabinet'
-      ImageIndex = 4
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowControlPanel: TMenuItem
-      AutoCheck = True
-      Caption = 'Control Panel'
-      Hint = 'Control Panel'
-      ImageIndex = 5
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowSoftwareCover: TMenuItem
-      AutoCheck = True
-      Caption = 'Software Cover'
-      Hint = 'Software Cover'
-      ImageIndex = 6
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowPCB: TMenuItem
-      AutoCheck = True
-      Caption = 'PCB'
-      Hint = 'PCB'
-      ImageIndex = 7
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowInGameArtwork: TMenuItem
-      AutoCheck = True
-      Caption = 'In-Game Artwork'
-      Hint = 'In-Game Artwork'
-      ImageIndex = 8
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowEnd: TMenuItem
-      AutoCheck = True
-      Caption = 'End'
-      Hint = 'End'
-      ImageIndex = 9
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowBoss: TMenuItem
-      AutoCheck = True
-      Caption = 'Boss'
-      Hint = 'Boss'
-      ImageIndex = 10
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowLogo: TMenuItem
-      AutoCheck = True
-      Caption = 'Logo'
-      Hint = 'Logo'
-      ImageIndex = 11
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowScore: TMenuItem
-      AutoCheck = True
-      Caption = 'Score'
-      Hint = 'Score'
-      ImageIndex = 12
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowVersus: TMenuItem
-      AutoCheck = True
-      Caption = 'Versus'
-      Hint = 'Versus'
-      ImageIndex = 13
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowGameOver: TMenuItem
-      AutoCheck = True
-      Caption = 'Game Over'
-      Hint = 'Game Over'
-      ImageIndex = 14
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowHowToPlay: TMenuItem
-      AutoCheck = True
-      Caption = 'How to Play'
-      Hint = 'How to Play'
-      ImageIndex = 15
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object ButtonShowSelect: TMenuItem
-      AutoCheck = True
-      Caption = 'Select'
-      Hint = 'Select'
-      ImageIndex = 16
-      RadioItem = True
-      OnClick = ButtonShowGameSnapshotClick
-    end
-    object N36: TMenuItem
-      Caption = '-'
-    end
-    object PopupSetupCategoryFolders: TMenuItem
-      Caption = 'Setup Folders'
-      OnClick = MenuImageCategorySettingsClick
-    end
-  end
-  object PopupScreenshotLayouts: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = IL_ScreenshotLayouts_Small
-    OwnerDraw = True
-    TrackButton = tbLeftButton
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = ANSI_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -16
-    Bar.BarCaption.Font.Name = 'Trebuchet MS'
-    Bar.BarCaption.Font.Style = [fsBold]
-    Bar.BarCaption.ShadowColor = clBlack
-    Bar.BarCaption.Caption = 'Screenshots Layouts'
-    Separators.Fade = True
-    Separators.Font.Charset = ANSI_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'Tahoma'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = BcDrawModule
-    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 392
-    Top = 208
-    object PopupScrLayoutSingle: TMenuItem
-      AutoCheck = True
-      Caption = 'Single'
-      Checked = True
-      Default = True
-      ImageIndex = 0
-      RadioItem = True
-      OnClick = PopupScrLayoutSingleClick
-    end
-  end
   object PopupGameDocuments: TBcBarPopupMenu
     AutoHotkeys = maManual
     Images = IL_MenuPopup
@@ -3226,18 +3058,6 @@ object FormMain: TFormMain
     Height = 48
     Width = 48
     Left = 136
-    Top = 176
-  end
-  object IL_ImagesCategory_Large: TImageList
-    Height = 48
-    Width = 48
-    Left = 264
-    Top = 144
-  end
-  object IL_ScreenshotLayouts_Small: TImageList
-    Height = 24
-    Width = 24
-    Left = 392
     Top = 176
   end
   object IL_ImagesToolBarButtons: TImageList
@@ -3407,12 +3227,6 @@ object FormMain: TFormMain
       OnClick = FilterSearchBarHelpClick
     end
   end
-  object IL_Systems: TImageList
-    Height = 68
-    Width = 68
-    Left = 360
-    Top = 176
-  end
   object IL_MainMenuOptions: TImageList
     Height = 24
     Width = 24
@@ -3456,11 +3270,6 @@ object FormMain: TFormMain
       Hint = 'Modify frontend settings'
       ImageIndex = 7
       OnClick = MenuPreferencesClick
-    end
-    object MenuUpdateFavoritesProfiles: TMenuItem
-      Caption = 'Update Favorites Profiles'
-      Hint = 'Convert EL v8.2.9 profiles and merge EmuCon profiles'
-      OnClick = MenuUpdateFavoritesProfilesClick
     end
     object N23: TMenuItem
       Caption = '-'
@@ -4079,6 +3888,16 @@ object FormMain: TFormMain
         OnClick = MenuHelpViewQuickSetupGuideClick
       end
       object N53: TMenuItem
+        Caption = '-'
+      end
+      object MenuUpdateFavoritesProfiles: TMenuItem
+        Caption = 'Update Favorites Profiles'
+        Hint = 
+          'Convert EL v8.2.9 profiles to EL v8.3 and merge with EmuCon prof' +
+          'iles'
+        OnClick = MenuUpdateFavoritesProfilesClick
+      end
+      object N62: TMenuItem
         Caption = '-'
       end
       object MenuAbout: TMenuItem

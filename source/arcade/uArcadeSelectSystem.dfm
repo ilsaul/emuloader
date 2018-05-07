@@ -24,29 +24,11 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelMultiSelect: TShadowLabel
-    Left = 20
-    Top = 325
-    Width = 206
-    Height = 16
-    Caption = 'Hold Ctrl or Shift for multiple selections'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clGray
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
   object PanelList: TPanelEx
     Left = 0
     Top = 0
     Width = 250
-    Height = 323
+    Height = 331
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -57,7 +39,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Style = vgSolid
     object LabelEmuTitle: TShadowLabel
       Left = 10
-      Top = 284
+      Top = 292
       Width = 230
       Height = 38
       Alignment = taCenter
@@ -120,7 +102,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       HotTrack.Enabled = True
       HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
       HotTrack.Underline = False
-      ImagesLarge = FormMain.IL_Systems
+      ImagesLarge = IL_Systems
       PaintInfoGroup.Expandable = False
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
       PaintInfoItem.BorderColor = 16370824
@@ -166,8 +148,26 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    object LabelMultiSelect: TShadowLabel
+      Left = 22
+      Top = 0
+      Width = 206
+      Height = 16
+      Caption = 'Hold Ctrl or Shift for multiple selections'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
     object ButtonOk: TBitBtn
-      Left = 219
+      Left = 427
       Top = 13
       Width = 89
       Height = 25
@@ -179,7 +179,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       TabOrder = 0
     end
     object ButtonCancel: TBitBtn
-      Left = 317
+      Left = 525
       Top = 13
       Width = 89
       Height = 25
@@ -610,5 +610,11 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
+  end
+  object IL_Systems: TImageList
+    Height = 68
+    Width = 68
+    Left = 272
+    Top = 328
   end
 end

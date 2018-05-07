@@ -334,12 +334,12 @@ procedure TFormImagesManager.SelectImageCategory;
 var
   selCat: ShortInt;
 begin
-  selCat:= FormMain.CallSelectImageCategory(ButtonImageCategory.Tag);
+  selCat:= FormMain.CallSelectImageCategory(ButtonImageCategory.Tag, False, True, True);
   if selCat = -1 then
      Exit;
   ButtonImageCategory.Tag:= selCat;
-  ButtonImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption;
-  FormMain.IL_ImagesCategory_Small.GetIcon(ButtonImageCategory.Tag, ImageCategoryIcon.Picture.Icon);
+  ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon);
 end;
 
 procedure TFormImagesManager.ReadIniFile;
@@ -977,14 +977,14 @@ function TFormImagesManager.RenameImageFile(OldName, NewName, FilePath: String):
 begin
   CallMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
-  FormMain.AddMsgText(FilePath+OldName, $00a65300, [fsBold]);
+  FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'To ');
-  FormMain.AddMsgText(FilePath+NewName, $00a65300, [fsBold]);
+  FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
 
   if FileExists(FilePath+NewName) then
      begin
        FormMain.AddMsgText(#13#10+#13#10+'    File ');
-       FormMain.AddMsgText(FilePath+NewName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' already exists. Both .ico and .txt history will be overwritten.');
      end;
   FormMain.AddMsgText(#13#10+#13#10+'Are you sure you want to continue ?');
@@ -1174,7 +1174,7 @@ begin
         ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
         FilesList.BeginUpdate;
         FormStatus.MessageStr('Validating '+IntToStr(el_GamesList.Count)+' games (up to '+IntToStr(MaxImagePerCategory)+' images per game)'+#13#10+
-                              'Image category: '+FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption);
+                              'Image category: '+GetImageCategoryTitle(ButtonImageCategory.Tag));
 
         TotalGamesCount:= el_GamesList.Count;
         for Loop2:=0 to el_GamesList.Count-1 do
@@ -1302,7 +1302,7 @@ begin
   ImageToLoad:= TImage32.Create(nil);
   TKernelResampler.Create(ImageToLoad.Bitmap);
   TKernelResampler(ImageToLoad.Bitmap.Resampler).Kernel:=
-             TCustomKernelClass(THermiteKernel).Create; // Hermite (used to be Lanczos filter)
+             TCustomKernelClass(TCosineKernel).Create; // Hermite (used to be Lanczos filter)
 
   iType:= FormMain.LoadPreviewImage(ImageName, ImageToLoad);
   if (ImageToLoad.Bitmap.Width/ImageToLoad.Bitmap.Height) <= (IconSize/IconSize) then
@@ -1379,7 +1379,7 @@ begin
   imgHolder.BeginUpdate;
   TKernelResampler.Create(imgHolder.Bitmap);
       TKernelResampler(imgHolder.Bitmap.Resampler).Kernel:=
-                    TCustomKernelClass(THermiteKernel).Create;
+                    TCustomKernelClass(TCosineKernel).Create;
   imgHolder.ScaleMode:= smResize;
   imgHolder.Width:= imgForm.ClientWidth;
   imgHolder.Height:= imgForm.ClientHeight;
@@ -1425,8 +1425,8 @@ begin
   FormMain.LoadCategoriesIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
-  FormMain.IL_ImagesCategory_Small.GetIcon(ButtonImageCategory.Tag, ImageCategoryIcon.Picture.Icon);
-  ButtonImageCategory.Caption:= FormMain.PopupMenuImageCategories.Items[ButtonImageCategory.Tag].Caption;
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon);
+  ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
 
   FormMain.ELV_ResetNormalColors(MissingImagesList);
   FormMain.ELV_ResetNormalColors(NotUsedImagesList);
@@ -1710,7 +1710,7 @@ begin
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Missing Images <----------'+#13#10);
   ListOutput.Add('  -> System: '+FormMain.GetArcadeEmulatorDescription(idMAME));
-  ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TMissingImageInfo(Item).eImageCategory].Caption);
+  ListOutput.Add('  -> Image Category: '+GetImageCategoryTitle(TMissingImageInfo(Item).eImageCategory));
   ListOutput.Add('     Total Games: '+IntToStr(MissingImagesList.Groups.ItemCount)+#13#10);
   ListOutput.Add(Format('%16s %16s %s', ['[Name]', '[Clone of]', '[Title]']));
 
@@ -1902,7 +1902,7 @@ begin
   ListOutput.BeginUpdate;
   ListOutput.Add('----------> Images of Missing Games <----------'+#13#10);
   ListOutput.Add('  -> System: '+FormMain.GetArcadeEmulatorDescription(idMAME));
-  ListOutput.Add('  -> Image Category: '+FormMain.PopupMenuImageCategories.Items[TNotUsedImageInfo(Item).eImageCategory].Caption);
+  ListOutput.Add('  -> Image Category: '+GetImageCategoryTitle(TNotUsedImageInfo(Item).eImageCategory));
   ListOutput.Add('     Total Files: '+IntToStr(NotUsedImagesList.Groups.ItemCount)+#13#10);
   Item:= NotUsedImagesList.Groups.FirstItem;
   repeat
@@ -2053,76 +2053,76 @@ end;
 procedure TFormImagesManager.ButtonHelpClick(Sender: TObject);
 begin
   CallMessageBox;
-  FormMain.AddMsgText('Games With Missing Images', $00a65300, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to create a list of all games without a snapshot'+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Games With Missing Images', MsgTxtColors.colorFileName, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to create a list of all games without a snapshot'+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select an ');
-  FormMain.AddMsgText('image category', $00a65300, [fsBold]);
+  FormMain.AddMsgText('image category', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. More scan options are found in popup menu. Click ');
-  FormMain.AddMsgText('Scan Missing Images', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Missing Images', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. Only one image category can be listed at a time (no mixed lists).'+
   #13#10+'    To ');
-  FormMain.AddMsgText('create a snapshot', $00a65300, [fsBold]);
+  FormMain.AddMsgText('create a snapshot', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' (if emulator supports it), run selected game with ');
-  FormMain.AddMsgText('Enter', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key, mouse double-click or ');
-  FormMain.AddMsgText('Play', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Play', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu. To remove games from the list use ');
-  FormMain.AddMsgText('Delete', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+'You can also ');
-  FormMain.AddMsgText('export', $00a65300, [fsBold]);
+  FormMain.AddMsgText('export', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' the list to a ');
-  FormMain.AddMsgText('.txt file', $00a65300, [fsBold]);
+  FormMain.AddMsgText('.txt file', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' with ');
-  FormMain.AddMsgText('Save Games List To File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Save Games List To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+'    Setting ');
-  FormMain.AddMsgText('Scan Device Sets', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Device Sets', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' does not add device sets with no ROMs.'+#13#10+'    Setting ');
-  FormMain.AddMsgText('Scan Non-Arcade Machines', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Non-Arcade Machines', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' require ');
-  FormMain.AddMsgText('mess.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('mess.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file created by AntoPISA (available in "version.ini" pack).'+#13#10+#13#10);
 
-  FormMain.AddMsgText('Invalid Images Filenames', $00a65300, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to delete images not used by any game. '+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Invalid Images Filenames', MsgTxtColors.colorFileName, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to delete images not used by any game. '+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select an ');
-  FormMain.AddMsgText('image category', $00a65300, [fsBold]);
+  FormMain.AddMsgText('image category', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. Click ');
-  FormMain.AddMsgText('Scan Invalid Images', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Invalid Images', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. Only one image category can be listed at a time (no mixed lists).'+
                       ' If you want to keep a file, remove it from the list with ');
-  FormMain.AddMsgText('Delete', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
     'You can also ');
-  FormMain.AddMsgText('export', $00a65300, [fsBold]);
+  FormMain.AddMsgText('export', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('the list to a ');
-  FormMain.AddMsgText('.txt file', $00a65300, [fsBold]);
+  FormMain.AddMsgText('.txt file', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' with ');
-  FormMain.AddMsgText('Save List To File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Save List To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+'    Click ');
-  FormMain.AddMsgText('Delete Invalid Images', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete Invalid Images', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to delete all files listed. Recycle bin is NOT supported.'+#13#10+#13#10);
 
-  FormMain.AddMsgText('Available Images for Missing Games', $00a65300, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to delete available images for games you don''t have. '+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Available Images for Missing Games', MsgTxtColors.colorFileName, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to delete available images for games you don''t have. '+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select an ');
-  FormMain.AddMsgText('image category', $00a65300, [fsBold]);
+  FormMain.AddMsgText('image category', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. Click ');
-  FormMain.AddMsgText('Scan Not Used Images', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Not Used Images', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. If you want to keep an image file, remove the game from the list with ');
-  FormMain.AddMsgText('Delete', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
     '    You can also ');
-  FormMain.AddMsgText('export', $00a65300, [fsBold]);
+  FormMain.AddMsgText('export', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' the list to a ');
-  FormMain.AddMsgText('.txt file', $00a65300, [fsBold]);
+  FormMain.AddMsgText('.txt file', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' with ');
-  FormMain.AddMsgText('Save List To File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Save List To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       'You can see the image of current selected games in the floating preview image window.');
 

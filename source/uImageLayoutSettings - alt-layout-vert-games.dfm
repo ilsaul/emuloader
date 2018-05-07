@@ -85,7 +85,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Left = 0
     Top = 0
     Width = 934
-    Height = 264
+    Height = 261
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -98,7 +98,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Left = 0
       Top = 244
       Width = 934
-      Height = 19
+      Height = 16
       Alignment = taCenter
       AutoSize = False
       Caption = 'LAYOUT TITLE'
@@ -119,7 +119,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     end
     object LabelShowHideLayouts: TShadowLabel
       Left = 0
-      Top = 245
+      Top = 244
       Width = 250
       Height = 16
       Hint = 'Toggle visible / not visible for all layouts'
@@ -222,6 +222,14 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     ScaleMode = smNormal
     TabOrder = 2
   end
+  object ButtonUseAlternateLayoutVerticalGames_UsageRules: TBitBtn
+    Left = 647
+    Top = 295
+    Width = 89
+    Height = 23
+    Caption = 'Usage Rules'
+    TabOrder = 3
+  end
   object GroupBoxCategoryAllSystems: TAdvGroupBox
     Left = 8
     Top = 269
@@ -236,7 +244,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 4
     object FrameIconLayScr2: TShape
       Left = 120
       Top = 42
@@ -536,7 +544,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 5
     OnCheckBoxClick = GroupBoxCategoryConsoleComputerCheckBoxClick
     object FrameIconLayScr2_ConsComp: TShape
       Left = 120
@@ -756,7 +764,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
       Visible = False
     end
-    object ButtonHelp_CustomCategoryConsComp: TBitBtn
+    object BitBtn1: TBitBtn
       Left = 26
       Top = 0
       Width = 19
@@ -772,7 +780,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
-      OnClick = ButtonHelp_CustomCategoryConsCompClick
     end
     object ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtn
       Left = 347
@@ -809,6 +816,71 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShowHint = True
       TabOrder = 0
       OnClick = ButtonLayoutResetPanelsIndex_ConsCompClick
+    end
+  end
+  object UseAlternateLayoutVerticalGames: TAdvOfficeCheckBox
+    Left = 464
+    Top = 270
+    Width = 332
+    Height = 23
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 7891291
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+    OnClick = UseAlternateLayoutVerticalGamesClick
+    Alignment = taLeftJustify
+    Caption = 'Use Alternate Layout for Vertical Games (Arcade Only)'
+    ReturnIsTab = False
+    Themed = True
+  end
+  object GroupBoxVertGamesAltLayout: TAdvGroupBox
+    Left = 464
+    Top = 299
+    Width = 119
+    Height = 131
+    RoundEdges = True
+    Ctl3D = True
+    TabOrder = 7
+    object FrameIconVertGamesAltLay: TShape
+      Left = 12
+      Top = 12
+      Width = 96
+      Height = 96
+      Pen.Color = 7891291
+    end
+    object IconVertGamesAltLayout: TImage
+      Left = 26
+      Top = 26
+      Width = 68
+      Height = 68
+      IncrementalDisplay = True
+      Transparent = True
+      OnClick = IconVertGamesAltLayoutClick
+    end
+    object LabelVertGamesAltLayout: TShadowLabel
+      Left = 13
+      Top = 111
+      Width = 94
+      Height = 14
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Vertical Games'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
     end
   end
   object IL_Layouts: TImageList

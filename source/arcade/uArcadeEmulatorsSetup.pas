@@ -10,9 +10,6 @@ uses
 
 type
   TFormArcadeEmulatorsSetup = class(TForm)
-    ButtonSetOptions: TBitBtn;
-    ButtonUpdateSystem: TBitBtn;
-    ButtonClearSystem: TBitBtn;
     LabelArcade_exec: TShadowLabel;
     Arcade_exec: TEdit;
     ButtonBrowseArcade_exec: TBitBtn;
@@ -38,10 +35,14 @@ type
     ShadowLabel5: TShadowLabel;
     ShadowLabel6: TShadowLabel;
     ButtonSetOptionsAlterMAME: TBitBtn;
-    LabelAlterMAME_Autorun: TLabel;
+    LabelAlterMAME_Autorun: TShadowLabel;
     ShadowLabel7: TShadowLabel;
     ShadowLabel3: TShadowLabel;
     ShadowLabel4: TShadowLabel;
+    ButtonSetOptions: TBitBtn;
+    ButtonUpdateSystem: TBitBtn;
+    ButtonClearSystem: TBitBtn;
+    IL_Systems: TImageList;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -67,8 +68,7 @@ type
   private
     { Private declarations }
     newEmulatorFile,
-    newEmulatorVersion{,
-    newEmulatorChecksum}: packed array[1..MaxArcadeSystems] of String;
+    newEmulatorVersion: packed array[1..MaxArcadeSystems] of String;
     newEmulatorDateTime: packed array[1..MaxArcadeSystems] of Integer;
     newAlterMAMEFile, newAlterMAMEVersion: String;
     newAlterMAMEDateTime: Integer;
@@ -161,8 +161,9 @@ var
   Loop: Integer;
 begin
   ResizeForm;
-  //ButtonCancel.Enabled:= FormMain.AbortExecution; // this seems to be pointless!!! September 05, 2017
+
   FormMain.ELV_ResetNormalColors(SystemSelector);
+  FormMain.LoadSystemsIcons(IL_Systems, False);
 
   // show emulator icon like in EmuCon ???
   //GetExtIcon('.exe', IL_EmulatorIcon); // .exe files
@@ -170,8 +171,6 @@ begin
   //GetExtIcon('.exe', IL_EmulatorIcon); // emulator executable files
   //GetExtIcon('.exe', IL_EmulatorIcon); // AlterMAME icon (if available)
 
-  //if FileExists(FormMain.FrontendPath+'EmuLoader.ini') then
-  //   elIni:= TMemIniFile.Create(FormMain.FrontendPath+'EmuLoader.ini');
   for Loop:= 1 to MaxArcadeSystems do
   begin
     newEmulatorFile[Loop]:= FormMain.EmulatorFile[Loop];
@@ -189,11 +188,8 @@ begin
   AlterMAME_Autorun.Tag:= 1;
   AlterMAME_Autorun.Checked:= FormMain.PopupAutorunGameAlterMAME.Checked;
   AlterMAME_Autorun.Tag:= 0;
-  //if Assigned(elIni) then
-  //   FreeAndNil(elIni);
 
   FormMain.ELV_PopulateSystems(SystemSelector, True, True, 1);
-  //FormMain.ELV_SystemsShortTitle(SystemSelector);
   FormMain.ELV_SelectItem(SystemSelector, 0);
 end;
 
@@ -209,7 +205,6 @@ begin
        elIni.DeleteKey(SectionString, 'emu_FileName');
        elIni.DeleteKey(SectionString, 'emu_VersionInfo');
        elIni.DeleteKey(SectionString, 'emu_DateTime');
-       elIni.DeleteKey(SectionString, 'emu_Checksum');
        if FormMain.IsMAMEBasedSys(SystemID) then
           begin
             elIni.DeleteKey(SectionString, 'emu_ListXML');
@@ -218,29 +213,22 @@ begin
        Exit;
      end;
 
-  //if newEmulatorDateTime[SystemID] <> FormMain.EmulatorDateTime[SystemID] then
-  //   begin
-       case FormMain.IsMAMEBasedSys(SystemID) of
-         True : Result:= FormMain.CheckMAMEIniFile(emuFile, SystemID);
-         False: Result:= True;
-       end;
-       if Result then
-          GetEmulatorDefaultDescription(SystemID, False);
-       //   begin
-       //     if (SameText(newEmulatorVersion[SystemID], FormMain.EmulatorVersion[SystemID])) or
-       //        (newEmulatorVersion[SystemID] = '') then
-       //        GetEmulatorDefaultDescription(SystemID, False);
-       //   end;
-       SectionString:= FormMain.GetArcadeSystemIniSection(SystemID);
-       elIni.WriteString(SectionString, 'emu_FileName', newEmulatorFile[SystemID]);
-       elIni.WriteString(SectionString, 'emu_VersionInfo', newEmulatorVersion[SystemID]);
-       elIni.WriteInteger(SectionString, 'emu_DateTime', newEmulatorDateTime[SystemID]);
+  case FormMain.IsMAMEBasedSys(SystemID) of
+    True : Result:= FormMain.CheckMAMEIniFile(emuFile, SystemID);
+    False: Result:= True;
+  end;
+  if Result then
+     GetEmulatorDefaultDescription(SystemID, False);
+     
+  SectionString:= FormMain.GetArcadeSystemIniSection(SystemID);
+  elIni.WriteString(SectionString, 'emu_FileName', newEmulatorFile[SystemID]);
+  elIni.WriteString(SectionString, 'emu_VersionInfo', newEmulatorVersion[SystemID]);
+  elIni.WriteInteger(SectionString, 'emu_DateTime', newEmulatorDateTime[SystemID]);
 
-       case SystemID of
-         idMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildMAME);
-         idHBMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildHBMAME);
-       end;
-  //   end;
+  case SystemID of
+    idMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildMAME);
+    idHBMAME: elIni.WriteString(SectionString, 'emu_Build', newbuildHBMAME);
+  end;
 end;
 
 function TFormArcadeEmulatorsSetup.VerifyAlterMAME: Boolean;
@@ -253,7 +241,6 @@ begin
         elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion', newAlterMAMEVersion);
         elIni.WriteInteger(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime', newAlterMAMEDateTime);
         elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild', newbuildAlterMAME);
-        //elIni.WriteInteger(FormMain.GetSystemIniSection(idMAME), 'emu_AlterMAMEAutoRun', Ord(AlterMAME_Autorun.Checked));
       end;
     False:
       begin
@@ -261,7 +248,6 @@ begin
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion');
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime');
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild');
-        //elIni.DeleteKey(FormMain.GetSystemIniSection(idMAME), 'emu_AlterMAMEAutoRun')
       end;
   end;
 end;
@@ -334,19 +320,14 @@ begin
        FormMain.BlinkBkEdit(Arcade_exec);
        Exit;
      end;
-  // not needed anymore as this is done in the function call below CallEmulatorOptions...
-  //if FormMain.IsMAMEBasedSys(SystemSelector.Tag) then
-  //   begin
-  //     if not FileExists(FormMain.GetEmuIniFileName(SystemSelector.Tag, newEmulatorFile[SystemSelector.Tag])) then
-  //        FormMain.CreateMAMEIniFile(newEmulatorFile[SystemSelector.Tag]);
-  //   end;
+     
   case SystemSelector.Tag of
     idMAME:   iVersion:= newBuildMAME;
     idHBMAME: iVersion:= newBuildHBMAME;
   else
     iVersion:= '';
   end;
-  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, iVersion);//newBuildMAME);
+  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, iVersion);
 end;
 
 {procedure TFormEmulatorsSetup.ClearEmulatorIcon(AlterMAME: Boolean);
@@ -533,18 +514,18 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    Select a second MAME emulator to run games. Handy when you want/need to run a game that '+
                       'requires a different MAME build or a MAME variant like ');
-  FormMain.AddMsgText('SDLMAME', $00a65300, [fsBold]);
+  FormMain.AddMsgText('SDLMAME', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. You can even use, to some extent, ');
-  FormMain.AddMsgText('Raine Arcade Emulator ', $00a65300, [fsBold]);
-  FormMain.AddMsgText('http://raine.1emulation.com', clBlue, [fsUnderline]); // http://rainemu.swishparty.co.uk (no longer valid)
+  FormMain.AddMsgText('Raine Arcade Emulator ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('http://raine.1emulation.com', MsgTxtcolors.colorFileName{clBlue}, [fsUnderline]); // http://rainemu.swishparty.co.uk (no longer valid)
   FormMain.AddMsgText(#13#10+'    You can set emulator default settings and game custom settings for AlterMAME as well.'+#13#10+
                       'There are two ways to use AlterMAME. By ');
-  FormMain.AddMsgText('autorun', $00a65300, [fsBold]);
+  FormMain.AddMsgText('autorun', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('; make sure to check ');
-  FormMain.AddMsgText('Autorun Game With AlterMAME', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Autorun Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(', also available in games popup menu (mouse right-click). It only works if the primary MAME fails to load the game.'+#13#10+
                       '    You can also run a game directly with AlterMAME by selecting ');
-  FormMain.AddMsgText('Run Game With AlterMAME', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Run Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in games popup menu.'+#13#10+#13#10+
                       '    Emu Loader does not validate games for AlterMAME so, make sure to audit your ROMs with a ROMs manager '+
                       'tool like ClrMAME or RomCenter.');
@@ -598,7 +579,6 @@ begin
      end;
   if LabelAlterMAME.Enabled then
      begin
-       //if FileExists(AlterMAME_exec.Text) then
        if (AlterMAME_exec.Text <> '') and FileExists(newAlterMAMEFile) then
           begin
             FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile, newAlterMAMEVersion, newbuildAlterMAME);
@@ -623,7 +603,7 @@ end;
 
 procedure TFormArcadeEmulatorsSetup.ShadowLabel1MouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clNavy;//$00a65300;
+  TShadowLabel(Sender).Font.Color:= clNavy;
   TShadowLabel(Sender).Font.Style:= [fsBold];
 end;
 
@@ -651,6 +631,7 @@ begin
      end;
   FormMain.CallEmulatorOptions(newAlterMAMEFile, newAlterMAMEVersion, SystemSelector.Tag, True, newbuildAlterMAME);
 end;
+
 
 end.
 

@@ -301,7 +301,7 @@ begin
      begin
        CallMessageBox;
        FormMain.AddMsgText('    Required file ');
-       FormMain.AddMsgText(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile, $00a65300,[fsBold]);
+       FormMain.AddMsgText(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile, MsgTxtColors.colorFileName,[fsBold]);
        FormMain.AddMsgText(' was not found. Cannot proceed...');
        GenerateMessage('Error', 'File not found', '', 2, False, 1);
        //ButtonCancel.Click;

@@ -92,7 +92,7 @@ begin
       begin
         CallMessageBox;
         FormMain.AddMsgText('    File ');
-        FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
+        FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found. The filters list cannot be loaded.'+#13#10+'Aborting...');
         GenerateMessage('Arcade Games Filters', 'File access failed.', '', 2, False, 1);
         Exit;
@@ -106,7 +106,7 @@ begin
        FormMain.AddMsgText('[main]', clBlack, [fsBold]);
        FormMain.AddMsgText(' section is empty or was not be found. This section is required for the filters to work correctly.'+
                            #13#10+'File ');
-       FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
+       FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' is not valid. Aborting...');
        GenerateMessage('Games Filters', 'Failed to read filters list.', '', 2, False, 1);
        Result:= False;
@@ -176,7 +176,7 @@ begin
               FormMain.AddMsgText(' but there is nothing in it. No sub-filters will be added for ');
               FormMain.AddMsgText(mainSectionList.ValueFromIndex[Loop], clBlack, [fsBold]);
               FormMain.AddMsgText('. Either remove this section or replace the file ');
-              FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
+              FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
               FormMain.AddMsgText(' with a proper copy.');
               GenerateMessage('Arcade Games Filters', 'A main filter was found with empty sub-filters.', '', 2);
             end;

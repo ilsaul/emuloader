@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  StdCtrls, Buttons, MPCommonObjects, EasyListview, PanelEx;
+  StdCtrls, Buttons, MPCommonObjects, EasyListview, MPCommonUtilities,
+  PanelEx, IniFiles, ExtCtrls, Menus, BarMenus, ShadowLabel;
 
 type
   TFormArcadeMultiSlotGames = class(TForm)
@@ -16,6 +17,14 @@ type
     ButtonDown: TBitBtn;
     ButtonRemoveFromList: TBitBtn;
     LabelHelpText: TLabel;
+    PanelNeoGeoMVS: TPanel;
+    LabelMultiSlotMachines: TLabel;
+    ButtonChangePanelNeoGeoMVS: TBitBtn;
+    PanelMultiSlotMachines: TPanelEx;
+    LabelMultiSlotMachinesChooseMachineToRun: TShadowLabel;
+    MultiSlotMachines: TEasyListview;
+    ButtonOkMultiSlotMachines: TBitBtn;
+    LabelMultiSlotMachinesBoldDefaultMachine: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure GamesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -26,8 +35,17 @@ type
     procedure ButtonRemoveFromListClick(Sender: TObject);
     procedure GamesListKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+    procedure ButtonChangePanelNeoGeoMVSClick(Sender: TObject);
+    procedure ButtonOkMultiSlotMachinesClick(Sender: TObject);
+    procedure MultiSlotMachinesDblClick(Sender: TCustomEasyListview;
+      Button: TCommonMouseButton; MousePos: TPoint;
+      ShiftState: TShiftState; var Handled: Boolean);
+    procedure MultiSlotMachinesKeyAction(Sender: TCustomEasyListview;
+      var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
   private
     { Private declarations }
+    procedure UpdateLabelSelectedMachine(Item: TEasyItem);
+    procedure AddMachinesMultiSlot;
     procedure UpdateSlotIndex;
     procedure AddMultiGames;
     procedure ResizeForm;
@@ -44,6 +62,161 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+{
+    Known motherboards:
+    ===================
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+    | Model   | Year | Slots | Generation | Video chipset         | Notes                                                                    |
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+    | MV-1    | 1990 | 1     | 1          | PRO-B0/PRO-C0/LSPC-A0 | Original full-featured 1-slot board                                      |
+    | MV-1F   |      | 1     | 2          | NEO-B1/LSPC2-A2       | 2nd-generation 1-slot board, no memory card headers                      |
+    | MV-1FZ  |      | 1     | 2          | NEO-B1/LSPC2-A2       | Cost-reduced MV-1F without LED displays/mahjong inputs/stereo output     |
+    | MV-1FZS |      | 1     | 2          | NEO-B1/LSPC2-A2       | Spanish MV-1FZ                                                           |
+    | MV-1A   | 1995 | 1     | 3          | NEO-MGA/NEO-GRC       | 3rd-generation 1-slot board, removes coin lockouts                       |
+    | MV-1ACH | 1995 | 1     | 3          | NEO-MGA/NEO-GRC       | Chinese MV-1A                                                            |
+    | MV-1AX  |      | 1     | 3          | NEO-MGA/NEO-GRC       | MV-1A with soldered BIOS                                                 |
+    | MV-1B   |      | 1     | 4          | NEO-GRC2              | 4th-generation 1-slot board, soldered BIOS, no SM1 ROM, 8-pin SIT header |
+    | MV-1C   | 1999 | 1     | 5          | NEO-GRZ               | Final iteration, vertical cartridge slot                                 |
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+    | MV-2B   |      | 2     | 1          | PRO-B0/PRO-C0/LSPC-A0 | Original full-featured 2-slot board                                      |
+    | MV-2F   |      | 2     | 2          | NEO-B1/LSPC2-A2       | 2nd-geneation 2-slot board, onboard PCMCIA slot and 3.5mm jacks          |
+    | MV-2FS  |      | 2     | 2          | NEO-B1/LSPC2-A2       | Spanish MV-2F                                                            |
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+    | MV-4    | 1990 | 4     | 1          | PRO-B0/PRO-C0/LSPC-A0 | Original 4-slot board                                                    |
+    | MV-4F   |      | 4     | 2          | NEO-B1/LSPC2-A2       | 2nd-generation 4-slot board                                              |
+    | MV-4FS  |      | 4     | 2          | NEO-B1/LSPC2-A2       | Spanish MV-4                                                             |
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+    | MV-6    | 1990 | 6     | 1          | PRO-B0/PRO-C0/LSPC-A0 | 2-board stack - mainboard and slot board                                 |
+    +---------+------+-------+------------+-----------------------+--------------------------------------------------------------------------+
+
+    Mainboard features
+    ==================
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+    |       |Vid |Slots|Edge |Coins|Counters|Lockouts|Mahjong|8-pin|Memcard|Mono/St|Phones|7-seg|EL |  BIOS  |Data In|Orient|
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+    |MV-1   | B0 |  1  |JAMMA|  2  |   2    |   2    |   2   | no  |header |switch |header| yes |no | socket |  yes  |horiz |
+    |MV-1F  | B1 |  1  |JAMMA|  2  |   2    |   2    |   2   | no  | none  |switch |header| yes |no | socket |  no   |horiz |
+    |MV-1FZ | B1 |  1  |JAMMA|  2  |   2    |   2    |   0   | no  | none  | mono  | none | no  |no | socket |  yes  |horiz |
+    |MV-1A  |MGA |  1  |JAMMA|  2  |   2    |   0    |   0   | no  | none  | mono  | none | no  |no | socket |  no   |horiz |
+    |MV-1AX |MGA |  1  |JAMMA|  2  |   2    |   0    |   0   | no  | none  | mono  | none | no  |no |soldered|  no   |horiz |
+    |MV-1B  |GRC2|  1  |JAMMA|  2  |   2    |   0    |   0   | yes | none  | mono  | none | no  |no |soldered|  no   |horiz |
+    |MV-1C  |GRZ |  1  |JAMMA|  2  |   2    |   0    |   0   | yes | none  | mono  | none | no  |no |soldered|  no   | vert |
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+    |MV-2B  | B0 |  2  | MVS |  4  |   2    |   2    |   2   | no  |header | both  |header| yes |yes| socket |  no   | vert |
+    |MV-2F  | B1 |  2  | MVS |  4  |   2    |   2    |   2   | no  |onboard| both  |jacks | yes |yes| socket |  no   | vert |
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+    |MV-4-25| B0 |  4  | MVS |  4  |   2    |   2    |   2   | no  |header | both  |header| yes |yes| socket |  no   | vert |
+    |MV-4F  | B1 |  4  | MVS |  4  |   2    |   2    |   2   | no  |header | both  |header| yes |yes| socket |  no   | vert |
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+    |MV-6   | B0 |  6  | MVS |  4  |   2    |   2    |   2   | no  |header | both  |header| yes |yes| socket |  no   | vert |
+    +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
+}
+
+procedure TFormArcadeMultiSlotGames.UpdateLabelSelectedMachine(Item: TEasyItem);
+begin
+  LabelMultiSlotMachines.Caption:= 'Use Machine: '+Item.Caption+'    '+
+                                   Item.Captions[1]+'    '+
+                                   Item.Captions[2]+'    '+
+                                   '['+Item.Captions[4]+']';
+  LabelMultiSlotMachines.Tag:= Item.Tag;
+  LabelMultiSlotMachines.Hint:= Item.Captions[4];
+end;
+
+procedure TFormArcadeMultiSlotGames.AddMachinesMultiSlot;
+var
+  iLoop, IconIndex: Integer;
+  iName, SectionStr, LastUsedName, tmpStr: String;
+  MachinesIni: TMemIniFile;
+  MachinesList: TStringList;
+  Item: TEasyItem;
+  GamesFile: THashedStringList;
+  AddIcon: Boolean;
+begin
+  //if not FormMain.ValidateFile(FormMain.GetArcadeFolder+'mame_multislot_machines.txt') then
+  if not FormMain.ValidateFile(FormMain.GetArcadeMultiSlotFile(FormArcadeMultiSlotGames.Tag)) then
+     Exit;
+
+  MultiSlotMachines.BeginUpdate;
+  MultiSlotMachines.Items.ReIndexDisable:= True;
+
+  SectionStr:= 'neogeo';
+  MachinesIni:= TMemIniFile.Create(FormMain.GetArcadeMultiSlotFile(FormArcadeMultiSlotGames.Tag)); // (FormMain.GetArcadeFolder+'mame_multislot_machines.txt');
+  MachinesList:= TStringList.Create;
+  MachinesIni.ReadSection(SectionStr, MachinesList);
+  ButtonChangePanelNeoGeoMVS.Visible:= MachinesList.Count > 0;
+  if MachinesList.Count > 0 then
+  begin
+    AddIcon:= FormMain.ValidateFile(FormMain.GetGamesFolderEL+GetSystemFileName(FormArcadeMultiSlotGames.Tag, 2));
+    if AddIcon then
+       begin
+         GamesFile:= THashedStringList.Create;
+         GamesFile.LoadFromFile(FormMain.GetGamesFolderEL+GetSystemFileName(FormArcadeMultiSlotGames.Tag, 2));
+       end;
+
+    LastUsedName:= MachinesIni.ReadString('lastused', SectionStr, SectionStr);
+
+    for iLoop:=0 to MachinesList.Count-1 do
+    begin
+      iName:= MachinesIni.ReadString(SectionStr, MachinesList[iLoop], '');
+      if iName <> '' then
+      begin
+        Item:= MultiSlotMachines.Items.Add;
+        //with MultiSlotMachines.Items.Add do
+        //begin
+          Item.Tag:= StrToInt(SoftListGetEntryValue(iName, 'slots'));
+          if AddIcon then
+             begin
+               tmpStr:= GamesFile.Values[MachinesList[iLoop]];
+               if tmpStr <> '' then
+                  Item.ImageIndex:= StrToInt(Copy(tmpStr, 1, 2))
+               else
+                  Item.ImageIndex:= 500; // set a bogus index to show an empty space
+             end;
+
+          Item.Caption:= SoftListGetEntryValue(iName, 'title'); // machine title
+          Item.Captions[1]:= SoftListGetEntryValue(iName, 'year'); // year
+          Item.Captions[2]:= IntToStr(Item.Tag)+'-slot'; //SoftListGetEntryValue(iName, 'slots')+'-slot'; // slot configuration
+          Item.Captions[3]:= SoftListGetEntryValue(iName, 'videochipset'); // video chipset
+          Item.Captions[4]:= MachinesList[iLoop]; // machine name
+          Item.Captions[5]:= SoftListGetEntryValue(iName, 'notes'); // notes
+          if SameText(MachinesList[iLoop], SectionStr) then
+             Item.Bold:= True;
+          if MachinesList[iLoop] = LastUsedName then
+             begin
+               UpdateLabelSelectedMachine(Item);
+               Item.Selected:= True;
+               //Selection.FocusedItem:= Item;
+             end;
+        //end;
+      end;
+    end;
+    if AddIcon then
+       FreeAndNil(GamesFile);
+  end;
+
+  MultiSlotMachines.Items.ReIndexDisable:= False;
+  if FormMain.CheckTotal(MultiSlotMachines) then
+     begin
+       MultiSlotMachines.Header.Columns[0].AutoSizeToFit;
+       MultiSlotMachines.Header.Columns[3].AutoSizeToFit;
+       MultiSlotMachines.Header.Columns[4].AutoSizeToFit;
+
+       iLoop:= MultiSlotMachines.Header.Columns[0].Width;
+       iLoop:= MultiSlotMachines.Header.Columns[1].Width+iLoop;
+       iLoop:= MultiSlotMachines.Header.Columns[2].Width+iLoop;
+       iLoop:= MultiSlotMachines.Header.Columns[3].Width+iLoop;
+       iLoop:= MultiSlotMachines.Header.Columns[4].Width+iLoop;
+       iLoop:= MultiSlotMachines.Width-iLoop-2;
+       if MultiSlotMachines.Scrollbars.VertBarVisible then
+          iLoop:= iLoop-GetSystemMetrics(SM_CXVSCROLL);
+       MultiSlotMachines.Header.Columns[5].Width:= iLoop;
+     end;
+  MultiSlotMachines.EndUpdate;
+
+  FreeAndNil(MachinesIni);
+  FreeAndNil(MachinesList);
+end;
 
 procedure TFormArcadeMultiSlotGames.UpdateSlotIndex;
 var
@@ -103,7 +276,7 @@ begin
 
   UpdateSlotIndex;
   if GamesList.Scrollbars.VertBarVisible then
-     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-GetSystemMetrics(SM_CXVSCROLL); // -16 ?
+     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-GetSystemMetrics(SM_CXVSCROLL);
 
   if GamesList.Scrollbars.HorzBarVisible then
      begin
@@ -121,19 +294,30 @@ var
   wDiff: Integer;
 begin
   //wDiff:= 160; // for debugging only; do not enable this
-  if Screen.Width >= 800 then
+  if Screen.Width >= 960 then
      Exit;
-  if Screen.Width = 720 then
-     wDiff:= 80
-  else
-  if Screen.Width = 640 then
-     wDiff:= 160;
+  case Screen.Width of
+    800: wDiff:= 100;
+    720: wDiff:= 180;
+    640: wDiff:= 260;
+  end;
 
   ButtonOk.Left:= ButtonOk.Left-(wDiff div 2);
   ButtonNo.Left:= ButtonNo.Left-(wDiff div 2);
   LabelHelpText.Left:= LabelHelpText.Left-(wDiff div 2);
   GamesList.Width:= GamesList.Width-wDiff;
   GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-wDiff;
+
+  MultiSlotMachines.Width:= MultiSlotMachines.Width-wDiff;
+
+  LabelMultiSlotMachinesBoldDefaultMachine.Caption:= 'bold is default';
+  LabelMultiSlotMachinesBoldDefaultMachine.Left:= LabelMultiSlotMachinesBoldDefaultMachine.Left-((wDiff-55) div 2);
+  ButtonOkMultiSlotMachines.Left:= ButtonOkMultiSlotMachines.Left-wDiff;
+  PanelMultiSlotMachines.Width:= PanelMultiSlotMachines.Width-wDiff;
+
+  ButtonChangePanelNeoGeoMVS.Left:= ButtonChangePanelNeoGeoMVS.Left-wDiff;
+  PanelNeoGeoMVS.Width:= PanelNeoGeoMVS.Width-wDiff;
+
   FormArcadeMultiSlotGames.ClientWidth:= FormArcadeMultiSlotGames.ClientWidth-wDiff;
 end;
 
@@ -161,8 +345,11 @@ end;
 procedure TFormArcadeMultiSlotGames.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(GamesList);
+  FormMain.ELV_ResetNormalColors(MultiSlotMachines);
   ResizeForm;
+  AddMachinesMultiSlot;
   AddMultiGames;
+  PanelMultiSlotMachines.Visible:= False; // cannot add items to EasyListView while "visible = FALSE" or it triggers "access violation" error
 end;
 
 procedure TFormArcadeMultiSlotGames.GamesListItemPaintText(
@@ -171,13 +358,16 @@ procedure TFormArcadeMultiSlotGames.GamesListItemPaintText(
 begin
   //ACanvas.Font.Name:= 'Segoe UI';
   //ACanvas.Font.Size:= 9;
+  Item.Ghosted:= Item.Index > (LabelMultiSlotMachines.Tag-1);
+
   case Position of
     0:
      begin
        //ACanvas.Font.Name:= 'Tahoma';
        //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
-       ACanvas.Font.Color:= $00323232;
+       if not Item.Ghosted then
+          ACanvas.Font.Color:= $00323232;
      end;
     1:
      begin
@@ -188,6 +378,8 @@ begin
      end;
     //4: ACanvas.Font.Size:= 7;
   end;
+  if Item.Ghosted then
+     ACanvas.Font.Color:= clGray;
 end;
 
 procedure TFormArcadeMultiSlotGames.FormKeyPress(Sender: TObject;
@@ -236,6 +428,41 @@ begin
       end;
     VK_DELETE: ButtonRemoveFromList.Click;
   end;
+end;
+
+procedure TFormArcadeMultiSlotGames.ButtonChangePanelNeoGeoMVSClick(
+  Sender: TObject);
+begin
+  PanelMultiSlotMachines.Visible:= True;
+  ButtonOk.Enabled:= False;
+  MultiSlotMachines.SetFocus;
+end;
+
+procedure TFormArcadeMultiSlotGames.ButtonOkMultiSlotMachinesClick(
+  Sender: TObject);
+begin
+  if FormMain.CheckSelected(MultiSlotMachines) then
+     begin
+       UpdateLabelSelectedMachine(MultiSlotMachines.Selection.First);
+     end;
+
+  PanelMultiSlotMachines.Visible:= False;
+  ButtonOk.Enabled:= True;
+end;
+
+procedure TFormArcadeMultiSlotGames.MultiSlotMachinesDblClick(
+  Sender: TCustomEasyListview; Button: TCommonMouseButton;
+  MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
+begin
+  ButtonOkMultiSlotMachines.Click;
+end;
+
+procedure TFormArcadeMultiSlotGames.MultiSlotMachinesKeyAction(
+  Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
+  var DoDefault: Boolean);
+begin
+  if CharCode = VK_RETURN then
+     ButtonOkMultiSlotMachines.Click;
 end;
 
 end.

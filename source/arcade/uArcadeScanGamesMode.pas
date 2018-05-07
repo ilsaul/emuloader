@@ -215,14 +215,14 @@ begin
   FormMain.AddMsgText(' games with MAME (consoles/computers).'+
                       ' One important rule you must follow to use software list games with Emu Loader:'+#13#10+#13#10);
   FormMain.AddMsgText('    Game files must be in sub-folders named the same name as XML filenames from ', clBlack, [fsBold]);
-  FormMain.AddMsgText('mamedir\hash\', $00a65300, [fsBold, fsItalic]);
+  FormMain.AddMsgText('mamedir\hash\', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   FormMain.AddMsgText(' folder.', clBlack, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'    There are three options to choose from:'+#13#10);
   FormMain.AddMsgText('1. ', clMaroon, [fsBold]);
-  FormMain.AddMsgText('Disable', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Disable', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': software lists will not be created and all frontend games list files deleted.'+#13#10);
   FormMain.AddMsgText('2. ', clMaroon, [fsBold]);
-  FormMain.AddMsgText('Enable, Update Mode', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Enable, Update Mode', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': new software lists will be created and current ones updated only if ');
   FormMain.AddMsgText('CRC32 checksum', clBlack, [fsItalic]);
   FormMain.AddMsgText(' of MAME ');
@@ -231,39 +231,39 @@ begin
   FormMain.AddMsgText('softlist.el', clBlack, [fsItalic]);
   FormMain.AddMsgText(' file.'+#13#10);
   FormMain.AddMsgText('3. ', clMaroon, [fsBold]);
-  FormMain.AddMsgText('Enable, Overwrite Mode', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Enable, Overwrite Mode', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': all software lists will be created, overwriting current frontend lists even if file checksums match.'+#13#10+#13#10+
                       '    Say you have ');
-  FormMain.AddMsgText('rompath d:\emu\mame_roms;d:\emu\mess_roms', $00a65300, [fsBold], taLeftJustify, 9, 'Consolas');
+  FormMain.AddMsgText('rompath d:\emu\mame_roms;d:\emu\mess_roms', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText(' in ');
   FormMain.AddMsgText('mame.ini', clBlack, [fsItalic]);
   FormMain.AddMsgText(', and have ');
   FormMain.AddMsgText('H.E.R.O.', clBlack, [fsBold]);
-  FormMain.AddMsgText(' (hero.zip)', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' (hero.zip)', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' game for two different software lists, ');
   FormMain.AddMsgText('Atari 2600', clBlack, [fsBold]);
-  FormMain.AddMsgText(' (a2600.xml)', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' (a2600.xml)', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' and ');
   FormMain.AddMsgText('MSX1 Cartridges', clBlack, [fsBold]);
-  FormMain.AddMsgText(' (msx1_cart.xml)', clMaroon, [fsBold]);
+  FormMain.AddMsgText(' (msx1_cart.xml)', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. '+#13#10+
                       'Both files should be in the following folders (softlist sub-folders are not required in ');
   FormMain.AddMsgText('mame.ini', clBlack, [fsItalic]);
   FormMain.AddMsgText('):'+#13#10#13#10);
   FormMain.AddMsgText('    Atari 2600', clBlack, [fsBold, fsItalic]);
   FormMain.AddMsgText(' (console system)');
-  FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\a2600\hero.zip', clMaroon, [fsBold], taLeftJustify, 9, 'Consolas');
-  FormMain.AddMsgText('  or  ', $00a65300, [fsBold]);
-  FormMain.AddMsgText('d:\emu\mess_roms\a2600\hero.zip', clMaroon, [fsBold], taLeftJustify, 9, 'Consolas');
+  FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\a2600\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
+  FormMain.AddMsgText('  or  ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('d:\emu\mess_roms\a2600\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText(#13#10+#13#10+'    MSX1 Cartridge', clBlack, [fsBold, fsItalic]);
   FormMain.AddMsgText(' (computer system)');
-  FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\msx1_cart\hero.zip', clMaroon, [fsBold], taLeftJustify, 9, 'Consolas');
-  FormMain.AddMsgText('  or  ', $00a65300, [fsBold]);
-  FormMain.AddMsgText('d:\emu\mess_roms\msx1_cart\hero.zip', clMaroon, [fsBold], taLeftJustify, 9, 'Consolas');
+  FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\msx1_cart\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
+  FormMain.AddMsgText('  or  ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('d:\emu\mess_roms\msx1_cart\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText(#13#10+#13#10+'    Easy. The same rule applies to game snapshots and video previews. '+
                       'Go here for more details:'+#13#10);
   FormMain.AddMsgText('http://www.mameworld.info/ubbthreads/showthreaded.php?Cat=&Number=341588&page=0&view=collapsed&sb=5&o=&fpart=1&vc=1&new=',
-                      $00a65300);
+                      MsgTxtColors.colorFileName);
   GenerateMessage('Help', 'Software List Games');
 end;
 

@@ -468,7 +468,7 @@ begin
 
   AddEntry2('Manufacturer', FormMain.MemGameInfo.eManufacturer);
 
-  // AddEntry2('Alternate Title', Utf8Decode('グラディウス')); ... for MAME software listo only
+  // AddEntry2('Alternate Title', Utf8Decode('グラディウス')); ... for MAME software list only
   // maybe ?????
 
   if not FormMain.MemGameInfo.eIsCustomGame then
@@ -897,11 +897,6 @@ var
     else
     if FormMain.IsFileID_BiosCHD(ROMTag) then
        StrCHD:= 'Bios ';
-    //case ROMTag of
-    //  //12, 15, 18, 21: StrCHD:= 'CHD '; // text not required
-    //  13, 16, 19, 22: StrCHD:= 'Dev ';
-    //  14, 17, 20, 23: StrCHD:= 'Bios ';
-    //end;
 
     if ROMTag >= 12 then
        begin
@@ -935,27 +930,6 @@ var
                 Result:= 'Bios'; // bios ROM
            end;
       end;
-
-    //case ROMTag of
-    //  1, 4, 7, 10: // device ROM
-    //    begin
-    //      if not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification) then
-    //         Result:= 'Device';
-    //    end;
-    //  2, 5, 8, 11: // bios ROM
-    //    begin
-    //      if not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification) then
-    //         begin
-    //           if FormMain.MemGameInfo.eSystemID = idSegaModel2 then
-    //              begin
-    //                if FormMain.MemGameInfo.eName <> 'model2' then
-    //                   Result:= 'Board ROM';
-    //              end
-    //           else
-    //              Result:= 'Bios';
-    //         end;
-    //    end;
-    //end;
 
     if IsROMFromParentSet and
        (not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification)) and
@@ -1083,7 +1057,7 @@ var
             if IsNewFileFormat then
                begin
                  tmpString:= romName; // tmpString holds the name of the CHD
-                 //tmpString2:= SoftListGetEntryValue(LineStr, 'parentname'); // tmpString2 is the parent CHD name!!!... info got from code above
+                 //tmpString2:= SoftListGetEntryValue(LineStr, 'parentname'); // tmpString2 is the parent CHD name!!!... info taken from code above
                end;
 
             Item.Caption:= tmpString; // tmpString holds the name of the CHD
@@ -1127,19 +1101,6 @@ var
             if FormMain.IsFileID_BiosCHD(romTagIndex) then
                AddEntry2('   Bios CHD', CHDInfo, Ord(CHDFile <> ''));
 
-            //case romTagIndex of
-            //  12, 15, 18, 21: AddEntry2('   CHD', CHDInfo, Ord(CHDFile <> ''));
-            //  13, 16, 19, 22: AddEntry2('   Device CHD', CHDInfo, Ord(CHDFile <> ''));
-            //  14, 17, 20, 23: AddEntry2('   Bios CHD', CHDInfo, Ord(CHDFile <> ''));
-
-              //15: AddEntry2('   CD', CHDInfo, Ord(CHDFile <> ''));
-              //16: AddEntry2('   Bios CD', CHDInfo, Ord(CHDFile <> ''));
-              //17: AddEntry2('   Device CD', CHDInfo, Ord(CHDFile <> ''));
-
-              //18: AddEntry2('   Flash', CHDInfo, Ord(CHDFile <> ''));
-              //19: AddEntry2('   Bios Flash', CHDInfo, Ord(CHDFile <> ''));
-              //20: AddEntry2('   Device Flash', CHDInfo, Ord(CHDFile <> ''));
-            //end;
             AddMissCHDExtra(CHDFile <> '', tmpString2);
 
             if (tmpString2 <> '') and (tmpString2 <> tmpString) then
@@ -1457,8 +1418,6 @@ var
 begin
   FormMain.ELV_ResetNormalColors(ROMsListView);
   iFormWidth:= FormGameDetails.ClientWidth;
-  //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
-  //FormMain.IL_ArcadeSystem_Large.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
   case FormMain.MemGameInfo.eIsCustomGame of
     True:

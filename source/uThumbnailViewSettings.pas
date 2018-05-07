@@ -347,7 +347,7 @@ begin
        if (not FoundImg_Hor) then
           begin
             FormMain.AddMsgText('File ');
-            FormMain.AddMsgText(FileHor, $00a65300, [fsBold]);
+            FormMain.AddMsgText(FileHor, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' is missing.');
           end;
        if (not FoundImg_Vert) then
@@ -355,7 +355,7 @@ begin
             if not FoundImg_Hor then
                FormMain.AddMsgText(#13#10);
             FormMain.AddMsgText('File ');
-            FormMain.AddMsgText(FileVert, $00a65300, [fsBold]);
+            FormMain.AddMsgText(FileVert, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' is missing.');
           end;
 

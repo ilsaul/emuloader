@@ -960,14 +960,14 @@ function TFormArcadeMAMu_IconsManager.RenameIconFile(OldName, NewName, FilePath:
 begin
   CallMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
-  FormMain.AddMsgText(FilePath+OldName, $00a65300, [fsBold]);
+  FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'To ');
-  FormMain.AddMsgText(FilePath+NewName, $00a65300, [fsBold]);
+  FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
 
   if FileExists(FilePath+NewName) then
      begin
        FormMain.AddMsgText(#13#10+#13#10+'    File ');
-       FormMain.AddMsgText(FilePath+NewName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' already exists. Both .ico and .txt history will be overwritten.');
      end;
   FormMain.AddMsgText(#13#10+#13#10+'Are you sure you want to continue ?');
@@ -1289,7 +1289,7 @@ begin
       begin
         CallMessageBox;
         FormMain.AddMsgText('    Failed to create a blank icon file. File ');
-        FormMain.AddMsgText(BlankIcon, $00a65300, [fsBold]);
+        FormMain.AddMsgText(BlankIcon, MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found!');
         GenerateMessage('Error', PopupCreateEditIcon.Caption, '', 2, False, 1);
       end;
@@ -2235,93 +2235,63 @@ procedure TFormArcadeMAMu_IconsManager.BitBtn3Click(Sender: TObject);
 begin
   // missing icons
   CallMessageBox;
-  FormMain.AddMsgText('Games With Missing Icons', $00a65300, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to create a list of all games without an icon'+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Games With Missing Icons', MsgTxtColors.colorFileName, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to create a list of all games without an icon'+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select a system. There are extra search options in popup menu. Click ');
-  FormMain.AddMsgText('Scan Missing', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Missing', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. Only one system can be listed at a time (no multiple lists).'+#13#10+
                       '    To create a snapshot, run selected game with ');
-  FormMain.AddMsgText('Enter', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key, mouse double-click or ');
-  FormMain.AddMsgText('Play', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Play', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu. You can remove games from the list after taking snapshots with ');
-  FormMain.AddMsgText('Delete', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       '    Use the popup menu to filter your games list. '+
                       'You can also export the list to a .txt file with ');
-  FormMain.AddMsgText('Save Games List To File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Save Games List To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10);
-  FormMain.AddMsgText('Not Used Icons', $00a65300, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to delete icon files that are not used by the games list'+#13#10+#13#10, $00323232, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Not Used Icons', MsgTxtColors.colorFileName, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to delete icon files that are not used by the games list'+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select a system then click ');
-  FormMain.AddMsgText('Scan Not Used', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Scan Not Used', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. If you want to keep a file, remove it from the list with ');
-  FormMain.AddMsgText('Delete', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu ');
-  FormMain.AddMsgText('(files are not actually deleted).', $00323232, [fsItalic]);
+  FormMain.AddMsgText('(files are not actually deleted).', MsgTxtColors.colorBoldTitle, [fsItalic]);
   FormMain.AddMsgText(#13#10+
                       '    If needed, you can update ');
-  FormMain.AddMsgText('el_dir\arcade\el_mamu_exclude.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('el_dir\arcade\el_mamu_exclude.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file with icon file names you want to exclude from the scan (you have to scan files again though).'+
                       #13#10+'You can also export the current list to a .txt file with ');
-  FormMain.AddMsgText('Save To File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Save To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button.'+#13#10+
                       '    To edit icons, select one and press ');
-  FormMain.AddMsgText('Enter', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key, mouse double-click or ');
-  FormMain.AddMsgText('Edit With Associated Editor', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Edit With Associated Editor', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       '    To rename an icon, press ');
-  FormMain.AddMsgText('F2', $00a65300, [fsBold]);
+  FormMain.AddMsgText('F2', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Rename File', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Rename File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in the popup menu.'+#13#10+
                       'History files are stored in ');
-  FormMain.AddMsgText('el_dir\icons_history\', $00a65300, [fsBold]);
+  FormMain.AddMsgText('el_dir\icons_history\', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' folder as ');
-  FormMain.AddMsgText('icon_filename.txt', $00a65300, [fsBold]);
+  FormMain.AddMsgText('icon_filename.txt', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' format.'+#13#10+
                       '    After editing an icon, the info must be update manually with ');
-  FormMain.AddMsgText('Update Icon Info', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Update Icon Info', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       'Only 1 (one) system is supported at a time. Click ');
-  FormMain.AddMsgText('Delete Not Used Icons', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Delete Not Used Icons', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to delete all files listed. Recycle bin is NOT supported.');
   GenerateMessage('Help', 'Usage tips.', '', 2);
-
-  {GenerateMessage('Help', 'Usage tips.',
-    '--> Games With Missing Icons <--'+#13#10+#13#10+
-    '    How to create a list of all games without an icon. Select a system and then click on '+
-    '"Scan Missing" button. If you want to search icons for clone games, '+
-    'check "Search Icons for Clone Games" option in popup menu. Only one system can be '+
-    'listed at a time (no multiple lists).'+#13#10+
-    '    To create a snapshot, run the selected game by pressing ENTER key, mouse double-click '+
-    'or selecting "Play" in the popup menu". After taking the snapshot you can remove the game '+
-    'from the list by pressing DELETE key or selecting "Remove Selected" in the popup menu.'+#13#10+
-    'In the popup menu you will find a games filter to list only parents, clones or bios. '+
-    'You can also export the list to a .txt file, by using the "Save Games List To File" in popup menu.'+#13#10+#13#10+
-    //'Do a mouse right-click to call the popup menu for more options. To create an icon select "Create [gamename] And Edit With Associated Editor". After you're done, select "Remove Game From List [system_name]" to delete the game from the list. Non-working games have a "Preliminary" driver status.
-
-  // not used icons
-    '--> Not Used Icons <--'+#13#10+#13#10+
-    '    How to delete icon files that are not used by the games list. Select a system '+
-    'then click "Scan Not Used" button. If you want to keep a file, remove it from the list '+
-    'by pressing "DELETE" key or using the "Remove Selected" popup menu (files are not actually deleted).'+#13#10+
-    '    If needed, you can update the file "<emuloader>\arcade\el_mamu_exclude.ini" with file names that '+
-    'you want to exclude from the scan (you have to scan files again though).'+#13#10+'You can also export the '+
-    'current list to a .txt file by using the "Save To File" button.'+#13#10+
-    ' You can edit icons by selecting one and pressing ENTER key, or mouse double-click or using the '+
-    'popup menu.'+#13#10+
-    ' To rename an icon, press "F2" hotkey or use "Rename File" option in the popup menu.'+#13#10+
-    '    History files are stored in "el_folder\icons_history\" folder and the filename is the icon filename but '+
-    'with ".txt" extension.'+#13#10+
-    ' After editing an icon, the info needs to be update manually. Use "Update Icon Info" in popup menu.'+#13#10+
-    '    Only 1 (one) system is supported at a time. Click "DELETE NOT USED ICONS" button to delete all files listed. '+
-    'Recycle bin is NOT supported.', 2);}
 end;
 
 procedure TFormArcadeMAMu_IconsManager.MissingIconsListColumnSizeChanging(

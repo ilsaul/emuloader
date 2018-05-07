@@ -5,7 +5,7 @@ interface
 uses
   Windows, Classes, Graphics, Controls, Forms, SysUtils,
   Buttons, StdCtrls, ComCtrls, ExtCtrls, ShadowLabel, Messages, PanelEx,
-  RichEditURL, ShellAPI;
+  RichEditURL, ShellAPI, AdvOfficeButtons;
 
 type
   TFormMessageBox = class(TForm)
@@ -20,11 +20,13 @@ type
     ButtonYestoAll: TBitBtn;
     ButtonAbort: TBitBtn;
     IconMediaType: TImage;
+    NightMode: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure LabelMessageURLClick(Sender: TObject; const URL: String);
     procedure LabelMessageResizeRequest(Sender: TObject; Rect: TRect);
     procedure FormCreate(Sender: TObject);
+    procedure NightModeClick(Sender: TObject);
   private
     { Private declarations }
     RichEditHeight: Integer;
@@ -116,9 +118,19 @@ begin
   end;
 
   if PanelMessages.Tag = 1 then
-     PanelTop.Color1:= $00e5f0fa // red
+     begin
+       if IsNightMode then
+         PanelTop.Color1:= $0000004b
+       else
+          PanelTop.Color1:= $00e5f0fa; // red
+     end
   else
-     PanelTop.Color1:= $00faf0e5; // blue
+     begin
+       if IsNightMode then
+          PanelTop.Color1:= $00590000
+       else
+          PanelTop.Color1:= $00faf0e5; // blue
+     end;
 
   // $00faf0e5 // blue
   // $00e5f0fa // red
@@ -204,6 +216,12 @@ end;
 procedure TFormMessageBox.FormCreate(Sender: TObject);
 begin
   LabelMessage.Height:= 1300;
+end;
+
+procedure TFormMessageBox.NightModeClick(Sender: TObject);
+begin
+  IsNightMode:= NightMode.Checked;
+  PopulateMsgColors;
 end;
 
 end.

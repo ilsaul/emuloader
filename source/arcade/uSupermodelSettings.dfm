@@ -15,6 +15,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow

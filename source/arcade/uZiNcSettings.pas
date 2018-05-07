@@ -502,9 +502,6 @@ end;
 procedure TFormZiNcSettings.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
-  //FormMain.IL_Systems.GetIcon(idZiNc, SystemIcon.Picture.Icon);
-  //FormMain.IL_ArcadeSystem_Large.GetIcon(idZiNc, SystemIcon.Picture.Icon);
-  //FormMain.LoadSystemThumbIcon(SystemIcon, 2);
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idZiNc, emuVersionStr);
 
   //if FormMain.EmulatorVersion[idZiNc] <> '' then
@@ -549,8 +546,6 @@ begin
        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
-       //FormMain.IL_ArcadeSystem_Large.GetIcon(idZiNc, GameIcon.Picture.Icon);
        case FormMain.MemGameInfo.eGameSetStatus of
          0: TopBar.Color1:= $00f0fae5; // green
          1: TopBar.Color1:= $00e5f0fa; // red (based on green)

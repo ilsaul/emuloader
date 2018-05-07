@@ -614,18 +614,18 @@ begin
   FormMain.AddMsgText(' machine type include MAME games.'+#13#10+'The ');
   FormMain.AddMsgText('MAME Machine Without Software List', clBlack, [fsBold]);
   FormMain.AddMsgText(' option require AntoPISA''s ');
-  FormMain.AddMsgText('mess.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('mess.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file to work.'+#13#10+#13#10+'    Checking options ');
-  FormMain.AddMsgText('All Arcade Systems', $00a65300, [fsBold]);
+  FormMain.AddMsgText('All Arcade Systems', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('All Console/Computer/Handheld Systems', $00a65300, [fsBold]);
+  FormMain.AddMsgText('All Console/Computer/Handheld Systems', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will show or hide ');
   FormMain.AddMsgText('all', clBlack, [fsBold]);
   FormMain.AddMsgText(' systems, but they will ');
   FormMain.AddMsgText('not', clBlack, [fsBold]);
   FormMain.AddMsgText(' change the checked status of individual systems.'+#13#10+#13#10+
                       '    Filter settings are saved in ');
-  FormMain.AddMsgText('EmuLoader.ini', $00a65300, [fsBold]);
+  FormMain.AddMsgText('EmuLoader.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' when you exit the frontend.'+#13#10+#13#10+
                       '    You can find more options for systems panel in the popup menu (mouse right-click).');
 

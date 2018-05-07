@@ -58,8 +58,8 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
-    newSnapshotFolderArcade: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)-1] of String;
-    newSnapshotFolderConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)-1] of String;
+    newSnapshotFolderArcade: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of String;
+    newSnapshotFolderConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
     //UpdateFolderArcade: packed
 
     procedure ResizeForm;
@@ -89,13 +89,13 @@ var
 begin
   for LoopSys:= 1 to MaxArcadeSystems do
   begin
-    for LoopCategory:= 0 to High(ImageCategoryArray)-1 do
+    for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
         newSnapshotFolderArcade[LoopSys, LoopCategory]:= FormMain.imgFolder[LoopSys, LoopCategory];
   end;
 
   for LoopSys:= 1 to MaxConsoleComputerSystems do
   begin
-    for LoopCategory:= 0 to High(ImageCategoryArray)-1 do
+    for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
         newSnapshotFolderConsComp[LoopSys, LoopCategory]:= SnapshotFolderCustom[LoopSys, LoopCategory];
   end;
 end;
@@ -108,7 +108,7 @@ begin
   // MAME / arcade
   for LoopSys:= 1 to MaxArcadeSystems do
   begin
-    for LoopCategory:=0 to High(ImageCategoryArray)-1 do
+    for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
       if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
          FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
@@ -118,28 +118,22 @@ begin
   // console/computer (EmuCon)
   for LoopSys:= 1 to MaxConsoleComputerSystems do
   begin
-    for LoopCategory:=0 to High(ImageCategoryArray)-1 do
+    for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
       if SnapshotFolderCustom[LoopSys, LoopCategory] <> newSnapshotFolderConsComp[LoopSys, LoopCategory] then
          SnapshotFolderCustom[LoopSys, LoopCategory]:= newSnapshotFolderConsComp[LoopSys, LoopCategory];
     end;
   end;
 
-  FormMain.PopupMenuImageCategories.BeginUpdate;
   Item:= ImageCategory_Selector.Groups.FirstItem;
   repeat
     // update img categories background color
-    if FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Tag <> Item.Tag then
-       FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Tag:= Item.Tag;
-
-    FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Visible:= Item.Checked; // show/hide categories in images buttons tool bar
-
+    FormMain.ImageCategorySettings[Item.ImageIndex].BackgroundColor:= Item.Tag;
+    FormMain.ImageCategorySettings[Item.ImageIndex].Visible:= Item.Checked; // show/hide categories in images buttons tool bar
     Item:= ImageCategory_Selector.Groups.NextItem(Item);
   until Item = nil;
-
-  FormMain.PopupMenuImageCategories.EndUpdate;
   // update FormMain.imgFolder[] and uCommon.SnapshotFolderCustom[] arrays from temp image folder arrays
-  // update category background colors (from EasyListView to FormMain.PopupMenuImageCategories)
+  // update category background colors from EasyListView to FormMain.ImageCategorySettings[] array
 end;
 
 procedure TFormImageCategorySettings.UpdateCategorySettingsIni;
@@ -152,9 +146,9 @@ begin
 
   for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
   begin
-    ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.PopupMenuImageCategories.Items[Loop].Tag);
+    ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.ImageCategorySettings[Loop].BackgroundColor);
     if Loop <> 1 then
-       ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', Ord(FormMain.PopupMenuImageCategories.Items[Loop].Visible));
+       ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', Ord(FormMain.ImageCategorySettings[Loop].Visible));
   end;
 
   ImgIniFile.UpdateFile;
@@ -174,15 +168,13 @@ begin
 
   if not FormMain.CheckSelected(Systems) then
      Exit;
-  if ImageCategory_Selector.Tag < High(ImageCategoryArray) then
-     begin
-       ImageCategoryBackgroundColor.Selected:= ImageCategory_Selector.Selection.First.Tag; // for img category background color
-       // need to keep track of the selected system type (arcade or EmuCon)
-       if FormMain.ELV_IsArcadeSystemSelected(Systems) then
-          ImageCategoryFolder.Text:= newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]
-       else
-          ImageCategoryFolder.Text:= newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag];
-     end;
+
+  ImageCategoryBackgroundColor.Selected:= ImageCategory_Selector.Selection.First.Tag; // for img category background color
+  // need to keep track of the selected system type (arcade or EmuCon)
+  if FormMain.ELV_IsArcadeSystemSelected(Systems) then
+     ImageCategoryFolder.Text:= newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]
+  else
+     ImageCategoryFolder.Text:= newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag];
 end;
 
 procedure TFormImageCategorySettings.SystemsItemSelectionChanged(
@@ -227,7 +219,7 @@ var
 begin
   if CheckSystemAndImageCatSelected then
      begin
-       iStr:= 'Select a folder for '+FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Tag].Caption+
+       iStr:= 'Select a folder for '+GetImageCategoryTitle(ImageCategory_Selector.Tag)+
               ' ['+GetSystemTypeTitle(Systems.Tag, FormMain.ELV_IsArcadeSystemSelected(Systems))+']'+#13#10;
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
           iStr:= iStr+FormMain.GetArcadeEmulatorDescription(Systems.Tag)
@@ -240,9 +232,6 @@ begin
      begin
        GenerateMessage('Error', 'Missing selection.', '    Either the system or image category is not selected! Aborting...');
      end;
-
-     //FormMain.DialogSelectFolder(ImageCategoryFolder, False, 'Select a folder for '+
-     //                            FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Tag].Caption+' ['+GetSystemTypeTitle();
 end;
 
 procedure TFormImageCategorySettings.ResizeForm;
@@ -255,11 +244,9 @@ begin
        FormImageCategorySettings.Height:= 675; // 694;
 
        Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= Systems.Height-iDiff+LabelEmuTitle.Height;// FormImageCategorySettings.ClientHeight;
+       Systems.Height:= Systems.Height-iDiff+LabelEmuTitle.Height;
        PanelImageCategories.Left:= PanelImageCategories.Left+Systems.CellSizes.Icon.Width-1;
-       //PanelImageCategorySelector.Height:= PanelImageCategorySelector.Height-19;
        FormImageCategorySettings.ClientWidth:= FormImageCategorySettings.ClientWidth+Systems.CellSizes.Icon.Width;
-       //PanelBottomButtons.Top:= PanelBottomButtons.Top-19;//82;
 
        SystemTitlePanel.Color1:= clWhite;
        SystemTitlePanel.Width:= 432;
@@ -279,18 +266,6 @@ begin
        ButtonZippedImages.Left:= ButtonZippedImages.Left+Systems.CellSizes.Icon.Width;
        ButtonOk.Left:= ButtonOk.Left+Systems.CellSizes.Icon.Width;
        ButtonCancel.Left:= ButtonCancel.Left+Systems.CellSizes.Icon.Width;
-
-       //LabelRelativePathsTip.Top:= LabelRelativePathsTip.Top-12;
-       //LabelZippedFilesTip.Top:= LabelZippedFilesTip.Top-12;
-       //LabelGameSnapUsedByVideoPreviewTip.Top:= LabelGameSnapUsedByVideoPreviewTip.Top-12;
-
-       //{for Loop:=0 to FormCustomSnapshotsSettings.ControlCount-1 do
-       //begin
-       //  if (FormCustomSnapshotsSettings.Controls[Loop].Name <> 'Systems') and
-       //     (FormCustomSnapshotsSettings.Controls[Loop].Name <> 'ButtonOk') and
-       //     (FormCustomSnapshotsSettings.Controls[Loop].Name <> 'ButtonCancel') then
-       //     FormCustomSnapshotsSettings.Controls[Loop].Left:= FormCustomSnapshotsSettings.Controls[Loop].Left+Systems.CellSizes.Icon.Width;
-       //end;
      end;
 end;
 
@@ -309,17 +284,9 @@ begin
 
   PopulateFolders;
 
-  FormMain.ELV_PopulateImageCategory(ImageCategory_Selector, 0);
-  //ImageCategory_Selector.Items[High(ImageCategoryArray)].Enabled:= False; // needed for arcade systems; does nothing for console/computer systems
+  FormMain.ELV_PopulateImageCategory(ImageCategory_Selector, True, False, 0);
 
   FormMain.ELV_PopulateSystemsMulti(Systems, 1, True, True, True);
-
-  //ELV_PopulateCustomSystems(Systems, -1, -1, True); // no longer used
-
-  //case FormMain.CheckSelected(FormMain.GamesListView) of
-  //  True : FormMain.ELV_PopulateSystems(Systems, FormMain.MemGameInfo.eSystemID, -1, True);
-  //  False: FormMain.ELV_PopulateSystems(Systems, -1, -1, True);
-  //end;
 end;
 
 procedure TFormImageCategorySettings.FormCloseQuery(Sender: TObject;
@@ -348,10 +315,11 @@ begin
                       '3. To set a background color, select a category and then the color of your choice. This setting '+
                       'is the same for all systems!'+#13#10+#13#10+
                       '    When you''re done, click ');
-  FormMain.AddMsgText('Apply', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to save and apply changes or click ');
-  FormMain.AddMsgText('Abort', $00a65300, [fsBold]);
-  FormMain.AddMsgText(' button to cancel any changes you''ve made.');
+  FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(' button to cancel any changes you''ve made.'+#13#10+#13#10+
+                      '    Disabled systems are visible with ghosted icon and gray text, and you can change their settings, except folder paths for MAME/HBMAME.');
   GenerateMessage('Help', 'How to setup images.', '', 2);
 
 end;
@@ -390,20 +358,7 @@ begin
   if not FormMain.CheckSelected(Systems) then
      Exit;
   ImageCategory_Selector.Tag:= Item.ImageIndex;
-  LabelCategoryTitle.Caption:= UpperCase(FormMain.PopupMenuImageCategories.Items[Item.ImageIndex].Caption); // no longer needed, img_cat caption is in the icon anyway... (February 12, 2017)
-  if ImageCategory_Selector.Tag = High(ImageCategoryArray) then
-     LabelCategoryTitle.Caption:= LabelCategoryTitle.Caption+' (MAME / SOFTWARE LIST)';
-
-  ImageCategoryFolder.Enabled:= ImageCategory_Selector.Tag < High(ImageCategoryArray);
-  LabelImageCategoryFolder.Enabled:= ImageCategoryFolder.Enabled;
-  ButtonImageCategoryFolder.Enabled:= ImageCategoryFolder.Enabled;
-  ButtonClearImageCategoryFolder.Enabled:= ImageCategoryFolder.Enabled;
-  ButtonResetImageCategoryFolder.Enabled:= ImageCategoryFolder.Enabled;
-  ButtonDefaultImageCategoryFolder.Enabled:= ImageCategoryFolder.Enabled;
-
-  ImageCategoryBackgroundColor.Enabled:= ImageCategoryFolder.Enabled;
-  LabelImageBackgroundColor.Enabled:= ImageCategoryFolder.Enabled;
-  ButtonImageCategoryBackgroundColorReset.Enabled:= ImageCategoryFolder.Enabled;
+  LabelCategoryTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex)); // no longer needed, img_cat caption is in the icon anyway... (February 12, 2017)
 
   if ImageCategoryBackgroundColor.Font.Color <> clBlack then
      ImageCategoryBackgroundColor.Font.Color:= clBlack;
@@ -419,22 +374,13 @@ begin
   if FormMain.ELV_IsArcadeSystemSelected(Systems) then
   begin
     case FormMain.ImagesPNGOnly(ImageCategory_Selector.Tag) of
-      True:
-        begin
-          LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png']);
-        end;
-      False:
-        begin
-          if ImageCategory_Selector.Tag < High(ImageCategoryArray) then
-             LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png; .jpg']);
-        end;
+      True : LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png']);
+      False: LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png; .jpg']);
     end;
   end
   else
-  begin
-    if ImageCategory_Selector.Tag < High(ImageCategoryArray) then
-       LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png; .jpg']);
-  end;
+     LabelImageCategoryFolder.Caption:= Format(LabelImageCategoryFolder.Hint, ['.png; .jpg']);
+
   SetImageCategoryValues;
 end;
 
@@ -475,7 +421,7 @@ begin
   ImageCategory_Selector.BeginUpdate;
   Item:= ImageCategory_Selector.Groups.FirstItem;
   repeat
-    if not (Item.ImageIndex in [1, High(ImageCategoryArray)]) then
+    if Item.ImageIndex <> 1 then // In-Game Snapshot cannot be disabled
        Item.Checked:= Boolean(TShadowLabel(Sender).Tag);
     Item:= ImageCategory_Selector.Groups.NextItem(Item);
   until Item = nil;
@@ -491,9 +437,6 @@ end;
 procedure TFormImageCategorySettings.ImageCategoryBackgroundColorSelect(
   Sender: TObject);
 begin
-  // do not change the color .Tag in FormMain.PopupMenuImageCategories;
-  // this will only be done if user clicks OK button; clicking Abort button does not update it
-  // I can use "ImageCategory_Selector.Selection.First.Tag" to hold the new value instead of using a new array var
   if FormMain.CheckSelected(ImageCategory_Selector) then
      ImageCategory_Selector.Selection.First.Tag:= ImageCategoryBackgroundColor.Selected;
 end;
@@ -502,7 +445,7 @@ procedure TFormImageCategorySettings.ButtonImageCategoryBackgroundColorResetClic
   Sender: TObject);
 begin
   if FormMain.CheckSelected(ImageCategory_Selector) then
-     ImageCategoryBackgroundColor.Selected:= FormMain.PopupMenuImageCategories.Items[ImageCategory_Selector.Selection.First.ImageIndex].Tag;
+     ImageCategoryBackgroundColor.Selected:= FormMain.ImageCategorySettings[ImageCategory_Selector.Selection.First.ImageIndex].BackgroundColor;
 end;
 
 procedure TFormImageCategorySettings.FormActivate(Sender: TObject);

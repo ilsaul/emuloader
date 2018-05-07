@@ -46,6 +46,12 @@ object FormPreferences: TFormPreferences
       Down = True
       Caption = 'General'
       Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
       OnClick = ButtonGeneralClick
     end
     object ButtonGamesList: TSpeedButton
@@ -87,6 +93,7 @@ object FormPreferences: TFormPreferences
     Top = 0
     Width = 546
     Height = 392
+    PageIndex = 1
     TabOrder = 0
     object TPage
       Left = 0
@@ -842,17 +849,17 @@ object FormPreferences: TFormPreferences
       HelpContext = 2
       Caption = 'Images'
       object LabelImagePanelOuterFrameColor: TLabel
-        Left = 107
-        Top = 130
-        Width = 171
+        Left = 16
+        Top = 124
+        Width = 130
         Height = 15
-        Caption = 'Images Panel Outer Frame Color'
+        Caption = 'Panel Outer Frame Color'
         ShowAccelChar = False
         Transparent = True
       end
       object LabelFixRetroArchImageFileNames: TLabel
-        Left = 123
-        Top = 369
+        Left = 32
+        Top = 234
         Width = 238
         Height = 18
         Caption = 'Replace & * '#39' < > ? | chars by _ (underscore)'
@@ -866,11 +873,11 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object LabelImageDisableThreadedLoading: TLabel
-        Left = 123
-        Top = 331
-        Width = 280
+        Left = 32
+        Top = 194
+        Width = 223
         Height = 18
-        Caption = 'Prevent delay and "invalid pointer operation" error'
+        Caption = 'Fix delay and "invalid pointer operation"'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
         Font.Height = -12
@@ -881,17 +888,17 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object GroupBoxImageLayoytSplitters: TAdvGroupBox
-        Left = 107
+        Left = 16
         Top = 12
-        Width = 290
-        Height = 103
+        Width = 257
+        Height = 99
         RoundEdges = True
-        Caption = 'Layout View Mode - Image Splitters'
+        Caption = 'Multiple Images Splitters'
         Ctl3D = True
         TabOrder = 0
         object LabelImageLayoutSplitterSingleColor: TLabel
           Left = 8
-          Top = 24
+          Top = 48
           Width = 29
           Height = 15
           Caption = 'Color'
@@ -899,7 +906,7 @@ object FormPreferences: TFormPreferences
         end
         object LabelImageLayoutSplitterSingleColorHot: TLabel
           Left = 8
-          Top = 49
+          Top = 73
           Width = 52
           Height = 15
           Caption = 'Hot Color'
@@ -907,7 +914,7 @@ object FormPreferences: TFormPreferences
         end
         object ImageEnableGripIcon: TAdvOfficeCheckBox
           Left = 8
-          Top = 72
+          Top = 20
           Width = 107
           Height = 20
           Hint = 'Show/hide grip icon in the middle of the image splitters'
@@ -922,8 +929,8 @@ object FormPreferences: TFormPreferences
         end
         object ImageLayoutSplitterSingleColor: TColorBox
           Left = 64
-          Top = 20
-          Width = 221
+          Top = 44
+          Width = 187
           Height = 22
           Hint = 'Color of the splitter'
           NoneColorColor = clBtnFace
@@ -936,8 +943,8 @@ object FormPreferences: TFormPreferences
         end
         object ImageLayoutSplitterSingleColorHot: TColorBox
           Left = 64
-          Top = 46
-          Width = 221
+          Top = 70
+          Width = 187
           Height = 22
           Hint = 'Color of the splitter while hovering mouse'
           DefaultColorColor = clGray
@@ -951,8 +958,8 @@ object FormPreferences: TFormPreferences
           OnSelect = ImageLayoutSplitterSingleColorHotSelect
         end
         object ButtonImageLayoutSplitterSingleColorDefault: TBitBtn
-          Left = 236
-          Top = 72
+          Left = 203
+          Top = 16
           Width = 47
           Height = 23
           Hint = 'Set single color default values'
@@ -962,9 +969,9 @@ object FormPreferences: TFormPreferences
         end
       end
       object ImagePanelOuterFrameColor: TColorBox
-        Left = 107
-        Top = 148
-        Width = 225
+        Left = 16
+        Top = 142
+        Width = 191
         Height = 22
         NoneColorColor = clWhite
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
@@ -973,8 +980,8 @@ object FormPreferences: TFormPreferences
         OnSelect = ImagePanelOuterFrameColorSelect
       end
       object ButtonImagePanelOuterFrameColorDefault: TBitBtn
-        Left = 347
-        Top = 147
+        Left = 222
+        Top = 141
         Width = 47
         Height = 23
         Caption = 'Default'
@@ -983,10 +990,14 @@ object FormPreferences: TFormPreferences
       end
       object GroupBoxInternetGameInfo: TAdvGroupBox
         Left = 16
-        Top = 180
-        Width = 473
-        Height = 125
-        Caption = 'Internet Game Info'
+        Top = 268
+        Width = 514
+        Height = 106
+        RoundEdges = True
+        Caption = 
+          'Internet Game Info                                              ' +
+          '                                                                ' +
+          '                  '
         Ctl3D = True
         TabOrder = 3
         object LabelInternetGameInfoLink: TLabel
@@ -1004,13 +1015,11 @@ object FormPreferences: TFormPreferences
           Caption = 'MAME Software List Game Info Link'
         end
         object Label5: TLabel
-          Left = 13
-          Top = 104
-          Width = 444
+          Left = 115
+          Top = 1
+          Width = 287
           Height = 14
-          Caption = 
-            'You must use      tags so they can be replaced by               ' +
-            '   and                  .'
+          Caption = 'Tag       required to be replaced by                  and'
           Font.Charset = ANSI_CHARSET
           Font.Color = clNavy
           Font.Height = -12
@@ -1021,13 +1030,13 @@ object FormPreferences: TFormPreferences
           Transparent = True
         end
         object Label6: TLabel
-          Left = 92
-          Top = 104
-          Width = 362
+          Left = 141
+          Top = 1
+          Width = 347
           Height = 14
           Caption = 
-            '%s                                              game name       ' +
-            'softlist name'
+            '%s                                       game name       softwar' +
+            'e name'
           Font.Charset = ANSI_CHARSET
           Font.Color = clMaroon
           Font.Height = -12
@@ -1040,14 +1049,14 @@ object FormPreferences: TFormPreferences
         object InternetGameInfoLink: TEdit
           Left = 8
           Top = 36
-          Width = 409
+          Width = 450
           Height = 21
           AutoSize = False
           Color = clWhite
           TabOrder = 0
         end
         object InternetGameInfoLinkButtonDefault: TBitBtn
-          Left = 418
+          Left = 459
           Top = 35
           Width = 47
           Height = 23
@@ -1059,14 +1068,14 @@ object FormPreferences: TFormPreferences
         object InternetMAMESoftwareListGameInfoLink: TEdit
           Left = 8
           Top = 76
-          Width = 409
+          Width = 450
           Height = 21
           AutoSize = False
           Color = clWhite
           TabOrder = 2
         end
         object InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn
-          Left = 418
+          Left = 459
           Top = 75
           Width = 47
           Height = 23
@@ -1077,19 +1086,19 @@ object FormPreferences: TFormPreferences
         end
       end
       object FixRetroArchImageFileNames: TAdvOfficeCheckBox
-        Left = 107
-        Top = 352
-        Width = 298
+        Left = 16
+        Top = 217
+        Width = 185
         Height = 20
         TabOrder = 4
         Alignment = taLeftJustify
-        Caption = 'Fix RetroArch Image File Names (Show Images Only)'
+        Caption = 'Fix RetroArch Image File Name'
         ReturnIsTab = False
         Themed = True
       end
       object ImageDisableThreadedLoading: TAdvOfficeCheckBox
-        Left = 107
-        Top = 314
+        Left = 16
+        Top = 177
         Width = 244
         Height = 20
         TabOrder = 5
@@ -1097,6 +1106,197 @@ object FormPreferences: TFormPreferences
         Caption = 'Disable Threaded Preview Images Loading'
         ReturnIsTab = False
         Themed = True
+      end
+      object HintBoxSettings: TAdvGroupBox
+        Left = 287
+        Top = 12
+        Width = 243
+        Height = 245
+        RoundEdges = True
+        Caption = 'Hint Box'
+        Ctl3D = True
+        TabOrder = 6
+        object LabelHintBox_Color: TLabel
+          Left = 8
+          Top = 48
+          Width = 29
+          Height = 15
+          Caption = 'Color'
+          Transparent = True
+        end
+        object LabelHintBox_FrameColor: TLabel
+          Left = 8
+          Top = 74
+          Width = 33
+          Height = 15
+          Caption = 'Frame'
+          Transparent = True
+        end
+        object LabelHintBox_Opacity: TLabel
+          Left = 8
+          Top = 97
+          Width = 70
+          Height = 15
+          Caption = 'Opacity [200]'
+        end
+        object LabelHintBox_TextColor: TLabel
+          Left = 8
+          Top = 192
+          Width = 22
+          Height = 15
+          Caption = 'Text'
+          Transparent = True
+        end
+        object LabelHintBox_TextShadowColor: TLabel
+          Left = 8
+          Top = 218
+          Width = 42
+          Height = 15
+          Caption = 'Shadow'
+          Transparent = True
+        end
+        object HintBox_Color: TColorBox
+          Left = 49
+          Top = 44
+          Width = 187
+          Height = 22
+          Hint = 'Hint box background color'
+          DefaultColorColor = 16750899
+          NoneColorColor = clBtnFace
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 0
+        end
+        object HintBox_FrameColor: TColorBox
+          Left = 49
+          Top = 70
+          Width = 187
+          Height = 22
+          Hint = 'Hint box frame color'
+          DefaultColorColor = 16750899
+          NoneColorColor = clBtnFace
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 1
+        end
+        object HintBox_FrameEnabled: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 109
+          Height = 20
+          Checked = True
+          TabOrder = 2
+          Alignment = taLeftJustify
+          Caption = 'Show Box Frame'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object HintBox_Opacity: TGaugeBar
+          Left = 8
+          Top = 113
+          Width = 177
+          Height = 20
+          Hint = 'Transparency level of the hint box'
+          Color = clWhite
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 5
+          Max = 255
+          ShowHandleGrip = True
+          Position = 200
+          OnChange = HintBox_OpacityChange
+        end
+        object ButtonDefaultHintBox_Opacity: TBitBtn
+          Left = 188
+          Top = 112
+          Width = 47
+          Height = 22
+          Hint = 'Set opacity to default level'
+          Caption = 'Default'
+          TabOrder = 4
+          OnClick = ButtonDefaultHintBox_OpacityClick
+        end
+        object HintBox_TextShadowColor: TColorBox
+          Left = 53
+          Top = 214
+          Width = 182
+          Height = 22
+          Hint = 'Text shadow color'
+          NoneColorColor = clBtnFace
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 5
+        end
+        object HintBox_TextColor: TColorBox
+          Left = 53
+          Top = 188
+          Width = 182
+          Height = 22
+          Hint = 'Text color'
+          DefaultColorColor = clWhite
+          NoneColorColor = clBtnFace
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 6
+        end
+        object ButtonHintBoxDefaultColors: TBitBtn
+          Left = 188
+          Top = 16
+          Width = 47
+          Height = 23
+          Hint = 'Set hint box colors to default'
+          Caption = 'Default'
+          TabOrder = 7
+          OnClick = ButtonHintBoxDefaultColorsClick
+        end
+        object ButtonHintTextDefaultColors: TBitBtn
+          Left = 188
+          Top = 144
+          Width = 47
+          Height = 23
+          Hint = 'Set text colors to default'
+          Caption = 'Default'
+          TabOrder = 8
+          OnClick = ButtonHintTextDefaultColorsClick
+        end
+        object HintBox_TextShadowEnabled: TAdvOfficeCheckBox
+          Left = 8
+          Top = 164
+          Width = 120
+          Height = 20
+          Checked = True
+          TabOrder = 9
+          Alignment = taLeftJustify
+          Caption = 'Show Text Shadow'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object HintBox_IconEnabled: TAdvOfficeCheckBox
+          Left = 8
+          Top = 146
+          Width = 171
+          Height = 20
+          Checked = True
+          TabOrder = 10
+          Alignment = taLeftJustify
+          Caption = 'Show Unzipped/Zipped Icon'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
       end
     end
     object TPage

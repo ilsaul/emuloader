@@ -23,15 +23,14 @@ type
     ButtonCancel: TBitBtn;
     ShadowNewName: TShadowLabel;
     ImageCategoryIcon: TImage;
-    LabelImageCategory: TShadowLabel;
     Shape1: TShape;
     LabelSoftwareListTitle: TShadowLabel;
     LabelFileSize: TShadowLabel;
     LabelDateTime: TShadowLabel;
     LabelFileType: TShadowLabel;
     LabelFileTypeMismatch: TShadowLabel;
-    LabelWarningUnicodeFileName: TShadowLabel;
     MediaTypeIcon: TImage;
+    LabelDimensions: TShadowLabel;
     procedure ResizeForm;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -95,9 +94,6 @@ begin
 
   FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, MediaTypeIcon, FormMain.MemGameInfo.eSoftwareExecParameter);
 
-  //FormMain.LoadGameIDThumbIcon(GameIcon, FormMain.MemGameInfo.eROMIdentification);
-  //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
-
   LabelGameDetails.Caption:= LabelGameDetails.Caption+FormMain.StatusBar_GamesGameName.Caption;
   if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
      LabelGameDetails.Caption:= LabelGameDetails.Caption+#13#10+'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
@@ -126,39 +122,30 @@ begin
     ifPNG:
       begin
         LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.png');
-        LabelFileType.Caption:= 'File Type: Portable Network Graphics (PNG)';
+        LabelFileType.Caption:= 'Type: Portable Network Graphics (PNG)';
       end;
     ifJPG:
       begin
         LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.jpg');
-        LabelFileType.Caption:= 'File Type: Joint Photographic Experts Group (JPEG)';
+        LabelFileType.Caption:= 'Type: Joint Photographic Experts Group (JPEG)';
       end;
     ifGIF:
       begin
         LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.gif');
-        LabelFileType.Caption:= 'File Type: Graphics Interchange Format (GIF)';
+        LabelFileType.Caption:= 'Type: Graphics Interchange Format (GIF)';
       end;
     ifBMP:
       begin
         LabelFileTypeMismatch.Visible:= not SameText(iFileExt, '.bmp');
-        LabelFileType.Caption:= 'File Type: Bitmap Image (BMP)';
+        LabelFileType.Caption:= 'Type: Bitmap Image (BMP)';
       end;
   end;
 
+  LabelDimensions.Caption:= 'Dimensions: '+IntToStr(ImagePreview.Bitmap.Width)+'x'+IntToStr(ImagePreview.Bitmap.Height);
   LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSizeW(ImageFileName), False);
   LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAgeW(ImageFileName));
 
-  FormMain.IL_ImagesCategory_Small.GetIcon(ImageCategoryIcon.Tag, ImageCategoryIcon.Picture.Icon);
-  case ImageCategoryIcon.Tag of
-    0: LabelImageCategory.Caption:= 'Title';
-    1: LabelImageCategory.Caption:= 'Snap';
-    5: LabelImageCategory.Caption:= 'CPanel';
-    6: LabelImageCategory.Caption:= 'Cover';
-    8: LabelImageCategory.Caption:= 'Game Art';
-    15: LabelImageCategory.Caption:= 'How To';
-  else
-       LabelImageCategory.Caption:= ImageCategoryArray[ImageCategoryIcon.Tag, 1];
-  end;
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
 
   mmResult:= mrCancel;
   RenameImageEditBox.Visible:= FormImageDeleteRename.Tag = 1;

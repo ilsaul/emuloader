@@ -1067,18 +1067,18 @@ begin
   FileStr:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
   CallMessageBox;
   //ShowGameNameEntryMsgBox;
-  FormMain.AddMsgText('Emulator   ', $000053a6, [fsItalic, fsBold], taCenter);
-  FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, clGray, [fsItalic, fsBold], taCenter);
+  FormMain.AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+  FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
   if FormMain.MemGameInfo.eSoftwareName <> '' then
      begin
-       FormMain.AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
-       FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+       FormMain.AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+       FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter, 9);
      end;
   FormMain.AddMsgText(#13#10);
 
   FormMain.AddMsgText('File:'+#13#10, clBlack, [fsBold]);
-  FormMain.AddMsgText(FileStr+#13#10, $00600000, [], taLeftJustify, 10, 'Lucida Console');
+  FormMain.AddMsgText(FileStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Lucida Console');
   FormMain.AddMsgText('Size: ', clBlack, [fsBold]);
   FormMain.AddMsgText(TFileInfo(Item).eSizeText+#13#10);
   FormMain.AddMsgText('Date modified: ', clBlack, [fsBold]);
@@ -2010,15 +2010,15 @@ begin
                                 #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
 
             if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
             else
             if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
             else
-               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
 
             FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' and overwrite the file above ?');
 
             if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
@@ -2112,15 +2112,15 @@ begin
                                 #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
 
             if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
             else
             if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
             else
-               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
 
             FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' and overwrite the file above ?');
 
             if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
@@ -2235,15 +2235,15 @@ begin
                                 #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
 
             if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
             else
             if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
             else
-               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
 
             FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' and overwrite the file above ?');
 
             if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
@@ -2523,15 +2523,15 @@ begin
                                 #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
 
             if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
             else
             if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', $00a65300, [fsBold])
+               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
             else
-               FormMain.AddMsgText('(same date)', $00a65300, [fsBold]);
+               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
 
             FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, $00a65300, [fsBold]);
+            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' and overwrite the file above ?');
 
             if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then

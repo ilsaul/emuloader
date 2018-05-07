@@ -849,6 +849,7 @@ type
     procedure PortAudioLatencyKeyPress(Sender: TObject; var Key: Char);
     procedure HTTPPortKeyPress(Sender: TObject; var Key: Char);
     procedure SaveStateRewindBufferSizeChange(Sender: TObject);
+    procedure BGFXShadowMaskTextureNameButtonSelectClick(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -5837,8 +5838,6 @@ begin
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
-       //FormMain.IL_Systems.GetIcon(sysID, SystemIcon.Picture.Icon);
-       //FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
 
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
@@ -5882,8 +5881,6 @@ begin
        //     LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
        //   end;
 
-       //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
-       //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, GameIcon.Picture.Icon);
        case FormMain.MemGameInfo.eGameSetStatus of
          0: TopBar.Color1:= $00f0fae5; //green
          1: TopBar.Color1:= $00e5f0fa; // red (based on green)
@@ -6618,7 +6615,7 @@ procedure TFormMAMESettings.ButtonReadFileHelpClick(Sender: TObject);
 begin
   CallMessageBox;
   FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reload Settings', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Reload Settings', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will load a list of custom files one by one, overwriting settings from the previous one.'+
                       ' MAME does this when loading games.'+#13#10);
   FormMain.AddMsgText('- mame.ini; ume.ini; hbmame.ini; emufilename.ini'+#13#10+
@@ -6638,7 +6635,7 @@ begin
                       '- parentgame.ini (if current game is clone)'+#13#10+
                       '- gamename.ini'+#13#10+#13#10);
   FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reset to Default', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Reset to Default', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will only load emulator default settings: mame.ini; ume.ini; hbmame.ini; ignoring everything else.');
   GenerateMessage('Help', 'Why two reload buttons ?');
 end;
@@ -6673,12 +6670,12 @@ procedure TFormMAMESettings.ButtonHelpSaveValidateAllCustomFilesClick(
 begin
   CallMessageBox;
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
-  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, $00a65300, [fsItalic], taCenter);
+  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
-  FormMain.AddMsgText('(mame.ini; ume.ini; hbmame.ini; emufilename.ini)', clBlack, [fsItalic]);
+  FormMain.AddMsgText('(mame.ini; hbmame.ini; ume.ini; emufilename.ini)', clBlack, [fsItalic]);
   FormMain.AddMsgText(', ignoring all custom files.'+#13#10+
                       'This is the old frontend''s saving method and I for one, prefer this way.'+#13#10+#13#10);
-  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, $00a65300, [fsItalic], taCenter);
+  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    It will keep custom settings files clean and avoid duplicated settings across files. '+
                       'All files will be scanned accordingly ');
   FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack, [fsItalic]);
@@ -6789,12 +6786,12 @@ procedure TFormMAMESettings.ButtonHelpVideoOutputModeClick(
   Sender: TObject);
 begin
   CallMessageBox;
-  FormMain.AddMsgText('OpenGL', $00a65300, [fsBold]);
+  FormMain.AddMsgText('OpenGL', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' video mode is only supported in SDLMAME and starting from MAME v0.159.'+#13#10);
-  FormMain.AddMsgText('DirectDraw', $00a65300, [fsBold]);
+  FormMain.AddMsgText('DirectDraw', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' video mode is only supported in MAME v0.170 and lower versions.'+#13#10+#13#10+
                       'In doubt, leave this setting in ');
-  FormMain.AddMsgText('Auto', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Auto', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('.');
   GenerateMessage('Info', 'Video output mode.');
 end;
@@ -6966,6 +6963,30 @@ procedure TFormMAMESettings.SaveStateRewindBufferSizeChange(
   Sender: TObject);
 begin
   LabelSaveStateRewindBufferSize.Caption:= Format(LabelSaveStateRewindBufferSize.Hint, [SaveStateRewindBufferSize.Position]);
+end;
+
+procedure TFormMAMESettings.BGFXShadowMaskTextureNameButtonSelectClick(
+  Sender: TObject);
+var
+  FolderStr, FileStr, GameStr: String;
+begin
+  if not FormMain.CheckTotal(FolderArtworks) then
+     Exit;
+  FolderStr:= FormMain.MountFoldersListMAME(FolderArtworks);
+  if FolderStr = '' then
+     Exit;
+  if FormMAMESettings.Tag = 0 then
+     GameStr:= FormMain.GetArcadeSystemIniSection(sysID)
+  else
+     GameStr:= ChangeFileExt(ExtractFileName(GameIni), '');
+  if not FormMain.SelectFileName(32, sysID, emuFileExec, FileStr, FolderStr) then
+     Exit;
+  BGFXShadowMaskTextureName.Text:= FileStr;
+  if BGFXShadowMaskTextureName.Text <> '' then
+     begin
+       if PosEx(' ', BGFXShadowMaskTextureName.Text) <> 0 then
+          BGFXShadowMaskTextureName.Text:= '"'+BGFXShadowMaskTextureName.Text+'"';
+     end;
 end;
 
 end.

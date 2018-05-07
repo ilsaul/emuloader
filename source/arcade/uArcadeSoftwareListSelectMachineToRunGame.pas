@@ -1,4 +1,4 @@
-unit uSoftwareListSelectMachineToRunGame;
+unit uArcadeSoftwareListSelectMachineToRunGame;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   MPCommonObjects, MPCommonUtilities, EasyListview, AdvOfficeButtons, IniFiles;
 
 type
-  TFormSoftwareListMachineToRunGame = class(TForm)
+  TFormArcadeSoftwareListMachineToRunGame = class(TForm)
     PanelMessages: TPanelEx;
     ButtonYes: TBitBtn;
     ButtonNo: TBitBtn;
@@ -53,7 +53,7 @@ type
   end;
 
 var
-  FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame;
+  FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToRunGame;
 
 implementation
 
@@ -62,7 +62,7 @@ uses uMain, uCommon, uCommonCustom;
 {$R *.dfm}
 
 
-procedure TFormSoftwareListMachineToRunGame.FormKeyPress(Sender: TObject;
+procedure TFormArcadeSoftwareListMachineToRunGame.FormKeyPress(Sender: TObject;
   var Key: Char);
 
   procedure CheckFocusedButton;
@@ -95,7 +95,7 @@ begin
   end;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ResizeForm;
+procedure TFormArcadeSoftwareListMachineToRunGame.ResizeForm;
 var
   iScreenWidth, iScreenHeight, iWidth, iHeight, iWidthDec: Integer;
 begin
@@ -138,13 +138,13 @@ begin
      end;
 
   if iScreenWidth <= 800 then
-     iWidthDec:= -(FormSoftwareListMachineToRunGame.Width-iWidth+10)
+     iWidthDec:= -(FormArcadeSoftwareListMachineToRunGame.Width-iWidth+10)
   else
   if iScreenWidth >= 1152 then
      iWidthDec:= iWidth;//(FormSoftwareListMachineToRunGame.Width+iWidth+10);
 
-  FormSoftwareListMachineToRunGame.Width:= FormSoftwareListMachineToRunGame.Width+iWidthDec;
-  FormSoftwareListMachineToRunGame.Height:= FormSoftwareListMachineToRunGame.Height+iHeight;
+  FormArcadeSoftwareListMachineToRunGame.Width:= FormArcadeSoftwareListMachineToRunGame.Width+iWidthDec;
+  FormArcadeSoftwareListMachineToRunGame.Height:= FormArcadeSoftwareListMachineToRunGame.Height+iHeight;
   MachinesListView.Width:= MachinesListView.Width+iWidthDec;
   MachinesListView.Height:= MachinesListView.Height+iHeight;
   LabelTitle.Width:= LabelTitle.Width+iWidthDec;
@@ -153,7 +153,7 @@ begin
   LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width+iWidthDec;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
+procedure TFormArcadeSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
 begin
   if PanelMessages.Tag = 1 then
      PanelTop.Color1:= $00e5f0fa // red
@@ -206,7 +206,7 @@ begin
   BringToFront;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ReadWriteSettings(ReadMode: Boolean);
+procedure TFormArcadeSoftwareListMachineToRunGame.ReadWriteSettings(ReadMode: Boolean);
 var
   INIFile: TMemIniFile;
   SectionStr: String;
@@ -233,7 +233,7 @@ begin
   end;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.FormShow(Sender: TObject);
+procedure TFormArcadeSoftwareListMachineToRunGame.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(MachinesListView);
   ResizeForm;
@@ -248,11 +248,11 @@ begin
   if CurrentMachineName <> '' then
      ReselectItem(CurrentMachineName);
 
-  FormSoftwareListMachineToRunGame.Tag:= 0;
+  FormArcadeSoftwareListMachineToRunGame.Tag:= 0;
   ChangeFilters;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.MachinesListViewColumnClick(
+procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewColumnClick(
   Sender: TCustomEasyListview; Button: TCommonMouseButton;
   ShiftState: TShiftState; const Column: TEasyColumn);
 begin
@@ -264,7 +264,7 @@ begin
      end;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
+procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
@@ -279,7 +279,7 @@ begin
      end;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ReselectItem(const MachineName: String);
+procedure TFormArcadeSoftwareListMachineToRunGame.ReselectItem(const MachineName: String);
 var
   Item: TEasyItem;
 begin
@@ -297,13 +297,13 @@ begin
   MachinesListView.SetFocus;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ChangeFilters;
+procedure TFormArcadeSoftwareListMachineToRunGame.ChangeFilters;
 var
   Item: TEasyItem;
   KeepGame: Boolean;
   SelectedName: String;
 begin
-  if FormSoftwareListMachineToRunGame.Tag = 1 then
+  if FormArcadeSoftwareListMachineToRunGame.Tag = 1 then
      Exit;
   if MachinesListView.Selection.First <> nil then
      SelectedName:= MachinesListView.Selection.First.Captions[1]
@@ -335,33 +335,33 @@ begin
   ReselectItem(SelectedName);
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ShowAvailableMachinesOnlyClick(
+procedure TFormArcadeSoftwareListMachineToRunGame.ShowAvailableMachinesOnlyClick(
   Sender: TObject);
 begin
   ChangeFilters;
 end;
 
-procedure TFormSoftwareListMachineToRunGame.ButtonResetToCurrentClick(
+procedure TFormArcadeSoftwareListMachineToRunGame.ButtonResetToCurrentClick(
   Sender: TObject);
 begin
   ReselectItem(CurrentMachineName);
 end;
 
-procedure TFormSoftwareListMachineToRunGame.FormCloseQuery(Sender: TObject;
+procedure TFormArcadeSoftwareListMachineToRunGame.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if CanClose then
      ReadWriteSettings(False);
 end;
 
-procedure TFormSoftwareListMachineToRunGame.MachinesListViewItemSelectionChanged(
+procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Selected then
      FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
 end;
 
-procedure TFormSoftwareListMachineToRunGame.MachinesListViewDblClick(
+procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewDblClick(
   Sender: TCustomEasyListview; Button: TCommonMouseButton;
   MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
 begin

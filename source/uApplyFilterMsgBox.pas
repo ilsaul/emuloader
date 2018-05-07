@@ -8,6 +8,7 @@ uses
 
 type
   TFormApplyFilterMsgBox = class(TForm)
+    PanelBackground: TPanelEx;
     LabelMsgGroupedView: TShadowLabel;
     LabelBoxMessageTitle: TShadowLabel;
     LabelBoxMessage: TShadowLabel;

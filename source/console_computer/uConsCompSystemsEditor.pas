@@ -725,9 +725,6 @@ begin
        PopupMoveSelectedToDestination.Caption:= 'Assign Selected to "'+Systems.Selection.First.Caption+'"';
        PopupMoveSelectedToDestination.ShortCut:= 0;
        PopupMoveSelectedToDestination.Tag:= 0;
-
-       //ImagePanelSeparator.Hint:= PopupMenuImageCategories.Items[ImageDetails[1].ImageCategoryIndex].Caption;// Images.Hint;
-       //PopupMenuImages.Tag:= 1;
      end
   else
   if PopupSoftList.PopupComponent = SoftListAssignedToSystem then
@@ -735,8 +732,6 @@ begin
        PopupMoveSelectedToDestination.Caption:= 'Remove Selected from "'+Systems.Selection.First.Caption+'"';
        PopupMoveSelectedToDestination.ShortCut:= VK_DELETE;
        PopupMoveSelectedToDestination.Tag:= 1;
-       //ImagePanelSeparator.Hint:= PopupMenuImageCategories.Items[ImageDetails[2].ImageCategoryIndex].Caption;// ImageScr[2].Hint;
-       //PopupMenuImages.Tag:= 2;
      end;
 
   {if not ValidateSelectedGame then

@@ -161,7 +161,7 @@ object FormImagesManager: TFormImagesManager
       Height = 200
       Align = alBottom
       Bitmap.ResamplerClassName = 'TKernelResampler'
-      Bitmap.Resampler.KernelClassName = 'THermiteKernel'
+      Bitmap.Resampler.KernelClassName = 'TCosineKernel'
       Bitmap.Resampler.KernelMode = kmDynamic
       Bitmap.Resampler.TableSize = 32
       BitmapAlign = baCenter

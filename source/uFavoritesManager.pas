@@ -216,7 +216,7 @@ begin
        else
           begin
             GenerateMessage('Error', 'No files found.', '    No favorites files were found an failed to '+
-                            'create the default profile favorites.txt!', 2, False, 1);
+                            'create the default profile "favorites.txt".', 2, False, 1);
             FreeAndNil(FullFavFilesList);
             Exit;
           end;
@@ -320,7 +320,7 @@ begin
           begin
             CallMessageBox;
             FormMain.AddMsgText('    File ');
-            FormMain.AddMsgText(favFileName, $00a65300,[fsBold]);
+            FormMain.AddMsgText(favFileName, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' was not found. Cannot change title.'+#13#10+'Aborting...');
             GenerateMessage('Error', 'Change favorite title.', '', 2, False, 1);
           end;
@@ -366,9 +366,9 @@ begin
        if not RenamedTxt then
           begin
             FormMain.AddMsgText('    Failed to rename a file.'+#13#10+'From ');
-            FormMain.AddMsgText(FormMain.GetFavoritesFolder+OldFile, $00a65300,[fsBold]);
+            FormMain.AddMsgText(FormMain.GetFavoritesFolder+OldFile, MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(#13#10+'to ');
-            FormMain.AddMsgText(FormMain.GetFavoritesFolder+NewFile, $00a65300,[fsBold]);
+            FormMain.AddMsgText(FormMain.GetFavoritesFolder+NewFile, MsgTxtColors.colorFileName, [fsBold]);
           end;
        FormMain.AddMsgText(#13#10+#13#10+'Please try again.');
        GenerateMessage('Error', 'Rename file.', '', 2, False, 1);
@@ -522,7 +522,7 @@ begin
           begin
             CallMessageBox;
             FormMain.AddMsgText('    Failed to create a new profile... you have more than 1000 files named ');
-            FormMain.AddMsgText('favorites????.txt', $00a65300, [fsBold]);
+            FormMain.AddMsgText('favorites????.txt', MsgTxtColors.colorFileName, [fsBold]);
             FormMain.AddMsgText(' in your favorites folder! Rename or delete a few before creating new ones.');
             GenerateMessage('Error', 'Create favorites profile.', '', 2, False, 1);
             Exit;
@@ -552,13 +552,13 @@ begin
              FormMain.AddMsgText('    This task will delete all game entries from the file, except ');
              FormMain.AddMsgText('favorite_title', clBlack,[fsBold]);
              FormMain.AddMsgText('.'+#13#10+#13#10+'Title: ');
-             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, $00a65300, [fsBold]);
+             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, MsgTxtColors.colorFileName, [fsBold]);
              FormMain.AddMsgText(#13#10+'File: ');
-             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, $00a65300, [fsBold]);
+             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
              if FoundTxtFile then
                 begin
                   FormMain.AddMsgText(#13#10+'Date Modified: ');
-                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, $00a65300, [fsBold]);
+                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, MsgTxtColors.colorFileName, [fsBold]);
                 end;
              FormMain.AddMsgText(#13#10+#13#10+'Are you sure ?');
              if GenerateMessage('Purge', 'Clear game entries.', '', 1, False, 2) = mrYes then
@@ -605,16 +605,16 @@ begin
              CallMessageBox;
              FormMain.AddMsgText('    You are about to delete a favorites profile.');
              FormMain.AddMsgText('.'+#13#10+#13#10+'Title: ');
-             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, $00a65300, [fsBold]);
+             FormMain.AddMsgText(TFavFileInfo(Item).eTitle, MsgTxtColors.colorFileName, [fsBold]);
              FormMain.AddMsgText(#13#10+'File: ');
-             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, $00a65300, [fsBold]);
+             FormMain.AddMsgText(TFavFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
              if FoundTxtFile then
                 begin
                   FormMain.AddMsgText(#13#10+'Games Count: ');
-                  FormMain.AddMsgText(IntToStr(TFavFileInfo(Item).eGamesCount), $00a65300, [fsBold]);
+                  FormMain.AddMsgText(IntToStr(TFavFileInfo(Item).eGamesCount), MsgTxtColors.colorFileName, [fsBold]);
 
                   FormMain.AddMsgText(#13#10+'Date Modified: ');
-                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, $00a65300, [fsBold]);
+                  FormMain.AddMsgText(TFavFileInfo(Item).eDateTimeText, MsgTxtColors.colorFileName, [fsBold]);
                 end;
              FormMain.AddMsgText(#13#10+#13#10+'    If this is the active profile, the previous listed profile will be set active.'+#13#10+'Are you sure ?');
              if GenerateMessage('Delete File', 'Delete favorites profile.', '', 1, True, 2) = mrYes then
@@ -750,7 +750,7 @@ begin
      begin
        CallMessageBox;
        FormMain.AddMsgText('    File ');
-       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' was not found. The list cannot be cleansed. Aborting...');
        GenerateMessage(ErrorMsgTitle, 'Could not access the file.', '', 2, False, 1);
        Exit;
@@ -760,7 +760,7 @@ begin
      begin
        CallMessageBox;
        FormMain.AddMsgText('    File ');
-       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' is marked read-only. Cannot continue...');
        GenerateMessage(ErrorMsgTitle, 'A file that needs to be updated cannot be opened.', '', 2);
        Exit;
@@ -768,23 +768,14 @@ begin
 
   CallMessageBox;
   FormMain.AddMsgText('    File ');
-  FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
+  FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will be cleansed of all impurities, based on current games list.'+#13#10);
-  FormMain.AddMsgText('(arcade/console/computer)', $00a65300,[fsBold, fsItalic]);
+  FormMain.AddMsgText('(arcade/console/computer)', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
   FormMain.AddMsgText('.'+#13#10+'Valid game entries of systems that are not available anymore will also be removed. Click ');
-  FormMain.AddMsgText('No', $00a65300,[fsBold]);
+  FormMain.AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
   if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrNo then
      Exit;
-
-
-  {if GenerateMessage(FavMsgTitle, 'A file is about to be changed.',
-                     '    File "'+TFavFileInfo(favItem).eFileName+'"'+
-                     ' will be cleansed of all impurities, based on current games list (arcade/console/computer). '+#13#10+
-                     'Valid game entries of systems that are not available anymore will also be removed.'+
-                     'Click No button if you want to abort.'+
-                      #13#10+'Continue ?', 1, False, 2) = mrNo then
-     Exit;}
 
   LabelTaskMessage.Caption:= 'Cleansing favorite file of impurities, please wait...';
   ShowUpdateFavGamesListPanel;
@@ -818,7 +809,6 @@ begin
   end;
   GamesListFull.EndUpdate;
   Application.ProcessMessages;
-  //GamesListFull.SaveToFile(FormMain.FrontendPath+'fav.txt');
 
   RemovedCount:= 0;
   HaveTitle:= False;
@@ -854,17 +844,7 @@ begin
        begin
          FavoriteGamesList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
          TFavFileInfo(favItem).eGamesCount:= FavoriteGamesList.Count-Ord(HaveTitle);
-         //CallMessageBox;
-         //FormMain.AddMsgText('    File ');
-         //FormMain.AddMsgText(FormMain.GetFavoritesFolder(True)+TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
-         //FormMain.AddMsgText(' was successfully cleansed of ');
-         //FormMain.AddMsgText(IntToStr(RemovedCountArcade), $00a65300,[fsBold]);
-         //FormMain.AddMsgText(' impurities! ');
-         //GenerateMessage(FavMsgTitle, 'The contents of a file have changed.', '', 2);
        end;
-    //else
-    //   GenerateMessage(FavMsgTitle, 'No changes have been made.',
-    //                   '    No impurities were found in file '+FormMain.GetFavoritesFolder(True)+TFavFileInfo(favItem).eFileName, 2);
     FreeAndNil(FavoriteGamesList);
   end;
 
@@ -874,7 +854,7 @@ begin
      begin
        CallMessageBox;
        FormMain.AddMsgText('    No impurities were found in file ');
-       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, $00a65300, [fsBold]);
+       FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' is marked read-only. Cannot continue...');
        GenerateMessage(FavMsgTitle, 'No changes have been made.', '', 2);
      end
@@ -883,9 +863,9 @@ begin
      begin
        CallMessageBox;
        FormMain.AddMsgText('    File ');
-       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, $00a65300,[fsBold]);
+       FormMain.AddMsgText(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' was successfully cleansed of ');
-       FormMain.AddMsgText(IntToStr(RemovedCount), $00a65300,[fsBold]);
+       FormMain.AddMsgText(IntToStr(RemovedCount), MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' impurities! ');
 
        GenerateMessage(FavMsgTitle, 'The contents of a file have changed.', '', 2);
@@ -911,9 +891,9 @@ begin
        CallMessageBox;
        FormMain.AddMsgText('    The .txt file for the active favorites profile was not found but is listed anyway.'+
                            ' Please make sure to select a valid profile.'+#13#10+#13#10+'Title: ');
-       FormMain.AddMsgText(FormMain.FavoriteProfile[0], $00a65300, [fsBold]);
+       FormMain.AddMsgText(FormMain.FavoriteProfile[0], MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(#13#10+'File: ');
-       FormMain.AddMsgText(FormMain.FavoriteProfile[1], $00a65300, [fsBold]);
+       FormMain.AddMsgText(FormMain.FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold]);
        GenerateMessage('Error', 'File not found.', '', 2, False, 1);
        Exit;
      end;
@@ -1274,12 +1254,6 @@ begin
      begin
        FormFavoritesManager.Top:= (Screen.Height-FormFavoritesManager.Height) div 2;
        FormFavoritesManager.Left:= (Screen.Width-FormFavoritesManager.Width) div 2;
-
-       //if ((FormFavoritesManager.Top = 0) and (FormFavoritesManager.Left = 0)) then
-       //   begin
-       //     FormFavoritesManager.Top:= (Screen.Height-FormFavoritesManager.Height) div 2;
-       //     FormFavoritesManager.Left:= (Screen.Width-FormFavoritesManager.Width) div 2;
-       //   end;
      end;
 end;
 
@@ -1302,8 +1276,6 @@ begin
 
   if FormFavoritesManager.WindowState <> wsMaximized then
      begin
-       //iniFile.WriteInteger('FavoritesManager', 'ScreenTop', FormFavoritesManager.Top);
-       //iniFile.WriteInteger('FavoritesManager', 'ScreenLeft', FormFavoritesManager.Left);
        iniFile.WriteInteger('FavoritesManager', 'ScreenWidth', FormFavoritesManager.Width);
        iniFile.WriteInteger('FavoritesManager', 'ScreenHeight', FormFavoritesManager.Height);
      end;
@@ -1353,7 +1325,6 @@ begin
   end;
   FavoritesList.EndUpdate;
 end;
-
 
 
 end.

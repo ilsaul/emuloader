@@ -1,4 +1,4 @@
-object FormSoftwareListMachineToRunGame: TFormSoftwareListMachineToRunGame
+object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToRunGame
   Left = 569
   Top = 357
   BorderIcons = [biSystemMenu]

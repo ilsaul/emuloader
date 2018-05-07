@@ -3033,6 +3033,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 5
+            OnClick = BGFXShadowMaskTextureNameButtonSelectClick
           end
           object BGFXShadowMaskTextureNameButtonReset: TBitBtn
             Left = 322
@@ -8894,6 +8895,7 @@ object FormMAMESettings: TFormMAMESettings
       Top = 0
       AutoSize = True
       Caption = 'Video 2'
+      Grouped = True
       ImageIndex = 500
       Style = tbsCheck
       OnClick = ButtonPageFoldersClick

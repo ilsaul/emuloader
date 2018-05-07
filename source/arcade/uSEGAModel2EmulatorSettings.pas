@@ -573,8 +573,6 @@ begin
      begin
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
-       //FormMain.IL_Systems.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
-       //FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
        LabelReadFileIni.Visible:= False;
      end;

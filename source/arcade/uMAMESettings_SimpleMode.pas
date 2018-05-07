@@ -1315,8 +1315,6 @@ begin
        FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
-       //FormMain.IL_Systems.GetIcon(sysID, SystemIcon.Picture.Icon);
-       //FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
 
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
@@ -1351,8 +1349,6 @@ begin
        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       //FormMain.LoadGameIDThumbIcon(SystemIcon, FormMain.MemGameInfo.eROMIdentification);
-       //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, GameIcon.Picture.Icon);
        case FormMain.MemGameInfo.eGameSetStatus of
          0: TopBar.Color1:= $00f0fae5; //green
          1: TopBar.Color1:= $00e5f0fa; // red (based on green)
@@ -1472,7 +1468,7 @@ procedure TFormMAMESettings_SimpleMode.ButtonReadFileHelpClick(Sender: TObject);
 begin
   CallMessageBox;
   FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reload Settings', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Reload Settings', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will load a list of custom files one by one, overwriting settings from the previous one.'+
                       ' MAME does this when loading games.'+#13#10);
   FormMain.AddMsgText('- mame.ini; ume.ini; hbmame.ini; emufilename.ini'+#13#10+
@@ -1489,7 +1485,7 @@ begin
                       '- parentgame.ini (if current game is clone)'+#13#10+
                       '- gamename.ini'+#13#10+#13#10);
   FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reset to Default', $00a65300, [fsBold]);
+  FormMain.AddMsgText('Reset to Default', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' will only load emulator default settings: mame.ini; ume.ini; hbmame.ini; ignoring everything else.');
   GenerateMessage('Help', 'Why two reload buttons ?');
 end;
@@ -1548,12 +1544,12 @@ procedure TFormMAMESettings_SimpleMode.ButtonHelpSaveValidateAllCustomFilesClick
 begin
   CallMessageBox;
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
-  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, $00a65300, [fsItalic], taCenter);
+  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
   FormMain.AddMsgText('(mame.ini; ume.ini; hbmame.ini; emufilename.ini)', clBlack, [fsItalic]);
   FormMain.AddMsgText(', ignoring all custom files.'+#13#10+
                       'This is the old frontend''s saving method and I for one, prefer this way.'+#13#10+#13#10);
-  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, $00a65300, [fsItalic], taCenter);
+  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    It will keep custom settings files clean and avoid duplicated settings across files. '+
                       'All files will be scanned accordingly ');
   FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack, [fsItalic]);

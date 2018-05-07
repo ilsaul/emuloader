@@ -177,5 +177,17 @@ object FormMessageBox: TFormMessageBox
       TabOrder = 3
       Visible = False
     end
+    object NightMode: TAdvOfficeCheckBox
+      Left = 4
+      Top = 11
+      Width = 87
+      Height = 20
+      TabOrder = 4
+      OnClick = NightModeClick
+      Alignment = taLeftJustify
+      Caption = 'Night Mode'
+      ReturnIsTab = False
+      Themed = True
+    end
   end
 end

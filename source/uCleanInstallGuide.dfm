@@ -18,137 +18,6 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
   Scaled = False
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSelectOptions: TShadowLabel
-    Left = 31
-    Top = 123
-    Width = 125
-    Height = 19
-    Caption = 'Select Your Options'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel3: TShadowLabel
-    Left = 273
-    Top = 123
-    Width = 331
-    Height = 18
-    Caption = '(unckeck all options if you just want to access the frontend)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel5: TShadowLabel
-    Left = 271
-    Top = 189
-    Width = 174
-    Height = 15
-    Caption = '(select emulators required)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -12
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel6: TShadowLabel
-    Left = 300
-    Top = 285
-    Width = 200
-    Height = 15
-    Caption = '(select games folders required)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -12
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
-    Left = 327
-    Top = 155
-    Width = 212
-    Height = 19
-    Hint = '(selected emulators config file'
-    Caption = '(selected emulators config file found)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clGreen
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelOption_SelectConsoleComputerGamesFolders_FileStatus: TShadowLabel
-    Left = 314
-    Top = 251
-    Width = 233
-    Height = 19
-    Hint = '(selected games folders config file'
-    Caption = '(selected games folders config file found)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clGreen
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel4: TShadowLabel
-    Left = 203
-    Top = 325
-    Width = 213
-    Height = 16
-    Caption = 'Click here to view the quick setup guide'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clNavy
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-    OnClick = ShadowLabel4Click
-    OnMouseEnter = ShadowLabel4MouseEnter
-    OnMouseLeave = ShadowLabel4MouseLeave
-  end
   object PanelEx1: TPanelEx
     Left = 0
     Top = 0
@@ -159,7 +28,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color2 = 75
     Color3 = clMaroon
     Color4 = 15856113
-    ColorFrame = clGreen
+    ColorFrame = 16750899
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -212,8 +81,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Top = 105
     Width = 619
     Height = 15
+    Align = alTop
     Color1 = 75
-    Color2 = 15856113
+    Color2 = 1
     Color3 = 1
     Color4 = 15856113
     ColorFrame = clGreen
@@ -222,125 +92,23 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Style = vgSimple
     Steps = 100
   end
-  object Option_SelectArcadeEmulators: TAdvOfficeCheckBox
-    Left = 10
-    Top = 154
-    Width = 312
-    Height = 19
-    Checked = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 2
-    Alignment = taLeftJustify
-    ButtonVertAlign = tlBottom
-    Caption = 'Select and Setup MAME / Arcade Emulators'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object Option_CreateArcadeGamesList: TAdvOfficeCheckBox
-    Left = 10
-    Top = 186
-    Width = 254
-    Height = 19
-    Checked = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 3
-    Alignment = taLeftJustify
-    ButtonVertAlign = tlBottom
-    Caption = 'Create MAME / Arcade Games Lists'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object Option_SelectConsoleComputerEmulators: TAdvOfficeCheckBox
-    Left = 10
-    Top = 218
-    Width = 585
-    Height = 19
-    Checked = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 4
-    Alignment = taLeftJustify
-    ButtonVertAlign = tlBottom
-    Caption = 
-      'Select and Setup Console / Computer Emulators and Their Command ' +
-      'Line Parameters'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object Option_SelectConsoleComputerGamesFolders: TAdvOfficeCheckBox
-    Left = 10
-    Top = 250
-    Width = 298
-    Height = 19
-    Checked = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 5
-    Alignment = taLeftJustify
-    ButtonVertAlign = tlBottom
-    Caption = 'Select Console / Computer Games Folders'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object Option_CreateConsoleComputerGamesList: TAdvOfficeCheckBox
-    Left = 10
-    Top = 282
-    Width = 282
-    Height = 19
-    Checked = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 6
-    Alignment = taLeftJustify
-    ButtonVertAlign = tlBottom
-    Caption = 'Create Console / Computer Games Lists'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
   object PanelButtons: TPanelEx
     Left = 0
-    Top = 356
+    Top = 339
     Width = 619
-    Height = 41
+    Height = 58
     Align = alBottom
-    Color1 = 15856113
-    Color2 = 14540253
-    Color3 = clYellow
-    Color4 = clTeal
+    Color1 = 1
+    Color2 = 3289650
+    Color3 = 15856113
+    Color4 = 14540253
     ColorFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtn
       Left = 215
-      Top = 8
+      Top = 25
       Width = 89
       Height = 25
       Caption = 'Continue'
@@ -351,7 +119,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     end
     object ButtonCancel: TBitBtn
       Left = 315
-      Top = 8
+      Top = 25
       Width = 89
       Height = 25
       Hint = 'Terminate the application'
@@ -360,6 +128,273 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+    end
+  end
+  object PanelEx4: TPanelEx
+    Left = 0
+    Top = 139
+    Width = 619
+    Height = 200
+    Color1 = 5832704
+    Color2 = 1
+    Color3 = 7891291
+    Color4 = 3289650
+    ColorFrame = 16750899
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object ShadowLabel5: TShadowLabel
+      Left = 271
+      Top = 45
+      Width = 174
+      Height = 15
+      Caption = '(select emulators required)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -12
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMaroon
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object ShadowLabel6: TShadowLabel
+      Left = 300
+      Top = 141
+      Width = 200
+      Height = 15
+      Caption = '(select games folders required)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -12
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMaroon
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
+      Left = 327
+      Top = 13
+      Width = 236
+      Height = 15
+      Hint = '(selected emulators config file'
+      Caption = '(selected emulators config file found)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clLime
+      Font.Height = -12
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelOption_SelectConsoleComputerGamesFolders_FileStatus: TShadowLabel
+      Left = 314
+      Top = 109
+      Width = 262
+      Height = 15
+      Hint = '(selected games folders config file'
+      Caption = '(selected games folders config file found)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clLime
+      Font.Height = -12
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object ShadowLabel4: TShadowLabel
+      Left = 203
+      Top = 181
+      Width = 213
+      Height = 16
+      Caption = 'Click here to view the quick setup guide'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12779458
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 15616
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+      OnClick = ShadowLabel4Click
+      OnMouseEnter = ShadowLabel4MouseEnter
+      OnMouseLeave = ShadowLabel4MouseLeave
+    end
+    object Option_SelectArcadeEmulators: TAdvOfficeCheckBox
+      Left = 10
+      Top = 10
+      Width = 312
+      Height = 19
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
+      Caption = 'Select and Setup MAME / Arcade Emulators'
+      ReturnIsTab = False
+      ShadowEnabled = True
+      State = cbChecked
+      Themed = True
+    end
+    object Option_CreateArcadeGamesList: TAdvOfficeCheckBox
+      Left = 10
+      Top = 42
+      Width = 254
+      Height = 19
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
+      Caption = 'Create MAME / Arcade Games Lists'
+      ReturnIsTab = False
+      ShadowEnabled = True
+      State = cbChecked
+      Themed = True
+    end
+    object Option_SelectConsoleComputerEmulators: TAdvOfficeCheckBox
+      Left = 10
+      Top = 74
+      Width = 585
+      Height = 19
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
+      Caption = 
+        'Select and Setup Console / Computer Emulators and Their Command ' +
+        'Line Parameters'
+      ReturnIsTab = False
+      ShadowEnabled = True
+      State = cbChecked
+      Themed = True
+    end
+    object Option_SelectConsoleComputerGamesFolders: TAdvOfficeCheckBox
+      Left = 10
+      Top = 106
+      Width = 298
+      Height = 19
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
+      Caption = 'Select Console / Computer Games Folders'
+      ReturnIsTab = False
+      ShadowEnabled = True
+      State = cbChecked
+      Themed = True
+    end
+    object Option_CreateConsoleComputerGamesList: TAdvOfficeCheckBox
+      Left = 10
+      Top = 138
+      Width = 282
+      Height = 19
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
+      Caption = 'Create Console / Computer Games Lists'
+      ReturnIsTab = False
+      ShadowEnabled = True
+      State = cbChecked
+      Themed = True
+    end
+  end
+  object PanelEx5: TPanelEx
+    Left = 0
+    Top = 120
+    Width = 619
+    Height = 19
+    Align = alTop
+    Color1 = 1
+    Color2 = 5832704
+    Color3 = 1
+    Color4 = 5832704
+    ColorFrame = 16750899
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object LabelSelectOptions: TShadowLabel
+      Left = 31
+      Top = 0
+      Width = 125
+      Height = 19
+      Caption = 'Select Your Options'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clYellow
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMaroon
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object ShadowLabel3: TShadowLabel
+      Left = 273
+      Top = 0
+      Width = 331
+      Height = 18
+      Caption = '(unckeck all options if you just want to access the frontend)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clBlack
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
     end
   end
 end
