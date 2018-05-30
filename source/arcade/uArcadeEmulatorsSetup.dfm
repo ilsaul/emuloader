@@ -17,230 +17,11 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
+  OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelArcade_versioninfo: TShadowLabel
-    Left = 12
-    Top = 183
-    Width = 78
-    Height = 15
-    Caption = 'Version Info'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelAlterMAME: TShadowLabel
-    Left = 12
-    Top = 229
-    Width = 180
-    Height = 15
-    Caption = 'AlterMAME (.exe; .bat; .cmd)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelAlterMAME_versioninfo: TShadowLabel
-    Left = 12
-    Top = 272
-    Width = 150
-    Height = 15
-    Caption = 'AlterMAME Version Info'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clSilver
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelArcade_exec: TShadowLabel
-    Left = 12
-    Top = 140
-    Width = 190
-    Height = 15
-    Caption = 'Emulator File (.exe; .bat; .cmd)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 3289650
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object LabelAlterMAME_Autorun: TShadowLabel
-    Left = 225
-    Top = 315
-    Width = 295
-    Height = 16
-    Caption = '(Run game with AlterMAME if fails with primary MAME)'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clWhite
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel3: TShadowLabel
-    Left = 201
-    Top = 229
-    Width = 303
-    Height = 15
-    Caption = 
-      '--                                                              ' +
-      '        --'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ShadowLabel4: TShadowLabel
-    Left = 218
-    Top = 228
-    Width = 267
-    Height = 16
-    Caption = 'Play MAME games with a secondary MAME binary'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
-    ParentFont = False
-    ParentShowHint = False
-    ShowAccelChar = False
-    ShowHint = True
-    ShadowColor = clWhite
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = True
-  end
-  object ButtonBrowseArcade_exec: TBitBtn
-    Left = 586
-    Top = 156
-    Width = 47
-    Height = 21
-    Hint = 'Click here to select a file'
-    Caption = 'Select'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 1
-    OnClick = ButtonBrowseArcade_execClick
-  end
-  object Arcade_versioninfo: TEdit
-    Left = 8
-    Top = 199
-    Width = 624
-    Height = 21
-    TabStop = False
-    AutoSize = False
-    Color = clWhite
-    Ctl3D = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
-    OnChange = Arcade_versioninfoChange
-  end
-  object AlterMAME_exec: TEdit
-    Left = 8
-    Top = 245
-    Width = 512
-    Height = 21
-    TabStop = False
-    AutoSize = False
-    Color = clWhite
-    Ctl3D = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
-    OnChange = AlterMAME_execChange
-  end
-  object ButtonBrowseAlterMAME: TBitBtn
-    Left = 521
-    Top = 245
-    Width = 47
-    Height = 21
-    Hint = 'Click here to select a file'
-    Caption = 'Select'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 4
-    OnClick = ButtonBrowseAlterMAMEClick
-  end
-  object ButtonClearAlterMAME: TBitBtn
-    Left = 569
-    Top = 245
-    Width = 42
-    Height = 21
-    Hint = 'Click here to clear AlterMAME'
-    Caption = 'Clear'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 5
-    OnClick = ButtonClearAlterMAMEClick
-  end
-  object ButtonHelpAlterMAME: TBitBtn
-    Left = 612
-    Top = 245
-    Width = 21
-    Height = 21
-    Hint = 'What is this for ?'
-    Caption = '?'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 6
-    OnClick = ButtonHelpAlterMAMEClick
-  end
   object PanelSystemsSelect: TPanelEx
     Left = 0
     Top = 0
@@ -251,6 +32,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -350,26 +132,6 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnItemSelectionChanged = SystemSelectorItemSelectionChanged
     end
   end
-  object AlterMAME_Autorun: TAdvOfficeCheckBox
-    Left = 8
-    Top = 314
-    Width = 213
-    Height = 20
-    Hint = 'Run selected game with AlterMAME executable if fails with MAME'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowHint = True
-    TabOrder = 7
-    OnClick = AlterMAME_AutorunClick
-    Alignment = taLeftJustify
-    Caption = 'Autorun Game With AlterMAME'
-    ReturnIsTab = False
-    Themed = True
-  end
   object PanelButtons: TPanelEx
     Left = 0
     Top = 351
@@ -381,6 +143,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -441,49 +204,131 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       TabOrder = 4
       OnClick = ButtonClearSystemClick
     end
+    object UseLargeIcons: TAdvOfficeCheckBox
+      Left = 361
+      Top = 11
+      Width = 79
+      Height = 20
+      Hint = 'Use 128x128 system icons'
+      TabOrder = 5
+      OnClick = UseLargeIconsClick
+      Alignment = taLeftJustify
+      Caption = 'Large Icons'
+      ReturnIsTab = False
+    end
   end
-  object AlterMAME_versioninfo: TEdit
-    Left = 8
-    Top = 288
-    Width = 524
-    Height = 21
-    TabStop = False
-    AutoSize = False
-    Color = clWhite
-    Ctl3D = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 10
-    OnChange = AlterMAME_versioninfoChange
-  end
-  object PanelMAMEEmulatorsText: TPanelEx
-    Left = 205
-    Top = 140
-    Width = 428
-    Height = 15
+  object PanelEmulatorDetails: TPanelEx
+    Left = 0
+    Top = 136
+    Width = 640
+    Height = 201
     Color1 = 15856113
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object ShadowLabel2: TShadowLabel
-      Left = 1
-      Top = 0
-      Width = 316
+    object LabelArcade_versioninfo: TShadowLabel
+      Left = 12
+      Top = 47
+      Width = 78
+      Height = 15
+      Caption = 'Version Info'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelAlterMAME: TShadowLabel
+      Left = 12
+      Top = 93
+      Width = 180
+      Height = 15
+      Caption = 'AlterMAME (.exe; .bat; .cmd)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelAlterMAME_versioninfo: TShadowLabel
+      Left = 12
+      Top = 136
+      Width = 150
+      Height = 15
+      Caption = 'AlterMAME Version Info'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelArcade_exec: TShadowLabel
+      Left = 12
+      Top = 4
+      Width = 190
+      Height = 15
+      Caption = 'Emulator File (.exe; .bat; .cmd)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 3289650
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelAlterMAME_Autorun: TShadowLabel
+      Left = 225
+      Top = 179
+      Width = 295
+      Height = 16
+      Caption = '(Run game with AlterMAME if fails with primary MAME)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clWhite
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+    end
+    object ShadowLabel3: TShadowLabel
+      Left = 201
+      Top = 93
+      Width = 303
       Height = 15
       Caption = 
-        '--            /                             /                  /' +
-        '         --'
+        '--                                                              ' +
+        '        --'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -496,141 +341,327 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       EllipsType = etNone
       Transparent = True
     end
-    object ShadowLabel1: TShadowLabel
-      Left = 18
-      Top = 0
-      Width = 41
-      Height = 15
-      Cursor = crHandPoint
-      Hint = 'http://mamedev.org'
-      Caption = 'MAME'
+    object ShadowLabel4: TShadowLabel
+      Left = 218
+      Top = 92
+      Width = 267
+      Height = 16
+      Caption = 'Play MAME games with a secondary MAME binary'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
+      Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
       ParentFont = False
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
+      ShadowColor = clWhite
+      ShadowEnabled = True
       EllipsType = etNone
       Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
     end
-    object ShadowLabel5: TShadowLabel
-      Left = 192
-      Top = 0
-      Width = 69
-      Height = 15
-      Cursor = crHandPoint
-      Hint = 'http://wolfmame.marpirc.net'
-      Caption = 'WolfMAME'
+    object ButtonBrowseArcade_exec: TBitBtn
+      Left = 586
+      Top = 20
+      Width = 47
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = ButtonBrowseArcade_execClick
+    end
+    object Arcade_versioninfo: TEdit
+      Left = 8
+      Top = 63
+      Width = 624
+      Height = 21
+      TabStop = False
+      AutoSize = False
+      Color = clWhite
+      Ctl3D = True
       Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnChange = Arcade_versioninfoChange
+    end
+    object AlterMAME_exec: TEdit
+      Left = 8
+      Top = 109
+      Width = 512
+      Height = 21
+      TabStop = False
+      AutoSize = False
+      Color = clWhite
+      Ctl3D = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnChange = AlterMAME_execChange
+    end
+    object ButtonBrowseAlterMAME: TBitBtn
+      Left = 521
+      Top = 109
+      Width = 47
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = ButtonBrowseAlterMAMEClick
+    end
+    object ButtonClearAlterMAME: TBitBtn
+      Left = 569
+      Top = 109
+      Width = 42
+      Height = 21
+      Hint = 'Click here to clear AlterMAME'
+      Caption = 'Clear'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = ButtonClearAlterMAMEClick
+    end
+    object ButtonHelpAlterMAME: TBitBtn
+      Left = 612
+      Top = 109
+      Width = 21
+      Height = 21
+      Hint = 'What is this for ?'
+      Caption = '?'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = ButtonHelpAlterMAMEClick
+    end
+    object AlterMAME_Autorun: TAdvOfficeCheckBox
+      Left = 8
+      Top = 178
+      Width = 213
+      Height = 20
+      Hint = 'Run selected game with AlterMAME executable if fails with MAME'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      ParentShowHint = False
-      ShowAccelChar = False
       ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
+      TabOrder = 6
+      OnClick = AlterMAME_AutorunClick
+      Alignment = taLeftJustify
+      Caption = 'Autorun Game With AlterMAME'
+      ReturnIsTab = False
+      Themed = True
     end
-    object ShadowLabel6: TShadowLabel
-      Left = 271
-      Top = 0
-      Width = 27
-      Height = 15
-      Cursor = crHandPoint
-      Hint = 
-        'http://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=8&' +
-        'page=1'
-      Caption = 'SDL'
+    object AlterMAME_versioninfo: TEdit
+      Left = 8
+      Top = 152
+      Width = 524
+      Height = 21
+      TabStop = False
+      AutoSize = False
+      Color = clWhite
+      Ctl3D = True
       Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
+      Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentCtl3D = False
       ParentFont = False
       ParentShowHint = False
-      ShowAccelChar = False
       ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
+      TabOrder = 7
+      OnChange = AlterMAME_versioninfoChange
     end
-    object ShadowLabel7: TShadowLabel
-      Left = 70
-      Top = 0
-      Width = 111
+    object PanelMAMEEmulatorsText: TPanelEx
+      Left = 205
+      Top = 4
+      Width = 428
       Height = 15
-      Cursor = crHandPoint
-      Hint = 'http://hbmame.1emulation.com'
-      Caption = 'HomeBrew MAME'
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = 7891291
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgSolid
+      object ShadowLabel2: TShadowLabel
+        Left = 1
+        Top = 0
+        Width = 316
+        Height = 15
+        Caption = 
+          '--            /                             /                  /' +
+          '         --'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = 14540253
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+      end
+      object ShadowLabel1: TShadowLabel
+        Left = 18
+        Top = 0
+        Width = 41
+        Height = 15
+        Cursor = crHandPoint
+        Hint = 'http://mamedev.org'
+        Caption = 'MAME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = clSilver
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = ShadowLabel1Click
+        OnMouseEnter = ShadowLabel1MouseEnter
+        OnMouseLeave = ShadowLabel1MouseLeave
+      end
+      object ShadowLabel5: TShadowLabel
+        Left = 192
+        Top = 0
+        Width = 69
+        Height = 15
+        Cursor = crHandPoint
+        Hint = 'http://wolfmame.marpirc.net'
+        Caption = 'WolfMAME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = clSilver
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = ShadowLabel1Click
+        OnMouseEnter = ShadowLabel1MouseEnter
+        OnMouseLeave = ShadowLabel1MouseLeave
+      end
+      object ShadowLabel6: TShadowLabel
+        Left = 271
+        Top = 0
+        Width = 27
+        Height = 15
+        Cursor = crHandPoint
+        Hint = 
+          'http://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=8&' +
+          'page=1'
+        Caption = 'SDL'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = clSilver
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = ShadowLabel1Click
+        OnMouseEnter = ShadowLabel1MouseEnter
+        OnMouseLeave = ShadowLabel1MouseLeave
+      end
+      object ShadowLabel7: TShadowLabel
+        Left = 70
+        Top = 0
+        Width = 111
+        Height = 15
+        Cursor = crHandPoint
+        Hint = 'http://hbmame.1emulation.com'
+        Caption = 'HomeBrew MAME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = clSilver
+        ShadowEnabled = False
+        EllipsType = etNone
+        Transparent = True
+        OnClick = ShadowLabel1Click
+        OnMouseEnter = ShadowLabel1MouseEnter
+        OnMouseLeave = ShadowLabel1MouseLeave
+      end
+    end
+    object Arcade_exec: TEdit
+      Left = 8
+      Top = 20
+      Width = 577
+      Height = 21
+      TabStop = False
+      AutoSize = False
+      Color = clWhite
+      Ctl3D = True
       Font.Charset = ANSI_CHARSET
-      Font.Color = clNavy
+      Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentCtl3D = False
       ParentFont = False
       ParentShowHint = False
-      ShowAccelChar = False
       ShowHint = True
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      Transparent = True
-      OnClick = ShadowLabel1Click
-      OnMouseEnter = ShadowLabel1MouseEnter
-      OnMouseLeave = ShadowLabel1MouseLeave
+      TabOrder = 9
+      OnChange = Arcade_execChange
     end
-  end
-  object Arcade_exec: TEdit
-    Left = 8
-    Top = 156
-    Width = 577
-    Height = 21
-    TabStop = False
-    AutoSize = False
-    Color = clWhite
-    Ctl3D = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentCtl3D = False
-    ParentFont = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 0
-    OnChange = Arcade_execChange
-  end
-  object ButtonSetOptionsAlterMAME: TBitBtn
-    Left = 533
-    Top = 288
-    Width = 100
-    Height = 21
-    Hint = 'Set AlterMAME default settings'
-    Caption = 'Default Settings'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 12
-    OnClick = ButtonSetOptionsAlterMAMEClick
+    object ButtonSetOptionsAlterMAME: TBitBtn
+      Left = 533
+      Top = 152
+      Width = 100
+      Height = 21
+      Hint = 'Set AlterMAME default settings'
+      Caption = 'Default Settings'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 10
+      OnClick = ButtonSetOptionsAlterMAMEClick
+    end
   end
   object IL_Systems: TImageList
     Height = 68

@@ -41,6 +41,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -81,6 +82,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Color3 = 1117964
         Color4 = clMaroon
         ColorFrame = clWhite
+        ColorInnerFrame = clGreen
         Frames = [frBottom]
         ParentBackground = False
         Style = vgSimple
@@ -147,6 +149,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Color3 = 1117964
         Color4 = clMaroon
         ColorFrame = clWhite
+        ColorInnerFrame = clGreen
         Frames = [frTop, frBottom]
         ParentBackground = False
         Style = vgSimple
@@ -266,6 +269,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       Color3 = 16115676
       Color4 = clMoneyGreen
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frBottom]
       ParentBackground = False
       Style = vgVista
@@ -408,6 +412,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       Color3 = 16115676
       Color4 = clMoneyGreen
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frBottom]
       ParentBackground = False
       Style = vgVista

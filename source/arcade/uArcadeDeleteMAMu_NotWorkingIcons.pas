@@ -247,7 +247,7 @@ begin
                       TNotWorkingGameInfo(Item).eSystemID,
                       TNotWorkingGameInfo(Item).eGameStatus,
                       TNotWorkingGameInfo(Item).eDriverStatus,
-                      TNotWorkingGameInfo(Item).eClone, ACanvas, True);
+                      TNotWorkingGameInfo(Item).eClone, ACanvas, True, False);
      end
   else
      begin

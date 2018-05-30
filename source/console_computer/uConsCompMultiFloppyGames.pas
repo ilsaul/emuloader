@@ -9,23 +9,24 @@ uses
 
 type
   TFormConsCompMultiFloppyGames = class(TForm)
-    GamesList: TEasyListview;
-    BottomBarButtons: TPanelEx;
+    BottomBar: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonNo: TBitBtn;
     IL_LoadMultiFloppy: TImageList;
     PanelWinViceLabel: TPanelEx;
     LabelWinVICE: TLabel;
-    PanelGameTitle: TPanelEx;
+    TopBar: TPanelEx;
     SystemIcon: TImage;
     LabelSystemTitle: TShadowLabel;
-    LabelEmulatorTitle: TShadowLabel;
+    LabelEmulatorDetails: TShadowLabel;
     EmulatorIcon: TImage;
     IL_EmulatorIcon: TImageList;
     LabelTotalFloppyDisks: TShadowLabel;
     ButtonUp: TBitBtn;
     ButtonDown: TBitBtn;
     ButtonRemoveFromList: TBitBtn;
+    FrameGamesList: TPanelEx;
+    GamesList: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure GamesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -53,7 +54,7 @@ var
 
 implementation
 
-uses uMain;
+uses uMain, uCommon;
 
 {$R *.dfm}
 
@@ -135,7 +136,7 @@ begin
   UpdateTotalDisksLabel;
   //UpdateInfo;
   if GamesList.Scrollbars.VertBarVisible then
-     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-GetSystemMetrics(SM_CXVSCROLL); // -16
+     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-GetSystemMetrics(SM_CXVSCROLL);
 end;
 
 procedure TFormConsCompMultiFloppyGames.UpdateTotalDisksLabel;
@@ -179,6 +180,18 @@ end;
 procedure TFormConsCompMultiFloppyGames.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(GamesList);
+  if IsNightMode then
+     begin
+       SetFormColors(FormConsCompMultiFloppyGames, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorDetails);
+       SetLabelColors(LabelTotalFloppyDisks, clWhite, clNavy);
+
+       FrameGamesList.ColorFrame:= $00ff9933;
+       FrameGamesList.ColorInnerFrame:= clBlue;
+
+       GamesList.Color:= FormConsCompMultiFloppyGames.Color;
+       GamesList.Font.Color:= clWhite;
+       GamesList.HotTrack.Color:= clWhite;
+     end;
   AddMultiGames;
 end;
 
@@ -200,8 +213,12 @@ begin
        //ACanvas.Font.Name:= 'Tahoma';
        //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
-       ACanvas.Font.Color:= $00323232;
+       if IsNightMode then
+          ACanvas.Font.Color:= $f1f1f1
+       else
+          ACanvas.Font.Color:= $00323232;
      end;
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
 procedure TFormConsCompMultiFloppyGames.FormKeyPress(Sender: TObject;

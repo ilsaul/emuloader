@@ -4,7 +4,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Image File'
-  ClientHeight = 316
+  ClientHeight = 336
   ClientWidth = 699
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -22,17 +22,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object Shape1: TShape
-    Left = 258
-    Top = 144
-    Width = 76
-    Height = 76
-    Pen.Color = 15856113
-    Shape = stSquare
-  end
   object LabelFilename: TShadowLabel
     Left = 261
-    Top = 108
+    Top = 128
     Width = 428
     Height = 31
     AutoSize = False
@@ -56,7 +48,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelSystemTitle: TShadowLabel
     Left = 261
-    Top = 72
+    Top = 92
     Width = 285
     Height = 19
     Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
@@ -72,9 +64,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     EllipsType = etNone
     Transparent = True
   end
-  object ShadowNewName: TShadowLabel
+  object LabelRenameImage: TShadowLabel
     Left = 261
-    Top = 232
+    Top = 252
     Width = 210
     Height = 16
     Caption = 'New Name (file extension not required)'
@@ -90,16 +82,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     EllipsType = etNone
     Transparent = True
   end
-  object ImageCategoryIcon: TImage
-    Left = 262
-    Top = 148
-    Width = 68
-    Height = 68
-    Transparent = True
-  end
   object LabelSoftwareListTitle: TShadowLabel
     Left = 261
-    Top = 89
+    Top = 109
     Width = 428
     Height = 14
     AutoSize = False
@@ -120,7 +105,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelFileSize: TShadowLabel
     Left = 342
-    Top = 161
+    Top = 181
     Width = 348
     Height = 15
     AutoSize = False
@@ -139,7 +124,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelDateTime: TShadowLabel
     Left = 342
-    Top = 177
+    Top = 197
     Width = 348
     Height = 15
     AutoSize = False
@@ -158,7 +143,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelFileType: TShadowLabel
     Left = 342
-    Top = 193
+    Top = 213
     Width = 348
     Height = 15
     AutoSize = False
@@ -177,7 +162,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelFileTypeMismatch: TShadowLabel
     Left = 385
-    Top = 208
+    Top = 228
     Width = 199
     Height = 16
     Caption = 'file type does not match file extension'
@@ -196,7 +181,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelDimensions: TShadowLabel
     Left = 342
-    Top = 145
+    Top = 165
     Width = 150
     Height = 15
     Caption = 'Dimensions: 1000x1000'
@@ -212,9 +197,32 @@ object FormImageDeleteRename: TFormImageDeleteRename
     EllipsType = etNone
     Transparent = True
   end
-  object PanelEx1: TPanelEx
+  object FrameImageCategoryIcon: TPanelEx
+    Left = 258
+    Top = 164
+    Width = 76
+    Height = 76
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = 15856113
+    EnableInnerFrame = True
+    Frames = [frLeft, frTop, frRight, frBottom]
+    ParentBackground = False
+    Style = vgSolid
+    object ImageCategoryIcon: TImage
+      Left = 4
+      Top = 4
+      Width = 68
+      Height = 68
+      Transparent = True
+    end
+  end
+  object BottomBar: TPanelEx
     Left = 0
-    Top = 275
+    Top = 295
     Width = 699
     Height = 41
     Align = alBottom
@@ -223,6 +231,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -257,28 +266,29 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Left = 0
     Top = 0
     Width = 699
-    Height = 60
+    Height = 80
     Align = alTop
     Color1 = 15792869
     Color2 = clWhite
     Color3 = clYellow
     Color4 = 13690320
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelGameTitle: TShadowLabel
-      Left = 56
+      Left = 76
       Top = 4
-      Width = 636
-      Height = 26
+      Width = 616
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -291,15 +301,15 @@ object FormImageDeleteRename: TFormImageDeleteRename
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 618
-      Top = 33
-      Width = 71
-      Height = 14
+      Left = 608
+      Top = 51
+      Width = 81
+      Height = 15
       Alignment = taRightJustify
       Caption = 'Game Status: '
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -312,19 +322,19 @@ object FormImageDeleteRename: TFormImageDeleteRename
     object GameIcon: TImage
       Left = 2
       Top = 2
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
-    object LabelGameDetails: TShadowLabel
-      Left = 76
-      Top = 33
-      Width = 37
-      Height = 13
+    object LabelGameName: TShadowLabel
+      Left = 106
+      Top = 51
+      Width = 44
+      Height = 14
       Caption = 'name: '
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -335,16 +345,16 @@ object FormImageDeleteRename: TFormImageDeleteRename
       Transparent = True
     end
     object MediaTypeIcon: TImage
-      Left = 56
-      Top = 32
-      Width = 16
-      Height = 16
+      Left = 76
+      Top = 46
+      Width = 24
+      Height = 24
       Transparent = True
     end
   end
   object RenameImageEditBox: TEdit
     Left = 261
-    Top = 248
+    Top = 268
     Width = 315
     Height = 21
     AutoSize = False
@@ -354,14 +364,16 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object ImagePreviewFrame: TPanelEx
     Left = 8
-    Top = 69
+    Top = 89
     Width = 239
     Height = 239
-    Color1 = clSilver
+    Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = 7891291
+    ColorFrame = clSilver
+    ColorInnerFrame = 7891291
+    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid

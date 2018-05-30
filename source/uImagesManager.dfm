@@ -317,6 +317,7 @@ object FormImagesManager: TFormImagesManager
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSimple

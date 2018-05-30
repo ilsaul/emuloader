@@ -17,8 +17,6 @@ const
 type
   TFormGameDetails = class(TForm)
     TopBar: TPanelEx;
-    ROMsListView: TEasyListview;
-    FrameROMsListView: TShape;
     LabelYear: TShadowLabel;
     LabelYearValue: TShadowLabel;
     SystemIcon: TImage;
@@ -27,6 +25,8 @@ type
     LabelEmulatorVersion: TShadowLabel;
     LabelScanMode: TShadowLabel;
     IL_FileType: TImageList;
+    FrameROMsListView: TPanelEx;
+    ROMsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure ROMsListViewItemPaintText(Sender: TCustomEasyListview;
@@ -50,6 +50,7 @@ type
     function  FindZiNcFile(const NameString: String): String;
     procedure CreateLabelTitle(const lTitle: WideString);
     procedure CreateLabelValue(const tValue: WideString; var ShadowLabelVar: TShadowLabel; DriverIndex: ShortInt = -1);
+    procedure SetLabelColor(LabelSource: TShadowLabel; StateIndex: ShortInt);
     function  AddEntry2(const sLabelTitle: String; sValue: WideString = ''; sImageIndex: ShortInt = -1): Boolean;
     function  GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
     procedure FillGameTree;
@@ -152,16 +153,51 @@ begin
   end;
   if DriverIndex <> -1 then
      begin
-       case NewLabelValue.Tag of
-         0: NewLabelValue.Font.Color:= clRed;   // preliminary driver
-         1: NewLabelValue.Font.Color:= clGreen; // good driver
-         2: NewLabelValue.Font.Color:= clOlive; // imperfect driver
-       end
+       SetLabelColor(NewLabelValue, NewLabelValue.Tag);
      end;
   newLabelValue.Top:= TextPos;
   newLabelValue.Caption:= ValueStr;
   ShadowLabelVar:= newLabelValue;
   LeftPanelLastText:= newLabelValue.Top;
+end;
+
+procedure TFormGameDetails.SetLabelColor(LabelSource: TShadowLabel; StateIndex: ShortInt);
+begin
+  case StateIndex of
+     -5: // game type: "Game Files" string
+       begin
+         LabelSource.Font.Color:= MsgTxtColors.colorFileName;
+         if IsNightMode then
+            LabelSource.ShadowColor:= clNavy;
+       end;
+      0: // File Missing
+        begin
+          LabelSource.Font.Color:= clRed;
+          if IsNightMode then
+             LabelSource.ShadowColor:= $323200;
+        end;
+      1: // Have File / ROM
+        begin
+          if IsNightMode then
+             begin
+               LabelSource.Font.Color:= clLime;
+               LabelSource.ShadowColor:= $003232;
+             end
+          else
+             LabelSource.Font.Color:= clGreen;
+        end;
+      2: // Missing ROMs/CHDs
+        begin
+          if IsNightMode then
+             begin
+               LabelSource.Font.Color:= clYellow;
+               LabelSource.ShadowColor:= $003232;
+             end
+          else
+             LabelSource.Font.Color:= clOlive;
+        end;
+      20: LabelSource.Font.Color:= MsgTxtColors.colorFileName; //$00a65300; // Scan Mode
+    end;
 end;
 
 function TFormGameDetails.AddEntry2(const sLabelTitle: String; sValue: WideString = ''; sImageIndex: ShortInt = -1): Boolean;
@@ -228,13 +264,7 @@ begin
   CreateLabelValue(sValue, LabelTemp);
   LabelTemp.Caption:= sValue;
   LabelTemp.Tag:= sImageIndex;
-  case sImageIndex of
-   -5: LabelTemp.Font.Color:= $00a65300;//clNavy; // game type: "Game Files" string
-    0: LabelTemp.Font.Color:= clRed;   // File Missing
-    1: LabelTemp.Font.Color:= clGreen; // Have File / ROM
-    2: LabelTemp.Font.Color:= clOlive; // Missing ROMs/CHDs
-    20: LabelTemp.Font.Color:= $00a65300;//clNavy; // Scan Mode
-  end;
+  SetLabelColor(LabelTemp, sImageIndex);
 
   if LabelTemp.Width > LeftPanelSize then
      LeftPanelSize:= LabelTemp.Width;
@@ -1419,18 +1449,20 @@ begin
   FormMain.ELV_ResetNormalColors(ROMsListView);
   iFormWidth:= FormGameDetails.ClientWidth;
 
+  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+
   case FormMain.MemGameInfo.eIsCustomGame of
     True:
       begin
         LabelScanMode.Visible:= False;
         LabelEmulatorVersion.Width:= 875; //LabelEmulatorVersion.Width+
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
         FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
       end;
     False:
       begin
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                              SystemIcon.Picture.Icon);
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+        //                                      SystemIcon.Picture.Icon);
         FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
       end;
   end;
@@ -1443,11 +1475,26 @@ begin
 
   LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
   //LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
-  case FormMain.MemGameInfo.eGameSetStatus of
-    0: TopBar.Color1:= $00f0fae5; // green
-    1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-    2: TopBar.Color1:= $00d9d9d9;//$00eeeeee; // silver (base on green)
-  end;
+
+  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion);
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
+  if IsNightMode then
+     begin
+       SetLabelColors(LabelYear, clWhite, clNavy);
+       SetLabelColors(LabelYearValue, clWhite, clNavy); //$303030; // dark gray (48, 48, 48) // clGray;//clNavy;
+       SetLabelColors(LabelScanMode, MsgTxtColors.colorMachineName, clNavy);
+
+       FrameROMsListView.ColorFrame:= $00ff9933; // neon blue
+       FrameROMsListView.ColorInnerFrame:= clBlue;
+       FrameROMsListView.Color1:= $00000001;
+       ROMsListView.Color:= $00000001;
+       ROMsListView.Font.Color:= clWhite;
+       //ROMsListView.PaintInfoColumn.Color:= clNavy;
+       //ROMsListView.PaintInfoColumn.Style:= ehbsThemed;
+       //ROMsListView.Header.Font.Color:= clWhite;
+       //ROMsListView.Themed:= False;
+     end;
+
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
 
   LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????
@@ -1527,8 +1574,8 @@ begin
           LeftPanelSize:= LeftPanelMinimumTextSize;
 
        FrameROMsListView.Left:= LabelYearValue.Left+LeftPanelSize+6; // 6 for the border
-       ROMsListView.Left:= FrameROMsListView.Left+1;
-       FormGameDetails.ClientWidth:= ROMsListView.Left+ROMsListView.Width+7; // 7 for the border
+       //FormGameDetails.ClientWidth:= ROMsListView.Left+ROMsListView.Width+7; // 7 for the border
+       FormGameDetails.ClientWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 for the border
        //LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
        //LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
      end;
@@ -1551,14 +1598,16 @@ begin
 
   //iFormHeight:= LeftPanelLastText+LabelYearValue.Height+6; // 6 for the border
 
-  if BottomPos < (iROMsHeight+ROMsListView.Top) then
-     BottomPos:= iROMsHeight+ROMsListView.Top;
+  if BottomPos < (iROMsHeight+FrameROMsListView.Top) then
+     BottomPos:= iROMsHeight+FrameROMsListView.Top;
 
   if BottomPos > Screen.Height-50 then
      BottomPos:= Screen.Height-50; // prevent form height from being larger than screen height
 
-  ROMsListView.Height:= BottomPos-ROMsListView.Top;
+  ROMsListView.Height:= BottomPos-FrameROMsListView.Top;
+  FrameROMsListView.Height:= ROMsListView.Height+4;
 
+  Inc(BottomPos, 4); // add 4 pixels to the bottom of "FrameROMsListView"
   ROMsListView.BeginUpdate;
 
   if ROMsListView.Header.Columns[3].Visible then
@@ -1588,7 +1637,8 @@ begin
           iNewWidth:= -(ROMsListView.Width-iNewWidth);
 
        ROMsListView.Width:= ROMsListView.Width+iNewWidth;
-       iNewWidth:= ROMsListView.Left+ROMsListView.Width+7; // 7 is for the right border
+       FrameROMsListView.Width:= ROMsListView.Width+4;
+       iNewWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 is for the right border
 
        FormGameDetails.ClientWidth:= iNewWidth;
 
@@ -1645,8 +1695,8 @@ begin
   if FormGameDetails.ClientHeight <> BottomPos then
      FormGameDetails.ClientHeight:= BottomPos;
 
-  FrameROMsListView.Width:= ROMsListView.Width+2;
-  FrameROMsListView.Height:= ROMsListView.Height+2;
+  FrameROMsListView.Width:= ROMsListView.Width+4;
+  FrameROMsListView.Height:= ROMsListView.Height+4;
 
   ResizeForm;
 end;

@@ -22,33 +22,6 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelTips: TLabel
-    Left = 8
-    Top = 570
-    Width = 384
-    Height = 36
-    Alignment = taCenter
-    Caption = 
-      'Use games popup menu to enable/disable "mount images on a virtua' +
-      'l drive", or quickly select an emulator for a system (mouse righ' +
-      't-click).'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    Transparent = True
-    WordWrap = True
-  end
-  object BottomFrame: TShape
-    Left = 0
-    Top = 563
-    Width = 684
-    Height = 1
-    Pen.Color = 7891291
-  end
   object EmulatorsList: TEasyListview
     Tag = -1
     Left = 6
@@ -60,7 +33,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     BackGround.OffsetY = -17
     BackGround.Tile = False
     BorderStyle = bsNone
-    CellSizes.Tile.Height = 38
+    CellSizes.Tile.Height = 46
     CellSizes.Tile.Width = 655
     CellSizes.Report.Height = 26
     CellSizes.Report.Width = 466
@@ -83,7 +56,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     PaintInfoGroup.ImageIndent = 6
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Size = 42
-    PaintInfoItem.CheckIndent = 15
+    PaintInfoItem.CheckIndent = 132
     PaintInfoItem.CheckSize = 13
     PaintInfoItem.CheckType = ectRadio
     PaintInfoItem.TileDetailCount = 2
@@ -107,29 +80,78 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     OnItemCheckChange = EmulatorsListItemCheckChange
     OnItemPaintText = EmulatorsListItemPaintText
   end
-  object ButtonOk: TBitBtn
-    Left = 478
-    Top = 576
-    Width = 89
-    Height = 25
-    Hint = 'Close and update settings'
-    Caption = 'Apply'
-    ModalResult = 1
-    TabOrder = 1
-  end
-  object ButtonCancel: TBitBtn
-    Left = 584
-    Top = 576
-    Width = 89
-    Height = 25
-    Hint = 'Abort changes'
-    Caption = 'Abort'
-    ModalResult = 2
-    TabOrder = 2
+  object PanelEx1: TPanelEx
+    Left = 0
+    Top = 563
+    Width = 684
+    Height = 49
+    Align = alBottom
+    Color1 = 15856113
+    Color2 = 14540253
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = [frTop]
+    ParentBackground = False
+    Style = vgSimple
+    object LabelTips: TLabel
+      Left = 9
+      Top = 7
+      Width = 337
+      Height = 36
+      AutoSize = False
+      Caption = 
+        'Enable/disable "mount images on a virtual drive" or select an em' +
+        'ulator to play in games popup menu (mouse right-click).'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+      WordWrap = True
+    end
+    object ButtonOk: TBitBtn
+      Left = 479
+      Top = 14
+      Width = 89
+      Height = 25
+      Hint = 'Close and update settings'
+      Caption = 'Apply'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object ButtonCancel: TBitBtn
+      Left = 585
+      Top = 14
+      Width = 89
+      Height = 25
+      Hint = 'Abort changes'
+      Caption = 'Abort'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object UseSmallIcons: TAdvOfficeCheckBox
+      Left = 384
+      Top = 17
+      Width = 81
+      Height = 20
+      Hint = 'Use small system icons'
+      ShowHint = True
+      TabOrder = 2
+      OnClick = UseSmallIconsClick
+      Alignment = taLeftJustify
+      Caption = 'Small Icons'
+      ReturnIsTab = False
+      Themed = True
+    end
   end
   object IL_EmulatorIcon: TImageList
-    Height = 24
-    Width = 24
+    Height = 32
+    Width = 32
     Left = 56
     Top = 160
   end

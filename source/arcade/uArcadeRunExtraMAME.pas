@@ -37,7 +37,7 @@ type
 
 type
   TFormArcadeRunGameExtraMAME = class(TForm)
-    PanelTop: TPanelEx;
+    TopBar: TPanelEx;
     GameIcon: TImage;
     LabelTitle: TShadowLabel;
     LabelGameNameCloneOf: TShadowLabel;
@@ -1392,6 +1392,7 @@ procedure TFormArcadeRunGameExtraMAME.ResizeForm;
 var
   iWidth, iWidthDec, iHeight: Integer;
 begin
+  Exit;
   if Screen.Width >= 1024 then
      Exit;
 
@@ -1399,7 +1400,7 @@ begin
      begin
        // decrease 200 pixels!!!
        iWidth:= 635;
-       iHeight:= 100;
+       iHeight:= 120;
        AutoSaveState.Caption:= 'Auto';
        AutoSaveState.Width:= 52;
        LabelRecordMovieRootFolder.Hint:= 'Root:';
@@ -1545,12 +1546,16 @@ begin
   InputRecordTimecodeFile.Left:= 170;
 
   LabelTitle.Caption:= FormMain.MemGameInfo.eTitle;
-  FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                              GameIcon.Picture.Icon);
+
+  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+  //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+  //                                            GameIcon.Picture.Icon);
 
   FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
 
   LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
+
+  SetLightColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
 
   // Call adjust form for higher resolutions
   // ... it must be called before the AdjustDisabledPanel() functions!!!!
@@ -1608,20 +1613,22 @@ begin
   if LabelSoftwareListTitle.Visible then
      begin
        LabelMachineInUse.Visible:= True;
+       LabelGameNameCloneOf.Top:= LabelGameNameCloneOf.Top-LabelSoftwareListTitle.Height;
        LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+#13#10+'software list:'+#13#10+'Run with machine';
 
        LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
-       LabelSoftwareListTitle.Left:= 154;
+       LabelSoftwareListTitle.Left:= 182;
+       LabelSoftwareListTitle.Top:= LabelGameNameCloneOf.Top+(LabelSoftwareListTitle.Height*2)-2;
        LabelMachineInUse.Caption:= '['+MachineNameToRun+']: '+LabelMachineInUse.Hint;
-       LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+12;
-       PanelTop.Height:= PanelTop.Height+17;
-       FormArcadeRunGameExtraMAME.ClientHeight:= FormArcadeRunGameExtraMAME.ClientHeight+15;
-       NotebookPages.Top:= NotebookPages.Top+15;
-       PageButtonInput.Top:= PageButtonInput.Top+15;
-       PageButtonSaveState.Top:= PageButtonSaveState.Top+15;
-       PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+15;
-       PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+15;
-       PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+15;
+       LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+LabelSoftwareListTitle.Height-1;// LabelGameNameCloneOf.Top; //  LabelSoftwareListTitle.Top+12;
+       TopBar.Height:= TopBar.Height+6;//17;
+       //FormArcadeRunGameExtraMAME.ClientHeight:= FormArcadeRunGameExtraMAME.ClientHeight+15;
+       //NotebookPages.Top:= NotebookPages.Top+15;
+       //PageButtonInput.Top:= PageButtonInput.Top+15;
+       //PageButtonSaveState.Top:= PageButtonSaveState.Top+15;
+       //PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+15;
+       //PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+15;
+       //PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+15;
      end;
 
   //NotebookPages.DoubleBuffered:= True;

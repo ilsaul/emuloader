@@ -306,6 +306,7 @@ object FormArcadeGamesScanResults: TFormArcadeGamesScanResults
     Color3 = 16641245
     Color4 = 16637122
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -383,6 +384,7 @@ object FormArcadeGamesScanResults: TFormArcadeGamesScanResults
     Color3 = 16448250
     Color4 = clWhite
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frRight, frBottom]
     ParentBackground = False
     Style = vgSimple

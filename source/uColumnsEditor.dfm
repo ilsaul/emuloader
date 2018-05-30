@@ -144,18 +144,18 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object Label3: TLabel
     Left = 222
-    Top = 322
-    Width = 231
-    Height = 52
+    Top = 317
+    Width = 212
+    Height = 65
     AutoSize = False
     Caption = 
       'You can access this dialog and other options in columns header p' +
-      'opup menu (mouse right-click).'#13#10#13#10'There are more options in pref' +
-      'erences screen.'
+      'opup menu (mouse right-click).'#13#10#13#10'More options in preferences sc' +
+      'reen.'
     Font.Charset = ANSI_CHARSET
     Font.Color = 3289650
     Font.Height = -11
-    Font.Name = 'Tahoma'
+    Font.Name = 'Verdana'
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
@@ -366,6 +366,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -404,6 +405,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Color3 = 16707808
     Color4 = 16445669
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

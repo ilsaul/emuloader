@@ -364,6 +364,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frLeft, frTop, frRight, frBottom]
       ParentBackground = False
       Style = vgSimple
@@ -604,6 +605,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 11775403
+      ColorInnerFrame = clGreen
       Frames = [frLeft, frRight, frBottom]
       ParentBackground = False
       Style = vgSolid

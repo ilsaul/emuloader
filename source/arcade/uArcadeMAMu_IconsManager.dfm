@@ -417,6 +417,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgVista
@@ -431,6 +432,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frBottom]
       ParentBackground = False
       Style = vgSimple

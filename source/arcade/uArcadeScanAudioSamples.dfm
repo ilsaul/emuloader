@@ -120,6 +120,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

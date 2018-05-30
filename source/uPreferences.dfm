@@ -34,6 +34,7 @@ object FormPreferences: TFormPreferences
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frRight]
     ParentBackground = False
     Style = vgSolid
@@ -93,7 +94,6 @@ object FormPreferences: TFormPreferences
     Top = 0
     Width = 546
     Height = 392
-    PageIndex = 1
     TabOrder = 0
     object TPage
       Left = 0

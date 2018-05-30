@@ -5,17 +5,18 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, uCommon, uCommonCustom, ImgList, MPCommonObjects, EasyListview,
-  MPCommonUtilities, ExtCtrls, Buttons;
+  MPCommonUtilities, ExtCtrls, Buttons, AdvOfficeButtons, PanelEx;
 
 type
   TFormConsCompSelectEmulator = class(TForm)
     EmulatorsList: TEasyListview;
-    LabelTips: TLabel;
-    BottomFrame: TShape;
     IL_EmulatorIcon: TImageList;
+    IL_Systems: TImageList;
+    PanelEx1: TPanelEx;
+    LabelTips: TLabel;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
-    IL_Systems: TImageList;
+    UseSmallIcons: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure EmulatorsListItemPaintText(Sender: TCustomEasyListview;
@@ -34,8 +35,12 @@ type
       Group: TEasyGroup; ACanvas: TCanvas;
       const RectArray: TEasyRectArrayObject;
       AlphaBlender: TEasyAlphaBlender);
+    procedure UseSmallIconsClick(Sender: TObject);
   private
     newEmulatorIndexToUseCustom: packed array[1..MaxConsoleComputerSystems] of ShortInt; // emulator index to use 1..4
+    SystemIcon: array [1..MaxConsoleComputersystems] of TImage;
+    procedure AddIconImage(sysID: Integer);
+    procedure FreeIconImages;
     procedure AddEmulatorsList;
     procedure ResizeForm;
     { Private declarations }
@@ -52,6 +57,25 @@ uses uMain;
 
 {$R *.dfm}
 
+procedure TFormConsCompSelectEmulator.AddIconImage(sysID: Integer);
+begin
+  SystemIcon[sysID]:= TImage.Create(nil);
+  if UseSmallIcons.Checked then
+     SystemIcon[sysID].Width:= 32
+  else
+    SystemIcon[sysID].Width:= 128;
+  SystemIcon[sysID].Height:= SystemIcon[sysID].Width;
+  FormMain.LoadIconIntoImage(SystemsListCustom[sysID, 1], SystemIcon[sysID], True);
+end;
+
+procedure TFormConsCompSelectEmulator.FreeIconImages;
+var
+  Loop: Integer;
+begin
+  for Loop:= Low(SystemIcon) to High(SystemIcon) do
+      FreeAndNil(SystemIcon[Loop]);
+end;
+
 procedure TFormConsCompSelectEmulator.AddEmulatorsList;
 var
   Loop: Byte;
@@ -61,6 +85,9 @@ var
   Group: TEasyGroup;
   sysList: TStringList;
   sys1Index, sys2Index: ShortInt;
+
+
+
 begin
   for Loop:=1 to MaxConsoleComputerSystems do
       newEmulatorIndexToUseCustom[Loop]:= EmulatorIndexToUseCustom[Loop]; // initialize temp array so user can confirm or cancel changes
@@ -125,6 +152,7 @@ begin
   begin
     sysID:= StrToInt(sysList.ValueFromIndex[Loop]);
     Group:= EmulatorsList.Groups.Add;
+    AddIconImage(sysID);
 
     Group.ImageIndex:= sysID;
     Group.Caption:= SystemsListCustom[sysID, 0];
@@ -186,6 +214,7 @@ begin
        EmulatorsList.Header.Columns[0].Width:= EmulatorsList.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
        EmulatorsList.CellSizes.Report.Width:= EmulatorsList.CellSizes.Report.Width-GetSystemMetrics(SM_CXVSCROLL);
      end;
+  FormMain.HideFilterMsgBox;
   Screen.Cursor:= crDefault;
 end;
 
@@ -255,6 +284,7 @@ var
 begin
   if CanClose then
      begin
+       FreeIconImages;
        if FormConsCompSelectEmulator.ModalResult = mrOk then
        begin
          for Loop:=1 to MaxConsoleComputerSystems do
@@ -279,40 +309,35 @@ begin
   //   Exit;
 
   iDiff:= -1;
-  case iScreenHeight of
-    480: iDiff:= 400-FormConsCompSelectEmulator.Height;
-    600: iDiff:= 620-FormConsCompSelectEmulator.Height;
-  else
-    begin
+  //case iScreenHeight of
+  //  480: iDiff:= 400-FormConsCompSelectEmulator.Height;
+  //  600: iDiff:= 620-FormConsCompSelectEmulator.Height;
+  //else
+  //  begin
       if iScreenHeight > 900 then
          iDiff:= 800-FormConsCompSelectEmulator.Height;
-    end;
-  end;
+  //  end;
+  //end;
   if iDiff <> -1 then
      begin
        EmulatorsList.Height:= EmulatorsList.Height+iDiff;
-       BottomFrame.Top:= BottomFrame.Top+iDiff;
-       LabelTips.Top:= LabelTips.Top+iDiff;
-       ButtonOk.Top:= ButtonOk.Top+iDiff;
-       ButtonCancel.Top:= ButtonCancel.Top+iDiff;
        FormConsCompSelectEmulator.Height:= FormConsCompSelectEmulator.Height+iDiff;
      end;
 
   iDiff:= -1;
-  case iScreenWidth of
-    640: iDiff:= 620-FormConsCompSelectEmulator.Width;
-  else
-    begin
+  //case iScreenWidth of
+  //  640: iDiff:= 620-FormConsCompSelectEmulator.Width;
+  //else
+  //  begin
       if iScreenWidth > 800 then
          iDiff:= 820-FormConsCompSelectEmulator.Width;
-    end;
-  end;
+  //  end;
+  //end;
 
   if iDiff <> -1 then
      begin
        EmulatorsList.CellSizes.Tile.Width:= EmulatorsList.CellSizes.Tile.Width+iDiff;
        EmulatorsList.Width:= EmulatorsList.Width+iDiff;
-       BottomFrame.Width:= BottomFrame.Width+iDiff;
        ButtonOk.Left:= ButtonOk.Left+iDiff;
        ButtonCancel.Left:= ButtonCancel.Left+iDiff;
        FormConsCompSelectEmulator.Width:= FormConsCompSelectEmulator.Width+iDiff;
@@ -329,8 +354,14 @@ procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageGetSize(
   Sender: TCustomEasyListview; Group: TEasyGroup; var ImageWidth,
   ImageHeight: Integer);
 begin
-  ImageWidth:= EmulatorsList.ImagesGroup.Width;
-  ImageHeight:= EmulatorsList.ImagesGroup.Height;
+  if UseSmallIcons.Checked then
+     ImageWidth:= 32
+  else
+     ImageWidth:= 128;
+
+  ImageHeight:= ImageWidth;
+  //ImageWidth:= EmulatorsList.ImagesGroup.Width;
+  //ImageHeight:= EmulatorsList.ImagesGroup.Height;
 end;
 
 procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageDraw(
@@ -341,17 +372,29 @@ var
 begin
   ACanvas.Lock;
 
-  iLeft:= RectArray.IconRect.Left;
+  if UseSmallIcons.Checked then
+     iLeft:= RectArray.IconRect.Left
+  else
+     iLeft:= RectArray.IconRect.Left-5; // -5 to move icon closer to the left border and give some space between the icon and selection bar
   iTop:=  RectArray.IconRect.Top+5; // -> +5 is to be the same as "no custom icon drawing"
 
-  EmulatorsList.ImagesGroup.Draw(ACanvas, iLeft, iTop, Group.ImageIndex);
+  //EmulatorsList.ImagesGroup.Draw(ACanvas, iLeft, iTop, Group.ImageIndex); // no longer used
+
+  ACanvas.Draw(iLeft, iTop, SystemIcon[Group.ImageIndex].Picture.Icon);
 
   iSysTypeIndex:= ACanvas.Pen.Color;
   ACanvas.Pen.Color:= clMedGray;
-  ACanvas.MoveTo(iLeft-5, iTop+EmulatorsList.ImagesGroup.Height+2);
-  ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+EmulatorsList.ImagesGroup.Height+2);
+  if UseSmallIcons.Checked then
+     begin
+       ACanvas.MoveTo(iLeft-5, iTop+32+2); // 32x32 group system icons // EmulatorsList.ImagesGroup.Height+2);
+       ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+32+2); // 32x32 group system icons //EmulatorsList.ImagesGroup.Height+2);
+     end
+  else
+     begin
+       ACanvas.MoveTo(iLeft+132, iTop+32+2); // EmulatorsList.ImagesGroup.Height+2);
+       ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+32+2); // EmulatorsList.ImagesGroup.Height+2);
+     end;
   ACanvas.Pen.Color:= iSysTypeIndex;
-
 
   iLeft:= iLeft+(EmulatorsList.width div 2)-50;// EmulatorsList.ImagesGroup.Width+250;
   iTop:= iTop+(EmulatorsList.ImagesGroup.Height-FormMain.IL_MenuPopup.Height) div 2;
@@ -375,6 +418,34 @@ begin
   ACanvas.Font.Color:= clBlack;
   ACanvas.TextOut(iLeft+20, iTop, GetSystemTypeTitle(Group.ImageIndex, False));
   ACanvas.UnLock;
+end;
+
+procedure TFormConsCompSelectEmulator.UseSmallIconsClick(Sender: TObject);
+var
+  Group: TEasyGroup;
+begin
+  if UseSmallIcons.Checked then
+     begin
+       EmulatorsList.Selection.FullCellIndent:= 0;
+       EmulatorsList.PaintInfoItem.CheckIndent:= 15;
+     end
+  else
+     begin
+       EmulatorsList.Selection.FullCellIndent:= 134;
+       EmulatorsList.PaintInfoItem.CheckIndent:= 134;
+     end;
+
+  if not FormMain.CheckTotal(EmulatorsList) then
+     Exit;
+
+  EmulatorsList.BeginUpdate;
+  FreeIconImages;
+  Group:= EmulatorsList.Groups.FirstGroup;
+  repeat
+    AddIconImage(Group.ImageIndex);
+    Group:= EmulatorsList.Groups.NextGroup(Group);
+  until Group = nil;
+  EmulatorsList.EndUpdate;
 end;
 
 end.

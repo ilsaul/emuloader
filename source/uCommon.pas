@@ -8,7 +8,8 @@ uses
   Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
   Graphics, SysUtils, ShlObj, Forms, Menus, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
-  uMessageBox, uSelectDirectory, Math, MPCommonUtilities, ShadowLabel;
+  uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
+  ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx;
 
 const
   MaxArcadeSystems = 8;
@@ -353,7 +354,17 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
+// bright / dark theme functions
+function  SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+function  SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+function  SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+function  SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1);
+
 procedure PopulateMsgColors;
+procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
+procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; IsBottomColorSilver: Boolean = True);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -505,6 +516,69 @@ var
 
 implementation
 
+function SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+begin
+  LabelSource.Font.Color:= iColor;
+  LabelSource.ShadowColor:= iShadowColor;
+  LabelSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+function SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+begin
+  CheckBoxSource.Font.Color:= iColor;
+  CheckBoxSource.ShadowColor:= iShadowColor;
+  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+function SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+begin
+  CheckBoxSource.Font.Color:= iColor;
+  CheckBoxSource.ShadowColor:= iShadowColor;
+  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+function SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+begin
+  GroupBoxSource.BorderColor:= iBorderColor;
+  GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
+  GroupBoxSource.Font.Color:= iColor;
+  GroupBoxSource.ShadowColor:= iShadowColor;
+  GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1);
+begin
+  if IsNightMode then
+  begin
+    PanelSource.ColorFrame:= $00ff9933;
+    PanelSource.ColorInnerFrame:= clBlue;
+  end
+  else
+  begin
+    PanelSource.ColorFrame:= clSilver;
+    PanelSource.ColorInnerFrame:= $0078695b;
+  end;
+
+  if PanelSource.Style = vgSolid then
+     begin
+       if iColor1 <> -1 then
+          PanelSource.Color1:= iColor1
+       else
+       begin
+         if IsNightMode then
+            PanelSource.Color1:= $00000001
+         else
+            PanelSource.Color1:= $00f1f1f1;
+       end;
+     end
+  else
+     begin
+       // dual colors (vgSimple); both iColor1 and iColor2 must contain valid colors
+       PanelSource.Color1:= iColor1;
+       PanelSource.Color2:= iColor2;
+     end;
+end;
+
 procedure PopulateMsgColors;
 begin
   if IsNightMode then
@@ -536,6 +610,117 @@ begin
       MsgTxtColors.colorWarning:= clMaroon;
       MsgTxtColors.colorExitCode:= $00000060;
     end;
+  end;
+end;
+
+procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
+begin
+  // this is for regular light colors (no dark theme)
+  // $00faf0e5 // blue
+  // $00e5f0fa // red
+  // $00f0fae5 // green
+  // $00e5fafa // yellow
+  PanelSource.Canvas.Lock;
+  case GameSetStatus of
+   -1: PanelSource.Color1:= $00faf0e5; // blue (229, 240, 250)
+    0: PanelSource.Color1:= $00f0fae5; // green (229, 250, 240)
+    1: PanelSource.Color1:= $00e5f0fa; // red, based on green (250, 240, 229)
+    2: PanelSource.Color1:= $00eeeeee; // silver, base on green (238, 238, 238) /// $00d9d9d9 (217, 217, 217) darker silver
+  end;
+  if IsBottomColorSilver then
+     begin
+       if PanelSource.Color2 <> $00f1f1f1 then
+          PanelSource.Color2:= $00f1f1f1; // silver bottom color
+     end
+  else
+     begin
+       if PanelSource.Color2 <> clWhite then
+          PanelSource.Color2:= clWhite; // white bottom color (FormMessageBox ... and others ?)
+     end;
+  PanelSource.Canvas.UnLock;
+end;
+
+procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
+begin
+  //PanelSource.Canvas.Lock;
+  if IsNightMode then
+  begin
+    PanelSource.Canvas.Lock;
+    case GameSetStatus of
+     -1: PanelSource.Color1:= $00590000; // blue (0, 0, 89) // -1 is for message box and unknown game set state
+      0: PanelSource.Color1:= $00005900; // green (0, 89, 0)
+      1: PanelSource.Color1:= $00000059; // red, based on green (89, 0, 0) /// $0000004b (75, 0, 0) darker red
+      2: PanelSource.Color1:= $004c4c4c; // silver, base on desaturated green (76, 76, 76) /// $00595959 (89, 89, 89) darker silver
+    end;
+    if PanelSource.Color2 <> $00000001 then
+       PanelSource.Color2:= $00000001;
+    PanelSource.Canvas.UnLock;
+  end
+  else
+  begin
+    SetLightColorsGameTopBar(GameSetStatus, PanelSource, IsBottomColorSilver);
+    {// $00faf0e5 // blue
+    // $00e5f0fa // red
+    // $00f0fae5 // green
+    // $00e5fafa // yellow
+    case GameSetStatus of
+     -1: PanelSource.Color1:= $00faf0e5; // blue (229, 240, 250)
+      0: PanelSource.Color1:= $00f0fae5; // green (229, 250, 240)
+      1: PanelSource.Color1:= $00e5f0fa; // red, based on green (250, 240, 229)
+      2: PanelSource.Color1:= $00eeeeee; // silver, base on green (238, 238, 238) /// $00d9d9d9 (217, 217, 217) darker silver
+    end;
+    if IsBottomColorSilver then
+       begin
+         if PanelSource.Color2 <> $00f1f1f1 then
+            PanelSource.Color2:= $00f1f1f1; // silver bottom color
+       end
+    else
+       begin
+         if PanelSource.Color2 <> clWhite then
+            PanelSource.Color2:= clWhite; // white bottom color (FormMessageBox ... and others ?)
+       end;}
+  end;
+  //PanelSource.Canvas.UnLock;
+end;
+
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; IsBottomColorSilver: Boolean = True);
+begin
+  if IsNightMode then
+  begin
+    FormSource.Color:= $00000001;
+
+    if PanelTopSource <> nil then
+    begin
+      PanelTopSource.Color1:= $00590000; // will paint to default color no matter what
+      PanelTopSource.Color2:= $00000001; // will paint to default color no matter what
+      PanelTopSource.Color3:= $0078695b;
+      PanelTopSource.ColorFrame:= $00ff9933;
+    end;
+
+    if PanelBottomSource <> nil then
+    begin
+      PanelBottomSource.Color1:= $00000001;
+      PanelBottomSource.Color2:= $00323232;
+      PanelBottomSource.ColorFrame:= $00ff9933;
+    end;
+
+    if LabelGameTitle <> nil then
+    begin
+      LabelGameTitle.Font.Color:= clYellow;
+      LabelGameTitle.ShadowColor:= clMaroon;
+      LabelGameTitle.ShadowEnabled:= True;
+    end;
+
+    if LabelGameName <> nil then
+    begin
+      LabelGameName.Font.Color:= clWhite;
+      LabelGameName.ShadowColor:= clNavy;
+      LabelGameName.ShadowEnabled:= True;
+    end;
+  end
+  else
+  begin
+
   end;
 end;
 
@@ -1388,7 +1573,7 @@ end;
 function GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 begin
   CallMessageBox;
-  FormMessageBox.PanelMessages.Tag:= 1;
+  FormMessageBox.PanelBottom.Tag:= 1;
   FormMessageBox.Caption:= 'Error: Zip File';
   FormMessageBox.LabelMessageTitle:= TitleMessage;
   FormMessageBox.LabelMessage.Clear;
@@ -1413,7 +1598,7 @@ begin
   // 03 -> Command Line
   CallMessageBox;
 
-  FormMessageBox.PanelMessages.Tag:= IconIndex;
+  FormMessageBox.PanelBottom.Tag:= IconIndex;
   FormMessageBox.Caption:= WindowMessage;
   FormMessageBox.LabelMessageTitle:= TitleMessage;
 
@@ -1456,30 +1641,13 @@ begin
     FormMessageBox.NightMode.Checked:= IsNightMode;
     if IsNightMode then
     begin
-      FormMessageBox.PanelTop.Color1:= $00590000;
-      FormMessageBox.PanelTop.Color2:= $00000001;
-      FormMessageBox.PanelTop.Color3:= $0078695b;
-      FormMessageBox.PanelTop.ColorFrame:= $00ff9933;
-      FormMessageBox.Color:= $00000001;
-
-      FormMessageBox.PanelMessages.Color1:= $00000001;
-      FormMessageBox.PanelMessages.Color2:= $00323232;
-      FormMessageBox.PanelMessages.ColorFrame:= $00ff9933;
-
-      FormMessageBox.LabelTitle.Font.Color:= clYellow;
-      FormMessageBox.LabelTitle.ShadowColor:= clMaroon;
-      FormMessageBox.LabelTitle.ShadowEnabled:= True;
-
-      FormMessageBox.LabelGameNameCloneOf.Font.Color:= clWhite;
-      FormMessageBox.LabelGameNameCloneOf.ShadowColor:= clNavy;
-      FormMessageBox.LabelGameNameCloneOf.ShadowEnabled:= True;
+      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, False);
 
       FormMessageBox.LabelMessage.Color:= $00000001;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
       FormMessageBox.NightMode.Font.Color:=$00f1f1f1;
     end;
   end;
-
 end;
 
 procedure FreeMessageBox;

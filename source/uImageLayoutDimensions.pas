@@ -47,7 +47,7 @@ var
   strFile: TMemIniFile;
 begin
   try
-    strFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    strFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     FormImageLayoutDimensions.Left:= strFile.ReadInteger('Layout Dimensions', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
     FormImageLayoutDimensions.Top:= strFile.ReadInteger('Layout Dimensions', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
   finally
@@ -60,7 +60,7 @@ var
   strFile: TMemIniFile;
 begin
   try
-    strFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    strFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     strFile.WriteInteger('Layout Dimensions', 'ScreenLeft', FormImageLayoutDimensions.Left);
     strFile.WriteInteger('Layout Dimensions', 'ScreenTop', FormImageLayoutDimensions.Top);
   finally

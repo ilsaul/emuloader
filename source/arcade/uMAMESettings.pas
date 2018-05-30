@@ -10,7 +10,7 @@ uses
   ShadowLabel, ExTrackBar, ToolWin;
 
 type
-  TScreenInfo = record
+  TScreenInfo = record // for MAME/HBMAME
     eScreenName,
     eScreenAspectRatio,
     eScreenResolution,
@@ -5835,7 +5835,9 @@ begin
          idMAME  : TopBar.Color1:= clSkyBlue; // MAME
          idHBMAME: TopBar.Color1:= $00b4bf8f;//$00bfb490; // HBMAME
        end;
-       FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
+
+       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(sysID), SystemIcon);
+       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
        LabelGameStatus.Visible:= False;
@@ -5871,9 +5873,18 @@ begin
 
        LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
 
-       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                                   SystemIcon.Picture.Icon);
+       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+
+       //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+       //                                            SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+
+       case FormMain.MemGameInfo.eGameSetStatus of
+         0: TopBar.Color1:= $00f0fae5; // green
+         1: TopBar.Color1:= $00e5f0fa; // red (based on green)
+         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
+       end;
+
 
        //if FormMain.MemGameInfo.eSoftwareName <> '' then
        //   begin
@@ -5881,11 +5892,9 @@ begin
        //     LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
        //   end;
 
-       case FormMain.MemGameInfo.eGameSetStatus of
-         0: TopBar.Color1:= $00f0fae5; //green
-         1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
-       end;
+       // do not set dark mode yet! (May 17, 2018) 
+       //SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
+
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
        ButtonPageFolders.Visible:= False;
      end;

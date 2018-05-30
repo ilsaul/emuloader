@@ -63,7 +63,7 @@ type
     IL_MediaType: TImageList;
     TopBar: TPanelEx;
     FilesListView: TEasyListview;
-    PanelBottom: TPanelEx;
+    BottomBar: TPanelEx;
     ButtonNo: TBitBtn;
     ButtonYes: TBitBtn;
     FileTypesGroupBox: TAdvGroupBox;
@@ -108,7 +108,7 @@ type
     ROMsTotalSize, CHDsTotalSize, CFGsTotalSize: Int64;
     ROMsTotalFiles, CHDsTotalFiles, CFGsTotalFiles: Integer;
 
-    procedure SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
     procedure LoadMediaIcons;
     procedure GetFilesCountSize;
     procedure AddFiles; // ROMs and CHDs
@@ -276,15 +276,25 @@ begin
      Result:= -1;
 end;
 
-procedure TFormDeleteGamesFiles.SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+procedure TFormDeleteGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
 var
   Item: TEasyItem;
   sFileType: Integer;
 begin
-  if Enabled then
-     CheckBoxHolder.Font.Color:= $00a65300 //clNavy
+  if IsNightMode then
+  begin
+    if Enabled then
+       SetCheckBoxColors(CheckBoxHolder, MsgTxtColors.colorFileName, clNavy)
+    else
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clBlack);
+  end
   else
-     CheckBoxHolder.Font.Color:= clGray;//$00e6e6e6;
+  begin
+    if Enabled then
+       CheckBoxHolder.Font.Color:= MsgTxtColors.colorFileName// $00a65300 //clNavy
+    else
+       CheckBoxHolder.Font.Color:= clGray;//$00e6e6e6;
+  end;
 
   if CheckBoxHolder.Tag = -1 then
      Exit; // for "Delete Game From Games List"; this one shouldn't do anything to the files list
@@ -678,32 +688,15 @@ procedure TFormDeleteGamesFiles.FormShow(Sender: TObject);
 var
   HeightDiff: Integer;
   Screen480, ScreenHighRes: Boolean;
-
-  {function RemovePixels(PixelsToShrink: Integer): Boolean;
-  begin
-    Result:= True;
-    FilesListView.CellSizes.Tile.Width:=  FilesListView.CellSizes.Tile.Width-PixelsToShrink;
-    FilesListView.Width:= FilesListView.Width-PixelsToShrink;
-    LabelGameTitle.Width:= LabelGameTitle.Width-PixelsToShrink;
-    LabelGameStatus.Left:= LabelGameStatus.Left-PixelsToShrink;
-    DestinationFolder.Width:= DestinationFolder.Width-PixelsToShrink;
-    ButtonSelectROMsFolder.Left:= ButtonSelectROMsFolder.Left-PixelsToShrink;
-    CopyMoveOverwriteFiles.Left:= CopyMoveOverwriteFiles.Left-PixelsToShrink;
-    LabelTotalFiles.Left:= LabelTotalFiles.Left-(PixelsToShrink div 2);
-    LabelTotalFilesChecked.Left:= LabelTotalFiles.Left;
-    ButtonYes.Left:= ButtonYes.Left-PixelsToShrink;
-    ButtonNo.Left:= ButtonNo.Left-PixelsToShrink;
-    FormDeleteGamesFiles.Width:= FormDeleteGamesFiles.Width-PixelsToShrink;
-  end;}
-
 begin
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
   FormMain.ELV_ResetNormalColors(FilesListView);
 
+  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
   case FormMain.MemGameInfo.eIsCustomGame of
     True:
       begin
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
         FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
 
         FileTypesGroupBox.Visible:= False;
@@ -718,8 +711,8 @@ begin
       end;
     False:
       begin
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                                    SystemIcon.Picture.Icon);
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+        //                                            SystemIcon.Picture.Icon);
         FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
       end;
   end;
@@ -754,9 +747,11 @@ begin
     True:
       begin
         LabelGameStatus.Visible:= False;
-        LabelGameDetails.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]; // MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0]+'; file extension '+ExtractFileExtW(FormMain.MemGameInfo.eName);
+        LabelGameDetails.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+#13#10+
+                                   GetSystemTypeTitle(FormMain.MemGameInfo.eCustomSystemID, False);
+        //LabelGameDetails.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]; // MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0]+'; file extension '+ExtractFileExtW(FormMain.MemGameInfo.eName);
         LabelEmulatorVersion.Visible:= False;
-        LabelGameDetails.Top:= LabelGameDetails.Top+7;
+        //LabelGameDetails.Top:= LabelGameDetails.Top+7;
       end;
     False:
       begin
@@ -781,12 +776,7 @@ begin
 
   GameChanged:= False;
   //LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
-  
-  case FormMain.MemGameInfo.eGameSetStatus of
-    0: TopBar.Color1:= $00f0fae5; // green                  - good
-    1: TopBar.Color1:= $00e5f0fa; // red (based on green)   - found with missing ROMs/CHDs
-    2: TopBar.Color1:= $00eeeeee; // silver (base on green) - missing
-  end;
+
   case ActionMode of
     0: ActionString:= 'Delete';
     1: ActionString:= 'Copy';
@@ -813,6 +803,43 @@ begin
   //else
   //   FileTypesGroupBox.Width:= 131;
 
+  ChangeCheckBoxColor(DeleteROMs.Checked, DeleteROMs);
+  ChangeCheckBoxColor(DeleteCHDs.Checked, DeleteCHDs);
+  ChangeCheckBoxColor(DeleteCFGsNVRAMs.Checked, DeleteCFGsNVRAMs);
+
+  ChangeCheckBoxColor(DeleteGameFromGamesList.Checked, DeleteGameFromGamesList);
+  ChangeCheckBoxColor(DeleteGameFileFromDisk.Checked, DeleteGameFileFromDisk);
+
+  if IsNightMode then
+  begin
+    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails);
+    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+                                        // 200,83,0   200,200,0
+    SetLabelColors(LabelSoftwareListTitle, $000053e6, clMaroon);//$0040d6d6);
+    SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);
+    FilesListView.Color:= FormDeleteGamesFiles.Color;
+    FilesListView.Font.Color:= clWhite;
+    FilesListView.HotTrack.Color:= clWhite;
+
+    PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
+    SetLabelColors(LabelCopyMoveDestination, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    DestinationFolder.Color:= FormDeleteGamesFiles.Color;
+    DestinationFolder.Font.Color:= clWhite;
+
+    SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clBlue);
+    SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clBlue);
+
+    FileTypesGroupBox.BorderStyle:= bsDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, $00ff9933, clBlue, clWhite, clNavy);
+
+    SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
+    SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
+  end;
+
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
+  
   // add all files in the list
   Application.ProcessMessages;
   FilesListView.BeginUpdate;
@@ -907,7 +934,7 @@ begin
 
               if FormMain.MemGameInfo.eSoftwareName <> '' then
                  begin
-                   FormMain.AddMsgText('Software List   ', $000053a6, [fsItalic, fsBold], taCenter);
+                   FormMain.AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
                    FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
                  end;
 
@@ -941,7 +968,7 @@ begin
       begin
         ACanvas.Font.Name:= 'Trebuchet MS';
         ACanvas.Font.Size:= ACanvas.Font.Size+2;
-        ACanvas.Font.Color:= clMaroon;
+        ACanvas.Font.Color:= MsgTxtColors.colorWarning;//clMaroon;
         ACanvas.Font.Style:= [fsItalic];
       end;
     1:
@@ -960,9 +987,9 @@ begin
   if Item.Ghosted then
      begin
        if Position = 0 then
-          ACanvas.Font.Color:= $00707070// clSilver
+          ACanvas.Font.Color:= $00707070 // (112, 112, 112) // clSilver
        else
-          ACanvas.Font.Color:= $00464646;//clMedGray;
+          ACanvas.Font.Color:= $00464646; // (70, 70, 70) //clMedGray;
      end;
 end;
 
@@ -1139,7 +1166,7 @@ end;
 
 procedure TFormDeleteGamesFiles.DeleteCHDsClick(Sender: TObject);
 begin
-  SetCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
+  ChangeCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
   if FormDeleteGamesFiles.Visible then
      FilesListView.SetFocus;
 end;

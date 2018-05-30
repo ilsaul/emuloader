@@ -784,6 +784,7 @@ begin
        Exit;
      end;
 
+  Exit;
   if Screen.Width >= 1024 then
      Exit;
 

@@ -104,6 +104,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frTop]
     ParentBackground = False
     Style = vgSimple
@@ -122,9 +123,9 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     object Label1: TLabel
       Left = 608
       Top = 2
-      Width = 34
+      Width = 76
       Height = 15
-      Caption = 'Label1'
+      Caption = 'OnFormResize'
       Transparent = True
       Visible = False
     end

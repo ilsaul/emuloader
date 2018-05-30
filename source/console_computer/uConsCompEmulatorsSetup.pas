@@ -86,7 +86,8 @@ type
     EmuHardDiskDriveParameter: TEdit;
     EmuHardDiskDriveParameter2: TEdit;
     BitBtn1: TBitBtn;
-    LabelVideoPreviewSystem: TShadowLabel;
+    PanelSystemTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
     LabelSystemType: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure EmulatorFileChange(Sender: TObject);
@@ -792,25 +793,79 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.ResizeForm;
 var
-  iDiff: Integer;
+  iDiff, iScreenWidth, iScreenHeight: Integer;
 begin
-  if Screen.Height = 720 then
+  iScreenWidth:= Screen.Width;
+  iScreenHeight:= Screen.Height;
+
+  // no resize necessary for 1280x800 with 68x68 icons
+  if (iScreenWidth < 1280) or (iScreenHeight < 800) then
+  begin // go back to 48x48 icons
+    IL_Systems.Width:= 48;
+    IL_Systems.Height:= 48;
+    Systems.CellSizes.Icon.Width:= 62;
+    Systems.CellSizes.Icon.Height:= 82;
+    Systems.Width:= 577;
+    Systems.Height:= 672;
+    LabelSystemTitle.Width:= 558;
+    PanelEmulators.Left:= 558;
+    PanelEmulators.Height:= 672;
+    if FormConsCompEmulatorsSetup.ClientWidth <> 984 then
+       FormConsCompEmulatorsSetup.ClientWidth:= 984;// .Width:= 1000;
+    if FormConsCompEmulatorsSetup.ClientHeight <> 672 then
+       FormConsCompEmulatorsSetup.ClientHeight:= 672;// Height:= 710;
+
+    if iScreenHeight = 720 then
+       begin
+         PanelSystemTitle.Left:= 0;
+         PanelSystemTitle.Top:= (Systems.CellSizes.Icon.Height*7);
+         PanelSystemTitle.Width:= PanelEmulators.Left;
+         PanelSystemTitle.Height:= Systems.Height-PanelSystemTitle.Top;
+         PanelSystemTitle.Frames:= [frTop];
+       end
+    else
+       begin
+         PanelSystemTitle.Left:= (Systems.CellSizes.Icon.Width*2)+2; // +2 for border
+         PanelSystemTitle.Top:= (Systems.CellSizes.Icon.Height*7)+2;
+         PanelSystemTitle.Width:= PanelEmulators.Left-PanelSystemTitle.Left;
+       end;
+
+    LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+    LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
+  end;
+
+  if iScreenHeight < 720 then
+     begin
+       //FormMain.ResizeFormAddScrollBars(FormConsCompEmulatorsSetup);
+       Exit;
+     end;
+
+  if iScreenHeight = 720 then
      begin
        iDiff:= FormConsCompEmulatorsSetup.Height-670;
        FormConsCompEmulatorsSetup.Height:= 670;
-       Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= FormConsCompEmulatorsSetup.ClientHeight-LabelVideoPreviewSystem.Height;
-       PanelEmulators.Left:= PanelEmulators.Left+Systems.CellSizes.Icon.Width;
+       Systems.Width:= Systems.Width+(Systems.CellSizes.Icon.Width);
+       Systems.Height:= FormConsCompEmulatorsSetup.ClientHeight;
+       PanelSystemTitle.Height:= PanelSystemTitle.Height-iDiff;
+       PanelEmulators.Left:= PanelEmulators.Left+(Systems.CellSizes.Icon.Width);
        PanelEmulators.Height:= PanelEmulators.Height-iDiff;
-       FormConsCompEmulatorsSetup.ClientWidth:= PanelEmulators.Left+PanelEmulators.Width;
-       LabelVideoPreviewSystem.Width:= PanelEmulators.Left-1;
+
+       LabelSystemType.Top:= LabelSystemType.Top-9;
+       LabelSystemTitle.Top:= LabelSystemTitle.Top-9;
+       PanelSystemTitle.Width:= PanelEmulators.Left;
+       PanelSystemTitle.Height:= Systems.Height-PanelSystemTitle.Top;
+       LabelSystemTitle.Width:= PanelEmulators.Left-1;
+       LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+       LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
        PanelBottomButtons.Align:= alNone;
        PanelBottomButtons.Top:= PanelBottomButtons.Top+5;
+       FormConsCompEmulatorsSetup.ClientWidth:= PanelEmulators.Left+PanelEmulators.Width;
      end;
 end;
 
 procedure TFormConsCompEmulatorsSetup.FormShow(Sender: TObject);
 begin
+  
   ResizeForm;
 
   FormMain.ELV_ResetNormalColors(Systems);
@@ -1022,7 +1077,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= Systems.Selection.First.ImageIndex;
-       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelVideoPreviewSystem, LabelSystemType);
+       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType);
        ToggleControls(Systems.Tag);
        if PanelEmulators.Tag <> 1 then
           begin

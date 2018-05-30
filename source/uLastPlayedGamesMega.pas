@@ -67,7 +67,7 @@ type
     PanelGames: TPanelEx;
     LastPlayedList: TEasyListview;
     IL_Systems: TImageList;
-    PanelBottomButtons: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonSelectGame: TBitBtn;
     ButtonClose: TBitBtn;
     PanelPlayedListHeader: TPanelEx;
@@ -585,7 +585,7 @@ begin
         iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
         Systems.Height:= iDiff;
         PanelSystems.Height:= Systems.Height+LabelSystemTitle.Height;
-        FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottomButtons.Height;
+        FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottom.Height;
         iDiff:= FormLastPlayedGamesMega.ClientWidth-LastPlayedList.Width;
         LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth;
         LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+(iDiff div 2);
@@ -673,7 +673,7 @@ begin
              iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
              Systems.Height:= iDiff;
              PanelSystems.Height:= Systems.Height+LabelSystemTitle.Height;
-             FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottomButtons.Height;
+             FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottom.Height;
            end;
         if Systems.Scrollbars.VertBarVisible then
            begin
@@ -689,7 +689,7 @@ begin
   if FormLastPlayedGamesMega.Height > (iScreenHeight-55) then
      begin
        FormLastPlayedGamesMega.Height:= iScreenHeight-55;
-       PanelGames.Height:= FormLastPlayedGamesMega.ClientHeight-PanelSystems.Height-PanelBottomButtons.Height;
+       PanelGames.Height:= FormLastPlayedGamesMega.ClientHeight-PanelSystems.Height-PanelBottom.Height;
        LastPlayedList.Height:= PanelGames.Height-PanelPlayedListHeader.Height;
      end;
 
@@ -723,7 +723,7 @@ begin
 
   LabelSystemType.Top:= LabelSystemTitle.Top;
 
-  ButtonSelectGameExit.Left:= (PanelBottomButtons.Width div 2) - (ButtonSelectGameExit.Width div 2);
+  ButtonSelectGameExit.Left:= (PanelBottom.Width div 2) - (ButtonSelectGameExit.Width div 2);
   ButtonSelectGame.Left:= ButtonSelectGameExit.Left-ButtonSelectGame.Width-6;
   ButtonClose.Left:= ButtonSelectGameExit.Left+ButtonSelectGameExit.Width+6;
 end;
@@ -732,6 +732,19 @@ procedure TFormLastPlayedGamesMega.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(LastPlayedList);
+
+  {if IsNightMode then
+     begin
+       SetFormColors(FormLastPlayedGamesMega, nil, PanelBottom, nil, nil);
+
+       Systems.Color:= FormLastPlayedGamesMega.Color;
+       Systems.Font.Color:= clWhite;
+       Systems.HotTrack.Color:= clWhite;
+
+       LabelSystemTitle.Color:= $00590000;
+       PanelPlayedListHeader.ColorFrame:= clBlue;
+       SetLabelColors(LabelSystemTitle, MsgTxtColors.colorWarning, clred);
+     end;}
 
   LastSelectedStateImageIndex:= -5; // set to "unknown" or "not set"
   AddGamesMRU;

@@ -4,7 +4,7 @@ object FormMAMESettings: TFormMAMESettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 560
+  ClientHeight = 580
   ClientWidth = 868
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -25,7 +25,7 @@ object FormMAMESettings: TFormMAMESettings
   TextHeight = 15
   object NotebookPages: TNotebook
     Left = 0
-    Top = 80
+    Top = 100
     Width = 868
     Height = 454
     Color = 15856113
@@ -8719,7 +8719,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonReadFile: TBitBtn
     Left = 16
-    Top = 526
+    Top = 546
     Width = 89
     Height = 25
     Hint = 'Reload configuration files'
@@ -8729,7 +8729,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonOk: TBitBtn
     Left = 665
-    Top = 526
+    Top = 546
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -8739,7 +8739,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonCancel: TBitBtn
     Left = 763
-    Top = 526
+    Top = 546
     Width = 89
     Height = 25
     Hint = 'Close without updating'
@@ -8751,12 +8751,13 @@ object FormMAMESettings: TFormMAMESettings
     Left = 0
     Top = 0
     Width = 868
-    Height = 60
+    Height = 80
     Color1 = 15792869
     Color2 = 15856113
     Color3 = 1117964
     Color4 = 16448250
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -8764,14 +8765,14 @@ object FormMAMESettings: TFormMAMESettings
       Left = 86
       Top = 1
       Width = 771
-      Height = 26
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -8784,17 +8785,17 @@ object FormMAMESettings: TFormMAMESettings
       WordWrap = True
     end
     object LabelEmulatorVersion: TShadowLabel
-      Left = 86
-      Top = 28
+      Left = 106
+      Top = 48
       Width = 580
-      Height = 25
+      Height = 27
       AutoSize = False
       Caption = 
         'game: gamename [clone of parentname] [bios: biosname]'#13#10'Emulator ' +
         'version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -8809,29 +8810,29 @@ object FormMAMESettings: TFormMAMESettings
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object GameIcon: TImage
-      Left = 56
-      Top = 28
+      Left = 76
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 750
-      Top = 26
-      Width = 110
-      Height = 27
+      Left = 753
+      Top = 45
+      Width = 107
+      Height = 29
       Hint = 'Game Status'
       Alignment = taRightJustify
       AutoSize = False
       Caption = 'Game Status'#13#10'Missing ROMs/CHDs'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -8845,7 +8846,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ToolBarPages: TToolBar
     Left = 300
-    Top = 60
+    Top = 80
     Width = 568
     Height = 21
     Align = alNone
@@ -8958,7 +8959,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonResetToDefault: TBitBtn
     Left = 109
-    Top = 526
+    Top = 546
     Width = 89
     Height = 25
     Hint = 'Load only emulator default settings'
@@ -8968,7 +8969,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonReadFileHelp: TBitBtn
     Left = 202
-    Top = 531
+    Top = 551
     Width = 15
     Height = 15
     Hint = 'Why two reload buttons ?'
@@ -8984,7 +8985,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object ButtonHelpSaveValidateAllCustomFiles: TBitBtn
     Left = 437
-    Top = 531
+    Top = 551
     Width = 15
     Height = 15
     Hint = 'What is this settings for ?'
@@ -9000,7 +9001,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object SaveValidateAllCustomFiles: TAdvOfficeCheckBox
     Left = 455
-    Top = 529
+    Top = 549
     Width = 195
     Height = 20
     Hint = 

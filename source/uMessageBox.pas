@@ -10,13 +10,13 @@ uses
 type
   TFormMessageBox = class(TForm)
     LabelMessage: TRichEditURL;
-    PanelMessages: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonYes: TBitBtn;
     ButtonNo: TBitBtn;
     PanelTop: TPanelEx;
     MessageIcon: TImage;
-    LabelTitle: TShadowLabel;
-    LabelGameNameCloneOf: TShadowLabel;
+    LabelGameTitle: TShadowLabel;
+    LabelGameName: TShadowLabel;
     ButtonYestoAll: TBitBtn;
     ButtonAbort: TBitBtn;
     IconMediaType: TImage;
@@ -89,7 +89,7 @@ end;
 
 procedure TFormMessageBox.FormShow(Sender: TObject);
 var
-  newHeight, scrMaxHeight, MediaTypeIconID: Integer;
+  newHeight, scrMaxHeight{, MediaTypeIconID}: Integer;
 begin
   // icon index:
   // -1 -> Game ID Icon
@@ -103,13 +103,13 @@ begin
   // 07 -> Run Sega Titan-Video multi-slot games
   //if PanelMessages.Tag <> -1 then
   //   PanelMessages.Hint:= 'EmuLoader_Orb.ico';
-  if not LabelGameNameCloneOf.Visible then
+  if not LabelGameName.Visible then
   begin
-    case PanelMessages.Tag of
-      0: PanelMessages.Hint:= 'info.ico';
-      1: PanelMessages.Hint:= 'error.ico';
-      2: PanelMessages.Hint:= 'question.ico';
-      3: PanelMessages.Hint:= 'cmdline.ico';
+    case PanelBottom.Tag of
+      0: PanelBottom.Hint:= 'info.ico';
+      1: PanelBottom.Hint:= 'error.ico';
+      2: PanelBottom.Hint:= 'question.ico';
+      3: PanelBottom.Hint:= 'cmdline.ico';
       //4: PanelMessages.Hint:= 'NeoGeoMVS.ico'; // Run Neo-Geo MVS multi-slot games
       //5: PanelMessages.Hint:= 'SegaMegaTech.ico'; // Run Sega Mega-Tech multi-slot games
       //6: PanelMessages.Hint:= 'cmdline.ico'; // Run Nintendo PlayChoice-10 multi-slot games
@@ -117,29 +117,13 @@ begin
     end;
   end;
 
-  if PanelMessages.Tag = 1 then
-     begin
-       if IsNightMode then
-         PanelTop.Color1:= $0000004b
-       else
-          PanelTop.Color1:= $00e5f0fa; // red
-     end
+  if PanelBottom.Tag = 1 then
+     SetColorsGameTopBar(1, PanelTop, False) // red
   else
-     begin
-       if IsNightMode then
-          PanelTop.Color1:= $00590000
-       else
-          PanelTop.Color1:= $00faf0e5; // blue
-     end;
-
-  // $00faf0e5 // blue
-  // $00e5f0fa // red
-  // $00f0fae5 // green
-  // $00e5fafa // yellow
-  // $00eeeeee // silver
+     SetColorsGameTopBar(-1, PanelTop, False); // blue
 
   if IconMediaType.Tag <> -1 then
-     FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter);
+     FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);
 
   //if not IconMediaType.Visible then
   //   begin
@@ -149,32 +133,35 @@ begin
   //        LabelMessage.Top:= 57;
   //   end;
 
-  if (PanelMessages.Tag = -1) or (LabelGameNameCloneOf.Visible and (PanelMessages.Tag <> 4)) then
+  if (PanelBottom.Tag = -1) or (LabelGameName.Visible and (PanelBottom.Tag <> 4)) then
      begin
-       case FormMain.MemGameInfo.eIsCustomGame of
-         True : FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID,
-                                                            MessageIcon.Picture.Icon);
-         False: FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                                            MessageIcon.Picture.Icon);
-       end;
+       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+
+       //case FormMain.MemGameInfo.eIsCustomGame of
+       //  True : FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID,
+       //                                                     MessageIcon.Picture.Icon);
+       //  False: FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+       //                                                     MessageIcon.Picture.Icon);
+       //end;
      end
   else
-  if PanelMessages.Tag = 4 then // for Multi-cart loading systems...
-     FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
+  if PanelBottom.Tag = 4 then // for Multi-cart loading systems...
+     FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(FormMain.MemGameInfo.eSystemID), MessageIcon)
+     // FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
   else
      begin
-       MessageIcon.Width:= 32;
-       MessageIcon.Height:= 32;
-       LabelTitle.Top:= 3;
-       LabelTitle.Left:= LabelTitle.Left-16;
-       LabelTitle.Width:= LabelTitle.Width+16;
-       PanelTop.Height:= PanelTop.Height-21;
-       LabelMessage.Top:= LabelMessage.Top-21;
-       FormMessageBox.ClientHeight:= FormMessageBox.ClientHeight-21;
-       FormMain.LoadMessageIcon(MessageIcon, PanelMessages.Hint);
+       //MessageIcon.Width:= 32;
+       //MessageIcon.Height:= 32;
+       //LabelGameTitle.Top:= 3;
+       //LabelGameTitle.Left:= LabelGameTitle.Left-16;
+       //LabelGameTitle.Width:= LabelGameTitle.Width+16;
+       //PanelTop.Height:= PanelTop.Height-21;
+       //LabelMessage.Top:= LabelMessage.Top-21;
+       //FormMessageBox.ClientHeight:= FormMessageBox.ClientHeight-21;
+       FormMain.LoadMessageIcon(MessageIcon, PanelBottom.Hint);
      end;
 
-  LabelTitle.Caption:= LabelMessageTitle;
+  LabelGameTitle.Caption:= LabelMessageTitle;
 
   if Screen.Cursor <> crDefault then
      Screen.Cursor:= crDefault;
@@ -183,7 +170,7 @@ begin
      begin
        //scrMaxHeight:= 400; // for debugging 640x840 resolution
        scrMaxHeight:= Screen.Height-80;
-       newHeight:= FormMessageBox.LabelMessage.Top+RichEditHeight+PanelMessages.Height+16;
+       newHeight:= FormMessageBox.LabelMessage.Top+RichEditHeight+PanelBottom.Height+16;
        if newHeight <= scrMaxHeight then
           begin
             // size of URLRichEdit changes according to the text length!!! :)
@@ -221,6 +208,7 @@ end;
 procedure TFormMessageBox.NightModeClick(Sender: TObject);
 begin
   IsNightMode:= NightMode.Checked;
+  FormMain.MenuEnableNightMode.Checked:= IsNightMode;
   PopulateMsgColors;
 end;
 

@@ -4,7 +4,7 @@ object FormZiNcSettings: TFormZiNcSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 489
+  ClientHeight = 509
   ClientWidth = 715
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -24,7 +24,7 @@ object FormZiNcSettings: TFormZiNcSettings
   TextHeight = 15
   object LabelReadFileIni: TShadowLabel
     Left = 108
-    Top = 464
+    Top = 484
     Width = 88
     Height = 16
     Caption = 'LabelReadFileIni'
@@ -42,7 +42,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object LabelControllerZNC: TLabel
     Left = 8
-    Top = 197
+    Top = 217
     Width = 104
     Height = 15
     Caption = 'Controller [.znc file]'
@@ -51,7 +51,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object LabelRendererZNC: TLabel
     Left = 8
-    Top = 243
+    Top = 263
     Width = 98
     Height = 15
     Caption = 'Renderer [.znc file]'
@@ -60,7 +60,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object LabelControllerConfigFile: TLabel
     Left = 288
-    Top = 197
+    Top = 217
     Width = 142
     Height = 15
     Caption = 'Controller Config [.cfg file]'
@@ -69,7 +69,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object LabelRendererConfigFile: TLabel
     Left = 288
-    Top = 243
+    Top = 263
     Width = 136
     Height = 15
     Caption = 'Renderer Config [.cfg file]'
@@ -78,7 +78,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object LabelROMsFolders: TLabel
     Left = 8
-    Top = 67
+    Top = 87
     Width = 73
     Height = 15
     Caption = 'ROMs Folders'
@@ -91,35 +91,36 @@ object FormZiNcSettings: TFormZiNcSettings
     Left = 0
     Top = 0
     Width = 715
-    Height = 60
+    Height = 80
     Align = alTop
     Color1 = 15792869
     Color2 = 15856113
     Color3 = clWhite
     Color4 = 1117964
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object GameIcon: TImage
-      Left = 56
-      Top = 28
+      Left = 76
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 1
-      Width = 619
-      Height = 26
+      Width = 599
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -132,17 +133,17 @@ object FormZiNcSettings: TFormZiNcSettings
       WordWrap = True
     end
     object LabelEmulatorVersion: TShadowLabel
-      Left = 86
-      Top = 28
-      Width = 505
-      Height = 25
+      Left = 106
+      Top = 46
+      Width = 485
+      Height = 27
       AutoSize = False
       Caption = 
         'game: gamename [clone of parentname] [bios: biosname]'#13#10'Emulator ' +
         'version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -157,22 +158,22 @@ object FormZiNcSettings: TFormZiNcSettings
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
       Left = 599
-      Top = 26
+      Top = 45
       Width = 110
-      Height = 27
+      Height = 29
       Hint = 'Game Status'
       Alignment = taRightJustify
       AutoSize = False
       Caption = 'Game Status'#13#10'Missing ROMs/CHDs'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -186,7 +187,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object AudioBox: TAdvGroupBox
     Left = 567
-    Top = 67
+    Top = 87
     Width = 141
     Height = 152
     CheckBox.Checked = True
@@ -297,7 +298,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object AdvGroupBox3: TAdvGroupBox
     Left = 566
-    Top = 243
+    Top = 263
     Width = 141
     Height = 197
     RoundEdges = True
@@ -409,7 +410,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object OpenGLD3DRendererBox: TAdvGroupBox
     Left = 8
-    Top = 288
+    Top = 308
     Width = 483
     Height = 157
     RoundEdges = True
@@ -828,7 +829,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ButtonReadFile: TBitBtn
     Left = 8
-    Top = 458
+    Top = 478
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -838,7 +839,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ButtonOk: TBitBtn
     Left = 521
-    Top = 458
+    Top = 478
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -848,7 +849,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ControllerZNC: TEdit
     Left = 8
-    Top = 213
+    Top = 233
     Width = 219
     Height = 21
     Hint = 'Choose controller plugin'
@@ -862,7 +863,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ControllerZNCButtonSelect: TBitBtn
     Left = 229
-    Top = 213
+    Top = 233
     Width = 43
     Height = 21
     Hint = 'Click here to select a controller file'
@@ -874,7 +875,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object RendererZNC: TEdit
     Left = 8
-    Top = 259
+    Top = 279
     Width = 219
     Height = 21
     Hint = 'Choose renderer to use'
@@ -888,7 +889,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object RendererZNCButtonSelect: TBitBtn
     Left = 229
-    Top = 259
+    Top = 279
     Width = 43
     Height = 21
     Hint = 'Click here to select a renderer file'
@@ -900,7 +901,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ControllerConfigFile: TEdit
     Left = 288
-    Top = 213
+    Top = 233
     Width = 219
     Height = 21
     Hint = 
@@ -915,7 +916,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ControllerConfigFileButtonSelect: TBitBtn
     Left = 509
-    Top = 213
+    Top = 233
     Width = 43
     Height = 21
     Hint = 'Click here to select a controller config file'
@@ -927,7 +928,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object RendererConfigFile: TEdit
     Left = 288
-    Top = 259
+    Top = 279
     Width = 219
     Height = 21
     Hint = 'Gets renderer config info from the filename specified'
@@ -940,7 +941,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object RendererConfigFileButtonSelect: TBitBtn
     Left = 509
-    Top = 259
+    Top = 279
     Width = 43
     Height = 21
     Hint = 'Click here to select a renderer config file'
@@ -953,7 +954,7 @@ object FormZiNcSettings: TFormZiNcSettings
   object FolderROMs: TEasyListview
     Tag = 1
     Left = 8
-    Top = 83
+    Top = 103
     Width = 543
     Height = 83
     Hint = 'ROMs Folders'
@@ -1011,7 +1012,7 @@ object FormZiNcSettings: TFormZiNcSettings
   object ButtonUp: TBitBtn
     Tag = 1
     Left = 8
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Move selected folder up'
@@ -1024,7 +1025,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ButtonDown: TBitBtn
     Left = 51
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Move selected folder down'
@@ -1037,7 +1038,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object FolderROMButtonSelect: TBitBtn
     Left = 380
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Click here to add folders'
@@ -1049,7 +1050,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object FolderROMsButtonEdit: TBitBtn
     Left = 423
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
@@ -1061,7 +1062,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object FolderROMsButtonDelete: TBitBtn
     Left = 466
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
@@ -1073,7 +1074,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object FolderROMsButtonClear: TBitBtn
     Left = 509
-    Top = 167
+    Top = 187
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'
@@ -1085,7 +1086,7 @@ object FormZiNcSettings: TFormZiNcSettings
   end
   object ButtonCancel: TBitBtn
     Left = 619
-    Top = 458
+    Top = 478
     Width = 89
     Height = 25
     Hint = 'Close without updating'

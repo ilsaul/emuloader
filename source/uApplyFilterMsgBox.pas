@@ -4,14 +4,14 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls,
-  ShadowLabel, PanelEx;
+  ShadowLabel, PanelEx, ExtCtrls;
 
 type
   TFormApplyFilterMsgBox = class(TForm)
     PanelBackground: TPanelEx;
-    LabelMsgGroupedView: TShadowLabel;
     LabelBoxMessageTitle: TShadowLabel;
     LabelBoxMessage: TShadowLabel;
+    MsgIcon: TImage;
   private
     { Private declarations }
   public

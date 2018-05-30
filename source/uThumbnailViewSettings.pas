@@ -773,15 +773,6 @@ begin
   end;
   if FormThumbnailView.Tag = 0 then
      UpdateImageSize(True, False);
-
-
-  //tImageWidth:= RectWidth(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
-  //tImageHeight:= RectHeight(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
-
-  //tImageWidth:= GridWidthSize.Position - ((FormMain.GamesListView.PaintInfoItem.Border*2) + 8); // this last "16" is an internal border for the icon Rect ????
-  //tImageHeight:= GridHeightSize.Position - (((FormMain.GamesListView.PaintInfoItem.Border*2) + 8)-TextHeight); // this last "16" is an internal border for the icon Rect ????
-
-  //LabelImageSize.Caption:= 'Image Size: '+IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
 end;
 
 procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);

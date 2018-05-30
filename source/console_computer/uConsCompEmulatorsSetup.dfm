@@ -1,13 +1,13 @@
 object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
-  Left = 590
-  Top = 412
+  Left = 760
+  Top = 428
   ActiveControl = Systems
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Console/Computer Emulators Setup'
-  ClientHeight = 672
-  ClientWidth = 984
-  Color = 15856113
+  ClientHeight = 714
+  ClientWidth = 1206
+  Color = clBlue
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -24,60 +24,15 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelVideoPreviewSystem: TShadowLabel
-    Left = 0
-    Top = 0
-    Width = 558
-    Height = 16
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'ATARI 5200 SUPERSYSTEM'
-    Color = 16448250
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = False
-    Layout = tlCenter
-  end
-  object LabelSystemType: TShadowLabel
-    Left = 32
-    Top = 0
-    Width = 51
-    Height = 16
-    Caption = 'ARCADE'
-    Color = 16448250
-    Constraints.MaxHeight = 16
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = False
-    Layout = tlCenter
-  end
   object Systems: TEasyListview
     Tag = -1
     Left = 0
-    Top = 16
-    Width = 577
-    Height = 656
+    Top = 0
+    Width = 811
+    Height = 714
     BorderStyle = bsNone
-    CellSizes.Icon.Height = 82
-    CellSizes.Icon.Width = 62
+    CellSizes.Icon.Height = 102
+    CellSizes.Icon.Width = 78
     CellSizes.Tile.Width = 186
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -131,15 +86,16 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
   end
   object PanelEmulators: TPanelEx
     Tag = 1
-    Left = 558
+    Left = 780
     Top = 0
     Width = 426
-    Height = 672
+    Height = 714
     Color1 = 15856113
     Color2 = 15132390
     Color3 = 1117964
     Color4 = 1331230
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frLeft]
     ParentBackground = True
     Style = vgSolid
@@ -1135,7 +1091,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     end
     object PanelBottomButtons: TPanelEx
       Left = 0
-      Top = 631
+      Top = 673
       Width = 426
       Height = 41
       Align = alBottom
@@ -1144,6 +1100,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Color3 = 14540253
       Color4 = 14671839
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frLeft]
       ParentBackground = False
       Style = vgSimple
@@ -1234,6 +1191,68 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Visible = False
     OnClick = BitBtn1Click
   end
+  object PanelSystemTitle: TPanelEx
+    Left = 392
+    Top = 614
+    Width = 388
+    Height = 100
+    Color1 = 16448250
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = [frLeft, frTop]
+    ParentBackground = False
+    Style = vgSolid
+    object LabelSystemTitle: TShadowLabel
+      Left = 5
+      Top = 46
+      Width = 378
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'ATARI 5200 SUPERSYSTEM'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelSystemType: TShadowLabel
+      Left = 141
+      Top = 24
+      Width = 105
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'ARCADE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = True
+      Layout = tlCenter
+    end
+  end
   object IL_EmulatorIcon: TImageList
     Height = 32
     Width = 32
@@ -1241,8 +1260,8 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Top = 128
   end
   object IL_Systems: TImageList
-    Height = 48
-    Width = 48
+    Height = 68
+    Width = 68
     Left = 144
     Top = 136
   end

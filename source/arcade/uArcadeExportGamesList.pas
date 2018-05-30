@@ -436,12 +436,8 @@ begin
   if not Result then
      Exit;
 
-  FormApplyFilterMsgBox.LabelMsgGroupedView.Visible:= False;
-  FormApplyFilterMsgBox.LabelBoxMessageTitle.Caption:= FormMain.MenuExportGamesListTextFile.Caption;
-  FormApplyFilterMsgBox.LabelBoxMessage.Caption:= 'Parsing games list to generate file, please wait...';
-  FormApplyFilterMsgBox.Show;
-  Application.ProcessMessages;
-
+  FormMain.ShowFilterMsgBox(FormMain.MenuExportGamesListTextFile.Caption, 'Parsing games list to generate file, please wait...', True);
+  
   FormMain.ClearMemGameInfo(FormMain.TempGameVars); // make sure vars reset to default value... just in case
 
   ExportGames:= THashedStringList.Create;

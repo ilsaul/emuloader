@@ -20,7 +20,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelOptions: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
     Top = 475
     Width = 1230
@@ -31,6 +31,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Color3 = clGray
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -226,6 +227,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -356,6 +358,9 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Header.Height = 23
     Header.Sizeable = False
     Header.Visible = True
+    HotTrack.Color = clBlack
+    HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
+    HotTrack.Underline = False
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
@@ -378,6 +383,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Selection.FullRowSelect = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
+    Selection.RectSelect = True
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False

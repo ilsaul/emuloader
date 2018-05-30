@@ -515,7 +515,7 @@ begin
 
   //cStart:= GetTickCount;
 
-  FormMain.ShowFilterMsgBox('Search Bar', 'Applying filters, please wait...');
+  FormMain.ShowFilterMsgBox('Search Bar', 'Applying filters, please wait...', True);
   //Screen.Cursor:= crHourGlass;
   StrSearch:= LowerCase(FilterGameTitle.Text);
 

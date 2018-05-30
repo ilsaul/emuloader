@@ -498,7 +498,8 @@ begin
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
        TopBar.Color1:= $00dccdc0;
-       FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
+       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idSupermodel), SystemIcon);
+       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
      end
@@ -526,7 +527,8 @@ begin
        FolderROMsButtonEdit.Enabled:= False;
        FolderROMsButtonDelete.Enabled:= False;
        FolderROMsButtonClear.Enabled:= False;
-       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+       //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
        case FormMain.MemGameInfo.eGameSetStatus of

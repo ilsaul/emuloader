@@ -4,8 +4,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Game Files'
-  ClientHeight = 520
-  ClientWidth = 764
+  ClientHeight = 540
+  ClientWidth = 824
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,43 +25,44 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 764
-    Height = 69
+    Width = 824
+    Height = 89
     Align = alTop
     Color1 = 15792869
     Color2 = clWhite
     Color3 = 1117964
     Color4 = 16448250
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object GameIcon: TImage
-      Left = 58
-      Top = 28
+      Left = 78
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 1
-      Width = 670
-      Height = 26
+      Width = 710
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -74,17 +75,17 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 646
-      Top = 26
+      Left = 709
+      Top = 45
       Width = 110
-      Height = 27
+      Height = 29
       Hint = 'Game Status'
       Alignment = taRightJustify
       AutoSize = False
       Caption = 'Game Status'#13#10'Missing ROMs/CHDs'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -96,14 +97,14 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       WordWrap = True
     end
     object LabelGameDetails: TShadowLabel
-      Left = 86
-      Top = 28
-      Width = 290
-      Height = 13
+      Left = 106
+      Top = 46
+      Width = 341
+      Height = 14
       Caption = 'game: gamename [clone of parentname] [bios: biosname]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -114,14 +115,14 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object LabelEmulatorVersion: TShadowLabel
-      Left = 86
-      Top = 40
-      Width = 88
-      Height = 13
+      Left = 106
+      Top = 59
+      Width = 100
+      Height = 14
       Caption = 'Emulator version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -132,8 +133,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object LabelSoftwareListTitle: TShadowLabel
-      Left = 154
-      Top = 51
+      Left = 183
+      Top = 72
       Width = 79
       Height = 14
       Caption = '[softlist title] '
@@ -151,14 +152,14 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Visible = False
     end
     object LabelSoftwareList: TShadowLabel
-      Left = 86
-      Top = 52
-      Width = 68
-      Height = 13
+      Left = 106
+      Top = 72
+      Width = 77
+      Height = 14
       Caption = 'software list:'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -172,11 +173,11 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   end
   object FilesListView: TEasyListview
     Left = 1
-    Top = 69
-    Width = 763
+    Top = 89
+    Width = 823
     Height = 348
     BorderStyle = bsNone
-    CellSizes.Tile.Width = 762
+    CellSizes.Tile.Width = 822
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -223,10 +224,10 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     OnItemPaintText = FilesListViewItemPaintText
     OnKeyAction = FilesListViewKeyAction
   end
-  object PanelBottom: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
-    Top = 465
-    Width = 764
+    Top = 485
+    Width = 824
     Height = 55
     Align = alBottom
     Color1 = clWhite
@@ -234,6 +235,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -276,7 +278,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object ButtonNo: TBitBtn
-      Left = 667
+      Left = 727
       Top = 14
       Width = 89
       Height = 34
@@ -426,7 +428,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Themed = True
     end
     object ButtonYes: TBitBtn
-      Left = 566
+      Left = 626
       Top = 14
       Width = 89
       Height = 34
@@ -438,7 +440,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       OnClick = ButtonYesClick
     end
     object ButtonHelp: TBitBtn
-      Left = 524
+      Left = 584
       Top = 20
       Width = 33
       Height = 23
@@ -452,8 +454,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
   end
   object PanelDestinationFolder: TPanelEx
     Left = 0
-    Top = 417
-    Width = 764
+    Top = 437
+    Width = 824
     Height = 48
     Align = alBottom
     Color1 = clWhite
@@ -461,6 +463,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -481,14 +484,14 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object DestinationFolder: TEdit
       Left = 8
       Top = 20
-      Width = 370
+      Width = 430
       Height = 21
       AutoSize = False
       Color = clWhite
       TabOrder = 0
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
-      Left = 430
+      Left = 490
       Top = 20
       Width = 99
       Height = 20
@@ -503,7 +506,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Themed = True
     end
     object ButtonSelectROMsFolder: TBitBtn
-      Left = 380
+      Left = 440
       Top = 20
       Width = 43
       Height = 21
@@ -515,7 +518,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       OnClick = ButtonSelectROMsFolderClick
     end
     object CopyMoveAddSystemFolder: TAdvOfficeCheckBox
-      Left = 534
+      Left = 594
       Top = 20
       Width = 121
       Height = 20

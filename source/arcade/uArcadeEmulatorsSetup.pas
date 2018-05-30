@@ -10,39 +10,41 @@ uses
 
 type
   TFormArcadeEmulatorsSetup = class(TForm)
-    LabelArcade_exec: TShadowLabel;
-    Arcade_exec: TEdit;
-    ButtonBrowseArcade_exec: TBitBtn;
-    LabelArcade_versioninfo: TShadowLabel;
-    Arcade_versioninfo: TEdit;
-    LabelAlterMAME: TShadowLabel;
-    AlterMAME_exec: TEdit;
-    ButtonBrowseAlterMAME: TBitBtn;
-    ButtonClearAlterMAME: TBitBtn;
-    ButtonHelpAlterMAME: TBitBtn;
     PanelSystemsSelect: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     SystemSelector: TEasyListview;
-    AlterMAME_Autorun: TAdvOfficeCheckBox;
     PanelButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
-    LabelAlterMAME_versioninfo: TShadowLabel;
-    AlterMAME_versioninfo: TEdit;
-    PanelMAMEEmulatorsText: TPanelEx;
-    ShadowLabel1: TShadowLabel;
-    ShadowLabel2: TShadowLabel;
-    ShadowLabel5: TShadowLabel;
-    ShadowLabel6: TShadowLabel;
-    ButtonSetOptionsAlterMAME: TBitBtn;
-    LabelAlterMAME_Autorun: TShadowLabel;
-    ShadowLabel7: TShadowLabel;
-    ShadowLabel3: TShadowLabel;
-    ShadowLabel4: TShadowLabel;
     ButtonSetOptions: TBitBtn;
     ButtonUpdateSystem: TBitBtn;
     ButtonClearSystem: TBitBtn;
     IL_Systems: TImageList;
+    UseLargeIcons: TAdvOfficeCheckBox;
+    PanelEmulatorDetails: TPanelEx;
+    LabelArcade_versioninfo: TShadowLabel;
+    LabelAlterMAME: TShadowLabel;
+    LabelAlterMAME_versioninfo: TShadowLabel;
+    LabelArcade_exec: TShadowLabel;
+    LabelAlterMAME_Autorun: TShadowLabel;
+    ShadowLabel3: TShadowLabel;
+    ShadowLabel4: TShadowLabel;
+    ButtonBrowseArcade_exec: TBitBtn;
+    Arcade_versioninfo: TEdit;
+    AlterMAME_exec: TEdit;
+    ButtonBrowseAlterMAME: TBitBtn;
+    ButtonClearAlterMAME: TBitBtn;
+    ButtonHelpAlterMAME: TBitBtn;
+    AlterMAME_Autorun: TAdvOfficeCheckBox;
+    AlterMAME_versioninfo: TEdit;
+    PanelMAMEEmulatorsText: TPanelEx;
+    ShadowLabel2: TShadowLabel;
+    ShadowLabel1: TShadowLabel;
+    ShadowLabel5: TShadowLabel;
+    ShadowLabel6: TShadowLabel;
+    ShadowLabel7: TShadowLabel;
+    Arcade_exec: TEdit;
+    ButtonSetOptionsAlterMAME: TBitBtn;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -65,6 +67,8 @@ type
     procedure ShadowLabel1MouseLeave(Sender: TObject);
     procedure ShadowLabel1Click(Sender: TObject);
     procedure ButtonSetOptionsAlterMAMEClick(Sender: TObject);
+    procedure UseLargeIconsClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     { Private declarations }
     newEmulatorFile,
@@ -85,6 +89,7 @@ type
     //function  SetEmulatorIcon(sysID: ShortInt; IsAlterMAME: Boolean): Integer;
     procedure ResizeForm;
     procedure SetSystemInfo(sysID: ShortInt);
+    procedure ReadWriteSettings(ReadMode: Boolean);
   public
     { Public declarations }
   end;
@@ -160,6 +165,7 @@ procedure TFormArcadeEmulatorsSetup.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  ReadWriteSettings(True);
   ResizeForm;
 
   FormMain.ELV_ResetNormalColors(SystemSelector);
@@ -408,8 +414,11 @@ procedure TFormArcadeEmulatorsSetup.ResizeForm;
 var
   Loop: Integer;
 begin
+  Exit;
   if Screen.Height > 480 then
      Exit;
+
+  UseLargeIcons.Visible:= False;
   SystemSelector.Left:= 0;
   SystemSelector.Top:= 0;
   LabelSystemTitle.Top:= LabelSystemTitle.Top-16;
@@ -632,6 +641,83 @@ begin
   FormMain.CallEmulatorOptions(newAlterMAMEFile, newAlterMAMEVersion, SystemSelector.Tag, True, newbuildAlterMAME);
 end;
 
+procedure TFormArcadeEmulatorsSetup.ReadWriteSettings(ReadMode: Boolean);
+var
+  INIFile: TMemIniFile;
+  SectionStr: String;
+begin
+  if not FileExists(FormMain.GetFrontendExtraIniFile) then
+     Exit;
+  SectionStr:= 'UseLargeIcons';
+  try
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
+    if ReadMode then
+       UseLargeIcons.Checked:= Boolean(INIFile.ReadInteger(SectionStr, 'ArcadeEmulatorsSetup', 0))
+    else
+       INIFile.WriteInteger(SectionStr, 'ArcadeEmulatorsSetup', Ord(UseLargeIcons.Checked));
+  finally
+    if not ReadMode then
+       INIFile.UpdateFile;
+    FreeAndNil(INIFile);
+  end;
+end;
+
+procedure TFormArcadeEmulatorsSetup.UseLargeIconsClick(Sender: TObject);
+var
+  iDiff: Integer;
+begin
+  if Screen.Height < 720 then
+     Exit;
+  if UseLargeIcons.Checked then
+     IL_Systems.Width:= 128
+  else
+     IL_Systems.Width:= 68;
+
+  IL_Systems.Height:= IL_Systems.Width;
+
+  FormMain.LoadSystemsIcons(IL_Systems);
+
+  if UseLargeIcons.Checked then
+  begin
+    if SystemSelector.CellSizes.Icon.Height = 166 then
+       Exit;
+
+    SystemSelector.PaintInfoItem.IconViewAdjustIconTopBorder:= True;
+    iDiff:=(166*2)-SystemSelector.Height;
+
+    FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight+iDiff;
+    PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top+iDiff;
+    PanelSystemsSelect.Height:= PanelSystemsSelect.Height+iDiff;
+    LabelSystemTitle.Top:= LabelSystemTitle.Top+iDiff;
+    SystemSelector.Height:= 166*2;
+    SystemSelector.CellSizes.Icon.Height:= 166;
+    SystemSelector.CellSizes.Icon.Width:= 156;
+  end
+  else
+  begin
+    if SystemSelector.CellSizes.Icon.Height = 92 then
+       Exit;
+    SystemSelector.PaintInfoItem.IconViewAdjustIconTopBorder:= False;
+    iDiff:= SystemSelector.Height-92;
+    SystemSelector.Height:= 92;
+    SystemSelector.CellSizes.Icon.Height:= 92;
+    SystemSelector.CellSizes.Icon.Width:= 78;
+    LabelSystemTitle.Top:= LabelSystemTitle.Top-iDiff; // 108;
+    PanelSystemsSelect.Height:= PanelSystemsSelect.Height-iDiff; // 125;
+    PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top-iDiff; // 136;
+    FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight-iDiff; //392;
+  end;
+
+  if FormMain.CheckTotal(SystemSelector) then
+     FormArcadeEmulatorsSetup.Top:= (Screen.Height shr 1)-(FormArcadeEmulatorsSetup.Height shr 1)-1;
+end;
+
+procedure TFormArcadeEmulatorsSetup.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if CanClose then
+     ReadWriteSettings(False);
+end;
 
 end.
 

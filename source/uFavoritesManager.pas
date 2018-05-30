@@ -49,9 +49,10 @@ type
     FavSettingSmallFont: TAdvOfficeRadioButton;
     FavSettingLargeFont: TAdvOfficeRadioButton;
     FavSettingMediumFont: TAdvOfficeRadioButton;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
+    Label1: TShadowLabel;
+    Label2: TShadowLabel;
+    Label3: TShadowLabel;
+    LabelSettings: TShadowLabel;
     procedure ToolbarButtonsCustomDraw(Sender: TToolBar;
       const ARect: TRect; var DefaultDraw: Boolean);
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
@@ -1067,10 +1068,25 @@ begin
   PanelFavSettings.Left:= 4;
   PanelFavSettings.Top:= 26;
 
+  if IsNightMode then
+     begin
+       SetFormColors(FormFavoritesManager, nil, nil, nil, nil, False);
+       FavoritesList.Color:= FormFavoritesManager.Color;
+       FavoritesList.Font.Color:= clWhite;
+       FavoritesList.HotTrack.Color:= clWhite;
+
+       SetPanelNightColors(PanelFavSettings);
+
+       SetLabelColors(LabelSettings, clYellow, clMaroon);
+       LabelSettings.Color:= $00590000;
+       SetRadioButtonColors(FavSettingSmallFont, clWhite, clNavy);
+       SetRadioButtonColors(FavSettingMediumFont, clWhite, clNavy);
+       SetRadioButtonColors(FavSettingLargeFont, clWhite, clNavy);
+     end;
   ReadSettings;
 
-  if (Screen.Width < 960) and (FormFavoritesManager.WindowState <> wsMaximized) then
-     FormFavoritesManager.Width:= Screen.Width-5;
+  //if (Screen.Width < 960) and (FormFavoritesManager.WindowState <> wsMaximized) then
+  //   FormFavoritesManager.Width:= Screen.Width-5;
 
   if FormMain.PopupEnableFavorites.Checked then
      begin
@@ -1086,6 +1102,7 @@ begin
   ActiveProfileItem:= nil;
   UpdateFavStatusInGames:= False;
   LoadFavoritesProfiles;
+  FormMain.HideFilterMsgBox;
   SelectCurrentProfile;
 end;
 
@@ -1204,6 +1221,7 @@ end;
 procedure TFormFavoritesManager.ButtonClosePanelFavSettingsClick(Sender: TObject);
 begin
   PanelFavSettings.Visible:= False;
+  FavoritesList.SetFocus;
 end;
 
 procedure TFormFavoritesManager.FavoritesListColumnSizeChanging(
@@ -1227,7 +1245,7 @@ procedure TFormFavoritesManager.ReadSettings;
 var
   iniFile: TMemIniFile;
 begin
-  iniFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+  iniFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
 
   FormFavoritesManager.Tag:= Ord(iniFile.ReadString('FavoritesManager', 'WindowState', 'Normal') = 'Maximized');
 
@@ -1262,10 +1280,10 @@ var
   iniFile: TMemIniFile;
   tmpString: String;
 begin
-  if FormMain.CheckReadOnly(FormMain.FrontendPath+'el_extras.ini') then
+  if FormMain.CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
      Exit;
 
-  iniFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+  iniFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
 
   tmpString:= 'Normal';
   if FormFavoritesManager.WindowState = wsMaximized then

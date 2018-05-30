@@ -61,6 +61,7 @@ type
     CategoryMAMEHandheldMachines: TAdvOfficeCheckBox;
     ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox;
     CategoryMusic: TAdvOfficeCheckBox;
+    CategoryBoardGame: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -182,6 +183,9 @@ begin
         FilterChanged(CategoryPinMAME.Tag, Ord(CategoryPinMAME.Checked));
         CategoryPinMAME.Tag:= Ord(CategoryPinMAME.Checked);
 
+        FilterChanged(CategoryBoardGame.Tag, Ord(CategoryBoardGame.Checked));
+        CategoryBoardGame.Tag:= Ord(CategoryBoardGame.Checked);
+
         FilterChanged(CategoryQuiz.Tag, Ord(CategoryQuiz.Checked));
         CategoryQuiz.Tag:= Ord(CategoryQuiz.Checked);
 
@@ -263,6 +267,7 @@ begin
         ResetFilterCheckBox(CategoryMahjong);
         ResetFilterCheckBox(CategoryTabletop);
         ResetFilterCheckBox(CategoryPinMAME);
+        ResetFilterCheckBox(CategoryBoardGame);
         ResetFilterCheckBox(CategoryQuiz);
 
         ResetFilterCheckBox(CategoryUtilities);
@@ -338,6 +343,7 @@ begin
   CategoryMahjong.Checked:= True;
   CategoryTabletop.Checked:= True;
   CategoryPinMAME.Checked:= True;
+  CategoryBoardGame.Checked:= True;
   CategoryQuiz.Checked:= True;
 
   CategoryUtilities.Checked:= True;

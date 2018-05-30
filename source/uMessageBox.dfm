@@ -4,7 +4,7 @@ object FormMessageBox: TFormMessageBox
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   ClientHeight = 437
-  ClientWidth = 619
+  ClientWidth = 684
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,35 +24,36 @@ object FormMessageBox: TFormMessageBox
   object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 619
-    Height = 60
+    Width = 684
+    Height = 80
     Color1 = 16445669
     Color2 = clWhite
     Color3 = 16112579
     Color4 = 16707808
     ColorFrame = 15658734
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object MessageIcon: TImage
-      Left = 1
-      Top = 1
-      Width = 48
-      Height = 48
+      Left = 4
+      Top = 4
+      Width = 68
+      Height = 68
       Transparent = True
     end
-    object LabelTitle: TShadowLabel
-      Left = 56
-      Top = 10
-      Width = 555
-      Height = 27
+    object LabelGameTitle: TShadowLabel
+      Left = 79
+      Top = 4
+      Width = 599
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -64,15 +65,16 @@ object FormMessageBox: TFormMessageBox
       Layout = tlCenter
       WordWrap = True
     end
-    object LabelGameNameCloneOf: TShadowLabel
-      Left = 76
-      Top = 34
-      Width = 285
-      Height = 13
+    object LabelGameName: TShadowLabel
+      Left = 106
+      Top = 41
+      Width = 570
+      Height = 27
+      AutoSize = False
       Caption = 'name: gamename [clone of gamename] [bios: biosname]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -81,13 +83,14 @@ object FormMessageBox: TFormMessageBox
       ShadowEnabled = False
       EllipsType = etNone
       Transparent = True
+      Layout = tlCenter
       Visible = False
     end
     object IconMediaType: TImage
-      Left = 56
-      Top = 33
-      Width = 16
-      Height = 16
+      Left = 78
+      Top = 44
+      Width = 24
+      Height = 24
       IncrementalDisplay = True
       Transparent = True
       Visible = False
@@ -95,9 +98,9 @@ object FormMessageBox: TFormMessageBox
   end
   object LabelMessage: TRichEditURL
     Left = 8
-    Top = 70
-    Width = 602
-    Height = 325
+    Top = 90
+    Width = 667
+    Height = 305
     BorderStyle = bsNone
     Color = clWhite
     Font.Charset = ANSI_CHARSET
@@ -113,10 +116,10 @@ object FormMessageBox: TFormMessageBox
     OnResizeRequest = LabelMessageResizeRequest
     OnURLClick = LabelMessageURLClick
   end
-  object PanelMessages: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 396
-    Width = 619
+    Width = 684
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -124,11 +127,12 @@ object FormMessageBox: TFormMessageBox
     Color3 = clWhite
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 214
+      Left = 233
       Top = 8
       Width = 89
       Height = 25
@@ -139,7 +143,7 @@ object FormMessageBox: TFormMessageBox
       TabOrder = 0
     end
     object ButtonNo: TBitBtn
-      Left = 317
+      Left = 336
       Top = 8
       Width = 89
       Height = 25
@@ -150,7 +154,7 @@ object FormMessageBox: TFormMessageBox
       TabOrder = 1
     end
     object ButtonYestoAll: TBitBtn
-      Left = 124
+      Left = 151
       Top = 8
       Width = 89
       Height = 25
@@ -165,7 +169,7 @@ object FormMessageBox: TFormMessageBox
       Visible = False
     end
     object ButtonAbort: TBitBtn
-      Left = 424
+      Left = 443
       Top = 8
       Width = 89
       Height = 25
@@ -182,6 +186,8 @@ object FormMessageBox: TFormMessageBox
       Top = 11
       Width = 87
       Height = 20
+      Hint = 'Check to use a dark theme'
+      ShowHint = True
       TabOrder = 4
       OnClick = NightModeClick
       Alignment = taLeftJustify

@@ -34,6 +34,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -125,6 +126,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frTop]
       ParentBackground = False
       Style = vgSimple
@@ -216,6 +218,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -262,7 +265,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
-      Transparent = False
+      Transparent = True
       Layout = tlCenter
     end
     object Systems: TEasyListview
@@ -324,7 +327,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       OnItemSelectionChanged = SystemsItemSelectionChanged
     end
   end
-  object PanelBottomButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 925
     Width = 1178
@@ -335,6 +338,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Color3 = 14540253
     Color4 = 14671839
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

@@ -4,8 +4,8 @@ object FormArcadeFileVersions: TFormArcadeFileVersions
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'MAME and Arcade Files Versions'
-  ClientHeight = 528
-  ClientWidth = 592
+  ClientHeight = 624
+  ClientWidth = 684
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,22 +24,22 @@ object FormArcadeFileVersions: TFormArcadeFileVersions
   object Systems: TEasyListview
     Left = 0
     Top = 0
-    Width = 592
-    Height = 528
+    Width = 684
+    Height = 624
     Align = alClient
     BorderStyle = bsNone
-    CellSizes.Tile.Height = 66
-    CellSizes.Tile.Width = 592
+    CellSizes.Tile.Height = 78
+    CellSizes.Tile.Width = 684
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -9
+    EditManager.Font.Height = -11
     EditManager.Font.Name = 'Verdana'
     EditManager.Font.Style = []
     UseDockManager = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -9
+    Font.Height = -11
     Font.Name = 'Verdana'
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
@@ -65,7 +65,7 @@ object FormArcadeFileVersions: TFormArcadeFileVersions
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
-    ImagesExLarge = FormMain.IL_ArcadeSystem_ExtraLarge
+    ImagesExLarge = IL_Systems
     PaintInfoGroup.Expandable = False
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoItem.BorderColor = 16370824
@@ -94,5 +94,11 @@ object FormArcadeFileVersions: TFormArcadeFileVersions
     TabOrder = 0
     View = elsTile
     OnItemPaintText = SystemsItemPaintText
+  end
+  object IL_Systems: TImageList
+    Height = 68
+    Width = 68
+    Left = 96
+    Top = 112
   end
 end

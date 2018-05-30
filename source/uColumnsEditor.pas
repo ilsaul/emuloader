@@ -194,6 +194,7 @@ procedure TFormColumnsEditor.ResizeForm;
 var
   iDiff: Integer;
 begin
+  Exit; // minimum resolution 800x600 required
   if Screen.Height > 480 then
      Exit;
 

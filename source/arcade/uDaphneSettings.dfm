@@ -4,8 +4,8 @@ object FormDaphneSettings: TFormDaphneSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 404
-  ClientWidth = 561
+  ClientHeight = 424
+  ClientWidth = 581
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,43 +25,44 @@ object FormDaphneSettings: TFormDaphneSettings
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 561
-    Height = 60
+    Width = 581
+    Height = 80
     Align = alTop
     Color1 = 12639452
     Color2 = 15856113
     Color3 = clWhite
     Color4 = 1117964
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object GameIcon: TImage
-      Left = 58
-      Top = 30
+      Left = 78
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 1
-      Width = 480
-      Height = 26
+      Width = 470
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -74,14 +75,14 @@ object FormDaphneSettings: TFormDaphneSettings
       WordWrap = True
     end
     object LabelEmulatorFile: TLabel
-      Left = 86
-      Top = 28
-      Width = 63
-      Height = 12
+      Left = 106
+      Top = 46
+      Width = 72
+      Height = 13
       Caption = 'Emulator file'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -89,14 +90,14 @@ object FormDaphneSettings: TFormDaphneSettings
       Transparent = True
     end
     object LabelReadFileIni: TLabel
-      Left = 86
-      Top = 40
-      Width = 128
-      Height = 12
+      Left = 106
+      Top = 59
+      Width = 147
+      Height = 13
       Caption = 'Emulator Config Filename'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -106,7 +107,7 @@ object FormDaphneSettings: TFormDaphneSettings
   end
   object GeneralBox: TAdvGroupBox
     Left = 8
-    Top = 67
+    Top = 87
     Width = 313
     Height = 195
     RoundEdges = True
@@ -292,8 +293,8 @@ object FormDaphneSettings: TFormDaphneSettings
     end
   end
   object AdvGroupBox4: TAdvGroupBox
-    Left = 368
-    Top = 67
+    Left = 388
+    Top = 87
     Width = 185
     Height = 195
     RoundEdges = True
@@ -414,7 +415,7 @@ object FormDaphneSettings: TFormDaphneSettings
   end
   object AudioBox: TAdvGroupBox
     Left = 8
-    Top = 273
+    Top = 293
     Width = 233
     Height = 85
     RoundEdges = True
@@ -479,7 +480,7 @@ object FormDaphneSettings: TFormDaphneSettings
   end
   object ButtonReadFile: TBitBtn
     Left = 8
-    Top = 372
+    Top = 392
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -490,8 +491,8 @@ object FormDaphneSettings: TFormDaphneSettings
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 366
-    Top = 372
+    Left = 386
+    Top = 392
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -502,8 +503,8 @@ object FormDaphneSettings: TFormDaphneSettings
     TabOrder = 5
   end
   object ButtonCancel: TBitBtn
-    Left = 464
-    Top = 372
+    Left = 484
+    Top = 392
     Width = 89
     Height = 25
     Hint = 'Close without updating'

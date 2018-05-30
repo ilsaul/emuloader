@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   IniFiles, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
-  AdvOfficeButtons, StdCtrls, Buttons, PanelEx, ShadowLabel, ImgList;
+  AdvOfficeButtons, StdCtrls, Buttons, PanelEx, ShadowLabel, ImgList,
+  ExtCtrls;
 
 type
   TSoftwareInfo = class(TEasyItemStored)
@@ -33,16 +34,21 @@ type
 
 type
   TFormArcadeSoftwareListCustomize = class(TForm)
-    SoftwareLists: TEasyListview;
-    PanelMessages: TPanelEx;
+    BottomBar: TPanelEx;
     ButtonYes: TBitBtn;
     ButtonNo: TBitBtn;
     ButtonResetToCurrent: TBitBtn;
     CheckAll: TAdvOfficeCheckBox;
     LabelTotalSoftwareList: TShadowLabel;
-    ShadowLabel1: TShadowLabel;
     FilterShowUncheckedOnly: TAdvOfficeCheckBox;
     IL_MediaType: TImageList;
+    TopBar: TPanelEx;
+    SystemIcon: TImage;
+    LabelSystemTitle: TShadowLabel;
+    EmulatorIcon: TImage;
+    LabelEmulatorVersion: TShadowLabel;
+    FrameSoftwareList: TPanelEx;
+    SoftwareLists: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure CheckAllClick(Sender: TObject);
@@ -253,6 +259,8 @@ begin
     end;
 
     SoftwareLists.Sort.SortAll;
+    SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+
     SoftwareLists.Items.ReIndexDisable:= False;
     SoftwareLists.EndUpdate(False);
     LabelTotalSoftwareList.Tag:= SoftwareLists.Items.Count;
@@ -266,12 +274,14 @@ begin
 
   FreeAndNil(iFiles);
 
+
 end;
 
 procedure TFormArcadeSoftwareListCustomize.ResizeForm;
 var
   iDiffW, iDiffH: Integer;
 begin
+  Exit;
   if Screen.Height = 480 then
      Exit;
 
@@ -303,10 +313,31 @@ end;
 
 procedure TFormArcadeSoftwareListCustomize.FormShow(Sender: TObject);
 begin
-  SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+  //SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   FormMain.ELV_ResetNormalColors(SoftwareLists);
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
+  FormMain.LoadIconIntoImage('emu_ume', SystemIcon, False);
+  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon, False);
+
+  LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
+
   ResizeForm;
+
+  if IsNightMode then
+     begin
+       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, False);
+       SetLabelColors(LabelTotalSoftwareList, clWhite, clNavy);
+
+       FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
+       FrameSoftwareList.ColorInnerFrame:= clBlue;
+       FrameSoftwareList.Color1:= $00000001;
+       SoftwareLists.Color:= $00000001;
+       SoftwareLists.Font.Color:= clWhite;
+
+       SetCheckBoxColors(CheckAll, clWhite, clNavy);
+       SetCheckBoxColors(FilterShowUncheckedOnly, clWhite, clNavy);
+     end;
+
   GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
   FormMain.HideFilterMsgBox;
 end;

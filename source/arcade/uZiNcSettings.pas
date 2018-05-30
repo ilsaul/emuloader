@@ -515,7 +515,8 @@ begin
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
        TopBar.Color1:= $00c0cddc;
-       FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idZiNc, SystemIcon.Picture.Icon);
+       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idZiNc), SystemIcon);
+       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idZiNc, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
      end
@@ -543,13 +544,14 @@ begin
        FolderROMsButtonDelete.Enabled:= False;
        FolderROMsButtonClear.Enabled:= False;
 
-       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+       //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
        case FormMain.MemGameInfo.eGameSetStatus of
          0: TopBar.Color1:= $00f0fae5; // green
          1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-         2: TopBar.Color1:= $00d9d9d9; //$00eeeeee; // silver (base on green)
+         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
        end;
      end;
   OpenGLD3DRendererBox.DoubleBuffered:= True;

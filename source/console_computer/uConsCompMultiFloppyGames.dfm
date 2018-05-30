@@ -5,8 +5,8 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
   BorderStyle = bsDialog
   Caption = 'Load Multi Floppy Disks Game'
   ClientHeight = 462
-  ClientWidth = 873
-  Color = clBlue
+  ClientWidth = 885
+  Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -21,103 +21,19 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object GamesList: TEasyListview
-    Left = 0
-    Top = 63
-    Width = 873
-    Height = 296
-    Align = alTop
-    CellSizes.Tile.Width = 254
-    CellSizes.Report.Height = 22
-    Color = clWhite
-    DisabledBlendAlpha = 0
-    EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Segoe UI'
-    EditManager.Font.Style = []
-    ImagesState = IL_LoadMultiFloppy
-    UseDockManager = False
-    HintType = ehtToolTip
-    Header.Columns.Items = {
-      0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000017000000FFFFFF1F0001000000
-      0100000001000000440000000000000000000000000011000000544561737943
-      6F6C756D6E53746F726564FFFECE000600000080080001010001010000000000
-      0086010000FFFFFF1F000100000001000000050000005400690074006C006500
-      000000000000000000000000110000005445617379436F6C756D6E53746F7265
-      64FFFECE000600000080080001010001020000000000003C000000FFFFFF1F00
-      0100000001000000040000005900650061007200000000000000000000000000
-      110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
-      0101000103000000000000B9000000FFFFFF1F0001000000010000000C000000
-      4D0061006E007500660061006300740075007200650072000000000000000000
-      00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-      0080080001010001040000000000003C000000FFFFFF1F000100000001000000
-      04000000460069006C0065000000000000000000000000001100000054456173
-      79436F6C756D6E53746F726564FFFECE00060000008008000101000105000000
-      0000009B000000FFFFFF1F0001000000010000000600000050006C0061007900
-      65006400000000000000000000000000110000005445617379436F6C756D6E53
-      746F726564FFFECE0006000000800000010100010600000000000132000000FF
-      FFFF1F0001000000010000000C000000460069006C006500460075006C006C00
-      5000610074006800000000000000000000000000}
-    Header.Draggable = False
-    Header.Height = 23
-    Header.Sizeable = False
-    Header.Visible = True
-    IncrementalSearch.Enabled = True
-    IncrementalSearch.ResetTime = 1000
-    IncrementalSearch.StartType = eissFocusedNode
-    PaintInfoColumn.CaptionIndent = 0
-    PaintInfoColumn.HotTrack = False
-    PaintInfoGroup.BandBlended = False
-    PaintInfoGroup.BandEnabled = False
-    PaintInfoGroup.Expandable = False
-    PaintInfoGroup.MarginBottom.Size = 0
-    PaintInfoGroup.MarginBottom.Visible = True
-    PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoGroup.MarginTop.Size = 20
-    PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.ImageIndent = 0
-    PaintInfoItem.ShowBorder = False
-    ParentShowHint = False
-    ShowThemedBorder = False
-    ShowHint = True
-    Selection.BlendAlphaImage = 0
-    Selection.BlendColorSelRect = 10902593
-    Selection.BlendIcon = False
-    Selection.BorderColor = 10902593
-    Selection.BorderColorSelRect = 10902593
-    Selection.Color = 10902593
-    Selection.FullCellPaint = True
-    Selection.FullItemPaint = True
-    Selection.FullRowSelect = True
-    Selection.GradientColorBottom = 16506264
-    Selection.GradientColorTop = 15582647
-    Selection.InactiveBorderColor = 10902593
-    Selection.InactiveColor = 15582647
-    Selection.MouseButton = [cmbLeft, cmbRight]
-    Selection.MultiSelect = True
-    Selection.RoundRectRadius = 2
-    Selection.TextColor = clBlack
-    Selection.UseFocusRect = False
-    TabOrder = 0
-    View = elsReport
-    OnItemCompare = GamesListItemCompare
-    OnItemPaintText = GamesListItemPaintText
-    OnKeyAction = GamesListKeyAction
-  end
-  object BottomBarButtons: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
     Top = 421
-    Width = 873
+    Width = 885
     Height = 41
     Align = alBottom
-    Color1 = 15856113
-    Color2 = 14540253
+    Color1 = clWhite
+    Color2 = 15856113
     Color3 = clWhite
     Color4 = 15856113
     ColorFrame = 7891291
-    Frames = [frTop]
+    ColorInnerFrame = clGreen
+    Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelTotalFloppyDisks: TShadowLabel
@@ -133,7 +49,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
-      ShadowColor = 16448250
+      ShadowColor = 14606046
       ShadowEnabled = True
       EllipsType = etPathEllips
       Transparent = True
@@ -226,6 +142,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -246,32 +163,33 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       Transparent = True
     end
   end
-  object PanelGameTitle: TPanelEx
+  object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 873
-    Height = 63
+    Width = 885
+    Height = 83
     Align = alTop
     Color1 = 16445669
     Color2 = clWhite
     Color3 = 16112579
     Color4 = 16707808
     ColorFrame = 7891291
-    Frames = [frBottom]
+    ColorInnerFrame = clGreen
+    Frames = []
     ParentBackground = False
     Style = vgSimple
     object SystemIcon: TImage
       Tag = -50
-      Left = 1
-      Top = 1
-      Width = 48
-      Height = 48
+      Left = 4
+      Top = 4
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object LabelSystemTitle: TShadowLabel
-      Left = 56
-      Top = 4
-      Width = 600
+      Left = 79
+      Top = 7
+      Width = 781
       Height = 17
       AutoSize = False
       Caption = 'System Title'
@@ -289,17 +207,18 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       Layout = tlCenter
       WordWrap = True
     end
-    object LabelEmulatorTitle: TShadowLabel
-      Left = 86
-      Top = 24
-      Width = 455
-      Height = 13
+    object LabelEmulatorDetails: TShadowLabel
+      Left = 109
+      Top = 47
+      Width = 759
+      Height = 27
+      AutoSize = False
       Caption = 
         'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
         'ftlist: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -311,11 +230,111 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     end
     object EmulatorIcon: TImage
       Tag = -50
-      Left = 56
-      Top = 26
+      Left = 79
+      Top = 49
       Width = 24
       Height = 24
       Transparent = True
+    end
+  end
+  object FrameGamesList: TPanelEx
+    Left = 4
+    Top = 88
+    Width = 877
+    Height = 300
+    Color1 = clBlue
+    Color2 = clSilver
+    Color3 = 7891291
+    Color4 = 7891291
+    ColorFrame = clSilver
+    ColorInnerFrame = 7891291
+    EnableInnerFrame = True
+    Frames = [frLeft, frTop, frRight, frBottom]
+    ParentBackground = False
+    Style = vgSolid
+    object GamesList: TEasyListview
+      Left = 2
+      Top = 2
+      Width = 873
+      Height = 296
+      CellSizes.Tile.Width = 254
+      CellSizes.Report.Height = 22
+      Color = clWhite
+      DisabledBlendAlpha = 0
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clBlack
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Style = []
+      ImagesState = IL_LoadMultiFloppy
+      UseDockManager = False
+      HintType = ehtToolTip
+      Header.Columns.Items = {
+        0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
+        0006000000800800010100010000000000000017000000FFFFFF1F0001000000
+        0100000001000000440000000000000000000000000011000000544561737943
+        6F6C756D6E53746F726564FFFECE000600000080080001010001010000000000
+        0086010000FFFFFF1F000100000001000000050000005400690074006C006500
+        000000000000000000000000110000005445617379436F6C756D6E53746F7265
+        64FFFECE000600000080080001010001020000000000003C000000FFFFFF1F00
+        0100000001000000040000005900650061007200000000000000000000000000
+        110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+        0101000103000000000000B9000000FFFFFF1F0001000000010000000C000000
+        4D0061006E007500660061006300740075007200650072000000000000000000
+        00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+        0080080001010001040000000000003C000000FFFFFF1F000100000001000000
+        04000000460069006C0065000000000000000000000000001100000054456173
+        79436F6C756D6E53746F726564FFFECE00060000008008000101000105000000
+        0000009B000000FFFFFF1F0001000000010000000600000050006C0061007900
+        65006400000000000000000000000000110000005445617379436F6C756D6E53
+        746F726564FFFECE0006000000800000010100010600000000000132000000FF
+        FFFF1F0001000000010000000C000000460069006C006500460075006C006C00
+        5000610074006800000000000000000000000000}
+      Header.Draggable = False
+      Header.Height = 23
+      Header.Sizeable = False
+      Header.Visible = True
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      PaintInfoColumn.CaptionIndent = 0
+      PaintInfoColumn.HotTrack = False
+      PaintInfoGroup.BandBlended = False
+      PaintInfoGroup.BandEnabled = False
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.Size = 0
+      PaintInfoGroup.MarginBottom.Visible = True
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoGroup.MarginTop.Size = 20
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.ImageIndent = 0
+      PaintInfoItem.ShowBorder = False
+      ParentShowHint = False
+      ShowThemedBorder = False
+      ShowHint = True
+      Selection.BlendAlphaImage = 0
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.MultiSelect = True
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsReport
+      OnItemCompare = GamesListItemCompare
+      OnItemPaintText = GamesListItemPaintText
+      OnKeyAction = GamesListKeyAction
     end
   end
   object IL_LoadMultiFloppy: TImageList

@@ -10,7 +10,19 @@ uses
 type
   TFormConsCompGamesFolders = class(TForm)
     Systems: TEasyListview;
+    PanelFolders: TPanelEx;
+    IL_GameIconSmall: TImageList;
     LabelFolderROM: TShadowLabel;
+    LabelFolderDiscImage: TShadowLabel;
+    LabelFolderFloppyDisk: TShadowLabel;
+    LabelFolderCassetteTape: TShadowLabel;
+    LabelRecursiveFolderInfo: TShadowLabel;
+    IconCartridge: TImage;
+    IconDiscImage: TImage;
+    IconFloppyDisk: TImage;
+    IconCassetteTape: TImage;
+    LabelFolderHardDiskDrive: TShadowLabel;
+    IconHardDiskDrive: TImage;
     FolderROM: TEasyListview;
     ButtonMoveFolderUp_ROM: TBitBtn;
     ButtonMoveFolderDown_ROM: TBitBtn;
@@ -18,8 +30,6 @@ type
     ButtonDeleteFolder_ROM: TBitBtn;
     ButtonEditFolder_ROM: TBitBtn;
     ButtonClearFolder_ROM: TBitBtn;
-    Shape1: TShape;
-    LabelFolderDiscImage: TShadowLabel;
     FolderDiscImage: TEasyListview;
     ButtonMoveFolderUp_ISO: TBitBtn;
     ButtonMoveFolderDown_ISO: TBitBtn;
@@ -27,14 +37,12 @@ type
     ButtonDeleteFolder_ISO: TBitBtn;
     ButtonEditFolder_ISO: TBitBtn;
     ButtonClearFolder_ISO: TBitBtn;
-    LabelFolderFloppyDisk: TShadowLabel;
     FolderFloppyDisk: TEasyListview;
     ButtonMoveFolderDown_FLOPPY: TBitBtn;
     ButtonAddFolder_FLOPPY: TBitBtn;
     ButtonDeleteFolder_FLOPPY: TBitBtn;
     ButtonEditFolder_FLOPPY: TBitBtn;
     ButtonClearFolder_FLOPPY: TBitBtn;
-    LabelFolderCassetteTape: TShadowLabel;
     FolderCassetteTape: TEasyListview;
     ButtonMoveFolderUp_TAPE: TBitBtn;
     ButtonMoveFolderDown_TAPE: TBitBtn;
@@ -43,19 +51,9 @@ type
     ButtonEditFolder_TAPE: TBitBtn;
     ButtonClearFolder_TAPE: TBitBtn;
     ButtonMoveFolderUp_FLOPPY: TBitBtn;
-    LabelRecursiveFolderInfo: TShadowLabel;
-    PanelEx1: TPanelEx;
     PanelBottomButtons: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
-    IconCartridge: TImage;
-    IconDiscImage: TImage;
-    IconFloppyDisk: TImage;
-    IconCassetteTape: TImage;
-    IL_GameIconSmall: TImageList;
-    IL_Systems: TImageList;
-    LabelFolderHardDiskDrive: TShadowLabel;
-    IconHardDiskDrive: TImage;
     FolderHardDiskDrive: TEasyListview;
     ButtonMoveFolderUp_HARDDISK: TBitBtn;
     ButtonMoveFolderDown_HARDDISK: TBitBtn;
@@ -63,6 +61,10 @@ type
     ButtonDeleteFolder_HARDDISK: TBitBtn;
     ButtonEditFolder_HARDDISK: TBitBtn;
     ButtonClearFolder_HARDDISK: TBitBtn;
+    IL_Systems: TImageList;
+    PanelSystemTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
+    LabelSystemType: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
@@ -300,23 +302,71 @@ end;
 
 procedure TFormConsCompGamesFolders.ResizeForm;
 var
-  Loop: Integer;
+  iDiff, iScreenWidth, iScreenHeight: Integer;
 begin
-  if Screen.Height = 720 then
-     begin
-       FormConsCompGamesFolders.Height:= 670; // 670;
-       Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= FormConsCompGamesFolders.ClientHeight;
-       FormConsCompGamesFolders.ClientWidth:= FormConsCompGamesFolders.ClientWidth+Systems.CellSizes.Icon.Width;
-       PanelBottomButtons.Top:= PanelBottomButtons.Top-22;
-       LabelRecursiveFolderInfo.Top:= LabelRecursiveFolderInfo.Top-16;
-       for Loop:=0 to FormConsCompGamesFolders.ControlCount-1 do
+  iScreenWidth:= Screen.Width;
+  iScreenHeight:= Screen.Height;
+
+  // no resize necessary for 1280x800 with 68x68 icons
+  if (iScreenWidth < 1280) or (iScreenHeight < 800) then
+  begin // go back to 48x48 icons
+    IL_Systems.Width:= 48;
+    IL_Systems.Height:= 48;
+    Systems.CellSizes.Icon.Width:= 62;
+    Systems.CellSizes.Icon.Height:= 82;
+    Systems.Width:= 577;
+    Systems.Height:= 672;
+    LabelSystemTitle.Width:= 558;
+    PanelFolders.Left:= 558;
+    PanelFolders.Height:= 672;
+    if FormConsCompGamesFolders.ClientWidth <> 984 then
+       FormConsCompGamesFolders.ClientWidth:= 984;// .Width:= 1000;
+    if FormConsCompGamesFolders.ClientHeight <> 672 then
+       FormConsCompGamesFolders.ClientHeight:= 672;// Height:= 710;
+
+    if iScreenHeight = 720 then
        begin
-         if (FormConsCompGamesFolders.Controls[Loop].Name <> 'Systems') and
-            (FormConsCompGamesFolders.Controls[Loop].Name <> 'ButtonOk') and
-            (FormConsCompGamesFolders.Controls[Loop].Name <> 'ButtonCancel') then
-            FormConsCompGamesFolders.Controls[Loop].Left:= FormConsCompGamesFolders.Controls[Loop].Left+Systems.CellSizes.Icon.Width;
+         PanelSystemTitle.Left:= 0;
+         PanelSystemTitle.Top:= (Systems.CellSizes.Icon.Height*7);
+         PanelSystemTitle.Width:= PanelFolders.Left;
+         PanelSystemTitle.Height:= Systems.Height-PanelSystemTitle.Top;
+         PanelSystemTitle.Frames:= [frTop];
+       end
+    else
+       begin
+         PanelSystemTitle.Left:= (Systems.CellSizes.Icon.Width*2)+2; // +2 for border
+         PanelSystemTitle.Top:= (Systems.CellSizes.Icon.Height*7)+2;
+         PanelSystemTitle.Width:= PanelFolders.Left-PanelSystemTitle.Left;
        end;
+
+    LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+    LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
+  end;
+
+  if iScreenHeight < 720 then
+     begin
+       //FormMain.ResizeFormAddScrollBars(FormConsCompGamesFolders);
+       Exit;
+     end;
+
+  if iScreenHeight = 720 then
+     begin
+       iDiff:= FormConsCompGamesFolders.Height-670;
+       FormConsCompGamesFolders.Height:= 670;
+       Systems.Width:= Systems.Width+(Systems.CellSizes.Icon.Width);
+       Systems.Height:= FormConsCompGamesFolders.ClientHeight;
+       PanelSystemTitle.Height:= PanelSystemTitle.Height-iDiff;
+       PanelFolders.Left:= PanelFolders.Left+(Systems.CellSizes.Icon.Width);
+       PanelFolders.Height:= PanelFolders.Height-iDiff;
+
+       LabelSystemType.Top:= LabelSystemType.Top-9;
+       LabelSystemTitle.Top:= LabelSystemTitle.Top-9;
+       PanelSystemTitle.Width:= PanelFolders.Left;
+       PanelSystemTitle.Height:= Systems.Height-PanelSystemTitle.Top;
+       LabelSystemTitle.Width:= PanelFolders.Left-1;
+       LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+       LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
+       FormConsCompGamesFolders.ClientWidth:= PanelFolders.Left+PanelFolders.Width;
      end;
 end;
 
@@ -358,6 +408,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= Systems.Selection.First.ImageIndex;
+       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType);
        ToggleControls(Systems.Tag);
        PopulateFolders(FolderROM);
        PopulateFolders(FolderDiscImage);

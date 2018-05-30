@@ -214,6 +214,7 @@ object FormFavoritesManager: TFormFavoritesManager
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSimple
@@ -268,6 +269,8 @@ object FormFavoritesManager: TFormFavoritesManager
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clBlack
+    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSimple
@@ -295,23 +298,25 @@ object FormFavoritesManager: TFormFavoritesManager
   object PanelFavSettings: TPanelEx
     Left = 4
     Top = 226
-    Width = 301
-    Height = 87
+    Width = 317
+    Height = 125
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = 7891291
+    ColorFrame = clSilver
+    ColorInnerFrame = 7891291
+    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     ShowHint = True
     Style = vgSolid
     Visible = False
-    object Label1: TLabel
-      Left = 24
-      Top = 24
-      Width = 38
-      Height = 15
+    object Label1: TShadowLabel
+      Left = 32
+      Top = 54
+      Width = 41
+      Height = 16
       Caption = '9 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clGray
@@ -320,13 +325,16 @@ object FormFavoritesManager: TFormFavoritesManager
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = 16448250
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
     end
-    object Label2: TLabel
-      Left = 120
-      Top = 24
-      Width = 44
-      Height = 15
+    object Label2: TShadowLabel
+      Left = 128
+      Top = 54
+      Width = 47
+      Height = 16
       Caption = '12 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clGray
@@ -335,13 +343,16 @@ object FormFavoritesManager: TFormFavoritesManager
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = 16448250
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
     end
-    object Label3: TLabel
-      Left = 232
-      Top = 24
-      Width = 44
-      Height = 15
+    object Label3: TShadowLabel
+      Left = 240
+      Top = 54
+      Width = 47
+      Height = 16
       Caption = '14 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clGray
@@ -350,11 +361,36 @@ object FormFavoritesManager: TFormFavoritesManager
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = 16448250
+      ShadowEnabled = False
+      EllipsType = etNone
       Transparent = True
     end
+    object LabelSettings: TShadowLabel
+      Left = 2
+      Top = 2
+      Width = 313
+      Height = 22
+      AutoSize = False
+      Caption = '  Settings'
+      Color = clSilver
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMedGray
+      ShadowEnabled = True
+      EllipsType = etNone
+      Transparent = False
+      Layout = tlCenter
+    end
     object ButtonClosePanelFavSettings: TBitBtn
-      Left = 218
-      Top = 56
+      Left = 226
+      Top = 86
       Width = 75
       Height = 23
       Caption = 'Close'
@@ -362,8 +398,8 @@ object FormFavoritesManager: TFormFavoritesManager
       OnClick = ButtonClosePanelFavSettingsClick
     end
     object ButtonCenterPanelFavSettings: TBitBtn
-      Left = 8
-      Top = 56
+      Left = 16
+      Top = 86
       Width = 75
       Height = 23
       Hint = 'Align window to center screen'
@@ -372,8 +408,8 @@ object FormFavoritesManager: TFormFavoritesManager
       OnClick = ButtonCenterPanelFavSettingsClick
     end
     object FavSettingSmallFont: TAdvOfficeRadioButton
-      Left = 8
-      Top = 8
+      Left = 16
+      Top = 38
       Width = 78
       Height = 18
       TabOrder = 2
@@ -387,8 +423,8 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object FavSettingLargeFont: TAdvOfficeRadioButton
       Tag = 2
-      Left = 216
-      Top = 8
+      Left = 224
+      Top = 38
       Width = 78
       Height = 18
       TabOrder = 3
@@ -400,8 +436,8 @@ object FormFavoritesManager: TFormFavoritesManager
     end
     object FavSettingMediumFont: TAdvOfficeRadioButton
       Tag = 1
-      Left = 104
-      Top = 8
+      Left = 112
+      Top = 38
       Width = 93
       Height = 18
       TabOrder = 4

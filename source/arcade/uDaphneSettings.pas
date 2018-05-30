@@ -197,7 +197,8 @@ begin
   LaserdiscType.Items.EndUpdate;
   LaserdiscType.ItemIndex:= 0;
 
-  FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idDaphne, SystemIcon.Picture.Icon);
+  //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idDaphne, SystemIcon.Picture.Icon);
+  FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idDaphne), SystemIcon);
   FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idDaphne, emuVersionStr);

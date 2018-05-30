@@ -571,7 +571,8 @@ begin
 
   if Tag = 0 then
      begin
-       FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
+       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
+       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idSegaModel2), SystemIcon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
        LabelReadFileIni.Visible:= False;

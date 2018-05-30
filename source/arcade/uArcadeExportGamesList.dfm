@@ -30,8 +30,8 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Caption = 
       '     Choose the output format. Software list games require MAME ' +
       'v0.162 or higher. AntoPISA "mess.ini" file is required for non-a' +
-      'rcade machines. You can customize the game info to export, for "' +
-      'Full Format" only.'
+      'rcade machines. You can customize the game info to export, "Full' +
+      ' Format" only.'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -53,6 +53,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

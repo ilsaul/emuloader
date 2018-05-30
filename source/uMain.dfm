@@ -625,6 +625,7 @@ object FormMain: TFormMain
       Color3 = 16641245
       Color4 = 16637122
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frLeft, frTop, frRight, frBottom]
       ParentBackground = False
       Style = vgSimple
@@ -723,6 +724,7 @@ object FormMain: TFormMain
         Color3 = clYellow
         Color4 = clTeal
         ColorFrame = 7368816
+        ColorInnerFrame = clGreen
         Frames = [frLeft, frTop, frRight, frBottom]
         ParentBackground = False
         Style = vgSolid
@@ -813,6 +815,39 @@ object FormMain: TFormMain
         OnClick = ButtonFilterCPUCloseClick
       end
     end
+    object PanelEx1: TPanelEx
+      Left = 320
+      Top = 248
+      Width = 201
+      Height = 161
+      Color1 = 5832704
+      Color2 = 1
+      Color3 = 7891291
+      Color4 = 16750899
+      ColorFrame = 16750899
+      ColorInnerFrame = clBlue
+      EnableCustomBorder = True
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+      Visible = False
+      object ImageOverlay: TImage
+        Left = 64
+        Top = 8
+        Width = 68
+        Height = 68
+        Transparent = True
+      end
+      object BitBtn1: TBitBtn
+        Left = 72
+        Top = 112
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn1'
+        TabOrder = 0
+        OnClick = BitBtn1Click
+      end
+    end
   end
   object PanelScreenshotsArea: TPanelEx
     Left = 539
@@ -826,6 +861,7 @@ object FormMain: TFormMain
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -926,6 +962,7 @@ object FormMain: TFormMain
         Color3 = clYellow
         Color4 = clTeal
         ColorFrame = clSilver
+        ColorInnerFrame = clGreen
         Frames = [frTop, frRight]
         ParentBackground = False
         Style = vgSimple
@@ -950,15 +987,23 @@ object FormMain: TFormMain
         end
       end
     end
-    object PanelImagesDocuments: TPanel
+    object PanelImagesDocuments: TPanelEx
       Left = 0
       Top = 31
       Width = 370
       Height = 270
+      BevelInner = bvNone
       BevelOuter = bvNone
-      BorderStyle = bsSingle
+      Color1 = 15856113
+      Color2 = clMaroon
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
+      EnableCustomBorder = True
+      Frames = []
       ParentBackground = False
-      TabOrder = 0
+      Style = vgSolid
       object SplitterMAMEInfo: TSplitterEx
         Left = 0
         Top = 108
@@ -1026,6 +1071,7 @@ object FormMain: TFormMain
             Color3 = clYellow
             Color4 = clTeal
             ColorFrame = 16750899
+            ColorInnerFrame = clGreen
             Frames = [frLeft, frTop, frRight, frBottom]
             Opacity = 200
             ParentBackground = False
@@ -1105,6 +1151,7 @@ object FormMain: TFormMain
       AutoSize = True
       ButtonHeight = 31
       ButtonWidth = 31
+      Color = clBtnFace
       Constraints.MinHeight = 31
       EdgeBorders = []
       EdgeInner = esNone
@@ -1112,6 +1159,7 @@ object FormMain: TFormMain
       Flat = True
       Images = IL_ImagesToolBarButtons
       Indent = 2
+      ParentColor = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
@@ -1256,6 +1304,8 @@ object FormMain: TFormMain
       Color3 = 7891291
       Color4 = 16750899
       ColorFrame = 16750899
+      ColorInnerFrame = clBlue
+      EnableInnerFrame = True
       Frames = [frLeft, frTop, frRight, frBottom]
       ParentBackground = False
       Style = vgSimple
@@ -2219,17 +2269,20 @@ object FormMain: TFormMain
     end
     object Separator_FullScreen: TMenuItem
       Caption = '-'
+      Enabled = False
       Hint = 'Full Screen Mode'
       Visible = False
     end
     object PopupReturnToWindowMode: TMenuItem
       Caption = 'Return To Window Mode'
+      Enabled = False
       ShortCut = 8305
       Visible = False
       OnClick = PopupReturnToWindowModeClick
     end
     object PopupExitApplication: TMenuItem
       Caption = 'Exit Application'
+      Enabled = False
       ImageIndex = 2
       Visible = False
       OnClick = MenuExitClick
@@ -2378,8 +2431,8 @@ object FormMain: TFormMain
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
-    Left = 328
-    Top = 408
+    Left = 264
+    Top = 488
   end
   object PopupGameFilterHaveMiss: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -3271,6 +3324,12 @@ object FormMain: TFormMain
       ImageIndex = 7
       OnClick = MenuPreferencesClick
     end
+    object MenuEnableNightMode: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable Night Mode'
+      Hint = 'Check to use a dark theme'
+      OnClick = MenuEnableNightModeClick
+    end
     object N23: TMenuItem
       Caption = '-'
     end
@@ -3419,12 +3478,15 @@ object FormMain: TFormMain
       end
       object N38: TMenuItem
         Caption = '-'
+        Visible = False
       end
       object MenuViewFullScreen: TMenuItem
         AutoCheck = True
         Caption = 'Frontend In Full Screen'
+        Enabled = False
         Hint = 'Hide title bar and tool bars'
         ShortCut = 8305
+        Visible = False
         OnClick = MenuViewFullScreenClick
       end
       object N1: TMenuItem
@@ -4399,5 +4461,17 @@ object FormMain: TFormMain
     Width = 68
     Left = 104
     Top = 176
+  end
+  object IL_MediaType: TImageList
+    Height = 24
+    Width = 24
+    Left = 40
+    Top = 463
+  end
+  object IL_Overlay: TImageList
+    Height = 68
+    Width = 68
+    Left = 480
+    Top = 423
   end
 end

@@ -1,11 +1,11 @@
 object FormArcadeROMsFolders: TFormArcadeROMsFolders
   Left = 544
   Top = 285
-  ActiveControl = SystemsListView
+  ActiveControl = SystemSelector
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'MAME and Arcade ROMs Folders'
-  ClientHeight = 347
+  ClientHeight = 388
   ClientWidth = 640
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -18,6 +18,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
+  OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -37,7 +38,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
     ReadOnly = True
     TabOrder = 0
   end
-  object PanelList: TPanelEx
+  object PanelSystemsSelect: TPanelEx
     Left = 0
     Top = 0
     Width = 640
@@ -47,6 +48,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -73,7 +75,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       Transparent = False
       Layout = tlCenter
     end
-    object SystemsListView: TEasyListview
+    object SystemSelector: TEasyListview
       Tag = -1
       Left = 8
       Top = 8
@@ -143,7 +145,44 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
-      OnItemSelectionChanged = SystemsListViewItemSelectionChanged
+      OnItemSelectionChanged = SystemSelectorItemSelectionChanged
+    end
+  end
+  object PanelBottom: TPanelEx
+    Left = 0
+    Top = 347
+    Width = 640
+    Height = 41
+    Align = alBottom
+    Color1 = 15856113
+    Color2 = 14540253
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object ButtonCancel: TBitBtn
+      Left = 544
+      Top = 8
+      Width = 89
+      Height = 25
+      Caption = 'Close'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object UseLargeIcons: TAdvOfficeCheckBox
+      Left = 9
+      Top = 11
+      Width = 79
+      Height = 20
+      Hint = 'Use 128x128 system icons'
+      TabOrder = 1
+      OnClick = UseLargeIconsClick
+      Alignment = taLeftJustify
+      Caption = 'Large Icons'
+      ReturnIsTab = False
     end
   end
   object IL_Systems: TImageList

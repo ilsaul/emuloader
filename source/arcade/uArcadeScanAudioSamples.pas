@@ -494,7 +494,7 @@ begin
                       TFileInfo(Item).eSystemID,
                       TFileInfo(Item).eGameStatus,
                       TFileInfo(Item).eDriverStatus,
-                      TFileInfo(Item).eClone, ACanvas, True);
+                      TFileInfo(Item).eClone, ACanvas, True, IsNightMode);
 end;
 
 procedure TFormArcadeScanAudioSamples.FilesListViewItemSelectionChanged(
@@ -509,6 +509,7 @@ end;
 
 procedure TFormArcadeScanAudioSamples.ResizeForm;
 begin
+  Exit;
   if Screen.Width < 1024 then
      begin
        ClientWidth:= Screen.Width-24;

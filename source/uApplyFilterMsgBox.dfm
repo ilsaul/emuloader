@@ -29,38 +29,21 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
     Color3 = 7891291
     Color4 = 16112579
     ColorFrame = 16750899
+    ColorInnerFrame = clBlue
+    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSimple
-    object LabelMsgGroupedView: TShadowLabel
-      Left = 8
-      Top = 11
-      Width = 132
-      Height = 15
-      Alignment = taCenter
-      Caption = 'Grouped View Mode'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clSilver
-      Font.Height = -12
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 3289650
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-    end
     object LabelBoxMessageTitle: TShadowLabel
-      Left = 146
+      Left = 38
       Top = 11
-      Width = 318
+      Width = 427
       Height = 17
       AutoSize = False
       Caption = 'Games Filters'
       Font.Charset = ANSI_CHARSET
       Font.Color = clYellow
-      Font.Height = -12
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -87,6 +70,13 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      Transparent = True
+    end
+    object MsgIcon: TImage
+      Left = 8
+      Top = 8
+      Width = 24
+      Height = 24
       Transparent = True
     end
   end

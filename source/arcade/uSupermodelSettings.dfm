@@ -4,7 +4,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 523
+  ClientHeight = 543
   ClientWidth = 614
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -23,7 +23,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   TextHeight = 15
   object LabelReadFileIni: TShadowLabel
     Left = 108
-    Top = 495
+    Top = 515
     Width = 300
     Height = 16
     AutoSize = False
@@ -42,7 +42,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object LabelFolderROMs: TLabel
     Left = 8
-    Top = 69
+    Top = 89
     Width = 73
     Height = 15
     Caption = 'ROMs Folders'
@@ -51,7 +51,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object Label1: TLabel
     Left = 337
-    Top = 440
+    Top = 460
     Width = 258
     Height = 15
     Caption = 'Load Graphics State From Save State File (Debug)'
@@ -63,42 +63,43 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Left = 0
     Top = 0
     Width = 614
-    Height = 60
+    Height = 80
     Align = alTop
     Color1 = 15792869
     Color2 = 15856113
     Color3 = clWhite
     Color4 = 1117964
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object GameIcon: TImage
-      Left = 56
-      Top = 28
+      Left = 76
+      Top = 49
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 1
-      Width = 519
-      Height = 26
+      Width = 500
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -111,17 +112,17 @@ object FormSupermodelSettings: TFormSupermodelSettings
       WordWrap = True
     end
     object LabelEmulatorVersion: TShadowLabel
-      Left = 87
-      Top = 27
-      Width = 414
-      Height = 25
+      Left = 107
+      Top = 46
+      Width = 384
+      Height = 27
       AutoSize = False
       Caption = 
         'game: gamename [clone of parentname] [bios: biosname]'#13#10'Emulator ' +
         'version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -134,17 +135,17 @@ object FormSupermodelSettings: TFormSupermodelSettings
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 496
-      Top = 26
+      Left = 499
+      Top = 45
       Width = 110
-      Height = 27
+      Height = 29
       Hint = 'Game Status'
       Alignment = taRightJustify
       AutoSize = False
       Caption = 'Game Status'#13#10'Missing ROMs/CHDs'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -158,7 +159,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object VideoGroupBox: TAdvGroupBox
     Left = 8
-    Top = 158
+    Top = 178
     Width = 312
     Height = 215
     RoundEdges = True
@@ -178,18 +179,18 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object LabelVertexShader: TLabel
       Left = 8
       Top = 124
-      Width = 192
+      Width = 214
       Height = 15
-      Caption = '3D Vertex Shader (Legacy 3D Engine)'
+      Caption = 'Real3D Vertex Shader (Legacy 3D Engine)'
       ShowAccelChar = False
       Transparent = True
     end
     object LabelFragmentShader: TLabel
       Left = 8
       Top = 170
-      Width = 211
+      Width = 233
       Height = 15
-      Caption = '3D Fragment Shader (Legacy 3D Engine)'
+      Caption = 'Real3D Fragment Shader (Legacy 3D Engine)'
       ShowAccelChar = False
       Transparent = True
     end
@@ -247,7 +248,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Top = 140
       Width = 251
       Height = 21
-      Hint = 'Load 3D vertex shader from external file'
+      Hint = 'Load Real3D vertex shader for 3D rendering'
       AutoSize = False
       ParentShowHint = False
       ShowHint = True
@@ -258,7 +259,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Top = 186
       Width = 251
       Height = 21
-      Hint = 'Load 3D fragment shader from external file'
+      Hint = 'Load Real3D fragment shader for 3D rendering'
       AutoSize = False
       ParentShowHint = False
       ShowHint = True
@@ -379,7 +380,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object InputGroupBox: TAdvGroupBox
     Left = 8
-    Top = 381
+    Top = 401
     Width = 312
     Height = 102
     RoundEdges = True
@@ -462,7 +463,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object AudioGroupBox: TAdvGroupBox
     Left = 337
-    Top = 158
+    Top = 178
     Width = 268
     Height = 197
     RoundEdges = True
@@ -597,7 +598,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object PowerPCFrequencyBox: TAdvGroupBox
     Left = 337
-    Top = 363
+    Top = 383
     Width = 268
     Height = 69
     RoundEdges = True
@@ -659,7 +660,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object Multithreading: TAdvOfficeCheckBox
     Left = 337
-    Top = 453
+    Top = 473
     Width = 101
     Height = 20
     Hint = 'Uncheck it to disable multi-threading entirely'
@@ -674,7 +675,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonReadFile: TBitBtn
     Left = 8
-    Top = 490
+    Top = 510
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -684,7 +685,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonOk: TBitBtn
     Left = 419
-    Top = 490
+    Top = 510
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -694,7 +695,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonCancel: TBitBtn
     Left = 517
-    Top = 490
+    Top = 510
     Width = 89
     Height = 25
     Hint = 'Close without updating'
@@ -705,7 +706,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   object FolderROMs: TEasyListview
     Tag = 1
     Left = 8
-    Top = 85
+    Top = 105
     Width = 461
     Height = 65
     Hint = 'ROMs Folders'
@@ -765,7 +766,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   object ButtonUp: TBitBtn
     Tag = 1
     Left = 471
-    Top = 84
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Move selected folder up'
@@ -778,7 +779,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonDown: TBitBtn
     Left = 471
-    Top = 105
+    Top = 125
     Width = 43
     Height = 21
     Hint = 'Move selected folder down'
@@ -791,7 +792,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object FolderROMButtonSelect: TBitBtn
     Left = 520
-    Top = 84
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Click here to add folders'
@@ -803,7 +804,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object FolderROMsButtonEdit: TBitBtn
     Left = 563
-    Top = 84
+    Top = 104
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
@@ -815,7 +816,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object FolderROMsButtonDelete: TBitBtn
     Left = 520
-    Top = 105
+    Top = 125
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
@@ -827,7 +828,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object FolderROMsButtonClear: TBitBtn
     Left = 563
-    Top = 105
+    Top = 125
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'

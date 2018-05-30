@@ -4,7 +4,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Run with Extra Parameters'
-  ClientHeight = 477
+  ClientHeight = 497
   ClientWidth = 819
   Color = clWhite
   Font.Charset = ANSI_CHARSET
@@ -23,7 +23,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   object PageButtonInput: TSpeedButton
     Tag = 1
     Left = 4
-    Top = 66
+    Top = 86
     Width = 179
     Height = 25
     GroupIndex = 1
@@ -40,7 +40,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   object PageButtonSaveState: TSpeedButton
     Tag = 2
     Left = 182
-    Top = 69
+    Top = 89
     Width = 109
     Height = 22
     GroupIndex = 1
@@ -56,7 +56,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   object PageButtonMemoryCard: TSpeedButton
     Tag = 3
     Left = 290
-    Top = 69
+    Top = 89
     Width = 121
     Height = 22
     GroupIndex = 1
@@ -72,7 +72,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   object PageButtonRecordMovie: TSpeedButton
     Tag = 4
     Left = 410
-    Top = 69
+    Top = 89
     Width = 206
     Height = 22
     GroupIndex = 1
@@ -87,43 +87,44 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   end
   object PagesButtonBottomLine: TBevel
     Left = 2
-    Top = 88
+    Top = 108
     Width = 815
     Height = 2
     Shape = bsTopLine
   end
-  object PanelTop: TPanelEx
+  object TopBar: TPanelEx
     Left = 0
     Top = 0
     Width = 819
-    Height = 60
+    Height = 80
     Color1 = 16445669
     Color2 = clWhite
     Color3 = 16112579
     Color4 = 16707808
     ColorFrame = 15658734
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object GameIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object LabelTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 0
-      Width = 728
-      Height = 27
+      Width = 708
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -136,16 +137,16 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       WordWrap = True
     end
     object LabelGameNameCloneOf: TShadowLabel
-      Left = 86
-      Top = 28
-      Width = 418
-      Height = 25
+      Left = 106
+      Top = 45
+      Width = 488
+      Height = 27
       Caption = 
         'gamename [clone of parentname] [bios: biosname] [merged set] [so' +
         'ftlist: filename]'#13#10'Emulator version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -157,15 +158,15 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       WordWrap = True
     end
     object SystemIcon: TImage
-      Left = 56
-      Top = 28
+      Left = 76
+      Top = 46
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelSoftwareListTitle: TShadowLabel
-      Left = 511
-      Top = 51
+      Left = 531
+      Top = 35
       Width = 79
       Height = 14
       Caption = '[softlist title] '
@@ -183,8 +184,8 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Visible = False
     end
     object LabelMachineInUse: TShadowLabel
-      Left = 176
-      Top = 52
+      Left = 210
+      Top = 36
       Width = 281
       Height = 14
       Caption = 'Run with machine [machinename]: Machine Title'
@@ -204,7 +205,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   end
   object PanelMessages: TPanelEx
     Left = 0
-    Top = 436
+    Top = 456
     Width = 819
     Height = 41
     Align = alBottom
@@ -213,6 +214,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Color3 = clWhite
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -257,7 +259,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   object NotebookPages: TNotebook
     Tag = 1
     Left = 0
-    Top = 91
+    Top = 111
     Width = 819
     Height = 345
     Color = clWhite
@@ -1100,6 +1102,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Color3 = clYellow
         Color4 = clTeal
         ColorFrame = 11775403
+        ColorInnerFrame = clGreen
         Frames = [frLeft, frRight, frBottom]
         ParentBackground = False
         Style = vgSolid
@@ -1545,8 +1548,8 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     MenuStyle = msWindowsXP
     UseSystemFont = False
     DrawModule = FormMain.BcDrawModule
-    Left = 504
-    Top = 16
+    Left = 664
+    Top = 72
     object PopupMemoryCardAssignToSlot1: TMenuItem
       Tag = 1
       Caption = 'Assign to Slot 1'

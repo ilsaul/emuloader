@@ -489,7 +489,7 @@ begin
                 TEasyGameInfo_dc(Item).eSystem,
                 TEasyGameInfo_dc(Item).eGameStatus,
                 TEasyGameInfo_dc(Item).eDriverStatus,
-                TEasyGameInfo_dc(Item).eClone, ACanvas, True);
+                TEasyGameInfo_dc(Item).eClone, ACanvas, True, False);
 end;
 
 

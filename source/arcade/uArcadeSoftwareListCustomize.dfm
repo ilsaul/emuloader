@@ -3,8 +3,8 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   Top = 325
   BorderStyle = bsDialog
   Caption = 'Customize Software List'
-  ClientHeight = 382
-  ClientWidth = 619
+  ClientHeight = 642
+  ClientWidth = 984
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -20,8 +20,8 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   PixelsPerInch = 96
   TextHeight = 15
   object LabelTotalSoftwareList: TShadowLabel
-    Left = 450
-    Top = 43
+    Left = 815
+    Top = 91
     Width = 157
     Height = 15
     Alignment = taRightJustify
@@ -39,104 +39,10 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     Transparent = True
     Layout = tlCenter
   end
-  object ShadowLabel1: TShadowLabel
-    Left = 38
-    Top = 4
-    Width = 542
-    Height = 31
-    AutoSize = False
-    Caption = 
-      'Uncheck all software lists you want to disable. They will be ign' +
-      'ored when creating a MAME games list. You can also use "Create S' +
-      'oftware List Games" (main menu) to apply changes.'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clNavy
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    Transparent = True
-    WordWrap = True
-  end
-  object SoftwareLists: TEasyListview
-    Left = 8
-    Top = 59
-    Width = 602
-    Height = 278
-    AllowHiddenCheckedItems = True
-    CellSizes.Report.Height = 22
-    Color = clWhite
-    DisabledBlendAlpha = 0
-    EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Segoe UI'
-    EditManager.Font.Style = []
-    UseDockManager = False
-    HintType = ehtToolTip
-    Header.Columns.Items = {
-      0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000100014E010000FFFFFF1F0001000000
-      01000000050000005400690074006C0065000000000000000000000000001100
-      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      000101000000000001A5000000FFFFFF1F0001000000010000000D0000005300
-      6F0066007400770061007200650020004E0061006D0065000000000000000000
-      00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-      00800800010100010200000000000164000000FFFFFF1F000100000001000000
-      050000004D006500640069006100000000000000000000000000}
-    Header.Draggable = False
-    Header.Height = 23
-    Header.Sizeable = False
-    Header.Visible = True
-    IncrementalSearch.Enabled = True
-    IncrementalSearch.ResetTime = 1000
-    IncrementalSearch.StartType = eissFocusedNode
-    ImagesSmall = IL_MediaType
-    PaintInfoColumn.CaptionIndent = 0
-    PaintInfoGroup.BandBlended = False
-    PaintInfoGroup.BandEnabled = False
-    PaintInfoGroup.Expandable = False
-    PaintInfoGroup.MarginBottom.Size = 0
-    PaintInfoGroup.MarginBottom.Visible = True
-    PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoGroup.MarginTop.Size = 20
-    PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.CheckType = ectBox
-    PaintInfoItem.ShowBorder = False
-    ParentShowHint = False
-    ShowHint = True
-    Selection.BlendAlphaImage = 0
-    Selection.BlendColorSelRect = 10902593
-    Selection.BlendIcon = False
-    Selection.BorderColor = 10902593
-    Selection.BorderColorSelRect = 10902593
-    Selection.Color = 10902593
-    Selection.FullCellPaint = True
-    Selection.FullItemPaint = True
-    Selection.FullRowSelect = True
-    Selection.GradientColorBottom = 16506264
-    Selection.GradientColorTop = 15582647
-    Selection.InactiveBorderColor = 10902593
-    Selection.InactiveColor = 15582647
-    Selection.MouseButton = [cmbLeft, cmbRight]
-    Selection.RoundRectRadius = 2
-    Selection.TextColor = clBlack
-    Selection.UseFocusRect = False
-    TabOrder = 0
-    View = elsReport
-    OnColumnClick = SoftwareListsColumnClick
-    OnItemCheckChange = SoftwareListsItemCheckChange
-    OnItemCheckChanging = SoftwareListsItemCheckChanging
-    OnItemPaintText = SoftwareListsItemPaintText
-  end
-  object PanelMessages: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
-    Top = 341
-    Width = 619
+    Top = 601
+    Width = 984
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -144,11 +50,12 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     Color3 = clWhite
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 418
+      Left = 783
       Top = 8
       Width = 89
       Height = 25
@@ -161,7 +68,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       OnClick = ButtonYesClick
     end
     object ButtonNo: TBitBtn
-      Left = 521
+      Left = 886
       Top = 8
       Width = 89
       Height = 25
@@ -184,7 +91,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       OnClick = ButtonResetToCurrentClick
     end
     object FilterShowUncheckedOnly: TAdvOfficeCheckBox
-      Left = 164
+      Left = 60
       Top = 11
       Width = 141
       Height = 20
@@ -200,12 +107,12 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   end
   object CheckAll: TAdvOfficeCheckBox
     Left = 12
-    Top = 40
-    Width = 105
-    Height = 18
+    Top = 88
+    Width = 100
+    Height = 20
     Checked = True
     ShowHint = True
-    TabOrder = 2
+    TabOrder = 1
     OnClick = CheckAllClick
     Alignment = taLeftJustify
     Caption = 'Uncheck All'
@@ -213,8 +120,176 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     State = cbChecked
     Themed = True
   end
-  object IL_MediaType: TImageList
-    Left = 256
+  object TopBar: TPanelEx
+    Left = 0
+    Top = 0
+    Width = 984
+    Height = 83
+    Align = alTop
+    Color1 = 16445669
+    Color2 = clWhite
+    Color3 = 16112579
+    Color4 = 16707808
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object SystemIcon: TImage
+      Tag = -50
+      Left = 4
+      Top = 4
+      Width = 68
+      Height = 68
+      Transparent = True
+    end
+    object LabelSystemTitle: TShadowLabel
+      Left = 79
+      Top = 4
+      Width = 757
+      Height = 33
+      AutoSize = False
+      Caption = 
+        'Uncheck all software lists you want to disable. They will be ign' +
+        'ored when creating a MAME games list. You can also use "Create S' +
+        'oftware List Games" (main menu) to apply changes.'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 3289650
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSkyBlue
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+      Layout = tlCenter
+      WordWrap = True
+    end
+    object EmulatorIcon: TImage
+      Tag = -50
+      Left = 79
+      Top = 49
+      Width = 24
+      Height = 24
+      Transparent = True
+    end
+    object LabelEmulatorVersion: TShadowLabel
+      Left = 106
+      Top = 47
+      Width = 863
+      Height = 27
+      AutoSize = False
+      Caption = 'Emulator version'#13#10'Emulator filename'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 3289650
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 12632284
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+      WordWrap = True
+    end
+  end
+  object FrameSoftwareList: TPanelEx
+    Left = 8
     Top = 112
+    Width = 967
+    Height = 473
+    Color1 = clWhite
+    Color2 = 1
+    Color3 = 7891291
+    Color4 = 16750899
+    ColorFrame = clSilver
+    ColorInnerFrame = 7891291
+    EnableCustomBorder = True
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object SoftwareLists: TEasyListview
+      Left = 0
+      Top = 0
+      Width = 963
+      Height = 469
+      Align = alClient
+      AllowHiddenCheckedItems = True
+      CellSizes.Report.Height = 22
+      Color = clWhite
+      DisabledBlendAlpha = 0
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clBlack
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      Groups.Items = {
+        060000000100000010000000544561737947726F757053746F726564FFFECE00
+        060000008108060000000000000000000000000000000000000000000000}
+      HintType = ehtToolTip
+      Header.Columns.Items = {
+        0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
+        00060000008008000101000100000000010001B4020000FFFFFF1F0001000000
+        01000000050000005400690074006C0065000000000000000000000000001100
+        00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+        000101000000000001A5000000FFFFFF1F0001000000010000000D0000005300
+        6F0066007400770061007200650020004E0061006D0065000000000000000000
+        00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+        00800800010100010200000000000169000000FFFFFF1F000100000001000000
+        050000004D006500640069006100000000000000000000000000}
+      Header.Draggable = False
+      Header.Height = 23
+      Header.Sizeable = False
+      Header.Visible = True
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      ImagesSmall = IL_MediaType
+      PaintInfoColumn.CaptionIndent = 0
+      PaintInfoGroup.BandBlended = False
+      PaintInfoGroup.BandEnabled = False
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.Size = 0
+      PaintInfoGroup.MarginBottom.Visible = True
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoGroup.MarginTop.Size = 20
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.CheckType = ectBox
+      PaintInfoItem.ShowBorder = False
+      ParentShowHint = False
+      ShowThemedBorder = False
+      ShowHint = True
+      Selection.BlendAlphaImage = 0
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsReport
+      OnColumnClick = SoftwareListsColumnClick
+      OnItemCheckChange = SoftwareListsItemCheckChange
+      OnItemCheckChanging = SoftwareListsItemCheckChanging
+      OnItemPaintText = SoftwareListsItemPaintText
+    end
+  end
+  object IL_MediaType: TImageList
+    Left = 264
+    Top = 80
   end
 end

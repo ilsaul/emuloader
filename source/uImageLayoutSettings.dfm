@@ -41,6 +41,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -91,6 +92,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -528,7 +530,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     CheckBox.Action = caNone
     CheckBox.Visible = True
     RoundEdges = True
-    Caption = '      Use Custom Category for Console/Computer'
+    Caption = '      Use Custom Category for Console/Computer '
     Ctl3D = True
     Font.Charset = ANSI_CHARSET
     Font.Color = 7891291

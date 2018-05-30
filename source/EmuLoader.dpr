@@ -74,7 +74,8 @@ uses
   uConsCompSystemRules in 'console_computer\uConsCompSystemRules.pas' {FormConsCompSystemRules},
   uSelectFilterSystemSimple in 'uSelectFilterSystemSimple.pas' {FormSelectFilterSystemSimple},
   uImageLayoutSelector in 'uImageLayoutSelector.pas' {FormImageLayoutSelector},
-  uImageCategorySelector in 'uImageCategorySelector.pas' {FormImageCategorySelector};
+  uImageCategorySelector in 'uImageCategorySelector.pas' {FormImageCategorySelector},
+  uArcadeFileVersionsLarge in 'arcade\uArcadeFileVersionsLarge.pas' {FormArcadeFileVersionsLarge};
 
 {$R *.RES}
 
@@ -87,6 +88,7 @@ begin
   Application.HintColor:= $00f8f4f3;//$00EEEBE6;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPreferences, FormPreferences);
+  Application.CreateForm(TFormArcadeFileVersionsLarge, FormArcadeFileVersionsLarge);
   Application.Run;
 end.
 

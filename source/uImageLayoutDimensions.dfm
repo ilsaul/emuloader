@@ -31,6 +31,7 @@ object FormImageLayoutDimensions: TFormImageLayoutDimensions
     Color3 = 1117964
     Color4 = clMaroon
     ColorFrame = clWhite
+    ColorInnerFrame = clGreen
     Frames = []
     Opacity = 100
     ParentBackground = False

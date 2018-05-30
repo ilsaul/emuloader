@@ -9,21 +9,21 @@ uses
 
 type
   TFormArcadeSoftwareListMachineToRunGame = class(TForm)
-    PanelMessages: TPanelEx;
+    BottomBar: TPanelEx;
     ButtonYes: TBitBtn;
     ButtonNo: TBitBtn;
-    PanelTop: TPanelEx;
-    MessageIcon: TImage;
-    LabelTitle: TShadowLabel;
-    LabelGameNameCloneOf: TShadowLabel;
-    MachinesListView: TEasyListview;
-    LabelUsage: TShadowLabel;
+    TopBar: TPanelEx;
+    GameIcon: TImage;
+    LabelGameTitle: TShadowLabel;
+    LabelGameName: TShadowLabel;
     LabelSoftwarelistTitleW: TShadowLabel;
     ButtonResetToCurrent: TBitBtn;
     ShowAvailableMachinesOnly: TAdvOfficeCheckBox;
     HidePreliminaryMachines: TAdvOfficeCheckBox;
     LabelTotalMachines: TShadowLabel;
     IconMediaType: TImage;
+    FrameMachinesList: TPanelEx;
+    MachinesListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -99,6 +99,7 @@ procedure TFormArcadeSoftwareListMachineToRunGame.ResizeForm;
 var
   iScreenWidth, iScreenHeight, iWidth, iHeight, iWidthDec: Integer;
 begin
+  exit;
   iScreenWidth:= Screen.Width;
   iScreenHeight:= Screen.Height;
 
@@ -130,7 +131,7 @@ begin
   else
   if iScreenWidth >= 1152 then
      begin
-       iWidth:= 200;
+       iWidth:= 200-4;
        MachinesListView.Header.Columns[0].Width:= MachinesListView.Header.Columns[0].Width+75;
        MachinesListView.Header.Columns[1].Width:= MachinesListView.Header.Columns[1].Width+25;
        MachinesListView.Header.Columns[2].Width:= MachinesListView.Header.Columns[2].Width+75;
@@ -145,9 +146,13 @@ begin
 
   FormArcadeSoftwareListMachineToRunGame.Width:= FormArcadeSoftwareListMachineToRunGame.Width+iWidthDec;
   FormArcadeSoftwareListMachineToRunGame.Height:= FormArcadeSoftwareListMachineToRunGame.Height+iHeight;
-  MachinesListView.Width:= MachinesListView.Width+iWidthDec;
+
+  FrameMachinesList.Width:= FrameMachinesList.Width+iWidthDec;
+  FrameMachinesList.Height:= FrameMachinesList.Height+iHeight;
+
+  MachinesListView.Width:= MachinesListView.Width+iWidthDec-4;
   MachinesListView.Height:= MachinesListView.Height+iHeight;
-  LabelTitle.Width:= LabelTitle.Width+iWidthDec;
+  LabelGameTitle.Width:= LabelGameTitle.Width+iWidthDec;
   ButtonYes.Left:= ButtonYes.Left+iWidthDec;
   ButtonNo.Left:= ButtonNo.Left+iWidthDec;
   LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width+iWidthDec;
@@ -155,54 +160,37 @@ end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
 begin
-  if PanelMessages.Tag = 1 then
-     PanelTop.Color1:= $00e5f0fa // red
-  else
-     PanelTop.Color1:= $00faf0e5; // blue
+  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);
 
-  // $00faf0e5 // blue
-  // $00e5f0fa // red
-  // $00f0fae5 // green
-  // $00e5fafa // yellow
-  // $00eeeeee // silver
+  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
 
-  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter);
   case FormMain.MemGameInfo.eIsCustomGame of
     True:
       begin
         LabelSoftwarelistTitleW.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+' - '+MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
-        //FormSoftwareListMachineToRunGame.Caption:= 'Select a Machine to Run the Custom Game With';
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, MessageIcon.Picture.Icon);
-        //LabelGameNameCloneOf.Canvas.Lock;
-        LabelGameNameCloneOf.Caption:= 'file: '+FormMain.MemGameInfo.eName;
-
-        //LabelGameNameCloneOf.Caption:= MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
-        //LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+'; file extension '+ExtractFileExt(FormMain.MemGameInfo.eName);
-        //LabelGameNameCloneOf.Canvas.Unlock;
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, MessageIcon.Picture.Icon);
+        LabelGameName.Caption:= 'file: '+FormMain.MemGameInfo.eName;
       end;
     False:
       begin
-        LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
-        FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-                                                       MessageIcon.Picture.Icon);
-        LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+        LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;
+
+        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
+        //                                               MessageIcon.Picture.Icon);
+        LabelGameName.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
       end;
   end;
 
-  LabelTitle.Caption:= FormMain.MemGameInfo.eTitle;
-  //LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
   if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
      begin
-       LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+#13#10+
-                                      'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
-       //LabelUsage.Caption:= 'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
-       //LabelUsage.Visible:= True;
-     end
-  else
-     LabelGameNameCloneOf.Top:= IconMediaType.Top+1;
+       LabelGameName.Caption:= LabelGameName.Caption+#13#10+
+                               'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
+     end;
+  //else
+  //   LabelGameNameCloneOf.Top:= IconMediaType.Top+1;
 
-  //LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;// FormMain.GetSoftwareListTitle(FormMain.MemGameInfo.eSoftwareName);
   BringToFront;
 end;
 
@@ -211,11 +199,11 @@ var
   INIFile: TMemIniFile;
   SectionStr: String;
 begin
-  if not FileExists(FormMain.FrontendPath+'el_extras.ini') then
+  if not FileExists(FormMain.GetFrontendExtraIniFile) then
      Exit;
   SectionStr:= 'SelectMachineSoftwareListGame';
   try
-    INIFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     if ReadMode then
        begin
          ShowAvailableMachinesOnly.Checked:= Boolean(INIFile.ReadInteger(SectionStr, 'ShowAvailableMachinesOnly', 0));
@@ -237,6 +225,38 @@ procedure TFormArcadeSoftwareListMachineToRunGame.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(MachinesListView);
   ResizeForm;
+  if IsNightMode then
+  begin
+    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, False);
+    SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
+    SetLabelColors(LabelSoftwarelistTitleW, MsgTxtColors.colorWarning, $323200);
+
+    FrameMachinesList.ColorFrame:= $00ff9933; // neon blue
+    FrameMachinesList.ColorInnerFrame:= clBlue;
+    FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
+
+    MachinesListView.Color:= FormArcadeSoftwareListMachineToRunGame.Color;
+    MachinesListView.Font.Color:= clWhite;
+    MachinesListView.HotTrack.Color:= clWhite;
+
+    SetCheckBoxColors(ShowAvailableMachinesOnly, clWhite, clNavy);
+    SetCheckBoxColors(HidePreliminaryMachines, clWhite, clNavy);
+  end;
+
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
+
+  //if BottomBar.Tag = 1 then
+  //   PanelTop.Color1:= $00e5f0fa // red
+  //else
+  //   PanelTop.Color1:= $00faf0e5; // blue
+
+  // $00faf0e5 // blue
+  // $00e5f0fa // red
+  // $00f0fae5 // green
+  // $00e5fafa // yellow
+  // $00eeeeee // silver
+
+
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;
   MachinesListView.BeginUpdate;
@@ -268,15 +288,13 @@ procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  case FormMain.MemGameInfo.eIsCustomGame of
-    True : FormMain.GetCanvasFontCustom(idMAME, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
-    False: FormMain.GetCanvasFontCustom(FormMain.MemGameInfo.eSystemID, Item.Tag, Item.StateImageIndex, Item.Captions[4], ACanvas);
-  end;
+  FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[6], IsNightMode);
   if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
        ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
      end;
+  FormMain.ELV_ItemPaintText_General(MachinesListView, Item, ACanvas);
 end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.ReselectItem(const MachineName: String);

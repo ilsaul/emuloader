@@ -34,6 +34,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -145,6 +146,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

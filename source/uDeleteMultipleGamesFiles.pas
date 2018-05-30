@@ -88,7 +88,7 @@ type
 
 type
   TFormDeleteMultipleGamesFiles = class(TForm)
-    PanelOptions: TPanelEx;
+    BottomBar: TPanelEx;
     IL_DeleteGameIcons: TImageList;
     FileTypesGroupBox: TAdvGroupBox;
     DeleteROMs: TAdvOfficeCheckBox;
@@ -166,7 +166,7 @@ type
 
     FileTextMaxCount: Integer;
     HaveArcade, HaveConsoleComputer: Boolean;
-    procedure SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
     procedure SetSelectedGame(ELV_Item: TEasyItem);
     procedure UpdateTotalFilesLabel;
     procedure SearchROMsFiles(eROMsList: TStringList; var MergedSetVar: Boolean; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean; var CHDFilesCountVar: Integer; var ROMFileTotalSizeVar: Int64; var CHDFilesTotalSizeVar: Int64);
@@ -281,12 +281,22 @@ begin
   end;
 end;
 
-procedure TFormDeleteMultipleGamesFiles.SetCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+procedure TFormDeleteMultipleGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
 begin
-  if Enabled then
-     CheckBoxHolder.Font.Color:= $00a65300 //clNavy
+  if IsNightMode then
+  begin
+    if Enabled then
+       SetCheckBoxColors(CheckBoxHolder, MsgTxtColors.colorFileName, clNavy)
+    else
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clBlack);
+  end
   else
-     CheckBoxHolder.Font.Color:= clGray;
+  begin
+    if Enabled then
+       CheckBoxHolder.Font.Color:= MsgTxtColors.colorFileName// $00a65300 //clNavy
+    else
+       CheckBoxHolder.Font.Color:= clGray;//$00e6e6e6;
+  end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.SetSelectedGame(ELV_Item: TEasyItem);
@@ -1123,9 +1133,9 @@ begin
   GamesList.Height:= (ItemsLineCount*GamesList.CellSizes.Tile.Height)+GamesList.PaintInfoItem.Border;
 
   if PanelDestinationFolder.Visible then
-     bPanelSize:= PanelOptions.Height+PanelDestinationFolder.Height
+     bPanelSize:= BottomBar.Height+PanelDestinationFolder.Height
   else
-     bPanelSize:= PanelOptions.Height;
+     bPanelSize:= BottomBar.Height;
 
   FormDeleteMultipleGamesFiles.ClientHeight:= GamesList.Height+bPanelSize;
 
@@ -1190,6 +1200,41 @@ begin
      end;
   //StatusIconIndex:= IL_DeleteGameIcons.Count-3;
 
+  ChangeCheckBoxColor(DeleteROMs.Checked, DeleteROMs);
+  ChangeCheckBoxColor(DeleteCHDs.Checked, DeleteCHDs);
+  ChangeCheckBoxColor(DeleteCFGsNVRAMs.Checked, DeleteCFGsNVRAMs);
+
+  ChangeCheckBoxColor(DeleteGameFromGamesList.Checked, DeleteGameFromGamesList);
+  ChangeCheckBoxColor(DeleteGameFileFromDisk.Checked, DeleteGameFileFromDisk);
+
+  if IsNightMode then
+  begin
+    SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil);
+    //SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    //SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    //SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+                                        // 200,83,0   200,200,0
+    //SetLabelColors(LabelSoftwareListTitle, $000053e6, clMaroon);//$0040d6d6);
+    //SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);
+    GamesList.Color:= FormDeleteMultipleGamesFiles.Color;
+    GamesList.Font.Color:= clWhite;
+    GamesList.HotTrack.Color:= clWhite;
+
+    PanelDestinationFolder.Color1:= FormDeleteMultipleGamesFiles.Color;
+    SetLabelColors(LabelCopyMoveDestination, clWhite, clNavy);
+    DestinationFolder.Color:= FormDeleteMultipleGamesFiles.Color;
+    DestinationFolder.Font.Color:= clWhite;
+
+    SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clNavy);
+    SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clNavy);
+
+    FileTypesGroupBox.BorderStyle:= bsDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, $00ff9933, clBlue, clWhite, clNavy);
+
+    //SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
+    //SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
+  end;
+
   FileTextMaxCount:= 87; // this is for TGameInfo.GetCaptions
   HaveArcade:= False;
   HaveConsoleComputer:= False;
@@ -1221,7 +1266,12 @@ begin
 
   Application.ProcessMessages;
   if not FormMain.CheckTotal(GamesList) then
-     PostMessage(Handle, wm_Close, 0, 0); // force auto-close if there are no games to process
+     PostMessage(Handle, wm_Close, 0, 0) // force auto-close if there are no games to process
+  else
+     begin
+       if (not GamesList.Scrollbars.VertBarVisible) and (not GamesList.Scrollbars.HorzBarVisible) then
+          GamesList.HotTrack.Enabled:= True;
+     end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.FormKeyPress(Sender: TObject;
@@ -1308,12 +1358,7 @@ procedure TFormDeleteMultipleGamesFiles.GamesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(TGameInfo(Item).eSystemID, TGameInfo(Item).eGameStatus,
-                         TGameInfo(Item).eDriverStatus,
-                         TGameInfo(Item).eClone, ACanvas, True);
-  //if GamesList.Width > 1000 then
-  //   Exit;
-
+  FormMain.GetCanvasDefaultFont(ACanvas, TGameInfo(Item).eGameStatus, TGameInfo(Item).eDriverStatus, IsNightMode);
   case Position of
     0:
       begin
@@ -1324,15 +1369,10 @@ begin
      begin
        ACanvas.Font.Name:= 'Consolas';
        ACanvas.Font.Size:= 8; //9;
-       ACanvas.Font.Color:= clBlack;
+       //ACanvas.Font.Color:= clBlack;
      end;
   end;
-  //else
-  //if (Position > 0) and (Position <> 4) then
-  //   begin
-  //     ACanvas.Font.Name:= 'Tahoma';
-  //     ACanvas.Font.Size:= 8;
-  //   end;
+  FormMain.ELV_ItemPaintText_General(GamesList, Item, ACanvas);
 end;
 
 procedure TFormDeleteMultipleGamesFiles.GamesListItemSelectionChanged(
@@ -1432,7 +1472,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.DeleteCHDsClick(Sender: TObject);
 begin
-  SetCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
+  ChangeCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
   if FormDeleteMultipleGamesFiles.Visible then
      GamesList.SetFocus;
 end;

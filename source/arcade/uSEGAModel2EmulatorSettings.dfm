@@ -4,7 +4,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 420
+  ClientHeight = 440
   ClientWidth = 619
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,7 +25,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   TextHeight = 15
   object Label1: TLabel
     Left = 8
-    Top = 67
+    Top = 87
     Width = 501
     Height = 15
     Caption = 
@@ -36,7 +36,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object LabelReadFileIni: TShadowLabel
     Left = 104
-    Top = 393
+    Top = 413
     Width = 314
     Height = 16
     AutoSize = False
@@ -57,27 +57,28 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     Left = 0
     Top = 0
     Width = 644
-    Height = 60
+    Height = 80
     Color1 = clMoneyGreen
     Color2 = 15856113
     Color3 = 1117964
     Color4 = 16448250
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelGameTitle: TShadowLabel
-      Left = 86
+      Left = 106
       Top = 1
-      Width = 526
-      Height = 26
+      Width = 506
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -90,17 +91,17 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       WordWrap = True
     end
     object LabelEmulatorVersion: TShadowLabel
-      Left = 86
-      Top = 28
-      Width = 410
-      Height = 24
+      Left = 106
+      Top = 44
+      Width = 390
+      Height = 27
       AutoSize = False
       Caption = 
         'game: gamename [clone of parentname] [bios: biosname]'#13#10'Emulator ' +
         'version'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -115,29 +116,29 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object SystemIcon: TImage
       Left = 4
       Top = 4
-      Width = 48
-      Height = 48
+      Width = 68
+      Height = 68
       Transparent = True
     end
     object GameIcon: TImage
-      Left = 58
-      Top = 30
+      Left = 78
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
       Left = 505
-      Top = 26
+      Top = 45
       Width = 110
-      Height = 27
+      Height = 29
       Hint = 'Game Status'
       Alignment = taRightJustify
       AutoSize = False
       Caption = 'Game Status'#13#10'Missing ROMs/CHDs'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -152,7 +153,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   object FolderROMs: TEasyListview
     Tag = 1
     Left = 8
-    Top = 84
+    Top = 104
     Width = 466
     Height = 65
     BackGround.Enabled = True
@@ -215,7 +216,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   object ButtonUp: TBitBtn
     Tag = 1
     Left = 476
-    Top = 83
+    Top = 103
     Width = 43
     Height = 21
     Hint = 'Move selected folder up'
@@ -228,7 +229,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object ButtonDown: TBitBtn
     Left = 476
-    Top = 104
+    Top = 124
     Width = 43
     Height = 21
     Hint = 'Move selected folder down'
@@ -241,7 +242,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMButtonSelect: TBitBtn
     Left = 525
-    Top = 83
+    Top = 103
     Width = 43
     Height = 21
     Hint = 'Click here to add folders'
@@ -253,7 +254,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMsButtonEdit: TBitBtn
     Left = 568
-    Top = 83
+    Top = 103
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
@@ -263,7 +264,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMsButtonDelete: TBitBtn
     Left = 525
-    Top = 104
+    Top = 124
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
@@ -273,7 +274,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMsButtonClear: TBitBtn
     Left = 568
-    Top = 104
+    Top = 124
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'
@@ -285,7 +286,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object FolderROMsButtonSetActiveInactive: TBitBtn
     Left = 476
-    Top = 129
+    Top = 149
     Width = 43
     Height = 21
     Hint = 'Click here to toggle selected folder active/inactive'
@@ -295,7 +296,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object GroupBox2: TAdvGroupBox
     Left = 8
-    Top = 157
+    Top = 177
     Width = 601
     Height = 130
     RoundEdges = True
@@ -560,7 +561,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object EnableSound: TAdvOfficeCheckBox
     Left = 520
-    Top = 327
+    Top = 347
     Width = 94
     Height = 20
     Checked = True
@@ -573,7 +574,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object AdvGroupBox1: TAdvGroupBox
     Left = 8
-    Top = 295
+    Top = 315
     Width = 493
     Height = 78
     RoundEdges = True
@@ -683,7 +684,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object ButtonReadFile: TBitBtn
     Left = 8
-    Top = 388
+    Top = 408
     Width = 89
     Height = 25
     Hint = 'Read "emulator.ini"'
@@ -695,7 +696,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object ButtonOk: TBitBtn
     Left = 425
-    Top = 388
+    Top = 408
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -705,7 +706,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   end
   object ButtonCancel: TBitBtn
     Left = 523
-    Top = 388
+    Top = 408
     Width = 89
     Height = 25
     Hint = 'Close without updating'

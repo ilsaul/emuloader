@@ -348,7 +348,7 @@ var
   Loop: Integer;
 begin
   try
-    INIFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     FormImagesManager.Tag:= Ord(INIFile.ReadString('ImagesManager', 'WindowState', 'Normal') = 'Maximized');
     FormImagesManager.Width:= INIFile.ReadInteger('ImagesManager', 'ScreenWidth', 1200);
     FormImagesManager.Height:= INIFile.ReadInteger('ImagesManager', 'ScreenHeight', 600);
@@ -379,7 +379,7 @@ var
   Loop: Integer;
 begin
   try
-    INIFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     INIFile.EraseSection('ImagesManager');
     case FormImagesManager.WindowState of
       wsNormal   : INIFile.WriteString('ImagesManager', 'WindowState', 'Normal');
@@ -674,10 +674,10 @@ procedure TFormImagesManager.CreateImagePanelForm;
   var
     sIni: TMemIniFile;
   begin
-    if not FileExists(FormMain.FrontendPath+'el_extras.ini') then
+    if not FileExists(FormMain.GetFrontendExtraIniFile) then
        Exit;
 
-    sIni:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    sIni:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
 
     FormImageFoundMissingGame.Tag:= sIni.ReadInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', 1);
     FormImageFoundMissingGame.Width:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenWidth', 320);
@@ -727,10 +727,10 @@ procedure TFormImagesManager.FreeImagePanelForm;
   var
     sIni: TMemIniFile;
   begin
-    if FormMain.CheckReadOnly(FormMain.FrontendPath+'el_extras.ini') then
+    if FormMain.CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
        Exit;
 
-    sIni:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    sIni:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     sIni.EraseSection('ImagesManager_SnapPreview');
 
     sIni.WriteInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', FormImageFoundMissingGame.Tag);
@@ -1482,7 +1482,7 @@ begin
                 TMissingImageInfo(Item).eSystemID,
                 TMissingImageInfo(Item).eGameStatus,
                 TMissingImageInfo(Item).eDriverStatus,
-                TMissingImageInfo(Item).eClone, ACanvas, True);
+                TMissingImageInfo(Item).eClone, ACanvas, True, False);
   if MissingImagesList.View = elsTile then
      begin
        if Position > 0 then

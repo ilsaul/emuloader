@@ -9,22 +9,23 @@ uses
 
 type
   TFormArcadeMultiSlotGames = class(TForm)
-    GamesList: TEasyListview;
-    PanelButtons: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonOk: TBitBtn;
     ButtonNo: TBitBtn;
     ButtonUp: TBitBtn;
     ButtonDown: TBitBtn;
     ButtonRemoveFromList: TBitBtn;
-    LabelHelpText: TLabel;
-    PanelNeoGeoMVS: TPanel;
-    LabelMultiSlotMachines: TLabel;
+    LabelHelpText: TShadowLabel;
+    PanelNeoGeoMVS: TPanelEx;
+    LabelMultiSlotMachines: TShadowLabel;
     ButtonChangePanelNeoGeoMVS: TBitBtn;
     PanelMultiSlotMachines: TPanelEx;
     LabelMultiSlotMachinesChooseMachineToRun: TShadowLabel;
     MultiSlotMachines: TEasyListview;
     ButtonOkMultiSlotMachines: TBitBtn;
     LabelMultiSlotMachinesBoldDefaultMachine: TShadowLabel;
+    PanelGamesList: TPanelEx;
+    GamesList: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure GamesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -133,15 +134,19 @@ var
   GamesFile: THashedStringList;
   AddIcon: Boolean;
 begin
-  //if not FormMain.ValidateFile(FormMain.GetArcadeFolder+'mame_multislot_machines.txt') then
+  if not PanelNeoGeoMVS.Visible then
+     Exit;
+
   if not FormMain.ValidateFile(FormMain.GetArcadeMultiSlotFile(FormArcadeMultiSlotGames.Tag)) then
      Exit;
+
+  // this is for Neo-Geo MVS only
+  SectionStr:= 'neogeo';
+  MachinesIni:= TMemIniFile.Create(FormMain.GetArcadeMultiSlotFile(FormArcadeMultiSlotGames.Tag)); // (FormMain.GetArcadeFolder+'mame_multislot_machines.txt');
 
   MultiSlotMachines.BeginUpdate;
   MultiSlotMachines.Items.ReIndexDisable:= True;
 
-  SectionStr:= 'neogeo';
-  MachinesIni:= TMemIniFile.Create(FormMain.GetArcadeMultiSlotFile(FormArcadeMultiSlotGames.Tag)); // (FormMain.GetArcadeFolder+'mame_multislot_machines.txt');
   MachinesList:= TStringList.Create;
   MachinesIni.ReadSection(SectionStr, MachinesList);
   ButtonChangePanelNeoGeoMVS.Visible:= MachinesList.Count > 0;
@@ -269,8 +274,8 @@ begin
        iTotalW:= iTotalW+GamesList.Header.Columns[iLoop].Width;
   end;
 
-  if iTotalW < (GamesList.Width-2) then //iMaxTotalWidth then
-     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width+((GamesList.Width-2)-iTotalW);
+  if iTotalW < (GamesList.Width{-2}) then //iMaxTotalWidth then
+     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width+((GamesList.Width{-2})-iTotalW);
 
   GamesList.EndUpdate(False);
 
@@ -294,6 +299,7 @@ var
   wDiff: Integer;
 begin
   //wDiff:= 160; // for debugging only; do not enable this
+  Exit;
   if Screen.Width >= 960 then
      Exit;
   case Screen.Width of
@@ -346,7 +352,34 @@ procedure TFormArcadeMultiSlotGames.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(GamesList);
   FormMain.ELV_ResetNormalColors(MultiSlotMachines);
+
+  PanelMultiSlotMachines.Top:= 60; // place panel at correct position
+
+  if PanelNeoGeoMVS.Visible then
+     FormArcadeMultiSlotGames.Height:= 440 // default form height at runtime; it's bigger at design mode
+  else
+     FormArcadeMultiSlotGames.Height:= 440-PanelNeoGeoMVS.Height;
+
   ResizeForm;
+
+  SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, True);
+  if IsNightMode then
+     begin
+       PanelGamesList.ColorFrame:= $00ff9933;
+       PanelGamesList.ColorInnerFrame:= clBlue;
+       GamesList.Color:= FormArcadeMultiSlotGames.Color;
+       GamesList.Font.Color:= clWhite;
+
+       PanelNeoGeoMVS.Color1:= GamesList.Color;
+       PanelNeoGeoMVS.ColorFrame:= PanelGamesList.ColorFrame;
+       PanelNeoGeoMVS.ColorInnerFrame:= PanelGamesList.ColorInnerFrame;
+
+       MultiSlotMachines.Color:= GamesList.Color;
+       MultiSlotMachines.Font.Color:= clWhite;
+
+       SetLabelColors(LabelMultiSlotMachines, clWhite, clNavy);
+       SetLabelColors(LabelHelpText, MsgTxtColors.colorFileName, clNavy);
+     end;
   AddMachinesMultiSlot;
   AddMultiGames;
   PanelMultiSlotMachines.Visible:= False; // cannot add items to EasyListView while "visible = FALSE" or it triggers "access violation" error
@@ -367,17 +400,20 @@ begin
        //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
        if not Item.Ghosted then
-          ACanvas.Font.Color:= $00323232;
+          begin
+            if IsNightMode then
+               ACanvas.Font.Color:= $f1f1f1
+            else
+               ACanvas.Font.Color:= $00323232;
+          end;
      end;
     1:
      begin
-       FormMain.GetCanvasFontCustom(idMAME,
-                                    Item.Tag,
-                                    Item.StateImageIndexes[7],
-                                    Item.Captions[3], ACanvas);
+       FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[7], IsNightMode);
      end;
     //4: ACanvas.Font.Size:= 7;
   end;
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
   if Item.Ghosted then
      ACanvas.Font.Color:= clGray;
 end;

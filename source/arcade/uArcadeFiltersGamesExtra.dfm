@@ -150,6 +150,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -601,7 +602,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryUtilities: TAdvOfficeCheckBox
       Tag = 1
       Left = 122
-      Top = 108
+      Top = 128
       Width = 62
       Height = 20
       Checked = True
@@ -616,7 +617,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryCalculator: TAdvOfficeCheckBox
       Tag = 1
-      Left = 8
+      Left = 122
       Top = 108
       Width = 76
       Height = 20
@@ -753,6 +754,22 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       TabOrder = 18
       Alignment = taLeftJustify
       Caption = 'Music'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategoryBoardGame: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 8
+      Top = 108
+      Width = 84
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 19
+      Alignment = taLeftJustify
+      Caption = 'Board Game'
       ReturnIsTab = False
       ShadowColor = clSilver
       State = cbChecked

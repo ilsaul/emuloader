@@ -429,7 +429,7 @@ var
   Loop: Integer;
 begin
   try
-    INIFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     FormArcadeMAMu_IconsManager.Tag:= Ord(INIFile.ReadString('MAMu_IconsManager', 'WindowState', 'Normal') = 'Maximized');
     FormArcadeMAMu_IconsManager.Width:= INIFile.ReadInteger('MAMu_IconsManager', 'ScreenWidth', 1200);
     FormArcadeMAMu_IconsManager.Height:= INIFile.ReadInteger('MAMu_IconsManager', 'ScreenHeight', 600);
@@ -460,7 +460,7 @@ var
   Loop: Integer;
 begin
   try
-    INIFile:= TMemIniFile.Create(FormMain.FrontendPath+'el_extras.ini');
+    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     INIFile.EraseSection('MAMu_IconsManager');
     case FormArcadeMAMu_IconsManager.WindowState of
       wsNormal   : INIFile.WriteString('MAMu_IconsManager', 'WindowState', 'Normal');
@@ -1351,7 +1351,7 @@ begin
                 TMissingIconInfo(Item).eSystemID,
                 TMissingIconInfo(Item).eGameStatus,
                 TMissingIconInfo(Item).eDriverStatus,
-                TMissingIconInfo(Item).eClone, ACanvas, True);
+                TMissingIconInfo(Item).eClone, ACanvas, True, False);
   if MissingIconsList.View = elsTile then
      begin
        if Position > 0 then
