@@ -14,7 +14,7 @@ type
     ProgressBar: TProgressBar;
     ButtonPause: TBitBtn;
     ButtonCancel: TBitBtn;
-    PanelGameTitle: TPanelEx;
+    PanelTop: TPanelEx;
     SystemIcon: TImage;
     LabelGameTitle: TShadowLabel;
     IL_MediaType: TImageList;
@@ -33,6 +33,7 @@ type
     procedure ButtonPauseClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure ButtonCancelClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     DestinationFullPath: String;
@@ -108,6 +109,8 @@ var
   ActionStr: String;
   HasMAME: Boolean;
 begin
+  FormCopyMoveGameFiles.Color:= clrDarkGray; // must set TRichEdit bk color here; it crashes at .onFormCreate() event
+  //Exit; // for debugging only, do not enable
   Left:= (Screen.Width shr 1)-(Width shr 1)-1;
   Top:= (Screen.Height shr 1)-(Height shr 1)-1;
 
@@ -196,7 +199,7 @@ var
   ErrorMsg: DWORD;
   tmpStr: String;
 
-  function SetSysIcon(sysID: ShortInt; IsCustomGame: Boolean): Boolean;
+  function SetSysIcon(sysID: Integer; IsCustomGame: Boolean): Boolean;
   begin
     if IsCustomGame then
        begin
@@ -205,7 +208,9 @@ var
              begin
                SystemIcon.Tag:= sysID;
                SystemIcon.HelpContext:= 0;
-               FormMain.IL_StandardIconsLarge.GetIcon(MaxGameID+sysID, SystemIcon.Picture.Icon);
+
+               FormMain.LoadIconIntoImage(SystemsListCustom[sysID, 1], SystemIcon, -1, True);
+               //FormMain.IL_StandardIconsLarge.GetIcon(MaxGameID+sysID, SystemIcon.Picture.Icon);
                //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, SystemIcon.Picture.Icon);
              end;
        end
@@ -216,7 +221,8 @@ var
              begin
                SystemIcon.Tag:= sysID;
                SystemIcon.HelpContext:= -1;
-               FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, SystemIcon.Picture.Icon);
+               FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(sysID), SystemIcon);
+               //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, SystemIcon.Picture.Icon);
              end;
        end;
   end;
@@ -960,6 +966,7 @@ end;
 
 procedure TFormCopyMoveGameFiles.FormActivate(Sender: TObject);
 begin
+  //Exit; // for debugging only, do not enable
   if LabelCopyToTitle.Tag = 0 then
      begin
        LabelCopyToTitle.Tag:= 1;
@@ -973,6 +980,30 @@ begin
      Close
   else
      ButtonCancel.ModalResult:= mrAbort;
+end;
+
+procedure TFormCopyMoveGameFiles.FormCreate(Sender: TObject);
+begin
+  if IsNightMode then
+     begin
+       SetFormColors(nil, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, -1);
+       PanelFileInfo.Style:= vgSimple;
+       SetPanelNightColors(PanelFileInfo, clrBlackBk, clrDarkRed);
+       SetPanelNightColors(PanelProgress, clrDarkRed, clrDarkGray);
+
+       SetLabelColors(LabelFileType, MsgTxtColors.colorWarning, clMaroon);
+
+       SetLabelColors(LabelGameFile, clWhite, clNavy);
+       SetLabelColors(LabelFileSizeDate, clWhite, clNavy);
+       SetLabelColors(LabelCopyToTitle, clWhite, clrMedBlue);
+       SetLabelColors(LabelRemainingFiles, clWhite, clrMedBlue);
+       SetLabelColors(LabelCopyTo, clYellow, clrDarkOrange);
+       SetLabelColors(LabelCanceledByUser, MsgTxtColors.colorWarning, clMaroon);
+
+       Log.BorderStyle:= bsNone;
+       Log.Color:= clrDarkGray;
+       Log.Font.Color:= clWhite;
+     end;
 end;
 
 end.

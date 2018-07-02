@@ -263,6 +263,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Width = 819
     Height = 345
     Color = clWhite
+    PageIndex = 1
     ParentColor = False
     TabOrder = 2
     object TPage

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, ComCtrls, StdCtrls, IniFiles, FileCtrl, Menus, uCommon,
   uCommonCustom,
-  MPCommonObjects, EasyListview, ExtCtrls, PanelEx, ShadowLabel,
+  MPCommonObjects, EasyListview, ExtCtrls, ShadowLabel, PanelEx,
   AdvOfficeButtons, ImgList;
 
 type
@@ -1204,7 +1204,7 @@ procedure TFormConsCompEmulatorsSetup.Emulator1PageButtonClick(Sender: TObject);
        begin
          TSpeedButton(ButtonHolder).Top:= TSpeedButton(ButtonHolder).Top+3;
          TSpeedButton(ButtonHolder).Height:= TSpeedButton(ButtonHolder).Height-3;
-         TSpeedButton(ButtonHolder).Font.Color:= $00323232;
+         TSpeedButton(ButtonHolder).Font.Color:= clrDarkGray;
        end;
   end;
 

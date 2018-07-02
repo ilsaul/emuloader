@@ -128,6 +128,7 @@ procedure TFormThumbnailView.ButtonGridDefaultClick(Sender: TObject);
 begin
   GridWidthSize.Position:= 144;
   GridHeightSize.Position:= 174; // 186 -> font "Segoe UI" size 12 ; 174 -> font "Segoe UI" size 9
+  ELV_ThumbnailPreview.Invalidate;
 end;
 
 procedure TFormThumbnailView.ButtonApplyClick(Sender: TObject);
@@ -245,11 +246,6 @@ var
   // offset increment
   liSize, loSize: integer;
 begin
-  //aDest:= TPNGGraphic.Create;
-  //aDest.PixelFormat:= pf24bit;
-  //aDest.Width:= iWidth;
-  //aDest.Height:= iHeight;
-  //aDest.Canvas.Lock;
   Result:= ThumbImageOriginal[ThumbnailIndex] <> nil;
   if not Result then
      begin
@@ -312,10 +308,8 @@ begin
   bTmp.Canvas.UnLock;
   abmp.Width:= bTmp.Width;
   abmp.Height:= bTmp.Height;
-  //abmp.Canvas.Assign(bTmp);
   abmp.Canvas.Draw(0, 0, bTmp);
   FreeAndNil(bTmp);
-  //bTmp.Free;
 end;
 
 procedure TFormThumbnailView.LoadSystemIcon;
@@ -323,7 +317,6 @@ begin
   FreeAndNil(tSystemIcon);
   tSystemIcon:= TIcon.Create;
   case SystemIconSize.ItemIndex of
-    //0: IL_StandardIconsSmall.GetIcon(TEasyGameInfo(Item).eSystemID, Request.SystemIcon);
     0: FormMain.IL_ArcadeSystem_Small.GetIcon(idHBMAME, tSystemIcon);
     1: FormMain.IL_ArcadeSystem_Large.GetIcon(idHBMAME, tSystemIcon);
     2: FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idHBMAME, tSystemIcon);
@@ -461,7 +454,7 @@ begin
         if ShowSystemIcon.Checked then
            begin
              ThumbImageResized[ThumbnailIndex].Canvas.Draw(xPosFav, yPosFav, tSystemIcon);
-             yPosFav:= iSysIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+             yPosFav:= iSysIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height values) :_((
            end;
 
         if ShowGameIcon.Checked then
@@ -472,7 +465,7 @@ begin
                xPosFav:= yPosFav;
                yPosFav:= 2;
             end;
-          //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+          //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height values) :_((
           ThumbImageResized[ThumbnailIndex].Canvas.Draw(xPosFav, yPosFav, tGameIcon);
         end;
 
@@ -511,7 +504,7 @@ begin
         if ShowSystemIcon.Checked then
            begin
              ThumbImageResized[ThumbnailIndex].Canvas.Draw(xPosFav, yPosFav, tSystemIcon);
-             yPosFav:= iSysIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+             yPosFav:= iSysIconSize+6; // SystemIcon.Height+4; (TIcon doesn't return width/height values) :_((
            end;
 
         if ShowGameIcon.Checked then
@@ -525,7 +518,7 @@ begin
              else
                 xPosFav:= xPosFav+iRightAlignDiff; // right align icon
 
-             //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height...) :_((
+             //yPosFav:= SystemIconSize+4; // SystemIcon.Height+4; (TIcon doesn't return width/height values) :_((
 
              ThumbImageResized[ThumbnailIndex].Canvas.Draw(xPosFav, yPosFav, tGameIcon);
            end;
@@ -603,7 +596,7 @@ begin
        ELV_ThumbnailPreview.BackGround.Enabled:= True;
      end;
 
-  // current values to restore last settings even after if pressing Cancel button... even after using Update button!!!
+  // current values to restore last settings even after if pressing Cancel button, even after using Update button
   Current_BorderColor:= FormMain.GamesListView.PaintInfoItem.BorderColor;
   Current_ShowBorder:= FormMain.GamesListView.PaintInfoItem.ShowBorder;
   Current_ShowGameTitle:= not FormMain.GamesListView.PaintInfoItem.HideCaption;
@@ -764,7 +757,6 @@ end;
 
 procedure TFormThumbnailView.GridWidthSizeChange(Sender: TObject);
 begin
-  //ValidateTrackBarLocked(GridWidthSize, GridHeightSize);
   LabelGridWidthSize.Caption:= Format(LabelGridWidthSize.Hint, [GridWidthSize.Position]);
 
   case ELV_ThumbnailPreview.Items.Count of
@@ -777,7 +769,6 @@ end;
 
 procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);
 begin
-  //ValidateTrackBarLocked(GridHeightSize, GridWidthSize);
   LabelGridHeightSize.Caption:= Format(LabelGridHeightSize.Hint, [GridHeightSize.Position]);
   ELV_ThumbnailPreview.Height:= GridHeightSize.Position+2;
   if FormThumbnailView.Tag = 0 then
@@ -792,8 +783,6 @@ end;
 procedure TFormThumbnailView.BorderColorSelect(Sender: TObject);
 begin
   ELV_ThumbnailPreview.PaintInfoItem.BorderColor:= BorderColor.Selected;
-  //if FormMain.GamesListView.PaintInfoItem.BorderColor <> BorderColor.Selected then
-  //   FormMain.GamesListView.PaintInfoItem.BorderColor:= BorderColor.Selected;
 end;
 
 procedure TFormThumbnailView.ShowBorderClick(Sender: TObject);
@@ -801,26 +790,16 @@ begin
   ELV_ThumbnailPreview.BeginUpdate;
   ELV_ThumbnailPreview.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
   ELV_ThumbnailPreview.EndUpdate;
-  //FormMain.GamesListView.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
-  //FormMain.GamesListView.Refresh;
-
-  //if FormMain.GamesListView.PaintInfoItem.ShowBorder <> ShowBorder.Checked then
-  //   begin
-  //     ELV_ThumbnailPreview.BeginUpdate;
-  //     ELV_ThumbnailPreview.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
-  //     ELV_ThumbnailPreview.EndUpdate;
-  //     FormMain.GamesListView.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
-  //     FormMain.GamesListView.Refresh;
-  //   end;
 end;
 
 procedure TFormThumbnailView.ShowGameTitlesClick(Sender: TObject);
 begin
   ELV_ThumbnailPreview.PaintInfoItem.HideCaption:= not ShowGameTitles.Checked;
-  //FormMain.GamesListView.PaintInfoItem.HideCaption:= not ShowGameTitles.Checked;
-
   if FormThumbnailView.Tag = 0 then
-     UpdateImageSize(False, True, True);
+     begin
+       UpdateImageSize(False, True, True);
+       ELV_ThumbnailPreview.Invalidate;
+     end;
 end;
 
 procedure TFormThumbnailView.ButtonGridWidthSize_DecreaseClick(
@@ -895,15 +874,11 @@ begin
   if FormThumbnailView.Tag = 1 then
      Exit;
   ELV_ThumbnailPreview.BeginUpdate;
-  //if ThumbImageOriginal[1] <> nil then
-     UpdateThumbnail(1);
 
-  //if ThumbImageOriginal[2] <> nil then
-     UpdateThumbnail(2);
+  UpdateThumbnail(1);
+  UpdateThumbnail(2);
 
   ELV_ThumbnailPreview.EndUpdate;
-  //if (ThumbImageOriginal[1] <> nil) or (ThumbImageOriginal[2] <> nil) then
-  //   ELV_ThumbnailPreview.Invalidate;
 end;
 
 

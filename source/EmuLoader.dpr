@@ -22,7 +22,7 @@ uses
   uDeleteMultipleGamesFiles in 'uDeleteMultipleGamesFiles.pas' {FormDeleteMultipleGamesFiles},
   uArcadeSelectSystem in 'arcade\uArcadeSelectSystem.pas' {FormArcadeSelectSystem},
   uArcadeScanAudioSamples in 'arcade\uArcadeScanAudioSamples.pas' {FormArcadeScanAudioSamples},
-  uArcadeGamesScanResults in 'arcade\uArcadeGamesScanResults.pas' {FormArcadeGamesScanResults},
+  uArcadeScanGamesResults in 'arcade\uArcadeScanGamesResults.pas' {FormArcadeScanGamesResults},
   uImageLayoutSettings in 'uImageLayoutSettings.pas' {FormImageLayoutSettings},
   uThumbnailViewSettings in 'uThumbnailViewSettings.pas' {FormThumbnailView},
   uArcadeFileVersions in 'arcade\uArcadeFileVersions.pas' {FormArcadeFileVersions},
@@ -83,12 +83,11 @@ begin
   if CheckAppOneInstance then
      Exit;
   Application.Initialize;
-  Application.Title := 'Emu Loader: MAME and Arcade Frontend';
+  Application.Title := 'Emu Loader: Multiple Systems Frontend';
   Application.HintPause:= 200; // fix for the hint pause... :_(
   Application.HintColor:= $00f8f4f3;//$00EEEBE6;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPreferences, FormPreferences);
-  Application.CreateForm(TFormArcadeFileVersionsLarge, FormArcadeFileVersionsLarge);
   Application.Run;
 end.
 

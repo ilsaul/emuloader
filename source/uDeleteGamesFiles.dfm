@@ -70,6 +70,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -93,6 +96,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -112,6 +118,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmulatorVersion: TShadowLabel
@@ -130,6 +139,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelSoftwareListTitle: TShadowLabel
@@ -148,6 +160,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
@@ -167,6 +182,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
@@ -256,6 +274,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelTotalFilesChecked: TShadowLabel
@@ -275,6 +296,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ButtonNo: TBitBtn
@@ -479,6 +503,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object DestinationFolder: TEdit

@@ -13,29 +13,21 @@ type
   TFormPreferences = class(TForm)
     PageOptions: TNotebook;
     DisableMinimize: TAdvOfficeCheckBox;
-    GroupBoxSplitters: TAdvGroupBox;
-    SplitterStyleSelector: TComboBox;
-    ButtonSplitterStyleDefault: TBitBtn;
-    SplitterGripIcon: TAdvOfficeCheckBox;
     ButtonCustomizeGameFonts: TBitBtn;
-    GroupBoxImageLayoytSplitters: TAdvGroupBox;
+    GroupBoxImageSplitters: TAdvGroupBox;
     LabelAppearanceGameDocuments: TLabel;
     GameDocumentsBackgroundColor: TColorBox;
     ButtonGameDocumentsFont: TBitBtn;
     ButtonGameDocumentsDefault: TBitBtn;
     GameSelectionAlphaBlend: TAdvOfficeCheckBox;
-    LabelMAMu_IconsFolder: TLabel;
-    MAMu_IconsFolder: TEdit;
-    ButtonMAMu_IconsFolderSelect: TBitBtn;
-    ImageEnableGripIcon: TAdvOfficeCheckBox;
-    MAMu_Icon: TImage;
+    ImageSplitterShowGripIcon: TAdvOfficeCheckBox;
     ShadowLabel1: TShadowLabel;
     PanelTabButtons: TPanelEx;
-    ButtonGeneral: TSpeedButton;
-    ButtonGamesList: TSpeedButton;
-    ButtonImages: TSpeedButton;
-    ButtonGameDocuments: TSpeedButton;
-    ColumnsSettings: TAdvGroupBox;
+    ButtonPageGeneral: TSpeedButton;
+    ButtonPageGamesList: TSpeedButton;
+    ButtonPageImages: TSpeedButton;
+    ButtonPageGameDocuments: TSpeedButton;
+    ColumnsSettingsGroupBox: TAdvGroupBox;
     DisableCloneIndent: TAdvOfficeCheckBox;
     DisableDriverStatusIcons: TAdvOfficeCheckBox;
     DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBox;
@@ -59,11 +51,11 @@ type
     LabelGoToMAMEHistory: TShadowLabel;
     GameMultilineCaptions: TAdvOfficeCheckBox;
     LabelGameMultilineCaptions: TLabel;
-    LabelImageLayoutSplitterSingleColor: TLabel;
-    ImageLayoutSplitterSingleColor: TColorBox;
-    ImageLayoutSplitterSingleColorHot: TColorBox;
-    LabelImageLayoutSplitterSingleColorHot: TLabel;
-    ButtonImageLayoutSplitterSingleColorDefault: TBitBtn;
+    LabelImageSplitterSingleColor: TLabel;
+    ImageSplitterSingleColor: TColorBox;
+    ImageSplitterSingleColorHot: TColorBox;
+    LabelImageSplitterSingleColorHot: TLabel;
+    ButtonImageSplitterStyleDefault: TBitBtn;
     HideDOSBoxFrame: TAdvGroupBox;
     HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox;
     HideDOSBoxRunGame: TAdvOfficeCheckBox;
@@ -73,18 +65,7 @@ type
     ImagePanelOuterFrameColor: TColorBox;
     ButtonImagePanelOuterFrameColorDefault: TBitBtn;
     LabelGoToGameInit: TShadowLabel;
-    GameDocs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonResetAutoGameInfoOrder: TBitBtn;
-    ShadowLabel3: TShadowLabel;
     AllowOnlyOneInstance: TAdvOfficeCheckBox;
-    ShadowLabel4: TShadowLabel;
-    LabelSplitterSingleColor: TLabel;
-    SplitterSingleColor: TColorBox;
-    SplitterSingleColorHot: TColorBox;
-    LabelSplitterSingleColorHot: TLabel;
-    ButtonSplitterSingleColorDefault: TBitBtn;
     GamesListStatusBarBox: TAdvGroupBox;
     LabelGamesListStatusBarBottomColor: TLabel;
     LabelGamesListStatusBarTopColor: TLabel;
@@ -96,28 +77,10 @@ type
     GamesListStatusBarTopColor: TColorBox;
     GamesListStatusBarFontColor: TColorBox;
     GamesListStatusBarFrameColor: TColorBox;
-    GroupBoxInternetGameInfo: TAdvGroupBox;
-    LabelInternetGameInfoLink: TLabel;
-    InternetGameInfoLink: TEdit;
-    InternetGameInfoLinkButtonDefault: TBitBtn;
-    LabelInternetMAMESoftwareListGameInfoLink: TLabel;
-    InternetMAMESoftwareListGameInfoLink: TEdit;
-    InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn;
-    Label5: TLabel;
-    Label6: TLabel;
     DisableDeleteSelectedGames: TAdvOfficeCheckBox;
     LabelDisableDeleteSelectedGames: TLabel;
     IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox;
-    GameDocsDisplayModeTabs: TAdvOfficeRadioButton;
-    GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton;
-    LabelGameDocsDisplayMode: TShadowLabel;
-    LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
-    LabelGameDocsDisplayModeTabs: TShadowLabel;
-    FixRetroArchImageFileNames: TAdvOfficeCheckBox;
-    LabelFixRetroArchImageFileNames: TLabel;
     RestoreInternetGameInfoStartup: TAdvOfficeCheckBox;
-    ImageDisableThreadedLoading: TAdvOfficeCheckBox;
-    LabelImageDisableThreadedLoading: TLabel;
     Label1: TLabel;
     HintBoxSettings: TAdvGroupBox;
     LabelHintBox_Color: TLabel;
@@ -136,6 +99,68 @@ type
     ButtonHintTextDefaultColors: TBitBtn;
     HintBox_TextShadowEnabled: TAdvOfficeCheckBox;
     HintBox_IconEnabled: TAdvOfficeCheckBox;
+    ButtonPageNightMode: TSpeedButton;
+    NightModeToolBarBackgroundColors: TAdvGroupBox;
+    NightModeToolBarBkTopColor: TColorBox;
+    LabelNightModeToolBarBkTopColor: TShadowLabel;
+    NightModeToolBarFrameColor: TColorBox;
+    NightModeToolBarBkColorsDefaultButton: TBitBtn;
+    NightModeToolBarShowFrame: TAdvOfficeCheckBox;
+    GroupBoxGamesListSplitters: TAdvGroupBox;
+    LabelGamesListSplitterSingleColorDefault: TShadowLabel;
+    LabelGamesListSplitterSingleColor: TLabel;
+    LabelGamesListSplitterSingleColorHot: TLabel;
+    GamesListSplitterStyleSelector: TComboBox;
+    ButtonGamesListSplitterStyleDefault: TBitBtn;
+    GamesListSplitterShowGripIcon: TAdvOfficeCheckBox;
+    GamesListSplitterSingleColor: TColorBox;
+    GamesListSplitterSingleColorHot: TColorBox;
+    ButtonGamesListSplitterSingleColorDefault: TBitBtn;
+    GroupBoxGameDocsSplitter: TAdvGroupBox;
+    LabelGameDocsSplitterSingleColorDefault: TShadowLabel;
+    LabelGameDocsSplitterSingleColor: TLabel;
+    LabelGameDocsSplitterSingleColorHot: TLabel;
+    GameDocsSplitterStyleSelector: TComboBox;
+    ButtonGameDocsSplitterStyleDefault: TBitBtn;
+    GameDocsSplitterShowGripIcon: TAdvOfficeCheckBox;
+    GameDocsSplitterSingleColor: TColorBox;
+    GameDocsSplitterSingleColorHot: TColorBox;
+    ButtonGameDocsSplitterSingleColorDefault: TBitBtn;
+    GroupBoxInternetGameInfo: TAdvGroupBox;
+    LabelInternetGameInfoLink: TLabel;
+    LabelInternetMAMESoftwareListGameInfoLink: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    InternetGameInfoLink: TEdit;
+    InternetGameInfoLinkButtonDefault: TBitBtn;
+    InternetMAMESoftwareListGameInfoLink: TEdit;
+    InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn;
+    LabelImageSplitterSingleColorDefault: TShadowLabel;
+    ButtonImageSplitterSingleColorDefault: TBitBtn;
+    ImageSplitterStyleSelector: TComboBox;
+    MAMu_Icon: TImage;
+    LabelMAMu_IconsFolder: TLabel;
+    MAMu_IconsFolder: TEdit;
+    ButtonMAMu_IconsFolderSelect: TBitBtn;
+    LabelGamesBackgroundColor: TShadowLabel;
+    ImagesSpecialSettingsGroupBox: TAdvGroupBox;
+    LabelFixRetroArchImageFileNames: TLabel;
+    LabelImageDisableThreadedLoading: TLabel;
+    FixRetroArchImageFileNames: TAdvOfficeCheckBox;
+    ImageDisableThreadedLoading: TAdvOfficeCheckBox;
+    GameDocsDisplayOrderBox: TAdvGroupBox;
+    GameDocs: TEasyListview;
+    ButtonUp: TBitBtn;
+    ButtonDown: TBitBtn;
+    ButtonResetAutoGameInfoOrder: TBitBtn;
+    GameDocsDisplayModeBox: TAdvGroupBox;
+    LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
+    LabelGameDocsDisplayModeTabs: TShadowLabel;
+    GameDocsDisplayModeTabs: TAdvOfficeRadioButton;
+    GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton;
+    NightModeToolBarGradientBar: TAdvOfficeCheckBox;
+    NightModeToolBarBkBottomColor: TColorBox;
+    LabelNightModeToolBarBkBottomColor: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -157,18 +182,18 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure ButtonUpClick(Sender: TObject);
     procedure GameSelectionAlphaBlendClick(Sender: TObject);
-    procedure ImageLayoutSplitterSingleColorSelect(Sender: TObject);
-    procedure ImageLayoutSplitterSingleColorHotSelect(Sender: TObject);
-    procedure ButtonImageLayoutSplitterSingleColorDefaultClick(Sender: TObject);
-    procedure ButtonSplitterStyleDefaultClick(Sender: TObject);
-    procedure ButtonSplitterSingleColorDefaultClick(Sender: TObject);
-    procedure SplitterStyleSelectorSelect(Sender: TObject);
-    procedure SplitterSingleColorSelect(Sender: TObject);
-    procedure SplitterSingleColorHotSelect(Sender: TObject);
-    procedure SplitterGripIconClick(Sender: TObject);
-    procedure ButtonGeneralClick(Sender: TObject);
+    procedure ImageSplitterSingleColorSelect(Sender: TObject);
+    procedure ImageSplitterSingleColorHotSelect(Sender: TObject);
+    procedure ButtonImageSplitterStyleDefaultClick(Sender: TObject);
+    procedure ButtonGamesListSplitterStyleDefaultClick(Sender: TObject);
+    procedure ButtonGamesListSplitterSingleColorDefaultClick(Sender: TObject);
+    procedure GamesListSplitterStyleSelectorSelect(Sender: TObject);
+    procedure GamesListSplitterSingleColorSelect(Sender: TObject);
+    procedure GamesListSplitterSingleColorHotSelect(Sender: TObject);
+    procedure GamesListSplitterShowGripIconClick(Sender: TObject);
+    procedure ButtonPageGeneralClick(Sender: TObject);
     procedure ButtonMAMu_IconsFolderSelectClick(Sender: TObject);
-    procedure ImageEnableGripIconClick(Sender: TObject);
+    procedure ImageSplitterShowGripIconClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure DisableCloneIndentClick(Sender: TObject);
     procedure GamesBackgroundImageEnableClick(Sender: TObject);
@@ -193,8 +218,24 @@ type
     procedure ButtonDefaultHintBox_OpacityClick(Sender: TObject);
     procedure ButtonHintBoxDefaultColorsClick(Sender: TObject);
     procedure ButtonHintTextDefaultColorsClick(Sender: TObject);
+    procedure NightModeToolBarBkColorsDefaultButtonClick(Sender: TObject);
+    procedure NightModeToolBarBkTopColorSelect(Sender: TObject);
+    procedure NightModeToolBarFrameColorSelect(Sender: TObject);
+    procedure NightModeToolBarShowFrameClick(Sender: TObject);
+    procedure ImageSplitterStyleSelectorSelect(Sender: TObject);
+    procedure ButtonImageSplitterSingleColorDefaultClick(Sender: TObject);
+    procedure GameDocsSplitterStyleSelectorSelect(Sender: TObject);
+    procedure ButtonGameDocsSplitterStyleDefaultClick(Sender: TObject);
+    procedure ButtonGameDocsSplitterSingleColorDefaultClick(
+      Sender: TObject);
+    procedure GameDocsSplitterShowGripIconClick(Sender: TObject);
+    procedure GameDocsSplitterSingleColorSelect(Sender: TObject);
+    procedure GameDocsSplitterSingleColorHotSelect(Sender: TObject);
+    procedure NightModeToolBarBkBottomColorSelect(Sender: TObject);
+    procedure NightModeToolBarGradientBarClick(Sender: TObject);
   private
     { Private declarations }
+    procedure NightModeRepaintToolBar;
   public
     { Public declarations }
 
@@ -390,76 +431,71 @@ begin
   FormMain.MachinesListSidePanel.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
 end;
 
-procedure TFormPreferences.ImageLayoutSplitterSingleColorSelect(
+procedure TFormPreferences.ImageSplitterSingleColorSelect(
   Sender: TObject);
 begin
   FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
-procedure TFormPreferences.ImageLayoutSplitterSingleColorHotSelect(
+procedure TFormPreferences.ImageSplitterSingleColorHotSelect(
   Sender: TObject);
 begin
   FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
-procedure TFormPreferences.ButtonImageLayoutSplitterSingleColorDefaultClick(
+procedure TFormPreferences.ButtonImageSplitterStyleDefaultClick(
   Sender: TObject);
 begin
-  SetDefaultColorBox(ImageLayoutSplitterSingleColor);
-  SetDefaultColorBox(ImageLayoutSplitterSingleColorHot);
+  SetSelectedComboBox(1, ImageSplitterStyleSelector);
 end;
 
-procedure TFormPreferences.ButtonSplitterStyleDefaultClick(
+procedure TFormPreferences.ButtonGamesListSplitterStyleDefaultClick(
   Sender: TObject);
 begin
-  SetSelectedComboBox(6, SplitterStyleSelector);
+  SetSelectedComboBox(6, GamesListSplitterStyleSelector);
 end;
 
-procedure TFormPreferences.ButtonSplitterSingleColorDefaultClick(
+procedure TFormPreferences.ButtonGamesListSplitterSingleColorDefaultClick(
   Sender: TObject);
 begin
-  SetDefaultColorBox(SplitterSingleColor);
-  SetDefaultColorBox(SplitterSingleColorHot);
+  SetDefaultColorBox(GamesListSplitterSingleColor);
+  SetDefaultColorBox(GamesListSplitterSingleColorHot);
 end;
 
-procedure TFormPreferences.SplitterStyleSelectorSelect(Sender: TObject);
+procedure TFormPreferences.GamesListSplitterStyleSelectorSelect(Sender: TObject);
 begin
-  //FormMain.SetGroupBoxState(GroupBoxSplitterSingleColor, SplitterStyleSelector.ItemIndex = 1);
-  //GroupBoxSplitterSingleColor.Enabled{Visible}:= SplitterStyleSelector.ItemIndex = 1;
-  FormMain.UpdateSplitterStyle(FormMain.Splitter, TTMSStyle(SplitterStyleSelector.ItemIndex),
-                               SplitterSingleColor.Selected,
-                               SplitterSingleColorHot.Selected);
-  FormMain.UpdateSplitterStyle(FormMain.SplitterMAMEInfo, TTMSStyle(SplitterStyleSelector.ItemIndex),
-                               SplitterSingleColor.Selected,
-                               SplitterSingleColorHot.Selected);
-  FormMain.UpdateSplitterStyle(FormMain.SplitterMachines, TTMSStyle(SplitterStyleSelector.ItemIndex),
-                               SplitterSingleColor.Selected,
-                               SplitterSingleColorHot.Selected);
+  FormMain.UpdateSplitterStyle(FormMain.Splitter, TTMSStyle(GamesListSplitterStyleSelector.ItemIndex),
+                               GamesListSplitterSingleColor.Selected,
+                               GamesListSplitterSingleColorHot.Selected);
+  
+  FormMain.UpdateSplitterStyle(FormMain.SplitterMachines, TTMSStyle(GamesListSplitterStyleSelector.ItemIndex),
+                               GamesListSplitterSingleColor.Selected,
+                               GamesListSplitterSingleColorHot.Selected);
 end;
 
-procedure TFormPreferences.SplitterSingleColorSelect(Sender: TObject);
+procedure TFormPreferences.GamesListSplitterSingleColorSelect(Sender: TObject);
 begin
-  SplitterStyleSelector.OnSelect(Self);
+  GamesListSplitterStyleSelector.OnSelect(Self);
 end;
 
-procedure TFormPreferences.SplitterSingleColorHotSelect(Sender: TObject);
+procedure TFormPreferences.GamesListSplitterSingleColorHotSelect(Sender: TObject);
 begin
-  SplitterStyleSelector.OnSelect(Self);
+  GamesListSplitterStyleSelector.OnSelect(Self);
 end;
 
-procedure TFormPreferences.SplitterGripIconClick(Sender: TObject);
+procedure TFormPreferences.GamesListSplitterShowGripIconClick(Sender: TObject);
 begin
-  FormMain.SetGripIcon(FormMain.Splitter, SplitterGripIcon.Checked);
-  FormMain.SetGripIcon(FormMain.SplitterMAMEInfo, SplitterGripIcon.Checked);
+  FormMain.SetGripIcon(FormMain.Splitter, GamesListSplitterShowGripIcon.Checked);
 end;
 
-procedure TFormPreferences.ButtonGeneralClick(Sender: TObject);
+procedure TFormPreferences.ButtonPageGeneralClick(Sender: TObject);
 begin
   PageOptions.PageIndex:= TSpeedButton(Sender).Tag;
-  ButtonGeneral.Font.Style:= [];
-  ButtonGamesList.Font.Style:= [];
-  ButtonImages.Font.Style:= [];
-  ButtonGameDocuments.Font.Style:= [];
+  ButtonPageGeneral.Font.Style:= [];
+  ButtonPageGamesList.Font.Style:= [];
+  ButtonPageImages.Font.Style:= [];
+  ButtonPageGameDocuments.Font.Style:= [];
+  ButtonPageNightMode.Font.Style:= [];
   TSpeedButton(Sender).Font.Style:= [fsBold];
 end;
 
@@ -469,9 +505,9 @@ begin
   FormMain.DialogSelectFolder(MAMu_IconsFolder, False);
 end;
 
-procedure TFormPreferences.ImageEnableGripIconClick(Sender: TObject);
+procedure TFormPreferences.ImageSplitterShowGripIconClick(Sender: TObject);
 begin
-  if ImageEnableGripIcon.Tag = 0 then
+  if ImageSplitterShowGripIcon.Tag = 0 then
      FormMain.PopupImageShowSplitterGrip.Click;
 end;
 
@@ -626,11 +662,11 @@ end;
 procedure TFormPreferences.GameDocsDisplayModeSinglePanelClick(
   Sender: TObject);
 begin
-  // LabelGameDocsDisplayMode.Tag
+  // GameDocsDisplayModeBox.Tag
   // 0 -> Single Panel
   // 1 -> Tabbed Panels
 
-  if (TAdvOfficeRadioButton(Sender).Tag = LabelGameDocsDisplayMode.Tag) and (not FormMain.IsStartup) then
+  if (TAdvOfficeRadioButton(Sender).Tag = GameDocsDisplayModeBox.Tag) and (not FormMain.IsStartup) then
      Exit;
 
   FormMain.ButtonImagePanelToggle.Visible:= not GameDocsDisplayModeSinglePanel.Checked;
@@ -639,7 +675,7 @@ begin
   if FormMain.IsStartup then
      Exit;
 
-  LabelGameDocsDisplayMode.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  GameDocsDisplayModeBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
 
   //if GameDocsDisplayModeSinglePanel.Checked then
   //   begin
@@ -672,6 +708,101 @@ begin
   SetDefaultColorBox(HintBox_TextColor);
   SetDefaultColorBox(HintBox_TextShadowColor);
   HintBox_TextShadowEnabled.Checked:= True;
+end;
+
+procedure TFormPreferences.NightModeRepaintToolBar;
+begin
+  if (not FormMain.IsStartup) and IsNightMode then
+     begin
+       FormMain.ImagesToolbarButtons.Invalidate;
+       FormMain.ToolBarButtons.Invalidate; // games filters tool bar
+     end;
+end;
+
+procedure TFormPreferences.NightModeToolBarBkColorsDefaultButtonClick(Sender: TObject);
+begin
+  SetDefaultColorBox(NightModeToolBarBkTopColor);
+  SetDefaultColorBox(NightModeToolBarBkBottomColor);
+  SetDefaultColorBox(NightModeToolBarFrameColor);
+end;
+
+procedure TFormPreferences.NightModeToolBarBkTopColorSelect(
+  Sender: TObject);
+begin
+  NightModeRepaintToolBar;
+end;
+
+procedure TFormPreferences.NightModeToolBarFrameColorSelect(
+  Sender: TObject);
+begin
+  NightModeRepaintToolBar;
+end;
+
+procedure TFormPreferences.NightModeToolBarShowFrameClick(Sender: TObject);
+begin
+  NightModeRepaintToolBar;
+end;
+
+procedure TFormPreferences.ImageSplitterStyleSelectorSelect(
+  Sender: TObject);
+begin
+  FormMain.UpdateImageLayoutSplittersStyle;
+end;
+
+procedure TFormPreferences.ButtonImageSplitterSingleColorDefaultClick(Sender: TObject);
+begin
+  SetDefaultColorBox(ImageSplitterSingleColor);
+  SetDefaultColorBox(ImageSplitterSingleColorHot);
+end;
+
+procedure TFormPreferences.GameDocsSplitterStyleSelectorSelect(
+  Sender: TObject);
+begin
+  FormMain.UpdateSplitterStyle(FormMain.SplitterMAMEInfo, TTMSStyle(GameDocsSplitterStyleSelector.ItemIndex),
+                               GameDocsSplitterSingleColor.Selected,
+                               GameDocsSplitterSingleColorHot.Selected);
+end;
+
+procedure TFormPreferences.ButtonGameDocsSplitterStyleDefaultClick(
+  Sender: TObject);
+begin
+  SetSelectedComboBox(6, GameDocsSplitterStyleSelector);
+end;
+
+procedure TFormPreferences.ButtonGameDocsSplitterSingleColorDefaultClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(GameDocsSplitterSingleColor);
+  SetDefaultColorBox(GameDocsSplitterSingleColorHot);
+end;
+
+procedure TFormPreferences.GameDocsSplitterShowGripIconClick(
+  Sender: TObject);
+begin
+  FormMain.SetGripIcon(FormMain.SplitterMAMEInfo, GameDocsSplitterShowGripIcon.Checked);
+end;
+
+procedure TFormPreferences.GameDocsSplitterSingleColorSelect(
+  Sender: TObject);
+begin
+  GameDocsSplitterStyleSelector.OnSelect(Self);
+end;
+
+procedure TFormPreferences.GameDocsSplitterSingleColorHotSelect(
+  Sender: TObject);
+begin
+  GameDocsSplitterStyleSelector.OnSelect(Self);
+end;
+
+procedure TFormPreferences.NightModeToolBarBkBottomColorSelect(Sender: TObject);
+begin
+  NightModeRepaintToolBar;
+end;
+
+procedure TFormPreferences.NightModeToolBarGradientBarClick(
+  Sender: TObject);
+begin
+  NightModeRepaintToolBar;
 end;
 
 end.

@@ -243,7 +243,7 @@ function  IsAtari800Emu(const emuFile: String): Boolean;
 function  IsAtariPlusPlus(const emuFile: String): Boolean;
 function  IsAltirra(const emuFile: String): Boolean;
 
-function  FindFile(RootFolder: String; {const }FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean; out VarNameDOS: String): Boolean;
+function  FindFile(RootFolder: String; {const }FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean): Boolean;
 
 procedure GetPlayedGameInfoIniCustom(const LineStr: String;
                                      var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
@@ -1112,7 +1112,7 @@ begin
            SameText(emuFile, 'altirra.exe');
 end;
 
-function FindFile(RootFolder: String; FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean; out VarNameDOS: String): Boolean;
+function FindFile(RootFolder: String; FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean): Boolean;
 const
   ISO_metadata: array[1..5] of String = ('.m3u', '.cue', '.toc', '.mds', '.ccd'); // .m3u is for Mednafen emulator, multiple CD games...
 var
@@ -1144,30 +1144,14 @@ begin
      Exit;
   RootFolder:= IncludeTrailingPathDelimiter(RootFolder);
   Result:= FileExistsW(RootFolder+FileName);
-  //if Result then
-  //   ShowMessageW('FileExistsW('+RootFolder+FileName+')'+#13#10+#13#10+'File found!')
-  //else
-  //   ShowMessageW('FileExistsW('+RootFolder+FileName+')'+#13#10+'File NOT found!');
   if Result then
      begin
        ResultVar:= RootFolder+FileName;
-       //FileISO:= RootFolder+FileName;
        if SearchISOmetadata then
           begin
             if FindISOmetadata(RootFolder) then
                ResultVar:= FileMetadata;
           end;
-
-       {case SearchISOmetadata of
-         True:
-           begin
-             case FindISOmetadata(RootFolder) of
-               True : ResultVar:= FileMetadata;
-               False: ResultVar:= FileISO;
-             end;
-           end;
-         False: ResultVar:= FileISO;
-       end;}
        Exit;
      end;
 
@@ -1181,23 +1165,11 @@ begin
     if Result then
        begin
          ResultVar:= FolderStr+FileName;
-         //FileISO:= FolderStr+FileName;
          if SearchISOmetadata then
           begin
             if FindISOmetadata(FolderStr) then
                ResultVar:= FileMetadata;
           end;
-
-         {case SearchISOmetadata of
-           True:
-             begin
-               case FindISOmetadata(FolderStr) of
-                 True : ResultVar:= FileMetadata;
-                 False: ResultVar:= FileISO;
-               end;
-             end;
-           False: ResultVar:= FileISO;
-         end;}
          Break;
        end;
   end;

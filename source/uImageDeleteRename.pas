@@ -79,7 +79,7 @@ var
 begin
   ResizeForm;
 
-  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName);
+  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus);
   if IsNightMode then
      begin
        SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);

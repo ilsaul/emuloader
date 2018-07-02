@@ -182,7 +182,7 @@ begin
   FormMain.ELV_ResetNormalColors(GamesList);
   if IsNightMode then
      begin
-       SetFormColors(FormConsCompMultiFloppyGames, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorDetails);
+       SetFormColors(FormConsCompMultiFloppyGames, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorDetails, -1);
        SetLabelColors(LabelTotalFloppyDisks, clWhite, clNavy);
 
        FrameGamesList.ColorFrame:= $00ff9933;
@@ -214,9 +214,9 @@ begin
        //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
        if IsNightMode then
-          ACanvas.Font.Color:= $f1f1f1
+          ACanvas.Font.Color:= $00f1f1f1
        else
-          ACanvas.Font.Color:= $00323232;
+          ACanvas.Font.Color:= clrDarkGray;
      end;
   FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;

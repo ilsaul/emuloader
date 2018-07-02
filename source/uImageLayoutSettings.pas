@@ -749,7 +749,7 @@ begin
   if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
      GroupBoxCategoryConsoleComputer.Font.Color:= clBlack
   else
-     GroupBoxCategoryConsoleComputer.Font.Color:= $0078695b;
+     GroupBoxCategoryConsoleComputer.Font.Color:= clrLightGrayFrame;
 end;
 
 procedure TFormImageLayoutSettings.ButtonLayoutCopyCatAllSystems_ConsCompClick(

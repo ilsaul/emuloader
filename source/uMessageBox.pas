@@ -125,41 +125,13 @@ begin
   if IconMediaType.Tag <> -1 then
      FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);
 
-  //if not IconMediaType.Visible then
-  //   begin
-  //     if MessageIcon.Height = 41 then
-  //        LabelMessage.Top:= 50
-  //     else
-  //        LabelMessage.Top:= 57;
-  //   end;
-
   if (PanelBottom.Tag = -1) or (LabelGameName.Visible and (PanelBottom.Tag <> 4)) then
-     begin
-       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
-
-       //case FormMain.MemGameInfo.eIsCustomGame of
-       //  True : FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID,
-       //                                                     MessageIcon.Picture.Icon);
-       //  False: FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-       //                                                     MessageIcon.Picture.Icon);
-       //end;
-     end
+     FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame)
   else
-  if PanelBottom.Tag = 4 then // for Multi-cart loading systems...
+  if PanelBottom.Tag = 4 then // for Multi-cart loading systems
      FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(FormMain.MemGameInfo.eSystemID), MessageIcon)
-     // FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, MessageIcon.Picture.Icon)
   else
-     begin
-       //MessageIcon.Width:= 32;
-       //MessageIcon.Height:= 32;
-       //LabelGameTitle.Top:= 3;
-       //LabelGameTitle.Left:= LabelGameTitle.Left-16;
-       //LabelGameTitle.Width:= LabelGameTitle.Width+16;
-       //PanelTop.Height:= PanelTop.Height-21;
-       //LabelMessage.Top:= LabelMessage.Top-21;
-       //FormMessageBox.ClientHeight:= FormMessageBox.ClientHeight-21;
-       FormMain.LoadMessageIcon(MessageIcon, PanelBottom.Hint);
-     end;
+     FormMain.LoadMessageIcon(MessageIcon, PanelBottom.Hint);
 
   LabelGameTitle.Caption:= LabelMessageTitle;
 
@@ -173,13 +145,13 @@ begin
        newHeight:= FormMessageBox.LabelMessage.Top+RichEditHeight+PanelBottom.Height+16;
        if newHeight <= scrMaxHeight then
           begin
-            // size of URLRichEdit changes according to the text length!!! :)
+            // size of URLRichEdit changes according to the text length
             FormMessageBox.ClientHeight:= newHeight;
             LabelMessage.Height:= RichEditHeight+1;
           end
        else
           begin
-            // height must be lowered even more due to screen height!!!
+            // height must be lowered even more due to screen height
             FormMessageBox.ClientHeight:= scrMaxHeight;
             LabelMessage.Height:= RichEditHeight-(newHeight-scrMaxHeight);
           end;
@@ -202,7 +174,7 @@ end;
 
 procedure TFormMessageBox.FormCreate(Sender: TObject);
 begin
-  LabelMessage.Height:= 1300;
+  LabelMessage.Height:= 1300; // without this hack-fix, form height goes nuts, DO NOT REMOVE!
 end;
 
 procedure TFormMessageBox.NightModeClick(Sender: TObject);
@@ -211,5 +183,6 @@ begin
   FormMain.MenuEnableNightMode.Checked:= IsNightMode;
   PopulateMsgColors;
 end;
+
 
 end.

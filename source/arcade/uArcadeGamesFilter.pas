@@ -5,22 +5,28 @@ interface
 uses
   Windows, Messages, Classes, Graphics, Controls, Forms,
   Buttons, SysUtils, StdCtrls, ExtCtrls, IniFiles, ImgList,
-  MPCommonObjects, MPCommonUtilities, EasyListview, PanelEx;
+  MPCommonObjects, MPCommonUtilities, EasyListview, PanelEx,
+  AdvOfficeButtons, ShadowLabel;
 
 type
   TFormArcadeGamesFilter = class(TForm)
     IL_MainFiltersMAME: TImageList;
+    PanelFilters: TPanelEx;
     FiltersListView: TEasyListview;
-    PanelEx1: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonGoToCurrentFilter: TBitBtn;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
+    LabelToolBarIconSize: TShadowLabel;
+    LabelIconSizeValue: TShadowLabel;
+    IconSizeExtraLarge: TSpeedButton;
+    IconSizeLarge: TSpeedButton;
+    IconSizeSmall: TSpeedButton;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FiltersListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
-    procedure FormActivate(Sender: TObject);
     procedure FiltersListViewGroupClick(Sender: TCustomEasyListview;
       Group: TEasyGroup; KeyStates: TCommonKeyStates;
       HitTest: TEasyGroupHitTestInfoSet);
@@ -28,13 +34,17 @@ type
       Button: TCommonMouseButton; MousePos: TPoint;
       HitInfo: TEasyHitInfoItem);
     procedure ButtonGoToCurrentFilterClick(Sender: TObject);
+    procedure IconSizeLargeClick(Sender: TObject);
   private
     { Private declarations }
+    IconIndexList: TStringList;
     function  FiltersIniFound: Boolean;
     function  MountFiltersList: Boolean;
+    procedure ChangeIconSize;
   public
     { Public declarations }
     SelNodeName: String;
+
   end;
 
 var
@@ -45,6 +55,91 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormArcadeGamesFilter.ChangeIconSize;
+var
+  iValue: Integer;
+  iconFolder: String;
+  ReloadIcons: Boolean;
+begin
+  ReloadIcons:= False;
+  iValue:= 48;
+  case LabelToolBarIconSize.Tag of
+    0: iValue:= 68; // extra large icon
+    1: iValue:= 48; // large icon
+    2: iValue:= 30; // small icon
+  end;
+  if IL_MainFiltersMAME.Width <> iValue then
+     begin
+       IL_MainFiltersMAME.Width:= iValue;
+       if iValue <> 30 then
+          IL_MainFiltersMAME.Height:= iValue
+       else
+          IL_MainFiltersMAME.Height:= 24;
+       ReloadIcons:= True;
+     end;
+
+  case LabelToolBarIconSize.Tag of
+    0: // extra large icon
+      begin
+        if FormArcadeGamesFilter.Height <> 600 then
+           FormArcadeGamesFilter.Height:= 600;
+
+        if FiltersListView.CellSizes.Tile.Width <> 184 then
+           FiltersListView.CellSizes.Tile.Width:= 184;
+        if FiltersListView.CellSizes.Tile.Height <> 78 then
+           FiltersListView.CellSizes.Tile.Height:= 78;
+      end;
+    1: // large icon
+      begin
+        if FormArcadeGamesFilter.Height <> 516 then
+           FormArcadeGamesFilter.Height:= 516;
+
+        if FiltersListView.CellSizes.Tile.Width <> 164 then
+           FiltersListView.CellSizes.Tile.Width:= 164;
+        if FiltersListView.CellSizes.Tile.Height <> 58 then
+           FiltersListView.CellSizes.Tile.Height:= 58;
+      end;
+    2: // small icon
+      begin
+        if FormArcadeGamesFilter.Height <> 516 then
+           FormArcadeGamesFilter.Height:= 516;
+           
+        if FiltersListView.CellSizes.Tile.Width <> 152 then
+           FiltersListView.CellSizes.Tile.Width:= 164;
+        if FiltersListView.CellSizes.Tile.Height <> 34 then
+           FiltersListView.CellSizes.Tile.Height:= 34;
+      end;
+  end;
+
+  FiltersListView.Height:= PanelFilters.ClientHeight-PanelBottom.Height;
+
+  iValue:= (FiltersListView.CellSizes.Tile.Width*3)+2+GetSystemMetrics(SM_CXVSCROLL); // +4 is the border
+
+  if FiltersListView.Width <> iValue then
+     FiltersListView.Width:= iValue;
+
+  if FormArcadeGamesFilter.ClientWidth <> iValue+4 then
+     FormArcadeGamesFilter.ClientWidth:= iValue+4; // +4 is the border of the PanelEx under the EasyListView
+
+  ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8;
+  ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-8;
+
+  if FormMain.CheckTotal(FiltersListView) and ReloadIcons then
+  begin
+    if IconIndexList.Count > 0 then
+    begin
+      FiltersListView.BeginUpdate;
+      iconFolder:= FormMain.GetFolderFull(32)+'arcade_filters\';
+      IL_MainFiltersMAME.Clear;
+      for iValue:=0 to IconIndexList.Count-1 do
+          FormMain.AddDefaultIcons(IconIndexList[iValue], iconFolder, IL_MainFiltersMAME, Ord(iValue <> 1), True);
+      FiltersListView.EndUpdate;
+    end;
+    if FormMain.CheckSelected(FiltersListView) then
+       FiltersListView.Selection.First.MakeVisible(emvAuto);
+  end;
+end;
 
 function TFormArcadeGamesFilter.FiltersIniFound: Boolean;
 begin
@@ -68,9 +163,12 @@ var
 
   function AddFilterIcon(const iFile: String): Integer;
   begin
-    Result:= 1;
-    if FormMain.AddDefaultIcons(iFile+'.ico', iconFolder, IL_MainFiltersMAME, False) then
-       Result:= IL_MainFiltersMAME.Count-1;
+    Result:= 0;
+    if FormMain.AddDefaultIcons(iFile+'.ico', iconFolder, IL_MainFiltersMAME, Ord(iFile <> 'allgames'), True) then
+       begin
+         IconIndexList.Add(iFile+'.ico');
+         Result:= IL_MainFiltersMAME.Count-1;
+       end;
   end;
 
 begin
@@ -116,7 +214,11 @@ begin
      end;
 
   iconFolder:= FormMain.GetFolderFull(32)+'arcade_filters\';
-  FormMain.AddDefaultIcons('no_icon.ico', iconFolder, IL_MainFiltersMAME);
+  FormMain.AddDefaultIcons('no_icon.ico', iconFolder, IL_MainFiltersMAME, 1, True);
+
+  IconIndexList.BeginUpdate;
+  IconIndexList.Add('no_icon.ico');
+
   subSectionsList:= THashedStringList.Create; // will hold sub-sections of main section
   FiltersListView.BeginUpdate;
   FiltersListView.Items.ReIndexDisable:= True;
@@ -182,6 +284,7 @@ begin
             end;
         end;
   end;
+  IconIndexList.EndUpdate;
   FormMain.ELV_RemoveDefaultGroup(FiltersListView);
   FiltersListView.Items.ReIndexDisable:= False;
   FiltersListView.EndUpdate;
@@ -219,6 +322,11 @@ begin
       end;
     mrCancel: SelNodeName:= 'cancel';
   end;
+  if CanClose then
+     begin
+       FormMain.ButtonArcadeGamesFilters.Tag:= LabelToolBarIconSize.Tag;
+       FreeAndNil(IconIndexList);
+     end;
 end;
 
 procedure TFormArcadeGamesFilter.FormKeyPress(Sender: TObject; var Key: Char);
@@ -247,11 +355,47 @@ begin
   case FiltersIniFound of
     True:
       begin
+        //Screen.Cursor:= crHourGlass;
         if FormMain.MenuArcadeBrowseGames.Tag <> 0 then
            FiltersListView.IncrementalSearch.Enabled:= False;
         FormMain.ELV_ResetNormalColors(FiltersListView);
+
+        LabelToolBarIconSize.Tag:= FormMain.ButtonArcadeGamesFilters.Tag;
+        case LabelToolBarIconSize.Tag of
+          0:
+            begin
+              IconSizeExtraLarge.Down:= True;
+              IconSizeExtraLarge.Click;
+            end;
+          2:
+           begin
+             IconSizeSmall.Down:= True;
+             IconSizeSmall.Click;
+           end;
+        end;
+        ChangeIconSize;
+        IconIndexList:= TStringList.Create;
+        case MountFiltersList of
+          True:
+            begin
+              FormArcadeGamesFilter.Tag:= 1;
+              FormMain.HideFilterMsgBox;
+            end;
+          False:
+            begin
+              //Screen.Cursor:= crDefault;
+              FormMain.HideFilterMsgBox;
+              ButtonCancel.Click;
+              PostMessage(Handle, wm_Close, 0, 0);
+            end;
+        end;
+        //Screen.Cursor:= crDefault;
       end;
-    False: ButtonCancel.Click;
+    False:
+      begin
+        FormMain.HideFilterMsgBox;
+        ButtonCancel.Click;
+      end;
   end;
 end;
 
@@ -389,23 +533,6 @@ end;
                      'dkong.c, popeye.c, punchout.c, mario.c';
 }
 
-procedure TFormArcadeGamesFilter.FormActivate(Sender: TObject);
-begin
-  if Tag = 1 then
-     Exit;
-  Screen.Cursor:= crHourGlass;
-  case MountFiltersList of
-    True: Tag:= 1;
-    False:
-      begin
-        Screen.Cursor:= crDefault;
-        ButtonCancel.Click;
-        PostMessage(Handle, wm_Close, 0, 0);
-      end;
-  end;
-  Screen.Cursor:= crDefault;
-end;
-
 procedure TFormArcadeGamesFilter.FiltersListViewGroupClick(
   Sender: TCustomEasyListview; Group: TEasyGroup;
   KeyStates: TCommonKeyStates; HitTest: TEasyGroupHitTestInfoSet);
@@ -426,6 +553,21 @@ procedure TFormArcadeGamesFilter.ButtonGoToCurrentFilterClick(
 begin
   FormMain.ELV_SelectItem(FiltersListView, 0, FormMain.SelectedFilterName, Ord(FormMain.SelectedFilterName <> ''));
   FiltersListView.SetFocus;
+end;
+
+procedure TFormArcadeGamesFilter.IconSizeLargeClick(Sender: TObject);
+begin
+  if (TSpeedButton(Sender).Tag = LabelToolBarIconSize.Tag) and (FormArcadeGamesFilter.Tag = 1) then
+     Exit;
+
+  LabelToolBarIconSize.Tag:= TSpeedButton(Sender).Tag;
+  case TSpeedButton(Sender).Tag of
+    0: LabelIconSizeValue.Caption:= 'Extra Large (68x68)';
+    1: LabelIconSizeValue.Caption:= 'Large (48x48)';
+    2: LabelIconSizeValue.Caption:= 'Small (30x24)';
+  end;
+  if FormArcadeGamesFilter.Tag = 1 then // to prevent setting from executing if screen settings are being loaded!
+     ChangeIconSize;
 end;
 
 end.

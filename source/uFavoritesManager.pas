@@ -1070,7 +1070,7 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormFavoritesManager, nil, nil, nil, nil, False);
+       SetFormColors(FormFavoritesManager, nil, nil, nil, nil, -1, False);
        FavoritesList.Color:= FormFavoritesManager.Color;
        FavoritesList.Font.Color:= clWhite;
        FavoritesList.HotTrack.Color:= clWhite;

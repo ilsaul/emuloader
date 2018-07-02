@@ -6671,7 +6671,7 @@ begin
   if SaveValidateAllCustomFiles.Checked then
      SaveValidateAllCustomFiles.Font.Color:= clBlue
   else
-     SaveValidateAllCustomFiles.Font.Color:= $00323232;
+     SaveValidateAllCustomFiles.Font.Color:= clrDarkGray;
 end;
 
 procedure TFormMAMESettings.ButtonHelpSaveValidateAllCustomFilesClick(

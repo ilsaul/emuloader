@@ -171,7 +171,6 @@ type
     procedure UpdateTotalFilesLabel;
     procedure SearchROMsFiles(eROMsList: TStringList; var MergedSetVar: Boolean; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean; var CHDFilesCountVar: Integer; var ROMFileTotalSizeVar: Int64; var CHDFilesTotalSizeVar: Int64);
     procedure SearchConfigFiles(var HaveCFGsVar: Boolean; var CFGFilesCountVar: Integer; var CFGTotalFilesSize: Int64);
-    procedure SearchConsCompGameFile(var VarFileFullPath: WideString; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean);
     function  DeleteConsoleComputerGames: Boolean;
     procedure ResizeForm;
     procedure AddGamesToList;
@@ -367,18 +366,7 @@ begin
   // if 4th char position is a space char, then it's a EmuCon game... 
   if FormMain.TempGameVars.eIsCustomGame then
      begin
-       {FileFullPath:= FormMain.TempGameVars.eName;
-       FormMain.SearchGameFile(FormMain.TempGameVars.eName, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eCustomMediaType, False, False, FileFullPath, StrDOSName);
-       if FileFullPath <> '' then
-          begin
-            if FormMain.MemGameInfo.eIsUnicode then
-               tempFilesList.Add(IntToStr(FormMain.MemGameInfo.eCustomMediaType)+'1 '+UTF8Encode(FileFullPath))
-            else
-               tempFilesList.Add(IntToStr(FormMain.MemGameInfo.eCustomMediaType)+'0 '+FileFullPath);
 
-            HaveROMsVar:= True;
-            ROMsTotalSize:= ROMsTotalSize+GetFileSizeW(FileFullPath);
-          end;}
      end
   else
      begin
@@ -424,7 +412,7 @@ begin
     begin
       DiskFile:= eROMsList[Loop];
       FormMain.GetROMDetailsInfo(DiskFile, FormMain.GameIsClone(FormMain.TempGameVars.eName), romName, romCRC32, romSHA1, chdParentName, romDeviceName);
-      //if (romName[1] = '3') and (romCRC <> '') then
+
       CHDFileID:= StrToInt(DiskFile[1]+DiskFile[2]);
       if (CHDFileID >= 12) and (DiskFile[3] = '1') and (romSHA1 <> '') then
          begin
@@ -616,41 +604,12 @@ begin
   AddItem_ELV(4); // .flash
 end;
 
-procedure TFormDeleteMultipleGamesFiles.SearchConsCompGameFile(var VarFileFullPath: WideString; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean);
-var
-  //FileFullPath: WideString;
-  DOSNameStr: String;
-begin
-  // this function is not being used anywhere!!! (November 09, 2017)
-  //case FormMain.SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName) of
-  HaveROMsVar:= False;
-  HaveCHDsVar:= False;
-  FormMain.SearchGameFile(FormMain.TempGameVars.eName, FormMain.TempGameVars.eCustomSystemID, FormMain.TempGameVars.eCustomMediaType, False, False, VarFileFullPath, DOSNameStr);
-
-  if VarFileFullPath <> '' then
-     begin
-       // found game_filename
-       //VarFileFullPath:= media_type is_unicode file_fullpath
-       VarFileFullPath:= WideFormat('%.2u%d %s', [FormMain.TempGameVars.eCustomMediaType, Ord(FormMain.TempGameVars.eIsUnicode), VarFileFullPath]);
-
-       ConsCompTotalSize:= ConsCompTotalSize+GetFileSizeW(VarFileFullPath);
-       Inc(ConsCompTotalFiles);
-       //if FormMain.TempGameVars.eCustomMediaType <> 2 then
-       //   HaveROMsVar:= True
-       //else
-       //   HaveCHDsVar:= True;
-       //ROMsTotalSize:= ROMsTotalSize+GetFileSizeW(VarFileFullPath);
-       //Inc(ROMsTotalFiles);
-     end;
-end;
-
 procedure TFormDeleteMultipleGamesFiles.AddGamesToList;
 var
   Loop, Loop2, SelectionIndex: Integer;
   gItem, addItem: TEasyItem;
   GameIsMerged, FoundROMsArcade, FoundCHDsArcade, FoundCFGsArcade: Boolean;
   CustomGameFullPath: WideString;
-  DOSNameStr: String;
   ROMsSize, CHDsSize, CFGsSize, CustomGameSize: Int64;
 
   ArcadeCHDCount, ArcadeCFGCount: Integer;
@@ -775,7 +734,7 @@ begin
       case uMain.TEasyGameInfo(gItem).eIsCustomGame of
         True:
           begin
-            FormMain.SearchGameFile(uMain.TEasyGameInfo(gItem).eName, uMain.TEasyGameInfo(gItem).eCustomSystemID, uMain.TEasyGameInfo(gItem).eCustomMediaType, False, False, CustomGameFullPath, DOSNameStr);
+            FormMain.SearchGameFile(uMain.TEasyGameInfo(gItem).eName, uMain.TEasyGameInfo(gItem).eCustomSystemID, uMain.TEasyGameInfo(gItem).eCustomMediaType, False, False, CustomGameFullPath);
             if CustomGameFullPath <> '' then
                begin
                  CustomGameSize:= GetFileSizeW(CustomGameFullPath);
@@ -1209,7 +1168,7 @@ begin
 
   if IsNightMode then
   begin
-    SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil);
+    SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil, -1);
     //SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
     //SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
     //SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
@@ -1363,12 +1322,13 @@ begin
     0:
       begin
         ACanvas.Font.Name:= 'Verdana';
-        ACanvas.Font.Style:= [fsBold];
+        ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
       end;
     1:
      begin
        ACanvas.Font.Name:= 'Consolas';
        ACanvas.Font.Size:= 8; //9;
+       ACanvas.Font.Style:= []; // remove all styles, only keep font color
        //ACanvas.Font.Color:= clBlack;
      end;
   end;
@@ -1741,6 +1701,21 @@ begin
   if not Assigned(FormDeleteMultipleGamesViewFiles) then
      FormDeleteMultipleGamesViewFiles:= TFormDeleteMultipleGamesViewFiles.Create(nil);
   FormDeleteMultipleGamesViewFiles.Tag:= TMenuItem(Sender).Tag;
+
+  if IsNightMode then
+     begin
+       FormDeleteMultipleGamesViewFiles.BottomBar.Frames:= [];
+       FormDeleteMultipleGamesViewFiles.BottomBar.Style:= vgSimple;
+       SetFormColors(FormDeleteMultipleGamesViewFiles, nil, FormDeleteMultipleGamesViewFiles.BottomBar, nil, nil, -1);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clRed, $323200);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clWhite, clNavy);
+       FormDeleteMultipleGamesViewFiles.FilesListView.Color:= FormDeleteMultipleGamesViewFiles.Color;
+       FormDeleteMultipleGamesViewFiles.FilesListView.Font.Color:= clWhite;
+       FormDeleteMultipleGamesViewFiles.FilesListView.HotTrack.Color:= clWhite;
+       FormDeleteMultipleGamesViewFiles.FilesListView.GroupFont.Color:= clWhite;
+       FormDeleteMultipleGamesViewFiles.LabelTotalItems.Tag:= 1;
+     end;
+
   FormDeleteMultipleGamesViewFiles.ShowModal;
   FreeAndNil(FormDeleteMultipleGamesViewFiles);
   FormDeleteMultipleGamesFiles.BringToFront;
@@ -1875,6 +1850,14 @@ begin
        iLeft:= RectArray.LabelRect.Right-(IL_DeleteGameIcons.Width*3);
 
        iTop:= (RectArray.IconRect.Top+1+GamesList.ImagesExLarge.Height)-IL_DeleteGameIcons.Height;// FormMain.IL_StandardIconsSmall.Height;
+
+       // show driver status icon ? (June 22, 2018)
+       //if TGameInfo(Item).eDriverStatus <> -1 then
+       //   begin
+       //     IL_DeleteGameIcons.Draw(ACanvas, iLeft, iTop, TGameInfo(Item).eDriverStatus+24);
+       //     iLeft:= (iLeft-IL_DeleteGameIcons.Width)-4;
+       //   end;
+
        if TGameInfo(Item).eHaveCFGsArcade then
           begin
             IL_DeleteGameIcons.Draw(ACanvas, iLeft, iTop, FormDeleteMultipleGamesFiles.DeleteCFGsNVRAMs.Tag+1); //MaxGameID+MaxArcadeSystems+3

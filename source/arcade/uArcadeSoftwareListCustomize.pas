@@ -316,8 +316,8 @@ begin
   //SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   FormMain.ELV_ResetNormalColors(SoftwareLists);
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
-  FormMain.LoadIconIntoImage('emu_ume', SystemIcon, False);
-  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon, False);
+  FormMain.LoadIconIntoImage('emu_ume', SystemIcon);//, False);
+  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);//, False);
 
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
 
@@ -325,7 +325,7 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, False);
+       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, False);
        SetLabelColors(LabelTotalSoftwareList, clWhite, clNavy);
 
        FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue

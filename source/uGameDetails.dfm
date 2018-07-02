@@ -5,7 +5,7 @@ object FormGameDetails: TFormGameDetails
   BorderStyle = bsDialog
   Caption = 'Game Details'
   ClientHeight = 585
-  ClientWidth = 970
+  ClientWidth = 1085
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -38,6 +38,9 @@ object FormGameDetails: TFormGameDetails
     ShadowColor = 12632284
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object LabelYearValue: TShadowLabel
@@ -56,12 +59,15 @@ object FormGameDetails: TFormGameDetails
     ShadowColor = clSkyBlue
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 970
+    Width = 1085
     Height = 80
     Align = alTop
     Color1 = 15792869
@@ -99,6 +105,9 @@ object FormGameDetails: TFormGameDetails
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -129,6 +138,9 @@ object FormGameDetails: TFormGameDetails
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
@@ -151,6 +163,9 @@ object FormGameDetails: TFormGameDetails
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -158,7 +173,7 @@ object FormGameDetails: TFormGameDetails
   object FrameROMsListView: TPanelEx
     Left = 297
     Top = 89
-    Width = 666
+    Width = 781
     Height = 490
     Color1 = 15856113
     Color2 = 1
@@ -174,7 +189,7 @@ object FormGameDetails: TFormGameDetails
       Tag = 1
       Left = 2
       Top = 2
-      Width = 662
+      Width = 777
       Height = 486
       BackGround.Enabled = True
       BorderStyle = bsNone
@@ -199,7 +214,7 @@ object FormGameDetails: TFormGameDetails
       GroupFont.Style = []
       HintType = ehtToolTip
       Header.Columns.Items = {
-        0600000005000000110000005445617379436F6C756D6E53746F726564FFFECE
+        0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
         00060000008008000101000100000000000001BE000000FFFFFF1F0001000000
         01000000040000004E0061006D00650000000000000000000000000011000000
         5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
@@ -208,11 +223,14 @@ object FormGameDetails: TFormGameDetails
         6E53746F726564FFFECE00060000008008000101000102000000000001200100
         00FFFFFF1F000100000001000000050000005300480041002D00310000000000
         0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800000010100010300000000000178000000FFFFFF1F0001000000
-        0100000006000000440065007600690063006500000000000000000000000000
-        110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
-        010100010400000000000178000000FFFFFF1F00010000000100000006000000
-        530074006100740075007300000000000000000000000000}
+        0006000000800800010100010300000000000173000000FFFFFF1F0001000000
+        0100000004000000530069007A00650000000000000000000000000011000000
+        5445617379436F6C756D6E53746F726564FFFECE000600000080000001010001
+        0400000000000178000000FFFFFF1F0001000000010000000600000044006500
+        7600690063006500000000000000000000000000110000005445617379436F6C
+        756D6E53746F726564FFFECE0006000000800800010100010500000000000178
+        000000FFFFFF1F00010000000100000006000000530074006100740075007300
+        000000000000000000000000}
       Header.Draggable = False
       Header.Font.Charset = ANSI_CHARSET
       Header.Font.Color = clBlack

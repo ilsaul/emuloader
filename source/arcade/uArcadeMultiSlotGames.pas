@@ -362,7 +362,7 @@ begin
 
   ResizeForm;
 
-  SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, True);
+  SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, -1, True);
   if IsNightMode then
      begin
        PanelGamesList.ColorFrame:= $00ff9933;
@@ -402,9 +402,9 @@ begin
        if not Item.Ghosted then
           begin
             if IsNightMode then
-               ACanvas.Font.Color:= $f1f1f1
+               ACanvas.Font.Color:= $00f1f1f1
             else
-               ACanvas.Font.Color:= $00323232;
+               ACanvas.Font.Color:= clrDarkGray;
           end;
      end;
     1:

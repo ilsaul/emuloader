@@ -13,7 +13,7 @@ uses
 
 const
   MaxArcadeSystems = 8;
-  MaxIniCountMAME: Byte = 12; // MAME .ini files array ... see more in uMain.GetCustomIniFileMAME() function
+  MaxIniCountMAME: Byte = 12; // MAME .ini files array - see more in uMain.GetCustomIniFileMAME() function
   MaxImagePerCategory = 30;
   MaxImageLayouts = 26; // single, dual, triple, quad
   MaxImagePanels = 4;
@@ -254,6 +254,20 @@ const
     $B3667A2E, $C4614AB8, $5D681B02, $2A6F2B94,
     $B40BBE37, $C30C8EA1, $5A05DF1B, $2D02EF8D);
 
+  clrLightGrayFrame = TColor($0078695b); // this color is for light mode frames (TPanelEx... and other controls ?)
+  // custom colors for the night mode
+  clrDarkBlue   = TColor($00590000); // RGB(0, 0, 89) -> blue
+  clrDarkGreen  = TColor($00005900); // RGB(0, 89, 0) -> green
+  clrDarkRed    = TColor($00000059); // RGB(89, 0, 0) -> red /// $0000004b (75, 0, 0) darker red
+  clrDarkSilver = TColor($004c4c4c); // desaturated green RGB(76, 76, 76) /// $00595959 (89, 89, 89) darker silver
+  clrDarkOrange = TColor($00005a82); // RGB(130, 90, 0)
+  clrDarkGray   = TColor($00323232); // RGB(50, 50 ,50) -> for unchecked checkboxes (also used in TShadowLabel)
+
+  clrBlackBk    = TColor($00000001); // RGB(0, 0, 1) -> this is needed to create gradient in TPanelEx
+
+  clrLightBlue  = TColor($00ff9933);
+  clrMedBlue    = TColor($00c83232);
+
 type
   TMsgBoxColors = packed record
     colorKeyTitle,
@@ -364,7 +378,7 @@ procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColo
 procedure PopulateMsgColors;
 procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
 procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; IsBottomColorSilver: Boolean = True);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = True);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -387,10 +401,10 @@ function  GetGameHistory(const GameName, StringLine: String; TagLength: Integer)
 
 // SHA-1 / MD5 routines
 function  ComputeHashValueMemoryStream(Mode: Integer; const mStreamHolder: TMemoryStream): String;
-function  ComputeHashValue(Mode: Integer; const FileName: String): String;
+function  ComputeHashValue(Mode: Integer; const FileName: WideString): String;
 function  GetSHA1_ValueMemoryStream(const mStream: TMemoryStream): String;
-function  GetSHA1_Value(const strFileName: String): String;
-function  GetMD5_Value(const strFileName: String): String;
+function  GetSHA1_Value(const strFileName: WideString): String;
+function  GetMD5_Value(const strFileName: WideString): String;
 
 function  CheckAndCreateFolder(const FolderString: String): Boolean;
 function  CompareIntValue(const A, B: Int64): ShortInt;
@@ -550,13 +564,13 @@ procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColo
 begin
   if IsNightMode then
   begin
-    PanelSource.ColorFrame:= $00ff9933;
+    PanelSource.ColorFrame:= clrLightBlue;
     PanelSource.ColorInnerFrame:= clBlue;
   end
   else
   begin
     PanelSource.ColorFrame:= clSilver;
-    PanelSource.ColorInnerFrame:= $0078695b;
+    PanelSource.ColorInnerFrame:= clrLightGrayFrame;
   end;
 
   if PanelSource.Style = vgSolid then
@@ -566,7 +580,7 @@ begin
        else
        begin
          if IsNightMode then
-            PanelSource.Color1:= $00000001
+            PanelSource.Color1:= clrBlackBk
          else
             PanelSource.Color1:= $00f1f1f1;
        end;
@@ -606,7 +620,7 @@ begin
       MsgTxtColors.colorMachineName:= clNavy;
       MsgTxtColors.colorMachineMultiSlot:= clOlive;
       MsgTxtColors.colorCmdLine:= $00600000;
-      MsgTxtColors.colorBoldTitle:= $00323232;
+      MsgTxtColors.colorBoldTitle:= clrDarkGray;
       MsgTxtColors.colorWarning:= clMaroon;
       MsgTxtColors.colorExitCode:= $00000060;
     end;
@@ -647,74 +661,74 @@ begin
   begin
     PanelSource.Canvas.Lock;
     case GameSetStatus of
-     -1: PanelSource.Color1:= $00590000; // blue (0, 0, 89) // -1 is for message box and unknown game set state
-      0: PanelSource.Color1:= $00005900; // green (0, 89, 0)
-      1: PanelSource.Color1:= $00000059; // red, based on green (89, 0, 0) /// $0000004b (75, 0, 0) darker red
-      2: PanelSource.Color1:= $004c4c4c; // silver, base on desaturated green (76, 76, 76) /// $00595959 (89, 89, 89) darker silver
+     -1: PanelSource.Color1:= clrDarkBlue;   // blue -> -1 is for message box and unknown game set state
+      0: PanelSource.Color1:= clrDarkGreen;  // green
+      1: PanelSource.Color1:= clrDarkRed;    // red
+      2: PanelSource.Color1:= clrDarkSilver; // silver
     end;
-    if PanelSource.Color2 <> $00000001 then
-       PanelSource.Color2:= $00000001;
+    if PanelSource.Color2 <> clrBlackBk then
+       PanelSource.Color2:= clrBlackBk;
     PanelSource.Canvas.UnLock;
   end
   else
   begin
     SetLightColorsGameTopBar(GameSetStatus, PanelSource, IsBottomColorSilver);
-    {// $00faf0e5 // blue
-    // $00e5f0fa // red
-    // $00f0fae5 // green
-    // $00e5fafa // yellow
-    case GameSetStatus of
-     -1: PanelSource.Color1:= $00faf0e5; // blue (229, 240, 250)
-      0: PanelSource.Color1:= $00f0fae5; // green (229, 250, 240)
-      1: PanelSource.Color1:= $00e5f0fa; // red, based on green (250, 240, 229)
-      2: PanelSource.Color1:= $00eeeeee; // silver, base on green (238, 238, 238) /// $00d9d9d9 (217, 217, 217) darker silver
-    end;
-    if IsBottomColorSilver then
-       begin
-         if PanelSource.Color2 <> $00f1f1f1 then
-            PanelSource.Color2:= $00f1f1f1; // silver bottom color
-       end
-    else
-       begin
-         if PanelSource.Color2 <> clWhite then
-            PanelSource.Color2:= clWhite; // white bottom color (FormMessageBox ... and others ?)
-       end;}
   end;
-  //PanelSource.Canvas.UnLock;
 end;
 
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; IsBottomColorSilver: Boolean = True);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = True);
 begin
   if IsNightMode then
   begin
-    FormSource.Color:= $00000001;
+    if FormSource <> nil then
+       FormSource.Color:= clrBlackBk;
 
     if PanelTopSource <> nil then
     begin
-      PanelTopSource.Color1:= $00590000; // will paint to default color no matter what
-      PanelTopSource.Color2:= $00000001; // will paint to default color no matter what
-      PanelTopSource.Color3:= $0078695b;
-      PanelTopSource.ColorFrame:= $00ff9933;
+      PanelTopSource.Color1:= clrDarkBlue; // will paint to default color no matter what
+      PanelTopSource.Color2:= clrBlackBk;  // will paint to default color no matter what
+      PanelTopSource.Color3:= clrLightGrayFrame;
+      PanelTopSource.ColorFrame:= clrLightBlue; // $00ff9933;
     end;
 
     if PanelBottomSource <> nil then
     begin
-      PanelBottomSource.Color1:= $00000001;
-      PanelBottomSource.Color2:= $00323232;
-      PanelBottomSource.ColorFrame:= $00ff9933;
+      PanelBottomSource.Color1:= clrBlackBk;
+      PanelBottomSource.Color2:= clrDarkGray;
+      PanelBottomSource.ColorFrame:= clrLightBlue;
     end;
 
     if LabelGameTitle <> nil then
     begin
-      LabelGameTitle.Font.Color:= clYellow;
-      LabelGameTitle.ShadowColor:= clMaroon;
+      case GameStatus of // 0 - have (available); 1 - missing ROMs/CHDs; 2 - missing (no .zip and no ROMs found... even if CHDs are found)
+        -1: // default blue gradient
+          begin
+            LabelGameTitle.Font.Color:= clYellow;
+            LabelGameTitle.ShadowColor:= clMaroon;
+          end;
+        0: // green gradient (have)
+          begin
+            LabelGameTitle.Font.Color:= clLime;
+            LabelGameTitle.ShadowColor:= clNavy;//$003232;
+          end;
+        1: // red gradient (missing ROMs/CHDs)
+          begin
+            LabelGameTitle.Font.Color:= clRed;// clYellow;
+            LabelGameTitle.ShadowColor:= clMaroon;//Navy;// $323200;
+          end;
+        2: // gray gradient (missing)
+          begin
+            LabelGameTitle.Font.Color:= clYellow;
+            LabelGameTitle.ShadowColor:= $003232;
+          end;
+      end;
       LabelGameTitle.ShadowEnabled:= True;
     end;
 
     if LabelGameName <> nil then
     begin
       LabelGameName.Font.Color:= clWhite;
-      LabelGameName.ShadowColor:= clNavy;
+      LabelGameName.ShadowColor:= clrMedBlue; //clNavy;
       LabelGameName.ShadowEnabled:= True;
     end;
   end
@@ -1612,9 +1626,10 @@ begin
   if MessageType = 2 then
      begin
        FormMessageBox.ButtonYes.Caption:= 'Close';
-       FormMessageBox.ButtonYes.Left:= 262;
-       if FormMessageBox.Width < 720 then
-          FormMessageBox.ButtonYes.Left:= 254;
+
+       FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2);
+       //if FormMessageBox.Width < 720 then
+       //   FormMessageBox.ButtonYes.Left:= 254;
        FormMessageBox.ButtonNo.Visible:= False;
      end;
   case DefaultButtonNo of
@@ -1641,7 +1656,7 @@ begin
     FormMessageBox.NightMode.Checked:= IsNightMode;
     if IsNightMode then
     begin
-      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, False);
+      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, -1, False);
 
       FormMessageBox.LabelMessage.Color:= $00000001;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
@@ -1995,19 +2010,19 @@ begin
   end;
 end;
 
-function ComputeHashValue(Mode: Integer; const FileName: String): String;
+function ComputeHashValue(Mode: Integer; const FileName: WideString): String;
 var
   Checksum: TMessageDigest;
-  Stream: TFileStream;
+  Stream: TWideFileStream;
 begin
   // "No Authentication" mode
   Result:= '';
   if ((Mode < Low(ChecksumMode)) or (Mode > High(ChecksumMode))) or
-     (not FileExists(FileName)) then
+     (not FileExistsW(FileName)) then
      Exit;
   try
     Checksum:= ChecksumMode[Mode].Create;
-    Stream:= TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+    Stream:= TWideFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
     Stream.Seek(0, soFromBeginning);
     Checksum.TransformStream(Stream);
     Checksum.Complete;
@@ -2032,10 +2047,10 @@ begin
   end;
 end;
 
-function GetSHA1_Value(const strFileName: String): String;
+function GetSHA1_Value(const strFileName: WideString): String;
 begin
   Result:= '';
-  if not FileExists(strFileName) then
+  if not FileExistsW(strFileName) then
      Exit;
   try
     Result:= ComputeHashValue(3, strFileName);
@@ -2044,10 +2059,10 @@ begin
   end;
 end;
 
-function GetMD5_Value(const strFileName: String): String;
+function GetMD5_Value(const strFileName: WideString): String;
 begin
   Result:= '';
-  if not FileExists(strFileName) then
+  if not FileExistsW(strFileName) then
      Exit;
   try
     Result:= ComputeHashValue(2, strFileName);

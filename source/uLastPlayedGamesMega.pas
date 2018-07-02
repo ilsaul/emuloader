@@ -836,7 +836,7 @@ begin
           end;
      end;}
   //if Item.Index mod 2 = 1 then
-  //   ACanvas.Font.Color:= $00323232;
+  //   ACanvas.Font.Color:= clrDarkGrey;
 end;
 
 procedure TFormLastPlayedGamesMega.FormCloseQuery(Sender: TObject;

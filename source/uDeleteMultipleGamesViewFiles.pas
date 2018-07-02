@@ -207,7 +207,7 @@ begin
           True : VertBar:= 2;
           False: VertBar:= 0;
         end;
-        ExtraCount:= 71-VertBar;
+        ExtraCount:= 90-VertBar;
         if extraStr <> '' then
            begin
              extraStr:= '['+extraStr+'] ';
@@ -507,22 +507,21 @@ procedure TFormDeleteMultipleGamesViewFiles.UpdateTotalFilesLabel;
 begin
   LabelTotalItems.Caption:= IntToStr(FilesListView.Groups.VisibleCount)+' Games';
   if FilesListView.Scrollbars.VertBarVisible then
-     FilesListView.CellSizes.Tile.Width:= 617-GetSystemMetrics(SM_CXVSCROLL)// 565
+     FilesListView.CellSizes.Tile.Width:= 732-GetSystemMetrics(SM_CXVSCROLL)// 565
   else
-     FilesListView.CellSizes.Tile.Width:= 617;// 582;
+     FilesListView.CellSizes.Tile.Width:= 732;// 582;
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.FormShow(Sender: TObject);
 var
   SearchGroup: TEasyGroup;
 begin
-  //CallMaximizeWindow(TForm(Sender));
   FormMain.ELV_ResetNormalColors(FilesListView);
   LoadMediaIcons;
-  if Screen.Height = 480 then
-     begin
-       FormDeleteMultipleGamesViewFiles.ClientHeight:= 402;
-     end;
+  //if Screen.Height = 480 then
+  //   begin
+  //     FormDeleteMultipleGamesViewFiles.ClientHeight:= 402;
+  //   end;
 
   FormDeleteMultipleGamesViewFiles.Left:= (Screen.Width shr 1)-((FormDeleteMultipleGamesViewFiles.Width shr 1)-1); // to center the form
 
@@ -560,7 +559,10 @@ begin
       begin
         ACanvas.Font.Name:= 'Trebuchet MS';
         ACanvas.Font.Size:= ACanvas.Font.Size+2;
-        ACanvas.Font.Color:= clMaroon;
+        if LabelTotalItems.Tag = 0 then
+           ACanvas.Font.Color:= clMaroon // light mode
+        else
+           ACanvas.Font.Color:= clRed; // night mode
         ACanvas.Font.Style:= [fsItalic];
       end;
     1:

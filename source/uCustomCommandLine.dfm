@@ -91,7 +91,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       Caption = 'Field to Add'
     end
     object LabelSuffixToAdd: TLabel
-      Left = 341
+      Left = 325
       Top = 144
       Width = 68
       Height = 15

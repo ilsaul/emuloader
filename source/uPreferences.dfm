@@ -4,8 +4,8 @@ object FormPreferences: TFormPreferences
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Preferences'
-  ClientHeight = 392
-  ClientWidth = 619
+  ClientHeight = 562
+  ClientWidth = 834
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -28,7 +28,7 @@ object FormPreferences: TFormPreferences
     Left = 0
     Top = 0
     Width = 73
-    Height = 392
+    Height = 562
     Color1 = 14540253
     Color2 = 15856113
     Color3 = clYellow
@@ -38,7 +38,7 @@ object FormPreferences: TFormPreferences
     Frames = [frRight]
     ParentBackground = False
     Style = vgSolid
-    object ButtonGeneral: TSpeedButton
+    object ButtonPageGeneral: TSpeedButton
       Left = 1
       Top = 1
       Width = 70
@@ -53,9 +53,9 @@ object FormPreferences: TFormPreferences
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
-      OnClick = ButtonGeneralClick
+      OnClick = ButtonPageGeneralClick
     end
-    object ButtonGamesList: TSpeedButton
+    object ButtonPageGamesList: TSpeedButton
       Tag = 1
       Left = 1
       Top = 52
@@ -64,9 +64,9 @@ object FormPreferences: TFormPreferences
       GroupIndex = 1
       Caption = 'Games List'#13#10' / Columns'
       Flat = True
-      OnClick = ButtonGeneralClick
+      OnClick = ButtonPageGeneralClick
     end
-    object ButtonImages: TSpeedButton
+    object ButtonPageImages: TSpeedButton
       Tag = 2
       Left = 1
       Top = 103
@@ -75,9 +75,9 @@ object FormPreferences: TFormPreferences
       GroupIndex = 1
       Caption = 'Images'
       Flat = True
-      OnClick = ButtonGeneralClick
+      OnClick = ButtonPageGeneralClick
     end
-    object ButtonGameDocuments: TSpeedButton
+    object ButtonPageGameDocuments: TSpeedButton
       Tag = 3
       Left = 1
       Top = 154
@@ -86,22 +86,35 @@ object FormPreferences: TFormPreferences
       GroupIndex = 1
       Caption = 'Game Docs'#13#10'(MAME)'
       Flat = True
-      OnClick = ButtonGeneralClick
+      OnClick = ButtonPageGeneralClick
+    end
+    object ButtonPageNightMode: TSpeedButton
+      Tag = 4
+      Left = 1
+      Top = 205
+      Width = 70
+      Height = 50
+      GroupIndex = 1
+      Caption = 'Night'#13#10'Mode'
+      Flat = True
+      OnClick = ButtonPageGeneralClick
     end
   end
   object PageOptions: TNotebook
     Left = 73
     Top = 0
-    Width = 546
-    Height = 392
+    Width = 761
+    Height = 562
+    Color = 15856113
+    ParentColor = False
     TabOrder = 0
     object TPage
       Left = 0
       Top = 0
       Caption = 'General'
       object Label1: TLabel
-        Left = 142
-        Top = 325
+        Left = 32
+        Top = 188
         Width = 264
         Height = 18
         Caption = 'Do not display errors after exiting the emulator'
@@ -115,7 +128,7 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object DisableMinimize: TAdvOfficeCheckBox
-        Left = 126
+        Left = 15
         Top = 12
         Width = 286
         Height = 20
@@ -125,158 +138,19 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object GroupBoxSplitters: TAdvGroupBox
-        Left = 126
-        Top = 164
-        Width = 293
-        Height = 133
-        RoundEdges = True
-        Caption = 'Splitters [Games List / Machines List / Game Docs]'
-        Ctl3D = True
-        TabOrder = 1
-        object ShadowLabel4: TShadowLabel
-          Left = 8
-          Top = 56
-          Width = 67
-          Height = 16
-          Caption = 'Single Color'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          Transparent = True
-        end
-        object LabelSplitterSingleColor: TLabel
-          Left = 8
-          Top = 82
-          Width = 29
-          Height = 15
-          Caption = 'Color'
-          Transparent = True
-        end
-        object LabelSplitterSingleColorHot: TLabel
-          Left = 8
-          Top = 107
-          Width = 52
-          Height = 15
-          Caption = 'Hot Color'
-          Transparent = True
-        end
-        object SplitterStyleSelector: TComboBox
-          Left = 8
-          Top = 21
-          Width = 220
-          Height = 23
-          Hint = 'Set splitter style'
-          Style = csDropDownList
-          Ctl3D = True
-          DropDownCount = 20
-          ItemHeight = 15
-          ItemIndex = 6
-          ParentCtl3D = False
-          TabOrder = 0
-          Text = 'Office 2007 Luna (Default)'
-          OnSelect = SplitterStyleSelectorSelect
-          Items.Strings = (
-            'Silver'
-            'Single Color (Customizable)'
-            'Office 2003 Blue'
-            'Office 2003 Silver'
-            'Office 2003 Olive'
-            'Office 2003 Classic'
-            'Office 2007 Luna (Default)'
-            'Office 2007 Silver'
-            'Office 2007 Obsidian'
-            'Windows XP'
-            'Whidbey'
-            'Windows Vista'
-            'Windows 7'
-            'Terminal'
-            'Office 2010 Blue'
-            'Office 2010 Silver'
-            'Office 2010 Black')
-        end
-        object ButtonSplitterStyleDefault: TBitBtn
-          Left = 236
-          Top = 20
-          Width = 47
-          Height = 23
-          Hint = 'Set splitters default style'
-          Caption = 'Default'
-          TabOrder = 1
-          OnClick = ButtonSplitterStyleDefaultClick
-        end
-        object SplitterGripIcon: TAdvOfficeCheckBox
-          Left = 183
-          Top = 50
-          Width = 97
-          Height = 20
-          Hint = 
-            'Show/hide grip icon in the middle of the splitter (games list/ga' +
-            'me docs)'
-          Checked = True
-          TabOrder = 2
-          OnClick = SplitterGripIconClick
-          Alignment = taRightJustify
-          Caption = 'Show Grip Icon'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object SplitterSingleColor: TColorBox
-          Left = 64
-          Top = 78
-          Width = 221
-          Height = 22
-          Hint = 'Color of the splitter'
-          NoneColorColor = clBtnFace
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 3
-          OnSelect = SplitterSingleColorSelect
-        end
-        object SplitterSingleColorHot: TColorBox
-          Left = 64
-          Top = 104
-          Width = 221
-          Height = 22
-          Hint = 'Color of the splitter while hovering mouse'
-          DefaultColorColor = clGray
-          NoneColorColor = clGray
-          Selected = clGray
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 4
-          OnSelect = SplitterSingleColorHotSelect
-        end
-        object ButtonSplitterSingleColorDefault: TBitBtn
-          Left = 78
-          Top = 51
-          Width = 47
-          Height = 23
-          Hint = 'Set single color default values'
-          Caption = 'Default'
-          TabOrder = 5
-          OnClick = ButtonSplitterSingleColorDefaultClick
-        end
-      end
       object HideDOSBoxFrame: TAdvGroupBox
-        Left = 126
-        Top = 56
-        Width = 293
-        Height = 99
+        Left = 15
+        Top = 61
+        Width = 314
+        Height = 97
         RoundEdges = True
         Caption = 'Hide Command Prompt Box'
         Ctl3D = True
-        TabOrder = 2
+        TabOrder = 1
         object ShadowLabel2: TShadowLabel
           Left = 24
           Top = 57
-          Width = 248
+          Width = 281
           Height = 37
           AutoSize = False
           Caption = 
@@ -311,22 +185,22 @@ object FormPreferences: TFormPreferences
         object HideDOSBoxRunGame: TAdvOfficeCheckBox
           Left = 8
           Top = 40
-          Width = 275
+          Width = 304
           Height = 20
           TabOrder = 1
           Alignment = taLeftJustify
-          Caption = 'Run Game (Full Screen. Use it at Your Own Risk!)'
+          Caption = 'Run Game (Full Screen Only. Use it at Your Own Risk!)'
           ReturnIsTab = False
           Themed = True
         end
       end
       object AllowOnlyOneInstance: TAdvOfficeCheckBox
-        Left = 126
+        Left = 15
         Top = 32
         Width = 154
         Height = 20
         Checked = True
-        TabOrder = 3
+        TabOrder = 2
         Alignment = taLeftJustify
         Caption = 'Allow Only One Instance'
         ReturnIsTab = False
@@ -334,12 +208,12 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox
-        Left = 126
-        Top = 308
+        Left = 16
+        Top = 171
         Width = 289
         Height = 20
         Checked = True
-        TabOrder = 4
+        TabOrder = 3
         Alignment = taLeftJustify
         Caption = 'Ignore Exit Code 1: Invalid Function (KEGA Fusion)'
         ReturnIsTab = False
@@ -347,15 +221,112 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object RestoreInternetGameInfoStartup: TAdvOfficeCheckBox
-        Left = 126
-        Top = 344
+        Left = 15
+        Top = 411
         Width = 230
         Height = 20
-        TabOrder = 5
+        TabOrder = 4
         Alignment = taLeftJustify
         Caption = 'Restore "Internet Game Info" at Startup'
         ReturnIsTab = False
         Themed = True
+      end
+      object GroupBoxInternetGameInfo: TAdvGroupBox
+        Left = 15
+        Top = 440
+        Width = 514
+        Height = 106
+        RoundEdges = True
+        Caption = 
+          'Internet Game Info                                              ' +
+          '                                                                ' +
+          '                  '
+        Ctl3D = True
+        TabOrder = 5
+        object LabelInternetGameInfoLink: TLabel
+          Left = 8
+          Top = 20
+          Width = 80
+          Height = 15
+          Caption = 'Game Info Link'
+        end
+        object LabelInternetMAMESoftwareListGameInfoLink: TLabel
+          Left = 8
+          Top = 60
+          Width = 189
+          Height = 15
+          Caption = 'MAME Software List Game Info Link'
+        end
+        object Label5: TLabel
+          Left = 115
+          Top = 1
+          Width = 287
+          Height = 14
+          Caption = 'Tag       required to be replaced by                  and'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object Label6: TLabel
+          Left = 141
+          Top = 1
+          Width = 347
+          Height = 14
+          Caption = 
+            '%s                                       game name       softwar' +
+            'e name'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object InternetGameInfoLink: TEdit
+          Left = 8
+          Top = 36
+          Width = 450
+          Height = 21
+          AutoSize = False
+          Color = clWhite
+          TabOrder = 0
+        end
+        object InternetGameInfoLinkButtonDefault: TBitBtn
+          Left = 459
+          Top = 35
+          Width = 47
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Default'
+          TabOrder = 1
+          OnClick = InternetGameInfoLinkButtonDefaultClick
+        end
+        object InternetMAMESoftwareListGameInfoLink: TEdit
+          Left = 8
+          Top = 76
+          Width = 450
+          Height = 21
+          AutoSize = False
+          Color = clWhite
+          TabOrder = 2
+        end
+        object InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn
+          Left = 459
+          Top = 75
+          Width = 47
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Default'
+          TabOrder = 3
+          OnClick = InternetMAMESoftwareListGameInfoLinkButtonDefaultClick
+        end
       end
     end
     object TPage
@@ -363,33 +334,9 @@ object FormPreferences: TFormPreferences
       Top = 0
       HelpContext = 1
       Caption = 'Games List Appearance'
-      object LabelMAMu_IconsFolder: TLabel
-        Left = 50
-        Top = 344
-        Width = 391
-        Height = 15
-        Caption = 
-          'MAMu_ Icons Folder (emulator relative path support; MAME only fe' +
-          'ature!)'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        Transparent = True
-      end
-      object MAMu_Icon: TImage
-        Left = 16
-        Top = 348
-        Width = 32
-        Height = 32
-        Transparent = True
-      end
       object LabelDisableNaturalSorting: TLabel
-        Left = 264
-        Top = 83
+        Left = 32
+        Top = 324
         Width = 198
         Height = 18
         Caption = 'Use ASCII sorting (1, 10, 11, 2, 20, 3)'
@@ -403,8 +350,8 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object LabelGameMultilineCaptions: TLabel
-        Left = 264
-        Top = 49
+        Left = 32
+        Top = 284
         Width = 249
         Height = 18
         Caption = 'Show full caption (32x32 and 48x48 icon size)'
@@ -418,8 +365,8 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object LabelDisableDeleteSelectedGames: TLabel
-        Left = 264
-        Top = 319
+        Left = 32
+        Top = 405
         Width = 237
         Height = 18
         Caption = 'Safeguard your ROMs from naughty kiddies'
@@ -432,9 +379,33 @@ object FormPreferences: TFormPreferences
         ShowAccelChar = False
         Transparent = True
       end
+      object MAMu_Icon: TImage
+        Left = 16
+        Top = 514
+        Width = 32
+        Height = 32
+        Transparent = True
+      end
+      object LabelMAMu_IconsFolder: TLabel
+        Left = 50
+        Top = 510
+        Width = 449
+        Height = 15
+        Caption = 
+          'MAMu_ Icons Folder                 emulator relative path suppor' +
+          't; MAME and arcade only'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
       object ButtonCustomizeGameFonts: TBitBtn
-        Left = 248
-        Top = 106
+        Left = 16
+        Top = 347
         Width = 166
         Height = 23
         Caption = 'Customize Game Fonts'
@@ -448,8 +419,8 @@ object FormPreferences: TFormPreferences
         OnClick = ButtonCustomizeGameFontsClick
       end
       object GameSelectionAlphaBlend: TAdvOfficeCheckBox
-        Left = 248
-        Top = 12
+        Left = 16
+        Top = 247
         Width = 169
         Height = 18
         Hint = 'Enable alpha blended bar'
@@ -460,37 +431,16 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object MAMu_IconsFolder: TEdit
-        Left = 50
-        Top = 360
-        Width = 385
-        Height = 21
-        Hint = 'Select MAMu_ Icons Folder'
-        AutoSize = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 2
-      end
-      object ButtonMAMu_IconsFolderSelect: TBitBtn
-        Left = 436
-        Top = 360
-        Width = 49
-        Height = 21
-        Hint = 'Click here to select a folder'
-        Caption = 'Select'
-        TabOrder = 3
-        OnClick = ButtonMAMu_IconsFolderSelectClick
-      end
-      object ColumnsSettings: TAdvGroupBox
-        Left = 16
-        Top = 141
-        Width = 218
+      object ColumnsSettingsGroupBox: TAdvGroupBox
+        Left = 502
+        Top = 256
+        Width = 244
         Height = 163
         Transparent = False
         RoundEdges = True
-        Caption = 'Details/Grouped Columns Settings'
+        Caption = 'Details/Grouped View Columns Settings'
         Ctl3D = True
-        TabOrder = 4
+        TabOrder = 2
         object DisableCloneIndent: TAdvOfficeCheckBox
           Left = 8
           Top = 20
@@ -577,16 +527,28 @@ object FormPreferences: TFormPreferences
       object GamesBackgroundGroupBox: TAdvGroupBox
         Left = 16
         Top = 12
-        Width = 218
-        Height = 121
+        Width = 729
+        Height = 69
         RoundEdges = True
         Caption = 'Background'
         Ctl3D = True
-        TabOrder = 5
+        TabOrder = 3
+        object LabelGamesBackgroundColor: TShadowLabel
+          Left = 8
+          Top = 22
+          Width = 32
+          Height = 16
+          Caption = 'Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
         object GamesBackgroundColor: TColorBox
           Left = 8
-          Top = 20
-          Width = 152
+          Top = 39
+          Width = 187
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -597,8 +559,8 @@ object FormPreferences: TFormPreferences
           OnSelect = GamesBackgroundColorSelect
         end
         object ButtonDefaultBkSortedColor: TBitBtn
-          Left = 162
-          Top = 20
+          Left = 197
+          Top = 38
           Width = 47
           Height = 23
           Hint = 'Set default values'
@@ -613,8 +575,8 @@ object FormPreferences: TFormPreferences
           OnClick = ButtonDefaultBkSortedColorClick
         end
         object GamesBackgroundImageEnable: TAdvOfficeCheckBox
-          Left = 8
-          Top = 48
+          Left = 264
+          Top = 20
           Width = 92
           Height = 18
           TabOrder = 2
@@ -625,36 +587,20 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
         object GamesBackgroundImage: TEdit
-          Left = 8
-          Top = 68
-          Width = 203
+          Left = 264
+          Top = 39
+          Width = 357
           Height = 21
           AutoSize = False
           Ctl3D = True
           ParentCtl3D = False
           TabOrder = 3
         end
-        object GamesBackgroundImageButtonUpdate: TBitBtn
-          Left = 112
-          Top = 90
-          Width = 49
-          Height = 23
-          Hint = 'Click here to load the image if you'#39've made a manual change'
-          Caption = 'Update'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 5
-          OnClick = GamesBackgroundImageButtonUpdateClick
-        end
         object GamesTileBackground: TAdvOfficeCheckBox
-          Left = 8
-          Top = 92
+          Left = 580
+          Top = 20
           Width = 40
-          Height = 20
+          Height = 18
           Hint = 'Tile the background image on the entire games list canvas'
           Checked = True
           TabOrder = 6
@@ -666,8 +612,8 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
         object GamesBackgroundImageButtonSelect: TBitBtn
-          Left = 161
-          Top = 90
+          Left = 623
+          Top = 38
           Width = 49
           Height = 23
           Hint = 'Click here to select a file'
@@ -681,14 +627,30 @@ object FormPreferences: TFormPreferences
           TabOrder = 4
           OnClick = GamesBackgroundImageButtonSelectClick
         end
+        object GamesBackgroundImageButtonUpdate: TBitBtn
+          Left = 672
+          Top = 38
+          Width = 49
+          Height = 23
+          Hint = 'Click here to load the image if you'#39've made a manual change'
+          Caption = 'Update'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          OnClick = GamesBackgroundImageButtonUpdateClick
+        end
       end
       object DisableNaturalSorting: TAdvOfficeCheckBox
-        Left = 248
-        Top = 66
+        Left = 16
+        Top = 307
         Width = 237
         Height = 18
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
-        TabOrder = 6
+        TabOrder = 4
         OnClick = DisableNaturalSortingClick
         Alignment = taLeftJustify
         Caption = 'Disable Natural Sorting (1, 2, 3, 10, 11, 20)'
@@ -696,11 +658,11 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object GameMultilineCaptions: TAdvOfficeCheckBox
-        Left = 248
-        Top = 32
+        Left = 16
+        Top = 267
         Width = 242
         Height = 20
-        TabOrder = 7
+        TabOrder = 5
         OnClick = GameMultilineCaptionsClick
         Alignment = taLeftJustify
         Caption = 'Multiline Captions (Details/Grouped View)'
@@ -708,13 +670,13 @@ object FormPreferences: TFormPreferences
         Themed = True
       end
       object GamesListStatusBarBox: TAdvGroupBox
-        Left = 248
-        Top = 141
+        Left = 502
+        Top = 93
         Width = 244
         Height = 150
         RoundEdges = True
         Caption = 'Status Bar Colors'
-        TabOrder = 8
+        TabOrder = 6
         object LabelGamesListStatusBarBottomColor: TLabel
           Left = 8
           Top = 73
@@ -830,17 +792,177 @@ object FormPreferences: TFormPreferences
         end
       end
       object DisableDeleteSelectedGames: TAdvOfficeCheckBox
-        Left = 248
-        Top = 302
+        Left = 16
+        Top = 388
         Width = 237
         Height = 20
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
-        TabOrder = 9
+        TabOrder = 7
         OnClick = DisableDeleteSelectedGamesClick
         Alignment = taLeftJustify
         Caption = 'Disable "Delete/Copy/Move Games Files"'
         ReturnIsTab = False
         Themed = True
+      end
+      object GroupBoxGamesListSplitters: TAdvGroupBox
+        Left = 16
+        Top = 93
+        Width = 293
+        Height = 133
+        RoundEdges = True
+        Caption = 'Games List / Machines List Splitters'
+        Ctl3D = True
+        TabOrder = 8
+        object LabelGamesListSplitterSingleColorDefault: TShadowLabel
+          Left = 8
+          Top = 56
+          Width = 67
+          Height = 16
+          Caption = 'Single Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object LabelGamesListSplitterSingleColor: TLabel
+          Left = 8
+          Top = 82
+          Width = 29
+          Height = 15
+          Caption = 'Color'
+          Transparent = True
+        end
+        object LabelGamesListSplitterSingleColorHot: TLabel
+          Left = 8
+          Top = 107
+          Width = 52
+          Height = 15
+          Caption = 'Hot Color'
+          Transparent = True
+        end
+        object GamesListSplitterStyleSelector: TComboBox
+          Left = 8
+          Top = 21
+          Width = 220
+          Height = 23
+          Hint = 'Set splitter style'
+          Style = csDropDownList
+          Ctl3D = True
+          DropDownCount = 20
+          ItemHeight = 15
+          ItemIndex = 6
+          ParentCtl3D = False
+          TabOrder = 0
+          Text = 'Office 2007 Luna (Default)'
+          OnSelect = GamesListSplitterStyleSelectorSelect
+          Items.Strings = (
+            'Silver'
+            'Single Color (Customizable)'
+            'Office 2003 Blue'
+            'Office 2003 Silver'
+            'Office 2003 Olive'
+            'Office 2003 Classic'
+            'Office 2007 Luna (Default)'
+            'Office 2007 Silver'
+            'Office 2007 Obsidian'
+            'Windows XP'
+            'Whidbey'
+            'Windows Vista'
+            'Windows 7'
+            'Terminal'
+            'Office 2010 Blue'
+            'Office 2010 Silver'
+            'Office 2010 Black')
+        end
+        object ButtonGamesListSplitterStyleDefault: TBitBtn
+          Left = 236
+          Top = 20
+          Width = 47
+          Height = 23
+          Hint = 'Set splitters default style'
+          Caption = 'Default'
+          TabOrder = 1
+          OnClick = ButtonGamesListSplitterStyleDefaultClick
+        end
+        object GamesListSplitterShowGripIcon: TAdvOfficeCheckBox
+          Left = 183
+          Top = 50
+          Width = 97
+          Height = 20
+          Hint = 
+            'Show/hide grip icon in the middle of the splitter (games list/ga' +
+            'me docs)'
+          Checked = True
+          TabOrder = 2
+          OnClick = GamesListSplitterShowGripIconClick
+          Alignment = taRightJustify
+          Caption = 'Show Grip Icon'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object GamesListSplitterSingleColor: TColorBox
+          Left = 64
+          Top = 78
+          Width = 221
+          Height = 22
+          Hint = 'Color of the splitter'
+          NoneColorColor = clBtnFace
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 3
+          OnSelect = GamesListSplitterSingleColorSelect
+        end
+        object GamesListSplitterSingleColorHot: TColorBox
+          Left = 64
+          Top = 104
+          Width = 221
+          Height = 22
+          Hint = 'Color of the splitter while hovering mouse'
+          DefaultColorColor = clGray
+          NoneColorColor = clGray
+          Selected = clGray
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 4
+          OnSelect = GamesListSplitterSingleColorHotSelect
+        end
+        object ButtonGamesListSplitterSingleColorDefault: TBitBtn
+          Left = 78
+          Top = 51
+          Width = 47
+          Height = 23
+          Hint = 'Set single color default values'
+          Caption = 'Default'
+          TabOrder = 5
+          OnClick = ButtonGamesListSplitterSingleColorDefaultClick
+        end
+      end
+      object MAMu_IconsFolder: TEdit
+        Left = 50
+        Top = 526
+        Width = 452
+        Height = 21
+        Hint = 'Select MAMu_ Icons Folder'
+        AutoSize = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 9
+      end
+      object ButtonMAMu_IconsFolderSelect: TBitBtn
+        Left = 504
+        Top = 526
+        Width = 49
+        Height = 21
+        Hint = 'Click here to select a folder'
+        Caption = 'Select'
+        TabOrder = 10
+        OnClick = ButtonMAMu_IconsFolderSelectClick
       end
     end
     object TPage
@@ -850,87 +972,69 @@ object FormPreferences: TFormPreferences
       Caption = 'Images'
       object LabelImagePanelOuterFrameColor: TLabel
         Left = 16
-        Top = 124
-        Width = 130
+        Top = 156
+        Width = 179
         Height = 15
-        Caption = 'Panel Outer Frame Color'
+        Caption = 'Panel Outer Frame Color (7 Pixels)'
         ShowAccelChar = False
         Transparent = True
       end
-      object LabelFixRetroArchImageFileNames: TLabel
-        Left = 32
-        Top = 234
-        Width = 238
-        Height = 18
-        Caption = 'Replace & * '#39' < > ? | chars by _ (underscore)'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsItalic]
-        ParentFont = False
-        ShowAccelChar = False
-        Transparent = True
-      end
-      object LabelImageDisableThreadedLoading: TLabel
-        Left = 32
-        Top = 194
-        Width = 223
-        Height = 18
-        Caption = 'Fix delay and "invalid pointer operation"'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsItalic]
-        ParentFont = False
-        ShowAccelChar = False
-        Transparent = True
-      end
-      object GroupBoxImageLayoytSplitters: TAdvGroupBox
+      object GroupBoxImageSplitters: TAdvGroupBox
         Left = 16
         Top = 12
-        Width = 257
-        Height = 99
+        Width = 293
+        Height = 133
         RoundEdges = True
-        Caption = 'Multiple Images Splitters'
+        Caption = 'Splitters'
         Ctl3D = True
         TabOrder = 0
-        object LabelImageLayoutSplitterSingleColor: TLabel
+        object LabelImageSplitterSingleColor: TLabel
           Left = 8
-          Top = 48
+          Top = 82
           Width = 29
           Height = 15
           Caption = 'Color'
           Transparent = True
         end
-        object LabelImageLayoutSplitterSingleColorHot: TLabel
+        object LabelImageSplitterSingleColorHot: TLabel
           Left = 8
-          Top = 73
+          Top = 107
           Width = 52
           Height = 15
           Caption = 'Hot Color'
           Transparent = True
         end
-        object ImageEnableGripIcon: TAdvOfficeCheckBox
+        object LabelImageSplitterSingleColorDefault: TShadowLabel
           Left = 8
-          Top = 20
-          Width = 107
+          Top = 56
+          Width = 67
+          Height = 16
+          Caption = 'Single Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object ImageSplitterShowGripIcon: TAdvOfficeCheckBox
+          Left = 183
+          Top = 50
+          Width = 103
           Height = 20
           Hint = 'Show/hide grip icon in the middle of the image splitters'
           Checked = True
           TabOrder = 0
-          OnClick = ImageEnableGripIconClick
+          OnClick = ImageSplitterShowGripIconClick
           Alignment = taLeftJustify
-          Caption = 'Enable Grip Icon'
+          Caption = 'Show Grip Icon'
           ReturnIsTab = False
           State = cbChecked
           Themed = True
         end
-        object ImageLayoutSplitterSingleColor: TColorBox
+        object ImageSplitterSingleColor: TColorBox
           Left = 64
-          Top = 44
-          Width = 187
+          Top = 78
+          Width = 221
           Height = 22
           Hint = 'Color of the splitter'
           NoneColorColor = clBtnFace
@@ -939,12 +1043,12 @@ object FormPreferences: TFormPreferences
           ItemHeight = 16
           ParentCtl3D = False
           TabOrder = 1
-          OnSelect = ImageLayoutSplitterSingleColorSelect
+          OnSelect = ImageSplitterSingleColorSelect
         end
-        object ImageLayoutSplitterSingleColorHot: TColorBox
+        object ImageSplitterSingleColorHot: TColorBox
           Left = 64
-          Top = 70
-          Width = 187
+          Top = 104
+          Width = 221
           Height = 22
           Hint = 'Color of the splitter while hovering mouse'
           DefaultColorColor = clGray
@@ -955,23 +1059,67 @@ object FormPreferences: TFormPreferences
           ItemHeight = 16
           ParentCtl3D = False
           TabOrder = 2
-          OnSelect = ImageLayoutSplitterSingleColorHotSelect
+          OnSelect = ImageSplitterSingleColorHotSelect
         end
-        object ButtonImageLayoutSplitterSingleColorDefault: TBitBtn
-          Left = 203
-          Top = 16
+        object ButtonImageSplitterStyleDefault: TBitBtn
+          Left = 236
+          Top = 20
+          Width = 47
+          Height = 23
+          Hint = 'Set splitter default style'
+          Caption = 'Default'
+          TabOrder = 3
+          OnClick = ButtonImageSplitterStyleDefaultClick
+        end
+        object ButtonImageSplitterSingleColorDefault: TBitBtn
+          Left = 78
+          Top = 51
           Width = 47
           Height = 23
           Hint = 'Set single color default values'
           Caption = 'Default'
-          TabOrder = 3
-          OnClick = ButtonImageLayoutSplitterSingleColorDefaultClick
+          TabOrder = 4
+          OnClick = ButtonImageSplitterSingleColorDefaultClick
+        end
+        object ImageSplitterStyleSelector: TComboBox
+          Left = 8
+          Top = 21
+          Width = 220
+          Height = 23
+          Hint = 'Set splitter style'
+          Style = csDropDownList
+          Ctl3D = True
+          DropDownCount = 20
+          ItemHeight = 15
+          ItemIndex = 1
+          ParentCtl3D = False
+          TabOrder = 5
+          Text = 'Single Color (Customizable)'
+          OnSelect = ImageSplitterStyleSelectorSelect
+          Items.Strings = (
+            'Silver'
+            'Single Color (Customizable)'
+            'Office 2003 Blue'
+            'Office 2003 Silver'
+            'Office 2003 Olive'
+            'Office 2003 Classic'
+            'Office 2007 Luna (Default)'
+            'Office 2007 Silver'
+            'Office 2007 Obsidian'
+            'Windows XP'
+            'Whidbey'
+            'Windows Vista'
+            'Windows 7'
+            'Terminal'
+            'Office 2010 Blue'
+            'Office 2010 Silver'
+            'Office 2010 Black')
         end
       end
       object ImagePanelOuterFrameColor: TColorBox
         Left = 16
-        Top = 142
-        Width = 191
+        Top = 174
+        Width = 244
         Height = 22
         NoneColorColor = clWhite
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
@@ -980,142 +1128,23 @@ object FormPreferences: TFormPreferences
         OnSelect = ImagePanelOuterFrameColorSelect
       end
       object ButtonImagePanelOuterFrameColorDefault: TBitBtn
-        Left = 222
-        Top = 141
+        Left = 262
+        Top = 173
         Width = 47
         Height = 23
         Caption = 'Default'
         TabOrder = 2
         OnClick = ButtonImagePanelOuterFrameColorDefaultClick
       end
-      object GroupBoxInternetGameInfo: TAdvGroupBox
-        Left = 16
-        Top = 268
-        Width = 514
-        Height = 106
-        RoundEdges = True
-        Caption = 
-          'Internet Game Info                                              ' +
-          '                                                                ' +
-          '                  '
-        Ctl3D = True
-        TabOrder = 3
-        object LabelInternetGameInfoLink: TLabel
-          Left = 8
-          Top = 20
-          Width = 80
-          Height = 15
-          Caption = 'Game Info Link'
-        end
-        object LabelInternetMAMESoftwareListGameInfoLink: TLabel
-          Left = 8
-          Top = 60
-          Width = 189
-          Height = 15
-          Caption = 'MAME Software List Game Info Link'
-        end
-        object Label5: TLabel
-          Left = 115
-          Top = 1
-          Width = 287
-          Height = 14
-          Caption = 'Tag       required to be replaced by                  and'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clNavy
-          Font.Height = -12
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object Label6: TLabel
-          Left = 141
-          Top = 1
-          Width = 347
-          Height = 14
-          Caption = 
-            '%s                                       game name       softwar' +
-            'e name'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clMaroon
-          Font.Height = -12
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowAccelChar = False
-          Transparent = True
-        end
-        object InternetGameInfoLink: TEdit
-          Left = 8
-          Top = 36
-          Width = 450
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          TabOrder = 0
-        end
-        object InternetGameInfoLinkButtonDefault: TBitBtn
-          Left = 459
-          Top = 35
-          Width = 47
-          Height = 23
-          Hint = 'Reset link to default'
-          Caption = 'Default'
-          TabOrder = 1
-          OnClick = InternetGameInfoLinkButtonDefaultClick
-        end
-        object InternetMAMESoftwareListGameInfoLink: TEdit
-          Left = 8
-          Top = 76
-          Width = 450
-          Height = 21
-          AutoSize = False
-          Color = clWhite
-          TabOrder = 2
-        end
-        object InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn
-          Left = 459
-          Top = 75
-          Width = 47
-          Height = 23
-          Hint = 'Reset link to default'
-          Caption = 'Default'
-          TabOrder = 3
-          OnClick = InternetMAMESoftwareListGameInfoLinkButtonDefaultClick
-        end
-      end
-      object FixRetroArchImageFileNames: TAdvOfficeCheckBox
-        Left = 16
-        Top = 217
-        Width = 185
-        Height = 20
-        TabOrder = 4
-        Alignment = taLeftJustify
-        Caption = 'Fix RetroArch Image File Name'
-        ReturnIsTab = False
-        Themed = True
-      end
-      object ImageDisableThreadedLoading: TAdvOfficeCheckBox
-        Left = 16
-        Top = 177
-        Width = 244
-        Height = 20
-        TabOrder = 5
-        Alignment = taLeftJustify
-        Caption = 'Disable Threaded Preview Images Loading'
-        ReturnIsTab = False
-        Themed = True
-      end
       object HintBoxSettings: TAdvGroupBox
-        Left = 287
+        Left = 503
         Top = 12
         Width = 243
-        Height = 245
+        Height = 248
         RoundEdges = True
         Caption = 'Hint Box'
         Ctl3D = True
-        TabOrder = 6
+        TabOrder = 3
         object LabelHintBox_Color: TLabel
           Left = 8
           Top = 48
@@ -1141,7 +1170,7 @@ object FormPreferences: TFormPreferences
         end
         object LabelHintBox_TextColor: TLabel
           Left = 8
-          Top = 192
+          Top = 194
           Width = 22
           Height = 15
           Caption = 'Text'
@@ -1149,7 +1178,7 @@ object FormPreferences: TFormPreferences
         end
         object LabelHintBox_TextShadowColor: TLabel
           Left = 8
-          Top = 218
+          Top = 221
           Width = 42
           Height = 15
           Caption = 'Shadow'
@@ -1200,7 +1229,7 @@ object FormPreferences: TFormPreferences
         end
         object HintBox_Opacity: TGaugeBar
           Left = 8
-          Top = 113
+          Top = 114
           Width = 177
           Height = 20
           Hint = 'Transparency level of the hint box'
@@ -1215,7 +1244,7 @@ object FormPreferences: TFormPreferences
         end
         object ButtonDefaultHintBox_Opacity: TBitBtn
           Left = 188
-          Top = 112
+          Top = 113
           Width = 47
           Height = 22
           Hint = 'Set opacity to default level'
@@ -1225,7 +1254,7 @@ object FormPreferences: TFormPreferences
         end
         object HintBox_TextShadowColor: TColorBox
           Left = 53
-          Top = 214
+          Top = 217
           Width = 182
           Height = 22
           Hint = 'Text shadow color'
@@ -1238,7 +1267,7 @@ object FormPreferences: TFormPreferences
         end
         object HintBox_TextColor: TColorBox
           Left = 53
-          Top = 188
+          Top = 191
           Width = 182
           Height = 22
           Hint = 'Text color'
@@ -1263,7 +1292,7 @@ object FormPreferences: TFormPreferences
         end
         object ButtonHintTextDefaultColors: TBitBtn
           Left = 188
-          Top = 144
+          Top = 163
           Width = 47
           Height = 23
           Hint = 'Set text colors to default'
@@ -1273,7 +1302,7 @@ object FormPreferences: TFormPreferences
         end
         object HintBox_TextShadowEnabled: TAdvOfficeCheckBox
           Left = 8
-          Top = 164
+          Top = 167
           Width = 120
           Height = 20
           Checked = True
@@ -1286,7 +1315,7 @@ object FormPreferences: TFormPreferences
         end
         object HintBox_IconEnabled: TAdvOfficeCheckBox
           Left = 8
-          Top = 146
+          Top = 147
           Width = 171
           Height = 20
           Checked = True
@@ -1298,6 +1327,68 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
+      object ImagesSpecialSettingsGroupBox: TAdvGroupBox
+        Left = 16
+        Top = 448
+        Width = 293
+        Height = 99
+        RoundEdges = True
+        Caption = 'Special Settings'
+        Ctl3D = True
+        TabOrder = 4
+        object LabelFixRetroArchImageFileNames: TLabel
+          Left = 24
+          Top = 77
+          Width = 238
+          Height = 18
+          Caption = 'Replace & * '#39' < > ? | chars by _ (underscore)'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object LabelImageDisableThreadedLoading: TLabel
+          Left = 24
+          Top = 37
+          Width = 254
+          Height = 18
+          Caption = 'Fix delay and "invalid pointer operation" error'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          ShowAccelChar = False
+          Transparent = True
+        end
+        object FixRetroArchImageFileNames: TAdvOfficeCheckBox
+          Left = 8
+          Top = 60
+          Width = 254
+          Height = 20
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Fix Image File Name for RetroArch Frontend'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object ImageDisableThreadedLoading: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 244
+          Height = 20
+          TabOrder = 1
+          Alignment = taLeftJustify
+          Caption = 'Disable Threaded Preview Images Loading'
+          ReturnIsTab = False
+          Themed = True
+        end
+      end
     end
     object TPage
       Left = 0
@@ -1305,8 +1396,8 @@ object FormPreferences: TFormPreferences
       HelpContext = 3
       Caption = 'Game Documents'
       object LabelAppearanceGameDocuments: TLabel
-        Left = 94
-        Top = 187
+        Left = 16
+        Top = 182
         Width = 96
         Height = 15
         Caption = 'Background Color'
@@ -1314,8 +1405,8 @@ object FormPreferences: TFormPreferences
         Transparent = True
       end
       object ShadowLabel1: TShadowLabel
-        Left = 94
-        Top = 12
+        Left = 222
+        Top = 408
         Width = 317
         Height = 19
         Caption = 'Enable this feature in games popup menu or "F3" hot-key'
@@ -1331,8 +1422,8 @@ object FormPreferences: TFormPreferences
         EllipsType = etNone
       end
       object LabelGoToMAMEInfo: TShadowLabel
-        Left = 19
-        Top = 336
+        Left = 125
+        Top = 501
         Width = 198
         Height = 14
         Cursor = crHandPoint
@@ -1356,8 +1447,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMARP: TShadowLabel
-        Left = 315
-        Top = 368
+        Left = 421
+        Top = 533
         Width = 214
         Height = 14
         Cursor = crHandPoint
@@ -1381,8 +1472,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMAMEScore: TShadowLabel
-        Left = 315
-        Top = 336
+        Left = 421
+        Top = 501
         Width = 146
         Height = 14
         Cursor = crHandPoint
@@ -1406,8 +1497,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMAMEHistory: TShadowLabel
-        Left = 315
-        Top = 352
+        Left = 421
+        Top = 517
         Width = 164
         Height = 14
         Cursor = crHandPoint
@@ -1431,8 +1522,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToMESSInfo: TShadowLabel
-        Left = 19
-        Top = 352
+        Left = 125
+        Top = 517
         Width = 212
         Height = 14
         Cursor = crHandPoint
@@ -1456,8 +1547,8 @@ object FormPreferences: TFormPreferences
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
       object LabelGoToGameInit: TShadowLabel
-        Left = 19
-        Top = 368
+        Left = 125
+        Top = 533
         Width = 275
         Height = 14
         Cursor = crHandPoint
@@ -1480,69 +1571,10 @@ object FormPreferences: TFormPreferences
         OnMouseEnter = LabelGoToMAMEInfoMouseEnter
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
-      object ShadowLabel3: TShadowLabel
-        Left = 94
-        Top = 32
-        Width = 74
-        Height = 16
-        Caption = 'Display Order'
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        Transparent = True
-      end
-      object LabelGameDocsDisplayMode: TShadowLabel
-        Left = 94
-        Top = 238
-        Width = 75
-        Height = 16
-        Caption = 'Display Mode'
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        Transparent = True
-      end
-      object LabelGameDocsDisplayModeSinglePanel: TShadowLabel
-        Left = 110
-        Top = 273
-        Width = 208
-        Height = 19
-        Caption = 'Show images and game docs together'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsItalic]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        Transparent = True
-      end
-      object LabelGameDocsDisplayModeTabs: TShadowLabel
-        Left = 110
-        Top = 309
-        Width = 262
-        Height = 19
-        Caption = 'Show images and game docs in separate panels'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsItalic]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-      end
       object GameDocumentsBackgroundColor: TColorBox
-        Left = 94
-        Top = 205
-        Width = 215
+        Left = 16
+        Top = 200
+        Width = 234
         Height = 22
         DefaultColorColor = clWhite
         NoneColorColor = clWhite
@@ -1553,8 +1585,8 @@ object FormPreferences: TFormPreferences
         OnSelect = GameDocumentsBackgroundColorSelect
       end
       object ButtonGameDocumentsFont: TBitBtn
-        Left = 311
-        Top = 204
+        Left = 252
+        Top = 199
         Width = 47
         Height = 23
         Hint = 'Select font for window texts'
@@ -1562,9 +1594,248 @@ object FormPreferences: TFormPreferences
         TabOrder = 1
         OnClick = ButtonGameDocumentsFontClick
       end
+      object GroupBoxGameDocsSplitter: TAdvGroupBox
+        Left = 452
+        Top = 12
+        Width = 293
+        Height = 133
+        RoundEdges = True
+        Caption = 'Splitter'
+        Ctl3D = True
+        TabOrder = 3
+        object LabelGameDocsSplitterSingleColorDefault: TShadowLabel
+          Left = 8
+          Top = 56
+          Width = 67
+          Height = 16
+          Caption = 'Single Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object LabelGameDocsSplitterSingleColor: TLabel
+          Left = 8
+          Top = 82
+          Width = 29
+          Height = 15
+          Caption = 'Color'
+          Transparent = True
+        end
+        object LabelGameDocsSplitterSingleColorHot: TLabel
+          Left = 8
+          Top = 107
+          Width = 52
+          Height = 15
+          Caption = 'Hot Color'
+          Transparent = True
+        end
+        object GameDocsSplitterStyleSelector: TComboBox
+          Left = 8
+          Top = 21
+          Width = 220
+          Height = 23
+          Hint = 'Set splitter style'
+          Style = csDropDownList
+          Ctl3D = True
+          DropDownCount = 20
+          ItemHeight = 15
+          ItemIndex = 6
+          ParentCtl3D = False
+          TabOrder = 0
+          Text = 'Office 2007 Luna (Default)'
+          OnSelect = GameDocsSplitterStyleSelectorSelect
+          Items.Strings = (
+            'Silver'
+            'Single Color (Customizable)'
+            'Office 2003 Blue'
+            'Office 2003 Silver'
+            'Office 2003 Olive'
+            'Office 2003 Classic'
+            'Office 2007 Luna (Default)'
+            'Office 2007 Silver'
+            'Office 2007 Obsidian'
+            'Windows XP'
+            'Whidbey'
+            'Windows Vista'
+            'Windows 7'
+            'Terminal'
+            'Office 2010 Blue'
+            'Office 2010 Silver'
+            'Office 2010 Black')
+        end
+        object ButtonGameDocsSplitterStyleDefault: TBitBtn
+          Left = 236
+          Top = 20
+          Width = 47
+          Height = 23
+          Hint = 'Set splitters default style'
+          Caption = 'Default'
+          TabOrder = 1
+          OnClick = ButtonGameDocsSplitterStyleDefaultClick
+        end
+        object GameDocsSplitterShowGripIcon: TAdvOfficeCheckBox
+          Left = 183
+          Top = 50
+          Width = 97
+          Height = 20
+          Hint = 
+            'Show/hide grip icon in the middle of the splitter (games list/ga' +
+            'me docs)'
+          Checked = True
+          TabOrder = 2
+          OnClick = GameDocsSplitterShowGripIconClick
+          Alignment = taRightJustify
+          Caption = 'Show Grip Icon'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object GameDocsSplitterSingleColor: TColorBox
+          Left = 64
+          Top = 78
+          Width = 221
+          Height = 22
+          Hint = 'Color of the splitter'
+          NoneColorColor = clBtnFace
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 3
+          OnSelect = GameDocsSplitterSingleColorSelect
+        end
+        object GameDocsSplitterSingleColorHot: TColorBox
+          Left = 64
+          Top = 104
+          Width = 221
+          Height = 22
+          Hint = 'Color of the splitter while hovering mouse'
+          DefaultColorColor = clGray
+          NoneColorColor = clGray
+          Selected = clGray
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 4
+          OnSelect = GameDocsSplitterSingleColorHotSelect
+        end
+        object ButtonGameDocsSplitterSingleColorDefault: TBitBtn
+          Left = 78
+          Top = 51
+          Width = 47
+          Height = 23
+          Hint = 'Set single color default values'
+          Caption = 'Default'
+          TabOrder = 5
+          OnClick = ButtonGameDocsSplitterSingleColorDefaultClick
+        end
+      end
+      object GameDocsDisplayOrderBox: TAdvGroupBox
+        Left = 16
+        Top = 12
+        Width = 331
+        Height = 157
+        RoundEdges = True
+        Caption = 'Display Order'
+        Ctl3D = True
+        TabOrder = 4
+        object GameDocs: TEasyListview
+          Tag = 1
+          Left = 8
+          Top = 21
+          Width = 263
+          Height = 128
+          BackGround.Enabled = True
+          CellSizes.Report.Height = 20
+          Color = clWhite
+          Ctl3D = True
+          EditManager.Font.Charset = ANSI_CHARSET
+          EditManager.Font.Color = clBlack
+          EditManager.Font.Height = -12
+          EditManager.Font.Name = 'Segoe UI'
+          EditManager.Font.Style = []
+          UseDockManager = False
+          HintType = ehtToolTip
+          Header.Columns.Items = {
+            0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+            0006000000800800010100010000000000000105010000FFFFFF1F0001000000
+            00000000000000000000000000000000}
+          Header.Draggable = False
+          Header.FixedSingleColumn = True
+          Header.Height = 23
+          IncrementalSearch.Enabled = True
+          IncrementalSearch.ResetTime = 1000
+          IncrementalSearch.StartType = eissFocusedNode
+          PaintInfoGroup.Expandable = False
+          PaintInfoGroup.MarginBottom.CaptionIndent = 4
+          PaintInfoItem.Border = 1
+          PaintInfoItem.BorderColor = 16370824
+          PaintInfoItem.CaptionIndent = 2
+          PaintInfoItem.CheckType = ectBox
+          PaintInfoItem.ShowBorder = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          Selection.BlendColorSelRect = 10902593
+          Selection.BlendIcon = False
+          Selection.BorderColor = 10902593
+          Selection.BorderColorSelRect = 10902593
+          Selection.Color = 10902593
+          Selection.FullCellPaint = True
+          Selection.FullItemPaint = True
+          Selection.FullRowSelect = True
+          Selection.GradientColorBottom = 16506264
+          Selection.GradientColorTop = 15582647
+          Selection.InactiveBorderColor = 10902593
+          Selection.InactiveColor = 15582647
+          Selection.MouseButton = [cmbLeft, cmbRight]
+          Selection.RoundRectRadius = 2
+          Selection.TextColor = clBlack
+          Selection.UseFocusRect = False
+          TabOrder = 0
+          View = elsReport
+          OnItemPaintText = GameDocsItemPaintText
+        end
+        object ButtonUp: TBitBtn
+          Tag = 1
+          Left = 276
+          Top = 21
+          Width = 47
+          Height = 23
+          Hint = 'Move selected item up'
+          Caption = 'Up'
+          TabOrder = 1
+          TabStop = False
+          OnClick = ButtonUpClick
+        end
+        object ButtonDown: TBitBtn
+          Left = 276
+          Top = 44
+          Width = 47
+          Height = 23
+          Hint = 'Move selected folder down'
+          Caption = 'Down'
+          TabOrder = 2
+          TabStop = False
+          OnClick = ButtonUpClick
+        end
+        object ButtonResetAutoGameInfoOrder: TBitBtn
+          Left = 276
+          Top = 127
+          Width = 47
+          Height = 23
+          Hint = 'Set the order of the texts to default'
+          Caption = 'Reset'
+          TabOrder = 3
+          OnClick = ButtonResetAutoGameInfoOrderClick
+        end
+      end
       object ButtonGameDocumentsDefault: TBitBtn
-        Left = 362
-        Top = 204
+        Left = 300
+        Top = 199
         Width = 47
         Height = 23
         Hint = 'Set background color / font default values'
@@ -1572,122 +1843,198 @@ object FormPreferences: TFormPreferences
         TabOrder = 2
         OnClick = ButtonGameDocumentsDefaultClick
       end
-      object GameDocs: TEasyListview
-        Tag = 1
-        Left = 94
-        Top = 49
-        Width = 263
-        Height = 128
-        BackGround.Enabled = True
-        CellSizes.Report.Height = 20
-        Color = clWhite
+      object GameDocsDisplayModeBox: TAdvGroupBox
+        Left = 16
+        Top = 236
+        Width = 331
+        Height = 96
+        RoundEdges = True
+        Caption = 'Display Mode'
         Ctl3D = True
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000105010000FFFFFF1F0001000000
-          00000000000000000000000000000000}
-        Header.Draggable = False
-        Header.FixedSingleColumn = True
-        Header.Height = 23
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoItem.Border = 1
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.CaptionIndent = 2
-        PaintInfoItem.CheckType = ectBox
-        PaintInfoItem.ShowBorder = False
-        ParentCtl3D = False
-        ParentShowHint = False
-        ShowHint = True
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 3
-        View = elsReport
-        OnItemPaintText = GameDocsItemPaintText
-      end
-      object ButtonUp: TBitBtn
-        Tag = 1
-        Left = 362
-        Top = 49
-        Width = 47
-        Height = 23
-        Hint = 'Move selected item up'
-        Caption = 'Up'
-        TabOrder = 4
-        TabStop = False
-        OnClick = ButtonUpClick
-      end
-      object ButtonDown: TBitBtn
-        Left = 362
-        Top = 72
-        Width = 47
-        Height = 23
-        Hint = 'Move selected folder down'
-        Caption = 'Down'
         TabOrder = 5
-        TabStop = False
-        OnClick = ButtonUpClick
+        object LabelGameDocsDisplayModeSinglePanel: TShadowLabel
+          Left = 24
+          Top = 37
+          Width = 208
+          Height = 19
+          Caption = 'Show images and game docs together'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object LabelGameDocsDisplayModeTabs: TShadowLabel
+          Left = 24
+          Top = 73
+          Width = 262
+          Height = 19
+          Caption = 'Show images and game docs in separate panels'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+        end
+        object GameDocsDisplayModeTabs: TAdvOfficeRadioButton
+          Tag = 1
+          Left = 8
+          Top = 56
+          Width = 225
+          Height = 20
+          TabOrder = 0
+          OnClick = GameDocsDisplayModeSinglePanelClick
+          Alignment = taLeftJustify
+          Caption = 'Images and Game Docs Tabbed Panels'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton
+          Left = 8
+          Top = 20
+          Width = 213
+          Height = 20
+          TabOrder = 1
+          TabStop = True
+          OnClick = GameDocsDisplayModeSinglePanelClick
+          Alignment = taLeftJustify
+          Caption = 'Images and Game Docs Single Panel'
+          Checked = True
+          ReturnIsTab = False
+          Themed = True
+        end
       end
-      object ButtonResetAutoGameInfoOrder: TBitBtn
-        Left = 362
-        Top = 155
-        Width = 47
-        Height = 23
-        Hint = 'Set the order of the texts to default'
-        Caption = 'Reset'
-        TabOrder = 6
-        OnClick = ButtonResetAutoGameInfoOrderClick
-      end
-      object GameDocsDisplayModeTabs: TAdvOfficeRadioButton
-        Tag = 1
-        Left = 94
-        Top = 292
-        Width = 225
-        Height = 20
-        TabOrder = 7
-        OnClick = GameDocsDisplayModeSinglePanelClick
-        Alignment = taLeftJustify
-        Caption = 'Images and Game Docs Tabbed Panels'
-        ReturnIsTab = False
-        Themed = True
-      end
-      object GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton
-        Left = 94
-        Top = 256
-        Width = 213
-        Height = 20
-        TabOrder = 8
-        TabStop = True
-        OnClick = GameDocsDisplayModeSinglePanelClick
-        Alignment = taLeftJustify
-        Caption = 'Images and Game Docs Single Panel'
-        Checked = True
-        ReturnIsTab = False
-        Themed = True
+    end
+    object TPage
+      Left = 0
+      Top = 0
+      HelpContext = 4
+      Caption = 'Night Mode'
+      object NightModeToolBarBackgroundColors: TAdvGroupBox
+        Left = 16
+        Top = 12
+        Width = 256
+        Height = 125
+        CheckBox.Action = caNone
+        RoundEdges = True
+        Caption = 'Tool Bar Background Colors'
+        Ctl3D = True
+        TabOrder = 0
+        object LabelNightModeToolBarBkTopColor: TShadowLabel
+          Left = 8
+          Top = 48
+          Width = 24
+          Height = 16
+          Caption = 'Top'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object LabelNightModeToolBarBkBottomColor: TShadowLabel
+          Left = 8
+          Top = 74
+          Width = 43
+          Height = 16
+          Caption = 'Bottom'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          Transparent = True
+        end
+        object NightModeToolBarBkTopColor: TColorBox
+          Left = 62
+          Top = 44
+          Width = 187
+          Height = 22
+          DefaultColorColor = 5832704
+          NoneColorColor = clBtnFace
+          Selected = 5832704
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 0
+          OnSelect = NightModeToolBarBkTopColorSelect
+        end
+        object NightModeToolBarFrameColor: TColorBox
+          Left = 62
+          Top = 96
+          Width = 187
+          Height = 22
+          DefaultColorColor = clBlue
+          NoneColorColor = clBtnFace
+          Selected = clBlue
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 1
+          OnSelect = NightModeToolBarFrameColorSelect
+        end
+        object NightModeToolBarBkColorsDefaultButton: TBitBtn
+          Left = 201
+          Top = 16
+          Width = 47
+          Height = 21
+          Caption = 'Default'
+          TabOrder = 2
+          OnClick = NightModeToolBarBkColorsDefaultButtonClick
+        end
+        object NightModeToolBarShowFrame: TAdvOfficeCheckBox
+          Left = 8
+          Top = 97
+          Width = 53
+          Height = 20
+          Checked = True
+          TabOrder = 3
+          OnClick = NightModeToolBarShowFrameClick
+          Alignment = taLeftJustify
+          Caption = 'Frame'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object NightModeToolBarGradientBar: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 87
+          Height = 20
+          TabOrder = 4
+          OnClick = NightModeToolBarGradientBarClick
+          Alignment = taLeftJustify
+          Caption = 'Gradient Bar'
+          ReturnIsTab = False
+          Themed = True
+        end
+        object NightModeToolBarBkBottomColor: TColorBox
+          Left = 62
+          Top = 70
+          Width = 187
+          Height = 22
+          DefaultColorColor = 1
+          NoneColorColor = clBtnFace
+          Selected = 1
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 5
+          OnSelect = NightModeToolBarBkBottomColorSelect
+        end
       end
     end
   end

@@ -516,7 +516,6 @@ type
     MenuVisitXArcadeHomepage: TMenuItem;
     MenuVisitHotRodHomepage: TMenuItem;
     FontDialog: TFontDialog;
-    ToolBarPanel: TCoolBar;
     PopupExitApplication: TMenuItem;
     PopupGameFilterHaveMiss: TBcBarPopupMenu;
     PopupShowHaveMiss: TMenuItem;
@@ -554,7 +553,7 @@ type
     MenuVisitMashMameInfo: TMenuItem;
     MenuVisitEasyEmu: TMenuItem;
     ButtonGameFilterParentClone: TToolButton;
-    ButtonGameFilterMain: TToolButton;
+    ButtonArcadeGamesFilters: TToolButton;
     MenuCustomizeToolBar: TMenuItem;
     IL_ToolBarButtons: TImageList;
     IL_MenuPopup: TImageList;
@@ -564,13 +563,9 @@ type
     IL_ArcadeSystem_Large: TImageList;
     IL_ArcadeSystem_Small: TImageList;
     IL_FilterWorkingNonWorking_Small: TImageList;
-    IL_FilterWorkingNonWorking_Large: TImageList;
     IL_FilterHaveMiss_Small: TImageList;
-    IL_FilterHaveMiss_Large: TImageList;
     IL_FilterParentClone_Small: TImageList;
-    IL_FilterParentClone_Large: TImageList;
     IL_ViewMode_Small: TImageList;
-    IL_ViewMode_Large: TImageList;
     PopupReloadMAMu_Icons: TMenuItem;
     ButtonGameFilterMachineTypeSystemsMulti: TToolButton;
     N16: TMenuItem;
@@ -649,7 +644,6 @@ type
     MenuThumbnailSettings: TMenuItem;
     MenuThumbnailShowParentThumbs: TMenuItem;
     PopupIconSizeExtraLarge: TMenuItem;
-    N6: TMenuItem;
     PopupShowMissROMs: TMenuItem;
     IL_ImagesToolBarButtons: TImageList;
     IL_MiscToolBarPopup: TImageList;
@@ -682,9 +676,6 @@ type
     PopupThumbnailSettings: TMenuItem;
     N52: TMenuItem;
     PopupThumbnailShowParentThumbs: TMenuItem;
-    ToolBarFilterTitle: TToolBar;
-    ButtonFilterTitleApply: TToolButton;
-    ButtonFilterTitleReset: TToolButton;
     PopupMAMu_IconsManager: TMenuItem;
     MenuImagesManager: TMenuItem;
     PopupSetMAMEVectorGamesOptions: TMenuItem;
@@ -696,20 +687,6 @@ type
     MenuHelpViewReadme: TMenuItem;
     MenuHelpViewFAQ: TMenuItem;
     ButtonExtraFilters: TToolButton;
-    PopupFilterGameTitle: TBcBarPopupMenu;
-    FilterGameTitle_Title: TMenuItem;
-    FilterGameTitle_Year: TMenuItem;
-    FilterGameTitle_Manufacturer: TMenuItem;
-    FilterGameTitle_Category: TMenuItem;
-    FilterGameTitle_VersionAdded: TMenuItem;
-    FilterGameTitle_DriverName: TMenuItem;
-    N26: TMenuItem;
-    FilterTextBarIncludeToolBarFilters: TMenuItem;
-    FilterSearchBarHelp: TMenuItem;
-    N39: TMenuItem;
-    PanelTextBarFilter: TPanel;
-    FilterGameTitle: TEdit;
-    FilterGameTitle_BiosName: TMenuItem;
     MenuValidateMAMECHDTypes: TMenuItem;
     PopupScanAllSelectedGames: TMenuItem;
     IL_MainMenuOptions: TImageList;
@@ -761,17 +738,12 @@ type
     PanelGameDocuments: TPanel;
     PanelWebBrowser: TPanel;
     WebBrowser: TWebBrowser;
-    FilterGameTitle_Language: TMenuItem;
     MenuVisitHBMAMEHomepage: TMenuItem;
     MenuVisitDICEHomepage: TMenuItem;
     PopupImageShowToolBar: TMenuItem;
     PopupShowSplitterGrip: TMenuItem;
     PopupAutoRunGameAlterMAME: TMenuItem;
     PopupShowToolBar: TMenuItem;
-    FilterGameTitle_ScreenResolution: TMenuItem;
-    FilterGameTitle_GameName: TMenuItem;
-    FilterGameTitle_CloneOf: TMenuItem;
-    FilterGameTitle_NumberofPlayers: TMenuItem;
     PopupCopySelectedGames: TMenuItem;
     PopupMoveSelectedGames: TMenuItem;
     PopupSelectGameStartup: TMenuItem;
@@ -780,7 +752,7 @@ type
     PopupStartupGameSelectionClear: TMenuItem;
     N3: TMenuItem;
     N13: TMenuItem;
-    ImagesToolbarButtons: TToolBar;
+    ImagesToolBarButtons: TToolBar;
     ButtonPreviousImage: TToolButton;
     ButtonNextImage: TToolButton;
     ButtonPreviousCategory: TToolButton;
@@ -795,12 +767,6 @@ type
     WebButtonExit: TToolButton;
     WebBrowserStatusPanel: TPanelEx;
     LabelWebBrowserStatus: TShadowLabel;
-    ToolBarFilterByMainCPU: TToolBar;
-    FilterCPU: TEdit;
-    FilterCPUList: TComboBox;
-    ButtonFilterCPUApply: TToolButton;
-    ButtonFilterCPUReset: TToolButton;
-    ButtonFilterCPUClose: TToolButton;
     PopupSelectScanGamesMode: TMenuItem;
     PopupFavorites: TBcBarPopupMenu;
     PopupEnableFavorites: TMenuItem;
@@ -822,9 +788,7 @@ type
     N45: TMenuItem;
     PopupSetArcadeIniCustomOptions: TMenuItem;
     PopupDeleteArcadeIniCustomOptions: TMenuItem;
-    MenuSmallToolBar: TMenuItem;
     MenuShowGamesStatusBar: TMenuItem;
-    LabelFilterCPU: TPanelEx;
     N18: TMenuItem;
     MenuAlterMAMEDefaultSettings: TMenuItem;
     N29: TMenuItem;
@@ -850,7 +814,6 @@ type
     PopupCustomizeColumns: TMenuItem;
     PopupCustomizeColumnsHeaderFont: TMenuItem;
     PopupDefaultHeaderFont: TMenuItem;
-    ShadowLabel1: TShadowLabel;
     MenuCreateMAMESoftwareListGames: TMenuItem;
     PopupMachineToRunGame: TMenuItem;
     PopupSetConsoleIniCustomOptions: TMenuItem;
@@ -923,15 +886,12 @@ type
     CreateSupermodelXMLdatFromSourceFile1: TMenuItem;
     HelpMAMEDocumentation: TMenuItem;
     MAMEInfoTextHolder: TRichEditURL;
-    ButtonFilterControls: TToolButton;
-    PopupSearchBarControlsFilter: TBcBarPopupMenu;
     PopupPlayGameExtraParametersMAME: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_Supported: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_Unsupported: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_Unknown: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_ListAll: TMenuItem;
-    FilterGameTitle_SoftwareListName: TMenuItem;
     IL_StandardIconsThumbnail: TImageList;
     MenuThumbnailAlphaBlendedIcons: TMenuItem;
     IconDriverStatus: TImage;
@@ -1013,7 +973,6 @@ type
     PopupTilesViewCellSizeStandard: TMenuItem;
     PopupTilesViewCellSizeExtraLarge: TMenuItem;
     PopupTilesViewCellSizeUltraLarge: TMenuItem;
-    IL_StandardIconsMegaLarge: TImageList;
     PopupTilesViewCellSizeMegaLarge: TMenuItem;
     N60: TMenuItem;
     N61: TMenuItem;
@@ -1026,7 +985,6 @@ type
     IconGameMediaType: TImage;
     PopupVideoPreviewSettings: TMenuItem;
     ButtonSystemsQuickFilter: TToolButton;
-    ButtonFilterTitleSettings: TToolButton;
     ButtonInternetGameInfo: TToolButton;
     ButtonImagePanelToggle: TToolButton;
     ButtonDocsPanelToggle: TToolButton;
@@ -1045,10 +1003,53 @@ type
     InitZipSystemIcon: TImage;
     MenuEnableNightMode: TMenuItem;
     IL_MediaType: TImageList;
-    PanelEx1: TPanelEx;
-    IL_Overlay: TImageList;
-    ImageOverlay: TImage;
-    BitBtn1: TBitBtn;
+    MenuCustomizeNightModeColors: TMenuItem;
+    ButtonFilterSearchGames: TToolButton;
+    MenuToolBarIconSize: TMenuItem;
+    MenuToolBarIconSizeExtraLarge: TMenuItem;
+    MenuToolBarIconSizeLarge: TMenuItem;
+    MenuToolBarIconSizeSmall: TMenuItem;
+    N26: TMenuItem;
+    PanelFilterCPU: TPanelEx;
+    FilterCPU_LabelCaptionBar: TShadowLabel;
+    FilterCPU_ButtonClose: TShadowLabel;
+    ToolBarFilterByMainCPU: TToolBar;
+    ButtonFilterCPUApply: TToolButton;
+    ButtonFilterCPUReset: TToolButton;
+    FilterCPU: TEdit;
+    LabelCustomCPUTitle: TShadowLabel;
+    FilterCPUList: TComboBox;
+    LabelSelectCPU: TShadowLabel;
+    PanelSearchGames: TPanelEx;
+    PanelSearchGamesCaptionBar: TShadowLabel;
+    ButtonFilterTitleClose: TShadowLabel;
+    LabelSearchGamesTitle: TShadowLabel;
+    FilterGameTitle: TEdit;
+    ToolBarFilterTitle: TToolBar;
+    ButtonFilterTitleApply: TToolButton;
+    ButtonFilterControls: TToolButton;
+    ButtonFilterTitleReset: TToolButton;
+    ButtonFilterTitleSettings: TToolButton;
+    LabelSearchGamesBy: TShadowLabel;
+    PopupSearchBarControlsFilter: TBcBarPopupMenu;
+    PopupFilterGameTitle: TBcBarPopupMenu;
+    FilterTextBarIncludeToolBarFilters: TMenuItem;
+    N39: TMenuItem;
+    FilterGameTitle_Title: TMenuItem;
+    FilterGameTitle_Year: TMenuItem;
+    FilterGameTitle_Manufacturer: TMenuItem;
+    FilterGameTitle_Category: TMenuItem;
+    FilterGameTitle_VersionAdded: TMenuItem;
+    FilterGameTitle_Language: TMenuItem;
+    FilterGameTitle_DriverName: TMenuItem;
+    FilterGameTitle_BiosName: TMenuItem;
+    FilterGameTitle_ScreenResolution: TMenuItem;
+    FilterGameTitle_GameName: TMenuItem;
+    FilterGameTitle_CloneOf: TMenuItem;
+    FilterGameTitle_SoftwareListName: TMenuItem;
+    FilterGameTitle_NumberofPlayers: TMenuItem;
+    MenuItem1: TMenuItem;
+    FilterSearchBarHelp: TMenuItem;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1087,7 +1088,7 @@ type
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure PopupImageStretchClick(Sender: TObject);
     procedure WebBrowserEnter(Sender: TObject);
-    procedure ButtonGameFilterMainClick(Sender: TObject);
+    procedure ButtonArcadeGamesFiltersClick(Sender: TObject);
     procedure BcDrawModuleDrawMenuItem(Sender: TObject;
       AMenuItem: TMenuItem; ACanvas: TCanvas; ARect: TRect;
       State: TOwnerDrawState; ABarVisible: Boolean;
@@ -1159,12 +1160,8 @@ type
     procedure PopupSetMAMEHorizontalGamesOptionsClick(Sender: TObject);
     procedure MenuArcadeControllersLayoutClick(Sender: TObject);
     procedure PopupThumbnailShowParentThumbsClick(Sender: TObject);
-    procedure ButtonFilterTitleApplyClick(Sender: TObject);
-    procedure ButtonFilterTitleResetClick(Sender: TObject);
     procedure PopupMAMu_IconsManagerClick(Sender: TObject);
     procedure MenuImagesManagerClick(Sender: TObject);
-    procedure ButtonFilterCPUApplyClick(Sender: TObject);
-    procedure ButtonFilterCPUCloseClick(Sender: TObject);
     function GamesListViewItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
       var DoDefault: Boolean): Integer;
@@ -1176,10 +1173,6 @@ type
     procedure FormResize(Sender: TObject);
     procedure MenuHelpViewQuickSetupGuideClick(Sender: TObject);
     procedure ButtonExtraFiltersClick(Sender: TObject);
-    procedure FilterGameTitle_TitleClick(Sender: TObject);
-    procedure FilterSearchBarHelpClick(Sender: TObject);
-    procedure FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
-    procedure ButtonFilterCPUResetClick(Sender: TObject);
     procedure MenuValidateMAMECHDTypesClick(Sender: TObject);
     procedure GamesListViewItemSelectionChanging(
       Sender: TCustomEasyListview; Item: TEasyItem; var Allow: Boolean);
@@ -1207,7 +1200,7 @@ type
     procedure PopupStartupGameSelectionUseCurrentSelectionClick(
       Sender: TObject);
     procedure PopupStartupGameSelectionGameSelectedClick(Sender: TObject);
-    procedure ImagesToolbarButtonsCustomDraw(Sender: TToolBar;
+    procedure ImagesToolBarButtonsCustomDraw(Sender: TToolBar;
       const ARect: TRect; var DefaultDraw: Boolean);
     procedure WebBrowserBeforeNavigate2(Sender: TObject;
       const pDisp: IDispatch; var URL, Flags, TargetFrameName, PostData,
@@ -1220,11 +1213,7 @@ type
     procedure GameDocsGoToInformationClick(Sender: TObject);
     procedure MenuShowPlayersInfoFromNplayersIniOnlyClick(Sender: TObject);
     procedure ButtonPlayVideoPreviewClick(Sender: TObject);
-    procedure MenuSmallToolBarClick(Sender: TObject);
     procedure MenuShowGamesStatusBarClick(Sender: TObject);
-    procedure FilterGameTitleEnter(Sender: TObject);
-    procedure FilterGameTitleExit(Sender: TObject);
-    procedure FilterGameTitleClick(Sender: TObject);
     procedure PopupSetCustomOptionsAlterMAMEClick(Sender: TObject);
     procedure PopupSetGameDriverCustomOptionsAlterMAMEClick(
       Sender: TObject);
@@ -1273,7 +1262,6 @@ type
     procedure MenuShowFavoriteIconInGamesListClick(Sender: TObject);
     procedure MenuExportGamesListTextFileClick(Sender: TObject);
     procedure CreateSupermodelXMLdatFromSourceFile1Click(Sender: TObject);
-    procedure FilterCPUKeyPress(Sender: TObject; var Key: Char);
     procedure PopupPlayGameExtraParametersMAMEClick(Sender: TObject);
     procedure PopupMachinesListSidePanelFiltersSaveState_ListAllClick(Sender: TObject);
     procedure ImagesMouseEnter(Sender: TObject);
@@ -1310,9 +1298,6 @@ type
       Sender: TObject);
     procedure PopupDeleteSelectedGamesFromGamesListClick(Sender: TObject);
     procedure ButtonSystemsQuickFilterClick(Sender: TObject);
-    procedure FilterCPUEnter(Sender: TObject);
-    procedure FilterCPUExit(Sender: TObject);
-    procedure FilterCPUListSelect(Sender: TObject);
     procedure ButtonInternetGameInfoClick(Sender: TObject);
     procedure ToolBarImagesDocsPanelCustomDraw(Sender: TToolBar; const ARect: TRect;
       var DefaultDraw: Boolean);
@@ -1321,7 +1306,32 @@ type
     procedure ButtonImageCategoryClick(Sender: TObject);
     procedure ButtonScreenshotLayoutsClick(Sender: TObject);
     procedure MenuEnableNightModeClick(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
+    procedure MenuCustomizeNightModeColorsClick(Sender: TObject);
+    procedure ButtonFilterSearchGamesClick(Sender: TObject);
+    procedure ButtonImageCUEClick(Sender: TObject);
+    procedure MenuToolBarIconSizeLargeClick(Sender: TObject);
+    procedure FilterCPU_LabelCaptionBarMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure FilterCPU_ButtonCloseMouseEnter(Sender: TObject);
+    procedure FilterCPU_ButtonCloseMouseLeave(Sender: TObject);
+    procedure ButtonFilterCPUApplyClick(Sender: TObject);
+    procedure ButtonFilterCPUResetClick(Sender: TObject);
+    procedure FilterCPUKeyPress(Sender: TObject; var Key: Char);
+    procedure FilterCPUListSelect(Sender: TObject);
+    procedure FilterCPU_ButtonCloseClick(Sender: TObject);
+    procedure ToolBarFilterByMainCPUCustomDraw(Sender: TToolBar;
+      const ARect: TRect; var DefaultDraw: Boolean);
+    procedure FilterGameTitleClick(Sender: TObject);
+    procedure FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonFilterTitleApplyClick(Sender: TObject);
+    procedure ButtonFilterTitleResetClick(Sender: TObject);
+    procedure FilterGameTitle_TitleClick(Sender: TObject);
+    procedure FilterSearchBarHelpClick(Sender: TObject);
+    procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
+      const ARect: TRect; var DefaultDraw: Boolean);
+    procedure ButtonFilterTitleCloseClick(Sender: TObject);
+    procedure PanelSearchGamesCaptionBarMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
 
   { Private declarations }
   private
@@ -1386,6 +1396,12 @@ type
     procedure SplitImageCategoriesIniSettings;
     procedure LoadImageCategoryLayoutSettings;
 
+    procedure SetColorsSearchGamesPanel;
+    procedure SetColorsFilterMainCPUPanel;
+
+    procedure ReadNightModeSettings;
+    procedure WriteNightModeSettings;
+
     procedure LoadImagePanelColorSettings;
     procedure UpdateImagePanelColorSettings;
 
@@ -1432,7 +1448,7 @@ type
 
     // Load Icons in TImageList components
     procedure ClearImageList(IL_Holder: TImageList);
-    procedure LoadMainScreenIcons(Reload: Boolean = False);
+    procedure LoadMainScreenIcons;//(Reload: Boolean = False);
     procedure LoadLeftPanelIcons;
     procedure LoadToolBarButtons(ImageList_Holder: TImageList; IsCustomizeForm: Boolean = False);
 
@@ -1455,12 +1471,13 @@ type
     procedure SelectRandomGame(ELV_Holder: TEasyListview; var CurrentSelection: TEasyItem);
 
     // games filters routines
+    procedure ApplyFilters;
+    procedure ApplyFilterSearchBar;
     function  ReselectItem(SelectItem: Boolean): Boolean;
     function  CheckArcadeMainFilter: Boolean;
     function  CheckConsCompSystemFilter: Boolean;
     function  FilterGamesList(const FilterName: String): Boolean;
     procedure UpdateGamesFilterHint;
-    procedure ApplyFilterSearchBar;
     procedure SetDriverStatusCategory;
     // games filters routines
 
@@ -1471,6 +1488,9 @@ type
     function  FixDriverSourceName(const DriverStr: String): String;
 
     procedure SetCustomGameTitle(ItemHolder: TEasyItem);
+
+    procedure ApplyFilterCPU;
+    procedure InitFilterCPU_MAME;
 
     //procedure GenerateLastUsedMachines;
     function  CreateGamesListMAME(sysID: Byte; SoftwareListsToProcess: THashedStringList): Boolean; // sysID is for MAME based emulator (MAME and HBMAME)
@@ -1762,7 +1782,7 @@ type
     procedure ShowFilterMsgBox(const TitleMessageStr, MessageStr: WideString; ForceShowDialog: Boolean = False);
     procedure HideFilterMsgBox;
 
-    function  MountROMInfo(fileID, IsCRC32Collision: Integer; IsDisk: Boolean; const romName, romCRC32, romSHA1: String; IsBadDump: ShortInt; IsFileFromParentSet: Boolean = False; FileRegion: String = ''; FileOffset: String = ''): String;
+    function  MountROMInfo(fileID, IsCRC32Collision: Integer; IsDisk: Boolean; const romName, romCRC32, romSize, romSHA1: String; IsBadDump: ShortInt; IsFileFromParentSet: Boolean = False; FileRegion: String = ''; FileOffset: String = ''): String;
     procedure LoadROMsDatabase(addedItem: TEasyItem; sysID: ShortInt; var LoadedDBsysID: ShortInt; const GameName: String; const SoftwareList: String; var LoadedDBSoftwareList: String; ROMsListHolder: TStringList);
 
     function  DecodeHTML(const s: String): String;
@@ -1805,8 +1825,9 @@ type
     function  CheckTotalVisible(ListViewHolder: TEasyListView): Boolean;
     function  HaveItemsChecked(ListViewHolder: TEasyListView): Boolean;
     function  ApplyMiscFilters(KeepGameStatus: Boolean): Boolean;
-    //procedure ApplyFilters(const FilterName: String; SelectItem: Boolean);
-    procedure ApplyFilters;
+    //procedure ApplyFilters(const FilterName: String; SelectItem: Boolean); // no longer valid
+    //procedure ApplyFilters; // moved to "private" section
+    //procedure ApplyFilterSearchBar; // moved to "private" section
 
     procedure SetExtraFilter(LabelHolder: TLabel; ComboBoxHolder: TComboBox);
 
@@ -1862,7 +1883,7 @@ type
 
     function  SearchCHDSimpleScan(SystemID: Integer; const chdName, chdParentName, GameName, CloneOf, BiosName: String; SoftwareList: String = ''): String;
 
-    function  SearchGameFile(const GameName: WideString; CustomSystemID, CustomMediaType: Integer; SearchDiscFileCUE, ShowQuickMessageBox: Boolean; out VarFileFullPath: WideString; out DOSFileNameStr: String): Boolean;
+    function  SearchGameFile(const GameName: WideString; CustomSystemID, CustomMediaType: Integer; SearchDiscFileCUE, ShowQuickMessageBox: Boolean; out VarFileFullPath: WideString): Boolean;
 
     procedure GetROMDetailsInfo(const LineStr: String; IsClone: Boolean; out VarName: String; out VarCRC32: String; out VarSHA1: String; out VarParentNameCHD: String; out VarROMDeviceName: String);
     function  GetMissCheckEntry(const CRC32Str, SHA1Str: String): String;
@@ -1894,7 +1915,7 @@ type
     procedure LoadImageCategoryThumbIcon(ImageHolder: TImage; CategoryIndex: ShortInt);
     procedure LoadImageLayoutThumbIcon(ImageHolder: TImage; LayoutIndex: ShortInt);
     procedure LoadThumbnailFavIcon(Size: Integer; IconHolder: TIcon; IsAlphaBlend: Boolean); // to load fav icon into thumbnail image
-    procedure LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; IsConsoleComputerSys: Boolean = False);
+    procedure LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; OverlayIndex: Integer = -1; IsConsoleComputerSys: Boolean = False; ForceLightMode: Boolean = False; FileSubFolder: String = '');
     procedure LoadGameIconIntoImage(Arcade_SysID, ConsComp_SysID: Integer; romID: Integer; DestImage: TImage; SoftwareName: String; IsConsoleComputerSys: Boolean);
     function  GameHaveROMs(HaveROMsTag: ShortInt): Boolean;
 
@@ -2014,9 +2035,9 @@ type
     procedure ReadColumnProfile;
     procedure UpdateColumnProfile;
 
-    procedure SetToolBarIcon(IconFileName: String; const IconFolder: String; IconList: TImageList; IconIndex: Integer; DisplayErrorMsg: Boolean = True);
-    function  AddIconWithOverLay(const IconFileName, IconOverlayFileName, IconFolder: String; IconList: TImageList; ShowErrorMsg: Boolean = True): Boolean;
-    function  AddDefaultIcons(const IconFileName, IconsFolder: String; IconList: TImageList; ShowErrorMsg: Boolean = True): Boolean;
+    procedure SetToolBarIcon(IconFileName: String; const IconFolder: String; IconList: TImageList; IconIndex, OverlayIndex: Integer; DisplayErrorMsg: Boolean = True);
+    function  CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
+    function  AddDefaultIcons(const IconFileName, IconsFolder: String; IconList: TImageList; OverlayIndex: Integer = -1; ForceLightMode: Boolean = False): Boolean;
     procedure AddMainScrIcons(const IconFileName, IconsFolder: String; IconListLarge, IconListSmall: TImageList; Reload: Boolean);
 
     function  GetMAMu_IconFolder(sysID: Byte; AddExtraIconPath: Boolean; const SoftwareName: String = ''): String;
@@ -2041,6 +2062,7 @@ type
     
     function  GetIniFilesFolder: String;
     function  GetFrontendExtraIniFile: String;
+    function  GetNightModeIniFile: String;
     function  GetVideoPreviewIniFile(IsDefaultFile: Boolean = False): String;
     function  GetCustomFontIniFile: String;
     function  GetFavoritesFolder: String;
@@ -2236,7 +2258,7 @@ uses
   uMAMESettings,
   uDeleteMultipleGamesFiles,
   uArcadeSelectSystem, uArcadeScanAudioSamples,
-  uArcadeGamesScanResults,
+  uArcadeScanGamesResults,
   uThumbnailViewSettings,
   uArcadeFileVersions, uImageLayoutSettings,
   uSelectDirectory, uArcadeROMsFolders, uGamesListFontSettings, // uZipFilesNotUsed,
@@ -2263,10 +2285,9 @@ uses
 procedure TFontDialog.DoShow;
 const
   SMyColorName: PChar = 'Custom...';
-  //CMyColor: TColor = clBlack;//$0033ccff;
 begin
   SendDlgItemMessage(Handle, IDCOLORCMB, CB_INSERTSTRING, 0, Integer(SMyColorName));
-  SendDlgItemMessage(Handle, IDCOLORCMB, CB_SETITEMDATA, 0, ColorToRGB(Font.Color));// ColorToRGB(CMyColor));
+  SendDlgItemMessage(Handle, IDCOLORCMB, CB_SETITEMDATA, 0, ColorToRGB(Font.Color));
 end;
 
 procedure TFontDialog.WndProc(var Message: TMessage);
@@ -2299,7 +2320,7 @@ begin
   end
   else
   begin
-    Result:= True;  //keep enumerating until you find your id
+    Result:= True; //keep enumerating until you find your id
   end; 
 end;
 
@@ -2323,7 +2344,6 @@ begin
         else
            Result:= eTitleShort;
       end;
-    //00: Result:= FormMain.GetGameTitleText(eTitle, eClone);
     01: Result:= eYear;
     02: Result:= eManufacturer;
     03: Result:= aOrientation[eScreenOrientation];
@@ -2340,7 +2360,7 @@ begin
     08: Result:= eName;
     09: Result:= eClone;
     10: Result:= eDriverName;
-    11: Result:= FormMain.GetNumberPlayersInfo(eNumberPlayers, eNumberPlayersIni); // Result:= eNumberPlayers;
+    11: Result:= FormMain.GetNumberPlayersInfo(eNumberPlayers, eNumberPlayersIni);
     12: Result:= FormMain.AbbreviateStatusText(aStatus[eDriverStatus]);
     13: Result:= FormMain.AbbreviateStatusText(aStatus[eEmulationStatus]);
     14: Result:= FormMain.AbbreviateStatusText(aStatus[eColorStatus]);
@@ -5993,6 +6013,13 @@ begin
       MAMEInfoTextHolder.Font.Style:= TFontStyles(Byte(INIFile.ReadInteger('GameDocuments', 'FontType', 0)));
       SetSelectedColorBox(GameDocumentsBackgroundColor, INIFile.ReadInteger('GameDocuments', 'BackgroundColor', GameDocumentsBackgroundColor.DefaultColorColor));
     end;
+
+
+    FormPreferences.GameDocsSplitterSingleColor.Selected:= INIFile.ReadInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.GameDocsSplitterSingleColor.DefaultColorColor);
+    FormPreferences.GameDocsSplitterSingleColorHot.Selected:= INIFile.ReadInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.GameDocsSplitterSingleColorHot.DefaultColorColor);
+    FormPreferences.GameDocsSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('GameDocuments', 'SplitterShowGrip', 1));
+    SetSelectedComboBox(INIFile.ReadInteger('GameDocuments', 'SplitterStyle', 6), FormPreferences.GameDocsSplitterStyleSelector);
+
     GameDocumentsLayout1_Top.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutTop_Height', 151);
     GameDocumentsLayout2_Bottom.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutBottom_Height', 151);
     GameDocumentsLayout3_Left.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutLeft_Width', 151);
@@ -6019,9 +6046,9 @@ begin
       3: GameDocumentsLayout4_Right.Click;
     end;
 
-    FormPreferences.LabelGameDocsDisplayMode.Tag:= INIFile.ReadInteger('GameDocuments', 'DisplayMode', 0);
+    FormPreferences.GameDocsDisplayModeBox.Tag:= INIFile.ReadInteger('GameDocuments', 'DisplayMode', 0);
 
-    if FormPreferences.LabelGameDocsDisplayMode.Tag = 1 then
+    if FormPreferences.GameDocsDisplayModeBox.Tag = 1 then
        FormPreferences.GameDocsDisplayModeTabs.Checked:= True
     else
        FormPreferences.GameDocsDisplayModeSinglePanel.Checked:= True;
@@ -6063,6 +6090,11 @@ begin
       INIFile.WriteInteger('GameDocuments', 'FontType', Byte(MAMEInfoTextHolder.Font.Style));
     end;
 
+    INIFile.WriteInteger('GameDocuments', 'SplitterStyle', FormPreferences.GameDocsSplitterStyleSelector.ItemIndex);
+    INIFile.WriteInteger('GameDocuments', 'SplitterShowGrip', Ord(FormPreferences.GameDocsSplitterShowGripIcon.Checked));
+    INIFile.WriteInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.GameDocsSplitterSingleColor.Selected);
+    INIFile.WriteInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.GameDocsSplitterSingleColorHot.Selected);
+
     INIFile.WriteInteger('GameDocuments', 'LayoutTop_Height', GameDocumentsLayout1_Top.Tag);
     INIFile.WriteInteger('GameDocuments', 'LayoutBottom_Height', GameDocumentsLayout2_Bottom.Tag);
     INIFile.WriteInteger('GameDocuments', 'LayoutLeft_Width', GameDocumentsLayout3_Left.Tag);
@@ -6088,6 +6120,45 @@ begin
   finally
     FreeAndNil(INIFile);
   end;
+end;
+
+procedure TFormMain.ReadNightModeSettings;
+var
+  IniFile: TMemIniFile;
+begin
+  if not FileExists(GetNightModeIniFile) then
+     Exit;
+
+  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
+
+  FormPreferences.NightModeToolBarShowFrame.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'ShowFrame', 1));
+  SetSelectedColorBox(FormPreferences.NightModeToolBarBkTopColor, IniFile.ReadInteger('ToolBar', 'BackgroundTopColor', FormPreferences.NightModeToolbarBkTopColor.DefaultColorColor)); // clrDarkBlue
+  SetSelectedColorBox(FormPreferences.NightModeToolBarBkBottomColor, IniFile.ReadInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.NightModeToolbarBkBottomColor.DefaultColorColor)); // clrBlackBk
+  SetSelectedColorBox(FormPreferences.NightModeToolbarFrameColor, IniFile.ReadInteger('ToolBar', 'FrameColor', FormPreferences.NightModeToolbarFrameColor.DefaultColorColor)); // clBlue
+  FormPreferences.NightModeToolBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'GradientBar', 0));
+
+  FreeAndNil(IniFile);
+end;
+
+procedure TFormMain.WriteNightModeSettings;
+var
+  IniFile: TMemIniFile;
+begin
+  if CheckReadOnly(GetNightModeIniFile) then
+     Exit;
+
+  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
+
+  IniFile.WriteInteger('ToolBar', 'ShowFrame', Ord(FormPreferences.NightModeToolBarShowFrame.Checked));
+  IniFile.WriteInteger('ToolBar', 'GradientBar', Ord(FormPreferences.NightModeToolBarGradientBar.Checked));
+
+  IniFile.WriteInteger('ToolBar', 'BackgroundTopColor', FormPreferences.NightModeToolBarBkTopColor.Selected);
+  IniFile.WriteInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.NightModeToolbarBkBottomColor.Selected);
+
+  IniFile.WriteInteger('ToolBar', 'FrameColor', FormPreferences.NightModeToolBarFrameColor.Selected);
+
+  IniFile.UpdateFile;
+  FreeAndNil(IniFile);
 end;
 
 procedure TFormMain.SetVideoPreviewState;
@@ -7196,10 +7267,12 @@ begin
     FormPreferences.ImagePanelOuterFrameColor.Selected:= ImgIniFile.ReadInteger('Images', 'PanelOuterFrameColor', 0);
     PanelImage.Color:= FormPreferences.ImagePanelOuterFrameColor.Selected;
 
-    FormPreferences.ImageLayoutSplitterSingleColor.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.DefaultColorColor);
-    FormPreferences.ImageLayoutSplitterSingleColorHot.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.DefaultColorColor);
+    FormPreferences.ImageSplitterSingleColor.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.DefaultColorColor);
+    FormPreferences.ImageSplitterSingleColorHot.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.DefaultColorColor);
 
-    if not Boolean(ImgIniFile.ReadInteger('Images', 'ShowSplitterGrip', 1)) then
+    SetSelectedComboBox(ImgIniFile.ReadInteger('Images', 'SplitterStyle', 1), FormPreferences.ImageSplitterStyleSelector);
+
+    if not Boolean(ImgIniFile.ReadInteger('Images', 'SplitterShowGrip', 1)) then
        PopupImageShowSplitterGrip.Click;
 
     FormPreferences.HintBox_Color.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.DefaultColorColor);
@@ -7231,9 +7304,11 @@ begin
 
   ImgIniFile.WriteInteger('Images', 'PanelOuterFrameColor', FormPreferences.ImagePanelOuterFrameColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'ShowSplitterGrip', Ord(PopupImageShowSplitterGrip.Checked));
-  ImgIniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageLayoutSplitterSingleColor.Selected);
-  ImgIniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+  ImgIniFile.WriteInteger('Images', 'SplitterStyle', FormPreferences.ImageSplitterStyleSelector.ItemIndex);
+
+  ImgIniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(PopupImageShowSplitterGrip.Checked));
+  ImgIniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.Selected);
+  ImgIniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.Selected);
 
   ImgIniFile.WriteInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.Selected);
   ImgIniFile.WriteInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.Selected);
@@ -7284,7 +7359,8 @@ begin
 
   try
     INIFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
-    MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'BoundToGamesPanel', 0);
+    MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_BoundToGamesPanel', 0);
+
     MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
     MenuBoundToGamesPanel.OnClick(Self);
 
@@ -7390,6 +7466,7 @@ begin
     if SelectedFilterName = '' then
        SelectedFilterName:= 'allgames';
     LastFilterName:= INIFile.ReadString('ListFilter', 'ArcadeGames_LastFilter', '');
+    ButtonArcadeGamesFilters.Tag:= INIFile.ReadInteger('ListFilter', 'ArcadeGames_IconSize', 1); // 0 -> extra large; 1 -> large; 2 -> small
     ButtonGameFilterParentClone.Tag:= INIFile.ReadInteger('ListFilter', 'ParentClone', 0);
     ButtonGameFilterHaveMiss.Tag:= INIFile.ReadInteger('ListFilter', 'HaveMiss', 0);
 
@@ -7457,6 +7534,8 @@ begin
 
     FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision.Tag:= INIFile.ReadInteger('ListFilter', 'ShowOnlySetsCRC32Collision', 0);
 
+    FormArcadeFiltersExtra.FilterGamesMainCPU.Tag:= INIFile.ReadInteger('ListFilter', 'FilterMAMEGamesMainCPU', 0);
+
     SetExtraFilter(FormArcadeFiltersExtra.LabelBios, FormArcadeFiltersExtra.Bios);
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.HideBiosSets);
 
@@ -7505,15 +7584,16 @@ begin
 
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision);
 
-    FormArcadeFiltersExtra.FilterGamesMainCPU.Checked:= Boolean(INIFile.ReadInteger('ListFilter', 'CPUFilter', 0));
+    SetMiscFilterCheckBox(FormArcadeFiltersExtra.FilterGamesMainCPU);
+    //FormArcadeFiltersExtra.FilterGamesMainCPU.Checked:= Boolean(INIFile.ReadInteger('ListFilter', 'CPUFilter', 0));
 
     FilterTextBarIncludeToolBarFilters.Checked:= Boolean(INIFile.ReadInteger('ListFilter', 'TextToolBarFilterIncludeFilters', 1));
     Loop:= INIFile.ReadInteger('ListFilter', 'TextToolBarFilterIndex', 0);
     if Loop > 0 then
-       PopupFilterGameTitle.Items[Loop+2].Click;// Checked:= True;
+       PopupFilterGameTitle.Items[Loop+2].Click;
 
     PopupSearchBarControlsFilter.Tag:= INIFile.ReadInteger('ListFilter', 'SearchBarControlsIncludeMainFilters', 1);
-    
+
     // set tool bar buttons checked menu items
     PopupGameFilterParentClone.Items[ButtonGameFilterParentClone.Tag].Checked:= True;
     PopupGameFilterHaveMiss.Items[ButtonGameFilterHaveMiss.Tag].Checked:= True;
@@ -7697,11 +7777,11 @@ begin
       MenuEnableNightMode.Checked:= IsNightMode;
       PopulateMsgColors;
 
-      SplitterGripIcon.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShowSplitterGrip', 1));
+      GamesListSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'GamesListSplitterShowGripIcon', 1));
       //SplitterGripIcon.OnClick(Self);
-      FormPreferences.SplitterSingleColor.Selected:= INIFile.ReadInteger('Preferences', 'SplitterSingleColor', FormPreferences.SplitterSingleColor.DefaultColorColor);
-      FormPreferences.SplitterSingleColorHot.Selected:= INIFile.ReadInteger('Preferences', 'SplitterSingleColorHot', FormPreferences.SplitterSingleColorHot.DefaultColorColor);
-      SetSelectedComboBox(INIFile.ReadInteger('Preferences', 'SplitterStyle', 6), FormPreferences.SplitterStyleSelector);
+      FormPreferences.GamesListSplitterSingleColor.Selected:= INIFile.ReadInteger('Preferences', 'GamesListSplitterSingleColor', FormPreferences.GamesListSplitterSingleColor.DefaultColorColor);
+      FormPreferences.GamesListSplitterSingleColorHot.Selected:= INIFile.ReadInteger('Preferences', 'GamesListSplitterSingleColorHot', FormPreferences.GamesListSplitterSingleColorHot.DefaultColorColor);
+      SetSelectedComboBox(INIFile.ReadInteger('Preferences', 'GamesListSplitterStyle', 6), FormPreferences.GamesListSplitterStyleSelector);
 
       // General Folders
       // Emu Loader Folders & Zip Files
@@ -7800,12 +7880,36 @@ begin
 
     PopupCustomMAME.Tag:= INIFile.ReadInteger('Preferences', 'MAMESettings_ValidateAllCustomFiles', 0);
 
-    tmpString:= INIFile.ReadString('ToolBar', 'Buttons_Main', '');
+    tmpString:= INIFile.ReadString('ToolBar', 'GamesFilters_Buttons', '');
     if tmpString = '' then
        begin
+         // set default, all tool bar buttons are visible
          for Loop:=0 to ToolBarButtons.ButtonCount-1 do
              tmpString:= tmpString+'1';
        end;
+
+    for Loop:=0 to ToolBarButtons.ButtonCount-1 do
+    begin
+      if tmpString[Loop+1] <> '' then
+         ToolBarButtons.Buttons[Loop].Visible:= Boolean(StrToInt(tmpString[Loop+1]))
+      else
+         ToolBarButtons.Buttons[Loop].Visible:= True;
+    end;
+
+    if not Boolean(INIFile.ReadInteger('ToolBar', 'GamesFilters_Visible', 1)) then
+       MenuEnableToolBar.Click;
+
+    if not Boolean(INIFile.ReadInteger('ToolBar', 'ImagesBar_Visible', 1)) then
+       MenuImagesEnableToolBar.Click;
+
+    {tmpString:= INIFile.ReadString('ToolBar', 'Buttons_Main', '');
+    if tmpString = '' then
+       begin
+         // set default, all tool bar buttons are visible
+         for Loop:=0 to ToolBarButtons.ButtonCount-1 do
+             tmpString:= tmpString+'1';
+       end;
+
     for Loop:=0 to ToolBarButtons.ButtonCount-1 do
     begin
       if tmpString[Loop+1] <> '' then
@@ -7815,13 +7919,13 @@ begin
     end;
 
     if not Boolean(INIFile.ReadInteger('ToolBar', 'Visible_TextBar', 1)) then
-       ToolBarFilterTitle.Visible:= False;
+       ButtonFilterSearchGames.Visible:= False;
 
     if not Boolean(INIFile.ReadInteger('ToolBar', 'Visible_MainBar', 1)) then
        MenuEnableToolBar.Click;
 
     if not Boolean(INIFile.ReadInteger('ToolBar', 'Visible_ImagesBar', 1)) then
-       MenuImagesEnableToolBar.Click;
+       MenuImagesEnableToolBar.Click;}
   finally
     FreeAndNil(INIFile);
   end;
@@ -7954,7 +8058,7 @@ begin
            tmpString:= '';
            tmpString:= EncodeUnicodeStr(SelectGameStartup.GameName);
            INIFile.WriteString('SelectGameStartup', 'GameName', tmpString);
-           
+
            INIFile.WriteString('SelectGameStartup', 'SoftwareName', SelectGameStartup.SoftwareName);
            INIFile.WriteString('SelectGameStartup', 'GameNameDetails', SelectGameStartup.GameNameDetails);
          end;
@@ -7973,8 +8077,10 @@ begin
 
       INIFile.WriteInteger('ListFilter', 'SystemQuickFilterEnabled', Ord(IsSystemQuickFilterEnabled));
 
-      INIFile.WriteString('ListFilter', 'ArcadeGames', SelectedFilterName);
-      INIFile.WriteString('ListFilter', 'ArcadeGames_LastFilter', LastFilterName);
+      INIFile.WriteString('ListFilter',  'ArcadeGames', SelectedFilterName);
+      INIFile.WriteString('ListFilter',  'ArcadeGames_LastFilter', LastFilterName);
+      INIFile.WriteInteger('ListFilter', 'ArcadeGames_IconSize', ButtonArcadeGamesFilters.Tag); // 0 -> extra large; 1 -> large; 2 -> small
+
       INIFile.WriteInteger('ListFilter', 'ParentClone', ButtonGameFilterParentClone.Tag);
       INIFile.WriteInteger('ListFilter', 'HaveMiss', ButtonGameFilterHaveMiss.Tag);
 
@@ -7992,8 +8098,6 @@ begin
       INIFile.WriteInteger('ListFilter', 'MachineTypeMAMEMachinesWithoutSoftwareList', Ord(FilterMachineType.MAMEMachinesWithoutSoftwareList_Enabled));
       INIFile.WriteInteger('ListFilter', 'MachineTypeMAMESoftwareListGames', Ord(FilterMachineType.MAMESoftwareListGames_Enabled));
       INIFile.WriteInteger('ListFilter', 'EnableMAMEMachinesFilterPanel', Ord(FilterMachineType.MAMEMachinesFilterPanel_Enabled));
-
-      INIFile.WriteInteger('ListFilter', 'CPUFilter', Ord(FormArcadeFiltersExtra.FilterGamesMainCPU.Checked));
 
       INIFile.WriteInteger('ListFilter', 'BiosNoBios', FormArcadeFiltersExtra.LabelBios.Tag);
       INIFile.WriteInteger('ListFilter', 'HideBiosSets', Ord(FormArcadeFiltersExtra.HideBiosSets.Checked));
@@ -8041,6 +8145,9 @@ begin
       INIFile.WriteInteger('ListFilter', 'ShowMergedSetsOnly', Ord(FormArcadeFiltersExtra.ShowMergedSetsOnly.Checked));
 
       INIFile.WriteInteger('ListFilter', 'ShowOnlySetsCRC32Collision', Ord(FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision.Checked));
+
+      INIFile.WriteInteger('ListFilter', 'FilterMAMEGamesMainCPU', FormArcadeFiltersExtra.FilterGamesMainCPU.Tag);
+      //INIFile.WriteInteger('ListFilter', 'CPUFilter', Ord(FormArcadeFiltersExtra.FilterGamesMainCPU.Checked));
 
       INIFile.WriteInteger('ListFilter', 'TextToolBarFilterIndex', FilterGameTitle.Tag);
       INIFile.WriteInteger('ListFilter', 'TextToolBarFilterIncludeFilters', Ord(FilterTextBarIncludeToolBarFilters.Checked));
@@ -8109,10 +8216,10 @@ begin
 
         INIFile.WriteInteger('Preferences', 'DisableDeleteSelectedGames', Ord(DisableDeleteSelectedGames.Checked));
 
-        INIFile.WriteInteger('Preferences', 'ShowSplitterGrip', Ord(SplitterGripIcon.Checked));
-        INIFile.WriteInteger('Preferences', 'SplitterStyle', FormPreferences.SplitterStyleSelector.ItemIndex);
-        INIFile.WriteInteger('Preferences', 'SplitterSingleColor', FormPreferences.SplitterSingleColor.Selected);
-        INIFile.WriteInteger('Preferences', 'SplitterSingleColorHot', FormPreferences.SplitterSingleColorHot.Selected);
+        INIFile.WriteInteger('Preferences', 'GamesListSplitterShowGripIcon', Ord(GamesListSplitterShowGripIcon.Checked));
+        INIFile.WriteInteger('Preferences', 'GamesListSplitterStyle', GamesListSplitterStyleSelector.ItemIndex);
+        INIFile.WriteInteger('Preferences', 'GamesListSplitterSingleColor', GamesListSplitterSingleColor.Selected);
+        INIFile.WriteInteger('Preferences', 'GamesListSplitterSingleColorHot', GamesListSplitterSingleColorHot.Selected);
 
         INIFile.WriteString('Preferences', 'InternetGameInfoLink', InternetGameInfoLink.Text);
         INIFile.WriteString('Preferences', 'InternetGameSoftwareListInfoLink', InternetMAMESoftwareListGameInfoLink.Text);
@@ -8172,18 +8279,18 @@ begin
       INIFile.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
       INIFile.WriteInteger('Images', 'FixRetroArchImageFileNames', Ord(FormPreferences.FixRetroArchImageFileNames.Checked));
 
-      INIFile.WriteInteger('ToolBar', 'BoundToGamesPanel', MenuBoundToGamesPanel.Tag);
-      INIFile.WriteInteger('ToolBar', 'SmallToolBar', Ord(MenuSmallToolBar.Checked));
+      INIFile.WriteInteger('ToolBar', 'GamesFilters_BoundToGamesPanel', MenuBoundToGamesPanel.Tag);
+      INIFile.WriteInteger('ToolBar', 'GamesFilters_IconSize', MenuToolBarIconSize.Tag);
 
-      INIFile.WriteInteger('ToolBar', 'Visible_TextBar', Ord(ToolBarFilterTitle.Visible));
-      INIFile.WriteInteger('ToolBar', 'Visible_MainBar', ToolBarPanel.Tag);
+      INIFile.WriteInteger('ToolBar', 'GamesFilters_Visible', ToolBarButtons.Tag);
+
       tmpString:= '';
       for Loop:=0 to ToolBarButtons.ButtonCount-1 do
           tmpString:= tmpString+IntToStr(Ord(ToolBarButtons.Buttons[Loop].Visible));
 
-      INIFile.WriteString('ToolBar', 'Buttons_Main', tmpString);
+      INIFile.WriteString('ToolBar', 'GamesFilters_Buttons', tmpString);
 
-      INIFile.WriteInteger('ToolBar', 'Visible_ImagesBar', Ord(ImagesToolBarButtons.Visible));
+      INIFile.WriteInteger('ToolBar', 'ImagesBar_Visible', Ord(ImagesToolBarButtons.Visible));
 
       INIFile.UpdateFile;
     finally
@@ -8733,7 +8840,7 @@ var
   MainLoop: Integer;
   IsGameEntry: Boolean;
   tmpEmuVersion, iVersion: String;
-  tempFile, RegionTagStr, romName, {romSize, }romCRC32, romOffset: String;
+  tempFile, RegionTagStr, romName, romSize, romCRC32, romOffset: String;
   ParentROMsList: TMemIniFile;
   GameStatusList: TStringList;
 
@@ -8819,14 +8926,13 @@ var
     //romSHA1:= XML_GetEntryValue(FileLine, 'sha1');
     romOffset:= XML_GetEntryValue(FileLine, 'offset');
 
-    TempString:= '';
-    TempString:= XML_GetEntryValue(FileLine, 'size'); // this tag is not present in the new "Config\Games.xml" file...
-    if TempString <> '' then
-       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
+    romSize:= XML_GetEntryValue(FileLine, 'size'); // this tag is not present in the new "Config\Games.xml" file...
+    if romSize <> '' then
+       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
     TempString:= '';
 
     IsBadDump:= Ord(PosEx('BAD_DUMP', UpperCase(FileLine)) <> 0);
-    ROMInfoFull:= MountROMInfo(newFileID, 0, False, romName, romCRC32, '', IsBadDump, False, RegionTagStr, romOffset);
+    ROMInfoFull:= MountROMInfo(newFileID, 0, False, romName, romCRC32, romSize, '', IsBadDump, False, RegionTagStr, romOffset);
 
     if FileID = 0 then
        FixedID:= newFileID;
@@ -9418,6 +9524,7 @@ begin
   FormArcadeMultiSlotGames.GamesList.BeginUpdate;
   FormArcadeMultiSlotGames.GamesList.Items.ReIndexDisable:= True;
 
+  ShowFilterMsgBox('Multi-Slot Machines', 'Building a list of supported multi-slot games, please wait...', IsGroupedView);
   iCount:= 0;
   selItem:= GamesListView.Selection.First;
   iItemIndex:= 1;
@@ -9474,7 +9581,7 @@ begin
                end;
           end;
         end;
-        {if MachineName = 'megatech' then // for the future (February 16, 2018) 
+        {if MachineName = 'megatech' then // for the future (February 16, 2018)
         begin
           if TEasyGameInfo(selItem).eName <> 'megatech' then
           begin
@@ -9492,6 +9599,7 @@ begin
   FormArcadeMultiSlotGames.GamesList.Items.ReIndexDisable:= False;
   FormArcadeMultiSlotGames.GamesList.EndUpdate(False);
 
+  HideFilterMsgBox;
   if MachineName = 'neogeo' then
      begin
        FormArcadeMultiSlotGames.PanelNeoGeoMVS.Visible:= True;
@@ -9578,6 +9686,7 @@ begin
 
   FormArcadeRunGameExtraMAME.EmulatorFileName:= iEmulatorFile;
   FormArcadeRunGameExtraMAME.MachineNameToRun:= SoftlistMachineName;
+  FormArcadeRunGameExtraMAME.sysID:= sysID;
   if FormArcadeRunGameExtraMAME.ShowModal = mrYes then
      Result:= FormArcadeRunGameExtraMAME.CommandLine
   else
@@ -9609,6 +9718,9 @@ begin
   Result:= '';
   GameFound:= False;
   ItemHolder:= nil;
+  if iMachineName = '' then
+     Exit; // there is no MAME machine name to search
+  ShowFilterMsgBox('Select Machine to Use', 'Scanning games list for machine title, please wait...', IsGroupedView);
   if IsGroupedView then
     begin
       Group:= GamesListView.Groups.FirstGroup;
@@ -9646,14 +9758,16 @@ begin
         Item:= GamesListView.Groups.NextItem(Item);
       until (Item = nil) or GameFound;
     end;
+  HideFilterMsgBox;
 end;
 
 // ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
 function TFormMain.ExecuteGame(MAME_ExtraSetting: ShortInt = -1; MAME_ExtraPamars: Boolean = False): Integer;
 var
   msgboxTitle, EmulatorTitle, MachineNameStr, SoftwareNameFolder, MAME_ExtraParamsCommandLine: String;
-  ErrorMsgTitle, MultiSlotMachineName, StrDOSName, TempStr: String;
+  ErrorMsgTitle, MultiSlotMachineName, TempStr: String;
   ScreenResolutions: THashedStringList;
+  SupermodelSettings: TStringList; // it contains Supermodel settings for "emu default settings" and then "game custom settings" (like MAME does it)
   IsBatchFile, IsBatchFileAlterMAME, IsAlterMAME, IsDemulEmptySystem, TryAgainAlterMAME, IsMultiSlot: Boolean;
   ExitCode, ExitCodeAlterMAME: DWORD;
   iPlayTime: Cardinal;
@@ -9737,63 +9851,24 @@ var
     end;
   end;
 
-  function ReadSupermodelParameters(const SMIniFile: String): String;
+  function MountSupermodelCommandLine: String;
   var
-    SupermodelIni: TMemIniFile;
-    StrValue: String;
-    IntValue: Integer;
+    StrValue, StrValue2: String;
+    LoopModel3, IntValue: Integer;
     RunFullScreen, UseFrequency, UseFrequencyCustom: Boolean;
   begin
     Result:= '';
     UseFrequency:= False;
     UseFrequencyCustom:= False;
-    SupermodelIni:= TMemIniFile.Create(SMIniFile);
-    IntValue:= SupermodelIni.ReadInteger('Emulation', 'Multithreading', 1);
-    if not Boolean(IntValue) then
-       Result:= Result+'-no-threads ';
+    RunFullScreen:= False;
+    if SupermodelSettings.Count = 0 then
+       Exit;
 
-    IntValue:= SupermodelIni.ReadInteger('Emulation', 'GPUMultithreading', 1);
-    if not Boolean(IntValue) then
-       Result:= Result+'-no-gpu-thread ';
+    StrValue:= SupermodelSettings.Values['FullScreen'];
+    if Strvalue <> '' then
+       RunFullScreen:= StrValue = '1';
 
-    StrValue:= SupermodelIni.ReadString('Emulation', 'PowerPCFrequencyCustom', '');
-    IntValue:= SupermodelIni.ReadInteger('Emulation', 'PowerPCFrequency', 2);
-    if not (IntValue in [0..8]) then
-       IntValue:= 5; // 50 MHz (emulator default frequency!)
-    if IntValue <> 5 then
-       UseFrequency:= True;
-
-    if StrValue <> '' then
-       begin
-         IntValue:= StrToInt(StrValue);
-         if (IntValue > 1) and (IntValue < 1000) then
-            UseFrequencyCustom:= True;
-       end;
-
-    if UseFrequencyCustom then
-       Result:= '-ppc-frequency='+StrValue+' '
-    else
-    if UseFrequency then
-       Result:= ' -ppc-frequency='+IntToStr(Model3PowerPCFrequency[IntValue])+' ';
-
-    IntValue:= SupermodelIni.ReadInteger('Video', 'New3DEngine', 1);
-    case IntValue of // as listed in 3D Engine combobox in Supermodel settings screen
-      0: Result:= Result+'-legacy3d ';
-      1: Result:= Result+'-new3d ';
-    end;
-       
-    IntValue:= SupermodelIni.ReadInteger('Video', 'Widescreen', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-wide-screen ';
-
-    IntValue:= SupermodelIni.ReadInteger('Video', 'MultiTexture', 1);
-    if not Boolean(IntValue) then
-       Result:= Result+'-no-multi-texture ';
-
-    RunFullScreen:= Boolean(SupermodelIni.ReadInteger('Video', 'FullScreen', 0));
-
-    StrValue:= '';
-    StrValue:= SupermodelIni.ReadString('Video', 'Resolution', 'auto');
+    StrValue:= SupermodelSettings.Values['Resolution'];
     if StrValue = '' then
        StrValue:= 'auto';
     case RunFullScreen of
@@ -9801,14 +9876,18 @@ var
         begin
           if SameText('auto', StrValue) then
              StrValue:= IntToStr(Screen.Width)+'x'+IntToStr(Screen.Height);
+
           if not ValidateResolution(StrValue) then
-             begin
-               // this should never happen!!!!
-               Result:= 'invalid_resolution';
-               FreeAndNil(SupermodelIni);
-               Exit;
-             end;
-          Result:= Result+'-res='+StringReplace(StrValue, 'x', ',', [rfIgnoreCase])+' -fullscreen ';
+             StrValue:= IntToStr(Screen.Width)+'x'+IntToStr(Screen.Height);
+
+          //if not ValidateResolution(StrValue) then
+          //   begin
+          //     // this should never happen!!!!
+          //     Result:= 'invalid_resolution';
+          //     FreeAndNil(SupermodelSettings);
+          //     Exit;
+          //   end;
+          Result:= Result+' -res='+StringReplace(StrValue, 'x', ',', [rfIgnoreCase])+' -fullscreen';
         end;
       False:
         begin
@@ -9816,76 +9895,242 @@ var
              Result:= Result+'-res='+StringReplace(StrValue, 'x', ',', [rfIgnoreCase])+' ';
         end;
     end;
-    IntValue:= SupermodelIni.ReadInteger('Video', 'DisableThrottle', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-no-throttle ';
 
-    IntValue:= SupermodelIni.ReadInteger('Video', 'DisableVSync', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-no-vsync ';
+    StrValue:= SupermodelSettings.Values['MultiThreaded'];
+    if StrValue <> '' then
+       if StrValue = '0' then
+          Result:= Result+' -no-threads';
 
-    IntValue:= SupermodelIni.ReadInteger('Video', 'ShowFPS', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-show-fps ';
+    StrValue:= SupermodelSettings.Values['GPUMultiThreaded'];
+    if StrValue <> '' then
+       if StrValue = '0' then
+          Result:= Result+' -no-gpu-thread';
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'DisableSound', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-no-sound ';
+    StrValue:= SupermodelSettings.Values['PowerPCFrequencyEnableCustom'];
+    if StrValue <> '' then
+       begin
+         if StrValue = '1' then
+         begin
+           // use custom PowerPC frequency
+           StrValue2:= SupermodelSettings.Values['PowerPCFrequencyCustom'];
+           if StrValue2 <> '' then
+           begin
+             IntValue:= StrToInt(StrValue2);
+             if (IntValue >= 1) and (IntValue <= 1000) then
+                UseFrequencyCustom:= True;
+           end;
+         end;
+       end;
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'DisableMusic', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-no-dsb ';
+    if not UseFrequencyCustom then
+    begin
+      // no custom frequency, check if frequency parameter needs to be added to the command line
+      StrValue:= SupermodelSettings.Values['PowerPCFrequency'];
+      if StrValue <> '' then
+         begin
+           IntValue:= StrToInt(StrValue);
+           if not (IntValue in [0..8]) then
+              IntValue:= 5; // 50 MHz (emulator default frequency!)
+           if IntValue <> 5 then
+              UseFrequency:= True;
+         end;
+    end;
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'FlipStereo', 0);
-    if Boolean(IntValue) then
-       Result:= Result+'-flip-stereo ';
+    if UseFrequencyCustom then
+       Result:= Result+' -ppc-frequency='+StrValue2//+' '
+    else
+    if UseFrequency then
+       Result:= Result+' -ppc-frequency='+IntToStr(Model3PowerPCFrequency[IntValue]);//+' ';
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'SoundVolume', 100);
-    if IntValue <> 100 then
-       Result:= Result+ '-sound-volume='+IntToStr(IntValue)+' ';
+    StrValue:= SupermodelSettings.Values['New3DEngine']; //, 1);
+    if StrValue <> '' then //case IntValue of // as listed in 3D Engine combobox in Supermodel settings screen
+    begin
+      if StrValue = '0' then
+         Result:= Result+' -legacy3d'
+      else
+      if StrValue = '1' then
+         Result:= Result+' -new3d';
+    end;
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'MusicVolume', 100);
-    if IntValue <> 100 then
-       Result:= Result+'-music-volume='+IntToStr(IntValue)+' ';
+    StrValue:= SupermodelSettings.Values['WideScreen']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -wide-screen';
 
-    IntValue:= SupermodelIni.ReadInteger('Audio', 'Balance', 0);
-    if IntValue <> 0 then
-       Result:= Result+'-balance='+IntToStr(IntValue)+' ';
+    StrValue:= SupermodelSettings.Values['Stretch']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -stretch';
 
-    StrValue:= SupermodelIni.ReadString('Controls', 'InputSystem', 'dinput');
-    if not SameText(StrValue, 'dinput') then
-       Result:= Result+ '-input-system='+StrValue+' ';
+    StrValue:= SupermodelSettings.Values['MultiTexture']; // 1
+    if StrValue <> '' then
+       if StrValue = '0' then
+          Result:= Result+' -no-multi-texture';
 
-    IntValue:= SupermodelIni.ReadInteger('Controls', 'Crosshairs', 0); // 0 = none (default)
-    if IntValue <> 0 then
-       Result:= Result+'-crosshairs='+IntToStr(IntValue)+' ';
-       
-    IntValue:= SupermodelIni.ReadInteger('Controls', 'EnableForceFeedback', 0);
-    if Boolean(IntValue) then
-       Result:= Result+ '-force-feedback ';
+    StrValue:= SupermodelSettings.Values['DisableThrottle']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -no-throttle';
 
-    StrValue:= SupermodelIni.ReadString('Debug', 'VertexShader', '');
+    StrValue:= SupermodelSettings.Values['DisableVSync']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -no-vsync';
+
+    StrValue:= SupermodelSettings.Values['ShowFrameRate']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -show-fps';
+
+    StrValue:= SupermodelSettings.Values['DisableSound']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -no-sound';
+
+    StrValue:= SupermodelSettings.Values['DisableMusic']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -no-dsb';
+
+    StrValue:= SupermodelSettings.Values['FlipStereo']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+' -flip-stereo';
+
+    StrValue:= SupermodelSettings.Values['SoundVolume']; // 100
+    if StrValue <> '' then
+       if StrToInt(StrValue) <> 100 then
+          Result:= Result+ ' -sound-volume='+StrValue;//+' ';
+
+    StrValue:= SupermodelSettings.Values['MusicVolume']; // 100
+    if StrValue <> '' then
+       if StrToInt(StrValue) <> 100 then
+          Result:= Result+' -music-volume='+StrValue;//+' ';
+
+    StrValue:= SupermodelSettings.Values['Balance']; // 0
+    if StrValue <> '' then
+       if StrToInt(StrValue) <> 0 then
+          Result:= Result+' -balance='+StrValue;//+' ';
+
+    StrValue:= SupermodelSettings.Values['InputSystem']; // 'dinput'
+    if StrValue <> '' then
+       if not SameText(StrValue, 'dinput') then
+          Result:= Result+ ' -input-system='+StrValue;//+' ';
+
+    StrValue:= SupermodelSettings.Values['Crosshairs']; // 0 = none (default)
+    if StrValue <> '' then
+       if StrValue <> '0' then
+          Result:= Result+' -crosshairs='+StrValue;//+' ';
+
+    StrValue:= SupermodelSettings.Values['ForceFeedback']; // 0
+    if StrValue <> '' then
+       if StrValue = '1' then
+          Result:= Result+ ' -force-feedback';
+
+    StrValue:= SupermodelSettings.Values['VertexShader']; // ''
     if (StrValue <> '') and FileExists(StrValue) then
-       Result:= Result+'-vert-shader="'+StrValue+'" ';
+       Result:= Result+' -vert-shader="'+StrValue+'"';
 
-    StrValue:= SupermodelIni.ReadString('Debug', 'FragmentShader', '');
+    StrValue:= SupermodelSettings.Values['FragmentShader']; // ''
     if (StrValue <> '') and FileExists(StrValue) then
-       Result:= Result+' -frag-shader="'+StrValue+'" ';
+       Result:= Result+' -frag-shader="'+StrValue+'"';
 
-    FreeAndNil(SupermodelIni);
+    StrValue:= SupermodelSettings.Values['VertexShaderFog']; // ''
+    if (StrValue <> '') and FileExists(StrValue) then
+       Result:= Result+' -vert-shader-fog="'+StrValue+'"';
+
+    StrValue:= SupermodelSettings.Values['FragmentShaderFog']; // ''
+    if (StrValue <> '') and FileExists(StrValue) then
+       Result:= Result+' -frag-shader-fog="'+StrValue+'"';
+
+    StrValue:= SupermodelSettings.Values['VertexShader2D']; // ''
+    if (StrValue <> '') and FileExists(StrValue) then
+       Result:= Result+'-vert-shader-2d="'+StrValue+'" ';
+
+    StrValue:= SupermodelSettings.Values['FragmentShader2D']; // ''
+    if (StrValue <> '') and FileExists(StrValue) then
+       Result:= Result+' -frag-shader-2d="'+StrValue+'"';
+
+    if Result <> '' then
+       CommandLine:= CommandLine+TrimLeft(Result)+' '; // add parameters to the command line
   end;
 
-  function ReadSupermodelIni(const FileStr: String): String;
+  function ReadSupermodelIni(const FileStr: String; IsCustomSettings: Boolean): String;
+  var
+    SupermodelIni: TMemIniFile;
+
+    function AddSupermodelSetting(const iSectionName, iKeyName, iDefaultValueString: String): Boolean;
+    var
+      iStr: String;
+      iIndex: Integer;
+    begin
+      Result:= True;
+      iStr:= SupermodelIni.ReadString(iSectionName, iKeyName, iDefaultValueString);
+      if not IsCustomSettings then
+         SupermodelSettings.Add(iKeyName+'='+iStr)
+      else
+         begin
+           if SupermodelIni.ValueExists(iSectionName, iKeyName) then
+           begin
+             iIndex:= SupermodelSettings.IndexOfName(iKeyName);
+             if iIndex <> -1 then
+                SupermodelSettings[iIndex]:= iKeyName+'='+iStr
+             else
+                SupermodelSettings.Add(iKeyName+'='+iStr);
+           end;
+         end;
+    end;
+
   begin
     Result:= '';
     if not FileExists(GetFolderArcadeEmulatorIni(idSupermodel)+FileStr) then
        Exit;
-    Result:= ReadSupermodelParameters(GetFolderArcadeEmulatorIni(idSupermodel)+FileStr);
-    if Result <> '' then
-       CommandLine:= CommandLine+Result
-    else
-    if Result = 'invalid_resolution' then
-       ResetSettings;
+
+    SupermodelIni:= TMemIniFile.Create(GetFolderArcadeEmulatorIni(idSupermodel)+FileStr);
+
+    SupermodelSettings.BeginUpdate;
+
+    AddSupermodelSetting('Video', 'FullScreen', '0');
+    AddSupermodelSetting('Video', 'Resolution', 'auto');
+
+    AddSupermodelSetting('Emulation', 'MultiThreaded', '1');
+    AddSupermodelSetting('Emulation', 'GPUMultiThreaded', '1');
+
+    AddSupermodelSetting('Emulation', 'PowerPCFrequency', '2');
+    AddSupermodelSetting('Emulation', 'PowerPCFrequencyEnableCustom', '0');
+    AddSupermodelSetting('Emulation', 'PowerPCFrequencyCustom', '');
+
+    AddSupermodelSetting('Video', 'New3DEngine', '1');
+    AddSupermodelSetting('Video', 'WideScreen', '0');
+    AddSupermodelSetting('Video', 'Stretch', '0');
+    AddSupermodelSetting('Video', 'MultiTexture', '1');
+    AddSupermodelSetting('Video', 'DisableThrottle', '0');
+    AddSupermodelSetting('Video', 'DisableVSync', '0');
+    AddSupermodelSetting('Video', 'ShowFrameRate', '0');
+
+    AddSupermodelSetting('Audio', 'DisableSound', '0');
+    AddSupermodelSetting('Audio', 'DisableMusic', '0');
+    AddSupermodelSetting('Audio', 'FlipStereo', '0');
+
+    AddSupermodelSetting('Audio', 'SoundVolume', '100');
+    AddSupermodelSetting('Audio', 'MusicVolume', '100');
+    AddSupermodelSetting('Audio', 'Balance', '0');
+
+    AddSupermodelSetting('Controls', 'InputSystem', 'dinput');
+    AddSupermodelSetting('Controls', 'Crosshairs', '0'); // 0 = none (default)
+    AddSupermodelSetting('Controls', 'ForceFeedback', '0');
+
+    AddSupermodelSetting('Shaders', 'VertexShader', '');
+    AddSupermodelSetting('Shaders', 'FragmentShader', '');
+
+    AddSupermodelSetting('Shaders', 'VertexShaderFog', '');
+    AddSupermodelSetting('Shaders', 'FragmentShaderFog', '');
+
+    AddSupermodelSetting('Shaders', 'VertexShader2D', '');
+    AddSupermodelSetting('Shaders', 'FragmentShader2D', '');
+
+    SupermodelSettings.EndUpdate;
+    FreeAndNil(SupermodelIni);
   end;
 
   function ReadDaphneIni: String;
@@ -10119,12 +10364,11 @@ begin
   case MemGameInfo.eIsCustomGame of
     True:
       begin
-        case SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName) of
+        case SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName) of
           True:
             begin
-              if MemGameInfo.eIsUnicode then
-                 TempGameVars.eName:= GetShortFileNameW(TempGameVars.eName);
-
+              //if MemGameInfo.eIsUnicode then
+              //   TempGameVars.eName:= GetShortFileNameW(TempGameVars.eName); // MAME command line parameter does not require convert Unicode filenames to DOS 8.3 (July 01, 2018)
               TempGameVars.eName:= '"'+TempGameVars.eName+'"';
             end;
           False:
@@ -10168,13 +10412,7 @@ begin
 
   case IsAlterMAME of
     True : CommandLine:= SystemStr+AlterMAMEFile+SystemStr+' ';
-    False:
-      begin
-        //if not MemGameInfo.eSystemID = idZiNc then
-           CommandLine:= SystemStr+EmulatorFile[MemGameInfo.eSystemID]+SystemStr+' ';
-        //else
-        //   CommandLine:= SystemStr+GetShortFileNameW(EmulatorFile[MemGameInfo.eSystemID])+SystemStr+' '
-      end;
+    False: CommandLine:= SystemStr+EmulatorFile[MemGameInfo.eSystemID]+SystemStr+' ';
   end;
 
   if MemGameInfo.eIsCustomGame then
@@ -10339,22 +10577,46 @@ begin
                 idSupermodel:
                   begin
                     // Supermodel, need to add options before game, and it's .zip file with full path!
-                    NewOption:= ReadSupermodelIni(MemGameInfo.eName+'.ini');
-                    if NewOption = 'invalid_resolution' then
-                       Exit
-                    else
-                    if NewOption = '' then
-                       begin
-                         NewOption:= ReadSupermodelIni(GetArcadeEmuIniFileName(MemGameInfo.eSystemID));
-                         if NewOption = 'invalid_resolution' then
-                            Exit;
-                       end
-                    else
-                       SetCmdLineTitle(True);
                     NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
                     if NewOption = '' then
-                       NewOption:= 'file not found';
-                    CommandLine:= CommandLine+' "'+NewOption+'"';
+                       begin
+                         CallMessageBox;
+                         ShowGameNameEntryMsgBox;
+                         GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle,
+                                         'Cannot execute because the game file was not found. Aborting...', 2, False, 0);
+
+                         ResetSettings;
+                         Exit; // game file not found, "Abort. For the 1000th time... ABORT!!!"
+                       end;
+
+                    if MAME_ExtraPamars then
+                       begin
+                         // 22: load a save state
+                         MAME_ExtraParamsCommandLine:= RunMAMEExtraParameters(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], MachineNameStr);
+                         // if var above is empty... no biggie, continue to run game!
+                         if SameText(MAME_ExtraParamsCommandLine, 'abort') then
+                            begin
+                              ResetSettings;
+                              Exit; // "Abort. For the 1000th time... ABORT!!!"
+                            end;
+                         //ShowMessage('"->'+MAME_ExtraParamsCommandLine+'<-"'); // for debugging only!!!
+                       end;
+
+                    SupermodelSettings:= TStringList.Create;
+
+                    // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\Supermodel.ini" first
+                    ReadSupermodelIni(GetArcadeEmuIniFileName(MemGameInfo.eSystemID), False);
+
+                    // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\gamename.ini", and overwrite current settings
+                    ReadSupermodelIni(MemGameInfo.eName+'.ini', True);
+
+                    NewOption2:= MountSupermodelCommandLine;
+
+                    FreeAndNil(SupermodelSettings);
+                    
+                    SetCmdLineTitle(True);
+
+                    CommandLine:= CommandLine+'"'+NewOption+'"'; // add the game filename with full path
                   end;
                 idDaphne:
                   begin
@@ -10367,19 +10629,19 @@ begin
                                      ' -rom='+MemGameInfo.eName
                     else
                        IsDemulEmptySystem:= True;
-                    // do nothing else as Demul doesn't support custom game settings...
+                    // do nothing else as Demul doesn't support custom game settings
                     //if MemGameInfo.eDriverName <> '' then
                     //   CommandLine:= CommandLine+'-run='+GetDemulMachineName(MemGameInfo.eDriverName)+
                     //              ' -rom='+MemGameInfo.eName
                     //else
                     //   IsDemulEmptySystem:= True;
-                    // do nothing else as Demul doesn't support custom game settings...
+                    // do nothing else as Demul doesn't support custom game settings
                   end;
                 idZiNc:
                   begin
                     // ZiNc, needs special parameters before the game name
                     if MemGameInfo.eScreenType <> -1 then
-                       CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc has game index in "eScreenType" var
+                       CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc stores game index in "eScreenType" var
                     else
                        begin
                          CallMessageBox;
@@ -10409,10 +10671,11 @@ begin
                             end;
                         end;
 
-                    // function "LongToShortPath()" cannot have last slash '\' or it does not work... the filename is also lost!!!!!
-                    // NewOption will hold the .cfg file with full path!!! October 10, 2016
-                    NewOption:= GetShortFileNameW(NewOption);
-                    //NewOption:= ExtractShortPathName(NewOption); // this doesn't work (do not remove this comment!)
+                    // function "LongToShortPath()" cannot have last backslash '\' or it won't work; the filename is also lost
+                    // "NewOption" var will store the .cfg file with full path (October 10, 2016)
+
+                    // ZiNc does not support Unicode paths or filenames
+                    NewOption:= GetShortFileNameW(NewOption); //NewOption:= ExtractShortPathName(NewOption); // this doesn't work (do not remove this comment!)
                     if ValidateFile(NewOption+NewOption2) then
                        CommandLine:= CommandLine+' --use-config-file='+NewOption+NewOption2;
 
@@ -10471,12 +10734,12 @@ begin
              True :
                begin
                  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
                  AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
              False:
                begin
-                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
                  AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                end;
            end;
@@ -10500,22 +10763,18 @@ begin
                      AddMsgText(#13#10+'Multi-slot Machine   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
                      AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
                    end;
-                //AddMsgText(#13#10+'Multi-slot Machine   ', txtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                //AddMsgText(FormArcadeMultiSlotGames.Caption+#13#10, txtColors.colorKeyValue, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
-                //if MachineToUse_Title <> '' then
-                //   AddMsgText(MachineToUse_Title+#13#10, txtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
                 msItem:= FormArcadeMultiSlotGames.GamesList.Groups.FirstItem;
                 repeat
                   if not msItem.Ghosted then
                   begin
-                    if msItem.Index < 9 then // 9 ? msItem.Index starts at ZERO (slot #10 is actually Index 9)
+                    if msItem.Index < 9 then // msItem.Index starts at ZERO (slot #10 is actually Index 9)
                        NewOption:= '0'+IntToStr(msItem.Index+1)
                     else
                        NewOption:= IntToStr(msItem.Index+1);
                                       // two leading zeroes
-                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [fsBold], taLeftJustify);//, 8, 'Tahoma');
-                    AddMsgText(msItem.Captions[1], clBlack, [fsBold], taLeftJustify);//, 8, 'Tahoma');
+                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [fsBold], taLeftJustify);
+                    AddMsgText(msItem.Captions[1], clBlack, [fsBold], taLeftJustify);
                   end;
 
                   msItem:= FormArcadeMultiSlotGames.GamesList.Groups.NextItem(msItem);
@@ -10601,28 +10860,28 @@ begin
                  else
                     begin
                       MsgType:= 4; // set this so msgbox shows the system icon...
-                      if MachineNameStr{MultiSlotMachineName} = 'neogeo' then
+                      if MachineNameStr = 'neogeo' then // MultiSlotMachineName (no longer used)
                          begin
                            NewOption:= 'Neo-Geo Multi Video System';
-                           //MsgType:= 4;
+                           //MsgType:= 4; // no longer used (May 26, 2018)
                          end
                       else
-                      if MachineNameStr{MultiSlotMachineName} = 'megatech' then
+                      if MachineNameStr = 'megatech' then // MultiSlotMachineName (no longer used)
                          begin
                            NewOption:= 'Sega Mega-Tech System';
-                           //MsgType:= 5;
+                           //MsgType:= 5; // no longer used (May 26, 2018)
                          end
                       else
-                      if MachineNameStr{MultiSlotMachineName} = 'playch10' then
+                      if MachineNameStr = 'playch10' then // MultiSlotMachineName (no longer used)
                          begin
                            NewOption:= 'Nintendo PlayChoice-10';
-                           //MsgType:= 6;
+                           //MsgType:= 6; // no longer used (May 26, 2018)
                          end
                       else
-                      if MachineNameStr{MultiSlotMachineName} = 'stv' then
+                      if MachineNameStr = 'stv' then // MultiSlotMachineName (no longer used)
                          begin
                            NewOption:= 'Sega Titan Video Game System';
-                           //MsgType:= 7;
+                           //MsgType:= 7; // no longer used (May 26, 2018)
                          end;
                     end;
                  if GenerateMessage(msgboxTitle, NewOption, '', 1, False, MsgType) = mrNo then
@@ -10640,7 +10899,7 @@ begin
            end;
          end;
 
-      PlayDummyVideo(True); // stop current video playback...
+      PlayDummyVideo(True); // stop current video playback by playing a dummy video
       iPlayTime:= GetTickCount;
 
       case IsAlterMAME of
@@ -10699,7 +10958,7 @@ begin
                   ImageDetails[1].NewImageLoaded:= False;
                 end;
              ToggleImagesPanel(True); // will force to reload snapshot, this is just in case user takes a new screenshots while gaming
-             //MenuShowImages.OnClick(Self); // avoid this as EL was re-initializing the zipped image lists
+             //MenuShowImages.OnClick(Self); // avoid this as EL was re-initializing the zipped image lists (do not remove this comment)
            end;
          end
       else
@@ -10812,7 +11071,7 @@ begin
                    begin
                      // need to use MAMEMachineItem var here and use TempGameVars variables in GameDetails screen...
                      AddMsgText(#13#10+'Please check for missing ROMs/CHDs and make sure the machine ');
-                     AddMsgText(MachineToUse_Title, MsgTxtColors.colorMachineName{ colorMachineMultiSlot}, [fsItalic]);
+                     AddMsgText(MachineToUse_Title, MsgTxtColors.colorMachineName, [fsItalic]); // colorMachineMultiSlot
                      AddMsgText(' ('+MachineNameStr+') ');
                      AddMsgText('doesn''t have missing ROMs/CHDs. Would you like to view ROMs/CHDs details now ?');
                    end;
@@ -10845,7 +11104,7 @@ begin
   begin
     IconMediaType.Visible:= True;
     LabelGameName.Visible:= True;
-    //LabelGameTitle.Top:= 1;
+
     IconMediaType.Hint:= MediaTypeCustom[MemGameInfo.eCustomMediaType, 1];
     LabelGameName.Canvas.Lock;
     LabelGameName.Caption:= MediaTypeCustom[MemGameInfo.eCustomMediaType, 0];
@@ -10870,17 +11129,15 @@ begin
            (sysCustomFolders[MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType].Count > 0);
 end;
 
-function TFormMain.SearchGameFile(const GameName: WideString; CustomSystemID, CustomMediaType: Integer; SearchDiscFileCUE, ShowQuickMessageBox: Boolean; out VarFileFullPath: WideString; out DOSFileNameStr: String): Boolean;
+function TFormMain.SearchGameFile(const GameName: WideString; CustomSystemID, CustomMediaType: Integer; SearchDiscFileCUE, ShowQuickMessageBox: Boolean; out VarFileFullPath: WideString): Boolean;
 var
   LoopSearch: Integer;
   FolderStr: String;
   SearchCUE: Boolean;
   FileToSearch: WideString;
-  FileToSearchDOS: String;
 begin
   Result:= False;
   FileToSearch:= '';
-  FileToSearchDOS:= '';
 
   if not Assigned(sysCustomFolders[CustomSystemID, CustomMediaType]) then
      Exit;
@@ -10897,10 +11154,9 @@ begin
   begin
     FolderStr:= sysCustomFolders[CustomSystemID, CustomMediaType].Strings[LoopSearch];
 
-    if FindFile(FolderStr, GameName, FileToSearch, SearchCUE, FileToSearchDOS) then
+    if FindFile(FolderStr, GameName, FileToSearch, SearchCUE) then
        begin
          VarFileFullPath:= FileToSearch;
-         DOSFileNameStr:= FileToSearchDOS;
          Result:= True;
          Break;
        end;
@@ -10933,7 +11189,7 @@ var
   IsJavaPSPEmu, IsWinApeEmu: Boolean;
   ExitCode: DWORD;
 
-  WinApeCurrentROM, StrDOSName: String;
+  WinApeCurrentROM: String;
   iPlayTime: Cardinal;
 
   function GetEmulatorFile: Boolean;
@@ -11007,7 +11263,7 @@ var
       begin
         if IsCARFile then
            Exit;
-        // see "cart.txt" for the cart type indexes!!!
+        // see "cart.txt" for the cart type indexes
         case TmpFileSize of
             8: CommandLine:= CommandLine+' -cart-type 1';  // Standard 8 KB cartridge
            16: CommandLine:= CommandLine+' -cart-type 2';  // Standard 16 KB cartridge
@@ -11030,7 +11286,7 @@ var
        begin
          if IsExecutableFile or IsCARFile then
             Exit;
-         // see "src\Altirra\source\cartridge.cpp" for the cart type indexes!!!
+         // see "src\Altirra\source\cartridge.cpp" for the cart type indexes
          case TmpFileSize of
              8: CommandLine:= CommandLine+' /cartmapper 1';  // Standard 8 KB cartridge
             16: CommandLine:= CommandLine+' /cartmapper 2';  // Standard 16 KB cartridge
@@ -11055,7 +11311,7 @@ var
         // need to get floppy parameters for Atari++ (executable files requires it)
         MemGameInfo.eCustomMediaType:= IsFloppy;
         EmuParameters:= '';
-        // get floppy parameters and set CommandLine again...
+        // get floppy parameters and set CommandLine again
         Result:= GetExecParameters(EmulatorParameterIndexToUseCustom[MemGameInfo.eCustomSystemID, 1]);
         MemGameInfo.eCustomMediaType:= 1;
         CommandLine:= SystemStr+EmulatorString+SystemStr+WideFormat(' '+EmuParameters, [TempGameVars.eName]);
@@ -11090,7 +11346,7 @@ var
     emuFile:= ExtractFileName(EmulatorString);
     if IsAppleIIGS(emuFile) then
        begin
-         // Apple IIgs... will check if Kegs32 or GSport emulators are being used
+         // Apple IIgs - will check if Kegs32 or GSport emulators are being used
          // if yes, will try to edit "config.kegs" or "config.txt"
          Result:= EditApple2GScfg(EmulatorString, TempGameVars.eName, nil, sClearEntry);
          if Result then
@@ -11110,7 +11366,7 @@ var
     Result:= MemGameInfo.eCustomSystemID = 59;
     if Result then
        begin
-         // restore WinAPE cartridge "OS ROM" in emulator config file !!!
+         // restore WinAPE cartridge "OS ROM" in emulator config file
          if IsWinApeEmu then
             WinApeEditIni(MemGameInfo.eCustomMediaType, EmulatorString, WinApeCurrentROM, '', '', '');
        end;
@@ -11156,7 +11412,7 @@ begin
     False: ErrorMsgTitle:= 'Error: Run Game ['+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+']';
   end;
   if (not MultiFloppy) and (MemGameInfo.eIsCustomGame) then
-    begin // doesn't allow this for MAME software lists... only games from EmuCon are supported!!!
+    begin // don't allow this for MAME software lists, only games from EmuCon are supported
       if Boolean(PlayWithAssociatedEmulator[MemGameInfo.eCustomSystemID]) then
          begin
            ExecuteGameAssociatedApp;
@@ -11242,10 +11498,10 @@ begin
         if (MemGameInfo.eCustomSystemID in [39, 49, 56, 59]) then
            begin
              // for Commodore 64, 128, VIC-20, Amstrad CPC
-             // the first floppy will be added normally in the command line (Commodore 64, 128, VIC-20 WinVice emulator)
+             // the first floppy will be added directly to the command line (Commodore 64, 128, VIC-20 WinVice emulator)
              // I think I'll just do it all in the MountMultiFloppyCommandLine function anyway... like the other systems!!!
              TempGameVars.eName:= MemGameInfo.eName; // floppy disk
-             IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName);
+             IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
              if not IsFileFound then
                 begin
                   CallMessageBox;
@@ -11307,7 +11563,7 @@ begin
             end;
           4: // floppy disks
             begin
-              // nothing to do here... handling is done at the end....
+              // nothing to do here, handling is done at the end (do not remove this commented code)
               // if (MemGameInfo.eSystemID in [39, 49, 56]) and (MemGameInfo.eMediaType = IsFloppy) then
               //    begin
               //      if IsWinVice(ExtractFileName(EmulatorString)) then
@@ -11326,7 +11582,7 @@ begin
         case MemGameInfo.eIsCustomGame of
           True:
             begin
-              IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName);
+              IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
             end;
           False:
             begin
@@ -11462,7 +11718,7 @@ begin
                       end;
                    if (MemGameInfo.eCustomSystemID = 53) and (MemGameInfo.eCustomMediaType = IsFloppy) then
                       begin
-                        // Apple IIGS... will check if Kegs32 or GSport emulators are being used
+                        // Apple IIGS - will check if "Kegs32" or "GSport" emulators are being used
                         // if yes, will try to edit "config.kegs" or "config.txt"
                         if not CheckAppleIIgs(False) then
                            begin
@@ -11513,7 +11769,7 @@ begin
      begin
        // replace entries for multi-floppy disks loading
        case MemGameInfo.eCustomSystemID of
-         //39: CommandLine:= CommandLine+' '+MultiFloppyParameter; // Commodore64 "WinVICE" emulator only... not used anymore ? (February 27, 2018)
+         //39: CommandLine:= CommandLine+' '+MultiFloppyParameter; // Commodore64 "WinVICE" emulator only, not used anymore ? (February 27, 2018)
          44: // Amiga
            begin
              case IsWinUAE of
@@ -11569,13 +11825,13 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
              AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);//, 9, 'Trebuchet MS');
+             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
              AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
 
              AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
@@ -11649,7 +11905,7 @@ begin
           begin
             if (ExitCode = 1) and FormPreferences.IgnoreExitCode1InvalidFunction.Checked then
                begin
-                 // KEGA Fusion have a bug that returns error code 1 even when emu and game load without errors
+                 // "KEGA Fusion" emulator have a bug that returns error code 1 even when emu and game load without errors
                  ResetToFrontend;
                  Exit;
                end;
@@ -11693,7 +11949,7 @@ end;
 procedure TFormMain.ExecuteGameAssociatedApp;
 var
   IsFileFound: Boolean;
-  CommandLine, ErrorMsgTitle, AppTitle, AssociatedApp, StrDOSName: String;
+  CommandLine, ErrorMsgTitle, AppTitle, AssociatedApp: String;
   iPlayTime: Cardinal;
 
   function AddEmulatorHeader: Boolean;
@@ -11743,7 +11999,7 @@ begin
   else
      AppTitle:= AssociatedApp;
 
-  IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName, StrDOSName);
+  IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
   if not IsFileFound then
      begin
        CallMessageBox;
@@ -11778,7 +12034,7 @@ begin
           end;
      end;
 
-  //SetCurrentDir(ExtractFilePath(EmulatorString)); // not needed ? (February 27, 2018)
+  //SetCurrentDir(ExtractFilePath(EmulatorString)); // set current path to emulator directory, not needed ? (February 27, 2018)
 
   iPlayTime:= GetTickCount;
   RunProcess(CommandLine, True);
@@ -11851,7 +12107,7 @@ var
 begin
   iSectionPlayTime:= GetTickCount-GamePlayTime; // get total play time in milliseconds
 
-  // edit the TEasyItem directly in case the user selected another game while the emulator is running!!!! September 08, 2015
+  // edit the TEasyItem directly in case the user selected another game while the emulator is running (September 08, 2015)
   TEasyGameInfo(ELV_ItemToUpdate).ePlayed:= TEasyGameInfo(ELV_ItemToUpdate).ePlayed+1;
   TEasyGameInfo(ELV_ItemToUpdate).ePlayedDate:= DateTimeToFileDate(Now);
   TEasyGameInfo(ELV_ItemToUpdate).ePlayedDateText:= GetDateTimeStr(TEasyGameInfo(ELV_ItemToUpdate).ePlayedDate, True, FormPreferences.LastPlayedHideSeconds.Checked);
@@ -11861,7 +12117,7 @@ begin
 
   if SelectedEasyItem = ELV_ItemToUpdate then
      begin
-       // update MemGameInfo vars with new info!
+       // update MemGameInfo vars with new info
        MemGameInfo.ePlayed:= TEasyGameInfo(ELV_ItemToUpdate).ePlayed;
        MemGameInfo.ePlayedDate:= TEasyGameInfo(ELV_ItemToUpdate).ePlayedDate;
        MemGameInfo.ePlayedDateText:= TEasyGameInfo(ELV_ItemToUpdate).ePlayedDateText;
@@ -12099,7 +12355,7 @@ end;
 
 function CompareDescending(List: TStringList; Index1, Index2: Integer): Integer;
 begin
-  // it must be natural sorting to sort filenames correctly, instead of "1, 2, 11, 20"...
+  // it must use natural sorting to sort filenames correctly, instead of "1, 2, 11, 20"
   Result:= NaturalCompareText(List[Index2], List[Index1]);
 end;
 
@@ -12136,7 +12392,7 @@ var
   GamesFiles: TStringList;
   selItem: TEasyItem;
   MediaType: ShortInt;
-  sysID, {Loop, }DriveIndex, EmuIconIndex: Integer;
+  sysID, DriveIndex, EmuIconIndex: Integer;
   emuFile: String;
   FileFullPath, FloppyCommand: WideString;
   IsWinUAE: Boolean;
@@ -12144,7 +12400,7 @@ var
   StrDOSName, tStr: String;
   HaveYearInfo, HaveManufacturerInfo: Boolean;
 
-  function SearchGameFiles(const SearchName: WideString): WideString;
+  function SearchGameFiles_MultiFloppy(const SearchName: WideString): WideString;
   var
     LoopSearch: Integer;
     FolderStr: String;
@@ -12158,8 +12414,11 @@ var
     for LoopSearch:=0 to sysCustomFolders[sysID, MediaType].Count-1 do
     begin
       FolderStr:= sysCustomFolders[sysID, MediaType].Strings[LoopSearch];
-      if FindFile(FolderStr, SearchName, Result, False, StrDOSName) then
-         Break;
+      if FindFile(FolderStr, SearchName, Result, False) then
+         begin
+           StrDOSName:= GetShortFileNameW(Result); // this is mostly for WinAPE emulator
+           Break;
+         end;
     end;
   end;
 
@@ -12173,7 +12432,7 @@ var
   begin
     Result:= True;
     AddMsgText('    Emulator in use not supported for multiple disks: '+#13#10);
-    AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyTitle{ $00a65300 }, [fsBold]);
+    AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
     AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold, fsItalic]);
   end;
 
@@ -12387,10 +12646,6 @@ begin
 
   LoadGameIconIntoImage(MemGameInfo.eSystemID, MemGameInfo.eCustomSystemID, MemGameInfo.eROMIdentification, FormConsCompMultiFloppyGames.SystemIcon, MemGameInfo.eSoftwareName, MemGameInfo.eIsCustomGame);
 
-  //case MemGameInfo.eIsCustomGame of
-  //  True : IL_StandardIconsExtraLarge.GetIcon(MaxGameID+MemGameInfo.eCustomSystemID, FormConsCompMultiFloppyGames.SystemIcon.Picture.Icon);
-  //  False: IL_ArcadeSystem_ExtraLarge.GetIcon(FormMain.MemGameInfo.eSystemID, FormConsCompMultiFloppyGames.SystemIcon.Picture.Icon)
-  //end;
   FormConsCompMultiFloppyGames.LabelSystemTitle.Caption:= SystemsListCustom[sysID, 0];
 
   if EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]] <> '' then
@@ -12411,10 +12666,6 @@ begin
 
   FormConsCompMultiFloppyGames.GamesList.BeginUpdate;
   FormConsCompMultiFloppyGames.GamesList.Items.ReIndexDisable:= True;
-
-  //FormConsCompMultiFloppyGames.GamesList.Height:= (GamesListView.Selection.Count*FormConsCompMultiFloppyGames.GamesList.CellSizes.Report.Height)+
-  //                                                FormConsCompMultiFloppyGames.GamesList.Header.Height+
-  //                                                FormConsCompMultiFloppyGames.GamesList.PaintInfoItem.Border+2;
                                                   
   selItem:= GamesListView.Selection.First;
   repeat
@@ -12424,7 +12675,7 @@ begin
             (not TEasyGameInfo(selItem).eIsUnicode) then
          begin
            // add game to the list
-           FileFullPath:= SearchGameFiles(TEasyGameInfo(selItem).eName);
+           FileFullPath:= SearchGameFiles_MultiFloppy(TEasyGameInfo(selItem).eName);
            if FileFullPath <> '' then
            begin
              tStr:= '';
@@ -12463,7 +12714,6 @@ begin
     selItem:= GamesListView.Selection.Next(selItem);
   until selItem = nil;
 
-  //FormConsCompMultiFloppyGames.GamesList.Items.Count
   FormConsCompMultiFloppyGames.GamesList.Height:= (FormConsCompMultiFloppyGames.GamesList.Items.Count*FormConsCompMultiFloppyGames.GamesList.CellSizes.Report.Height)+
                                                   FormConsCompMultiFloppyGames.GamesList.Header.Height+
                                                   FormConsCompMultiFloppyGames.GamesList.PaintInfoItem.Border+2;
@@ -12507,10 +12757,10 @@ begin
       begin
         isWinUAE:= SameText(emuFile, 'WinUAE.exe');
         case isWinUAE of
-          True : FloppyCommand:= '"%s"'; // FloppyCommand:='-diskswapper="%s"';//  oldCODE ???('-s diskimage%u="%s"';) // WinUAE disk swapper (up to 20 drives!)
+          True : FloppyCommand:= '"%s"'; // FloppyCommand:='-diskswapper="%s"';//  oldCODE ??? ('-s diskimage%u="%s"';) // WinUAE disk swapper (up to 20 drives!)
           False: FloppyCommand:= '--floppy_image_%u="%s"'; // FS-UAE
         end;
-        DriveIndex:= 0; // starts with zero!
+        DriveIndex:= 0; // starts with zero
       end;
     48: // Atari 400/800/XL
       begin
@@ -12544,10 +12794,6 @@ begin
   FormConsCompMultiFloppyGames.ClientHeight:= FormConsCompMultiFloppyGames.FrameGamesList.Top+FormConsCompMultiFloppyGames.FrameGamesList.Height+14+
                                               FormConsCompMultiFloppyGames.BottomBar.Height;
 
-  //FormConsCompMultiFloppyGames.ClientHeight:= FormConsCompMultiFloppyGames.PanelGameTitle.Height+
-  //                                            FormConsCompMultiFloppyGames.GamesList.Height+
-  //                                            FormConsCompMultiFloppyGames.BottomBarButtons.Height;
-  //
   Result:= FormConsCompMultiFloppyGames.ShowModal = mrYes;
   if not Result then
      begin
@@ -12660,7 +12906,7 @@ begin
        WinApeEditIni(4, EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]], StrDOSName, GamesFiles[0], GamesFiles[1], '');
      end;
 
-  //ShowMessageW(CmdLineVar); // for debugging only
+  //ShowMessageW(CmdLineVar); // for debugging only, do not remove
   FreeAndNil(GamesFiles);
   FreeAndNil(FormConsCompMultiFloppyGames);
 end;
@@ -12832,10 +13078,10 @@ var
 
 begin
   if ItemHolder = nil then
-     Exit; // no item to work with... I'm outta here!
+     Exit; // no item to work with, I'm outta here!
 
   case MenuGameTitleExtraInfo.Tag of
-    0: TEasyGameInfo(ItemHolder).eTitleShort:= ''; // full title (empty eTitleShort to free RAM usage)
+    0: TEasyGameInfo(ItemHolder).eTitleShort:= ''; // full title (empty "eTitleShort" var to free RAM usage)
     1: // remove from parent sets only
       begin
         case GameIsClone(TEasyGameInfo(ItemHolder).eClone) of
@@ -13269,7 +13515,7 @@ begin
               else
                  begin
                    // for EmuCon games... only if game file is not zipped (.zip; .7z)
-                   Result:= MediaTypeCustom[MediaTypeConsoleComputer, 0];
+                   Result:= '  '+MediaTypeCustom[MediaTypeConsoleComputer, 0];
                  end;
             end;
           False:
@@ -13308,7 +13554,6 @@ begin
      
   tmpStyle:= 0; // no style format
   case FontID of
-    //2: tmpColor:= clRed; // missing ROMs // why show a red font for "preliminary" driver if game doesn't have missing ROMs ? (May 19, 2018)
     2: tmpColor:= clGray; // preliminary
     3: tmpColor:= clRed;  // missing ROMs
     4: tmpColor:= clRed;  // missing ROMs preliminary
@@ -14190,6 +14435,11 @@ end;
 function TFormMain.GetFrontendExtraIniFile: String;
 begin
   Result:= FrontendPath+'el_extras.ini';
+end;
+
+function TFormMain.GetNightModeIniFile: String;
+begin
+  Result:= FrontendPath+'nightmode.ini';
 end;
 
 function TFormMain.GetVideoPreviewIniFile(IsDefaultFile: Boolean = False): String;
@@ -15492,7 +15742,7 @@ begin
   SHFileOperation(FileOp);
 end;}
 
-function TFormMain.MountROMInfo(fileID, IsCRC32Collision: Integer; IsDisk: Boolean; const romName, romCRC32, romSHA1: String; IsBadDump: ShortInt; IsFileFromParentSet: Boolean = False; FileRegion: String = ''; FileOffset: String = ''): String;
+function TFormMain.MountROMInfo(fileID, IsCRC32Collision: Integer; IsDisk: Boolean; const romName, romCRC32, romSize, romSHA1: String; IsBadDump: ShortInt; IsFileFromParentSet: Boolean = False; FileRegion: String = ''; FileOffset: String = ''): String;
 begin
   //            FileID MediaType IsCRC32Collision IsBadDump IsFileFromParentSet <name>Filename/> <crc>CRC32/> <sha1>/SHA-1 or MD5/> <mediatype_title>Custom Media Type Title/> <region>Supermodel3_file_region/><offset>Supermode3_file_offset/>
   // positions:   12       3            4             5             6
@@ -15503,23 +15753,27 @@ begin
   // IsParentSetFile
   // TRUE  -> yes, ROM/Cart/Floppy/Cassette/Disk is from a parent set (only for clone games)
   // FALSE -> no, file is from the game in question
-  Result:= Format('%.2u', [fileID])+IntToStr(Ord(IsDisk))+IntToStr(IsCRC32Collision)+IntToStr(IsBadDump)+IntToStr(Ord(IsFileFromParentSet))+'<name>'+romName+'/>';
+  Result:= Format('%.2u', [fileID])+IntToStr(Ord(IsDisk))+IntToStr(IsCRC32Collision)+IntToStr(IsBadDump)+IntToStr(Ord(IsFileFromParentSet))+
+           MountGameInfoFieldStr('name', romName); // '<name>'+romName+'/>';
   if romCRC32 <> '' then
-     Result:= Result+'<crc>'+romCRC32+'/>';
+     Result:= Result+MountGameInfoFieldStr('crc', romCRC32); // Result:= Result+'<crc>'+romCRC32+'/>';
   if romSHA1 <> '' then
      begin
        if Length(romSHA1) > 32 then
-          Result:= Result+'<sha1>'+romSHA1+'/>'
+          Result:= Result+MountGameInfoFieldStr('sha1', romSHA1) // Result:= Result+'<sha1>'+romSHA1+'/>'
        else
-          Result:= Result+'<md5>'+romSHA1+'/>'
+          Result:= Result+MountGameInfoFieldStr('md5', romSHA1); // Result:= Result+'<md5>'+romSHA1+'/>'
      end;
+
+  if romSize <> '' then
+     Result:= Result+MountGameInfoFieldStr('size', romSize); // Result:= Result+'<size>'+romSize+'/>';
 
   // FileRegion and FileOffset and for Supermodel 3 emulator only (new "Config\Games.xml" file)
   if FileRegion <> '' then
-     Result:= Result+'<region>'+FileRegion+'/>';
+     Result:= Result+MountGameInfoFieldStr('region', FileRegion); // Result:= Result+'<region>'+FileRegion+'/>';
 
   if FileOffset <> '' then
-     Result:= Result+'<offset>'+FileOffset+'/>';
+     Result:= Result+MountGameInfoFieldStr('offset', FileOffset); // Result:= Result+'<offset>'+FileOffset+'/>';
 
   // FileID
   // 0 -> ROM
@@ -15859,7 +16113,7 @@ var
   MainLoop, iCount: Integer;
   IsResource, IsGameEntry, IsCHDFile, GetScreenRes: Boolean;
   BiosSet, ListDeviceROMsGame, SoftNameMachinesList: TMemIniFile;
-  tempFile, romName, romNameMerge, romCRC32, romSHA1, SampleName, RegionTagStr, iDriver, MediaTypeTagExtra: String;
+  tempFile, romName, romNameMerge, romCRC32, romSize, romSHA1, SampleName, RegionTagStr, iDriver, MediaTypeTagExtra: String;
   AddedMemoryCardFileExt: Boolean;
   IsOptionalROM: Boolean;
 
@@ -16446,7 +16700,8 @@ var
                 // ROMInfoFull var is filled and added to "ListROMsDeviceSet" in ParseROMDiskEntry() function
                 // (February 19, 2018) added a "<devicename>devicename_str/>" new tag to know what device set is the ROM from
                 //                     ... this is needed for the 2018 new MAME/HBMAME audit scan (device/bios .zip arrays in RAM)
-                ROMsList.Add(ListROMsDeviceSet[LoopDevice]+'<devicename>'+TempString+'/>');
+
+                ROMsList.Add(ListROMsDeviceSet[LoopDevice]+MountGameInfoFieldStr('devicename', TempString)); // '<devicename>'+TempString+'/>');
               end;
          end;
        end;
@@ -16549,14 +16804,12 @@ var
             CRC32CollisionFile.Add(TempGameVars.eName);
        end;
 
-    TempString:= '';
-    TempString:= XML_GetEntryValue(FileLine, 'size');
-    if TempString <> '' then
-       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
-    TempString:= '';
+    romSize:= XML_GetEntryValue(FileLine, 'size');
+    if romSize <> '' then
+       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
 
     IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
-    ROMInfoFull:= MountROMInfo(newFileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
+    ROMInfoFull:= MountROMInfo(newFileID, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
 
     if FileID = 0 then
        begin
@@ -17450,7 +17703,7 @@ var
   MainLoop: Integer;
   IsResource, IsGameEntry, IsCHDFile, GetScreenRes: Boolean;
   BiosSet: TMemIniFile;
-  tempFile, tempDriverFile, romName, romCRC32, romSHA1, SampleName: String;
+  tempFile, tempDriverFile, romName, romCRC32, romSize, romSHA1, SampleName: String;
   CPUisAdded, BiosTitleAdded, DefaultBiosAdded: Boolean;
   TitleErrorMsg, EmuTitle: String;
   tmpList: THashedStringList;
@@ -17631,7 +17884,7 @@ var
 
     romCRC32:= ListInfo_GetEntryValue(FileLine, 'crc', ' ');
     romSHA1:= ListInfo_GetEntryValue(FileLine, 'sha1', ' ');
-    
+
     IsCHDFile:= IsDisk;
 
     if IsCHDFile then
@@ -17646,16 +17899,14 @@ var
        end;
 
     // FileID -> 1: Device (not used by -listinfo); 2: BIOS; 0: Game
-    TempString:= '';
-    TempString:= ListInfo_GetEntryValue(FileLine, 'size', ' ');
-    if TempString <> '' then
-       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
-    TempString:= '';
+    romSize:= ListInfo_GetEntryValue(FileLine, 'size', ' ');
+    if romSize <> '' then
+       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
 
     IsBadDump:= PosEx('baddump', FileLine);
     case IsCHDFile of
-      True : ROMInfoFull:= MountROMInfo(IndexCHD, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
-      False: ROMInfoFull:= MountROMInfo(FileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
+      True : ROMInfoFull:= MountROMInfo(IndexCHD, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
+      False: ROMInfoFull:= MountROMInfo(FileID, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
     end;
 
     if (FileID = 0) and (not IsCHDFile) then
@@ -18385,7 +18636,7 @@ var
   FileLine, ROMsDetailsLine, TempString, ROMDataLine, ROMOf: String;
   MainLoop, tmpIndex: Integer;
   IsResource, IsGameEntry, IsCHDFile, ROMsHeaderAdded: Boolean;
-  tempFile, tmpEmuVersion, romName, romNameMerge, romCRC32, romSHA1, iDriver, MediaTypeTagExtra: String;
+  tempFile, tmpEmuVersion, romName, romNameMerge, romCRC32, romSize, romSHA1, iDriver, MediaTypeTagExtra: String;
 
   TitleErrorMsg: String;
   DemulROMOf: String;
@@ -18702,6 +18953,7 @@ begin
           begin
             // Demul, generate listxml with -listxml cmdline parameter
             tempFile:= FrontendPath+'temp\demul-listxml.dat';
+            FormStatus.MessageStr('Creating "'+tempFile+'" file.');
             FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+tempFile+SystemStr;
             SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
             RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
@@ -18729,7 +18981,7 @@ begin
   iVersion:= '';
 
   FormStatus.TitleStr('Create Games List: '+GetArcadeEmulatorDescription(sysID));
-  FormStatus.MessageStr('', False);
+  FormStatus.MessageStr('');
   if not FormStatus.Visible then
      FormStatus.Show;
   FormStatus.StartThreadClock;
@@ -18862,12 +19114,9 @@ begin
                 romCRC32:= XML_GetEntryValue(FileLine, 'crc');
                 romCRC32:= FixCRCEmptySpaces(romCRC32); // for Demul emulator only
                 romSHA1:= XML_GetEntryValue(FileLine, 'sha1');
-
-                TempString:= '';
-                TempString:= XML_GetEntryValue(FileLine, 'size');
-                if TempString <> '' then
-                   TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
-                TempString:= '';
+                romSize:= XML_GetEntryValue(FileLine, 'size');
+                if romSize <> '' then
+                   TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
 
                 newFileID:= 2; // newFileID is the var that will be used to generate the final "ROMInfoFull" string
                 BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eName;
@@ -18898,7 +19147,7 @@ begin
 
                 // this will go last
                 IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
-                ROMInfoFull:= MountROMInfo(newfileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
+                ROMInfoFull:= MountROMInfo(newfileID, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
 
                 if not ROMsHeaderAdded then
                    begin
@@ -19116,10 +19365,9 @@ begin
 
                 IsCHDFile:= PosEx('<disk ', FileLine) <> 0;
 
-                TempString:= '';
-                TempString:= XML_GetEntryValue(FileLine, 'size');
-                if TempString <> '' then
-                   TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
+                romSize:= XML_GetEntryValue(FileLine, 'size');
+                if romSize <> '' then
+                   TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
                 TempString:= '';
 
                 newFileID:= 0; // newFileID is the var that will be used to generate the final "ROMInfoFull" string
@@ -19201,7 +19449,7 @@ begin
                    end;
 
                 IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
-                ROMInfoFull:= MountROMInfo(newFileID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
+                ROMInfoFull:= MountROMInfo(newFileID, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
 
 
                 if (romNameMerge <> '') and (newFileID = 0) then // newFileID = 0 -> for game ROM only
@@ -19412,7 +19660,7 @@ var
   FileLine, TempString, ROMDataLine: String;
   MainLoop: Integer;
   IsGameEntry, GetGameFiles, IsComment, ParseData: Boolean;
-  tempFile, romName, romCRC32, romSHA1: String;
+  tempFile, romName, romCRC32, romSize, romSHA1: String;
   PartName, PartTitle: String;
   Requirement: String;
   TitleErrorMsg, EmuTitle: String;
@@ -19432,6 +19680,8 @@ var
     Result:= True;
     ROMInfoFull:= '';
     romName:= XML_GetEntryValue(FileLine, 'name'); // name of the ROM or CHD
+    if romName = '' then
+       Exit; // some games have WRAM on cartridge, for backup or maybe save state (hash\nes.xml -> "xuanyuan")
     romName:= DecodeHTML(romName);
 
     romCRC32:= XML_GetEntryValue(FileLine, 'crc');
@@ -19450,16 +19700,17 @@ var
             romSHA1:= XML_GetEntryValue(FileLine, 'md5'); // for MAME 0.77 down to 0.69 .... MD5 will never be found in software list games ("mamedir\hash\" folder)
        end;
 
-    TempString:= '';
-    TempString:= XML_GetEntryValue(FileLine, 'size');
-    if (TempString <> '') and (TempString[1] <> '?') then
-       TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(TempString);
-    TempString:= '';
+    romSize:= XML_GetEntryValue(FileLine, 'size');
+    if romSize <> '' then
+       begin
+         if romSize[1] <> '?' then
+            TempGameVars.eGameSize:= TempGameVars.eGameSize+StrToInt64(romSize);
+       end;
 
     // 0000<name>goonies, the (japan) (alt 2).rom/><crc>38f04741/><sha1>b7b4d5c83d8c336dbfe32833bba974cea7f0cb8d/>
 
     IsBadDump:= Ord(PosEx('status="baddump"', FileLine) <> 0);
-    ROMInfoFull:= MountROMInfo(newID, 0, IsCHDFile, romName, romCRC32, romSHA1, IsBadDump);
+    ROMInfoFull:= MountROMInfo(newID, 0, IsCHDFile, romName, romCRC32, romSize, romSHA1, IsBadDump);
     FixedID:= newID;
 
     if TempGameVars.eSoftwareExecParameter <> '' then
@@ -19500,9 +19751,9 @@ var
        end;
     if PartName <> '' then
        begin
-         ROMInfoFull:= ROMInfoFull+'<part_name>'+PartName+'/>';
+         ROMInfoFull:= ROMInfoFull+MountGameInfoFieldStr('part_name', PartName); // '<part_name>'+PartName+'/>';
          if PartTitle <> '' then
-            ROMInfoFull:= ROMInfoFull+'<part_title>'+PartTitle+'/>';
+            ROMInfoFull:= ROMInfoFull+MountGameInfoFieldStr('part_title', PartTitle); // '<part_title>'+PartTitle+'/>';
        end;
     ROMsList.Add(ROMInfoFull);
 
@@ -19939,9 +20190,9 @@ begin
     FreeAndNil(filters_file);
   end;
   if strFilter <> '' then
-     ButtonGameFilterMain.Hint:= 'Selected MAME and arcade games filter'+#13#10+' -> '+strFilter
+     ButtonArcadeGamesFilters.Hint:= 'Selected MAME and arcade games filter'+#13#10+' -> '+strFilter
   else
-     ButtonGameFilterMain.Hint:= 'Selected MAME and arcade games filter';
+     ButtonArcadeGamesFilters.Hint:= 'Selected MAME and arcade games filter';
 end;
 
 function TFormMain.GetROMFields(const ListHolder: THashedStringList; Index: Integer; ForceSysID: ShortInt = -1): Boolean;
@@ -22635,6 +22886,7 @@ var
   begin
     Result:= False;
     FormStatus.SetProgressPos(0);
+    Application.ProcessMessages;
     case IsMAMEBasedSys(SystemID) of
       True:
         begin
@@ -23015,13 +23267,13 @@ var
 
     if tmpDeviceStr <> '' then
        begin
-         if DeviceListSource.IndexOf(tmpDeviceStr) <> -1 then
+         if DeviceListSource.IndexOf(tmpDeviceStr) = -1 then
             DeviceListSource.Add(tmpDeviceStr);
        end;
-       
+
     if tmpBiosStr <> '' then
        begin
-         if BiosListSource.IndexOf(tmpBiosStr) <> -1 then
+         if BiosListSource.IndexOf(tmpBiosStr) = -1 then
             BiosListSource.Add(tmpBiosStr);
        end;
 
@@ -23264,7 +23516,7 @@ begin
   LoadROMFolders(sysID);
 
   if (PopupSelectScanGamesMode.Tag = 0) and (SoftwareList = '') and // only if scan mode is Full Scan and "no" MAME software lists
-     (IsMAMEBasedSys(sysID) or (sysID = idDemul) or (sysID = idZiNc)) then
+     (IsMAMEBasedSys(sysID) or (sysID = idDemul) or (sysID = idZiNc) or (sysID = idSegaModel2)) then
   begin
     FormStatus.MessageStr('Generating device/bios lists to be scanned.');
     TempDevsList:= THashedStringList.Create;
@@ -23272,15 +23524,21 @@ begin
     TempDevsList.BeginUpdate;
     TempBiosList.BeginUpdate;
 
+    if sysID = idSegaModel2 then
+       TempBiosList.Add('model2'); // must add "model2 board ROMs" set to the bios list or games are not scanned properly (June 28, 2018)
+
     if RefreshMode = 0 then
     begin
       // scan all games
-      MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID)); // only MAME/arcade, NO software lists (March 01, 2018)
-      if IsMAMEBasedSys(sysID) then
-         MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file; note: TMemIniFile.ReadSection() already have .BeginUpdate and .EndUpdate
+      if sysID <> idSegaModel2 then
+      begin // must ignore this or "TempBiosList" var gets emptied and games are not validated correctly (July 01, 2018)
+        MAMEList:= TMemIniFile.Create(GetGamesFolderEL+GetSystemFileName(sysID)); // only MAME/arcade, NO software lists (March 01, 2018)
+        if IsMAMEBasedSys(sysID) then
+           MAMEList.ReadSection('devices', TempDevsList); // read keynames only from file; note: TMemIniFile.ReadSection() already have .BeginUpdate and .EndUpdate
 
-      MAMEList.ReadSection('bios', TempBiosList);
-      FreeAndNil(MAMEList);
+        MAMEList.ReadSection('bios', TempBiosList);
+        FreeAndNil(MAMEList);
+      end;
     end
     else
     if RefreshMode = 3 then // single game audit
@@ -23364,8 +23622,8 @@ begin
             TotalGamesCount:= GamesListView.Selection.Count;
             CurrentIndex:= 0;
             SelectedIndex:= 1;
-            TempDevsList.BeginUpdate;
-            TempBiosList.BeginUpdate;
+            //TempDevsList.BeginUpdate;
+            //TempBiosList.BeginUpdate;
             checkItem:= GamesListView.Selection.First;
             repeat
               if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = '') then
@@ -24079,8 +24337,17 @@ var
                                        Continue:= BiosSetsSHA1ZipContents.IndexOf(TempGameVars.eName+'='+romSHA1) = -1 // it's a bios set
                                     else
                                        begin
-                                         if TempGameVars.eBiosName <> '' then
-                                            Continue:= BiosSetsSHA1ZipContents.IndexOf(TempGameVars.eBiosName+'='+romSHA1) = -1;
+                                         if TempGameVars.eSystemID <> idSegaModel2 then
+                                            begin
+                                              if TempGameVars.eBiosName <> '' then
+                                                 Continue:= BiosSetsSHA1ZipContents.IndexOf(TempGameVars.eBiosName+'='+romSHA1) = -1;
+                                            end
+                                         else
+                                            begin
+                                              // special case for SEGA Model 2 board ROMs (model2.zip)
+                                              //Continue:= BiosSetsSHA1ZipContents.IndexOf(TempGameVars.eBiosName+'='+romSHA1) = -1;
+                                              Continue:= BiosSetsSHA1ZipContents.IndexOf('model2='+romSHA1) = -1;
+                                            end;
                                        end;
 
                                  end;
@@ -24109,8 +24376,17 @@ var
                                        Continue:= BiosSetsZipContents.IndexOf(TempGameVars.eName+'='+romCRC32) = -1 // it's a bios set
                                     else
                                        begin
-                                         if TempGameVars.eBiosName <> '' then
-                                            Continue:= BiosSetsZipContents.IndexOf(TempGameVars.eBiosName+'='+romCRC32) = -1;
+                                         if TempGameVars.eSystemID <> idSegaModel2 then
+                                            begin
+                                              if TempGameVars.eBiosName <> '' then
+                                                 Continue:= BiosSetsZipContents.IndexOf(TempGameVars.eBiosName+'='+romCRC32) = -1;
+                                            end
+                                         else
+                                            begin
+                                              // special case for SEGA Model 2 board ROMs (model2.zip)
+                                              //Continue:= BiosSetsZipContents.IndexOf(TempGameVars.eBiosName+'='+romCRC32) = -1;
+                                              Continue:= BiosSetsZipContents.IndexOf('model2='+romCRC32) = -1;
+                                            end;
                                        end;
                                  end;
                              end;
@@ -25693,6 +25969,7 @@ var
   FileIcon: TIcon;
   iImageList: TImageList;
 begin
+  // it seems to be used only in "uMain.PopulateMenuItemCustomEmuParameter" function
   iImageList:= SourceHolder;
   if Source2Holder <> nil then
      begin
@@ -25775,41 +26052,125 @@ begin
   FreeAndNil(fIcon);
 end;
 
-
-procedure TFormMain.LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; IsConsoleComputerSys: Boolean = False);
+procedure TFormMain.LoadIconIntoImage(const IconFileName: String; DestImageHolder: TImage; OverlayIndex: Integer = -1; IsConsoleComputerSys: Boolean = False; ForceLightMode: Boolean = False; FileSubFolder: String = '');
 var
-  fIcon: TExIcon;
-  tmpIcon: TIcon;
-  icoLoop: Integer;
-  fExt: String;
+  Icon32, Icon32Overlay: TExIcon;
+  tmpIcon, tmpIconOverlay, MergedIcon: TIcon;
+  icoLoop, icoOverlayLoop: Integer;
+  FileExt: String;
+  FolderStr: String;
+  OverlayFolder, OverlayFileName: String;
+  HaveOverlay: Boolean;
 begin
+  // OverlayIndex
+  // -1 -> no overlay to load
+  //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_light.ico" (replace by "_dark.ico" in night mode)
+  //  1 -> games filters tool bar single icon - "main_icons\overlay\toolbar_overlay_light.ico" (replace by "_dark.ico" in night mode)
+  //  2 -> tool bar image category 24x24      - "main_icons\overlay\image_category_overlay_small_dark.ico" (there is no "light" overlay)
+  
   if IsConsoleComputerSys then
      icoLoop:= 34
   else
      icoLoop:= 32;
-  fExt:= '.ico';
+  FileExt:= '.ico';
   if PosEx('.ico', IconFileName) <> 0 then
-     fExt:= '';
-  if not FileExists(GetFolderFull(icoLoop)+IconFileName+fExt) then
+     FileExt:= '';
+  if FileSubFolder = '' then
+     FolderStr:= GetFolderFull(icoLoop)
+  else
+     FolderStr:= GetFolderFull(32)+FileSubFolder;
+
+  if not FileExists(FolderStr+IconFileName+FileExt) then
      Exit;
-  fIcon:= TExIcon.Create;
-  fIcon.LoadFromFile(GetFolderFull(icoLoop)+IconFileName+fExt);
-  for icoLoop:=0 to fIcon.ImageCount-1 do
+
+  DestImageHolder.Picture.Icon:= nil; // clear it first
+
+  HaveOverlay:= False;
+  if OverlayIndex <> -1 then
   begin
-    if (fIcon.Images[icoLoop].Width = DestImageHolder.Width) and
-       (fIcon.Images[icoLoop].Height = DestImageHolder.Height) then
+    OverlayFolder:= GetFolderFull(32)+'overlay\';
+    case OverlayIndex of
+      0: OverlayFileName:= 'toolbar_overlay_multi_';
+      1: OverlayFileName:= 'toolbar_overlay_';
+      2: OverlayFileName:= 'image_category_overlay_small_dark.ico';
+    end;
+    if OverlayIndex in [0, 1] then
        begin
-         fIcon.CurrentImage:= icoLoop;
+         if IsNightMode and (not ForceLightMode) then
+            OverlayFileName:= OverlayFileName+'dark.ico'
+         else
+            OverlayFileName:= OverlayFileName+'light.ico';
+       end;
+    HaveOverlay:= FileExists(OverlayFolder+OverlayFileName);
+  end;
+
+  //ColorDepth:= pf32bit;
+
+  if HaveOverlay then
+  begin
+    HaveOverlay:= False;
+    Icon32Overlay:= TExIcon.Create;
+    Icon32Overlay.LoadFromFile(OverlayFolder+OverlayFileName);
+    for icoOverlayLoop:=0 to Icon32Overlay.ImageCount-1 do
+    begin
+      if (Icon32Overlay.Images[icoOverlayLoop].Width = DestImageHolder.Width) and
+         (Icon32Overlay.Images[icoOverlayLoop].Height = DestImageHolder.Height) then //and
+         //(Icon32Overlay.Images[icoOverlayLoop].PixelFormat = ColorDepth) then
+         begin
+           HaveOverlay:= True;
+           Icon32Overlay.CurrentImage:= icoOverlayLoop;
+           tmpIconOverlay:= TIcon.Create;
+           tmpIconOverlay.Handle:= Icon32Overlay.Handle;
+           Break;
+         end;
+    end;
+    if not HaveOverlay then
+       begin
+         Icon32Overlay.Releasehandle;
+         FreeAndNil(Icon32Overlay);
+       end;
+  end;
+
+  Icon32:= TExIcon.Create;
+  Icon32.LoadFromFile(FolderStr+IconFileName+FileExt);
+  for icoLoop:=0 to Icon32.ImageCount-1 do
+  begin
+    if (Icon32.Images[icoLoop].Width = DestImageHolder.Width) and
+       (Icon32.Images[icoLoop].Height = DestImageHolder.Height) then
+       begin
+         Icon32.CurrentImage:= icoLoop;
+         tmpIcon:= TIcon.Create;
+         tmpIcon.Handle:= Icon32.Handle;
+
+         if HaveOverlay then
+            begin
+              MergedIcon:= TIcon.Create;
+              MergedIcon.Handle:= CombineIcons(tmpIconOverlay.Handle, tmpIcon.Handle);
+
+              DestImageHolder.Picture.Icon.Handle:= MergedIcon.Handle;
+
+              //IconList.AddIcon(MergedIcon);
+              tmpIconOverlay.ReleaseHandle;
+              FreeAndNil(tmpIconOverlay);
+              MergedIcon.ReleaseHandle;
+              FreeAndNil(MergedIcon);
+              Icon32Overlay.Releasehandle;
+              FreeAndNil(Icon32Overlay);
+            end
+         else
+            DestImageHolder.Picture.Icon.Handle:= tmpIcon.Handle; // IconList.AddIcon(tmpIcon);
+            //DestImageHolder.Picture.Icon:= tmpIcon; // IconList.AddIcon(tmpIcon);
+
+         tmpIcon.ReleaseHandle;
+         FreeAndNil(tmpIcon);
          Break;
        end;
   end;
-  tmpIcon:= TIcon.Create;
-  tmpIcon.Handle:= fIcon.Handle;
-  DestImageHolder.Picture.Icon:= nil; // clear it first
-  DestImageHolder.Picture.Icon:= tmpIcon;
-  FreeAndNil(tmpIcon);
-  fIcon.Releasehandle;
-  FreeAndNil(fIcon);
+
+  //DestImageHolder.Picture.Icon:= tmpIcon;
+  //FreeAndNil(tmpIcon);
+  Icon32.Releasehandle;
+  FreeAndNil(Icon32);
 end;
 
 procedure TFormMain.LoadGameIconIntoImage(Arcade_SysID, ConsComp_SysID: Integer; romID: Integer; DestImage: TImage; SoftwareName: String; IsConsoleComputerSys: Boolean);
@@ -25925,33 +26286,28 @@ procedure TFormMain.LoadToolBarButtons(ImageList_Holder: TImageList; IsCustomize
 var
   tempFolder, tempFolderFilters: String;
 begin
-  // Main Tool Bar Buttons 48x44 size or 28x22
+  // Main Tool Bar Buttons size: 68x68 / 48x48 / 30x24
   tempFolder:= GetFolderFull(32);
   tempFolderFilters:= GetFolderFull(40);
 
   ClearImageList(ImageList_Holder);
   AddDefaultIcons('EmuLoader_Orb.ico', tempFolder, ImageList_Holder);
-  AddDefaultIcons('viewmode_01_details.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('filter5_machines.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('filter_systems_quick_disabled.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('favorites.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('arcade_filters\allgames.ico', tempFolder, ImageList_Holder);
-  AddDefaultIcons('filter2_01_both.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('filter3_01_listall.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('filter4_01_all.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('mamu_.ico', tempFolder, ImageList_Holder);
-  AddDefaultIcons('filter_extra.ico', tempFolderFilters, ImageList_Holder);
+  AddDefaultIcons('viewmode_01_details.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('filter5_machines.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('filter_systems_quick_disabled.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('favorites.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('arcade_filters\allgames.ico', tempFolder, ImageList_Holder, 0, IsCustomizeForm);
+  AddDefaultIcons('filter2_01_both.ico', tempFolderFilters, ImageList_Holder, 0, IsCustomizeForm);
+  AddDefaultIcons('filter3_01_listall.ico', tempFolderFilters, ImageList_Holder, 0, IsCustomizeForm);
+  AddDefaultIcons('filter4_01_all.ico', tempFolderFilters, ImageList_Holder, 0, IsCustomizeForm);
+  AddDefaultIcons('mamu_.ico', tempFolder, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('filter_extra.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
 
-  AddDefaultIcons('cdimage_cue.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('emu_useparameter.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('games_mru.ico', tempFolderFilters, ImageList_Holder);
-  AddDefaultIcons('emulators.ico', tempFolderFilters, ImageList_Holder);
-
-  if IsCustomizeForm then
-     begin
-       AddDefaultIcons('filter_text.ico', tempFolder, ImageList_Holder);
-       AddDefaultIcons('toolbar.ico', tempFolder, ImageList_Holder);
-     end;
+  AddDefaultIcons('cdimage_cue_enabled.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('emu_useparameter.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('games_mru.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('emulators.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
+  AddDefaultIcons('filter_search_text.ico', tempFolderFilters, ImageList_Holder, 1, IsCustomizeForm);
 end;
 
 procedure TFormMain.LoadCustomEmulatorsIconsPopupMenu;
@@ -25987,53 +26343,56 @@ begin
   //AddDefaultIcons('folder.ico', tempFolder, IL_PopupPlayCustomEmulators); // index: 14
 end;
 
-procedure TFormMain.LoadMainScreenIcons(Reload: Boolean = False);
+procedure TFormMain.LoadMainScreenIcons;//(Reload: Boolean = False);
 var
   tempFolder, tempFolderFilters: String;
   Loop: ShortInt;
 begin
   tempFolder:= GetFolderFull(32);
   tempFolderFilters:= GetFolderFull(40);
+
   // ViewMode
-  ClearImageList(IL_ViewMode_Large);
-  if not Reload then
-     ClearImageList(IL_ViewMode_Small);
-  AddMainScrIcons('viewmode_01_details.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
-  AddMainScrIcons('viewmode_02_grouped.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
-  AddMainScrIcons('viewmode_03_small.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
-  AddMainScrIcons('viewmode_04_large.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
-  AddMainScrIcons('viewmode_05_tile.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
-  AddMainScrIcons('viewmode_06_thumbnail.ico', tempFolderFilters, IL_ViewMode_Large, IL_ViewMode_Small, Reload);
+  ClearImageList(IL_ViewMode_Small);
+
+  AddDefaultIcons('viewmode_01_details.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
+  AddDefaultIcons('viewmode_02_grouped.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
+  AddDefaultIcons('viewmode_03_small.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
+  AddDefaultIcons('viewmode_04_large.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
+  AddDefaultIcons('viewmode_05_tile.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
+  AddDefaultIcons('viewmode_06_thumbnail.ico', tempFolderFilters, IL_ViewMode_Small, 1, True);
 
   // Arcade Games Filter, icons are loaded dynamically
 
   // Parent/Clone Filter
-  ClearImageList(IL_FilterParentClone_Large);
-  if not Reload then
-     ClearImageList(IL_FilterParentClone_Small);
-  AddMainScrIcons('filter2_01_both.ico', tempFolderFilters, IL_FilterParentClone_Large, IL_FilterParentClone_Small, Reload);
-  AddMainScrIcons('filter2_02_parent.ico', tempFolderFilters, IL_FilterParentClone_Large, IL_FilterParentClone_Small, Reload);
-  AddMainScrIcons('filter2_03_clone.ico', tempFolderFilters, IL_FilterParentClone_Large, IL_FilterParentClone_Small, Reload);
+  ClearImageList(IL_FilterParentClone_Small);
+
+  AddDefaultIcons('filter2_01_both.ico', tempFolderFilters, IL_FilterParentClone_Small, 0, True);
+  AddDefaultIcons('filter2_02_parent.ico', tempFolderFilters, IL_FilterParentClone_Small, 1, True);
+  AddDefaultIcons('filter2_03_clone.ico', tempFolderFilters, IL_FilterParentClone_Small, 1, True);
 
   // Have/Miss Filter
-  ClearImageList(IL_FilterHaveMiss_Large);
-  if not Reload then
-     ClearImageList(IL_FilterHaveMiss_Small);
-  AddMainScrIcons('filter3_01_listall.ico', tempFolderFilters, IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, Reload);
-  AddMainScrIcons('filter3_02_have.ico', tempFolderFilters, IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, Reload);
-  AddMainScrIcons('filter3_03_miss.ico', tempFolderFilters, IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, Reload);
-  AddMainScrIcons('filter3_04_missroms.ico', tempFolderFilters, IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, Reload);
-  AddMainScrIcons('filter3_05_miss_and_missroms.ico', tempFolderFilters, IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, Reload);
+  ClearImageList(IL_FilterHaveMiss_Small);
+
+  AddDefaultIcons('filter3_01_listall.ico', tempFolderFilters, IL_FilterHaveMiss_Small, 0, True);
+  AddDefaultIcons('filter3_02_have.ico', tempFolderFilters, IL_FilterHaveMiss_Small, 1, True);
+  AddDefaultIcons('filter3_03_miss.ico', tempFolderFilters, IL_FilterHaveMiss_Small, 1, True);
+  AddDefaultIcons('filter3_04_missroms.ico', tempFolderFilters, IL_FilterHaveMiss_Small, 1, True);
+  AddDefaultIcons('filter3_05_miss_and_missroms.ico', tempFolderFilters, IL_FilterHaveMiss_Small, 1, True);
 
   // Working/Non-Working Filter
-  ClearImageList(IL_FilterWorkingNonWorking_Large);
-  if not Reload then
-     ClearImageList(IL_FilterWorkingNonWorking_Small);
-  AddMainScrIcons('filter4_01_all.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
-  AddMainScrIcons('filter4_02_good-imperfect.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
-  AddMainScrIcons('filter4_03_good.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
-  AddMainScrIcons('filter4_04_imperfect.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
-  AddMainScrIcons('filter4_05_preliminary.ico', tempFolderFilters, IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, Reload);
+  ClearImageList(IL_FilterWorkingNonWorking_Small);
+
+  if Assigned(FormArcadeFiltersDriverStatus) then
+  begin
+    if FormArcadeFiltersDriverStatus.IconListAll.Picture.Icon.Empty then
+    begin
+      LoadIconIntoImage('filter4_01_all.ico', FormArcadeFiltersDriverStatus.IconListAll, 0, False, True, 'toolbar_filters\');
+      LoadIconIntoImage('filter4_02_good-imperfect.ico', FormArcadeFiltersDriverStatus.IconGoodImperfect, 1, False, True, 'toolbar_filters\');
+      LoadIconIntoImage('filter4_03_good.ico', FormArcadeFiltersDriverStatus.IconGood, 1, False, True, 'toolbar_filters\');
+      LoadIconIntoImage('filter4_04_imperfect.ico', FormArcadeFiltersDriverStatus.IconImperfect, 1, False, True, 'toolbar_filters\');
+      LoadIconIntoImage('filter4_05_preliminary.ico', FormArcadeFiltersDriverStatus.IconPreliminary, 1, False, True, 'toolbar_filters\');
+    end;
+  end;
 
   LoadToolBarButtons(IL_ToolBarButtons);
 
@@ -26070,12 +26429,14 @@ begin
   AddDefaultIcons('settings.ico', tempFolder, IL_MiscToolBarPopup); // 10
   AddDefaultIcons('toolbar.ico', tempFolder, IL_MiscToolBarPopup); // 11
 
+  AddDefaultIcons('interface_classic.ico', tempFolder, IL_MiscToolBarPopup); // 12 // Search Games
+
   AddDefaultIcons('scanresult_ok.ico', tempFolder, IL_GroupedMode); // 00
   AddDefaultIcons('scanresult_missroms.ico', tempFolder, IL_GroupedMode); // 01
   AddDefaultIcons('scanresult_badcrc.ico', tempFolder, IL_GroupedMode); // 02
   AddDefaultIcons('favorite_game.ico', tempFolder, IL_GroupedMode); // 03
 
-  // IL_MiscToolBarSmall (28x22) for tool bar buttons, mostly
+  // IL_MiscToolBarSmall (30x24) for tool bar buttons, mostly
   ClearImageList(IL_MiscToolBarSmall);
   AddDefaultIcons('option_check.ico', tempFolder, IL_MiscToolBarSmall); // 00 // use this for check/not checked items
   AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MiscToolBarSmall); // 01 // use this for radio groups checked items
@@ -26087,73 +26448,69 @@ begin
   AddDefaultIcons('search.ico', tempFolder, IL_MiscToolBarSmall); // 07
 
   // Main menu and popup icons
-  if not Reload then
-    begin
-    ClearImageList(IL_MenuPopup);
-    AddDefaultIcons('option_check.ico', tempFolder, IL_MenuPopup); // 00 // use this for check/not checked items
-    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MenuPopup); // 01 // use this for radio groups checked items
-    AddDefaultIcons('exit.ico', tempFolder, IL_MenuPopup); // 2
-    AddDefaultIcons('favorite_user.ico', tempFolder, IL_MenuPopup); // 3
-    AddDefaultIcons('folder.ico', tempFolder, IL_MenuPopup); // 4
-    AddDefaultIcons('toolbar.ico', tempFolder, IL_MenuPopup); // 5
-    AddDefaultIcons('image_view.ico', tempFolder, IL_MenuPopup); // 6
-    AddDefaultIcons('settings.ico', tempFolder, IL_MenuPopup); // 7
-    AddDefaultIcons('bios_chip.ico', tempFolder, IL_MenuPopup); // 8
-    AddDefaultIcons('gamedocs.ico', tempFolder, IL_MenuPopup); // 9
-    AddDefaultIcons('information.ico', tempFolder, IL_MenuPopup); // 10
+  ClearImageList(IL_MenuPopup);
+  AddDefaultIcons('option_check.ico', tempFolder, IL_MenuPopup); // 00 // use this for check/not checked items
+  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MenuPopup); // 01 // use this for radio groups checked items
+  AddDefaultIcons('exit.ico', tempFolder, IL_MenuPopup); // 2
+  AddDefaultIcons('favorite_user.ico', tempFolder, IL_MenuPopup); // 3
+  AddDefaultIcons('folder.ico', tempFolder, IL_MenuPopup); // 4
+  AddDefaultIcons('toolbar.ico', tempFolder, IL_MenuPopup); // 5
+  AddDefaultIcons('image_view.ico', tempFolder, IL_MenuPopup); // 6
+  AddDefaultIcons('settings.ico', tempFolder, IL_MenuPopup); // 7
+  AddDefaultIcons('bios_chip.ico', tempFolder, IL_MenuPopup); // 8
+  AddDefaultIcons('gamedocs.ico', tempFolder, IL_MenuPopup); // 9
+  AddDefaultIcons('information.ico', tempFolder, IL_MenuPopup); // 10
 
-    AddDefaultIcons('image.ico', tempFolder, IL_MenuPopup); // 11
-    AddDefaultIcons('zipfile.ico', tempFolder, IL_MenuPopup); // 12
-    AddDefaultIcons('video_preview.ico', tempFolder, IL_MenuPopup); // 13
-    AddDefaultIcons('delete.ico', tempFolder, IL_MenuPopup); // 14
-    AddDefaultIcons('refresh.ico', tempFolder, IL_MenuPopup); // 15
-    AddDefaultIcons('savestate.ico', tempFolder, IL_MenuPopup); // 16
+  AddDefaultIcons('image.ico', tempFolder, IL_MenuPopup); // 11
+  AddDefaultIcons('zipfile.ico', tempFolder, IL_MenuPopup); // 12
+  AddDefaultIcons('video_preview.ico', tempFolder, IL_MenuPopup); // 13
+  AddDefaultIcons('delete.ico', tempFolder, IL_MenuPopup); // 14
+  AddDefaultIcons('refresh.ico', tempFolder, IL_MenuPopup); // 15
+  AddDefaultIcons('savestate.ico', tempFolder, IL_MenuPopup); // 16
 
-    AddDefaultIcons('miscellaneous.ico', tempFolder, IL_MenuPopup); // 17
-    AddDefaultIcons('play_standard.ico', tempFolder, IL_MenuPopup); // 18
-    AddDefaultIcons('EmuLoader_Orb.ico', tempFolder, IL_MenuPopup); // 19
-    AddDefaultIcons('emu_ume.ico', tempFolder, IL_MenuPopup); // 20
-    AddDefaultIcons('multidisks.ico', tempFolder, IL_MenuPopup); // 21
-    AddDefaultIcons('usagerules.ico', tempFolder, IL_MenuPopup); // 22
-    AddDefaultIcons('emucon.ico', tempFolder, IL_MenuPopup); // 23
+  AddDefaultIcons('miscellaneous.ico', tempFolder, IL_MenuPopup); // 17
+  AddDefaultIcons('play_standard.ico', tempFolder, IL_MenuPopup); // 18
+  AddDefaultIcons('EmuLoader_Orb.ico', tempFolder, IL_MenuPopup); // 19
+  AddDefaultIcons('emu_ume.ico', tempFolder, IL_MenuPopup); // 20
+  AddDefaultIcons('multidisks.ico', tempFolder, IL_MenuPopup); // 21
+  AddDefaultIcons('usagerules.ico', tempFolder, IL_MenuPopup); // 22
+  AddDefaultIcons('emucon.ico', tempFolder, IL_MenuPopup); // 23
 
-    AddDefaultIcons('systemtype_arcade.ico', tempFolder, IL_MenuPopup); // 24
-    AddDefaultIcons('systemtype_console.ico', tempFolder, IL_MenuPopup); // 25
-    AddDefaultIcons('systemtype_computer.ico', tempFolder, IL_MenuPopup); // 26
-    AddDefaultIcons('systemtype_handheld.ico', tempFolder, IL_MenuPopup); // 27
+  AddDefaultIcons('systemtype_arcade.ico', tempFolder, IL_MenuPopup); // 24
+  AddDefaultIcons('systemtype_console.ico', tempFolder, IL_MenuPopup); // 25
+  AddDefaultIcons('systemtype_computer.ico', tempFolder, IL_MenuPopup); // 26
+  AddDefaultIcons('systemtype_handheld.ico', tempFolder, IL_MenuPopup); // 27
 
-    ClearImageList(IL_MainMenuOptions);
-    AddDefaultIcons('option_check.ico', tempFolder, IL_MainMenuOptions); // 00 // use this for check/not checked items
-    AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MainMenuOptions); // 01 // use this for radio groups checked items
-    AddDefaultIcons('exit.ico', tempFolder, IL_MainMenuOptions); // 2
-    AddDefaultIcons('favorite_user.ico', tempFolder, IL_MainMenuOptions); // 3
-    AddDefaultIcons('folder.ico', tempFolder, IL_MainMenuOptions); // 4
-    AddDefaultIcons('toolbar.ico', tempFolder, IL_MainMenuOptions); // 5
+  ClearImageList(IL_MainMenuOptions);
+  AddDefaultIcons('option_check.ico', tempFolder, IL_MainMenuOptions); // 00 // use this for check/not checked items
+  AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_MainMenuOptions); // 01 // use this for radio groups checked items
+  AddDefaultIcons('exit.ico', tempFolder, IL_MainMenuOptions); // 2
+  AddDefaultIcons('favorite_user.ico', tempFolder, IL_MainMenuOptions); // 3
+  AddDefaultIcons('folder.ico', tempFolder, IL_MainMenuOptions); // 4
+  AddDefaultIcons('toolbar.ico', tempFolder, IL_MainMenuOptions); // 5
 
-    AddDefaultIcons('settings.ico', tempFolder, IL_MainMenuOptions); // 6
-    AddDefaultIcons('zipfile.ico', tempFolder, IL_MainMenuOptions); // 7
-    AddDefaultIcons('refresh.ico', tempFolder, IL_MainMenuOptions); // 8
+  AddDefaultIcons('settings.ico', tempFolder, IL_MainMenuOptions); // 6
+  AddDefaultIcons('zipfile.ico', tempFolder, IL_MainMenuOptions); // 7
+  AddDefaultIcons('refresh.ico', tempFolder, IL_MainMenuOptions); // 8
 
-    AddDefaultIcons('image_view.ico', tempFolder, IL_MainMenuOptions); // 9
-    AddDefaultIcons('delete.ico', tempFolder, IL_MainMenuOptions); // 10
-    AddDefaultIcons('bios_chip.ico', tempFolder, IL_MainMenuOptions); // 11
-    AddDefaultIcons('gamedocs.ico', tempFolder, IL_MainMenuOptions); // 12
-    AddDefaultIcons('information.ico', tempFolder, IL_MainMenuOptions); // 13
-    AddDefaultIcons('emu_ume.ico', tempFolder, IL_MainMenuOptions); // 14
-    AddDefaultIcons('emucon.ico', tempFolder, IL_MainMenuOptions); // 15
-    AddDefaultIcons('internet_gameinfo.ico', tempFolder, IL_MainMenuOptions); // 16
+  AddDefaultIcons('image_view.ico', tempFolder, IL_MainMenuOptions); // 9
+  AddDefaultIcons('delete.ico', tempFolder, IL_MainMenuOptions); // 10
+  AddDefaultIcons('bios_chip.ico', tempFolder, IL_MainMenuOptions); // 11
+  AddDefaultIcons('gamedocs.ico', tempFolder, IL_MainMenuOptions); // 12
+  AddDefaultIcons('information.ico', tempFolder, IL_MainMenuOptions); // 13
+  AddDefaultIcons('emu_ume.ico', tempFolder, IL_MainMenuOptions); // 14
+  AddDefaultIcons('emucon.ico', tempFolder, IL_MainMenuOptions); // 15
+  AddDefaultIcons('internet_gameinfo.ico', tempFolder, IL_MainMenuOptions); // 16
 
-    
-    // Arcade systems / emulator icons
-    ClearImageList(IL_ArcadeSystem_ExtraLarge);
-    ClearImageList(IL_ArcadeSystem_Large);
-    ClearImageList(IL_ArcadeSystem_Small);
-    for Loop:=0 to MaxArcadeSystems do
-    begin
-      AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_ExtraLarge); // 48x48
-      AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_Large); // 32x32
-      AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_Small); // 24x24
-    end;
+  // Arcade systems / emulator icons
+  ClearImageList(IL_ArcadeSystem_ExtraLarge);
+  ClearImageList(IL_ArcadeSystem_Large);
+  ClearImageList(IL_ArcadeSystem_Small);
+  for Loop:=0 to MaxArcadeSystems do
+  begin
+    AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_ExtraLarge); // 48x48
+    AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_Large); // 32x32
+    AddDefaultIcons(GetArcadeSystemIconFileName(Loop), tempFolder, IL_ArcadeSystem_Small); // 24x24
   end;
 end;
 
@@ -26195,7 +26552,7 @@ begin
 
   AddDefaultIcons('video_preview.ico', tempFolder, IL_LeftPanel);      // 24 -> for Internet Game Info bar
 
-  // for all screens that require to show 24x24 media type icons
+  // IL_MediaType - for all screens that require to show 24x24 media type icons
   AddDefaultIcons('bios_chip.ico', tempFolder, IL_MediaType);          // 0
 
   AddDefaultIcons('media_cartridge.ico', tempFolder, IL_MediaType);    // 1
@@ -26207,7 +26564,6 @@ begin
   AddDefaultIcons('media_flashcard.ico', tempFolder, IL_MediaType);    // 6
   AddDefaultIcons('media_harddisk.ico', tempFolder, IL_MediaType);     // 7
   AddDefaultIcons('media_vhs.ico', tempFolder, IL_MediaType);          // 8
-
 end;
 
 procedure TFormMain.LoadMediaTypeIcons(IconList: TImageList; ClearImageList: Boolean);
@@ -26224,54 +26580,7 @@ begin
       AddDefaultIcons(MediaTypeCustom[Loop, 1], tempFolder, IconList);
 end;
 
-procedure TFormMain.SetToolBarIcon(IconFileName: String; const IconFolder: String; IconList: TImageList; IconIndex: Integer; DisplayErrorMsg: Boolean = True);
-var
-  Icon32: TExIcon;
-  tmpIcon: TIcon;
-  icoLoop: ShortInt;
-  ColorDepth: TPixelFormat;
-  IconLoaded: Boolean;
-  FileExt: String;
-begin
-  FileExt:= '.ico';
-  if PosEx('.ico', LowerCase(IconFileName)) <> 0 then
-     FileExt:= '';
-
-  if not FileExists(IconFolder+IconFileName+FileExt) then
-     IconFileName:= 'arcade_filters\no_icon';
-
-  if not FileExists(IconFolder+IconFileName+FileExt) then
-     Exit;
-  Icon32:= TExIcon.Create;
-  Icon32.LoadFromFile(IconFolder+IconFileName+FileExt);
-  IconLoaded:= False;
-  ColorDepth:= pf32bit;
-
-  for icoLoop:=0 to Icon32.ImageCount-1 do
-  begin
-    if (Icon32.Images[icoLoop].Width = IconList.Width) and
-       (Icon32.Images[icoLoop].Height = IconList.Height) and
-       (Icon32.Images[icoLoop].PixelFormat = ColorDepth) then
-       begin
-         Icon32.CurrentImage:= icoLoop;
-         tmpIcon:= TIcon.Create;
-         tmpIcon.Handle:= Icon32.Handle;
-         IconList.ReplaceIcon(IconIndex, tmpIcon);
-         FreeAndNil(tmpIcon);
-         Icon32.Releasehandle;
-         IconLoaded:= True;
-         Break;
-       end;
-  end;
-  FreeAndNil(Icon32);
-  if not IconLoaded then
-     GenerateMessage('Error', 'Replace tool bar icon failed.',
-                     'Tool bar icon ('+IntToStr(IconList.Width)+'x'+
-                     IntToStr(IconList.Height)+') was not loaded.'+#13#10+
-                     IconList.Name+#13#10+IconFolder+IconFileName+FileExt, 2, False, 1);
-end;
-
-function CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
+function TFormMain.CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
 var
   WinDC: HDC;
   FrontInfo: TIconInfo;
@@ -26296,7 +26605,7 @@ begin
   BitBlt(BackDC, 0, 0, BmpObj.bmWidth, BmpObj.bmHeight, FrontDC, 0, 0, SRCAND);
 
   SelectObject(BackDC, BackInfo.hbmColor);
-  DrawIconEx(BackDC, 0,0,FrontIcon, 0, 0, 0, 0, DI_NORMAL);
+  DrawIconEx(BackDC, 0, 0, FrontIcon, 0, 0, 0, 0, DI_NORMAL);
 
   Result := CreateIconIndirect(BackInfo);
 
@@ -26311,43 +26620,85 @@ begin
   DeleteObject(BackInfo.hbmMask);
 end;
 
-function TFormMain.AddIconWithOverLay(const IconFileName, IconOverlayFileName, IconFolder: String; IconList: TImageList; ShowErrorMsg: Boolean = True): Boolean;
+procedure TFormMain.SetToolBarIcon(IconFileName: String; const IconFolder: String; IconList: TImageList; IconIndex, OverlayIndex: Integer; DisplayErrorMsg: Boolean = True);
 var
   Icon32, Icon32Overlay: TExIcon;
-  tmpIcon, tmpOverlayIcon, FinalIcon: TIcon;
+  tmpIcon, tmpIconOverlay, MergedIcon: TIcon;
   icoLoop, icoOverlayLoop: ShortInt;
   ColorDepth: TPixelFormat;
-  IconAdded, HaveOverlay: Boolean;
-  OverlayFolder: String;
+  IconLoaded: Boolean;
+  FileExt: String;
+  OverlayFolder, OverlayFileName: String;
+  HaveOverlay: Boolean;
 begin
-  Result:= False;
-  //OverlayFolder:= IconFolder+'overlay\';
-  OverlayFolder:= IconFolder;
-  if (not FileExists(IconFolder+IconFileName)) and (not FileExists(OverlayFolder+IconOverlayFileName)) then
+  // OverlayIndex
+  // -1 -> no overlay to load
+  //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_light.ico" (replace by "_dark.ico" in night mode)
+  //  1 -> games filters tool bar single icon - "main_icons\overlay\toolbar_overlay_light.ico" (replace by "_dark.ico" in night mode)
+  //  2 -> tool bar image category 24x24      - "main_icons\overlay\image_category_overlay_dark.ico" (there is no "light" overlay)
+
+  // must load the overlay icon
+  FileExt:= '.ico';
+  if PosEx('.ico', LowerCase(IconFileName)) <> 0 then
+     FileExt:= '';
+
+  if not FileExists(IconFolder+IconFileName+FileExt) then
+     IconFileName:= 'arcade_filters\no_icon';
+
+  if not FileExists(IconFolder+IconFileName+FileExt) then
      Exit;
 
-  ColorDepth:= pf32bit;
-
   HaveOverlay:= False;
-  Icon32Overlay:= TExIcon.Create;
-  Icon32Overlay.LoadFromFile(OverlayFolder+IconOverlayFileName);
-  for icoOverlayLoop:=0 to Icon32Overlay.ImageCount-1 do
+  if OverlayIndex <> -1 then
   begin
-    if (Icon32Overlay.Images[icoOverlayLoop].Width = IconList.Width) and
-       (Icon32Overlay.Images[icoOverlayLoop].Height = IconList.Height) and
-       (Icon32Overlay.Images[icoOverlayLoop].PixelFormat = ColorDepth) then
+    OverlayFolder:= GetFolderFull(32)+'overlay\';
+    case OverlayIndex of
+      0: OverlayFileName:= 'toolbar_overlay_multi_';
+      1: OverlayFileName:= 'toolbar_overlay_';
+      2: OverlayFileName:= 'image_category_overlay_dark.ico';
+    end;
+    if OverlayIndex in [0, 1] then
        begin
-         HaveOverlay:= True;
-         Icon32Overlay.CurrentImage:= icoOverlayLoop;
-         tmpOverlayIcon:= TIcon.Create;
-         tmpOverlayIcon.Handle:= Icon32Overlay.Handle;
-         Break;
+         if IsNightMode then
+            OverlayFileName:= OverlayFileName+'dark.ico'
+         else
+            OverlayFileName:= OverlayFileName+'light.ico';
+       end;
+    HaveOverlay:= FileExists(OverlayFolder+OverlayFileName);
+  end;
+
+  ColorDepth:= pf32bit;
+  
+  if HaveOverlay then
+  begin
+    HaveOverlay:= False;
+    Icon32Overlay:= TExIcon.Create;
+    Icon32Overlay.LoadFromFile(OverlayFolder+OverlayFileName);
+    for icoOverlayLoop:=0 to Icon32Overlay.ImageCount-1 do
+    begin
+      if (Icon32Overlay.Images[icoOverlayLoop].Width = IconList.Width) and
+         (Icon32Overlay.Images[icoOverlayLoop].Height = IconList.Height) and
+         (Icon32Overlay.Images[icoOverlayLoop].PixelFormat = ColorDepth) then
+         begin
+           HaveOverlay:= True;
+           Icon32Overlay.CurrentImage:= icoOverlayLoop;
+           tmpIconOverlay:= TIcon.Create;
+           tmpIconOverlay.Handle:= Icon32Overlay.Handle;
+           Break;
+         end;
+    end;
+    if not HaveOverlay then
+       begin
+         Icon32Overlay.Releasehandle;
+         FreeAndNil(Icon32Overlay);
        end;
   end;
 
-  FinalIcon:= TIcon.Create;
   Icon32:= TExIcon.Create;
-  Icon32.LoadFromFile(IconFolder+IconFileName);
+  Icon32.LoadFromFile(IconFolder+IconFileName+FileExt);
+  IconLoaded:= False;
+  ColorDepth:= pf32bit;
+
   for icoLoop:=0 to Icon32.ImageCount-1 do
   begin
     if (Icon32.Images[icoLoop].Width = IconList.Width) and
@@ -26357,49 +26708,117 @@ begin
          Icon32.CurrentImage:= icoLoop;
          tmpIcon:= TIcon.Create;
          tmpIcon.Handle:= Icon32.Handle;
-         if HaveOverlay then
-            FinalIcon.Handle:= CombineIcons(tmpOverlayIcon.Handle, tmpIcon.Handle)
-         else
-            FinalIcon.Handle:= Icon32.Handle;
 
-         IconList.AddIcon(FinalIcon);
-         tmpIcon.ReleaseHandle;
+         if HaveOverlay then
+            begin
+              MergedIcon:= TIcon.Create;
+              MergedIcon.Handle:= CombineIcons(tmpIconOverlay.Handle, tmpIcon.Handle);
+              IconList.ReplaceIcon(IconIndex, MergedIcon);
+              MergedIcon.ReleaseHandle;
+              FreeAndNil(MergedIcon);
+            end
+         else
+            IconList.ReplaceIcon(IconIndex, tmpIcon);
          FreeAndNil(tmpIcon);
-         Result:= True;
+         Icon32.ReleaseHandle;
+         IconLoaded:= True;
          Break;
        end;
   end;
-
   if HaveOverlay then
      begin
-       tmpOverlayIcon.ReleaseHandle;
-       FreeAndNil(tmpOverlayIcon);
+       tmpIconOverlay.ReleaseHandle;
+       FreeAndNil(tmpIconOverlay);
+       Icon32Overlay.ReleaseHandle;
        FreeAndNil(Icon32Overlay);
      end;
 
-  FinalIcon.ReleaseHandle;
-  FreeAndNil(FinalIcon);
   FreeAndNil(Icon32);
+  if not IconLoaded then
+     GenerateMessage('Error', 'Replace tool bar icon failed.',
+                     'Tool bar icon ('+IntToStr(IconList.Width)+'x'+
+                     IntToStr(IconList.Height)+') was not loaded.'+#13#10+
+                     IconList.Name+#13#10+IconFolder+IconFileName+FileExt, 2, False, 1);
 end;
 
-function TFormMain.AddDefaultIcons(const IconFileName, IconsFolder: String; IconList: TImageList; ShowErrorMsg: Boolean = True): Boolean;
+function TFormMain.AddDefaultIcons(const IconFileName, IconsFolder: String; IconList: TImageList; OverlayIndex: Integer = -1; ForceLightMode: Boolean = False): Boolean;
 var
-  Icon32: TExIcon;
-  tmpIcon: TIcon;
-  icoLoop: ShortInt;
+  Icon32, Icon32Overlay: TExIcon;
+  tmpIcon, tmpIconOverlay, MergedIcon: TIcon;
+  icoLoop, icoOverlayLoop: ShortInt;
   ColorDepth: TPixelFormat;
   IconAdded: Boolean;
+  FileExt: String;
+  OverlayFolder, OverlayFileName: String;
+  HaveOverlay: Boolean;
 begin
+  // OverlayIndex
+  // -1 -> no overlay to load
+  //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_light.ico" (replace by "_dark.ico" in night mode)
+  //  1 -> games filters tool bar single icon - "main_icons\overlay\toolbar_overlay_light.ico" (replace by "_dark.ico" in night mode)
+  //  2 -> tool bar image category 24x24      - "main_icons\overlay\image_category_overlay_small_dark.ico" (there is no "light" overlay)
+  
   Result:= False;
-  if (not FileExists(IconsFolder+IconFileName)) and ShowErrorMsg then
+  FileExt:= '.ico';
+  if PosEx('.ico', LowerCase(IconFileName)) <> 0 then
+     FileExt:= '';
+
+  if (not FileExists(IconsFolder+IconFileName+FileExt)) then
      begin
        GenerateMessage('Error', 'File not found.',
-                       Format(MissingIconFileMsg, [IconsFolder+IconFileName]), 2, False, 1);
+                       Format(MissingIconFileMsg, [IconsFolder+IconFileName+FileExt]), 2, False, 1);
        Exit;
      end;
+
+  HaveOverlay:= False;
+  if OverlayIndex <> -1 then
+  begin
+    OverlayFolder:= GetFolderFull(32)+'overlay\';
+    case OverlayIndex of
+      0: OverlayFileName:= 'toolbar_overlay_multi_';
+      1: OverlayFileName:= 'toolbar_overlay_';
+      2: OverlayFileName:= 'image_category_overlay_small_dark.ico';
+    end;
+    if OverlayIndex in [0, 1] then
+       begin
+         if IsNightMode and (not ForceLightMode) then
+            OverlayFileName:= OverlayFileName+'dark.ico'
+         else
+            OverlayFileName:= OverlayFileName+'light.ico';
+       end;
+    HaveOverlay:= FileExists(OverlayFolder+OverlayFileName);
+  end;
+
+  ColorDepth:= pf32bit;
+
+  if HaveOverlay then
+  begin
+    HaveOverlay:= False;
+    Icon32Overlay:= TExIcon.Create;
+    Icon32Overlay.LoadFromFile(OverlayFolder+OverlayFileName);
+    for icoOverlayLoop:=0 to Icon32Overlay.ImageCount-1 do
+    begin
+      if (Icon32Overlay.Images[icoOverlayLoop].Width = IconList.Width) and
+         (Icon32Overlay.Images[icoOverlayLoop].Height = IconList.Height) and
+         (Icon32Overlay.Images[icoOverlayLoop].PixelFormat = ColorDepth) then
+         begin
+           HaveOverlay:= True;
+           Icon32Overlay.CurrentImage:= icoOverlayLoop;
+           tmpIconOverlay:= TIcon.Create;
+           tmpIconOverlay.Handle:= Icon32Overlay.Handle;
+           Break;
+         end;
+    end;
+    if not HaveOverlay then
+       begin
+         Icon32Overlay.Releasehandle;
+         FreeAndNil(Icon32Overlay);
+       end;
+  end;
+
   Icon32:= TExIcon.Create;
   Icon32.LoadFromFile(IconsFolder+IconFileName);
-  ColorDepth:= pf32bit;
+
   IconAdded:= False;
   for icoLoop:=0 to Icon32.ImageCount-1 do
   begin
@@ -26410,7 +26829,19 @@ begin
          Icon32.CurrentImage:= icoLoop;
          tmpIcon:= TIcon.Create;
          tmpIcon.Handle:= Icon32.Handle;
-         IconList.AddIcon(tmpIcon);
+
+         if HaveOverlay then
+            begin
+              MergedIcon:= TIcon.Create;
+              MergedIcon.Handle:= CombineIcons(tmpIconOverlay.Handle, tmpIcon.Handle);
+              IconList.AddIcon(MergedIcon);
+              MergedIcon.ReleaseHandle;
+              FreeAndNil(MergedIcon);
+              Icon32.ReleaseHandle;
+            end
+         else
+            IconList.AddIcon(tmpIcon);
+
          tmpIcon.ReleaseHandle;
          FreeAndNil(tmpIcon);
          Result:= True;
@@ -26418,8 +26849,15 @@ begin
          Break;
        end;
   end;
+  if HaveOverlay then
+     begin
+       tmpIconOverlay.ReleaseHandle;
+       FreeAndNil(tmpIconOverlay);
+       Icon32Overlay.ReleaseHandle;
+       FreeAndNil(Icon32Overlay);
+     end;
   FreeAndNil(Icon32);
-  if (not IconAdded) and ShowErrorMsg then
+  if (not IconAdded) then //and ShowErrorMsg then
      GenerateMessage('Error', 'Failed to load file.', 'Icon ('+IntToStr(IconList.Width)+'x'+
                                        IntToStr(IconList.Height)+') was not added.'+#13#10+
                      IconList.Name+#13#10+IconsFolder+IconFileName, 2, False, 1);
@@ -26446,6 +26884,7 @@ var
   end;
 
 begin
+  // this is only used to load games list tool bar filter icons (June 07, 2018)
   if not FileExists(IconsFolder+IconFileName) then
      begin
        GenerateMessage('Error', 'Could not access a file.',
@@ -27029,6 +27468,8 @@ begin
     FreeAndNil(elIni);
   end;
 
+  WriteNightModeSettings;
+
   UpdateImagePanelColorSettings; // image panel color settings (image panel outer frame color, image splitter colors, image hint box settings
   SetImageHintBoxColors(1); // update ImageHintPanel
   SetImageHintBoxColors(2); // update ImageHintPanel2[2]
@@ -27242,7 +27683,7 @@ begin
   if FileExists(FrontendPath+'EmuLoader.ini') then
      begin
        INIFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
-       MenuSmallToolBar.Checked:= Boolean(INIFile.ReadInteger('ToolBar', 'SmallToolBar', 0));
+       MenuToolBarIconSize.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_IconSize', 1); // 0 -> extra large (68x68); 1 -> large (48x48); 2 -> small (30x24)
        IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'MessageBoxNightMode', 0));
        if IsNightMode then
           MenuEnableNightMode.Checked:= True;
@@ -27256,27 +27697,22 @@ begin
   ELV_ResetNormalColors(GamesListView);
   ELV_ResetNormalColors(MachinesListSidePanel);
 
+  // create Form that must be initialized at all times
   FormApplyFilterMsgBox:= TFormApplyFilterMsgBox.Create(Self);
-  LoadIconIntoImage('EmuLoader_Orb', FormApplyFilterMsgBox.MsgIcon);
-  
-  //if not Assigned(FormArcadeFiltersExtra) then
-     FormArcadeFiltersExtra:= TFormArcadeFiltersExtra.Create(nil);
 
-  //if not Assigned(FormArcadeFiltersDriverStatus) then
-     FormArcadeFiltersDriverStatus:= TFormArcadeFiltersDriverStatus.Create(nil);
+  LoadIconIntoImage('EmuLoader_Orb', FormApplyFilterMsgBox.MsgIcon);
+
+  FormArcadeFiltersExtra:= TFormArcadeFiltersExtra.Create(nil);
+
+  FormArcadeFiltersDriverStatus:= TFormArcadeFiltersDriverStatus.Create(nil);
 
   FormStatus.MessageStr('Loading main screen icons.');
   LoadMainScreenIcons;
-  if MenuSmallToolBar.Checked then
-     MenuSmallToolBar.OnClick(Self);
+  if MenuToolBarIconSize.Tag <> 1 then
+     MenuToolBarIconSize.Items[MenuToolBarIconSize.Tag].Click; // change games list filters tool bar size
+
   FormStatus.MessageStr('Loading miscellaneous icons.');
   LoadLeftPanelIcons;
-
-  IL_FilterWorkingNonWorking_Small.GetIcon(0, FormArcadeFiltersDriverStatus.IconListAll.Picture.Icon);
-  IL_FilterWorkingNonWorking_Small.GetIcon(1, FormArcadeFiltersDriverStatus.IconGoodImperfect.Picture.Icon);
-  IL_FilterWorkingNonWorking_Small.GetIcon(2, FormArcadeFiltersDriverStatus.IconGood.Picture.Icon);
-  IL_FilterWorkingNonWorking_Small.GetIcon(3, FormArcadeFiltersDriverStatus.IconImperfect.Picture.Icon);
-  IL_FilterWorkingNonWorking_Small.GetIcon(4, FormArcadeFiltersDriverStatus.IconPreliminary.Picture.Icon);
 
   LoadCustomEmulatorsIconsPopupMenu; // for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
 
@@ -27650,6 +28086,7 @@ begin
      UpdateExtraIni;
 
   ReadExtraIni; // read game docs settings and other settings (file cannot be rewritten when terminating the frontend like it does for "EmuLoader.ini")
+  ReadNightModeSettings; // read night mode colors settings (Preferences screen)
 
   ReadConsCompSelectEmulatorIni; // set small icons or 128x128 icons in "Select Default Emulators To Play (Console/Computer)" tool bar button
 
@@ -27760,8 +28197,8 @@ begin
            end;
         WriteSettingsCleanInstall; // update el_extra.ini with clean install dialog settings
         FreeAndNil(FormCleanInstallGuide);
-        
-        FormStatus.TitleStr('Initializing'); 
+
+        FormStatus.TitleStr('Initializing');
         FormStatus.StartThreadClock;
         FormStatus.Show;
         
@@ -27834,6 +28271,10 @@ begin
      begin
        SetPanelNightColors(PanelImagesDocuments);
        WebToolBarButtons.Font.Color:= clWhite;
+
+       // set night colors to "Search Games" form
+       SetColorsSearchGamesPanel;
+       SetColorsFilterMainCPUPanel;
      end;
      
   FormStatus.MessageStr('Loading games list icons to RAM.');
@@ -27990,8 +28431,8 @@ begin
        if PanelInitZipFile.Parent <> GamesListView then
           PanelInitZipFile.Parent:= GamesListView;
 
-       if ToolBarPanel.Visible then
-          AddHeight:= ToolBarPanel.Height+1
+       if ToolBarButtons.Visible then
+          AddHeight:= ToolBarButtons.Height+1
        else
           AddHeight:= 0;
        PanelInitZipFile.Top:= GamesListView.Top+10; //AddHeightFormMain.Top+28+10+AddHeight;
@@ -28621,7 +29062,7 @@ begin
      begin
        if InitZipSystemIcon.Tag <> sysID then
           begin
-            LoadIconIntoImage(SystemsListCustom[sysID, 1], InitZipSystemIcon, True);
+            LoadIconIntoImage(SystemsListCustom[sysID, 1], InitZipSystemIcon, -1, True);
             InitZipSystemIcon.Tag:= sysID;
           end;
        LabelInitZipSystemTitle.Caption:= SystemsListCustom[sysID, 0];
@@ -28987,12 +29428,12 @@ var
 
   function ValidateDriver(const DriverNameStr: String): Boolean;
   begin
-    Result:= iDriverName <> DriverNameStr;
+    Result:= iDriverName <> DriverNameStr; // this function is used to validate multiple drivers at once
   end;
 
   function CheckDriverFilter: Boolean;
   begin
-    DeleteGame:= iDriverName <> FilterName;
+    DeleteGame:= iDriverName <> FilterName; // this function is used to validate only one driver
     Result:= DeleteGame;
   end;
 
@@ -29047,7 +29488,7 @@ begin
   else
   if FilterName = 'irem' then
      begin
-       //Irem Old School
+       //Irem Mix
        DeleteGame:= ValidateDriver('mpatrol') and // Moon Patrol
                     ValidateDriver('m52') and     // Irem "M52" system (Moon Patrol, MAME 0.122u8)
                     ValidateDriver('m62') and     // Irem "M62" system
@@ -29125,10 +29566,16 @@ begin
      end
   else
   if FilterName = 'cps2' then
-     CheckDriverFilter // Capcom Play System 2 (CPS-2)
+     begin
+       DeleteGame:= ValidateDriver('cps2') and // Capcom Play System 2 (CPS-2)
+                    ValidateDriver('cps2mis'); // for HBMAME CPS-2 hacks
+     end
   else
   if FilterName = 'cps3' then
-     CheckDriverFilter // Capcom Play System 3 (CPS-3)
+     begin
+       DeleteGame:= ValidateDriver('cps3') and // Capcom Play System 3 (CPS-3)
+                    ValidateDriver('cps3mis'); // for HBMAME CPS-3 hacks
+     end
   else
   if FilterName = 'cpzn1' then
      begin
@@ -29146,7 +29593,7 @@ begin
                     CheckBiosFilter('cpzn2');       // Capcom ZN-2 (up to MAME v0.177)
      end
   else
-  if FilterName = 'capcom_oldschool' then
+  if FilterName = 'capcom_80s' then
      begin
        // Capcom (Old School)
        DeleteGame:= ValidateDriver('gng') and      // Ghosts'n Goblins hardware
@@ -29352,20 +29799,9 @@ begin
   if FilterName = 'ksys573' then
      CheckDriverFilter // Konami System 573
   else
-  if FilterName = 'konami_oldschool1' then
+  if FilterName = 'konami_80s' then
      begin
-       // Konami - Old School 1
-       DeleteGame:= ValidateDriver('tmnt') and     // Konami 68000 based games
-                    ValidateDriver('simpsons') and // The Simpsons hardware
-                    ValidateDriver('moo') and      // Wild West C.O.W. hardware
-                    ValidateDriver('parodius') and // Konami GX955 hardware
-                    ValidateDriver('xexex') and    // Xexex hardware
-                    ValidateDriver('asterix');     // Xexex based hardware
-     end
-  else
-  if FilterName = 'konami_oldschool2' then
-     begin
-       // Konami - Old School 2
+       // Konami - 80's
        DeleteGame:= ValidateDriver('trackfld') and  // Track'n'Field hardware
                     ValidateDriver('gyruss') and    // Gyruss hardware
                     ValidateDriver('hyperspt') and  // Hyper Sports hardware
@@ -29383,6 +29819,17 @@ begin
                     ValidateDriver('timeplt') and   // Konami Time Pilot hardware
                     ValidateDriver('tp84') and      // Konami Time Pilot '84 hardware
                     ValidateDriver('circusc');      // Konami Circus Charlie GX380 hardware
+     end
+  else
+  if FilterName = 'konami_90s' then
+     begin
+       // Konami - 90's
+       DeleteGame:= ValidateDriver('tmnt') and     // Konami 68000 based games
+                    ValidateDriver('simpsons') and // The Simpsons hardware
+                    ValidateDriver('moo') and      // Wild West C.O.W. hardware
+                    ValidateDriver('parodius') and // Konami GX955 hardware
+                    ValidateDriver('xexex') and    // Xexex hardware
+                    ValidateDriver('asterix');     // Xexex based hardware
      end
   else
   if FilterName = 'taito' then
@@ -29452,9 +29899,9 @@ begin
   if FilterName = 'taitotx' then
      CheckDriverFilter // Taito Type X System
   else
-  if FilterName = 'taito_oldschool1' then
+  if FilterName = 'taito_mix1' then
      begin
-       // Taito - Old School 1
+       // Taito - Mix 1
        DeleteGame:= ValidateDriver('halleys') and  // Halley's Comet hardware
                     ValidateDriver('tsamurai') and // Samurai hardware
                     ValidateDriver('fastfred') and // Fast Freddie/Jump Coaster hardware
@@ -29468,9 +29915,9 @@ begin
                     ValidateDriver('lkage');       // Legend of Kage hardware
      end
   else
-  if FilterName = 'taito_oldschool2' then
+  if FilterName = 'taito_mix2' then
      begin
-       // Taito - Old School 2
+       // Taito - Mix 2
        DeleteGame:= ValidateDriver('8080bw') and   // Space Invaders II hardware
                     ValidateDriver('mw8080bw') and // Space Invaders hardware
                     ValidateDriver('phoenix') and  // Phoenix hardware
@@ -29532,18 +29979,18 @@ begin
   if FilterName = 'namcops2' then
      CheckDriverFilter // Namco System 246 / System 256 games (Sony PS2 based)
   else
-  if FilterName = 'namco_misc' then
+  if FilterName = 'namco_90s' then
      begin
-       // Namco System NA-1 / NA-2 / NB-1 / ND-1 / FL
+       // Namco 90's - System NA-1 / NA-2 / NB-1 / ND-1 / FL
        DeleteGame:= ValidateDriver('namcona1') and // Namco System NA-1 / NA-2
                     ValidateDriver('namconb1') and // Namco System NB-1
                     ValidateDriver('namcond1') and // Namco System ND-1
                     ValidateDriver('namcofl');     // Namco System FL
      end
   else
-  if FilterName = 'namco_oldschool' then
+  if FilterName = 'namco_mix1' then
      begin
-       // Namco - Old School
+       // Namco - Mix
        DeleteGame:= ValidateDriver('galaga') and   // Galaga hardware
                     ValidateDriver('mappy') and    // Mappy hardware
                     ValidateDriver('gaplus') and   // GaPlus hardware
@@ -29584,7 +30031,7 @@ begin
   if FilterName = 'atarisy2' then
      CheckDriverFilter // Atari System 2 hardware
   else
-  if FilterName = 'atari_misc' then
+  if FilterName = 'atari_90s' then
      begin
        // Atari G1 / G42 / GT / GX2
        DeleteGame:= ValidateDriver('atarig1') and  // Atari G1 hardware
@@ -29593,9 +30040,9 @@ begin
                     ValidateDriver('atarigx2');    // Atari GX2 hardware
      end
   else
-  if FilterName = 'atari_oldschool' then
+  if FilterName = 'atari_mix1' then
      begin
-       // Atari - Old School
+       // Atari - Mix
        DeleteGame:= ValidateDriver('centiped') and // Atari Centiped hardware
                     ValidateDriver('ccastles') and // Atari Crystal Castles hardware
                     ValidateDriver('irobot') and   // Atari I, Robot hardware
@@ -29632,7 +30079,7 @@ begin
   if (FilterName = 'vsnes') or (FilterName = 'nvs') then
      CheckDriverFilter // Nintendo VS (UniSystem and DualSystem)
   else
-  if FilterName = 'nintendo_oldschool' then
+  if FilterName = 'nintendo_nostalgia' then
      begin
        // Nintendo - Old School
        DeleteGame:= ValidateDriver('dkong') and    // Donkey Kong hardware
@@ -29999,7 +30446,7 @@ var
             KeepGame:= ApplyMiscFilters(KeepGame);
 
          if KeepGame and (SelectedFilterName <> 'favorites') then
-            KeepGame:= not FilterGamesList(SelectedFilterName);
+            KeepGame:= not FilterGamesList(SelectedFilterName); // validate "Arcade Filters" in "uMain."FilterGamesList" function
 
          if KeepGame and (FormArcadeFiltersExtra.ControlName <> '') then
             KeepGame:= CheckGameControlType(MemGameInfo.eSystemID, MemGameInfo.eControls, FormArcadeFiltersExtra.ControlName, MemGameInfo.eSoftwareName, MemGameInfo.eButtonsCount);
@@ -30042,6 +30489,7 @@ begin
                     FirstItem.Visible:= True;
                end;
             SelectedEasyItem:= GamesListView.Groups.NextInGroup(elvGroup, SelectedEasyItem);
+            Application.ProcessMessages;
           until SelectedEasyItem = nil;
           //elvGroup.Visible:= elvGroup.VisibleCount > 0; // cannot hide groups here (do not remove this)
           elvGroup:= GamesListView.Groups.PrevGroup(elvGroup);
@@ -30253,6 +30701,7 @@ begin
     if elvGroup.VisibleCount = 0 then
        elvGroup.Visible:= False;
     elvGroup:= ELV_Holder.Groups.NextGroup(elvGroup);
+    Application.ProcessMessages;
   until elvGroup = nil;
 end;
 
@@ -30471,52 +30920,106 @@ begin
   // 12 -> EmuCon emulator parameters to use (never changes)
   // 13 -> last played games MRU (never changes)
   // 14 -> select main emulators to play with EmuCon (never changes)
+  // 15 -> Search Games Panel
 
+  // OverlayIndex
+  // 0 -> tool bar multi icon
+  // 1 -> tool bar single icon
+  tempString:= '';
   if ButtonName = ButtonViewMode then
-     SetIcon(IL_ViewMode_Large, IL_ViewMode_Small, IL_ToolBarButtons, ButtonViewMode.Tag, 1)
+     begin
+       case ButtonViewMode.Tag of
+         0: tempString:= 'viewmode_01_details.ico';
+         1: tempString:= 'viewmode_02_grouped.ico';
+         2: tempString:= 'viewmode_03_small.ico';
+         3: tempString:= 'viewmode_04_large.ico';
+         4: tempString:= 'viewmode_05_tile.ico';
+         5: tempString:= 'viewmode_06_thumbnail.ico';
+       end;
+       SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 1, 1); //SetIcon(IL_ViewMode_Large, IL_ViewMode_Small, IL_ToolBarButtons, ButtonViewMode.Tag, 1)
+     end
   else
   if ButtonName = ButtonSystemsQuickFilter then
      begin
        if IsSystemQuickFilterEnabled then
           begin
-            SetToolBarIcon('filter_systems_quick_enabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3);
+            SetToolBarIcon('filter_systems_quick_enabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3, 1);
             ButtonSystemsQuickFilter.Hint:= 'Select systems filter, quick mode (enabled)';
           end
        else
           begin
-            SetToolBarIcon('filter_systems_quick_disabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3);
+            SetToolBarIcon('filter_systems_quick_disabled.ico', GetFolderFull(40), IL_ToolBarButtons, 3, 1);
             ButtonSystemsQuickFilter.Hint:= 'Select systems filter, quick mode (disabled)';
           end;
      end
   else
-  if ButtonName = ButtonGameFilterMain then
+  if ButtonName = ButtonArcadeGamesFilters then
      begin
-       ButtonGameFilterMain.Enabled:= (SelectedFilterName <> 'favorites') and (not PanelMachinesList.Visible);
+       ButtonArcadeGamesFilters.Enabled:= (SelectedFilterName <> 'favorites') and (not PanelMachinesList.Visible);
        tempString:= GetFolderFull(32);
-       case MenuSmallToolBar.Checked of
+       case ButtonArcadeGamesFilters.Enabled of
+         True : SetToolBarIcon(SelectedFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5, Ord(SelectedFilterName <> 'allgames'));
+         False: SetToolBarIcon(LastFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5, Ord(LastFilterName <> 'allgames'));
+       end;
+
+       {case MenuSmallToolBar.Checked of
          True:
            begin
              // arcade main filter icon doesn't change when small icons are enabled; there are no 28x22 icons in "resources\main_icons\arcade_filters\" files
-             SetToolBarIcon('allgames', tempString+'arcade_filters\', IL_ToolBarButtons, 5);
+             SetToolBarIcon('allgames', tempString+'arcade_filters\', IL_ToolBarButtons, 5, 0);
            end;
          False:
            begin
              case ButtonGameFilterMain.Enabled of
-               True : SetToolBarIcon(SelectedFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5);
-               False: SetToolBarIcon(LastFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5);
+               True : SetToolBarIcon(SelectedFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5, Ord(SelectedFilterName <> 'allgames'));
+               False: SetToolBarIcon(LastFilterName, tempString+'arcade_filters\', IL_ToolBarButtons, 5, Ord(LastFilterName <> 'allgames'));
              end;
            end;
-       end;
+       end;}
      end
   else
   if ButtonName = ButtonGameFilterParentClone then
-     SetIcon(IL_FilterParentClone_Large, IL_FilterParentClone_Small, IL_ToolBarButtons, ButtonGameFilterParentClone.Tag, 6)
+     begin
+       case ButtonGameFilterParentClone.Tag of
+         0: tempString:= 'filter2_01_both.ico';
+         1: tempString:= 'filter2_02_parent.ico';
+         2: tempString:= 'filter2_03_clone.ico';
+       end;
+       SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 6, Ord(ButtonGameFilterParentClone.Tag <> 0)); // SetIcon(IL_FilterParentClone_Large, IL_FilterParentClone_Small, IL_ToolBarButtons, ButtonGameFilterParentClone.Tag, 6)
+     end
   else
   if ButtonName = ButtonGameFilterHaveMiss then
-     SetIcon(IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, IL_ToolBarButtons, ButtonGameFilterHaveMiss.Tag, 7)
+     begin
+       case ButtonGameFilterHaveMiss.Tag of
+         0: tempString:= 'filter3_01_listall.ico';
+         1: tempString:= 'filter3_02_have.ico';
+         2: tempString:= 'filter3_03_miss.ico';
+         3: tempString:= 'filter3_04_missroms.ico';
+         4: tempString:= 'filter3_05_miss_and_missroms.ico';
+       end;
+       SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 7, Ord(ButtonGameFilterHaveMiss.Tag <> 0)); // SetIcon(IL_FilterHaveMiss_Large, IL_FilterHaveMiss_Small, IL_ToolBarButtons, ButtonGameFilterHaveMiss.Tag, 7)
+     end
   else
   if ButtonName = ButtonGameFilterDriverStatus then
-     SetIcon(IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, IL_ToolBarButtons, ButtonGameFilterDriverStatus.Tag, 8);
+     begin
+       case ButtonGameFilterDriverStatus.Tag of
+         0: tempString:= 'filter4_01_all.ico';
+         1: tempString:= 'filter4_02_good-imperfect.ico';
+         2: tempString:= 'filter4_03_good.ico';
+         3: tempString:= 'filter4_04_imperfect.ico';
+         4: tempString:= 'filter4_05_preliminary.ico';
+       end;
+       SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 8, Ord(ButtonGameFilterDriverStatus.Tag <> 0)); // SetIcon(IL_FilterWorkingNonWorking_Large, IL_FilterWorkingNonWorking_Small, IL_ToolBarButtons, ButtonGameFilterDriverStatus.Tag, 8);
+     end
+  else
+  if ButtonName = ButtonImageCue then
+     begin
+       case ButtonImageCue.Down of
+         True : tempString:= 'cdimage_cue_enabled.ico';
+         False: tempString:= 'cdimage_cue_disabled.ico'
+       end;
+       SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 11, 1);
+     end;
 end;
 
 procedure TFormMain.ResetFavoriteSettings;
@@ -30524,7 +31027,7 @@ begin
   PopupEnableFavorites.Checked:= SelectedFilterName = 'favorites';
   ButtonGameFilterFavorites.Down:= PopupEnableFavorites.Checked;
   PopupScanGames.Enabled:= ButtonGameFilterHaveMiss.Enabled;
-  ButtonGameFilterMain.Enabled:= (not PopupEnableFavorites.Checked) and (not PanelMachinesList.Visible);
+  ButtonArcadeGamesFilters.Enabled:= (not PopupEnableFavorites.Checked) and (not PanelMachinesList.Visible);
 end;
 
 procedure TFormMain.SetGameType(LoadFiles: Boolean);
@@ -30718,10 +31221,11 @@ begin
   SetMainToolBarIcon(ButtonViewMode);
   SetMainToolBarIcon(ButtonSystemsQuickFilter);
   ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
-  SetMainToolBarIcon(ButtonGameFilterMain);
+  SetMainToolBarIcon(ButtonArcadeGamesFilters);
   SetMainToolBarIcon(ButtonGameFilterParentClone);
   SetMainToolBarIcon(ButtonGameFilterHaveMiss);
   SetMainToolBarIcon(ButtonGameFilterDriverStatus);
+  SetMainToolBarIcon(ButtonImageCue);
 
   GetGameDataListView(SelectedEasyItem);
 
@@ -30771,6 +31275,9 @@ begin
   if MenuShowImages.Checked then
      InitZippedImagesCache;
 
+  if FormArcadeFiltersExtra.FilterGamesMainCPU.Tag = 1 then
+     FormMain.InitFilterCPU_MAME;
+     
   //if not IsDetailsView then
   //   begin
   //     PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
@@ -31885,11 +32392,24 @@ begin
   if PopupRunConsoleComputerGameWithAlterMAME.Visible then
      PopupRunConsoleComputerGameWithAlterMAME.Caption:= 'Run Game With AlterMAME v'+buildAlterMAME;
 
-  PopupPlayGameExtraParametersMAME.Visible:= (IsMAMEBasedSys(MemGameInfo.eSystemID) and ValidateArcadeEmulatorFile(MemGameInfo.eSystemID));
+  PopupPlayGameExtraParametersMAME.Visible:= ((MemGameInfo.eSystemID = idSupermodel) or IsMAMEBasedSys(MemGameInfo.eSystemID)) and ValidateArcadeEmulatorFile(MemGameInfo.eSystemID);
   if PopupPlayGameExtraParametersMAME.Visible and (not MemGameInfo.eIsCustomGame) then
      begin
        if IsROM_Device(MemGameInfo.eROMIdentification) or IsROM_Bios(MemGameInfo.eROMIdentification) then
-          PopupPlayGameExtraParametersMAME.Visible:= False;
+          PopupPlayGameExtraParametersMAME.Visible:= False
+       else
+          begin
+            if MemGameInfo.eSystemID <> idSupermodel then
+               begin
+                 if not SameText(PopupPlayGameExtraParametersMAME.Caption, 'Run Game (Extra Parameters)') then
+                    PopupPlayGameExtraParametersMAME.Caption:= 'Run Game (Extra Parameters)';
+               end
+            else
+               begin
+                 if not SameText(PopupPlayGameExtraParametersMAME.Caption, 'Run Game (Load a Save State)') then
+                    PopupPlayGameExtraParametersMAME.Caption:= 'Run Game (Load a Save State)';
+               end;
+          end;
      end;
 
   PopupCustomSettings.Visible:= PopupPlayGameStandard.Visible and
@@ -31936,7 +32456,7 @@ begin
                                TEasyGameInfo(SelectedEasyItem).eDeviceSets[iLoop], True, False, False)).OnClick:= PopupSelectSetExtra;
        end;
      end;
-
+     
   PopupSelectSet.Visible:= PopupSelectSet.Count > 0;
 
   GameDriver:= ChangeFileExt(MemGameInfo.eDriverName, '');
@@ -33114,7 +33634,7 @@ begin
   FocusGamesList;
 end;
 
-procedure TFormMain.ButtonGameFilterMainClick(Sender: TObject);
+procedure TFormMain.ButtonArcadeGamesFiltersClick(Sender: TObject);
 begin
   if not FileExists(GetFolderFull(43)+'mame_filters.ini') then
      begin
@@ -33125,11 +33645,13 @@ begin
        GenerateMessage('Error', 'Main filter', '', 2, False, 1);
        Exit;
      end;
+
+  ShowFilterMsgBox('Arcade Games Filters', 'Building filters list, please wait...', True);
   if not Assigned(FormArcadeGamesFilter) then
      FormArcadeGamesFilter:= TFormArcadeGamesFilter.Create(nil);
-  if Screen.Height = 480 then
-     FormArcadeGamesFilter.ClientHeight:= 400;
-  FormArcadeGamesFilter.Left:= FormMain.Left+ButtonGameFilterMain.Left+10;
+  //if Screen.Height = 480 then
+  //   FormArcadeGamesFilter.ClientHeight:= 400;
+  FormArcadeGamesFilter.Left:= FormMain.Left+ButtonArcadeGamesFilters.Left+10;
   FormArcadeGamesFilter.Top:= FormMain.Top+28+10+ToolBarButtons.ButtonHeight+1;
   FormArcadeGamesFilter.ShowModal;
   if (FormArcadeGamesFilter.SelNodeName <> SelectedFilterName) and
@@ -33137,7 +33659,7 @@ begin
      begin
        SelectedFilterName:= FormArcadeGamesFilter.SelNodeName;
        FreeAndNil(FormArcadeGamesFilter);
-       SetMainToolBarIcon(ButtonGameFilterMain);
+       SetMainToolBarIcon(ButtonArcadeGamesFilters);
        SetGameType(False);
      end
   else
@@ -33244,6 +33766,7 @@ var
           begin
             case ImageList.Width of
               32: CheckRect.Right:= 40;
+              30: CheckRect.Right:= 38; // added June 07, 2018
               28: CheckRect.Right:= 36;
               24: CheckRect.Right:= 32;
               16: CheckRect.Right:= 24;
@@ -33273,6 +33796,7 @@ begin
            begin
              case ImageList.Width of
                32: IconR.Right:= 44;
+               30: IconR.Right:= 42; // added June 07, 2018
                28: IconR.Right:= 40;
                24: IconR.Right:= 36;
                16: IconR.Right:= 26;
@@ -33299,6 +33823,7 @@ begin
         begin
           case ImageList.Width of
             32: ARect.Left:= 44;
+            30: ARect.Left:= 42; // added June 07, 2018
             28: ARect.Left:= 40;
             24: ARect.Left:= 36;
             16: ARect.Left:= 26;
@@ -33368,6 +33893,7 @@ begin
                   begin
                     case ImageList.Width of
                       32: Inc(R.Left, 40);
+                      30: Inc(R.Left, 38); // added June 07, 2018
                       28: Inc(R.Left, 36);
                       24: Inc(R.Left, 32);
                       16: Inc(R.Left, 24);
@@ -33396,6 +33922,7 @@ begin
                  begin
                    case ImageList.Width of
                      32: R.Left:= 41;
+                     30: R.Left:= 39; // added June 07, 2018
                      28: R.Left:= 37;
                      24: R.Left:= 33;
                      16: R.Left:= 25;
@@ -33512,6 +34039,7 @@ var
     Result:= True;
     case ImageList.Width of
       32: Height:= 38;
+      30: Height:= 34; // added June 07, 2018
       28: Height:= 32;
       24: Height:= 34;
       16: Height:= 22;
@@ -33555,10 +34083,10 @@ begin
         if (AMenuItem.Parent = PopupPlayGameWithCustomSystem) then
         begin
           if (AMenuItem.HelpContext = 50) then
-             Height:= 22
+             Height:= 24 //Height:= 22  // modified June 07, 2018
           else
           if AMenuItem.Hint = '' then
-             Height:= 22
+             Height:= 24 //Height:= 22  // modified June 07, 2018
           else
              SetItemHeight;
         end
@@ -33576,7 +34104,7 @@ begin
                if AMenuItem.Hint <> '' then
                   Height:= 32
                else
-                  Height:= 22;
+                  Height:= 24 //Height:= 22; // modified June 07, 2018
              end
           else
              SetItemHeight;
@@ -33585,7 +34113,7 @@ begin
       end;
     False:
       begin
-        Height:= 22;
+        Height:= 24; //Height:= 22; // modified June 07, 2018
         Width:= Width+16;
       end;
   end;
@@ -34106,8 +34634,8 @@ begin
         FormMainHeight:= FormMain.Height;
         FormMainTop:= FormMain.Top;
         FormMainLeft:= FormMain.Left;
-        if ToolBarPanel.Tag = 1 then
-           ToolbarPanel.Visible:= False;
+        if ToolBarButtons.Tag = 1 then
+           ToolBarButtons.Visible:= False;
         if StatusBarPanel.Visible then
            StatusBarPanel.Visible:= False;
 
@@ -34135,8 +34663,8 @@ begin
         MoveWindow(FormMain.Handle, FormMainLeft, FormMainTop, FormMainWidth, FormMainHeight, True);
         LockWindowUpdate(0);
 
-        if ToolBarPanel.Tag = 1 then
-           ToolbarPanel.Visible:= True;
+        if ToolBarButtons.Tag = 1 then
+           ToolBarButtons.Visible:= True;
         if (not StatusBarPanel.Visible) and MenuShowGamesStatusBar.Checked then
            StatusBarPanel.Visible:= True;
         if MenuViewFullScreen.Tag = 1 then
@@ -34190,8 +34718,8 @@ end;
 
 procedure TFormMain.MenuEnableToolBarClick(Sender: TObject);
 begin
-  ToolBarPanel.Visible:= MenuEnableToolBar.Checked;
-  ToolBarPanel.Tag:= Ord(ToolBarPanel.Visible);
+  ToolBarButtons.Visible:= MenuEnableToolBar.Checked;
+  ToolBarButtons.Tag:= Ord(ToolBarButtons.Visible);
   if PopupShowToolBar.Checked <> MenuEnableToolBar.Checked then
      PopupShowToolBar.Checked:= MenuEnableToolBar.Checked;
   PopupShowToolBar.Visible:= not PopupShowToolBar.Checked;
@@ -34230,8 +34758,8 @@ end;
 
 procedure TFormMain.PopupSetFoldersMAMu_Click(Sender: TObject);
 begin
-  FormPreferences.ButtonGamesList.Down:= True;
-  FormPreferences.ButtonGamesList.Click;
+  FormPreferences.ButtonPageGamesList.Down:= True;
+  FormPreferences.ButtonPageGamesList.Click;
   FormPreferences.Tag:= 2;
   MenuPreferences.Click;
 end;
@@ -34553,11 +35081,11 @@ begin
   FormStatus.TitleStr('View Incomplete Games/Machines');
   FormStatus.MessageStr('Loading files.');
   Application.ProcessMessages;
-  if not Assigned(FormArcadeGamesScanResults) then
-     FormArcadeGamesScanResults:= TFormArcadeGamesScanResults.Create(nil);
-  FormArcadeGamesScanResults.SingleGame:= False;
-  FormArcadeGamesScanResults.ShowModal;
-  FreeAndNil(FormArcadeGamesScanResults);
+  if not Assigned(FormArcadeScanGamesResults) then
+     FormArcadeScanGamesResults:= TFormArcadeScanGamesResults.Create(nil);
+  FormArcadeScanGamesResults.SingleGame:= False;
+  FormArcadeScanGamesResults.ShowModal;
+  FreeAndNil(FormArcadeScanGamesResults);
   FocusGamesList;
 end;
 
@@ -34593,11 +35121,11 @@ begin
               FormStatus.TitleStr('View Incomplete Games/Machines: '+FormMain.GetArcadeEmulatorDescription(MemGameInfo.eSystemID, True));
               FormStatus.MessageStr('Loading files.');
               FreeAndNil(missFile);
-              if not Assigned(FormArcadeGamesScanResults) then
-                 FormArcadeGamesScanResults:= TFormArcadeGamesScanResults.Create(nil);
-              FormArcadeGamesScanResults.SingleGame:= True;
-              FormArcadeGamesScanResults.ShowModal;
-              FreeAndNil(FormArcadeGamesScanResults);
+              if not Assigned(FormArcadeScanGamesResults) then
+                 FormArcadeScanGamesResults:= TFormArcadeScanGamesResults.Create(nil);
+              FormArcadeScanGamesResults.SingleGame:= True;
+              FormArcadeScanGamesResults.ShowModal;
+              FreeAndNil(FormArcadeScanGamesResults);
             end;
           False:
             begin
@@ -35429,7 +35957,7 @@ var
          SplitterImg[Index]:= TSplitterEx.Create(nil);
          SplitterImg[Index].Parent:= imgParentComponent;
          SplitterImg[Index].Style:= TTMSStyle(tsSolidColor);
-         case FormPreferences.ImageEnableGripIcon.Checked of
+         case FormPreferences.ImageSplitterShowGripIcon.Checked of
            True : SplitterImg[Index].GripStyle:= sgDots;
            False: SplitterImg[Index].GripStyle:= sgNone;
          end;
@@ -36264,23 +36792,13 @@ begin
      begin
        for iLoop:= Low(SplitterImg) to High(SplitterImg) do
        begin
-         UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(tsSolidColor),
-                             FormPreferences.ImageLayoutSplitterSingleColor.Selected,
-                             FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
+         UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(FormPreferences.ImageSplitterStyleSelector.ItemIndex), //TTMSStyle(tsSolidColor),
+                             FormPreferences.ImageSplitterSingleColor.Selected,
+                             FormPreferences.ImageSplitterSingleColorHot.Selected);
 
          SetGripIcon(SplitterImg[iLoop], PopupImageShowSplitterGrip.Checked);
 
        end;
-       {UpdateSplitterStyle(SplitterImg[1], TTMSStyle(tsSolidColor),
-                           FormPreferences.ImageLayoutSplitterSingleColor.Selected,
-                           FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
-
-       UpdateSplitterStyle(SplitterImg[2], TTMSStyle(tsSolidColor),
-                           FormPreferences.ImageLayoutSplitterSingleColor.Selected,
-                           FormPreferences.ImageLayoutSplitterSingleColorHot.Selected);
-
-       SetGripIcon(SplitterImg[1], PopupImageShowSplitterGrip.Checked);
-       SetGripIcon(SplitterImg[2], PopupImageShowSplitterGrip.Checked);}
      end;
 end;
 
@@ -36291,7 +36809,7 @@ end;
 
 procedure TFormMain.ChangeImageCategoryIcon(CategoryIndex: Integer; DestinationImageList: TImageList; PositionIndex: Integer);
 begin
-  SetToolBarIcon(ImageCategoryArray[CategoryIndex, 0], GetFolderFull(32), DestinationImageList, PositionIndex);
+  SetToolBarIcon(ImageCategoryArray[CategoryIndex, 0], GetFolderFull(32), DestinationImageList, PositionIndex, 2); // overlay = 2 (images tool bar single icon 24x24)
 end;
 
 procedure TFormMain.CallSelectImageLayout(SelectLayoutIndex: Integer; ShowSelectorDialog: Boolean);
@@ -36337,7 +36855,7 @@ begin
   MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
   ButtonScreenshotLayouts.Tag:= iLoop;
 
-  SetToolBarIcon(GetScrLayoutImageFile(ButtonScreenshotLayouts.Tag, False), GetFolderFull(32), IL_ImagesToolBarButtons, 5);
+  SetToolBarIcon(GetScrLayoutImageFile(ButtonScreenshotLayouts.Tag, False), GetFolderFull(32), IL_ImagesToolBarButtons, 5, -1); // -1 no overlay to load
 
   ClearScreenshots;
   ImagePreviewMouseLeave(Images);
@@ -37167,7 +37685,7 @@ begin
            SelectRandomGame(GamesListView, SelectedEasyItem)
         else
         if (CharCode = Ord('T')) and (Shift = [ssCtrl]) then
-           ToolBarPanel.Visible:= not ToolBarPanel.Visible
+           ToolBarButtons.Visible:= not ToolBarButtons.Visible
         else
         if (CharCode = Ord('I')) and (Shift = [ssCtrl]) then
            MenuImagesEnableToolBar.Click
@@ -37235,7 +37753,7 @@ begin
            MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('{') then
-           ButtonGameFilterMain.Click // select games filter
+           ButtonArcadeGamesFilters.Click // select games filter
         else
         if CharCode = VK_SPACE then
            ButtonPlayVideoPreview.Click // play video preview
@@ -37269,7 +37787,7 @@ begin
            MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('K') then
-           ButtonGameFilterMain.Click // select games filter
+           ButtonArcadeGamesFilters.Click // select games filter
         else
         if CharCode = Ord('9') then
            ButtonPlayVideoPreview.Click // play video preview
@@ -37292,7 +37810,7 @@ begin
            MenuShowImages.Click // toggle images ON/OFF
         else
         if CharCode = Ord('5') then
-           ButtonGameFilterMain.Click // select games filter
+           ButtonArcadeGamesFilters.Click // select games filter
         else
         if CharCode = Ord('2') then
            begin
@@ -37321,8 +37839,8 @@ end;
 
 procedure TFormMain.GameDocumentsCustomizePanelClick(Sender: TObject);
 begin
-  FormPreferences.ButtonGameDocuments.Down:= True;
-  FormPreferences.ButtonGameDocuments.Click;
+  FormPreferences.ButtonPageGameDocuments.Down:= True;
+  FormPreferences.ButtonPageGameDocuments.Click;
   MenuPreferences.Click;
 end;
 
@@ -37372,10 +37890,11 @@ var
 
           AddDefaultIcons('media_vhs.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons); // 23
 
+          // show driver icon ? (June 22, 2018)
           //-1 -> none; 0 -> Good; 1 -> Imperfect; 2 -> Preliminary
-          //AddDefaultIcons('scanresult_ok.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);
-          //AddDefaultIcons('scanresult_missroms.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);
-          //AddDefaultIcons('scanresult_badcrc.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);
+          //AddDefaultIcons('scanresult_ok.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);       // 24
+          //AddDefaultIcons('scanresult_missroms.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons); // 25
+          //AddDefaultIcons('scanresult_badcrc.ico', tempFolder, FormDeleteMultipleGamesFiles.IL_DeleteGameIcons);   // 26
        end;
   end;
 
@@ -37917,7 +38436,7 @@ begin
   FocusGamesList;
 end;
 
-procedure TFormMain.ButtonFilterCPUApplyClick(Sender: TObject);
+procedure TFormMain.ApplyFilterCPU;
 var
   Item, FirstItem: TEasyItem;
   Group: TEasyGroup;
@@ -37939,6 +38458,9 @@ var
   end;
 
 begin
+  if not PanelFilterCPU.Visible then
+     Exit;
+
   if not CheckTotal(GamesListView) then
      begin
        BlinkBkEdit(FilterCPU);
@@ -37946,17 +38468,18 @@ begin
        Exit;
      end;
 
-  if (((FilterCPU.Text) = '') or SameText(' Enter a CPU title...', FilterCPU.Text)) and
-     (FilterCPUList.ItemIndex = 0) then
+
+  if (FilterCPU.Text = '') and (FilterCPUList.ItemIndex = 0) then
      begin
-       SetGameType(False);
+       //SetGameType(False);
+       BlinkBkEdit(FilterCPU);
+       FocusGamesList;
        Exit;
      end
   else
      begin
        // MAME based systems only
-       if not SameText(' Enter a CPU title...', FilterCPU.Text) then
-          SearchStrCPU:= LowerCase(FilterCPU.Text);
+       SearchStrCPU:= LowerCase(FilterCPU.Text);
        GamesListView.BeginUpdate;
        case IsGroupedView of
          True:
@@ -38080,6 +38603,8 @@ var
          begin
            // ButtonFilterControls.Tag = 1 ("Controls" filter search bar button)
            KeepGame:= CheckGameControlType(MemGameInfo.eSystemID, MemGameInfo.eControls, ControlStr, MemGameInfo.eSoftwareName, MemGameInfo.eButtonsCount);
+           if KeepGame and MemGameInfo.eIsCustomGame then
+              KeepGame:= False; // this will remove all EmuCon games from the lis; "Controls" filter is for arcade and MAME only
          end;
        end;
     if KeepGame and FilterMachineType.MAMEMachinesFilterPanel_Enabled then
@@ -38176,7 +38701,7 @@ var
   end;
 
 begin
-  if (FilterGameTitle.Text = '') or SameText(' Search games...', FilterGameTitle.Text) then
+  if (FilterGameTitle.Text = '') then //or SameText(' Search games...', FormFiltersSearchGames.FilterGameTitle.Text) then
      begin
        BlinkBkEdit(FilterGameTitle);
        Exit;
@@ -38191,7 +38716,7 @@ begin
   // Bios / No Bios
   // Game Title
 
-  ShowFilterMsgBox('Search Bar', 'Applying filters, please wait...', IsGroupedView);
+  ShowFilterMsgBox('Search Games Filter', 'Applying filters, please wait...', IsGroupedView);
   //Screen.Cursor:= crHourGlass;
   StrSearch:= LowerCase(FilterGameTitle.Text);
   
@@ -38278,48 +38803,18 @@ begin
   //ShowMessage('time: '+IntToStr(GetTickCount-cStart)); // for debugging only
 end;
 
-procedure TFormMain.FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then
-     begin
-       Key:= #0; // to remove the "ding" sound when pressing keys like ENTER, ESC
-       ButtonFilterTitleApply.Click;
-     end
-  else
-  if Key = #27 then
-     begin
-       Key:= #0;
-       TEdit(Sender).Text:= '';
-     end;
-end;
-
-procedure TFormMain.ButtonFilterTitleApplyClick(Sender: TObject);
-begin
-  ApplyFilterSearchBar;
-end;
-
-procedure TFormMain.ButtonFilterTitleResetClick(Sender: TObject);
-begin
-  if CheckTotal(GamesListView) then
-     begin
-       FilterGameTitle.Text:= '';
-       FilterGameTitle.OnExit(FilterGameTitle);
-       SetGameType(False);
-     end;
-end;
-
 procedure TFormMain.PopupMAMu_IconsManagerClick(Sender: TObject);
 begin
   if not Assigned(FormArcadeMAMu_IconsManager) then
      FormArcadeMAMu_IconsManager:= TFormArcadeMAMu_IconsManager.Create(nil);
-  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterList, TTMSStyle(FormPreferences.SplitterStyleSelector.ItemIndex),
-                                FormPreferences.SplitterSingleColor.Selected,
-                                FormPreferences.SplitterSingleColorHot.Selected);
-  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterIconHistory, TTMSStyle(FormPreferences.SplitterStyleSelector.ItemIndex),
-                                FormPreferences.SplitterSingleColor.Selected,
-                                FormPreferences.SplitterSingleColorHot.Selected);
-  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterList, FormPreferences.SplitterGripIcon.Checked);
-  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormPreferences.SplitterGripIcon.Checked);
+  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterList, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
+                                FormPreferences.GamesListSplitterSingleColor.Selected,
+                                FormPreferences.GamesListSplitterSingleColorHot.Selected);
+  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterIconHistory, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
+                                FormPreferences.GamesListSplitterSingleColor.Selected,
+                                FormPreferences.GamesListSplitterSingleColorHot.Selected);
+  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterList, FormPreferences.GamesListSplitterShowGripIcon.Checked);
+  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormPreferences.GamesListSplitterShowGripIcon.Checked);
   FormArcadeMAMu_IconsManager.FormStyle:= fsStayOnTop;
   FormArcadeMAMu_IconsManager.Show;
 end;
@@ -38328,18 +38823,12 @@ procedure TFormMain.MenuImagesManagerClick(Sender: TObject);
 begin
   if not Assigned(FormImagesManager) then
      FormImagesManager:= TFormImagesManager.Create(nil);
-  UpdateSplitterStyle(FormImagesManager.SplitterNotUsed, TTMSStyle(FormPreferences.SplitterStyleSelector.ItemIndex),
-                                FormPreferences.SplitterSingleColor.Selected,
-                                FormPreferences.SplitterSingleColorHot.Selected);
-  SetGripIcon(FormImagesManager.SplitterNotUsed, FormPreferences.SplitterGripIcon.Checked);
+  UpdateSplitterStyle(FormImagesManager.SplitterNotUsed, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
+                                FormPreferences.GamesListSplitterSingleColor.Selected,
+                                FormPreferences.GamesListSplitterSingleColorHot.Selected);
+  SetGripIcon(FormImagesManager.SplitterNotUsed, FormPreferences.GamesListSplitterShowGripIcon.Checked);
   FormImagesManager.ShowModal;
   FreeAndNil(FormImagesManager);
-end;
-
-procedure TFormMain.ButtonFilterCPUCloseClick(Sender: TObject);
-begin
-  FormArcadeFiltersExtra.FilterGamesMainCPU.Checked:= False;
-  ButtonFilterTitleReset.Click; // reset filters  
 end;
 
 function TFormMain.iCompare(const Item1, Item2: WideString): Integer;
@@ -38559,85 +39048,29 @@ begin
 
   if FormArcadeFiltersExtra.mResult = mrOk then
      begin
+       if FormArcadeFiltersExtra.FilterGamesMainCPU.Checked then
+          InitFilterCPU_MAME
+       else
+          PanelFilterCPU.Hide;
+
        if FormArcadeFiltersExtra.ApplyFilter_Misc then
           SetGameType(False);
      end;
 end;
 
-procedure TFormMain.FilterGameTitle_TitleClick(Sender: TObject);
+procedure TFormMain.InitFilterCPU_MAME;
+var
+  LeftPos: Integer;
 begin
-  if TMenuItem(Sender).Tag = FilterGameTitle.Tag then
-     begin
-       TMenuItem(Sender).Checked:= True;
-       Exit;
-     end;
-  FilterGameTitle.Tag:= TMenuItem(Sender).Tag;
-  FilterGameTitle.Hint:= 'Search games'+#13#10+'Filter: '+TMenuItem(Sender).Caption;
-end;
+  if PanelFilterCPU.Visible then
+     Exit;
+     
+  LeftPos:= FormMain.Left+FormMain.GamesListView.Left+100;// ButtonFilterSearchGames.Left+10;
 
-procedure TFormMain.FilterSearchBarHelpClick(Sender: TObject);
-begin
-  //$00a65300
-  CallMessageBox;
-  AddMsgText('1', MsgTxtColors.colorWarning, [fsBold]);
-  AddMsgText('. Type what you want to search for in teh text bar and press ');
-  AddMsgText('ENTER', clBlack, [fsBold]);
-  AddMsgText(' key or click ');
-  AddMsgText('Apply', clBlack, [fsBold]);
-  AddMsgText(' button.'+#13#10+#13#10);
-  AddMsgText('2', MsgTxtColors.colorWarning, [fsBold]);
-  AddMsgText('. You can select another search criteria. Click on settings button and select another option.'+#13#10+'     ');
-  AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' (MAME) or ');
-  AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' + ');
-  AddMsgText('mature.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' (MAME), ');
-  AddMsgText('version.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' (MAME), ');
-  AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' + ');
-  AddMsgText('mature_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' (HBMAME), '+#13#10+'     ');
-  AddMsgText('version_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' (HBMAME) '+
-             'required for category and version added'+#13#10+'     ');
+  PanelFilterCPU.Left:= LeftPos;
+  PanelFilterCPU.Top:= FormMain.Top+28+10+FormMain.ToolBarButtons.ButtonHeight+5+1; // just below the games list .Top position
 
-  AddMsgText('languages.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' required for language'+#13#10+'     ');
-  AddMsgText('nplayers.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  AddMsgText(' is optional for # of players'+#13#10+#13#10);
-
-  AddMsgText('3', MsgTxtColors.colorWarning, [fsBold]);
-  AddMsgText('. You can use the ');
-  AddMsgText('Controls', clBlack, [fsBold]);
-  AddMsgText(' button to filter games by control. This filter ignores the search criteria and the controls selection'+
-             ' in the ');
-  AddMsgText('Misc', clBlack, [fsBold]);
-  AddMsgText(' main filter button. Just select a control and the filter will apply immediately.'+#13#10+#13#10);
-
-  AddMsgText('4', MsgTxtColors.colorWarning, [fsBold]);
-  AddMsgText('. Click on ');
-  AddMsgText('Reset', clBlack, [fsBold]);
-  AddMsgText(' button to reset filters to default settings (main tool bar buttons).'+#13#10+#13#10);
-
-  AddMsgText('5', MsgTxtColors.colorWarning, [fsBold]);
-  AddMsgText('. Check ');
-  AddMsgText('Include Tool Bar Filters', clBlack, [fsBold]);
-  AddMsgText(' button to include main filters in the search.'+#13#10+
-             '    System, Parent/Clone, Have/Miss, Working/Non-Working, Orientation, Misc Filters'+#13#10+#13#10);
-  AddMsgText('Note', clBlack, [fsBold]);
-  AddMsgText(': If you change main filters, you must apply the search bar again.'+#13#10);
-  AddMsgText('Warning', clBlack, [fsBold]);
-  AddMsgText(': Unicode strings are not supported in the TEdit control.');
-  GenerateMessage('Info', 'How to use the search bar.');
-end;
-
-procedure TFormMain.ButtonFilterCPUResetClick(Sender: TObject);
-begin
-  FilterCPU.Text:= '';
-  FilterCPU.OnExit(FilterCPU);
-  ButtonFilterTitleReset.Click; // reset filters
+  PanelFilterCPU.Show;
 end;
 
 procedure TFormMain.MenuValidateMAMECHDTypesClick(Sender: TObject);
@@ -38838,32 +39271,37 @@ begin
   case MenuBoundToGamesPanel.Checked of
     True:
       begin
-        if ToolBarPanel.Parent <> PanelList then
-           ToolBarPanel.Parent:= PanelList;
-
-        ToolBarFilterByMainCPU.Top:= ToolBarPanel.Top+ToolBarPanel.Height+1; // fix: move this tool bar below main tool bar buttons (February 09, 2018)
+        if ToolBarButtons.Parent <> PanelList then
+           ToolBarButtons.Parent:= PanelList;
       end;
     False:
       begin
-        if ToolBarPanel.Parent <> FormMain then
-           ToolBarPanel.Parent:= FormMain;
+        if ToolBarButtons.Parent <> FormMain then
+           ToolBarButtons.Parent:= FormMain;
       end;
   end;
-  ToolBarPanel.Invalidate;
+  ToolBarButtons.Invalidate;
   FormMain.Canvas.UnLock;
 end;
 
 procedure TFormMain.PopupImageCustomizeSplittersClick(Sender: TObject);
 begin
-  FormPreferences.ButtonImages.Down:= True;
-  FormPreferences.ButtonImages.Click;
+  FormPreferences.ButtonPageImages.Down:= True;
+  FormPreferences.ButtonPageImages.Click;
   MenuPreferences.Click;
 end;
 
 procedure TFormMain.MenuCustomizeGamesListAppearanceClick(Sender: TObject);
 begin
-  FormPreferences.ButtonGamesList.Down:= True;
-  FormPreferences.ButtonGamesList.Click;
+  FormPreferences.ButtonPageGamesList.Down:= True;
+  FormPreferences.ButtonPageGamesList.Click;
+  MenuPreferences.Click;
+end;
+
+procedure TFormMain.MenuCustomizeNightModeColorsClick(Sender: TObject);
+begin
+  FormPreferences.ButtonPageNightMode.Down:= True;
+  FormPreferences.ButtonPageNightMode.Click;
   MenuPreferences.Click;
 end;
 
@@ -38952,9 +39390,9 @@ begin
   SetGripIcon(SplitterImg[2], TMenuItem(Sender).Checked);
   SetGripIcon(SplitterImg[3], TMenuItem(Sender).Checked);
   PopupShowSplitterGrip.Checked:= TMenuItem(Sender).Checked;
-  FormPreferences.ImageEnableGripIcon.Tag:= 1;
-  FormPreferences.ImageEnableGripIcon.Checked:= TMenuItem(Sender).Checked;
-  FormPreferences.ImageEnableGripIcon.Tag:= 0;
+  FormPreferences.ImageSplitterShowGripIcon.Tag:= 1;
+  FormPreferences.ImageSplitterShowGripIcon.Checked:= TMenuItem(Sender).Checked;
+  FormPreferences.ImageSplitterShowGripIcon.Tag:= 0;
 end;
 
 procedure TFormMain.PopupShowSplitterGripClick(Sender: TObject);
@@ -39104,16 +39542,28 @@ begin
   end;
 end;
 
-procedure TFormMain.ImagesToolbarButtonsCustomDraw(Sender: TToolBar;
+procedure TFormMain.ImagesToolBarButtonsCustomDraw(Sender: TToolBar;
   const ARect: TRect; var DefaultDraw: Boolean);
 begin
   if IsNightMode and (not Sender.ShowCaptions) then
   begin
-    Sender.Canvas.Brush.Color:= $00590000;
-    Sender.Canvas.Rectangle(Sender.ClientRect);
+    if FormPreferences.NightModeToolBarGradientBar.Checked then
+       begin
+         DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                      FormPreferences.NightModeToolBarBkTopColor.Selected,
+                      FormPreferences.NightModeToolBarBkBottomColor.Selected, 0, 0, 0);
+       end
+    else
+       begin
+         Sender.Canvas.Brush.Color:= FormPreferences.NightModeToolBarBkTopColor.Selected;
+         Sender.Canvas.Rectangle(Sender.ClientRect);
+       end;
 
-    Sender.Canvas.Brush.Color:= clBlue;
-    Sender.Canvas.FrameRect(Sender.BoundsRect);
+    if FormPreferences.NightModeToolbarShowFrame.Checked then
+       begin
+         Sender.Canvas.Brush.Color:= FormPreferences.NightModeToolBarFrameColor.Selected;
+         Sender.Canvas.FrameRect(Sender.BoundsRect);
+       end;
   end
   else
   begin
@@ -39256,92 +39706,10 @@ begin
      end;
 end;
 
-procedure TFormMain.MenuSmallToolBarClick(Sender: TObject);
-
-  procedure ResizeImgLst(ImgListName: TImageList; Small: Boolean);
-  begin
-    case Small of
-      True:
-        begin
-          ImgListName.Width:= 28;
-          ImgListName.Height:= 22;
-        end;
-      False:
-        begin
-          ImgListName.Width:= 44;
-          ImgListName.Height:= 40;
-        end;
-    end;
-  end;
-
-begin
-  ToolBarButtons.AutoSize:= True;
-
-  IL_ToolBarButtons.Clear;
-  ResizeImgLst(IL_ToolBarButtons, MenuSmallToolBar.Checked);
-  LoadToolBarButtons(IL_ToolBarButtons);
-
-  case MenuSmallToolBar.Checked of
-    True:
-      begin
-        ToolBarButtons.ButtonWidth:= 35;
-        ToolBarButtons.ButtonHeight:= 28;
-      end;
-    False:
-      begin
-        ToolBarButtons.ButtonWidth:= 51;
-        ToolBarButtons.ButtonHeight:= 46;
-      end;
-  end;
-  ToolBarButtons.AutoSize:= False;
-  ToolBarButtons.Height:= ToolBarButtons.Height+1;
-
-  if IsStartup then
-     Exit;
-
-  // execute these lines only if not initializing
-  SetMainToolBarIcon(ButtonViewMode);
-  SetMainToolBarIcon(ButtonSystemsQuickFilter);
-  ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
-  SetMainToolBarIcon(ButtonGameFilterMain);
-  SetMainToolBarIcon(ButtonGameFilterParentClone);
-  SetMainToolBarIcon(ButtonGameFilterHaveMiss);
-  SetMainToolBarIcon(ButtonGameFilterDriverStatus);
-end;
-
 procedure TFormMain.MenuShowGamesStatusBarClick(Sender: TObject);
 begin
   StatusBarPanel.Visible:= MenuShowGamesStatusBar.Checked;
   UpdateStatusBarGame;
-end;
-
-procedure TFormMain.FilterGameTitleEnter(Sender: TObject);
-begin
-  if SameText(' Search games...', TEdit(Sender).Text) then
-     begin
-       TEdit(Sender).Font.Color:= clBlack;
-       TEdit(Sender).Text:= '';
-     end;
-end;
-
-procedure TFormMain.FilterGameTitleExit(Sender: TObject);
-begin
-  if TEdit(Sender).Text = '' then
-     begin
-       TEdit(Sender).Font.Color:= clSilver;
-       TEdit(Sender).Text:= ' Search games...';
-     end;
-end;
-
-procedure TFormMain.FilterGameTitleClick(Sender: TObject);
-begin
-  // no longer used, do not remove this code (March 03, 2018)
-  // this SendMessage call can be used to remove pixels from the end of a TEdit control
-  //if TEdit(Sender).Tag = 0 then
-  //   begin
-  //     SendMessage(FilterGameTitle.Handle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, MakeLong(0, 16));
-  //     TEdit(Sender).Tag:= 1;
-  //   end;
 end;
 
 procedure TFormMain.PopupSetCustomOptionsAlterMAMEClick(Sender: TObject);
@@ -40322,7 +40690,7 @@ begin
   end;
 
   MenuColumns.Visible:= not PanelMachinesList.Visible;
-  ButtonGameFilterMain.Enabled:= (not PanelMachinesList.Visible) and (not PopupEnableFavorites.Checked);
+  ButtonArcadeGamesFilters.Enabled:= (not PanelMachinesList.Visible) and (not PopupEnableFavorites.Checked);
   ButtonExtraFilters.Enabled:= not PanelMachinesList.Visible;
 end;
 
@@ -40672,7 +41040,7 @@ end;
 
 procedure TFormMain.PopupMainMenuClick(Sender: TObject);
 begin
-  MainMenuOptions.Popup(2, ToolBarPanel.Height+21);
+  MainMenuOptions.Popup(2, ToolBarButtons.Height+21);
 end;
 
 procedure TFormMain.PopupFavoritesPopup(Sender: TObject);
@@ -40922,21 +41290,6 @@ procedure TFormMain.CreateSupermodelXMLdatFromSourceFile1Click(
   Sender: TObject);
 begin
   CreateSupermodelGamesDatFile;
-end;
-
-procedure TFormMain.FilterCPUKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then
-     begin
-       Key:= #0; // to remove the "ding" sound when pressing some keys like ENTER, ESC and others
-       ButtonFilterCPUApply.Click;
-     end
-  else
-  if Key = #27 then
-     begin
-       Key:= #0;
-       TEdit(Sender).Text:= '';
-     end;
 end;
 
 procedure TFormMain.PopupPlayGameExtraParametersMAMEClick(Sender: TObject);
@@ -42444,35 +42797,6 @@ begin
      end;
 end;
 
-procedure TFormMain.FilterCPUEnter(Sender: TObject);
-begin
-  if SameText(' Enter a CPU title...', TEdit(Sender).Text) then
-     begin
-       TEdit(Sender).Font.Color:= clBlack;
-       TEdit(Sender).Text:= '';
-     end;
-end;
-
-procedure TFormMain.FilterCPUExit(Sender: TObject);
-begin
-  if TEdit(Sender).Text = '' then
-     begin
-       TEdit(Sender).Font.Color:= clSilver;
-       TEdit(Sender).Text:= ' Enter a CPU title...';
-     end;
-end;
-
-procedure TFormMain.FilterCPUListSelect(Sender: TObject);
-begin
-  if FilterCPUList.ItemIndex = -1 then
-     FilterCPUList.ItemIndex:= 0;
-
-  FilterCPU.Text:= '';
-  FilterCPU.OnExit(FilterCPU);
-  Application.ProcessMessages;
-  ButtonFilterCPUApply.Click;
-end;
-
 procedure TFormMain.ButtonInternetGameInfoClick(Sender: TObject);
 begin
   if not IsStartup and ButtonInternetGameInfo.Down then
@@ -42596,6 +42920,61 @@ begin
   CallSelectImageLayout(ButtonScreenshotLayouts.Tag, True);
 end;
 
+procedure TFormMain.SetColorsSearchGamesPanel;
+begin
+  PanelSearchGames.Canvas.Lock;
+  if IsNightMode then
+     begin
+       //SetFormColors(nil, nil, nil, LabelSearchGamesBy, LabelSearchGamesTitle, -1);
+       SetLabelColors(LabelSearchGamesTitle, clWhite, clNavy);
+       SetLabelColors(LabelSearchGamesBy, clYellow, clMaroon);
+       //SetPanelNightColors(PanelSearchGames, clrDarkBlue);//FormPreferences.NightModeToolbarBkColor.Selected);
+       PanelSearchGames.Style:= vgSimple;
+       SetPanelNightColors(PanelSearchGames, clrBlackBk, clrDarkBlue);//, clrBlackBk);//FormPreferences.NightModeToolbarBkColor.Selected);
+       SetLabelColors(PanelSearchGamesCaptionBar, clWhite, clMaroon);
+       //PanelSearchGamesCaptionBar.Color:= clrBlackBk;// clrDarkGray;
+       PanelSearchGamesCaptionBar.Transparent:= True;
+     end
+  else
+     begin
+       SetLabelColors(LabelSearchGamesTitle, clBlack, clWhite);
+       SetLabelColors(LabelSearchGamesBy, clMaroon, clCream);
+       PanelSearchGames.Style:= vgSolid;
+       SetPanelNightColors(PanelSearchGames, $00f1f1f1);
+       SetLabelColors(PanelSearchGamesCaptionBar, clBlack, clGray);
+       //PanelSearchGamesCaptionBar.Color:= clMedGray;
+       PanelSearchGamesCaptionBar.Transparent:= False;
+     end;
+  PanelSearchGames.Canvas.UnLock;
+end;
+
+procedure TFormMain.SetColorsFilterMainCPUPanel;
+begin
+  PanelFilterCPU.Canvas.Lock;
+  if IsNightMode then
+     begin
+       SetLabelColors(LabelSelectCPU, clWhite, clBlue);
+       SetLabelColors(LabelCustomCPUTitle, clWhite, clBlue);
+
+       PanelFilterCPU.Style:= vgSimple;
+       SetPanelNightColors(PanelFilterCPU, clrBlackBk, clrDarkBlue);//FormPreferences.NightModeToolbarBkColor.Selected);
+       SetLabelColors(FilterCPU_LabelCaptionBar, clWhite, clMaroon);
+       //FilterCPU_LabelCaptionBar.Color:= clrBlackBk;// clrDarkGray;
+       FilterCPU_LabelCaptionBar.Transparent:= True;
+     end
+  else
+     begin
+       SetLabelColors(LabelSelectCPU, clBlack, clWhite);
+       SetLabelColors(LabelCustomCPUTitle, clBlack, clWhite);
+       PanelFilterCPU.Style:= vgSolid;
+       SetPanelNightColors(PanelFilterCPU, $00f1f1f1);
+       SetLabelColors(FilterCPU_LabelCaptionBar, clBlack, clGray);
+       //FilterCPU_LabelCaptionBar.Color:= clMedGray;
+       FilterCPU_LabelCaptionBar.Transparent:= False;
+     end;
+  PanelFilterCPU.Canvas.UnLock;
+end;
+
 procedure TFormMain.MenuEnableNightModeClick(Sender: TObject);
 begin
   IsNightMode:= MenuEnableNightMode.Checked;
@@ -42603,8 +42982,24 @@ begin
      Exit;
 
   SetPanelNightColors(PanelImagesDocuments);
+
+  ToolBarButtons.Canvas.Lock;
+  LoadToolBarButtons(IL_ToolBarButtons); // reload tool bar buttons into TImageList
+
+  // set buttons icons
+  SetMainToolBarIcon(ButtonViewMode);
+  SetMainToolBarIcon(ButtonSystemsQuickFilter);
+  // no need for this //ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
+  SetMainToolBarIcon(ButtonArcadeGamesFilters);
+  SetMainToolBarIcon(ButtonGameFilterParentClone);
+  SetMainToolBarIcon(ButtonGameFilterHaveMiss);
+  SetMainToolBarIcon(ButtonGameFilterDriverStatus);
+  SetMainToolBarIcon(ButtonImageCue);
+
+  ToolBarButtons.Invalidate; // force repaint;
   ImagesToolbarButtons.Invalidate; // force repaint
-  ToolBarFilterByMainCPU.Invalidate; // force repaint
+
+  //ToolBarFilterByMainCPU.Invalidate; // force repaint // must update this to the new Main CPU Filter window
   if IsNightMode then
      begin
        WebToolBarButtons.Font.Color:= clWhite;
@@ -42613,20 +43008,332 @@ begin
      begin
        WebToolBarButtons.Font.Color:= clBlack;
      end;
+  ToolBarButtons.Canvas.UnLock;
+
+  SetColorsSearchGamesPanel; // set night colors to "Search Games" panel
+  SetColorsFilterMainCPUPanel; // set night colors to "Filter MAME Games by Main CPU" panel
 end;
 
-procedure TFormMain.BitBtn1Click(Sender: TObject);
+procedure TFormMain.ButtonFilterSearchGamesClick(Sender: TObject);
+var
+  LeftPos, OverSize: Integer;
 begin
-  IL_Overlay.Width:= 48;
-  IL_Overlay.Height:= 48;
-  ImageOverlay.Width:= 48;
-  ImageOverlay.Height:= 48;
-  if AddIconWithOverLay('cdimage_cue.ico', 'overlay_light.ico', GetFolderFull(40)+'new_2018\', IL_Overlay) then
-     IL_Overlay.GetIcon(0, ImageOverlay.Picture.Icon);
+  LeftPos:= FormMain.Left+ButtonFilterSearchGames.Left+10;
 
-  exit;
-  if AddIconWithOverLay('image_13_versus.ico', 'image_13_versus.ico', GetFolderFull(32), IL_Overlay) then
-     IL_Overlay.GetIcon(0, ImageOverlay.Picture.Icon)
+  OverSize:= LeftPos+PanelSearchGames.Width;
+  if OverSize > (FormMain.Left+GamesListView.Left+GamesListView.Width-GetSystemMetrics(SM_CXVSCROLL)) then
+     begin // make sure panel is not outside the games list panel
+       OverSize:= OverSize-(FormMain.Left+GamesListView.Left+GamesListView.Width-GetSystemMetrics(SM_CXVSCROLL));
+       LeftPos:= LeftPos-OverSize;
+     end;
+
+  PanelSearchGames.Left:= LeftPos;
+  PanelSearchGames.Top:= FormMain.Top+28+10+ToolBarButtons.ButtonHeight+1;
+
+  PanelSearchGames.Show;
+end;
+
+procedure TFormMain.ButtonImageCUEClick(Sender: TObject);
+begin
+  SetMainToolBarIcon(ButtonImageCue);
+end;
+
+procedure TFormMain.MenuToolBarIconSizeLargeClick(Sender: TObject);
+begin
+  if not IsStartup then
+  begin
+    if TMenuItem(Sender).Tag = MenuToolBarIconSize.Tag then
+       begin
+         TMenuItem(Sender).Checked:= True;
+         Exit;
+       end;
+
+    MenuToolBarIconSize.Tag:= TMenuItem(Sender).Tag;
+  end;
+
+  ToolBarButtons.Canvas.Lock;
+  ToolBarButtons.AutoSize:= True;
+
+  case MenuToolBarIconSize.Tag of
+    0: // Extra Large (68x68)
+      begin
+        IL_ToolBarButtons.Width:= 68;
+        IL_ToolBarButtons.Height:= 68;
+
+        // 68x68 ImageList
+        ToolbarButtons.ButtonWidth:= 75;
+        ToolbarButtons.ButtonHeight:= 74;
+      end;
+    1: // Large (48x48) - default size
+      begin
+        IL_ToolBarButtons.Width:= 48;
+        IL_ToolBarButtons.Height:= 48;
+
+        // 48x48 ImageList
+        ToolbarButtons.ButtonWidth:= 55;
+        ToolbarButtons.ButtonHeight:= 54;
+
+        //// 44x40 ImageList
+        //ToolBarButtons.ButtonWidth:= 51;
+        //ToolBarButtons.ButtonHeight:= 46;
+      end;
+    2: // Small (30x24)
+      begin
+        IL_ToolBarButtons.Width:= 30;
+        IL_ToolBarButtons.Height:= 24;
+
+        // 30x24 ImageList
+        ToolbarButtons.ButtonWidth:= 37;
+        ToolbarButtons.ButtonHeight:= 30;
+        //// 28x22 ImageList
+        //ToolBarButtons.ButtonWidth:= 35;
+        //ToolBarButtons.ButtonHeight:= 28;
+      end;
+  end;
+
+  LoadToolBarButtons(IL_ToolBarButtons);
+
+  ToolBarButtons.AutoSize:= False;
+  ToolBarButtons.Height:= ToolBarButtons.Height+1;
+
+  if IsStartup then
+     Exit;
+
+  // execute these lines only if not initializing
+  SetMainToolBarIcon(ButtonViewMode);
+  SetMainToolBarIcon(ButtonSystemsQuickFilter);
+  ResetFavoriteSettings; // if selected filter is favorites then check TMenuItem and other settings
+  SetMainToolBarIcon(ButtonArcadeGamesFilters);
+  SetMainToolBarIcon(ButtonGameFilterParentClone);
+  SetMainToolBarIcon(ButtonGameFilterHaveMiss);
+  SetMainToolBarIcon(ButtonGameFilterDriverStatus);
+  SetMainToolBarIcon(ButtonImageCue);
+
+  ToolBarButtons.Canvas.UnLock;
+end;
+
+
+procedure TFormMain.FilterCPU_LabelCaptionBarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+const
+   sc_DragMove = $f012;
+begin
+  ReleaseCapture;
+  PanelFilterCPU.Perform(wm_SysCommand, sc_DragMove, 0);
+end;
+
+procedure TFormMain.FilterCPU_ButtonCloseMouseEnter(Sender: TObject);
+begin
+  TShadowLabel(Sender).Color:= clRed;
+end;
+
+procedure TFormMain.FilterCPU_ButtonCloseMouseLeave(Sender: TObject);
+begin
+  TShadowLabel(Sender).Color:= clMaroon;
+end;
+
+procedure TFormMain.ButtonFilterCPUApplyClick(Sender: TObject);
+begin
+  ApplyFilterCPU;
+end;
+
+procedure TFormMain.ButtonFilterCPUResetClick(Sender: TObject);
+begin
+  FilterCPU.Text:= '';
+  ButtonFilterTitleReset.Click; // reset filters
+  //if CheckTotal(GamesListView) then
+  //   SetGameType(False); // reset filters
+end;
+
+procedure TFormMain.FilterCPUKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       Key:= #0; // to remove the "ding" sound when pressing some keys like ENTER, ESC and others
+       ButtonFilterCPUApply.Click;
+     end
+  else
+  if Key = #27 then
+     begin
+       Key:= #0;
+       TEdit(Sender).Text:= '';
+     end;
+end;
+
+procedure TFormMain.FilterCPUListSelect(Sender: TObject);
+begin
+  if FilterCPUList.ItemIndex = -1 then
+     FilterCPUList.ItemIndex:= 0;
+
+  FilterCPU.Text:= '';
+  Application.ProcessMessages;
+  ButtonFilterCPUApply.Click;
+end;
+
+procedure TFormMain.FilterCPU_ButtonCloseClick(Sender: TObject);
+begin
+  FormArcadeFiltersExtra.FilterGamesMainCPU.Tag:= 0;
+  FormArcadeFiltersExtra.FilterGamesMainCPU.Checked:= False;
+
+  //if FormMain.CheckTotal(FormMain.GamesListView) then
+  //   FormMain.SetGameType(False); // reset filters
+
+  PanelFilterCPU.Hide;
+end;
+
+procedure TFormMain.ToolBarFilterByMainCPUCustomDraw(Sender: TToolBar;
+  const ARect: TRect; var DefaultDraw: Boolean);
+begin
+  if IsNightMode then
+  begin
+    DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                 PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top],
+                 PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+    //Sender.Canvas.Brush.Color:= PanelFilterCPU.Color1;// FormPreferences.NightModeToolBarBkColor.Selected;
+    //Sender.Canvas.Pen.Color:= Sender.Canvas.Brush.Color;
+    //Sender.Canvas.Rectangle(Sender.ClientRect);
+  end;
+end;
+
+procedure TFormMain.FilterGameTitleClick(Sender: TObject);
+begin
+  // no longer used, do not remove this code (March 03, 2018)
+  // this SendMessage call can be used to remove pixels from the end of a TEdit control
+  //if TEdit(Sender).Tag = 0 then
+  //   begin
+  //     SendMessage(FilterGameTitle.Handle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, MakeLong(0, 16));
+  //     TEdit(Sender).Tag:= 1;
+  //   end;
+end;
+
+procedure TFormMain.FilterGameTitleKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       Key:= #0; // to remove the "ding" sound when pressing keys like ENTER, ESC
+       ButtonFilterTitleApply.Click;
+     end
+  else
+  if Key = #27 then
+     begin
+       Key:= #0;
+       TEdit(Sender).Text:= '';
+     end;
+end;
+
+procedure TFormMain.ButtonFilterTitleApplyClick(Sender: TObject);
+begin
+  ApplyFilterSearchBar;
+end;
+
+procedure TFormMain.ButtonFilterTitleResetClick(Sender: TObject);
+begin
+  if FormMain.CheckTotal(FormMain.GamesListView) then
+     begin
+       FilterGameTitle.Text:= '';
+       SetGameType(False);
+     end;
+end;
+
+procedure TFormMain.FilterGameTitle_TitleClick(Sender: TObject);
+begin
+  if TMenuItem(Sender).Tag = FilterGameTitle.Tag then
+     begin
+       TMenuItem(Sender).Checked:= True;
+       Exit;
+     end;
+  FilterGameTitle.Tag:= TMenuItem(Sender).Tag;
+  LabelSearchGamesBy.Caption:= TMenuItem(Sender).Caption;
+  //FilterGameTitle.Hint:= 'Search games'+#13#10+'Filter: '+TMenuItem(Sender).Caption;
+end;
+
+procedure TFormMain.FilterSearchBarHelpClick(Sender: TObject);
+begin
+  CallMessageBox;
+
+  FormMain.AddMsgText('1', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('. Type what you want to search for in teh text bar and press ');
+  FormMain.AddMsgText('ENTER', clBlack, [fsBold]);
+  FormMain.AddMsgText(' key or click ');
+  FormMain.AddMsgText('Apply', clBlack, [fsBold]);
+  FormMain.AddMsgText(' button.'+#13#10+#13#10);
+  FormMain.AddMsgText('2', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('. You can select another search criteria. Click on settings button and select another option.'+#13#10+'     ');
+  FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' (MAME) or ');
+  FormMain.AddMsgText('category.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' + ');
+  FormMain.AddMsgText('mature.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' (MAME), ');
+  FormMain.AddMsgText('version.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' (MAME), ');
+  FormMain.AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' + ');
+  FormMain.AddMsgText('mature_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' (HBMAME), '+#13#10+'     ');
+  FormMain.AddMsgText('version_hb.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' (HBMAME) '+
+                      'required for category and version added'+#13#10+'     ');
+
+  FormMain.AddMsgText('languages.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' required for language'+#13#10+'     ');
+  FormMain.AddMsgText('nplayers.ini', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText(' is optional for # of players'+#13#10+#13#10);
+
+  FormMain.AddMsgText('3', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('. You can use the ');
+  FormMain.AddMsgText('Controls', clBlack, [fsBold]);
+  FormMain.AddMsgText(' button to filter games by control. This filter ignores the search criteria and the controls selection'+
+                      ' in the ');
+  FormMain.AddMsgText('Misc', clBlack, [fsBold]);
+  FormMain.AddMsgText(' main filter button. Just select a control and the filter will apply immediately.'+#13#10+#13#10);
+
+  FormMain.AddMsgText('4', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('. Click on ');
+  FormMain.AddMsgText('Reset', clBlack, [fsBold]);
+  FormMain.AddMsgText(' button to reset filters to default settings (main tool bar buttons).'+#13#10+#13#10);
+
+  FormMain.AddMsgText('5', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('. Check ');
+  FormMain.AddMsgText('Include Tool Bar Filters', clBlack, [fsBold]);
+  FormMain.AddMsgText(' button to include main filters in the search.'+#13#10+
+                      '    System, Parent/Clone, Have/Miss, Working/Non-Working, Orientation, Misc Filters'+#13#10+#13#10);
+  FormMain.AddMsgText('Note', clBlack, [fsBold]);
+  FormMain.AddMsgText(': If you change main filters, you must apply the search bar again.'+#13#10);
+  FormMain.AddMsgText('Warning', clBlack, [fsBold]);
+  FormMain.AddMsgText(': Unicode strings are not supported in the TEdit control.');
+  GenerateMessage('Info', 'How to use the search bar.');
+end;
+
+procedure TFormMain.ToolBarFilterTitleCustomDraw(Sender: TToolBar;
+  const ARect: TRect; var DefaultDraw: Boolean);
+begin
+  if IsNightMode then
+     begin
+       DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                    PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
+                    PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+       //Sender.Canvas.Brush.Color:= PanelSearchGames.Color1;
+       //Sender.Canvas.Pen.Color:= PanelSearchGames.Color1;
+       //Sender.Canvas.Rectangle(Sender.ClientRect);
+     end;
+  //Sender.Canvas.FrameRect(Sender.BoundsRect); // not used, just set Pen.Color and the frame is also painted with .ClientRect
+end;
+
+procedure TFormMain.ButtonFilterTitleCloseClick(Sender: TObject);
+begin
+  PanelSearchGames.Hide;
+  FocusGamesList;
+end;
+
+procedure TFormMain.PanelSearchGamesCaptionBarMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+const
+   sc_DragMove = $f012;
+begin
+  ReleaseCapture;
+  PanelSearchGames.Perform(wm_SysCommand, sc_DragMove, 0);
 end;
 
 end.

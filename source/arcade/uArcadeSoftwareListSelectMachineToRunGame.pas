@@ -227,7 +227,7 @@ begin
   ResizeForm;
   if IsNightMode then
   begin
-    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, False);
+    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, False);
     SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
     SetLabelColors(LabelSoftwarelistTitleW, MsgTxtColors.colorWarning, $323200);
 
@@ -244,18 +244,6 @@ begin
   end;
 
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
-
-  //if BottomBar.Tag = 1 then
-  //   PanelTop.Color1:= $00e5f0fa // red
-  //else
-  //   PanelTop.Color1:= $00faf0e5; // blue
-
-  // $00faf0e5 // blue
-  // $00e5f0fa // red
-  // $00f0fae5 // green
-  // $00e5fafa // yellow
-  // $00eeeeee // silver
-
 
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;

@@ -124,6 +124,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuTitle: TShadowLabel
@@ -144,6 +147,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCartridgeParameter: TShadowLabel
@@ -164,6 +170,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuDiscImageParameter: TShadowLabel
@@ -184,6 +193,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuBootDiscParameter: TShadowLabel
@@ -204,6 +216,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelDaemonToolsFile: TShadowLabel
@@ -224,6 +239,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelDaemonToolsMount: TShadowLabel
@@ -244,6 +262,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelDaemonToolsUnmount: TShadowLabel
@@ -264,6 +285,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFloppyDiskParameter: TShadowLabel
@@ -284,6 +308,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCassetteTapeParameter: TShadowLabel
@@ -304,6 +331,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCartridgeParameter1: TShadowLabel
@@ -322,6 +352,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCartridgeParameter2: TShadowLabel
@@ -340,6 +373,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuDiscImageParameter1: TShadowLabel
@@ -358,6 +394,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuDiscImageParameter2: TShadowLabel
@@ -376,6 +415,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuBootDiscParameter1: TShadowLabel
@@ -394,6 +436,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuBootDiscParameter2: TShadowLabel
@@ -412,6 +457,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFloppyDiskParameter1: TShadowLabel
@@ -430,6 +478,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFloppyDiskParameter2: TShadowLabel
@@ -448,6 +499,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCassetteTapeParameter1: TShadowLabel
@@ -466,6 +520,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuCassetteTapeParameter2: TShadowLabel
@@ -484,6 +541,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object IconCartridge: TImage
@@ -698,6 +758,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuHardDiskDriveParameter1: TShadowLabel
@@ -716,6 +779,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuHardDiskDriveParameter2: TShadowLabel
@@ -734,6 +800,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object IconHardDiskDrive: TImage
@@ -1225,6 +1294,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
@@ -1249,6 +1321,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end

@@ -1,11 +1,11 @@
 object FormSupermodelSettings: TFormSupermodelSettings
-  Left = 925
-  Top = 612
+  Left = 1356
+  Top = 405
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 543
-  ClientWidth = 614
+  ClientHeight = 743
+  ClientWidth = 847
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,8 +23,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
   TextHeight = 15
   object LabelReadFileIni: TShadowLabel
     Left = 108
-    Top = 515
-    Width = 300
+    Top = 715
+    Width = 515
     Height = 16
     AutoSize = False
     Caption = 'LabelReadFileIni'
@@ -49,20 +49,10 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ShowAccelChar = False
     Transparent = True
   end
-  object Label1: TLabel
-    Left = 337
-    Top = 460
-    Width = 258
-    Height = 15
-    Caption = 'Load Graphics State From Save State File (Debug)'
-    ShowAccelChar = False
-    Transparent = True
-    Visible = False
-  end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 614
+    Width = 847
     Height = 80
     Align = alTop
     Color1 = 15792869
@@ -91,7 +81,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object LabelGameTitle: TShadowLabel
       Left = 106
       Top = 1
-      Width = 500
+      Width = 735
       Height = 33
       AutoSize = False
       Caption = 
@@ -114,7 +104,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object LabelEmulatorVersion: TShadowLabel
       Left = 107
       Top = 46
-      Width = 384
+      Width = 600
       Height = 27
       AutoSize = False
       Caption = 
@@ -135,7 +125,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       WordWrap = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 499
+      Left = 730
       Top = 45
       Width = 110
       Height = 29
@@ -159,16 +149,16 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object VideoGroupBox: TAdvGroupBox
     Left = 8
-    Top = 178
-    Width = 312
-    Height = 215
+    Top = 211
+    Width = 831
+    Height = 272
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
     Ctl3D = True
     TabOrder = 1
     object LabelResolution: TLabel
-      Left = 8
+      Left = 428
       Top = 20
       Width = 56
       Height = 15
@@ -176,26 +166,26 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowAccelChar = False
       Transparent = True
     end
-    object LabelVertexShader: TLabel
+    object LabelReal3DVertexShader: TLabel
       Left = 8
-      Top = 124
-      Width = 214
+      Top = 76
+      Width = 110
       Height = 15
-      Caption = 'Real3D Vertex Shader (Legacy 3D Engine)'
+      Caption = 'Real3D Vertex Shader'
       ShowAccelChar = False
       Transparent = True
     end
-    object LabelFragmentShader: TLabel
+    object LabelReal3DFragmentShader: TLabel
       Left = 8
-      Top = 170
-      Width = 233
+      Top = 126
+      Width = 129
       Height = 15
-      Caption = 'Real3D Fragment Shader (Legacy 3D Engine)'
+      Caption = 'Real3D Fragment Shader'
       ShowAccelChar = False
       Transparent = True
     end
     object LabelVideo3DEngine: TLabel
-      Left = 184
+      Left = 8
       Top = 20
       Width = 53
       Height = 15
@@ -203,8 +193,44 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowAccelChar = False
       Transparent = True
     end
-    object ScreenResolution: TComboBox
+    object LabelLoadTileMapVertexShader2D: TLabel
+      Left = 428
+      Top = 76
+      Width = 174
+      Height = 15
+      Caption = 'Load Tile Map Vertex Shader (2D)'
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object LabelLoadTileMapFragmentShader2D: TLabel
+      Left = 428
+      Top = 126
+      Width = 193
+      Height = 15
+      Caption = 'Load Tile Map Fragment Shader (2D)'
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object LabelLoadReal3DScrollFogVertexShader: TLabel
       Left = 8
+      Top = 176
+      Width = 285
+      Height = 15
+      Caption = 'Load Real3D Scroll Fog Vertex Shader (New 3D Engine)'
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object LabelLoadReal3DScrollFogFragmentShader: TLabel
+      Left = 8
+      Top = 226
+      Width = 304
+      Height = 15
+      Caption = 'Load Real3D Scroll Fog Fragment Shader (New 3D Engine)'
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object ScreenResolution: TComboBox
+      Left = 428
       Top = 36
       Width = 169
       Height = 23
@@ -218,8 +244,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 0
     end
     object DisableThrottle: TAdvOfficeCheckBox
-      Left = 184
-      Top = 100
+      Left = 672
+      Top = 240
       Width = 105
       Height = 20
       Hint = 'Disable 60Hz frame rate limit (not recommended!)'
@@ -231,8 +257,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object ShowFPS: TAdvOfficeCheckBox
-      Left = 8
-      Top = 100
+      Left = 432
+      Top = 220
       Width = 72
       Height = 20
       Hint = 'Display frame rate in window title bar'
@@ -243,10 +269,10 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object VertexShader: TEdit
+    object Real3DVertexShader: TEdit
       Left = 8
-      Top = 140
-      Width = 251
+      Top = 92
+      Width = 350
       Height = 21
       Hint = 'Load Real3D vertex shader for 3D rendering'
       AutoSize = False
@@ -254,10 +280,10 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 3
     end
-    object FragmentShader: TEdit
+    object Real3DFragmentShader: TEdit
       Left = 8
-      Top = 186
-      Width = 251
+      Top = 142
+      Width = 350
       Height = 21
       Hint = 'Load Real3D fragment shader for 3D rendering'
       AutoSize = False
@@ -265,27 +291,33 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 4
     end
-    object ButtonSelectVertexShader: TBitBtn
-      Left = 261
-      Top = 140
+    object ButtonSelectReal3DVertexShader: TBitBtn
+      Left = 360
+      Top = 92
       Width = 43
       Height = 21
+      Hint = 'Click here to select a file'
       Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
-      OnClick = ButtonSelectVertexShaderClick
+      OnClick = ButtonSelectReal3DVertexShaderClick
     end
-    object ButtonSelectFragmentShader: TBitBtn
-      Left = 261
-      Top = 186
+    object ButtonSelectReal3DFragmentShader: TBitBtn
+      Left = 360
+      Top = 142
       Width = 43
       Height = 21
+      Hint = 'Click here to select a file'
       Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
-      OnClick = ButtonSelectFragmentShaderClick
+      OnClick = ButtonSelectReal3DFragmentShaderClick
     end
     object Widescreen: TAdvOfficeCheckBox
-      Left = 8
-      Top = 60
+      Left = 432
+      Top = 180
       Width = 84
       Height = 20
       Hint = 'Expand 3D field of view to screen width'
@@ -297,8 +329,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object FullScreen: TAdvOfficeCheckBox
-      Left = 98
-      Top = 60
+      Left = 554
+      Top = 180
       Width = 79
       Height = 20
       Hint = 'Run game in full screen'
@@ -309,26 +341,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object MultiTexture: TAdvOfficeCheckBox
-      Left = 184
-      Top = 60
-      Width = 94
-      Height = 20
-      Hint = 
-        'Use 8 texture maps for accurate decoding (disable to decode to a' +
-        ' single texture map)'
-      Checked = True
-      ShowHint = True
-      TabOrder = 9
-      Alignment = taLeftJustify
-      Caption = 'Multi-Texture'
-      ReturnIsTab = False
-      State = cbChecked
-      Themed = True
-    end
     object GPUMultithreading: TAdvOfficeCheckBox
-      Left = 8
-      Top = 80
+      Left = 432
+      Top = 200
       Width = 127
       Height = 20
       Hint = 
@@ -336,7 +351,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
         'n thread)'
       Checked = True
       ShowHint = True
-      TabOrder = 10
+      TabOrder = 9
       Alignment = taLeftJustify
       Caption = 'GPU Multithreading'
       ReturnIsTab = False
@@ -344,13 +359,10 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object Video3DEngine: TComboBox
-      Left = 184
+      Left = 8
       Top = 36
-      Width = 121
+      Width = 350
       Height = 23
-      Hint = 
-        'Choose between the new 3D Engine by Ian Curtis (recommended) or ' +
-        'the old one'
       Style = csDropDownList
       Ctl3D = True
       ItemHeight = 15
@@ -358,29 +370,159 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentCtl3D = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 11
-      Text = 'New 3D Engine'
+      TabOrder = 10
+      Text = 'New 3D Engine by Ian Curtis (recommended)'
       Items.Strings = (
-        'Legacy 3D Engine'
-        'New 3D Engine')
+        'Legacy 3D Engine (faster but less accurate)'
+        'New 3D Engine by Ian Curtis (recommended)')
     end
     object DisableVSync: TAdvOfficeCheckBox
-      Left = 184
-      Top = 80
+      Left = 672
+      Top = 220
       Width = 101
       Height = 20
       Hint = 'Do not lock to vertical refresh rate'
       ShowHint = True
-      TabOrder = 12
+      TabOrder = 11
       Alignment = taLeftJustify
       Caption = 'Disable V-Sync'
       ReturnIsTab = False
       Themed = True
     end
+    object Stretch: TAdvOfficeCheckBox
+      Left = 672
+      Top = 180
+      Width = 60
+      Height = 20
+      Hint = 'Fit viewport to resolution, ignoring aspect ratio'
+      ShowHint = True
+      TabOrder = 12
+      Alignment = taLeftJustify
+      Caption = 'Stretch'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object LoadTileMapVertexShader2D: TEdit
+      Left = 428
+      Top = 92
+      Width = 350
+      Height = 21
+      AutoSize = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 13
+    end
+    object ButtonSelectLoadTileMapVertexShader2D: TBitBtn
+      Left = 780
+      Top = 92
+      Width = 43
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 14
+      OnClick = ButtonSelectLoadTileMapVertexShader2DClick
+    end
+    object LoadTileMapFragmentShader2D: TEdit
+      Left = 428
+      Top = 142
+      Width = 350
+      Height = 21
+      AutoSize = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 15
+    end
+    object ButtonSelectLoadTileMapFragmentShader2D: TBitBtn
+      Left = 780
+      Top = 142
+      Width = 43
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 16
+      OnClick = ButtonSelectLoadTileMapFragmentShader2DClick
+    end
+    object MultiTexture: TAdvOfficeCheckBox
+      Left = 432
+      Top = 240
+      Width = 197
+      Height = 20
+      Hint = 
+        'Use 8 texture maps for accurate decoding (disable to decode to a' +
+        ' single texture map)'
+      ShowHint = True
+      TabOrder = 17
+      Alignment = taLeftJustify
+      Caption = 'Multi-Texture (Legacy 3D Engine)'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object LoadReal3DScrollFogVertexShader: TEdit
+      Left = 8
+      Top = 192
+      Width = 350
+      Height = 21
+      Hint = 'Load Real3D vertex shader for 3D rendering'
+      AutoSize = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 18
+    end
+    object ButtonSelectLoadReal3DScrollFogVertexShader: TBitBtn
+      Left = 360
+      Top = 190
+      Width = 43
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 19
+      OnClick = ButtonSelectLoadReal3DScrollFogVertexShaderClick
+    end
+    object ButtonSelectLoadReal3DScrollFogFragmentShader: TBitBtn
+      Left = 360
+      Top = 242
+      Width = 43
+      Height = 21
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 20
+      OnClick = ButtonSelectLoadReal3DScrollFogFragmentShaderClick
+    end
+    object LoadReal3DScrollFogFragmentShader: TEdit
+      Left = 8
+      Top = 242
+      Width = 350
+      Height = 21
+      Hint = 'Load Real3D fragment shader for 3D rendering'
+      AutoSize = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 21
+    end
+    object ButtonVideo3DEngineReset: TBitBtn
+      Left = 360
+      Top = 36
+      Width = 43
+      Height = 21
+      Hint = 'Click here to set default 3D engine'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 22
+      OnClick = ButtonVideo3DEngineResetClick
+    end
   end
   object InputGroupBox: TAdvGroupBox
-    Left = 8
-    Top = 401
+    Left = 434
+    Top = 557
     Width = 312
     Height = 102
     RoundEdges = True
@@ -462,9 +604,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     end
   end
   object AudioGroupBox: TAdvGroupBox
-    Left = 337
-    Top = 178
-    Width = 268
+    Left = 8
+    Top = 495
+    Width = 411
     Height = 197
     RoundEdges = True
     ShadowColor = clSilver
@@ -504,11 +646,11 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object SoundVolume: TGaugeBar
       Left = 8
       Top = 79
-      Width = 233
+      Width = 305
       Height = 20
       Hint = 
         'Adjust colume of SCSP-generated sound, applies only when Digital' +
-        ' Sound Board is present (mouse right-click for default)'
+        ' Sound Board is present'#13#10'(mouse right-click for default)'
       Color = clWhite
       Backgnd = bgPattern
       ButtonSize = 12
@@ -547,11 +689,11 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object MusicVolume: TGaugeBar
       Left = 8
       Top = 124
-      Width = 233
+      Width = 305
       Height = 20
       Hint = 
-        'Adjust Digital Sound Board volume (mouse right-click for default' +
-        ')'
+        'Adjust Digital Sound Board volume'#13#10'(mouse right-click for defaul' +
+        't)'
       Color = clWhite
       Backgnd = bgPattern
       ButtonSize = 12
@@ -579,11 +721,11 @@ object FormSupermodelSettings: TFormSupermodelSettings
     object AudioBalanceFrontRear: TGaugeBar
       Left = 8
       Top = 169
-      Width = 233
+      Width = 305
       Height = 20
       Hint = 
-        'Adjust sound position between front and rear speakers (mouse rig' +
-        'ht-click for default)'
+        'Adjust sound position between front and rear speakers'#13#10'(mouse ri' +
+        'ght-click for default)'
       Color = clWhite
       Backgnd = bgPattern
       ButtonSize = 12
@@ -595,18 +737,84 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = AudioBalanceFrontRearChange
       OnMouseDown = AudioBalanceFrontRearMouseDown
     end
+    object BitBtn5: TBitBtn
+      Left = 317
+      Top = 80
+      Width = 43
+      Height = 21
+      Hint = 'Click here to set last used volume'
+      Caption = 'Last'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+    end
+    object BitBtn6: TBitBtn
+      Left = 317
+      Top = 128
+      Width = 43
+      Height = 21
+      Hint = 'Click here to set last used volume'
+      Caption = 'Last'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+    end
+    object BitBtn7: TBitBtn
+      Left = 360
+      Top = 80
+      Width = 43
+      Height = 21
+      Hint = 'Click here to reset volume to default'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+    end
+    object BitBtn8: TBitBtn
+      Left = 360
+      Top = 128
+      Width = 43
+      Height = 21
+      Hint = 'Click here to reset volume to default'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+    end
+    object BitBtn9: TBitBtn
+      Left = 317
+      Top = 168
+      Width = 43
+      Height = 21
+      Hint = 'Click here to set last used volume'
+      Caption = 'Last'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 10
+    end
+    object BitBtn10: TBitBtn
+      Left = 360
+      Top = 168
+      Width = 43
+      Height = 21
+      Hint = 'Click here to reset volume to default'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 11
+    end
   end
   object PowerPCFrequencyBox: TAdvGroupBox
-    Left = 337
-    Top = 383
-    Width = 268
-    Height = 69
+    Left = 434
+    Top = 495
+    Width = 405
+    Height = 50
     RoundEdges = True
     Caption = 'PowerPC Bus Frequency (PPC)'
     Ctl3D = True
     TabOrder = 4
     object LabelPowerPCFrequency: TLabel
-      Left = 96
+      Left = 105
       Top = 23
       Width = 40
       Height = 15
@@ -614,28 +822,20 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowAccelChar = False
       Transparent = False
     end
-    object Label3: TLabel
-      Left = 146
+    object LabelPowerPCFrequencyCustom: TLabel
+      Left = 372
       Top = 23
-      Width = 88
-      Height = 15
-      Caption = 'Custom [1-1000]'
-      ShowAccelChar = False
-      Transparent = True
-    end
-    object Label4: TLabel
-      Left = 237
-      Top = 41
       Width = 25
       Height = 15
       Caption = 'MHz'
+      Enabled = False
       ShowAccelChar = False
       Transparent = True
     end
     object PowerPCFrequency: TGaugeBar
       Left = 8
       Top = 21
-      Width = 84
+      Width = 90
       Height = 20
       Hint = 'Set PowerPC frequency in MHz [Default: 50]'
       Color = clWhite
@@ -648,19 +848,32 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = PowerPCFrequencyChange
     end
     object PowerPCFrequencyCustom: TEdit
-      Left = 146
-      Top = 39
-      Width = 89
+      Left = 307
+      Top = 20
+      Width = 63
       Height = 22
       AutoSize = False
+      Enabled = False
       TabOrder = 1
       Text = '1000'
       OnKeyPress = PowerPCFrequencyCustomKeyPress
     end
+    object PowerPCFrequencyUseCustom: TAdvOfficeCheckBox
+      Left = 175
+      Top = 21
+      Width = 129
+      Height = 20
+      TabOrder = 2
+      OnClick = PowerPCFrequencyUseCustomClick
+      Alignment = taLeftJustify
+      Caption = 'Use Custom [1-1000]'
+      ReturnIsTab = False
+      Themed = True
+    end
   end
   object Multithreading: TAdvOfficeCheckBox
-    Left = 337
-    Top = 473
+    Left = 434
+    Top = 672
     Width = 101
     Height = 20
     Hint = 'Uncheck it to disable multi-threading entirely'
@@ -675,7 +888,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonReadFile: TBitBtn
     Left = 8
-    Top = 510
+    Top = 710
     Width = 89
     Height = 25
     Hint = 'Reload configuration file'
@@ -684,8 +897,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = ButtonReadFileClick
   end
   object ButtonOk: TBitBtn
-    Left = 419
-    Top = 510
+    Left = 652
+    Top = 710
     Width = 89
     Height = 25
     Hint = 'Close and update settings'
@@ -694,8 +907,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     TabOrder = 7
   end
   object ButtonCancel: TBitBtn
-    Left = 517
-    Top = 510
+    Left = 750
+    Top = 710
     Width = 89
     Height = 25
     Hint = 'Close without updating'
@@ -707,8 +920,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Tag = 1
     Left = 8
     Top = 105
-    Width = 461
-    Height = 65
+    Width = 739
+    Height = 98
     Hint = 'ROMs Folders'
     BackGround.Enabled = True
     CellSizes.Report.Height = 18
@@ -723,7 +936,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000101000100000000000001C9010000FFFFFF1F0001000000
+      00060000008008000101000100000000000001DF020000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Draggable = False
     Header.FixedSingleColumn = True
@@ -765,7 +978,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
   end
   object ButtonUp: TBitBtn
     Tag = 1
-    Left = 471
+    Left = 751
     Top = 104
     Width = 43
     Height = 21
@@ -778,7 +991,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = ButtonUpClick
   end
   object ButtonDown: TBitBtn
-    Left = 471
+    Left = 751
     Top = 125
     Width = 43
     Height = 21
@@ -791,7 +1004,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = ButtonUpClick
   end
   object FolderROMButtonSelect: TBitBtn
-    Left = 520
+    Left = 794
     Top = 104
     Width = 43
     Height = 21
@@ -803,8 +1016,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = FolderROMButtonSelectClick
   end
   object FolderROMsButtonEdit: TBitBtn
-    Left = 563
-    Top = 104
+    Left = 794
+    Top = 125
     Width = 43
     Height = 21
     Hint = 'Click here to edit the selected folder [F2]'
@@ -815,8 +1028,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = FolderROMsButtonEditClick
   end
   object FolderROMsButtonDelete: TBitBtn
-    Left = 520
-    Top = 125
+    Left = 794
+    Top = 146
     Width = 43
     Height = 21
     Hint = 'Click here to delete selected folders [DEL]'
@@ -827,8 +1040,8 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnClick = FolderROMsButtonDeleteClick
   end
   object FolderROMsButtonClear: TBitBtn
-    Left = 563
-    Top = 125
+    Left = 794
+    Top = 167
     Width = 43
     Height = 21
     Hint = 'Click here to clear folders list'

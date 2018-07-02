@@ -13,18 +13,17 @@ type
     TopBar: TPanelEx;
     VideoGroupBox: TAdvGroupBox;
     LabelResolution: TLabel;
-    LabelVertexShader: TLabel;
-    LabelFragmentShader: TLabel;
+    LabelReal3DVertexShader: TLabel;
+    LabelReal3DFragmentShader: TLabel;
     ScreenResolution: TComboBox;
     DisableThrottle: TAdvOfficeCheckBox;
     ShowFPS: TAdvOfficeCheckBox;
-    VertexShader: TEdit;
-    FragmentShader: TEdit;
-    ButtonSelectVertexShader: TBitBtn;
-    ButtonSelectFragmentShader: TBitBtn;
+    Real3DVertexShader: TEdit;
+    Real3DFragmentShader: TEdit;
+    ButtonSelectReal3DVertexShader: TBitBtn;
+    ButtonSelectReal3DFragmentShader: TBitBtn;
     Widescreen: TAdvOfficeCheckBox;
     FullScreen: TAdvOfficeCheckBox;
-    MultiTexture: TAdvOfficeCheckBox;
     InputGroupBox: TAdvGroupBox;
     InputSystem: TComboBox;
     ButtonConfigInput: TBitBtn;
@@ -41,8 +40,7 @@ type
     AudioBalanceFrontRear: TGaugeBar;
     PowerPCFrequencyBox: TAdvGroupBox;
     LabelPowerPCFrequency: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    LabelPowerPCFrequencyCustom: TLabel;
     PowerPCFrequency: TGaugeBar;
     PowerPCFrequencyCustom: TEdit;
     Multithreading: TAdvOfficeCheckBox;
@@ -68,8 +66,29 @@ type
     Video3DEngine: TComboBox;
     Crosshairs: TComboBox;
     LabelCrosshairs: TLabel;
-    Label1: TLabel;
     DisableVSync: TAdvOfficeCheckBox;
+    Stretch: TAdvOfficeCheckBox;
+    LabelLoadTileMapVertexShader2D: TLabel;
+    LoadTileMapVertexShader2D: TEdit;
+    ButtonSelectLoadTileMapVertexShader2D: TBitBtn;
+    LabelLoadTileMapFragmentShader2D: TLabel;
+    LoadTileMapFragmentShader2D: TEdit;
+    ButtonSelectLoadTileMapFragmentShader2D: TBitBtn;
+    MultiTexture: TAdvOfficeCheckBox;
+    LabelLoadReal3DScrollFogVertexShader: TLabel;
+    LoadReal3DScrollFogVertexShader: TEdit;
+    ButtonSelectLoadReal3DScrollFogVertexShader: TBitBtn;
+    ButtonSelectLoadReal3DScrollFogFragmentShader: TBitBtn;
+    LabelLoadReal3DScrollFogFragmentShader: TLabel;
+    LoadReal3DScrollFogFragmentShader: TEdit;
+    ButtonVideo3DEngineReset: TBitBtn;
+    BitBtn5: TBitBtn;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    BitBtn8: TBitBtn;
+    BitBtn9: TBitBtn;
+    BitBtn10: TBitBtn;
+    PowerPCFrequencyUseCustom: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -88,8 +107,8 @@ type
     procedure FolderROMsButtonClearClick(Sender: TObject);
     procedure PowerPCFrequencyCustomKeyPress(Sender: TObject;
       var Key: Char);
-    procedure ButtonSelectVertexShaderClick(Sender: TObject);
-    procedure ButtonSelectFragmentShaderClick(Sender: TObject);
+    procedure ButtonSelectReal3DVertexShaderClick(Sender: TObject);
+    procedure ButtonSelectReal3DFragmentShaderClick(Sender: TObject);
     procedure SoundVolumeChange(Sender: TObject);
     procedure MusicVolumeChange(Sender: TObject);
     procedure ButtonConfigInputClick(Sender: TObject);
@@ -101,6 +120,15 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure AudioBalanceFrontRearMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ButtonVideo3DEngineResetClick(Sender: TObject);
+    procedure ButtonSelectLoadReal3DScrollFogVertexShaderClick(
+      Sender: TObject);
+    procedure ButtonSelectLoadReal3DScrollFogFragmentShaderClick(
+      Sender: TObject);
+    procedure ButtonSelectLoadTileMapVertexShader2DClick(Sender: TObject);
+    procedure ButtonSelectLoadTileMapFragmentShader2DClick(
+      Sender: TObject);
+    procedure PowerPCFrequencyUseCustomClick(Sender: TObject);
   private
     { Private declarations }
     //procedure PopulateScreenResolution;
@@ -170,6 +198,7 @@ var
   end;
 
 begin
+  // see OSD\SDL\Main.cpp for "-net" options (and more)
   try
     elCFG:= TMemIniFile.Create(FormMain.GetArcadeEmulatorsFile);
     StrValue:= elCFG.ReadString(FormMain.GetArcadeSystemIniSection(idSupermodel), 'roms_path', 'roms');
@@ -207,11 +236,11 @@ begin
     CustomEntryList.EndUpdate;
   end;
 
-  if CustomSettingExist('Multithreading') then
-     Multithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'Multithreading', 1));
+  if CustomSettingExist('MultiThreaded') then
+     Multithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'MultiThreaded', 1));
 
-  if CustomSettingExist('GPUMultithreading') then
-     GPUMultithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'GPUMultithreading', 1));
+  if CustomSettingExist('GPUMultiThreaded') then
+     GPUMultithreading.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'GPUMultiThreaded', 1));
 
   if CustomSettingExist('PowerPCFrequency') then
      begin
@@ -220,6 +249,10 @@ begin
           IntValue:= 5; // 50 MHz (default)
        PowerPCFrequency.Position:= IntValue;
      end;
+
+  if CustomSettingExist('PowerPCFrequencyEnableCustom') then
+     PowerPCFrequencyUseCustom.Checked:= Boolean(emuFile.ReadInteger('Emulation', 'PowerPCFrequencyEnableCustom', 0));
+
   if CustomSettingExist('PowerPCFrequencyCustom') then
      begin
        StrValue:= emuFile.ReadString('Emulation', 'PowerPCFrequencyCustom', '');
@@ -246,11 +279,14 @@ begin
   if CustomSettingExist('FullScreen') then
      FullScreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'FullScreen', 0));
 
-  if CustomSettingExist('Widescreen') then
-     Widescreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'Widescreen', 0));
+  if CustomSettingExist('WideScreen') then
+     Widescreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'WideScreen', 0));
+
+  if CustomSettingExist('Stretch') then
+     Stretch.Checked:= Boolean(emuFile.ReadInteger('Video', 'Stretch', 0));
 
   if CustomSettingExist('MultiTexture') then
-     MultiTexture.Checked:= Boolean(emuFile.ReadInteger('Video', 'MultiTexture', 1));
+     MultiTexture.Checked:= Boolean(emuFile.ReadInteger('Video', 'MultiTexture', 0));
 
   if CustomSettingExist('DisableThrottle') then
      DisableThrottle.Checked:= Boolean(emuFile.ReadInteger('Video', 'DisableThrottle', 0));
@@ -258,8 +294,8 @@ begin
   if CustomSettingExist('DisableVSync') then
      DisableVSync.Checked:= Boolean(emuFile.ReadInteger('Video', 'DisableVSync', 0));
 
-  if CustomSettingExist('ShowFPS') then
-     ShowFPS.Checked:= Boolean(emuFile.ReadInteger('Video', 'ShowFPS', 0));
+  if CustomSettingExist('ShowFrameRate') then
+     ShowFPS.Checked:= Boolean(emuFile.ReadInteger('Video', 'ShowFrameRate', 0));
 
   if CustomSettingExist('DisableSound') then
      DisableSound.Checked:= Boolean(emuFile.ReadInteger('Audio', 'DisableSound', 0));
@@ -307,14 +343,26 @@ begin
           Crosshairs.ItemIndex:= 0;
      end;
 
-  if CustomSettingExist('EnableForceFeedback') then
-     EnableForceFeedback.Checked:= Boolean(emuFile.ReadInteger('Controls', 'EnableForceFeedback', 0));
+  if CustomSettingExist('ForceFeedback') then
+     EnableForceFeedback.Checked:= Boolean(emuFile.ReadInteger('Controls', 'ForceFeedback', 0));
 
   if CustomSettingExist('VertexShader') then
-     VertexShader.Text:= emuFile.ReadString('Debug', 'VertexShader', '');
+     Real3DVertexShader.Text:= emuFile.ReadString('Shaders', 'VertexShader', '');
 
   if CustomSettingExist('FragmentShader') then
-     FragmentShader.Text:= emuFile.ReadString('Debug', 'FragmentShader', '');
+     Real3DFragmentShader.Text:= emuFile.ReadString('Shaders', 'FragmentShader', '');
+
+  if CustomSettingExist('VertexShaderFog') then
+     LoadReal3DScrollFogVertexShader.Text:= emuFile.ReadString('Shaders', 'VertexShaderFog', '');
+
+  if CustomSettingExist('FragmentShaderFog') then
+     LoadReal3DScrollFogFragmentShader.Text:= emuFile.ReadString('Shaders', 'FragmentShaderFog', '');
+
+  if CustomSettingExist('VertexShader2D') then
+     LoadTileMapVertexShader2D.Text:= emuFile.ReadString('Shaders', 'VertexShader2D', '');
+
+  if CustomSettingExist('FragmentShader2D') then
+     LoadTileMapFragmentShader2D.Text:= emuFile.ReadString('Shaders', 'FragmentShader2D', '');
 
   FreeAndNil(emuFile);
   if IsCustom then
@@ -340,10 +388,16 @@ var
     end;
   end;
 
-  function CheckEmulatorIniValue(const EntryStr, EntryValue: String): Boolean;
+  function CheckEmulatorIniValue(const EntryStr, EntryValue: String; ForceCustomSetting: Boolean = False): Boolean;
   begin
     case IsCustom of
-      True : Result:= CustomEntryList.IndexOf(EntryStr+'='+EntryValue) = -1;
+      True:
+        begin
+          if not ForceCustomSetting then
+             Result:= CustomEntryList.IndexOf(EntryStr+'='+EntryValue) = -1
+          else
+             Result:= True;
+        end;
       False: Result:= True; // always return TRUE; default settings is being written!!!
     end;
   end;
@@ -391,14 +445,17 @@ begin
      DeleteFile(iniFile);
   emuFile:= TMemIniFile.Create(iniFile);
 
-  if CheckEmulatorIniValue('Multithreading', IntToStr(Ord(Multithreading.Checked))) then
-     emuFile.WriteInteger('Emulation', 'Multithreading', Ord(Multithreading.Checked));
+  if CheckEmulatorIniValue('MultiThreaded', IntToStr(Ord(Multithreading.Checked))) then
+     emuFile.WriteInteger('Emulation', 'MultiThreaded', Ord(Multithreading.Checked));
 
-  if CheckEmulatorIniValue('GPUMultithreading', IntToStr(Ord(GPUMultithreading.Checked))) then
-     emuFile.WriteInteger('Emulation', 'GPUMultithreading', Ord(GPUMultithreading.Checked));
+  if CheckEmulatorIniValue('GPUMultiThreaded', IntToStr(Ord(GPUMultithreading.Checked))) then
+     emuFile.WriteInteger('Emulation', 'GPUMultiThreaded', Ord(GPUMultithreading.Checked));
 
   if CheckEmulatorIniValue('PowerPCFrequency', IntToStr(PowerPCFrequency.Position)) then
      emuFile.WriteInteger('Emulation', 'PowerPCFrequency', PowerPCFrequency.Position);
+
+  if CheckEmulatorIniValue('PowerPCFrequencyEnableCustom', IntToStr(Ord(PowerPCFrequencyUseCustom.Checked))) then //, True) then
+     emuFile.WriteInteger('Emulation', 'PowerPCFrequencyEnableCustom', Ord(PowerPCFrequencyUseCustom.Checked));
 
   if PowerPCFrequencyCustom.Text = '' then
      PowerPCFrequencyCustom.Text:= '1000'
@@ -409,13 +466,14 @@ begin
   if StrToInt(PowerPCFrequencyCustom.Text) > 1000 then
      PowerPCFrequencyCustom.Text:= '1000';
 
-  if CheckEmulatorIniValue('PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text) then
+  if CheckEmulatorIniValue('PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text) then //, True) then
      emuFile.WriteString('Emulation', 'PowerPCFrequencyCustom', PowerPCFrequencyCustom.Text);
 
   StrValue:= ScreenResolution.Text;
   if Strvalue = '' then
      StrValue:= 'auto';
 
+     // XResolution // YResolution
   if CheckEmulatorIniValue('Resolution', StrValue) then
      emuFile.WriteString('Video', 'Resolution', StrValue);
 
@@ -428,8 +486,11 @@ begin
   if CheckEmulatorIniValue('FullScreen', IntToStr(Ord(FullScreen.Checked))) then
      emuFile.WriteInteger('Video', 'FullScreen', Ord(FullScreen.Checked));
 
-  if CheckEmulatorIniValue('Widescreen', IntToStr(Ord(Widescreen.Checked))) then
-     emuFile.WriteInteger('Video', 'Widescreen', Ord(Widescreen.Checked));
+  if CheckEmulatorIniValue('WideScreen', IntToStr(Ord(Widescreen.Checked))) then
+     emuFile.WriteInteger('Video', 'WideScreen', Ord(Widescreen.Checked));
+
+  if CheckEmulatorIniValue('Stretch', IntToStr(Ord(Stretch.Checked))) then
+     emuFile.WriteInteger('Video', 'Stretch', Ord(Stretch.Checked));
 
   if CheckEmulatorIniValue('MultiTexture', IntToStr(Ord(MultiTexture.Checked))) then
      emuFile.WriteInteger('Video', 'MultiTexture', Ord(MultiTexture.Checked));
@@ -440,8 +501,8 @@ begin
   if CheckEmulatorIniValue('DisableVSync', IntToStr(Ord(DisableVSync.Checked))) then
      emuFile.WriteInteger('Video', 'DisableVSync', Ord(DisableVSync.Checked));
 
-  if CheckEmulatorIniValue('ShowFPS', IntToStr(Ord(ShowFPS.Checked))) then
-     emuFile.WriteInteger('Video', 'ShowFPS', Ord(ShowFPS.Checked));
+  if CheckEmulatorIniValue('ShowFrameRate', IntToStr(Ord(ShowFPS.Checked))) then
+     emuFile.WriteInteger('Video', 'ShowFrameRate', Ord(ShowFPS.Checked));
 
   if CheckEmulatorIniValue('DisableSound', IntToStr(Ord(DisableSound.Checked))) then
      emuFile.WriteInteger('Audio', 'DisableSound', Ord(DisableSound.Checked));
@@ -467,19 +528,35 @@ begin
   if CheckEmulatorIniValue('Crosshairs', IntToStr(Crosshairs.ItemIndex)) then
      emuFile.WriteInteger('Controls', 'Crosshairs', Crosshairs.ItemIndex); // 0 = none (default)
 
-  if CheckEmulatorIniValue('EnableForceFeedback', IntToStr(Ord(EnableForceFeedback.Checked))) then
-     emuFile.WriteInteger('Controls', 'EnableForceFeedback', Ord(EnableForceFeedback.Checked));
+  if CheckEmulatorIniValue('ForceFeedback', IntToStr(Ord(EnableForceFeedback.Checked))) then
+     emuFile.WriteInteger('Controls', 'ForceFeedback', Ord(EnableForceFeedback.Checked));
 
-  if CheckEmulatorIniValue('VertexShader', VertexShader.Text) then
-     emuFile.WriteString('Debug', 'VertexShader', VertexShader.Text);
+  if CheckEmulatorIniValue('VertexShader', Real3DVertexShader.Text) then
+     emuFile.WriteString('Shaders', 'VertexShader', Real3DVertexShader.Text);
 
-  if CheckEmulatorIniValue('FragmentShader', FragmentShader.Text) then
-     emuFile.WriteString('Debug', 'FragmentShader', FragmentShader.Text);
+  if CheckEmulatorIniValue('FragmentShader', Real3DFragmentShader.Text) then
+     emuFile.WriteString('Shaders', 'FragmentShader', Real3DFragmentShader.Text);
+
+  if CheckEmulatorIniValue('VertexShaderFog', LoadReal3DScrollFogVertexShader.Text) then
+     emuFile.WriteString('Shaders', 'VertexShaderFog', LoadReal3DScrollFogVertexShader.Text);
+
+  if CheckEmulatorIniValue('FragmentShaderFog', LoadReal3DScrollFogFragmentShader.Text) then
+     emuFile.WriteString('Shaders', 'FragmentShaderFog', LoadReal3DScrollFogFragmentShader.Text);
+
+  if CheckEmulatorIniValue('VertexShader2D', LoadTileMapVertexShader2D.Text) then
+     emuFile.WriteString('Shaders', 'VertexShader2D', LoadTileMapVertexShader2D.Text);
+
+  if CheckEmulatorIniValue('FragmentShader2D', LoadTileMapFragmentShader2D.Text) then
+     emuFile.WriteString('Shaders', 'FragmentShader2D', LoadTileMapFragmentShader2D.Text);
 
   emuFile.UpdateFile;
   FreeAndNil(emuFile);
   if IsCustom then
-     FreeAndNil(CustomEntryList);
+     begin
+       FreeAndNil(CustomEntryList);
+       if not FormMain.ValidateFile(iniFile) then
+          DeleteFile(iniFile); // settings are the same as "Supermodel.ini", no need to create a game custom settings file
+     end;
 end;
 
 procedure TFormSupermodelSettings.FormShow(Sender: TObject);
@@ -655,16 +732,40 @@ begin
      Key:= Char(0);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectVertexShaderClick(
+procedure TFormSupermodelSettings.ButtonSelectReal3DVertexShaderClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(12, 'Select a shader file', VertexShader, False);
+  FormMain.DialogOpenFile(12, 'Select a vertex shader file', Real3DVertexShader, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectFragmentShaderClick(
+procedure TFormSupermodelSettings.ButtonSelectReal3DFragmentShaderClick(
   Sender: TObject);
 begin
-  FormMain.DialogOpenFile(12, 'Select a shader file', FragmentShader, False);
+  FormMain.DialogOpenFile(12, 'Select a frament shader file', Real3DFragmentShader, False);
+end;
+
+procedure TFormSupermodelSettings.ButtonSelectLoadReal3DScrollFogVertexShaderClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(12, 'Select a scroll fog vertex shader file', LoadReal3DScrollFogVertexShader, False);
+end;
+
+procedure TFormSupermodelSettings.ButtonSelectLoadReal3DScrollFogFragmentShaderClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(12, 'Select a scroll fog frament shader file', LoadReal3DScrollFogFragmentShader, False);
+end;
+
+procedure TFormSupermodelSettings.ButtonSelectLoadTileMapVertexShader2DClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(12, 'Select a tile map vertex shader file', LoadTileMapVertexShader2D, False);
+end;
+
+procedure TFormSupermodelSettings.ButtonSelectLoadTileMapFragmentShader2DClick(
+  Sender: TObject);
+begin
+  FormMain.DialogOpenFile(12, 'Select a tile map frament shader file', LoadTileMapFragmentShader2D, False);
 end;
 
 procedure TFormSupermodelSettings.SoundVolumeChange(Sender: TObject);
@@ -698,6 +799,8 @@ begin
   if not (InputSystem.ItemIndex in [0, 1]) then
      Exit;
 
+  if GenerateMessage('INFO', 'Configure Supermodel Inputs', '    Supermodel emulator will be executed so you can configure inputs.'+#13#10+'Continue ?', 1, False, 2) = mrNo then
+     Exit;
   ExecLine:= SystemStr+FormMain.EmulatorFile[idSupermodel]+SystemStr+' -config-inputs -input-system=';
   case InputSystem.ItemIndex of
     0: ExecLine:= ExecLine+'dinput';
@@ -744,6 +847,19 @@ procedure TFormSupermodelSettings.AudioBalanceFrontRearMouseDown(
 begin
   if Button = mbRight then
      AudioBalanceFrontRear.Position:= 0; // reset to default
+end;
+
+procedure TFormSupermodelSettings.ButtonVideo3DEngineResetClick(
+  Sender: TObject);
+begin
+  Video3DEngine.ItemIndex:= 1; // New 3D Engine
+end;
+
+procedure TFormSupermodelSettings.PowerPCFrequencyUseCustomClick(
+  Sender: TObject);
+begin
+  PowerPCFrequencyCustom.Enabled:= PowerPCFrequencyUseCustom.Checked;
+  LabelPowerPCFrequencyCustom.Enabled:= PowerPCFrequencyUseCustom.Checked;
 end;
 
 end.

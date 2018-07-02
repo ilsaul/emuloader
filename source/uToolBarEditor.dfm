@@ -4,9 +4,9 @@ object FormToolBarEditor: TFormToolBarEditor
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Tool Bar'
-  ClientHeight = 350
-  ClientWidth = 618
-  Color = 15856113
+  ClientHeight = 532
+  ClientWidth = 690
+  Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -23,12 +23,12 @@ object FormToolBarEditor: TFormToolBarEditor
   object ToolBarListView: TEasyListview
     Left = 0
     Top = 0
-    Width = 640
-    Height = 301
+    Width = 710
+    Height = 482
     AllowHiddenCheckedItems = True
     BorderStyle = bsNone
-    CellSizes.Tile.Height = 60
-    CellSizes.Tile.Width = 206
+    CellSizes.Tile.Height = 80
+    CellSizes.Tile.Width = 230
     Color = clWhite
     DisabledBlendColor = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -81,23 +81,85 @@ object FormToolBarEditor: TFormToolBarEditor
   end
   object PanelEx1: TPanelEx
     Left = 0
-    Top = 301
-    Width = 618
+    Top = 483
+    Width = 690
     Height = 49
     Align = alBottom
     Color1 = clWhite
     Color2 = 15856113
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = clGreen
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object GamesSearchBarIcon: TImage
-      Left = 274
-      Top = 8
-      Width = 32
-      Height = 32
+    object LabelToolBarIconSize: TShadowLabel
+      Tag = 1
+      Left = 192
+      Top = 5
+      Width = 68
+      Height = 16
+      Caption = 'Set Icon Size'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object LabelIconSizeValue: TShadowLabel
+      Left = 268
+      Top = 22
+      Width = 72
+      Height = 16
+      Caption = 'Large (48x48)'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      Transparent = True
+    end
+    object IconSizeExtraLarge: TSpeedButton
+      Left = 192
+      Top = 20
+      Width = 24
+      Height = 20
+      Hint = 'Extra large icons (68x68)'
+      GroupIndex = 1
+      Caption = 'XL'
+      Flat = True
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = IconSizeLargeClick
+    end
+    object IconSizeLarge: TSpeedButton
+      Tag = 1
+      Left = 217
+      Top = 20
+      Width = 24
+      Height = 20
+      Hint = 'Large icons (48x48)'
+      GroupIndex = 1
+      Down = True
+      Caption = 'L'
+      Flat = True
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = IconSizeLargeClick
+    end
+    object IconSizeSmall: TSpeedButton
+      Tag = 2
+      Left = 242
+      Top = 20
+      Width = 24
+      Height = 20
+      Hint = 'Small Icons (30x24)'
+      GroupIndex = 1
+      Caption = 'S'
+      Flat = True
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = IconSizeLargeClick
     end
     object BoundToGamesPanel: TAdvOfficeCheckBox
       Left = 8
@@ -119,29 +181,31 @@ object FormToolBarEditor: TFormToolBarEditor
       Top = 24
       Width = 105
       Height = 20
+      Checked = True
       ShowHint = True
       TabOrder = 1
       OnClick = ShowHideToolBarClick
       Alignment = taLeftJustify
-      Caption = 'Hide Tool Bar'
+      Caption = 'Show Tool Bar'
       ReturnIsTab = False
       ShadowColor = clSkyBlue
+      State = cbChecked
       Themed = True
     end
     object ButtonDefault: TBitBtn
-      Left = 422
+      Left = 454
       Top = 16
       Width = 89
       Height = 25
       Hint = 'Set all buttons visible'
-      Caption = 'Default'
+      Caption = 'All Visible'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
       OnClick = ButtonDefaultClick
     end
     object ButtonClose: TBitBtn
-      Left = 520
+      Left = 594
       Top = 16
       Width = 89
       Height = 25
@@ -151,39 +215,10 @@ object FormToolBarEditor: TFormToolBarEditor
       ShowHint = True
       TabOrder = 3
     end
-    object SmallToolBar: TAdvOfficeCheckBox
-      Left = 120
-      Top = 24
-      Width = 100
-      Height = 20
-      Hint = 'Use large icons (44x40) or small icons (28x22)'
-      ShowHint = True
-      TabOrder = 4
-      OnClick = SmallToolBarClick
-      Alignment = taLeftJustify
-      Caption = 'Small Tool Bar'
-      ReturnIsTab = False
-      ShadowColor = clSkyBlue
-      Themed = True
-    end
-    object GamesSearchBar: TAdvOfficeCheckBox
-      Left = 256
-      Top = 14
-      Width = 158
-      Height = 20
-      ShowHint = True
-      TabOrder = 5
-      OnClick = GamesSearchBarClick
-      Alignment = taLeftJustify
-      Caption = '             Games Search Bar'
-      ReturnIsTab = False
-      ShadowColor = clSkyBlue
-      Themed = True
-    end
   end
   object IL_ToolBarButtonsEditor: TImageList
-    Height = 40
-    Width = 44
+    Height = 68
+    Width = 68
     Left = 280
     Top = 208
   end

@@ -1252,6 +1252,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     Color3 = 1117964
     Color4 = 16448250
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple

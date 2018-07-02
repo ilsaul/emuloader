@@ -239,6 +239,9 @@ begin
 
         FilterChanged(ShowOnlySetsCRC32Collision.Tag, Ord(ShowOnlySetsCRC32Collision.Checked));
         ShowOnlySetsCRC32Collision.Tag:= Ord(ShowOnlySetsCRC32Collision.Checked);
+
+        //FilterChanged(FilterGamesMainCPU.Tag, Ord(FilterGamesMainCPU.Checked));
+        FilterGamesMainCPU.Tag:= Ord(FilterGamesMainCPU.Checked);
       end;
     mrCancel:
       begin
@@ -298,6 +301,8 @@ begin
         ResetFilterCheckBox(ShowMergedSetsOnly);
 
         ResetFilterCheckBox(ShowOnlySetsCRC32Collision);
+
+        ResetFilterCheckBox(FilterGamesMainCPU);
       end;
   end;
 end;
@@ -315,9 +320,9 @@ end;
 
 procedure TFormArcadeFiltersExtra.FilterGamesMainCPUClick(Sender: TObject);
 begin
-  FormMain.ToolBarFilterByMainCPU.Visible:= FilterGamesMainCPU.Checked;
-  if FormMain.ToolBarFilterByMainCPU.Visible then
-     FormMain.ToolBarButtons.Top:= 0;
+  //FormMain.ToolBarFilterByMainCPU.Visible:= FilterGamesMainCPU.Checked;
+  //if FormMain.ToolBarFilterByMainCPU.Visible then
+  //   FormMain.ToolBarButtons.Top:= 0;
 end;
 
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);
@@ -366,6 +371,7 @@ begin
   ShowMergedSetsOnly.Checked:= False;
   ShowOnlySetsCRC32Collision.Checked:= False;
   SaveState.ItemIndex:= 0;
+  FilterGamesMainCPU.Checked:= False;
 end;
 
 procedure TFormArcadeFiltersExtra.FormKeyPress(Sender: TObject; var Key: Char);

@@ -75,7 +75,7 @@ begin
   if AddMAMEDeviceSetWithNoROMs.Checked then
      AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
   else
-     AddMAMEDeviceSetWithNoROMs.Font.Color:= $0078695b;
+     AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
 end;
 
 procedure TFormArcadeScanGamesMode.FormShow(Sender: TObject);

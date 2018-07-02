@@ -3,8 +3,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
   Top = 474
   BorderStyle = bsDialog
   Caption = 'Copy Games Files'
-  ClientHeight = 377
-  ClientWidth = 614
+  ClientHeight = 393
+  ClientWidth = 734
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -15,19 +15,21 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
   OldCreateOrder = False
   Scaled = False
   OnActivate = FormActivate
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object PanelProgress: TPanelEx
     Left = 0
-    Top = 138
-    Width = 614
+    Top = 154
+    Width = 734
     Height = 95
     Color1 = clWhite
     Color2 = 15856113
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -47,6 +49,9 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelCopyTo: TShadowLabel
@@ -65,10 +70,13 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelCanceledByUser: TShadowLabel
-      Left = 124
+      Left = 244
       Top = 69
       Width = 400
       Height = 19
@@ -85,6 +93,9 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 16448250
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
@@ -105,12 +116,15 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ProgressBar: TProgressBar
       Left = 8
       Top = 42
-      Width = 596
+      Width = 716
       Height = 16
       TabOrder = 0
     end
@@ -126,7 +140,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       OnClick = ButtonPauseClick
     end
     object ButtonCancel: TBitBtn
-      Left = 536
+      Left = 656
       Top = 67
       Width = 68
       Height = 23
@@ -138,17 +152,18 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       OnClick = ButtonCancelClick
     end
   end
-  object PanelGameTitle: TPanelEx
+  object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 614
-    Height = 73
+    Width = 734
+    Height = 89
     Align = alTop
     Color1 = 16445669
     Color2 = clWhite
     Color3 = 16112579
     Color4 = 16707808
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -156,23 +171,23 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Tag = -50
       Left = 4
       Top = 4
-      Width = 32
-      Height = 32
+      Width = 68
+      Height = 68
       HelpContext = -2
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 40
+      Left = 78
       Top = 4
-      Width = 565
-      Height = 26
+      Width = 642
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -180,21 +195,24 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = clSkyBlue
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
     end
     object LabelGameNameCloneOf: TShadowLabel
-      Left = 40
-      Top = 34
-      Width = 455
-      Height = 13
+      Left = 78
+      Top = 46
+      Width = 535
+      Height = 14
       Caption = 
         'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
         'ftlist: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -202,13 +220,16 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
   object Log: TRichEditURL
     Left = 8
-    Top = 239
-    Width = 597
+    Top = 255
+    Width = 717
     Height = 129
     Color = 15856113
     Font.Charset = ANSI_CHARSET
@@ -225,14 +246,15 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
   end
   object PanelFileInfo: TPanelEx
     Left = 0
-    Top = 73
-    Width = 614
+    Top = 89
+    Width = 734
     Height = 65
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -262,13 +284,16 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
     object LabelFileSizeDate: TShadowLabel
       Left = 83
       Top = 39
-      Width = 518
+      Width = 638
       Height = 14
       AutoSize = False
       Caption = 'Size: 0000.00 KBytes  Date/Time: Jan/01/2016 00:00:00'
@@ -282,13 +307,16 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
     object LabelFileType: TShadowLabel
       Left = 95
       Top = 2
-      Width = 500
+      Width = 620
       Height = 21
       AutoSize = False
       Caption = 'Electrically Erasable Programmable Read-Only Memory'
@@ -302,13 +330,16 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
   object IL_MediaType: TImageList
     Height = 48
     Width = 48
-    Left = 568
-    Top = 48
+    Left = 696
+    Top = 104
   end
 end

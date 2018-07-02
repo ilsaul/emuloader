@@ -1,8 +1,8 @@
 object FormMain: TFormMain
   Left = 792
-  Top = 338
+  Top = 315
   Width = 1075
-  Height = 639
+  Height = 670
   Caption = 'Emu Loader'
   Color = clBtnFace
   Constraints.MinHeight = 400
@@ -25,9 +25,9 @@ object FormMain: TFormMain
   TextHeight = 15
   object Splitter: TSplitterEx
     Left = 533
-    Top = 47
+    Top = 55
     Width = 6
-    Height = 554
+    Height = 577
     Align = alRight
     ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
@@ -42,307 +42,190 @@ object FormMain: TFormMain
     GripStyle = sgDots
     Style = tsOffice2007Luna
   end
-  object ToolBarPanel: TCoolBar
+  object ToolBarButtons: TToolBar
     Tag = 1
     Left = 0
     Top = 0
     Width = 1059
-    Height = 47
-    AutoSize = True
-    BandBorderStyle = bsNone
-    BandMaximize = bmNone
-    Bands = <
-      item
-        Control = ToolBarButtons
-        ImageIndex = -1
-        MinHeight = 47
-        Width = 817
-      end
-      item
-        Break = False
-        Control = ToolBarFilterTitle
-        FixedSize = True
-        ImageIndex = -1
-        MinHeight = 24
-        Width = 242
-      end>
+    Height = 55
+    ButtonHeight = 54
+    ButtonWidth = 55
     EdgeBorders = []
     EdgeInner = esNone
     EdgeOuter = esNone
-    FixedOrder = True
+    Flat = True
+    Images = IL_ToolBarButtons
+    Indent = 2
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    Transparent = True
+    Wrapable = False
+    OnCustomDraw = ImagesToolBarButtonsCustomDraw
     OnMouseDown = ToolBarButtonsMouseDown
-    object ToolBarButtons: TToolBar
-      Left = 0
+    object ButtonMainMenuOptions: TToolButton
+      Left = 2
       Top = 0
-      Width = 780
-      Height = 47
-      Align = alNone
-      ButtonHeight = 46
-      ButtonWidth = 51
-      Constraints.MaxWidth = 780
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      Images = IL_ToolBarButtons
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      Transparent = True
-      Wrapable = False
-      OnMouseDown = ToolBarButtonsMouseDown
-      object ButtonMainMenuOptions: TToolButton
-        Left = 0
-        Top = 0
-        Hint = 'Menu options'
-        AutoSize = True
-        Caption = 'Menu Options'
-        DropdownMenu = MainMenuOptions
-        ImageIndex = 0
-      end
-      object ButtonViewMode: TToolButton
-        Left = 51
-        Top = 0
-        Hint = 'Games view mode'
-        AutoSize = True
-        Caption = 'View Mode'
-        DropdownMenu = PopupMenuViewMode
-        ImageIndex = 1
-      end
-      object ButtonGameFilterMachineTypeSystemsMulti: TToolButton
-        Left = 102
-        Top = 0
-        Hint = 'Select machine types and systems filter'
-        AutoSize = True
-        Caption = 'Machine Type and Systems Filters'
-        ImageIndex = 2
-        OnClick = ButtonGameFilterMachineTypeSystemsMultiClick
-      end
-      object ButtonSystemsQuickFilter: TToolButton
-        Left = 153
-        Top = 0
-        Hint = 'Select systems filter, quick mode (disabled)'
-        Caption = 'Systems Quick Filter'
-        ImageIndex = 3
-        OnClick = ButtonSystemsQuickFilterClick
-      end
-      object ButtonGameFilterFavorites: TToolButton
-        Left = 204
-        Top = 0
-        Hint = 'Show favorites list [Ctrl+F3 toggle ON/OFF]'
-        AutoSize = True
-        Caption = 'Favorites Filter'
-        DropdownMenu = PopupFavorites
-        ImageIndex = 4
-        Style = tbsCheck
-      end
-      object ButtonGameFilterMain: TToolButton
-        Left = 255
-        Top = 0
-        Hint = 
-          'Selected MAME and arcade games filter'#13#10' -> List All Filters (Def' +
-          'ault)'
-        AutoSize = True
-        Caption = 'Games Filters-MAME and Arcade'
-        ImageIndex = 5
-        OnClick = ButtonGameFilterMainClick
-      end
-      object ButtonGameFilterParentClone: TToolButton
-        Left = 306
-        Top = 0
-        Hint = 'Select MAME and arcade parent/clone games filter'
-        AutoSize = True
-        Caption = 'Parent/Clone Filter-MAME and Arcade'
-        DropdownMenu = PopupGameFilterParentClone
-        ImageIndex = 6
-      end
-      object ButtonGameFilterHaveMiss: TToolButton
-        Left = 357
-        Top = 0
-        Hint = 'Select MAME and arcade available/missing games filter'
-        AutoSize = True
-        Caption = 'Have/Miss Filter-MAME and Arcade'
-        DropdownMenu = PopupGameFilterHaveMiss
-        ImageIndex = 7
-      end
-      object ButtonGameFilterDriverStatus: TToolButton
-        Left = 408
-        Top = 0
-        Hint = 'Select MAME and Arcade driver status filter'
-        AutoSize = True
-        Caption = 'Driver Status Filter-MAME and Arcade'
-        ImageIndex = 8
-        OnClick = ButtonGameFilterDriverStatusClick
-      end
-      object ButtonMAMu_Icons: TToolButton
-        Left = 459
-        Top = 0
-        Hint = 'Show MAMu_ icons for MAME and arcade games'
-        AutoSize = True
-        Caption = 'MAMu_ Icons-MAME and Arcade'
-        DropdownMenu = PopupMAMu_Icons
-        ImageIndex = 9
-      end
-      object ButtonExtraFilters: TToolButton
-        Left = 510
-        Top = 0
-        Hint = 'Miscellaneous MAME and arcade filters for the games list'
-        AutoSize = True
-        Caption = 'Miscellaneous Filters-MAME and Arcade'
-        ImageIndex = 10
-        OnClick = ButtonExtraFiltersClick
-      end
-      object ButtonImageCUE: TToolButton
-        Left = 561
-        Top = 0
-        Hint = 
-          'Load console/computer game using metadata file (.cue; .toc; .mds' +
-          '; .ccd) instead of disc image'#13#10'Some emulators require this (load' +
-          ' or mount in a virtual drive)'
-        Caption = 'Load Game With Metadata File-Console/Computer'
-        Down = True
-        ImageIndex = 11
-        Style = tbsCheck
-      end
-      object ButtonCustomEmuParameterToUse: TToolButton
-        Tag = 1
-        Left = 612
-        Top = 0
-        Hint = 'Select parameter to use with console/computer emulator'
-        Caption = 'Emulator Parameters To Use-Console/Computer'
-        DropdownMenu = MenuCustomEmuParameters
-        ImageIndex = 12
-      end
-      object ButtonGamesMRU: TToolButton
-        Left = 663
-        Top = 0
-        Hint = 'Last played games (MRU)'
-        Caption = 'Last Played Games'
-        ImageIndex = 13
-        OnClick = ButtonGamesMRUClick
-      end
-      object ButtonCustomSelectDefaultEmulators: TToolButton
-        Left = 714
-        Top = 0
-        Hint = 'Select main console/computer emulators to play games'
-        Caption = 'Select Default Emulators-Console/Computer'
-        ImageIndex = 14
-        OnClick = ButtonCustomSelectDefaultEmulatorsClick
-      end
-    end
-    object ToolBarFilterTitle: TToolBar
-      Left = 817
-      Top = 11
-      Width = 242
-      Height = 24
-      Align = alNone
+      Hint = 'Menu options'
       AutoSize = True
-      ButtonHeight = 24
-      Caption = 'Search Bar'
-      Constraints.MaxWidth = 242
-      Constraints.MinWidth = 242
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
-      Images = IL_LeftPanel
-      ParentFont = False
-      TabOrder = 1
-      Transparent = True
-      OnMouseDown = ToolBarButtonsMouseDown
-      object PanelTextBarFilter: TPanel
-        Left = 0
-        Top = 0
-        Width = 145
-        Height = 24
-        BevelOuter = bvNone
-        Constraints.MinHeight = 24
-        ParentBackground = True
-        TabOrder = 0
-        object FilterGameTitle: TEdit
-          Left = 0
-          Top = 0
-          Width = 145
-          Height = 24
-          Hint = 'Search games'#13#10'Filter: Game Title'
-          AutoSize = False
-          BevelKind = bkFlat
-          BevelOuter = bvNone
-          Color = clWhite
-          Constraints.MaxHeight = 24
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clSilver
-          Font.Height = -11
-          Font.Name = 'Trebuchet MS'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 0
-          Text = ' Search games...'
-          OnClick = FilterGameTitleClick
-          OnEnter = FilterGameTitleEnter
-          OnExit = FilterGameTitleExit
-          OnKeyPress = FilterGameTitleKeyPress
-        end
-      end
-      object ButtonFilterTitleApply: TToolButton
-        Left = 145
-        Top = 0
-        Hint = 'Click here to apply filter'
-        AutoSize = True
-        Caption = 'Apply'
-        ImageIndex = 6
-        OnClick = ButtonFilterTitleApplyClick
-      end
-      object ButtonFilterControls: TToolButton
-        Left = 168
-        Top = 0
-        Hint = 
-          'Click here to select a controls filter (will be applied automati' +
-          'cally)'
-        AutoSize = True
-        Caption = 'Controls'
-        DropdownMenu = PopupSearchBarControlsFilter
-        ImageIndex = 14
-      end
-      object ButtonFilterTitleReset: TToolButton
-        Left = 191
-        Top = 0
-        Hint = 'Click here to reset filter to default (main tool bar buttons)'
-        AutoSize = True
-        Caption = 'Reset'
-        ImageIndex = 7
-        OnClick = ButtonFilterTitleResetClick
-      end
-      object ButtonFilterTitleSettings: TToolButton
-        Left = 214
-        Top = 0
-        Hint = 'Click here to change filter settings'
-        AutoSize = True
-        Caption = 'Settings'
-        DropdownMenu = PopupFilterGameTitle
-        ImageIndex = 9
-      end
+      Caption = 'Menu Options'
+      DropdownMenu = MainMenuOptions
+      ImageIndex = 0
+    end
+    object ButtonViewMode: TToolButton
+      Left = 57
+      Top = 0
+      Hint = 'Games view mode'
+      AutoSize = True
+      Caption = 'View Mode'
+      DropdownMenu = PopupMenuViewMode
+      ImageIndex = 1
+    end
+    object ButtonGameFilterMachineTypeSystemsMulti: TToolButton
+      Left = 112
+      Top = 0
+      Hint = 'Select machine types and systems filter'
+      AutoSize = True
+      Caption = 'Machine Type and Systems Filters'
+      ImageIndex = 2
+      OnClick = ButtonGameFilterMachineTypeSystemsMultiClick
+    end
+    object ButtonSystemsQuickFilter: TToolButton
+      Left = 167
+      Top = 0
+      Hint = 'Select systems filter, quick mode (disabled)'
+      Caption = 'Systems Quick Filter'
+      ImageIndex = 3
+      OnClick = ButtonSystemsQuickFilterClick
+    end
+    object ButtonGameFilterFavorites: TToolButton
+      Left = 222
+      Top = 0
+      Hint = 'Show favorites list [Ctrl+F3 toggle ON/OFF]'
+      AutoSize = True
+      Caption = 'Favorites Filter'
+      DropdownMenu = PopupFavorites
+      ImageIndex = 4
+      Style = tbsCheck
+    end
+    object ButtonArcadeGamesFilters: TToolButton
+      Tag = 1
+      Left = 277
+      Top = 0
+      Hint = 
+        'Selected MAME and arcade games filter'#13#10' -> List All Filters (Def' +
+        'ault)'
+      AutoSize = True
+      Caption = 'Games Filters-MAME and Arcade'
+      ImageIndex = 5
+      OnClick = ButtonArcadeGamesFiltersClick
+    end
+    object ButtonGameFilterParentClone: TToolButton
+      Left = 332
+      Top = 0
+      Hint = 'Select MAME and arcade parent/clone games filter'
+      AutoSize = True
+      Caption = 'Parent/Clone Filter-MAME and Arcade'
+      DropdownMenu = PopupGameFilterParentClone
+      ImageIndex = 6
+    end
+    object ButtonGameFilterHaveMiss: TToolButton
+      Left = 387
+      Top = 0
+      Hint = 'Select MAME and arcade available/missing games filter'
+      AutoSize = True
+      Caption = 'Have/Miss Filter-MAME and Arcade'
+      DropdownMenu = PopupGameFilterHaveMiss
+      ImageIndex = 7
+    end
+    object ButtonGameFilterDriverStatus: TToolButton
+      Left = 442
+      Top = 0
+      Hint = 'Select MAME and Arcade driver status filter'
+      AutoSize = True
+      Caption = 'Driver Status Filter-MAME and Arcade'
+      ImageIndex = 8
+      OnClick = ButtonGameFilterDriverStatusClick
+    end
+    object ButtonMAMu_Icons: TToolButton
+      Left = 497
+      Top = 0
+      Hint = 'Show MAMu_ icons for MAME and arcade games'
+      AutoSize = True
+      Caption = 'MAMu_ Icons-MAME and Arcade'
+      DropdownMenu = PopupMAMu_Icons
+      ImageIndex = 9
+    end
+    object ButtonExtraFilters: TToolButton
+      Left = 552
+      Top = 0
+      Hint = 'Miscellaneous MAME and arcade filters for the games list'
+      AutoSize = True
+      Caption = 'Miscellaneous Filters-MAME and Arcade'
+      ImageIndex = 10
+      OnClick = ButtonExtraFiltersClick
+    end
+    object ButtonImageCUE: TToolButton
+      Left = 607
+      Top = 0
+      Hint = 
+        'Load console/computer game using metadata file (.cue; .toc; .mds' +
+        '; .ccd) instead of disc image'#13#10'Some emulators require this (load' +
+        ' or mount in a virtual drive)'
+      Caption = 'Load Game With Metadata File-Console/Computer'
+      Down = True
+      ImageIndex = 11
+      Style = tbsCheck
+      OnClick = ButtonImageCUEClick
+    end
+    object ButtonCustomEmuParameterToUse: TToolButton
+      Tag = 1
+      Left = 662
+      Top = 0
+      Hint = 'Select parameter to use with console/computer emulator'
+      Caption = 'Emulator Parameters To Use-Console/Computer'
+      DropdownMenu = MenuCustomEmuParameters
+      ImageIndex = 12
+    end
+    object ButtonGamesMRU: TToolButton
+      Left = 717
+      Top = 0
+      Hint = 'Last played games (MRU)'
+      Caption = 'Last Played Games'
+      ImageIndex = 13
+      OnClick = ButtonGamesMRUClick
+    end
+    object ButtonCustomSelectDefaultEmulators: TToolButton
+      Left = 772
+      Top = 0
+      Hint = 'Select main console/computer emulators to play games'
+      Caption = 'Select Default Emulators-Console/Computer'
+      ImageIndex = 14
+      OnClick = ButtonCustomSelectDefaultEmulatorsClick
+    end
+    object ButtonFilterSearchGames: TToolButton
+      Left = 827
+      Top = 0
+      Hint = 'Filter games list by title, game name and others'
+      Caption = 'Search Games'
+      ImageIndex = 15
+      OnClick = ButtonFilterSearchGamesClick
     end
   end
   object PanelList: TPanel
     Left = 0
-    Top = 47
+    Top = 55
     Width = 533
-    Height = 554
+    Height = 577
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 0
     object SplitterMachines: TSplitterEx
       Left = 230
-      Top = 24
+      Top = 0
       Width = 6
-      Height = 510
+      Height = 557
       Visible = False
       Appearance.BorderColor = clNone
       Appearance.BorderColorHot = clNone
@@ -357,18 +240,18 @@ object FormMain: TFormMain
     end
     object PanelMachinesList: TPanel
       Left = 0
-      Top = 24
+      Top = 0
       Width = 230
-      Height = 510
+      Height = 557
       Align = alLeft
       BevelOuter = bvNone
-      TabOrder = 3
+      TabOrder = 2
       Visible = False
       object MachinesListSidePanel: TEasyListview
         Left = 0
         Top = 0
         Width = 230
-        Height = 510
+        Height = 557
         Align = alClient
         CellSizes.Report.Height = 20
         Color = clWhite
@@ -453,9 +336,9 @@ object FormMain: TFormMain
     end
     object GamesListView: TEasyListview
       Left = 236
-      Top = 24
+      Top = 0
       Width = 297
-      Height = 510
+      Height = 557
       Align = alClient
       CellSizes.SmallIcon.Height = 20
       CellSizes.Tile.Width = 260
@@ -616,7 +499,7 @@ object FormMain: TFormMain
     object StatusBarPanel: TPanelEx
       Tag = 1
       Left = 0
-      Top = 534
+      Top = 557
       Width = 533
       Height = 20
       Align = alBottom
@@ -645,6 +528,9 @@ object FormMain: TFormMain
         ShadowColor = clSkyBlue
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object StatusBar_GamesGameName: TShadowLabel
@@ -665,6 +551,9 @@ object FormMain: TFormMain
         ShadowColor = clSkyBlue
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object IconGameStatus: TImage
@@ -692,65 +581,184 @@ object FormMain: TFormMain
         Transparent = True
       end
     end
-    object ToolBarFilterByMainCPU: TToolBar
-      Left = 0
-      Top = 0
-      Width = 533
-      Height = 24
-      ButtonHeight = 23
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      Images = IL_LeftPanel
-      ParentFont = False
-      TabOrder = 1
-      Transparent = True
+    object PanelFilterCPU: TPanelEx
+      Left = 24
+      Top = 400
+      Width = 475
+      Height = 86
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
+      EnableCustomBorder = True
+      Frames = []
+      ParentBackground = False
+      Style = vgSolid
       Visible = False
-      Wrapable = False
-      OnCustomDraw = ImagesToolbarButtonsCustomDraw
-      object LabelFilterCPU: TPanelEx
-        Left = 0
-        Top = 0
+      object FilterCPU_LabelCaptionBar: TShadowLabel
+        Left = 1
+        Top = 1
+        Width = 469
+        Height = 25
+        AutoSize = False
+        Caption = '   Filter MAME Games by Main CPU'
+        Color = clMedGray
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Verdana'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = False
+        Layout = tlCenter
+        OnMouseDown = FilterCPU_LabelCaptionBarMouseDown
+      end
+      object FilterCPU_ButtonClose: TShadowLabel
+        Left = 425
+        Top = 3
+        Width = 43
+        Height = 21
+        Hint = 'Close'
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'X'
+        Color = clMaroon
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clBlack
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = 2519212
+        ColorInnerFrame = clBlack
+        EnableInnerFrame = True
+        Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
+        Transparent = False
+        Layout = tlCenter
+        OnClick = FilterCPU_ButtonCloseClick
+        OnMouseEnter = FilterCPU_ButtonCloseMouseEnter
+        OnMouseLeave = FilterCPU_ButtonCloseMouseLeave
+      end
+      object LabelCustomCPUTitle: TShadowLabel
+        Left = 210
+        Top = 32
         Width = 99
-        Height = 23
-        Color1 = 9547720
-        Color2 = clSilver
-        Color3 = clYellow
-        Color4 = clTeal
-        ColorFrame = 7368816
-        ColorInnerFrame = clGreen
-        Frames = [frLeft, frTop, frRight, frBottom]
-        ParentBackground = False
-        Style = vgSolid
-        object ShadowLabel1: TShadowLabel
-          Left = 3
-          Top = 3
-          Width = 93
-          Height = 14
-          Caption = 'MAME CPU Filter'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWhite
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
-          ParentFont = False
-          ShowAccelChar = False
-          ShadowColor = clNavy
-          ShadowEnabled = True
-          EllipsType = etNone
-          Transparent = True
+        Height = 16
+        Caption = 'Custom CPU Title'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clWhite
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object LabelSelectCPU: TShadowLabel
+        Left = 8
+        Top = 32
+        Width = 73
+        Height = 16
+        Caption = 'Select a CPU'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clWhite
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object ToolBarFilterByMainCPU: TToolBar
+        Left = 401
+        Top = 45
+        Width = 68
+        Height = 30
+        Align = alNone
+        ButtonHeight = 30
+        ButtonWidth = 31
+        EdgeBorders = []
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        Images = IL_MiscToolBarPopup
+        ParentFont = False
+        TabOrder = 0
+        Transparent = False
+        Wrapable = False
+        OnCustomDraw = ToolBarFilterByMainCPUCustomDraw
+        object ButtonFilterCPUApply: TToolButton
+          Left = 0
+          Top = 0
+          Hint = 'Click here to apply filter'
+          AutoSize = True
+          ImageIndex = 9
+          OnClick = ButtonFilterCPUApplyClick
+        end
+        object ButtonFilterCPUReset: TToolButton
+          Left = 31
+          Top = 0
+          Hint = 'Click here to reset filters to default (games tool bar buttons)'
+          AutoSize = True
+          ImageIndex = 3
+          OnClick = ButtonFilterCPUResetClick
         end
       end
+      object FilterCPU: TEdit
+        Left = 210
+        Top = 48
+        Width = 190
+        Height = 24
+        Hint = 
+          'Enter CPU title (not short name). Partial strings are supported'#13 +
+          #10'Press "ENTER" hot-key or click "Apply" button'
+        AutoSize = False
+        BevelKind = bkFlat
+        BevelOuter = bvNone
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnKeyPress = FilterCPUKeyPress
+      end
       object FilterCPUList: TComboBox
-        Left = 99
-        Top = 0
-        Width = 150
+        Left = 8
+        Top = 48
+        Width = 190
         Height = 23
         Hint = 'Select a CPU'
         Style = csDropDownList
@@ -762,98 +770,216 @@ object FormMain: TFormMain
         Font.Style = []
         ItemHeight = 15
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 2
         OnSelect = FilterCPUListSelect
       end
-      object FilterCPU: TEdit
-        Left = 249
-        Top = 0
-        Width = 150
-        Height = 23
-        Hint = 
-          'Enter CPU title (not short name). Partial strings are supported'#13 +
-          #10'Press "ENTER" hot-key or click "Apply" button'
+    end
+    object PanelSearchGames: TPanelEx
+      Left = 32
+      Top = 224
+      Width = 349
+      Height = 86
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
+      EnableCustomBorder = True
+      Frames = []
+      ParentBackground = False
+      Style = vgSolid
+      Visible = False
+      object PanelSearchGamesCaptionBar: TShadowLabel
+        Left = 1
+        Top = 1
+        Width = 343
+        Height = 25
+        AutoSize = False
+        Caption = '   Search Games Filter'
+        Color = clMedGray
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Verdana'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = False
+        Layout = tlCenter
+        OnMouseDown = PanelSearchGamesCaptionBarMouseDown
+      end
+      object ButtonFilterTitleClose: TShadowLabel
+        Left = 299
+        Top = 3
+        Width = 43
+        Height = 21
+        Hint = 'Close'
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'X'
+        Color = clMaroon
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clBlack
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = 2519212
+        ColorInnerFrame = clBlack
+        EnableInnerFrame = True
+        Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
+        Transparent = False
+        Layout = tlCenter
+        OnClick = ButtonFilterTitleCloseClick
+        OnMouseEnter = FilterCPU_ButtonCloseMouseEnter
+        OnMouseLeave = FilterCPU_ButtonCloseMouseLeave
+      end
+      object LabelSearchGamesTitle: TShadowLabel
+        Left = 8
+        Top = 32
+        Width = 105
+        Height = 14
+        Caption = 'Filter games by'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clWhite
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object LabelSearchGamesBy: TShadowLabel
+        Left = 115
+        Top = 32
+        Width = 32
+        Height = 14
+        Caption = 'Title'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clCream
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object FilterGameTitle: TEdit
+        Left = 8
+        Top = 48
+        Width = 205
+        Height = 24
         AutoSize = False
         BevelKind = bkFlat
         BevelOuter = bvNone
         Color = clWhite
-        Constraints.MinHeight = 22
+        Constraints.MaxHeight = 24
         Font.Charset = ANSI_CHARSET
-        Font.Color = clSilver
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        Text = ' Enter a CPU title...'
-        OnEnter = FilterCPUEnter
-        OnExit = FilterCPUExit
-        OnKeyPress = FilterCPUKeyPress
+        OnClick = FilterGameTitleClick
+        OnKeyPress = FilterGameTitleKeyPress
       end
-      object ButtonFilterCPUApply: TToolButton
-        Left = 399
-        Top = 0
-        Hint = 'Click here to apply CPU filter'
-        AutoSize = True
-        ImageIndex = 6
-        OnClick = ButtonFilterCPUApplyClick
-      end
-      object ButtonFilterCPUReset: TToolButton
-        Left = 422
-        Top = 0
-        Hint = 'Click here to reset filter to default'
-        AutoSize = True
-        ImageIndex = 7
-        OnClick = ButtonFilterCPUResetClick
-      end
-      object ButtonFilterCPUClose: TToolButton
-        Left = 445
-        Top = 0
-        Hint = 'Disable this feature'
-        AutoSize = True
-        ImageIndex = 12
-        OnClick = ButtonFilterCPUCloseClick
-      end
-    end
-    object PanelEx1: TPanelEx
-      Left = 320
-      Top = 248
-      Width = 201
-      Height = 161
-      Color1 = 5832704
-      Color2 = 1
-      Color3 = 7891291
-      Color4 = 16750899
-      ColorFrame = 16750899
-      ColorInnerFrame = clBlue
-      EnableCustomBorder = True
-      Frames = []
-      ParentBackground = False
-      Style = vgSimple
-      Visible = False
-      object ImageOverlay: TImage
-        Left = 64
-        Top = 8
-        Width = 68
-        Height = 68
-        Transparent = True
-      end
-      object BitBtn1: TBitBtn
-        Left = 72
-        Top = 112
-        Width = 75
-        Height = 25
-        Caption = 'BitBtn1'
-        TabOrder = 0
-        OnClick = BitBtn1Click
+      object ToolBarFilterTitle: TToolBar
+        Left = 215
+        Top = 45
+        Width = 129
+        Height = 30
+        Align = alNone
+        ButtonHeight = 30
+        ButtonWidth = 31
+        Color = 15856113
+        EdgeBorders = []
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        Images = IL_MiscToolBarPopup
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        Transparent = False
+        Wrapable = False
+        OnCustomDraw = ToolBarFilterTitleCustomDraw
+        object ButtonFilterTitleApply: TToolButton
+          Left = 0
+          Top = 0
+          Hint = 'Click here to apply filter'
+          AutoSize = True
+          Caption = 'Apply'
+          ImageIndex = 9
+          OnClick = ButtonFilterTitleApplyClick
+        end
+        object ButtonFilterControls: TToolButton
+          Left = 31
+          Top = 0
+          Hint = 
+            'Click here to select a controls filter (will be applied immediat' +
+            'ely)'
+          AutoSize = True
+          Caption = 'Controls'
+          DropdownMenu = PopupSearchBarControlsFilter
+          ImageIndex = 12
+        end
+        object ButtonFilterTitleReset: TToolButton
+          Left = 62
+          Top = 0
+          Hint = 'Click here to reset filters to default (games tool bar buttons)'
+          AutoSize = True
+          Caption = 'Reset'
+          ImageIndex = 3
+          OnClick = ButtonFilterTitleResetClick
+        end
+        object ButtonFilterTitleSettings: TToolButton
+          Left = 93
+          Top = 0
+          Hint = 'Click here to change filter settings'
+          AutoSize = True
+          Caption = 'Settings'
+          DropdownMenu = PopupFilterGameTitle
+          ImageIndex = 10
+        end
       end
     end
   end
   object PanelScreenshotsArea: TPanelEx
     Left = 539
-    Top = 47
+    Top = 55
     Width = 520
-    Height = 554
+    Height = 577
     Align = alRight
     BevelOuter = bvNone
     Color1 = clBtnFace
@@ -909,7 +1035,7 @@ object FormMain: TFormMain
         TabOrder = 1
         Transparent = False
         Wrapable = False
-        OnCustomDraw = ImagesToolbarButtonsCustomDraw
+        OnCustomDraw = ImagesToolBarButtonsCustomDraw
         object WebButtonRefresh: TToolButton
           Left = 0
           Top = 0
@@ -983,6 +1109,9 @@ object FormMain: TFormMain
           ShadowColor = clGray
           ShadowEnabled = False
           EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
       end
@@ -1093,6 +1222,9 @@ object FormMain: TFormMain
               ShadowColor = clBlack
               ShadowEnabled = True
               EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = True
             end
             object ImageHintIcon: TImage
@@ -1143,7 +1275,7 @@ object FormMain: TFormMain
         end
       end
     end
-    object ImagesToolbarButtons: TToolBar
+    object ImagesToolBarButtons: TToolBar
       Left = 0
       Top = 0
       Width = 520
@@ -1165,7 +1297,7 @@ object FormMain: TFormMain
       TabOrder = 2
       Transparent = False
       Wrapable = False
-      OnCustomDraw = ImagesToolbarButtonsCustomDraw
+      OnCustomDraw = ImagesToolBarButtonsCustomDraw
       object ButtonPreviousImage: TToolButton
         Left = 2
         Top = 0
@@ -1326,6 +1458,9 @@ object FormMain: TFormMain
         ShadowColor = clMaroon
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelInitZipFile: TShadowLabel
@@ -1346,6 +1481,9 @@ object FormMain: TFormMain
         ShadowColor = clMaroon
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         WordWrap = True
       end
@@ -1366,6 +1504,9 @@ object FormMain: TFormMain
         ShadowColor = clNavy
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelInitZipImageCategory: TShadowLabel
@@ -1385,6 +1526,9 @@ object FormMain: TFormMain
         ShadowColor = clMaroon
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object InitZipSystemIcon: TImage
@@ -1550,8 +1694,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 264
-    Top = 408
+    Left = 392
+    Top = 216
     object PopupPlayGameStandard: TMenuItem
       Caption = 'Run Game'
       ImageIndex = 18
@@ -2431,8 +2575,8 @@ object FormMain: TFormMain
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
-    Left = 264
-    Top = 488
+    Left = 272
+    Top = 184
   end
   object PopupGameFilterHaveMiss: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -2464,7 +2608,7 @@ object FormMain: TFormMain
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
     Left = 168
-    Top = 208
+    Top = 120
     object PopupShowHaveMiss: TMenuItem
       AutoCheck = True
       Caption = 'List All'
@@ -2521,8 +2665,8 @@ object FormMain: TFormMain
     InMemory = False
     OnProcessFileFailure = ZipForgeProcessFileFailure
     Zip64Mode = zmDisabled
-    Left = 264
-    Top = 376
+    Left = 240
+    Top = 184
   end
   object PopupMenuViewMode: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -2553,8 +2697,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 40
-    Top = 208
+    Left = 72
+    Top = 120
     object ButtonViewModeDetails: TMenuItem
       AutoCheck = True
       Caption = 'Details (columns)'
@@ -2746,7 +2890,7 @@ object FormMain: TFormMain
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
     Left = 136
-    Top = 208
+    Top = 120
     object PopupShowParentClone: TMenuItem
       AutoCheck = True
       Caption = 'List Both'
@@ -2774,96 +2918,72 @@ object FormMain: TFormMain
     end
   end
   object IL_ToolBarButtons: TImageList
-    Height = 40
-    Width = 44
-    Left = 360
-    Top = 144
+    Height = 48
+    Width = 48
+    Left = 392
+    Top = 80
   end
   object IL_MenuPopup: TImageList
-    Left = 264
-    Top = 440
+    Left = 392
+    Top = 184
   end
   object IL_StandardIconsLarge: TImageList
     Height = 32
     Width = 32
-    Left = 168
-    Top = 176
+    Left = 104
+    Top = 160
   end
   object IL_StandardIconsStandard: TImageList
     Height = 24
     Width = 24
-    Left = 200
-    Top = 176
+    Left = 136
+    Top = 160
   end
   object IL_StandardIconsSmall: TImageList
-    Left = 232
-    Top = 176
+    Left = 168
+    Top = 160
   end
   object IL_ArcadeSystem_Large: TImageList
     Height = 32
     Width = 32
     Left = 328
-    Top = 144
+    Top = 112
   end
   object IL_ArcadeSystem_Small: TImageList
     Height = 24
     Width = 24
     Left = 328
-    Top = 112
+    Top = 80
   end
   object IL_FilterWorkingNonWorking_Small: TImageList
-    Height = 22
-    Width = 28
+    Height = 24
+    Width = 30
     Left = 200
-    Top = 112
-  end
-  object IL_FilterWorkingNonWorking_Large: TImageList
-    Height = 40
-    Width = 44
-    Left = 200
-    Top = 144
+    Top = 88
   end
   object IL_FilterHaveMiss_Small: TImageList
-    Height = 22
-    Width = 28
+    Height = 24
+    Width = 30
     Left = 168
-    Top = 112
-  end
-  object IL_FilterHaveMiss_Large: TImageList
-    Height = 40
-    Width = 44
-    Left = 168
-    Top = 144
+    Top = 88
   end
   object IL_FilterParentClone_Small: TImageList
-    Height = 22
-    Width = 28
+    Height = 24
+    Width = 30
     Left = 136
-    Top = 112
-  end
-  object IL_FilterParentClone_Large: TImageList
-    Height = 40
-    Width = 44
-    Left = 136
-    Top = 144
+    Top = 88
   end
   object IL_ViewMode_Small: TImageList
-    Height = 22
-    Width = 28
-    Left = 40
-    Top = 112
-  end
-  object IL_ViewMode_Large: TImageList
-    Height = 40
-    Width = 44
-    Left = 40
-    Top = 144
+    Height = 24
+    Width = 30
+    Left = 72
+    Top = 88
   end
   object BcDrawModule: TBcCustomDrawModule
     OnDrawMenuItem = BcDrawModuleDrawMenuItem
     OnMeasureMenuItem = BcDrawModuleMeasureMenuItem
-    Left = 40
-    Top = 247
+    Left = 248
+    Top = 111
   end
   object PopupMAMu_Icons: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -2895,8 +3015,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 312
-    Top = 208
+    Left = 432
+    Top = 144
     object PopupEnableMAMu_Icons: TMenuItem
       AutoCheck = True
       Caption = 'Enable MAMu_ Icons'
@@ -2976,8 +3096,8 @@ object FormMain: TFormMain
     end
   end
   object IL_LeftPanel: TImageList
-    Left = 40
-    Top = 432
+    Left = 168
+    Top = 200
   end
   object PopupGameDocuments: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -3110,8 +3230,8 @@ object FormMain: TFormMain
   object IL_StandardIconsExtraLarge: TImageList
     Height = 48
     Width = 48
-    Left = 136
-    Top = 176
+    Left = 72
+    Top = 160
   end
   object IL_ImagesToolBarButtons: TImageList
     Height = 24
@@ -3129,162 +3249,17 @@ object FormMain: TFormMain
     Height = 48
     Width = 48
     Left = 328
-    Top = 176
+    Top = 144
   end
   object IL_GroupedMode: TImageList
-    Left = 264
-    Top = 176
-  end
-  object PopupFilterGameTitle: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = IL_MenuPopup
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = BcDrawModule
-    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 808
-    Top = 16
-    object FilterTextBarIncludeToolBarFilters: TMenuItem
-      AutoCheck = True
-      Caption = 'Include Tool Bar Filters'
-      Checked = True
-      ImageIndex = 5
-    end
-    object N39: TMenuItem
-      Caption = '-'
-      Hint = 'Search games by...'
-    end
-    object FilterGameTitle_Title: TMenuItem
-      AutoCheck = True
-      Caption = 'Title'
-      Checked = True
-      Default = True
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_Year: TMenuItem
-      Tag = 1
-      AutoCheck = True
-      Caption = 'Year'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_Manufacturer: TMenuItem
-      Tag = 2
-      AutoCheck = True
-      Caption = 'Manufacturer'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_Category: TMenuItem
-      Tag = 3
-      AutoCheck = True
-      Caption = 'Category'
-      Hint = 'category.ini + mature.ini or catver.ini required'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_VersionAdded: TMenuItem
-      Tag = 4
-      AutoCheck = True
-      Caption = 'Version Added'
-      Hint = 'version.ini or catver.ini required'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_Language: TMenuItem
-      Tag = 5
-      AutoCheck = True
-      Caption = 'Language'
-      Hint = 'languages.ini required'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_DriverName: TMenuItem
-      Tag = 6
-      AutoCheck = True
-      Caption = 'Driver Name'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_BiosName: TMenuItem
-      Tag = 7
-      AutoCheck = True
-      Caption = 'Bios Name'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_ScreenResolution: TMenuItem
-      Tag = 8
-      AutoCheck = True
-      Caption = 'Screen Resolution'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_GameName: TMenuItem
-      Tag = 9
-      AutoCheck = True
-      Caption = 'Game Name'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_CloneOf: TMenuItem
-      Tag = 10
-      AutoCheck = True
-      Caption = 'Clone of'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_SoftwareListName: TMenuItem
-      Tag = 11
-      AutoCheck = True
-      Caption = 'Software List Name'
-      Hint = 'List supported machines of a software list'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object FilterGameTitle_NumberofPlayers: TMenuItem
-      Tag = 12
-      AutoCheck = True
-      Caption = '# of Players'
-      Hint = 'nplayers.ini optional'
-      RadioItem = True
-      OnClick = FilterGameTitle_TitleClick
-    end
-    object N26: TMenuItem
-      Caption = '-'
-    end
-    object FilterSearchBarHelp: TMenuItem
-      Caption = 'Help'
-      ImageIndex = 10
-      OnClick = FilterSearchBarHelpClick
-    end
+    Left = 296
+    Top = 144
   end
   object IL_MainMenuOptions: TImageList
     Height = 24
     Width = 24
-    Left = 72
-    Top = 328
+    Left = 8
+    Top = 88
   end
   object MainMenuOptions: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -3316,8 +3291,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 40
-    Top = 328
+    Left = 8
+    Top = 120
     object MenuPreferences: TMenuItem
       Caption = 'Preferences'
       Hint = 'Modify frontend settings'
@@ -3329,6 +3304,10 @@ object FormMain: TFormMain
       Caption = 'Enable Night Mode'
       Hint = 'Check to use a dark theme'
       OnClick = MenuEnableNightModeClick
+    end
+    object MenuCustomizeNightModeColors: TMenuItem
+      Caption = 'Customize Night Mode Colors'
+      OnClick = MenuCustomizeNightModeColorsClick
     end
     object N23: TMenuItem
       Caption = '-'
@@ -3426,46 +3405,6 @@ object FormMain: TFormMain
     end
     object MenuView: TMenuItem
       Caption = 'View'
-      object MenuViewToolBar: TMenuItem
-        Caption = 'Tool Bar Buttons'
-        object MenuEnableToolBar: TMenuItem
-          AutoCheck = True
-          Caption = 'Show Tool Bar'
-          Checked = True
-          ShortCut = 16468
-          OnClick = MenuEnableToolBarClick
-        end
-        object MenuBoundToGamesPanel: TMenuItem
-          AutoCheck = True
-          Caption = 'Bound to Games Panel'
-          Hint = 'Limit panel size to games list'
-          OnClick = MenuBoundToGamesPanelClick
-        end
-        object MenuSmallToolBar: TMenuItem
-          AutoCheck = True
-          Caption = 'Small Tool Bar'
-          Hint = 'Use small icons in main tool bar'
-          OnClick = MenuSmallToolBarClick
-        end
-        object N20: TMenuItem
-          Caption = '-'
-        end
-        object MenuCustomizeToolBar: TMenuItem
-          Caption = 'Customize'
-          ImageIndex = 7
-          OnClick = MenuCustomizeToolBarClick
-        end
-      end
-      object MenuShowGamesStatusBar: TMenuItem
-        AutoCheck = True
-        Caption = 'Show Games Status Bar'
-        Checked = True
-        OnClick = MenuShowGamesStatusBarClick
-      end
-      object N6: TMenuItem
-        Caption = '-'
-        Hint = 'MAME/Arcade'
-      end
       object MenuROMsFolders: TMenuItem
         Caption = 'Arcade ROMs Folders'
         ImageIndex = 4
@@ -3513,9 +3452,64 @@ object FormMain: TFormMain
     end
     object MenuGameList: TMenuItem
       Caption = 'Games List'
-      object MenuExportGamesListTextFile: TMenuItem
-        Caption = 'Export MAME and Arcade Games List'
-        OnClick = MenuExportGamesListTextFileClick
+      object MenuViewToolBar: TMenuItem
+        Caption = 'Tool Bar Buttons'
+        object MenuEnableToolBar: TMenuItem
+          AutoCheck = True
+          Caption = 'Show Tool Bar'
+          Checked = True
+          ShortCut = 16468
+          OnClick = MenuEnableToolBarClick
+        end
+        object MenuBoundToGamesPanel: TMenuItem
+          AutoCheck = True
+          Caption = 'Bound to Games Panel'
+          Hint = 'Limit panel size to games list'
+          OnClick = MenuBoundToGamesPanelClick
+        end
+        object MenuToolBarIconSize: TMenuItem
+          Tag = 1
+          Caption = 'Icon Size'
+          object MenuToolBarIconSizeExtraLarge: TMenuItem
+            AutoCheck = True
+            Caption = 'Extra Large (68x68)'
+            RadioItem = True
+            OnClick = MenuToolBarIconSizeLargeClick
+          end
+          object MenuToolBarIconSizeLarge: TMenuItem
+            Tag = 1
+            AutoCheck = True
+            Caption = 'Large (48x48)'
+            Checked = True
+            Default = True
+            RadioItem = True
+            OnClick = MenuToolBarIconSizeLargeClick
+          end
+          object MenuToolBarIconSizeSmall: TMenuItem
+            Tag = 2
+            AutoCheck = True
+            Caption = 'Small (30x24)'
+            RadioItem = True
+            OnClick = MenuToolBarIconSizeLargeClick
+          end
+        end
+        object N20: TMenuItem
+          Caption = '-'
+        end
+        object MenuCustomizeToolBar: TMenuItem
+          Caption = 'Customize'
+          ImageIndex = 7
+          OnClick = MenuCustomizeToolBarClick
+        end
+      end
+      object MenuShowGamesStatusBar: TMenuItem
+        AutoCheck = True
+        Caption = 'Show Games Status Bar'
+        Checked = True
+        OnClick = MenuShowGamesStatusBarClick
+      end
+      object N26: TMenuItem
+        Caption = '-'
       end
       object NewTitleFormat: TMenuItem
         AutoCheck = True
@@ -3674,6 +3668,10 @@ object FormMain: TFormMain
         Caption = 'Scan MAME/HBMAME Missing Audio Samples'
         Hint = 'Check for missing files (.zip; .7z)'
         OnClick = MenuScanMAMEAudioSamplesClick
+      end
+      object MenuExportGamesListTextFile: TMenuItem
+        Caption = 'Export MAME and Arcade Games List'
+        OnClick = MenuExportGamesListTextFileClick
       end
     end
     object MenuImages: TMenuItem
@@ -4076,8 +4074,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 80
-    Top = 208
+    Left = 104
+    Top = 120
     object PopupEnableFavorites: TMenuItem
       AutoCheck = True
       Caption = 'Enable Favorites'
@@ -4102,10 +4100,10 @@ object FormMain: TFormMain
     end
   end
   object IL_MiscToolBarSmall: TImageList
-    Height = 22
-    Width = 28
-    Left = 312
-    Top = 240
+    Height = 24
+    Width = 30
+    Left = 432
+    Top = 112
   end
   object PopupGamesColumns: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -4138,7 +4136,7 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 296
+    Left = 248
     Top = 80
     object PopupCustomizeColumns: TMenuItem
       Caption = 'Customize Columns'
@@ -4190,8 +4188,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 144
-    Top = 432
+    Left = 8
+    Top = 200
     object PopupMachinesListSidePanelFiltersHaveMiss: TMenuItem
       Caption = 'Have/Miss Filter'
       object PopupMachinesListSidePanelFiltersHaveMiss_ListAll: TMenuItem
@@ -4358,42 +4356,11 @@ object FormMain: TFormMain
       end
     end
   end
-  object PopupSearchBarControlsFilter: TBcBarPopupMenu
-    Tag = 1
-    AutoHotkeys = maManual
-    Images = IL_MenuPopup
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Fade = True
-    Separators.Font.Charset = DEFAULT_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'MS Sans Serif'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = BcDrawModule
-    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 776
-    Top = 16
-  end
   object IL_StandardIconsThumbnail: TImageList
     Height = 128
     Width = 128
-    Left = 72
-    Top = 176
+    Left = 8
+    Top = 160
   end
   object MenuCustomEmuParameters: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -4422,8 +4389,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 296
-    Top = 488
+    Left = 432
+    Top = 216
     object MenuParametersCustomSystemTitle: TMenuItem
       AutoHotkeys = maManual
       Caption = '  - System Title -'
@@ -4453,25 +4420,189 @@ object FormMain: TFormMain
   object IL_PopupPlayCustomEmulators: TImageList
     Height = 24
     Width = 24
-    Left = 328
-    Top = 488
-  end
-  object IL_StandardIconsMegaLarge: TImageList
-    Height = 68
-    Width = 68
-    Left = 104
-    Top = 176
+    Left = 432
+    Top = 184
   end
   object IL_MediaType: TImageList
     Height = 24
     Width = 24
-    Left = 40
-    Top = 463
+    Left = 136
+    Top = 199
   end
-  object IL_Overlay: TImageList
-    Height = 68
-    Width = 68
-    Left = 480
-    Top = 423
+  object PopupSearchBarControlsFilter: TBcBarPopupMenu
+    Tag = 1
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 50
+    Top = 332
+  end
+  object PopupFilterGameTitle: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 82
+    Top = 332
+    object FilterTextBarIncludeToolBarFilters: TMenuItem
+      AutoCheck = True
+      Caption = 'Include Tool Bar Filters'
+      Checked = True
+      ImageIndex = 5
+    end
+    object N39: TMenuItem
+      Caption = '-'
+      Hint = 'Filter games by...'
+    end
+    object FilterGameTitle_Title: TMenuItem
+      AutoCheck = True
+      Caption = 'Title'
+      Checked = True
+      Default = True
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Year: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Year'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Manufacturer: TMenuItem
+      Tag = 2
+      AutoCheck = True
+      Caption = 'Manufacturer'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Category: TMenuItem
+      Tag = 3
+      AutoCheck = True
+      Caption = 'Category'
+      Hint = 'category.ini + mature.ini or catver.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_VersionAdded: TMenuItem
+      Tag = 4
+      AutoCheck = True
+      Caption = 'Version Added'
+      Hint = 'version.ini or catver.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_Language: TMenuItem
+      Tag = 5
+      AutoCheck = True
+      Caption = 'Language'
+      Hint = 'languages.ini required'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_DriverName: TMenuItem
+      Tag = 6
+      AutoCheck = True
+      Caption = 'Driver Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_BiosName: TMenuItem
+      Tag = 7
+      AutoCheck = True
+      Caption = 'Bios Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_ScreenResolution: TMenuItem
+      Tag = 8
+      AutoCheck = True
+      Caption = 'Screen Resolution'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_GameName: TMenuItem
+      Tag = 9
+      AutoCheck = True
+      Caption = 'Game Name'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_CloneOf: TMenuItem
+      Tag = 10
+      AutoCheck = True
+      Caption = 'Clone of'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_SoftwareListName: TMenuItem
+      Tag = 11
+      AutoCheck = True
+      Caption = 'Software List Name'
+      Hint = 'List supported machines of a software list'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object FilterGameTitle_NumberofPlayers: TMenuItem
+      Tag = 12
+      AutoCheck = True
+      Caption = '# of Players'
+      Hint = 'nplayers.ini optional'
+      RadioItem = True
+      OnClick = FilterGameTitle_TitleClick
+    end
+    object MenuItem1: TMenuItem
+      Caption = '-'
+    end
+    object FilterSearchBarHelp: TMenuItem
+      Caption = 'Help'
+      ImageIndex = 10
+      OnClick = FilterSearchBarHelpClick
+    end
   end
 end

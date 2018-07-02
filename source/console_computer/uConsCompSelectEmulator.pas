@@ -65,7 +65,7 @@ begin
   else
     SystemIcon[sysID].Width:= 128;
   SystemIcon[sysID].Height:= SystemIcon[sysID].Width;
-  FormMain.LoadIconIntoImage(SystemsListCustom[sysID, 1], SystemIcon[sysID], True);
+  FormMain.LoadIconIntoImage(SystemsListCustom[sysID, 1], SystemIcon[sysID], -1, True);
 end;
 
 procedure TFormConsCompSelectEmulator.FreeIconImages;

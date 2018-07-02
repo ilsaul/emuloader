@@ -358,7 +358,7 @@ var
   GameIsMerged, IsZiNcSystem: Boolean;
   Loop: Integer;
   FileID: ShortInt;
-  chdParentName, DiskFile, ChecksumCHD, romName, romCRC32, romSHA1, StrDOSName, romDeviceName: String;
+  chdParentName, DiskFile, ChecksumCHD, romName, romCRC32, romSHA1, romDeviceName: String;
   HeaderVerCHD: Byte;
 begin
   IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
@@ -369,7 +369,7 @@ begin
   case FormMain.MemGameInfo.eIsCustomGame of
     True:
       begin
-        FormMain.SearchGameFile(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eCustomMediaType, False, False, FileFullPath, StrDOSName);
+        FormMain.SearchGameFile(FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eCustomMediaType, False, False, FileFullPath);
       end;
     False:
       begin
@@ -812,7 +812,7 @@ begin
 
   if IsNightMode then
   begin
-    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails);
+    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, FormMain.MemGameInfo.eGameSetStatus);
     SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
     SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
     SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);

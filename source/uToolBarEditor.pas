@@ -5,7 +5,7 @@ interface
 uses
   Windows, Graphics, Controls, Forms, StdCtrls, Buttons, ComCtrls, Classes,
   ToolWin, ExtCtrls, ImgList, MPCommonObjects, EasyListview, SysUtils,
-  AdvOfficeButtons, PanelEx;
+  AdvOfficeButtons, PanelEx, GR32_RangeBars, ShadowLabel;
 
 type
   TFormToolBarEditor = class(TForm)
@@ -16,9 +16,11 @@ type
     ShowHideToolBar: TAdvOfficeCheckBox;
     ButtonDefault: TBitBtn;
     ButtonClose: TBitBtn;
-    SmallToolBar: TAdvOfficeCheckBox;
-    GamesSearchBar: TAdvOfficeCheckBox;
-    GamesSearchBarIcon: TImage;
+    LabelToolBarIconSize: TShadowLabel;
+    LabelIconSizeValue: TShadowLabel;
+    IconSizeExtraLarge: TSpeedButton;
+    IconSizeLarge: TSpeedButton;
+    IconSizeSmall: TSpeedButton;
     procedure ButtonDefaultClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ToolBarListViewItemPaintText(Sender: TCustomEasyListview;
@@ -28,8 +30,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure BoundToGamesPanelClick(Sender: TObject);
     procedure ShowHideToolBarClick(Sender: TObject);
-    procedure SmallToolBarClick(Sender: TObject);
-    procedure GamesSearchBarClick(Sender: TObject);
+    procedure IconSizeLargeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -103,8 +104,6 @@ var
   iPos: Integer;
   iTitle, iDetail: String;
 begin
-  FormMain.LoadIconIntoImage('filter_text', GamesSearchBarIcon);
-  GamesSearchBar.Checked:= FormMain.ToolBarFilterTitle.Visible;
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
@@ -149,7 +148,26 @@ begin
   FormMain.ELV_SelectItem(ToolBarListView, 0);
   BoundToGamesPanel.Tag:= 1;
   BoundToGamesPanel.Checked:= FormMain.MenuBoundToGamesPanel.Checked;
-  SmallToolBar.Checked:= FormMain.MenuSmallToolBar.Checked;
+
+  ShowHideToolBar.Checked:= FormMain.MenuEnableToolBar.Checked;
+
+  LabelToolBarIconSize.Tag:= FormMain.MenuToolBarIconSize.Tag;
+  if LabelToolBarIconSize.Tag <> 1 then
+     begin
+       case LabelToolBarIconSize.Tag of
+         0:
+           begin
+             IconSizeExtraLarge.Down:= True;
+             IconSizeExtraLarge.Click;
+           end;
+         2:
+           begin
+             IconSizeSmall.Down:= True;
+             IconSizeSmall.Click;
+           end;
+       end;
+     end;
+
   BoundToGamesPanel.Tag:= 0;
 end;
 
@@ -165,16 +183,19 @@ begin
      FormMain.MenuEnableToolBar.Click;
 end;
 
-procedure TFormToolBarEditor.SmallToolBarClick(Sender: TObject);
+procedure TFormToolBarEditor.IconSizeLargeClick(Sender: TObject);
 begin
-  if BoundToGamesPanel.Tag = 0 then
-     FormMain.MenuSmallToolbar.Click;
-end;
+  if (TSpeedButton(Sender).Tag = LabelToolBarIconSize.Tag) and (BoundToGamesPanel.Tag = 0) then
+     Exit;
 
-procedure TFormToolBarEditor.GamesSearchBarClick(Sender: TObject);
-begin
-  if GamesSearchBar.Checked <> FormMain.ToolBarFilterTitle.Visible then
-     FormMain.ToolBarFilterTitle.Visible:= GamesSearchBar.Checked;
+  LabelToolBarIconSize.Tag:= TSpeedButton(Sender).Tag;
+  case TSpeedButton(Sender).Tag of
+    0: LabelIconSizeValue.Caption:= 'Extra Large (68x68)';
+    1: LabelIconSizeValue.Caption:= 'Large (48x48)';
+    2: LabelIconSizeValue.Caption:= 'Small (30x24)';
+  end;
+  if BoundToGamesPanel.Tag = 0 then // to prevent setting from executing if screen settings are being loaded!
+     FormMain.MenuToolBarIconSize.Items[TSpeedButton(Sender).Tag].Click;
 end;
 
 end.

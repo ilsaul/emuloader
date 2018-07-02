@@ -127,14 +127,14 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object FilterGamesMainCPU: TAdvOfficeCheckBox
     Left = 418
     Top = 121
-    Width = 166
+    Width = 142
     Height = 20
-    Hint = 'Enable/disable the main cpu filter bar'
+    Hint = 'Enable it so you can filter MAME games by main CPU'
     ShowHint = True
     TabOrder = 0
     OnClick = FilterGamesMainCPUClick
     Alignment = taLeftJustify
-    Caption = 'Enable Main CPU Filter Bar'
+    Caption = 'Enable Main CPU Filter'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True

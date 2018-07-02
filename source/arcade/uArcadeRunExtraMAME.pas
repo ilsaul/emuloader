@@ -261,6 +261,7 @@ type
     function  CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
   public
     { Public declarations }
+    sysID: Integer;
     MachineNameToRun, CommandLine, EmulatorFileName: String;
     IsMultiSlotGame: Boolean;
   end;
@@ -381,8 +382,17 @@ begin
     22: // save state
       begin
         iFolder:= FolderState;
-        iFileMask:= '*.sta';
-        iFileExtension:= '.sta';
+        if sysID = idSupermodel then
+           begin
+             iFileMask:= FormMain.MemGameInfo.eName+'.st*';
+             iFileExtension:= '.st*';
+           end
+        else
+           begin
+             // MAME
+             iFileMask:= '*.sta';
+             iFileExtension:= '.sta';
+           end;
       end;
     23: // record movie (.wav)
       begin
@@ -520,7 +530,8 @@ begin
        end;
      end
   else
-     iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\gamename\multi_filenames.inp" (arcade game)
+     if sysID <> idSupermodel then // Supermodel doesn't not support "\Saves\gamename\name.st?" game name sub-folder scan
+        iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\gamename\multi_filenames.inp" (arcade game)
 
   if FeatureIndex = 32 then
      GetFilesMulti(iFolder, iFileMask) // for "memcard\gamename\*.*"... or "memcard\psu\psx\gamename\*.*" (for softlists)
@@ -698,6 +709,8 @@ var
   Item: TEasyItem;
   GameFound: Boolean;
 begin
+  if sysID = idSupermodel then
+     Exit; // this validation is only for MAME
   if FormMain.MemGameInfo.eSoftwareName = '' then
      begin
        if FormMain.MemGameInfo.eSaveState <> 1 then
@@ -1524,7 +1537,7 @@ begin
   FormMain.ELV_ResetNormalColors(RecordMovieListView);
 
   ResizeForm;
-  
+
   CommandLine:= '';
 
   MemCardLastUsed_MachineName:= '';
@@ -1587,27 +1600,39 @@ begin
   LabelRecordMovieSelectedFileFolder.Caption:= '';
   LabelRecordMovieRootFolder.Caption:= '';
 
-  ParseMAMEIni;
-  if FolderInput <> '' then
-     FolderInput:= FormMain.FullEmuFolderFix(FolderInput, FormMain.MemGameInfo.eSystemID, False);
+  if sysID = idSupermodel then
+  begin
+    FolderState:= 'Saves'; // this folder name is fixed in Supermodel source code
+  end
+  else
+  begin
+    ParseMAMEIni;
+
+    if FolderInput <> '' then
+       FolderInput:= FormMain.FullEmuFolderFix(FolderInput, FormMain.MemGameInfo.eSystemID, False);
+
+    //if FolderState <> '' then
+    //   FolderState:= FormMain.FullEmuFolderFix(FolderState, FormMain.MemGameInfo.eSystemID, False);
+
+    FolderMemoryCard:= FormMain.FullEmuFolderFix(FolderMemoryCard, FormMain.MemGameInfo.eSystemID, False);
+
+    if FolderRecordMovie <> '' then
+       begin
+         // .HelpKeyword holds the "mame_snapdir" full path to generate the command line correctly
+         LabelRecordMovieRootFolder.HelpKeyword:= FormMain.FullEmuFolderFix(FolderRecordMovie, FormMain.MemGameInfo.eSystemID, False);
+         FolderRecordMovie:= LabelRecordMovieRootFolder.HelpKeyword+RecordMovieSubDir+SoftwareListFolder;
+         LabelRecordMovieRootFolder.Caption:= LabelRecordMovieRootFolder.Hint+' '+FolderRecordMovie;
+       end;
+
+    if not FoundInputExtra then
+       InputExitEmulatorAfterInputPlayback.Visible:= False;
+    CheckMemoryCardSupport;
+  end;
 
   if FolderState <> '' then
      FolderState:= FormMain.FullEmuFolderFix(FolderState, FormMain.MemGameInfo.eSystemID, False);
-
-  FolderMemoryCard:= FormMain.FullEmuFolderFix(FolderMemoryCard, FormMain.MemGameInfo.eSystemID, False);
-
-  if FolderRecordMovie <> '' then
-     begin
-       // .HelpKeyword holds the "mame_snapdir" full path to generate the command line correctly
-       LabelRecordMovieRootFolder.HelpKeyword:= FormMain.FullEmuFolderFix(FolderRecordMovie, FormMain.MemGameInfo.eSystemID, False);
-       FolderRecordMovie:= LabelRecordMovieRootFolder.HelpKeyword+RecordMovieSubDir+SoftwareListFolder;
-       LabelRecordMovieRootFolder.Caption:= LabelRecordMovieRootFolder.Hint+' '+FolderRecordMovie;
-     end;
-
-  if not FoundInputExtra then
-     InputExitEmulatorAfterInputPlayback.Visible:= False;
-  CheckMemoryCardSupport;
-  CheckSaveStateSupport;
+  
+  CheckSaveStateSupport; // MAME only
 
   LabelSoftwareListTitle.Visible:= FormMain.MemGameInfo.eSoftwareName <> '';
   if LabelSoftwareListTitle.Visible then
@@ -1622,16 +1647,7 @@ begin
        LabelMachineInUse.Caption:= '['+MachineNameToRun+']: '+LabelMachineInUse.Hint;
        LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+LabelSoftwareListTitle.Height-1;// LabelGameNameCloneOf.Top; //  LabelSoftwareListTitle.Top+12;
        TopBar.Height:= TopBar.Height+6;//17;
-       //FormArcadeRunGameExtraMAME.ClientHeight:= FormArcadeRunGameExtraMAME.ClientHeight+15;
-       //NotebookPages.Top:= NotebookPages.Top+15;
-       //PageButtonInput.Top:= PageButtonInput.Top+15;
-       //PageButtonSaveState.Top:= PageButtonSaveState.Top+15;
-       //PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+15;
-       //PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+15;
-       //PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+15;
      end;
-
-  //NotebookPages.DoubleBuffered:= True;
 
   // this has to be done on code or ELV crashes... :_((
   InputListView.Header.Columns[0].SortDirection:= esdNone;
@@ -1645,6 +1661,19 @@ begin
 
   RecordMovieListView.Header.Columns[0].SortDirection:= esdNone;
   RecordMovieListView.Header.Columns[2].SortDirection:= esdDescending;
+
+  if sysID = idSupermodel then
+     begin
+       // hide all other buttons and move save state button to left
+       PageButtonSaveState.Down:= True;
+       PageButtonSaveState.Click;
+       PageButtonInput.Visible:= False;
+       PageButtonMemoryCard.Visible:= False;
+       PageButtonRecordMovie.Visible:= False;
+       PageButtonSaveState.Left:= PageButtonInput.Left;
+
+       Enabled_LoadSaveState.Checked:= True; // auto-enable save state; user can disable it if needed
+     end;
 end;
 
 procedure TFormArcadeRunGameExtraMAME.FormKeyPress(Sender: TObject;
@@ -1694,7 +1723,7 @@ begin
      begin
        InputRecord.Font.Style:= [];
        LabelInputFileName.Caption:= 'Selected File (file extension optional)';
-       LabelInputFileName.Font.Color:= $00323232;
+       LabelInputFileName.Font.Color:= clrDarkGray;
      end
   else
      begin
@@ -1764,7 +1793,7 @@ procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
        begin
          TSpeedButton(ButtonHolder).Top:= TSpeedButton(ButtonHolder).Top+3;
          TSpeedButton(ButtonHolder).Height:= TSpeedButton(ButtonHolder).Height-3;
-         TSpeedButton(ButtonHolder).Font.Color:= $00323232;
+         TSpeedButton(ButtonHolder).Font.Color:= clrDarkGray;
        end;
   end;
 
@@ -1826,7 +1855,7 @@ begin
      end;
   case TAdvOfficeCheckBox(Sender).Checked of
     True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
   end;
   PanelDisabledInput.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
 
@@ -1969,11 +1998,14 @@ begin
      end;
   case TAdvOfficeCheckBox(Sender).Checked of
     True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
   end;
 
   PanelDisabledSaveState.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
-  PanelDisabledSaveStateNotSupportedMsg.Visible:= PanelDisabledSaveState.Visible;
+  if sysID <> idSupermodel then
+     PanelDisabledSaveStateNotSupportedMsg.Visible:= PanelDisabledSaveState.Visible
+  else
+     PanelDisabledSaveStateNotSupportedMsg.Visible:= True;
 
   ReSelectSaveStateFile;
 end;
@@ -2167,7 +2199,7 @@ begin
      end;
   case TAdvOfficeCheckBox(Sender).Checked of
     True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
   end;
   PanelDisabledMemoryCard.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
 end;
@@ -2313,7 +2345,7 @@ begin
      end;
   case TAdvOfficeCheckBox(Sender).Checked of
     True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //$00323232;
+    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
   end;
   PanelDisabledRecordMovie.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
   RecordMovieFilter_FileType;

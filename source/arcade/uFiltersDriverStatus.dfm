@@ -51,37 +51,37 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   end
   object IconListAll: TImage
     Left = 24
-    Top = 84
-    Width = 28
-    Height = 22
+    Top = 83
+    Width = 30
+    Height = 24
     Transparent = True
   end
   object IconGoodImperfect: TImage
     Left = 24
-    Top = 116
-    Width = 28
-    Height = 22
+    Top = 115
+    Width = 30
+    Height = 24
     Transparent = True
   end
   object IconImperfect: TImage
     Left = 24
-    Top = 180
-    Width = 28
-    Height = 22
+    Top = 179
+    Width = 30
+    Height = 24
     Transparent = True
   end
   object IconPreliminary: TImage
     Left = 24
-    Top = 212
-    Width = 28
-    Height = 22
+    Top = 211
+    Width = 30
+    Height = 24
     Transparent = True
   end
   object IconGood: TImage
     Left = 24
-    Top = 148
-    Width = 28
-    Height = 22
+    Top = 147
+    Width = 30
+    Height = 24
     Transparent = True
   end
   object PanelBottom: TPanelEx
@@ -94,6 +94,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 14671839
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -125,13 +126,13 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   object ListAll: TAdvOfficeRadioButton
     Left = 8
     Top = 85
-    Width = 97
+    Width = 103
     Height = 20
     TabOrder = 1
     TabStop = True
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '           List All'
+    Caption = '            List All'
     Checked = True
     ReturnIsTab = False
     Themed = True
@@ -165,12 +166,12 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 1
     Left = 8
     Top = 117
-    Width = 201
+    Width = 207
     Height = 20
     TabOrder = 2
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '           Working (Good+Imperfect)'
+    Caption = '            Working (Good+Imperfect)'
     ReturnIsTab = False
     Themed = True
   end
@@ -178,12 +179,12 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 3
     Left = 8
     Top = 181
-    Width = 161
+    Width = 167
     Height = 20
     TabOrder = 4
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '           Working (Imperfect)'
+    Caption = '            Working (Imperfect)'
     ReturnIsTab = False
     Themed = True
   end
@@ -191,12 +192,12 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 4
     Left = 8
     Top = 213
-    Width = 209
+    Width = 212
     Height = 20
     TabOrder = 5
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '           Non-Working (Preliminary)'
+    Caption = '            Non-Working (Preliminary)'
     ReturnIsTab = False
     Themed = True
   end
@@ -204,12 +205,12 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 2
     Left = 8
     Top = 149
-    Width = 145
+    Width = 151
     Height = 20
     TabOrder = 3
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '           Working (Good)'
+    Caption = '            Working (Good)'
     ReturnIsTab = False
     Themed = True
   end

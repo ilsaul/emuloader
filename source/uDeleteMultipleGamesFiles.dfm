@@ -243,6 +243,9 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object DestinationFolder: TEdit
@@ -411,7 +414,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Visible = False
   end
   object IL_DeleteGameIcons: TImageList
-    Left = 48
+    Left = 8
     Top = 328
   end
   object PopupGames: TBcBarPopupMenu
@@ -442,8 +445,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     UseSystemFont = False
     DrawModule = FormMain.BcDrawModule
     OnMeasureMenuItem = PopupGamesMeasureMenuItem
-    Left = 232
-    Top = 208
+    Left = 40
+    Top = 328
     object PopupRemoveSelectedGames: TMenuItem
       Caption = 'Remove Selected Games'
       ShortCut = 46
