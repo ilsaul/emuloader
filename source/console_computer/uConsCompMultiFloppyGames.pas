@@ -185,8 +185,8 @@ begin
        SetFormColors(FormConsCompMultiFloppyGames, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorDetails, -1);
        SetLabelColors(LabelTotalFloppyDisks, clWhite, clNavy);
 
-       FrameGamesList.ColorFrame:= $00ff9933;
-       FrameGamesList.ColorInnerFrame:= clBlue;
+       //FrameGamesList.ColorFrame:= clrLightBlue;
+       //FrameGamesList.ColorInnerFrame:= clBlue;
 
        GamesList.Color:= FormConsCompMultiFloppyGames.Color;
        GamesList.Font.Color:= clWhite;

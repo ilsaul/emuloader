@@ -82,7 +82,7 @@ begin
   SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus);
   if IsNightMode then
      begin
-       SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);
+       SetLabelColors(LabelGameStatus, clrLightBlue, clBlue);
        SetLabelColors(LabelFilename, MsgTxtColors.colorFileName, clNavy);
        SetLabelColors(LabelSystemTitle, MsgTxtColors.colorWarning, $323200);
        SetLabelColors(LabelFileTypeMismatch, MsgTxtColors.colorWarning, $323200);
@@ -91,9 +91,7 @@ begin
        SetLabelColors(LabelDateTime, clWhite, clNavy);
        SetLabelColors(LabelFileType, clWhite, clNavy);
        SetLabelColors(LabelRenameImage, clWhite, clNavy);
-       SetPanelNightColors(ImagePreviewFrame);
-       //ImagePreviewFrame.Color1:= clBlue;
-       //ImagePreviewFrame.ColorFrame:= TopBar.ColorFrame;
+       //SetPanelNightColors(ImagePreviewFrame); // will be set at FormMain, to get colors from FormPreferences
        FrameImageCategoryIcon.Color1:= clBlue;
        FrameImageCategoryIcon.Color2:= clBlue;
        FrameImageCategoryIcon.Color3:= clBlue;
@@ -137,7 +135,8 @@ begin
   end;
   LabelGameStatus.Visible:= not FormMain.MemGameInfo.eIsCustomGame;
   if LabelGameStatus.Visible then
-     LabelGameStatus.Caption:= LabelGameStatus.Caption+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
+     LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
+
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
   LabelFilename.Caption:= ImageFileName; // LabelFilename.Hint;

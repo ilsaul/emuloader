@@ -144,6 +144,9 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = LabelDownloadLinkClick
       OnMouseEnter = LabelDownloadLinkMouseEnter
@@ -159,6 +162,9 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end

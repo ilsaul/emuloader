@@ -118,6 +118,9 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object Label1: TLabel
@@ -159,21 +162,21 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       OnClick = ButtonDefaultBkSortedColorClick
     end
     object GamesBackgroundImageEnable: TAdvOfficeCheckBox
-      Left = 285
+      Left = 267
       Top = 4
-      Width = 121
+      Width = 202
       Height = 18
       TabOrder = 2
       OnClick = GamesBackgroundImageEnableClick
       Alignment = taLeftJustify
-      Caption = 'Show Image [.png]'
+      Caption = 'Show Image as Background [.png]'
       ReturnIsTab = False
       Themed = True
     end
     object GamesBackgroundImage: TEdit
-      Left = 285
+      Left = 267
       Top = 23
-      Width = 300
+      Width = 318
       Height = 21
       AutoSize = False
       Ctl3D = True

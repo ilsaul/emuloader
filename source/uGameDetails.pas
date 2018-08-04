@@ -326,9 +326,9 @@ var
   ZipName, ZipParent, ZipBios: WideString;
   IsBiosGame, FileFound, IsSegaModel2, NoROMs: Boolean;
   ImgIndex: ShortInt;
-  ListSamples, SamplesPathList: THashedStringList;
+  ListSamples: THashedStringList;
   Loop: Integer;
-  Supermodel3ControlsList: TStringList;
+  Supermodel3ControlsList, SamplesPathList: TStringList;
   ReqSoftwareName, ReqSetName: String;
 
   function AddControlsList(const ctrlList: String): Boolean;
@@ -1272,15 +1272,20 @@ end;
 
 procedure TFormGameDetails.FillEmuConGameFilesTree;
 var
-  //sFile: String;
   Item: TEasyItem;
-  //Have, Miss: Integer;
-  //romMissStatus: ShortInt;
-  //ValidCHD: Boolean;
-
-  //missFile: TMemIniFile;
   StatusImageIndex: Integer;
   ZippedROMFile: TWideMemoryStream;
+
+  IsZippedFile: Boolean;
+  romCRC32, romSHA1, NameDOS: String;
+  romName: WideString;
+  romSize: Int64;
+  //romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
+
+  ArchiveItemZip: TZFArchiveItem; // ZipForge (.zip)
+  ArchiveItem7Zip: I7zInArchive; // SevenZip (.7z)
+  Loop7z: Integer;
+  FileExtensionStr: String;
 
   function CheckEmptyVar(VarStr: String; AddCommaSeparator: Boolean = False): String;
   begin
@@ -1312,179 +1317,158 @@ var
        Result:= FileSHA1;
   end;
 
-  function AddROMs: Boolean;
-  var
-    IsZippedFile: Boolean;
-    romCRC32, romSHA1, NameDOS: String;
-    romName: WideString;
-    romSize: Int64;
-    //romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
-
-    ArchiveItemZip: TZFArchiveItem; // ZipForge (.zip)
-    ArchiveItem7Zip: I7zInArchive; // SevenZip (.7z)
-    Loop7z: Integer;
-    FileExtensionStr: String;
-
-    function ELV_AddFile: Boolean;
-    begin
-      Result:= True;
-      Item:= ROMsListView.Items.Add;
-      StatusImageIndex:= 0; // GetROM_ImageIndex;
-      Item.Caption:= romName; // ROM Name
-      //eCustomMediaType: ShortInt; // 0 -> ROM; 1 -> Cartridge; 2 -> Disc Image; 3 -> Floppy; 4 -> Cassette; 5 -> Hard Disk Drive
-      Item.Tag:= Ord(FormMain.IsMediaTypeCHD(FormMain.MemGameInfo.eCustomMediaType, True));
-      //Item.Tag:= Ord(FormMain.MemGameInfo.eCustomMediaType = 02);
-      Item.StateImageIndex:= 0; //StatusImageIndex;
-
-      case FormMain.MemGameInfo.eCustomMediaType of
-        00: Item.ImageIndex:= 15; // ROM
-        01: Item.ImageIndex:= 16; // Cartridge
-        03: Item.ImageIndex:= 17; // Floppy Disk
-        04: Item.ImageIndex:= 18; // Cassette Tape
-        05: Item.ImageIndex:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
-        02: Item.ImageIndex:= 20; // Disc Image
-        //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
-      end;
-
-      Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
-      Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
-      Item.Captions[3]:= FileSizeStr(romSize); // FormMain.GetSizeType(romSize, (FormMain.MemGameInfo.eCustomMediaType = 1)); // file size string, "bits" for cartridges, "bytes" for everything else
-      Item.Captions[4]:= ''; // device name (not used by EmuCon games)
-      Item.Captions[5]:= 'Ok';//GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
-    end;
-
+  function ELV_AddFile: Boolean;
   begin
     Result:= True;
-    IsZippedFile:= FormMain.IsZipFile(EmuConGameFileName);
-    // add ROMs nodes
-    ROMsListView.BeginUpdate;
-    ROMsListView.Items.ReIndexDisable:= True;
+    Item:= ROMsListView.Items.Add;
+    StatusImageIndex:= 0; // GetROM_ImageIndex;
+    Item.Caption:= romName; // ROM Name
+    //eCustomMediaType: ShortInt; // 0 -> ROM; 1 -> Cartridge; 2 -> Disc Image; 3 -> Floppy; 4 -> Cassette; 5 -> Hard Disk Drive
+    Item.Tag:= Ord(FormMain.IsMediaTypeCHD(FormMain.MemGameInfo.eCustomMediaType, True));
+    //Item.Tag:= Ord(FormMain.MemGameInfo.eCustomMediaType = 02);
+    Item.StateImageIndex:= 0; //StatusImageIndex;
 
-    // romTagIndex
-    // romName
-    // romCRC32
-    // romSHA1
-    // romSize
-
-    if IsZippedFile then
-    begin
-      if FileExistsW(EmuconGameFileName) then
-      begin
-        ZippedROMFile:= TWideMemoryStream.Create;
-        FileExtensionStr:= ExtractFileExt(EmuConGameFileName);
-        if FormMain.MemGameInfo.eIsUnicode then
-           EmuConGameFileName:= GetShortFileNameW(EmuConGameFileName); // must convert to DOS name or ZipForge / SevenZip crash when trying to open a Unicode filename
-        if SameText('.zip', FileExtensionStr) then
-           begin
-             with FormMain.ZipForge do
-             begin
-               FileName:= EmuConGameFileName;
-               // Open existing archive file
-               try
-                 OpenArchive(fmOpenRead or fmShareDenyNone);
-
-                 if FileCount > 0 then
-                    begin
-                      // Search text files stored inside the archive
-                      if (FindFirst('*', ArchiveItemZip, faAnyFile-faDirectory)) then // '*.*'
-                         begin
-                           repeat
-                             romName:= ArchiveItemZip.FileName;
-                             romCRC32:= LowerCase(IntToHex(ArchiveItemZip.CRC, 8));
-                             romSHA1:= '';
-                             romSize:= ArchiveItemZip.UncompressedSize;
-                             if romSize = -1 then
-                                romSize:= 0;
-                             ZippedROMFile.Clear;
-                             if romSize < 33554435 then // 32MB max
-                                ExtractToStream(ArchiveItemZip.FileName, ZippedROMFile);
-                             romSHA1:= GenerateSHA1Checksum(ZippedROMFile);
-                             ELV_AddFile;
-                             //ListCustomGameSize.Add(IntToStr(ArchiveItem7Zip.ItemSize));
-                           until (not FindNext(ArchiveItemZip));
-                         end;
-                    end;
-                 Close;
-                 FileName:= '';
-               except
-                 Result:= False;
-                 CloseArchive;
-                 FileName:= '';
-               end;
-             end;
-           end
-        else
-        if SameText('.7z', FileExtensionStr) then
-           begin
-             ArchiveItem7Zip:= CreateInArchive(CLSID_CFormat7z);
-             with ArchiveItem7Zip do
-             begin
-               try
-                 OpenFile(EmuConGameFileName);
-                 if NumberOfItems > 0 then
-                    begin
-                      // Search text files stored inside the archive
-                      for Loop7z:= 0 to NumberOfItems-1 do
-                      begin
-                        if not ItemIsFolder[Loop7z] then
-                           begin
-                             romName:= ItemPath[Loop7z];
-                             romCRC32:= LowerCase(IntToHex(ItemCRC[Loop7z], 8));
-                             romSHA1:= '';
-                             romSize:= ItemSize[Loop7z];
-                             if romSize = -1 then
-                                romSize:= 0;
-                             ZippedROMFile.Clear;
-                             if romSize < 33554435 then // 32MB max
-                                ExtractItem(Loop7z, ZippedROMFile, False);
-                             romSHA1:= GenerateSHA1Checksum(ZippedROMFile);
-                             ELV_AddFile;
-                           end;
-                      end;
-                    end;
-                 Close;
-               except
-                 Result:= False;
-                 Close;
-               end;
-             end;
-           end;
-        FreeAndNil(ZippedROMFile);
-      end;
-    end
-    else
-    begin
-      // game file is not zipped, will generate CRC32 checksum and maybe SHA-1 checksum (only if file size is less than 50 MegaBytes!)
-      Screen.Cursor:= crHourGlass;
-      romName:= FormMain.MemGameInfo.eName;
-      romSize:= GetFileSizeW(EmuConGameFileName);
-      if romSize = -1 then
-         romSize:= 0;
-      if romSize < 52428800 then
-         begin
-           // files larger than 50 MegaBytes takes way too long to generate checksums!!!
-           romCRC32:= CalcFileCRC32(EmuConGameFileName);
-           if romSize < 33554435 then
-              romSHA1:= GetSHA1_Value(EmuConGameFileName);
-         end;
-      ELV_AddFile;
-      Screen.Cursor:= crDefault;
+    case FormMain.MemGameInfo.eCustomMediaType of
+      00: Item.ImageIndex:= 15; // ROM
+      01: Item.ImageIndex:= 16; // Cartridge
+      03: Item.ImageIndex:= 17; // Floppy Disk
+      04: Item.ImageIndex:= 18; // Cassette Tape
+      05: Item.ImageIndex:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+      02: Item.ImageIndex:= 20; // Disc Image
+      //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
     end;
 
-    ROMsListView.Items.ReIndexDisable:= False;
-    ROMsListView.EndUpdate;
+    Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
+    Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
+    Item.Captions[3]:= FileSizeStr(romSize); // FormMain.GetSizeType(romSize, (FormMain.MemGameInfo.eCustomMediaType = 1)); // file size string, "bits" for cartridges, "bytes" for everything else
+    Item.Captions[4]:= ''; // device name (not used by EmuCon games)
+    Item.Captions[5]:= 'Ok';//GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
   end;
 
 begin
   if EmuConGameFileName = '' then
      begin
        ROMsListView.Visible:= False;
-       //Shape2.Visible:= False;
-       //Shape3.Visible:= False;
        Exit;
      end;
 
-  AddROMs;
+  IsZippedFile:= FormMain.IsZipFile(EmuConGameFileName);
+  // add ROMs nodes
+  ROMsListView.BeginUpdate;
+  ROMsListView.Items.ReIndexDisable:= True;
+
+  // romTagIndex
+  // romName
+  // romCRC32
+  // romSHA1
+  // romSize
+
+  if IsZippedFile then
+  begin
+    if FileExistsW(EmuconGameFileName) then
+    begin
+      ZippedROMFile:= TWideMemoryStream.Create;
+      FileExtensionStr:= ExtractFileExt(EmuConGameFileName);
+      if FormMain.MemGameInfo.eIsUnicode then
+         EmuConGameFileName:= GetShortFileNameW(EmuConGameFileName); // must convert to DOS name or ZipForge / SevenZip crash when trying to open a Unicode filename
+      if SameText('.zip', FileExtensionStr) then
+         begin
+           with FormMain.ZipForge do
+           begin
+             FileName:= EmuConGameFileName;
+             // Open existing archive file
+             try
+               OpenArchive(fmOpenRead or fmShareDenyNone);
+
+               if FileCount > 0 then
+                  begin
+                    // Search text files stored inside the archive
+                    if (FindFirst('*', ArchiveItemZip, faAnyFile-faDirectory)) then // '*.*'
+                       begin
+                         repeat
+                           romName:= ArchiveItemZip.FileName;
+                           romCRC32:= LowerCase(IntToHex(ArchiveItemZip.CRC, 8));
+                           romSHA1:= '';
+                           romSize:= ArchiveItemZip.UncompressedSize;
+                           if romSize = -1 then
+                              romSize:= 0;
+                           ZippedROMFile.Clear;
+                           if romSize < 33554435 then // 32MB max
+                              ExtractToStream(ArchiveItemZip.FileName, ZippedROMFile);
+                           romSHA1:= GenerateSHA1Checksum(ZippedROMFile);
+                           ELV_AddFile;
+                           //ListCustomGameSize.Add(IntToStr(ArchiveItem7Zip.ItemSize));
+                         until (not FindNext(ArchiveItemZip));
+                       end;
+                  end;
+               Close;
+               FileName:= '';
+             except
+               CloseArchive;
+               FileName:= '';
+             end;
+           end;
+         end
+      else
+      if SameText('.7z', FileExtensionStr) then
+         begin
+           ArchiveItem7Zip:= CreateInArchive(CLSID_CFormat7z);
+           with ArchiveItem7Zip do
+           begin
+             try
+               OpenFile(EmuConGameFileName);
+               if NumberOfItems > 0 then
+                  begin
+                    // Search text files stored inside the archive
+                    for Loop7z:= 0 to NumberOfItems-1 do
+                    begin
+                      if not ItemIsFolder[Loop7z] then
+                         begin
+                           romName:= ItemPath[Loop7z];
+                           romCRC32:= LowerCase(IntToHex(ItemCRC[Loop7z], 8));
+                           romSHA1:= '';
+                           romSize:= ItemSize[Loop7z];
+                           if romSize = -1 then
+                              romSize:= 0;
+                           ZippedROMFile.Clear;
+                           if romSize < 33554435 then // 32MB max
+                              ExtractItem(Loop7z, ZippedROMFile, False);
+                           romSHA1:= GenerateSHA1Checksum(ZippedROMFile);
+                           ELV_AddFile;
+                         end;
+                    end;
+                  end;
+               Close;
+             except
+               Close;
+             end;
+           end;
+         end;
+      FreeAndNil(ZippedROMFile);
+    end;
+  end
+  else
+  begin
+    // game file is not zipped, will generate CRC32 checksum and maybe SHA-1 checksum (only if file size is less than 50 MegaBytes!)
+    Screen.Cursor:= crHourGlass;
+    romName:= FormMain.MemGameInfo.eName;
+    romSize:= GetFileSizeW(EmuConGameFileName);
+    if romSize = -1 then
+       romSize:= 0;
+    if romSize < 52428800 then
+       begin
+         // files larger than 50 MegaBytes takes way too long to generate checksums!!!
+         romCRC32:= CalcFileCRC32(EmuConGameFileName);
+         if romSize < 33554435 then
+            romSHA1:= GetSHA1_Value(EmuConGameFileName);
+       end;
+    ELV_AddFile;
+    Screen.Cursor:= crDefault;
+  end;
+
+  ROMsListView.Items.ReIndexDisable:= False;
+  ROMsListView.EndUpdate;
+
 end;
 
 procedure TFormGameDetails.ResizeForm;
@@ -1511,7 +1495,7 @@ begin
     True:
       begin
         LabelScanMode.Visible:= False;
-        LabelEmulatorVersion.Width:= 875; //LabelEmulatorVersion.Width+
+        LabelEmulatorVersion.Width:= 875;
         //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
         FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
       end;
@@ -1529,31 +1513,26 @@ begin
   IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
   ZiNcFilePath:= '';
   LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
-  //LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
 
   SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, FormMain.MemGameInfo.eGameSetStatus);
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
   if IsNightMode then
      begin
        SetLabelColors(LabelYear, clWhite, clNavy);
-       SetLabelColors(LabelYearValue, clWhite, clNavy); //$303030; // dark gray (48, 48, 48) // clGray;//clNavy;
-       SetLabelColors(LabelScanMode, MsgTxtColors.colorMachineName, clNavy);
+       SetLabelColors(LabelYearValue, clWhite, clNavy);
+       SetLabelColors(LabelScanMode, clrLightBlue, clBlue);
 
-       FrameROMsListView.ColorFrame:= $00ff9933; // neon blue
-       FrameROMsListView.ColorInnerFrame:= clBlue;
-       FrameROMsListView.Color1:= $00000001;
-       ROMsListView.Color:= $00000001;
+       //FrameROMsListView.ColorFrame:= clrLightBlue;
+       //FrameROMsListView.ColorInnerFrame:= clBlue;
+       
+       FrameROMsListView.Color1:= FormGameDetails.Color;
+       ROMsListView.Color:= FormGameDetails.Color;
        ROMsListView.Font.Color:= clWhite;
-       //ROMsListView.PaintInfoColumn.Color:= clNavy;
-       //ROMsListView.PaintInfoColumn.Style:= ehbsThemed;
-       //ROMsListView.Header.Font.Color:= clWhite;
-       //ROMsListView.Themed:= False;
      end;
 
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
 
   LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Checksum column size is 65, difference is 186...
 
   if FormMain.MemGameInfo.eCHDsCount > 0 then
@@ -1566,7 +1545,6 @@ begin
               for Loop:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
               begin
                 iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[Loop];
-                //iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.ValueFromIndex[Loop];
                 // 12 and higher = CHD files
                 if StrToInt(iROM[1]+iROM[2]) >= 12 then
                    begin
@@ -1585,15 +1563,9 @@ begin
        if not CHDsAllNoDump then
           begin
             LeftPanelMinimumTextSize:= 0;
-            //FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+186;
-            //ROMsListView.Header.Columns[1].Width:= 248;
-            //ROMsListView.Header.Columns[2].Width:= 119;
-            //ROMsListView.Width:= ROMsListView.Width+186;
-            //FrameROMsListView.Width:= FrameROMsListView.Width+186;
           end;
      end;
 
-  // part from Form.Activate event!!!
   if FormGameDetails.Tag <> 0 then
      Exit;
   EmuConGameFileName:= '';
@@ -1614,6 +1586,7 @@ begin
     False: FillROMsTree;
   end;
 
+  // increase game files list width size ? would be useful only for "Name" column
   //if Screen.Width >= 1024 then
   //   begin
   //     ROMsListView.Width:= ROMsListView.Width+250;
@@ -1629,28 +1602,21 @@ begin
           LeftPanelSize:= LeftPanelMinimumTextSize;
 
        FrameROMsListView.Left:= LabelYearValue.Left+LeftPanelSize+6; // 6 for the border
-       //FormGameDetails.ClientWidth:= ROMsListView.Left+ROMsListView.Width+7; // 7 for the border
        FormGameDetails.ClientWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 for the border
-       //LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
-       //LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
      end;
-  //LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
-  //LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
 
-  BottomPos:= LeftPanelLastText+LeftPanelLastTextHeight;//LabelYearValue.Height;
+  BottomPos:= LeftPanelLastText+LeftPanelLastTextHeight;
 
   HeaderSize:= ROMsListView.Header.Height+2+4; // +4 for the bottom border
   ROMsCount:= ROMsListView.Groups.ItemCount;
   iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
-
-  {if ROMsCount <= 25 then
-     iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height)
-  else
-     begin
-       iROMsHeight:= HeaderSize+(25*ROMsListView.CellSizes.Report.Height); // original code, limit ROMs list height to 25 items
-       //iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
-     end;}
-
+  //if ROMsCount <= 25 then
+  //   iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height)
+  //else
+  //   begin
+  //     iROMsHeight:= HeaderSize+(25*ROMsListView.CellSizes.Report.Height); // original code, limit ROMs list height to 25 items
+  //     //iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
+  //   end;
   //iFormHeight:= LeftPanelLastText+LabelYearValue.Height+6; // 6 for the border
 
   if BottomPos < (iROMsHeight+FrameROMsListView.Top) then

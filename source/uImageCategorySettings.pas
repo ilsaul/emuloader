@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
-  ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles;
+  ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -56,10 +56,15 @@ type
     procedure FormActivate(Sender: TObject);
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure ButtonDefaultImageCategoryFolderClick(Sender: TObject);
   private
     { Private declarations }
-    newSnapshotFolderArcade: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of String;
-    newSnapshotFolderConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
+
+    newSnapshotFolderArcade, ResetSnapshotFolderArcade: TImageFoldersArcade;
+    newSnapshotFolderConsComp, ResetSnapshotFolderConsComp: TImageFoldersConsoleComputer;
+    //newSnapshotFolderArcade: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of String;
+    //newSnapshotFolderConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
+
     //UpdateFolderArcade: packed
 
     procedure ResizeForm;
@@ -68,6 +73,7 @@ type
     //procedure UpdateFolders;
     procedure UpdateImageCategories;
     procedure UpdateCategorySettingsIni;
+    procedure ReadSnapDir_MAME;
     procedure UpdateSnapDir_MAME;
     procedure SetImageCategoryValues;
   public
@@ -79,7 +85,6 @@ var
 
 implementation
 
-uses uMain;
 
 {$R *.dfm}
 
@@ -87,16 +92,27 @@ procedure TFormImageCategorySettings.PopulateFolders;
 var
   LoopSys, LoopCategory: Integer;
 begin
+  ReadSnapDir_MAME; // read "snap_directory" from "mame.ini" (MAME/HBMAME)
+  FormMain.ReadArcadeImageCategories(True, False, newSnapshotFolderArcade, False);
   for LoopSys:= 1 to MaxArcadeSystems do
   begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-        newSnapshotFolderArcade[LoopSys, LoopCategory]:= FormMain.imgFolder[LoopSys, LoopCategory];
+        ResetSnapshotFolderArcade[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
   end;
+
+  //for LoopSys:= 1 to MaxArcadeSystems do
+  //begin
+  //  for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+  //      newSnapshotFolderArcade[LoopSys, LoopCategory]:= FormMain.imgFolder[LoopSys, LoopCategory];
+  //end;
 
   for LoopSys:= 1 to MaxConsoleComputerSystems do
   begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-        newSnapshotFolderConsComp[LoopSys, LoopCategory]:= SnapshotFolderCustom[LoopSys, LoopCategory];
+    begin
+      newSnapshotFolderConsComp[LoopSys, LoopCategory]:= SnapshotFolderCustom[LoopSys, LoopCategory];
+      ResetSnapshotFolderConsComp[LoopSys, LoopCategory]:= SnapshotFolderCustom[LoopSys, LoopCategory];
+    end;
   end;
 end;
 
@@ -104,14 +120,22 @@ procedure TFormImageCategorySettings.UpdateImageCategories;
 var
   LoopSys, LoopCategory: Integer;
   Item: TEasyItem;
+  ValueToSet: String;
 begin
-  // MAME / arcade
+  // MAME / arcade (must update FormMain.imgFolder[] array, remove quotes and get only the first path
+  // perhaps make it use full path in case of relative paths used ?already s
   for LoopSys:= 1 to MaxArcadeSystems do
   begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
-      if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
-         FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
+      ValueToSet:= newSnapshotFolderArcade[LoopSys, LoopCategory];
+      ValueToSet:= FormMain.GetFirstPathOnly(ValueToSet);
+      ValueToSet:= RemoveQuotes(ValueToSet);
+      if FormMain.imgFolder[LoopSys, LoopCategory] <> ValueToSet then
+         FormMain.imgFolder[LoopSys, LoopCategory]:= ValueToSet;
+
+      //if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
+      //   FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
     end;
   end;
 
@@ -154,11 +178,54 @@ begin
   ImgIniFile.UpdateFile;
   FreeAndNil(ImgIniFile);
 end;
-  
+
+procedure TFormImageCategorySettings.ReadSnapDir_MAME;
+
+  function ReadEmuIni(sysID: Integer): Boolean;
+  var
+    MAMEIniFile: THashedStringList;
+    TextLine, iniFile, EntryString, ValueToRead: String;
+    Loop: Integer;
+  begin
+    Result:= FormMain.ValidateArcadeEmulatorFile(sysID);
+    if not Result then
+       Exit;
+
+    iniFile:= FormMain.GetArcadeEmuIniFileName(sysID, FormMain.EmulatorFile[sysID]);
+    if not FileExists(iniFile) then
+       Exit;
+
+    MAMEIniFile:= THashedStringList.Create;
+    MAMEIniFile.LoadFromFile(iniFile);
+    for Loop:=0 to MAMEIniFile.Count -1 do
+    begin
+      TextLine:= MAMEIniFile[Loop];
+      if TextLine <> '' then
+         begin
+           EntryString:= XML_GetEntryName(TextLine)+' ';
+           if EntryString = ImageCategoryArray[1, 4]+' ' then
+              begin
+                ValueToRead:= ExtractMAMEIniValue(TextLine);
+                if ValueToRead = '' then
+                   ValueToRead:= ImageCategoryArray[1, 3]; // set to default folder "snap"
+
+                newSnapshotFolderArcade[sysID, 1]:= ValueToRead;
+                ResetSnapshotFolderArcade[sysID, 1]:= ValueToRead;
+              end;
+         end;
+    end;
+    FreeAndNil(MAMEIniFile);
+  end;
+
+begin
+  ReadEmuIni(idMAME);
+  ReadEmuIni(idHBMAME);
+end;
+
 procedure TFormImageCategorySettings.UpdateSnapDir_MAME;
 begin
-  FormMain.UpdateMAMEsnapDir(FormMain.imgFolder[idMAME, 1], idMAME);
-  FormMain.UpdateMAMEsnapDir(FormMain.imgFolder[idHBMAME, 1], idHBMAME);
+  FormMain.UpdateMAMEsnapDir(newSnapshotFolderArcade[idMAME, 1], idMAME);
+  FormMain.UpdateMAMEsnapDir(newSnapshotFolderArcade[idHBMAME, 1], idHBMAME);
 end;
 
 procedure TFormImageCategorySettings.SetImageCategoryValues;
@@ -299,7 +366,7 @@ begin
      begin
        UpdateImageCategories; // same as "UpdateFolder" function (update SnapshotFolderCustom[] array)
        UpdateSnapDir_MAME; // only if user click "Apply" button (MAME/arcade only)
-       FormMain.WriteImageCategories(True, False); // save category folders for MAME/arcade
+       FormMain.WriteArcadeImageCategories(True, False, newSnapshotFolderArcade); // save category folders for MAME/arcade
        UpdateCustomSysImageFolders; // save changes to "sysimagefolders.ini" for console/computer
        UpdateCategorySettingsIni; // must be called AFTER "UpdateImageCategories" function
      end;
@@ -337,9 +404,14 @@ begin
   if CheckSystemAndImageCatSelected then
      begin
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
-          ImageCategoryFolder.Text:= FormMain.imgFolder[Systems.Tag, ImageCategory_Selector.Tag]
+          ImageCategoryFolder.Text:= ResetSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]
        else
-          ImageCategoryFolder.Text:= SnapshotFolderCustom[Systems.Tag, ImageCategory_Selector.Tag];
+          ImageCategoryFolder.Text:= ResetSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]
+
+       //if FormMain.ELV_IsArcadeSystemSelected(Systems) then
+       //   ImageCategoryFolder.Text:= FormMain.imgFolder[Systems.Tag, ImageCategory_Selector.Tag]
+       //else
+       //   ImageCategoryFolder.Text:= SnapshotFolderCustom[Systems.Tag, ImageCategory_Selector.Tag];
      end;
 end;
 
@@ -468,6 +540,13 @@ procedure TFormImageCategorySettings.SystemsItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.ELV_SetGhostedIconText(Item, Systems, ACanvas);
+end;
+
+procedure TFormImageCategorySettings.ButtonDefaultImageCategoryFolderClick(
+  Sender: TObject);
+begin
+  if CheckSystemAndImageCatSelected then
+     ImageCategoryFolder.Text:= ImageCategoryArray[ImageCategory_Selector.Tag, 3];
 end;
 
 end.

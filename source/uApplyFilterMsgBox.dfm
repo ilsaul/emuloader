@@ -31,7 +31,8 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
     ColorFrame = 16750899
     ColorInnerFrame = clBlue
     EnableInnerFrame = True
-    Frames = [frLeft, frTop, frRight, frBottom]
+    EnableCustomBorder = ecbDouble
+    Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelBoxMessageTitle: TShadowLabel
@@ -51,6 +52,9 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelBoxMessage: TShadowLabel
@@ -70,6 +74,9 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object MsgIcon: TImage

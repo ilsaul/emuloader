@@ -231,8 +231,8 @@ begin
     SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
     SetLabelColors(LabelSoftwarelistTitleW, MsgTxtColors.colorWarning, $323200);
 
-    FrameMachinesList.ColorFrame:= $00ff9933; // neon blue
-    FrameMachinesList.ColorInnerFrame:= clBlue;
+    //FrameMachinesList.ColorFrame:= clrLightBlue;
+    //FrameMachinesList.ColorInnerFrame:= clBlue;
     FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
 
     MachinesListView.Color:= FormArcadeSoftwareListMachineToRunGame.Color;

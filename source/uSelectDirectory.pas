@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ShellCtrls, ExtCtrls, uxTheme,
-  ShadowLabel, Buttons, AdvOfficeButtons, PanelEx;//, ShellAPI, ShlObj;
+  ShadowLabel, Buttons, AdvOfficeButtons, PanelEx;
 
 type
   TFormSelectDirectory = class(TForm)

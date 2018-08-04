@@ -291,9 +291,9 @@ begin
   else
   begin
     if Enabled then
-       CheckBoxHolder.Font.Color:= MsgTxtColors.colorFileName// $00a65300 //clNavy
+       CheckBoxHolder.Font.Color:= MsgTxtColors.colorFileName
     else
-       CheckBoxHolder.Font.Color:= clGray;//$00e6e6e6;
+       CheckBoxHolder.Font.Color:= clGray;
   end;
 
   if CheckBoxHolder.Tag = -1 then
@@ -818,7 +818,7 @@ begin
     SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
                                         // 200,83,0   200,200,0
     SetLabelColors(LabelSoftwareListTitle, $000053e6, clMaroon);//$0040d6d6);
-    SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);
+    SetLabelColors(LabelGameStatus, clrLightBlue, clBlue);
     FilesListView.Color:= FormDeleteGamesFiles.Color;
     FilesListView.Font.Color:= clWhite;
     FilesListView.HotTrack.Color:= clWhite;
@@ -831,8 +831,8 @@ begin
     SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clBlue);
     SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clBlue);
 
-    FileTypesGroupBox.BorderStyle:= bsDualColors;
-    SetGroupBoxColors(FileTypesGroupBox, $00ff9933, clBlue, clWhite, clNavy);
+    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clWhite, clNavy);
 
     SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
     SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
@@ -968,8 +968,15 @@ begin
       begin
         ACanvas.Font.Name:= 'Trebuchet MS';
         ACanvas.Font.Size:= ACanvas.Font.Size+2;
-        ACanvas.Font.Color:= MsgTxtColors.colorWarning;//clMaroon;
+
+        if IsNightMode then
+           ACanvas.Font.Color:= MsgTxtColors.colorWarning
+        else
+           ACanvas.Font.Color:= clMaroon;
+
         ACanvas.Font.Style:= [fsItalic];
+        if Item.Selected then
+           ACanvas.Font.Color:= clMaroon;
       end;
     1:
       begin

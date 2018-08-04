@@ -52,6 +52,9 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       ShadowColor = 14606046
       ShadowEnabled = True
       EllipsType = etPathEllips
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ButtonOk: TBitBtn
@@ -203,6 +206,9 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       ShadowColor = clSkyBlue
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -226,6 +232,9 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object EmulatorIcon: TImage

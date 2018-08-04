@@ -105,6 +105,9 @@ object FormToolBarEditor: TFormToolBarEditor
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelIconSizeValue: TShadowLabel
@@ -117,6 +120,9 @@ object FormToolBarEditor: TFormToolBarEditor
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object IconSizeExtraLarge: TSpeedButton

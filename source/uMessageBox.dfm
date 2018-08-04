@@ -36,6 +36,7 @@ object FormMessageBox: TFormMessageBox
     ParentBackground = False
     Style = vgSimple
     object MessageIcon: TImage
+      Tag = -1
       Left = 4
       Top = 4
       Width = 68
@@ -61,6 +62,9 @@ object FormMessageBox: TFormMessageBox
       ShadowColor = clMaroon
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -82,6 +86,9 @@ object FormMessageBox: TFormMessageBox
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       Visible = False

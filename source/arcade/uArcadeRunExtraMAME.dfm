@@ -132,6 +132,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       ShadowColor = clMaroon
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -154,6 +157,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -180,6 +186,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
@@ -199,6 +208,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
@@ -263,7 +275,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Width = 819
     Height = 345
     Color = clWhite
-    PageIndex = 1
     ParentColor = False
     TabOrder = 2
     object TPage
@@ -308,6 +319,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etPathEllips
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object Enabled_PlaybackRecordInput: TAdvOfficeCheckBox
@@ -576,6 +590,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etPathEllips
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelLoadSaveStateNotSupportedMsg: TLabel
@@ -1125,6 +1142,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           ShadowColor = clSilver
           ShadowEnabled = False
           EllipsType = etPathEllips
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
           Layout = tlCenter
         end
@@ -1255,6 +1275,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etPathEllips
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelRecordMovieFileName: TLabel
@@ -1288,6 +1311,9 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etPathEllips
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object Enabled_RecordMovie: TAdvOfficeCheckBox

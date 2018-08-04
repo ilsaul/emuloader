@@ -1169,12 +1169,7 @@ begin
   if IsNightMode then
   begin
     SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil, -1);
-    //SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    //SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    //SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-                                        // 200,83,0   200,200,0
-    //SetLabelColors(LabelSoftwareListTitle, $000053e6, clMaroon);//$0040d6d6);
-    //SetLabelColors(LabelGameStatus, MsgTxtColors.colorMachineName, clNavy);
+
     GamesList.Color:= FormDeleteMultipleGamesFiles.Color;
     GamesList.Font.Color:= clWhite;
     GamesList.HotTrack.Color:= clWhite;
@@ -1187,11 +1182,8 @@ begin
     SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clNavy);
     SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clNavy);
 
-    FileTypesGroupBox.BorderStyle:= bsDualColors;
-    SetGroupBoxColors(FileTypesGroupBox, $00ff9933, clBlue, clWhite, clNavy);
-
-    //SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
-    //SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
+    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clWhite, clNavy);
   end;
 
   FileTextMaxCount:= 87; // this is for TGameInfo.GetCaptions
@@ -1707,7 +1699,7 @@ begin
        FormDeleteMultipleGamesViewFiles.BottomBar.Frames:= [];
        FormDeleteMultipleGamesViewFiles.BottomBar.Style:= vgSimple;
        SetFormColors(FormDeleteMultipleGamesViewFiles, nil, FormDeleteMultipleGamesViewFiles.BottomBar, nil, nil, -1);
-       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clRed, $323200);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clRed, clrDarkOrange);//$323200);
        SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clWhite, clNavy);
        FormDeleteMultipleGamesViewFiles.FilesListView.Color:= FormDeleteMultipleGamesViewFiles.Color;
        FormDeleteMultipleGamesViewFiles.FilesListView.Font.Color:= clWhite;

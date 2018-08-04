@@ -667,6 +667,7 @@ begin
        ACanvas.Font.Color:= TileDetailsTextColor;
        ACanvas.Font.Style:= [];//fsItalic];
      end;
+
   FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 

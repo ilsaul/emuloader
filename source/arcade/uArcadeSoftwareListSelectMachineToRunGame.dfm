@@ -41,6 +41,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     ShadowColor = clMaroon
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
     Layout = tlCenter
   end
@@ -60,6 +63,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     ShadowColor = clMaroon
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
     Layout = tlCenter
   end
@@ -182,6 +188,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       ShadowColor = clMaroon
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -203,6 +212,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end

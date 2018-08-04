@@ -66,6 +66,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end
@@ -268,6 +271,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelEditSelected_Year: TAdvOfficeCheckBox
@@ -282,6 +288,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Caption = 'Year'
         ReturnIsTab = False
         State = cbChecked
+        Themed = True
       end
       object EditSelected_Year: TEdit
         Left = 104
@@ -303,6 +310,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Caption = 'Manufacturer'
         ReturnIsTab = False
         State = cbChecked
+        Themed = True
       end
       object EditSelected_Manufacturer: TEdit
         Left = 104
@@ -386,6 +394,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ShadowColor = clMoneyGreen
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelHotkeyKeys: TShadowLabel
@@ -404,6 +415,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ShadowColor = clMoneyGreen
         ShadowEnabled = True
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
     end

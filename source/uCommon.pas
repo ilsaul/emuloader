@@ -125,7 +125,7 @@ const
   ChecksumMode: array [0..4] of TMessageDigestClass = (
     TMD2, TMD4, TMD5, TSHA1, TRIPEMD160);
 
-  ListSelectionColors: packed array[0..4] of packed array[0..1] of Integer =
+  {ListSelectionColors: packed array[0..4] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red),
     //(($00fcdcc3, $00c3dcfc), // new single color (October 26, 2016)
     // old single color (($00a65c41, $00415ca6),  // 0 -> bar single color
@@ -133,8 +133,9 @@ const
      ($00fcebdc, $00dcebfc),  // 1 -> gradient color top
      ($00fcdbc1, $00c1dbfc),  // 2 -> gradient color bottom
      ($00b98c64, $00648cb9),  // 3 -> gradient border color (new - October 26, 2016) R:100 G:140 B:185
+     (clBlack  , clMaroon));}
+
      //($00cea27d, $007da2ce),  // 3 -> gradient border color
-     (clBlack  , clMaroon));
      //($006c0000, $0000006c)); // 4 -> font color (new color - October 26, 2016)
      //($00cc6600, $000066cc)); // 4 -> font color
 
@@ -156,12 +157,12 @@ const
      // $00dedede // border color (gray)
      // $00f7f7f7 // bar single color (gray)
 
-  ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
+  {ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red)
     (($00d2d2c8, $00c8d2d2), // 0 -> inactive single color R:222 G:222 B:222
      ($00dcdcdc, $00dcdcdc), // 1 -> inactive color, gradient mode(same as gradient color top)
      ($008e8e8e, $008e8e8e), // 2 -> inactive border color, gradient mode (same as bar single color) R:142 G:142: B:142
-     (clBlack, clBlack));      // 3 -> inactive font color
+     (clBlack, clBlack));      // 3 -> inactive font color}
 
   {ListSelectionColorInactive: packed array[0..3] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red)
@@ -254,7 +255,7 @@ const
     $B3667A2E, $C4614AB8, $5D681B02, $2A6F2B94,
     $B40BBE37, $C30C8EA1, $5A05DF1B, $2D02EF8D);
 
-  clrLightGrayFrame = TColor($0078695b); // this color is for light mode frames (TPanelEx... and other controls ?)
+  clrLightGrayFrame = TColor($0078695b); // RGB(171, 173, 179) // this color is for light mode frames (TPanelEx... and other controls ?)
   // custom colors for the night mode
   clrDarkBlue   = TColor($00590000); // RGB(0, 0, 89) -> blue
   clrDarkGreen  = TColor($00005900); // RGB(0, 89, 0) -> green
@@ -265,8 +266,10 @@ const
 
   clrBlackBk    = TColor($00000001); // RGB(0, 0, 1) -> this is needed to create gradient in TPanelEx
 
-  clrLightBlue  = TColor($00ff9933);
-  clrMedBlue    = TColor($00c83232);
+  clrLightBlue  = TColor($00ff9933); // RGB(51, 153, 255)
+  clrMedBlue    = TColor($00c83232); // RGB(50, 50, 200)
+
+  clrOrange     = TColor($002670ac); // RGB(172, 112, 38)
 
 type
   TMsgBoxColors = packed record
@@ -373,7 +376,7 @@ function  SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor
 function  SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
 function  SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
 function  SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
-procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1);
+procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
 
 procedure PopulateMsgColors;
 procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
@@ -382,7 +385,7 @@ procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TP
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
-                          IconIndex: Integer = 0): Integer;
+                          IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
 procedure CallMessageBox;
 procedure FreeMessageBox;
 
@@ -391,9 +394,11 @@ function  GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList
 procedure GenerateControllerDefinitionsFilesList(Folder: String; ListHolder: THashedStringList; ClearList: Boolean = False);
 procedure GetFilesList(Folder, FileType, FileMask: String; ListHolder: THashedStringList; SubDirectories, ClearList, ReturnFullPath: Boolean);
 procedure GetFoldersList(Folder: String; ListHolder: THashedStringList; ClearList, SubDirectories: Boolean);
+procedure GetFoldersList2(Folder: String; ListHolder: THashedStringList; ClearList: Boolean; ReturnFullPath: Boolean = True);
 
 function  GetPlayTime(Milliseconds: Int64; ShowHoursDays: Boolean = False; HideSeconds: Boolean = False): String;
 function  ExtractMAMEIniValue(const MAMEOption: String): String;
+function  RemoveQuotes(const ValueStr: String): String;
 
 function  GetContrastColor(ABGColor: TColor): TColor;
 
@@ -441,7 +446,7 @@ function  MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): 
 
 procedure SetDefaultColorBox(ColorHolder: TColorBox);
 
-function  SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean): Boolean;
+function  SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean; RootFolder: WideString = ''): Boolean;
 
 procedure CallMaximizeWindow(FormHolder: TForm);
 
@@ -560,17 +565,124 @@ begin
   GroupBoxSource.ShadowEnabled:= iShadowEnabled;
 end;
 
-procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1);
+procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
+var
+  ColorToApply: TColor;
 begin
-  if IsNightMode then
+  ColorToApply:= clNone; // set to none to avoid appling an undefined color
+  if iBorderColor <> -1 then
+     ColorToApply:= iBorderColor
+  else
+     begin
+       if IsNightMode or ForceNightColors then
+          ColorToApply:= clrLightBlue
+       else
+          ColorToApply:= clSilver;
+     end;
+
+  if ColorToApply <> clNone then
+     begin
+       if PanelSource.ColorFrame <> ColorToApply then
+          PanelSource.ColorFrame:= ColorToApply;
+     end;
+
+  ColorToApply:= clNone;
+  if iBorderInnerColor <> -1 then
+     ColorToApply:= iBorderColor
+  else
+     begin
+       if IsNightMode or ForceNightColors then
+          ColorToApply:= clBlue
+       else
+          ColorToApply:= clrLightGrayFrame;
+     end;
+
+  if ColorToApply <> clNone then
+     begin
+       if PanelSource.ColorInnerFrame <> ColorToApply then
+          PanelSource.ColorInnerFrame:= ColorToApply;
+     end;
+
+  ColorToApply:= clNone;
+  if PanelSource.Style = vgSolid then
+     begin
+       if iColor1 <> -1 then
+          ColorToApply:= iColor1
+       else
+       begin
+         if IsNightMode or ForceNightColors then
+            ColorToApply:= clrBlackBk
+         else
+            ColorToApply:= $00f1f1f1;
+       end;
+
+       if ColorToApply <> clNone then
+          begin
+            if PanelSource.Color1 <> ColorToApply then
+               PanelSource.Color1:= ColorToApply;
+          end;
+     end
+  else
+     begin
+       // dual colors (vgSimple); both iColor1 and iColor2 must contain valid colors
+       ColorToApply:= clNone; // top color
+       if iColor1 <> -1 then
+          ColorToApply:= iColor1
+       else
+       begin
+         if IsNightMode or ForceNightColors then
+            ColorToApply:= clrDarkBlue
+         else
+            ColorToApply:= clWhite;
+       end;
+
+       if ColorToApply <> clNone then
+          begin
+            if PanelSource.Color1 <> ColorToApply then
+               PanelSource.Color1:= ColorToApply;
+          end;
+
+       ColorToApply:= clNone; // bottom color
+       if iColor2 <> -1 then
+          ColorToApply:= iColor2
+       else
+       begin
+         if IsNightMode or ForceNightColors then
+            ColorToApply:= clrBlackBk
+         else
+            ColorToApply:= $00f1f1f1;
+       end;
+
+       if ColorToApply <> clNone then
+          begin
+            if PanelSource.Color2 <> ColorToApply then
+               PanelSource.Color2:= ColorToApply;
+          end;
+     end;
+
+  {if IsNightMode then
   begin
-    PanelSource.ColorFrame:= clrLightBlue;
-    PanelSource.ColorInnerFrame:= clBlue;
+    if iBorderColor <> -1 then
+       PanelSource.ColorFrame:= iBorderColor
+    else
+       PanelSource.ColorFrame:= clrLightBlue;
+
+    if iBorderInnerColor <> -1 then
+       PanelSource.ColorInnerFrame:= iBorderInnerColor
+    else
+       PanelSource.ColorInnerFrame:= clBlue;
   end
   else
   begin
-    PanelSource.ColorFrame:= clSilver;
-    PanelSource.ColorInnerFrame:= clrLightGrayFrame;
+    if iBorderColor <> -1 then
+       PanelSource.ColorFrame:= iBorderColor
+    else
+       PanelSource.ColorFrame:= clSilver;
+
+    if iBorderInnerColor <> -1 then
+       PanelSource.ColorInnerFrame:= iBorderInnerColor
+    else
+       PanelSource.ColorInnerFrame:= clrLightGrayFrame;
   end;
 
   if PanelSource.Style = vgSolid then
@@ -590,7 +702,7 @@ begin
        // dual colors (vgSimple); both iColor1 and iColor2 must contain valid colors
        PanelSource.Color1:= iColor1;
        PanelSource.Color2:= iColor2;
-     end;
+     end;}
 end;
 
 procedure PopulateMsgColors;
@@ -599,15 +711,15 @@ begin
   begin
     if MsgTxtColors.colorKeyTitle <> $00006ee6 then
     begin
-      MsgTxtColors.colorKeyTitle:= $00006ee6; //$000053a6;
-      MsgTxtColors.colorKeyValue:= $00a0a0a0;// clGray;
-      MsgTxtColors.colorFileName:= $00d68b40; // (0, 100, 200) //$00a65300;
-      MsgTxtColors.colorMachineName:= $00ff7c7c; //clNavy;
-      MsgTxtColors.colorMachineMultiSlot:= $00009696; //clOlive;
+      MsgTxtColors.colorKeyTitle:= $00006ee6;
+      MsgTxtColors.colorKeyValue:= $00a0a0a0;
+      MsgTxtColors.colorFileName:= $00d68b40; // (0, 100, 200)
+      MsgTxtColors.colorMachineName:= $00ff7c7c;
+      MsgTxtColors.colorMachineMultiSlot:= $00009696;
       MsgTxtColors.colorCmdLine:= clLime;
       MsgTxtColors.colorBoldTitle:= $00c8c8c8; // (200, 200, 200)
-      MsgTxtColors.colorWarning:= $001414e6; //$005050c8; //clMaroon;
-      MsgTxtColors.colorExitCode:= $008b8bd6; //$00000060;
+      MsgTxtColors.colorWarning:= $001414e6;
+      MsgTxtColors.colorExitCode:= $008b8bd6;
     end;
   end
   else
@@ -688,7 +800,7 @@ begin
       PanelTopSource.Color1:= clrDarkBlue; // will paint to default color no matter what
       PanelTopSource.Color2:= clrBlackBk;  // will paint to default color no matter what
       PanelTopSource.Color3:= clrLightGrayFrame;
-      PanelTopSource.ColorFrame:= clrLightBlue; // $00ff9933;
+      PanelTopSource.ColorFrame:= clrLightBlue;
     end;
 
     if PanelBottomSource <> nil then
@@ -731,11 +843,10 @@ begin
       LabelGameName.ShadowColor:= clrMedBlue; //clNavy;
       LabelGameName.ShadowEnabled:= True;
     end;
-  end
-  else
-  begin
-
   end;
+  //else
+  //begin
+  //end;
 end;
 
 function WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
@@ -1602,7 +1713,7 @@ begin
 end;
 
 function GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
-                         IconIndex: Integer = 0): Integer;
+                         IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
 begin
   // icon index:
   // -1 -> Game Icon
@@ -1615,6 +1726,7 @@ begin
   FormMessageBox.PanelBottom.Tag:= IconIndex;
   FormMessageBox.Caption:= WindowMessage;
   FormMessageBox.LabelMessageTitle:= TitleMessage;
+  FormMessageBox.MessageIcon.Tag:= GameSetStatus;
 
   if DescriptionMessage <> '' then
      begin
@@ -1658,7 +1770,7 @@ begin
     begin
       SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, -1, False);
 
-      FormMessageBox.LabelMessage.Color:= $00000001;
+      FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
       FormMessageBox.NightMode.Font.Color:=$00f1f1f1;
     end;
@@ -1872,6 +1984,54 @@ begin
      end;
   FindClose(Search);
   ListHolder.EndUpdate;
+end;
+
+procedure GetFoldersList2(Folder: String; ListHolder: THashedStringList; ClearList: Boolean; ReturnFullPath: Boolean = True);
+var
+  Search: TSearchRec;
+begin
+  // this function only returns one level folder names, no recursive folder scanning
+  // only used by "select icon overlay folder" in preferences screen
+  if Folder = '' then
+     Exit;
+  ListHolder.BeginUpdate;
+  ListHolder.Sorted:= True;
+  ListHolder.Duplicates:= dupIgnore;
+  if ClearList then
+     ListHolder.Clear;
+  Folder:= IncludeTrailingPathDelimiter(Folder);
+
+  if FindFirst(Folder+'*.*', $37, Search) = 0 then
+     begin
+       repeat
+         // It's a directory?
+         if (Search.Attr and $10 = $10) and (Search.Name <> '.') and
+            (Search.Name <> '..') then
+            begin
+              if ReturnFullPath then
+                 ListHolder.Add(Folder+Search.Name)
+              else
+                 ListHolder.Add(Search.Name); // used for icon overlay list only (preferences screen)
+            end;
+       until (FindNext(Search) <> 0);
+     end;
+  FindClose(Search);
+  ListHolder.EndUpdate;
+end;
+
+function RemoveQuotes(const ValueStr: String): String;
+var
+  iPos: Integer;
+begin
+  Result:= ValueStr;
+  if ValueStr = '' then
+     Exit;
+
+  if Result[1] = '"' then
+     Delete(Result, 1, 1);
+
+  if Result[Length(Result)] = '"' then
+     Delete(Result, Length(Result), 1);
 end;
 
 function ExtractMAMEIniValue(const MAMEOption: String): String;
@@ -2634,12 +2794,14 @@ begin
      ColorHolder.OnSelect(ColorHolder);
 end;
 
-function SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean): Boolean;
+function SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean; RootFolder: WideString = ''): Boolean;
 begin
   if not Assigned(FormSelectDirectory) then
      FormSelectDirectory:= TFormSelectDirectory.Create(nil);
   FormSelectDirectory.AddSubFolders.Visible:= RecursiveSubFolders;
   FormSelectDirectory.LabelTitle.Caption:= Caption;
+  if RootFolder <> '' then
+     FormSelectDirectory.ShellTree.Root:= RootFolder;
   Result:= FormSelectDirectory.ShowModal = mrOK;
   case Result of
     True:
@@ -2649,6 +2811,8 @@ begin
       end;
     False: Directory:= '';
   end;
+  //if RootFolder <> '' then
+  //   FormSelectDirectory.ShellTree.Root:= '';
   FreeAndNil(FormSelectDirectory);
 end;
 

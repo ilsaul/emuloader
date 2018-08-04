@@ -75,7 +75,8 @@ uses
   uSelectFilterSystemSimple in 'uSelectFilterSystemSimple.pas' {FormSelectFilterSystemSimple},
   uImageLayoutSelector in 'uImageLayoutSelector.pas' {FormImageLayoutSelector},
   uImageCategorySelector in 'uImageCategorySelector.pas' {FormImageCategorySelector},
-  uArcadeFileVersionsLarge in 'arcade\uArcadeFileVersionsLarge.pas' {FormArcadeFileVersionsLarge};
+  uArcadeFileVersionsLarge in 'arcade\uArcadeFileVersionsLarge.pas' {FormArcadeFileVersionsLarge},
+  uArcadeMAMEMachinesCustomize in 'arcade\uArcadeMAMEMachinesCustomize.pas' {FormArcadeMAMEMachinesCustomize};
 
 {$R *.RES}
 
@@ -88,6 +89,7 @@ begin
   Application.HintColor:= $00f8f4f3;//$00EEEBE6;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPreferences, FormPreferences);
+  Application.CreateForm(TFormArcadeMAMEMachinesCustomize, FormArcadeMAMEMachinesCustomize);
   Application.Run;
 end.
 

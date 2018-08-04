@@ -365,8 +365,8 @@ begin
   SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, -1, True);
   if IsNightMode then
      begin
-       PanelGamesList.ColorFrame:= $00ff9933;
-       PanelGamesList.ColorInnerFrame:= clBlue;
+       //PanelGamesList.ColorFrame:= clrLightBlue;
+       //PanelGamesList.ColorInnerFrame:= clBlue;
        GamesList.Color:= FormArcadeMultiSlotGames.Color;
        GamesList.Font.Color:= clWhite;
 

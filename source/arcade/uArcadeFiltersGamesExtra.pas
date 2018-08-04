@@ -62,8 +62,8 @@ type
     ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox;
     CategoryMusic: TAdvOfficeCheckBox;
     CategoryBoardGame: TAdvOfficeCheckBox;
+    CategorySlotMachines: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
-    procedure FilterGamesMainCPUClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonDefaultOptionsClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -168,6 +168,9 @@ begin
         FilterChanged(CategoryFruitMachines.Tag, Ord(CategoryFruitMachines.Checked));
         CategoryFruitMachines.Tag:= Ord(CategoryFruitMachines.Checked);
 
+        FilterChanged(CategorySlotMachines.Tag, Ord(CategorySlotMachines.Checked));
+        CategorySlotMachines.Tag:= Ord(CategorySlotMachines.Checked);
+
         FilterChanged(CategoryRhythm.Tag, Ord(CategoryRhythm.Checked));
         CategoryRhythm.Tag:= Ord(CategoryRhythm.Checked);
 
@@ -265,6 +268,7 @@ begin
 
         ResetFilterCheckBox(CategoryCasino);
         ResetFilterCheckBox(CategoryFruitMachines);
+        ResetFilterCheckBox(CategorySlotMachines);
         ResetFilterCheckBox(CategoryRhythm);
         ResetFilterCheckBox(CategoryMature);
         ResetFilterCheckBox(CategoryMahjong);
@@ -318,13 +322,6 @@ begin
   SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
 end;
 
-procedure TFormArcadeFiltersExtra.FilterGamesMainCPUClick(Sender: TObject);
-begin
-  //FormMain.ToolBarFilterByMainCPU.Visible:= FilterGamesMainCPU.Checked;
-  //if FormMain.ToolBarFilterByMainCPU.Visible then
-  //   FormMain.ToolBarButtons.Top:= 0;
-end;
-
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);
 begin
   mResult:= TBitBtn(Sender).ModalResult;
@@ -343,6 +340,7 @@ begin
   GamesROMs.ItemIndex:= 0;
   CategoryCasino.Checked:= True;
   CategoryFruitMachines.Checked:= True;
+  CategorySlotMachines.Checked:= True;
   CategoryRhythm.Checked:= True;
   CategoryMature.Checked:= True;
   CategoryMahjong.Checked:= True;

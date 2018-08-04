@@ -245,7 +245,7 @@ begin
            TSoftwareInfo(addItem).eMediaTypeText:= MediaTypeCustom[iMediaTypeID, 0]; //GetMediaTypeTitle(SoftListFiles_MediaType[Loop]);
 
            if Assigned(ExcludeFiles) then
-              TSoftwareInfo(addItem).eCheckedFromIni:= ExcludeFiles.IndexOf(iFolder) = -1 // only check if not found in "ini_files\softlist_exclude.txt"
+              TSoftwareInfo(addItem).eCheckedFromIni:= ExcludeFiles.IndexOf(iFolder) = -1 // only check if not found in "\arcade\mame_softlist_exclude.txt"
            else
               TSoftwareInfo(addItem).eCheckedFromIni:= True;
            addItem.Checked:= TSoftwareInfo(addItem).eCheckedFromIni;
@@ -273,8 +273,6 @@ begin
   SoftwareLists.SetFocus;
 
   FreeAndNil(iFiles);
-
-
 end;
 
 procedure TFormArcadeSoftwareListCustomize.ResizeForm;
@@ -328,8 +326,8 @@ begin
        SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, False);
        SetLabelColors(LabelTotalSoftwareList, clWhite, clNavy);
 
-       FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
-       FrameSoftwareList.ColorInnerFrame:= clBlue;
+       //FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
+       //FrameSoftwareList.ColorInnerFrame:= clBlue;
        FrameSoftwareList.Color1:= $00000001;
        SoftwareLists.Color:= $00000001;
        SoftwareLists.Font.Color:= clWhite;
@@ -459,7 +457,7 @@ begin
   SoftwareLists.BeginUpdate;
   Item:= SoftwareLists.Groups.FirstItem;
   repeat
-    Item.Checked:= TSoftwareInfo(Item).eCheckedFromIni; // reset to last saved "ini_files\softlist_exclude.txt"
+    Item.Checked:= TSoftwareInfo(Item).eCheckedFromIni; // reset to last saved "\arcade\mame_softlist_exclude.txt"
     // not used!!!! //TSoftwareInfo(Item).eCheckedCustom:= TSoftwareInfo(Item).eCheckedFromIni;
     Item:= SoftwareLists.Groups.NextItem(Item);
   until Item = nil;

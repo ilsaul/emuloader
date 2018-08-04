@@ -35,6 +35,9 @@ object FormThumbnailView: TFormThumbnailView
     ShadowColor = clGray
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
   end
   object LabelGridHeightSize: TShadowLabel
     Left = 8
@@ -48,6 +51,9 @@ object FormThumbnailView: TFormThumbnailView
     ShadowColor = clGray
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
   end
   object LabelImageSize: TShadowLabel
     Left = 396
@@ -67,6 +73,9 @@ object FormThumbnailView: TFormThumbnailView
     ShadowColor = clGray
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = False
   end
   object GridWidthSize: TExTrackBar
@@ -378,6 +387,7 @@ object FormThumbnailView: TFormThumbnailView
     Selection.UseFocusRect = False
     TabOrder = 17
     View = elsThumbnail
+    OnItemPaintText = ELV_ThumbnailPreviewItemPaintText
     OnItemThumbnailDraw = ELV_ThumbnailPreviewItemThumbnailDraw
   end
   object ButtonGridWidthSize_Decrease: TBitBtn

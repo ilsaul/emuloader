@@ -202,8 +202,7 @@ var
   var
     sLoop: Integer;
     tmpStr: String;
-    SamplesPathList: THashedStringList;
-
+    SamplesPathList: TStringList;
   begin
     //tmpStr:= FormMain.LoadFolderSpecial_MAME(SystemIndex, FormMain.EmulatorFile[SystemIndex], 2); // can't be executed here (March 17, 2016)
     FormMain.ExtractFolders2MAME(SystemIndex, SamplesDirMAME[SystemIndex], SamplesPathList);

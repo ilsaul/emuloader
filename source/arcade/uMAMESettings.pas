@@ -1820,7 +1820,8 @@ end;
 procedure TFormMAMESettings.ReadMAMEIniFile(const IniFile: String; EmuDefaultSettings: Boolean = False);
 var
   TextLine, Value, EntryString: String;
-  MAMEIniFile, ctrlrDefinitionsList, FoldersList: THashedStringList;
+  MAMEIniFile, ctrlrDefinitionsList: THashedStringList;
+  FoldersList: TStringList;
   Loop, Loop2: Integer;
 
   function SetComboBoxItemZero(ComboBoxHolder: TComboBox): Boolean;

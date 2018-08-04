@@ -3,7 +3,7 @@ unit uSelectFilterSystemMega;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, CommCtrl,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
   ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, AdvOfficeButtons,
   uCommon, uCommonCustom, Menus, BarMenus;
@@ -731,28 +731,48 @@ procedure TFormSelectFilterSystemMega.SystemsListViewItemImageDraw(
 var
   iLeft, iTop: Integer;
   iSysTypeIndex: Integer;
+
+  rgbBk, rgbFg: Longword;
+  fStyle: Integer;
 begin
   // this is for tiles view mode
   iLeft:= RectArray.IconRect.Left+SystemsListView.PaintInfoItem.ImageIndent;
   iTop:=  RectArray.IconRect.Top+2;
 
+  if Item.Ghosted then
+     begin
+       rgbBk := CLR_NONE;
+       rgbFg := CLR_NONE;
+       fStyle:= ILD_TRANSPARENT or ILD_SELECTED;
+       rgbFg := ColorToRGB(SystemsListView.DisabledBlendColor);
+     end;
+
   if FormMain.ELV_IsArcadeSystemMulti(Item) then
      begin
-       SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+       if Item.Ghosted then
+          ImageList_DrawEx(SystemsListView.ImagesExLarge.Handle, Item.ImageIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
+       else
+          SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
        if Item.ImageIndex > 0 then
           begin
             iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
             iTop:= iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
 
-            FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
-
+            //FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
             if Item.Ghosted then
-               AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), Sender.Color);
+               ImageList_DrawEx(FormMain.IL_MenuPopup.Handle, 24, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
+            else
+               FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
+            //if Item.Ghosted then
+            //   AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
           end;
      end
   else
      begin
-       SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
+       if Item.Ghosted then
+          ImageList_DrawEx(SystemsListView.ImagesExLarge.Handle, MaxArcadeSystems+1+Item.StateImageIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
+       else
+          SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
 
        iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
        iTop:= iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
@@ -771,15 +791,18 @@ begin
 
             if iSysTypeIndex <> -1 then
                begin
-                 FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
                  if Item.Ghosted then
-                    AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), Sender.Color);
+                    ImageList_DrawEx(FormMain.IL_MenuPopup.Handle, iSysTypeIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
+                 else
+                    FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+                 //if Item.Ghosted then
+                 //   AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
                end;
           end;
      end;
 
-  if Item.Ghosted then
-     AlphaBlender.BasicBlend(Sender, ACanvas, RectArray.IconRect, Sender.Color);
+  //if Item.Ghosted then
+  //   AlphaBlender.BasicBlend(Sender, ACanvas, RectArray.IconRect, ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
 end;
 
 procedure TFormSelectFilterSystemMega.PopupSystemsMeasureMenuItem(

@@ -57,6 +57,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -240,6 +241,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frBottom]
     ParentBackground = False
     Style = vgSolid

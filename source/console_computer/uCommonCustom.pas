@@ -162,6 +162,8 @@ const
      1, //('Nintendo 3DS',           '65_Nintendo3DS.ico',       'Nintendo3DS.txt'),
      1); //('SuFami Turbo',           '66_SuFamiTurbo.ico',       'SuFamiTurbo.txt'));}
 
+type
+  TImageFoldersConsoleComputer = packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
 
 var
   EmulatorFileCustom,
@@ -177,7 +179,8 @@ var
   sysCustomFolders: packed array[1..MaxConsoleComputerSystems] of packed array[Low(MediaTypeCustom)..High(MediaTypeCustom)] of THashedStringList;
   // 1 -> cartridge; 2 -> disc image; 3 -> floppy disk; 4 -> cassette tape; 5 -> hard disk drive
 
-  SnapshotFolderCustom: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
+  SnapshotFolderCustom: TImageFoldersConsoleComputer;
+  //SnapshotFolderCustom: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
   // see uCommon.ImageCategoryArray[] for the image category indexes
 
   imgZipFileListConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of THashedStringList;

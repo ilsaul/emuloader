@@ -54,6 +54,7 @@ object FormSelectDirectory: TFormSelectDirectory
     Color3 = 16707808
     Color4 = 16112579
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -74,6 +75,9 @@ object FormSelectDirectory: TFormSelectDirectory
       ShadowColor = 15790320
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -97,6 +101,7 @@ object FormSelectDirectory: TFormSelectDirectory
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -117,6 +122,9 @@ object FormSelectDirectory: TFormSelectDirectory
       ShadowColor = 16448250
       ShadowEnabled = True
       EllipsType = etPathEllips
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object AddSubFolders: TAdvOfficeCheckBox

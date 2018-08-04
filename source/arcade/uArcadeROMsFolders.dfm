@@ -72,6 +72,9 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end
@@ -183,6 +186,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       Alignment = taLeftJustify
       Caption = 'Large Icons'
       ReturnIsTab = False
+      Themed = True
     end
   end
   object IL_Systems: TImageList

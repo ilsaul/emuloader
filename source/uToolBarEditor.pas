@@ -50,7 +50,7 @@ procedure TFormToolBarEditor.ButtonDefaultClick(Sender: TObject);
 var
   Loop: ShortInt;
 begin
-  for Loop:=0 to FormMain.ToolBarButtons.ButtonCount do
+  for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
       ToolBarListView.Items[Loop].Checked:= True;
   ToolBarListView.SetFocus;
 end;
@@ -91,7 +91,17 @@ procedure TFormToolBarEditor.ToolBarListViewItemCheckChange(
 begin
   if Item <> nil then
      begin
-       FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
+       if Item.Index = (FormMain.ToolBarButtons.ButtonCount-1) then
+          begin
+            // "Search Games" button / filter
+            FormMain.ButtonFilterSearchGames.Tag:= Ord(Item.Checked);
+            if FormMain.ButtonFilterTitlePanelMode.Tag = 0 then
+               FormMain.PanelSearchGames_ToolBar.Visible:= Item.Checked
+            else
+               FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
+          end
+       else
+          FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
        SetGhostItem;
      end;
   FormMain.ToolBarButtons.Repaint;
@@ -104,6 +114,9 @@ var
   iPos: Integer;
   iTitle, iDetail: String;
 begin
+  // must call FormMain.ButtonFilterTitleClose.Click to close all search panels, and also hide the tool bar attached panel
+  // if user uncheck "Search Games"
+  
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
@@ -123,26 +136,16 @@ begin
       Caption:= iTitle;
       Captions[1]:= iDetail;
 
-      Checked:= FormMain.ToolBarButtons.Buttons[Loop].Visible;
+      if (Loop = (FormMain.ToolBarButtons.ButtonCount-1)) and (FormMain.ButtonFilterTitlePanelMode.Tag = 0) then
+         Checked:= FormMain.PanelSearchGames_ToolBar.Visible
+      else
+         Checked:= FormMain.ToolBarButtons.Buttons[Loop].Visible;
       if not Checked then
          State:= State+[esosGhosted];
 
       Details[1]:= 1;
-      //Captions[1]:= 'Arcade';
-      //Details[1]:= 1;
     end;
   end;
-  {with ToolBarListView.Items.Add do
-  begin
-    ImageIndex:= FormMain.ToolBarButtons.ButtonCount;
-    Caption:= 'Search Bar';
-    Checked:= FormMain.ToolBarFilterTitle.Visible;
-    if not Checked then
-       State:= State+[esosGhosted];
-
-    //Captions[1]:= 'Arcade';
-    //Details[1]:= 1;
-  end;}
 
   ToolBarListView.EndUpdate;
   FormMain.ELV_SelectItem(ToolBarListView, 0);
@@ -197,5 +200,6 @@ begin
   if BoundToGamesPanel.Tag = 0 then // to prevent setting from executing if screen settings are being loaded!
      FormMain.MenuToolBarIconSize.Items[TSpeedButton(Sender).Tag].Click;
 end;
+
 
 end.

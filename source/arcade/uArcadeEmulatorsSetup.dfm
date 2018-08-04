@@ -56,6 +56,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end
@@ -215,6 +218,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Alignment = taLeftJustify
       Caption = 'Large Icons'
       ReturnIsTab = False
+      Themed = True
     end
   end
   object PanelEmulatorDetails: TPanelEx
@@ -247,6 +251,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelAlterMAME: TShadowLabel
@@ -265,6 +272,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelAlterMAME_versioninfo: TShadowLabel
@@ -283,6 +293,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelArcade_exec: TShadowLabel
@@ -301,6 +314,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = 3289650
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelAlterMAME_Autorun: TShadowLabel
@@ -319,6 +335,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = clWhite
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ShadowLabel3: TShadowLabel
@@ -339,6 +358,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = 14540253
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ShadowLabel4: TShadowLabel
@@ -359,6 +381,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShadowColor = clWhite
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ButtonBrowseArcade_exec: TBitBtn
@@ -524,6 +549,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         ShadowColor = 14540253
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object ShadowLabel1: TShadowLabel
@@ -546,6 +574,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = ShadowLabel1Click
         OnMouseEnter = ShadowLabel1MouseEnter
@@ -571,6 +602,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = ShadowLabel1Click
         OnMouseEnter = ShadowLabel1MouseEnter
@@ -598,6 +632,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = ShadowLabel1Click
         OnMouseEnter = ShadowLabel1MouseEnter
@@ -623,6 +660,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = ShadowLabel1Click
         OnMouseEnter = ShadowLabel1MouseEnter

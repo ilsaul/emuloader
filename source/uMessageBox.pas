@@ -120,7 +120,14 @@ begin
   if PanelBottom.Tag = 1 then
      SetColorsGameTopBar(1, PanelTop, False) // red
   else
-     SetColorsGameTopBar(-1, PanelTop, False); // blue
+     begin
+       if PanelBottom.Tag = 4 then // multi-slot arcade machines
+          MessageIcon.Tag:= -1;
+       if MessageIcon.Tag <> -1 then
+          SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, MessageIcon.Tag);
+
+       SetColorsGameTopBar(MessageIcon.Tag{-1}, PanelTop, False); // blue for -1 or game set status (green, red, gray)
+     end;
 
   if IconMediaType.Tag <> -1 then
      FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);

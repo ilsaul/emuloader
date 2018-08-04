@@ -562,8 +562,12 @@ begin
         if LabelTotalItems.Tag = 0 then
            ACanvas.Font.Color:= clMaroon // light mode
         else
-           ACanvas.Font.Color:= clRed; // night mode
+           ACanvas.Font.Color:= MsgTxtColors.colorWarning; // night mode
         ACanvas.Font.Style:= [fsItalic];
+
+        if Item.Selected then
+           ACanvas.Font.Color:= clMaroon;
+
       end;
     1:
       begin

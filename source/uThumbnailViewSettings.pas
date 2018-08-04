@@ -57,6 +57,9 @@ type
     procedure MaintainAspectRatioClick(Sender: TObject);
     procedure SystemIconSizeSelect(Sender: TObject);
     procedure ButtonAbortClick(Sender: TObject);
+    procedure ELV_ThumbnailPreviewItemPaintText(
+      Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+      ACanvas: TCanvas);
   private
     { Private declarations }
     tImageWidth, tImageHeight: Integer; // this is the maximum width x height bounds of the thumb image
@@ -968,5 +971,13 @@ begin
   Close;
 end;
 
+
+procedure TFormThumbnailView.ELV_ThumbnailPreviewItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if Item.Selected then
+     FormMain.ELV_ItemPaintText_General(ELV_ThumbnailPreview, Item, ACanvas);
+end;
 
 end.

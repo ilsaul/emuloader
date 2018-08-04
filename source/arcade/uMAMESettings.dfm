@@ -4897,6 +4897,9 @@ object FormMAMESettings: TFormMAMESettings
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
       object LabelExitAfterInputPlayback: TShadowLabel
         Left = 232
@@ -4914,6 +4917,9 @@ object FormMAMESettings: TFormMAMESettings
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
       object MultiKeyboard: TAdvOfficeCheckBox
         Left = 16
@@ -8780,6 +8786,9 @@ object FormMAMESettings: TFormMAMESettings
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -8803,6 +8812,9 @@ object FormMAMESettings: TFormMAMESettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -8840,6 +8852,9 @@ object FormMAMESettings: TFormMAMESettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end

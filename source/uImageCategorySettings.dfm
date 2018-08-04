@@ -45,6 +45,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
     ShadowColor = 14540253
     ShadowEnabled = True
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = False
     Layout = tlCenter
   end
@@ -67,6 +70,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
     ShadowColor = 14540253
     ShadowEnabled = True
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = False
     Layout = tlCenter
   end
@@ -89,6 +95,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
     ShadowColor = 14540253
     ShadowEnabled = True
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = False
     Layout = tlCenter
     Visible = False
@@ -162,6 +171,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frTop]
     ParentBackground = False
     Style = vgSolid
@@ -185,6 +195,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
       OnClick = LabelShowHideCategoriesClick
@@ -211,6 +224,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end
@@ -310,6 +326,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 7891291
+      ColorInnerFrame = clGreen
       Frames = [frLeft, frTop]
       ParentBackground = False
       Style = vgSolid
@@ -330,10 +347,13 @@ object FormImageCategorySettings: TFormImageCategorySettings
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelImageBackgroundColor: TShadowLabel
-        Left = 368
+        Left = 424
         Top = 12
         Width = 102
         Height = 16
@@ -349,10 +369,13 @@ object FormImageCategorySettings: TFormImageCategorySettings
         ShadowColor = clSilver
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object ButtonResetImageCategoryFolder: TBitBtn
-        Left = 266
+        Left = 326
         Top = 7
         Width = 43
         Height = 21
@@ -364,7 +387,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnClick = ButtonResetImageCategoryFolderClick
       end
       object ButtonClearImageCategoryFolder: TBitBtn
-        Left = 222
+        Left = 282
         Top = 7
         Width = 43
         Height = 21
@@ -373,7 +396,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnClick = ButtonClearImageCategoryFolderClick
       end
       object ButtonImageCategoryFolder: TBitBtn
-        Left = 310
+        Left = 370
         Top = 29
         Width = 47
         Height = 21
@@ -388,7 +411,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         Tag = 1
         Left = 8
         Top = 29
-        Width = 299
+        Width = 361
         Height = 21
         Hint = 'Select a Folder for Game Snapshots'
         AutoSize = False
@@ -399,7 +422,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnChange = ImageCategoryFolderChange
       end
       object ImageCategoryBackgroundColor: TColorBox
-        Left = 368
+        Left = 424
         Top = 29
         Width = 187
         Height = 22
@@ -416,7 +439,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnSelect = ImageCategoryBackgroundColorSelect
       end
       object ButtonImageCategoryBackgroundColorReset: TBitBtn
-        Left = 510
+        Left = 566
         Top = 7
         Width = 43
         Height = 21
@@ -428,13 +451,14 @@ object FormImageCategorySettings: TFormImageCategorySettings
         OnClick = ButtonImageCategoryBackgroundColorResetClick
       end
       object ButtonDefaultImageCategoryFolder: TBitBtn
-        Left = 310
+        Left = 370
         Top = 7
         Width = 47
         Height = 21
         Hint = 'Use a default folder name assigned by the frontend'
         Caption = 'Default'
         TabOrder = 6
+        OnClick = ButtonDefaultImageCategoryFolderClick
       end
       object ButtonZippedImages: TBitBtn
         Left = 650
@@ -484,6 +508,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSolid

@@ -1,10 +1,10 @@
-object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
+object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
   Left = 579
   Top = 325
   BorderStyle = bsDialog
-  Caption = 'Customize Software List'
+  Caption = 'Customize MAME Machines List'
   ClientHeight = 642
-  ClientWidth = 984
+  ClientWidth = 1061
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -19,8 +19,8 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelTotalSoftwareList: TShadowLabel
-    Left = 815
+  object LabelTotalMachinesList: TShadowLabel
+    Left = 893
     Top = 91
     Width = 157
     Height = 15
@@ -45,7 +45,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object BottomBar: TPanelEx
     Left = 0
     Top = 601
-    Width = 984
+    Width = 1061
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -58,11 +58,11 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtn
-      Left = 783
+      Left = 861
       Top = 8
       Width = 89
       Height = 25
-      Hint = 'Update "\arcade\mame_softlist_exclude.txt" file'
+      Hint = 'Update "\arcade\mame_machines_exclude.txt" file'
       Caption = 'Confirm'
       ModalResult = 6
       ParentShowHint = False
@@ -71,7 +71,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       OnClick = ButtonYesClick
     end
     object ButtonNo: TBitBtn
-      Left = 886
+      Left = 964
       Top = 8
       Width = 89
       Height = 25
@@ -98,12 +98,25 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       Top = 11
       Width = 141
       Height = 20
-      Hint = 'Show only disabled software lists for easier viewing'
+      Hint = 'Show only disabled machines for easier viewing'
       ShowHint = True
       TabOrder = 3
       OnClick = FilterShowUncheckedOnlyClick
       Alignment = taLeftJustify
       Caption = 'Show Unchecked Only'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object FilterShowParentSetsOnly: TAdvOfficeCheckBox
+      Left = 220
+      Top = 11
+      Width = 141
+      Height = 20
+      ShowHint = True
+      TabOrder = 4
+      OnClick = FilterShowParentSetsOnlyClick
+      Alignment = taLeftJustify
+      Caption = 'Show Parent Sets Only'
       ReturnIsTab = False
       Themed = True
     end
@@ -126,7 +139,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 984
+    Width = 1061
     Height = 83
     Align = alTop
     Color1 = 16445669
@@ -149,13 +162,13 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     object LabelSystemTitle: TShadowLabel
       Left = 79
       Top = 4
-      Width = 757
+      Width = 970
       Height = 33
       AutoSize = False
       Caption = 
-        'Uncheck all software lists you want to disable. They will be ign' +
-        'ored when creating a MAME games list. You can also use "Create S' +
-        'oftware List Games" (main menu) to apply changes.'
+        'Uncheck all machines you want to hide. Hiding parent set automat' +
+        'ically hides all its clone sets, no need to uncheck them. '#13'Use p' +
+        'opup menu to check/uncheck multiple selections.'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -13
@@ -184,7 +197,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     object LabelEmulatorVersion: TShadowLabel
       Left = 106
       Top = 47
-      Width = 863
+      Width = 943
       Height = 27
       AutoSize = False
       Caption = 'Emulator version'#13#10'Emulator filename'
@@ -208,7 +221,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object FrameSoftwareList: TPanelEx
     Left = 8
     Top = 112
-    Width = 967
+    Width = 1045
     Height = 473
     Color1 = clWhite
     Color2 = 1
@@ -220,10 +233,10 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object SoftwareLists: TEasyListview
+    object MachinesListEditor: TEasyListview
       Left = 0
       Top = 0
-      Width = 963
+      Width = 1041
       Height = 469
       Align = alClient
       AllowHiddenCheckedItems = True
@@ -235,21 +248,33 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       EditManager.Font.Height = -12
       EditManager.Font.Name = 'Segoe UI'
       EditManager.Font.Style = []
+      ImagesState = FormMain.IL_GroupedMode
       UseDockManager = False
       Groups.Items = {
         060000000100000010000000544561737947726F757053746F726564FFFECE00
         060000008108060000000000000000000000000000000000000000000000}
       HintType = ehtToolTip
       Header.Columns.Items = {
-        0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000010001B4020000FFFFFF1F0001000000
+        0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
+        0006000000800800010100010000000001000190010000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-        000101000000000001A5000000FFFFFF1F0001000000010000000D0000005300
-        6F0066007400770061007200650020004E0061006D0065000000000000000000
-        00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-        00800800010100010200000000000169000000FFFFFF1F000100000001000000
-        050000004D006500640069006100000000000000000000000000}
+        00010100000000000137000000FFFFFF1F000100000001000000040000005900
+        650061007200000000000000000000000000110000005445617379436F6C756D
+        6E53746F726564FFFECE00060000008008000101000102000000000001B40000
+        00FFFFFF1F0001000000010000000C0000004D0061006E007500660061006300
+        7400750072006500720000000000000000000000000011000000544561737943
+        6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
+        0164000000FFFFFF1F000100000001000000040000004E0061006D0065000000
+        00000000000000000000110000005445617379436F6C756D6E53746F726564FF
+        FECE0006000000800800010100010400000000000164000000FFFFFF1F000100
+        0000010000000800000043006C006F006E00650020004F006600000000000000
+        000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+        000000800800010100010500000000000173000000FFFFFF1F00010000000100
+        0000060000004400720069007600650072000000000000000000000000001100
+        00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+        0001060000000000015A000000FFFFFF1F0001000000010000000A0000005300
+        610076006500200053007400610074006500000000000000000000000000}
       Header.Draggable = False
       Header.Height = 23
       Header.Sizeable = False
@@ -257,8 +282,9 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       IncrementalSearch.Enabled = True
       IncrementalSearch.ResetTime = 1000
       IncrementalSearch.StartType = eissFocusedNode
-      ImagesSmall = IL_MediaType
+      ImagesSmall = FormMain.IL_StandardIconsSmall
       PaintInfoColumn.CaptionIndent = 0
+      PaintInfoColumn.HotTrack = False
       PaintInfoGroup.BandBlended = False
       PaintInfoGroup.BandEnabled = False
       PaintInfoGroup.Expandable = False
@@ -270,6 +296,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       PaintInfoItem.CheckType = ectBox
       PaintInfoItem.ShowBorder = False
       ParentShowHint = False
+      PopupMenu = PopupMachines
       ShowThemedBorder = False
       ShowHint = True
       Selection.BlendAlphaImage = 0
@@ -286,19 +313,67 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       Selection.InactiveBorderColor = 10902593
       Selection.InactiveColor = 15582647
       Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.MultiSelect = True
       Selection.RoundRectRadius = 2
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
-      OnColumnClick = SoftwareListsColumnClick
-      OnItemCheckChange = SoftwareListsItemCheckChange
-      OnItemCheckChanging = SoftwareListsItemCheckChanging
-      OnItemPaintText = SoftwareListsItemPaintText
+      OnColumnClick = MachinesListEditorColumnClick
+      OnIncrementalSearch = MachinesListEditorIncrementalSearch
+      OnItemCheckChange = MachinesListEditorItemCheckChange
+      OnItemCheckChanging = MachinesListEditorItemCheckChanging
+      OnItemCompare = MachinesListEditorItemCompare
+      OnItemPaintText = MachinesListEditorItemPaintText
+      OnItemSelectionChanged = MachinesListEditorItemSelectionChanged
+      OnKeyAction = MachinesListEditorKeyAction
     end
   end
   object IL_MediaType: TImageList
     Left = 264
-    Top = 80
+    Top = 120
+  end
+  object PopupMachines: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    OwnerDraw = True
+    TrackButton = tbLeftButton
+    OnPopup = PopupMachinesPopup
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = ANSI_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -16
+    Bar.BarCaption.Font.Name = 'Trebuchet MS'
+    Bar.BarCaption.Font.Style = [fsBold]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Caption = 'Screenshots Layouts'
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = FormMain.BcDrawModule
+    OnMeasureMenuItem = PopupMachinesMeasureMenuItem
+    Left = 304
+    Top = 120
+    object PopupCheckMultipleSelected: TMenuItem
+      Tag = 1
+      Caption = 'Check Multiple Selected'
+      OnClick = PopupCheckMultipleSelectedClick
+    end
+    object PopupUncheckMultipleSelected: TMenuItem
+      Caption = 'Uncheck Multiple Selected'
+      OnClick = PopupCheckMultipleSelectedClick
+    end
   end
 end

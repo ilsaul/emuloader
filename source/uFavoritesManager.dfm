@@ -236,6 +236,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = clMoneyGreen
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelHotkeyKeys: TShadowLabel
@@ -256,6 +259,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = clMoneyGreen
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -271,13 +277,14 @@ object FormFavoritesManager: TFormFavoritesManager
     ColorFrame = 7891291
     ColorInnerFrame = clBlack
     EnableInnerFrame = True
-    Frames = [frLeft, frTop, frRight, frBottom]
+    EnableCustomBorder = ecbDouble
+    Frames = []
     ParentBackground = False
     Style = vgSimple
     Visible = False
     object LabelTaskMessage: TShadowLabel
-      Left = 8
-      Top = 13
+      Left = 6
+      Top = 11
       Width = 333
       Height = 15
       AutoSize = False
@@ -292,6 +299,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = clSilver
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -328,6 +338,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = 16448250
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object Label2: TShadowLabel
@@ -346,6 +359,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = 16448250
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object Label3: TShadowLabel
@@ -364,6 +380,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = 16448250
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelSettings: TShadowLabel
@@ -385,6 +404,9 @@ object FormFavoritesManager: TFormFavoritesManager
       ShadowColor = clMedGray
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end

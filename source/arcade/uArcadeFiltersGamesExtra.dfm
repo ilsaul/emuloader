@@ -132,7 +132,6 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Hint = 'Enable it so you can filter MAME games by main CPU'
     ShowHint = True
     TabOrder = 0
-    OnClick = FilterGamesMainCPUClick
     Alignment = taLeftJustify
     Caption = 'Enable Main CPU Filter'
     ReturnIsTab = False
@@ -524,7 +523,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Left = 122
       Top = 28
       Width = 60
-      Height = 20
+      Height = 21
+      Hint = 'Mature / Adult'
       Checked = True
       ShowHint = True
       TabOrder = 4
@@ -538,7 +538,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryMahjong: TAdvOfficeCheckBox
       Tag = 1
       Left = 122
-      Top = 48
+      Top = 68
       Width = 71
       Height = 20
       Checked = True
@@ -554,7 +554,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryTabletop: TAdvOfficeCheckBox
       Tag = 1
       Left = 122
-      Top = 68
+      Top = 88
       Width = 69
       Height = 20
       Checked = True
@@ -586,7 +586,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryQuiz: TAdvOfficeCheckBox
       Tag = 1
       Left = 122
-      Top = 88
+      Top = 108
       Width = 49
       Height = 20
       Checked = True
@@ -601,8 +601,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryUtilities: TAdvOfficeCheckBox
       Tag = 1
-      Left = 122
-      Top = 128
+      Left = 322
+      Top = 28
       Width = 62
       Height = 20
       Checked = True
@@ -617,8 +617,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     end
     object CategoryCalculator: TAdvOfficeCheckBox
       Tag = 1
-      Left = 122
-      Top = 108
+      Left = 229
+      Top = 28
       Width = 76
       Height = 20
       Checked = True
@@ -634,7 +634,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryEducational: TAdvOfficeCheckBox
       Tag = 1
       Left = 229
-      Top = 28
+      Top = 48
       Width = 84
       Height = 20
       Checked = True
@@ -650,7 +650,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryElectronic: TAdvOfficeCheckBox
       Tag = 1
       Left = 322
-      Top = 28
+      Top = 48
       Width = 73
       Height = 20
       Checked = True
@@ -666,7 +666,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryPrinters: TAdvOfficeCheckBox
       Tag = 1
       Left = 229
-      Top = 48
+      Top = 68
       Width = 63
       Height = 20
       Checked = True
@@ -682,7 +682,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryPhones: TAdvOfficeCheckBox
       Tag = 1
       Left = 322
-      Top = 48
+      Top = 68
       Width = 62
       Height = 20
       Checked = True
@@ -698,7 +698,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryMAMEConsoleMachines: TAdvOfficeCheckBox
       Tag = 1
       Left = 229
-      Top = 68
+      Top = 88
       Width = 157
       Height = 20
       Checked = True
@@ -714,7 +714,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryMAMEComputerMachines: TAdvOfficeCheckBox
       Tag = 1
       Left = 229
-      Top = 88
+      Top = 108
       Width = 168
       Height = 20
       Checked = True
@@ -730,7 +730,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object CategoryMAMEHandheldMachines: TAdvOfficeCheckBox
       Tag = 1
       Left = 229
-      Top = 108
+      Top = 128
       Width = 166
       Height = 20
       Checked = True
@@ -770,6 +770,23 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       TabOrder = 19
       Alignment = taLeftJustify
       Caption = 'Board Game'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object CategorySlotMachines: TAdvOfficeCheckBox
+      Tag = 1
+      Left = 122
+      Top = 48
+      Width = 96
+      Height = 20
+      Hint = 'Slot Machines / Video Slot'
+      Checked = True
+      ShowHint = True
+      TabOrder = 20
+      Alignment = taLeftJustify
+      Caption = 'Slot Machines'
       ReturnIsTab = False
       ShadowColor = clSilver
       State = cbChecked
