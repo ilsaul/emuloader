@@ -865,7 +865,6 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.FormShow(Sender: TObject);
 begin
-  
   ResizeForm;
 
   FormMain.ELV_ResetNormalColors(Systems);
@@ -1289,6 +1288,8 @@ begin
   else
      begin
        Systems.View:= elsTile;
+       Systems.CellSizes.Tile.Height:= 78;
+       Systems.CellSizes.Tile.Width:= 180;
        Systems.Font.Name:= 'Trebuchet MS';
        Systems.PaintInfoItem.TileDetailCount:= 2;
        Systems.Font.Size:= 9;

@@ -1999,7 +1999,7 @@ begin
                begin
                  Value:= GetStringValue;
                  FolderControllerDefinitions.Text:= Value;
-                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, emuFileExec); // add to HashedStringList in RAM with FULL path...
+                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, True, emuFileExec); // add to HashedStringList in RAM with FULL path...
                  if FoldersList.Count > 0 then
                     begin
                       for Loop2:= 0 to FoldersList.Count-1 do

@@ -1,12 +1,12 @@
 object FormImageCategorySettings: TFormImageCategorySettings
-  Left = 503
-  Top = 294
+  Left = 892
+  Top = 468
   ActiveControl = Systems
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Image Category Settings (Folders, Visibility, Background Color)'
-  ClientHeight = 664
-  ClientWidth = 930
+  ClientHeight = 632
+  ClientWidth = 1000
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,90 +24,12 @@ object FormImageCategorySettings: TFormImageCategorySettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelEmuTitle: TShadowLabel
-    Left = 0
-    Top = 410
-    Width = 930
-    Height = 16
-    Align = alBottom
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'SYSTEM TYPE    SYSTEM TITLE'
-    Color = 16448250
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    ColorFrame = clBlack
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = False
-    Layout = tlCenter
-  end
-  object LabelSystemType: TShadowLabel
-    Left = 32
-    Top = 410
-    Width = 51
-    Height = 16
-    Caption = 'ARCADE'
-    Color = 16448250
-    Constraints.MaxHeight = 16
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    ColorFrame = clBlack
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = False
-    Layout = tlCenter
-  end
-  object LabelSystemNotAvailable: TShadowLabel
-    Left = 697
-    Top = 410
-    Width = 203
-    Height = 16
-    Caption = 'THIS SYSTEM IS NOT AVAILABLE'
-    Color = 16448250
-    Constraints.MaxHeight = 16
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    ColorFrame = clBlack
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = False
-    Layout = tlCenter
-    Visible = False
-  end
   object Systems: TEasyListview
     Tag = -1
     Left = 0
     Top = 0
-    Width = 955
-    Height = 410
+    Width = 712
+    Height = 574
     BorderStyle = bsNone
     CellSizes.Icon.Height = 82
     CellSizes.Icon.Width = 62
@@ -161,53 +83,23 @@ object FormImageCategorySettings: TFormImageCategorySettings
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
   object PanelImageCategories: TPanelEx
-    Left = 0
-    Top = 426
-    Width = 930
-    Height = 238
-    Align = alBottom
+    Left = 682
+    Top = 0
+    Width = 318
+    Height = 481
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = [frTop]
+    Frames = [frLeft]
     ParentBackground = False
     Style = vgSolid
-    object LabelShowHideCategories: TShadowLabel
-      Left = 0
-      Top = 165
-      Width = 314
-      Height = 16
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'CLICK HERE TO HIDE ALL CATEGORIES'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = False
-      Layout = tlCenter
-      OnClick = LabelShowHideCategoriesClick
-      OnMouseEnter = LabelShowHideCategoriesMouseEnter
-      OnMouseLeave = LabelShowHideCategoriesMouseLeave
-    end
     object LabelCategoryTitle: TShadowLabel
-      Left = 416
-      Top = 164
-      Width = 361
+      Left = 1
+      Top = 465
+      Width = 317
       Height = 16
       Alignment = taCenter
       AutoSize = False
@@ -233,9 +125,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
     object ImageCategory_Selector: TEasyListview
       Tag = 1
       Left = 6
-      Top = 7
-      Width = 945
-      Height = 152
+      Top = 5
+      Width = 340
+      Height = 460
       AllowHiddenCheckedItems = True
       BorderStyle = bsNone
       CellSizes.Icon.Height = 78
@@ -315,204 +207,344 @@ object FormImageCategorySettings: TFormImageCategorySettings
       OnItemCheckChange = ImageCategory_SelectorItemCheckChange
       OnItemSelectionChanged = ImageCategory_SelectorItemSelectionChanged
     end
-    object PanelImageCategorySelector: TPanelEx
-      Left = 0
-      Top = 180
-      Width = 930
-      Height = 58
-      Align = alBottom
-      Color1 = 15856113
+    object PanelEx1: TPanelEx
+      Left = 212
+      Top = 392
+      Width = 98
+      Height = 62
+      Color1 = 16448250
       Color2 = clSilver
       Color3 = clYellow
       Color4 = clTeal
-      ColorFrame = 7891291
+      ColorFrame = clGreen
       ColorInnerFrame = clGreen
-      Frames = [frLeft, frTop]
+      Frames = []
       ParentBackground = False
       Style = vgSolid
-      object LabelImageCategoryFolder: TShadowLabel
-        Left = 8
-        Top = 12
-        Width = 142
-        Height = 16
-        Hint = 'Images Folder [%s]'
-        Caption = 'Images Folder [.png; .jpg]'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clSilver
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object LabelImageBackgroundColor: TShadowLabel
-        Left = 424
-        Top = 12
-        Width = 102
-        Height = 16
-        Hint = 'Folder [%s]'
-        Caption = 'Background Color'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clSilver
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object ButtonResetImageCategoryFolder: TBitBtn
-        Left = 326
-        Top = 7
-        Width = 43
-        Height = 21
-        Hint = 'Reset folder to current'
-        Caption = 'Reset'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 0
-        OnClick = ButtonResetImageCategoryFolderClick
-      end
-      object ButtonClearImageCategoryFolder: TBitBtn
-        Left = 282
-        Top = 7
-        Width = 43
-        Height = 21
-        Caption = 'Clear'
-        TabOrder = 1
-        OnClick = ButtonClearImageCategoryFolderClick
-      end
-      object ButtonImageCategoryFolder: TBitBtn
-        Left = 370
-        Top = 29
-        Width = 47
-        Height = 21
-        Hint = 'Click here to select a folder'
-        Caption = 'Select'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 2
-        OnClick = ButtonImageCategoryFolderClick
-      end
-      object ImageCategoryFolder: TEdit
-        Tag = 1
-        Left = 8
-        Top = 29
-        Width = 361
-        Height = 21
-        Hint = 'Select a Folder for Game Snapshots'
-        AutoSize = False
-        Color = clWhite
-        Ctl3D = True
-        ParentCtl3D = False
-        TabOrder = 3
-        OnChange = ImageCategoryFolderChange
-      end
-      object ImageCategoryBackgroundColor: TColorBox
-        Left = 424
-        Top = 29
-        Width = 187
-        Height = 22
-        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ItemHeight = 16
-        ParentFont = False
-        TabOrder = 4
-        OnSelect = ImageCategoryBackgroundColorSelect
-      end
-      object ButtonImageCategoryBackgroundColorReset: TBitBtn
-        Left = 566
-        Top = 7
-        Width = 43
-        Height = 21
-        Hint = 'Reset background color to current'
-        Caption = 'Reset'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 5
-        OnClick = ButtonImageCategoryBackgroundColorResetClick
-      end
-      object ButtonDefaultImageCategoryFolder: TBitBtn
-        Left = 370
-        Top = 7
-        Width = 47
-        Height = 21
-        Hint = 'Use a default folder name assigned by the frontend'
-        Caption = 'Default'
-        TabOrder = 6
-        OnClick = ButtonDefaultImageCategoryFolderClick
-      end
-      object ButtonZippedImages: TBitBtn
-        Left = 650
-        Top = 17
-        Width = 43
-        Height = 25
-        Hint = 'How to use zipped images'
-        Caption = 'Help'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 7
-        OnClick = ButtonZippedImagesClick
-      end
-      object ButtonOk: TBitBtn
-        Left = 729
-        Top = 17
-        Width = 89
-        Height = 25
-        Hint = 'Close and update settings'
-        Caption = 'Apply'
-        ModalResult = 1
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 8
-      end
-      object ButtonCancel: TBitBtn
-        Left = 825
-        Top = 17
-        Width = 89
-        Height = 25
-        Hint = 'Close without updating'
-        Caption = 'Abort'
-        ModalResult = 2
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 9
-      end
+      Visible = False
     end
   end
-  object SystemTitlePanel: TPanelEx
-    Left = 680
-    Top = 344
-    Width = 100
-    Height = 41
-    Color1 = clBlue
+  object PanelImageCategorySelector: TPanelEx
+    Left = 0
+    Top = 574
+    Width = 1000
+    Height = 58
+    Align = alBottom
+    Color1 = 15856113
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = clGreen
+    ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = []
+    Frames = [frTop]
     ParentBackground = False
     Style = vgSolid
-    Visible = False
+    object LabelImageCategoryFolder: TShadowLabel
+      Left = 8
+      Top = 12
+      Width = 142
+      Height = 16
+      Hint = 'Images Folder [%s]'
+      Caption = 'Images Folder [.png; .jpg]'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelImageBackgroundColor: TShadowLabel
+      Left = 496
+      Top = 12
+      Width = 102
+      Height = 16
+      Hint = 'Folder [%s]'
+      Caption = 'Background Color'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object ButtonResetImageCategoryFolder: TBitBtn
+      Left = 382
+      Top = 7
+      Width = 43
+      Height = 21
+      Hint = 'Reset folder to current'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = ButtonResetImageCategoryFolderClick
+    end
+    object ButtonClearImageCategoryFolder: TBitBtn
+      Left = 338
+      Top = 7
+      Width = 43
+      Height = 21
+      Caption = 'Clear'
+      TabOrder = 1
+      OnClick = ButtonClearImageCategoryFolderClick
+    end
+    object ButtonImageCategoryFolder: TBitBtn
+      Left = 426
+      Top = 29
+      Width = 47
+      Height = 21
+      Hint = 'Click here to select a folder'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ButtonImageCategoryFolderClick
+    end
+    object ImageCategoryFolder: TEdit
+      Tag = 1
+      Left = 8
+      Top = 29
+      Width = 416
+      Height = 21
+      Hint = 'Select a Folder for Game Snapshots'
+      AutoSize = False
+      Color = clWhite
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 3
+      OnChange = ImageCategoryFolderChange
+    end
+    object ImageCategoryBackgroundColor: TColorBox
+      Left = 496
+      Top = 29
+      Width = 187
+      Height = 22
+      Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 16
+      ParentFont = False
+      TabOrder = 4
+      OnSelect = ImageCategoryBackgroundColorSelect
+    end
+    object ButtonImageCategoryBackgroundColorReset: TBitBtn
+      Left = 638
+      Top = 7
+      Width = 43
+      Height = 21
+      Hint = 'Reset background color to current'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = ButtonImageCategoryBackgroundColorResetClick
+    end
+    object ButtonDefaultImageCategoryFolder: TBitBtn
+      Left = 426
+      Top = 7
+      Width = 47
+      Height = 21
+      Hint = 'Use a default folder name assigned by the frontend'
+      Caption = 'Default'
+      TabOrder = 6
+      OnClick = ButtonDefaultImageCategoryFolderClick
+    end
+    object ButtonZippedImages: TBitBtn
+      Left = 754
+      Top = 17
+      Width = 43
+      Height = 25
+      Hint = 'How to use zipped images'
+      Caption = 'Help'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+      OnClick = ButtonZippedImagesClick
+    end
+    object ButtonOk: TBitBtn
+      Left = 809
+      Top = 17
+      Width = 89
+      Height = 25
+      Hint = 'Close and update settings'
+      Caption = 'Apply'
+      ModalResult = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+    end
+    object ButtonCancel: TBitBtn
+      Left = 905
+      Top = 17
+      Width = 89
+      Height = 25
+      Hint = 'Close without updating'
+      Caption = 'Abort'
+      ModalResult = 2
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+    end
+  end
+  object PanelEx2: TPanelEx
+    Left = 682
+    Top = 481
+    Width = 318
+    Height = 93
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = [frLeft, frTop]
+    ParentBackground = False
+    Style = vgSolid
+    object LabelShowHideCategories: TShadowLabel
+      Left = 113
+      Top = 19
+      Width = 92
+      Height = 56
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'CLICK HERE TO SHOW ALL CATEGORIES'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 10900224
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clSilver
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
+      Transparent = False
+      Layout = tlCenter
+      WordWrap = True
+      OnClick = LabelShowHideCategoriesClick
+      OnMouseEnter = LabelShowHideCategoriesMouseEnter
+      OnMouseLeave = LabelShowHideCategoriesMouseLeave
+    end
+  end
+  object SystemTitlePanel: TPanelEx
+    Left = 436
+    Top = 494
+    Width = 246
+    Height = 80
+    Color1 = 16448250
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = [frLeft, frTop]
+    ParentBackground = False
+    Style = vgSolid
+    object LabelSystemType: TShadowLabel
+      Left = 70
+      Top = 8
+      Width = 105
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'ARCADE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelEmuTitle: TShadowLabel
+      Left = 13
+      Top = 24
+      Width = 220
+      Height = 37
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'SUPERMODEL: A SEGA MODEL 3 ARCADE EMULATOR'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+      WordWrap = True
+    end
+    object LabelSystemNotAvailable: TShadowLabel
+      Left = 46
+      Top = 61
+      Width = 155
+      Height = 16
+      Caption = 'SYSTEM NOT AVAILABLE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+      Visible = False
+    end
   end
   object IL_Systems: TImageList
     Height = 48

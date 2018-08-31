@@ -107,7 +107,6 @@ object FormPreferences: TFormPreferences
     Width = 951
     Height = 618
     Color = 15856113
-    PageIndex = 1
     ParentColor = False
     TabOrder = 0
     object TPage
@@ -117,9 +116,9 @@ object FormPreferences: TFormPreferences
       object Label1: TLabel
         Left = 32
         Top = 188
-        Width = 264
+        Width = 284
         Height = 18
-        Caption = 'Do not display errors after exiting the emulator'
+        Caption = 'Do not display this error after exiting the emulator'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
         Font.Height = -12
@@ -215,12 +214,12 @@ object FormPreferences: TFormPreferences
       object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox
         Left = 16
         Top = 171
-        Width = 294
+        Width = 329
         Height = 20
         Checked = True
         TabOrder = 3
         Alignment = taLeftJustify
-        Caption = 'Ignore "Exit Code 1: Invalid Function" (KEGA Fusion)'
+        Caption = 'Ignore "Exit Code 1: Invalid Function" (Console/Computer)'
         ReturnIsTab = False
         State = cbChecked
         Themed = True
@@ -371,7 +370,7 @@ object FormPreferences: TFormPreferences
       end
       object LabelDisableDeleteSelectedGames: TLabel
         Left = 658
-        Top = 398
+        Top = 438
         Width = 209
         Height = 18
         Caption = 'Safeguard ROMs from naughty kiddies'
@@ -420,9 +419,24 @@ object FormPreferences: TFormPreferences
         ColorInnerFrame = clBlack
         Frames = []
       end
+      object LabelAddLeadingZeroVersionInfoMAME: TLabel
+        Left = 658
+        Top = 357
+        Width = 254
+        Height = 18
+        Caption = 'Show a zero in front of the text instead of .???'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
       object ButtonCustomizeGameFonts: TBitBtn
         Left = 642
-        Top = 340
+        Top = 380
         Width = 166
         Height = 23
         Caption = 'Customize Game Fonts'
@@ -852,7 +866,7 @@ object FormPreferences: TFormPreferences
       end
       object DisableDeleteSelectedGames: TAdvOfficeCheckBox
         Left = 642
-        Top = 381
+        Top = 421
         Width = 237
         Height = 20
         Hint = 'Don'#39't want games sorted like Windows Explorer ?'
@@ -1384,6 +1398,17 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 14
         end
+      end
+      object AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBox
+        Left = 642
+        Top = 340
+        Width = 290
+        Height = 18
+        TabOrder = 13
+        Alignment = taLeftJustify
+        Caption = 'Add Leading Zero to Version Info Column (MAME)'
+        ReturnIsTab = False
+        Themed = True
       end
     end
     object TPage

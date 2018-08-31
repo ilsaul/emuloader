@@ -1522,6 +1522,9 @@ type
 
     procedure SelectRandomGame(ELV_Holder: TEasyListview; var CurrentSelection: TEasyItem);
 
+    procedure SetVersionInfoFormat;
+    function  FixVersionInfoColumn(const InfoStr: String; ShowLeadingZero: Boolean): String;
+
     // games filters routines
     procedure ApplyFilters;
     procedure ApplyFilterSearchBar;
@@ -1535,6 +1538,8 @@ type
 
     procedure HideGroupsFilter(ELV_Holder: TEasyListView);
     function  CheckGameControlType(sysID: ShortInt; const ControlsStrHolder, ControlName, SoftwareName: String; ButtonsCount: Byte): Boolean;
+    function  GetAlterMAMEGamesFile: String;
+    procedure CreateGamesListAlterMAME(IsCreatingMAMEGamesList: Boolean);
     function  VerifyArcadeGamesSys(sysID: ShortInt; const SoftwareName: String = ''): Boolean;
     function  VerifyGamesMAMESoftlist(sysID: ShortInt): Boolean;
     function  FixDriverSourceName(const DriverStr: String): String;
@@ -1616,7 +1621,7 @@ type
 
     function  IsGameDocsSinglePanelDisplay: Boolean;
     procedure ClearGameInfoRichEdit;
-    
+
     procedure ToggleFavoriteLastFilter;
     procedure SetSinglePanelLayoutGameDocuments;
 
@@ -1748,6 +1753,8 @@ type
     imgFolder: TImageFoldersArcade; // this type can be passed as a parameter in a procedure and/or function; load/save image folders in main screen / Image Category Settings screen
     //imgFolder: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of String;
     // imgFolderArcade: array[1..MaxArcadeSystems] of array[0..High(ImageCategoryArray)] of TStringList; // to support mulitple paths; basically, for MAME/HMAME (ui.ini) July 29, 2018
+    imgFolderMAME: array[1..2] of array[0..High(ImageCategoryArray)] of TStringList; // to support mulitple paths; for MAME/HMAME (ui.ini) July 29, 2018
+                   // 1 -> MAME; 2 -> HBMAME
 
     imgZipFileList: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of THashedStringList;
 
@@ -2020,7 +2027,7 @@ type
     //procedure WriteArcadeEmulatorExecutable(UpdateEmulatorInfo, UpdateEmulatorExecutable, UpdateFolderInfo: Boolean); // no longer needed; function moved to FormMain.OnShow() event
 
     function  GetFirstPathOnly(const PathString: String): String;
-    function  ReadArcadeImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean; var ArcadeImageFolderVarsArray: TImageFoldersArcade; ParseFirstPathOnly: Boolean): Boolean;
+    function  ReadArcadeImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean; var ArcadeImageFolderVarsArray: TImageFoldersArcade; ExtractMAMEFolderToStringList: Boolean): Boolean;
     procedure WriteArcadeImageCategories(WriteImagesSettings, WriteMAMu_Setting: Boolean; var ArcadeImageFolderVarsArray: TImageFoldersArcade);
 
     function  IsSameFont(SourceFont, DestinationFont: TFont): Boolean;
@@ -2062,7 +2069,7 @@ type
     procedure LoadFolders_ConfigFiles(sysID: Integer; out dirCFG: String; out dirNVRAM: String);
     function  MountFoldersListMAME(ListHolder: TEasyListView): String;
     function  MountFoldersListToString(ListSource: TStringList): String;
-    procedure ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; EmuFileName: String = '');
+    procedure ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
     procedure ExtractMultiFolders(const FoldersStr: String; SystemID: Integer; ELV_ListHolder: TEasyListView);
 
     procedure SetImageScaleMode;
@@ -2204,6 +2211,7 @@ type
     function  IsClrMAMEProBasedSys(sysID: ShortInt): Boolean;
     function  IsMediaTypeCHD(MediaTypeIndex: Integer; IsCustomGame: Boolean): Boolean;
     //function  IsMediaTypeHD(MediaTypeIndex: ShortInt): Boolean;
+    function  GetArcadeSysIDFromName(const NameStr: String): Integer;
     function  GetArcadeSystemIniSection(sysID: Byte; ReturnFolderName: Boolean = False): String;
     function  GetArcadeSystemIconFileName(SystemID: Byte; FileExtension: String = '.ico'): String;
     function  GetELGameIconFileName(Index: ShortInt): String;
@@ -4634,11 +4642,12 @@ begin
 
   // mulitple image paths; basically, for MAME/HMAME (ui.ini)
   // future improvement, multiple images paths (July 29, 2018)
-  //for Loop:=Low(imgFolderArcade) to High(imgFolderArcade) do
-  //begin
-  //  for Loop2:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-  //      FreeAndNil(imgFolderArcade[Loop, Loop2]);
-  //end;
+
+  for Loop:=Low(imgFolderMAME) to High(imgFolderMAME) do
+  begin
+    for Loop2:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
+        FreeAndNil(imgFolderMAME[Loop, Loop2]);
+  end;
 end;
 
 function TFormMain.PopulateGameStatusDataLine: String;
@@ -6368,14 +6377,14 @@ begin
   SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelInnerFrameColor, IniFile.ReadInteger('Panels', 'InnerFrameColor', FormPreferences.NightModeSearchGamesPanelInnerFrameColor.DefaultColorColor));
   SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelOuterFrameColor, IniFile.ReadInteger('Panels', 'OuterFrameColor', FormPreferences.NightModeSearchGamesPanelOuterFrameColor.DefaultColorColor));
 
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterFontColor, IniFile.ReadInteger('Panels', 'TitleFontColor', FormPreferences.NightModePanelColorsTitleFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterShadowColor, IniFile.ReadInteger('Panels', 'TitleShadowColor', FormPreferences.NightModePanelColorsTitleShadowFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitleFontColor, IniFile.ReadInteger('Panels', 'TitleFontColor', FormPreferences.NightModePanelColorsTitleFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitleShadowFontColor, IniFile.ReadInteger('Panels', 'TitleShadowColor', FormPreferences.NightModePanelColorsTitleShadowFontColor.DefaultColorColor));
 
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterFontColor, IniFile.ReadInteger('Panels', 'Title2FontColor', FormPreferences.NightModePanelColorsTitle2FontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterShadowColor, IniFile.ReadInteger('Panels', 'Title2ShadowColor', FormPreferences.NightModePanelColorsTitle2ShadowFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitle2FontColor, IniFile.ReadInteger('Panels', 'Title2FontColor', FormPreferences.NightModePanelColorsTitle2FontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitle2ShadowFontColor, IniFile.ReadInteger('Panels', 'Title2ShadowColor', FormPreferences.NightModePanelColorsTitle2ShadowFontColor.DefaultColorColor));
 
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterFontColor, IniFile.ReadInteger('Panels', 'MessageFontColor', FormPreferences.NightModePanelColorsMessageFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterShadowColor, IniFile.ReadInteger('Panels', 'MessageShadowColor', FormPreferences.NightModePanelColorsMessageShadowFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsMessageFontColor, IniFile.ReadInteger('Panels', 'MessageFontColor', FormPreferences.NightModePanelColorsMessageFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormPreferences.NightModePanelColorsMessageShadowFontColor, IniFile.ReadInteger('Panels', 'MessageShadowColor', FormPreferences.NightModePanelColorsMessageShadowFontColor.DefaultColorColor));
 
   FreeAndNil(IniFile);
 end;
@@ -6869,12 +6878,13 @@ begin
      end;
 end;
 
-function TFormMain.ReadArcadeImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean; var ArcadeImageFolderVarsArray: TImageFoldersArcade; ParseFirstPathOnly: Boolean): Boolean;
+function TFormMain.ReadArcadeImageCategories(LoadImagesSettings, LoadMAMu_Setting: Boolean; var ArcadeImageFolderVarsArray: TImageFoldersArcade; ExtractMAMEFolderToStringList: Boolean): Boolean;
 var
   INIFile: TMemIniFile;
   Loop: ShortInt;
   IsMAME_uiIni, IsHBMAME_uiIni: Boolean;
   ShowErrorMsg, ImageCatIniFound: Boolean;
+  IndexMAME: Integer;
 
   function ReadLineMAME_uiIni(sysID, ImageCategory: Integer; const LineStr: String): Boolean;
   var
@@ -6889,13 +6899,6 @@ var
     if ImageCategory <> 50 then
        begin
          ValueToRead:= ExtractMAMEIniValue(LineStr);
-         //case Assigned(imgFolderArcade[sysID, ImageCategory]) of
-         //  True : imgFolderArcade[sysID, ImageCategory].Clear;
-         //  False: imgFolderArcade[sysID, ImageCategory]:= THashedStringList.Create;
-         //end;
-         //ExtractFolders2MAME(sysID, ValueToRead, imgFolderArcade[sysID, ImageCategory]); // no need to pass emulator filename parameters here (EmulatorFile[sysID])
-
-
          if ValueToRead = '' then
             ValueToRead:= ImageCategoryArray[ImageCategory, 3] // get default folder value if value in mamedir\ui.ini is empty
          else
@@ -6905,12 +6908,21 @@ var
                  ValueToRead:= 'artpreview';
             end;
 
-         if ParseFirstPathOnly then // this cannot be TRUE for "Image Category Settings" screen
-            begin
-              ValueToRead:= GetFirstPathOnly(ValueToRead);
-              ValueToRead:= RemoveQuotes(ValueToRead);
-            end;
+         //if ParseFirstPathOnly then // this cannot be TRUE for "Image Category Settings" screen
+         //   begin
+         //     ValueToRead:= GetFirstPathOnly(ValueToRead);
+         //     ValueToRead:= RemoveQuotes(ValueToRead);
+         //   end;
          ArcadeImageFolderVarsArray[sysID, ImageCategory]:= ValueToRead;
+         if ExtractMAMEFolderToStringList then
+            begin
+              IndexMAME:= Ord(sysID <> idMAME)+1;
+              case Assigned(imgFolderMAME[IndexMAME, ImageCategory]) of
+                True : imgFolderMAME[IndexMAME, ImageCategory].Clear;
+                False: imgFolderMAME[IndexMAME, ImageCategory]:= TStringList.Create;
+              end;
+              ExtractFolders2MAME(sysID, ValueToRead, imgFolderMAME[IndexMAME, ImageCategory], False); // emulator full path already generated in TStringList
+            end;
        end
     else
        begin
@@ -6928,7 +6940,7 @@ var
 
   function ReadMAMESettingUI(sysID: Integer): Boolean;
   var
-    LoopUI, iPos: Integer;
+    LoopUI: Integer;
     TextLineUI, EntryStringUI, tmpEntryStr, ValueUI, FileIniUI: String;
     UpdateSetting: Boolean;
     FileMAME_ui: TStringList;
@@ -7016,19 +7028,6 @@ var
                 begin
                   // default value "artwork preview;artpreview"
                   ReadLineMAME_uiIni(sysID, 8, TextLineUI);
-                  //if SameText('"artwork preview;artpreview"', imgFolder[sysID, 8]) then
-                  //   imgFolder[sysID, 8]:= 'artpreview'
-                  //else
-                  //begin
-                  //  iPos:= PosEx(';', imgFolder[sysID, 8]);
-                  //  if iPos <> 0 then
-                  //     begin
-                  //       ValueUI:= Copy(imgFolder[sysID, 8], iPos+1, Length(imgFolder[sysID, 8]));
-                  //       if ValueUI[Length(ValueUI)] = '"' then
-                  //          Delete(ValueUI, Length(ValueUI), 1);
-                  //       imgFolder[sysID, 8]:= ValueUI;
-                  //     end;
-                  //end;
                 end
              else
              if tmpEntryStr = (ImageCategoryArray[9, 4]+' ') then // ui.ini //if tmpEntryStr = 'ends_directory ' then // ui.ini
@@ -7109,12 +7108,6 @@ var
            if not (IsMAMEBasedSys(SystemID) and (LoopImg = 1)) then
               begin
                 ValueToRead:= INIFile.ReadString(Section, ImageCategoryArray[LoopImg, 4], ImageCategoryArray[LoopImg, 3]);
-                //case Assigned(imgFolderArcade[SystemID, LoopImg]) of
-                //  True : imgFolderArcade[SystemID, LoopImg].Clear;
-                //  False: imgFolderArcade[SystemID, LoopImg]:= THashedStringList.Create;
-                //end;
-                //ExtractFolders2MAME(SystemID, ValueToRead, imgFolderArcade[SystemID, LoopImg]); // no need to pass emulator filename parameters here (EmulatorFile[sysID])
-
                 if ValueToRead = '' then
                    ValueToRead:= ImageCategoryArray[LoopImg, 3] // get default folder value if value in mamedir\ui.ini is empty
                 else
@@ -7124,14 +7117,27 @@ var
                         ValueToRead:= 'artpreview';
                    end;
 
-                if ParseFirstPathOnly then // this cannot be TRUE for "Image Category Settings" screen
-                   begin
-                     ValueToRead:= GetFirstPathOnly(ValueToRead);
-                     ValueToRead:= RemoveQuotes(ValueToRead);
-                   end;
+                //if ParseFirstPathOnly then // this cannot be TRUE for "Image Category Settings" screen
+                //   begin
+                //     ValueToRead:= GetFirstPathOnly(ValueToRead);
+                //     ValueToRead:= RemoveQuotes(ValueToRead);
+                //   end;
 
                 ArcadeImageFolderVarsArray[SystemID, LoopImg]:= ValueToRead;
                 //imgFolder[SystemID, LoopImg]:= ValueToRead; // INIFile.ReadString(Section, ImageCategoryArray[LoopImg, 4], ImageCategoryArray[LoopImg, 3]);
+
+                if IsMAMEBasedsys(SystemID) then
+                begin
+                  if ExtractMAMEFolderToStringList then
+                     begin
+                       IndexMAME:= Ord(SystemID <> idMAME)+1;
+                       case Assigned(imgFolderMAME[IndexMAME, LoopImg]) of
+                         True : imgFolderMAME[IndexMAME, LoopImg].Clear;
+                         False: imgFolderMAME[IndexMAME, LoopImg]:= TStringList.Create;
+                       end;
+                       ExtractFolders2MAME(SystemID, ValueToRead, imgFolderMAME[IndexMAME, LoopImg], False); // emulator full path already generated in TStringList
+                     end;
+                end;
               end;
          end;
        end;
@@ -7942,6 +7948,8 @@ begin
 
     FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision.Tag:= INIFile.ReadInteger('ListFilter', 'ShowOnlySetsCRC32Collision', 0);
 
+    FormArcadeFiltersExtra.HideMAMESoftlist_vgmplay.Tag:= INIFile.ReadInteger('ListFilter', 'HideMAMESoftlist_vgmplay', 0);
+
     FormArcadeFiltersExtra.FilterGamesMainCPU.Tag:= INIFile.ReadInteger('ListFilter', 'FilterMAMEGamesMainCPU', 0);
 
     SetExtraFilter(FormArcadeFiltersExtra.LabelBios, FormArcadeFiltersExtra.Bios);
@@ -7992,6 +8000,8 @@ begin
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.ShowMergedSetsOnly);
 
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision);
+
+    SetMiscFilterCheckBox(FormArcadeFiltersExtra.HideMAMESoftlist_vgmplay);
 
     SetMiscFilterCheckBox(FormArcadeFiltersExtra.FilterGamesMainCPU);
 
@@ -8063,6 +8073,8 @@ begin
     FormPreferences.DisableNaturalSorting.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'DisableNaturalSorting', 0));
 
     FormPreferences.GameMultilineCaptions.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'GameMultilineCaptions', 0));
+
+    FormPreferences.AddLeadingZeroVersionInfoMAME.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'GameAddLeadingZeroVersionInfo', 0));
 
     ButtonViewMode.Tag:= INIFile.ReadInteger('Configuration', 'ViewMode', 0);
 
@@ -8403,6 +8415,7 @@ begin
       INIFile.WriteInteger('Preferences', 'DisableNaturalSorting', Ord(FormPreferences.DisableNaturalSorting.Checked));
 
       INIFile.WriteInteger('Preferences', 'GameMultilineCaptions', Ord(FormPreferences.GameMultilineCaptions.Checked));
+      INIFile.WriteInteger('Preferences', 'GameAddLeadingZeroVersionInfo', Ord(FormPreferences.AddLeadingZeroVersionInfoMAME.Checked));
 
       INIFile.WriteInteger('Thumbnails', 'WidthSize', ThumbnailSettings.Width); // set thumbnails grid size directly in EasListView (April 05, 2017)
       INIFile.WriteInteger('Thumbnails', 'HeightSize', ThumbnailSettings.Height); // set thumbnails grid size directly in EasListView (April 05, 2017)
@@ -8553,6 +8566,8 @@ begin
       INIFile.WriteInteger('ListFilter', 'ShowMergedSetsOnly', Ord(FormArcadeFiltersExtra.ShowMergedSetsOnly.Checked));
 
       INIFile.WriteInteger('ListFilter', 'ShowOnlySetsCRC32Collision', Ord(FormArcadeFiltersExtra.ShowOnlySetsCRC32Collision.Checked));
+
+      INIFile.WriteInteger('ListFilter', 'HideMAMESoftlist_vgmplay', Ord(FormArcadeFiltersExtra.HideMAMESoftlist_vgmplay.Checked));
 
       INIFile.WriteInteger('ListFilter', 'FilterMAMEGamesMainCPU', FormArcadeFiltersExtra.FilterGamesMainCPU.Tag);
 
@@ -11824,10 +11839,10 @@ var
        end;
   end;
 
-  function IsKEGAFusionEmu: Boolean;
-  begin
-    Result:= SameText(ExtractFileName(EmulatorString), 'fusion.exe');
-  end;
+  //function IsKEGAFusionEmu: Boolean;
+  //begin
+  //  Result:= SameText(ExtractFileName(EmulatorString), 'fusion.exe');
+  //end;
 
   function GetGamesListVersion(sysID: Integer): String;
   var
@@ -12353,15 +12368,15 @@ begin
 
   if ExitCode <> 0 then
      begin
-       if IsKEGAFusionEmu then
-          begin
+       //if IsKEGAFusionEmu then
+       //   begin
             if (ExitCode = 1) and FormPreferences.IgnoreExitCode1InvalidFunction.Checked then
                begin
                  // "KEGA Fusion" emulator have a bug that returns error code 1 even when emu and game load without errors
                  ResetToFrontend;
                  Exit;
                end;
-          end;
+       //   end;
 
        CallMessageBox;
        case MemGameInfo.eIsCustomGame of
@@ -13695,6 +13710,35 @@ begin
   else
     Result:= GetArcadeSystemIniSection(sysID);
   end;
+end;
+
+function TFormMain.GetArcadeSysIDFromName(const NameStr: String): Integer;
+begin
+  if SameText(NameStr, 'MAME') then
+     Result:= idMAME
+  else
+  if SameText(NameStr, 'SupermodelSEGAModel3') then
+     Result:= idSupermodel
+  else
+  if SameText(NameStr, 'Daphne') then
+     Result:= idDaphne
+  else
+  if SameText(NameStr, 'Demul') then
+     Result:= idDemul
+  else
+  if SameText(NameStr, 'HBMAME') then
+     Result:= idHBMAME
+  else
+  if SameText(NameStr, 'DICE') then
+     Result:= idDICE
+  else
+  if SameText(NameStr, 'SEGAModel2') then
+     Result:= idSEGAModel2
+  else
+  if SameText(NameStr, 'ZiNc') then
+     Result:= idZiNc
+  else
+     Result:= -1;
 end;
 
 function TFormMain.GetArcadeSystemIniSection(sysID: Byte; ReturnFolderName: Boolean = False): String;
@@ -15137,6 +15181,11 @@ begin
   //Result:= GetGamesFolderEL(Ord(IsSoftwareList))+Result;
 end;
 
+function TFormMain.GetAlterMAMEGamesFile: String;
+begin
+  Result:= GetGamesFolderEL+GetArcadeSystemIniSection(idMAME, True)+'_altermame.txt';
+end;
+
 function TFormMain.GetMAMEMachineSoftListFile(UserCustomMachinesFile: Boolean; sysID: ShortInt): String;
 begin
   case UserCustomMachinesFile of
@@ -15503,8 +15552,8 @@ end;
 procedure TFormMain.LoadFolders_MAME(SystemID: Byte; EmuFileNameStr: String = ''; IsAlterMAME: Boolean = False);
 var
   MAMEIniFile: THashedStringList;
-  iFolder, TextLine, IniFile, EntryString, iniDirString, ExeFileStr, ValueToRead: String;
-  Loop, iPos, iVersion: Integer;
+  iFolder, TextLine, IniFile, EntryString, iniDirString, ExeFileStr: String;
+  Loop, iPos, iVersion, IndexMAME: Integer;
 begin
   if EmuFileNameStr <> '' then
   begin
@@ -15532,6 +15581,7 @@ begin
   if not FileExists(iniFile) then
      Exit;
 
+  IndexMAME:= Ord(SystemID <> idMAME)+1; // 1 -> MAME; 2 -> HBMAME
   MAMEIniFile:= THashedStringList.Create;
   MAMEIniFile.LoadFromFile(iniFile);
   for Loop:=0 to MAMEIniFile.Count -1 do
@@ -15557,23 +15607,16 @@ begin
            else
            if EntryString = 'snapshot_directory ' then
               begin
-                ValueToRead:= ExtractMAMEIniValue(TextLine);
-                if ValueToRead = '' then
-                   ValueToRead:= ImageCategoryArray[1, 3] // set to default folder "snap"
-                else
-                   ValueToRead:= GetFirstPathOnly(ValueToRead);
-
-                ValueToRead:= RemoveQuotes(ValueToRead);
-
-                //case Assigned(imgFolderArcade[SystemID, 1]) of
-                //  True : imgFolderArcade[SystemID, 1].Clear;
-                //  False: imgFolderArcade[SystemID, 1]:= THashedStringList.Create;
-                //end;
-                //if not IsAlterMAME then
-                //   ExtractFolders2MAME(SystemID, ValueToRead, imgFolderArcade[SystemID, 1], ExeFileStr);
-
+                imgFolder[SystemID, 1]:= ExtractMAMEIniValue(TextLine);
                 if imgFolder[SystemID, 1] = '' then
-                   imgFolder[SystemID, 1]:= ValueToRead;
+                   imgFolder[SystemID, 1]:= ImageCategoryArray[1, 3]; // set to default folder "snap"
+
+                case Assigned(imgFolderMAME[IndexMAME, 1]) of
+                  True : imgFolderMAME[IndexMAME, 1].Clear;
+                  False: imgFolderMAME[IndexMAME, 1]:= TStringList.Create;
+                end;
+                if not IsAlterMAME then
+                   ExtractFolders2MAME(SystemID, imgFolder[SystemID, 1], imgFolderMAME[IndexMAME, 1], False, ExeFileStr); // emulator full path already generated in TStringList
               end;
          end;
 
@@ -15996,17 +16039,25 @@ begin
   end;
 end;
 
-procedure TFormMain.ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; EmuFileName: String = '');
+procedure TFormMain.ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
 var
   PathName, EmuFileStr: String;
   Loop: Integer;
 
   procedure AddFolder;
   begin
-    if PathName = '.' then
-       PathName:= ExtractFilePath(EmuFileStr);
-    PathName:= FullFolderFix(PathName, EmuFilestr);
-    ListHolder.Add(PathName);
+    if IncludeEmuFullPath then
+       begin
+          if PathName = '.' then
+             PathName:= ExtractFilePath(EmuFileStr);
+          PathName:= FullFolderFix(PathName, EmuFilestr);
+          ListHolder.Add(PathName);
+       end
+    else
+       begin
+         if PathName <> '.' then
+            ListHolder.Add(PathName);
+       end;
   end;
 
 begin
@@ -16221,6 +16272,121 @@ begin
            Result:= GameFilePath+GameName+'\'+CHDFileName;
       end;
   end;
+end;
+
+procedure TFormMain.CreateGamesListAlterMAME(IsCreatingMAMEGamesList: Boolean);
+var
+  EmuTitle, TitleErrorMsg, FileLine, tempFile, iVersion: String;
+  Loop, iMAME, iPos: Integer;
+  GameNameList: TStringList;
+begin
+  EmuTitle:= 'AlterMAME';
+  TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
+  if not FileExists(AlterMAMEFile) then
+     Exit;
+
+  FormStatus.SetProgressPos(0);
+  CheckAndCreateFolder(GetGamesFolderEL);
+
+  FormStatus.TitleStr('Create Games List: '+EmuTitle);
+
+  if not FormStatus.Visible then
+     FormStatus.Show;
+  FormStatus.StartThreadClock;
+
+  iMAME:= -1;
+
+  FormStatus.MessageStr('Extracting AlterMAME emulator version.');
+  AlterMAMEDateTime:= FileAge(AlterMAMEFile); // get emulator date/time stamp
+  GetArcadeEmulatorVersion(idMAME, AlterMAMEFile, AlterMAMEVersion, iVersion);
+
+  if iVersion = '' then
+     iVersion:= GetMAMEBinaryVersion(AlterMAMEFile);
+  if buildAlterMAME <> iVersion then
+     buildAlterMAME:= iVersion;
+
+  iMAME:= GetMAMEBuild(idMAME, True);
+
+  tempFile:= 'altermame_listfull.txt';
+  FormStatus.MessageStr('Creating "'+tempFile+'" file.');
+
+  FileLine:= SystemStr+AlterMAMEFile+SystemStr+' -listfull > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
+  SetCurrentDir(ExtractFilePath(AlterMAMEFile));
+  RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+
+  SetCurrentDir(FrontendPath);
+  FileLine:= '';
+
+  Sleep(50); // small pause
+  if not ValidateFile(GetGamesFolderEL+tempFile) then
+     Exit;
+
+  {
+  tempFile:= 'altermame_listclones.txt';
+  FormStatus.MessageStr('Creating "'+tempFile+'" file.');
+
+  FileLine:= SystemStr+AlterMAMEFile+SystemStr+' -listclones > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
+  SetCurrentDir(ExtractFilePath(AlterMAMEFile));
+  RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+
+  SetCurrentDir(FrontendPath);
+  FileLine:= '';
+
+  Sleep(50); // small pause
+
+  tempFile:= 'altermame_listsource.txt';
+  FormStatus.MessageStr('Creating "'+tempFile+'" file.');
+
+  FileLine:= SystemStr+AlterMAMEFile+SystemStr+' -listsource > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
+  SetCurrentDir(ExtractFilePath(AlterMAMEFile));
+  RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+
+  SetCurrentDir(FrontendPath);
+  FileLine:= '';
+
+  Sleep(50); // small pause
+  }
+
+  FormStatus.MessageStr('Generating list of game names.');
+  CompleteGamesList:= THashedStringList.Create;
+  CompleteGamesList.BeginUpdate;
+  GameNameList:= TStringList.Create;
+  GameNameList.LoadFromFile(GetGamesFolderEL+'altermame_listfull.txt');
+
+  for Loop:= 1 to GameNameList.Count-1 do
+  begin
+    FileLine:= GameNameList[Loop];
+    if FileLine <> '' then
+       begin
+         iPos:= PosEx(' ', FileLine);
+         if iPos <> -1 then
+            Delete(FileLine, iPos, Length(FileLine));
+
+         CompleteGamesList.Add(FileLine);
+       end;
+  end;
+  CompleteGamesList.EndUpdate;
+  FreeAndNil(GameNameList);
+  if CompleteGamesList.Count > 0 then
+     CompleteGamesList.SaveToFile(GetAlterMAMEGamesFile);
+
+  FreeAndNil(CompleteGamesList);
+
+  DeleteFile(GetGamesFolderEL+tempFile);
+  if not IsCreatingMAMEGamesList then
+     FormStatus.Close;
+  {GameNameList.Clear;
+  if ValidateFile(GetGamesFolderEL+'altermame_listclones.txt') then
+     begin
+       GameNameList.LoadFromFile(GetGamesFolderEL+'altermame_listclones.txt');
+       GameNameList.BeginUpdate;
+       for Loop:= 1 to GameNameList.Count-1 do
+       begin
+
+       end;
+
+     end;
+  }
 end;
 
 function TFormMain.VerifyArcadeGamesSys(sysID: ShortInt; const SoftwareName: String = ''): Boolean;
@@ -16603,6 +16769,9 @@ begin
      Result:= CreateGamesListXML(sysID, iMAME, SoftwareListsToProcess) // (MAME and HBMAME v0.70 and up)
   else
      Result:= CreateGamesList_ListInfo(sysID); // for old MAME builds ("-listinfo" parameter)
+
+  if sysID = idMAME then
+     CreateGamesListAlterMAME(True);
 end;
 
 function TFormMain.IsMultiSlotSoftwareList(const SoftListName: String): Boolean;
@@ -20693,7 +20862,10 @@ begin
                         PartName:= XML_GetEntryValue(FileLine, 'name');
                         if not MediaTypeAdded then
                            begin
-                             TempGameVars.eSoftwareExecParameter:= FixMediaParameterStr(PartName);
+                             if SoftwareListName <> 'vgmplay' then
+                                TempGameVars.eSoftwareExecParameter:= FixMediaParameterStr(PartName)
+                             else
+                                TempGameVars.eSoftwareExecParameter:= 'quik';
                              MediaTypeAdded:= True;
                            end;
                       end
@@ -21454,6 +21626,91 @@ begin
      Result:= iAnsiStr;
 end;
 
+procedure TFormMain.SetVersionInfoFormat;
+var
+  InfoStr: String;
+  sbPos: Integer;
+  Item: TEasyItem;
+  Group: TEasyGroup;
+  UpdateGamesList: Boolean;
+begin
+  if IsStartup then
+     Exit;
+  if not CheckTotal(GamesListView) then
+     Exit;
+  Screen.Cursor:= crHourGlass;
+  sbPos:= GetHorizontalBarPos;
+  UpdateGamesList:= False;
+  GamesListView.BeginUpdate;
+  GamesListView.Items.ReIndexDisable:= True;
+  if IsGroupedView then
+  begin
+    if FormPreferences.AddLeadingZeroVersionInfoMAME.Checked then
+       ShowFilterMsgBox('Add Leading Zero to Version Info Column', 'Updating MAME version info texts, please wait...', True)
+    else
+       ShowFilterMsgBox('Remove Leading Zero From Version Info Column', 'Updating MAME version info texts, please wait...', True);
+    Group:= GamesListView.Groups.FirstGroup;
+    repeat
+      Item:= GamesListView.Groups.FirstInGroup(Group);
+      repeat
+        InfoStr:= FixVersionInfoColumn(TEasyGameInfo(Item).eVersionAdded, FormPreferences.AddLeadingZeroVersionInfoMAME.Checked);
+        if not SameText(InfoStr, TEasyGameInfo(Item).eVersionAdded) then
+           begin
+             TEasyGameInfo(Item).eVersionAdded:= InfoStr;
+             UpdateGamesList:= True;
+           end;
+        Item:= GamesListView.Groups.NextInGroup(Group, Item);
+      until Item = nil;
+      Group:= GamesListView.Groups.NextGroup(Group);
+    until Group = nil;
+  end
+  else
+  begin
+    Item:= GamesListView.Groups.FirstItem;
+    repeat
+      InfoStr:= FixVersionInfoColumn(TEasyGameInfo(Item).eVersionAdded, FormPreferences.AddLeadingZeroVersionInfoMAME.Checked);
+      if not SameText(InfoStr, TEasyGameInfo(Item).eVersionAdded) then
+         begin
+           TEasyGameInfo(Item).eVersionAdded:= InfoStr;
+           UpdateGamesList:= True;
+         end;
+      Item:= GamesListView.Groups.NextItem(Item);
+    until Item = nil;
+  end;
+  if UpdateGamesList then
+     GamesListView.Sort.SortAll;
+  GamesListView.Items.ReIndexDisable:= False;
+  GamesListView.EndUpdate;
+  HideFilterMsgBox;
+  RestoreHorizontalBarPos(sbPos);
+  Screen.Cursor:= crDefault;
+  //if UpdateGamesList then
+  //   if CheckSelected(GamesListView) then
+  //   SelectedEasyItem.MakeVisible(emvMiddle);
+
+end;
+
+function TFormMain.FixVersionInfoColumn(const InfoStr: String; ShowLeadingZero: Boolean): String;
+begin
+  Result:= InfoStr;
+  if InfoStr = '' then
+     Exit;
+
+  if ShowLeadingZero then
+     begin
+       if InfoStr[1] = '.' then
+          Result:= '0'+InfoStr;
+     end
+  else
+     begin
+       if InfoStr[1] <> '.' then
+          begin
+            if InfoStr[1] = '0' then
+               Delete(Result, 1, 1);
+          end;
+     end;
+end;
+ 
 procedure TFormMain.AddGames;
 var
   Loop, iPos: Integer;
@@ -21907,6 +22164,13 @@ begin
                 if TempGameVars.eLanguage <> '' then
                    TempGameVars.eLanguage:= DecodeUnicodeStr(TempGameVars.eLanguage);
               end;
+
+              if TempGameVars.eVersionAdded <> '' then
+                 TempGameVars.eVersionAdded:= FixVersionInfoColumn(TempGameVars.eVersionAdded, FormPreferences.AddLeadingZeroVersionInfoMAME.Checked);
+                 //begin
+                 //  if TempGameVars.eVersionAdded[1] = '.' then
+                 //     TempGameVars.eVersionAdded:= '0'+TempGameVars.eVersionAdded;
+                 //end;
 
               case TempGameVars.eSystemID of
                 idMAME:
@@ -22940,7 +23204,9 @@ end;
 
 procedure TFormMain.LoadScreenshot(ScreenIndex: ShortInt);
 var
-  Folder, FolderSnap, ImageExt, ExtraFolderStrMAME,
+  ImageToSearch: packed array[1..MaxImagePanels] of WideString;
+
+  Folder, FolderSnapEmuCon, ImageExt, ExtraFolderStrMAME,
   CurrentImageZip, NoImageFile, SoftwareNameString: packed array[1..MaxImagePanels] of String;
   ImageName, ImageParentName: packed array[1..MaxImagePanels] of WideString;
   FoundImage, FoundInSoftListZipFile, FoundInSoftListZipFile_SL, FoundZipCustomGameInSnapDir, ContinueImg: packed array[1..MaxImagePanels] of Boolean;
@@ -22948,6 +23214,8 @@ var
   CurrentSystemID, CurrentImageCategoryID, CurrentCustomSystemID: packed array[1..MaxImagePanels] of Integer;
   iImageTag: packed array[1..MaxImagePanels] of Integer;
   NewMAMESnapName, NewMAMESnapCloneName: array[1..MaxImagePanels] of String; // for "gamename\0000.png"
+  //iDirectoryLoop: array[1..MaxImagePanels] of Integer;
+  //iLoopMAME1, iLoopMAME2, iLoopMAME3, iLoopMAME4: Integer;
 
   function FixBlendMode: Boolean;
   begin
@@ -23023,18 +23291,83 @@ var
   function LoadZippedImage(var ZipForgeHolder: TZipForge): Boolean;
   var
     zFile: array[1..MaxImagePanels] of String;
+
+    function FindZipFile: Boolean;
+    var
+      iLoopScr1, iLoopScr2, iLoopScr3, iLoopScr4: Integer;
+    begin
+      if (not MemGameInfo.eIsCustomGame) and IsMAMEBasedSys(MemGameInfo.eSystemID) then
+      begin
+        Result:= True;
+        case ScreenIndex of
+         1:
+           begin
+             for iLoopScr1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr1];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         2:
+           begin
+             for iLoopScr2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr2];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         3:
+           begin
+             for iLoopScr3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr3];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         4:
+           begin
+             for iLoopScr4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr4];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+       end;
+
+      end
+      else
+      begin
+        ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+      end;
+    end;
+
   begin
     FixBlendMode;
+    //must create a loop to go thru all image folders, for MAME/HBMAME. All other systems will use a single folder
     case FoundInSoftListZipFile[ScreenIndex] of
       True:
         begin
           zFile[ScreenIndex]:= ImageDetails[ScreenIndex].SoftwareName+'.zip'; // search "snap\softlist.zip"
-          ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+          FindZipFile;
+          //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
           if not ContinueImg[ScreenIndex] then
              begin
                // search "snap\softwarename\softlist.zip"
                zFile[ScreenIndex]:= ImageDetails[ScreenIndex].SoftwareName+'\'+ImageDetails[ScreenIndex].SoftwareName+'.zip';
-               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+               FindZipFile;
+               //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
              end;
         end;
       False:
@@ -23043,7 +23376,8 @@ var
             True:
               begin
                 zFile[ScreenIndex]:= GetImgZipFileName_SL(ImageDetails[ScreenIndex].ImageCategoryIndex); // search "snap\snap_sl.zip"
-                ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
+                FindZipFile;
+                //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
               end;
             False:
               begin
@@ -23051,10 +23385,10 @@ var
                 zFile[ScreenIndex]:= GetImgZipFileName(ImageDetails[ScreenIndex].ImageCategoryIndex);
                 if MemGameInfo.eIsCustomGame then
                    begin
-                     if (ImageDetails[ScreenIndex].ImageCategoryIndex <> 1) and (FolderSnap[ScreenIndex] <> '') then
+                     if (ImageDetails[ScreenIndex].ImageCategoryIndex <> 1) and (FolderSnapEmuCon[ScreenIndex] <> '') then
                         begin
                           // search titles.zip; covers.zip; flyers.zip... any other .zip file in "in-game snap dir"
-                          ContinueImg[ScreenIndex]:= FileExists(FolderSnap[ScreenIndex]+zFile[ScreenIndex]);
+                          ContinueImg[ScreenIndex]:= FileExists(FolderSnapEmuCon[ScreenIndex]+zFile[ScreenIndex]);
                           if ContinueImg[ScreenIndex] then
                              FoundZipCustomGameInSnapDir[ScreenIndex]:= True;
                         end
@@ -23082,7 +23416,7 @@ var
     with ZipForgeHolder do
     begin
       case FoundZipCustomGameInSnapDir[ScreenIndex] of
-        True : FileName:= FolderSnap[ScreenIndex]+zFile[ScreenIndex]; // use "snapdir\titles.zip"; "snapdir\covers.zip" (for EmuCon games only)
+        True : FileName:= FolderSnapEmuCon[ScreenIndex]+zFile[ScreenIndex]; // use "snapdir\titles.zip"; "snapdir\covers.zip" (for EmuCon games only)
         False: FileName:= Folder[ScreenIndex]+zFile[ScreenIndex]; // use "imgcatdir\titles.zip"; "imgcatdir\covers.zip"
       end;
 
@@ -23158,45 +23492,73 @@ var
        end;
   end;
 
-  function SearchUnzippedFile(IsNewImageNamingMAME: Boolean; const NameString: WideString): String;
-  begin
-    ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
-    ExtraFolderStrMAME[ScreenIndex]:= '';
-    if (not ContinueImg[ScreenIndex]) then
-       begin
-         ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                             ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                             SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
-         if ContinueImg[ScreenIndex] then
-            ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
-       end;
-
-    if not ContinueImg[ScreenIndex] then
-       begin
-         if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
-            begin
-              ImageExt[ScreenIndex]:= '.jpg';
-              ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
-              if (not ContinueImg[ScreenIndex]) then
-                 begin
-                   ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                                       ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                                       SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
-                   if ContinueImg[ScreenIndex] then
-                      ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
-                 end;
-            end;
-       end;
-    if ContinueImg[ScreenIndex] then
-       begin
-         ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex];
-         ImageDetails[ScreenIndex].IsZipped:= False;
-       end;
-  end;
-
   function SearchImageFile(IsNewImageNamingMAME: Boolean; const NameString: WideString; SearchInZip: Boolean = False): Boolean;
+
+    function FindUnzippedImage(FullImageName: WideString): Boolean;
+    var
+      iLoopMAME1, iLoopMAME2, iLoopMAME3, iLoopMAME4: Integer; // this is for unzipped images only, MAME/HBMAME only
+      iNameSearch: array[1..MaxImagePanels] of WideString; // again, for unzipped images only, MAME/HBMAME only
+    begin
+      Result:= True;
+      iNameSearch[ScreenIndex]:= FullImageName;
+      if (not MemGameInfo.eIsCustomGame) and (IsMAMEBasedSys(MemGameInfo.eSystemID)) then
+         begin
+           case ScreenIndex of
+             1:
+               begin
+                 for iLoopMAME1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+                 begin
+                   Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME1];
+                   Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+                   ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+iNameSearch[ScreenIndex]);
+                   if ContinueImg[ScreenIndex] then
+                      Break;
+                 end;
+               end;
+             2:
+               begin
+                 for iLoopMAME2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+                 begin
+                   Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME2];
+                   Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+                   ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+iNameSearch[ScreenIndex]);
+                   if ContinueImg[ScreenIndex] then
+                      Break;
+                 end;
+               end;
+             3:
+               begin
+                 for iLoopMAME3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+                 begin
+                   Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME3];
+                   Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+                   ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+iNameSearch[ScreenIndex]);
+                   if ContinueImg[ScreenIndex] then
+                      Break;
+                 end;
+               end;
+             4:
+               begin
+                 for iLoopMAME4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+                 begin
+                   Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME4];
+                   Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+                   ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+iNameSearch[ScreenIndex]);
+                   if ContinueImg[ScreenIndex] then
+                      Break;
+                 end;
+               end;
+           end;
+         end
+      else
+         begin
+           ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+iNameSearch[ScreenIndex]);
+         end;
+    end;
+
   begin
     ImageExt[ScreenIndex]:= '.png';
+    ImageToSearch[ScreenIndex]:= NameString;
     case SearchInZip of
       True:
         begin
@@ -23209,15 +23571,15 @@ var
                 ContinueImg[ScreenIndex]:= Assigned(imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex]);
                 if not ContinueImg[ScreenIndex] then
                    Exit;
-                ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(NameString+ImageExt[ScreenIndex]) <> -1;
+                ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                 if not ContinueImg[ScreenIndex] then
                    begin
                      ImageExt[ScreenIndex]:= '.jpg';
-                     ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(NameString+ImageExt[ScreenIndex]) <> -1;
+                     ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                    end;
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= NameString+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= True;
                    end;
               end;
@@ -23229,18 +23591,18 @@ var
                      ContinueImg[ScreenIndex]:= Assigned(ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex]);
                      if ContinueImg[ScreenIndex] then
                      begin
-                       ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(NameString+ImageExt[ScreenIndex]) <> -1;
+                       ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                        if not ContinueImg[ScreenIndex] then
                           begin
                             if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                                begin
                                  ImageExt[ScreenIndex]:= '.jpg';
-                                 ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(NameString+ImageExt[ScreenIndex]) <> -1;
+                                 ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                                end;
                           end;
                        if ContinueImg[ScreenIndex] then
                           begin
-                            ImageDetails[ScreenIndex].FileName:= NameString+ImageExt[ScreenIndex];
+                            ImageDetails[ScreenIndex].FileName:= {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                             FoundInSoftListZipFile[ScreenIndex]:= True;
                           end;
                      end;
@@ -23254,19 +23616,19 @@ var
                      begin
                        if Assigned(ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex]) then
                        begin
-                         ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]) <> -1;
+                         ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                          if not ContinueImg[ScreenIndex] then
                          begin
                            if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                               begin
                                 ImageExt[ScreenIndex]:= '.jpg';
-                                ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]) <> -1;
+                                ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                               end;
                          end;
                        end;
                        if ContinueImg[ScreenIndex] then
                           begin
-                            ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]; // it must be "softlistname\gamename.???"
+                            ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]; // it must be "softlistname\gamename.???"
                             FoundInSoftListZipFile_SL[ScreenIndex]:= True;
                           end;
                      end;
@@ -23279,17 +23641,17 @@ var
                      if not ContinueImg[ScreenIndex] then
                         Exit;
 
-                     ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]) <> -1;
+                     ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                      if not ContinueImg[ScreenIndex] then
                         begin
                           if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                               begin
                                 ImageExt[ScreenIndex]:= '.jpg';
-                                ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]) <> -1;
+                                ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                               end;
                         end;
                      if ContinueImg[ScreenIndex] then
-                        ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex];
+                        ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                    end;
 
                 if ContinueImg[ScreenIndex] then
@@ -23303,13 +23665,13 @@ var
             True:
               begin
                 ExtraFolderStrMAME[ScreenIndex]:= '';
-                ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                 if not ContinueImg[ScreenIndex] then
                    begin
                      // check img extra folder
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                          ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
-                                         NameString+ImageExt[ScreenIndex]);
+                                         {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if ContinueImg[ScreenIndex] then
                         ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\';
                    end;
@@ -23317,13 +23679,13 @@ var
                 if not ContinueImg[ScreenIndex] then
                    begin
                      ImageExt[ScreenIndex]:= '.jpg';
-                     ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                     ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if not ContinueImg[ScreenIndex] then
                         begin
                           // check img extra folder
                           ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                               ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
-                                              NameString+ImageExt[ScreenIndex]);
+                                              {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                           if ContinueImg[ScreenIndex] then
                              ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\';
                         end;
@@ -23332,20 +23694,23 @@ var
 
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+NameString+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= False;
                    end;
               end;
             False:
               begin
                 // SearchUnzippedFile(IsNewImageNamingMAME, NameString); // mulitple image paths support, for future improvement, MAYBE! (July 29, 2018)
-                ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                FindUnzippedImage(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]{NameString}+ImageExt[ScreenIndex]);
+                //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]{NameString}+ImageExt[ScreenIndex]);
                 ExtraFolderStrMAME[ScreenIndex]:= '';
                 if (not ContinueImg[ScreenIndex]) then
                    begin
-                     ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                                         ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                                         SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                     //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
+                     //                    ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
+                     //                    SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                     FindUnzippedImage(ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
+                                       SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if ContinueImg[ScreenIndex] then
                         ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
                    end;
@@ -23355,12 +23720,16 @@ var
                      if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                         begin
                           ImageExt[ScreenIndex]:= '.jpg';
-                          ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                          FindUnzippedImage(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                          //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                           if (not ContinueImg[ScreenIndex]) then
                              begin
-                               ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                                                   ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                                                   SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex]);
+                               //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
+                               //                    ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
+                               //                    SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                               FindUnzippedImage(ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
+                                                 SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+
                                if ContinueImg[ScreenIndex] then
                                   ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
                              end;
@@ -23368,7 +23737,7 @@ var
                    end;
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+SoftwareNameString[ScreenIndex]+NameString+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= False;
                    end;
               end;
@@ -23418,7 +23787,6 @@ var
          begin
            ImageDetails[ScreenIndex].NoImageLoaded:= False;
          end;
-
        end;
 
     if ContinueImg[ScreenIndex] then // image found
@@ -23440,17 +23808,20 @@ begin
   SoftwareNameString[ScreenIndex]:= ImageSoftwareName;
   ImageDetails[ScreenIndex].NewImageLoaded:= False;
 
-  FolderSnap[ScreenIndex]:= '';
+  FolderSnapEmuCon[ScreenIndex]:= '';
   case MemGameInfo.eIsCustomGame of
     True:
       begin
         Folder[ScreenIndex]:= FullFolderFix(SnapshotFolderCustom[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex]);
         if ImageDetails[ScreenIndex].ImageCategoryIndex <> 1 then
-           FolderSnap[ScreenIndex]:= FullFolderFix(SnapshotFolderCustom[MemGameInfo.eCustomSystemID, 1]);
+           FolderSnapEmuCon[ScreenIndex]:= FullFolderFix(SnapshotFolderCustom[MemGameInfo.eCustomSystemID, 1]);
       end;
     False:
       begin
-        Folder[ScreenIndex]:= GetFolderFull(ImageDetails[ScreenIndex].ImageCategoryIndex, MemGameInfo.eSystemID);
+        if not IsMAMEBasedSys(MemGameInfo.eSystemID) then
+           Folder[ScreenIndex]:= GetFolderFull(ImageDetails[ScreenIndex].ImageCategoryIndex, MemGameInfo.eSystemID)
+        else
+           Folder[ScreenIndex]:= '';
       end;
   end;
 
@@ -23484,11 +23855,69 @@ begin
   if not ContinueImg[ScreenIndex] then
      GetImageFileName(True); // search for zipped image
 
-  if not ContinueImg[ScreenIndex] then
+  {if (not MemGameInfo.eIsCustomGame) and (IsMAMEBasedSys(MemGameInfo.eSystemID)) then
+     begin
+       case ScreenIndex of
+         1:
+           begin
+             for iLoopMAME1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME1];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         2:
+           begin
+             for iLoopMAME2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME2];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+
+               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         3:
+           begin
+             for iLoopMAME3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME3];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+         4:
+           begin
+             for iLoopMAME4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
+             begin
+               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME4];
+               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
+               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+               if ContinueImg[ScreenIndex] then
+                  Break;
+             end;
+           end;
+       end;
+       if not ContinueImg[ScreenIndex] then
+          GetImageFileName(True); // search for zipped image
+     end
+  else
+     begin
+       GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+       if not ContinueImg[ScreenIndex] then
+          GetImageFileName(True); // search for zipped image
+     end;}
+
+  if (not ContinueImg[ScreenIndex]) and (not MemGameInfo.eIsCustomGame) then
      begin
        if ImagesMrDo_Artwork(ImageDetails[ScreenIndex].ImageCategoryIndex) and
-          PopupDisplayGameSnapshotifGameArtworkNotFound.Checked and
-          (not MemGameInfo.eIsCustomGame) then
+          PopupDisplayGameSnapshotifGameArtworkNotFound.Checked then
           begin
             // setting "show game snap if in-game artwork not found" (no zipped images support)
             // will try to load game snap instead (requested by "Mr. Do!")
@@ -27346,6 +27775,7 @@ begin
   AddDefaultIcons('media_flashcard.ico', tempFolder, IL_MediaType);    // 6
   AddDefaultIcons('media_harddisk.ico', tempFolder, IL_MediaType);     // 7
   AddDefaultIcons('media_vhs.ico', tempFolder, IL_MediaType);          // 8
+  //AddDefaultIcons('media_audio.ico', tempFolder, IL_MediaType);        // 9
 end;
 
 procedure TFormMain.LoadMediaTypeIcons(IconList: TImageList; ClearImageList: Boolean);
@@ -28306,6 +28736,7 @@ begin
             end;
           end;
      end;
+  SetVersionInfoFormat;
   GamesListView.BeginUpdate;
   ELV_ResetNormalColors(GamesListView);
   GamesListView.EndUpdate;
@@ -31030,6 +31461,9 @@ begin
        end;
      end;
 
+  if KeepGame and SameText(MemGameInfo.eSoftwareName, 'vgmplay') then
+     KeepGame:= not FormArcadeFiltersExtra.HideMAMESoftlist_vgmplay.Checked;
+
   if KeepGame and IsMediaTypeCHD(MemGameInfo.eMediaType, False) then
      KeepGame:= not FormArcadeFiltersExtra.HideGamesWithCHDFiles.Checked;
 
@@ -32271,7 +32705,7 @@ begin
      end;
 
   DeInitEmulatorVariables;
-  
+
   //for Loop:=1 to MaxArcadeSystems do
   //    FreeAndNil(emuROMsFolders[Loop]);
 
@@ -35120,12 +35554,12 @@ begin
               //ListFolders:= THashedStringList.Create;
               //ListFolders.AddStrings(ArtworksDir[Ord(sysID = idMAME)]); // ArtworksDir[] array is not used anymore (March 17, 2016)
               iDir:= LoadFolderSpecial_MAME(sysID, EmuFileStr, 0);
-              ExtractFolders2MAME(sysID, iDir, ListFolders, EmuFileStr);
+              ExtractFolders2MAME(sysID, iDir, ListFolders, True, EmuFileStr);
 
               //ListFolders.AddStrings(ArtworksDir[Ord(MemGameInfo.eSystemID = idMAME)]); // not used anymore (March 17, 2016)
               //ExtractFolders2MAME(sysID, ArtworksDir[Ord(sysID = idMAME)], ListFolders); // not used anymore
             end;
-          29, 30: ExtractFolders2MAME(sysID, CustomFolders, ListFolders, EmuFileStr);
+          29, 30: ExtractFolders2MAME(sysID, CustomFolders, ListFolders, True, EmuFileStr);
           //29, 30: ExtractFolders2MAME(MemGameInfo.eSystemID, CustomFolders, ListFolders);
         end;
         if Assigned(ListFolders) and (ListFolders.Count > 0) then
@@ -40898,6 +41332,7 @@ begin
        end
     else
        ListHolder.Delete(Loop); // "mamedir\hash\softwarename.xml" not found, cannot create a games list for it, remove the softlist from frontend's list
+    Application.ProcessMessages;
   end;
   ListHolder.EndUpdate;
 end;

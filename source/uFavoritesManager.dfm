@@ -1,6 +1,6 @@
 object FormFavoritesManager: TFormFavoritesManager
-  Left = 974
-  Top = 635
+  Left = 878
+  Top = 423
   Width = 797
   Height = 440
   BorderIcons = [biSystemMenu, biMaximize]

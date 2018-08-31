@@ -12,7 +12,7 @@ uses
 
 const
   MaxConsoleComputerSystems = 65;
-  IsFloppy = 3; // quick dirty way to check for floppy media type... used by multi disk games features for console/computer systems!
+  IsFloppy = 3; // quick dirty way to check for floppy media type, used by multi disk games features for console/computer systems
 
   SystemsListCustom: packed array [0..MaxConsoleComputerSystems] of packed array[0..2] of String = (
     // sys title/section name, icon fileName,              games list filename,
@@ -180,7 +180,6 @@ var
   // 1 -> cartridge; 2 -> disc image; 3 -> floppy disk; 4 -> cassette tape; 5 -> hard disk drive
 
   SnapshotFolderCustom: TImageFoldersConsoleComputer;
-  //SnapshotFolderCustom: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
   // see uCommon.ImageCategoryArray[] for the image category indexes
 
   imgZipFileListConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of THashedStringList;
@@ -383,8 +382,7 @@ end;
 
 function SystemIsConsole(sysID: Integer): Boolean;
 begin
-  Result:= sysID in [01, 03..08, 10, 12, 14..16, 18, 19, 21..24, 27, 28, 30, 32..38, 50, 57, 58, 61, 63, 64, 66];;
-  // Result:= sysID in [01..38, 50, 51, 54, 55, 57, 58, 60, 61, 63.. 66]; // console+handheld
+  Result:= sysID in [01, 03..08, 10, 12, 14..16, 18, 19, 21..24, 27, 28, 30, 32..38, 50, 57, 58, 61, 63, 64, 66];
 end;
 
 function SystemIsComputer(sysID: Integer): Boolean;
@@ -670,7 +668,7 @@ var
     EmulatorMountVirtualDrive[SystemID]:= (SystemID = 30); // will set to all to false but true for PC Engine CD!
     if SystemUseDisc(SystemID) then
        EmulatorMountVirtualDrive[SystemID]:= Boolean(IniFileName.ReadInteger(SystemsListCustom[SystemID, 0], 'MountDaemonTools', Ord(SystemID = 30)));
-       // for "PC Engine CD", mount with Daemon Tools is enabled by default!!!!
+       // for "PC Engine CD", mount with Daemon Tools must be enabled by default
 
     PlayWithAssociatedEmulator[SystemID]:= Boolean(IniFileName.ReadInteger(SystemsListCustom[SystemID, 0], 'PlayWithAssociatedApp', 0));
 
@@ -780,10 +778,10 @@ begin
 
   for sysLoop:=1 to MaxConsoleComputerSystems do
   begin
-    // do not assign a default folder path... leave it empty if user hasn't selected one!!!! March 02, 2017
-    // this is to prevent mixing up with arcade "snap.zip" files (other categories too)
+    // do not assign a default folder path; leave it empty if user hasn't selected one (March 02, 2017)
+    // this is to prevent mixing up with arcade "snap.zip" files and other categories too
     for ImgCatLoop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-        SnapshotFolderCustom[sysLoop, ImgCatLoop]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[ImgCatLoop, 4], ''); //, ImageCategoryArray[ImgCatLoop, 3]);
+        SnapshotFolderCustom[sysLoop, ImgCatLoop]:= IniFileName.ReadString(SystemsListCustom[sysLoop, 0], ImageCategoryArray[ImgCatLoop, 4], '');
   end;
   FreeAndNil(IniFileName);
 end;
@@ -793,7 +791,6 @@ var
   sysLoop, sysCategory: Integer;
   IniFileName: TMemIniFile;
 begin
-  //DeleteFile(GetSysImageFolders); //sysimagefolders.ini
   IniFileName:= TMemIniFile.Create(GetSysImageFolders);//AppPath+'sysimagefolders.ini');
   for sysLoop:=1 to MaxConsoleComputerSystems do
   begin
@@ -808,7 +805,7 @@ end;
 
 procedure ReadCustomGamesFolders;
 var
-  sysLoop, MediaTypeLoop, idxMediaType: Integer;
+  sysLoop, MediaTypeLoop: Integer;
   IniFileName: TMemIniFile;
   LineString, ValueString, SectionStr, MediaTypeStr: String;
   Continue: Boolean;
@@ -933,7 +930,7 @@ begin
      end;
   tFile:= LowerCase(VirtualDriveFileName);
   if PosEx('vcdmount', tFile) <> 0 then
-     Result:= 'Virtual CloneDrive' // Elby Virtual CloneDrive
+     Result:= 'Virtual CloneDrive'
   else
   if (PosEx('dtlite', tFile) <> 0) or (PosEx('daemon', tFile) <> 0) then
      Result:= 'Daemon Tools'
@@ -986,8 +983,8 @@ procedure EmuParametersAddMissingSections;
 var
   SysLoop: Byte;
   SectionIndex, Loop: Integer;
-  {MissingSections, }EmuParamUpd, DefaultEmuParamFile: THashedStringList;
-  SectionStr, EntryStr{, PrevEntryStr}: String;
+  EmuParamUpd, DefaultEmuParamFile: THashedStringList;
+  SectionStr, EntryStr: String;
   FileUpdated: Boolean;
 begin
   if (not FormMain.ValidateFile(GetEmuParametersFile)) or (not FormMain.ValidateFile(GetEmuParametersFile(True, True))) then
@@ -1020,7 +1017,7 @@ begin
                 if (EntryStr = '') or (EntryStr[1] <> '[') then
                    EmuParamUpd.Add(EntryStr)
                 else
-                   Break; // finished adding the section, get outta here!
+                   Break; // finished adding the section, bug out!
               end;
             end;
        end;
@@ -1036,7 +1033,7 @@ procedure InitializeCustomEmulatorVariables;
 var
   Loop, Loop2: Integer;
 begin
-  // define values for all arrays or exception error will occur....
+  // define values for all arrays or exception error will occur
   try
     //SystemsFilters[0]:= True;
     for Loop:= 1 to MaxConsoleComputerSystems do
@@ -1053,7 +1050,7 @@ begin
         EmulatorVersionCustom[Loop, Loop2]:= '';
       end;
       for Loop2:=Low(MediaTypeCustom) to High(MediaTypeCustom) do
-          sysCustomFolders[Loop, Loop2]:= nil; // only 1 folder list for now...
+          sysCustomFolders[Loop, Loop2]:= nil; // only 1 folder list for now
     end;
 
     for Loop:=Low(SnapshotFolderCustom) to High(SnapshotFolderCustom) do
@@ -1117,12 +1114,12 @@ end;
 
 function FindFile(RootFolder: String; FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean): Boolean;
 const
-  ISO_metadata: array[1..5] of String = ('.m3u', '.cue', '.toc', '.mds', '.ccd'); // .m3u is for Mednafen emulator, multiple CD games...
+  ISO_metadata: array[1..5] of String = ('.m3u', '.cue', '.toc', '.mds', '.ccd'); // .m3u is for Mednafen emulator, multiple CD games
 var
   FoldersList: THashedStringList;
   Loop: Integer;
   FolderStr: String;
-  FileISO, FileMetadata: WideString;
+  FileMetadata: WideString;
 
   function FindISOmetadata(const SubFolderStr: String): Boolean;
   var
@@ -1196,10 +1193,8 @@ begin
   vPos:= PosEx('/>', LineStr);
   ValueStr:= Copy(LineStr, vPos+2, Length(LineStr));
 
-  //showMessage('LineStr:'+#13#10+LineStr+#13#10+#13#10+'ValueStr:'+#13#10+ValueStr);
+  //showMessage('LineStr:'+#13#10+LineStr+#13#10+#13#10+'ValueStr:'+#13#10+ValueStr); // for debugging only, do not enable
 
-
-  //MediaTypeVar:= StrToInt(LineStr[1]); // always at position 1 (first char in the string)...
   iPos:= Pos(';', ValueStr); // last played
   iPos2:= PosEx(';', ValueStr, iPos+1); // total playtime
 

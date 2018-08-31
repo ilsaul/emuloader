@@ -14,25 +14,27 @@ type
     IL_ImageCategory_ExtraLarge: TImageList;
     PanelImageCategories: TPanelEx;
     ImageCategory_Selector: TEasyListview;
+    LabelCategoryTitle: TShadowLabel;
+    SystemTitlePanel: TPanelEx;
     PanelImageCategorySelector: TPanelEx;
     LabelImageCategoryFolder: TShadowLabel;
+    LabelImageBackgroundColor: TShadowLabel;
     ButtonResetImageCategoryFolder: TBitBtn;
     ButtonClearImageCategoryFolder: TBitBtn;
     ButtonImageCategoryFolder: TBitBtn;
     ImageCategoryFolder: TEdit;
-    LabelShowHideCategories: TShadowLabel;
-    LabelImageBackgroundColor: TShadowLabel;
     ImageCategoryBackgroundColor: TColorBox;
     ButtonImageCategoryBackgroundColorReset: TBitBtn;
     ButtonDefaultImageCategoryFolder: TBitBtn;
-    LabelCategoryTitle: TShadowLabel;
-    LabelEmuTitle: TShadowLabel;
     ButtonZippedImages: TBitBtn;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
+    PanelEx1: TPanelEx;
+    PanelEx2: TPanelEx;
     LabelSystemType: TShadowLabel;
+    LabelEmuTitle: TShadowLabel;
     LabelSystemNotAvailable: TShadowLabel;
-    SystemTitlePanel: TPanelEx;
+    LabelShowHideCategories: TShadowLabel;
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ImageCategoryFolderChange(Sender: TObject);
@@ -62,10 +64,6 @@ type
 
     newSnapshotFolderArcade, ResetSnapshotFolderArcade: TImageFoldersArcade;
     newSnapshotFolderConsComp, ResetSnapshotFolderConsComp: TImageFoldersConsoleComputer;
-    //newSnapshotFolderArcade: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of String;
-    //newSnapshotFolderConsComp: packed array[1..MaxConsoleComputerSystems] of packed array[0..High(ImageCategoryArray)] of String;
-
-    //UpdateFolderArcade: packed
 
     procedure ResizeForm;
     function  CheckSystemAndImageCatSelected: Boolean;
@@ -85,7 +83,6 @@ var
 
 implementation
 
-
 {$R *.dfm}
 
 procedure TFormImageCategorySettings.PopulateFolders;
@@ -99,12 +96,6 @@ begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
         ResetSnapshotFolderArcade[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
   end;
-
-  //for LoopSys:= 1 to MaxArcadeSystems do
-  //begin
-  //  for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-  //      newSnapshotFolderArcade[LoopSys, LoopCategory]:= FormMain.imgFolder[LoopSys, LoopCategory];
-  //end;
 
   for LoopSys:= 1 to MaxConsoleComputerSystems do
   begin
@@ -120,22 +111,21 @@ procedure TFormImageCategorySettings.UpdateImageCategories;
 var
   LoopSys, LoopCategory: Integer;
   Item: TEasyItem;
-  ValueToSet: String;
 begin
-  // MAME / arcade (must update FormMain.imgFolder[] array, remove quotes and get only the first path
-  // perhaps make it use full path in case of relative paths used ?already s
+  // MAME / arcade (must update FormMain.imgFolder[] array, and update FormMain.imgFolderMAME[] TStringLists for MAME/HBMAME
   for LoopSys:= 1 to MaxArcadeSystems do
   begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
-      ValueToSet:= newSnapshotFolderArcade[LoopSys, LoopCategory];
-      ValueToSet:= FormMain.GetFirstPathOnly(ValueToSet);
-      ValueToSet:= RemoveQuotes(ValueToSet);
-      if FormMain.imgFolder[LoopSys, LoopCategory] <> ValueToSet then
-         FormMain.imgFolder[LoopSys, LoopCategory]:= ValueToSet;
-
-      //if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
-      //   FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
+      if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
+         begin
+           FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
+           if FormMain.IsMAMEBasedSys(LoopSys) then
+              begin
+                FormMain.ExtractFolders2MAME(LoopSys, newSnapshotFolderArcade[LoopSys, LoopCategory],
+                                             FormMain.imgFolderMAME[Ord(LoopSys <> idMAME)+1, LoopCategory], False);
+              end;
+         end;
     end;
   end;
 
@@ -263,7 +253,6 @@ end;
 
 procedure TFormImageCategorySettings.ImageCategoryFolderChange(Sender: TObject);
 begin
-  // new RAM var so user can abort changes (February 10, 2017)
   if CheckSystemAndImageCatSelected then
      begin
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
@@ -283,17 +272,22 @@ procedure TFormImageCategorySettings.ButtonImageCategoryFolderClick(
   Sender: TObject);
 var
   iStr: String;
+  IsMultiFolders: Boolean;
 begin
   if CheckSystemAndImageCatSelected then
      begin
+       IsMultiFolders:= False;
        iStr:= 'Select a folder for '+GetImageCategoryTitle(ImageCategory_Selector.Tag)+
               ' ['+GetSystemTypeTitle(Systems.Tag, FormMain.ELV_IsArcadeSystemSelected(Systems))+']'+#13#10;
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
-          iStr:= iStr+FormMain.GetArcadeEmulatorDescription(Systems.Tag)
+          begin
+            iStr:= iStr+FormMain.GetArcadeEmulatorDescription(Systems.Tag);
+            IsMultiFolders:= FormMain.IsMAMEBasedSys(Systems.Tag);
+          end
        else
           iStr:= iStr+SystemsListCustom[Systems.Tag, 0];
 
-       FormMain.DialogSelectFolder(ImageCategoryFolder, False, iStr);
+       FormMain.DialogSelectFolder(ImageCategoryFolder, IsMultiFolders, iStr);
      end
   else
      begin
@@ -302,10 +296,10 @@ begin
 end;
 
 procedure TFormImageCategorySettings.ResizeForm;
-var
-  iDiff: Integer;
+//var
+//  iDiff: Integer;
 begin
-  if Screen.Height = 720 then
+  {if Screen.Height = 720 then
      begin
        iDiff:= FormImageCategorySettings.Height-675;
        FormImageCategorySettings.Height:= 675; // 694;
@@ -315,25 +309,14 @@ begin
        PanelImageCategories.Left:= PanelImageCategories.Left+Systems.CellSizes.Icon.Width-1;
        FormImageCategorySettings.ClientWidth:= FormImageCategorySettings.ClientWidth+Systems.CellSizes.Icon.Width;
 
-       SystemTitlePanel.Color1:= clWhite;
-       SystemTitlePanel.Width:= 432;
-       SystemTitlePanel.Height:= 40;
-       SystemTitlePanel.Top:= PanelImageCategories.Top-SystemTitlePanel.Height;
-       SystemTitlePanel.Left:= 568;
-       SystemTitlePanel.Visible:= True;
-
-       LabelEmuTitle.Parent:= SystemTitlePanel;
-       LabelSystemType.Parent:= SystemTitlePanel;
-       LabelSystemNotAvailable.Parent:= SystemTitlePanel;
-
        LabelSystemType.Top:= 0;
        LabelSystemNotAvailable.Top:= 0;
-       LabelSystemNotAvailable.Left:= SystemTitlePanel.Width-LabelSystemNotAvailable.Width-32;
+
 
        ButtonZippedImages.Left:= ButtonZippedImages.Left+Systems.CellSizes.Icon.Width;
        ButtonOk.Left:= ButtonOk.Left+Systems.CellSizes.Icon.Width;
        ButtonCancel.Left:= ButtonCancel.Left+Systems.CellSizes.Icon.Width;
-     end;
+     end;}
 end;
 
 procedure TFormImageCategorySettings.FormShow(Sender: TObject);
@@ -376,7 +359,8 @@ procedure TFormImageCategorySettings.ButtonZippedImagesClick(Sender: TObject);
 begin
   CallMessageBox;
   FormMain.AddMsgText('    You can show/hide image categories, change their background color and select folders'+#13#10+#13#10+
-                      '1. To setup folders, select a system, a category, then a folder where images are. Relative path is relative to the emulator directory.'+#13#10+#13#10+
+                      '1. To setup folders, select a system, a category, then a folder where images are. Relative path is relative to the emulator directory. '+
+                      'You can select multiple folders for MAME and HBMAME. Each folder must be separated by a ; char (semicolon)'+#13#10+#13#10+
                       '2. To hide a category, clear the checkbox on each of them. This setting is the same for all '+
                       'systems!'+#13#10+#13#10+
                       '3. To set a background color, select a category and then the color of your choice. This setting '+
@@ -407,11 +391,6 @@ begin
           ImageCategoryFolder.Text:= ResetSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]
        else
           ImageCategoryFolder.Text:= ResetSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]
-
-       //if FormMain.ELV_IsArcadeSystemSelected(Systems) then
-       //   ImageCategoryFolder.Text:= FormMain.imgFolder[Systems.Tag, ImageCategory_Selector.Tag]
-       //else
-       //   ImageCategoryFolder.Text:= SnapshotFolderCustom[Systems.Tag, ImageCategory_Selector.Tag];
      end;
 end;
 
@@ -430,7 +409,7 @@ begin
   if not FormMain.CheckSelected(Systems) then
      Exit;
   ImageCategory_Selector.Tag:= Item.ImageIndex;
-  LabelCategoryTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex)); // no longer needed, img_cat caption is in the icon anyway... (February 12, 2017)
+  LabelCategoryTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex));
 
   if ImageCategoryBackgroundColor.Font.Color <> clBlack then
      ImageCategoryBackgroundColor.Font.Color:= clBlack;
@@ -500,8 +479,8 @@ begin
   ImageCategory_Selector.EndUpdate;
   TShadowLabel(Sender).Tag:= Ord(not Boolean(TShadowLabel(Sender).Tag));
   case TShadowLabel(Sender).Tag of
-    0: TShadowLabel(Sender).Caption:= 'CLICK HERE TO HIDE ALL CATEGORIES';
-    1: TShadowLabel(Sender).Caption:= 'CLICK HERE TO SHOW ALL CATEGORIES';
+    0: TShadowLabel(Sender).Caption:= 'CLICK HERE'+#13#10+'TO HIDE ALL'+#13#10+'CATEGORIES';
+    1: TShadowLabel(Sender).Caption:= 'CLICK HERE'+#13#10+'TO SHOW ALL'+#13#10+'CATEGORIES';
   end;
   ImageCategory_Selector.SetFocus;
 end;

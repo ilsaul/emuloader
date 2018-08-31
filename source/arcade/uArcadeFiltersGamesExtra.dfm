@@ -5,7 +5,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Miscellaneous Filters (MAME and Arcade Only)'
-  ClientHeight = 362
+  ClientHeight = 377
   ClientWidth = 621
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -125,8 +125,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
-    Left = 418
-    Top = 121
+    Left = 10
+    Top = 304
     Width = 142
     Height = 20
     Hint = 'Enable it so you can filter MAME games by main CPU'
@@ -140,7 +140,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object PanelEx1: TPanelEx
     Left = 0
-    Top = 321
+    Top = 336
     Width = 621
     Height = 41
     Align = alBottom
@@ -803,6 +803,20 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     TabOrder = 18
     Alignment = taLeftJustify
     Caption = 'Show CRC32 Collision Sets Only'
+    ReturnIsTab = False
+    ShadowColor = clSilver
+    Themed = True
+  end
+  object HideMAMESoftlist_vgmplay: TAdvOfficeCheckBox
+    Left = 418
+    Top = 110
+    Width = 182
+    Height = 34
+    ShowHint = True
+    TabOrder = 19
+    Alignment = taLeftJustify
+    ButtonVertAlign = tlCenter
+    Caption = 'Hide Video Game Music Files'#13#10'MAME Software List: vgmplay'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True

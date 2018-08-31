@@ -311,6 +311,8 @@ type
     Label11: TLabel;
     Label16: TLabel;
     Label19: TLabel;
+    AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBox;
+    LabelAddLeadingZeroVersionInfoMAME: TLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);

@@ -63,6 +63,7 @@ type
     CategoryMusic: TAdvOfficeCheckBox;
     CategoryBoardGame: TAdvOfficeCheckBox;
     CategorySlotMachines: TAdvOfficeCheckBox;
+    HideMAMESoftlist_vgmplay: TAdvOfficeCheckBox;
     procedure FormActivate(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonDefaultOptionsClick(Sender: TObject);
@@ -243,6 +244,9 @@ begin
         FilterChanged(ShowOnlySetsCRC32Collision.Tag, Ord(ShowOnlySetsCRC32Collision.Checked));
         ShowOnlySetsCRC32Collision.Tag:= Ord(ShowOnlySetsCRC32Collision.Checked);
 
+        FilterChanged(HideMAMESoftlist_vgmplay.Tag, Ord(HideMAMESoftlist_vgmplay.Checked));
+        HideMAMESoftlist_vgmplay.Tag:= Ord(HideMAMESoftlist_vgmplay.Checked);
+
         //FilterChanged(FilterGamesMainCPU.Tag, Ord(FilterGamesMainCPU.Checked));
         FilterGamesMainCPU.Tag:= Ord(FilterGamesMainCPU.Checked);
       end;
@@ -305,6 +309,8 @@ begin
         ResetFilterCheckBox(ShowMergedSetsOnly);
 
         ResetFilterCheckBox(ShowOnlySetsCRC32Collision);
+
+        ResetFilterCheckBox(HideMAMESoftlist_vgmplay);
 
         ResetFilterCheckBox(FilterGamesMainCPU);
       end;
@@ -369,6 +375,9 @@ begin
   ShowMergedSetsOnly.Checked:= False;
   ShowOnlySetsCRC32Collision.Checked:= False;
   SaveState.ItemIndex:= 0;
+
+  HideMAMESoftlist_vgmplay.Checked:= False;
+  
   FilterGamesMainCPU.Checked:= False;
 end;
 

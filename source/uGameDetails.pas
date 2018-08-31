@@ -1277,7 +1277,7 @@ var
   ZippedROMFile: TWideMemoryStream;
 
   IsZippedFile: Boolean;
-  romCRC32, romSHA1, NameDOS: String;
+  romCRC32, romSHA1: String;
   romName: WideString;
   romSize: Int64;
   //romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file

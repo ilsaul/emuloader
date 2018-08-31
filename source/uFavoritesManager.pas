@@ -25,6 +25,27 @@ type
     property eGamesCount: Integer read fGamesCount write fGamesCount;
   end;
 
+  TFavCleanseInfo = class(TEasyItemStored)
+  private
+    fImageIndex: Integer;
+    fSystemID: Integer;
+    fSystemTitle: String;
+    fMediaType: Integer;
+    fIsCustomGame: Boolean;
+    fName: WideString;
+    fEntryString: String;
+  protected
+    function GetCaptions(Column: Integer): WideString; override;
+  public
+    property eImageIndex: Integer read fImageIndex write fImageIndex;
+    property eSystemID: Integer read fSystemID write fSystemID;
+    property eSystemTitle: String read fSystemTitle write fSystemTitle; 
+    property eMediaType: Integer read fMediaType write fMediaType;
+    property eIsCustomGame: Boolean read fIsCustomGame write fIsCustomGame;
+    property eName: WideString read fName write fName;
+    property eEntryString: String read fEntryString write fEntryString;
+  end;
+
 type
   TFormFavoritesManager = class(TForm)
     ToolbarButtons: TToolBar;
@@ -113,7 +134,7 @@ implementation
 
 {$R *.dfm}
 
-uses uMain, uCommon, uCommonCustom;
+uses uMain, uCommon, uCommonCustom, uFavoritesManagerCleanseProfile;
 
 function TFavFileInfo.GetCaptions(Column: Integer): WideString;
 begin
@@ -122,6 +143,14 @@ begin
     1: Result:= IntToStr(eGamesCount);
     2: Result:= eFileName;
     3: Result:= eDateTimeText;
+  end;
+end;
+
+function TFavCleanseInfo.GetCaptions(Column: Integer): WideString;
+begin
+  case Column of
+    0: Result:= eName;
+    1: Result:= eSystemTitle;
   end;
 end;
 
@@ -670,12 +699,13 @@ var
   GamesListFull, FavoriteGamesList: THashedStringList;
   Loop, RemovedCount, TitleIndex: Integer;
   ErrorMsgTitle, FavMsgTitle: String;
-  gItem, favItem: TEasyItem;
+  gItem, favItem, addItem: TEasyItem;
   gGroup: TEasyGroup;
   UpdTxt, HaveTitle: Boolean;
-  favStr: String;
+  favStr, LineStr: String;
 
-  function SearchAndDelete: Boolean;
+  // this function is not used anywhere (August 28, 2018)
+  {function SearchAndDelete: Boolean;
   var
     favIndex: Integer;
   begin
@@ -704,7 +734,7 @@ var
                  end;
             end;
        end;
-  end;
+  end;}
 
   function AddGameHashedList: Boolean;
   var
@@ -767,18 +797,7 @@ begin
        Exit;
      end;
 
-  CallMessageBox;
-  FormMain.AddMsgText('    File ');
-  FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' will be cleansed of all impurities, based on current games list.'+#13#10);
-  FormMain.AddMsgText('(arcade/console/computer)', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
-  FormMain.AddMsgText('.'+#13#10+'Valid game entries of systems that are not available anymore will also be removed. Click ');
-  FormMain.AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
-  if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrNo then
-     Exit;
-
-  LabelTaskMessage.Caption:= 'Cleansing favorite file of impurities, please wait...';
+  LabelTaskMessage.Caption:= 'Generating list of impurities, please wait...';
   ShowUpdateFavGamesListPanel;
   Application.ProcessMessages;
   Screen.Cursor:= crHourGlass;
@@ -816,11 +835,119 @@ begin
 
   if UpdTxt then
      begin
+       if not Assigned(FormFavoritesManagerCleanseProfile) then
+          FormFavoritesManagerCleanseProfile:= TFormFavoritesManagerCleanseProfile.Create(nil);
+
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.BeginUpdate;
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= True;
+       LoadCustomMAMEIconToForm(FormFavoritesManagerCleanseProfile, 3);
+       FormMain.LoadSystemsIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False);
+       FormMain.LoadNonArcadeSystemIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False, False);
+       FormMain.ELV_ResetNormalColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList);
+
        FavoriteGamesList:= THashedStringList.Create;
        FavoriteGamesList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
        TitleIndex:= FavoriteGamesList.IndexOfName('favorite_title');
        HaveTitle:= TitleIndex <> -1;
-       FavoriteGamesList.BeginUpdate;
+
+       FormFavoritesManagerCleanseProfile.LabelTotal.Tag:= FavoriteGamesList.Count-Ord(HaveTitle);
+
+       for Loop:=0 to FavoriteGamesList.Count-1 do
+       begin
+         if Loop <> TitleIndex then
+         begin
+           LineStr:= FavoriteGamesList[Loop];
+           if LineStr <> '' then
+           begin
+             if GamesListFull.IndexOf(LineStr) = -1 then
+                 begin
+                   addItem:= FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.AddCustom(TFavCleanseInfo, nil);
+
+                   TFavCleanseInfo(addItem).eIsCustomGame:= PosEx('<file>', LineStr) <> 0;
+
+                   TFavCleanseInfo(addItem).eEntryString:= LineStr; // full string line from profile ".ini"
+
+                   case TFavCleanseInfo(addItem).eIsCustomGame of
+                     True:
+                       begin
+                         TFavCleanseInfo(addItem).eSystemID:= StrToInt(Copy(LineStr, 1, 3));
+                         TFavCleanseInfo(addItem).eSystemTitle:= SystemsListCustom[TFavCleanseInfo(addItem).eSystemID, 0];
+                         TFavCleanseInfo(addItem).eImageIndex:= MaxArcadeSystems+1+TFavCleanseInfo(addItem).eSystemID;
+                         TFavCleanseInfo(addItem).eMediaType:= StrToInt(LineStr[5]);
+                         TFavCleanseInfo(addItem).eName:= FormMain.DecodeUnicodeStr(Copy(LineStr, PosEx('<file>', LineStr)+6, Length(LineStr)));
+                         if SystemIsConsole(TFavCleanseInfo(addItem).eSystemID) then
+                            addItem.StateImageIndexes[1]:= 25
+                         else
+                         if SystemIsComputer(TFavCleanseInfo(addItem).eSystemID) then
+                            addItem.StateImageIndexes[1]:= 26
+                         else
+                         if SystemIsHandheld(TFavCleanseInfo(addItem).eSystemID) then
+                            addItem.StateImageIndexes[1]:= 27;
+                       end;
+                     False:
+                       begin
+                         TFavCleanseInfo(addItem).eSystemID:= FormMain.GetArcadeSysIDFromName(FavoriteGamesList.ValueFromIndex[Loop]);
+                         TFavCleanseInfo(addItem).eSystemTitle:= FormMain.GetArcadeEmulatorDescription(TFavCleanseInfo(addItem).eSystemID);
+                         TFavCleanseInfo(addItem).eImageIndex:= TFavCleanseInfo(addItem).eSystemID;
+                         TFavCleanseInfo(addItem).eMediaType:= -1;
+                         TFavCleanseInfo(addItem).eName:= FavoriteGamesList.Names[Loop];
+                         addItem.StateImageIndexes[1]:= 24; // arcade icon
+                       end;
+                   end;
+                   addItem.ImageIndex:= TFavCleanseInfo(addItem).eImageIndex;
+                 end;
+              end;
+           end;
+       end;
+
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= False;
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.EndUpdate;
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Sort.SortAll;
+
+       if FormMain.CheckTotal(FormFavoritesManagerCleanseProfile.FavoritesCleanseList) then
+       begin
+         case FormFavoritesManagerCleanseProfile.ShowModal of
+           mrOk:
+            begin
+              if FormMain.CheckTotal(FormFavoritesManagerCleanseProfile.FavoritesCleanseList) then
+              begin
+                CallMessageBox;
+                FormMain.AddMsgText('    File ');
+                FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
+                FormMain.AddMsgText(' will be cleansed of all impurities, based on current games list.'+#13#10);
+                FormMain.AddMsgText('(arcade/console/computer)', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+                FormMain.AddMsgText('.'+#13#10+'Valid game entries of systems that are not available anymore will also be removed. Click ');
+                FormMain.AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
+                FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
+                if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrYes then
+                   begin
+                     FavoriteGamesList.BeginUpdate;
+                     // remove all games from fav .ini file...
+                     addItem:= FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Groups.FirstItem;
+                     repeat
+                       Loop:= FavoriteGamesList.IndexOf(TFavCleanseInfo(addItem).eEntryString);
+                       if Loop <> -1 then
+                       begin
+                         if GamesListFull.IndexOf(TFavCleanseInfo(addItem).eEntryString) = -1 then
+                         begin
+                           Inc(RemovedCount);
+                           FavoriteGamesList.Delete(Loop);
+                         end;
+                       end;
+                       addItem:= FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Groups.NextItem(addItem);
+                     until addItem = nil;
+                     FavoriteGamesList.EndUpdate;
+                   end
+                else
+                   RemovedCount:= -1;
+              end;
+            end;
+           mrCancel: RemovedCount:= -1;
+         end;
+       end;
+       FreeAndNil(FormFavoritesManagerCleanseProfile);
+
+       {FavoriteGamesList.BeginUpdate;
        for Loop:= FavoriteGamesList.Count-1 downto 0 do
        begin
          if Loop <> TitleIndex then
@@ -832,7 +959,7 @@ begin
                end;
             end;
        end;
-       FavoriteGamesList.EndUpdate;
+       FavoriteGamesList.EndUpdate;}
      end;
 
   PanelUpdatingFavTagInGames.Visible:= False;
@@ -841,6 +968,7 @@ begin
 
   if UpdTxt then
   begin
+    // re-enable this later! (August 28, 2018)
     if RemovedCount > 0 then
        begin
          FavoriteGamesList.SaveToFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
@@ -856,7 +984,7 @@ begin
        CallMessageBox;
        FormMain.AddMsgText('    No impurities were found in file ');
        FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-       FormMain.AddMsgText(' is marked read-only. Cannot continue...');
+       FormMain.AddMsgText('.');
        GenerateMessage(FavMsgTitle, 'No changes have been made.', '', 2);
      end
   else
