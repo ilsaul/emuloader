@@ -5,19 +5,20 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
-  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, Menus, BarMenus;
+  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, Menus, BarMenus,
+  ButtonsEx;
 
 type
   TFormSelectFilterSystemSimple = class(TForm)
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    ButtonReload: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    ButtonReload: TBitBtnEx;
     ConsCompSystemsListView: TEasyListview;
     LabelMultiSelect: TShadowLabel;
     IL_Systems: TImageList;
-    ButtonHelp: TBitBtn;
-    ResetToMachineTypeSystemsMegaFilter: TBitBtn;
+    ButtonHelp: TBitBtnEx;
+    ResetToMachineTypeSystemsMegaFilter: TBitBtnEx;
     PopupSystems: TBcBarPopupMenu;
     PopupCheckAllArcadeSystems: TMenuItem;
     PopupUncheckAllArcadeSystems: TMenuItem;
@@ -119,7 +120,7 @@ begin
       end;
     720:
       begin
-        ColumnsCount:= 5; // max lines = 12
+        ColumnsCount:= 7; // max lines = 12
         //VisibleCount:= 12; // for debugging only
         if VisibleCount <= 12 then
            ColumnsCount:= 1;
@@ -195,7 +196,7 @@ begin
   if FormSelectFilterSystemSimple.Height > MaxHeight then
      begin
        FormSelectFilterSystemSimple.ClientHeight:= MaxHeight-GetSystemMetrics(SM_CYCAPTION);
-       ConsCompSystemsListView.Height:= FormSelectFilterSystemSimple.ClientHeight-5-PanelButtons.Height;
+       ConsCompSystemsListView.Height:= FormSelectFilterSystemSimple.ClientHeight-5-PanelBottom.Height;
      end;
 
   FormSelectFilterSystemSimple.ClientWidth:= ConsCompSystemsListView.Width+8;
@@ -207,7 +208,7 @@ begin
   ButtonCancel.Left:= (FormSelectFilterSystemSimple.ClientWidth-ButtonCancel.Width)-6;
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
   ButtonHelp.Left:= ButtonOk.Left-ButtonHelp.Width-4;
-  LabelMultiSelect.Left:= (PanelButtons.Width div 2) - (LabelMultiSelect.Width div 2);
+  LabelMultiSelect.Left:= (PanelBottom.Width div 2) - (LabelMultiSelect.Width div 2);
 end;
 
 procedure TFormSelectFilterSystemSimple.SetSelectedSystems;
@@ -282,7 +283,7 @@ procedure TFormSelectFilterSystemSimple.FormActivate(Sender: TObject);
 begin
   if FormSelectFilterSystemSimple.Tag = 1 then
      Exit;
-                                                           //1 -> should be "1" to show only available systems
+                                                           //1 -> should be "1" to show only available systems; 0 -> show all systems
   FormMain.ELV_PopulateSystemsMulti(ConsCompSystemsListView, 1, False, True, False, True);
   FormMain.ELV_FixTitleClickAreaMulti(ConsCompSystemsListView);
 
@@ -359,8 +360,9 @@ begin
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
 
   FormMain.ELV_ResetNormalColors(ConsCompSystemsListView);
-  ConsCompSystemsListView.Selection.AlphaBlend:= False;
-  ConsCompSystemsListView.Selection.RoundRect:= False;
+
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(ConsCompSystemsListView);
 
   //ELV_PopulateCustomSystems(SystemsListView, FormMain.ButtonGameFilterConsoleComputerSystems.Tag);
   //FormMain.ELV_PopulateSystems(SystemsListView, True);
@@ -434,9 +436,16 @@ begin
   if Position = 1 then
      begin
        ACanvas.Font.Name:= 'Segoe UI';
-       ACAnvas.Font.Size:= 9;
-       ACanvas.Font.Style:= [fsItalic];
+       ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
+       ACanvas.Font.Style:= [fsItalic];
+       if IsNightMode then
+          ACanvas.Font.Color:= clMedGray
+       else
+          ACanvas.Font.Color:= clGray;
+
+       if IsNightMode and Item.Selected then
+          ACanvas.Font.Color:= clrDarkGray;
      end;
 end;
 

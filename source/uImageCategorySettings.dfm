@@ -96,32 +96,6 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Frames = [frLeft]
     ParentBackground = False
     Style = vgSolid
-    object LabelCategoryTitle: TShadowLabel
-      Left = 1
-      Top = 465
-      Width = 317
-      Height = 16
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'CATEGORY TITLE'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = False
-      Layout = tlCenter
-    end
     object ImageCategory_Selector: TEasyListview
       Tag = 1
       Left = 6
@@ -207,21 +181,46 @@ object FormImageCategorySettings: TFormImageCategorySettings
       OnItemCheckChange = ImageCategory_SelectorItemCheckChange
       OnItemSelectionChanged = ImageCategory_SelectorItemSelectionChanged
     end
-    object PanelEx1: TPanelEx
-      Left = 212
-      Top = 392
-      Width = 98
-      Height = 62
-      Color1 = 16448250
-      Color2 = clSilver
+    object PanelCategoryTitle: TPanelEx
+      Left = 1
+      Top = 465
+      Width = 317
+      Height = 16
+      Color1 = clWhite
+      Color2 = 15132390
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = clGreen
       ColorInnerFrame = clGreen
       Frames = []
       ParentBackground = False
-      Style = vgSolid
-      Visible = False
+      Style = vgSimple
+      object LabelCategoryTitle: TShadowLabel
+        Left = 8
+        Top = 0
+        Width = 302
+        Height = 16
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'CATEGORY TITLE'
+        Color = 16448250
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -13
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsBold, fsItalic]
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = 14540253
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        Layout = tlCenter
+      end
     end
   end
   object PanelImageCategorySelector: TPanelEx
@@ -283,7 +282,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Frames = []
       Transparent = True
     end
-    object ButtonResetImageCategoryFolder: TBitBtn
+    object ButtonResetImageCategoryFolder: TBitBtnEx
       Left = 382
       Top = 7
       Width = 43
@@ -295,7 +294,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 0
       OnClick = ButtonResetImageCategoryFolderClick
     end
-    object ButtonClearImageCategoryFolder: TBitBtn
+    object ButtonClearImageCategoryFolder: TBitBtnEx
       Left = 338
       Top = 7
       Width = 43
@@ -304,7 +303,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 1
       OnClick = ButtonClearImageCategoryFolderClick
     end
-    object ButtonImageCategoryFolder: TBitBtn
+    object ButtonImageCategoryFolder: TBitBtnEx
       Left = 426
       Top = 29
       Width = 47
@@ -316,7 +315,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 2
       OnClick = ButtonImageCategoryFolderClick
     end
-    object ImageCategoryFolder: TEdit
+    object ImageCategoryFolder: TEditEx
       Tag = 1
       Left = 8
       Top = 29
@@ -347,7 +346,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 4
       OnSelect = ImageCategoryBackgroundColorSelect
     end
-    object ButtonImageCategoryBackgroundColorReset: TBitBtn
+    object ButtonImageCategoryBackgroundColorReset: TBitBtnEx
       Left = 638
       Top = 7
       Width = 43
@@ -359,7 +358,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 5
       OnClick = ButtonImageCategoryBackgroundColorResetClick
     end
-    object ButtonDefaultImageCategoryFolder: TBitBtn
+    object ButtonDefaultImageCategoryFolder: TBitBtnEx
       Left = 426
       Top = 7
       Width = 47
@@ -369,7 +368,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 6
       OnClick = ButtonDefaultImageCategoryFolderClick
     end
-    object ButtonZippedImages: TBitBtn
+    object ButtonZippedImages: TBitBtnEx
       Left = 754
       Top = 17
       Width = 43
@@ -381,7 +380,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 7
       OnClick = ButtonZippedImagesClick
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 809
       Top = 17
       Width = 89
@@ -393,7 +392,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       ShowHint = True
       TabOrder = 8
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 905
       Top = 17
       Width = 89
@@ -406,7 +405,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 9
     end
   end
-  object PanelEx2: TPanelEx
+  object PanelCategoriesBottom: TPanelEx
     Left = 682
     Top = 481
     Width = 318
@@ -417,7 +416,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Color4 = clTeal
     ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = [frLeft, frTop]
+    Frames = [frLeft]
     ParentBackground = False
     Style = vgSolid
     object LabelShowHideCategories: TShadowLabel
@@ -450,11 +449,26 @@ object FormImageCategorySettings: TFormImageCategorySettings
       OnMouseEnter = LabelShowHideCategoriesMouseEnter
       OnMouseLeave = LabelShowHideCategoriesMouseLeave
     end
+    object PanelCategoryTitleBottom: TPanelEx
+      Left = 1
+      Top = 0
+      Width = 317
+      Height = 12
+      Color1 = 15132390
+      Color2 = 15856113
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+    end
   end
-  object SystemTitlePanel: TPanelEx
-    Left = 436
+  object PanelSystemTitle: TPanelEx
+    Left = 498
     Top = 494
-    Width = 246
+    Width = 184
     Height = 80
     Color1 = 16448250
     Color2 = clSilver
@@ -466,7 +480,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     ParentBackground = False
     Style = vgSolid
     object LabelSystemType: TShadowLabel
-      Left = 70
+      Left = 39
       Top = 8
       Width = 105
       Height = 16
@@ -492,10 +506,10 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Transparent = True
       Layout = tlCenter
     end
-    object LabelEmuTitle: TShadowLabel
-      Left = 13
+    object LabelSystemTitle: TShadowLabel
+      Left = 2
       Top = 24
-      Width = 220
+      Width = 180
       Height = 37
       Alignment = taCenter
       AutoSize = False
@@ -520,7 +534,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       WordWrap = True
     end
     object LabelSystemNotAvailable: TShadowLabel
-      Left = 46
+      Left = 14
       Top = 61
       Width = 155
       Height = 16

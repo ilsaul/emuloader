@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   IniFiles, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   AdvOfficeButtons, StdCtrls, Buttons, PanelEx, ShadowLabel, ImgList,
-  ExtCtrls, Menus, BarMenus;
+  ExtCtrls, Menus, BarMenus, ButtonsEx;
 
 type
   TMachineEditorGameInfo = class(TEasyItemStored)
@@ -69,9 +69,9 @@ type
 type
   TFormArcadeMAMEMachinesCustomize = class(TForm)
     BottomBar: TPanelEx;
-    ButtonYes: TBitBtn;
-    ButtonNo: TBitBtn;
-    ButtonResetToCurrent: TBitBtn;
+    ButtonYes: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
+    ButtonResetToCurrent: TBitBtnEx;
     CheckAll: TAdvOfficeCheckBox;
     LabelTotalMachinesList: TShadowLabel;
     FilterShowUncheckedOnly: TAdvOfficeCheckBox;
@@ -388,13 +388,15 @@ begin
 
        //FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
        //FrameSoftwareList.ColorInnerFrame:= clBlue;
-       FrameSoftwareList.Color1:= $00000001;
-       MachinesListEditor.Color:= $00000001;
+       FrameSoftwareList.Color1:= clrBlackBk;
+       MachinesListEditor.Color:= clrBlackBk;
        MachinesListEditor.Font.Color:= clWhite;
 
        SetCheckBoxColors(CheckAll, clWhite, clNavy);
        SetCheckBoxColors(FilterShowUncheckedOnly, clWhite, clNavy);
        SetCheckBoxColors(FilterShowParentSetsOnly, clWhite, clNavy);
+
+       FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
      end;
 
   //GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list

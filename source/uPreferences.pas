@@ -7,7 +7,7 @@ uses
   ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles,
   Buttons, BarMenus, GraphicEx,  MPCommonObjects, EasyListview,
   SplitterEx, AdvOfficeButtons, AdvGroupBox, ShadowLabel, PanelEx, ShellAPI,
-  GR32_RangeBars;
+  GR32_RangeBars, EditEx, ButtonsEx;
 
 type
   TFormPreferences = class(TForm)
@@ -36,7 +36,7 @@ type
     GamesBackgroundColor: TColorBox;
     ButtonDefaultBkSortedColor: TBitBtn;
     GamesBackgroundImageEnable: TAdvOfficeCheckBox;
-    GamesBackgroundImage: TEdit;
+    GamesBackgroundImage: TEditEx;
     GamesBackgroundImageButtonSelect: TBitBtn;
     GamesBackgroundImageButtonUpdate: TBitBtn;
     GamesTileBackground: TAdvOfficeCheckBox;
@@ -79,7 +79,7 @@ type
     LabelDisableDeleteSelectedGames: TLabel;
     IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox;
     RestoreInternetGameInfoStartup: TAdvOfficeCheckBox;
-    Label1: TLabel;
+    LabelIgnoreExitCode1InvalidFunction: TLabel;
     HintBoxSettings: TAdvGroupBox;
     LabelHintBox_Color: TLabel;
     HintBox_Color: TColorBox;
@@ -126,16 +126,16 @@ type
     LabelInternetMAMESoftwareListGameInfoLink: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    InternetGameInfoLink: TEdit;
-    InternetGameInfoLinkButtonDefault: TBitBtn;
-    InternetMAMESoftwareListGameInfoLink: TEdit;
-    InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn;
+    InternetGameInfoLink: TEditEx;
+    InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtn;
+    InternetMAMESoftwareListGameInfoLink: TEditEx;
+    InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault: TBitBtn;
     LabelImageSplitterSingleColorDefault: TShadowLabel;
     ButtonImageSplitterSingleColorDefault: TBitBtn;
     ImageSplitterStyleSelector: TComboBox;
     MAMu_Icon: TImage;
     LabelMAMu_IconsFolder: TLabel;
-    MAMu_IconsFolder: TEdit;
+    MAMu_IconsFolder: TEditEx;
     ButtonMAMu_IconsFolderSelect: TBitBtn;
     ImagesSpecialSettingsGroupBox: TAdvGroupBox;
     LabelFixRetroArchImageFileNames: TLabel;
@@ -168,7 +168,7 @@ type
     NightModeSearchGamesPanelFieldShadowColor: TColorBox;
     GamesListStatusBarShadowFontColor: TColorBox;
     GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBox;
-    NightModeGamesListStatusBarBox: TAdvGroupBox;
+    NightModeGamesListStatusBarColorsBox: TAdvGroupBox;
     LabelNightModeGamesListStatusBarBottomColor: TLabel;
     LabelNightModeGamesListStatusBarTopColor: TLabel;
     LabelNightModeGamesListStatusBarFontColor: TLabel;
@@ -192,16 +192,8 @@ type
     NightModeSearchGamesPanelCaptionBarFontColor: TColorBox;
     Label4: TLabel;
     NightModeSearchGamesPanelCaptionBarShadowColor: TColorBox;
-    Label7: TLabel;
-    ColorBox3: TColorBox;
-    Label8: TLabel;
-    ColorBox4: TColorBox;
-    Label9: TLabel;
-    ColorBox5: TColorBox;
-    Label12: TLabel;
     Label13: TLabel;
     ColorBox6: TColorBox;
-    ColorBox7: TColorBox;
     NightModeImagesPanelFrameColorsBox: TAdvGroupBox;
     NightModeImagesPanelOuterFrameColor: TColorBox;
     NightModeImagesPanelInnerFrameColor: TColorBox;
@@ -224,10 +216,7 @@ type
     NightModeSearchGamesPanelEditBoxFontColor: TColorBox;
     LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TLabel;
     NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBox;
-    ToolBarOverlayIconsFolder: TComboBox;
-    LabelToolBarOverlayIconsFolder: TShadowLabel;
-    ToolBarOverlayIconsFolderButtonUpdate: TBitBtn;
-    NightModePanelColors: TAdvGroupBox;
+    NightModePanelColorsBox: TAdvGroupBox;
     NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBox;
     LabelNightModeSearchGamesPanelTopColor: TLabel;
     NightModeSearchGamesPanelTopColor: TColorBox;
@@ -277,7 +266,7 @@ type
     Label24: TLabel;
     Label26: TLabel;
     GamesSelectionInactiveBottomColor: TColorBox;
-    NightModeGamesSelectionBarGroupBox: TAdvGroupBox;
+    NightModeGamesSelectionBarColorsBox: TAdvGroupBox;
     Label27: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -313,6 +302,67 @@ type
     Label19: TLabel;
     AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBox;
     LabelAddLeadingZeroVersionInfoMAME: TLabel;
+    InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
+    InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
+    LabelMAMEGameManualsPDFFolder: TShadowLabel;
+    MAMEGameManualsPDFFolder: TEditEx;
+    ShadowLabel6: TShadowLabel;
+    MAMEGameManualsPDFFolderButtonSelect: TBitBtn;
+    MAMEGameManualsPDFFolderButtonDefault: TBitBtn;
+    LabelMARP_scores3htm: TShadowLabel;
+    LabelLinkMARP_scores3htm: TShadowLabel;
+    LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TLabel;
+    NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBox;
+    NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBox;
+    NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TColorBox;
+    LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TLabel;
+    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBox;
+    LabelUseItalicFontStyleSystemTitleBar: TLabel;
+    LabelToolBarOverlayIconsFolder: TShadowLabel;
+    ToolBarOverlayIconsFolder: TComboBox;
+    ToolBarOverlayIconsFolderButtonUpdate: TBitBtn;
+    ButtonPageNightMode2: TSpeedButton;
+    NightModeButtonColorsBox: TAdvGroupBox;
+    LabelNightModeButtonColorFontColor: TShadowLabel;
+    LabelNightModeButtonColorGradientTop: TShadowLabel;
+    LabelNightModeButtonColorGradientBottom: TShadowLabel;
+    LabelNightModeButtonColorGradientBottomHover: TShadowLabel;
+    LabelNightModeButtonColorGradientTopHover: TShadowLabel;
+    LabelNightModeButtonColorGradientTopDisabled: TShadowLabel;
+    LabelNightModeButtonColorGradientBottomDisabled: TShadowLabel;
+    LabelNightModeButtonColorFrameColor: TShadowLabel;
+    LabelNightModeButtonColorFrameColorHover: TShadowLabel;
+    LabelNightModeButtonColorFrameColorDisabled: TShadowLabel;
+    LabelNightModeButtonColorFrameColorFocused: TShadowLabel;
+    LabelNightModeButtonColorFontColorDisabled: TShadowLabel;
+    LabelNightModeButtonColorFontShadowColorDisabled: TShadowLabel;
+    NightModeButtonColorFontColor: TColorBox;
+    NightModeButtonColorGradientTop: TColorBox;
+    NightModeButtonColorGradientBottom: TColorBox;
+    NightModeButtonColorGradientTopHover: TColorBox;
+    NightModeButtonColorGradientBottomHover: TColorBox;
+    NightModeButtonColorGradientBottomDisabled: TColorBox;
+    NightModeButtonColorGradientTopDisabled: TColorBox;
+    NightModeButtonColorFrameColor: TColorBox;
+    NightModeButtonColorFrameColorHover: TColorBox;
+    NightModeButtonColorFrameColorDisabled: TColorBox;
+    NightModeButtonColorFrameColorFocused: TColorBox;
+    NightModeButtonColorFontColorDisabled: TColorBox;
+    NightModeButtonColorFontShadowColorDisabled: TColorBox;
+    LabelNightModeButtonColorsViewNextBackground: TShadowLabel;
+    NightModeButtonColorsSamplePanel: TPanelEx;
+    NightModeButtonColorsSampleButton1: TBitBtnEx;
+    NightModeButtonColorsSampleButton2: TBitBtnEx;
+    NightModeButtonColorsSampleButton3: TBitBtnEx;
+    NightModeButtonColorsViewNextBackground: TBitBtn;
+    NightModeButtonColorsBoxDefaultButton: TBitBtn;
+    NightModeButtonColorsSampleButton4: TSpeedButtonEx;
+    ShadowLabel8: TShadowLabel;
+    ShadowLabel9: TShadowLabel;
+    ShadowLabel10: TShadowLabel;
+    NightModeButtonColorGradientTopSelected: TColorBox;
+    NightModeButtonColorGradientBottomSelected: TColorBox;
+    NightModeButtonColorFrameColorSelected: TColorBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -362,8 +412,8 @@ type
     procedure GamesListStatusBarInnerFrameColorSelect(Sender: TObject);
     procedure GamesListStatusBarFontColorSelect(Sender: TObject);
     procedure GamesListStatusBarButtonDefaultClick(Sender: TObject);
-    procedure InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
-    procedure InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
+    procedure InternetGameInfoProgettoEMMALinkButtonDefaultClick(Sender: TObject);
+    procedure InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefaultClick(Sender: TObject);
     procedure DisableDeleteSelectedGamesClick(Sender: TObject);
     procedure GameDocsDisplayModeSinglePanelClick(Sender: TObject);
     procedure HintBox_OpacityChange(Sender: TObject);
@@ -470,6 +520,38 @@ type
     procedure NightModeGameSelectionAlphaBlendClick(Sender: TObject);
     procedure NightModeGameSelectionButtonDefaultClick(Sender: TObject);
     procedure GameSelectionButtonCopyClick(Sender: TObject);
+    procedure InternetGameInfoArcadeItaliaLinkButtonDefaultClick(Sender: TObject);
+    procedure InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefaultClick(Sender: TObject);
+    procedure MAMEGameManualsPDFFolderButtonDefaultClick(Sender: TObject);
+    procedure MAMEGameManualsPDFFolderButtonSelectClick(Sender: TObject);
+    procedure NightModeSearchGamesPanelEditBoxCustomFrameColorSelect(
+      Sender: TObject);
+    procedure NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect(
+      Sender: TObject);
+    procedure NightModeSearchGamesPanelEditBoxUseCustomFrameClick(
+      Sender: TObject);
+    procedure NightModeButtonColorsViewNextBackgroundClick(
+      Sender: TObject);
+    procedure NightModeButtonColorFontColorSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientTopSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientBottomSelect(Sender: TObject);
+    procedure NightModeButtonColorFrameColorSelect(Sender: TObject);
+    procedure NightModeButtonColorFrameColorFocusedSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientTopHoverSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientBottomHoverSelect(Sender: TObject);
+    procedure NightModeButtonColorFrameColorHoverSelect(Sender: TObject);
+    procedure NightModeButtonColorFontColorDisabledSelect(Sender: TObject);
+    procedure NightModeButtonColorFontShadowColorDisabledSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientTopDisabledSelect(Sender: TObject);
+    procedure NightModeButtonColorGradientBottomDisabledSelect(Sender: TObject);
+    procedure NightModeButtonColorFrameColorDisabledSelect(Sender: TObject);
+    procedure NightModeButtonColorsBoxDefaultButtonClick(Sender: TObject);
+    procedure NightModeButtonColorGradientTopSelectedSelect(
+      Sender: TObject);
+    procedure NightModeButtonColorGradientBottomSelectedSelect(
+      Sender: TObject);
+    procedure NightModeButtonColorFrameColorSelectedSelect(
+      Sender: TObject);
   private
     { Private declarations }
     procedure NightModeRepaintToolBar;
@@ -516,7 +598,12 @@ begin
   iFoldersList:= THashedStringList.Create;
   GetFoldersList2(FormMain.GetFolderFull(32)+'overlay\', iFoldersList, True, False);
   if iFoldersList.Count > 0 then
-     ToolBarOverlayIconsFolder.Items.AddStrings(iFoldersList);
+     begin
+       ToolBarOverlayIconsFolder.Items.AddStrings(iFoldersList);
+       iIndex:= ToolBarOverlayIconsFolder.Items.IndexOf('img_dark');
+       if iIndex <> -1 then
+          ToolBarOverlayIconsFolder.Items.Delete(iIndex);
+     end;
   FreeAndNil(iFoldersList);
   ToolBarOverlayIconsFolder.Items.EndUpdate;
 
@@ -771,6 +858,7 @@ begin
   ButtonPageImages.Font.Style:= [];
   ButtonPageGameDocuments.Font.Style:= [];
   ButtonPageNightMode.Font.Style:= [];
+  ButtonPageNightMode2.Font.Style:= [];
   TSpeedButton(Sender).Font.Style:= [fsBold];
 end;
 
@@ -794,9 +882,9 @@ begin
        if not Application.Terminated then
           begin
             if InternetGameInfoLink.Text = '' then
-               InternetGameInfoLinkButtonDefault.Click;
+               InternetGameInfoProgettoEMMALinkButtonDefault.Click;
             if InternetMAMESoftwareListGameInfoLink.Text = '' then
-               InternetMAMESoftwareListGameInfoLinkButtonDefault.Click;
+               InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault.Click;
             FormMain.UpdateVideoPreviewIni;
             FormMain.SetVideoPreviewState;
           end;
@@ -972,14 +1060,24 @@ begin
   GamesListStatusBarGradientBar.Checked:= True;
 end;
 
-procedure TFormPreferences.InternetGameInfoLinkButtonDefaultClick(Sender: TObject);
+procedure TFormPreferences.InternetGameInfoProgettoEMMALinkButtonDefaultClick(Sender: TObject);
 begin
   InternetGameInfoLink.Text:= 'http://www.progettoemma.net/gioco.php?game=%s';
 end;
 
-procedure TFormPreferences.InternetMAMESoftwareListGameInfoLinkButtonDefaultClick(Sender: TObject);
+procedure TFormPreferences.InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefaultClick(Sender: TObject);
 begin
   InternetMAMESoftwareListGameInfoLink.Text:= 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s';
+end;
+
+procedure TFormPreferences.InternetGameInfoArcadeItaliaLinkButtonDefaultClick(Sender: TObject);
+begin
+  InternetGameInfoLink.Text:= 'http://adb.arcadeitalia.net/?mame=%s';
+end;
+
+procedure TFormPreferences.InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefaultClick(Sender: TObject);
+begin
+  InternetMAMESoftwareListGameInfoLink.Text:= 'http://adb.arcadeitalia.net/?mess=%s&list=%s';
 end;
 
 procedure TFormPreferences.DisableDeleteSelectedGamesClick(Sender: TObject);
@@ -1174,6 +1272,11 @@ begin
   SetDefaultColorBox(NightModeSearchGamesPanelEditBoxFontColor);
   SetDefaultColorBox(NightModeSearchGamesPanelEditBoxBackgroundColor);
 
+  SetDefaultColorBox(NightModeSearchGamesPanelEditBoxCustomFrameColor);
+  SetDefaultColorBox(NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor);
+
+  NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked:= True;
+
   SetDefaultColorBox(NightModeSearchGamesPanelCaptionBarFontColor);
   SetDefaultColorBox(NightModeSearchGamesPanelCaptionBarShadowColor);
 end;
@@ -1257,6 +1360,7 @@ begin
        FormMain.LabelSearchGamesFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
        FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
        FormMain.LabelSelectCPU.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
+       FormMain.LabelCustomCPUFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
      end;
 end;
 
@@ -1268,6 +1372,7 @@ begin
        FormMain.LabelSearchGamesFilter.ShadowColor:= NightModeSearchGamesPanelFilterShadowColor.Selected;
        FormMain.LabelSearchGamesFilter_ToolBar.ShadowColor:= NightModeSearchGamesPanelFilterShadowColor.Selected;
        FormMain.LabelSelectCPU.ShadowColor:= NightModeSearchGamesPanelFilterShadowColor.Selected;
+       FormMain.LabelCustomCPUFilter.ShadowColor:= NightModeSearchGamesPanelFilterShadowColor.Selected;
      end;
 end;
 
@@ -1560,6 +1665,7 @@ begin
      begin
        FormMain.FilterGameTitle_ToolBar.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
        FormMain.FilterGameTitle.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
+       FormMain.FilterCPU.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
      end;
 end;
 
@@ -1570,6 +1676,7 @@ begin
      begin
        FormMain.FilterGameTitle_ToolBar.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
        FormMain.FilterGameTitle.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
+       FormMain.FilterCPU.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
      end;
 end;
 
@@ -1611,8 +1718,6 @@ begin
   if not SameText(CurrentOverlayFolder, FormMain.ToolBarOverlayIconFolderStr) then
      FormMain.UpdateToolBarOverlays;
 end;
-
-
 
 procedure TFormPreferences.NightModePanelColorsTitleFontColorSelect(
   Sender: TObject);
@@ -1763,6 +1868,233 @@ begin
   FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveBottomColor, GamesSelectionInactiveBottomColor.Selected);
   FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveFrameColor, GamesSelectionInactiveFrameColor.Selected);
   FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveFontColor, GamesSelectionInactiveFontColor.Selected);
+end;
+
+
+
+procedure TFormPreferences.MAMEGameManualsPDFFolderButtonDefaultClick(
+  Sender: TObject);
+begin
+  MAMEGameManualsPDFFolder.Text:= 'manuals';
+end;
+
+procedure TFormPreferences.MAMEGameManualsPDFFolderButtonSelectClick(
+  Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(MAMEGameManualsPDFFolder, False);
+end;
+
+procedure TFormPreferences.NightModeSearchGamesPanelEditBoxCustomFrameColorSelect(
+  Sender: TObject);
+begin
+  if IsNightMode then
+     begin
+       FormMain.FilterGameTitle_ToolBar.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
+       FormMain.FilterGameTitle.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
+       FormMain.FilterCPU.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
+     end;
+end;
+
+procedure TFormPreferences.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect(
+  Sender: TObject);
+begin
+  if IsNightMode then
+     begin
+       FormMain.FilterGameTitle_ToolBar.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
+       FormMain.FilterGameTitle.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
+       FormMain.FilterCPU.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
+     end;
+end;
+
+procedure TFormPreferences.NightModeSearchGamesPanelEditBoxUseCustomFrameClick(
+  Sender: TObject);
+begin
+  if IsNightMode then
+     begin
+       FormMain.FilterGameTitle_ToolBar.UseCustomBorder:= NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
+       FormMain.FilterGameTitle.UseCustomBorder:= NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
+       FormMain.FilterCPU.UseCustomBorder:= NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
+     end;
+end;
+
+procedure TFormPreferences.NightModeButtonColorsViewNextBackgroundClick(
+  Sender: TObject);
+begin
+  TBitBtn(Sender).Tag:= TBitBtn(Sender).Tag+1;
+  if TBitBtn(Sender).Tag > 3 then
+     TBitBtn(Sender).Tag:= 1;
+
+  case TBitBtn(Sender).Tag of
+    1:
+      begin
+        LabelNightModeButtonColorsViewNextBackground.Caption:= 'Med Dark Gray Gradient Background';
+        SetPanelColors(NightModeButtonColorsSamplePanel, menu_background_color[1], clrMedDarkGray);
+      end;
+    2:
+      begin
+        LabelNightModeButtonColorsViewNextBackground.Caption:= 'Dark Gray Gradient Background';
+        SetPanelColors(NightModeButtonColorsSamplePanel, clrBlackBk, clrDarkGray);
+      end;
+    3:
+      begin
+        LabelNightModeButtonColorsViewNextBackground.Caption:= 'Med Dark Gray Solid Background';
+        SetPanelColors(NightModeButtonColorsSamplePanel, menu_background_color[1], -1, True);
+      end;
+  end;
+  NightModeButtonColorsSampleButton1.Invalidate;
+  NightModeButtonColorsSampleButton2.Invalidate;
+  NightModeButtonColorsSampleButton3.Invalidate;
+  NightModeButtonColorsSampleButton4.Invalidate;
+end;
+
+
+procedure TFormPreferences.NightModeButtonColorFontColorSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.Font.Color:= NightModeButtonColorFontColor.Selected;// TColorBox(Sender).Selected;
+  NightModeButtonColorsSampleButton2.Font.Color:= NightModeButtonColorsSampleButton1.Font.Color;
+  NightModeButtonColorsSampleButton3.Font.Color:= NightModeButtonColorsSampleButton1.Font.Color;
+  NightModeButtonColorsSampleButton4.Font.Color:= NightModeButtonColorsSampleButton1.Font.Color;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientTopSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorTop:= NightModeButtonColorGradientTop.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorTop:= NightModeButtonColorsSampleButton1.GradientColorTop;
+  NightModeButtonColorsSampleButton3.GradientColorTop:= NightModeButtonColorsSampleButton1.GradientColorTop;
+  NightModeButtonColorsSampleButton4.GradientColorTop:= NightModeButtonColorsSampleButton1.GradientColorTop;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientBottomSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorBottom:= NightModeButtonColorGradientBottom.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorBottom:= NightModeButtonColorsSampleButton1.GradientColorBottom;
+  NightModeButtonColorsSampleButton3.GradientColorBottom:= NightModeButtonColorsSampleButton1.GradientColorBottom;
+  NightModeButtonColorsSampleButton4.GradientColorBottom:= NightModeButtonColorsSampleButton1.GradientColorBottom;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFrameColorSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FrameColor:= NightModeButtonColorFrameColor.Selected;
+  NightModeButtonColorsSampleButton2.FrameColor:= NightModeButtonColorsSampleButton1.FrameColor;
+  NightModeButtonColorsSampleButton3.FrameColor:= NightModeButtonColorsSampleButton1.FrameColor;
+  NightModeButtonColorsSampleButton4.FrameColor:= NightModeButtonColorsSampleButton1.FrameColor;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFrameColorFocusedSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FrameColor_Focused:= NightModeButtonColorFrameColorFocused.Selected;
+  NightModeButtonColorsSampleButton2.FrameColor_Focused:= NightModeButtonColorsSampleButton1.FrameColor_Focused;
+  NightModeButtonColorsSampleButton3.FrameColor_Focused:= NightModeButtonColorsSampleButton1.FrameColor_Focused;
+  NightModeButtonColorsSampleButton4.FrameColor_Focused:= NightModeButtonColorsSampleButton1.FrameColor_Focused;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientTopHoverSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorTop_Hover:= NightModeButtonColorGradientTopHover.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorTop_Hover:= NightModeButtonColorsSampleButton1.GradientColorTop_Hover;
+  NightModeButtonColorsSampleButton3.GradientColorTop_Hover:= NightModeButtonColorsSampleButton1.GradientColorTop_Hover;
+  NightModeButtonColorsSampleButton4.GradientColorTop_Hover:= NightModeButtonColorsSampleButton1.GradientColorTop_Hover;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientBottomHoverSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorBottom_Hover:= NightModeButtonColorGradientBottomHover.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorBottom_Hover:= NightModeButtonColorsSampleButton1.GradientColorBottom_Hover;
+  NightModeButtonColorsSampleButton3.GradientColorBottom_Hover:= NightModeButtonColorsSampleButton1.GradientColorBottom_Hover;
+  NightModeButtonColorsSampleButton4.GradientColorBottom_Hover:= NightModeButtonColorsSampleButton1.GradientColorBottom_Hover;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFrameColorHoverSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FrameColor_Hover:= NightModeButtonColorFrameColorHover.Selected;
+  NightModeButtonColorsSampleButton2.FrameColor_Hover:= NightModeButtonColorsSampleButton1.FrameColor_Hover;
+  NightModeButtonColorsSampleButton3.FrameColor_Hover:= NightModeButtonColorsSampleButton1.FrameColor_Hover;
+  NightModeButtonColorsSampleButton4.FrameColor_Hover:= NightModeButtonColorsSampleButton1.FrameColor_Hover;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientTopSelectedSelect(
+  Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton4.GradientColorTop_Down:= NightModeButtonColorGradientTopSelected.Selected;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientBottomSelectedSelect(
+  Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton4.GradientColorBottom_Down:= NightModeButtonColorGradientBottomSelected.Selected;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFrameColorSelectedSelect(
+  Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton4.FrameColor_Down:= NightModeButtonColorFrameColorSelected.Selected;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFontColorDisabledSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FontColorDisabled:= NightModeButtonColorFontColorDisabled.Selected;
+  NightModeButtonColorsSampleButton2.FontColorDisabled:= NightModeButtonColorsSampleButton1.FontColorDisabled;
+  NightModeButtonColorsSampleButton3.FontColorDisabled:= NightModeButtonColorsSampleButton1.FontColorDisabled;
+  NightModeButtonColorsSampleButton4.FontColorDisabled:= NightModeButtonColorsSampleButton1.FontColorDisabled;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFontShadowColorDisabledSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FontShadowColorDisabled:= NightModeButtonColorFontShadowColorDisabled.Selected;
+  NightModeButtonColorsSampleButton2.FontShadowColorDisabled:= NightModeButtonColorsSampleButton1.FontShadowColorDisabled;
+  NightModeButtonColorsSampleButton3.FontShadowColorDisabled:= NightModeButtonColorsSampleButton1.FontShadowColorDisabled;
+  NightModeButtonColorsSampleButton4.FontShadowColorDisabled:= NightModeButtonColorsSampleButton1.FontShadowColorDisabled;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientTopDisabledSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorTop_Disabled:= NightModeButtonColorGradientTopDisabled.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorTop_Disabled:= NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
+  NightModeButtonColorsSampleButton3.GradientColorTop_Disabled:= NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
+  NightModeButtonColorsSampleButton4.GradientColorTop_Disabled:= NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
+end;
+
+procedure TFormPreferences.NightModeButtonColorGradientBottomDisabledSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled:= NightModeButtonColorGradientBottomDisabled.Selected;
+  NightModeButtonColorsSampleButton2.GradientColorBottom_Disabled:= NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled;
+  NightModeButtonColorsSampleButton3.GradientColorBottom_Disabled:= NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled;
+  NightModeButtonColorsSampleButton4.GradientColorBottom_Disabled:= NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled;
+end;
+
+procedure TFormPreferences.NightModeButtonColorFrameColorDisabledSelect(Sender: TObject);
+begin
+  NightModeButtonColorsSampleButton1.FrameColor_Disabled:= NightModeButtonColorFrameColorDisabled.Selected;
+  NightModeButtonColorsSampleButton2.FrameColor_Disabled:= NightModeButtonColorsSampleButton1.FrameColor_Disabled;
+  NightModeButtonColorsSampleButton3.FrameColor_Disabled:= NightModeButtonColorsSampleButton1.FrameColor_Disabled;
+  NightModeButtonColorsSampleButton4.FrameColor_Disabled:= NightModeButtonColorsSampleButton1.FrameColor_Disabled;
+end;
+
+
+procedure TFormPreferences.NightModeButtonColorsBoxDefaultButtonClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(NightModeButtonColorFontColor);
+  SetDefaultColorBox(NightModeButtonColorGradientTop);
+  SetDefaultColorBox(NightModeButtonColorGradientBottom);
+  SetDefaultColorBox(NightModeButtonColorFrameColor);
+
+  SetDefaultColorBox(NightModeButtonColorFrameColorFocused);
+
+  SetDefaultColorBox(NightModeButtonColorGradientTopHover);
+  SetDefaultColorBox(NightModeButtonColorGradientBottomHover);
+  SetDefaultColorBox(NightModeButtonColorFrameColorHover);
+
+  SetDefaultColorBox(NightModeButtonColorGradientTopSelected);
+  SetDefaultColorBox(NightModeButtonColorGradientBottomSelected);
+  SetDefaultColorBox(NightModeButtonColorFrameColorSelected);
+
+  SetDefaultColorBox(NightModeButtonColorGradientTopDisabled);
+  SetDefaultColorBox(NightModeButtonColorGradientBottomDisabled);
+  SetDefaultColorBox(NightModeButtonColorFrameColorDisabled);
+
+  SetDefaultColorBox(NightModeButtonColorFontColorDisabled);
+  SetDefaultColorBox(NightModeButtonColorFontShadowColorDisabled);
 end;
 
 

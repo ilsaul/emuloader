@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
   MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
-  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons;
+  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons, ButtonsEx;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -65,8 +65,8 @@ type
     IL_SystemType: TImageList;
     PanelFavSettings: TPanelEx;
     ToolButtonFavSettings: TToolButton;
-    ButtonClosePanelFavSettings: TBitBtn;
-    ButtonCenterPanelFavSettings: TBitBtn;
+    ButtonClosePanelFavSettings: TBitBtnEx;
+    ButtonCenterPanelFavSettings: TBitBtnEx;
     FavSettingSmallFont: TAdvOfficeRadioButton;
     FavSettingLargeFont: TAdvOfficeRadioButton;
     FavSettingMediumFont: TAdvOfficeRadioButton;
@@ -838,6 +838,21 @@ begin
        if not Assigned(FormFavoritesManagerCleanseProfile) then
           FormFavoritesManagerCleanseProfile:= TFormFavoritesManagerCleanseProfile.Create(nil);
 
+       if IsNightMode then
+          begin
+            FormFavoritesManagerCleanseProfile.Color:= menu_background_color[1];
+            SetPanelColors(FormFavoritesManagerCleanseProfile.PanelBottom, menu_background_color[1], clrMedDarkGray);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTopMessage, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTotal, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+            FormMain.SetEasyListViewColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, menu_background_color[1], item_caption_active_color[1]);
+            FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorderColor:= FavoritesList.ShowThemedBorderColor;
+
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonConfirm);
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonAbort);
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonRemoveSelected);
+          end;
+
        FormFavoritesManagerCleanseProfile.FavoritesCleanseList.BeginUpdate;
        FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= True;
        LoadCustomMAMEIconToForm(FormFavoritesManagerCleanseProfile, 3);
@@ -921,8 +936,11 @@ begin
                 FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
                 if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrYes then
                    begin
+                     LabelTaskMessage.Caption:= 'Cleansing profile of impure data, please wait...';
+                     ShowUpdateFavGamesListPanel;
                      FavoriteGamesList.BeginUpdate;
                      // remove all games from fav .ini file...
+
                      addItem:= FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Groups.FirstItem;
                      repeat
                        Loop:= FavoriteGamesList.IndexOf(TFavCleanseInfo(addItem).eEntryString);
@@ -935,6 +953,7 @@ begin
                          end;
                        end;
                        addItem:= FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Groups.NextItem(addItem);
+                       Application.ProcessMessages;
                      until addItem = nil;
                      FavoriteGamesList.EndUpdate;
                    end
@@ -1199,9 +1218,8 @@ begin
   if IsNightMode then
      begin
        SetFormColors(FormFavoritesManager, nil, nil, nil, nil, -1, False);
-       FavoritesList.Color:= FormFavoritesManager.Color;
-       FavoritesList.Font.Color:= clWhite;
-       FavoritesList.HotTrack.Color:= clWhite;
+
+       FormMain.SetEasyListViewColors(FavoritesList, FormFavoritesManager.Color, clWhite);
 
        SetPanelNightColors(PanelFavSettings);
 
@@ -1210,6 +1228,8 @@ begin
        SetRadioButtonColors(FavSettingSmallFont, clWhite, clNavy);
        SetRadioButtonColors(FavSettingMediumFont, clWhite, clNavy);
        SetRadioButtonColors(FavSettingLargeFont, clWhite, clNavy);
+       FormMain.SetButtonExColors(ButtonCenterPanelFavSettings);
+       FormMain.SetButtonExColors(ButtonClosePanelFavSettings);
      end;
   ReadSettings;
 

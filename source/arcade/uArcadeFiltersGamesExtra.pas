@@ -5,43 +5,43 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, uCommon, Buttons,
-  AdvOfficeButtons, PanelEx, AdvGroupBox;
+  AdvOfficeButtons, PanelEx, AdvGroupBox, ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeFiltersExtra = class(TForm)
     FilterGamesMainCPU: TAdvOfficeCheckBox;
-    PanelEx1: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelControlType: TLabel;
-    LabelInterfaceType: TLabel;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelControlType: TShadowLabel;
+    LabelInterfaceType: TShadowLabel;
     InterfaceType: TComboBox;
-    LabelAudioType: TLabel;
+    LabelAudioType: TShadowLabel;
     AudioType: TComboBox;
-    LabelGamesROMs: TLabel;
+    LabelGamesROMs: TShadowLabel;
     GamesROMs: TComboBox;
-    LabelDeviceROMs: TLabel;
+    LabelDeviceROMs: TShadowLabel;
     HideDeviceSets: TAdvOfficeCheckBox;
     DeviceROMs: TComboBox;
-    LabelBios: TLabel;
+    LabelBios: TShadowLabel;
     Bios: TComboBox;
     HideBiosSets: TAdvOfficeCheckBox;
     HideGamesWithCHDFiles: TAdvOfficeCheckBox;
-    ButtonDefaultOptions: TBitBtn;
-    LabelSTVMultiSlot: TLabel;
+    ButtonDefaultOptions: TBitBtnEx;
+    LabelSTVMultiSlot: TShadowLabel;
     NeoGeoMVS: TAdvOfficeCheckBox;
     STVMultiSlot: TAdvOfficeCheckBox;
-    LabelNeoGeoMVS: TLabel;
+    LabelNeoGeoMVS: TShadowLabel;
     ControlType_New: TComboBox;
     ScreenOrientation: TComboBox;
-    LabelScreenOrientation: TLabel;
+    LabelScreenOrientation: TShadowLabel;
     ShowMergedSetsOnly: TAdvOfficeCheckBox;
     HideNoDumpROMsGames: TAdvOfficeCheckBox;
     SaveState: TComboBox;
-    LabelSaveState: TLabel;
+    LabelSaveState: TShadowLabel;
     CategoryFiltersGroupBox: TAdvGroupBox;
-    Label1: TLabel;
-    ButtonCategoriesToHideInfo: TBitBtn;
+    LabelCategoryFiltersGroupBoxHint: TShadowLabel;
+    ButtonCategoriesToHideInfo: TBitBtnEx;
     CategoryCasino: TAdvOfficeCheckBox;
     CategoryFruitMachines: TAdvOfficeCheckBox;
     CategoryRhythm: TAdvOfficeCheckBox;

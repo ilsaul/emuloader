@@ -6,45 +6,59 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, ComCtrls, IniFiles, Buttons, FileCtrl,
   MPCommonObjects, EasyListview, uCommon, ImgList, ToolWin,
-  ShadowLabel, PanelEx, AdvOfficeButtons, ShellAPI;
+  ShadowLabel, PanelEx, AdvOfficeButtons, ShellAPI, EditEx, ButtonsEx;
 
 type
   TFormArcadeEmulatorsSetup = class(TForm)
     PanelSystemsSelect: TPanelEx;
-    LabelSystemTitle: TShadowLabel;
     SystemSelector: TEasyListview;
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    ButtonSetOptions: TBitBtn;
-    ButtonUpdateSystem: TBitBtn;
-    ButtonClearSystem: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    ButtonSetOptions: TBitBtnEx;
+    ButtonUpdateSystem: TBitBtnEx;
+    ButtonClearSystem: TBitBtnEx;
     IL_Systems: TImageList;
     UseLargeIcons: TAdvOfficeCheckBox;
     PanelEmulatorDetails: TPanelEx;
     LabelArcade_versioninfo: TShadowLabel;
-    LabelAlterMAME: TShadowLabel;
-    LabelAlterMAME_versioninfo: TShadowLabel;
+    LabelAlterMAME1: TShadowLabel;
+    LabelAlterMAME1_versioninfo: TShadowLabel;
     LabelArcade_exec: TShadowLabel;
-    LabelAlterMAME_Autorun: TShadowLabel;
-    ShadowLabel3: TShadowLabel;
-    ShadowLabel4: TShadowLabel;
-    ButtonBrowseArcade_exec: TBitBtn;
-    Arcade_versioninfo: TEdit;
-    AlterMAME_exec: TEdit;
-    ButtonBrowseAlterMAME: TBitBtn;
-    ButtonClearAlterMAME: TBitBtn;
-    ButtonHelpAlterMAME: TBitBtn;
-    AlterMAME_Autorun: TAdvOfficeCheckBox;
-    AlterMAME_versioninfo: TEdit;
+    LabelAlterMAME1_Autorun: TShadowLabel;
+    LabelAlterMAME1_Tip2: TShadowLabel;
+    LabelAlterMAME1_Tip1: TShadowLabel;
+    ButtonBrowseArcade_exec: TBitBtnEx;
+    Arcade_versioninfo: TEditEx;
+    AlterMAME1_exec: TEditEx;
+    ButtonBrowseAlterMAME1: TBitBtnEx;
+    ButtonClearAlterMAME1: TBitBtnEx;
+    ButtonHelpAlterMAME: TBitBtnEx;
+    AlterMAME1_Autorun: TAdvOfficeCheckBox;
+    AlterMAME1_versioninfo: TEditEx;
     PanelMAMEEmulatorsText: TPanelEx;
-    ShadowLabel2: TShadowLabel;
-    ShadowLabel1: TShadowLabel;
-    ShadowLabel5: TShadowLabel;
-    ShadowLabel6: TShadowLabel;
-    ShadowLabel7: TShadowLabel;
-    Arcade_exec: TEdit;
-    ButtonSetOptionsAlterMAME: TBitBtn;
+    LabelMAMELink_Tabs: TShadowLabel;
+    LabelMAMELink1: TShadowLabel;
+    LabelMAMELink3: TShadowLabel;
+    LabelMAMELink4: TShadowLabel;
+    LabelMAMELink2: TShadowLabel;
+    Arcade_exec: TEditEx;
+    LabelAlterMAME2: TShadowLabel;
+    LabelAlterMAME2_versioninfo: TShadowLabel;
+    LabelAlterMAME2_Tip2: TShadowLabel;
+    LabelAlterMAME2_Tip1: TShadowLabel;
+    AlterMAME2_exec: TEditEx;
+    ButtonBrowseAlterMAME2: TBitBtnEx;
+    ButtonClearAlterMAME2: TBitBtnEx;
+    AlterMAME2_versioninfo: TEditEx;
+    IconEmulator: TImage;
+    IconEmulatorAlterMAME1: TImage;
+    IconEmulatorAlterMAME2: TImage;
+    LabelAlterMAME2_Autorun: TShadowLabel;
+    AlterMAME2_Autorun: TAdvOfficeCheckBox;
+    PanelSystemTitleBottom: TPanelEx;
+    PanelSystemTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -56,38 +70,43 @@ type
     procedure SystemSelectorItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure ButtonHelpAlterMAMEClick(Sender: TObject);
-    procedure ButtonBrowseAlterMAMEClick(Sender: TObject);
-    procedure AlterMAME_execChange(Sender: TObject);
-    procedure ButtonClearAlterMAMEClick(Sender: TObject);
+    procedure ButtonBrowseAlterMAME1Click(Sender: TObject);
+    procedure AlterMAME1_execChange(Sender: TObject);
+    procedure ButtonClearAlterMAME1Click(Sender: TObject);
     procedure ButtonUpdateSystemClick(Sender: TObject);
-    procedure AlterMAME_AutorunClick(Sender: TObject);
+    procedure AlterMAME1_AutorunClick(Sender: TObject);
     procedure Arcade_versioninfoChange(Sender: TObject);
-    procedure AlterMAME_versioninfoChange(Sender: TObject);
-    procedure ShadowLabel1MouseEnter(Sender: TObject);
-    procedure ShadowLabel1MouseLeave(Sender: TObject);
-    procedure ShadowLabel1Click(Sender: TObject);
-    procedure ButtonSetOptionsAlterMAMEClick(Sender: TObject);
+    procedure AlterMAME1_versioninfoChange(Sender: TObject);
+    procedure LabelMAMELink1MouseEnter(Sender: TObject);
+    procedure LabelMAMELink1MouseLeave(Sender: TObject);
+    procedure LabelMAMELink1Click(Sender: TObject);
     procedure UseLargeIconsClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure AlterMAME2_AutorunClick(Sender: TObject);
+    procedure ButtonBrowseAlterMAME2Click(Sender: TObject);
+    procedure AlterMAME2_execChange(Sender: TObject);
+    procedure AlterMAME2_versioninfoChange(Sender: TObject);
+    procedure ButtonClearAlterMAME2Click(Sender: TObject);
   private
     { Private declarations }
     newEmulatorFile,
     newEmulatorVersion: packed array[1..MaxArcadeSystems] of String;
     newEmulatorDateTime: packed array[1..MaxArcadeSystems] of Integer;
-    newAlterMAMEFile, newAlterMAMEVersion: String;
-    newAlterMAMEDateTime: Integer;
-    newbuildMAME, newbuildAlterMAME, newbuildHBMAME: String;
-    IsExeMAME: Boolean; // for AlterMAME default settings button
+    newAlterMAMEFile, newAlterMAMEVersion, newbuildAlterMAME: packed array[1..2] of String;
+    newAlterMAMEDateTime: packed array[1..2] of Integer;
+    newbuildMAME, newbuildHBMAME: String;
+    //IsExeMAME: Boolean; // for AlterMAME default settings button
     elIni: TMemIniFile;
     function  VerifyEmulator(SystemID: Byte): Boolean;
-    function  VerifyAlterMAME: Boolean;
+    function  VerifyAlterMAME1: Boolean;
+    function  VerifyAlterMAME2: Boolean;
     procedure GetEmulatorDefaultDescription(SystemID: Byte; UpdateLabel: Boolean = True);
-    procedure ValidateAlterMAMEExecutable;
     procedure SetAlterMAMEPanel(Enabled: Boolean);
     procedure SetAlterMAMEText;
+    procedure SetAlterMAME2Text;
     //procedure ClearEmulatorIcon(AlterMAME: Boolean);
     //function  SetEmulatorIcon(sysID: ShortInt; IsAlterMAME: Boolean): Integer;
-    procedure ResizeForm;
+    //procedure ResizeForm;
     procedure SetSystemInfo(sysID: ShortInt);
     procedure ReadWriteSettings(ReadMode: Boolean);
   public
@@ -117,42 +136,50 @@ begin
      Arcade_versioninfo.Text:= newEmulatorVersion[SystemID];
 end;
 
-procedure TFormArcadeEmulatorsSetup.ValidateAlterMAMEExecutable;
-var
-  sFile: String;
-begin
-  IsExeMAME:= False;
-  ButtonSetOptionsAlterMAME.Enabled:= False;
-  if AlterMAME_exec.Text = '' then
-     Exit;
-  sFile:= LowerCase(AlterMAME_exec.Text);
-  IsExeMAME:= PosEx('mame', sFile) <> 0;
-  if not IsExeMAME then
-     IsExeMAME:= PosEx('ume', sFile) <> 0;
-  ButtonSetOptionsAlterMAME.Enabled:= IsExeMAME;
-end;
-
 procedure TFormArcadeEmulatorsSetup.SetAlterMAMEPanel(Enabled: Boolean);
 begin
-  if LabelAlterMAME.Enabled = Enabled then
+  if LabelAlterMAME1.Enabled = Enabled then
      Exit;
-  LabelAlterMAME.Enabled:= Enabled;
-  LabelAlterMAME_versioninfo.Enabled:= Enabled;
-  AlterMAME_versioninfo.Enabled:= Enabled;
-  AlterMAME_exec.Enabled:= Enabled;
-  ButtonBrowseAlterMAME.Enabled:= Enabled;
-  ButtonClearAlterMAME.Enabled:= Enabled;
+  LabelAlterMAME1.Enabled:= Enabled;
+  LabelAlterMAME1_versioninfo.Enabled:= Enabled;
+  LabelAlterMAME1_Tip1.Enabled:= Enabled;
+  LabelAlterMAME1_Tip2.Enabled:= Enabled;
+  IconEmulatorAlterMAME1.Visible:= Enabled;
+  AlterMAME1_versioninfo.Enabled:= Enabled;
+  AlterMAME1_exec.Enabled:= Enabled;
+  ButtonBrowseAlterMAME1.Enabled:= Enabled;
+  ButtonClearAlterMAME1.Enabled:= Enabled;
   ButtonHelpAlterMAME.Enabled:= Enabled;
-  AlterMAME_Autorun.Enabled:= Enabled;
-  ButtonSetOptionsAlterMAME.Enabled:= Enabled;
+  AlterMAME1_Autorun.Enabled:= Enabled;
+  LabelAlterMAME1_Autorun.Enabled:= Enabled;
+
+  LabelAlterMAME2.Enabled:= Enabled;
+  LabelAlterMAME2_versioninfo.Enabled:= Enabled;
+  LabelAlterMAME2_Tip1.Enabled:= Enabled;
+  LabelAlterMAME2_Tip2.Enabled:= Enabled;
+  IconEmulatorAlterMAME2.Visible:= Enabled;
+  AlterMAME2_versioninfo.Enabled:= Enabled;
+  AlterMAME2_exec.Enabled:= Enabled;
+  ButtonBrowseAlterMAME2.Enabled:= Enabled;
+  ButtonClearAlterMAME2.Enabled:= Enabled;
+  AlterMAME2_Autorun.Enabled:= Enabled;
+  LabelAlterMAME2_Autorun.Enabled:= Enabled;
 end;
 
 procedure TFormArcadeEmulatorsSetup.SetAlterMAMEText;
 begin
-  if newAlterMAMEVersion <> '' then
-     AlterMAME_versioninfo.Text:= newAlterMAMEVersion
+  if newAlterMAMEVersion[1] <> '' then
+     AlterMAME1_versioninfo.Text:= newAlterMAMEVersion[1]
   else
-     AlterMAME_versioninfo.Text:= '';
+     AlterMAME1_versioninfo.Text:= '';
+end;
+
+procedure TFormArcadeEmulatorsSetup.SetAlterMAME2Text;
+begin
+  if newAlterMAMEVersion[2] <> '' then
+     AlterMAME2_versioninfo.Text:= newAlterMAMEVersion[2]
+  else
+     AlterMAME2_versioninfo.Text:= '';
 end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonCancelClick(Sender: TObject);
@@ -166,9 +193,16 @@ var
   Loop: Integer;
 begin
   ReadWriteSettings(True);
-  ResizeForm;
+  //ResizeForm;
+
+  FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
+  FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
+  FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME2.Picture.Icon);
 
   FormMain.ELV_ResetNormalColors(SystemSelector);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(SystemSelector);
+     
   FormMain.LoadSystemsIcons(IL_Systems, False);
 
   // show emulator icon like in EmuCon ???
@@ -184,16 +218,25 @@ begin
     newEmulatorDateTime[Loop]:= FormMain.EmulatorDateTime[Loop];
   end;
   newbuildMAME:= FormMain.buildMAME;
-  newAlterMAMEFile:= FormMain.AlterMAMEFile;
-  newAlterMAMEVersion:= FormMain.AlterMAMEVersion;
-  newAlterMAMEDateTime:= FormMain.AlterMAMEDateTime;
-  newbuildAlterMAME:= FormMain.buildAlterMAME;
   newbuildHBMAME:= FormMain.buildHBMAME;
 
-  AlterMAME_versioninfo.Text:= newAlterMAMEVersion;
-  AlterMAME_Autorun.Tag:= 1;
-  AlterMAME_Autorun.Checked:= FormMain.PopupAutorunGameAlterMAME.Checked;
-  AlterMAME_Autorun.Tag:= 0;
+  for Loop:= Low(FormMain.AlterMAMEFile) to High(FormMain.AlterMAMEFile) do
+  begin
+    newAlterMAMEFile[Loop]:= FormMain.AlterMAMEFile[Loop];
+    newAlterMAMEVersion[Loop]:= FormMain.AlterMAMEVersion[Loop];
+    newAlterMAMEDateTime[Loop]:= FormMain.AlterMAMEDateTime[Loop];
+    newbuildAlterMAME[Loop]:= FormMain.buildAlterMAME[Loop];
+  end;
+
+  AlterMAME1_versioninfo.Text:= newAlterMAMEVersion[1];
+  AlterMAME1_Autorun.Tag:= 1;
+  AlterMAME1_Autorun.Checked:= FormMain.PopupAutorunGameAlterMAME.Checked;
+  AlterMAME1_Autorun.Tag:= 0;
+
+  AlterMAME2_versioninfo.Text:= newAlterMAMEVersion[2];
+  AlterMAME2_Autorun.Tag:= 1;
+  AlterMAME2_Autorun.Checked:= FormMain.PopupAutorunGameAlterMAME2.Checked;
+  AlterMAME2_Autorun.Tag:= 0;
 
   FormMain.ELV_PopulateSystems(SystemSelector, True, True, 1);
   FormMain.ELV_SelectItem(SystemSelector, 0);
@@ -237,16 +280,16 @@ begin
   end;
 end;
 
-function TFormArcadeEmulatorsSetup.VerifyAlterMAME: Boolean;
+function TFormArcadeEmulatorsSetup.VerifyAlterMAME1: Boolean;
 begin
-  Result:= (newAlterMAMEFile <> '') and (FileExists(newAlterMAMEFile));
+  Result:= (newAlterMAMEFile[1] <> '') and (FileExists(newAlterMAMEFile[1]));
   case Result of
     True:
       begin
-        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEFile', newAlterMAMEFile);
-        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion', newAlterMAMEVersion);
-        elIni.WriteInteger(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime', newAlterMAMEDateTime);
-        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild', newbuildAlterMAME);
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEFile', newAlterMAMEFile[1]);
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion', newAlterMAMEVersion[1]);
+        elIni.WriteInteger(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime', newAlterMAMEDateTime[1]);
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild', newbuildAlterMAME[1]);
       end;
     False:
       begin
@@ -254,6 +297,27 @@ begin
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEVersion');
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEDateTime');
         elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAMEBuild');
+      end;
+  end;
+end;
+
+function TFormArcadeEmulatorsSetup.VerifyAlterMAME2: Boolean;
+begin
+  Result:= (newAlterMAMEFile[2] <> '') and (FileExists(newAlterMAMEFile[2]));
+  case Result of
+    True:
+      begin
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2File', newAlterMAMEFile[2]);
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2Version', newAlterMAMEVersion[2]);
+        elIni.WriteInteger(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2DateTime', newAlterMAMEDateTime[2]);
+        elIni.WriteString(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2Build', newbuildAlterMAME[2]);
+      end;
+    False:
+      begin
+        elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2File');
+        elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2Version');
+        elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2DateTime');
+        elIni.DeleteKey(FormMain.GetArcadeSystemIniSection(idMAME), 'emu_AlterMAME2Build');
       end;
   end;
 end;
@@ -289,19 +353,33 @@ begin
     VerifyEmulator(Loop);
   end;
   FormMain.buildMAME:= newbuildMAME;
-  FormMain.AlterMAMEFile:= '';
-  FormMain.AlterMAMEVersion:= '';
-  FormMain.AlterMAMEDateTime:= -1;
-  FormMain.buildAlterMAME:= '';
   FormMain.buildHBMAME:= newbuildHBMAME;
 
-  if VerifyAlterMAME then
+  for Loop:= Low(FormMain.AlterMAMEFile) to High(FormMain.AlterMAMEFile) do
+  begin
+    // clear vars contents, just in case
+    FormMain.AlterMAMEFile[Loop]:= '';
+    FormMain.AlterMAMEVersion[Loop]:= '';
+    FormMain.AlterMAMEDateTime[Loop]:= -1;
+    FormMain.buildAlterMAME[Loop]:= '';
+  end;
+
+  if VerifyAlterMAME1 then
      begin
-       FormMain.AlterMAMEFile:= newAlterMAMEFile;
-       FormMain.AlterMAMEVersion:= newAlterMAMEVersion;
-       FormMain.AlterMAMEDateTime:= newAlterMAMEDateTime;
-       FormMain.buildAlterMAME:= newbuildAlterMAME;
+       FormMain.AlterMAMEFile[1]:= newAlterMAMEFile[1];
+       FormMain.AlterMAMEVersion[1]:= newAlterMAMEVersion[1];
+       FormMain.AlterMAMEDateTime[1]:= newAlterMAMEDateTime[1];
+       FormMain.buildAlterMAME[1]:= newbuildAlterMAME[1];
      end;
+
+  if VerifyAlterMAME2 then
+     begin
+       FormMain.AlterMAMEFile[2]:= newAlterMAMEFile[2];
+       FormMain.AlterMAMEVersion[2]:= newAlterMAMEVersion[2];
+       FormMain.AlterMAMEDateTime[2]:= newAlterMAMEDateTime[2];
+       FormMain.buildAlterMAME[2]:= newbuildAlterMAME[2];
+     end;
+
   if not FormMain.CheckReadOnly(FormMain.GetArcadeEmulatorsFile) then
      elIni.UpdateFile;
   FreeAndNil(elIni);
@@ -333,7 +411,7 @@ begin
   else
     iVersion:= '';
   end;
-  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, False, iVersion);
+  FormMain.CallEmulatorOptions(newEmulatorFile[SystemSelector.Tag], newEmulatorVersion[SystemSelector.Tag], SystemSelector.Tag, iVersion);
 end;
 
 {procedure TFormEmulatorsSetup.ClearEmulatorIcon(AlterMAME: Boolean);
@@ -388,8 +466,10 @@ begin
   Arcade_exec.Text:= newEmulatorFile[sysID];
   Arcade_versioninfo.Text:= newEmulatorVersion[sysID];
   SetAlterMAMEPanel(sysID = idMAME);
-  AlterMAME_exec.Text:= newAlterMAMEFile;
+  AlterMAME1_exec.Text:= newAlterMAMEFile[1];
+  AlterMAME2_exec.Text:= newAlterMAMEFile[2];
   SetAlterMAMEText;
+  SetAlterMAME2Text;
   //SetEmulatorIcon(sysID, False);
   //if sysID = idMAME then
   //   SetEmulatorIcon(-1, True);
@@ -410,6 +490,7 @@ begin
   //end;
 end;
 
+{
 procedure TFormArcadeEmulatorsSetup.ResizeForm;
 var
   Loop: Integer;
@@ -430,16 +511,15 @@ begin
   ButtonBrowseArcade_exec.Top:=ButtonBrowseArcade_exec.Top-24;
   LabelArcade_versioninfo.Top:= LabelArcade_versioninfo.Top-24;
   Arcade_versioninfo.Top:= Arcade_versioninfo.Top-24;
-  LabelAlterMAME.Top:= LabelAlterMAME.Top-24;
-  AlterMAME_exec.Top:= AlterMAME_exec.Top-24;
-  ButtonBrowseAlterMAME.Top:= ButtonBrowseAlterMAME.Top-24;
-  ButtonClearAlterMAME.Top:= ButtonClearAlterMAME.Top-24;
+  LabelAlterMAME1.Top:= LabelAlterMAME1.Top-24;
+  AlterMAME1_exec.Top:= AlterMAME1_exec.Top-24;
+  ButtonBrowseAlterMAME1.Top:= ButtonBrowseAlterMAME1.Top-24;
+  ButtonClearAlterMAME1.Top:= ButtonClearAlterMAME1.Top-24;
   ButtonHelpAlterMAME.Top:= ButtonHelpAlterMAME.Top-24;
-  LabelAlterMAME_versioninfo.Top:= LabelAlterMAME_versioninfo.Top-24;
-  AlterMAME_versioninfo.Top:= AlterMAME_versioninfo.Top-24;
-  ButtonSetOptionsAlterMAME.Top:= ButtonSetOptionsAlterMAME.Top-24;
-  AlterMAME_Autorun.Top:= AlterMAME_Autorun.Top-24;
-  LabelAlterMAME_Autorun.Top:= LabelAlterMAME_Autorun.Top-24;
+  LabelAlterMAME1_versioninfo.Top:= LabelAlterMAME1_versioninfo.Top-24;
+  AlterMAME1_versioninfo.Top:= AlterMAME1_versioninfo.Top-24;
+  AlterMAME1_Autorun.Top:= AlterMAME1_Autorun.Top-24;
+  LabelAlterMAME1_Autorun.Top:= LabelAlterMAME1_Autorun.Top-24;
   ButtonSetOptions.Top:= ButtonSetOptions.Top-28;
   ButtonUpdateSystem.Top:= ButtonUpdateSystem.Top-28;
   ButtonClearSystem.Top:= ButtonClearSystem.Top-28;
@@ -450,12 +530,11 @@ begin
   Arcade_exec.Width:= Arcade_exec.Width-16;
   ButtonBrowseArcade_exec.Left:= ButtonBrowseArcade_exec.Left-16;
   Arcade_versioninfo.Width:= Arcade_versioninfo.Width-16;
-  AlterMAME_exec.Width:= AlterMAME_exec.Width-16;
-  ButtonBrowseAlterMAME.Left:= ButtonBrowseAlterMAME.Left-16;
-  ButtonClearAlterMAME.Left:= ButtonClearAlterMAME.Left-16;
+  AlterMAME1_exec.Width:= AlterMAME1_exec.Width-16;
+  ButtonBrowseAlterMAME1.Left:= ButtonBrowseAlterMAME1.Left-16;
+  ButtonClearAlterMAME1.Left:= ButtonClearAlterMAME1.Left-16;
   ButtonHelpAlterMAME.Left:= ButtonHelpAlterMAME.Left-16;
-  AlterMAME_versioninfo.Width:= AlterMAME_versioninfo.Width-16;
-  ButtonSetOptionsAlterMAME.Left:= ButtonSetOptionsAlterMAME.Left-16;
+  AlterMAME1_versioninfo.Width:= AlterMAME1_versioninfo.Width-16;
   ButtonSetOptions.Left:= ButtonSetOptions.Left-8;
   ButtonUpdateSystem.Left:= ButtonUpdateSystem.Left-8;
   ButtonClearSystem.Left:= ButtonClearSystem.Left-8;
@@ -463,6 +542,7 @@ begin
   ButtonOk.Left:= ButtonOk.Left-8;
   ButtonCancel.Left:= ButtonCancel.Left-8;
 end;
+}
 
 procedure TFormArcadeEmulatorsSetup.Arcade_execChange(Sender: TObject);
 begin
@@ -503,8 +583,8 @@ begin
     idHBMAME: newbuildHBMAME:= '';
   end;
   //ClearEmulatorIcon(False);
-  if LabelAlterMAME.Enabled then
-     ButtonClearAlterMAME.Click;
+  if LabelAlterMAME1.Enabled then
+     ButtonClearAlterMAME1.Click;
 end;
 
 procedure TFormArcadeEmulatorsSetup.SystemSelectorItemSelectionChanged(
@@ -521,59 +601,62 @@ end;
 procedure TFormArcadeEmulatorsSetup.ButtonHelpAlterMAMEClick(Sender: TObject);
 begin
   CallMessageBox;
-  FormMain.AddMsgText('    Select a second MAME emulator to run games. Handy when you want/need to run a game that '+
+  FormMain.AddMsgText('    You can select a second and a third MAME emulator to run games. Handy when you want/need to run a game that '+
                       'requires a different MAME build or a MAME variant like ');
   FormMain.AddMsgText('SDLMAME', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText('. You can even use, to some extent, ');
+  FormMain.AddMsgText('.'+#13#10+#13#10);//+'You can also use ');
   FormMain.AddMsgText('Raine Arcade Emulator ', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText('http://raine.1emulation.com', MsgTxtcolors.colorFileName{clBlue}, [fsUnderline]); // http://rainemu.swishparty.co.uk (no longer valid)
-  FormMain.AddMsgText(#13#10+'    You can set emulator default settings and game custom settings for AlterMAME as well.'+#13#10+
-                      'There are two ways to use AlterMAME. By ');
+  FormMain.AddMsgText('http://raine.1emulation.com', MsgTxtcolors.colorFileName, [fsUnderline]); // http://rainemu.swishparty.co.uk (no longer valid)
+  FormMain.AddMsgText(' and ');
+  FormMain.AddMsgText('FinalBurn Alpha ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('https://www.fbalpha.com', MsgTxtcolors.colorFileName, [fsUnderline]);
+
+  FormMain.AddMsgText(' emulators can be used (other third-party emulators and/or variants are not supported at this time).'+#13#10+#13#10+
+                      '    There are two ways to use AlterMAME. By ');
   FormMain.AddMsgText('autorun', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('; make sure to check ');
   FormMain.AddMsgText('Autorun Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(', also available in games popup menu (mouse right-click). It only works if the primary MAME fails to load the game.'+#13#10+
-                      '    You can also run a game directly with AlterMAME by selecting ');
+  FormMain.AddMsgText(' options, also available in games popup menu (mouse right-click). It only works if the primary MAME fails to load the game.'+#13#10+
+                      'Or run a game directly with AlterMAME by selecting ');
   FormMain.AddMsgText('Run Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' in games popup menu.'+#13#10+#13#10+
-                      '    Emu Loader does not validate games for AlterMAME so, make sure to audit your ROMs with a ROMs manager '+
-                      'tool like ClrMAME or RomCenter.');
+                      '    No ROMs validation is made so, make sure to audit your ROMs with a ROMs manager '+
+                      'tool like ClrMAME or RomCenter. The emulators must also be fully configured before you can use them.');
   GenerateMessage('Help', 'What is AlterMAME ?', '', 2);
 end;
 
-procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAMEClick(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME1Click(Sender: TObject);
 begin
   if FormMain.DialogOpenFile(2, 'Select an emulator file for AlterMAME',
-                             AlterMAME_exec, False) = '' then
+                             AlterMAME1_exec, False) = '' then
      Exit;
-  if FileExists(AlterMAME_exec.Text) then
+  if FileExists(AlterMAME1_exec.Text) then
      begin
        Screen.Cursor:= crHourGlass;
-       FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile, newAlterMAMEVersion, newbuildAlterMAME);
-       newAlterMAMEDateTime:= FileAge(AlterMAME_exec.Text); // get modified date/time
+       FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[1], newAlterMAMEVersion[1], newbuildAlterMAME[1]);
+       newAlterMAMEDateTime[1]:= FileAge(AlterMAME1_exec.Text); // get modified date/time
        SetAlterMAMEText;
        //SetEmulatorIcon(-1, True);
        Screen.Cursor:= crDefault;
      end;
 end;
 
-procedure TFormArcadeEmulatorsSetup.AlterMAME_execChange(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.AlterMAME1_execChange(Sender: TObject);
 begin
-  newAlterMAMEFile:= AlterMAME_exec.Text;
-  ValidateAlterMAMEExecutable;
+  newAlterMAMEFile[1]:= AlterMAME1_exec.Text;
 end;
 
-procedure TFormArcadeEmulatorsSetup.AlterMAME_versioninfoChange(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.AlterMAME1_versioninfoChange(Sender: TObject);
 begin
-  newAlterMAMEVersion:= AlterMAME_versioninfo.Text;
+  newAlterMAMEVersion[1]:= AlterMAME1_versioninfo.Text;
 end;
 
-procedure TFormArcadeEmulatorsSetup.ButtonClearAlterMAMEClick(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.ButtonClearAlterMAME1Click(Sender: TObject);
 begin
-  AlterMAME_exec.Clear;
-  newAlterMAMEVersion:= '';
-  newAlterMAMEDateTime:= -1;
-  newbuildAlterMAME:= '';
+  AlterMAME1_exec.Clear;
+  newAlterMAMEVersion[1]:= '';
+  newAlterMAMEDateTime[1]:= -1;
+  newbuildAlterMAME[1]:= '';
   SetAlterMAMEText;
   //ClearEmulatorIcon(True);
 end;
@@ -586,59 +669,61 @@ begin
        GetEmulatorDefaultDescription(SystemSelector.Tag); // get emulator version info
        newEmulatorDateTime[SystemSelector.Tag]:= FileAge(Arcade_exec.Text); // get modified date/time
      end;
-  if LabelAlterMAME.Enabled then
+  if LabelAlterMAME1.Enabled then
      begin
-       if (AlterMAME_exec.Text <> '') and FileExists(newAlterMAMEFile) then
+       if (AlterMAME1_exec.Text <> '') and FileExists(newAlterMAMEFile[1]) then
           begin
-            FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile, newAlterMAMEVersion, newbuildAlterMAME);
-            newAlterMAMEDateTime:= FileAge(AlterMAME_exec.Text); // get modified date/time
+            FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[1], newAlterMAMEVersion[1], newbuildAlterMAME[1]);
+            newAlterMAMEDateTime[1]:= FileAge(AlterMAME1_exec.Text); // get modified date/time
             SetAlterMAMEText;
+          end;
+
+       if (AlterMAME2_exec.Text <> '') and FileExists(newAlterMAMEFile[2]) then
+          begin
+            FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[2], newAlterMAMEVersion[2], newbuildAlterMAME[2]);
+            newAlterMAMEDateTime[2]:= FileAge(AlterMAME2_exec.Text); // get modified date/time
+            SetAlterMAME2Text;
           end;
      end;
   Screen.Cursor:= crDefault;
 end;
 
-procedure TFormArcadeEmulatorsSetup.AlterMAME_AutorunClick(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.AlterMAME1_AutorunClick(Sender: TObject);
 begin
-  if AlterMAME_Autorun.Tag = 0 then
-     FormMain.PopupAutorunGameAlterMAME.Checked:= AlterMAME_Autorun.Checked;
+  if AlterMAME1_Autorun.Tag = 0 then
+     FormMain.PopupAutorunGameAlterMAME.Checked:= AlterMAME1_Autorun.Checked;
 end;
 
-procedure TFormArcadeEmulatorsSetup.ShadowLabel1MouseEnter(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.AlterMAME2_AutorunClick(
+  Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
+  if AlterMAME2_Autorun.Tag = 0 then
+     FormMain.PopupAutorunGameAlterMAME2.Checked:= AlterMAME2_Autorun.Checked;
+end;
+
+procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseEnter(Sender: TObject);
+begin
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
+
   TShadowLabel(Sender).Font.Style:= [fsBold, fsUnderline];
 end;
 
-procedure TFormArcadeEmulatorsSetup.ShadowLabel1MouseLeave(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clNavy;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clSilver, clrMedBlue)
+  else
+     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
+
   TShadowLabel(Sender).Font.Style:= [fsBold];
 end;
 
-procedure TFormArcadeEmulatorsSetup.ShadowLabel1Click(Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.LabelMAMELink1Click(Sender: TObject);
 begin
   CallShellExecute(Sender);
-end;
-
-procedure TFormArcadeEmulatorsSetup.ButtonSetOptionsAlterMAMEClick(
-  Sender: TObject);
-begin
-  if not FormMain.CheckSelected(SystemSelector) then
-     Exit;
-  if not IsExeMAME then
-     Exit;
-  if (AlterMAME_exec.Text = '') or (not FileExists(AlterMAME_exec.Text)) then
-     begin
-       FormMain.BlinkBkEdit(AlterMAME_exec);
-       Exit;
-     end;
-  if FormMain.IsMAMEBasedSys(SystemSelector.Tag) then
-     begin
-       if not FileExists(FormMain.GetArcadeEmuIniFileName(SystemSelector.Tag, newAlterMAMEFile)) then
-          FormMain.CreateMAMEIniFile(newAlterMAMEFile);
-     end;
-  FormMain.CallEmulatorOptions(newAlterMAMEFile, newAlterMAMEVersion, SystemSelector.Tag, True, newbuildAlterMAME);
 end;
 
 procedure TFormArcadeEmulatorsSetup.ReadWriteSettings(ReadMode: Boolean);
@@ -688,7 +773,10 @@ begin
     FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight+iDiff;
     PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top+iDiff;
     PanelSystemsSelect.Height:= PanelSystemsSelect.Height+iDiff;
-    LabelSystemTitle.Top:= LabelSystemTitle.Top+iDiff;
+
+    PanelSystemTitle.Top:= PanelSystemTitle.Top+iDiff;
+    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top+iDiff;
+    //LabelSystemTitle.Top:= LabelSystemTitle.Top+iDiff;
     SystemSelector.Height:= 166*2;
     SystemSelector.CellSizes.Icon.Height:= 166;
     SystemSelector.CellSizes.Icon.Width:= 156;
@@ -702,7 +790,9 @@ begin
     SystemSelector.Height:= 92;
     SystemSelector.CellSizes.Icon.Height:= 92;
     SystemSelector.CellSizes.Icon.Width:= 78;
-    LabelSystemTitle.Top:= LabelSystemTitle.Top-iDiff; // 108;
+    //LabelSystemTitle.Top:= LabelSystemTitle.Top-iDiff; // 108;
+    PanelSystemTitle.Top:= PanelSystemTitle.Top-iDiff;
+    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top-iDiff;
     PanelSystemsSelect.Height:= PanelSystemsSelect.Height-iDiff; // 125;
     PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top-iDiff; // 136;
     FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight-iDiff; //392;
@@ -717,6 +807,45 @@ procedure TFormArcadeEmulatorsSetup.FormCloseQuery(Sender: TObject;
 begin
   if CanClose then
      ReadWriteSettings(False);
+end;
+
+procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME2Click(
+  Sender: TObject);
+begin
+  if FormMain.DialogOpenFile(2, 'Select an emulator file for AlterMAME 2',
+                             AlterMAME2_exec, False) = '' then
+     Exit;
+  if FileExists(AlterMAME2_exec.Text) then
+     begin
+       Screen.Cursor:= crHourGlass;
+       FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[2], newAlterMAMEVersion[2], newbuildAlterMAME[2]);
+       newAlterMAMEDateTime[2]:= FileAge(AlterMAME2_exec.Text); // get modified date/time
+       SetAlterMAME2Text;
+       //SetEmulatorIcon(-1, True);
+       Screen.Cursor:= crDefault;
+     end;
+end;
+
+procedure TFormArcadeEmulatorsSetup.ButtonClearAlterMAME2Click(
+  Sender: TObject);
+begin
+  AlterMAME2_exec.Clear;
+  newAlterMAMEVersion[2]:= '';
+  newAlterMAMEDateTime[2]:= -1;
+  newbuildAlterMAME[2]:= '';
+  SetAlterMAME2Text;
+  //ClearEmulatorIcon(True);
+end;
+
+procedure TFormArcadeEmulatorsSetup.AlterMAME2_execChange(Sender: TObject);
+begin
+  newAlterMAMEFile[2]:= AlterMAME2_exec.Text;
+end;
+
+procedure TFormArcadeEmulatorsSetup.AlterMAME2_versioninfoChange(
+  Sender: TObject);
+begin
+  newAlterMAMEVersion[2]:= AlterMAME2_versioninfo.Text;
 end;
 
 end.

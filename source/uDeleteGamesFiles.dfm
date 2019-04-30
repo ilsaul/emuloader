@@ -301,7 +301,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Frames = []
       Transparent = True
     end
-    object ButtonNo: TBitBtn
+    object ButtonNo: TBitBtnEx
       Left = 727
       Top = 14
       Width = 89
@@ -316,7 +316,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object FileTypesGroupBox: TAdvGroupBox
       Left = 8
       Top = 6
-      Width = 232
+      Width = 231
       Height = 41
       CaptionPosition = cpTopCenter
       RoundEdges = True
@@ -327,7 +327,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ParentColor = False
       TabOrder = 2
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
-        Left = 122
+        Left = 121
         Top = 18
         Width = 106
         Height = 18
@@ -344,6 +344,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 2
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
+        ButtonVertAlign = tlBottom
         Caption = 'CFGs/NVRAMs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -351,7 +352,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
       object DeleteROMs: TAdvOfficeCheckBox
-        Left = 8
+        Left = 7
         Top = 18
         Width = 55
         Height = 18
@@ -367,6 +368,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 0
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
+        ButtonVertAlign = tlBottom
         Caption = 'ROMs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -374,7 +376,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
       object DeleteCHDs: TAdvOfficeCheckBox
-        Left = 67
+        Left = 66
         Top = 18
         Width = 53
         Height = 18
@@ -392,6 +394,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 1
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
+        ButtonVertAlign = tlBottom
         Caption = 'CHDs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -417,6 +420,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Visible = False
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
       Caption = 'Delete Game From Games List'
       DisabledFontColor = clSilver
       ReturnIsTab = False
@@ -444,6 +448,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Visible = False
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
+      ButtonVertAlign = tlBottom
       Caption = 'Delete Game File From Disk'
       DisabledFontColor = clSilver
       ReturnIsTab = False
@@ -451,7 +456,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       State = cbChecked
       Themed = True
     end
-    object ButtonYes: TBitBtn
+    object ButtonYes: TBitBtnEx
       Left = 626
       Top = 14
       Width = 89
@@ -463,7 +468,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       TabOrder = 1
       OnClick = ButtonYesClick
     end
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 584
       Top = 20
       Width = 33
@@ -508,7 +513,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Frames = []
       Transparent = True
     end
-    object DestinationFolder: TEdit
+    object DestinationFolder: TEditEx
       Left = 8
       Top = 20
       Width = 430
@@ -532,7 +537,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ReturnIsTab = False
       Themed = True
     end
-    object ButtonSelectROMsFolder: TBitBtn
+    object ButtonSelectROMsFolder: TBitBtnEx
       Left = 440
       Top = 20
       Width = 43

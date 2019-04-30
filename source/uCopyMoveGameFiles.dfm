@@ -15,7 +15,6 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
   OldCreateOrder = False
   Scaled = False
   OnActivate = FormActivate
-  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
@@ -128,7 +127,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Height = 16
       TabOrder = 0
     end
-    object ButtonPause: TBitBtn
+    object ButtonPause: TBitBtnEx
       Left = 8
       Top = 67
       Width = 68
@@ -139,7 +138,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Visible = False
       OnClick = ButtonPauseClick
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 656
       Top = 67
       Width = 68

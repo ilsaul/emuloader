@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ImgList, IniFiles, ComCtrls, uCommon, MPCommonObjects,
-  EasyListview, ExtCtrls, ToolWin, Buttons, ShadowLabel, PanelEx, Menus,
-  BarMenus;
+  MPCommonUtilities, EasyListview, ExtCtrls, ToolWin, Buttons, ShadowLabel,
+  PanelEx, Menus, BarMenus, EditEx;
 
 type
   TEasyScanInfo = class(TEasyItemStored)
@@ -57,6 +57,9 @@ type
 
     fSoftwareTitle,
     fSoftwareName: String;
+
+    fIsMerged: Boolean;
+
     //fCategory: String;
   protected
     function GetCaptions(Column: Integer): WideString; override;
@@ -115,6 +118,8 @@ type
 
     property eSoftwareTitle: String read fSoftwareTitle write fSoftwareTitle;
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
+
+    property eIsMerged: Boolean read fIsMerged write fIsMerged;
   end;
 
   TEasyScanGroupInfo = class(TEasyGroupStored)
@@ -133,6 +138,7 @@ type
     fGameTitle: WideString;
     fSoftwareTitle: String;
     fSoftwareName: String;
+    fIsMerged: Boolean;
   protected
     function GetCaptions(Column: Integer): WideString; override;
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
@@ -159,6 +165,8 @@ type
 
     property eSoftwareTitle: String read fSoftwareTitle write fSoftwareTitle;
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
+
+    property eIsMerged: Boolean read fIsMerged write fIsMerged;
   end;
 
 type
@@ -188,6 +196,10 @@ type
     N22: TMenuItem;
     MenuItem13: TMenuItem;
     ButtonToggleTree: TBitBtn;
+    SearchBarEdit: TEditEx;
+    SearchBarToolBar: TToolBar;
+    ButtonFilterTitleApply_ToolBar: TToolButton;
+    LabelSearchBar: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonToggleTreeClick(Sender: TObject);
@@ -207,6 +219,8 @@ type
     procedure PopupSplittersMeasureMenuItem(Sender: TObject;
       AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
+    procedure ButtonFilterTitleApply_ToolBarClick(Sender: TObject);
+    procedure SearchBarEditKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     GamesListVersion: packed array[1..MaxArcadeSystems] of String;
@@ -217,6 +231,7 @@ type
     procedure LoadScanResultsFile(sysID: ShortInt; const SoftwareName: String);
     procedure ResizeForm;
     procedure FilterGamesList;
+    procedure SearchGame;
   public
     { Public declarations }
     SingleGame: Boolean;
@@ -345,7 +360,7 @@ begin
                    if eROMCRC32 <> '' then
                       begin
                         // this is usually for ROM/Disk/Floppy/Cassette
-                        Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Bad CRC-32';//Checksum';
+                        Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Bad CRC-32';
                       end
                    else
                       begin
@@ -445,21 +460,102 @@ var
   tmpString, MissingROMsFileName: String;
   addGroup, checkGroup: TEasyGroup;
   addItem, checkItem: TEasyItem;
-  IsSegaModel2{, HaveMultipleDeviceSets, }: Boolean;
+  IsSegaModel2: Boolean;
   tmpFileID: Integer;
 
-  function GetZipStatusText(const Data_String: String; Data_FileStatus: Boolean): String;
+  function IsCHDGameOnly: Boolean;
+  begin
+    // no game set, no bios set, no device sets
+    Result:= not FormMain.GameHaveROMs(FormMain.TempGameVars.eHaveGameROMs);
+    if Result then
+       begin
+         Result:= FormMain.TempGameVars.eCHDsCount > 0;
+         if Result then
+            begin
+              Result:= uMain.TEasyGameInfo(checkItem).eDeviceSets = nil;
+              if Result then
+                 Result:= not FormMain.ValidateBiosName(FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eName);
+            end;
+       end;
+  end;
+
+  function IsBiosSetOnly: Boolean;
+  begin
+    // if is a bios set (gamename=bios, biosname = '' or biosname=gamename), return FALSE, and ADD string "zip not found".
+    // if is a game set, check for Taito G-NET and others alike... bios set only + CHD file
+    // return TRUE, and DO NOT add string "zip not found"
+    Result:= FormMain.ValidateBiosName(FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eName);
+    if Result then
+       Result:= not FormMain.GameHaveROMs(FormMain.MemGameInfo.eHaveGameROMs);
+  end;
+
+  function IsDeviceSetOnly: Boolean;
+  begin
+    // no main game set, just device sets
+    Result:= uMain.TEasyGameInfo(checkItem).eDeviceSets <> nil;
+    if Result then
+       Result:= not FormMain.GameHaveROMs(FormMain.MemGameInfo.eHaveGameROMs);
+  end;
+
+  function GetZipStatusText(FileTypeIndex: Integer; const Data_String: String; Data_FileStatus: Boolean; ShowMergedStatus: Boolean = False): String;
   var
     tmpString2: String;
   begin
     Result:= '';
-    if Data_String <> '' then
+    if Data_String = '' then
+       Exit;
+
+    if ShowMergedStatus and FormMain.TempGameVars.eIsMerged then
        begin
-         case Data_FileStatus of
-           True : tmpString2:= '';
-           False: tmpString2:= 'not ';
+         Result:= Data_String+' (merged)';
+       end
+    else
+       begin
+         case FileTypeIndex of
+           2: // game name
+             begin
+               if FormMain.TempGameVars.eIsMerged then
+                  Result:= Data_String+' (merged)'
+               else
+               if FormMain.TempGameVars.eGameROMsNoDump then
+                  Result:= Data_String+' (No Game ROMs)'
+               else
+               begin
+                  if Data_FileStatus then
+                     tmpString2:= ''
+                  else
+                     tmpString2:= 'not ';
+                  Result:= Data_String+'.zip '+tmpString2+'found';
+               end;
+             end;
+           3: // parent game name (clone of)
+             begin
+               if FormMain.TempGameVars.eParentGameROMsNoDump then
+                  Result:= Data_String+' (No Game ROMs)'
+               else
+               begin
+                 if Data_FileStatus then
+                     tmpString2:= ''
+                  else
+                     tmpString2:= 'not ';
+                  Result:= Data_String+'.zip '+tmpString2+'found';
+               end;
+             end;
+           else // all other indexes 4..?
+             begin
+               if Data_FileStatus then
+                  tmpString2:= ''
+               else
+                  tmpString2:= 'not ';
+               Result:= Data_String+'.zip '+tmpString2+'found';
+             end;
          end;
-         Result:= Data_String+'.zip '+tmpString2+'found';
+         //// original code
+         //case Data_FileStatus of
+         //  True : tmpString2:= '';
+         //  False: tmpString2:= 'not ';
+         //end;
+         //Result:= Data_String+'.zip '+tmpString2+'found';
        end;
   end;
 
@@ -499,13 +595,13 @@ var
     if TypeIndex = 2 then
        begin
          TEasyScanInfo(addItem).eNameText:= Format('%-9s: %s', ['name', FormMain.TempGameVars.eName]);
-         TEasyScanInfo(addItem).eNameZipStatus:= GetZipStatusText(FormMain.TempGameVars.eName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_game', '0'))));
+         TEasyScanInfo(addItem).eNameZipStatus:= GetZipStatusText(TypeIndex, FormMain.TempGameVars.eName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_game', '0'))));//, FormMain.GameIsClone(FormMain.TempGameVars.eClone));
        end;
 
     if TypeIndex = 3 then
        begin
          TEasyScanInfo(addItem).eParentText:= Format('%-9s: %s', ['parent', FormMain.TempGameVars.eClone]);
-         TEasyScanInfo(addItem).eParentZipStatus:= GetZipStatusText(FormMain.TempGameVars.eClone, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_parentgame', '0'))));
+         TEasyScanInfo(addItem).eParentZipStatus:= GetZipStatusText(TypeIndex, FormMain.TempGameVars.eClone, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_parentgame', '0'))));
        end;
 
     if TypeIndex = 4 then
@@ -514,7 +610,7 @@ var
             TEasyScanInfo(addItem).eBiosText:= Format('%-9s: %s', ['board', FormMain.TempGameVars.eBiosName])
          else
             TEasyScanInfo(addItem).eBiosText:= Format('%-9s: %s', ['bios', FormMain.TempGameVars.eBiosName]);
-         TEasyScanInfo(addItem).eBiosZipStatus:= GetZipStatusText(FormMain.TempGameVars.eBiosName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_bios', '0'))));
+         TEasyScanInfo(addItem).eBiosZipStatus:= GetZipStatusText(TypeIndex, FormMain.TempGameVars.eBiosName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_bios', '0'))));
        end;
 
     if TypeIndex = 5 then
@@ -526,7 +622,7 @@ var
     if TypeIndex > 6 then // in [7..n] then
        begin
          DeviceName:= missFile.ReadString(FormMain.TempGameVars.eName, 'device'+IntToStr(TypeIndex-6), '');
-         ZipStatus:= GetZipStatusText(DeviceName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_device'+IntToStr(TypeIndex-6), '0'))));
+         ZipStatus:= GetZipStatusText(TypeIndex, DeviceName, Boolean(StrToInt(missFile.ReadString(FormMain.TempGameVars.eName, 'zip_device'+IntToStr(TypeIndex-6), '0'))));
          DeviceName:= Format('device %.2u: %s', [(TypeIndex-6), DeviceName]);
          TEasyScanInfo(addItem).eDeviceText:= DeviceName;
          TEasyScanInfo(addItem).eDeviceZipStatus:= ZipStatus;
@@ -588,6 +684,8 @@ var
     TEasyScanGroupInfo(addGroup).eGameTitle:= FormMain.TempGameVars.eTitle;
     TEasyScanGroupInfo(addGroup).eSoftwareTitle:= FormMain.TempGameVars.eCategory;
     TEasyScanGroupInfo(addGroup).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
+
+    TEasyScanGroupInfo(addGroup).eIsMerged:= FormMain.TempGameVars.eIsMerged;
 
     case FormMain.GameIsClone(FormMain.TempGameVars.eClone) of
       True: TEasyScanGroupInfo(addGroup).eImageIndex:= 1;
@@ -793,11 +891,11 @@ begin
         repeat
           checkItem:= FormMain.GamesListView.Groups.FirstInGroup(checkGroup);
           repeat
-            if (TEasyGameInfo(checkItem).eSystemID = sysID) and (TEasyGameInfo(checkItem).eSoftwareName = SoftwareName) then
+            if (uMain.TEasyGameInfo(checkItem).eSystemID = sysID) and (uMain.TEasyGameInfo(checkItem).eSoftwareName = SoftwareName) then
                begin
-                 if missGamesList.IndexOf(TEasyGameInfo(checkItem).eName) <> -1 then
+                 if missGamesList.IndexOf(uMain.TEasyGameInfo(checkItem).eName) <> -1 then
                     begin
-                      if TEasyGameInfo(checkItem).eROMInfo <> nil then
+                      if uMain.TEasyGameInfo(checkItem).eROMInfo <> nil then
                          begin
                            FormMain.ClearMemGameInfo(FormMain.TempGameVars);
                            FormMain.FillTempGameInfo(checkItem);
@@ -862,6 +960,10 @@ begin
      begin
        FormArcadeScanGamesResults.ClientHeight:= 500;
        SystemSelectorToolBar.Left:= SystemSelectorToolBar.Left-35;
+
+       SearchBarEdit.Left:= SearchBarEdit.Left-35;
+       SearchBarToolBar.Left:= SearchBarToolBar.Left-35;
+
        FormArcadeScanGamesResults.ClientWidth:= 774;
        ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-35;
      end
@@ -869,6 +971,10 @@ begin
   if Screen.Height = 480 then
      begin
        SystemSelectorToolBar.Left:= SystemSelectorToolBar.Left-190;
+
+       SearchBarEdit.Left:= SearchBarEdit.Left-190;
+       SearchBarToolBar.Left:= SearchBarToolBar.Left-190;
+
        LabelEmulatorVersion.Font.Size:= 7;
        LabelGamesListList.Font.Size:= 7;
        LabelGamesListList.Font.Name:= 'Segoe UI';
@@ -891,19 +997,29 @@ var
   Loop: Integer;
   missSoftListFiles: THashedStringList;
 begin
+
+  ResizeForm;
+  CallMaximizeWindow(TForm(Sender));
+  FormMain.ELV_ResetNormalColors(ROMsListView);
+
   if IsNightMode then
      begin
        SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, -1, False);
        SetLabelColors(LabelGamesListList, clWhite, clrMedBlue);
        SetLabelColors(LabelTotalGames, clWhite, clrDarkOrange);
-       ROMsListView.Color:= clrBlackBk;
-       ROMsListView.Font.Color:= clWhite;
-       ROMsListView.GroupFont.Color:= clRed;
+       SetLabelColors(LabelSearchBar, clWhite, clrMedBlue);// clrDarkOrange);
+
+       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrLightRed);
+
+       //ROMsListView.Color:= clrBlackBk;
+       //ROMsListView.Font.Color:= clWhite;
+       //ROMsListView.GroupFont.Color:= clRed;
+
+       SetEditNightColors(SearchBarEdit);
+       
+       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
      end;
      
-  ResizeForm;
-  CallMaximizeWindow(TForm(Sender));
-  FormMain.ELV_ResetNormalColors(ROMsListView);
   tempFolder:= FormMain.GetFolderFull(32);
   FormMain.AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_ScanResults);
   for Loop:=1 to MaxArcadeSystems do
@@ -1089,6 +1205,48 @@ begin
   ROMsListView.SetFocus;
 end;
 
+procedure TFormArcadeScanGamesResults.SearchGame;
+var
+  vGroup: TEasyGroup;
+  vItem: TEasyItem;
+  FoundItem: Boolean;
+  StrToSearch: String;
+  //iSearchTitle, iSearchName: Integer;
+begin
+  if not FormMain.CheckTotal(ROMsListView) then
+     Exit;
+
+  StrToSearch:= SearchBarEdit.Text;
+  if StrToSearch = '' then
+     Exit;
+
+  FoundItem:= False;
+  vGroup:= ROMsListView.Groups.FirstVisibleGroup;
+  repeat
+    if vGroup.Visible then
+       begin
+         // WideIncrementalSearch() -> 0: means it found a match (partial string...); -1 or 1: no match
+         //iSearchTitle:= WideIncrementalSearch(TEasyScanGroupInfo(vGroup).eGameTitle, StrToSearch); // for debugging only, do not enable
+         //iSearchName:= WideIncrementalSearch(TEasyScanGroupInfo(vGroup).eGameName, StrToSearch); // for debugging only, do not enable
+         //ShowMessageW('title: '+TEasyScanGroupInfo(vGroup).eGameTitle+#13#10+'iSearch: '+IntToStr(iSearchTitle)+#13#10+#13#10+
+         //            'name : '+TEasyScanGroupInfo(vGroup).eGameName+#13#10+'iSearch: '+IntToStr(iSearchName)); // for debugging only, do not enable
+
+         if WideIncrementalSearch(TEasyScanGroupInfo(vGroup).eGameTitle, StrToSearch) = 0 then
+            FoundItem:= True
+         else
+         if WideIncrementalSearch(TEasyScanGroupInfo(vGroup).eGameName, StrToSearch) = 0 then
+            FoundItem:= True;
+       end;
+    if not FoundItem then
+       vGroup:= ROMsListView.Groups.NextVisibleGroup(vGroup);
+  until (vGroup = nil) or FoundItem;
+
+  if FoundItem then
+     ROMsListView.Groups.FirstVisibleInGroup(vGroup).MakeVisible(emvMiddle)
+  else
+     FormMain.BlinkBkEdit(SearchBarEdit);
+end;
+
 procedure TFormArcadeScanGamesResults.sysMAMEClick(Sender: TObject);
 begin
   SystemSelectorToolBar.Tag:= TToolButton(Sender).ImageIndex;
@@ -1112,24 +1270,33 @@ procedure TFormArcadeScanGamesResults.ROMsListViewItemPaintText(
 
   function GetFileColor(const FileStr: String): TColor;
   begin
+    if PosEx('(No Game ROMs)', FileStr) <> 0 then
+       Result:= ACanvas.Font.Color
+    else
     if PosEx(' not ', FileStr) = 0 then
        begin
          if IsNightMode then
             Result:= clLime
          else
-            Result:= clrDarkGreen;// clGreen;
+            Result:= clrDarkGreen;
        end
     else
-       Result:= clRed;
+       begin
+         if IsNightMode then
+            Result:= clrLightRed
+         else
+            Result:= clRed;
+       end;
   end;
 
 begin
+  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
   if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
      begin // missing file and CHD with bad SHA-1 / MD-5 checksum
        if IsNightMode then
           ACanvas.Font.Color:= clSilver
        else
-          ACanvas.Font.Color:= clrDarkGray;
+          ACanvas.Font.Color:= clrMedDarkGray;
      end;
   case Position of
     0: // file name
@@ -1173,10 +1340,15 @@ begin
         // MaxArcadeSystems+1
         
         if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
-           ACanvas.Font.Color:= clRed;
+           begin
+             if IsNightMode then
+                ACanvas.Font.Color:= clrLightRed
+             else
+                ACanvas.Font.Color:= clRed;
+           end;
       end;
   end;
-  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
+  //FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
 end;
 
 function TFormArcadeScanGamesResults.ROMsListViewItemCompare(
@@ -1197,8 +1369,11 @@ begin
   // MarArcadeSystems+2  -> CHD bad SHA-1 checksum
   if Item.Selected then
      begin
-       BarMode:= Ord(TEasyScanInfo(Item).eImageIndex = MaxArcadeSystems+3);
-       FormMain.ELV_SetSelectRibbon(BarMode, ROMsListView);
+       BarMode:= Ord(TEasyScanInfo(Item).eStateImageIndex = MaxArcadeSystems+3);
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(BarMode, ROMsListView)
+       else
+          FormMain.ELV_SetSelectRibbon(BarMode, ROMsListView);
      end;
 end;
 
@@ -1261,6 +1436,22 @@ procedure TFormArcadeScanGamesResults.PopupSplittersMeasureMenuItem(
   Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
 begin
   FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
+end;
+
+procedure TFormArcadeScanGamesResults.ButtonFilterTitleApply_ToolBarClick(
+  Sender: TObject);
+begin
+  SearchGame;
+end;
+
+procedure TFormArcadeScanGamesResults.SearchBarEditKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       Key:= #0; // to remove the "ding" sound when pressing keys like ENTER, ESC
+       ButtonFilterTitleApply_ToolBar.Click;
+     end
 end;
 
 end.

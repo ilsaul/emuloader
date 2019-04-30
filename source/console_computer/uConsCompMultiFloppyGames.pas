@@ -5,13 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, MPCommonObjects, EasyListview, PanelEx,
-  ImgList, ShadowLabel, ExtCtrls;
+  ImgList, ShadowLabel, ExtCtrls, ButtonsEx;
 
 type
   TFormConsCompMultiFloppyGames = class(TForm)
-    BottomBar: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonNo: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
     IL_LoadMultiFloppy: TImageList;
     PanelWinViceLabel: TPanelEx;
     LabelWinVICE: TLabel;
@@ -22,9 +22,9 @@ type
     EmulatorIcon: TImage;
     IL_EmulatorIcon: TImageList;
     LabelTotalFloppyDisks: TShadowLabel;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonRemoveFromList: TBitBtn;
+    ButtonUp: TBitBtnEx;
+    ButtonDown: TBitBtnEx;
+    ButtonRemoveFromList: TBitBtnEx;
     FrameGamesList: TPanelEx;
     GamesList: TEasyListview;
     procedure FormShow(Sender: TObject);
@@ -59,79 +59,7 @@ uses uMain, uCommon;
 {$R *.dfm}
 
 procedure TFormConsCompMultiFloppyGames.AddMultiGames;
-//var
-  //selectedItem, addItem: TEasyItem;
-  //{HaveFavorites, }HaveClones{, HavePlayed}: Boolean;
-  //iLoop, iTotalW: Integer;
-  //tStr: String;
 begin
-  //GamesList.BeginUpdate;
-  {//HaveFavorites:= False;
-  HaveClones:= False;
-  //HavePlayed:= False;
-  FormMain.ClearListView(GamesList);
-  GamesList.BeginUpdate;
-  GamesList.Items.ReIndexDisable:= True;
-  iLoop:= 0;
-  selectedItem:= FormMain.GamesListView.Selection.First;
-  repeat
-    FormMain.FillTempGameInfo(selectedItem);
-    tStr:= '';
-    with GamesList.Items.Add do
-    begin
-      Tag:= FormMain.TempGameVars.eGameSetStatus;
-      ImageIndex:= FormMain.TempGameVars.eROMIdentification;
-      case FormMain.TempGameVars.eIsFavorite of
-        True:
-          begin
-            //HaveFavorites:= True;
-            StateImageIndex:= 3;
-          end;
-        False: StateImageIndex:= 50;
-      end;
-      //Caption:= UTF8Decode('クロススウォードII')+'   :english: Crossed Swords II (Jpn)';
-      //Caption:= UTF8Decode('ビューポイント')+'   :english: Viewpoint (Jpn, USA)';
-      //Caption:= UTF8Decode('_Ciro)');
-      //Caption:= UTF8Decode('ワールドヒーローズ2ジェット');//FormMain.TempGameVars.eTitle;
-      Caption:= FormMain.TempGameVars.eTitle;
-      Captions[1]:= FormMain.TempGameVars.eName;
-      Captions[2]:= FormMain.TempGameVars.eClone;
-      if FormMain.TempGameVars.ePlayed <> 0 then
-         tStr:= IntToStr(FormMain.TempGameVars.ePlayed)+'x';
-      if FormMain.TempGameVars.ePlayedDate <> 0 then
-         begin
-           if tStr <> '' then
-              tStr:= tStr+' ';
-           tStr:= tStr+FormMain.GetDateTimeStr(FormMain.TempGameVars.ePlayedDate, True, True);
-         end;
-      Captions[3]:= tStr;
-      Captions[4]:= FormMain.TempGameVars.eNumberPlayers;
-      Captions[5]:= FormMain.TempGameVars.eYear;
-      StateImageIndexes[6]:= FormMain.TempGameVars.eDriverStatus;
-      if FormMain.GameIsClone(FormMain.TempGameVars.eClone) then
-         HaveClones:= True;
-      Inc(iLoop);
-      case iLoop of
-         1: LabelSlot1.Enabled:= True;
-         2: LabelSlot2.Enabled:= True;
-         3: LabelSlot3.Enabled:= True;
-         4: LabelSlot4.Enabled:= True;
-         5: LabelSlot5.Enabled:= True;
-         6: LabelSlot6.Enabled:= True;
-         7: LabelSlot7.Enabled:= True;
-         8: LabelSlot8.Enabled:= True;
-         9: LabelSlot9.Enabled:= True;
-        10: LabelSlot10.Enabled:= True;
-      end;
-    end;
-    selectedItem:= FormMain.GamesListView.Selection.Next(selectedItem);
-  until selectedItem = nil;
-  GamesList.Items.ReIndexDisable:= False;
-  if not HaveClones then
-     GamesList.Header.Columns[2].Visible:= False;
-
-  FormMain.ClearMemGameInfo(FormMain.TempGameVars);}
-
   UpdateDriveIndex;
   UpdateTotalDisksLabel;
   //UpdateInfo;
@@ -141,7 +69,7 @@ end;
 
 procedure TFormConsCompMultiFloppyGames.UpdateTotalDisksLabel;
 begin
- LabelTotalFloppyDisks.Caption:= IntToStr(GamesList.Groups.ItemCount)+' Floppy Disks';
+  LabelTotalFloppyDisks.Caption:= IntToStr(GamesList.Groups.ItemCount)+' Floppy Disks';
 end;
 
 procedure TFormConsCompMultiFloppyGames.MoveToSlot(MoveUp: Boolean);
@@ -182,15 +110,17 @@ begin
   FormMain.ELV_ResetNormalColors(GamesList);
   if IsNightMode then
      begin
-       SetFormColors(FormConsCompMultiFloppyGames, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorDetails, -1);
-       SetLabelColors(LabelTotalFloppyDisks, clWhite, clNavy);
+       SetFormColors(FormConsCompMultiFloppyGames, TopBar, PanelBottom, LabelSystemTitle, LabelEmulatorDetails, -1, IsNightMode);
+       SetLabelColors(LabelTotalFloppyDisks, clCream, item_caption_active_shadow_color[1]);
 
-       //FrameGamesList.ColorFrame:= clrLightBlue;
-       //FrameGamesList.ColorInnerFrame:= clBlue;
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonNo);
+       FormMain.SetButtonExColors(ButtonUp);
+       FormMain.SetButtonExColors(ButtonDown);
+       FormMain.SetButtonExColors(ButtonRemoveFromList);
 
-       GamesList.Color:= FormConsCompMultiFloppyGames.Color;
-       GamesList.Font.Color:= clWhite;
-       GamesList.HotTrack.Color:= clWhite;
+       FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
+       FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
      end;
   AddMultiGames;
 end;

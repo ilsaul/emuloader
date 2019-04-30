@@ -22,7 +22,7 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelBottomButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 343
     Width = 596
@@ -33,6 +33,7 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -56,10 +57,13 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 401
       Top = 8
       Width = 89
@@ -71,7 +75,7 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 499
       Top = 8
       Width = 89

@@ -3,7 +3,7 @@ object FormMessageBox: TFormMessageBox
   Top = 341
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  ClientHeight = 437
+  ClientHeight = 427
   ClientWidth = 684
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -26,6 +26,7 @@ object FormMessageBox: TFormMessageBox
     Top = 0
     Width = 684
     Height = 80
+    Align = alTop
     Color1 = 16445669
     Color2 = clWhite
     Color3 = 16112579
@@ -105,7 +106,7 @@ object FormMessageBox: TFormMessageBox
   end
   object LabelMessage: TRichEditURL
     Left = 8
-    Top = 90
+    Top = 80
     Width = 667
     Height = 305
     BorderStyle = bsNone
@@ -125,7 +126,7 @@ object FormMessageBox: TFormMessageBox
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 396
+    Top = 386
     Width = 684
     Height = 41
     Align = alBottom
@@ -138,7 +139,7 @@ object FormMessageBox: TFormMessageBox
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonYes: TBitBtn
+    object ButtonYes: TBitBtnEx
       Left = 233
       Top = 8
       Width = 89
@@ -149,7 +150,7 @@ object FormMessageBox: TFormMessageBox
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonNo: TBitBtn
+    object ButtonNo: TBitBtnEx
       Left = 336
       Top = 8
       Width = 89
@@ -160,7 +161,7 @@ object FormMessageBox: TFormMessageBox
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonYestoAll: TBitBtn
+    object ButtonYestoAll: TBitBtnEx
       Left = 151
       Top = 8
       Width = 89
@@ -175,7 +176,7 @@ object FormMessageBox: TFormMessageBox
       TabOrder = 2
       Visible = False
     end
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 443
       Top = 8
       Width = 89
@@ -189,7 +190,7 @@ object FormMessageBox: TFormMessageBox
       Visible = False
     end
     object NightMode: TAdvOfficeCheckBox
-      Left = 4
+      Left = 12
       Top = 11
       Width = 87
       Height = 20

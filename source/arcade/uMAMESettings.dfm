@@ -75,7 +75,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderCheatFiles: TLabel
         Left = 590
-        Top = 131
+        Top = 108
         Width = 98
         Height = 15
         Caption = 'Path to Cheat Files'
@@ -84,7 +84,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderMemoryCards: TLabel
         Left = 590
-        Top = 394
+        Top = 347
         Width = 216
         Height = 15
         Caption = 'Directory to Save Memory Card Contents'
@@ -93,7 +93,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderDiff: TLabel
         Left = 590
-        Top = 79
+        Top = 60
         Width = 200
         Height = 15
         Caption = 'Directory to Save CHD Difference Files'
@@ -121,9 +121,9 @@ object FormMAMESettings: TFormMAMESettings
       object LabelFolderHashFiles: TLabel
         Left = 16
         Top = 394
-        Width = 94
+        Width = 206
         Height = 15
-        Caption = 'Path to Hash Files'
+        Caption = 'Path to Software Definition Files (Hash)'
         ParentShowHint = False
         ShowHint = False
       end
@@ -139,15 +139,15 @@ object FormMAMESettings: TFormMAMESettings
       object LabelFolderSamples: TLabel
         Left = 16
         Top = 346
-        Width = 104
+        Width = 139
         Height = 15
-        Caption = 'Path to Sample Sets'
+        Caption = 'Path to Audio Sample Sets'
         ParentShowHint = False
         ShowHint = False
       end
       object LabelFolderInputDeviceLogs: TLabel
         Left = 590
-        Top = 338
+        Top = 299
         Width = 186
         Height = 15
         Caption = 'Directory to Save Input Device Logs'
@@ -156,7 +156,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderControllerDefinitions: TLabel
         Left = 590
-        Top = 182
+        Top = 155
         Width = 154
         Height = 15
         Caption = 'Path to Controller Definitions'
@@ -165,7 +165,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderCrosshairFiles: TLabel
         Left = 590
-        Top = 234
+        Top = 203
         Width = 116
         Height = 15
         Caption = 'Path to Crosshair Files'
@@ -174,7 +174,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderFontFiles: TLabel
         Left = 590
-        Top = 286
+        Top = 251
         Width = 91
         Height = 15
         Caption = 'Path to Font Files'
@@ -185,7 +185,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object LabelFolderDebuggerComments: TLabel
         Left = 590
-        Top = 27
+        Top = 13
         Width = 206
         Height = 15
         Caption = 'Directory to Save Debugger Comments'
@@ -195,9 +195,9 @@ object FormMAMESettings: TFormMAMESettings
       object LabelFolderLanguageFiles: TLabel
         Left = 303
         Top = 192
-        Width = 119
+        Width = 140
         Height = 15
-        Caption = 'Path to Language Files'
+        Caption = 'Path to UI Translation Files'
         ParentShowHint = False
         ShowHint = False
       end
@@ -207,6 +207,15 @@ object FormMAMESettings: TFormMAMESettings
         Width = 101
         Height = 15
         Caption = 'Path to Plugin Files'
+        ParentShowHint = False
+        ShowHint = False
+      end
+      object LabelFolderManualsPDF: TLabel
+        Left = 590
+        Top = 394
+        Width = 197
+        Height = 15
+        Caption = 'Directory to Game Manual Files (PDF)'
         ParentShowHint = False
         ShowHint = False
       end
@@ -346,7 +355,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 364
         Width = 217
         Height = 21
-        Hint = 'Path to Sample Sets'
+        Hint = 'Path to Audio Sample Sets'
         TabStop = False
         AutoSize = False
         Color = clWhite
@@ -424,7 +433,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCheatFiles: TEdit
         Left = 590
-        Top = 149
+        Top = 126
         Width = 217
         Height = 21
         Hint = 'Path To Cheat Files'
@@ -439,7 +448,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCheatFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 149
+        Top = 126
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -451,7 +460,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderMemoryCards: TEdit
         Left = 590
-        Top = 412
+        Top = 365
         Width = 217
         Height = 21
         Hint = 'Directory To Save Memory Card Contents'
@@ -466,7 +475,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderMemoryCardsButtonSelect: TBitBtn
         Left = 809
-        Top = 412
+        Top = 367
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -478,7 +487,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDiff: TEdit
         Left = 590
-        Top = 97
+        Top = 78
         Width = 217
         Height = 21
         Hint = 'Directory For Hard Drive Image Difference Files'
@@ -493,7 +502,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDiffButtonSelect: TBitBtn
         Left = 809
-        Top = 97
+        Top = 78
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -562,7 +571,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 412
         Width = 217
         Height = 21
-        Hint = 'Path To Hash Files'
+        Hint = 'Path to Software Definition Files (Hash)'
         TabStop = False
         AutoSize = False
         Color = clWhite
@@ -848,7 +857,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderInputDeviceLogs: TEdit
         Left = 590
-        Top = 356
+        Top = 317
         Width = 217
         Height = 21
         Hint = 'Directory For Recordings (Input Device Logs)'
@@ -863,7 +872,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderInputDeviceLogsButtonSelect: TBitBtn
         Left = 809
-        Top = 356
+        Top = 317
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -875,7 +884,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderControllerDefinitionsButtonSelect: TBitBtn
         Left = 809
-        Top = 200
+        Top = 173
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -887,7 +896,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCrosshairFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 252
+        Top = 221
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -899,7 +908,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderFontFiles: TEdit
         Left = 590
-        Top = 304
+        Top = 269
         Width = 217
         Height = 21
         Hint = 'Path to font files'
@@ -914,7 +923,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderFontFilesButtonSelect: TBitBtn
         Left = 809
-        Top = 304
+        Top = 269
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -926,7 +935,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderControllerDefinitions: TEdit
         Left = 590
-        Top = 200
+        Top = 173
         Width = 217
         Height = 21
         Hint = 'Directory For Preconfigured Controller Keys'
@@ -941,7 +950,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderCrosshairFiles: TEdit
         Left = 590
-        Top = 252
+        Top = 221
         Width = 217
         Height = 21
         Hint = 'Path To Crosshair Files'
@@ -956,7 +965,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDebuggerCommentsButtonSelect: TBitBtn
         Left = 809
-        Top = 45
+        Top = 31
         Width = 43
         Height = 21
         Hint = 'Click here to select a folder'
@@ -968,7 +977,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object FolderDebuggerComments: TEdit
         Left = 590
-        Top = 45
+        Top = 31
         Width = 217
         Height = 21
         Hint = 'Directory to Save Debugger Comments'
@@ -998,6 +1007,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 210
         Width = 217
         Height = 21
+        Hint = 'Path to UI Translation Files'
         TabStop = False
         AutoSize = False
         Color = clWhite
@@ -1032,6 +1042,33 @@ object FormMAMESettings: TFormMAMESettings
         ParentShowHint = False
         ShowHint = False
         TabOrder = 52
+      end
+      object FolderManualsPDF: TEdit
+        Left = 590
+        Top = 412
+        Width = 217
+        Height = 21
+        Hint = 'Directory to Game Manual Files (PDF)'
+        TabStop = False
+        AutoSize = False
+        Color = clWhite
+        Ctl3D = True
+        ParentCtl3D = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 53
+      end
+      object FolderManualsPDFButtonSelect: TBitBtn
+        Left = 809
+        Top = 412
+        Width = 43
+        Height = 21
+        Hint = 'Click here to select a folder'
+        Caption = 'Select'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 54
+        OnClick = FolderManualsPDFButtonSelectClick
       end
     end
     object TPage
@@ -1098,7 +1135,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 60
           Width = 117
           Height = 20
-          Hint = 'Enables aspect ratio enforcement, so games look like they should'
+          Hint = 'Maintain aspect ratio when scaling to fill output screen/window'
           Checked = True
           TabOrder = 2
           Alignment = taLeftJustify
@@ -1138,7 +1175,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 120
           Width = 104
           Height = 20
-          Hint = 'Allow non-integer stretch factors'
+          Hint = 
+            'Allow non-integer ratios when scaling to fill output screen/wind' +
+            'ow horizontally or vertically'
           Checked = True
           Enabled = False
           TabOrder = 5
@@ -1153,7 +1192,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 140
           Width = 132
           Height = 20
-          Hint = 'Allow non-integer stretch factors only on horizontal axis'
+          Hint = 
+            'Allow non-integer ratios when scaling to fill output screen/wind' +
+            'ow horizontally'
           Enabled = False
           TabOrder = 6
           Alignment = taLeftJustify
@@ -1211,7 +1252,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 160
           Width = 132
           Height = 20
-          Hint = 'Allow non-integer stretch factors only on vertical axis'
+          Hint = 
+            'Allow non-integer ratios when scaling to fill otuput screen/wind' +
+            'ow vertially'
           Enabled = False
           TabOrder = 10
           Alignment = taLeftJustify
@@ -1963,7 +2006,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 20
           Width = 49
           Height = 20
-          Hint = 'Crop artwork to game screen size'
+          Hint = 
+            'Crop artwork so emulated screen image fills output screen/window' +
+            ' in one axis'
           TabOrder = 3
           Alignment = taLeftJustify
           Caption = 'Crop'
@@ -2219,7 +2264,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 40
           Width = 103
           Height = 20
-          Hint = 'Enable automatic frameskip selection'
+          Hint = 
+            'Enable automatic frameskip adjustment to maintain emulation spee' +
+            'd'
           TabOrder = 0
           Alignment = taLeftJustify
           Caption = 'Auto Frameskip'
@@ -2231,7 +2278,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 40
           Width = 63
           Height = 20
-          Hint = 'Enable throttling to keep game running in sync with real time'
+          Hint = 'Throttle emulation to keep system running in sync with real time'
           Checked = True
           TabOrder = 1
           Alignment = taLeftJustify
@@ -2277,8 +2324,8 @@ object FormMAMESettings: TFormMAMESettings
           Width = 95
           Height = 20
           Hint = 
-            'Automatically adjusts the speed of gameplay to keep the refresh ' +
-            'rate lower than the screen'
+            'Automatically adjust emulation speed to keep the emulated refres' +
+            'h rate slower than the host screen'
           Checked = True
           TabOrder = 4
           Alignment = taLeftJustify
@@ -2947,6 +2994,17 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = False
             Transparent = True
           end
+          object LabelBGFXLUTTextureName: TLabel
+            Left = 384
+            Top = 100
+            Width = 98
+            Height = 15
+            Caption = 'LUT Texture Name'
+            ParentShowHint = False
+            ShowAccelChar = False
+            ShowHint = False
+            Transparent = True
+          end
           object BGFXPath: TEdit
             Left = 8
             Top = 72
@@ -2971,6 +3029,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 1
+            OnClick = BGFXPathButtonSelectClick
           end
           object BGFXBackend: TComboBox
             Left = 8
@@ -3028,7 +3087,7 @@ object FormMAMESettings: TFormMAMESettings
             Top = 116
             Width = 43
             Height = 21
-            Hint = 'Click here to select a folder'
+            Hint = 'Click here to select a file'
             Caption = 'Select'
             ParentShowHint = False
             ShowHint = True
@@ -3180,6 +3239,43 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 13
             OnClick = BGFXScreenShaderChainsButtonResetClick
           end
+          object BGFXLUTTextureName: TEdit
+            Left = 384
+            Top = 116
+            Width = 269
+            Height = 21
+            AutoSize = False
+            Color = clWhite
+            Ctl3D = True
+            ParentCtl3D = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 14
+          end
+          object BGFXLUTTextureNameButtonSelect: TBitBtn
+            Left = 655
+            Top = 116
+            Width = 43
+            Height = 21
+            Hint = 'Click here to select a file'
+            Caption = 'Select'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 15
+            OnClick = BGFXLUTTextureNameButtonSelectClick
+          end
+          object BGFXLUTTextureNameButtonReset: TBitBtn
+            Left = 698
+            Top = 116
+            Width = 43
+            Height = 21
+            Hint = 'Click here to set default filename (empty)'
+            Caption = 'Reset'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 16
+            OnClick = BGFXLUTTextureNameButtonResetClick
+          end
         end
         object TPage
           Left = 0
@@ -3234,17 +3330,6 @@ object FormMAMESettings: TFormMAMESettings
             Width = 129
             Height = 15
             Caption = 'Shadow Mask Tile Mode'
-            ParentShowHint = False
-            ShowAccelChar = False
-            ShowHint = False
-            Transparent = True
-          end
-          object LabelBloomBlendMode: TLabel
-            Left = 235
-            Top = 150
-            Width = 102
-            Height = 15
-            Caption = 'Bloom Blend Mode'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
@@ -3458,28 +3543,6 @@ object FormMAMESettings: TFormMAMESettings
               'Screen Based'
               'Source Based')
           end
-          object BloomBlendMode: TComboBox
-            Left = 235
-            Top = 166
-            Width = 129
-            Height = 21
-            Style = csDropDownList
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ItemHeight = 13
-            ItemIndex = 0
-            ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 15
-            Text = 'Brighten'
-            Items.Strings = (
-              'Brighten'
-              'Darken')
-          end
           object ShadowMaskTextureButtonReset: TBitBtn
             Left = 323
             Top = 114
@@ -3489,7 +3552,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Reset'
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 16
+            TabOrder = 15
             OnClick = ShadowMaskTextureButtonResetClick
           end
           object VectorPostProcessingBox: TAdvGroupBox
@@ -3501,7 +3564,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Vector Post-Processing'
             Ctl3D = True
             Enabled = False
-            TabOrder = 17
+            TabOrder = 16
             object LabelVectorBeamSmooth: TLabel
               Left = 8
               Top = 20
@@ -3588,6 +3651,151 @@ object FormMAMESettings: TFormMAMESettings
               SmallChange = 0.001000000047497451
               Position = 0.500000000000000000
               OnChange = VectorMinimumLengthAttenuationChange
+            end
+          end
+          object HLSLBloomPostProcessingBox: TAdvGroupBox
+            Left = 432
+            Top = 192
+            Width = 329
+            Height = 161
+            RoundEdges = True
+            Caption = 'Bloom Post-Processing'
+            Ctl3D = True
+            TabOrder = 17
+            object LabelBloomBlendMode: TLabel
+              Left = 8
+              Top = 20
+              Width = 102
+              Height = 15
+              Caption = 'Bloom Blend Mode'
+              ParentShowHint = False
+              ShowAccelChar = False
+              ShowHint = False
+              Transparent = True
+            end
+            object BloomBlendMode: TComboBox
+              Left = 8
+              Top = 36
+              Width = 129
+              Height = 21
+              Style = csDropDownList
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ItemHeight = 13
+              ItemIndex = 0
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+              Text = 'Brighten'
+              Items.Strings = (
+                'Brighten'
+                'Darken')
+            end
+            object BloomLUTTextureScreen: TEdit
+              Left = 8
+              Top = 84
+              Width = 222
+              Height = 21
+              Hint = '3D LUT texture filename for screen'
+              AutoSize = False
+              Color = clWhite
+              Ctl3D = True
+              ParentCtl3D = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object BloomLUTTextureScreenButtonSelect: TBitBtn
+              Left = 232
+              Top = 84
+              Width = 43
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = 'Select'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              OnClick = BloomLUTTextureScreenButtonSelectClick
+            end
+            object BloomLUTTextureScreenButtonReset: TBitBtn
+              Left = 276
+              Top = 84
+              Width = 43
+              Height = 21
+              Hint = 'Click here to set default filename (empty)'
+              Caption = 'Reset'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 3
+              OnClick = BloomLUTTextureScreenButtonResetClick
+            end
+            object BloomLUTEnabled: TAdvOfficeCheckBox
+              Left = 8
+              Top = 64
+              Width = 162
+              Height = 20
+              Hint = 'Enables 3D LUT to be applied to screen after post-processing'
+              TabOrder = 4
+              Alignment = taLeftJustify
+              Caption = 'Enable Screen LUT Texture'
+              ReturnIsTab = False
+              Themed = True
+            end
+            object BloomLOOTUIEnabled: TAdvOfficeCheckBox
+              Left = 8
+              Top = 112
+              Width = 191
+              Height = 20
+              Hint = 
+                'Enables 3D LUT to be applied to UI and artwork after post-proces' +
+                'sing'
+              TabOrder = 5
+              Alignment = taLeftJustify
+              Caption = 'Enable UI / Artwork LUT Texture'
+              ReturnIsTab = False
+              Themed = True
+            end
+            object BloomLUTTextureUI: TEdit
+              Left = 8
+              Top = 132
+              Width = 222
+              Height = 21
+              Hint = '3D LUT texture filename of UI'
+              AutoSize = False
+              Color = clWhite
+              Ctl3D = True
+              ParentCtl3D = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 6
+            end
+            object BloomLUTTextureUIButtonSelect: TBitBtn
+              Left = 232
+              Top = 132
+              Width = 43
+              Height = 21
+              Hint = 'Click here to select a file'
+              Caption = 'Select'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 7
+              OnClick = BloomLUTTextureUIButtonSelectClick
+            end
+            object BloomLUTTextureUIButtonReset: TBitBtn
+              Left = 276
+              Top = 132
+              Width = 43
+              Height = 21
+              Hint = 'Click here to set default filename (empty)'
+              Caption = 'Reset'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+              OnClick = BloomLUTTextureUIButtonResetClick
             end
           end
         end
@@ -4451,7 +4659,7 @@ object FormMAMESettings: TFormMAMESettings
           Top = 80
           Width = 281
           Height = 20
-          Hint = 'Timer delay to trigger command execution on auto-boot'
+          Hint = 'Delay before executing autoboot command'
           Color = clWhite
           Backgnd = bgPattern
           ButtonSize = 12
@@ -5022,7 +5230,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 92
         Width = 97
         Height = 20
-        Hint = 'Enable coin lockouts to actually lock out coins'
+        Hint = 'Ignore coin inputs if coin lockout ouput is active'
         Checked = True
         TabOrder = 8
         Alignment = taLeftJustify
@@ -6098,7 +6306,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 105
         Height = 20
-        Hint = 'Skip displaying the information screen at startup'
+        Hint = 'Skip displaying the system information screen at startup'
         Enabled = False
         TabOrder = 0
         Alignment = taLeftJustify
@@ -6125,7 +6333,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 32
         Width = 121
         Height = 20
-        Hint = 'Writes configuration to (driver).ini on exit'
+        Hint = 'Write configuration to (driver).ini on exit'
         TabOrder = 2
         Alignment = taLeftJustify
         Caption = 'Write Config Files'
@@ -6159,7 +6367,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 52
         Width = 97
         Height = 20
-        Hint = 'Display quit confirmation dialog on exit'
+        Hint = 'Ask for confirmation before exiting'
         TabOrder = 5
         Alignment = taLeftJustify
         Caption = 'Confirm Quit'
@@ -6234,7 +6442,9 @@ object FormMAMESettings: TFormMAMESettings
           Top = 40
           Width = 112
           Height = 20
-          Hint = 'Output error.log data to the system debugger'
+          Hint = 
+            'Output error.log data to system diagnostic output (debugger or s' +
+            'tandard error)'
           TabOrder = 1
           Alignment = taLeftJustify
           Caption = 'Log to Debugger'
@@ -6421,9 +6631,9 @@ object FormMAMESettings: TFormMAMESettings
       object DRC: TAdvOfficeCheckBox
         Left = 252
         Top = 12
-        Width = 145
+        Width = 141
         Height = 20
-        Hint = 'Enable DRC cpu core if available'
+        Hint = 'Enable DRC CPU core if available'
         Checked = True
         TabOrder = 10
         Alignment = taLeftJustify
@@ -6435,12 +6645,13 @@ object FormMAMESettings: TFormMAMESettings
       object DRCUseC: TAdvOfficeCheckBox
         Left = 252
         Top = 32
-        Width = 169
+        Width = 189
         Height = 20
-        Hint = 'Force DRC use C backend'
+        Hint = 'Force DRC to use C backend'
+        ShowHint = False
         TabOrder = 11
         Alignment = taLeftJustify
-        Caption = 'Force DRC Use C Backend'
+        Caption = 'Force DRC To Use C Backend'
         ReturnIsTab = False
         Themed = True
       end

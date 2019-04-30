@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ImgList, MPCommonObjects, MPCommonUtilities,
   EasyListview, ExtCtrls, PanelEx, Buttons, ShadowLabel, IniFiles,
-  SplitterEx, Menus, BarMenus, AdvOfficeButtons;
+  SplitterEx, Menus, BarMenus, AdvOfficeButtons, ButtonsEx;
 
 type
   TPlayedGameInfo = class(TEasyItemStored)
@@ -32,7 +32,10 @@ type
     fTotalPlaytime: Int64;
     fTotalPlaytimeText: String;
 
+    fGameSetStatus: ShortInt;
+
     fIsCustomGame: Boolean;
+
 
     fReadDataFromMainList: Boolean; // this var is to improve speed when adding extra game info from main games list
   protected
@@ -58,6 +61,9 @@ type
     property ePlayedDateText: String read fPlayedDateText write fPlayedDateText; // formatted last played in "00:00:00 Feb 03, 2014"
     property eTotalPlaytime: Int64 read fTotalPlaytime write fTotalPlaytime; // total playtime in milliseconds
     property eTotalPlaytimeText: String read fTotalPlaytimeText write fTotalPlaytimeText; // formatted playtime in "x days, 00:00:00" format
+
+    property eGameSetStatus: ShortInt read fGameSetStatus write fGameSetStatus; // 0 - have; 1 - missing ROMs/CHDs; 2 - missing (no .zip and no ROMs found)
+
     property eIsCustomGame: Boolean read fIsCustomGame write fIsCustomGame;
     property eReadDataFromMainList: Boolean read fReadDataFromMainList write fReadDataFromMainList;
   end;
@@ -68,23 +74,24 @@ type
     LastPlayedList: TEasyListview;
     IL_Systems: TImageList;
     PanelBottom: TPanelEx;
-    ButtonSelectGame: TBitBtn;
-    ButtonClose: TBitBtn;
+    ButtonSelectGame: TBitBtnEx;
+    ButtonClose: TBitBtnEx;
     PanelPlayedListHeader: TPanelEx;
-    LabelTitleCaption: TLabel;
-    LabelLastPlayed: TLabel;
-    LabelTotalPlaytime: TLabel;
+    LabelTitleCaption: TShadowLabel;
+    LabelLastPlayed: TShadowLabel;
+    LabelTotalPlaytime: TShadowLabel;
     PanelSystems: TPanelEx;
     Systems: TEasyListview;
-    LabelSystemTitle: TShadowLabel;
-    LabelSystemType: TShadowLabel;
-    LabelSoftwareNameCaption: TLabel;
-    ButtonSelectGameExit: TBitBtn;
+    LabelSoftwareNameCaption: TShadowLabel;
+    ButtonSelectGameExit: TBitBtnEx;
     PopupLastPlayed: TBcBarPopupMenu;
     PopupDetailsView: TMenuItem;
     PopupTilesView: TMenuItem;
     N1: TMenuItem;
-    LabelGameNameCaption: TLabel;
+    LabelGameNameCaption: TShadowLabel;
+    PanelSystemsTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
+    LabelSystemType: TShadowLabel;
     procedure ButtonSelectGameClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -105,6 +112,8 @@ type
       AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure PopupDetailsViewClick(Sender: TObject);
+    procedure LastPlayedListItemSelectionChanged(
+      Sender: TCustomEasyListview; Item: TEasyItem);
   private
     { Private declarations }
     LastSelectedStateImageIndex: ShortInt;
@@ -430,6 +439,9 @@ var
 
     if TPlayedGameInfo(LastPlayedItem).eTitle <> uMain.TEasyGameInfo(elvItem).eTitle then
        TPlayedGameInfo(LastPlayedItem).eTitle:= uMain.TEasyGameInfo(elvItem).eTitle;
+
+    if TPlayedGameInfo(LastPlayedItem).eGameSetStatus <> uMain.TEasyGameInfo(elvItem).eGameSetStatus then
+       TPlayedGameInfo(LastPlayedItem).eGameSetStatus:= uMain.TEasyGameInfo(elvItem).eGameSetStatus;
     //TPlayedGameInfo(LastPlayedItem).eYear:= uMain.TEasyGameInfo(elvItem).eYear;
     //TPlayedGameInfo(LastPlayedItem).eManufacturer:= uMain.TEasyGameInfo(elvItem).eManufacturer;
     //TPlayedGameInfo(LastPlayedItem).eSoftwareName:= uMain.TEasyGameInfo(elvItem).eSoftwareName;
@@ -584,8 +596,8 @@ begin
         FormLastPlayedGamesMega.ClientWidth:= Systems.CellSizes.Icon.Width*ItemsColumnCount;
         iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
         Systems.Height:= iDiff;
-        PanelSystems.Height:= Systems.Height+LabelSystemTitle.Height;
-        FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottom.Height;
+        PanelSystems.Height:= Systems.Height;//+LabelSystemTitle.Height;
+        FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelSystemsTitle.Height+PanelGames.Height+PanelBottom.Height;
         iDiff:= FormLastPlayedGamesMega.ClientWidth-LastPlayedList.Width;
         LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth;
         LastPlayedList.Header.Columns[0].Width:= LastPlayedList.Header.Columns[0].Width+(iDiff div 2);
@@ -672,8 +684,8 @@ begin
            begin
              iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
              Systems.Height:= iDiff;
-             PanelSystems.Height:= Systems.Height+LabelSystemTitle.Height;
-             FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelGames.Height+PanelBottom.Height;
+             PanelSystems.Height:= Systems.Height;//+LabelSystemTitle.Height;
+             FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelSystemsTitle.Height+PanelGames.Height+PanelBottom.Height;
            end;
         if Systems.Scrollbars.VertBarVisible then
            begin
@@ -689,7 +701,7 @@ begin
   if FormLastPlayedGamesMega.Height > (iScreenHeight-55) then
      begin
        FormLastPlayedGamesMega.Height:= iScreenHeight-55;
-       PanelGames.Height:= FormLastPlayedGamesMega.ClientHeight-PanelSystems.Height-PanelBottom.Height;
+       PanelGames.Height:= FormLastPlayedGamesMega.ClientHeight-PanelSystems.Height-PanelSystemsTitle.Height-PanelSystemsTitle.Height-PanelBottom.Height;
        LastPlayedList.Height:= PanelGames.Height-PanelPlayedListHeader.Height;
      end;
 
@@ -721,7 +733,7 @@ begin
      end;
   LastPlayedList.EndUpdate;
 
-  LabelSystemType.Top:= LabelSystemTitle.Top;
+  LabelSystemTitle.Width:= PanelSystemsTitle.Width-16;
 
   ButtonSelectGameExit.Left:= (PanelBottom.Width div 2) - (ButtonSelectGameExit.Width div 2);
   ButtonSelectGame.Left:= ButtonSelectGameExit.Left-ButtonSelectGame.Width-6;
@@ -732,6 +744,12 @@ procedure TFormLastPlayedGamesMega.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(LastPlayedList);
+
+  if IsNightMode then
+     begin
+       FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.ELV_SetRibbonNightColors(0, LastPlayedList, True);
+     end;
 
   {if IsNightMode then
      begin
@@ -873,6 +891,18 @@ begin
      LastPlayedList.View:= elsReport
   else
      LastPlayedList.View:=elsTile;
+end;
+
+procedure TFormLastPlayedGamesMega.LastPlayedListItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Selected then
+     begin
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(TPlayedGameInfo(Item).eGameSetStatus, LastPlayedList)
+       else
+          FormMain.ELV_SetSelectRibbon(TPlayedGameInfo(Item).eGameSetStatus, LastPlayedList);
+     end;
 end;
 
 end.

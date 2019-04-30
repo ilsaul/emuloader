@@ -5,18 +5,22 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, MPCommonObjects, EasyListview, ComCtrls, ExtCtrls,
-  ShadowLabel, PanelEx, ImgList, IniFiles, AdvOfficeButtons, Buttons;
+  ShadowLabel, PanelEx, ImgList, IniFiles, AdvOfficeButtons, Buttons,
+  ButtonsEx;
 
 type
   TFormArcadeROMsFolders = class(TForm)
-    FoldersList: TMemo;
     PanelSystemsSelect: TPanelEx;
-    LabelSystemTitle: TShadowLabel;
     SystemSelector: TEasyListview;
     IL_Systems: TImageList;
     PanelBottom: TPanelEx;
-    ButtonCancel: TBitBtn;
+    ButtonCancel: TBitBtnEx;
     UseLargeIcons: TAdvOfficeCheckBox;
+    PanelFoldersList: TPanelEx;
+    FoldersList: TMemo;
+    PanelSystemTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
+    PanelSystemTitleBottom: TPanelEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure SystemSelectorItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -95,10 +99,14 @@ begin
        SystemSelector.Width:= SystemSelector.Width-160;
        FormArcadeROMsFolders.ClientWidth:= FormArcadeROMsFolders.ClientWidth-160;
 
-       LabelSystemTitle.Top:= LabelSystemTitle.Top-20;
-       LabelSystemTitle.Width:= ClientWidth;
-       FoldersList.Top:= FoldersList.Top-20;
-       FoldersList.Width:= ClientWidth-16;
+       PanelSystemTitle.Top:= PanelSystemTitle.Top-20;
+       PanelSystemTitle.Width:= ClientWidth;
+
+       PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top-20;
+       PanelSystemTitleBottom.Width:= ClientWidth;
+
+       PanelFoldersList.Top:= PanelFoldersList.Top-20;
+       PanelFoldersList.Width:= ClientWidth-16;
      end;
 end;
 
@@ -178,8 +186,10 @@ begin
 
     FormArcadeROMsFolders.ClientHeight:= FormArcadeROMsFolders.ClientHeight+iDiff;
     PanelSystemsSelect.Height:= PanelSystemsSelect.Height+iDiff;
-    LabelSystemTitle.Top:= LabelSystemTitle.Top+iDiff;
-    FoldersList.Top:= FoldersList.Top+iDiff;
+    PanelSystemTitle.Top:= PanelSystemTitle.Top+iDiff;
+    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top+iDiff;
+
+    PanelFoldersList.Top:= PanelFoldersList.Top+iDiff;
     SystemSelector.Height:= 166*2;
     SystemSelector.CellSizes.Icon.Height:= 166;
     SystemSelector.CellSizes.Icon.Width:= 156;
@@ -193,9 +203,10 @@ begin
     SystemSelector.Height:= 92;
     SystemSelector.CellSizes.Icon.Height:= 92;
     SystemSelector.CellSizes.Icon.Width:= 78;
-    LabelSystemTitle.Top:= LabelSystemTitle.Top-iDiff;
+    PanelSystemTitle.Top:= PanelSystemTitle.Top-iDiff;
+    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top-iDiff;
     PanelSystemsSelect.Height:= PanelSystemsSelect.Height-iDiff;
-    FoldersList.Top:= FoldersList.Top-iDiff;
+    PanelFoldersList.Top:= PanelFoldersList.Top-iDiff;
 
     FormArcadeROMsFolders.ClientHeight:= FormArcadeROMsFolders.ClientHeight-iDiff;
   end;

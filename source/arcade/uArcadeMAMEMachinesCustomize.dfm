@@ -57,7 +57,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonYes: TBitBtn
+    object ButtonYes: TBitBtnEx
       Left = 861
       Top = 8
       Width = 89
@@ -70,7 +70,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       TabOrder = 0
       OnClick = ButtonYesClick
     end
-    object ButtonNo: TBitBtn
+    object ButtonNo: TBitBtnEx
       Left = 964
       Top = 8
       Width = 89
@@ -81,7 +81,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonResetToCurrent: TBitBtn
+    object ButtonResetToCurrent: TBitBtnEx
       Left = 8
       Top = 8
       Width = 43

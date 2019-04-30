@@ -109,7 +109,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     OnItemSelectionChanged = FilesListViewItemSelectionChanged
     OnKeyAction = FilesListViewKeyAction
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 490
     Width = 884

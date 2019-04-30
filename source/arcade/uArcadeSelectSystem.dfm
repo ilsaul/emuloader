@@ -38,7 +38,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelEmuTitle: TShadowLabel
+    object LabelSystemTitle: TShadowLabel
       Left = 10
       Top = 292
       Width = 230
@@ -58,6 +58,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
       WordWrap = True
     end
@@ -135,7 +138,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       OnKeyAction = SystemsListViewKeyAction
     end
   end
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 342
     Width = 624
@@ -166,9 +169,12 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = 14540253
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 427
       Top = 13
       Width = 89
@@ -180,7 +186,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 525
       Top = 13
       Width = 89
@@ -222,7 +228,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Caption = '           MAME Software List Games '
     Ctl3D = True
     TabOrder = 3
-    object ShadowLabel1: TShadowLabel
+    object LabelMAMESoftwareList_Disabled: TShadowLabel
       Left = 172
       Top = 32
       Width = 186
@@ -238,9 +244,12 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ShadowLabel2: TShadowLabel
+    object LabelMAMESoftwareList_EnabledUpdate: TShadowLabel
       Left = 161
       Top = 58
       Width = 197
@@ -256,9 +265,12 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ShadowLabel3: TShadowLabel
+    object LabelMAMESoftwareList_EnabledOverwrite: TShadowLabel
       Left = 170
       Top = 84
       Width = 188
@@ -274,6 +286,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelCustomizeMAMESoftwareList: TShadowLabel
@@ -295,6 +310,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = LabelCustomizeMAMESoftwareListClick
       OnMouseEnter = LabelCustomizeMAMESoftwareListMouseEnter
@@ -306,14 +324,21 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Width = 16
       Height = 16
     end
-    object Shape2: TShape
+    object LabelMAMESoftwareListBox_BlankLine: TShape
       Left = 212
       Top = 8
       Width = 137
       Height = 1
       Pen.Color = clWhite
     end
-    object LabelCreateSoftwareListGames: TShadowLabel
+    object LabelMAMESoftwareListBox_BlankLine2: TShape
+      Left = 212
+      Top = 9
+      Width = 137
+      Height = 1
+      Pen.Color = clWhite
+    end
+    object LabelMAMESoftwareListBox: TShadowLabel
       Left = 217
       Top = 1
       Width = 109
@@ -329,6 +354,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object MAMESoftwareList_Disabled: TAdvOfficeRadioButton
@@ -389,11 +417,11 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object ButtonHelpCreateMAMESoftwareListGames: TBitBtn
+    object ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx
       Left = 328
       Top = 0
-      Width = 17
-      Height = 17
+      Width = 19
+      Height = 19
       Hint = 'What is this ?'
       Caption = '?'
       Font.Charset = ANSI_CHARSET
@@ -418,11 +446,11 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Caption = '           Choose Scan Mode '
     Ctl3D = True
     TabOrder = 4
-    object LabelForceAllAvailable: TLabel
+    object LabelForceAllAvailable: TShadowLabel
       Left = 167
       Top = 84
-      Width = 188
-      Height = 15
+      Width = 191
+      Height = 16
       Caption = '(no validation or file search is done)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
@@ -431,13 +459,19 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelQuickScan: TLabel
+    object LabelQuickScan: TShadowLabel
       Left = 94
       Top = 58
-      Width = 261
-      Height = 15
+      Width = 264
+      Height = 16
       Caption = '(search .zip; .7z; .chd game/bios/device files only)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
@@ -446,13 +480,19 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelFullScan: TLabel
+    object LabelFullScan: TShadowLabel
       Left = 84
       Top = 32
-      Width = 271
-      Height = 15
+      Width = 274
+      Height = 16
       Caption = '(validate all ROMs/CHDs, CRC32/SHA-1 checksum)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
@@ -461,6 +501,12 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ScanModeIcon: TImage
@@ -469,9 +515,16 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Width = 16
       Height = 16
     end
-    object Shape1: TShape
+    object LabelScanModeCurrentTaskOnly_BlankLine: TShape
       Left = 224
       Top = 8
+      Width = 125
+      Height = 1
+      Pen.Color = clWhite
+    end
+    object LabelScanModeCurrentTaskOnly_BlankLine2: TShape
+      Left = 224
+      Top = 9
       Width = 125
       Height = 1
       Pen.Color = clWhite
@@ -535,7 +588,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Top = 114
       Width = 349
       Height = 41
-      BorderStyle = bsNone
+      BorderStyle = bsAdvNone
       Transparent = False
       Caption = '         Scan MAME Sets (v0.162 or newer)'
       Ctl3D = True
@@ -617,6 +670,6 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Height = 68
     Width = 68
     Left = 272
-    Top = 328
+    Top = 320
   end
 end

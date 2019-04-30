@@ -6,7 +6,7 @@ uses
   Windows, Messages, Classes, Graphics, Controls, Forms,
   Buttons, SysUtils, StdCtrls, ExtCtrls, IniFiles, ImgList,
   MPCommonObjects, MPCommonUtilities, EasyListview, PanelEx,
-  AdvOfficeButtons, ShadowLabel;
+  AdvOfficeButtons, ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeGamesFilter = class(TForm)
@@ -14,9 +14,9 @@ type
     PanelFilters: TPanelEx;
     FiltersListView: TEasyListview;
     PanelBottom: TPanelEx;
-    ButtonGoToCurrentFilter: TBitBtn;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonGoToCurrentFilter: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     LabelToolBarIconSize: TShadowLabel;
     LabelIconSizeValue: TShadowLabel;
     IconSizeExtraLarge: TSpeedButton;
@@ -44,7 +44,6 @@ type
   public
     { Public declarations }
     SelNodeName: String;
-
   end;
 
 var
@@ -79,14 +78,18 @@ begin
        ReloadIcons:= True;
      end;
 
+  if LabelToolBarIconSize.Tag = 2 then
+     FiltersListView.Font.Size:= 8
+  else
+     FiltersListView.Font.Size:= 9;
   case LabelToolBarIconSize.Tag of
     0: // extra large icon
       begin
         if FormArcadeGamesFilter.Height <> 600 then
            FormArcadeGamesFilter.Height:= 600;
 
-        if FiltersListView.CellSizes.Tile.Width <> 184 then
-           FiltersListView.CellSizes.Tile.Width:= 184;
+        if FiltersListView.CellSizes.Tile.Width <> 214 then
+           FiltersListView.CellSizes.Tile.Width:= 214;
         if FiltersListView.CellSizes.Tile.Height <> 78 then
            FiltersListView.CellSizes.Tile.Height:= 78;
       end;
@@ -95,8 +98,8 @@ begin
         if FormArcadeGamesFilter.Height <> 516 then
            FormArcadeGamesFilter.Height:= 516;
 
-        if FiltersListView.CellSizes.Tile.Width <> 164 then
-           FiltersListView.CellSizes.Tile.Width:= 164;
+        if FiltersListView.CellSizes.Tile.Width <> 194 then
+           FiltersListView.CellSizes.Tile.Width:= 194;
         if FiltersListView.CellSizes.Tile.Height <> 58 then
            FiltersListView.CellSizes.Tile.Height:= 58;
       end;
@@ -104,9 +107,9 @@ begin
       begin
         if FormArcadeGamesFilter.Height <> 516 then
            FormArcadeGamesFilter.Height:= 516;
-           
-        if FiltersListView.CellSizes.Tile.Width <> 152 then
-           FiltersListView.CellSizes.Tile.Width:= 164;
+
+        if FiltersListView.CellSizes.Tile.Width <> 172 then
+           FiltersListView.CellSizes.Tile.Width:= 184;
         if FiltersListView.CellSizes.Tile.Height <> 34 then
            FiltersListView.CellSizes.Tile.Height:= 34;
       end;
@@ -133,7 +136,7 @@ begin
       iconFolder:= FormMain.GetFolderFull(32)+'arcade_filters\';
       IL_MainFiltersMAME.Clear;
       for iValue:=0 to IconIndexList.Count-1 do
-          FormMain.AddDefaultIcons(IconIndexList[iValue], iconFolder, IL_MainFiltersMAME, Ord(iValue <> 1), True);
+          FormMain.AddDefaultIcons(IconIndexList[iValue], iconFolder, IL_MainFiltersMAME, Ord(iValue <> 1));
       FiltersListView.EndUpdate;
     end;
     if FormMain.CheckSelected(FiltersListView) then
@@ -164,7 +167,7 @@ var
   function AddFilterIcon(const iFile: String): Integer;
   begin
     Result:= 0;
-    if FormMain.AddDefaultIcons(iFile+'.ico', iconFolder, IL_MainFiltersMAME, Ord(iFile <> 'allgames'), True) then
+    if FormMain.AddDefaultIcons(iFile+'.ico', iconFolder, IL_MainFiltersMAME, Ord(iFile <> 'allgames')) then
        begin
          IconIndexList.Add(iFile+'.ico');
          Result:= IL_MainFiltersMAME.Count-1;
@@ -359,6 +362,8 @@ begin
         if FormMain.MenuArcadeBrowseGames.Tag <> 0 then
            FiltersListView.IncrementalSearch.Enabled:= False;
         FormMain.ELV_ResetNormalColors(FiltersListView);
+        if IsNightMode then
+           FormMain.ELV_SetNightModeColors(FiltersListView);
 
         LabelToolBarIconSize.Tag:= FormMain.ButtonArcadeGamesFilters.Tag;
         case LabelToolBarIconSize.Tag of

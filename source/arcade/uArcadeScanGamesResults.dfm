@@ -229,10 +229,27 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       Transparent = True
     end
     object MAMEMachinesFilterIcon: TImage
-      Left = 397
+      Left = 301
       Top = 53
       Width = 16
       Height = 16
+    end
+    object LabelSearchBar: TShadowLabel
+      Left = 690
+      Top = 53
+      Width = 72
+      Height = 16
+      Caption = 'Search Game'
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = False
+      ShadowColor = clCream
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
     end
     object SystemSelectorToolBar: TToolBar
       Left = 773
@@ -322,7 +339,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       end
     end
     object MAMEMachinesFilter: TComboBox
-      Left = 416
+      Left = 320
       Top = 50
       Width = 185
       Height = 21
@@ -343,6 +360,62 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
         'List All'
         'MAME Games Only'
         'MAME Software List Games Only')
+    end
+    object SearchBarEdit: TEditEx
+      Left = 766
+      Top = 48
+      Width = 189
+      Height = 24
+      Hint = 'Enter a game title or game name'
+      AutoSize = False
+      BevelOuter = bvNone
+      Color = clWhite
+      Constraints.MaxHeight = 24
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnKeyPress = SearchBarEditKeyPress
+    end
+    object SearchBarToolBar: TToolBar
+      Left = 958
+      Top = 45
+      Width = 37
+      Height = 30
+      Align = alNone
+      ButtonHeight = 30
+      ButtonWidth = 31
+      Color = 15856113
+      EdgeBorders = []
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      Images = FormMain.IL_MiscToolBarPopup
+      ParentColor = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Transparent = False
+      Wrapable = False
+      OnCustomDraw = SystemSelectorToolBarCustomDraw
+      object ButtonFilterTitleApply_ToolBar: TToolButton
+        Left = 0
+        Top = 0
+        Hint = 'Click here to search'
+        AutoSize = True
+        Caption = 'Apply'
+        ImageIndex = 9
+        OnClick = ButtonFilterTitleApply_ToolBarClick
+      end
     end
   end
   object ButtonToggleTree: TBitBtn

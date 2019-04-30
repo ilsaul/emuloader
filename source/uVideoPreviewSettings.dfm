@@ -21,76 +21,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelVideoPreviewSystem: TShadowLabel
-    Left = 0
-    Top = 410
-    Width = 930
-    Height = 16
-    Align = alBottom
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'SUPERMODEL 3: A SEGA MODEL 3 ARCADE EMULATOR'
-    Color = 16448250
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = False
-    Layout = tlCenter
-  end
-  object LabelSystemType: TShadowLabel
-    Left = 32
-    Top = 410
-    Width = 51
-    Height = 16
-    Caption = 'ARCADE'
-    Color = 16448250
-    Constraints.MaxHeight = 16
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = False
-    Layout = tlCenter
-  end
-  object LabelSystemNotAvailable: TShadowLabel
-    Left = 697
-    Top = 410
-    Width = 203
-    Height = 16
-    Caption = 'THIS SYSTEM IS NOT AVAILABLE'
-    Color = 16448250
-    Constraints.MaxHeight = 16
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 14540253
-    ShadowEnabled = True
-    EllipsType = etNone
-    Transparent = False
-    Layout = tlCenter
-    Visible = False
-  end
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 596
     Width = 930
@@ -101,11 +32,12 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     ShowHint = True
     Style = vgSimple
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Tag = 1
       Left = 371
       Top = 8
@@ -116,7 +48,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ModalResult = 1
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 469
       Top = 8
       Width = 89
@@ -126,7 +58,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ModalResult = 2
       TabOrder = 1
     end
-    object ButtonVideoPreviewHelp: TBitBtn
+    object ButtonVideoPreviewHelp: TBitBtnEx
       Left = 8
       Top = 8
       Width = 43
@@ -139,9 +71,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
   end
   object PanelSettings: TPanelEx
     Left = 0
-    Top = 426
+    Top = 438
     Width = 930
-    Height = 170
+    Height = 158
     Align = alBottom
     BevelOuter = bvNone
     Color1 = 15856113
@@ -149,40 +81,59 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
-    Frames = [frTop]
+    ColorInnerFrame = clGreen
+    Frames = []
     ParentBackground = False
     ShowHint = True
     Style = vgSolid
-    object Label2: TLabel
+    object LabelVideoPreviewFolder: TShadowLabel
       Left = 13
-      Top = 8
-      Width = 310
-      Height = 15
+      Top = 2
+      Width = 313
+      Height = 16
       Caption = 'Folder (emulator relative path supported, no network path)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelVideoPreviewMediaPlayerExecutable: TLabel
+    object LabelVideoPreviewMediaPlayerExecutable: TShadowLabel
       Left = 13
-      Top = 69
-      Width = 179
-      Height = 15
+      Top = 63
+      Width = 182
+      Height = 16
       Caption = 'Media Player File (.exe; .bat; .cmd)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelVideoPreviewMediaPlayerParameters: TLabel
+    object LabelVideoPreviewMediaPlayerParameters: TShadowLabel
       Left = 13
-      Top = 117
-      Width = 312
-      Height = 15
-      Caption = 'Media Player Parameters        (%1 tag required for filename)'
+      Top = 111
+      Width = 318
+      Height = 16
+      Caption = 'Media Player Parameters         (%1 tag required for filename)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelVideoPreviewAutoPlay: TShadowLabel
       Left = 728
-      Top = 62
+      Top = 56
       Width = 146
       Height = 16
       Caption = '(use with extreme caution!)'
@@ -196,20 +147,29 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ShadowColor = clGray
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelVideoPreviewDummyVideoParameters: TLabel
+    object LabelVideoPreviewDummyVideoParameters: TShadowLabel
       Left = 477
-      Top = 117
-      Width = 303
-      Height = 15
+      Top = 111
+      Width = 306
+      Height = 16
       Caption = 'Dummy Video Media Player Parameters (%1 tag optional)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelSnapDirAutoSearch: TShadowLabel
       Left = 10
-      Top = 50
+      Top = 44
       Width = 379
       Height = 12
       Caption = 
@@ -227,11 +187,14 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ShadowColor = 16119285
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object VideoPreviewFolder: TEdit
+    object VideoPreviewFolder: TEditEx
       Left = 8
-      Top = 25
+      Top = 19
       Width = 403
       Height = 21
       AutoSize = False
@@ -242,9 +205,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 0
       OnChange = VideoPreviewFolderChange
     end
-    object ButtonSelectVideoPreviewFolder: TBitBtn
+    object ButtonSelectVideoPreviewFolder: TBitBtnEx
       Left = 416
-      Top = 24
+      Top = 18
       Width = 43
       Height = 23
       Hint = 'Click here to select a folder'
@@ -252,9 +215,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 1
       OnClick = ButtonSelectVideoPreviewFolderClick
     end
-    object VideoPreviewMediaPlayerExecutable: TEdit
+    object VideoPreviewMediaPlayerExecutable: TEditEx
       Left = 8
-      Top = 86
+      Top = 80
       Width = 403
       Height = 21
       AutoSize = False
@@ -265,9 +228,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ShowHint = False
       TabOrder = 2
     end
-    object ButtonSelectVideoPreviewMediaPlayer: TBitBtn
+    object ButtonSelectVideoPreviewMediaPlayer: TBitBtnEx
       Left = 416
-      Top = 85
+      Top = 79
       Width = 43
       Height = 23
       Hint = 'Click here to select a file'
@@ -275,9 +238,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 3
       OnClick = ButtonSelectVideoPreviewMediaPlayerClick
     end
-    object VideoPreviewMediaPlayerParameters: TEdit
+    object VideoPreviewMediaPlayerParameters: TEditEx
       Left = 8
-      Top = 134
+      Top = 128
       Width = 403
       Height = 21
       AutoSize = False
@@ -289,7 +252,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object VideoPreviewAutoPlay: TAdvOfficeCheckBox
       Left = 658
-      Top = 60
+      Top = 54
       Width = 69
       Height = 20
       Hint = 'Play video preview automatically when selecting games'
@@ -301,7 +264,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object VideoPreviewParentGameVideo: TAdvOfficeCheckBox
       Left = 658
-      Top = 34
+      Top = 28
       Width = 121
       Height = 20
       Hint = 'Play video of parent game if video of clone game is not found'
@@ -311,11 +274,11 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtn
+    object ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtnEx
       Left = 147
-      Top = 117
-      Width = 15
-      Height = 15
+      Top = 109
+      Width = 19
+      Height = 19
       Hint = 'Why ???'
       Caption = '?'
       Font.Charset = ANSI_CHARSET
@@ -329,7 +292,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox
       Left = 658
-      Top = 86
+      Top = 80
       Width = 260
       Height = 18
       TabOrder = 8
@@ -338,11 +301,11 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ButtonHelpVideoPreviewPlayDummyVideo: TBitBtn
-      Left = 640
-      Top = 88
-      Width = 15
-      Height = 15
+    object ButtonHelpVideoPreviewPlayDummyVideo: TBitBtnEx
+      Left = 636
+      Top = 80
+      Width = 19
+      Height = 19
       Hint = 'Why ???'
       Caption = '?'
       Font.Charset = ANSI_CHARSET
@@ -354,9 +317,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 9
       OnClick = ButtonHelpVideoPreviewPlayDummyVideoClick
     end
-    object VideoPreviewDummyVideoParameters: TEdit
+    object VideoPreviewDummyVideoParameters: TEditEx
       Left = 472
-      Top = 134
+      Top = 128
       Width = 403
       Height = 21
       AutoSize = False
@@ -366,11 +329,11 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ShowHint = False
       TabOrder = 10
     end
-    object ButtonSnaplDirAutoSearchHelp: TBitBtn
+    object ButtonSnaplDirAutoSearchHelp: TBitBtnEx
       Left = 391
-      Top = 48
-      Width = 15
-      Height = 15
+      Top = 40
+      Width = 19
+      Height = 19
       Hint = 'What is Auto-Search ?'
       Caption = '?'
       Font.Charset = ANSI_CHARSET
@@ -384,7 +347,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object VideoPreviewEnabled: TAdvOfficeCheckBox
       Left = 658
-      Top = 8
+      Top = 2
       Width = 70
       Height = 20
       Hint = 
@@ -404,9 +367,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       State = cbChecked
       Themed = True
     end
-    object ButtonResetVideoPreviewMediaPlayerParameters: TBitBtn
+    object ButtonResetVideoPreviewMediaPlayerParameters: TBitBtnEx
       Left = 416
-      Top = 133
+      Top = 127
       Width = 43
       Height = 23
       Hint = 'Reset parameter to current'
@@ -414,9 +377,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 13
       OnClick = ButtonResetVideoPreviewMediaPlayerParametersClick
     end
-    object ButtonResetVideoPreviewDummyVideoParameters: TBitBtn
+    object ButtonResetVideoPreviewDummyVideoParameters: TBitBtnEx
       Left = 880
-      Top = 133
+      Top = 127
       Width = 43
       Height = 23
       Hint = 'Reset dummy parameter to current'
@@ -424,18 +387,18 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 14
       OnClick = ButtonResetVideoPreviewDummyVideoParametersClick
     end
-    object ButtonResetVideoPreviewMediaPlayer: TBitBtn
+    object ButtonResetVideoPreviewMediaPlayer: TBitBtnEx
       Left = 459
-      Top = 85
+      Top = 79
       Width = 43
       Height = 23
       Hint = 'Reset filename to current'
       Caption = 'Reset'
       TabOrder = 15
     end
-    object ButtonResetVideoPreviewFolder: TBitBtn
+    object ButtonResetVideoPreviewFolder: TBitBtnEx
       Left = 459
-      Top = 24
+      Top = 18
       Width = 43
       Height = 23
       Hint = 'Reset folder to current'
@@ -443,11 +406,11 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 16
       OnClick = ButtonResetVideoPreviewFolderClick
     end
-    object ButtonVideoPreviewAutoPlayHelp: TBitBtn
-      Left = 640
-      Top = 62
-      Width = 15
-      Height = 15
+    object ButtonVideoPreviewAutoPlayHelp: TBitBtnEx
+      Left = 636
+      Top = 54
+      Width = 19
+      Height = 19
       Hint = 'Why ???'
       Caption = '?'
       Font.Charset = ANSI_CHARSET
@@ -530,6 +493,115 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     TabOrder = 2
     OnItemPaintText = SystemsVideoPreviewItemPaintText
     OnItemSelectionChanged = SystemsVideoPreviewItemSelectionChanged
+  end
+  object PanelSystemsTitle: TPanelEx
+    Left = 0
+    Top = 410
+    Width = 930
+    Height = 16
+    Align = alBottom
+    Color1 = clWhite
+    Color2 = 15132390
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object LabelSystemTitle: TShadowLabel
+      Left = 8
+      Top = 0
+      Width = 914
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'SUPERMODEL 3: A SEGA MODEL 3 ARCADE EMULATOR'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelSystemType: TShadowLabel
+      Left = 32
+      Top = 0
+      Width = 51
+      Height = 16
+      Caption = 'ARCADE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelSystemNotAvailable: TShadowLabel
+      Left = 697
+      Top = 0
+      Width = 203
+      Height = 16
+      Caption = 'THIS SYSTEM IS NOT AVAILABLE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+      Visible = False
+    end
+  end
+  object PanelSystemsTitleBottom: TPanelEx
+    Left = 0
+    Top = 426
+    Width = 930
+    Height = 12
+    Align = alBottom
+    Color1 = 15132390
+    Color2 = 15856113
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
   end
   object IL_Systems: TImageList
     Height = 48

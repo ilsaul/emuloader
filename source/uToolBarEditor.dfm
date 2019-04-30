@@ -4,8 +4,8 @@ object FormToolBarEditor: TFormToolBarEditor
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Tool Bar'
-  ClientHeight = 532
-  ClientWidth = 690
+  ClientHeight = 387
+  ClientWidth = 920
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,8 +23,8 @@ object FormToolBarEditor: TFormToolBarEditor
   object ToolBarListView: TEasyListview
     Left = 0
     Top = 0
-    Width = 710
-    Height = 482
+    Width = 940
+    Height = 338
     AllowHiddenCheckedItems = True
     BorderStyle = bsNone
     CellSizes.Tile.Height = 80
@@ -79,10 +79,10 @@ object FormToolBarEditor: TFormToolBarEditor
     OnItemCheckChange = ToolBarListViewItemCheckChange
     OnItemPaintText = ToolBarListViewItemPaintText
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
-    Top = 483
-    Width = 690
+    Top = 338
+    Width = 920
     Height = 49
     Align = alBottom
     Color1 = clWhite
@@ -198,8 +198,8 @@ object FormToolBarEditor: TFormToolBarEditor
       State = cbChecked
       Themed = True
     end
-    object ButtonDefault: TBitBtn
-      Left = 454
+    object ButtonDefault: TBitBtnEx
+      Left = 684
       Top = 16
       Width = 89
       Height = 25
@@ -210,8 +210,8 @@ object FormToolBarEditor: TFormToolBarEditor
       TabOrder = 2
       OnClick = ButtonDefaultClick
     end
-    object ButtonClose: TBitBtn
-      Left = 594
+    object ButtonClose: TBitBtnEx
+      Left = 824
       Top = 16
       Width = 89
       Height = 25

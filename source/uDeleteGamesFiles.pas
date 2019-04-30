@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, MPCommonObjects, EasyListview, ExtCtrls,
   ImgList, IniFiles, FileCtrl, PanelEx, ShadowLabel, uCommon, uCommonCustom,
-  AdvOfficeButtons, AdvGroupBox, CommCtrl, Buttons, uMain;
+  AdvOfficeButtons, AdvGroupBox, CommCtrl, Buttons, uMain, EditEx,
+  ButtonsEx;
 
 type
   TGameInfo = class(TEasyItemStored)
@@ -64,8 +65,8 @@ type
     TopBar: TPanelEx;
     FilesListView: TEasyListview;
     BottomBar: TPanelEx;
-    ButtonNo: TBitBtn;
-    ButtonYes: TBitBtn;
+    ButtonNo: TBitBtnEx;
+    ButtonYes: TBitBtnEx;
     FileTypesGroupBox: TAdvGroupBox;
     DeleteCFGsNVRAMs: TAdvOfficeCheckBox;
     DeleteROMs: TAdvOfficeCheckBox;
@@ -78,16 +79,16 @@ type
     LabelTotalFilesChecked: TShadowLabel;
     PanelDestinationFolder: TPanelEx;
     LabelCopyMoveDestination: TShadowLabel;
-    DestinationFolder: TEdit;
+    DestinationFolder: TEditEx;
     CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
-    ButtonSelectROMsFolder: TBitBtn;
+    ButtonSelectROMsFolder: TBitBtnEx;
     LabelGameDetails: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     LabelSoftwareListTitle: TShadowLabel;
     LabelSoftwareList: TShadowLabel;
     DeleteGameFromGamesList: TAdvOfficeCheckBox;
     DeleteGameFileFromDisk: TAdvOfficeCheckBox;
-    ButtonHelp: TBitBtn;
+    ButtonHelp: TBitBtnEx;
     CopyMoveAddSystemFolder: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
@@ -284,9 +285,9 @@ begin
   if IsNightMode then
   begin
     if Enabled then
-       SetCheckBoxColors(CheckBoxHolder, MsgTxtColors.colorFileName, clNavy)
+       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1])// clrLightBlue, clNavy)
     else
-       SetCheckBoxColors(CheckBoxHolder, clMedGray, clBlack);
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack);
   end
   else
   begin
@@ -716,7 +717,7 @@ begin
         FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
       end;
   end;
-  
+
   ScreenHighRes:= Screen.Height > 800;
   Screen480:= Screen.Height = 480;
   //Screen480:= True; // for debugging (October 27, 2016)
@@ -784,6 +785,52 @@ begin
   end;
 
   LoadMediaIcons;
+
+  if IsNightMode then
+  begin
+    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+                                             // 200,83,0   200,200,0
+    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);// $000053e6, clMaroon);//$0040d6d6);
+    SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack);//clBlue);
+
+    FormMain.SetEasyListViewColors(FilesListView, FormDeleteGamesFiles.Color, clWhite);
+
+    PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
+    SetEditNightColors(DestinationFolder);
+    SetLabelColors(LabelCopyMoveDestination, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+
+    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1]);
+    //SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clCream, item_caption_active_shadow_color[1]);
+
+    SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
+    SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
+
+    FormMain.SetButtonExColors(ButtonYes);
+    FormMain.SetButtonExColors(ButtonNo);
+    FormMain.SetButtonExColors(ButtonSelectROMsFolder);
+    FormMain.SetButtonExColors(ButtonHelp);
+
+    //ROMsListView.Color:= menu_background_color[1];// FormGameDetails.Color;
+    //ROMsListView.Font.Color:= clWhite;
+    //ROMsListView.Selection.Gradient:= True;
+
+    FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
+  end;
+  
   if ActionMode = 0 then
      begin
        PanelDestinationFolder.Visible:= False;
@@ -793,7 +840,7 @@ begin
      begin
        //LabelWarning.Caption:= 'Uncheck files you do NOT want to '+LowerCase(ActionString)+'. Network paths are not supported!';
        ButtonYes.Caption:= ActionString+' Files';
-       DeleteCFGsNVRAMs.Font.Color:= clSilver;
+       //DeleteCFGsNVRAMs.Font.Color:= clSilver;
        DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
@@ -803,42 +850,14 @@ begin
   //else
   //   FileTypesGroupBox.Width:= 131;
 
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status
+
   ChangeCheckBoxColor(DeleteROMs.Checked, DeleteROMs);
   ChangeCheckBoxColor(DeleteCHDs.Checked, DeleteCHDs);
   ChangeCheckBoxColor(DeleteCFGsNVRAMs.Checked, DeleteCFGsNVRAMs);
 
   ChangeCheckBoxColor(DeleteGameFromGamesList.Checked, DeleteGameFromGamesList);
   ChangeCheckBoxColor(DeleteGameFileFromDisk.Checked, DeleteGameFileFromDisk);
-
-  if IsNightMode then
-  begin
-    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, FormMain.MemGameInfo.eGameSetStatus);
-    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-                                        // 200,83,0   200,200,0
-    SetLabelColors(LabelSoftwareListTitle, $000053e6, clMaroon);//$0040d6d6);
-    SetLabelColors(LabelGameStatus, clrLightBlue, clBlue);
-    FilesListView.Color:= FormDeleteGamesFiles.Color;
-    FilesListView.Font.Color:= clWhite;
-    FilesListView.HotTrack.Color:= clWhite;
-
-    PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
-    SetLabelColors(LabelCopyMoveDestination, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    DestinationFolder.Color:= FormDeleteGamesFiles.Color;
-    DestinationFolder.Font.Color:= clWhite;
-
-    SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clBlue);
-    SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clBlue);
-
-    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
-    SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clWhite, clNavy);
-
-    SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
-    SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
-  end;
-
-  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
   
   // add all files in the list
   Application.ProcessMessages;
@@ -957,6 +976,7 @@ begin
         Close;
       end;
   end;
+
 end;
 
 procedure TFormDeleteGamesFiles.FilesListViewItemPaintText(
@@ -970,13 +990,13 @@ begin
         ACanvas.Font.Size:= ACanvas.Font.Size+2;
 
         if IsNightMode then
-           ACanvas.Font.Color:= MsgTxtColors.colorWarning
+           ACanvas.Font.Color:= clrLightRed// MsgTxtColors.colorWarning
         else
            ACanvas.Font.Color:= clMaroon;
 
         ACanvas.Font.Style:= [fsItalic];
-        if Item.Selected then
-           ACanvas.Font.Color:= clMaroon;
+        //if Item.Selected and not IsNightMode then
+        //   ACanvas.Font.Color:= clMaroon;
       end;
     1:
       begin

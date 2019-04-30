@@ -89,6 +89,7 @@ type
     BitBtn9: TBitBtn;
     BitBtn10: TBitBtn;
     PowerPCFrequencyUseCustom: TAdvOfficeCheckBox;
+    QuadRendering: TAdvOfficeCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -275,6 +276,9 @@ begin
        if Video3DEngine.ItemIndex = -1 then
           Video3DEngine.ItemIndex:= 1; // new 3D engine is the default
      end;
+
+  if CustomSettingExist('QuadRendering') then
+     QuadRendering.Checked:= Boolean(emuFile.ReadInteger('Video', 'QuadRendering', 1));
 
   if CustomSettingExist('FullScreen') then
      FullScreen.Checked:= Boolean(emuFile.ReadInteger('Video', 'FullScreen', 0));
@@ -482,6 +486,9 @@ begin
 
   if CheckEmulatorIniValue('New3DEngine', IntToStr(Video3DEngine.ItemIndex)) then
      emuFile.WriteInteger('Video', 'New3DEngine', Video3DEngine.ItemIndex);
+
+  if CheckEmulatorIniValue('QuadRendering', IntToStr(Ord(QuadRendering.Checked))) then
+     emuFile.WriteInteger('Video', 'QuadRendering', Ord(QuadRendering.Checked));
 
   if CheckEmulatorIniValue('FullScreen', IntToStr(Ord(FullScreen.Checked))) then
      emuFile.WriteInteger('Video', 'FullScreen', Ord(FullScreen.Checked));

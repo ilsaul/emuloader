@@ -6,37 +6,37 @@ uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, ComCtrls, IniFiles, Buttons,
   MPCommonObjects, MPCommonUtilities, EasyListview, ImgList, PanelEx,
-  AdvOfficeButtons;
+  AdvOfficeButtons, ShadowLabel, ButtonsEx;
 
 type
   TFormColumnsEditor = class(TForm)
+    ButtonUp: TBitBtnEx;
+    ButtonDown: TBitBtnEx;
+    ButtonEditWidth: TBitBtnEx;
+    ButtonReloadProfile: TBitBtnEx;
+    ButtonDefault: TBitBtnEx;
+    ButtonDefaultSize: TBitBtnEx;
+    ButtonResetSize: TBitBtnEx;
+    ButtonSizeDecrease: TBitBtnEx;
+    ButtonSizeIncrease: TBitBtnEx;
+    LabelButtonUpDown: TShadowLabel;
+    LabelButtonEditWidth: TShadowLabel;
+    LabelButtonSize: TShadowLabel;
+    LabelButtonDefaultSize: TShadowLabel;
+    LabelButtonResetSize: TShadowLabel;
+    LabelButtonReloadProfileDefaultSettings: TShadowLabel;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    PanelTitleTip: TPanelEx;
+    LabelTitleTip: TShadowLabel;
+    LabelToggleVisibility: TShadowLabel;
+    LabelButtonSetDefaultAll: TShadowLabel;
+    LabelTips: TShadowLabel;
+    ButtonCustomizeColumnHeaderFont: TBitBtnEx;
+    ButtonCustomizeColumnHeaderFontSetDefault: TBitBtnEx;
+    PanelColumnsList: TPanelEx;
     ColumnsListView: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonEditWidth: TBitBtn;
-    ButtonReloadProfile: TBitBtn;
-    ButtonDefault: TBitBtn;
-    ButtonDefaultSize: TBitBtn;
-    ButtonResetSize: TBitBtn;
-    ButtonSizeDecrease: TBitBtn;
-    ButtonSizeIncrease: TBitBtn;
-    LabelButtonUpDown: TLabel;
-    LabelButtonEditWidth: TLabel;
-    LabelButtonSize: TLabel;
-    LabelButtonDefaultSize: TLabel;
-    LabelButtonResetSize: TLabel;
-    LabelButtonReloadProfileDefaultSettings: TLabel;
-    ColumnsListVertBorder: TShape;
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    PanelEx2: TPanelEx;
-    Label1: TLabel;
-    LabelToggleVisibility: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    ButtonCustomizeColumnHeaderFont: TBitBtn;
-    ButtonCustomizeColumnHeaderFontSetDefault: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -65,7 +65,6 @@ type
   private
     procedure MoveColumn(MoveUp: Boolean);
     procedure ResetColumns(DefaultSettings: Boolean = False);
-    procedure ResizeForm;
     procedure SetDefaultProfile;
     //procedure LoadProfile;
     function  SaveProfile: Boolean;
@@ -190,24 +189,6 @@ begin
   ColumnsListView.SetFocus;
 end;
 
-procedure TFormColumnsEditor.ResizeForm;
-var
-  iDiff: Integer;
-begin
-  Exit; // minimum resolution 800x600 required
-  if Screen.Height > 480 then
-     Exit;
-
-  iDiff:= ColumnsListView.Height-402;
-
-  ColumnsListView.Height:= ColumnsListView.Height-iDiff;
-  ColumnsListVertBorder.Height:= ColumnsListVertBorder.Height-iDiff;
-  ColumnsListView.Header.Columns[0].Width:= ColumnsListView.Header.Columns[0].Width-19;
-
-  PanelButtons.Top:= PanelButtons.Top-iDiff;
-  FormColumnsEditor.ClientHeight:= 402;
-end;
-
 procedure TFormColumnsEditor.SetDefaultProfile;
 var
   gColumn: TEasyColumn;
@@ -262,8 +243,9 @@ end;
 
 procedure TFormColumnsEditor.FormShow(Sender: TObject);
 begin
-  ResizeForm;
   FormMain.ELV_ResetNormalColors(ColumnsListView);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(ColumnsListView);
   if FormMain.PanelMachinesList.Visible then
      FormColumnsEditor.Caption:= 'Customize Software List Columns (Details / Grouped)';
   ResetColumns;

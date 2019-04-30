@@ -5,7 +5,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'MAME and Arcade ROMs Folders'
-  ClientHeight = 388
+  ClientHeight = 392
   ClientWidth = 640
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -23,61 +23,20 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object FoldersList: TMemo
-    Left = 8
-    Top = 135
-    Width = 624
-    Height = 203
-    Color = 15856113
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    ParentFont = False
-    ReadOnly = True
-    TabOrder = 0
-  end
   object PanelSystemsSelect: TPanelEx
     Left = 0
     Top = 0
     Width = 640
-    Height = 125
+    Height = 108
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = [frBottom]
+    Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelSystemTitle: TShadowLabel
-      Left = 0
-      Top = 108
-      Width = 640
-      Height = 16
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'SYSTEM TITLE'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = False
-      Layout = tlCenter
-    end
     object SystemSelector: TEasyListview
       Tag = -1
       Left = 8
@@ -153,7 +112,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 347
+    Top = 351
     Width = 640
     Height = 41
     Align = alBottom
@@ -166,7 +125,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 544
       Top = 8
       Width = 89
@@ -188,6 +147,95 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       ReturnIsTab = False
       Themed = True
     end
+  end
+  object PanelFoldersList: TPanelEx
+    Left = 8
+    Top = 136
+    Width = 624
+    Height = 207
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = 7891291
+    EnableCustomBorder = ecbDouble
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object FoldersList: TMemo
+      Left = 0
+      Top = 0
+      Width = 620
+      Height = 203
+      Align = alClient
+      BorderStyle = bsNone
+      Color = 15856113
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object PanelSystemTitle: TPanelEx
+    Left = 0
+    Top = 108
+    Width = 640
+    Height = 16
+    Color1 = clWhite
+    Color2 = 15132390
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object LabelSystemTitle: TShadowLabel
+      Left = 8
+      Top = 0
+      Width = 624
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'SYSTEM TITLE'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+  end
+  object PanelSystemTitleBottom: TPanelEx
+    Left = 0
+    Top = 124
+    Width = 640
+    Height = 12
+    Color1 = 15132390
+    Color2 = 15856113
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
   end
   object IL_Systems: TImageList
     Height = 68

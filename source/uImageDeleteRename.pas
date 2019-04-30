@@ -4,12 +4,13 @@ interface
 
 uses
   Windows, Classes, Graphics, Controls, Forms, GR32_Image, StdCtrls, ExtCtrls,
-  PanelEx, ShadowLabel, uCommon, uCommonCustom, SysUtils, Buttons, GraphicEx;
+  PanelEx, ShadowLabel, uCommon, uCommonCustom, SysUtils, Buttons, GraphicEx,
+  EditEx, ButtonsEx;
 
 type
   TFormImageDeleteRename = class(TForm)
     LabelFilename: TShadowLabel;
-    RenameImageEditBox: TEdit;
+    RenameImageEditBox: TEditEx;
     TopBar: TPanelEx;
     LabelGameTitle: TShadowLabel;
     ImagePreviewFrame: TPanelEx;
@@ -19,8 +20,8 @@ type
     LabelGameName: TShadowLabel;
     LabelSystemTitle: TShadowLabel;
     BottomBar: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     LabelRenameImage: TShadowLabel;
     FrameImageCategoryIcon: TPanelEx;
     LabelSoftwareListTitle: TShadowLabel;
@@ -31,7 +32,6 @@ type
     MediaTypeIcon: TImage;
     LabelDimensions: TShadowLabel;
     ImageCategoryIcon: TImage;
-    procedure ResizeForm;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure RenameImageEditBoxKeyPress(Sender: TObject; var Key: Char);
@@ -54,51 +54,41 @@ uses uMain;
 
 {$R *.dfm}
 
-procedure TFormImageDeleteRename.ResizeForm;
-begin
-  Exit;
-  if Screen.Width < 720 then
-     begin
-       LabelGameTitle.Width:= 556;
-       LabelGameStatus.Left:= 538;
-       LabelSoftwareListTitle.Width:= 348;
-       LabelFilename.Width:= 348;
-       LabelFileSize.Width:= 290;
-       LabelDateTime.Width:= 290;
-       LabelFileType.Width:= 290;
-       LabelFileTypeMismatch.Left:= 355;
-       ButtonOk.Left:= 424;
-       ButtonCancel.Left:= 522;
-     end;
-end;
-
 procedure TFormImageDeleteRename.FormShow(Sender: TObject);
 var
   iFileExt: String;
   iType: TImageType;
 begin
-  ResizeForm;
-
-  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus);
+  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, True);
   if IsNightMode then
      begin
        SetLabelColors(LabelGameStatus, clrLightBlue, clBlue);
        SetLabelColors(LabelFilename, MsgTxtColors.colorFileName, clNavy);
-       SetLabelColors(LabelSystemTitle, MsgTxtColors.colorWarning, $323200);
-       SetLabelColors(LabelFileTypeMismatch, MsgTxtColors.colorWarning, $323200);
-       SetLabelColors(LabelDimensions, clWhite, clNavy);
-       SetLabelColors(LabelFileSize, clWhite, clNavy);
-       SetLabelColors(LabelDateTime, clWhite, clNavy);
-       SetLabelColors(LabelFileType, clWhite, clNavy);
-       SetLabelColors(LabelRenameImage, clWhite, clNavy);
-       //SetPanelNightColors(ImagePreviewFrame); // will be set at FormMain, to get colors from FormPreferences
-       FrameImageCategoryIcon.Color1:= clBlue;
+       SetLabelColors(LabelSystemTitle, clrLightRed, clrLightBlack);//item_caption_active_shadow_color[1]);// MsgTxtColors.colorWarning, $323200);
+       SetLabelColors(LabelFileTypeMismatch, clrLightRed, item_caption_active_shadow_color[1]);// MsgTxtColors.colorWarning, $323200);
+       SetLabelColors(LabelDimensions, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       SetLabelColors(LabelFileSize, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       SetLabelColors(LabelDateTime, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       SetLabelColors(LabelFileType, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       SetLabelColors(LabelRenameImage, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       SetPanelNightColors(ImagePreviewFrame, -1, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+
+       //SetSystemTitleBarNightColors(PanelTop_SplitBarTop, PanelTop_SplitBarBottom);
+
+       FrameImageCategoryIcon.Style:= vgSimple;
+       SetPanelNightColors(FrameImageCategoryIcon, clrDarkBlue, clrLightBlack, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+
+       SetEditNightColors(RenameImageEditBox);
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+
+       {FrameImageCategoryIcon.Color1:= clBlue;
        FrameImageCategoryIcon.Color2:= clBlue;
        FrameImageCategoryIcon.Color3:= clBlue;
        FrameImageCategoryIcon.Color4:= FormMain.GamesListView.Selection.Color;
        FrameImageCategoryIcon.Style:= vgMulti;
        FrameImageCategoryIcon.ColorFrame:= TopBar.ColorFrame;
-       FrameImageCategoryIcon.ColorInnerFrame:= clBlue;
+       FrameImageCategoryIcon.ColorInnerFrame:= clBlue;}
      end;
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
@@ -171,14 +161,14 @@ begin
   LabelFileSize.Caption:= 'Size: '+FormMain.GetSizeType(GetFileSizeW(ImageFileName), False);
   LabelDateTime.Caption:= 'Date/Time: '+FormMain.GetDateTimeStr(FileAgeW(ImageFileName));
 
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
 
   mmResult:= mrCancel;
   RenameImageEditBox.Visible:= FormImageDeleteRename.Tag = 1;
   LabelRenameImage.Visible:= RenameImageEditBox.Visible;
   // 0 -> delete; 1 -> rename
 
-  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
 
   //case FormMain.MemGameInfo.eGameSetStatus of
   //  0: TopBar.Color1:= $00f0fae5; // green
@@ -220,7 +210,6 @@ begin
         ButtonCancel.Click;
       end;
   end;
-
 end;
 
 procedure TFormImageDeleteRename.FormKeyPress(Sender: TObject;

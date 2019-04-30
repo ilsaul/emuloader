@@ -461,7 +461,6 @@ type
     Label7: TLabel;
     LabelHLSLUpscaleSnapshot: TLabel;
     LabelShadowMaskTileMode: TLabel;
-    LabelBloomBlendMode: TLabel;
     HLSLEnable: TAdvOfficeCheckBox;
     YIQEnable: TAdvOfficeCheckBox;
     ShadowMaskTexture: TEdit;
@@ -477,7 +476,6 @@ type
     ButtonHLSLUpscaleSnapReset: TBitBtn;
     HLSLOversampling: TAdvOfficeCheckBox;
     ShadowMaskTileMode: TComboBox;
-    BloomBlendMode: TComboBox;
     ShadowMaskTextureButtonReset: TBitBtn;
     LabelBGFXPath: TLabel;
     Label14: TLabel;
@@ -642,6 +640,24 @@ type
     LabelOverrideArtwork: TLabel;
     OverrideArtwork: TEdit;
     CommSyncFrame: TAdvOfficeCheckBox;
+    BGFXLUTTextureName: TEdit;
+    BGFXLUTTextureNameButtonSelect: TBitBtn;
+    BGFXLUTTextureNameButtonReset: TBitBtn;
+    LabelBGFXLUTTextureName: TLabel;
+    HLSLBloomPostProcessingBox: TAdvGroupBox;
+    BloomBlendMode: TComboBox;
+    LabelBloomBlendMode: TLabel;
+    BloomLUTTextureScreen: TEdit;
+    BloomLUTTextureScreenButtonSelect: TBitBtn;
+    BloomLUTTextureScreenButtonReset: TBitBtn;
+    BloomLUTEnabled: TAdvOfficeCheckBox;
+    BloomLOOTUIEnabled: TAdvOfficeCheckBox;
+    BloomLUTTextureUI: TEdit;
+    BloomLUTTextureUIButtonSelect: TBitBtn;
+    BloomLUTTextureUIButtonReset: TBitBtn;
+    LabelFolderManualsPDF: TLabel;
+    FolderManualsPDF: TEdit;
+    FolderManualsPDFButtonSelect: TBitBtn;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -850,6 +866,14 @@ type
     procedure HTTPPortKeyPress(Sender: TObject; var Key: Char);
     procedure SaveStateRewindBufferSizeChange(Sender: TObject);
     procedure BGFXShadowMaskTextureNameButtonSelectClick(Sender: TObject);
+    procedure BGFXPathButtonSelectClick(Sender: TObject);
+    procedure BGFXLUTTextureNameButtonResetClick(Sender: TObject);
+    procedure BGFXLUTTextureNameButtonSelectClick(Sender: TObject);
+    procedure BloomLUTTextureScreenButtonSelectClick(Sender: TObject);
+    procedure BloomLUTTextureScreenButtonResetClick(Sender: TObject);
+    procedure BloomLUTTextureUIButtonSelectClick(Sender: TObject);
+    procedure BloomLUTTextureUIButtonResetClick(Sender: TObject);
+    procedure FolderManualsPDFButtonSelectClick(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -877,6 +901,7 @@ type
     procedure SelectGLSLShaderMAME(EditHolder: TEdit; IsMAMEFile: Boolean = True);
     procedure EnableDisableControls;
     procedure ToggleSDLDeviceMappingCustom(SDLDeviceMapping: TComboBox; SDLCustomMapping: TEdit);
+    procedure SelectLUTTextureFile(EditHolder: TEdit);
   public
     { Public declarations }
     emuIni,
@@ -884,7 +909,6 @@ type
     emuFileExec,
     emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
-    IsAlterMAME: Boolean;
     iVersion: Integer;
   end;
 
@@ -1299,7 +1323,6 @@ begin
      Exit;
 
   lFullPath:= FormMain.FullFolderFix(lFullPath, emuFileExec);
-  //lFullPath:= FullEmuFolderFix(lFullPath, sysID, False, IsAlterMAME); // old, causes crash on a fresh install
   if not DirectoryExists(lFullPath) then
      Exit;
 
@@ -3148,6 +3171,18 @@ begin
             if EntryString = 'bloom_blend_mode ' then
                BloomBlendMode.ItemIndex:= GetIntegerValue
             else
+            if EntryString = 'lut_texture ' then
+               BloomLUTTextureScreen.Text:= GetStringValue
+            else
+            if EntryString = 'lut_enable ' then
+               BloomLUTEnabled.Checked:= GetBooleanValue
+            else
+            if EntryString = 'ui_lut_texture ' then
+               BloomLUTTextureUI.Text:= GetStringValue
+            else
+            if EntryString = 'ui_lut_enable ' then
+               BloomLOOTUIEnabled.Checked:= GetBooleanValue
+            else
             if EntryString = 'hlsl_ini_read ' then // for MAME 0.149
                ReadCustomHLSLFile.Checked:= GetBooleanValue
             else
@@ -3273,6 +3308,9 @@ begin
             else
             if EntryString = 'bgfx_shadow_mask ' then
                BGFXShadowMaskTextureName.Text:= GetStringValue
+            else
+            if EntryString = 'bgfx_lut ' then
+               BGFXLUTTextureName.Text:= GetStringValue
             else
             //if EntryString = 'bgfx_avi_name ' then
             //   begin
@@ -3599,10 +3637,7 @@ begin
     strFile:= FormMain.GetCustomIniFileMAME(Loop);
     if strFile <> '' then
     begin
-      if IsAlterMAME then
-         FileFolder:= FormMain.AlterMAMEIniFilesDir
-      else
-         FileFolder:= FormMain.IniFilesDir[sysID];
+      FileFolder:= FormMain.IniFilesDir[sysID];
 
       if Loop = 9 then
          begin
@@ -4817,7 +4852,18 @@ begin
          if tmpEntryStr = 'bloom_blend_mode ' then
             UpdateMAMELine(EntryString, IntToStr(BloomBlendMode.ItemIndex))
          else
-
+         if tmpEntryStr = 'lut_texture ' then
+            UpdateMAMELine(EntryString, BloomLUTTextureScreen.Text)
+         else
+         if tmpEntryStr = 'lut_enable ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(BloomLUTEnabled.Checked))
+         else
+         if tmpEntryStr = 'ui_lut_texture ' then
+            UpdateMAMELine(EntryString, BloomLUTTextureUI.Text)
+         else
+         if tmpEntryStr = 'ui_lut_enable ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(BloomLOOTUIEnabled.Checked))
+         else
          if tmpEntryStr = 'hlsl_ini_read ' then // for MAME 0.149
             UpdateMAMELine(EntryString, GetBooleanValue(ReadCustomHLSLFile.Checked))
          else
@@ -5045,6 +5091,9 @@ begin
                  BGFXShadowMaskTextureName.Text:= 'slot-mask.png';
               UpdateMAMELine(EntryString, BGFXShadowMaskTextureName.Text);
             end
+         else
+         if tmpEntryStr = 'bgfx_lut ' then
+            UpdateMAMELine(EntryString, BGFXLUTTextureName.Text)
          else
          //if tmpEntryStr = 'bgfx_avi_name ' then
          //   begin
@@ -5363,10 +5412,7 @@ begin
   if strFile = '' then
      Exit;
 
-  if IsAlterMAME then
-     FileFolder:= FormMain.AlterMAMEIniFilesDir
-  else
-     FileFolder:= FormMain.IniFilesDir[sysID];
+  FileFolder:= FormMain.IniFilesDir[sysID];
 
   if FileID = 9 then
      begin
@@ -5419,10 +5465,7 @@ begin
       strFile:= FormMain.GetCustomIniFileMAME(Loop);
       if strFile <> '' then
       begin
-        if IsAlterMAME then
-           FileFolder:= FormMain.AlterMAMEIniFilesDir
-        else
-           FileFolder:= FormMain.IniFilesDir[sysID];
+        FileFolder:= FormMain.IniFilesDir[sysID];
 
         if Loop = 9 then // drivername.ini
            begin
@@ -5525,7 +5568,7 @@ end;
 procedure TFormMAMESettings.FolderGameSnapshotsButtonSelectClick(
   Sender: TObject);
 begin
-  FormMain.DialogSelectFolder(FolderGameSnapshots, False);
+  FormMain.DialogSelectFolder(FolderGameSnapshots, True);
 end;
 
 procedure TFormMAMESettings.FolderDiffButtonSelectClick(Sender: TObject);
@@ -5807,8 +5850,7 @@ begin
   FormMain.ELV_ResetNormalColors(BGFXScreenShaderChains_ListView);
 
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
-  if IsAlterMAME then
-     FormMAMESettings.Caption:= 'AlterMAME '+FormMAMESettings.Caption;
+
   IsSDLMAME:= False;
   PopulateVideoOutputMode;
   EnableSettingsIniMAME; //
@@ -5819,8 +5861,8 @@ begin
        Debugger.Items.EndUpdate;
      end;
   case SystemIcon.Tag of
-    0: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, sysID, emuVersionStr, IsAlterMAME);
-    1: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(False, sysID, emuVersionStr, IsAlterMAME);
+    0: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, sysID, emuVersionStr);
+    1: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(False, sysID, emuVersionStr);
   end;
 
   if (Tag = 0) or (SystemIcon.Tag = 1) then
@@ -5852,10 +5894,7 @@ begin
      begin
        // is game custom options... this case will never be used by emulator default settings!!! (March 16, 2016)
        //iStr:= emuVersionStr;
-       case IsAlterMAME of
-         True : iStr:= FormMain.AlterMAMEVersion;
-         False: iStr:= FormMain.EmulatorVersion[sysID];
-       end;
+       iStr:= FormMain.EmulatorVersion[sysID];
        if iStr <> '' then
           LabelEmulatorVersion.Caption:= iStr
        else
@@ -6997,6 +7036,76 @@ begin
        if PosEx(' ', BGFXShadowMaskTextureName.Text) <> 0 then
           BGFXShadowMaskTextureName.Text:= '"'+BGFXShadowMaskTextureName.Text+'"';
      end;
+end;
+
+procedure TFormMAMESettings.SelectLUTTextureFile(EditHolder: TEdit);
+var
+  sFile, sFolder: String;
+begin
+  if EditHolder.Text <> '' then
+     sFolder:= ExtractFilePath(EditHolder.Text);
+  if (sFolder <> '') and (not DirectoryExists(sFolder)) then
+     sFolder:= ExtractFilePath(emuFileExec);
+
+  sFile:= FormMain.DialogOpenFile(5, 'Select a LUT texture file', EditHolder, False, True, sFolder);
+  if sFile <> '' then
+     EditHolder.Text:= sFile; //ChangeFileExt(sFile, ''); // shader file cannot have file extension
+end;
+
+procedure TFormMAMESettings.BGFXPathButtonSelectClick(Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(BGFXPath, False);
+end;
+
+procedure TFormMAMESettings.BGFXLUTTextureNameButtonSelectClick(
+  Sender: TObject);
+var
+  sFile, sFolder: String;
+begin
+  SelectLUTTextureFile(BGFXLUTTextureName);
+  //if BGFXLUTTextureName.Text <> '' then
+  //   sFolder:= ExtractFilePath(BGFXLUTTextureName.Text);
+  //if (sFolder <> '') and (not DirectoryExists(sFolder)) then
+  //   sFolder:= ExtractFilePath(emuFileExec);
+  //
+  //sFile:= FormMain.DialogOpenFile(12, 'Select a BGFX LUT file', BGFXLUTTextureName, False, True, sFolder);
+  //
+  //if sFile <> '' then
+  //   BGFXLUTTextureName.Text:= sFile; //ChangeFileExt(sFile, ''); // shader file cannot have file extension ??? not sure about this yet (November 01, 2018)
+end;
+
+procedure TFormMAMESettings.BGFXLUTTextureNameButtonResetClick(
+  Sender: TObject);
+begin
+  BGFXLUTTextureName.Text:= '';
+end;
+
+procedure TFormMAMESettings.BloomLUTTextureScreenButtonSelectClick(Sender: TObject);
+begin
+  SelectLUTTextureFile(BloomLUTTextureScreen);
+end;
+
+procedure TFormMAMESettings.BloomLUTTextureScreenButtonResetClick(
+  Sender: TObject);
+begin
+  BloomLUTTextureScreen.Text:= '';
+end;
+
+procedure TFormMAMESettings.BloomLUTTextureUIButtonSelectClick(
+  Sender: TObject);
+begin
+  SelectLUTTextureFile(BloomLUTTextureUI);
+end;
+
+procedure TFormMAMESettings.BloomLUTTextureUIButtonResetClick(
+  Sender: TObject);
+begin
+  BloomLUTTextureUI.Text:= '';
+end;
+
+procedure TFormMAMESettings.FolderManualsPDFButtonSelectClick(Sender: TObject);
+begin
+  FormMain.DialogSelectFolder(FolderManualsPDF, False);
 end;
 
 end.

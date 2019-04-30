@@ -9,7 +9,8 @@ uses
   Graphics, SysUtils, ShlObj, Forms, Menus, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
-  ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx;
+  ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
+  BevelEx;
 
 const
   MaxArcadeSystems = 8;
@@ -26,7 +27,7 @@ const
   idDICE       = 6;
   idSegaModel2 = 7;
   idZiNc       = 8;
-  idMultiSys   = 500;
+  idMultiSys   = 500; // when selecting multiple systems
 
   //idFontParent      = 0;
   //idFontClone       = 1;
@@ -256,20 +257,66 @@ const
     $B40BBE37, $C30C8EA1, $5A05DF1B, $2D02EF8D);
 
   clrLightGrayFrame = TColor($0078695b); // RGB(171, 173, 179) // this color is for light mode frames (TPanelEx... and other controls ?)
+  
   // custom colors for the night mode
-  clrDarkBlue   = TColor($00590000); // RGB(0, 0, 89) -> blue
-  clrDarkGreen  = TColor($00005900); // RGB(0, 89, 0) -> green
-  clrDarkRed    = TColor($00000059); // RGB(89, 0, 0) -> red /// $0000004b (75, 0, 0) darker red
-  clrDarkSilver = TColor($004c4c4c); // desaturated green RGB(76, 76, 76) /// $00595959 (89, 89, 89) darker silver
-  clrDarkOrange = TColor($00005a82); // RGB(130, 90, 0)
-  clrDarkGray   = TColor($00323232); // RGB(50, 50 ,50) -> for unchecked checkboxes (also used in TShadowLabel)
+  clrDarkBlue    = TColor($00590000); // RGB(0, 0, 89) -> blue
+  clrDarkGreen   = TColor($00005900); // RGB(0, 89, 0) -> green
+  clrDarkRed     = TColor($00000059); // RGB(89, 0, 0) -> red /// $0000004b (75, 0, 0) darker red
+  clrDarkSilver  = TColor($004c4c4c); // desaturated green RGB(76, 76, 76) /// $00595959 (89, 89, 89) darker silver
+  clrDarkOrange  = TColor($00005a82); // RGB(130, 90, 0)
+  clrDarkGray    = TColor($00323232); // RGB(50, 50 ,50) -> for unchecked checkboxes (also used in TShadowLabel)
 
-  clrBlackBk    = TColor($00000001); // RGB(0, 0, 1) -> this is needed to create gradient in TPanelEx
+  clrMedSilver   = TColor($00e6e6e6); // RGB(230, 230, 230) -> for system title bar
 
-  clrLightBlue  = TColor($00ff9933); // RGB(51, 153, 255)
-  clrMedBlue    = TColor($00c83232); // RGB(50, 50, 200)
+  clrBlackBk     = TColor($00000001); // RGB(0, 0, 1) -> this is needed to create gradient in TPanelEx
+  clrLightBlack  = TColor($000f0f0f); // RGB(15, 15, 15) -> used in system title background... "Console/Computer Emulator Settings" screen and others
 
-  clrOrange     = TColor($002670ac); // RGB(172, 112, 38)
+  clrLightBlue   = TColor($00ff9933); // RGB(51, 153, 255)
+  clrMedBlue     = TColor($00c83232); // RGB(50, 50, 200)
+
+  clrLightRed    = TColor($005050fa); // RGB(250, 80, 80)
+  clrMedRed      = TColor($003232c8); // RGB(200, 50, 50)
+
+  clrLightGreen  = TColor($0099ff33); // RGB(51, 255, 153)
+  clrMedGreen    = TColor($0032c832); // RGB(50, 200, 50)
+
+  clrMedDarkGray = TColor($00505050); // RGB(80, 80, 80)
+
+  clrOrange      = TColor($002670ac); // RGB(172, 112, 38)
+  clrOrangeVivid = TColor($000053e6); // RGB(230, 83, 0)
+
+  // colors for dark gray backgrounds (filter screens, emulator setup screens, etc) - mostly used in groupbox frames
+  clrBorderGroupBoxGrayBk      = TColor($00585048); // RGB(78, 80, 88)
+  clrInnerBorderGroupBoxGrayBk = TColor($0035302b); // RGB(43, 42, 53)
+
+  // colors for EasyListView dark orange selection bars, night mode
+  clrOrangeBarTop    = TColor($003ea2ff); // RGB(255, 162, 62) - gradient top color
+  clrOrangeBarBottom = TColor($00245eb4); // RGB(180, 94, 36)  - gradient bottom color
+  clrOrangeBarBorder = TColor($0000b6ff); // RGB(255, 182, 0)  - frame color
+
+  // position 0 -> light mode; position 1 -> night mode
+  menu_background_color: array[0..1] of Integer = ($00fafafa, $00272727);
+  hint_line_color: array[0..1] of Integer = ($00c5c5c5, $00c5c5c5);
+  hint_text_color: array[0..1] of Integer = ($00993300, $00af912b);
+  item_caption_active_color: array[0..1] of Integer = (clBlack, $00bfdfe0);
+  item_caption_active_shadow_color: array[0..1] of Integer = (clGray, $00404b4c); //$00566465);
+  item_caption_disabled_color: array[0..1] of Integer = ($00c5c5c5, clGray);
+  item_shortcut_color: array[0..1] of Integer = ($006e1500, clrLightBlue);
+  item_shortcut_selected_color: array[0..1] of Integer = ($006e1500, clrDarkBlue);
+  item_caption_selected_color: array[0..1] of Integer = ($006e1500, $006e1500);
+  help_text_color: array[0..1] of Integer = (clMedGray, clGray); // RGB(255, 255, 255) - night mode (new March 17, 2019)
+  help_text_selected_color: array[0..1] of Integer = (clGray, clrDarkSilver); // RGB(255, 255, 255) - night mode (new March 17, 2019) ... $00c5c5c5 color is unreadable!
+  checked_framecolor: array[0..1] of Integer = ($00399bf7, $00399bf7);//, $00fce489);
+  checked_innerframecolor: array[0..1] of Integer = ($00f1f1f1, $005d5d5d);// ($009ccefc, $009ccefc); // (new March 17, 2019)
+
+  selection_frame_color: array[0..1] of Integer = ($0000b7ff, $000087ff); // RGB(255, 135, 0)   - night mode
+  selection_singlecolor: array[0..1] of Integer = ($0000b7ff, $000087ff); // RGB(255, 135, 0)   - night mode
+  selection_uppergradient_colorstart: array[0..1] of Integer = ($00daecfd, $00b3d0fb);  // RGB(251, 208, 179) - night mode
+  selection_uppergradient_colorend: array[0..1] of Integer = ($00bde0fd, $0096c2fb);    // RGB(251, 194, 150) - night mode
+  selection_lowergradient_colorstart: array[0..1] of Integer = ($0069ceff, $003ea2ff);  // RGB(255, 162, 62)  - night mode
+  selection_lowergradient_colorend: array[0..1] of Integer = ($009af6ff, $0062d7ff);    // RGB(255, 215, 98)  - night mode
+  selection_gradient_outerframecolor: array[0..1] of Integer = ($00f4f9fe, $00e1edfd);  // RGB(253, 237, 225) - night mode (new March 17, 2019)
+  selection_frame_round_ish_pixels: array[0..1] of Integer = ($0000dcff, $0000b6ff);    // RGB(255, 182, 0)   - night mode (new March 17, 2019)
 
 type
   TMsgBoxColors = packed record
@@ -372,16 +419,34 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
 // bright / dark theme functions
-function  SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
-function  SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
-function  SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
-function  SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
+procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
+procedure SetColorBoxColors(ColorBoxSource: TColorBox; iBackgroundColor, iFontColor: TColor);
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBox; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
+procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
+
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
+procedure SetEditNightColors(EditSource: TEditEx);
+procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1);
+procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
+                            FontColor: TColor = -1;
+                            GradientColorTop: TColor = -1; GradientColorBottom: TColor = -1; FrameColor: TColor = -1;
+                            FrameColor_Focused: TColor = -1;
+                            GradientColorTop_Hover: TColor = -1; GradientColorBottom_Hover: TColor = -1; FrameColor_Hover: TColor = -1;
+                            //GradientColorTop_Down: TColor = -1; GradientColorBottom_Down: TColor = -1; FrameColor_Down: TColor = -1;
+                            GradientColorTop_Disabled: TColor = -1; GradientColorBottom_Disabled: TColor = -1; FrameColor_Disabled: TColor = -1;
+                            FontColor_Disabled: TColor = -1; FontShadowColor_Disabled: TColor = -1);
 
 procedure PopulateMsgColors;
 procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
 procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = True);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
+procedure SetSystemTitleBarNightColors(sysBarSource, sysBottomBarSource: TPanelEx; IsBlackBackground: Boolean = True);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -459,7 +524,7 @@ function  ShortDirString(const FileFullPath: String; MaxLength: Integer): String
 function  LengthW(const ws: WideString): Integer;
 function  ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): WideString;
 
-function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: string; var FileName: string;
+function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: String; var FileName: String;
                              MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
 
 function  GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
@@ -472,7 +537,7 @@ function  GetFileTypeStr(const strFilename: String): String;
 function  GetWinTempDir: String;
 function  GetWindowsDir: String;
 function  GetSystemDir: String;
-function  GetMyDocuments: string;
+function  GetMyDocuments: String;
 
 procedure PopulateScreenResolution(DestList: TComboBox; AddAutoText: Boolean = False);
 function  CompareStringListNatural(sList: TStringList; Index1, Index2: Integer): Integer;
@@ -525,8 +590,11 @@ procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder:
 
 function  CheckAppOneInstance: Boolean;
 
+procedure ShowDropdownMenu(ButtonExSource: TBitBtnEx; PopupMenuSource: TPopupMenu); overload;
+procedure ShowDropdownMenu(ButtonExSource: TSpeedButtonEx; PopupMenuSource: TPopupMenu); overload;
+
 procedure CalcCRC32(p: Pointer; ByteCount: DWORD; var CRCValue: DWORD);
-function  CalcStringCRC32(s: string; out CRC32: DWORD): Boolean;
+function  CalcStringCRC32(s: String; out CRC32: DWORD): Boolean;
 function  CalcFileCRC32(FromName: WideString): String;
 
 var
@@ -535,34 +603,111 @@ var
 
 implementation
 
-function SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
 begin
   LabelSource.Font.Color:= iColor;
   LabelSource.ShadowColor:= iShadowColor;
   LabelSource.ShadowEnabled:= iShadowEnabled;
 end;
 
-function SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
+begin
+  LabelSource.Color:= iBackgroundColor;
+  LabelSource.ColorFrame:= iFrameColor;
+  if iFrameInnerColor <> -1 then
+     LabelSource.ColorInnerFrame:= iFrameInnerColor;
+end;
+
+procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
+begin
+  if IsNightMode then
+     begin
+       BevelExSource.CustomColor1:= clrLightGrayFrame;
+       BevelExSource.CustomColor2:= clrDarkGray;
+       BevelExSource.Style:= bsCustomColors;
+     end
+  else
+     BevelExSource.Style:= bsLowered;
+end;
+
+procedure SetColorBoxColors(ColorBoxSource: TColorBox; iBackgroundColor, iFontColor: TColor);
+begin
+  ColorBoxSource.Color:= iBackgroundColor;
+  ColorBoxSource.Font.Color:= iFontColor;
+end;
+
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+begin
+  CheckBoxSource.Font.Color:= iColor;
+  CheckBoxSource.ShadowColor:= iShadowColor;
+  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+  if iDisabledColor <> -1 then
+     CheckBoxSource.DisabledFontColor:= iDisabledColor;
+  if iDisabledShadowColor <> -1 then
+     CheckBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
+end;
+
+procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 begin
   CheckBoxSource.Font.Color:= iColor;
   CheckBoxSource.ShadowColor:= iShadowColor;
   CheckBoxSource.ShadowEnabled:= iShadowEnabled;
 end;
 
-function SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
-begin
-  CheckBoxSource.Font.Color:= iColor;
-  CheckBoxSource.ShadowColor:= iShadowColor;
-  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
-end;
-
-function SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True): Boolean;
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
 begin
   GroupBoxSource.BorderColor:= iBorderColor;
   GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
   GroupBoxSource.Font.Color:= iColor;
   GroupBoxSource.ShadowColor:= iShadowColor;
   GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBox; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+begin
+  GroupBoxSource.Font.Color:= iFontColor;
+  if iShadowFontColor <> -1 then
+     GroupBoxSource.ShadowColor:= iShadowFontColor;
+  if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
+     GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+
+procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
+var
+  iDrawStyle: TvgStyle;
+begin
+  if iColor1 <> -1 then// PanelSource.Color1 <> -1 then
+     begin
+       if PanelSource.Color1 <> iColor1 then
+          PanelSource.Color1:= iColor1;
+     end;
+  if iColor2 <> -1 then// PanelSource.Color2 <> -1 then
+     begin
+       if PanelSource.Color2 <> iColor2 then
+          PanelSource.Color2:= iColor2;
+     end;
+  if IsSolidDrawStyle then
+     iDrawStyle:= vgSolid
+  else
+     iDrawStyle:= vgSimple;
+
+  if PanelSource.Style <> iDrawStyle then
+     PanelSource.Style:= iDrawStyle;
+end;
+
+procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
+begin
+  if iBorderColor <> -1 then
+     begin
+       if PanelSource.ColorFrame <> iBorderColor then
+          PanelSource.ColorFrame:= iBorderColor;
+     end;
+  if iBorderInnerColor <> -1 then
+     begin
+       if PanelSource.ColorInnerFrame <> iBorderInnerColor then
+          PanelSource.ColorInnerFrame:= iBorderInnerColor;
+     end;
 end;
 
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
@@ -588,7 +733,7 @@ begin
 
   ColorToApply:= clNone;
   if iBorderInnerColor <> -1 then
-     ColorToApply:= iBorderColor
+     ColorToApply:= iBorderInnerColor
   else
      begin
        if IsNightMode or ForceNightColors then
@@ -659,50 +804,81 @@ begin
                PanelSource.Color2:= ColorToApply;
           end;
      end;
+end;
 
-  {if IsNightMode then
-  begin
-    if iBorderColor <> -1 then
-       PanelSource.ColorFrame:= iBorderColor
-    else
-       PanelSource.ColorFrame:= clrLightBlue;
+procedure SetEditNightColors(EditSource: TEditEx);
+begin
+  EditSource.Color:= clrDarkGray;
+  EditSource.ColorFrame:= clGray; // set to default TEditEx frame color just in case 
+  EditSource.ColorFrameFocused:= clSilver;
+  EditSource.ColorFrameDisabled:= clrMedDarkGray;
+  EditSource.ColorDisabled:= menu_background_color[1];
+  EditSource.Font.Color:= clCream; //item_caption_active_color[1]
+  EditSource.UseCustomBorder:= True;
+end;
 
-    if iBorderInnerColor <> -1 then
-       PanelSource.ColorInnerFrame:= iBorderInnerColor
-    else
-       PanelSource.ColorInnerFrame:= clBlue;
-  end
-  else
-  begin
-    if iBorderColor <> -1 then
-       PanelSource.ColorFrame:= iBorderColor
-    else
-       PanelSource.ColorFrame:= clSilver;
+procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1);
+begin
+  EditSource.Color:= BackgroundColor;
+  EditSource.ColorFrame:= FrameColor;
+  EditSource.ColorFrameFocused:= FrameFocusedColor;
+  if FrameDisabledColor <> -1 then
+     EditSource.ColorFrameDisabled:= FrameDisabledColor;
+  EditSource.Font.Color:= FontColor; //item_caption_active_color[1]
+  EditSource.UseCustomBorder:= True;
+end;
 
-    if iBorderInnerColor <> -1 then
-       PanelSource.ColorInnerFrame:= iBorderInnerColor
-    else
-       PanelSource.ColorInnerFrame:= clrLightGrayFrame;
-  end;
+procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
+                            FontColor: TColor = -1;
+                            GradientColorTop: TColor = -1; GradientColorBottom: TColor = -1; FrameColor: TColor = -1;
+                            FrameColor_Focused: TColor = -1;
+                            GradientColorTop_Hover: TColor = -1; GradientColorBottom_Hover: TColor = -1; FrameColor_Hover: TColor = -1;
+                            //GradientColorTop_Down: TColor = -1; GradientColorBottom_Down: TColor = -1; FrameColor_Down: TColor = -1;
+                            GradientColorTop_Disabled: TColor = -1; GradientColorBottom_Disabled: TColor = -1; FrameColor_Disabled: TColor = -1;
+                            FontColor_Disabled: TColor = -1; FontShadowColor_Disabled: TColor = -1);
+begin
+  // this function is not being used by anything yet.... it might not be necessary
+  if FontColor <> -1 then
+     ButtonSource.Font.Color:= FontColor;
 
-  if PanelSource.Style = vgSolid then
-     begin
-       if iColor1 <> -1 then
-          PanelSource.Color1:= iColor1
-       else
-       begin
-         if IsNightMode then
-            PanelSource.Color1:= clrBlackBk
-         else
-            PanelSource.Color1:= $00f1f1f1;
-       end;
-     end
-  else
-     begin
-       // dual colors (vgSimple); both iColor1 and iColor2 must contain valid colors
-       PanelSource.Color1:= iColor1;
-       PanelSource.Color2:= iColor2;
-     end;}
+  if GradientColorTop <> -1 then
+     ButtonSource.GradientColorTop:= GradientColorTop;
+
+  if GradientColorBottom <> -1 then
+     ButtonSource.GradientColorBottom:= GradientColorBottom;
+
+  if FrameColor <> -1 then
+     ButtonSource.FrameColor:= FrameColor;
+
+  if FrameColor_Focused <> -1 then
+     ButtonSource.FrameColor_Focused:= FrameColor_Focused;
+
+  if GradientColorTop_Hover <> -1 then
+     ButtonSource.GradientColorTop_Hover:= GradientColorTop_Hover;
+
+  if GradientColorBottom_Hover <> -1 then
+     ButtonSource.GradientColorBottom_Hover:= GradientColorBottom_Hover;
+
+  if FrameColor_Hover <> -1 then
+     ButtonSource.FrameColor_Hover:= FrameColor_Hover;
+
+  if GradientColorTop_Disabled <> -1 then
+     ButtonSource.GradientColorTop_Disabled:= GradientColorTop_Disabled;
+
+  if GradientColorBottom_Disabled <> -1 then
+     ButtonSource.GradientColorBottom_Disabled:= GradientColorBottom_Disabled;
+
+  if FrameColor_Disabled <> -1 then
+     ButtonSource.FrameColor_Disabled:= FrameColor_Disabled;
+
+  if FontColor_Disabled <> -1 then
+     ButtonSource.FontColorDisabled:= FontColor_Disabled;
+
+  if FontShadowColor_Disabled <> -1 then
+     ButtonSource.FontShadowColorDisabled:= FontShadowColor_Disabled;
+
+  if ForceUpdate then
+     ButtonSource.Invalidate;
 end;
 
 procedure PopulateMsgColors;
@@ -778,7 +954,10 @@ begin
       1: PanelSource.Color1:= clrDarkRed;    // red
       2: PanelSource.Color1:= clrDarkSilver; // silver
     end;
-    if PanelSource.Color2 <> clrBlackBk then
+
+    if IsBottomColorSilver then
+       PanelSource.Color2:= menu_background_color[1]
+    else
        PanelSource.Color2:= clrBlackBk;
     PanelSource.Canvas.UnLock;
   end
@@ -788,26 +967,35 @@ begin
   end;
 end;
 
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = True);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
 begin
   if IsNightMode then
   begin
     if FormSource <> nil then
-       FormSource.Color:= clrBlackBk;
+       begin
+         if IsBottomColorSilver then
+            FormSource.Color:= menu_background_color[1]
+         else
+            FormSource.Color:= clrBlackBk;
+       end;
 
     if PanelTopSource <> nil then
     begin
       PanelTopSource.Color1:= clrDarkBlue; // will paint to default color no matter what
-      PanelTopSource.Color2:= clrBlackBk;  // will paint to default color no matter what
+      if IsBottomColorSilver then
+         PanelTopSource.Color2:= menu_background_color[1]
+      else
+         PanelTopSource.Color2:= clrBlackBk;
       PanelTopSource.Color3:= clrLightGrayFrame;
       PanelTopSource.ColorFrame:= clrLightBlue;
     end;
 
     if PanelBottomSource <> nil then
     begin
-      PanelBottomSource.Color1:= clrBlackBk;
-      PanelBottomSource.Color2:= clrDarkGray;
-      PanelBottomSource.ColorFrame:= clrLightBlue;
+      if IsBottomColorSilver then
+         SetPanelNightColors(PanelBottomSource, menu_background_color[1], clrMedDarkGray, clrLightBlue)
+      else
+         SetPanelNightColors(PanelBottomSource, clrBlackBk, clrDarkGray, clrLightBlue);
     end;
 
     if LabelGameTitle <> nil then
@@ -821,17 +1009,17 @@ begin
         0: // green gradient (have)
           begin
             LabelGameTitle.Font.Color:= clLime;
-            LabelGameTitle.ShadowColor:= clNavy;//$003232;
+            LabelGameTitle.ShadowColor:= clNavy;
           end;
         1: // red gradient (missing ROMs/CHDs)
           begin
             LabelGameTitle.Font.Color:= clRed;// clYellow;
-            LabelGameTitle.ShadowColor:= clMaroon;//Navy;// $323200;
+            LabelGameTitle.ShadowColor:= clMaroon;
           end;
         2: // gray gradient (missing)
           begin
             LabelGameTitle.Font.Color:= clYellow;
-            LabelGameTitle.ShadowColor:= $003232;
+            LabelGameTitle.ShadowColor:= clrDarkGray;
           end;
       end;
       LabelGameTitle.ShadowEnabled:= True;
@@ -839,14 +1027,29 @@ begin
 
     if LabelGameName <> nil then
     begin
-      LabelGameName.Font.Color:= clWhite;
-      LabelGameName.ShadowColor:= clrMedBlue; //clNavy;
-      LabelGameName.ShadowEnabled:= True;
+      if IsBottomColorSilver then
+         SetLabelColors(LabelGameName, clCream, item_caption_active_shadow_color[1])
+      else
+         SetLabelColors(LabelGameName, clWhite, clrMedBlue);
+
     end;
   end;
   //else
   //begin
   //end;
+end;
+
+procedure SetSystemTitleBarNightColors(sysBarSource, sysBottomBarSource: TPanelEx; IsBlackBackground: Boolean = True);
+begin
+  if IsBlackBackground then
+     SetPanelColors(sysBarSource, clrBlackBk, clrDarkGray)
+  else
+     SetPanelColors(sysBarSource, menu_background_color[1], clrDarkGray);
+  SetPanelColors(sysBottomBarSource, clrDarkGray, menu_background_color[1]);
+  if not sysBarSource.Visible then
+     sysBarSource.Visible:= True;
+  if not sysBottomBarSource.Visible then
+     sysBottomBarSource.Visible:= True;
 end;
 
 function WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
@@ -1768,11 +1971,14 @@ begin
     FormMessageBox.NightMode.Checked:= IsNightMode;
     if IsNightMode then
     begin
-      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, -1, False);
+      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, -1, True);
 
       FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
       FormMessageBox.NightMode.Font.Color:=$00f1f1f1;
+
+
+       //SetPanelColors(PanelTop_Bottom, clrBlackBk, menu_background_color[1]);
     end;
   end;
 end;
@@ -1785,14 +1991,15 @@ end;
 function GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 begin
   // FileID
-  // 0 -> games list             "system_name.el"
-  // 1 -> ROMs list              "system_name.elrom"
-  // 2 -> games set status       "system_name.elstatus"
-  // 3 -> missing files          "system_name.miss"
-  // 4 -> wav/flac audio samples "system_name.elsamples"
-  // 5 -> machines list+softlist "system_name.elsoftlist"
-  // 6 -> softlist requirement   "system_name.elsoftlistreq"
-  // 9 -> CRC32 collisions list  "system_name_crc32collision.txt"
+  //  0 -> games list             "system_name.el"
+  //  1 -> ROMs list              "system_name.elrom"
+  //  2 -> games set status       "system_name.elstatus"
+  //  3 -> missing files          "system_name.miss"
+  //  4 -> wav/flac audio samples "system_name.elsamples"
+  //  5 -> machines list+softlist "system_name.elsoftlist"
+  //  6 -> softlist requirement   "system_name.elsoftlistreq"
+  //  9 -> CRC32 collisions list  "system_name_crc32collision.txt"
+  // 10 -> set with "NoDump"      "system_name_romsnodump.txt"
   Result:= '';
   case SystemID of
     idMAME, idHBMAME:
@@ -1824,6 +2031,7 @@ begin
     5: Result:= Result+'.elsoftlist';
     6: Result:= Result+'.elsoftlistreq';
     9: Result:= Result+'_crc32collision.txt'; // id "9" to give some room for future expansion (February 15, 2018)
+   10: Result:= Result+'_romsnodump.txt'; //
   end;
 end;
 
@@ -2020,8 +2228,6 @@ begin
 end;
 
 function RemoveQuotes(const ValueStr: String): String;
-var
-  iPos: Integer;
 begin
   Result:= ValueStr;
   if ValueStr = '' then
@@ -2802,6 +3008,7 @@ begin
   FormSelectDirectory.LabelTitle.Caption:= Caption;
   if RootFolder <> '' then
      FormSelectDirectory.ShellTree.Root:= RootFolder;
+
   Result:= FormSelectDirectory.ShowModal = mrOK;
   case Result of
     True:
@@ -3059,10 +3266,10 @@ begin
   end;
 end;}
 
-function DarkenColor(Color: TColor; Perc: integer): TColor;
+function DarkenColor(Color: TColor; Perc: Integer): TColor;
 var
   r, g, b: Integer;//longint;
-  l: longint;
+  l: Longint;
 begin
   l := ColorToRGB(Color);
   r := ((l AND $FF0000) shr 16) and $FF;
@@ -3081,24 +3288,24 @@ var
   r1, g1, b1: Integer;
 begin
   Col := ColorToRGB(Col);
-  r1 := GetRValue(Col);
-  g1 := GetGValue(Col);
-  b1 := GetBValue(Col);
+  r1  := GetRValue(Col);
+  g1  := GetGValue(Col);
+  b1  := GetBValue(Col);
 
   if r1 = 0 then
-    r1 := Max(0,Brightness)
+     r1 := Max(0,Brightness)
   else
-    r1 := Round( Min(100,(100 + Brightness))/100 * r1 );
+     r1 := Round( Min(100,(100 + Brightness))/100 * r1 );
 
   if g1 = 0 then
-    g1 := Max(0,Brightness)
+     g1 := Max(0,Brightness)
   else
-    g1 := Round( Min(100,(100 + Brightness))/100 * g1 );
+     g1 := Round( Min(100,(100 + Brightness))/100 * g1 );
 
   if b1 = 0 then
-    b1 := Max(0,Brightness)
+     b1 := Max(0,Brightness)
   else
-    b1 := Round( Min(100,(100 + Brightness))/100 * b1 );
+     b1 := Round( Min(100,(100 + Brightness))/100 * b1 );
 
   Result := RGB(r1,g1,b1);
 end;
@@ -3108,9 +3315,9 @@ var
   r1, g1, b1: Integer;
 begin
   Col := Longint(ColorToRGB(Col));
-  r1 := GetRValue(Col);
-  g1 := GetGValue(Col);
-  b1 := GetBValue(Col);
+  r1  := GetRValue(Col);
+  g1  := GetGValue(Col);
+  b1  := GetBValue(Col);
 
   if r1 = 0 then
     r1 := Max(0,BR)
@@ -3135,18 +3342,18 @@ var
   c1, c2: Integer; //LongInt;
   R, G, B, v1, v2: Byte;
 begin
-  A := Round(2.55 * A);
+  A  := Round(2.55 * A);
   c1 := ColorToRGB(Color1);
   c2 := ColorToRGB(Color2);
   v1 := Byte(c1);
   v2 := Byte(c2);
-  R := Byte(A * (v1 - v2) shr 8 + v2);
+  R  := Byte(A * (v1 - v2) shr 8 + v2);
   v1 := Byte(c1 shr 8);
   v2 := Byte(c2 shr 8);
-  G := Byte(A * (v1 - v2) shr 8 + v2);
+  G  := Byte(A * (v1 - v2) shr 8 + v2);
   v1 := Byte(c1 shr 16);
   v2 := Byte(c2 shr 16);
-  B := Byte(A * (v1 - v2) shr 8 + v2);
+  B  := Byte(A * (v1 - v2) shr 8 + v2);
   Result := (B shl 16) + (G shl 8) + R;
 end;
 
@@ -3311,7 +3518,7 @@ begin
     MessageBoxW(Handle, FileName, nil, MB_OK);
 }
 
-function OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: string; var FileName: string;
+function OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: String; var FileName: String;
                             MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
 var
   ofn: TOpenFileName;
@@ -3327,21 +3534,21 @@ begin
     lpstrFile:= szFile;
     nMaxFile:= SizeOf(szFile);
     if (Title <> '') then
-      lpstrTitle:= PChar(Title);
+       lpstrTitle:= PChar(Title);
     if (InitialDir <> '') then
-      lpstrInitialDir:= PChar(InitialDir);
+       lpstrInitialDir:= PChar(InitialDir);
     StrPCopy(lpstrFile, FileName);
     lpstrFilter:= PChar( StringReplace(Filter, '|', #0, [rfReplaceAll]) +#0#0 );
     if DefExt <> '' then
-      lpstrDefExt:= PChar(DefExt);
+       lpstrDefExt:= PChar(DefExt);
   end;
 
   ofn.Flags:= ofn.Flags or OFN_DONTADDTORECENT or OFN_EXPLORER;
   if MustExist then
-    ofn.Flags:= ofn.Flags or OFN_FILEMUSTEXIST;
+     ofn.Flags:= ofn.Flags or OFN_FILEMUSTEXIST;
 
   if OverwritePrompt then
-    ofn.Flags:= ofn.Flags or OFN_OVERWRITEPROMPT;
+     ofn.Flags:= ofn.Flags or OFN_OVERWRITEPROMPT;
 
   if NoChangeDir then
     ofn.Flags:= ofn.Flags or OFN_NOCHANGEDIR;
@@ -3413,7 +3620,7 @@ begin
 {$ENDIF}
 end;
 
-function GetMyDocuments: string;
+function GetMyDocuments: String;
 var
   r: Bool;
   path: array[0..Max_Path] of Char;
@@ -3909,7 +4116,7 @@ begin
   end;
 end;
 
-function StrDupW(var dst:PWideChar;src:PWideChar;len:integer=0):PWideChar;
+function StrDupW(var dst: PWideChar; src: PWideChar; len: integer = 0): PWideChar;
 begin
   if (src=nil) or (src^=#0) then
     dst:=nil
@@ -4010,6 +4217,33 @@ begin
      Result:= False;
 end;
 
+procedure ShowDropdownMenu(ButtonExSource: TBitBtnEx; PopupMenuSource: TPopupMenu);
+var
+  iPoint: TPoint;
+  iLeft, iTop: Integer;
+begin
+  iPoint:= ButtonExSource.ClientToScreen(Point(0, 0));
+  iLeft:= iPoint.X;
+  iTop:= iPoint.Y+ButtonExSource.Height+1;
+  PopupMenuSource.Popup(iLeft, iTop);
+end;
+
+procedure ShowDropdownMenu(ButtonExSource: TSpeedButtonEx; PopupMenuSource: TPopupMenu);
+var
+  iPoint: TPoint;
+  iLeft, iTop: Integer;
+begin
+  iPoint:= ButtonExSource.ClientToScreen(Point(0, 0));
+  iLeft:= iPoint.X;
+  iTop:= iPoint.Y+ButtonExSource.Height+1;
+  PopupMenuSource.Popup(iLeft, iTop); //iPoint.X, iPoint.Y);
+
+  // these do not work
+  //  iPoint:= ClientToParent(Point(TSpeedButtonEx(Sender).Left, TSpeedButtonEx(Sender).Top), FormConsCompGamesEditor);//TSpeedButtonEx(Sender).Owner);
+  //  iPoint:= ClientToScreen(Point(TSpeedButtonEx(Sender).Left, TSpeedButtonEx(Sender).Top + TSpeedButtonEx(Sender).Height));
+  //  PopupMenuOptions.Popup(iLeft, iTop); //iPoint.X, iPoint.Y);
+end;
+
 // Use CalcCRC32 as a procedure so CRCValue can be passed in but
   // also returned. This allows multiple calls to CalcCRC32 for
   // the "same" CRC-32 calculation.
@@ -4034,7 +4268,7 @@ begin
   end
 end;
 
-function CalcStringCRC32(S: string; out CRC32: DWORD): Boolean;
+function CalcStringCRC32(S: String; out CRC32: DWORD): Boolean;
 var
   iCRC32Table: DWORD;
 begin

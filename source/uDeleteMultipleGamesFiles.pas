@@ -7,7 +7,7 @@ uses
   StdCtrls, IniFiles, Dialogs,
   uMain, EasyListview, MPCommonObjects, MPCommonUtilities, ImgList,
   ExtCtrls, uCommon, uCommonCustom, Buttons, PanelEx, ShadowLabel,
-  AdvOfficeButtons, AdvGroupBox, Menus, BarMenus;
+  AdvOfficeButtons, AdvGroupBox, Menus, BarMenus, EditEx, ButtonsEx;
 
 type
   TGameInfo = class(TEasyItemStored)
@@ -94,19 +94,19 @@ type
     DeleteROMs: TAdvOfficeCheckBox;
     DeleteCHDs: TAdvOfficeCheckBox;
     DeleteCFGsNVRAMs: TAdvOfficeCheckBox;
-    ButtonDeleteFiles: TBitBtn;
-    ButtonNo: TBitBtn;
+    ButtonDeleteFiles: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
     PopupGames: TBcBarPopupMenu;
     PopupRemoveSelectedGames: TMenuItem;
     PopupParentGame: TMenuItem;
     N1: TMenuItem;
     PopupViewSelectedFilesList: TMenuItem;
     PopupViewFilesListAllGames: TMenuItem;
-    ButtonHelp: TBitBtn;
+    ButtonHelp: TBitBtnEx;
     PanelDestinationFolder: TPanelEx;
-    DestinationFolder: TEdit;
+    DestinationFolder: TEditEx;
     LabelCopyMoveDestination: TShadowLabel;
-    ButtonSelectROMsFolder: TBitBtn;
+    ButtonSelectROMsFolder: TBitBtnEx;
     CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
     DeleteGameFromGamesList: TAdvOfficeCheckBox;
     DeleteGameFileFromDisk: TAdvOfficeCheckBox;
@@ -285,9 +285,9 @@ begin
   if IsNightMode then
   begin
     if Enabled then
-       SetCheckBoxColors(CheckBoxHolder, MsgTxtColors.colorFileName, clNavy)
+       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1])// clrLightBlue, clNavy)
     else
-       SetCheckBoxColors(CheckBoxHolder, clMedGray, clBlack);
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack);
   end
   else
   begin
@@ -300,7 +300,10 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.SetSelectedGame(ELV_Item: TEasyItem);
 begin
-  FormMain.ELV_SetSelectRibbon(TGameInfo(ELV_Item).eGameStatus, GamesList);
+  if IsNightMode then
+     FormMain.ELV_SetRibbonNightColors(TGameInfo(ELV_Item).eGameStatus, GamesList)
+  else
+     FormMain.ELV_SetSelectRibbon(TGameInfo(ELV_Item).eGameStatus, GamesList);
   if GamesList.Selection.Count = 1 then
      begin
        if SelectedItem <> ELV_Item then
@@ -1152,12 +1155,43 @@ begin
        ButtonDeleteFiles.Caption:= ActionString+' Files';
        FileTypesGroupBox.Caption:= 'Check Arcade File Types to '+ActionString;
 
-       DeleteCFGsNVRAMs.Font.Color:= clGray;
+       //DeleteCFGsNVRAMs.Font.Color:= clGray;
        DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        //DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
      end;
   //StatusIconIndex:= IL_DeleteGameIcons.Count-3;
+
+  if IsNightMode then
+  begin
+    SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil, -1, IsNightMode);
+
+    FormMain.SetEasyListViewColors(GamesList, FormDeleteMultipleGamesFiles.Color, clWhite);
+
+    PanelDestinationFolder.Color1:= FormDeleteMultipleGamesFiles.Color;
+    SetLabelColors(LabelCopyMoveDestination, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+    SetEditNightColors(DestinationFolder);
+
+    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+
+    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
+    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1]);
+
+    FormMain.SetButtonExColors(ButtonDeleteFiles);
+    FormMain.SetButtonExColors(ButtonNo);
+    FormMain.SetButtonExColors(ButtonSelectROMsFolder);
+    FormMain.SetButtonExColors(ButtonHelp);
+
+    FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
+  end;
 
   ChangeCheckBoxColor(DeleteROMs.Checked, DeleteROMs);
   ChangeCheckBoxColor(DeleteCHDs.Checked, DeleteCHDs);
@@ -1165,27 +1199,7 @@ begin
 
   ChangeCheckBoxColor(DeleteGameFromGamesList.Checked, DeleteGameFromGamesList);
   ChangeCheckBoxColor(DeleteGameFileFromDisk.Checked, DeleteGameFileFromDisk);
-
-  if IsNightMode then
-  begin
-    SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil, -1);
-
-    GamesList.Color:= FormDeleteMultipleGamesFiles.Color;
-    GamesList.Font.Color:= clWhite;
-    GamesList.HotTrack.Color:= clWhite;
-
-    PanelDestinationFolder.Color1:= FormDeleteMultipleGamesFiles.Color;
-    SetLabelColors(LabelCopyMoveDestination, clWhite, clNavy);
-    DestinationFolder.Color:= FormDeleteMultipleGamesFiles.Color;
-    DestinationFolder.Font.Color:= clWhite;
-
-    SetCheckBoxColors(CopyMoveOverwriteFiles, clWhite, clNavy);
-    SetCheckBoxColors(CopyMoveAddSystemFolder, clWhite, clNavy);
-
-    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
-    SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clWhite, clNavy);
-  end;
-
+  
   FileTextMaxCount:= 87; // this is for TGameInfo.GetCaptions
   HaveArcade:= False;
   HaveConsoleComputer:= False;
@@ -1698,13 +1712,15 @@ begin
      begin
        FormDeleteMultipleGamesViewFiles.BottomBar.Frames:= [];
        FormDeleteMultipleGamesViewFiles.BottomBar.Style:= vgSimple;
-       SetFormColors(FormDeleteMultipleGamesViewFiles, nil, FormDeleteMultipleGamesViewFiles.BottomBar, nil, nil, -1);
-       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clRed, clrDarkOrange);//$323200);
-       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clWhite, clNavy);
-       FormDeleteMultipleGamesViewFiles.FilesListView.Color:= FormDeleteMultipleGamesViewFiles.Color;
-       FormDeleteMultipleGamesViewFiles.FilesListView.Font.Color:= clWhite;
-       FormDeleteMultipleGamesViewFiles.FilesListView.HotTrack.Color:= clWhite;
-       FormDeleteMultipleGamesViewFiles.FilesListView.GroupFont.Color:= clWhite;
+       SetFormColors(FormDeleteMultipleGamesViewFiles, nil, FormDeleteMultipleGamesViewFiles.BottomBar, nil, nil, -1, IsNightMode);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clrLightRed, clrLightBlack);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clCream, item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(FormDeleteMultipleGamesViewFiles.FilesListView, FormDeleteMultipleGamesViewFiles.Color, clWhite, clWhite);
+
+       FormMain.SetButtonExColors(FormDeleteMultipleGamesViewFiles.ButtonClose);
+       FormMain.SetButtonExColors(FormDeleteMultipleGamesViewFiles.ButtonShowFileTypes);
+
        FormDeleteMultipleGamesViewFiles.LabelTotalItems.Tag:= 1;
      end;
 
@@ -1890,5 +1906,6 @@ begin
   ImageWidth:= GamesList.ImagesExLarge.Width+16; // +16 is 16x16 icon size, plus 2 pixels border
   ImageHeight:= GamesList.ImagesExLarge.Height;
 end;
+
 
 end.

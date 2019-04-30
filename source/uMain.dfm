@@ -1,8 +1,8 @@
 object FormMain: TFormMain
-  Left = 768
-  Top = 498
-  Width = 1251
-  Height = 670
+  Left = 829
+  Top = 279
+  Width = 1266
+  Height = 785
   Caption = 'Emu Loader'
   Color = clBtnFace
   Constraints.MinHeight = 400
@@ -24,10 +24,10 @@ object FormMain: TFormMain
   PixelsPerInch = 96
   TextHeight = 15
   object Splitter: TSplitterEx
-    Left = 779
+    Left = 794
     Top = 55
     Width = 6
-    Height = 577
+    Height = 692
     Align = alRight
     ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
@@ -45,7 +45,7 @@ object FormMain: TFormMain
   object PanelToolBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 1235
+    Width = 1250
     Height = 55
     Align = alTop
     Color1 = 15856113
@@ -58,7 +58,7 @@ object FormMain: TFormMain
     ParentBackground = False
     Style = vgSolid
     object PanelSearchGames_ToolBar: TPanelEx
-      Left = 904
+      Left = 919
       Top = 0
       Width = 331
       Height = 55
@@ -181,7 +181,7 @@ object FormMain: TFormMain
           ImageIndex = 10
         end
       end
-      object FilterGameTitle_ToolBar: TEdit
+      object FilterGameTitle_ToolBar: TEditEx
         Left = 8
         Top = 22
         Width = 189
@@ -204,7 +204,7 @@ object FormMain: TFormMain
       Tag = 1
       Left = 0
       Top = 0
-      Width = 904
+      Width = 919
       Height = 55
       Align = alClient
       ButtonHeight = 54
@@ -381,8 +381,8 @@ object FormMain: TFormMain
   object PanelGamesArea: TPanel
     Left = 0
     Top = 55
-    Width = 779
-    Height = 577
+    Width = 794
+    Height = 692
     Align = alClient
     BevelOuter = bvNone
     Color = 15856113
@@ -391,7 +391,7 @@ object FormMain: TFormMain
       Left = 230
       Top = 0
       Width = 6
-      Height = 577
+      Height = 692
       Visible = False
       Appearance.BorderColor = clNone
       Appearance.BorderColorHot = clNone
@@ -407,8 +407,8 @@ object FormMain: TFormMain
     object PanelGamesList: TPanelEx
       Left = 236
       Top = 0
-      Width = 543
-      Height = 577
+      Width = 558
+      Height = 692
       Align = alClient
       BevelOuter = bvNone
       Color1 = 15856113
@@ -423,8 +423,8 @@ object FormMain: TFormMain
       object GamesListView: TEasyListview
         Left = 0
         Top = 0
-        Width = 543
-        Height = 553
+        Width = 558
+        Height = 668
         Align = alClient
         CellSizes.SmallIcon.Height = 20
         CellSizes.Tile.Width = 260
@@ -585,8 +585,8 @@ object FormMain: TFormMain
       object StatusBarPanel: TPanelEx
         Tag = 1
         Left = 0
-        Top = 553
-        Width = 543
+        Top = 668
+        Width = 558
         Height = 24
         Align = alBottom
         Color1 = 15391180
@@ -668,12 +668,22 @@ object FormMain: TFormMain
           Transparent = True
         end
       end
+      object BitBtn1: TBitBtn
+        Left = 352
+        Top = 320
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn1'
+        TabOrder = 2
+        Visible = False
+        OnClick = BitBtn1Click
+      end
     end
     object PanelMachinesList: TPanelEx
       Left = 0
       Top = 0
       Width = 230
-      Height = 577
+      Height = 692
       Align = alLeft
       BevelOuter = bvNone
       Color1 = 15856113
@@ -690,7 +700,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 230
-        Height = 553
+        Height = 668
         Align = alClient
         CellSizes.Report.Height = 20
         Color = clWhite
@@ -706,25 +716,25 @@ object FormMain: TFormMain
         Header.Columns.Items = {
           0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
           00060000008008000101000100000000010000FA000000FFFFFF1F0001000000
-          01000000070000004D0061006300680069006E00650000000000000000000000
-          0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
-          080001010001010000000000002D000000FFFFFF1F0001000000010000000400
-          0000590065006100720000000000000000000000000011000000544561737943
-          6F6C756D6E53746F726564FFFECE000600000080080001010001020000000000
-          0078000000FFFFFF1F0001000000010000000C0000004D0061006E0075006600
-          6100630074007500720065007200000000000000000000000000110000005445
-          617379436F6C756D6E53746F726564FFFECE0006000000800800010100010300
-          000000000055000000FFFFFF1F000100000001000000040000004E0061006D00
-          6500000000000000000000000000110000005445617379436F6C756D6E53746F
-          726564FFFECE0006000000800800010100010400000000000055000000FFFFFF
-          1F0001000000010000000800000043006C006F006E00650020006F0066000000
-          00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-          FECE000600000080080001010001050000000000005F000000FFFFFF1F000100
-          0000010000000600000044007200690076006500720000000000000000000000
-          0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
-          080001010001060000000000005A000000FFFFFF1F0001000000010000000A00
-          0000530061007600650020005300740061007400650000000000000000000000
-          0000}
+          010000000C0000004D0041004D00450020004D0061006300680069006E006500
+          000000000000000000000000110000005445617379436F6C756D6E53746F7265
+          64FFFECE000600000080080001010001010000000000002D000000FFFFFF1F00
+          0100000001000000040000005900650061007200000000000000000000000000
+          110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+          010100010200000000000078000000FFFFFF1F0001000000010000000C000000
+          4D0061006E007500660061006300740075007200650072000000000000000000
+          00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+          00800800010100010300000000000055000000FFFFFF1F000100000001000000
+          040000004E0061006D0065000000000000000000000000001100000054456173
+          79436F6C756D6E53746F726564FFFECE00060000008008000101000104000000
+          00000055000000FFFFFF1F0001000000010000000800000043006C006F006E00
+          650020006F006600000000000000000000000000110000005445617379436F6C
+          756D6E53746F726564FFFECE000600000080080001010001050000000000005F
+          000000FFFFFF1F00010000000100000006000000440072006900760065007200
+          000000000000000000000000110000005445617379436F6C756D6E53746F7265
+          64FFFECE000600000080080001010001060000000000005A000000FFFFFF1F00
+          01000000010000000A0000005300610076006500200053007400610074006500
+          000000000000000000000000}
         Header.Draggable = False
         Header.Height = 23
         Header.Visible = True
@@ -775,7 +785,7 @@ object FormMain: TFormMain
       end
       object StatusBarPanelMachines: TPanelEx
         Left = 0
-        Top = 553
+        Top = 668
         Width = 230
         Height = 24
         Align = alBottom
@@ -933,7 +943,7 @@ object FormMain: TFormMain
         ColorInnerFrame = clBlack
         Frames = []
       end
-      object FilterGameTitle: TEdit
+      object FilterGameTitle: TEditEx
         Left = 8
         Top = 48
         Width = 205
@@ -1181,7 +1191,7 @@ object FormMain: TFormMain
           OnClick = ButtonFilterCPUResetClick
         end
       end
-      object FilterCPU: TEdit
+      object FilterCPU: TEditEx
         Left = 210
         Top = 48
         Width = 190
@@ -1222,10 +1232,10 @@ object FormMain: TFormMain
     end
   end
   object PanelScreenshotsArea: TPanelEx
-    Left = 785
+    Left = 800
     Top = 55
     Width = 450
-    Height = 577
+    Height = 692
     Align = alRight
     BevelOuter = bvNone
     Color1 = 15856113
@@ -1770,14 +1780,23 @@ object FormMain: TFormMain
           Style = tbsCheck
           OnClick = ButtonInternetGameInfoClick
         end
-        object TabbedImageGameDocSeparator: TToolButton
+        object ButtonOpenManualPDF: TToolButton
           Left = 312
+          Top = 0
+          Hint = 'Show the game'#39's manual in PDF format'
+          AutoSize = True
+          Caption = 'PDF Manual'
+          ImageIndex = 13
+          OnClick = ButtonOpenManualPDFClick
+        end
+        object TabbedImageGameDocSeparator: TToolButton
+          Left = 343
           Top = 0
           AutoSize = True
           Enabled = False
         end
         object ButtonImagePanelToggle: TToolButton
-          Left = 319
+          Left = 350
           Top = 0
           Hint = 'Show Images panel'
           AutoSize = True
@@ -1791,7 +1810,7 @@ object FormMain: TFormMain
         end
         object ButtonDocsPanelToggle: TToolButton
           Tag = 1
-          Left = 350
+          Left = 381
           Top = 0
           Hint = 'Show game documents panel'
           AutoSize = True
@@ -1978,17 +1997,29 @@ object FormMain: TFormMain
       ShortCut = 8205
       OnClick = PopupRunGameWithAlterMAMEClick
     end
+    object PopupRunGameWithAlterMAME2: TMenuItem
+      Tag = 2
+      Caption = 'Run Game With AlterMAME 2'
+      ImageIndex = 18
+      OnClick = PopupRunGameWithAlterMAME2Click
+    end
     object PopupRunConsoleComputerGameWithMAME: TMenuItem
       Caption = 'Run Game With MAME'
       ImageIndex = 18
       Visible = False
       OnClick = PopupRunConsoleComputerGameWithMAMEClick
     end
-    object PopupRunConsoleComputerGameWithAlterMAME: TMenuItem
+    object PopupRunConsoleComputerGameWithAlterMAME1: TMenuItem
       Caption = 'Run Game With AlterMAME'
       ImageIndex = 18
       Visible = False
-      OnClick = PopupRunConsoleComputerGameWithAlterMAMEClick
+      OnClick = PopupRunConsoleComputerGameWithAlterMAME1Click
+    end
+    object PopupRunConsoleComputerGameWithAlterMAME2: TMenuItem
+      Caption = 'Run Game With AlterMAME 2'
+      ImageIndex = 18
+      Visible = False
+      OnClick = PopupRunConsoleComputerGameWithAlterMAME2Click
     end
     object PopupPlayGameWithCustomSystem: TMenuItem
       Caption = 'Run Game (Custom Emulators)'
@@ -2145,13 +2176,24 @@ object FormMain: TFormMain
       ShortCut = 8278
       OnClick = ButtonPlayVideoPreviewClick
     end
+    object PopupViewGameManualPDF: TMenuItem
+      Caption = 'View Game Manual (PDF)'
+      ImageIndex = 28
+      ShortCut = 8269
+      OnClick = PopupViewGameManualPDFClick
+    end
     object N12: TMenuItem
       Caption = '-'
     end
     object PopupAutoRunGameAlterMAME: TMenuItem
       AutoCheck = True
       Caption = 'AutoRun Game With AlterMAME'
-      Hint = 'Try again with AlterMAME if fails with MAME'
+      Hint = 'Try again with AlterMAME 1 if fails with MAME'
+    end
+    object PopupAutoRunGameAlterMAME2: TMenuItem
+      AutoCheck = True
+      Caption = 'Autorun Game With AlterMAME 2'
+      Hint = 'Try again with AlterMAME 2 if fails with AlterMAME 1'
     end
     object PopupEnableAutoRunCustomGamesWithMAME: TMenuItem
       AutoCheck = True
@@ -2159,7 +2201,7 @@ object FormMain: TFormMain
       Hint = 'Quickload games with MAME using ENTER or mouse double-click'
     end
     object PopupEnableCustomCommandLine: TMenuItem
-      Caption = 'Enable Custom Command Line'
+      Caption = 'Enable Custom Command Line (NOT IMPLEMENTED!)'
       Hint = 'Run game with custom command line, if available'
       Visible = False
     end
@@ -2349,191 +2391,8 @@ object FormMain: TFormMain
         end
       end
     end
-    object PopupAlterMAMECustomSettings: TMenuItem
-      Caption = 'AlterMAME Custom Settings'
-      object PopupSetCustomOptionsAlterMAME: TMenuItem
-        Caption = 'Set [gamename] Custom Options'
-        Hint = 'Set [%s] Custom Options'
-        ImageIndex = 7
-        OnClick = PopupSetCustomOptionsAlterMAMEClick
-      end
-      object PopupDeleteCustomOptionsAlterMAME: TMenuItem
-        Tag = 1
-        Caption = 'Delete [gamename] Custom Options'
-        Hint = 'Delete [%s] Custom Options'
-        ImageIndex = 14
-        OnClick = PopupSetCustomOptionsAlterMAMEClick
-      end
-      object PopupSetGameDriverCustomOptionsAlterMAME: TMenuItem
-        Caption = 'Set [drivername] Custom Options'
-        Hint = 'Set [%s] Custom Options'
-        ImageIndex = 7
-        OnClick = PopupSetGameDriverCustomOptionsAlterMAMEClick
-      end
-      object PopupDeleteGameDriverCustomOptionsAlterMAME: TMenuItem
-        Tag = 1
-        Caption = 'Delete [drivername] Custom Options'
-        Hint = 'Delete [%s] Custom Options'
-        ImageIndex = 14
-        OnClick = PopupSetGameDriverCustomOptionsAlterMAMEClick
-      end
-      object PopupCustomMAMEAlterMAME: TMenuItem
-        Caption = 'Extra'
-        object PopupSetMAMEHorizontalGamesOptionsAlterMAME: TMenuItem
-          Caption = 'Set Horizontal Game Options'
-          Hint = 'horizont'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMEHorizontalGamesOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete Horizontal Game Options'
-          Hint = 'horizont'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetMAMEVerticalGamesOptionsAlterMAME: TMenuItem
-          Caption = 'Set Vertical Game Options'
-          Hint = 'vertical'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMEVerticalGamesOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete Vertical Game Options'
-          Hint = 'vertical'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetDebugCustomOptionsAlterMAME: TMenuItem
-          Caption = 'Set Debug Custom Options'
-          Hint = 'debug'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteDebugCustomOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete Debug Custom Options'
-          Hint = 'debug'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object N51: TMenuItem
-          Caption = '-'
-          Hint = 'Screen type'
-        end
-        object PopupSetMAMERasterGameOptionsAlterMAME: TMenuItem
-          Caption = 'Set Raster Custom Options'
-          Hint = 'raster'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMERasterGameOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete Raster Custom Options'
-          Hint = 'raster'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetMAMEVectorGamesOptionsAlterMAME: TMenuItem
-          Caption = 'Set Vector Custom Options'
-          Hint = 'vector'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMEVectorGamesOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete Vector Custom Options'
-          Hint = 'vector'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetMAMELCDGameOptionsAlterMAME: TMenuItem
-          Caption = 'Set LCD Custom Options'
-          Hint = 'lcd'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMELCDGameOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete LCD Custom Options'
-          Hint = 'lcd'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetMAMESVGGameOptionsAlterMAME: TMenuItem
-          Caption = 'Set SVG Custom Options'
-          Hint = 'svg'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteMAMESVGGameOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete SVG Custom Options'
-          Hint = 'svg'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object N63: TMenuItem
-          Caption = '-'
-          Hint = 'MAME 0.162 (and newer) / UME'
-        end
-        object PopupSetArcadeIniCustomOptionsAlterMAME: TMenuItem
-          Caption = 'Set [arcade.ini] Custom Options'
-          Hint = 'arcade'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteArcadeIniCustomOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete [arcade.ini] Custom Options'
-          Hint = 'arcade'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetConsoleIniCustomOptionsAlterMAME: TMenuItem
-          Caption = 'Set [console.ini] Custom Options'
-          Hint = 'console'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteConsoleIniCustomOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete [console.ini] Custom Options'
-          Hint = 'console'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetComputerIniCustomOptionsAlterMAME: TMenuItem
-          Caption = 'Set [computer.ini] Custom Options'
-          Hint = 'computer'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteComputerIniCustomOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete [computer.ini] Custom Options'
-          Hint = 'computer'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupSetOtherSysIniCustomOptionsAlterMAME: TMenuItem
-          Caption = 'Set [othersys.ini] Custom Options'
-          Hint = 'othersys'
-          ImageIndex = 7
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-        object PopupDeleteOtherSysIniCustomOptionsAlterMAME: TMenuItem
-          Tag = 1
-          Caption = 'Delete [othersys.ini] Custom Options'
-          Hint = 'othersys'
-          ImageIndex = 14
-          OnClick = PopupSetMAMEHorizontalGamesOptionsAlterMAMEClick
-        end
-      end
-    end
     object CustomCommandLine1: TMenuItem
-      Caption = 'Custom Command Line'
+      Caption = 'Custom Command Line (NOT IMPLEMENTED!)'
       Visible = False
       object PopupSetGameCustomCommandLine: TMenuItem
         Caption = 'Set [gamename] Command Line'
@@ -2627,6 +2486,31 @@ object FormMain: TFormMain
       ImageIndex = 9
       ShortCut = 114
       OnClick = PopupAutomaticGameInformationClick
+    end
+    object PopupResetSelectedGamesInfo: TMenuItem
+      Caption = 'Reset Selected Games Info'
+      object PopupResetSelectedGamesInfo_Playtime: TMenuItem
+        Tag = 1
+        Caption = 'Reset Total Playtime'
+        OnClick = PopupResetSelectedGamesInfo_AllClick
+      end
+      object PopupResetSelectedGamesInfo_LastPlayed: TMenuItem
+        Tag = 2
+        Caption = 'Reset Last Played'
+        OnClick = PopupResetSelectedGamesInfo_AllClick
+      end
+      object PopupResetSelectedGamesInfo_TimesPlayed: TMenuItem
+        Tag = 3
+        Caption = 'Reset Times Played'
+        OnClick = PopupResetSelectedGamesInfo_AllClick
+      end
+      object N66: TMenuItem
+        Caption = '-'
+      end
+      object PopupResetSelectedGamesInfo_All: TMenuItem
+        Caption = 'Reset All'
+        OnClick = PopupResetSelectedGamesInfo_AllClick
+      end
     end
     object N28: TMenuItem
       Caption = '-'
@@ -3588,11 +3472,6 @@ object FormMain: TFormMain
         Caption = 'Emulators Default Settings'
         ImageIndex = 7
         OnClick = MenuArcadeEmulatorDefaultSettingsClick
-      end
-      object MenuAlterMAMEDefaultSettings: TMenuItem
-        Caption = 'AlterMAME Default Settings'
-        ImageIndex = 7
-        OnClick = MenuAlterMAMEDefaultSettingsClick
       end
       object N54: TMenuItem
         Caption = '-'
@@ -4669,6 +4548,12 @@ object FormMain: TFormMain
         OnClick = PopupMachinesListSidePanelSmall16x16Click
       end
     end
+    object PopupShowMAMEMachinesStatusBar: TMenuItem
+      AutoCheck = True
+      Caption = 'Show MAME Machines Status Bar'
+      Checked = True
+      OnClick = PopupShowMAMEMachinesStatusBarClick
+    end
   end
   object IL_StandardIconsThumbnail: TImageList
     Height = 128
@@ -4912,7 +4797,7 @@ object FormMain: TFormMain
     end
     object N80: TMenuItem
       Caption = '-'
-      Hint = 'Settings'
+      Hint = 'Search Bar Settings'
     end
     object FilterSearchBarUseSmall16x16Icons: TMenuItem
       AutoCheck = True

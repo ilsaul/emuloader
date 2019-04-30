@@ -11,7 +11,7 @@ uses
   uCommon;
 
 const
-  MaxConsoleComputerSystems = 65;
+  MaxConsoleComputerSystems = 66;
   IsFloppy = 3; // quick dirty way to check for floppy media type, used by multi disk games features for console/computer systems
 
   SystemsListCustom: packed array [0..MaxConsoleComputerSystems] of packed array[0..2] of String = (
@@ -81,7 +81,8 @@ const
     ('Sega SF-7000',           '62_SegaSF7000.ico',        'SegaSF7000.txt'),
     ('Nintendo Satellaview',   '63_Satellaview.ico',       'Satellaview.txt'),
     ('Nintendo Wii U',         '64_NintendoWiiU.ico',      'NintendoWiiU.txt'),
-    ('Nintendo 3DS',           '65_Nintendo3DS.ico',       'Nintendo3DS.txt'));
+    ('Nintendo 3DS',           '65_Nintendo3DS.ico',       'Nintendo3DS.txt'),
+    ('Nintendo Switch',        '66_NintendoSwitch.ico',    'NintendoSwitch.txt'));
     //('SuFami Turbo',           '66_SuFamiTurbo.ico',       'SuFamiTurbo.txt'));
 
   MediaTypeCustom: packed array[1..5] of packed array[0..2] of String = (
@@ -249,8 +250,8 @@ function  FindFile(RootFolder: String; {const }FileName: WideString; out ResultV
 
 procedure GetPlayedGameInfoIniCustom(const LineStr: String;
                                      var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
-function  GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; AddGameTag: Boolean = True): Integer;
-function  GetCustomGamePosIndex(ListPlayed: THashedStringList; const GameName: String): Integer;
+function  GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean; AddGameTag: Boolean = True): Integer;
+function  GetCustomGamePosExtraInfoIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean): Integer;
 
 implementation
 
@@ -392,7 +393,7 @@ end;
 
 function SystemIsHandheld(sysID: Integer): Boolean;
 begin
-  Result:= sysID in [02, 09, 11, 13, 17, 20, 25, 26, 29, 31, 51, 54, 55, 60, 65];
+  Result:= sysID in [02, 09, 11, 13, 17, 20, 25, 26, 29, 31, 51, 54, 55, 60, 65, 66];
 end;
 
 function GetSystemTypeTitle(sysID: Integer; IsArcadeSystem: Boolean): String;
@@ -481,11 +482,11 @@ begin
        end;
 
     selItem:= ELV_Holder.Items.Add; // this is the real system ID... (arcade/console/computer can have same tags)
-
+    selItem.Caption:= SystemsListCustom[Loop, 0];
+    
     if ActionMode <> 4 then
        begin
          selItem.ImageIndex:= Loop;
-         //if AddSystemTypeLabel then
          begin
            selItem.Captions[1]:= '      '+LowerCase(GetSystemTypeTitle(Loop, False));
            selItem.Details[1]:= 1;
@@ -497,7 +498,7 @@ begin
          selItem.StateImageIndex:= Loop; // to keep track of the correct system icon
        end;
 
-    selItem.Caption:= SystemsListCustom[Loop, 0];
+
     selItem.Visible:= ShowSystem;
     //selItem.Enabled:= ShowSystem; // if you click a disabled item, current selections are reset! :(
   end;
@@ -1182,7 +1183,7 @@ var
   iPos, iPos2, vPos: Integer;
   iStr, ValueStr: String;
 begin
-  // <file>Game Filename/> media_type is_unicode times_played;last_played;total_playtime
+  // <file>Game Filename/> media_type is_unicode  times_played;last_played;total_playtime
   // <file>H.E.R.O. (1984) (Activision).bin/>10 2;1219279034;9454
 
   // only 9 media types max will be supported in EmuCon
@@ -1208,7 +1209,7 @@ begin
   TotalPlaytimeVar:= StrToInt64(iStr);
 end;
 
-function GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; AddGameTag: Boolean = True): Integer;
+function GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean; AddGameTag: Boolean = True): Integer;
 var
   iStr: String;
   Loop: Integer;
@@ -1219,8 +1220,8 @@ begin
   begin
     iStr:= ListPlayed[Loop];
     case AddGameTag of
-      True : iPos:= PosEx('<file>'+GameName+'/>', iStr);
-      False: iPos:= PosEx(GameName, iStr); // this is only used by ExecuteGame()
+      True : iPos:= PosEx('<file>'+GameName+'/>'+IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+' ', iStr); // this is only used by uMain.AddGames()
+      False: iPos:= PosEx(GameName+IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+' ', iStr); // this is everywhere else
     end;
     if iPos <> 0 then
     begin
@@ -1230,17 +1231,18 @@ begin
   end;
 end;
 
-function GetCustomGamePosIndex(ListPlayed: THashedStringList; const GameName: String): Integer;
+function GetCustomGamePosExtraInfoIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean): Integer;
 var
   iStr: String;
   Loop: Integer;
   iPos: Integer;
 begin
+  // this is only used for "Console/Computer Games Editor" and in uMain.AddGames()... EmuCon games 
   Result:= -1;
   for Loop:=0 to ListPlayed.Count-1 do
   begin
     iStr:= ListPlayed[Loop];
-    iPos:= PosEx('<file>'+GameName+'/>', iStr);
+    iPos:= PosEx(IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+'<file>'+GameName+'/>', iStr);
     if iPos <> 0 then
     begin
       Result:= Loop;

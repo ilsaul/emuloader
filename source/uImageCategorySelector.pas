@@ -6,15 +6,15 @@ uses
   Windows, Messages, Classes, Graphics, Controls, Forms,
   StdCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, ExtCtrls, ImgList, Buttons,
-  ShadowLabel, PanelEx;
+  ShadowLabel, PanelEx, ButtonsEx;
 
 type
   TFormImageCategorySelector = class(TForm)
     IL_ImageCategory: TImageList;
-    PanelBottomButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelEmuTitle: TShadowLabel;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelSystemTitle: TShadowLabel;
     CategoriesListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -65,6 +65,9 @@ procedure TFormImageCategorySelector.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(CategoriesListView);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
+
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(CategoriesListView);
 end;
 
 procedure TFormImageCategorySelector.FormActivate(Sender: TObject);
@@ -94,9 +97,9 @@ procedure TFormImageCategorySelector.CategoriesListViewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       LabelEmuTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex));
+       LabelSystemTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex));
        ButtonOk.Enabled:= not Item.Ghosted;
-       FormMain.ELV_SetSelectRibbon(Ord(not ButtonOk.Enabled), CategoriesListView);
+       //FormMain.ELV_SetSelectRibbon(Ord(not ButtonOk.Enabled), CategoriesListView); // no longer used (April 04, 2019)
        Sender.Tag:= Item.ImageIndex;
      end;
 end;

@@ -21,7 +21,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 421
     Width = 885
@@ -57,7 +57,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 683
       Top = 8
       Width = 89
@@ -68,7 +68,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonNo: TBitBtn
+    object ButtonNo: TBitBtnEx
       Left = 778
       Top = 8
       Width = 89
@@ -79,7 +79,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonUp: TBitBtn
+    object ButtonUp: TBitBtnEx
       Tag = 1
       Left = 8
       Top = 8
@@ -98,7 +98,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       TabOrder = 2
       OnClick = ButtonUpClick
     end
-    object ButtonDown: TBitBtn
+    object ButtonDown: TBitBtnEx
       Left = 144
       Top = 8
       Width = 128
@@ -116,7 +116,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       TabOrder = 3
       OnClick = ButtonUpClick
     end
-    object ButtonRemoveFromList: TBitBtn
+    object ButtonRemoveFromList: TBitBtnEx
       Left = 280
       Top = 8
       Width = 125

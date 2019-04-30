@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   MPCommonObjects, EasyListview, StdCtrls, ImgList, GraphicEx,
   MPCommonUtilities, ExtCtrls, Buttons, PanelEx, uCommon, uCommonCustom,
-  Menus, BarMenus, ShadowLabel, AdvOfficeButtons;
+  Menus, BarMenus, ShadowLabel, AdvOfficeButtons, EditEx, ButtonsEx;
 
 type
   TFormGamesListFontSettings = class(TForm)
@@ -24,16 +24,16 @@ type
     N3: TMenuItem;
     PanelBottom: TPanelEx;
     GamesBackgroundColor: TColorBox;
-    ButtonDefaultBkSortedColor: TBitBtn;
+    ButtonDefaultBkSortedColor: TBitBtnEx;
     GamesBackgroundImageEnable: TAdvOfficeCheckBox;
-    GamesBackgroundImage: TEdit;
+    GamesBackgroundImage: TEditEx;
     GamesTileBackground: TAdvOfficeCheckBox;
-    GamesBackgroundImageButtonUpdate: TBitBtn;
-    GamesBackgroundImageButtonSelect: TBitBtn;
+    GamesBackgroundImageButtonUpdate: TBitBtnEx;
+    GamesBackgroundImageButtonSelect: TBitBtnEx;
     LabelBackgroundColor: TShadowLabel;
     Label1: TLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     PopupShowAvailableSystemsOnly: TMenuItem;
     PopupHelp: TMenuItem;
     SetAllConsoleComputerSystemsFontsToAllSystems1: TMenuItem;
@@ -397,7 +397,7 @@ begin
      GamesFont.PaintInfoItem.ImageIndent:= 0;
 
   case iWidth of //Screen.Width of
-     640:
+     {640:
        begin
          iNewWidth:= 625;
          iNewHeight:= 400;
@@ -424,7 +424,7 @@ begin
          iNewHeight:= 503;// 517;
          GamesFont.CellSizes.Tile.Width:= 302;//425;
          GamesFont.CellSizes.Tile.Height:= 60;
-       end;
+       end;}
     1024:
       begin
         iNewWidth:= 1000;
@@ -534,7 +534,7 @@ begin
   if iNewHeight <> FormGamesListFontSettings.Height then
      FormGamesListFontSettings.Height:= iNewHeight;
 
-  if iWidth < 960 then
+  {if iWidth < 960 then
      begin
        //need to decrease size only for 640 resolution!!!
        if iWidth = 640 then
@@ -552,17 +552,11 @@ begin
 
        ButtonOk.Top:= 58;
        ButtonCancel.Top:= 58;
+     end;}
 
-       //ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-4;//ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
-       //ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
-
-       //ButtonOk.Left:= (PanelBottom.Width-((ButtonCancel.Left-ButtonOk.Left)+ButtonCancel.Width)) div 2;
-       //ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
-     end;
-
-  if iWidth < 960 then
-     ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8
-  else
+  //if iWidth < 960 then
+  //   ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8
+  //else
      ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-16;//ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
 

@@ -22,65 +22,101 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelControlType: TLabel
+  object LabelControlType: TShadowLabel
     Left = 418
     Top = 56
-    Width = 108
-    Height = 15
+    Width = 111
+    Height = 16
     Caption = 'MAME Control Type'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelInterfaceType: TLabel
+  object LabelInterfaceType: TShadowLabel
     Left = 213
     Top = 56
-    Width = 131
-    Height = 15
+    Width = 134
+    Height = 16
     Caption = 'Interface Type (Controls)'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelAudioType: TLabel
+  object LabelAudioType: TShadowLabel
     Left = 8
     Top = 56
-    Width = 61
-    Height = 15
+    Width = 64
+    Height = 16
     Caption = 'Audio Type'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelGamesROMs: TLabel
+  object LabelGamesROMs: TShadowLabel
     Left = 418
     Top = 8
-    Width = 66
-    Height = 15
+    Width = 69
+    Height = 16
     Caption = 'Game ROMs'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelDeviceROMs: TLabel
+  object LabelDeviceROMs: TShadowLabel
     Left = 213
     Top = 8
-    Width = 70
-    Height = 15
+    Width = 73
+    Height = 16
     Caption = 'Device ROMs'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelBios: TLabel
+  object LabelBios: TShadowLabel
     Left = 8
     Top = 8
-    Width = 60
-    Height = 15
+    Width = 63
+    Height = 16
     Caption = 'BIOS ROMs'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelSTVMultiSlot: TLabel
+  object LabelSTVMultiSlot: TShadowLabel
     Left = 24
     Top = 200
-    Width = 100
-    Height = 16
+    Width = 103
+    Height = 17
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
@@ -89,13 +125,19 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Font.Style = [fsItalic]
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelNeoGeoMVS: TLabel
+  object LabelNeoGeoMVS: TShadowLabel
     Left = 24
     Top = 168
-    Width = 100
-    Height = 16
+    Width = 103
+    Height = 17
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
@@ -104,30 +146,48 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Font.Style = [fsItalic]
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelScreenOrientation: TLabel
+  object LabelScreenOrientation: TShadowLabel
     Left = 8
     Top = 104
-    Width = 98
-    Height = 15
+    Width = 101
+    Height = 16
     Caption = 'Screen Orientation'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelSaveState: TLabel
+  object LabelSaveState: TShadowLabel
     Left = 213
     Top = 104
-    Width = 53
-    Height = 15
+    Width = 56
+    Height = 16
     Caption = 'Save State'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object FilterGamesMainCPU: TAdvOfficeCheckBox
-    Left = 10
+    Left = 8
     Top = 304
-    Width = 142
+    Width = 144
     Height = 20
     Hint = 'Enable it so you can filter MAME games by main CPU'
     ShowHint = True
@@ -138,7 +198,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 336
     Width = 621
@@ -153,7 +213,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 426
       Top = 8
       Width = 89
@@ -166,7 +226,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       TabOrder = 0
       OnClick = ButtonOkClick
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 524
       Top = 8
       Width = 89
@@ -179,7 +239,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       TabOrder = 1
       OnClick = ButtonOkClick
     end
-    object ButtonDefaultOptions: TBitBtn
+    object ButtonDefaultOptions: TBitBtnEx
       Left = 8
       Top = 8
       Width = 89
@@ -246,9 +306,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With No Main Set')
   end
   object HideDeviceSets: TAdvOfficeCheckBox
-    Left = 303
+    Left = 301
     Top = 6
-    Width = 105
+    Width = 107
     Height = 20
     TabOrder = 5
     Alignment = taRightJustify
@@ -292,9 +352,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With No BIOS ROMs')
   end
   object HideBiosSets: TAdvOfficeCheckBox
-    Left = 108
+    Left = 106
     Top = 6
-    Width = 95
+    Width = 97
     Height = 19
     TabOrder = 8
     Alignment = taRightJustify
@@ -338,7 +398,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object STVMultiSlot: TAdvOfficeCheckBox
     Left = 8
     Top = 184
-    Width = 163
+    Width = 164
     Height = 20
     Hint = 
       'Check it to show only ST-V games compatible with multi-slot mach' +
@@ -387,7 +447,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object ShowMergedSetsOnly: TAdvOfficeCheckBox
     Left = 8
     Top = 264
-    Width = 145
+    Width = 147
     Height = 20
     Hint = 
       'Check to only show clone sets merged into parent sets (MAME/HBMA' +
@@ -403,7 +463,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object HideNoDumpROMsGames: TAdvOfficeCheckBox
     Left = 8
     Top = 244
-    Width = 151
+    Width = 152
     Height = 20
     Hint = 
       'Check to hide games that have all ROMs/CHDs tagged as "nodump" o' +
@@ -440,14 +500,14 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Width = 400
     Height = 152
     RoundEdges = True
-    Caption = 'Category (uncheck to hide)       '
+    Caption = 'Category (uncheck to hide)         '
     Ctl3D = True
     TabOrder = 17
-    object Label1: TLabel
+    object LabelCategoryFiltersGroupBoxHint: TShadowLabel
       Left = 199
       Top = 0
-      Width = 177
-      Height = 16
+      Width = 180
+      Height = 17
       Caption = ' catver.ini or category.ini required '
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
@@ -456,15 +516,27 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Font.Style = [fsItalic]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object ButtonCategoriesToHideInfo: TBitBtn
+    object ButtonCategoriesToHideInfo: TBitBtnEx
       Left = 154
-      Top = 1
-      Width = 16
-      Height = 16
+      Top = 0
+      Width = 19
+      Height = 19
       Hint = 'Categories to hide info'
       Caption = '?'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -474,7 +546,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 8
       Top = 28
-      Width = 57
+      Width = 58
       Height = 20
       Checked = True
       ShowHint = True
@@ -506,7 +578,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 8
       Top = 68
-      Width = 63
+      Width = 65
       Height = 20
       Checked = True
       ShowHint = True
@@ -522,7 +594,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 122
       Top = 28
-      Width = 60
+      Width = 62
       Height = 21
       Hint = 'Mature / Adult'
       Checked = True
@@ -539,7 +611,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 122
       Top = 68
-      Width = 71
+      Width = 72
       Height = 20
       Checked = True
       ShowHint = True
@@ -555,7 +627,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 122
       Top = 88
-      Width = 69
+      Width = 70
       Height = 20
       Checked = True
       ShowHint = True
@@ -587,7 +659,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 122
       Top = 108
-      Width = 49
+      Width = 50
       Height = 20
       Checked = True
       ShowHint = True
@@ -619,7 +691,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 28
-      Width = 76
+      Width = 77
       Height = 20
       Checked = True
       ShowHint = True
@@ -635,7 +707,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 48
-      Width = 84
+      Width = 85
       Height = 20
       Checked = True
       ShowHint = True
@@ -667,7 +739,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 68
-      Width = 63
+      Width = 64
       Height = 20
       Checked = True
       ShowHint = True
@@ -699,7 +771,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 88
-      Width = 157
+      Width = 159
       Height = 20
       Checked = True
       ShowHint = True
@@ -715,7 +787,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 108
-      Width = 168
+      Width = 169
       Height = 20
       Checked = True
       ShowHint = True
@@ -731,7 +803,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 229
       Top = 128
-      Width = 166
+      Width = 168
       Height = 20
       Checked = True
       ShowHint = True
@@ -747,7 +819,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 8
       Top = 128
-      Width = 55
+      Width = 56
       Height = 20
       Checked = True
       ShowHint = True
@@ -763,7 +835,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 8
       Top = 108
-      Width = 84
+      Width = 89
       Height = 20
       Checked = True
       ShowHint = True
@@ -779,7 +851,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Tag = 1
       Left = 122
       Top = 48
-      Width = 96
+      Width = 97
       Height = 20
       Hint = 'Slot Machines / Video Slot'
       Checked = True

@@ -7,7 +7,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     'Games List Font Settings [Mouse Double-click / ENTER Key to Cust' +
     'omize]'
   ClientHeight = 489
-  ClientWidth = 924
+  ClientWidth = 984
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -27,7 +27,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   object GamesFont: TEasyListview
     Left = 0
     Top = 0
-    Width = 924
+    Width = 984
     Height = 435
     Align = alClient
     CellSizes.Tile.Height = 62
@@ -96,7 +96,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   object PanelBottom: TPanelEx
     Left = 0
     Top = 435
-    Width = 924
+    Width = 984
     Height = 54
     Align = alBottom
     Color1 = 15856113
@@ -124,7 +124,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Transparent = True
     end
     object Label1: TLabel
-      Left = 608
+      Left = 625
       Top = 2
       Width = 76
       Height = 15
@@ -135,7 +135,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     object GamesBackgroundColor: TColorBox
       Left = 8
       Top = 23
-      Width = 188
+      Width = 205
       Height = 22
       DefaultColorColor = clWhite
       NoneColorColor = clWhite
@@ -145,8 +145,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       TabOrder = 0
       OnSelect = GamesBackgroundColorSelect
     end
-    object ButtonDefaultBkSortedColor: TBitBtn
-      Left = 200
+    object ButtonDefaultBkSortedColor: TBitBtnEx
+      Left = 217
       Top = 23
       Width = 47
       Height = 21
@@ -162,7 +162,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       OnClick = ButtonDefaultBkSortedColorClick
     end
     object GamesBackgroundImageEnable: TAdvOfficeCheckBox
-      Left = 267
+      Left = 284
       Top = 4
       Width = 202
       Height = 18
@@ -173,8 +173,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ReturnIsTab = False
       Themed = True
     end
-    object GamesBackgroundImage: TEdit
-      Left = 267
+    object GamesBackgroundImage: TEditEx
+      Left = 284
       Top = 23
       Width = 318
       Height = 21
@@ -184,7 +184,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       TabOrder = 3
     end
     object GamesTileBackground: TAdvOfficeCheckBox
-      Left = 547
+      Left = 564
       Top = 4
       Width = 40
       Height = 18
@@ -198,8 +198,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       State = cbChecked
       Themed = True
     end
-    object GamesBackgroundImageButtonUpdate: TBitBtn
-      Left = 587
+    object GamesBackgroundImageButtonUpdate: TBitBtnEx
+      Left = 604
       Top = 23
       Width = 49
       Height = 21
@@ -214,8 +214,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       TabOrder = 5
       OnClick = GamesBackgroundImageButtonUpdateClick
     end
-    object GamesBackgroundImageButtonSelect: TBitBtn
-      Left = 636
+    object GamesBackgroundImageButtonSelect: TBitBtnEx
+      Left = 653
       Top = 23
       Width = 49
       Height = 21
@@ -230,8 +230,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       TabOrder = 6
       OnClick = GamesBackgroundImageButtonSelectClick
     end
-    object ButtonOk: TBitBtn
-      Left = 727
+    object ButtonOk: TBitBtnEx
+      Left = 787
       Top = 17
       Width = 89
       Height = 25
@@ -242,8 +242,8 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ShowHint = True
       TabOrder = 7
     end
-    object ButtonCancel: TBitBtn
-      Left = 825
+    object ButtonCancel: TBitBtnEx
+      Left = 885
       Top = 17
       Width = 89
       Height = 25

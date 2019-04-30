@@ -18,7 +18,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
   Scaled = False
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelEx1: TPanelEx
+  object PanelGreetingsProgram: TPanelEx
     Left = 0
     Top = 0
     Width = 619
@@ -29,10 +29,11 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color3 = clMaroon
     Color4 = 15856113
     ColorFrame = 16750899
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ShadowLabel1: TShadowLabel
+    object LabelGreetingsProgram: TShadowLabel
       Left = 231
       Top = 8
       Width = 157
@@ -48,9 +49,12 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clNavy
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ShadowLabel2: TShadowLabel
+    object LabelGreetingsInfo: TShadowLabel
       Left = 8
       Top = 32
       Width = 603
@@ -73,10 +77,13 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clNavy
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
-  object PanelEx2: TPanelEx
+  object PanelGreetingsProgramBottom: TPanelEx
     Left = 0
     Top = 105
     Width = 619
@@ -87,12 +94,13 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color3 = 1
     Color4 = 15856113
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     Steps = 100
   end
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 339
     Width = 619
@@ -103,6 +111,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color3 = 15856113
     Color4 = 14540253
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -130,7 +139,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       TabOrder = 1
     end
   end
-  object PanelEx4: TPanelEx
+  object PanelOptions: TPanelEx
     Left = 0
     Top = 139
     Width = 619
@@ -140,6 +149,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color3 = 7891291
     Color4 = 3289650
     ColorFrame = 16750899
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -159,6 +169,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object ShadowLabel6: TShadowLabel
@@ -177,6 +190,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
@@ -196,6 +212,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clGreen
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelOption_SelectConsoleComputerGamesFolders_FileStatus: TShadowLabel
@@ -215,9 +234,12 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clGreen
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ShadowLabel4: TShadowLabel
+    object LabelQuickSetupGuide: TShadowLabel
       Left = 203
       Top = 181
       Width = 213
@@ -233,10 +255,13 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = 15616
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
-      OnClick = ShadowLabel4Click
-      OnMouseEnter = ShadowLabel4MouseEnter
-      OnMouseLeave = ShadowLabel4MouseLeave
+      OnClick = LabelQuickSetupGuideClick
+      OnMouseEnter = LabelQuickSetupGuideMouseEnter
+      OnMouseLeave = LabelQuickSetupGuideMouseLeave
     end
     object Option_SelectArcadeEmulators: TAdvOfficeCheckBox
       Left = 10
@@ -346,7 +371,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       Themed = True
     end
   end
-  object PanelEx5: TPanelEx
+  object PanelSelectOptions: TPanelEx
     Left = 0
     Top = 120
     Width = 619
@@ -357,6 +382,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Color3 = 1
     Color4 = 5832704
     ColorFrame = 16750899
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -376,9 +402,12 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clMaroon
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ShadowLabel3: TShadowLabel
+    object LabelSelectOptionsTop: TShadowLabel
       Left = 273
       Top = 0
       Width = 331
@@ -394,6 +423,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = clBlack
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end

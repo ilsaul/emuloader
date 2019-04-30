@@ -30,7 +30,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Height = 178
     Shape = bsFrame
   end
-  object PanelBottomButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 600
     Width = 934
@@ -45,7 +45,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 8
       Top = 11
       Width = 89
@@ -57,7 +57,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       TabOrder = 0
       OnClick = ButtonHelpClick
     end
-    object ButtonClose: TBitBtn
+    object ButtonClose: TBitBtnEx
       Left = 743
       Top = 11
       Width = 89
@@ -69,7 +69,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 841
       Top = 11
       Width = 89
@@ -86,68 +86,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Left = 0
     Top = 0
     Width = 934
-    Height = 264
+    Height = 244
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = [frBottom]
+    Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelLayoutTitle: TShadowLabel
-      Left = 0
-      Top = 244
-      Width = 934
-      Height = 19
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'LAYOUT TITLE'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = False
-      Layout = tlCenter
-    end
-    object LabelShowHideLayouts: TShadowLabel
-      Left = 0
-      Top = 245
-      Width = 250
-      Height = 16
-      Hint = 'Toggle visible / not visible for all layouts'
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'CLICK HERE TO HIDE ALL LAYOUTS'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = False
-      Layout = tlCenter
-      OnClick = LabelShowHideLayoutsClick
-      OnMouseEnter = LabelShowHideLayoutsMouseEnter
-      OnMouseLeave = LabelShowHideLayoutsMouseLeave
-    end
     object LayoutListView: TEasyListview
       Left = 8
       Top = 8
@@ -224,304 +172,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     ScaleMode = smNormal
     TabOrder = 2
   end
-  object GroupBoxCategoryAllSystems: TAdvGroupBox
-    Left = 8
-    Top = 269
-    Width = 445
-    Height = 161
-    RoundEdges = True
-    Caption = ' Category (All Systems) '
-    Ctl3D = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
-    ParentFont = False
-    TabOrder = 3
-    object FrameIconLayScr2: TShape
-      Left = 120
-      Top = 42
-      Width = 96
-      Height = 96
-      Pen.Color = 7891291
-    end
-    object FrameIconLayScr3: TShape
-      Left = 229
-      Top = 42
-      Width = 96
-      Height = 96
-      Pen.Color = 7891291
-    end
-    object FrameIconLayScr1: TShape
-      Left = 12
-      Top = 42
-      Width = 96
-      Height = 96
-      Pen.Color = 7891291
-    end
-    object LabelPanel1: TLabel
-      Left = 39
-      Top = 22
-      Width = 42
-      Height = 18
-      Caption = 'Panel 1'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      Transparent = True
-    end
-    object LabelLayScr3: TShadowLabel
-      Left = 231
-      Top = 141
-      Width = 94
-      Height = 14
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Flyer'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-      OnClick = IconLayScr3Click
-    end
-    object LabelLayScr2: TShadowLabel
-      Left = 121
-      Top = 141
-      Width = 94
-      Height = 14
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Title Snapshot'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-      OnClick = IconLayScr2Click
-    end
-    object IconLayScr1: TImage
-      Left = 26
-      Top = 56
-      Width = 68
-      Height = 68
-      IncrementalDisplay = True
-      Transparent = True
-      OnClick = IconLayScr1Click
-    end
-    object IconLayScr2: TImage
-      Left = 134
-      Top = 56
-      Width = 68
-      Height = 68
-      IncrementalDisplay = True
-      Transparent = True
-      OnClick = IconLayScr2Click
-    end
-    object IconLayScr3: TImage
-      Left = 243
-      Top = 56
-      Width = 68
-      Height = 68
-      IncrementalDisplay = True
-      Transparent = True
-      OnClick = IconLayScr3Click
-    end
-    object LabelLayScr1: TShadowLabel
-      Left = 13
-      Top = 141
-      Width = 94
-      Height = 14
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Game Snapshot'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-      OnClick = IconLayScr1Click
-    end
-    object FrameIconLayScr4: TShape
-      Left = 337
-      Top = 42
-      Width = 96
-      Height = 96
-      Pen.Color = 7891291
-    end
-    object LabelLayScr4: TShadowLabel
-      Left = 339
-      Top = 141
-      Width = 94
-      Height = 14
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Cabinet'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-      OnClick = IconLayScr4Click
-    end
-    object IconLayScr4: TImage
-      Left = 351
-      Top = 56
-      Width = 68
-      Height = 68
-      IncrementalDisplay = True
-      Transparent = True
-      OnClick = IconLayScr4Click
-    end
-    object LabelPanel4: TLabel
-      Left = 364
-      Top = 22
-      Width = 42
-      Height = 18
-      Caption = 'Panel 4'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      Transparent = True
-    end
-    object LabelPanel2: TLabel
-      Left = 143
-      Top = 8
-      Width = 42
-      Height = 18
-      Caption = 'Panel 2'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      Transparent = True
-      Visible = False
-    end
-    object LabelPanel3: TLabel
-      Left = 252
-      Top = 8
-      Width = 42
-      Height = 18
-      Caption = 'Panel 3'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      Transparent = True
-      Visible = False
-    end
-    object PanelEnabledScr2: TAdvOfficeCheckBox
-      Left = 139
-      Top = 20
-      Width = 63
-      Height = 20
-      Hint = 'Show/hide this panel for selected layout'
-      Checked = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowHint = True
-      TabOrder = 0
-      OnClick = PanelEnabledScr2Click
-      Alignment = taLeftJustify
-      Caption = 'Panel 2'
-      ReturnIsTab = False
-      ShadowColor = clSilver
-      State = cbChecked
-      Themed = True
-    end
-    object PanelEnabledScr3: TAdvOfficeCheckBox
-      Left = 247
-      Top = 20
-      Width = 62
-      Height = 20
-      Hint = 'Show/hide this panel for selected layout'
-      Checked = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowHint = True
-      TabOrder = 1
-      OnClick = PanelEnabledScr3Click
-      Alignment = taLeftJustify
-      Caption = 'Panel 3'
-      ReturnIsTab = False
-      ShadowColor = clSilver
-      State = cbChecked
-      Themed = True
-    end
-    object ButtonLayoutResetPanelsIndex: TBitBtn
-      Left = 388
-      Top = 3
-      Width = 47
-      Height = 19
-      Hint = 'Reset settings of selected layout to default'
-      Caption = 'Default'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-      OnClick = ButtonLayoutResetPanelsIndexClick
-    end
-  end
   object GroupBoxCategoryConsoleComputer: TAdvGroupBox
     Left = 8
     Top = 440
@@ -561,11 +211,11 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Height = 96
       Pen.Color = 7891291
     end
-    object LabelPanel1_ConsComp: TLabel
+    object LabelPanel1_ConsComp: TShadowLabel
       Left = 39
       Top = 22
-      Width = 42
-      Height = 18
+      Width = 45
+      Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -574,6 +224,12 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelLayScr3_ConsComp: TShadowLabel
@@ -596,6 +252,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = IconLayScr3_ConsCompClick
     end
@@ -619,6 +278,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = IconLayScr2_ConsCompClick
     end
@@ -669,6 +331,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = IconLayScr1_ConsCompClick
     end
@@ -699,6 +364,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = IconLayScr4_ConsCompClick
     end
@@ -711,11 +379,11 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
       OnClick = IconLayScr4_ConsCompClick
     end
-    object LabelPanel4_ConsComp: TLabel
+    object LabelPanel4_ConsComp: TShadowLabel
       Left = 364
       Top = 22
-      Width = 42
-      Height = 18
+      Width = 45
+      Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -724,13 +392,19 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelPanel3_ConsComp: TLabel
+    object LabelPanel3_ConsComp: TShadowLabel
       Left = 252
       Top = 22
-      Width = 42
-      Height = 18
+      Width = 45
+      Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -739,14 +413,20 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
-    object LabelPanel2_ConsComp: TLabel
+    object LabelPanel2_ConsComp: TShadowLabel
       Left = 143
       Top = 22
-      Width = 42
-      Height = 18
+      Width = 45
+      Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -755,10 +435,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Visible = False
     end
-    object ButtonHelp_CustomCategoryConsComp: TBitBtn
+    object ButtonHelp_CustomCategoryConsComp: TBitBtnEx
       Left = 26
       Top = 0
       Width = 19
@@ -776,11 +462,11 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       TabOrder = 1
       OnClick = ButtonHelp_CustomCategoryConsCompClick
     end
-    object ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtn
+    object ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtnEx
       Left = 347
       Top = 3
       Width = 41
-      Height = 19
+      Height = 21
       Hint = 'Copy category selections from "all systems"'
       Caption = 'Copy'
       Font.Charset = ANSI_CHARSET
@@ -794,11 +480,11 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       TabOrder = 2
       OnClick = ButtonLayoutCopyCatAllSystems_ConsCompClick
     end
-    object ButtonLayoutResetPanelsIndex_ConsComp: TBitBtn
+    object ButtonLayoutResetPanelsIndex_ConsComp: TBitBtnEx
       Left = 388
       Top = 3
       Width = 47
-      Height = 19
+      Height = 21
       Hint = 'Reset settings of selected layout to default'
       Caption = 'Default'
       Font.Charset = ANSI_CHARSET
@@ -812,6 +498,428 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       TabOrder = 0
       OnClick = ButtonLayoutResetPanelsIndex_ConsCompClick
     end
+  end
+  object PanelLayoutTitle: TPanelEx
+    Left = 0
+    Top = 244
+    Width = 934
+    Height = 16
+    Color1 = clWhite
+    Color2 = 15132390
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object LabelLayoutTitle: TShadowLabel
+      Left = 8
+      Top = -3
+      Width = 918
+      Height = 19
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'LAYOUT TITLE'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelShowHideLayouts: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 250
+      Height = 16
+      Hint = 'Toggle visible / not visible for all layouts'
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'CLICK HERE TO HIDE ALL LAYOUTS'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 10900224
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowAccelChar = False
+      ShowHint = True
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+      OnClick = LabelShowHideLayoutsClick
+      OnMouseEnter = LabelShowHideLayoutsMouseEnter
+      OnMouseLeave = LabelShowHideLayoutsMouseLeave
+    end
+  end
+  object GroupBoxCategoryAllSystems: TAdvGroupBox
+    Left = 8
+    Top = 269
+    Width = 445
+    Height = 161
+    RoundEdges = True
+    Caption = ' Category (All Systems) '
+    Ctl3D = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    TabOrder = 3
+    object FrameIconLayScr2: TShape
+      Left = 120
+      Top = 42
+      Width = 96
+      Height = 96
+      Pen.Color = 7891291
+    end
+    object FrameIconLayScr3: TShape
+      Left = 229
+      Top = 42
+      Width = 96
+      Height = 96
+      Pen.Color = 7891291
+    end
+    object FrameIconLayScr1: TShape
+      Left = 12
+      Top = 42
+      Width = 96
+      Height = 96
+      Pen.Color = 7891291
+    end
+    object LabelPanel1: TShadowLabel
+      Left = 39
+      Top = 22
+      Width = 45
+      Height = 19
+      Caption = 'Panel 1'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelLayScr3: TShadowLabel
+      Left = 231
+      Top = 141
+      Width = 94
+      Height = 14
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Flyer'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      OnClick = IconLayScr3Click
+    end
+    object LabelLayScr2: TShadowLabel
+      Left = 121
+      Top = 141
+      Width = 94
+      Height = 14
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Title Snapshot'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      OnClick = IconLayScr2Click
+    end
+    object IconLayScr1: TImage
+      Left = 26
+      Top = 56
+      Width = 68
+      Height = 68
+      IncrementalDisplay = True
+      Transparent = True
+      OnClick = IconLayScr1Click
+    end
+    object IconLayScr2: TImage
+      Left = 134
+      Top = 56
+      Width = 68
+      Height = 68
+      IncrementalDisplay = True
+      Transparent = True
+      OnClick = IconLayScr2Click
+    end
+    object IconLayScr3: TImage
+      Left = 243
+      Top = 56
+      Width = 68
+      Height = 68
+      IncrementalDisplay = True
+      Transparent = True
+      OnClick = IconLayScr3Click
+    end
+    object LabelLayScr1: TShadowLabel
+      Left = 13
+      Top = 141
+      Width = 94
+      Height = 14
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Game Snapshot'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      OnClick = IconLayScr1Click
+    end
+    object FrameIconLayScr4: TShape
+      Left = 337
+      Top = 42
+      Width = 96
+      Height = 96
+      Pen.Color = 7891291
+    end
+    object LabelLayScr4: TShadowLabel
+      Left = 339
+      Top = 141
+      Width = 94
+      Height = 14
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Cabinet'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      OnClick = IconLayScr4Click
+    end
+    object IconLayScr4: TImage
+      Left = 351
+      Top = 56
+      Width = 68
+      Height = 68
+      IncrementalDisplay = True
+      Transparent = True
+      OnClick = IconLayScr4Click
+    end
+    object LabelPanel4: TShadowLabel
+      Left = 364
+      Top = 22
+      Width = 45
+      Height = 19
+      Caption = 'Panel 4'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelPanel2: TShadowLabel
+      Left = 143
+      Top = 8
+      Width = 45
+      Height = 19
+      Caption = 'Panel 2'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Visible = False
+    end
+    object LabelPanel3: TShadowLabel
+      Left = 252
+      Top = 8
+      Width = 45
+      Height = 19
+      Caption = 'Panel 3'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Visible = False
+    end
+    object PanelEnabledScr2: TAdvOfficeCheckBox
+      Left = 139
+      Top = 20
+      Width = 63
+      Height = 20
+      Hint = 'Show/hide this panel for selected layout'
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = PanelEnabledScr2Click
+      Alignment = taLeftJustify
+      Caption = 'Panel 2'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object PanelEnabledScr3: TAdvOfficeCheckBox
+      Left = 247
+      Top = 20
+      Width = 62
+      Height = 20
+      Hint = 'Show/hide this panel for selected layout'
+      Checked = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = PanelEnabledScr3Click
+      Alignment = taLeftJustify
+      Caption = 'Panel 3'
+      ReturnIsTab = False
+      ShadowColor = clSilver
+      State = cbChecked
+      Themed = True
+    end
+    object ButtonLayoutResetPanelsIndex: TBitBtnEx
+      Left = 388
+      Top = 3
+      Width = 47
+      Height = 21
+      Hint = 'Reset settings of selected layout to default'
+      Caption = 'Default'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ButtonLayoutResetPanelsIndexClick
+    end
+  end
+  object PanelLayoutsTitleBottom: TPanelEx
+    Left = 0
+    Top = 260
+    Width = 934
+    Height = 12
+    Color1 = 15132390
+    Color2 = 15856113
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
   end
   object IL_Layouts: TImageList
     Height = 68

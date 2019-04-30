@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
-  ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain;
+  ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain, EditEx,
+  ButtonsEx;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -14,27 +15,28 @@ type
     IL_ImageCategory_ExtraLarge: TImageList;
     PanelImageCategories: TPanelEx;
     ImageCategory_Selector: TEasyListview;
-    LabelCategoryTitle: TShadowLabel;
-    SystemTitlePanel: TPanelEx;
+    PanelSystemTitle: TPanelEx;
     PanelImageCategorySelector: TPanelEx;
     LabelImageCategoryFolder: TShadowLabel;
     LabelImageBackgroundColor: TShadowLabel;
-    ButtonResetImageCategoryFolder: TBitBtn;
-    ButtonClearImageCategoryFolder: TBitBtn;
-    ButtonImageCategoryFolder: TBitBtn;
-    ImageCategoryFolder: TEdit;
+    ButtonResetImageCategoryFolder: TBitBtnEx;
+    ButtonClearImageCategoryFolder: TBitBtnEx;
+    ButtonImageCategoryFolder: TBitBtnEx;
+    ImageCategoryFolder: TEditEx;
     ImageCategoryBackgroundColor: TColorBox;
-    ButtonImageCategoryBackgroundColorReset: TBitBtn;
-    ButtonDefaultImageCategoryFolder: TBitBtn;
-    ButtonZippedImages: TBitBtn;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    PanelEx1: TPanelEx;
-    PanelEx2: TPanelEx;
+    ButtonImageCategoryBackgroundColorReset: TBitBtnEx;
+    ButtonDefaultImageCategoryFolder: TBitBtnEx;
+    ButtonZippedImages: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    PanelCategoriesBottom: TPanelEx;
     LabelSystemType: TShadowLabel;
-    LabelEmuTitle: TShadowLabel;
+    LabelSystemTitle: TShadowLabel;
     LabelSystemNotAvailable: TShadowLabel;
     LabelShowHideCategories: TShadowLabel;
+    PanelCategoryTitle: TPanelEx;
+    LabelCategoryTitle: TShadowLabel;
+    PanelCategoryTitleBottom: TPanelEx;
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ImageCategoryFolderChange(Sender: TObject);
@@ -65,7 +67,6 @@ type
     newSnapshotFolderArcade, ResetSnapshotFolderArcade: TImageFoldersArcade;
     newSnapshotFolderConsComp, ResetSnapshotFolderConsComp: TImageFoldersConsoleComputer;
 
-    procedure ResizeForm;
     function  CheckSystemAndImageCatSelected: Boolean;
     procedure PopulateFolders;
     //procedure UpdateFolders;
@@ -240,7 +241,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= FormMain.ELV_GetSystemTagMulti(Systems); // Systems.Tag:= Item.ImageIndex;
-       FormMain.ELV_GetSystemTitle(Systems, Item, LabelEmuTitle, LabelSystemType);
+       FormMain.ELV_GetSystemTitle(Systems, Item, LabelSystemTitle, LabelSystemType);
        SetImageCategoryValues;
        LabelSystemNotAvailable.Visible:= Item.Ghosted; 
      end;
@@ -295,34 +296,9 @@ begin
      end;
 end;
 
-procedure TFormImageCategorySettings.ResizeForm;
-//var
-//  iDiff: Integer;
-begin
-  {if Screen.Height = 720 then
-     begin
-       iDiff:= FormImageCategorySettings.Height-675;
-       FormImageCategorySettings.Height:= 675; // 694;
-
-       Systems.Width:= Systems.Width+Systems.CellSizes.Icon.Width;
-       Systems.Height:= Systems.Height-iDiff+LabelEmuTitle.Height;
-       PanelImageCategories.Left:= PanelImageCategories.Left+Systems.CellSizes.Icon.Width-1;
-       FormImageCategorySettings.ClientWidth:= FormImageCategorySettings.ClientWidth+Systems.CellSizes.Icon.Width;
-
-       LabelSystemType.Top:= 0;
-       LabelSystemNotAvailable.Top:= 0;
-
-
-       ButtonZippedImages.Left:= ButtonZippedImages.Left+Systems.CellSizes.Icon.Width;
-       ButtonOk.Left:= ButtonOk.Left+Systems.CellSizes.Icon.Width;
-       ButtonCancel.Left:= ButtonCancel.Left+Systems.CellSizes.Icon.Width;
-     end;}
-end;
-
 procedure TFormImageCategorySettings.FormShow(Sender: TObject);
 begin
   LoadCustomMAMEIconToForm(TForm(Sender));
-  ResizeForm;
 
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
@@ -331,6 +307,12 @@ begin
 
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(ImageCategory_Selector);
+
+  if IsNightMode then
+     begin
+       FormMain.ELV_SetNightModeColors(ImageCategory_Selector);
+       FormMain.ELV_SetNightModeColors(Systems);
+     end;
 
   PopulateFolders;
 
@@ -403,6 +385,8 @@ end;
 
 procedure TFormImageCategorySettings.ImageCategory_SelectorItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
+var
+  iColor: TColor;
 begin
   if not Item.Selected then
      Exit;
@@ -411,13 +395,18 @@ begin
   ImageCategory_Selector.Tag:= Item.ImageIndex;
   LabelCategoryTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex));
 
-  if ImageCategoryBackgroundColor.Font.Color <> clBlack then
-     ImageCategoryBackgroundColor.Font.Color:= clBlack;
+  if IsNightMode then
+     iColor:= clCream
+  else
+     iColor:= clBlack;
+
+  if ImageCategoryBackgroundColor.Font.Color <> iColor then
+     ImageCategoryBackgroundColor.Font.Color:= iColor;
 
   if ImageCategoryFolder.Enabled then
      begin
-       if ImageCategoryBackgroundColor.Font.Color <> clBlack then
-          ImageCategoryBackgroundColor.Font.Color:= clBlack;
+       if ImageCategoryBackgroundColor.Font.Color <> iColor then
+          ImageCategoryBackgroundColor.Font.Color:= iColor;
      end
   else
      ImageCategoryBackgroundColor.Font.Color:= clGray;
@@ -455,13 +444,19 @@ end;
 procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseEnter(
   Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     TShadowLabel(Sender).Font.Color:= clBlue;
 end;
 
 procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseLeave(
   Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= $00a65300;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+  else
+     TShadowLabel(Sender).Font.Color:= MsgTxtColors.colorFileName;
 end;
 
 procedure TFormImageCategorySettings.LabelShowHideCategoriesClick(

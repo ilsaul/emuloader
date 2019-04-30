@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, MPCommonObjects, EasyListview, ExtCtrls,
   ImgList, IniFiles, FileCtrl, PanelEx, ShadowLabel, uCommon, uCommonCustom,
-  Buttons;
+  Buttons, ButtonsEx;
 
 type
   TViewFileInfo = class(TEasyItemStored)
@@ -119,9 +119,9 @@ type
     IL_MediaType: TImageList;
     BottomBar: TPanelEx;
     LabelTotalItems: TShadowLabel;
-    ButtonShowFileTypes: TBitBtn;
+    ButtonShowFileTypes: TBitBtnEx;
     LabelGhostedFiles: TShadowLabel;
-    ButtonClose: TBitBtn;
+    ButtonClose: TBitBtnEx;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -517,6 +517,7 @@ var
   SearchGroup: TEasyGroup;
 begin
   FormMain.ELV_ResetNormalColors(FilesListView);
+  FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
   LoadMediaIcons;
   //if Screen.Height = 480 then
   //   begin
@@ -562,11 +563,11 @@ begin
         if LabelTotalItems.Tag = 0 then
            ACanvas.Font.Color:= clMaroon // light mode
         else
-           ACanvas.Font.Color:= MsgTxtColors.colorWarning; // night mode
+           ACanvas.Font.Color:= clrLightRed; // night mode
         ACanvas.Font.Style:= [fsItalic];
 
-        if Item.Selected then
-           ACanvas.Font.Color:= clMaroon;
+        //if Item.Selected then
+        //   ACanvas.Font.Color:= clMaroon;
 
       end;
     1:

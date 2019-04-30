@@ -19,11 +19,11 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSelectCategory: TLabel
+  object LabelSelectCategory: TShadowLabel
     Left = 24
     Top = 8
-    Width = 91
-    Height = 15
+    Width = 94
+    Height = 16
     Caption = 'Select a Category'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -32,13 +32,19 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelFilterStatus: TLabel
+  object LabelFilterStatus: TShadowLabel
     Left = 24
     Top = 64
-    Width = 75
-    Height = 15
+    Width = 78
+    Height = 16
     Caption = 'Select a Status'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -47,6 +53,12 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object IconListAll: TImage
@@ -98,7 +110,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 32
       Top = 8
       Width = 89
@@ -110,7 +122,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 130
       Top = 8
       Width = 89
@@ -139,7 +151,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   end
   object DriverStatusCategory: TComboBox
     Left = 24
-    Top = 25
+    Top = 26
     Width = 201
     Height = 21
     Style = csDropDownList

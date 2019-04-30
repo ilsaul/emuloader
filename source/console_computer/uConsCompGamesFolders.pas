@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, EasyListview, StdCtrls,
-  Buttons, IniFiles, AdvOfficeButtons, ShadowLabel, ExtCtrls, PanelEx, ImgList;
+  Buttons, IniFiles, AdvOfficeButtons, ShadowLabel, ExtCtrls, PanelEx, ImgList,
+  ButtonsEx;
 
 type
   TFormConsCompGamesFolders = class(TForm)
@@ -24,43 +25,43 @@ type
     LabelFolderHardDiskDrive: TShadowLabel;
     IconHardDiskDrive: TImage;
     FolderROM: TEasyListview;
-    ButtonMoveFolderUp_ROM: TBitBtn;
-    ButtonMoveFolderDown_ROM: TBitBtn;
-    ButtonAddFolder_ROM: TBitBtn;
-    ButtonDeleteFolder_ROM: TBitBtn;
-    ButtonEditFolder_ROM: TBitBtn;
-    ButtonClearFolder_ROM: TBitBtn;
+    ButtonMoveFolderUp_ROM: TBitBtnEx;
+    ButtonMoveFolderDown_ROM: TBitBtnEx;
+    ButtonAddFolder_ROM: TBitBtnEx;
+    ButtonDeleteFolder_ROM: TBitBtnEx;
+    ButtonEditFolder_ROM: TBitBtnEx;
+    ButtonClearFolder_ROM: TBitBtnEx;
     FolderDiscImage: TEasyListview;
-    ButtonMoveFolderUp_ISO: TBitBtn;
-    ButtonMoveFolderDown_ISO: TBitBtn;
-    ButtonAddFolder_ISO: TBitBtn;
-    ButtonDeleteFolder_ISO: TBitBtn;
-    ButtonEditFolder_ISO: TBitBtn;
-    ButtonClearFolder_ISO: TBitBtn;
+    ButtonMoveFolderUp_ISO: TBitBtnEx;
+    ButtonMoveFolderDown_ISO: TBitBtnEx;
+    ButtonAddFolder_ISO: TBitBtnEx;
+    ButtonDeleteFolder_ISO: TBitBtnEx;
+    ButtonEditFolder_ISO: TBitBtnEx;
+    ButtonClearFolder_ISO: TBitBtnEx;
     FolderFloppyDisk: TEasyListview;
-    ButtonMoveFolderDown_FLOPPY: TBitBtn;
-    ButtonAddFolder_FLOPPY: TBitBtn;
-    ButtonDeleteFolder_FLOPPY: TBitBtn;
-    ButtonEditFolder_FLOPPY: TBitBtn;
-    ButtonClearFolder_FLOPPY: TBitBtn;
+    ButtonMoveFolderDown_FLOPPY: TBitBtnEx;
+    ButtonAddFolder_FLOPPY: TBitBtnEx;
+    ButtonDeleteFolder_FLOPPY: TBitBtnEx;
+    ButtonEditFolder_FLOPPY: TBitBtnEx;
+    ButtonClearFolder_FLOPPY: TBitBtnEx;
     FolderCassetteTape: TEasyListview;
-    ButtonMoveFolderUp_TAPE: TBitBtn;
-    ButtonMoveFolderDown_TAPE: TBitBtn;
-    ButtonAddFolder_TAPE: TBitBtn;
-    ButtonDeleteFolder_TAPE: TBitBtn;
-    ButtonEditFolder_TAPE: TBitBtn;
-    ButtonClearFolder_TAPE: TBitBtn;
-    ButtonMoveFolderUp_FLOPPY: TBitBtn;
-    PanelBottomButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonMoveFolderUp_TAPE: TBitBtnEx;
+    ButtonMoveFolderDown_TAPE: TBitBtnEx;
+    ButtonAddFolder_TAPE: TBitBtnEx;
+    ButtonDeleteFolder_TAPE: TBitBtnEx;
+    ButtonEditFolder_TAPE: TBitBtnEx;
+    ButtonClearFolder_TAPE: TBitBtnEx;
+    ButtonMoveFolderUp_FLOPPY: TBitBtnEx;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     FolderHardDiskDrive: TEasyListview;
-    ButtonMoveFolderUp_HARDDISK: TBitBtn;
-    ButtonMoveFolderDown_HARDDISK: TBitBtn;
-    ButtonAddFolder_HARDDISK: TBitBtn;
-    ButtonDeleteFolder_HARDDISK: TBitBtn;
-    ButtonEditFolder_HARDDISK: TBitBtn;
-    ButtonClearFolder_HARDDISK: TBitBtn;
+    ButtonMoveFolderUp_HARDDISK: TBitBtnEx;
+    ButtonMoveFolderDown_HARDDISK: TBitBtnEx;
+    ButtonAddFolder_HARDDISK: TBitBtnEx;
+    ButtonDeleteFolder_HARDDISK: TBitBtnEx;
+    ButtonEditFolder_HARDDISK: TBitBtnEx;
+    ButtonClearFolder_HARDDISK: TBitBtnEx;
     IL_Systems: TImageList;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
@@ -182,21 +183,30 @@ end;
 
 procedure TFormConsCompGamesFolders.ToggleControls(const SystemID: Integer);
 
-  procedure SetControlStatus(ctrlEnabled: Boolean; ELV_Holder: TEasyListview;
+  function  SetControlStatus(ctrlEnabled: Boolean; ELV_Holder: TEasyListview;
                  UpButton, DownButton, AddButton,
-                 DeleteButton, EditButton, ClearButton: TBitBtn; MediaIcon: TImage);
+                 DeleteButton, EditButton, ClearButton: TBitBtnEx; MediaIcon: TImage): Boolean;
+  var
+    iColor: TColor;
   begin
+    Result:= ctrlEnabled;
     ELV_Holder.Enabled:= ctrlEnabled;
     if ELV_Holder.Enabled then
        begin
-         if ELV_Holder.Color <> clWhite then
-            ELV_Holder.Color:= clWhite;
+         if IsNightMode then
+            iColor:= clrDarkGray
+         else
+            iColor:= clWhite;
+         if ELV_Holder.Color <> iColor then
+            ELV_Holder.Color:= iColor;
        end
     else
        begin
          if ELV_Holder.Color <> FormConsCompGamesFolders.Color then
             ELV_Holder.Color:= FormConsCompGamesFolders.Color;
        end;
+    FormMain.SetEasyListViewBorderColor(ELV_Holder, ctrlEnabled);
+
     UpButton.Enabled:= ctrlEnabled;
     DownButton.Enabled:= ctrlEnabled;
     AddButton.Enabled:= ctrlEnabled;
@@ -270,8 +280,6 @@ begin
      CanClose:= not FormMain.ELV_IsEditing(FolderHardDiskDrive);
   if CanClose then
      begin
-       //if FormConsCompGamesFolders.ModalResult = mrOk then
-       //   UpdateEmulatorInfo; // no longer used here! (November 21, 2017)
        for sysID:=1 to MaxConsoleComputerSystems do
        begin
          for MediaType:=Low(MediaTypeCustom) to High(MediaTypeCustom) do
@@ -394,12 +402,18 @@ begin
   FormMain.ELV_ResetNormalColors(FolderFloppyDisk);
   FormMain.ELV_ResetNormalColors(FolderCassetteTape);
   FormMain.ELV_ResetNormalColors(FolderHardDiskDrive);
+
+  if IsNightMode then
+     begin
+       FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.ELV_SetNightModeColors(FolderROM);
+       FormMain.ELV_SetNightModeColors(FolderDiscImage);
+       FormMain.ELV_SetNightModeColors(FolderFloppyDisk);
+       FormMain.ELV_SetNightModeColors(FolderCassetteTape);
+       FormMain.ELV_SetNightModeColors(FolderHardDiskDrive);
+     end;
   InitializeFoldersVariablesTemp;
   ELV_PopulateCustomSystems(Systems, Systems.Tag, -1, True);
-  //if Systems.Tag = -1 then
-  //   ELV_PopulateCustomSystems(Systems, FormMain.GetSystemIDGamesList(True), -1, True)
-  //else
-  //   ELV_PopulateCustomSystems(Systems, Systems.Tag, -1, True);
 end;
 
 procedure TFormConsCompGamesFolders.SystemsItemSelectionChanged(
@@ -415,18 +429,17 @@ begin
        PopulateFolders(FolderFloppyDisk);
        PopulateFolders(FolderCassetteTape);
        PopulateFolders(FolderHardDiskDRive);
-       //ShowEmulatorDetails(PanelEmulators.Tag); // not used here anymore ??? (August 11, 2017)
      end;
 end;
 
 procedure TFormConsCompGamesFolders.ButtonMoveFolderUp_ROMClick(Sender: TObject);
 begin
-  case TBitBtn(Sender).HelpContext of
-    1: FormMain.ELV_MoveItem(FolderROM, Boolean(TBitBtn(Sender).Tag));
-    2: FormMain.ELV_MoveItem(FolderDiscImage, Boolean(TBitBtn(Sender).Tag));
-    3: FormMain.ELV_MoveItem(FolderFloppyDisk, Boolean(TBitBtn(Sender).Tag));
-    4: FormMain.ELV_MoveItem(FolderCassetteTape, Boolean(TBitBtn(Sender).Tag));
-    5: FormMain.ELV_MoveItem(FolderHardDiskDrive, Boolean(TBitBtn(Sender).Tag));
+  case TBitBtnEx(Sender).HelpContext of
+    1: FormMain.ELV_MoveItem(FolderROM, Boolean(TBitBtnEx(Sender).Tag));
+    2: FormMain.ELV_MoveItem(FolderDiscImage, Boolean(TBitBtnEx(Sender).Tag));
+    3: FormMain.ELV_MoveItem(FolderFloppyDisk, Boolean(TBitBtnEx(Sender).Tag));
+    4: FormMain.ELV_MoveItem(FolderCassetteTape, Boolean(TBitBtnEx(Sender).Tag));
+    5: FormMain.ELV_MoveItem(FolderHardDiskDrive, Boolean(TBitBtnEx(Sender).Tag));
   end;
 end;
 
@@ -434,7 +447,7 @@ procedure TFormConsCompGamesFolders.ButtonAddFolder_ROMClick(Sender: TObject);
 var
   MediaTypeID: Integer;
 begin
-  MediaTypeID:= TBitBtn(Sender).HelpContext;
+  MediaTypeID:= TBitBtnEx(Sender).HelpContext;
   case MediaTypeID of
     1: FormMain.DialogSelectMultiFolders(FolderROM);
     2: FormMain.DialogSelectMultiFolders(FolderDiscImage);
@@ -477,7 +490,7 @@ var
     ELV_Holder.SetFocus;
   end;
 begin
-  MediaTypeID:= TBitBtn(Sender).HelpContext;
+  MediaTypeID:= TBitBtnEx(Sender).HelpContext;
   case MediaTypeID of
     1: DeleteItems(FolderROM);
     2: DeleteItems(FolderDiscImage);
@@ -489,7 +502,7 @@ end;
 
 procedure TFormConsCompGamesFolders.ButtonEditFolder_ROMClick(Sender: TObject);
 begin
-  case TBitBtn(Sender).HelpContext of
+  case TBitBtnEx(Sender).HelpContext of
     1: FormMain.ELV_EnableEdit(FolderROM);
     2: FormMain.ELV_EnableEdit(FolderDiscImage);
     3: FormMain.ELV_EnableEdit(FolderFloppyDisk);
@@ -502,7 +515,7 @@ procedure TFormConsCompGamesFolders.ButtonClearFolder_ROMClick(Sender: TObject);
 var
   MediaTypeID: Integer;
 begin
-  MediaTypeID:= TBitBtn(Sender).HelpContext;
+  MediaTypeID:= TBitBtnEx(Sender).HelpContext;
   case MediaTypeID of
     1: FormMain.ClearListView(FolderROM);
     2: FormMain.ClearListView(FolderDiscImage);

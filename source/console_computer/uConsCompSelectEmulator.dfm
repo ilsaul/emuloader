@@ -80,7 +80,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     OnItemCheckChange = EmulatorsListItemCheckChange
     OnItemPaintText = EmulatorsListItemPaintText
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 563
     Width = 684
@@ -95,7 +95,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     Frames = [frTop]
     ParentBackground = False
     Style = vgSimple
-    object LabelTips: TLabel
+    object LabelTips: TShadowLabel
       Left = 9
       Top = 7
       Width = 337
@@ -111,10 +111,16 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 479
       Top = 14
       Width = 89
@@ -124,7 +130,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       ModalResult = 1
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 585
       Top = 14
       Width = 89

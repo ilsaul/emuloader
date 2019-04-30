@@ -5,17 +5,17 @@ interface
 uses
   Windows, Graphics, Controls, Forms, StdCtrls, Buttons, ComCtrls, Classes,
   ToolWin, ExtCtrls, ImgList, MPCommonObjects, EasyListview, SysUtils,
-  AdvOfficeButtons, PanelEx, GR32_RangeBars, ShadowLabel;
+  AdvOfficeButtons, PanelEx, GR32_RangeBars, ShadowLabel, ButtonsEx;
 
 type
   TFormToolBarEditor = class(TForm)
     IL_ToolBarButtonsEditor: TImageList;
     ToolBarListView: TEasyListview;
-    PanelEx1: TPanelEx;
+    PanelBottom: TPanelEx;
     BoundToGamesPanel: TAdvOfficeCheckBox;
     ShowHideToolBar: TAdvOfficeCheckBox;
-    ButtonDefault: TBitBtn;
-    ButtonClose: TBitBtn;
+    ButtonDefault: TBitBtnEx;
+    ButtonClose: TBitBtnEx;
     LabelToolBarIconSize: TShadowLabel;
     LabelIconSizeValue: TShadowLabel;
     IconSizeExtraLarge: TSpeedButton;
@@ -45,6 +45,10 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+// form with 3 columns and 5 lines (if more tool bar icons are added in future EL builds)
+// Form -> 706x570
+// EasyListView -> 710x482
 
 procedure TFormToolBarEditor.ButtonDefaultClick(Sender: TObject);
 var
@@ -105,7 +109,6 @@ begin
        SetGhostItem;
      end;
   FormMain.ToolBarButtons.Repaint;
-  //FormMain.PaintToolBarTheme(FormMain.ToolBarButtons, FormMain.MenuBoundToGamesPanel.Checked);
 end;
 
 procedure TFormToolBarEditor.FormShow(Sender: TObject);
@@ -118,6 +121,8 @@ begin
   // if user uncheck "Search Games"
   
   FormMain.ELV_ResetNormalColors(ToolBarListView);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(ToolBarListView);
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
   begin

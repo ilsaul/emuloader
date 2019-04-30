@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
   ExtCtrls, ShadowLabel, Buttons, PanelEx, uCommon, uCommonCustom, AdvOfficeButtons,
-  AdvGroupBox, ImgList;
+  AdvGroupBox, ImgList, ButtonsEx;
 
 const
   ActionModeStr: array[-1..6] of String = (
@@ -24,27 +24,27 @@ const
 type
   TFormArcadeSelectSystem = class(TForm)
     PanelList: TPanelEx;
-    LabelEmuTitle: TShadowLabel;
+    LabelSystemTitle: TShadowLabel;
     SystemsListView: TEasyListview;
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox;
     MAMESoftwareListBox: TAdvGroupBox;
     MAMESoftwareList_Disabled: TAdvOfficeRadioButton;
     MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButton;
     MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButton;
-    ShadowLabel1: TShadowLabel;
-    ShadowLabel2: TShadowLabel;
-    ShadowLabel3: TShadowLabel;
-    ButtonHelpCreateMAMESoftwareListGames: TBitBtn;
+    LabelMAMESoftwareList_Disabled: TShadowLabel;
+    LabelMAMESoftwareList_EnabledUpdate: TShadowLabel;
+    LabelMAMESoftwareList_EnabledOverwrite: TShadowLabel;
+    ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx;
     LabelCustomizeMAMESoftwareList: TShadowLabel;
     ImageMAMESoftwareList: TImage;
-    LabelCreateSoftwareListGames: TShadowLabel;
+    LabelMAMESoftwareListBox: TShadowLabel;
     ScanModeBox: TAdvGroupBox;
-    LabelForceAllAvailable: TLabel;
-    LabelQuickScan: TLabel;
-    LabelFullScan: TLabel;
+    LabelForceAllAvailable: TShadowLabel;
+    LabelQuickScan: TShadowLabel;
+    LabelFullScan: TShadowLabel;
     ScanModeIcon: TImage;
     ScanModeCurrentTaskOnly: TAdvOfficeCheckBox;
     QuickScan: TAdvOfficeRadioButton;
@@ -54,11 +54,13 @@ type
     ScanMAMEAllSets: TAdvOfficeRadioButton;
     ScanMAMEArcadeMachines: TAdvOfficeRadioButton;
     ScanMAMESoftwareListGames: TAdvOfficeRadioButton;
-    Shape1: TShape;
-    Shape2: TShape;
+    LabelScanModeCurrentTaskOnly_BlankLine: TShape;
+    LabelMAMESoftwareListBox_BlankLine: TShape;
     ForceAllAvailable: TAdvOfficeRadioButton;
     LabelMultiSelect: TShadowLabel;
     IL_Systems: TImageList;
+    LabelMAMESoftwareListBox_BlankLine2: TShape;
+    LabelScanModeCurrentTaskOnly_BlankLine2: TShape;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -220,7 +222,7 @@ begin
        ScanMAMESetsBox.Top:= ScanMAMESetsBox.Top-20;//+92;
 
        PanelList.Height:= PanelList.Height-20;//+92;
-       LabelEmuTitle.Top:= LabelEmuTitle.Top-20;//+92;
+       LabelSystemTitle.Top:= LabelSystemTitle.Top-20;//+92;
        SystemsListView.Height:= SystemsListView.Height-20;//+92;
        if SystemsListView.Width = 720 then
           begin
@@ -248,12 +250,14 @@ begin
           end;
        LabelMultiSelect.Font.Size:= 8;
      end;
-  LabelEmuTitle.Width:= FormArcadeSelectSystem.ClientWidth;
+  LabelSystemTitle.Width:= FormArcadeSelectSystem.ClientWidth;
 end;
 
 procedure TFormArcadeSelectSystem.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(SystemsListView);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(SystemsListView);
   FormMain.LoadSystemsIcons(IL_Systems, False);
   MAMESoftwareListBox.Tag:= FormMain.MenuCreateMAMESoftwareListGames.Tag; // set MAME Software List mode
   MAMESoftwareListBox.Visible:= ActionMode in [1, 6]; // create games list / create MAME/HBMAME software list "ActionMode" only
@@ -296,8 +300,10 @@ begin
      begin
        Caption:= 'Select a System';
        ClientWidth:= 250;
-       ButtonOk.Left:= ButtonOk.Left-189;
-       ButtonCancel.Left:= ButtonCancel.Left-189;
+       ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
+       ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
+       //ButtonOk.Left:= ButtonOk.Left-189;
+       //ButtonCancel.Left:= ButtonCancel.Left-189;
        LabelMultiSelect.Visible:= False;
 
        if ActionMode = 2 then // MAME/Arcade default settings
@@ -312,8 +318,8 @@ begin
          ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
          ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
 
-         LabelEmuTitle.Width:= LabelEmuTitle.Width+SystemsListView.CellSizes.Icon.Width;
-         LabelEmuTitle.Top:= LabelEmuTitle.Top-SystemsListView.CellSizes.Icon.Height;
+         LabelSystemTitle.Width:= LabelSystemTitle.Width+SystemsListView.CellSizes.Icon.Width;
+         LabelSystemTitle.Top:= LabelSystemTitle.Top-SystemsListView.CellSizes.Icon.Height;
          ClientHeight:= ClientHeight-SystemsListView.CellSizes.Icon.Height;
        end;
      end;
@@ -372,7 +378,7 @@ procedure TFormArcadeSelectSystem.SystemsListViewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       LabelEmuTitle.Caption:= UpperCase(FormMain.GetArcadeEmulatorDescription(Item.ImageIndex));
+       LabelSystemTitle.Caption:= UpperCase(FormMain.GetArcadeEmulatorDescription(Item.ImageIndex));
        if ActionMode <> 6 then
           ButtonOk.Enabled:= not ((Item.Ghosted) and (SystemsListView.Selection.Count = 1))
        else
@@ -434,9 +440,19 @@ procedure TFormArcadeSelectSystem.AddMAMEDeviceSetWithNoROMsClick(
   Sender: TObject);
 begin
   if AddMAMEDeviceSetWithNoROMs.Checked then
-     AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
+     begin
+       if IsNightMode then
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1])
+       else
+          AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
+     end
   else
-     AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
+     begin
+       if IsNightMode then
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, clrLightGrayFrame, clrDarkGray)
+       else
+          AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
+     end;
 end;
 
 procedure TFormArcadeSelectSystem.ButtonHelpCreateMAMESoftwareListGamesClick(
@@ -502,13 +518,19 @@ end;
 
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     TShadowLabel(Sender).Font.Color:= clBlue;
   TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clNavy;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+  else
+     TShadowLabel(Sender).Font.Color:= clNavy;
   TShadowLabel(Sender).Font.Style:= [];
 end;
 

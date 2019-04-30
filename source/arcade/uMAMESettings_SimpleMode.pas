@@ -169,7 +169,6 @@ type
     emuFileExec,
     emuVersionStr: String;
     sysID, ActiveFileID: ShortInt;
-    IsAlterMAME: Boolean;
     iVersion: Integer;
   end;
 
@@ -632,10 +631,7 @@ begin
     strFile:= GetCustomIniFile(Loop);
     if strFile <> '' then
     begin
-      if IsAlterMAME then
-         FileFolder:= FormMain.AlterMAMEIniFilesDir
-      else
-         FileFolder:= FormMain.IniFilesDir[sysID];
+      FileFolder:= FormMain.IniFilesDir[sysID];
 
       if Loop = 9 then
          begin
@@ -1113,10 +1109,7 @@ begin
   if strFile = '' then
      Exit;
 
-  if IsAlterMAME then
-     FileFolder:= FormMain.AlterMAMEIniFilesDir
-  else
-     FileFolder:= FormMain.IniFilesDir[sysID];
+  FileFolder:= FormMain.IniFilesDir[sysID];
 
   if FileID = 9 then
      begin
@@ -1168,10 +1161,7 @@ begin
       strFile:= GetCustomIniFile(Loop);
       if strFile <> '' then
       begin
-        if IsAlterMAME then
-           FileFolder:= FormMain.AlterMAMEIniFilesDir
-        else
-           FileFolder:= FormMain.IniFilesDir[sysID];
+        FileFolder:= FormMain.IniFilesDir[sysID];
 
         if Loop = 9 then
            begin
@@ -1292,21 +1282,18 @@ begin
   FormMain.ELV_ResetNormalColors(FolderArtworks);
 
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
-  if IsAlterMAME then
-     FormMAMESettings_SimpleMode.Caption:= 'AlterMAME '+FormMAMESettings_SimpleMode.Caption;
+
   IsSDLMAME:= False;
 
   case SystemIcon.Tag of
-    0: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, sysID, emuVersionStr, IsAlterMAME);
-    1: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(False, sysID, emuVersionStr, IsAlterMAME);
+    0: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, sysID, emuVersionStr);
+    1: LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(False, sysID, emuVersionStr);
   end;
 
   if (Tag = 0) or (SystemIcon.Tag = 1) then
      begin
-       case IsAlterMAME of
-         True : LabelEmulatorVersion.Caption:= FormMain.AlterMAMEFile+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-         False: LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[sysID]+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-       end;
+       LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[sysID]+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
+
        //LabelReadFileIni.Visible:= False;
        case sysID of
          idMAME  : TopBar.Color1:= clSkyBlue; // MAME
@@ -1324,10 +1311,8 @@ begin
   else
   if Tag = 1 then
      begin
-       case IsAlterMAME of
-         True : iStr:= FormMain.AlterMAMEVersion;
-         False: iStr:= FormMain.EmulatorVersion[sysID];
-       end;
+       iStr:= FormMain.EmulatorVersion[sysID];
+
        if iStr <> '' then
           LabelEmulatorVersion.Caption:= iStr
        else

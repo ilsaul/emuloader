@@ -410,7 +410,7 @@ object FormFavoritesManager: TFormFavoritesManager
       Transparent = False
       Layout = tlCenter
     end
-    object ButtonClosePanelFavSettings: TBitBtn
+    object ButtonClosePanelFavSettings: TBitBtnEx
       Left = 226
       Top = 86
       Width = 75
@@ -419,7 +419,7 @@ object FormFavoritesManager: TFormFavoritesManager
       TabOrder = 0
       OnClick = ButtonClosePanelFavSettingsClick
     end
-    object ButtonCenterPanelFavSettings: TBitBtn
+    object ButtonCenterPanelFavSettings: TBitBtnEx
       Left = 16
       Top = 86
       Width = 75

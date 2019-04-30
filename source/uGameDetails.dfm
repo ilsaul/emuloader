@@ -243,7 +243,6 @@ object FormGameDetails: TFormGameDetails
       ImagesSmall = FormMain.IL_LeftPanel
       PaintInfoColumn.Border = 2
       PaintInfoColumn.CaptionIndent = 0
-      PaintInfoColumn.HotTrack = False
       PaintInfoGroup.Expandable = False
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
       PaintInfoItem.BorderColor = 16370824

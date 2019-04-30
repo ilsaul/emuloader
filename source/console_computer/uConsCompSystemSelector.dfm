@@ -82,18 +82,19 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
     OnItemPaintText = SystemsItemPaintText
     OnKeyAction = SystemsKeyAction
   end
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 493
     Width = 744
     Height = 40
     Align = alBottom
-    Color1 = 15856113
+    Color1 = clWhite
     Color2 = 14540253
     Color3 = 14540253
     Color4 = 14671839
     ColorFrame = 7891291
-    Frames = [frTop]
+    ColorInnerFrame = clGreen
+    Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelCreateNewList: TShadowLabel
@@ -112,6 +113,9 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object CreateNewList: TAdvOfficeCheckBox
@@ -136,7 +140,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       State = cbChecked
       Themed = True
     end
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 486
       Top = 8
       Width = 43
@@ -148,7 +152,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       TabOrder = 1
       OnClick = ButtonHelpClick
     end
-    object ButtonApply: TBitBtn
+    object ButtonApply: TBitBtnEx
       Left = 544
       Top = 8
       Width = 89
@@ -159,7 +163,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       ShowHint = False
       TabOrder = 2
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 648
       Top = 8
       Width = 89

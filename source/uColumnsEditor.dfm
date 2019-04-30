@@ -5,7 +5,7 @@ object FormColumnsEditor: TFormColumnsEditor
   BorderStyle = bsDialog
   Caption = 'Customize Columns (Details / Grouped)'
   ClientHeight = 445
-  ClientWidth = 460
+  ClientWidth = 466
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -22,11 +22,11 @@ object FormColumnsEditor: TFormColumnsEditor
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelButtonUpDown: TLabel
-    Left = 304
+  object LabelButtonUpDown: TShadowLabel
+    Left = 313
     Top = 45
-    Width = 119
-    Height = 15
+    Width = 122
+    Height = 16
     Caption = '[Ctrl+Up / Ctrl+Down]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -34,13 +34,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelButtonEditWidth: TLabel
-    Left = 304
+  object LabelButtonEditWidth: TShadowLabel
+    Left = 313
     Top = 73
-    Width = 139
-    Height = 15
+    Width = 142
+    Height = 16
     Caption = '[F2 / Mouse Double-Click]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -48,13 +55,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelButtonSize: TLabel
-    Left = 304
+  object LabelButtonSize: TShadowLabel
+    Left = 313
     Top = 100
-    Width = 121
-    Height = 15
+    Width = 124
+    Height = 16
     Caption = '[Ctrl+Left / Ctrl+Right]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -62,13 +76,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelButtonDefaultSize: TLabel
-    Left = 304
+  object LabelButtonDefaultSize: TShadowLabel
+    Left = 313
     Top = 152
-    Width = 20
-    Height = 15
+    Width = 23
+    Height = 16
     Caption = '[F3]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -76,13 +97,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelButtonResetSize: TLabel
-    Left = 304
+  object LabelButtonResetSize: TShadowLabel
+    Left = 313
     Top = 126
-    Width = 20
-    Height = 15
+    Width = 23
+    Height = 16
     Caption = '[F4]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -90,13 +118,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelButtonReloadProfileDefaultSettings: TLabel
-    Left = 304
+  object LabelButtonReloadProfileDefaultSettings: TShadowLabel
+    Left = 313
     Top = 217
-    Width = 20
-    Height = 15
+    Width = 23
+    Height = 16
     Caption = '[F5]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -104,21 +139,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object ColumnsListVertBorder: TShape
-    Left = 211
-    Top = 0
-    Width = 1
-    Height = 445
-    Brush.Color = clBtnFace
-    Pen.Color = 7891291
-  end
-  object LabelToggleVisibility: TLabel
-    Left = 304
+  object LabelToggleVisibility: TShadowLabel
+    Left = 313
     Top = 176
-    Width = 146
-    Height = 15
+    Width = 149
+    Height = 16
     Caption = '[Space Bar] Toggle Visibility'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -126,13 +160,20 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object Label2: TLabel
-    Left = 304
+  object LabelButtonSetDefaultAll: TShadowLabel
+    Left = 313
     Top = 249
-    Width = 20
-    Height = 15
+    Width = 23
+    Height = 16
     Caption = '[F6]'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -140,10 +181,17 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object Label3: TLabel
-    Left = 222
+  object LabelTips: TShadowLabel
+    Left = 231
     Top = 317
     Width = 212
     Height = 65
@@ -159,95 +207,18 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Style = []
     ParentFont = False
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
     WordWrap = True
   end
-  object ColumnsListView: TEasyListview
-    Left = 0
-    Top = 0
-    Width = 211
-    Height = 445
-    BackGround.Enabled = True
-    CellSizes.Report.Height = 19
-    Color = clWhite
-    EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -13
-    EditManager.Font.Name = 'Consolas'
-    EditManager.Font.Style = []
-    UseDockManager = False
-    DragManager.Enabled = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Consolas'
-    Font.Style = []
-    GroupFont.Charset = ANSI_CHARSET
-    GroupFont.Color = clBlack
-    GroupFont.Height = -12
-    GroupFont.Name = 'Segoe UI'
-    GroupFont.Style = []
-    HintType = ehtToolTip
-    Header.AutoSizeHeightMargin = 6
-    Header.Columns.Items = {
-      0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000000000100000000000000A0000000FFFFFF1F0001000000
-      01000000050000005400690074006C0065000000000000000000000000001100
-      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000000
-      00010100000000000031000000FFFFFF1F000100000001000000040000005300
-      69007A006500000000000000000000000000}
-    Header.Draggable = False
-    Header.Font.Charset = ANSI_CHARSET
-    Header.Font.Color = clBlack
-    Header.Font.Height = -9
-    Header.Font.Name = 'Verdana'
-    Header.Font.Style = []
-    Header.Height = 18
-    Header.Sizeable = False
-    IncrementalSearch.Enabled = True
-    IncrementalSearch.ResetTime = 1000
-    IncrementalSearch.StartType = eissFocusedNode
-    PaintInfoColumn.Border = 2
-    PaintInfoColumn.CaptionIndent = 0
-    PaintInfoColumn.HotTrack = False
-    PaintInfoGroup.Expandable = False
-    PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.CheckIndent = 1
-    PaintInfoItem.CheckSize = 13
-    PaintInfoItem.CheckType = ectBox
-    PaintInfoItem.ShowBorder = False
-    ParentFont = False
-    ParentShowHint = False
-    ShowHint = False
-    Selection.BlendColorSelRect = 10902593
-    Selection.BlendIcon = False
-    Selection.BorderColor = 10902593
-    Selection.BorderColorSelRect = 10902593
-    Selection.Color = 10902593
-    Selection.FullCellPaint = True
-    Selection.FullItemPaint = True
-    Selection.FullRowSelect = True
-    Selection.GradientColorBottom = 16506264
-    Selection.GradientColorTop = 15582647
-    Selection.InactiveBorderColor = 10902593
-    Selection.InactiveColor = 15582647
-    Selection.MouseButton = [cmbLeft, cmbRight]
-    Selection.RoundRectRadius = 2
-    Selection.TextColor = clBlack
-    Selection.UseFocusRect = False
-    TabOrder = 0
-    View = elsReport
-    OnDblClick = ColumnsListViewDblClick
-    OnItemCheckChange = ColumnsListViewItemCheckChange
-    OnItemEdited = ColumnsListViewItemEdited
-    OnItemEditEnd = ColumnsListViewItemEditEnd
-    OnItemPaintText = ColumnsListViewItemPaintText
-    OnKeyAction = ColumnsListViewKeyAction
-  end
-  object ButtonUp: TBitBtn
+  object ButtonUp: TBitBtnEx
     Tag = 1
-    Left = 220
+    Left = 230
     Top = 40
     Width = 39
     Height = 25
@@ -255,11 +226,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Up'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
     OnClick = ButtonUpClick
   end
-  object ButtonDown: TBitBtn
-    Left = 261
+  object ButtonDown: TBitBtnEx
+    Left = 270
     Top = 40
     Width = 39
     Height = 25
@@ -267,12 +238,12 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Down'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 2
+    TabOrder = 1
     OnClick = ButtonUpClick
   end
-  object ButtonEditWidth: TBitBtn
+  object ButtonEditWidth: TBitBtnEx
     Tag = 1
-    Left = 220
+    Left = 229
     Top = 68
     Width = 80
     Height = 25
@@ -280,11 +251,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Edit Size'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 3
+    TabOrder = 2
     OnClick = ButtonEditWidthClick
   end
-  object ButtonReloadProfile: TBitBtn
-    Left = 220
+  object ButtonReloadProfile: TBitBtnEx
+    Left = 229
     Top = 212
     Width = 80
     Height = 25
@@ -292,11 +263,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Reset All'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 4
+    TabOrder = 3
     OnClick = ButtonReloadProfileClick
   end
-  object ButtonDefault: TBitBtn
-    Left = 220
+  object ButtonDefault: TBitBtnEx
+    Left = 229
     Top = 244
     Width = 80
     Height = 25
@@ -304,11 +275,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Default All'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 5
+    TabOrder = 4
     OnClick = ButtonDefaultClick
   end
-  object ButtonDefaultSize: TBitBtn
-    Left = 220
+  object ButtonDefaultSize: TBitBtnEx
+    Left = 229
     Top = 147
     Width = 80
     Height = 25
@@ -316,11 +287,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Default Size'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 6
+    TabOrder = 5
     OnClick = ButtonDefaultSizeClick
   end
-  object ButtonResetSize: TBitBtn
-    Left = 220
+  object ButtonResetSize: TBitBtnEx
+    Left = 229
     Top = 121
     Width = 80
     Height = 25
@@ -328,11 +299,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = 'Reset Size'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 7
+    TabOrder = 6
     OnClick = ButtonResetSizeClick
   end
-  object ButtonSizeDecrease: TBitBtn
-    Left = 220
+  object ButtonSizeDecrease: TBitBtnEx
+    Left = 230
     Top = 95
     Width = 39
     Height = 25
@@ -340,12 +311,12 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = '-'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 8
+    TabOrder = 7
     OnClick = ButtonSizeDecreaseClick
   end
-  object ButtonSizeIncrease: TBitBtn
+  object ButtonSizeIncrease: TBitBtnEx
     Tag = 1
-    Left = 261
+    Left = 270
     Top = 95
     Width = 39
     Height = 25
@@ -353,11 +324,11 @@ object FormColumnsEditor: TFormColumnsEditor
     Caption = '+'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 9
+    TabOrder = 8
     OnClick = ButtonSizeDecreaseClick
   end
-  object PanelButtons: TPanelEx
-    Left = 212
+  object PanelBottom: TPanelEx
+    Left = 218
     Top = 404
     Width = 248
     Height = 41
@@ -370,7 +341,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 29
       Top = 8
       Width = 89
@@ -382,7 +353,7 @@ object FormColumnsEditor: TFormColumnsEditor
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 129
       Top = 8
       Width = 89
@@ -395,11 +366,11 @@ object FormColumnsEditor: TFormColumnsEditor
       TabOrder = 1
     end
   end
-  object PanelEx2: TPanelEx
-    Left = 212
+  object PanelTitleTip: TPanelEx
+    Left = 218
     Top = 0
     Width = 248
-    Height = 30
+    Height = 34
     Color1 = 16445669
     Color2 = 15856113
     Color3 = 16707808
@@ -409,7 +380,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object Label1: TLabel
+    object LabelTitleTip: TShadowLabel
       Left = 9
       Top = 2
       Width = 229
@@ -424,12 +395,19 @@ object FormColumnsEditor: TFormColumnsEditor
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
   end
-  object ButtonCustomizeColumnHeaderFont: TBitBtn
-    Left = 220
+  object ButtonCustomizeColumnHeaderFont: TBitBtnEx
+    Left = 229
     Top = 288
     Width = 142
     Height = 23
@@ -440,18 +418,121 @@ object FormColumnsEditor: TFormColumnsEditor
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    TabOrder = 12
+    TabOrder = 11
     OnClick = ButtonCustomizeColumnHeaderFontClick
   end
-  object ButtonCustomizeColumnHeaderFontSetDefault: TBitBtn
-    Left = 364
+  object ButtonCustomizeColumnHeaderFontSetDefault: TBitBtnEx
+    Left = 373
     Top = 288
     Width = 80
     Height = 23
     Caption = 'Default Font'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 13
+    TabOrder = 12
     OnClick = ButtonCustomizeColumnHeaderFontSetDefaultClick
+  end
+  object PanelColumnsList: TPanelEx
+    Left = 0
+    Top = 0
+    Width = 218
+    Height = 445
+    Color1 = clWhite
+    Color2 = 15856113
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = 7891291
+    Frames = [frRight]
+    ParentBackground = False
+    Style = vgSolid
+    object ColumnsListView: TEasyListview
+      Left = 4
+      Top = 2
+      Width = 211
+      Height = 444
+      BackGround.Enabled = True
+      CellSizes.Report.Height = 19
+      Color = clWhite
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clBlack
+      EditManager.Font.Height = -13
+      EditManager.Font.Name = 'Consolas'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      DragManager.Enabled = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Consolas'
+      Font.Style = []
+      GroupFont.Charset = ANSI_CHARSET
+      GroupFont.Color = clBlack
+      GroupFont.Height = -12
+      GroupFont.Name = 'Segoe UI'
+      GroupFont.Style = []
+      HintType = ehtToolTip
+      Header.AutoSizeHeightMargin = 6
+      Header.Columns.Items = {
+        0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
+        00060000008008000000000100000000000000A0000000FFFFFF1F0001000000
+        01000000050000005400690074006C0065000000000000000000000000001100
+        00005445617379436F6C756D6E53746F726564FFFECE00060000008008000000
+        00010100000000000031000000FFFFFF1F000100000001000000040000005300
+        69007A006500000000000000000000000000}
+      Header.Draggable = False
+      Header.Font.Charset = ANSI_CHARSET
+      Header.Font.Color = clBlack
+      Header.Font.Height = -9
+      Header.Font.Name = 'Verdana'
+      Header.Font.Style = []
+      Header.Height = 18
+      Header.Sizeable = False
+      HotTrack.Color = clBlack
+      HotTrack.Enabled = True
+      HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
+      HotTrack.Underline = False
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      PaintInfoColumn.Border = 2
+      PaintInfoColumn.CaptionIndent = 0
+      PaintInfoColumn.HotTrack = False
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.CheckIndent = 1
+      PaintInfoItem.CheckSize = 13
+      PaintInfoItem.CheckType = ectBox
+      PaintInfoItem.ShowBorder = False
+      ParentFont = False
+      ParentShowHint = False
+      ShowThemedBorder = False
+      ShowHint = False
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsReport
+      OnDblClick = ColumnsListViewDblClick
+      OnItemCheckChange = ColumnsListViewItemCheckChange
+      OnItemEdited = ColumnsListViewItemEdited
+      OnItemEditEnd = ColumnsListViewItemEditEnd
+      OnItemPaintText = ColumnsListViewItemPaintText
+      OnKeyAction = ColumnsListViewKeyAction
+    end
   end
 end

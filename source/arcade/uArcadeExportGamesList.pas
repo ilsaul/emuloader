@@ -5,19 +5,17 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, PanelEx, AdvOfficeButtons, MPCommonObjects,
-  EasyListview, AdvGroupBox, IniFiles;
+  EasyListview, AdvGroupBox, IniFiles, ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeExportGamesList = class(TForm)
-    LabelSelectMode: TLabel;
-    PanelBottom: TPanelEx;
-    ButtonApplyAndExit: TBitBtn;
-    ButtonCancel: TBitBtn;
-    ExportList: TEasyListview;
+    BottomBar: TPanelEx;
+    ButtonApplyAndExit: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     GroupExportOptionsAllGames: TAdvGroupBox;
     ExportOption_ArcadeGames: TAdvOfficeCheckBox;
     ExportOption_NonArcadeMAMEMachines: TAdvOfficeCheckBox;
-    LabelExportOption_MAMESoftwareListGames: TLabel;
+    LabelExportOption_MAMESoftwareListGames: TShadowLabel;
     ExportOption_MAMESoftwareListGames: TAdvOfficeCheckBox;
     ExportOption_MAME: TAdvOfficeCheckBox;
     ExportOption_Supermodel3: TAdvOfficeCheckBox;
@@ -32,15 +30,19 @@ type
     MCMPlus_HBMAME: TAdvOfficeCheckBox;
     GroupExportOptionsGameColumnsFullFormat: TAdvGroupBox;
     GameInfoListToExport: TEasyListview;
-    GameInfoListToExport_MoveUp: TBitBtn;
-    GameInfoListToExport_MoveDown: TBitBtn;
+    GameInfoListToExport_MoveUp: TBitBtnEx;
+    GameInfoListToExport_MoveDown: TBitBtnEx;
     GameInfoToExport_MicrosoftExcelFormat: TAdvOfficeCheckBox;
-    ButtonHelp_GameInfoToExport_MicrosoftExcelFormat: TBitBtn;
-    ButtonApply: TBitBtn;
-    ButtonHelp: TBitBtn;
-    GameInfoListToExport_Reset: TBitBtn;
-    GameInfoListToExport_Default: TBitBtn;
+    ButtonHelp_GameInfoToExport_MicrosoftExcelFormat: TBitBtnEx;
+    ButtonApply: TBitBtnEx;
+    ButtonHelp: TBitBtnEx;
+    GameInfoListToExport_Reset: TBitBtnEx;
+    GameInfoListToExport_Default: TBitBtnEx;
     GameInfoToExport_UseGamesListVisibleColumns: TAdvOfficeCheckBox;
+    TopBar: TPanelEx;
+    LabelSelectMode: TShadowLabel;
+    PanelExportList: TPanelEx;
+    ExportList: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure ExportListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -58,6 +60,8 @@ type
     procedure GameInfoListToExport_ResetClick(Sender: TObject);
     procedure GameInfoListToExport_DefaultClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ExportListItemSelectionChanged(Sender: TCustomEasyListview;
+      Item: TEasyItem);
   private
     { Private declarations }
     procedure ReadSettings(LoadGameInfoColumnsOnly: Boolean = False);
@@ -210,7 +214,6 @@ var
   Group: TEasyGroup;
   FileStr, FullGameInfoStr: String;
   SelIndex: Integer;
-  HeaderAdded: Boolean;
 
   function ValidateGameFilter: Boolean;
   begin
@@ -520,6 +523,56 @@ procedure TFormArcadeExportGamesList.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(ExportList);
   FormMain.ELV_ResetNormalColors(GameInfoListToExport);
+
+  if IsNightMode then
+     begin
+       SetFormColors(FormArcadeExportGamesList, TopBar, BottomBar, LabelSelectMode, nil, -1);
+
+       FormMain.SetEasyListViewColors(ExportList, clrBlackBk, clWhite, clRed);
+
+       GroupMAMEContentManagerPlus.BorderStyle:= bsAdvDualColors;
+       SetGroupBoxColors(GroupMAMEContentManagerPlus, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+
+       SetCheckBoxColors(MCMPlus_MAME, clWhite, clNavy);
+       SetCheckBoxColors(MCMPlus_HBMAME, clWhite, clNavy);
+
+       GroupExportOptionsAllGames.BorderStyle:= bsAdvDualColors;
+       SetGroupBoxColors(GroupExportOptionsAllGames, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+
+       SetCheckBoxColors(ExportOption_ArcadeGames, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_NonArcadeMAMEMachines, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_MAMESoftwareListGames, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_MAME, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_Supermodel3, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_Daphne, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_Demul, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_HBMAME, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_DICE, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_SegaModel2, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_ZiNc, clWhite, clNavy);
+
+       GroupExportOptionsGameColumnsFullFormat.BorderStyle:= bsAdvDualColors;
+       SetGroupBoxColors(GroupExportOptionsGameColumnsFullFormat, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+
+       FormMain.SetEasyListViewColors(GameInfoListToExport, clrBlackBk, clWhite, clRed);
+
+       SetCheckBoxColors(GameInfoToExport_UseGamesListVisibleColumns, clWhite, clNavy);
+       SetCheckBoxColors(GameInfoToExport_MicrosoftExcelFormat, clWhite, clNavy);
+
+       FormMain.ELV_SetNightModeColors(ExportList);
+       FormMain.ELV_SetNightModeColors(GameInfoListToExport);
+
+       FormMain.SetButtonExColors(ButtonApplyAndExit);
+       FormMain.SetButtonExColors(ButtonApply);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonHelp);
+       FormMain.SetButtonExColors(GameInfoListToExport_MoveUp);
+       FormMain.SetButtonExColors(GameInfoListToExport_MoveDown);
+       FormMain.SetButtonExColors(GameInfoListToExport_Reset);
+       FormMain.SetButtonExColors(GameInfoListToExport_Default);
+       FormMain.SetButtonExColors(ButtonHelp_GameInfoToExport_MicrosoftExcelFormat);
+     end;
+
   ReadSettings;
   ExportList.SetFocus;
   ExportList.Groups.FirstItem.Selected:= True;
@@ -656,6 +709,7 @@ var
 
   function AddItem_ELV(Index: Integer): Boolean;
   begin
+    Result:= True;
     Item:= GameInfoListToExport.Items.Add;
     Item.StateImageIndex:= Index;
     case Index of
@@ -695,6 +749,19 @@ procedure TFormArcadeExportGamesList.FormKeyPress(Sender: TObject;
 begin
   if Key = #27 then
      Close;
+end;
+
+procedure TFormArcadeExportGamesList.ExportListItemSelectionChanged(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+var
+  InfoToExportEnabled: Boolean;
+begin
+  if Item.Selected then
+     begin
+       InfoToExportEnabled:= Item.ImageIndex in [0, 1, 4];
+       if GroupExportOptionsGameColumnsFullFormat.Visible <> InfoToExportEnabled then
+          GroupExportOptionsGameColumnsFullFormat.Visible:= InfoToExportEnabled;
+     end;
 end;
 
 end.

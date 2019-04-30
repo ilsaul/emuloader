@@ -139,7 +139,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     OnItemCompare = FavoritesCleanseListItemCompare
     OnKeyAction = FavoritesCleanseListKeyAction
   end
-  object PanelEx1: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 601
     Width = 714
@@ -154,7 +154,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 363
       Top = 10
       Width = 75
@@ -163,7 +163,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
       ModalResult = 2
       TabOrder = 0
     end
-    object ButtonConfirm: TBitBtn
+    object ButtonConfirm: TBitBtnEx
       Left = 275
       Top = 10
       Width = 75
@@ -172,7 +172,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
       ModalResult = 1
       TabOrder = 1
     end
-    object ButtonRemoveSelected: TBitBtn
+    object ButtonRemoveSelected: TBitBtnEx
       Left = 10
       Top = 10
       Width = 135

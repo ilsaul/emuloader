@@ -5,16 +5,16 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, MPCommonObjects, MPCommonUtilities,
-  EasyListview, ImgList, PanelEx, ShadowLabel;
+  EasyListview, ImgList, PanelEx, ShadowLabel, ButtonsEx;
 
 type
   TFormFavoritesManagerCleanseProfile = class(TForm)
     FavoritesCleanseList: TEasyListview;
     IL_Systems: TImageList;
-    PanelEx1: TPanelEx;
-    ButtonAbort: TBitBtn;
-    ButtonConfirm: TBitBtn;
-    ButtonRemoveSelected: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonAbort: TBitBtnEx;
+    ButtonConfirm: TBitBtnEx;
+    ButtonRemoveSelected: TBitBtnEx;
     LabelTopMessage: TShadowLabel;
     LabelTotal: TShadowLabel;
     function FavoritesCleanseListItemCompare(Sender: TCustomEasyListview;

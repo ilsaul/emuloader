@@ -38,6 +38,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ShadowColor = 12632284
     ShadowEnabled = False
     EllipsType = etPathEllips
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object LabelFolderROMs: TLabel
@@ -97,6 +100,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -120,6 +126,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -143,6 +152,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -342,7 +354,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
     object GPUMultithreading: TAdvOfficeCheckBox
-      Left = 432
+      Left = 672
       Top = 200
       Width = 127
       Height = 20
@@ -518,6 +530,20 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 22
       OnClick = ButtonVideo3DEngineResetClick
+    end
+    object QuadRendering: TAdvOfficeCheckBox
+      Left = 432
+      Top = 200
+      Width = 234
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 23
+      Alignment = taLeftJustify
+      Caption = 'Enable Quad Rendering (New 3D Engine)'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
     end
   end
   object InputGroupBox: TAdvGroupBox

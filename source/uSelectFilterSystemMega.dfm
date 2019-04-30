@@ -5,7 +5,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Machine Type and Systems Filters'
-  ClientHeight = 569
+  ClientHeight = 564
   ClientWidth = 608
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -23,15 +23,15 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelSelectMode: TLabel
+  object LabelSelectMode: TShadowLabel
     Left = 0
     Top = 0
     Width = 608
     Height = 25
     Align = alTop
     Caption = 
-      '              Choose what machine types you want to see in the g' +
-      'ames list.'
+      '              Choose what machine types and systems you want to ' +
+      'see in the games list.'
     Color = clWhite
     Constraints.MinHeight = 25
     Font.Charset = ANSI_CHARSET
@@ -42,13 +42,19 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     ParentColor = False
     ParentFont = False
     ShowAccelChar = False
-    Transparent = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
     Layout = tlCenter
     WordWrap = True
   end
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
-    Top = 528
+    Top = 523
     Width = 608
     Height = 41
     Align = alBottom
@@ -61,11 +67,11 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object LabelCategoryIniForMESS: TLabel
+    object LabelCategoryIniForMESS: TShadowLabel
       Left = 180
       Top = 8
-      Width = 202
-      Height = 13
+      Width = 205
+      Height = 14
       Cursor = crHandPoint
       Hint = 'http://www.progettosnaps.net/renameset/'
       Caption = 'click here to download version.ini pack'
@@ -78,16 +84,22 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = True
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       OnClick = LabelCategoryIniForMESSClick
       OnMouseEnter = LabelCategoryIniForMESSMouseEnter
       OnMouseLeave = LabelCategoryIniForMESSMouseLeave
     end
-    object LabelCategoryIniFolderForMESS: TLabel
+    object LabelCategoryIniFolderForMESS: TShadowLabel
       Left = 160
       Top = 21
-      Width = 242
-      Height = 16
+      Width = 245
+      Height = 17
       Caption = '(place "mess.ini" file in "\arcade\filters\" folder)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
@@ -96,9 +108,15 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       Font.Style = [fsItalic]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 415
       Top = 10
       Width = 89
@@ -110,7 +128,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 513
       Top = 10
       Width = 89
@@ -122,7 +140,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonReset: TBitBtn
+    object ButtonReset: TBitBtnEx
       Left = 6
       Top = 10
       Width = 89
@@ -134,7 +152,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       TabOrder = 2
       OnClick = ButtonResetClick
     end
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 99
       Top = 10
       Width = 47

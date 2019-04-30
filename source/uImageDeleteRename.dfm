@@ -24,7 +24,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   TextHeight = 15
   object LabelFilename: TShadowLabel
     Left = 261
-    Top = 128
+    Top = 127
     Width = 513
     Height = 31
     AutoSize = False
@@ -51,7 +51,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelSystemTitle: TShadowLabel
     Left = 261
-    Top = 92
+    Top = 91
     Width = 513
     Height = 19
     AutoSize = False
@@ -73,7 +73,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelRenameImage: TShadowLabel
     Left = 261
-    Top = 252
+    Top = 251
     Width = 210
     Height = 16
     Caption = 'New Name (file extension not required)'
@@ -94,7 +94,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object LabelSoftwareListTitle: TShadowLabel
     Left = 261
-    Top = 109
+    Top = 108
     Width = 513
     Height = 14
     AutoSize = False
@@ -117,8 +117,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Visible = False
   end
   object LabelFileSize: TShadowLabel
-    Left = 342
-    Top = 181
+    Left = 348
+    Top = 180
     Width = 348
     Height = 15
     AutoSize = False
@@ -139,8 +139,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelDateTime: TShadowLabel
-    Left = 342
-    Top = 197
+    Left = 348
+    Top = 196
     Width = 348
     Height = 15
     AutoSize = False
@@ -161,8 +161,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileType: TShadowLabel
-    Left = 342
-    Top = 213
+    Left = 348
+    Top = 212
     Width = 348
     Height = 15
     AutoSize = False
@@ -183,8 +183,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileTypeMismatch: TShadowLabel
-    Left = 385
-    Top = 228
+    Left = 391
+    Top = 227
     Width = 199
     Height = 16
     Caption = 'file type does not match file extension'
@@ -205,8 +205,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Visible = False
   end
   object LabelDimensions: TShadowLabel
-    Left = 342
-    Top = 165
+    Left = 348
+    Top = 164
     Width = 150
     Height = 15
     Caption = 'Dimensions: 1000x1000'
@@ -227,9 +227,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object FrameImageCategoryIcon: TPanelEx
     Left = 258
-    Top = 164
-    Width = 76
-    Height = 76
+    Top = 163
+    Width = 82
+    Height = 82
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -242,8 +242,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ParentBackground = False
     Style = vgSolid
     object ImageCategoryIcon: TImage
-      Left = 2
-      Top = 2
+      Left = 5
+      Top = 5
       Width = 68
       Height = 68
       Transparent = True
@@ -264,7 +264,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 589
       Top = 8
       Width = 89
@@ -277,7 +277,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
       TabOrder = 0
       OnClick = ButtonOkClick
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 687
       Top = 8
       Width = 89
@@ -394,9 +394,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
       Transparent = True
     end
   end
-  object RenameImageEditBox: TEdit
+  object RenameImageEditBox: TEditEx
     Left = 261
-    Top = 268
+    Top = 267
     Width = 510
     Height = 21
     AutoSize = False
@@ -406,7 +406,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object ImagePreviewFrame: TPanelEx
     Left = 8
-    Top = 89
+    Top = 88
     Width = 239
     Height = 239
     Color1 = clWhite

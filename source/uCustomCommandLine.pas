@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Buttons, GR32_Image, IniFiles,
-  ImgList, MPCommonObjects, EasyListview;
+  EditEx, ImgList, MPCommonObjects, EasyListview;
 
 type
   TFormCustomCommandLine = class(TForm)
@@ -16,16 +16,16 @@ type
     ButtonMoveParameterUp: TButton;
     ButtonUpdate: TButton;
     LabelPrefixToAdd: TLabel;
-    PrefixToAdd: TEdit;
+    PrefixToAdd: TEditEx;
     LabelFieldToAdd: TLabel;
     FieldToAdd: TComboBoxEx;
     LabelSuffixToAdd: TLabel;
-    SuffixToAdd: TEdit;
+    SuffixToAdd: TEditEx;
     ButtonAddParameter: TButton;
     ParameterSurroundWithQuotes: TCheckBox;
     PrefixSendLeadingSpace: TCheckBox;
     AdditionalParametersBox: TGroupBox;
-    AdditionalParameters: TEdit;
+    AdditionalParameters: TEditEx;
     LabelGameDescription: TLabel;
     BottomBar: TImage32;
     ButtonReload: TButton;
@@ -34,7 +34,7 @@ type
     ButtonOk: TButton;
     ButtonCancel: TButton;
     LabelCustomEmulatorFile: TGroupBox;
-    EmulatorBatchFile: TEdit;
+    EmulatorBatchFile: TEditEx;
     ButtonEmulatorBatchFileBrowse: TButton;
     ParametersListView: TEasyListview;
     LabelIniFile: TLabel;

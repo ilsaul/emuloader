@@ -6,32 +6,26 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   uCommon, uCommonCustom, Dialogs, StdCtrls, PanelEx, ExtCtrls, ComCtrls, ToolWin,
   IniFiles, ImgList, SplitterEx, MPCommonObjects, MPCommonUtilities, EasyListview, ShadowLabel,
-  Buttons, AdvOfficeButtons, Menus, BarMenus;
+  Buttons, AdvOfficeButtons, Menus, BarMenus, EditEx, ButtonsEx;
 
 type
   TFormConsCompGamesEditor = class(TForm)
-    PanelSystems: TPanel;
-    LabelSystemTitle: TShadowLabel;
+    PanelSystems: TPanelEx;
     Systems: TEasyListview;
     Splitter: TSplitterEx;
     IL_Systems: TImageList;
-    PanelCustomGamesSelectedSystem: TPanel;
+    PanelCustomGamesSelectedSystem: TPanelEx;
     CustomGamesList: TEasyListview;
-    PanelBottomCustomGamesList: TPanelEx;
-    LabelCustomGamesListTotal: TLabel;
-    PanelEditSelected: TPanel;
+    PanelEditSelected: TPanelEx;
     LabelEditSelected: TShadowLabel;
     LabelEditSelected_Year: TAdvOfficeCheckBox;
-    EditSelected_Year: TEdit;
+    EditSelected_Year: TEditEx;
     LabelEditSelected_Manufacturer: TAdvOfficeCheckBox;
-    EditSelected_Manufacturer: TEdit;
+    EditSelected_Manufacturer: TEditEx;
     LabelEditSelected_NumberPlayers: TAdvOfficeCheckBox;
-    EditSelected_NumberPlayers: TEdit;
-    ButtonMultiSelectedInfo_Confirm: TBitBtn;
-    MultiSelectedInfo_Cancel: TBitBtn;
-    NewFavoritePanel: TPanelEx;
-    LabelHotkeyText: TShadowLabel;
-    LabelHotkeyKeys: TShadowLabel;
+    EditSelected_NumberPlayers: TEditEx;
+    ButtonMultiSelectedInfo_Confirm: TBitBtnEx;
+    MultiSelectedInfo_Cancel: TBitBtnEx;
     PopupGamesList: TBcBarPopupMenu;
     PopupMachinesListSidePanelResetColumnsWidth: TMenuItem;
     EditTitle1: TMenuItem;
@@ -41,24 +35,35 @@ type
     EditAll1: TMenuItem;
     N1: TMenuItem;
     ResetSystemsPanelSize: TMenuItem;
-    ToolBarPanel: TCoolBar;
-    ToolBarButtons: TToolBar;
-    ButtonApplyChanges: TToolButton;
-    ButtonAbortChanges: TToolButton;
-    ButtonSelectFont: TToolButton;
-    PopupCustomizeFont: TMenuItem;
-    N2: TMenuItem;
-    GamesListBackgroundColor: TColorBox;
-    ToolButton1: TToolButton;
+    PanelSystemTitleBottom: TPanelEx;
+    PanelSystemTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
+    LabelCustomGamesListTotal: TShadowLabel;
+    PanelToolBarGamesEditor: TPanelEx;
+    PanelSearchGames: TPanelEx;
     ToolBarFilterTitle: TToolBar;
-    PanelTextBarFilter: TPanel;
-    FilterGameTitle: TEdit;
     ButtonFilterTitleApply: TToolButton;
     ButtonFilterTitleReset: TToolButton;
+    LabelHotkeyText: TShadowLabel;
+    LabelHotkeyKeys: TShadowLabel;
+    GamesListFontSize: TShadowLabel;
+    ButtonApplyChanges: TBitBtnEx;
+    ButtonAbortChanges: TBitBtnEx;
+    GamesListFontSizeLarger_x4: TBitBtnEx;
+    GamesListFontSizeLarger: TBitBtnEx;
+    GamesListFontSizeSmaller_x4: TBitBtnEx;
+    GamesListFontSizeSmaller: TBitBtnEx;
+    SystemsHideScrollBarArea: TAdvOfficeCheckBox;
+    LabelToolBarFilterTitle: TShadowLabel;
+    FilterGameTitle: TEditEx;
+    PopupMenuOptions: TBcBarPopupMenu;
+    PopupSystemsViewMode: TMenuItem;
+    PopupSystemsViewMode_Tiles: TMenuItem;
+    PopupSystemsViewMode_LargeIcons: TMenuItem;
+    ButtonOptions: TBitBtnEx;
     procedure FormShow(Sender: TObject);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
-    procedure ButtonApplyChangesClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     function CustomGamesListItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
@@ -90,20 +95,34 @@ type
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure ResetSystemsPanelSizeClick(Sender: TObject);
     procedure EditTitle1Click(Sender: TObject);
-    procedure ButtonAbortChangesClick(Sender: TObject);
-    procedure GamesListBackgroundColorSelect(Sender: TObject);
-    procedure PopupCustomizeFontClick(Sender: TObject);
-    procedure ButtonSelectFontClick(Sender: TObject);
-    procedure CustomGamesListItemPaintText(Sender: TCustomEasyListview;
-      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
-    procedure FilterGameTitleEnter(Sender: TObject);
-    procedure FilterGameTitleExit(Sender: TObject);
     procedure FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonFilterTitleApplyClick(Sender: TObject);
     procedure ButtonFilterTitleResetClick(Sender: TObject);
+    procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
+      const ARect: TRect; var DefaultDraw: Boolean);
+    procedure SystemsHideScrollBarAreaClick(Sender: TObject);
+    procedure GamesListFontSizeSmallerClick(Sender: TObject);
+    procedure ButtonApplyChangesClick(Sender: TObject);
+    procedure ButtonAbortChangesClick(Sender: TObject);
+    procedure ButtonOptionsClick(Sender: TObject);
+    procedure PopupSystemsViewMode_TilesClick(Sender: TObject);
+    procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
+    procedure SystemsItemImageDrawIsCustom(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var IsCustom: Boolean);
+    procedure SystemsItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
+    procedure SystemsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure SplitterMoved(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     extraDataFile: array[1..MaxConsoleComputerSystems] of THashedStringList;
+    procedure UpdateSystemsDimensions;
     procedure UpdateTotalGamesLabel(IsSearchBar: Boolean = False);
     procedure LoadGamesInList;
     procedure UpdateExtraInfoFiles;
@@ -112,6 +131,7 @@ type
     procedure RestoreHorizontalBarPos(ScrollBarPosition: Integer);
     procedure ApplyCustomFilterSearchBar;
     procedure EditSelectedFields(ColumnIndex: Integer);
+    procedure SetEditBkColor(EditExSource: TEditEx; IsEnabled: Boolean);
     procedure UpdateMultiSelectedInfo;
     procedure ELV_AdjustCellHeight(ELV_Holder: TEasyListView);
     procedure ReadSettings;
@@ -223,6 +243,20 @@ begin
      Result:= -1;
 end;
 
+procedure TFormConsCompGamesEditor.UpdateSystemsDimensions;
+var
+  SysTitleBarHeight: Integer;
+begin
+  if Systems.Align = alClient then
+     Exit;
+
+  SysTitleBarHeight:= 0;
+  if PanelSystemTitle.Visible then
+     SysTitleBarHeight:= PanelSystemTitle.Height+PanelSystemTitleBottom.Height;
+  Systems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL);
+  Systems.Height:= PanelSystems.Height-SysTitleBarHeight;
+end;
+
 procedure TFormConsCompGamesEditor.UpdateTotalGamesLabel(IsSearchBar: Boolean = False);
 var
   iSystemName: String;
@@ -233,9 +267,9 @@ begin
      iSystemName:=' - '+Systems.Selection.First.Caption;
 
   if CustomGamesList.Groups.VisibleItemCount = 1 then
-     LabelCustomGamesListTotal.Caption:= IntToStr(CustomGamesList.Groups.VisibleItemCount)+' game'+iSystemName
+     LabelCustomGamesListTotal.Caption:= '  '+IntToStr(CustomGamesList.Groups.VisibleItemCount)+' game'+iSystemName
   else
-     LabelCustomGamesListTotal.Caption:= IntToStr(CustomGamesList.Groups.VisibleItemCount)+' games'+iSystemName;
+     LabelCustomGamesListTotal.Caption:= '  '+IntToStr(CustomGamesList.Groups.VisibleItemCount)+' games'+iSystemName;
 end;
 
 procedure TFormConsCompGamesEditor.LoadGamesInList;
@@ -434,16 +468,18 @@ procedure TFormConsCompGamesEditor.ApplySystemFilter;
 var
   Item: TEasyItem;
 begin
+  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
+
   if not FormMain.CheckTotal(CustomGamesList) then
      Exit;
 
-  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
-
   CustomGamesList.BeginUpdate;
-  // need to set all groups visible first!!!!!!
-  CustomGamesList.Groups.MakeAllVisible;
-  CustomGamesList.Groups.Rebuild(True); // need to rebuild or list gets messed up
-  Application.ProcessMessages;
+  // need to set all groups visible first
+  if CustomGamesList.Groups.VisibleItemCount = 0 then
+     begin
+       CustomGamesList.Groups.MakeAllVisible;
+       CustomGamesList.Groups.Rebuild(True); // need to rebuild or list gets messed up
+     end;
 
   Item:= CustomGamesList.Groups.FirstItem;
   repeat
@@ -455,15 +491,6 @@ begin
   until Item = nil;
   CustomGamesList.EndUpdate(False);
   UpdateTotalGamesLabel;
-
-  Item:= CustomGamesList.Selection.First;
-  if Item <> nil then
-     begin
-       if Item.Visible then
-          Item.MakeVisible(emvMiddle)
-       else
-          CustomGamesList.Selection.ClearAll; // clear all selected games because they are invisible
-     end;
 end;
 
 function TFormConsCompGamesEditor.GetHorizontalBarPos: Integer;
@@ -507,7 +534,7 @@ var
   end;
 
 begin
-  if (FilterGameTitle.Text = '') or SameText(' Search games...', FilterGameTitle.Text) then
+  if (FilterGameTitle.Text = '') then
      begin
        FormMain.BlinkBkEdit(FilterGameTitle);
        Exit;
@@ -566,7 +593,7 @@ procedure TFormConsCompGamesEditor.EditSelectedFields(ColumnIndex: Integer);
     Item: TEasyItem;
   begin
     PanelEditSelected.Visible:= True;
-    PanelBottomCustomGamesList.Top:= PanelBottomCustomGamesList.Top-30;
+    //PanelBottomCustomGamesList.Top:= PanelBottomCustomGamesList.Top-30;
     LabelEditSelected_Manufacturer.Checked:= (ColumnIndex = -1);
     LabelEditSelected_Year.Checked:= (ColumnIndex = -1);
     LabelEditSelected_NumberPlayers.Checked:= (ColumnIndex = -1);
@@ -640,7 +667,7 @@ procedure TFormConsCompGamesEditor.ELV_AdjustCellHeight(ELV_Holder: TEasyListVie
 var
   iHeight, NewCellHeight: Integer;
 begin
-  iHeight:= ELV_Holder.Canvas.TextHeight('Ag');
+  iHeight:= ELV_Holder.Canvas.TextHeight('Ag[Á');
   NewCellHeight:= iHeight+5;
 
   if NewCellHeight < 28 then
@@ -681,24 +708,32 @@ begin
   FormConsCompGamesEditor.Width:= iIniFile.ReadInteger('Games Editor', 'ScreenWidth', FormConsCompGamesEditor.Width);
   FormConsCompGamesEditor.Height:= iIniFile.ReadInteger('Games Editor', 'ScreenHeight', FormConsCompGamesEditor.Height);
 
+  Loop:= iIniFile.ReadInteger('Games Editor', 'SystemsViewMode', 1);
+  if Loop <> 1 then
+     begin
+       //PopupSystemsViewMode.Items[Loop].Checked:= True;
+       PopupSystemsViewMode.Items[Loop].Click;
+     end;
+     
   PanelSystems.Width:= iIniFile.ReadInteger('Games Editor', 'SystemsPanelWidth', 392);
+  if iIniFile.ReadInteger('Games Editor', 'SystemsHideScrollBarArea', 0) = 1 then
+     begin
+       PanelSystems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL); // add extra ScrollBar area before executing CheckBox code! (DO NOT REMOVE THIS CODE!!!)
+       SystemsHideScrollBarArea.Checked:= True;
+     end;
 
   CustomGamesList.BeginUpdate;
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
       CustomGamesList.Header.Columns[Loop].Width:= iIniFile.ReadInteger('Games Editor', 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  FormMain.SetSelectedColorBox(GamesListBackgroundColor, iIniFile.ReadInteger('Games Editor', 'GamesListBackgroundColor', GamesListBackgroundColor.DefaultColorColor));
+  GamesListFontSize.Tag:= iIniFile.ReadInteger('Games Editor', 'SoftListFontSize', 9);
+  if (GamesListFontSize.Tag < 8) or (GamesListFontSize.Tag > 72) then
+     GamesListFontSize.Tag:= 9; // reset font size to 9
 
-  CustomGamesList.Font.Color:= iIniFile.ReadInteger('Games Editor', 'GamesListFontColor', 0);
-  CustomGamesList.Font.Name:= iIniFile.ReadString('Games Editor', 'GamesListFontName', 'Segoe UI');
-  CustomGamesList.Font.Size:= iIniFile.ReadInteger('Games Editor', 'GamesListFontSize', 9);
-  CustomGamesList.Font.Style:= TFontStyles(Byte(iIniFile.ReadInteger('Games Editor', 'GamesListFontStyle', 0)));
+  GamesListFontSize.Caption:= IntToStr(GamesListFontSize.Tag);
+  CustomGamesList.Font.Size:= GamesListFontSize.Tag;
 
   CustomGamesList.EndUpdate;
-
-  //FormCustomGamesEditor.Width
-  //FormCustomGamesEditor.Height
-  //FormCustomGamesEditor.WindowState:= wsMaximized;
 
   FreeAndNil(iIniFile);
 end;
@@ -724,16 +759,13 @@ begin
      end;
 
   iIniFile.WriteInteger('Games Editor', 'SystemsPanelWidth', PanelSystems.Width);
+  iIniFile.WriteInteger('Games Editor', 'SystemsHideScrollBarArea', Ord(SystemsHideScrollBarArea.Checked));
+  iIniFile.WriteInteger('Games Editor', 'SystemsViewMode', PopupSystemsViewMode.Tag);
 
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
       iIniFile.WriteInteger('Games Editor', 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  iIniFile.WriteInteger('Games Editor', 'GamesListBackgroundColor', GamesListBackgroundColor.Selected);
-
-  iIniFile.WriteInteger('Games Editor', 'GamesListFontColor', CustomGamesList.Font.Color);
-  iIniFile.WriteString('Games Editor', 'GamesListFontName', CustomGamesList.Font.Name);
-  iIniFile.WriteInteger('Games Editor', 'GamesListFontSize', CustomGamesList.Font.Size);
-  iIniFile.WriteInteger('Games Editor', 'GamesListFontStyle', Byte(CustomGamesList.Font.Style));
+  iIniFile.WriteInteger('Games Editor', 'SoftListFontSize', GamesListFontSize.Tag);
 
   iIniFile.UpdateFile;
   FreeAndNil(iIniFile);
@@ -772,13 +804,22 @@ begin
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(CustomGamesList);
 
+  if IsNightMode then
+     begin
+       FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.ELV_SetRibbonNightColors(0, CustomGamesList, True);
+     end;
+
   //ReadEmulatorsInfo;
   FormStatus.MessageStr('Loading console/computer games.');
   LoadGamesInList;
   //UpdateTotalGamesLabel;
 
-  ELV_PopulateCustomSystems(Systems, -1, -1);
+  ELV_PopulateCustomSystems(Systems, -1, 0);
+  Systems.Groups.FirstItem.Captions[1]:= ''; // fix the empty spaces for "All Systems" entry
   LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
+  if FormMain.ELV_IsTileView(Systems) then
+     FormMain.ELV_FixTitleClickAreaMulti(Systems);
 
   if FormMain.CheckSelected(FormMain.GamesListView) then
      begin
@@ -798,19 +839,12 @@ begin
      begin
        if Item.ImageIndex <> Systems.Tag then
        begin
+         if PanelEditSelected.Visible then
+            MultiSelectedInfo_Cancel.Click; // clear all texts and hide the panel
          Systems.Tag:= Item.ImageIndex;
          ApplySystemFilter;
-         //LoadSoftwareListsSelectedSystem;
        end;
      end;
-end;
-
-procedure TFormConsCompGamesEditor.ButtonApplyChangesClick(
-  Sender: TObject);
-begin
-  mResult:= mrOk;
-  UpdateExtraInfoFiles;
-  Close;
 end;
 
 procedure TFormConsCompGamesEditor.FormCloseQuery(Sender: TObject;
@@ -938,33 +972,42 @@ begin
   FormMain.SetFormKeyPreview(FormConsCompGamesEditor);
 end;
 
+procedure TFormConsCompGamesEditor.SetEditBkColor(EditExSource: TEditEx; IsEnabled: Boolean);
+begin
+  if IsNightMode then
+     begin
+       if IsEnabled then
+          EditExSource.Color:= clrDarkGray
+       else
+          EditExSource.Color:= EditExSource.ColorDisabled;
+     end
+  else
+     begin
+       if IsEnabled then
+          EditExSource.Color:= clWhite
+       else
+          EditExSource.Color:= $00f1f1f1;
+     end;
+end;
+
 procedure TFormConsCompGamesEditor.LabelEditSelected_ManufacturerClick(
   Sender: TObject);
 begin
-  case LabelEditSelected_Manufacturer.Checked of
-    True : EditSelected_Manufacturer.Color:= clWhite;
-    False: EditSelected_Manufacturer.Color:= $00e6e6e6;
-  end;
+  SetEditBkColor(EditSelected_Manufacturer, LabelEditSelected_Manufacturer.Checked);
   EditSelected_Manufacturer.Enabled:= LabelEditSelected_Manufacturer.Checked;
 end;
 
 procedure TFormConsCompGamesEditor.LabelEditSelected_YearClick(
   Sender: TObject);
 begin
-  case LabelEditSelected_Year.Checked of
-    True : EditSelected_Year.Color:= clWhite;
-    False: EditSelected_Year.Color:= $00e6e6e6;
-  end;
+  SetEditBkColor(EditSelected_Year, LabelEditSelected_Year.Checked);
   EditSelected_Year.Enabled:= LabelEditSelected_Year.Checked;
 end;
 
 procedure TFormConsCompGamesEditor.LabelEditSelected_NumberPlayersClick(
   Sender: TObject);
 begin
-  case LabelEditSelected_NumberPlayers.Checked of
-    True : EditSelected_NumberPlayers.Color:= clWhite;
-    False: EditSelected_NumberPlayers.Color:= $00e6e6e6;
-  end;
+  SetEditBkColor(EditSelected_NumberPlayers, LabelEditSelected_NumberPlayers.Checked);
   EditSelected_NumberPlayers.Enabled:= LabelEditSelected_NumberPlayers.Checked;
 end;
 
@@ -1012,7 +1055,13 @@ end;
 procedure TFormConsCompGamesEditor.ResetSystemsPanelSizeClick(
   Sender: TObject);
 begin
-  PanelSystems.Width:= 392;
+  if SystemsHideScrollBarArea.Checked then
+     begin
+       PanelSystems.Width:= 392-GetSystemMetrics(SM_CXVSCROLL);
+       Systems.Width:= 392;
+     end
+  else
+     PanelSystems.Width:= 392;
 end;
 
 procedure TFormConsCompGamesEditor.EditTitle1Click(Sender: TObject);
@@ -1028,64 +1077,6 @@ begin
     //VK_F6: EditSelectedFields(-1); // edit all fields, usually for multiple selected games
 end;
 
-
-procedure TFormConsCompGamesEditor.ButtonAbortChangesClick(Sender: TObject);
-begin
-  mResult:= mrAbort;
-  Close;
-end;
-
-procedure TFormConsCompGamesEditor.GamesListBackgroundColorSelect(
-  Sender: TObject);
-begin
-  CustomGamesList.Color:= GamesListBackgroundColor.Selected;
-end;
-
-procedure TFormConsCompGamesEditor.PopupCustomizeFontClick(Sender: TObject);
-begin
-  FormMain.FontDialog.Font:= CustomGamesList.Font;
-  FormMain.FontDialog.Tag:= 8;
-  if FormMain.FontDialog.Execute then
-     begin
-       CustomGamesList.Font:= FormMain.FontDialog.Font;
-       ELV_AdjustCellHeight(CustomGamesList);
-     end;
-end;
-
-procedure TFormConsCompGamesEditor.ButtonSelectFontClick(Sender: TObject);
-begin
-  PopupCustomizeFont.Click;
-end;
-
-procedure TFormConsCompGamesEditor.CustomGamesListItemPaintText(
-  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
-  ACanvas: TCanvas);
-begin
-  Exit;
-  if not FormMain.ELV_IsEditing(CustomGamesList) then
-     Exit;
-
-  if ACanvas.Font.Color <> clBlack then
-     ACanvas.Font.Color:= clBlack;
-end;
-
-procedure TFormConsCompGamesEditor.FilterGameTitleEnter(Sender: TObject);
-begin
-  if SameText(' Search games...', TEdit(Sender).Text) then
-     begin
-       TEdit(Sender).Font.Color:= clBlack;
-       TEdit(Sender).Text:= '';
-     end;
-end;
-
-procedure TFormConsCompGamesEditor.FilterGameTitleExit(Sender: TObject);
-begin
-  if TEdit(Sender).Text = '' then
-     begin
-       TEdit(Sender).Font.Color:= clSilver;
-       TEdit(Sender).Text:= ' Search games...';
-     end;
-end;
 
 procedure TFormConsCompGamesEditor.FilterGameTitleKeyPress(Sender: TObject;
   var Key: Char);
@@ -1115,10 +1106,228 @@ begin
   if FormMain.CheckTotal(CustomGamesList) then
      begin
        FilterGameTitle.Text:= '';
-       FilterGameTitle.OnExit(FilterGameTitle);
        if FormMain.CheckSelected(Systems) then
           ApplySystemFilter;
      end;
+end;
+
+procedure TFormConsCompGamesEditor.ToolBarFilterTitleCustomDraw(
+  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
+begin
+  if PanelSearchGames.Style = vgSolid then
+     begin
+       Sender.Canvas.Brush.Color:= PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top];
+       Sender.Canvas.Rectangle(Sender.ClientRect);
+     end
+  else
+     FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
+                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+end;
+
+procedure TFormConsCompGamesEditor.SystemsHideScrollBarAreaClick(
+  Sender: TObject);
+begin
+  Systems.BeginUpdate;
+  if SystemsHideScrollBarArea.Checked then
+     begin
+       Systems.Align:= alNone;
+       PanelSystems.Width:= PanelSystems.Width-GetSystemMetrics(SM_CXVSCROLL);
+     end
+  else
+     begin
+       PanelSystems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL);
+       Systems.Align:= alClient;
+     end;
+  Systems.EndUpdate;
+end;
+
+procedure TFormConsCompGamesEditor.GamesListFontSizeSmallerClick(
+  Sender: TObject);
+var
+  iValue: Integer;
+begin
+  iValue:= GamesListFontSize.Tag;
+  case TShadowLabel(Sender).Tag of
+    -4: Dec(iValue, 4);
+    -1: Dec(iValue);
+     1: Inc(iValue);
+     4: Inc(iValue, 4);
+  end;
+
+  if (iValue < 8) or (iValue > 72) then
+     Exit;
+
+  GamesListFontSize.Tag:= iValue;
+  GamesListFontSize.Caption:= IntToStr(iValue);
+  CustomGamesList.Font.Size:= iValue;
+  ELV_AdjustCellHeight(CustomGamesList);
+end;
+
+procedure TFormConsCompGamesEditor.ButtonApplyChangesClick(Sender: TObject);
+begin
+  mResult:= mrOk;
+  UpdateExtraInfoFiles;
+  Close;
+end;
+
+procedure TFormConsCompGamesEditor.ButtonAbortChangesClick(Sender: TObject);
+begin
+  mResult:= mrAbort;
+  Close;
+end;
+
+procedure TFormConsCompGamesEditor.ButtonOptionsClick(Sender: TObject);
+begin
+  ShowDropdownMenu(TSpeedButtonEx(Sender), PopupMenuOptions);
+end;
+
+procedure TFormConsCompGamesEditor.PopupSystemsViewMode_TilesClick(
+  Sender: TObject);
+begin
+  if TMenuItem(Sender).Tag = PopupSystemsViewMode.Tag then
+     begin
+       TMenuItem(Sender).Checked:= True;
+       Exit;
+     end;
+
+  if not TMenuItem(Sender).Checked then
+     Exit;
+
+  PopupSystemsViewMode.Tag:= TMenuItem(Sender).Tag;
+
+  Systems.BeginUpdate;
+  if TMenuItem(Sender).Tag = 0 then
+     begin
+       // tiles view mode, 32x32 icons
+       IL_Systems.Width:= 32;
+       IL_Systems.Height:= 32;
+       Systems.Font.Name:= 'Trebuchet MS';
+       Systems.Font.Size:= 9;
+       Systems.PaintInfoItem.ImageIndent:= 0;
+       Systems.PaintInfoItem.ShowBorder:= True;
+       Systems.PaintInfoItem.CaptionIndent:= 0;
+       FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
+       PanelSystemTitleBottom.Visible:= False;
+       PanelSystemTitle.Visible:= False;
+       if Systems.Align = alNone then
+          Systems.Top:= Systems.Top-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+       Splitter.Appearance.SingleColor:= clrBlackBk;
+     end
+  else
+     begin
+       // large icons, 48x48 icons
+       IL_Systems.Width:= 48;
+       IL_Systems.Height:= 48;
+       Systems.Font.Name:= 'Tahoma';
+       Systems.Font.Size:= 7;
+       Systems.PaintInfoItem.ImageIndent:= 2;
+       Systems.PaintInfoItem.ShowBorder:= True;
+       Systems.PaintInfoItem.CaptionIndent:= 4;
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+       PanelSystemTitle.Visible:= True;
+       PanelSystemTitleBottom.Visible:= True;
+       if Systems.Align = alNone then
+          Systems.Top:= Systems.Top+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+       Splitter.Appearance.SingleColor:= menu_background_color[1];
+     end;
+
+  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
+
+  if TMenuItem(Sender).Tag = 0 then
+     Systems.View:= elsTile
+  else
+     Systems.View:= elsIcon;
+
+  FormMain.ELV_FixTitleClickAreaMulti(Systems, Systems.View = elsTile);
+
+  Systems.EndUpdate;
+end;
+
+
+procedure TFormConsCompGamesEditor.SystemsItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+var
+  iLeft, iTop: Integer;
+  iSysTypeIndex: Integer;
+begin
+  if not FormMain.ELV_IsTileView(Systems) then
+     Exit;
+  // this is for tiles view mode
+  iLeft:= RectArray.IconRect.Left+Systems.PaintInfoItem.ImageIndent+1;
+  iTop:=  RectArray.IconRect.Top+1;
+
+  Systems.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+
+  iLeft:= iLeft+Systems.ImagesExLarge.Width+4;
+  iTop:= iTop+(Systems.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
+
+  iSysTypeIndex:= -1;
+  if SystemIsConsole(Item.ImageIndex) then
+     iSysTypeIndex:= 25 // index 25 is "console" icon
+  else
+  if SystemIsComputer(Item.ImageIndex) then
+     iSysTypeIndex:= 26 // index 26 is "computer" icon
+  else
+  if SystemIsHandheld(Item.ImageIndex) then
+     iSysTypeIndex:= 27; // index 27 is "handheld" icon
+
+  if iSysTypeIndex <> -1 then
+     FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+end;
+
+procedure TFormConsCompGamesEditor.SystemsItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  if FormMain.ELV_IsTileView(Systems) then
+     IsCustom:= True; // this is for tiles view mode
+end;
+
+procedure TFormConsCompGamesEditor.SystemsItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  if FormMain.ELV_IsTileView(Systems) then
+     begin
+       ImageWidth:= Systems.ImagesExLarge.Width;//+16; // +16 is 16x16 icon size, plus 2 pixels border
+       ImageHeight:= Systems.ImagesExLarge.Height;
+     end;
+end;
+
+procedure TFormConsCompGamesEditor.SystemsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if not FormMain.ELV_IsTileView(Systems) then
+     Exit;
+  if Position = 1 then
+     begin
+       ACanvas.Font.Name:= 'Segoe UI';
+       ACanvas.Font.Size:= 9;
+       ACanvas.Font.Color:= clMedGray;
+       ACanvas.Font.Style:= [fsItalic];
+       if IsNightMode then
+          ACanvas.Font.Color:= clMedGray
+       else
+          ACanvas.Font.Color:= clGray;
+
+       if IsNightMode and Item.Selected then
+          ACanvas.Font.Color:= clrDarkGray;
+     end;
+end;
+
+
+procedure TFormConsCompGamesEditor.SplitterMoved(Sender: TObject);
+begin
+  UpdateSystemsDimensions;
+end;
+
+procedure TFormConsCompGamesEditor.FormResize(Sender: TObject);
+begin
+  UpdateSystemsDimensions;
 end;
 
 end.

@@ -113,6 +113,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       View = elsReport
       OnDblClick = LastPlayedListDblClick
       OnItemPaintText = LastPlayedListItemPaintText
+      OnItemSelectionChanged = LastPlayedListItemSelectionChanged
       OnKeyAction = LastPlayedListKeyAction
     end
     object PanelPlayedListHeader: TPanelEx
@@ -127,14 +128,14 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       Color4 = clTeal
       ColorFrame = 7891291
       ColorInnerFrame = clGreen
-      Frames = [frTop]
+      Frames = []
       ParentBackground = False
       Style = vgSimple
-      object LabelTitleCaption: TLabel
+      object LabelTitleCaption: TShadowLabel
         Left = 14
-        Top = 4
-        Width = 24
-        Height = 13
+        Top = 6
+        Width = 27
+        Height = 14
         Caption = 'Title'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -143,13 +144,19 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelLastPlayed: TLabel
+      object LabelLastPlayed: TShadowLabel
         Left = 910
-        Top = 4
-        Width = 65
-        Height = 13
+        Top = 6
+        Width = 68
+        Height = 14
         Caption = 'Last Played'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -158,13 +165,19 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelTotalPlaytime: TLabel
+      object LabelTotalPlaytime: TShadowLabel
         Left = 1034
-        Top = 4
-        Width = 81
-        Height = 13
+        Top = 6
+        Width = 84
+        Height = 14
         Caption = 'Total Playtime'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -173,13 +186,19 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelSoftwareNameCaption: TLabel
+      object LabelSoftwareNameCaption: TShadowLabel
         Left = 730
-        Top = 4
-        Width = 88
-        Height = 13
+        Top = 6
+        Width = 91
+        Height = 14
         Caption = 'Software Name'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -188,13 +207,19 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelGameNameCaption: TLabel
+      object LabelGameNameCaption: TShadowLabel
         Left = 591
-        Top = 4
-        Width = 71
-        Height = 13
+        Top = 6
+        Width = 74
+        Height = 14
         Caption = 'Game Name'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -203,6 +228,12 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
     end
@@ -211,7 +242,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Left = 0
     Top = 0
     Width = 1178
-    Height = 345
+    Height = 329
     Align = alTop
     Color1 = clWhite
     Color2 = clSilver
@@ -222,52 +253,6 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelSystemTitle: TShadowLabel
-      Left = 0
-      Top = 329
-      Width = 1178
-      Height = 16
-      Align = alBottom
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'SUPERMODEL 3: A SEGA MODEL 3 ARCADE EMULATOR'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = False
-      Layout = tlCenter
-    end
-    object LabelSystemType: TShadowLabel
-      Left = 32
-      Top = 329
-      Width = 51
-      Height = 16
-      Caption = 'ARCADE'
-      Color = 16448250
-      Constraints.MaxHeight = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlue
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      Transparent = True
-      Layout = tlCenter
-    end
     object Systems: TEasyListview
       Tag = -1
       Left = 0
@@ -342,7 +327,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object ButtonSelectGame: TBitBtn
+    object ButtonSelectGame: TBitBtnEx
       Left = 420
       Top = 8
       Width = 89
@@ -356,7 +341,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       TabOrder = 0
       OnClick = ButtonSelectGameClick
     end
-    object ButtonClose: TBitBtn
+    object ButtonClose: TBitBtnEx
       Left = 668
       Top = 8
       Width = 89
@@ -368,7 +353,7 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonSelectGameExit: TBitBtn
+    object ButtonSelectGameExit: TBitBtnEx
       Tag = 1
       Left = 524
       Top = 8
@@ -380,6 +365,73 @@ object FormLastPlayedGamesMega: TFormLastPlayedGamesMega
       ShowHint = True
       TabOrder = 2
       OnClick = ButtonSelectGameClick
+    end
+  end
+  object PanelSystemsTitle: TPanelEx
+    Left = 0
+    Top = 329
+    Width = 1178
+    Height = 16
+    Align = alTop
+    Color1 = clWhite
+    Color2 = 14543069
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSimple
+    object LabelSystemTitle: TShadowLabel
+      Left = 8
+      Top = 0
+      Width = 1162
+      Height = 16
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'SUPERMODEL 3: A SEGA MODEL 3 ARCADE EMULATOR'
+      Color = 16448250
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+    end
+    object LabelSystemType: TShadowLabel
+      Left = 32
+      Top = 0
+      Width = 51
+      Height = 16
+      Caption = 'ARCADE'
+      Color = 16448250
+      Constraints.MaxHeight = 16
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold, fsItalic]
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = 14540253
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
     end
   end
   object IL_Systems: TImageList

@@ -5,12 +5,12 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, AdvOfficeButtons, ShellAPI,
-  ShadowLabel, ExtCtrls, AdvGroupBox;
+  ShadowLabel, ExtCtrls, AdvGroupBox, ButtonsEx;
 
 type
   TFormArcadeScanGamesMode = class(TForm)
-    PanelEx1: TPanelEx;
-    ButtonOk: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
     ScanModeBox: TAdvGroupBox;
     ScanModeIcon: TImage;
     FullScan: TAdvOfficeRadioButton;
@@ -21,23 +21,24 @@ type
     ScanMAMEAllSets: TAdvOfficeRadioButton;
     ScanMAMEArcadeMachines: TAdvOfficeRadioButton;
     ScanMAMESoftwareListGames: TAdvOfficeRadioButton;
-    LabelFullScan: TLabel;
-    LabelQuickScan: TLabel;
-    LabelForceAllAvailable: TLabel;
-    Label5: TLabel;
+    LabelFullScan: TShadowLabel;
+    LabelQuickScan: TShadowLabel;
+    LabelForceAllAvailable: TShadowLabel;
+    LabelImportantTips: TShadowLabel;
     MAMESoftwareListBox: TAdvGroupBox;
-    ShadowLabel1: TShadowLabel;
-    ShadowLabel2: TShadowLabel;
-    ShadowLabel3: TShadowLabel;
+    LabelMAMESoftwareList_Disabled: TShadowLabel;
+    LabelMAMESoftwareList_EnabledUpdate: TShadowLabel;
+    LabelMAMESoftwareList_EnabledOverwrite: TShadowLabel;
     ImageMAMESoftwareList: TImage;
-    Shape2: TShape;
-    ShadowLabel4: TShadowLabel;
+    LabelMAMESoftwareListBox_BlankLine: TShape;
+    LabelMAMESoftwareListBox: TShadowLabel;
     MAMESoftwareList_Disabled: TAdvOfficeRadioButton;
     MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButton;
     MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButton;
-    ButtonHelpCreateMAMESoftwareListGames: TBitBtn;
+    ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx;
     LabelCustomizeMAMESoftwareList: TShadowLabel;
     AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox;
+    LabelMAMESoftwareListBox_BlankLine2: TShape;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure AddMAMEDeviceSetWithNoROMsClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -73,9 +74,19 @@ procedure TFormArcadeScanGamesMode.AddMAMEDeviceSetWithNoROMsClick(
   Sender: TObject);
 begin
   if AddMAMEDeviceSetWithNoROMs.Checked then
-     AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
+     begin
+       if IsNightMode then
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1])
+       else
+          AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
+     end
   else
-     AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
+     begin
+       if IsNightMode then
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, clrLightGrayFrame, clrDarkGray)
+       else
+          AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
+     end;
 end;
 
 procedure TFormArcadeScanGamesMode.FormShow(Sender: TObject);
@@ -149,13 +160,19 @@ end;
 
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     TShadowLabel(Sender).Font.Color:= clBlue;
   TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clNavy;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+  else
+     TShadowLabel(Sender).Font.Color:= clNavy;
   TShadowLabel(Sender).Font.Style:= [];
 end;
 

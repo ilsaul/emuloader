@@ -45,6 +45,9 @@ object FormArcadeSelectIconFile: TFormArcadeSelectIconFile
     ShadowColor = 12632284
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object FilesListView: TEasyListview

@@ -6,14 +6,14 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   ImgList, StdCtrls, Buttons, ComCtrls, ShadowLabel, PanelEx, ExtCtrls,
-  IniFiles, GraphicEx, RichEditURL;
+  IniFiles, GraphicEx, RichEditURL, ButtonsEx;
 
 type
   TFormCopyMoveGameFiles = class(TForm)
     PanelProgress: TPanelEx;
     ProgressBar: TProgressBar;
-    ButtonPause: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonPause: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     PanelTop: TPanelEx;
     SystemIcon: TImage;
     LabelGameTitle: TShadowLabel;
@@ -33,7 +33,6 @@ type
     procedure ButtonPauseClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure ButtonCancelClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     DestinationFullPath: String;
@@ -109,7 +108,38 @@ var
   ActionStr: String;
   HasMAME: Boolean;
 begin
-  FormCopyMoveGameFiles.Color:= clrDarkGray; // must set TRichEdit bk color here; it crashes at .onFormCreate() event
+  if IsNightMode then
+     begin
+       SetFormColors(nil, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, -1);
+
+       FormCopyMoveGameFiles.Color:= menu_background_color[1];
+       //SetPanelColors(FormArcadeEmulatorsSetup.PanelBottom, menu_background_color[1], clrMedDarkGray);
+
+       PanelFileInfo.Color1:= clrBlackBk;
+       SetPanelNightColors(PanelProgress, clrBlackBk, menu_background_color[1]);
+
+       //PanelFileInfo.Style:= vgSimple;
+       //SetPanelNightColors(PanelFileInfo, clrBlackBk, clrDarkRed);
+       //SetPanelNightColors(PanelProgress, clrDarkRed, clrDarkGray);
+
+       SetLabelColors(LabelFileType, MsgTxtColors.colorWarning, clMaroon);
+
+       SetLabelColors(LabelGameFile, clWhite, clNavy);
+       SetLabelColors(LabelFileSizeDate, clWhite, clNavy);
+       SetLabelColors(LabelCopyToTitle, clWhite, clrMedBlue);
+       SetLabelColors(LabelRemainingFiles, clWhite, clrMedBlue);
+       SetLabelColors(LabelCopyTo, clYellow, clrDarkOrange);
+       SetLabelColors(LabelCanceledByUser, MsgTxtColors.colorWarning, clMaroon);
+
+       Log.BorderStyle:= bsNone;
+       Log.Color:= menu_background_color[1];//clrDarkGray;
+       Log.Font.Color:= item_caption_active_color[1];//clWhite;
+
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonPause);
+     end;
+
+  //FormCopyMoveGameFiles.Color:= clrDarkGray; // must set TRichEdit bk color here; it crashes at .onFormCreate() event
   //Exit; // for debugging only, do not enable
   Left:= (Screen.Width shr 1)-(Width shr 1)-1;
   Top:= (Screen.Height shr 1)-(Height shr 1)-1;
@@ -168,7 +198,7 @@ begin
        LabelCopyTo.Left:= LabelCopyToTitle.Left+LabelCopyToTitle.Width+4;
        LabelCopyTo.Caption:= DestinationFullPath;
      end;
-  FormCopyMoveGameFiles.ClientHeight:= 237;
+  //FormCopyMoveGameFiles.ClientHeight:= 250;//237;
   UpdateTotalLeftLabel(iTotalFiles);
 
   DestinationFullPath:= IncludeTrailingPathDelimiter(DestinationFullPath);
@@ -943,7 +973,7 @@ begin
 
   if OperationErrors > 0 then
      begin
-       FormCopyMoveGameFiles.ClientHeight:= 377;
+       //FormCopyMoveGameFiles.ClientHeight:= 393;//377;
        LabelCanceledByUser.Caption:= LabelCanceledByUser.Caption+'Failed to process one or more files. ';
      end
   else
@@ -966,7 +996,7 @@ end;
 
 procedure TFormCopyMoveGameFiles.FormActivate(Sender: TObject);
 begin
-  //Exit; // for debugging only, do not enable
+  Exit; // for debugging only, do not enable
   if LabelCopyToTitle.Tag = 0 then
      begin
        LabelCopyToTitle.Tag:= 1;
@@ -980,30 +1010,6 @@ begin
      Close
   else
      ButtonCancel.ModalResult:= mrAbort;
-end;
-
-procedure TFormCopyMoveGameFiles.FormCreate(Sender: TObject);
-begin
-  if IsNightMode then
-     begin
-       SetFormColors(nil, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, -1);
-       PanelFileInfo.Style:= vgSimple;
-       SetPanelNightColors(PanelFileInfo, clrBlackBk, clrDarkRed);
-       SetPanelNightColors(PanelProgress, clrDarkRed, clrDarkGray);
-
-       SetLabelColors(LabelFileType, MsgTxtColors.colorWarning, clMaroon);
-
-       SetLabelColors(LabelGameFile, clWhite, clNavy);
-       SetLabelColors(LabelFileSizeDate, clWhite, clNavy);
-       SetLabelColors(LabelCopyToTitle, clWhite, clrMedBlue);
-       SetLabelColors(LabelRemainingFiles, clWhite, clrMedBlue);
-       SetLabelColors(LabelCopyTo, clYellow, clrDarkOrange);
-       SetLabelColors(LabelCanceledByUser, MsgTxtColors.colorWarning, clMaroon);
-
-       Log.BorderStyle:= bsNone;
-       Log.Color:= clrDarkGray;
-       Log.Font.Color:= clWhite;
-     end;
 end;
 
 end.

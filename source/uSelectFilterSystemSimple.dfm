@@ -23,7 +23,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 299
     Width = 812
@@ -34,6 +34,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -53,9 +54,12 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShadowColor = 15856113
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 619
       Top = 21
       Width = 89
@@ -67,7 +71,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 717
       Top = 21
       Width = 89
@@ -79,7 +83,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShowHint = True
       TabOrder = 1
     end
-    object ButtonReload: TBitBtn
+    object ButtonReload: TBitBtnEx
       Left = 6
       Top = 21
       Width = 89
@@ -91,7 +95,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       TabOrder = 2
       OnClick = ButtonReloadClick
     end
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 570
       Top = 21
       Width = 43
@@ -103,7 +107,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       TabOrder = 3
       OnClick = ButtonHelpClick
     end
-    object ResetToMachineTypeSystemsMegaFilter: TBitBtn
+    object ResetToMachineTypeSystemsMegaFilter: TBitBtnEx
       Tag = 1
       Left = 99
       Top = 21

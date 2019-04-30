@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ComCtrls, uCommon, uCommonCustom, StdCtrls, ImgList, MPCommonObjects,
   MPCommonUtilities, EasyListview, AdvOfficeButtons,
-  Buttons, ExtCtrls, PanelEx, ShadowLabel;
+  Buttons, ExtCtrls, PanelEx, ShadowLabel, ButtonsEx;
 
 const
   // Action Mode:
@@ -22,11 +22,11 @@ const
 type
   TFormConsCompSystemSelector = class(TForm)
     Systems: TEasyListview;
-    PanelButtons: TPanelEx;
+    PanelBottom: TPanelEx;
     CreateNewList: TAdvOfficeCheckBox;
-    ButtonHelp: TBitBtn;
-    ButtonApply: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonHelp: TBitBtnEx;
+    ButtonApply: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     LabelCreateNewList: TShadowLabel;
     IL_Systems: TImageList;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -44,7 +44,7 @@ type
   private
     { Private declarations }
     procedure SelectSysFilters;
-    procedure UpdateSysFilters;
+    //procedure UpdateSysFilters;
     procedure ResizeForm;
     procedure ResizeScreen;
   public
@@ -100,6 +100,8 @@ begin
   Systems.EndUpdate;
 end;
 
+{
+// not used anymore ??? (April 04, 2019)
 procedure TFormConsCompSystemSelector.UpdateSysFilters;
 var
   Item: TEasyItem;
@@ -148,6 +150,7 @@ begin
     Item:= Systems.Groups.NextItem(Item);
   until Item = nil;
 end;
+}
 
 procedure TFormConsCompSystemSelector.FormKeyPress(Sender: TObject; var Key: Char);
 begin
@@ -178,7 +181,7 @@ begin
        ButtonHelp.Left:= ButtonHelp.Left+FormConsCompSystemSelector.Tag;
        ButtonApply.Left:= ButtonApply.Left+FormConsCompSystemSelector.Tag;
        ButtonCancel.Left:= ButtonCancel.Left+FormConsCompSystemSelector.Tag;
-       FormConsCompSystemSelector.ClientHeight:= Systems.Height+PanelButtons.Height;
+       FormConsCompSystemSelector.ClientHeight:= Systems.Height+PanelBottom.Height;
        FormConsCompSystemSelector.Tag:= 0;
      end;
 end;
@@ -229,7 +232,7 @@ begin
      Systems.Height:= ItemHeight*5; // five lines}
 
   Systems.EndUpdate;
-  FormConsCompSystemSelector.ClientHeight:= Systems.Height+PanelButtons.Height;
+  FormConsCompSystemSelector.ClientHeight:= Systems.Height+PanelBottom.Height;
 end;
 
 procedure TFormConsCompSystemSelector.FormShow(Sender: TObject);
@@ -244,14 +247,18 @@ begin
   //ButtonHelp.Visible:= not CreateNewList.Visible;
   Systems.Selection.MultiSelect:= ButtonHelp.Visible;
   //Systems.HotTrack.Enabled:= not CreateNewList.Visible; // always enabled from now on
+
   FormMain.ELV_ResetNormalColors(Systems);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(Systems);
+
   //if ActionMode in [0, 1] then
   //   Caption:= 'Select One or More Systems';
 
   if ActionMode <> -1 then // "-1" means "all systems"... no need to change form title (usually, -1 is for debugging since it's not used by any features)
      Caption:= Format('%s [%s]', [Caption, ActionModeStr[ActionMode]]);
 
-  ELV_PopulateCustomSystems(Systems, selSysID, ActionMode);//, ActionMode); // always load "All Systems" item
+  ELV_PopulateCustomSystems(Systems, selSysID, ActionMode); // always load "All Systems" item
   ResizeScreen;
   if ActionMode = 0 then // show filters in games list
      SelectSysFilters;

@@ -7,7 +7,7 @@ uses
   StdCtrls, ComCtrls, ExtCtrls, IniFiles, Buttons,
   MPCommonObjects, EasyListview, uCommon, ImgList,
   PanelEx, AdvOfficeButtons, ShadowLabel, GR32_Image, GraphicEx,
-  AdvGroupBox;
+  AdvGroupBox, ButtonsEx;
 
 type
   TLayoutInfo = record
@@ -28,11 +28,11 @@ type
   TFormImageLayoutSettings = class(TForm)
     IL_Layouts: TImageList;
     IL_ImageCategory: TImageList;
-    PanelBottomButtons: TPanelEx;
-    ButtonHelp: TBitBtn;
-    ButtonClose: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonHelp: TBitBtnEx;
+    ButtonClose: TBitBtnEx;
     IL_ImageCategory_ExtraLarge: TImageList;
-    ButtonAbort: TBitBtn;
+    ButtonAbort: TBitBtnEx;
     ImageScrLayoutFrame: TBevel;
     PanelLayoutsSelector: TPanelEx;
     LayoutListView: TEasyListview;
@@ -42,7 +42,7 @@ type
     FrameIconLayScr2: TShape;
     FrameIconLayScr3: TShape;
     FrameIconLayScr1: TShape;
-    LabelPanel1: TLabel;
+    LabelPanel1: TShadowLabel;
     LabelLayScr3: TShadowLabel;
     LabelLayScr2: TShadowLabel;
     IconLayScr1: TImage;
@@ -52,18 +52,16 @@ type
     FrameIconLayScr4: TShape;
     LabelLayScr4: TShadowLabel;
     IconLayScr4: TImage;
-    LabelPanel4: TLabel;
-    LabelPanel2: TLabel;
-    LabelPanel3: TLabel;
+    LabelPanel4: TShadowLabel;
+    LabelPanel2: TShadowLabel;
+    LabelPanel3: TShadowLabel;
     PanelEnabledScr2: TAdvOfficeCheckBox;
     PanelEnabledScr3: TAdvOfficeCheckBox;
-    LabelLayoutTitle: TShadowLabel;
-    LabelShowHideLayouts: TShadowLabel;
-    ButtonLayoutResetPanelsIndex: TBitBtn;
+    ButtonLayoutResetPanelsIndex: TBitBtnEx;
     FrameIconLayScr2_ConsComp: TShape;
     FrameIconLayScr3_ConsComp: TShape;
     FrameIconLayScr1_ConsComp: TShape;
-    LabelPanel1_ConsComp: TLabel;
+    LabelPanel1_ConsComp: TShadowLabel;
     LabelLayScr3_ConsComp: TShadowLabel;
     LabelLayScr2_ConsComp: TShadowLabel;
     IconLayScr1_ConsComp: TImage;
@@ -73,12 +71,16 @@ type
     FrameIconLayScr4_ConsComp: TShape;
     LabelLayScr4_ConsComp: TShadowLabel;
     IconLayScr4_ConsComp: TImage;
-    LabelPanel4_ConsComp: TLabel;
-    LabelPanel3_ConsComp: TLabel;
-    ButtonLayoutResetPanelsIndex_ConsComp: TBitBtn;
-    LabelPanel2_ConsComp: TLabel;
-    ButtonHelp_CustomCategoryConsComp: TBitBtn;
-    ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtn;
+    LabelPanel4_ConsComp: TShadowLabel;
+    LabelPanel3_ConsComp: TShadowLabel;
+    ButtonLayoutResetPanelsIndex_ConsComp: TBitBtnEx;
+    LabelPanel2_ConsComp: TShadowLabel;
+    ButtonHelp_CustomCategoryConsComp: TBitBtnEx;
+    ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtnEx;
+    PanelLayoutTitle: TPanelEx;
+    PanelLayoutsTitleBottom: TPanelEx;
+    LabelLayoutTitle: TShadowLabel;
+    LabelShowHideLayouts: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LayoutListViewItemCheckChange(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -143,7 +145,7 @@ var
 begin
   tmpFolder:= FormMain.GetFolderFull(32);
   for Loop:=0 to MaxImageLayouts do
-      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts);
+      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts, 3); // 3 -> layout white titles overlay
 end;
 
 procedure TFormImageLayoutSettings.LoadLayouts;
@@ -314,7 +316,7 @@ end;
 
 procedure TFormImageLayoutSettings.LoadLayoutIcon(LayoutImgHolder: TImage; ImgCategory: ShortInt);
 begin
-  FormMain.LoadImageCategoryThumbIcon(LayoutImgHolder, ImgCategory);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImgCategory, 0], LayoutImgHolder, 2); // 2 -> image category overlay
 end;
 
 procedure TFormImageLayoutSettings.FormCloseQuery(Sender: TObject;
@@ -339,8 +341,17 @@ begin
      end;
   case Item.Checked of
     True : Item.State:= Item.State-[esosGhosted];
-    False: Item.State:= Item.State+[esosGhosted];
+    False:
+      begin
+        if Item.Index <> FormMain.ButtonScreenshotLayouts.Tag then
+           Item.State:= Item.State+[esosGhosted]
+        else
+           Item.Checked:= True; // do not allow disable if layout is currently being used in main screen
+           Exit;
+      end;
   end;
+
+
   if Item.Selected then
      begin
        Item.Invalidate(True);
@@ -717,6 +728,9 @@ begin
   LabelPanel3.Top:= LabelPanel1.Top;
   FormMain.ELV_ResetNormalColors(LayoutListView);
 
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(LayoutListView);
+
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
   FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
   LoadLayoutIcons;
@@ -746,10 +760,20 @@ end;
 procedure TFormImageLayoutSettings.GroupBoxCategoryConsoleComputerCheckBoxClick(
   Sender: TObject);
 begin
-  if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
-     GroupBoxCategoryConsoleComputer.Font.Color:= clBlack
+  if IsNightMode then
+     begin
+       if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, item_caption_active_color[1], item_caption_active_shadow_color[1])
+       else
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, clGray, clrMedDarkGray);
+     end
   else
-     GroupBoxCategoryConsoleComputer.Font.Color:= clrLightGrayFrame;
+     begin
+       if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
+          GroupBoxCategoryConsoleComputer.Font.Color:= clBlack
+       else
+          GroupBoxCategoryConsoleComputer.Font.Color:= clrLightGrayFrame;
+     end;
 end;
 
 procedure TFormImageLayoutSettings.ButtonLayoutCopyCatAllSystems_ConsCompClick(
@@ -852,13 +876,19 @@ end;
 procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseEnter(
   Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     SetLabelColors(TShadowLabel(Sender), clBlue, clNavy);
 end;
 
 procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseLeave(
   Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= $00a65300;
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+  else
+     SetLabelColors(TShadowLabel(Sender), MsgTxtColors.colorFileName, $00dddddd);
 end;
 
 procedure TFormImageLayoutSettings.ButtonHelp_CustomCategoryConsCompClick(

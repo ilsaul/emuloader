@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, IniFiles, uCommon, StdCtrls, Buttons, AdvGroupBox,
   AdvOfficeButtons, ShadowLabel, ExtCtrls, PanelEx, MPCommonObjects,
-  MPCommonUtilities, EasyListview, Menus, BarMenus;
+  MPCommonUtilities, EasyListview, Menus, BarMenus, EditEx, ButtonsEx,
+  BevelEx;
 
 type
   TFileInfo = class(TEasyItemStored)
@@ -39,61 +40,52 @@ type
   TFormArcadeRunGameExtraMAME = class(TForm)
     TopBar: TPanelEx;
     GameIcon: TImage;
-    LabelTitle: TShadowLabel;
-    LabelGameNameCloneOf: TShadowLabel;
-    PanelMessages: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonAbort: TBitBtn;
-    Label3: TLabel;
+    LabelGameTitle: TShadowLabel;
+    LabelGameName: TShadowLabel;
+    BottomBar: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonAbort: TBitBtnEx;
+    LabelInfo: TShadowLabel;
     SystemIcon: TImage;
     LabelSoftwareListTitle: TShadowLabel;
     NotebookPages: TNotebook;
-    PageButtonInput: TSpeedButton;
-    PageButtonSaveState: TSpeedButton;
-    PageButtonMemoryCard: TSpeedButton;
-    PageButtonRecordMovie: TSpeedButton;
-    PagesButtonBottomLine: TBevel;
+    PageButtonInput: TSpeedButtonEx;
+    PageButtonSaveState: TSpeedButtonEx;
+    PageButtonMemoryCard: TSpeedButtonEx;
+    PageButtonRecordMovie: TSpeedButtonEx;
+    PagesButtonBottomLine: TBevelEx;
     Enabled_PlaybackRecordInput: TAdvOfficeCheckBox;
     InputPlayback: TAdvOfficeRadioButton;
-    InputFileName: TEdit;
+    InputFileName: TEditEx;
     InputRecord: TAdvOfficeRadioButton;
     InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBox;
     InputRecordTimecodeFile: TAdvOfficeCheckBox;
-    ButtonInputResetFileName: TBitBtn;
-    InputListView: TEasyListview;
-    LabelInputSelectedFileFolder: TShadowLabel;
-    SaveStateListView: TEasyListview;
+    ButtonInputResetFileName: TBitBtnEx;
     Enabled_LoadSaveState: TAdvOfficeCheckBox;
     Enabled_InsertMemoryCard: TAdvOfficeCheckBox;
     Enabled_RecordMovie: TAdvOfficeCheckBox;
-    LabelInsertMemoryCard_Slot1: TLabel;
-    LabelInsertMemoryCard_Slot2: TLabel;
-    InsertMemoryCard_Slot1: TEdit;
-    InsertMemoryCard_Slot2: TEdit;
-    ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtn;
-    ButtonInsertMemoryCard_Slot1_Clear: TBitBtn;
-    ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtn;
-    ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtn;
-    ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtn;
-    ButtonInsertMemoryCard_Slot2_Clear: TBitBtn;
-    ButtonRecordMovieResetFileNameTitle: TBitBtn;
-    ButtonRecordMovieResetFileName: TBitBtn;
-    RecordMovieFileName: TEdit;
+    LabelInsertMemoryCard_Slot1: TShadowLabel;
+    LabelInsertMemoryCard_Slot2: TShadowLabel;
+    InsertMemoryCard_Slot1: TEditEx;
+    InsertMemoryCard_Slot2: TEditEx;
+    ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot1_Clear: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot2_Clear: TBitBtnEx;
+    ButtonRecordMovieResetFileNameTitle: TBitBtnEx;
+    ButtonRecordMovieResetFileName: TBitBtnEx;
+    RecordMovieFileName: TEditEx;
     RecordMovieWAV: TAdvOfficeRadioButton;
     RecordMovieMNG: TAdvOfficeRadioButton;
     RecordMovieAVI: TAdvOfficeRadioButton;
-    InputListViewFileFolderFrame: TShape;
-    LabelInputFileName: TLabel;
-    LabelSaveStateSelectedFileFolder: TShadowLabel;
-    SaveStateListViewFileFolderFrame: TShape;
-    LabelLoadSaveStateNotSupportedMsg: TLabel;
+    LabelInputFileName: TShadowLabel;
+    LabelLoadSaveStateNotSupportedMsg: TShadowLabel;
     LabelMachineInUse: TShadowLabel;
     PopupELV: TBcBarPopupMenu;
     PopupInputRenameFile: TMenuItem;
     PopupInputDeleteFile: TMenuItem;
-    RecordMovieListView: TEasyListview;
-    LabelRecordMovieSelectedFileFolder: TShadowLabel;
-    RecordMovieListViewFileFolder: TShape;
     PanelDisabledInput: TPanel;
     PanelDisabledSaveState: TPanel;
     PanelDisabledMemoryCard: TPanel;
@@ -103,24 +95,33 @@ type
     N1: TMenuItem;
     AutoSaveState: TAdvOfficeCheckBox;
     PanelDisabledSaveStateNotSupportedMsg: TPanel;
-    ButtonInputResetFileNameTitle: TBitBtn;
-    LabelRecordMovieFileName: TLabel;
+    ButtonInputResetFileNameTitle: TBitBtnEx;
+    LabelRecordMovieFileName: TShadowLabel;
     LabelRecordMovieRootFolder: TShadowLabel;
     MemoryCardFileFolderPanel: TPanelEx;
     MemoryCardListView: TEasyListview;
     LabelMemoryCardSelectedFileFolder: TShadowLabel;
-    LabelInsertMemoryCard_Slot3: TLabel;
-    LabelInsertMemoryCard_Slot4: TLabel;
-    InsertMemoryCard_Slot3: TEdit;
-    InsertMemoryCard_Slot4: TEdit;
-    ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtn;
-    ButtonInsertMemoryCard_Slot3_Clear: TBitBtn;
-    ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtn;
-    ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtn;
-    ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtn;
-    ButtonInsertMemoryCard_Slot4_Clear: TBitBtn;
+    LabelInsertMemoryCard_Slot3: TShadowLabel;
+    LabelInsertMemoryCard_Slot4: TShadowLabel;
+    InsertMemoryCard_Slot3: TEditEx;
+    InsertMemoryCard_Slot4: TEditEx;
+    ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot3_Clear: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot4_Clear: TBitBtnEx;
     PopupMemoryCardAssignToSlot3: TMenuItem;
     PopupMemoryCardAssignToSlot4: TMenuItem;
+    PanelInputListView: TPanelEx;
+    LabelInputSelectedFileFolder: TShadowLabel;
+    InputListView: TEasyListview;
+    PanelSaveStateListView: TPanelEx;
+    SaveStateListView: TEasyListview;
+    LabelSaveStateSelectedFileFolder: TShadowLabel;
+    PanelRecordMovieListView: TPanelEx;
+    LabelRecordMovieSelectedFileFolder: TShadowLabel;
+    RecordMovieListView: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure InputPlaybackClick(Sender: TObject);
@@ -259,6 +260,7 @@ type
     procedure ResizeForm;
     procedure SetBottomButtons(IsEnabled: Boolean);
     function  CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
+    procedure SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBox);
   public
     { Public declarations }
     sysID: Integer;
@@ -466,7 +468,11 @@ begin
     if FileExists(iFolder+FormMain.MemGameInfo.eName+iFileExtension) then
        begin
          case FeatureIndex of
-           //20, 21: AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input // will not allow "mame_inpdir\expert11\gooniesb.inp" file!!!!!
+           20, 21:
+             begin
+               if MachineNameFolder = '' then // only for MAME arcade; softlist games cannot be used here! (March 10, 2019)
+                  AddFile_ELV(InputListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // input // will not allow "mame_inpdir\expert11\gooniesb.inp" file!!!!!
+             end;
            //22: AddFile_ELV(SaveStateListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // save state // MAME doesn't support this, files must be in "\gamename\" subfolder!!!!!
            23, 24, 25: AddFile_ELV(RecordMovieListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // record movie (.avi; .wav; .mng)
            // no longer used! 32: AddFile_ELV(MemoryCardListView, FormMain.MemGameInfo.eName+iFileExtension, iFolder, False); // memory card
@@ -525,7 +531,7 @@ begin
        end;
 
        case FeatureIndex of
-         20, 21, 32: iFolder:= iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
+         20, 21, 22, 32: iFolder:= iFolder+SoftwareListFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
          23, 24, 25: iFolder:= iFolder+FormMain.MemGameInfo.eName+'\'; // "inp_dir\expert11\gooniesb\multi_filenames.inp"
        end;
      end
@@ -1435,8 +1441,8 @@ begin
   InputListView.Width:= InputListView.Width-iWidthDec;
   InputListView.Height:= InputListView.Height-iHeight;
 
-  InputListViewFileFolderFrame.Top:= InputListViewFileFolderFrame.Top-iHeight;
-  InputListViewFileFolderFrame.Width:= InputListViewFileFolderFrame.Width-iWidthDec;
+  //InputListViewFileFolderFrame.Top:= InputListViewFileFolderFrame.Top-iHeight;
+  //InputListViewFileFolderFrame.Width:= InputListViewFileFolderFrame.Width-iWidthDec;
 
   LabelInputSelectedFileFolder.Top:= LabelInputSelectedFileFolder.Top-iHeight;
   LabelInputSelectedFileFolder.Width:= LabelInputSelectedFileFolder.Width-iWidthDec;
@@ -1455,8 +1461,8 @@ begin
   SaveStateListView.Width:= SaveStateListView.Width-iWidthDec;
   SaveStateListView.Height:= SaveStateListView.Height-iHeight;
 
-  SaveStateListViewFileFolderFrame.Top:= SaveStateListViewFileFolderFrame.Top-iHeight;
-  SaveStateListViewFileFolderFrame.Width:= SaveStateListViewFileFolderFrame.Width-iWidthDec;
+  //SaveStateListViewFileFolderFrame.Top:= SaveStateListViewFileFolderFrame.Top-iHeight;
+  //SaveStateListViewFileFolderFrame.Width:= SaveStateListViewFileFolderFrame.Width-iWidthDec;
 
   LabelSaveStateSelectedFileFolder.Top:= LabelSaveStateSelectedFileFolder.Top-iHeight;
   LabelSaveStateSelectedFileFolder.Width:= LabelSaveStateSelectedFileFolder.Width-iWidthDec;
@@ -1504,10 +1510,10 @@ begin
 
   LabelRecordMovieSelectedFileFolder.Width:= LabelRecordMovieSelectedFileFolder.Width-iWidthDec;
 
-  RecordMovieListViewFileFolder.Top:= RecordMovieListViewFileFolder.Top-iHeight;
-  RecordMovieListViewFileFolder.Width:= RecordMovieListViewFileFolder.Width-iWidthDec;
-  
-  LabelTitle.Width:= LabelTitle.Width-iWidthDec;
+  //RecordMovieListViewFileFolder.Top:= RecordMovieListViewFileFolder.Top-iHeight;
+  //RecordMovieListViewFileFolder.Width:= RecordMovieListViewFileFolder.Width-iWidthDec;
+
+  LabelGameTitle.Width:= LabelGameTitle.Width-iWidthDec;
   ButtonOk.Left:= ButtonOk.Left-iWidthDec;
   ButtonAbort.Left:= ButtonAbort.Left-iWidthDec;
 
@@ -1516,6 +1522,8 @@ begin
 end;
 
 procedure TFormArcadeRunGameExtraMAME.FormShow(Sender: TObject);
+var
+  cLoop: Integer;
 
   function AdjustDisabledPanel(PanelHolder: TPanel): Boolean;
   begin
@@ -1558,7 +1566,7 @@ begin
 
   InputRecordTimecodeFile.Left:= 170;
 
-  LabelTitle.Caption:= FormMain.MemGameInfo.eTitle;
+  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
   //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
@@ -1566,9 +1574,97 @@ begin
 
   FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
 
-  LabelGameNameCloneOf.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
+  LabelGameName.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
 
-  SetLightColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
+  if IsNightMode then
+  begin
+    SetFormColors(FormArcadeRunGameExtraMAME, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    NotebookPages.Color:= FormArcadeRunGameExtraMAME.Color;
+
+    SetTabButtonLineColors(PagesButtonBottomLine);
+
+    //SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
+    SetLabelColors(LabelMachineInUse, clrLightRed, clrLightBlack);
+    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);
+
+    // playback/record panel
+    SetPanelNightColors(PanelInputListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
+
+    SetCheckBoxColors(Enabled_PlaybackRecordInput, clCream, item_caption_active_shadow_color[1]);
+    SetRadioButtonColors(InputPlayback, clCream, item_caption_active_shadow_color[1]);
+    SetRadioButtonColors(InputRecord, clCream, item_caption_active_shadow_color[1]);
+    SetCheckBoxColors(InputExitEmulatorAfterInputPlayback, clCream, item_caption_active_shadow_color[1]);
+    SetCheckBoxColors(InputRecordTimecodeFile, clCream, item_caption_active_shadow_color[1]);
+
+    SetLabelColors(LabelInputSelectedFileFolder, clSilver, clrLightBlack);
+    SetLabelBkFrameColors(LabelInputSelectedFileFolder, clrDarkGray, PanelInputListView.ColorFrame);
+    FormMain.SetEasyListViewColors(InputListView, menu_background_color[1], item_caption_active_color[1]);
+
+    SetLabelColors(LabelInputFileName, clGray, clrDarkGray);
+    SetEditNightColors(InputFileName);
+
+    // Load a Save State panel
+    SetCheckBoxColors(Enabled_LoadSaveState, clCream, item_caption_active_shadow_color[1]);
+    SetCheckBoxColors(AutoSaveState, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelLoadSaveStateNotSupportedMsg, clRed, clMaroon);
+
+    SetPanelNightColors(PanelSaveStateListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
+
+    SetLabelColors(LabelSaveStateSelectedFileFolder, clSilver, clrDarkGray);
+    SetLabelBkFrameColors(LabelSaveStateSelectedFileFolder, clrDarkGray, PanelSaveStateListView.ColorFrame);
+    FormMain.SetEasyListViewColors(SaveStateListView, menu_background_color[1], item_caption_active_color[1]);
+
+    // Insert Memory Card panel
+    SetCheckBoxColors(Enabled_InsertMemoryCard, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelInsertMemoryCard_Slot1, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelInsertMemoryCard_Slot2, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelInsertMemoryCard_Slot3, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelInsertMemoryCard_Slot4, clCream, item_caption_active_shadow_color[1]);
+
+    SetEditNightColors(InsertMemoryCard_Slot1);
+    SetEditNightColors(InsertMemoryCard_Slot2);
+    SetEditNightColors(InsertMemoryCard_Slot3);
+    SetEditNightColors(InsertMemoryCard_Slot4);
+
+    SetPanelNightColors(MemoryCardFileFolderPanel, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
+    SetLabelColors(LabelMemoryCardSelectedFileFolder, clSilver, clrDarkGray);
+    SetLabelBkFrameColors(LabelMemoryCardSelectedFileFolder, clrDarkGray, MemoryCardFileFolderPanel.ColorFrame);
+    FormMain.SetEasyListViewColors(MemoryCardListView, menu_background_color[1], item_caption_active_color[1]);
+
+    // Record Session to a Movie panel
+    SetCheckBoxColors(Enabled_RecordMovie, clCream, item_caption_active_shadow_color[1]);
+    SetRadioButtonColors(RecordMovieAVI, clCream, item_caption_active_shadow_color[1]);
+    SetRadioButtonColors(RecordMovieMNG, clCream, item_caption_active_shadow_color[1]);
+    SetRadioButtonColors(RecordMovieWAV, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelRecordMovieFileName, clCream, item_caption_active_shadow_color[1]);
+    SetLabelColors(LabelRecordMovieRootFolder, clSilver, clrLightBlack);
+    SetEditNightColors(RecordMovieFileName);
+
+    SetPanelNightColors(PanelRecordMovieListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
+    SetLabelColors(LabelRecordMovieSelectedFileFolder, clSilver, clrLightBlack);
+    SetLabelBkFrameColors(LabelRecordMovieSelectedFileFolder, clrDarkGray, PanelRecordMovieListView.ColorFrame);
+    FormMain.SetEasyListViewColors(RecordMovieListView, menu_background_color[1], item_caption_active_color[1]);
+
+    SetLabelColors(LabelInfo, clLime, clrDarkGreen);
+
+    for cLoop:= 0 to FormArcadeRunGameExtraMAME.ComponentCount-1 do
+    begin
+      if FormArcadeRunGameExtraMAME.Components[cLoop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormArcadeRunGameExtraMAME.Components[cLoop]))
+      else
+      if FormArcadeRunGameExtraMAME.Components[cLoop] is TSpeedButtonEx then
+         FormMain.SetButtonExColors(TSpeedButtonEx(FormArcadeRunGameExtraMAME.Components[cLoop]));
+    end;
+
+    FormMain.ELV_SetRibbonNightColors(0, InputListView, True);
+    FormMain.ELV_SetRibbonNightColors(0, SaveStateListView, True);
+    FormMain.ELV_SetRibbonNightColors(0, MemoryCardListView, True);
+    FormMain.ELV_SetRibbonNightColors(0, RecordMovieListView, True);
+  end;
+  
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status // for light mode and night mode
+
+  //SetLightColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
 
   // Call adjust form for higher resolutions
   // ... it must be called before the AdjustDisabledPanel() functions!!!!
@@ -1577,7 +1673,6 @@ begin
   AdjustDisabledPanel(PanelDisabledSaveState);
   AdjustDisabledPanel(PanelDisabledMemoryCard);
   PanelDisabledSaveStateNotSupportedMsg.Left:= 95;
-  PanelDisabledSaveStateNotSupportedMsg.Height:= 17;
   PanelDisabledSaveStateNotSupportedMsg.Width:= (NotebookPages.Width-PanelDisabledSaveStateNotSupportedMsg.Left)-10;
   PanelDisabledSaveStateNotSupportedMsg.ParentBackground:= False;
   PanelDisabledSaveStateNotSupportedMsg.Color:= NotebookPages.Color;
@@ -1638,12 +1733,12 @@ begin
   if LabelSoftwareListTitle.Visible then
      begin
        LabelMachineInUse.Visible:= True;
-       LabelGameNameCloneOf.Top:= LabelGameNameCloneOf.Top-LabelSoftwareListTitle.Height;
-       LabelGameNameCloneOf.Caption:= LabelGameNameCloneOf.Caption+#13#10+'software list:'+#13#10+'Run with machine';
+       LabelGameName.Top:= LabelGameName.Top-LabelSoftwareListTitle.Height;
+       LabelGameName.Caption:= LabelGameName.Caption+#13#10+'software list:'+#13#10+'Run with machine';
 
        LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
        LabelSoftwareListTitle.Left:= 182;
-       LabelSoftwareListTitle.Top:= LabelGameNameCloneOf.Top+(LabelSoftwareListTitle.Height*2)-2;
+       LabelSoftwareListTitle.Top:= LabelGameName.Top+(LabelSoftwareListTitle.Height*2)-2;
        LabelMachineInUse.Caption:= '['+MachineNameToRun+']: '+LabelMachineInUse.Hint;
        LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+LabelSoftwareListTitle.Height-1;// LabelGameNameCloneOf.Top; //  LabelSoftwareListTitle.Top+12;
        TopBar.Height:= TopBar.Height+6;//17;
@@ -1723,13 +1818,20 @@ begin
      begin
        InputRecord.Font.Style:= [];
        LabelInputFileName.Caption:= 'Selected File (file extension optional)';
-       LabelInputFileName.Font.Color:= clrDarkGray;
+       if IsNightMode then
+          SetLabelColors(LabelInputFileName, clGray, clrDarkGray)
+          //LabelInputFileName.Font.Color:= clrGray
+       else
+          LabelInputFileName.Font.Color:= clrDarkGray;
      end
   else
      begin
        InputPlayback.Font.Style:= [];
        LabelInputFileName.Caption:= 'New File (file extension optional)';
-       LabelInputFileName.Font.Color:= clBlack;
+       if IsNightMode then
+          SetLabelColors(LabelInputFileName, clCream, item_caption_active_shadow_color[1])//clWhite, clNavy)
+       else
+          LabelInputFileName.Font.Color:= clBlack;
      end;
   //InputFileName.Tag:= 1;
   ReselectInputFile;
@@ -1786,25 +1888,27 @@ end;
 
 procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
 
-  function UncheckButton(ButtonHolder: TSpeedButton): Boolean;
+  function UncheckButton(ButtonHolder: TSpeedButtonEx): Boolean;
   begin
-    Result:= TSpeedButton(ButtonHolder).Top = TSpeedButton(Sender).Top;
+    Result:= TSpeedButtonEx(ButtonHolder).Top = TSpeedButtonEx(Sender).Top;
     if Result then
        begin
-         TSpeedButton(ButtonHolder).Top:= TSpeedButton(ButtonHolder).Top+3;
-         TSpeedButton(ButtonHolder).Height:= TSpeedButton(ButtonHolder).Height-3;
-         TSpeedButton(ButtonHolder).Font.Color:= clrDarkGray;
+         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+3;
+         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-3;
+         if not IsNightMode then
+            TSpeedButtonEx(ButtonHolder).Font.Color:= clrDarkGray;
        end;
   end;
 
 begin
-  if TSpeedButton(Sender).Tag = NotebookPages.Tag then
+  if TSpeedButtonEx(Sender).Tag = NotebookPages.Tag then
      Exit;
-  TSpeedButton(Sender).Top:= TSpeedButton(Sender).Top-3;
-  TSpeedButton(Sender).Height:= TSpeedButton(Sender).Height+3;
-  TSpeedButton(Sender).Font.Color:= clBlack;
+  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-3;
+  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+3;
+  if not IsNightMode then
+     TSpeedButtonEx(Sender).Font.Color:= clBlack;
 
-  case TSpeedButton(Sender).Tag of
+  case TSpeedButtonEx(Sender).Tag of
     1:
       begin
         UncheckButton(PageButtonSaveState);
@@ -1831,8 +1935,8 @@ begin
       end;
   end;
 
-  NotebookPages.Tag:= TSpeedButton(Sender).Tag;
-  NoteBookPages.PageIndex:= TSpeedButton(Sender).Tag-1;
+  NotebookPages.Tag:= TSpeedButtonEx(Sender).Tag;
+  NoteBookPages.PageIndex:= TSpeedButtonEx(Sender).Tag-1;
 
   //TAdvOfficeRadioButton(Sender).Font.Color:= clMaroon;
   //TAdvOfficeRadioButton(Sender).ShadowColor:= $00c0c0dc;
@@ -1845,6 +1949,24 @@ begin
 //  ShowEmulatorDetails(PanelEmulators.Tag);
 end;
 
+procedure TFormArcadeRunGameExtraMAME.SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBox);
+begin
+  if IsNightMode then
+     begin
+       case CheckBoxSource.Checked of
+         True : SetCheckBoxColors(CheckBoxSource, clYellow, clrOrange);
+         False: SetCheckBoxColors(CheckBoxSource, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       end;
+     end
+  else
+     begin
+       case CheckBoxSource.Checked of
+         True : CheckBoxSource.Font.Color:= clNavy;
+         False: CheckBoxSource.Font.Color:= clBlack;
+       end;
+     end;
+end;
+
 procedure TFormArcadeRunGameExtraMAME.Enabled_PlaybackRecordInputClick(
   Sender: TObject);
 begin
@@ -1853,10 +1975,11 @@ begin
        if not FormMain.CheckTotal(InputListView) then
           GetFiles(20, True);
      end;
-  case TAdvOfficeCheckBox(Sender).Checked of
-    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  end;
+  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
+  //case TAdvOfficeCheckBox(Sender).Checked of
+  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
+  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack;
+  //end;
   PanelDisabledInput.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
 
   ReselectInputFile;
@@ -1909,7 +2032,7 @@ begin
   if Item.Selected then
      begin
        InputFileName.Text:= TFileInfo(InputListView.Selection.First).eFileName;
-       LabelInputSelectedFileFolder.Caption:= TFileInfo(InputListView.Selection.First).eFileFolder;
+       LabelInputSelectedFileFolder.Caption:= ' '+TFileInfo(InputListView.Selection.First).eFileFolder;
        case InputListView.Tag of
          0: InputPlayback_CurrentFile:= TFileInfo(InputListView.Selection.First).eFileFolder+TFileInfo(InputListView.Selection.First).eFileName;
          1: InputRecord_CurrentFile:= TFileInfo(InputListView.Selection.First).eFileFolder+TFileInfo(InputListView.Selection.First).eFileName;
@@ -1929,7 +2052,7 @@ procedure TFormArcadeRunGameExtraMAME.ButtonInputResetFileNameClick(
 var
   iFullPath: String;
 begin
-  case TBitBtn(Sender).Tag of
+  case TBitBtnEx(Sender).Tag of
     0: InputRecord_CurrentFile:= FormMain.MemGameInfo.eName+'.inp'; // reset to game name
     1: InputRecord_CurrentFile:= FormMain.MemGameInfo.eTitle+'.inp'; // reset to game title
   end;
@@ -1937,7 +2060,7 @@ begin
   exit;
 
   iFullPath:= FolderInput+MachineNameFolder+SoftwareListFolder;
-  case TBitBtn(Sender).Tag of
+  case TBitBtnEx(Sender).Tag of
     0: iFullPath:= iFullPath+FormMain.MemGameInfo.eName+'.inp'; // reset to game name
     1: iFullPath:= iFullPath+FormMain.MemGameInfo.eTitle+'.inp'; // reset to game title
   end;
@@ -1977,7 +2100,7 @@ procedure TFormArcadeRunGameExtraMAME.SaveStateListViewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       LabelSaveStateSelectedFileFolder.Caption:= TFileInfo(SaveStateListView.Selection.First).eFileFolder;
+       LabelSaveStateSelectedFileFolder.Caption:= ' '+TFileInfo(SaveStateListView.Selection.First).eFileFolder;
      end;
 end;
 
@@ -1996,10 +2119,11 @@ begin
        if not FormMain.CheckTotal(SaveStateListView) then
           GetFiles(22, True);
      end;
-  case TAdvOfficeCheckBox(Sender).Checked of
-    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  end;
+  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
+  //case TAdvOfficeCheckBox(Sender).Checked of
+  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
+  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
+  //end;
 
   PanelDisabledSaveState.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
   if sysID <> idSupermodel then
@@ -2197,10 +2321,12 @@ begin
             // get last used memcard slot 2
           end;
      end;
-  case TAdvOfficeCheckBox(Sender).Checked of
-    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  end;
+
+  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
+  //case TAdvOfficeCheckBox(Sender).Checked of
+  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
+  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
+  //end;
   PanelDisabledMemoryCard.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
 end;
 
@@ -2343,10 +2469,12 @@ begin
             GetFiles(23, True); // 23 - WAV
           end;
      end;
-  case TAdvOfficeCheckBox(Sender).Checked of
-    True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-    False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  end;
+
+  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
+  //case TAdvOfficeCheckBox(Sender).Checked of
+  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
+  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
+  //end;
   PanelDisabledRecordMovie.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
   RecordMovieFilter_FileType;
 end;
@@ -2498,6 +2626,25 @@ begin
        Exit;
      end;
   RecordMovieListView.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+
+  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButton(Sender).Tag of
+    0:
+      begin
+        RecordMovieMNG.Font.Style:= [];
+        RecordMovieWAV.Font.Style:= [];
+      end;
+    1:
+      begin
+        RecordMovieAVI.Font.Style:= [];
+        RecordMovieWAV.Font.Style:= [];
+      end;
+    2:
+      begin
+        RecordMovieAVI.Font.Style:= [];
+        RecordMovieMNG.Font.Style:= [];
+      end;
+  end;
   RecordMovieFilter_FileType;
 end;
 
@@ -2605,7 +2752,7 @@ procedure TFormArcadeRunGameExtraMAME.RecordMovieListViewItemSelectionChanged(
 begin
   if Item.Selected then
      begin
-       LabelRecordMovieSelectedFileFolder.Caption:= TFileInfo(RecordMovieListView.Selection.First).eFileFolder;
+       LabelRecordMovieSelectedFileFolder.Caption:= ' '+TFileInfo(RecordMovieListView.Selection.First).eFileFolder;
        RecordMovieFileName.Text:= TFileInfo(RecordMovieListView.Selection.First).eFileName; //TFileInfo(RecordMovieListView.Selection.First).eFileFolder+TFileInfo(RecordMovieListView.Selection.First).eFileName;
      end;
 end;
@@ -2620,7 +2767,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.ButtonRecordMovieResetFileNameClick(
   Sender: TObject);
 begin
-  case TBitBtn(Sender).Tag of
+  case TBitBtnEx(Sender).Tag of
     0: RecordMovieFileName.Text:= FormMain.MemGameInfo.eName+GetRecordMovieFileExtension; // reset to game name
     1: RecordMovieFileName.Text:= FormMain.MemGameInfo.eTitle+GetRecordMovieFileExtension; // reset to game title
   end;

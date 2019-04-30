@@ -142,7 +142,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 3
       OnClick = ButtonUpdateClick
     end
-    object PrefixToAdd: TEdit
+    object PrefixToAdd: TEditEx
       Left = 8
       Top = 160
       Width = 145
@@ -186,7 +186,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 5
       DropDownCount = 8
     end
-    object SuffixToAdd: TEdit
+    object SuffixToAdd: TEditEx
       Left = 325
       Top = 160
       Width = 145
@@ -311,7 +311,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       'Additional Parameters (will be added at the end of the command l' +
       'ine)'
     TabOrder = 2
-    object AdditionalParameters: TEdit
+    object AdditionalParameters: TEditEx
       Left = 8
       Top = 17
       Width = 518
@@ -403,7 +403,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     Height = 49
     Caption = 'Emulator File / Batch File (full path, no quotes)'
     TabOrder = 4
-    object EmulatorBatchFile: TEdit
+    object EmulatorBatchFile: TEditEx
       Left = 8
       Top = 17
       Width = 462

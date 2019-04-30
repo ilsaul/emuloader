@@ -1275,6 +1275,9 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -1298,6 +1301,9 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -1335,6 +1341,9 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end

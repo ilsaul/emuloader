@@ -1,0 +1,18 @@
+need 'madBasic'
+'HKCU\Software\Borland\Delphi\7.0\Library'\'Search Path' -= 'C:\Program Files (x86)\Borland\Component\madCollection\madKernel\Delphi 7;'
+'HKCU\Software\Borland\Delphi\7.0\Library'\'Browsing Path' -= 'C:\Program Files (x86)\Borland\Component\madCollection\madKernel\Sources;'
+'Delphi 7', FFFFFFFF, FFFFFFFFFFFFF800
+'Demos', FFFFFFFF, FFFFFFFFFFFFF800
+'Help', FFFFFFFF, FFFFFFFFFFFFF800
+'Sources', FFFFFFFF, FFFFFFFFFFFFF800
+'Delphi 7\madKernel.dcu', 477F4, 1DC267CCFA23280
+'Delphi 7\madKernel_.bpl', 29800, 1DC267CCFAE4130
+'Delphi 7\madKernel_.dcp', 2CF69, 1DC267CCFA56710
+'Demos\under construction', 0, 1BFE9C138C41E00
+'Help\Content.htm', 6CF, 1C4C4F13E069E00
+'Help\madKernel.htm', 6D3, 1C4C4F17E661C00
+'Sources\mad.inc', 6BE, 1D7FB4AE94531C0
+'Sources\madKernel.pas', 64D3A, 1DB6CD7B8195D00
+'Sources\madKernelUses.inc', 29, 1C5A5DB6C1A2200
+'Sources\madKernel_.dpk', 25C, 1CA0A14E4EF6B80
+'www.madshi.net.url', 59, 1BFE9C218E12A00

@@ -7,7 +7,7 @@ uses
   Dialogs, Buttons, ComCtrls, StdCtrls, IniFiles, FileCtrl, Menus, uCommon,
   uCommonCustom,
   MPCommonObjects, EasyListview, ExtCtrls, ShadowLabel, PanelEx,
-  AdvOfficeButtons, ImgList;
+  AdvOfficeButtons, ImgList, EditEx, ButtonsEx, BevelEx;
 
 type
   TFormConsCompEmulatorsSetup = class(TForm)
@@ -17,41 +17,41 @@ type
     LabelEmuCartridgeParameter: TShadowLabel;
     LabelEmuDiscImageParameter: TShadowLabel;
     LabelEmuBootDiscParameter: TShadowLabel;
-    ButtonClearEmulator: TBitBtn;
+    ButtonClearEmulator: TBitBtnEx;
     LabelDaemonToolsFile: TShadowLabel;
     LabelDaemonToolsMount: TShadowLabel;
     LabelDaemonToolsUnmount: TShadowLabel;
-    ButtonDaemonToolsHelp: TBitBtn;
+    ButtonDaemonToolsHelp: TBitBtnEx;
     Systems: TEasyListview;
-    DaemonToolsFile: TEdit;
-    ButtonSelectDaemonTools: TBitBtn;
-    DaemonToolsMount: TEdit;
-    DaemonToolsUnmount: TEdit;
-    EmulatorFile: TEdit;
-    ButtonSelectEmulator: TBitBtn;
-    EmuDescription: TEdit;
-    EmuCartridgeParameter: TEdit;
-    EmuDiscImageParameter: TEdit;
-    EmuBootDiscParameter: TEdit;
+    DaemonToolsFile: TEditEx;
+    ButtonSelectDaemonTools: TBitBtnEx;
+    DaemonToolsMount: TEditEx;
+    DaemonToolsUnmount: TEditEx;
+    EmulatorFile: TEditEx;
+    ButtonSelectEmulator: TBitBtnEx;
+    EmuDescription: TEditEx;
+    EmuCartridgeParameter: TEditEx;
+    EmuDiscImageParameter: TEditEx;
+    EmuBootDiscParameter: TEditEx;
     LabelEmuFloppyDiskParameter: TShadowLabel;
     LabelEmuCassetteTapeParameter: TShadowLabel;
-    EmuFloppyDiskParameter: TEdit;
-    EmuCassetteTapeParameter: TEdit;
+    EmuFloppyDiskParameter: TEditEx;
+    EmuCassetteTapeParameter: TEditEx;
     LabelEmuCartridgeParameter1: TShadowLabel;
     LabelEmuCartridgeParameter2: TShadowLabel;
-    EmuCartridgeParameter2: TEdit;
+    EmuCartridgeParameter2: TEditEx;
     LabelEmuDiscImageParameter1: TShadowLabel;
     LabelEmuDiscImageParameter2: TShadowLabel;
-    EmuDiscImageParameter2: TEdit;
+    EmuDiscImageParameter2: TEditEx;
     LabelEmuBootDiscParameter1: TShadowLabel;
     LabelEmuBootDiscParameter2: TShadowLabel;
-    EmuBootDiscParameter2: TEdit;
+    EmuBootDiscParameter2: TEditEx;
     LabelEmuFloppyDiskParameter1: TShadowLabel;
     LabelEmuFloppyDiskParameter2: TShadowLabel;
-    EmuFloppyDiskParameter2: TEdit;
+    EmuFloppyDiskParameter2: TEditEx;
     LabelEmuCassetteTapeParameter1: TShadowLabel;
     LabelEmuCassetteTapeParameter2: TShadowLabel;
-    EmuCassetteTapeParameter2: TEdit;
+    EmuCassetteTapeParameter2: TEditEx;
     IconCartridge: TImage;
     IconDiscImage: TImage;
     IconBootDisc: TImage;
@@ -59,33 +59,33 @@ type
     IconCassetteTape: TImage;
     EmuIcon: TImage;
     IL_EmulatorIcon: TImageList;
-    EmuIconFrame: TBevel;
-    VirtualDriveIconFrame: TBevel;
+    EmuIconFrame: TBevelEx;
+    VirtualDriveIconFrame: TBevelEx;
     VirtualDriveIcon: TImage;
-    PanelBottomButtons: TPanelEx;
-    ButtonInstructions: TBitBtn;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonInstructions: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     IconCartridgeReset: TImage;
     IconDiscImageReset: TImage;
     IconBootDiscReset: TImage;
     IconFloppyDiskReset: TImage;
     IconCassetteTapeReset: TImage;
-    ButtonSelectFolders: TBitBtn;
-    Emulator1PageButton: TSpeedButton;
-    Emulator2PageButton: TSpeedButton;
-    Emulator3PageButton: TSpeedButton;
-    Emulator4PageButton: TSpeedButton;
-    Bevel1: TBevel;
+    ButtonSelectFolders: TBitBtnEx;
+    Emulator1PageButton: TSpeedButtonEx;
+    Emulator2PageButton: TSpeedButtonEx;
+    Emulator3PageButton: TSpeedButtonEx;
+    Emulator4PageButton: TSpeedButtonEx;
+    PageButtonsBottomLine: TBevelEx;
     IL_Systems: TImageList;
     LabelEmuHardDiskDriveParameter: TShadowLabel;
     LabelEmuHardDiskDriveParameter1: TShadowLabel;
     LabelEmuHardDiskDriveParameter2: TShadowLabel;
     IconHardDiskDrive: TImage;
     IconHardDiskDriveReset: TImage;
-    EmuHardDiskDriveParameter: TEdit;
-    EmuHardDiskDriveParameter2: TEdit;
-    BitBtn1: TBitBtn;
+    EmuHardDiskDriveParameter: TEditEx;
+    EmuHardDiskDriveParameter2: TEditEx;
+    BitBtn1: TBitBtnEx;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     LabelSystemType: TShadowLabel;
@@ -126,6 +126,15 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
+    procedure SystemsItemImageDrawIsCustom(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var IsCustom: Boolean);
+    procedure SystemsItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
   private
     { Private declarations }
     newEmulatorFileCustom,
@@ -725,7 +734,7 @@ begin
   EmuCassetteTapeParameter2.Clear;
   EmuHardDiskDriveParameter2.Clear;
   EmuIcon.Picture.Icon:= nil;
-  EmuIconFrame.Visible:= True;
+  EmuIconFrame.Visible:= not IsNightMode;
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonSelectEmulatorClick(Sender: TObject);
@@ -857,8 +866,8 @@ begin
        LabelSystemTitle.Width:= PanelEmulators.Left-1;
        LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
        LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
-       PanelBottomButtons.Align:= alNone;
-       PanelBottomButtons.Top:= PanelBottomButtons.Top+5;
+       PanelBottom.Align:= alNone;
+       PanelBottom.Top:= PanelBottom.Top+5;
        FormConsCompEmulatorsSetup.ClientWidth:= PanelEmulators.Left+PanelEmulators.Width;
      end;
 end;
@@ -868,6 +877,8 @@ begin
   ResizeForm;
 
   FormMain.ELV_ResetNormalColors(Systems);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(Systems);
   GetExtIcon('.exe', IL_EmulatorIcon); // .exe files
   GetExtIcon('.bat', IL_EmulatorIcon); // .bat files
   GetExtIcon('.exe', IL_EmulatorIcon); // emulator executable files
@@ -1196,25 +1207,27 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.Emulator1PageButtonClick(Sender: TObject);
 
-  function UncheckButton(ButtonHolder: TSpeedButton): Boolean;
+  function UncheckButton(ButtonHolder: TSpeedButtonEx): Boolean;
   begin
-    Result:= TSpeedButton(ButtonHolder).Top = TSpeedButton(Sender).Top;
+    Result:= TSpeedButtonEx(ButtonHolder).Top = TSpeedButtonEx(Sender).Top;
     if Result then
        begin
-         TSpeedButton(ButtonHolder).Top:= TSpeedButton(ButtonHolder).Top+3;
-         TSpeedButton(ButtonHolder).Height:= TSpeedButton(ButtonHolder).Height-3;
-         TSpeedButton(ButtonHolder).Font.Color:= clrDarkGray;
+         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+3;
+         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-3;
+         if not IsNightMode then
+            TSpeedButtonEx(ButtonHolder).Font.Color:= clrDarkGray;
        end;
   end;
 
 begin
-  if TSpeedButton(Sender).Tag = PanelEmulators.Tag then
+  if TSpeedButtonEx(Sender).Tag = PanelEmulators.Tag then
      Exit;
-  TSpeedButton(Sender).Top:= TSpeedButton(Sender).Top-3;
-  TSpeedButton(Sender).Height:= TSpeedButton(Sender).Height+3;
-  TSpeedButton(Sender).Font.Color:= clBlack;
+  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-3;
+  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+3;
+  if not IsNightMode then
+     TSpeedButtonEx(Sender).Font.Color:= clBlack;
 
-  case TSpeedButton(Sender).Tag of
+  case TSpeedButtonEx(Sender).Tag of
     1:
       begin
         UncheckButton(Emulator2PageButton);
@@ -1241,7 +1254,7 @@ begin
       end;
   end;
 
-  PanelEmulators.Tag:= TSpeedButton(Sender).Tag;
+  PanelEmulators.Tag:= TSpeedButtonEx(Sender).Tag;
 
   //TAdvOfficeRadioButton(Sender).Font.Color:= clMaroon;
   //TAdvOfficeRadioButton(Sender).ShadowColor:= $00c0c0dc;
@@ -1262,53 +1275,106 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.BitBtn1Click(Sender: TObject);
 begin
-  if TBitBtn(Sender).Tag = 0 then
-     begin
-       TBitBtn(Sender).Tag:= 1;
-       //IL_Systems.Width:= 32;
-       //IL_Systems.Height:= 32;
-     end
-  else
-     begin
-       TBitBtn(Sender).Tag:= 0;
-       IL_Systems.Width:= 48;
-       IL_Systems.Height:= 48;
-     end;
+  if IL_Systems.Width <> 68 then
+     Exit;
+
+  IL_Systems.Width:= 128;
+  IL_Systems.Height:= 128;
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
 
-  if TBitBtn(Sender).Tag = 0 then
-     begin
-       Systems.View:= elsIcon;
-       Systems.PaintInfoItem.TileDetailCount:= 1;
-       Systems.Font.Name:= 'Tahoma';
-       Systems.Font.Size:= 7;
-
-     end
-  else
-     begin
-       Systems.View:= elsTile;
-       Systems.CellSizes.Tile.Height:= 78;
-       Systems.CellSizes.Tile.Width:= 180;
-       Systems.Font.Name:= 'Trebuchet MS';
-       Systems.PaintInfoItem.TileDetailCount:= 2;
-       Systems.Font.Size:= 9;
-     end;
+  Systems.PaintInfoItem.IconViewAdjustIconTopBorder:= True;
+  Systems.CellSizes.Icon.Height:= 184;
+  Systems.CellSizes.Icon.Width:= 156;
+  Systems.Font.Name:= 'Segoe UI';
+  Systems.Font.Size:= 9;
 end;
 
 procedure TFormConsCompEmulatorsSetup.SystemsItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Systems.View = elsTile then
+  if Position = 1 then
      begin
-       if Position = 1 then
-         begin
-           ACanvas.Font.Name:= 'Segoe UI';
-           ACAnvas.Font.Size:= 9;
-           ACanvas.Font.Style:= [fsItalic];
-           ACanvas.Font.Color:= clMedGray;
-         end;
+       ACanvas.Font.Name:= 'Segoe UI';
+       ACanvas.Font.Size:= 9;
+       ACanvas.Font.Color:= clMedGray;
+       ACanvas.Font.Style:= [fsItalic];
+       if IsNightMode then
+          ACanvas.Font.Color:= clMedGray
+       else
+          ACanvas.Font.Color:= clGray;
+
+       if IsNightMode and Item.Selected then
+          ACanvas.Font.Color:= clrDarkGray;
+     end;
+end;
+
+procedure TFormConsCompEmulatorsSetup.SystemsItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+var
+  iLeft, iTop: Integer;
+  iSysTypeIndex: Integer;
+begin
+  if IL_Systems.Width < 128 then
+     Exit;
+  // this is for tiles view mode
+  iLeft:= RectArray.IconRect.Left;//+Systems.PaintInfoItem.ImageIndent+1;
+  iTop:=  RectArray.IconRect.Top+2;
+
+  Systems.ImagesLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+
+  //iLeft:= iLeft+Systems.ImagesExLarge.Width+4;
+  iTop:= RectArray.TextRect.Bottom;// iTop+(Systems.ImagesLarge.Height+12+2);//-FormMain.IL_MenuPopup.Height);
+
+  iSysTypeIndex:= -1;
+  if SystemIsConsole(Item.ImageIndex) then
+     iSysTypeIndex:= 25 // index 25 is "console" icon
+  else
+  if SystemIsComputer(Item.ImageIndex) then
+     iSysTypeIndex:= 26 // index 26 is "computer" icon
+  else
+  if SystemIsHandheld(Item.ImageIndex) then
+     iSysTypeIndex:= 27; // index 27 is "handheld" icon
+
+  if iSysTypeIndex <> -1 then
+     begin
+       FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+
+       ACanvas.Font.Name:= 'Segoe UI';
+       ACanvas.Font.Size:= 9;
+       ACanvas.Font.Color:= clMedGray;
+       ACanvas.Font.Style:= [fsItalic];
+       if IsNightMode then
+          ACanvas.Font.Color:= clMedGray
+       else
+          ACanvas.Font.Color:= clGray;
+
+       if IsNightMode and Item.Selected then
+          ACanvas.Font.Color:= clrDarkGray;
+       ACanvas.Brush.Style:= bsClear;
+       ACanvas.TextOut(iLeft, iTop, Item.Captions[1]);
+     end;
+end;
+
+procedure TFormConsCompEmulatorsSetup.SystemsItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  if IL_Systems.Width = 128 then
+     IsCustom:= True; // this is for tiles view mode
+end;
+
+procedure TFormConsCompEmulatorsSetup.SystemsItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  if IL_Systems.Width = 128 then
+     begin
+       ImageWidth:= Systems.ImagesLarge.Width;
+       ImageHeight:= Systems.ImagesLarge.Height;
      end;
 end;
 

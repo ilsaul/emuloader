@@ -5,44 +5,47 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, IniFiles,
   Dialogs, StdCtrls, Buttons, PanelEx, AdvOfficeButtons, MPCommonObjects,
-  EasyListview, ShadowLabel, ExtCtrls, ImgList, uCommon, uCommonCustom; //, ShellAPI;
+  EasyListview, ShadowLabel, ExtCtrls, ImgList, uCommon, uCommonCustom,
+  EditEx, ButtonsEx; //, ShellAPI;
 
 type
   TFormVideoPreviewSettings = class(TForm)
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     PanelSettings: TPanelEx;
-    Label2: TLabel;
-    LabelVideoPreviewMediaPlayerExecutable: TLabel;
-    LabelVideoPreviewMediaPlayerParameters: TLabel;
+    LabelVideoPreviewFolder: TShadowLabel;
+    LabelVideoPreviewMediaPlayerExecutable: TShadowLabel;
+    LabelVideoPreviewMediaPlayerParameters: TShadowLabel;
     LabelVideoPreviewAutoPlay: TShadowLabel;
-    LabelVideoPreviewDummyVideoParameters: TLabel;
+    LabelVideoPreviewDummyVideoParameters: TShadowLabel;
     LabelSnapDirAutoSearch: TShadowLabel;
-    VideoPreviewFolder: TEdit;
-    ButtonSelectVideoPreviewFolder: TBitBtn;
-    VideoPreviewMediaPlayerExecutable: TEdit;
-    ButtonSelectVideoPreviewMediaPlayer: TBitBtn;
-    VideoPreviewMediaPlayerParameters: TEdit;
+    VideoPreviewFolder: TEditEx;
+    ButtonSelectVideoPreviewFolder: TBitBtnEx;
+    VideoPreviewMediaPlayerExecutable: TEditEx;
+    ButtonSelectVideoPreviewMediaPlayer: TBitBtnEx;
+    VideoPreviewMediaPlayerParameters: TEditEx;
     VideoPreviewAutoPlay: TAdvOfficeCheckBox;
     VideoPreviewParentGameVideo: TAdvOfficeCheckBox;
-    ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtn;
+    ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtnEx;
     VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox;
-    ButtonHelpVideoPreviewPlayDummyVideo: TBitBtn;
-    VideoPreviewDummyVideoParameters: TEdit;
-    ButtonSnaplDirAutoSearchHelp: TBitBtn;
+    ButtonHelpVideoPreviewPlayDummyVideo: TBitBtnEx;
+    VideoPreviewDummyVideoParameters: TEditEx;
+    ButtonSnaplDirAutoSearchHelp: TBitBtnEx;
     VideoPreviewEnabled: TAdvOfficeCheckBox;
     IL_Systems: TImageList;
-    ButtonResetVideoPreviewMediaPlayerParameters: TBitBtn;
-    ButtonResetVideoPreviewDummyVideoParameters: TBitBtn;
-    ButtonResetVideoPreviewMediaPlayer: TBitBtn;
-    ButtonResetVideoPreviewFolder: TBitBtn;
-    LabelVideoPreviewSystem: TShadowLabel;
-    LabelSystemType: TShadowLabel;
+    ButtonResetVideoPreviewMediaPlayerParameters: TBitBtnEx;
+    ButtonResetVideoPreviewDummyVideoParameters: TBitBtnEx;
+    ButtonResetVideoPreviewMediaPlayer: TBitBtnEx;
+    ButtonResetVideoPreviewFolder: TBitBtnEx;
     SystemsVideoPreview: TEasyListview;
-    ButtonVideoPreviewHelp: TBitBtn;
-    ButtonVideoPreviewAutoPlayHelp: TBitBtn;
+    ButtonVideoPreviewHelp: TBitBtnEx;
+    ButtonVideoPreviewAutoPlayHelp: TBitBtnEx;
+    PanelSystemsTitle: TPanelEx;
+    LabelSystemType: TShadowLabel;
     LabelSystemNotAvailable: TShadowLabel;
+    LabelSystemTitle: TShadowLabel;
+    PanelSystemsTitleBottom: TPanelEx;
     procedure SystemsVideoPreviewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure VideoPreviewFolderChange(Sender: TObject);
@@ -110,7 +113,7 @@ begin
   if Item.Selected then
      begin
        SystemsVideoPreview.Tag:= FormMain.ELV_GetSystemTagMulti(SystemsVideoPreview);
-       FormMain.ELV_GetSystemTitle(SystemsVideoPreview, Item, LabelVideoPreviewSystem, LabelSystemType);
+       FormMain.ELV_GetSystemTitle(SystemsVideoPreview, Item, LabelSystemTitle, LabelSystemType);
        LabelSystemNotAvailable.Visible:= Item.Ghosted;
        if FormMain.ELV_IsArcadeSystemSelected(SystemsVideoPreview) then
           VideoPreviewFolder.Text:= FormMain.ArcadeVideoPreviewDir[Sender.Tag]
@@ -325,7 +328,9 @@ begin
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
 
   FormMain.ELV_ResetNormalColors(SystemsVideoPreview);
-  LabelVideoPreviewSystem.Caption:= '';
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(SystemsVideoPreview);
+  LabelSystemTitle.Caption:= '';
 
   for Loop:= 1 to MaxArcadeSystems do //Low(FormMain.ArcadeVideoPreviewDir) to High(FormMain.ArcadeVideoPreviewDir) do
       temp_ArcadeVideoPreviewDir[Loop]:= FormMain.ArcadeVideoPreviewDir[Loop];

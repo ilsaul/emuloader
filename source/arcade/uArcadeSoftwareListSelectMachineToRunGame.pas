@@ -5,19 +5,20 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ShadowLabel, ExtCtrls, Buttons, PanelEx,
-  MPCommonObjects, MPCommonUtilities, EasyListview, AdvOfficeButtons, IniFiles;
+  MPCommonObjects, MPCommonUtilities, EasyListview, AdvOfficeButtons, IniFiles,
+  ButtonsEx;
 
 type
   TFormArcadeSoftwareListMachineToRunGame = class(TForm)
     BottomBar: TPanelEx;
-    ButtonYes: TBitBtn;
-    ButtonNo: TBitBtn;
+    ButtonYes: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
     TopBar: TPanelEx;
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
     LabelGameName: TShadowLabel;
     LabelSoftwarelistTitleW: TShadowLabel;
-    ButtonResetToCurrent: TBitBtn;
+    ButtonResetToCurrent: TBitBtnEx;
     ShowAvailableMachinesOnly: TAdvOfficeCheckBox;
     HidePreliminaryMachines: TAdvOfficeCheckBox;
     LabelTotalMachines: TShadowLabel;
@@ -227,23 +228,25 @@ begin
   ResizeForm;
   if IsNightMode then
   begin
-    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, False);
+    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
     SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
-    SetLabelColors(LabelSoftwarelistTitleW, MsgTxtColors.colorWarning, $323200);
+    SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack);
 
-    //FrameMachinesList.ColorFrame:= clrLightBlue;
-    //FrameMachinesList.ColorInnerFrame:= clBlue;
     FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
 
-    MachinesListView.Color:= FormArcadeSoftwareListMachineToRunGame.Color;
-    MachinesListView.Font.Color:= clWhite;
-    MachinesListView.HotTrack.Color:= clWhite;
+    FormMain.SetEasyListViewColors(MachinesListView, FormArcadeSoftwareListMachineToRunGame.Color, clWhite);
 
-    SetCheckBoxColors(ShowAvailableMachinesOnly, clWhite, clNavy);
-    SetCheckBoxColors(HidePreliminaryMachines, clWhite, clNavy);
+    SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);//clWhite, clNavy);
+    SetCheckBoxColors(HidePreliminaryMachines, item_caption_active_color[1], item_caption_active_shadow_color[1]);//clWhite, clNavy);
+
+    FormMain.SetButtonExColors(ButtonYes);
+    FormMain.SetButtonExColors(ButtonNo);
+    FormMain.SetButtonExColors(ButtonResetToCurrent);
+
+    FormMain.ELV_SetRibbonNightColors(0, MachinesListView, True);
   end;
 
-  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, False); // change top bar color based on game set status
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status
 
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;
@@ -276,13 +279,14 @@ procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
+  FormMain.ELV_ItemPaintText_General(MachinesListView, Item, ACanvas);
   FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[6], IsNightMode);
   if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
        ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
      end;
-  FormMain.ELV_ItemPaintText_General(MachinesListView, Item, ACanvas);
+
 end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.ReselectItem(const MachineName: String);
@@ -364,7 +368,12 @@ procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemSelectionC
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Selected then
-     FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
+     begin
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(Item.Tag, MachinesListView)
+       else
+          FormMain.ELV_SetSelectRibbon(Item.Tag, MachinesListView);
+     end;
 end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewDblClick(

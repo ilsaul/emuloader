@@ -3,22 +3,19 @@ unit uThumbnailViewSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  ComCtrls, StdCtrls, ExTrackBar, ExtCtrls, Buttons, GraphicEx,
-  AdvOfficeButtons, MPCommonObjects, EasyListview, MPCommonUtilities, ShadowLabel, ImgList, uMain, uCommon;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
+  StdCtrls, ExTrackBar, ExtCtrls, Buttons, GraphicEx, AdvOfficeButtons,
+  MPCommonObjects, EasyListview, MPCommonUtilities, ShadowLabel, ImgList, PanelEx,
+  uMain, uCommon, ButtonsEx;
 
 type
   TFormThumbnailView = class(TForm)
     LabelGridWidthSize: TShadowLabel;
-    ButtonGridDefault: TBitBtn;
     GridWidthSize: TExTrackBar;
     BorderColor: TColorBox;
     ShowBorder: TAdvOfficeCheckBox;
-    BorderColorDefault: TBitBtn;
+    BorderColorDefault: TBitBtnEx;
     ShowGameTitles: TAdvOfficeCheckBox;
-    ButtonAbort: TBitBtn;
-    ButtonApply: TBitBtn;
-    ButtonConfirm: TBitBtn;
     MaintainAspectRatio: TAdvOfficeCheckBox;
     ShowSystemIcon: TAdvOfficeCheckBox;
     ShowFavoriteIcon: TAdvOfficeCheckBox;
@@ -31,12 +28,20 @@ type
     LabelImageSize: TShadowLabel;
     ELV_ThumbnailPreview: TEasyListview;
     IL_Thumbnail: TImageList;
-    ButtonGridWidthSize_Decrease: TBitBtn;
-    ButtonGridWidthSize_Increase: TBitBtn;
-    ButtonGridHeightSize_Decrease: TBitBtn;
-    ButtonGridHeightSize_Increase: TBitBtn;
+    ButtonGridWidthSize_Decrease: TBitBtnEx;
+    ButtonGridWidthSize_Increase: TBitBtnEx;
+    ButtonGridHeightSize_Decrease: TBitBtnEx;
+    ButtonGridHeightSize_Increase: TBitBtnEx;
     ThumbLeftAlignIcons: TAdvOfficeRadioButton;
     ThumbRightAlignIcons: TAdvOfficeRadioButton;
+    PanelBottom: TPanelEx;
+    ButtonApply: TBitBtnEx;
+    ButtonConfirm: TBitBtnEx;
+    ButtonAbort: TBitBtnEx;
+    ButtonGridDefault: TBitBtnEx;
+    LabelImageSizeValue: TShadowLabel;
+    LabelGridWidthSizeValue: TShadowLabel;
+    LabelGridHeightSizeValue: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);
     procedure ButtonApplyClick(Sender: TObject);
@@ -104,7 +109,6 @@ type
     procedure LoadSystemIcon;
     procedure LoadThumbImage;
     procedure UpdateThumbnail(ThumbnailIndex: Byte);
-    procedure ResizeForm;
   public
     { Public declarations }
     iModalResult: Integer;
@@ -114,8 +118,6 @@ var
   FormThumbnailView: TFormThumbnailView;
 
 implementation
-
-//uses uMain, uCommon;
 
 {$R *.dfm}
 
@@ -560,35 +562,10 @@ begin
   ThumbImageResized[ThumbnailIndex].Canvas.Unlock;
 end;
 
-procedure TFormThumbnailView.ResizeForm;
-begin
-  case Screen.Width of
-    720: FormThumbnailView.Width:= 715;
-    800: FormThumbnailView.Width:= 795;
-    960..1279: FormThumbnailView.Width:= 810;
-    else
-    begin
-      if Screen.Width >= 1280 then
-         FormThumbnailView.Width:= 1225;
-    end;
-  end;
-
-  if Screen.Height >= 600 then
-     begin
-       FormThumbnailView.Height:= 467;
-       //ButtonGridDefault.Top:= ButtonGridDefault.Top+44;
-       ButtonApply.Top:= ButtonApply.Top+47;
-       ButtonConfirm.Top:= ButtonConfirm.Top+47;
-       ButtonAbort.Top:= ButtonAbort.Top+47;
-     end;
-end;
-
 procedure TFormThumbnailView.FormShow(Sender: TObject);
 var
   Item: TEasyItem;
 begin
-  ResizeForm;
-
   ButtonApply.Enabled:= FormMain.IsThumbnailView;
   FormMain.ELV_ResetNormalColors(ELV_ThumbnailPreview);
   FormMain.ELV_SetBackgroundColor(ELV_ThumbnailPreview);
@@ -649,12 +626,9 @@ begin
   Item.ImageIndex:= 0;
   Item.Caption:= 'Horizontal';//'Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (NGM-2400)';
 
-  if FormThumbnailView.Width > 1000 then
-     begin
-       Item:= ELV_ThumbnailPreview.Items.Add;
-       Item.ImageIndex:= 1;
-       Item.Caption:= 'Vertical';//'Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (NGM-2400)';
-     end;
+  Item:= ELV_ThumbnailPreview.Items.Add;
+  Item.ImageIndex:= 1;
+  Item.Caption:= 'Vertical';//'Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (NGM-2400)';
 
   ELV_ThumbnailPreview.Items.ReIndexDisable:= False;
   ELV_ThumbnailPreview.EndUpdate;
@@ -670,7 +644,7 @@ begin
   //tImageWidth:= GridWidthSize.Position - ((FormMain.GamesListView.PaintInfoItem.Border*2) + 8); // this last "16" is an internal border for the icon Rect ????
   //tImageHeight:= GridHeightSize.Position - (((FormMain.GamesListView.PaintInfoItem.Border*2) + 8)-TextHeight); // this last "16" is an internal border for the icon Rect ????
 
-  LabelImageSize.Caption:= 'Image Size: '+IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
+  LabelImageSizeValue.Caption:= IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
 
   // Image Width:= GridWidthSize.Position - (FormMain.GamesListView.PaintInfoItem.Border*2) + 8; // this last "8" is an internal border for the icon Rect ????
   // Image Height:= GridHeightSize.Position - (FormMain.GamesListView.PaintInfoItem.Border*2) + 8; // this last "8" is an internal border for the icon Rect ????
@@ -741,7 +715,8 @@ begin
           end;
      end;
 
-  LabelImageSize.Caption:= 'Image Size: '+IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
+  LabelImageSizeValue.Caption:= IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
+  
   if UpdateWidth or UpdateHeight or ForceUpdate then
      begin
        UpdateImageListSize;
@@ -760,7 +735,7 @@ end;
 
 procedure TFormThumbnailView.GridWidthSizeChange(Sender: TObject);
 begin
-  LabelGridWidthSize.Caption:= Format(LabelGridWidthSize.Hint, [GridWidthSize.Position]);
+  LabelGridWidthSizeValue.Caption:= IntToStr(GridWidthSize.Position);
 
   case ELV_ThumbnailPreview.Items.Count of
     1: ELV_ThumbnailPreview.Width:= GridWidthSize.Position+2;
@@ -772,7 +747,7 @@ end;
 
 procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);
 begin
-  LabelGridHeightSize.Caption:= Format(LabelGridHeightSize.Hint, [GridHeightSize.Position]);
+  LabelGridHeightSizeValue.Caption:= IntToStr(GridHeightSize.Position);
   ELV_ThumbnailPreview.Height:= GridHeightSize.Position+2;
   if FormThumbnailView.Tag = 0 then
      UpdateImageSize(False, True);
@@ -781,6 +756,7 @@ end;
 procedure TFormThumbnailView.BorderColorDefaultClick(Sender: TObject);
 begin
   FormMain.SetSelectedColorBox(BorderColor, BorderColor.DefaultColorColor);
+  BorderColor.Invalidate;
 end;
 
 procedure TFormThumbnailView.BorderColorSelect(Sender: TObject);
@@ -971,7 +947,6 @@ begin
   Close;
 end;
 
-
 procedure TFormThumbnailView.ELV_ThumbnailPreviewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
@@ -979,5 +954,7 @@ begin
   if Item.Selected then
      FormMain.ELV_ItemPaintText_General(ELV_ThumbnailPreview, Item, ACanvas);
 end;
+
+
 
 end.

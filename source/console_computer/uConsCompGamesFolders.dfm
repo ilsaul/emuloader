@@ -108,6 +108,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelFolderDiscImage: TShadowLabel
@@ -126,6 +129,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelFolderFloppyDisk: TShadowLabel
@@ -144,6 +150,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelFolderCassetteTape: TShadowLabel
@@ -162,6 +171,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelRecursiveFolderInfo: TShadowLabel
@@ -183,6 +195,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -230,6 +245,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object IconHardDiskDrive: TImage
@@ -317,7 +335,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnItemEditEnd = FolderROMItemEditEnd
       OnKeyAction = FolderROMKeyAction
     end
-    object ButtonMoveFolderUp_ROM: TBitBtn
+    object ButtonMoveFolderUp_ROM: TBitBtnEx
       Tag = 1
       Left = 330
       Top = 25
@@ -331,7 +349,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 1
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonMoveFolderDown_ROM: TBitBtn
+    object ButtonMoveFolderDown_ROM: TBitBtnEx
       Left = 373
       Top = 25
       Width = 43
@@ -344,7 +362,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 2
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonAddFolder_ROM: TBitBtn
+    object ButtonAddFolder_ROM: TBitBtnEx
       Left = 330
       Top = 60
       Width = 43
@@ -357,7 +375,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 3
       OnClick = ButtonAddFolder_ROMClick
     end
-    object ButtonDeleteFolder_ROM: TBitBtn
+    object ButtonDeleteFolder_ROM: TBitBtnEx
       Left = 330
       Top = 81
       Width = 43
@@ -370,7 +388,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 4
       OnClick = ButtonDeleteFolder_ROMClick
     end
-    object ButtonEditFolder_ROM: TBitBtn
+    object ButtonEditFolder_ROM: TBitBtnEx
       Left = 373
       Top = 60
       Width = 43
@@ -383,7 +401,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 5
       OnClick = ButtonEditFolder_ROMClick
     end
-    object ButtonClearFolder_ROM: TBitBtn
+    object ButtonClearFolder_ROM: TBitBtnEx
       Left = 373
       Top = 81
       Width = 43
@@ -471,7 +489,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnItemEditEnd = FolderDiscImageItemEditEnd
       OnKeyAction = FolderDiscImageKeyAction
     end
-    object ButtonMoveFolderUp_ISO: TBitBtn
+    object ButtonMoveFolderUp_ISO: TBitBtnEx
       Tag = 1
       Left = 330
       Top = 132
@@ -485,7 +503,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 8
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonMoveFolderDown_ISO: TBitBtn
+    object ButtonMoveFolderDown_ISO: TBitBtnEx
       Left = 373
       Top = 132
       Width = 43
@@ -498,7 +516,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 9
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonAddFolder_ISO: TBitBtn
+    object ButtonAddFolder_ISO: TBitBtnEx
       Left = 330
       Top = 167
       Width = 43
@@ -511,7 +529,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 10
       OnClick = ButtonAddFolder_ROMClick
     end
-    object ButtonDeleteFolder_ISO: TBitBtn
+    object ButtonDeleteFolder_ISO: TBitBtnEx
       Left = 330
       Top = 188
       Width = 43
@@ -524,7 +542,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 11
       OnClick = ButtonDeleteFolder_ROMClick
     end
-    object ButtonEditFolder_ISO: TBitBtn
+    object ButtonEditFolder_ISO: TBitBtnEx
       Left = 373
       Top = 167
       Width = 43
@@ -537,7 +555,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 12
       OnClick = ButtonEditFolder_ROMClick
     end
-    object ButtonClearFolder_ISO: TBitBtn
+    object ButtonClearFolder_ISO: TBitBtnEx
       Left = 373
       Top = 188
       Width = 43
@@ -626,7 +644,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnItemEditEnd = FolderFloppyDiskItemEditEnd
       OnKeyAction = FolderFloppyDiskKeyAction
     end
-    object ButtonMoveFolderDown_FLOPPY: TBitBtn
+    object ButtonMoveFolderDown_FLOPPY: TBitBtnEx
       Left = 373
       Top = 239
       Width = 43
@@ -639,7 +657,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 15
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonAddFolder_FLOPPY: TBitBtn
+    object ButtonAddFolder_FLOPPY: TBitBtnEx
       Left = 330
       Top = 274
       Width = 43
@@ -652,7 +670,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 16
       OnClick = ButtonAddFolder_ROMClick
     end
-    object ButtonDeleteFolder_FLOPPY: TBitBtn
+    object ButtonDeleteFolder_FLOPPY: TBitBtnEx
       Left = 330
       Top = 295
       Width = 43
@@ -665,7 +683,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 17
       OnClick = ButtonDeleteFolder_ROMClick
     end
-    object ButtonEditFolder_FLOPPY: TBitBtn
+    object ButtonEditFolder_FLOPPY: TBitBtnEx
       Left = 373
       Top = 274
       Width = 43
@@ -678,7 +696,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 18
       OnClick = ButtonEditFolder_ROMClick
     end
-    object ButtonClearFolder_FLOPPY: TBitBtn
+    object ButtonClearFolder_FLOPPY: TBitBtnEx
       Left = 373
       Top = 295
       Width = 43
@@ -766,7 +784,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnItemEditEnd = FolderCassetteTapeItemEditEnd
       OnKeyAction = FolderCassetteTapeKeyAction
     end
-    object ButtonMoveFolderUp_TAPE: TBitBtn
+    object ButtonMoveFolderUp_TAPE: TBitBtnEx
       Tag = 1
       Left = 330
       Top = 346
@@ -780,7 +798,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 21
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonMoveFolderDown_TAPE: TBitBtn
+    object ButtonMoveFolderDown_TAPE: TBitBtnEx
       Left = 373
       Top = 346
       Width = 43
@@ -793,7 +811,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 22
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonAddFolder_TAPE: TBitBtn
+    object ButtonAddFolder_TAPE: TBitBtnEx
       Left = 330
       Top = 381
       Width = 43
@@ -806,7 +824,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 23
       OnClick = ButtonAddFolder_ROMClick
     end
-    object ButtonDeleteFolder_TAPE: TBitBtn
+    object ButtonDeleteFolder_TAPE: TBitBtnEx
       Left = 330
       Top = 402
       Width = 43
@@ -819,7 +837,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 24
       OnClick = ButtonDeleteFolder_ROMClick
     end
-    object ButtonEditFolder_TAPE: TBitBtn
+    object ButtonEditFolder_TAPE: TBitBtnEx
       Left = 373
       Top = 381
       Width = 43
@@ -832,7 +850,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 25
       OnClick = ButtonEditFolder_ROMClick
     end
-    object ButtonClearFolder_TAPE: TBitBtn
+    object ButtonClearFolder_TAPE: TBitBtnEx
       Left = 373
       Top = 402
       Width = 43
@@ -845,7 +863,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 26
       OnClick = ButtonClearFolder_ROMClick
     end
-    object ButtonMoveFolderUp_FLOPPY: TBitBtn
+    object ButtonMoveFolderUp_FLOPPY: TBitBtnEx
       Tag = 1
       Left = 330
       Top = 239
@@ -859,7 +877,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 27
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object PanelBottomButtons: TPanelEx
+    object PanelBottom: TPanelEx
       Left = 0
       Top = 673
       Width = 426
@@ -874,7 +892,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Frames = [frLeft]
       ParentBackground = False
       Style = vgSimple
-      object ButtonOk: TBitBtn
+      object ButtonOk: TBitBtnEx
         Left = 115
         Top = 8
         Width = 89
@@ -887,7 +905,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
         TabOrder = 0
         OnClick = ButtonOkClick
       end
-      object ButtonCancel: TBitBtn
+      object ButtonCancel: TBitBtnEx
         Left = 221
         Top = 8
         Width = 89
@@ -975,7 +993,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnItemEditEnd = FolderHardDiskDriveItemEditEnd
       OnKeyAction = FolderHardDiskDriveKeyAction
     end
-    object ButtonMoveFolderUp_HARDDISK: TBitBtn
+    object ButtonMoveFolderUp_HARDDISK: TBitBtnEx
       Tag = 1
       Left = 330
       Top = 450
@@ -989,7 +1007,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 30
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonMoveFolderDown_HARDDISK: TBitBtn
+    object ButtonMoveFolderDown_HARDDISK: TBitBtnEx
       Left = 373
       Top = 450
       Width = 43
@@ -1002,7 +1020,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 31
       OnClick = ButtonMoveFolderUp_ROMClick
     end
-    object ButtonAddFolder_HARDDISK: TBitBtn
+    object ButtonAddFolder_HARDDISK: TBitBtnEx
       Left = 330
       Top = 485
       Width = 43
@@ -1015,7 +1033,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 32
       OnClick = ButtonAddFolder_ROMClick
     end
-    object ButtonDeleteFolder_HARDDISK: TBitBtn
+    object ButtonDeleteFolder_HARDDISK: TBitBtnEx
       Left = 330
       Top = 506
       Width = 43
@@ -1028,7 +1046,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 33
       OnClick = ButtonDeleteFolder_ROMClick
     end
-    object ButtonEditFolder_HARDDISK: TBitBtn
+    object ButtonEditFolder_HARDDISK: TBitBtnEx
       Left = 373
       Top = 485
       Width = 43
@@ -1041,7 +1059,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 34
       OnClick = ButtonEditFolder_ROMClick
     end
-    object ButtonClearFolder_HARDDISK: TBitBtn
+    object ButtonClearFolder_HARDDISK: TBitBtnEx
       Left = 373
       Top = 506
       Width = 43
@@ -1056,9 +1074,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     end
   end
   object PanelSystemTitle: TPanelEx
-    Left = 392
+    Left = 470
     Top = 614
-    Width = 388
+    Width = 310
     Height = 100
     Color1 = 16448250
     Color2 = clSilver
@@ -1070,9 +1088,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     ParentBackground = False
     Style = vgSolid
     object LabelSystemTitle: TShadowLabel
-      Left = 5
+      Left = 10
       Top = 46
-      Width = 378
+      Width = 292
       Height = 16
       Alignment = taCenter
       AutoSize = False
@@ -1089,11 +1107,14 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
     object LabelSystemType: TShadowLabel
-      Left = 141
+      Left = 103
       Top = 24
       Width = 105
       Height = 16
@@ -1113,6 +1134,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end

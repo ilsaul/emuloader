@@ -5,20 +5,20 @@ interface
 uses
   Windows, Classes, Graphics, Controls, Forms, SysUtils,
   Buttons, StdCtrls, ComCtrls, ExtCtrls, ShadowLabel, Messages, PanelEx,
-  RichEditURL, ShellAPI, AdvOfficeButtons;
+  RichEditURL, ShellAPI, AdvOfficeButtons, ButtonsEx;
 
 type
   TFormMessageBox = class(TForm)
     LabelMessage: TRichEditURL;
     PanelBottom: TPanelEx;
-    ButtonYes: TBitBtn;
-    ButtonNo: TBitBtn;
+    ButtonYes: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
     PanelTop: TPanelEx;
     MessageIcon: TImage;
     LabelGameTitle: TShadowLabel;
     LabelGameName: TShadowLabel;
-    ButtonYestoAll: TBitBtn;
-    ButtonAbort: TBitBtn;
+    ButtonYestoAll: TBitBtnEx;
+    ButtonAbort: TBitBtnEx;
     IconMediaType: TImage;
     NightMode: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -118,15 +118,27 @@ begin
   end;
 
   if PanelBottom.Tag = 1 then
-     SetColorsGameTopBar(1, PanelTop, False) // red
+     SetColorsGameTopBar(1, PanelTop, IsNightMode)
   else
      begin
        if PanelBottom.Tag = 4 then // multi-slot arcade machines
           MessageIcon.Tag:= -1;
        if MessageIcon.Tag <> -1 then
-          SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, MessageIcon.Tag);
+          SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, MessageIcon.Tag, IsNightMode);
 
-       SetColorsGameTopBar(MessageIcon.Tag{-1}, PanelTop, False); // blue for -1 or game set status (green, red, gray)
+       SetColorsGameTopBar(MessageIcon.Tag{-1}, PanelTop, IsNightMode); // blue for -1 or game set status (green, red, gray)
+     end;
+
+  if IsNightMode then
+     begin
+       FormMain.SetButtonExColors(ButtonYestoAll);
+       FormMain.SetButtonExColors(ButtonYes);
+       FormMain.SetButtonExColors(ButtonNo);
+       FormMain.SetButtonExColors(ButtonAbort);
+
+  //     FormMessageBox.Color:= menu_background_color[1];
+  //     LabelMessage.Color:= menu_background_color[1];
+  //     SetPanelColors(PanelBottom, menu_background_color[1], clrMedDarkGray);
      end;
 
   if IconMediaType.Tag <> -1 then
@@ -189,6 +201,7 @@ begin
   IsNightMode:= NightMode.Checked;
   FormMain.MenuEnableNightMode.Checked:= IsNightMode;
   PopulateMsgColors;
+  FormMain.MenuEnableNightMode.OnClick(Self);
 end;
 
 

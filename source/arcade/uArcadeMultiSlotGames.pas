@@ -5,26 +5,26 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, MPCommonObjects, EasyListview, MPCommonUtilities,
-  PanelEx, IniFiles, ExtCtrls, Menus, BarMenus, ShadowLabel;
+  PanelEx, IniFiles, ExtCtrls, Menus, BarMenus, ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeMultiSlotGames = class(TForm)
     PanelBottom: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonNo: TBitBtn;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonRemoveFromList: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
+    ButtonUp: TBitBtnEx;
+    ButtonDown: TBitBtnEx;
+    ButtonRemoveFromList: TBitBtnEx;
     LabelHelpText: TShadowLabel;
     PanelNeoGeoMVS: TPanelEx;
     LabelMultiSlotMachines: TShadowLabel;
-    ButtonChangePanelNeoGeoMVS: TBitBtn;
+    ButtonChangePanelNeoGeoMVS: TBitBtnEx;
     PanelMultiSlotMachines: TPanelEx;
     LabelMultiSlotMachinesChooseMachineToRun: TShadowLabel;
     MultiSlotMachines: TEasyListview;
-    ButtonOkMultiSlotMachines: TBitBtn;
+    ButtonOkMultiSlotMachines: TBitBtnEx;
     LabelMultiSlotMachinesBoldDefaultMachine: TShadowLabel;
-    PanelGamesList: TPanelEx;
+    ButtonCancelMultiSlotMachines: TBitBtnEx;
     GamesList: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure GamesListItemPaintText(Sender: TCustomEasyListview;
@@ -43,13 +43,14 @@ type
       ShiftState: TShiftState; var Handled: Boolean);
     procedure MultiSlotMachinesKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+    procedure ButtonCancelMultiSlotMachinesClick(Sender: TObject);
   private
     { Private declarations }
+    LastSelectedMachine: TEasyItem;
     procedure UpdateLabelSelectedMachine(Item: TEasyItem);
     procedure AddMachinesMultiSlot;
     procedure UpdateSlotIndex;
     procedure AddMultiGames;
-    procedure ResizeForm;
     procedure MoveToSlot(MoveUp: Boolean);
   public
     { Public declarations }
@@ -167,33 +168,31 @@ begin
       if iName <> '' then
       begin
         Item:= MultiSlotMachines.Items.Add;
-        //with MultiSlotMachines.Items.Add do
-        //begin
-          Item.Tag:= StrToInt(SoftListGetEntryValue(iName, 'slots'));
-          if AddIcon then
-             begin
-               tmpStr:= GamesFile.Values[MachinesList[iLoop]];
-               if tmpStr <> '' then
-                  Item.ImageIndex:= StrToInt(Copy(tmpStr, 1, 2))
-               else
-                  Item.ImageIndex:= 500; // set a bogus index to show an empty space
-             end;
 
-          Item.Caption:= SoftListGetEntryValue(iName, 'title'); // machine title
-          Item.Captions[1]:= SoftListGetEntryValue(iName, 'year'); // year
-          Item.Captions[2]:= IntToStr(Item.Tag)+'-slot'; //SoftListGetEntryValue(iName, 'slots')+'-slot'; // slot configuration
-          Item.Captions[3]:= SoftListGetEntryValue(iName, 'videochipset'); // video chipset
-          Item.Captions[4]:= MachinesList[iLoop]; // machine name
-          Item.Captions[5]:= SoftListGetEntryValue(iName, 'notes'); // notes
-          if SameText(MachinesList[iLoop], SectionStr) then
-             Item.Bold:= True;
-          if MachinesList[iLoop] = LastUsedName then
-             begin
-               UpdateLabelSelectedMachine(Item);
-               Item.Selected:= True;
-               //Selection.FocusedItem:= Item;
-             end;
-        //end;
+        Item.Tag:= StrToInt(SoftListGetEntryValue(iName, 'slots'));
+        if AddIcon then
+           begin
+             tmpStr:= GamesFile.Values[MachinesList[iLoop]];
+             if tmpStr <> '' then
+                Item.ImageIndex:= StrToInt(Copy(tmpStr, 1, 2))
+             else
+                Item.ImageIndex:= 500; // set a bogus index to show an empty space
+           end;
+
+        Item.Caption:= SoftListGetEntryValue(iName, 'title'); // machine title
+        Item.Captions[1]:= SoftListGetEntryValue(iName, 'year'); // year
+        Item.Captions[2]:= IntToStr(Item.Tag)+'-slot'; //SoftListGetEntryValue(iName, 'slots')+'-slot'; // slot configuration
+        Item.Captions[3]:= SoftListGetEntryValue(iName, 'videochipset'); // video chipset
+        Item.Captions[4]:= MachinesList[iLoop]; // machine name
+        Item.Captions[5]:= SoftListGetEntryValue(iName, 'notes'); // notes
+        if SameText(MachinesList[iLoop], SectionStr) then
+           Item.Bold:= True;
+        if MachinesList[iLoop] = LastUsedName then
+           begin
+             UpdateLabelSelectedMachine(Item);
+             Item.Selected:= True;
+             LastSelectedMachine:= Item;
+           end;
       end;
     end;
     if AddIcon then
@@ -274,57 +273,12 @@ begin
        iTotalW:= iTotalW+GamesList.Header.Columns[iLoop].Width;
   end;
 
-  if iTotalW < (GamesList.Width{-2}) then //iMaxTotalWidth then
-     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width+((GamesList.Width{-2})-iTotalW);
+  if iTotalW < (GamesList.Width-2) then
+     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width+((GamesList.Width-2)-iTotalW);
 
   GamesList.EndUpdate(False);
 
   UpdateSlotIndex;
-  if GamesList.Scrollbars.VertBarVisible then
-     GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-GetSystemMetrics(SM_CXVSCROLL);
-
-  if GamesList.Scrollbars.HorzBarVisible then
-     begin
-       // resolution is smaller than 800x600... headers scroll bar needed ????
-       GamesList.Height:= GamesList.Height+GetSystemMetrics(SM_CXHSCROLL);
-       ButtonUp.Top:= ButtonUp.Top+GetSystemMetrics(SM_CXHSCROLL);
-       ButtonDown.Top:= ButtonUp.Top;
-       ButtonRemoveFromList.Top:= ButtonUp.Top;
-       LabelHelpText.Top:= LabelHelpText.Top+GetSystemMetrics(SM_CXHSCROLL);
-     end;
-end;
-
-procedure TFormArcadeMultiSlotGames.ResizeForm;
-var
-  wDiff: Integer;
-begin
-  //wDiff:= 160; // for debugging only; do not enable this
-  Exit;
-  if Screen.Width >= 960 then
-     Exit;
-  case Screen.Width of
-    800: wDiff:= 100;
-    720: wDiff:= 180;
-    640: wDiff:= 260;
-  end;
-
-  ButtonOk.Left:= ButtonOk.Left-(wDiff div 2);
-  ButtonNo.Left:= ButtonNo.Left-(wDiff div 2);
-  LabelHelpText.Left:= LabelHelpText.Left-(wDiff div 2);
-  GamesList.Width:= GamesList.Width-wDiff;
-  GamesList.Header.Columns[1].Width:= GamesList.Header.Columns[1].Width-wDiff;
-
-  MultiSlotMachines.Width:= MultiSlotMachines.Width-wDiff;
-
-  LabelMultiSlotMachinesBoldDefaultMachine.Caption:= 'bold is default';
-  LabelMultiSlotMachinesBoldDefaultMachine.Left:= LabelMultiSlotMachinesBoldDefaultMachine.Left-((wDiff-55) div 2);
-  ButtonOkMultiSlotMachines.Left:= ButtonOkMultiSlotMachines.Left-wDiff;
-  PanelMultiSlotMachines.Width:= PanelMultiSlotMachines.Width-wDiff;
-
-  ButtonChangePanelNeoGeoMVS.Left:= ButtonChangePanelNeoGeoMVS.Left-wDiff;
-  PanelNeoGeoMVS.Width:= PanelNeoGeoMVS.Width-wDiff;
-
-  FormArcadeMultiSlotGames.ClientWidth:= FormArcadeMultiSlotGames.ClientWidth-wDiff;
 end;
 
 procedure TFormArcadeMultiSlotGames.MoveToSlot(MoveUp: Boolean);
@@ -360,26 +314,44 @@ begin
   else
      FormArcadeMultiSlotGames.Height:= 440-PanelNeoGeoMVS.Height;
 
-  ResizeForm;
-
   SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, -1, True);
   if IsNightMode then
      begin
-       //PanelGamesList.ColorFrame:= clrLightBlue;
-       //PanelGamesList.ColorInnerFrame:= clBlue;
-       GamesList.Color:= FormArcadeMultiSlotGames.Color;
-       GamesList.Font.Color:= clWhite;
-
-       PanelNeoGeoMVS.Color1:= GamesList.Color;
-       PanelNeoGeoMVS.ColorFrame:= PanelGamesList.ColorFrame;
-       PanelNeoGeoMVS.ColorInnerFrame:= PanelGamesList.ColorInnerFrame;
+       FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
+       GamesList.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
+       PanelNeoGeoMVS.Color1:= clrLightBlack;
 
        MultiSlotMachines.Color:= GamesList.Color;
        MultiSlotMachines.Font.Color:= clWhite;
 
-       SetLabelColors(LabelMultiSlotMachines, clWhite, clNavy);
-       SetLabelColors(LabelHelpText, MsgTxtColors.colorFileName, clNavy);
+       SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelHelpText, clrLightRed, clMaroon);// MsgTxtColors.colorFileName, clNavy);
+
+       SetLabelColors(LabelMultiSlotMachinesChooseMachineToRun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelMultiSlotMachinesBoldDefaultMachine, clrLightBlue, clNavy);
+
+       FormMain.SetPanelExStyle(PanelMultiSlotMachines, True);
+       SetPanelNightColors(PanelMultiSlotMachines,
+                           clrLightBlack,
+                           clrDarkGray,
+                           clrBorderGroupBoxGrayBk,
+                           clrInnerBorderGroupBoxGrayBk);
+       MultiSlotMachines.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonNo);
+       FormMain.SetButtonExColors(ButtonUp);
+       FormMain.SetButtonExColors(ButtonDown);
+       FormMain.SetButtonExColors(ButtonRemoveFromList);
+       FormMain.SetButtonExColors(ButtonChangePanelNeoGeoMVS);
+       FormMain.SetButtonExColors(ButtonOkMultiSlotMachines);
+       FormMain.SetButtonExColors(ButtonCancelMultiSlotMachines);
+
+       FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
+       FormMain.ELV_SetRibbonNightColors(0, MultiSlotMachines, True);
      end;
+
+  LastSelectedMachine:= nil;
   AddMachinesMultiSlot;
   AddMultiGames;
   PanelMultiSlotMachines.Visible:= False; // cannot add items to EasyListView while "visible = FALSE" or it triggers "access violation" error
@@ -479,6 +451,7 @@ procedure TFormArcadeMultiSlotGames.ButtonOkMultiSlotMachinesClick(
 begin
   if FormMain.CheckSelected(MultiSlotMachines) then
      begin
+       LastSelectedMachine:= MultiSlotMachines.Selection.First;
        UpdateLabelSelectedMachine(MultiSlotMachines.Selection.First);
      end;
 
@@ -499,6 +472,14 @@ procedure TFormArcadeMultiSlotGames.MultiSlotMachinesKeyAction(
 begin
   if CharCode = VK_RETURN then
      ButtonOkMultiSlotMachines.Click;
+end;
+
+procedure TFormArcadeMultiSlotGames.ButtonCancelMultiSlotMachinesClick(
+  Sender: TObject);
+begin
+  LastSelectedMachine.Selected:= True;
+  PanelMultiSlotMachines.Visible:= False;
+  ButtonOk.Enabled:= True;
 end;
 
 end.

@@ -81,6 +81,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 1
+    OnItemImageDraw = SystemsItemImageDraw
+    OnItemImageGetSize = SystemsItemImageGetSize
+    OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
     OnItemPaintText = SystemsItemPaintText
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
@@ -99,14 +102,14 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Frames = [frLeft]
     ParentBackground = True
     Style = vgSolid
-    object EmuIconFrame: TBevel
+    object EmuIconFrame: TBevelEx
       Left = 12
       Top = 139
       Width = 34
       Height = 34
     end
     object LabelEmulatorFile: TShadowLabel
-      Left = 52
+      Left = 56
       Top = 135
       Width = 222
       Height = 16
@@ -589,7 +592,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       IncrementalDisplay = True
       Transparent = True
     end
-    object VirtualDriveIconFrame: TBevel
+    object VirtualDriveIconFrame: TBevelEx
       Left = 12
       Top = 10
       Width = 34
@@ -668,7 +671,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnMouseDown = IconCartridgeResetMouseDown
       OnMouseUp = IconCartridgeResetMouseUp
     end
-    object Emulator1PageButton: TSpeedButton
+    object Emulator1PageButton: TSpeedButtonEx
       Tag = 1
       Left = 12
       Top = 102
@@ -684,8 +687,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      GradientColorTop_Down = 10905138
+      GradientColorBottom_Down = 9196326
+      FrameColor_Down = clBlack
     end
-    object Emulator2PageButton: TSpeedButton
+    object Emulator2PageButton: TSpeedButtonEx
       Tag = 2
       Left = 101
       Top = 105
@@ -700,8 +706,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      GradientColorTop_Down = 10905138
+      GradientColorBottom_Down = 9196326
+      FrameColor_Down = clBlack
     end
-    object Emulator3PageButton: TSpeedButton
+    object Emulator3PageButton: TSpeedButtonEx
       Tag = 3
       Left = 190
       Top = 105
@@ -716,8 +725,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      GradientColorTop_Down = 10905138
+      GradientColorBottom_Down = 9196326
+      FrameColor_Down = clBlack
     end
-    object Emulator4PageButton: TSpeedButton
+    object Emulator4PageButton: TSpeedButtonEx
       Tag = 4
       Left = 279
       Top = 105
@@ -732,8 +744,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      GradientColorTop_Down = 10905138
+      GradientColorBottom_Down = 9196326
+      FrameColor_Down = clBlack
     end
-    object Bevel1: TBevel
+    object PageButtonsBottomLine: TBevelEx
       Left = 2
       Top = 124
       Width = 422
@@ -825,10 +840,10 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnMouseDown = IconCartridgeResetMouseDown
       OnMouseUp = IconCartridgeResetMouseUp
     end
-    object EmulatorFile: TEdit
-      Left = 48
+    object EmulatorFile: TEditEx
+      Left = 52
       Top = 152
-      Width = 319
+      Width = 315
       Height = 21
       Hint = '1'
       AutoSize = False
@@ -847,7 +862,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 6
       OnChange = EmulatorFileChange
     end
-    object ButtonClearEmulator: TBitBtn
+    object ButtonClearEmulator: TBitBtnEx
       Left = 374
       Top = 114
       Width = 41
@@ -863,7 +878,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 0
       OnClick = ButtonClearEmulatorClick
     end
-    object ButtonDaemonToolsHelp: TBitBtn
+    object ButtonDaemonToolsHelp: TBitBtnEx
       Left = 395
       Top = 23
       Width = 21
@@ -878,7 +893,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 1
       OnClick = ButtonDaemonToolsHelpClick
     end
-    object DaemonToolsFile: TEdit
+    object DaemonToolsFile: TEditEx
       Tag = 1
       Left = 48
       Top = 23
@@ -901,7 +916,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 2
       OnChange = DaemonToolsFileChange
     end
-    object ButtonSelectDaemonTools: TBitBtn
+    object ButtonSelectDaemonTools: TBitBtnEx
       Left = 347
       Top = 23
       Width = 47
@@ -911,7 +926,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 3
       OnClick = ButtonSelectDaemonToolsClick
     end
-    object DaemonToolsMount: TEdit
+    object DaemonToolsMount: TEditEx
       Tag = 1
       Left = 12
       Top = 69
@@ -930,7 +945,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 4
       OnChange = DaemonToolsMountChange
     end
-    object DaemonToolsUnmount: TEdit
+    object DaemonToolsUnmount: TEditEx
       Tag = 1
       Left = 218
       Top = 69
@@ -949,7 +964,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 5
       OnChange = DaemonToolsUnmountChange
     end
-    object ButtonSelectEmulator: TBitBtn
+    object ButtonSelectEmulator: TBitBtnEx
       Left = 369
       Top = 152
       Width = 47
@@ -959,11 +974,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 7
       OnClick = ButtonSelectEmulatorClick
     end
-    object EmuDescription: TEdit
+    object EmuDescription: TEditEx
       Tag = 1
-      Left = 48
+      Left = 52
       Top = 175
-      Width = 367
+      Width = 363
       Height = 21
       AutoSize = False
       Color = clWhite
@@ -978,7 +993,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 8
       OnChange = EmuDescriptionChange
     end
-    object EmuCartridgeParameter: TEdit
+    object EmuCartridgeParameter: TEditEx
       Left = 52
       Top = 221
       Width = 363
@@ -996,7 +1011,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 9
       OnChange = EmuCartridgeParameterChange
     end
-    object EmuDiscImageParameter: TEdit
+    object EmuDiscImageParameter: TEditEx
       Left = 52
       Top = 290
       Width = 363
@@ -1014,7 +1029,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 10
       OnChange = EmuDiscImageParameterChange
     end
-    object EmuBootDiscParameter: TEdit
+    object EmuBootDiscParameter: TEditEx
       Left = 52
       Top = 359
       Width = 363
@@ -1032,7 +1047,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 11
       OnChange = EmuBootDiscParameterChange
     end
-    object EmuFloppyDiskParameter: TEdit
+    object EmuFloppyDiskParameter: TEditEx
       Left = 52
       Top = 428
       Width = 363
@@ -1050,7 +1065,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 12
       OnChange = EmuFloppyDiskParameterChange
     end
-    object EmuCassetteTapeParameter: TEdit
+    object EmuCassetteTapeParameter: TEditEx
       Left = 52
       Top = 497
       Width = 363
@@ -1068,7 +1083,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 13
       OnChange = EmuCassetteTapeParameterChange
     end
-    object EmuCartridgeParameter2: TEdit
+    object EmuCartridgeParameter2: TEditEx
       Left = 52
       Top = 244
       Width = 363
@@ -1086,7 +1101,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 14
       OnChange = EmuCartridgeParameter2Change
     end
-    object EmuDiscImageParameter2: TEdit
+    object EmuDiscImageParameter2: TEditEx
       Left = 52
       Top = 313
       Width = 363
@@ -1104,7 +1119,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 15
       OnChange = EmuDiscImageParameter2Change
     end
-    object EmuBootDiscParameter2: TEdit
+    object EmuBootDiscParameter2: TEditEx
       Left = 52
       Top = 382
       Width = 363
@@ -1122,7 +1137,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 16
       OnChange = EmuBootDiscParameter2Change
     end
-    object EmuFloppyDiskParameter2: TEdit
+    object EmuFloppyDiskParameter2: TEditEx
       Left = 52
       Top = 451
       Width = 363
@@ -1140,7 +1155,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 17
       OnChange = EmuFloppyDiskParameter2Change
     end
-    object EmuCassetteTapeParameter2: TEdit
+    object EmuCassetteTapeParameter2: TEditEx
       Left = 52
       Top = 520
       Width = 363
@@ -1158,7 +1173,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 18
       OnChange = EmuCassetteTapeParameter2Change
     end
-    object PanelBottomButtons: TPanelEx
+    object PanelBottom: TPanelEx
       Left = 0
       Top = 673
       Width = 426
@@ -1173,7 +1188,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Frames = [frLeft]
       ParentBackground = False
       Style = vgSimple
-      object ButtonInstructions: TBitBtn
+      object ButtonInstructions: TBitBtnEx
         Left = 161
         Top = 8
         Width = 47
@@ -1182,7 +1197,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         TabOrder = 0
         OnClick = ButtonInstructionsClick
       end
-      object ButtonOk: TBitBtn
+      object ButtonOk: TBitBtnEx
         Left = 222
         Top = 8
         Width = 89
@@ -1192,7 +1207,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         ModalResult = 1
         TabOrder = 1
       end
-      object ButtonCancel: TBitBtn
+      object ButtonCancel: TBitBtnEx
         Left = 328
         Top = 8
         Width = 89
@@ -1202,7 +1217,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         ModalResult = 2
         TabOrder = 2
       end
-      object ButtonSelectFolders: TBitBtn
+      object ButtonSelectFolders: TBitBtnEx
         Left = 12
         Top = 8
         Width = 125
@@ -1213,7 +1228,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         OnClick = ButtonSelectFoldersClick
       end
     end
-    object EmuHardDiskDriveParameter: TEdit
+    object EmuHardDiskDriveParameter: TEditEx
       Left = 52
       Top = 566
       Width = 363
@@ -1231,7 +1246,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       TabOrder = 20
       OnChange = EmuHardDiskDriveParameterChange
     end
-    object EmuHardDiskDriveParameter2: TEdit
+    object EmuHardDiskDriveParameter2: TEditEx
       Left = 52
       Top = 589
       Width = 363
@@ -1250,7 +1265,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnChange = EmuHardDiskDriveParameter2Change
     end
   end
-  object BitBtn1: TBitBtn
+  object BitBtn1: TBitBtnEx
     Left = 40
     Top = 296
     Width = 75
@@ -1261,9 +1276,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     OnClick = BitBtn1Click
   end
   object PanelSystemTitle: TPanelEx
-    Left = 392
+    Left = 470
     Top = 614
-    Width = 388
+    Width = 310
     Height = 100
     Color1 = 16448250
     Color2 = clSilver
@@ -1275,9 +1290,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     ParentBackground = False
     Style = vgSolid
     object LabelSystemTitle: TShadowLabel
-      Left = 5
+      Left = 10
       Top = 46
-      Width = 378
+      Width = 292
       Height = 16
       Alignment = taCenter
       AutoSize = False
@@ -1301,7 +1316,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Layout = tlCenter
     end
     object LabelSystemType: TShadowLabel
-      Left = 141
+      Left = 103
       Top = 24
       Width = 105
       Height = 16

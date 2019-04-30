@@ -47,6 +47,9 @@ type
     EmuConGameFileName: WideString;
     TextPos, LeftPanelSize, LeftPanelMinimumTextSize, LeftPanelLastText, LeftPanelLastTextHeight: Integer;
     missFile: TMemIniFile;
+    MissingSetZipContents: THashedStringList;
+    CRC32CollisionFile: TStringList;
+    IsSetMissing: Boolean;
     function  FindZiNcFile(const NameString: String): String;
     procedure CreateLabelTitle(const lTitle: WideString);
     procedure CreateLabelValue(const tValue: WideString; var ShadowLabelVar: TShadowLabel; DriverIndex: ShortInt = -1);
@@ -492,6 +495,142 @@ var
        TextPos:= TextPos+iLabelDriver.Height;
   end;
 
+  function GetZipContents(ZipFileName: String): Boolean;
+  var
+    ArchiveItem: TZFArchiveItem;
+    iSetNameStr: String;
+    IsCollision: Boolean;
+    ROMFileMemoryStream: TWideMemoryStream;
+  begin
+    Result:= FileExists(ZipFileName);
+    if not Result then
+       Exit;
+    MissingSetZipContents.BeginUpdate;
+    iSetNameStr:= ChangeFileExtW(ExtractFileNameW(ZipFileName), '');
+
+    IsCollision:= Assigned(CRC32CollisionFile) and (CRC32CollisionFile.IndexOf(iSetNameStr) <> -1);
+    if IsCollision then
+       ROMFileMemoryStream:= TWideMemoryStream.Create;
+
+    with FormMain.ZipForge do
+    begin
+      FileName:= ZipFileName;
+
+      // Open existing archive file
+      try
+        OpenArchive(fmOpenRead or fmShareDenyNone);
+
+        Result:= FileCount > 0;
+        if Result then
+           begin
+             // Search text files stored inside the archive
+             if FindFirst('*.*', ArchiveItem) then
+                begin
+                  repeat
+                    if IsCollision then
+                       begin
+                         ExtractToStream(ArchiveItem.FileName, ROMFileMemoryStream);
+                         FormMain.GenerateStreamSHA1(ROMFileMemoryStream, MissingSetZipContents, iSetNameStr);
+                       end
+                    else
+                       MissingSetZipContents.Add(iSetNameStr+'='+LowerCase(IntToHex(ArchiveItem.CRC, 8)));
+                  until (not FindNext(ArchiveItem));
+                end
+             else
+                Result:= False;
+           end;
+        CloseArchive;
+        FormMain.ZipForge.FileName:= '';
+      except
+        Result:= False;
+        CloseArchive;
+        FormMain.ZipForge.FileName:= '';
+      end;
+    end;
+    MissingSetZipContents.EndUpdate;
+    if IsCollision then
+       begin
+         ROMFileMemoryStream.Clear;
+         FreeAndNil(ROMFileMemoryStream);
+       end;
+  end;
+
+  function GetSevenZipContents(SevenZipFileName: String): Boolean;
+  var
+    ArchiveItem: I7zInArchive;
+    Loop7z: Integer;
+    iSetNameStr: String;
+    IsCollision: Boolean;
+    ROMFileMemoryStream: TWideMemoryStream;
+  begin
+    Result:= FileExists(SevenZipFileName);
+    if not Result then
+       Exit;
+
+    try
+      ArchiveItem:= CreateInArchive(CLSID_CFormat7z);
+    except
+      Result:= False;
+      Exit;
+    end;
+
+    MissingSetZipContents.BeginUpdate;
+    iSetNameStr:= ChangeFileExtW(ExtractFileNameW(SevenZipFileName), '');
+
+    IsCollision:= Assigned(CRC32CollisionFile) and (CRC32CollisionFile.IndexOf(iSetNameStr) <> -1);
+    if IsCollision then
+       ROMFileMemoryStream:= TWideMemoryStream.Create;
+       
+    with ArchiveItem do
+    begin
+      // Open existing archive file
+      try
+        OpenFile(SevenZipFileName);
+
+        Result:= NumberOfItems > 0;
+        if Result then
+           begin
+             // Search text files stored inside the archive
+             for Loop7z:= 0 to NumberOfItems-1 do
+             begin
+               if not ItemIsFolder[Loop7z] then
+                  begin
+                    if IsCollision then
+                       begin
+                         ExtractItem(Loop7z, ROMFileMemoryStream, False);
+                         FormMain.GenerateStreamSHA1(ROMFileMemoryStream, MissingSetZipContents, iSetNameStr);
+                       end
+                    else
+                       MissingSetZipContents.Add(iSetNameStr+'='+LowerCase(IntToHex(ItemCRC[Loop7z], 8)));
+                  end;
+             end;
+           end;
+        Close;
+      except
+        Result:= False;
+        Close;
+      end;
+    end;
+    MissingSetZipContents.EndUpdate;
+    if IsCollision then
+       begin
+         ROMFileMemoryStream.Clear;
+         FreeAndNil(ROMFileMemoryStream);
+       end;
+  end;
+
+  function GetFileContents(const iFile: WideString): Boolean;
+  begin
+    Result:= IsSetMissing;
+    if not Result then
+       Exit;
+
+    if FormMain.IsZipFile(iFile) then
+       Result:= GetZipContents(iFile)
+    else
+       Result:= GetSevenZipContents(iFile);
+  end;
+
 begin
   LeftPanelSize:= 0;
   LeftPanelLastText:= 0;
@@ -643,7 +782,6 @@ begin
             AddEntry2('', 'Softlist: '+ReqSoftwareName);
        end;
 
-
     AddEntry2('Main CPU Chip', FormMain.MemGameInfo.eChipCPU);
 
     AddEntry2('Language', FormMain.MemGameInfo.eLanguage);
@@ -732,6 +870,7 @@ begin
            end;
       end;
   end;
+
   AddEntry2('Game Files', tmpString, -5);
 
   case FormMain.MemGameInfo.eIsCustomGame of
@@ -782,16 +921,27 @@ begin
              end;
            end;
 
+        if IsSetMissing then
+           MissingSetZipContents:= THashedStringList.Create;
+
         if FormMain.SystemUseSevenZip(FormMain.MemGameInfo.eSystemID) then
            tmpString:= ' (.zip; .7z)'
         else
            tmpString:= '.zip';
 
         if NoROMs then
-           AddEntry2('   Game Set', 'Set with no Game ROMs')//, 1) // special case for sets with no ROMs
+           AddEntry2('   Game Set', 'Set with no Game ROMs') // special case for sets with no ROMs
+        else
+        if FormMain.MemGameInfo.eGameROMsNoDump then
+           AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (No Game ROMs)')
+           //AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (no dump)', 1)
         else
         if ZipName <> '' then
-           AddEntry2('   Game Set', ExtractFileNameW(ZipName), Ord(ZipName <> ''))
+           begin
+             AddEntry2('   Game Set', ExtractFileNameW(ZipName), Ord(ZipName <> ''));
+             if IsSetMissing then
+                GetFileContents(ZipName);
+           end
         else
         if IsCHDGameOnly then
            begin
@@ -804,15 +954,22 @@ begin
              if not FormMain.MemGameInfo.eIsMerged then
                 AddEntry2('   Game Set', FormMain.MemGameInfo.eName+tmpString, 0)
              else
-                AddEntry2('   Game Set', FormMain.MemGameInfo.eName+tmpString, 0); // 'Merged in parent set', 1); // for merged clone sets!!!
+                AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (Merged)', 1); // 'Merged in parent set', 1); // for merged clone sets!!!
            end;
         if FormMain.GameIsClone(FormMain.MemGameInfo.eClone) and (not NoROMs) then
            begin
+             if FormMain.MemGameInfo.eParentGameROMsNoDump then
+                AddEntry2('   Parent Set', FormMain.MemGameInfo.eClone+' (No Game ROMs)', 1)
+             else
              if IsBiosSetOnly or (ZipParent = '') then // this is for G-NET and others with bios set + chd (no game set)
                 AddEntry2('   Parent Set', FormMain.MemGameInfo.eClone+tmpString, 0)
              else
              if ZipParent <> '' then
-                AddEntry2('   Parent Set', ExtractFileNameW(ZipParent), 1);
+                begin
+                  AddEntry2('   Parent Set', ExtractFileNameW(ZipParent), 1);
+                  if IsSetMissing then
+                     GetFileContents(ZipParent);
+                end;
            end;
         if not IsBiosGame then
            begin
@@ -821,7 +978,11 @@ begin
              else
                 FormMain.TempGameVars.eTitle:= '   Bios Set';
              if ZipBios <> '' then
-                AddEntry2(FormMain.TempGameVars.eTitle, ExtractFileNameW(ZipBios), 1)
+                begin
+                  AddEntry2(FormMain.TempGameVars.eTitle, ExtractFileNameW(ZipBios), 1);
+                  if IsSetMissing then
+                     GetFileContents(ZipBios);
+                end
              else
                 AddEntry2(FormMain.TempGameVars.eTitle, FormMain.TempGameVars.eBiosName+tmpString, 0);
            end;
@@ -832,7 +993,11 @@ begin
              begin
                ZipDevice:= FormMain.SearchZIPFolder(TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets[ImgIndex], 1);
                if ZipDevice <> '' then
-                  AddEntry2('   Device Set '+IntToStr(imgIndex+1), ExtractFileNameW(ZipDevice), 1)
+                  begin
+                    AddEntry2('   Device Set '+IntToStr(imgIndex+1), ExtractFileNameW(ZipDevice), 1);
+                    if IsSetMissing then
+                       GetFileContents(ZipDevice);
+                  end
                else
                   AddEntry2('   Device Set '+IntToStr(imgIndex+1), TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets[ImgIndex]+tmpString, 0);
              end;
@@ -904,29 +1069,39 @@ var
 
   function GetROM_ImageIndex: ShortInt;
   begin
-    case romMissStatus of
-      -1:
-        begin
-          if FormMain.MemGameInfo.eScanMode = 0 then
-             begin
-               case FormMain.MemGameInfo.eGameSetStatus of
-                 0: StatusImageIndex:= 0;
-                 1: StatusImageIndex:= 0;
-                 2: StatusImageIndex:= 1;
+    if IsSetMissing and (MissingSetZipContents.Count > 0) then
+    begin
+      if romMissStatus <> -1 then
+         StatusImageIndex:= romMissStatus
+      else
+         StatusImageIndex:= 1; // missing ROM
+    end
+    else
+    begin
+      case romMissStatus of
+        -1:
+          begin
+            if FormMain.MemGameInfo.eScanMode = 0 then
+               begin
+                 case FormMain.MemGameInfo.eGameSetStatus of
+                   0: StatusImageIndex:= 0;
+                   1: StatusImageIndex:= 0;
+                   2: StatusImageIndex:= 1;
+                 end;
+               end
+            else
+               begin
+                 // for quick scan and force available
+                 case FormMain.MemGameInfo.eGameSetStatus of
+                   0: StatusImageIndex:= 0; // all good
+                   1: StatusImageIndex:= 1; // missing ROMs/CHDs
+                   2: StatusImageIndex:= 1; // missing all files
+                  end;
                end;
-             end
-          else
-             begin
-               // for quick scan and force available
-               case FormMain.MemGameInfo.eGameSetStatus of
-                 0: StatusImageIndex:= 0; // all good
-                 1: StatusImageIndex:= 1; // missing ROMs/CHDs
-                 2: StatusImageIndex:= 1; // missing all files
-                end;
-             end;
-        end;
-      0: StatusImageIndex:= 1; // file Missing
-      1: StatusImageIndex:= 2; // CHD file found with bad SHA-1
+          end;
+        0: StatusImageIndex:= 1; // file Missing
+        1: StatusImageIndex:= 2; // CHD file found with bad SHA-1
+      end;
     end;
     Result:= StatusImageIndex;
   end;
@@ -1022,7 +1197,7 @@ var
                Result:= CheckEmptyVar(Result, True)+'Missing'
             else
                begin
-                 if FormMain.MemGameInfo.eGameSetStatus = 1 then
+                 if FormMain.MemGameInfo.eGameSetStatus in [1, 2] then
                     StatusImageIndex:= 0;
                end;
           end;
@@ -1050,11 +1225,12 @@ var
     isCHD: Boolean;
     tmpString, tmpString2, CHDFile, CHDInfo, CHDChecksum, LineStr: String;
     HeaderVerCHD: Byte;
-    romName, romCRC32, romSHA1, romDeviceName: String;
+    romName, romCRC32, romSHA1, romDeviceName: String; //, romParentName}: String;
     romSize: Int64;
     romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
     IsCRC32Collision, IsNewFileFormat, IsBadDump, IsParentROM: Boolean;
     iTempStr: String;
+    FoundROM: Boolean;
 
     function AddMissCHDExtra(CHDFound: Boolean; ParentCHDName: String): Boolean;
     begin
@@ -1081,8 +1257,8 @@ var
       IsNewFileFormat:= PosEx('<name>', LineStr) <> 0;
       if IsNewFileFormat then
          begin
-           // FileID MediaType IsCRC32Collision IsBadDump<name>Filename/><crc>CRC32/><sha1>/SHA-1 or MD5/>
-           //   12       3           4             5
+           // FileID MediaType IsCRC32Collision IsBadDump IsParentROM <name>Filename/><crc>CRC32/><sha1>/SHA-1 or MD5/>
+           //   12       3           4             5           6
            romTagIndex:= StrToInt(LineStr[1]+LineStr[2]);
            IsCHD:= FormMain.IsMediaTypeCHD(StrToInt(LineStr[3]), False); // the position 3 now holds the media type; 0 -> rom/cart/flop/cass; 1 -> CHDs
            IsCRC32Collision:= Boolean(StrToInt(LineStr[4]));
@@ -1103,10 +1279,64 @@ var
            if iTempStr <> '' then
               romSize:= StrToInt(iTempStr);
          end;
-         
+
       tmpString:= '';
       romMissStatus:= -1;
 
+      if IsSetMissing and (MissingSetZipContents.Count > 0) then
+         begin
+           // get ROM state from zip contents (November 17, 2018)
+           if not IsCHD then
+           begin
+             if (romCRC32 = '') and (romSHA1 = '') and (not IsBadDump) then
+                romMissStatus:= 0 // ROMs "nodump" do not need further processing... 
+             else
+             if FormMain.IsFileID_GameROM(romTagIndex) or FormMain.IsFileID_DeviceROM(romTagIndex) or
+                FormMain.IsFileID_GameCHD(romTagIndex) or FormMain.IsFileID_DeviceCHD(romTagIndex) then
+                begin
+                  FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eName+'='+romSHA1) <> -1;
+                  if not FoundROM then
+                     FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eName+'='+romCRC32) <> -1;
+
+                  if (not FoundROM) and FormMain.GameIsClone(FormMain.MemGameInfo.eClone) then
+                  begin
+                    FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eClone+'='+romSHA1) <> -1;
+                    if not FoundROM then
+                       FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eClone+'='+romCRC32) <> -1;
+                  end;
+
+                  if (not FoundROM) and (romDeviceName <> '') then
+                  begin
+                    FoundROM:= MissingSetZipContents.IndexOf(romDeviceName+'='+romSHA1) <> -1;
+                    if not FoundROM then
+                       FoundROM:= MissingSetZipContents.IndexOf(romDeviceName+'='+romCRC32) <> -1;
+                  end;
+
+                  romMissStatus:= Ord(not FoundROM); // 0 -> ROM found, green icon; 1 -> ROM not found, gray icon
+                end
+             else
+             if FormMain.IsFileID_BiosROM(romTagIndex) or FormMain.IsFileID_BiosCHD(romTagIndex) then
+                begin
+                  if FormMain.ValidateBiosName(FormMain.MemGameInfo.eBiosName, FormMain.MemGameInfo.eName) then
+                  begin
+                    FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eBiosName+'='+romSHA1) <> -1;
+                    if not FoundROM then
+                       FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eBiosName+'='+romCRC32) <> -1;
+
+                    romMissStatus:= Ord(not FoundROM);
+                  end
+                  else
+                  begin
+                    FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eName+'='+romSHA1) <> -1;
+                    if not FoundROM then
+                       FoundROM:= MissingSetZipContents.IndexOf(FormMain.MemGameInfo.eName+'='+romCRC32) <> -1;
+
+                    romMissStatus:= Ord(not FoundROM);
+                  end;
+                end;
+           end;
+         end
+      else // business as usual
       if Assigned(missFile) then
          begin
            // crc32;sha1=ikaruga.chd
@@ -1122,13 +1352,9 @@ var
           begin
             HeaderVerCHD:= 0;
             tmpString:= ''; // holds CHD name
-            //tmpString2:= ''; // holds Parent CHD name; info got from code above...
 
             if IsNewFileFormat then
-               begin
-                 tmpString:= romName; // tmpString holds the name of the CHD
-                 //tmpString2:= SoftListGetEntryValue(LineStr, 'parentname'); // tmpString2 is the parent CHD name!!!... info taken from code above
-               end;
+               tmpString:= romName; // tmpString holds the name of the CHD
 
             Item.Caption:= tmpString; // tmpString holds the name of the CHD
 
@@ -1210,10 +1436,20 @@ var
           end;
         False:
           begin
-            Item.Caption:= romName; // ROM Name
+            if tmpString2 = '' then
+               Item.Caption:= romName // ROM Name
+            else
+               Item.Caption:= tmpString2; // ROM Parent Name (alternate name, for clone sets)
           end;
       end;
       Item.Tag:= Ord(IsCHD); // 0 -> ROM; 1 -> CHD
+
+      Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
+      Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
+      Item.Captions[3]:= FileSizeStr(romSize, CHDFile, romTagIndex); // ROM size
+      Item.Captions[4]:= romDeviceName; // device name
+      Item.Captions[5]:= GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
+      
       Item.StateImageIndex:= StatusImageIndex;
       case isCHD of
         True:
@@ -1239,13 +1475,6 @@ var
             end;
           end;
       end;
-      Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
-      Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
-      Item.Captions[3]:= FileSizeStr(romSize, CHDFile, romTagIndex); // ROM size
-      Item.Captions[4]:= romDeviceName; // device name
-      Item.Captions[5]:= GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
-      //Item.Captions[5]:= InToStr(FileIndex);
-      //Inc(iFileIndex);
     end;
 
     ROMsListView.Items.ReIndexDisable:= False;
@@ -1468,7 +1697,6 @@ begin
 
   ROMsListView.Items.ReIndexDisable:= False;
   ROMsListView.EndUpdate;
-
 end;
 
 procedure TFormGameDetails.ResizeForm;
@@ -1514,20 +1742,20 @@ begin
   ZiNcFilePath:= '';
   LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
 
-  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, FormMain.MemGameInfo.eGameSetStatus);
+  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
   if IsNightMode then
      begin
-       SetLabelColors(LabelYear, clWhite, clNavy);
-       SetLabelColors(LabelYearValue, clWhite, clNavy);
-       SetLabelColors(LabelScanMode, clrLightBlue, clBlue);
+       SetLabelColors(LabelYear, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelScanMode, clrLightBlue, clNavy);
 
-       //FrameROMsListView.ColorFrame:= clrLightBlue;
-       //FrameROMsListView.ColorInnerFrame:= clBlue;
-       
+       SetPanelBorderColors(FrameROMsListView, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+
        FrameROMsListView.Color1:= FormGameDetails.Color;
-       ROMsListView.Color:= FormGameDetails.Color;
-       ROMsListView.Font.Color:= clWhite;
+
+       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite);
+       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
      end;
 
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
@@ -1578,6 +1806,24 @@ begin
           ROMsListView.Header.Columns[4].Visible:= True;
      end;
 
+  IsSetMissing:= False;
+  if not FormMain.MemGameInfo.eIsCustomGame then
+     begin
+       IsSetMissing:= (FormMain.MemGameInfo.eSystemID <> idDaphne) and (TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil) and
+                      FormMain.IsROM_Miss(FormMain.MemGameInfo.eROMIdentification) and (not FormMain.MemGameInfo.eROMsAllNoDump) and
+                      (not FormMain.IsROM_HaveMissROMs(FormMain.MemGameInfo.eGameSetStatus)) and //(not FormMain.MemGameInfo.eROMsAllNoDump) and
+                      //(not FormMain.IsROM_Have(FormMain.MemGameInfo.eGameSetStatus)) and
+                      (FormMain.MemGameInfo.eSoftwareName = '');
+
+       if IsSetMissing then
+       if FileExists(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9)) then
+          begin
+            CRC32CollisionFile:= TStringList.Create;
+            CRC32CollisionFile.LoadFromFile(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9));
+          end;
+
+
+     end;
   ROMsListView.Width:= 1200;
   FillGameTree;
   Application.ProcessMessages;
@@ -1585,6 +1831,12 @@ begin
     True : FillEmuConGameFilesTree;
     False: FillROMsTree;
   end;
+
+  if IsSetMissing then
+     begin
+       FreeAndNil(CRC32CollisionFile);
+       FreeAndNil(MissingSetZipContents);
+     end;
 
   // increase game files list width size ? would be useful only for "Name" column
   //if Screen.Width >= 1024 then
@@ -1732,15 +1984,21 @@ procedure TFormGameDetails.ROMsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
+  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
   if Item.StateImageIndex = 2 then
-     ACanvas.Font.Color:= clRed   // wrong checksum, CHDs only
+     begin
+       if IsNightMode then
+          ACanvas.Font.Color:= clrLightRed
+       else
+          ACanvas.Font.Color:= clRed;   // wrong checksum, CHDs only
+     end
   else
-  if (FormMain.MemGameInfo.eGameSetStatus = 1) and (Item.StateImageIndex = 1) then
+  if Item.StateImageIndex = 1 then
      begin
        if IsNightMode then
           ACanvas.Font.Color:= clSilver
        else
-          ACanvas.Font.Color:= clrDarkGray;
+          ACanvas.Font.Color:= clrMedDarkGray;
      end;
 
   case Position of
@@ -1751,11 +2009,15 @@ begin
       end;
     5:
      begin
-       if (FormMain.MemGameInfo.eGameSetStatus = 1) and (Item.StateImageIndex = 1) then
-          ACanvas.Font.Color:= clRed; // missing
+       if Item.StateImageIndex = 1 then
+          begin
+            if IsNightMode then
+               ACanvas.Font.Color:= clrLightRed
+            else
+               ACanvas.Font.Color:= clRed; // missing
+          end;
      end;
   end;
-  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
 end;
 
 procedure TFormGameDetails.FormCloseQuery(Sender: TObject;
@@ -1768,7 +2030,12 @@ procedure TFormGameDetails.ROMsListViewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Selected then
-     FormMain.ELV_SetSelectRibbon(Ord(Item.StateImageIndex = 2), ROMsListView);
+     begin
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(Ord(Item.StateImageIndex = 2), ROMsListView)
+       else
+          FormMain.ELV_SetSelectRibbon(Ord(Item.StateImageIndex = 2), ROMsListView);
+     end;
 end;
 
 procedure TFormGameDetails.ROMsListViewColumnClick(

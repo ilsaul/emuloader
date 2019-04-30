@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   IniFiles, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   AdvOfficeButtons, StdCtrls, Buttons, PanelEx, ShadowLabel, ImgList,
-  ExtCtrls;
+  ExtCtrls, ButtonsEx;
 
 type
   TSoftwareInfo = class(TEasyItemStored)
@@ -35,9 +35,9 @@ type
 type
   TFormArcadeSoftwareListCustomize = class(TForm)
     BottomBar: TPanelEx;
-    ButtonYes: TBitBtn;
-    ButtonNo: TBitBtn;
-    ButtonResetToCurrent: TBitBtn;
+    ButtonYes: TBitBtnEx;
+    ButtonNo: TBitBtnEx;
+    ButtonResetToCurrent: TBitBtnEx;
     CheckAll: TAdvOfficeCheckBox;
     LabelTotalSoftwareList: TShadowLabel;
     FilterShowUncheckedOnly: TAdvOfficeCheckBox;
@@ -323,17 +323,17 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, False);
-       SetLabelColors(LabelTotalSoftwareList, clWhite, clNavy);
+       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, IsNightMode);
+       SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1]);
 
-       //FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
-       //FrameSoftwareList.ColorInnerFrame:= clBlue;
-       FrameSoftwareList.Color1:= $00000001;
-       SoftwareLists.Color:= $00000001;
-       SoftwareLists.Font.Color:= clWhite;
+       FrameSoftwareList.Color1:= FormArcadeSoftwareListCustomize.Color;
 
-       SetCheckBoxColors(CheckAll, clWhite, clNavy);
-       SetCheckBoxColors(FilterShowUncheckedOnly, clWhite, clNavy);
+       FormMain.SetEasyListViewColors(SoftwareLists, menu_background_color[1], clWhite);
+
+       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
      end;
 
   GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list

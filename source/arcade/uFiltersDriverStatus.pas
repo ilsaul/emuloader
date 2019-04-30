@@ -5,15 +5,15 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, AdvGroupBox, AdvOfficeButtons,
-  ExtCtrls;
+  ExtCtrls, ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeFiltersDriverStatus = class(TForm)
     PanelBottom: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelSelectCategory: TLabel;
-    LabelFilterStatus: TLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelSelectCategory: TShadowLabel;
+    LabelFilterStatus: TShadowLabel;
     IconListAll: TImage;
     IconGoodImperfect: TImage;
     IconImperfect: TImage;

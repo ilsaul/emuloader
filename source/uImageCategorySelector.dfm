@@ -21,7 +21,7 @@ object FormImageCategorySelector: TFormImageCategorySelector
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelBottomButtons: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 259
     Width = 512
@@ -32,10 +32,11 @@ object FormImageCategorySelector: TFormImageCategorySelector
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object LabelEmuTitle: TShadowLabel
+    object LabelSystemTitle: TShadowLabel
       Left = -1
       Top = 1
       Width = 306
@@ -56,10 +57,13 @@ object FormImageCategorySelector: TFormImageCategorySelector
       ShadowColor = 14540253
       ShadowEnabled = True
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 318
       Top = 8
       Width = 89
@@ -71,7 +75,7 @@ object FormImageCategorySelector: TFormImageCategorySelector
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 416
       Top = 8
       Width = 89
@@ -148,6 +152,7 @@ object FormImageCategorySelector: TFormImageCategorySelector
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
+    Selection.Gradient = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593

@@ -1,6 +1,6 @@
 object FormPreferences: TFormPreferences
-  Left = 675
-  Top = 445
+  Left = 1167
+  Top = 784
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Preferences'
@@ -100,6 +100,17 @@ object FormPreferences: TFormPreferences
       Flat = True
       OnClick = ButtonPageGeneralClick
     end
+    object ButtonPageNightMode2: TSpeedButton
+      Tag = 5
+      Left = 756
+      Top = 1
+      Width = 150
+      Height = 26
+      GroupIndex = 1
+      Caption = 'Night Mode 2'
+      Flat = True
+      OnClick = ButtonPageGeneralClick
+    end
   end
   object PageOptions: TNotebook
     Left = 0
@@ -113,12 +124,27 @@ object FormPreferences: TFormPreferences
       Left = 0
       Top = 0
       Caption = 'General'
-      object Label1: TLabel
+      object LabelIgnoreExitCode1InvalidFunction: TLabel
         Left = 32
         Top = 188
         Width = 284
         Height = 18
         Caption = 'Do not display this error after exiting the emulator'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        Transparent = True
+      end
+      object LabelUseItalicFontStyleSystemTitleBar: TLabel
+        Left = 32
+        Top = 228
+        Width = 251
+        Height = 18
+        Caption = 'Uncheck this option if you dislike italic fonts'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
         Font.Height = -12
@@ -238,7 +264,7 @@ object FormPreferences: TFormPreferences
       object GroupBoxInternetGameInfo: TAdvGroupBox
         Left = 15
         Top = 496
-        Width = 514
+        Width = 752
         Height = 106
         RoundEdges = True
         Caption = 
@@ -293,7 +319,7 @@ object FormPreferences: TFormPreferences
           ShowAccelChar = False
           Transparent = True
         end
-        object InternetGameInfoLink: TEdit
+        object InternetGameInfoLink: TEditEx
           Left = 8
           Top = 36
           Width = 450
@@ -302,17 +328,17 @@ object FormPreferences: TFormPreferences
           Color = clWhite
           TabOrder = 0
         end
-        object InternetGameInfoLinkButtonDefault: TBitBtn
+        object InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtn
           Left = 459
           Top = 35
-          Width = 47
+          Width = 142
           Height = 23
           Hint = 'Reset link to default'
-          Caption = 'Default'
+          Caption = 'Reset to ProgettoEMMA'
           TabOrder = 1
-          OnClick = InternetGameInfoLinkButtonDefaultClick
+          OnClick = InternetGameInfoProgettoEMMALinkButtonDefaultClick
         end
-        object InternetMAMESoftwareListGameInfoLink: TEdit
+        object InternetMAMESoftwareListGameInfoLink: TEditEx
           Left = 8
           Top = 76
           Width = 450
@@ -321,16 +347,49 @@ object FormPreferences: TFormPreferences
           Color = clWhite
           TabOrder = 2
         end
-        object InternetMAMESoftwareListGameInfoLinkButtonDefault: TBitBtn
+        object InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault: TBitBtn
           Left = 459
           Top = 75
-          Width = 47
+          Width = 142
           Height = 23
           Hint = 'Reset link to default'
-          Caption = 'Default'
+          Caption = 'Reset to ProgettoEMMA'
           TabOrder = 3
-          OnClick = InternetMAMESoftwareListGameInfoLinkButtonDefaultClick
+          OnClick = InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefaultClick
         end
+        object InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtn
+          Left = 603
+          Top = 35
+          Width = 142
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Reset to Arcade Italia'
+          TabOrder = 4
+          OnClick = InternetGameInfoArcadeItaliaLinkButtonDefaultClick
+        end
+        object InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefault: TBitBtn
+          Left = 603
+          Top = 75
+          Width = 142
+          Height = 23
+          Hint = 'Reset link to default'
+          Caption = 'Reset to Arcade Italia'
+          TabOrder = 5
+          OnClick = InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefaultClick
+        end
+      end
+      object UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBox
+        Left = 16
+        Top = 211
+        Width = 233
+        Height = 20
+        Checked = True
+        TabOrder = 6
+        Alignment = taLeftJustify
+        Caption = 'Use Italic Font Style in System Title Bars'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
       end
     end
     object TPage
@@ -404,20 +463,6 @@ object FormPreferences: TFormPreferences
         ParentFont = False
         ShowAccelChar = False
         Transparent = True
-      end
-      object LabelToolBarOverlayIconsFolder: TShadowLabel
-        Left = 16
-        Top = 448
-        Width = 157
-        Height = 16
-        Caption = 'Tool Bar Overlay Icons Folder'
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
       end
       object LabelAddLeadingZeroVersionInfoMAME: TLabel
         Left = 658
@@ -592,7 +637,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object GamesBackgroundImage: TEdit
+        object GamesBackgroundImage: TEditEx
           Left = 282
           Top = 31
           Width = 528
@@ -1017,7 +1062,7 @@ object FormPreferences: TFormPreferences
           OnClick = ButtonGamesListSplitterSingleColorDefaultClick
         end
       end
-      object MAMu_IconsFolder: TEdit
+      object MAMu_IconsFolder: TEditEx
         Left = 50
         Top = 582
         Width = 332
@@ -1038,27 +1083,6 @@ object FormPreferences: TFormPreferences
         TabOrder = 9
         OnClick = ButtonMAMu_IconsFolderSelectClick
       end
-      object ToolBarOverlayIconsFolder: TComboBox
-        Left = 16
-        Top = 464
-        Width = 242
-        Height = 23
-        Style = csDropDownList
-        Color = clWhite
-        ItemHeight = 15
-        TabOrder = 10
-        OnSelect = ToolBarOverlayIconsFolderSelect
-      end
-      object ToolBarOverlayIconsFolderButtonUpdate: TBitBtn
-        Left = 260
-        Top = 464
-        Width = 49
-        Height = 23
-        Hint = 'Click here to update the folders list (no restart needed)'
-        Caption = 'Update'
-        TabOrder = 11
-        OnClick = ToolBarOverlayIconsFolderButtonUpdateClick
-      end
       object GroupBoxGamesListSelectionBar: TAdvGroupBox
         Left = 329
         Top = 85
@@ -1068,7 +1092,7 @@ object FormPreferences: TFormPreferences
         RoundEdges = True
         Caption = 'Selection Bar'
         Ctl3D = True
-        TabOrder = 12
+        TabOrder = 10
         object Label2: TLabel
           Left = 8
           Top = 48
@@ -1404,7 +1428,7 @@ object FormPreferences: TFormPreferences
         Top = 340
         Width = 290
         Height = 18
-        TabOrder = 13
+        TabOrder = 11
         Alignment = taLeftJustify
         Caption = 'Add Leading Zero to Version Info Column (MAME)'
         ReturnIsTab = False
@@ -1830,7 +1854,7 @@ object FormPreferences: TFormPreferences
       Caption = 'Game Documents'
       object LabelAppearanceGameDocuments: TLabel
         Left = 16
-        Top = 182
+        Top = 230
         Width = 96
         Height = 15
         Caption = 'Background Color'
@@ -1839,7 +1863,7 @@ object FormPreferences: TFormPreferences
       end
       object ShadowLabel1: TShadowLabel
         Left = 317
-        Top = 408
+        Top = 496
         Width = 317
         Height = 19
         Caption = 'Enable this feature in games popup menu or "F3" hot-key'
@@ -1888,11 +1912,11 @@ object FormPreferences: TFormPreferences
       object LabelGoToMARP: TShadowLabel
         Left = 536
         Top = 589
-        Width = 254
+        Width = 333
         Height = 14
         Cursor = crHandPoint
         Hint = 'http://replay.marpirc.net'
-        Caption = 'Go To MAME Action Replay Page (marp.dat)'
+        Caption = 'Go To MAME Action Replay Page (scores3.htm; marp.dat)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
         Font.Height = -11
@@ -2025,9 +2049,43 @@ object FormPreferences: TFormPreferences
         OnMouseEnter = LabelGoToMAMEInfoMouseEnter
         OnMouseLeave = LabelGoToMAMEInfoMouseLeave
       end
+      object LabelMAMEGameManualsPDFFolder: TShadowLabel
+        Left = 16
+        Top = 416
+        Width = 271
+        Height = 16
+        Caption = 'Directory for PDF Game Manual Files (MAME Only)'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object ShadowLabel6: TShadowLabel
+        Left = 116
+        Top = 458
+        Width = 177
+        Height = 19
+        Caption = 'Relative folder name supported'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
       object GameDocumentsBackgroundColor: TColorBox
         Left = 16
-        Top = 200
+        Top = 248
         Width = 234
         Height = 22
         DefaultColorColor = clWhite
@@ -2040,7 +2098,7 @@ object FormPreferences: TFormPreferences
       end
       object ButtonGameDocumentsFont: TBitBtn
         Left = 252
-        Top = 199
+        Top = 247
         Width = 47
         Height = 23
         Hint = 'Select font for window texts'
@@ -2192,16 +2250,54 @@ object FormPreferences: TFormPreferences
         Left = 16
         Top = 12
         Width = 331
-        Height = 157
+        Height = 205
         RoundEdges = True
         Caption = 'Display Order'
         Ctl3D = True
         TabOrder = 4
+        object LabelMARP_scores3htm: TShadowLabel
+          Left = 80
+          Top = 184
+          Width = 241
+          Height = 14
+          Hint = 'http://replay.marpirc.net/txt/scores3.htm'
+          Caption = 'http://replay.marpirc.net/txt/scores3.htm'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          Font.Style = []
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          OnClick = LabelGoToMAMEInfoClick
+          OnMouseEnter = LabelGoToMAMEInfoMouseEnter
+          OnMouseLeave = LabelGoToMAMEInfoMouseLeave
+        end
+        object LabelLinkMARP_scores3htm: TShadowLabel
+          Left = 8
+          Top = 184
+          Width = 61
+          Height = 16
+          Caption = 'MARP link:'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+        end
         object GameDocs: TEasyListview
           Tag = 1
           Left = 8
           Top = 21
-          Width = 263
+          Width = 315
           Height = 128
           BackGround.Enabled = True
           CellSizes.Report.Height = 20
@@ -2216,7 +2312,7 @@ object FormPreferences: TFormPreferences
           HintType = ehtToolTip
           Header.Columns.Items = {
             0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-            0006000000800800010100010000000000000105010000FFFFFF1F0001000000
+            0006000000800800010100010000000000000139010000FFFFFF1F0001000000
             00000000000000000000000000000000}
           Header.Draggable = False
           Header.FixedSingleColumn = True
@@ -2256,8 +2352,8 @@ object FormPreferences: TFormPreferences
         end
         object ButtonUp: TBitBtn
           Tag = 1
-          Left = 276
-          Top = 21
+          Left = 8
+          Top = 151
           Width = 47
           Height = 23
           Hint = 'Move selected item up'
@@ -2267,8 +2363,8 @@ object FormPreferences: TFormPreferences
           OnClick = ButtonUpClick
         end
         object ButtonDown: TBitBtn
-          Left = 276
-          Top = 44
+          Left = 60
+          Top = 151
           Width = 47
           Height = 23
           Hint = 'Move selected folder down'
@@ -2279,7 +2375,7 @@ object FormPreferences: TFormPreferences
         end
         object ButtonResetAutoGameInfoOrder: TBitBtn
           Left = 276
-          Top = 127
+          Top = 151
           Width = 47
           Height = 23
           Hint = 'Set the order of the texts to default'
@@ -2290,7 +2386,7 @@ object FormPreferences: TFormPreferences
       end
       object ButtonGameDocumentsDefault: TBitBtn
         Left = 300
-        Top = 199
+        Top = 247
         Width = 47
         Height = 23
         Hint = 'Set background color / font default values'
@@ -2300,7 +2396,7 @@ object FormPreferences: TFormPreferences
       end
       object GameDocsDisplayModeBox: TAdvGroupBox
         Left = 16
-        Top = 236
+        Top = 284
         Width = 331
         Height = 96
         RoundEdges = True
@@ -2410,12 +2506,371 @@ object FormPreferences: TFormPreferences
         State = cbChecked
         Themed = True
       end
+      object MAMEGameManualsPDFFolder: TEditEx
+        Left = 16
+        Top = 432
+        Width = 281
+        Height = 23
+        TabOrder = 9
+      end
+      object MAMEGameManualsPDFFolderButtonSelect: TBitBtn
+        Left = 300
+        Top = 432
+        Width = 47
+        Height = 21
+        Hint = 'Click here to select a folder'
+        Caption = 'Select'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 10
+        OnClick = MAMEGameManualsPDFFolderButtonSelectClick
+      end
+      object MAMEGameManualsPDFFolderButtonDefault: TBitBtn
+        Left = 300
+        Top = 456
+        Width = 47
+        Height = 21
+        Hint = 'Click here to reset folder to default'
+        Caption = 'Default'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 11
+        OnClick = MAMEGameManualsPDFFolderButtonDefaultClick
+      end
     end
     object TPage
       Left = 0
       Top = 0
       HelpContext = 4
       Caption = 'Night Mode'
+      object LabelToolBarOverlayIconsFolder: TShadowLabel
+        Left = 642
+        Top = 379
+        Width = 157
+        Height = 16
+        Caption = 'Tool Bar Overlay Icons Folder'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object NightModeSearchGamesPanelColorsBox: TAdvGroupBox
+        Left = 642
+        Top = 12
+        Width = 293
+        Height = 356
+        Transparent = False
+        RoundEdges = True
+        Caption = 'Search Games Panel Colors'
+        Ctl3D = True
+        TabOrder = 1
+        object LabelNightModeSearchGamesPanelFilterFontColor: TLabel
+          Left = 8
+          Top = 48
+          Width = 53
+          Height = 15
+          Caption = 'Filter Font'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelFilterShadowColor: TLabel
+          Left = 8
+          Top = 74
+          Width = 71
+          Height = 15
+          Caption = 'Filter Shadow'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelFieldFontColor: TLabel
+          Left = 8
+          Top = 100
+          Width = 52
+          Height = 15
+          Caption = 'Field Font'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelFieldShadowColor: TLabel
+          Left = 8
+          Top = 126
+          Width = 70
+          Height = 15
+          Caption = 'Field Shadow'
+          Transparent = True
+        end
+        object Label3: TLabel
+          Left = 8
+          Top = 305
+          Width = 50
+          Height = 15
+          Caption = 'Title Font'
+          Transparent = True
+        end
+        object Label4: TLabel
+          Left = 8
+          Top = 331
+          Width = 68
+          Height = 15
+          Caption = 'Title Shadow'
+          Transparent = True
+        end
+        object Label13: TLabel
+          Left = 8
+          Top = 402
+          Width = 63
+          Height = 15
+          Caption = 'Exit Shadow'
+          Transparent = True
+          Visible = False
+        end
+        object LabelNightModeSearchGamesFloatingPanel: TShadowLabel
+          Left = 145
+          Top = 284
+          Width = 78
+          Height = 16
+          Caption = 'Floating Panel'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelEditBoxFontColor: TLabel
+          Left = 8
+          Top = 152
+          Width = 49
+          Height = 15
+          Caption = 'Text Font'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TLabel
+          Left = 8
+          Top = 178
+          Width = 70
+          Height = 15
+          Caption = 'Text Bk Color'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TLabel
+          Left = 8
+          Top = 233
+          Width = 65
+          Height = 15
+          Caption = 'Frame Color'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TLabel
+          Left = 8
+          Top = 257
+          Width = 76
+          Height = 15
+          Caption = 'Focused Color'
+          Transparent = True
+        end
+        object NightModeSearchGamesPanelColorsDefaultButton: TBitBtn
+          Left = 236
+          Top = 16
+          Width = 47
+          Height = 21
+          Hint = 'Reset colors to default'
+          Caption = 'Default'
+          TabOrder = 0
+          OnClick = NightModeSearchGamesPanelColorsDefaultButtonClick
+        end
+        object NightModeSearchGamesPanelFilterFontColor: TColorBox
+          Left = 90
+          Top = 44
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the filter text'
+          DefaultColorColor = clWhite
+          NoneColorColor = clWhite
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 1
+          OnSelect = NightModeSearchGamesPanelFilterFontColorSelect
+        end
+        object NightModeSearchGamesPanelFilterShadowColor: TColorBox
+          Left = 90
+          Top = 70
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the filter text'
+          DefaultColorColor = clBlue
+          NoneColorColor = clBlue
+          Selected = clBlue
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 2
+          OnSelect = NightModeSearchGamesPanelFilterShadowColorSelect
+        end
+        object NightModeSearchGamesPanelFieldFontColor: TColorBox
+          Left = 90
+          Top = 96
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the category text'
+          DefaultColorColor = clYellow
+          NoneColorColor = clNone
+          Selected = clYellow
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 3
+          OnSelect = NightModeSearchGamesPanelFieldFontColorSelect
+        end
+        object NightModeSearchGamesPanelFieldShadowColor: TColorBox
+          Left = 90
+          Top = 122
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the category text'
+          DefaultColorColor = clMaroon
+          NoneColorColor = clNone
+          Selected = clMaroon
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 4
+          OnSelect = NightModeSearchGamesPanelFieldShadowColorSelect
+        end
+        object NightModeSearchGamesPanelCaptionBarFontColor: TColorBox
+          Left = 90
+          Top = 301
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the caption bar'
+          DefaultColorColor = clWhite
+          NoneColorColor = clNone
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 5
+          OnSelect = NightModeSearchGamesPanelCaptionBarFontColorSelect
+        end
+        object NightModeSearchGamesPanelCaptionBarShadowColor: TColorBox
+          Left = 90
+          Top = 327
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the caption bar'
+          DefaultColorColor = clMaroon
+          NoneColorColor = clNone
+          Selected = clMaroon
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 6
+          OnSelect = NightModeSearchGamesPanelCaptionBarShadowColorSelect
+        end
+        object ColorBox6: TColorBox
+          Left = 80
+          Top = 398
+          Width = 205
+          Height = 22
+          Hint = 'Exit button shadow font color'
+          NoneColorColor = clNone
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 7
+          Visible = False
+        end
+        object NightModeSearchGamesPanelEditBoxFontColor: TColorBox
+          Left = 90
+          Top = 148
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the edit box'
+          DefaultColorColor = clWhite
+          NoneColorColor = clNone
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 8
+          OnSelect = NightModeSearchGamesPanelEditBoxFontColorSelect
+        end
+        object NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBox
+          Left = 90
+          Top = 174
+          Width = 195
+          Height = 22
+          Hint = 'Background color for the edit box'
+          DefaultColorColor = 5832704
+          NoneColorColor = clNone
+          Selected = 5832704
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 9
+          OnSelect = NightModeSearchGamesPanelEditBoxBackgroundColorSelect
+        end
+        object NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBox
+          Left = 90
+          Top = 229
+          Width = 195
+          Height = 22
+          Hint = 'Frame color for the edit box'
+          DefaultColorColor = 16750899
+          NoneColorColor = clNone
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 10
+          OnSelect = NightModeSearchGamesPanelEditBoxCustomFrameColorSelect
+        end
+        object NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBox
+          Left = 90
+          Top = 205
+          Width = 172
+          Height = 20
+          Hint = 'Uncheck this option to paint a Windows themed edit box border'
+          Checked = True
+          TabOrder = 11
+          OnClick = NightModeSearchGamesPanelEditBoxUseCustomFrameClick
+          Alignment = taLeftJustify
+          Caption = 'Use Edit Box Custom Frame'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TColorBox
+          Left = 90
+          Top = 253
+          Width = 195
+          Height = 22
+          Hint = 'Focused frame color for the edit box'
+          DefaultColorColor = clWhite
+          NoneColorColor = clNone
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 12
+          OnSelect = NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect
+        end
+      end
       object NightModeToolBarBackgroundColorsBox: TAdvGroupBox
         Left = 16
         Top = 12
@@ -2569,7 +3024,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeGamesListStatusBarBox: TAdvGroupBox
+      object NightModeGamesListStatusBarColorsBox: TAdvGroupBox
         Left = 16
         Top = 177
         Width = 293
@@ -2945,627 +3400,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeSearchGamesPanelColorsBox: TAdvGroupBox
-        Left = 642
-        Top = 12
-        Width = 293
-        Height = 271
-        Transparent = False
-        RoundEdges = True
-        Caption = 'Search Games Panel Colors'
-        Ctl3D = True
-        TabOrder = 1
-        object LabelNightModeSearchGamesPanelFilterFontColor: TLabel
-          Left = 8
-          Top = 48
-          Width = 53
-          Height = 15
-          Caption = 'Filter Font'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelFilterShadowColor: TLabel
-          Left = 8
-          Top = 74
-          Width = 71
-          Height = 15
-          Caption = 'Filter Shadow'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelFieldFontColor: TLabel
-          Left = 8
-          Top = 100
-          Width = 52
-          Height = 15
-          Caption = 'Field Font'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelFieldShadowColor: TLabel
-          Left = 8
-          Top = 126
-          Width = 70
-          Height = 15
-          Caption = 'Field Shadow'
-          Transparent = True
-        end
-        object Label3: TLabel
-          Left = 8
-          Top = 220
-          Width = 50
-          Height = 15
-          Caption = 'Title Font'
-          Transparent = True
-        end
-        object Label4: TLabel
-          Left = 8
-          Top = 246
-          Width = 68
-          Height = 15
-          Caption = 'Title Shadow'
-          Transparent = True
-        end
-        object Label7: TLabel
-          Left = 8
-          Top = 298
-          Width = 57
-          Height = 15
-          Caption = 'Exit Button'
-          Transparent = True
-          Visible = False
-        end
-        object Label8: TLabel
-          Left = 8
-          Top = 324
-          Width = 63
-          Height = 15
-          Caption = 'Inner Frame'
-          Transparent = True
-          Visible = False
-        end
-        object Label9: TLabel
-          Left = 8
-          Top = 350
-          Width = 66
-          Height = 15
-          Caption = 'Outer Frame'
-          Transparent = True
-          Visible = False
-        end
-        object Label12: TLabel
-          Left = 8
-          Top = 376
-          Width = 45
-          Height = 15
-          Caption = 'Exit Font'
-          Transparent = True
-          Visible = False
-        end
-        object Label13: TLabel
-          Left = 8
-          Top = 402
-          Width = 63
-          Height = 15
-          Caption = 'Exit Shadow'
-          Transparent = True
-          Visible = False
-        end
-        object LabelNightModeSearchGamesFloatingPanel: TShadowLabel
-          Left = 145
-          Top = 199
-          Width = 78
-          Height = 16
-          Caption = 'Floating Panel'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelEditBoxFontColor: TLabel
-          Left = 8
-          Top = 152
-          Width = 49
-          Height = 15
-          Caption = 'Text Font'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TLabel
-          Left = 8
-          Top = 178
-          Width = 70
-          Height = 15
-          Caption = 'Text Bk Color'
-          Transparent = True
-        end
-        object NightModeSearchGamesPanelColorsDefaultButton: TBitBtn
-          Left = 236
-          Top = 16
-          Width = 47
-          Height = 21
-          Hint = 'Reset colors to default'
-          Caption = 'Default'
-          TabOrder = 0
-          OnClick = NightModeSearchGamesPanelColorsDefaultButtonClick
-        end
-        object NightModeSearchGamesPanelFilterFontColor: TColorBox
-          Left = 90
-          Top = 44
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the filter text'
-          DefaultColorColor = clWhite
-          NoneColorColor = clWhite
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 1
-          OnSelect = NightModeSearchGamesPanelFilterFontColorSelect
-        end
-        object NightModeSearchGamesPanelFilterShadowColor: TColorBox
-          Left = 90
-          Top = 70
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the filter text'
-          DefaultColorColor = clBlue
-          NoneColorColor = clBlue
-          Selected = clBlue
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 2
-          OnSelect = NightModeSearchGamesPanelFilterShadowColorSelect
-        end
-        object NightModeSearchGamesPanelFieldFontColor: TColorBox
-          Left = 90
-          Top = 96
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the category text'
-          DefaultColorColor = clYellow
-          NoneColorColor = clNone
-          Selected = clYellow
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 3
-          OnSelect = NightModeSearchGamesPanelFieldFontColorSelect
-        end
-        object NightModeSearchGamesPanelFieldShadowColor: TColorBox
-          Left = 90
-          Top = 122
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the category text'
-          DefaultColorColor = clMaroon
-          NoneColorColor = clNone
-          Selected = clMaroon
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 4
-          OnSelect = NightModeSearchGamesPanelFieldShadowColorSelect
-        end
-        object NightModeSearchGamesPanelCaptionBarFontColor: TColorBox
-          Left = 90
-          Top = 216
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the caption bar'
-          DefaultColorColor = clWhite
-          NoneColorColor = clNone
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 5
-          OnSelect = NightModeSearchGamesPanelCaptionBarFontColorSelect
-        end
-        object NightModeSearchGamesPanelCaptionBarShadowColor: TColorBox
-          Left = 90
-          Top = 242
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the caption bar'
-          DefaultColorColor = clMaroon
-          NoneColorColor = clNone
-          Selected = clMaroon
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 6
-          OnSelect = NightModeSearchGamesPanelCaptionBarShadowColorSelect
-        end
-        object ColorBox3: TColorBox
-          Left = 80
-          Top = 294
-          Width = 205
-          Height = 22
-          DefaultColorColor = clMaroon
-          NoneColorColor = clNone
-          Selected = clMaroon
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 7
-          Visible = False
-        end
-        object ColorBox4: TColorBox
-          Left = 80
-          Top = 320
-          Width = 205
-          Height = 22
-          Hint = 'Exit button inner frame color'
-          NoneColorColor = clNone
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 8
-          Visible = False
-        end
-        object ColorBox5: TColorBox
-          Left = 80
-          Top = 346
-          Width = 205
-          Height = 22
-          Hint = 'Exit button outer frame color'
-          DefaultColorColor = 2519212
-          NoneColorColor = clNone
-          Selected = 2519212
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 9
-          Visible = False
-        end
-        object ColorBox6: TColorBox
-          Left = 80
-          Top = 398
-          Width = 205
-          Height = 22
-          Hint = 'Exit button shadow font color'
-          NoneColorColor = clNone
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 10
-          Visible = False
-        end
-        object ColorBox7: TColorBox
-          Left = 80
-          Top = 372
-          Width = 205
-          Height = 22
-          Hint = 'Exit button font color'
-          DefaultColorColor = clWhite
-          NoneColorColor = clNone
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 11
-          Visible = False
-        end
-        object NightModeSearchGamesPanelEditBoxFontColor: TColorBox
-          Left = 90
-          Top = 148
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the edit box'
-          DefaultColorColor = clWhite
-          NoneColorColor = clNone
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 12
-          OnSelect = NightModeSearchGamesPanelEditBoxFontColorSelect
-        end
-        object NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBox
-          Left = 90
-          Top = 174
-          Width = 195
-          Height = 22
-          Hint = 'Background color for the edit box'
-          DefaultColorColor = 5832704
-          NoneColorColor = clNone
-          Selected = 5832704
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 13
-          OnSelect = NightModeSearchGamesPanelEditBoxBackgroundColorSelect
-        end
-      end
-      object NightModePanelColors: TAdvGroupBox
-        Left = 642
-        Top = 295
-        Width = 293
-        Height = 306
-        Transparent = False
-        RoundEdges = True
-        Caption = 'Panels Colors (Mostly Frames and Message Boxes)'
-        Ctl3D = True
-        TabOrder = 5
-        object LabelNightModeSearchGamesPanelTopColor: TLabel
-          Left = 8
-          Top = 48
-          Width = 21
-          Height = 15
-          Caption = 'Top'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelBottomColor: TLabel
-          Left = 8
-          Top = 73
-          Width = 40
-          Height = 15
-          Caption = 'Bottom'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelInnerFrameColor: TLabel
-          Left = 8
-          Top = 99
-          Width = 63
-          Height = 15
-          Caption = 'Inner Frame'
-          Transparent = True
-        end
-        object LabelNightModeSearchGamesPanelOuterFrameColor: TLabel
-          Left = 8
-          Top = 125
-          Width = 66
-          Height = 15
-          Caption = 'Outer Frame'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsTitleFontColor: TLabel
-          Left = 8
-          Top = 152
-          Width = 50
-          Height = 15
-          Caption = 'Title Font'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsTitleShadowFontColor: TLabel
-          Left = 8
-          Top = 178
-          Width = 68
-          Height = 15
-          Caption = 'Title Shadow'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsMessageFontColor: TLabel
-          Left = 8
-          Top = 255
-          Width = 49
-          Height = 15
-          Caption = 'Text Font'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsMessageShadowFontColor: TLabel
-          Left = 8
-          Top = 281
-          Width = 67
-          Height = 15
-          Caption = 'Text Shadow'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsTitle2FontColor: TLabel
-          Left = 8
-          Top = 203
-          Width = 59
-          Height = 15
-          Caption = 'Title 2 Font'
-          Transparent = True
-        end
-        object LabelNightModePanelColorsTitle2ShadowFontColor: TLabel
-          Left = 8
-          Top = 229
-          Width = 77
-          Height = 15
-          Caption = 'Title 2 Shadow'
-          Transparent = True
-        end
-        object NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBox
-          Left = 8
-          Top = 20
-          Width = 86
-          Height = 20
-          Checked = True
-          TabOrder = 0
-          TabStop = True
-          OnClick = NightModeSearchGamesPanelGradientBarClick
-          Alignment = taLeftJustify
-          Caption = 'Gradient Bar'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-        end
-        object NightModeSearchGamesPanelTopColor: TColorBox
-          Left = 90
-          Top = 44
-          Width = 195
-          Height = 22
-          DefaultColorColor = 5832704
-          NoneColorColor = 5832704
-          Selected = 5832704
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 1
-          OnSelect = NightModeSearchGamesPanelTopColorSelect
-        end
-        object NightModeSearchGamesPanelBottomColor: TColorBox
-          Left = 90
-          Top = 70
-          Width = 195
-          Height = 22
-          DefaultColorColor = 1
-          NoneColorColor = 1
-          Selected = 1
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 2
-          OnSelect = NightModeSearchGamesPanelBottomColorSelect
-        end
-        object NightModeSearchGamesPanelInnerFrameColor: TColorBox
-          Left = 90
-          Top = 96
-          Width = 195
-          Height = 22
-          DefaultColorColor = clBlue
-          NoneColorColor = clBlue
-          Selected = clBlue
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 3
-          OnSelect = NightModeSearchGamesPanelInnerFrameColorSelect
-        end
-        object NightModeSearchGamesPanelOuterFrameColor: TColorBox
-          Left = 90
-          Top = 122
-          Width = 195
-          Height = 22
-          DefaultColorColor = 16750899
-          NoneColorColor = 16750899
-          Selected = 16750899
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 4
-          OnSelect = NightModeSearchGamesPanelOuterFrameColorSelect
-        end
-        object NightModePanelsBackgroundColorsDefaultButton: TBitBtn
-          Left = 236
-          Top = 16
-          Width = 47
-          Height = 21
-          Hint = 'Reset colors to default'
-          Caption = 'Default'
-          TabOrder = 5
-          OnClick = NightModePanelsBackgroundColorsDefaultButtonClick
-        end
-        object NightModePanelColorsTitleShadowFontColor: TColorBox
-          Left = 90
-          Top = 174
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the title text'
-          DefaultColorColor = clMaroon
-          NoneColorColor = clNone
-          Selected = clMaroon
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 6
-          OnSelect = NightModePanelColorsTitleShadowFontColorSelect
-        end
-        object NightModePanelColorsTitleFontColor: TColorBox
-          Left = 90
-          Top = 148
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the title text'
-          DefaultColorColor = clYellow
-          NoneColorColor = clNone
-          Selected = clYellow
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 7
-          OnSelect = NightModePanelColorsTitleFontColorSelect
-        end
-        object NightModePanelColorsMessageShadowFontColor: TColorBox
-          Left = 90
-          Top = 277
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the message text'
-          DefaultColorColor = clMaroon
-          NoneColorColor = clNone
-          Selected = clMaroon
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 8
-          OnSelect = NightModePanelColorsMessageShadowFontColorSelect
-        end
-        object NightModePanelColorsMessageFontColor: TColorBox
-          Left = 90
-          Top = 251
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the message text'
-          DefaultColorColor = clWhite
-          NoneColorColor = clNone
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 9
-          OnSelect = NightModePanelColorsMessageFontColorSelect
-        end
-        object NightModePanelColorsTitle2ShadowFontColor: TColorBox
-          Left = 90
-          Top = 225
-          Width = 195
-          Height = 22
-          Hint = 'Shadow font color for the second title text'
-          DefaultColorColor = 13120050
-          NoneColorColor = clNone
-          Selected = 13120050
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 10
-          OnSelect = NightModePanelColorsTitle2ShadowFontColorSelect
-        end
-        object NightModePanelColorsTitle2FontColor: TColorBox
-          Left = 90
-          Top = 199
-          Width = 195
-          Height = 22
-          Hint = 'Font color for the second title text'
-          DefaultColorColor = clWhite
-          NoneColorColor = clNone
-          Selected = clWhite
-          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-          Ctl3D = True
-          ItemHeight = 16
-          ParentCtl3D = False
-          TabOrder = 11
-          OnSelect = NightModePanelColorsTitle2FontColorSelect
-        end
-      end
-      object NightModeGamesSelectionBarGroupBox: TAdvGroupBox
+      object NightModeGamesSelectionBarColorsBox: TAdvGroupBox
         Left = 329
         Top = 12
         Width = 293
@@ -3916,6 +3751,854 @@ object FormPreferences: TFormPreferences
           TabOrder = 15
           OnClick = GameSelectionButtonCopyClick
         end
+      end
+      object NightModePanelColorsBox: TAdvGroupBox
+        Left = 329
+        Top = 425
+        Width = 606
+        Height = 177
+        Transparent = False
+        RoundEdges = True
+        Caption = 'Panels Colors (Mostly Frames and Message Boxes)'
+        Ctl3D = True
+        TabOrder = 5
+        object LabelNightModeSearchGamesPanelTopColor: TLabel
+          Left = 8
+          Top = 48
+          Width = 21
+          Height = 15
+          Caption = 'Top'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelBottomColor: TLabel
+          Left = 8
+          Top = 73
+          Width = 40
+          Height = 15
+          Caption = 'Bottom'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelInnerFrameColor: TLabel
+          Left = 8
+          Top = 99
+          Width = 63
+          Height = 15
+          Caption = 'Inner Frame'
+          Transparent = True
+        end
+        object LabelNightModeSearchGamesPanelOuterFrameColor: TLabel
+          Left = 8
+          Top = 125
+          Width = 66
+          Height = 15
+          Caption = 'Outer Frame'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsTitleFontColor: TLabel
+          Left = 321
+          Top = 100
+          Width = 50
+          Height = 15
+          Caption = 'Title Font'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsTitleShadowFontColor: TLabel
+          Left = 321
+          Top = 126
+          Width = 68
+          Height = 15
+          Caption = 'Title Shadow'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsMessageFontColor: TLabel
+          Left = 321
+          Top = 48
+          Width = 49
+          Height = 15
+          Caption = 'Text Font'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsMessageShadowFontColor: TLabel
+          Left = 321
+          Top = 74
+          Width = 67
+          Height = 15
+          Caption = 'Text Shadow'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsTitle2FontColor: TLabel
+          Left = 8
+          Top = 152
+          Width = 59
+          Height = 15
+          Caption = 'Title 2 Font'
+          Transparent = True
+        end
+        object LabelNightModePanelColorsTitle2ShadowFontColor: TLabel
+          Left = 321
+          Top = 152
+          Width = 77
+          Height = 15
+          Caption = 'Title 2 Shadow'
+          Transparent = True
+        end
+        object NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBox
+          Left = 8
+          Top = 20
+          Width = 86
+          Height = 20
+          Checked = True
+          TabOrder = 0
+          TabStop = True
+          OnClick = NightModeSearchGamesPanelGradientBarClick
+          Alignment = taLeftJustify
+          Caption = 'Gradient Bar'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object NightModeSearchGamesPanelTopColor: TColorBox
+          Left = 90
+          Top = 44
+          Width = 195
+          Height = 22
+          DefaultColorColor = 5832704
+          NoneColorColor = 5832704
+          Selected = 5832704
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 1
+          OnSelect = NightModeSearchGamesPanelTopColorSelect
+        end
+        object NightModeSearchGamesPanelBottomColor: TColorBox
+          Left = 90
+          Top = 70
+          Width = 195
+          Height = 22
+          DefaultColorColor = 1
+          NoneColorColor = 1
+          Selected = 1
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 2
+          OnSelect = NightModeSearchGamesPanelBottomColorSelect
+        end
+        object NightModeSearchGamesPanelInnerFrameColor: TColorBox
+          Left = 90
+          Top = 96
+          Width = 195
+          Height = 22
+          DefaultColorColor = clBlue
+          NoneColorColor = clBlue
+          Selected = clBlue
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 3
+          OnSelect = NightModeSearchGamesPanelInnerFrameColorSelect
+        end
+        object NightModeSearchGamesPanelOuterFrameColor: TColorBox
+          Left = 90
+          Top = 122
+          Width = 195
+          Height = 22
+          DefaultColorColor = 16750899
+          NoneColorColor = 16750899
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 4
+          OnSelect = NightModeSearchGamesPanelOuterFrameColorSelect
+        end
+        object NightModePanelsBackgroundColorsDefaultButton: TBitBtn
+          Left = 549
+          Top = 16
+          Width = 47
+          Height = 21
+          Hint = 'Reset colors to default'
+          Caption = 'Default'
+          TabOrder = 5
+          OnClick = NightModePanelsBackgroundColorsDefaultButtonClick
+        end
+        object NightModePanelColorsTitleShadowFontColor: TColorBox
+          Left = 403
+          Top = 122
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the title text'
+          DefaultColorColor = clMaroon
+          NoneColorColor = clNone
+          Selected = clMaroon
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 6
+          OnSelect = NightModePanelColorsTitleShadowFontColorSelect
+        end
+        object NightModePanelColorsTitleFontColor: TColorBox
+          Left = 403
+          Top = 96
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the title text'
+          DefaultColorColor = clYellow
+          NoneColorColor = clNone
+          Selected = clYellow
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 7
+          OnSelect = NightModePanelColorsTitleFontColorSelect
+        end
+        object NightModePanelColorsMessageShadowFontColor: TColorBox
+          Left = 403
+          Top = 70
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the message text'
+          DefaultColorColor = clMaroon
+          NoneColorColor = clNone
+          Selected = clMaroon
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 8
+          OnSelect = NightModePanelColorsMessageShadowFontColorSelect
+        end
+        object NightModePanelColorsMessageFontColor: TColorBox
+          Left = 403
+          Top = 44
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the message text'
+          DefaultColorColor = clWhite
+          NoneColorColor = clNone
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 9
+          OnSelect = NightModePanelColorsMessageFontColorSelect
+        end
+        object NightModePanelColorsTitle2ShadowFontColor: TColorBox
+          Left = 403
+          Top = 148
+          Width = 195
+          Height = 22
+          Hint = 'Shadow font color for the second title text'
+          DefaultColorColor = 13120050
+          NoneColorColor = clNone
+          Selected = 13120050
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 10
+          OnSelect = NightModePanelColorsTitle2ShadowFontColorSelect
+        end
+        object NightModePanelColorsTitle2FontColor: TColorBox
+          Left = 90
+          Top = 148
+          Width = 195
+          Height = 22
+          Hint = 'Font color for the second title text'
+          DefaultColorColor = clWhite
+          NoneColorColor = clNone
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 11
+          OnSelect = NightModePanelColorsTitle2FontColorSelect
+        end
+      end
+      object ToolBarOverlayIconsFolder: TComboBox
+        Left = 642
+        Top = 395
+        Width = 242
+        Height = 23
+        Style = csDropDownList
+        Color = clWhite
+        ItemHeight = 15
+        TabOrder = 7
+        OnSelect = ToolBarOverlayIconsFolderSelect
+      end
+      object ToolBarOverlayIconsFolderButtonUpdate: TBitBtn
+        Left = 886
+        Top = 395
+        Width = 49
+        Height = 23
+        Hint = 'Click here to update the folders list (no restart needed)'
+        Caption = 'Update'
+        TabOrder = 8
+        OnClick = ToolBarOverlayIconsFolderButtonUpdateClick
+      end
+    end
+    object TPage
+      Left = 0
+      Top = 0
+      HelpContext = 5
+      Caption = 'Night Mode 2'
+      object LabelNightModeButtonColorsViewNextBackground: TShadowLabel
+        Left = 66
+        Top = 531
+        Width = 196
+        Height = 16
+        Caption = 'Med Dark Gray Gradient Background'
+        ShowAccelChar = False
+        ShadowColor = clSilver
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object NightModeButtonColorsBox: TAdvGroupBox
+        Left = 16
+        Top = 13
+        Width = 355
+        Height = 498
+        RoundEdges = True
+        Caption = 'Buttons Colors'
+        TabOrder = 0
+        object LabelNightModeButtonColorFontColor: TShadowLabel
+          Left = 8
+          Top = 43
+          Width = 59
+          Height = 16
+          Caption = 'Font Color'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientTop: TShadowLabel
+          Left = 8
+          Top = 75
+          Width = 72
+          Height = 16
+          Caption = 'Gradient Top'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientBottom: TShadowLabel
+          Left = 8
+          Top = 99
+          Width = 91
+          Height = 16
+          Caption = 'Gradient Bottom'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientBottomHover: TShadowLabel
+          Left = 8
+          Top = 215
+          Width = 126
+          Height = 16
+          Caption = 'Gradient Bottom Hover'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientTopHover: TShadowLabel
+          Left = 8
+          Top = 191
+          Width = 107
+          Height = 16
+          Caption = 'Gradient Top Hover'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientTopDisabled: TShadowLabel
+          Left = 8
+          Top = 423
+          Width = 120
+          Height = 16
+          Caption = 'Gradient Top Disabled'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorGradientBottomDisabled: TShadowLabel
+          Left = 8
+          Top = 447
+          Width = 139
+          Height = 16
+          Caption = 'Gradient Bottom Disabled'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFrameColor: TShadowLabel
+          Left = 8
+          Top = 123
+          Width = 68
+          Height = 16
+          Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFrameColorHover: TShadowLabel
+          Left = 8
+          Top = 239
+          Width = 103
+          Height = 16
+          Caption = 'Frame Color Hover'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFrameColorDisabled: TShadowLabel
+          Left = 8
+          Top = 471
+          Width = 116
+          Height = 16
+          Caption = 'Frame Color Disabled'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFrameColorFocused: TShadowLabel
+          Left = 8
+          Top = 151
+          Width = 115
+          Height = 16
+          Caption = 'Frame Color Focused'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFontColorDisabled: TShadowLabel
+          Left = 8
+          Top = 367
+          Width = 107
+          Height = 16
+          Caption = 'Font Color Disabled'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object LabelNightModeButtonColorFontShadowColorDisabled: TShadowLabel
+          Left = 8
+          Top = 391
+          Width = 152
+          Height = 16
+          Caption = 'Font Shadow Color Disabled'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object ShadowLabel8: TShadowLabel
+          Left = 8
+          Top = 303
+          Width = 138
+          Height = 16
+          Caption = 'Gradient Bottom Selected'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object ShadowLabel9: TShadowLabel
+          Left = 8
+          Top = 279
+          Width = 119
+          Height = 16
+          Caption = 'Gradient Top Selected'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object ShadowLabel10: TShadowLabel
+          Left = 8
+          Top = 327
+          Width = 115
+          Height = 16
+          Caption = 'Frame Color Selected'
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object NightModeButtonColorFontColor: TColorBox
+          Left = 162
+          Top = 44
+          Width = 185
+          Height = 22
+          DefaultColorColor = clCream
+          Selected = clCream
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 0
+          OnSelect = NightModeButtonColorFontColorSelect
+        end
+        object NightModeButtonColorGradientTop: TColorBox
+          Left = 162
+          Top = 76
+          Width = 185
+          Height = 22
+          DefaultColorColor = 5131854
+          Selected = 5131854
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 1
+          OnSelect = NightModeButtonColorGradientTopSelect
+        end
+        object NightModeButtonColorGradientBottom: TColorBox
+          Left = 162
+          Top = 100
+          Width = 185
+          Height = 22
+          DefaultColorColor = 3289650
+          Selected = 3289650
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 2
+          OnSelect = NightModeButtonColorGradientBottomSelect
+        end
+        object NightModeButtonColorGradientTopHover: TColorBox
+          Left = 162
+          Top = 188
+          Width = 185
+          Height = 22
+          DefaultColorColor = 12153143
+          Selected = 12153143
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 3
+          OnSelect = NightModeButtonColorGradientTopHoverSelect
+        end
+        object NightModeButtonColorGradientBottomHover: TColorBox
+          Left = 162
+          Top = 212
+          Width = 185
+          Height = 22
+          DefaultColorColor = 10181674
+          Selected = 10181674
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 4
+          OnSelect = NightModeButtonColorGradientBottomHoverSelect
+        end
+        object NightModeButtonColorGradientBottomDisabled: TColorBox
+          Left = 162
+          Top = 444
+          Width = 185
+          Height = 22
+          DefaultColorColor = clMedGray
+          Selected = clMedGray
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 5
+          OnSelect = NightModeButtonColorGradientBottomDisabledSelect
+        end
+        object NightModeButtonColorGradientTopDisabled: TColorBox
+          Left = 162
+          Top = 420
+          Width = 185
+          Height = 22
+          DefaultColorColor = clSilver
+          Selected = clSilver
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 6
+          OnSelect = NightModeButtonColorGradientTopDisabledSelect
+        end
+        object NightModeButtonColorFrameColor: TColorBox
+          Left = 162
+          Top = 124
+          Width = 185
+          Height = 22
+          DefaultColorColor = 2236962
+          Selected = 2236962
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 7
+          OnSelect = NightModeButtonColorFrameColorSelect
+        end
+        object NightModeButtonColorFrameColorHover: TColorBox
+          Left = 162
+          Top = 236
+          Width = 185
+          Height = 22
+          DefaultColorColor = 2236962
+          Selected = 2236962
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 8
+          OnSelect = NightModeButtonColorFrameColorHoverSelect
+        end
+        object NightModeButtonColorFrameColorDisabled: TColorBox
+          Left = 162
+          Top = 468
+          Width = 185
+          Height = 22
+          DefaultColorColor = clGray
+          Selected = clGray
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 9
+          OnSelect = NightModeButtonColorFrameColorDisabledSelect
+        end
+        object NightModeButtonColorFrameColorFocused: TColorBox
+          Left = 162
+          Top = 148
+          Width = 185
+          Height = 22
+          DefaultColorColor = 12615756
+          Selected = 12615756
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 10
+          OnSelect = NightModeButtonColorFrameColorFocusedSelect
+        end
+        object NightModeButtonColorFontColorDisabled: TColorBox
+          Left = 162
+          Top = 364
+          Width = 185
+          Height = 22
+          DefaultColorColor = clBtnShadow
+          Selected = clBtnShadow
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 11
+          OnSelect = NightModeButtonColorFontColorDisabledSelect
+        end
+        object NightModeButtonColorFontShadowColorDisabled: TColorBox
+          Left = 162
+          Top = 388
+          Width = 185
+          Height = 22
+          DefaultColorColor = clBtnHighlight
+          Selected = clBtnHighlight
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 12
+          OnSelect = NightModeButtonColorFontShadowColorDisabledSelect
+        end
+        object NightModeButtonColorsBoxDefaultButton: TBitBtn
+          Left = 300
+          Top = 16
+          Width = 47
+          Height = 21
+          Hint = 'Reset colors to default'
+          Caption = 'Default'
+          TabOrder = 13
+          OnClick = NightModeButtonColorsBoxDefaultButtonClick
+        end
+        object NightModeButtonColorGradientTopSelected: TColorBox
+          Left = 162
+          Top = 276
+          Width = 185
+          Height = 22
+          DefaultColorColor = 10905138
+          Selected = 10905138
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 14
+          OnSelect = NightModeButtonColorGradientTopSelectedSelect
+        end
+        object NightModeButtonColorGradientBottomSelected: TColorBox
+          Left = 162
+          Top = 300
+          Width = 185
+          Height = 22
+          DefaultColorColor = 9196326
+          Selected = 9196326
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 15
+          OnSelect = NightModeButtonColorGradientBottomSelectedSelect
+        end
+        object NightModeButtonColorFrameColorSelected: TColorBox
+          Left = 162
+          Top = 324
+          Width = 185
+          Height = 22
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          ItemHeight = 16
+          TabOrder = 16
+          OnSelect = NightModeButtonColorFrameColorSelectedSelect
+        end
+      end
+      object NightModeButtonColorsSamplePanel: TPanelEx
+        Left = 16
+        Top = 556
+        Width = 345
+        Height = 41
+        Color1 = 2565927
+        Color2 = 5263440
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = clGreen
+        ColorInnerFrame = clGreen
+        Frames = []
+        ParentBackground = False
+        Style = vgSimple
+        object NightModeButtonColorsSampleButton4: TSpeedButtonEx
+          Left = 264
+          Top = 8
+          Width = 73
+          Height = 25
+          AllowAllUp = True
+          GroupIndex = 2
+          Down = True
+          Caption = 'Selected'
+          UseCustomDraw = True
+          GradientColorTop_Down = 10905138
+          GradientColorBottom_Down = 9196326
+          FrameColor_Down = clBlack
+        end
+        object NightModeButtonColorsSampleButton1: TBitBtnEx
+          Left = 8
+          Top = 8
+          Width = 73
+          Height = 25
+          Caption = 'Button 1'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clCream
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          UseCustomDraw = True
+        end
+        object NightModeButtonColorsSampleButton2: TBitBtnEx
+          Left = 93
+          Top = 8
+          Width = 73
+          Height = 25
+          Caption = 'Button 2'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clCream
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          UseCustomDraw = True
+        end
+        object NightModeButtonColorsSampleButton3: TBitBtnEx
+          Left = 178
+          Top = 8
+          Width = 73
+          Height = 25
+          Caption = 'Disabled'
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clCream
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          UseCustomDraw = True
+        end
+      end
+      object NightModeButtonColorsViewNextBackground: TBitBtn
+        Tag = 1
+        Left = 16
+        Top = 528
+        Width = 47
+        Height = 21
+        Caption = 'Next >'
+        TabOrder = 2
+        OnClick = NightModeButtonColorsViewNextBackgroundClick
       end
     end
   end

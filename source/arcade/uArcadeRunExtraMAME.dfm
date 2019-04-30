@@ -20,7 +20,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PageButtonInput: TSpeedButton
+  object PageButtonInput: TSpeedButtonEx
     Tag = 1
     Left = 4
     Top = 86
@@ -36,8 +36,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
+    GradientColorTop_Down = 10905138
+    GradientColorBottom_Down = 9196326
+    FrameColor_Down = clBlack
   end
-  object PageButtonSaveState: TSpeedButton
+  object PageButtonSaveState: TSpeedButtonEx
     Tag = 2
     Left = 182
     Top = 89
@@ -52,8 +55,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
+    GradientColorTop_Down = 10905138
+    GradientColorBottom_Down = 9196326
+    FrameColor_Down = clBlack
   end
-  object PageButtonMemoryCard: TSpeedButton
+  object PageButtonMemoryCard: TSpeedButtonEx
     Tag = 3
     Left = 290
     Top = 89
@@ -68,8 +74,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
+    GradientColorTop_Down = 10905138
+    GradientColorBottom_Down = 9196326
+    FrameColor_Down = clBlack
   end
-  object PageButtonRecordMovie: TSpeedButton
+  object PageButtonRecordMovie: TSpeedButtonEx
     Tag = 4
     Left = 410
     Top = 89
@@ -84,11 +93,14 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
+    GradientColorTop_Down = 10905138
+    GradientColorBottom_Down = 9196326
+    FrameColor_Down = clBlack
   end
-  object PagesButtonBottomLine: TBevel
+  object PagesButtonBottomLine: TBevelEx
     Left = 2
     Top = 108
-    Width = 815
+    Width = 616
     Height = 2
     Shape = bsTopLine
   end
@@ -113,7 +125,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Height = 68
       Transparent = True
     end
-    object LabelTitle: TShadowLabel
+    object LabelGameTitle: TShadowLabel
       Left = 106
       Top = 0
       Width = 708
@@ -139,7 +151,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Layout = tlCenter
       WordWrap = True
     end
-    object LabelGameNameCloneOf: TShadowLabel
+    object LabelGameName: TShadowLabel
       Left = 106
       Top = 45
       Width = 488
@@ -215,7 +227,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Visible = False
     end
   end
-  object PanelMessages: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
     Top = 456
     Width = 819
@@ -230,11 +242,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Frames = []
     ParentBackground = False
     Style = vgSimple
-    object Label3: TLabel
+    object LabelInfo: TShadowLabel
       Left = 56
       Top = 12
-      Width = 306
-      Height = 18
+      Width = 309
+      Height = 19
       Caption = 'Check features you want to use. Uncheck to disable.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
@@ -243,9 +255,15 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Font.Style = [fsBold, fsItalic]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 620
       Top = 8
       Width = 89
@@ -256,7 +274,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 723
       Top = 8
       Width = 89
@@ -275,25 +293,18 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Width = 819
     Height = 345
     Color = clWhite
+    PageIndex = 1
     ParentColor = False
     TabOrder = 2
     object TPage
       Left = 0
       Top = 0
       Caption = 'Input'
-      object InputListViewFileFolderFrame: TShape
-        Left = 8
-        Top = 289
-        Width = 803
-        Height = 25
-        Brush.Style = bsClear
-        Pen.Color = 11775403
-      end
-      object LabelInputFileName: TLabel
+      object LabelInputFileName: TShadowLabel
         Left = 8
         Top = 319
-        Width = 206
-        Height = 15
+        Width = 209
+        Height = 16
         Caption = 'Selected File (file extension optional)'
         Font.Charset = ANSI_CHARSET
         Font.Color = 3289650
@@ -301,28 +312,13 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
-      end
-      object LabelInputSelectedFileFolder: TShadowLabel
-        Left = 12
-        Top = 292
-        Width = 795
-        Height = 19
-        AutoSize = False
-        Caption = 'Folder of selected file...'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentFont = False
         ShowAccelChar = False
-        ShadowColor = clSilver
+        ShadowColor = clGray
         ShadowEnabled = False
-        EllipsType = etPathEllips
+        EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
         Frames = []
-        Transparent = True
       end
       object Enabled_PlaybackRecordInput: TAdvOfficeCheckBox
         Left = 24
@@ -336,7 +332,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
-        TabOrder = 1
+        TabOrder = 0
         OnClick = Enabled_PlaybackRecordInputClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
@@ -354,7 +350,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 1
         TabStop = True
         OnClick = InputPlaybackClick
         Alignment = taLeftJustify
@@ -363,7 +359,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object InputFileName: TEdit
+      object InputFileName: TEditEx
         Left = 222
         Top = 316
         Width = 464
@@ -377,7 +373,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 2
         OnKeyPress = InputFileNameKeyPress
       end
       object InputRecord: TAdvOfficeRadioButton
@@ -392,7 +388,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
         OnClick = InputPlaybackClick
         Alignment = taLeftJustify
         Caption = 'Record'
@@ -411,7 +407,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         Alignment = taLeftJustify
         Caption = 'Exit Emulator After Input Playback'
         ReturnIsTab = False
@@ -429,14 +425,14 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 5
         Visible = False
         Alignment = taLeftJustify
         Caption = 'Record an Input Timecode File'
         ReturnIsTab = False
         Themed = True
       end
-      object ButtonInputResetFileName: TBitBtn
+      object ButtonInputResetFileName: TBitBtnEx
         Left = 688
         Top = 316
         Width = 43
@@ -452,94 +448,10 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 7
+        TabOrder = 6
         OnClick = ButtonInputResetFileNameClick
       end
-      object InputListView: TEasyListview
-        Left = 8
-        Top = 42
-        Width = 803
-        Height = 248
-        CellSizes.Report.Height = 20
-        Color = clWhite
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000001000162010000FFFFFF1F0001000000
-          01000000040000004E0061006D00650000000000000000000000000011000000
-          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-          0100000000000178000000FFFFFF1F0001000000010000000400000053006900
-          7A006500000000000000000000000000110000005445617379436F6C756D6E53
-          746F726564FFFECE000600000080080001010001020000000000017D000000FF
-          FFFF1F0001000000010000000D000000440061007400650020004D006F006400
-          6900660069006500640000000000000000000000000011000000544561737943
-          6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
-          01CA000000FFFFFF1F0001000000010000000600000046006F006C0064006500
-          7200000000000000000000000000}
-        Header.Draggable = False
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        Header.Visible = True
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.Border = 2
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        ParentFont = False
-        ParentShowHint = False
-        PopupMenu = PopupELV
-        ShowHint = False
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 0
-        View = elsReport
-        OnColumnClick = InputListViewColumnClick
-        OnItemCompare = InputListViewItemCompare
-        OnItemEdited = InputListViewItemEdited
-        OnItemEditEnd = InputListViewItemEditEnd
-        OnItemSelectionChanged = InputListViewItemSelectionChanged
-        OnKeyAction = InputListViewKeyAction
-      end
-      object ButtonInputResetFileNameTitle: TBitBtn
+      object ButtonInputResetFileNameTitle: TBitBtnEx
         Tag = 1
         Left = 732
         Top = 316
@@ -548,7 +460,134 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Hint = 'Click here to reset filename to game title (no unicode support)'
         Caption = 'Reset to Title'
         Enabled = False
-        TabOrder = 9
+        TabOrder = 8
+      end
+      object PanelInputListView: TPanelEx
+        Left = 8
+        Top = 42
+        Width = 803
+        Height = 272
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = clSilver
+        ColorInnerFrame = 7891291
+        EnableCustomBorder = ecbSingle
+        Frames = []
+        ParentBackground = False
+        Style = vgSolid
+        object LabelInputSelectedFileFolder: TShadowLabel
+          Left = 0
+          Top = 246
+          Width = 801
+          Height = 24
+          Align = alBottom
+          AutoSize = False
+          Caption = ' Folder of selected file...'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etPathEllips
+          ColorFrame = clSilver
+          ColorInnerFrame = clBlack
+          Frames = [lfrTop]
+          Transparent = False
+          Layout = tlCenter
+        end
+        object InputListView: TEasyListview
+          Left = 0
+          Top = 0
+          Width = 801
+          Height = 246
+          Align = alClient
+          BorderStyle = bsNone
+          CellSizes.Report.Height = 20
+          Color = clWhite
+          EditManager.Font.Charset = ANSI_CHARSET
+          EditManager.Font.Color = clBlack
+          EditManager.Font.Height = -12
+          EditManager.Font.Name = 'Segoe UI'
+          EditManager.Font.Style = []
+          UseDockManager = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          GroupFont.Charset = ANSI_CHARSET
+          GroupFont.Color = clBlack
+          GroupFont.Height = -12
+          GroupFont.Name = 'Segoe UI'
+          GroupFont.Style = []
+          HintType = ehtToolTip
+          Header.Columns.Items = {
+            0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
+            0006000000800800010100010000000001000162010000FFFFFF1F0001000000
+            01000000040000004E0061006D00650000000000000000000000000011000000
+            5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+            0100000000000178000000FFFFFF1F0001000000010000000400000053006900
+            7A006500000000000000000000000000110000005445617379436F6C756D6E53
+            746F726564FFFECE000600000080080001010001020000000000017D000000FF
+            FFFF1F0001000000010000000D000000440061007400650020004D006F006400
+            6900660069006500640000000000000000000000000011000000544561737943
+            6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
+            01C6000000FFFFFF1F0001000000010000000600000046006F006C0064006500
+            7200000000000000000000000000}
+          Header.Draggable = False
+          Header.Font.Charset = ANSI_CHARSET
+          Header.Font.Color = clBlack
+          Header.Font.Height = -12
+          Header.Font.Name = 'Segoe UI'
+          Header.Font.Style = []
+          Header.Height = 23
+          Header.Sizeable = False
+          Header.Visible = True
+          IncrementalSearch.Enabled = True
+          IncrementalSearch.ResetTime = 1000
+          IncrementalSearch.StartType = eissFocusedNode
+          PaintInfoColumn.Border = 2
+          PaintInfoColumn.CaptionIndent = 0
+          PaintInfoGroup.Expandable = False
+          PaintInfoGroup.MarginBottom.CaptionIndent = 4
+          PaintInfoItem.BorderColor = 16370824
+          PaintInfoItem.ShowBorder = False
+          ParentFont = False
+          ParentShowHint = False
+          PopupMenu = PopupELV
+          ShowThemedBorder = False
+          ShowHint = False
+          Selection.BlendColorSelRect = 10902593
+          Selection.BlendIcon = False
+          Selection.BorderColor = 10902593
+          Selection.BorderColorSelRect = 10902593
+          Selection.Color = 10902593
+          Selection.FullCellPaint = True
+          Selection.FullItemPaint = True
+          Selection.FullRowSelect = True
+          Selection.GradientColorBottom = 16506264
+          Selection.GradientColorTop = 15582647
+          Selection.InactiveBorderColor = 10902593
+          Selection.InactiveColor = 15582647
+          Selection.MouseButton = [cmbLeft, cmbRight]
+          Selection.RoundRectRadius = 2
+          Selection.TextColor = clBlack
+          Selection.UseFocusRect = False
+          TabOrder = 0
+          View = elsReport
+          OnColumnClick = InputListViewColumnClick
+          OnItemCompare = InputListViewItemCompare
+          OnItemEdited = InputListViewItemEdited
+          OnItemEditEnd = InputListViewItemEditEnd
+          OnItemSelectionChanged = InputListViewItemSelectionChanged
+          OnKeyAction = InputListViewKeyAction
+        end
       end
       object PanelDisabledInput: TPanel
         Left = 100
@@ -557,7 +596,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Height = 11
         BevelOuter = bvNone
         Color = clSilver
-        TabOrder = 8
+        TabOrder = 7
       end
     end
     object TPage
@@ -565,41 +604,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Top = 0
       HelpContext = 1
       Caption = 'SaveState'
-      object SaveStateListViewFileFolderFrame: TShape
-        Left = 8
-        Top = 312
-        Width = 803
-        Height = 25
-        Brush.Style = bsClear
-        Pen.Color = 11775403
-      end
-      object LabelSaveStateSelectedFileFolder: TShadowLabel
-        Left = 12
-        Top = 315
-        Width = 795
-        Height = 19
-        AutoSize = False
-        Caption = 'Folder of selected file...'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clSilver
-        ShadowEnabled = False
-        EllipsType = etPathEllips
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object LabelLoadSaveStateNotSupportedMsg: TLabel
+      object LabelLoadSaveStateNotSupportedMsg: TShadowLabel
         Left = 352
         Top = 6
-        Width = 456
-        Height = 12
+        Width = 459
+        Height = 13
         Caption = 'Save states are not officially supported by this machine!'
         Font.Charset = OEM_CHARSET
         Font.Color = clMaroon
@@ -607,87 +616,13 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Terminal'
         Font.Style = []
         ParentFont = False
-      end
-      object SaveStateListView: TEasyListview
-        Left = 8
-        Top = 22
-        Width = 803
-        Height = 291
-        CellSizes.Report.Height = 20
-        Color = clWhite
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000001000162010000FFFFFF1F0001000000
-          01000000040000004E0061006D00650000000000000000000000000011000000
-          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-          0100000000000178000000FFFFFF1F0001000000010000000400000053006900
-          7A006500000000000000000000000000110000005445617379436F6C756D6E53
-          746F726564FFFECE000600000080080001010001020000000000017D000000FF
-          FFFF1F0001000000010000000D000000440061007400650020004D006F006400
-          69006600690065006400000000000000000000000000}
-        Header.Draggable = False
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        Header.Visible = True
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.Border = 2
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        ParentFont = False
-        ParentShowHint = False
-        PopupMenu = PopupELV
-        ShowHint = False
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 0
-        View = elsReport
-        OnColumnClick = SaveStateListViewColumnClick
-        OnItemCompare = SaveStateListViewItemCompare
-        OnItemEdited = SaveStateListViewItemEdited
-        OnItemEditEnd = SaveStateListViewItemEditEnd
-        OnItemSelectionChanged = SaveStateListViewItemSelectionChanged
-        OnKeyAction = SaveStateListViewKeyAction
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
       object Enabled_LoadSaveState: TAdvOfficeCheckBox
         Left = 24
@@ -701,7 +636,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
-        TabOrder = 1
+        TabOrder = 0
         OnClick = Enabled_LoadSaveStateClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
@@ -723,12 +658,136 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = []
         ParentFont = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 2
         Visible = False
         Alignment = taLeftJustify
         Caption = 'Auto Save State'
         ReturnIsTab = False
         Themed = True
+      end
+      object PanelSaveStateListView: TPanelEx
+        Left = 8
+        Top = 22
+        Width = 803
+        Height = 315
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = clSilver
+        ColorInnerFrame = 7891291
+        EnableCustomBorder = ecbSingle
+        Frames = []
+        ParentBackground = False
+        Style = vgSolid
+        object LabelSaveStateSelectedFileFolder: TShadowLabel
+          Left = 0
+          Top = 289
+          Width = 801
+          Height = 24
+          Align = alBottom
+          AutoSize = False
+          Caption = ' Folder of selected file...'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etPathEllips
+          ColorFrame = clSilver
+          ColorInnerFrame = clBlack
+          Frames = [lfrTop]
+          Transparent = False
+          Layout = tlCenter
+        end
+        object SaveStateListView: TEasyListview
+          Left = 0
+          Top = 0
+          Width = 801
+          Height = 289
+          Align = alClient
+          BorderStyle = bsNone
+          CellSizes.Report.Height = 20
+          Color = clWhite
+          EditManager.Font.Charset = ANSI_CHARSET
+          EditManager.Font.Color = clBlack
+          EditManager.Font.Height = -12
+          EditManager.Font.Name = 'Segoe UI'
+          EditManager.Font.Style = []
+          UseDockManager = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          GroupFont.Charset = ANSI_CHARSET
+          GroupFont.Color = clBlack
+          GroupFont.Height = -12
+          GroupFont.Name = 'Segoe UI'
+          GroupFont.Style = []
+          HintType = ehtToolTip
+          Header.Columns.Items = {
+            0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
+            000600000080080001010001000000000100012A020000FFFFFF1F0001000000
+            01000000040000004E0061006D00650000000000000000000000000011000000
+            5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+            0100000000000178000000FFFFFF1F0001000000010000000400000053006900
+            7A006500000000000000000000000000110000005445617379436F6C756D6E53
+            746F726564FFFECE000600000080080001010001020000000000017D000000FF
+            FFFF1F0001000000010000000D000000440061007400650020004D006F006400
+            69006600690065006400000000000000000000000000}
+          Header.Draggable = False
+          Header.Font.Charset = ANSI_CHARSET
+          Header.Font.Color = clBlack
+          Header.Font.Height = -12
+          Header.Font.Name = 'Segoe UI'
+          Header.Font.Style = []
+          Header.Height = 23
+          Header.Sizeable = False
+          Header.Visible = True
+          IncrementalSearch.Enabled = True
+          IncrementalSearch.ResetTime = 1000
+          IncrementalSearch.StartType = eissFocusedNode
+          PaintInfoColumn.Border = 2
+          PaintInfoColumn.CaptionIndent = 0
+          PaintInfoGroup.Expandable = False
+          PaintInfoGroup.MarginBottom.CaptionIndent = 4
+          PaintInfoItem.BorderColor = 16370824
+          PaintInfoItem.ShowBorder = False
+          ParentFont = False
+          ParentShowHint = False
+          PopupMenu = PopupELV
+          ShowThemedBorder = False
+          ShowHint = False
+          Selection.BlendColorSelRect = 10902593
+          Selection.BlendIcon = False
+          Selection.BorderColor = 10902593
+          Selection.BorderColorSelRect = 10902593
+          Selection.Color = 10902593
+          Selection.FullCellPaint = True
+          Selection.FullItemPaint = True
+          Selection.FullRowSelect = True
+          Selection.GradientColorBottom = 16506264
+          Selection.GradientColorTop = 15582647
+          Selection.InactiveBorderColor = 10902593
+          Selection.InactiveColor = 15582647
+          Selection.MouseButton = [cmbLeft, cmbRight]
+          Selection.RoundRectRadius = 2
+          Selection.TextColor = clBlack
+          Selection.UseFocusRect = False
+          TabOrder = 0
+          View = elsReport
+          OnColumnClick = SaveStateListViewColumnClick
+          OnItemCompare = SaveStateListViewItemCompare
+          OnItemEdited = SaveStateListViewItemEdited
+          OnItemEditEnd = SaveStateListViewItemEditEnd
+          OnItemSelectionChanged = SaveStateListViewItemSelectionChanged
+          OnKeyAction = SaveStateListViewKeyAction
+        end
       end
       object PanelDisabledSaveState: TPanel
         Left = 104
@@ -737,16 +796,16 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Height = 11
         BevelOuter = bvNone
         Color = clSilver
-        TabOrder = 2
+        TabOrder = 1
       end
       object PanelDisabledSaveStateNotSupportedMsg: TPanel
-        Left = 208
+        Left = 232
         Top = 1
         Width = 89
-        Height = 11
+        Height = 20
         BevelOuter = bvNone
         Color = clSilver
-        TabOrder = 4
+        TabOrder = 3
       end
     end
     object TPage
@@ -754,11 +813,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Top = 0
       HelpContext = 2
       Caption = 'MemoryCard'
-      object LabelInsertMemoryCard_Slot4: TLabel
+      object LabelInsertMemoryCard_Slot4: TShadowLabel
         Left = 8
         Top = 109
-        Width = 29
-        Height = 15
+        Width = 32
+        Height = 16
         Caption = 'Slot 4'
         Enabled = False
         Font.Charset = ANSI_CHARSET
@@ -768,13 +827,19 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelInsertMemoryCard_Slot3: TLabel
+      object LabelInsertMemoryCard_Slot3: TShadowLabel
         Left = 8
         Top = 82
-        Width = 29
-        Height = 15
+        Width = 32
+        Height = 16
         Caption = 'Slot 3'
         Enabled = False
         Font.Charset = ANSI_CHARSET
@@ -784,13 +849,19 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelInsertMemoryCard_Slot1: TLabel
+      object LabelInsertMemoryCard_Slot1: TShadowLabel
         Left = 8
         Top = 28
-        Width = 29
-        Height = 15
+        Width = 32
+        Height = 16
         Caption = 'Slot 1'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -799,13 +870,19 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelInsertMemoryCard_Slot2: TLabel
+      object LabelInsertMemoryCard_Slot2: TShadowLabel
         Left = 8
         Top = 55
-        Width = 29
-        Height = 15
+        Width = 32
+        Height = 16
         Caption = 'Slot 2'
         Enabled = False
         Font.Charset = ANSI_CHARSET
@@ -815,9 +892,15 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object ButtonInsertMemoryCard_Slot4_Clear: TBitBtn
+      object ButtonInsertMemoryCard_Slot4_Clear: TBitBtnEx
         Left = 768
         Top = 107
         Width = 43
@@ -836,7 +919,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 18
         OnClick = ButtonInsertMemoryCard_Slot4_ClearClick
       end
-      object ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtn
+      object ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtnEx
         Left = 704
         Top = 107
         Width = 64
@@ -855,7 +938,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 16
         OnClick = ButtonInsertMemoryCard_Slot4_LastUsedClick
       end
-      object ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtn
+      object ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtnEx
         Left = 656
         Top = 107
         Width = 47
@@ -874,7 +957,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 15
         OnClick = ButtonInsertMemoryCard_Slot4_SelectFileClick
       end
-      object ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtn
+      object ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtnEx
         Left = 704
         Top = 80
         Width = 64
@@ -893,7 +976,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 14
         OnClick = ButtonInsertMemoryCard_Slot3_LastUsedClick
       end
-      object ButtonInsertMemoryCard_Slot3_Clear: TBitBtn
+      object ButtonInsertMemoryCard_Slot3_Clear: TBitBtnEx
         Left = 768
         Top = 80
         Width = 43
@@ -912,7 +995,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 13
         OnClick = ButtonInsertMemoryCard_Slot3_ClearClick
       end
-      object ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtn
+      object ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtnEx
         Left = 656
         Top = 80
         Width = 47
@@ -931,7 +1014,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 12
         OnClick = ButtonInsertMemoryCard_Slot3_SelectFileClick
       end
-      object InsertMemoryCard_Slot4: TEdit
+      object InsertMemoryCard_Slot4: TEditEx
         Left = 40
         Top = 107
         Width = 614
@@ -942,7 +1025,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 4
         OnKeyPress = InsertMemoryCard_Slot4KeyPress
       end
-      object InsertMemoryCard_Slot3: TEdit
+      object InsertMemoryCard_Slot3: TEditEx
         Left = 40
         Top = 80
         Width = 614
@@ -978,7 +1061,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object InsertMemoryCard_Slot1: TEdit
+      object InsertMemoryCard_Slot1: TEditEx
         Left = 40
         Top = 26
         Width = 614
@@ -988,7 +1071,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 1
         OnKeyPress = InsertMemoryCard_Slot1KeyPress
       end
-      object InsertMemoryCard_Slot2: TEdit
+      object InsertMemoryCard_Slot2: TEditEx
         Left = 40
         Top = 53
         Width = 614
@@ -999,7 +1082,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 2
         OnKeyPress = InsertMemoryCard_Slot2KeyPress
       end
-      object ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtn
+      object ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtnEx
         Left = 656
         Top = 26
         Width = 47
@@ -1017,7 +1100,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 5
         OnClick = ButtonInsertMemoryCard_Slot1_SelectFileClick
       end
-      object ButtonInsertMemoryCard_Slot1_Clear: TBitBtn
+      object ButtonInsertMemoryCard_Slot1_Clear: TBitBtnEx
         Left = 769
         Top = 26
         Width = 43
@@ -1035,7 +1118,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 6
         OnClick = ButtonInsertMemoryCard_Slot1_ClearClick
       end
-      object ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtn
+      object ButtonInsertMemoryCard_Slot1_LastUsed: TBitBtnEx
         Left = 704
         Top = 26
         Width = 64
@@ -1053,7 +1136,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 7
         OnClick = ButtonInsertMemoryCard_Slot1_LastUsedClick
       end
-      object ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtn
+      object ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtnEx
         Left = 656
         Top = 53
         Width = 47
@@ -1072,7 +1155,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 8
         OnClick = ButtonInsertMemoryCard_Slot2_SelectFileClick
       end
-      object ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtn
+      object ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtnEx
         Left = 704
         Top = 53
         Width = 64
@@ -1091,7 +1174,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 9
         OnClick = ButtonInsertMemoryCard_Slot2_LastUsedClick
       end
-      object ButtonInsertMemoryCard_Slot2_Clear: TBitBtn
+      object ButtonInsertMemoryCard_Slot2_Clear: TBitBtnEx
         Left = 769
         Top = 53
         Width = 43
@@ -1119,16 +1202,17 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Color2 = clSilver
         Color3 = clYellow
         Color4 = clTeal
-        ColorFrame = 11775403
-        ColorInnerFrame = clGreen
-        Frames = [frLeft, frRight, frBottom]
+        ColorFrame = clSilver
+        ColorInnerFrame = 7891291
+        EnableCustomBorder = ecbSingle
+        Frames = []
         ParentBackground = False
         Style = vgSolid
         object LabelMemoryCardSelectedFileFolder: TShadowLabel
           Left = 0
-          Top = 177
-          Width = 803
-          Height = 25
+          Top = 176
+          Width = 801
+          Height = 24
           Align = alBottom
           AutoSize = False
           Caption = ' Folder of selected file...'
@@ -1142,18 +1226,19 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           ShadowColor = clSilver
           ShadowEnabled = False
           EllipsType = etPathEllips
-          ColorFrame = clBlack
+          ColorFrame = clSilver
           ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
+          Frames = [lfrTop]
+          Transparent = False
           Layout = tlCenter
         end
         object MemoryCardListView: TEasyListview
           Left = 0
           Top = 0
-          Width = 803
-          Height = 177
+          Width = 801
+          Height = 176
           Align = alClient
+          BorderStyle = bsNone
           CellSizes.Report.Height = 20
           Color = clWhite
           EditManager.Font.Charset = ANSI_CHARSET
@@ -1207,6 +1292,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           ParentFont = False
           ParentShowHint = False
           PopupMenu = PopupELV
+          ShowThemedBorder = False
           ShowHint = False
           Selection.BlendColorSelRect = 10902593
           Selection.BlendIcon = False
@@ -1250,41 +1336,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
       Top = 0
       HelpContext = 3
       Caption = 'RecordMovie'
-      object RecordMovieListViewFileFolder: TShape
-        Left = 8
-        Top = 289
-        Width = 803
-        Height = 25
-        Brush.Style = bsClear
-        Pen.Color = 11775403
-      end
-      object LabelRecordMovieSelectedFileFolder: TShadowLabel
-        Left = 12
-        Top = 292
-        Width = 795
-        Height = 19
-        AutoSize = False
-        Caption = 'Folder of selected file...'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clSilver
-        ShadowEnabled = False
-        EllipsType = etPathEllips
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object LabelRecordMovieFileName: TLabel
+      object LabelRecordMovieFileName: TShadowLabel
         Left = 8
         Top = 319
-        Width = 199
-        Height = 15
+        Width = 202
+        Height = 16
         Caption = 'File to Save (file extension optional)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -1292,11 +1348,18 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
       object LabelRecordMovieRootFolder: TShadowLabel
-        Left = 228
+        Left = 234
         Top = 23
-        Width = 581
+        Width = 575
         Height = 19
         Hint = 'Root folder:'
         AutoSize = False
@@ -1328,14 +1391,14 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
-        TabOrder = 1
+        TabOrder = 0
         OnClick = Enabled_RecordMovieClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
         ReturnIsTab = False
         Themed = True
       end
-      object ButtonRecordMovieResetFileNameTitle: TBitBtn
+      object ButtonRecordMovieResetFileNameTitle: TBitBtnEx
         Tag = 1
         Left = 732
         Top = 316
@@ -1351,10 +1414,10 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 2
+        TabOrder = 1
         OnClick = ButtonRecordMovieResetFileNameClick
       end
-      object ButtonRecordMovieResetFileName: TBitBtn
+      object ButtonRecordMovieResetFileName: TBitBtnEx
         Left = 688
         Top = 316
         Width = 43
@@ -1369,10 +1432,10 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 2
         OnClick = ButtonRecordMovieResetFileNameClick
       end
-      object RecordMovieFileName: TEdit
+      object RecordMovieFileName: TEditEx
         Left = 211
         Top = 316
         Width = 474
@@ -1385,7 +1448,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
         OnChange = RecordMovieFileNameChange
         OnKeyPress = RecordMovieFileNameKeyPress
       end
@@ -1393,7 +1456,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Tag = 2
         Left = 155
         Top = 22
-        Width = 67
+        Width = 72
         Height = 18
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -1401,7 +1464,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         OnClick = RecordMovieAVIClick
         Alignment = taLeftJustify
         Caption = 'WAV File'
@@ -1412,7 +1475,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Tag = 1
         Left = 76
         Top = 22
-        Width = 71
+        Width = 73
         Height = 18
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -1420,7 +1483,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 5
         OnClick = RecordMovieAVIClick
         Alignment = taLeftJustify
         Caption = 'MNG File'
@@ -1437,10 +1500,10 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Font.Color = clBlack
         Font.Height = -12
         Font.Name = 'Segoe UI'
-        Font.Style = []
+        Font.Style = [fsBold]
         ParentFont = False
         ShowHint = True
-        TabOrder = 7
+        TabOrder = 6
         TabStop = True
         OnClick = RecordMovieAVIClick
         Alignment = taLeftJustify
@@ -1449,89 +1512,132 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object RecordMovieListView: TEasyListview
+      object PanelRecordMovieListView: TPanelEx
         Left = 8
         Top = 42
         Width = 803
-        Height = 248
-        CellSizes.Report.Height = 20
-        Color = clWhite
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clBlack
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000001000162010000FFFFFF1F0001000000
-          01000000040000004E0061006D00650000000000000000000000000011000000
-          5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-          0100000000000178000000FFFFFF1F0001000000010000000400000053006900
-          7A006500000000000000000000000000110000005445617379436F6C756D6E53
-          746F726564FFFECE000600000080080001010001020000000000017D000000FF
-          FFFF1F0001000000010000000D000000440061007400650020004D006F006400
-          6900660069006500640000000000000000000000000011000000544561737943
-          6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
-          01CA000000FFFFFF1F0001000000010000000600000046006F006C0064006500
-          7200000000000000000000000000}
-        Header.Draggable = False
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        Header.Visible = True
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.Border = 2
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        ParentFont = False
-        ParentShowHint = False
-        PopupMenu = PopupELV
-        ShowHint = False
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 0
-        View = elsReport
-        OnColumnClick = RecordMovieListViewColumnClick
-        OnItemCompare = RecordMovieListViewItemCompare
-        OnItemEdited = RecordMovieListViewItemEdited
-        OnItemEditEnd = RecordMovieListViewItemEditEnd
-        OnItemSelectionChanged = RecordMovieListViewItemSelectionChanged
-        OnKeyAction = RecordMovieListViewKeyAction
+        Height = 272
+        Color1 = clWhite
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = clSilver
+        ColorInnerFrame = 7891291
+        EnableCustomBorder = ecbSingle
+        Frames = []
+        ParentBackground = False
+        Style = vgSolid
+        object LabelRecordMovieSelectedFileFolder: TShadowLabel
+          Left = 0
+          Top = 246
+          Width = 801
+          Height = 24
+          Align = alBottom
+          AutoSize = False
+          Caption = ' Folder of selected file...'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Trebuchet MS'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clSilver
+          ShadowEnabled = False
+          EllipsType = etPathEllips
+          ColorFrame = clSilver
+          ColorInnerFrame = clBlack
+          Frames = [lfrTop]
+          Transparent = False
+          Layout = tlCenter
+        end
+        object RecordMovieListView: TEasyListview
+          Left = 0
+          Top = 0
+          Width = 801
+          Height = 246
+          Align = alClient
+          BorderStyle = bsNone
+          CellSizes.Report.Height = 20
+          Color = clWhite
+          EditManager.Font.Charset = ANSI_CHARSET
+          EditManager.Font.Color = clBlack
+          EditManager.Font.Height = -12
+          EditManager.Font.Name = 'Segoe UI'
+          EditManager.Font.Style = []
+          UseDockManager = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          GroupFont.Charset = ANSI_CHARSET
+          GroupFont.Color = clBlack
+          GroupFont.Height = -12
+          GroupFont.Name = 'Segoe UI'
+          GroupFont.Style = []
+          HintType = ehtToolTip
+          Header.Columns.Items = {
+            0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
+            0006000000800800010100010000000001000162010000FFFFFF1F0001000000
+            01000000040000004E0061006D00650000000000000000000000000011000000
+            5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+            0100000000000178000000FFFFFF1F0001000000010000000400000053006900
+            7A006500000000000000000000000000110000005445617379436F6C756D6E53
+            746F726564FFFECE000600000080080001010001020000000000017D000000FF
+            FFFF1F0001000000010000000D000000440061007400650020004D006F006400
+            6900660069006500640000000000000000000000000011000000544561737943
+            6F6C756D6E53746F726564FFFECE000600000080080001010001030000000000
+            01CA000000FFFFFF1F0001000000010000000600000046006F006C0064006500
+            7200000000000000000000000000}
+          Header.Draggable = False
+          Header.Font.Charset = ANSI_CHARSET
+          Header.Font.Color = clBlack
+          Header.Font.Height = -12
+          Header.Font.Name = 'Segoe UI'
+          Header.Font.Style = []
+          Header.Height = 23
+          Header.Sizeable = False
+          Header.Visible = True
+          IncrementalSearch.Enabled = True
+          IncrementalSearch.ResetTime = 1000
+          IncrementalSearch.StartType = eissFocusedNode
+          PaintInfoColumn.Border = 2
+          PaintInfoColumn.CaptionIndent = 0
+          PaintInfoGroup.Expandable = False
+          PaintInfoGroup.MarginBottom.CaptionIndent = 4
+          PaintInfoItem.BorderColor = 16370824
+          PaintInfoItem.ShowBorder = False
+          ParentFont = False
+          ParentShowHint = False
+          PopupMenu = PopupELV
+          ShowThemedBorder = False
+          ShowHint = False
+          Selection.BlendColorSelRect = 10902593
+          Selection.BlendIcon = False
+          Selection.BorderColor = 10902593
+          Selection.BorderColorSelRect = 10902593
+          Selection.Color = 10902593
+          Selection.FullCellPaint = True
+          Selection.FullItemPaint = True
+          Selection.FullRowSelect = True
+          Selection.GradientColorBottom = 16506264
+          Selection.GradientColorTop = 15582647
+          Selection.InactiveBorderColor = 10902593
+          Selection.InactiveColor = 15582647
+          Selection.MouseButton = [cmbLeft, cmbRight]
+          Selection.RoundRectRadius = 2
+          Selection.TextColor = clBlack
+          Selection.UseFocusRect = False
+          TabOrder = 0
+          View = elsReport
+          OnColumnClick = RecordMovieListViewColumnClick
+          OnItemCompare = RecordMovieListViewItemCompare
+          OnItemEdited = RecordMovieListViewItemEdited
+          OnItemEditEnd = RecordMovieListViewItemEditEnd
+          OnItemSelectionChanged = RecordMovieListViewItemSelectionChanged
+          OnKeyAction = RecordMovieListViewKeyAction
+        end
       end
       object PanelDisabledRecordMovie: TPanel
         Left = 100
@@ -1540,7 +1646,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Height = 11
         BevelOuter = bvNone
         Color = clSilver
-        TabOrder = 8
+        TabOrder = 7
       end
     end
   end

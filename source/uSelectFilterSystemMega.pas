@@ -6,23 +6,23 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, CommCtrl,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
   ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, AdvOfficeButtons,
-  uCommon, uCommonCustom, Menus, BarMenus;
+  uCommon, uCommonCustom, Menus, BarMenus, ButtonsEx;
 
 type
   TFormSelectFilterSystemMega = class(TForm)
-    PanelButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    ButtonReset: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    ButtonReset: TBitBtnEx;
     SystemsListView: TEasyListview;
     IL_Systems: TImageList;
     IL_MachinesFilters: TImageList;
-    LabelSelectMode: TLabel;
+    LabelSelectMode: TShadowLabel;
     PanelMachinesType: TPanelEx;
     MachinesTypeList: TEasyListview;
-    ButtonHelp: TBitBtn;
-    LabelCategoryIniForMESS: TLabel;
-    LabelCategoryIniFolderForMESS: TLabel;
+    ButtonHelp: TBitBtnEx;
+    LabelCategoryIniForMESS: TShadowLabel;
+    LabelCategoryIniFolderForMESS: TShadowLabel;
     PopupSystems: TBcBarPopupMenu;
     PopupCheckAllArcadeSystems: TMenuItem;
     PopupUncheckAllArcadeSystems: TMenuItem;
@@ -225,7 +225,7 @@ begin
 
   SystemsListView.Width:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
   FormSelectFilterSystemMega.ClientWidth:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+SystemsListView.Left;
-  FormSelectFilterSystemMega.ClientHeight:= SystemsListView.Top+SystemsListView.Height+PanelButtons.Height;
+  FormSelectFilterSystemMega.ClientHeight:= SystemsListView.Top+SystemsListView.Height+PanelBottom.Height;
 
   if FormSelectFilterSystemMega.Height > MaxHeight then
      begin
@@ -554,8 +554,11 @@ begin
   FormMain.AddDefaultIcons('emu_mame.ico', IconFolder, IL_MachinesFilters);
   FormMain.AddDefaultIcons('emu_ume.ico', IconFolder, IL_MachinesFilters);
 
-  SystemsListView.Selection.AlphaBlend:= False;
-  SystemsListView.Selection.RoundRect:= False;
+  if IsNightMode then
+     begin
+       FormMain.ELV_SetNightModeColors(MachinesTypeList);
+       FormMain.ELV_SetNightModeColors(SystemsListView);
+     end;
 
   FiltersHaveChanged:= False;
   MAMEMachinesListPanelChanged:= False;
@@ -594,10 +597,23 @@ procedure TFormSelectFilterSystemMega.MachinesTypeListItemPaintText(
   ACanvas: TCanvas);
 begin
   if Position = 0 then
-     ACanvas.Font.Style:= [fsBold]
+     begin
+       ACanvas.Font.Style:= [fsBold];
+     end
   else
   if Position = 1 then
-     ACanvas.Font.Style:= [fsItalic];
+     begin
+       ACanvas.Font.Style:= [fsItalic];
+       if IsNightMode then
+          begin
+            if Item.Selected then
+               ACanvas.Font.Color:= clrDarkGray
+            else
+               ACanvas.Font.Color:= clMedGray;
+          end
+       else
+          ACanvas.Font.Color:= clGray;
+     end;
 
   FormMain.ELV_SetGhostedIconText(Item, MachinesTypeList, ACanvas);
 end;
@@ -635,15 +651,23 @@ end;
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseEnter(
   Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clBlue;
-  TLabel(Sender).Font.Style:= [fsBold, fsUnderline];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+  else
+     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
+
+  TShadowLabel(Sender).Font.Style:= [fsBold, fsUnderline];
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseLeave(
   Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clNavy;
-  TLabel(Sender).Font.Style:= [fsBold];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
+  else
+     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
+
+  TShadowLabel(Sender).Font.Style:= [fsBold];
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSClick(
@@ -693,14 +717,29 @@ procedure TFormSelectFilterSystemMega.SystemsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.ELV_SetGhostedIconText(Item, SystemsListView, ACanvas);
+  if Position = 0 then
+     begin
+       //ACanvas.Font.Style:= [fsBold];
+       //if IsNightMode and Item.Selected and (not Item.Checked) then
+       //   ACanvas.Font.Color:= clrDarkGray;
+     end
+  else
   if Position = 1 then
      begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACAnvas.Font.Size:= 9;
        ACanvas.Font.Style:= [fsItalic];
-       ACanvas.Font.Color:= clMedGray;
+       if IsNightMode then
+          begin
+            if Item.Selected then
+               ACanvas.Font.Color:= clrDarkGray
+            else
+               ACanvas.Font.Color:= clMedGray;
+          end
+       else
+          ACanvas.Font.Color:= clGray;
      end;
+  FormMain.ELV_SetGhostedIconText(Item, SystemsListView, ACanvas);
 end;
 
 procedure TFormSelectFilterSystemMega.PopupCheckAllArcadeSystemsClick(

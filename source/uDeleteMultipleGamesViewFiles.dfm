@@ -149,7 +149,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
       Transparent = True
       WordWrap = True
     end
-    object ButtonShowFileTypes: TBitBtn
+    object ButtonShowFileTypes: TBitBtnEx
       Left = 8
       Top = 27
       Width = 158
@@ -161,7 +161,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
       TabOrder = 0
       OnClick = ButtonShowFileTypesClick
     end
-    object ButtonClose: TBitBtn
+    object ButtonClose: TBitBtnEx
       Left = 658
       Top = 27
       Width = 68

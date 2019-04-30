@@ -5,13 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, MPCommonObjects, MPCommonUtilities,
-  EasyListview, ShadowLabel, PanelEx, ImgList, ExtCtrls;
+  EasyListview, ShadowLabel, PanelEx, ImgList, ExtCtrls, ButtonsEx;
 
 type
   TFormImageLayoutSelector = class(TForm)
-    PanelBottomButtons: TPanelEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     IL_Layouts: TImageList;
     LayoutsListView: TEasyListview;
     LabelLayoutTitle: TShadowLabel;
@@ -50,7 +50,7 @@ var
 begin
   tmpFolder:= FormMain.GetFolderFull(32);
   for Loop:=0 to MaxImageLayouts do
-      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts);
+      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts, 3); // 3 -> image layout white text overlays
 end;
 
 procedure TFormImageLayoutSelector.AddLayouts;
@@ -65,20 +65,8 @@ end;
 procedure TFormImageLayoutSelector.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(LayoutsListView);
-  {LayoutsListView.Selection.Color:= clNavy;// $00fcebdc;
-  LayoutsListView.Selection.GradientColorTop:= $00daecfd; // gradient top
-  LayoutsListView.Selection.GradientColorBottom:= $0069ceff; // gradient bottom
-  LayoutsListView.Selection.BorderColor:= $0000b7ff;
-  LayoutsListView.Selection.BlendColorSelRect:= LayoutsListView.Selection.BorderColor;
-  LayoutsListView.Selection.BorderColorSelRect:= LayoutsListView.Selection.BorderColor;}
-
-  {frame color $0000b7ff
-
-  selection_uppergradient_colorstart: Integer = $00daecfd;
-  selection_uppergradient_colorend: Integer = $00bde0fd;
-  selection_lowergradient_colorstart: Integer = $0069ceff;
-  selection_lowergradient_colorend: Integer = $009af6ff;}
-
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(LayoutsListView);
   LoadLayoutIcons;
 end;
 

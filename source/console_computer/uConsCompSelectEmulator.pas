@@ -5,17 +5,18 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, uCommon, uCommonCustom, ImgList, MPCommonObjects, EasyListview,
-  MPCommonUtilities, ExtCtrls, Buttons, AdvOfficeButtons, PanelEx;
+  MPCommonUtilities, ExtCtrls, Buttons, AdvOfficeButtons, PanelEx,
+  ShadowLabel, ButtonsEx;
 
 type
   TFormConsCompSelectEmulator = class(TForm)
     EmulatorsList: TEasyListview;
     IL_EmulatorIcon: TImageList;
     IL_Systems: TImageList;
-    PanelEx1: TPanelEx;
-    LabelTips: TLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    PanelBottom: TPanelEx;
+    LabelTips: TShadowLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     UseSmallIcons: TAdvOfficeCheckBox;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -39,6 +40,7 @@ type
   private
     newEmulatorIndexToUseCustom: packed array[1..MaxConsoleComputerSystems] of ShortInt; // emulator index to use 1..4
     SystemIcon: array [1..MaxConsoleComputersystems] of TImage;
+    
     procedure AddIconImage(sysID: Integer);
     procedure FreeIconImages;
     procedure AddEmulatorsList;
@@ -208,6 +210,8 @@ begin
   Screen.Cursor:= crHourGlass;
   ResizeForm;
   FormMain.ELV_ResetNormalColors(EmulatorsList);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(EmulatorsList);
   AddEmulatorsList;
   if EmulatorsList.Scrollbars.VertBarVisible then
      begin
@@ -226,13 +230,14 @@ begin
      begin
        if Position = 0 then
           ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
-       //ACanvas.Font.Color:= ListSelectionColors[4, 0];
      end;
   if Position = 1 then
      begin
-       ACanvas.Font.Name:= 'Verdana';//'Tahoma';
-       ACanvas.Font.Size:= 8;//ACanvas.Font.Size-1;
-       ACanvas.Font.Color:= $00606060; //clGray;
+       ACanvas.Font.Name:= 'Verdana';
+       ACanvas.Font.Size:= 8;
+       ACanvas.Font.Color:= $00606060;
+       if IsNightMode and Item.Selected then
+          ACanvas.Font.Color:= clrDarkGray;
      end;
 end;
 
@@ -241,7 +246,10 @@ procedure TFormConsCompSelectEmulator.EmulatorsListGroupPaintText(
 begin
   ACanvas.Font.Size:= ACanvas.Font.Size+2;
   ACanvas.Font.Name:= 'Trebuchet MS';
-  ACanvas.Font.Color:= clMaroon;
+  if not IsNightMode then
+     ACanvas.Font.Color:= clMaroon
+  else
+     ACanvas.Font.Color:= MsgTxtColors.colorWarning;
   ACanvas.Font.Style:= [fsBold, fsItalic];
 end;
 
@@ -387,7 +395,7 @@ begin
   if UseSmallIcons.Checked then
      begin
        ACanvas.MoveTo(iLeft-5, iTop+32+2); // 32x32 group system icons // EmulatorsList.ImagesGroup.Height+2);
-       ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+32+2); // 32x32 group system icons //EmulatorsList.ImagesGroup.Height+2);
+       ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-25), iTop+32+2); // 32x32 group system icons //EmulatorsList.ImagesGroup.Height+2);
      end
   else
      begin
@@ -396,26 +404,37 @@ begin
      end;
   ACanvas.Pen.Color:= iSysTypeIndex;
 
-  iLeft:= iLeft+(EmulatorsList.width div 2)-50;// EmulatorsList.ImagesGroup.Width+250;
-  iTop:= iTop+(EmulatorsList.ImagesGroup.Height-FormMain.IL_MenuPopup.Height) div 2;
-
   iSysTypeIndex:= -1;
   if SystemIsConsole(Group.ImageIndex) then
-     iSysTypeIndex:= 25 // index 25 is "console" icon
+     iSysTypeIndex:= 25 // index 25 is "console" icon (42 pixels text width)
   else
   if SystemIsComputer(Group.ImageIndex) then
-     iSysTypeIndex:= 26 // index 26 is "computer" icon
+     iSysTypeIndex:= 26 // index 26 is "computer" icon (53 pixels text width)
   else
   if SystemIsHandheld(Group.ImageIndex) then
-     iSysTypeIndex:= 27; // index 27 is "handheld" icon
+     iSysTypeIndex:= 27; // index 27 is "handheld" icon (53 pixels text width)
+
+  if iSysTypeIndex = 25 then
+     iLeft:= iLeft+(EmulatorsList.Width-112)
+  else
+     iLeft:= iLeft+(EmulatorsList.Width-124);// (EmulatorsList.width div 2)-50;// EmulatorsList.ImagesGroup.Width+250;
+  iTop:= iTop+(EmulatorsList.ImagesGroup.Height-FormMain.IL_MenuPopup.Height) div 2;
 
   if iSysTypeIndex <> -1 then
-     FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+     begin
+       if not UseSmallIcons.Checked then
+          Inc(iLeft, 5);
+       FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+     end;
 
   ACanvas.Font.Name:= 'Segoe UI';
   ACAnvas.Font.Size:= 9;
   ACanvas.Font.Style:= [fsItalic];
-  ACanvas.Font.Color:= clBlack;
+  if not IsNightMode then
+     ACanvas.Font.Color:= clBlack
+  else
+     ACanvas.Font.Color:= item_caption_active_color[1];
+
   ACanvas.TextOut(iLeft+20, iTop, GetSystemTypeTitle(Group.ImageIndex, False));
   ACanvas.UnLock;
 end;

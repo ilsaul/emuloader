@@ -33,7 +33,6 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
     Color4 = 16750899
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableCustomBorder = True
     Frames = []
     ParentBackground = False
     Style = vgSolid
@@ -45,17 +44,17 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
       Height = 433
       HelpContext = 1
       BorderStyle = bsNone
-      CellSizes.Tile.Width = 164
+      CellSizes.Tile.Width = 193
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -9
+      EditManager.Font.Height = -12
       EditManager.Font.Name = 'Tahoma'
       EditManager.Font.Style = []
       UseDockManager = False
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -9
+      Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
@@ -128,8 +127,8 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
     end
     object PanelBottom: TPanelEx
       Left = 0
-      Top = 433
-      Width = 518
+      Top = 437
+      Width = 522
       Height = 49
       Align = alBottom
       Color1 = clWhite
@@ -152,6 +151,9 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object LabelIconSizeValue: TShadowLabel
@@ -164,6 +166,9 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object IconSizeExtraLarge: TSpeedButton
@@ -208,7 +213,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
         ShowHint = True
         OnClick = IconSizeLargeClick
       end
-      object ButtonGoToCurrentFilter: TBitBtn
+      object ButtonGoToCurrentFilter: TBitBtnEx
         Left = 8
         Top = 16
         Width = 89
@@ -220,7 +225,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
         TabOrder = 0
         OnClick = ButtonGoToCurrentFilterClick
       end
-      object ButtonOk: TBitBtn
+      object ButtonOk: TBitBtnEx
         Left = 325
         Top = 16
         Width = 89
@@ -230,7 +235,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
         ModalResult = 1
         TabOrder = 1
       end
-      object ButtonCancel: TBitBtn
+      object ButtonCancel: TBitBtnEx
         Left = 422
         Top = 16
         Width = 89
