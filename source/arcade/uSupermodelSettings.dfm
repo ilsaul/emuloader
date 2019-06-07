@@ -159,7 +159,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       WordWrap = True
     end
   end
-  object VideoGroupBox: TAdvGroupBox
+  object VideoGroupBox: TAdvGroupBoxEx
     Left = 8
     Top = 211
     Width = 831
@@ -255,7 +255,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 0
     end
-    object DisableThrottle: TAdvOfficeCheckBox
+    object DisableThrottle: TAdvOfficeCheckBoxEx
       Left = 672
       Top = 240
       Width = 105
@@ -268,7 +268,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ShowFPS: TAdvOfficeCheckBox
+    object ShowFPS: TAdvOfficeCheckBoxEx
       Left = 432
       Top = 220
       Width = 72
@@ -327,7 +327,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 6
       OnClick = ButtonSelectReal3DFragmentShaderClick
     end
-    object Widescreen: TAdvOfficeCheckBox
+    object Widescreen: TAdvOfficeCheckBoxEx
       Left = 432
       Top = 180
       Width = 84
@@ -340,7 +340,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object FullScreen: TAdvOfficeCheckBox
+    object FullScreen: TAdvOfficeCheckBoxEx
       Left = 554
       Top = 180
       Width = 79
@@ -353,7 +353,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object GPUMultithreading: TAdvOfficeCheckBox
+    object GPUMultithreading: TAdvOfficeCheckBoxEx
       Left = 672
       Top = 200
       Width = 127
@@ -388,7 +388,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
         'Legacy 3D Engine (faster but less accurate)'
         'New 3D Engine by Ian Curtis (recommended)')
     end
-    object DisableVSync: TAdvOfficeCheckBox
+    object DisableVSync: TAdvOfficeCheckBoxEx
       Left = 672
       Top = 220
       Width = 101
@@ -401,7 +401,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Stretch: TAdvOfficeCheckBox
+    object Stretch: TAdvOfficeCheckBoxEx
       Left = 672
       Top = 180
       Width = 60
@@ -458,7 +458,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 16
       OnClick = ButtonSelectLoadTileMapFragmentShader2DClick
     end
-    object MultiTexture: TAdvOfficeCheckBox
+    object MultiTexture: TAdvOfficeCheckBoxEx
       Left = 432
       Top = 240
       Width = 197
@@ -531,7 +531,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 22
       OnClick = ButtonVideo3DEngineResetClick
     end
-    object QuadRendering: TAdvOfficeCheckBox
+    object QuadRendering: TAdvOfficeCheckBoxEx
       Left = 432
       Top = 200
       Width = 234
@@ -546,7 +546,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
   end
-  object InputGroupBox: TAdvGroupBox
+  object InputGroupBox: TAdvGroupBoxEx
     Left = 434
     Top = 557
     Width = 312
@@ -596,7 +596,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 1
       OnClick = ButtonConfigInputClick
     end
-    object EnableForceFeedback: TAdvOfficeCheckBox
+    object EnableForceFeedback: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 50
       Width = 256
@@ -629,7 +629,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
         'Player 1 and Player 2')
     end
   end
-  object AudioGroupBox: TAdvGroupBox
+  object AudioGroupBox: TAdvGroupBoxEx
     Left = 8
     Top = 495
     Width = 411
@@ -688,7 +688,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = SoundVolumeChange
       OnMouseDown = SoundVolumeMouseDown
     end
-    object DisableSound: TAdvOfficeCheckBox
+    object DisableSound: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 20
       Width = 110
@@ -700,7 +700,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object DisableMusic: TAdvOfficeCheckBox
+    object DisableMusic: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 40
       Width = 257
@@ -731,7 +731,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = MusicVolumeChange
       OnMouseDown = MusicVolumeMouseDown
     end
-    object FlipStereo: TAdvOfficeCheckBox
+    object FlipStereo: TAdvOfficeCheckBoxEx
       Left = 179
       Top = 20
       Width = 77
@@ -830,7 +830,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       TabOrder = 11
     end
   end
-  object PowerPCFrequencyBox: TAdvGroupBox
+  object PowerPCFrequencyBox: TAdvGroupBoxEx
     Left = 434
     Top = 495
     Width = 405
@@ -884,7 +884,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Text = '1000'
       OnKeyPress = PowerPCFrequencyCustomKeyPress
     end
-    object PowerPCFrequencyUseCustom: TAdvOfficeCheckBox
+    object PowerPCFrequencyUseCustom: TAdvOfficeCheckBoxEx
       Left = 175
       Top = 21
       Width = 129
@@ -897,7 +897,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Themed = True
     end
   end
-  object Multithreading: TAdvOfficeCheckBox
+  object Multithreading: TAdvOfficeCheckBoxEx
     Left = 434
     Top = 672
     Width = 101

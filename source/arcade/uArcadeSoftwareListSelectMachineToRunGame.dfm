@@ -118,7 +118,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       TabOrder = 2
       OnClick = ButtonResetToCurrentClick
     end
-    object ShowAvailableMachinesOnly: TAdvOfficeCheckBox
+    object ShowAvailableMachinesOnly: TAdvOfficeCheckBoxEx
       Left = 111
       Top = 11
       Width = 130
@@ -132,7 +132,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       ReturnIsTab = False
       Themed = True
     end
-    object HidePreliminaryMachines: TAdvOfficeCheckBox
+    object HidePreliminaryMachines: TAdvOfficeCheckBoxEx
       Left = 247
       Top = 11
       Width = 163
@@ -197,7 +197,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     end
     object LabelGameName: TShadowLabel
       Left = 106
-      Top = 45
+      Top = 46
       Width = 855
       Height = 27
       AutoSize = False
@@ -220,7 +220,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     end
     object IconMediaType: TImage
       Left = 76
-      Top = 46
+      Top = 48
       Width = 24
       Height = 24
       IncrementalDisplay = True

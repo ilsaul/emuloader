@@ -4,8 +4,8 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   ActiveControl = ButtonOk
   BorderIcons = []
   BorderStyle = bsToolWindow
-  Caption = 'Miscellaneous Filters (MAME and Arcade Only)'
-  ClientHeight = 377
+  Caption = 'Miscellaneous Filters'
+  ClientHeight = 412
   ClientWidth = 621
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -184,7 +184,43 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Frames = []
     Transparent = True
   end
-  object FilterGamesMainCPU: TAdvOfficeCheckBox
+  object LabelSpecialList: TShadowLabel
+    Left = 418
+    Top = 104
+    Width = 61
+    Height = 16
+    Caption = 'Special List'
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
+  object LabelHideMAMESoftlist_vgmplay: TShadowLabel
+    Left = 434
+    Top = 168
+    Width = 153
+    Height = 17
+    Caption = 'MAME Software List: vgmplay'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clGray
+    Font.Height = -11
+    Font.Name = 'Trebuchet MS'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
+  object FilterGamesMainCPU: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 304
     Width = 144
@@ -200,7 +236,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 336
+    Top = 371
     Width = 621
     Height = 41
     Align = alBottom
@@ -305,7 +341,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With No ROMs/CHDs'
       'Games With No Main Set')
   end
-  object HideDeviceSets: TAdvOfficeCheckBox
+  object HideDeviceSets: TAdvOfficeCheckBoxEx
     Left = 301
     Top = 6
     Width = 107
@@ -351,7 +387,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With BIOS ROMs'
       'Games With No BIOS ROMs')
   end
-  object HideBiosSets: TAdvOfficeCheckBox
+  object HideBiosSets: TAdvOfficeCheckBoxEx
     Left = 106
     Top = 6
     Width = 97
@@ -363,7 +399,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object HideGamesWithCHDFiles: TAdvOfficeCheckBox
+  object HideGamesWithCHDFiles: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 224
     Width = 171
@@ -379,7 +415,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object NeoGeoMVS: TAdvOfficeCheckBox
+  object NeoGeoMVS: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 152
     Width = 161
@@ -395,7 +431,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object STVMultiSlot: TAdvOfficeCheckBox
+  object STVMultiSlot: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 184
     Width = 164
@@ -444,7 +480,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Vertical Games'
       'Unknown')
   end
-  object ShowMergedSetsOnly: TAdvOfficeCheckBox
+  object ShowMergedSetsOnly: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 264
     Width = 147
@@ -460,7 +496,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object HideNoDumpROMsGames: TAdvOfficeCheckBox
+  object HideNoDumpROMsGames: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 244
     Width = 152
@@ -494,9 +530,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Unsupported'
       'Unknown')
   end
-  object CategoryFiltersGroupBox: TAdvGroupBox
+  object CategoryFiltersGroupBox: TAdvGroupBoxEx
     Left = 213
-    Top = 152
+    Top = 187
     Width = 400
     Height = 152
     RoundEdges = True
@@ -542,7 +578,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       TabOrder = 0
       OnClick = ButtonCategoriesToHideInfoClick
     end
-    object CategoryCasino: TAdvOfficeCheckBox
+    object CategoryCasino: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 28
@@ -558,7 +594,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryFruitMachines: TAdvOfficeCheckBox
+    object CategoryFruitMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 48
@@ -574,7 +610,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryRhythm: TAdvOfficeCheckBox
+    object CategoryRhythm: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 68
@@ -590,7 +626,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMature: TAdvOfficeCheckBox
+    object CategoryMature: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 28
@@ -607,7 +643,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMahjong: TAdvOfficeCheckBox
+    object CategoryMahjong: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 68
@@ -623,7 +659,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryTabletop: TAdvOfficeCheckBox
+    object CategoryTabletop: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 88
@@ -639,7 +675,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryPinMAME: TAdvOfficeCheckBox
+    object CategoryPinMAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 88
@@ -655,7 +691,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryQuiz: TAdvOfficeCheckBox
+    object CategoryQuiz: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 108
@@ -671,7 +707,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryUtilities: TAdvOfficeCheckBox
+    object CategoryUtilities: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 322
       Top = 28
@@ -687,7 +723,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryCalculator: TAdvOfficeCheckBox
+    object CategoryCalculator: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 28
@@ -703,7 +739,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryEducational: TAdvOfficeCheckBox
+    object CategoryEducational: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 48
@@ -719,7 +755,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryElectronic: TAdvOfficeCheckBox
+    object CategoryElectronic: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 322
       Top = 48
@@ -735,7 +771,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryPrinters: TAdvOfficeCheckBox
+    object CategoryPrinters: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 68
@@ -751,7 +787,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryPhones: TAdvOfficeCheckBox
+    object CategoryPhones: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 322
       Top = 68
@@ -767,7 +803,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMAMEConsoleMachines: TAdvOfficeCheckBox
+    object CategoryMAMEConsoleMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 88
@@ -783,7 +819,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMAMEComputerMachines: TAdvOfficeCheckBox
+    object CategoryMAMEComputerMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 108
@@ -799,7 +835,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMAMEHandheldMachines: TAdvOfficeCheckBox
+    object CategoryMAMEHandheldMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 229
       Top = 128
@@ -815,7 +851,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryMusic: TAdvOfficeCheckBox
+    object CategoryMusic: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 128
@@ -831,7 +867,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategoryBoardGame: TAdvOfficeCheckBox
+    object CategoryBoardGame: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 108
@@ -847,7 +883,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
     end
-    object CategorySlotMachines: TAdvOfficeCheckBox
+    object CategorySlotMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 48
@@ -865,7 +901,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       Themed = True
     end
   end
-  object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox
+  object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBoxEx
     Left = 8
     Top = 284
     Width = 191
@@ -879,18 +915,35 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object HideMAMESoftlist_vgmplay: TAdvOfficeCheckBox
+  object HideMAMESoftlist_vgmplay: TAdvOfficeCheckBoxEx
     Left = 418
-    Top = 110
-    Width = 182
-    Height = 34
+    Top = 152
+    Width = 180
+    Height = 20
     ShowHint = True
     TabOrder = 19
     Alignment = taLeftJustify
     ButtonVertAlign = tlCenter
-    Caption = 'Hide Video Game Music Files'#13#10'MAME Software List: vgmplay'
+    Caption = 'Hide Video Game Music Files'
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+  end
+  object SpecialList: TComboBox
+    Left = 418
+    Top = 121
+    Width = 195
+    Height = 23
+    Style = csDropDownList
+    Ctl3D = True
+    ItemHeight = 15
+    ItemIndex = 0
+    ParentCtl3D = False
+    TabOrder = 20
+    Text = 'List Both'
+    Items.Strings = (
+      'List Both'
+      'Show Special List Games Only'
+      'Hide Special List Games')
   end
 end

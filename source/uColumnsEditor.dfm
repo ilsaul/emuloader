@@ -4,7 +4,7 @@ object FormColumnsEditor: TFormColumnsEditor
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Customize Columns (Details / Grouped)'
-  ClientHeight = 445
+  ClientHeight = 464
   ClientWidth = 466
   Color = 15856113
   DefaultMonitor = dmMainForm
@@ -192,7 +192,7 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object LabelTips: TShadowLabel
     Left = 231
-    Top = 317
+    Top = 336
     Width = 212
     Height = 65
     AutoSize = False
@@ -329,7 +329,7 @@ object FormColumnsEditor: TFormColumnsEditor
   end
   object PanelBottom: TPanelEx
     Left = 218
-    Top = 404
+    Top = 423
     Width = 248
     Height = 41
     Color1 = 15856113
@@ -436,7 +436,7 @@ object FormColumnsEditor: TFormColumnsEditor
     Left = 0
     Top = 0
     Width = 218
-    Height = 445
+    Height = 464
     Color1 = clWhite
     Color2 = 15856113
     Color3 = clYellow
@@ -450,7 +450,7 @@ object FormColumnsEditor: TFormColumnsEditor
       Left = 4
       Top = 2
       Width = 211
-      Height = 444
+      Height = 463
       BackGround.Enabled = True
       CellSizes.Report.Height = 19
       Color = clWhite

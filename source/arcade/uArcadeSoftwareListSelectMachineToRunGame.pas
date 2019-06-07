@@ -19,8 +19,8 @@ type
     LabelGameName: TShadowLabel;
     LabelSoftwarelistTitleW: TShadowLabel;
     ButtonResetToCurrent: TBitBtnEx;
-    ShowAvailableMachinesOnly: TAdvOfficeCheckBox;
-    HidePreliminaryMachines: TAdvOfficeCheckBox;
+    ShowAvailableMachinesOnly: TAdvOfficeCheckBoxEx;
+    HidePreliminaryMachines: TAdvOfficeCheckBoxEx;
     LabelTotalMachines: TShadowLabel;
     IconMediaType: TImage;
     FrameMachinesList: TPanelEx;
@@ -161,7 +161,9 @@ end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
 begin
-  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);
+  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame,
+                                  FormMain.MemGameInfo.eMediaType, FormMain.MemGameInfo.eArcadeCHDMediaType, IconMediaType,
+                                  FormMain.MemGameInfo.eSoftwareExecParameter, FormMain.MemGameInfo.eSoftwareName, True);
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
 

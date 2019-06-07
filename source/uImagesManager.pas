@@ -1173,7 +1173,7 @@ begin
       begin
         ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
         FilesList.BeginUpdate;
-        FormStatus.MessageStr('Validating '+IntToStr(el_GamesList.Count)+' games (up to '+IntToStr(MaxImagePerCategory)+' images per game)'+#13#10+
+        FormStatus.MessageStr('Validating '+IntToStr(el_GamesList.Count)+' games ('+IntToStr(MaxImagePerCategory)+' images per game)'+#13#10+
                               'Image category: '+GetImageCategoryTitle(ButtonImageCategory.Tag));
 
         TotalGamesCount:= el_GamesList.Count;

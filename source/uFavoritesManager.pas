@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
   MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
-  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons, ButtonsEx;
+  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons, ButtonsEx, Themes;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -48,7 +48,7 @@ type
 
 type
   TFormFavoritesManager = class(TForm)
-    ToolbarButtons: TToolBar;
+    ToolBarButtons: TToolBar;
     ToolButtonNew: TToolButton;
     FavoritesList: TEasyListview;
     ToolButtonDuplicate: TToolButton;
@@ -67,14 +67,15 @@ type
     ToolButtonFavSettings: TToolButton;
     ButtonClosePanelFavSettings: TBitBtnEx;
     ButtonCenterPanelFavSettings: TBitBtnEx;
-    FavSettingSmallFont: TAdvOfficeRadioButton;
-    FavSettingLargeFont: TAdvOfficeRadioButton;
-    FavSettingMediumFont: TAdvOfficeRadioButton;
+    FavSettingSmallFont: TAdvOfficeRadioButtonEx;
+    FavSettingLargeFont: TAdvOfficeRadioButtonEx;
+    FavSettingMediumFont: TAdvOfficeRadioButtonEx;
     Label1: TShadowLabel;
     Label2: TShadowLabel;
     Label3: TShadowLabel;
     LabelSettings: TShadowLabel;
-    procedure ToolbarButtonsCustomDraw(Sender: TToolBar;
+    SpeedButtonEx1: TSpeedButtonEx;
+    procedure ToolBarButtonsCustomDraw(Sender: TToolBar;
       const ARect: TRect; var DefaultDraw: Boolean);
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
@@ -101,8 +102,16 @@ type
       Column: TEasyColumn; Width, NewWidth: Integer; var Allow: Boolean);
     procedure ButtonCenterPanelFavSettingsClick(Sender: TObject);
     procedure FavSettingSmallFontClick(Sender: TObject);
+    procedure ToolBarButtonsCustomDrawButton(Sender: TToolBar;
+      Button: TToolButton; State: TCustomDrawState;
+      var DefaultDraw: Boolean);
+    procedure ToolButtonFavSettingsMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ToolButtonFavSettingsMouseUp(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
+    BtnClick: Boolean;
     UpdateFavStatusInGames: Boolean;
     LastActiveFavFilter: String;
     ActiveProfileItem: TEasyItem;
@@ -1141,10 +1150,10 @@ begin
   PanelUpdatingFavTagInGames.Visible:= True;
 end;
 
-procedure TFormFavoritesManager.ToolbarButtonsCustomDraw(Sender: TToolBar;
+procedure TFormFavoritesManager.ToolBarButtonsCustomDraw(Sender: TToolBar;
   const ARect: TRect; var DefaultDraw: Boolean);
 begin
-  FormMain.PaintToolBarTheme(Sender, True);
+  FormMain.PaintToolBarBk(Sender, ARect);
 end;
 
 procedure TFormFavoritesManager.FavoritesListKeyAction(
@@ -1215,16 +1224,20 @@ begin
   PanelFavSettings.Left:= 4;
   PanelFavSettings.Top:= 26;
 
+  FormMain.ELV_ResetNormalColors(FavoritesList);
+  
   if IsNightMode then
      begin
        SetFormColors(FormFavoritesManager, nil, nil, nil, nil, -1, False);
 
-       FormMain.SetEasyListViewColors(FavoritesList, FormFavoritesManager.Color, clWhite);
+       //FormMain.SetEasyListViewColors(FavoritesList, FormFavoritesManager.Color, clWhite);
+       FormMain.SetEasyListViewColors(FavoritesList, menu_background_color[1], clWhite);
+       FormMain.ELV_SetRibbonNightColors(0, FavoritesList, True);
 
        SetPanelNightColors(PanelFavSettings);
 
        SetLabelColors(LabelSettings, clYellow, clMaroon);
-       LabelSettings.Color:= $00590000;
+       LabelSettings.Color:= clrDarkBlue;
        SetRadioButtonColors(FavSettingSmallFont, clWhite, clNavy);
        SetRadioButtonColors(FavSettingMediumFont, clWhite, clNavy);
        SetRadioButtonColors(FavSettingLargeFont, clWhite, clNavy);
@@ -1243,7 +1256,7 @@ begin
            ToolbarButtons.Buttons[Loop].Enabled:= False;
      end;
   ToolBarSetSelectedProfileActive.Enabled:= True;
-  FormMain.ELV_ResetNormalColors(FavoritesList);
+
   FavoritesList.Header.Columns[0].SortDirection:= esdNone;
   FavoritesList.Header.Columns[3].SortDirection:= esdDescending;
   LastActiveFavFilter:= FormMain.FavoriteProfile[1];
@@ -1469,7 +1482,7 @@ end;
 procedure TFormFavoritesManager.FavSettingSmallFontClick(Sender: TObject);
 begin
   FavoritesList.BeginUpdate;
-  case TAdvOfficeRadioButton(Sender).Tag of
+  case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         FavoritesList.CellSizes.Report.Height:= 22;
@@ -1492,5 +1505,128 @@ begin
   FavoritesList.EndUpdate;
 end;
 
+
+procedure TFormFavoritesManager.ToolBarButtonsCustomDrawButton(
+  Sender: TToolBar; Button: TToolButton; State: TCustomDrawState;
+  var DefaultDraw: Boolean);
+var
+  iRect: TRect;
+  iBtn: TThemedToolBar;
+  iButton: TThemedButton;
+  Details: TThemedElementDetails;
+begin
+  //if not IsNightMode then
+  //   Exit;
+
+  DefaultDraw:= False;
+
+  //PerformEraseBackground(Self, Canvas.Handle);
+
+  Sender.Canvas.Brush.Style:= bsClear;
+  Sender.Canvas.Font.Color:= clWhite;
+
+  if Button = ToolButtonFavSettings then
+     begin
+       if not Button.Enabled then
+          FormFavoritesManager.Caption:= 'disabled'
+       else
+       if Button.Down then
+          FormFavoritesManager.Caption:= 'down'
+       else
+       if BtnClick then
+          FormFavoritesManager.Caption:= 'pressed'
+       else
+       if TCustomDrawState(Word(State)) = [cdsSelected] then
+          FormFavoritesManager.Caption:= 'selected'
+       else
+       if TCustomDrawState(Word(State)) = [cdsGrayed] then
+          FormFavoritesManager.Caption:= 'grayed'
+       else
+       //if TCustomDrawState(Word(State)) = [cdsDisabled] then
+       //   FormFavoritesManager.Caption:= 'disabled'
+       //else
+       if TCustomDrawState(Word(State)) = [cdsChecked] then
+          FormFavoritesManager.Caption:= 'checked'
+       else
+       if TCustomDrawState(Word(State)) = [cdsFocused] then
+          FormFavoritesManager.Caption:= 'focused'
+       else
+       if TCustomDrawState(Word(State)) = [cdsDefault] then
+          FormFavoritesManager.Caption:= 'default'
+       else
+       if TCustomDrawState(Word(State)) = [cdsHot] then
+          FormFavoritesManager.Caption:= 'hot'
+       else
+       if TCustomDrawState(Word(State)) = [cdsMarked] then
+          FormFavoritesManager.Caption:= 'marked'
+       else
+       if TCustomDrawState(Word(State)) = [cdsIndeterminate] then
+          FormFavoritesManager.Caption:= 'indeterminate';
+     end;
+
+  if not Button.Enabled then // if TCustomDrawState(Word(State)) = [cdsDisabled] then
+     iBtn:= ttbButtonDisabled
+  else
+  if Button.Down then
+     iBtn:= ttbButtonChecked
+  else
+  if (TCustomDrawState(Word(State)) = [cdsFocused]) or
+     (TCustomDrawState(Word(State)) = [cdsHot]) then
+     iBtn:= ttbButtonHot
+  else
+  if BtnClick then
+     iBtn:= ttbButtonPressed//ttbDropDownButtonPressed
+  else
+  if TCustomDrawState(Word(State)) = [cdsSelected] then
+     iBtn:= ttbButtonChecked//ttbButtonPressed
+  else
+     iBtn:= ttbButtonNormal;
+
+  iRect:= Button.BoundsRect;
+  Details := ThemeServices.GetElementDetails(iBtn);
+  ThemeServices.DrawElement(Sender.Canvas.Handle, Details, iRect);
+  iRect := ThemeServices.ContentRect(Sender.Canvas.Handle, Details, iRect);
+  //err. button down state does not work
+
+  if BtnClick then
+     OffsetRect(iRect, 1, 1);
+  if Button.ImageIndex = -1 then
+     OffsetRect(iRect, 3, 3)
+  else
+     OffsetRect(iRect, 8+Sender.Images.Width, 3);
+
+  // must calculate icon pos correctly and show it with the iRect.Left... then shift the text pos if icon exists...
+  if Button.ImageIndex <> -1 then
+     ToolBarButtons.Images.Draw(Sender.Canvas, Button.Left+3+Ord(BtnClick), iRect.Top, Button.ImageIndex, (iBtn <> ttbButtonDisabled));
+
+  //if iBtn = ttbButtonPressed then
+  //   OffsetRect(iRect, 1, 1);
+
+  OffsetRect(iRect, -1, 0);
+  if TCustomDrawState(Word(State)) = [cdsDisabled] then
+     begin
+       // shadow color clBtnHighlight
+       OffsetRect(iRect, 1, 1);
+       Sender.Canvas.Font.Color:= clBtnHighlight;
+       DrawText(Sender.Canvas.Handle, PChar(Button.Caption), Length(Button.Caption), iRect, 0);
+       OffsetRect(iRect, -1, -1);
+       Sender.Canvas.Font.Color:= clBtnShadow;
+     end;
+  DrawText(Sender.Canvas.Handle, PChar(Button.Caption), Length(Button.Caption), iRect, 0);
+end;
+
+procedure TFormFavoritesManager.ToolButtonFavSettingsMouseDown(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  BtnClick:= True;
+end;
+
+procedure TFormFavoritesManager.ToolButtonFavSettingsMouseUp(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  BtnClick:= False;
+end;
 
 end.

@@ -126,7 +126,7 @@ object FormThumbnailView: TFormThumbnailView
     Height = 16
     Alignment = taCenter
     AutoSize = False
-    Caption = '174'
+    Caption = '178'
     ShowAccelChar = False
     ShadowColor = clGray
     ShadowEnabled = False
@@ -160,7 +160,7 @@ object FormThumbnailView: TFormThumbnailView
     SelEnable = False
   end
   object BorderColor: TColorBox
-    Left = 444
+    Left = 430
     Top = 466
     Width = 189
     Height = 22
@@ -174,10 +174,10 @@ object FormThumbnailView: TFormThumbnailView
     TabOrder = 1
     OnSelect = BorderColorSelect
   end
-  object ShowBorder: TAdvOfficeCheckBox
-    Left = 444
+  object ShowBorder: TAdvOfficeCheckBoxEx
+    Left = 430
     Top = 444
-    Width = 161
+    Width = 99
     Height = 20
     Hint = 'Show border arround the entire frame'
     ShowHint = True
@@ -189,7 +189,7 @@ object FormThumbnailView: TFormThumbnailView
     Themed = True
   end
   object BorderColorDefault: TBitBtnEx
-    Left = 634
+    Left = 620
     Top = 466
     Width = 49
     Height = 22
@@ -200,10 +200,10 @@ object FormThumbnailView: TFormThumbnailView
     TabOrder = 3
     OnClick = BorderColorDefaultClick
   end
-  object ShowGameTitles: TAdvOfficeCheckBox
-    Left = 444
-    Top = 497
-    Width = 121
+  object ShowGameTitles: TAdvOfficeCheckBoxEx
+    Left = 561
+    Top = 444
+    Width = 112
     Height = 20
     Hint = 'Show/hide captions of games'
     Checked = True
@@ -216,9 +216,9 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
   end
-  object MaintainAspectRatio: TAdvOfficeCheckBox
-    Left = 444
-    Top = 520
+  object MaintainAspectRatio: TAdvOfficeCheckBoxEx
+    Left = 684
+    Top = 444
     Width = 140
     Height = 20
     Hint = 'Generate thumbnails without distorting the image'
@@ -232,98 +232,19 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
   end
-  object ShowSystemIcon: TAdvOfficeCheckBox
-    Left = 700
-    Top = 444
-    Width = 121
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 6
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Show System Icon'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object ShowFavoriteIcon: TAdvOfficeCheckBox
-    Left = 700
-    Top = 520
-    Width = 121
-    Height = 20
-    ShowHint = True
-    TabOrder = 7
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Show Favorite Icon'
-    ReturnIsTab = False
-    Themed = True
-  end
-  object AlphaBlendedIcons: TAdvOfficeCheckBox
-    Left = 444
-    Top = 543
-    Width = 133
-    Height = 20
-    Hint = 'Don'#39't show the white background'
-    Checked = True
-    ShowHint = True
-    TabOrder = 8
-    Visible = False
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Alpha Blended Icons'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object SystemIconSize: TComboBox
-    Left = 701
-    Top = 466
-    Width = 127
-    Height = 23
-    Hint = 'System icon size'
-    Style = csDropDownList
-    ItemHeight = 15
-    ItemIndex = 1
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 9
-    Text = 'Large (32x32)'
-    OnSelect = SystemIconSizeSelect
-    Items.Strings = (
-      'Medium (24x24)'
-      'Large (32x32)'
-      'Extra Large (48x48)')
-  end
-  object ShowGameIcon: TAdvOfficeCheckBox
-    Left = 700
-    Top = 497
-    Width = 114
-    Height = 20
-    Checked = True
-    ShowHint = True
-    TabOrder = 10
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Show Game Icon'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-  end
-  object ShowPreviewScreenshotsPanel: TAdvOfficeCheckBox
-    Left = 444
-    Top = 566
-    Width = 153
+  object ShowPreviewScreenshotsPanel: TAdvOfficeCheckBoxEx
+    Left = 684
+    Top = 468
+    Width = 150
     Height = 20
     Hint = 
       'Show screenshots along with thumbnails (useful if using multiple' +
       ' layouts)'
     Checked = True
     ShowHint = True
-    TabOrder = 11
+    TabOrder = 6
     Alignment = taLeftJustify
-    Caption = 'Enable Screenshots Panel'
+    Caption = 'Show Screenshots Panel'
     ReturnIsTab = False
     State = cbChecked
     Themed = True
@@ -337,8 +258,8 @@ object FormThumbnailView: TFormThumbnailView
     Min = 120
     PageSize = 10
     Frequency = 10
-    Position = 174
-    TabOrder = 12
+    Position = 178
+    TabOrder = 7
     OnChange = GridHeightSizeChange
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -393,7 +314,7 @@ object FormThumbnailView: TFormThumbnailView
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
-    TabOrder = 13
+    TabOrder = 8
     View = elsThumbnail
     OnItemPaintText = ELV_ThumbnailPreviewItemPaintText
     OnItemThumbnailDraw = ELV_ThumbnailPreviewItemThumbnailDraw
@@ -411,7 +332,7 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 14
+    TabOrder = 9
     OnClick = ButtonGridWidthSize_DecreaseClick
   end
   object ButtonGridWidthSize_Increase: TBitBtnEx
@@ -427,7 +348,7 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 15
+    TabOrder = 10
     OnClick = ButtonGridWidthSize_DecreaseClick
   end
   object ButtonGridHeightSize_Increase: TBitBtnEx
@@ -443,7 +364,7 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 17
+    TabOrder = 12
     OnClick = ButtonGridHeightSize_DecreaseClick
   end
   object ButtonGridHeightSize_Decrease: TBitBtnEx
@@ -459,36 +380,8 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 16
+    TabOrder = 11
     OnClick = ButtonGridHeightSize_DecreaseClick
-  end
-  object ThumbLeftAlignIcons: TAdvOfficeRadioButton
-    Left = 700
-    Top = 543
-    Width = 107
-    Height = 20
-    Hint = 'Show icons at thumbnail'#39's top-left'
-    TabOrder = 18
-    TabStop = True
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Left Align Icons'
-    Checked = True
-    ReturnIsTab = False
-    Themed = True
-  end
-  object ThumbRightAlignIcons: TAdvOfficeRadioButton
-    Left = 700
-    Top = 566
-    Width = 113
-    Height = 20
-    Hint = 'Show icons at thumbnail'#39's top-right'
-    TabOrder = 19
-    OnClick = MaintainAspectRatioClick
-    Alignment = taLeftJustify
-    Caption = 'Right Align Icons'
-    ReturnIsTab = False
-    Themed = True
   end
   object PanelBottom: TPanelEx
     Left = 0
@@ -554,6 +447,197 @@ object FormThumbnailView: TFormThumbnailView
       ShowHint = True
       TabOrder = 3
       OnClick = ButtonGridDefaultClick
+    end
+  end
+  object IconsGroupBox: TAdvGroupBoxEx
+    Left = 430
+    Top = 488
+    Width = 397
+    Height = 95
+    Transparent = False
+    RoundEdges = True
+    Caption = 'Icons'
+    TabOrder = 14
+    object LabelThumbAlignIcons: TShadowLabel
+      Left = 220
+      Top = 22
+      Width = 31
+      Height = 16
+      Caption = 'Align'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object ShowSystemIcon: TAdvOfficeCheckBoxEx
+      Left = 6
+      Top = 44
+      Width = 62
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 0
+      OnClick = ShowSystemIconClick
+      Alignment = taLeftJustify
+      Caption = 'System'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object ShowFavoriteIcon: TAdvOfficeCheckBoxEx
+      Left = 204
+      Top = 68
+      Width = 67
+      Height = 20
+      ShowHint = True
+      TabOrder = 1
+      OnClick = ShowFavoriteIconClick
+      Alignment = taLeftJustify
+      Caption = 'Favorite'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object ShowMediaTypeIcon: TAdvOfficeCheckBoxEx
+      Left = 4
+      Top = 68
+      Width = 59
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ShowMediaTypeIconClick
+      Alignment = taLeftJustify
+      Caption = 'Media'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object SystemIconSize: TComboBox
+      Left = 68
+      Top = 42
+      Width = 125
+      Height = 23
+      Hint = 'System icon size'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 15
+      ItemIndex = 1
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Text = 'Large (32x32)'
+      OnSelect = SystemIconSizeSelect
+      Items.Strings = (
+        'Medium (24x24)'
+        'Large (32x32)'
+        'Extra Large (48x48)')
+    end
+    object ShowGameIcon: TAdvOfficeCheckBoxEx
+      Left = 204
+      Top = 44
+      Width = 57
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 4
+      OnClick = ShowGameIconClick
+      Alignment = taLeftJustify
+      Caption = 'Game'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+    end
+    object ThumbLeftAlignIcons: TAdvOfficeRadioButtonEx
+      Tag = 1
+      Left = 266
+      Top = 20
+      Width = 44
+      Height = 20
+      Hint = 'Show icons at thumbnail'#39's top-left'
+      TabOrder = 5
+      TabStop = True
+      OnClick = ThumbLeftAlignIconsClick
+      Alignment = taLeftJustify
+      Caption = 'Left'
+      Checked = True
+      ReturnIsTab = False
+      Themed = True
+    end
+    object ThumbRightAlignIcons: TAdvOfficeRadioButtonEx
+      Left = 320
+      Top = 20
+      Width = 52
+      Height = 20
+      Hint = 'Show icons at thumbnail'#39's top-right'
+      TabOrder = 6
+      OnClick = ThumbLeftAlignIconsClick
+      Alignment = taLeftJustify
+      Caption = 'Right'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object ShowIconsWithNoThumbnail: TAdvOfficeCheckBoxEx
+      Left = 6
+      Top = 20
+      Width = 190
+      Height = 20
+      Hint = 'Show the overlay icons even if no thumbnail is available'
+      ShowHint = True
+      TabOrder = 7
+      OnClick = ShowIconsWithNoThumbnailClick
+      Alignment = taLeftJustify
+      Caption = 'Show Icons With No Thumbnail'
+      ReturnIsTab = False
+      Themed = True
+    end
+    object MediaTypeIconSize: TComboBox
+      Left = 68
+      Top = 66
+      Width = 125
+      Height = 23
+      Hint = 'Media/Game/Favorite/Special icon size'
+      Style = csDropDownList
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 15
+      ItemIndex = 0
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+      Text = 'Medium (24x24)'
+      OnSelect = MediaTypeIconSizeSelect
+      Items.Strings = (
+        'Medium (24x24)'
+        'Large (32x32)'
+        'Extra Large (48x48)')
+    end
+    object ShowSpecialIcon: TAdvOfficeCheckBoxEx
+      Left = 311
+      Top = 44
+      Width = 82
+      Height = 20
+      Checked = True
+      ShowHint = True
+      TabOrder = 9
+      OnClick = ShowSpecialIconClick
+      Alignment = taLeftJustify
+      Caption = 'Special List'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
     end
   end
   object IL_Thumbnail: TImageList

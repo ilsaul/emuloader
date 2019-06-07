@@ -1075,7 +1075,7 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Video'
-      object VideoRenderOptionsGroupBox: TAdvGroupBox
+      object VideoRenderOptionsGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 169
@@ -1104,7 +1104,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object WindowMode: TAdvOfficeCheckBox
+        object WindowMode: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 101
@@ -1116,7 +1116,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object MaximizeWindow: TAdvOfficeCheckBox
+        object MaximizeWindow: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 119
@@ -1130,7 +1130,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object KeepAspectRatio: TAdvOfficeCheckBox
+        object KeepAspectRatio: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 60
           Width = 117
@@ -1144,7 +1144,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object WaitVerticalSync: TAdvOfficeCheckBox
+        object WaitVerticalSync: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 100
           Width = 116
@@ -1156,7 +1156,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object BilinearFilter: TAdvOfficeCheckBox
+        object BilinearFilter: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 80
           Width = 113
@@ -1170,7 +1170,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object UnevenStretch: TAdvOfficeCheckBox
+        object UnevenStretch: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 120
           Width = 104
@@ -1187,7 +1187,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object UnevenStretchX: TAdvOfficeCheckBox
+        object UnevenStretchX: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 140
           Width = 132
@@ -1234,7 +1234,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 8
           OnKeyPress = IntegerScaleFactorVerticalKeyPress
         end
-        object IntegerScaleOverscan: TAdvOfficeCheckBox
+        object IntegerScaleOverscan: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 200
           Width = 140
@@ -1247,7 +1247,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object UnevenStretchY: TAdvOfficeCheckBox
+        object UnevenStretchY: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 160
           Width = 132
@@ -1262,7 +1262,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object AutoUnevenStretchXY: TAdvOfficeCheckBox
+        object AutoUnevenStretchXY: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 180
           Width = 130
@@ -1278,7 +1278,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object VectorGroupBox: TAdvGroupBox
+      object VectorGroupBox: TAdvGroupBoxEx
         Left = 384
         Top = 214
         Width = 169
@@ -1400,7 +1400,7 @@ object FormMAMESettings: TFormMAMESettings
           SmallChange = 0.009999999776482582
           OnChange = VectorBeamIntensityWeightChange
         end
-        object Antialias: TAdvOfficeCheckBox
+        object Antialias: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 65
@@ -1416,7 +1416,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object ScreenOptionsBox: TAdvGroupBox
+      object ScreenOptionsBox: TAdvGroupBoxEx
         Left = 200
         Top = 12
         Width = 169
@@ -1611,7 +1611,7 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = EffectOverlayBrowseClick
         end
       end
-      object FullScreenBox: TAdvGroupBox
+      object FullScreenBox: TAdvGroupBoxEx
         Left = 384
         Top = 12
         Width = 169
@@ -1659,7 +1659,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = False
         end
-        object TripleBuffer: TAdvOfficeCheckBox
+        object TripleBuffer: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 89
@@ -1671,7 +1671,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object SwitchResolution: TAdvOfficeCheckBox
+        object SwitchResolution: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 121
@@ -1732,7 +1732,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = FullScreenGammaChange
         end
       end
-      object LabelSnapshotsBox: TAdvGroupBox
+      object LabelSnapshotsBox: TAdvGroupBoxEx
         Left = 568
         Top = 227
         Width = 169
@@ -1785,7 +1785,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object SnapBurnIn: TAdvOfficeCheckBox
+        object SnapBurnIn: TAdvOfficeCheckBoxEx
           Left = 7
           Top = 176
           Width = 113
@@ -1852,7 +1852,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 3
           OnClick = ButtonSnapViewDefaultClick
         end
-        object SnapSizeAuto: TAdvOfficeCheckBox
+        object SnapSizeAuto: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 111
           Width = 106
@@ -1913,7 +1913,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           TabOrder = 7
         end
-        object SnapBilinear: TAdvOfficeCheckBox
+        object SnapBilinear: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 156
           Width = 123
@@ -1930,7 +1930,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object ArtworkGroupBox: TAdvGroupBox
+      object ArtworkGroupBox: TAdvGroupBoxEx
         Left = 568
         Top = 12
         Width = 169
@@ -1959,7 +1959,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object ArtworkBackdrops: TAdvOfficeCheckBox
+        object ArtworkBackdrops: TAdvOfficeCheckBoxEx
           Left = 88
           Top = 40
           Width = 77
@@ -1973,7 +1973,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object ArtworkBezels: TAdvOfficeCheckBox
+        object ArtworkBezels: TAdvOfficeCheckBoxEx
           Left = 110
           Top = 60
           Width = 53
@@ -1987,7 +1987,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object ArtworkOverlays: TAdvOfficeCheckBox
+        object ArtworkOverlays: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 68
@@ -2001,7 +2001,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object ArtworkCrop: TAdvOfficeCheckBox
+        object ArtworkCrop: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 49
@@ -2015,7 +2015,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object ArtworkControlPanels: TAdvOfficeCheckBox
+        object ArtworkControlPanels: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 60
           Width = 99
@@ -2029,7 +2029,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object ArtworkMarquees: TAdvOfficeCheckBox
+        object ArtworkMarquees: TAdvOfficeCheckBoxEx
           Left = 88
           Top = 20
           Width = 75
@@ -2064,7 +2064,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 7
         end
       end
-      object LabelScreenRotation: TAdvGroupBox
+      object LabelScreenRotation: TAdvGroupBoxEx
         Left = 200
         Top = 297
         Width = 169
@@ -2073,7 +2073,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Screen Rotation'
         ParentCtl3D = True
         TabOrder = 3
-        object FlipX: TAdvOfficeCheckBox
+        object FlipX: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 84
           Width = 96
@@ -2085,7 +2085,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object FlipY: TAdvOfficeCheckBox
+        object FlipY: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 104
           Width = 112
@@ -2097,7 +2097,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object RotateRight: TAdvOfficeCheckBox
+        object RotateRight: TAdvOfficeCheckBoxEx
           Left = 88
           Top = 40
           Width = 51
@@ -2109,7 +2109,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object RotateLeft: TAdvOfficeCheckBox
+        object RotateLeft: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 41
@@ -2121,7 +2121,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object AutoRotateRight: TAdvOfficeCheckBox
+        object AutoRotateRight: TAdvOfficeCheckBoxEx
           Left = 88
           Top = 60
           Width = 81
@@ -2133,7 +2133,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object AutoRotateLeft: TAdvOfficeCheckBox
+        object AutoRotateLeft: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 60
           Width = 73
@@ -2147,7 +2147,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object Rotate: TAdvOfficeCheckBox
+        object Rotate: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 45
@@ -2180,7 +2180,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         Transparent = True
       end
-      object PerformanceGroupBox: TAdvGroupBox
+      object PerformanceGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 308
@@ -2259,7 +2259,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           Transparent = False
         end
-        object AutoFrameskip: TAdvOfficeCheckBox
+        object AutoFrameskip: TAdvOfficeCheckBoxEx
           Left = 79
           Top = 40
           Width = 103
@@ -2273,7 +2273,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object Throttle: TAdvOfficeCheckBox
+        object Throttle: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 63
@@ -2287,7 +2287,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object Sleep: TAdvOfficeCheckBox
+        object Sleep: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 51
@@ -2303,7 +2303,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object Multithreading: TAdvOfficeCheckBox
+        object Multithreading: TAdvOfficeCheckBoxEx
           Left = 79
           Top = 20
           Width = 100
@@ -2318,7 +2318,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object RefreshSpeed: TAdvOfficeCheckBox
+        object RefreshSpeed: TAdvOfficeCheckBoxEx
           Left = 191
           Top = 40
           Width = 95
@@ -2334,7 +2334,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object SyncronizeRefreshRate: TAdvOfficeCheckBox
+        object SyncronizeRefreshRate: TAdvOfficeCheckBoxEx
           Left = 191
           Top = 20
           Width = 113
@@ -2494,7 +2494,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = SecondsToRunChange
         end
       end
-      object ScreensBox: TAdvGroupBox
+      object ScreensBox: TAdvGroupBoxEx
         Left = 16
         Top = 222
         Width = 176
@@ -3056,7 +3056,7 @@ object FormMAMESettings: TFormMAMESettings
               'OpenGL'
               'OpenGL ES')
           end
-          object BGFXDebug: TAdvOfficeCheckBox
+          object BGFXDebug: TAdvOfficeCheckBoxEx
             Left = 384
             Top = 10
             Width = 167
@@ -3335,7 +3335,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = False
             Transparent = True
           end
-          object HLSLEnable: TAdvOfficeCheckBox
+          object HLSLEnable: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 12
             Width = 88
@@ -3348,7 +3348,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object YIQEnable: TAdvOfficeCheckBox
+          object YIQEnable: TAdvOfficeCheckBoxEx
             Left = 195
             Top = 32
             Width = 141
@@ -3413,7 +3413,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 5
             OnClick = ButtonSelectHLSLPathClick
           end
-          object ReadCustomHLSLFile: TAdvOfficeCheckBox
+          object ReadCustomHLSLFile: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 260
             Width = 112
@@ -3426,7 +3426,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object WriteCustomHLSLFile: TAdvOfficeCheckBox
+          object WriteCustomHLSLFile: TAdvOfficeCheckBoxEx
             Left = 124
             Top = 260
             Width = 114
@@ -3507,7 +3507,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 12
             OnClick = ButtonHLSLUpscaleSnapResetClick
           end
-          object HLSLOversampling: TAdvOfficeCheckBox
+          object HLSLOversampling: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 32
             Width = 162
@@ -3555,7 +3555,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 15
             OnClick = ShadowMaskTextureButtonResetClick
           end
-          object VectorPostProcessingBox: TAdvGroupBox
+          object VectorPostProcessingBox: TAdvGroupBoxEx
             Left = 432
             Top = 54
             Width = 330
@@ -3653,7 +3653,7 @@ object FormMAMESettings: TFormMAMESettings
               OnChange = VectorMinimumLengthAttenuationChange
             end
           end
-          object HLSLBloomPostProcessingBox: TAdvGroupBox
+          object HLSLBloomPostProcessingBox: TAdvGroupBoxEx
             Left = 432
             Top = 192
             Width = 329
@@ -3733,7 +3733,7 @@ object FormMAMESettings: TFormMAMESettings
               TabOrder = 3
               OnClick = BloomLUTTextureScreenButtonResetClick
             end
-            object BloomLUTEnabled: TAdvOfficeCheckBox
+            object BloomLUTEnabled: TAdvOfficeCheckBoxEx
               Left = 8
               Top = 64
               Width = 162
@@ -3745,7 +3745,7 @@ object FormMAMESettings: TFormMAMESettings
               ReturnIsTab = False
               Themed = True
             end
-            object BloomLOOTUIEnabled: TAdvOfficeCheckBox
+            object BloomLOOTUIEnabled: TAdvOfficeCheckBoxEx
               Left = 8
               Top = 112
               Width = 191
@@ -4031,7 +4031,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowAccelChar = False
             Transparent = True
           end
-          object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBox
+          object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 32
             Width = 172
@@ -4045,7 +4045,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBox
+          object OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBoxEx
             Left = 235
             Top = 12
             Width = 214
@@ -4057,7 +4057,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object EnableOpenGL_VBO: TAdvOfficeCheckBox
+          object EnableOpenGL_VBO: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 52
             Width = 81
@@ -4071,7 +4071,7 @@ object FormMAMESettings: TFormMAMESettings
             State = cbChecked
             Themed = True
           end
-          object EnableOpenGL_PBO: TAdvOfficeCheckBox
+          object EnableOpenGL_PBO: TAdvOfficeCheckBoxEx
             Left = 132
             Top = 52
             Width = 82
@@ -4085,7 +4085,7 @@ object FormMAMESettings: TFormMAMESettings
             State = cbChecked
             Themed = True
           end
-          object EnableGLSL: TAdvOfficeCheckBox
+          object EnableGLSL: TAdvOfficeCheckBoxEx
             Left = 8
             Top = 12
             Width = 89
@@ -4098,7 +4098,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object EnableOpenGLFilterNotFF: TAdvOfficeCheckBox
+          object EnableOpenGLFilterNotFF: TAdvOfficeCheckBoxEx
             Left = 235
             Top = 32
             Width = 214
@@ -4600,7 +4600,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Style = []
         ParentFont = False
       end
-      object AutobootBox: TAdvGroupBox
+      object AutobootBox: TAdvGroupBoxEx
         Left = 16
         Top = 289
         Width = 297
@@ -4706,7 +4706,7 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = AutobootCommandButtonClearClick
         end
       end
-      object EnableEmulatorLUAConsole: TAdvOfficeCheckBox
+      object EnableEmulatorLUAConsole: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 268
         Width = 179
@@ -4721,7 +4721,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object EnableLUAPluginSupport: TAdvOfficeCheckBox
+      object EnableLUAPluginSupport: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 13
         Width = 163
@@ -4800,7 +4800,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 3
         View = elsReport
       end
-      object GroupBoxAudio: TAdvGroupBox
+      object GroupBoxAudio: TAdvGroupBoxEx
         Left = 632
         Top = 65
         Width = 222
@@ -4849,7 +4849,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object Samples: TAdvOfficeCheckBox
+        object Samples: TAdvOfficeCheckBoxEx
           Left = 130
           Top = 36
           Width = 87
@@ -4971,7 +4971,7 @@ object FormMAMESettings: TFormMAMESettings
             'None')
         end
       end
-      object PortAudioSettingsGroupBox: TAdvGroupBox
+      object PortAudioSettingsGroupBox: TAdvGroupBoxEx
         Left = 632
         Top = 240
         Width = 222
@@ -5129,7 +5129,7 @@ object FormMAMESettings: TFormMAMESettings
         ColorInnerFrame = clBlack
         Frames = []
       end
-      object MultiKeyboard: TAdvOfficeCheckBox
+      object MultiKeyboard: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 52
         Width = 105
@@ -5141,7 +5141,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object Mouse: TAdvOfficeCheckBox
+      object Mouse: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 12
         Width = 65
@@ -5153,7 +5153,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object MultiMouse: TAdvOfficeCheckBox
+      object MultiMouse: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 32
         Width = 89
@@ -5165,7 +5165,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object LightGun: TAdvOfficeCheckBox
+      object LightGun: TAdvOfficeCheckBoxEx
         Left = 168
         Top = 12
         Width = 73
@@ -5177,7 +5177,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object DualLightGun: TAdvOfficeCheckBox
+      object DualLightGun: TAdvOfficeCheckBoxEx
         Left = 168
         Top = 32
         Width = 100
@@ -5189,7 +5189,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object LightGunOffScreenReload: TAdvOfficeCheckBox
+      object LightGunOffScreenReload: TAdvOfficeCheckBoxEx
         Left = 168
         Top = 52
         Width = 121
@@ -5201,7 +5201,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object NaturalKeyboard: TAdvOfficeCheckBox
+      object NaturalKeyboard: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 72
         Width = 113
@@ -5213,7 +5213,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object SteadyKey: TAdvOfficeCheckBox
+      object SteadyKey: TAdvOfficeCheckBoxEx
         Left = 168
         Top = 72
         Width = 81
@@ -5225,7 +5225,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object CoinLockout: TAdvOfficeCheckBox
+      object CoinLockout: TAdvOfficeCheckBoxEx
         Left = 168
         Top = 92
         Width = 97
@@ -5239,7 +5239,7 @@ object FormMAMESettings: TFormMAMESettings
         State = cbChecked
         Themed = True
       end
-      object UIMouse: TAdvOfficeCheckBox
+      object UIMouse: TAdvOfficeCheckBoxEx
         Left = 564
         Top = 323
         Width = 212
@@ -5253,7 +5253,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object JoystickBox: TAdvGroupBox
+      object JoystickBox: TAdvGroupBoxEx
         Left = 16
         Top = 163
         Width = 297
@@ -5305,7 +5305,7 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0.300000011920929000
           OnChange = JoystickDeadzoneChange
         end
-        object Joystick: TAdvOfficeCheckBox
+        object Joystick: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 125
@@ -5319,7 +5319,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object JoystickContradictory: TAdvOfficeCheckBox
+        object JoystickContradictory: TAdvOfficeCheckBoxEx
           Left = 151
           Top = 20
           Width = 138
@@ -5351,7 +5351,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = JoystickSaturationChange
         end
       end
-      object LabelAnalogSettings: TAdvGroupBox
+      object LabelAnalogSettings: TAdvGroupBoxEx
         Left = 562
         Top = 12
         Width = 289
@@ -5657,7 +5657,7 @@ object FormMAMESettings: TFormMAMESettings
             'Lightgun')
         end
       end
-      object UIActive: TAdvOfficeCheckBox
+      object UIActive: TAdvOfficeCheckBoxEx
         Left = 564
         Top = 303
         Width = 272
@@ -5726,7 +5726,7 @@ object FormMAMESettings: TFormMAMESettings
         Items.Strings = (
           '(None)')
       end
-      object HTTPServer: TAdvGroupBox
+      object HTTPServer: TAdvGroupBoxEx
         Left = 562
         Top = 372
         Width = 289
@@ -5800,7 +5800,7 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonResetHTTPServerClick
         end
       end
-      object UIModeBox: TAdvGroupBox
+      object UIModeBox: TAdvGroupBoxEx
         Left = 562
         Top = 224
         Width = 289
@@ -5846,7 +5846,7 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonUIModeKeyDetectKeyClick
         end
       end
-      object CommOptionsBox: TAdvGroupBox
+      object CommOptionsBox: TAdvGroupBoxEx
         Left = 328
         Top = 12
         Width = 219
@@ -6003,7 +6003,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 7
           OnClick = CommRemotePortButtonResetClick
         end
-        object CommSyncFrame: TAdvOfficeCheckBox
+        object CommSyncFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 200
           Width = 120
@@ -6015,7 +6015,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object EnableGlobalInputs: TAdvOfficeCheckBox
+      object EnableGlobalInputs: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 92
         Width = 128
@@ -6027,7 +6027,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object RecordInputTimecodeFile: TAdvOfficeCheckBox
+      object RecordInputTimecodeFile: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 380
         Width = 185
@@ -6038,7 +6038,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object ExitAfterInputPlayback: TAdvOfficeCheckBox
+      object ExitAfterInputPlayback: TAdvOfficeCheckBoxEx
         Left = 216
         Top = 380
         Width = 200
@@ -6049,7 +6049,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object OSDInputOptionsGroupBox: TAdvGroupBox
+      object OSDInputOptionsGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 256
         Width = 297
@@ -6185,7 +6185,7 @@ object FormMAMESettings: TFormMAMESettings
             'None')
         end
       end
-      object OSDOutputOptionsBox: TAdvGroupBox
+      object OSDOutputOptionsBox: TAdvGroupBoxEx
         Left = 328
         Top = 300
         Width = 217
@@ -6301,7 +6301,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowAccelChar = False
         Transparent = True
       end
-      object SkipGameInfo: TAdvOfficeCheckBox
+      object SkipGameInfo: TAdvOfficeCheckBoxEx
         Left = 138
         Top = 12
         Width = 105
@@ -6314,7 +6314,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object ReadConfigFiles: TAdvOfficeCheckBox
+      object ReadConfigFiles: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 12
         Width = 115
@@ -6328,7 +6328,7 @@ object FormMAMESettings: TFormMAMESettings
         State = cbChecked
         Themed = True
       end
-      object WriteConfigFiles: TAdvOfficeCheckBox
+      object WriteConfigFiles: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 32
         Width = 121
@@ -6340,7 +6340,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object Cheat: TAdvOfficeCheckBox
+      object Cheat: TAdvOfficeCheckBoxEx
         Left = 138
         Top = 32
         Width = 105
@@ -6362,7 +6362,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 4
         OnKeyPress = RAMSizeKeyPress
       end
-      object ConfirmQuit: TAdvOfficeCheckBox
+      object ConfirmQuit: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 52
         Width = 97
@@ -6374,7 +6374,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object DebugGroupBox: TAdvGroupBox
+      object DebugGroupBox: TAdvGroupBoxEx
         Left = 252
         Top = 146
         Width = 197
@@ -6425,7 +6425,7 @@ object FormMAMESettings: TFormMAMESettings
             's'
           Caption = 'secs'
         end
-        object Log: TAdvOfficeCheckBox
+        object Log: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 57
@@ -6437,7 +6437,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object OSLog: TAdvOfficeCheckBox
+        object OSLog: TAdvOfficeCheckBoxEx
           Left = 81
           Top = 40
           Width = 112
@@ -6451,7 +6451,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object Verbose: TAdvOfficeCheckBox
+        object Verbose: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 81
@@ -6463,7 +6463,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object UpdateInPause: TAdvOfficeCheckBox
+        object UpdateInPause: TAdvOfficeCheckBoxEx
           Left = 81
           Top = 20
           Width = 109
@@ -6628,7 +6628,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 9
         OnClick = UIFontSelectFontButtonClick
       end
-      object DRC: TAdvOfficeCheckBox
+      object DRC: TAdvOfficeCheckBoxEx
         Left = 252
         Top = 12
         Width = 141
@@ -6642,7 +6642,7 @@ object FormMAMESettings: TFormMAMESettings
         State = cbChecked
         Themed = True
       end
-      object DRCUseC: TAdvOfficeCheckBox
+      object DRCUseC: TAdvOfficeCheckBoxEx
         Left = 252
         Top = 32
         Width = 189
@@ -6665,7 +6665,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 12
         OnClick = RAMSizeButtonClearClick
       end
-      object DRCLogUML: TAdvOfficeCheckBox
+      object DRCLogUML: TAdvOfficeCheckBoxEx
         Left = 252
         Top = 52
         Width = 194
@@ -6676,7 +6676,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object DRCLogNative: TAdvOfficeCheckBox
+      object DRCLogNative: TAdvOfficeCheckBoxEx
         Left = 252
         Top = 72
         Width = 201
@@ -6787,7 +6787,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 17
         View = elsReport
       end
-      object SaveNVRAMOnExit: TAdvOfficeCheckBox
+      object SaveNVRAMOnExit: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 72
         Width = 128
@@ -6803,7 +6803,7 @@ object FormMAMESettings: TFormMAMESettings
         State = cbChecked
         Themed = True
       end
-      object AutoSave: TAdvOfficeCheckBox
+      object AutoSave: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 92
         Width = 103
@@ -6817,7 +6817,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object EnableSaveStateRewind: TAdvOfficeCheckBox
+      object EnableSaveStateRewind: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 112
         Width = 152
@@ -6873,7 +6873,7 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'SDL'
-      object SDKKeyboardMappingBox: TAdvGroupBox
+      object SDKKeyboardMappingBox: TAdvGroupBoxEx
         Left = 16
         Top = 20
         Width = 249
@@ -6934,7 +6934,7 @@ object FormMAMESettings: TFormMAMESettings
           OnClick = ButtonSDLKeymapFilenameResetClick
         end
       end
-      object SDLJoystickMappingBox: TAdvGroupBox
+      object SDLJoystickMappingBox: TAdvGroupBoxEx
         Left = 362
         Top = 236
         Width = 240
@@ -7367,7 +7367,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 15
         end
-        object PS3SixaxisControllers: TAdvOfficeCheckBox
+        object PS3SixaxisControllers: TAdvOfficeCheckBoxEx
           Left = 106
           Top = -1
           Width = 130
@@ -7380,7 +7380,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object SDLLightgunMappingBox: TAdvGroupBox
+      object SDLLightgunMappingBox: TAdvGroupBoxEx
         Left = 617
         Top = 236
         Width = 240
@@ -7814,7 +7814,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 15
         end
       end
-      object SDL2MouseMappingBox: TAdvGroupBox
+      object SDL2MouseMappingBox: TAdvGroupBoxEx
         Left = 617
         Top = 20
         Width = 240
@@ -8248,7 +8248,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 15
         end
       end
-      object SDL2KeyboardMappingBox: TAdvGroupBox
+      object SDL2KeyboardMappingBox: TAdvGroupBoxEx
         Left = 362
         Top = 20
         Width = 240
@@ -8682,7 +8682,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 15
         end
       end
-      object SDLVideoPerformance: TAdvOfficeCheckBox
+      object SDLVideoPerformance: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 142
         Width = 177
@@ -8693,7 +8693,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object SDLOutputModeBox: TAdvGroupBox
+      object SDLOutputModeBox: TAdvGroupBoxEx
         Left = 16
         Top = 166
         Width = 249
@@ -8711,7 +8711,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowAccelChar = False
           Transparent = True
         end
-        object SDLCenterHorizontally: TAdvOfficeCheckBox
+        object SDLCenterHorizontally: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 129
@@ -8725,7 +8725,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object SDLCenterVertically: TAdvOfficeCheckBox
+        object SDLCenterVertically: TAdvOfficeCheckBoxEx
           Left = 136
           Top = 20
           Width = 107
@@ -8766,7 +8766,7 @@ object FormMAMESettings: TFormMAMESettings
             'Hardware Best (SDL 2)')
         end
       end
-      object SDLSplitFullScreenMonitors: TAdvOfficeCheckBox
+      object SDLSplitFullScreenMonitors: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 262
         Width = 231
@@ -8779,7 +8779,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object SDLLowLevelDriver: TAdvGroupBox
+      object SDLLowLevelDriver: TAdvGroupBoxEx
         Left = 16
         Top = 334
         Width = 331
@@ -9225,7 +9225,7 @@ object FormMAMESettings: TFormMAMESettings
     TabOrder = 8
     OnClick = ButtonHelpSaveValidateAllCustomFilesClick
   end
-  object SaveValidateAllCustomFiles: TAdvOfficeCheckBox
+  object SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx
     Left = 455
     Top = 549
     Width = 195

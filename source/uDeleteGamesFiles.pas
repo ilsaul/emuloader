@@ -67,10 +67,10 @@ type
     BottomBar: TPanelEx;
     ButtonNo: TBitBtnEx;
     ButtonYes: TBitBtnEx;
-    FileTypesGroupBox: TAdvGroupBox;
-    DeleteCFGsNVRAMs: TAdvOfficeCheckBox;
-    DeleteROMs: TAdvOfficeCheckBox;
-    DeleteCHDs: TAdvOfficeCheckBox;
+    FileTypesGroupBox: TAdvGroupBoxEx;
+    DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx;
+    DeleteROMs: TAdvOfficeCheckBoxEx;
+    DeleteCHDs: TAdvOfficeCheckBoxEx;
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
@@ -80,16 +80,16 @@ type
     PanelDestinationFolder: TPanelEx;
     LabelCopyMoveDestination: TShadowLabel;
     DestinationFolder: TEditEx;
-    CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
+    CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx;
     ButtonSelectROMsFolder: TBitBtnEx;
     LabelGameDetails: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     LabelSoftwareListTitle: TShadowLabel;
     LabelSoftwareList: TShadowLabel;
-    DeleteGameFromGamesList: TAdvOfficeCheckBox;
-    DeleteGameFileFromDisk: TAdvOfficeCheckBox;
+    DeleteGameFromGamesList: TAdvOfficeCheckBoxEx;
+    DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx;
     ButtonHelp: TBitBtnEx;
-    CopyMoveAddSystemFolder: TAdvOfficeCheckBox;
+    CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -109,7 +109,7 @@ type
     ROMsTotalSize, CHDsTotalSize, CFGsTotalSize: Int64;
     ROMsTotalFiles, CHDsTotalFiles, CFGsTotalFiles: Integer;
 
-    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBoxEx);
     procedure LoadMediaIcons;
     procedure GetFilesCountSize;
     procedure AddFiles; // ROMs and CHDs
@@ -277,7 +277,7 @@ begin
      Result:= -1;
 end;
 
-procedure TFormDeleteGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+procedure TFormDeleteGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBoxEx);
 var
   Item: TEasyItem;
   sFileType: Integer;
@@ -337,19 +337,20 @@ begin
   for Loop:=Low(aMediaType)+1 to High(aMediaType) do
       FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType); // zipfile.ico and chd.ico
 
-  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);      // 2
-  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType); // 3
+  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);             // 2
+  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType);        // 3
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);        // 4
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 5
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 6
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 7
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 8
+  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);               // 4
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 5
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 6
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 7
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 8
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
 
-  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);       // 14
+  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);              // 14
+  FormMain.AddDefaultIcons('media_videogamemusic.ico', Folder, IL_MediaType);   // 15
 end;
 
 procedure TFormDeleteGamesFiles.AddFiles;
@@ -491,7 +492,7 @@ function TFormDeleteGamesFiles.ProcessGamesFiles: Boolean;
 begin
   if not Assigned(FormCopyMoveGameFiles) then
      FormCopyMoveGameFiles:= TFormCopyMoveGameFiles.Create(nil);
-  FormCopyMoveGameFiles.DoubleBuffered:= True;
+  //FormCopyMoveGameFiles.DoubleBuffered:= True;
   FormCopyMoveGameFiles.Tag:= ActionMode;
 
   FormCopyMoveGameFiles.iTotalFiles:= 0;
@@ -1193,7 +1194,7 @@ end;
 
 procedure TFormDeleteGamesFiles.DeleteCHDsClick(Sender: TObject);
 begin
-  ChangeCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
+  ChangeCheckBoxColor(TAdvOfficeCheckBoxEx(Sender).Checked, TAdvOfficeCheckBoxEx(Sender));
   if FormDeleteGamesFiles.Visible then
      FilesListView.SetFocus;
 end;

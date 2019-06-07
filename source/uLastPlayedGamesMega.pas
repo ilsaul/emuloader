@@ -21,6 +21,7 @@ type
     //fManufacturer: WideString;
     fName: WideString;
     fMediaType: ShortInt;
+    fArcadeCHDMediaType: ShortInt;
     fSoftwareName: String;
     fSoftwareExecParam: String;
     fSoftwareTitle: WideString;
@@ -52,6 +53,8 @@ type
     //property eManufacturer: WideString read fManufacturer write fManufacturer;
     property eName: WideString read fName write fName;
     property eMediaType: ShortInt read fMediaType write fMediaType;
+    property eArcadeCHDMediaType: ShortInt read fArcadeCHDMediaType write fArcadeCHDMediaType;
+
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
     property eSoftwareExecParam: String read fSoftwareExecParam write fSoftwareExecParam;
     property eSoftwareTitle: WideString read fSoftwareTitle write fSoftwareTitle;
@@ -174,25 +177,9 @@ begin
   if Column = 0 then
      begin
        if eIsCustomGame then
-       begin
-         case eCustomMediaType of
-           00: Result:= 15; // ROM
-           01: Result:= 16; // Cartridge
-           03: Result:= 17; // Floppy Disk
-           04: Result:= 18; // Cassette Tape
-           05: Result:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
-           02: Result:= 20; // Disc Image
-          //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
-         end;
-       end
+          Result:= FormMain.GetMediaTypeIconMsgBox(eCustomMediaType, True, eMediaType, eArcadeCHDMediaType, nil, '', '')
        else
-       begin
-         Result:= FormMain.GetMediaTypeIconMsgBox(-1, False, eMediaType, nil, eSoftwareExecParam);
-         //case eMediaType of
-         //  00: Result:= 15; // ROM
-         //  01: Result:= 19; // CHD
-         //end;
-       end;
+          Result:= FormMain.GetMediaTypeIconMsgBox(-1, False, eMediaType, eArcadeCHDMediaType, nil, eSoftwareExecParam, eSoftwareName);
      end
   else
      Result:= -1;
@@ -432,6 +419,7 @@ var
     if not TPlayedGameInfo(LastPlayedItem).eIsCustomGame then
        begin
          TPlayedGameInfo(LastPlayedItem).eMediaType:= uMain.TEasyGameInfo(elvItem).eMediaType;
+         TPlayedGameInfo(LastPlayedItem).eArcadeCHDMediaType:= uMain.TEasyGameInfo(elvItem).eArcadeCHDMediaType;
          TPlayedGameInfo(LastPlayedItem).eSoftwareExecParam:= uMain.TEasyGameInfo(elvItem).eSoftwareExecParameter;
          if TPlayedGameInfo(LastPlayedItem).eSoftwareName <> '' then
             TPlayedGameInfo(LastPlayedItem).eSoftwareTitle:= uMain.TEasyGameInfo(elvItem).eCategory;

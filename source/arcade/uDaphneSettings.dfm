@@ -105,7 +105,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Transparent = True
     end
   end
-  object GeneralBox: TAdvGroupBox
+  object GeneralBox: TAdvGroupBoxEx
     Left = 8
     Top = 87
     Width = 313
@@ -139,7 +139,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ParentFont = False
       TabOrder = 0
     end
-    object Daphne_NoJoysticks: TAdvOfficeCheckBox
+    object Daphne_NoJoysticks: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 111
       Width = 87
@@ -154,7 +154,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object SRAMContinuousUpdate: TAdvOfficeCheckBox
+    object SRAMContinuousUpdate: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 131
       Width = 161
@@ -169,7 +169,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object FastBoot: TAdvOfficeCheckBox
+    object FastBoot: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 151
       Width = 81
@@ -184,7 +184,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object StopLaserdiscPlayer: TAdvOfficeCheckBox
+    object StopLaserdiscPlayer: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 171
       Width = 137
@@ -199,7 +199,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Daphne_NoLog: TAdvOfficeCheckBox
+    object Daphne_NoLog: TAdvOfficeCheckBoxEx
       Left = 168
       Top = 111
       Width = 137
@@ -214,7 +214,7 @@ object FormDaphneSettings: TFormDaphneSettings
       State = cbChecked
       Themed = True
     end
-    object Daphne_NoWarnings: TAdvOfficeCheckBox
+    object Daphne_NoWarnings: TAdvOfficeCheckBoxEx
       Left = 168
       Top = 131
       Width = 90
@@ -227,7 +227,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object SendUsageStatistics: TAdvOfficeCheckBox
+    object SendUsageStatistics: TAdvOfficeCheckBoxEx
       Left = 168
       Top = 151
       Width = 137
@@ -244,7 +244,7 @@ object FormDaphneSettings: TFormDaphneSettings
       State = cbChecked
       Themed = True
     end
-    object EnableCheat: TAdvOfficeCheckBox
+    object EnableCheat: TAdvOfficeCheckBoxEx
       Left = 168
       Top = 171
       Width = 97
@@ -259,7 +259,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object IdleExit: TAdvOfficeCheckBox
+    object IdleExit: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 64
       Width = 137
@@ -292,7 +292,7 @@ object FormDaphneSettings: TFormDaphneSettings
       OnChange = IdleExitValueChange
     end
   end
-  object AdvGroupBox4: TAdvGroupBox
+  object AdvGroupBox4: TAdvGroupBoxEx
     Left = 388
     Top = 87
     Width = 185
@@ -329,7 +329,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Items.Strings = (
         'Auto (Default)')
     end
-    object Daphne_FullScreen: TAdvOfficeCheckBox
+    object Daphne_FullScreen: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 65
       Width = 81
@@ -342,7 +342,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object FullScale: TAdvOfficeCheckBox
+    object FullScale: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 85
       Width = 97
@@ -355,7 +355,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object IgnoreAspectRatio: TAdvOfficeCheckBox
+    object IgnoreAspectRatio: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 105
       Width = 137
@@ -370,7 +370,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Daphne_OpenGL: TAdvOfficeCheckBox
+    object Daphne_OpenGL: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 125
       Width = 65
@@ -386,7 +386,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object BlankSearches: TAdvOfficeCheckBox
+    object BlankSearches: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 145
       Width = 105
@@ -399,7 +399,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object BlankSkips: TAdvOfficeCheckBox
+    object BlankSkips: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 165
       Width = 97
@@ -413,7 +413,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Themed = True
     end
   end
-  object AudioBox: TAdvGroupBox
+  object AudioBox: TAdvGroupBoxEx
     Left = 8
     Top = 293
     Width = 233
@@ -433,7 +433,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ShowAccelChar = False
       Transparent = False
     end
-    object NoSound: TAdvOfficeCheckBox
+    object NoSound: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 62
       Width = 81
@@ -446,7 +446,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Daphne_PreferSamples: TAdvOfficeCheckBox
+    object Daphne_PreferSamples: TAdvOfficeCheckBoxEx
       Left = 128
       Top = 62
       Width = 101

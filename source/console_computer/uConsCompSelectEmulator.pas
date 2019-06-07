@@ -17,7 +17,7 @@ type
     LabelTips: TShadowLabel;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    UseSmallIcons: TAdvOfficeCheckBox;
+    UseSmallIcons: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure EmulatorsListItemPaintText(Sender: TCustomEasyListview;

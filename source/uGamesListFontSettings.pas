@@ -25,9 +25,9 @@ type
     PanelBottom: TPanelEx;
     GamesBackgroundColor: TColorBox;
     ButtonDefaultBkSortedColor: TBitBtnEx;
-    GamesBackgroundImageEnable: TAdvOfficeCheckBox;
+    GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx;
     GamesBackgroundImage: TEditEx;
-    GamesTileBackground: TAdvOfficeCheckBox;
+    GamesTileBackground: TAdvOfficeCheckBoxEx;
     GamesBackgroundImageButtonUpdate: TBitBtnEx;
     GamesBackgroundImageButtonSelect: TBitBtnEx;
     LabelBackgroundColor: TShadowLabel;

@@ -167,7 +167,7 @@ object FormToolBarEditor: TFormToolBarEditor
       ShowHint = True
       OnClick = IconSizeLargeClick
     end
-    object BoundToGamesPanel: TAdvOfficeCheckBox
+    object BoundToGamesPanel: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 3
       Width = 145
@@ -182,7 +182,7 @@ object FormToolBarEditor: TFormToolBarEditor
       ShadowColor = clSkyBlue
       Themed = True
     end
-    object ShowHideToolBar: TAdvOfficeCheckBox
+    object ShowHideToolBar: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 24
       Width = 105

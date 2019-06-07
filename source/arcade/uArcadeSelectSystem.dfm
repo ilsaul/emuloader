@@ -199,7 +199,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       TabOrder = 1
     end
   end
-  object AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox
+  object AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBoxEx
     Left = 380
     Top = 323
     Width = 228
@@ -218,7 +218,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     ReturnIsTab = False
     Themed = True
   end
-  object MAMESoftwareListBox: TAdvGroupBox
+  object MAMESoftwareListBox: TAdvGroupBoxEx
     Tag = 1
     Left = 250
     Top = 184
@@ -359,7 +359,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Frames = []
       Transparent = True
     end
-    object MAMESoftwareList_Disabled: TAdvOfficeRadioButton
+    object MAMESoftwareList_Disabled: TAdvOfficeRadioButtonEx
       Left = 9
       Top = 30
       Width = 69
@@ -377,7 +377,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButton
+    object MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButtonEx
       Tag = 1
       Left = 9
       Top = 56
@@ -398,7 +398,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButton
+    object MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButtonEx
       Tag = 2
       Left = 9
       Top = 82
@@ -437,7 +437,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       OnClick = ButtonHelpCreateMAMESoftwareListGamesClick
     end
   end
-  object ScanModeBox: TAdvGroupBox
+  object ScanModeBox: TAdvGroupBoxEx
     Left = 250
     Top = 8
     Width = 364
@@ -529,7 +529,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Height = 1
       Pen.Color = clWhite
     end
-    object ScanModeCurrentTaskOnly: TAdvOfficeCheckBox
+    object ScanModeCurrentTaskOnly: TAdvOfficeCheckBoxEx
       Left = 229
       Top = -1
       Width = 115
@@ -544,7 +544,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object QuickScan: TAdvOfficeRadioButton
+    object QuickScan: TAdvOfficeRadioButtonEx
       Tag = 1
       Left = 9
       Top = 56
@@ -563,7 +563,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object FullScan: TAdvOfficeRadioButton
+    object FullScan: TAdvOfficeRadioButtonEx
       Left = 9
       Top = 30
       Width = 69
@@ -583,7 +583,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
     end
-    object ScanMAMESetsBox: TAdvGroupBox
+    object ScanMAMESetsBox: TAdvGroupBoxEx
       Left = 7
       Top = 114
       Width = 349
@@ -599,7 +599,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         Width = 16
         Height = 16
       end
-      object ScanMAMEAllSets: TAdvOfficeRadioButton
+      object ScanMAMEAllSets: TAdvOfficeRadioButtonEx
         Left = 2
         Top = 20
         Width = 62
@@ -619,7 +619,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         ReturnIsTab = False
         Themed = True
       end
-      object ScanMAMEArcadeMachines: TAdvOfficeRadioButton
+      object ScanMAMEArcadeMachines: TAdvOfficeRadioButtonEx
         Tag = 1
         Left = 81
         Top = 20
@@ -632,7 +632,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         ReturnIsTab = False
         Themed = True
       end
-      object ScanMAMESoftwareListGames: TAdvOfficeRadioButton
+      object ScanMAMESoftwareListGames: TAdvOfficeRadioButtonEx
         Tag = 2
         Left = 217
         Top = 20
@@ -646,7 +646,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         Themed = True
       end
     end
-    object ForceAllAvailable: TAdvOfficeRadioButton
+    object ForceAllAvailable: TAdvOfficeRadioButtonEx
       Tag = 2
       Left = 9
       Top = 82

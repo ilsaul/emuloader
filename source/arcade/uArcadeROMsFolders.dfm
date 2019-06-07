@@ -134,7 +134,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       ModalResult = 1
       TabOrder = 0
     end
-    object UseLargeIcons: TAdvOfficeCheckBox
+    object UseLargeIcons: TAdvOfficeCheckBoxEx
       Left = 9
       Top = 11
       Width = 79

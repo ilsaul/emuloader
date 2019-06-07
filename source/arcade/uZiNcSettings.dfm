@@ -185,7 +185,7 @@ object FormZiNcSettings: TFormZiNcSettings
       WordWrap = True
     end
   end
-  object AudioBox: TAdvGroupBox
+  object AudioBox: TAdvGroupBoxEx
     Left = 567
     Top = 87
     Width = 141
@@ -218,7 +218,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ShowAccelChar = False
       Transparent = False
     end
-    object SoundFilter: TAdvOfficeCheckBox
+    object SoundFilter: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 86
       Width = 85
@@ -230,7 +230,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object SoundStereoExciter: TAdvOfficeCheckBox
+    object SoundStereoExciter: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 20
       Width = 92
@@ -244,7 +244,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object SoundLiteSurround: TAdvOfficeCheckBox
+    object SoundLiteSurround: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 40
       Width = 132
@@ -296,7 +296,7 @@ object FormZiNcSettings: TFormZiNcSettings
       OnChange = SoundLiteSurroundMultiplierChange
     end
   end
-  object AdvGroupBox3: TAdvGroupBox
+  object AdvGroupBox3: TAdvGroupBoxEx
     Left = 566
     Top = 263
     Width = 141
@@ -322,7 +322,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Height = 15
       Caption = 'Net Game Connect'
     end
-    object SlowGeometry: TAdvOfficeCheckBox
+    object SlowGeometry: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 20
       Width = 102
@@ -337,7 +337,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object MemoryPrediction: TAdvOfficeCheckBox
+    object MemoryPrediction: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 40
       Width = 123
@@ -348,7 +348,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object StackInRAMHack: TAdvOfficeCheckBox
+    object StackInRAMHack: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 60
       Width = 128
@@ -384,7 +384,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '180 Degrees'
         '280 Degrees')
     end
-    object NetGameServer: TAdvOfficeCheckBox
+    object NetGameServer: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 128
       Width = 113
@@ -408,7 +408,7 @@ object FormZiNcSettings: TFormZiNcSettings
       TabOrder = 5
     end
   end
-  object OpenGLD3DRendererBox: TAdvGroupBox
+  object OpenGLD3DRendererBox: TAdvGroupBoxEx
     Left = 8
     Top = 308
     Width = 483
@@ -548,7 +548,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ShowHint = True
       TabOrder = 0
     end
-    object FullScreen: TAdvOfficeCheckBox
+    object FullScreen: TAdvOfficeCheckBoxEx
       Left = 98
       Top = 85
       Width = 78
@@ -631,7 +631,7 @@ object FormZiNcSettings: TFormZiNcSettings
         'OpenGL'
         'Direct3D')
     end
-    object Dithering: TAdvOfficeCheckBox
+    object Dithering: TAdvOfficeCheckBoxEx
       Left = 98
       Top = 65
       Width = 112
@@ -643,7 +643,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ShowFPS: TAdvOfficeCheckBox
+    object ShowFPS: TAdvOfficeCheckBoxEx
       Left = 237
       Top = 65
       Width = 73
@@ -657,7 +657,7 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object FrameLimitation: TAdvOfficeCheckBox
+    object FrameLimitation: TAdvOfficeCheckBoxEx
       Left = 325
       Top = 85
       Width = 112
@@ -671,7 +671,7 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object FrameSkip: TAdvOfficeCheckBox
+    object FrameSkip: TAdvOfficeCheckBoxEx
       Left = 237
       Top = 85
       Width = 81
@@ -685,7 +685,7 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object FramerateDetection: TAdvOfficeCheckBox
+    object FramerateDetection: TAdvOfficeCheckBoxEx
       Left = 325
       Top = 65
       Width = 128
@@ -738,7 +738,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Text = '100'
       OnKeyPress = FramerateManualKeyPress
     end
-    object EnableKeys: TAdvOfficeCheckBox
+    object EnableKeys: TAdvOfficeCheckBoxEx
       Left = 98
       Top = 105
       Width = 131

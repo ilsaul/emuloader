@@ -181,7 +181,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       TabOrder = 4
       OnClick = ButtonClearSystemClick
     end
-    object UseLargeIcons: TAdvOfficeCheckBox
+    object UseLargeIcons: TAdvOfficeCheckBoxEx
       Left = 361
       Top = 11
       Width = 79
@@ -577,7 +577,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       WordWrap = True
       OnClick = ButtonHelpAlterMAMEClick
     end
-    object AlterMAME1_Autorun: TAdvOfficeCheckBox
+    object AlterMAME1_Autorun: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 226
       Width = 225
@@ -858,7 +858,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       TabOrder = 13
       OnChange = AlterMAME2_versioninfoChange
     end
-    object AlterMAME2_Autorun: TAdvOfficeCheckBox
+    object AlterMAME2_Autorun: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 246
       Width = 225

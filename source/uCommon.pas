@@ -67,7 +67,7 @@ const
      ('image_15_howto',       'HowToPlay',        'howtoplay.png',     'howto',      'howto_directory',           'How to Play'),
      ('image_16_select',      'Select',           'select.png',        'select',     'select_directory',          'Select'));
 
-  aColumns: packed array[0..22] of packed array[0..1] of String = (
+  aColumns: packed array[0..23] of packed array[0..1] of String = (
      //IniEntryName,     ColumnTitle
      ('Title',           'Title'),            // 00
      ('Year',            'Year'),             // 01
@@ -98,10 +98,11 @@ const
      ('GameSize',        'Game Size'),        // 19
      ('LastPlayed',      'Last Played'),      // 20
      ('Playtime',        'Playtime'),         // 21
-     ('SoftwareName',    'Software Name'));   // 22
+     ('SoftwareName',    'Software Name'),    // 22
+     ('Special',         'Special'));         // 23
 
-  aColumnsWidth: packed array[0..22] of Integer = ( //           13  14  15  16           19   20   21   22
-    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 115, 130, 110, 130);
+  aColumnsWidth: packed array[0..23] of Integer = ( //           13  14  15  16           19   20   21   22
+    400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 115, 130, 110, 130, 65);
 
   aColumnsMachinesList: packed array[0..6] of String =
      ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // Machines List Side Panel
@@ -423,10 +424,10 @@ procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
 procedure SetColorBoxColors(ColorBoxSource: TColorBox; iBackgroundColor, iFontColor: TColor);
-procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
-procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
-procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBox; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
 procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
 procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
 
@@ -465,6 +466,9 @@ function  GetPlayTime(Milliseconds: Int64; ShowHoursDays: Boolean = False; HideS
 function  ExtractMAMEIniValue(const MAMEOption: String): String;
 function  RemoveQuotes(const ValueStr: String): String;
 
+function  DarkenColor(Color: TColor; Perc: Integer): TColor;
+function  BrightenColor(Color: TColor; Factor: Integer): TColor;
+function  Blend(Color1, Color2: TColor; A: Byte): TColor;
 function  GetContrastColor(ABGColor: TColor): TColor;
 
 function  GetGameHistory(const GameName, StringLine: String; TagLength: Integer): Boolean;
@@ -636,7 +640,7 @@ begin
   ColorBoxSource.Font.Color:= iFontColor;
 end;
 
-procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBox; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 begin
   CheckBoxSource.Font.Color:= iColor;
   CheckBoxSource.ShadowColor:= iShadowColor;
@@ -647,14 +651,14 @@ begin
      CheckBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
-procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButton; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 begin
   CheckBoxSource.Font.Color:= iColor;
   CheckBoxSource.ShadowColor:= iShadowColor;
   CheckBoxSource.ShadowEnabled:= iShadowEnabled;
 end;
 
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBox; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
 begin
   GroupBoxSource.BorderColor:= iBorderColor;
   GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
@@ -663,7 +667,7 @@ begin
   GroupBoxSource.ShadowEnabled:= iShadowEnabled;
 end;
 
-procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBox; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
 begin
   GroupBoxSource.Font.Color:= iFontColor;
   if iShadowFontColor <> -1 then
@@ -3283,7 +3287,25 @@ begin
   Result := (r shl 16) or (g shl 8) or b;
 end;
 
-function BrightnessColor(Col: TColor; Brightness: Integer): TColor; overload;
+function BrightenColor(Color: TColor; Factor: Integer): TColor;
+const
+  MaxFactor = 100;
+begin
+  Color := ColorToRGB(Color);
+  if 0 < Factor then             // 0 = no changes
+  begin
+    if Factor > MaxFactor then
+       Factor := MaxFactor;
+    Result := (          (((255 - ((Color shr 16) and $FF)) * Factor) div MaxFactor)) shl 8;
+    Result := (Result or (((255 - ((Color shr  8) and $FF)) * Factor) div MaxFactor)) shl 8;
+    Result := (Result or (((255 - ( Color         and $FF)) * Factor) div MaxFactor));
+    Result := Color + Result;
+  end
+  else
+    Result := Color;
+end;
+
+{function BrightnessColor(Col: TColor; Brightness: Integer): TColor; overload;
 var
   r1, g1, b1: Integer;
 begin
@@ -3335,7 +3357,7 @@ begin
     b1 := Round( Min(100,(100 + BB))/100 * b1 );
 
   Result := RGB(r1,g1,b1);
-end;
+end;}
 
 function Blend(Color1, Color2: TColor; A: Byte): TColor;
 var
@@ -4190,6 +4212,14 @@ begin
   ListHolder.EndUpdate;
   //ShowMessage('files'+#13#10+ListHolder.Text);
 end;
+
+{function TextExtentW(const TextW: WideString; ACanvas: TCanvas): TSize;
+begin
+  //RequiredState([csHandleValid, csFontValid]);
+  Result.cX := 0;
+  Result.cY := 0;
+  Windows.GetTextExtentPoint32W(ACanvas.Handle, PWideChar(TextW), Length(TextW), Result);
+end;}
 
 function CheckAppOneInstance: Boolean;
 var

@@ -215,7 +215,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     end
     object LabelEmulatorDetails: TShadowLabel
       Left = 109
-      Top = 47
+      Top = 46
       Width = 759
       Height = 27
       AutoSize = False
@@ -240,7 +240,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     object EmulatorIcon: TImage
       Tag = -50
       Left = 79
-      Top = 49
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True

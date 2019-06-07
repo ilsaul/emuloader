@@ -229,7 +229,6 @@ type
     function  CheckEmptyVar(const VarStr: String): String;
     procedure GetGamesListVersions;
     procedure LoadScanResultsFile(sysID: ShortInt; const SoftwareName: String);
-    procedure ResizeForm;
     procedure FilterGamesList;
     procedure SearchGame;
   public
@@ -919,86 +918,12 @@ begin
      end;
 end;
 
-procedure TFormArcadeScanGamesResults.ResizeForm;
-begin
-  //ROMsListView.Font.Size:= 10;//14;
-  //ROMsListView.GroupFont.Size:= 12;//15;
-  exit;
-  if Screen.Width > 2560 then
-     begin
-       // for 4K resolution 3840x2160
-       ROMsListView.ImagesGroup:= FormMain.IL_StandardIconsStandard;
-       ROMsListView.ImagesSmall:= IL_ScanResults;
-       FormArcadeScanGamesResults.ClientWidth:= FormArcadeScanGamesResults.ClientWidth+500;
-       ROMsListView.Font.Size:= 14;
-       ROMsListView.GroupFont.Size:= 15;
-       ROMsListView.PaintInfoGroup.MarginTop.Size:= 40;
-       //ROMsListView.PaintInfoGroup.MarginBottom.Size:= 38;
-       ROMsListView.PaintInfoItem.ImageIndent:= 5;
-       ROMsListView.CellSizes.Report.Height:= 28;//40;
-       ROMsListView.Header.Columns[0].Width:= 618; // 281 is the difference...
-       ROMsListView.Header.Columns[1].Width:= 88;
-       ROMsListView.Header.Columns[2].Width:= 408;
-       ROMsListView.Header.Columns[3].Width:= 195;
-
-       IL_ScanResults.Width:=  24;
-       IL_ScanResults.Height:= 24;
-
-       MAMEMachinesFilterIcon.Left:= MAMEMachinesFilterIcon.Left-8;
-       MAMEMachinesFilterIcon.Top:= MAMEMachinesFilterIcon.Top-8;
-       MAMEMachinesFilterIcon.Width:= 24;
-       MAMEMachinesFilterIcon.Height:= 24;
-
-       Exit;
-     end;
-
-  Exit;
-  if Screen.Width >= 1024 then
-     Exit;
-
-  if Screen.Height = 600 then
-     begin
-       FormArcadeScanGamesResults.ClientHeight:= 500;
-       SystemSelectorToolBar.Left:= SystemSelectorToolBar.Left-35;
-
-       SearchBarEdit.Left:= SearchBarEdit.Left-35;
-       SearchBarToolBar.Left:= SearchBarToolBar.Left-35;
-
-       FormArcadeScanGamesResults.ClientWidth:= 774;
-       ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-35;
-     end
-  else
-  if Screen.Height = 480 then
-     begin
-       SystemSelectorToolBar.Left:= SystemSelectorToolBar.Left-190;
-
-       SearchBarEdit.Left:= SearchBarEdit.Left-190;
-       SearchBarToolBar.Left:= SearchBarToolBar.Left-190;
-
-       LabelEmulatorVersion.Font.Size:= 7;
-       LabelGamesListList.Font.Size:= 7;
-       LabelGamesListList.Font.Name:= 'Segoe UI';
-       LabelGamesListList.Caption:= 'List :';
-       LabelGamesListVersion.Font.Size:= 7;
-       LabelGamesListVersion.Font.Name:= 'Segoe UI';
-       LabelGamesListVersion.Left:= 73;
-       SystemSelectorToolBar.Left:= 404;
-       MAMEMachinesFilterIcon.Left:= 240;
-       MAMEMachinesFilter.Left:= 259;
-       FormArcadeScanGamesResults.ClientWidth:= 624;
-       ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-60;
-       //ROMsListView.Header.Columns[0].Width:= 262;
-     end;
-end;
-
 procedure TFormArcadeScanGamesResults.FormShow(Sender: TObject);
 var
   tempFolder: String;
   Loop: Integer;
   missSoftListFiles: THashedStringList;
 begin
-
-  ResizeForm;
   CallMaximizeWindow(TForm(Sender));
   FormMain.ELV_ResetNormalColors(ROMsListView);
 
@@ -1034,10 +959,11 @@ begin
   FormMain.AddDefaultIcons('media_floppydisk.ico', tempFolder, IL_ScanResults);         // 14
   FormMain.AddDefaultIcons('media_cassettetape.ico', tempFolder, IL_ScanResults);       // 15
 
-  FormMain.AddDefaultIcons('chd.ico', tempFolder, IL_ScanResults);                      // 16 -> this is also used for "Hard Disk Drive" media type... 
+  FormMain.AddDefaultIcons('chd.ico', tempFolder, IL_ScanResults);                      // 16 -> this is also used for "Hard Disk Drive" media type...
   FormMain.AddDefaultIcons('media_disc.ico', tempFolder, IL_ScanResults);               // 17
   FormMain.AddDefaultIcons('media_flashcard.ico', tempFolder, IL_ScanResults);          // 18
   FormMain.AddDefaultIcons('media_vhs.ico', tempFolder, IL_ScanResults);                // 19
+  FormMain.AddDefaultIcons('media_videogamemusic.ico', tempFolder, IL_ScanResults);     // 20
 
   for Loop:=0 to SystemSelectorToolBar.ButtonCount-1 do
       SystemSelectorToolBar.Buttons[Loop].Hint:= FormMain.GetArcadeEmulatorDescription(SystemSelectorToolBar.Buttons[Loop].ImageIndex);
@@ -1208,7 +1134,6 @@ end;
 procedure TFormArcadeScanGamesResults.SearchGame;
 var
   vGroup: TEasyGroup;
-  vItem: TEasyItem;
   FoundItem: Boolean;
   StrToSearch: String;
   //iSearchTitle, iSearchName: Integer;
@@ -1384,6 +1309,9 @@ var
   Item1Title, Item2Title: String;
 begin
   // list device sets A..Z first, then bios A..Z, then games A..Z
+  if TEasyScanGroupInfo(Item1).eSystem <> TEasyScanGroupInfo(Item2).eSystem then
+     Exit;
+
   Item1Device:= TEasyScanGroupInfo(Item1).eIsDevice;
   Item2Device:= TEasyScanGroupInfo(Item2).eIsDevice;
   Item1Bios:= TEasyScanGroupInfo(Item1).eIsBios;
@@ -1394,8 +1322,8 @@ begin
   Item1Title:= TEasyScanGroupInfo(Item1).eGameTitle;
   Item2Title:= TEasyScanGroupInfo(Item2).eGameTitle;
 
-  if TEasyScanGroupInfo(Item1).eSystem <> TEasyScanGroupInfo(Item2).eSystem then
-     Exit;
+  //if TEasyScanGroupInfo(Item1).eSystem <> TEasyScanGroupInfo(Item2).eSystem then
+  //   Exit;
 
   if Item1Game and Item2Game then
      Result:= FormMain.iCompare(Item1Title, Item2Title)
@@ -1416,7 +1344,6 @@ begin
   else
      Result:= 1;
 end;
-
 
 procedure TFormArcadeScanGamesResults.MAMEMachinesFilterSelect(Sender: TObject);
 begin

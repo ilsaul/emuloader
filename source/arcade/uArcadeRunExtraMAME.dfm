@@ -36,9 +36,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
-    GradientColorTop_Down = 10905138
-    GradientColorBottom_Down = 9196326
-    FrameColor_Down = clBlack
   end
   object PageButtonSaveState: TSpeedButtonEx
     Tag = 2
@@ -55,9 +52,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
-    GradientColorTop_Down = 10905138
-    GradientColorBottom_Down = 9196326
-    FrameColor_Down = clBlack
   end
   object PageButtonMemoryCard: TSpeedButtonEx
     Tag = 3
@@ -74,9 +68,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
-    GradientColorTop_Down = 10905138
-    GradientColorBottom_Down = 9196326
-    FrameColor_Down = clBlack
   end
   object PageButtonRecordMovie: TSpeedButtonEx
     Tag = 4
@@ -93,9 +84,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Font.Style = []
     ParentFont = False
     OnClick = PageButtonInputClick
-    GradientColorTop_Down = 10905138
-    GradientColorBottom_Down = 9196326
-    FrameColor_Down = clBlack
   end
   object PagesButtonBottomLine: TBevelEx
     Left = 2
@@ -103,6 +91,8 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Width = 616
     Height = 2
     Shape = bsTopLine
+    CustomColor1 = clBlack
+    CustomColor2 = clBlack
   end
   object TopBar: TPanelEx
     Left = 0
@@ -153,7 +143,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     end
     object LabelGameName: TShadowLabel
       Left = 106
-      Top = 45
+      Top = 46
       Width = 488
       Height = 27
       Caption = 
@@ -177,7 +167,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     end
     object SystemIcon: TImage
       Left = 76
-      Top = 46
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
@@ -293,7 +283,6 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Width = 819
     Height = 345
     Color = clWhite
-    PageIndex = 1
     ParentColor = False
     TabOrder = 2
     object TPage
@@ -320,7 +309,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ColorInnerFrame = clBlack
         Frames = []
       end
-      object Enabled_PlaybackRecordInput: TAdvOfficeCheckBox
+      object Enabled_PlaybackRecordInput: TAdvOfficeCheckBoxEx
         Left = 24
         Top = 2
         Width = 64
@@ -336,10 +325,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         OnClick = Enabled_PlaybackRecordInputClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
-      object InputPlayback: TAdvOfficeRadioButton
+      object InputPlayback: TAdvOfficeRadioButtonEx
         Left = 8
         Top = 22
         Width = 70
@@ -376,7 +366,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 2
         OnKeyPress = InputFileNameKeyPress
       end
-      object InputRecord: TAdvOfficeRadioButton
+      object InputRecord: TAdvOfficeRadioButtonEx
         Tag = 1
         Left = 84
         Top = 22
@@ -395,7 +385,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBox
+      object InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBoxEx
         Left = 170
         Top = 22
         Width = 199
@@ -410,10 +400,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 4
         Alignment = taLeftJustify
         Caption = 'Exit Emulator After Input Playback'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
-      object InputRecordTimecodeFile: TAdvOfficeCheckBox
+      object InputRecordTimecodeFile: TAdvOfficeCheckBoxEx
         Left = 366
         Top = 22
         Width = 183
@@ -429,6 +420,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Visible = False
         Alignment = taLeftJustify
         Caption = 'Record an Input Timecode File'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
@@ -624,7 +616,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ColorInnerFrame = clBlack
         Frames = []
       end
-      object Enabled_LoadSaveState: TAdvOfficeCheckBox
+      object Enabled_LoadSaveState: TAdvOfficeCheckBoxEx
         Left = 24
         Top = 2
         Width = 64
@@ -640,10 +632,11 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         OnClick = Enabled_LoadSaveStateClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
-      object AutoSaveState: TAdvOfficeCheckBox
+      object AutoSaveState: TAdvOfficeCheckBoxEx
         Left = 100
         Top = 2
         Width = 104
@@ -662,6 +655,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Visible = False
         Alignment = taLeftJustify
         Caption = 'Auto Save State'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
@@ -1042,7 +1036,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         TabOrder = 3
         OnKeyPress = InsertMemoryCard_Slot3KeyPress
       end
-      object Enabled_InsertMemoryCard: TAdvOfficeCheckBox
+      object Enabled_InsertMemoryCard: TAdvOfficeCheckBoxEx
         Left = 24
         Top = 2
         Width = 64
@@ -1058,6 +1052,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         OnClick = Enabled_InsertMemoryCardClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
@@ -1379,7 +1374,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Frames = []
         Transparent = True
       end
-      object Enabled_RecordMovie: TAdvOfficeCheckBox
+      object Enabled_RecordMovie: TAdvOfficeCheckBoxEx
         Left = 24
         Top = 2
         Width = 64
@@ -1395,6 +1390,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         OnClick = Enabled_RecordMovieClick
         Alignment = taLeftJustify
         Caption = 'Enabled'
+        DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
       end
@@ -1452,7 +1448,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         OnChange = RecordMovieFileNameChange
         OnKeyPress = RecordMovieFileNameKeyPress
       end
-      object RecordMovieWAV: TAdvOfficeRadioButton
+      object RecordMovieWAV: TAdvOfficeRadioButtonEx
         Tag = 2
         Left = 155
         Top = 22
@@ -1471,7 +1467,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object RecordMovieMNG: TAdvOfficeRadioButton
+      object RecordMovieMNG: TAdvOfficeRadioButtonEx
         Tag = 1
         Left = 76
         Top = 22
@@ -1490,7 +1486,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         ReturnIsTab = False
         Themed = True
       end
-      object RecordMovieAVI: TAdvOfficeRadioButton
+      object RecordMovieAVI: TAdvOfficeRadioButtonEx
         Left = 8
         Top = 22
         Width = 64

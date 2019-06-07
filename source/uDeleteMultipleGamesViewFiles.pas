@@ -317,19 +317,20 @@ begin
   for Loop:=Low(aMediaType)+1 to High(aMediaType) do
       FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType); // zipfile.ico and chd.ico
 
-  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);      // 2
-  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType); // 3
+  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);             // 2
+  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType);        // 3
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);        // 4
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 5
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 6
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 7
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);       // 8
+  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);               // 4
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 5
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 6
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 7
+  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 8
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
 
-  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType); // 14
+  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);              // 14
+  FormMain.AddDefaultIcons('media_videogamemusic.ico', Folder, IL_MediaType);   // 15
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.AddGames(var GroupToFocus: TEasyGroup);

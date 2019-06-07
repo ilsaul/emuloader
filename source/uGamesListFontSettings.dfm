@@ -161,7 +161,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       TabOrder = 1
       OnClick = ButtonDefaultBkSortedColorClick
     end
-    object GamesBackgroundImageEnable: TAdvOfficeCheckBox
+    object GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx
       Left = 284
       Top = 4
       Width = 202
@@ -183,7 +183,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ParentCtl3D = False
       TabOrder = 3
     end
-    object GamesTileBackground: TAdvOfficeCheckBox
+    object GamesTileBackground: TAdvOfficeCheckBoxEx
       Left = 564
       Top = 4
       Width = 40

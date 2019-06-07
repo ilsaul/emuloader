@@ -135,7 +135,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
       TabOrder = 1
     end
   end
-  object ListAll: TAdvOfficeRadioButton
+  object ListAll: TAdvOfficeRadioButtonEx
     Left = 8
     Top = 85
     Width = 103
@@ -174,7 +174,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
       'Sound Status (MAME Only)'
       'Graphic Status (MAME Only)')
   end
-  object GoodImperfect: TAdvOfficeRadioButton
+  object GoodImperfect: TAdvOfficeRadioButtonEx
     Tag = 1
     Left = 8
     Top = 117
@@ -187,7 +187,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     ReturnIsTab = False
     Themed = True
   end
-  object Imperfect: TAdvOfficeRadioButton
+  object Imperfect: TAdvOfficeRadioButtonEx
     Tag = 3
     Left = 8
     Top = 181
@@ -200,7 +200,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     ReturnIsTab = False
     Themed = True
   end
-  object Preliminary: TAdvOfficeRadioButton
+  object Preliminary: TAdvOfficeRadioButtonEx
     Tag = 4
     Left = 8
     Top = 213
@@ -213,7 +213,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     ReturnIsTab = False
     Themed = True
   end
-  object Good: TAdvOfficeRadioButton
+  object Good: TAdvOfficeRadioButtonEx
     Tag = 2
     Left = 8
     Top = 149

@@ -172,7 +172,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     ScaleMode = smNormal
     TabOrder = 2
   end
-  object GroupBoxCategoryConsoleComputer: TAdvGroupBox
+  object GroupBoxCategoryConsoleComputer: TAdvGroupBoxEx
     Left = 8
     Top = 440
     Width = 445
@@ -572,7 +572,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnMouseLeave = LabelShowHideLayoutsMouseLeave
     end
   end
-  object GroupBoxCategoryAllSystems: TAdvGroupBox
+  object GroupBoxCategoryAllSystems: TAdvGroupBoxEx
     Left = 8
     Top = 269
     Width = 445
@@ -841,7 +841,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
       Visible = False
     end
-    object PanelEnabledScr2: TAdvOfficeCheckBox
+    object PanelEnabledScr2: TAdvOfficeCheckBoxEx
       Left = 139
       Top = 20
       Width = 63
@@ -864,7 +864,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       State = cbChecked
       Themed = True
     end
-    object PanelEnabledScr3: TAdvOfficeCheckBox
+    object PanelEnabledScr3: TAdvOfficeCheckBoxEx
       Left = 247
       Top = 20
       Width = 62

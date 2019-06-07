@@ -342,7 +342,7 @@ begin
        end
     else
        begin
-         PanelSystemTitle.Left:= (Systems.CellSizes.Icon.Width*2)+2; // +2 for border
+         PanelSystemTitle.Left:= (Systems.CellSizes.Icon.Width*3)+2; // +2 for border
          PanelSystemTitle.Top:= (Systems.CellSizes.Icon.Height*7)+2;
          PanelSystemTitle.Width:= PanelFolders.Left-PanelSystemTitle.Left;
        end;

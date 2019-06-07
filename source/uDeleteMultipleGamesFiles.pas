@@ -90,10 +90,10 @@ type
   TFormDeleteMultipleGamesFiles = class(TForm)
     BottomBar: TPanelEx;
     IL_DeleteGameIcons: TImageList;
-    FileTypesGroupBox: TAdvGroupBox;
-    DeleteROMs: TAdvOfficeCheckBox;
-    DeleteCHDs: TAdvOfficeCheckBox;
-    DeleteCFGsNVRAMs: TAdvOfficeCheckBox;
+    FileTypesGroupBox: TAdvGroupBoxEx;
+    DeleteROMs: TAdvOfficeCheckBoxEx;
+    DeleteCHDs: TAdvOfficeCheckBoxEx;
+    DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx;
     ButtonDeleteFiles: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     PopupGames: TBcBarPopupMenu;
@@ -107,13 +107,13 @@ type
     DestinationFolder: TEditEx;
     LabelCopyMoveDestination: TShadowLabel;
     ButtonSelectROMsFolder: TBitBtnEx;
-    CopyMoveOverwriteFiles: TAdvOfficeCheckBox;
-    DeleteGameFromGamesList: TAdvOfficeCheckBox;
-    DeleteGameFileFromDisk: TAdvOfficeCheckBox;
+    CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx;
+    DeleteGameFromGamesList: TAdvOfficeCheckBoxEx;
+    DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx;
     DeleteGameConsoleComputerIcon: TImage;
     GamesList: TEasyListview;
     Panel1: TPanel;
-    CopyMoveAddSystemFolder: TAdvOfficeCheckBox;
+    CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonHelpClick(Sender: TObject);
@@ -166,7 +166,7 @@ type
 
     FileTextMaxCount: Integer;
     HaveArcade, HaveConsoleComputer: Boolean;
-    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+    procedure ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBoxEx);
     procedure SetSelectedGame(ELV_Item: TEasyItem);
     procedure UpdateTotalFilesLabel;
     procedure SearchROMsFiles(eROMsList: TStringList; var MergedSetVar: Boolean; var HaveROMsVar: Boolean; var HaveCHDsVar: Boolean; var CHDFilesCountVar: Integer; var ROMFileTotalSizeVar: Int64; var CHDFilesTotalSizeVar: Int64);
@@ -280,7 +280,7 @@ begin
   end;
 end;
 
-procedure TFormDeleteMultipleGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBox);
+procedure TFormDeleteMultipleGamesFiles.ChangeCheckBoxColor(Enabled: Boolean; CheckBoxHolder: TAdvOfficeCheckBoxEx);
 begin
   if IsNightMode then
   begin
@@ -1438,7 +1438,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.DeleteCHDsClick(Sender: TObject);
 begin
-  ChangeCheckBoxColor(TAdvOfficeCheckBox(Sender).Checked, TAdvOfficeCheckBox(Sender));
+  ChangeCheckBoxColor(TAdvOfficeCheckBoxEx(Sender).Checked, TAdvOfficeCheckBoxEx(Sender));
   if FormDeleteMultipleGamesFiles.Visible then
      GamesList.SetFocus;
 end;

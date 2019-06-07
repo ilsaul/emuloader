@@ -85,7 +85,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       OnClick = ButtonHelpClick
     end
   end
-  object GroupExportOptionsAllGames: TAdvGroupBox
+  object GroupExportOptionsAllGames: TAdvGroupBoxEx
     Left = 226
     Top = 48
     Width = 193
@@ -115,7 +115,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Frames = []
       Transparent = True
     end
-    object ExportOption_ArcadeGames: TAdvOfficeCheckBox
+    object ExportOption_ArcadeGames: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 20
@@ -131,7 +131,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_NonArcadeMAMEMachines: TAdvOfficeCheckBox
+    object ExportOption_NonArcadeMAMEMachines: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 40
@@ -147,7 +147,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_MAMESoftwareListGames: TAdvOfficeCheckBox
+    object ExportOption_MAMESoftwareListGames: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 60
@@ -163,7 +163,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_MAME: TAdvOfficeCheckBox
+    object ExportOption_MAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 96
@@ -179,7 +179,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_Supermodel3: TAdvOfficeCheckBox
+    object ExportOption_Supermodel3: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 116
@@ -195,7 +195,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_Daphne: TAdvOfficeCheckBox
+    object ExportOption_Daphne: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 136
@@ -211,7 +211,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_Demul: TAdvOfficeCheckBox
+    object ExportOption_Demul: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 156
@@ -227,7 +227,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_HBMAME: TAdvOfficeCheckBox
+    object ExportOption_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 176
@@ -243,7 +243,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_DICE: TAdvOfficeCheckBox
+    object ExportOption_DICE: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 196
@@ -259,7 +259,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_SegaModel2: TAdvOfficeCheckBox
+    object ExportOption_SegaModel2: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 216
@@ -275,7 +275,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object ExportOption_ZiNc: TAdvOfficeCheckBox
+    object ExportOption_ZiNc: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 236
@@ -292,7 +292,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Themed = True
     end
   end
-  object GroupMAMEContentManagerPlus: TAdvGroupBox
+  object GroupMAMEContentManagerPlus: TAdvGroupBoxEx
     Left = 8
     Top = 312
     Width = 209
@@ -301,7 +301,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Caption = 'MAME Content Manager Plus'
     Ctl3D = True
     TabOrder = 2
-    object MCMPlus_MAME: TAdvOfficeCheckBox
+    object MCMPlus_MAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 20
@@ -318,7 +318,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
     end
-    object MCMPlus_HBMAME: TAdvOfficeCheckBox
+    object MCMPlus_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 88
       Top = 20
@@ -336,7 +336,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Themed = True
     end
   end
-  object GroupExportOptionsGameColumnsFullFormat: TAdvGroupBox
+  object GroupExportOptionsGameColumnsFullFormat: TAdvGroupBoxEx
     Left = 428
     Top = 48
     Width = 183
@@ -468,7 +468,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       TabOrder = 2
       OnClick = GameInfoListToExport_MoveUpClick
     end
-    object GameInfoToExport_MicrosoftExcelFormat: TAdvOfficeCheckBox
+    object GameInfoToExport_MicrosoftExcelFormat: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 284
@@ -537,7 +537,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       TabOrder = 6
       OnClick = GameInfoListToExport_DefaultClick
     end
-    object GameInfoToExport_UseGamesListVisibleColumns: TAdvOfficeCheckBox
+    object GameInfoToExport_UseGamesListVisibleColumns: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 260

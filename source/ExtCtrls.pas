@@ -4994,9 +4994,6 @@ procedure TCustomColorBox.DrawItem(Index: Integer; Rect: TRect;
 var
   LRect: TRect;
   LBackground: TColor;
-
-  iColor: LongInt;
-  R, G, B: Byte;
   iColorCaption: String;
 begin
   with Canvas do

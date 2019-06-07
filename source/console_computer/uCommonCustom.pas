@@ -85,13 +85,14 @@ const
     ('Nintendo Switch',        '66_NintendoSwitch.ico',    'NintendoSwitch.txt'));
     //('SuFami Turbo',           '66_SuFamiTurbo.ico',       'SuFamiTurbo.txt'));
 
-  MediaTypeCustom: packed array[1..5] of packed array[0..2] of String = (
-    // media title,   icon filename,              media short .ini value, EXPERIMENTAL!!! // this array can never be higher than 1..9 !!!!!!!! no reason to either...
-    ('Cartridge',       'media_Cartridge.ico',    'cart'),
-    ('Disc Image',      'media_Disc.ico',         'disc'),
-    ('Floppy Disk',     'media_FloppyDisk.ico',   'flop'),
-    ('Cassette Tape',   'media_CassetteTape.ico', 'cass'),
-    ('Hard Disk Drive', 'media_HardDisk.ico',     'hard'));
+  MediaTypeCustom: packed array[1..6] of packed array[0..2] of String = (
+    // media title,   icon filename,                 media short .ini value, EXPERIMENTAL!!! // this array can never be higher than 1..9 !!!!!!!! no reason to either...
+    ('Cartridge',        'media_Cartridge.ico',      'cart'),
+    ('Disc Image',       'media_Disc.ico',           'disc'),
+    ('Floppy Disk',      'media_FloppyDisk.ico',     'flop'),
+    ('Cassette Tape',    'media_CassetteTape.ico',   'cass'),
+    ('Hard Disk Drive',  'media_HardDisk.ico',       'hard'),
+    ('Video Game Music', 'media_VideoGameMusic.ico', 'quick'));
 
   // SystemCategory: packed array[0..2] of String = ('Arcade', 'Console', 'Computer');
   {SystemsCategory: packed array [1..MaxCustomSystems] of Byte = (

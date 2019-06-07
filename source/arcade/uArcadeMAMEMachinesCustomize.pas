@@ -72,9 +72,9 @@ type
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     ButtonResetToCurrent: TBitBtnEx;
-    CheckAll: TAdvOfficeCheckBox;
+    CheckAll: TAdvOfficeCheckBoxEx;
     LabelTotalMachinesList: TShadowLabel;
-    FilterShowUncheckedOnly: TAdvOfficeCheckBox;
+    FilterShowUncheckedOnly: TAdvOfficeCheckBoxEx;
     IL_MediaType: TImageList;
     TopBar: TPanelEx;
     SystemIcon: TImage;
@@ -83,7 +83,7 @@ type
     LabelEmulatorVersion: TShadowLabel;
     FrameSoftwareList: TPanelEx;
     MachinesListEditor: TEasyListview;
-    FilterShowParentSetsOnly: TAdvOfficeCheckBox;
+    FilterShowParentSetsOnly: TAdvOfficeCheckBoxEx;
     PopupMachines: TBcBarPopupMenu;
     PopupCheckMultipleSelected: TMenuItem;
     PopupUncheckMultipleSelected: TMenuItem;

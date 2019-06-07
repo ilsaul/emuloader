@@ -15,7 +15,7 @@ type
     IL_Systems: TImageList;
     PanelBottom: TPanelEx;
     ButtonCancel: TBitBtnEx;
-    UseLargeIcons: TAdvOfficeCheckBox;
+    UseLargeIcons: TAdvOfficeCheckBoxEx;
     PanelFoldersList: TPanelEx;
     FoldersList: TMemo;
     PanelSystemTitle: TPanelEx;

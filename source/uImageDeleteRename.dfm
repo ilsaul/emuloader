@@ -365,7 +365,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     end
     object LabelGameName: TShadowLabel
       Left = 106
-      Top = 48
+      Top = 46
       Width = 543
       Height = 27
       AutoSize = False

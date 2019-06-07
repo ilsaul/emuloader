@@ -37,8 +37,8 @@ type
     PanelLayoutsSelector: TPanelEx;
     LayoutListView: TEasyListview;
     ImageScrLayout: TImage32;
-    GroupBoxCategoryAllSystems: TAdvGroupBox;
-    GroupBoxCategoryConsoleComputer: TAdvGroupBox;
+    GroupBoxCategoryAllSystems: TAdvGroupBoxEx;
+    GroupBoxCategoryConsoleComputer: TAdvGroupBoxEx;
     FrameIconLayScr2: TShape;
     FrameIconLayScr3: TShape;
     FrameIconLayScr1: TShape;
@@ -55,8 +55,8 @@ type
     LabelPanel4: TShadowLabel;
     LabelPanel2: TShadowLabel;
     LabelPanel3: TShadowLabel;
-    PanelEnabledScr2: TAdvOfficeCheckBox;
-    PanelEnabledScr3: TAdvOfficeCheckBox;
+    PanelEnabledScr2: TAdvOfficeCheckBoxEx;
+    PanelEnabledScr3: TAdvOfficeCheckBoxEx;
     ButtonLayoutResetPanelsIndex: TBitBtnEx;
     FrameIconLayScr2_ConsComp: TShape;
     FrameIconLayScr3_ConsComp: TShape;

@@ -23,7 +23,7 @@ type
   TFormConsCompSystemSelector = class(TForm)
     Systems: TEasyListview;
     PanelBottom: TPanelEx;
-    CreateNewList: TAdvOfficeCheckBox;
+    CreateNewList: TAdvOfficeCheckBoxEx;
     ButtonHelp: TBitBtnEx;
     ButtonApply: TBitBtnEx;
     ButtonCancel: TBitBtnEx;

@@ -12,8 +12,8 @@ type
     IL_ToolBarButtonsEditor: TImageList;
     ToolBarListView: TEasyListview;
     PanelBottom: TPanelEx;
-    BoundToGamesPanel: TAdvOfficeCheckBox;
-    ShowHideToolBar: TAdvOfficeCheckBox;
+    BoundToGamesPanel: TAdvOfficeCheckBoxEx;
+    ShowHideToolBar: TAdvOfficeCheckBoxEx;
     ButtonDefault: TBitBtnEx;
     ButtonClose: TBitBtnEx;
     LabelToolBarIconSize: TShadowLabel;

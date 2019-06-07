@@ -29,11 +29,11 @@ type
     PanelBottom: TPanelEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBox;
-    MAMESoftwareListBox: TAdvGroupBox;
-    MAMESoftwareList_Disabled: TAdvOfficeRadioButton;
-    MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButton;
-    MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButton;
+    AddMAMEDeviceSetWithNoROMs: TAdvOfficeCheckBoxEx;
+    MAMESoftwareListBox: TAdvGroupBoxEx;
+    MAMESoftwareList_Disabled: TAdvOfficeRadioButtonEx;
+    MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButtonEx;
+    MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButtonEx;
     LabelMAMESoftwareList_Disabled: TShadowLabel;
     LabelMAMESoftwareList_EnabledUpdate: TShadowLabel;
     LabelMAMESoftwareList_EnabledOverwrite: TShadowLabel;
@@ -41,22 +41,22 @@ type
     LabelCustomizeMAMESoftwareList: TShadowLabel;
     ImageMAMESoftwareList: TImage;
     LabelMAMESoftwareListBox: TShadowLabel;
-    ScanModeBox: TAdvGroupBox;
+    ScanModeBox: TAdvGroupBoxEx;
     LabelForceAllAvailable: TShadowLabel;
     LabelQuickScan: TShadowLabel;
     LabelFullScan: TShadowLabel;
     ScanModeIcon: TImage;
-    ScanModeCurrentTaskOnly: TAdvOfficeCheckBox;
-    QuickScan: TAdvOfficeRadioButton;
-    FullScan: TAdvOfficeRadioButton;
-    ScanMAMESetsBox: TAdvGroupBox;
+    ScanModeCurrentTaskOnly: TAdvOfficeCheckBoxEx;
+    QuickScan: TAdvOfficeRadioButtonEx;
+    FullScan: TAdvOfficeRadioButtonEx;
+    ScanMAMESetsBox: TAdvGroupBoxEx;
     ImageScanMAME: TImage;
-    ScanMAMEAllSets: TAdvOfficeRadioButton;
-    ScanMAMEArcadeMachines: TAdvOfficeRadioButton;
-    ScanMAMESoftwareListGames: TAdvOfficeRadioButton;
+    ScanMAMEAllSets: TAdvOfficeRadioButtonEx;
+    ScanMAMEArcadeMachines: TAdvOfficeRadioButtonEx;
+    ScanMAMESoftwareListGames: TAdvOfficeRadioButtonEx;
     LabelScanModeCurrentTaskOnly_BlankLine: TShape;
     LabelMAMESoftwareListBox_BlankLine: TShape;
-    ForceAllAvailable: TAdvOfficeRadioButton;
+    ForceAllAvailable: TAdvOfficeRadioButtonEx;
     LabelMultiSelect: TShadowLabel;
     IL_Systems: TImageList;
     LabelMAMESoftwareListBox_BlankLine2: TShape;
@@ -415,9 +415,9 @@ end;
 
 procedure TFormArcadeSelectSystem.ScanMAMEAllSetsClick(Sender: TObject);
 begin
-  ScanMAMESetsBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
-  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
-  case TAdvOfficeRadioButton(Sender).Tag of
+  ScanMAMESetsBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
+  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         ScanMAMEArcadeMachines.Font.Style:= [];
@@ -542,9 +542,9 @@ end;
 procedure TFormArcadeSelectSystem.MAMESoftwareList_EnabledUpdateClick(
   Sender: TObject);
 begin
-  MAMESoftwareListBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
-  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
-  case TAdvOfficeRadioButton(Sender).Tag of
+  MAMESoftwareListBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
+  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         MAMESoftwareList_EnabledUpdate.Font.Style:= [];
@@ -567,9 +567,9 @@ end;
 
 procedure TFormArcadeSelectSystem.FullScanClick(Sender: TObject);
 begin
-  ScanModeBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
-  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
-  case TAdvOfficeRadioButton(Sender).Tag of
+  ScanModeBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
+  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         QuickScan.Font.Style:= [];

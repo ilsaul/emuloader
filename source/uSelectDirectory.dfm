@@ -127,7 +127,7 @@ object FormSelectDirectory: TFormSelectDirectory
       Frames = []
       Transparent = True
     end
-    object AddSubFolders: TAdvOfficeCheckBox
+    object AddSubFolders: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 34

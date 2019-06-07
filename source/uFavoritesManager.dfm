@@ -20,7 +20,7 @@ object FormFavoritesManager: TFormFavoritesManager
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object ToolbarButtons: TToolBar
+  object ToolBarButtons: TToolBar
     Left = 0
     Top = 0
     Width = 781
@@ -40,7 +40,8 @@ object FormFavoritesManager: TFormFavoritesManager
     TabOrder = 0
     Transparent = True
     Wrapable = False
-    OnCustomDraw = ToolbarButtonsCustomDraw
+    OnCustomDraw = ToolBarButtonsCustomDraw
+    OnCustomDrawButton = ToolBarButtonsCustomDrawButton
     object ToolButtonFavSettings: TToolButton
       Left = 2
       Top = 0
@@ -48,6 +49,8 @@ object FormFavoritesManager: TFormFavoritesManager
       AutoSize = True
       ImageIndex = 7
       OnClick = ToolButtonFavSettingsClick
+      OnMouseDown = ToolButtonFavSettingsMouseDown
+      OnMouseUp = ToolButtonFavSettingsMouseUp
     end
     object ToolButtonNew: TToolButton
       Left = 36
@@ -108,6 +111,22 @@ object FormFavoritesManager: TFormFavoritesManager
       Caption = 'Set Selected Profile Active'
       ImageIndex = 3
       OnClick = ToolBarSetSelectedProfileActiveClick
+    end
+    object SpeedButtonEx1: TSpeedButtonEx
+      Left = 553
+      Top = 0
+      Width = 167
+      Height = 22
+      Caption = 'Set Selected Profile Active'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ImageIndex = 3
+      Images = FormMain.IL_MenuPopup
+      ParentFont = False
     end
   end
   object FavoritesList: TEasyListview
@@ -429,7 +448,7 @@ object FormFavoritesManager: TFormFavoritesManager
       TabOrder = 1
       OnClick = ButtonCenterPanelFavSettingsClick
     end
-    object FavSettingSmallFont: TAdvOfficeRadioButton
+    object FavSettingSmallFont: TAdvOfficeRadioButtonEx
       Left = 16
       Top = 38
       Width = 78
@@ -443,7 +462,7 @@ object FormFavoritesManager: TFormFavoritesManager
       ReturnIsTab = False
       Themed = True
     end
-    object FavSettingLargeFont: TAdvOfficeRadioButton
+    object FavSettingLargeFont: TAdvOfficeRadioButtonEx
       Tag = 2
       Left = 224
       Top = 38
@@ -456,7 +475,7 @@ object FormFavoritesManager: TFormFavoritesManager
       ReturnIsTab = False
       Themed = True
     end
-    object FavSettingMediumFont: TAdvOfficeRadioButton
+    object FavSettingMediumFont: TAdvOfficeRadioButtonEx
       Tag = 1
       Left = 112
       Top = 38

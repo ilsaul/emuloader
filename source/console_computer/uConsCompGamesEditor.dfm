@@ -366,7 +366,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Frames = []
         Transparent = True
       end
-      object LabelEditSelected_Year: TAdvOfficeCheckBox
+      object LabelEditSelected_Year: TAdvOfficeCheckBoxEx
         Left = 8
         Top = 65
         Width = 45
@@ -390,7 +390,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         TabOrder = 4
         OnKeyPress = EditSelected_ManufacturerKeyPress
       end
-      object LabelEditSelected_Manufacturer: TAdvOfficeCheckBox
+      object LabelEditSelected_Manufacturer: TAdvOfficeCheckBoxEx
         Left = 8
         Top = 41
         Width = 93
@@ -414,7 +414,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         TabOrder = 2
         OnKeyPress = EditSelected_ManufacturerKeyPress
       end
-      object LabelEditSelected_NumberPlayers: TAdvOfficeCheckBox
+      object LabelEditSelected_NumberPlayers: TAdvOfficeCheckBoxEx
         Left = 280
         Top = 65
         Width = 83
@@ -761,7 +761,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         TabOrder = 4
         OnClick = GamesListFontSizeSmallerClick
       end
-      object SystemsHideScrollBarArea: TAdvOfficeCheckBox
+      object SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx
         Left = 534
         Top = 5
         Width = 146

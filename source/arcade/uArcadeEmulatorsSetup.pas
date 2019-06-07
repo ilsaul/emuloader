@@ -19,7 +19,7 @@ type
     ButtonUpdateSystem: TBitBtnEx;
     ButtonClearSystem: TBitBtnEx;
     IL_Systems: TImageList;
-    UseLargeIcons: TAdvOfficeCheckBox;
+    UseLargeIcons: TAdvOfficeCheckBoxEx;
     PanelEmulatorDetails: TPanelEx;
     LabelArcade_versioninfo: TShadowLabel;
     LabelAlterMAME1: TShadowLabel;
@@ -34,7 +34,7 @@ type
     ButtonBrowseAlterMAME1: TBitBtnEx;
     ButtonClearAlterMAME1: TBitBtnEx;
     ButtonHelpAlterMAME: TBitBtnEx;
-    AlterMAME1_Autorun: TAdvOfficeCheckBox;
+    AlterMAME1_Autorun: TAdvOfficeCheckBoxEx;
     AlterMAME1_versioninfo: TEditEx;
     PanelMAMEEmulatorsText: TPanelEx;
     LabelMAMELink_Tabs: TShadowLabel;
@@ -55,7 +55,7 @@ type
     IconEmulatorAlterMAME1: TImage;
     IconEmulatorAlterMAME2: TImage;
     LabelAlterMAME2_Autorun: TShadowLabel;
-    AlterMAME2_Autorun: TAdvOfficeCheckBox;
+    AlterMAME2_Autorun: TAdvOfficeCheckBoxEx;
     PanelSystemTitleBottom: TPanelEx;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;

@@ -25,14 +25,14 @@ type
     VideoPreviewMediaPlayerExecutable: TEditEx;
     ButtonSelectVideoPreviewMediaPlayer: TBitBtnEx;
     VideoPreviewMediaPlayerParameters: TEditEx;
-    VideoPreviewAutoPlay: TAdvOfficeCheckBox;
-    VideoPreviewParentGameVideo: TAdvOfficeCheckBox;
+    VideoPreviewAutoPlay: TAdvOfficeCheckBoxEx;
+    VideoPreviewParentGameVideo: TAdvOfficeCheckBoxEx;
     ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtnEx;
-    VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox;
+    VideoPreviewPlayDummyVideo: TAdvOfficeCheckBoxEx;
     ButtonHelpVideoPreviewPlayDummyVideo: TBitBtnEx;
     VideoPreviewDummyVideoParameters: TEditEx;
     ButtonSnaplDirAutoSearchHelp: TBitBtnEx;
-    VideoPreviewEnabled: TAdvOfficeCheckBox;
+    VideoPreviewEnabled: TAdvOfficeCheckBoxEx;
     IL_Systems: TImageList;
     ButtonResetVideoPreviewMediaPlayerParameters: TBitBtnEx;
     ButtonResetVideoPreviewDummyVideoParameters: TBitBtnEx;

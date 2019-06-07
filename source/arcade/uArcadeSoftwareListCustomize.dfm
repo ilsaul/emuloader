@@ -4,7 +4,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   BorderStyle = bsDialog
   Caption = 'Customize Software List'
   ClientHeight = 642
-  ClientWidth = 984
+  ClientWidth = 1134
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -20,7 +20,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   PixelsPerInch = 96
   TextHeight = 15
   object LabelTotalSoftwareList: TShadowLabel
-    Left = 815
+    Left = 965
     Top = 91
     Width = 157
     Height = 15
@@ -45,7 +45,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object BottomBar: TPanelEx
     Left = 0
     Top = 601
-    Width = 984
+    Width = 1134
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -58,7 +58,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtnEx
-      Left = 783
+      Left = 933
       Top = 8
       Width = 89
       Height = 25
@@ -71,7 +71,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       OnClick = ButtonYesClick
     end
     object ButtonNo: TBitBtnEx
-      Left = 886
+      Left = 1036
       Top = 8
       Width = 89
       Height = 25
@@ -93,7 +93,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       TabOrder = 2
       OnClick = ButtonResetToCurrentClick
     end
-    object FilterShowUncheckedOnly: TAdvOfficeCheckBox
+    object FilterShowUncheckedOnly: TAdvOfficeCheckBoxEx
       Left = 60
       Top = 11
       Width = 141
@@ -107,8 +107,21 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       ReturnIsTab = False
       Themed = True
     end
+    object UseBiggerFontIconSize: TAdvOfficeCheckBoxEx
+      Left = 252
+      Top = 11
+      Width = 183
+      Height = 20
+      ShowHint = True
+      TabOrder = 4
+      OnClick = UseBiggerFontIconSizeClick
+      Alignment = taLeftJustify
+      Caption = 'Use Bigger Icon and Font Sizes'
+      ReturnIsTab = False
+      Themed = True
+    end
   end
-  object CheckAll: TAdvOfficeCheckBox
+  object CheckAll: TAdvOfficeCheckBoxEx
     Left = 12
     Top = 88
     Width = 100
@@ -126,7 +139,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 984
+    Width = 1134
     Height = 83
     Align = alTop
     Color1 = 16445669
@@ -176,14 +189,14 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     object EmulatorIcon: TImage
       Tag = -50
       Left = 79
-      Top = 49
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelEmulatorVersion: TShadowLabel
       Left = 106
-      Top = 47
+      Top = 46
       Width = 863
       Height = 27
       AutoSize = False
@@ -208,7 +221,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   object FrameSoftwareList: TPanelEx
     Left = 8
     Top = 112
-    Width = 967
+    Width = 1117
     Height = 473
     Color1 = clWhite
     Color2 = 1
@@ -223,7 +236,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     object SoftwareLists: TEasyListview
       Left = 0
       Top = 0
-      Width = 963
+      Width = 1113
       Height = 469
       Align = alClient
       AllowHiddenCheckedItems = True
@@ -242,13 +255,13 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000010001B4020000FFFFFF1F0001000000
+        00060000008008000101000100000000010001DA020000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-        000101000000000001A5000000FFFFFF1F0001000000010000000D0000005300
+        000101000000000001E6000000FFFFFF1F0001000000010000000D0000005300
         6F0066007400770061007200650020004E0061006D0065000000000000000000
         00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-        00800800010100010200000000000169000000FFFFFF1F000100000001000000
+        00800800010100010200000000000196000000FFFFFF1F000100000001000000
         050000004D006500640069006100000000000000000000000000}
       Header.Draggable = False
       Header.Height = 23

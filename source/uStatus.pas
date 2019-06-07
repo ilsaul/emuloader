@@ -22,7 +22,6 @@ type
   private
     { Private declarations }
     procedure ResetTimerLabel;
-    procedure ResizeForm;
   public
     { Public declarations }
     procedure StartThreadClock;
@@ -105,13 +104,16 @@ var
 begin
   if Total in [0, 1] then
      Exit;
+  if not ProgressBar.Visible then
+     ProgressBar.Visible:= True;
   CalculatePosition:= Trunc((Position * 100) / Total);
   if CalculatePosition > ProgressBar.Position then
      ProgressBar.Position:= CalculatePosition;
 end;
 
-procedure TFormStatus.ResizeForm;
+{procedure TFormStatus.ResizeForm;
 begin
+  Exit;
   if Screen.Height < 600 then
      begin
        LabelStatusType.Font.Name:= 'Segoe UI';
@@ -145,18 +147,24 @@ begin
        LabelVersion.Left:= 135;
        LabelVersion.Top:= 32;
      end;
-end;
+end;}
 
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
+  if Screen.Fonts.IndexOf('Terminal') = -1 then
+     begin
+       // this is for Windows 10... no "Terminal" font installed in this OS (only in Win7)
+       LabelTimer.Font.Name:= 'Lucida Console';
+       LabelSoftwareScanCount.Font.Name:= 'Lucida Console';
+     end;
+
   mmResult:= 0;
   LabelStatusType.Caption:= '';
   LabelMessage.Caption:= '';
 
   if not Application.Terminated then
      begin
-       LabelSoftwareScanCount.Left:= 554;
-       ResizeForm;
+       LabelMessage.Left:= 4;
      end;
 end;
 
@@ -192,6 +200,8 @@ begin
        SetProgressPos(0); // reset progress bar position (required)
        TitleStr(''); // clean title message (cosmetic fix, not required)
        MessageStr(''); //clean detailed message (cosmetic fix, not required)
+       if ProgressBar.Visible then
+          ProgressBar.Visible:= False;
      end;
 end;
 

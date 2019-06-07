@@ -20,7 +20,7 @@ type
     ButtonYestoAll: TBitBtnEx;
     ButtonAbort: TBitBtnEx;
     IconMediaType: TImage;
-    NightMode: TAdvOfficeCheckBox;
+    NightMode: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure LabelMessageURLClick(Sender: TObject; const URL: String);
@@ -142,7 +142,9 @@ begin
      end;
 
   if IconMediaType.Tag <> -1 then
-     FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, IconMediaType, FormMain.MemGameInfo.eSoftwareExecParameter, True);
+     FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType,
+                                     FormMain.MemGameInfo.eArcadeCHDMediaType, IconMediaType,
+                                     FormMain.MemGameInfo.eSoftwareExecParameter, FormMain.MemGameInfo.eSoftwareName, True);
 
   if (PanelBottom.Tag = -1) or (LabelGameName.Visible and (PanelBottom.Tag <> 4)) then
      FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame)

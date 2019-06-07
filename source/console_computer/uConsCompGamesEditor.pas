@@ -18,11 +18,11 @@ type
     CustomGamesList: TEasyListview;
     PanelEditSelected: TPanelEx;
     LabelEditSelected: TShadowLabel;
-    LabelEditSelected_Year: TAdvOfficeCheckBox;
+    LabelEditSelected_Year: TAdvOfficeCheckBoxEx;
     EditSelected_Year: TEditEx;
-    LabelEditSelected_Manufacturer: TAdvOfficeCheckBox;
+    LabelEditSelected_Manufacturer: TAdvOfficeCheckBoxEx;
     EditSelected_Manufacturer: TEditEx;
-    LabelEditSelected_NumberPlayers: TAdvOfficeCheckBox;
+    LabelEditSelected_NumberPlayers: TAdvOfficeCheckBoxEx;
     EditSelected_NumberPlayers: TEditEx;
     ButtonMultiSelectedInfo_Confirm: TBitBtnEx;
     MultiSelectedInfo_Cancel: TBitBtnEx;
@@ -53,7 +53,7 @@ type
     GamesListFontSizeLarger: TBitBtnEx;
     GamesListFontSizeSmaller_x4: TBitBtnEx;
     GamesListFontSizeSmaller: TBitBtnEx;
-    SystemsHideScrollBarArea: TAdvOfficeCheckBox;
+    SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx;
     LabelToolBarFilterTitle: TShadowLabel;
     FilterGameTitle: TEditEx;
     PopupMenuOptions: TBcBarPopupMenu;
@@ -673,19 +673,6 @@ begin
   if NewCellHeight < 28 then
      NewCellHeight:= 28;
 
-  //case IL_MediaType.Width of
-  //  16:
-  //    begin
-  //      if NewCellHeight < 22 then
-  //         NewCellHeight:= 22;
-  //    end;
-  //  24:
-  //    begin
-  //      if NewCellHeight < 28 then
-  //         NewCellHeight:= 28;
-  //    end;
-  //end;
-
   if (NewCellHeight <> ELV_Holder.CellSizes.Report.Height) then
      begin
        ELV_Holder.BeginUpdate;
@@ -1207,12 +1194,18 @@ begin
        Systems.PaintInfoItem.ImageIndent:= 0;
        Systems.PaintInfoItem.ShowBorder:= True;
        Systems.PaintInfoItem.CaptionIndent:= 0;
-       FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
+       if IsNightMode then
+          begin
+            FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
+            Splitter.Appearance.SingleColor:= clrBlackBk;
+          end;
        PanelSystemTitleBottom.Visible:= False;
        PanelSystemTitle.Visible:= False;
        if Systems.Align = alNone then
-          Systems.Top:= Systems.Top-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-       Splitter.Appearance.SingleColor:= clrBlackBk;
+          begin
+            Systems.Top:= Systems.Top-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+            Systems.Height:= Systems.Height+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+          end;
      end
   else
      begin
@@ -1224,12 +1217,18 @@ begin
        Systems.PaintInfoItem.ImageIndent:= 2;
        Systems.PaintInfoItem.ShowBorder:= True;
        Systems.PaintInfoItem.CaptionIndent:= 4;
-       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+       if IsNightMode then
+          begin
+            FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+            Splitter.Appearance.SingleColor:= menu_background_color[1];
+          end;
        PanelSystemTitle.Visible:= True;
        PanelSystemTitleBottom.Visible:= True;
        if Systems.Align = alNone then
-          Systems.Top:= Systems.Top+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-       Splitter.Appearance.SingleColor:= menu_background_color[1];
+          begin
+            Systems.Top:= Systems.Top+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+            Systems.Height:= Systems.Height-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
+          end;
      end;
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
@@ -1243,7 +1242,6 @@ begin
 
   Systems.EndUpdate;
 end;
-
 
 procedure TFormConsCompGamesEditor.SystemsItemImageDraw(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;

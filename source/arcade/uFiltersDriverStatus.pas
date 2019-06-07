@@ -17,12 +17,12 @@ type
     IconListAll: TImage;
     IconGoodImperfect: TImage;
     IconImperfect: TImage;
-    ListAll: TAdvOfficeRadioButton;
+    ListAll: TAdvOfficeRadioButtonEx;
     DriverStatusCategory: TComboBox;
-    GoodImperfect: TAdvOfficeRadioButton;
-    Imperfect: TAdvOfficeRadioButton;
-    Preliminary: TAdvOfficeRadioButton;
-    Good: TAdvOfficeRadioButton;
+    GoodImperfect: TAdvOfficeRadioButtonEx;
+    Imperfect: TAdvOfficeRadioButtonEx;
+    Preliminary: TAdvOfficeRadioButtonEx;
+    Good: TAdvOfficeRadioButtonEx;
     IconGood: TImage;
     IconPreliminary: TImage;
     procedure ListAllClick(Sender: TObject);
@@ -42,7 +42,7 @@ implementation
 
 procedure TFormArcadeFiltersDriverStatus.ListAllClick(Sender: TObject);
 begin
-  LabelFilterStatus.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  LabelFilterStatus.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
 end;
 
 procedure TFormArcadeFiltersDriverStatus.FormKeyPress(Sender: TObject;

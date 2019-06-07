@@ -41,7 +41,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Width = 24
       Height = 24
     end
-    object DeleteGameFileFromDisk: TAdvOfficeCheckBox
+    object DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx
       Left = 248
       Top = 26
       Width = 216
@@ -68,7 +68,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       State = cbChecked
       Themed = True
     end
-    object DeleteGameFromGamesList: TAdvOfficeCheckBox
+    object DeleteGameFromGamesList: TAdvOfficeCheckBoxEx
       Tag = -1
       Left = 248
       Top = 9
@@ -96,7 +96,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       State = cbChecked
       Themed = True
     end
-    object FileTypesGroupBox: TAdvGroupBox
+    object FileTypesGroupBox: TAdvGroupBoxEx
       Left = 8
       Top = 1
       Width = 231
@@ -110,7 +110,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Ctl3D = True
       ParentColor = False
       TabOrder = 0
-      object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
+      object DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx
         Left = 121
         Top = 18
         Width = 107
@@ -134,7 +134,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         State = cbChecked
         Themed = True
       end
-      object DeleteROMs: TAdvOfficeCheckBox
+      object DeleteROMs: TAdvOfficeCheckBoxEx
         Left = 7
         Top = 18
         Width = 55
@@ -157,7 +157,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         State = cbChecked
         Themed = True
       end
-      object DeleteCHDs: TAdvOfficeCheckBox
+      object DeleteCHDs: TAdvOfficeCheckBoxEx
         Left = 66
         Top = 18
         Width = 53
@@ -273,7 +273,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       TabOrder = 1
       OnClick = ButtonSelectROMsFolderClick
     end
-    object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
+    object CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx
       Left = 421
       Top = 22
       Width = 98
@@ -288,7 +288,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ReturnIsTab = False
       Themed = True
     end
-    object CopyMoveAddSystemFolder: TAdvOfficeCheckBox
+    object CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx
       Left = 525
       Top = 22
       Width = 120

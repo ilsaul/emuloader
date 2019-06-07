@@ -294,7 +294,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 5
     OnClick = FolderROMsButtonSetActiveInactiveClick
   end
-  object GroupBox2: TAdvGroupBox
+  object GroupBox2: TAdvGroupBoxEx
     Left = 8
     Top = 177
     Width = 601
@@ -342,7 +342,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ItemHeight = 15
       TabOrder = 0
     end
-    object AutoSwitchFullScreen: TAdvOfficeCheckBox
+    object AutoSwitchFullScreen: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 66
       Width = 162
@@ -354,7 +354,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ForceSync: TAdvOfficeCheckBox
+    object ForceSync: TAdvOfficeCheckBoxEx
       Left = 176
       Top = 66
       Width = 93
@@ -423,7 +423,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         'Dynamic (Default)'
         'Force Managed textures')
     end
-    object SoftwareVertexProcessing: TAdvOfficeCheckBox
+    object SoftwareVertexProcessing: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 106
       Width = 161
@@ -438,7 +438,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Wireframe: TAdvOfficeCheckBox
+    object Wireframe: TAdvOfficeCheckBoxEx
       Left = 424
       Top = 106
       Width = 149
@@ -450,7 +450,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object FakeGouraud: TAdvOfficeCheckBox
+    object FakeGouraud: TAdvOfficeCheckBoxEx
       Left = 176
       Top = 86
       Width = 97
@@ -464,7 +464,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object BilinearFiltering: TAdvOfficeCheckBox
+    object BilinearFiltering: TAdvOfficeCheckBoxEx
       Left = 424
       Top = 66
       Width = 113
@@ -478,7 +478,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       State = cbChecked
       Themed = True
     end
-    object FilterTilemaps: TAdvOfficeCheckBox
+    object FilterTilemaps: TAdvOfficeCheckBoxEx
       Left = 176
       Top = 106
       Width = 105
@@ -492,7 +492,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object TrilinearFiltering: TAdvOfficeCheckBox
+    object TrilinearFiltering: TAdvOfficeCheckBoxEx
       Left = 424
       Top = 86
       Width = 110
@@ -506,7 +506,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object AutoMipMap: TAdvOfficeCheckBox
+    object AutoMipMap: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 66
       Width = 125
@@ -518,7 +518,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object MeshTransparency: TAdvOfficeCheckBox
+    object MeshTransparency: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 86
       Width = 125
@@ -532,7 +532,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Crosshair: TAdvOfficeCheckBox
+    object Crosshair: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 106
       Width = 135
@@ -546,7 +546,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       State = cbChecked
       Themed = True
     end
-    object FSAA: TAdvOfficeCheckBox
+    object FSAA: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 86
       Width = 152
@@ -559,7 +559,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
   end
-  object EnableSound: TAdvOfficeCheckBox
+  object EnableSound: TAdvOfficeCheckBoxEx
     Left = 520
     Top = 347
     Width = 94
@@ -572,7 +572,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     State = cbChecked
     Themed = True
   end
-  object AdvGroupBox1: TAdvGroupBox
+  object AdvGroupBox1: TAdvGroupBoxEx
     Left = 8
     Top = 315
     Width = 493
@@ -581,7 +581,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     Caption = 'Input'
     Ctl3D = True
     TabOrder = 11
-    object ReturnToNeutral: TAdvOfficeCheckBox
+    object ReturnToNeutral: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 15
       Width = 152
@@ -595,7 +595,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object UseRawInput: TAdvGroupBox
+    object UseRawInput: TAdvGroupBoxEx
       Left = 9
       Top = 20
       Width = 265
@@ -655,7 +655,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
           'Mouse 4')
       end
     end
-    object ForceFeedbackEnable: TAdvOfficeCheckBox
+    object ForceFeedbackEnable: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 55
       Width = 140
@@ -667,7 +667,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object XInput: TAdvOfficeCheckBox
+    object XInput: TAdvOfficeCheckBoxEx
       Left = 280
       Top = 35
       Width = 211

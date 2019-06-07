@@ -124,11 +124,11 @@ object FormPreferences: TFormPreferences
       Left = 0
       Top = 0
       Caption = 'General'
-      object LabelIgnoreExitCode1InvalidFunction: TLabel
+      object LabelIgnoreExitCode1InvalidFunction: TShadowLabel
         Left = 32
         Top = 188
-        Width = 284
-        Height = 18
+        Width = 287
+        Height = 19
         Caption = 'Do not display this error after exiting the emulator'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -137,13 +137,19 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelUseItalicFontStyleSystemTitleBar: TLabel
+      object LabelUseItalicFontStyleSystemTitleBar: TShadowLabel
         Left = 32
         Top = 228
-        Width = 251
-        Height = 18
+        Width = 254
+        Height = 19
         Caption = 'Uncheck this option if you dislike italic fonts'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -152,9 +158,15 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object DisableMinimize: TAdvOfficeCheckBox
+      object DisableMinimize: TAdvOfficeCheckBoxEx
         Left = 15
         Top = 12
         Width = 286
@@ -165,7 +177,7 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object HideDOSBoxFrame: TAdvGroupBox
+      object HideDOSBoxFrame: TAdvGroupBoxEx
         Left = 15
         Top = 61
         Width = 314
@@ -199,7 +211,7 @@ object FormPreferences: TFormPreferences
           Transparent = True
           WordWrap = True
         end
-        object HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox
+        object HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 247
@@ -212,7 +224,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object HideDOSBoxRunGame: TAdvOfficeCheckBox
+        object HideDOSBoxRunGame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 304
@@ -224,7 +236,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object AllowOnlyOneInstance: TAdvOfficeCheckBox
+      object AllowOnlyOneInstance: TAdvOfficeCheckBoxEx
         Left = 15
         Top = 32
         Width = 154
@@ -237,7 +249,7 @@ object FormPreferences: TFormPreferences
         State = cbChecked
         Themed = True
       end
-      object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox
+      object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 171
         Width = 329
@@ -250,7 +262,7 @@ object FormPreferences: TFormPreferences
         State = cbChecked
         Themed = True
       end
-      object RestoreInternetGameInfoStartup: TAdvOfficeCheckBox
+      object RestoreInternetGameInfoStartup: TAdvOfficeCheckBoxEx
         Left = 15
         Top = 467
         Width = 230
@@ -261,7 +273,7 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object GroupBoxInternetGameInfo: TAdvGroupBox
+      object GroupBoxInternetGameInfo: TAdvGroupBoxEx
         Left = 15
         Top = 496
         Width = 752
@@ -273,25 +285,39 @@ object FormPreferences: TFormPreferences
           '                  '
         Ctl3D = True
         TabOrder = 5
-        object LabelInternetGameInfoLink: TLabel
+        object LabelInternetGameInfoLink: TShadowLabel
           Left = 8
           Top = 20
-          Width = 80
-          Height = 15
+          Width = 83
+          Height = 16
           Caption = 'Game Info Link'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
-        object LabelInternetMAMESoftwareListGameInfoLink: TLabel
+        object LabelInternetMAMESoftwareListGameInfoLink: TShadowLabel
           Left = 8
           Top = 60
-          Width = 189
-          Height = 15
+          Width = 192
+          Height = 16
           Caption = 'MAME Software List Game Info Link'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
-        object Label5: TLabel
+        object Label5: TShadowLabel
           Left = 115
           Top = 1
-          Width = 287
-          Height = 14
+          Width = 290
+          Height = 15
           Caption = 'Tag       required to be replaced by                  and'
           Font.Charset = ANSI_CHARSET
           Font.Color = clNavy
@@ -300,13 +326,19 @@ object FormPreferences: TFormPreferences
           Font.Style = []
           ParentFont = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label6: TLabel
+        object Label6: TShadowLabel
           Left = 141
           Top = 1
-          Width = 347
-          Height = 14
+          Width = 350
+          Height = 15
           Caption = 
             '%s                                       game name       softwar' +
             'e name'
@@ -317,6 +349,12 @@ object FormPreferences: TFormPreferences
           Font.Style = []
           ParentFont = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object InternetGameInfoLink: TEditEx
@@ -378,7 +416,7 @@ object FormPreferences: TFormPreferences
           OnClick = InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefaultClick
         end
       end
-      object UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBox
+      object UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx
         Left = 16
         Top = 211
         Width = 233
@@ -397,11 +435,11 @@ object FormPreferences: TFormPreferences
       Top = 0
       HelpContext = 1
       Caption = 'Games List Appearance'
-      object LabelDisableNaturalSorting: TLabel
+      object LabelDisableNaturalSorting: TShadowLabel
         Left = 658
         Top = 317
-        Width = 198
-        Height = 18
+        Width = 201
+        Height = 19
         Caption = 'Use ASCII sorting (1, 10, 11, 2, 20, 3)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -410,13 +448,19 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelGameMultilineCaptions: TLabel
+      object LabelGameMultilineCaptions: TShadowLabel
         Left = 658
         Top = 277
-        Width = 215
-        Height = 18
+        Width = 218
+        Height = 19
         Caption = 'Show full caption (32x32 / 48x48 icons)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -425,13 +469,19 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelDisableDeleteSelectedGames: TLabel
+      object LabelDisableDeleteSelectedGames: TShadowLabel
         Left = 658
         Top = 438
-        Width = 209
-        Height = 18
+        Width = 212
+        Height = 19
         Caption = 'Safeguard ROMs from naughty kiddies'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -440,6 +490,12 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object MAMu_Icon: TImage
@@ -449,11 +505,11 @@ object FormPreferences: TFormPreferences
         Height = 32
         Transparent = True
       end
-      object LabelMAMu_IconsFolder: TLabel
+      object LabelMAMu_IconsFolder: TShadowLabel
         Left = 50
         Top = 566
-        Width = 243
-        Height = 15
+        Width = 246
+        Height = 16
         Caption = 'MAMu_ Icons Folder (MAME and arcade only)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -462,13 +518,19 @@ object FormPreferences: TFormPreferences
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelAddLeadingZeroVersionInfoMAME: TLabel
+      object LabelAddLeadingZeroVersionInfoMAME: TShadowLabel
         Left = 658
         Top = 357
-        Width = 254
-        Height = 18
+        Width = 257
+        Height = 19
         Caption = 'Show a zero in front of the text instead of .???'
         Font.Charset = ANSI_CHARSET
         Font.Color = clGray
@@ -477,6 +539,12 @@ object FormPreferences: TFormPreferences
         Font.Style = [fsItalic]
         ParentFont = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object ButtonCustomizeGameFonts: TBitBtn
@@ -494,7 +562,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 0
         OnClick = ButtonCustomizeGameFontsClick
       end
-      object ColumnsSettingsGroupBox: TAdvGroupBox
+      object ColumnsSettingsGroupBox: TAdvGroupBoxEx
         Left = 642
         Top = 85
         Width = 293
@@ -504,7 +572,7 @@ object FormPreferences: TFormPreferences
         Caption = 'Details/Grouped View Columns Settings'
         Ctl3D = True
         TabOrder = 1
-        object DisableCloneIndent: TAdvOfficeCheckBox
+        object DisableCloneIndent: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 187
@@ -517,7 +585,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object DisableDriverStatusIcons: TAdvOfficeCheckBox
+        object DisableDriverStatusIcons: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
           Width = 145
@@ -529,7 +597,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBox
+        object DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 80
           Width = 201
@@ -541,7 +609,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object HideDriverStatusTexts: TAdvOfficeCheckBox
+        object HideDriverStatusTexts: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 60
           Width = 146
@@ -553,7 +621,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object ShortDriverColumnTitles: TAdvOfficeCheckBox
+        object ShortDriverColumnTitles: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 100
           Width = 195
@@ -564,7 +632,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object LastPlayedHideSeconds: TAdvOfficeCheckBox
+        object LastPlayedHideSeconds: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 120
           Width = 167
@@ -575,7 +643,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object TotalPlayTimeHideSeconds: TAdvOfficeCheckBox
+        object TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 140
           Width = 156
@@ -587,7 +655,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object GamesBackgroundGroupBox: TAdvGroupBox
+      object GamesBackgroundGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 919
@@ -625,7 +693,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 1
           OnClick = ButtonDefaultBkSortedColorClick
         end
-        object GamesBackgroundImageEnable: TAdvOfficeCheckBox
+        object GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx
           Left = 282
           Top = 12
           Width = 192
@@ -647,7 +715,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 3
         end
-        object GamesTileBackground: TAdvOfficeCheckBox
+        object GamesTileBackground: TAdvOfficeCheckBoxEx
           Left = 770
           Top = 12
           Width = 40
@@ -695,7 +763,7 @@ object FormPreferences: TFormPreferences
           OnClick = GamesBackgroundImageButtonUpdateClick
         end
       end
-      object DisableNaturalSorting: TAdvOfficeCheckBox
+      object DisableNaturalSorting: TAdvOfficeCheckBoxEx
         Left = 642
         Top = 300
         Width = 237
@@ -708,7 +776,7 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object GameMultilineCaptions: TAdvOfficeCheckBox
+      object GameMultilineCaptions: TAdvOfficeCheckBoxEx
         Left = 642
         Top = 260
         Width = 242
@@ -720,7 +788,7 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object GamesListStatusBarBox: TAdvGroupBox
+      object GamesListStatusBarBox: TAdvGroupBoxEx
         Left = 16
         Top = 230
         Width = 293
@@ -729,31 +797,52 @@ object FormPreferences: TFormPreferences
         Caption = 'Games List Status Bar Colors (Light Mode)'
         Ctl3D = True
         TabOrder = 5
-        object LabelGamesListStatusBarBottomColor: TLabel
+        object LabelGamesListStatusBarBottomColor: TShadowLabel
           Left = 8
           Top = 73
-          Width = 40
-          Height = 15
+          Width = 43
+          Height = 16
           Caption = 'Bottom'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelGamesListStatusBarTopColor: TLabel
+        object LabelGamesListStatusBarTopColor: TShadowLabel
           Left = 8
           Top = 48
-          Width = 21
-          Height = 15
+          Width = 24
+          Height = 16
           Caption = 'Top'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelGamesListStatusBarFontColor: TLabel
+        object LabelGamesListStatusBarFontColor: TShadowLabel
           Left = 8
           Top = 152
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object GamesListStatusBarGradientBar: TAdvOfficeCheckBox
+        object GamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 89
@@ -865,7 +954,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 7
           OnSelect = GamesListStatusBarShadowFontColorSelect
         end
-        object GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBox
+        object GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 176
           Width = 87
@@ -878,7 +967,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object GamesListStatusBarShowInnerFrame: TAdvOfficeCheckBox
+        object GamesListStatusBarShowInnerFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 97
           Width = 82
@@ -893,7 +982,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object GamesListStatusBarShowOuterFrame: TAdvOfficeCheckBox
+        object GamesListStatusBarShowOuterFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 123
           Width = 85
@@ -909,7 +998,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object DisableDeleteSelectedGames: TAdvOfficeCheckBox
+      object DisableDeleteSelectedGames: TAdvOfficeCheckBoxEx
         Left = 642
         Top = 421
         Width = 237
@@ -922,7 +1011,7 @@ object FormPreferences: TFormPreferences
         ReturnIsTab = False
         Themed = True
       end
-      object GroupBoxGamesListSplitters: TAdvGroupBox
+      object GroupBoxGamesListSplitters: TAdvGroupBoxEx
         Left = 16
         Top = 85
         Width = 293
@@ -946,20 +1035,34 @@ object FormPreferences: TFormPreferences
           Frames = []
           Transparent = True
         end
-        object LabelGamesListSplitterSingleColor: TLabel
+        object LabelGamesListSplitterSingleColor: TShadowLabel
           Left = 8
           Top = 82
-          Width = 29
-          Height = 15
+          Width = 32
+          Height = 16
           Caption = 'Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelGamesListSplitterSingleColorHot: TLabel
+        object LabelGamesListSplitterSingleColorHot: TShadowLabel
           Left = 8
           Top = 107
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Hot Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object GamesListSplitterStyleSelector: TComboBox
@@ -1006,7 +1109,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 1
           OnClick = ButtonGamesListSplitterStyleDefaultClick
         end
-        object GamesListSplitterShowGripIcon: TAdvOfficeCheckBox
+        object GamesListSplitterShowGripIcon: TAdvOfficeCheckBoxEx
           Left = 191
           Top = 52
           Width = 97
@@ -1083,7 +1186,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 9
         OnClick = ButtonMAMu_IconsFolderSelectClick
       end
-      object GroupBoxGamesListSelectionBar: TAdvGroupBox
+      object GroupBoxGamesListSelectionBar: TAdvGroupBoxEx
         Left = 329
         Top = 85
         Width = 293
@@ -1093,36 +1196,64 @@ object FormPreferences: TFormPreferences
         Caption = 'Selection Bar'
         Ctl3D = True
         TabOrder = 10
-        object Label2: TLabel
+        object Label2: TShadowLabel
           Left = 8
           Top = 48
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label10: TLabel
+        object Label10: TShadowLabel
           Left = 8
           Top = 126
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label14: TLabel
+        object Label14: TShadowLabel
           Left = 8
           Top = 172
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label15: TLabel
+        object Label15: TShadowLabel
           Left = 8
           Top = 249
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object ShadowLabel4: TShadowLabel
@@ -1139,20 +1270,34 @@ object FormPreferences: TFormPreferences
           ColorInnerFrame = clBlack
           Frames = []
         end
-        object Label17: TLabel
+        object Label17: TShadowLabel
           Left = 8
           Top = 295
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label18: TLabel
+        object Label18: TShadowLabel
           Left = 8
           Top = 373
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object ShadowLabel5: TShadowLabel
@@ -1169,52 +1314,94 @@ object FormPreferences: TFormPreferences
           ColorInnerFrame = clBlack
           Frames = []
         end
-        object Label23: TLabel
+        object Label23: TShadowLabel
           Left = 8
           Top = 73
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label24: TLabel
+        object Label24: TShadowLabel
           Left = 8
           Top = 197
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label26: TLabel
+        object Label26: TShadowLabel
           Left = 8
           Top = 320
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label11: TLabel
+        object Label11: TShadowLabel
           Left = 8
           Top = 99
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label16: TLabel
+        object Label16: TShadowLabel
           Left = 8
           Top = 222
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label19: TLabel
+        object Label19: TShadowLabel
           Left = 8
           Top = 346
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object GamesSelectionTopColor: TColorBox
@@ -1349,7 +1536,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 9
         end
-        object GameSelectionAlphaBlend: TAdvOfficeCheckBox
+        object GameSelectionAlphaBlend: TAdvOfficeCheckBoxEx
           Left = 112
           Top = 20
           Width = 103
@@ -1379,7 +1566,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 11
         end
-        object GameSelectionGradientBar: TAdvOfficeCheckBox
+        object GameSelectionGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 89
@@ -1423,7 +1610,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 14
         end
       end
-      object AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBox
+      object AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBoxEx
         Left = 642
         Top = 340
         Width = 290
@@ -1440,16 +1627,22 @@ object FormPreferences: TFormPreferences
       Top = 0
       HelpContext = 2
       Caption = 'Images'
-      object LabelImageBorderColor: TLabel
+      object LabelImageBorderColor: TShadowLabel
         Left = 16
         Top = 156
-        Width = 144
-        Height = 15
+        Width = 147
+        Height = 16
         Caption = 'Image 7 Pixels Border Color'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object GroupBoxImageSplitters: TAdvGroupBox
+      object GroupBoxImageSplitters: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 293
@@ -1458,20 +1651,34 @@ object FormPreferences: TFormPreferences
         Caption = 'Splitters'
         Ctl3D = True
         TabOrder = 0
-        object LabelImageSplitterSingleColor: TLabel
+        object LabelImageSplitterSingleColor: TShadowLabel
           Left = 8
           Top = 82
-          Width = 29
-          Height = 15
+          Width = 32
+          Height = 16
           Caption = 'Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelImageSplitterSingleColorHot: TLabel
+        object LabelImageSplitterSingleColorHot: TShadowLabel
           Left = 8
           Top = 107
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Hot Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object LabelImageSplitterSingleColorDefault: TShadowLabel
@@ -1489,7 +1696,7 @@ object FormPreferences: TFormPreferences
           Frames = []
           Transparent = True
         end
-        object ImageSplitterShowGripIcon: TAdvOfficeCheckBox
+        object ImageSplitterShowGripIcon: TAdvOfficeCheckBoxEx
           Left = 183
           Top = 50
           Width = 103
@@ -1609,7 +1816,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 2
         OnClick = ButtonImageBorderColorDefaultClick
       end
-      object HintBoxSettings: TAdvGroupBox
+      object HintBoxSettings: TAdvGroupBoxEx
         Left = 642
         Top = 12
         Width = 293
@@ -1618,27 +1825,48 @@ object FormPreferences: TFormPreferences
         Caption = 'Hint Box'
         Ctl3D = True
         TabOrder = 3
-        object LabelHintBox_Color: TLabel
+        object LabelHintBox_Color: TShadowLabel
           Left = 8
           Top = 48
-          Width = 63
-          Height = 15
+          Width = 66
+          Height = 16
           Caption = 'Bkgrd Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelHintBox_Opacity: TLabel
+        object LabelHintBox_Opacity: TShadowLabel
           Left = 8
           Top = 97
-          Width = 70
-          Height = 15
+          Width = 73
+          Height = 16
           Caption = 'Opacity [200]'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
-        object LabelHintBox_TextColor: TLabel
+        object LabelHintBox_TextColor: TShadowLabel
           Left = 8
           Top = 174
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object HintBox_Color: TColorBox
@@ -1671,7 +1899,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 1
         end
-        object HintBox_FrameEnabled: TAdvOfficeCheckBox
+        object HintBox_FrameEnabled: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 72
           Width = 57
@@ -1757,7 +1985,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 8
           OnClick = ButtonHintTextDefaultColorsClick
         end
-        object HintBox_TextShadowEnabled: TAdvOfficeCheckBox
+        object HintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 199
           Width = 65
@@ -1770,7 +1998,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object HintBox_IconEnabled: TAdvOfficeCheckBox
+        object HintBox_IconEnabled: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 147
           Width = 171
@@ -1784,7 +2012,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object ImagesSpecialSettingsGroupBox: TAdvGroupBox
+      object ImagesSpecialSettingsGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 504
         Width = 293
@@ -1793,11 +2021,11 @@ object FormPreferences: TFormPreferences
         Caption = 'Special Settings'
         Ctl3D = True
         TabOrder = 4
-        object LabelFixRetroArchImageFileNames: TLabel
+        object LabelFixRetroArchImageFileNames: TShadowLabel
           Left = 24
           Top = 77
-          Width = 238
-          Height = 18
+          Width = 241
+          Height = 19
           Caption = 'Replace & * '#39' < > ? | chars by _ (underscore)'
           Font.Charset = ANSI_CHARSET
           Font.Color = clGray
@@ -1806,13 +2034,19 @@ object FormPreferences: TFormPreferences
           Font.Style = [fsItalic]
           ParentFont = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelImageDisableThreadedLoading: TLabel
+        object LabelImageDisableThreadedLoading: TShadowLabel
           Left = 24
           Top = 37
-          Width = 254
-          Height = 18
+          Width = 257
+          Height = 19
           Caption = 'Fix delay and "invalid pointer operation" error'
           Font.Charset = ANSI_CHARSET
           Font.Color = clGray
@@ -1821,9 +2055,15 @@ object FormPreferences: TFormPreferences
           Font.Style = [fsItalic]
           ParentFont = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object FixRetroArchImageFileNames: TAdvOfficeCheckBox
+        object FixRetroArchImageFileNames: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 60
           Width = 254
@@ -1834,7 +2074,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object ImageDisableThreadedLoading: TAdvOfficeCheckBox
+        object ImageDisableThreadedLoading: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 244
@@ -1852,13 +2092,19 @@ object FormPreferences: TFormPreferences
       Top = 0
       HelpContext = 3
       Caption = 'Game Documents'
-      object LabelAppearanceGameDocuments: TLabel
+      object LabelAppearanceGameDocuments: TShadowLabel
         Left = 16
         Top = 230
-        Width = 96
-        Height = 15
+        Width = 99
+        Height = 16
         Caption = 'Background Color'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object ShadowLabel1: TShadowLabel
@@ -2106,7 +2352,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 1
         OnClick = ButtonGameDocumentsFontClick
       end
-      object GroupBoxGameDocsSplitter: TAdvGroupBox
+      object GroupBoxGameDocsSplitter: TAdvGroupBoxEx
         Left = 642
         Top = 12
         Width = 293
@@ -2130,20 +2376,34 @@ object FormPreferences: TFormPreferences
           Frames = []
           Transparent = True
         end
-        object LabelGameDocsSplitterSingleColor: TLabel
+        object LabelGameDocsSplitterSingleColor: TShadowLabel
           Left = 8
           Top = 82
-          Width = 29
-          Height = 15
+          Width = 32
+          Height = 16
           Caption = 'Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelGameDocsSplitterSingleColorHot: TLabel
+        object LabelGameDocsSplitterSingleColorHot: TShadowLabel
           Left = 8
           Top = 107
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Hot Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object GameDocsSplitterStyleSelector: TComboBox
@@ -2190,7 +2450,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 1
           OnClick = ButtonGameDocsSplitterStyleDefaultClick
         end
-        object GameDocsSplitterShowGripIcon: TAdvOfficeCheckBox
+        object GameDocsSplitterShowGripIcon: TAdvOfficeCheckBoxEx
           Left = 183
           Top = 52
           Width = 97
@@ -2246,7 +2506,7 @@ object FormPreferences: TFormPreferences
           OnClick = ButtonGameDocsSplitterSingleColorDefaultClick
         end
       end
-      object GameDocsDisplayOrderBox: TAdvGroupBox
+      object GameDocsDisplayOrderBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 331
@@ -2394,7 +2654,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 2
         OnClick = ButtonGameDocumentsDefaultClick
       end
-      object GameDocsDisplayModeBox: TAdvGroupBox
+      object GameDocsDisplayModeBox: TAdvGroupBoxEx
         Left = 16
         Top = 284
         Width = 331
@@ -2444,7 +2704,7 @@ object FormPreferences: TFormPreferences
           ColorInnerFrame = clBlack
           Frames = []
         end
-        object GameDocsDisplayModeTabs: TAdvOfficeRadioButton
+        object GameDocsDisplayModeTabs: TAdvOfficeRadioButtonEx
           Tag = 1
           Left = 8
           Top = 56
@@ -2457,7 +2717,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton
+        object GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButtonEx
           Left = 8
           Top = 20
           Width = 213
@@ -2492,7 +2752,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 7
         OnClick = ButtonGameDocsBorderColorDefaultClick
       end
-      object GameDocsShowBorder: TAdvOfficeCheckBox
+      object GameDocsShowBorder: TAdvOfficeCheckBoxEx
         Left = 642
         Top = 180
         Width = 193
@@ -2557,7 +2817,7 @@ object FormPreferences: TFormPreferences
         ColorInnerFrame = clBlack
         Frames = []
       end
-      object NightModeSearchGamesPanelColorsBox: TAdvGroupBox
+      object NightModeSearchGamesPanelColorsBox: TAdvGroupBoxEx
         Left = 642
         Top = 12
         Width = 293
@@ -2567,60 +2827,109 @@ object FormPreferences: TFormPreferences
         Caption = 'Search Games Panel Colors'
         Ctl3D = True
         TabOrder = 1
-        object LabelNightModeSearchGamesPanelFilterFontColor: TLabel
+        object LabelNightModeSearchGamesPanelFilterFontColor: TShadowLabel
           Left = 8
           Top = 48
-          Width = 53
-          Height = 15
+          Width = 56
+          Height = 16
           Caption = 'Filter Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelFilterShadowColor: TLabel
+        object LabelNightModeSearchGamesPanelFilterShadowColor: TShadowLabel
           Left = 8
           Top = 74
-          Width = 71
-          Height = 15
+          Width = 74
+          Height = 16
           Caption = 'Filter Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelFieldFontColor: TLabel
+        object LabelNightModeSearchGamesPanelFieldFontColor: TShadowLabel
           Left = 8
           Top = 100
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Field Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelFieldShadowColor: TLabel
+        object LabelNightModeSearchGamesPanelFieldShadowColor: TShadowLabel
           Left = 8
           Top = 126
-          Width = 70
-          Height = 15
+          Width = 73
+          Height = 16
           Caption = 'Field Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label3: TLabel
+        object Label3: TShadowLabel
           Left = 8
           Top = 305
-          Width = 50
-          Height = 15
+          Width = 53
+          Height = 16
           Caption = 'Title Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label4: TLabel
+        object Label4: TShadowLabel
           Left = 8
           Top = 331
-          Width = 68
-          Height = 15
+          Width = 71
+          Height = 16
           Caption = 'Title Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label13: TLabel
+        object Label13: TShadowLabel
           Left = 8
           Top = 402
-          Width = 63
-          Height = 15
+          Width = 66
+          Height = 16
           Caption = 'Exit Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = True
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
           Visible = False
         end
@@ -2639,36 +2948,64 @@ object FormPreferences: TFormPreferences
           Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelEditBoxFontColor: TLabel
+        object LabelNightModeSearchGamesPanelEditBoxFontColor: TShadowLabel
           Left = 8
           Top = 152
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TLabel
+        object LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TShadowLabel
           Left = 8
           Top = 178
-          Width = 70
-          Height = 15
+          Width = 73
+          Height = 16
           Caption = 'Text Bk Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TLabel
+        object LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TShadowLabel
           Left = 8
           Top = 233
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TLabel
+        object LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TShadowLabel
           Left = 8
           Top = 257
-          Width = 76
-          Height = 15
+          Width = 79
+          Height = 16
           Caption = 'Focused Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object NightModeSearchGamesPanelColorsDefaultButton: TBitBtn
@@ -2839,7 +3176,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 10
           OnSelect = NightModeSearchGamesPanelEditBoxCustomFrameColorSelect
         end
-        object NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBox
+        object NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBoxEx
           Left = 90
           Top = 205
           Width = 172
@@ -2871,7 +3208,7 @@ object FormPreferences: TFormPreferences
           OnSelect = NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect
         end
       end
-      object NightModeToolBarBackgroundColorsBox: TAdvGroupBox
+      object NightModeToolBarBackgroundColorsBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 293
@@ -2951,7 +3288,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 2
           OnClick = NightModeToolBarBkColorsDefaultButtonClick
         end
-        object NightModeToolBarGradientBar: TAdvOfficeCheckBox
+        object NightModeToolBarGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 87
@@ -2993,7 +3330,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 5
           OnSelect = NightModeToolBarOuterFrameColorSelect
         end
-        object NightModeToolBarShowInnerFrame: TAdvOfficeCheckBox
+        object NightModeToolBarShowInnerFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 97
           Width = 82
@@ -3008,7 +3345,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object NightModeToolBarShowOuterFrame: TAdvOfficeCheckBox
+        object NightModeToolBarShowOuterFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 123
           Width = 85
@@ -3024,7 +3361,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeGamesListStatusBarColorsBox: TAdvGroupBox
+      object NightModeGamesListStatusBarColorsBox: TAdvGroupBoxEx
         Left = 16
         Top = 177
         Width = 293
@@ -3034,31 +3371,52 @@ object FormPreferences: TFormPreferences
         Caption = 'Games List Status Bar Colors'
         Ctl3D = True
         TabOrder = 2
-        object LabelNightModeGamesListStatusBarBottomColor: TLabel
+        object LabelNightModeGamesListStatusBarBottomColor: TShadowLabel
           Left = 8
           Top = 73
-          Width = 40
-          Height = 15
+          Width = 43
+          Height = 16
           Caption = 'Bottom'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeGamesListStatusBarTopColor: TLabel
+        object LabelNightModeGamesListStatusBarTopColor: TShadowLabel
           Left = 8
           Top = 48
-          Width = 21
-          Height = 15
+          Width = 24
+          Height = 16
           Caption = 'Top'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeGamesListStatusBarFontColor: TLabel
+        object LabelNightModeGamesListStatusBarFontColor: TShadowLabel
           Left = 8
           Top = 152
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object NightModeGamesListStatusBarGradientBar: TAdvOfficeCheckBox
+        object NightModeGamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 87
@@ -3163,7 +3521,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 7
           OnSelect = NightModeGamesListStatusBarShadowFontColorSelect
         end
-        object NightModeGamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBox
+        object NightModeGamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 176
           Width = 87
@@ -3198,7 +3556,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 2
           OnClick = NightModeGamesListStatusBarButtonDefaultClick
         end
-        object NightModeGamesListStatusBarShowOuterFrame: TAdvOfficeCheckBox
+        object NightModeGamesListStatusBarShowOuterFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 123
           Width = 85
@@ -3211,7 +3569,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object NightModeGamesListStatusBarShowInnerFrame: TAdvOfficeCheckBox
+        object NightModeGamesListStatusBarShowInnerFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 97
           Width = 82
@@ -3225,7 +3583,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeGamesListFrameColorsBox: TAdvGroupBox
+      object NightModeGamesListFrameColorsBox: TAdvGroupBoxEx
         Left = 16
         Top = 392
         Width = 293
@@ -3274,7 +3632,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 2
           OnClick = NightModeGamesListFrameColorsDefaultButtonClick
         end
-        object NightModeGamesListUseWindowsThemedBorder: TAdvOfficeCheckBox
+        object NightModeGamesListUseWindowsThemedBorder: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 179
@@ -3289,7 +3647,7 @@ object FormPreferences: TFormPreferences
           ReturnIsTab = False
           Themed = True
         end
-        object NightModeGamesListShowInnerFrame: TAdvOfficeCheckBox
+        object NightModeGamesListShowInnerFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 46
           Width = 82
@@ -3304,7 +3662,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object NightModeGamesListShowOuterFrame: TAdvOfficeCheckBox
+        object NightModeGamesListShowOuterFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 72
           Width = 85
@@ -3320,7 +3678,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeImagesPanelFrameColorsBox: TAdvGroupBox
+      object NightModeImagesPanelFrameColorsBox: TAdvGroupBoxEx
         Left = 16
         Top = 503
         Width = 293
@@ -3369,7 +3727,7 @@ object FormPreferences: TFormPreferences
           TabOrder = 2
           OnClick = NightModeImagesPanelFrameColorsDefaultButtonClick
         end
-        object NightModeImagesPanelShowInnerFrame: TAdvOfficeCheckBox
+        object NightModeImagesPanelShowInnerFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 46
           Width = 82
@@ -3384,7 +3742,7 @@ object FormPreferences: TFormPreferences
           State = cbChecked
           Themed = True
         end
-        object NightModeImagesPanelShowOuterFrame: TAdvOfficeCheckBox
+        object NightModeImagesPanelShowOuterFrame: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 72
           Width = 85
@@ -3400,7 +3758,7 @@ object FormPreferences: TFormPreferences
           Themed = True
         end
       end
-      object NightModeGamesSelectionBarColorsBox: TAdvGroupBox
+      object NightModeGamesSelectionBarColorsBox: TAdvGroupBoxEx
         Left = 329
         Top = 12
         Width = 293
@@ -3410,52 +3768,94 @@ object FormPreferences: TFormPreferences
         Caption = 'Selection Bar'
         Ctl3D = True
         TabOrder = 6
-        object Label27: TLabel
+        object Label27: TShadowLabel
           Left = 8
           Top = 48
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label28: TLabel
+        object Label28: TShadowLabel
           Left = 8
           Top = 126
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label29: TLabel
+        object Label29: TShadowLabel
           Left = 8
           Top = 99
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label30: TLabel
+        object Label30: TShadowLabel
           Left = 8
           Top = 172
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label31: TLabel
+        object Label31: TShadowLabel
           Left = 8
           Top = 249
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label32: TLabel
+        object Label32: TShadowLabel
           Left = 8
           Top = 222
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object ShadowLabel3: TShadowLabel
@@ -3472,28 +3872,49 @@ object FormPreferences: TFormPreferences
           ColorInnerFrame = clBlack
           Frames = []
         end
-        object Label33: TLabel
+        object Label33: TShadowLabel
           Left = 8
           Top = 295
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Caption = 'Top Bkgrd'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label34: TLabel
+        object Label34: TShadowLabel
           Left = 8
           Top = 373
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label35: TLabel
+        object Label35: TShadowLabel
           Left = 8
           Top = 346
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Frame Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object ShadowLabel7: TShadowLabel
@@ -3510,28 +3931,49 @@ object FormPreferences: TFormPreferences
           ColorInnerFrame = clBlack
           Frames = []
         end
-        object Label39: TLabel
+        object Label39: TShadowLabel
           Left = 8
           Top = 73
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label40: TLabel
+        object Label40: TShadowLabel
           Left = 8
           Top = 197
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label42: TLabel
+        object Label42: TShadowLabel
           Left = 8
           Top = 320
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Caption = 'Bottom Bk'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object NightModeGamesSelectionTopColor: TColorBox
@@ -3670,7 +4112,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 9
         end
-        object NightModeGameSelectionAlphaBlend: TAdvOfficeCheckBox
+        object NightModeGameSelectionAlphaBlend: TAdvOfficeCheckBoxEx
           Left = 81
           Top = 20
           Width = 101
@@ -3698,7 +4140,7 @@ object FormPreferences: TFormPreferences
           ParentCtl3D = False
           TabOrder = 11
         end
-        object NightModeGameSelectionGradientBar: TAdvOfficeCheckBox
+        object NightModeGameSelectionGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 68
@@ -3752,7 +4194,7 @@ object FormPreferences: TFormPreferences
           OnClick = GameSelectionButtonCopyClick
         end
       end
-      object NightModePanelColorsBox: TAdvGroupBox
+      object NightModePanelColorsBox: TAdvGroupBoxEx
         Left = 329
         Top = 425
         Width = 606
@@ -3762,87 +4204,159 @@ object FormPreferences: TFormPreferences
         Caption = 'Panels Colors (Mostly Frames and Message Boxes)'
         Ctl3D = True
         TabOrder = 5
-        object LabelNightModeSearchGamesPanelTopColor: TLabel
+        object LabelNightModeSearchGamesPanelTopColor: TShadowLabel
           Left = 8
           Top = 48
-          Width = 21
-          Height = 15
+          Width = 24
+          Height = 16
           Caption = 'Top'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelBottomColor: TLabel
+        object LabelNightModeSearchGamesPanelBottomColor: TShadowLabel
           Left = 8
           Top = 73
-          Width = 40
-          Height = 15
+          Width = 43
+          Height = 16
           Caption = 'Bottom'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelInnerFrameColor: TLabel
+        object LabelNightModeSearchGamesPanelInnerFrameColor: TShadowLabel
           Left = 8
           Top = 99
-          Width = 63
-          Height = 15
+          Width = 66
+          Height = 16
           Caption = 'Inner Frame'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModeSearchGamesPanelOuterFrameColor: TLabel
+        object LabelNightModeSearchGamesPanelOuterFrameColor: TShadowLabel
           Left = 8
           Top = 125
-          Width = 66
-          Height = 15
+          Width = 69
+          Height = 16
           Caption = 'Outer Frame'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsTitleFontColor: TLabel
+        object LabelNightModePanelColorsTitleFontColor: TShadowLabel
           Left = 321
           Top = 100
-          Width = 50
-          Height = 15
+          Width = 53
+          Height = 16
           Caption = 'Title Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsTitleShadowFontColor: TLabel
+        object LabelNightModePanelColorsTitleShadowFontColor: TShadowLabel
           Left = 321
           Top = 126
-          Width = 68
-          Height = 15
+          Width = 71
+          Height = 16
           Caption = 'Title Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsMessageFontColor: TLabel
+        object LabelNightModePanelColorsMessageFontColor: TShadowLabel
           Left = 321
           Top = 48
-          Width = 49
-          Height = 15
+          Width = 52
+          Height = 16
           Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsMessageShadowFontColor: TLabel
+        object LabelNightModePanelColorsMessageShadowFontColor: TShadowLabel
           Left = 321
           Top = 74
-          Width = 67
-          Height = 15
+          Width = 70
+          Height = 16
           Caption = 'Text Shadow'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = True
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsTitle2FontColor: TLabel
+        object LabelNightModePanelColorsTitle2FontColor: TShadowLabel
           Left = 8
           Top = 152
-          Width = 59
-          Height = 15
+          Width = 62
+          Height = 16
           Caption = 'Title 2 Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNightModePanelColorsTitle2ShadowFontColor: TLabel
+        object LabelNightModePanelColorsTitle2ShadowFontColor: TShadowLabel
           Left = 321
           Top = 152
-          Width = 77
-          Height = 15
+          Width = 80
+          Height = 16
           Caption = 'Title 2 Shadow'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBox
+        object NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
           Width = 86
@@ -4031,7 +4545,7 @@ object FormPreferences: TFormPreferences
         Height = 23
         Style = csDropDownList
         Color = clWhite
-        ItemHeight = 15
+        ItemHeight = 0
         TabOrder = 7
         OnSelect = ToolBarOverlayIconsFolderSelect
       end
@@ -4066,7 +4580,7 @@ object FormPreferences: TFormPreferences
         Frames = []
         Transparent = True
       end
-      object NightModeButtonColorsBox: TAdvGroupBox
+      object NightModeButtonColorsBox: TAdvGroupBoxEx
         Left = 16
         Top = 13
         Width = 355
@@ -4076,7 +4590,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 0
         object LabelNightModeButtonColorFontColor: TShadowLabel
           Left = 8
-          Top = 43
+          Top = 48
           Width = 59
           Height = 16
           Caption = 'Font Color'
@@ -4539,9 +5053,6 @@ object FormPreferences: TFormPreferences
           Down = True
           Caption = 'Selected'
           UseCustomDraw = True
-          GradientColorTop_Down = 10905138
-          GradientColorBottom_Down = 9196326
-          FrameColor_Down = clBlack
         end
         object NightModeButtonColorsSampleButton1: TBitBtnEx
           Left = 8
@@ -4599,6 +5110,247 @@ object FormPreferences: TFormPreferences
         Caption = 'Next >'
         TabOrder = 2
         OnClick = NightModeButtonColorsViewNextBackgroundClick
+      end
+      object NightModeImagesHintBox: TAdvGroupBoxEx
+        Left = 642
+        Top = 12
+        Width = 293
+        Height = 228
+        RoundEdges = True
+        Caption = 'Images Hint Box'
+        Ctl3D = True
+        TabOrder = 3
+        object LabelNightModeHintBox_Color: TShadowLabel
+          Left = 8
+          Top = 48
+          Width = 66
+          Height = 16
+          Caption = 'Bkgrd Color'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object NightModeLabelHintBox_Opacity: TShadowLabel
+          Left = 8
+          Top = 97
+          Width = 73
+          Height = 16
+          Caption = 'Opacity [200]'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+        end
+        object NightModeLabelHintBox_TextColor: TShadowLabel
+          Left = 8
+          Top = 174
+          Width = 52
+          Height = 16
+          Caption = 'Text Font'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object NightModeHintBox_Color: TColorBox
+          Left = 80
+          Top = 44
+          Width = 205
+          Height = 22
+          Hint = 'Hint box background color'
+          DefaultColorColor = 16750899
+          NoneColorColor = clBtnFace
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 0
+        end
+        object NightModeHintBox_FrameColor: TColorBox
+          Left = 80
+          Top = 70
+          Width = 205
+          Height = 22
+          Hint = 'Hint box frame color'
+          DefaultColorColor = 16750899
+          NoneColorColor = clBtnFace
+          Selected = 16750899
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 1
+        end
+        object NightModeHintBox_FrameEnabled: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 72
+          Width = 57
+          Height = 20
+          Checked = True
+          TabOrder = 2
+          Alignment = taLeftJustify
+          Caption = 'Frame'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object NightModeHintBox_Opacity: TGaugeBar
+          Left = 8
+          Top = 114
+          Width = 225
+          Height = 20
+          Hint = 'Transparency level of the hint box'
+          Color = clWhite
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 5
+          Max = 255
+          ShowHandleGrip = True
+          Position = 200
+          OnChange = NightModeHintBox_OpacityChange
+        end
+        object NightModeButtonDefaultHintBox_Opacity: TBitBtn
+          Left = 236
+          Top = 113
+          Width = 47
+          Height = 22
+          Hint = 'Set opacity to default level'
+          Caption = 'Default'
+          TabOrder = 4
+          OnClick = NightModeButtonDefaultHintBox_OpacityClick
+        end
+        object NightModeHintBox_TextShadowColor: TColorBox
+          Left = 80
+          Top = 197
+          Width = 205
+          Height = 22
+          Hint = 'Shadow font color for the text'
+          NoneColorColor = clBtnFace
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 5
+        end
+        object NightModeHintBox_TextColor: TColorBox
+          Left = 80
+          Top = 171
+          Width = 205
+          Height = 22
+          Hint = 'Font color for the text'
+          DefaultColorColor = clWhite
+          NoneColorColor = clBtnFace
+          Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 6
+        end
+        object NightModeButtonHintBoxDefaultColors: TBitBtn
+          Left = 236
+          Top = 16
+          Width = 47
+          Height = 23
+          Hint = 'Set hint box colors to default'
+          Caption = 'Default'
+          TabOrder = 7
+          OnClick = NightModeButtonHintBoxDefaultColorsClick
+        end
+        object NightModeButtonHintTextDefaultColors: TBitBtn
+          Left = 236
+          Top = 143
+          Width = 47
+          Height = 23
+          Hint = 'Set text colors to default'
+          Caption = 'Default'
+          TabOrder = 8
+          OnClick = NightModeButtonHintTextDefaultColorsClick
+        end
+        object NightModeHintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 199
+          Width = 65
+          Height = 20
+          Checked = True
+          TabOrder = 9
+          Alignment = taLeftJustify
+          Caption = 'Shadow'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+        object NightModeHintBox_IconEnabled: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 147
+          Width = 171
+          Height = 20
+          Checked = True
+          TabOrder = 10
+          Alignment = taLeftJustify
+          Caption = 'Show Unzipped/Zipped Icon'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+        end
+      end
+      object NightModeMenuPopupMenuBox: TAdvGroupBoxEx
+        Left = 642
+        Top = 252
+        Width = 293
+        Height = 75
+        Caption = 'Menus / Popup Menus'
+        TabOrder = 4
+        object LabelNightModeMenuPopupMenuFrameColor: TShadowLabel
+          Left = 8
+          Top = 48
+          Width = 36
+          Height = 16
+          Caption = 'Frame'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+        end
+        object NightModeMenuPopupMenuFrameColor: TColorBox
+          Left = 80
+          Top = 44
+          Width = 205
+          Height = 22
+          DefaultColorColor = 5787720
+          Selected = 5787720
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+          Ctl3D = True
+          ItemHeight = 16
+          ParentCtl3D = False
+          TabOrder = 0
+        end
+        object NightModeMenuPopupMenuFrameColorDefaultColors: TBitBtn
+          Left = 236
+          Top = 16
+          Width = 47
+          Height = 23
+          Hint = 'Set menus colors to default'
+          Caption = 'Default'
+          TabOrder = 1
+          OnClick = NightModeMenuPopupMenuFrameColorDefaultColorsClick
+        end
       end
     end
   end

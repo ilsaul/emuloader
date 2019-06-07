@@ -38,9 +38,9 @@ type
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     ButtonResetToCurrent: TBitBtnEx;
-    CheckAll: TAdvOfficeCheckBox;
+    CheckAll: TAdvOfficeCheckBoxEx;
     LabelTotalSoftwareList: TShadowLabel;
-    FilterShowUncheckedOnly: TAdvOfficeCheckBox;
+    FilterShowUncheckedOnly: TAdvOfficeCheckBoxEx;
     IL_MediaType: TImageList;
     TopBar: TPanelEx;
     SystemIcon: TImage;
@@ -49,6 +49,7 @@ type
     LabelEmulatorVersion: TShadowLabel;
     FrameSoftwareList: TPanelEx;
     SoftwareLists: TEasyListview;
+    UseBiggerFontIconSize: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure CheckAllClick(Sender: TObject);
@@ -64,10 +65,11 @@ type
     procedure SoftwareListsItemCheckChanging(Sender: TCustomEasyListview;
       Item: TEasyItem; var Allow: Boolean);
     procedure ButtonYesClick(Sender: TObject);
+    procedure UseBiggerFontIconSizeClick(Sender: TObject);
   private
     { Private declarations }
-    procedure GetMAME_SoftListFiles;
     procedure ResizeForm;
+    procedure GetMAME_SoftListFiles;
     function  GetSoftListFileTitle(const FileXML: String; out MediaTypeIndex: Integer): WideString;
     procedure UpdateCheckedStateCheckBox;
   public
@@ -100,12 +102,31 @@ begin
      Result:= -1;
 end;
 
+procedure TFormArcadeSoftwareListCustomize.ResizeForm;
+begin
+  if Screen.Width >= 1280 then
+     Exit;
+
+  UseBiggerFontIconSize.Visible:= False;
+
+  FormArcadeSoftwareListCustomize.Width:= 1000;
+  LabelTotalSoftwareList.Left:= LabelTotalSoftwareList.Left-200;
+  ButtonYes.Left:= ButtonYes.Left-200;
+  ButtonNo.Left:= ButtonNo.Left-200;
+
+  SoftwareLists.Header.Columns[0].Width:= 672;
+  SoftwareLists.Header.Columns[1].Width:= 165;
+  SoftwareLists.Header.Columns[2].Width:= 125;
+  FrameSoftwareList.Width:= FrameSoftwareList.Width-200;
+
+end;
+
 function TFormArcadeSoftwareListCustomize.GetSoftListFileTitle(const FileXML: String; out MediaTypeIndex: Integer): WideString;
 var
   iXML: THashedStringList;
   Loop: Integer;
   FileLine, PartName: String;
-  FoundTitle, FoundPartName, GotMediaFromFileName: Boolean;
+  FoundTitle, FoundPartName: Boolean;
 begin
   Result:= FileXML;
   if not FileExists(FileXML) then
@@ -206,7 +227,6 @@ var
   Loop, iMediaTypeID: Integer;
   iTitle: WideString;
   iFolder: String;
-  iName: String;
 begin
   FormMain.ReadMAMEHashFolder(idMAME, FormMain.EmulatorFile[idMAME], iFolder);
   if iFolder = '' then
@@ -234,6 +254,8 @@ begin
     begin
       iFolder:= ExtractFileName(ChangeFileExt(iFiles[Loop], ''));
       iTitle:= GetSoftListFileTitle(iFiles[Loop], iMediaTypeID);
+      if SameText(iFolder, 'vgmplay') then
+         iMediaTypeID:= 6;
       if iMediaTypeID <> -1 then
          begin
            // do not add files if there are not game entries in the .xml file ("vreader.xml" is one of them!!)
@@ -275,51 +297,16 @@ begin
   FreeAndNil(iFiles);
 end;
 
-procedure TFormArcadeSoftwareListCustomize.ResizeForm;
-var
-  iDiffW, iDiffH: Integer;
-begin
-  Exit;
-  if Screen.Height = 480 then
-     Exit;
-
-  if Screen.Height < 1079 then
-     iDiffH:= (Screen.Height-45-FormArcadeSoftwareListCustomize.Height)-10
-  else
-     iDiffH:= 750-FormArcadeSoftwareListCustomize.Height; // 330 - increase by this number!!!
-
-  if Screen.Width <= 1024 then
-     iDiffW:= (Screen.Width-FormArcadeSoftwareListCustomize.Width)-15
-  else
-     iDiffW:= 1000-FormArcadeSoftwareListCustomize.Width; // 365 - increase by this number!!!
-
-  FormArcadeSoftwareListCustomize.Width:= FormArcadeSoftwareListCustomize.Width+iDiffW;
-  FormArcadeSoftwareListCustomize.Height:= FormArcadeSoftwareListCustomize.Height+iDiffH;
-  SoftwareLists.Width:= SoftwareLists.Width+iDiffW;
-  SoftwareLists.Height:= SoftwareLists.Height+iDiffH;
-
-  if Screen.Width < 1600 then
-     SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width+iDiffW
-  else
-     SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width+iDiffW;
-
-  LabelTotalSoftwareList.Left:= LabelTotalSoftwareList.Left+iDiffW;
-  ButtonYes.Left:= ButtonYes.Left+iDiffW;
-  ButtonNo.Left:= ButtonNo.Left+iDiffW;
-  FilterShowUncheckedOnly.Left:= FilterShowUncheckedOnly.Left+(iDiffW div 2);
-end;
-
 procedure TFormArcadeSoftwareListCustomize.FormShow(Sender: TObject);
 begin
   //SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+  ResizeForm;
   FormMain.ELV_ResetNormalColors(SoftwareLists);
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
-  FormMain.LoadIconIntoImage('emu_ume', SystemIcon);//, False);
-  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);//, False);
+  FormMain.LoadIconIntoImage('emu_ume', SystemIcon);
+  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);
 
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
-
-  ResizeForm;
 
   if IsNightMode then
      begin
@@ -332,6 +319,7 @@ begin
 
        SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(UseBiggerFontIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
      end;
@@ -532,6 +520,40 @@ begin
   if iListXML.Count > 0 then
      iListXML.SaveToFile(FormMain.GetSoftListExcludeFile(idMAME));
   FreeAndNil(iListXML);
+end;
+
+procedure TFormArcadeSoftwareListCustomize.UseBiggerFontIconSizeClick(
+  Sender: TObject);
+begin
+  if Screen.Width < 1280 then
+     Exit; // this feature is for high resolutions only
+  SoftwareLists.BeginUpdate;
+  if UseBiggerFontIconSize.Checked then
+     begin
+       IL_MediaType.Width:= 24;
+       IL_MediaType.Height:= 24;
+       SoftwareLists.Font.Size:= 14;
+       SoftwareLists.CellSizes.Report.Height:= 30;
+       //SoftwareLists.Header.Columns[0].Width:= 687;
+       //SoftwareLists.Header.Columns[1].Width:= 235;
+       //SoftwareLists.Header.Columns[2].Width:= 170;
+     end
+  else
+     begin
+       IL_MediaType.Width:= 16;
+       IL_MediaType.Height:= 16;
+       SoftwareLists.Font.Size:= 9;
+       SoftwareLists.CellSizes.Report.Height:= 22;
+       //SoftwareLists.Header.Columns[0].Width:= 672;
+       //SoftwareLists.Header.Columns[1].Width:= 165;
+       //SoftwareLists.Header.Columns[2].Width:= 125;
+     end;
+  if FormMain.CheckTotal(SoftwareLists) then
+     FormMain.LoadMediaTypeIcons(IL_MediaType, True)
+  else
+     SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width+GetSystemMetrics(SM_CXVSCROLL);
+  SoftwareLists.EndUpdate(False);
+  FormMain.MenuCustomizeMAMESoftwareList.Tag:= Ord(UseBiggerFontIconSize.Checked);
 end;
 
 end.

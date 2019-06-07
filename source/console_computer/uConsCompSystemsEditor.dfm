@@ -371,7 +371,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         ModalResult = 2
         TabOrder = 1
       end
-      object SystemsHideScrollBarArea: TAdvOfficeCheckBox
+      object SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx
         Left = 248
         Top = 11
         Width = 146
@@ -719,7 +719,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       ShowAccelChar = False
       Transparent = True
     end
-    object SystemViewMode_Tiles: TAdvOfficeRadioButton
+    object SystemViewMode_Tiles: TAdvOfficeRadioButtonEx
       Left = 16
       Top = 48
       Width = 80
@@ -731,7 +731,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       ReturnIsTab = False
       Themed = True
     end
-    object SystemViewMode_LargeIcons: TAdvOfficeRadioButton
+    object SystemViewMode_LargeIcons: TAdvOfficeRadioButtonEx
       Tag = 1
       Left = 16
       Top = 88

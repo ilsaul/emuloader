@@ -9,7 +9,7 @@ uses
 
 type
   TFormArcadeFiltersExtra = class(TForm)
-    FilterGamesMainCPU: TAdvOfficeCheckBox;
+    FilterGamesMainCPU: TAdvOfficeCheckBoxEx;
     PanelBottom: TPanelEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
@@ -21,49 +21,52 @@ type
     LabelGamesROMs: TShadowLabel;
     GamesROMs: TComboBox;
     LabelDeviceROMs: TShadowLabel;
-    HideDeviceSets: TAdvOfficeCheckBox;
+    HideDeviceSets: TAdvOfficeCheckBoxEx;
     DeviceROMs: TComboBox;
     LabelBios: TShadowLabel;
     Bios: TComboBox;
-    HideBiosSets: TAdvOfficeCheckBox;
-    HideGamesWithCHDFiles: TAdvOfficeCheckBox;
+    HideBiosSets: TAdvOfficeCheckBoxEx;
+    HideGamesWithCHDFiles: TAdvOfficeCheckBoxEx;
     ButtonDefaultOptions: TBitBtnEx;
     LabelSTVMultiSlot: TShadowLabel;
-    NeoGeoMVS: TAdvOfficeCheckBox;
-    STVMultiSlot: TAdvOfficeCheckBox;
+    NeoGeoMVS: TAdvOfficeCheckBoxEx;
+    STVMultiSlot: TAdvOfficeCheckBoxEx;
     LabelNeoGeoMVS: TShadowLabel;
     ControlType_New: TComboBox;
     ScreenOrientation: TComboBox;
     LabelScreenOrientation: TShadowLabel;
-    ShowMergedSetsOnly: TAdvOfficeCheckBox;
-    HideNoDumpROMsGames: TAdvOfficeCheckBox;
+    ShowMergedSetsOnly: TAdvOfficeCheckBoxEx;
+    HideNoDumpROMsGames: TAdvOfficeCheckBoxEx;
     SaveState: TComboBox;
     LabelSaveState: TShadowLabel;
-    CategoryFiltersGroupBox: TAdvGroupBox;
+    CategoryFiltersGroupBox: TAdvGroupBoxEx;
     LabelCategoryFiltersGroupBoxHint: TShadowLabel;
     ButtonCategoriesToHideInfo: TBitBtnEx;
-    CategoryCasino: TAdvOfficeCheckBox;
-    CategoryFruitMachines: TAdvOfficeCheckBox;
-    CategoryRhythm: TAdvOfficeCheckBox;
-    CategoryMature: TAdvOfficeCheckBox;
-    CategoryMahjong: TAdvOfficeCheckBox;
-    CategoryTabletop: TAdvOfficeCheckBox;
-    CategoryPinMAME: TAdvOfficeCheckBox;
-    CategoryQuiz: TAdvOfficeCheckBox;
-    CategoryUtilities: TAdvOfficeCheckBox;
-    CategoryCalculator: TAdvOfficeCheckBox;
-    CategoryEducational: TAdvOfficeCheckBox;
-    CategoryElectronic: TAdvOfficeCheckBox;
-    CategoryPrinters: TAdvOfficeCheckBox;
-    CategoryPhones: TAdvOfficeCheckBox;
-    CategoryMAMEConsoleMachines: TAdvOfficeCheckBox;
-    CategoryMAMEComputerMachines: TAdvOfficeCheckBox;
-    CategoryMAMEHandheldMachines: TAdvOfficeCheckBox;
-    ShowOnlySetsCRC32Collision: TAdvOfficeCheckBox;
-    CategoryMusic: TAdvOfficeCheckBox;
-    CategoryBoardGame: TAdvOfficeCheckBox;
-    CategorySlotMachines: TAdvOfficeCheckBox;
-    HideMAMESoftlist_vgmplay: TAdvOfficeCheckBox;
+    CategoryCasino: TAdvOfficeCheckBoxEx;
+    CategoryFruitMachines: TAdvOfficeCheckBoxEx;
+    CategoryRhythm: TAdvOfficeCheckBoxEx;
+    CategoryMature: TAdvOfficeCheckBoxEx;
+    CategoryMahjong: TAdvOfficeCheckBoxEx;
+    CategoryTabletop: TAdvOfficeCheckBoxEx;
+    CategoryPinMAME: TAdvOfficeCheckBoxEx;
+    CategoryQuiz: TAdvOfficeCheckBoxEx;
+    CategoryUtilities: TAdvOfficeCheckBoxEx;
+    CategoryCalculator: TAdvOfficeCheckBoxEx;
+    CategoryEducational: TAdvOfficeCheckBoxEx;
+    CategoryElectronic: TAdvOfficeCheckBoxEx;
+    CategoryPrinters: TAdvOfficeCheckBoxEx;
+    CategoryPhones: TAdvOfficeCheckBoxEx;
+    CategoryMAMEConsoleMachines: TAdvOfficeCheckBoxEx;
+    CategoryMAMEComputerMachines: TAdvOfficeCheckBoxEx;
+    CategoryMAMEHandheldMachines: TAdvOfficeCheckBoxEx;
+    ShowOnlySetsCRC32Collision: TAdvOfficeCheckBoxEx;
+    CategoryMusic: TAdvOfficeCheckBoxEx;
+    CategoryBoardGame: TAdvOfficeCheckBoxEx;
+    CategorySlotMachines: TAdvOfficeCheckBoxEx;
+    HideMAMESoftlist_vgmplay: TAdvOfficeCheckBoxEx;
+    SpecialList: TComboBox;
+    LabelSpecialList: TShadowLabel;
+    LabelHideMAMESoftlist_vgmplay: TShadowLabel;
     procedure FormActivate(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonDefaultOptionsClick(Sender: TObject);
@@ -116,7 +119,7 @@ var
        ApplyFilter_Misc:= True;
   end;
 
-  function ResetFilterCheckBox(CheckBoxHolder: TAdvOfficeCheckBox): Boolean;
+  function ResetFilterCheckBox(CheckBoxHolder: TAdvOfficeCheckBoxEx): Boolean;
   begin
     Result:= True;
     if CheckBoxHolder.Checked <> (Boolean(CheckBoxHolder.Tag)) then
@@ -247,6 +250,9 @@ begin
         FilterChanged(HideMAMESoftlist_vgmplay.Tag, Ord(HideMAMESoftlist_vgmplay.Checked));
         HideMAMESoftlist_vgmplay.Tag:= Ord(HideMAMESoftlist_vgmplay.Checked);
 
+        FilterChanged(LabelSpecialList.Tag, SpecialList.ItemIndex);
+        LabelSpecialList.Tag:= SpecialList.ItemIndex;
+
         //FilterChanged(FilterGamesMainCPU.Tag, Ord(FilterGamesMainCPU.Checked));
         FilterGamesMainCPU.Tag:= Ord(FilterGamesMainCPU.Checked);
       end;
@@ -311,6 +317,8 @@ begin
         ResetFilterCheckBox(ShowOnlySetsCRC32Collision);
 
         ResetFilterCheckBox(HideMAMESoftlist_vgmplay);
+
+        FormMAin.SetExtraFilter(LabelSpecialList, SpecialList);
 
         ResetFilterCheckBox(FilterGamesMainCPU);
       end;
@@ -377,6 +385,8 @@ begin
   SaveState.ItemIndex:= 0;
 
   HideMAMESoftlist_vgmplay.Checked:= False;
+
+  SpecialList.ItemIndex:= 0;
   
   FilterGamesMainCPU.Checked:= False;
 end;

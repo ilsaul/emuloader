@@ -14,7 +14,7 @@ type
     LabelTitle: TShadowLabel;
     MessageIcon: TImage;
     PanelButtons: TPanelEx;
-    AddSubFolders: TAdvOfficeCheckBox;
+    AddSubFolders: TAdvOfficeCheckBoxEx;
     ButtonOk: TBitBtn;
     ButtonCancel: TBitBtn;
     LabelSelectedPath: TShadowLabel;

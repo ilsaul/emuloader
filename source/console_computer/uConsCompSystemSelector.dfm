@@ -118,7 +118,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       Frames = []
       Transparent = True
     end
-    object CreateNewList: TAdvOfficeCheckBox
+    object CreateNewList: TAdvOfficeCheckBoxEx
       Left = 4
       Top = 2
       Width = 149

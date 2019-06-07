@@ -319,9 +319,9 @@ object FormMain: TFormMain
       object ButtonExtraFilters: TToolButton
         Left = 552
         Top = 0
-        Hint = 'Miscellaneous MAME and arcade filters for the games list'
+        Hint = 'Miscellaneous filters for the games list'
         AutoSize = True
-        Caption = 'Miscellaneous Filters-MAME and Arcade'
+        Caption = 'Miscellaneous Filters'
         ImageIndex = 10
         OnClick = ButtonExtraFiltersClick
       end
@@ -450,7 +450,7 @@ object FormMain: TFormMain
         GroupFont.Style = []
         HintType = ehtToolTip
         Header.Columns.Items = {
-          0600000017000000110000005445617379436F6C756D6E53746F726564FFFECE
+          0600000018000000110000005445617379436F6C756D6E53746F726564FFFECE
           0006000000800800010100010000000001000190010000FFFFFF1F0001000000
           01000000050000005400690074006C0065000000000000000000000000001100
           00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
@@ -517,7 +517,10 @@ object FormMain: TFormMain
           000000000000000000000000110000005445617379436F6C756D6E53746F7265
           64FFFECE0006000000800800010100011600000000000182000000FFFFFF1F00
           01000000010000000D00000053006F0066007400770061007200650020004E00
-          61006D006500000000000000000000000000}
+          61006D006500000000000000000000000000110000005445617379436F6C756D
+          6E53746F726564FFFECE00060000008008000101000117000000000001410000
+          00FFFFFF1F000100000001000000070000005300700065006300690061006C00
+          000000000000000000000000}
         Header.Draggable = False
         Header.Font.Charset = ANSI_CHARSET
         Header.Font.Color = clBlack
@@ -667,16 +670,6 @@ object FormMain: TFormMain
           Height = 16
           Transparent = True
         end
-      end
-      object BitBtn1: TBitBtn
-        Left = 352
-        Top = 320
-        Width = 75
-        Height = 25
-        Caption = 'BitBtn1'
-        TabOrder = 2
-        Visible = False
-        OnClick = BitBtn1Click
       end
     end
     object PanelMachinesList: TPanelEx
@@ -2335,7 +2328,7 @@ object FormMain: TFormMain
         end
         object N45: TMenuItem
           Caption = '-'
-          Hint = 'MAME 0.162 (and newer) / UME'
+          Hint = 'MAME 0.162 (and newer)'
         end
         object PopupSetArcadeIniCustomOptions: TMenuItem
           Caption = 'Set [arcade.ini] Custom Options'
@@ -2558,6 +2551,21 @@ object FormMain: TFormMain
       ImageIndex = 3
       ShortCut = 8260
       OnClick = PopupDeleteFromFavoritesClick
+    end
+    object N51: TMenuItem
+      Caption = '-'
+    end
+    object PopupAddToSpecialList: TMenuItem
+      Caption = 'Add To Special List'
+      Hint = 'Add To Special List [%u]'
+      ImageIndex = 29
+      OnClick = PopupAddToSpecialListClick
+    end
+    object PopupRemoveFromSpecialList: TMenuItem
+      Caption = 'Remove From Special List'
+      Hint = 'Remove From Special List [%u]'
+      ImageIndex = 29
+      OnClick = PopupRemoveFromSpecialListClick
     end
     object Separator_FullScreen: TMenuItem
       Caption = '-'
@@ -2969,6 +2977,18 @@ object FormMain: TFormMain
         Hint = '48x48'
         RadioItem = True
         OnClick = PopupTilesViewCellSizeStandardClick
+      end
+    end
+    object ilesViewIconSize1: TMenuItem
+      Caption = 'Tiles View Icon Size'
+      Visible = False
+      object Standard1: TMenuItem
+        Caption = 'Standard'
+        Hint = '48x48'
+      end
+      object Large1: TMenuItem
+        Caption = 'Large'
+        Hint = '68x68'
       end
     end
     object ButtonViewModeThumbnailSettings: TMenuItem
@@ -3456,6 +3476,12 @@ object FormMain: TFormMain
     object MenuCustomizeNightModeColors: TMenuItem
       Caption = 'Customize Night Mode Colors'
       OnClick = MenuCustomizeNightModeColorsClick
+    end
+    object MenuUseAlternateFrontendIcons: TMenuItem
+      AutoCheck = True
+      Caption = 'Use Alternate Frontend Icons'
+      Hint = 'Load icons from "\alternate\" sub-folder'
+      OnClick = MenuUseAlternateFrontendIconsClick
     end
     object N23: TMenuItem
       Caption = '-'
@@ -4092,12 +4118,14 @@ object FormMain: TFormMain
       end
       object N53: TMenuItem
         Caption = '-'
+        Visible = False
       end
       object MenuUpdateFavoritesProfiles: TMenuItem
         Caption = 'Update Favorites Profiles'
         Hint = 
           'Convert EL v8.2.9 profiles to EL v8.3 and merge with EmuCon prof' +
           'iles'
+        Visible = False
         OnClick = MenuUpdateFavoritesProfilesClick
       end
       object N62: TMenuItem
@@ -4823,5 +4851,17 @@ object FormMain: TFormMain
       ImageIndex = 10
       OnClick = FilterSearchBarHelpClick
     end
+  end
+  object IL_MediaType_Large: TImageList
+    Height = 32
+    Width = 32
+    Left = 104
+    Top = 199
+  end
+  object IL_MediaType_ExtraLarge: TImageList
+    Height = 48
+    Width = 48
+    Left = 72
+    Top = 199
   end
 end

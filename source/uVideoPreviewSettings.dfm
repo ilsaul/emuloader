@@ -250,7 +250,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ShowHint = False
       TabOrder = 4
     end
-    object VideoPreviewAutoPlay: TAdvOfficeCheckBox
+    object VideoPreviewAutoPlay: TAdvOfficeCheckBoxEx
       Left = 658
       Top = 54
       Width = 69
@@ -262,7 +262,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
     end
-    object VideoPreviewParentGameVideo: TAdvOfficeCheckBox
+    object VideoPreviewParentGameVideo: TAdvOfficeCheckBoxEx
       Left = 658
       Top = 28
       Width = 121
@@ -290,7 +290,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 7
       OnClick = ButtonHelpVideoPreviewMediaPlayerParametersClick
     end
-    object VideoPreviewPlayDummyVideo: TAdvOfficeCheckBox
+    object VideoPreviewPlayDummyVideo: TAdvOfficeCheckBoxEx
       Left = 658
       Top = 80
       Width = 260
@@ -345,7 +345,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 11
       OnClick = ButtonSnaplDirAutoSearchHelpClick
     end
-    object VideoPreviewEnabled: TAdvOfficeCheckBox
+    object VideoPreviewEnabled: TAdvOfficeCheckBoxEx
       Left = 658
       Top = 2
       Width = 70

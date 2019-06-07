@@ -93,7 +93,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       TabOrder = 2
       OnClick = ButtonResetToCurrentClick
     end
-    object FilterShowUncheckedOnly: TAdvOfficeCheckBox
+    object FilterShowUncheckedOnly: TAdvOfficeCheckBoxEx
       Left = 60
       Top = 11
       Width = 141
@@ -107,7 +107,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       ReturnIsTab = False
       Themed = True
     end
-    object FilterShowParentSetsOnly: TAdvOfficeCheckBox
+    object FilterShowParentSetsOnly: TAdvOfficeCheckBoxEx
       Left = 220
       Top = 11
       Width = 141
@@ -121,7 +121,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       Themed = True
     end
   end
-  object CheckAll: TAdvOfficeCheckBox
+  object CheckAll: TAdvOfficeCheckBoxEx
     Left = 12
     Top = 88
     Width = 100
@@ -189,14 +189,14 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
     object EmulatorIcon: TImage
       Tag = -50
       Left = 79
-      Top = 49
+      Top = 48
       Width = 24
       Height = 24
       Transparent = True
     end
     object LabelEmulatorVersion: TShadowLabel
       Left = 106
-      Top = 47
+      Top = 46
       Width = 943
       Height = 27
       AutoSize = False

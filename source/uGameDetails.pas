@@ -1455,7 +1455,7 @@ var
         True:
           begin
             case romTagIndex of
-              12, 13, 14: Item.ImageIndex:= 19; // HDD (also general CHD)
+              12, 13, 14: Item.ImageIndex:= 22;//19; // HDD (also general CHD)
               15, 16, 17: Item.ImageIndex:= 20; // CD
               18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card
               21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS)
@@ -1463,12 +1463,15 @@ var
           end;
         False:
           begin
+            if FormMain.MemGameInfo.eSoftwareName = 'vgmplay' then
+               Item.ImageIndex:= 24
+            else
             case romTagIndex of
               00, 01, 02: Item.ImageIndex:= 15; // ROM
               03, 04, 05: Item.ImageIndex:= 16; // Cartridge
               06, 07, 08: Item.ImageIndex:= 17; // Floppy Disk
               09, 10, 11: Item.ImageIndex:= 18; // Cassette Tape
-              12, 13, 14: Item.ImageIndex:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+              12, 13, 14: Item.ImageIndex:= 22;//19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
               15, 16, 17: Item.ImageIndex:= 20; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
               18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
               21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS) (but it's not a CHD file)...
@@ -1562,7 +1565,7 @@ var
       01: Item.ImageIndex:= 16; // Cartridge
       03: Item.ImageIndex:= 17; // Floppy Disk
       04: Item.ImageIndex:= 18; // Cassette Tape
-      05: Item.ImageIndex:= 19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+      05: Item.ImageIndex:= 22;//19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
       02: Item.ImageIndex:= 20; // Disc Image
       //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
     end;

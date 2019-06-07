@@ -1,6 +1,6 @@
 object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
   Left = 1205
-  Top = 429
+  Top = 534
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Games with Missing ROMs/CHDs'

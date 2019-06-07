@@ -72,7 +72,7 @@ object FormMessageBox: TFormMessageBox
     end
     object LabelGameName: TShadowLabel
       Left = 106
-      Top = 41
+      Top = 46
       Width = 570
       Height = 27
       AutoSize = False
@@ -96,7 +96,7 @@ object FormMessageBox: TFormMessageBox
     end
     object IconMediaType: TImage
       Left = 78
-      Top = 44
+      Top = 48
       Width = 24
       Height = 24
       IncrementalDisplay = True
@@ -189,7 +189,7 @@ object FormMessageBox: TFormMessageBox
       TabOrder = 3
       Visible = False
     end
-    object NightMode: TAdvOfficeCheckBox
+    object NightMode: TAdvOfficeCheckBoxEx
       Left = 12
       Top = 11
       Width = 87

@@ -54,16 +54,16 @@ type
     PageButtonMemoryCard: TSpeedButtonEx;
     PageButtonRecordMovie: TSpeedButtonEx;
     PagesButtonBottomLine: TBevelEx;
-    Enabled_PlaybackRecordInput: TAdvOfficeCheckBox;
-    InputPlayback: TAdvOfficeRadioButton;
+    Enabled_PlaybackRecordInput: TAdvOfficeCheckBoxEx;
+    InputPlayback: TAdvOfficeRadioButtonEx;
     InputFileName: TEditEx;
-    InputRecord: TAdvOfficeRadioButton;
-    InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBox;
-    InputRecordTimecodeFile: TAdvOfficeCheckBox;
+    InputRecord: TAdvOfficeRadioButtonEx;
+    InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBoxEx;
+    InputRecordTimecodeFile: TAdvOfficeCheckBoxEx;
     ButtonInputResetFileName: TBitBtnEx;
-    Enabled_LoadSaveState: TAdvOfficeCheckBox;
-    Enabled_InsertMemoryCard: TAdvOfficeCheckBox;
-    Enabled_RecordMovie: TAdvOfficeCheckBox;
+    Enabled_LoadSaveState: TAdvOfficeCheckBoxEx;
+    Enabled_InsertMemoryCard: TAdvOfficeCheckBoxEx;
+    Enabled_RecordMovie: TAdvOfficeCheckBoxEx;
     LabelInsertMemoryCard_Slot1: TShadowLabel;
     LabelInsertMemoryCard_Slot2: TShadowLabel;
     InsertMemoryCard_Slot1: TEditEx;
@@ -77,9 +77,9 @@ type
     ButtonRecordMovieResetFileNameTitle: TBitBtnEx;
     ButtonRecordMovieResetFileName: TBitBtnEx;
     RecordMovieFileName: TEditEx;
-    RecordMovieWAV: TAdvOfficeRadioButton;
-    RecordMovieMNG: TAdvOfficeRadioButton;
-    RecordMovieAVI: TAdvOfficeRadioButton;
+    RecordMovieWAV: TAdvOfficeRadioButtonEx;
+    RecordMovieMNG: TAdvOfficeRadioButtonEx;
+    RecordMovieAVI: TAdvOfficeRadioButtonEx;
     LabelInputFileName: TShadowLabel;
     LabelLoadSaveStateNotSupportedMsg: TShadowLabel;
     LabelMachineInUse: TShadowLabel;
@@ -93,7 +93,7 @@ type
     PopupMemoryCardAssignToSlot1: TMenuItem;
     PopupMemoryCardAssignToSlot2: TMenuItem;
     N1: TMenuItem;
-    AutoSaveState: TAdvOfficeCheckBox;
+    AutoSaveState: TAdvOfficeCheckBoxEx;
     PanelDisabledSaveStateNotSupportedMsg: TPanel;
     ButtonInputResetFileNameTitle: TBitBtnEx;
     LabelRecordMovieFileName: TShadowLabel;
@@ -260,7 +260,7 @@ type
     procedure ResizeForm;
     procedure SetBottomButtons(IsEnabled: Boolean);
     function  CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
-    procedure SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBox);
+    procedure SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBoxEx);
   public
     { Public declarations }
     sysID: Integer;
@@ -1794,27 +1794,27 @@ end;
 
 procedure TFormArcadeRunGameExtraMAME.InputPlaybackClick(Sender: TObject);
 begin
-  if TAdvOfficeRadioButton(Sender).Tag = InputListView.Tag then
+  if TAdvOfficeRadioButtonEx(Sender).Tag = InputListView.Tag then
      begin
-       TAdvOfficeRadioButton(Sender).Checked:= True;
+       TAdvOfficeRadioButtonEx(Sender).Checked:= True;
        Exit;
      end;
 
-  ButtonInputResetFileName.Enabled:= TAdvOfficeRadioButton(Sender).Tag = 1;
+  ButtonInputResetFileName.Enabled:= TAdvOfficeRadioButtonEx(Sender).Tag = 1;
   ButtonInputResetFileNameTitle.Enabled:= ButtonInputResetFileName.Enabled;
   if FoundInputExtra then
      begin
        // only for new MAME builds that support these settings...
-       InputExitEmulatorAfterInputPlayback.Visible:= TAdvOfficeRadioButton(Sender).Tag = 0;
+       InputExitEmulatorAfterInputPlayback.Visible:= TAdvOfficeRadioButtonEx(Sender).Tag = 0;
        InputRecordTimecodeFile.Visible:= ButtonInputResetFileName.Enabled;
      end;
 
-  InputListView.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  InputListView.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
 
   InputFileName.Enabled:= InputListView.Tag = 1;
   //LabelInputFileName.Enabled:= InputFileName.Enabled;
-  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
-  if TAdvOfficeRadioButton(Sender).Tag = 0 then
+  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  if TAdvOfficeRadioButtonEx(Sender).Tag = 0 then
      begin
        InputRecord.Font.Style:= [];
        LabelInputFileName.Caption:= 'Selected File (file extension optional)';
@@ -1937,25 +1937,15 @@ begin
 
   NotebookPages.Tag:= TSpeedButtonEx(Sender).Tag;
   NoteBookPages.PageIndex:= TSpeedButtonEx(Sender).Tag-1;
-
-  //TAdvOfficeRadioButton(Sender).Font.Color:= clMaroon;
-  //TAdvOfficeRadioButton(Sender).ShadowColor:= $00c0c0dc;
-  //TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold, fsUnderline];
-
-//  LabelEmulatorFile.Caption:= Format(LabelEmulatorFile.Hint, [PanelEmulators.Tag]);
-//  LabelEmuTitle.Caption:= Format(LabelEmuTitle.Hint, [PanelEmulators.Tag]);
-
-
-//  ShowEmulatorDetails(PanelEmulators.Tag);
 end;
 
-procedure TFormArcadeRunGameExtraMAME.SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBox);
+procedure TFormArcadeRunGameExtraMAME.SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBoxEx);
 begin
   if IsNightMode then
      begin
        case CheckBoxSource.Checked of
          True : SetCheckBoxColors(CheckBoxSource, clYellow, clrOrange);
-         False: SetCheckBoxColors(CheckBoxSource, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+         False: SetCheckBoxColors(CheckBoxSource, clCream, item_caption_active_shadow_color[1]);
        end;
      end
   else
@@ -1970,17 +1960,13 @@ end;
 procedure TFormArcadeRunGameExtraMAME.Enabled_PlaybackRecordInputClick(
   Sender: TObject);
 begin
-  if TAdvOfficeCheckBox(Sender).Checked then
+  if TAdvOfficeCheckBoxEx(Sender).Checked then
      begin
        if not FormMain.CheckTotal(InputListView) then
           GetFiles(20, True);
      end;
-  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
-  //case TAdvOfficeCheckBox(Sender).Checked of
-  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack;
-  //end;
-  PanelDisabledInput.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+  SetCheckBoxStateColor(TAdvOfficeCheckBoxEx(Sender));
+  PanelDisabledInput.Visible:= not TAdvOfficeCheckBoxEx(Sender).Checked;
 
   ReselectInputFile;
 end;
@@ -2114,18 +2100,14 @@ end;
 procedure TFormArcadeRunGameExtraMAME.Enabled_LoadSaveStateClick(
   Sender: TObject);
 begin
-  if TAdvOfficeCheckBox(Sender).Checked then
+  if TAdvOfficeCheckBoxEx(Sender).Checked then
      begin
        if not FormMain.CheckTotal(SaveStateListView) then
           GetFiles(22, True);
      end;
-  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
-  //case TAdvOfficeCheckBox(Sender).Checked of
-  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  //end;
+  SetCheckBoxStateColor(TAdvOfficeCheckBoxEx(Sender));
 
-  PanelDisabledSaveState.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+  PanelDisabledSaveState.Visible:= not TAdvOfficeCheckBoxEx(Sender).Checked;
   if sysID <> idSupermodel then
      PanelDisabledSaveStateNotSupportedMsg.Visible:= PanelDisabledSaveState.Visible
   else
@@ -2312,7 +2294,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.Enabled_InsertMemoryCardClick(
   Sender: TObject);
 begin
-  if TAdvOfficeCheckBox(Sender).Checked then
+  if TAdvOfficeCheckBoxEx(Sender).Checked then
      begin
        if not FormMain.CheckTotal(MemoryCardListView) then
           begin
@@ -2322,12 +2304,8 @@ begin
           end;
      end;
 
-  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
-  //case TAdvOfficeCheckBox(Sender).Checked of
-  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  //end;
-  PanelDisabledMemoryCard.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+  SetCheckBoxStateColor(TAdvOfficeCheckBoxEx(Sender));
+  PanelDisabledMemoryCard.Visible:= not TAdvOfficeCheckBoxEx(Sender).Checked;
 end;
 
 procedure TFormArcadeRunGameExtraMAME.MemoryCardListViewColumnClick(
@@ -2460,7 +2438,7 @@ end;
 
 procedure TFormArcadeRunGameExtraMAME.Enabled_RecordMovieClick(Sender: TObject);
 begin
-  if TAdvOfficeCheckBox(Sender).Checked then
+  if TAdvOfficeCheckBoxEx(Sender).Checked then
      begin
        if not FormMain.CheckTotal(InputListView) then
           begin
@@ -2470,12 +2448,8 @@ begin
           end;
      end;
 
-  SetCheckBoxStateColor(TAdvOfficeCheckBox(Sender));
-  //case TAdvOfficeCheckBox(Sender).Checked of
-  //  True : TAdvOfficeCheckBox(Sender).Font.Color:= clNavy;
-  //  False: TAdvOfficeCheckBox(Sender).Font.Color:= clBlack; //clrDarkGrey;
-  //end;
-  PanelDisabledRecordMovie.Visible:= not TAdvOfficeCheckBox(Sender).Checked;
+  SetCheckBoxStateColor(TAdvOfficeCheckBoxEx(Sender));
+  PanelDisabledRecordMovie.Visible:= not TAdvOfficeCheckBoxEx(Sender).Checked;
   RecordMovieFilter_FileType;
 end;
 
@@ -2620,15 +2594,15 @@ end;
 
 procedure TFormArcadeRunGameExtraMAME.RecordMovieAVIClick(Sender: TObject);
 begin
-  if TAdvOfficeRadioButton(Sender).Tag = RecordMovieListView.Tag then
+  if TAdvOfficeRadioButtonEx(Sender).Tag = RecordMovieListView.Tag then
      begin
-       TAdvOfficeRadioButton(Sender).Checked:= True;
+       TAdvOfficeRadioButtonEx(Sender).Checked:= True;
        Exit;
      end;
-  RecordMovieListView.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  RecordMovieListView.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
 
-  TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold];
-  case TAdvOfficeRadioButton(Sender).Tag of
+  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         RecordMovieMNG.Font.Style:= [];

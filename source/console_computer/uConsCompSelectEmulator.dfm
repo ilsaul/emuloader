@@ -140,7 +140,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       ModalResult = 2
       TabOrder = 1
     end
-    object UseSmallIcons: TAdvOfficeCheckBox
+    object UseSmallIcons: TAdvOfficeCheckBoxEx
       Left = 384
       Top = 17
       Width = 81

@@ -12,120 +12,120 @@ uses
 type
   TFormPreferences = class(TForm)
     PageOptions: TNotebook;
-    DisableMinimize: TAdvOfficeCheckBox;
+    DisableMinimize: TAdvOfficeCheckBoxEx;
     ButtonCustomizeGameFonts: TBitBtn;
-    GroupBoxImageSplitters: TAdvGroupBox;
-    LabelAppearanceGameDocuments: TLabel;
+    GroupBoxImageSplitters: TAdvGroupBoxEx;
+    LabelAppearanceGameDocuments: TShadowLabel;
     GameDocumentsBackgroundColor: TColorBox;
     ButtonGameDocumentsFont: TBitBtn;
     ButtonGameDocumentsDefault: TBitBtn;
-    ImageSplitterShowGripIcon: TAdvOfficeCheckBox;
+    ImageSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
     ShadowLabel1: TShadowLabel;
     PanelTabButtons: TPanelEx;
     ButtonPageGeneral: TSpeedButton;
     ButtonPageGamesList: TSpeedButton;
     ButtonPageImages: TSpeedButton;
     ButtonPageGameDocuments: TSpeedButton;
-    ColumnsSettingsGroupBox: TAdvGroupBox;
-    DisableCloneIndent: TAdvOfficeCheckBox;
-    DisableDriverStatusIcons: TAdvOfficeCheckBox;
-    DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBox;
-    HideDriverStatusTexts: TAdvOfficeCheckBox;
-    ShortDriverColumnTitles: TAdvOfficeCheckBox;
-    GamesBackgroundGroupBox: TAdvGroupBox;
+    ColumnsSettingsGroupBox: TAdvGroupBoxEx;
+    DisableCloneIndent: TAdvOfficeCheckBoxEx;
+    DisableDriverStatusIcons: TAdvOfficeCheckBoxEx;
+    DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBoxEx;
+    HideDriverStatusTexts: TAdvOfficeCheckBoxEx;
+    ShortDriverColumnTitles: TAdvOfficeCheckBoxEx;
+    GamesBackgroundGroupBox: TAdvGroupBoxEx;
     GamesBackgroundColor: TColorBox;
     ButtonDefaultBkSortedColor: TBitBtn;
-    GamesBackgroundImageEnable: TAdvOfficeCheckBox;
+    GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx;
     GamesBackgroundImage: TEditEx;
     GamesBackgroundImageButtonSelect: TBitBtn;
     GamesBackgroundImageButtonUpdate: TBitBtn;
-    GamesTileBackground: TAdvOfficeCheckBox;
-    LastPlayedHideSeconds: TAdvOfficeCheckBox;
-    TotalPlayTimeHideSeconds: TAdvOfficeCheckBox;
-    DisableNaturalSorting: TAdvOfficeCheckBox;
-    LabelDisableNaturalSorting: TLabel;
+    GamesTileBackground: TAdvOfficeCheckBoxEx;
+    LastPlayedHideSeconds: TAdvOfficeCheckBoxEx;
+    TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx;
+    DisableNaturalSorting: TAdvOfficeCheckBoxEx;
+    LabelDisableNaturalSorting: TShadowLabel;
     LabelGoToMAMEInfo: TShadowLabel;
     LabelGoToMARP: TShadowLabel;
     LabelGoToMAMEScore: TShadowLabel;
     LabelGoToMAMEHistory: TShadowLabel;
-    GameMultilineCaptions: TAdvOfficeCheckBox;
-    LabelGameMultilineCaptions: TLabel;
-    LabelImageSplitterSingleColor: TLabel;
+    GameMultilineCaptions: TAdvOfficeCheckBoxEx;
+    LabelGameMultilineCaptions: TShadowLabel;
+    LabelImageSplitterSingleColor: TShadowLabel;
     ImageSplitterSingleColor: TColorBox;
     ImageSplitterSingleColorHot: TColorBox;
-    LabelImageSplitterSingleColorHot: TLabel;
+    LabelImageSplitterSingleColorHot: TShadowLabel;
     ButtonImageSplitterStyleDefault: TBitBtn;
-    HideDOSBoxFrame: TAdvGroupBox;
-    HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBox;
-    HideDOSBoxRunGame: TAdvOfficeCheckBox;
+    HideDOSBoxFrame: TAdvGroupBoxEx;
+    HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBoxEx;
+    HideDOSBoxRunGame: TAdvOfficeCheckBoxEx;
     ShadowLabel2: TShadowLabel;
     LabelGoToMESSInfo: TShadowLabel;
-    LabelImageBorderColor: TLabel;
+    LabelImageBorderColor: TShadowLabel;
     ImageBorderColor: TColorBox;
     ButtonImageBorderColorDefault: TBitBtn;
     LabelGoToGameInit: TShadowLabel;
-    AllowOnlyOneInstance: TAdvOfficeCheckBox;
-    GamesListStatusBarBox: TAdvGroupBox;
-    LabelGamesListStatusBarBottomColor: TLabel;
-    LabelGamesListStatusBarTopColor: TLabel;
-    LabelGamesListStatusBarFontColor: TLabel;
-    GamesListStatusBarGradientBar: TAdvOfficeCheckBox;
+    AllowOnlyOneInstance: TAdvOfficeCheckBoxEx;
+    GamesListStatusBarBox: TAdvGroupBoxEx;
+    LabelGamesListStatusBarBottomColor: TShadowLabel;
+    LabelGamesListStatusBarTopColor: TShadowLabel;
+    LabelGamesListStatusBarFontColor: TShadowLabel;
+    GamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx;
     GamesListStatusBarBottomColor: TColorBox;
     GamesListStatusBarButtonDefault: TBitBtn;
     GamesListStatusBarTopColor: TColorBox;
     GamesListStatusBarFontColor: TColorBox;
     GamesListStatusBarInnerFrameColor: TColorBox;
-    DisableDeleteSelectedGames: TAdvOfficeCheckBox;
-    LabelDisableDeleteSelectedGames: TLabel;
-    IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBox;
-    RestoreInternetGameInfoStartup: TAdvOfficeCheckBox;
-    LabelIgnoreExitCode1InvalidFunction: TLabel;
-    HintBoxSettings: TAdvGroupBox;
-    LabelHintBox_Color: TLabel;
+    DisableDeleteSelectedGames: TAdvOfficeCheckBoxEx;
+    LabelDisableDeleteSelectedGames: TShadowLabel;
+    IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx;
+    RestoreInternetGameInfoStartup: TAdvOfficeCheckBoxEx;
+    LabelIgnoreExitCode1InvalidFunction: TShadowLabel;
+    HintBoxSettings: TAdvGroupBoxEx;
+    LabelHintBox_Color: TShadowLabel;
     HintBox_Color: TColorBox;
     HintBox_FrameColor: TColorBox;
-    HintBox_FrameEnabled: TAdvOfficeCheckBox;
-    LabelHintBox_Opacity: TLabel;
+    HintBox_FrameEnabled: TAdvOfficeCheckBoxEx;
+    LabelHintBox_Opacity: TShadowLabel;
     HintBox_Opacity: TGaugeBar;
     ButtonDefaultHintBox_Opacity: TBitBtn;
-    LabelHintBox_TextColor: TLabel;
+    LabelHintBox_TextColor: TShadowLabel;
     HintBox_TextShadowColor: TColorBox;
     HintBox_TextColor: TColorBox;
     ButtonHintBoxDefaultColors: TBitBtn;
     ButtonHintTextDefaultColors: TBitBtn;
-    HintBox_TextShadowEnabled: TAdvOfficeCheckBox;
-    HintBox_IconEnabled: TAdvOfficeCheckBox;
+    HintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx;
+    HintBox_IconEnabled: TAdvOfficeCheckBoxEx;
     ButtonPageNightMode: TSpeedButton;
-    NightModeToolBarBackgroundColorsBox: TAdvGroupBox;
+    NightModeToolBarBackgroundColorsBox: TAdvGroupBoxEx;
     NightModeToolBarBkTopColor: TColorBox;
     LabelNightModeToolBarBkTopColor: TShadowLabel;
     NightModeToolBarInnerFrameColor: TColorBox;
     NightModeToolBarBkColorsDefaultButton: TBitBtn;
-    GroupBoxGamesListSplitters: TAdvGroupBox;
+    GroupBoxGamesListSplitters: TAdvGroupBoxEx;
     LabelGamesListSplitterSingleColorDefault: TShadowLabel;
-    LabelGamesListSplitterSingleColor: TLabel;
-    LabelGamesListSplitterSingleColorHot: TLabel;
+    LabelGamesListSplitterSingleColor: TShadowLabel;
+    LabelGamesListSplitterSingleColorHot: TShadowLabel;
     GamesListSplitterStyleSelector: TComboBox;
     ButtonGamesListSplitterStyleDefault: TBitBtn;
-    GamesListSplitterShowGripIcon: TAdvOfficeCheckBox;
+    GamesListSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
     GamesListSplitterSingleColor: TColorBox;
     GamesListSplitterSingleColorHot: TColorBox;
     ButtonGamesListSplitterSingleColorDefault: TBitBtn;
-    GroupBoxGameDocsSplitter: TAdvGroupBox;
+    GroupBoxGameDocsSplitter: TAdvGroupBoxEx;
     LabelGameDocsSplitterSingleColorDefault: TShadowLabel;
-    LabelGameDocsSplitterSingleColor: TLabel;
-    LabelGameDocsSplitterSingleColorHot: TLabel;
+    LabelGameDocsSplitterSingleColor: TShadowLabel;
+    LabelGameDocsSplitterSingleColorHot: TShadowLabel;
     GameDocsSplitterStyleSelector: TComboBox;
     ButtonGameDocsSplitterStyleDefault: TBitBtn;
-    GameDocsSplitterShowGripIcon: TAdvOfficeCheckBox;
+    GameDocsSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
     GameDocsSplitterSingleColor: TColorBox;
     GameDocsSplitterSingleColorHot: TColorBox;
     ButtonGameDocsSplitterSingleColorDefault: TBitBtn;
-    GroupBoxInternetGameInfo: TAdvGroupBox;
-    LabelInternetGameInfoLink: TLabel;
-    LabelInternetMAMESoftwareListGameInfoLink: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
+    GroupBoxInternetGameInfo: TAdvGroupBoxEx;
+    LabelInternetGameInfoLink: TShadowLabel;
+    LabelInternetMAMESoftwareListGameInfoLink: TShadowLabel;
+    Label5: TShadowLabel;
+    Label6: TShadowLabel;
     InternetGameInfoLink: TEditEx;
     InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtn;
     InternetMAMESoftwareListGameInfoLink: TEditEx;
@@ -134,45 +134,45 @@ type
     ButtonImageSplitterSingleColorDefault: TBitBtn;
     ImageSplitterStyleSelector: TComboBox;
     MAMu_Icon: TImage;
-    LabelMAMu_IconsFolder: TLabel;
+    LabelMAMu_IconsFolder: TShadowLabel;
     MAMu_IconsFolder: TEditEx;
     ButtonMAMu_IconsFolderSelect: TBitBtn;
-    ImagesSpecialSettingsGroupBox: TAdvGroupBox;
-    LabelFixRetroArchImageFileNames: TLabel;
-    LabelImageDisableThreadedLoading: TLabel;
-    FixRetroArchImageFileNames: TAdvOfficeCheckBox;
-    ImageDisableThreadedLoading: TAdvOfficeCheckBox;
-    GameDocsDisplayOrderBox: TAdvGroupBox;
+    ImagesSpecialSettingsGroupBox: TAdvGroupBoxEx;
+    LabelFixRetroArchImageFileNames: TShadowLabel;
+    LabelImageDisableThreadedLoading: TShadowLabel;
+    FixRetroArchImageFileNames: TAdvOfficeCheckBoxEx;
+    ImageDisableThreadedLoading: TAdvOfficeCheckBoxEx;
+    GameDocsDisplayOrderBox: TAdvGroupBoxEx;
     GameDocs: TEasyListview;
     ButtonUp: TBitBtn;
     ButtonDown: TBitBtn;
     ButtonResetAutoGameInfoOrder: TBitBtn;
-    GameDocsDisplayModeBox: TAdvGroupBox;
+    GameDocsDisplayModeBox: TAdvGroupBoxEx;
     LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
     LabelGameDocsDisplayModeTabs: TShadowLabel;
-    GameDocsDisplayModeTabs: TAdvOfficeRadioButton;
-    GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButton;
-    NightModeToolBarGradientBar: TAdvOfficeCheckBox;
+    GameDocsDisplayModeTabs: TAdvOfficeRadioButtonEx;
+    GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButtonEx;
+    NightModeToolBarGradientBar: TAdvOfficeCheckBoxEx;
     NightModeToolBarBkBottomColor: TColorBox;
     LabelNightModeToolBarBkBottomColor: TShadowLabel;
     GamesListStatusBarOuterFrameColor: TColorBox;
-    NightModeSearchGamesPanelColorsBox: TAdvGroupBox;
-    LabelNightModeSearchGamesPanelFilterFontColor: TLabel;
-    LabelNightModeSearchGamesPanelFilterShadowColor: TLabel;
-    LabelNightModeSearchGamesPanelFieldFontColor: TLabel;
-    LabelNightModeSearchGamesPanelFieldShadowColor: TLabel;
+    NightModeSearchGamesPanelColorsBox: TAdvGroupBoxEx;
+    LabelNightModeSearchGamesPanelFilterFontColor: TShadowLabel;
+    LabelNightModeSearchGamesPanelFilterShadowColor: TShadowLabel;
+    LabelNightModeSearchGamesPanelFieldFontColor: TShadowLabel;
+    LabelNightModeSearchGamesPanelFieldShadowColor: TShadowLabel;
     NightModeSearchGamesPanelColorsDefaultButton: TBitBtn;
     NightModeSearchGamesPanelFilterFontColor: TColorBox;
     NightModeSearchGamesPanelFilterShadowColor: TColorBox;
     NightModeSearchGamesPanelFieldFontColor: TColorBox;
     NightModeSearchGamesPanelFieldShadowColor: TColorBox;
     GamesListStatusBarShadowFontColor: TColorBox;
-    GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBox;
-    NightModeGamesListStatusBarColorsBox: TAdvGroupBox;
-    LabelNightModeGamesListStatusBarBottomColor: TLabel;
-    LabelNightModeGamesListStatusBarTopColor: TLabel;
-    LabelNightModeGamesListStatusBarFontColor: TLabel;
-    NightModeGamesListStatusBarGradientBar: TAdvOfficeCheckBox;
+    GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBoxEx;
+    NightModeGamesListStatusBarColorsBox: TAdvGroupBoxEx;
+    LabelNightModeGamesListStatusBarBottomColor: TShadowLabel;
+    LabelNightModeGamesListStatusBarTopColor: TShadowLabel;
+    LabelNightModeGamesListStatusBarFontColor: TShadowLabel;
+    NightModeGamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx;
     NightModeGamesListStatusBarBottomColor: TColorBox;
     NightModeGamesListStatusBarButtonDefault: TBitBtn;
     NightModeGamesListStatusBarTopColor: TColorBox;
@@ -180,107 +180,107 @@ type
     NightModeGamesListStatusBarInnerFrameColor: TColorBox;
     NightModeGamesListStatusBarOuterFrameColor: TColorBox;
     NightModeGamesListStatusBarShadowFontColor: TColorBox;
-    NightModeGamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBox;
+    NightModeGamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBoxEx;
     NightModeToolBarOuterFrameColor: TColorBox;
-    NightModeGamesListFrameColorsBox: TAdvGroupBox;
+    NightModeGamesListFrameColorsBox: TAdvGroupBoxEx;
     NightModeGamesListOuterFrameColor: TColorBox;
     NightModeGamesListInnerFrameColor: TColorBox;
     NightModeGamesListFrameColorsDefaultButton: TBitBtn;
-    NightModeGamesListUseWindowsThemedBorder: TAdvOfficeCheckBox;
+    NightModeGamesListUseWindowsThemedBorder: TAdvOfficeCheckBoxEx;
     NightModeGamesListStatusBarCopyButton: TBitBtn;
-    Label3: TLabel;
+    Label3: TShadowLabel;
     NightModeSearchGamesPanelCaptionBarFontColor: TColorBox;
-    Label4: TLabel;
+    Label4: TShadowLabel;
     NightModeSearchGamesPanelCaptionBarShadowColor: TColorBox;
-    Label13: TLabel;
+    Label13: TShadowLabel;
     ColorBox6: TColorBox;
-    NightModeImagesPanelFrameColorsBox: TAdvGroupBox;
+    NightModeImagesPanelFrameColorsBox: TAdvGroupBoxEx;
     NightModeImagesPanelOuterFrameColor: TColorBox;
     NightModeImagesPanelInnerFrameColor: TColorBox;
     NightModeImagesPanelFrameColorsDefaultButton: TBitBtn;
     LabelNightModeSearchGamesFloatingPanel: TShadowLabel;
     GameDocsBorderColor: TColorBox;
     ButtonGameDocsBorderColorDefault: TBitBtn;
-    GamesListStatusBarShowInnerFrame: TAdvOfficeCheckBox;
-    GamesListStatusBarShowOuterFrame: TAdvOfficeCheckBox;
-    NightModeGamesListStatusBarShowOuterFrame: TAdvOfficeCheckBox;
-    NightModeGamesListStatusBarShowInnerFrame: TAdvOfficeCheckBox;
-    NightModeToolBarShowInnerFrame: TAdvOfficeCheckBox;
-    NightModeToolBarShowOuterFrame: TAdvOfficeCheckBox;
-    NightModeImagesPanelShowInnerFrame: TAdvOfficeCheckBox;
-    NightModeImagesPanelShowOuterFrame: TAdvOfficeCheckBox;
-    NightModeGamesListShowInnerFrame: TAdvOfficeCheckBox;
-    NightModeGamesListShowOuterFrame: TAdvOfficeCheckBox;
-    GameDocsShowBorder: TAdvOfficeCheckBox;
-    LabelNightModeSearchGamesPanelEditBoxFontColor: TLabel;
+    GamesListStatusBarShowInnerFrame: TAdvOfficeCheckBoxEx;
+    GamesListStatusBarShowOuterFrame: TAdvOfficeCheckBoxEx;
+    NightModeGamesListStatusBarShowOuterFrame: TAdvOfficeCheckBoxEx;
+    NightModeGamesListStatusBarShowInnerFrame: TAdvOfficeCheckBoxEx;
+    NightModeToolBarShowInnerFrame: TAdvOfficeCheckBoxEx;
+    NightModeToolBarShowOuterFrame: TAdvOfficeCheckBoxEx;
+    NightModeImagesPanelShowInnerFrame: TAdvOfficeCheckBoxEx;
+    NightModeImagesPanelShowOuterFrame: TAdvOfficeCheckBoxEx;
+    NightModeGamesListShowInnerFrame: TAdvOfficeCheckBoxEx;
+    NightModeGamesListShowOuterFrame: TAdvOfficeCheckBoxEx;
+    GameDocsShowBorder: TAdvOfficeCheckBoxEx;
+    LabelNightModeSearchGamesPanelEditBoxFontColor: TShadowLabel;
     NightModeSearchGamesPanelEditBoxFontColor: TColorBox;
-    LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TLabel;
+    LabelNightModeSearchGamesPanelEditBoxBackgroundColor: TShadowLabel;
     NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBox;
-    NightModePanelColorsBox: TAdvGroupBox;
-    NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBox;
-    LabelNightModeSearchGamesPanelTopColor: TLabel;
+    NightModePanelColorsBox: TAdvGroupBoxEx;
+    NightModeSearchGamesPanelGradientBar: TAdvOfficeCheckBoxEx;
+    LabelNightModeSearchGamesPanelTopColor: TShadowLabel;
     NightModeSearchGamesPanelTopColor: TColorBox;
-    LabelNightModeSearchGamesPanelBottomColor: TLabel;
+    LabelNightModeSearchGamesPanelBottomColor: TShadowLabel;
     NightModeSearchGamesPanelBottomColor: TColorBox;
-    LabelNightModeSearchGamesPanelInnerFrameColor: TLabel;
+    LabelNightModeSearchGamesPanelInnerFrameColor: TShadowLabel;
     NightModeSearchGamesPanelInnerFrameColor: TColorBox;
-    LabelNightModeSearchGamesPanelOuterFrameColor: TLabel;
+    LabelNightModeSearchGamesPanelOuterFrameColor: TShadowLabel;
     NightModeSearchGamesPanelOuterFrameColor: TColorBox;
     NightModePanelsBackgroundColorsDefaultButton: TBitBtn;
-    LabelNightModePanelColorsTitleFontColor: TLabel;
-    LabelNightModePanelColorsTitleShadowFontColor: TLabel;
+    LabelNightModePanelColorsTitleFontColor: TShadowLabel;
+    LabelNightModePanelColorsTitleShadowFontColor: TShadowLabel;
     NightModePanelColorsTitleShadowFontColor: TColorBox;
     NightModePanelColorsTitleFontColor: TColorBox;
-    LabelNightModePanelColorsMessageFontColor: TLabel;
-    LabelNightModePanelColorsMessageShadowFontColor: TLabel;
+    LabelNightModePanelColorsMessageFontColor: TShadowLabel;
+    LabelNightModePanelColorsMessageShadowFontColor: TShadowLabel;
     NightModePanelColorsMessageShadowFontColor: TColorBox;
     NightModePanelColorsMessageFontColor: TColorBox;
-    LabelNightModePanelColorsTitle2FontColor: TLabel;
-    LabelNightModePanelColorsTitle2ShadowFontColor: TLabel;
+    LabelNightModePanelColorsTitle2FontColor: TShadowLabel;
+    LabelNightModePanelColorsTitle2ShadowFontColor: TShadowLabel;
     NightModePanelColorsTitle2ShadowFontColor: TColorBox;
     NightModePanelColorsTitle2FontColor: TColorBox;
-    GroupBoxGamesListSelectionBar: TAdvGroupBox;
-    Label2: TLabel;
+    GroupBoxGamesListSelectionBar: TAdvGroupBoxEx;
+    Label2: TShadowLabel;
     GamesSelectionTopColor: TColorBox;
     GameSelectionButtonDefault: TBitBtn;
-    Label10: TLabel;
+    Label10: TShadowLabel;
     GamesSelectionFontColor: TColorBox;
     GamesSelectionFrameColor: TColorBox;
-    Label14: TLabel;
+    Label14: TShadowLabel;
     GamesSelectionMissROMsTopColor: TColorBox;
-    Label15: TLabel;
+    Label15: TShadowLabel;
     GamesSelectionMissROMsFontColor: TColorBox;
     GamesSelectionMissROMsFrameColor: TColorBox;
     ShadowLabel4: TShadowLabel;
-    Label17: TLabel;
-    Label18: TLabel;
+    Label17: TShadowLabel;
+    Label18: TShadowLabel;
     ShadowLabel5: TShadowLabel;
     GamesSelectionInactiveTopColor: TColorBox;
     GamesSelectionInactiveFontColor: TColorBox;
     GamesSelectionInactiveFrameColor: TColorBox;
-    GameSelectionAlphaBlend: TAdvOfficeCheckBox;
-    Label23: TLabel;
+    GameSelectionAlphaBlend: TAdvOfficeCheckBoxEx;
+    Label23: TShadowLabel;
     GamesSelectionBottomColor: TColorBox;
-    GameSelectionGradientBar: TAdvOfficeCheckBox;
+    GameSelectionGradientBar: TAdvOfficeCheckBoxEx;
     GamesSelectionMissROMsBottomColor: TColorBox;
-    Label24: TLabel;
-    Label26: TLabel;
+    Label24: TShadowLabel;
+    Label26: TShadowLabel;
     GamesSelectionInactiveBottomColor: TColorBox;
-    NightModeGamesSelectionBarColorsBox: TAdvGroupBox;
-    Label27: TLabel;
-    Label28: TLabel;
-    Label29: TLabel;
-    Label30: TLabel;
-    Label31: TLabel;
-    Label32: TLabel;
+    NightModeGamesSelectionBarColorsBox: TAdvGroupBoxEx;
+    Label27: TShadowLabel;
+    Label28: TShadowLabel;
+    Label29: TShadowLabel;
+    Label30: TShadowLabel;
+    Label31: TShadowLabel;
+    Label32: TShadowLabel;
     ShadowLabel3: TShadowLabel;
-    Label33: TLabel;
-    Label34: TLabel;
-    Label35: TLabel;
+    Label33: TShadowLabel;
+    Label34: TShadowLabel;
+    Label35: TShadowLabel;
     ShadowLabel7: TShadowLabel;
-    Label39: TLabel;
-    Label40: TLabel;
-    Label42: TLabel;
+    Label39: TShadowLabel;
+    Label40: TShadowLabel;
+    Label42: TShadowLabel;
     NightModeGamesSelectionTopColor: TColorBox;
     NightModeGameSelectionButtonDefault: TBitBtn;
     NightModeGamesSelectionFontColor: TColorBox;
@@ -291,17 +291,17 @@ type
     NightModeGamesSelectionInactiveTopColor: TColorBox;
     NightModeGamesSelectionInactiveFontColor: TColorBox;
     NightModeGamesSelectionInactiveFrameColor: TColorBox;
-    NightModeGameSelectionAlphaBlend: TAdvOfficeCheckBox;
+    NightModeGameSelectionAlphaBlend: TAdvOfficeCheckBoxEx;
     NightModeGamesSelectionBottomColor: TColorBox;
-    NightModeGameSelectionGradientBar: TAdvOfficeCheckBox;
+    NightModeGameSelectionGradientBar: TAdvOfficeCheckBoxEx;
     NightModeGamesSelectionMissROMsBottomColor: TColorBox;
     NightModeGamesSelectionInactiveBottomColor: TColorBox;
     GameSelectionButtonCopy: TBitBtn;
-    Label11: TLabel;
-    Label16: TLabel;
-    Label19: TLabel;
-    AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBox;
-    LabelAddLeadingZeroVersionInfoMAME: TLabel;
+    Label11: TShadowLabel;
+    Label16: TShadowLabel;
+    Label19: TShadowLabel;
+    AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBoxEx;
+    LabelAddLeadingZeroVersionInfoMAME: TShadowLabel;
     InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
     InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
     LabelMAMEGameManualsPDFFolder: TShadowLabel;
@@ -311,18 +311,18 @@ type
     MAMEGameManualsPDFFolderButtonDefault: TBitBtn;
     LabelMARP_scores3htm: TShadowLabel;
     LabelLinkMARP_scores3htm: TShadowLabel;
-    LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TLabel;
+    LabelNightModeSearchGamesPanelEditBoxCustomFrameColor: TShadowLabel;
     NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBox;
-    NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBox;
+    NightModeSearchGamesPanelEditBoxUseCustomFrame: TAdvOfficeCheckBoxEx;
     NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TColorBox;
-    LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TLabel;
-    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBox;
-    LabelUseItalicFontStyleSystemTitleBar: TLabel;
+    LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TShadowLabel;
+    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx;
+    LabelUseItalicFontStyleSystemTitleBar: TShadowLabel;
     LabelToolBarOverlayIconsFolder: TShadowLabel;
     ToolBarOverlayIconsFolder: TComboBox;
     ToolBarOverlayIconsFolderButtonUpdate: TBitBtn;
     ButtonPageNightMode2: TSpeedButton;
-    NightModeButtonColorsBox: TAdvGroupBox;
+    NightModeButtonColorsBox: TAdvGroupBoxEx;
     LabelNightModeButtonColorFontColor: TShadowLabel;
     LabelNightModeButtonColorGradientTop: TShadowLabel;
     LabelNightModeButtonColorGradientBottom: TShadowLabel;
@@ -363,6 +363,25 @@ type
     NightModeButtonColorGradientTopSelected: TColorBox;
     NightModeButtonColorGradientBottomSelected: TColorBox;
     NightModeButtonColorFrameColorSelected: TColorBox;
+    NightModeImagesHintBox: TAdvGroupBoxEx;
+    LabelNightModeHintBox_Color: TShadowLabel;
+    NightModeLabelHintBox_Opacity: TShadowLabel;
+    NightModeLabelHintBox_TextColor: TShadowLabel;
+    NightModeHintBox_Color: TColorBox;
+    NightModeHintBox_FrameColor: TColorBox;
+    NightModeHintBox_FrameEnabled: TAdvOfficeCheckBoxEx;
+    NightModeHintBox_Opacity: TGaugeBar;
+    NightModeButtonDefaultHintBox_Opacity: TBitBtn;
+    NightModeHintBox_TextShadowColor: TColorBox;
+    NightModeHintBox_TextColor: TColorBox;
+    NightModeButtonHintBoxDefaultColors: TBitBtn;
+    NightModeButtonHintTextDefaultColors: TBitBtn;
+    NightModeHintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx;
+    NightModeHintBox_IconEnabled: TAdvOfficeCheckBoxEx;
+    NightModeMenuPopupMenuBox: TAdvGroupBoxEx;
+    LabelNightModeMenuPopupMenuFrameColor: TShadowLabel;
+    NightModeMenuPopupMenuFrameColor: TColorBox;
+    NightModeMenuPopupMenuFrameColorDefaultColors: TBitBtn;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -376,9 +395,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure ButtonResetAutoGameInfoOrderClick(Sender: TObject);
     procedure ButtonDefaultBkSortedColorClick(Sender: TObject);
-    procedure PopupMenuThemePreviewMeasureMenuItem(Sender: TObject;
-      AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
-      ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure ButtonCustomizeGameFontsClick(Sender: TObject);
     procedure GameDocsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -552,6 +568,12 @@ type
       Sender: TObject);
     procedure NightModeButtonColorFrameColorSelectedSelect(
       Sender: TObject);
+    procedure NightModeButtonHintBoxDefaultColorsClick(Sender: TObject);
+    procedure NightModeHintBox_OpacityChange(Sender: TObject);
+    procedure NightModeButtonDefaultHintBox_OpacityClick(Sender: TObject);
+    procedure NightModeButtonHintTextDefaultColorsClick(Sender: TObject);
+    procedure NightModeMenuPopupMenuFrameColorDefaultColorsClick(
+      Sender: TObject);
   private
     { Private declarations }
     procedure NightModeRepaintToolBar;
@@ -591,12 +613,13 @@ begin
   CurrentFolder:= FormMain.ToolBarOverlayIconFolderStr;
   if CurrentFolder = '' then
      CurrentFolder:= 'Default';
-  ToolBarOverlayIconsFolder.Clear;
   ToolBarOverlayIconsFolder.Items.BeginUpdate;
+  ToolBarOverlayIconsFolder.Clear;
   ToolBarOverlayIconsFolder.Items.Add('Default');
 
   iFoldersList:= THashedStringList.Create;
   GetFoldersList2(FormMain.GetFolderFull(32)+'overlay\', iFoldersList, True, False);
+  Application.ProcessMessages;
   if iFoldersList.Count > 0 then
      begin
        ToolBarOverlayIconsFolder.Items.AddStrings(iFoldersList);
@@ -728,7 +751,8 @@ end;
 
 procedure TFormPreferences.FormCreate(Sender: TObject);
 begin
-  PageOptions.PageIndex:= 0;
+  if PageOptions.PageIndex <> 0 then
+     PageOptions.PageIndex:= 0;
   FormMain.LoadMessageIcon(MAMu_Icon, 'mamu_.ico', True);
 
   FormMain.ELV_ResetNormalColors(GameDocs);
@@ -752,16 +776,6 @@ procedure TFormPreferences.ButtonDefaultBkSortedColorClick(Sender: TObject);
 begin
   SetDefaultColorBox(GamesBackgroundColor);
   FormMain.Font_TilesViewDetailsText.Color:= GetContrastColor(GamesBackgroundColor.Selected);
-end;
-
-procedure TFormPreferences.PopupMenuThemePreviewMeasureMenuItem(
-  Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
-  Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
-begin
-  if (GetMenuBarMenusIntf(TMenu(Sender)).UseMenuStyle = msWindowsXP) then
-     Height:= Height+2;
-  if AMenuItem.ShortCut <> scNone then
-     Width:= Width+ACanvas.TextWidth(ShortCutToText(AMenuItem.ShortCut))+10;
 end;
 
 procedure TFormPreferences.ButtonCustomizeGameFontsClick(Sender: TObject);
@@ -1094,7 +1108,7 @@ begin
   // 0 -> Single Panel
   // 1 -> Tabbed Panels
 
-  if (TAdvOfficeRadioButton(Sender).Tag = GameDocsDisplayModeBox.Tag) and (not FormMain.IsStartup) then
+  if (TAdvOfficeRadioButtonEx(Sender).Tag = GameDocsDisplayModeBox.Tag) and (not FormMain.IsStartup) then
      Exit;
 
   FormMain.ButtonImagePanelToggle.Visible:= not GameDocsDisplayModeSinglePanel.Checked;
@@ -1103,7 +1117,7 @@ begin
   if FormMain.IsStartup then
      Exit;
 
-  GameDocsDisplayModeBox.Tag:= TAdvOfficeRadioButton(Sender).Tag;
+  GameDocsDisplayModeBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
 
   //if GameDocsDisplayModeSinglePanel.Checked then
   //   begin
@@ -2097,6 +2111,39 @@ begin
   SetDefaultColorBox(NightModeButtonColorFontShadowColorDisabled);
 end;
 
+
+procedure TFormPreferences.NightModeButtonHintBoxDefaultColorsClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(NightModeHintBox_Color);
+  SetDefaultColorBox(NightModeHintBox_FrameColor);
+  NightModeHintBox_FrameEnabled.Checked:= True;
+end;
+
+procedure TFormPreferences.NightModeHintBox_OpacityChange(Sender: TObject);
+begin
+  NightModeLabelHintBox_Opacity.Caption:= 'Opacity ['+IntToStr(NightModeHintBox_Opacity.Position)+']';
+end;
+
+procedure TFormPreferences.NightModeButtonDefaultHintBox_OpacityClick(
+  Sender: TObject);
+begin
+  NightModeHintBox_Opacity.Position:= 200;
+end;
+
+procedure TFormPreferences.NightModeButtonHintTextDefaultColorsClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(NightModeHintBox_TextColor);
+  SetDefaultColorBox(NightModeHintBox_TextShadowColor);
+  NightModeHintBox_TextShadowEnabled.Checked:= True;
+end;
+
+procedure TFormPreferences.NightModeMenuPopupMenuFrameColorDefaultColorsClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(NightModeMenuPopupMenuFrameColor); // clrBorderGroupBoxGrayBk
+end;
 
 end.
 

@@ -313,7 +313,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShowHint = True
       TabOrder = 0
     end
-    object FileTypesGroupBox: TAdvGroupBox
+    object FileTypesGroupBox: TAdvGroupBoxEx
       Left = 8
       Top = 6
       Width = 231
@@ -326,7 +326,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Ctl3D = True
       ParentColor = False
       TabOrder = 2
-      object DeleteCFGsNVRAMs: TAdvOfficeCheckBox
+      object DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx
         Left = 121
         Top = 18
         Width = 106
@@ -351,7 +351,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         State = cbChecked
         Themed = True
       end
-      object DeleteROMs: TAdvOfficeCheckBox
+      object DeleteROMs: TAdvOfficeCheckBoxEx
         Left = 7
         Top = 18
         Width = 55
@@ -375,7 +375,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         State = cbChecked
         Themed = True
       end
-      object DeleteCHDs: TAdvOfficeCheckBox
+      object DeleteCHDs: TAdvOfficeCheckBoxEx
         Left = 66
         Top = 18
         Width = 53
@@ -401,7 +401,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         Themed = True
       end
     end
-    object DeleteGameFromGamesList: TAdvOfficeCheckBox
+    object DeleteGameFromGamesList: TAdvOfficeCheckBoxEx
       Tag = -1
       Left = 392
       Top = 13
@@ -428,7 +428,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       State = cbChecked
       Themed = True
     end
-    object DeleteGameFileFromDisk: TAdvOfficeCheckBox
+    object DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx
       Left = 392
       Top = 29
       Width = 184
@@ -522,7 +522,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Color = clWhite
       TabOrder = 0
     end
-    object CopyMoveOverwriteFiles: TAdvOfficeCheckBox
+    object CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx
       Left = 490
       Top = 20
       Width = 99
@@ -549,7 +549,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       TabOrder = 2
       OnClick = ButtonSelectROMsFolderClick
     end
-    object CopyMoveAddSystemFolder: TAdvOfficeCheckBox
+    object CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx
       Left = 594
       Top = 20
       Width = 121
