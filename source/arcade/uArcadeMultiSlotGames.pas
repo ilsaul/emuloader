@@ -127,7 +127,7 @@ end;
 
 procedure TFormArcadeMultiSlotGames.AddMachinesMultiSlot;
 var
-  iLoop, IconIndex: Integer;
+  iLoop: Integer;
   iName, SectionStr, LastUsedName, tmpStr: String;
   MachinesIni: TMemIniFile;
   MachinesList: TStringList;

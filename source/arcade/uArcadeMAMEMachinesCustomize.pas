@@ -175,7 +175,7 @@ procedure TFormArcadeMAMEMachinesCustomize.ELV_LoadMachinesList;
 var
   MachinesIni: THashedStringList;
   ExcludeFiles: THashedStringList;
-  Loop, LoopSoftList: Integer;
+  Loop: Integer;
   addItem: TEasyItem;
 begin
   if not FormMain.ValidateFile(FormMain.GetGamesFolderEL+GetSystemFileName(idMAME, 5)) then
@@ -259,7 +259,7 @@ var
   MachinesIni: TMemIniFile;
   SoftLists: TStringList;
   ExcludeFiles: THashedStringList;
-  Loop, LoopSoftList: Integer;
+  Loop: Integer;
   addGroup: TEasyGroup;
   addItem: TEasyItem;
 begin
@@ -353,8 +353,6 @@ begin
 end;
 
 procedure TFormArcadeMAMEMachinesCustomize.ResizeForm;
-var
-  iDiffW, iDiffH: Integer;
 begin
   if Screen.Width > 1024 then
      begin

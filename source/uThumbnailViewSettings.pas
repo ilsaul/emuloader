@@ -6,13 +6,13 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
   StdCtrls, ExTrackBar, ExtCtrls, Buttons, GraphicEx, AdvOfficeButtons,
   MPCommonObjects, EasyListview, MPCommonUtilities, ShadowLabel, ImgList, PanelEx,
-  uMain, uCommon, ButtonsEx, AdvGroupBox;
+  uMain, uCommon, ButtonsEx, AdvGroupBox, ColorBoxEx;
 
 type
   TFormThumbnailView = class(TForm)
     LabelGridWidthSize: TShadowLabel;
     GridWidthSize: TExTrackBar;
-    BorderColor: TColorBox;
+    BorderColor: TColorBoxEx;
     ShowBorder: TAdvOfficeCheckBoxEx;
     BorderColorDefault: TBitBtnEx;
     ShowGameTitles: TAdvOfficeCheckBoxEx;
@@ -40,12 +40,12 @@ type
     ShowSystemIcon: TAdvOfficeCheckBoxEx;
     ShowFavoriteIcon: TAdvOfficeCheckBoxEx;
     ShowMediaTypeIcon: TAdvOfficeCheckBoxEx;
-    SystemIconSize: TComboBox;
+    SystemIconSize: TComboBox2Ex;
     ShowGameIcon: TAdvOfficeCheckBoxEx;
     ThumbLeftAlignIcons: TAdvOfficeRadioButtonEx;
     ThumbRightAlignIcons: TAdvOfficeRadioButtonEx;
     ShowIconsWithNoThumbnail: TAdvOfficeCheckBoxEx;
-    MediaTypeIconSize: TComboBox;
+    MediaTypeIconSize: TComboBox2Ex;
     ShowSpecialIcon: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);

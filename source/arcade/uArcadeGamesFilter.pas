@@ -6,7 +6,7 @@ uses
   Windows, Messages, Classes, Graphics, Controls, Forms,
   Buttons, SysUtils, StdCtrls, ExtCtrls, IniFiles, ImgList,
   MPCommonObjects, MPCommonUtilities, EasyListview, PanelEx,
-  AdvOfficeButtons, ShadowLabel, ButtonsEx;
+  ShadowLabel, ButtonsEx;
 
 type
   TFormArcadeGamesFilter = class(TForm)

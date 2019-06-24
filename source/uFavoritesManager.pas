@@ -48,23 +48,11 @@ type
 
 type
   TFormFavoritesManager = class(TForm)
-    ToolBarButtons: TToolBar;
-    ToolButtonNew: TToolButton;
     FavoritesList: TEasyListview;
-    ToolButtonDuplicate: TToolButton;
-    ToolButtonDelete: TToolButton;
-    NewFavoritePanel: TPanelEx;
-    ToolButton3: TToolButton;
-    ToolBarSetSelectedProfileActive: TToolButton;
-    ToolButtonClearGames: TToolButton;
-    ToolButtonRemoveInvalidEntries: TToolButton;
-    LabelHotkeyText: TShadowLabel;
     LabelTaskMessage: TShadowLabel;
     PanelUpdatingFavTagInGames: TPanelEx;
-    LabelHotkeyKeys: TShadowLabel;
     IL_SystemType: TImageList;
     PanelFavSettings: TPanelEx;
-    ToolButtonFavSettings: TToolButton;
     ButtonClosePanelFavSettings: TBitBtnEx;
     ButtonCenterPanelFavSettings: TBitBtnEx;
     FavSettingSmallFont: TAdvOfficeRadioButtonEx;
@@ -74,12 +62,18 @@ type
     Label2: TShadowLabel;
     Label3: TShadowLabel;
     LabelSettings: TShadowLabel;
-    SpeedButtonEx1: TSpeedButtonEx;
-    procedure ToolBarButtonsCustomDraw(Sender: TToolBar;
-      const ARect: TRect; var DefaultDraw: Boolean);
+    NewFavoritePanel: TPanelEx;
+    LabelHotkeyText: TShadowLabel;
+    LabelHotkeyKeys: TShadowLabel;
+    ButtonSetSelectedProfileActive: TSpeedButtonEx;
+    ButtonSettings: TSpeedButtonEx;
+    ButtonNew: TSpeedButtonEx;
+    ButtonClearGames: TSpeedButtonEx;
+    ButtonRemoveInvalidEntries: TSpeedButtonEx;
+    ButtonReplicate: TSpeedButtonEx;
+    ButtonDelete: TSpeedButtonEx;
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
-    procedure ToolButtonNewClick(Sender: TObject);
     procedure FavoritesListColumnClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; ShiftState: TShiftState;
       const Column: TEasyColumn);
@@ -91,27 +85,20 @@ type
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
     procedure FavoritesListItemEditEnd(Sender: TCustomEasyListview;
       Item: TEasyItem);
-    procedure ToolBarSetSelectedProfileActiveClick(Sender: TObject);
     procedure FavoritesListDblClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure ToolButtonFavSettingsClick(Sender: TObject);
     procedure ButtonClosePanelFavSettingsClick(Sender: TObject);
     procedure FavoritesListColumnSizeChanging(Sender: TCustomEasyListview;
       Column: TEasyColumn; Width, NewWidth: Integer; var Allow: Boolean);
     procedure ButtonCenterPanelFavSettingsClick(Sender: TObject);
     procedure FavSettingSmallFontClick(Sender: TObject);
-    procedure ToolBarButtonsCustomDrawButton(Sender: TToolBar;
-      Button: TToolButton; State: TCustomDrawState;
-      var DefaultDraw: Boolean);
-    procedure ToolButtonFavSettingsMouseDown(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ToolButtonFavSettingsMouseUp(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ButtonSettingsClick(Sender: TObject);
+    procedure ButtonNewClick(Sender: TObject);
+    procedure ButtonSetSelectedProfileActiveClick(Sender: TObject);
   private
     { Private declarations }
-    BtnClick: Boolean;
     UpdateFavStatusInGames: Boolean;
     LastActiveFavFilter: String;
     ActiveProfileItem: TEasyItem;
@@ -375,7 +362,7 @@ end;
 
 procedure TFormFavoritesManager.UpdateFileNameInfo(OldFile, NewFile: String; ShowErrorMessage: Boolean = False);
 var
-  UpdTxt, RenamedTxt, RenamedConsoleComputer, ErrorMsg: Boolean;
+  UpdTxt, RenamedTxt, ErrorMsg: Boolean;
 begin
   UpdTxt:= FileExists(FormMain.GetFavoritesFolder+OldFile);
 
@@ -419,7 +406,7 @@ var
   fIndex, titleIndex: Integer;
   fExt, defFile, DestinationFileName: String;
   gFile: THashedStringList;
-  IsDefaultProfile, FoundTxt: Boolean;
+  FoundTxt: Boolean;
 
   function CreateFileFav(Index: Integer): Boolean;
   begin
@@ -643,7 +630,7 @@ begin
 
              CallMessageBox;
              FormMain.AddMsgText('    You are about to delete a favorites profile.');
-             FormMain.AddMsgText('.'+#13#10+#13#10+'Title: ');
+             FormMain.AddMsgText(#13#10+#13#10+'Title: ');
              FormMain.AddMsgText(TFavFileInfo(Item).eTitle, MsgTxtColors.colorFileName, [fsBold]);
              FormMain.AddMsgText(#13#10+'File: ');
              FormMain.AddMsgText(TFavFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
@@ -711,7 +698,7 @@ var
   gItem, favItem, addItem: TEasyItem;
   gGroup: TEasyGroup;
   UpdTxt, HaveTitle: Boolean;
-  favStr, LineStr: String;
+  LineStr: String;
 
   // this function is not used anywhere (August 28, 2018)
   {function SearchAndDelete: Boolean;
@@ -1150,12 +1137,6 @@ begin
   PanelUpdatingFavTagInGames.Visible:= True;
 end;
 
-procedure TFormFavoritesManager.ToolBarButtonsCustomDraw(Sender: TToolBar;
-  const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  FormMain.PaintToolBarBk(Sender, ARect);
-end;
-
 procedure TFormFavoritesManager.FavoritesListKeyAction(
   Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
   var DoDefault: Boolean);
@@ -1168,21 +1149,16 @@ begin
   case CharCode of
     VK_RETURN:
       begin
-        ToolBarSetSelectedProfileActive.Click;
+        ButtonSetSelectedProfileActive.Click;
         if FormMain.CheckSelected(FavoritesList) then
            Close;
       end;
-    VK_SPACE: ToolBarSetSelectedProfileActive.Click;
+    VK_SPACE: ButtonSetSelectedProfileActive.Click;
     VK_F2: EditTitleFileName(0);
     VK_F3: EditTitleFileName(2);
-    VK_DELETE: ToolButtonDelete.Click;
+    VK_DELETE: ButtonDelete.Click;
     VK_ESCAPE: Close;
   end;
-end;
-
-procedure TFormFavoritesManager.ToolButtonNewClick(Sender: TObject);
-begin
-  ExecuteFavAction(TToolButton(Sender).Tag);
 end;
 
 procedure TFormFavoritesManager.FavoritesListColumnClick(
@@ -1215,8 +1191,6 @@ begin
 end;
 
 procedure TFormFavoritesManager.FormShow(Sender: TObject);
-var
-  Loop: Byte;
 begin
   LoadCustomMAMEIconToForm(TForm(Sender), 3);
   FormMain.AddDefaultIcons('systemtype_arcade.ico', FormMain.GetFolderFull(32), IL_SystemType);
@@ -1252,10 +1226,14 @@ begin
   if FormMain.PopupEnableFavorites.Checked then
      begin
        FormFavoritesManager.Caption:= 'Select a Favorites Profile';
-       for Loop:=0 to 5 do
-           ToolbarButtons.Buttons[Loop].Enabled:= False;
+       ButtonSettings.Enabled:= False;
+       ButtonNew.Enabled:= False;
+       ButtonClearGames.Enabled:= False;
+       ButtonRemoveInvalidEntries.Enabled:= False;
+       ButtonReplicate.Enabled:= False;
+       ButtonDelete.Enabled:= False;
      end;
-  ToolBarSetSelectedProfileActive.Enabled:= True;
+  ButtonSetSelectedProfileActive.Enabled:= True;
 
   FavoritesList.Header.Columns[0].SortDirection:= esdNone;
   FavoritesList.Header.Columns[3].SortDirection:= esdDescending;
@@ -1324,32 +1302,11 @@ begin
   FormMain.SetFormKeyPreview(FormFavoritesManager);
 end;
 
-procedure TFormFavoritesManager.ToolBarSetSelectedProfileActiveClick(
-  Sender: TObject);
-var
-  Item: TEasyItem;
-begin
-  if not FormMain.CheckSelected(FavoritesList) then
-     begin
-       GenerateMessage('Info', 'No profile selected.', '    You haven''t selected a profile to set active'+
-                       '. Please try again.', 2);
-       Exit;
-     end;
-  Item:= FavoritesList.Selection.First;
-  FormMain.FavoriteProfile[0]:= TFavFileInfo(Item).eTitle;
-  FormMain.FavoriteProfile[1]:= TFavFileInfo(Item).eFileName;
-  if ActiveProfileItem <> nil then
-     ActiveProfileItem.ImageIndex:= -1;
-  ActiveProfileItem:= Item;
-  Item.ImageIndex:= 3;
-  FormMain.PopupEnableFavorites.Hint:= FormMain.FavoriteProfile[0];
-end;
-
 procedure TFormFavoritesManager.FavoritesListDblClick(
   Sender: TCustomEasyListview; Button: TCommonMouseButton;
   MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
 begin
-  ToolBarSetSelectedProfileActive.Click;
+  ButtonSetSelectedProfileActive.Click;
   if FormMain.CheckSelected(FavoritesList) then
      Close;
 end;
@@ -1362,21 +1319,6 @@ begin
      CanClose:= ValidateGamesActiveProfile;
   if CanClose then
      WriteSettings;
-end;
-
-procedure TFormFavoritesManager.ToolButtonFavSettingsClick(
-  Sender: TObject);
-begin
-  case FormFavoritesManager.WindowState of
-    wsNormal:
-      begin
-        if not ButtonCenterPanelFavSettings.Enabled then
-           ButtonCenterPanelFavSettings.Enabled:= True;
-      end;
-    wsMaximized: ButtonCenterPanelFavSettings.Enabled:= False;
-  end;
-  PanelFavSettings.Visible:= True;
-
 end;
 
 procedure TFormFavoritesManager.ButtonClosePanelFavSettingsClick(Sender: TObject);
@@ -1506,127 +1448,43 @@ begin
 end;
 
 
-procedure TFormFavoritesManager.ToolBarButtonsCustomDrawButton(
-  Sender: TToolBar; Button: TToolButton; State: TCustomDrawState;
-  var DefaultDraw: Boolean);
+procedure TFormFavoritesManager.ButtonSettingsClick(Sender: TObject);
+begin
+  case FormFavoritesManager.WindowState of
+    wsNormal:
+      begin
+        if not ButtonCenterPanelFavSettings.Enabled then
+           ButtonCenterPanelFavSettings.Enabled:= True;
+      end;
+    wsMaximized: ButtonCenterPanelFavSettings.Enabled:= False;
+  end;
+  PanelFavSettings.Visible:= True;
+end;
+
+procedure TFormFavoritesManager.ButtonNewClick(Sender: TObject);
+begin
+  ExecuteFavAction(TSpeedButtonEx(Sender).Tag);
+end;
+
+procedure TFormFavoritesManager.ButtonSetSelectedProfileActiveClick(
+  Sender: TObject);
 var
-  iRect: TRect;
-  iBtn: TThemedToolBar;
-  iButton: TThemedButton;
-  Details: TThemedElementDetails;
+  Item: TEasyItem;
 begin
-  //if not IsNightMode then
-  //   Exit;
-
-  DefaultDraw:= False;
-
-  //PerformEraseBackground(Self, Canvas.Handle);
-
-  Sender.Canvas.Brush.Style:= bsClear;
-  Sender.Canvas.Font.Color:= clWhite;
-
-  if Button = ToolButtonFavSettings then
+  if not FormMain.CheckSelected(FavoritesList) then
      begin
-       if not Button.Enabled then
-          FormFavoritesManager.Caption:= 'disabled'
-       else
-       if Button.Down then
-          FormFavoritesManager.Caption:= 'down'
-       else
-       if BtnClick then
-          FormFavoritesManager.Caption:= 'pressed'
-       else
-       if TCustomDrawState(Word(State)) = [cdsSelected] then
-          FormFavoritesManager.Caption:= 'selected'
-       else
-       if TCustomDrawState(Word(State)) = [cdsGrayed] then
-          FormFavoritesManager.Caption:= 'grayed'
-       else
-       //if TCustomDrawState(Word(State)) = [cdsDisabled] then
-       //   FormFavoritesManager.Caption:= 'disabled'
-       //else
-       if TCustomDrawState(Word(State)) = [cdsChecked] then
-          FormFavoritesManager.Caption:= 'checked'
-       else
-       if TCustomDrawState(Word(State)) = [cdsFocused] then
-          FormFavoritesManager.Caption:= 'focused'
-       else
-       if TCustomDrawState(Word(State)) = [cdsDefault] then
-          FormFavoritesManager.Caption:= 'default'
-       else
-       if TCustomDrawState(Word(State)) = [cdsHot] then
-          FormFavoritesManager.Caption:= 'hot'
-       else
-       if TCustomDrawState(Word(State)) = [cdsMarked] then
-          FormFavoritesManager.Caption:= 'marked'
-       else
-       if TCustomDrawState(Word(State)) = [cdsIndeterminate] then
-          FormFavoritesManager.Caption:= 'indeterminate';
+       GenerateMessage('Info', 'No profile selected.', '    You haven''t selected a profile to set active'+
+                       '. Please try again.', 2);
+       Exit;
      end;
-
-  if not Button.Enabled then // if TCustomDrawState(Word(State)) = [cdsDisabled] then
-     iBtn:= ttbButtonDisabled
-  else
-  if Button.Down then
-     iBtn:= ttbButtonChecked
-  else
-  if (TCustomDrawState(Word(State)) = [cdsFocused]) or
-     (TCustomDrawState(Word(State)) = [cdsHot]) then
-     iBtn:= ttbButtonHot
-  else
-  if BtnClick then
-     iBtn:= ttbButtonPressed//ttbDropDownButtonPressed
-  else
-  if TCustomDrawState(Word(State)) = [cdsSelected] then
-     iBtn:= ttbButtonChecked//ttbButtonPressed
-  else
-     iBtn:= ttbButtonNormal;
-
-  iRect:= Button.BoundsRect;
-  Details := ThemeServices.GetElementDetails(iBtn);
-  ThemeServices.DrawElement(Sender.Canvas.Handle, Details, iRect);
-  iRect := ThemeServices.ContentRect(Sender.Canvas.Handle, Details, iRect);
-  //err. button down state does not work
-
-  if BtnClick then
-     OffsetRect(iRect, 1, 1);
-  if Button.ImageIndex = -1 then
-     OffsetRect(iRect, 3, 3)
-  else
-     OffsetRect(iRect, 8+Sender.Images.Width, 3);
-
-  // must calculate icon pos correctly and show it with the iRect.Left... then shift the text pos if icon exists...
-  if Button.ImageIndex <> -1 then
-     ToolBarButtons.Images.Draw(Sender.Canvas, Button.Left+3+Ord(BtnClick), iRect.Top, Button.ImageIndex, (iBtn <> ttbButtonDisabled));
-
-  //if iBtn = ttbButtonPressed then
-  //   OffsetRect(iRect, 1, 1);
-
-  OffsetRect(iRect, -1, 0);
-  if TCustomDrawState(Word(State)) = [cdsDisabled] then
-     begin
-       // shadow color clBtnHighlight
-       OffsetRect(iRect, 1, 1);
-       Sender.Canvas.Font.Color:= clBtnHighlight;
-       DrawText(Sender.Canvas.Handle, PChar(Button.Caption), Length(Button.Caption), iRect, 0);
-       OffsetRect(iRect, -1, -1);
-       Sender.Canvas.Font.Color:= clBtnShadow;
-     end;
-  DrawText(Sender.Canvas.Handle, PChar(Button.Caption), Length(Button.Caption), iRect, 0);
-end;
-
-procedure TFormFavoritesManager.ToolButtonFavSettingsMouseDown(
-  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
-  Y: Integer);
-begin
-  BtnClick:= True;
-end;
-
-procedure TFormFavoritesManager.ToolButtonFavSettingsMouseUp(
-  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
-  Y: Integer);
-begin
-  BtnClick:= False;
+  Item:= FavoritesList.Selection.First;
+  FormMain.FavoriteProfile[0]:= TFavFileInfo(Item).eTitle;
+  FormMain.FavoriteProfile[1]:= TFavFileInfo(Item).eFileName;
+  if ActiveProfileItem <> nil then
+     ActiveProfileItem.ImageIndex:= -1;
+  ActiveProfileItem:= Item;
+  Item.ImageIndex:= 3;
+  FormMain.PopupEnableFavorites.Hint:= FormMain.FavoriteProfile[0];
 end;
 
 end.

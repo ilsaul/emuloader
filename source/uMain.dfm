@@ -866,9 +866,9 @@ object FormMain: TFormMain
         OnMouseDown = PanelSearchGamesCaptionBarMouseDown
       end
       object ButtonFilterTitleClose: TShadowLabel
-        Left = 330
+        Left = 332
         Top = 3
-        Width = 43
+        Width = 41
         Height = 21
         Hint = 'Close'
         Alignment = taCenter
@@ -877,7 +877,7 @@ object FormMain: TFormMain
         Color = clMaroon
         Font.Charset = ANSI_CHARSET
         Font.Color = clWhite
-        Font.Height = -15
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
@@ -1074,9 +1074,9 @@ object FormMain: TFormMain
         OnMouseDown = FilterCPU_LabelCaptionBarMouseDown
       end
       object FilterCPU_ButtonClose: TShadowLabel
-        Left = 425
+        Left = 427
         Top = 3
-        Width = 43
+        Width = 41
         Height = 21
         Hint = 'Close'
         Alignment = taCenter
@@ -1085,7 +1085,7 @@ object FormMain: TFormMain
         Color = clMaroon
         Font.Charset = ANSI_CHARSET
         Font.Color = clWhite
-        Font.Height = -15
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
@@ -1204,7 +1204,7 @@ object FormMain: TFormMain
         TabOrder = 1
         OnKeyPress = FilterCPUKeyPress
       end
-      object FilterCPUList: TComboBox
+      object FilterCPUList: TComboBox2Ex
         Left = 8
         Top = 48
         Width = 190
@@ -1451,7 +1451,6 @@ object FormMain: TFormMain
             ColorFrame = 16750899
             ColorInnerFrame = clGreen
             Frames = [frLeft, frTop, frRight, frBottom]
-            Opacity = 200
             ParentBackground = False
             Style = vgSolid
             Visible = False
@@ -1504,7 +1503,7 @@ object FormMain: TFormMain
           Left = 7
           Top = 7
           Width = 352
-          Height = 137
+          Height = 113
           TabStop = False
           Align = alClient
           BorderStyle = bsNone
@@ -1523,6 +1522,24 @@ object FormMain: TFormMain
           TabOrder = 0
           WantReturns = False
           OnURLClick = MAMEInfoTextHolderURLClick
+        end
+        object MAMEInfoStatusBar: TPanelEx
+          Left = 7
+          Top = 120
+          Width = 352
+          Height = 24
+          Align = alBottom
+          Color1 = 15391180
+          Color2 = 16512497
+          Color3 = 16641245
+          Color4 = 16637122
+          ColorFrame = 11775403
+          ColorInnerFrame = 7891291
+          EnableCustomBorder = ecbDouble
+          Frames = []
+          ParentBackground = False
+          Style = vgSimple
+          Visible = False
         end
       end
     end

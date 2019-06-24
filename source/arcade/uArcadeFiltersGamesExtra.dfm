@@ -288,7 +288,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       OnClick = ButtonDefaultOptionsClick
     end
   end
-  object InterfaceType: TComboBox
+  object InterfaceType: TComboBox2Ex
     Left = 213
     Top = 73
     Width = 195
@@ -305,7 +305,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Classic (Stick/Buttons)'
       'Mechanical (Pinball, etc)')
   end
-  object AudioType: TComboBox
+  object AudioType: TComboBox2Ex
     Left = 8
     Top = 73
     Width = 195
@@ -323,7 +323,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Discrete Audio'
       'Flac/Wave Sample Audio')
   end
-  object GamesROMs: TComboBox
+  object GamesROMs: TComboBox2Ex
     Left = 418
     Top = 25
     Width = 195
@@ -353,7 +353,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object DeviceROMs: TComboBox
+  object DeviceROMs: TComboBox2Ex
     Left = 213
     Top = 25
     Width = 195
@@ -370,7 +370,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With Device ROMs'
       'Games With No Device ROMs')
   end
-  object Bios: TComboBox
+  object Bios: TComboBox2Ex
     Left = 8
     Top = 25
     Width = 195
@@ -447,7 +447,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object ControlType_New: TComboBox
+  object ControlType_New: TComboBox2Ex
     Left = 418
     Top = 73
     Width = 195
@@ -462,7 +462,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Items.Strings = (
       'List All')
   end
-  object ScreenOrientation: TComboBox
+  object ScreenOrientation: TComboBox2Ex
     Left = 8
     Top = 121
     Width = 195
@@ -512,7 +512,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object SaveState: TComboBox
+  object SaveState: TComboBox2Ex
     Left = 213
     Top = 121
     Width = 195
@@ -929,7 +929,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
   end
-  object SpecialList: TComboBox
+  object SpecialList: TComboBox2Ex
     Left = 418
     Top = 121
     Width = 195

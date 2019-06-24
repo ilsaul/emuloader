@@ -1022,7 +1022,7 @@ var
   Loop2, iPos, TotalGamesCount: Integer;
   strName, strCloneOf, strSoftwareName, Folder: String;
   ExtraFolderStrMAME, SoftwareNameDir: String;
-  NewMAMESnapName, NewMAMESnapCloneName: String; // used by in-game snapshot only "gamename\0000.png"
+  NewMAMESnapName: String; // used by in-game snapshot only "gamename\0000.png"
 
   function CheckGameFiles(FileIndex: Integer; iGameName: String): Boolean;
   var

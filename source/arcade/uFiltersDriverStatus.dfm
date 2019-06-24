@@ -149,19 +149,19 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     ReturnIsTab = False
     Themed = True
   end
-  object DriverStatusCategory: TComboBox
+  object DriverStatusCategory: TComboBox2Ex
     Left = 24
     Top = 26
     Width = 201
-    Height = 21
-    Style = csDropDownList
+    Height = 23
+    Style = csOwnerDrawFixed
     Ctl3D = True
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
-    ItemHeight = 13
+    ItemHeight = 17
     ItemIndex = 0
     ParentCtl3D = False
     ParentFont = False

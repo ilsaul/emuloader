@@ -609,7 +609,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.AddGamesToList;
 var
-  Loop, Loop2, SelectionIndex: Integer;
+  Loop, SelectionIndex: Integer;
   gItem, addItem: TEasyItem;
   GameIsMerged, FoundROMsArcade, FoundCHDsArcade, FoundCFGsArcade: Boolean;
   CustomGameFullPath: WideString;
@@ -923,7 +923,7 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.ResizeForm;
 var
-  gListSize, bPanelSize, iScrSize, MaxGameCount: Integer;
+  bPanelSize: Integer;
   iScreenWidth, iScreenHeight: Integer;
   ItemsColumnCount, ItemsLineCount, MaxItemsLineCount: Integer;
 begin

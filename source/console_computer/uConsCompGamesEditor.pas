@@ -60,7 +60,7 @@ type
     PopupSystemsViewMode: TMenuItem;
     PopupSystemsViewMode_Tiles: TMenuItem;
     PopupSystemsViewMode_LargeIcons: TMenuItem;
-    ButtonOptions: TBitBtnEx;
+    ButtonOptions: TSpeedButtonEx;
     procedure FormShow(Sender: TObject);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);

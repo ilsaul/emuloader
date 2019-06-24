@@ -518,10 +518,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSize: TShadowLabel
         Tag = 9
-        Left = 401
-        Top = 4
-        Width = 24
-        Height = 21
+        Left = 403
+        Top = 3
+        Width = 25
+        Height = 23
         Hint = 'Software lists font size (default 9)'
         Alignment = taCenter
         AutoSize = False
@@ -542,11 +542,22 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Transparent = True
         Layout = tlCenter
       end
+      object ButtonOptions: TSpeedButtonEx
+        Left = 2
+        Top = 2
+        Width = 22
+        Height = 24
+        Hint = 'Settings'
+        Flat = True
+        ImageIndex = 7
+        Images = FormMain.IL_MenuPopup
+        OnClick = ButtonOptionsClick
+      end
       object ButtonApplyChanges: TBitBtnEx
         Left = 48
-        Top = 3
+        Top = 2
         Width = 121
-        Height = 23
+        Height = 25
         Hint = 'Close and update main games list with current changes'
         Caption = 'Apply Changes'
         Font.Charset = ANSI_CHARSET
@@ -560,9 +571,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object ButtonAbortChanges: TBitBtnEx
         Left = 169
-        Top = 3
+        Top = 2
         Width = 121
-        Height = 23
+        Height = 25
         Hint = 'Close and ignore any changes made to the games data'
         Caption = 'Abort Changes'
         Font.Charset = ANSI_CHARSET
@@ -573,22 +584,6 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ParentFont = False
         TabOrder = 6
         OnClick = ButtonAbortChangesClick
-      end
-      object ButtonOptions: TBitBtnEx
-        Left = 2
-        Top = 3
-        Width = 24
-        Height = 23
-        Hint = 'Settings'
-        Caption = #234
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 7
-        OnClick = ButtonOptionsClick
       end
       object PanelSearchGames: TPanelEx
         Left = 958
@@ -695,10 +690,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeLarger_x4: TBitBtnEx
         Tag = 4
-        Left = 451
-        Top = 3
+        Left = 456
+        Top = 2
         Width = 46
-        Height = 23
+        Height = 25
         Hint = 'Larger font size (4 steps)'
         Caption = #232#232
         Font.Charset = SYMBOL_CHARSET
@@ -712,10 +707,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeLarger: TBitBtnEx
         Tag = 1
-        Left = 427
-        Top = 3
-        Width = 23
-        Height = 23
+        Left = 430
+        Top = 2
+        Width = 25
+        Height = 25
         Hint = 'Larger font size'
         Caption = #232
         Font.Charset = SYMBOL_CHARSET
@@ -730,9 +725,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       object GamesListFontSizeSmaller_x4: TBitBtnEx
         Tag = -4
         Left = 328
-        Top = 3
+        Top = 2
         Width = 46
-        Height = 23
+        Height = 25
         Hint = 'Smaller font size (4 steps)'
         Caption = #231#231
         Font.Charset = SYMBOL_CHARSET
@@ -747,9 +742,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       object GamesListFontSizeSmaller: TBitBtnEx
         Tag = -1
         Left = 376
-        Top = 3
-        Width = 23
-        Height = 23
+        Top = 2
+        Width = 25
+        Height = 25
         Hint = 'Smaller font size'
         Caption = #231
         Font.Charset = SYMBOL_CHARSET

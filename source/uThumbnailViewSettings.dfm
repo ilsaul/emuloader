@@ -159,7 +159,7 @@ object FormThumbnailView: TFormThumbnailView
     LabelsInterval = 40
     SelEnable = False
   end
-  object BorderColor: TColorBox
+  object BorderColor: TColorBoxEx
     Left = 430
     Top = 466
     Width = 189
@@ -516,7 +516,7 @@ object FormThumbnailView: TFormThumbnailView
       State = cbChecked
       Themed = True
     end
-    object SystemIconSize: TComboBox
+    object SystemIconSize: TComboBox2Ex
       Left = 68
       Top = 42
       Width = 125
@@ -599,7 +599,7 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       Themed = True
     end
-    object MediaTypeIconSize: TComboBox
+    object MediaTypeIconSize: TComboBox2Ex
       Left = 68
       Top = 66
       Width = 125

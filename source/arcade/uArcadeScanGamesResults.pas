@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ImgList, IniFiles, ComCtrls, uCommon, MPCommonObjects,
   MPCommonUtilities, EasyListview, ExtCtrls, ToolWin, Buttons, ShadowLabel,
-  PanelEx, Menus, BarMenus, EditEx;
+  PanelEx, Menus, BarMenus, EditEx, ColorBoxEx;
 
 type
   TEasyScanInfo = class(TEasyItemStored)
@@ -188,7 +188,7 @@ type
     sysZiNc: TToolButton;
     LabelTotalGames: TShadowLabel;
     MAMEMachinesFilterIcon: TImage;
-    MAMEMachinesFilter: TComboBox;
+    MAMEMachinesFilter: TComboBox2Ex;
     PopupSplitters: TBcBarPopupMenu;
     CenterSplitter1: TMenuItem;
     MenuItem11: TMenuItem;
@@ -933,6 +933,7 @@ begin
        SetLabelColors(LabelGamesListList, clWhite, clrMedBlue);
        SetLabelColors(LabelTotalGames, clWhite, clrDarkOrange);
        SetLabelColors(LabelSearchBar, clWhite, clrMedBlue);// clrDarkOrange);
+       SetComboBox2ExColors(MAMEMachinesFilter, True);
 
        FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrLightRed);
 

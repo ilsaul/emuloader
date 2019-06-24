@@ -31,6 +31,7 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
     Color3 = clWhite
     Color4 = clBtnFace
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -50,6 +51,9 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
       ShadowColor = clMoneyGreen
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
     end

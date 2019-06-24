@@ -37,7 +37,7 @@ type
     GamesListFontSize: TShadowLabel;
     GamesListFontSizeSmaller_x4: TBitBtnEx;
     GamesListFontSizeLarger_x4: TBitBtnEx;
-    ButtonOptions: TBitBtnEx;
+    ButtonOptions: TSpeedButtonEx;
     PopupMenuOptions: TBcBarPopupMenu;
     PopupSystemsViewMode: TMenuItem;
     PopupSystemsViewMode_Tiles: TMenuItem;
@@ -166,7 +166,7 @@ var
   iSoftFile: THashedStringList;
   Loop: Integer;
   FileLine, PartName: String;
-  FoundTitle, FoundPartName, GotMediaFromFileName: Boolean;
+  FoundTitle, FoundPartName: Boolean;
 begin
   Result:= '';
   if not FileExists(SoftwareListFile) then
@@ -274,6 +274,7 @@ begin
 
   iFiles:= THashedStringList.Create;
   GetFilesList(iFolder, '.xml', '*.xml', iFiles, False, True, True);
+  Application.ProcessMessages;
   if iFiles.Count > 0 then
   begin
     DeInitSoftListFiles;
@@ -352,6 +353,7 @@ begin
       Item.Captions[1]:= SoftListFiles_Name[sIndex];
       Item.Captions[2]:= GetMediaTypeTitle(SoftListFiles_MediaType[sIndex]); // MediaTypeCustom[SoftListFiles_MediaType[sIndex], 0];
     //end;
+    Application.ProcessMessages;
   end;
   SoftListFiles_Name.EndUpdate;
   SoftListFilesNotAssigned.Sort.SortAll;
@@ -376,6 +378,7 @@ begin
   begin
     SystemsSoftList[Loop].Clear;
     iniFile.ReadSectionValues(SystemsListCustom[Loop, 0], SystemsSoftList[Loop]);
+    Application.ProcessMessages;
     if SystemsSoftList[Loop].Count > 0 then
        begin
          for LoopSoft:=0 to SystemsSoftList[Loop].Count-1 do
@@ -522,7 +525,7 @@ end;
 procedure TFormConsCompSystemsEditor.UpdateSystemsIniFile;
 var
   iniFile: TStringList;
-  Loop, LoopSoft, iMediaType, iIndex: Integer;
+  Loop, LoopSoft: Integer;
   iFile, iName: String;
   AddedContent: Boolean;
 begin
@@ -654,15 +657,13 @@ end;
 procedure TFormConsCompSystemsEditor.FormShow(Sender: TObject);
 begin
   //Mouse.DragImmediate := False;
-  FormStatus.TitleStr('Custom Games Editor');
+  //FormStatus.TitleStr('Custom Games Editor');
   FormStatus.MessageStr('Loading systems icons.');
-  if not FormStatus.Visible then
-     begin
-       FormStatus.Show;
-       FormStatus.StartThreadClock;
-     end;
-
-  Application.ProcessMessages;
+  //if not FormStatus.Visible then
+  //   begin
+  //     FormStatus.Show;
+  //     FormStatus.StartThreadClock;
+  //   end;
 
   ReadSettings;
 

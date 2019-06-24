@@ -108,6 +108,9 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
           ShadowColor = 14540253
           ShadowEnabled = True
           EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
       end
@@ -176,6 +179,9 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
           ShadowColor = 14540253
           ShadowEnabled = True
           EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
       end
@@ -308,6 +314,9 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = SystemIconClick
       end
@@ -324,6 +333,9 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         ShadowColor = clGray
         ShadowEnabled = False
         EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
         OnClick = ImageCategoryIconClick
       end

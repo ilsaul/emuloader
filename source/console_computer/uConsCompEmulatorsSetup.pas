@@ -7,7 +7,7 @@ uses
   Dialogs, Buttons, ComCtrls, StdCtrls, IniFiles, FileCtrl, Menus, uCommon,
   uCommonCustom,
   MPCommonObjects, EasyListview, ExtCtrls, ShadowLabel, PanelEx,
-  AdvOfficeButtons, ImgList, EditEx, ButtonsEx, BevelEx;
+  ImgList, EditEx, ButtonsEx, BevelEx;
 
 type
   TFormConsCompEmulatorsSetup = class(TForm)

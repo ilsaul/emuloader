@@ -20,120 +20,11 @@ object FormFavoritesManager: TFormFavoritesManager
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object ToolBarButtons: TToolBar
-    Left = 0
-    Top = 0
-    Width = 781
-    Height = 22
-    AutoSize = True
-    ButtonWidth = 163
-    EdgeBorders = []
-    EdgeInner = esNone
-    EdgeOuter = esNone
-    Flat = True
-    Images = FormMain.IL_MenuPopup
-    Indent = 2
-    List = True
-    ParentShowHint = False
-    ShowCaptions = True
-    ShowHint = True
-    TabOrder = 0
-    Transparent = True
-    Wrapable = False
-    OnCustomDraw = ToolBarButtonsCustomDraw
-    OnCustomDrawButton = ToolBarButtonsCustomDrawButton
-    object ToolButtonFavSettings: TToolButton
-      Left = 2
-      Top = 0
-      Hint = 'Settings'
-      AutoSize = True
-      ImageIndex = 7
-      OnClick = ToolButtonFavSettingsClick
-      OnMouseDown = ToolButtonFavSettingsMouseDown
-      OnMouseUp = ToolButtonFavSettingsMouseUp
-    end
-    object ToolButtonNew: TToolButton
-      Left = 36
-      Top = 0
-      Hint = 'Create a new favorites list'
-      AutoSize = True
-      Caption = '  New'
-      OnClick = ToolButtonNewClick
-    end
-    object ToolButtonClearGames: TToolButton
-      Tag = 2
-      Left = 77
-      Top = 0
-      Hint = 'Empty games list of selected favorites'
-      AutoSize = True
-      Caption = '  Clear Games'
-      OnClick = ToolButtonNewClick
-    end
-    object ToolButtonRemoveInvalidEntries: TToolButton
-      Tag = 1
-      Left = 160
-      Top = 0
-      Hint = 'Remove invalid entries from selected favorites'
-      AutoSize = True
-      Caption = '  Cleanse'
-      OnClick = ToolButtonNewClick
-    end
-    object ToolButtonDuplicate: TToolButton
-      Tag = 3
-      Left = 218
-      Top = 0
-      Hint = 'Create a copy of selected favorites'
-      AutoSize = True
-      Caption = '  Replicate'
-      OnClick = ToolButtonNewClick
-    end
-    object ToolButtonDelete: TToolButton
-      Tag = 4
-      Left = 283
-      Top = 0
-      Hint = 'Terminate selected favorites [Delete key]'
-      AutoSize = True
-      Caption = '  Delete'
-      OnClick = ToolButtonNewClick
-    end
-    object ToolButton3: TToolButton
-      Left = 333
-      Top = 0
-      AutoSize = True
-      Caption = '              '
-      Enabled = False
-    end
-    object ToolBarSetSelectedProfileActive: TToolButton
-      Left = 386
-      Top = 0
-      Hint = 'Change favorites list to selected [Space Bar key]'
-      AutoSize = True
-      Caption = 'Set Selected Profile Active'
-      ImageIndex = 3
-      OnClick = ToolBarSetSelectedProfileActiveClick
-    end
-    object SpeedButtonEx1: TSpeedButtonEx
-      Left = 553
-      Top = 0
-      Width = 167
-      Height = 22
-      Caption = 'Set Selected Profile Active'
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWhite
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ImageIndex = 3
-      Images = FormMain.IL_MenuPopup
-      ParentFont = False
-    end
-  end
   object FavoritesList: TEasyListview
     Left = 0
-    Top = 44
+    Top = 47
     Width = 781
-    Height = 358
+    Height = 355
     Align = alClient
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 22
@@ -212,7 +103,7 @@ object FormFavoritesManager: TFormFavoritesManager
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
-    TabOrder = 1
+    TabOrder = 0
     View = elsReport
     OnColumnClick = FavoritesListColumnClick
     OnColumnSizeChanging = FavoritesListColumnSizeChanging
@@ -221,68 +112,6 @@ object FormFavoritesManager: TFormFavoritesManager
     OnItemEdited = FavoritesListItemEdited
     OnItemEditEnd = FavoritesListItemEditEnd
     OnKeyAction = FavoritesListKeyAction
-  end
-  object NewFavoritePanel: TPanelEx
-    Left = 0
-    Top = 22
-    Width = 781
-    Height = 22
-    Align = alTop
-    Color1 = 16445669
-    Color2 = clMoneyGreen
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = 7891291
-    ColorInnerFrame = clGreen
-    Frames = [frLeft, frTop, frRight, frBottom]
-    ParentBackground = False
-    Style = vgSimple
-    object LabelHotkeyText: TShadowLabel
-      Left = 8
-      Top = 7
-      Width = 597
-      Height = 9
-      Caption = 
-        '  :edit title   :edit filename          :set active             ' +
-        '      :set active and exit    :exit'
-      Font.Charset = OEM_CHARSET
-      Font.Color = 3684408
-      Font.Height = -8
-      Font.Name = 'Terminal'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clMoneyGreen
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelHotkeyKeys: TShadowLabel
-      Left = 7
-      Top = 7
-      Width = 567
-      Height = 9
-      Caption = 
-        'F2            F3               Space Bar            Enter/Double' +
-        '-click                     Esc'
-      Font.Charset = OEM_CHARSET
-      Font.Color = 191
-      Font.Height = -8
-      Font.Name = 'Terminal'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clMoneyGreen
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
   end
   object PanelUpdatingFavTagInGames: TPanelEx
     Left = 317
@@ -322,6 +151,198 @@ object FormFavoritesManager: TFormFavoritesManager
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
+    end
+  end
+  object NewFavoritePanel: TPanelEx
+    Left = 0
+    Top = 0
+    Width = 781
+    Height = 47
+    Align = alTop
+    Color1 = 15856113
+    Color2 = clMoneyGreen
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = 7891291
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    ShowHint = True
+    Style = vgWindowsTheme
+    object LabelHotkeyText: TShadowLabel
+      Left = 8
+      Top = 33
+      Width = 597
+      Height = 9
+      Caption = 
+        '  :edit title   :edit filename          :set active             ' +
+        '      :set active and exit    :exit'
+      Font.Charset = OEM_CHARSET
+      Font.Color = 3684408
+      Font.Height = -8
+      Font.Name = 'Terminal'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMoneyGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelHotkeyKeys: TShadowLabel
+      Left = 7
+      Top = 33
+      Width = 567
+      Height = 9
+      Caption = 
+        'F2            F3               Space Bar            Enter/Double' +
+        '-click                     Esc'
+      Font.Charset = OEM_CHARSET
+      Font.Color = 191
+      Font.Height = -8
+      Font.Name = 'Terminal'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clMoneyGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object ButtonSetSelectedProfileActive: TSpeedButtonEx
+      Left = 394
+      Top = 2
+      Width = 162
+      Height = 22
+      Hint = 'Change favorites list to selected [Space Bar key]'
+      Caption = 'Set Selected Profile Active'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ImageIndex = 3
+      Images = FormMain.IL_MenuPopup
+      ParentFont = False
+      OnClick = ButtonSetSelectedProfileActiveClick
+    end
+    object ButtonSettings: TSpeedButtonEx
+      Left = 2
+      Top = 2
+      Width = 22
+      Height = 24
+      Hint = 'Settings'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ImageIndex = 7
+      Images = FormMain.IL_MenuPopup
+      ParentFont = False
+      OnClick = ButtonSettingsClick
+    end
+    object ButtonNew: TSpeedButtonEx
+      Left = 24
+      Top = 2
+      Width = 47
+      Height = 24
+      Hint = 'Create a new favorites list'
+      Caption = 'New'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonNewClick
+    end
+    object ButtonClearGames: TSpeedButtonEx
+      Tag = 2
+      Left = 71
+      Top = 2
+      Width = 90
+      Height = 24
+      Hint = 'Empty games list of selected favorites'
+      Caption = 'Clear Games'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonNewClick
+    end
+    object ButtonRemoveInvalidEntries: TSpeedButtonEx
+      Tag = 1
+      Left = 161
+      Top = 2
+      Width = 64
+      Height = 24
+      Hint = 'Remove invalid entries from selected favorites'
+      Caption = 'Cleanse'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonNewClick
+    end
+    object ButtonReplicate: TSpeedButtonEx
+      Tag = 3
+      Left = 225
+      Top = 2
+      Width = 72
+      Height = 24
+      Hint = 'Create a copy of selected favorites'
+      Caption = 'Replicate'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonNewClick
+    end
+    object ButtonDelete: TSpeedButtonEx
+      Tag = 4
+      Left = 297
+      Top = 2
+      Width = 56
+      Height = 24
+      Hint = 'Terminate selected favorites [Delete key]'
+      Caption = 'Delete'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonNewClick
     end
   end
   object PanelFavSettings: TPanelEx

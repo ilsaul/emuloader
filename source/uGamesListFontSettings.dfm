@@ -132,7 +132,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Transparent = True
       Visible = False
     end
-    object GamesBackgroundColor: TColorBox
+    object GamesBackgroundColor: TColorBoxEx
       Left = 8
       Top = 23
       Width = 205

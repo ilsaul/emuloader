@@ -371,7 +371,6 @@ procedure TFormArcadeRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameName
 
 var
   iFolder, iFileMask, iFileExtension, iFolderRelative: String;
-  iMachineFolderStr, iSoftListFolderStr: String;
 begin
   iFolder:= '';
   case FeatureIndex of
@@ -556,7 +555,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.CheckMemoryCardSupport;
 var
   MemCardSlots: TStringList;
-  sectionStr, MemCardLastUsed_MachineName, FileExtStr: String;
+  sectionStr, MemCardLastUsed_MachineName: String;
   Loop, iTop, iHeight: Integer;
   MemcardFile: TMemIniFile;
 begin

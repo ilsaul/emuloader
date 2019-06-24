@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   MPCommonObjects, EasyListview, StdCtrls, ImgList, GraphicEx,
   MPCommonUtilities, ExtCtrls, Buttons, PanelEx, uCommon, uCommonCustom,
-  Menus, BarMenus, ShadowLabel, AdvOfficeButtons, EditEx, ButtonsEx;
+  Menus, BarMenus, ShadowLabel, AdvOfficeButtons, EditEx, ButtonsEx, ColorBoxEx;
 
 type
   TFormGamesListFontSettings = class(TForm)
@@ -23,7 +23,7 @@ type
     N2: TMenuItem;
     N3: TMenuItem;
     PanelBottom: TPanelEx;
-    GamesBackgroundColor: TColorBox;
+    GamesBackgroundColor: TColorBoxEx;
     ButtonDefaultBkSortedColor: TBitBtnEx;
     GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx;
     GamesBackgroundImage: TEditEx;
@@ -1064,7 +1064,7 @@ begin
   FormMain.AddMsgText('Show Available Systems Only', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' option in popup menu.');
 
-  GenerateMessage('Help', 'Shed some light on the darkness.');
+  GenerateMessage('Help', 'Shed some light into the darkness.');
 end;
 
 

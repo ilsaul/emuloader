@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, ComCtrls, IniFiles, Buttons,
   MPCommonObjects, MPCommonUtilities, EasyListview, ImgList, PanelEx,
-  AdvOfficeButtons, ShadowLabel, ButtonsEx;
+  ShadowLabel, ButtonsEx;
 
 type
   TFormColumnsEditor = class(TForm)

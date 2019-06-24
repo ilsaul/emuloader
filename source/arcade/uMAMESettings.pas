@@ -7059,8 +7059,8 @@ end;
 
 procedure TFormMAMESettings.BGFXLUTTextureNameButtonSelectClick(
   Sender: TObject);
-var
-  sFile, sFolder: String;
+//var
+//  sFile, sFolder: String;
 begin
   SelectLUTTextureFile(BGFXLUTTextureName);
   //if BGFXLUTTextureName.Text <> '' then

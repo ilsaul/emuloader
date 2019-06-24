@@ -338,7 +338,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
         OnClick = sysMAMEClick
       end
     end
-    object MAMEMachinesFilter: TComboBox
+    object MAMEMachinesFilter: TComboBox2Ex
       Left = 320
       Top = 50
       Width = 185

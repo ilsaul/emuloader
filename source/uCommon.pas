@@ -10,7 +10,7 @@ uses
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
-  BevelEx;
+  BevelEx, ColorBoxEx, GR32_RangeBars;
 
 const
   MaxArcadeSystems = 8;
@@ -423,7 +423,9 @@ procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility:
 procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
-procedure SetColorBoxColors(ColorBoxSource: TColorBox; iBackgroundColor, iFontColor: TColor);
+procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean);
+procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil);
+procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar);
 procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
@@ -634,10 +636,88 @@ begin
      BevelExSource.Style:= bsLowered;
 end;
 
-procedure SetColorBoxColors(ColorBoxSource: TColorBox; iBackgroundColor, iFontColor: TColor);
+procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean);
 begin
-  ColorBoxSource.Color:= iBackgroundColor;
-  ColorBoxSource.Font.Color:= iFontColor;
+  if UpdateColors then
+  begin
+    ColorBoxExSource.SelectionBarCustomColor_Top:= clrOrangeBarTop;
+    ColorBoxExSource.SelectionBarCustomColor_Bottom:= clrOrangeBarBottom;
+    ColorBoxExSource.SelectionShowFrameColor:= clrOrangeBarBorder;
+    ColorBoxExSource.SelectionShowFrame:= True;
+
+    ColorBoxExSource.SelectionFontCustomColor:= clrBlackBk;
+    ColorBoxExSource.CustomColorBk:= clrDarkGray;
+    ColorboxExSource.CustomColorFont:= clCream;
+  end;
+  if ColorBoxExSource.CustomColorsEnabled <> IsNightMode then
+     ColorBoxExSource.CustomColorsEnabled:= IsNightMode;
+end;
+
+procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil);
+begin
+  if UpdateColors then
+  begin
+    ComboBox2ExSource.SelectionBarCustomColor_Top:= clrOrangeBarTop;
+    ComboBox2ExSource.SelectionBarCustomColor_Bottom:= clrOrangeBarBottom;
+    ComboBox2ExSource.SelectionShowFrameColor:= clrOrangeBarBorder;
+    ComboBox2ExSource.SelectionShowFrame:= True;
+
+    ComboBox2ExSource.SelectionFontCustomColor:= clrBlackBk;
+    if EditColors = nil then
+    begin
+      ComboBox2ExSource.CustomColorBk:= clrDarkGray;
+      ComboBox2ExSource.CustomColorFont:= clCream;
+
+      ComboBox2ExSource.FrameColor:= clGray;
+      ComboBox2ExSource.FrameColorFocused:= clSilver;
+      ComboBox2ExSource.FrameColorDisabled:= clrMedDarkGray; // $00505050;
+    end
+    else
+    begin
+      ComboBox2ExSource.CustomColorBk:= EditColors.Color;
+      ComboBox2ExSource.CustomColorFont:= EditColors.Font.Color;
+
+      ComboBox2ExSource.FrameColor:= EditColors.ColorFrame;
+      ComboBox2ExSource.FrameColorFocused:= EditColors.ColorFrameFocused;
+      ComboBox2ExSource.FrameColorDisabled:= EditColors.ColorFrameDisabled;
+    end;
+  end;
+  if ComboBox2ExSource.CustomColorsEnabled <> IsNightMode then
+     ComboBox2ExSource.CustomColorsEnabled:= IsNightMode;
+  if IsNightMode and ComboBox2ExSource.CustomColorsEnabled then
+     begin
+       if ComboBox2ExSource.ItemHeight <> 16 then
+          ComboBox2ExSource.ItemHeight:= 16; // fix for the control height... should always be one more pixel in "OwnerDraw" mode
+     end;
+end;
+
+procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar);
+begin
+  if IsNightMode then
+     begin
+       if GaugeBarSource.Style <> rbsMac then
+          GaugeBarSource.Style:= rbsMac;
+
+       GaugeBarSource.Backgnd:= bgSolid;
+       GaugeBarSource.BorderStyle:= bsNone;
+       GaugeBarSource.BorderColor:= clGray;
+       GaugeBarSource.ArrowColor:= clCream;
+       GaugeBarSource.ButtonColor:= clrDarkSilver;
+       GaugeBarSource.ButtonSize:= 17;
+       GaugeBarSource.Color:= clrDarkGray;
+       GaugeBarSource.HandleColor:= clGray;
+       GaugeBarSource.HighLightColor:= clrDarkGray;
+       GaugeBarSource.ShadowColor:= clrBlackBk;
+       GaugeBarSource.ShowHandleGrip:= True;
+
+     end
+  else
+     begin
+       if GaugeBarSource.Style <> rbsDefault then
+          GaugeBarSource.Style:= rbsDefault;
+       GaugeBarSource.Backgnd:= bgPattern;
+       GaugeBarSource.ButtonSize:= 12;
+     end;
 end;
 
 procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);

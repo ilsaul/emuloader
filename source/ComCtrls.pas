@@ -2810,7 +2810,9 @@ type
     FWrap: Boolean;
     FStyle: TToolButtonStyle;
     FUpdateCount: Integer;
+    FClicked: Boolean; // added by Ciro Alfredo Consentino (June 08, 2019)
     function GetButtonState: Byte;
+    function GetIsClicked: Boolean;
     function GetIndex: Integer;
     function IsCheckedStored: Boolean;
     function IsImageIndexStored: Boolean;
@@ -2835,24 +2837,24 @@ type
     procedure AssignTo(Dest: TPersistent); override;
     procedure BeginUpdate; virtual;
     procedure EndUpdate; virtual;
-    function GetActionLinkClass: TControlActionLinkClass; override;
+    function  GetActionLinkClass: TControlActionLinkClass; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Paint; override;
     procedure RefreshControl; virtual;
-    procedure SetAutoSize(Value: Boolean); override;   
+    procedure SetAutoSize(Value: Boolean); override;
     procedure SetToolBar(AToolBar: TToolBar);
     procedure UpdateControl; virtual;
     procedure ValidateContainer(AComponent: TComponent); override;
   public
     constructor Create(AOwner: TComponent); override;
-    function CheckMenuDropdown: Boolean; dynamic;
+    function  CheckMenuDropdown: Boolean; dynamic;
     procedure Click; override;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
     property Index: Integer read GetIndex;
+    property IsClicked: Boolean read GetIsClicked;
   published
     property Action;
     property AllowAllUp: Boolean read FAllowAllUp write FAllowAllUp default False;
@@ -2964,6 +2966,7 @@ type
     FOurFont: Integer;
     FStockFont: Integer;
     FHideClippedButtons: Boolean;
+
     function ButtonIndex(OldIndex, ALeft, ATop: Integer): Integer;
     procedure CanvasChanged(Sender: TObject);
     function DoGetButton(NMToolbar: PNMToolbar): Boolean;
@@ -16291,6 +16294,7 @@ begin
   Height := 22;
   FImageIndex := -1;
   FStyle := tbsButton;
+  FClicked := False;
 end;
 
 procedure TToolButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -16298,6 +16302,9 @@ procedure TToolButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
 begin
   if (Style = tbsDropDown) and (Button = mbLeft) and Enabled then
     Down := not Down;
+
+  if (Style = tbsButton) and (Button = mbLeft) and Enabled then
+     FClicked := True;
   inherited MouseDown(Button, Shift, X, Y);
 end;
 
@@ -16313,8 +16320,11 @@ procedure TToolButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
 begin
   inherited MouseUp(Button, Shift, X, Y);
   if (Button = mbLeft) and (X >= 0) and (X < ClientWidth) and (Y >= 0) and
-    (Y <= ClientHeight) then
-  if Style = tbsDropDown then Down := False;
+     (Y <= ClientHeight) then
+     begin
+       if Style = tbsDropDown then Down := False;
+       if Style = tbsButton then FClicked := False;
+     end;
 end;
 
 procedure TToolButton.Click;
@@ -16696,6 +16706,11 @@ end;
 procedure TToolButton.EndUpdate;
 begin
   Dec(FUpdateCount);
+end;
+
+function TToolButton.GetIsClicked: Boolean;
+begin
+  Result := FClicked;
 end;
 
 function TToolButton.GetIndex: Integer;
@@ -18659,8 +18674,13 @@ begin
           if (CapControl = Control) or (Control is TToolButton) then
           begin
             with TToolButton(Control) do
+            begin
               if Down and Grouped and AllowAllUp and (Style = tbsCheck) then
                 Down := False;
+
+              if FClicked and (Style = tbsButton) then
+                 FClicked := False;
+            end;
             UpdateButtonStates;
           end
           else if (CapControl is TToolButton) or (TToolButton(Control).Style = tbsDropDown) then

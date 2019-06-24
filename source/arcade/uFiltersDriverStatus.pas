@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, AdvGroupBox, AdvOfficeButtons,
-  ExtCtrls, ShadowLabel, ButtonsEx;
+  ExtCtrls, ShadowLabel, ButtonsEx, ColorBoxEx;
 
 type
   TFormArcadeFiltersDriverStatus = class(TForm)
@@ -18,7 +18,7 @@ type
     IconGoodImperfect: TImage;
     IconImperfect: TImage;
     ListAll: TAdvOfficeRadioButtonEx;
-    DriverStatusCategory: TComboBox;
+    DriverStatusCategory: TComboBox2Ex;
     GoodImperfect: TAdvOfficeRadioButtonEx;
     Imperfect: TAdvOfficeRadioButtonEx;
     Preliminary: TAdvOfficeRadioButtonEx;

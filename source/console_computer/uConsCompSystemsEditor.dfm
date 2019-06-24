@@ -310,10 +310,10 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       OnResize = PanelBottomResize
       object GamesListFontSize: TShadowLabel
         Tag = 9
-        Left = 130
+        Left = 132
         Top = 10
-        Width = 24
-        Height = 21
+        Width = 25
+        Height = 23
         Hint = 'Software lists font size (default 9)'
         Alignment = taCenter
         AutoSize = False
@@ -334,20 +334,15 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Transparent = True
         Layout = tlCenter
       end
-      object ButtonOptions: TBitBtnEx
+      object ButtonOptions: TSpeedButtonEx
         Left = 9
         Top = 9
-        Width = 24
-        Height = 23
+        Width = 22
+        Height = 24
         Hint = 'Settings'
-        Caption = #234
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 7
+        Flat = True
+        ImageIndex = 7
+        Images = FormMain.IL_MenuPopup
         OnClick = ButtonOptionsClick
       end
       object ButtonOk: TBitBtnEx
@@ -390,8 +385,8 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Tag = -1
         Left = 105
         Top = 9
-        Width = 23
-        Height = 23
+        Width = 25
+        Height = 25
         Hint = 'Smaller font size'
         Caption = #231
         Font.Charset = SYMBOL_CHARSET
@@ -405,10 +400,10 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       end
       object GamesListFontSizeLarger: TBitBtnEx
         Tag = 1
-        Left = 156
+        Left = 159
         Top = 9
-        Width = 23
-        Height = 23
+        Width = 25
+        Height = 25
         Hint = 'Larger font size'
         Caption = #232
         Font.Charset = SYMBOL_CHARSET
@@ -425,7 +420,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Left = 57
         Top = 9
         Width = 46
-        Height = 23
+        Height = 25
         Hint = 'Smaller font size (4 steps)'
         Caption = #231#231
         Font.Charset = SYMBOL_CHARSET
@@ -439,10 +434,10 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       end
       object GamesListFontSizeLarger_x4: TBitBtnEx
         Tag = 4
-        Left = 180
+        Left = 185
         Top = 9
         Width = 46
-        Height = 23
+        Height = 25
         Hint = 'Larger font size (4 steps)'
         Caption = #232#232
         Font.Charset = SYMBOL_CHARSET

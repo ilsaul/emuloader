@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, CommCtrl,
   ComCtrls, StdCtrls, MPCommonObjects, MPCommonUtilities, EasyListview,
-  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList, AdvOfficeButtons,
+  ExtCtrls, Buttons, PanelEx, ShadowLabel, ImgList,
   uCommon, uCommonCustom, Menus, BarMenus, ButtonsEx;
 
 type
@@ -311,7 +311,6 @@ end;
 
 procedure TFormSelectFilterSystemMega.ShowHideSystems;
 var
-  IsVisible: Boolean;
   Item: TEasyItem;
 begin
   SystemsListView.BeginUpdate;
@@ -539,7 +538,6 @@ end;
 procedure TFormSelectFilterSystemMega.FormShow(Sender: TObject);
 var
   IconFolder: String;
-  Loop: Integer;
 begin
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
@@ -566,7 +564,6 @@ end;
 
 procedure TFormSelectFilterSystemMega.FormActivate(Sender: TObject);
 var
-  MaxItems: Integer;
   Item: TEasyItem;
 begin
   if FormSelectFilterSystemMega.Tag = 1 then

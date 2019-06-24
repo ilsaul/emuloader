@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ImgList, MPCommonObjects, MPCommonUtilities,
   EasyListview, ExtCtrls, PanelEx, Buttons, ShadowLabel, IniFiles,
-  SplitterEx, Menus, BarMenus, AdvOfficeButtons, ButtonsEx;
+  SplitterEx, Menus, BarMenus, ButtonsEx;
 
 type
   TPlayedGameInfo = class(TEasyItemStored)
@@ -140,8 +140,8 @@ uses uCommon, uCommonCustom, uMain;
 {$R *.dfm}
 
 function TPlayedGameInfo.GetCaptions(Column: Integer): WideString;
-var
-  strMediaType: String;
+//var
+//  strMediaType: String;
 begin
   //strSize:= FormMain.MountSizeString(eMediaType, eGameSize);
   //strMediaType:= MediaTypeArray[eMediaType, 0]; // MediaType[] or MediaTypeCustom[]
@@ -198,7 +198,7 @@ var
   SysLoop, Loop: ShortInt;
   ValueStr, UnicodeFileName, StrToSearch: String;
   PlayedList: THashedStringList;
-  iGameTitle, iGameName: WideString;
+  iGameTitle: WideString;
   iMediaType: Integer;
   //iSoftwareExecParam: String;
   iPlayed: Cardinal;
@@ -529,8 +529,6 @@ begin
 end;
 
 procedure TFormLastPlayedGamesMega.ButtonSelectGameClick(Sender: TObject);
-var
-  Item: TEasyItem;
 begin
   if FormMain.CheckSelected(LastPlayedList) then
      SelectGameToPlay(LastPlayedList.Selection.First, Boolean(TBitBtn(Sender).Tag = 1));
@@ -767,7 +765,7 @@ end;
 procedure TFormLastPlayedGamesMega.SystemsItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 var
-  newSysTag, NewColumnWidth: Integer;
+  newSysTag: Integer;
 begin
   if FormLastPlayedGamesMega.Tag = 0 then
      Exit;

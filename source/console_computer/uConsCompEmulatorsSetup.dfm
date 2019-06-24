@@ -107,6 +107,8 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Top = 139
       Width = 34
       Height = 34
+      CustomColor1 = clBlack
+      CustomColor2 = clBlack
     end
     object LabelEmulatorFile: TShadowLabel
       Left = 56
@@ -597,6 +599,8 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Top = 10
       Width = 34
       Height = 34
+      CustomColor1 = clBlack
+      CustomColor2 = clBlack
     end
     object VirtualDriveIcon: TImage
       Left = 13
@@ -687,9 +691,6 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
-      GradientColorTop_Down = 10905138
-      GradientColorBottom_Down = 9196326
-      FrameColor_Down = clBlack
     end
     object Emulator2PageButton: TSpeedButtonEx
       Tag = 2
@@ -706,9 +707,6 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
-      GradientColorTop_Down = 10905138
-      GradientColorBottom_Down = 9196326
-      FrameColor_Down = clBlack
     end
     object Emulator3PageButton: TSpeedButtonEx
       Tag = 3
@@ -725,9 +723,6 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
-      GradientColorTop_Down = 10905138
-      GradientColorBottom_Down = 9196326
-      FrameColor_Down = clBlack
     end
     object Emulator4PageButton: TSpeedButtonEx
       Tag = 4
@@ -744,9 +739,6 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
-      GradientColorTop_Down = 10905138
-      GradientColorBottom_Down = 9196326
-      FrameColor_Down = clBlack
     end
     object PageButtonsBottomLine: TBevelEx
       Left = 2
@@ -754,6 +746,8 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Width = 422
       Height = 2
       Shape = bsTopLine
+      CustomColor1 = clBlack
+      CustomColor2 = clBlack
     end
     object LabelEmuHardDiskDriveParameter: TShadowLabel
       Left = 32

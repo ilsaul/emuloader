@@ -7,7 +7,7 @@ uses
   StdCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, ImgList, uMain, ExtCtrls, ComCtrls,
   uCommon, ToolWin, Buttons, PanelEx, GR32_Image, ShadowLabel,
-  AdvOfficeButtons, Menus, BarMenus;
+  Menus, BarMenus;
 
 type
   TEasyGameInfo_dc = class(TEasyItemStored)

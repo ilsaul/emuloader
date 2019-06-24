@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
   ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain, EditEx,
-  ButtonsEx;
+  ButtonsEx, ColorBoxEx;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -23,7 +23,7 @@ type
     ButtonClearImageCategoryFolder: TBitBtnEx;
     ButtonImageCategoryFolder: TBitBtnEx;
     ImageCategoryFolder: TEditEx;
-    ImageCategoryBackgroundColor: TColorBox;
+    ImageCategoryBackgroundColor: TColorBoxEx;
     ButtonImageCategoryBackgroundColorReset: TBitBtnEx;
     ButtonDefaultImageCategoryFolder: TBitBtnEx;
     ButtonZippedImages: TBitBtnEx;

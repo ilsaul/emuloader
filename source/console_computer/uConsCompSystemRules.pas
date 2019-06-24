@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, ComCtrls, ShadowLabel, RichEditURL,
-  ShellApi, ExtCtrls, AdvOfficeButtons;
+  ShellApi, ExtCtrls;
 
 type
   TFormConsCompSystemRules = class(TForm)

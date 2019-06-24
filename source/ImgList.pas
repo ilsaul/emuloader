@@ -208,6 +208,9 @@ begin
     Row := BitMap.ScanLine[y];
     for x := 0 to BitMap.Width - 1 do
     begin
+      //Gray             := ((Row[x].rgbtRed Shl 5)+(Row[x].rgbtGreen Shl 6)+(Row[x].rgbtBlue*12)) Div 108;
+      //Gray             := Round((Row[x].rgbtRed+0.21)+(Row[x].rgbtGreen+0.72)+(Row[x].rgbtBlue+0.07));
+      //Gray             := Round((0.30 * Row[x].rgbtRed) + (0.59 * Row[x].rgbtGreen) + (0.11 * Row[x].rgbtBlue));
       Gray             := (Row[x].rgbtRed + Row[x].rgbtGreen + Row[x].rgbtBlue) div 3;
       Row[x].rgbtRed   := Gray;
       Row[x].rgbtGreen := Gray;
@@ -602,9 +605,9 @@ end;
 
 procedure TCustomImageList.DoDraw(Index: Integer; Canvas: TCanvas; X, Y: Integer;
   Style: Cardinal; Enabled: Boolean);
-var
-  MaskBitMap : TBitmap;
-  GrayBitMap : TBitmap;
+//var
+//  MaskBitMap : TBitmap;
+//  GrayBitMap : TBitmap;
 begin
   if HandleAllocated then
   begin
@@ -612,8 +615,10 @@ begin
       ImageList_DrawEx(Handle, Index, Canvas.Handle, X, Y, 0, 0,
         GetRGBColor(BkColor), GetRGBColor(BlendColor), Style)
     else
+      ImageList_DrawEx(Handle, Index, Canvas.Handle, X, Y, 0, 0,
+        GetRGBColor(BkColor), GetRGBColor(BlendColor), ILD_BLEND50);
 
-    begin
+    {begin
       GrayBitMap := TBitmap.Create;
       MaskBitMap := TBitmap.Create;
       try
@@ -631,7 +636,7 @@ begin
         GrayBitMap.Free;
         MaskBitMap.Free;
       end;
-    end;
+    end;}
   end;
 end;
 

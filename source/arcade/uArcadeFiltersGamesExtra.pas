@@ -5,7 +5,8 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, uCommon, Buttons,
-  AdvOfficeButtons, PanelEx, AdvGroupBox, ShadowLabel, ButtonsEx;
+  AdvOfficeButtons, PanelEx, AdvGroupBox, ShadowLabel, ButtonsEx,
+  ColorBoxEx;
 
 type
   TFormArcadeFiltersExtra = class(TForm)
@@ -15,16 +16,16 @@ type
     ButtonCancel: TBitBtnEx;
     LabelControlType: TShadowLabel;
     LabelInterfaceType: TShadowLabel;
-    InterfaceType: TComboBox;
+    InterfaceType: TComboBox2Ex;
     LabelAudioType: TShadowLabel;
-    AudioType: TComboBox;
+    AudioType: TComboBox2Ex;
     LabelGamesROMs: TShadowLabel;
-    GamesROMs: TComboBox;
+    GamesROMs: TComboBox2Ex;
     LabelDeviceROMs: TShadowLabel;
     HideDeviceSets: TAdvOfficeCheckBoxEx;
-    DeviceROMs: TComboBox;
+    DeviceROMs: TComboBox2Ex;
     LabelBios: TShadowLabel;
-    Bios: TComboBox;
+    Bios: TComboBox2Ex;
     HideBiosSets: TAdvOfficeCheckBoxEx;
     HideGamesWithCHDFiles: TAdvOfficeCheckBoxEx;
     ButtonDefaultOptions: TBitBtnEx;
@@ -32,12 +33,12 @@ type
     NeoGeoMVS: TAdvOfficeCheckBoxEx;
     STVMultiSlot: TAdvOfficeCheckBoxEx;
     LabelNeoGeoMVS: TShadowLabel;
-    ControlType_New: TComboBox;
-    ScreenOrientation: TComboBox;
+    ControlType_New: TComboBox2Ex;
+    ScreenOrientation: TComboBox2Ex;
     LabelScreenOrientation: TShadowLabel;
     ShowMergedSetsOnly: TAdvOfficeCheckBoxEx;
     HideNoDumpROMsGames: TAdvOfficeCheckBoxEx;
-    SaveState: TComboBox;
+    SaveState: TComboBox2Ex;
     LabelSaveState: TShadowLabel;
     CategoryFiltersGroupBox: TAdvGroupBoxEx;
     LabelCategoryFiltersGroupBoxHint: TShadowLabel;
@@ -64,7 +65,7 @@ type
     CategoryBoardGame: TAdvOfficeCheckBoxEx;
     CategorySlotMachines: TAdvOfficeCheckBoxEx;
     HideMAMESoftlist_vgmplay: TAdvOfficeCheckBoxEx;
-    SpecialList: TComboBox;
+    SpecialList: TComboBox2Ex;
     LabelSpecialList: TShadowLabel;
     LabelHideMAMESoftlist_vgmplay: TShadowLabel;
     procedure FormActivate(Sender: TObject);

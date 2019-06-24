@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, EasyListview, StdCtrls,
-  Buttons, IniFiles, AdvOfficeButtons, ShadowLabel, ExtCtrls, PanelEx, ImgList,
+  Buttons, IniFiles, ShadowLabel, ExtCtrls, PanelEx, ImgList,
   ButtonsEx;
 
 type

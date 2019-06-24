@@ -329,7 +329,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 3
       OnChange = ImageCategoryFolderChange
     end
-    object ImageCategoryBackgroundColor: TColorBox
+    object ImageCategoryBackgroundColor: TColorBoxEx
       Left = 496
       Top = 29
       Width = 187
