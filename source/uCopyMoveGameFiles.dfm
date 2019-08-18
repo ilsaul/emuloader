@@ -86,7 +86,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Font.Color = 191
       Font.Height = -13
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 16448250
@@ -166,6 +166,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 89
     object SystemIcon: TImage
       Tag = -50
       Left = 4

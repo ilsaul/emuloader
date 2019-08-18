@@ -178,15 +178,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Width = 445
     Height = 161
     CheckBox.Action = caNone
+    CheckBox.Themed = True
     CheckBox.Visible = True
     RoundEdges = True
     Caption = '      Use Custom Category for Console/Computer '
     Ctl3D = True
     Font.Charset = ANSI_CHARSET
     Font.Color = 7891291
-    Font.Height = -13
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
+    Font.Style = []
     ParentFont = False
     TabOrder = 4
     OnCheckBoxClick = GroupBoxCategoryConsoleComputerCheckBoxClick
@@ -213,15 +214,15 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     end
     object LabelPanel1_ConsComp: TShadowLabel
       Left = 39
-      Top = 22
-      Width = 45
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -380,16 +381,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnClick = IconLayScr4_ConsCompClick
     end
     object LabelPanel4_ConsComp: TShadowLabel
-      Left = 364
-      Top = 22
-      Width = 45
+      Left = 365
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -401,16 +402,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
     end
     object LabelPanel3_ConsComp: TShadowLabel
-      Left = 252
-      Top = 22
-      Width = 45
+      Left = 257
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -423,16 +424,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Visible = False
     end
     object LabelPanel2_ConsComp: TShadowLabel
-      Left = 143
-      Top = 22
-      Width = 45
+      Left = 148
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -544,6 +545,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 0
       Width = 250
       Height = 16
+      Cursor = crHandPoint
       Hint = 'Toggle visible / not visible for all layouts'
       Alignment = taCenter
       AutoSize = False
@@ -577,14 +579,15 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Top = 269
     Width = 445
     Height = 161
+    CheckBox.Themed = True
     RoundEdges = True
     Caption = ' Category (All Systems) '
     Ctl3D = True
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
+    Font.Style = []
     ParentFont = False
     TabOrder = 3
     object FrameIconLayScr2: TShape
@@ -609,16 +612,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Pen.Color = 7891291
     end
     object LabelPanel1: TShadowLabel
-      Left = 39
-      Top = 22
-      Width = 45
+      Left = 41
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -777,16 +780,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnClick = IconLayScr4Click
     end
     object LabelPanel4: TShadowLabel
-      Left = 364
-      Top = 22
-      Width = 45
+      Left = 365
+      Top = 23
+      Width = 43
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -798,16 +801,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
     end
     object LabelPanel2: TShadowLabel
-      Left = 143
+      Left = 148
       Top = 8
-      Width = 45
+      Width = 43
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -820,16 +823,16 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Visible = False
     end
     object LabelPanel3: TShadowLabel
-      Left = 252
+      Left = 257
       Top = 8
-      Width = 45
+      Width = 43
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -842,8 +845,8 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Visible = False
     end
     object PanelEnabledScr2: TAdvOfficeCheckBoxEx
-      Left = 139
-      Top = 20
+      Left = 140
+      Top = 21
       Width = 63
       Height = 20
       Hint = 'Show/hide this panel for selected layout'
@@ -852,7 +855,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowHint = True
       TabOrder = 0
@@ -865,8 +868,8 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Themed = True
     end
     object PanelEnabledScr3: TAdvOfficeCheckBoxEx
-      Left = 247
-      Top = 20
+      Left = 249
+      Top = 21
       Width = 62
       Height = 20
       Hint = 'Show/hide this panel for selected layout'
@@ -875,7 +878,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowHint = True
       TabOrder = 1

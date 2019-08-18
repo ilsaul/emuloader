@@ -133,7 +133,6 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     Color4 = clTeal
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -272,21 +271,21 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
     EnableInnerFrame = True
-    EnableCustomBorder = ecbDouble
+    EnableCustomBorder = ecbSingle
     Frames = []
     ParentBackground = False
     Style = vgSolid
     object LabelMultiSlotMachinesChooseMachineToRun: TShadowLabel
-      Left = 14
-      Top = 251
-      Width = 388
+      Left = 15
+      Top = 254
+      Width = 355
       Height = 17
       Caption = 'Choose machine to run games with, click "Ok" button'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -13
       Font.Name = 'Verdana'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMedGray
@@ -298,11 +297,11 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       Transparent = True
     end
     object LabelMultiSlotMachinesBoldDefaultMachine: TShadowLabel
-      Left = 532
-      Top = 252
-      Width = 155
-      Height = 15
-      Caption = 'bold is default machine'
+      Left = 517
+      Top = 255
+      Width = 171
+      Height = 18
+      Caption = 'default machine is in bold'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
       Font.Height = -12
@@ -319,8 +318,8 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       Transparent = True
     end
     object MultiSlotMachines: TEasyListview
-      Left = 14
-      Top = 14
+      Left = 15
+      Top = 16
       Width = 946
       Height = 225
       CellSizes.Tile.Width = 254
@@ -413,8 +412,8 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       OnKeyAction = MultiSlotMachinesKeyAction
     end
     object ButtonOkMultiSlotMachines: TBitBtnEx
-      Left = 823
-      Top = 248
+      Left = 824
+      Top = 251
       Width = 65
       Height = 23
       Hint = 
@@ -425,8 +424,8 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       OnClick = ButtonOkMultiSlotMachinesClick
     end
     object ButtonCancelMultiSlotMachines: TBitBtnEx
-      Left = 895
-      Top = 248
+      Left = 896
+      Top = 251
       Width = 65
       Height = 23
       Hint = 

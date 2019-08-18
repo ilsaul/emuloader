@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ToolWin, IniFiles, PanelEx, MPCommonObjects,
   MPCommonUtilities, MPThreadManager, EasyListview, StdCtrls, Buttons,
-  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons, ButtonsEx, Themes;
+  ShadowLabel, ExtCtrls, ImgList, AdvOfficeButtons, ButtonsEx, Themes,
+  Menus, BarMenus;
 type
   TFavFileInfo = class(TEasyItemStored)
   private
@@ -52,16 +53,6 @@ type
     LabelTaskMessage: TShadowLabel;
     PanelUpdatingFavTagInGames: TPanelEx;
     IL_SystemType: TImageList;
-    PanelFavSettings: TPanelEx;
-    ButtonClosePanelFavSettings: TBitBtnEx;
-    ButtonCenterPanelFavSettings: TBitBtnEx;
-    FavSettingSmallFont: TAdvOfficeRadioButtonEx;
-    FavSettingLargeFont: TAdvOfficeRadioButtonEx;
-    FavSettingMediumFont: TAdvOfficeRadioButtonEx;
-    Label1: TShadowLabel;
-    Label2: TShadowLabel;
-    Label3: TShadowLabel;
-    LabelSettings: TShadowLabel;
     NewFavoritePanel: TPanelEx;
     LabelHotkeyText: TShadowLabel;
     LabelHotkeyKeys: TShadowLabel;
@@ -72,6 +63,12 @@ type
     ButtonRemoveInvalidEntries: TSpeedButtonEx;
     ButtonReplicate: TSpeedButtonEx;
     ButtonDelete: TSpeedButtonEx;
+    PopupSettings: TBcBarPopupMenu;
+    PopupSettingsSmallFont: TMenuItem;
+    PopupSettingsMediumFont: TMenuItem;
+    PopupSettingsLargeFont: TMenuItem;
+    N7: TMenuItem;
+    PopupSettingsCenterWindow: TMenuItem;
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure FavoritesListColumnClick(Sender: TCustomEasyListview;
@@ -89,14 +86,17 @@ type
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure ButtonClosePanelFavSettingsClick(Sender: TObject);
     procedure FavoritesListColumnSizeChanging(Sender: TCustomEasyListview;
       Column: TEasyColumn; Width, NewWidth: Integer; var Allow: Boolean);
-    procedure ButtonCenterPanelFavSettingsClick(Sender: TObject);
-    procedure FavSettingSmallFontClick(Sender: TObject);
     procedure ButtonSettingsClick(Sender: TObject);
     procedure ButtonNewClick(Sender: TObject);
     procedure ButtonSetSelectedProfileActiveClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure PopupSettingsMeasureMenuItem(Sender: TObject;
+      AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
+      ABarVisible: Boolean; var DefaultMeasure: Boolean);
+    procedure PopupSettingsSmallFontClick(Sender: TObject);
+    procedure PopupSettingsCenterWindowClick(Sender: TObject);
   private
     { Private declarations }
     UpdateFavStatusInGames: Boolean;
@@ -834,27 +834,30 @@ begin
        if not Assigned(FormFavoritesManagerCleanseProfile) then
           FormFavoritesManagerCleanseProfile:= TFormFavoritesManagerCleanseProfile.Create(nil);
 
-       if IsNightMode then
-          begin
-            FormFavoritesManagerCleanseProfile.Color:= menu_background_color[1];
-            SetPanelColors(FormFavoritesManagerCleanseProfile.PanelBottom, menu_background_color[1], clrMedDarkGray);
-            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTopMessage, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTotal, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-
-            FormMain.SetEasyListViewColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, menu_background_color[1], item_caption_active_color[1]);
-            FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorderColor:= FavoritesList.ShowThemedBorderColor;
-
-            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonConfirm);
-            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonAbort);
-            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonRemoveSelected);
-          end;
-
        FormFavoritesManagerCleanseProfile.FavoritesCleanseList.BeginUpdate;
        FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= True;
        LoadCustomMAMEIconToForm(FormFavoritesManagerCleanseProfile, 3);
        FormMain.LoadSystemsIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False);
        FormMain.LoadNonArcadeSystemIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False, False);
        FormMain.ELV_ResetNormalColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList);
+
+       if IsNightMode then
+          begin
+            FormFavoritesManagerCleanseProfile.Color:= menu_background_color[1];
+            SetPanelColors(FormFavoritesManagerCleanseProfile.PanelBottom, menu_background_color[1], clrMedDarkGray);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTopMessage, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTotal, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+
+            FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorder:= False;
+            //FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorderColor:= FavoritesList.ShowThemedBorderColor;
+            FormMain.SetEasyListViewColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, menu_background_color[1], item_caption_active_color[1]);
+            FormMain.SetEasyListViewHeaderColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, True);
+            FormMain.ELV_SetRibbonNightColors(0, FormFavoritesManagerCleanseProfile.FavoritesCleanseList, True);
+
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonConfirm);
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonAbort);
+            FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonRemoveSelected);
+          end;
 
        FavoriteGamesList:= THashedStringList.Create;
        FavoriteGamesList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
@@ -1195,28 +1198,16 @@ begin
   LoadCustomMAMEIconToForm(TForm(Sender), 3);
   FormMain.AddDefaultIcons('systemtype_arcade.ico', FormMain.GetFolderFull(32), IL_SystemType);
   FormMain.AddDefaultIcons('systemtype_computer.ico', FormMain.GetFolderFull(32), IL_SystemType);
-  PanelFavSettings.Left:= 4;
-  PanelFavSettings.Top:= 26;
 
   FormMain.ELV_ResetNormalColors(FavoritesList);
   
   if IsNightMode then
      begin
-       SetFormColors(FormFavoritesManager, nil, nil, nil, nil, -1, False);
+       SetFormColors(FormFavoritesManager, nil, nil, nil, nil, nil, -1, False);
 
-       //FormMain.SetEasyListViewColors(FavoritesList, FormFavoritesManager.Color, clWhite);
        FormMain.SetEasyListViewColors(FavoritesList, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewHeaderColors(FavoritesList, True);
        FormMain.ELV_SetRibbonNightColors(0, FavoritesList, True);
-
-       SetPanelNightColors(PanelFavSettings);
-
-       SetLabelColors(LabelSettings, clYellow, clMaroon);
-       LabelSettings.Color:= clrDarkBlue;
-       SetRadioButtonColors(FavSettingSmallFont, clWhite, clNavy);
-       SetRadioButtonColors(FavSettingMediumFont, clWhite, clNavy);
-       SetRadioButtonColors(FavSettingLargeFont, clWhite, clNavy);
-       FormMain.SetButtonExColors(ButtonCenterPanelFavSettings);
-       FormMain.SetButtonExColors(ButtonClosePanelFavSettings);
      end;
   ReadSettings;
 
@@ -1321,27 +1312,12 @@ begin
      WriteSettings;
 end;
 
-procedure TFormFavoritesManager.ButtonClosePanelFavSettingsClick(Sender: TObject);
-begin
-  PanelFavSettings.Visible:= False;
-  FavoritesList.SetFocus;
-end;
-
 procedure TFormFavoritesManager.FavoritesListColumnSizeChanging(
   Sender: TCustomEasyListview; Column: TEasyColumn; Width,
   NewWidth: Integer; var Allow: Boolean);
 begin
   if Column.Index = 1 then
      Allow:= False;
-end;
-
-procedure TFormFavoritesManager.ButtonCenterPanelFavSettingsClick(Sender: TObject);
-begin
-  if FormFavoritesManager.WindowState = wsNormal then
-     begin
-       FormFavoritesManager.Left:= (Screen.Width shr 1)-(FormFavoritesManager.Width shr 1)-1;
-       FormFavoritesManager.Top:= (Screen.Height shr 1)-(FormFavoritesManager.Height shr 1)-1;
-     end;
 end;
 
 procedure TFormFavoritesManager.ReadSettings;
@@ -1363,9 +1339,9 @@ begin
   FavoritesList.Header.Columns[3].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnDateModifiedWidth', 155);
 
   case iniFile.ReadInteger('FavoritesManager', 'FavoritesListFontSize', 0) of
-    0: FavSettingSmallFont.Checked:= True;
-    1: FavSettingMediumFont.Checked:= True;
-    2: FavSettingLargeFont.Checked:= True;
+    //0: PopupSettingsSmallFont.Checked:= True;
+    1: PopupSettingsMediumFont.Click;
+    2: PopupSettingsLargeFont.Click;
   end;
 
   FreeAndNil(iniFile);
@@ -1407,58 +1383,31 @@ begin
   iniFile.WriteInteger('FavoritesManager', 'ColumnDateModifiedWidth', FavoritesList.Header.Columns[3].Width);
 
   tmpString:= '0';
-  if FavSettingSmallFont.Checked then
-     tmpString:= IntToStr(FavSettingSmallFont.Tag)
+  if PopupSettingsSmallFont.Checked then
+     tmpString:= IntToStr(PopupSettingsSmallFont.Tag)
   else
-  if FavSettingMediumFont.Checked then
-     tmpString:= IntToStr(FavSettingMediumFont.Tag)
+  if PopupSettingsMediumFont.Checked then
+     tmpString:= IntToStr(PopupSettingsMediumFont.Tag)
   else
-  if FavSettingLargeFont.Checked then
-     tmpString:= IntToStr(FavSettingLargeFont.Tag);
+  if PopupSettingsLargeFont.Checked then
+     tmpString:= IntToStr(PopupSettingsLargeFont.Tag);
   iniFile.WriteString('FavoritesManager', 'FavoritesListFontSize', tmpString);
 
   iniFile.UpdateFile;
   FreeAndNil(iniFile);
 end;
 
-procedure TFormFavoritesManager.FavSettingSmallFontClick(Sender: TObject);
-begin
-  FavoritesList.BeginUpdate;
-  case TAdvOfficeRadioButtonEx(Sender).Tag of
-    0:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 22;
-        FavoritesList.Font.Size:= 9;
-        FavoritesList.Header.Font.Size:= 9;
-      end;
-    1:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 28;
-        FavoritesList.Font.Size:= 12;
-        FavoritesList.Header.Font.Size:= 12;
-      end;
-    2:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 32;
-        FavoritesList.Font.Size:= 14;
-        FavoritesList.Header.Font.Size:= 12;
-      end;
-  end;
-  FavoritesList.EndUpdate;
-end;
-
-
 procedure TFormFavoritesManager.ButtonSettingsClick(Sender: TObject);
 begin
   case FormFavoritesManager.WindowState of
     wsNormal:
       begin
-        if not ButtonCenterPanelFavSettings.Enabled then
-           ButtonCenterPanelFavSettings.Enabled:= True;
+        if not PopupSettingsCenterWindow.Enabled then
+           PopupSettingsCenterWindow.Enabled:= True;
       end;
-    wsMaximized: ButtonCenterPanelFavSettings.Enabled:= False;
+    wsMaximized: PopupSettingsCenterWindow.Enabled:= False;
   end;
-  PanelFavSettings.Visible:= True;
+  ShowDropdownMenu(ButtonSettings, PopupSettings);
 end;
 
 procedure TFormFavoritesManager.ButtonNewClick(Sender: TObject);
@@ -1485,6 +1434,60 @@ begin
   ActiveProfileItem:= Item;
   Item.ImageIndex:= 3;
   FormMain.PopupEnableFavorites.Hint:= FormMain.FavoriteProfile[0];
+end;
+
+procedure TFormFavoritesManager.FormCreate(Sender: TObject);
+begin
+  if Screen.Fonts.IndexOf('Terminal') = -1 then
+     begin
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, 7);
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyText, 7);
+     end;
+end;
+
+procedure TFormFavoritesManager.PopupSettingsMeasureMenuItem(
+  Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
+  Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
+begin
+  FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
+end;
+
+procedure TFormFavoritesManager.PopupSettingsSmallFontClick(
+  Sender: TObject);
+begin
+  FavoritesList.BeginUpdate;
+  case TMenuItem(Sender).Tag of
+    0:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 22;
+        FavoritesList.Font.Size:= 9;
+        FavoritesList.Header.Font.Size:= 9;
+      end;
+    1:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 28;
+        FavoritesList.Font.Size:= 12;
+        FavoritesList.Header.Font.Size:= 12;
+      end;
+    2:
+      begin
+        FavoritesList.CellSizes.Report.Height:= 32;
+        FavoritesList.Font.Size:= 14;
+        FavoritesList.Header.Font.Size:= 12;
+      end;
+  end;
+  FavoritesList.EndUpdate;
+  FavoritesList.SetFocus;
+end;
+
+procedure TFormFavoritesManager.PopupSettingsCenterWindowClick(
+  Sender: TObject);
+begin
+  if FormFavoritesManager.WindowState = wsNormal then
+     begin
+       FormFavoritesManager.Left:= (Screen.Width shr 1)-(FormFavoritesManager.Width shr 1)-1;
+       FormFavoritesManager.Top:= (Screen.Height shr 1)-(FormFavoritesManager.Height shr 1)-1;
+     end;
 end;
 
 end.

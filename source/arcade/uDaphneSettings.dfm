@@ -1,6 +1,7 @@
 object FormDaphneSettings: TFormDaphneSettings
   Left = 751
   Top = 198
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -37,6 +38,7 @@ object FormDaphneSettings: TFormDaphneSettings
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object SystemIcon: TImage
       Left = 4
       Top = 4
@@ -70,15 +72,18 @@ object FormDaphneSettings: TFormDaphneSettings
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
     end
-    object LabelEmulatorFile: TLabel
+    object LabelEmulatorFile: TShadowLabel
       Left = 106
       Top = 46
-      Width = 72
-      Height = 13
+      Width = 75
+      Height = 14
       Caption = 'Emulator file'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
@@ -87,13 +92,19 @@ object FormDaphneSettings: TFormDaphneSettings
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelReadFileIni: TLabel
+    object LabelReadFileIni: TShadowLabel
       Left = 106
       Top = 59
-      Width = 147
-      Height = 13
+      Width = 150
+      Height = 14
       Caption = 'Emulator Config Filename'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
@@ -102,6 +113,12 @@ object FormDaphneSettings: TFormDaphneSettings
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -115,15 +132,22 @@ object FormDaphneSettings: TFormDaphneSettings
     Caption = 'General'
     Ctl3D = True
     TabOrder = 1
-    object Label2: TLabel
+    object LaserDiscTypeLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 81
-      Height = 15
+      Width = 84
+      Height = 16
       Caption = 'Laser Disc Type'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LaserDiscType: TComboBox
+    object LaserDiscType: TComboBox2Ex
       Left = 8
       Top = 36
       Width = 295
@@ -292,7 +316,7 @@ object FormDaphneSettings: TFormDaphneSettings
       OnChange = IdleExitValueChange
     end
   end
-  object AdvGroupBox4: TAdvGroupBoxEx
+  object VideoBox: TAdvGroupBoxEx
     Left = 388
     Top = 87
     Width = 185
@@ -302,15 +326,22 @@ object FormDaphneSettings: TFormDaphneSettings
     Caption = 'Video'
     Ctl3D = True
     TabOrder = 2
-    object Label3: TLabel
+    object ScreenResolutionLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 94
-      Height = 15
+      Width = 97
+      Height = 16
       Caption = 'Screen Resolution'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ScreenResolution: TComboBox
+    object ScreenResolution: TComboBox2Ex
       Left = 8
       Top = 36
       Width = 169
@@ -423,14 +454,20 @@ object FormDaphneSettings: TFormDaphneSettings
     Caption = 'Audio'
     Ctl3D = True
     TabOrder = 3
-    object LabelAudioVolumeVLDP: TLabel
+    object AudioVolumeVLDPLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 205
-      Height = 15
+      Width = 208
+      Height = 16
       Hint = 'Virtual Laser Disc Player Volume [%s]'
       Caption = 'Virtual Laser Disc Player Volume [Auto]'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
     object NoSound: TAdvOfficeCheckBoxEx
@@ -478,7 +515,7 @@ object FormDaphneSettings: TFormDaphneSettings
       OnChange = AudioVolumeVLDPChange
     end
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 8
     Top = 392
     Width = 89
@@ -490,7 +527,7 @@ object FormDaphneSettings: TFormDaphneSettings
     TabOrder = 4
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 386
     Top = 392
     Width = 89
@@ -502,7 +539,7 @@ object FormDaphneSettings: TFormDaphneSettings
     ShowHint = True
     TabOrder = 5
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 484
     Top = 392
     Width = 89

@@ -24,7 +24,7 @@ object FormImagesManager: TFormImagesManager
     Left = 604
     Top = 31
     Width = 6
-    Height = 456
+    Height = 457
     Align = alRight
     OnMoved = SplitterListMoved
     Appearance.BorderColor = clNone
@@ -42,10 +42,10 @@ object FormImagesManager: TFormImagesManager
     Left = 0
     Top = 31
     Width = 604
-    Height = 456
+    Height = 457
     Align = alClient
     BorderStyle = bsNone
-    CellSizes.Report.Height = 20
+    CellSizes.Report.Height = 28
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -62,7 +62,7 @@ object FormImagesManager: TFormImagesManager
     GroupFont.Color = clMaroon
     GroupFont.Height = -13
     GroupFont.Name = 'Trebuchet MS'
-    GroupFont.Style = [fsBold, fsItalic]
+    GroupFont.Style = [fsBold]
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
@@ -94,7 +94,7 @@ object FormImagesManager: TFormImagesManager
     IncrementalSearch.ResetTime = 1300
     IncrementalSearch.StartType = eissFocusedNode
     ImagesGroup = IL_ImageCategory
-    ImagesSmall = FormMain.IL_StandardIconsSmall
+    ImagesSmall = FormMain.IL_StandardIconsStandard
     ImagesExLarge = FormMain.IL_StandardIconsExtraLarge
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoGroup.BandEnabled = False
@@ -131,14 +131,14 @@ object FormImagesManager: TFormImagesManager
     Left = 610
     Top = 31
     Width = 305
-    Height = 456
+    Height = 457
     Align = alRight
     BevelOuter = bvNone
     Constraints.MinWidth = 305
     TabOrder = 1
     object SplitterNotUsed: TSplitterEx
       Left = 0
-      Top = 249
+      Top = 250
       Width = 305
       Height = 7
       Cursor = crVSplit
@@ -156,7 +156,7 @@ object FormImagesManager: TFormImagesManager
     end
     object ImagePreview: TImage32
       Left = 0
-      Top = 256
+      Top = 257
       Width = 305
       Height = 200
       Align = alBottom
@@ -176,7 +176,7 @@ object FormImagesManager: TFormImagesManager
       Left = 0
       Top = 0
       Width = 305
-      Height = 249
+      Height = 250
       Align = alClient
       BorderStyle = bsNone
       CellSizes.Tile.Width = 288
@@ -195,7 +195,7 @@ object FormImagesManager: TFormImagesManager
       GroupFont.Color = clMaroon
       GroupFont.Height = -13
       GroupFont.Name = 'Trebuchet MS'
-      GroupFont.Style = [fsItalic]
+      GroupFont.Style = [fsBold]
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
@@ -245,67 +245,6 @@ object FormImagesManager: TFormImagesManager
       OnKeyAction = NotUsedImagesListKeyAction
     end
   end
-  object BottomBar: TCoolBar
-    Left = 0
-    Top = 487
-    Width = 915
-    Height = 25
-    Align = alBottom
-    BandBorderStyle = bsNone
-    BandMaximize = bmNone
-    Bands = <>
-    EdgeBorders = [ebTop]
-    FixedOrder = True
-    object LabelTotalItemsMissing: TLabel
-      Left = 2
-      Top = 0
-      Width = 124
-      Height = 23
-      Hint = ' %u Missing Images'
-      Caption = ' 000000 Missing Images'
-      Constraints.MinHeight = 23
-      Layout = tlCenter
-    end
-    object LabelTotalItemsNotUsed: TLabel
-      Left = 610
-      Top = 0
-      Width = 118
-      Height = 23
-      Caption = ' 000000 Invalid Images'
-      Constraints.MinHeight = 23
-      Layout = tlCenter
-    end
-    object ButtonInvalidImagesDeleteFiles: TSpeedButton
-      Left = 776
-      Top = 0
-      Width = 137
-      Height = 22
-      Caption = 'Delete Invalid Images'
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      OnClick = ButtonInvalidImagesDeleteFilesClick
-    end
-    object ButtonNotUsedImagesDeleteFiles: TSpeedButton
-      Left = 162
-      Top = 1
-      Width = 145
-      Height = 22
-      Caption = 'Delete Not Used Images'
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      OnClick = ButtonNotUsedImagesDeleteFilesClick
-    end
-  end
   object PanelToolBarButtons: TPanelEx
     Left = 0
     Top = 0
@@ -327,7 +266,7 @@ object FormImagesManager: TFormImagesManager
       Width = 24
       Height = 24
     end
-    object ButtonImageCategory: TBitBtn
+    object ButtonImageCategory: TBitBtnEx
       Tag = 1
       Left = 28
       Top = 2
@@ -346,7 +285,7 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 0
       OnClick = ButtonImageCategoryClick
     end
-    object ButtonScanMissing: TBitBtn
+    object ButtonScanMissing: TBitBtnEx
       Left = 183
       Top = 2
       Width = 124
@@ -358,7 +297,7 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 2
       OnClick = ButtonScanMissingClick
     end
-    object ButtonScanInvalidImages: TBitBtn
+    object ButtonScanInvalidImages: TBitBtnEx
       Left = 489
       Top = 2
       Width = 118
@@ -370,7 +309,7 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 3
       OnClick = ButtonScanInvalidImagesClick
     end
-    object ButtonHelp: TBitBtn
+    object ButtonHelp: TBitBtnEx
       Left = 620
       Top = 2
       Width = 38
@@ -382,7 +321,7 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 1
       OnClick = ButtonHelpClick
     end
-    object ButtonScanNotUsedImages: TBitBtn
+    object ButtonScanNotUsedImages: TBitBtnEx
       Left = 311
       Top = 2
       Width = 174
@@ -393,6 +332,85 @@ object FormImagesManager: TFormImagesManager
       ShowHint = True
       TabOrder = 4
       OnClick = ButtonScanNotUsedImagesClick
+    end
+  end
+  object BottomBar: TPanelEx
+    Left = 0
+    Top = 488
+    Width = 915
+    Height = 24
+    Align = alBottom
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgWindowsTheme
+    object LabelTotalItemsMissing: TShadowLabel
+      Left = 4
+      Top = 1
+      Width = 127
+      Height = 22
+      Hint = ' %u Missing Images'
+      Caption = ' 000000 Missing Images'
+      Constraints.MinHeight = 22
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Layout = tlCenter
+    end
+    object ButtonNotUsedImagesDeleteFiles: TSpeedButtonEx
+      Left = 162
+      Top = 1
+      Width = 145
+      Height = 22
+      Caption = 'Delete Not Used Images'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = ButtonNotUsedImagesDeleteFilesClick
+    end
+    object LabelTotalItemsNotUsed: TShadowLabel
+      Left = 610
+      Top = 0
+      Width = 121
+      Height = 23
+      Caption = ' 000000 Invalid Images'
+      Constraints.MinHeight = 23
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Layout = tlCenter
+    end
+    object ButtonInvalidImagesDeleteFiles: TSpeedButtonEx
+      Left = 772
+      Top = 0
+      Width = 137
+      Height = 22
+      Caption = 'Delete Invalid Images'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = ButtonInvalidImagesDeleteFilesClick
     end
   end
   object IL_Buttons: TImageList

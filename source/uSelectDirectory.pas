@@ -5,23 +5,24 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ShellCtrls, ExtCtrls, uxTheme,
-  ShadowLabel, Buttons, AdvOfficeButtons, PanelEx;
+  ShadowLabel, Buttons, AdvOfficeButtons, PanelEx, ButtonsEx;
 
 type
   TFormSelectDirectory = class(TForm)
     ShellTree: TShellTreeView;
-    PanelTop: TPanelEx;
+    TopBar: TPanelEx;
     LabelTitle: TShadowLabel;
     MessageIcon: TImage;
-    PanelButtons: TPanelEx;
+    BottomBar: TPanelEx;
     AddSubFolders: TAdvOfficeCheckBoxEx;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     LabelSelectedPath: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormActivate(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ShellTreeChange(Sender: TObject; Node: TTreeNode);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -85,6 +86,18 @@ begin
      LabelSelectedPath.Caption:= ShellTree.SelectedFolder.PathName
   else
      LabelSelectedPath.Caption:= '';
+end;
+
+procedure TFormSelectDirectory.FormShow(Sender: TObject);
+begin
+  if IsNightMode then
+     begin
+       SetFormColors(FormSelectDirectory, TopBar, BottomBar, LabelTitle, nil, nil, -1, IsNightMode);
+       SetLabelColors(LabelSelectedPath, clSilver, item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(AddSubFolders, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       ShellTree.Color:= FormSelectDirectory.Color;
+       ShellTree.Font.Color:= clCream;
+     end;
 end;
 
 end.

@@ -17,6 +17,7 @@ object FormFavoritesManager: TFormFavoritesManager
   OldCreateOrder = False
   Scaled = False
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
@@ -85,6 +86,7 @@ object FormFavoritesManager: TFormFavoritesManager
     PaintInfoItem.TileDetailCount = 2
     ParentFont = False
     ParentShowHint = False
+    ShowThemedBorder = False
     ShowHint = True
     Selection.BlendAlphaImage = 0
     Selection.BlendColorSelRect = 10902593
@@ -185,7 +187,7 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMoneyGreen
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -208,7 +210,7 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMoneyGreen
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -345,173 +347,69 @@ object FormFavoritesManager: TFormFavoritesManager
       OnClick = ButtonNewClick
     end
   end
-  object PanelFavSettings: TPanelEx
-    Left = 4
-    Top = 226
-    Width = 317
-    Height = 125
-    Color1 = clWhite
-    Color2 = clSilver
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = clSilver
-    ColorInnerFrame = 7891291
-    EnableInnerFrame = True
-    Frames = [frLeft, frTop, frRight, frBottom]
-    ParentBackground = False
-    ShowHint = True
-    Style = vgSolid
-    Visible = False
-    object Label1: TShadowLabel
-      Left = 32
-      Top = 54
-      Width = 41
-      Height = 16
-      Caption = '9 pixels'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clGray
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 16448250
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object Label2: TShadowLabel
-      Left = 128
-      Top = 54
-      Width = 47
-      Height = 16
-      Caption = '12 pixels'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clGray
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 16448250
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object Label3: TShadowLabel
-      Left = 240
-      Top = 54
-      Width = 47
-      Height = 16
-      Caption = '14 pixels'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clGray
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 16448250
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelSettings: TShadowLabel
-      Left = 2
-      Top = 2
-      Width = 313
-      Height = 22
-      AutoSize = False
-      Caption = '  Settings'
-      Color = clSilver
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clMedGray
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = False
-      Layout = tlCenter
-    end
-    object ButtonClosePanelFavSettings: TBitBtnEx
-      Left = 226
-      Top = 86
-      Width = 75
-      Height = 23
-      Caption = 'Close'
-      TabOrder = 0
-      OnClick = ButtonClosePanelFavSettingsClick
-    end
-    object ButtonCenterPanelFavSettings: TBitBtnEx
-      Left = 16
-      Top = 86
-      Width = 75
-      Height = 23
-      Hint = 'Align window to center screen'
-      Caption = 'Center'
-      TabOrder = 1
-      OnClick = ButtonCenterPanelFavSettingsClick
-    end
-    object FavSettingSmallFont: TAdvOfficeRadioButtonEx
-      Left = 16
-      Top = 38
-      Width = 78
-      Height = 18
-      TabOrder = 2
-      TabStop = True
-      OnClick = FavSettingSmallFontClick
-      Alignment = taLeftJustify
-      Caption = 'Small Font'
-      Checked = True
-      ReturnIsTab = False
-      Themed = True
-    end
-    object FavSettingLargeFont: TAdvOfficeRadioButtonEx
-      Tag = 2
-      Left = 224
-      Top = 38
-      Width = 78
-      Height = 18
-      TabOrder = 3
-      OnClick = FavSettingSmallFontClick
-      Alignment = taLeftJustify
-      Caption = 'Large Font'
-      ReturnIsTab = False
-      Themed = True
-    end
-    object FavSettingMediumFont: TAdvOfficeRadioButtonEx
-      Tag = 1
-      Left = 112
-      Top = 38
-      Width = 93
-      Height = 18
-      TabOrder = 4
-      OnClick = FavSettingSmallFontClick
-      Alignment = taLeftJustify
-      Caption = 'Medium Font'
-      ReturnIsTab = False
-      Themed = True
-    end
-  end
   object IL_SystemType: TImageList
     Left = 160
     Top = 88
+  end
+  object PopupSettings: TBcBarPopupMenu
+    AutoHotkeys = maManual
+    Images = FormMain.IL_MenuPopup
+    OwnerDraw = True
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Width = 10
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = ANSI_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -16
+    Bar.BarCaption.Font.Name = 'Trebuchet MS'
+    Bar.BarCaption.Font.Style = [fsBold]
+    Bar.BarCaption.ShadowColor = clBlack
+    Bar.BarCaption.Caption = 'Screenshots Layouts'
+    Separators.Fade = True
+    Separators.Font.Charset = ANSI_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'Tahoma'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = FormMain.BcDrawModule
+    OnMeasureMenuItem = PopupSettingsMeasureMenuItem
+    Left = 120
+    Top = 88
+    object PopupSettingsSmallFont: TMenuItem
+      AutoCheck = True
+      Caption = 'Small Font (9 pixels)'
+      Checked = True
+      RadioItem = True
+      OnClick = PopupSettingsSmallFontClick
+    end
+    object PopupSettingsMediumFont: TMenuItem
+      Tag = 1
+      AutoCheck = True
+      Caption = 'Medium Font (12 pixels)'
+      RadioItem = True
+      OnClick = PopupSettingsSmallFontClick
+    end
+    object PopupSettingsLargeFont: TMenuItem
+      Tag = 2
+      AutoCheck = True
+      Caption = 'Large Font (14 pixels)'
+      RadioItem = True
+      OnClick = PopupSettingsSmallFontClick
+    end
+    object N7: TMenuItem
+      Caption = '-'
+    end
+    object PopupSettingsCenterWindow: TMenuItem
+      Caption = 'Center Window'
+      OnClick = PopupSettingsCenterWindowClick
+    end
   end
 end

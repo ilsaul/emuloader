@@ -36,7 +36,6 @@ type
     LabelGridWidthSizeValue: TShadowLabel;
     LabelGridHeightSizeValue: TShadowLabel;
     IconsGroupBox: TAdvGroupBoxEx;
-    LabelThumbAlignIcons: TShadowLabel;
     ShowSystemIcon: TAdvOfficeCheckBoxEx;
     ShowFavoriteIcon: TAdvOfficeCheckBoxEx;
     ShowMediaTypeIcon: TAdvOfficeCheckBoxEx;
@@ -359,8 +358,6 @@ begin
   abmp.Canvas.Draw(0, 0, bTmp);
   FreeAndNil(bTmp);
 end;
-
-
 
 procedure TFormThumbnailView.LoadThumbImage;
 var

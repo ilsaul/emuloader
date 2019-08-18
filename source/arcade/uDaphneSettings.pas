@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, ComCtrls, PanelEx,
   ImgList, IniFiles, GR32_RangeBars, AdvOfficeButtons, AdvGroupBox,
-  ShadowLabel, Buttons;
+  ShadowLabel, Buttons, ButtonsEx, ColorBoxEx;
 
 const
   LaserDiscTypeList: packed array[0..6] of packed array[0..1] of String =
@@ -22,8 +22,8 @@ type
   TFormDaphneSettings = class(TForm)
     TopBar: TPanelEx;
     GeneralBox: TAdvGroupBoxEx;
-    Label2: TLabel;
-    LaserDiscType: TComboBox;
+    LaserDiscTypeLabel: TShadowLabel;
+    LaserDiscType: TComboBox2Ex;
     Daphne_NoJoysticks: TAdvOfficeCheckBoxEx;
     SRAMContinuousUpdate: TAdvOfficeCheckBoxEx;
     FastBoot: TAdvOfficeCheckBoxEx;
@@ -32,9 +32,9 @@ type
     Daphne_NoWarnings: TAdvOfficeCheckBoxEx;
     SendUsageStatistics: TAdvOfficeCheckBoxEx;
     EnableCheat: TAdvOfficeCheckBoxEx;
-    AdvGroupBox4: TAdvGroupBoxEx;
-    Label3: TLabel;
-    ScreenResolution: TComboBox;
+    VideoBox: TAdvGroupBoxEx;
+    ScreenResolutionLabel: TShadowLabel;
+    ScreenResolution: TComboBox2Ex;
     Daphne_FullScreen: TAdvOfficeCheckBoxEx;
     FullScale: TAdvOfficeCheckBoxEx;
     IgnoreAspectRatio: TAdvOfficeCheckBoxEx;
@@ -44,18 +44,18 @@ type
     AudioBox: TAdvGroupBoxEx;
     NoSound: TAdvOfficeCheckBoxEx;
     Daphne_PreferSamples: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtn;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelAudioVolumeVLDP: TLabel;
+    ButtonReadFile: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    AudioVolumeVLDPLabel: TShadowLabel;
     AudioVolumeVLDP: TGaugeBar;
     IdleExit: TAdvOfficeCheckBoxEx;
     IdleExitValue: TGaugeBar;
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
-    LabelEmulatorFile: TLabel;
-    LabelReadFileIni: TLabel;
+    LabelEmulatorFile: TShadowLabel;
+    LabelReadFileIni: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -189,8 +189,43 @@ end;
 
 procedure TFormDaphneSettings.FormShow(Sender: TObject);
 var
-  Loop: Byte;
+  Loop: Integer;
 begin
+  if IsNightMode then
+  begin
+    for Loop:= 0 to FormDaphneSettings.ComponentCount-1 do
+    begin
+      if FormDaphneSettings.Components[Loop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormDaphneSettings.Components[Loop]))
+      else
+      if FormDaphneSettings.Components[Loop] is TAdvGroupBoxEx then
+         begin
+           SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormDaphneSettings.Components[Loop]));
+           SetGroupBoxColors(TAdvGroupBoxEx(FormDaphneSettings.Components[Loop]),
+                             clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                             item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+         end
+      else
+      if FormDaphneSettings.Components[Loop] is TComboBox2Ex then
+         SetComboBox2ExColors(TComboBox2Ex(FormDaphneSettings.Components[Loop]), True)
+      else
+      if FormDaphneSettings.Components[Loop] is TGaugeBar then
+         SetGaugeBarColors(TGaugeBar(FormDaphneSettings.Components[Loop]))
+      else
+      if FormDaphneSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+         begin
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+           TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontColor:= clGray;
+           TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+         end;
+      if FormDaphneSettings.Components[Loop] is TShadowLabel then
+         SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+    end;
+    SetFormColors(FormDaphneSettings, nil, nil, LabelGameTitle, LabelEmulatorFile, nil, -1, IsNightMode);
+    SetColorEmulatorTopBar(TopBar, idDaphne, True);
+    SetLabelColors(LabelReadFileIni, LabelEmulatorFile.Font.Color, LabelEmulatorFile.ShadowColor, False);
+  end;
+  
   LaserdiscType.Items.BeginUpdate;
   for Loop:= Low(LaserdiscTypeList) to High(LaserdiscTypeList) do
       LaserdiscType.Items.Add(LaserdiscTypeList[Loop, 1]);
@@ -256,10 +291,10 @@ end;
 procedure TFormDaphneSettings.AudioVolumeVLDPChange(Sender: TObject);
 begin
   case AudioVolumeVLDP.Position of
-    -1: LabelAudioVolumeVLDP.Caption:= Format(LabelAudioVolumeVLDP.Hint, ['Auto']);
-     0: LabelAudioVolumeVLDP.Caption:= Format(LabelAudioVolumeVLDP.Hint, ['Muted']);
+    -1: AudioVolumeVLDPLabel.Caption:= Format(AudioVolumeVLDPLabel.Hint, ['Auto']);
+     0: AudioVolumeVLDPLabel.Caption:= Format(AudioVolumeVLDPLabel.Hint, ['Muted']);
   else
-     LabelAudioVolumeVLDP.Caption:= Format(LabelAudioVolumeVLDP.Hint, [IntToStr(AudioVolumeVLDP.Position)]);
+     AudioVolumeVLDPLabel.Caption:= Format(AudioVolumeVLDPLabel.Hint, [IntToStr(AudioVolumeVLDP.Position)]);
   end;
 end;
 

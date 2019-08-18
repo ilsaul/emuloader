@@ -526,38 +526,42 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeExportGamesList, TopBar, BottomBar, LabelSelectMode, nil, -1);
+       SetFormColors(FormArcadeExportGamesList, TopBar, BottomBar, LabelSelectMode, nil, nil, -1, True);
 
-       FormMain.SetEasyListViewColors(ExportList, clrBlackBk, clWhite, clRed);
+       SetPanelBorderColors(PanelExportList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
-       GroupMAMEContentManagerPlus.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(GroupMAMEContentManagerPlus, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+       FormMain.SetEasyListViewColors(ExportList, FormArcadeExportGamesList.Color, clWhite, clrLightRed, clGray);
+       FormMain.SetEasyListViewHeaderColors(ExportList, True);
 
-       SetCheckBoxColors(MCMPlus_MAME, clWhite, clNavy);
-       SetCheckBoxColors(MCMPlus_HBMAME, clWhite, clNavy);
+       SetGroupBoxBorderStyle(GroupMAMEContentManagerPlus);
+       SetGroupBoxColors(GroupMAMEContentManagerPlus, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       GroupExportOptionsAllGames.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(GroupExportOptionsAllGames, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+       SetCheckBoxColors(MCMPlus_MAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(MCMPlus_HBMAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(ExportOption_ArcadeGames, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_NonArcadeMAMEMachines, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_MAMESoftwareListGames, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_MAME, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_Supermodel3, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_Daphne, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_Demul, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_HBMAME, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_DICE, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_SegaModel2, clWhite, clNavy);
-       SetCheckBoxColors(ExportOption_ZiNc, clWhite, clNavy);
+       SetGroupBoxBorderStyle(GroupExportOptionsAllGames);
+       SetGroupBoxColors(GroupExportOptionsAllGames, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       GroupExportOptionsGameColumnsFullFormat.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(GroupExportOptionsGameColumnsFullFormat, PanelExportList.ColorFrame, PanelExportList.ColorInnerFrame, clWhite, clNavy);
+       SetCheckBoxColors(ExportOption_ArcadeGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_NonArcadeMAMEMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_MAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_MAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_Supermodel3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_Daphne, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_Demul, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_HBMAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_DICE, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_SegaModel2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(ExportOption_ZiNc, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       FormMain.SetEasyListViewColors(GameInfoListToExport, clrBlackBk, clWhite, clRed);
+       SetGroupBoxBorderStyle(GroupExportOptionsGameColumnsFullFormat);
+       SetGroupBoxColors(GroupExportOptionsGameColumnsFullFormat, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetCheckBoxColors(GameInfoToExport_UseGamesListVisibleColumns, clWhite, clNavy);
-       SetCheckBoxColors(GameInfoToExport_MicrosoftExcelFormat, clWhite, clNavy);
+       FormMain.SetEasyListViewColors(GameInfoListToExport, FormArcadeExportGamesList.Color, item_caption_active_color[1]{clWhite}, clRed);
+       FormMain.SetEasyListViewHeaderColors(GameInfoListToExport, True);
+
+       SetCheckBoxColors(GameInfoToExport_UseGamesListVisibleColumns, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(GameInfoToExport_MicrosoftExcelFormat, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        FormMain.ELV_SetNightModeColors(ExportList);
        FormMain.ELV_SetNightModeColors(GameInfoListToExport);

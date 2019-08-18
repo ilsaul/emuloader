@@ -10,9 +10,10 @@ uses
   ShellAPI, CommCtrl, JPEG, Themes, BarMenus, XPMan, UxTheme,
   URLMon, OleCtrls, SHDocVw, madExceptVcl, unitExIcon, BcDrawModule,
   BcCustomDrawModule, BcRectUtilities, ImgList, RichEditURL, AdvGroupBox, AdvOfficeButtons,
+  EditEx, ButtonsEx, ColorBoxEx,
   EasyListview, MPCommonObjects, MPCommonUtilities, MPThreadManager, Math, uCommon, uCommonCustom,
   SplitterEx, ShadowLabel, PanelEx, CommDlg, MPShellTypes,
-  SynchedThreads, SevenZip, EditEx, ButtonsEx, ColorBoxEx;
+  SynchedThreads, SevenZip;
 
 type
   TFontDialog = class(Dialogs.TFontDialog) // hack to add a "Custom..." color selection in the TFontDialog component
@@ -110,6 +111,7 @@ type
     ImageCategoryIndex: ShortInt; // the value of this var changes depending on "all sytems" and "console/computer" category index (if "Use Custom Category for Console/Computer" is enabled)
     ImageCategoryIndex_AllSystems: ShortInt;
     ImageCategoryIndex_ConsComp: ShortInt; // alternate category for console/computer, includes MAME software lists (April 15, 2018)
+    ImageType: String; // "PNG", "JPG", "GIF", "BMP" (perhaps other formats ?)
     //ImageCategoryIndex_AltLayout: ShortInt; // future expansion; alternate layout for vertical arcade games; no console/computer support! (April 15, 2018)
 
     IsZipped: Boolean;
@@ -848,10 +850,6 @@ type
     ButtonScreenshotLayouts: TToolButton;
     ButtonPreviousLayout: TToolButton;
     ButtonNextLayout: TToolButton;
-    WebToolBarButtons: TToolBar;
-    WebButtonRefresh: TToolButton;
-    WebButtonStop: TToolButton;
-    WebButtonExit: TToolButton;
     WebBrowserStatusPanel: TPanelEx;
     LabelWebBrowserStatus: TShadowLabel;
     PopupSelectScanGamesMode: TMenuItem;
@@ -1046,8 +1044,6 @@ type
     ButtonImagePanelToggle: TToolButton;
     ButtonDocsPanelToggle: TToolButton;
     TabbedImageGameDocSeparator: TToolButton;
-    ToolButton1: TToolButton;
-    WebButtonPlayVideoPreview: TToolButton;
     MenuCreateHBMAMESoftwareListGames: TMenuItem;
     MenuImageFilterCosine: TMenuItem;
     ImageHintIcon: TImage;
@@ -1159,6 +1155,23 @@ type
     Standard1: TMenuItem;
     Large1: TMenuItem;
     MAMEInfoStatusBar: TPanelEx;
+    PopupImagesDisableAspectRatio: TMenuItem;
+    ImageHintDetailsText: TShadowLabel;
+    PanelWebToolBarButtons: TPanelEx;
+    WebButtonRefresh: TSpeedButtonEx;
+    WebButtonStop: TSpeedButtonEx;
+    WebButtonExit: TSpeedButtonEx;
+    WebButtonPlayVideoPreview: TSpeedButtonEx;
+    MenuCustomizeMAMEMachinesList: TMenuItem;
+    PopupNightModeCopyPasteColor: TBcBarPopupMenu;
+    PopupNightModeTitle: TMenuItem;
+    PopupNightModeTitleSeparator: TMenuItem;
+    PopupNightModeRGBQuickEdit: TMenuItem;
+    PopupNightModePasteColor: TMenuItem;
+    PopupNightModeCopyColor: TMenuItem;
+    IL_Colors: TImageList;
+    MenuImageUseSingleBackgroundColor: TMenuItem;
+    PopupImageUseSingleBackgroundColor: TMenuItem;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1177,8 +1190,6 @@ type
     procedure PopupShowParentCloneClick(Sender: TObject);
     procedure PopupShowParentIconsClick(Sender: TObject);
     procedure PopupMenuGamesListPopup(Sender: TObject);
-    procedure WebButtonStopClick(Sender: TObject);
-    procedure WebButtonRefreshClick(Sender: TObject);
     procedure WebBrowserStatusTextChange(Sender: TObject;
       const Text: WideString);
     procedure PopupShowFirstImageClick(Sender: TObject);
@@ -1222,7 +1233,6 @@ type
     procedure getsnaps1Click(Sender: TObject);
     procedure PopupScanResultsAllGamesClick(Sender: TObject);
     procedure PopupScanResultsSelectedGameClick(Sender: TObject);
-    procedure WebButtonExitClick(Sender: TObject);
     procedure MenuROMsFoldersClick(Sender: TObject);
     procedure MAMEInfoTextHolderURLClick(Sender: TObject;
       const URL: String);
@@ -1321,7 +1331,6 @@ type
     procedure ButtonGameFilterDriverStatusClick(Sender: TObject);
     procedure GameDocsGoToInformationClick(Sender: TObject);
     procedure MenuShowPlayersInfoFromNplayersIniOnlyClick(Sender: TObject);
-    procedure ButtonPlayVideoPreviewClick(Sender: TObject);
     procedure MenuShowGamesStatusBarClick(Sender: TObject);
     procedure PopupCustomizeColumnsHeaderFontClick(Sender: TObject);
     procedure PopupCustomizeColumnsClick(Sender: TObject);
@@ -1457,6 +1466,17 @@ type
     procedure PopupAddToSpecialListClick(Sender: TObject);
     procedure PopupRemoveFromSpecialListClick(Sender: TObject);
     procedure MenuUseAlternateFrontendIconsClick(Sender: TObject);
+    procedure WebButtonRefreshClick(Sender: TObject);
+    procedure WebButtonStopClick(Sender: TObject);
+    procedure WebButtonExitClick(Sender: TObject);
+    procedure WebButtonPlayVideoPreviewClick(Sender: TObject);
+    procedure PopupNightModeCopyPasteColorPopup(Sender: TObject);
+    procedure PopupNightModeRGBQuickEditClick(Sender: TObject);
+    procedure PopupNightModePasteColorClick(Sender: TObject);
+    procedure PopupNightModeCopyColorClick(Sender: TObject);
+    procedure MenuImageUseSingleBackgroundColorClick(
+      Sender: TObject);
+    procedure PopupImageUseSingleBackgroundColorClick(Sender: TObject);
 
   { Private declarations }
   private
@@ -1473,6 +1493,8 @@ type
 
     ZipContentsArrayDevice, ZipContentsArrayBios: array of THashedStringList;
 
+    CurrentPickColor, CopyPickColor: TColor; // for the "RGB Quick Edit" popup menu
+
     ProcessingGameDocuments: Boolean; // required to avoid crashes when game docs is enabled and you change between games too fast...
     GameLastAddedIndex: Integer;
     FormMainWidth, FormMainHeight, FormMainTop, FormMainLeft: Integer;
@@ -1487,6 +1509,7 @@ type
     SplitterImg: array[1..3] of TSplitterEx;
     ImageHintPanel2: array[2..MaxImagePanels] of TPanelEx;
     ImageHintText2: array[2..MaxImagePanels] of TShadowLabel;
+    ImageHintDetailsText2: array[2..MaxImagePanels] of TShadowLabel;
     ImageHintIcon2: array[2..MaxImagePanels] of TImage;
 
     LayoutUseAltCategory_ConsComp: Boolean; //, LayoutAltVertGames: Boolean;
@@ -1518,6 +1541,7 @@ type
     procedure HideAppFormTaskBarButton; // fix for dual buttons in task bar and to fix minimize/maximize in Win7 and newer
 
     procedure DisableItalicFontSystemTitleBar(iLabelSystemTitle: TShadowLabel; iLabelSystemType: TShadowLabel = nil; iLabelSystemNotAvailable: TShadowLabel = nil);
+    procedure DisableItalicFontGroupBoxEx(iGroupBoxEx: TAdvGroupBoxEx);
     function  GetGameTitleText(const CurrentTitleStr: WideString; const CloneOf: String): WideString;
 
     function  AbbreviateStatusText(const StatusText: String): String;
@@ -1527,8 +1551,19 @@ type
     procedure UpdateEmuConPlayedGamesTags;
     procedure UpdateArcadeVideoPreviewSection;
     //procedure UpdateOldGamesListFiles; // update old Emu Loader games list files to latest one (systemname.el; systemname.elrom; systemname.elstatus; systemname.miss)
-    procedure SplitImageCategoriesIniSettings;
-    procedure LoadImageCategoryLayoutSettings;
+    //procedure SplitImageCategoriesIniSettings;
+    procedure ReadImageSingleBackground(UpdateColorOnly: Boolean);
+    procedure WriteImageSingleBackground;
+    procedure LoadImageCategoryLayoutSettings(ReadCategoryBackgroundColorsOnly: Boolean = False);
+
+    // functions for "RGB Quick Edit"
+    function  GetRGBTextFromColor(iColor: TColor; ReturnRGBPrefixText: Boolean = True): String;
+    function  GetColorName(iColor: TColor; ReturnHexStringOnly: Boolean): String;
+    procedure ReplaceColorIcon(IsCopyColor: Boolean; IsImageBkColor: Boolean = False; Startup: Boolean = False);
+    procedure AssignRGBQuickEditPopupToColorBoxEx(ColorBoxExSource: TColorBoxEx);
+
+    procedure InitPreferencesScreen;
+    procedure PopulateCheckRadioProfiles(ReloadList: Boolean);
 
     // night/light mode change colors
     procedure InitNightModeScreen;
@@ -1544,15 +1579,13 @@ type
     procedure SetPopupMenuCustomFrame(BcPopupMenuSource: TBcBarPopupMenu);
     procedure SetPopupMenuNightColors(BcPopupMenuSource: TBcBarPopupMenu);
     procedure SetPopupMenuNightColorsFormMain(UpdateNightMode: Boolean);
+    procedure SetEditExBorderStyle;
 
-    procedure SetToolBarFiltersFormColors;
+    procedure SetToolBarFiltersFormColors(UpdateNightMode: Boolean = False);
     procedure UpdateFiltersButtonExColors;
 
-    procedure ReadNightModeSettings;
-    procedure WriteNightModeSettings;
-
-    procedure LoadImagePanelColorSettings;
-    procedure UpdateImagePanelColorSettings;
+    procedure ReadLightModeSettings;
+    procedure WriteLightModeSettings;
 
     procedure LoadMAMESoftList(sysID: Integer; var SoftListVar: THashedStringList; RemoveFileExtension: Boolean);
     procedure LoadGames(LoadArcade, LoadSoftwareListMESS, LoadCustomGames: Boolean; ClearGamesList: Boolean = False);
@@ -1606,6 +1639,10 @@ type
     procedure LoadCustomEmulatorsIconsPopupMenu;
 
     procedure UpdateImageHintPanelText(Index: ShortInt; ForceUpdate: Boolean = False);
+    function  GetImageResolutionStr(ImageSource: TImage32; ScreenIndex: Integer = -1): String;
+    procedure SetImageHintBoxColors(ImageIndex: Integer; IsPreferencesScreen: Boolean);
+    procedure SetImageHintItalicStyle(LabelSource: TShadowLabel);
+
     procedure ChangeImageCategory(CategoryIndex: Integer);
 
     procedure LoadInternetGameInfo(const GameName, SoftwareName: WideString; IsCustomGame: Boolean);
@@ -1734,15 +1771,18 @@ type
     procedure ToggleFavoriteLastFilter;
     procedure SetSinglePanelLayoutGameDocuments;
 
+    procedure SetToolBarPanelColors(PanelSource, PanelDestination: TPanelEx);
+
     // "Search Games" panel
     procedure SetFilterSearchBarIconsSize(UseSmallIcons: Boolean);
     procedure FilterSearchBarAdjustPanelControls;
+    procedure WebToolBarButtonsUpdateFontColor;
 
     procedure PopupSearchBarControlsFilterIncludeMainFiltersClick(Sender: TObject);
     procedure PopupSearchBarControlsFilterSelectionClick(Sender: TObject);
 
     procedure CallSelectImageLayout(SelectLayoutIndex: Integer; ShowSelectorDialog: Boolean);
-    
+
     //procedure PopulateMachineToUsePopupMenu(const SoftwareName: String);
     procedure CenterImageSplitterQuad(SplitterHolder: TSplitterEx; CenterAll: Boolean = False);
 
@@ -1750,9 +1790,8 @@ type
     procedure ReadScreenshotLayout(LayoutIndex: Byte; out strVar: array of Integer; out boolVar: array of Boolean);
     procedure UpdateScreenshotLayout(LayoutIndex: Byte);
     procedure ImageSplitterMovedUpd(Sender: TObject);
-    //procedure SetImageHintBoxColors(PanelToChange: TPanelEx; TextToChange: TShadowLabel);
-    procedure SetImageHintBoxColors(ImageIndex: Integer; IsPreferencesScreen: Boolean);
 
+    function  GetImageBackgroundColor(CategoryIndex: Integer): TColor;
     function  IsQuadImageLayout: Boolean;
     procedure SetImageLayout;
     procedure LoadImageLayoutPreview(LayoutIndex: ShortInt);
@@ -1769,6 +1808,9 @@ type
     function  UpdateMAMu_ScanFolder: Boolean;
 
     procedure UpdateHeaderFont(ELV_Holder: TEasyListView);
+    procedure ELV_GetDefaultHeaderFont(FontDest: TFont; IsNightModeProfile: Boolean; ReturnFontColorOnly: Boolean);
+    procedure ELV_SetCustomHeaderFont(IsNightModeProfile: Boolean);
+    procedure ELV_SetDefaultHeaderFont(IsNightModeProfile: Boolean);
 
     function  GetSoftListGameRequiredParam(sysID: Integer; const GameName: WideString; const SoftwareName: String): String; // for software list games "requirement" tag
 
@@ -1811,6 +1853,7 @@ type
     function  GetUsageRulesFile(sysID: Integer): String;
     procedure ShowRulesButton;
 
+    procedure DrawDisabledImage(DC: HDC; ImageList: TCustomImageList; Index, X, Y: Integer; BlendColor: TColor = clNone);
     function  DeleteSingleGameFromGamesListConsoleComputer(ShowDeleteMessage: Boolean): Boolean;
     procedure ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect); // for OnItemThumbnailDraw() event in main games list
 
@@ -1904,11 +1947,14 @@ type
     SortAuditGames, UseSevenZip: Boolean;
     AutoMAMEInfoDATFile, AutoHistoryDATFile, AutoStoryDATFile, AutoMarpDATFile, AutoGameInitDATFile: THashedStringList;
 
+    AlignEmuGameText: TAlignment;
+    
     FavoriteProfile: packed array[0..1] of String; // 0 - title; 1 - filename // January 2014
     ControlType: THashedStringList;
 
     ListCustomGameName, ListCustomGameSize: THashedStringList; // for custom games (uMain.CreateCustomGamesList() and "Custom Games Editor" form)
 
+    NightModeProfileStr: String;
     // thumbnail view mode settings
     ThumbnailSettings: TThumbnailSettings;
 
@@ -1919,11 +1965,17 @@ type
     function  ReadCustomCommandLine(const sFileFullPath: WideString; RunningGame: Boolean = False): WideString;
     procedure DeleteCustomCommandLine(const sFileName: WideString);
 
-    procedure ResizeFormAddScrollBars(FormSource: TForm);
-
     procedure SetPanelExFrames(CheckBoxOuterBorder: TAdvOfficeCheckBoxEx; CheckBoxInnerBorder: TAdvOfficeCheckBoxEx; PanelSource: TPanelEx; PanelHeight: Integer; NightModeOnly: Boolean);
     procedure SetPanelExFrameHeight(PanelSource: TPanelEx; iSize: Integer);
     procedure SetPanelExStyle(PanelSource: TPanelEx; IsGradient: Boolean);
+
+    procedure SetCloseButtonColorsFloatingPanel(ButtonSource: TShadowLabel; ForceNightModeColors: Boolean = False);
+    procedure SetCloseButtonColorsFloatingPanel_Enter(ButtonSource: TShadowLabel; ForceNightModeColors: Boolean = False);
+
+    procedure SetSystemTitleLabelColors(LabelSource: TShadowLabel);
+    procedure SetSystemTypeLabelColors(LabelSource: TShadowLabel);
+
+    procedure ChangeLabelFontConsolas(LabelSource: TShadowLabel; FontSize: Integer = -1);
 
     procedure PaintToolBarBk(Sender: TToolBar; const ARect: TRect);
 
@@ -1986,7 +2038,7 @@ type
     procedure AddGames;
     //procedure LoadSoftwareListXML; // load games from mamedir\hash\soflist.xml files... // will not be used anymore (July 19, 2015)
     //procedure AddGames(const FilterName: String; SelectItem: Boolean);
-    procedure LoadListCPU(BoxHolder: TComboBox);
+    procedure LoadListCPU(BoxHolder: TComboBox2Ex);
     function  GetMAMEImageIndex(CurrentImageIndex: Integer; const SoftwareName: String; IsMAMu_IconLoaded: Boolean = False): Integer;
 
     function  GetSoftwareListTitle(const SoftwareName: String; sysID: ShortInt): WideString;
@@ -2017,7 +2069,7 @@ type
     function  HaveItemsChecked(ListViewHolder: TEasyListView): Boolean;
     function  ApplyMiscFilters(KeepGameStatus: Boolean): Boolean;
 
-    procedure SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox);
+    procedure SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox2Ex);
 
     // Machines List Side Panel
     function  GetSoftwareListDefaultColumnPos(iColumnIndex: Integer): Integer; // games list column position when machines list left panel is enabled
@@ -2052,6 +2104,7 @@ type
     function  ValidateMultiSlot(sysID: ShortInt; var MachineName: String; var CommandLineVar: WideString; iCloseWindow: Boolean = True): Boolean;
     function  RunMAMEExtraParameters(sysID: Byte; const iEmulatorFile, SoftlistMachineName: String): String;
     function  GetTitleMachineToUse(sysID: Integer; const iMachineName, GameName, SoftwareName: String; var ItemHolder: TEasyItem): WideString;
+    function  GetAlignEmuGameText: TAlignment;
     function  ExecuteGame(RunWithAlterMAME_Index: ShortInt = -1; MAME_ExtraPamars: Boolean = False): Integer;
 
     procedure ExecuteGameCustom; // for custom games, emulators and run MAME softlist games (EmuCon)
@@ -2122,7 +2175,7 @@ type
     function  GetWindowStateRunGame(sysID: ShortInt): Integer;
     function  GetArcadeEmulatorVersion(SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
     function  GetArcadeEmuVersionXML(sysID: Byte): String;
-    procedure SetSelectedColorBox(ColorBoxHolder: TColorBox; Color: TColor);
+    procedure SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor);
     procedure FixEmptyValue(TextHolder: TEdit; StringValue: String);
 
     procedure ReadExtraIni;
@@ -2130,6 +2183,11 @@ type
     procedure SetVideoPreviewState;
     procedure ReadVideoPreviewIni(LoadMediaPlayerSettings, LoadMediaPlayerParameters, LoadDummyParameters: Boolean);
     procedure UpdateVideoPreviewIni;
+
+    function  ReadNightModeSettings: Boolean;
+    procedure WriteNightModeSettings(const ProfileNameStr: String = '');
+
+    function  GetCheckBoxThemeFolder: String;
 
     procedure ValidateEmuImgCat_IniFile;
     function  ReadArcadeEmulatorExecutable(ShowFileNotFoundMessage: Boolean = False): Boolean;
@@ -2143,8 +2201,8 @@ type
     procedure SetFont(SourceFont: TFont; var DestinationFont: TFont; AutoCreateDestinationFontVar: Boolean = False);
     //procedure SetFont(SourceFont, DestinationFont: TFont; AutoCreateDestinationFontVar: Boolean = False);
 
-    procedure ReadCustomGameFontFile;
-    procedure UpdateCustomGameFontFile;
+    procedure ReadCustomGameFontFile(ReadNightModeFile: Boolean);
+    procedure WriteCustomGameFontFile(ReadNightModeFile: Boolean);
 
     procedure ReadSingleLayoutCategory(SetCategoryPopupMenu: Boolean);
 
@@ -2181,6 +2239,7 @@ type
     procedure ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
     procedure ExtractMultiFolders(const FoldersStr: String; SystemID: Integer; ELV_ListHolder: TEasyListView);
 
+    procedure UpdateImageHintBoxPosition(HintBoxSource: TPanelEx; ImageSource: TImage32; PositionIndex: Integer);
     procedure SetImageScaleMode;
 
     function  GetImageName(const GameName: String; ImageIndex: ShortInt; FormatIndex: ShortInt; SoftwareName: String = ''): String;
@@ -2204,7 +2263,9 @@ type
 
     procedure DisplayImage;
     procedure SetGripIcon(var SplitterHolder: TSplitterEx; ShowGrip: Boolean);
+    procedure SetSplitterColors(SplitterHolder: TSplitterEx; SingleColor, SingleColorHot: TColor);
     procedure UpdateSplitterStyle(SplitterHolder: TSplitterEx; NewSplitterStyle: TTMSStyle; SingleColor, SingleColorHot: TColor);
+    procedure UpdateGamesListSplitterStyle;
     procedure UpdateImageLayoutSplittersStyle;
     procedure UpdateImageDimensionsInfo;
 
@@ -2259,9 +2320,12 @@ type
 
     function  GetIniFilesFolder: String;
     function  GetFrontendExtraIniFile: String;
-    function  GetNightModeIniFile: String;
+
+    function  GetNightModeFolder: String;
+    function  GetNightModeIniFile(ReturnProfileNameOnly: Boolean = False): String;
+    
     function  GetVideoPreviewIniFile(IsDefaultFile: Boolean = False): String;
-    function  GetCustomFontIniFile: String;
+    function  GetCustomFontIniFile(GetNightModeFile: Boolean; ReturnFileNameOnly: Boolean = False): String;
     function  GetFavoritesFolder: String;
     function  GetFavoritesFile: String;
     function  IsFavoriteDefault(const favFile: String): Boolean;
@@ -2271,6 +2335,7 @@ type
     function  GetImageCategoriesFile: String;
     function  GetImageLayoutsFile: String;
     function  GetImageCategorySettingsFile: String;
+    function  GetLightModeFile: String;
 
     function  GetColumnProfile(IsSoftwareList: Boolean = False): String;
     function  GetControlTypeFile(sysID: Integer): String;
@@ -2368,7 +2433,7 @@ type
     procedure ELV_DeleteSelected(ListHolder: TEasyListView);
 
     procedure ELV_MoveItem(ELV_Holder: TEasyListView; MoveUp: Boolean);
-    procedure ELV_ItemPaintText_General(EasyListViewHolder: TCustomEasyListView; ELV_Item: TEasyItem; out CanvasHolder: TCanvas);
+    procedure ELV_ItemPaintText_General(EasyListViewHolder: TCustomEasyListView; ELV_Item: TEasyItem; out CanvasHolder: TCanvas; GameSetStatus: ShortInt = 0; ForceNightColors: Boolean = False);
     procedure ELV_CheckItemVisible(ELV_Holder: TEasyListView; Item: TEasyItem; ShowInTheMiddle: Boolean);
     procedure ELV_SetGhostedIcon(ELV_Item: TEasyItem);
     procedure ELV_SetGhostedIconText(ELV_Item: TEasyItem; ELV_Source: TEasyListView; CanvasDestination: TCanvas);
@@ -2397,9 +2462,9 @@ type
     function  ELV_FindItemBySystemID(ELV_Destination: TEasyListView; sysID: Integer; IsCustomGame: Boolean; SearchDisabledItems: Boolean): TEasyItem;
     function  ELV_FindSelectedSystemMulti(ELV_Destination: TEasyListView; Item_Source: TEasyItem; SearchDisabledItems: Boolean = True): Boolean;
 
-    function  ELV_SelecionBar_GetColorState(GameStatus: ShortInt; HaveSet: TColorBox; MissingROMsSet: TColorBox; GetDefaultColor: Boolean = False): TColor;
+    function  ELV_SelecionBar_GetColorState(GameStatus: ShortInt; HaveSet: TColorBoxEx; MissingROMsSet: TColorBoxEx; GetDefaultColor: Boolean = False): TColor;
     function  ELV_AllowSelectionBarUserColors(EasyListView_To_Check: TEasyListView): Boolean;
-    procedure ELV_SetSelectRibbon(State: ShortInt; EasyListViewHolder: TEasyListView; ForceUpdate: Boolean = False);
+    procedure ELV_SetSelectRibbon(State: ShortInt; EasyListViewHolder: TEasyListView; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
     procedure ELV_ResetNormalColors(ELV_Holder: TEasyListView; UpdateSelection: Boolean = True);
     procedure ELV_SetRibbonNightColors(State: ShortInt; EasyListView_Source: TEasyListView; ForceUpdate: Boolean = False);
     procedure ELV_SetNightModeColors(ELV_Source: TEasyListView; UpdateSelection: Boolean = True);
@@ -2409,11 +2474,17 @@ type
 
     procedure SetEasyListViewColors(ELV_Source: TEasyListView; BackgroundColor: TColor = -1; FontColor: TColor = -1; GroupFontColor: TColor = -1; BorderColor: TColor = -1);
     procedure SetEasyListViewBorderColor(ELV_Source: TEasyListView; Enabled: Boolean);
-    procedure ToggleButtonExCustomDraw(ButtonExSource: TBitBtnEx); overload;
-    procedure ToggleButtonExCustomDraw(ButtonExSource: TSpeedButtonEx); overload;
-    procedure SetButtonExColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean = False); overload;
-    procedure SetButtonExColors(ButtonSource: TSpeedButtonEx; ForceUpdate: Boolean = False); overload;
-    procedure SetButtonExColorsColorBox(ButtonSource: TBitBtnEx; SetDefaultColor: Boolean; ForceUpdate: Boolean = False);
+    procedure SetEasyListViewHeaderColors(ELV_Source: TEasyListView; SetFontColor: Boolean; ForceNightColors: Boolean = False);
+    procedure ToggleButtonExCustomDraw(ButtonExSource: TBitBtnEx; ForceNightColors: Boolean = False); overload;
+    procedure ToggleButtonExCustomDraw(ButtonExSource: TSpeedButtonEx; ForceNightColors: Boolean = False); overload;
+    procedure SetButtonExColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False); overload;
+    procedure SetButtonExColors(ButtonSource: TSpeedButtonEx; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False); overload;
+    procedure SetButtonExColorsColorBox(ButtonSource: TBitBtnEx; SetDefaultColor: Boolean; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
+
+    procedure SetCheckBoxExCustomIcon(CheckBoxExSource: TAdvOfficeCheckBoxEx; EnableCustomIcon: Boolean);
+    procedure SetRadioButtonExCustomIcon(RadioButtonExSource: TAdvOfficeRadioButtonEx; EnableCustomIcon: Boolean);
+
+    procedure ToggleNightMode(NightModeProfile: Boolean);
 
     procedure SetBcMenuFrameColors(BcMenuSource: TBcBarPopupMenu); overload;
     procedure SetBcMenuFrameColors(BcMenuSource: TBcBarMainMenu); overload;
@@ -2501,7 +2572,7 @@ uses
   uSelectFilterSystemMega, uLastPlayedGamesMega, uSelectFile,
   uConsCompSystemRules, uSelectFilterSystemSimple, uImageLayoutSelector,
   uImageCategorySelector, uArcadeFileVersionsLarge,
-  uArcadeMAMEMachinesCustomize, uNightMode;
+  uArcadeMAMEMachinesCustomize, uNightMode, uNightModeRGBQuickEdit;
 
 {$R *.dfm}
 
@@ -2542,12 +2613,12 @@ begin
   if vID = dwData then
   begin
     PostMessage(hHwnd, WM_CLOSE, 0, 0); //tell window to close gracefully
-    Result:= False;  //can stop enumerating    
+    Result:= False;  //can stop enumerating
   end
   else
   begin
     Result:= True; //keep enumerating until you find your id
-  end; 
+  end;
 end;
 
 function TGroupInfo.GetCaptions(Column: Integer): WideString;
@@ -2918,42 +2989,43 @@ begin
 
        FormArcadeSelectSystem.PanelList.Color1:= menu_background_color[1];
        SetEasyListViewColors(FormArcadeSelectSystem.SystemsListView, menu_background_color[1], item_caption_active_color[1]);
-       SetLabelColors(FormArcadeSelectSystem.LabelSystemTitle, clYellow, clMaroon);
+
+       SetSystemTitleLabelColors(FormArcadeSelectSystem.LabelSystemTitle);// SetLabelColors(FormArcadeSelectSystem.LabelSystemTitle, clYellow, clMaroon, False);
        FormArcadeSelectSystem.LabelSystemTitle.Transparent:= True;
 
-       SetRadioButtonColors(FormArcadeSelectSystem.FullScan, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.QuickScan, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.ForceAllAvailable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeSelectSystem.FullScan, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.QuickScan, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.ForceAllAvailable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMEAllSets, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMEArcadeMachines, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMEAllSets, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMEArcadeMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.ScanMAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_Disabled, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_EnabledUpdate, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_EnabledOverwrite, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_Disabled, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_EnabledUpdate, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeSelectSystem.MAMESoftwareList_EnabledOverwrite, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormArcadeSelectSystem.LabelFullScan, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeSelectSystem.LabelQuickScan, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeSelectSystem.LabelForceAllAvailable, clrLightBlue, clNavy);
+       SetLabelColors(FormArcadeSelectSystem.LabelFullScan, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelQuickScan, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelForceAllAvailable, clrLightBlue, clNavy, False);
 
-       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareListBox, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_Disabled, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_EnabledUpdate, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_EnabledOverwrite, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeSelectSystem.LabelCustomizeMAMESoftwareList, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareListBox, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_Disabled, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_EnabledUpdate, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelMAMESoftwareList_EnabledOverwrite, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeSelectSystem.LabelCustomizeMAMESoftwareList, item_shortcut_color[1], item_shortcut_selected_color[1], False);
 
-       SetLabelColors(FormArcadeSelectSystem.LabelMultiSelect, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeSelectSystem.LabelMultiSelect, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormArcadeSelectSystem.AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormArcadeSelectSystem.AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       FormArcadeSelectSystem.ScanModeBox.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(FormArcadeSelectSystem.ScanModeBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxBorderStyle(FormArcadeSelectSystem.ScanModeBox);
+       SetGroupBoxColors(FormArcadeSelectSystem.ScanModeBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetGroupBoxColors(FormArcadeSelectSystem.ScanMAMESetsBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxColors(FormArcadeSelectSystem.ScanMAMESetsBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       FormArcadeSelectSystem.MAMESoftwareListBox.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(FormArcadeSelectSystem.MAMESoftwareListBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxBorderStyle(FormArcadeSelectSystem.MAMESoftwareListBox);
+       SetGroupBoxColors(FormArcadeSelectSystem.MAMESoftwareListBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
        FormArcadeSelectSystem.LabelMAMESoftwareListBox_BlankLine.Pen.Color:= FormArcadeSelectSystem.Color;
        FormArcadeSelectSystem.LabelMAMESoftwareListBox_BlankLine2.Pen.Color:= FormArcadeSelectSystem.Color;
@@ -2966,7 +3038,7 @@ begin
 
        SetPanelColors(FormArcadeSelectSystem.PanelBottom, menu_background_color[1], clrMedDarkGray);
      end;
-     
+
   DisableItalicFontSystemTitleBar(FormArcadeSelectSystem.LabelSystemTitle);
   FormArcadeSelectSystem.ActionMode:= FeatureType;
   FormArcadeSelectSystem.selSysID:= SelectSysID;
@@ -4778,6 +4850,7 @@ begin
       ImageDetails[Loop].PrevNoImageLoaded:= False;
       ImageDetails[Loop].IsZipped:= False;
       ImageDetails[Loop].NewImageLoaded:= False;
+      ImageDetails[Loop].ImageType:= '';
     end;
 
     for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
@@ -5731,8 +5804,8 @@ var
 
   function AddEmulatorHeader: Boolean;
   begin
-    AddMsgText('Associated Application'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
-    AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+    AddMsgText('Associated Application   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+    AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
     AddMsgText(#13#10);
   end;
 
@@ -6474,11 +6547,11 @@ begin
      FormStatus.Visible:= True;
 end;
 
-procedure TFormMain.SetSelectedColorBox(ColorBoxHolder: TColorBox; Color: TColor);
+procedure TFormMain.SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor);
 begin
   ColorBoxHolder.Selected:= Color;
   if Assigned(ColorBoxHolder.OnSelect) then
-     ColorBoxHolder.OnSelect(nil);
+     ColorBoxHolder.OnSelect(ColorBoxHolder);
 end;
 
 procedure TFormMain.FixEmptyValue(TextHolder: TEdit; StringValue: String);
@@ -6503,12 +6576,12 @@ procedure TFormMain.ELV_AddGameDocs(Index: Integer; Enabled: Boolean = True);
 begin
   FormPreferences.GameDocs.BeginUpdate;
   case Index of
-    1: AddItem('Info (mameinfo.dat)', 1);
-    2: AddItem('History (history.dat)', 2);
-    3: AddItem('Driver Info (mameinfo.dat)', 3);
-    4: AddItem('Story (story.dat)', 4);
-    5: AddItem('MAME Action Replay Page (scores3.htm; marp.dat)', 5);
-    6: AddItem('Game Initialization (gameinit.dat)', 6);
+    1: AddItem('Info', 1);
+    2: AddItem('History', 2);
+    3: AddItem('Driver Info', 3);
+    4: AddItem('MAMEScore (Story)', 4);
+    5: AddItem('MAME Action Replay Page', 5);
+    6: AddItem('Game Initialization', 6);
   end;
   FormPreferences.GameDocs.EndUpdate;
 end;
@@ -6534,27 +6607,12 @@ begin
     INIFile:= TMemIniFile.Create(GetFrontendExtraIniFile);
     with FormPreferences do
     begin
-      FormPreferences.GameDocsFont_Setting.Font.Color:= INIFile.ReadInteger('GameDocuments', 'FontColor', 0);
-      FormPreferences.GameDocsFont_Setting.Font.Name:= INIFile.ReadString('GameDocuments', 'FontName', 'Consolas');
-      FormPreferences.GameDocsFont_Setting.Font.Size:= INIFile.ReadInteger('GameDocuments', 'FontSize', 9);
-      FormPreferences.GameDocsFont_Setting.Font.Style:= TFontStyles(Byte(INIFile.ReadInteger('GameDocuments', 'FontType', 0)));
-      SetSelectedColorBox(GameDocumentsBackgroundColor, INIFile.ReadInteger('GameDocuments', 'BackgroundColor', GameDocumentsBackgroundColor.DefaultColorColor));
-      if not IsNightMode then
-         MAMEInfoTextHolder.Font:= FormPreferences.GameDocsFont_Setting.Font;
+      GameDocumentsLayout1_Top.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutTop_Height', 151);
+      GameDocumentsLayout2_Bottom.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutBottom_Height', 151);
+      GameDocumentsLayout3_Left.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutLeft_Width', 151);
+      GameDocumentsLayout4_Right.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutRight_Width', 151);
+      PanelGameDocuments.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutIndex', 0);
     end;
-
-    FormPreferences.GameDocsSplitterSingleColor.Selected:= INIFile.ReadInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.GameDocsSplitterSingleColor.DefaultColorColor);
-    FormPreferences.GameDocsSplitterSingleColorHot.Selected:= INIFile.ReadInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.GameDocsSplitterSingleColorHot.DefaultColorColor);
-    FormPreferences.GameDocsSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('GameDocuments', 'SplitterShowGrip', 1));
-    SetSelectedComboBox(INIFile.ReadInteger('GameDocuments', 'SplitterStyle', 6), FormPreferences.GameDocsSplitterStyleSelector);
-
-    FormPreferences.GameDocsShowStatusBar.Checked:= Boolean(INIFile.ReadInteger('GameDocuments', 'ShowStatusBar', 0));
-
-    GameDocumentsLayout1_Top.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutTop_Height', 151);
-    GameDocumentsLayout2_Bottom.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutBottom_Height', 151);
-    GameDocumentsLayout3_Left.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutLeft_Width', 151);
-    GameDocumentsLayout4_Right.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutRight_Width', 151);
-    PanelGameDocuments.Tag:= INIFile.ReadInteger('GameDocuments', 'LayoutIndex', 0);
 
     PopupAutomaticGameInformation.Tag:= INIFile.ReadInteger('GameDocuments', 'AutoGameDocs', 0);
     // value 11 -> index + enabled/disabled
@@ -6575,9 +6633,6 @@ begin
       2: GameDocumentsLayout3_Left.Click;
       3: GameDocumentsLayout4_Right.Click;
     end;
-
-    SetSelectedColorBox(FormPreferences.GameDocsBorderColor, INIFile.ReadInteger('GameDocuments', 'BorderColor', clBlack));
-    FormPreferences.GameDocsShowBorder.Checked:= Boolean(INIFile.ReadInteger('GameDocuments', 'ShowBorder', 1));
     
     FormPreferences.GameDocsDisplayModeBox.Tag:= INIFile.ReadInteger('GameDocuments', 'DisplayMode', 0);
 
@@ -6614,26 +6669,10 @@ begin
   try
     INIFile:= TMemIniFile.Create(GetFrontendExtraIniFile);
 
-    INIFile.WriteInteger('GameDocuments', 'BackgroundColor', FormPreferences.GameDocumentsBackgroundColor.Selected);
-    INIFile.WriteInteger('GameDocuments', 'FontColor', FormPreferences.GameDocsFont_Setting.Font.Color);// MAMEInfoTextHolder.Font.Color);
-    INIFile.WriteString('GameDocuments', 'FontName', FormPreferences.GameDocsFont_Setting.Font.Name);// MAMEInfoTextHolder.Font.Name);
-    INIFile.WriteInteger('GameDocuments', 'FontSize', FormPreferences.GameDocsFont_Setting.Font.Size);//  MAMEInfoTextHolder.Font.Size);
-    INIFile.WriteInteger('GameDocuments', 'FontType', Byte(FormPreferences.GameDocsFont_Setting.Font.Style));//  MAMEInfoTextHolder.Font.Style));
-
-    INIFile.WriteInteger('GameDocuments', 'SplitterStyle', FormPreferences.GameDocsSplitterStyleSelector.ItemIndex);
-    INIFile.WriteInteger('GameDocuments', 'SplitterShowGrip', Ord(FormPreferences.GameDocsSplitterShowGripIcon.Checked));
-    INIFile.WriteInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.GameDocsSplitterSingleColor.Selected);
-    INIFile.WriteInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.GameDocsSplitterSingleColorHot.Selected);
-
-    INIFile.WriteInteger('GameDocuments', 'ShowStatusBar', Ord(FormPreferences.GameDocsShowStatusBar.Checked));
-
     INIFile.WriteInteger('GameDocuments', 'LayoutTop_Height', GameDocumentsLayout1_Top.Tag);
     INIFile.WriteInteger('GameDocuments', 'LayoutBottom_Height', GameDocumentsLayout2_Bottom.Tag);
     INIFile.WriteInteger('GameDocuments', 'LayoutLeft_Width', GameDocumentsLayout3_Left.Tag);
     INIFile.WriteInteger('GameDocuments', 'LayoutRight_Width', GameDocumentsLayout4_Right.Tag);
-
-    INIFile.WriteInteger('GameDocuments', 'ShowBorder', Ord(FormPreferences.GameDocsShowBorder.Checked));
-    INIFile.WriteInteger('GameDocuments', 'BorderColor', FormPreferences.GameDocsBorderColor.Selected);
 
     INIFile.WriteInteger('GameDocuments', 'LayoutIndex', PanelGameDocuments.Tag);
     INIFile.WriteInteger('GameDocuments', 'AutoGameDocs', Ord(PopupAutomaticGameInformation.Checked));
@@ -6657,36 +6696,62 @@ begin
   end;
 end;
 
-procedure TFormMain.ReadNightModeSettings;
+function TFormMain.GetNightModeFolder: String;
+begin
+  Result:= FrontendPath+'nightmode\';
+end;
+
+function TFormMain.GetNightModeIniFile(ReturnProfileNameOnly: Boolean = False): String;
+var
+  iFileName: String;
+begin
+  //Result:= 'nightmode.ini';
+  //Exit; // the new code will be enabled when night mode profiles are properly implemented
+  iFileName:= '';
+  if FormNightMode.NightModeProfiles.ItemIndex = -1 then
+     begin
+       FormNightMode.NightModeProfiles.Tag:= 1;
+       FormNightMode.NightModeProfiles.ItemIndex:= 0;
+       FormNightMode.NightModeProfiles.Tag:= 0;
+     end;
+
+  iFileName:= FormNightMode.NightModeProfiles.Text;
+  if iFileName = '' then
+     iFileName:= NightModeProfileStr;
+  if not ReturnProfileNameOnly then
+     Result:= GetNightModeFolder+iFileName+'.ini';
+end;
+
+function TFormMain.ReadNightModeSettings: Boolean;
 var
   IniFile: TMemIniFile;
+  iFile, iStr: String;
+  iIndex: Integer;
 begin
-  if not FileExists(GetNightModeIniFile) then
+  iFile:= GetNightModeIniFile;
+  Result:= FileExists(iFile);
+  if not Result then
      Exit;
 
   ELV_ResetNormalColors(FormNightMode.NightModeGamesListView); // must be set here first before setting new colors to EasyListView (unknown reason!)
   ELV_SetRibbonNightColors(0, FormNightMode.NightModeGamesListView, True);
 
-  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
+  IniFile:= TMemIniFile.Create(iFile);
+
+  iStr:= IniFile.ReadString('ToolBar', 'OverlayIconFolder', 'Default');
+  iIndex:= FormNightMode.ToolBarOverlayIconsFolder.Items.IndexOf(iStr);
+  if iIndex = -1 then
+     iIndex:= 0;
+  FormNightMode.ToolBarOverlayIconsFolder.ItemIndex:= iIndex;
+  ToolBarOverlayIconFolderStr:= FormNightMode.ToolBarOverlayIconsFolder.Text;
 
   SetSelectedColorBox(FormNightMode.NightModeToolBarBkTopColor, IniFile.ReadInteger('ToolBar', 'BackgroundTopColor', FormNightMode.NightModeToolbarBkTopColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeToolBarBkBottomColor, IniFile.ReadInteger('ToolBar', 'BackgroundBottomColor', FormNightMode.NightModeToolbarBkBottomColor.DefaultColorColor));
-  FormNightMode.NightModeToolBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'GradientBar', 0));
+  FormNightMode.NightModeToolBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'GradientBar', 1));
 
-  SetSelectedColorBox(FormNightMode.NightModeToolBarInnerFrameColor, IniFile.ReadInteger('ToolBar', 'InnerFrameColor', FormNightMode.NightModeToolBarInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModeToolBarOuterFrameColor, IniFile.ReadInteger('ToolBar', 'OuterFrameColor', FormNightMode.NightModeToolBarOuterFrameColor.DefaultColorColor));
-  FormNightMode.NightModeToolBarShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'InnerFrameShow', 1));
-  FormNightMode.NightModeToolBarShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'OuterFrameShow', 1));
-
-  FormNightMode.NightModeGamesListUseWindowsThemedBorder.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'UseWindowsThemedBorder', 0));
-  FormNightMode.NightModeGamesListShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'OuterFrameShow', 1));
-  FormNightMode.NightModeGamesListShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'InnerFrameShow', 1));
-
-  SetSelectedColorBox(FormNightMode.NightModeGamesListInnerFrameColor, IniFile.ReadInteger('GamesList', 'InnerFrameColor', FormNightMode.NightModeGamesListInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModeGamesListOuterFrameColor, IniFile.ReadInteger('GamesList', 'OuterFrameColor', FormNightMode.NightModeGamesListOuterFrameColor.DefaultColorColor));
-
-  FormNightMode.NightModeGameSelectionGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'Gradient', 0));
-  FormNightMode.NightModeGameSelectionAlphaBlend.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'AlphaBlend', 0));
+  FormNightMode.NightModeGameSelectionGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'Gradient', 1));
+  FormNightMode.NightModeGameSelectionAlphaBlend.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'AlphaBlend', 1));
+  FormNightMode.NightModeGameSelectionRoundCorners.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'RoundCorners', 1));
 
   SetSelectedColorBox(FormNightMode.NightModeGamesSelectionTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'TopColor', FormNightMode.NightModeGamesSelectionTopColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeGamesSelectionBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'BottomColor', FormNightMode.NightModeGamesSelectionBottomColor.DefaultColorColor));
@@ -6707,77 +6772,86 @@ begin
   SetSelectedColorBox(FormNightMode.NightModeGamesListStatusBarBottomColor, IniFile.ReadInteger('GamesListStatusBar', 'BottomColor', FormNightMode.NightModeGamesListStatusBarBottomColor.DefaultColorColor));
   FormNightMode.NightModeGamesListStatusBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'Gradient', 1));
 
-  SetSelectedColorBox(FormNightMode.NightModeGamesListStatusBarInnerFrameColor, IniFile.ReadInteger('GamesListStatusBar', 'InnerFrameColor', FormNightMode.NightModeGamesListStatusBarInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModeGamesListStatusBarOuterFrameColor, IniFile.ReadInteger('GamesListStatusBar', 'OuterFrameColor', FormNightMode.NightModeGamesListStatusBarOuterFrameColor.DefaultColorColor));
-
-  FormNightMode.NightModeGamesListStatusBarShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'InnerFrameShow', 0));
-  FormNightMode.NightModeGamesListStatusBarShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'OuterFrameShow', 0));
-
   SetSelectedColorBox(FormNightMode.NightModeGamesListStatusBarFontColor, IniFile.ReadInteger('GamesListStatusBar', 'FontColor', FormNightMode.NightModeGamesListStatusBarFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModeGamesListStatusBarShadowFontColor, IniFile.ReadInteger('GamesListStatusBar', 'FontShadowColor', FormNightMode.NightModeGamesListStatusBarShadowFontColor.DefaultColorColor));
-  FormNightMode.NightModeGamesListStatusBarShadowFontEnabled.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'FontShadowEnabled', 0));
 
   // games list splitters
-  FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', 1));
-  FormNightMode.NightModeGamesListSplitterSingleColor.Selected:= INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormNightMode.NightModeGamesListSplitterSingleColor.DefaultColorColor);
-  FormNightMode.NightModeGamesListSplitterSingleColorHot.Selected:= INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormNightMode.NightModeGamesListSplitterSingleColorHot.DefaultColorColor);
-  SetSelectedComboBox(IniFile.ReadInteger('GamesListSplitter', 'GamesListSplitterStyle', 1), FormNightMode.NightModeGamesListSplitterStyleSelector);
+  SetSelectedColorBox(FormNightMode.NightModeGamesListSplitterSingleColor, IniFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormNightMode.NightModeGamesListSplitterSingleColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeGamesListSplitterSingleColorHot, IniFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormNightMode.NightModeGamesListSplitterSingleColorHot.DefaultColorColor));
+
+  FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', 0));
 
   // games list background color/image
   SetSelectedColorBox(FormNightMode.NightModeGamesBackgroundColor, IniFile.ReadInteger('GamesListBackground', 'GamesListBackgroundColor', FormNightMode.NightModeGamesBackgroundColor.DefaultColorColor));
   FormNightMode.NightModeGamesTileBackground.Checked:= Boolean(IniFile.ReadInteger('GamesListBackground', 'TileBackground', 1));
-  FormNightMode.NightModeGamesBackgroundImage.Text:= INIFile.ReadString('GamesListBackground', 'BackgroundImage', 'el_bk.png');
-  FormNightMode.NightModeGamesBackgroundImageEnable.Checked:= Boolean(INIFile.ReadInteger('GamesListBackground', 'BackgroundImageEnabled', 0));
+  FormNightMode.NightModeGamesBackgroundImage.Text:= INIFile.ReadString('GamesListBackground', 'BackgroundImage', 'resources\images\bkgrd_dark.png');
+  FormNightMode.NightModeGamesBackgroundImageEnable.Checked:= Boolean(INIFile.ReadInteger('GamesListBackground', 'BackgroundImageEnabled', 1));
 
-  FormNightMode.NightModeImagesPanelShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('Images', 'InnerFrameShow', 1));
-  FormNightMode.NightModeImagesPanelShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('Images', 'OuterFrameShow', 1));
+  SetSelectedColorBox(FormNightMode.NightModeGamesListHeaderBackgroundColor, IniFile.ReadInteger('GamesListHeader', 'GamesListHeaderBackgroundColor', FormNightMode.NightModeGamesListHeaderBackgroundColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeGamesListHeaderBackgroundColorHover, IniFile.ReadInteger('GamesListHeader', 'GamesListHeaderBackgroundColorHover', FormNightMode.NightModeGamesListHeaderBackgroundColorHover.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeGamesListHeaderBackgroundColorDown, IniFile.ReadInteger('GamesListHeader', 'GamesListHeaderBackgroundColorDown', FormNightMode.NightModeGamesListHeaderBackgroundColorDown.DefaultColorColor));
 
-  SetSelectedColorBox(FormNightMode.NightModeImagesPanelInnerFrameColor, IniFile.ReadInteger('Images', 'InnerFrameColor', FormNightMode.NightModeImagesPanelInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModeImagesPanelOuterFrameColor, IniFile.ReadInteger('Images', 'OuterFrameColor', FormNightMode.NightModeImagesPanelOuterFrameColor.DefaultColorColor));
+  FormNightMode.NightModeGamesListHeaderFont.Font.Color:= IniFile.ReadInteger('GamesListHeader', 'FontColor', Ord(clCream));
+  FormNightMode.NightModeGamesListHeaderFont.Font.Name:= IniFile.ReadString('GamesListHeader', 'FontName', 'Segoe UI');
+  FormNightMode.NightModeGamesListHeaderFont.Font.Size:= IniFile.ReadInteger('GamesListHeader', 'FontSize', 9);
+  FormNightMode.NightModeGamesListHeaderFont.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GamesListHeader', 'FontType', 0)));
+  if IsNightMode then
+     begin
+       FontDialog.Font:= FormNightMode.NightModeGamesListHeaderFont.Font;
+       UpdateHeaderFont(GamesListView);
+       UpdateHeaderFont(MachinesListSidePanel);
+     end;
 
-  FormNightMode.NightModeImageBorderColor.Selected:= IniFile.ReadInteger('Images', 'ImageBorderColor', 0);
-  PanelImage.Color:= FormNightMode.NightModeImageBorderColor.Selected;
+  SetSelectedColorBox(FormNightMode.NightModeImageBorderColor, IniFile.ReadInteger('Images', 'ImageBorderColor', FormNightMode.NightModeImageBorderColor.DefaultColorColor));
+  if IsNightMode then
+     PanelImage.Color:= FormNightMode.NightModeImageBorderColor.Selected;
 
-  FormNightMode.NightModeImageSplitterSingleColor.Selected:= IniFile.ReadInteger('Images', 'SplitterSingleColor', FormNightMode.NightModeImageSplitterSingleColor.DefaultColorColor);
-  FormNightMode.NightModeImageSplitterSingleColorHot.Selected:= IniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormNightMode.NightModeImageSplitterSingleColorHot.DefaultColorColor);
-
-  SetSelectedComboBox(IniFile.ReadInteger('Images', 'SplitterStyle', 1), FormNightMode.NightModeImageSplitterStyleSelector);
+  SetSelectedColorBox(FormNightMode.NightModeImageSplitterSingleColor, IniFile.ReadInteger('Images', 'SplitterSingleColor', FormNightMode.NightModeImageSplitterSingleColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeImageSplitterSingleColorHot, IniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormNightMode.NightModeImageSplitterSingleColorHot.DefaultColorColor));
 
   FormNightMode.NightModeImageSplitterShowGripIcon.Tag:= 1;
   FormNightMode.NightModeImageSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('Images', 'SplitterShowGrip', 1));
   FormNightMode.NightModeImageSplitterShowGripIcon.Tag:= 0;
 
   if IsNightMode then
-     if not FormNightMode.NightModeImageSplitterShowGripIcon.Checked then //if not Boolean(ImgIniFile.ReadInteger('Images', 'SplitterShowGrip', 1)) then
-        PopupImageShowSplitterGrip.Click;
+     begin
+       if PopupImageShowSplitterGrip.Checked <> FormNightMode.NightModeImageSplitterShowGripIcon.Checked then
+          PopupImageShowSplitterGrip.Click;
+     end;
 
-  FormNightMode.NightModeHintBox_Color.Selected:= IniFile.ReadInteger('Images', 'HintBox_Color', FormNightMode.NightModeHintBox_Color.DefaultColorColor);
-  FormNightMode.NightModeHintBox_FrameColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_FrameColor', FormNightMode.NightModeHintBox_FrameColor.DefaultColorColor);
-  FormNightMode.NightModeHintBox_FrameEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 1));
+  SetSelectedColorBox(FormNightMode.NightModeHintBox_Color, IniFile.ReadInteger('Images', 'HintBox_Color', FormNightMode.NightModeHintBox_Color.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeHintBox_FrameColor, IniFile.ReadInteger('Images', 'HintBox_FrameColor', FormNightMode.NightModeHintBox_FrameColor.DefaultColorColor));
+  FormNightMode.NightModeHintBox_FrameEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 0));
 
-  FormNightMode.NightModeHintBox_Opacity.Position:= IniFile.ReadInteger('Images', 'HintBox_Opacity', 200);
+  FormNightMode.NightModeHintBox_Opacity.Position:= IniFile.ReadInteger('Images', 'HintBox_Opacity', 190);
 
-  FormNightMode.NightModeHintBox_TextColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_TextColor', FormNightMode.NightModeHintBox_TextColor.DefaultColorColor);
-  FormNightMode.NightModeHintBox_TextShadowColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormNightMode.NightModeHintBox_TextShadowColor.DefaultColorColor);
-  FormNightMode.NightModeHintBox_TextShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 1));
+  SetSelectedColorBox(FormNightMode.NightModeHintBox_TextColor, IniFile.ReadInteger('Images', 'HintBox_TextColor', FormNightMode.NightModeHintBox_TextColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModeHintBox_TextShadowColor, IniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormNightMode.NightModeHintBox_TextShadowColor.DefaultColorColor));
+  FormNightMode.NightModeHintBox_TextShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 0));
 
-  FormNightMode.NightModeHintBox_IconEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_IconEnabled', 1));
+  FormNightMode.NightModeHintBox_Position.Position:= IniFile.ReadInteger('Images', 'HintBox_Position', 8);
+  FormNightMode.NightModeHintBox_FontItalicStyle.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FontItalicStyle', 0));
+  FormNightMode.NightModeHintBox_LargerFontSize.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_LargerFontSize', 0));
 
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor, IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarFontColor', FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarShadowColor', FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.DefaultColorColor));
+  FormNightMode.NightModeSearchGamesPanelCaptionBarShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarShadowEnabled', 0));
+
+  SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColor, IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarOpaqueBackgroundColor', FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColor.DefaultColorColor));
+  FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundEnabled.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarOpaqueBackgroundEnabled', 0));
 
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelFilterFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FilterFontColor', FormNightMode.NightModeSearchGamesPanelFilterFontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelFilterShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'FilterShadowColor', FormNightMode.NightModeSearchGamesPanelFilterShadowColor.DefaultColorColor));
+  FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'FilterShadowEnabled', 0));
 
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelFieldFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FieldFontColor', FormNightMode.NightModeSearchGamesPanelFieldFontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelFieldShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'FieldShadowColor', FormNightMode.NightModeSearchGamesPanelFieldShadowColor.DefaultColorColor));
+  FormNightMode.NightModeSearchGamesPanelFieldShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'FieldShadowEnabled', 0));
 
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelEditBoxFontColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFontColor', FormNightMode.NightModeSearchGamesPanelEditBoxFontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelEditBoxBackgroundColor, IniFile.ReadInteger('SearchGamesPanel', 'TextBackgroundColor', FormNightMode.NightModeSearchGamesPanelEditBoxBackgroundColor.DefaultColorColor));
 
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelEditBoxCustomFrameColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFrameColor', FormNightMode.NightModeSearchGamesPanelEditBoxCustomFrameColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFocusedFrameColor', FormNightMode.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.DefaultColorColor));
-  FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'TextUseCustomFrame', 1));
 
   FormNightMode.NightModeSearchGamesPanelGradientBar.Checked:= Boolean(IniFile.ReadInteger('Panels', 'GradientBar', 1));
 
@@ -6789,12 +6863,14 @@ begin
 
   SetSelectedColorBox(FormNightMode.NightModePanelColorsTitleFontColor, IniFile.ReadInteger('Panels', 'TitleFontColor', FormNightMode.NightModePanelColorsTitleFontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModePanelColorsTitleShadowFontColor, IniFile.ReadInteger('Panels', 'TitleShadowColor', FormNightMode.NightModePanelColorsTitleShadowFontColor.DefaultColorColor));
+  FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Panels', 'TitleShadowEnabled', 0));
 
   SetSelectedColorBox(FormNightMode.NightModePanelColorsTitle2FontColor, IniFile.ReadInteger('Panels', 'Title2FontColor', FormNightMode.NightModePanelColorsTitle2FontColor.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModePanelColorsTitle2ShadowFontColor, IniFile.ReadInteger('Panels', 'Title2ShadowColor', FormNightMode.NightModePanelColorsTitle2ShadowFontColor.DefaultColorColor));
+  FormNightMode.NightModePanelColorsTitle2ShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Panels', 'Title2ShadowEnabled', 0));
 
-  SetSelectedColorBox(FormNightMode.NightModePanelColorsMessageFontColor, IniFile.ReadInteger('Panels', 'MessageFontColor', FormNightMode.NightModePanelColorsMessageFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormNightMode.NightModePanelColorsMessageShadowFontColor, IniFile.ReadInteger('Panels', 'MessageShadowColor', FormNightMode.NightModePanelColorsMessageShadowFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModePanelColorsImageCategoryTextFontColor, IniFile.ReadInteger('Panels', 'ImageCategoryTextFontColor', FormNightMode.NightModePanelColorsImageCategoryTextFontColor.DefaultColorColor));
+  SetSelectedColorBox(FormNightMode.NightModePanelColorsImageZipTextFontColor, IniFile.ReadInteger('Panels', 'ImageZipTextFontColor', FormNightMode.NightModePanelColorsImageZipTextFontColor.DefaultColorColor));
 
   // ButtonEx colors
   SetSelectedColorBox(FormNightMode.NightModeButtonColorFontColor, IniFile.ReadInteger('Buttons', 'FontColor', FormNightMode.NightModeButtonColorFontColor.DefaultColorColor));
@@ -6812,6 +6888,7 @@ begin
   SetSelectedColorBox(FormNightMode.NightModeButtonColorGradientBottomSelected, IniFile.ReadInteger('Buttons', 'GradientBottomSelected', FormNightMode.NightModeButtonColorGradientBottomSelected.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeButtonColorFrameColorSelected, IniFile.ReadInteger('Buttons', 'FrameColorSelected', FormNightMode.NightModeButtonColorFrameColorSelected.DefaultColorColor));
 
+  FormNightMode.NightModeLabelButtonColorFontShadowColorDisabled.Checked:= Boolean(IniFile.ReadInteger('Buttons', 'FontShadowUseDisabled', 0));
   SetSelectedColorBox(FormNightMode.NightModeButtonColorGradientTopDisabled, IniFile.ReadInteger('Buttons', 'GradientTopDisabled', FormNightMode.NightModeButtonColorGradientTopDisabled.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeButtonColorGradientBottomDisabled, IniFile.ReadInteger('Buttons', 'GradientBottomDisabled', FormNightMode.NightModeButtonColorGradientBottomDisabled.DefaultColorColor));
   SetSelectedColorBox(FormNightMode.NightModeButtonColorFrameColorDisabled, IniFile.ReadInteger('Buttons', 'FrameColorDisabled', FormNightMode.NightModeButtonColorFrameColorDisabled.DefaultColorColor));
@@ -6820,58 +6897,62 @@ begin
   SetSelectedColorBox(FormNightMode.NightModeButtonColorFontShadowColorDisabled, IniFile.ReadInteger('Buttons', 'FontShadowColorDisabled', FormNightMode.NightModeButtonColorFontShadowColorDisabled.DefaultColorColor));
 
   SetSelectedColorBox(FormNightMode.NightModeMenuPopupMenuFrameColor, IniFile.ReadInteger('MenuPopup', 'FrameColor', FormNightMode.NightModeMenuPopupMenuFrameColor.DefaultColorColor));
+  SetPopupMenuNightColors(PopupNightModeCopyPasteColor);
 
-  FormNightMode.NightModeGameDocsFont_Setting.Font.Color:= IniFile.ReadInteger('GameDocuments', 'FontColor', Ord(clWhite));
-  FormNightMode.NightModeGameDocsFont_Setting.Font.Name:= IniFile.ReadString('GameDocuments', 'FontName', 'Consolas');
+  FormNightMode.NightModeGameDocsFont_Setting.Font.Color:= IniFile.ReadInteger('GameDocuments', 'FontColor', clrGamesListHeaderFontColor);
+  FormNightMode.NightModeGameDocsFont_Setting.Font.Name:= IniFile.ReadString('GameDocuments', 'FontName', 'Calibri');
   FormNightMode.NightModeGameDocsFont_Setting.Font.Size:= IniFile.ReadInteger('GameDocuments', 'FontSize', 9);
   FormNightMode.NightModeGameDocsFont_Setting.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GameDocuments', 'FontType', 0)));
   SetSelectedColorBox(FormNightMode.NightModeGameDocumentsBackgroundColor, IniFile.ReadInteger('GameDocuments', 'BackgroundColor', FormNightMode.NightModeGameDocumentsBackgroundColor.DefaultColorColor));
   if IsNightMode then
-     MAMEInfoTextHolder.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
+     begin
+       MAMEInfoTextHolder.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
+       SetEditExBorderStyle;
+     end;
 
-  FormNightMode.NightModeGameDocsSplitterSingleColor.Selected:= IniFile.ReadInteger('GameDocuments', 'SplitterSingleColor', FormNightMode.NightModeGameDocsSplitterSingleColor.DefaultColorColor);
-  FormNightMode.NightModeGameDocsSplitterSingleColorHot.Selected:= IniFile.ReadInteger('GameDocuments', 'SplitterSingleColorHot', FormNightMode.NightModeGameDocsSplitterSingleColorHot.DefaultColorColor);
-  FormNightMode.NightModeGameDocsSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'SplitterShowGrip', 1));
-  SetSelectedComboBox(IniFile.ReadInteger('GameDocuments', 'SplitterStyle', 6), FormNightMode.NightModeGameDocsSplitterStyleSelector);
-
-  SetSelectedColorBox(FormNightMode.NightModeGameDocsBorderColor, IniFile.ReadInteger('GameDocuments', 'BorderColor', clBlack));
+  SetSelectedColorBox(FormNightMode.NightModeGameDocsBorderColor, IniFile.ReadInteger('GameDocuments', 'BorderColor', FormNightMode.NightModeGameDocsBorderColor.DefaultColorColor));
   FormNightMode.NightModeGameDocsShowBorder.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowBorder', 1));
 
-  FormNightMode.NightModeGameDocsShowStatusBar.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowStatusBar', 0));
+  FormNightMode.NightModeGameDocsShowStatusBar.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowStatusBar', 1));
 
   FreeAndNil(IniFile);
 
-  SetImageHintBoxColors(1, False); // update ImageHintPanel
-  SetImageHintBoxColors(2, False); // update ImageHintPanel2[2]
-  SetImageHintBoxColors(3, False); // update ImageHintPanel2[3]
-  SetImageHintBoxColors(4, False); // update ImageHintPanel2[4]
+  if IsNightMode then
+  begin
+    SetImageHintBoxColors(1, False); // update ImageHintPanel
+    SetImageHintBoxColors(2, False); // update ImageHintPanel2[2]
+    SetImageHintBoxColors(3, False); // update ImageHintPanel2[3]
+    SetImageHintBoxColors(4, False); // update ImageHintPanel2[4]
+  end;
 end;
 
-procedure TFormMain.WriteNightModeSettings;
+procedure TFormMain.WriteNightModeSettings(const ProfileNameStr: String = '');
 var
   IniFile: TMemIniFile;
+  iFile: String;
 begin
-  if CheckReadOnly(GetNightModeIniFile) then
+  if ProfileNameStr = '' then
+     iFile:= GetNightModeIniFile
+  else
+     begin
+       iFile:= ProfileNameStr;
+       iFile:= GetNightModeFolder+iFile+'.ini';
+     end;
+
+  if CheckReadOnly(iFile) then
      Exit;
 
-  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
+  DeleteFile(iFile); // delete file first so it removes all unused entries
+  IniFile:= TMemIniFile.Create(iFile);
 
   IniFile.WriteInteger('ToolBar', 'GradientBar', Ord(FormNightMode.NightModeToolBarGradientBar.Checked));
   IniFile.WriteInteger('ToolBar', 'BackgroundTopColor', FormNightMode.NightModeToolBarBkTopColor.Selected);
   IniFile.WriteInteger('ToolBar', 'BackgroundBottomColor', FormNightMode.NightModeToolbarBkBottomColor.Selected);
+  IniFile.WriteString ('ToolBar', 'OverlayIconFolder', ToolBarOverlayIconFolderStr);
 
-  IniFile.WriteInteger('ToolBar', 'InnerFrameShow', Ord(FormNightMode.NightModeToolBarShowInnerFrame.Checked));
-  IniFile.WriteInteger('ToolBar', 'OuterFrameShow', Ord(FormNightMode.NightModeToolBarShowOuterFrame.Checked));
-
-  IniFile.WriteInteger('ToolBar', 'InnerFrameColor', FormNightMode.NightModeToolBarInnerFrameColor.Selected);
-  IniFile.WriteInteger('ToolBar', 'OuterFrameColor', FormNightMode.NightModeToolBarOuterFrameColor.Selected);
-
-  IniFile.WriteInteger('GamesList', 'UseWindowsThemedBorder', Ord(FormNightMode.NightModeGamesListUseWindowsThemedBorder.Checked));
-  IniFile.WriteInteger('GamesList', 'InnerFrameShow', Ord(FormNightMode.NightModeGamesListShowInnerFrame.Checked));
-  IniFile.WriteInteger('GamesList', 'OuterFrameShow', Ord(FormNightMode.NightModeGamesListShowOuterFrame.Checked));
-
-  INIFile.WriteInteger('GamesListSelectionBar', 'Gradient', Ord(FormNightMode.NightModeGameSelectionGradientBar.Checked));
-  INIFile.WriteInteger('GamesListSelectionBar', 'AlphaBlend', Ord(FormNightMode.NightModeGameSelectionAlphaBlend.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'Gradient', Ord(FormNightMode.NightModeGameSelectionGradientBar.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'AlphaBlend', Ord(FormNightMode.NightModeGameSelectionAlphaBlend.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'RoundCorners', Ord(FormNightMode.NightModeGameSelectionRoundCorners.Checked));
 
   IniFile.WriteInteger('GamesListSelectionBar', 'TopColor', FormNightMode.NightModeGamesSelectionTopColor.Selected);
   IniFile.WriteInteger('GamesListSelectionBar', 'BottomColor', FormNightMode.NightModeGamesSelectionBottomColor.Selected);
@@ -6891,17 +6972,11 @@ begin
   IniFile.WriteInteger('GamesListStatusBar', 'Gradient', Ord(FormNightMode.NightModeGamesListStatusBarGradientBar.Checked));
   IniFile.WriteInteger('GamesListStatusBar', 'TopColor', FormNightMode.NightModeGamesListStatusBarTopColor.Selected);
   IniFile.WriteInteger('GamesListStatusBar', 'BottomColor', FormNightMode.NightModeGamesListStatusBarBottomColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'InnerFrameShow', Ord(FormNightMode.NightModeGamesListStatusBarShowInnerFrame.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'OuterFrameShow', Ord(FormNightMode.NightModeGamesListStatusBarShowOuterFrame.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'InnerFrameColor', FormNightMode.NightModeGamesListStatusBarInnerFrameColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'OuterFrameColor', FormNightMode.NightModeGamesListStatusBarOuterFrameColor.Selected);
+
   IniFile.WriteInteger('GamesListStatusBar', 'FontColor', FormNightMode.NightModeGamesListStatusBarFontColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'FontShadowEnabled', Ord(FormNightMode.NightModeGamesListStatusBarShadowFontEnabled.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'FontShadowColor', FormNightMode.NightModeGamesListStatusBarShadowFontColor.Selected);
 
   // games list splitters
   INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', Ord(FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked));
-  INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterStyle', FormNightMode.NightModeGamesListSplitterStyleSelector.ItemIndex);
   INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormNightMode.NightModeGamesListSplitterSingleColor.Selected);
   INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormNightMode.NightModeGamesListSplitterSingleColorHot.Selected);
 
@@ -6911,21 +6986,19 @@ begin
   IniFile.WriteInteger('GamesListBackground', 'BackgroundImageEnabled', Ord(FormNightMode.NightModeGamesBackgroundImageEnable.Checked));
   IniFile.WriteString('GamesListBackground', 'BackgroundImage', FormNightMode.NightModeGamesBackgroundImage.Text);
 
-  IniFile.WriteInteger('GamesList', 'InnerFrameColor', FormNightMode.NightModeGamesListInnerFrameColor.Selected);
-  IniFile.WriteInteger('GamesList', 'OuterFrameColor', FormNightMode.NightModeGamesListOuterFrameColor.Selected);
+  IniFile.WriteInteger('GamesListHeader', 'GamesListHeaderBackgroundColor', FormNightMode.NightModeGamesListHeaderBackgroundColor.Selected);
+  IniFile.WriteInteger('GamesListHeader', 'GamesListHeaderBackgroundColorHover', FormNightMode.NightModeGamesListHeaderBackgroundColorHover.Selected);
+  IniFile.WriteInteger('GamesListHeader', 'GamesListHeaderBackgroundColorDown', FormNightMode.NightModeGamesListHeaderBackgroundColorDown.Selected);
 
-  IniFile.WriteInteger('Images', 'InnerFrameShow', Ord(FormNightMode.NightModeImagesPanelShowInnerFrame.Checked));
-  IniFile.WriteInteger('Images', 'OuterFrameShow', Ord(FormNightMode.NightModeImagesPanelShowOuterFrame.Checked));
-
-  IniFile.WriteInteger('Images', 'InnerFrameColor', FormNightMode.NightModeImagesPanelInnerFrameColor.Selected);
-  IniFile.WriteInteger('Images', 'OuterFrameColor', FormNightMode.NightModeImagesPanelOuterFrameColor.Selected);
+  IniFile.WriteInteger('GamesListHeader', 'FontColor', FormNightMode.NightModeGamesListHeaderFont.Font.Color);
+  IniFile.WriteString('GamesListHeader', 'FontName', FormNightMode.NightModeGamesListHeaderFont.Font.Name);
+  IniFile.WriteInteger('GamesListHeader', 'FontSize', FormNightMode.NightModeGamesListHeaderFont.Font.Size);
+  IniFile.WriteInteger('GamesListHeader', 'FontType', Byte(FormNightMode.NightModeGamesListHeaderFont.Font.Style));
 
   IniFile.WriteInteger('Images', 'ImageBorderColor', FormNightMode.NightModeImageBorderColor.Selected);
 
   // image splitters
-  IniFile.WriteInteger('Images', 'SplitterStyle', FormNightMode.NightModeImageSplitterStyleSelector.ItemIndex);
-
-  IniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(FormNightMode.NightModeImageSplitterShowGripIcon.Checked)); //PopupImageShowSplitterGrip.Checked));
+  IniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(FormNightMode.NightModeImageSplitterShowGripIcon.Checked));
   IniFile.WriteInteger('Images', 'SplitterSingleColor', FormNightMode.NightModeImageSplitterSingleColor.Selected);
   IniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
 
@@ -6939,23 +7012,30 @@ begin
   IniFile.WriteInteger('Images', 'HintBox_TextShadowColor', FormNightMode.NightModeHintBox_TextShadowColor.Selected);
   IniFile.WriteInteger('Images', 'HintBox_TextShadowEnabled', Ord(FormNightMode.NightModeHintBox_TextShadowEnabled.Checked));
 
-  IniFile.WriteInteger('Images', 'HintBox_IconEnabled', Ord(FormNightMode.NightModeHintBox_IconEnabled.Checked));
+  IniFile.WriteInteger('Images', 'HintBox_Position', FormNightMode.NightModeHintBox_Position.Position);
+  IniFile.WriteInteger('Images', 'HintBox_FontItalicStyle', Ord(FormNightMode.NightModeHintBox_FontItalicStyle.Checked));
+  IniFile.WriteInteger('Images', 'HintBox_LargerFontSize', Ord(FormNightMode.NightModeHintBox_LargerFontSize.Checked));
 
   IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarFontColor', FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.Selected);
   IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarShadowColor', FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarShadowEnabled', Ord(FormNightMode.NightModeSearchGamesPanelCaptionBarShadowEnabled.Checked));
+
+  IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarOpaqueBackgroundColor', FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarOpaqueBackgroundEnabled', Ord(FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundEnabled.Checked));
 
   IniFile.WriteInteger('SearchGamesPanel', 'FilterFontColor', FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected);
   IniFile.WriteInteger('SearchGamesPanel', 'FilterShadowColor', FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'FilterShadowEnabled', Ord(FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked));
 
   IniFile.WriteInteger('SearchGamesPanel', 'FieldFontColor', FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected);
   IniFile.WriteInteger('SearchGamesPanel', 'FieldShadowColor', FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'FieldShadowEnabled', Ord(FormNightMode.NightModeSearchGamesPanelFieldShadowEnabled.Checked));
 
   IniFile.WriteInteger('SearchGamesPanel', 'TextFontColor', FormNightMode.NightModeSearchGamesPanelEditBoxFontColor.Selected);
   IniFile.WriteInteger('SearchGamesPanel', 'TextBackgroundColor', FormNightMode.NightModeSearchGamesPanelEditBoxBackgroundColor.Selected);
 
   IniFile.WriteInteger('SearchGamesPanel', 'TextFrameColor', FormNightMode.NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected);
   IniFile.WriteInteger('SearchGamesPanel', 'TextFocusedFrameColor', FormNightMode.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'TextUseCustomFrame', Ord(FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked));
 
   IniFile.WriteInteger('Panels', 'GradientBar', Ord(FormNightMode.NightModeSearchGamesPanelGradientBar.Checked));
 
@@ -6967,12 +7047,14 @@ begin
 
   IniFile.WriteInteger('Panels', 'TitleFontColor', FormNightMode.NightModePanelColorsTitleFontColor.Selected);
   IniFile.WriteInteger('Panels', 'TitleShadowColor', FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected);
+  IniFile.WriteInteger('Panels', 'TitleShadowEnabled', Ord(FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked));
 
   IniFile.WriteInteger('Panels', 'Title2FontColor', FormNightMode.NightModePanelColorsTitle2FontColor.Selected);
   IniFile.WriteInteger('Panels', 'Title2ShadowColor', FormNightMode.NightModePanelColorsTitle2ShadowFontColor.Selected);
+  IniFile.WriteInteger('Panels', 'Title2ShadowEnabled', Ord(FormNightMode.NightModePanelColorsTitle2ShadowEnabled.Checked));
 
-  IniFile.WriteInteger('Panels', 'MessageFontColor', FormNightMode.NightModePanelColorsMessageFontColor.Selected);
-  IniFile.WriteInteger('Panels', 'MessageShadowColor', FormNightMode.NightModePanelColorsMessageShadowFontColor.Selected);
+  IniFile.WriteInteger('Panels', 'ImageCategoryTextFontColor', FormNightMode.NightModePanelColorsImageCategoryTextFontColor.Selected);
+  IniFile.WriteInteger('Panels', 'ImageZipTextFontColor', FormNightMode.NightModePanelColorsImageZipTextFontColor.Selected);
 
   // ButtonEx colors
   IniFile.WriteInteger('Buttons', 'FontColor', FormNightMode.NightModeButtonColorFontColor.Selected);
@@ -6996,19 +7078,15 @@ begin
 
   IniFile.WriteInteger('Buttons', 'FontColorDisabled', FormNightMode.NightModeButtonColorFontColorDisabled.Selected);
   IniFile.WriteInteger('Buttons', 'FontShadowColorDisabled', FormNightMode.NightModeButtonColorFontShadowColorDisabled.Selected);
+  IniFile.WriteInteger('Buttons', 'FontShadowUseDisabled', Ord(FormNightMode.NightModeLabelButtonColorFontShadowColorDisabled.Checked));
 
   IniFile.WriteInteger('MenuPopup', 'FrameColor', FormNightMode.NightModeMenuPopupMenuFrameColor.Selected);
 
   IniFile.WriteInteger('GameDocuments', 'BackgroundColor', FormNightMode.NightmodeGameDocumentsBackgroundColor.Selected);
-  IniFile.WriteInteger('GameDocuments', 'FontColor', FormNightMode.NightModeGameDocsFont_Setting.Font.Color);// MAMEInfoTextHolder.Font.Color);
-  IniFile.WriteString('GameDocuments', 'FontName', FormNightMode.NightModeGameDocsFont_Setting.Font.Name);// MAMEInfoTextHolder.Font.Name);
-  IniFile.WriteInteger('GameDocuments', 'FontSize', FormNightMode.NightModeGameDocsFont_Setting.Font.Size);//  MAMEInfoTextHolder.Font.Size);
-  IniFile.WriteInteger('GameDocuments', 'FontType', Byte(FormNightMode.NightModeGameDocsFont_Setting.Font.Style));//  MAMEInfoTextHolder.Font.Style));
-
-  IniFile.WriteInteger('GameDocuments', 'SplitterStyle', FormNightMode.NightModeGameDocsSplitterStyleSelector.ItemIndex);
-  IniFile.WriteInteger('GameDocuments', 'SplitterShowGrip', Ord(FormNightMode.NightModeGameDocsSplitterShowGripIcon.Checked));
-  IniFile.WriteInteger('GameDocuments', 'SplitterSingleColor', FormNightMode.NightModeGameDocsSplitterSingleColor.Selected);
-  IniFile.WriteInteger('GameDocuments', 'SplitterSingleColorHot', FormNightMode.NightModeGameDocsSplitterSingleColorHot.Selected);
+  IniFile.WriteInteger('GameDocuments', 'FontColor', FormNightMode.NightModeGameDocsFont_Setting.Font.Color);
+  IniFile.WriteString('GameDocuments', 'FontName', FormNightMode.NightModeGameDocsFont_Setting.Font.Name);
+  IniFile.WriteInteger('GameDocuments', 'FontSize', FormNightMode.NightModeGameDocsFont_Setting.Font.Size);
+  IniFile.WriteInteger('GameDocuments', 'FontType', Byte(FormNightMode.NightModeGameDocsFont_Setting.Font.Style));
 
   IniFile.WriteInteger('GameDocuments', 'ShowStatusBar', Ord(FormNightMode.NightModeGameDocsShowStatusBar.Checked));
 
@@ -7019,363 +7097,10 @@ begin
   FreeAndNil(IniFile);
 end;
 
-{
-// night mode from preferences screen
-procedure TFormMain.ReadNightModeSettings;
-var
-  IniFile: TMemIniFile;
+function TFormMain.GetCheckBoxThemeFolder: String;
 begin
-  if not FileExists(GetNightModeIniFile) then
-     Exit;
-
-  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
-
-  SetSelectedColorBox(FormPreferences.NightModeToolBarBkTopColor, IniFile.ReadInteger('ToolBar', 'BackgroundTopColor', FormPreferences.NightModeToolbarBkTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeToolBarBkBottomColor, IniFile.ReadInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.NightModeToolbarBkBottomColor.DefaultColorColor));
-  FormPreferences.NightModeToolBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'GradientBar', 0));
-
-  SetSelectedColorBox(FormPreferences.NightModeToolBarInnerFrameColor, IniFile.ReadInteger('ToolBar', 'InnerFrameColor', FormPreferences.NightModeToolBarInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeToolBarOuterFrameColor, IniFile.ReadInteger('ToolBar', 'OuterFrameColor', FormPreferences.NightModeToolBarOuterFrameColor.DefaultColorColor));
-  FormPreferences.NightModeToolBarShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'InnerFrameShow', 1));
-  FormPreferences.NightModeToolBarShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'OuterFrameShow', 1));
-
-  FormPreferences.NightModeGamesListUseWindowsThemedBorder.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'UseWindowsThemedBorder', 0));
-  FormPreferences.NightModeGamesListShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'OuterFrameShow', 1));
-  FormPreferences.NightModeGamesListShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('GamesList', 'InnerFrameShow', 1));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesListInnerFrameColor, IniFile.ReadInteger('GamesList', 'InnerFrameColor', FormPreferences.NightModeGamesListInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesListOuterFrameColor, IniFile.ReadInteger('GamesList', 'OuterFrameColor', FormPreferences.NightModeGamesListOuterFrameColor.DefaultColorColor));
-
-  FormPreferences.NightModeGameSelectionGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'Gradient', 0));
-  FormPreferences.NightModeGameSelectionAlphaBlend.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'AlphaBlend', 0));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'TopColor', FormPreferences.NightModeGamesSelectionTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'BottomColor', FormPreferences.NightModeGamesSelectionBottomColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'FrameColor', FormPreferences.NightModeGamesSelectionFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'FontColor', FormPreferences.NightModeGamesSelectionFontColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionMissROMsTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsTopColor', FormPreferences.NightModeGamesSelectionMissROMsTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionMissROMsBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsBottomColor', FormPreferences.NightModeGamesSelectionMissROMsBottomColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionMissROMsFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsFrameColor', FormPreferences.NightModeGamesSelectionMissROMsFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionMissROMsFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsFontColor', FormPreferences.NightModeGamesSelectionMissROMsFontColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionInactiveTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveTopColor', FormPreferences.NightModeGamesSelectionInactiveTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionInactiveBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveBottomColor', FormPreferences.NightModeGamesSelectionInactiveBottomColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionInactiveFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveFrameColor', FormPreferences.NightModeGamesSelectionInactiveFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesSelectionInactiveFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveFontColor', FormPreferences.NightModeGamesSelectionInactiveFontColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarTopColor, IniFile.ReadInteger('GamesListStatusBar', 'TopColor', FormPreferences.NightModeGamesListStatusBarTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarBottomColor, IniFile.ReadInteger('GamesListStatusBar', 'BottomColor', FormPreferences.NightModeGamesListStatusBarBottomColor.DefaultColorColor));
-  FormPreferences.NightModeGamesListStatusBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'Gradient', 1));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarInnerFrameColor, IniFile.ReadInteger('GamesListStatusBar', 'InnerFrameColor', FormPreferences.NightModeGamesListStatusBarInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarOuterFrameColor, IniFile.ReadInteger('GamesListStatusBar', 'OuterFrameColor', FormPreferences.NightModeGamesListStatusBarOuterFrameColor.DefaultColorColor));
-
-  FormPreferences.NightModeGamesListStatusBarShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'InnerFrameShow', 0));
-  FormPreferences.NightModeGamesListStatusBarShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'OuterFrameShow', 0));
-
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarFontColor, IniFile.ReadInteger('GamesListStatusBar', 'FontColor', FormPreferences.NightModeGamesListStatusBarFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeGamesListStatusBarShadowFontColor, IniFile.ReadInteger('GamesListStatusBar', 'FontShadowColor', FormPreferences.NightModeGamesListStatusBarShadowFontColor.DefaultColorColor));
-  FormPreferences.NightModeGamesListStatusBarShadowFontEnabled.Checked:= Boolean(IniFile.ReadInteger('GamesListStatusBar', 'FontShadowEnabled', 0));
-
-  // games list splitters
-  FormPreferences.NightModeGamesListSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', 1));
-  FormPreferences.NightModeGamesListSplitterSingleColor.Selected:= INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormPreferences.NightModeGamesListSplitterSingleColor.DefaultColorColor);
-  FormPreferences.NightModeGamesListSplitterSingleColorHot.Selected:= INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormPreferences.NightModeGamesListSplitterSingleColorHot.DefaultColorColor);
-  SetSelectedComboBox(INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterStyle', 1), FormPreferences.NightModeGamesListSplitterStyleSelector);
-
-  // games list background color/image
-  SetSelectedColorBox(FormPreferences.NightModeGamesBackgroundColor, IniFile.ReadInteger('GamesListBackground', 'GamesListBackgroundColor', FormPreferences.NightModeGamesBackgroundColor.DefaultColorColor));
-  FormPreferences.NightModeGamesTileBackground.Checked:= Boolean(IniFile.ReadInteger('GamesListBackground', 'TileBackground', 1));
-  FormPreferences.NightModeGamesBackgroundImage.Text:= INIFile.ReadString('GamesListBackground', 'BackgroundImage', 'el_bk.png');
-  FormPreferences.NightModeGamesBackgroundImageEnable.Checked:= Boolean(INIFile.ReadInteger('GamesListBackground', 'BackgroundImageEnabled', 0));
-
-  FormPreferences.NightModeImagesPanelShowInnerFrame.Checked:= Boolean(IniFile.ReadInteger('Images', 'InnerFrameShow', 1));
-  FormPreferences.NightModeImagesPanelShowOuterFrame.Checked:= Boolean(IniFile.ReadInteger('Images', 'OuterFrameShow', 1));
-
-  SetSelectedColorBox(FormPreferences.NightModeImagesPanelInnerFrameColor, IniFile.ReadInteger('Images', 'InnerFrameColor', FormPreferences.NightModeImagesPanelInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeImagesPanelOuterFrameColor, IniFile.ReadInteger('Images', 'OuterFrameColor', FormPreferences.NightModeImagesPanelOuterFrameColor.DefaultColorColor));
-
-  FormPreferences.NightModeImageBorderColor.Selected:= IniFile.ReadInteger('Images', 'ImageBorderColor', 0);
-  PanelImage.Color:= FormPreferences.NightModeImageBorderColor.Selected;
-
-  FormPreferences.NightModeImageSplitterSingleColor.Selected:= IniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.NightModeImageSplitterSingleColor.DefaultColorColor);
-  FormPreferences.NightModeImageSplitterSingleColorHot.Selected:= IniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.NightModeImageSplitterSingleColorHot.DefaultColorColor);
-
-  SetSelectedComboBox(IniFile.ReadInteger('Images', 'SplitterStyle', 1), FormPreferences.NightModeImageSplitterStyleSelector);
-
-  FormPreferences.NightModeImageSplitterShowGripIcon.Tag:= 1;
-  FormPreferences.NightModeImageSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('Images', 'SplitterShowGrip', 1));
-  FormPreferences.NightModeImageSplitterShowGripIcon.Tag:= 0;
-
-  if IsNightMode then
-     if not FormPreferences.NightModeImageSplitterShowGripIcon.Checked then //if not Boolean(ImgIniFile.ReadInteger('Images', 'SplitterShowGrip', 1)) then
-        PopupImageShowSplitterGrip.Click;
-
-  FormPreferences.NightModeHintBox_Color.Selected:= IniFile.ReadInteger('Images', 'HintBox_Color', FormPreferences.NightModeHintBox_Color.DefaultColorColor);
-  FormPreferences.NightModeHintBox_FrameColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_FrameColor', FormPreferences.NightModeHintBox_FrameColor.DefaultColorColor);
-  FormPreferences.NightModeHintBox_FrameEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 1));
-
-  FormPreferences.NightModeHintBox_Opacity.Position:= IniFile.ReadInteger('Images', 'HintBox_Opacity', 200);
-
-  FormPreferences.NightModeHintBox_TextColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_TextColor', FormPreferences.NightModeHintBox_TextColor.DefaultColorColor);
-  FormPreferences.NightModeHintBox_TextShadowColor.Selected:= IniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormPreferences.NightModeHintBox_TextShadowColor.DefaultColorColor);
-  FormPreferences.NightModeHintBox_TextShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 1));
-
-  FormPreferences.NightModeHintBox_IconEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_IconEnabled', 1));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelCaptionBarFontColor, IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarFontColor', FormPreferences.NightModeSearchGamesPanelCaptionBarFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelCaptionBarShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'CaptionBarShadowColor', FormPreferences.NightModeSearchGamesPanelCaptionBarShadowColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FilterFontColor', FormPreferences.NightModeSearchGamesPanelFilterFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFilterShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'FilterShadowColor', FormPreferences.NightModeSearchGamesPanelFilterShadowColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFieldFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FieldFontColor', FormPreferences.NightModeSearchGamesPanelFieldFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelFieldShadowColor, IniFile.ReadInteger('SearchGamesPanel', 'FieldShadowColor', FormPreferences.NightModeSearchGamesPanelFieldShadowColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelEditBoxFontColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFontColor', FormPreferences.NightModeSearchGamesPanelEditBoxFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelEditBoxBackgroundColor, IniFile.ReadInteger('SearchGamesPanel', 'TextBackgroundColor', FormPreferences.NightModeSearchGamesPanelEditBoxBackgroundColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelEditBoxCustomFrameColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFrameColor', FormPreferences.NightModeSearchGamesPanelEditBoxCustomFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFocusedFrameColor', FormPreferences.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.DefaultColorColor));
-  FormPreferences.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked:= Boolean(IniFile.ReadInteger('SearchGamesPanel', 'TextUseCustomFrame', 1));
-
-  FormPreferences.NightModeSearchGamesPanelGradientBar.Checked:= Boolean(IniFile.ReadInteger('Panels', 'GradientBar', 1));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelTopColor, IniFile.ReadInteger('Panels', 'BackgroundTopColor', FormPreferences.NightModeSearchGamesPanelTopColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelBottomColor, IniFile.ReadInteger('Panels', 'BackgroundBottomColor', FormPreferences.NightModeSearchGamesPanelBottomColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelInnerFrameColor, IniFile.ReadInteger('Panels', 'InnerFrameColor', FormPreferences.NightModeSearchGamesPanelInnerFrameColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeSearchGamesPanelOuterFrameColor, IniFile.ReadInteger('Panels', 'OuterFrameColor', FormPreferences.NightModeSearchGamesPanelOuterFrameColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitleFontColor, IniFile.ReadInteger('Panels', 'TitleFontColor', FormPreferences.NightModePanelColorsTitleFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitleShadowFontColor, IniFile.ReadInteger('Panels', 'TitleShadowColor', FormPreferences.NightModePanelColorsTitleShadowFontColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitle2FontColor, IniFile.ReadInteger('Panels', 'Title2FontColor', FormPreferences.NightModePanelColorsTitle2FontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsTitle2ShadowFontColor, IniFile.ReadInteger('Panels', 'Title2ShadowColor', FormPreferences.NightModePanelColorsTitle2ShadowFontColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsMessageFontColor, IniFile.ReadInteger('Panels', 'MessageFontColor', FormPreferences.NightModePanelColorsMessageFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModePanelColorsMessageShadowFontColor, IniFile.ReadInteger('Panels', 'MessageShadowColor', FormPreferences.NightModePanelColorsMessageShadowFontColor.DefaultColorColor));
-
-  // ButtonEx colors
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFontColor, IniFile.ReadInteger('Buttons', 'FontColor', FormPreferences.NightModeButtonColorFontColor.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientTop, IniFile.ReadInteger('Buttons', 'GradientTop', FormPreferences.NightModeButtonColorGradientTop.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientBottom, IniFile.ReadInteger('Buttons', 'GradientBottom', FormPreferences.NightModeButtonColorGradientBottom.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFrameColor, IniFile.ReadInteger('Buttons', 'FrameColor', FormPreferences.NightModeButtonColorFrameColor.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFrameColorFocused, IniFile.ReadInteger('Buttons', 'FrameColorFocused', FormPreferences.NightModeButtonColorFrameColorFocused.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientTopHover, IniFile.ReadInteger('Buttons', 'GradientTopHover', FormPreferences.NightModeButtonColorGradientTopHover.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientBottomHover, IniFile.ReadInteger('Buttons', 'GradientBottomHover', FormPreferences.NightModeButtonColorGradientBottomHover.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFrameColorHover, IniFile.ReadInteger('Buttons', 'FrameColorHover', FormPreferences.NightModeButtonColorFrameColorHover.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientTopSelected, IniFile.ReadInteger('Buttons', 'GradientTopSelected', FormPreferences.NightModeButtonColorGradientTopSelected.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientBottomSelected, IniFile.ReadInteger('Buttons', 'GradientBottomSelected', FormPreferences.NightModeButtonColorGradientBottomSelected.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFrameColorSelected, IniFile.ReadInteger('Buttons', 'FrameColorSelected', FormPreferences.NightModeButtonColorFrameColorSelected.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientTopDisabled, IniFile.ReadInteger('Buttons', 'GradientTopDisabled', FormPreferences.NightModeButtonColorGradientTopDisabled.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorGradientBottomDisabled, IniFile.ReadInteger('Buttons', 'GradientBottomDisabled', FormPreferences.NightModeButtonColorGradientBottomDisabled.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFrameColorDisabled, IniFile.ReadInteger('Buttons', 'FrameColorDisabled', FormPreferences.NightModeButtonColorFrameColorDisabled.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFontColorDisabled, IniFile.ReadInteger('Buttons', 'FontColorDisabled', FormPreferences.NightModeButtonColorFontColorDisabled.DefaultColorColor));
-  SetSelectedColorBox(FormPreferences.NightModeButtonColorFontShadowColorDisabled, IniFile.ReadInteger('Buttons', 'FontShadowColorDisabled', FormPreferences.NightModeButtonColorFontShadowColorDisabled.DefaultColorColor));
-
-  SetSelectedColorBox(FormPreferences.NightModeMenuPopupMenuFrameColor, IniFile.ReadInteger('MenuPopup', 'FrameColor', FormPreferences.NightModeMenuPopupMenuFrameColor.DefaultColorColor));
-
-  FormPreferences.NightModeGameDocsFont_Setting.Font.Color:= IniFile.ReadInteger('GameDocuments', 'FontColor', Ord(clWhite));
-  FormPreferences.NightModeGameDocsFont_Setting.Font.Name:= IniFile.ReadString('GameDocuments', 'FontName', 'Consolas');
-  FormPreferences.NightModeGameDocsFont_Setting.Font.Size:= IniFile.ReadInteger('GameDocuments', 'FontSize', 9);
-  FormPreferences.NightModeGameDocsFont_Setting.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GameDocuments', 'FontType', 0)));
-  SetSelectedColorBox(FormPreferences.NightModeGameDocumentsBackgroundColor, IniFile.ReadInteger('GameDocuments', 'BackgroundColor', FormPreferences.NightModeGameDocumentsBackgroundColor.DefaultColorColor));
-  if IsNightMode then
-     MAMEInfoTextHolder.Font:= FormPreferences.NightModeGameDocsFont_Setting.Font;
-
-  FormPreferences.NightModeGameDocsSplitterSingleColor.Selected:= IniFile.ReadInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.NightModeGameDocsSplitterSingleColor.DefaultColorColor);
-  FormPreferences.NightModeGameDocsSplitterSingleColorHot.Selected:= IniFile.ReadInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.NightModeGameDocsSplitterSingleColorHot.DefaultColorColor);
-  FormPreferences.NightModeGameDocsSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'SplitterShowGrip', 1));
-  SetSelectedComboBox(IniFile.ReadInteger('GameDocuments', 'SplitterStyle', 6), FormPreferences.NightModeGameDocsSplitterStyleSelector);
-
-  SetSelectedColorBox(FormPreferences.NightModeGameDocsBorderColor, IniFile.ReadInteger('GameDocuments', 'BorderColor', clBlack));
-  FormPreferences.NightModeGameDocsShowBorder.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowBorder', 1));
-
-  FormPreferences.NightModeGameDocsShowStatusBar.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowStatusBar', 0));
-
-  FreeAndNil(IniFile);
+  Result:= FrontendPath+'resources\checkbox_radiobutton\';
 end;
-
-procedure TFormMain.WriteNightModeSettings;
-var
-  IniFile: TMemIniFile;
-begin
-  if CheckReadOnly(GetNightModeIniFile) then
-     Exit;
-
-  IniFile:= TMemIniFile.Create(GetNightModeIniFile);
-
-  IniFile.WriteInteger('ToolBar', 'GradientBar', Ord(FormPreferences.NightModeToolBarGradientBar.Checked));
-  IniFile.WriteInteger('ToolBar', 'BackgroundTopColor', FormPreferences.NightModeToolBarBkTopColor.Selected);
-  IniFile.WriteInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.NightModeToolbarBkBottomColor.Selected);
-
-  IniFile.WriteInteger('ToolBar', 'InnerFrameShow', Ord(FormPreferences.NightModeToolBarShowInnerFrame.Checked));
-  IniFile.WriteInteger('ToolBar', 'OuterFrameShow', Ord(FormPreferences.NightModeToolBarShowOuterFrame.Checked));
-
-  IniFile.WriteInteger('ToolBar', 'InnerFrameColor', FormPreferences.NightModeToolBarInnerFrameColor.Selected);
-  IniFile.WriteInteger('ToolBar', 'OuterFrameColor', FormPreferences.NightModeToolBarOuterFrameColor.Selected);
-
-  IniFile.WriteInteger('GamesList', 'UseWindowsThemedBorder', Ord(FormPreferences.NightModeGamesListUseWindowsThemedBorder.Checked));
-  IniFile.WriteInteger('GamesList', 'InnerFrameShow', Ord(FormPreferences.NightModeGamesListShowInnerFrame.Checked));
-  IniFile.WriteInteger('GamesList', 'OuterFrameShow', Ord(FormPreferences.NightModeGamesListShowOuterFrame.Checked));
-
-  INIFile.WriteInteger('GamesListSelectionBar', 'Gradient', Ord(FormPreferences.NightModeGameSelectionGradientBar.Checked));
-  INIFile.WriteInteger('GamesListSelectionBar', 'AlphaBlend', Ord(FormPreferences.NightModeGameSelectionAlphaBlend.Checked));
-
-  IniFile.WriteInteger('GamesListSelectionBar', 'TopColor', FormPreferences.NightModeGamesSelectionTopColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'BottomColor', FormPreferences.NightModeGamesSelectionBottomColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'FrameColor', FormPreferences.NightModeGamesSelectionFrameColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'FontColor', FormPreferences.NightModeGamesSelectionFontColor.Selected);
-
-  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsTopColor', FormPreferences.NightModeGamesSelectionMissROMsTopColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsBottomColor', FormPreferences.NightModeGamesSelectionMissROMsBottomColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsFrameColor', FormPreferences.NightModeGamesSelectionMissROMsFrameColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsFontColor', FormPreferences.NightModeGamesSelectionMissROMsFontColor.Selected);
-
-  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveTopColor', FormPreferences.NightModeGamesSelectionInactiveTopColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveBottomColor', FormPreferences.NightModeGamesSelectionInactiveBottomColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveFrameColor', FormPreferences.NightModeGamesSelectionInactiveFrameColor.Selected);
-  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveFontColor', FormPreferences.NightModeGamesSelectionInactiveFontColor.Selected);
-
-  IniFile.WriteInteger('GamesListStatusBar', 'Gradient', Ord(FormPreferences.NightModeGamesListStatusBarGradientBar.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'TopColor', FormPreferences.NightModeGamesListStatusBarTopColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'BottomColor', FormPreferences.NightModeGamesListStatusBarBottomColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'InnerFrameShow', Ord(FormPreferences.NightModeGamesListStatusBarShowInnerFrame.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'OuterFrameShow', Ord(FormPreferences.NightModeGamesListStatusBarShowOuterFrame.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'InnerFrameColor', FormPreferences.NightModeGamesListStatusBarInnerFrameColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'OuterFrameColor', FormPreferences.NightModeGamesListStatusBarOuterFrameColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'FontColor', FormPreferences.NightModeGamesListStatusBarFontColor.Selected);
-  IniFile.WriteInteger('GamesListStatusBar', 'FontShadowEnabled', Ord(FormPreferences.NightModeGamesListStatusBarShadowFontEnabled.Checked));
-  IniFile.WriteInteger('GamesListStatusBar', 'FontShadowColor', FormPreferences.NightModeGamesListStatusBarShadowFontColor.Selected);
-
-  // games list splitters
-  INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', Ord(FormPreferences.NightModeGamesListSplitterShowGripIcon.Checked));
-  INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterStyle', FormPreferences.NightModeGamesListSplitterStyleSelector.ItemIndex);
-  INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormPreferences.NightModeGamesListSplitterSingleColor.Selected);
-  INIFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormPreferences.NightModeGamesListSplitterSingleColorHot.Selected);
-
-  IniFile.WriteInteger('GamesListBackground', 'GamesListBackgroundColor', FormPreferences.NightModeGamesBackgroundColor.Selected);
-
-  IniFile.WriteInteger('GamesListBackground', 'TileBackground', Ord(FormPreferences.NightModeGamesTileBackground.Checked));
-  IniFile.WriteInteger('GamesListBackground', 'BackgroundImageEnabled', Ord(FormPreferences.NightModeGamesBackgroundImageEnable.Checked));
-  IniFile.WriteString('GamesListBackground', 'BackgroundImage', FormPreferences.NightModeGamesBackgroundImage.Text);
-
-  IniFile.WriteInteger('GamesList', 'InnerFrameColor', FormPreferences.NightModeGamesListInnerFrameColor.Selected);
-  IniFile.WriteInteger('GamesList', 'OuterFrameColor', FormPreferences.NightModeGamesListOuterFrameColor.Selected);
-
-  IniFile.WriteInteger('Images', 'InnerFrameShow', Ord(FormPreferences.NightModeImagesPanelShowInnerFrame.Checked));
-  IniFile.WriteInteger('Images', 'OuterFrameShow', Ord(FormPreferences.NightModeImagesPanelShowOuterFrame.Checked));
-
-  IniFile.WriteInteger('Images', 'InnerFrameColor', FormPreferences.NightModeImagesPanelInnerFrameColor.Selected);
-  IniFile.WriteInteger('Images', 'OuterFrameColor', FormPreferences.NightModeImagesPanelOuterFrameColor.Selected);
-
-  IniFile.WriteInteger('Images', 'ImageBorderColor', FormPreferences.ImageBorderColor.Selected);
-
-  // image splitters
-  IniFile.WriteInteger('Images', 'SplitterStyle', FormPreferences.NightModeImageSplitterStyleSelector.ItemIndex);
-
-  IniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(FormPreferences.NightModeImageSplitterShowGripIcon.Checked)); //PopupImageShowSplitterGrip.Checked));
-  IniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.NightModeImageSplitterSingleColor.Selected);
-  IniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.NightModeImageSplitterSingleColorHot.Selected);
-
-  IniFile.WriteInteger('Images', 'HintBox_Color', FormPreferences.NightModeHintBox_Color.Selected);
-  IniFile.WriteInteger('Images', 'HintBox_FrameColor', FormPreferences.NightModeHintBox_FrameColor.Selected);
-  IniFile.WriteInteger('Images', 'HintBox_FrameEnabled', Ord(FormPreferences.NightModeHintBox_FrameEnabled.Checked));
-
-  IniFile.WriteInteger('Images', 'HintBox_Opacity', FormPreferences.NightModeHintBox_Opacity.Position);
-
-  IniFile.WriteInteger('Images', 'HintBox_TextColor', FormPreferences.NightModeHintBox_TextColor.Selected);
-  IniFile.WriteInteger('Images', 'HintBox_TextShadowColor', FormPreferences.NightModeHintBox_TextShadowColor.Selected);
-  IniFile.WriteInteger('Images', 'HintBox_TextShadowEnabled', Ord(FormPreferences.NightModeHintBox_TextShadowEnabled.Checked));
-
-  IniFile.WriteInteger('Images', 'HintBox_IconEnabled', Ord(FormPreferences.NightModeHintBox_IconEnabled.Checked));
-
-  IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarFontColor', FormPreferences.NightModeSearchGamesPanelCaptionBarFontColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'CaptionBarShadowColor', FormPreferences.NightModeSearchGamesPanelCaptionBarShadowColor.Selected);
-
-  IniFile.WriteInteger('SearchGamesPanel', 'FilterFontColor', FormPreferences.NightModeSearchGamesPanelFilterFontColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'FilterShadowColor', FormPreferences.NightModeSearchGamesPanelFilterShadowColor.Selected);
-
-  IniFile.WriteInteger('SearchGamesPanel', 'FieldFontColor', FormPreferences.NightModeSearchGamesPanelFieldFontColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'FieldShadowColor', FormPreferences.NightModeSearchGamesPanelFieldShadowColor.Selected);
-
-  IniFile.WriteInteger('SearchGamesPanel', 'TextFontColor', FormPreferences.NightModeSearchGamesPanelEditBoxFontColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'TextBackgroundColor', FormPreferences.NightModeSearchGamesPanelEditBoxBackgroundColor.Selected);
-
-  IniFile.WriteInteger('SearchGamesPanel', 'TextFrameColor', FormPreferences.NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'TextFocusedFrameColor', FormPreferences.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected);
-  IniFile.WriteInteger('SearchGamesPanel', 'TextUseCustomFrame', Ord(FormPreferences.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked));
-
-  IniFile.WriteInteger('Panels', 'GradientBar', Ord(FormPreferences.NightModeSearchGamesPanelGradientBar.Checked));
-    
-  IniFile.WriteInteger('Panels', 'BackgroundTopColor', FormPreferences.NightModeSearchGamesPanelTopColor.Selected);
-  IniFile.WriteInteger('Panels', 'BackgroundBottomColor', FormPreferences.NightModeSearchGamesPanelBottomColor.Selected);
-
-  IniFile.WriteInteger('Panels', 'InnerFrameColor', FormPreferences.NightModeSearchGamesPanelInnerFrameColor.Selected);
-  IniFile.WriteInteger('Panels', 'OuterFrameColor', FormPreferences.NightModeSearchGamesPanelOuterFrameColor.Selected);
-
-  IniFile.WriteInteger('Panels', 'TitleFontColor', FormPreferences.NightModePanelColorsTitleFontColor.Selected);
-  IniFile.WriteInteger('Panels', 'TitleShadowColor', FormPreferences.NightModePanelColorsTitleShadowFontColor.Selected);
-
-  IniFile.WriteInteger('Panels', 'Title2FontColor', FormPreferences.NightModePanelColorsTitle2FontColor.Selected);
-  IniFile.WriteInteger('Panels', 'Title2ShadowColor', FormPreferences.NightModePanelColorsTitle2ShadowFontColor.Selected);
-
-  IniFile.WriteInteger('Panels', 'MessageFontColor', FormPreferences.NightModePanelColorsMessageFontColor.Selected);
-  IniFile.WriteInteger('Panels', 'MessageShadowColor', FormPreferences.NightModePanelColorsMessageShadowFontColor.Selected);
-
-  // ButtonEx colors
-  IniFile.WriteInteger('Buttons', 'FontColor', FormPreferences.NightModeButtonColorFontColor.Selected);
-  IniFile.WriteInteger('Buttons', 'GradientTop', FormPreferences.NightModeButtonColorGradientTop.Selected);
-  IniFile.WriteInteger('Buttons', 'GradientBottom', FormPreferences.NightModeButtonColorGradientBottom.Selected);
-  IniFile.WriteInteger('Buttons', 'FrameColor', FormPreferences.NightModeButtonColorFrameColor.Selected);
-
-  IniFile.WriteInteger('Buttons', 'FrameColorFocused', FormPreferences.NightModeButtonColorFrameColorFocused.Selected);
-
-  IniFile.WriteInteger('Buttons', 'GradientTopHover', FormPreferences.NightModeButtonColorGradientTopHover.Selected);
-  IniFile.WriteInteger('Buttons', 'GradientBottomHover', FormPreferences.NightModeButtonColorGradientBottomHover.Selected);
-  IniFile.WriteInteger('Buttons', 'FrameColorHover', FormPreferences.NightModeButtonColorFrameColorHover.Selected);
-
-  IniFile.WriteInteger('Buttons', 'GradientTopSelected', FormPreferences.NightModeButtonColorGradientTopSelected.Selected);
-  IniFile.WriteInteger('Buttons', 'GradientBottomSelected', FormPreferences.NightModeButtonColorGradientBottomSelected.Selected);
-  IniFile.WriteInteger('Buttons', 'FrameColorSelected', FormPreferences.NightModeButtonColorFrameColorSelected.Selected);
-
-  IniFile.WriteInteger('Buttons', 'GradientTopDisabled', FormPreferences.NightModeButtonColorGradientTopDisabled.Selected);
-  IniFile.WriteInteger('Buttons', 'GradientBottomDisabled', FormPreferences.NightModeButtonColorGradientBottomDisabled.Selected);
-  IniFile.WriteInteger('Buttons', 'FrameColorDisabled', FormPreferences.NightModeButtonColorFrameColorDisabled.Selected);
-
-  IniFile.WriteInteger('Buttons', 'FontColorDisabled', FormPreferences.NightModeButtonColorFontColorDisabled.Selected);
-  IniFile.WriteInteger('Buttons', 'FontShadowColorDisabled', FormPreferences.NightModeButtonColorFontShadowColorDisabled.Selected);
-
-  IniFile.WriteInteger('MenuPopup', 'FrameColor', FormPreferences.NightModeMenuPopupMenuFrameColor.Selected);
-
-  IniFile.WriteInteger('GameDocuments', 'BackgroundColor', FormPreferences.NightmodeGameDocumentsBackgroundColor.Selected);
-  IniFile.WriteInteger('GameDocuments', 'FontColor', FormPreferences.NightModeGameDocsFont_Setting.Font.Color);// MAMEInfoTextHolder.Font.Color);
-  IniFile.WriteString('GameDocuments', 'FontName', FormPreferences.NightModeGameDocsFont_Setting.Font.Name);// MAMEInfoTextHolder.Font.Name);
-  IniFile.WriteInteger('GameDocuments', 'FontSize', FormPreferences.NightModeGameDocsFont_Setting.Font.Size);//  MAMEInfoTextHolder.Font.Size);
-  IniFile.WriteInteger('GameDocuments', 'FontType', Byte(FormPreferences.NightModeGameDocsFont_Setting.Font.Style));//  MAMEInfoTextHolder.Font.Style));
-
-  IniFile.WriteInteger('GameDocuments', 'SplitterStyle', FormPreferences.NightModeGameDocsSplitterStyleSelector.ItemIndex);
-  IniFile.WriteInteger('GameDocuments', 'SplitterShowGrip', Ord(FormPreferences.NightModeGameDocsSplitterShowGripIcon.Checked));
-  IniFile.WriteInteger('GameDocuments', 'SplitterSingleColor', FormPreferences.NightModeGameDocsSplitterSingleColor.Selected);
-  IniFile.WriteInteger('GameDocuments', 'SplitterSingleColorHot', FormPreferences.NightModeGameDocsSplitterSingleColorHot.Selected);
-
-  IniFile.WriteInteger('GameDocuments', 'ShowStatusBar', Ord(FormPreferences.NightModeGameDocsShowStatusBar.Checked));
-
-  IniFile.WriteInteger('GameDocuments', 'ShowBorder', Ord(FormPreferences.NightModeGameDocsShowBorder.Checked));
-  IniFile.WriteInteger('GameDocuments', 'BorderColor', FormPreferences.NightModeGameDocsBorderColor.Selected);
-
-
-  IniFile.UpdateFile;
-  FreeAndNil(IniFile);
-end;
-}
 
 procedure TFormMain.SetVideoPreviewState;
 begin
@@ -8348,11 +8073,13 @@ begin
   DestinationFont.Style:= SourceFont.Style;
 end;
 
-procedure TFormMain.ReadCustomGameFontFile;
+procedure TFormMain.ReadCustomGameFontFile(ReadNightModeFile: Boolean);
 var
   FontIniFile: TMemIniFile;
   Loop: Integer;
   tmpFont: TFont;
+  iFile: String;
+  iColor: TColor;
 
   function ReadEntry(const EntryTitle: String; DestinationFont: TFont; DefaultFontColor: TColor; const DefaultFontName: String; DefaultFontSize: Integer; DefaultFontStyle: Byte): Boolean;
   begin
@@ -8362,22 +8089,44 @@ var
     DestinationFont.Size:= FontIniFile.ReadInteger(EntryTitle, 'FontSize', DefaultFontSize);
     DestinationFont.Style:= TFontStyles(Byte(FontIniFile.ReadInteger(EntryTitle, 'FontStyle', DefaultFontStyle)));
   end;
-  
+
 begin
-  if not ValidateFile(GetCustomFontIniFile) then
+  iFile:= GetCustomFontIniFile(ReadNightModeFile);
+  if not ValidateFile(iFile) then
      Exit;
 
   if FormStatus.Visible then
-     FormStatus.MessageStr('Loading systems custom fonts.');
+     FormStatus.MessageStr('Loading systems custom fonts file "'+ExtractFileName(iFile)+'".');
+
+  if not IsStartup then
+  begin
+    // DeInit console/computer TFont variables first!
+    for Loop:= 1 to MaxConsoleComputerSystems do
+        FreeAndNil(Font_ConsoleComputer[Loop]);
+  end;
 
   try
-    FontIniFile:= TMemIniFile.Create(GetCustomFontIniFile);
+    FontIniFile:= TMemIniFile.Create(iFile);
 
-    ReadEntry('Parent Game', Font_Parent, 0, 'Segoe UI', 9, 0);
-    ReadEntry('Clone Game', Font_Clone, 0, 'Segoe UI', 9, 0);
-    ReadEntry('Preliminary Game', Font_Preliminary, TColor(clGray), 'Segoe UI', 9, 8);
-    ReadEntry('Missing ROMs Game', Font_MissingROMs, TColor(clRed), 'Segoe UI', 9, 0);
-    ReadEntry('Missing ROMs Preliminary Game', Font_MissingROMsPreliminary, TColor(clRed), 'Segoe UI', 9, 8);
+    if ReadNightModeFile then
+       iColor:= clWhite
+    else
+       iColor:= clBlack;
+    ReadEntry('Parent Game', Font_Parent, iColor, 'Segoe UI', 9, 0);
+    ReadEntry('Clone Game', Font_Clone, iColor, 'Segoe UI', 9, 0);
+
+    if ReadNightModeFile then
+       iColor:= clSilver
+    else
+       iColor:= clGray;
+    ReadEntry('Preliminary Game', Font_Preliminary, iColor, 'Segoe UI', 9, 8);
+
+    if ReadNightModeFile then
+       iColor:= clrLightRed
+    else
+       iColor:= clRed;
+    ReadEntry('Missing ROMs Game', Font_MissingROMs, iColor, 'Segoe UI', 9, 0);
+    ReadEntry('Missing ROMs Preliminary Game', Font_MissingROMsPreliminary, iColor, 'Segoe UI', 9, 8);
 
     GamesListView.Font:= Font_Parent;
     //SetFont(Font_Parent, GamesListView.Font);
@@ -8400,10 +8149,11 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateCustomGameFontFile;
+procedure TFormMain.WriteCustomGameFontFile(ReadNightModeFile: Boolean);
 var
   FontIniFile: TMemIniFile;
   Loop: Integer;
+  iFile: String;
 
   function WriteEntry(EntryTitle: String; SourceFont: TFont): Boolean;
   begin
@@ -8415,12 +8165,13 @@ var
   end;
 
 begin
-  if CheckReadOnly(GetCustomFontIniFile) then
+  iFile:= GetCustomFontIniFile(ReadNightModeFile);
+  if CheckReadOnly(iFile) then
      Exit;
 
-  DeleteFile(GetCustomFontIniFile);
+  DeleteFile(iFile);
   try
-    FontIniFile:= TMemIniFile.Create(GetCustomFontIniFile);
+    FontIniFile:= TMemIniFile.Create(iFile);
 
     WriteEntry('Parent Game', Font_Parent);
     WriteEntry('Clone Game', Font_Clone);
@@ -8473,76 +8224,74 @@ begin
      ButtonImageCategory.Tag:= iCategory;
 end;
 
-procedure TFormMain.SplitImageCategoriesIniSettings;
+procedure TFormMain.ReadImageSingleBackground(UpdateColorOnly: Boolean);
 var
-  elIniFile, ImagesCatLayIniFile: TMemIniFile;
-  Loop: Integer;
-  IntData, BoolData: Integer;
+  ImgIniFile: TMemIniFile;
 begin
-  if ValidateFile(GetImageCategorySettingsFile) then
+  if not ValidateFile(GetImageCategorySettingsFile) then
      Exit;
+  ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
 
-  if not ValidateFile(FrontendPath+'EmuLoader.ini') then
-     Exit;
+  if IsNightMode then
+     MenuImageUseSingleBackgroundColor.Tag:= ImgIniFile.ReadInteger('SingleBackground', 'Color_NightMode', 0) // the selected color is stored in the .Tag property
+  else
+     MenuImageUseSingleBackgroundColor.Tag:= ImgIniFile.ReadInteger('SingleBackground', 'Color', 0); // the selected color is stored in the .Tag property
+  if not UpdateColorOnly then
+     begin
+       MenuImageUseSingleBackgroundColor.Checked:= Boolean(ImgIniFile.ReadInteger('SingleBackground', 'Enabled', 0));
+       PopupImageUseSingleBackgroundColor.Checked:= MenuImageUseSingleBackgroundColor.Checked;
+     end;
+  ReplaceColorIcon(False, True); // replace the icon by a color box
 
-  elIniFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
-  ImagesCatLayIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile); // file "ini_files\image_category.ini"
-
-  // first, read the data from EmuLoader.ini and store on temp vars
-  // then, save the new data in the new file with new section names and new key names
-
-  // image category settings
-  for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
-  begin
-    // read data
-    IntData:= elIniFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
-    if Loop <> 1 then
-       BoolData:= elIniFile.ReadInteger('Images', ImageCategoryArray[Loop, 1]+'_enabled', 1);
-
-    // write data
-    ImagesCatLayIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', IntData);
-    if Loop <> 1 then // in-game snapshots is always enabled; it cannot be disabled
-       ImagesCatLayIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', BoolData);
-  end;
-
-  ImagesCatLayIniFile.UpdateFile;
-  FreeAndNil(ImagesCatLayIniFile);
-
-  ImagesCatLayIniFile:= TMemIniFile.Create(GetImageLayoutsFile); // file "ini_files\screenshot_layouts.ini"
-
-  // image layout settings (visibility)
-  for Loop:=1 to MaxImageLayouts do // Loop starts at index 1 because single image layout cannot be set invisible
-  begin
-    // read data
-    BoolData:= elIniFile.ReadInteger('Images_Layout', 'layout'+IntToStr(Loop)+'_visible', 1);
-
-    // write data
-    ImagesCatLayIniFile.WriteInteger(GetScrLayoutSection(Loop), 'visible', BoolData);
-  end;
-  ImagesCatLayIniFile.UpdateFile;
-  FreeAndNil(ImagesCatLayIniFile);
-  FreeAndNil(elIniFile);
+  FreeAndNil(ImgIniFile);
 end;
 
-procedure TFormMain.LoadImageCategoryLayoutSettings;
+procedure TFormMain.WriteImageSingleBackground;
+var
+  ImgIniFile: TMemIniFile;
+begin
+  ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+
+  ImgIniFile.WriteInteger('SingleBackground', 'Enabled', Ord(MenuImageUseSingleBackgroundColor.Checked));
+  if IsNightMode then
+     ImgIniFile.WriteInteger('SingleBackground', 'Color_NightMode', MenuImageUseSingleBackgroundColor.Tag) // the selected color is stored in the .Tag property
+  else
+     ImgIniFile.WriteInteger('SingleBackground', 'Color', MenuImageUseSingleBackgroundColor.Tag); // the selected color is stored in the .Tag property
+
+  ImgIniFile.UpdateFile;
+  FreeAndNil(ImgIniFile);
+end;
+
+procedure TFormMain.LoadImageCategoryLayoutSettings(ReadCategoryBackgroundColorsOnly: Boolean = False);
 var
   ImgIniFile: TMemIniFile;
   Loop: Integer;
+  iSection: String;
 begin
   // called only from uMain.ReadIniFile
   if ValidateFile(GetImageCategorySettingsFile) then
      begin
+       if IsNightMode then
+          iSection:= 'NightMode'
+       else
+          iSection:= 'Category';
+
        ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
        // set image category settings
          for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
          begin
-           ImageCategorySettings[Loop].BackgroundColor:= ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
-           if Loop <> 1 then
-              ImageCategorySettings[Loop].Visible:= Boolean(ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', 1));
+           ImageCategorySettings[Loop].BackgroundColor:= ImgIniFile.ReadInteger(iSection, ImageCategoryArray[Loop, 1]+'_bkcolor', 0);
+           if not ReadCategoryBackgroundColorsOnly then
+           begin
+             if Loop <> 1 then
+                ImageCategorySettings[Loop].Visible:= Boolean(ImgIniFile.ReadInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', 1));
+           end;
          end;
        FreeAndNil(ImgIniFile);
      end;
 
+  if ReadCategoryBackgroundColorsOnly then
+     Exit;
   if ValidateFile(GetImageLayoutsFile) then
      begin
        ImgIniFile:= TMemIniFile.Create(GetImageLayoutsFile);
@@ -8553,79 +8302,238 @@ begin
      end;
 end;
 
-procedure TFormMain.LoadImagePanelColorSettings;
+procedure TFormMain.ReadLightModeSettings; // this is for light mode only
 var
-  ImgIniFile: TMemIniFile;
+  IniFile: TMemIniFile;
 begin
-  if ValidateFile(GetImageCategorySettingsFile) then
+  if ValidateFile(GetLightModeFile) then // if ValidateFile(GetImageCategorySettingsFile(IsNightModeProfile)) then
   begin
-    ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+    IniFile:= TMemIniFile.Create(GetLightModeFile); // GetImageCategorySettingsFile(IsNightModeProfile));
 
-    FormPreferences.ImageBorderColor.Selected:= ImgIniFile.ReadInteger('Images', 'ImageBorderColor', 0);
-    PanelImage.Color:= FormPreferences.ImageBorderColor.Selected;
+    SetSelectedColorBox(FormPreferences.ToolBarBkTopColor, IniFile.ReadInteger('ToolBar', 'BackgroundTopColor', FormPreferences.ToolbarBkTopColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.ToolBarBkBottomColor, IniFile.ReadInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.ToolbarBkBottomColor.DefaultColorColor));
+    FormPreferences.ToolBarGradientBar.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'GradientBar', 1));
+    FormPreferences.ToolBarWindowsTheme.Checked:= Boolean(IniFile.ReadInteger('ToolBar', 'WindowsTheme', 1));
 
-    FormPreferences.ImageSplitterSingleColor.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.DefaultColorColor);
-    FormPreferences.ImageSplitterSingleColorHot.Selected:= ImgIniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.DefaultColorColor);
+    SetSelectedColorBox(FormPreferences.SearchGamesPanelFilterFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FilterFontColor', FormPreferences.SearchGamesPanelFilterFontColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.SearchGamesPanelFieldFontColor, IniFile.ReadInteger('SearchGamesPanel', 'FieldFontColor', FormPreferences.SearchGamesPanelFieldFontColor.DefaultColorColor));
 
-    SetSelectedComboBox(ImgIniFile.ReadInteger('Images', 'SplitterStyle', 1), FormPreferences.ImageSplitterStyleSelector);
+    SetSelectedColorBox(FormPreferences.SearchGamesPanelEditBoxFontColor, IniFile.ReadInteger('SearchGamesPanel', 'TextFontColor', FormPreferences.SearchGamesPanelEditBoxFontColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.SearchGamesPanelEditBoxBackgroundColor, IniFile.ReadInteger('SearchGamesPanel', 'TextBackgroundColor', FormPreferences.SearchGamesPanelEditBoxBackgroundColor.DefaultColorColor));
+
+    // read Games Font Type and Color
+    SetSelectedColorBox(FormPreferences.GamesBackgroundColor, IniFile.ReadInteger('GamesListBackground', 'GamesListBackgroundColor', FormPreferences.GamesBackgroundColor.DefaultColorColor));
+
+    FormPreferences.GamesTileBackground.Checked:= Boolean(IniFile.ReadInteger('GamesListBackground', 'TileBackground', 1));
+    FormPreferences.GamesBackgroundImage.Text:= IniFile.ReadString('GamesListBackground', 'BackgroundImage', 'resources\images\el_bk.png');
+    FormPreferences.GamesBackgroundImageEnable.Checked:= Boolean(IniFile.ReadInteger('GamesListBackground', 'BackgroundImageEnabled', 0));
+
+    FormPreferences.GameSelectionGradientBar.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'Gradient', 1));
+    FormPreferences.GameSelectionAlphaBlend.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'AlphaBlend', 1));
+    FormPreferences.GameSelectionRoundCorners.Checked:= Boolean(IniFile.ReadInteger('GamesListSelectionBar', 'RoundCorners', 1));
+
+    SetSelectedColorBox(FormPreferences.GamesSelectionTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'TopColor', FormPreferences.GamesSelectionTopColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'BottomColor', FormPreferences.GamesSelectionBottomColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'FrameColor', FormPreferences.GamesSelectionFrameColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'FontColor', FormPreferences.GamesSelectionFontColor.DefaultColorColor));
+
+    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsTopColor', FormPreferences.GamesSelectionMissROMsTopColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsBottomColor', FormPreferences.GamesSelectionMissROMsBottomColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsFrameColor', FormPreferences.GamesSelectionMissROMsFrameColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'MissROMsFontColor', FormPreferences.GamesSelectionMissROMsFontColor.DefaultColorColor));
+
+    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveTopColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveTopColor', FormPreferences.GamesSelectionInactiveTopColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveBottomColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveBottomColor', FormPreferences.GamesSelectionInactiveBottomColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveFrameColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveFrameColor', FormPreferences.GamesSelectionInactiveFrameColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveFontColor, IniFile.ReadInteger('GamesListSelectionBar', 'InactiveFontColor', FormPreferences.GamesSelectionInactiveFontColor.DefaultColorColor));
+
+    FormPreferences.GamesListStatusBarGradientBar.Checked:= Boolean(INIFile.ReadInteger('GamesListStatusBar', 'Gradient', 1));
+    SetSelectedColorBox(FormPreferences.GamesListStatusBarTopColor, INIFile.ReadInteger('GamesListStatusBar', 'TopColor', FormPreferences.GamesListStatusBarTopColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesListStatusBarBottomColor, INIFile.ReadInteger('GamesListStatusBar', 'BottomColor', FormPreferences.GamesListStatusBarBottomColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesListStatusBarFontColor, INIFile.ReadInteger('GamesListStatusBar', 'FontColor', FormPreferences.GamesListStatusBarFontColor.DefaultColorColor));
+
+    FormPreferences.GamesListSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', 1));
+    SetSelectedColorBox(FormPreferences.GamesListSplitterSingleColor, INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormPreferences.GamesListSplitterSingleColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.GamesListSplitterSingleColorHot, INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormPreferences.GamesListSplitterSingleColorHot.DefaultColorColor));
+    SetSelectedComboBox(INIFile.ReadInteger('GamesListSplitter', 'GamesListSplitterStyle', 6), FormPreferences.GamesListSplitterStyleSelector);
+
+    FormPreferences.GameListHeaderFont_Setting.Font.Color:= IniFile.ReadInteger('GamesListHeader', 'ColumnsHeaderFontColor', 0);
+    FormPreferences.GameListHeaderFont_Setting.Font.Name:= IniFile.ReadString('GamesListHeader', 'ColumnsHeaderFontName', 'Segoe UI');
+    FormPreferences.GameListHeaderFont_Setting.Font.Size:= IniFile.ReadInteger('GamesListHeader', 'ColumnsHeaderFontSize', 9);
+    FormPreferences.GameListHeaderFont_Setting.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GamesListHeader', 'ColumnsHeaderFontStyle', 0)));
+    if not IsNightMode then
+       begin
+         GamesListView.BeginUpdate;
+         GamesListView.Header.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
+         GamesListView.Header.Height:= 2;
+         GamesListView.EndUpdate(False);
+         MachinesListSidePanel.BeginUpdate;
+         MachinesListSidePanel.Header.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
+         MachinesListSidePanel.Header.Height:= 2;
+         MachinesListSidePanel.EndUpdate(False);
+       end;
+
+    SetSelectedColorBox(FormPreferences.ImageBorderColor, IniFile.ReadInteger('Images', 'ImageBorderColor', 0)); // 7 pixels border
+    if not IsNightMode then
+       PanelImage.Color:= FormPreferences.ImageBorderColor.Selected;
+
+    SetSelectedColorBox(FormPreferences.ImageSplitterSingleColor, IniFile.ReadInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.ImageSplitterSingleColorHot, IniFile.ReadInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.DefaultColorColor));
+
+    SetSelectedComboBox(IniFile.ReadInteger('Images', 'SplitterStyle', 1), FormPreferences.ImageSplitterStyleSelector);
 
     FormPreferences.ImageSplitterShowGripIcon.Tag:= 1;
-    FormPreferences.ImageSplitterShowGripIcon.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'SplitterShowGrip', 1));
+    FormPreferences.ImageSplitterShowGripIcon.Checked:= Boolean(IniFile.ReadInteger('Images', 'SplitterShowGrip', 1));
     FormPreferences.ImageSplitterShowGripIcon.Tag:= 0;
 
     if not IsNightMode then
-       if not FormPreferences.ImageSplitterShowGripIcon.Checked then //if not Boolean(ImgIniFile.ReadInteger('Images', 'SplitterShowGrip', 1)) then
-          PopupImageShowSplitterGrip.Click;
+       begin
+         if PopupImageShowSplitterGrip.Checked <> FormPreferences.ImageSplitterShowGripIcon.Checked then
+            PopupImageShowSplitterGrip.Click;
+       end;
 
-    FormPreferences.HintBox_Color.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.DefaultColorColor);
-    FormPreferences.HintBox_FrameColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.DefaultColorColor);
-    FormPreferences.HintBox_FrameEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 1));
+    SetSelectedColorBox(FormPreferences.HintBox_Color, IniFile.ReadInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.HintBox_FrameColor, IniFile.ReadInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.DefaultColorColor));
+    FormPreferences.HintBox_FrameEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FrameEnabled', 1));
 
-    FormPreferences.HintBox_Opacity.Position:= ImgIniFile.ReadInteger('Images', 'HintBox_Opacity', 200);
+    FormPreferences.HintBox_Opacity.Position:= IniFile.ReadInteger('Images', 'HintBox_Opacity', 200);
 
-    FormPreferences.HintBox_TextColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.DefaultColorColor);
-    FormPreferences.HintBox_TextShadowColor.Selected:= ImgIniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.DefaultColorColor);
-    FormPreferences.HintBox_TextShadowEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 1));
+    SetSelectedColorBox(FormPreferences.HintBox_TextColor, IniFile.ReadInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.DefaultColorColor));
+    SetSelectedColorBox(FormPreferences.HintBox_TextShadowColor, IniFile.ReadInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.DefaultColorColor));
+    FormPreferences.HintBox_TextShadowEnabled.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_TextShadowEnabled', 1));
 
-    FormPreferences.HintBox_IconEnabled.Checked:= Boolean(ImgIniFile.ReadInteger('Images', 'HintBox_IconEnabled', 1));
-    FreeAndNil(ImgIniFile);
+    FormPreferences.HintBox_Position.Position:= IniFile.ReadInteger('Images', 'HintBox_Position', 4);
+    FormPreferences.HintBox_FontItalicStyle.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_FontItalicStyle', 0));
+    FormPreferences.HintBox_LargerFontSize.Checked:= Boolean(IniFile.ReadInteger('Images', 'HintBox_LargerFontSize', 0));
+
+    FormPreferences.GameDocsFont_Setting.Font.Color:= IniFile.ReadInteger('GameDocuments', 'FontColor', 0);
+    FormPreferences.GameDocsFont_Setting.Font.Name:= IniFile.ReadString('GameDocuments', 'FontName', 'Calibri');
+    FormPreferences.GameDocsFont_Setting.Font.Size:= IniFile.ReadInteger('GameDocuments', 'FontSize', 9);
+    FormPreferences.GameDocsFont_Setting.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GameDocuments', 'FontType', 0)));
+    SetSelectedColorBox(FormPreferences.GameDocumentsBackgroundColor, IniFile.ReadInteger('GameDocuments', 'BackgroundColor', FormPreferences.GameDocumentsBackgroundColor.DefaultColorColor));
+    if not IsNightMode then
+       MAMEInfoTextHolder.Font:= FormPreferences.GameDocsFont_Setting.Font;
+
+    SetSelectedColorBox(FormPreferences.GameDocsBorderColor, IniFile.ReadInteger('GameDocuments', 'BorderColor', clBlack));
+    FormPreferences.GameDocsShowBorder.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowBorder', 1));
+
+    FormPreferences.GameDocsShowStatusBar.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowStatusBar', 0));
+
+    FreeAndNil(IniFile);
   end;
 
-  SetImageHintBoxColors(1, True);
-  UpdateImageHintPanelText(1);
+  if not IsNightMode then
+     begin
+       SetImageHintBoxColors(1, True);
+       SetImageHintBoxColors(2, True);
+       SetImageHintBoxColors(3, True);
+       SetImageHintBoxColors(4, True);
+
+       UpdateImageHintPanelText(1);
+       UpdateImageHintPanelText(2);
+       UpdateImageHintPanelText(3);
+       UpdateImageHintPanelText(4);
+     end;
 end;
 
-procedure TFormMain.UpdateImagePanelColorSettings;
+procedure TFormMain.WriteLightModeSettings; // this is for light mode only
 var
-  ImgIniFile: TMemIniFile;
+  IniFile: TMemIniFile;
+  iFile: String;
 begin
-  if CheckReadOnly(GetImageCategorySettingsFile) then
+  iFile:= GetLightModeFile;
+  if CheckReadOnly(iFile) then
      Exit;
 
-  ImgIniFile:= TMemIniFile.Create(GetImageCategorySettingsFile);
+  DeleteFile(iFile);
+  IniFile:= TMemIniFile.Create(iFile);
 
-  ImgIniFile.WriteInteger('Images', 'ImageBorderColor', FormPreferences.ImageBorderColor.Selected);
+  IniFile.WriteInteger('ToolBar', 'WindowsTheme', Ord(FormPreferences.ToolBarWindowsTheme.Checked));
+  IniFile.WriteInteger('ToolBar', 'GradientBar', Ord(FormPreferences.ToolBarGradientBar.Checked));
+  IniFile.WriteInteger('ToolBar', 'BackgroundTopColor', FormPreferences.ToolbarBkTopColor.Selected);
+  IniFile.WriteInteger('ToolBar', 'BackgroundBottomColor', FormPreferences.ToolbarBkBottomColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'SplitterStyle', FormPreferences.ImageSplitterStyleSelector.ItemIndex);
+  IniFile.WriteInteger('SearchGamesPanel', 'FilterFontColor', FormPreferences.SearchGamesPanelFilterFontColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'FieldFontColor', FormPreferences.SearchGamesPanelFieldFontColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(FormPreferences.ImageSplitterShowGripIcon.Checked)); // PopupImageShowSplitterGrip.Checked));
-  ImgIniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.Selected);
-  ImgIniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'TextFontColor', FormPreferences.SearchGamesPanelEditBoxFontColor.Selected);
+  IniFile.WriteInteger('SearchGamesPanel', 'TextBackgroundColor', FormPreferences.SearchGamesPanelEditBoxBackgroundColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.Selected);
-  ImgIniFile.WriteInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.Selected);
-  ImgIniFile.WriteInteger('Images', 'HintBox_FrameEnabled', Ord(FormPreferences.HintBox_FrameEnabled.Checked));
+  IniFile.WriteInteger('GamesListBackground', 'GamesListBackgroundColor', FormPreferences.GamesBackgroundColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'HintBox_Opacity', FormPreferences.HintBox_Opacity.Position);
+  IniFile.WriteInteger('GamesListBackground', 'TileBackground', Ord(FormPreferences.GamesTileBackground.Checked));
+  IniFile.WriteInteger('GamesListBackground', 'BackgroundImageEnabled', Ord(FormPreferences.GamesBackgroundImageEnable.Checked));
+  IniFile.WriteString('GamesListBackground', 'BackgroundImage', FormPreferences.GamesBackgroundImage.Text);
+  
+  IniFile.WriteInteger('GamesListSelectionBar', 'Gradient', Ord(FormPreferences.GameSelectionGradientBar.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'AlphaBlend', Ord(FormPreferences.GameSelectionAlphaBlend.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'RoundCorners', Ord(FormPreferences.GameSelectionRoundCorners.Checked));
 
-  ImgIniFile.WriteInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.Selected);
-  ImgIniFile.WriteInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.Selected);
-  ImgIniFile.WriteInteger('Images', 'HintBox_TextShadowEnabled', Ord(FormPreferences.HintBox_TextShadowEnabled.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'TopColor', FormPreferences.GamesSelectionTopColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'BottomColor', FormPreferences.GamesSelectionBottomColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'FrameColor', FormPreferences.GamesSelectionFrameColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'FontColor', FormPreferences.GamesSelectionFontColor.Selected);
 
-  ImgIniFile.WriteInteger('Images', 'HintBox_IconEnabled', Ord(FormPreferences.HintBox_IconEnabled.Checked));
+  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsTopColor', FormPreferences.GamesSelectionMissROMsTopColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsBottomColor', FormPreferences.GamesSelectionMissROMsBottomColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsFrameColor', FormPreferences.GamesSelectionMissROMsFrameColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'MissROMsFontColor', FormPreferences.GamesSelectionMissROMsFontColor.Selected);
 
-  ImgIniFile.UpdateFile;
-  FreeAndNil(ImgIniFile);
+  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveTopColor', FormPreferences.GamesSelectionInactiveTopColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveBottomColor', FormPreferences.GamesSelectionInactiveBottomColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveFrameColor', FormPreferences.GamesSelectionInactiveFrameColor.Selected);
+  IniFile.WriteInteger('GamesListSelectionBar', 'InactiveFontColor', FormPreferences.GamesSelectionInactiveFontColor.Selected);
+
+  IniFile.WriteInteger('GamesListStatusBar', 'Gradient', Ord(FormPreferences.GamesListStatusBarGradientBar.Checked));
+  IniFile.WriteInteger('GamesListStatusBar', 'TopColor', FormPreferences.GamesListStatusBarTopColor.Selected);
+  IniFile.WriteInteger('GamesListStatusBar', 'BottomColor', FormPreferences.GamesListStatusBarBottomColor.Selected);
+  IniFile.WriteInteger('GamesListStatusBar', 'FontColor', FormPreferences.GamesListStatusBarFontColor.Selected);
+
+  IniFile.WriteInteger('GamesListSplitter', 'GamesListSplitterShowGripIcon', Ord(FormPreferences.GamesListSplitterShowGripIcon.Checked));
+  IniFile.WriteInteger('GamesListSplitter', 'GamesListSplitterStyle', FormPreferences.GamesListSplitterStyleSelector.ItemIndex);
+  IniFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColor', FormPreferences.GamesListSplitterSingleColor.Selected);
+  IniFile.WriteInteger('GamesListSplitter', 'GamesListSplitterSingleColorHot', FormPreferences.GamesListSplitterSingleColorHot.Selected);
+
+  IniFile.WriteInteger('Preferences', 'ColumnsHeaderFontColor', FormPreferences.GameListHeaderFont_Setting.Font.Color);
+  IniFile.WriteString('Preferences', 'ColumnsHeaderFontName', FormPreferences.GameListHeaderFont_Setting.Font.Name);
+  IniFile.WriteInteger('Preferences', 'ColumnsHeaderFontSize', FormPreferences.GameListHeaderFont_Setting.Font.Size);
+  IniFile.WriteInteger('Preferences', 'ColumnsHeaderFontStyle', Byte(FormPreferences.GameListHeaderFont_Setting.Font.Style));
+
+  IniFile.WriteInteger('Images', 'ImageBorderColor', FormPreferences.ImageBorderColor.Selected);
+
+  IniFile.WriteInteger('Images', 'SplitterStyle', FormPreferences.ImageSplitterStyleSelector.ItemIndex);
+
+  IniFile.WriteInteger('Images', 'SplitterShowGrip', Ord(FormPreferences.ImageSplitterShowGripIcon.Checked));
+  IniFile.WriteInteger('Images', 'SplitterSingleColor', FormPreferences.ImageSplitterSingleColor.Selected);
+  IniFile.WriteInteger('Images', 'SplitterSingleColorHot', FormPreferences.ImageSplitterSingleColorHot.Selected);
+
+  IniFile.WriteInteger('Images', 'HintBox_Color', FormPreferences.HintBox_Color.Selected);
+  IniFile.WriteInteger('Images', 'HintBox_FrameColor', FormPreferences.HintBox_FrameColor.Selected);
+  IniFile.WriteInteger('Images', 'HintBox_FrameEnabled', Ord(FormPreferences.HintBox_FrameEnabled.Checked));
+
+  IniFile.WriteInteger('Images', 'HintBox_Opacity', FormPreferences.HintBox_Opacity.Position);
+
+  IniFile.WriteInteger('Images', 'HintBox_TextColor', FormPreferences.HintBox_TextColor.Selected);
+  IniFile.WriteInteger('Images', 'HintBox_TextShadowColor', FormPreferences.HintBox_TextShadowColor.Selected);
+  IniFile.WriteInteger('Images', 'HintBox_TextShadowEnabled', Ord(FormPreferences.HintBox_TextShadowEnabled.Checked));
+
+  IniFile.WriteInteger('Images', 'HintBox_Position', FormPreferences.HintBox_Position.Position);
+  IniFile.WriteInteger('Images', 'HintBox_FontItalicStyle', Ord(FormPreferences.HintBox_FontItalicStyle.Checked));
+  IniFile.WriteInteger('Images', 'HintBox_LargerFontSize', Ord(FormPreferences.HintBox_LargerFontSize.Checked));
+
+  IniFile.WriteInteger('GameDocuments', 'BackgroundColor', FormPreferences.GameDocumentsBackgroundColor.Selected);
+  IniFile.WriteInteger('GameDocuments', 'FontColor', FormPreferences.GameDocsFont_Setting.Font.Color);
+  IniFile.WriteString('GameDocuments', 'FontName', FormPreferences.GameDocsFont_Setting.Font.Name);
+  IniFile.WriteInteger('GameDocuments', 'FontSize', FormPreferences.GameDocsFont_Setting.Font.Size);
+  IniFile.WriteInteger('GameDocuments', 'FontType', Byte(FormPreferences.GameDocsFont_Setting.Font.Style));
+
+  IniFile.WriteInteger('GameDocuments', 'ShowBorder', Ord(FormPreferences.GameDocsShowBorder.Checked));
+  IniFile.WriteInteger('GameDocuments', 'BorderColor', FormPreferences.GameDocsBorderColor.Selected);
+
+  IniFile.WriteInteger('GameDocuments', 'ShowStatusBar', Ord(FormPreferences.GameDocsShowStatusBar.Checked));
+
+  IniFile.UpdateFile;
+  FreeAndNil(IniFile);
 end;
 
 procedure TFormMain.ReadIniFile;
@@ -8652,9 +8560,10 @@ begin
   if FormStatus.Visible then
      FormStatus.MessageStr(ReadIniFileMsg);
 
-  LoadImagePanelColorSettings; // image panel color settings (image panel outer frame color, image splitter colors, image hint box settings
+  ReadLightModeSettings;
   LoadImageCategoryLayoutSettings; // image category "bkcolor/visible" and image layout "visible" settings
   ReadSingleLayoutCategory(True);
+  ReadImageSingleBackground(False);
 
   if not ValidateFile(FrontendPath+'EmuLoader.ini') then
      Exit;
@@ -8666,75 +8575,8 @@ begin
     MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
     MenuBoundToGamesPanel.OnClick(Self);
 
-    // read Games Font Type and Color
-    SetSelectedColorBox(FormPreferences.GamesBackgroundColor, INIFile.ReadInteger('Appearance', 'GamesListBackgroundColor', FormPreferences.GamesBackgroundColor.DefaultColorColor));
-
-    if not ValidateFile(GetCustomFontIniFile) then
-       begin
-          // only execute these lines if "ini_files\systemsfonts.ini" file is not found
-          Font_Parent.Color:= INIFile.ReadInteger('Appearance', 'ParentGameFontColor', 0);
-          Font_Parent.Name:= INIFile.ReadString('Appearance', 'ParentGameFontName', 'Segoe UI');
-          Font_Parent.Size:= INIFile.ReadInteger('Appearance', 'ParentGameFontSize', 9);
-          Font_Parent.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'ParentGameFontStyle', 0)));
-
-          Font_Clone.Color:= INIFile.ReadInteger('Appearance', 'CloneGameFontColor', 0);
-          Font_Clone.Name:= INIFile.ReadString('Appearance', 'CloneGameFontName', 'Segoe UI');
-          Font_Clone.Size:= INIFile.ReadInteger('Appearance', 'CloneGameFontSize', 9);
-          Font_Clone.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'CloneGameFontStyle', 0)));
-
-          Font_Preliminary.Color:= INIFile.ReadInteger('Appearance', 'PreliminaryGameFontColor', TColor(clGray));
-          Font_Preliminary.Name:= INIFile.ReadString('Appearance', 'PreliminaryGameFontName', 'Segoe UI');
-          Font_Preliminary.Size:= INIFile.ReadInteger('Appearance', 'PreliminaryGameFontSize', 9);
-          Font_Preliminary.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'PreliminaryGameFontStyle', 8)));
-
-          Font_MissingROMs.Color:= INIFile.ReadInteger('Appearance', 'MissingROMsGameFontColor', TColor(clRed));
-          Font_MissingROMs.Name:= INIFile.ReadString('Appearance', 'MissingROMsGameFontName', 'Segoe UI');
-          Font_MissingROMs.Size:= INIFile.ReadInteger('Appearance', 'MissingROMsGameFontSize', 9);
-          Font_MissingROMs.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'MissingROMsGameFontStyle', 0)));
-
-          Font_MissingROMsPreliminary.Color:= INIFile.ReadInteger('Appearance', 'MissingROMsPreliminaryGameFontColor', TColor(clRed));
-          Font_MissingROMsPreliminary.Name:= INIFile.ReadString('Appearance', 'MissingROMsPreliminaryGameFontName', 'Segoe UI');
-          Font_MissingROMsPreliminary.Size:= INIFile.ReadInteger('Appearance', 'MissingROMsPreliminaryGameFontSize', 9);
-          Font_MissingROMsPreliminary.Style:= TFontStyles(Byte(INIFile.ReadInteger('Appearance', 'MissingROMsPreliminaryGameFontStyle', 8)));
-
-          GamesListView.Font:= Font_Parent;
-          UpdateCustomGameFontFile; // create "ini_files\systemsfonts.ini"
-       end;
-
-    FormPreferences.GamesTileBackground.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'TileBackground', 1));
-    FormPreferences.GamesBackgroundImage.Text:= INIFile.ReadString('Appearance', 'BackgroundImage', 'el_bk.png');
-    FormPreferences.GamesBackgroundImageEnable.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'BackgroundImageEnabled', 0));
-
     MenuFontSettings.Tag:= INIFile.ReadInteger('Appearance', 'GamesFontDialogShowAvailableOnly', 0);
-
-    FormPreferences.GameSelectionGradientBar.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'SelectionBarGradient', 0));
-    FormPreferences.GameSelectionAlphaBlend.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'SelectionBarAlphaBlend', 0));
-
-    SetSelectedColorBox(FormPreferences.GamesSelectionTopColor, INIFile.ReadInteger('Appearance', 'SelectionBarTopColor', FormPreferences.GamesSelectionTopColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionBottomColor, INIFile.ReadInteger('Appearance', 'SelectionBarBottomColor', FormPreferences.GamesSelectionBottomColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionFrameColor, INIFile.ReadInteger('Appearance', 'SelectionBarFrameColor', FormPreferences.GamesSelectionFrameColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionFontColor, INIFile.ReadInteger('Appearance', 'SelectionBarFontColor', FormPreferences.GamesSelectionFontColor.DefaultColorColor));
-
-    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsTopColor, INIFile.ReadInteger('Appearance', 'SelectionBarMissROMsTopColor', FormPreferences.GamesSelectionMissROMsTopColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsBottomColor, INIFile.ReadInteger('Appearance', 'SelectionBarMissROMsBottomColor', FormPreferences.GamesSelectionMissROMsBottomColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsFrameColor, INIFile.ReadInteger('Appearance', 'SelectionBarMissROMsFrameColor', FormPreferences.GamesSelectionMissROMsFrameColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionMissROMsFontColor, INIFile.ReadInteger('Appearance', 'SelectionBarMissROMsFontColor', FormPreferences.GamesSelectionMissROMsFontColor.DefaultColorColor));
-
-    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveTopColor, INIFile.ReadInteger('Appearance', 'SelectionBarInactiveTopColor', FormPreferences.GamesSelectionInactiveTopColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveBottomColor, INIFile.ReadInteger('Appearance', 'SelectionBarInactiveBottomColor', FormPreferences.GamesSelectionInactiveBottomColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveFrameColor, INIFile.ReadInteger('Appearance', 'SelectionBarInactiveFrameColor', FormPreferences.GamesSelectionInactiveFrameColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesSelectionInactiveFontColor, INIFile.ReadInteger('Appearance', 'SelectionBarInactiveFontColor', FormPreferences.GamesSelectionInactiveFontColor.DefaultColorColor));
-
-    FormPreferences.GamesListStatusBarGradientBar.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'GamesListStatusBarGradient', 1));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarTopColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarTopColor', FormPreferences.GamesListStatusBarTopColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarBottomColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarBottomColor', FormPreferences.GamesListStatusBarBottomColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarInnerFrameColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarInnerFrameColor', FormPreferences.GamesListStatusBarInnerFrameColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarOuterFrameColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarOuterFrameColor', FormPreferences.GamesListStatusBarOuterFrameColor.DefaultColorColor));
-    FormPreferences.GamesListStatusBarShowInnerFrame.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'GamesListStatusBarInnerFrameShow', 1));
-    FormPreferences.GamesListStatusBarShowOuterFrame.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'GamesListStatusBarOuterFrameShow', 1));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarFontColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarFontColor', FormPreferences.GamesListStatusBarFontColor.DefaultColorColor));
-    SetSelectedColorBox(FormPreferences.GamesListStatusBarShadowFontColor, INIFile.ReadInteger('Appearance', 'GamesListStatusBarShadowFontColor', FormPreferences.GamesListStatusBarShadowFontColor.DefaultColorColor));
-    FormPreferences.GamesListStatusBarShadowFontEnabled.Checked:= Boolean(INIFile.ReadInteger('Appearance', 'GamesListStatusBarShadowFontEnabled', 0));
+    MenuFontSettings.HelpContext:= INIFile.ReadInteger('Appearance', 'GamesFontShowFontName', 0);
 
     if FormStatus.Visible then
        FormStatus.MessageStr(ReadIniFileMsg);
@@ -8966,21 +8808,6 @@ begin
     FormPreferences.ShortDriverColumnTitles.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShortDriverStatusColumnTitles', 0));
     ShortDriverColumnTitle;
 
-    GamesListView.BeginUpdate;
-    GamesListView.Header.Font.Color:= INIFile.ReadInteger('Preferences', 'ColumnsHeaderFontColor', 0);
-    GamesListView.Header.Font.Name:= INIFile.ReadString('Preferences', 'ColumnsHeaderFontName', 'Segoe UI');
-    GamesListView.Header.Font.Size:= INIFile.ReadInteger('Preferences', 'ColumnsHeaderFontSize', 9);
-    GamesListView.Header.Font.Style:= TFontStyles(Byte(INIFile.ReadInteger('Preferences', 'ColumnsHeaderFontStyle', 0)));
-    GamesListView.Header.Height:= 2;
-    GamesListView.EndUpdate(False);
-    MachinesListSidePanel.BeginUpdate;
-    MachinesListSidePanel.Header.Font.Color:= GamesListView.Header.Font.Color;
-    MachinesListSidePanel.Header.Font.Name:= GamesListView.Header.Font.Name;
-    MachinesListSidePanel.Header.Font.Size:= GamesListView.Header.Font.Size;
-    MachinesListSidePanel.Header.Font.Style:= GamesListView.Header.Font.Style;
-    MachinesListSidePanel.Header.Height:= 2;
-    MachinesListSidePanel.EndUpdate(False);
-
     FormPreferences.LastPlayedHideSeconds.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'HideSecondsLastPlayed', 0));
     FormPreferences.TotalPlayTimeHideSeconds.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'HideSecondsTotalPlaytime', 0));
 
@@ -9119,8 +8946,9 @@ begin
       DisableMinimize.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'DisableMinimize', 0));
       AllowOnlyOneInstance.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'AllowOneInstance', 1));
 
-      IgnoreExitCode1InvalidFunction.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'IgnoreExitCode1InvalidFunction', 1));
       UseItalicFontStyleSystemTitleBar.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseItalicFontStyleSystemTitleBar', 1));
+      IgnoreExitCode1InvalidFunction.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'IgnoreExitCode1InvalidFunction', 1));
+      LeftAlignEmulatorGameTextMessageBox.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'LeftAlignEmulatorGameTextMessageBox', 0));
 
       DisableDeleteSelectedGames.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'DisableDeleteSelectedGames', 0));
 
@@ -9130,19 +8958,11 @@ begin
 
       // Miscellaneous
       MenuViewEmulatorFullCommandLine.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'ShowEmulatorFullCommandLine', 1));
-      IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'NightModeEnabled', 0));
+      NightModeProfileStr:= INIFile.ReadString('Preferences', 'NightModeProfile', 'Default');
+      IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'NightModeEnabled', 1));
+      MenuCustomizeNightModeColors.Tag:= INIFile.ReadInteger('Preferences', 'NightModeProfileUseColorsActiveProfile', 0);
       MenuEnableNightMode.Checked:= IsNightMode;
       PopulateMsgColors;
-
-      GamesListSplitterShowGripIcon.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'GamesListSplitterShowGripIcon', 1));
-      FormPreferences.GamesListSplitterSingleColor.Selected:= INIFile.ReadInteger('Preferences', 'GamesListSplitterSingleColor', FormPreferences.GamesListSplitterSingleColor.DefaultColorColor);
-      FormPreferences.GamesListSplitterSingleColorHot.Selected:= INIFile.ReadInteger('Preferences', 'GamesListSplitterSingleColorHot', FormPreferences.GamesListSplitterSingleColorHot.DefaultColorColor);
-      SetSelectedComboBox(INIFile.ReadInteger('Preferences', 'GamesListSplitterStyle', 6), FormPreferences.GamesListSplitterStyleSelector);
-
-      // General Folders
-      // Emu Loader Folders & Zip Files
-      //FolderGamesFAQ.Text:= INIFile.ReadString('Folders', 'GamesFAQ', '');
-      //FolderPCBInfo.Text:= INIFile.ReadString('Folders', 'PCBInfo', '');
 
       InternetGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameInfoLink', 'http://www.progettoemma.net/gioco.php?game=%s');
       InternetMAMESoftwareListGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameSoftwareListInfoLink', 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s');
@@ -9209,10 +9029,9 @@ begin
 
     PopupImageStretch.Tag:= INIFile.ReadInteger('Images', 'Stretch', 1);
     PopupImageStretchLarger.Tag:= INIFile.ReadInteger('Images', 'StretchLargerImages', 0);
+    PopupImagesDisableAspectRatio.Checked:= Boolean(INIFile.ReadInteger('Images', 'DisableAspectRatio', 0));
 
     PopupDisplayGameSnapshotifGameArtworkNotFound.Checked:= Boolean(INIFile.ReadInteger('Images', 'DisplayGameSnapWhenNoArtwork', 0));
-    //MenuImageCategoryPrevNextAutoSwitch.Checked:= Boolean(INIFile.ReadInteger('Images', 'CategoryAutoCycle', 0));
-    //MenuImageLayoutPrevNextAutoSwitch.Checked:= Boolean(INIFile.ReadInteger('Images', 'LayoutAutoCycle', 0));
 
     PopupImageDisplayParent.Checked:= Boolean(INIFile.ReadInteger('Images', 'DisplayParent', 1));
     if PopupImageStretchLarger.Tag = 1 then
@@ -9223,8 +9042,16 @@ begin
           PopupImageStretch.Checked:= False;
           SetImageScaleMode;
         end;
-      1: PopupImageStretch.Tag:= 0;
+      1:
+        begin
+          PopupImageStretch.Tag:= 0;
+          if PopupImagesDisableAspectRatio.Checked then
+             SetImageScaleMode;
+        end;
     end;
+
+    //MenuImageUseCategorySingleBackgroundColor.Tag:= INIFile.ReadInteger('Images', 'SingleBackgroundColor', 0); // the selected color is stored in the .Tag property
+    //MenuImageUseCategorySingleBackgroundColor.Checked:= Boolean(INIFile.ReadInteger('Images', 'SingleBackgroundColorEnabled', 0));
 
     MenuShowImages.Tag:= INIFile.ReadInteger('Images', 'ShowImages', 1);
 
@@ -9272,7 +9099,8 @@ begin
 
     if not Boolean(INIFile.ReadInteger('ToolBar', 'ImagesBar_Visible', 1)) then
        MenuImagesEnableToolBar.Click;
-       
+
+  AlignEmuGameText:= GetAlignEmuGameText;
   finally
     FreeAndNil(INIFile);
   end;
@@ -9285,6 +9113,7 @@ var
   tmpString: String;
   gColumn: TEasyColumn;
 begin
+  WriteImageSingleBackground;
   if not CheckReadOnly(FrontendPath+'EmuLoader.ini') then
   begin
     try
@@ -9331,11 +9160,6 @@ begin
       INIFile.WriteInteger('Preferences', 'ShowStatusFirstLetterOnly', Ord(FormPreferences.DriverStatusShowFirstLetterOnly.Checked));
       INIFile.WriteInteger('Preferences', 'ShowHideStatusTexts', Ord(FormPreferences.HideDriverStatusTexts.Checked));
       INIFile.WriteInteger('Preferences', 'ShortDriverStatusColumnTitles', Ord(FormPreferences.ShortDriverColumnTitles.Checked));
-
-      INIFile.WriteInteger('Preferences', 'ColumnsHeaderFontColor', GamesListView.Header.Font.Color);
-      INIFile.WriteString('Preferences', 'ColumnsHeaderFontName', GamesListView.Header.Font.Name);
-      INIFile.WriteInteger('Preferences', 'ColumnsHeaderFontSize', GamesListView.Header.Font.Size);
-      INIFile.WriteInteger('Preferences', 'ColumnsHeaderFontStyle', Byte(GamesListView.Header.Font.Style));
 
       INIFile.WriteInteger('Preferences', 'HideSecondsLastPlayed', Ord(FormPreferences.LastPlayedHideSeconds.Checked));
       INIFile.WriteInteger('Preferences', 'HideSecondsTotalPlaytime', Ord(FormPreferences.TotalPlayTimeHideSeconds.Checked));
@@ -9517,42 +9341,8 @@ begin
       INIFile.WriteString('Preferences', 'FavoriteFile', FavoriteProfile[1]);
       INIFile.WriteInteger('Preferences', 'ShowFavIconInGame', Ord(MenuShowFavoriteIconInGamesList.Checked));
 
-      INIFile.WriteInteger('Appearance', 'GamesListBackgroundColor', FormPreferences.GamesBackgroundColor.Selected);
-
-      INIFile.WriteInteger('Appearance', 'TileBackground', Ord(FormPreferences.GamesTileBackground.Checked));
-      INIFile.WriteInteger('Appearance', 'BackgroundImageEnabled', Ord(FormPreferences.GamesBackgroundImageEnable.Checked));
-      INIFile.WriteString('Appearance', 'BackgroundImage', FormPreferences.GamesBackgroundImage.Text);
-
       INIFile.WriteInteger('Appearance', 'GamesFontDialogShowAvailableOnly', MenuFontSettings.Tag);
-
-      INIFile.WriteInteger('Appearance', 'SelectionBarGradient', Ord(FormPreferences.GameSelectionGradientBar.Checked));
-      INIFile.WriteInteger('Appearance', 'SelectionBarAlphaBlend', Ord(FormPreferences.GameSelectionAlphaBlend.Checked));
-
-      INIFile.WriteInteger('Appearance', 'SelectionBarTopColor', FormPreferences.GamesSelectionTopColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarBottomColor', FormPreferences.GamesSelectionBottomColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarFrameColor', FormPreferences.GamesSelectionFrameColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarFontColor', FormPreferences.GamesSelectionFontColor.Selected);
-
-      INIFile.WriteInteger('Appearance', 'SelectionBarMissROMsTopColor', FormPreferences.GamesSelectionMissROMsTopColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarMissROMsBottomColor', FormPreferences.GamesSelectionMissROMsBottomColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarMissROMsFrameColor', FormPreferences.GamesSelectionMissROMsFrameColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarMissROMsFontColor', FormPreferences.GamesSelectionMissROMsFontColor.Selected);
-
-      INIFile.WriteInteger('Appearance', 'SelectionBarInactiveTopColor', FormPreferences.GamesSelectionInactiveTopColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarInactiveBottomColor', FormPreferences.GamesSelectionInactiveBottomColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarInactiveFrameColor', FormPreferences.GamesSelectionInactiveFrameColor.Selected);
-      INIFile.WriteInteger('Appearance', 'SelectionBarInactiveFontColor', FormPreferences.GamesSelectionInactiveFontColor.Selected);
-
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarGradient', Ord(FormPreferences.GamesListStatusBarGradientBar.Checked));
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarTopColor', FormPreferences.GamesListStatusBarTopColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarBottomColor', FormPreferences.GamesListStatusBarBottomColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarInnerFrameShow', Ord(FormPreferences.GamesListStatusBarShowInnerFrame.Checked));
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarOuterFrameShow', Ord(FormPreferences.GamesListStatusBarShowOuterFrame.Checked));
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarInnerFrameColor', FormPreferences.GamesListStatusBarInnerFrameColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarOuterFrameColor', FormPreferences.GamesListStatusBarOuterFrameColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarFontColor', FormPreferences.GamesListStatusBarFontColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarShadowFontColor', FormPreferences.GamesListStatusBarShadowFontColor.Selected);
-      INIFile.WriteInteger('Appearance', 'GamesListStatusBarShadowFontEnabled', Ord(FormPreferences.GamesListStatusBarShadowFontEnabled.Checked));
+      INIFile.WriteInteger('Appearance', 'GamesFontShowFontName', MenuFontSettings.HelpContext);
 
       // EasyListView settings
 
@@ -9596,23 +9386,23 @@ begin
         INIFile.WriteInteger('Preferences', 'DisableMinimize', Ord(DisableMinimize.Checked));
         INIFile.WriteInteger('Preferences', 'AllowOneInstance', Ord(AllowOnlyOneInstance.Checked));
 
-        INIFile.WriteInteger('Preferences', 'IgnoreExitCode1InvalidFunction', Ord(IgnoreExitCode1InvalidFunction.Checked));
         INIFile.WriteInteger('Preferences', 'UseItalicFontStyleSystemTitleBar', Ord(UseItalicFontStyleSystemTitleBar.Checked));
+        INIFile.WriteInteger('Preferences', 'IgnoreExitCode1InvalidFunction', Ord(IgnoreExitCode1InvalidFunction.Checked));
+        INIFile.WriteInteger('Preferences', 'LeftAlignEmulatorGameTextMessageBox', Ord(LeftAlignEmulatorGameTextMessageBox.Checked));
+
         INIFile.WriteInteger('Preferences', 'UseAlternateFrontendIcons', Ord(MenuUseAlternateFrontendIcons.Checked));
 
         INIFile.WriteInteger('Preferences', 'DisableDeleteSelectedGames', Ord(DisableDeleteSelectedGames.Checked));
-
-        INIFile.WriteInteger('Preferences', 'GamesListSplitterShowGripIcon', Ord(GamesListSplitterShowGripIcon.Checked));
-        INIFile.WriteInteger('Preferences', 'GamesListSplitterStyle', GamesListSplitterStyleSelector.ItemIndex);
-        INIFile.WriteInteger('Preferences', 'GamesListSplitterSingleColor', GamesListSplitterSingleColor.Selected);
-        INIFile.WriteInteger('Preferences', 'GamesListSplitterSingleColorHot', GamesListSplitterSingleColorHot.Selected);
 
         INIFile.WriteString('Preferences', 'InternetGameInfoLink', InternetGameInfoLink.Text);
         INIFile.WriteString('Preferences', 'InternetGameSoftwareListInfoLink', InternetMAMESoftwareListGameInfoLink.Text);
       end;
 
       INIFile.WriteInteger('Preferences', 'ShowEmulatorFullCommandLine', Ord(MenuViewEmulatorFullCommandLine.Checked));
+
       INIFile.WriteInteger('Preferences', 'NightModeEnabled', Ord(IsNightMode));
+      INIFile.WriteString('Preferences',  'NightModeProfile', NightModeProfileStr);
+      INIFile.WriteInteger('Preferences', 'NightModeProfileUseColorsActiveProfile', MenuCustomizeNightModeColors.Tag);
 
       INIFile.WriteInteger('Preferences', 'BrowseGameWithArcadeControl', MenuArcadeBrowseGames.Tag);
       INIFile.WriteInteger('Preferences', 'ArcadeSlikStik_Swap2ndStick', Ord(MenuArcadeControlSlikStik_SwapStick.Checked));
@@ -9651,6 +9441,7 @@ begin
 
       INIFile.WriteInteger('Images', 'Stretch', Ord(PopupImageStretch.Checked));
       INIFile.WriteInteger('Images', 'StretchLargerImages', Ord(PopupImageStretchLarger.Checked));
+      INIFile.WriteInteger('Images', 'DisableAspectRatio', Ord(PopupImagesDisableAspectRatio.Checked));
 
       INIFile.WriteInteger('Images', 'DisplayGameSnapWhenNoArtwork', Ord(PopupDisplayGameSnapshotifGameArtworkNotFound.Checked));
 
@@ -9662,8 +9453,6 @@ begin
       INIFile.WriteInteger('Images', 'ShowImages', Ord(MenuShowImages.Checked));
 
       INIFile.WriteInteger('Images', 'LayoutIndex',  ButtonScreenshotLayouts.Tag);
-
-      //INIFile.WriteInteger('Images', 'ShowLayoutDimensions', Ord(PopupImageShowLayoutDimensions.Checked));
 
       INIFile.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
       INIFile.WriteInteger('Images', 'FixRetroArchImageFileNames', Ord(FormPreferences.FixRetroArchImageFileNames.Checked));
@@ -9685,8 +9474,6 @@ begin
       INIFile.WriteString('ToolBar', 'GamesFilters_Buttons', tmpString);
 
       INIFile.WriteInteger('ToolBar', 'ImagesBar_Visible', Ord(PanelToolBarImages.Visible));
-
-      INIFile.WriteString('ToolBar', 'OverlayIconFolder', ToolBarOverlayIconFolderStr);
 
       INIFile.UpdateFile;
     finally
@@ -10890,20 +10677,6 @@ begin
   //cStart:= GetTickCount;
   if not Assigned(FormArcadeMultiSlotGames) then
      FormArcadeMultiSlotGames:= TFormArcadeMultiSlotGames.Create(nil);
-
-  if IsNightMode then
-     begin
-       SetPanelNightColors(FormArcadeMultiSlotGames.PanelNeoGeoMVS, -1, -1,
-                           FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
-                           FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
-
-       //SetPanelNightColors(FormArcadeMultiSlotGames.PanelMultiSlotMachines,
-       //                    FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
-       //                    FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
-       //                    FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
-       //                    FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
-       //SetPanelExStyle(FormArcadeMultiSlotGames.PanelMultiSlotMachines, FormNightMode.NightModeSearchGamesPanelGradientBar.Checked);
-     end;
      
   FormArcadeMultiSlotGames.Tag:= sysID;
 
@@ -11090,9 +10863,6 @@ begin
 
   if IsNightMode then
      begin
-       FormArcadeRunGameExtraMAME.PanelInputListView.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
-       FormArcadeRunGameExtraMAME.PanelInputListView.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
-
        SetPopupMenuNightColors(FormArcadeRunGameExtraMAME.PopupELV);
      end;
   
@@ -11171,6 +10941,14 @@ begin
       until (Item = nil) or GameFound;
     end;
   HideFilterMsgBox;
+end;
+
+function TFormMain.GetAlignEmuGameText: TAlignment;
+begin
+  if FormPreferences.LeftAlignEmulatorGameTextMessageBox.Checked then
+     Result:= taLeftJustify
+  else
+     Result:= taCenter;
 end;
 
 // ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
@@ -11738,7 +11516,7 @@ var
             end;
        end;
   end;
-  
+
 begin
   // AlterMAME extra setting value is now "1"!!!
   Result:= 0; // all is well
@@ -12104,7 +11882,7 @@ begin
                     NewOption2:= MountSupermodelCommandLine;
 
                     FreeAndNil(SupermodelSettings);
-                    
+
                     SetCmdLineTitle(True);
 
                     CommandLine:= CommandLine+'"'+NewOption+'"'; // add the game filename with full path
@@ -12225,39 +12003,39 @@ begin
              True :
                begin
                  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                end;
              False:
                begin
-                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                end;
            end;
 
            if RunWithAlterMAME[1] then
               begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end
            else
            if RunWithAlterMAME[2] then
               begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end
            else
               begin
-                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end;
 
            if IsMultiSlot then
               begin
                 if MachineToUse_Title <> '' then
                    begin
-                     AddMsgText(#13#10+'Multi-slot Machine   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                     AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                     AddMsgText(#13#10+'Multi-slot Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                     AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                    end;
 
                 msItem:= FormArcadeMultiSlotGames.GamesList.Groups.FirstItem;
@@ -12269,8 +12047,8 @@ begin
                     else
                        NewOption:= IntToStr(msItem.Index+1);
                                       // two leading zeroes
-                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [fsBold], taLeftJustify);
-                    AddMsgText(msItem.Captions[1], clBlack, [fsBold], taLeftJustify);
+                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [], taLeftJustify);
+                    AddMsgText(msItem.Captions[1], clBlack, [], taLeftJustify);
                   end;
 
                   msItem:= FormArcadeMultiSlotGames.GamesList.Groups.NextItem(msItem);
@@ -12283,14 +12061,17 @@ begin
               begin
                  if MemGameInfo.eSoftwareName <> '' then
                     begin
-                      AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                      AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                      AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                      AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+
+                      AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                      AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                     end;
               end
            else
               begin
-                AddMsgText(#13#10+'MAME Machine   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'MAME Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end;
 
            if not IsDemulEmptySystem then
@@ -12308,8 +12089,8 @@ begin
                 AddMsgText(#13#10+#13#10);
                 AddMsgText('AlterMAME will be used to run "'+MemGameInfo.eName+'" if it fails '+
                            'to load with MAME.'+#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator  ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME Emulator  ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[1], [rfIgnoreCase]);
                 if IsBatchFileAlterMAME[1] then
@@ -12322,8 +12103,8 @@ begin
                 AddMsgText(#13#10+#13#10);
                 AddMsgText('AlterMAME 2 will be used to run "'+MemGameInfo.eName+'" if it fails '+
                            'to load with AlterMAME.'+#13#10);
-                AddMsgText(#13#10+'AlterMAME 2 Emulator  ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME 2 Emulator  ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[2], [rfIgnoreCase]);
                 if IsBatchFileAlterMAME[2] then
@@ -12339,14 +12120,14 @@ begin
                      begin
                        AddMsgText(#13#10);
                        AddMsgText(#13#10+'WARNING: One on more ROMs/CHDs are missing, "'+
-                                  MemGameInfo.eName+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                                  MemGameInfo.eName+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                      end
                   else
                      if (MemGameInfo.eSystemID = idZiNc) and (NewOption = '') then
                         begin
                           AddMsgText(#13#10);
                           AddMsgText(#13#10+'WARNING: Zip file was not found. "'+MemGameInfo.eName+'" cannot be run!'+
-                                     #13#10+'ZiNc might return "Error 1: Incorrect Function" message.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                                     #13#10+'ZiNc might return "Error 1: Incorrect Function" message.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                         end;
                 end;
 
@@ -12356,7 +12137,7 @@ begin
                         AddMsgText(#13#10+#13#10);
 
                      AddMsgText('WARNING: One on more ROMs/CHDs are missing, "'+
-                                MachineNameStr+'" machine might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                                MachineNameStr+'" machine might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                    end;
               end;
 
@@ -12522,45 +12303,46 @@ begin
              True:
                begin
                  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                end;
              False:
                begin
-                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                end;
            end;
 
            if (RunWithAlterMAME[1] and (not TryAgainAlterMAME[1])) then
               begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end
            else
            if (RunWithAlterMAME[2] and (not TryAgainAlterMAME[2])) then
               begin
-                AddMsgText('AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end
            else
               begin
-                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end;
 
            if not MemGameInfo.eIsCustomGame then
               begin
                 if MemGameInfo.eSoftwareName <> '' then
                    begin
-                     AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                     AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                     AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                     AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
                    end;
               end
            else
               begin
-                AddMsgText(#13#10+'Machine: '+MachineToUse_Title+#13#10, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end;
 
            AddMsgText(#13#10+'Error '+IntToStr(ExitCode), MsgTxtColors.colorExitCode, [fsBold]);
@@ -12572,8 +12354,8 @@ begin
               begin
                 AddMsgText(#13#10);
                 case MemGameInfo.eIsCustomGame of
-                  True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
-                  False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                  True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
+                  False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                 end;
               end;
 
@@ -12590,8 +12372,8 @@ begin
               begin
                 //if ExitCodeAlterMAME[1] <> 2 then // if ExitCode <> 2 then
                 //   AddMsgText(#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter); // RGB(0, 83, 166)
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
                 if ExitCodeAlterMAME[1] <> 0 then
                    begin
@@ -12602,8 +12384,8 @@ begin
                         begin
                           AddMsgText(#13#10);
                           case MemGameInfo.eIsCustomGame of
-                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
-                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
+                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                           end;
                         end
                      else
@@ -12621,8 +12403,8 @@ begin
               begin
                 //if ExitCodeAlterMAME[2] <> 2 then // if ExitCode <> 2 then
                 //   AddMsgText(#13#10);
-                AddMsgText(#13#10+'AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter); // RGB(0, 83, 166)
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+                AddMsgText(#13#10+'AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
                 if ExitCodeAlterMAME[2] <> 0 then
                    begin
@@ -12633,8 +12415,8 @@ begin
                         begin
                           AddMsgText(#13#10);
                           case MemGameInfo.eIsCustomGame of
-                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
-                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter, 10);
+                            True : AddMsgText(#13#10+'Required "'+MachineNameStr+'" machine files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
+                            False: AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                           end;
                         end
                      else
@@ -12705,7 +12487,7 @@ begin
     if CheckMultipleSelected(GamesListView) then
        LabelGameName.Caption:= LabelGameName.Caption+'; '+IntToStr(GamesListView.Selection.Count)+' games selected'
     else
-       LabelGameName.Caption:= LabelGameName.Caption+'; file extension '+ExtractFileExtW(MemGameInfo.eName);
+       LabelGameName.Caption:= LabelGameName.Caption+'; file extension '+WideLowerCase(ExtractFileExtW(MemGameInfo.eName));
 
     LabelGameName.Canvas.Unlock;
   end;
@@ -12756,11 +12538,11 @@ end;
 
 procedure TFormMain.AddEmulatorHeader(const iEmulatorFile: String = '');
 begin
-  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
+  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
   if iEmulatorFile = '' then
-     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter)
+     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS')
   else
-     AddMsgText(iEmulatorFile+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+     AddMsgText(iEmulatorFile+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
   AddMsgText(#13#10);
 end;
 
@@ -12770,7 +12552,7 @@ const
 var
   CommandLine, EmuParameters, MultiFloppyParameter, txtString: WideString;
   EmulatorString, ErrorMsgTitle,
-  MountImageStr, UnmountImageStr: String;
+  MountImageStr, UnmountImageStr: WideString;
   GameFileExt, TempStr: String;
   Continue, UseVirtualDrive, IsBatchFile, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;
   ExtraParameters, ExtraDefaultParameters: TMemIniFile;
@@ -13170,7 +12952,10 @@ begin
         case MemGameInfo.eIsCustomGame of
           True:
             begin
-              IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
+              if UseVirtualDrive then
+                 IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, False, True, TempGameVars.eName)
+              else
+                 IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
             end;
           False:
             begin
@@ -13227,7 +13012,7 @@ begin
                           EnableMsgMediaTypeLabel(UseVirtualDrive);
                           AddEmulatorHeader;
                           AddMsgText('    File extension ');
-                          AddMsgText(GameFileExt, MsgTxtColors.colorFileName, [fsBold]);
+                          AddMsgText(LowerCase(GameFileExt), MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText(' not supported. Valid file extensions are: ');
                           AddMsgText('.gxb', MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText('; ');
@@ -13413,17 +13198,17 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
        end;
        
@@ -13433,13 +13218,13 @@ begin
 
        if UseVirtualDrive then
           begin
-            AddMsgText('Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText('Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
             AddMsgText(UnmountImageStr+#13#10+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Mount Image On Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText('Mount Image On Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
             AddMsgText(MountImageStr+#13#10#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Execute Emulator'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText('Execute Emulator'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
             AddMsgText(CommandLine+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
+            AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
             AddMsgText(UnmountImageStr, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
           end
        else
@@ -13467,7 +13252,7 @@ begin
      begin
        // unmount first to be sure no image is mounted in virtual drive
        RunProcess(UnmountImageStr, True, SW_SHOWNORMAL);
-       Sleep(10); // give it some time for virtual drive to update its status (10 ms)
+       Sleep(20); // give it some time for virtual drive to update its status (20 ms)
        RunProcess(MountImageStr, True, SW_SHOWNORMAL);
      end;
 
@@ -13505,17 +13290,17 @@ begin
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
              TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
        end;
        AddEmulatorHeader;
@@ -13526,7 +13311,7 @@ begin
        if ExitCode = 2 then
           begin
             AddMsgText(#13#10);
-            AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], taCenter);
+            AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText);
           end;
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle, '', 2);
      end;
@@ -13542,8 +13327,8 @@ var
 
   function AddEmulatorHeader: Boolean;
   begin
-    AddMsgText('Associated Application'+#13#10, MsgTxtColors.colorKeyTitle, [], taCenter);
-    AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+    AddMsgText('Associated Application   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+    AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
     AddMsgText(#13#10);
   end;
   
@@ -13571,7 +13356,7 @@ begin
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('File extension');
-       AddMsgText(ExtractFileExt(MemGameInfo.eName), MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText(WideLowerCase(ExtractFileExt(MemGameInfo.eName)), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' is not associated with any application!'+#13#10+#13#10+
                   '    Please associate your games files in Windows with the emulator of your choice (unzipped only).'+
                    #13#10+#13#10+'    You can disable the');
@@ -14080,7 +13865,7 @@ begin
         Result:= IsAmigaUAE(emuFile);
         if not Result then
            Exit;
-           
+
         cfgFile:= FormMain.GetFolderFull(38)+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+'\'+
                   MemGameInfo.eName;
 
@@ -14262,7 +14047,7 @@ begin
              AddMsgText('WinVICE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulator can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, WinVICE filename must be one of the following:'+#13#10);
-             AddMsgText('x64.exe        x64sc.exe        x128.exe        x64dtv.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('x64.exe        x64sc.exe        x128.exe        x64dtv.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+'    Also, a ');
              AddMsgText('flip list file', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' will be created by EmuCon, named the same as the first disk, but with a ');
@@ -14288,7 +14073,7 @@ begin
              AddMsgText('WinUAE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('FS-UAE.exe        WinUAE.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('FS-UAE.exe        WinUAE.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -14310,7 +14095,7 @@ begin
              AddMsgText('Atari++', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('Altirra.exe        Altirra64.exe        atari++.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('Altirra.exe        Altirra64.exe        atari++.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -14333,7 +14118,7 @@ begin
              AddMsgText('JACE', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks (2 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('AppleWin.exe        jace.bat        jace.cmd'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('AppleWin.exe        jace.bat        jace.cmd'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -14354,7 +14139,7 @@ begin
              AddMsgText('GSport', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulators can be used to load multiple floppy disks (11 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('KEGS32.exe        GSport.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('KEGS32.exe        GSport.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -14373,7 +14158,7 @@ begin
              AddMsgText('WinApe', MsgTxtColors.colorFileName, [fsBold]);
              AddMsgText(' emulator can be used to load multiple floppy disks (2 disks max) in the command line! '+
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
-             AddMsgText('WinApe.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], taCenter);
+             AddMsgText('WinApe.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -14388,11 +14173,11 @@ begin
   if not Assigned(FormConsCompMultiFloppyGames) then
      FormConsCompMultiFloppyGames:= TFormConsCompMultiFloppyGames.Create(nil);
 
-  if IsNightMode then
-     begin
-       FormConsCompMultiFloppyGames.FrameGamesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
-       FormConsCompMultiFloppyGames.FrameGamesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
-     end;
+  //if IsNightMode then
+  //   begin
+  //     FormConsCompMultiFloppyGames.FrameGamesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
+  //     FormConsCompMultiFloppyGames.FrameGamesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
+  //   end;
 
   tStr:= GetFolderFull(32);
   AddDefaultIcons('favorite_game.ico', tStr, FormConsCompMultiFloppyGames.IL_LoadMultiFloppy); // index 0
@@ -15603,7 +15388,7 @@ begin
   ELV_Holder.SetFocus;
 end;
 
-procedure TFormMain.ELV_ItemPaintText_General(EasyListViewHolder: TCustomEasyListView; ELV_Item: TEasyItem; out CanvasHolder: TCanvas);
+procedure TFormMain.ELV_ItemPaintText_General(EasyListViewHolder: TCustomEasyListView; ELV_Item: TEasyItem; out CanvasHolder: TCanvas; GameSetStatus: ShortInt = 0; ForceNightColors: Boolean = False);
 begin
   if ELV_Item.Selected then
      begin
@@ -15613,11 +15398,11 @@ begin
        //if (EasyListViewHolder = GamesListView) or (EasyListViewHolder = MachinesListSidePanel) then
        if ELV_AllowSelectionBarUserColors(TEasyListView(EasyListViewHolder)) then
        begin
-         if IsNightMode then
+         if IsNightMode or ForceNightColors then
          begin
            if EasyListViewHolder.Focused then
            begin
-              CanvasHolder.Font.Color:= ELV_SelecionBar_GetColorState(TEasyGameInfo(ELV_Item).eGameSetStatus, FormNightMode.NightModeGamesSelectionFontColor, FormNightMode.NightModeGamesSelectionMissROMsFontColor);
+              CanvasHolder.Font.Color:= ELV_SelecionBar_GetColorState(GameSetStatus, FormNightMode.NightModeGamesSelectionFontColor, FormNightMode.NightModeGamesSelectionMissROMsFontColor);
            end
            else
            begin
@@ -15628,7 +15413,7 @@ begin
          begin
            if EasyListViewHolder.Focused then
               begin
-                CanvasHolder.Font.Color:= ELV_SelecionBar_GetColorState(TEasyGameInfo(ELV_Item).eGameSetStatus, FormPreferences.GamesSelectionFontColor, FormPreferences.GamesSelectionMissROMsFontColor);
+                CanvasHolder.Font.Color:= ELV_SelecionBar_GetColorState(GameSetStatus, FormPreferences.GamesSelectionFontColor, FormPreferences.GamesSelectionMissROMsFontColor);
               end
            else
               begin
@@ -15637,7 +15422,7 @@ begin
          end;
        end
        else
-       if IsNightMode then
+       if IsNightMode or ForceNightColors then
        begin
          if EasyListViewHolder.Focused then
             CanvasHolder.Font.Color:= ELV_SelecionBar_GetColorState(EasyListViewHolder.HelpContext, FormNightMode.NightModeGamesSelectionFontColor, FormNightMode.NightModeGamesSelectionMissROMsFontColor, True)
@@ -16202,7 +15987,7 @@ begin
      ELV_SelectItem(ELV_Destination, eID);
 end;
 
-function TFormMAin.ELV_SelecionBar_GetColorState(GameStatus: ShortInt; HaveSet: TColorBox; MissingROMsSet: TColorBox; GetDefaultColor: Boolean = False): TColor;
+function TFormMAin.ELV_SelecionBar_GetColorState(GameStatus: ShortInt; HaveSet: TColorBoxEx; MissingROMsSet: TColorBoxEx; GetDefaultColor: Boolean = False): TColor;
 begin
   if GameStatus = 1 then
      begin
@@ -16225,10 +16010,17 @@ begin
   Result:= (EasyListView_To_Check = GamesListView) or (EasyListView_To_Check = MachinesListSidePanel) or
             // customize games list fonts                 // customize thumbnails
            (EasyListView_To_Check.Name = 'GamesFont') or (EasyListView_To_Check.Name = 'ELV_ThumbnailPreview') or
-           (EasyListView_To_Check.Name = 'NightModeGamesListView');
+           (EasyListView_To_Check.Name = 'NightModeGamesListView') or
+           (EasyListView_To_Check.Name = 'GamesList') or // Delete Multiple Games Files
+           (EasyListview_To_Check.Name = 'FilesListView') or // Scan MAME Audio Samples
+           (EasyLisTview_To_Check.Name = 'MachinesListEditor') or // Customize MAME Machines
+           // arcade images manager
+           (EasyListView_To_Check.Name = 'MissingImagesList') or (EasyListView_To_Check.Name = 'NotUsedImagesList') or
+           // arcade delete clone images
+           (EasyListView_To_Check.Name = 'DeleteClonesList');
 end;
 
-procedure TFormMain.ELV_SetSelectRibbon(State: ShortInt; EasyListViewHolder: TEasyListView; ForceUpdate: Boolean = False);
+procedure TFormMain.ELV_SetSelectRibbon(State: ShortInt; EasyListViewHolder: TEasyListView; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
 begin
   // state:
   //   0 -> game OK
@@ -16244,23 +16036,7 @@ begin
   begin
     if (not IsNightMode) and (not Assigned(FormPreferences)) then
        Exit;
-    if not IsNightMode then
-    begin
-      EasyListViewHolder.Selection.Color:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionTopColor, FormPreferences.GamesSelectionMissROMsTopColor); // single color selection
-      EasyListViewHolder.Selection.GradientColorTop:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionTopColor, FormPreferences.GamesSelectionMissROMsTopColor); // gradient top
-      EasyListViewHolder.Selection.GradientColorBottom:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionBottomColor, FormPreferences.GamesSelectionMissROMsBottomColor); // gradient bottom
-      EasyListViewHolder.Selection.BorderColor:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionFrameColor, FormPreferences.GamesSelectionMissROMsFrameColor); // frame color
-
-      //EasyListViewHolder.Selection.TextColor:= clBlack; // this doesn't work, call ELV_ItemPaintText_General() function instead
-
-      EasyListViewHolder.Selection.InactiveColor:= FormPreferences.GamesSelectionInactiveTopColor.Selected;
-      EasyListViewHolder.Selection.InactiveGradientColorTop:= FormPreferences.GamesSelectionInactiveTopColor.Selected;
-      EasyListViewHolder.Selection.InactiveGradientColorBottom:= FormPreferences.GamesSelectionInactiveBottomColor.Selected;
-      EasyListViewHolder.Selection.InactiveBorderColor:=  FormPreferences.GamesSelectionInactiveFrameColor.Selected;
-      EasyListViewHolder.Selection.InactiveTextColor:= FormPreferences.GamesSelectionInactiveFontColor.Selected;
-                                                       // this doesn't work, call ELV_ItemPaintText_General() function instead
-    end
-    else
+    if IsNightMode or ForceNightColors then
     begin
       EasyListViewHolder.Selection.Color:= ELV_SelecionBar_GetColorState(State, FormNightMode.NightModeGamesSelectionTopColor, FormNightMode.NightModeGamesSelectionMissROMsTopColor); // single color selection
       EasyListViewHolder.Selection.GradientColorTop:= ELV_SelecionBar_GetColorState(State, FormNightMode.NightModeGamesSelectionTopColor, FormNightMode.NightModeGamesSelectionMissROMsTopColor); // gradient top
@@ -16274,6 +16050,22 @@ begin
       EasyListViewHolder.Selection.InactiveGradientColorBottom:= FormNightMode.NightModeGamesSelectionInactiveBottomColor.Selected;
       EasyListViewHolder.Selection.InactiveBorderColor:=  FormNightMode.NightModeGamesSelectionInactiveFrameColor.Selected;
       EasyListViewHolder.Selection.InactiveTextColor:= FormNightMode.NightModeGamesSelectionInactiveFontColor.Selected;
+                                                       // this doesn't work, call ELV_ItemPaintText_General() function instead
+    end
+    else
+    begin
+      EasyListViewHolder.Selection.Color:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionTopColor, FormPreferences.GamesSelectionMissROMsTopColor); // single color selection
+      EasyListViewHolder.Selection.GradientColorTop:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionTopColor, FormPreferences.GamesSelectionMissROMsTopColor); // gradient top
+      EasyListViewHolder.Selection.GradientColorBottom:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionBottomColor, FormPreferences.GamesSelectionMissROMsBottomColor); // gradient bottom
+      EasyListViewHolder.Selection.BorderColor:= ELV_SelecionBar_GetColorState(State, FormPreferences.GamesSelectionFrameColor, FormPreferences.GamesSelectionMissROMsFrameColor); // frame color
+
+      //EasyListViewHolder.Selection.TextColor:= clBlack; // this doesn't work, call ELV_ItemPaintText_General() function instead
+
+      EasyListViewHolder.Selection.InactiveColor:= FormPreferences.GamesSelectionInactiveTopColor.Selected;
+      EasyListViewHolder.Selection.InactiveGradientColorTop:= FormPreferences.GamesSelectionInactiveTopColor.Selected;
+      EasyListViewHolder.Selection.InactiveGradientColorBottom:= FormPreferences.GamesSelectionInactiveBottomColor.Selected;
+      EasyListViewHolder.Selection.InactiveBorderColor:=  FormPreferences.GamesSelectionInactiveFrameColor.Selected;
+      EasyListViewHolder.Selection.InactiveTextColor:= FormPreferences.GamesSelectionInactiveFontColor.Selected;
                                                        // this doesn't work, call ELV_ItemPaintText_General() function instead
     end;
   end
@@ -16447,7 +16239,53 @@ begin
      ELV_Source.ShowThemedBorderColor:= clrMedDarkGray;
 end;
 
-procedure TFormMain.SetButtonExColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean = False);
+procedure TFormMain.SetEasyListViewHeaderColors(ELV_Source: TEasyListView; SetFontColor: Boolean; ForceNightColors: Boolean = False);
+var
+  UseDefaultColor: Boolean;
+begin
+  ELV_Source.Header.Color:= ELV_Source.Color;
+  ELV_Source.Header.HeaderFrameColor:= ELV_Source.Color;
+  UseDefaultColor:= not FormMain.ELV_AllowSelectionBarUserColors(ELV_Source);
+  if UseDefaultColor then
+     begin
+       ELV_Source.Header.HeaderColumnColor:= clrDarkGray;
+       ELV_Source.Header.HeaderColumnColorHot:= clrMedDarkGray;
+       ELV_Source.Header.HeaderColumnColorClick:= menu_background_color[1];
+     end
+  else
+     begin
+       ELV_Source.Header.HeaderColumnColor:= FormNightMode.NightModeGamesListHeaderBackgroundColor.Selected;
+       ELV_Source.Header.HeaderColumnColorHot:= FormNightMode.NightModeGamesListHeaderBackgroundColorHover.Selected;
+       ELV_Source.Header.HeaderColumnColorClick:= FormNightMode.NightModeGamesListHeaderBackgroundColorDown.Selected;
+     end;
+
+  if SetFontColor then
+     begin
+       if IsNightMode then
+          begin
+            if UseDefaultColor then
+               ELV_GetDefaultHeaderFont(ELV_Source.Header.Font, IsNightMode, False)
+            else
+               ELV_Source.Header.Font:= FormNightMode.NightModeGamesListHeaderFont.Font
+          end
+       else
+          begin
+            if UseDefaultColor then
+               ELV_GetDefaultHeaderFont(ELV_Source.Header.Font, IsNightMode, False)
+            else
+               ELV_Source.Header.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
+          end;
+     //ELV_Source.Header.Font.Color:= clWhite;
+     end;
+
+  if ForceNightColors then
+     ELV_Source.Header.Themed:= False
+  else
+  if ELV_Source.Header.Themed <> not IsNightMode then
+     ELV_Source.Header.Themed:= not IsNightMode;
+end;
+
+procedure TFormMain.SetButtonExColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
 begin
   ButtonSource.Font.Color:= FormNightMode.NightModeButtonColorsSampleButton1.Font.Color;
   ButtonSource.GradientColorTop:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop;
@@ -16460,20 +16298,24 @@ begin
   ButtonSource.GradientColorBottom_Hover:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorBottom_Hover;
   ButtonSource.FrameColor_Hover:= FormNightMode.NightModeButtonColorsSampleButton1.FrameColor_Hover;
 
-  ButtonSource.GradientColorTop_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
+  ButtonSource.GradientColorTop_Down:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop_Down;
+  ButtonSource.GradientColorBottom_Down:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorBottom_Down;
+  ButtonSource.FrameColor_Down:= FormNightMode.NightModeButtonColorsSampleButton1.FrameColor_Down;
 
+  ButtonSource.FontShadowShow_Disabled:= FormNightMode.NightModeLabelButtonColorFontShadowColorDisabled.Checked;
+  ButtonSource.GradientColorTop_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
   ButtonSource.GradientColorBottom_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled;
   ButtonSource.FrameColor_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.FrameColor_Disabled;
   ButtonSource.FontColorDisabled:= FormNightMode.NightModeButtonColorsSampleButton1.FontColorDisabled;
   ButtonSource.FontShadowColorDisabled:= FormNightMode.NightModeButtonColorsSampleButton1.FontShadowColorDisabled;
 
-  ToggleButtonExCustomDraw(ButtonSource);
+  ToggleButtonExCustomDraw(ButtonSource, ForceNightColors);
 
   if ForceUpdate then
      ButtonSource.Invalidate;
 end;
 
-procedure TFormMain.SetButtonExColors(ButtonSource: TSpeedButtonEx; ForceUpdate: Boolean = False);
+procedure TFormMain.SetButtonExColors(ButtonSource: TSpeedButtonEx; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
 begin
   ButtonSource.Font.Color:= FormNightMode.NightModeButtonColorsSampleButton1.Font.Color;
   ButtonSource.GradientColorTop:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop;
@@ -16490,22 +16332,48 @@ begin
   ButtonSource.GradientColorBottom_Down:= FormNightMode.NightModeButtonColorsSampleButton4.GradientColorBottom_Down;
   ButtonSource.FrameColor_Down:= FormNightMode.NightModeButtonColorsSampleButton4.FrameColor_Down;
 
+  ButtonSource.FontShadowShow_Disabled:= FormNightMode.NightModeLabelButtonColorFontShadowColorDisabled.Checked;
   ButtonSource.GradientColorTop_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorTop_Disabled;
-
   ButtonSource.GradientColorBottom_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.GradientColorBottom_Disabled;
   ButtonSource.FrameColor_Disabled:= FormNightMode.NightModeButtonColorsSampleButton1.FrameColor_Disabled;
   ButtonSource.FontColorDisabled:= FormNightMode.NightModeButtonColorsSampleButton1.FontColorDisabled;
   ButtonSource.FontShadowColorDisabled:= FormNightMode.NightModeButtonColorsSampleButton1.FontShadowColorDisabled;
   
-  ToggleButtonExCustomDraw(ButtonSource);
+  ToggleButtonExCustomDraw(ButtonSource, ForceNightColors);
 
   if ForceUpdate then
      ButtonSource.Invalidate;
 end;
 
-procedure TFormMain.SetButtonExColorsColorBox(ButtonSource: TBitBtnEx; SetDefaultColor: Boolean; ForceUpdate: Boolean = False);
+procedure TFormMain.SetCheckBoxExCustomIcon(CheckBoxExSource: TAdvOfficeCheckBoxEx; EnableCustomIcon: Boolean);
+begin
+  if EnableCustomIcon then
+  begin
+    if FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint <> '' then
+       if CheckBoxExSource.CustomIconsDirectory <> FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint then
+          CheckBoxExSource.CustomIconsDirectory:= FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint;
+  end;
 
-  function GetColorState(ColorBoxSource: TColorBox): TColor;
+  if CheckBoxExSource.CustomIconsEnabled <> EnableCustomIcon then
+     CheckBoxExSource.CustomIconsEnabled:= EnableCustomIcon;
+end;
+
+procedure TFormMain.SetRadioButtonExCustomIcon(RadioButtonExSource: TAdvOfficeRadioButtonEx; EnableCustomIcon: Boolean);
+begin
+  if EnableCustomIcon then
+  begin
+    if FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint <> '' then
+       if RadioButtonExSource.CustomIconsDirectory <> FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint then
+          RadioButtonExSource.CustomIconsDirectory:= FormPreferences.CheckBoxRadioButtonBoxFolderFullPathLabel.Hint;
+  end;
+
+  if RadioButtonExSource.CustomIconsEnabled <> EnableCustomIcon then
+     RadioButtonExSource.CustomIconsEnabled:= EnableCustomIcon;
+end;
+
+procedure TFormMain.SetButtonExColorsColorBox(ButtonSource: TBitBtnEx; SetDefaultColor: Boolean; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
+
+  function GetColorState(ColorBoxSource: TColorBoxEx): TColor;
   begin
     if SetDefaultColor then
        Result:= ColorBoxSource.DefaultColorColor
@@ -16514,7 +16382,7 @@ procedure TFormMain.SetButtonExColorsColorBox(ButtonSource: TBitBtnEx; SetDefaul
   end;
 
 begin
-  // this can be used if button colors must be the default ones... redundant function since you can use uMain.SetButtonExColors() ?????????
+  // this can be used if button colors must be the default ones... redundant ? function since you can use uMain.SetButtonExColors()
   ButtonSource.Font.Color:= GetColorState(FormNightMode.NightModeButtonColorFontColor);
   ButtonSource.GradientColorTop:= GetColorState(FormNightMode.NightModeButtonColorGradientTop);
   ButtonSource.GradientColorBottom:= GetColorState(FormNightMode.NightModeButtonColorGradientBottom);
@@ -16534,7 +16402,7 @@ begin
 
   ButtonSource.FontShadowColorDisabled:= GetColorState(FormNightMode.NightModeButtonColorFontShadowColorDisabled);
 
-  ToggleButtonExCustomDraw(ButtonSource);
+  ToggleButtonExCustomDraw(ButtonSource, ForceNightColors);
 
   if ForceUpdate then
      ButtonSource.Invalidate;
@@ -16598,11 +16466,6 @@ begin
   Result:= FrontendPath+'el_extras.ini';
 end;
 
-function TFormMain.GetNightModeIniFile: String;
-begin
-  Result:= FrontendPath+'nightmode.ini';
-end;
-
 function TFormMain.GetVideoPreviewIniFile(IsDefaultFile: Boolean = False): String;
 begin
   if IsDefaultFile then
@@ -16611,9 +16474,15 @@ begin
      Result:= GetIniFilesFolder+'videopreview.ini';
 end;
 
-function TFormMain.GetCustomFontIniFile: String;
+function TFormMain.GetCustomFontIniFile(GetNightModeFile: Boolean; ReturnFileNameOnly: Boolean = False): String;
 begin
-  Result:= GetIniFilesFolder+'sysgamecustomfont.ini';
+  if GetNightModeFile then
+     Result:= 'sysgamecustomfont_nightmode.ini'
+  else
+     Result:= 'sysgamecustomfont.ini';
+
+  if not ReturnFileNameOnly then
+     Result:=GetIniFilesFolder+Result;
 end;
 
 function TFormMain.GetFavoritesFolder: String;
@@ -16654,6 +16523,11 @@ end;
 function TFormMain.GetImageCategorySettingsFile: String;
 begin
   Result:= GetIniFilesFolder+'image_category.ini';
+end;
+
+function TFormMain.GetLightModeFile: String;
+begin
+  Result:= GetIniFilesFolder+'lightmode.ini';
 end;
 
 function TFormMain.GetColumnProfile(IsSoftwareList: Boolean = False): String;
@@ -24277,7 +24151,7 @@ begin
       FreeAndNil(SoftListCustomSystems[Loop]);
 end;
 
-procedure TFormMain.LoadListCPU(BoxHolder: TComboBox);
+procedure TFormMain.LoadListCPU(BoxHolder: TComboBox2Ex);
 var
   GameCPU_MAME, ListCPU, SortedList: THashedStringList;
   Loop: Integer;
@@ -24539,24 +24413,34 @@ var
     case PopupImageStretch.Checked of
       True:
         begin
-          case PopupImageStretchLarger.Checked of
+          case PopupImagesDisableAspectRatio.Checked of
             True:
               begin
-                if (ImageHolder.Bitmap.Width > ImageHolder.Width) or (ImageHolder.Bitmap.Height > ImageHolder.Height) then
-                   begin
-                     if ImageHolder.ScaleMode <> smResize then
-                        ImageHolder.ScaleMode:= smResize
-                   end
-                else
-                   begin
-                     if ImageHolder.ScaleMode <> smNormal then
-                        ImageHolder.ScaleMode:= smNormal;
-                   end;
+                if ImageHolder.ScaleMode <> smStretch then
+                   ImageHolder.ScaleMode:= smStretch;
               end;
             False:
               begin
-                if ImageHolder.ScaleMode <> smResize then
-                   ImageHolder.ScaleMode:= smResize;
+                case PopupImageStretchLarger.Checked of
+                  True:
+                    begin
+                      if (ImageHolder.Bitmap.Width > ImageHolder.Width) or (ImageHolder.Bitmap.Height > ImageHolder.Height) then
+                         begin
+                           if ImageHolder.ScaleMode <> smResize then
+                              ImageHolder.ScaleMode:= smResize
+                         end
+                      else
+                         begin
+                           if ImageHolder.ScaleMode <> smNormal then
+                              ImageHolder.ScaleMode:= smNormal;
+                         end;
+                    end;
+                  False:
+                    begin
+                      if ImageHolder.ScaleMode <> smResize then
+                         ImageHolder.ScaleMode:= smResize;
+                    end;
+                end;
               end;
           end;
         end;
@@ -24690,6 +24574,7 @@ begin
   ImageDetails[ScreenIndex].NoImageLoaded:= True;
   ImageDetails[ScreenIndex].IsZipped:= False;
   ImageDetails[ScreenIndex].NewImageLoaded:= False;
+  ImageDetails[ScreenIndex].ImageType:= '';
 end;
 
 procedure TFormMain.ClearScreenshot(const ScreenIndex: ShortInt);
@@ -24771,25 +24656,25 @@ begin
       begin
         if PopupMenuImages.PopupComponent = Images then
            begin
-             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[1].ImageCategoryIndex); // Images.Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[1].ImageCategoryIndex);
              PopupMenuImages.Tag:= 1;
            end
         else
         if PopupMenuImages.PopupComponent = ImageScr[2] then
            begin
-             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[2].ImageCategoryIndex); // ImageScr[2].Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[2].ImageCategoryIndex);
              PopupMenuImages.Tag:= 2;
            end
         else
         if PopupMenuImages.PopupComponent = ImageScr[3] then
            begin
-             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[3].ImageCategoryIndex); // ImageScr[3].Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[3].ImageCategoryIndex);
              PopupMenuImages.Tag:= 3;
            end
         else
         if PopupMenuImages.PopupComponent = ImageScr[4] then
            begin
-             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[4].ImageCategoryIndex); // ImageScr[3].Hint;
+             ImagePanelSeparator.Hint:= GetImageCategoryTitle(ImageDetails[4].ImageCategoryIndex);
              PopupMenuImages.Tag:= 4;
            end
       end;
@@ -25077,6 +24962,7 @@ var
       case ImageTypeDetected[ScreenIndex] of
         ifPNG:
           begin
+            ImageDetails[ScreenIndex].ImageType:= 'PNG';
             pngImg[ScreenIndex]:= TPNGGraphic.Create;
             pngImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
             ImageHolder.Bitmap.Assign(pngImg[ScreenIndex]);
@@ -25084,6 +24970,7 @@ var
           end;
         ifJPG:
           begin
+            ImageDetails[ScreenIndex].ImageType:= 'JPG';
             jpgImg[ScreenIndex]:= TJPEGImage.Create;
             jpgImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
             ImageHolder.Bitmap.Assign(jpgImg[ScreenIndex]);
@@ -25091,6 +24978,7 @@ var
           end;
         ifGIF:
            begin
+             ImageDetails[ScreenIndex].ImageType:= 'GIF';
              gifImg[ScreenIndex]:= TGIFGraphic.Create;
              gifImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
              ImageHolder.Bitmap.Assign(gifImg[ScreenIndex]);
@@ -25098,6 +24986,7 @@ var
            end;
          ifBMP:
            begin
+             ImageDetails[ScreenIndex].ImageType:= 'BMP';
              bmpImg[ScreenIndex]:= TBitmap.Create;
              bmpImg[ScreenIndex].LoadFromStream(FileStream[ScreenIndex]);
              ImageHolder.Bitmap.Assign(bmpImg[ScreenIndex]);
@@ -25105,6 +24994,7 @@ var
            end;
       end;
     except
+      ImageDetails[ScreenIndex].ImageType:= '';
       ImageHolder.Bitmap:= nil; // ensures that there's no image loaded
       Result:= False;
     end;
@@ -25126,6 +25016,7 @@ var
         case ScreenIndex of
          1:
            begin
+             if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
              for iLoopScr1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
              begin
                Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr1];
@@ -25137,6 +25028,7 @@ var
            end;
          2:
            begin
+             if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
              for iLoopScr2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
              begin
                Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr2];
@@ -25148,6 +25040,7 @@ var
            end;
          3:
            begin
+             if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
              for iLoopScr3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
              begin
                Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr3];
@@ -25159,13 +25052,17 @@ var
            end;
          4:
            begin
+             if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
              for iLoopScr4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
              begin
+
+               begin
                Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr4];
                Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
                ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
                if ContinueImg[ScreenIndex] then
                   Break;
+               end;
              end;
            end;
        end;
@@ -25326,6 +25223,7 @@ var
            case ScreenIndex of
              1:
                begin
+                 if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
                  for iLoopMAME1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
                  begin
                    Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME1];
@@ -25337,6 +25235,7 @@ var
                end;
              2:
                begin
+                 if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
                  for iLoopMAME2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
                  begin
                    Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME2];
@@ -25348,6 +25247,7 @@ var
                end;
              3:
                begin
+                 if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
                  for iLoopMAME3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
                  begin
                    Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME3];
@@ -25359,6 +25259,7 @@ var
                end;
              4:
                begin
+                 if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
                  for iLoopMAME4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
                  begin
                    Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME4];
@@ -25391,15 +25292,15 @@ var
                 ContinueImg[ScreenIndex]:= Assigned(imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex]);
                 if not ContinueImg[ScreenIndex] then
                    Exit;
-                ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                 if not ContinueImg[ScreenIndex] then
                    begin
                      ImageExt[ScreenIndex]:= '.jpg';
-                     ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                     ContinueImg[ScreenIndex]:= imgZipFileListConsComp[MemGameInfo.eCustomSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                    end;
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= True;
                    end;
               end;
@@ -25411,7 +25312,7 @@ var
                      ContinueImg[ScreenIndex]:= Assigned(ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex]);
                      if ContinueImg[ScreenIndex] then
                      begin
-                       ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                       ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                        if not ContinueImg[ScreenIndex] then
                           begin
                             if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
@@ -25422,7 +25323,7 @@ var
                           end;
                        if ContinueImg[ScreenIndex] then
                           begin
-                            ImageDetails[ScreenIndex].FileName:= {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
+                            ImageDetails[ScreenIndex].FileName:= ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                             FoundInSoftListZipFile[ScreenIndex]:= True;
                           end;
                      end;
@@ -25436,19 +25337,19 @@ var
                      begin
                        if Assigned(ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex]) then
                        begin
-                         ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                         ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                          if not ContinueImg[ScreenIndex] then
                          begin
                            if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                               begin
                                 ImageExt[ScreenIndex]:= '.jpg';
-                                ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                                ContinueImg[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                               end;
                          end;
                        end;
                        if ContinueImg[ScreenIndex] then
                           begin
-                            ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]; // it must be "softlistname\gamename.???"
+                            ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]; // it must be "softlistname\gamename.???"
                             FoundInSoftListZipFile_SL[ScreenIndex]:= True;
                           end;
                      end;
@@ -25461,17 +25362,17 @@ var
                      if not ContinueImg[ScreenIndex] then
                         Exit;
 
-                     ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                     ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                      if not ContinueImg[ScreenIndex] then
                         begin
                           if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                               begin
                                 ImageExt[ScreenIndex]:= '.jpg';
-                                ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
+                                ContinueImg[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                               end;
                         end;
                      if ContinueImg[ScreenIndex] then
-                        ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
+                        ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                    end;
 
                 if ContinueImg[ScreenIndex] then
@@ -25485,13 +25386,13 @@ var
             True:
               begin
                 ExtraFolderStrMAME[ScreenIndex]:= '';
-                ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                 if not ContinueImg[ScreenIndex] then
                    begin
                      // check img extra folder
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                          ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
-                                         {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                                         ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if ContinueImg[ScreenIndex] then
                         ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\';
                    end;
@@ -25499,13 +25400,13 @@ var
                 if not ContinueImg[ScreenIndex] then
                    begin
                      ImageExt[ScreenIndex]:= '.jpg';
-                     ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                     ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if not ContinueImg[ScreenIndex] then
                         begin
                           // check img extra folder
                           ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                               ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
-                                              {NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                                              ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                           if ContinueImg[ScreenIndex] then
                              ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\';
                         end;
@@ -25514,23 +25415,19 @@ var
 
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= False;
                    end;
               end;
             False:
               begin
                 // SearchUnzippedFile(IsNewImageNamingMAME, NameString); // mulitple image paths support, for future improvement, MAYBE! (July 29, 2018)
-                FindUnzippedImage(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]{NameString}+ImageExt[ScreenIndex]);
-                //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]{NameString}+ImageExt[ScreenIndex]);
+                FindUnzippedImage(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                 ExtraFolderStrMAME[ScreenIndex]:= '';
                 if (not ContinueImg[ScreenIndex]) then
                    begin
-                     //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                     //                    ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                     //                    SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      FindUnzippedImage(ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                                       SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                                       SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if ContinueImg[ScreenIndex] then
                         ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
                    end;
@@ -25540,15 +25437,11 @@ var
                      if (not ImagesPNGOnly(ImageDetails[ScreenIndex].ImageCategoryIndex)) then
                         begin
                           ImageExt[ScreenIndex]:= '.jpg';
-                          FindUnzippedImage(SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
-                          //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                          FindUnzippedImage(SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                           if (not ContinueImg[ScreenIndex]) then
                              begin
-                               //ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+
-                               //                    ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                               //                    SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                                FindUnzippedImage(ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\'+
-                                                 SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
+                                                 SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
 
                                if ContinueImg[ScreenIndex] then
                                   ExtraFolderStrMAME[ScreenIndex]:= ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 3]+'\';
@@ -25557,7 +25450,7 @@ var
                    end;
                 if ContinueImg[ScreenIndex] then
                    begin
-                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+SoftwareNameString[ScreenIndex]+{NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
+                     ImageDetails[ScreenIndex].FileName:= Folder[ScreenIndex]+ExtraFolderStrMAME[ScreenIndex]+SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                      ImageDetails[ScreenIndex].IsZipped:= False;
                    end;
               end;
@@ -25675,65 +25568,6 @@ begin
   if not ContinueImg[ScreenIndex] then
      GetImageFileName(True); // search for zipped image
 
-  {if (not MemGameInfo.eIsCustomGame) and (IsMAMEBasedSys(MemGameInfo.eSystemID)) then
-     begin
-       case ScreenIndex of
-         1:
-           begin
-             for iLoopMAME1:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
-             begin
-               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME1];
-               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
-               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
-               if ContinueImg[ScreenIndex] then
-                  Break;
-             end;
-           end;
-         2:
-           begin
-             for iLoopMAME2:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
-             begin
-               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME2];
-               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
-
-               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
-               if ContinueImg[ScreenIndex] then
-                  Break;
-             end;
-           end;
-         3:
-           begin
-             for iLoopMAME3:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
-             begin
-               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME3];
-               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
-               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
-               if ContinueImg[ScreenIndex] then
-                  Break;
-             end;
-           end;
-         4:
-           begin
-             for iLoopMAME4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
-             begin
-               Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopMAME4];
-               Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
-               GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
-               if ContinueImg[ScreenIndex] then
-                  Break;
-             end;
-           end;
-       end;
-       if not ContinueImg[ScreenIndex] then
-          GetImageFileName(True); // search for zipped image
-     end
-  else
-     begin
-       GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
-       if not ContinueImg[ScreenIndex] then
-          GetImageFileName(True); // search for zipped image
-     end;}
-
   if (not ContinueImg[ScreenIndex]) and (not MemGameInfo.eIsCustomGame) then
      begin
        if ImagesMrDo_Artwork(ImageDetails[ScreenIndex].ImageCategoryIndex) and
@@ -25811,31 +25645,30 @@ begin
           end;
      end;
 
-  if FormPreferences.HintBox_IconEnabled.Checked then
-  begin
-    if ScreenIndex = 1 then
-       begin
-         if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon.Tag then
-            begin
-              ImageHintIcon.Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
-              case ImageHintIcon.Tag of
-                0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
-                1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
-              end;
+
+  if ScreenIndex = 1 then
+     begin
+       if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon.Tag then
+          begin
+            ImageHintIcon.Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
+            case ImageHintIcon.Tag of
+              0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
+              1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
             end;
-       end
-    else
-       begin
-         if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon2[ScreenIndex].Tag then
-            begin
-              ImageHintIcon2[ScreenIndex].Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
-              case ImageHintIcon2[ScreenIndex].Tag of
-                0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[ScreenIndex].Picture.Icon); // unzipped image
-                1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[ScreenIndex].Picture.Icon); // zipped image
-              end;
+          end;
+       ImageHintDetailsText.Caption:= IntToStr(Images.Bitmap.Width)+'x'+IntToStr(Images.Bitmap.Height)+' (PNG)';
+     end
+  else
+     begin
+       if Ord(ImageDetails[ScreenIndex].IsZipped) <> ImageHintIcon2[ScreenIndex].Tag then
+          begin
+            ImageHintIcon2[ScreenIndex].Tag:= Ord(ImageDetails[ScreenIndex].IsZipped);
+            case ImageHintIcon2[ScreenIndex].Tag of
+              0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[ScreenIndex].Picture.Icon); // unzipped image
+              1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[ScreenIndex].Picture.Icon); // zipped image
             end;
-       end;
-  end;
+          end;
+     end;
   UnzipActive[ScreenIndex]:= False;
 end;
 
@@ -29345,6 +29178,11 @@ begin
     HaveOverlay:= FileExists(OverlayFolder+OverlayCustomFolder+OverlayFileName);
     if not HaveOverlay then
        begin
+         if IsNightMode and (not ForceLightMode) then
+            begin
+              if not SameText(ToolBarOverlayIconFolderStr, 'Default') then
+                 ToolBarOverlayIconFolderStr:= 'Default'; // will reset to night mode's default overlay icons if sub-folder icons are not found 
+            end;
          OverlayCustomFolder:= '';
          HaveOverlay:= FileExists(OverlayFolder+OverlayFileName);
        end;
@@ -29812,6 +29650,8 @@ begin
 
   AddDefaultIcons('game_manual.ico', tempFolder, IL_MenuPopup); // 28
   AddDefaultIcons('special.ico', tempFolder, IL_MenuPopup); // 29
+  AddDefaultIcons('scanresult_notfound.ico', tempFolder, IL_MenuPopup); // 30 // use this for "image single background color" setting
+  ReplaceColorIcon(False, True); // replace the icon by a color box
 
   ClearImageList(IL_MainMenuOptions);
   AddDefaultIcons('option_check.ico', tempFolder, IL_MainMenuOptions); // 00 // use this for check/not checked items
@@ -29973,7 +29813,7 @@ begin
 end;
 
 function TFormMain.CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
-var                       //     overlay // icon
+var                           // overlay     icon
   WinDC: HDC;
   FrontInfo: TIconInfo;
   FrontDC: HDC;
@@ -30555,10 +30395,6 @@ begin
      Exit;
   for Loop:= 0 to BoxHolder.ControlCount-1 do
       BoxHolder.Controls[Loop].Enabled:= BoxEnabled;
-  if BoxEnabled then
-     BoxHolder.Font.Color:= clBlack
-  else
-     BoxHolder.Font.Color:= clBtnShadow;
   BoxHolder.Enabled:= BoxEnabled;
 end;
 
@@ -31025,6 +30861,240 @@ begin
   Close;
 end;
 
+// functions for "RGB Quick Edit"
+function TFormMain.GetRGBTextFromColor(iColor: TColor; ReturnRGBPrefixText: Boolean = True): String;
+var
+  tmpColor: TColor;
+  R, G, B: Byte;
+  //iStr: String;
+begin
+  tmpColor:= ColorToRGB(iColor);
+  R := GetRValue(tmpColor);
+  G := GetGValue(tmpColor);
+  B := GetBValue(tmpColor);
+
+  Result:= IntToStr(R) + ', ' +
+           IntToStr(G) + ', ' +
+           IntToStr(B);
+
+  if ReturnRGBPrefixText then
+     Result:= 'RGB('+Result+')';
+end;
+
+function TFormMain.GetColorName(iColor: TColor; ReturnHexStringOnly: Boolean): String;
+var
+  iName: String;
+  iPos, Loop: Integer;
+begin
+  if ReturnHexStringOnly then
+     begin
+       Result:= '#'+Format('%.2x%.2x%.2x', [GetRValue(iColor), GetGValue(iColor), GetBValue(iColor)]);
+       //Result:= '$'+LowerCase(IntToHex(iColor, 8));
+       Exit;
+     end;
+
+  Result:= GetColorPrettyName(CurrentPickColor);
+  if SameText('none', Result) then
+     begin
+       Result:= '';
+       Exit;
+     end;
+  if Result <> '' then
+     Exit;
+
+  iName:= ColorToString(iColor);
+  if SameText('clNone', iName) or (iName[1] = '$') then
+     begin
+       Result:= '';
+       Exit;
+     end;
+     
+  if Copy(iName, 1, 2) = 'cl' then
+     iPos:= 3
+  else
+     iPos:= 1;
+
+  for Loop:= iPos to Length(iName) do
+  begin
+    case iName[Loop] of
+      'A'..'Z':
+        if Result <> '' then
+           Result:= Result+' ';
+    end;
+    Result:= Result+iName[Loop];
+  end;
+end;
+
+procedure TFormMain.ReplaceColorIcon(IsCopyColor: Boolean; IsImageBkColor: Boolean = False; Startup: Boolean = False);
+var
+  iBMP: TBitmap;
+  iRect: TRect;
+begin
+  iBMP:= TBitmap.Create;
+  iBMP.Canvas.Lock;
+  iBMP.PixelFormat:= pf32bit;
+  iBMP.Width:= IL_Colors.Width;
+  iBMP.Height:= IL_Colors.Height;
+  iBMP.Transparent:= False;
+  iRect:= iBMP.Canvas.ClipRect;
+  if Startup then
+  begin
+    iBMP.Canvas.Brush.Color:= clBlack;
+    iBMP.Canvas.FillRect(iRect);
+    iBMP.Canvas.Pen.Color:= clGray;
+    iBMP.Canvas.FrameRect(iRect);
+    iBMP.Canvas.UnLock;
+    IL_Colors.Add(iBMP, nil); // paste color
+    IL_Colors.Add(iBMP, nil); // IsCopyColor
+  end
+  else
+  begin
+    if IsImageBkColor then
+       iBMP.Canvas.Brush.Color:= MenuImageUseSingleBackgroundColor.Tag
+    else
+    if IsCopyColor then
+       iBMP.Canvas.Brush.Color:= CopyPickColor
+    else
+       iBMP.Canvas.Brush.Color:= CurrentPickColor;
+    iBMP.Canvas.FillRect(iRect);
+    iBMP.Canvas.Brush.Color:= clGray;
+    iBMP.Canvas.FrameRect(iRect);
+    iBMP.Canvas.UnLock;
+    // paste color           -> index 0
+    // copy color            -> index 1
+    if IsImageBkColor then
+       IL_MenuPopup.Replace(30, iBMP, nil) // this index might change in the future
+    else
+       IL_Colors.Replace(Ord(IsCopyColor), iBMP, nil);
+  end;
+  iBMP.Free;
+end;
+
+procedure TFormMain.AssignRGBQuickEditPopupToColorBoxEx(ColorBoxExSource: TColorBoxEx);
+begin
+  if Assigned(ColorBoxExSource) then
+     ColorBoxExSource.PopupMenu:= PopupNightModeCopyPasteColor;
+end;
+
+procedure TFormMain.PopupNightModeCopyPasteColorPopup(Sender: TObject);
+var
+  colorSender: TObject;
+  colorName, iStr: String;
+begin
+  colorSender:= (Sender as TPopupMenu).PopupComponent;
+  colorName:= '';
+
+  PopupNightModeTitleSeparator.Visible:= (colorSender as TColorBoxEx).Hint <> '';
+  if PopupNightModeTitleSeparator.Visible then
+     PopupNightModeTitle.Caption:= '  '+(colorSender as TColorBoxEx).Hint;
+
+  PopupNightModeTitle.Visible:= PopupNightModeTitleSeparator.Visible;
+  PopupNightModePasteColor.Visible:= CurrentPickColor <> clNone;
+
+  if PopupNightModePasteColor.Visible then
+     begin
+       colorName:= GetColorName(CurrentPickColor, True);
+       iStr:= 'Paste Color '+GetRGBTextFromColor(CurrentPickColor);
+       if colorName <> '' then
+          iStr:= iStr+' - '+colorName;
+       PopupNightModePasteColor.Caption:= iStr;
+       ReplaceColorIcon(False);
+     end;
+
+  CopyPickColor:= (colorSender as TColorBoxEx).Selected;
+  colorName:= GetColorName(CopyPickColor, True);
+  iStr:= 'Copy Color  '+GetRGBTextFromColor(CopyPickColor);
+  if colorName <> '' then
+     iStr:= iStr+' - '+colorName;
+
+  PopupNightModeCopyColor.Caption:= iStr;
+  ReplaceColorIcon(True);
+end;
+
+procedure TFormMain.PopupNightModeRGBQuickEditClick(Sender: TObject);
+var
+  APopupMenu: TPopupMenu;
+  AColorBoxEx: TColorBoxEx;
+  iComponent: TComponent;
+  iLabelName: String;
+begin
+  APopupMenu:= TPopupMenu(PopupNightModePasteColor.GetParentMenu); // Firstly get parent TPopupMenu (needs casting from TMenu)
+  AColorBoxEx:= TColorBoxEx(APopupMenu.PopupComponent); // APopupMenu.PopupComponent is the "source" control, just cast it to TColorBoxEx
+
+  // TShadowLabel.Name for the panel's title text must be exactly the same as the TPanelEx.Name,
+  // plus a "Label" string at the end, or this will not work!
+  iLabelName:= AColorBoxEx.Parent.Name+'Label';
+
+  if not Assigned(FormNightModeRGBQuickEdit) then
+     FormNightModeRGBQuickEdit:= TFormNightModeRGBQuickEdit.Create(nil);
+
+  if IsNightMode or (GetParentForm(AColorBoxEx).Name = 'FormNightMode') then
+     begin
+       SetButtonExColors(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ButtonApply, False, True);
+       SetButtonExColors(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ButtonAbort, False, True);
+       SetEditNightColors(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Red);
+       SetEditNightColors(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Green);
+       SetEditNightColors(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Blue);
+     end
+  else
+     begin
+       FormNightModeRGBQuickEdit.Color:= clWhite;
+       FormNightModeRGBQuickEdit.NightModeColorBoxExHint.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_RedLabel.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_GreenLabel.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_BlueLabel.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_HexLabel.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSampleLabel.Font.Color:= clBlack;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample_CurrentLabel.Font.Color:= clBlack;
+
+       FormNightModeRGBQuickEdit.NightModeKeysHintLabel.Font.Color:= clNavy;
+       FormNightModeRGBQuickEdit.NightModeKeysHint2Label.Font.Color:= clNavy;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Red.UseCustomBorder:= False;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Green.UseCustomBorder:= False;
+       FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Blue.UseCustomBorder:= False;
+     end;
+
+  iComponent:= GetParentForm(AColorBoxEx).FindComponent(iLabelName);
+
+  if iComponent <> nil then
+     FormNightModeRGBQuickEdit.NightModeColorBoxExHint.Caption:= TShadowLabel(iComponent).Caption+#13#10+AColorBoxEx.Hint
+  else
+     FormNightModeRGBQuickEdit.NightModeColorBoxExHint.Caption:= AColorBoxEx.Hint;
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample.Brush.Color:= AColorBoxEx.Selected;
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample_Current.Brush.Color:= AColorBoxEx.Selected;
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Red.Text:= IntToStr(GetRValue(AColorBoxEx.Selected));
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Green.Text:= IntToStr(GetGValue(AColorBoxEx.Selected));
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_Blue.Text:= IntToStr(GetBValue(AColorBoxEx.Selected));
+
+  FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample_CurrentLabel.Caption:=
+         GetRGBTextFromColor(FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample_Current.Brush.Color, False);
+
+  if FormNightModeRGBQuickEdit.ShowModal = mrOk then
+     begin
+       if FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample.Brush.Color <> FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample_Current.Brush.Color then
+          SetSelectedColorBox(AColorBoxEx, FormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ColorSample.Brush.Color);
+     end;
+
+  FreeAndNil(FormNightModeRGBQuickEdit);
+end;
+
+procedure TFormMain.PopupNightModePasteColorClick(Sender: TObject);
+var
+  APopupMenu: TPopupMenu;
+  AColorBoxEx: TColorBoxEx;
+begin
+  APopupMenu:= TPopupMenu(PopupNightModePasteColor.GetParentMenu); // Firstly get parent TPopupMenu (needs casting from TMenu)
+  AColorBoxEx:= TColorBoxEx(APopupMenu.PopupComponent); // APopupMenu.PopupComponent is the "source" control, just cast it to TColorBoxEx
+
+  FormMain.SetSelectedColorBox(AColorBoxEx, CurrentPickColor);
+end;
+
+procedure TFormMain.PopupNightModeCopyColorClick(Sender: TObject);
+begin
+  CurrentPickColor:= CopyPickColor;
+end;
+
+// end of functions for "RGB Quick Edit"
 procedure TFormMain.MenuPreferencesClick(Sender: TObject);
 var
   CurrentFolder, CurrentMAMEFolderPDF: String;
@@ -31073,18 +31143,21 @@ begin
     FreeAndNil(elIni);
   end;
 
-  UpdateImagePanelColorSettings; // image .ini file, panel color settings (image panel outer frame color, image splitter colors, image hint box settings (light mode only)
+  AlignEmuGameText:= GetAlignEmuGameText;
+
+  WriteLightModeSettings;
   SetImageHintBoxColors(1, True); // update ImageHintPanel
   SetImageHintBoxColors(2, True); // update ImageHintPanel2[2]
   SetImageHintBoxColors(3, True); // update ImageHintPanel2[3]
   SetImageHintBoxColors(4, True); // update ImageHintPanel2[4]
-  UpdateImageHintPanelText(1, True);
-  UpdateImageHintPanelText(2, True);
-  UpdateImageHintPanelText(3, True);
-  UpdateImageHintPanelText(4, True);
 
   if not IsNightMode then
      begin
+       UpdateImageHintPanelText(1, True);
+       UpdateImageHintPanelText(2, True);
+       UpdateImageHintPanelText(3, True);
+       UpdateImageHintPanelText(4, True);
+
        SetColorsGamesListStatusBar;
      end;
 
@@ -31129,6 +31202,12 @@ begin
      iLabelSystemNotAvailable.Font.Style:= iLabelSystemNotAvailable.Font.Style-[fsItalic];
 end;
 
+procedure TFormMain.DisableItalicFontGroupBoxEx(iGroupBoxEx: TAdvGroupBoxEx);
+begin
+  if not FormPreferences.UseItalicFontStyleSystemTitleBar.Checked then
+     iGroupBoxEx.Font.Style:= iGroupBoxEx.Font.Style-[fsItalic]; 
+end;
+
 procedure TFormMain.MenuArcadeEmulatorSetupClick(Sender: TObject);
 var
   Loop: Integer;
@@ -31147,39 +31226,37 @@ begin
 
        SetEasyListViewColors(FormArcadeEmulatorsSetup.SystemSelector, clrBlackBk, clWhite);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTitleLabelColors(FormArcadeEmulatorsSetup.LabelSystemTitle); // SetLabelColors(FormArcadeEmulatorsSetup.LabelSystemTitle, clrOrangeBarTop, -1, False);//clYellow, clMaroon);
 
        SetSystemTitleBarNightColors(FormArcadeEmulatorsSetup.PanelSystemTitle, FormArcadeEmulatorsSetup.PanelSystemTitleBottom);
 
        // SetPanelColors(FormArcadeEmulatorsSetup.PanelSystemTitle, clrBlackBk, clrDarkBlue);
        // SetPanelColors(FormArcadeEmulatorsSetup.PanelSystemTitleBottom, clrDarkBlue, menu_background_color[1]);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelArcade_exec, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelArcade_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelArcade_exec, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelArcade_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink_Tabs, clWhite, clBlue);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink1, clSilver, clrMedBlue);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink2, clSilver, clrMedBlue);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink3, clSilver, clrMedBlue);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink4, clSilver, clrMedBlue);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink_Tabs, clSilver, clBlue, False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink1, clSilver, clrMedBlue, False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink2, clSilver, clrMedBlue, False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink3, clSilver, clrMedBlue, False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelMAMELink4, clSilver, clrMedBlue, False);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_Tip1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_Tip2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_Tip1, clSilver{ item_caption_active_color[1]}, item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_Tip1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_Tip2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_Tip1, clSilver{item_caption_active_color[1]}, item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormArcadeEmulatorsSetup.AlterMAME1_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormArcadeEmulatorsSetup.AlterMAME2_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormArcadeEmulatorsSetup.AlterMAME1_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormArcadeEmulatorsSetup.AlterMAME2_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME1_Autorun, clSilver{item_caption_active_color[1]}, item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeEmulatorsSetup.LabelAlterMAME2_Autorun, clSilver{item_caption_active_color[1]}, item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormArcadeEmulatorsSetup.UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormArcadeEmulatorsSetup.UseLargeIcons, clWhite, item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormArcadeEmulatorsSetup.Arcade_exec);
        SetEditNightColors(FormArcadeEmulatorsSetup.Arcade_versioninfo);
@@ -31193,11 +31270,7 @@ begin
        for Loop:= 0 to FormArcadeEmulatorsSetup.ComponentCount-1 do
        begin
          if FormArcadeEmulatorsSetup.Components[Loop] is TShadowLabel then
-            begin
-              TShadowLabel(FormArcadeEmulatorsSetup.Components[Loop]).DisabledFontColor:= clGray;
-              TShadowLabel(FormArcadeEmulatorsSetup.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-              TShadowLabel(FormArcadeEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True;
-            end
+            TShadowLabel(FormArcadeEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True
          else
          if FormArcadeEmulatorsSetup.Components[Loop] is TAdvOfficeCheckBoxEx then
             begin
@@ -31208,7 +31281,6 @@ begin
          if FormArcadeEmulatorsSetup.Components[Loop] is TBitBtnEx then
             SetButtonExColors(TBitBtnEx(FormArcadeEmulatorsSetup.Components[Loop]));
        end;
-
      end;
 
   FormArcadeEmulatorsSetup.ShowModal;
@@ -31298,9 +31370,11 @@ var
   VerInfo: TOSVersionInfo;
   INIFile: TMemIniFile;
   Loop: Integer;
+  Continue: Boolean;
 begin
   // Override Delphi's ugly hand cursor with the nice Windows hand cursor
   Screen.Cursors[crHandPoint]:= LoadCursor(0, IDC_HAND);
+
   IsStartup:= True;
   CreatingGamesList:= False;
 
@@ -31319,7 +31393,7 @@ begin
 
   HideAppFormTaskBarButton; // for Windows 7 / Windows 8 / Windows 10 (WinXP needs it too but WinXP is no longer supported!)
 
-  IsNightMode:= False;
+  IsNightMode:= True;
   if Win32Platform in [0, 1] then
      begin
        TerminateEmuLoader:= True;
@@ -31341,14 +31415,6 @@ begin
 
   FormStatus:= TFormStatus.Create(Self);
 
-  //if Screen.Height < 600 then
-  //   begin
-  //     SetResampler(FormStatus.ImageBk, 50);
-  //     FormStatus.ImageBk.ScaleMode:= smResize;
-  //     FormStatus.ClientWidth:= 550;
-  //     FormStatus.ClientHeight:= 322;
-  //   end;
-
   FormStatus.TitleStr('Initializing');
   FormStatus.MessageStr('Loading primary settings.');
   FormStatus.StartThreadClock;
@@ -31357,6 +31423,7 @@ begin
   LastColumnSortDirection:= esdAscending;
   VerifyTempDirectory;
 
+  AlignEmuGameText:= taCenter;
   ImageHintPanel.Opacity:= 200; // this is the default value, avoid setting opacity in design-time! (June 22, 2019)
   PanelScreenshotsArea.Width:= 370; // set to runtime default size; design time is larger so all controls are visible in images tool bar buttons
   CheckAndCreateFolder(GetFolderArcadeEmulatorIni(0, True));
@@ -31372,22 +31439,30 @@ begin
      end;
 
   CheckAndCreateFolder(GetFolderFull(38)); // "console_computer\game_cfg\" folder
+  CheckAndCreateFolder(GetNightModeFolder); // create "frontendpath\nightmode\" folder is necessary
 
-  if DirectoryExists(FrontendPath+'softwarelist') then
-     MoveFileW(FrontendPath+'softwarelist', GetGamesFolderEL(1), True); // MAME only (February 28, 2018)
+  //// these functions are no longer necessary, I think (more than one year old!)
+  //if DirectoryExists(FrontendPath+'softwarelist') then
+  //   MoveFileW(FrontendPath+'softwarelist', GetGamesFolderEL(1), True); // MAME only (February 28, 2018)
 
-  UpdateTimesPlayedIni; // remove "games_played.ini" and create "eldir\arcade\played_games\" folder with "sysname.txt" files for each system
-  UpdateEmuConPlayedGamesTags; // replace <game> tags by <file> tags (August 24, 2017)
+  //UpdateTimesPlayedIni; // remove "games_played.ini" and create "eldir\arcade\played_games\" folder with "sysname.txt" files for each system
+  //UpdateEmuConPlayedGamesTags; // replace <game> tags by <file> tags (August 24, 2017)
 
-  ValidateEmuImgCat_IniFile; // split "eldir\ini_files\folders_emulators.ini" into "arcade\emulators.ini" and "arcade\image_categories.ini"
+  //ValidateEmuImgCat_IniFile; // split "eldir\ini_files\folders_emulators.ini" into "arcade\emulators.ini" and "arcade\image_categories.ini"
 
-  // rename "image_categories.ini" to "sysimagefolders_arcade.ini" (March 12, 2018)
-  if FileExists(GetArcadeFolder+'image_categories.ini') then
-     MoveFileW(GetArcadeFolder+'image_categories.ini', GetImageCategoriesFile, True);
+  //// rename "image_categories.ini" to "sysimagefolders_arcade.ini" (March 12, 2018)
+  //if FileExists(GetArcadeFolder+'image_categories.ini') then
+  //   MoveFileW(GetArcadeFolder+'image_categories.ini', GetImageCategoriesFile, True);
 
-  SplitImageCategoriesIniSettings; // split image category "bkcolor" / "visible" settings and image layout visibility settings to new file (removed from EmuLoader.ini)
+  //SplitImageCategoriesIniSettings; // split image category "bkcolor" / "visible" settings and image layout visibility settings to new file (removed from EmuLoader.ini)
 
-  UpdateArcadeVideoPreviewSection; // read "ini_files\videopreview.ini" and rename [Folders] section to [Arcade Folders]
+  //UpdateArcadeVideoPreviewSection; // read "ini_files\videopreview.ini" and rename [Folders] section to [Arcade Folders]
+  //// these functions are no longer necessary, I think (more than one year old!)
+
+  // initialize "RGB Quick Edit" popup menu 
+  CurrentPickColor:= clNone;
+  CopyPickColor:= clNone;
+  ReplaceColorIcon(False, False, True);
 
   PanelImagesDocuments.Align:= alClient;
   PanelWebBrowser.Align:= alClient;
@@ -31401,20 +31476,28 @@ begin
   StatusBar_GamesGameName.Caption:= ''; // emtpy string to avoid junk text at startup
   StatusBar_GamesTotal.Caption:= '';
 
-  ToolBarOverlayIconFolderStr:= 'Default';
+  IsNightMode:= True; // make night mode enabled by default
+  NightModeProfileStr:= 'Default';
+  ToolBarOverlayIconFolderStr:= 'Default'; // this setting can be different for each night mode profile
+  
   if FileExists(FrontendPath+'EmuLoader.ini') then
      begin
        INIFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
        MenuToolBarIconSize.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_IconSize', 1); // 0 -> extra large (68x68); 1 -> large (48x48); 2 -> small (30x24)
-       IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'NightModeEnabled', 0));
-       if IsNightMode then
-          MenuEnableNightMode.Checked:= True;
-
-       ToolBarOverlayIconFolderStr:= INIFile.ReadString('ToolBar', 'OverlayIconFolder', 'Default');
+       NightModeProfileStr:= INIFile.ReadString('Preferences', 'NightModeProfile', 'Default');
+       IsNightMode:= Boolean(INIFile.ReadInteger('Preferences', 'NightModeEnabled', 1));
+       MenuCustomizeNightModeColors.Tag:= INIFile.ReadInteger('Preferences', 'NightModeProfileUseColorsActiveProfile', 0);
 
        MenuUseAlternateFrontendIcons.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseAlternateFrontendIcons', 0));
 
        FreeAndNil(INIFile);
+     end;
+
+  if IsNightMode then
+     begin
+       MenuEnableNightMode.Checked:= True;
+       SetCloseButtonColorsFloatingPanel(ButtonFilterTitleClose);
+       SetCloseButtonColorsFloatingPanel(FilterCPU_ButtonClose);
      end;
 
   PopulateMsgColors;
@@ -31436,16 +31519,6 @@ begin
   FormArcadeFiltersDriverStatus:= TFormArcadeFiltersDriverStatus.Create(nil);
   SetComboBox2ExColors(FormArcadeFiltersDriverStatus.DriverStatusCategory, True);
 
-  FormStatus.MessageStr('Loading main screen icons.');
-  LoadMainScreenIcons(False, False);
-  if MenuToolBarIconSize.Tag <> 1 then
-     MenuToolBarIconSize.Items[MenuToolBarIconSize.Tag].Click; // change games list filters tool bar size
-
-  FormStatus.MessageStr('Loading miscellaneous icons.');
-  LoadLeftPanelIcons;
-
-  LoadCustomEmulatorsIconsPopupMenu; // for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
-
   FormStatus.MessageStr('Initializing variables in RAM.');
   SelectedFilterName:= 'allgames'; // set default filter to "All Games" (MAME and arcade only)
 
@@ -31457,17 +31530,20 @@ begin
   Font_Preliminary:= TFont.Create;
   Font_MissingROMs:= TFont.Create;
   Font_MissingROMsPreliminary:= TFont.Create;
-  SetDefaultFont(Font_Parent, 0);
-  SetDefaultFont(Font_Clone, 1);
-  SetDefaultFont(Font_Preliminary, 2);
-  SetDefaultFont(Font_MissingROMs, 3);
-  SetDefaultFont(Font_MissingROMsPreliminary, 4);
+  SetDefaultFont(Font_Parent, 0, IsNightMode);
+  SetDefaultFont(Font_Clone, 1, IsNightMode);
+  SetDefaultFont(Font_Preliminary, 2, IsNightMode);
+  SetDefaultFont(Font_MissingROMs, 3, IsNightMode);
+  SetDefaultFont(Font_MissingROMsPreliminary, 4, IsNightMode);
 
   Font_TilesViewDetailsText:= TFont.Create;
   Font_TilesViewDetailsText.Name:= 'Trebuchet MS';
   Font_TilesViewDetailsText.Size:= 9;
   Font_TilesViewDetailsText.Style:= [];
-  Font_TilesViewDetailsText.Color:= clBlack;
+  if IsNightMode then
+     Font_TilesViewDetailsText.Color:= clCream
+  else
+     Font_TilesViewDetailsText.Color:= clBlack;
 
 
   CheckDefaultFavProfile;
@@ -31484,6 +31560,7 @@ begin
   ToolBarButtons.DoubleBuffered:= True;
   ToolBarFilterTitle_ToolBar.DoubleBuffered:= True;
   ImagesToolBarButtons.DoubleBuffered:= True;
+
   FormStatus.MessageStr('Initializing night mode screen.');
 end;
 
@@ -31566,6 +31643,8 @@ var
   iVersion: String;
   CreateListArcade, CreateListConsoleComputer: Boolean;
   MAMESoftwareListsToProcess, HBMAMESoftwareListsToProcess: THashedStringList;
+  iFileNightMode,  iFileLightMode : String;
+  iExistNightMode, iExistLightMode: Boolean;
 
   function ShowScanModeSelectDialog: Boolean;
   begin
@@ -31821,6 +31900,21 @@ begin
        Exit;
      end;
 
+  InitNightModeScreen;
+
+  InitPreferencesScreen; // assign "RGB Quick Edit" popup menu to TColorBoxEx components
+  PopulateCheckRadioProfiles(False);
+  
+  FormStatus.MessageStr('Loading main screen icons.');
+  LoadMainScreenIcons(False, False);
+  if MenuToolBarIconSize.Tag <> 1 then
+     MenuToolBarIconSize.Items[MenuToolBarIconSize.Tag].Click; // change games list filters tool bar size
+
+  FormStatus.MessageStr('Loading miscellaneous icons.');
+  LoadLeftPanelIcons;
+
+  LoadCustomEmulatorsIconsPopupMenu; // for "Play (Custom Emulators)" sub-menu (PopupMenuGamesList)
+
   LoadIconIntoImage('EmuLoader_Orb', FormApplyFilterMsgBox.MsgIcon);
 
   ELV_ResetNormalColors(GamesListView);
@@ -31844,16 +31938,28 @@ begin
      UpdateExtraIni;
 
   ReadExtraIni; // read game docs settings and other settings (file cannot be rewritten when terminating the frontend like it does for "EmuLoader.ini")
-  ReadNightModeSettings; // read night mode colors settings (Preferences screen)
-  InitNightModeScreen;
+  
+  SetEasyListViewHeaderColors(GamesListView, False);
+  SetEasyListViewHeaderColors(MachinesListSidePanel, False);
   SetComboBox2ExColors(FilterCPUList, True, FilterCPU);
 
   SetPopupMenuNightColorsFormMain(True); // set popup menus frame colors for the night mode ("FormMain" only)
 
+  //if IsNightMode then
+  //begin
+  //  if not Continue then
+  //     ToggleNightMode(False);
+  //  //else
+  //  //begin
+  //  //  //UpdateGamesListSplitterStyle; // no need to call them there anymore
+  //  //  //UpdateImageLayoutSplittersStyle;
+  //  //end;
+  //end;
   ReadConsCompSelectEmulatorIni; // set small icons or 128x128 icons in "Select Default Emulators To Play (Console/Computer)" tool bar button
 
   if not FileExists(GetVideoPreviewIniFile) then
      begin
+       // make sure "\ini_files\videopreview.ini" file exists; if not, make a duplicate of "\ini_files\videopreview[default].ini"
        if FileExists(GetVideoPreviewIniFile(True)) then
           begin
             CopyFile(PChar(GetVideoPreviewIniFile(True)), PChar(GetVideoPreviewIniFile), False);
@@ -31914,14 +32020,14 @@ begin
         if not ValidateFile(GetArcadeEmulatorsFile) then
            begin
              FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= $005050fa;//clRed;
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.ShadowColor:= clBlack;// clMaroon;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= $005050fa;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.ShadowColor:= clBlack;
            end;
         if not ValidateFile(GetSysImageFolders) then
            begin
              FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= $005050fa;//clRed;
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clBlack;//clMaroon;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= $005050fa;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clBlack;
            end;
         FormStatus.Close; // close FormStatus to avoid the clean guide dialog to be hidden behind it (December 31, 2017)
         if FormCleanInstallGuide.ShowModal = mrCancel then
@@ -32007,13 +32113,10 @@ begin
 
         Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again
         if Continue then
-           begin
-             // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
-             ErrorStr:= '';
-             //CheckAllMAMEIniFiles;
-           end;
+           ErrorStr:= '';
 
-        CheckAllMAMEIniFiles;
+        CheckAllMAMEIniFiles; // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
+
         // load ROMs folders and update emulator .exe info in case user updated .exe files before starting Emu Loader
         FormStatus.MessageStr('Loading arcade folders to RAM.');
         LoadFoldersAllArcadeSystems;
@@ -32031,7 +32134,7 @@ begin
            Continue:= True;
 
         if Continue then
-           SaveEmuVersionIniFile; //WriteArcadeEmulatorExecutable(True, False, False);
+           SaveEmuVersionIniFile;
       end;
   end;
 
@@ -32048,7 +32151,7 @@ begin
   FilterSearchBarAdjustPanelControls;
   if IsNightMode then
      begin
-       WebToolBarButtons.Font.Color:= clWhite;
+       WebToolBarButtonsUpdateFontColor;
        SetColorsGamesListStatusBar;
        SetColorsSearchGamesPanel;
 
@@ -32096,7 +32199,34 @@ begin
   FormStatus.MessageStr('Initializing images variables.');
   LoadListCPU(FilterCPUList);
 
-  ReadCustomGameFontFile; // read default font for GamesListView (all systems) and custom font for each system, before reading "EmuCon.ini"
+  iFileNightMode:= GetCustomFontIniFile(True);
+  iFileLightMode:= GetCustomFontIniFile(False);
+  iExistNightMode:= ValidateFile(iFileNightMode);
+  iExistLightMode:= ValidateFile(iFileLightMode);
+
+  if not iExistNightMode then
+     begin
+       if iExistLightMode then
+          begin
+            CopyFile(PChar(iFileLightMode), PChar(iFileNightMode), False);
+            Sleep(40);
+          end
+       else
+          WriteCustomGameFontFile(True);
+     end;
+
+  //if not iExistLightMode then
+  //   begin
+  //     if iExistNightMode then
+  //        begin
+  //          CopyFile(PChar(iFileNightMode), PChar(iFileLightMode), False);
+  //          Sleep(40);
+  //        end
+  //     else
+  //        WriteCustomGameFontFile(False);
+  //   end;
+
+  ReadCustomGameFontFile(IsNightMode); // read default font for GamesListView (all systems) and custom font for each system
 end;
 
 procedure TFormMain.InitImgZipThumbnail(FreeList: Boolean = False);
@@ -35271,7 +35401,7 @@ begin
 
   if not TerminateEmuLoader then
      begin
-       UpdateImagePanelColorSettings;
+       WriteLightModeSettings;
        UpdateExtraIni;
        UpdateIniFile;
 
@@ -35287,6 +35417,8 @@ begin
             ToggleMachinesListSidePanel; // will update columns when machines list is enabled
             GamesListView.EndUpdate(False);
           end;
+       if IsNightMode then
+          WriteNightModeSettings;
      end;
 
   DeInitEmulatorVariables;
@@ -35360,7 +35492,7 @@ procedure TFormMain.MenuRestoreMainScreenDefaultScreenSizePositionClick(
 begin
   if FormMain.WindowState <> wsNormal then
      Exit;
-  FormMain.Width:= 1075;
+  FormMain.Width:= 1130;
   FormMain.Height:= 570;
   PanelScreenshotsArea.Width:= 370;
   FormMain.Top:= (Screen.Height shr 1)-(Height shr 1)-1;
@@ -35452,6 +35584,7 @@ begin
              Delete(MAMEBuildVersion, 1, 2);
              iVersion:= StrToInt(MAMEBuildVersion);
            end;
+
         if (iVersion > 124) or (iVersion = -1) then
            CreateFull
         else
@@ -35535,6 +35668,7 @@ begin
 
               FormDaphneSettings.emuIni:= iniFile;
               FormDaphneSettings.LabelReadFileIni.Caption:= iniFile;
+
               FormDaphneSettings.ShowModal;
               FreeAndNil(FormDaphneSettings);
               LoadFoldersArcade2(sysID, EmulatorFileName);
@@ -35583,69 +35717,215 @@ begin
   SetCurrentDir(FrontendPath);
 end;
 
+procedure TFormMain.SetImageHintItalicStyle(LabelSource: TShadowLabel);
+begin
+  if IsNightMode then
+     begin
+       if FormNightMode.NightModeHintBox_FontItalicStyle.Checked then
+          LabelSource.Font.Style:= [fsItalic]
+       else
+          LabelSource.Font.Style:= [];
+     end
+  else
+     begin
+       if FormPreferences.HintBox_FontItalicStyle.Checked then
+          LabelSource.Font.Style:= [fsItalic]
+       else
+          LabelSource.Font.Style:= [];
+     end;
+end;
+
+function TFormMain.GetImageResolutionStr(ImageSource: TImage32; ScreenIndex: Integer = -1): String;
+begin
+  Result:= '';
+  if not Assigned(ImageSource) then
+     Exit;
+
+  Result:= IntToStr(ImageSource.Bitmap.Width)+'x'+IntToStr(ImageSource.Bitmap.Height);
+  if ScreenIndex <> -1 then
+     Result:= Result+' ('+ImageDetails[ScreenIndex].ImageType+')';
+end;
+
 procedure TFormMain.UpdateImageHintPanelText(Index: ShortInt; ForceUpdate: Boolean = False);
 var
-  IconSize: Integer;
-  ShowIcon: Boolean;
+  IconSize, iSize: Integer;
+  iResStr, iCatTitleStr: String;
+
+  function UpdateHintBoxSize(iPanel: TPanelEx; iHintIcon: TImage; iHintText, iHintDetailsText: TShadowLabel): Boolean;
+  begin
+    if IsNightMode then
+       begin
+        if FormNightMode.NightModeHintBox_LargerFontSize.Checked then
+           begin
+             iHintIcon.Top:= 13;
+             iHintText.Top:= 8;
+             iHintDetailsText.Top:= 34;
+             iPanel.Height:= 56;
+             iHintText.Font.Size:= 14;
+           end
+        else
+           begin
+             iHintIcon.Top:= 8;
+             iHintText.Top:= 5;
+             iHintDetailsText.Top:= 25;
+             iPanel.Height:= 48;
+             iHintText.Font.Size:= 10;
+           end;
+       end
+    else
+       begin
+         if FormPreferences.HintBox_LargerFontSize.Checked then
+           begin
+             iHintIcon.Top:= 13;
+             iHintText.Top:= 8;
+             iHintDetailsText.Top:= 34;
+             iPanel.Height:= 56;
+             iHintText.Font.Size:= 14;
+           end
+        else
+           begin
+             iHintIcon.Top:= 8;
+             iHintText.Top:= 5;
+             iHintDetailsText.Top:= 25;
+             iPanel.Height:= 48;
+             iHintText.Font.Size:= 10;
+           end;
+       end;
+  end;
+
 begin
   if ImageDetails[Index].ImageCategoryIndex = -1 then
      Exit
   else
      begin
-       if FormPreferences.HintBox_IconEnabled.Checked then
-          IconSize:= 20
-       else
-          IconSize:= 0;
+       IconSize:= 20;
        case Index of
          1:
            begin
-             if (ImageHintText.Caption = GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and (not ForceUpdate) then
+             iResStr:= GetImageResolutionStr(Images, Index);
+             iCatTitleStr:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
+             if (ImageHintText.Caption = iCatTitleStr) and // GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and
+                (ImageHintDetailsText.Caption = iResStr) and
+                (not ForceUpdate) then
                 Exit;
 
-             ImageHintText.Left:= 8+IconSize;
-             ImageHintText.Caption:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
-             ImageHintIcon.Picture.Icon:= nil;
-             if IsNightMode then
-                ShowIcon:= FormNightMode.NightModeHintBox_IconEnabled.Checked
-             else
-                ShowIcon:= FormPreferences.HintBox_IconEnabled.Checked;
+             SetImageHintItalicStyle(ImageHintText);
+             UpdateHintBoxSize(ImageHintPanel, ImageHintIcon, ImageHintText, ImageHintDetailsText);
 
-             if ShowIcon then
-                begin
-                  case ImageHintIcon.Tag of
-                    0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
-                    1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
-                  end;
-                end;
-             ImageHintPanel.Width:= ImageHintText.Width+16+IconSize;
+             ImageHintText.Left:= 8+IconSize;
+             ImageHintText.Caption:= iCatTitleStr;// GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
+             ImageHintIcon.Picture.Icon:= nil;
+
+             ImageHintDetailsText.Caption:= iResstr;
+
+             case ImageHintIcon.Tag of
+               0: IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
+               1: IL_MenuPopup.GetIcon(12, ImageHintIcon.Picture.Icon); // zipped image
+             end;
+
+             if ImageHintText.Width > ImageHintDetailsText.Width then
+                iSize:= ImageHintText.Width
+             else
+                iSize:= ImageHintDetailsText.Width;
+             ImageHintPanel.Width:= iSize+16+IconSize;
            end;
          2..MaxImagePanels:
            begin
              if Assigned(ImageHintPanel2[Index]) then
                 begin
-                  if (ImageHintText2[Index].Caption = GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and (not ForceUpdate) then
+                  iResStr:= GetImageResolutionStr(ImageScr[Index], Index);
+                  iCatTitleStr:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
+                  if (ImageHintText2[Index].Caption = iCatTitleStr) and //GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex)) and
+                     (ImageHintDetailsText2[Index].Caption = iResStr) and
+                     (not ForceUpdate) then
                      Exit;
+
+                  SetImageHintItalicStyle(ImageHintText2[Index]);
+                  UpdateHintBoxSize(ImageHintPanel2[Index], ImageHintIcon2[Index], ImageHintText2[Index], ImageHintDetailsText2[Index]);
 
                   ImageHintText2[Index].Left:= 8+IconSize;
                   ImageHintIcon2[Index].Picture.Icon:= nil;
-                  if IsNightMode then
-                     ShowIcon:= FormNightMode.NightModeHintBox_IconEnabled.Checked
-                  else
-                     ShowIcon:= FormPreferences.HintBox_IconEnabled.Checked;
 
-                  if ShowIcon then
-                     begin
-                       case ImageHintIcon2[Index].Tag of
-                         0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[Index].Picture.Icon); // unzipped image
-                         1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[Index].Picture.Icon); // zipped image
-                       end;
-                     end;
+                  ImageHintDetailsText2[Index].Caption:= iResStr;
+
+                  case ImageHintIcon2[Index].Tag of
+                    0: IL_MenuPopup.GetIcon(06, ImageHintIcon2[Index].Picture.Icon); // unzipped image
+                    1: IL_MenuPopup.GetIcon(12, ImageHintIcon2[Index].Picture.Icon); // zipped image
+                  end;
+
                   ImageHintText2[Index].Caption:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex);
-                  ImageHintPanel2[Index].Width:= ImageHintText2[Index].Width+16+IconSize;
+
+
+                  if ImageHintText2[Index].Width > ImageHintDetailsText2[Index].Width then
+                     iSize:= ImageHintText2[Index].Width
+                  else
+                     iSize:= ImageHintDetailsText2[Index].Width;
+                  ImageHintPanel2[Index].Width:= iSize+16+IconSize;
                 end;
            end;
        end;
      end;
+end;
+
+procedure TFormMain.UpdateImageHintBoxPosition(HintBoxSource: TPanelEx; ImageSource: TImage32; PositionIndex: Integer);
+var
+  pIndex, xPos, yPos: Integer;
+begin
+  pIndex:= PositionIndex;
+  if pIndex = -1 then
+     begin
+       if IsNightMode then
+          pIndex:= FormNightMode.NightModeHintBox_Position.Position
+       else
+          pIndex:= FormPreferences.HintBox_Position.Position;
+     end;
+
+  case pIndex of
+    1: // top / left
+      begin
+        xPos:= 20;
+        yPos:= 20;
+      end;
+    2: // top / middle
+      begin
+        xPos:= (ImageSource.Width div 2) - (HintBoxSource.Width div 2);
+        yPos:= 20;
+      end;
+    3: // top / right
+      begin
+        xPos:= ImageSource.Width-HintBoxSource.Width-20;
+        yPos:= 20;
+      end;
+    4: // middle / left
+      begin
+        xPos:= 20;
+        yPos:= (ImageSource.Height div 2) - (HintBoxSource.Height div 2);
+      end;
+    5: // middle / right
+      begin
+        xPos:= ImageSource.Width-HintBoxSource.Width-20;
+        yPos:= (ImageSource.Height div 2) - (HintBoxSource.Height div 2);
+      end;
+    6: // bottom / left
+      begin
+        xPos:= 20;
+        yPos:= ImageSource.Height-HintBoxSource.Height-20;
+      end;
+    7: // bottom / middle
+      begin
+        xPos:= (ImageSource.Width div 2) - (HintBoxSource.Width div 2);
+        yPos:= ImageSource.Height-HintBoxSource.Height-20;
+      end;
+    8: // bottom / right
+      begin
+        xPos:= ImageSource.Width-HintBoxSource.Width-20;
+        yPos:= ImageSource.Height-HintBoxSource.Height-20;
+      end;
+  end;
+  if HintBoxSource.Left <> xPos then
+     HintBoxSource.Left:= xPos;
+  if HintBoxSource.Top <> yPos then
+     HintBoxSource.Top:= yPos;
 end;
 
 procedure TFormMain.ChangeImageCategory(CategoryIndex: Integer);
@@ -35688,7 +35968,7 @@ begin
   ButtonImageCategory.Tag:= CategoryIndex;
 
   if IsSingleImageLayout then
-     Images.Color:= ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
+     Images.Color:= GetImageBackgroundColor(ButtonImageCategory.Tag); // ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
 
   ButtonImageCategory.Hint:= 'Category -> '+GetImageCategoryTitle(ButtonImageCategory.Tag)+' <-';
 
@@ -36209,6 +36489,7 @@ var
        begin
          FreeAndNil(ImageHintIcon2[Index]);
          FreeAndNil(ImageHintText2[Index]);
+         FreeAndNil(ImageHintDetailsText2[Index]);
          FreeAndNil(ImageHintPanel2[Index]);
        end;
     Result:= not Assigned(ImageHintPanel2[Index]);
@@ -36784,16 +37065,6 @@ begin
   PopupMenuGamesList.EndUpdate;
 end;
 
-procedure TFormMain.WebButtonStopClick(Sender: TObject);
-begin
-  WebBrowser.Stop;
-end;
-
-procedure TFormMain.WebButtonRefreshClick(Sender: TObject);
-begin
-  WebBrowser.Refresh;
-end;
-
 procedure TFormMain.WebBrowserStatusTextChange(Sender: TObject;
   const Text: WideString);
 begin
@@ -36827,16 +37098,12 @@ begin
   if not Assigned(FormImageDeleteRename) then
      FormImageDeleteRename:= TFormImageDeleteRename.Create(nil);
 
-  //if IsNightMode then
-  //   begin
-  //     FormImageDeleteRename.ImagePreviewFrame.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
-  //     FormImageDeleteRename.ImagePreviewFrame.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
-  //   end;
-
   FormImageDeleteRename.Tag:= Ord(IsRenameImage); // 0 -> delete image; 1 -> rename image
   FormImageDeleteRename.ImageFileName:= ImageDetails[PopupMenuImages.Tag].FileName;
   FormImageDeleteRename.ImageCategoryIcon.Tag:= ImageDetails[PopupMenuImages.Tag].ImageCategoryIndex;
   FileExtensionStr:= ExtractFileExtW(ImageDetails[PopupMenuImages.Tag].FileName); // rename image only
+
+  FormImageDeleteRename.LabelSystemTitle.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
 
   FormImageDeleteRename.ShowModal;
   if FormImageDeleteRename.mmResult = mrOk then
@@ -37776,12 +38043,12 @@ begin
      begin
        FormToolBarEditor.Color:= menu_background_color[1];
        SetPanelColors(FormToolBarEditor.PanelBottom, menu_background_color[1], clrMedDarkGray);
-       SetLabelColors(FormToolBarEditor.LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormToolBarEditor.LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormToolBarEditor.LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormToolBarEditor.LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        SetEasyListViewColors(FormToolBarEditor.ToolBarListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
 
-       SetCheckBoxColors(FormToolBarEditor.BoundToGamesPanel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormToolBarEditor.ShowHideToolBar, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormToolBarEditor.BoundToGamesPanel, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormToolBarEditor.ShowHideToolBar, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        FormToolBarEditor.IconSizeExtraLarge.Font.Color:= item_caption_active_color[1];
        FormToolBarEditor.IconSizeLarge.Font.Color:= item_caption_active_color[1];
@@ -37840,8 +38107,8 @@ begin
        FormArcadeGamesFilter.Color:= menu_background_color[1];
        FormArcadeGamesFilter.PanelFilters.Color1:= menu_background_color[1];
        SetPanelColors(FormArcadeGamesFilter.PanelBottom, menu_background_color[1], clrMedDarkGray);
-       SetLabelColors(FormArcadeGamesFilter.LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormArcadeGamesFilter.LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormArcadeGamesFilter.LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormArcadeGamesFilter.LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        SetEasyListViewColors(FormArcadeGamesFilter.FiltersListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
        FormArcadeGamesFilter.IconSizeExtraLarge.Font.Color:= item_caption_active_color[1];
        FormArcadeGamesFilter.IconSizeLarge.Font.Color:= item_caption_active_color[1];
@@ -37864,6 +38131,29 @@ begin
   else
      FreeAndNil(FormArcadeGamesFilter);
   UpdateGamesFilterHint;
+end;
+
+procedure TFormMain.DrawDisabledImage(DC: HDC; ImageList: TCustomImageList; Index, X, Y: Integer; BlendColor: TColor = clNone);
+var
+  Options: TImageListDrawParams;
+begin
+  ZeroMemory(@Options, SizeOf(Options));
+  Options.cbSize := SizeOf(Options);
+  Options.himl := ImageList.Handle;
+  Options.i := Index;
+  Options.hdcDst := DC;
+  Options.x := X;
+  Options.y := Y;
+  if BlendColor <> clNone then
+     begin
+       //Options.rgbBk:= ColorToRGB(clNone);
+       Options.rgbFg:= ColorToRGB(BlendColor);
+       Options.fState := ILD_BLEND50; //ILS_ALPHA;
+       //Options.Frame:= 20;
+     end
+  else
+     Options.fState := ILS_SATURATE;
+  ImageList_DrawIndirect(@Options);
 end;
 
 // dark menu colors
@@ -37996,21 +38286,6 @@ var
     finally
       FreeAndNil(Glyph);
     end;
-  end;
-
-  procedure DrawDisabledImage(DC: HDC; ImageList: TCustomImageList; Index, X, Y: Integer);
-  var
-    Options: TImageListDrawParams;
-  begin
-    ZeroMemory(@Options, SizeOf(Options));
-    Options.cbSize := SizeOf(Options);
-    Options.himl := ImageList.Handle;
-    Options.i := Index;
-    Options.hdcDst := DC;
-    Options.x := X;
-    Options.y := Y;
-    Options.fState := ILS_SATURATE;
-    ImageList_DrawIndirect(@Options);
   end;
 
 begin
@@ -39040,8 +39315,8 @@ end;
 
 procedure TFormMain.PopupSetFoldersMAMu_Click(Sender: TObject);
 begin
-  FormPreferences.ButtonPageGamesList.Down:= True;
-  FormPreferences.ButtonPageGamesList.Click;
+  FormPreferences.ButtonPage1.Down:= True;
+  FormPreferences.ButtonPage1.Click;
   FormPreferences.Tag:= 2;
   MenuPreferences.Click;
 end;
@@ -39306,23 +39581,6 @@ begin
 
   if IsNightMode then
      begin
-       FormArcadeScanAudioSamples.Color:= menu_background_color[1];
-       SetPanelColors(FormArcadeScanAudioSamples.PanelBottom, menu_background_color[1], clrMedDarkGray);
-
-       //FormArcadeEmulatorsSetup.PanelSystemsSelect.Color1:= clrBlackBk;
-       //FormArcadeEmulatorsSetup.PanelEmulatorDetails.Color1:= menu_background_color[1];
-
-       SetEasyListViewColors(FormArcadeScanAudioSamples.FilesListView, menu_background_color[1], clWhite);
-
-       SetLabelColors(FormArcadeScanAudioSamples.LabelTotalItems, clYellow, clMaroon);
-
-       SetLabelColors(FormArcadeScanAudioSamples.LabelDownloadLink, clWhite, clBlue);
-
-       // SetPanelColors(FormArcadeEmulatorsSetup.PanelSystemTitle, clrBlackBk, clrDarkBlue);
-       // SetPanelColors(FormArcadeEmulatorsSetup.PanelSystemTitleBottom, clrDarkBlue, menu_background_color[1]);
-
-       //SetLabelColors(FormArcadeEmulatorsSetup.LabelArcade_exec, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-
        SetPopupMenuNightColors(FormArcadeScanAudioSamples.PopupAudioSamples);
      end;
 
@@ -39488,12 +39746,6 @@ begin
   FocusGamesList;
 end;
 
-procedure TFormMain.WebButtonExitClick(Sender: TObject);
-begin
-  ButtonInternetGameInfo.Down:= False;
-  ButtonInternetGameInfo.Click;
-end;
-
 procedure TFormMain.MenuROMsFoldersClick(Sender: TObject);
 begin
   if not Assigned(FormArcadeROMsFolders) then
@@ -39507,41 +39759,20 @@ begin
        FormArcadeROMsFolders.PanelSystemsSelect.Color1:= clrBlackBk;
        SetEasyListViewColors(FormArcadeROMsFolders.SystemSelector, clrBlackBk, clWhite);
 
-       SetLabelColors(FormArcadeROMsFolders.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTitleLabelColors(FormArcadeROMsFolders.LabelSystemTitle);
 
        SetSystemTitleBarNightColors(FormArcadeROMsFolders.PanelSystemTitle, FormArcadeROMsFolders.PanelSystemTitleBottom);
-       //SetPanelColors(FormArcadeROMsFolders.PanelSystemTitle, clrBlackBk, clrDarkBlue);
-       //SetPanelColors(FormArcadeROMsFolders.PanelSystemTitleBottom, clrDarkBlue, menu_background_color[1]);
 
        SetPanelNightColors(FormArcadeROMsFolders.PanelFoldersList, -1, -1,
                            checked_innerframecolor[1], clrDarkGray);
 
-       SetCheckBoxColors(FormArcadeROMsFolders.UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormArcadeROMsFolders.UseLargeIcons, clWhite, item_caption_active_shadow_color[1], False);
        FormArcadeROMsFolders.FoldersList.Color:= menu_background_color[1];
        FormArcadeROMsFolders.FoldersList.Font.Color:= item_caption_active_color[1];
 
        SetButtonExColors(FormArcadeROMsFolders.ButtonCancel);
        
        SetPanelColors(FormArcadeROMsFolders.PanelBottom, menu_background_color[1], clrMedDarkGray);
-
-       {SetEasyListViewColors(FormLastPlayedGamesMega.Systems, clrBlackBk, clWhite);
-
-       FormLastPlayedGamesMega.PanelGames.Color1:= menu_background_color[1];
-
-       SetLabelColors(FormLastPlayedGamesMega.LabelSystemTitle, clYellow, clMaroon);
-
-       SetLabelColors(FormLastPlayedGamesMega.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-
-       SetLabelColors(FormLastPlayedGamesMega.LabelTitleCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelGameNameCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelSoftwareNameCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelLastPlayed, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelTotalPlaytime, clWhite, clNavy);
-
-
-       SetPanelColors(FormLastPlayedGamesMega.PanelPlayedListHeader, clrDarkBlue, menu_background_color[1]);
-
-       SetEasyListViewColors(FormLastPlayedGamesMega.LastPlayedList, menu_background_color[1], item_caption_active_color[1]);}
      end;
 
   FormArcadeROMsFolders.ShowModal;
@@ -40236,12 +40467,12 @@ procedure TFormMain.SetImageHintBoxColors(ImageIndex: Integer; IsPreferencesScre
 begin
   if IsPreferencesScreen and IsNightMode then
      Exit;
-  if (not IsPreferencesScreen) and (not IsNightMode) then
-     Exit;
-     
+  //if (not IsPreferencesScreen) and (not IsNightMode) then
+  //   Exit;
+
   if ImageIndex = 1 then
      begin
-       // read settings from Preferences screen
+       SetImageHintItalicStyle(ImageHintText);
        if IsNightMode then
        begin
          ImageHintPanel.Color1:= FormNightMode.NightModeHintBox_Color.Selected;
@@ -40252,12 +40483,12 @@ begin
             ImageHintPanel.Frames:= [];
          ImageHintPanel.Opacity:= FormNightMode.NightModeHintBox_Opacity.Position;
 
-         ImageHintText.Font.Color:= FormNightMode.NightModeHintBox_TextColor.Selected;
-         ImageHintText.ShadowColor:= FormNightMode.NightModeHintBox_TextShadowColor.Selected;
-         ImageHintText.ShadowEnabled:= FormNightMode.NightModeHintBox_TextShadowEnabled.Checked;
+         SetLabelColors(ImageHintText, FormNightMode.NightModeHintBox_TextColor.Selected, FormNightMode.NightModeHintBox_TextShadowColor.Selected, FormNightMode.NightModeHintBox_TextShadowEnabled.Checked);
+         SetLabelColors(ImageHintDetailsText, FormNightMode.NightModeHintBox_TextColor.Selected, FormNightMode.NightModeHintBox_TextShadowColor.Selected, FormNightMode.NightModeHintBox_TextShadowEnabled.Checked);
        end
        else
        begin
+         // read settings from Preferences screen
          ImageHintPanel.Color1:= FormPreferences.HintBox_Color.Selected;
          ImageHintPanel.ColorFrame:= FormPreferences.HintBox_FrameColor.Selected;
          if FormPreferences.HintBox_FrameEnabled.Checked then
@@ -40266,9 +40497,8 @@ begin
             ImageHintPanel.Frames:= [];
          ImageHintPanel.Opacity:= FormPreferences.HintBox_Opacity.Position;
 
-         ImageHintText.Font.Color:= FormPreferences.HintBox_TextColor.Selected;
-         ImageHintText.ShadowColor:= FormPreferences.HintBox_TextShadowColor.Selected;
-         ImageHintText.ShadowEnabled:= FormPreferences.HintBox_TextShadowEnabled.Checked;
+         SetLabelColors(ImageHintText, FormPreferences.HintBox_TextColor.Selected, FormPreferences.HintBox_TextShadowColor.Selected, FormPreferences.HintBox_TextShadowEnabled.Checked);
+         SetLabelColors(ImageHintDetailsText, FormPreferences.HintBox_TextColor.Selected, FormPreferences.HintBox_TextShadowColor.Selected, FormPreferences.HintBox_TextShadowEnabled.Checked);
        end;
      end
   else
@@ -40277,16 +40507,24 @@ begin
           Exit;
 
        // read settings from ImageHintPanel
+       SetImageHintItalicStyle(ImageHintText2[ImageIndex]);
        ImageHintPanel2[ImageIndex].Color1:= ImageHintPanel.Color1;
        ImageHintPanel2[ImageIndex].ColorFrame:= ImageHintPanel.ColorFrame;
        ImageHintPanel2[ImageIndex].Frames:= ImageHintPanel.Frames;
 
        ImageHintPanel2[ImageIndex].Opacity:= ImageHintPanel.Opacity;
 
-       ImageHintText2[ImageIndex].Font.Color:= ImageHintText.Font.Color;
-       ImageHintText2[ImageIndex].ShadowColor:= ImageHintText.ShadowColor;
-       ImageHintText2[ImageIndex].ShadowEnabled:= ImageHintText.ShadowEnabled;
+       SetLabelColors(ImageHintText2[ImageIndex], ImageHintText.Font.Color, ImageHintText.ShadowColor, ImageHintText.ShadowEnabled);
+       SetLabelColors(ImageHintDetailsText2[ImageIndex], ImageHintText.Font.Color, ImageHintText.ShadowColor, ImageHintText.ShadowEnabled);
      end;
+end;
+
+function TFormMain.GetImageBackgroundColor(CategoryIndex: Integer): TColor;
+begin
+  if MenuImageUseSingleBackgroundColor.Checked then
+     Result:= MenuImageUseSingleBackgroundColor.Tag
+  else
+     Result:= ImageCategorySettings[CategoryIndex].BackgroundColor;
 end;
 
 function TFormMain.IsQuadImageLayout: Boolean;
@@ -40313,7 +40551,7 @@ var
          ImageHintPanel2[Index].ColorFrame:= ImageHintPanel.ColorFrame;
          ImageHintPanel2[Index].Opacity:= ImageHintPanel.Opacity;
          ImageHintPanel2[Index].Visible:= False;
-         ImageHintPanel2[Index].Left:= ImageHintPanel.Left; // 20;
+         ImageHintPanel2[Index].Left:= ImageHintPanel.Left;
          ImageHintPanel2[Index].Width:= ImageHintPanel.Width;
          ImageHintPanel2[Index].Height:= ImageHintPanel.Height;
          ImageHintPanel2[Index].Tag:= -1;
@@ -40328,6 +40566,17 @@ var
          ImageHintText2[Index].Left:= ImageHintText.Left;
          ImageHintText2[Index].Top:= ImageHintText.Top;
          ImageHintText2[Index].Visible:= True;
+
+         ImageHintDetailsText2[Index]:= TShadowLabel.Create(Self);
+         ImageHintDetailsText2[Index].Parent:= ImageHintPanel2[Index];
+         ImageHintDetailsText2[Index].Transparent:= True;
+         ImageHintDetailsText2[Index].ShowAccelChar:= False;
+         ImageHintDetailsText2[Index].Font:= ImageHintDetailsText.Font;
+         ImageHintDetailsText2[Index].ShadowColor:= ImageHintDetailsText.ShadowColor;
+         ImageHintDetailsText2[Index].ShadowEnabled:= ImageHintDetailsText.ShadowEnabled;
+         ImageHintDetailsText2[Index].Left:= ImageHintDetailsText.Left;
+         ImageHintDetailsText2[Index].Top:= ImageHintDetailsText.Top;
+         ImageHintDetailsText2[Index].Visible:= True;
 
          ImageHintIcon2[Index]:= TImage.Create(Self);
          ImageHintIcon2[Index].Parent:= ImageHintPanel2[Index];
@@ -40442,7 +40691,7 @@ var
 
          if ImageDetails[Index].ImageCategoryIndex > -1 then
             begin
-              ImageScr[Index].Color:= ImageCategorySettings[ImageDetails[Index].ImageCategoryIndex].BackgroundColor;
+              ImageScr[Index].Color:= GetImageBackgroundColor(ImageDetails[Index].ImageCategoryIndex); //  ImageCategorySettings[ImageDetails[Index].ImageCategoryIndex].BackgroundColor;
               //ImageScr[Index].Hint:= GetImageCategoryTitle(ImageDetails[Index].ImageCategoryIndex); // not used anymore (March 03, 2018)
             end;
          ImageScr[Index].ShowHint:= False;
@@ -40482,7 +40731,7 @@ var
     //if ImageDetails[1].ImageCategoryIndex < Low(ImageCategoryArray) then // category not defined ?
     //   ImageDetails[1].ImageCategoryIndex:= 1; // make sure it is set to "in-game snapshot"
     if ImageDetails[1].ImageCategoryIndex > -1 then
-       Images.Color:= ImageCategorySettings[ImageDetails[1].ImageCategoryIndex].BackgroundColor;
+       Images.Color:= GetImageBackgroundColor(ImageDetails[1].ImageCategoryIndex); // ImageCategorySettings[ImageDetails[1].ImageCategoryIndex].BackgroundColor;
     Result:= True;
   end;
 
@@ -40503,9 +40752,8 @@ begin
        ImageDetails[1].ImageCategoryIndex:= ButtonImageCategory.Tag;
        ImageDetails[1].ImageCategoryIndex_AllSystems:= ImageDetails[1].ImageCategoryIndex;
        ImageDetails[1].ImageCategoryIndex_ConsComp:= ImageDetails[1].ImageCategoryIndex;
-       Images.Hint:= '';
        UpdateImageHintPanelText(1);
-       Images.Color:= ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
+       Images.Color:= GetImageBackgroundColor(ButtonImageCategory.Tag); // ImageCategorySettings[ButtonImageCategory.Tag].BackgroundColor; // change background color
        PanelScreenshotsArea.Canvas.Unlock;
        if MenuShowImages.Checked then
           MenuShowImages.OnClick(Self);
@@ -41178,6 +41426,20 @@ begin
   end;
 end;
 
+procedure TFormMain.SetSplitterColors(SplitterHolder: TSplitterEx; SingleColor, SingleColorHot: TColor);
+begin
+  if not Assigned(SplitterHolder) then
+     Exit;
+
+  if SplitterHolder.Style = tsSolidColor then
+     begin
+       if SplitterHolder.Appearance.SingleColor <> SingleColor then
+          SplitterHolder.Appearance.SingleColor:= SingleColor;
+       if SplitterHolder.Appearance.SingleColorHot <> SingleColorHot then
+          SplitterHolder.Appearance.SingleColorHot:= SingleColorHot;
+     end;
+end;
+
 procedure TFormMain.UpdateSplitterStyle(SplitterHolder: TSplitterEx; NewSplitterStyle: TTMSStyle; SingleColor, SingleColorHot: TColor);
 begin
   if not Assigned(SplitterHolder) then
@@ -41194,6 +41456,27 @@ begin
      end;
 end;
 
+procedure TFormMain.UpdateGamesListSplitterStyle;
+begin
+  if IsNightMode then
+     begin
+       UpdateSplitterStyle(Splitter, tsSolidColor,
+                           FormNightMode.NightModeGamesListSplitterSingleColor.Selected,
+                           FormNightMode.NightModeGamesListSplitterSingleColorHot.Selected);
+
+       UpdateSplitterStyle(SplitterMachines, tsSolidColor,
+                           FormNightMode.NightModeGamesListSplitterSingleColor.Selected,
+                           FormNightMode.NightModeGamesListSplitterSingleColorHot.Selected);
+
+       FormNightMode.NightModeGamesListSplitterShowGripIcon.OnClick(Self);
+     end
+  else
+     begin
+       FormPreferences.GamesListSplitterStyleSelector.OnSelect(Self);
+       FormPreferences.GamesListSplitterShowGripIcon.OnClick(Self);
+     end;
+end;
+
 procedure TFormMain.UpdateImageLayoutSplittersStyle;
 var
   iLoop: Integer;
@@ -41203,17 +41486,23 @@ begin
        for iLoop:= Low(SplitterImg) to High(SplitterImg) do
        begin
          if IsNightMode then
-            UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(FormNightMode.NightModeImageSplitterStyleSelector.ItemIndex), //TTMSStyle(tsSolidColor),
-                                FormNightMode.NightModeImageSplitterSingleColor.Selected,
-                                FormNightMode.NightModeImageSplitterSingleColorHot.Selected)
+            UpdateSplitterStyle(SplitterImg[iLoop], tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected)
+            //SetSplitterColors(SplitterImg[iLoop], FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected)
          else
-            UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(FormPreferences.ImageSplitterStyleSelector.ItemIndex), //TTMSStyle(tsSolidColor),
+            UpdateSplitterStyle(SplitterImg[iLoop], TTMSStyle(FormPreferences.ImageSplitterStyleSelector.ItemIndex),
                                 FormPreferences.ImageSplitterSingleColor.Selected,
                                 FormPreferences.ImageSplitterSingleColorHot.Selected);
 
          SetGripIcon(SplitterImg[iLoop], PopupImageShowSplitterGrip.Checked);
        end;
      end;
+  if IsNightMode then
+     UpdateSplitterStyle(SplitterMAMEInfo, tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected)
+  else
+     UpdateSplitterStyle(SplitterMAMEInfo, TTMSStyle(FormPreferences.ImageSplitterStyleSelector.ItemIndex),
+                         FormPreferences.ImageSplitterSingleColor.Selected,
+                         FormPreferences.ImageSplitterSingleColorHot.Selected);
+  SetGripIcon(SplitterMAMEInfo, PopupImageShowSplitterGrip.Checked);
 end;
 
 function TFormMain.IsSingleImageLayout: Boolean;
@@ -41254,7 +41543,7 @@ begin
          FormImageLayoutSelector.Color:= menu_background_color[1];
          SetPanelColors(FormImageLayoutSelector.PanelBottom, menu_background_color[1], clrMedDarkGray);
          SetEasyListViewColors(FormImageLayoutSelector.LayoutsListView, menu_background_color[1], item_caption_active_color[1]);
-         SetLabelColors(FormImageLayoutSelector.LabelLayoutTitle, clYellow, clMaroon);
+         SetSystemTitleLabelColors(FormImageLayoutSelector.LabelLayoutTitle); // SetLabelColors(FormImageLayoutSelector.LabelLayoutTitle, clYellow, clMaroon);
          SetButtonExColors(FormImageLayoutSelector.ButtonOk);
          SetButtonExColors(FormImageLayoutSelector.ButtonCancel);
        end;
@@ -41337,7 +41626,7 @@ begin
          FormImageCategorySelector.Color:= menu_background_color[1];
          SetPanelColors(FormImageCategorySelector.PanelBottom, menu_background_color[1], clrMedDarkGray);
          SetEasyListViewColors(FormImageCategorySelector.CategoriesListView, menu_background_color[1], item_caption_active_color[1]);
-         SetLabelColors(FormImageCategorySelector.LabelSystemTitle, clYellow, clMaroon);
+         SetSystemTitleLabelColors(FormImageCategorySelector.LabelSystemTitle); // SetLabelColors(FormImageCategorySelector.LabelSystemTitle, clYellow, clMaroon);
          SetButtonExColors(FormImageCategorySelector.ButtonOk);
          SetButtonExColors(FormImageCategorySelector.ButtonCancel);
        end;
@@ -41531,7 +41820,7 @@ begin
                ACanvas.Font.Size:= CurrentFontSize;
           end;
      end;
-  ELV_ItemPaintText_General(Sender, Item, ACanvas);
+  ELV_ItemPaintText_General(Sender, Item, ACanvas, TEasyGameInfo(Item).eGameSetStatus);
 end;
 
 procedure TFormMain.GamesListViewItemInitialize(
@@ -41647,53 +41936,53 @@ begin
        FormImageLayoutSettings.PanelLayoutsSelector.Color1:= clrBlackBk;
        SetEasyListViewColors(FormImageLayoutSettings.LayoutListView, clrBlackBk, clWhite);
 
-       SetLabelColors(FormImageLayoutSettings.LabelLayoutTitle, clYellow, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelShowHideLayouts, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetSystemTitleLabelColors(FormImageLayoutSettings.LabelLayoutTitle);
+       SetLabelColors(FormImageLayoutSettings.LabelShowHideLayouts, item_shortcut_color[1], item_shortcut_selected_color[1], False);
 
        SetSystemTitleBarNightColors(FormImageLayoutSettings.PanelLayoutTitle, FormImageLayoutSettings.PanelLayoutsTitleBottom);
 
-       FormImageLayoutSettings.GroupBoxCategoryAllSystems.BorderStyle:= bsAdvDualColors;
+       SetGroupBoxBorderStyle(FormImageLayoutSettings.GroupBoxCategoryAllSystems);
        SetGroupBoxColors(FormImageLayoutSettings.GroupBoxCategoryAllSystems,
                          clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                         item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetLabelColors(FormImageLayoutSettings.LabelPanel1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel4, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel1, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel4, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormImageLayoutSettings.PanelEnabledScr2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormImageLayoutSettings.PanelEnabledScr3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormImageLayoutSettings.PanelEnabledScr2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormImageLayoutSettings.PanelEnabledScr3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       FormImageLayoutSettings.FrameIconLayScr1.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr2.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr3.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr4.Brush.Color:= clrBlackBk; //menu_background_color[1];
+       FormImageLayoutSettings.FrameIconLayScr1.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr2.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr3.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr4.Brush.Color:= clrBlackBk;
 
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr1, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr2, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr3, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr4, clrLightRed, clMaroon);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr2, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr3, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr4, clrLightRed, clMaroon, False);
 
-       FormImageLayoutSettings.GroupBoxCategoryConsoleComputer.BorderStyle:= bsAdvDualColors;
+       SetGroupBoxBorderStyle(FormImageLayoutSettings.GroupBoxCategoryConsoleComputer);
        SetGroupBoxColors(FormImageLayoutSettings.GroupBoxCategoryConsoleComputer,
                          clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                         item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetLabelColors(FormImageLayoutSettings.LabelPanel1_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel2_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel3_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageLayoutSettings.LabelPanel4_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel1_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel2_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel3_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageLayoutSettings.LabelPanel4_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       FormImageLayoutSettings.FrameIconLayScr1_ConsComp.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr2_ConsComp.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr3_ConsComp.Brush.Color:= clrBlackBk; //menu_background_color[1];
-       FormImageLayoutSettings.FrameIconLayScr4_ConsComp.Brush.Color:= clrBlackBk; //menu_background_color[1];
+       FormImageLayoutSettings.FrameIconLayScr1_ConsComp.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr2_ConsComp.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr3_ConsComp.Brush.Color:= clrBlackBk;
+       FormImageLayoutSettings.FrameIconLayScr4_ConsComp.Brush.Color:= clrBlackBk;
 
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr1_ConsComp, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr2_ConsComp, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr3_ConsComp, clrLightRed, clMaroon);
-       SetLabelColors(FormImageLayoutSettings.LabelLayScr4_ConsComp, clrLightRed, clMaroon);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr1_ConsComp, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr2_ConsComp, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr3_ConsComp, clrLightRed, clMaroon, False);
+       SetLabelColors(FormImageLayoutSettings.LabelLayScr4_ConsComp, clrLightRed, clMaroon, False);
 
        //FormImageLayoutSettings.ImageScrLayoutFrame.Shape:= bsBox;
 
@@ -42251,43 +42540,45 @@ begin
   FormThumbnailView.ELV_ThumbnailPreview.CellSizes.Thumbnail.Width:= ThumbnailSettings.Width;
   FormThumbnailView.ELV_ThumbnailPreview.CellSizes.Thumbnail.Height:= ThumbnailSettings.Height;
 
+  AssignRGBQuickEditPopupToColorBoxEx(FormThumbnailView.BorderColor);
+
   if IsNightMode then
      begin
        FormThumbnailView.Color:= menu_background_color[1];
        SetPanelColors(FormThumbnailView.PanelBottom, menu_background_color[1], clrMedDarkGray);
-       SetLabelColors(FormThumbnailView.LabelGridWidthSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormThumbnailView.LabelGridWidthSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormThumbnailView.LabelGridHeightSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormThumbnailView.LabelGridHeightSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormThumbnailView.LabelImageSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormThumbnailView.LabelImageSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormThumbnailView.LabelGridWidthSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormThumbnailView.LabelGridWidthSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormThumbnailView.LabelGridHeightSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormThumbnailView.LabelGridHeightSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormThumbnailView.LabelImageSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormThumbnailView.LabelImageSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        FormThumbnailView.GridWidthSize.Font.Color:= item_caption_active_color[1];
        FormThumbnailView.GridHeightSize.Font.Color:= item_caption_active_color[1];
 
-       FormThumbnailView.IconsGroupBox.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(FormThumbnailView.IconsGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxBorderStyle(FormThumbnailView.IconsGroupBox);
+       SetGroupBoxColors(FormThumbnailView.IconsGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetCheckBoxColors(FormThumbnailView.ShowBorder, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowSystemIcon, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowGameTitles, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowGameIcon, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowMediaTypeIcon  , item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowFavoriteIcon, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.ShowIconsWithNoThumbnail, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormThumbnailView.MaintainAspectRatio, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormThumbnailView.ShowBorder, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowSystemIcon, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowGameTitles, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowGameIcon, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowMediaTypeIcon  , item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowFavoriteIcon, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.ShowIconsWithNoThumbnail, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormThumbnailView.MaintainAspectRatio, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormThumbnailView.ShowPreviewScreenshotsPanel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormThumbnailView.ShowPreviewScreenshotsPanel, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormThumbnailView.LabelThumbAlignIcons, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormThumbnailView.ThumbLeftAlignIcons, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormThumbnailView.ThumbRightAlignIcons, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormThumbnailView.ThumbLeftAlignIcons, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormThumbnailView.ThumbRightAlignIcons, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetComboBox2ExColors(FormThumbnailView.SystemIconSize, True);
        SetComboBox2ExColors(FormThumbnailView.MediaTypeIconSize, True);
 
        SetColorBoxColors(FormThumbnailView.BorderColor, True);
 
+       FormThumbnailView.ELV_ThumbnailPreview.ShowThemedBorderColor:= clrBorderGroupBoxGrayBk;
        for cLoop:= 0 to FormThumbnailView.ComponentCount-1 do
        begin
          if FormThumbnailView.Components[cLoop] is TBitBtnEx then
@@ -42442,6 +42733,18 @@ begin
     if not Assigned(FormArcadeFileVersionsLarge) then
        FormArcadeFileVersionsLarge:= TFormArcadeFileVersionsLarge.Create(nil);
 
+    if not FormPreferences.UseItalicFontStyleSystemTitleBar.Checked then
+       begin
+         for Loop:= 0 to FormArcadeFileVersionsLarge.ComponentCount-1 do
+         begin
+           if FormArcadeFileVersionsLarge.Components[Loop] is TShadowLabel then
+              begin
+                if fsItalic in TShadowLabel(FormArcadeFileVersionsLarge.Components[Loop]).Font.Style then
+                   TShadowLabel(FormArcadeFileVersionsLarge.Components[Loop]).Font.Style:= [fsBold];
+              end;
+         end;
+       end;
+
     if IsNightMode then
        begin
          FormArcadeFileVersionsLarge.Color:= menu_background_color[1];
@@ -42454,37 +42757,32 @@ begin
          FormArcadeFileVersionsLarge.Panel7.Color1:= menu_background_color[1];
          FormArcadeFileVersionsLarge.Panel8.Color1:= menu_background_color[1];
 
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle1, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle2, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle3, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle4, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle5, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle6, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle7, clrLightRed, clMaroon);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle8, clrLightRed, clMaroon);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle1, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle2, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle3, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle4, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle5, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle6, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle7, clrOrangeBarTop, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelSystemTitle8, clrOrangeBarTop, clrMedDarkGray, False);
 
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName1, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName2, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName3, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName4, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName5, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName6, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName7, clGray, clrMedDarkGray);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName8, clGray, clrMedDarkGray);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName1, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName2, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName3, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName4, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName5, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName6, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName7, clGray, clrMedDarkGray, False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelEmuFileName8, clGray, clrMedDarkGray, False);
 
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo4, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo5, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo6, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo7, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo8, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-
-         //SetPanelColors(FormImageCategorySelector.PanelBottom, menu_background_color[1], clrMedDarkGray);
-         //SetEasyListViewColors(FormImageCategorySelector.CategoriesListView, menu_background_color[1], item_caption_active_color[1]);
-         //SetLabelColors(FormImageCategorySelector.LabelSystemTitle, clYellow, clMaroon);
-
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo1, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo4, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo5, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo6, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo7, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(FormArcadeFileVersionsLarge.LabelVersionInfo8, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        end;
     FormArcadeFileVersionsLarge.ShowModal;
     FreeAndNil(FormArcadeFileVersionsLarge);
@@ -42507,24 +42805,32 @@ begin
        FormGamesListFontSettings.GamesBackgroundImage.Text:= FormNightMode.NightModeGamesBackgroundImage.Text;
        FormGamesListFontSettings.GamesTileBackground.Checked:= FormNightMode.NightModeGamesTileBackground.Checked;
        FormGamesListFontSettings.GamesBackgroundImageEnable.Checked:= FormNightMode.NightModeGamesBackgroundImageEnable.Checked;
+       FormGamesListFontSettings.PopupCopySelectedFontsFromLightMode.Caption:= 'Copy All Fonts From Light Mode';
      end
   else
      begin
        FormGamesListFontSettings.GamesBackgroundImage.Text:= FormPreferences.GamesBackgroundImage.Text;
        FormGamesListFontSettings.GamesTileBackground.Checked:= FormPreferences.GamesTileBackground.Checked;
        FormGamesListFontSettings.GamesBackgroundImageEnable.Checked:= FormPreferences.GamesBackgroundImageEnable.Checked;
+       FormGamesListFontSettings.PopupCopySelectedFontsFromLightMode.Caption:= 'Copy All Fonts From Night Mode';
      end;
 
+  FormGamesListFontSettings.PopupCopySelectedFontsFromLightMode.Hint:= GetCustomFontIniFile(not IsNightMode, True);
+
   FormGamesListFontSettings.PopupShowAvailableSystemsOnly.Checked:= Boolean(MenuFontSettings.Tag);
+  FormGamesListFontSettings.PopupShowFontName.Checked:= Boolean(MenuFontSettings.HelpContext);
+  FormGamesListFontSettings.GamesFont.PaintInfoItem.TileDetailCount:= Ord(MenuFontSettings.HelpContext)+2;
+
+  AssignRGBQuickEditPopupToColorBoxEx(FormGamesListFontSettings.GamesBackgroundColor);
 
   if IsNightMode then
      begin
        SetPanelColors(FormGamesListFontSettings.PanelBottom, menu_background_color[1], clrMedDarkGray);
        SetEditNightColors(FormGamesListFontSettings.GamesBackgroundImage);
-       SetLabelColors(FormGamesListFontSettings.LabelBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormGamesListFontSettings.LabelBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        SetColorBoxColors(FormGamesListFontSettings.GamesBackgroundColor, True);
-       SetCheckBoxColors(FormGamesListFontSettings.GamesBackgroundImageEnable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormGamesListFontSettings.GamesTileBackground, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormGamesListFontSettings.GamesBackgroundImageEnable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormGamesListFontSettings.GamesTileBackground, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetButtonExColors(FormGamesListFontSettings.ButtonOk);
        SetButtonExColors(FormGamesListFontSettings.ButtonCancel);
@@ -42586,6 +42892,7 @@ begin
        end;
      end;
   MenuFontSettings.Tag:= Ord(FormGamesListFontSettings.PopupShowAvailableSystemsOnly.Checked);
+  MenuFontSettings.HelpContext:= Ord(FormGamesListFontSettings.PopupShowFontName.Checked);
 
   FreeAndNil(FormGamesListFontSettings);
   SetCurrentDir(FrontendPath);
@@ -42917,8 +43224,8 @@ end;
 
 procedure TFormMain.GameDocumentsCustomizePanelClick(Sender: TObject);
 begin
-  FormPreferences.ButtonPageGameDocuments.Down:= True;
-  FormPreferences.ButtonPageGameDocuments.Click;
+  FormPreferences.ButtonPage1.Down:= True;
+  FormPreferences.ButtonPage1.Click;
   MenuPreferences.Click;
 end;
 
@@ -43076,10 +43383,15 @@ begin
           end;
        if not Assigned(FormDeleteMultipleGamesFiles) then
           FormDeleteMultipleGamesFiles:= TFormDeleteMultipleGamesFiles.Create(nil);
+
+       FormDeleteMultipleGamesFiles.DestinationFolderLabel.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
        CheckDelSettings(True);
 
        if IsNightMode then
-          SetPopupMenuNightColors(FormDeleteMultipleGamesFiles.PopupGames);
+          begin
+            FormDeleteMultipleGamesFiles.Color:= menu_background_color[1];
+            SetPopupMenuNightColors(FormDeleteMultipleGamesFiles.PopupGames);
+          end;
        LoadIcons;
 
        FormDeleteMultipleGamesFiles.DeleteROMs.Tag:= MaxArcadeSystems+0;
@@ -43095,6 +43407,22 @@ begin
        FormDeleteMultipleGamesFiles.DeleteGameFromGamesList.Enabled:= TMenuItem(Sender).Tag = 0; // delete game option only
        FormDeleteMultipleGamesFiles.DeleteGameFileFromDisk.Enabled:= TMenuItem(Sender).Tag = 0; // delete game option only
        FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Enabled:= TMenuItem(Sender).Tag = 0; // delete game option only
+
+       if FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Enabled then
+          IL_MainMenuOptions.GetIcon(15, FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Picture.Icon)
+       else
+          begin
+            //ImageList_DrawEx(IL_MainMenuOptions.Handle, 15, Canvas.Handle, 0, 0, 24, 24,
+            //                 ColorToRGB(clNone), ColorToRGB(menu_background_color[1]), ILD_BLEND50);
+            DrawDisabledImage(FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Canvas.Handle, IL_MainMenuOptions, 15, 0, 0, menu_background_color[1]);
+
+            //IL_MainMenuOptions.GetIcon(15, FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Picture.Icon, dsSelected, itImage);
+            //IL_MainMenuOptions.BlendColor:= clNone;
+          end;
+          //IL_MainMenuOptions.Draw(FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Picture.Bitmap.Canvas,
+          //                        0, 0, 15, False);
+
+       //DrawDisabledImage(FormDeleteMultipleGamesFiles.DeleteGameConsoleComputerIcon.Canvas.Handle, IL_MainMenuOptions, 15, 0, 0);
 
        FormDeleteMultipleGamesFiles.DestinationFolder.Text:= sValue;
        FormDeleteMultipleGamesFiles.CopyMoveOverwriteFiles.Checked:= bValue;
@@ -43248,6 +43576,7 @@ begin
 
   if not Assigned(FormDeleteGamesFiles) then
      FormDeleteGamesFiles:= TFormDeleteGamesFiles.Create(nil);
+  FormDeleteGamesFiles.DestinationFolderLabel.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
   CheckDelSettings(True);
 
   FormDeleteGamesFiles.DeleteROMs.Tag:= 0; //MaxGameID+MaxArcadeSystems+1;
@@ -43512,6 +43841,11 @@ end;
 procedure TFormMain.MenuArcadeControllersLayoutClick(Sender: TObject);
 begin
   FormControllerKeysLayout:= TFormControllerKeysLayout.Create(nil);
+  if IsNightMode then
+     begin
+       FormControllerKeysLayout.Color:= menu_background_color[1];
+       FormControllerKeysLayout.LabelWarning.Font.Color:= clCream;
+     end;
   FormControllerKeysLayout.ShowModal;
   FreeAndNil(FormControllerKeysLayout);
   FocusGamesList;
@@ -43938,6 +44272,12 @@ begin
      begin
        SetPopupMenuNightColors(FormImagesManager.PopupMissingImages);
        SetPopupMenuNightColors(FormImagesManager.PopupNotUsedIcons);
+
+       UpdateSplitterStyle(FormImagesManager.SplitterList, tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
+       SetGripIcon(FormImagesManager.SplitterList, PopupImageShowSplitterGrip.Checked);
+
+       UpdateSplitterStyle(FormImagesManager.SplitterNotUsed, tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
+       SetGripIcon(FormImagesManager.SplitterNotUsed, PopupImageShowSplitterGrip.Checked);
      end;
 
   FormImagesManager.ShowModal;
@@ -44143,7 +44483,7 @@ begin
      CallShellExecute(nil, FrontendPath+'docs\'+docFileName);
 end;
 
-procedure TFormMain.SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox);
+procedure TFormMain.SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox2Ex);
 begin
   if ComboBoxHolder.ItemIndex <> LabelHolder.Tag then
      ComboBoxHolder.ItemIndex:= LabelHolder.Tag;
@@ -44208,7 +44548,7 @@ begin
      Exit;
   CheckControl:= Assigned(ControlType);
 
-  tempFile:= 'D:\emulators\mame\binary\listxml0176.xml';
+  tempFile:= 'D:\emulators\mame\binary\listxml0211.xml';
   if not ValidateFile(tempFile) then
      Exit;
   FormStatus.TitleStr('Search New CHD Media And Control Types');
@@ -44405,30 +44745,25 @@ begin
   if IsNightMode then
      begin
        MenuCustomizeNightModeColors.Click;
-       //FormPreferences.ButtonPageNightMode2.Down:= True;
-       //FormPreferences.ButtonPageNightMode2.Click;
      end
   else
      begin
-       FormPreferences.ButtonPageImages.Down:= True;
-       FormPreferences.ButtonPageImages.Click;
+       FormPreferences.ButtonPage1.Down:= True;
+       FormPreferences.ButtonPage1.Click;
      end;
   MenuPreferences.Click;
 end;
 
 procedure TFormMain.MenuCustomizeGamesListAppearanceClick(Sender: TObject);
 begin
-  FormPreferences.ButtonPageGamesList.Down:= True;
-  FormPreferences.ButtonPageGamesList.Click;
+  FormPreferences.ButtonPage1.Down:= True;
+  FormPreferences.ButtonPage1.Click;
   MenuPreferences.Click;
 end;
 
 procedure TFormMain.MenuCustomizeNightModeColorsClick(Sender: TObject);
 begin
   ShowNightModeScreen;
-  //FormPreferences.ButtonPageNightMode.Down:= True;
-  //FormPreferences.ButtonPageNightMode.Click;
-  //MenuPreferences.Click;
 end;
 
 procedure TFormMain.CenterSplitter1Click(Sender: TObject);
@@ -44479,7 +44814,24 @@ begin
     True:
       begin
         if not Assigned(FormImageLayoutDimensions) then
-           FormImageLayoutDimensions:= TFormImageLayoutDimensions.Create(nil);
+           begin
+             FormImageLayoutDimensions:= TFormImageLayoutDimensions.Create(nil);
+             if IsNightMode then
+                begin
+                  FormImageLayoutDimensions.Color:= menu_background_color[1];
+                  SetSystemTitleLabelColors(FormImageLayoutDimensions.LabelLayoutTitle);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImagesPanel, clrLightRed, clMaroon, False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImagesPanelDimensions, clrLightRed, clMaroon, False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage1, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage1Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage2Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage3Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage4, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                  SetLabelColors(FormImageLayoutDimensions.LabelImage4Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+                end;
+           end;
 
         LoadImageLayoutPreview(ButtonScreenshotLayouts.Tag);
         UpdateImageDimensionsInfo;
@@ -44515,6 +44867,7 @@ begin
   SetGripIcon(SplitterImg[1], TMenuItem(Sender).Checked);
   SetGripIcon(SplitterImg[2], TMenuItem(Sender).Checked);
   SetGripIcon(SplitterImg[3], TMenuItem(Sender).Checked);
+  SetGripIcon(SplitterMAMEInfo, TMenuItem(Sender).Checked);
   PopupShowSplitterGrip.Checked:= TMenuItem(Sender).Checked;
   if IsNightMode then
      begin
@@ -44663,7 +45016,7 @@ end;
 
 procedure TFormMain.PaintToolBarBk(Sender: TToolBar; const ARect: TRect);
 begin
-  if IsNightMode then //and (not Sender.ShowCaptions) then
+  if IsNightMode then
   begin
     if FormNightMode.NightModeToolBarGradientBar.Checked then
        begin
@@ -44679,7 +45032,23 @@ begin
        end;
   end
   else
-     PaintToolBarTheme(Sender, MenuBoundToGamesPanel.Checked);
+  begin
+    if FormPreferences.ToolBarWindowsTheme.Checked then
+       PaintToolBarTheme(Sender, MenuBoundToGamesPanel.Checked)
+    else
+    begin
+      if FormPreferences.ToolBarGradientBar.Checked then
+         DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                      FormPreferences.ToolBarBkTopColor.Selected,
+                      FormPreferences.ToolBarBkBottomColor.Selected, 0, 0, 0)
+      else
+        begin
+          Sender.Canvas.Pen.Color:= FormPreferences.ToolBarBkTopColor.Selected; // to prevent black frame bug
+          Sender.Canvas.Brush.Color:= FormPreferences.ToolBarBkTopColor.Selected;
+          Sender.Canvas.Rectangle(Sender.ClientRect);
+        end;
+    end;
+  end;
 end;
 
 procedure TFormMain.ImagesToolBarButtonsCustomDraw(Sender: TToolBar;
@@ -44711,41 +45080,41 @@ begin
      begin
        FormArcadeScanGamesMode.Color:= menu_background_color[1];
 
-       SetRadioButtonColors(FormArcadeScanGamesMode.FullScan, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.QuickScan, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.ForceAllAvailable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeScanGamesMode.FullScan, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.QuickScan, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.ForceAllAvailable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMEAllSets, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMEArcadeMachines, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMEAllSets, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMEArcadeMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.ScanMAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_Disabled, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_EnabledUpdate, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_EnabledOverwrite, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_Disabled, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_EnabledUpdate, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetRadioButtonColors(FormArcadeScanGamesMode.MAMESoftwareList_EnabledOverwrite, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        FormArcadeScanGamesMode.LabelMAMESoftwareListBox_BlankLine.Pen.Color:= FormArcadeScanGamesMode.Color;
        FormArcadeScanGamesMode.LabelMAMESoftwareListBox_BlankLine2.Pen.Color:= FormArcadeScanGamesMode.Color;
-       SetLabelColors(FormArcadeScanGamesMode.LabelFullScan, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeScanGamesMode.LabelQuickScan, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeScanGamesMode.LabelForceAllAvailable, clrLightBlue, clNavy);
+       SetLabelColors(FormArcadeScanGamesMode.LabelFullScan, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelQuickScan, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelForceAllAvailable, clrLightBlue, clNavy, False);
 
-       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareListBox, clrLightBlue, clNavy);
-       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_Disabled, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_EnabledUpdate, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_EnabledOverwrite, clrLightRed, clMaroon);
-       SetLabelColors(FormArcadeScanGamesMode.LabelCustomizeMAMESoftwareList, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareListBox, clrLightBlue, clNavy, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_Disabled, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_EnabledUpdate, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelMAMESoftwareList_EnabledOverwrite, clrLightRed, clMaroon, False);
+       SetLabelColors(FormArcadeScanGamesMode.LabelCustomizeMAMESoftwareList, item_shortcut_color[1], item_shortcut_selected_color[1], False);
 
-       SetLabelColors(FormArcadeScanGamesMode.LabelImportantTips, clrLightRed, clMaroon);
+       SetLabelColors(FormArcadeScanGamesMode.LabelImportantTips, clrLightRed, clMaroon, False);
 
-       SetCheckBoxColors(FormArcadeScanGamesMode.AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormArcadeScanGamesMode.AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       FormArcadeScanGamesMode.ScanModeBox.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(FormArcadeScanGamesMode.ScanModeBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxBorderStyle(FormArcadeScanGamesMode.ScanModeBox);
+       SetGroupBoxColors(FormArcadeScanGamesMode.ScanModeBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       SetGroupBoxColors(FormArcadeScanGamesMode.ScanMAMESetsBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxColors(FormArcadeScanGamesMode.ScanMAMESetsBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-       FormArcadeScanGamesMode.MAMESoftwareListBox.BorderStyle:= bsAdvDualColors;
-       SetGroupBoxColors(FormArcadeScanGamesMode.MAMESoftwareListBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetGroupBoxBorderStyle(FormArcadeScanGamesMode.MAMESoftwareListBox);
+       SetGroupBoxColors(FormArcadeScanGamesMode.MAMESoftwareListBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
        SetButtonExColors(FormArcadeScanGamesMode.ButtonOk);
        SetButtonExColors(FormArcadeScanGamesMode.ButtonHelpCreateMAMESoftwareListGames);
@@ -44782,11 +45151,10 @@ begin
                       FormNightMode.NightModeToolBarBkTopColor.Selected,
                       FormNightMode.NightModeToolBarBkBottomColor.Selected, not FormNightMode.NightModeToolBarGradientBar.Checked);
 
-       SetLabelColors(FormFavoritesManager.LabelHotkeyText, clCream, item_caption_active_shadow_color[1]);
-       SetLabelColors(FormFavoritesManager.LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1]);
+       SetLabelColors(FormFavoritesManager.LabelHotkeyText, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormFavoritesManager.LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1], False);
 
-       FormFavoritesManager.FavoritesList.ShowThemedBorderColor:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
-
+       SetPopupMenuNightColors(FormFavoritesManager.PopupSettings);
        for Loop:= 0 to FormFavoritesManager.ComponentCount-1 do
        begin
          if FormFavoritesManager.Components[Loop] is TSpeedButtonEx then
@@ -44851,7 +45219,7 @@ begin
   end;
 end;
 
-procedure TFormMain.SetToolBarFiltersFormColors;
+procedure TFormMain.SetToolBarFiltersFormColors(UpdateNightMode: Boolean = False);
 var
   Loop: Integer;
 begin
@@ -44865,14 +45233,14 @@ begin
        if IsNightMode then
           begin
             FormArcadeFiltersDriverStatus.Color:= menu_background_color[1];
-            SetPanelColors(FormArcadeFiltersDriverStatus.PanelBottom, menu_background_color[1], clrMedDarkGray);
-            SetLabelColors(FormArcadeFiltersDriverStatus.LabelSelectCategory, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetLabelColors(FormArcadeFiltersDriverStatus.LabelFilterStatus, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetRadioButtonColors(FormArcadeFiltersDriverStatus.ListAll, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetRadioButtonColors(FormArcadeFiltersDriverStatus.GoodImperfect, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Good, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Imperfect, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Preliminary, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            SetPanelColors(FormArcadeFiltersDriverStatus.PanelBottom, menu_background_color[1], clrMedDarkGray, False);
+            SetLabelColors(FormArcadeFiltersDriverStatus.LabelSelectCategory, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetLabelColors(FormArcadeFiltersDriverStatus.LabelFilterStatus, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetRadioButtonColors(FormArcadeFiltersDriverStatus.ListAll, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetRadioButtonColors(FormArcadeFiltersDriverStatus.GoodImperfect, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Good, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Imperfect, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetRadioButtonColors(FormArcadeFiltersDriverStatus.Preliminary, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
           end
        else
           begin
@@ -44897,30 +45265,30 @@ begin
               if FormArcadeFiltersExtra.Components[Loop] is TShadowLabel then
                  begin
                    if TShadowLabel(FormArcadeFiltersExtra.Components[Loop]).Font.Style = [] then
-                      SetLabelColors(TShadowLabel(FormArcadeFiltersExtra.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                      SetLabelColors(TShadowLabel(FormArcadeFiltersExtra.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
                  end
               else
               if FormArcadeFiltersExtra.Components[Loop] is TAdvOfficeCheckBoxEx then
                  begin
-                   SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormArcadeFiltersExtra.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                   SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormArcadeFiltersExtra.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
                  end
               else
               if FormArcadeFiltersExtra.Components[Loop] is TAdvGroupBoxEx then
                  begin
-                   TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]).BorderStyle:= bsAdvDualColors;
+                   SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]));
                    SetGroupBoxColors(TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]),
                                      clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                                     item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                                     item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
                  end
               else
               if FormArcadeFiltersExtra.Components[Loop] is TComboBox2Ex then
                  SetComboBox2ExColors(TComboBox2Ex(FormArcadeFiltersExtra.Components[Loop]), False);
             end;
             FormArcadeFiltersExtra.ButtonCategoriesToHideInfo.Invalidate;
-            SetLabelColors(FormArcadeFiltersExtra.LabelCategoryFiltersGroupBoxHint, clrLightBlue, clNavy);
-            SetLabelColors(FormArcadeFiltersExtra.LabelNeoGeoMVS, clSilver, clrMedDarkGray);
-            SetLabelColors(FormArcadeFiltersExtra.LabelSTVMultiSlot, clSilver, clrMedDarkGray);
-            SetLabelColors(FormArcadeFiltersExtra.LabelHideMAMESoftlist_vgmplay, clSilver, clrMedDarkGray);
+            SetLabelColors(FormArcadeFiltersExtra.LabelCategoryFiltersGroupBoxHint, clSilver, clrMedDarkGray, False);
+            SetLabelColors(FormArcadeFiltersExtra.LabelNeoGeoMVS, clSilver, clrMedDarkGray, False);
+            SetLabelColors(FormArcadeFiltersExtra.LabelSTVMultiSlot, clSilver, clrMedDarkGray, False);
+            SetLabelColors(FormArcadeFiltersExtra.LabelHideMAMESoftlist_vgmplay, clSilver, clrMedDarkGray, False);
           end
        else
           begin
@@ -44941,8 +45309,8 @@ begin
               else
               if FormArcadeFiltersExtra.Components[Loop] is TAdvGroupBoxEx then
                  begin
-                   TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]).BorderStyle:= bsAdvSingle;
-                   SetGroupBoxColors(TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]), clSilver, clSilver, clBlack, clSilver, False);
+                   SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]));
+                   SetGroupBoxColors(TAdvGroupBoxEx(FormArcadeFiltersExtra.Components[Loop]), clSilver, clSilver, clBlack, clSilver, -1, clrMedDarkGray, False);
                  end
               else
               if FormArcadeFiltersExtra.Components[Loop] is TComboBox2Ex then
@@ -44951,12 +45319,19 @@ begin
             FormArcadeFiltersExtra.ButtonCategoriesToHideInfo.Invalidate;
             SetLabelColors(FormArcadeFiltersExtra.LabelCategoryFiltersGroupBoxHint, clNavy, clSilver, False);
           end;
+     end
+  else
+  if UpdateNightMode then
+     begin
+       // must update the button colors
+       UpdateFiltersButtonExColors;
+       SetComboBox2ExColors(FormArcadeFiltersDriverStatus.DriverStatusCategory, False);
      end;
 end;
 
-procedure TFormMain.ToggleButtonExCustomDraw(ButtonExSource: TBitBtnEx);
+procedure TFormMain.ToggleButtonExCustomDraw(ButtonExSource: TBitBtnEx; ForceNightColors: Boolean = False);
 begin
-  if IsNightMode then
+  if IsNightMode or ForceNightColors then
      begin
        if not ButtonExSource.UseCustomDraw then
           ButtonExSource.UseCustomDraw:= True;
@@ -44968,9 +45343,9 @@ begin
      end;
 end;
 
-procedure TFormMain.ToggleButtonExCustomDraw(ButtonExSource: TSpeedButtonEx);
+procedure TFormMain.ToggleButtonExCustomDraw(ButtonExSource: TSpeedButtonEx; ForceNightColors: Boolean = False);
 begin
-  if IsNightMode then
+  if IsNightMode or ForceNightColors then
      begin
        if not ButtonExSource.UseCustomDraw then
           ButtonExSource.UseCustomDraw:= True;
@@ -45051,21 +45426,6 @@ begin
   FormMain.GamesListView.EndUpdate(False);
 end;
 
-procedure TFormMain.ButtonPlayVideoPreviewClick(Sender: TObject);
-begin
-  if not VideoPreviewEnabled then
-     Exit;
-
-  ButtonPlayVideoPreview.Enabled:= CheckSelected(GamesListView) and (VideoPreviewFile <> '');
-  PopupPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
-  WebButtonPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
-  if ButtonPlayVideoPreview.Enabled then
-     begin
-       PlayDummyVideo;
-       CallPlayVideoPreview;
-     end;
-end;
-
 procedure TFormMain.MenuShowGamesStatusBarClick(Sender: TObject);
 begin
   StatusBarPanel.Visible:= MenuShowGamesStatusBar.Checked;
@@ -45111,24 +45471,117 @@ begin
   ELV_Holder.EndUpdate(False);
 end;
 
+procedure TFormMain.ELV_GetDefaultHeaderFont(FontDest: TFont; IsNightModeProfile: Boolean; ReturnFontColorOnly: Boolean);
+begin
+  if not ReturnFontColorOnly then
+     begin
+       FontDest.Name:= 'Segoe UI';
+       FontDest.Size:= 9;
+       FontDest.Style:= [];
+     end;
+  if IsNightModeProfile then
+     FontDest.Color:= clCream
+  else
+     FontDest.Color:= clBlack;
+end;
+
+procedure TFormMain.ELV_SetCustomHeaderFont(IsNightModeProfile: Boolean);
+var
+  UpdateFontELV: Boolean;
+begin
+  UpdateFontELV:= False;
+  if IsNightModeProfile then
+     FontDialog.Font:= FormNightMode.NightModeGamesListHeaderFont.Font
+  else
+     begin
+       if IsNightMode then
+          FontDialog.Font:= FormNightMode.NightModeGamesListHeaderFont.Font
+       else
+          FontDialog.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
+     end;
+
+  FontDialog.Tag:= 5;
+  if not FontDialog.Execute then
+     Exit;
+
+  if IsNightModeProfile then
+     begin
+       UpdateFontELV:= IsNightMode;
+       FormNightMode.NightModeGamesListHeaderFont.Font:= FontDialog.Font;
+     end
+  else
+     begin
+       UpdateFontELV:= True;
+       if IsNightMode then
+          FormNightMode.NightModeGamesListHeaderFont.Font:= FontDialog.Font
+       else
+          FormPreferences.GameListHeaderFont_Setting.Font:= FontDialog.Font;
+     end;
+
+  if UpdateFontELV then
+     begin
+       UpdateHeaderFont(GamesListView);
+       UpdateHeaderFont(MachinesListSidePanel);
+     end;
+end;
+
+procedure TFormMain.ELV_SetDefaultHeaderFont(IsNightModeProfile: Boolean);
+var
+  UpdateFontELV: Boolean;
+begin
+  UpdateFontELV:= False;
+  if IsNightModeProfile then
+     begin
+       UpdateFontELV:= IsNightMode;
+       FontDialog.Font.Color:= clrGamesListHeaderFontColor;
+     end
+  else
+     begin
+       UpdateFontELV:= True;
+       if IsNightMode then
+          FontDialog.Font.Color:= clrGamesListHeaderFontColor
+       else
+          FontDialog.Font.Color:= clBlack;
+     end;
+  FontDialog.Font.Name:= 'Segoe UI';
+  FontDialog.Font.Size:= 9;
+  FontDialog.Font.Style:= [];
+
+  if IsNightMode then
+     FormNightMode.NightModeGamesListHeaderFont.Font:= FontDialog.Font
+  else
+     FormPreferences.GameListHeaderFont_Setting.Font:= FontDialog.Font;
+  if UpdateFontELV then
+     begin
+       UpdateHeaderFont(GamesListView);
+       UpdateHeaderFont(MachinesListSidePanel);
+     end;
+end;
+
 procedure TFormMain.PopupCustomizeColumnsHeaderFontClick(Sender: TObject);
 begin
-  FontDialog.Font:= GamesListView.Header.Font;
+  ELV_SetCustomHeaderFont(PopupCustomizeColumnsHeaderFont.Tag = 1);
+  {FontDialog.Font:= GamesListView.Header.Font;
   FontDialog.Tag:= 5;
   if not FontDialog.Execute then
      Exit;
   UpdateHeaderFont(GamesListView);
   UpdateHeaderFont(MachinesListSidePanel);
+  if IsNightMode then
+     FormNightMode.NightModeGamesListHeaderFont.Font:= GamesListview.Header.Font
+  else
+     FormPreferences.GameListHeaderFont_Setting.Font:= GamesListview.Header.Font;}
 end;
 
 procedure TFormMain.PopupDefaultHeaderFontClick(Sender: TObject);
 begin
-  FontDialog.Font.Color:= clBlack;
-  FontDialog.Font.Name:= 'Segoe UI';
-  FontDialog.Font.Size:= 9;
-  FontDialog.Font.Style:= [];
-  UpdateHeaderFont(GamesListView);
-  UpdateHeaderFont(MachinesListSidePanel);
+  ELV_SetDefaultHeaderFont(PopupDefaultHeaderFont.Tag = 1);
+  //FontDialog.Font.Color:= clBlack;
+  //FontDialog.Font.Name:= 'Segoe UI';
+  //FontDialog.Font.Size:= 9;
+  //FontDialog.Font.Style:= [];
+  //UpdateHeaderFont(GamesListView);
+  //UpdateHeaderFont(MachinesListSidePanel);
 end;
 
 procedure TFormMain.PopupCustomizeColumnsClick(Sender: TObject);
@@ -45146,19 +45599,19 @@ begin
        FormColumnsEditor.PanelColumnsList.Color1:= clrLightBlack;
        SetEasyListViewColors(FormColumnsEditor.ColumnsListView, clrLightBlack, clCream);
 
-       SetPanelColors(FormColumnsEditor.PanelTitleTip, clrMedDarkGray, menu_background_color[1]);
-       SetLabelColors(FormColumnsEditor.LabelTitleTip, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetPanelColors(FormColumnsEditor.PanelTitleTip, clrMedDarkGray, menu_background_color[1], False);
+       SetLabelColors(FormColumnsEditor.LabelTitleTip, item_shortcut_color[1], item_shortcut_selected_color[1], False);
 
-       SetLabelColors(FormColumnsEditor.LabelButtonUpDown, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonEditWidth, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonSize, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonResetSize, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonDefaultSize, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelToggleVisibility, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonReloadProfileDefaultSettings, clrLightRed, clMaroon);
-       SetLabelColors(FormColumnsEditor.LabelButtonSetDefaultAll, clrLightRed, clMaroon);
+       SetLabelColors(FormColumnsEditor.LabelButtonUpDown, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonEditWidth, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonSize, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonResetSize, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonDefaultSize, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelToggleVisibility, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonReloadProfileDefaultSettings, clrLightRed, clMaroon, False);
+       SetLabelColors(FormColumnsEditor.LabelButtonSetDefaultAll, clrLightRed, clMaroon, False);
 
-       SetLabelColors(FormColumnsEditor.LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormColumnsEditor.LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        for cLoop:= 0 to FormColumnsEditor.ComponentCount-1 do
        begin
@@ -45631,8 +46084,9 @@ begin
 
   if IsNightMode then
      begin
-       FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected; // clrLightBlue;
-       FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected; // clBlue;
+       SetPanelBorderColors(FormArcadeSoftwareListMachineToRunGame.FrameMachinesList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       //FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected; // clrLightBlue;
+       //FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected; // clBlue;
      end;
 
   FormArcadeSoftwareListMachineToRunGame.Caption:= 'Select a MAME Machine to Run the '+GetSystemTypeTitle(CustomSystemID, False)+' Game With';
@@ -45797,8 +46251,9 @@ begin
 
   if IsNightMode then
      begin
-       FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected; // clrLightBlue;
-       FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected; // clBlue;
+       SetPanelBorderColors(FormArcadeSoftwareListMachineToRunGame.FrameMachinesList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       //FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
+       //FormArcadeSoftwareListMachineToRunGame.FrameMachinesList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
      end;
      
   FormArcadeSoftwareListMachineToRunGame.Tag:= 1;
@@ -46392,7 +46847,7 @@ begin
                 TMachineGameInfo(Item).eDriverStatus,
                 TMachineGameInfo(Item).eClone, ACanvas, True, MachinesListSidePanel);
 
-  ELV_ItemPaintText_General(Sender, Item, ACanvas);
+  ELV_ItemPaintText_General(Sender, Item, ACanvas, TMachineGameInfo(Item).eGameSetStatus);
 end;
 
 procedure TFormMain.MachinesListSidePanelItemSelectionChanged(
@@ -46604,15 +47059,6 @@ begin
   if MenuCustomizeMAMESoftwareList.Tag = 1 then
      FormArcadeSoftwareListCustomize.UseBiggerFontIconSize.Checked:= True;
 
-  if IsNightMode then
-     begin
-       FormArcadeSoftwareListCustomize.FrameSoftwareList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected;
-       FormArcadeSoftwareListCustomize.FrameSoftwareList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected;
-       SetButtonExColors(FormArcadeSoftwareListCustomize.ButtonYes);
-       SetButtonExColors(FormArcadeSoftwareListCustomize.ButtonNo);
-       SetButtonExColors(FormArcadeSoftwareListCustomize.ButtonResetToCurrent);
-     end;
-
   FormArcadeSoftwareListCustomize.ShowModal;
   FreeAndNil(FormArcadeSoftwareListCustomize);
 end;
@@ -46665,9 +47111,6 @@ begin
        GamesListView.BeginUpdate;
        GamesListView.EndUpdate(False);
      end;
-  //else
-  //if IsThumbnailView then
-  //   ResetThumbnails;
 end;
 
 procedure TFormMain.MenuExportGamesListTextFileClick(Sender: TObject);
@@ -46713,46 +47156,6 @@ begin
   FreeAndNil(FormArcadeExportGamesList);
 end;
 
-procedure TFormMain.ResizeFormAddScrollBars(FormSource: TForm);
-var
-  iScreenWidth, iScreenHeight: Integer;
-begin
-  iScreenHeight:= Screen.Height;
-  if iScreenHeight > 1000 then
-     Exit;
-
-  iScreenWidth:= Screen.Width;
-  if FormSource.Width > (iScreenWidth-6) then
-  begin
-    with FormSource.HorzScrollBar do
-    begin
-      // Set the range to twice the ClientWidth of the form
-      // This means that the form’’s logical size is twice as big
-      // as the physical window.
-      // Note that Range must always be larger than the ClientWidth
-      Range:= FormSource.ClientWidth;//+GetSystemMetrics(SM_CXHSCROLL);
-      Position:= 0;
-      Increment:= 10; // clicking the scroll arrows moves the form 10 pixels
-      Tracking:= True;
-      Visible:= True;
-    end;
-    FormSource.Width:= iScreenWidth-6;
-  end;
-
-  if FormSource.Height > (iScreenHeight-60) then
-  begin
-     with FormSource.VertScrollBar do
-     begin
-       Range:= FormSource.ClientHeight+GetSystemMetrics(SM_CXVSCROLL);
-       Position:= 0;
-       Increment:= 10; // clicking the scroll arrows moves the form 10 pixels
-       Tracking:= True;
-       Visible:= True;
-     end;
-     FormSource.Height:= iScreenHeight-60;
-  end;
-end;
-
 procedure TFormMain.CreateSupermodelXMLdatFromSourceFile1Click(
   Sender: TObject);
 begin
@@ -46786,8 +47189,7 @@ begin
      begin
        PanelHolder:= ImageHintPanel;
        UpdateImageHintPanelText(1);
-       //if Images.Layers.Count > 0 then
-       //   Images.Layers[0].Visible:= True;
+
      end
   else
   if TImage32(Sender) = ImageScr[2] then
@@ -46810,7 +47212,8 @@ begin
 
   if not PanelHolder.Visible then
      begin
-       PanelHolder.Top:= TImage32(Sender).Height div 2;
+       UpdateImageHintBoxPosition(PanelHolder, TImage32(Sender), -1);
+       //PanelHolder.Top:= TImage32(Sender).Height div 2;
        PanelHolder.Visible:= True;
      end;
 end;
@@ -46820,8 +47223,6 @@ begin
   if TImage32(Sender) = Images then
      begin
        ImageHintPanel.Visible:= False;
-       //if Images.Layers.Count > 0 then
-       //   Images.Layers[0].Visible:= False;
      end
   else
   if TImage32(Sender) = ImageScr[2] then
@@ -46914,21 +47315,23 @@ begin
 
        SetPanelColors(FormConsCompGamesEditor.PanelSystemTitle, menu_background_color[1], clrDarkGray);
        SetPanelColors(FormConsCompGamesEditor.PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
-       //SetSystemTitleBarNightColors(FormConsCompGamesEditor.PanelSystemsTitle, FormConsCompSystemsEditor.PanelSystemsTitleBottom);
-       SetLabelColors(FormConsCompGamesEditor.LabelSystemTitle, clYellow, clMaroon);
+
+       SetSystemTitleLabelColors(FormConsCompGamesEditor.LabelSystemTitle); // SetLabelColors(FormConsCompGamesEditor.LabelSystemTitle, clYellow, clMaroon);
 
        FormConsCompGamesEditor.PanelCustomGamesSelectedSystem.Color1:= menu_background_color[1];
        FormConsCompGamesEditor.PanelEditSelected.Color1:= menu_background_color[1];
 
        SetEasyListViewColors(FormConsCompGamesEditor.CustomGamesList, menu_background_color[1], clWhite);
+       FormConsCompGamesEditor.CustomGamesList.ShowThemedBorder:= False;
 
        FormConsCompGamesEditor.LabelCustomGamesListTotal.Color:= clrLightBlack;
-       SetLabelColors(FormConsCompGamesEditor.LabelCustomGamesListTotal, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompGamesEditor.LabelCustomGamesListTotal, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       FormConsCompGamesEditor.LabelCustomGamesListTotal.Frames:= [];
 
-       SetLabelColors(FormConsCompGamesEditor.LabelEditSelected, clCream, item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_Manufacturer, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_Year, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_NumberPlayers, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompGamesEditor.LabelEditSelected, clCream, item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_Manufacturer, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_Year, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormConsCompGamesEditor.LabelEditSelected_NumberPlayers, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormConsCompGamesEditor.EditSelected_Manufacturer);
        SetEditNightColors(FormConsCompGamesEditor.EditSelected_Year);
@@ -46949,18 +47352,21 @@ begin
                       FormNightMode.NightModeToolBarBkTopColor.Selected,
                       FormNightMode.NightModeToolBarBkBottomColor.Selected, not FormNightMode.NightModeToolBarGradientBar.Checked);
 
-       SetLabelColors(FormConsCompGamesEditor.LabelToolBarFilterTitle, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected);
+       SetLabelColors(FormConsCompGamesEditor.LabelToolBarFilterTitle, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected,
+                                                                       FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected,
+                                                                       FormNightMode.NightModeSearchGamesPanelFieldShadowEnabled.Checked);
+
        FormConsCompGamesEditor.FilterGameTitle.Font.Color:= FormNightMode.NightModeSearchGamesPanelEditBoxFontColor.Selected;
        FormConsCompGamesEditor.FilterGameTitle.Color:= FormNightMode.NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
 
        FormConsCompGamesEditor.FilterGameTitle.ColorFrame:= FormNightMode.NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
        FormConsCompGamesEditor.FilterGameTitle.ColorFrameFocused:= FormNightMode.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
 
-       FormConsCompGamesEditor.FilterGameTitle.UseCustomBorder:= FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
+       FormConsCompGamesEditor.FilterGameTitle.UseCustomBorder:= True;
 
        SetCheckBoxColors(FormConsCompGamesEditor.SystemsHideScrollBarArea, clCream, item_caption_active_shadow_color[1]);
 
-       SetLabelColors(FormConsCompGamesEditor.GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompGamesEditor.GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        SetButtonExColors(FormConsCompGamesEditor.GamesListFontSizeSmaller);
        SetButtonExColors(FormConsCompGamesEditor.GamesListFontSizeSmaller_x4);
        SetButtonExColors(FormConsCompGamesEditor.GamesListFontSizeLarger);
@@ -46970,12 +47376,18 @@ begin
        SetButtonExColors(FormConsCompGamesEditor.ButtonAbortChanges);
 
        SetButtonExColors(FormConsCompGamesEditor.ButtonOptions);
-       
-       SetLabelColors(FormConsCompGamesEditor.LabelHotkeyText, clCream, item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompGamesEditor.LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1]);
+
+       SetLabelColors(FormConsCompGamesEditor.LabelHotkeyText, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompGamesEditor.LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1], False);
 
        SetPopupMenuNightColors(FormConsCompGamesEditor.PopupGamesList);
        SetPopupMenuNightColors(FormConsCompGamesEditor.PopupMenuOptions);
+     end
+  else
+     begin
+       SetToolBarPanelColors(FormConsCompGamesEditor.PanelToolBarGamesEditor, PanelSearchGames_ToolBar);
+       SetToolBarPanelColors(FormConsCompGamesEditor.PanelToolBarGamesEditor, FormConsCompGamesEditor.PanelSearchGames);
+       FormConsCompGamesEditor.LabelToolBarFilterTitle.Font:= LabelSearchGamesFilter_ToolBar.Font;
      end;
 
   FormConsCompGamesEditor.ShowModal;
@@ -47278,11 +47690,8 @@ begin
 
        SetEasyListViewColors(FormConsCompSystemSelector.Systems, menu_background_color[1], item_caption_active_color[1]);
 
-       SetLabelColors(FormConsCompSystemSelector.LabelCreateNewList, clrMedSilver, clrDarkGray);// item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       //SetLabelColors(FormArcadeEmulatorsSetup.LabelSystemTitle, clYellow, clMaroon);
-
-       SetCheckBoxColors(FormConsCompSystemSelector.CreateNewList, clrLightRed, clrDarkRed);// item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       //SetCheckBoxColors(FormArcadeEmulatorsSetup.UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompSystemSelector.LabelCreateNewList, clrMedSilver, clrDarkGray, False);
+       SetCheckBoxColors(FormConsCompSystemSelector.CreateNewList, clrLightRed, clrDarkRed, False);
 
        SetButtonExColors(FormConsCompSystemSelector.ButtonApply);
        SetButtonExColors(FormConsCompSystemSelector.ButtonCancel);
@@ -47749,69 +48158,70 @@ begin
        FormConsCompEmulatorsSetup.PanelEmulators.Color1:= menu_background_color[1];
 
        FormConsCompEmulatorsSetup.PanelSystemTitle.Color1:= clrLightBlack;
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelSystemTitle, clYellow, clMaroon);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
+
+       SetSystemTitleLabelColors(FormConsCompEmulatorsSetup.LabelSystemTitle); // SetLabelColors(FormConsCompEmulatorsSetup.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTypeLabelColors(FormConsCompEmulatorsSetup.LabelSystemType); // SetLabelColors(FormConsCompEmulatorsSetup.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
 
        // virtual drive
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsFile, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsMount, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsUnmount, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsFile, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsMount, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelDaemonToolsUnmount, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.DaemonToolsFile);
        SetEditNightColors(FormConsCompEmulatorsSetup.DaemonToolsMount);
        SetEditNightColors(FormConsCompEmulatorsSetup.DaemonToolsUnmount);
 
        // emulator file
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmulatorFile, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuTitle, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmulatorFile, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuTitle, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmulatorFile);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuDescription);
 
        // cartridge parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCartridgeParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuCartridgeParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuCartridgeParameter2);
 
        // disc image parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuDiscImageParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuDiscImageParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuDiscImageParameter2);
 
        // boot disc image parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuBootDiscParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuBootDiscParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuBootDiscParameter2);
 
        // floppy disk parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuFloppyDiskParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuFloppyDiskParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuFloppyDiskParameter2);
 
        // cassette tape parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuCassetteTapeParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuCassetteTapeParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuCassetteTapeParameter2);
 
        // hard disk drive parameters
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter1, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter2, clrLightRed, clMaroon);//item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter1, clrLightRed, clMaroon, False);
+       SetLabelColors(FormConsCompEmulatorsSetup.LabelEmuHardDiskDriveParameter2, clrLightRed, clMaroon, False);
 
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuHardDiskDriveParameter);
        SetEditNightColors(FormConsCompEmulatorsSetup.EmuHardDiskDriveParameter2);
@@ -47819,11 +48229,7 @@ begin
        for Loop:= 0 to FormConsCompEmulatorsSetup.ComponentCount-1 do
        begin
          if FormConsCompEmulatorsSetup.Components[Loop] is TShadowLabel then
-            begin
-              TShadowLabel(FormConsCompEmulatorsSetup.Components[Loop]).DisabledFontColor:= clGray;
-              TShadowLabel(FormConsCompEmulatorsSetup.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-              TShadowLabel(FormConsCompEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True;
-            end
+            TShadowLabel(FormConsCompEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True
          else
          if FormConsCompEmulatorsSetup.Components[Loop] is TBitBtnEx then
             SetButtonExColors(TBitBtnEx(FormConsCompEmulatorsSetup.Components[Loop]))
@@ -47859,16 +48265,12 @@ begin
      begin
        FormConsCompSystemsEditor.Color:= menu_background_color[1];
 
-       //FormVideoPreviewSettings.PanelSystems.Color1:= clrBlackBk;
        FormConsCompSystemsEditor.PanelSystems.Color1:= menu_background_color[1];
        SetEasyListViewColors(FormConsCompSystemsEditor.Systems, clrBlackBk, clWhite);
 
        SetPanelColors(FormConsCompSystemsEditor.PanelSystemTitle, menu_background_color[1], clrDarkGray);
        SetPanelColors(FormConsCompSystemsEditor.PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
-       //SetSystemTitleBarNightColors(FormConsCompSystemsEditor.PanelSystemsTitle, FormConsCompSystemsEditor.PanelSystemsTitleBottom);
-       SetLabelColors(FormConsCompSystemsEditor.LabelSystemTitle, clYellow, clMaroon);
-       //SetLabelColors(FormVideoPreviewSettings.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-       //SetLabelColors(FormVideoPreviewSettings.LabelSystemNotAvailable, clSilver, clNavy);
+       SetSystemTitleLabelColors(FormConsCompSystemsEditor.LabelSystemTitle); // SetLabelColors(FormConsCompSystemsEditor.LabelSystemTitle, clYellow, clMaroon);
 
        FormConsCompSystemsEditor.PanelSoftwareLists.Color1:= menu_background_color[1];
        FormConsCompSystemsEditor.PanelAssignedSoftwareList.Color1:= menu_background_color[1];
@@ -47878,12 +48280,12 @@ begin
 
        FormConsCompSystemsEditor.LabelSoftListAssignedToSystem.Color:= clrLightBlack;
        FormConsCompSystemsEditor.LabelSoftListFilesNotAssigned.Color:= clrLightBlack;
-       SetLabelColors(FormConsCompSystemsEditor.LabelSoftListAssignedToSystem, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompSystemsEditor.LabelSoftListFilesNotAssigned, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompSystemsEditor.LabelSoftListAssignedToSystem, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompSystemsEditor.LabelSoftListFilesNotAssigned, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormConsCompSystemsEditor.SystemsHideScrollBarArea, clCream{item_caption_active_color[1]}, item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormConsCompSystemsEditor.SystemsHideScrollBarArea, clCream{item_caption_active_color[1]}, item_caption_active_shadow_color[1], False);
 
-       SetLabelColors(FormConsCompSystemsEditor.GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompSystemsEditor.GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
        SetButtonExColors(FormConsCompSystemsEditor.GamesListFontSizeSmaller);
        SetButtonExColors(FormConsCompSystemsEditor.GamesListFontSizeSmaller_x4);
        SetButtonExColors(FormConsCompSystemsEditor.GamesListFontSizeLarger);
@@ -47901,6 +48303,7 @@ begin
        SetGripIcon(FormConsCompSystemsEditor.Splitter, False);
        SetGripIcon(FormConsCompSystemsEditor.SplitterMainSoftware, False);
 
+       SetPopupMenuNightColors(FormConsCompSystemsEditor.PopupMenuOptions);
        SetPopupMenuNightColors(FormConsCompSystemsEditor.PopupSoftList);
      end;
 
@@ -47934,16 +48337,16 @@ begin
        FormConsCompGamesFolders.PanelFolders.Color1:= menu_background_color[1];
 
        FormConsCompGamesFolders.PanelSystemTitle.Color1:= clrLightBlack;
-       SetLabelColors(FormConsCompGamesFolders.LabelSystemTitle, clYellow, clMaroon);
-       SetLabelColors(FormConsCompGamesFolders.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetSystemTitleLabelColors(FormConsCompGamesFolders.LabelSystemTitle); // SetLabelColors(FormConsCompGamesFolders.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTypeLabelColors(FormConsCompGamesFolders.LabelSystemType); // SetLabelColors(FormConsCompGamesFolders.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
 
-       SetLabelColors(FormConsCompGamesFolders.LabelRecursiveFolderInfo, clrLightRed, clMaroon);
+       SetLabelColors(FormConsCompGamesFolders.LabelRecursiveFolderInfo, clrLightRed, clMaroon, False);
 
-       SetLabelColors(FormConsCompGamesFolders.LabelFolderROM, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompGamesFolders.LabelFolderDiscImage, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompGamesFolders.LabelFolderFloppyDisk, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompGamesFolders.LabelFolderCassetteTape, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormConsCompGamesFolders.LabelFolderHardDiskDrive, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompGamesFolders.LabelFolderROM, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompGamesFolders.LabelFolderDiscImage, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompGamesFolders.LabelFolderFloppyDisk, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompGamesFolders.LabelFolderCassetteTape, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormConsCompGamesFolders.LabelFolderHardDiskDrive, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEasyListViewColors(FormConsCompGamesFolders.FolderROM, clrDarkGray, clCream, -1, clSilver);
        SetEasyListViewColors(FormConsCompGamesFolders.FolderDiscImage, clrDarkGray, clCream, -1, clSilver);
@@ -47954,11 +48357,7 @@ begin
        for Loop:= 0 to FormConsCompGamesFolders.ComponentCount-1 do
        begin
          if FormConsCompGamesFolders.Components[Loop] is TShadowLabel then
-            begin
-              TShadowLabel(FormConsCompGamesFolders.Components[Loop]).DisabledFontColor:= clGray;
-              TShadowLabel(FormConsCompGamesFolders.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-              TShadowLabel(FormConsCompGamesFolders.Components[Loop]).UseCustomDisabledFontColor:= True;
-            end
+            TShadowLabel(FormConsCompGamesFolders.Components[Loop]).UseCustomDisabledFontColor:= True
          else
          if FormConsCompGamesFolders.Components[Loop] is TBitBtnEx then
             SetButtonExColors(TBitBtnEx(FormConsCompGamesFolders.Components[Loop]));
@@ -48110,6 +48509,12 @@ var
   paramIniFile: TMemIniFile;
   EmulatorString, EmuParameters: String;
 begin
+  if not CheckSelected(GamesListView) then
+     begin
+       PostMessage(Handle, WM_LBUTTONDOWN, MK_LBUTTON, 0);
+       PostMessage(Handle, WM_LBUTTONUP, MK_LBUTTON, 0);
+       Exit;
+     end;
   if MemGameInfo.eCustomSystemID = -1 then
      begin
        // if it's not a console/computer game or if the custom system ID is not set, do not show the popup menu
@@ -48231,21 +48636,17 @@ begin
 
        FormLastPlayedGamesMega.PanelGames.Color1:= menu_background_color[1];
 
-       SetLabelColors(FormLastPlayedGamesMega.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTitleLabelColors(FormLastPlayedGamesMega.LabelSystemTitle); // SetLabelColors(FormLastPlayedGamesMega.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTypeLabelColors(FormLastPlayedGamesMega.LabelSystemType); // SetLabelColors(FormLastPlayedGamesMega.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
 
-       SetLabelColors(FormLastPlayedGamesMega.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-
-       SetLabelColors(FormLastPlayedGamesMega.LabelTitleCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelGameNameCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelSoftwareNameCaption, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelLastPlayed, clWhite, clNavy);
-       SetLabelColors(FormLastPlayedGamesMega.LabelTotalPlaytime, clWhite, clNavy);
+       SetLabelColors(FormLastPlayedGamesMega.LabelTitleCaption, clWhite, clNavy, False);
+       SetLabelColors(FormLastPlayedGamesMega.LabelGameNameCaption, clWhite, clNavy, False);
+       SetLabelColors(FormLastPlayedGamesMega.LabelSoftwareNameCaption, clWhite, clNavy, False);
+       SetLabelColors(FormLastPlayedGamesMega.LabelLastPlayed, clWhite, clNavy, False);
+       SetLabelColors(FormLastPlayedGamesMega.LabelTotalPlaytime, clWhite, clNavy, False);
 
        SetSystemTitleBarNightColors(FormLastPlayedGamesMega.PanelSystemsTitle, FormLastPlayedGamesMega.PanelPlayedListHeader);
-
-       //SetPanelColors(FormLastPlayedGamesMega.PanelSystemsTitle, clrBlackBk, clrDarkBlue);
-       //SetPanelColors(FormLastPlayedGamesMega.PanelPlayedListHeader, clrDarkBlue, menu_background_color[1]);
-
+       
        SetEasyListViewColors(FormLastPlayedGamesMega.LastPlayedList, menu_background_color[1], item_caption_active_color[1]);
 
        SetButtonExColors(FormLastPlayedGamesMega.ButtonSelectGame);
@@ -48277,13 +48678,14 @@ begin
        FormConsCompSelectEmulator.PanelBottom.Frames:= [];
        SetPanelColors(FormConsCompSelectEmulator.PanelBottom, menu_background_color[1], clrMedDarkGray);
        SetEasyListViewColors(FormConsCompSelectEmulator.EmulatorsList, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
-       SetLabelColors(FormConsCompSelectEmulator.LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormConsCompSelectEmulator.UseSmallIcons, clWhite, item_caption_active_shadow_color[1]);
+       SetLabelColors(FormConsCompSelectEmulator.LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormConsCompSelectEmulator.UseSmallIcons, clWhite, item_caption_active_shadow_color[1], False);
 
        SetButtonExColors(FormConsCompSelectEmulator.ButtonOk);
        SetButtonExColors(FormConsCompSelectEmulator.ButtonCancel);
      end;
-      
+
+  FormConsCompSelectEmulator.LabelTips.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
   FormConsCompSelectEmulator.UseSmallIcons.Checked:= Boolean(ButtonCustomSelectDefaultEmulators.Tag);
   LoadNonArcadeSystemIcons(FormConsCompSelectEmulator.IL_Systems, False);
   FormConsCompSelectEmulator.ShowModal;
@@ -48337,6 +48739,11 @@ begin
   DisableItalicFontSystemTitleBar(FormImageCategorySettings.LabelSystemTitle, FormImageCategorySettings.LabelSystemType, FormImageCategorySettings.LabelSystemNotAvailable);
   DisableItalicFontSystemTitleBar(FormImageCategorySettings.LabelCategoryTitle, FormImageCategorySettings.LabelShowHideCategories);
 
+  AssignRGBQuickEditPopupToColorBoxEx(FormImageCategorySettings.ImageCategoryBackgroundColor);
+  AssignRGBQuickEditPopupToColorBoxEx(FormImageCategorySettings.ImageSingleBackgroundColor);
+
+  SetSelectedColorBox(FormImageCategorySettings.ImageSingleBackgroundColor, MenuImageUseSingleBackgroundColor.Tag);
+
   if IsNightMode then
      begin
        FormImageCategorySettings.Color:= menu_background_color[1];
@@ -48344,40 +48751,56 @@ begin
 
        SetEasyListViewColors(FormImageCategorySettings.Systems, clrBlackBk, clWhite);
        FormImageCategorySettings.PanelSystemTitle.Color1:= clrLightBlack;
-       SetLabelColors(FormImageCategorySettings.LabelSystemTitle, clYellow, clMaroon);
-       SetLabelColors(FormImageCategorySettings.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-       SetLabelColors(FormImageCategorySettings.LabelSystemNotAvailable, clSilver, clNavy);
+       SetSystemTitleLabelColors(FormImageCategorySettings.LabelSystemTitle); // SetLabelColors(FormImageCategorySettings.LabelSystemTitle, clYellow, clMaroon);
+       SetSystemTypeLabelColors(FormImageCategorySettings.LabelSystemType); // SetLabelColors(FormImageCategorySettings.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetLabelColors(FormImageCategorySettings.LabelSystemNotAvailable, clSilver, clNavy, False);
 
        FormImageCategorySettings.PanelImageCategories.Color1:= menu_background_color[1];
        SetEasyListViewColors(FormImageCategorySettings.ImageCategory_Selector, menu_background_color[1], item_caption_active_color[1]);
 
-       SetLabelColors(FormImageCategorySettings.LabelCategoryTitle, clYellow, clMaroon);
-       //SetLabelColors(FormVideoPreviewSettings.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-
-       SetLabelColors(FormImageCategorySettings.LabelShowHideCategories, item_shortcut_color[1], item_shortcut_selected_color[1]);
-       FormImageCategorySettings.LabelShowHideCategories.Color:= clrDarkGray;//clrMedDarkGray;
-       FormImageCategorySettings.LabelShowHideCategories.ColorFrame:= clrMedDarkGray; //clGray;
+       SetSystemTitleLabelColors(FormImageCategorySettings.LabelCategoryTitle);
+       SetLabelColors(FormImageCategorySettings.LabelShowHideCategories, item_shortcut_color[1], item_shortcut_selected_color[1], False);
+       FormImageCategorySettings.LabelShowHideCategories.Color:= clrDarkGray;
+       FormImageCategorySettings.LabelShowHideCategories.ColorFrame:= clrMedDarkGray;
 
        SetSystemTitleBarNightColors(FormImageCategorySettings.PanelCategoryTitle, FormImageCategorySettings.PanelCategoryTitleBottom, False);
        FormImageCategorySettings.PanelCategoriesBottom.Color1:= menu_background_color[1];
 
-       SetLabelColors(FormImageCategorySettings.LabelImageCategoryFolder, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormImageCategorySettings.LabelImageBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormImageCategorySettings.LabelImageCategoryFolder, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormImageCategorySettings.LabelImageBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+
+       SetCheckBoxColors(FormImageCategorySettings.ImageSingleBackgroundColorEnabled, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormImageCategorySettings.ImageCategoryFolder);
-
        SetColorBoxColors(FormImageCategorySettings.ImageCategoryBackgroundColor, True);
+       SetColorBoxColors(FormImageCategorySettings.ImageSingleBackgroundColor, True);
+
        SetButtonExColors(FormImageCategorySettings.ButtonOk);
        SetButtonExColors(FormImageCategorySettings.ButtonCancel);
        SetButtonExColors(FormImageCategorySettings.ButtonImageCategoryFolder);
        SetButtonExColors(FormImageCategorySettings.ButtonClearImageCategoryFolder);
        SetButtonExColors(FormImageCategorySettings.ButtonResetImageCategoryFolder);
+       SetButtonExColors(FormImageCategorySettings.ImageSingleBackgroundColorButtonReset);
        SetButtonExColors(FormImageCategorySettings.ButtonDefaultImageCategoryFolder);
        SetButtonExColors(FormImageCategorySettings.ButtonImageCategoryBackgroundColorReset);
        SetButtonExColors(FormImageCategorySettings.ButtonZippedImages);
      end;
-     
+
+  FormImageCategorySettings.ImageSingleBackgroundColorEnabled.Checked:= MenuImageUseSingleBackgroundColor.Checked;
   RefreshSettings:= FormImageCategorySettings.ShowModal = mrOk;
+  if RefreshSettings then
+     begin
+       if MenuImageUseSingleBackgroundColor.Tag <> FormImageCategorySettings.ImageSingleBackgroundColor.Selected then
+         begin
+           MenuImageUseSingleBackgroundColor.Tag:= FormImageCategorySettings.ImageSingleBackgroundColor.Selected; // the selected color is stored in the .Tag property
+           ReplaceColorIcon(False, True); // update image single background color icon
+         end;
+
+       MenuImageUseSingleBackgroundColor.Checked:= FormImageCategorySettings.ImageSingleBackgroundColorEnabled.Checked;
+       PopupImageUseSingleBackgroundColor.Checked:= MenuImageUseSingleBackgroundColor.Checked;
+       WriteImageSingleBackground;
+     end;
+
   FreeAndNil(FormImageCategorySettings);
   if not RefreshSettings then
      Exit;
@@ -48415,37 +48838,34 @@ begin
      begin
        FormVideoPreviewSettings.Color:= menu_background_color[1];
 
-       //FormVideoPreviewSettings.PanelSystems.Color1:= clrBlackBk;
        SetEasyListViewColors(FormVideoPreviewSettings.SystemsVideoPreview, clrBlackBk, clWhite);
 
        FormVideoPreviewSettings.PanelSettings.Color1:= menu_background_color[1];
 
-       SetLabelColors(FormVideoPreviewSettings.LabelSystemTitle, clYellow, clMaroon);
-       SetLabelColors(FormVideoPreviewSettings.LabelSystemType, item_shortcut_color[1], item_shortcut_selected_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelSystemNotAvailable, clSilver, clNavy);
+       SetSystemTitleLabelColors(FormVideoPreviewSettings.LabelSystemTitle);
+       SetSystemTypeLabelColors(FormVideoPreviewSettings.LabelSystemType);
+       SetLabelColors(FormVideoPreviewSettings.LabelSystemNotAvailable, clSilver, clNavy, False);
 
-       SetSystemTitleBarNightColors(FormVideoPreviewSettings.PanelSystemsTitle, FormVideoPreviewSettings.PanelSystemsTitleBottom);
-       //SetPanelColors(FormVideoPreviewSettings.PanelSystemsTitle, clrBlackBk, clrDarkBlue);
-       //SetPanelColors(FormVideoPreviewSettings.PanelSystemsTitleBottom, clrDarkBlue, menu_background_color[1]);
+       SetSystemTitleBarNightColors(FormVideoPreviewSettings.PanelSystemsTitle, FormVideoPreviewSettings.PanelSystemsTitleBottom); // remove the ", False" parameter!
 
-       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewEnabled, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewParentGameVideo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewEnabled, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewParentGameVideo, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
-       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewAutoPlay, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewAutoPlay, clrLightRed, clrBlackBk);
+       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewAutoPlay, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewAutoPlay, clrLightRed, clrBlackBk, False);
 
-       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewPlayDummyVideo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FormVideoPreviewSettings.VideoPreviewPlayDummyVideo, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetEditNightColors(FormVideoPreviewSettings.VideoPreviewFolder);
        SetEditNightColors(FormVideoPreviewSettings.VideoPreviewMediaPlayerExecutable);
        SetEditNightColors(FormVideoPreviewSettings.VideoPreviewMediaPlayerParameters);
        SetEditNightColors(FormVideoPreviewSettings.VideoPreviewDummyVideoParameters);
 
-       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewFolder, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelSnapDirAutoSearch, item_shortcut_color[1], item_shortcut_selected_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewMediaPlayerExecutable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewMediaPlayerParameters, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewDummyVideoParameters, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewFolder, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormVideoPreviewSettings.LabelSnapDirAutoSearch, item_shortcut_color[1], item_shortcut_selected_color[1], False);
+       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewMediaPlayerExecutable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewMediaPlayerParameters, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormVideoPreviewSettings.LabelVideoPreviewDummyVideoParameters, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetButtonExColors(FormVideoPreviewSettings.ButtonOk);
        SetButtonExColors(FormVideoPreviewSettings.ButtonCancel);
@@ -48629,6 +49049,7 @@ begin
   ApplyFilters:= False;
   ApplyMachinesListPanelFilter:= False;
 
+  FormSelectFilterSystemMega.LabelCategoryIniFolderForMESS.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
   if IsNightMode then
      begin
        FormSelectFilterSystemMega.Color:= menu_background_color[1];
@@ -48637,9 +49058,9 @@ begin
 
        SetEasyListViewColors(FormSelectFilterSystemMega.MachinesTypeList, menu_background_color[1], item_caption_active_color[1]);
        SetEasyListViewColors(FormSelectFilterSystemMega.SystemsListView, menu_background_color[1], item_caption_active_color[1]);
-       SetLabelColors(FormSelectFilterSystemMega.LabelSelectMode, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(FormSelectFilterSystemMega.LabelCategoryIniForMESS, clrLightBlue, clNavy);
-       SetLabelColors(FormSelectFilterSystemMega.LabelCategoryIniFolderForMESS, clYellow, clNavy);
+       SetLabelColors(FormSelectFilterSystemMega.LabelSelectMode, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormSelectFilterSystemMega.LabelCategoryIniForMESS, clrLightBlue, clNavy, False);
+       SetLabelColors(FormSelectFilterSystemMega.LabelCategoryIniFolderForMESS, clSilver, -1, False); // clYellow, clNavy);
 
        SetButtonExColors(FormSelectFilterSystemMega.ButtonOk);
        SetButtonExColors(FormSelectFilterSystemMega.ButtonCancel);
@@ -48690,6 +49111,8 @@ begin
 
   FormSelectFilterSystemSimple.ResetToMachineTypeSystemsMegaFilter.Visible:= IsSystemQuickFilterEnabled;
 
+  FormSelectFilterSystemSimple.LabelMultiSelect.Tag:= Ord(FormPreferences.UseItalicFontStyleSystemTitleBar.Checked);
+  
   if IsSystemQuickFilterEnabled then
      FormSelectFilterSystemSimple.Caption:= FormSelectFilterSystemSimple.Caption+' [enabled]'
   else
@@ -48700,7 +49123,7 @@ begin
        FormSelectFilterSystemSimple.Color:= menu_background_color[1];
        SetPanelColors(FormSelectFilterSystemSimple.PanelBottom, menu_background_color[1], clrMedDarkGray);
        SetEasyListViewColors(FormSelectFilterSystemSimple.ConsCompSystemsListView, menu_background_color[1], item_caption_active_color[1]);
-       SetLabelColors(FormSelectFilterSystemSimple.LabelMultiSelect, clrLightBlue, clNavy);
+       SetLabelColors(FormSelectFilterSystemSimple.LabelMultiSelect, clrLightBlue, clNavy, False);
 
        SetButtonExColors(FormSelectFilterSystemSimple.ButtonOk);
        SetButtonExColors(FormSelectFilterSystemSimple.ButtonCancel);
@@ -48975,10 +49398,70 @@ begin
      end;
 end;
 
-procedure TFormMain.SetColorsSearchGamesPanel;
+procedure TFormMain.SetCloseButtonColorsFloatingPanel(ButtonSource: TShadowLabel; ForceNightModeColors: Boolean = False);
 begin
-  PanelSearchGamesCaptionBar.Transparent:= IsNightMode;
-  FilterCPU_LabelCaptionBar.Transparent:= IsNightMode;
+  if IsNightMode or ForceNightModeColors then
+     begin
+       TShadowLabel(ButtonSource).Color:= clrDarkRed;
+       TShadowLabel(ButtonSource).ColorFrame:= clrDarkOrange;
+     end
+  else
+     begin
+       TShadowLabel(ButtonSource).Color:= clMaroon;
+       TShadowLabel(ButtonSource).ColorFrame:= clrOrange;
+     end;
+end;
+
+procedure TFormMain.SetCloseButtonColorsFloatingPanel_Enter(ButtonSource: TShadowLabel; ForceNightModeColors: Boolean = False);
+begin
+  if IsNightMode or ForceNightModeColors then
+     begin
+       TShadowLabel(ButtonSource).Color:= clMaroon;
+       TShadowLabel(ButtonSource).ColorFrame:= clrDarkOrange;
+     end
+  else
+     begin
+       TShadowLabel(ButtonSource).Color:= clRed;
+       TShadowLabel(ButtonSource).ColorFrame:= clrOrange;
+     end;
+end;
+
+procedure TFormMain.SetSystemTitleLabelColors(LabelSource: TShadowLabel);
+begin
+  SetLabelColors(LabelSource, clrOrangeBarTop, -1, False);//clYellow, clMaroon);
+end;
+
+procedure TFormMain.SetSystemTypeLabelColors(LabelSource: TShadowLabel);
+begin
+  SetLabelColors(LabelSource, item_shortcut_color[1], -1, False);// item_shortcut_selected_color[1]);
+end;
+
+procedure TFormMain.SetColorsSearchGamesPanel;
+var
+  iValue: Boolean;
+  iColor: TColor;
+begin
+  // search bar floating panel -> caption bar background
+  if IsNightMode then
+     begin
+       iValue:= not FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundEnabled.Checked;
+       iColor:= FormNightMode.NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColor.Selected;
+     end
+  else
+     begin
+       iValue:= False;
+       iColor:= clMedGray;
+     end;
+
+  PanelSearchGamesCaptionBar.Color:= iColor;
+  PanelSearchGamesCaptionBar.Transparent:= iValue;
+
+  FilterCPU_LabelCaptionBar.Color:= iColor;
+  FilterCPU_LabelCaptionBar.Transparent:= iValue;
+
+  FormNightMode.NightModePanelSearchGamesCaptionBar.Color:= iColor;
+  FormNightMode.NightModePanelSearchGamesCaptionBar.Transparent:= iValue;
+
   if IsStartup then
      Exit;
 
@@ -48986,20 +49469,29 @@ begin
   PanelFilterCPU.Canvas.Lock;
 
   FilterCPUList.CustomColorsEnabled:= IsNightMode;
+  SetEditExBorderStyle;
   if IsNightMode then
      begin
        // floating "Search Games" panel
+       SetPanelExStyle(PanelSearchGames, FormNightMode.NightModeSearchGamesPanelGradientBar.Checked); // this must be set first
        SetPanelNightColors(PanelSearchGames, FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
 
-       SetLabelColors(LabelSearchGamesFilter, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected); // clWhite, clNavy);
-       SetLabelColors(LabelSearchGamesBy, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected); //clYellow, clMaroon);
+       SetLabelColors(LabelSearchGamesFilter, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected,
+                                              FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected,
+                                              FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked);
 
-       SetLabelColors(PanelSearchGamesCaptionBar, FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.Selected, FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.Selected); //clWhite, clMaroon);
-       //PanelSearchGamesCaptionBar.Transparent:= True; // not used anymore
-       SetPanelExStyle(PanelSearchGames, FormNightMode.NightModeSearchGamesPanelGradientBar.Checked);
+       SetLabelColors(LabelSearchGamesBy, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected,
+                                          FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected,
+                                          FormNightMode.NightModeSearchGamesPanelFieldShadowEnabled.Checked);
+
+       SetLabelColors(PanelSearchGamesCaptionBar, FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.Selected,
+                                                  FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.Selected,
+                                                  FormNightMode.NightModeSearchGamesPanelCaptionBarShadowEnabled.Checked);
+
+
 
        FilterGameTitle_ToolBar.Font.Color:= FormNightMode.NightModeSearchGamesPanelEditBoxFontColor.Selected;
        FilterGameTitle.Font.Color:= FormNightMode.NightModeSearchGamesPanelEditBoxFontColor.Selected;
@@ -49008,12 +49500,9 @@ begin
 
        FormNightMode.NightModeSearchGamesPanelEditBoxCustomFrameColor.OnSelect(Self);
        FormNightMode.NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.OnSelect(Self);
-       FilterGameTitle_ToolBar.UseCustomBorder:= FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
-       FilterGameTitle.UseCustomBorder:= FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
-
-       FilterCPU.UseCustomBorder:= FormNightMode.NightModeSearchGamesPanelEditBoxUseCustomFrame.Checked;
 
        // floating "Main CPU Filter" panel
+       SetPanelExStyle(PanelFilterCPU, FormNightMode.NightModeSearchGamesPanelGradientBar.Checked);
        SetPanelNightColors(PanelFilterCPU, FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
                            FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
                            FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
@@ -49024,54 +49513,71 @@ begin
 
        SetComboBox2ExColors(FilterCPUList, True, FilterCPU);
 
-       SetLabelColors(LabelSelectCPU, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected);
-       SetLabelColors(LabelCustomCPUFilter, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected);
+       SetLabelColors(LabelSelectCPU, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected,
+                                      FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected,
+                                      FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked);
 
-       SetLabelColors(FilterCPU_LabelCaptionBar, FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.Selected, FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.Selected);
-       //FilterCPU_LabelCaptionBar.Transparent:= True; // not used anymore
+       SetLabelColors(LabelCustomCPUFilter, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected,
+                                            FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected,
+                                            FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked);
 
-       SetPanelExStyle(PanelFilterCPU, FormNightMode.NightModeSearchGamesPanelGradientBar.Checked);
+       SetLabelColors(FilterCPU_LabelCaptionBar, FormNightMode.NightModeSearchGamesPanelCaptionBarFontColor.Selected,
+                                                 FormNightMode.NightModeSearchGamesPanelCaptionBarShadowColor.Selected,
+                                                 FormNightMode.NightModeSearchGamesPanelCaptionBarShadowEnabled.Checked);
 
        // "Search Games" panel attached to the games filters tool bar
-       SetLabelColors(LabelSearchGamesFilter_ToolBar, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected);
-       SetLabelColors(LabelSearchGamesBy_ToolBar, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected, FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected);
+       //SetPanelExStyle(PanelSearchGames_ToolBar, FormNightMode.NightModeToolBarGradientBar.Checked);
+
+       SetToolBarPanelColors(PanelSearchGames, PanelSearchGames_ToolBar);
+       SetToolBarPanelColors(PanelSearchGames, PanelWebToolBarButtons);
+       SetLabelColors(LabelSearchGamesFilter_ToolBar, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected,
+                                                      FormNightMode.NightModeSearchGamesPanelFilterShadowColor.Selected,
+                                                      FormNightMode.NightModeSearchGamesPanelFilterShadowEnabled.Checked);
+                                                      
+       SetLabelColors(LabelSearchGamesBy_ToolBar, FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected,
+                                                  FormNightMode.NightModeSearchGamesPanelFieldShadowColor.Selected,
+                                                  FormNightMode.NightModeSearchGamesPanelFieldShadowEnabled.Checked);
      end
   else
      begin
        // floating "Search Games" panel
        PanelSearchGames.Style:= vgSolid;
        SetPanelNightColors(PanelSearchGames, $00f1f1f1);
-       SetLabelColors(LabelSearchGamesFilter, clBlack, clWhite);
-       SetLabelColors(LabelSearchGamesBy, clMaroon, clCream);
+       SetLabelColors(LabelSearchGamesFilter, clBlack, clWhite, False);
+       SetLabelColors(LabelSearchGamesBy, clMaroon, clCream, False);
 
-       PanelSearchGamesCaptionBar.Transparent:= False;
-       SetLabelColors(PanelSearchGamesCaptionBar, clBlack, clGray);
+       SetLabelColors(PanelSearchGamesCaptionBar, clBlack, clGray, False);
 
-       FilterGameTitle_ToolBar.Font.Color:= clBlack;
+       FilterGameTitle_ToolBar.Font.Color:= FormPreferences.SearchGamesPanelEditBoxFontColor.Selected; // clBlack;
+       FilterGameTitle_ToolBar.Color:= FormPreferences.SearchGamesPanelEditBoxBackgroundColor.Selected; // clWhite;
+
        FilterGameTitle.Font.Color:= clBlack;
-       FilterGameTitle_ToolBar.Color:= clWhite;
        FilterGameTitle.Color:= clWhite;
 
-       FilterGameTitle_ToolBar.UseCustomBorder:= False;
-       FilterGameTitle.UseCustomBorder:= False;
-
-       FilterCPU.UseCustomBorder:= False;
-
        // "Search Games" panel attached to the games filters tool bar
-       SetLabelColors(LabelSearchGamesFilter_ToolBar, clBlack, clWhite);
-       SetLabelColors(LabelSearchGamesBy_ToolBar, clMaroon, clCream);
+       if FormPreferences.ToolBarWindowsTheme.Checked then
+          PanelSearchGames_ToolBar.Style:= vgWindowsTheme
+       else
+          SetPanelExStyle(PanelSearchGames_ToolBar, FormPreferences.ToolBarGradientBar.Checked);
+
+       PanelSearchGames_ToolBar.Color1:= FormPreferences.ToolBarBkTopColor.Selected;
+       PanelSearchGames_ToolBar.Color2:= FormPreferences.ToolBarBkBottomColor.Selected;
+
+       SetToolBarPanelColors(PanelSearchGames_ToolBar, PanelWebToolBarButtons);
+
+       SetLabelColors(LabelSearchGamesFilter_ToolBar, FormPreferences.SearchGamesPanelFilterFontColor.Selected, -1, False);
+       SetLabelColors(LabelSearchGamesBy_ToolBar, FormPreferences.SearchGamesPanelFieldFontColor.Selected, -1, False);
 
        // floating "Main CPU Filter" panel
-       FilterCPU.Font.Color:= clBlack;
-       FilterCPU.Color:= clWhite;
        PanelFilterCPU.Style:= vgSolid;
        SetPanelNightColors(PanelFilterCPU, $00f1f1f1);
 
-       SetLabelColors(LabelSelectCPU, clBlack, clWhite);
-       SetLabelColors(LabelCustomCPUFilter, clBlack, clWhite);
+       FilterCPU.Font.Color:= clBlack;
+       FilterCPU.Color:= clWhite;
+       SetLabelColors(LabelSelectCPU, clBlack, clWhite, False);
+       SetLabelColors(LabelCustomCPUFilter, clBlack, clWhite, False);
 
-       FilterCPU_LabelCaptionBar.Transparent:= False;
-       SetLabelColors(FilterCPU_LabelCaptionBar, clBlack, clGray);
+       SetLabelColors(FilterCPU_LabelCaptionBar, clBlack, clGray, False);
      end;
 
   PanelSearchGames.Canvas.UnLock;
@@ -49084,84 +49590,41 @@ begin
      begin
        SetPanelExStyle(StatusBarPanel, FormNightMode.NightModeGamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(StatusBarPanel, FormNightMode.NightModeGamesListStatusBarTopColor.Selected,
-                                           FormNightMode.NightModeGamesListStatusBarBottomColor.Selected,
-                                           FormNightMode.NightModeGamesListStatusBarOuterFrameColor.Selected,
-                                           FormNightMode.NightModeGamesListStatusBarInnerFrameColor.Selected);
+                                           FormNightMode.NightModeGamesListStatusBarBottomColor.Selected);
 
-       SetLabelColors(StatusBar_GamesTotal, FormNightMode.NightModeGamesListStatusBarFontColor.Selected,
-                                            FormNightMode.NightModeGamesListStatusBarShadowFontColor.Selected,
-                                            FormNightMode.NightModeGamesListStatusBarShadowFontEnabled.Checked);
+       SetLabelColors(StatusBar_GamesTotal, FormNightMode.NightModeGamesListStatusBarFontColor.Selected, -1, False);
 
-       SetLabelColors(StatusBar_GamesGameName, FormNightMode.NightModeGamesListStatusBarFontColor.Selected,
-                                               FormNightMode.NightModeGamesListStatusBarShadowFontColor.Selected,
-                                               FormNightMode.NightModeGamesListStatusBarShadowFontEnabled.Checked);
-
-       SetPanelExFrames(FormNightMode.NightModeGamesListStatusBarShowOuterFrame,
-                        FormNightMode.NightModeGamesListStatusBarShowOuterFrame, StatusBarPanel, 20, True);
+       SetLabelColors(StatusBar_GamesGameName, FormNightMode.NightModeGamesListStatusBarFontColor.Selected, -1, False);
 
        SetPanelExStyle(StatusBarPanelMachines, FormNightMode.NightModeGamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(StatusBarPanelMachines, FormNightMode.NightModeGamesListStatusBarTopColor.Selected,
-                                                   FormNightMode.NightModeGamesListStatusBarBottomColor.Selected,
-                                                   FormNightMode.NightModeGamesListStatusBarOuterFrameColor.Selected,
-                                                   FormNightMode.NightModeGamesListStatusBarInnerFrameColor.Selected);
+                                                   FormNightMode.NightModeGamesListStatusBarBottomColor.Selected);
 
-       SetLabelColors(StatusBar_MachinesGameName, FormNightMode.NightModeGamesListStatusBarFontColor.Selected,
-                                                  FormNightMode.NightModeGamesListStatusBarShadowFontColor.Selected,
-                                                  FormNightMode.NightModeGamesListStatusBarShadowFontEnabled.Checked);
-
-       SetPanelExFrames(FormNightMode.NightModeGamesListStatusBarShowOuterFrame,
-                        FormNightMode.NightModeGamesListStatusBarShowOuterFrame, StatusBarPanelMachines, 20, True);
+       SetLabelColors(StatusBar_MachinesGameName, FormNightMode.NightModeGamesListStatusBarFontColor.Selected, -1, False);
 
        SetPanelExStyle(MAMEInfoStatusBar, FormNightMode.NightModeGamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(MAMEInfoStatusBar, FormNightMode.NightModeGamesListStatusBarTopColor.Selected,
-                                              FormNightMode.NightModeGamesListStatusBarBottomColor.Selected,
-                                              FormNightMode.NightModeGamesListStatusBarOuterFrameColor.Selected,
-                                              FormNightMode.NightModeGamesListStatusBarInnerFrameColor.Selected);
-       SetPanelExFrames(FormNightMode.NightModeGamesListStatusBarShowOuterFrame,
-                        FormNightMode.NightModeGamesListStatusBarShowOuterFrame, MAMEInfoStatusBar, 20, True);
-
-
+                                              FormNightMode.NightModeGamesListStatusBarBottomColor.Selected);
      end
   else
      begin
        SetPanelExStyle(StatusBarPanel, FormPreferences.GamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(StatusBarPanel, FormPreferences.GamesListStatusBarTopColor.Selected,
-                                           FormPreferences.GamesListStatusBarBottomColor.Selected,
-                                           FormPreferences.GamesListStatusBarOuterFrameColor.Selected,
-                                           FormPreferences.GamesListStatusBarInnerFrameColor.Selected);
+                                           FormPreferences.GamesListStatusBarBottomColor.Selected);
 
-       SetLabelColors(StatusBar_GamesTotal, FormPreferences.GamesListStatusBarFontColor.Selected,
-                                            FormPreferences.GamesListStatusBarShadowFontColor.Selected,
-                                            FormPreferences.GamesListStatusBarShadowFontEnabled.Checked);
+       SetLabelColors(StatusBar_GamesTotal, FormPreferences.GamesListStatusBarFontColor.Selected, -1, False);
 
-       SetLabelColors(StatusBar_GamesGameName, FormPreferences.GamesListStatusBarFontColor.Selected,
-                                               FormPreferences.GamesListStatusBarShadowFontColor.Selected,
-                                               FormPreferences.GamesListStatusBarShadowFontEnabled.Checked);
-
-       SetPanelExFrames(FormPreferences.GamesListStatusBarShowOuterFrame,
-                        FormPreferences.GamesListStatusBarShowOuterFrame, StatusBarPanel, 20, False);
+       SetLabelColors(StatusBar_GamesGameName, FormPreferences.GamesListStatusBarFontColor.Selected, -1, False);
 
        SetPanelExStyle(StatusBarPanelMachines, FormPreferences.GamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(StatusBarPanelMachines, FormPreferences.GamesListStatusBarTopColor.Selected,
-                                                   FormPreferences.GamesListStatusBarBottomColor.Selected,
-                                                   FormPreferences.GamesListStatusBarOuterFrameColor.Selected,
-                                                   FormPreferences.GamesListStatusBarInnerFrameColor.Selected);
+                                                   FormPreferences.GamesListStatusBarBottomColor.Selected);
 
-       SetLabelColors(StatusBar_MachinesGameName, FormPreferences.GamesListStatusBarFontColor.Selected,
-                                                  FormPreferences.GamesListStatusBarShadowFontColor.Selected,
-                                                  FormPreferences.GamesListStatusBarShadowFontEnabled.Checked);
-
-       SetPanelExFrames(FormPreferences.GamesListStatusBarShowOuterFrame,
-                        FormPreferences.GamesListStatusBarShowOuterFrame, StatusBarPanelMachines, 20, False);
+       SetLabelColors(StatusBar_MachinesGameName, FormPreferences.GamesListStatusBarFontColor.Selected, -1, False);
 
        SetPanelExStyle(MAMEInfoStatusBar, FormPreferences.GamesListStatusBarGradientBar.Checked);
        SetPanelNightColors(MAMEInfoStatusBar, FormPreferences.GamesListStatusBarTopColor.Selected,
-                                              FormPreferences.GamesListStatusBarBottomColor.Selected,
-                                              FormPreferences.GamesListStatusBarOuterFrameColor.Selected,
-                                              FormPreferences.GamesListStatusBarInnerFrameColor.Selected);
-       SetPanelExFrames(FormPreferences.GamesListStatusBarShowOuterFrame,
-                        FormPreferences.GamesListStatusBarShowOuterFrame, MAMEInfoStatusBar, 20, False);
-
+                                              FormPreferences.GamesListStatusBarBottomColor.Selected);
      end;
 end;
 
@@ -49169,42 +49632,48 @@ procedure TFormMain.SetColorsPanelsGeneral;
 begin
   if IsNightMode then
      begin
-       // PanelInitZipFile
+       // PanelInitZipFile / only gradient background is supported for this panel
        SetPanelNightColors(PanelInitZipFile, FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
                                              FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
 
-       SetLabelColors(LabelInitZipTitle, FormNightMode.NightModePanelColorsTitleFontColor.Selected, FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected);
-       SetLabelColors(LabelInitZipSystemTitle, FormNightMode.NightModePanelColorsTitle2FontColor.Selected, FormNightMode.NightModePanelColorsTitle2ShadowFontColor.Selected);
+       SetLabelColors(LabelInitZipTitle, FormNightMode.NightModePanelColorsTitleFontColor.Selected,
+                                         FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected,
+                                         FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked);
 
-       SetLabelColors(LabelInitZipImageCategory, FormNightMode.NightModePanelColorsMessageFontColor.Selected, FormNightMode.NightModePanelColorsMessageShadowFontColor.Selected);
-       SetLabelColors(LabelInitZipFile, FormNightMode.NightModePanelColorsMessageFontColor.Selected, FormNightMode.NightModePanelColorsMessageShadowFontColor.Selected);
+       SetLabelColors(LabelInitZipSystemTitle, FormNightMode.NightModePanelColorsTitle2FontColor.Selected,
+                                               FormNightMode.NightModePanelColorsTitle2ShadowFontColor.Selected,
+                                               FormNightMode.NightModePanelColorsTitle2ShadowEnabled.Checked);
 
-       // FormApplyFilterMsgBox
+       SetLabelColors(LabelInitZipImageCategory, FormNightMode.NightModePanelColorsImageCategoryTextFontColor.Selected, -1, False);
+
+       SetLabelColors(LabelInitZipFile, FormNightMode.NightModePanelColorsImageZipTextFontColor.Selected, -1, False);
+
        SetPanelNightColors(FormApplyFilterMsgBox.PanelBackground,
                                               FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
                                               FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
                                               FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
                                               FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
 
-       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessageTitle, FormNightMode.NightModePanelColorsTitleFontColor.Selected, FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected);
-       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessage, FormNightMode.NightModePanelColorsMessageFontColor.Selected, FormNightMode.NightModePanelColorsMessageShadowFontColor.Selected);
+       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessageTitle, FormNightMode.NightModePanelColorsTitleFontColor.Selected,
+                                                                  FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected,
+                                                                  FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked);
+                                                                  
+       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessage, FormNightMode.NightModePanelColorsImageZipTextFontColor.Selected, -1, False);
      end
   else
      begin
-       // PanelInitZipFile
-       SetPanelNightColors(PanelInitZipFile, -1, -1, -1, -1, True);
-       SetLabelColors(LabelInitZipTitle, FormNightMode.NightModePanelColorsTitleFontColor.DefaultColorColor, FormNightMode.NightModePanelColorsTitleShadowFontColor.DefaultColorColor);
-       SetLabelColors(LabelInitZipSystemTitle, FormNightMode.NightModePanelColorsTitle2FontColor.DefaultColorColor, FormNightMode.NightModePanelColorsTitle2ShadowFontColor.DefaultColorColor);
-
-       SetLabelColors(LabelInitZipImageCategory, FormNightMode.NightModePanelColorsMessageFontColor.DefaultColorColor, FormNightMode.NightModePanelColorsMessageShadowFontColor.DefaultColorColor);
-       SetLabelColors(LabelInitZipFile, FormNightMode.NightModePanelColorsMessageFontColor.DefaultColorColor, FormNightMode.NightModePanelColorsMessageShadowFontColor.DefaultColorColor);
+       SetPanelNightColors(PanelInitZipFile, -1, clGray, -1, -1);
+       SetLabelColors(LabelInitZipTitle, clBlack, -1, False);
+       SetLabelColors(LabelInitZipSystemTitle, clrGameBarBlue, -1, False);
+       SetLabelColors(LabelInitZipImageCategory, clCream, -1, False);
+       SetLabelColors(LabelInitZipFile, clWhite, -1, False);
 
        // FormApplyFilterMsgBox
-       SetPanelNightColors(FormApplyFilterMsgBox.PanelBackground, -1, -1, -1, -1, True);
-       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessageTitle, FormNightMode.NightModePanelColorsTitleFontColor.DefaultColorColor, FormNightMode.NightModePanelColorsTitleShadowFontColor.DefaultColorColor);
-       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessage, FormNightMode.NightModePanelColorsMessageFontColor.DefaultColorColor, FormNightMode.NightModePanelColorsMessageShadowFontColor.DefaultColorColor);
+       SetPanelNightColors(FormApplyFilterMsgBox.PanelBackground, -1, clGray, -1, -1);
+       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessageTitle, clBlack, -1, False);
+       SetLabelColors(FormApplyFilterMsgBox.LabelBoxMessage, clWhite, -1, False);
      end;
 end;
 
@@ -49214,8 +49683,6 @@ begin
      begin
        FormNightMode.NightModeGameDocsShowBorder.OnClick(Self);
        FormNightMode.NightModeGameDocsBorderColor.OnSelect(Self);
-       FormNightMode.NightModeGameDocsSplitterStyleSelector.OnSelect(Self);
-       FormNightMode.NightModeGameDocsSplitterShowGripIcon.OnClick(Self);
        FormNightMode.NightModeGameDocumentsBackgroundColor.OnSelect(Self);
        MAMEInfoTextHolder.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
        FormNightMode.NightModeGameDocsShowStatusBar.OnClick(Self);
@@ -49225,8 +49692,6 @@ begin
      begin
        FormPreferences.GameDocsShowBorder.OnClick(Self);
        FormPreferences.GameDocsBorderColor.OnSelect(Self);
-       FormPreferences.GameDocsSplitterStyleSelector.OnSelect(Self);
-       FormPreferences.GameDocsSplitterShowGripIcon.OnClick(Self);
        FormPreferences.GameDocumentsBackgroundColor.OnSelect(Self);
        MAMEInfoTextHolder.Font:= FormPreferences.GameDocsFont_Setting.Font;
        FormPreferences.GameDocsShowStatusBar.OnClick(Self);
@@ -49272,57 +49737,74 @@ begin
   ImagesToolBarButtons.Invalidate; // force repaint
   if (not IsStartup) and IsNightMode then
      LoadMainScreenIcons(True, False);
-  //SetToolBarFiltersFormColors; // change colors of "driver status" form and "misc filters" form (both are created at frontend startup and closed at frontend exit)
 end;
 
-procedure TFormMain.MenuEnableNightModeClick(Sender: TObject);
+procedure TFormMain.SetEditExBorderStyle;
 begin
-  IsNightMode:= MenuEnableNightMode.Checked;
-  if IsStartup then
-     Exit;
+  FilterGameTitle_ToolBar.UseCustomBorder:= IsNightMode;
+  FilterGameTitle.UseCustomBorder:= IsNightMode;
+  FilterCPU.UseCustomBorder:= IsNightMode;
+end;
 
-  if IsNightMode then
-     SetPanelBorderColors(PanelImagesDocuments, FormNightMode.NightModeImagesPanelOuterFrameColor.Selected, FormNightMode.NightModeImagesPanelInnerFrameColor.Selected)
-  else
-     SetPanelNightColors(PanelImagesDocuments);
+procedure TFormMain.SetToolBarPanelColors(PanelSource, PanelDestination: TPanelEx);
+begin
+  PanelDestination.Style:= PanelSource.Style;
+  PanelDestination.Color1:= PanelSource.Color1;
+  PanelDestination.Color2:= PanelSource.Color2; 
+end;
+
+procedure TFormMain.ToggleNightMode(NightModeProfile: Boolean);
+begin
+  if not NightModeProfile then
+  begin
+    SetCloseButtonColorsFloatingPanel(ButtonFilterTitleClose);
+    SetCloseButtonColorsFloatingPanel(FilterCPU_ButtonClose);
+  end;
 
   GamesListView.BeginUpdate;
   MachinesListSidePanel.BeginUpdate;
+
+  if not NightModeProfile then
+  begin
+    ReadCustomGameFontFile(IsNightMode); // read game font colors
+    ReadImageSingleBackground(True);
+    LoadImageCategoryLayoutSettings(True);
+    MenuImageUseSingleBackgroundColor.OnClick(Self);
+
+    SetEasyListViewHeaderColors(GamesListView, False);
+    SetEasyListViewHeaderColors(MachinesListSidePanel, False);
+
+  if IsNightMode then
+     GamesListview.Header.Font:= FormNightMode.NightModeGamesListHeaderFont.Font
+  else
+     GamesListview.Header.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
+
+    SetEditExBorderStyle;
+  end;
+
   if IsNightMode then
      begin
-       FormNightMode.NightModeToolBarShowOuterFrame.OnClick(Self);
-       PanelSearchGames_ToolBar.Style:= vgSimple;
-       FormNightMode.NightModeGamesListUseWindowsThemedBorder.OnClick(Self);
+       SetPanelExStyle(PanelSearchGames_ToolBar, FormNightMode.NightModeToolBarGradientBar.Checked);
+       SetPanelExStyle(PanelWebToolBarButtons, FormNightMode.NightModeToolBarGradientBar.Checked);
 
-       FormNightMode.NightModeGamesListSplitterStyleSelector.OnSelect(Self);
-       FormNightMode.NightModeGamesListSplitterShowGripIcon.OnClick(Self);
+       if PopupImageShowSplitterGrip.Checked <> FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked then
+          PopupImageShowSplitterGrip.Click;
+
+       PanelImage.Color:= FormNightMode.NightModeImageBorderColor.Selected;
      end
   else
      begin
-       SetPanelExFrames(nil, nil, PanelToolBar, ToolBarButtons.ButtonHeight+1, False);
-       SetPanelExFrames(nil, nil, PanelToolBarImages, ImagesToolBarButtons.ButtonHeight, False);
+       if not NightModeProfile then
+       begin
+         // do not update panel styles when night mode is not enabled and when changing night mode profiles (Night Mode screen)
+         SetPanelExFrames(nil, nil, PanelToolBar, ToolBarButtons.ButtonHeight+1, False);
+         SetPanelExFrames(nil, nil, PanelToolBarImages, ImagesToolBarButtons.ButtonHeight, False);
 
-       PanelSearchGames_ToolBar.Style:= vgWindowsTheme; // colors cannot be customized in light mode
+         if PopupImageShowSplitterGrip.Checked <> FormPreferences.ImageSplitterShowGripIcon.Checked then
+            PopupImageShowSplitterGrip.Click;
 
-       if PanelGamesList.EnableCustomBorder <> ecbNone then
-          PanelGamesList.EnableCustomBorder:= ecbNone;
-
-       if not GamesListView.ShowThemedBorder then
-          GamesListView.ShowThemedBorder:= True;
-       if GamesListView.ShowThemedBorderColor <> clNone then
-          GamesListView.ShowThemedBorderColor:= clNone; // clNone will paint a Windows themed border
-
-       if PanelMachinesList.EnableCustomBorder <> ecbNone then
-          PanelMachinesList.EnableCustomBorder:= ecbNone;
-
-       if not MachinesListSidePanel.ShowThemedBorder then
-          MachinesListSidePanel.ShowThemedBorder:= True;
-
-       if MachinesListSidePanel.ShowThemedBorderColor <> clNone then
-          MachinesListSidePanel.ShowThemedBorderColor:= clNone; // clNone will paint a Windows themed border
-
-       FormPreferences.GamesListSplitterStyleSelector.OnSelect(Self);
-       FormPreferences.GamesListSplitterShowGripIcon.OnClick(Self);
+         PanelImage.Color:= FormPreferences.ImageBorderColor.Selected;
+       end;
      end;
   ELV_ResetNormalColors(GamesListView);
   ELV_ResetNormalColors(MachinesListSidePanel);
@@ -49331,33 +49813,47 @@ begin
 
   UpdateToolBarOverlays;
   LoadMainScreenIcons(True, False);
-  SetToolBarFiltersFormColors;
+  SetToolBarFiltersFormColors(NightModeProfile);
   SetPopupMenuNightColorsFormMain(True);
 
   ToolBarFilterTitle_ToolBar.Invalidate; // force repaint
 
-  if IsNightMode then
-     begin
-       WebToolBarButtons.Font.Color:= clWhite; // this doesn't work, button caption color is always black (TToolBar component limitation)
-     end
-  else
-     begin
-       WebToolBarButtons.Font.Color:= clBlack; // this doesn't work, button caption color is always black (TToolBar component limitation)
-     end;
-
+  WebToolBarButtonsUpdateFontColor;
   SetColorsPanelsGeneral;
   SetColorsGamesListStatusBar;
   SetColorsSearchGamesPanel;
 
   SetColorsGameDocs;
   SetColorsGamesListBk;
-  
+
+  UpdateGamesListSplitterStyle; // set games list splitter colors
   UpdateImageLayoutSplittersStyle; // set image splitters colors
+
   SetImageHintBoxColors(1, False); // update ImageHintPanel
   SetImageHintBoxColors(2, False); // update ImageHintPanel2[2]
   SetImageHintBoxColors(3, False); // update ImageHintPanel2[3]
   SetImageHintBoxColors(4, False); // update ImageHintPanel2[4]
+  UpdateImageHintPanelText(1, True);
+  UpdateImageHintPanelText(2, True);
+  UpdateImageHintPanelText(3, True);
+  UpdateImageHintPanelText(4, True);
+end;
 
+procedure TFormMain.ChangeLabelFontConsolas(LabelSource: TShadowLabel; FontSize: Integer = -1);
+begin
+  // this is for Windows 10... no "Terminal" font installed in this OS (only in Win7)
+  LabelSource.Font.Name:= 'Lucida Console';
+  if FontSize <> -1 then
+     LabelSource.Font.Size:= FontSize;
+end;
+
+procedure TFormMain.MenuEnableNightModeClick(Sender: TObject);
+begin
+  IsNightMode:= MenuEnableNightMode.Checked;
+  if IsStartup then
+     Exit;
+
+  ToggleNightMode(False);
   FocusGamesList;
 end;
 
@@ -49477,7 +49973,6 @@ begin
   FilterSearchBarAdjustPanelControls; // adjust search panel controls and size
 end;
 
-
 procedure TFormMain.FilterCPU_LabelCaptionBarMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 const
@@ -49489,12 +49984,12 @@ end;
 
 procedure TFormMain.FilterCPU_ButtonCloseMouseEnter(Sender: TObject);
 begin
-  TShadowLabel(Sender).Color:= clRed;
+  SetCloseButtonColorsFloatingPanel_Enter(TShadowLabel(Sender));
 end;
 
 procedure TFormMain.FilterCPU_ButtonCloseMouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Color:= clMaroon;
+  SetCloseButtonColorsFloatingPanel(TShadowLabel(Sender));
 end;
 
 procedure TFormMain.ButtonFilterCPUApplyClick(Sender: TObject);
@@ -49551,12 +50046,16 @@ procedure TFormMain.ToolBarFilterByMainCPUCustomDraw(Sender: TToolBar;
 begin
   if IsNightMode then
   begin
-    DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                 PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top],
-                 PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
-    //Sender.Canvas.Brush.Color:= PanelFilterCPU.Color1;// FormNightMode.NightModeToolBarBkColor.Selected;
-    //Sender.Canvas.Pen.Color:= Sender.Canvas.Brush.Color;
-    //Sender.Canvas.Rectangle(Sender.ClientRect);
+    if PanelFilterCPU.Style = vgSimple then
+       DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                    PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top],
+                    PanelFilterCPU.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0)
+    else
+    begin
+      Sender.Canvas.Brush.Color:= PanelFilterCPU.Color1;
+      Sender.Canvas.Pen.Color:= PanelFilterCPU.Color1;
+      Sender.Canvas.Rectangle(Sender.ClientRect);
+    end;
   end;
 end;
 
@@ -49617,18 +50116,6 @@ begin
 
   if not IsStartup and (MenuToolBarIconSize.Tag = 2) then
      FilterSearchBarAdjustPanelControls; // adjust labels and controls on "Small Tool Bar" mode
-
-  {iPos:= LabelSearchGamesBy_Attached.Width;
-  LabelSearchGamesBy_Attached.Caption:= TMenuItem(Sender).Caption;
-  if LabelSearchGamesBy_Attached.Width > iPos then
-     iPos:= LabelSearchGamesBy_Attached.Width-iPos
-  else
-  if LabelSearchGamesBy_Attached.Width < iPos then
-     iPos:= -(iPos-LabelSearchGamesBy_Attached.Width);
-
-  LabelSearchGamesFilter_Attached.Left:= LabelSearchGamesFilter_Attached.Left+iPos;
-  FilterGameTitle_Attached.Left:= FilterGameTitle_Attached.Left+iPos;
-  ToolBarFilterTitle_Attached.Left:= ToolBarFilterTitle_Attached.Left+iPos;}
 end;
 
 procedure TFormMain.FilterSearchBarHelpClick(Sender: TObject);
@@ -49694,12 +50181,16 @@ procedure TFormMain.ToolBarFilterTitleCustomDraw(Sender: TToolBar;
 begin
   if IsNightMode then
      begin
-       DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                    PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
-                    PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
-       //Sender.Canvas.Brush.Color:= PanelSearchGames.Color1;
-       //Sender.Canvas.Pen.Color:= PanelSearchGames.Color1;
-       //Sender.Canvas.Rectangle(Sender.ClientRect);
+       if PanelSearchGames.Style = vgSimple then
+          DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                       PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
+                       PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0)
+       else
+       begin
+         Sender.Canvas.Brush.Color:= PanelSearchGames.Color1;
+         Sender.Canvas.Pen.Color:= PanelSearchGames.Color1;
+         Sender.Canvas.Rectangle(Sender.ClientRect);
+       end;
      end;
   //Sender.Canvas.FrameRect(Sender.BoundsRect); // not used, just set Pen.Color and the frame is also painted with .ClientRect
 end;
@@ -49746,7 +50237,7 @@ begin
         if PanelSearchGames_ToolBar.Visible then
            PanelSearchGames_ToolBar.Hide;
 
-        if {(not IsStartup) and }(ButtonFilterSearchGames.Tag = 1) then
+        if ButtonFilterSearchGames.Tag = 1 then
            ButtonFilterSearchGames.Click;
       end;
   end;
@@ -49755,9 +50246,28 @@ end;
 procedure TFormMain.ToolBarFilterTitle_ToolBarCustomDraw(Sender: TToolBar;
   const ARect: TRect; var DefaultDraw: Boolean);
 begin
-  DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-               PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top],
-               PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+  if IsNightMode then
+  begin
+    if PanelSearchGames_ToolBar.Style = vgSimple then
+       DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                    PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top],
+                    PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0)
+    else
+       begin
+         Sender.Canvas.Pen.Color:= FormNightMode.NightModeToolBarBkTopColor.Selected; // to prevent black frame bug
+         Sender.Canvas.Brush.Color:= FormNightMode.NightModeToolBarBkTopColor.Selected;
+         Sender.Canvas.Rectangle(Sender.ClientRect);
+       end;
+  end
+  else
+  begin
+    if MenuToolBarIconSize.Tag = 2 then
+       PaintToolBarBk(Sender, ARect)
+    else
+       DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                    PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top],
+                    PanelSearchGames_ToolBar.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+  end;
 end;
 
 procedure TFormMain.FilterSearchBarSwtichtoFloatingPanelClick(
@@ -49873,45 +50383,24 @@ begin
       begin
         // perhaps add an option to move buttons below the edit box ? (top "2", "18")
         // maybe invert the order of the buttons "back to front" so search icon is at right instead of left
-        //if LabelSearchGamesFilter_ToolBar.Left <> 8 then
-        //   LabelSearchGamesFilter_ToolBar.Left:= 8; // this position never changes
+        if LabelSearchGamesFilter_ToolBar.Top <> 16 then
+           LabelSearchGamesFilter_ToolBar.Top:= 16;
 
-        if LabelSearchGamesFilter_ToolBar.Top <> 16{2} then
-           LabelSearchGamesFilter_ToolBar.Top:= 16{2};
+        if LabelSearchGamesBy_ToolBar.Top <> 16 then
+           LabelSearchGamesBy_ToolBar.Top:= 16;
 
-        //if LabelSearchGamesBy_ToolBar.Left <> 68 then
-        //   LabelSearchGamesBy_ToolBar.Left:= 68; // this position never changes
-
-        if LabelSearchGamesBy_ToolBar.Top <> 16{2} then
-           LabelSearchGamesBy_ToolBar.Top:= 16{2};
-
-        //if FilterGameTitle_ToolBar.Left <> 8 then
-        //   FilterGameTitle_ToolBar.Left:= 8;
-
-        if FilterGameTitle_ToolBar.Top <> 32{18} then
-           FilterGameTitle_ToolBar.Top:= 32{18};
+        if FilterGameTitle_ToolBar.Top <> 32 then
+           FilterGameTitle_ToolBar.Top:= 32;
 
         SetFilterSearchBarIconsSize(FilterSearchBarUseSmall16x16Icons.Checked);
-
-        //ToolbarButtons.ButtonWidth:= 75;
-        //ToolbarButtons.ButtonHeight:= 74;
       end;
     1: // Large (48x48) - default size
       begin
-        //if LabelSearchGamesFilter_ToolBar.Left <> 8 then
-        //   LabelSearchGamesFilter_ToolBar.Left:= 8; // this position never changes
-
         if LabelSearchGamesFilter_ToolBar.Top <> 6 then
            LabelSearchGamesFilter_ToolBar.Top:= 6;
 
-        //if LabelSearchGamesBy_ToolBar.Left <> 68 then
-        //   LabelSearchGamesBy_ToolBar.Left:= 68; // this position never changes
-
         if LabelSearchGamesBy_ToolBar.Top <> 6 then
            LabelSearchGamesBy_ToolBar.Top:= 6;
-
-        //if FilterGameTitle_ToolBar.Left <> 8 then
-        //   FilterGameTitle_ToolBar.Left:= 8;
 
         if FilterGameTitle_ToolBar.Top <> 22 then
            FilterGameTitle_ToolBar.Top:= 22;
@@ -49921,9 +50410,6 @@ begin
     2: // Small (30x24)
       begin
         // must adjust the left position so label texts can fit before the edit box (when "show label texts" option is enabled)
-        //if FilterGameTitle_ToolBar.Left <> 8 then
-        //   FilterGameTitle_ToolBar.Left:= 8; // this position never changes
-
         if LabelSearchGamesFilter_ToolBar.Top <> 8 then
            LabelSearchGamesFilter_ToolBar.Top:= 8;
 
@@ -49988,6 +50474,43 @@ begin
      FilterSearchBarAdjustPanelControls; // for "Small Tool Bar" mode only
 end;
 
+procedure TFormMain.WebToolBarButtonsUpdateFontColor;
+
+  procedure SetFontDisabled(ButtonSource: TSpeedButtonEx);
+  begin
+    ButtonSource.FontShadowShow_Disabled:= not IsNightMode;
+    if IsNightMode then
+       begin
+         ButtonSource.FontColorDisabled:= clGray;
+       end
+    else
+       begin
+         ButtonSource.FontColorDisabled:= clBtnShadow;
+         ButtonSource.FontShadowColorDisabled:= clBtnHighlight;
+       end;
+  end;
+
+begin
+  if IsNightMode then
+     begin
+       WebButtonRefresh.Font.Color:= clWhite;
+       WebButtonStop.Font.Color:= clWhite;
+       WebButtonExit.Font.Color:= clWhite;
+       WebButtonPlayVideoPreview.Font.Color:= clWhite;
+     end
+  else
+     begin
+       WebButtonRefresh.Font.Color:= clBlack;
+       WebButtonStop.Font.Color:= clBlack;
+       WebButtonExit.Font.Color:= clBlack;
+       WebButtonPlayVideoPreview.Font.Color:= clBlack;
+     end;
+  SetFontDisabled(WebButtonRefresh);
+  SetFontDisabled(WebButtonStop);
+  SetFontDisabled(WebButtonExit);
+  SetFontDisabled(WebButtonPlayVideoPreview);
+end;
+
 procedure TFormMain.PopupMachinesListSidePanelFiltersMachinesList_CustomizeClick(
   Sender: TObject);
 begin
@@ -49996,8 +50519,6 @@ begin
 
   if IsNightMode then
      begin
-       FormArcadeMAMEMachinesCustomize.FrameSoftwareList.ColorFrame:= FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected; // clrLightBlue;
-       FormArcadeMAMEMachinesCustomize.FrameSoftwareList.ColorInnerFrame:= FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected; // clBlue;
        SetPopupMenuNightColors(FormArcadeMAMEMachinesCustomize.PopupMachines);
      end;
 
@@ -50107,15 +50628,6 @@ begin
   UpdateStatusBarMachine;
 end;
 
-{procedure TFormMain.MenuShowDarkMenuNightModeClick(Sender: TObject);
-begin
-  if not IsStartup then
-     begin
-       LoadMainScreenIcons(True, (IsNightMode and (not MenuShowDarkMenuNightMode.Checked)));
-       SetToolBarFiltersFormColors;
-     end;
-end;}
-
 procedure TFormMain.PopupAddToSpecialListClick(Sender: TObject);
 begin
   if PopupAddToSpecialList.Visible then
@@ -50151,39 +50663,113 @@ begin
   HideFilterMsgBox;
 end;
 
-procedure TFormMain.InitNightModeScreen;
+procedure TFormMain.InitPreferencesScreen;
 var
   cLoop: Integer;
 begin
-  FormNightMode.Color:= menu_background_color[1]; // prevent white background flicker when switching page1/page2
-  SetEditNightColors(FormNightMode.NightModeGamesBackgroundImage);
-  SetGaugeBarColors(FormNightMode.NightModeHintBox_Opacity);
-  for cLoop:= 0 to FormNightMode.ComponentCount-1 do
+  if FormPreferences.GamesBackgroundColor.PopupMenu <> nil then
+     Exit;
+  for cLoop:= 0 to FormPreferences.ComponentCount-1 do
   begin
-    if FormNightMode.Components[cLoop] is TBitBtnEx then
-       SetButtonExColors(TBitBtnEx(FormNightMode.Components[cLoop]))
-    else
-    if FormNightMode.Components[cLoop] is TSpeedButtonEx then
-       SetButtonExColors(TSpeedButtonEx(FormNightMode.Components[cLoop]))
-    else
-    if FormNightMode.Components[cLoop] is TColorBoxEx then
-       SetColorBoxColors(TColorBoxEx(FormNightMode.Components[cLoop]), True)
-    else
-    if FormNightMode.Components[cLoop] is TComboBox2Ex then
-       SetComboBox2ExColors(TComboBox2Ex(FormNightMode.Components[cLoop]), True);
+    if FormPreferences.Components[cLoop] is TColorBoxEx then
+       AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormPreferences.Components[cLoop]));
   end;
 end;
 
-procedure TFormMain.ShowNightModeScreen;
-//var
-//  cLoop: Integer;
-//  //CurrentOverlayFolder: String;
+procedure TFormMain.PopulateCheckRadioProfiles(ReloadList: Boolean);
+const
+  DefaultTheme: String = 'Windows Theme';
+var
+  iFolders: THashedStringList;
+  Loop, iIndex: Integer;
+  CurrentProfile, iStr: String;
 begin
-  //CurrentOverlayFolder:= ToolBarOverlayIconFolderStr;
+  FormPreferences.CheckBoxRadioButtonProfile.Tag:= 1;
+  CurrentProfile:= FormPreferences.CheckBoxRadioButtonProfile.Text;
+  if ReloadList then
+     FormPreferences.CheckBoxRadioButtonProfile.Items.Clear;
 
-  //FormNightMode.Left:= (Screen.Width shr 1)-(FormNightMode.Width shr 1)-1;
-  //FormNightMode.Top:= (Screen.Height shr 1)-(FormNightMode.Height shr 1)-1;
+  FormPreferences.CheckBoxRadioButtonProfile.Items.Add(DefaultTheme);
+  iFolders:= THashedStringList.Create;
+  GetFoldersList2(FormMain.GetCheckBoxThemeFolder, iFolders, True, False);
+  iIndex:= 0;
+  if iFolders.Count > 0 then
+     begin
+       FormPreferences.CheckBoxRadioButtonProfile.Items.BeginUpdate;
+       for Loop:=0 to iFolders.Count-1 do
+       begin
+         iStr:= iFolders[Loop];
+         if not SameText(DefaultTheme, iStr) then
+            FormPreferences.CheckBoxRadioButtonProfile.Items.Add(iStr);
+       end;
+       FormPreferences.CheckBoxRadioButtonProfile.Items.EndUpdate;
 
+       if not SameText(DefaultTheme, CurrentProfile) then
+          begin
+            iIndex:= FormPreferences.CheckBoxRadioButtonProfile.Items.IndexOf(CurrentProfile);
+            if iIndex = -1 then
+               iIndex:= 0;
+          end;
+     end;
+  FreeAndNil(iFolders);
+  FormPreferences.CheckBoxRadioButtonProfile.Tag:= 0;
+  //NightModeProfiles.ItemIndex:= iIndex;
+  SetSelectedComboBox(iIndex, FormPreferences.CheckBoxRadioButtonProfile);
+end;
+
+procedure TFormMain.InitNightModeScreen;
+var
+  cLoop: Integer;
+  iStr: String;
+begin
+  FormNightMode.Color:= menu_background_color[1]; // prevent white background flicker when switching page1/page2
+  iStr:= GetCheckBoxThemeFolder+'Night Mode 1\';
+  if not DirectoryExists(iStr) then
+     iStr:= '';
+  for cLoop:= 0 to FormNightMode.ComponentCount-1 do
+  begin
+    if FormNightMode.Components[cLoop] is TBitBtnEx then
+       SetButtonExColors(TBitBtnEx(FormNightMode.Components[cLoop]), True, True)
+    else
+    if FormNightMode.Components[cLoop] is TSpeedButtonEx then
+       SetButtonExColors(TSpeedButtonEx(FormNightMode.Components[cLoop]), True, True)
+    else
+    if FormNightMode.Components[cLoop] is TColorBoxEx then
+       begin
+         SetColorBoxColors(TColorBoxEx(FormNightMode.Components[cLoop]), True, True);
+         AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormNightMode.Components[cLoop]));
+       end
+    else
+    if FormNightMode.Components[cLoop] is TComboBox2Ex then
+       SetComboBox2ExColors(TComboBox2Ex(FormNightMode.Components[cLoop]), True, nil, True)
+    else
+    if FormNightMode.Components[cLoop] is TEditEx then
+       SetEditNightColors(TEditEx(FormNightMode.Components[cLoop]))
+    else
+    if FormNightMode.Components[cLoop] is TGaugeBar then
+       SetGaugeBarColors(TGaugeBar(FormNightMode.Components[cLoop]), True);
+    {else
+    if FormNightMode.Components[cLoop] is TAdvOfficeCheckBoxEx then
+       begin
+         if iStr <> '' then
+         begin
+           TAdvOfficeCheckBoxEx(FormNightMode.Components[cLoop]).CustomIconsDirectory:= iStr;
+           TAdvOfficeCheckBoxEx(FormNightMode.Components[cLoop]).CustomIconsEnabled:= True;
+         end;
+       end;}
+  end;
+
+  ELV_ResetNormalColors(FormNightMode.NightModeGamesListView);
+  ELV_ResetNormalColors(FormNightMode.NightModeNewProfileProfilesList);
+  SetEasyListViewColors(FormNightMode.NightModeNewProfileProfilesList, menu_background_color[1], clCream);
+  SetEasyListViewHeaderColors(FormNightMode.NightModeNewProfileProfilesList, True);
+  ELV_SetRibbonNightColors(0, FormNightMode.NightModeNewProfileProfilesList, True);
+
+  FormNightMode.NightModeNewProfileUseColorsActiveProfile.Checked:= Boolean(FormMain.MenuCustomizeNightModeColors.Tag);
+end;
+
+procedure TFormMain.ShowNightModeScreen;
+begin
   FormNightMode.ShowModal;
 
   // update these functions, replace FormPreferences by FormNightMode
@@ -50205,12 +50791,67 @@ begin
        SetColorsSearchGamesPanel;
      end;
 
-  if IsStartup then
-     Exit; // sanity check ??? I still need to double-check if preferences is called at startup or on a clean install (March 01, 2018)
-
   SetPopupMenuNightColorsFormMain(False); // update popup menus with frame color (FormMain only)
   UpdateFiltersButtonExColors; // update button colors for miscellaneous filter and driver status filter
 end;
 
+procedure TFormMain.WebButtonRefreshClick(Sender: TObject);
+begin
+  WebBrowser.Refresh;
+end;
+
+procedure TFormMain.WebButtonStopClick(Sender: TObject);
+begin
+  WebBrowser.Stop;
+end;
+
+procedure TFormMain.WebButtonExitClick(Sender: TObject);
+begin
+  ButtonInternetGameInfo.Down:= False;
+  ButtonInternetGameInfo.Click;
+end;
+
+procedure TFormMain.WebButtonPlayVideoPreviewClick(Sender: TObject);
+begin
+  if not VideoPreviewEnabled then
+     Exit;
+
+  ButtonPlayVideoPreview.Enabled:= CheckSelected(GamesListView) and (VideoPreviewFile <> '');
+  PopupPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
+  WebButtonPlayVideoPreview.Enabled:= ButtonPlayVideoPreview.Enabled;
+  if ButtonPlayVideoPreview.Enabled then
+     begin
+       PlayDummyVideo;
+       CallPlayVideoPreview;
+     end;
+end;
+
+procedure TFormMain.MenuImageUseSingleBackgroundColorClick(
+  Sender: TObject);
+var
+  Loop: Integer;
+begin
+  if PopupImageUseSingleBackgroundColor.Checked <> MenuImageUseSingleBackgroundColor.Checked then
+     PopupImageUseSingleBackgroundColor.Checked:= MenuImageUseSingleBackgroundColor.Checked;
+
+  Images.Color:= GetImageBackgroundColor(ImageDetails[1].ImageCategoryIndex);
+  for Loop:=Low(ImageScr) to High(ImageScr) do
+  begin
+    if Assigned(ImageScr[Loop]) then
+       if ImageDetails[Loop].ImageCategoryIndex > -1 then
+          ImageScr[Loop].Color:= GetImageBackgroundColor(ImageDetails[Loop].ImageCategoryIndex);
+  end;
+end;
+
+procedure TFormMain.PopupImageUseSingleBackgroundColorClick(
+  Sender: TObject);
+begin
+  if MenuImageUseSingleBackgroundColor.Checked <> PopupImageUseSingleBackgroundColor.Checked then
+     MenuImageUseSingleBackgroundColor.Checked:= PopupImageUseSingleBackgroundColor.Checked;
+  MenuImageUseSingleBackgroundColor.OnClick(Self);
+end;
+
+
 end.
+
 

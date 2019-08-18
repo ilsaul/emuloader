@@ -6,228 +6,260 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles,
   Buttons, BarMenus, GraphicEx, MPCommonObjects, EasyListview,
-  SplitterEx, AdvOfficeButtons, AdvGroupBox, ShadowLabel, PanelEx, ShellAPI,
-  GR32_RangeBars, EditEx, ButtonsEx;
+  SplitterEx, AdvOfficeButtons, ShadowLabel, PanelEx, ShellAPI,
+  GR32_RangeBars, EditEx, ButtonsEx, ColorBoxEx;
 
 type
   TFormPreferences = class(TForm)
-    PageOptions: TNotebook;
-    DisableMinimize: TAdvOfficeCheckBoxEx;
-    ButtonCustomizeGameFonts: TBitBtn;
-    GroupBoxImageSplitters: TAdvGroupBoxEx;
-    LabelAppearanceGameDocuments: TShadowLabel;
-    GameDocumentsBackgroundColor: TColorBox;
-    ButtonGameDocumentsFont: TBitBtn;
-    ButtonGameDocumentsDefault: TBitBtn;
-    ImageSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
-    ShadowLabel1: TShadowLabel;
     PanelTabButtons: TPanelEx;
-    ButtonPageGeneral: TSpeedButton;
-    ButtonPageGamesList: TSpeedButton;
-    ButtonPageImages: TSpeedButton;
-    ButtonPageGameDocuments: TSpeedButton;
-    ColumnsSettingsGroupBox: TAdvGroupBoxEx;
-    DisableCloneIndent: TAdvOfficeCheckBoxEx;
-    DisableDriverStatusIcons: TAdvOfficeCheckBoxEx;
-    DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBoxEx;
-    HideDriverStatusTexts: TAdvOfficeCheckBoxEx;
-    ShortDriverColumnTitles: TAdvOfficeCheckBoxEx;
-    GamesBackgroundGroupBox: TAdvGroupBoxEx;
-    GamesBackgroundColor: TColorBox;
-    ButtonDefaultBkSortedColor: TBitBtn;
-    GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx;
+    ButtonPage1: TSpeedButtonEx;
+    ButtonPage2: TSpeedButtonEx;
+    PanelPage2: TPanelEx;
+    ToolBarBackgroundColorsBox: TPanelEx;
+    ToolBarBackgroundColorsBoxLabel: TShadowLabel;
+    NightModeLabelToolBarBkBottomColor: TShadowLabel;
+    NightModeLabelToolBarBkTopColor: TShadowLabel;
+    ToolBarGradientBar: TAdvOfficeCheckBoxEx;
+    ToolBarBkTopColor: TColorBoxEx;
+    ToolBarBkBottomColor: TColorBoxEx;
+    ToolBarBkColorsDefaultButton: TBitBtnEx;
+    SearchGamesPanelColorsBox: TPanelEx;
+    SearchGamesPanelColorsBoxLabel: TShadowLabel;
+    NightModeLabelSearchGamesPanelFilterFontColor: TShadowLabel;
+    NightModeLabelSearchGamesPanelFieldFontColor: TShadowLabel;
+    NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel;
+    NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel;
+    SearchGamesPanelFilterFontColor: TColorBoxEx;
+    SearchGamesPanelFieldFontColor: TColorBoxEx;
+    SearchGamesPanelEditBoxFontColor: TColorBoxEx;
+    SearchGamesPanelEditBoxBackgroundColor: TColorBoxEx;
+    SearchGamesPanelColorsButtonDefault: TBitBtnEx;
+    GamesSelectionBarColorsBox: TPanelEx;
+    GamesSelectionBarColorsBoxLabel: TShadowLabel;
+    GamesSelectionTopColorLabel: TShadowLabel;
+    GamesSelectionFontColorLabel: TShadowLabel;
+    GamesSelectionMissROMsTopColorLabel: TShadowLabel;
+    GamesSelectionMissROMsFontColorLabel: TShadowLabel;
+    GamesSelectionMissROMsLabel: TShadowLabel;
+    GamesSelectionInactiveTopColorLabel: TShadowLabel;
+    GamesSelectionInactiveFontColorLabel: TShadowLabel;
+    GamesSelectionInactiveLabel: TShadowLabel;
+    GamesSelectionBottomColorLabel: TShadowLabel;
+    GamesSelectionMissROMsBottomColorLabel: TShadowLabel;
+    GamesSelectionInactiveBottomColorLabel: TShadowLabel;
+    GamesSelectionFrameColorLabel: TShadowLabel;
+    GamesSelectionMissROMsFrameColorLabel: TShadowLabel;
+    GamesSelectionInactiveFrameColorLabel: TShadowLabel;
+    GamesSelectionTopColor: TColorBoxEx;
+    GameSelectionButtonDefault: TBitBtnEx;
+    GamesSelectionFontColor: TColorBoxEx;
+    GamesSelectionFrameColor: TColorBoxEx;
+    GamesSelectionMissROMsTopColor: TColorBoxEx;
+    GamesSelectionMissROMsFontColor: TColorBoxEx;
+    GamesSelectionMissROMsFrameColor: TColorBoxEx;
+    GamesSelectionInactiveTopColor: TColorBoxEx;
+    GamesSelectionInactiveFontColor: TColorBoxEx;
+    GamesSelectionInactiveFrameColor: TColorBoxEx;
+    GameSelectionAlphaBlend: TAdvOfficeCheckBoxEx;
+    GamesSelectionBottomColor: TColorBoxEx;
+    GameSelectionGradientBar: TAdvOfficeCheckBoxEx;
+    GamesSelectionMissROMsBottomColor: TColorBoxEx;
+    GamesSelectionInactiveBottomColor: TColorBoxEx;
+    GameSelectionRoundCorners: TAdvOfficeCheckBoxEx;
+    ToolBarWindowsTheme: TAdvOfficeCheckBoxEx;
+    GamesListBackgroundBox: TPanelEx;
+    GamesListBackgroundBoxLabel: TShadowLabel;
+    GamesBackgroundColor: TColorBoxEx;
+    ButtonDefaultBkSortedColor: TBitBtnEx;
     GamesBackgroundImage: TEditEx;
-    GamesBackgroundImageButtonSelect: TBitBtn;
-    GamesBackgroundImageButtonUpdate: TBitBtn;
+    GamesBackgroundImageEnable: TAdvOfficeCheckBoxEx;
+    GamesBackgroundImageButtonSelect: TBitBtnEx;
+    GamesBackgroundImageButtonUpdate: TBitBtnEx;
     GamesTileBackground: TAdvOfficeCheckBoxEx;
-    LastPlayedHideSeconds: TAdvOfficeCheckBoxEx;
-    TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx;
-    DisableNaturalSorting: TAdvOfficeCheckBoxEx;
-    LabelDisableNaturalSorting: TShadowLabel;
-    LabelGoToMAMEInfo: TShadowLabel;
-    LabelGoToMARP: TShadowLabel;
-    LabelGoToMAMEScore: TShadowLabel;
-    LabelGoToMAMEHistory: TShadowLabel;
-    GameMultilineCaptions: TAdvOfficeCheckBoxEx;
-    LabelGameMultilineCaptions: TShadowLabel;
+    GamesListSplittersBox: TPanelEx;
+    GamesListSplittersBoxLabel: TShadowLabel;
+    GamesListSplitterStyleSelector: TComboBox2Ex;
+    ButtonGamesListSplitterStyleButtonDefault: TBitBtnEx;
+    LabelGamesListSplitterSingleColorDefault: TShadowLabel;
+    GamesListSplitterSingleColorButtonDefault: TBitBtnEx;
+    GamesListSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
+    GamesListSplitterSingleColor: TColorBoxEx;
+    GamesListSplitterSingleColorHot: TColorBoxEx;
+    LabelGamesListSplitterSingleColorHot: TShadowLabel;
+    LabelGamesListSplitterSingleColor: TShadowLabel;
+    GamesListStatusBarColorsBox: TPanelEx;
+    GamesListStatusBarColorsBoxLabel: TShadowLabel;
+    GamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx;
+    GamesListStatusBarButtonDefault: TBitBtnEx;
+    GamesListStatusBarTopColor: TColorBoxEx;
+    GamesListStatusBarBottomColor: TColorBoxEx;
+    LabelGamesListStatusBarBottomColor: TShadowLabel;
+    LabelGamesListStatusBarFontColor: TShadowLabel;
+    GamesListStatusBarFontColor: TColorBoxEx;
+    LabelGamesListStatusBarTopColor: TShadowLabel;
+    MAMEGameDocsBox: TPanelEx;
+    MAMEGameDocsBoxLabel: TShadowLabel;
+    GameDocumentsBackgroundColor: TColorBoxEx;
+    GameDocumentsButtonDefault: TBitBtnEx;
+    GameDocsShowBorder: TAdvOfficeCheckBoxEx;
+    GameDocsBorderColor: TColorBoxEx;
+    GameDocsBorderColorButtonDefault: TBitBtnEx;
+    GameDocsShowStatusBar: TAdvOfficeCheckBoxEx;
+    GameDocsShowStatusBarLabel: TShadowLabel;
+    ImagesHintBox: TPanelEx;
+    ImagesHintBoxLabel: TShadowLabel;
+    LabelHintBox_Color: TShadowLabel;
+    HintBox_OpacityLabel: TShadowLabel;
+    HintBox_TextColorLabel: TShadowLabel;
+    HintBox_PositionLabel: TShadowLabel;
+    HintBox_Color: TColorBoxEx;
+    HintBox_FrameColor: TColorBoxEx;
+    HintBox_FrameEnabled: TAdvOfficeCheckBoxEx;
+    HintBox_OpacityButtonDefault: TBitBtnEx;
+    HintBox_TextShadowColor: TColorBoxEx;
+    HintBox_TextColor: TColorBoxEx;
+    HintBoxtColorsButtonDefault: TBitBtnEx;
+    HintTextDefaultColorsButtonDefault: TBitBtnEx;
+    HintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx;
+    HintBox_FontItalicStyle: TAdvOfficeCheckBoxEx;
+    HintBox_LargerFontSize: TAdvOfficeCheckBoxEx;
+    HintBox_Position: TGaugeBar;
+    HintBox_Opacity: TGaugeBar;
+    ImageSplittersBox: TPanelEx;
+    ImageSplittersBoxLabel: TShadowLabel;
+    ImageSplitterStyleSelector: TComboBox2Ex;
+    ImageSplitterStyleSelectorButtonDefault: TBitBtnEx;
+    ImageSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
+    LabelImageSplitterSingleColorDefault: TShadowLabel;
+    ImageSplitterSingleColorButtonDefault: TBitBtnEx;
     LabelImageSplitterSingleColor: TShadowLabel;
-    ImageSplitterSingleColor: TColorBox;
-    ImageSplitterSingleColorHot: TColorBox;
+    ImageSplitterSingleColor: TColorBoxEx;
     LabelImageSplitterSingleColorHot: TShadowLabel;
-    ButtonImageSplitterStyleDefault: TBitBtn;
-    HideDOSBoxFrame: TAdvGroupBoxEx;
+    ImageSplitterSingleColorHot: TColorBoxEx;
+    ImageBorderColorBox: TPanelEx;
+    ImageBorderColorBoxLabel: TShadowLabel;
+    ImageBorderColor: TColorBoxEx;
+    ImageBorderColorButtonDefault: TBitBtnEx;
+    MAMEGameManualsPDFFolderBox: TPanelEx;
+    MAMEGameManualsPDFFolderBoxLabel: TShadowLabel;
+    PanelPage1: TPanelEx;
+    Settings_GeneralBox: TPanelEx;
+    Settings_GeneralBoxLabel: TShadowLabel;
+    IgnoreExitCode1InvalidFunctionLabel: TShadowLabel;
+    UseItalicFontStyleSystemTitleBarLabel: TShadowLabel;
+    LeftAlignEmulatorGameTextMessageBoxLabel: TShadowLabel;
+    DisableMinimize: TAdvOfficeCheckBoxEx;
+    AllowOnlyOneInstance: TAdvOfficeCheckBoxEx;
+    IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx;
+    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx;
+    LeftAlignEmulatorGameTextMessageBox: TAdvOfficeCheckBoxEx;
+    PanelEx10: TPanelEx;
+    ShadowLabel15: TShadowLabel;
+    GameListHeaderFont_Setting: TShadowLabel;
+    LabelDisableNaturalSorting: TShadowLabel;
+    LabelGameMultilineCaptions: TShadowLabel;
+    LabelDisableDeleteSelectedGames: TShadowLabel;
+    LabelAddLeadingZeroVersionInfoMAME: TShadowLabel;
+    DisableNaturalSorting: TAdvOfficeCheckBoxEx;
+    GameMultilineCaptions: TAdvOfficeCheckBoxEx;
+    DisableDeleteSelectedGames: TAdvOfficeCheckBoxEx;
+    AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBoxEx;
+    MAMu_IconsFolderBox: TPanelEx;
+    MAMu_IconsFolderBoxLabel: TShadowLabel;
+    MAMu_IconsFolder: TEditEx;
+    ButtonMAMu_IconsFolderSelect: TBitBtnEx;
+    MAMu_Icon: TImage;
+    ImagesSpecialSettingsBox: TPanelEx;
+    ImagesSpecialSettingsBoxLabel: TShadowLabel;
+    FixRetroArchImageFileNamesLabel: TShadowLabel;
+    FixRetroArchImageFileNames: TAdvOfficeCheckBoxEx;
+    ImageDisableThreadedLoadingLabel: TShadowLabel;
+    ImageDisableThreadedLoading: TAdvOfficeCheckBoxEx;
+    InternetGameInfoBox: TPanelEx;
+    InternetGameInfoBoxLabel: TShadowLabel;
+    InternetGameInfoBoxTip1Label: TShadowLabel;
+    InternetGameInfoBoxTip2Label: TShadowLabel;
+    RestoreInternetGameInfoStartup: TAdvOfficeCheckBoxEx;
+    InternetGameInfoLinkLabel: TShadowLabel;
+    InternetMAMESoftwareListGameInfoLinkLabel: TShadowLabel;
+    InternetGameInfoLink: TEditEx;
+    InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtnEx;
+    InternetMAMESoftwareListGameInfoLink: TEditEx;
+    InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault: TBitBtnEx;
+    InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtnEx;
+    InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefault: TBitBtnEx;
+    HideDOSBoxBox: TPanelEx;
+    HideDOSBoxRunGameLabel: TShadowLabel;
     HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBoxEx;
     HideDOSBoxRunGame: TAdvOfficeCheckBoxEx;
-    ShadowLabel2: TShadowLabel;
-    LabelGoToMESSInfo: TShadowLabel;
-    LabelImageBorderColor: TShadowLabel;
-    ImageBorderColor: TColorBox;
-    ButtonImageBorderColorDefault: TBitBtn;
-    LabelGoToGameInit: TShadowLabel;
-    AllowOnlyOneInstance: TAdvOfficeCheckBoxEx;
-    GamesListStatusBarBox: TAdvGroupBoxEx;
-    LabelGamesListStatusBarBottomColor: TShadowLabel;
-    LabelGamesListStatusBarTopColor: TShadowLabel;
-    LabelGamesListStatusBarFontColor: TShadowLabel;
-    GamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx;
-    GamesListStatusBarBottomColor: TColorBox;
-    GamesListStatusBarButtonDefault: TBitBtn;
-    GamesListStatusBarTopColor: TColorBox;
-    GamesListStatusBarFontColor: TColorBox;
-    GamesListStatusBarInnerFrameColor: TColorBox;
-    DisableDeleteSelectedGames: TAdvOfficeCheckBoxEx;
-    LabelDisableDeleteSelectedGames: TShadowLabel;
-    IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx;
-    RestoreInternetGameInfoStartup: TAdvOfficeCheckBoxEx;
-    LabelIgnoreExitCode1InvalidFunction: TShadowLabel;
-    HintBoxSettings: TAdvGroupBoxEx;
-    LabelHintBox_Color: TShadowLabel;
-    HintBox_Color: TColorBox;
-    HintBox_FrameColor: TColorBox;
-    HintBox_FrameEnabled: TAdvOfficeCheckBoxEx;
-    LabelHintBox_Opacity: TShadowLabel;
-    HintBox_Opacity: TGaugeBar;
-    ButtonDefaultHintBox_Opacity: TBitBtn;
-    LabelHintBox_TextColor: TShadowLabel;
-    HintBox_TextShadowColor: TColorBox;
-    HintBox_TextColor: TColorBox;
-    ButtonHintBoxDefaultColors: TBitBtn;
-    ButtonHintTextDefaultColors: TBitBtn;
-    HintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx;
-    HintBox_IconEnabled: TAdvOfficeCheckBoxEx;
-    GroupBoxGamesListSplitters: TAdvGroupBoxEx;
-    LabelGamesListSplitterSingleColorDefault: TShadowLabel;
-    LabelGamesListSplitterSingleColor: TShadowLabel;
-    LabelGamesListSplitterSingleColorHot: TShadowLabel;
-    GamesListSplitterStyleSelector: TComboBox;
-    ButtonGamesListSplitterStyleDefault: TBitBtn;
-    GamesListSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
-    GamesListSplitterSingleColor: TColorBox;
-    GamesListSplitterSingleColorHot: TColorBox;
-    ButtonGamesListSplitterSingleColorDefault: TBitBtn;
-    GroupBoxGameDocsSplitter: TAdvGroupBoxEx;
-    LabelGameDocsSplitterSingleColorDefault: TShadowLabel;
-    LabelGameDocsSplitterSingleColor: TShadowLabel;
-    LabelGameDocsSplitterSingleColorHot: TShadowLabel;
-    GameDocsSplitterStyleSelector: TComboBox;
-    ButtonGameDocsSplitterStyleDefault: TBitBtn;
-    GameDocsSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
-    GameDocsSplitterSingleColor: TColorBox;
-    GameDocsSplitterSingleColorHot: TColorBox;
-    ButtonGameDocsSplitterSingleColorDefault: TBitBtn;
-    GroupBoxInternetGameInfo: TAdvGroupBoxEx;
-    LabelInternetGameInfoLink: TShadowLabel;
-    LabelInternetMAMESoftwareListGameInfoLink: TShadowLabel;
-    Label5: TShadowLabel;
-    Label6: TShadowLabel;
-    InternetGameInfoLink: TEditEx;
-    InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtn;
-    InternetMAMESoftwareListGameInfoLink: TEditEx;
-    InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault: TBitBtn;
-    LabelImageSplitterSingleColorDefault: TShadowLabel;
-    ButtonImageSplitterSingleColorDefault: TBitBtn;
-    ImageSplitterStyleSelector: TComboBox;
-    MAMu_Icon: TImage;
-    LabelMAMu_IconsFolder: TShadowLabel;
-    MAMu_IconsFolder: TEditEx;
-    ButtonMAMu_IconsFolderSelect: TBitBtn;
-    ImagesSpecialSettingsGroupBox: TAdvGroupBoxEx;
-    LabelFixRetroArchImageFileNames: TShadowLabel;
-    LabelImageDisableThreadedLoading: TShadowLabel;
-    FixRetroArchImageFileNames: TAdvOfficeCheckBoxEx;
-    ImageDisableThreadedLoading: TAdvOfficeCheckBoxEx;
-    GameDocsDisplayOrderBox: TAdvGroupBoxEx;
+    HideDOSBoxBoxLabel: TShadowLabel;
+    Setting_MAMEGameDocsBox: TPanelEx;
+    Setting_MAMEGameDocsBoxLabel: TShadowLabel;
+    GameDocsDisplayOrderBox: TPanelEx;
+    GameDocsLabel: TShadowLabel;
+    ButtonUp: TBitBtnEx;
+    ButtonDown: TBitBtnEx;
+    ButtonResetAutoGameInfoOrder: TBitBtnEx;
     GameDocs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    ButtonResetAutoGameInfoOrder: TBitBtn;
-    GameDocsDisplayModeBox: TAdvGroupBoxEx;
-    LabelGameDocsDisplayModeSinglePanel: TShadowLabel;
-    LabelGameDocsDisplayModeTabs: TShadowLabel;
-    GameDocsDisplayModeTabs: TAdvOfficeRadioButtonEx;
+    GameDocsDisplayModeBox: TPanelEx;
+    GameDocsDisplayModeBoxLabel: TShadowLabel;
     GameDocsDisplayModeSinglePanel: TAdvOfficeRadioButtonEx;
-    GamesListStatusBarOuterFrameColor: TColorBox;
-    GamesListStatusBarShadowFontColor: TColorBox;
-    GamesListStatusBarShadowFontEnabled: TAdvOfficeCheckBoxEx;
-    GameDocsBorderColor: TColorBox;
-    ButtonGameDocsBorderColorDefault: TBitBtn;
-    GamesListStatusBarShowInnerFrame: TAdvOfficeCheckBoxEx;
-    GamesListStatusBarShowOuterFrame: TAdvOfficeCheckBoxEx;
-    GameDocsShowBorder: TAdvOfficeCheckBoxEx;
-    GroupBoxGamesListSelectionBar: TAdvGroupBoxEx;
-    Label2: TShadowLabel;
-    GamesSelectionTopColor: TColorBox;
-    GameSelectionButtonDefault: TBitBtn;
-    Label10: TShadowLabel;
-    GamesSelectionFontColor: TColorBox;
-    GamesSelectionFrameColor: TColorBox;
-    Label14: TShadowLabel;
-    GamesSelectionMissROMsTopColor: TColorBox;
-    Label15: TShadowLabel;
-    GamesSelectionMissROMsFontColor: TColorBox;
-    GamesSelectionMissROMsFrameColor: TColorBox;
-    ShadowLabel4: TShadowLabel;
-    Label17: TShadowLabel;
-    Label18: TShadowLabel;
-    ShadowLabel5: TShadowLabel;
-    GamesSelectionInactiveTopColor: TColorBox;
-    GamesSelectionInactiveFontColor: TColorBox;
-    GamesSelectionInactiveFrameColor: TColorBox;
-    GameSelectionAlphaBlend: TAdvOfficeCheckBoxEx;
-    Label23: TShadowLabel;
-    GamesSelectionBottomColor: TColorBox;
-    GameSelectionGradientBar: TAdvOfficeCheckBoxEx;
-    GamesSelectionMissROMsBottomColor: TColorBox;
-    Label24: TShadowLabel;
-    Label26: TShadowLabel;
-    GamesSelectionInactiveBottomColor: TColorBox;
-    Label11: TShadowLabel;
-    Label16: TShadowLabel;
-    Label19: TShadowLabel;
-    AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBoxEx;
-    LabelAddLeadingZeroVersionInfoMAME: TShadowLabel;
-    InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
-    InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefault: TBitBtn;
-    LabelMAMEGameManualsPDFFolder: TShadowLabel;
+    GameDocsDisplayModeSinglePanelLabel: TShadowLabel;
+    GameDocsDisplayModeTabs: TAdvOfficeRadioButtonEx;
+    GameDocsDisplayModeTabsLabel: TShadowLabel;
+    Setting_MAMEGameDocsBoxTipLabel: TShadowLabel;
+    MAMEGameManualsPDFFolderLabel: TShadowLabel;
+    MAMEGameManualsPDFFolderTipLabel: TShadowLabel;
     MAMEGameManualsPDFFolder: TEditEx;
-    ShadowLabel6: TShadowLabel;
-    MAMEGameManualsPDFFolderButtonSelect: TBitBtn;
-    MAMEGameManualsPDFFolderButtonDefault: TBitBtn;
-    LabelMARP_scores3htm: TShadowLabel;
-    LabelLinkMARP_scores3htm: TShadowLabel;
-    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx;
-    LabelUseItalicFontStyleSystemTitleBar: TShadowLabel;
+    MAMEGameManualsPDFFolderButtonSelect: TBitBtnEx;
+    MAMEGameManualsPDFFolderButtonDefault: TBitBtnEx;
+    LabelGoToMAMEInfo: TShadowLabel;
+    LabelGoToMESSInfo: TShadowLabel;
+    LabelGoToGameInit: TShadowLabel;
+    LabelGoToMARP: TShadowLabel;
+    LabelGoToMAMEHistory: TShadowLabel;
+    LabelGoToMAMEScore: TShadowLabel;
+    DisableCloneIndent: TAdvOfficeCheckBoxEx;
+    DisableDriverStatusIcons: TAdvOfficeCheckBoxEx;
+    HideDriverStatusTexts: TAdvOfficeCheckBoxEx;
+    DriverStatusShowFirstLetterOnly: TAdvOfficeCheckBoxEx;
+    ShortDriverColumnTitles: TAdvOfficeCheckBoxEx;
+    LastPlayedHideSeconds: TAdvOfficeCheckBoxEx;
+    TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx;
     GameDocsFont_Setting: TShadowLabel;
-    GameDocsShowStatusBar: TAdvOfficeCheckBoxEx;
-    LabelGameDocsShowStatusBar: TShadowLabel;
+    CheckBoxRadioButtonBox: TPanelEx;
+    CheckBoxRadioButtonBoxLabel: TShadowLabel;
+    CheckBoxRadioButtonProfile: TComboBox2Ex;
+    CheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx;
+    CheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx;
+    CheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx;
+    CheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
-    procedure ButtonGameDocumentsFontClick(Sender: TObject);
     procedure GameDocumentsBackgroundColorSelect(
       Sender: TObject);
-    procedure ButtonGameDocumentsDefaultClick(Sender: TObject);
+    procedure GameDocumentsButtonDefaultClick(Sender: TObject);
     procedure GamesBackgroundImageButtonSelectClick(Sender: TObject);
     procedure GamesBackgroundImageButtonUpdateClick(Sender: TObject);
     procedure GamesTileBackgroundClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ButtonResetAutoGameInfoOrderClick(Sender: TObject);
     procedure ButtonDefaultBkSortedColorClick(Sender: TObject);
-    procedure ButtonCustomizeGameFontsClick(Sender: TObject);
     procedure GameDocsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure ButtonUpClick(Sender: TObject);
     procedure GameSelectionAlphaBlendClick(Sender: TObject);
     procedure ImageSplitterSingleColorSelect(Sender: TObject);
     procedure ImageSplitterSingleColorHotSelect(Sender: TObject);
-    procedure ButtonImageSplitterStyleDefaultClick(Sender: TObject);
-    procedure ButtonGamesListSplitterStyleDefaultClick(Sender: TObject);
-    procedure ButtonGamesListSplitterSingleColorDefaultClick(Sender: TObject);
+    procedure ImageSplitterStyleSelectorButtonDefaultClick(Sender: TObject);
+    procedure ButtonGamesListSplitterStyleButtonDefaultClick(Sender: TObject);
+    procedure GamesListSplitterSingleColorButtonDefaultClick(Sender: TObject);
     procedure GamesListSplitterStyleSelectorSelect(Sender: TObject);
     procedure GamesListSplitterSingleColorSelect(Sender: TObject);
     procedure GamesListSplitterSingleColorHotSelect(Sender: TObject);
     procedure GamesListSplitterShowGripIconClick(Sender: TObject);
-    procedure ButtonPageGeneralClick(Sender: TObject);
+    procedure ButtonPage1Click(Sender: TObject);
     procedure ButtonMAMu_IconsFolderSelectClick(Sender: TObject);
     procedure ImageSplitterShowGripIconClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -239,11 +271,10 @@ type
     procedure LabelGoToMAMEInfoMouseLeave(Sender: TObject);
     procedure GameMultilineCaptionsClick(Sender: TObject);
     procedure ImageBorderColorSelect(Sender: TObject);
-    procedure ButtonImageBorderColorDefaultClick(Sender: TObject);
+    procedure ImageBorderColorButtonDefaultClick(Sender: TObject);
     procedure GamesListStatusBarGradientBarClick(Sender: TObject);
     procedure GamesListStatusBarTopColorSelect(Sender: TObject);
     procedure GamesListStatusBarBottomColorSelect(Sender: TObject);
-    procedure GamesListStatusBarInnerFrameColorSelect(Sender: TObject);
     procedure GamesListStatusBarFontColorSelect(Sender: TObject);
     procedure GamesListStatusBarButtonDefaultClick(Sender: TObject);
     procedure InternetGameInfoProgettoEMMALinkButtonDefaultClick(Sender: TObject);
@@ -251,25 +282,14 @@ type
     procedure DisableDeleteSelectedGamesClick(Sender: TObject);
     procedure GameDocsDisplayModeSinglePanelClick(Sender: TObject);
     procedure HintBox_OpacityChange(Sender: TObject);
-    procedure ButtonDefaultHintBox_OpacityClick(Sender: TObject);
-    procedure ButtonHintBoxDefaultColorsClick(Sender: TObject);
-    procedure ButtonHintTextDefaultColorsClick(Sender: TObject);
+    procedure HintBox_OpacityButtonDefaultClick(Sender: TObject);
+    procedure HintBoxtColorsButtonDefaultClick(Sender: TObject);
+    procedure HintTextDefaultColorsButtonDefaultClick(Sender: TObject);
     procedure ImageSplitterStyleSelectorSelect(Sender: TObject);
-    procedure ButtonImageSplitterSingleColorDefaultClick(Sender: TObject);
-    procedure GameDocsSplitterStyleSelectorSelect(Sender: TObject);
-    procedure ButtonGameDocsSplitterStyleDefaultClick(Sender: TObject);
-    procedure ButtonGameDocsSplitterSingleColorDefaultClick(
-      Sender: TObject);
-    procedure GameDocsSplitterShowGripIconClick(Sender: TObject);
-    procedure GameDocsSplitterSingleColorSelect(Sender: TObject);
-    procedure GameDocsSplitterSingleColorHotSelect(Sender: TObject);
-    procedure GamesListStatusBarOuterFrameColorSelect(Sender: TObject);
-    procedure GamesListStatusBarShadowFontEnabledClick(Sender: TObject);
-    procedure GamesListStatusBarShadowFontColorSelect(Sender: TObject);
+    procedure ImageSplitterSingleColorButtonDefaultClick(Sender: TObject);
     procedure GameDocsBorderColorSelect(Sender: TObject);
-    procedure ButtonGameDocsBorderColorDefaultClick(Sender: TObject);
+    procedure GameDocsBorderColorButtonDefaultClick(Sender: TObject);
     procedure GameDocsShowBorderClick(Sender: TObject);
-    procedure GamesListStatusBarShowOuterFrameClick(Sender: TObject);
     procedure OverlayIconsAlternateFolder_SelectPanelCloseMouseEnter(
       Sender: TObject);
     procedure OverlayIconsAlternateFolder_SelectPanelCloseMouseLeave(
@@ -280,11 +300,26 @@ type
     procedure InternetMAMESoftwareListGameInfoArcadeItaliaLinkButtonDefaultClick(Sender: TObject);
     procedure MAMEGameManualsPDFFolderButtonDefaultClick(Sender: TObject);
     procedure MAMEGameManualsPDFFolderButtonSelectClick(Sender: TObject);
-    procedure PageOptionsPageChanged(Sender: TObject);
     procedure GameDocsShowStatusBarClick(Sender: TObject);
+    procedure HintBox_PositionChange(Sender: TObject);
+    procedure GameSelectionRoundCornersClick(Sender: TObject);
+    procedure ToolBarGradientBarClick(Sender: TObject);
+    procedure ToolBarWindowsThemeClick(Sender: TObject);
+    procedure ToolBarBkTopColorSelect(Sender: TObject);
+    procedure ToolBarBkBottomColorSelect(Sender: TObject);
+    procedure ToolBarBkColorsDefaultButtonClick(Sender: TObject);
+    procedure GameDocsFont_SettingClick(Sender: TObject);
+    procedure SearchGamesPanelFilterFontColorSelect(Sender: TObject);
+    procedure SearchGamesPanelFieldFontColorSelect(Sender: TObject);
+    procedure SearchGamesPanelEditBoxFontColorSelect(Sender: TObject);
+    procedure SearchGamesPanelEditBoxBackgroundColorSelect(
+      Sender: TObject);
+    procedure CheckBoxRadioButtonProfileSelect(Sender: TObject);
   private
     { Private declarations }
+    MoveControls: Boolean;
     procedure UpdateGamesBackgroundImage(ImageEnabledCheckBox: TAdvOfficeCheckBoxEx; ImageFileNameEditBox: TEditEx; NightModeControls: Boolean);
+    procedure RepaintToolBar;
   public
     { Public declarations }
 
@@ -300,7 +335,7 @@ uses uMain, uStatus, uCommon;
 {$R *.DFM}
 
 // might be useful in the future...
-//procedure TFormPreferences.ELV_GetMissROM_Selected(ColorBoxHolder: TColorBox);
+//procedure TFormPreferences.ELV_GetMissROM_Selected(ColorBoxHolder: TColorBoxEx);
 //var
 //  colorRed, colorGreen, colorBlue, NewColor: Integer; // will hold default RGB color
 //begin
@@ -324,6 +359,17 @@ begin
        PostMessage(Handle, wm_Close, 0, 0);
        Exit;
      end;
+  if not MoveControls then
+  begin
+    // you cannot change a control parent property in Form.OnCreate() event
+    MoveControls:= True;
+    PanelPage2.Left:= 0;
+    PanelPage2.Top:= PanelPage1.Top;
+    PanelPage2.Visible:= False;
+    FormPreferences.ClientHeight:= PanelPage1.Top+PanelPage1.Height;
+    FormPreferences.ClientWidth:= PanelPage1.Width;
+  end;
+  
   if FormPreferences.Tag = 2 then
      begin
        MAMu_IconsFolder.SetFocus;
@@ -341,36 +387,19 @@ begin
      end;
 end;
 
-procedure TFormPreferences.ButtonGameDocumentsFontClick(
-  Sender: TObject);
-begin
-  FormMain.FontDialog.Font:= GameDocsFont_Setting.Font;
-  FormMain.FontDialog.Tag:= 6;
-  if FormMain.FontDialog.Execute then
-     begin
-       GameDocsFont_Setting.Font:= FormMain.FontDialog.Font;
-       if not IsNightMode then
-          FormMain.MAMEInfoTextHolder.Font:= GameDocsFont_Setting.Font;
-     end;
-
-  // original code
-  //FormMain.FontDialog.Font:= FormMain.MAMEInfoTextHolder.Font;
-  //FormMain.FontDialog.Tag:= 6;
-  //if FormMain.FontDialog.Execute then
-  //   FormMain.MAMEInfoTextHolder.Font:= FormMain.FontDialog.Font;
-end;
-
 procedure TFormPreferences.GameDocumentsBackgroundColorSelect(
   Sender: TObject);
 begin
   if not IsNightMode then
      FormMain.MAMEInfoTextHolder.Color:= GameDocumentsBackgroundColor.Selected;
+
+  GameDocsFont_Setting.Color:= GameDocumentsBackgroundColor.Selected;
 end;
 
-procedure TFormPreferences.ButtonGameDocumentsDefaultClick(Sender: TObject);
+procedure TFormPreferences.GameDocumentsButtonDefaultClick(Sender: TObject);
 begin
   GameDocsFont_Setting.Font.Color:= clBlack;
-  GameDocsFont_Setting.Font.Name:= 'Consolas';
+  GameDocsFont_Setting.Font.Name:= 'Calibri';
   GameDocsFont_Setting.Font.Size:= 9;
   GameDocsFont_Setting.Font.Style:= [];
   if not IsNightMode then
@@ -443,7 +472,8 @@ procedure TFormPreferences.GamesBackgroundImageButtonUpdateClick(
 //  ListViewBk: TPNGGraphic;
 //  FileFullPath: String;
 begin
-  UpdateGamesBackgroundImage(GamesBackgroundImageEnable, GamesBackgroundImage, False);
+  if not IsNightMode then
+     UpdateGamesBackgroundImage(GamesBackgroundImageEnable, GamesBackgroundImage, False);
   {
   case GamesBackgroundImageEnable.Checked of
     True:
@@ -503,10 +533,8 @@ end;
 
 procedure TFormPreferences.FormCreate(Sender: TObject);
 begin
-  if PageOptions.PageIndex <> 0 then
-     PageOptions.PageIndex:= 0;
+  MoveControls:= False;
   FormMain.LoadMessageIcon(MAMu_Icon, 'mamu_.ico', True);
-
   FormMain.ELV_ResetNormalColors(GameDocs);
 end;
 
@@ -529,11 +557,6 @@ begin
      FormMain.Font_TilesViewDetailsText.Color:= GetContrastColor(GamesBackgroundColor.Selected);
 end;
 
-procedure TFormPreferences.ButtonCustomizeGameFontsClick(Sender: TObject);
-begin
-  FormMain.MenuFontSettings.Click;
-end;
-
 procedure TFormPreferences.GameDocsItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
@@ -552,37 +575,37 @@ begin
   if not IsNightMode then
      begin
        FormMain.GamesListView.Selection.AlphaBlend:= GameSelectionAlphaBlend.Checked;
-       FormMain.GamesListView.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
        FormMain.MachinesListSidePanel.Selection.AlphaBlend:= GameSelectionAlphaBlend.Checked;
-       FormMain.MachinesListSidePanel.Selection.RoundRect:= GameSelectionAlphaBlend.Checked;
      end;
 end;
 
 procedure TFormPreferences.ImageSplitterSingleColorSelect(
   Sender: TObject);
 begin
-  FormMain.UpdateImageLayoutSplittersStyle;
+  if not IsNightMode then
+     FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
 procedure TFormPreferences.ImageSplitterSingleColorHotSelect(
   Sender: TObject);
 begin
-  FormMain.UpdateImageLayoutSplittersStyle;
+  if not IsNightMode then
+     FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
-procedure TFormPreferences.ButtonImageSplitterStyleDefaultClick(
+procedure TFormPreferences.ImageSplitterStyleSelectorButtonDefaultClick(
   Sender: TObject);
 begin
   SetSelectedComboBox(1, ImageSplitterStyleSelector);
 end;
 
-procedure TFormPreferences.ButtonGamesListSplitterStyleDefaultClick(
+procedure TFormPreferences.ButtonGamesListSplitterStyleButtonDefaultClick(
   Sender: TObject);
 begin
   SetSelectedComboBox(6, GamesListSplitterStyleSelector);
 end;
 
-procedure TFormPreferences.ButtonGamesListSplitterSingleColorDefaultClick(
+procedure TFormPreferences.GamesListSplitterSingleColorButtonDefaultClick(
   Sender: TObject);
 begin
   SetDefaultColorBox(GamesListSplitterSingleColor);
@@ -604,28 +627,43 @@ end;
 
 procedure TFormPreferences.GamesListSplitterSingleColorSelect(Sender: TObject);
 begin
-  GamesListSplitterStyleSelector.OnSelect(Self);
+  if not IsNightMode then
+     GamesListSplitterStyleSelector.OnSelect(Self);
 end;
 
 procedure TFormPreferences.GamesListSplitterSingleColorHotSelect(Sender: TObject);
 begin
-  GamesListSplitterStyleSelector.OnSelect(Self);
+  if not IsNightMode then
+     GamesListSplitterStyleSelector.OnSelect(Self);
 end;
 
 procedure TFormPreferences.GamesListSplitterShowGripIconClick(Sender: TObject);
 begin
   if not IsNightMode then
-     FormMain.SetGripIcon(FormMain.Splitter, GamesListSplitterShowGripIcon.Checked);
+     begin
+       FormMain.SetGripIcon(FormMain.Splitter, GamesListSplitterShowGripIcon.Checked);
+       FormMain.SetGripIcon(FormMain.SplitterMachines, GamesListSplitterShowGripIcon.Checked);
+     end;
 end;
 
-procedure TFormPreferences.ButtonPageGeneralClick(Sender: TObject);
+procedure TFormPreferences.ButtonPage1Click(Sender: TObject);
 begin
-  PageOptions.PageIndex:= TSpeedButton(Sender).Tag;
-  ButtonPageGeneral.Font.Style:= [];
-  ButtonPageGamesList.Font.Style:= [];
-  ButtonPageImages.Font.Style:= [];
-  ButtonPageGameDocuments.Font.Style:= [];
-  TSpeedButton(Sender).Font.Style:= [fsBold];
+  if TSpeedButton(Sender).Tag = 1 then
+     begin
+       if not PanelPage1.Visible then
+          begin
+            PanelPage2.Visible:= False;
+            PanelPage1.Visible:= True;
+          end;
+     end
+  else
+     begin
+       if not PanelPage2.Visible then
+          begin
+            PanelPage1.Visible:= False;
+            PanelPage2.Visible:= True;
+          end;
+     end;
 end;
 
 procedure TFormPreferences.ButtonMAMu_IconsFolderSelectClick(
@@ -636,6 +674,8 @@ end;
 
 procedure TFormPreferences.ImageSplitterShowGripIconClick(Sender: TObject);
 begin
+  if IsNightMode then
+     Exit;
   if ImageSplitterShowGripIcon.Tag = 0 then
      FormMain.PopupImageShowSplitterGrip.Click;
 end;
@@ -727,7 +767,7 @@ begin
      FormMain.PanelImage.Color:= ImageBorderColor.Selected;
 end;
 
-procedure TFormPreferences.ButtonImageBorderColorDefaultClick(Sender: TObject);
+procedure TFormPreferences.ImageBorderColorButtonDefaultClick(Sender: TObject);
 begin
   SetDefaultColorBox(ImageBorderColor);
 end;
@@ -739,6 +779,7 @@ begin
      begin
        FormMain.SetPanelExStyle(FormMain.StatusBarPanel, GamesListStatusBarGradientBar.Checked);
        FormMain.SetPanelExStyle(FormMain.StatusBarPanelMachines, GamesListStatusBarGradientBar.Checked);
+       FormMain.SetPanelExStyle(FormMain.MAMEInfoStatusBar, GamesListStatusBarGradientBar.Checked);
      end;
 end;
 
@@ -749,6 +790,7 @@ begin
      begin
        FormMain.StatusBarPanel.Color1:= GamesListStatusBarTopColor.Selected;
        FormMain.StatusBarPanelMachines.Color1:= GamesListStatusBarTopColor.Selected;
+       FormMain.MAMEInfoStatusBar.Color1:= GamesListStatusBarTopColor.Selected;
      end;
 end;
 
@@ -759,26 +801,7 @@ begin
      begin
        FormMain.StatusBarPanel.Color2:= GamesListStatusBarBottomColor.Selected;
        FormMain.StatusBarPanelMachines.Color2:= GamesListStatusBarBottomColor.Selected;
-     end;
-end;
-
-procedure TFormPreferences.GamesListStatusBarInnerFrameColorSelect(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     begin
-       FormMain.StatusBarPanel.ColorInnerFrame:= GamesListStatusBarInnerFrameColor.Selected;
-       FormMain.StatusBarPanelMachines.ColorInnerFrame:= GamesListStatusBarInnerFrameColor.Selected;
-     end;
-end;
-
-procedure TFormPreferences.GamesListStatusBarOuterFrameColorSelect(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     begin
-       FormMain.StatusBarPanel.ColorFrame:= GamesListStatusBarOuterFrameColor.Selected;
-       FormMain.StatusBarPanelMachines.ColorFrame:= GamesListStatusBarOuterFrameColor.Selected;
+       FormMain.MAMEInfoStatusBar.Color2:= GamesListStatusBarBottomColor.Selected;
      end;
 end;
 
@@ -793,40 +816,12 @@ begin
      end;
 end;
 
-procedure TFormPreferences.GamesListStatusBarShadowFontColorSelect(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     begin
-       FormMain.StatusBar_GamesTotal.ShadowColor:= GamesListStatusBarFontColor.Selected;
-       FormMain.StatusBar_GamesGameName.ShadowColor:= GamesListStatusBarFontColor.Selected;
-       FormMain.StatusBar_MachinesGameName.ShadowColor:= GamesListStatusBarFontColor.Selected;
-     end;
-end;
-
-procedure TFormPreferences.GamesListStatusBarShadowFontEnabledClick(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     begin
-       FormMain.StatusBar_GamesTotal.ShadowEnabled:= GamesListStatusBarShadowFontEnabled.Checked;
-       FormMain.StatusBar_GamesGameName.ShadowEnabled:= GamesListStatusBarShadowFontEnabled.Checked;
-       FormMain.StatusBar_MachinesGameName.ShadowEnabled:= GamesListStatusBarShadowFontEnabled.Checked;
-     end;
-end;
-
 procedure TFormPreferences.GamesListStatusBarButtonDefaultClick(Sender: TObject);
 begin
   SetDefaultColorBox(GamesListStatusBarTopColor);
   SetDefaultColorBox(GamesListStatusBarBottomColor);
-  SetDefaultColorBox(GamesListStatusBarInnerFrameColor);
-  SetDefaultColorBox(GamesListStatusBarOuterFrameColor);
   SetDefaultColorBox(GamesListStatusBarFontColor);
-  SetDefaultColorBox(GamesListStatusBarShadowFontColor);
 
-  GamesListStatusBarShowInnerFrame.Checked:= True;
-  GamesListStatusBarShowOuterFrame.Checked:= True;
-  GamesListStatusBarShadowFontEnabled.Checked:= False;
   GamesListStatusBarGradientBar.Checked:= True;
 end;
 
@@ -883,82 +878,45 @@ end;
 
 procedure TFormPreferences.HintBox_OpacityChange(Sender: TObject);
 begin
-  LabelHintBox_Opacity.Caption:= 'Opacity ['+IntToStr(HintBox_Opacity.Position)+']';
+  HintBox_OpacityLabel.Caption:= 'Opacity ['+IntToStr(HintBox_Opacity.Position)+']';
 end;
 
-procedure TFormPreferences.ButtonDefaultHintBox_OpacityClick(
+procedure TFormPreferences.HintBox_OpacityButtonDefaultClick(
   Sender: TObject);
 begin
   HintBox_Opacity.Position:= 200;
 end;
 
-procedure TFormPreferences.ButtonHintBoxDefaultColorsClick(
+procedure TFormPreferences.HintBoxtColorsButtonDefaultClick(
   Sender: TObject);
 begin
+  HintBox_Position.Position:= 4;
   SetDefaultColorBox(HintBox_Color);
   SetDefaultColorBox(HintBox_FrameColor);
   HintBox_FrameEnabled.Checked:= True;
 end;
 
-procedure TFormPreferences.ButtonHintTextDefaultColorsClick(
+procedure TFormPreferences.HintTextDefaultColorsButtonDefaultClick(
   Sender: TObject);
 begin
   SetDefaultColorBox(HintBox_TextColor);
   SetDefaultColorBox(HintBox_TextShadowColor);
   HintBox_TextShadowEnabled.Checked:= True;
+  HintBox_FontItalicStyle.Checked:= False;
+  HintBox_LargerFontSize.Checked:= False;
 end;
 
 procedure TFormPreferences.ImageSplitterStyleSelectorSelect(
   Sender: TObject);
 begin
-  FormMain.UpdateImageLayoutSplittersStyle;
+  if not IsNightMode then
+     FormMain.UpdateImageLayoutSplittersStyle;
 end;
 
-procedure TFormPreferences.ButtonImageSplitterSingleColorDefaultClick(Sender: TObject);
+procedure TFormPreferences.ImageSplitterSingleColorButtonDefaultClick(Sender: TObject);
 begin
   SetDefaultColorBox(ImageSplitterSingleColor);
   SetDefaultColorBox(ImageSplitterSingleColorHot);
-end;
-
-procedure TFormPreferences.GameDocsSplitterStyleSelectorSelect(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     FormMain.UpdateSplitterStyle(FormMain.SplitterMAMEInfo, TTMSStyle(GameDocsSplitterStyleSelector.ItemIndex),
-                                  GameDocsSplitterSingleColor.Selected,
-                                  GameDocsSplitterSingleColorHot.Selected);
-end;
-
-procedure TFormPreferences.ButtonGameDocsSplitterStyleDefaultClick(
-  Sender: TObject);
-begin
-  SetSelectedComboBox(6, GameDocsSplitterStyleSelector);
-end;
-
-procedure TFormPreferences.ButtonGameDocsSplitterSingleColorDefaultClick(
-  Sender: TObject);
-begin
-  SetDefaultColorBox(GameDocsSplitterSingleColor);
-  SetDefaultColorBox(GameDocsSplitterSingleColorHot);
-end;
-
-procedure TFormPreferences.GameDocsSplitterShowGripIconClick(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     FormMain.SetGripIcon(FormMain.SplitterMAMEInfo, GameDocsSplitterShowGripIcon.Checked);
-end;
-
-procedure TFormPreferences.GameDocsSplitterSingleColorSelect(
-  Sender: TObject);
-begin
-  GameDocsSplitterStyleSelector.OnSelect(Self);
-end;
-
-procedure TFormPreferences.GameDocsSplitterSingleColorHotSelect(
-  Sender: TObject);
-begin
-  GameDocsSplitterStyleSelector.OnSelect(Self);
 end;
 
 procedure TFormPreferences.GameDocsBorderColorSelect(Sender: TObject);
@@ -967,7 +925,7 @@ begin
      FormMain.PanelGameDocuments.Color:= GameDocsBorderColor.Selected;
 end;
 
-procedure TFormPreferences.ButtonGameDocsBorderColorDefaultClick(
+procedure TFormPreferences.GameDocsBorderColorButtonDefaultClick(
   Sender: TObject);
 begin
   SetDefaultColorBox(GameDocsBorderColor);
@@ -982,16 +940,8 @@ begin
           FormMain.PanelGameDocuments.BorderWidth:= 7
        else
           FormMain.PanelGameDocuments.BorderWidth:= 0;
-     end;
-end;
 
-procedure TFormPreferences.GamesListStatusBarShowOuterFrameClick(
-  Sender: TObject);
-begin
-  if not IsNightMode then
-     begin
-       FormMain.SetPanelExFrames(GamesListStatusBarShowOuterFrame, GamesListStatusBarShowInnerFrame, FormMain.StatusBarPanel, 20, False);
-       FormMain.SetPanelExFrames(GamesListStatusBarShowOuterFrame, GamesListStatusBarShowInnerFrame, FormMain.StatusBarPanelMachines, 20, False);
+       FormMain.MAMEInfoStatusBar.Visible:= GameDocsShowStatusBar.Checked and (not GameDocsShowBorder.Checked);
      end;
 end;
 
@@ -1018,8 +968,9 @@ end;
 
 procedure TFormPreferences.GameSelectionButtonDefaultClick(Sender: TObject);
 begin
-  GameSelectionGradientBar.Checked:= False;
-  GameSelectionAlphaBlend.Checked:= False;
+  GameSelectionGradientBar.Checked:= True;
+  GameSelectionAlphaBlend.Checked:= True;
+  GameSelectionRoundCorners.Checked:= True;
 
   SetDefaultColorBox(GamesSelectionTopColor);
   SetDefaultColorBox(GamesSelectionBottomColor);
@@ -1049,24 +1000,156 @@ begin
   FormMain.DialogSelectFolder(MAMEGameManualsPDFFolder, False);
 end;
 
-procedure TFormPreferences.PageOptionsPageChanged(Sender: TObject);
-begin
-  if PageOptions.PageIndex in [4, 5] then
-     begin
-       if PageOptions.Color <> clGray then
-          PageOptions.Color:= clGray
-     end
-  else
-     begin
-       if PageOptions.Color <> $00f1f1f1 then
-          PageOptions.Color:= $00f1f1f1;
-     end;
-end;
-
 procedure TFormPreferences.GameDocsShowStatusBarClick(Sender: TObject);
 begin
   if not IsNightMode then
      FormMain.MAMEInfoStatusBar.Visible:= GameDocsShowStatusBar.Checked and (not GameDocsShowBorder.Checked);
+end;
+
+procedure TFormPreferences.HintBox_PositionChange(Sender: TObject);
+begin
+  case HintBox_Position.Position of
+    1: HintBox_PositionLabel.Caption:= 'Top / Left';
+    2: HintBox_PositionLabel.Caption:= 'Top / Middle';
+    3: HintBox_PositionLabel.Caption:= 'Top / Right';
+    4: HintBox_PositionLabel.Caption:= 'Middle / Left'; // this is the default
+    5: HintBox_PositionLabel.Caption:= 'Middle / Right';
+    6: HintBox_PositionLabel.Caption:= 'Bottom / Left';
+    7: HintBox_PositionLabel.Caption:= 'Bottom / Middle';
+    8: HintBox_PositionLabel.Caption:= 'Bottom / Right';
+  end;
+end;
+
+procedure TFormPreferences.GameSelectionRoundCornersClick(Sender: TObject);
+begin
+  if not IsNightMode then
+     begin
+       FormMain.GamesListView.Selection.RoundRect:= GameSelectionRoundCorners.Checked;
+       FormMain.MachinesListSidePanel.Selection.RoundRect:= GameSelectionRoundCorners.Checked;
+     end;
+end;
+
+procedure TFormPreferences.RepaintToolBar;
+begin
+  if (not FormMain.IsStartup) and (not IsNightMode) then
+     begin
+       FormMain.ImagesToolbarButtons.Invalidate;
+       FormMain.ToolBarButtons.Invalidate; // games filters tool bar
+       FormMain.ToolBarFilterTitle_ToolBar.Invalidate;
+     end;
+end;
+
+procedure TFormPreferences.ToolBarGradientBarClick(Sender: TObject);
+begin
+  if (not IsNightMode) and (not ToolBarWindowsTheme.Checked) then
+     begin
+       FormMain.SetPanelExStyle(FormMain.PanelSearchGames_ToolBar, ToolBarGradientBar.Checked);
+       FormMain.SetPanelExStyle(FormMain.PanelWebToolBarButtons, ToolBarGradientBar.Checked);
+       RepaintToolBar;
+     end;
+end;
+
+procedure TFormPreferences.ToolBarWindowsThemeClick(Sender: TObject);
+begin
+  if not IsNightMode then
+     begin
+       if ToolBarWindowsTheme.Checked then
+          begin
+            FormMain.PanelSearchGames_ToolBar.Style:= vgWindowsTheme;
+            FormMain.PanelWebToolBarButtons.Style:= vgWindowsTheme;
+            RepaintToolBar;
+          end
+       else
+          ToolBarGradientBar.OnClick(Self);
+     end;
+end;
+
+procedure TFormPreferences.ToolBarBkTopColorSelect(Sender: TObject);
+begin
+  if not IsNightMode then
+     begin
+       FormMain.PanelSearchGames_ToolBar.Color1:= ToolBarBkTopColor.Selected;
+       FormMain.PanelWebToolBarButtons.Color1:= ToolBarBkTopColor.Selected;
+     end;
+  if not ToolBarWindowsTheme.Checked then
+     RepaintToolBar;
+end;
+
+procedure TFormPreferences.ToolBarBkBottomColorSelect(
+  Sender: TObject);
+begin
+  if not IsNightMode then
+     begin
+       FormMain.PanelSearchGames_ToolBar.Color2:= ToolBarBkBottomColor.Selected;
+       FormMain.PanelWebToolBarButtons.Color2:= ToolBarBkBottomColor.Selected;
+     end;
+  if not ToolBarWindowsTheme.Checked then
+     RepaintToolBar;
+end;
+
+procedure TFormPreferences.ToolBarBkColorsDefaultButtonClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(ToolBarBkTopColor);
+  SetDefaultColorBox(ToolBarBkBottomColor);
+  ToolBarWindowsTheme.Checked:= True;
+  ToolBarGradientBar.Checked:= True;
+end;
+
+procedure TFormPreferences.GameDocsFont_SettingClick(
+  Sender: TObject);
+begin
+  FormMain.FontDialog.Font:= GameDocsFont_Setting.Font;
+  FormMain.FontDialog.Tag:= 6;
+  if FormMain.FontDialog.Execute then
+     begin
+       GameDocsFont_Setting.Font:= FormMain.FontDialog.Font;
+       if not IsNightMode then
+          FormMain.MAMEInfoTextHolder.Font:= GameDocsFont_Setting.Font;
+     end;
+end;
+
+procedure TFormPreferences.SearchGamesPanelFilterFontColorSelect(
+  Sender: TObject);
+begin
+  if not IsNightMode then
+     FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= SearchGamesPanelFilterFontColor.Selected;
+end;
+
+procedure TFormPreferences.SearchGamesPanelFieldFontColorSelect(
+  Sender: TObject);
+begin
+  if not IsNightMode then
+     FormMain.LabelSearchGamesBy_ToolBar.Font.Color:= SearchGamesPanelFieldFontColor.Selected;
+end;
+
+procedure TFormPreferences.SearchGamesPanelEditBoxFontColorSelect(
+  Sender: TObject);
+begin
+  if not IsNightMode then
+     FormMain.FilterGameTitle_ToolBar.Font.Color:= SearchGamesPanelEditBoxFontColor.Selected;
+end;
+
+procedure TFormPreferences.SearchGamesPanelEditBoxBackgroundColorSelect(
+  Sender: TObject);
+begin
+  if not IsNightMode then
+     FormMain.FilterGameTitle_ToolBar.Color:= SearchGamesPanelEditBoxBackgroundColor.Selected;
+
+end;
+
+procedure TFormPreferences.CheckBoxRadioButtonProfileSelect(
+  Sender: TObject);
+var
+  IsCustom: Boolean;
+begin
+  IsCustom:= CheckBoxRadioButtonProfile.ItemIndex > 0;
+  if IsCustom then
+     CheckBoxRadioButtonBoxFolderFullPathLabel.Hint:= FormMain.GetCheckBoxThemeFolder+CheckBoxRadioButtonProfile.Text+'\';
+
+  FormMain.SetCheckBoxExCustomIcon(CheckBoxRadioButton_Check1, IsCustom);
+  FormMain.SetRadioButtonExCustomIcon(CheckBoxRadioButton_Radio1, IsCustom);
+  FormMain.SetRadioButtonExCustomIcon(CheckBoxRadioButton_Radio2, IsCustom);
 end;
 
 end.

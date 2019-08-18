@@ -110,9 +110,10 @@ begin
   FormMain.ELV_ResetNormalColors(GamesList);
   if IsNightMode then
      begin
-       SetFormColors(FormConsCompMultiFloppyGames, TopBar, PanelBottom, LabelSystemTitle, LabelEmulatorDetails, -1, IsNightMode);
-       SetLabelColors(LabelTotalFloppyDisks, clCream, item_caption_active_shadow_color[1]);
-
+       SetFormColors(FormConsCompMultiFloppyGames, TopBar, PanelBottom, LabelSystemTitle, LabelEmulatorDetails, nil, -1, IsNightMode);
+       SetLabelColors(LabelTotalFloppyDisks, clCream, item_caption_active_shadow_color[1], False);
+       SetPanelBorderColors(FrameGamesList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       FrameGamesList.Color1:= FormConsCompMultiFloppyGames.Color;
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonUp);
@@ -120,6 +121,7 @@ begin
        FormMain.SetButtonExColors(ButtonRemoveFromList);
 
        FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewHeaderColors(GamesList, True);
        FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
      end;
   AddMultiGames;

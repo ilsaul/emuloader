@@ -153,9 +153,8 @@ procedure TFormStatus.FormCreate(Sender: TObject);
 begin
   if Screen.Fonts.IndexOf('Terminal') = -1 then
      begin
-       // this is for Windows 10... no "Terminal" font installed in this OS (only in Win7)
-       LabelTimer.Font.Name:= 'Lucida Console';
-       LabelSoftwareScanCount.Font.Name:= 'Lucida Console';
+       FormMain.ChangeLabelFontConsolas(LabelTimer);
+       FormMain.ChangeLabelFontConsolas(LabelSoftwareScanCount);
      end;
 
   mmResult:= 0;

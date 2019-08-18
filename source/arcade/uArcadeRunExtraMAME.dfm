@@ -16,6 +16,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
   Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -235,14 +236,14 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     object LabelInfo: TShadowLabel
       Left = 56
       Top = 12
-      Width = 309
+      Width = 303
       Height = 19
       Caption = 'Check features you want to use. Uncheck to disable.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
@@ -521,7 +522,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           HintType = ehtToolTip
           Header.Columns.Items = {
             0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
-            0006000000800800010100010000000001000162010000FFFFFF1F0001000000
+            0006000000800800010100010000000001000164010000FFFFFF1F0001000000
             01000000040000004E0061006D00650000000000000000000000000011000000
             5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
             0100000000000178000000FFFFFF1F0001000000010000000400000053006900

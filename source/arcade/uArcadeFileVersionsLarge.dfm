@@ -56,8 +56,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName1: TShadowLabel
@@ -75,8 +78,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -95,8 +101,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -136,8 +145,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName2: TShadowLabel
@@ -155,8 +167,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -175,8 +190,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -216,8 +234,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName3: TShadowLabel
@@ -235,8 +256,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -255,8 +279,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -296,8 +323,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName4: TShadowLabel
@@ -315,8 +345,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -335,8 +368,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -376,8 +412,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName6: TShadowLabel
@@ -395,8 +434,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -415,8 +457,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -456,8 +501,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName5: TShadowLabel
@@ -475,8 +523,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -495,8 +546,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -536,8 +590,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName8: TShadowLabel
@@ -555,8 +612,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -575,8 +635,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
@@ -616,8 +679,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelEmuFileName7: TShadowLabel
@@ -635,8 +701,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -655,8 +724,11 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14606046
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end

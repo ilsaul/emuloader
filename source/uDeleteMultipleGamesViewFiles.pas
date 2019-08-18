@@ -565,23 +565,17 @@ begin
            ACanvas.Font.Color:= clMaroon // light mode
         else
            ACanvas.Font.Color:= clrLightRed; // night mode
-        ACanvas.Font.Style:= [fsItalic];
 
-        //if Item.Selected then
-        //   ACanvas.Font.Color:= clMaroon;
-
+        if FormDeleteMultipleGamesFiles.DestinationFolderLabel.Tag = 1 then
+           ACanvas.Font.Style:= [fsItalic];
       end;
     1:
       begin
         ACanvas.Font.Name:= 'Consolas';
-        //ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
-        //ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
         ACanvas.Font.Name:= 'Consolas';
-        //ACanvas.Font.Name:= 'Verdana';
-        //ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then
@@ -621,8 +615,6 @@ procedure TFormDeleteMultipleGamesViewFiles.FilesListViewGroupImageDraw(
   Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas;
   const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
 begin
-  //FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+8,
-  //                                       MaxGameID+TViewGameInfoGroup(Group).eSystemID);
   if TViewGameInfoGroup(Group).eIsCustomGame then
      begin
        FormMain.IL_MenuPopup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+12, 23); // load EmuCon icon

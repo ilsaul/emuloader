@@ -59,18 +59,22 @@ var
   iFileExt: String;
   iType: TImageType;
 begin
-  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, True);
+  SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, True);
   if IsNightMode then
      begin
-       SetLabelColors(LabelGameStatus, clrLightBlue, clBlue);
-       SetLabelColors(LabelFilename, MsgTxtColors.colorFileName, clNavy);
-       SetLabelColors(LabelSystemTitle, clrLightRed, clrLightBlack);//item_caption_active_shadow_color[1]);// MsgTxtColors.colorWarning, $323200);
-       SetLabelColors(LabelFileTypeMismatch, clrLightRed, item_caption_active_shadow_color[1]);// MsgTxtColors.colorWarning, $323200);
-       SetLabelColors(LabelDimensions, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
-       SetLabelColors(LabelFileSize, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
-       SetLabelColors(LabelDateTime, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
-       SetLabelColors(LabelFileType, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
-       SetLabelColors(LabelRenameImage, clCream, item_caption_active_shadow_color[1]);//clWhite, clNavy);
+       if LabelSystemTitle.Tag = 0 then
+          LabelSystemTitle.Font.Style:= [];
+       //SetLabelColors(LabelGameStatus, clrLightBlue, clBlue, False);
+       SetLabelColors(LabelFilename, item_caption_active_color[1], item_caption_active_shadow_color[1], False); // MsgTxtColors.colorFileName, clNavy, False);
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle); // SetLabelColors(LabelSystemTitle, clrLightRed, clrLightBlack, False);
+       //SetLabelColors(LabelSoftwareListTitle, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       FormMain.SetSystemTypeLabelColors(LabelSoftwareListTitle);
+       SetLabelColors(LabelFileTypeMismatch, clrLightRed, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelDimensions, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelFileSize, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelDateTime, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelFileType, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelRenameImage, clCream, item_caption_active_shadow_color[1], False);
        SetPanelNightColors(ImagePreviewFrame, -1, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
        //SetSystemTitleBarNightColors(PanelTop_SplitBarTop, PanelTop_SplitBarBottom);
@@ -81,14 +85,6 @@ begin
        SetEditNightColors(RenameImageEditBox);
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
-
-       {FrameImageCategoryIcon.Color1:= clBlue;
-       FrameImageCategoryIcon.Color2:= clBlue;
-       FrameImageCategoryIcon.Color3:= clBlue;
-       FrameImageCategoryIcon.Color4:= FormMain.GamesListView.Selection.Color;
-       FrameImageCategoryIcon.Style:= vgMulti;
-       FrameImageCategoryIcon.ColorFrame:= TopBar.ColorFrame;
-       FrameImageCategoryIcon.ColorInnerFrame:= clBlue;}
      end;
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);

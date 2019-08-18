@@ -36,6 +36,7 @@ object FormMessageBox: TFormMessageBox
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object MessageIcon: TImage
       Tag = -1
       Left = 4

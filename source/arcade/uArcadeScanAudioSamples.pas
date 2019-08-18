@@ -101,7 +101,6 @@ type
     { Private declarations }
     SelectedItem: TEasyItem;
     SamplesFolder: String;
-    procedure ResizeForm;
     procedure ClearSelected;
     procedure SetSelectedGame(AutoSelect: Boolean = True);
     procedure DeleteEmptyGroups;
@@ -167,10 +166,8 @@ begin
        FilesListView.Selection.FocusedItem:= SelectedItem;
        SelectedItem.MakeVisible(emvMiddle);
      end;
-  if IsNightMode then
-     FormMain.ELV_SetRibbonNightColors(TFileInfo(SelectedItem).eGameStatus, FilesListView)
-  else
-     FormMain.ELV_SetSelectRibbon(TFileInfo(SelectedItem).eGameStatus, FilesListView);
+
+  FormMain.ELV_SetSelectRibbon(TFileInfo(SelectedItem).eGameStatus, FilesListView, True);
 end;
 
 procedure TFormArcadeScanAudioSamples.DeleteEmptyGroups;
@@ -498,7 +495,7 @@ begin
                       TFileInfo(Item).eDriverStatus,
                       TFileInfo(Item).eClone, ACanvas, True, IsNightMode);
 
-  FormMain.ELV_ItemPaintText_General(FilesListView, Item, ACanvas);
+  FormMain.ELV_ItemPaintText_General(FilesListView, Item, ACanvas, TFileInfo(Item).eGameStatus);
 end;
 
 procedure TFormArcadeScanAudioSamples.FilesListViewItemSelectionChanged(
@@ -511,25 +508,18 @@ begin
      end;
 end;
 
-procedure TFormArcadeScanAudioSamples.ResizeForm;
-begin
-  Exit;
-  if Screen.Width < 1024 then
-     begin
-       ClientWidth:= Screen.Width-24;
-       LabelDownloadLink.Left:= 150;
-     end;
-  if Screen.Height < 600 then
-     ClientHeight:= Screen.Height-60;
-end;
-
 procedure TFormArcadeScanAudioSamples.FormShow(Sender: TObject);
 begin
-  ResizeForm;
-
   FormMain.ELV_ResetNormalColors(FilesListView);
+  FormMain.ELV_SetBackgroundColor(FilesListView, True);
+  SetPanelColors(PanelBottom, FormMain.StatusBarPanel.Color1, FormMain.StatusBarPanel.Color2, FormMain.StatusBarPanel.Style = vgSolid);
   if IsNightMode then
-     FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
+     begin
+       FormMain.SetEasyListViewHeaderColors(FilesListView, True);
+       SetLabelColors(LabelTotalItems, clrOrangeBarTop, -1, False);
+
+       SetLabelColors(LabelDownloadLink, clWhite, clBlue, False);
+     end;
   FormMain.CheckSevenZip(Tag);
   FormMain.LoadSystemsIcons(IL_Systems);
   AddGamesToList;
@@ -738,7 +728,7 @@ end;
 procedure TFormArcadeScanAudioSamples.LabelDownloadLinkMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
   else
      LabelDownloadLink.Font.Color:= clBlue;
 end;
@@ -747,7 +737,7 @@ procedure TFormArcadeScanAudioSamples.LabelDownloadLinkMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clWhite, clBlue)
+     SetLabelColors(TShadowLabel(Sender), clWhite, clBlue, False)
   else
      LabelDownloadLink.Font.Color:= clNavy;
 end;

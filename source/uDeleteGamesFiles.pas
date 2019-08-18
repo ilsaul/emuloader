@@ -78,7 +78,7 @@ type
     LabelTotalFiles: TShadowLabel;
     LabelTotalFilesChecked: TShadowLabel;
     PanelDestinationFolder: TPanelEx;
-    LabelCopyMoveDestination: TShadowLabel;
+    DestinationFolderLabel: TShadowLabel;
     DestinationFolder: TEditEx;
     CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx;
     ButtonSelectROMsFolder: TBitBtnEx;
@@ -285,9 +285,9 @@ begin
   if IsNightMode then
   begin
     if Enabled then
-       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1])// clrLightBlue, clNavy)
+       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1], False)
     else
-       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack);
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack, False);
   end
   else
   begin
@@ -704,8 +704,8 @@ begin
         FileTypesGroupBox.Visible:= False;
         DeleteGameFromGamesList.Left:= 8;
         DeleteGameFileFromDisk.Left:= 8;
-        DeleteGameFileFromDisk.Visible:= True;
-        DeleteGameFromGamesList.Visible:= True;
+        DeleteGameFileFromDisk.Visible:= ActionMode = 0;// True;
+        DeleteGameFromGamesList.Visible:= ActionMode = 0; //True;
         DeleteGameFileFromDisk.Enabled:= ActionMode = 0;
         DeleteGameFromGamesList.Enabled:= ActionMode = 0;
         //FormMain.IL_PopupPlayCustomEmulators.GetIcon(FormMain.MemGameInfo.eCustomMediaType+11, GameIcon.Picture.Icon);
@@ -789,45 +789,40 @@ begin
 
   if IsNightMode then
   begin
-    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
+    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
+    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
                                              // 200,83,0   200,200,0
-    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);// $000053e6, clMaroon);//$0040d6d6);
-    SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack);//clBlue);
+    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack, False);
+    //SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack, False);
 
     FormMain.SetEasyListViewColors(FilesListView, FormDeleteGamesFiles.Color, clWhite);
 
     PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
     SetEditNightColors(DestinationFolder);
-    SetLabelColors(LabelCopyMoveDestination, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(DestinationFolderLabel, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
 
-    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
 
-    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
+    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
 
-    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
-    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], True, clMedGray, clrLightBlack);
+    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
+    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
 
-    FileTypesGroupBox.BorderStyle:= bsAdvDualColors;
-    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1]);
-    //SetGroupBoxColors(FileTypesGroupBox, clrLightBlue, clBlue, clCream, item_caption_active_shadow_color[1]);
+    SetGroupBoxBorderStyle(FileTypesGroupBox);
+    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-    SetLabelColors(LabelTotalFiles, MsgTxtColors.colorFileName, clNavy);
-    SetLabelColors(LabelTotalFilesChecked, MsgTxtColors.colorFileName, clNavy);
+    SetLabelColors(LabelTotalFiles, clCream, clNavy, False);
+    SetLabelColors(LabelTotalFilesChecked, clCream, clNavy, False);
 
     FormMain.SetButtonExColors(ButtonYes);
     FormMain.SetButtonExColors(ButtonNo);
     FormMain.SetButtonExColors(ButtonSelectROMsFolder);
     FormMain.SetButtonExColors(ButtonHelp);
-
-    //ROMsListView.Color:= menu_background_color[1];// FormGameDetails.Color;
-    //ROMsListView.Font.Color:= clWhite;
-    //ROMsListView.Selection.Gradient:= True;
 
     FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
   end;
@@ -932,8 +927,8 @@ begin
           True:
             begin
               FormMain.EnableMsgMediaTypeLabel(False);
-              FormMain.AddMsgText('System   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-              FormMain.AddMsgText(SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
+              FormMain.AddMsgText('System   ', MsgTxtColors.colorKeyTitle, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
+              FormMain.AddMsgText(SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
               case FormMain.MemGameInfo.eIsUnicode of
                 True : FormMain.AddMsgText('    Game file');
                 False:
@@ -948,14 +943,14 @@ begin
           False:
             begin
               FormMain.ShowGameNameEntryMsgBox;
-              FormMain.AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-              FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsItalic, fsBold], taCenter);
-              FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold], taCenter);
+              FormMain.AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
+              FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
+              FormMain.AddMsgText(FormMain.EmulatorFile[FormMain.MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
 
               if FormMain.MemGameInfo.eSoftwareName <> '' then
                  begin
-                   FormMain.AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsItalic, fsBold], taCenter);
-                   FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsItalic, fsBold], taCenter, 9);
+                   FormMain.AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
+                   FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10+#13#10, clGray, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
                  end;
 
               if uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
@@ -977,7 +972,6 @@ begin
         Close;
       end;
   end;
-
 end;
 
 procedure TFormDeleteGamesFiles.FilesListViewItemPaintText(
@@ -991,11 +985,12 @@ begin
         ACanvas.Font.Size:= ACanvas.Font.Size+2;
 
         if IsNightMode then
-           ACanvas.Font.Color:= clrLightRed// MsgTxtColors.colorWarning
+           ACanvas.Font.Color:= clrLightRed
         else
            ACanvas.Font.Color:= clMaroon;
 
-        ACanvas.Font.Style:= [fsItalic];
+        if DestinationFolderLabel.Tag = 1 then
+           ACanvas.Font.Style:= [fsItalic];
         //if Item.Selected and not IsNightMode then
         //   ACanvas.Font.Color:= clMaroon;
       end;

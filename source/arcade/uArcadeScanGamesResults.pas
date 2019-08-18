@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ImgList, IniFiles, ComCtrls, uCommon, MPCommonObjects,
   MPCommonUtilities, EasyListview, ExtCtrls, ToolWin, Buttons, ShadowLabel,
-  PanelEx, Menus, BarMenus, EditEx, ColorBoxEx;
+  PanelEx, Menus, BarMenus, EditEx, ColorBoxEx, ButtonsEx;
 
 type
   TEasyScanInfo = class(TEasyItemStored)
@@ -195,7 +195,7 @@ type
     PopupShowSplitterGrip: TMenuItem;
     N22: TMenuItem;
     MenuItem13: TMenuItem;
-    ButtonToggleTree: TBitBtn;
+    ButtonToggleTree: TBitBtnEx;
     SearchBarEdit: TEditEx;
     SearchBarToolBar: TToolBar;
     ButtonFilterTitleApply_ToolBar: TToolButton;
@@ -929,20 +929,19 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, -1, False);
-       SetLabelColors(LabelGamesListList, clWhite, clrMedBlue);
-       SetLabelColors(LabelTotalGames, clWhite, clrDarkOrange);
-       SetLabelColors(LabelSearchBar, clWhite, clrMedBlue);// clrDarkOrange);
+       SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, nil, -1, False);
+       SetLabelColors(LabelGamesListList, clWhite, clrMedBlue, False);
+       SetLabelColors(LabelTotalGames, clWhite, clrDarkOrange, False);
+       SetLabelColors(LabelSearchBar, clWhite, clrMedBlue, False);
        SetComboBox2ExColors(MAMEMachinesFilter, True);
 
-       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrLightRed);
-
-       //ROMsListView.Color:= clrBlackBk;
-       //ROMsListView.Font.Color:= clWhite;
-       //ROMsListView.GroupFont.Color:= clRed;
+       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrOrangeBarTop);
 
        SetEditNightColors(SearchBarEdit);
-       
+
+       FormMain.SetButtonExColors(ButtonToggleTree);
+
+       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);       
        FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
      end;
      
@@ -1202,7 +1201,7 @@ procedure TFormArcadeScanGamesResults.ROMsListViewItemPaintText(
     if PosEx(' not ', FileStr) = 0 then
        begin
          if IsNightMode then
-            Result:= clLime
+            Result:= clrLightGreen
          else
             Result:= clrDarkGreen;
        end
@@ -1216,7 +1215,7 @@ procedure TFormArcadeScanGamesResults.ROMsListViewItemPaintText(
   end;
 
 begin
-  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
+  //FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
   if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
      begin // missing file and CHD with bad SHA-1 / MD-5 checksum
        if IsNightMode then
@@ -1274,7 +1273,6 @@ begin
            end;
       end;
   end;
-  //FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
 end;
 
 function TFormArcadeScanGamesResults.ROMsListViewItemCompare(

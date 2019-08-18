@@ -1,6 +1,7 @@
 object FormSupermodelSettings: TFormSupermodelSettings
   Left = 1356
   Top = 405
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -43,13 +44,19 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Frames = []
     Transparent = True
   end
-  object LabelFolderROMs: TLabel
+  object LabelFolderROMs: TShadowLabel
     Left = 8
     Top = 89
-    Width = 73
-    Height = 15
+    Width = 76
+    Height = 16
     Caption = 'ROMs Folders'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object TopBar: TPanelEx
@@ -67,6 +74,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object SystemIcon: TImage
       Left = 4
       Top = 4
@@ -169,79 +177,127 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Caption = 'Video'
     Ctl3D = True
     TabOrder = 1
-    object LabelResolution: TLabel
+    object ResolutionLabel: TShadowLabel
       Left = 428
       Top = 20
-      Width = 56
-      Height = 15
+      Width = 59
+      Height = 16
       Caption = 'Resolution'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelReal3DVertexShader: TLabel
+    object Real3DVertexShaderLabel: TShadowLabel
       Left = 8
       Top = 76
-      Width = 110
-      Height = 15
+      Width = 113
+      Height = 16
       Caption = 'Real3D Vertex Shader'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelReal3DFragmentShader: TLabel
+    object Real3DFragmentShaderLabel: TShadowLabel
       Left = 8
       Top = 126
-      Width = 129
-      Height = 15
+      Width = 132
+      Height = 16
       Caption = 'Real3D Fragment Shader'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelVideo3DEngine: TLabel
+    object Video3DEngineLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 53
-      Height = 15
+      Width = 56
+      Height = 16
       Caption = '3D Engine'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelLoadTileMapVertexShader2D: TLabel
+    object LoadTileMapVertexShader2DLabel: TShadowLabel
       Left = 428
       Top = 76
-      Width = 174
-      Height = 15
+      Width = 177
+      Height = 16
       Caption = 'Load Tile Map Vertex Shader (2D)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelLoadTileMapFragmentShader2D: TLabel
+    object LoadTileMapFragmentShader2DLabel: TShadowLabel
       Left = 428
       Top = 126
-      Width = 193
-      Height = 15
+      Width = 196
+      Height = 16
       Caption = 'Load Tile Map Fragment Shader (2D)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelLoadReal3DScrollFogVertexShader: TLabel
+    object LoadReal3DScrollFogVertexShaderLabel: TShadowLabel
       Left = 8
       Top = 176
-      Width = 285
-      Height = 15
+      Width = 288
+      Height = 16
       Caption = 'Load Real3D Scroll Fog Vertex Shader (New 3D Engine)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelLoadReal3DScrollFogFragmentShader: TLabel
+    object LoadReal3DScrollFogFragmentShaderLabel: TShadowLabel
       Left = 8
       Top = 226
-      Width = 304
-      Height = 15
+      Width = 307
+      Height = 16
       Caption = 'Load Real3D Scroll Fog Fragment Shader (New 3D Engine)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ScreenResolution: TComboBox
+    object ScreenResolution: TComboBox2Ex
       Left = 428
       Top = 36
       Width = 169
@@ -281,7 +337,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Real3DVertexShader: TEdit
+    object Real3DVertexShader: TEditEx
       Left = 8
       Top = 92
       Width = 350
@@ -292,7 +348,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 3
     end
-    object Real3DFragmentShader: TEdit
+    object Real3DFragmentShader: TEditEx
       Left = 8
       Top = 142
       Width = 350
@@ -303,7 +359,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 4
     end
-    object ButtonSelectReal3DVertexShader: TBitBtn
+    object Real3DVertexShaderButtonSelect: TBitBtnEx
       Left = 360
       Top = 92
       Width = 43
@@ -313,9 +369,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 5
-      OnClick = ButtonSelectReal3DVertexShaderClick
+      OnClick = Real3DVertexShaderButtonSelectClick
     end
-    object ButtonSelectReal3DFragmentShader: TBitBtn
+    object Real3DFragmentShaderButtonSelect: TBitBtnEx
       Left = 360
       Top = 142
       Width = 43
@@ -325,7 +381,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 6
-      OnClick = ButtonSelectReal3DFragmentShaderClick
+      OnClick = Real3DFragmentShaderButtonSelectClick
     end
     object Widescreen: TAdvOfficeCheckBoxEx
       Left = 432
@@ -370,7 +426,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       State = cbChecked
       Themed = True
     end
-    object Video3DEngine: TComboBox
+    object Video3DEngine: TComboBox2Ex
       Left = 8
       Top = 36
       Width = 350
@@ -414,7 +470,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object LoadTileMapVertexShader2D: TEdit
+    object LoadTileMapVertexShader2D: TEditEx
       Left = 428
       Top = 92
       Width = 350
@@ -424,7 +480,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 13
     end
-    object ButtonSelectLoadTileMapVertexShader2D: TBitBtn
+    object LoadTileMapVertexShader2DButtonSelect: TBitBtnEx
       Left = 780
       Top = 92
       Width = 43
@@ -434,9 +490,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 14
-      OnClick = ButtonSelectLoadTileMapVertexShader2DClick
+      OnClick = LoadTileMapVertexShader2DButtonSelectClick
     end
-    object LoadTileMapFragmentShader2D: TEdit
+    object LoadTileMapFragmentShader2D: TEditEx
       Left = 428
       Top = 142
       Width = 350
@@ -446,7 +502,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 15
     end
-    object ButtonSelectLoadTileMapFragmentShader2D: TBitBtn
+    object LoadTileMapFragmentShader2DButtonSelect: TBitBtnEx
       Left = 780
       Top = 142
       Width = 43
@@ -456,7 +512,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 16
-      OnClick = ButtonSelectLoadTileMapFragmentShader2DClick
+      OnClick = LoadTileMapFragmentShader2DButtonSelectClick
     end
     object MultiTexture: TAdvOfficeCheckBoxEx
       Left = 432
@@ -473,7 +529,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object LoadReal3DScrollFogVertexShader: TEdit
+    object LoadReal3DScrollFogVertexShader: TEditEx
       Left = 8
       Top = 192
       Width = 350
@@ -484,7 +540,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 18
     end
-    object ButtonSelectLoadReal3DScrollFogVertexShader: TBitBtn
+    object LoadReal3DScrollFogVertexShaderButtonSelect: TBitBtnEx
       Left = 360
       Top = 190
       Width = 43
@@ -494,9 +550,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 19
-      OnClick = ButtonSelectLoadReal3DScrollFogVertexShaderClick
+      OnClick = LoadReal3DScrollFogVertexShaderButtonSelectClick
     end
-    object ButtonSelectLoadReal3DScrollFogFragmentShader: TBitBtn
+    object LoadReal3DScrollFogFragmentShaderButtonSelect: TBitBtnEx
       Left = 360
       Top = 242
       Width = 43
@@ -506,9 +562,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 20
-      OnClick = ButtonSelectLoadReal3DScrollFogFragmentShaderClick
+      OnClick = LoadReal3DScrollFogFragmentShaderButtonSelectClick
     end
-    object LoadReal3DScrollFogFragmentShader: TEdit
+    object LoadReal3DScrollFogFragmentShader: TEditEx
       Left = 8
       Top = 242
       Width = 350
@@ -519,7 +575,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 21
     end
-    object ButtonVideo3DEngineReset: TBitBtn
+    object Video3DEngineButtonReset: TBitBtnEx
       Left = 360
       Top = 36
       Width = 43
@@ -529,7 +585,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 22
-      OnClick = ButtonVideo3DEngineResetClick
+      OnClick = Video3DEngineButtonResetClick
     end
     object QuadRendering: TAdvOfficeCheckBoxEx
       Left = 432
@@ -556,16 +612,22 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Caption = 'Input'
     Ctl3D = True
     TabOrder = 2
-    object LabelCrosshairs: TLabel
+    object CrosshairsLabel: TShadowLabel
       Left = 8
       Top = 76
-      Width = 126
-      Height = 15
+      Width = 129
+      Height = 16
       Caption = 'Crosshairs (Gun Games)'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object InputSystem: TComboBox
+    object InputSystem: TComboBox2Ex
       Left = 8
       Top = 21
       Width = 251
@@ -584,7 +646,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
         'Raw Input (multiple mice and keyboards)'
         'SDL (non-Windows builds)')
     end
-    object ButtonConfigInput: TBitBtn
+    object InputSystemConfigButton: TBitBtnEx
       Left = 261
       Top = 21
       Width = 43
@@ -594,7 +656,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
-      OnClick = ButtonConfigInputClick
+      OnClick = InputSystemConfigButtonClick
     end
     object EnableForceFeedback: TAdvOfficeCheckBoxEx
       Left = 8
@@ -607,7 +669,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Crosshairs: TComboBox
+    object Crosshairs: TComboBox2Ex
       Left = 136
       Top = 72
       Width = 138
@@ -639,34 +701,52 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Caption = 'Audio'
     Ctl3D = True
     TabOrder = 3
-    object LabelSoundVolume: TLabel
+    object SoundVolumeLabel: TShadowLabel
       Left = 8
       Top = 63
-      Width = 221
-      Height = 15
+      Width = 224
+      Height = 16
       Hint = 'Volume of SCSP Generated Sound [%u'
       Caption = 'Volume of SCSP Generated Sound [100 %]'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelMusicVolume: TLabel
+    object MusicVolumeLabel: TShadowLabel
       Left = 8
       Top = 108
-      Width = 229
-      Height = 15
+      Width = 232
+      Height = 16
       Hint = 'Music Volume, Digital Sound Board [%u'
       Caption = 'Music Volume, Digital Sound Board [100 %]'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelAudioBalanceFrontRear: TLabel
+    object AudioBalanceFrontRearLabel: TShadowLabel
       Left = 8
       Top = 153
-      Width = 130
-      Height = 15
+      Width = 133
+      Height = 16
       Hint = 'Front/Rear Balance [%d'
       Caption = 'Front/Rear Balance [0 %]'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
     object SoundVolume: TGaugeBar
@@ -763,7 +843,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       OnChange = AudioBalanceFrontRearChange
       OnMouseDown = AudioBalanceFrontRearMouseDown
     end
-    object BitBtn5: TBitBtn
+    object SoundVolumeButtonLast: TBitBtnEx
       Left = 317
       Top = 80
       Width = 43
@@ -774,7 +854,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 6
     end
-    object BitBtn6: TBitBtn
+    object MusicVolumeButtonLast: TBitBtnEx
       Left = 317
       Top = 128
       Width = 43
@@ -785,7 +865,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 7
     end
-    object BitBtn7: TBitBtn
+    object SoundVolumeButtonReset: TBitBtnEx
       Left = 360
       Top = 80
       Width = 43
@@ -796,7 +876,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 8
     end
-    object BitBtn8: TBitBtn
+    object MusicVolumeButtonReset: TBitBtnEx
       Left = 360
       Top = 128
       Width = 43
@@ -807,7 +887,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 9
     end
-    object BitBtn9: TBitBtn
+    object AudioBalanceFrontRearButtonLast: TBitBtnEx
       Left = 317
       Top = 168
       Width = 43
@@ -818,7 +898,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ShowHint = True
       TabOrder = 10
     end
-    object BitBtn10: TBitBtn
+    object AudioBalanceFrontRearButtonReset: TBitBtnEx
       Left = 360
       Top = 168
       Width = 43
@@ -839,23 +919,35 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Caption = 'PowerPC Bus Frequency (PPC)'
     Ctl3D = True
     TabOrder = 4
-    object LabelPowerPCFrequency: TLabel
+    object PowerPCFrequencyLabel: TShadowLabel
       Left = 105
       Top = 23
-      Width = 40
-      Height = 15
+      Width = 43
+      Height = 16
       Caption = '50 MHz'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelPowerPCFrequencyCustom: TLabel
+    object PowerPCFrequencyCustomLabel: TShadowLabel
       Left = 372
       Top = 23
-      Width = 25
-      Height = 15
+      Width = 28
+      Height = 16
       Caption = 'MHz'
       Enabled = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object PowerPCFrequency: TGaugeBar
@@ -873,7 +965,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Position = 5
       OnChange = PowerPCFrequencyChange
     end
-    object PowerPCFrequencyCustom: TEdit
+    object PowerPCFrequencyCustom: TEditEx
       Left = 307
       Top = 20
       Width = 63
@@ -912,7 +1004,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     State = cbChecked
     Themed = True
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 8
     Top = 710
     Width = 89
@@ -922,7 +1014,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     TabOrder = 6
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 652
     Top = 710
     Width = 89
@@ -932,7 +1024,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ModalResult = 1
     TabOrder = 7
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 750
     Top = 710
     Width = 89
@@ -1002,7 +1094,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     OnItemEditEnd = FolderROMsItemEditEnd
     OnKeyAction = FolderROMsKeyAction
   end
-  object ButtonUp: TBitBtn
+  object FolderROMsButtonUp: TBitBtnEx
     Tag = 1
     Left = 751
     Top = 104
@@ -1014,9 +1106,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ShowHint = True
     TabOrder = 10
     TabStop = False
-    OnClick = ButtonUpClick
+    OnClick = FolderROMsButtonUpClick
   end
-  object ButtonDown: TBitBtn
+  object FolderROMsButtonDown: TBitBtnEx
     Left = 751
     Top = 125
     Width = 43
@@ -1027,9 +1119,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ShowHint = True
     TabOrder = 11
     TabStop = False
-    OnClick = ButtonUpClick
+    OnClick = FolderROMsButtonUpClick
   end
-  object FolderROMButtonSelect: TBitBtn
+  object FolderROMsButtonSelect: TBitBtnEx
     Left = 794
     Top = 104
     Width = 43
@@ -1039,9 +1131,9 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ParentShowHint = False
     ShowHint = True
     TabOrder = 12
-    OnClick = FolderROMButtonSelectClick
+    OnClick = FolderROMsButtonSelectClick
   end
-  object FolderROMsButtonEdit: TBitBtn
+  object FolderROMsButtonEdit: TBitBtnEx
     Left = 794
     Top = 125
     Width = 43
@@ -1053,7 +1145,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     TabOrder = 13
     OnClick = FolderROMsButtonEditClick
   end
-  object FolderROMsButtonDelete: TBitBtn
+  object FolderROMsButtonDelete: TBitBtnEx
     Left = 794
     Top = 146
     Width = 43
@@ -1065,7 +1157,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     TabOrder = 14
     OnClick = FolderROMsButtonDeleteClick
   end
-  object FolderROMsButtonClear: TBitBtn
+  object FolderROMsButtonClear: TBitBtnEx
     Left = 794
     Top = 167
     Width = 43

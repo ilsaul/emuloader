@@ -20,7 +20,7 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelEx1: TPanelEx
+  object PanelTop: TPanelEx
     Left = 0
     Top = 0
     Width = 984

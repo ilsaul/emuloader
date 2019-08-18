@@ -47,8 +47,8 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clMaroon
     GroupFont.Height = -13
-    GroupFont.Name = 'Trebuchet MS'
-    GroupFont.Style = [fsBold, fsItalic]
+    GroupFont.Name = 'Verdana'
+    GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
@@ -75,6 +75,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
     Header.Height = 23
+    Header.Sizeable = False
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
@@ -418,7 +419,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       end
     end
   end
-  object ButtonToggleTree: TBitBtn
+  object ButtonToggleTree: TBitBtnEx
     Left = 0
     Top = 81
     Width = 24

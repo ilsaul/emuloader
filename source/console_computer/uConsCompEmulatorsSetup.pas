@@ -259,32 +259,8 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.ResetParametersToDefault(ParameterTag: ShortInt);
 var
-  //iParamStr: String;
   tempStr: String;
 begin
-  // to be used with the new "Reset to Default" buttons on each parameter TEdit boxes
-
-  //iParamStr:= EmuDefaultParameters.ReadString(Systems.Tag,)
-  //iParamStr:=ExtraDefaultParameters.ReadString(SystemsList[MemGameInfo.eSystemID, 0],
-  //                                 ExtractFileName(ChangeFileExt(EmulatorString, ''))+
-  //                                 GetMediaTypeName(mediaIdx, ParameterIndex, True), '');
-
-  {if FormMain.SystemUseCartridge(Systems.Tag) then
-     ReadFromIni(tempStr, Systems.Tag, PanelEmulators.Tag, 1, newEmuCartridgeParameter[Systems.Tag, PanelEmulators.Tag],
-                                                              newEmuCartridgeParameter2[Systems.Tag, PanelEmulators.Tag]);
-
-  if FormMain.SystemUseDisc(Systems.Tag) then
-     ReadFromIni(tempStr, Systems.Tag, PanelEmulators.Tag, 2, newEmuDiscImageParameter[Systems.Tag, PanelEmulators.Tag],
-                                                              newEmuDiscImageParameter2[Systems.Tag, PanelEmulators.Tag]);
-
-  if FormMain.SystemUseFloppyDisk(Systems.Tag) then
-     ReadFromIni(tempStr, Systems.Tag, PanelEmulators.Tag, 3, newEmuFloppyDiskParameter[Systems.Tag, PanelEmulators.Tag],
-                                                              newEmuFloppyDiskParameter2[Systems.Tag, PanelEmulators.Tag]);
-
-  if FormMain.SystemUseCassetteTape(Systems.Tag) then
-     ReadFromIni(tempStr, Systems.Tag, PanelEmulators.Tag, 4, newEmuCassetteTapeParameter[Systems.Tag, PanelEmulators.Tag],
-                                                              newEmuCassetteTapeParameter2[Systems.Tag, PanelEmulators.Tag]);}
-
   if newEmulatorFileCustom[Systems.Tag, PanelEmulators.Tag] = '' then
      Exit;
 
@@ -297,8 +273,6 @@ begin
              EmuCartridgeParameter.Text:= newEmuCartridgeParameterCustom[Systems.Tag, PanelEmulators.Tag];
              EmuCartridgeParameter2.Text:= newEmuCartridgeParameter2Custom[Systems.Tag, PanelEmulators.Tag];
            end;
-
-        //EmuCartridgeParameter.Text:= FormMain.  newEmuCartridgeParameter[Systems.Tag, EmulatorIndex];
       end;
     21, 22: // disc image, boot disc ... there is no way to read one without the other
       begin
@@ -643,7 +617,6 @@ begin
     EmulatorIndexToUseCustom[Loop]:= CheckEmulatorEmpty(Loop);
   end;
 
-  //FormMain.PopupGames.HelpContext:= 1; // what is this for ? is it still used ??? December 29, 2016
   if VerifyDaemonTools then
      UpdateIniFile:= True;
 
@@ -741,7 +714,7 @@ procedure TFormConsCompEmulatorsSetup.ButtonSelectEmulatorClick(Sender: TObject)
 var
   fileStr: String;
 begin
-  if FormMain.DialogOpenFile(2, 'Select an emulator file for '+Systems.Selection.First.Caption,
+  if FormMain.DialogOpenFile(2, 'Select an emulator file for '+SystemsListCustom[Systems.Tag, 0], // Systems.Selection.First.Caption,
                              EmulatorFile, False) <> '' then
      begin
        EmulatorFile.Tag:= 0;
@@ -793,11 +766,10 @@ end;
 procedure TFormConsCompEmulatorsSetup.SetResetParameterIcon(IconHolder: TImage; ButtonPressed: Boolean = False);
 begin
   IconHolder.Picture.Icon:= nil;
-  // re-enable these later... HUH ? December 11, 2017
-  //if ButtonPressed then
-  //   FormMain.IL_PopupMenu.GetIcon(3, IconHolder.Picture.Icon, dsSelected, itImage)
-  //else
-  //   FormMain.IL_PopupMenu.GetIcon(3, IconHolder.Picture.Icon);
+  if ButtonPressed then
+     FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon, dsSelected, itImage)
+  else
+     FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon);
 end;
 
 procedure TFormConsCompEmulatorsSetup.ResizeForm;
@@ -820,9 +792,9 @@ begin
     PanelEmulators.Left:= 558;
     PanelEmulators.Height:= 672;
     if FormConsCompEmulatorsSetup.ClientWidth <> 984 then
-       FormConsCompEmulatorsSetup.ClientWidth:= 984;// .Width:= 1000;
+       FormConsCompEmulatorsSetup.ClientWidth:= 984;
     if FormConsCompEmulatorsSetup.ClientHeight <> 672 then
-       FormConsCompEmulatorsSetup.ClientHeight:= 672;// Height:= 710;
+       FormConsCompEmulatorsSetup.ClientHeight:= 672;
 
     if iScreenHeight = 720 then
        begin
@@ -844,10 +816,7 @@ begin
   end;
 
   if iScreenHeight < 720 then
-     begin
-       //FormMain.ResizeFormAddScrollBars(FormConsCompEmulatorsSetup);
-       Exit;
-     end;
+     Exit;
 
   if iScreenHeight = 720 then
      begin
@@ -902,11 +871,6 @@ begin
 
   ELV_PopulateCustomSystems(Systems, FormMain.GetSystemIDGamesList(True), -1, True);
 
-  //case FormMain.CheckSelected(FormMain.GamesListView) of
-  //  True : FormMain.ELV_PopulateSystems(Systems, FormMain.MemGameInfo.eSystemID, -1, True);
-  //  False: FormMain.ELV_PopulateSystems(Systems, -1, -1, True);
-  //end;
-
   // for a future expansion maybe ??? it will not be enabled for now
   SetResetParameterIcon(IconCartridgeReset);
   SetResetParameterIcon(IconDiscImageReset);
@@ -941,8 +905,6 @@ procedure TFormConsCompEmulatorsSetup.EmuDescriptionChange(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmulatorVersionCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmulatorVersion[Systems.Tag, PanelEmulators.Tag] <> EmuDescription.Text  then
-  //   newEmulatorVersion[Systems.Tag, PanelEmulators.Tag]:= EmuDescription.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.UpdateMemParameter(EditHolder: TEdit; var MemVarParameter: String);
@@ -954,90 +916,66 @@ end;
 procedure TFormConsCompEmulatorsSetup.EmuCartridgeParameterChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuCartridgeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuCartridgeParameter[Systems.Tag, PanelEmulators.Tag] <> EmuCartridgeParameter.Text then
-  //   newEmuCartridgeParameter[Systems.Tag, PanelEmulators.Tag]:= EmuCartridgeParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuDiscImageParameterChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameterCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuDiscImageParameter[Systems.Tag, PanelEmulators.Tag] <> EmuDiscImageParameter.Text then
-  //   newEmuDiscImageParameter[Systems.Tag, PanelEmulators.Tag]:= EmuDiscImageParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuBootDiscParameterChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuLoadFromDiscCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuLoadFromDisc[Systems.Tag, PanelEmulators.Tag] <> EmuBootDiscParameter.Text then
-  //   newEmuLoadFromDisc[Systems.Tag, PanelEmulators.Tag]:= EmuBootDiscParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuFloppyDiskParameterChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuFloppyDiskParameterCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuFloppyDiskParameter[Systems.Tag, PanelEmulators.Tag] <> EmuFloppyDiskParameter.Text then
-  //   newEmuFloppyDiskParameter[Systems.Tag, PanelEmulators.Tag]:= EmuFloppyDiskParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCassetteTapeParameterChange(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuCassetteTapeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuCassetteTapeParameter[Systems.Tag, PanelEmulators.Tag] <> EmuCassetteTapeParameter.Text then
-  //   newEmuCassetteTapeParameter[Systems.Tag, PanelEmulators.Tag]:= EmuCassetteTapeParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCartridgeParameter2Change(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuCartridgeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuCartridgeParameter2[Systems.Tag, PanelEmulators.Tag] <> EmuCartridgeParameter2.Text then
-  //   newEmuCartridgeParameter2[Systems.Tag, PanelEmulators.Tag]:= EmuCartridgeParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuDiscImageParameter2Change(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuDiscImageParameter2[Systems.Tag, PanelEmulators.Tag] <> EmuDiscImageParameter2.Text then
-  //   newEmuDiscImageParameter2[Systems.Tag, PanelEmulators.Tag]:= EmuDiscImageParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuBootDiscParameter2Change(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuLoadFromDisc2[Systems.Tag, PanelEmulators.Tag] <> EmuBootDiscParameter2.Text then
-  //   newEmuLoadFromDisc2[Systems.Tag, PanelEmulators.Tag]:= EmuBootDiscParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuFloppyDiskParameter2Change(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuFloppyDiskParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuFloppyDiskParameter2[Systems.Tag, PanelEmulators.Tag] <> EmuFloppyDiskParameter2.Text then
-  //   newEmuFloppyDiskParameter2[Systems.Tag, PanelEmulators.Tag]:= EmuFloppyDiskParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCassetteTapeParameter2Change(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuCassetteTapeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuCassetteTapeParameter2[Systems.Tag, PanelEmulators.Tag] <> EmuCassetteTapeParameter2.Text then
-  //   newEmuCassetteTapeParameter2[Systems.Tag, PanelEmulators.Tag]:= EmuCassetteTapeParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuHardDiskDriveParameterChange(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuHardDiskDriveParameterCustom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuCassetteTapeParameter[Systems.Tag, PanelEmulators.Tag] <> EmuCassetteTapeParameter.Text then
-  //   newEmuCassetteTapeParameter[Systems.Tag, PanelEmulators.Tag]:= EmuCassetteTapeParameter.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuHardDiskDriveParameter2Change(
   Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newEmuHardDiskDriveParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
-  //if newEmuHardDiskDriveParameter2[Systems.Tag, PanelEmulators.Tag] <> EmuHardDiskDriveParameter2.Text then
-  //   newEmuHardDiskDriveParameter2[Systems.Tag, PanelEmulators.Tag]:= EmuHardDiskDriveParameter2.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonInstructionsClick(Sender: TObject);
@@ -1111,15 +1049,11 @@ end;
 procedure TFormConsCompEmulatorsSetup.DaemonToolsMountChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newVirtualDriveMount);
-  //if newDaemonToolsMount <> DaemonToolsMount.Text then
-  //   newDaemonToolsMount:= DaemonToolsMount.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.DaemonToolsUnmountChange(Sender: TObject);
 begin
   UpdateMemParameter(TEdit(Sender), newVirtualDriveUnmount);
-  //if newDaemonToolsUnmount <> DaemonToolsUnmount.Text then
-  //   newDaemonToolsUnmount:= DaemonToolsUnmount.Text;
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonSelectDaemonToolsClick(Sender: TObject);
@@ -1256,10 +1190,6 @@ begin
 
   PanelEmulators.Tag:= TSpeedButtonEx(Sender).Tag;
 
-  //TAdvOfficeRadioButton(Sender).Font.Color:= clMaroon;
-  //TAdvOfficeRadioButton(Sender).ShadowColor:= $00c0c0dc;
-  //TAdvOfficeRadioButton(Sender).Font.Style:= [fsBold, fsUnderline];
-
   LabelEmulatorFile.Caption:= Format(LabelEmulatorFile.Hint, [PanelEmulators.Tag]);
   //LabelEmuTitle.Caption:= Format(LabelEmuTitle.Hint, [PanelEmulators.Tag]);
   ButtonClearEmulator.Hint:= 'Clear emulator '+IntToStr(PanelEmulators.Tag)+' settings (emulator and parameters)';
@@ -1346,7 +1276,7 @@ begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [fsItalic];
+       ACanvas.Font.Style:= [];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else

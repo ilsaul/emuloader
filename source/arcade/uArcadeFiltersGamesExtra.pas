@@ -333,7 +333,6 @@ begin
   Tag:= 1;
   ApplyFilter_Misc:= False; // set default to FALSE; only set to TRUE if user click "Apply" button AND only if any of the filters changed
   ELV_PopulateControlType;
-  //SetComboBoxEx(ControlType, FormMain.ControlType.IndexOfName(ControlName)+1, True); // no longer used, all controls are TComboBox
   SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
 end;
 

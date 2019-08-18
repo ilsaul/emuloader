@@ -60,7 +60,6 @@ type
     function  FileSizeStr(iFileSize: Int64; const CHDFileName: WideString = ''; iArcadeMediaType: Integer = -1): String;
     procedure FillROMsTree;
     procedure FillEmuConGameFilesTree;
-    procedure ResizeForm;
   public
     { Public declarations }
   end;
@@ -130,8 +129,6 @@ begin
   newLabelValue.ShadowEnabled:= LabelYearValue.ShadowEnabled;
   newLabelValue.ShadowColor:= LabelYearValue.ShadowColor;
   newLabelValue.ShowAccelChar:= False;
-  //newLabelValue.Transparent:= False;
-  //newLabelValue.Color:= clSkyBlue;
   case DriverIndex of
     -1: newLabelValue.Left:= LabelYearValue.Left;
      1: // EmulationStatus
@@ -200,7 +197,7 @@ begin
           else
              LabelSource.Font.Color:= clOlive;
         end;
-      20: LabelSource.Font.Color:= MsgTxtColors.colorFileName; //$00a65300; // Scan Mode
+      20: LabelSource.Font.Color:= MsgTxtColors.colorFileName; // Scan Mode
     end;
 end;
 
@@ -268,11 +265,6 @@ begin
   CreateLabelValue(sValue, LabelTemp);
   LabelTemp.Caption:= sValue;
   LabelTemp.Tag:= sImageIndex;
-  //if sLabelHint <> '' then
-  //   begin
-  //     LabelTemp.Hint:= sLabelHint;
-  //     LabelTemp.ShowHint:= True;
-  //   end;
      
   SetLabelColor(LabelTemp, sImageIndex);
 
@@ -288,17 +280,10 @@ begin
        LabelTemp.Width:= LeftPanelSize;
        LabelTemp.Height:= LabelTemp.Height+8;
 
-       //if Pos(' ', sValue) <> -1 then
-       //   begin
-            LabelTemp.WordWrap:= True;
-            LabelTemp.AutoSize:= True;
-            LabelTemp.AutoSize:= False;
-            LabelTemp.Width:= LeftPanelSize;
-       //   end
-       //else
-       //   Wrap_Label_No_Spaces(LabelTemp, sValue);
-
-       ///////TextPos:= TextPos+LabelTemp.Height;
+       LabelTemp.WordWrap:= True;
+       LabelTemp.AutoSize:= True;
+       LabelTemp.AutoSize:= False;
+       LabelTemp.Width:= LeftPanelSize;
 
        if sLabelHint <> '' then
           begin // only enable label hint if text is bigger than panel
@@ -308,7 +293,6 @@ begin
      end;
   LeftPanelLastTextHeight:= LabelTemp.Height;
   TextPos:= TextPos+LeftPanelLastTextHeight;
-  //TextPos:= TextPos+LabelTemp.Height;
 end;
 
 function TFormGameDetails.GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
@@ -388,7 +372,10 @@ var
                        ButtonsOnly:= False;
                      end
                   else
-                       AddEntry2('', FormMain.ControlType.Values[TempString]);
+                     begin
+                       if TempString <> 'buttons' then
+                          AddEntry2('', FormMain.ControlType.Values[TempString]);
+                     end;
                 end;
 
                 TempString:= '';
@@ -824,8 +811,7 @@ begin
       end;
   end;
 
-  //if FormMain.MemGameInfo.eGameSizeText <> '' then
-     AddEntry2('Game Size', FormMain.MemGameInfo.eGameSizeText);
+  AddEntry2('Game Size', FormMain.MemGameInfo.eGameSizeText);
 
   // added in June 10, 2015 (show software list strings)
   ImgIndex:= Length(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eSoftwareList);
@@ -894,7 +880,6 @@ begin
            ((TEasyGameInfo(FormMain.SelectedEasyItem).eHaveGameROMs = 0) and (FormMain.MemGameInfo.eSystemID <> idDaphne)) then
            begin
              NoROMs:= True;
-             //AddEntry2('   Game Set', 'Set with no Game ROMs', 1) // special case for sets with no ROMs
            end
         else
         begin
@@ -934,7 +919,6 @@ begin
         else
         if FormMain.MemGameInfo.eGameROMsNoDump then
            AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (No Game ROMs)')
-           //AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (no dump)', 1)
         else
         if ZipName <> '' then
            begin
@@ -1445,7 +1429,7 @@ var
       Item.Tag:= Ord(IsCHD); // 0 -> ROM; 1 -> CHD
 
       Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
-      Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
+      Item.Captions[2]:= romSHA1;  // ROM SHA-1 Checksum
       Item.Captions[3]:= FileSizeStr(romSize, CHDFile, romTagIndex); // ROM size
       Item.Captions[4]:= romDeviceName; // device name
       Item.Captions[5]:= GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
@@ -1455,7 +1439,7 @@ var
         True:
           begin
             case romTagIndex of
-              12, 13, 14: Item.ImageIndex:= 22;//19; // HDD (also general CHD)
+              12, 13, 14: Item.ImageIndex:= 22; // HDD (also general CHD)
               15, 16, 17: Item.ImageIndex:= 20; // CD
               18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card
               21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS)
@@ -1471,7 +1455,7 @@ var
               03, 04, 05: Item.ImageIndex:= 16; // Cartridge
               06, 07, 08: Item.ImageIndex:= 17; // Floppy Disk
               09, 10, 11: Item.ImageIndex:= 18; // Cassette Tape
-              12, 13, 14: Item.ImageIndex:= 22;//19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+              12, 13, 14: Item.ImageIndex:= 22; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
               15, 16, 17: Item.ImageIndex:= 20; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
               18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
               21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS) (but it's not a CHD file)...
@@ -1488,8 +1472,6 @@ begin
   if TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo = nil then
      begin
        ROMsListView.Visible:= False;
-       //Shape2.Visible:= False;
-       //Shape3.Visible:= False;
        Exit;
      end;
 
@@ -1515,7 +1497,7 @@ var
   //romTagIndex: Byte; // 0 -> game ROM; 1 -> device ROM; 2 -> bios ROM; 3 -> chd file
 
   ArchiveItemZip: TZFArchiveItem; // ZipForge (.zip)
-  ArchiveItem7Zip: I7zInArchive; // SevenZip (.7z)
+  ArchiveItem7Zip: I7zInArchive;  // SevenZip (.7z)
   Loop7z: Integer;
   FileExtensionStr: String;
 
@@ -1557,7 +1539,6 @@ var
     Item.Caption:= romName; // ROM Name
     //eCustomMediaType: ShortInt; // 0 -> ROM; 1 -> Cartridge; 2 -> Disc Image; 3 -> Floppy; 4 -> Cassette; 5 -> Hard Disk Drive
     Item.Tag:= Ord(FormMain.IsMediaTypeCHD(FormMain.MemGameInfo.eCustomMediaType, True));
-    //Item.Tag:= Ord(FormMain.MemGameInfo.eCustomMediaType = 02);
     Item.StateImageIndex:= 0; //StatusImageIndex;
 
     case FormMain.MemGameInfo.eCustomMediaType of
@@ -1565,16 +1546,16 @@ var
       01: Item.ImageIndex:= 16; // Cartridge
       03: Item.ImageIndex:= 17; // Floppy Disk
       04: Item.ImageIndex:= 18; // Cassette Tape
-      05: Item.ImageIndex:= 22;//19; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+      05: Item.ImageIndex:= 22; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
       02: Item.ImageIndex:= 20; // Disc Image
       //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
     end;
 
     Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
-    Item.Captions[2]:= romSHA1; // ROM SHA-1 Checksum
+    Item.Captions[2]:= romSHA1;  // ROM SHA-1 Checksum
     Item.Captions[3]:= FileSizeStr(romSize); // FormMain.GetSizeType(romSize, (FormMain.MemGameInfo.eCustomMediaType = 1)); // file size string, "bits" for cartridges, "bytes" for everything else
-    Item.Captions[4]:= ''; // device name (not used by EmuCon games)
-    Item.Captions[5]:= 'Ok';//GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
+    Item.Captions[4]:= '';   // device name (not used by EmuCon games)
+    Item.Captions[5]:= 'Ok'; // GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
   end;
 
 begin
@@ -1615,7 +1596,7 @@ begin
                if FileCount > 0 then
                   begin
                     // Search text files stored inside the archive
-                    if (FindFirst('*', ArchiveItemZip, faAnyFile-faDirectory)) then // '*.*'
+                    if (FindFirst('*', ArchiveItemZip, faAnyFile-faDirectory)) then
                        begin
                          repeat
                            romName:= ArchiveItemZip.FileName;
@@ -1629,7 +1610,6 @@ begin
                               ExtractToStream(ArchiveItemZip.FileName, ZippedROMFile);
                            romSHA1:= GenerateSHA1Checksum(ZippedROMFile);
                            ELV_AddFile;
-                           //ListCustomGameSize.Add(IntToStr(ArchiveItem7Zip.ItemSize));
                          until (not FindNext(ArchiveItemZip));
                        end;
                   end;
@@ -1702,11 +1682,6 @@ begin
   ROMsListView.EndUpdate;
 end;
 
-procedure TFormGameDetails.ResizeForm;
-begin
-  FormMain.ResizeFormAddScrollBars(FormGameDetails);
-end;
-
 procedure TFormGameDetails.FormShow(Sender: TObject);
 var
   Loop: Integer;
@@ -1727,13 +1702,10 @@ begin
       begin
         LabelScanMode.Visible:= False;
         LabelEmulatorVersion.Width:= 875;
-        //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, SystemIcon.Picture.Icon);
         FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
       end;
     False:
       begin
-        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-        //                                      SystemIcon.Picture.Icon);
         FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
       end;
   end;
@@ -1745,19 +1717,19 @@ begin
   ZiNcFilePath:= '';
   LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
 
-  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, LabelScanMode, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
   if IsNightMode then
      begin
-       SetLabelColors(LabelYear, clCream, item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelScanMode, clrLightBlue, clNavy);
+       SetLabelColors(LabelYear, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        SetPanelBorderColors(FrameROMsListView, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
        FrameROMsListView.Color1:= FormGameDetails.Color;
 
        FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);
        FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
      end;
 
@@ -1824,8 +1796,6 @@ begin
             CRC32CollisionFile:= TStringList.Create;
             CRC32CollisionFile.LoadFromFile(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9));
           end;
-
-
      end;
   ROMsListView.Width:= 1200;
   FillGameTree;
@@ -1840,16 +1810,6 @@ begin
        FreeAndNil(CRC32CollisionFile);
        FreeAndNil(MissingSetZipContents);
      end;
-
-  // increase game files list width size ? would be useful only for "Name" column
-  //if Screen.Width >= 1024 then
-  //   begin
-  //     ROMsListView.Width:= ROMsListView.Width+250;
-  //     FrameROMsListView.Width:= FrameROMsListView.Width+250;
-  //     FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+250;
-  //     LabelGameTitle.Width:= LabelGameTitle.Width+250;
-  //     LabelScanMode.Left:= LabelScanMode.Left+250;
-  //   end;
 
   if LeftPanelSize < LeftTextMaxSize then // 198
      begin
@@ -1877,13 +1837,13 @@ begin
   if BottomPos < (iROMsHeight+FrameROMsListView.Top) then
      BottomPos:= iROMsHeight+FrameROMsListView.Top;
 
-  if BottomPos > Screen.Height-50 then
-     BottomPos:= Screen.Height-50; // prevent form height from being larger than screen height
+  if BottomPos > (Screen.Height-100) then
+     BottomPos:= (Screen.Height-100); // prevent form height from being larger than screen height
 
   ROMsListView.Height:= BottomPos-FrameROMsListView.Top;
-  FrameROMsListView.Height:= ROMsListView.Height+4;
+  FrameROMsListView.Height:= ROMsListView.Height+3;
 
-  Inc(BottomPos, 4); // add 4 pixels to the bottom of "FrameROMsListView"
+  Inc(BottomPos, 3); // add 4 pixels to the bottom of "FrameROMsListView"
   ROMsListView.BeginUpdate;
 
   if ROMsListView.Header.Columns[3].Visible then
@@ -1920,7 +1880,7 @@ begin
           iNewWidth:= -(ROMsListView.Width-iNewWidth);
 
        ROMsListView.Width:= ROMsListView.Width+iNewWidth;
-       FrameROMsListView.Width:= ROMsListView.Width+4;
+       FrameROMsListView.Width:= ROMsListView.Width+2;
        iNewWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 is for the right border
 
        FormGameDetails.ClientWidth:= iNewWidth;
@@ -1934,36 +1894,8 @@ begin
 
        LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
        LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
-
-       //LabelGameTitle.Width:= LabelGameTitle.Width+iNewWidth;
-       //LabelScanMode.Left:= LabelScanMode.Left+iNewWidth;
      end;
 
-  {if ROMsListView.Header.Columns[4].Width <> Loop then
-     begin
-       if ROMsListView.Header.Columns[4].Width > Loop then
-          begin
-            // new width is larger than before
-            iNewWidth:= ROMsListView.Header.Columns[4].Width-Loop;
-            if FormGameDetails.Width+iNewWidth <= Screen.Width then
-               begin
-                 ROMsListView.Width:= ROMsListView.Width+iNewWidth;
-                 FormGameDetails.ClientWidth:= FormGameDetails.ClientWidth+iNewWidth;
-                 LabelGameTitle.Width:= LabelGameTitle.Width+iNewWidth;
-                 LabelScanMode.Left:= LabelScanMode.Left+iNewWidth;
-                 FrameROMsListView.Width:= FrameROMsListView.Width+iNewWidth;
-                 iNewWidth:= 0; // do not add extra pixels to the "Name" column
-               end
-            else
-               iNewWidth:= Loop-ROMsListView.Header.Columns[4].Width;
-          end
-       else
-          begin
-            // new width is smaller than before
-            iNewWidth:= Loop-ROMsListView.Header.Columns[4].Width;
-          end;
-       ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width+iNewWidth;
-     end;}
   if ROMsListView.Groups.ItemCount > 0 then
      ROMsListView.Header.Columns[0].Caption:= 'Name'+Format('%25s', [IntToStr(ROMsListView.Groups.VisibleItemCount)+' files']);
 
@@ -1977,17 +1909,17 @@ begin
   if FormGameDetails.ClientHeight <> BottomPos then
      FormGameDetails.ClientHeight:= BottomPos;
 
-  FrameROMsListView.Width:= ROMsListView.Width+4;
-  FrameROMsListView.Height:= ROMsListView.Height+4;
+  FrameROMsListView.Width:= ROMsListView.Width+2;
+  FrameROMsListView.Height:= ROMsListView.Height+3;
 
-  ResizeForm;
+  FormGameDetails.Left:= (Screen.Width shr 1)-(FormGameDetails.Width shr 1)-1;
+  FormGameDetails.Top:= ((Screen.Height-40) shr 1)-(FormGameDetails.Height shr 1)-1;
 end;
 
 procedure TFormGameDetails.ROMsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
   if Item.StateImageIndex = 2 then
      begin
        if IsNightMode then
@@ -2008,7 +1940,6 @@ begin
     1, 2:
       begin
         ACanvas.Font.Name:= 'Consolas';
-        //ACanvas.Font.Size:= 9;
       end;
     5:
      begin

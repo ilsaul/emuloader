@@ -14,19 +14,12 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
   Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object Shape1: TShape
-    Left = 601
-    Top = 0
-    Width = 1
-    Height = 572
-    Align = alRight
-    Pen.Color = 7891291
-  end
   object PanelImages: TPanelEx
     Tag = 1
     Left = 602
@@ -35,8 +28,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     Height = 572
     Align = alRight
     BevelOuter = bvNone
-    BorderStyle = bsSingle
-    Color1 = clWhite
+    Color1 = 15856113
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
@@ -45,18 +37,26 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object PanelScreen1: TPanel
+    object PanelScreen1: TPanelEx
       Left = 0
       Top = 0
-      Width = 348
+      Width = 352
       Height = 284
       Align = alTop
       BevelOuter = bvNone
-      TabOrder = 0
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgVista
       object ImageScr1: TImage32
         Left = 0
         Top = 20
-        Width = 348
+        Width = 352
         Height = 264
         Align = alClient
         Bitmap.DrawMode = dmBlend
@@ -74,22 +74,22 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       object BarTextInfoScr1: TPanelEx
         Left = 0
         Top = 0
-        Width = 348
+        Width = 352
         Height = 20
         Align = alTop
-        Color1 = clWhite
+        Color1 = 15856113
         Color2 = 15856113
         Color3 = 1117964
         Color4 = clMaroon
         ColorFrame = clWhite
         ColorInnerFrame = clGreen
-        Frames = [frBottom]
+        Frames = []
         ParentBackground = False
-        Style = vgSimple
+        Style = vgSolid
         object LabelTextInfoScr1: TShadowLabel
           Left = 0
           Top = 0
-          Width = 348
+          Width = 352
           Height = 20
           Hint = 'SCREEN 1'
           Align = alClient
@@ -115,19 +115,27 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         end
       end
     end
-    object PanelParentGameScr1: TPanel
+    object PanelParentGameScr1: TPanelEx
       Left = 0
       Top = 284
-      Width = 348
-      Height = 284
+      Width = 352
+      Height = 288
       Align = alClient
       BevelOuter = bvNone
-      TabOrder = 1
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgVista
       object ImageParentScr1: TImage32
         Left = 0
         Top = 20
-        Width = 348
-        Height = 264
+        Width = 352
+        Height = 268
         Align = alClient
         Bitmap.DrawMode = dmBlend
         Bitmap.ResamplerClassName = 'TKernelResampler'
@@ -144,22 +152,22 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       object BarTextInfoParentScr1: TPanelEx
         Left = 0
         Top = 0
-        Width = 348
+        Width = 352
         Height = 20
         Align = alTop
-        Color1 = clWhite
+        Color1 = 15856113
         Color2 = 15856113
         Color3 = 1117964
         Color4 = clMaroon
         ColorFrame = clWhite
         ColorInnerFrame = clGreen
-        Frames = [frTop, frBottom]
+        Frames = []
         ParentBackground = False
-        Style = vgSimple
+        Style = vgSolid
         object LabelTextInfoParentScr1: TShadowLabel
           Left = 0
           Top = 0
-          Width = 348
+          Width = 352
           Height = 20
           Hint = 'PARENT GAME'
           Align = alClient
@@ -187,19 +195,26 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       end
     end
   end
-  object PanelGames: TPanel
+  object PanelGames: TPanelEx
     Left = 0
     Top = 0
-    Width = 601
+    Width = 602
     Height = 572
     Align = alClient
     BevelOuter = bvNone
-    ParentColor = True
-    TabOrder = 1
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgVista
     object DeleteClonesList: TEasyListview
       Left = 0
       Top = 57
-      Width = 601
+      Width = 602
       Height = 515
       Align = alClient
       CellSizes.Report.Height = 20
@@ -223,7 +238,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010101010000000001000190010000FFFFFF1F0001000000
+        000600000080080001010101000000000100019A010000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
         00010100000000000164000000FFFFFF1F000100000001000000040000004E00
@@ -247,6 +262,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
       ParentFont = False
       ParentShowHint = False
+      ShowThemedBorder = False
       ShowHint = True
       Selection.BlendIcon = False
       Selection.FullCellPaint = True
@@ -264,21 +280,21 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       OnItemSelectionChanged = DeleteClonesListItemSelectionChanged
       OnKeyAction = DeleteClonesListKeyAction
     end
-    object PanelEx1: TPanelEx
+    object PanelTop: TPanelEx
       Left = 0
       Top = 0
-      Width = 601
+      Width = 602
       Height = 57
       Align = alTop
-      Color1 = clSkyBlue
+      Color1 = 15856113
       Color2 = clWhite
       Color3 = 16115676
       Color4 = clMoneyGreen
       ColorFrame = 7891291
       ColorInnerFrame = clGreen
-      Frames = [frBottom]
+      Frames = []
       ParentBackground = False
-      Style = vgVista
+      Style = vgWindowsTheme
       object SystemIcon: TImage
         Tag = 1
         Left = 1
@@ -339,7 +355,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Transparent = True
         OnClick = ImageCategoryIconClick
       end
-      object ButtonScan: TBitBtn
+      object ButtonScan: TBitBtnEx
         Left = 3
         Top = 30
         Width = 65
@@ -351,7 +367,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 0
         OnClick = ButtonScanClick
       end
-      object ButtonDeleteImages: TBitBtn
+      object ButtonDeleteImages: TBitBtnEx
         Left = 337
         Top = 30
         Width = 64
@@ -363,7 +379,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 1
         OnClick = ButtonDeleteImagesClick
       end
-      object ButtonDeleteSelected: TBitBtn
+      object ButtonDeleteSelected: TBitBtnEx
         Left = 407
         Top = 30
         Width = 92
@@ -375,7 +391,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 2
         OnClick = ButtonDeleteSelectedClick
       end
-      object ButtonHelp: TBitBtn
+      object ButtonHelp: TBitBtnEx
         Left = 264
         Top = 3
         Width = 38
@@ -387,7 +403,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 3
         OnClick = ButtonHelpClick
       end
-      object ButtonRemoveSelected: TBitBtn
+      object ButtonRemoveSelected: TBitBtnEx
         Left = 94
         Top = 30
         Width = 102
@@ -399,7 +415,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 4
         OnClick = ButtonRemoveSelectedClick
       end
-      object ButtonRenameToParent: TBitBtn
+      object ButtonRenameToParent: TBitBtnEx
         Left = 202
         Top = 30
         Width = 106
@@ -413,22 +429,6 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         TabOrder = 5
         OnClick = ButtonRenameToParentClick
       end
-    end
-    object PanelEx2: TPanelEx
-      Left = 8
-      Top = 88
-      Width = 585
-      Height = 56
-      Color1 = clSkyBlue
-      Color2 = clWhite
-      Color3 = 16115676
-      Color4 = clMoneyGreen
-      ColorFrame = 7891291
-      ColorInnerFrame = clGreen
-      Frames = [frBottom]
-      ParentBackground = False
-      Style = vgVista
-      Visible = False
     end
   end
   object IL_Systems: TImageList

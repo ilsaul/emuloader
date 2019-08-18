@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
   ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain, EditEx,
-  ButtonsEx, ColorBoxEx;
+  ButtonsEx, ColorBoxEx, AdvOfficeButtons;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -18,13 +18,10 @@ type
     PanelSystemTitle: TPanelEx;
     PanelImageCategorySelector: TPanelEx;
     LabelImageCategoryFolder: TShadowLabel;
-    LabelImageBackgroundColor: TShadowLabel;
     ButtonResetImageCategoryFolder: TBitBtnEx;
     ButtonClearImageCategoryFolder: TBitBtnEx;
     ButtonImageCategoryFolder: TBitBtnEx;
     ImageCategoryFolder: TEditEx;
-    ImageCategoryBackgroundColor: TColorBoxEx;
-    ButtonImageCategoryBackgroundColorReset: TBitBtnEx;
     ButtonDefaultImageCategoryFolder: TBitBtnEx;
     ButtonZippedImages: TBitBtnEx;
     ButtonOk: TBitBtnEx;
@@ -37,6 +34,12 @@ type
     PanelCategoryTitle: TPanelEx;
     LabelCategoryTitle: TShadowLabel;
     PanelCategoryTitleBottom: TPanelEx;
+    ImageCategoryBackgroundColor: TColorBoxEx;
+    LabelImageBackgroundColor: TShadowLabel;
+    ButtonImageCategoryBackgroundColorReset: TBitBtnEx;
+    ImageSingleBackgroundColor: TColorBoxEx;
+    ImageSingleBackgroundColorButtonReset: TBitBtnEx;
+    ImageSingleBackgroundColorEnabled: TAdvOfficeCheckBoxEx;
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ImageCategoryFolderChange(Sender: TObject);
@@ -155,13 +158,19 @@ procedure TFormImageCategorySettings.UpdateCategorySettingsIni;
 var
   ImgIniFile: TMemIniFile;
   Loop: Integer;
+  iSection: String;
 begin
   // image category settings
   ImgIniFile:= TMemIniFile.Create(FormMain.GetImageCategorySettingsFile);
+  if IsNightMode then
+     iSection:= 'NightMode'
+  else
+     iSection:= 'Category';
 
   for Loop:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
   begin
-    ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.ImageCategorySettings[Loop].BackgroundColor);
+    //ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.ImageCategorySettings[Loop].BackgroundColor);
+    ImgIniFile.WriteInteger(iSection, ImageCategoryArray[Loop, 1]+'_bkcolor', FormMain.ImageCategorySettings[Loop].BackgroundColor);
     if Loop <> 1 then
        ImgIniFile.WriteInteger('Category', ImageCategoryArray[Loop, 1]+'_enabled', Ord(FormMain.ImageCategorySettings[Loop].Visible));
   end;
@@ -345,16 +354,18 @@ begin
                       'You can select multiple folders for MAME and HBMAME. Each folder must be separated by a ; char (semicolon)'+#13#10+#13#10+
                       '2. To hide a category, clear the checkbox on each of them. This setting is the same for all '+
                       'systems!'+#13#10+#13#10+
-                      '3. To set a background color, select a category and then the color of your choice. This setting '+
-                      'is the same for all systems!'+#13#10+#13#10+
-                      '    When you''re done, click ');
+                      '3. To set a background color for each category, select a category and then the color of your choice. This setting '+
+                      'is the same for all systems.'+#13#10+#13#10+
+                      '4. Or if you prefer to use the same color for all categories, enable "Use A Single Background Color" setting and then '+
+                      'select the color of your choice.'+#13#10+#13#10+
+                      '    Image background colors and single background color settings are different for night mode and light mode, depending on what mode is active.'+#13+#10+
+                      'When you''re done, click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to save and apply changes or click ');
   FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to cancel any changes you''ve made.'+#13#10+#13#10+
                       '    Disabled systems are visible with ghosted icon and gray text, and you can change their settings, except folder paths for MAME/HBMAME.');
   GenerateMessage('Help', 'How to setup images.', '', 2);
-
 end;
 
 procedure TFormImageCategorySettings.ButtonClearImageCategoryFolderClick(
@@ -445,7 +456,7 @@ procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream, -1, False)
   else
      TShadowLabel(Sender).Font.Color:= clBlue;
 end;
@@ -454,7 +465,7 @@ procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
   else
      TShadowLabel(Sender).Font.Color:= MsgTxtColors.colorFileName;
 end;
@@ -474,8 +485,8 @@ begin
   ImageCategory_Selector.EndUpdate;
   TShadowLabel(Sender).Tag:= Ord(not Boolean(TShadowLabel(Sender).Tag));
   case TShadowLabel(Sender).Tag of
-    0: TShadowLabel(Sender).Caption:= 'CLICK HERE'+#13#10+'TO HIDE ALL'+#13#10+'CATEGORIES';
-    1: TShadowLabel(Sender).Caption:= 'CLICK HERE'+#13#10+'TO SHOW ALL'+#13#10+'CATEGORIES';
+    0: TShadowLabel(Sender).Caption:= 'HIDE ALL CATEGORIES';
+    1: TShadowLabel(Sender).Caption:= 'SHOW ALL CATEGORIES';
   end;
   ImageCategory_Selector.SetFocus;
 end;

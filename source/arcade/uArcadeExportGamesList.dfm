@@ -96,14 +96,14 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     TabOrder = 1
     object LabelExportOption_MAMESoftwareListGames: TShadowLabel
       Left = 23
-      Top = 77
-      Width = 147
-      Height = 16
+      Top = 75
+      Width = 151
+      Height = 19
       Caption = '(console/computer games)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clGray
       Font.Height = -12
-      Font.Name = 'Segoe UI'
+      Font.Name = 'Trebuchet MS'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
@@ -152,7 +152,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Left = 8
       Top = 60
       Width = 166
-      Height = 20
+      Height = 18
       Checked = True
       ShowHint = True
       TabOrder = 2

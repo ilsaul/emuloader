@@ -10,7 +10,7 @@ uses
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
-  BevelEx, ColorBoxEx, GR32_RangeBars;
+  BevelEx, ColorBoxEx, GR32_RangeBars, uGR32Extra;
 
 const
   MaxArcadeSystems = 8;
@@ -286,6 +286,8 @@ const
   clrOrange      = TColor($002670ac); // RGB(172, 112, 38)
   clrOrangeVivid = TColor($000053e6); // RGB(230, 83, 0)
 
+  clrGamesListHeaderFontColor  = TColor($00b49d87); // RGB(135,157,180) default EasyListView header font color for night mode
+
   // colors for dark gray backgrounds (filter screens, emulator setup screens, etc) - mostly used in groupbox frames
   clrBorderGroupBoxGrayBk      = TColor($00585048); // RGB(78, 80, 88)
   clrInnerBorderGroupBoxGrayBk = TColor($0035302b); // RGB(43, 42, 53)
@@ -295,9 +297,16 @@ const
   clrOrangeBarBottom = TColor($00245eb4); // RGB(180, 94, 36)  - gradient bottom color
   clrOrangeBarBorder = TColor($0000b6ff); // RGB(255, 182, 0)  - frame color
 
+  // colors for the game top bar gradient
+  clrGameBarBlue   = TColor($00824600); // RGB(  0, 70, 130)
+  clrGameBarGreen  = TColor($00468200); // RGB(  0, 130, 70)
+  clrGameBarRed    = TColor($00464682); // RGB(130,  70, 70)
+  clrGameBarYellow = TColor($00008282); // RGB(130, 130, 0)
+  clrGameBarGray   = TColor($00646464); // RGB(100, 100, 100)
+
   // position 0 -> light mode; position 1 -> night mode
   menu_background_color: array[0..1] of Integer = ($00fafafa, $00272727);
-  hint_line_color: array[0..1] of Integer = ($00c5c5c5, $00c5c5c5);
+  hint_line_color: array[0..1] of Integer = ($00c5c5c5, clrBorderGroupBoxGrayBk);//$00c5c5c5);
   hint_text_color: array[0..1] of Integer = ($00993300, $00af912b);
   item_caption_active_color: array[0..1] of Integer = (clBlack, $00bfdfe0);
   item_caption_active_shadow_color: array[0..1] of Integer = (clGray, $00404b4c); //$00566465);
@@ -310,14 +319,14 @@ const
   checked_framecolor: array[0..1] of Integer = ($00399bf7, $00399bf7);//, $00fce489);
   checked_innerframecolor: array[0..1] of Integer = ($00f1f1f1, $005d5d5d);// ($009ccefc, $009ccefc); // (new March 17, 2019)
 
-  selection_frame_color: array[0..1] of Integer = ($0000b7ff, $000087ff); // RGB(255, 135, 0)   - night mode
-  selection_singlecolor: array[0..1] of Integer = ($0000b7ff, $000087ff); // RGB(255, 135, 0)   - night mode
-  selection_uppergradient_colorstart: array[0..1] of Integer = ($00daecfd, $00b3d0fb);  // RGB(251, 208, 179) - night mode
-  selection_uppergradient_colorend: array[0..1] of Integer = ($00bde0fd, $0096c2fb);    // RGB(251, 194, 150) - night mode
-  selection_lowergradient_colorstart: array[0..1] of Integer = ($0069ceff, $003ea2ff);  // RGB(255, 162, 62)  - night mode
-  selection_lowergradient_colorend: array[0..1] of Integer = ($009af6ff, $0062d7ff);    // RGB(255, 215, 98)  - night mode
-  selection_gradient_outerframecolor: array[0..1] of Integer = ($00f4f9fe, $00e1edfd);  // RGB(253, 237, 225) - night mode (new March 17, 2019)
-  selection_frame_round_ish_pixels: array[0..1] of Integer = ($0000dcff, $0000b6ff);    // RGB(255, 182, 0)   - night mode (new March 17, 2019)
+  selection_frame_color: array[0..1] of Integer = ($0000b7ff, $000078f0); // RGB(240, 125, 0)   - night mode
+  selection_singlecolor: array[0..1] of Integer = ($0000b7ff, $000078f0); // RGB(240, 125, 0)   - night mode
+  selection_uppergradient_colorstart: array[0..1] of Integer = ($00daecfd, $00a4c1ec);  // RGB(236, 193, 164) - night mode
+  selection_uppergradient_colorend:   array[0..1] of Integer = ($00bde0fd, $0087b3ec);  // RGB(236, 179, 135) - night mode
+  selection_lowergradient_colorstart: array[0..1] of Integer = ($0069ceff, $002f93f0);  // RGB(240, 147, 47)  - night mode
+  selection_lowergradient_colorend:   array[0..1] of Integer = ($009af6ff, $0053c8f0);  // RGB(240, 200, 83)  - night mode
+  selection_gradient_outerframecolor: array[0..1] of Integer = ($00f4f9fe, $00d2deee);  // RGB(238, 232, 210) - night mode
+  selection_frame_round_ish_pixels:   array[0..1] of Integer = ($0000dcff, $0000a7f0);  // RGB(240, 167, 0)   - night mode
 
 type
   TMsgBoxColors = packed record
@@ -420,22 +429,24 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
 // bright / dark theme functions
-procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
-procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean);
-procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil);
-procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar);
+procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean; ForceNightColors: Boolean = False);
+procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil; ForceNightColors: Boolean = False);
+procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar; ForceNightColors: Boolean = False); overload;
+procedure SetGaugeBarColors(GaugeBar2Source: TGaugeBar2; ForceNightColors: Boolean = False); overload;
 procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
-procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetGroupBoxBorderStyle(GroupBoxSource: TAdvGroupBoxEx);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
 procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
 procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
 procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
 
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
 procedure SetEditNightColors(EditSource: TEditEx);
-procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1);
+procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1; EnableCustomBorder: Boolean = True);
 procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
                             FontColor: TColor = -1;
                             GradientColorTop: TColor = -1; GradientColorBottom: TColor = -1; FrameColor: TColor = -1;
@@ -448,7 +459,8 @@ procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
 procedure PopulateMsgColors;
 procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
 procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
+procedure SetColorEmulatorTopBar(PanelExSource: TPanelEx; EmulatorID: Integer; IsBottomColorSilver: Boolean = False);
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName, LabelGameStatus: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
 procedure SetSystemTitleBarNightColors(sysBarSource, sysBottomBarSource: TPanelEx; IsBlackBackground: Boolean = True);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
@@ -486,9 +498,8 @@ function  CheckAndCreateFolder(const FolderString: String): Boolean;
 function  CompareIntValue(const A, B: Int64): ShortInt;
 function  CompareFloatValue(const A, B: Extended): ShortInt;
 function  CompareTDateTime(const A, B: TDateTime): Integer;
-procedure SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
-procedure SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
-procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox);
+
+procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
 
 function  XML_CheckData(const strLine, FieldEntry: String): Boolean;
 function  XML_GetEntryName(const strLine: String): String;
@@ -515,7 +526,7 @@ function  FileExists(const FileName: String): Boolean;
 function  RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
 function  MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
 
-procedure SetDefaultColorBox(ColorHolder: TColorBox);
+procedure SetDefaultColorBox(const ColorHolder: TColorBoxEx);
 
 function  SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean; RootFolder: WideString = ''): Boolean;
 
@@ -545,7 +556,7 @@ function  GetWindowsDir: String;
 function  GetSystemDir: String;
 function  GetMyDocuments: String;
 
-procedure PopulateScreenResolution(DestList: TComboBox; AddAutoText: Boolean = False);
+procedure PopulateScreenResolution(DestList: TComboBox2Ex; AddAutoText: Boolean = False);
 function  CompareStringListNatural(sList: TStringList; Index1, Index2: Integer): Integer;
 function  NaturalCompareText(const Text1, Text2: WideString): Integer;
 
@@ -609,11 +620,13 @@ var
 
 implementation
 
-procedure SetLabelColors(LabelSource: TShadowLabel; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
 begin
   LabelSource.Font.Color:= iColor;
-  LabelSource.ShadowColor:= iShadowColor;
+  if iShadowColor <> -1 then
+     LabelSource.ShadowColor:= iShadowColor;
   LabelSource.ShadowEnabled:= iShadowEnabled;
+  LabelSource.UseCustomDisabledFontColor:= IsNightMode;
 end;
 
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
@@ -636,7 +649,7 @@ begin
      BevelExSource.Style:= bsLowered;
 end;
 
-procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean);
+procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean; ForceNightColors: Boolean = False);
 begin
   if UpdateColors then
   begin
@@ -647,13 +660,19 @@ begin
 
     ColorBoxExSource.SelectionFontCustomColor:= clrBlackBk;
     ColorBoxExSource.CustomColorBk:= clrDarkGray;
-    ColorboxExSource.CustomColorFont:= clCream;
+    ColorBoxExSource.CustomColorFont:= clCream;
+
+    //ColorBoxExSource.ButtonColorHover:= clrMedDarkGray;
   end;
+  
+  if ForceNightColors then
+     ColorBoxExSource.CustomColorsEnabled:= True
+  else
   if ColorBoxExSource.CustomColorsEnabled <> IsNightMode then
      ColorBoxExSource.CustomColorsEnabled:= IsNightMode;
 end;
 
-procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil);
+procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil; ForceNightColors: Boolean = False);
 begin
   if UpdateColors then
   begin
@@ -661,6 +680,8 @@ begin
     ComboBox2ExSource.SelectionBarCustomColor_Bottom:= clrOrangeBarBottom;
     ComboBox2ExSource.SelectionShowFrameColor:= clrOrangeBarBorder;
     ComboBox2ExSource.SelectionShowFrame:= True;
+
+    //ComboBox2ExSource.ButtonColorHover:= clrMedDarkGray;
 
     ComboBox2ExSource.SelectionFontCustomColor:= clrBlackBk;
     if EditColors = nil then
@@ -670,7 +691,7 @@ begin
 
       ComboBox2ExSource.FrameColor:= clGray;
       ComboBox2ExSource.FrameColorFocused:= clSilver;
-      ComboBox2ExSource.FrameColorDisabled:= clrMedDarkGray; // $00505050;
+      ComboBox2ExSource.FrameColorDisabled:= clrMedDarkGray;
     end
     else
     begin
@@ -682,18 +703,22 @@ begin
       ComboBox2ExSource.FrameColorDisabled:= EditColors.ColorFrameDisabled;
     end;
   end;
+  if ForceNightColors then
+     ComboBox2ExSource.CustomColorsEnabled:= True
+  else
   if ComboBox2ExSource.CustomColorsEnabled <> IsNightMode then
      ComboBox2ExSource.CustomColorsEnabled:= IsNightMode;
-  if IsNightMode and ComboBox2ExSource.CustomColorsEnabled then
+  //if IsNightMode and ComboBox2ExSource.CustomColorsEnabled then
+  if ComboBox2ExSource.CustomColorsEnabled then
      begin
        if ComboBox2ExSource.ItemHeight <> 16 then
           ComboBox2ExSource.ItemHeight:= 16; // fix for the control height... should always be one more pixel in "OwnerDraw" mode
      end;
 end;
 
-procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar);
+procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar; ForceNightColors: Boolean = False);
 begin
-  if IsNightMode then
+  if IsNightMode or ForceNightColors then
      begin
        if GaugeBarSource.Style <> rbsMac then
           GaugeBarSource.Style:= rbsMac;
@@ -709,7 +734,6 @@ begin
        GaugeBarSource.HighLightColor:= clrDarkGray;
        GaugeBarSource.ShadowColor:= clrBlackBk;
        GaugeBarSource.ShowHandleGrip:= True;
-
      end
   else
      begin
@@ -717,6 +741,35 @@ begin
           GaugeBarSource.Style:= rbsDefault;
        GaugeBarSource.Backgnd:= bgPattern;
        GaugeBarSource.ButtonSize:= 12;
+     end;
+end;
+
+procedure SetGaugeBarColors(GaugeBar2Source: TGaugeBar2; ForceNightColors: Boolean = False);
+begin
+  if IsNightMode or ForceNightColors then
+     begin
+       if GaugeBar2Source.Style <> rbsMac then
+          GaugeBar2Source.Style:= rbsMac;
+
+       GaugeBar2Source.Backgnd:= bgSolid;
+       GaugeBar2Source.BorderStyle:= bsNone;
+       GaugeBar2Source.BorderColor:= clGray;
+       GaugeBar2Source.ArrowColor:= clCream;
+       GaugeBar2Source.ButtonColor:= clrDarkSilver;
+       GaugeBar2Source.ButtonSize:= 17;
+       GaugeBar2Source.Color:= clrDarkGray;
+       GaugeBar2Source.HandleColor:= clGray;
+       GaugeBar2Source.HighLightColor:= clrDarkGray;
+       GaugeBar2Source.ShadowColor:= clrBlackBk;
+       GaugeBar2Source.ShowHandleGrip:= True;
+
+     end
+  else
+     begin
+       if GaugeBar2Source.Style <> rbsDefault then
+          GaugeBar2Source.Style:= rbsDefault;
+       GaugeBar2Source.Backgnd:= bgPattern;
+       GaugeBar2Source.ButtonSize:= 12;
      end;
 end;
 
@@ -731,20 +784,38 @@ begin
      CheckBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
-procedure SetRadioButtonColors(CheckBoxSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
 begin
-  CheckBoxSource.Font.Color:= iColor;
-  CheckBoxSource.ShadowColor:= iShadowColor;
-  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+  RadioButtonSource.Font.Color:= iColor;
+  RadioButtonSource.ShadowColor:= iShadowColor;
+  RadioButtonSource.ShadowEnabled:= iShadowEnabled;
+  if iDisabledColor <> -1 then
+     RadioButtonSource.DisabledFontColor:= iDisabledColor;
+  if iDisabledShadowColor <> -1 then
+     RadioButtonSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxBorderStyle(GroupBoxSource: TAdvGroupBoxEx);
+begin
+  GroupBoxSource.RoundEdges:= not IsNightMode;
+  if IsNightMode then
+     GroupBoxSource.BorderStyle:= bsAdvDualColors
+  else
+     GroupBoxSource.BorderStyle:= bsAdvSingle;
+end;
+
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
 begin
   GroupBoxSource.BorderColor:= iBorderColor;
   GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
   GroupBoxSource.Font.Color:= iColor;
   GroupBoxSource.ShadowColor:= iShadowColor;
   GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+
+  if iDisabledColor <> -1 then
+     GroupBoxSource.DisabledFontColor:= iDisabledColor;
+  if iDisabledShadowColor <> -1 then
+     GroupBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
 procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
@@ -755,7 +826,6 @@ begin
   if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
      GroupBoxSource.ShadowEnabled:= iShadowEnabled;
 end;
-
 
 procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
 var
@@ -901,14 +971,16 @@ begin
   EditSource.UseCustomBorder:= True;
 end;
 
-procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1);
+procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1; EnableCustomBorder: Boolean = True);
 begin
   EditSource.Color:= BackgroundColor;
-  EditSource.ColorFrame:= FrameColor;
-  EditSource.ColorFrameFocused:= FrameFocusedColor;
+  if FrameColor <> -1 then
+     EditSource.ColorFrame:= FrameColor;
+  if FrameFocusedColor <> -1 then
+     EditSource.ColorFrameFocused:= FrameFocusedColor;
   if FrameDisabledColor <> -1 then
      EditSource.ColorFrameDisabled:= FrameDisabledColor;
-  EditSource.Font.Color:= FontColor; //item_caption_active_color[1]
+  EditSource.Font.Color:= FontColor;
   EditSource.UseCustomBorder:= True;
 end;
 
@@ -974,11 +1046,11 @@ begin
       MsgTxtColors.colorKeyTitle:= $00006ee6;
       MsgTxtColors.colorKeyValue:= $00a0a0a0;
       MsgTxtColors.colorFileName:= $00d68b40; // (0, 100, 200)
-      MsgTxtColors.colorMachineName:= $00ff7c7c;
-      MsgTxtColors.colorMachineMultiSlot:= $00009696;
-      MsgTxtColors.colorCmdLine:= clLime;
+      MsgTxtColors.colorMachineName:= clrLightBlue;// $00ff7c7c;
+      MsgTxtColors.colorMachineMultiSlot:= $00009696; // RGB(150, 150, 0)
+      MsgTxtColors.colorCmdLine:= clrLightGreen;//clLime;
       MsgTxtColors.colorBoldTitle:= $00c8c8c8; // (200, 200, 200)
-      MsgTxtColors.colorWarning:= $001414e6;
+      MsgTxtColors.colorWarning:= clrLightRed;// $001414e6;
       MsgTxtColors.colorExitCode:= $008b8bd6;
     end;
   end
@@ -1035,7 +1107,7 @@ begin
     case GameSetStatus of
      -1: PanelSource.Color1:= clrDarkBlue;   // blue -> -1 is for message box and unknown game set state
       0: PanelSource.Color1:= clrDarkGreen;  // green
-      1: PanelSource.Color1:= clrDarkRed;    // red
+      1: PanelSource.Color1:= clrDarkRed;     // red
       2: PanelSource.Color1:= clrDarkSilver; // silver
     end;
 
@@ -1051,7 +1123,82 @@ begin
   end;
 end;
 
-procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
+procedure SetColorEmulatorTopBar(PanelExSource: TPanelEx; EmulatorID: Integer; IsBottomColorSilver: Boolean = False);
+var
+  iTop, iBottom: TColor;
+begin
+  // night mode top color is 60% dark of the light color...
+  case EmulatorID of
+    idMAME:
+      begin
+        if IsNightMode then
+           iTop:= $00907964 //$00b44b32 // RGB(50, 75, 150)
+        else
+           iTop:= clSkyBlue;
+      end;
+    idSupermodel:
+      begin
+        if IsNightMode then
+           iTop:= $00847b73 //$00b44b32 // RGB(50, 75, 150)
+        else
+           iTop:= $00dccdc0;
+      end;
+    idDaphne:
+      begin
+        if IsNightMode then
+           iTop:= $00738484 // RGB(50, 75, 150)
+        else
+           iTop:= $00c0dcdc;
+      end;
+    //idDemul:
+    //  begin
+    //    if IsNightMode then
+    //       iTop:= $00b44b32 // RGB(50, 75, 150)
+    //    else
+    //       iTop:= clSkyBlue;
+    //  end;
+    idHBMAME:
+      begin
+        if IsNightMode then
+           iTop:= $006c7356 // RGB(50, 75, 150)
+        else
+           iTop:= $00b4bf8f;
+      end;
+    //idDICE:
+    //  begin
+    //    if IsNightMode then
+    //       iTop:= $00b44b32 // RGB(50, 75, 150)
+    //    else
+    //       iTop:= clSkyBlue;
+    //  end;
+    idSegaModel2:
+      begin
+        if IsNightMode then
+           iTop:= $00738473 //$00873826 // RGB(50, 75, 150)
+        else
+           iTop:= clMoneyGreen;
+      end;
+    idZiNc:
+      begin
+        if IsNightMode then
+           iTop:= $00737b84 //$00324bb4 // RGB(50, 75, 150)
+        else
+           iTop:= $00c0cddc;
+      end;
+  end;
+  if IsNightMode then
+     begin
+       if IsBottomColorSilver then
+          iBottom:= menu_background_color[1]
+       else
+          iBottom:= clrBlackBk
+     end;
+  PanelExSource.Color1:= iTop;
+  if IsNightMode then
+     PanelExSource.Color2:= iBottom;
+end;
+
+procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName, LabelGameStatus: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
 begin
   if IsNightMode then
   begin
@@ -1087,7 +1234,7 @@ begin
       case GameStatus of // 0 - have (available); 1 - missing ROMs/CHDs; 2 - missing (no .zip and no ROMs found... even if CHDs are found)
         -1: // default blue gradient
           begin
-            LabelGameTitle.Font.Color:= clYellow;
+            LabelGameTitle.Font.Color:= clrOrangeBarTop;// clYellow;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         0: // green gradient (have)
@@ -1102,20 +1249,25 @@ begin
           end;
         2: // gray gradient (missing)
           begin
-            LabelGameTitle.Font.Color:= clYellow;
-            LabelGameTitle.ShadowColor:= clrDarkGray;
+            LabelGameTitle.Font.Color:= clrOrangeBarTop;//clYellow;
+            LabelGameTitle.ShadowColor:= clMaroon;// clrDarkGray;
           end;
       end;
-      LabelGameTitle.ShadowEnabled:= True;
+      LabelGameTitle.ShadowEnabled:= False;//True;
     end;
 
     if LabelGameName <> nil then
     begin
       if IsBottomColorSilver then
-         SetLabelColors(LabelGameName, clCream, item_caption_active_shadow_color[1])
+         SetLabelColors(LabelGameName, clCream, item_caption_active_shadow_color[1], False)
       else
-         SetLabelColors(LabelGameName, clWhite, clrMedBlue);
+         SetLabelColors(LabelGameName, clWhite, clrMedBlue, False);
 
+    end;
+
+    if LabelGameStatus <> nil then
+    begin
+      SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack{clNavy}, False);
     end;
   end;
   //else
@@ -2055,7 +2207,7 @@ begin
     FormMessageBox.NightMode.Checked:= IsNightMode;
     if IsNightMode then
     begin
-      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, -1, True);
+      SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, nil, -1, True);
 
       FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
@@ -2524,9 +2676,6 @@ end;
 function CheckAndCreateFolder(const FolderString: String): Boolean;
 begin
   Result:= ForceDirectories(FolderString);
-  //Result:= DirectoryExists(FolderString);
-  //if not Result then
-  //   Result:= ForceDirectories(FolderString);
 end;
 
 function CompareIntValue(const A, B: Int64): ShortInt;
@@ -2562,39 +2711,7 @@ begin
      Result:= 1;
 end;
 
-procedure SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
-begin
-  if (Holder.ItemIndex = -1) or ResetSelection then
-     begin
-       Holder.ItemIndex:= ItemNumber;
-       if Assigned(Holder.OnSelect) then
-          Holder.OnSelect(nil);
-     end;
-end;
-
-procedure SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
-var
-  Loop: ShortInt;
-begin
-  if (Holder.ItemIndex = -1) or ResetSelection then
-     begin
-       Holder.ItemIndex:= -1;
-       for Loop:=0 to Holder.ItemsEx.Count-1 do
-       begin
-         if Holder.ItemsEx[Loop].ImageIndex = ImgIndex then
-            begin
-              Holder.ItemIndex:= Loop;
-              Break;
-            end;
-       end;
-       if Holder.ItemIndex = -1 then
-          Holder.ItemIndex:= 0;
-       if Assigned(Holder.OnSelect) then
-          Holder.OnSelect(nil);
-     end;
-end;
-
-procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox);
+procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
 begin
   ComboBoxHolder.ItemIndex:= sIndex;
   if Assigned(ComboBoxHolder.OnSelect) then
@@ -3077,7 +3194,7 @@ begin
            //+MOVEFILE_WRITE_THROUGH);
 end;
 
-procedure SetDefaultColorBox(ColorHolder: TColorBox);
+procedure SetDefaultColorBox(const ColorHolder: TColorBoxEx);
 begin
   ColorHolder.Selected:= ColorHolder.DefaultColorColor;
   if Assigned(ColorHolder.OnSelect) then
@@ -3756,7 +3873,7 @@ begin
   CloseHandle(FSnapshotHandle); 
 end;}
 
-procedure PopulateScreenResolution(DestList: TComboBox; AddAutoText: Boolean = False);
+procedure PopulateScreenResolution(DestList: TComboBox2Ex; AddAutoText: Boolean = False);
 var
   ScreenResolutions: TStringList;
 begin

@@ -442,14 +442,14 @@ begin
   if AddMAMEDeviceSetWithNoROMs.Checked then
      begin
        if IsNightMode then
-          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1])
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, item_caption_active_color[1], item_caption_active_shadow_color[1], False)
        else
           AddMAMEDeviceSetWithNoROMs.Font.Color:= clBlack
      end
   else
      begin
        if IsNightMode then
-          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, clrLightGrayFrame, clrDarkGray)
+          SetCheckBoxColors(AddMAMEDeviceSetWithNoROMs, clrLightGrayFrame, clrDarkGray, False)
        else
           AddMAMEDeviceSetWithNoROMs.Font.Color:= clrLightGrayFrame;
      end;
@@ -519,19 +519,19 @@ end;
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream, -1, False) // clrLightBlue, clrMedBlue, False)
   else
      TShadowLabel(Sender).Font.Color:= clBlue;
-  TShadowLabel(Sender).Font.Style:= [fsUnderline];
+  //TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
   else
      TShadowLabel(Sender).Font.Color:= clNavy;
-  TShadowLabel(Sender).Font.Style:= [];
+  //TShadowLabel(Sender).Font.Style:= [];
 end;
 
 procedure TFormArcadeSelectSystem.LabelCustomizeMAMESoftwareListClick(Sender: TObject);

@@ -435,10 +435,12 @@ procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemPaintText(
 begin
   if Position = 1 then
      begin
+       ACanvas.Font.Style:= [];
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [fsItalic];
+       if LabelMultiSelect.Tag = 1 then
+          ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else

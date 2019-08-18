@@ -137,6 +137,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Top = 23
       Width = 205
       Height = 22
+      Hint = 'Games List Background Color'
       DefaultColorColor = clWhite
       NoneColorColor = clWhite
       Selected = clWhite
@@ -199,7 +200,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Themed = True
     end
     object GamesBackgroundImageButtonUpdate: TBitBtnEx
-      Left = 604
+      Left = 653
       Top = 23
       Width = 49
       Height = 21
@@ -215,7 +216,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       OnClick = GamesBackgroundImageButtonUpdateClick
     end
     object GamesBackgroundImageButtonSelect: TBitBtnEx
-      Left = 653
+      Left = 604
       Top = 23
       Width = 49
       Height = 21
@@ -316,29 +317,46 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     object N3: TMenuItem
       Caption = '-'
     end
-    object SetFontsToMatchAllSystemsFont1: TMenuItem
+    object PopupSetFontsToMatchAllSystemsFont: TMenuItem
       Caption = 'Set Selected To "All Systems" Font'
-      OnClick = SetFontsToMatchAllSystemsFont1Click
+      OnClick = PopupSetFontsToMatchAllSystemsFontClick
     end
-    object CopyFromParent1: TMenuItem
+    object PopupCopyFontFromArcadeParentFont: TMenuItem
       Tag = 1
       Caption = 'Set Selected To "Arcade Parent Game" Font'
-      OnClick = SetFontsToMatchAllSystemsFont1Click
+      OnClick = PopupSetFontsToMatchAllSystemsFontClick
     end
     object N4: TMenuItem
       Caption = '-'
     end
-    object SetAllConsoleComputerSystemsFontsToAllSystems1: TMenuItem
+    object PopupSetAllConsoleComputerSystemsFontsToAllSystems: TMenuItem
       Caption = 'Set All Console/Computer To "All Systems" Font'
-      OnClick = SetAllConsoleComputerSystemsFontsToAllSystems1Click
+      OnClick = PopupSetAllConsoleComputerSystemsFontsToAllSystemsClick
     end
-    object SetAllToArcadeParentGameFont1: TMenuItem
+    object PopupSetAllToArcadeParentGameFont: TMenuItem
       Tag = 1
       Caption = 'Set All Console/Computer To "Arcade Parent Game" Font'
-      OnClick = SetAllConsoleComputerSystemsFontsToAllSystems1Click
+      OnClick = PopupSetAllConsoleComputerSystemsFontsToAllSystemsClick
+    end
+    object N5: TMenuItem
+      Caption = '-'
+      Visible = False
+    end
+    object PopupCopyAllFontsFromLightMode: TMenuItem
+      Caption = 'Copy All Fonts From'
+      Visible = False
+    end
+    object PopupCopySelectedFontsFromLightMode: TMenuItem
+      Caption = 'Copy Selected Fonts From'
+      Visible = False
     end
     object N1: TMenuItem
       Caption = '-'
+    end
+    object PopupShowFontName: TMenuItem
+      AutoCheck = True
+      Caption = 'Show Font Name'
+      OnClick = PopupShowFontNameClick
     end
     object PopupShowAvailableSystemsOnly: TMenuItem
       AutoCheck = True

@@ -5,39 +5,40 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Buttons, GR32_Image, IniFiles,
-  EditEx, ImgList, MPCommonObjects, EasyListview;
+  EditEx, ImgList, MPCommonObjects, EasyListview, ButtonsEx,
+  AdvOfficeButtons, ShadowLabel, AdvGroupBox;
 
 type
   TFormCustomCommandLine = class(TForm)
     TopBar: TImage32;
-    ParametersBox: TGroupBox;
-    ButtonMoveParameterDown: TButton;
-    ButtonParameterDelete: TButton;
-    ButtonMoveParameterUp: TButton;
-    ButtonUpdate: TButton;
-    LabelPrefixToAdd: TLabel;
+    ParametersBox: TAdvGroupBoxEx;
+    ButtonMoveParameterDown: TBitBtnEx;
+    ButtonParameterDelete: TBitBtnEx;
+    ButtonMoveParameterUp: TBitBtnEx;
+    ButtonUpdate: TBitBtnEx;
+    LabelPrefixToAdd: TShadowLabel;
     PrefixToAdd: TEditEx;
-    LabelFieldToAdd: TLabel;
+    LabelFieldToAdd: TShadowLabel;
     FieldToAdd: TComboBoxEx;
-    LabelSuffixToAdd: TLabel;
+    LabelSuffixToAdd: TShadowLabel;
     SuffixToAdd: TEditEx;
-    ButtonAddParameter: TButton;
-    ParameterSurroundWithQuotes: TCheckBox;
-    PrefixSendLeadingSpace: TCheckBox;
-    AdditionalParametersBox: TGroupBox;
+    ButtonAddParameter: TBitBtnEx;
+    ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx;
+    PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx;
+    AdditionalParametersBox: TAdvGroupBoxEx;
     AdditionalParameters: TEditEx;
-    LabelGameDescription: TLabel;
+    LabelGameDescription: TShadowLabel;
     BottomBar: TImage32;
-    ButtonReload: TButton;
-    ButtonClearCustomCommandLine: TButton;
-    ButtonPreview: TButton;
-    ButtonOk: TButton;
-    ButtonCancel: TButton;
-    LabelCustomEmulatorFile: TGroupBox;
+    ButtonReload: TBitBtnEx;
+    ButtonClearCustomCommandLine: TBitBtnEx;
+    ButtonPreview: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelCustomEmulatorFile: TAdvGroupBoxEx;
     EmulatorBatchFile: TEditEx;
-    ButtonEmulatorBatchFileBrowse: TButton;
+    ButtonEmulatorBatchFileBrowse: TBitBtnEx;
     ParametersListView: TEasyListview;
-    LabelIniFile: TLabel;
+    LabelIniFile: TShadowLabel;
     procedure ButtonEmulatorBatchFileBrowseClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonClearCustomCommandLineClick(Sender: TObject);
@@ -60,6 +61,9 @@ type
     { Private declarations }
     FileNameFullPath: String;
     procedure WriteCustomCommandLine;
+
+    procedure SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
+    procedure SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
   public
     { Public declarations }
   end;
@@ -72,6 +76,38 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormCustomCommandLine.SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
+begin
+  if (Holder.ItemIndex = -1) or ResetSelection then
+     begin
+       Holder.ItemIndex:= ItemNumber;
+       if Assigned(Holder.OnSelect) then
+          Holder.OnSelect(Holder);
+     end;
+end;
+
+procedure TFormCustomCommandLine.SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
+var
+  Loop: ShortInt;
+begin
+  if (Holder.ItemIndex = -1) or ResetSelection then
+     begin
+       Holder.ItemIndex:= -1;
+       for Loop:=0 to Holder.ItemsEx.Count-1 do
+       begin
+         if Holder.ItemsEx[Loop].ImageIndex = ImgIndex then
+            begin
+              Holder.ItemIndex:= Loop;
+              Break;
+            end;
+       end;
+       if Holder.ItemIndex = -1 then
+          Holder.ItemIndex:= 0;
+       if Assigned(Holder.OnSelect) then
+          Holder.OnSelect(Holder);
+     end;
+end;
 
 procedure TFormCustomCommandLine.WriteCustomCommandLine;
 var

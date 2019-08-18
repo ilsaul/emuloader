@@ -8,7 +8,6 @@ uses
 
 type
   TFormControllerKeysLayout = class(TForm)
-    FrameBottom: TBevel;
     LabelWarning: TShadowLabel;
     ControllerImage: TImage32;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -92,14 +91,6 @@ procedure TFormControllerKeysLayout.FormShow(Sender: TObject);
 begin
   LoadCtrlImg;
   SetFocus;
-  if Screen.Width = 640 then
-     begin
-       ControllerImage.ScaleMode:= smResize;
-       ClientWidth:= 635;
-       ClientHeight:= 351+FrameBottom.Height;
-       LabelWarning.Left:= 30;
-       LabelWarning.Top:= ClientHeight-18;
-     end;
 end;
 
 procedure TFormControllerKeysLayout.SelectPrevLayout;

@@ -20,6 +20,7 @@ object FormSelectDirectory: TFormSelectDirectory
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object ShellTree: TShellTreeView
@@ -43,7 +44,7 @@ object FormSelectDirectory: TFormSelectDirectory
     TabOrder = 0
     OnChange = ShellTreeChange
   end
-  object PanelTop: TPanelEx
+  object TopBar: TPanelEx
     Left = 0
     Top = 0
     Width = 434
@@ -90,7 +91,7 @@ object FormSelectDirectory: TFormSelectDirectory
       Transparent = True
     end
   end
-  object PanelButtons: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
     Top = 338
     Width = 434
@@ -142,7 +143,7 @@ object FormSelectDirectory: TFormSelectDirectory
       State = cbChecked
       Themed = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 239
       Top = 31
       Width = 89
@@ -152,7 +153,7 @@ object FormSelectDirectory: TFormSelectDirectory
       ModalResult = 1
       TabOrder = 1
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 337
       Top = 31
       Width = 89

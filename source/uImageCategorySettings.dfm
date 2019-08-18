@@ -241,37 +241,15 @@ object FormImageCategorySettings: TFormImageCategorySettings
     object LabelImageCategoryFolder: TShadowLabel
       Left = 8
       Top = 12
-      Width = 142
+      Width = 184
       Height = 16
-      Hint = 'Images Folder [%s]'
-      Caption = 'Images Folder [.png; .jpg]'
+      Hint = 'Image Category Folder [%s]'
+      Caption = 'Image Category Folder [.png; .jpg]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelImageBackgroundColor: TShadowLabel
-      Left = 496
-      Top = 12
-      Width = 102
-      Height = 16
-      Hint = 'Folder [%s]'
-      Caption = 'Background Color'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clSilver
@@ -329,35 +307,6 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 3
       OnChange = ImageCategoryFolderChange
     end
-    object ImageCategoryBackgroundColor: TColorBoxEx
-      Left = 496
-      Top = 29
-      Width = 187
-      Height = 22
-      Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-      Color = clWhite
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ItemHeight = 16
-      ParentFont = False
-      TabOrder = 4
-      OnSelect = ImageCategoryBackgroundColorSelect
-    end
-    object ButtonImageCategoryBackgroundColorReset: TBitBtnEx
-      Left = 638
-      Top = 7
-      Width = 43
-      Height = 21
-      Hint = 'Reset background color to current'
-      Caption = 'Reset'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 5
-      OnClick = ButtonImageCategoryBackgroundColorResetClick
-    end
     object ButtonDefaultImageCategoryFolder: TBitBtnEx
       Left = 426
       Top = 7
@@ -365,7 +314,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Height = 21
       Hint = 'Use a default folder name assigned by the frontend'
       Caption = 'Default'
-      TabOrder = 6
+      TabOrder = 4
       OnClick = ButtonDefaultImageCategoryFolderClick
     end
     object ButtonZippedImages: TBitBtnEx
@@ -377,7 +326,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Caption = 'Help'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 7
+      TabOrder = 5
       OnClick = ButtonZippedImagesClick
     end
     object ButtonOk: TBitBtnEx
@@ -390,7 +339,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       ModalResult = 1
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 8
+      TabOrder = 6
     end
     object ButtonCancel: TBitBtnEx
       Left = 905
@@ -402,7 +351,46 @@ object FormImageCategorySettings: TFormImageCategorySettings
       ModalResult = 2
       ParentShowHint = False
       ShowHint = True
+      TabOrder = 7
+    end
+    object ImageSingleBackgroundColor: TColorBoxEx
+      Left = 480
+      Top = 28
+      Width = 185
+      Height = 22
+      Hint = 'Image Single Background Color'
+      Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 16
+      ParentFont = False
+      TabOrder = 8
+    end
+    object ImageSingleBackgroundColorButtonReset: TBitBtnEx
+      Left = 667
+      Top = 28
+      Width = 43
+      Height = 21
+      Hint = 'Reset background color to current'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 9
+    end
+    object ImageSingleBackgroundColorEnabled: TAdvOfficeCheckBoxEx
+      Left = 480
+      Top = 10
+      Width = 187
+      Height = 18
+      TabOrder = 10
+      Alignment = taLeftJustify
+      Caption = 'Use A Single Background Color'
+      ReturnIsTab = False
+      Themed = True
     end
   end
   object PanelCategoriesBottom: TPanelEx
@@ -420,13 +408,14 @@ object FormImageCategorySettings: TFormImageCategorySettings
     ParentBackground = False
     Style = vgSolid
     object LabelShowHideCategories: TShadowLabel
-      Left = 113
-      Top = 19
-      Width = 92
-      Height = 56
+      Left = 74
+      Top = 59
+      Width = 170
+      Height = 25
+      Cursor = crHandPoint
       Alignment = taCenter
       AutoSize = False
-      Caption = 'CLICK HERE TO SHOW ALL CATEGORIES'
+      Caption = 'HIDE ALL CATEGORIES'
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
@@ -444,10 +433,31 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
       Transparent = False
       Layout = tlCenter
-      WordWrap = True
       OnClick = LabelShowHideCategoriesClick
       OnMouseEnter = LabelShowHideCategoriesMouseEnter
       OnMouseLeave = LabelShowHideCategoriesMouseLeave
+    end
+    object LabelImageBackgroundColor: TShadowLabel
+      Left = 16
+      Top = 12
+      Width = 186
+      Height = 16
+      Hint = 'Folder [%s]'
+      Caption = 'Image Category Background Color'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clSilver
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
     end
     object PanelCategoryTitleBottom: TPanelEx
       Left = 1
@@ -463,6 +473,36 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Frames = []
       ParentBackground = False
       Style = vgSimple
+    end
+    object ImageCategoryBackgroundColor: TColorBoxEx
+      Left = 16
+      Top = 28
+      Width = 240
+      Height = 22
+      Hint = 'Image Category Background Color'
+      Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ItemHeight = 16
+      ParentFont = False
+      TabOrder = 1
+      OnSelect = ImageCategoryBackgroundColorSelect
+    end
+    object ButtonImageCategoryBackgroundColorReset: TBitBtnEx
+      Left = 259
+      Top = 28
+      Width = 43
+      Height = 21
+      Hint = 'Reset background color to current'
+      Caption = 'Reset'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = ButtonImageCategoryBackgroundColorResetClick
     end
   end
   object PanelSystemTitle: TPanelEx

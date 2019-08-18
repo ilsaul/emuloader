@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles,
   ImgList, MPCommonObjects, EasyListview, ShadowLabel, PanelEx,
-  Buttons, AdvGroupBox, AdvOfficeButtons;
+  Buttons, AdvGroupBox, AdvOfficeButtons, ColorBoxEx, ButtonsEx;
 
 const
   FolderROM_Status: packed array[0..1] of String = ('Inactive', 'Active');
@@ -19,36 +19,36 @@ type
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameStatus: TShadowLabel;
-    Label1: TLabel;
+    FolderROMsLabel: TShadowLabel;
     FolderROMs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    FolderROMButtonSelect: TBitBtn;
-    FolderROMsButtonSetActiveInactive: TBitBtn;
-    FolderROMsButtonEdit: TBitBtn;
-    FolderROMsButtonDelete: TBitBtn;
-    FolderROMsButtonClear: TBitBtn;
-    GroupBox2: TAdvGroupBoxEx;
-    LabelFullScreenResolution: TLabel;
-    LabelWidescreenWindow: TLabel;
-    FullScreenResolution: TComboBox;
+    FolderROMsButtonUp: TBitBtnEx;
+    FolderROMsButtonDown: TBitBtnEx;
+    FolderROMsButtonSelect: TBitBtnEx;
+    FolderROMsButtonSetActiveInactive: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
+    VideoGroupBox: TAdvGroupBoxEx;
+    FullScreenResolutionLabel: TShadowLabel;
+    WidescreenWindowLabel: TShadowLabel;
+    FullScreenResolution: TComboBox2Ex;
     AutoSwitchFullScreen: TAdvOfficeCheckBoxEx;
     ForceSync: TAdvOfficeCheckBoxEx;
-    WidescreenWindow: TComboBox;
-    Frameskip: TComboBox;
-    LabelFrameskip: TLabel;
+    WidescreenWindow: TComboBox2Ex;
+    Frameskip: TComboBox2Ex;
+    FrameskipLabel: TShadowLabel;
     EnableSound: TAdvOfficeCheckBoxEx;
-    AdvGroupBox1: TAdvGroupBoxEx;
+    InputGroupBox: TAdvGroupBoxEx;
     ReturnToNeutral: TAdvOfficeCheckBoxEx;
     UseRawInput: TAdvGroupBoxEx;
-    LabelRawDevicePlayer1: TLabel;
-    LabelRawDevicePlayer2: TLabel;
-    RawDevicePlayer1: TComboBox;
-    RawDevicePlayer2: TComboBox;
+    RawDevicePlayer1Label: TShadowLabel;
+    RawDevicePlayer2Label: TShadowLabel;
+    RawDevicePlayer1: TComboBox2Ex;
+    RawDevicePlayer2: TComboBox2Ex;
     ForceFeedbackEnable: TAdvOfficeCheckBoxEx;
     XInput: TAdvOfficeCheckBoxEx;
-    Label2: TLabel;
-    ForceManagedTextures: TComboBox;
+    ForceManagedTexturesLabel: TShadowLabel;
+    ForceManagedTextures: TComboBox2Ex;
     SoftwareVertexProcessing: TAdvOfficeCheckBoxEx;
     Wireframe: TAdvOfficeCheckBoxEx;
     FakeGouraud: TAdvOfficeCheckBoxEx;
@@ -58,14 +58,14 @@ type
     AutoMipMap: TAdvOfficeCheckBoxEx;
     MeshTransparency: TAdvOfficeCheckBoxEx;
     Crosshair: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtn;
+    ButtonReadFile: TBitBtnEx;
     LabelReadFileIni: TShadowLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     FSAA: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure ButtonReadFileClick(Sender: TObject);
-    procedure FolderROMButtonSelectClick(Sender: TObject);
+    procedure FolderROMsButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonEditClick(Sender: TObject);
     procedure FolderROMsButtonDeleteClick(Sender: TObject);
     procedure FolderROMsButtonClearClick(Sender: TObject);
@@ -82,7 +82,7 @@ type
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
     procedure FolderROMsItemEditEnd(Sender: TCustomEasyListview;
       Item: TEasyItem);
-    procedure ButtonUpClick(Sender: TObject);
+    procedure FolderROMsButtonUpClick(Sender: TObject);
   private
     { Private declarations }
     customResolution: String;
@@ -557,8 +557,42 @@ begin
 end;}
 
 procedure TFormSEGAModel2EmulatorSettings.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
+  if IsNightMode then
+  begin
+    for Loop:= 0 to FormSEGAModel2EmulatorSettings.ComponentCount-1 do
+       begin
+         if FormSEGAModel2EmulatorSettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormSEGAModel2EmulatorSettings.Components[Loop]))
+         else
+         if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvGroupBoxEx then
+            begin
+              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
+              SetGroupBoxColors(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]),
+                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            end
+         else
+         if FormSEGAModel2EmulatorSettings.Components[Loop] is TComboBox2Ex then
+            SetComboBox2ExColors(TComboBox2Ex(FormSEGAModel2EmulatorSettings.Components[Loop]), True)
+         else
+         if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontColor:= clGray;
+              TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            end;
+         if FormSEGAModel2EmulatorSettings.Components[Loop] is TShadowLabel then
+            SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       end;
+    SetFormColors(FormSEGAModel2EmulatorSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
+    SetColorEmulatorTopBar(TopBar, idSEGAModel2, True);
+    FormMain.SetEasyListViewColors(FolderROMs, FormSEGAModel2EmulatorSettings.Color, clWhite, -1, clGray);
+    FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+  end;
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSegaModel2, emuVersionStr);
 
   //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSegaModel2]+#13#10+LabelReadFileIni.Caption;
@@ -591,7 +625,7 @@ begin
   //   ReadEmulatorIniFile(GameIni);
 end;
 
-procedure TFormSEGAModel2EmulatorSettings.FolderROMButtonSelectClick(
+procedure TFormSEGAModel2EmulatorSettings.FolderROMsButtonSelectClick(
   Sender: TObject);
 begin
   if FolderROMs.Groups.Count < 10 then
@@ -717,7 +751,7 @@ begin
   FormMain.ELV_SetEditManager(FolderROMs, False);
 end;
 
-procedure TFormSEGAModel2EmulatorSettings.ButtonUpClick(Sender: TObject);
+procedure TFormSEGAModel2EmulatorSettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
   FormMain.ELV_MoveItem(FolderROMs, Boolean(TButton(Sender).Tag));
 end;

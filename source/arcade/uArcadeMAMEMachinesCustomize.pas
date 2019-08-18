@@ -370,35 +370,44 @@ end;
 
 procedure TFormArcadeMAMEMachinesCustomize.FormShow(Sender: TObject);
 begin
+  ResizeForm;
   FormMain.ELV_ResetNormalColors(MachinesListEditor);
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
   FormMain.LoadIconIntoImage('emu_ume', SystemIcon);
   FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);
 
+  FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True);
+
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
 
-  ResizeForm;
+  ELV_LoadMachinesList;
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeMAMEMachinesCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, False);
-       SetLabelColors(LabelTotalMachinesList, clWhite, clNavy);
-
-       //FrameSoftwareList.ColorFrame:= $00ff9933; // neon blue
-       //FrameSoftwareList.ColorInnerFrame:= clBlue;
-       FrameSoftwareList.Color1:= clrBlackBk;
-       MachinesListEditor.Color:= clrBlackBk;
-       MachinesListEditor.Font.Color:= clWhite;
-
-       SetCheckBoxColors(CheckAll, clWhite, clNavy);
-       SetCheckBoxColors(FilterShowUncheckedOnly, clWhite, clNavy);
-       SetCheckBoxColors(FilterShowParentSetsOnly, clWhite, clNavy);
+       SetFormColors(FormArcadeMAMEMachinesCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
+       SetLabelColors(LabelTotalMachinesList, clCream, item_caption_active_shadow_color[1], False);
 
        FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
-     end;
 
-  //GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
-  ELV_LoadMachinesList;
+       FrameSoftwareList.Color1:= FormArcadeMAMEMachinesCustomize.Color;
+       FormMain.SetEasyListViewColors(MachinesListEditor, menu_background_color[1], clWhite);
+
+       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FilterShowParentSetsOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+
+       FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True);
+       FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
+
+       MachinesListEditor.Align:= alNone;
+       MachinesListEditor.Height:= MachinesListEditor.Height-2;
+       MachinesListEditor.Top:= MachinesListEditor.Top+1;
+
+       SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       FormMain.SetButtonExColors(ButtonYes);
+       FormMain.SetButtonExColors(ButtonNo);
+       FormMain.SetButtonExColors(ButtonResetToCurrent);
+     end;
   FormMain.HideFilterMsgBox;
 end;
 
@@ -494,8 +503,6 @@ procedure TFormArcadeMAMEMachinesCustomize.MachinesListEditorItemPaintText(
 begin
   FormMain.GetCanvasDefaultFont(ACanvas, TMachineEditorGameInfo(Item).eGameSetStatus,
                                 TMachineEditorGameInfo(Item).eDriverStatus, IsNightMode);
-
-  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 
   if not Item.Checked then
      ACanvas.Font.Color:= clGray;

@@ -76,18 +76,18 @@ object FormMain: TFormMain
       object LabelSearchGamesFilter_ToolBar: TShadowLabel
         Left = 8
         Top = 6
-        Width = 58
+        Width = 49
         Height = 14
         Caption = 'Filter by'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Verdana'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clWhite
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -95,20 +95,20 @@ object FormMain: TFormMain
         Transparent = True
       end
       object LabelSearchGamesBy_ToolBar: TShadowLabel
-        Left = 68
+        Left = 59
         Top = 6
-        Width = 32
+        Width = 27
         Height = 14
         Caption = 'Title'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
         Font.Height = -11
         Font.Name = 'Verdana'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clCream
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -424,7 +424,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 558
-        Height = 668
+        Height = 672
         Align = alClient
         CellSizes.SmallIcon.Height = 20
         CellSizes.Tile.Width = 260
@@ -536,6 +536,7 @@ object FormMain: TFormMain
         ImagesLarge = IL_StandardIconsLarge
         ImagesExLarge = IL_StandardIconsExtraLarge
         PaintInfoColumn.CaptionIndent = 0
+        PaintInfoColumn.Style = ehbsFlat
         PaintInfoGroup.BandBlended = False
         PaintInfoGroup.BandEnabled = False
         PaintInfoGroup.Expandable = False
@@ -550,6 +551,7 @@ object FormMain: TFormMain
         ParentShowHint = False
         PopupMenu = PopupMenuGamesList
         PopupMenuHeader = PopupGamesColumns
+        ShowThemedBorder = False
         ShowHint = True
         Selection.BlendAlphaImage = 0
         Selection.BlendColorSelRect = 10902593
@@ -588,9 +590,9 @@ object FormMain: TFormMain
       object StatusBarPanel: TPanelEx
         Tag = 1
         Left = 0
-        Top = 668
+        Top = 672
         Width = 558
-        Height = 24
+        Height = 20
         Align = alBottom
         Color1 = 15391180
         Color2 = 16512497
@@ -598,7 +600,6 @@ object FormMain: TFormMain
         Color4 = 16637122
         ColorFrame = 11775403
         ColorInnerFrame = 7891291
-        EnableCustomBorder = ecbDouble
         Frames = []
         ParentBackground = False
         Style = vgSimple
@@ -693,7 +694,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 230
-        Height = 668
+        Height = 672
         Align = alClient
         CellSizes.Report.Height = 20
         Color = clWhite
@@ -748,6 +749,7 @@ object FormMain: TFormMain
         PaintInfoItem.ShowBorder = False
         ParentShowHint = False
         PopupMenu = PopupMachinesList
+        ShowThemedBorder = False
         ShowHint = True
         Selection.BlendAlphaImage = 0
         Selection.BlendColorSelRect = 10902593
@@ -778,9 +780,9 @@ object FormMain: TFormMain
       end
       object StatusBarPanelMachines: TPanelEx
         Left = 0
-        Top = 668
+        Top = 672
         Width = 230
-        Height = 24
+        Height = 20
         Align = alBottom
         Color1 = 15391180
         Color2 = 16512497
@@ -788,7 +790,6 @@ object FormMain: TFormMain
         Color4 = 16637122
         ColorFrame = 11775403
         ColorInnerFrame = 7891291
-        EnableCustomBorder = ecbDouble
         Frames = []
         ParentBackground = False
         Style = vgSimple
@@ -856,7 +857,7 @@ object FormMain: TFormMain
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clGray
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -899,38 +900,38 @@ object FormMain: TFormMain
       object LabelSearchGamesFilter: TShadowLabel
         Left = 8
         Top = 32
-        Width = 58
+        Width = 49
         Height = 14
         Caption = 'Filter by'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Verdana'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clWhite
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
         Frames = []
       end
       object LabelSearchGamesBy: TShadowLabel
-        Left = 68
+        Left = 59
         Top = 32
-        Width = 32
+        Width = 27
         Height = 14
         Caption = 'Title'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
         Font.Height = -11
         Font.Name = 'Verdana'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clCream
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1064,7 +1065,7 @@ object FormMain: TFormMain
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clGray
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1107,18 +1108,18 @@ object FormMain: TFormMain
       object LabelCustomCPUFilter: TShadowLabel
         Left = 210
         Top = 32
-        Width = 99
-        Height = 16
+        Width = 103
+        Height = 14
         Caption = 'Custom CPU Title'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clWhite
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1127,18 +1128,18 @@ object FormMain: TFormMain
       object LabelSelectCPU: TShadowLabel
         Left = 8
         Top = 32
-        Width = 73
-        Height = 16
+        Width = 77
+        Height = 14
         Caption = 'Select a CPU'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clWhite
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1246,90 +1247,30 @@ object FormMain: TFormMain
       Width = 370
       Height = 137
       BevelOuter = bvNone
-      BorderStyle = bsSingle
       ParentColor = True
       TabOrder = 1
       Visible = False
       OnResize = PanelWebBrowserResize
       object WebBrowser: TWebBrowser
         Left = 0
-        Top = 22
-        Width = 366
-        Height = 111
+        Top = 24
+        Width = 370
+        Height = 113
         Align = alClient
         TabOrder = 0
         OnEnter = WebBrowserEnter
         OnStatusTextChange = WebBrowserStatusTextChange
         OnBeforeNavigate2 = WebBrowserBeforeNavigate2
         ControlData = {
-          4C000000D4250000790B00000000000000000000000000000000000000000000
+          4C0000003E260000AE0B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E12620A000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
-      object WebToolBarButtons: TToolBar
-        Left = 0
-        Top = 0
-        Width = 366
-        Height = 22
-        AutoSize = True
-        ButtonWidth = 126
-        EdgeInner = esNone
-        EdgeOuter = esNone
-        Flat = True
-        Images = IL_LeftPanel
-        List = True
-        ShowCaptions = True
-        TabOrder = 1
-        Transparent = False
-        Wrapable = False
-        OnCustomDraw = ImagesToolBarButtonsCustomDraw
-        object WebButtonRefresh: TToolButton
-          Left = 0
-          Top = 0
-          Hint = 'Refresh current web page'
-          AutoSize = True
-          Caption = 'Refresh'
-          ImageIndex = 7
-          OnClick = WebButtonRefreshClick
-        end
-        object WebButtonStop: TToolButton
-          Left = 70
-          Top = 0
-          Hint = 'Stop loading web page'
-          AutoSize = True
-          Caption = 'Stop'
-          ImageIndex = 13
-          OnClick = WebButtonStopClick
-        end
-        object WebButtonExit: TToolButton
-          Left = 125
-          Top = 0
-          Hint = 'Close internet game info and show images/game documents'
-          AutoSize = True
-          Caption = 'Exit'
-          ImageIndex = 12
-          OnClick = WebButtonExitClick
-        end
-        object ToolButton1: TToolButton
-          Left = 174
-          Top = 0
-          AutoSize = True
-        end
-        object WebButtonPlayVideoPreview: TToolButton
-          Left = 188
-          Top = 0
-          Hint = 'Play a video of selected game'
-          AutoSize = True
-          Caption = 'Play Video Preview'
-          ImageIndex = 24
-          OnClick = ButtonPlayVideoPreviewClick
-        end
-      end
       object WebBrowserStatusPanel: TPanelEx
-        Left = 2
-        Top = 113
+        Left = 0
+        Top = 117
         Width = 72
         Height = 20
         Color1 = clWhite
@@ -1364,6 +1305,70 @@ object FormMain: TFormMain
           Transparent = True
         end
       end
+      object PanelWebToolBarButtons: TPanelEx
+        Left = 0
+        Top = 0
+        Width = 370
+        Height = 24
+        Align = alTop
+        Color1 = 15856113
+        Color2 = clSilver
+        Color3 = clYellow
+        Color4 = clTeal
+        ColorFrame = clGreen
+        ColorInnerFrame = clGreen
+        Frames = []
+        ParentBackground = False
+        Style = vgWindowsTheme
+        object WebButtonRefresh: TSpeedButtonEx
+          Left = 0
+          Top = 0
+          Width = 70
+          Height = 22
+          Hint = 'Refresh current web page'
+          Caption = 'Refresh'
+          Flat = True
+          ImageIndex = 7
+          Images = IL_LeftPanel
+          OnClick = WebButtonRefreshClick
+        end
+        object WebButtonStop: TSpeedButtonEx
+          Left = 70
+          Top = 0
+          Width = 55
+          Height = 22
+          Hint = 'Stop loading web page'
+          Caption = 'Stop'
+          Flat = True
+          ImageIndex = 13
+          Images = IL_LeftPanel
+          OnClick = WebButtonStopClick
+        end
+        object WebButtonExit: TSpeedButtonEx
+          Left = 125
+          Top = 0
+          Width = 49
+          Height = 22
+          Hint = 'Close internet game info and show images/game documents'
+          Caption = 'Exit'
+          Flat = True
+          ImageIndex = 12
+          Images = IL_LeftPanel
+          OnClick = WebButtonExitClick
+        end
+        object WebButtonPlayVideoPreview: TSpeedButtonEx
+          Left = 188
+          Top = 0
+          Width = 132
+          Height = 22
+          Hint = 'Play a video of selected game'
+          Caption = 'Play Video Preview'
+          Flat = True
+          ImageIndex = 25
+          Images = IL_LeftPanel
+          OnClick = WebButtonPlayVideoPreviewClick
+        end
+      end
     end
     object PanelImagesDocuments: TPanelEx
       Left = 0
@@ -1378,14 +1383,13 @@ object FormMain: TFormMain
       Color4 = clTeal
       ColorFrame = clSilver
       ColorInnerFrame = 7891291
-      EnableCustomBorder = ecbDouble
       Frames = []
       ParentBackground = False
       Style = vgSolid
       object SplitterMAMEInfo: TSplitterEx
         Left = 0
-        Top = 108
-        Width = 366
+        Top = 112
+        Width = 370
         Height = 7
         Cursor = crVSplit
         Align = alBottom
@@ -1405,8 +1409,8 @@ object FormMain: TFormMain
       object PanelImage: TPanel
         Left = 0
         Top = 0
-        Width = 366
-        Height = 108
+        Width = 370
+        Height = 112
         Align = alClient
         BevelOuter = bvNone
         BorderWidth = 7
@@ -1419,8 +1423,8 @@ object FormMain: TFormMain
           Tag = 1
           Left = 7
           Top = 7
-          Width = 352
-          Height = 94
+          Width = 356
+          Height = 98
           Align = alClient
           Bitmap.DrawMode = dmBlend
           Bitmap.ResamplerClassName = 'TKernelResampler'
@@ -1443,7 +1447,7 @@ object FormMain: TFormMain
             Left = 20
             Top = 20
             Width = 171
-            Height = 41
+            Height = 48
             Color1 = 16750899
             Color2 = clSilver
             Color3 = clYellow
@@ -1456,15 +1460,15 @@ object FormMain: TFormMain
             Visible = False
             object ImageHintText: TShadowLabel
               Left = 28
-              Top = 8
-              Width = 133
-              Height = 25
+              Top = 5
+              Width = 92
+              Height = 19
               Caption = 'Category Name'
               Font.Charset = ANSI_CHARSET
               Font.Color = clWhite
-              Font.Height = -19
+              Font.Height = -13
               Font.Name = 'Trebuchet MS'
-              Font.Style = [fsItalic]
+              Font.Style = []
               ParentFont = False
               ShowAccelChar = False
               ShadowColor = clBlack
@@ -1477,9 +1481,30 @@ object FormMain: TFormMain
             end
             object ImageHintIcon: TImage
               Left = 8
-              Top = 13
+              Top = 8
               Width = 16
               Height = 16
+              Transparent = True
+            end
+            object ImageHintDetailsText: TShadowLabel
+              Left = 30
+              Top = 25
+              Width = 92
+              Height = 19
+              Caption = '0000x0000 (PNG)'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWhite
+              Font.Height = -12
+              Font.Name = 'Trebuchet MS'
+              Font.Style = []
+              ParentFont = False
+              ShowAccelChar = False
+              ShadowColor = clBlack
+              ShadowEnabled = True
+              EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = True
             end
           end
@@ -1488,22 +1513,21 @@ object FormMain: TFormMain
       object PanelGameDocuments: TPanel
         Tag = 1
         Left = 0
-        Top = 115
-        Width = 366
+        Top = 119
+        Width = 370
         Height = 151
         Align = alBottom
         BevelOuter = bvNone
-        BorderWidth = 7
-        Color = clBlack
+        Color = clWhite
         Constraints.MinHeight = 50
         ParentBackground = False
         TabOrder = 1
         Visible = False
         object MAMEInfoTextHolder: TRichEditURL
-          Left = 7
-          Top = 7
-          Width = 352
-          Height = 113
+          Left = 0
+          Top = 0
+          Width = 370
+          Height = 131
           TabStop = False
           Align = alClient
           BorderStyle = bsNone
@@ -1511,7 +1535,7 @@ object FormMain: TFormMain
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -12
-          Font.Name = 'Consolas'
+          Font.Name = 'Calibri'
           Font.Style = []
           ParentFont = False
           ParentShowHint = False
@@ -1524,10 +1548,10 @@ object FormMain: TFormMain
           OnURLClick = MAMEInfoTextHolderURLClick
         end
         object MAMEInfoStatusBar: TPanelEx
-          Left = 7
-          Top = 120
-          Width = 352
-          Height = 24
+          Left = 0
+          Top = 131
+          Width = 370
+          Height = 20
           Align = alBottom
           Color1 = 15391180
           Color2 = 16512497
@@ -1535,7 +1559,6 @@ object FormMain: TFormMain
           Color4 = 16637122
           ColorFrame = 11775403
           ColorInnerFrame = 7891291
-          EnableCustomBorder = ecbDouble
           Frames = []
           ParentBackground = False
           Style = vgSimple
@@ -1545,15 +1568,15 @@ object FormMain: TFormMain
     end
     object PanelInitZipFile: TPanelEx
       Left = 10
-      Top = 304
+      Top = 312
       Width = 374
       Height = 96
-      Color1 = 5832704
-      Color2 = 1
+      Color1 = clWhite
+      Color2 = clGray
       Color3 = 7891291
       Color4 = 16750899
-      ColorFrame = 16750899
-      ColorInnerFrame = clBlue
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
       EnableInnerFrame = True
       Frames = [frLeft, frTop, frRight, frBottom]
       ParentBackground = False
@@ -1562,18 +1585,18 @@ object FormMain: TFormMain
       object LabelInitZipTitle: TShadowLabel
         Left = 60
         Top = 8
-        Width = 304
+        Width = 305
         Height = 17
         Caption = 'Initializing Zipped Images Contents Array'
         Font.Charset = ANSI_CHARSET
-        Font.Color = clYellow
+        Font.Color = clBlack
         Font.Height = -13
         Font.Name = 'Verdana'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clMaroon
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1584,19 +1607,19 @@ object FormMain: TFormMain
         Left = 11
         Top = 72
         Width = 354
-        Height = 15
+        Height = 19
         Hint = '" list in RAM for fast access.'
         AutoSize = False
         Caption = 'Parsing "artpreview.zip" list in RAM for fast access.'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWhite
         Font.Height = -12
-        Font.Name = 'Tahoma'
+        Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
         ShowAccelChar = False
-        ShadowColor = clMaroon
-        ShadowEnabled = True
+        ShadowColor = clGray
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1608,18 +1631,18 @@ object FormMain: TFormMain
         Left = 60
         Top = 32
         Width = 305
-        Height = 17
+        Height = 19
         AutoSize = False
         Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
+        Font.Color = 8537600
         Font.Height = -13
-        Font.Name = 'Tahoma'
+        Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = 13120050
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1630,18 +1653,18 @@ object FormMain: TFormMain
         Left = 60
         Top = 56
         Width = 305
-        Height = 15
+        Height = 19
         AutoSize = False
         Caption = 'Game Snapshot'
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
+        Font.Color = clCream
         Font.Height = -12
-        Font.Name = 'Tahoma'
+        Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
         ShowAccelChar = False
-        ShadowColor = clMaroon
-        ShadowEnabled = True
+        ShadowColor = 89
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -1777,7 +1800,6 @@ object FormMain: TFormMain
           Hint = 'Play a video of selected game'
           Caption = 'Play Video Preview'
           ImageIndex = 9
-          OnClick = ButtonPlayVideoPreviewClick
         end
         object ButtonInternetGameInfo: TToolButton
           Left = 281
@@ -1885,6 +1907,18 @@ object FormMain: TFormMain
       Caption = 'Display Parent Images'
       Checked = True
       OnClick = PopupImageStretchClick
+    end
+    object PopupImagesDisableAspectRatio: TMenuItem
+      AutoCheck = True
+      Caption = 'Disable Aspect Ratio'
+      OnClick = PopupImageStretchClick
+    end
+    object PopupImageUseSingleBackgroundColor: TMenuItem
+      AutoCheck = True
+      Caption = 'Use Single Background Color'
+      Hint = 'One color to rule them all!'
+      ImageIndex = 30
+      OnClick = PopupImageUseSingleBackgroundColorClick
     end
     object N47: TMenuItem
       Caption = '-'
@@ -2032,7 +2066,7 @@ object FormMain: TFormMain
       OnClick = PopupRunConsoleComputerGameWithAlterMAME2Click
     end
     object PopupPlayGameWithCustomSystem: TMenuItem
-      Caption = 'Run Game (Custom Emulators)'
+      Caption = 'Run Game (Console/Computer Emulator)'
       SubMenuImages = IL_PopupPlayCustomEmulators
       ImageIndex = 18
       OnClick = PopupPlayGameWithCustomSystemClick
@@ -2184,7 +2218,6 @@ object FormMain: TFormMain
       Hint = 'Play a video of selected game'
       ImageIndex = 13
       ShortCut = 8278
-      OnClick = ButtonPlayVideoPreviewClick
     end
     object PopupViewGameManualPDF: TMenuItem
       Caption = 'View Game Manual (PDF)'
@@ -3487,6 +3520,7 @@ object FormMain: TFormMain
     object MenuEnableNightMode: TMenuItem
       AutoCheck = True
       Caption = 'Enable Night Mode'
+      Checked = True
       Hint = 'Check to use a dark theme'
       OnClick = MenuEnableNightModeClick
     end
@@ -3540,6 +3574,10 @@ object FormMain: TFormMain
         Caption = 'Customize MAME Software List'
         Hint = 'Enable/disable lists'
         OnClick = MenuCustomizeMAMESoftwareListClick
+      end
+      object MenuCustomizeMAMEMachinesList: TMenuItem
+        Caption = 'Customize MAME Machines List'
+        OnClick = PopupMachinesListSidePanelFiltersMachinesList_CustomizeClick
       end
       object MenuAddMAMEDeviceSetsWithNoROMs: TMenuItem
         Caption = 'Add MAME Device Sets With No ROMs (DO NOT REMOVE!!!)'
@@ -3832,10 +3870,12 @@ object FormMain: TFormMain
           OnClick = PopupCustomizeColumnsClick
         end
         object MenuCustomizeColumnsHeaderFont: TMenuItem
+          Tag = -1
           Caption = 'Customize Columns Header Font'
           OnClick = PopupCustomizeColumnsHeaderFontClick
         end
         object MenuDefaultColumnsHeaderFont: TMenuItem
+          Tag = -1
           Caption = 'Default Header Font'
           OnClick = PopupDefaultHeaderFontClick
         end
@@ -3925,6 +3965,13 @@ object FormMain: TFormMain
         Checked = True
         ShortCut = 16457
         OnClick = MenuImagesEnableToolBarClick
+      end
+      object MenuImageUseSingleBackgroundColor: TMenuItem
+        AutoCheck = True
+        Caption = 'Use Single Background Color'
+        Hint = 'One color to rule them all!'
+        ImageIndex = 30
+        OnClick = MenuImageUseSingleBackgroundColorClick
       end
       object N14: TMenuItem
         Caption = '-'
@@ -4880,5 +4927,63 @@ object FormMain: TFormMain
     Width = 48
     Left = 72
     Top = 199
+  end
+  object PopupNightModeCopyPasteColor: TBcBarPopupMenu
+    Tag = 1
+    AutoHotkeys = maManual
+    Images = IL_Colors
+    OwnerDraw = True
+    OnPopup = PopupNightModeCopyPasteColorPopup
+    Bar.GradientStart = clTeal
+    Bar.GradientStyle = gsDiagonalLeftRight
+    Bar.Visible = False
+    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
+    Bar.BarCaption.Font.Color = clWhite
+    Bar.BarCaption.Font.Height = -19
+    Bar.BarCaption.Font.Name = 'Tahoma'
+    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
+    Separators.Fade = True
+    Separators.Font.Charset = DEFAULT_CHARSET
+    Separators.Font.Color = clWindowText
+    Separators.Font.Height = -11
+    Separators.Font.Name = 'MS Sans Serif'
+    Separators.Font.Style = []
+    MenuFont.Charset = ANSI_CHARSET
+    MenuFont.Color = clBlack
+    MenuFont.Height = -12
+    MenuFont.Name = 'Trebuchet MS'
+    MenuFont.Style = []
+    MenuStyle = msWindowsXP
+    UseSystemFont = False
+    DrawModule = BcDrawModule
+    OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
+    Left = 248
+    Top = 296
+    object PopupNightModeTitle: TMenuItem
+      Caption = '-'
+    end
+    object PopupNightModeTitleSeparator: TMenuItem
+      Caption = '-'
+      Visible = False
+    end
+    object PopupNightModeRGBQuickEdit: TMenuItem
+      Caption = 'RGB Quick Edit'
+      OnClick = PopupNightModeRGBQuickEditClick
+    end
+    object PopupNightModePasteColor: TMenuItem
+      Caption = 'Paste Color'
+      ImageIndex = 0
+      OnClick = PopupNightModePasteColorClick
+    end
+    object PopupNightModeCopyColor: TMenuItem
+      Caption = 'Copy Color'
+      ImageIndex = 1
+      OnClick = PopupNightModeCopyColorClick
+    end
+  end
+  object IL_Colors: TImageList
+    Masked = False
+    Left = 280
+    Top = 296
   end
 end

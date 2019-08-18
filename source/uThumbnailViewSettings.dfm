@@ -164,7 +164,7 @@ object FormThumbnailView: TFormThumbnailView
     Top = 466
     Width = 189
     Height = 22
-    Hint = 'Select a border color'
+    Hint = 'Cell Border Color'
     DefaultColorColor = 10902593
     Selected = 10902593
     Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
@@ -458,21 +458,6 @@ object FormThumbnailView: TFormThumbnailView
     RoundEdges = True
     Caption = 'Icons'
     TabOrder = 14
-    object LabelThumbAlignIcons: TShadowLabel
-      Left = 220
-      Top = 22
-      Width = 31
-      Height = 16
-      Caption = 'Align'
-      ShowAccelChar = False
-      ShadowColor = clGray
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
     object ShowSystemIcon: TAdvOfficeCheckBoxEx
       Left = 6
       Top = 44
@@ -490,7 +475,7 @@ object FormThumbnailView: TFormThumbnailView
     end
     object ShowFavoriteIcon: TAdvOfficeCheckBoxEx
       Left = 204
-      Top = 68
+      Top = 44
       Width = 67
       Height = 20
       ShowHint = True
@@ -502,7 +487,7 @@ object FormThumbnailView: TFormThumbnailView
       Themed = True
     end
     object ShowMediaTypeIcon: TAdvOfficeCheckBoxEx
-      Left = 4
+      Left = 6
       Top = 68
       Width = 59
       Height = 20
@@ -543,7 +528,7 @@ object FormThumbnailView: TFormThumbnailView
     end
     object ShowGameIcon: TAdvOfficeCheckBoxEx
       Left = 204
-      Top = 44
+      Top = 20
       Width = 57
       Height = 20
       Checked = True
@@ -558,30 +543,30 @@ object FormThumbnailView: TFormThumbnailView
     end
     object ThumbLeftAlignIcons: TAdvOfficeRadioButtonEx
       Tag = 1
-      Left = 266
-      Top = 20
-      Width = 44
+      Left = 316
+      Top = 44
+      Width = 75
       Height = 20
       Hint = 'Show icons at thumbnail'#39's top-left'
       TabOrder = 5
       TabStop = True
       OnClick = ThumbLeftAlignIconsClick
       Alignment = taLeftJustify
-      Caption = 'Left'
+      Caption = 'Left Align'
       Checked = True
       ReturnIsTab = False
       Themed = True
     end
     object ThumbRightAlignIcons: TAdvOfficeRadioButtonEx
-      Left = 320
-      Top = 20
-      Width = 52
+      Left = 316
+      Top = 68
+      Width = 79
       Height = 20
       Hint = 'Show icons at thumbnail'#39's top-right'
       TabOrder = 6
       OnClick = ThumbLeftAlignIconsClick
       Alignment = taLeftJustify
-      Caption = 'Right'
+      Caption = 'Right Align'
       ReturnIsTab = False
       Themed = True
     end
@@ -625,9 +610,9 @@ object FormThumbnailView: TFormThumbnailView
         'Extra Large (48x48)')
     end
     object ShowSpecialIcon: TAdvOfficeCheckBoxEx
-      Left = 311
-      Top = 44
-      Width = 82
+      Left = 204
+      Top = 68
+      Width = 78
       Height = 20
       Checked = True
       ShowHint = True

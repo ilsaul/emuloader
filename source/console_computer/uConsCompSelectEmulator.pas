@@ -212,6 +212,7 @@ begin
   FormMain.ELV_ResetNormalColors(EmulatorsList);
   if IsNightMode then
      FormMain.ELV_SetNightModeColors(EmulatorsList);
+
   AddEmulatorsList;
   if EmulatorsList.Scrollbars.VertBarVisible then
      begin
@@ -235,7 +236,7 @@ begin
      begin
        ACanvas.Font.Name:= 'Verdana';
        ACanvas.Font.Size:= 8;
-       ACanvas.Font.Color:= $00606060;
+       ACanvas.Font.Color:= clrMedDarkGray;//$00606060;
        if IsNightMode and Item.Selected then
           ACanvas.Font.Color:= clrDarkGray;
      end;
@@ -244,13 +245,17 @@ end;
 procedure TFormConsCompSelectEmulator.EmulatorsListGroupPaintText(
   Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas);
 begin
-  ACanvas.Font.Size:= ACanvas.Font.Size+2;
+  ACanvas.Font.Size:= 10;//ACanvas.Font.Size+2;
   ACanvas.Font.Name:= 'Trebuchet MS';
-  if not IsNightMode then
-     ACanvas.Font.Color:= clMaroon
+  if IsNightMode then
+     ACanvas.Font.Color:= clrOrangeBarTop
   else
-     ACanvas.Font.Color:= MsgTxtColors.colorWarning;
-  ACanvas.Font.Style:= [fsBold, fsItalic];
+     ACanvas.Font.Color:= clMaroon;
+
+  if LabelTips.Tag = 1 then
+     ACanvas.Font.Style:= [fsBold, fsItalic]
+  else
+     ACanvas.Font.Style:= [fsBold];
 end;
 
 procedure TFormConsCompSelectEmulator.EmulatorsListItemCheckChange(
@@ -310,22 +315,10 @@ begin
   iScreenWidth:= Screen.Width;
   iScreenHeight:= Screen.Height;
 
-  //iScreenWidth:= 1280;
-  //iScreenHeight:= 1024;
-
-  //if (iScreenWidth > 720) and (iScreenHeight > 600) then
-  //   Exit;
-
   iDiff:= -1;
-  //case iScreenHeight of
-  //  480: iDiff:= 400-FormConsCompSelectEmulator.Height;
-  //  600: iDiff:= 620-FormConsCompSelectEmulator.Height;
-  //else
-  //  begin
-      if iScreenHeight > 900 then
-         iDiff:= 800-FormConsCompSelectEmulator.Height;
-  //  end;
-  //end;
+  if iScreenHeight > 900 then
+     iDiff:= 800-FormConsCompSelectEmulator.Height;
+
   if iDiff <> -1 then
      begin
        EmulatorsList.Height:= EmulatorsList.Height+iDiff;
@@ -333,14 +326,8 @@ begin
      end;
 
   iDiff:= -1;
-  //case iScreenWidth of
-  //  640: iDiff:= 620-FormConsCompSelectEmulator.Width;
-  //else
-  //  begin
-      if iScreenWidth > 800 then
-         iDiff:= 820-FormConsCompSelectEmulator.Width;
-  //  end;
-  //end;
+  if iScreenWidth > 800 then
+     iDiff:= 820-FormConsCompSelectEmulator.Width;
 
   if iDiff <> -1 then
      begin
@@ -368,8 +355,6 @@ begin
      ImageWidth:= 128;
 
   ImageHeight:= ImageWidth;
-  //ImageWidth:= EmulatorsList.ImagesGroup.Width;
-  //ImageHeight:= EmulatorsList.ImagesGroup.Height;
 end;
 
 procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageDraw(
@@ -386,12 +371,10 @@ begin
      iLeft:= RectArray.IconRect.Left-5; // -5 to move icon closer to the left border and give some space between the icon and selection bar
   iTop:=  RectArray.IconRect.Top+5; // -> +5 is to be the same as "no custom icon drawing"
 
-  //EmulatorsList.ImagesGroup.Draw(ACanvas, iLeft, iTop, Group.ImageIndex); // no longer used
-
   ACanvas.Draw(iLeft, iTop, SystemIcon[Group.ImageIndex].Picture.Icon);
 
   iSysTypeIndex:= ACanvas.Pen.Color;
-  ACanvas.Pen.Color:= clMedGray;
+  ACanvas.Pen.Color:= clrBorderGroupBoxGrayBk;// clMedGray;
   if UseSmallIcons.Checked then
      begin
        ACanvas.MoveTo(iLeft-5, iTop+32+2); // 32x32 group system icons // EmulatorsList.ImagesGroup.Height+2);
@@ -417,7 +400,7 @@ begin
   if iSysTypeIndex = 25 then
      iLeft:= iLeft+(EmulatorsList.Width-112)
   else
-     iLeft:= iLeft+(EmulatorsList.Width-124);// (EmulatorsList.width div 2)-50;// EmulatorsList.ImagesGroup.Width+250;
+     iLeft:= iLeft+(EmulatorsList.Width-124);
   iTop:= iTop+(EmulatorsList.ImagesGroup.Height-FormMain.IL_MenuPopup.Height) div 2;
 
   if iSysTypeIndex <> -1 then
@@ -429,11 +412,13 @@ begin
 
   ACanvas.Font.Name:= 'Segoe UI';
   ACAnvas.Font.Size:= 9;
-  ACanvas.Font.Style:= [fsItalic];
-  if not IsNightMode then
-     ACanvas.Font.Color:= clBlack
+  ACanvas.Font.Style:= [];
+  //if LabelTips.Tag = 1 then
+  //   ACanvas.Font.Style:= [fsItalic];
+  if IsNightMode then
+     ACanvas.Font.Color:= item_caption_active_color[1]
   else
-     ACanvas.Font.Color:= item_caption_active_color[1];
+     ACanvas.Font.Color:= clBlack;
 
   ACanvas.TextOut(iLeft+20, iTop, GetSystemTypeTitle(Group.ImageIndex, False));
   ACanvas.UnLock;

@@ -44,7 +44,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx
       Left = 248
       Top = 26
-      Width = 216
+      Width = 196
       Height = 18
       Hint = 
         'Allow the console/computer game file to be deleted (recycle bin ' +
@@ -53,15 +53,14 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
       Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Name = 'Segoe UI'
+      Font.Style = []
       ParentFont = False
       ShowHint = True
       TabOrder = 5
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
-      ButtonVertAlign = tlBottom
-      Caption = '       Delete Game File From Disk'
+      Caption = '         Delete Game File From Disk'
       DisabledFontColor = clSilver
       ReturnIsTab = False
       ShadowColor = 14540253
@@ -72,7 +71,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Tag = -1
       Left = 248
       Top = 9
-      Width = 227
+      Width = 209
       Height = 18
       Hint = 
         'Use this option to delete the game entry from main games list (c' +
@@ -81,15 +80,14 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
       Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Name = 'Segoe UI'
+      Font.Style = []
       ParentFont = False
       ShowHint = True
       TabOrder = 4
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
-      ButtonVertAlign = tlBottom
-      Caption = '       Delete Game From Games List'
+      Caption = '         Delete Game From Games List'
       DisabledFontColor = clSilver
       ReturnIsTab = False
       ShadowColor = 14540253
@@ -99,7 +97,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object FileTypesGroupBox: TAdvGroupBoxEx
       Left = 8
       Top = 1
-      Width = 231
+      Width = 223
       Height = 41
       Hint = 'Check File Types to %'
       CaptionPosition = cpTopCenter
@@ -113,7 +111,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx
         Left = 121
         Top = 18
-        Width = 107
+        Width = 100
         Height = 18
         Hint = 'Check this option to process game config/RAM files'
         HelpContext = 2
@@ -121,13 +119,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         TabOrder = 2
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        ButtonVertAlign = tlBottom
         Caption = 'CFGs/NVRAMs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -144,13 +141,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         TabOrder = 0
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        ButtonVertAlign = tlBottom
         Caption = 'ROMs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -169,13 +165,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         Font.Charset = ANSI_CHARSET
         Font.Color = 10900224
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         TabOrder = 1
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        ButtonVertAlign = tlBottom
         Caption = 'CHDs'
         ReturnIsTab = False
         ShadowColor = 14540253
@@ -236,14 +231,14 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object LabelCopyMoveDestination: TShadowLabel
+    object DestinationFolderLabel: TShadowLabel
       Left = 8
       Top = 6
-      Width = 413
+      Width = 371
       Height = 16
       Caption = 
-        'Select a destination folder. Full paths only, no network paths. ' +
-        'ANSI paths only!'
+        'Destination folder. Full paths only, no network paths. ANSI path' +
+        's only!'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
@@ -385,13 +380,13 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     PopupMenu = PopupGames
     ShowThemedBorder = False
     ShowHint = True
+    Selection.BlendAlphaImage = 0
     Selection.BlendIcon = False
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
     Selection.MouseButton = [cmbLeft, cmbRight]
     Selection.MultiSelect = True
-    Selection.RectSelect = True
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False

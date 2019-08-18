@@ -24,6 +24,7 @@ type
     Option_SelectConsoleComputerEmulators: TAdvOfficeCheckBoxEx;
     Option_SelectConsoleComputerGamesFolders: TAdvOfficeCheckBoxEx;
     Option_CreateConsoleComputerGamesList: TAdvOfficeCheckBoxEx;
+    PauseAnimation: TAdvOfficeCheckBoxEx;
     procedure LabelQuickSetupGuideMouseEnter(Sender: TObject);
     procedure LabelQuickSetupGuideMouseLeave(Sender: TObject);
     procedure LabelQuickSetupGuideClick(Sender: TObject);
@@ -32,6 +33,7 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure PauseAnimationClick(Sender: TObject);
   private
     { Private declarations }
     IsNightMode_Restore: Boolean;
@@ -133,7 +135,6 @@ end;
 
 procedure TFormCleanInstallGuide.FormShow(Sender: TObject);
 begin
-  //FormCleanInstallGuide.DoubleBuffered:= True;
   LoadAnimGIF;
 end;
 
@@ -182,5 +183,11 @@ begin
      end;
 end;
 
+
+procedure TFormCleanInstallGuide.PauseAnimationClick(
+  Sender: TObject);
+begin
+  gImage.Animate:= not PauseAnimation.Checked;
+end;
 
 end.

@@ -26,7 +26,6 @@ type
     LabelAlterMAME1_versioninfo: TShadowLabel;
     LabelArcade_exec: TShadowLabel;
     LabelAlterMAME1_Autorun: TShadowLabel;
-    LabelAlterMAME1_Tip2: TShadowLabel;
     LabelAlterMAME1_Tip1: TShadowLabel;
     ButtonBrowseArcade_exec: TBitBtnEx;
     Arcade_versioninfo: TEditEx;
@@ -45,7 +44,6 @@ type
     Arcade_exec: TEditEx;
     LabelAlterMAME2: TShadowLabel;
     LabelAlterMAME2_versioninfo: TShadowLabel;
-    LabelAlterMAME2_Tip2: TShadowLabel;
     LabelAlterMAME2_Tip1: TShadowLabel;
     AlterMAME2_exec: TEditEx;
     ButtonBrowseAlterMAME2: TBitBtnEx;
@@ -59,6 +57,7 @@ type
     PanelSystemTitleBottom: TPanelEx;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
+    ButtonClearArcade_exec: TBitBtnEx;
     procedure ButtonCancelClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -87,6 +86,7 @@ type
     procedure AlterMAME2_execChange(Sender: TObject);
     procedure AlterMAME2_versioninfoChange(Sender: TObject);
     procedure ButtonClearAlterMAME2Click(Sender: TObject);
+    procedure ButtonClearArcade_execClick(Sender: TObject);
   private
     { Private declarations }
     newEmulatorFile,
@@ -143,7 +143,6 @@ begin
   LabelAlterMAME1.Enabled:= Enabled;
   LabelAlterMAME1_versioninfo.Enabled:= Enabled;
   LabelAlterMAME1_Tip1.Enabled:= Enabled;
-  LabelAlterMAME1_Tip2.Enabled:= Enabled;
   IconEmulatorAlterMAME1.Visible:= Enabled;
   AlterMAME1_versioninfo.Enabled:= Enabled;
   AlterMAME1_exec.Enabled:= Enabled;
@@ -156,7 +155,6 @@ begin
   LabelAlterMAME2.Enabled:= Enabled;
   LabelAlterMAME2_versioninfo.Enabled:= Enabled;
   LabelAlterMAME2_Tip1.Enabled:= Enabled;
-  LabelAlterMAME2_Tip2.Enabled:= Enabled;
   IconEmulatorAlterMAME2.Visible:= Enabled;
   AlterMAME2_versioninfo.Enabled:= Enabled;
   AlterMAME2_exec.Enabled:= Enabled;
@@ -582,9 +580,14 @@ begin
     idMAME  : newbuildMAME:= '';
     idHBMAME: newbuildHBMAME:= '';
   end;
-  //ClearEmulatorIcon(False);
-  if LabelAlterMAME1.Enabled then
-     ButtonClearAlterMAME1.Click;
+
+  if ButtonClearSystem.Tag = 0 then
+     begin
+       if LabelAlterMAME1.Enabled then
+          ButtonClearAlterMAME1.Click;
+       if LabelAlterMAME2.Enabled then
+          ButtonClearAlterMAME2.Click;
+     end;
 end;
 
 procedure TFormArcadeEmulatorsSetup.SystemSelectorItemSelectionChanged(
@@ -704,21 +707,21 @@ end;
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue, False)
   else
      SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
 
-  TShadowLabel(Sender).Font.Style:= [fsBold, fsUnderline];
+  TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clSilver, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clSilver, clrMedBlue, False)
   else
      SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
 
-  TShadowLabel(Sender).Font.Style:= [fsBold];
+  TShadowLabel(Sender).Font.Style:= [];
 end;
 
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1Click(Sender: TObject);
@@ -846,6 +849,15 @@ procedure TFormArcadeEmulatorsSetup.AlterMAME2_versioninfoChange(
   Sender: TObject);
 begin
   newAlterMAMEVersion[2]:= AlterMAME2_versioninfo.Text;
+end;
+
+procedure TFormArcadeEmulatorsSetup.ButtonClearArcade_execClick(
+  Sender: TObject);
+begin
+  ButtonClearSystem.Tag:= 1;
+  ButtonClearSystem.Click;
+  Sleep(20);
+  ButtonClearSystem.Tag:= 0;
 end;
 
 end.

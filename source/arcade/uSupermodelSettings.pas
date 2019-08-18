@@ -6,32 +6,32 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, MPCommonObjects, EasyListview, ComCtrls, IniFiles,
   ImgList, GR32_RangeBars, ExtCtrls, Buttons, PanelEx,
-  ShadowLabel, AdvGroupBox, AdvOfficeButtons;
+  ShadowLabel, AdvGroupBox, AdvOfficeButtons, ButtonsEx, EditEx, ColorBoxEx;
 
 type
   TFormSupermodelSettings = class(TForm)
     TopBar: TPanelEx;
     VideoGroupBox: TAdvGroupBoxEx;
-    LabelResolution: TLabel;
-    LabelReal3DVertexShader: TLabel;
-    LabelReal3DFragmentShader: TLabel;
-    ScreenResolution: TComboBox;
+    ResolutionLabel: TShadowLabel;
+    Real3DVertexShaderLabel: TShadowLabel;
+    Real3DFragmentShaderLabel: TShadowLabel;
+    ScreenResolution: TComboBox2Ex;
     DisableThrottle: TAdvOfficeCheckBoxEx;
     ShowFPS: TAdvOfficeCheckBoxEx;
-    Real3DVertexShader: TEdit;
-    Real3DFragmentShader: TEdit;
-    ButtonSelectReal3DVertexShader: TBitBtn;
-    ButtonSelectReal3DFragmentShader: TBitBtn;
+    Real3DVertexShader: TEditEx;
+    Real3DFragmentShader: TEditEx;
+    Real3DVertexShaderButtonSelect: TBitBtnEx;
+    Real3DFragmentShaderButtonSelect: TBitBtnEx;
     Widescreen: TAdvOfficeCheckBoxEx;
     FullScreen: TAdvOfficeCheckBoxEx;
     InputGroupBox: TAdvGroupBoxEx;
-    InputSystem: TComboBox;
-    ButtonConfigInput: TBitBtn;
+    InputSystem: TComboBox2Ex;
+    InputSystemConfigButton: TBitBtnEx;
     EnableForceFeedback: TAdvOfficeCheckBoxEx;
     AudioGroupBox: TAdvGroupBoxEx;
-    LabelSoundVolume: TLabel;
-    LabelMusicVolume: TLabel;
-    LabelAudioBalanceFrontRear: TLabel;
+    SoundVolumeLabel: TShadowLabel;
+    MusicVolumeLabel: TShadowLabel;
+    AudioBalanceFrontRearLabel: TShadowLabel;
     SoundVolume: TGaugeBar;
     DisableSound: TAdvOfficeCheckBoxEx;
     DisableMusic: TAdvOfficeCheckBoxEx;
@@ -39,55 +39,55 @@ type
     FlipStereo: TAdvOfficeCheckBoxEx;
     AudioBalanceFrontRear: TGaugeBar;
     PowerPCFrequencyBox: TAdvGroupBoxEx;
-    LabelPowerPCFrequency: TLabel;
-    LabelPowerPCFrequencyCustom: TLabel;
+    PowerPCFrequencyLabel: TShadowLabel;
+    PowerPCFrequencyCustomLabel: TShadowLabel;
     PowerPCFrequency: TGaugeBar;
-    PowerPCFrequencyCustom: TEdit;
+    PowerPCFrequencyCustom: TEditEx;
     Multithreading: TAdvOfficeCheckBoxEx;
     GPUMultithreading: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtn;
+    ButtonReadFile: TBitBtnEx;
     LabelReadFileIni: TShadowLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelFolderROMs: TLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelFolderROMs: TShadowLabel;
     FolderROMs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    FolderROMButtonSelect: TBitBtn;
-    FolderROMsButtonEdit: TBitBtn;
-    FolderROMsButtonDelete: TBitBtn;
-    FolderROMsButtonClear: TBitBtn;
+    FolderROMsButtonUp: TBitBtnEx;
+    FolderROMsButtonDown: TBitBtnEx;
+    FolderROMsButtonSelect: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     LabelGameStatus: TShadowLabel;
-    LabelVideo3DEngine: TLabel;
-    Video3DEngine: TComboBox;
-    Crosshairs: TComboBox;
-    LabelCrosshairs: TLabel;
+    Video3DEngineLabel: TShadowLabel;
+    Video3DEngine: TComboBox2Ex;
+    Crosshairs: TComboBox2Ex;
+    CrosshairsLabel: TShadowLabel;
     DisableVSync: TAdvOfficeCheckBoxEx;
     Stretch: TAdvOfficeCheckBoxEx;
-    LabelLoadTileMapVertexShader2D: TLabel;
-    LoadTileMapVertexShader2D: TEdit;
-    ButtonSelectLoadTileMapVertexShader2D: TBitBtn;
-    LabelLoadTileMapFragmentShader2D: TLabel;
-    LoadTileMapFragmentShader2D: TEdit;
-    ButtonSelectLoadTileMapFragmentShader2D: TBitBtn;
+    LoadTileMapVertexShader2DLabel: TShadowLabel;
+    LoadTileMapVertexShader2D: TEditEx;
+    LoadTileMapVertexShader2DButtonSelect: TBitBtnEx;
+    LoadTileMapFragmentShader2DLabel: TShadowLabel;
+    LoadTileMapFragmentShader2D: TEditEx;
+    LoadTileMapFragmentShader2DButtonSelect: TBitBtnEx;
     MultiTexture: TAdvOfficeCheckBoxEx;
-    LabelLoadReal3DScrollFogVertexShader: TLabel;
-    LoadReal3DScrollFogVertexShader: TEdit;
-    ButtonSelectLoadReal3DScrollFogVertexShader: TBitBtn;
-    ButtonSelectLoadReal3DScrollFogFragmentShader: TBitBtn;
-    LabelLoadReal3DScrollFogFragmentShader: TLabel;
-    LoadReal3DScrollFogFragmentShader: TEdit;
-    ButtonVideo3DEngineReset: TBitBtn;
-    BitBtn5: TBitBtn;
-    BitBtn6: TBitBtn;
-    BitBtn7: TBitBtn;
-    BitBtn8: TBitBtn;
-    BitBtn9: TBitBtn;
-    BitBtn10: TBitBtn;
+    LoadReal3DScrollFogVertexShaderLabel: TShadowLabel;
+    LoadReal3DScrollFogVertexShader: TEditEx;
+    LoadReal3DScrollFogVertexShaderButtonSelect: TBitBtnEx;
+    LoadReal3DScrollFogFragmentShaderButtonSelect: TBitBtnEx;
+    LoadReal3DScrollFogFragmentShaderLabel: TShadowLabel;
+    LoadReal3DScrollFogFragmentShader: TEditEx;
+    Video3DEngineButtonReset: TBitBtnEx;
+    SoundVolumeButtonLast: TBitBtnEx;
+    MusicVolumeButtonLast: TBitBtnEx;
+    SoundVolumeButtonReset: TBitBtnEx;
+    MusicVolumeButtonReset: TBitBtnEx;
+    AudioBalanceFrontRearButtonLast: TBitBtnEx;
+    AudioBalanceFrontRearButtonReset: TBitBtnEx;
     PowerPCFrequencyUseCustom: TAdvOfficeCheckBoxEx;
     QuadRendering: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
@@ -101,18 +101,18 @@ type
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
     procedure FolderROMsItemEditEnd(Sender: TCustomEasyListview;
       Item: TEasyItem);
-    procedure ButtonUpClick(Sender: TObject);
-    procedure FolderROMButtonSelectClick(Sender: TObject);
+    procedure FolderROMsButtonUpClick(Sender: TObject);
+    procedure FolderROMsButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonEditClick(Sender: TObject);
     procedure FolderROMsButtonDeleteClick(Sender: TObject);
     procedure FolderROMsButtonClearClick(Sender: TObject);
     procedure PowerPCFrequencyCustomKeyPress(Sender: TObject;
       var Key: Char);
-    procedure ButtonSelectReal3DVertexShaderClick(Sender: TObject);
-    procedure ButtonSelectReal3DFragmentShaderClick(Sender: TObject);
+    procedure Real3DVertexShaderButtonSelectClick(Sender: TObject);
+    procedure Real3DFragmentShaderButtonSelectClick(Sender: TObject);
     procedure SoundVolumeChange(Sender: TObject);
     procedure MusicVolumeChange(Sender: TObject);
-    procedure ButtonConfigInputClick(Sender: TObject);
+    procedure InputSystemConfigButtonClick(Sender: TObject);
     procedure InputSystemSelect(Sender: TObject);
     procedure AudioBalanceFrontRearChange(Sender: TObject);
     procedure SoundVolumeMouseDown(Sender: TObject; Button: TMouseButton;
@@ -121,13 +121,13 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure AudioBalanceFrontRearMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ButtonVideo3DEngineResetClick(Sender: TObject);
-    procedure ButtonSelectLoadReal3DScrollFogVertexShaderClick(
+    procedure Video3DEngineButtonResetClick(Sender: TObject);
+    procedure LoadReal3DScrollFogVertexShaderButtonSelectClick(
       Sender: TObject);
-    procedure ButtonSelectLoadReal3DScrollFogFragmentShaderClick(
+    procedure LoadReal3DScrollFogFragmentShaderButtonSelectClick(
       Sender: TObject);
-    procedure ButtonSelectLoadTileMapVertexShader2DClick(Sender: TObject);
-    procedure ButtonSelectLoadTileMapFragmentShader2DClick(
+    procedure LoadTileMapVertexShader2DButtonSelectClick(Sender: TObject);
+    procedure LoadTileMapFragmentShader2DButtonSelectClick(
       Sender: TObject);
     procedure PowerPCFrequencyUseCustomClick(Sender: TObject);
   private
@@ -135,6 +135,7 @@ type
     //procedure PopulateScreenResolution;
     procedure ReadSupermodelIni(const iniFile: String; IsCustom: Boolean);
     procedure WriteSupermodelIni(const iniFile: String; IsCustom: Boolean);
+    procedure ChangeLabelColorGauge(GaugeBarSource: TGaugeBar; DefaultPosition: Integer; GaugeBarLabel: TShadowLabel);
   public
     { Public declarations }
     emuIni,
@@ -567,8 +568,49 @@ begin
 end;
 
 procedure TFormSupermodelSettings.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
+  if IsNightMode then
+  begin
+    for Loop:= 0 to FormSupermodelSettings.ComponentCount-1 do
+       begin
+         if FormSupermodelSettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormSupermodelSettings.Components[Loop]))
+         else
+         if FormSupermodelSettings.Components[Loop] is TEditEx then
+            SetEditNightColors(TEditEx(FormSupermodelSettings.Components[Loop]))
+         else
+         if FormSupermodelSettings.Components[Loop] is TAdvGroupBoxEx then
+            begin
+              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormSupermodelSettings.Components[Loop]));
+              SetGroupBoxColors(TAdvGroupBoxEx(FormSupermodelSettings.Components[Loop]),
+                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            end
+         else
+         if FormSupermodelSettings.Components[Loop] is TComboBox2Ex then
+            SetComboBox2ExColors(TComboBox2Ex(FormSupermodelSettings.Components[Loop]), True)
+         else
+         if FormSupermodelSettings.Components[Loop] is TGaugeBar then
+            SetGaugeBarColors(TGaugeBar(FormSupermodelSettings.Components[Loop]))
+         else
+         if FormSupermodelSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]).DisabledFontColor:= clGray;
+              TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            end;
+         if FormSupermodelSettings.Components[Loop] is TShadowLabel then
+            SetLabelColors(TShadowLabel(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       end;
+    SetFormColors(FormSupermodelSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
+    SetColorEmulatorTopBar(TopBar, idSupermodel, True);
+    FormMain.SetEasyListViewColors(FolderROMs, FormSupermodelSettings.Color, clWhite, -1, clGray);
+    FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+  end;
+
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSupermodel, emuVersionStr);
   //LabelEmulatorVersion.Visible:= Tag = 1;
   //if FormMain.EmulatorVersion[idSupermodel] <> '' then
@@ -581,7 +623,7 @@ begin
        //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idSupermodel]+#13#10+LabelReadFileIni.Caption;
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
-       TopBar.Color1:= $00dccdc0;
+       SetColorEmulatorTopBar(TopBar, idSupermodel, True); // TopBar.Color1:= $00c0cddc;
        FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idSupermodel), SystemIcon);
        //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSupermodel, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
@@ -605,9 +647,9 @@ begin
        LabelFolderROMs.Enabled:= False;
        FolderROMs.Enabled:= False;
        FolderROMs.Font.Color:= clSilver;
-       ButtonUp.Enabled:= False;
-       ButtonDown.Enabled:= False;
-       FolderROMButtonSelect.Enabled:= False;
+       FolderROMsButtonUp.Enabled:= False;
+       FolderROMsButtonDown.Enabled:= False;
+       FolderROMsButtonSelect.Enabled:= False;
        FolderROMsButtonEdit.Enabled:= False;
        FolderROMsButtonDelete.Enabled:= False;
        FolderROMsButtonClear.Enabled:= False;
@@ -615,11 +657,12 @@ begin
        FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       case FormMain.MemGameInfo.eGameSetStatus of
-         0: TopBar.Color1:= $00f0fae5; // green
-         1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
-       end;
+       SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar);
+       //case FormMain.MemGameInfo.eGameSetStatus of
+       //  0: TopBar.Color1:= $00f0fae5; // green
+       //  1: TopBar.Color1:= $00e5f0fa; // red (based on green)
+       //  2: TopBar.Color1:= $00eeeeee; // silver (base on green)
+       //end;
      end;
   AudioGroupBox.DoubleBuffered:= True;
   PopulateScreenResolution(ScreenResolution, True);
@@ -654,15 +697,8 @@ end;
 
 procedure TFormSupermodelSettings.PowerPCFrequencyChange(Sender: TObject);
 begin
-  LabelPowerPCFrequency.Caption:= Format('%u Mhz', [Model3PowerPCFrequency[PowerPCFrequency.Position]]);
-  if PowerPCFrequency.Position <> 5 then
-     begin
-       if LabelPowerPCFrequency.Font.Color <> clRed then
-          LabelPowerPCFrequency.Font.Color:= clRed;
-     end
-  else
-     LabelPowerPCFrequency.Font.Color:= clBlack;
-
+  PowerPCFrequencyLabel.Caption:= Format('%u Mhz', [Model3PowerPCFrequency[PowerPCFrequency.Position]]);
+  ChangeLabelColorGauge(PowerPCFrequency, 5, PowerPCFrequencyLabel);
 end;
 
 procedure TFormSupermodelSettings.ButtonReadFileClick(Sender: TObject);
@@ -703,12 +739,12 @@ begin
   FormMain.ELV_SetEditManager(FolderROMs, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonUpClick(Sender: TObject);
+procedure TFormSupermodelSettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
   FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
 end;
 
-procedure TFormSupermodelSettings.FolderROMButtonSelectClick(
+procedure TFormSupermodelSettings.FolderROMsButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogSelectMultiFolders(FolderROMs);
@@ -739,67 +775,86 @@ begin
      Key:= Char(0);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectReal3DVertexShaderClick(
+procedure TFormSupermodelSettings.Real3DVertexShaderButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a vertex shader file', Real3DVertexShader, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectReal3DFragmentShaderClick(
+procedure TFormSupermodelSettings.Real3DFragmentShaderButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a frament shader file', Real3DFragmentShader, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectLoadReal3DScrollFogVertexShaderClick(
+procedure TFormSupermodelSettings.LoadReal3DScrollFogVertexShaderButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a scroll fog vertex shader file', LoadReal3DScrollFogVertexShader, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectLoadReal3DScrollFogFragmentShaderClick(
+procedure TFormSupermodelSettings.LoadReal3DScrollFogFragmentShaderButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a scroll fog frament shader file', LoadReal3DScrollFogFragmentShader, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectLoadTileMapVertexShader2DClick(
+procedure TFormSupermodelSettings.LoadTileMapVertexShader2DButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a tile map vertex shader file', LoadTileMapVertexShader2D, False);
 end;
 
-procedure TFormSupermodelSettings.ButtonSelectLoadTileMapFragmentShader2DClick(
+procedure TFormSupermodelSettings.LoadTileMapFragmentShader2DButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a tile map frament shader file', LoadTileMapFragmentShader2D, False);
 end;
 
-procedure TFormSupermodelSettings.SoundVolumeChange(Sender: TObject);
+procedure TFormSupermodelSettings.ChangeLabelColorGauge(GaugeBarSource: TGaugeBar; DefaultPosition: Integer; GaugeBarLabel: TShadowLabel);
 begin
-  LabelSoundVolume.Caption:= Format(LabelSoundVolume.Hint, [SoundVolume.Position])+' %]';
-  if SoundVolume.Position <> 100 then
+  if GaugeBarSource.Position <> DefaultPosition then
      begin
-       if LabelSoundVolume.Font.Color <> clRed then
-          LabelSoundVolume.Font.Color:= clRed;
+       if IsNightMode then
+       begin
+         if GaugeBarLabel.Font.Color <> clrLightRed then
+            GaugeBarLabel.Font.Color:= clrLightRed;
+       end
+       else
+       begin
+         if GaugeBarLabel.Font.Color <> clRed then
+            GaugeBarLabel.Font.Color:= clRed;
+       end;
      end
   else
-     LabelSoundVolume.Font.Color:= clBlack;
+     begin
+       if IsNightMode then
+          GaugeBarLabel.Font.Color:= item_caption_active_color[1]
+       else
+          GaugeBarLabel.Font.Color:= clBlack;
+     end;
+end;
+
+procedure TFormSupermodelSettings.SoundVolumeChange(Sender: TObject);
+begin
+  SoundVolumeLabel.Caption:= Format(SoundVolumeLabel.Hint, [SoundVolume.Position])+' %]';
+  ChangeLabelColorGauge(SoundVolume, 100, SoundVolumeLabel);
 end;
 
 procedure TFormSupermodelSettings.MusicVolumeChange(Sender: TObject);
 begin
-  LabelMusicVolume.Caption:= Format(LabelMusicVolume.Hint, [MusicVolume.Position])+' %]';
-  if MusicVolume.Position <> 100 then
-     begin
-       if LabelMusicVolume.Font.Color <> clRed then
-          LabelMusicVolume.Font.Color:= clRed;
-     end
-  else
-     LabelMusicVolume.Font.Color:= clBlack;
+  MusicVolumeLabel.Caption:= Format(MusicVolumeLabel.Hint, [MusicVolume.Position])+' %]';
+  ChangeLabelColorGauge(MusicVolume, 100, MusicVolumeLabel);
 end;
 
-procedure TFormSupermodelSettings.ButtonConfigInputClick(Sender: TObject);
+procedure TFormSupermodelSettings.AudioBalanceFrontRearChange(
+  Sender: TObject);
+begin
+  AudioBalanceFrontRearLabel.Caption:= Format(AudioBalanceFrontRearLabel.Hint, [AudioBalanceFrontRear.Position])+' %]';
+  ChangeLabelColorGauge(AudioBalanceFrontRear, 0, AudioBalanceFrontRearLabel);
+end;
+
+procedure TFormSupermodelSettings.InputSystemConfigButtonClick(Sender: TObject);
 var
   ExecLine: String;
 begin
@@ -818,20 +873,7 @@ end;
 
 procedure TFormSupermodelSettings.InputSystemSelect(Sender: TObject);
 begin
-  ButtonConfigInput.Enabled:= InputSystem.ItemIndex in [0, 1];
-end;
-
-procedure TFormSupermodelSettings.AudioBalanceFrontRearChange(
-  Sender: TObject);
-begin
-  LabelAudioBalanceFrontRear.Caption:= Format(LabelAudioBalanceFrontRear.Hint, [AudioBalanceFrontRear.Position])+' %]';
-  if AudioBalanceFrontRear.Position <> 0 then
-     begin
-       if LabelAudioBalanceFrontRear.Font.Color <> clRed then
-          LabelAudioBalanceFrontRear.Font.Color:= clRed;
-     end
-  else
-     LabelAudioBalanceFrontRear.Font.Color:= clBlack;
+  InputSystemConfigButton.Enabled:= InputSystem.ItemIndex in [0, 1];
 end;
 
 procedure TFormSupermodelSettings.SoundVolumeMouseDown(Sender: TObject;
@@ -856,7 +898,7 @@ begin
      AudioBalanceFrontRear.Position:= 0; // reset to default
 end;
 
-procedure TFormSupermodelSettings.ButtonVideo3DEngineResetClick(
+procedure TFormSupermodelSettings.Video3DEngineButtonResetClick(
   Sender: TObject);
 begin
   Video3DEngine.ItemIndex:= 1; // New 3D Engine
@@ -866,7 +908,7 @@ procedure TFormSupermodelSettings.PowerPCFrequencyUseCustomClick(
   Sender: TObject);
 begin
   PowerPCFrequencyCustom.Enabled:= PowerPCFrequencyUseCustom.Checked;
-  LabelPowerPCFrequencyCustom.Enabled:= PowerPCFrequencyUseCustom.Checked;
+  PowerPCFrequencyCustomLabel.Enabled:= PowerPCFrequencyUseCustom.Checked;
 end;
 
 end.

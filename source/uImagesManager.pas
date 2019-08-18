@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ToolWin,
   ComCtrls, StdCtrls, ImgList, GraphicEx, GR32_Image, GR32, GR32_Resamplers,
   ExtCtrls, Buttons, Menus, BarMenus, MPCommonObjects, ShellAPI,
-  MPCommonUtilities, EasyListview, IniFiles, uCommon, SplitterEx, PanelEx;
+  MPCommonUtilities, EasyListview, IniFiles, uCommon, SplitterEx, PanelEx,
+  ButtonsEx, ShadowLabel;
 
 type
   TMissingImageInfo = class(TEasyItemStored)
@@ -92,7 +93,6 @@ type
     IL_SystemsImages: TImageList;
     MissingImagesList: TEasyListview;
     PanelNotUsed: TPanel;
-    BottomBar: TCoolBar;
     ImagePreview: TImage32;
     NotUsedImagesList: TEasyListview;
     PopupMissingImages: TBcBarPopupMenu;
@@ -109,9 +109,6 @@ type
     PopupShowCloneGamesOnly: TMenuItem;
     N3: TMenuItem;
     PopupMissingSaveToFile: TMenuItem;
-    LabelTotalItemsMissing: TLabel;
-    LabelTotalItemsNotUsed: TLabel;
-    ButtonInvalidImagesDeleteFiles: TSpeedButton;
     PopupGamesFilter: TMenuItem;
     PopupRestoreColumnsSizes: TMenuItem;
     IL_NotUsedImages: TImageList;
@@ -134,16 +131,20 @@ type
     PopupScanDeviceSets: TMenuItem;
     PanelToolBarButtons: TPanelEx;
     ImageCategoryIcon: TImage;
-    ButtonImageCategory: TBitBtn;
-    ButtonHelp: TBitBtn;
-    ButtonScanMissing: TBitBtn;
-    ButtonScanInvalidImages: TBitBtn;
+    ButtonImageCategory: TBitBtnEx;
+    ButtonHelp: TBitBtnEx;
+    ButtonScanMissing: TBitBtnEx;
+    ButtonScanInvalidImages: TBitBtnEx;
     PopupScanSoftwareListGames: TMenuItem;
     PopupScanNonArcadeMachines: TMenuItem;
     N5: TMenuItem;
-    ButtonScanNotUsedImages: TBitBtn;
-    ButtonNotUsedImagesDeleteFiles: TSpeedButton;
+    ButtonScanNotUsedImages: TBitBtnEx;
     PopupScanArcadeMachines: TMenuItem;
+    BottomBar: TPanelEx;
+    LabelTotalItemsMissing: TShadowLabel;
+    ButtonNotUsedImagesDeleteFiles: TSpeedButtonEx;
+    LabelTotalItemsNotUsed: TShadowLabel;
+    ButtonInvalidImagesDeleteFiles: TSpeedButtonEx;
     procedure FormShow(Sender: TObject);
     procedure MissingImagesListColumnClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; ShiftState: TShiftState;
@@ -339,7 +340,7 @@ begin
      Exit;
   ButtonImageCategory.Tag:= selCat;
   ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon, 2);
 end;
 
 procedure TFormImagesManager.ReadIniFile;
@@ -448,12 +449,13 @@ begin
   iType:= FormMain.LoadPreviewImage(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame, SnapPreview);
   iFileExt:= ExtractFileExtW(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame);
 
-  //SnapPreview.Bitmap.LoadFromFile(TMissingImageInfo(SelectedItemMissing).eFoundImageMissingGame);
   if FormImageFoundMissingGame.Tag = 1 then
      begin
        FormImageFoundMissingGame.ClientWidth:= SnapPreview.Bitmap.Width;
        FormImageFoundMissingGame.ClientHeight:= SnapPreview.Bitmap.Height;
      end;
+  if not FormImageFoundMissingGame.Visible then
+     FormImageFoundMissingGame.Show;
 end;
 
 procedure TFormImagesManager.SetSelectedMissingGame(AutoSelect: Boolean = True);
@@ -466,6 +468,7 @@ begin
        MissingImagesList.Selection.FocusedItem:= SelectedItemMissing;
        SelectedItemMissing.MakeVisible(emvMiddle); //(emvAuto);
      end;
+
   FormMain.ELV_SetSelectRibbon(TMissingImageInfo(SelectedItemMissing).eGameStatus, MissingImagesList);
   if LabelTotalItemsMissing.Tag = 1 then
      ShowPreviewImage;
@@ -1413,6 +1416,7 @@ end;
 procedure TFormImagesManager.FormShow(Sender: TObject);
 var
   Folder: String;
+  Loop: Integer;
 begin
   ReadIniFile;
   Folder:= FormMain.GetFolderFull(32);
@@ -1425,11 +1429,44 @@ begin
   FormMain.LoadCategoriesIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon, 2);
   ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
 
   FormMain.ELV_ResetNormalColors(MissingImagesList);
   FormMain.ELV_ResetNormalColors(NotUsedImagesList);
+
+  MissingImagesList.Color:= FormMain.GamesListView.Color;
+  if FormMain.GamesListView.BackGround.Enabled then
+     begin
+       MissingImagesList.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
+       MissingImagesList.BackGround.Tile:= FormMain.GamesListView.BackGround.Tile;
+       MissingImagesList.BackGround.Enabled:= True;
+
+       NotUsedImagesList.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
+       NotUsedImagesList.BackGround.Tile:= FormMain.GamesListView.BackGround.Tile;
+       NotUsedImagesList.BackGround.Enabled:= True;
+     end;
+
+  MissingImagesList.Font:= FormMain.GamesListView.Font;
+  NotUsedImagesList.Font:= FormMain.GamesListView.Font;
+
+  if IsNightMode then
+     begin
+       SetPanelColors(PanelToolBarButtons, menu_background_color[1], clrMedDarkGray);
+       SetPanelColors(BottomBar, FormMain.StatusBarPanel.Color1, FormMain.StatusBarPanel.Color2, (FormMain.StatusBarPanel.Style <> vgSimple));
+       
+       FormMain.SetButtonExColors(ButtonImageCategory);
+       FormMain.SetButtonExColors(ButtonScanMissing);
+       FormMain.SetButtonExColors(ButtonScanNotUsedImages);
+       FormMain.SetButtonExColors(ButtonScanInvalidImages);
+       FormMain.SetButtonExColors(ButtonHelp);
+
+       FormMain.SetEasyListViewColors(MissingImagesList, -1, -1, clrOrangeBarTop);
+       FormMain.SetEasyListViewHeaderColors(MissingImagesList, True);
+
+       FormMain.SetEasyListViewColors(NotUsedImagesList, -1, -1, clrOrangeBarTop);
+       FormMain.SetEasyListViewHeaderColors(NotUsedImagesList, True);
+     end;
 end;
 
 procedure TFormImagesManager.MissingImagesListColumnClick(
@@ -1478,12 +1515,21 @@ procedure TFormImagesManager.MissingImagesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(
-                TMissingImageInfo(Item).eSystemID,
-                TMissingImageInfo(Item).eGameStatus,
-                TMissingImageInfo(Item).eDriverStatus,
-                TMissingImageInfo(Item).eClone, ACanvas, True, False);
-  if MissingImagesList.View = elsTile then
+  FormMain.GetCanvasFont(TMissingImageInfo(Item).eSystemID,
+                         -1, //TEasyGameInfo(Item).eCustomSystemID,
+                         False, //TEasyGameInfo(Item).eIsCustomGame,
+                         TMissingImageInfo(Item).eGameStatus,
+                         TMissingImageInfo(Item).eDriverStatus,
+                         TMissingImageInfo(Item).eClone, ACanvas, False, MissingImagesList);
+  if ACanvas.Font.Size <> 9 then
+     ACanvas.Font.Size:= 9;
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas, TMissingImageInfo(Item).eGameStatus);
+  //FormMain.GetCanvasFontCustom(
+  //              TMissingImageInfo(Item).eSystemID,
+  //              TMissingImageInfo(Item).eGameStatus,
+  //              TMissingImageInfo(Item).eDriverStatus,
+  //              TMissingImageInfo(Item).eClone, ACanvas, True, False);
+  {if MissingImagesList.View = elsTile then
      begin
        if Position > 0 then
           begin
@@ -1497,7 +1543,7 @@ begin
      begin
        ACanvas.Font.Name:= 'Tahoma';
        ACanvas.Font.Size:= 8;
-     end;
+     end;}
 end;
 
 procedure TFormImagesManager.MissingImagesListItemSelectionChanged(
@@ -1733,16 +1779,27 @@ procedure TFormImagesManager.NotUsedImagesListItemPaintText(
 begin
   if not SameText(TNotUsedImageInfo(Item).eFileName, TNotUsedImageInfo(Item).eNameOriginal) then
      begin
-       ACanvas.Font.Color:= clMaroon;
+       if IsNightMode then
+          ACanvas.Font.Color:= clrLightRed
+       else
+          ACanvas.Font.Color:= clMaroon;
        ACAnvas.Font.Style:= [fsBold];
      end;
   if Position > 0 then
      begin
        ACanvas.Font.Name:= 'Consolas';
        ACanvas.Font.Size:= 8;
-       ACanvas.Font.Color:= clNavy;
+       if IsNightMode then
+          ACanvas.Font.Color:= clSilver// clrLightBlue
+       else
+          ACanvas.Font.Color:= clNavy;
+     end
+  else
+     begin
+       if ACanvas.Font.Size <> 9 then
+          ACanvas.Font.Size:= 9;
      end;
-       //ACanvas.Font.Size:= ACanvas.Font.Size-2;
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
 procedure TFormImagesManager.NotUsedImagesListItemSelectionChanged(
@@ -1757,7 +1814,6 @@ begin
                                     NotUsedImagesList);
 
        iType:= FormMain.LoadPreviewImage(TNotUsedImageInfo(Item).eFullPath+TNotUsedImageInfo(Item).eFileName, ImagePreview);
-
        if iType = ifUnknown then
           ImagePreview.Bitmap:= nil;
      end;

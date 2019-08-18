@@ -1,6 +1,7 @@
 object FormMAMESettings: TFormMAMESettings
   Left = 996
   Top = 454
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -23,6 +24,134 @@ object FormMAMESettings: TFormMAMESettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
+  object ButtonPageFolders: TSpeedButtonEx
+    Left = 305
+    Top = 80
+    Width = 66
+    Height = 22
+    GroupIndex = 1
+    Down = True
+    Caption = 'Folders'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageVideo1: TSpeedButtonEx
+    Tag = 1
+    Left = 371
+    Top = 80
+    Width = 57
+    Height = 22
+    GroupIndex = 1
+    Caption = 'Video'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageVideo2: TSpeedButtonEx
+    Tag = 2
+    Left = 428
+    Top = 80
+    Width = 66
+    Height = 22
+    GroupIndex = 1
+    Caption = 'Video 2'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageVideo3: TSpeedButtonEx
+    Tag = 3
+    Left = 494
+    Top = 80
+    Width = 66
+    Height = 22
+    GroupIndex = 1
+    Caption = 'Video 3'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageLUAandAudio: TSpeedButtonEx
+    Tag = 4
+    Left = 560
+    Top = 80
+    Width = 101
+    Height = 22
+    GroupIndex = 1
+    Caption = 'LUA and Audio'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageInput: TSpeedButtonEx
+    Tag = 5
+    Left = 661
+    Top = 80
+    Width = 57
+    Height = 22
+    GroupIndex = 1
+    Caption = 'Input'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageMisc: TSpeedButtonEx
+    Tag = 6
+    Left = 718
+    Top = 80
+    Width = 96
+    Height = 22
+    GroupIndex = 1
+    Caption = 'Miscellaneous'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
+  object ButtonPageSDLMAMEInput: TSpeedButtonEx
+    Tag = 6
+    Left = 814
+    Top = 80
+    Width = 49
+    Height = 22
+    GroupIndex = 1
+    Caption = 'SDL'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
+    ParentFont = False
+    OnClick = ButtonPageFoldersClick
+  end
   object NotebookPages: TNotebook
     Left = 0
     Top = 100
@@ -35,189 +164,326 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Folders'
-      object FolderROMsDisksBox: TLabel
+      object FolderROMsLabel: TShadowLabel
         Left = 16
         Top = 13
-        Width = 169
-        Height = 15
+        Width = 172
+        Height = 16
         Caption = 'Path to ROM Sets and CHD Files'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelFolderIniFiles: TLabel
+      object FolderIniFilesLabel: TShadowLabel
         Left = 16
         Top = 140
-        Width = 80
-        Height = 15
+        Width = 83
+        Height = 16
         Caption = 'Path to Ini Files'
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelFolderGameSnapshots: TLabel
+      object FolderGameSnapshotsLabel: TShadowLabel
         Left = 303
         Top = 140
-        Width = 155
-        Height = 15
+        Width = 158
+        Height = 16
         Caption = 'Directory to Save Screenshots'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderGamesConfigurations: TLabel
+      object FolderGamesConfigurationsLabel: TShadowLabel
         Left = 303
         Top = 346
-        Width = 171
-        Height = 15
+        Width = 174
+        Height = 16
         Caption = 'Directory to Save Configurations'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderCheatFiles: TLabel
+      object FolderCheatFilesLabel: TShadowLabel
         Left = 590
         Top = 108
-        Width = 98
-        Height = 15
+        Width = 101
+        Height = 16
         Caption = 'Path to Cheat Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderMemoryCards: TLabel
+      object FolderMemoryCardsLabel: TShadowLabel
         Left = 590
         Top = 347
-        Width = 216
-        Height = 15
+        Width = 219
+        Height = 16
         Caption = 'Directory to Save Memory Card Contents'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderDiff: TLabel
+      object FolderDiffLabel: TShadowLabel
         Left = 590
         Top = 60
-        Width = 200
-        Height = 15
+        Width = 203
+        Height = 16
         Caption = 'Directory to Save CHD Difference Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderSaveStates: TLabel
+      object FolderSaveStatesLabel: TShadowLabel
         Left = 304
         Top = 296
-        Width = 123
-        Height = 15
+        Width = 126
+        Height = 16
         Caption = 'Directory to Save States'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderNVRAM: TLabel
+      object FolderNVRAMLabel: TShadowLabel
         Left = 303
         Top = 394
-        Width = 185
-        Height = 15
+        Width = 188
+        Height = 16
         Caption = 'Directory to Save NVRAM Contents'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderHashFiles: TLabel
+      object FolderHashFilesLabel: TShadowLabel
         Left = 16
         Top = 394
-        Width = 206
-        Height = 15
+        Width = 209
+        Height = 16
         Caption = 'Path to Software Definition Files (Hash)'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderArtworks: TLabel
+      object FolderArtworksLabel: TShadowLabel
         Left = 16
         Top = 252
-        Width = 219
-        Height = 15
+        Width = 222
+        Height = 16
         Caption = 'Path to Artwork Files / Effect Overlay Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderSamples: TLabel
+      object FolderSamplesLabel: TShadowLabel
         Left = 16
         Top = 346
-        Width = 139
-        Height = 15
+        Width = 142
+        Height = 16
         Caption = 'Path to Audio Sample Sets'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderInputDeviceLogs: TLabel
+      object FolderInputDeviceLogsLabel: TShadowLabel
         Left = 590
         Top = 299
-        Width = 186
-        Height = 15
+        Width = 189
+        Height = 16
         Caption = 'Directory to Save Input Device Logs'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderControllerDefinitions: TLabel
+      object FolderControllerDefinitionsLabel: TShadowLabel
         Left = 590
         Top = 155
-        Width = 154
-        Height = 15
+        Width = 157
+        Height = 16
         Caption = 'Path to Controller Definitions'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderCrosshairFiles: TLabel
+      object FolderCrosshairFilesLabel: TShadowLabel
         Left = 590
         Top = 203
-        Width = 116
-        Height = 15
+        Width = 119
+        Height = 16
         Caption = 'Path to Crosshair Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderFontFiles: TLabel
+      object FolderFontFilesLabel: TShadowLabel
         Left = 590
         Top = 251
-        Width = 91
-        Height = 15
+        Width = 94
+        Height = 16
         Caption = 'Path to Font Files'
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelFolderDebuggerComments: TLabel
+      object FolderDebuggerCommentsLabel: TShadowLabel
         Left = 590
         Top = 13
-        Width = 206
-        Height = 15
+        Width = 209
+        Height = 16
         Caption = 'Directory to Save Debugger Comments'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderLanguageFiles: TLabel
+      object FolderLanguageFilesLabel: TShadowLabel
         Left = 303
         Top = 192
-        Width = 140
-        Height = 15
+        Width = 143
+        Height = 16
         Caption = 'Path to UI Translation Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderPluginFiles: TLabel
+      object FolderPluginFilesLabel: TShadowLabel
         Left = 303
         Top = 244
-        Width = 101
-        Height = 15
+        Width = 104
+        Height = 16
         Caption = 'Path to Plugin Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderManualsPDF: TLabel
+      object FolderManualsPDFLabel: TShadowLabel
         Left = 590
         Top = 394
-        Width = 197
-        Height = 15
+        Width = 200
+        Height = 16
         Caption = 'Directory to Game Manual Files (PDF)'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
       object FolderROMs: TEasyListview
         Tag = 1
@@ -239,7 +505,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000001C8010000FFFFFF1F0001000000
+          00060000008008000101000100000000000001CA010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -279,7 +545,7 @@ object FormMAMESettings: TFormMAMESettings
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderROMsKeyAction
       end
-      object FolderROMsButtonUp: TBitBtn
+      object FolderROMsButtonUp: TBitBtnEx
         Tag = 1
         Left = 478
         Top = 30
@@ -293,7 +559,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderROMsButtonUpClick
       end
-      object FolderROMsButtonDown: TBitBtn
+      object FolderROMsButtonDown: TBitBtnEx
         Left = 478
         Top = 51
         Width = 43
@@ -306,7 +572,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderROMsButtonUpClick
       end
-      object FolderROMsButtonSelect: TBitBtn
+      object FolderROMsButtonSelect: TBitBtnEx
         Left = 522
         Top = 30
         Width = 43
@@ -318,7 +584,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 3
         OnClick = FolderROMsButtonSelectClick
       end
-      object FolderROMsButtonEdit: TBitBtn
+      object FolderROMsButtonEdit: TBitBtnEx
         Left = 522
         Top = 51
         Width = 43
@@ -328,7 +594,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 4
         OnClick = FolderROMsButtonEditClick
       end
-      object FolderROMsButtonDelete: TBitBtn
+      object FolderROMsButtonDelete: TBitBtnEx
         Left = 522
         Top = 72
         Width = 43
@@ -338,7 +604,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 5
         OnClick = FolderROMsButtonDeleteClick
       end
-      object FolderROMsButtonClear: TBitBtn
+      object FolderROMsButtonClear: TBitBtnEx
         Left = 522
         Top = 93
         Width = 43
@@ -350,7 +616,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 6
         OnClick = FolderROMsButtonClearClick
       end
-      object FolderSamples: TEdit
+      object FolderSamples: TEditEx
         Left = 16
         Top = 364
         Width = 217
@@ -365,7 +631,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 7
       end
-      object FolderSamplesButtonSelect: TBitBtn
+      object FolderSamplesButtonSelect: TBitBtnEx
         Left = 235
         Top = 364
         Width = 43
@@ -377,7 +643,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 8
         OnClick = FolderSamplesButtonSelectClick
       end
-      object FolderGameSnapshots: TEdit
+      object FolderGameSnapshots: TEditEx
         Left = 303
         Top = 158
         Width = 217
@@ -392,7 +658,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 9
       end
-      object FolderGameSnapshotsButtonSelect: TBitBtn
+      object FolderGameSnapshotsButtonSelect: TBitBtnEx
         Left = 522
         Top = 158
         Width = 43
@@ -404,7 +670,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 10
         OnClick = FolderGameSnapshotsButtonSelectClick
       end
-      object FolderGamesConfigurations: TEdit
+      object FolderGamesConfigurations: TEditEx
         Left = 303
         Top = 364
         Width = 217
@@ -419,7 +685,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 11
       end
-      object FolderGamesConfigurationsButtonSelect: TBitBtn
+      object FolderGamesConfigurationsButtonSelect: TBitBtnEx
         Left = 522
         Top = 364
         Width = 43
@@ -431,7 +697,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 12
         OnClick = FolderGamesConfigurationsButtonSelectClick
       end
-      object FolderCheatFiles: TEdit
+      object FolderCheatFiles: TEditEx
         Left = 590
         Top = 126
         Width = 217
@@ -446,7 +712,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 13
       end
-      object FolderCheatFilesButtonSelect: TBitBtn
+      object FolderCheatFilesButtonSelect: TBitBtnEx
         Left = 809
         Top = 126
         Width = 43
@@ -458,7 +724,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 14
         OnClick = FolderCheatFilesButtonSelectClick
       end
-      object FolderMemoryCards: TEdit
+      object FolderMemoryCards: TEditEx
         Left = 590
         Top = 365
         Width = 217
@@ -473,7 +739,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 15
       end
-      object FolderMemoryCardsButtonSelect: TBitBtn
+      object FolderMemoryCardsButtonSelect: TBitBtnEx
         Left = 809
         Top = 367
         Width = 43
@@ -485,7 +751,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 16
         OnClick = FolderMemoryCardsButtonSelectClick
       end
-      object FolderDiff: TEdit
+      object FolderDiff: TEditEx
         Left = 590
         Top = 78
         Width = 217
@@ -500,7 +766,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 17
       end
-      object FolderDiffButtonSelect: TBitBtn
+      object FolderDiffButtonSelect: TBitBtnEx
         Left = 809
         Top = 78
         Width = 43
@@ -512,7 +778,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 18
         OnClick = FolderDiffButtonSelectClick
       end
-      object FolderSaveStates: TEdit
+      object FolderSaveStates: TEditEx
         Left = 303
         Top = 314
         Width = 217
@@ -527,7 +793,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 19
       end
-      object FolderSaveStatesButtonSelect: TBitBtn
+      object FolderSaveStatesButtonSelect: TBitBtnEx
         Left = 522
         Top = 314
         Width = 43
@@ -539,7 +805,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 20
         OnClick = FolderSaveStatesButtonSelectClick
       end
-      object FolderNVRAM: TEdit
+      object FolderNVRAM: TEditEx
         Left = 303
         Top = 412
         Width = 217
@@ -554,7 +820,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 21
       end
-      object FolderNVRAMButtonSelect: TBitBtn
+      object FolderNVRAMButtonSelect: TBitBtnEx
         Left = 522
         Top = 412
         Width = 43
@@ -566,7 +832,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 22
         OnClick = FolderNVRAMButtonSelectClick
       end
-      object FolderHashFiles: TEdit
+      object FolderHashFiles: TEditEx
         Left = 16
         Top = 412
         Width = 217
@@ -581,7 +847,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 23
       end
-      object FolderHashFilesButtonSelect: TBitBtn
+      object FolderHashFilesButtonSelect: TBitBtnEx
         Left = 235
         Top = 412
         Width = 43
@@ -613,7 +879,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -653,7 +919,7 @@ object FormMAMESettings: TFormMAMESettings
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderArtworksKeyAction
       end
-      object FolderArtworksButtonUp: TBitBtn
+      object FolderArtworksButtonUp: TBitBtnEx
         Tag = 1
         Left = 16
         Top = 316
@@ -667,7 +933,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderArtworksButtonUpClick
       end
-      object FolderArtworksButtonDown: TBitBtn
+      object FolderArtworksButtonDown: TBitBtnEx
         Left = 59
         Top = 316
         Width = 43
@@ -680,7 +946,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderArtworksButtonUpClick
       end
-      object FolderArtworksButtonSelect: TBitBtn
+      object FolderArtworksButtonSelect: TBitBtnEx
         Left = 106
         Top = 316
         Width = 43
@@ -692,7 +958,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 28
         OnClick = FolderArtworksButtonSelectClick
       end
-      object FolderArtworksButtonEdit: TBitBtn
+      object FolderArtworksButtonEdit: TBitBtnEx
         Left = 149
         Top = 316
         Width = 43
@@ -702,7 +968,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 29
         OnClick = FolderArtworksButtonEditClick
       end
-      object FolderArtworksButtonDelete: TBitBtn
+      object FolderArtworksButtonDelete: TBitBtnEx
         Left = 192
         Top = 316
         Width = 43
@@ -712,7 +978,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 30
         OnClick = FolderArtworksButtonDeleteClick
       end
-      object FolderArtworksButtonClear: TBitBtn
+      object FolderArtworksButtonClear: TBitBtnEx
         Left = 235
         Top = 316
         Width = 43
@@ -744,7 +1010,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -784,7 +1050,7 @@ object FormMAMESettings: TFormMAMESettings
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderIniFilesKeyAction
       end
-      object FolderIniFilesButtonUp: TBitBtn
+      object FolderIniFilesButtonUp: TBitBtnEx
         Tag = 1
         Left = 16
         Top = 222
@@ -798,7 +1064,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderIniFilesButtonUpClick
       end
-      object FolderIniFilesButtonDown: TBitBtn
+      object FolderIniFilesButtonDown: TBitBtnEx
         Left = 59
         Top = 222
         Width = 43
@@ -811,7 +1077,7 @@ object FormMAMESettings: TFormMAMESettings
         TabStop = False
         OnClick = FolderIniFilesButtonUpClick
       end
-      object FolderIniFilesButtonSelect: TBitBtn
+      object FolderIniFilesButtonSelect: TBitBtnEx
         Left = 106
         Top = 222
         Width = 43
@@ -823,7 +1089,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 35
         OnClick = FolderIniFilesButtonSelectClick
       end
-      object FolderIniFilesButtonEdit: TBitBtn
+      object FolderIniFilesButtonEdit: TBitBtnEx
         Left = 149
         Top = 222
         Width = 43
@@ -833,7 +1099,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 36
         OnClick = FolderIniFilesButtonEditClick
       end
-      object FolderIniFilesButtonDelete: TBitBtn
+      object FolderIniFilesButtonDelete: TBitBtnEx
         Left = 192
         Top = 222
         Width = 43
@@ -843,7 +1109,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 37
         OnClick = FolderIniFilesButtonDeleteClick
       end
-      object FolderIniFilesButtonClear: TBitBtn
+      object FolderIniFilesButtonClear: TBitBtnEx
         Left = 235
         Top = 222
         Width = 43
@@ -855,7 +1121,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 38
         OnClick = FolderIniFilesButtonClearClick
       end
-      object FolderInputDeviceLogs: TEdit
+      object FolderInputDeviceLogs: TEditEx
         Left = 590
         Top = 317
         Width = 217
@@ -870,7 +1136,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 39
       end
-      object FolderInputDeviceLogsButtonSelect: TBitBtn
+      object FolderInputDeviceLogsButtonSelect: TBitBtnEx
         Left = 809
         Top = 317
         Width = 43
@@ -882,7 +1148,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 40
         OnClick = FolderInputDeviceLogsButtonSelectClick
       end
-      object FolderControllerDefinitionsButtonSelect: TBitBtn
+      object FolderControllerDefinitionsButtonSelect: TBitBtnEx
         Left = 809
         Top = 173
         Width = 43
@@ -894,7 +1160,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 41
         OnClick = FolderControllerDefinitionsButtonSelectClick
       end
-      object FolderCrosshairFilesButtonSelect: TBitBtn
+      object FolderCrosshairFilesButtonSelect: TBitBtnEx
         Left = 809
         Top = 221
         Width = 43
@@ -906,7 +1172,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 42
         OnClick = FolderCrosshairFilesButtonSelectClick
       end
-      object FolderFontFiles: TEdit
+      object FolderFontFiles: TEditEx
         Left = 590
         Top = 269
         Width = 217
@@ -921,7 +1187,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 43
       end
-      object FolderFontFilesButtonSelect: TBitBtn
+      object FolderFontFilesButtonSelect: TBitBtnEx
         Left = 809
         Top = 269
         Width = 43
@@ -933,7 +1199,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 44
         OnClick = FolderFontFilesButtonSelectClick
       end
-      object FolderControllerDefinitions: TEdit
+      object FolderControllerDefinitions: TEditEx
         Left = 590
         Top = 173
         Width = 217
@@ -948,7 +1214,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 45
       end
-      object FolderCrosshairFiles: TEdit
+      object FolderCrosshairFiles: TEditEx
         Left = 590
         Top = 221
         Width = 217
@@ -963,7 +1229,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 46
       end
-      object FolderDebuggerCommentsButtonSelect: TBitBtn
+      object FolderDebuggerCommentsButtonSelect: TBitBtnEx
         Left = 809
         Top = 31
         Width = 43
@@ -975,7 +1241,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 47
         OnClick = FolderDebuggerCommentsButtonSelectClick
       end
-      object FolderDebuggerComments: TEdit
+      object FolderDebuggerComments: TEditEx
         Left = 590
         Top = 31
         Width = 217
@@ -990,7 +1256,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 48
       end
-      object FolderLanguageFilesButtonSelect: TBitBtn
+      object FolderLanguageFilesButtonSelect: TBitBtnEx
         Left = 522
         Top = 210
         Width = 43
@@ -1002,7 +1268,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 49
         OnClick = FolderLanguageFilesButtonSelectClick
       end
-      object FolderLanguageFiles: TEdit
+      object FolderLanguageFiles: TEditEx
         Left = 303
         Top = 210
         Width = 217
@@ -1017,7 +1283,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 50
       end
-      object FolderPluginFilesButtonSelect: TBitBtn
+      object FolderPluginFilesButtonSelect: TBitBtnEx
         Left = 522
         Top = 262
         Width = 43
@@ -1029,7 +1295,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 51
         OnClick = FolderPluginFilesButtonSelectClick
       end
-      object FolderPluginFiles: TEdit
+      object FolderPluginFiles: TEditEx
         Left = 303
         Top = 262
         Width = 217
@@ -1043,7 +1309,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 52
       end
-      object FolderManualsPDF: TEdit
+      object FolderManualsPDF: TEditEx
         Left = 590
         Top = 412
         Width = 217
@@ -1058,7 +1324,7 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 53
       end
-      object FolderManualsPDFButtonSelect: TBitBtn
+      object FolderManualsPDFButtonSelect: TBitBtnEx
         Left = 809
         Top = 412
         Width = 43
@@ -1084,24 +1350,36 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Render Options'
         ParentCtl3D = True
         TabOrder = 2
-        object LabelIntegerScaleFactorVertical: TLabel
+        object IntegerScaleFactorVerticalLabel: TShadowLabel
           Left = 92
           Top = 225
-          Width = 21
-          Height = 15
+          Width = 24
+          Height = 16
           Caption = 'Vert'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelIntegerScaleFactorHorizontal: TLabel
+        object IntegerScaleFactorHorizontalLabel: TShadowLabel
           Left = 24
           Top = 225
-          Width = 20
-          Height = 15
+          Width = 23
+          Height = 16
           Caption = 'Hor'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object WindowMode: TAdvOfficeCheckBoxEx
@@ -1202,7 +1480,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object IntegerScaleFactorHorizontal: TEdit
+        object IntegerScaleFactorHorizontal: TEditEx
           Left = 47
           Top = 222
           Width = 40
@@ -1218,7 +1496,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 7
           OnKeyPress = IntegerScaleFactorHorizontalKeyPress
         end
-        object IntegerScaleFactorVertical: TEdit
+        object IntegerScaleFactorVertical: TEditEx
           Left = 116
           Top = 222
           Width = 40
@@ -1287,7 +1565,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Vector'
         ParentCtl3D = True
         TabOrder = 1
-        object LabelVectorFlickerEffect: TLabel
+        object VectorFlickerEffectLabel: TShadowLabel
           Left = 8
           Top = 40
           Width = 121
@@ -1298,9 +1576,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelVectorBeamWidthMin: TLabel
+        object VectorBeamWidthMinLabel: TShadowLabel
           Left = 8
           Top = 83
           Width = 145
@@ -1311,9 +1595,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelVectorBeamWidthMax: TLabel
+        object VectorBeamWidthMaxLabel: TShadowLabel
           Left = 8
           Top = 126
           Width = 145
@@ -1324,9 +1614,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelVectorBeamIntensityWeight: TLabel
+        object VectorBeamIntensityWeightLabel: TShadowLabel
           Left = 8
           Top = 169
           Width = 158
@@ -1337,6 +1633,12 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object VectorFlickerEffect: TGaugeBar2
@@ -1416,7 +1718,7 @@ object FormMAMESettings: TFormMAMESettings
           Themed = True
         end
       end
-      object ScreenOptionsBox: TAdvGroupBoxEx
+      object ScreenOptionsGroupBox: TAdvGroupBoxEx
         Left = 200
         Top = 12
         Width = 169
@@ -1425,7 +1727,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Game Screen'
         Ctl3D = True
         TabOrder = 4
-        object LabelBrightness: TLabel
+        object BrightnessLabel: TShadowLabel
           Left = 8
           Top = 63
           Width = 153
@@ -1436,9 +1738,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelPrescale_ScaleScreen: TLabel
+        object Prescale_ScaleScreenLabel: TShadowLabel
           Left = 8
           Top = 20
           Width = 153
@@ -1449,9 +1757,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelContrast: TLabel
+        object ContrastLabel: TShadowLabel
           Left = 8
           Top = 106
           Width = 153
@@ -1462,9 +1776,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelGamma: TLabel
+        object GammaLabel: TShadowLabel
           Left = 8
           Top = 149
           Width = 153
@@ -1475,9 +1795,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelPauseBrightness: TLabel
+        object PauseBrightnessLabel: TShadowLabel
           Left = 8
           Top = 192
           Width = 153
@@ -1488,14 +1814,27 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object Label9: TLabel
+        object EffectOverlayLabel: TShadowLabel
           Left = 8
           Top = 235
-          Width = 133
-          Height = 15
+          Width = 136
+          Height = 16
           Caption = 'Visual Effects Overlay File'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
         object Prescale_ScaleScreen: TGaugeBar
           Left = 8
@@ -1584,7 +1923,7 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0.649999976158142100
           OnChange = PauseBrightnessChange
         end
-        object EffectOverlay: TEdit
+        object EffectOverlay: TEditEx
           Left = 8
           Top = 251
           Width = 108
@@ -1598,7 +1937,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 5
         end
-        object EffectOverlayBrowse: TBitBtn
+        object EffectOverlayButtonSelect: TBitBtnEx
           Left = 118
           Top = 251
           Width = 43
@@ -1608,10 +1947,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 6
-          OnClick = EffectOverlayBrowseClick
+          OnClick = EffectOverlayButtonSelectClick
         end
       end
-      object FullScreenBox: TAdvGroupBoxEx
+      object FullScreenGroupBox: TAdvGroupBoxEx
         Left = 384
         Top = 12
         Width = 169
@@ -1620,7 +1959,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Full Screen'
         ParentCtl3D = True
         TabOrder = 5
-        object LabelFullScreenBrightness: TLabel
+        object FullScreenBrightnessLabel: TShadowLabel
           Left = 8
           Top = 63
           Width = 153
@@ -1631,9 +1970,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelFullScreenContrast: TLabel
+        object FullScreenContrastLabel: TShadowLabel
           Left = 8
           Top = 106
           Width = 153
@@ -1644,9 +1989,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelFullScreenGamma: TLabel
+        object FullScreenGammaLabel: TShadowLabel
           Left = 8
           Top = 149
           Width = 153
@@ -1657,6 +2008,12 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object TripleBuffer: TAdvOfficeCheckBoxEx
@@ -1732,7 +2089,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = FullScreenGammaChange
         end
       end
-      object LabelSnapshotsBox: TAdvGroupBoxEx
+      object SnapshotsGroupBox: TAdvGroupBoxEx
         Left = 568
         Top = 227
         Width = 169
@@ -1741,48 +2098,72 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Snapshots / Movies'
         ParentCtl3D = True
         TabOrder = 6
-        object LabelSnapshotNameFormat: TLabel
+        object SnapshotNameFormatLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 73
-          Height = 15
+          Width = 76
+          Height = 16
           Caption = 'Name Format'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSnapshotView: TLabel
+        object SnapshotViewLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 25
-          Height = 15
+          Width = 28
+          Height = 16
           Caption = 'View'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSnapSizeCustomX: TLabel
+        object SnapSizeCustomXLabel: TShadowLabel
           Left = 111
           Top = 134
-          Width = 7
-          Height = 15
+          Width = 10
+          Height = 16
           Caption = 'X'
           Enabled = False
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSnapSizeCustom: TLabel
+        object SnapSizeCustomLabel: TShadowLabel
           Left = 24
           Top = 134
-          Width = 42
-          Height = 15
+          Width = 45
+          Height = 16
           Caption = 'Custom'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object SnapBurnIn: TAdvOfficeCheckBoxEx
@@ -1797,7 +2178,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object ButtonSnapNameDefault: TBitBtn
+        object SnapNameButtonDefault: TBitBtnEx
           Left = 125
           Top = 36
           Width = 38
@@ -1807,9 +2188,9 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-          OnClick = ButtonSnapNameDefaultClick
+          OnClick = SnapNameButtonDefaultClick
         end
-        object SnapView: TComboBox
+        object SnapView: TComboBox2Ex
           Left = 8
           Top = 80
           Width = 115
@@ -1840,7 +2221,7 @@ object FormMAMESettings: TFormMAMESettings
             'Pixel Aspect'
             'Cocktail')
         end
-        object ButtonSnapViewDefault: TBitBtn
+        object SnapViewButtonDefault: TBitBtnEx
           Left = 124
           Top = 80
           Width = 38
@@ -1850,7 +2231,7 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 3
-          OnClick = ButtonSnapViewDefaultClick
+          OnClick = SnapViewButtonDefaultClick
         end
         object SnapSizeAuto: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1867,7 +2248,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object SnapSizeWidth: TEdit
+        object SnapSizeWidth: TEditEx
           Left = 68
           Top = 131
           Width = 40
@@ -1883,7 +2264,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 5
           OnKeyPress = SnapSizeWidthKeyPress
         end
-        object SnapSizeHeight: TEdit
+        object SnapSizeHeight: TEditEx
           Left = 122
           Top = 131
           Width = 40
@@ -1899,7 +2280,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 6
           OnKeyPress = SnapSizeHeightKeyPress
         end
-        object SnapName: TEdit
+        object SnapName: TEditEx
           Left = 8
           Top = 36
           Width = 115
@@ -1939,24 +2320,36 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Artwork'
         ParentCtl3D = True
         TabOrder = 0
-        object LabelFallbackArtwork: TLabel
+        object FallbackArtworkLabel: TShadowLabel
           Left = 8
           Top = 88
-          Width = 88
-          Height = 15
+          Width = 91
+          Height = 16
           Caption = 'Fallback Artwork'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelOverrideArtwork: TLabel
+        object OverrideArtworkLabel: TShadowLabel
           Left = 8
           Top = 136
-          Width = 90
-          Height = 15
+          Width = 93
+          Height = 16
           Caption = 'Override Artwork'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object ArtworkBackdrops: TAdvOfficeCheckBoxEx
@@ -2043,7 +2436,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object FallbackArtwork: TEdit
+        object FallbackArtwork: TEditEx
           Left = 8
           Top = 104
           Width = 153
@@ -2054,7 +2447,7 @@ object FormMAMESettings: TFormMAMESettings
           Enabled = False
           TabOrder = 6
         end
-        object OverrideArtwork: TEdit
+        object OverrideArtwork: TEditEx
           Left = 8
           Top = 152
           Width = 153
@@ -2064,7 +2457,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 7
         end
       end
-      object LabelScreenRotation: TAdvGroupBoxEx
+      object ScreenRotationGroupBox: TAdvGroupBoxEx
         Left = 200
         Top = 297
         Width = 169
@@ -2169,15 +2562,21 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Video 2'
-      object LabelMonitorProvider: TLabel
+      object MonitorProviderLabel: TShadowLabel
         Left = 336
         Top = 13
-        Width = 90
-        Height = 15
+        Width = 93
+        Height = 16
         Caption = 'Monitor Provider'
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object PerformanceGroupBox: TAdvGroupBoxEx
@@ -2190,73 +2589,109 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Performance'
         ParentCtl3D = True
         TabOrder = 0
-        object LabelSpeed: TLabel
+        object SpeedLabel: TShadowLabel
           Left = 8
           Top = 107
-          Width = 120
-          Height = 15
+          Width = 123
+          Height = 16
           Hint = 'Gameplay Speed [%3.2f]'
           Caption = 'Gameplay Speed [1.00]'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelFrameskip: TLabel
+        object FrameskipLabel: TShadowLabel
           Left = 108
           Top = 63
-          Width = 54
-          Height = 15
+          Width = 57
+          Height = 16
           Caption = 'Frameskip'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelThreadPriority: TLabel
+        object ThreadPriorityLabel: TShadowLabel
           Left = 208
           Top = 63
-          Width = 78
-          Height = 15
+          Width = 81
+          Height = 16
           Caption = 'Thread Priority'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelNumberProcessors: TLabel
+        object NumberProcessorsLabel: TShadowLabel
           Left = 8
           Top = 63
-          Width = 80
-          Height = 15
+          Width = 83
+          Height = 16
           Caption = '# of Processors'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelBenchmark: TLabel
+        object BenchmarkLabel: TShadowLabel
           Left = 158
           Top = 107
-          Width = 118
-          Height = 15
+          Width = 121
+          Height = 16
           Hint = 'sec'
           Caption = 'Benchmark [00:00 sec]'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelSecondsToRun: TLabel
+        object SecondsToRunLabel: TShadowLabel
           Left = 8
           Top = 150
-          Width = 275
-          Height = 15
+          Width = 278
+          Height = 16
           Hint = 'sec'
           Caption = 'Time to Run Before Automatically Exiting [00:00 sec]'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object AutoFrameskip: TAdvOfficeCheckBoxEx
@@ -2367,7 +2802,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = SpeedChange
           OnMouseDown = SpeedMouseDown
         end
-        object Frameskip: TComboBox
+        object Frameskip: TComboBox2Ex
           Left = 108
           Top = 79
           Width = 93
@@ -2399,7 +2834,7 @@ object FormMAMESettings: TFormMAMESettings
             '11'
             '12')
         end
-        object ThreadPriority: TComboBox
+        object ThreadPriority: TComboBox2Ex
           Left = 208
           Top = 79
           Width = 92
@@ -2435,7 +2870,7 @@ object FormMAMESettings: TFormMAMESettings
             '0 (Normal)'
             '1')
         end
-        object NumberProcessors: TComboBox
+        object NumberProcessors: TComboBox2Ex
           Left = 8
           Top = 79
           Width = 93
@@ -2494,7 +2929,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = SecondsToRunChange
         end
       end
-      object ScreensBox: TAdvGroupBoxEx
+      object ScreensGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 222
         Width = 176
@@ -2504,75 +2939,112 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Screens'
         ParentCtl3D = True
         TabOrder = 1
-        object LabelScreenName: TLabel
+        object ScreenNameLabel: TShadowLabel
           Left = 8
           Top = 60
-          Width = 32
-          Height = 15
+          Width = 35
+          Height = 16
           Hint = 'Explicit name of'
           Caption = 'Name'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreenAspectRatio: TLabel
+        object ScreenAspectRatioLabel: TShadowLabel
           Left = 101
           Top = 104
-          Width = 66
-          Height = 15
+          Width = 69
+          Height = 16
           Hint = 'Aspect ratio of'
           Caption = 'Aspect Ratio'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreenResolution: TLabel
+        object ScreenResolutionLabel: TShadowLabel
           Left = 8
           Top = 148
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Hint = 'Preferred resolution of'
           Caption = 'Resolution'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreenRefreshRate_Custom: TLabel
+        object ScreenRefreshRate_CustomLabel: TShadowLabel
           Left = 101
           Top = 148
-          Width = 14
-          Height = 15
+          Width = 17
+          Height = 16
           Caption = 'Hz'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreenView: TLabel
+        object ScreenViewLabel: TShadowLabel
           Left = 7
           Top = 104
-          Width = 25
-          Height = 15
+          Width = 28
+          Height = 16
           Hint = 'Preferred view for'
           Caption = 'View'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreensSelector: TLabel
+        object ScreensSelectorLabel: TShadowLabel
           Left = 81
           Top = 16
-          Width = 80
-          Height = 15
+          Width = 83
+          Height = 16
           Hint = 'Explicit name of'
           Caption = 'Set Options On'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object ScreenName: TComboBox
+        object ScreenName: TComboBox2Ex
           Left = 8
           Top = 76
           Width = 89
@@ -2604,7 +3076,7 @@ object FormMAMESettings: TFormMAMESettings
             '\\.\DISPLAY7'
             '\\.\DISPLAY8')
         end
-        object ScreenAspectRatio: TComboBox
+        object ScreenAspectRatio: TComboBox2Ex
           Left = 101
           Top = 120
           Width = 68
@@ -2635,7 +3107,7 @@ object FormMAMESettings: TFormMAMESettings
             '5:2'
             '5:3')
         end
-        object ScreenResolution: TComboBox
+        object ScreenResolution: TComboBox2Ex
           Left = 8
           Top = 164
           Width = 89
@@ -2690,7 +3162,7 @@ object FormMAMESettings: TFormMAMESettings
             '1920x1440'
             '2048x1536')
         end
-        object ScreenRefreshRate: TComboBox
+        object ScreenRefreshRate: TComboBox2Ex
           Left = 101
           Top = 164
           Width = 68
@@ -2730,7 +3202,7 @@ object FormMAMESettings: TFormMAMESettings
             '200'
             '240')
         end
-        object ScreenView: TComboBox
+        object ScreenView: TComboBox2Ex
           Left = 8
           Top = 120
           Width = 89
@@ -2786,7 +3258,7 @@ object FormMAMESettings: TFormMAMESettings
           LabelsInterval = 1
           SelEnable = False
         end
-        object ScreensSelector: TComboBox
+        object ScreensSelector: TComboBox2Ex
           Tag = -1
           Left = 81
           Top = 32
@@ -2814,7 +3286,7 @@ object FormMAMESettings: TFormMAMESettings
             'Screen 3'
             'Screen 4')
         end
-        object ButtonScreenDefaultSettings: TBitBtn
+        object ScreenButtonDefaultSettings: TBitBtnEx
           Left = 129
           Top = 56
           Width = 38
@@ -2822,10 +3294,10 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 'Set default values for the selected screen'
           Caption = 'Reset'
           TabOrder = 7
-          OnClick = ButtonScreenDefaultSettingsClick
+          OnClick = ScreenButtonDefaultSettingsClick
         end
       end
-      object MonitorProvider: TComboBox
+      object MonitorProvider: TComboBox2Ex
         Left = 336
         Top = 29
         Width = 121
@@ -2857,16 +3329,73 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Video 3'
-      object LabelVideoOutputMode: TLabel
+      object VideoOutputModeLabel: TShadowLabel
         Left = 595
         Top = 19
-        Width = 105
-        Height = 15
+        Width = 108
+        Height = 16
         Caption = 'Video Output Mode'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object VideoOutputMode: TComboBox
+      object ButtonPageVideoEffectsBGFX: TSpeedButtonEx
+        Left = 16
+        Top = 16
+        Width = 172
+        Height = 22
+        GroupIndex = 2
+        Caption = 'BGFX Post-Processing Effects'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        OnClick = ButtonPageVideoEffectsBGFXClick
+      end
+      object ButtonPageVideoEffectsHLSL: TSpeedButtonEx
+        Tag = 1
+        Left = 188
+        Top = 16
+        Width = 188
+        Height = 22
+        GroupIndex = 2
+        Down = True
+        Caption = 'Direct3D Post-Processing Effects'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        OnClick = ButtonPageVideoEffectsBGFXClick
+      end
+      object ButtonPageVideoEffectsGLSL: TSpeedButtonEx
+        Tag = 2
+        Left = 376
+        Top = 16
+        Width = 185
+        Height = 22
+        GroupIndex = 2
+        Caption = 'OpenGL Post-Processing Effects'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        OnClick = ButtonPageVideoEffectsBGFXClick
+      end
+      object VideoOutputMode: TComboBox2Ex
         Left = 704
         Top = 16
         Width = 129
@@ -2877,13 +3406,13 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 0
+        ItemHeight = 13
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
       end
-      object ButtonHelpVideoOutputMode: TBitBtn
+      object VideoOutputModeButtonHelp: TBitBtnEx
         Left = 834
         Top = 16
         Width = 21
@@ -2897,7 +3426,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        OnClick = ButtonHelpVideoOutputModeClick
+        OnClick = VideoOutputModeButtonHelpClick
       end
       object NotebookVideoPostProcessingEffectsPages: TNotebook
         Left = 16
@@ -2910,102 +3439,144 @@ object FormMAMESettings: TFormMAMESettings
           Left = 0
           Top = 0
           Caption = 'BGFX'
-          object LabelBGFXPath: TLabel
+          object BGFXPathLabel: TShadowLabel
             Left = 8
             Top = 56
-            Width = 95
-            Height = 15
+            Width = 98
+            Height = 16
             Caption = 'Path to BGFX Files'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object Label14: TLabel
+          object BGFXBackendLabel: TShadowLabel
             Left = 8
             Top = 12
-            Width = 81
-            Height = 15
+            Width = 84
+            Height = 16
             Caption = 'Backend to Use'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelBGFXShadowMaskTextureName: TLabel
+          object BGFXShadowMaskTextureNameLabel: TShadowLabel
             Left = 8
             Top = 100
-            Width = 115
-            Height = 15
+            Width = 118
+            Height = 16
             Caption = 'Shadow Mask Texture'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelBGFXScreenShaderChains: TLabel
+          object BGFXScreenShaderChainsLabel: TShadowLabel
             Left = 8
             Top = 144
-            Width = 113
-            Height = 15
+            Width = 116
+            Height = 16
             Caption = 'Screen Shader Chains'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelBGFXScreenShaderChainsDetailsHTML: TLabel
-            Left = 469
-            Top = 145
-            Width = 138
-            Height = 14
+          object BGFXScreenShaderChainsDetailsHTMLLabel: TShadowLabel
+            Left = 459
+            Top = 144
+            Width = 150
+            Height = 16
             Hint = 
               'http://docs.mamedev.org/advanced/bgfx.html#configuration-setting' +
               's'
             Caption = '(click here for usage details)'
             Font.Charset = ANSI_CHARSET
             Font.Color = clNavy
-            Font.Height = -11
-            Font.Name = 'Arial'
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
             Font.Style = []
             ParentFont = False
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = True
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
-            OnClick = LabelBGFXScreenShaderChainsDetailsHTMLClick
-            OnMouseEnter = LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter
-            OnMouseLeave = LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave
+            OnClick = BGFXScreenShaderChainsDetailsHTMLLabelClick
+            OnMouseEnter = BGFXScreenShaderChainsDetailsHTMLLabelMouseEnter
+            OnMouseLeave = BGFXScreenShaderChainsDetailsHTMLLabelMouseLeave
           end
-          object LabelBGFXScreenShaderChainsHelp: TLabel
+          object BGFXScreenShaderChainsHelpLabel: TShadowLabel
             Left = 126
-            Top = 145
-            Width = 209
-            Height = 14
+            Top = 144
+            Width = 229
+            Height = 16
             Caption = 'select a shader in the list or type in edit box'
             Font.Charset = ANSI_CHARSET
             Font.Color = clMaroon
-            Font.Height = -11
-            Font.Name = 'Arial'
+            Font.Height = -12
+            Font.Name = 'Segoe UI'
             Font.Style = []
             ParentFont = False
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelBGFXLUTTextureName: TLabel
+          object BGFXLUTTextureNameLabel: TShadowLabel
             Left = 384
             Top = 100
-            Width = 98
-            Height = 15
+            Width = 101
+            Height = 16
             Caption = 'LUT Texture Name'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object BGFXPath: TEdit
+          object BGFXPath: TEditEx
             Left = 8
             Top = 72
             Width = 312
@@ -3019,7 +3590,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = True
             TabOrder = 0
           end
-          object BGFXPathButtonSelect: TBitBtn
+          object BGFXPathButtonSelect: TBitBtnEx
             Left = 322
             Top = 72
             Width = 43
@@ -3031,7 +3602,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 1
             OnClick = BGFXPathButtonSelectClick
           end
-          object BGFXBackend: TComboBox
+          object BGFXBackend: TComboBox2Ex
             Left = 8
             Top = 28
             Width = 129
@@ -3068,7 +3639,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object BGFXShadowMaskTextureName: TEdit
+          object BGFXShadowMaskTextureName: TEditEx
             Left = 8
             Top = 116
             Width = 269
@@ -3082,7 +3653,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = True
             TabOrder = 4
           end
-          object BGFXShadowMaskTextureNameButtonSelect: TBitBtn
+          object BGFXShadowMaskTextureNameButtonSelect: TBitBtnEx
             Left = 279
             Top = 116
             Width = 43
@@ -3094,7 +3665,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 5
             OnClick = BGFXShadowMaskTextureNameButtonSelectClick
           end
-          object BGFXShadowMaskTextureNameButtonReset: TBitBtn
+          object BGFXShadowMaskTextureNameButtonReset: TBitBtnEx
             Left = 322
             Top = 116
             Width = 43
@@ -3106,7 +3677,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 6
             OnClick = BGFXShadowMaskTextureNameButtonResetClick
           end
-          object BGFXScreenShaderChains: TEdit
+          object BGFXScreenShaderChains: TEditEx
             Left = 8
             Top = 160
             Width = 508
@@ -3122,7 +3693,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = True
             TabOrder = 7
           end
-          object BGFXScreenShaderChainsButtonReload: TBitBtn
+          object BGFXScreenShaderChainsButtonReload: TBitBtnEx
             Left = 518
             Top = 160
             Width = 47
@@ -3132,7 +3703,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 8
             OnClick = BGFXScreenShaderChainsButtonReloadClick
           end
-          object BGFXScreenShaderChainsButtonSelect: TBitBtn
+          object BGFXScreenShaderChainsButtonSelect: TBitBtnEx
             Left = 565
             Top = 350
             Width = 43
@@ -3207,7 +3778,7 @@ object FormMAMESettings: TFormMAMESettings
             OnItemCompare = BGFXScreenShaderChains_ListViewItemCompare
             OnItemPaintText = BGFXScreenShaderChains_ListViewItemPaintText
           end
-          object BGFXScreenShaderChains_ListViewButtonAdd: TBitBtn
+          object BGFXScreenShaderChains_ListViewButtonAdd: TBitBtnEx
             Left = 56
             Top = 350
             Width = 43
@@ -3217,7 +3788,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 11
             OnClick = BGFXScreenShaderChains_ListViewButtonAddClick
           end
-          object BGFXScreenShaderChains_ListViewButtonSelect: TBitBtn
+          object BGFXScreenShaderChains_ListViewButtonSelect: TBitBtnEx
             Left = 8
             Top = 350
             Width = 47
@@ -3229,7 +3800,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 12
             OnClick = BGFXScreenShaderChains_ListViewButtonSelectClick
           end
-          object BGFXScreenShaderChainsButtonReset: TBitBtn
+          object BGFXScreenShaderChainsButtonReset: TBitBtnEx
             Left = 565
             Top = 160
             Width = 43
@@ -3239,7 +3810,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 13
             OnClick = BGFXScreenShaderChainsButtonResetClick
           end
-          object BGFXLUTTextureName: TEdit
+          object BGFXLUTTextureName: TEditEx
             Left = 384
             Top = 116
             Width = 269
@@ -3252,7 +3823,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = True
             TabOrder = 14
           end
-          object BGFXLUTTextureNameButtonSelect: TBitBtn
+          object BGFXLUTTextureNameButtonSelect: TBitBtnEx
             Left = 655
             Top = 116
             Width = 43
@@ -3264,7 +3835,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 15
             OnClick = BGFXLUTTextureNameButtonSelectClick
           end
-          object BGFXLUTTextureNameButtonReset: TBitBtn
+          object BGFXLUTTextureNameButtonReset: TBitBtnEx
             Left = 698
             Top = 116
             Width = 43
@@ -3282,57 +3853,87 @@ object FormMAMESettings: TFormMAMESettings
           Top = 0
           HelpContext = 1
           Caption = 'Direct3D'
-          object LabelShadowMaskTexture: TLabel
+          object ShadowMaskTextureLabel: TShadowLabel
             Left = 8
             Top = 98
-            Width = 115
-            Height = 15
+            Width = 118
+            Height = 16
             Caption = 'Shadow Mask Texture'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelHLSLPath: TLabel
+          object HLSLPathLabel: TShadowLabel
             Left = 8
             Top = 54
-            Width = 94
-            Height = 15
+            Width = 97
+            Height = 16
             Caption = 'Path to HLSL Files'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object Label7: TLabel
+          object HLSLUpscaleSnapshotXLabel: TShadowLabel
             Left = 52
             Top = 224
-            Width = 7
-            Height = 15
+            Width = 10
+            Height = 16
             Caption = 'X'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelHLSLUpscaleSnapshot: TLabel
+          object HLSLUpscaleSnapshotLabel: TShadowLabel
             Left = 8
             Top = 206
-            Width = 136
-            Height = 15
+            Width = 139
+            Height = 16
             Caption = 'Upscaled Snap Resolution'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelShadowMaskTileMode: TLabel
+          object ShadowMaskTileModeLabel: TShadowLabel
             Left = 8
             Top = 146
-            Width = 129
-            Height = 15
+            Width = 132
+            Height = 16
             Caption = 'Shadow Mask Tile Mode'
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
           object HLSLEnable: TAdvOfficeCheckBoxEx
@@ -3363,7 +3964,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object ShadowMaskTexture: TEdit
+          object ShadowMaskTexture: TEditEx
             Left = 8
             Top = 114
             Width = 269
@@ -3375,7 +3976,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentCtl3D = False
             TabOrder = 2
           end
-          object ButtonSelectShadowMaskTexture: TBitBtn
+          object ShadowMaskTextureButtonSelect: TBitBtnEx
             Left = 279
             Top = 114
             Width = 43
@@ -3385,9 +3986,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
-            OnClick = ButtonSelectShadowMaskTextureClick
+            OnClick = ShadowMaskTextureButtonSelectClick
           end
-          object HLSLPath: TEdit
+          object HLSLPath: TEditEx
             Left = 8
             Top = 70
             Width = 312
@@ -3401,7 +4002,7 @@ object FormMAMESettings: TFormMAMESettings
             ShowHint = True
             TabOrder = 4
           end
-          object ButtonSelectHLSLPath: TBitBtn
+          object HLSLPathButtonSelect: TBitBtnEx
             Left = 322
             Top = 70
             Width = 43
@@ -3411,7 +4012,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 5
-            OnClick = ButtonSelectHLSLPathClick
+            OnClick = HLSLPathButtonSelectClick
           end
           object ReadCustomHLSLFile: TAdvOfficeCheckBoxEx
             Left = 8
@@ -3439,7 +4040,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object HLSLIniFile: TEdit
+          object HLSLIniFile: TEditEx
             Left = 239
             Top = 259
             Width = 84
@@ -3452,7 +4053,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentCtl3D = False
             TabOrder = 8
           end
-          object HLSLIniFileButtonReset: TBitBtn
+          object HLSLIniFileButtonReset: TBitBtnEx
             Left = 325
             Top = 259
             Width = 39
@@ -3465,7 +4066,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 9
             OnClick = HLSLIniFileButtonResetClick
           end
-          object HLSLUpscaleSnapX: TEdit
+          object HLSLUpscaleSnapX: TEditEx
             Left = 8
             Top = 222
             Width = 41
@@ -3480,7 +4081,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 10
             OnKeyPress = HLSLUpscaleSnapXKeyPress
           end
-          object HLSLUpscaleSnapY: TEdit
+          object HLSLUpscaleSnapY: TEditEx
             Left = 62
             Top = 222
             Width = 41
@@ -3495,7 +4096,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 11
             OnKeyPress = HLSLUpscaleSnapYKeyPress
           end
-          object ButtonHLSLUpscaleSnapReset: TBitBtn
+          object HLSLUpscaleSnapButtonReset: TBitBtnEx
             Left = 113
             Top = 222
             Width = 43
@@ -3505,7 +4106,7 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 12
-            OnClick = ButtonHLSLUpscaleSnapResetClick
+            OnClick = HLSLUpscaleSnapButtonResetClick
           end
           object HLSLOversampling: TAdvOfficeCheckBoxEx
             Left = 8
@@ -3521,7 +4122,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             Themed = True
           end
-          object ShadowMaskTileMode: TComboBox
+          object ShadowMaskTileMode: TComboBox2Ex
             Left = 8
             Top = 162
             Width = 129
@@ -3543,7 +4144,7 @@ object FormMAMESettings: TFormMAMESettings
               'Screen Based'
               'Source Based')
           end
-          object ShadowMaskTextureButtonReset: TBitBtn
+          object ShadowMaskTextureButtonReset: TBitBtnEx
             Left = 323
             Top = 114
             Width = 43
@@ -3555,7 +4156,7 @@ object FormMAMESettings: TFormMAMESettings
             TabOrder = 15
             OnClick = ShadowMaskTextureButtonResetClick
           end
-          object VectorPostProcessingBox: TAdvGroupBoxEx
+          object VectorPostProcessingGroupBox: TAdvGroupBoxEx
             Left = 432
             Top = 54
             Width = 330
@@ -3565,7 +4166,7 @@ object FormMAMESettings: TFormMAMESettings
             Ctl3D = True
             Enabled = False
             TabOrder = 16
-            object LabelVectorBeamSmooth: TLabel
+            object VectorBeamSmoothLabel: TShadowLabel
               Left = 8
               Top = 20
               Width = 119
@@ -3576,9 +4177,15 @@ object FormMAMESettings: TFormMAMESettings
               ParentShowHint = False
               ShowAccelChar = False
               ShowHint = False
+              ShadowColor = clGray
+              ShadowEnabled = False
+              EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = False
             end
-            object LabelVectorMaximumAttenuation: TLabel
+            object VectorMaximumAttenuationLabel: TShadowLabel
               Left = 169
               Top = 20
               Width = 156
@@ -3589,9 +4196,15 @@ object FormMAMESettings: TFormMAMESettings
               ParentShowHint = False
               ShowAccelChar = False
               ShowHint = False
+              ShadowColor = clGray
+              ShadowEnabled = False
+              EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = False
             end
-            object LabelVectorMinimumLengthAttenuation: TLabel
+            object VectorMinimumLengthAttenuationLabel: TShadowLabel
               Left = 8
               Top = 63
               Width = 203
@@ -3602,6 +4215,12 @@ object FormMAMESettings: TFormMAMESettings
               ParentShowHint = False
               ShowAccelChar = False
               ShowHint = False
+              ShadowColor = clGray
+              ShadowEnabled = False
+              EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = False
             end
             object VectorBeamSmooth: TGaugeBar2
@@ -3653,7 +4272,7 @@ object FormMAMESettings: TFormMAMESettings
               OnChange = VectorMinimumLengthAttenuationChange
             end
           end
-          object HLSLBloomPostProcessingBox: TAdvGroupBoxEx
+          object HLSLBloomPostProcessingGroupBox: TAdvGroupBoxEx
             Left = 432
             Top = 192
             Width = 329
@@ -3662,18 +4281,24 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Bloom Post-Processing'
             Ctl3D = True
             TabOrder = 17
-            object LabelBloomBlendMode: TLabel
+            object BloomBlendModeLabel: TShadowLabel
               Left = 8
               Top = 20
-              Width = 102
-              Height = 15
+              Width = 105
+              Height = 16
               Caption = 'Bloom Blend Mode'
               ParentShowHint = False
               ShowAccelChar = False
               ShowHint = False
+              ShadowColor = clGray
+              ShadowEnabled = False
+              EllipsType = etNone
+              ColorFrame = clBlack
+              ColorInnerFrame = clBlack
+              Frames = []
               Transparent = True
             end
-            object BloomBlendMode: TComboBox
+            object BloomBlendMode: TComboBox2Ex
               Left = 8
               Top = 36
               Width = 129
@@ -3695,7 +4320,7 @@ object FormMAMESettings: TFormMAMESettings
                 'Brighten'
                 'Darken')
             end
-            object BloomLUTTextureScreen: TEdit
+            object BloomLUTTextureScreen: TEditEx
               Left = 8
               Top = 84
               Width = 222
@@ -3709,7 +4334,7 @@ object FormMAMESettings: TFormMAMESettings
               ShowHint = True
               TabOrder = 1
             end
-            object BloomLUTTextureScreenButtonSelect: TBitBtn
+            object BloomLUTTextureScreenButtonSelect: TBitBtnEx
               Left = 232
               Top = 84
               Width = 43
@@ -3721,7 +4346,7 @@ object FormMAMESettings: TFormMAMESettings
               TabOrder = 2
               OnClick = BloomLUTTextureScreenButtonSelectClick
             end
-            object BloomLUTTextureScreenButtonReset: TBitBtn
+            object BloomLUTTextureScreenButtonReset: TBitBtnEx
               Left = 276
               Top = 84
               Width = 43
@@ -3759,7 +4384,7 @@ object FormMAMESettings: TFormMAMESettings
               ReturnIsTab = False
               Themed = True
             end
-            object BloomLUTTextureUI: TEdit
+            object BloomLUTTextureUI: TEditEx
               Left = 8
               Top = 132
               Width = 222
@@ -3773,7 +4398,7 @@ object FormMAMESettings: TFormMAMESettings
               ShowHint = True
               TabOrder = 6
             end
-            object BloomLUTTextureUIButtonSelect: TBitBtn
+            object BloomLUTTextureUIButtonSelect: TBitBtnEx
               Left = 232
               Top = 132
               Width = 43
@@ -3785,7 +4410,7 @@ object FormMAMESettings: TFormMAMESettings
               TabOrder = 7
               OnClick = BloomLUTTextureUIButtonSelectClick
             end
-            object BloomLUTTextureUIButtonReset: TBitBtn
+            object BloomLUTTextureUIButtonReset: TBitBtnEx
               Left = 276
               Top = 132
               Width = 43
@@ -3804,28 +4429,34 @@ object FormMAMESettings: TFormMAMESettings
           Top = 0
           HelpContext = 2
           Caption = 'OpenGL'
-          object LabelEnableOpenGLFilterNotFF: TLabel
+          object EnableOpenGLFilterNotFFLabel: TShadowLabel
             Left = 253
             Top = 50
-            Width = 188
-            Height = 11
+            Width = 229
+            Height = 17
             Caption = 'Checked: Bilinear (Default); Unchecked: Plain'
             Font.Charset = ANSI_CHARSET
             Font.Color = 10900224
-            Font.Height = -9
-            Font.Name = 'Tahoma'
+            Font.Height = -11
+            Font.Name = 'Trebuchet MS'
             Font.Style = []
             ParentFont = False
             ParentShowHint = False
             ShowAccelChar = False
             ShowHint = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME: TLabel
+          object GLSL_Shader_MAMELabel: TShadowLabel
             Left = 18
             Top = 76
-            Width = 191
-            Height = 13
+            Width = 194
+            Height = 14
             Caption = 'Custom OpenGL GLSL Shader Set MAME'
             Font.Charset = ANSI_CHARSET
             Font.Color = clBlack
@@ -3834,13 +4465,19 @@ object FormMAMESettings: TFormMAMESettings
             Font.Style = []
             ParentFont = False
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen: TLabel
+          object GLSL_Shader_ScreenLabel: TShadowLabel
             Left = 239
             Top = 76
-            Width = 176
-            Height = 13
+            Width = 179
+            Height = 14
             Caption = 'Custom OpenGL GLSL Shader Screen'
             Font.Charset = ANSI_CHARSET
             Font.Color = clBlack
@@ -3849,186 +4486,312 @@ object FormMAMESettings: TFormMAMESettings
             Font.Style = []
             ParentFont = False
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen0: TLabel
+          object GLSL_Shader_Screen0Label: TShadowLabel
             Left = 230
             Top = 95
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '0'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen1: TLabel
+          object GLSL_Shader_Screen1Label: TShadowLabel
             Left = 230
             Top = 117
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '1'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen2: TLabel
+          object GLSL_Shader_Screen2Label: TShadowLabel
             Left = 230
             Top = 139
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '2'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen3: TLabel
+          object GLSL_Shader_Screen3Label: TShadowLabel
             Left = 230
             Top = 161
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '3'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen4: TLabel
+          object GLSL_Shader_Screen4Label: TShadowLabel
             Left = 230
             Top = 183
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '4'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen5: TLabel
+          object GLSL_Shader_Screen5Label: TShadowLabel
             Left = 230
             Top = 205
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '5'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen6: TLabel
+          object GLSL_Shader_Screen6Label: TShadowLabel
             Left = 230
             Top = 227
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '6'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen7: TLabel
+          object GLSL_Shader_Screen7Label: TShadowLabel
             Left = 230
             Top = 249
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '7'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen8: TLabel
+          object GLSL_Shader_Screen8Label: TShadowLabel
             Left = 230
             Top = 271
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '8'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_Screen9: TLabel
+          object GLSL_Shader_Screen9Label: TShadowLabel
             Left = 230
             Top = 293
-            Width = 6
-            Height = 15
+            Width = 9
+            Height = 16
             Caption = '9'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME0: TLabel
+          object GLSL_Shader_MAME0Label: TShadowLabel
             Left = 8
-            Top = 103
-            Width = 6
-            Height = 15
+            Top = 95
+            Width = 9
+            Height = 16
             Caption = '0'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME1: TLabel
+          object GLSL_Shader_MAME1Label: TShadowLabel
             Left = 8
-            Top = 125
-            Width = 6
-            Height = 15
+            Top = 117
+            Width = 9
+            Height = 16
             Caption = '1'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME2: TLabel
+          object GLSL_Shader_MAME2Label: TShadowLabel
             Left = 8
-            Top = 147
-            Width = 6
-            Height = 15
+            Top = 139
+            Width = 9
+            Height = 16
             Caption = '2'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME3: TLabel
+          object GLSL_Shader_MAME3Label: TShadowLabel
             Left = 8
-            Top = 169
-            Width = 6
-            Height = 15
+            Top = 161
+            Width = 9
+            Height = 16
             Caption = '3'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME4: TLabel
+          object GLSL_Shader_MAME4Label: TShadowLabel
             Left = 8
-            Top = 191
-            Width = 6
-            Height = 15
+            Top = 183
+            Width = 9
+            Height = 16
             Caption = '4'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME5: TLabel
+          object GLSL_Shader_MAME5Label: TShadowLabel
             Left = 8
-            Top = 213
-            Width = 6
-            Height = 15
+            Top = 205
+            Width = 9
+            Height = 16
             Caption = '5'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME6: TLabel
+          object GLSL_Shader_MAME6Label: TShadowLabel
             Left = 8
-            Top = 235
-            Width = 6
-            Height = 15
+            Top = 227
+            Width = 9
+            Height = 16
             Caption = '6'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME7: TLabel
+          object GLSL_Shader_MAME7Label: TShadowLabel
             Left = 8
-            Top = 257
-            Width = 6
-            Height = 15
+            Top = 249
+            Width = 9
+            Height = 16
             Caption = '7'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME8: TLabel
+          object GLSL_Shader_MAME8Label: TShadowLabel
             Left = 8
-            Top = 279
-            Width = 6
-            Height = 15
+            Top = 271
+            Width = 9
+            Height = 16
             Caption = '8'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
-          object LabelGLSL_Shader_MAME9: TLabel
+          object GLSL_Shader_MAME9Label: TShadowLabel
             Left = 8
-            Top = 301
-            Width = 6
-            Height = 15
+            Top = 293
+            Width = 9
+            Height = 16
             Caption = '9'
             ShowAccelChar = False
+            ShadowColor = clGray
+            ShadowEnabled = False
+            EllipsType = etNone
+            ColorFrame = clBlack
+            ColorInnerFrame = clBlack
+            Frames = []
             Transparent = True
           end
           object OpenGLForcePowerTwoTextures: TAdvOfficeCheckBoxEx
@@ -4102,7 +4865,7 @@ object FormMAMESettings: TFormMAMESettings
             Left = 235
             Top = 32
             Width = 214
-            Height = 20
+            Height = 18
             Checked = True
             TabOrder = 5
             Alignment = taLeftJustify
@@ -4111,7 +4874,7 @@ object FormMAMESettings: TFormMAMESettings
             State = cbChecked
             Themed = True
           end
-          object GLSL_Shader_Screen0: TEdit
+          object GLSL_Shader_Screen0: TEditEx
             Left = 239
             Top = 92
             Width = 180
@@ -4119,7 +4882,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 6
           end
-          object ButtonGLSL_Shader_Screen0: TBitBtn
+          object GLSL_Shader_Screen0ButtonSelect: TBitBtnEx
             Left = 421
             Top = 92
             Width = 21
@@ -4129,9 +4892,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 7
-            OnClick = ButtonGLSL_Shader_Screen0Click
+            OnClick = GLSL_Shader_Screen0ButtonSelectClick
           end
-          object GLSL_Shader_Screen1: TEdit
+          object GLSL_Shader_Screen1: TEditEx
             Left = 239
             Top = 114
             Width = 180
@@ -4139,7 +4902,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 8
           end
-          object ButtonGLSL_Shader_Screen1: TBitBtn
+          object GLSL_Shader_Screen1ButtonSelect: TBitBtnEx
             Left = 421
             Top = 114
             Width = 21
@@ -4149,9 +4912,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 9
-            OnClick = ButtonGLSL_Shader_Screen1Click
+            OnClick = GLSL_Shader_Screen1ButtonSelectClick
           end
-          object GLSL_Shader_Screen2: TEdit
+          object GLSL_Shader_Screen2: TEditEx
             Left = 239
             Top = 136
             Width = 180
@@ -4159,7 +4922,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 10
           end
-          object ButtonGLSL_Shader_Screen2: TBitBtn
+          object GLSL_Shader_Screen2ButtonSelect: TBitBtnEx
             Left = 421
             Top = 136
             Width = 21
@@ -4169,9 +4932,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 11
-            OnClick = ButtonGLSL_Shader_Screen2Click
+            OnClick = GLSL_Shader_Screen2ButtonSelectClick
           end
-          object GLSL_Shader_Screen3: TEdit
+          object GLSL_Shader_Screen3: TEditEx
             Left = 239
             Top = 158
             Width = 180
@@ -4179,7 +4942,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 12
           end
-          object ButtonGLSL_Shader_Screen3: TBitBtn
+          object GLSL_Shader_Screen3ButtonSelect: TBitBtnEx
             Left = 421
             Top = 158
             Width = 21
@@ -4189,9 +4952,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 13
-            OnClick = ButtonGLSL_Shader_Screen3Click
+            OnClick = GLSL_Shader_Screen3ButtonSelectClick
           end
-          object GLSL_Shader_Screen4: TEdit
+          object GLSL_Shader_Screen4: TEditEx
             Left = 239
             Top = 180
             Width = 180
@@ -4199,7 +4962,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 14
           end
-          object ButtonGLSL_Shader_Screen4: TBitBtn
+          object GLSL_Shader_Screen4ButtonSelect: TBitBtnEx
             Left = 421
             Top = 180
             Width = 21
@@ -4209,9 +4972,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 15
-            OnClick = ButtonGLSL_Shader_Screen4Click
+            OnClick = GLSL_Shader_Screen4ButtonSelectClick
           end
-          object GLSL_Shader_Screen5: TEdit
+          object GLSL_Shader_Screen5: TEditEx
             Left = 239
             Top = 202
             Width = 180
@@ -4219,7 +4982,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 16
           end
-          object ButtonGLSL_Shader_Screen5: TBitBtn
+          object GLSL_Shader_Screen5ButtonSelect: TBitBtnEx
             Left = 421
             Top = 202
             Width = 21
@@ -4229,9 +4992,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 17
-            OnClick = ButtonGLSL_Shader_Screen5Click
+            OnClick = GLSL_Shader_Screen5ButtonSelectClick
           end
-          object GLSL_Shader_Screen6: TEdit
+          object GLSL_Shader_Screen6: TEditEx
             Left = 239
             Top = 224
             Width = 180
@@ -4239,7 +5002,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 18
           end
-          object ButtonGLSL_Shader_Screen6: TBitBtn
+          object GLSL_Shader_Screen6ButtonSelect: TBitBtnEx
             Left = 421
             Top = 224
             Width = 21
@@ -4249,9 +5012,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 19
-            OnClick = ButtonGLSL_Shader_Screen6Click
+            OnClick = GLSL_Shader_Screen6ButtonSelectClick
           end
-          object GLSL_Shader_Screen7: TEdit
+          object GLSL_Shader_Screen7: TEditEx
             Left = 239
             Top = 246
             Width = 180
@@ -4259,7 +5022,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 20
           end
-          object ButtonGLSL_Shader_Screen7: TBitBtn
+          object GLSL_Shader_Screen7ButtonSelect: TBitBtnEx
             Left = 421
             Top = 246
             Width = 21
@@ -4269,9 +5032,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 21
-            OnClick = ButtonGLSL_Shader_Screen7Click
+            OnClick = GLSL_Shader_Screen7ButtonSelectClick
           end
-          object GLSL_Shader_Screen8: TEdit
+          object GLSL_Shader_Screen8: TEditEx
             Left = 239
             Top = 268
             Width = 180
@@ -4279,7 +5042,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 22
           end
-          object ButtonGLSL_Shader_Screen8: TBitBtn
+          object GLSL_Shader_Screen8ButtonSelect: TBitBtnEx
             Left = 421
             Top = 268
             Width = 21
@@ -4289,9 +5052,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 23
-            OnClick = ButtonGLSL_Shader_Screen8Click
+            OnClick = GLSL_Shader_Screen8ButtonSelectClick
           end
-          object GLSL_Shader_Screen9: TEdit
+          object GLSL_Shader_Screen9: TEditEx
             Left = 239
             Top = 290
             Width = 180
@@ -4299,7 +5062,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 24
           end
-          object ButtonGLSL_Shader_Screen9: TBitBtn
+          object GLSL_Shader_Screen9ButtonSelect: TBitBtnEx
             Left = 421
             Top = 290
             Width = 21
@@ -4309,9 +5072,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 25
-            OnClick = ButtonGLSL_Shader_Screen9Click
+            OnClick = GLSL_Shader_Screen9ButtonSelectClick
           end
-          object GLSL_Shader_MAME0: TEdit
+          object GLSL_Shader_MAME0: TEditEx
             Left = 17
             Top = 92
             Width = 180
@@ -4319,7 +5082,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 26
           end
-          object ButtonGLSL_Shader_MAME0: TBitBtn
+          object GLSL_Shader_MAME0ButtonSelect: TBitBtnEx
             Left = 199
             Top = 92
             Width = 21
@@ -4329,9 +5092,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 27
-            OnClick = ButtonGLSL_Shader_MAME0Click
+            OnClick = GLSL_Shader_MAME0ButtonSelectClick
           end
-          object GLSL_Shader_MAME1: TEdit
+          object GLSL_Shader_MAME1: TEditEx
             Left = 17
             Top = 114
             Width = 180
@@ -4339,7 +5102,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 28
           end
-          object ButtonGLSL_Shader_MAME1: TBitBtn
+          object GLSL_Shader_MAME1ButtonSelect: TBitBtnEx
             Left = 199
             Top = 114
             Width = 21
@@ -4349,9 +5112,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 29
-            OnClick = ButtonGLSL_Shader_MAME1Click
+            OnClick = GLSL_Shader_MAME1ButtonSelectClick
           end
-          object GLSL_Shader_MAME2: TEdit
+          object GLSL_Shader_MAME2: TEditEx
             Left = 17
             Top = 136
             Width = 180
@@ -4359,7 +5122,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 30
           end
-          object ButtonGLSL_Shader_MAME2: TBitBtn
+          object GLSL_Shader_MAME2ButtonSelect: TBitBtnEx
             Left = 199
             Top = 136
             Width = 21
@@ -4369,9 +5132,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 31
-            OnClick = ButtonGLSL_Shader_MAME2Click
+            OnClick = GLSL_Shader_MAME2ButtonSelectClick
           end
-          object GLSL_Shader_MAME3: TEdit
+          object GLSL_Shader_MAME3: TEditEx
             Left = 17
             Top = 158
             Width = 180
@@ -4379,7 +5142,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 32
           end
-          object ButtonGLSL_Shader_MAME3: TBitBtn
+          object GLSL_Shader_MAME3ButtonSelect: TBitBtnEx
             Left = 199
             Top = 158
             Width = 21
@@ -4389,9 +5152,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 33
-            OnClick = ButtonGLSL_Shader_MAME3Click
+            OnClick = GLSL_Shader_MAME3ButtonSelectClick
           end
-          object GLSL_Shader_MAME4: TEdit
+          object GLSL_Shader_MAME4: TEditEx
             Left = 17
             Top = 180
             Width = 180
@@ -4399,7 +5162,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 34
           end
-          object ButtonGLSL_Shader_MAME4: TBitBtn
+          object GLSL_Shader_MAME4ButtonSelect: TBitBtnEx
             Left = 199
             Top = 180
             Width = 21
@@ -4409,9 +5172,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 35
-            OnClick = ButtonGLSL_Shader_MAME4Click
+            OnClick = GLSL_Shader_MAME4ButtonSelectClick
           end
-          object GLSL_Shader_MAME5: TEdit
+          object GLSL_Shader_MAME5: TEditEx
             Left = 17
             Top = 202
             Width = 180
@@ -4419,7 +5182,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 36
           end
-          object ButtonGLSL_Shader_MAME5: TBitBtn
+          object GLSL_Shader_MAME5ButtonSelect: TBitBtnEx
             Left = 199
             Top = 202
             Width = 21
@@ -4429,9 +5192,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 37
-            OnClick = ButtonGLSL_Shader_MAME5Click
+            OnClick = GLSL_Shader_MAME5ButtonSelectClick
           end
-          object GLSL_Shader_MAME6: TEdit
+          object GLSL_Shader_MAME6: TEditEx
             Left = 17
             Top = 224
             Width = 180
@@ -4439,7 +5202,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 38
           end
-          object ButtonGLSL_Shader_MAME6: TBitBtn
+          object GLSL_Shader_MAME6ButtonSelect: TBitBtnEx
             Left = 199
             Top = 224
             Width = 21
@@ -4449,9 +5212,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 39
-            OnClick = ButtonGLSL_Shader_MAME6Click
+            OnClick = GLSL_Shader_MAME6ButtonSelectClick
           end
-          object GLSL_Shader_MAME7: TEdit
+          object GLSL_Shader_MAME7: TEditEx
             Left = 17
             Top = 246
             Width = 180
@@ -4459,7 +5222,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 40
           end
-          object ButtonGLSL_Shader_MAME7: TBitBtn
+          object GLSL_Shader_MAME7ButtonSelect: TBitBtnEx
             Left = 199
             Top = 246
             Width = 21
@@ -4469,9 +5232,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 41
-            OnClick = ButtonGLSL_Shader_MAME7Click
+            OnClick = GLSL_Shader_MAME7ButtonSelectClick
           end
-          object GLSL_Shader_MAME8: TEdit
+          object GLSL_Shader_MAME8: TEditEx
             Left = 17
             Top = 268
             Width = 180
@@ -4479,7 +5242,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 42
           end
-          object ButtonGLSL_Shader_MAME8: TBitBtn
+          object GLSL_Shader_MAME8ButtonSelect: TBitBtnEx
             Left = 199
             Top = 268
             Width = 21
@@ -4489,9 +5252,9 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 43
-            OnClick = ButtonGLSL_Shader_MAME8Click
+            OnClick = GLSL_Shader_MAME8ButtonSelectClick
           end
-          object GLSL_Shader_MAME9: TEdit
+          object GLSL_Shader_MAME9: TEditEx
             Left = 17
             Top = 290
             Width = 180
@@ -4499,7 +5262,7 @@ object FormMAMESettings: TFormMAMESettings
             AutoSize = False
             TabOrder = 44
           end
-          object ButtonGLSL_Shader_MAME9: TBitBtn
+          object GLSL_Shader_MAME9ButtonSelect: TBitBtnEx
             Left = 199
             Top = 290
             Width = 21
@@ -4509,67 +5272,8 @@ object FormMAMESettings: TFormMAMESettings
             ParentShowHint = False
             ShowHint = True
             TabOrder = 45
-            OnClick = ButtonGLSL_Shader_MAME9Click
+            OnClick = GLSL_Shader_MAME9ButtonSelectClick
           end
-        end
-      end
-      object ToolBarVideoPostProcessingEffectsPages: TToolBar
-        Tag = 1
-        Left = 16
-        Top = 16
-        Width = 549
-        Height = 21
-        Align = alNone
-        ButtonWidth = 184
-        EdgeBorders = [ebBottom]
-        Flat = True
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        Images = FormMain.IL_MenuPopup
-        List = True
-        ParentFont = False
-        ShowCaptions = True
-        TabOrder = 3
-        Transparent = True
-        Wrapable = False
-        object ButtonPageVideoEffectsBGFX: TToolButton
-          Left = 0
-          Top = 0
-          AutoSize = True
-          Caption = 'BGFX Post-Processing Effects'
-          Enabled = False
-          Grouped = True
-          ImageIndex = 500
-          Style = tbsCheck
-          OnClick = ButtonPageVideoEffectsBGFXClick
-        end
-        object ButtonPageVideoEffectsHLSL: TToolButton
-          Tag = 1
-          Left = 172
-          Top = 0
-          AutoSize = True
-          Caption = 'Direct3D Post-Processing Effects'
-          Down = True
-          Enabled = False
-          Grouped = True
-          ImageIndex = 1
-          Style = tbsCheck
-          OnClick = ButtonPageVideoEffectsBGFXClick
-        end
-        object ButtonPageVideoEffectsGLSL: TToolButton
-          Tag = 2
-          Left = 360
-          Top = 0
-          AutoSize = True
-          Caption = 'OpenGL Post-Processing Effects'
-          Enabled = False
-          Grouped = True
-          ImageIndex = 500
-          Style = tbsCheck
-          OnClick = ButtonPageVideoEffectsBGFXClick
         end
       end
     end
@@ -4577,30 +5281,45 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'LUA'
-      object LabelLUAPluginsToEnable: TLabel
+      object LUAPluginsToEnableLabel: TShadowLabel
         Left = 16
         Top = 35
-        Width = 151
-        Height = 15
+        Width = 154
+        Height = 16
         Caption = 'List of LUA Plugins to Enable'
         Enabled = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelLUAPluginsToEnable2: TLabel
+      object LUAPluginsToEnable2Label: TShadowLabel
         Left = 171
-        Top = 36
-        Width = 107
-        Height = 14
+        Top = 35
+        Width = 119
+        Height = 16
         Caption = '(check plugins to use)'
         Enabled = False
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -11
-        Font.Name = 'Arial'
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
       end
-      object AutobootBox: TAdvGroupBoxEx
+      object AutobootGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 289
         Width = 297
@@ -4610,20 +5329,26 @@ object FormMAMESettings: TFormMAMESettings
         Ctl3D = True
         Enabled = False
         TabOrder = 0
-        object LabelAutobootCommand: TLabel
+        object AutobootCommandLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 206
-          Height = 15
+          Width = 209
+          Height = 16
           Caption = 'Execute Command After Machine Boot'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAutobootDelay: TLabel
+        object AutobootDelayLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 121
-          Height = 15
+          Width = 124
+          Height = 16
           Hint = 'Delay Timer [%s]'
           HelpType = htKeyword
           HelpKeyword = 'sec'
@@ -4631,19 +5356,31 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelAutobootLuaScript: TLabel
+        object AutobootLuaScriptLabel: TShadowLabel
           Left = 8
           Top = 107
-          Width = 218
-          Height = 15
+          Width = 221
+          Height = 16
           Hint = 'Delay Timer [%u sec]'
           Caption = 'LUA Script to Execute After Machine Boot'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object AutobootCommand: TEdit
+        object AutobootCommand: TEditEx
           Left = 8
           Top = 36
           Width = 236
@@ -4669,7 +5406,7 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0
           OnChange = AutobootDelayChange
         end
-        object AutobootLuaScript: TEdit
+        object AutobootLuaScript: TEditEx
           Left = 8
           Top = 123
           Width = 236
@@ -4683,7 +5420,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 2
         end
-        object AutobootLuaScriptSelectButton: TBitBtn
+        object AutobootLuaScriptSelectButton: TBitBtnEx
           Left = 246
           Top = 123
           Width = 43
@@ -4695,7 +5432,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 3
           OnClick = AutobootLuaScriptSelectButtonClick
         end
-        object AutobootCommandButtonClear: TBitBtn
+        object AutobootCommandButtonClear: TBitBtnEx
           Left = 246
           Top = 36
           Width = 43
@@ -4800,7 +5537,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 3
         View = elsReport
       end
-      object GroupBoxAudio: TAdvGroupBoxEx
+      object AudioGroupBox: TAdvGroupBoxEx
         Left = 632
         Top = 65
         Width = 222
@@ -4810,43 +5547,67 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Audio'
         ParentCtl3D = True
         TabOrder = 4
-        object LabelAudioLatency: TLabel
+        object AudioLatencyLabel: TShadowLabel
           Left = 95
           Top = 107
-          Width = 76
-          Height = 15
+          Width = 79
+          Height = 16
           Caption = 'Audio Latency'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSampleRate: TLabel
+        object SampleRateLabel: TShadowLabel
           Left = 8
           Top = 107
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Sample Rate'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelVolume: TLabel
+        object VolumeLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 138
-          Height = 15
+          Width = 141
+          Height = 16
           Hint = 'Volume Attenuation [%ddB]'
           Caption = 'Volume Attenuation [0dB]'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelSoundOutputMethod: TLabel
+        object SoundOutputMethodLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 109
-          Height = 15
+          Width = 112
+          Height = 16
           Caption = 'Sound Output Mode'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object Samples: TAdvOfficeCheckBoxEx
@@ -4863,7 +5624,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object AudioLatency: TComboBox
+        object AudioLatency: TComboBox2Ex
           Left = 95
           Top = 123
           Width = 81
@@ -4891,7 +5652,7 @@ object FormMAMESettings: TFormMAMESettings
             '4/5'
             '5/5')
         end
-        object SampleRate: TComboBox
+        object SampleRate: TComboBox2Ex
           Left = 8
           Top = 123
           Width = 80
@@ -4934,7 +5695,7 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0
           OnChange = VolumeChange
         end
-        object ButtonAudioLatencyReset: TBitBtn
+        object AudioLatencyButtonReset: TBitBtnEx
           Left = 177
           Top = 123
           Width = 38
@@ -4942,9 +5703,9 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 'Set default latency'
           Caption = 'Reset'
           TabOrder = 4
-          OnClick = ButtonAudioLatencyResetClick
+          OnClick = AudioLatencyButtonResetClick
         end
-        object SoundOutputMethod: TComboBox
+        object SoundOutputMethod: TComboBox2Ex
           Left = 8
           Top = 36
           Width = 115
@@ -4980,34 +5741,52 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'PortAudio Settings'
         Ctl3D = True
         TabOrder = 5
-        object LabelPortAudioAPI: TLabel
+        object PortAudioAPILabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 18
-          Height = 15
+          Width = 21
+          Height = 16
           Caption = 'API'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelPortAudioDevice: TLabel
+        object PortAudioDeviceLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 35
-          Height = 15
+          Width = 38
+          Height = 16
           Caption = 'Device'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelPortAudioLatency: TLabel
+        object PortAudioLatencyLabel: TShadowLabel
           Left = 8
           Top = 107
-          Width = 103
-          Height = 15
+          Width = 106
+          Height = 16
           Caption = 'Latency, in seconds'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object ButtonClearPortAudioAPI: TBitBtn
+        object PortAudioAPIButtonClear: TBitBtnEx
           Left = 172
           Top = 36
           Width = 43
@@ -5016,7 +5795,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Clear'
           TabOrder = 0
         end
-        object PortAudioAPI: TEdit
+        object PortAudioAPI: TEditEx
           Left = 8
           Top = 36
           Width = 161
@@ -5026,7 +5805,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           TabOrder = 1
         end
-        object PortAudioDevice: TEdit
+        object PortAudioDevice: TEditEx
           Left = 8
           Top = 80
           Width = 161
@@ -5036,7 +5815,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = False
           TabOrder = 2
         end
-        object ButtonClearPortAudioDevice: TBitBtn
+        object PortAudioDeviceButtonClear: TBitBtnEx
           Left = 172
           Top = 80
           Width = 43
@@ -5045,7 +5824,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Clear'
           TabOrder = 3
         end
-        object PortAudioLatency: TEdit
+        object PortAudioLatency: TEditEx
           Left = 8
           Top = 124
           Width = 161
@@ -5056,7 +5835,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 4
           OnKeyPress = PortAudioLatencyKeyPress
         end
-        object ButtonResetPortAudioLatency: TBitBtn
+        object PortAudioLatencyButtonReset: TBitBtnEx
           Left = 172
           Top = 124
           Width = 43
@@ -5071,34 +5850,46 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Input'
-      object LabelCoinImpulse: TLabel
+      object CoinImpulseLabel: TShadowLabel
         Left = 168
         Top = 120
-        Width = 100
-        Height = 15
+        Width = 103
+        Height = 16
         Caption = 'Coin Impulse Time'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelControllerDefinitions: TLabel
+      object ControllerDefinitionsLabel: TShadowLabel
         Left = 16
         Top = 120
-        Width = 113
-        Height = 15
+        Width = 116
+        Height = 16
         Caption = 'Controller Definitions'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelRecordInputTimecodeFile: TShadowLabel
+      object RecordInputTimecodeFileLabel: TShadowLabel
         Left = 32
-        Top = 398
-        Width = 147
-        Height = 15
-        Caption = '(to be used with record input)'
+        Top = 397
+        Width = 140
+        Height = 19
+        Caption = '(used with record input)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -11
-        Font.Name = 'Arial'
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
@@ -5108,17 +5899,18 @@ object FormMAMESettings: TFormMAMESettings
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
         Frames = []
+        Transparent = True
       end
-      object LabelExitAfterInputPlayback: TShadowLabel
+      object ExitAfterInputPlaybackLabel: TShadowLabel
         Left = 232
-        Top = 398
-        Width = 158
-        Height = 15
-        Caption = '(to be used with playback input)'
+        Top = 397
+        Width = 150
+        Height = 19
+        Caption = '(used with playback input)'
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -11
-        Font.Name = 'Arial'
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
         ShowAccelChar = False
@@ -5128,6 +5920,7 @@ object FormMAMESettings: TFormMAMESettings
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
         Frames = []
+        Transparent = True
       end
       object MultiKeyboard: TAdvOfficeCheckBoxEx
         Left = 16
@@ -5253,7 +6046,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object JoystickBox: TAdvGroupBoxEx
+      object JoystickGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 163
         Width = 297
@@ -5262,7 +6055,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Joystick'
         ParentCtl3D = True
         TabOrder = 10
-        object LabelJoystickDeadzone: TLabel
+        object JoystickDeadzoneLabel: TShadowLabel
           Left = 8
           Top = 42
           Width = 136
@@ -5273,9 +6066,15 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelJoystickSaturation: TLabel
+        object JoystickSaturationLabel: TShadowLabel
           Left = 152
           Top = 42
           Width = 136
@@ -5286,6 +6085,12 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object JoystickDeadzone: TGaugeBar2
@@ -5351,7 +6156,7 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = JoystickSaturationChange
         end
       end
-      object LabelAnalogSettings: TAdvGroupBoxEx
+      object AnalogSettingsGroupBox: TAdvGroupBoxEx
         Left = 562
         Top = 12
         Width = 289
@@ -5360,79 +6165,127 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Automatic Device Selection [Analog Controls]'
         ParentCtl3D = True
         TabOrder = 11
-        object LabelAnalog_Paddle: TLabel
+        object Analog_PaddleLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 36
-          Height = 15
+          Width = 39
+          Height = 16
           Caption = 'Paddle'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Joystick: TLabel
+        object Analog_JoystickLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 82
-          Height = 15
+          Width = 85
+          Height = 16
           Caption = 'Analog Joystick'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_LightGun: TLabel
+        object Analog_LightGunLabel: TShadowLabel
           Left = 152
           Top = 108
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Light Gun'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Pedal: TLabel
+        object Analog_PedalLabel: TShadowLabel
           Left = 152
           Top = 20
-          Width = 29
-          Height = 15
+          Width = 32
+          Height = 16
           Caption = 'Pedal'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Dial: TLabel
+        object Analog_DialLabel: TShadowLabel
           Left = 152
           Top = 64
-          Width = 20
-          Height = 15
+          Width = 23
+          Height = 16
           Caption = 'Dial'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Trackball: TLabel
+        object Analog_TrackballLabel: TShadowLabel
           Left = 152
           Top = 152
-          Width = 48
-          Height = 15
+          Width = 51
+          Height = 16
           Caption = 'Trackball'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Positional: TLabel
+        object Analog_PositionalLabel: TShadowLabel
           Left = 8
           Top = 108
-          Width = 52
-          Height = 15
+          Width = 55
+          Height = 16
           Caption = 'Positional'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelAnalog_Mouse: TLabel
+        object Analog_MouseLabel: TShadowLabel
           Left = 8
           Top = 152
-          Width = 36
-          Height = 15
+          Width = 39
+          Height = 16
           Caption = 'Mouse'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Analog_Paddle: TComboBox
+        object Analog_Paddle: TComboBox2Ex
           Left = 8
           Top = 36
           Width = 129
@@ -5460,7 +6313,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Joystick: TComboBox
+        object Analog_Joystick: TComboBox2Ex
           Left = 8
           Top = 80
           Width = 129
@@ -5488,7 +6341,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_LightGun: TComboBox
+        object Analog_LightGun: TComboBox2Ex
           Left = 152
           Top = 124
           Width = 129
@@ -5516,7 +6369,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Pedal: TComboBox
+        object Analog_Pedal: TComboBox2Ex
           Left = 152
           Top = 36
           Width = 129
@@ -5544,7 +6397,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Dial: TComboBox
+        object Analog_Dial: TComboBox2Ex
           Left = 152
           Top = 80
           Width = 129
@@ -5572,7 +6425,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Trackball: TComboBox
+        object Analog_Trackball: TComboBox2Ex
           Left = 152
           Top = 168
           Width = 129
@@ -5600,7 +6453,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Positional: TComboBox
+        object Analog_Positional: TComboBox2Ex
           Left = 8
           Top = 124
           Width = 129
@@ -5628,7 +6481,7 @@ object FormMAMESettings: TFormMAMESettings
             'Joystick'
             'Lightgun')
         end
-        object Analog_Mouse: TComboBox
+        object Analog_Mouse: TComboBox2Ex
           Left = 8
           Top = 168
           Width = 129
@@ -5671,7 +6524,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object CoinImpulse: TComboBox
+      object CoinImpulse: TComboBox2Ex
         Left = 168
         Top = 136
         Width = 145
@@ -5704,7 +6557,7 @@ object FormMAMESettings: TFormMAMESettings
           '9 seconds'
           '10 seconds')
       end
-      object ControllerDefinitions: TComboBox
+      object ControllerDefinitions: TComboBox2Ex
         Left = 16
         Top = 136
         Width = 145
@@ -5731,34 +6584,45 @@ object FormMAMESettings: TFormMAMESettings
         Top = 372
         Width = 289
         Height = 65
+        CheckBox.Action = caNone
         CheckBox.Hint = 'Enable local http server'
         CheckBox.Visible = True
+        Transparent = False
         RoundEdges = True
         Caption = 'Enable HTTP Server'
-        Enabled = False
         ParentCtl3D = True
         TabOrder = 15
-        object Label2: TLabel
+        object HTTPPortLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 22
-          Height = 15
+          Width = 25
+          Height = 16
           Caption = 'Port'
-          Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label3: TLabel
+        object HTTPPathLabel: TShadowLabel
           Left = 56
           Top = 20
-          Width = 119
-          Height = 15
+          Width = 122
+          Height = 16
           Caption = 'Root Path to Web Files'
-          Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object HTTPPort: TEdit
+        object HTTPPort: TEditEx
           Left = 8
           Top = 36
           Width = 45
@@ -5768,12 +6632,11 @@ object FormMAMESettings: TFormMAMESettings
           AutoSize = False
           Color = clWhite
           Ctl3D = True
-          Enabled = False
           ParentCtl3D = False
           TabOrder = 0
           OnKeyPress = HTTPPortKeyPress
         end
-        object HTTPPath: TEdit
+        object HTTPPath: TEditEx
           Left = 57
           Top = 36
           Width = 178
@@ -5782,25 +6645,23 @@ object FormMAMESettings: TFormMAMESettings
           AutoSize = False
           Color = clWhite
           Ctl3D = True
-          Enabled = False
           ParentCtl3D = False
           TabOrder = 1
         end
-        object ButtonResetHTTPServer: TBitBtn
+        object HTTPServerButtonReset: TBitBtnEx
           Left = 238
           Top = 36
           Width = 43
           Height = 21
           Hint = 'Reset to default values'
           Caption = 'Reset'
-          Enabled = False
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
-          OnClick = ButtonResetHTTPServerClick
+          OnClick = HTTPServerButtonResetClick
         end
       end
-      object UIModeBox: TAdvGroupBoxEx
+      object UIModeGroupBox: TAdvGroupBoxEx
         Left = 562
         Top = 224
         Width = 289
@@ -5809,16 +6670,22 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Full Keyboard Emulation (User Interface Disabled)'
         ParentCtl3D = True
         TabOrder = 16
-        object LabelUIModeKeyCustom: TLabel
+        object UIModeKeyCustomLabel: TShadowLabel
           Left = 8
           Top = 24
-          Width = 66
-          Height = 15
+          Width = 69
+          Height = 16
           Caption = 'ON/OFF Key'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object UIModeKeyCustom: TEdit
+        object UIModeKeyCustom: TEditEx
           Left = 8
           Top = 40
           Width = 273
@@ -5830,7 +6697,7 @@ object FormMAMESettings: TFormMAMESettings
           ParentCtl3D = False
           TabOrder = 0
         end
-        object ButtonUIModeKeyDetectKey: TBitBtn
+        object UIModeKeyButtonDetectKey: TBitBtnEx
           Left = 122
           Top = 18
           Width = 21
@@ -5843,10 +6710,10 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 1
           TabStop = False
           Visible = False
-          OnClick = ButtonUIModeKeyDetectKeyClick
+          OnClick = UIModeKeyButtonDetectKeyClick
         end
       end
-      object CommOptionsBox: TAdvGroupBoxEx
+      object CommOptionsGroupBox: TAdvGroupBoxEx
         Left = 328
         Top = 12
         Width = 219
@@ -5855,43 +6722,73 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Comm Options'
         Ctl3D = True
         TabOrder = 17
-        object LabelCommLocalHost: TLabel
+        object CommLocalHostLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 128
-          Height = 15
+          Width = 131
+          Height = 16
           Caption = 'Local Address to Bind to'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelCommLocalPort: TLabel
+        object CommLocalPortLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 108
-          Height = 15
+          Width = 111
+          Height = 16
           Caption = 'Local Port to Bind to'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelCommRemoteHost: TLabel
+        object CommRemoteHostLabel: TShadowLabel
           Left = 8
           Top = 108
-          Width = 128
-          Height = 15
+          Width = 131
+          Height = 16
           Caption = 'Local Address to Bind to'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelCommRemotePort: TLabel
+        object CommRemotePortLabel: TShadowLabel
           Left = 8
           Top = 152
-          Width = 108
-          Height = 15
+          Width = 111
+          Height = 16
           Caption = 'Local Port to Bind to'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object CommLocalHost: TEdit
+        object CommLocalHost: TEditEx
           Left = 8
           Top = 36
           Width = 157
@@ -5907,7 +6804,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 0
           OnKeyPress = CommLocalHostKeyPress
         end
-        object CommLocalPort: TEdit
+        object CommLocalPort: TEditEx
           Left = 8
           Top = 80
           Width = 157
@@ -5923,7 +6820,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 1
           OnKeyPress = CommLocalPortKeyPress
         end
-        object CommRemoteHost: TEdit
+        object CommRemoteHost: TEditEx
           Left = 8
           Top = 124
           Width = 157
@@ -5939,7 +6836,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 2
           OnKeyPress = CommLocalHostKeyPress
         end
-        object CommRemotePort: TEdit
+        object CommRemotePort: TEditEx
           Left = 8
           Top = 168
           Width = 157
@@ -5955,7 +6852,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 3
           OnKeyPress = CommLocalPortKeyPress
         end
-        object CommLocalHostButtonReset: TBitBtn
+        object CommLocalHostButtonReset: TBitBtnEx
           Left = 168
           Top = 36
           Width = 43
@@ -5967,7 +6864,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 4
           OnClick = CommLocalHostButtonResetClick
         end
-        object CommLocalPortButtonReset: TBitBtn
+        object CommLocalPortButtonReset: TBitBtnEx
           Left = 168
           Top = 80
           Width = 43
@@ -5979,7 +6876,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 5
           OnClick = CommLocalPortButtonResetClick
         end
-        object CommRemoteHostButtonReset: TBitBtn
+        object CommRemoteHostButtonReset: TBitBtnEx
           Left = 168
           Top = 124
           Width = 43
@@ -5991,7 +6888,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 6
           OnClick = CommRemoteHostButtonResetClick
         end
-        object CommRemotePortButtonReset: TBitBtn
+        object CommRemotePortButtonReset: TBitBtnEx
           Left = 168
           Top = 168
           Width = 43
@@ -6060,39 +6957,67 @@ object FormMAMESettings: TFormMAMESettings
         Ctl3D = True
         Enabled = False
         TabOrder = 21
-        object LabelOSDInputKeyboardProvider: TLabel
+        object OSDInputKeyboardProviderLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 97
-          Height = 15
+          Width = 100
+          Height = 16
           Caption = 'Keyboard Provider'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelOSDInputMouseProvider: TLabel
+        object OSDInputMouseProviderLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 83
-          Height = 15
+          Width = 86
+          Height = 16
           Caption = 'Mouse Provider'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelOSDInputLightgunProvider: TLabel
+        object OSDInputLightgunProviderLabel: TShadowLabel
           Left = 152
           Top = 20
-          Width = 95
-          Height = 15
+          Width = 98
+          Height = 16
           Caption = 'Lightgun Provider'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelOSDInputJoystickProvider: TLabel
+        object OSDInputJoystickProviderLabel: TShadowLabel
           Left = 152
           Top = 64
-          Width = 88
-          Height = 15
+          Width = 91
+          Height = 16
           Caption = 'Joystick Provider'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object OSDInputKeyboardProvider: TComboBox
+        object OSDInputKeyboardProvider: TComboBox2Ex
           Left = 8
           Top = 36
           Width = 137
@@ -6116,7 +7041,7 @@ object FormMAMESettings: TFormMAMESettings
             'UWP (Windows 10)'
             'None')
         end
-        object OSDInputMouseProvider: TComboBox
+        object OSDInputMouseProvider: TComboBox2Ex
           Left = 8
           Top = 80
           Width = 137
@@ -6139,7 +7064,7 @@ object FormMAMESettings: TFormMAMESettings
             'Win32 Input'
             'None')
         end
-        object OSDInputLightgunProvider: TComboBox
+        object OSDInputLightgunProvider: TComboBox2Ex
           Left = 152
           Top = 36
           Width = 137
@@ -6160,7 +7085,7 @@ object FormMAMESettings: TFormMAMESettings
             'Win32 Input'
             'None')
         end
-        object OSDInputJoystickProvider: TComboBox
+        object OSDInputJoystickProvider: TComboBox2Ex
           Left = 152
           Top = 80
           Width = 137
@@ -6185,23 +7110,30 @@ object FormMAMESettings: TFormMAMESettings
             'None')
         end
       end
-      object OSDOutputOptionsBox: TAdvGroupBoxEx
+      object OSDOutputOptionsGroupBox: TAdvGroupBoxEx
         Left = 328
         Top = 300
         Width = 217
         Height = 65
         RoundEdges = True
         Caption = 'OSD Output Options'
-        Ctl3D = True
+        ParentCtl3D = True
         TabOrder = 22
-        object LabelOSDOutputProvider: TLabel
+        object OSDOutputProviderLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 85
-          Height = 15
+          Width = 88
+          Height = 16
           Caption = 'Output Provider'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
-        object OSDOutputProvider: TComboBox
+        object OSDOutputProvider: TComboBox2Ex
           Left = 8
           Top = 36
           Width = 137
@@ -6230,75 +7162,126 @@ object FormMAMESettings: TFormMAMESettings
       Left = 0
       Top = 0
       Caption = 'Miscellaneous'
-      object LabelRAMSize: TLabel
+      object RAMSizeLabel: TShadowLabel
         Left = 252
         Top = 100
-        Width = 124
-        Height = 15
+        Width = 127
+        Height = 16
         Caption = 'RAM Size (if supported)'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelSystemBios: TLabel
+      object SystemBiosLabel: TShadowLabel
         Left = 465
         Top = 14
-        Width = 156
-        Height = 15
+        Width = 159
+        Height = 16
         Caption = 'Select the System BIOS to Use'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelUIFont: TLabel
+      object UIFontLabel: TShadowLabel
         Left = 252
         Top = 398
-        Width = 95
-        Height = 15
+        Width = 98
+        Height = 16
         Caption = 'User Inteface Font'
         Enabled = False
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelUIFontProvider: TLabel
+      object UIFontProviderLabel: TShadowLabel
         Left = 372
         Top = 354
-        Width = 44
-        Height = 15
+        Width = 47
+        Height = 16
         Caption = 'Provider'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelTypeUserInterface: TLabel
+      object TypeUserInterfaceLabel: TShadowLabel
         Left = 252
         Top = 354
-        Width = 115
-        Height = 15
+        Width = 118
+        Height = 16
         Caption = 'Type of User Interface'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelDisplayLanguage: TLabel
+      object DisplayLanguageLabel: TShadowLabel
         Left = 16
-        Top = 220
-        Width = 168
-        Height = 15
+        Top = 240
+        Width = 171
+        Height = 16
         Caption = 'User Interface Display Language'
         Enabled = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelSaveStateRewindBufferSize: TLabel
+      object SaveStateRewindBufferSizeLabel: TShadowLabel
         Left = 16
-        Top = 132
-        Width = 187
-        Height = 15
+        Top = 152
+        Width = 190
+        Height = 16
         Hint = 'Rewind Buffer Size [%u MegaBytes]'
         Caption = 'Rewind Buffer Size [100 MegaBytes]'
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = False
       end
-      object LabelSaveStateName: TLabel
+      object SaveStateNameLabel: TShadowLabel
         Left = 16
-        Top = 176
-        Width = 88
-        Height = 15
+        Top = 196
+        Width = 91
+        Height = 16
         Caption = 'Save State Name'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object SkipGameInfo: TAdvOfficeCheckBoxEx
@@ -6352,7 +7335,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object RAMSize: TEdit
+      object RAMSize: TEditEx
         Left = 252
         Top = 116
         Width = 153
@@ -6387,43 +7370,69 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable Debugger'
         ParentCtl3D = True
         TabOrder = 6
-        object LabelDebuggerScript: TLabel
+        object DebuggerScriptLabel: TShadowLabel
           Left = 8
           Top = 110
-          Width = 85
-          Height = 15
+          Width = 88
+          Height = 16
           Caption = 'Debugger Script'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelWatchdog: TLabel
+        object WatchdogLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 55
-          Height = 15
+          Width = 58
+          Height = 16
           Hint = 
             'Creates new thread that kills the application after a few second' +
             's'
           Caption = 'Watchdog'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
-        object Label4: TLabel
+        object DebuggerLabel: TShadowLabel
           Left = 92
           Top = 64
-          Width = 91
-          Height = 15
+          Width = 94
+          Height = 16
           Caption = 'Debugger To Use'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object Label1: TLabel
+        object WatchdogSecsLabel: TShadowLabel
           Left = 55
           Top = 83
-          Width = 22
-          Height = 15
+          Width = 25
+          Height = 16
           Hint = 
             'Creates new thread that kills the application after a few second' +
             's'
           Caption = 'secs'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
         end
         object Log: TAdvOfficeCheckBoxEx
           Left = 8
@@ -6475,7 +7484,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           Themed = True
         end
-        object DebuggerScript: TEdit
+        object DebuggerScript: TEditEx
           Left = 8
           Top = 128
           Width = 137
@@ -6489,7 +7498,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 4
         end
-        object DebuggerScriptBrowse: TBitBtn
+        object DebuggerScriptButtonSelect: TBitBtnEx
           Left = 146
           Top = 128
           Width = 43
@@ -6499,9 +7508,9 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 5
-          OnClick = DebuggerScriptBrowseClick
+          OnClick = DebuggerScriptButtonSelectClick
         end
-        object Watchdog: TEdit
+        object Watchdog: TEditEx
           Left = 11
           Top = 80
           Width = 40
@@ -6514,7 +7523,7 @@ object FormMAMESettings: TFormMAMESettings
           Text = '2500'
           OnKeyPress = WatchdogKeyPress
         end
-        object Debugger: TComboBox
+        object Debugger: TComboBox2Ex
           Left = 92
           Top = 80
           Width = 97
@@ -6605,7 +7614,7 @@ object FormMAMESettings: TFormMAMESettings
         View = elsReport
         OnItemCompare = BiosSetsListViewItemCompare
       end
-      object UIFont: TEdit
+      object UIFont: TEditEx
         Left = 252
         Top = 414
         Width = 153
@@ -6617,7 +7626,7 @@ object FormMAMESettings: TFormMAMESettings
         ParentCtl3D = False
         TabOrder = 8
       end
-      object UIFontSelectFontButton: TBitBtn
+      object UIFontSelectFontButtonSelect: TBitBtnEx
         Left = 407
         Top = 414
         Width = 43
@@ -6626,7 +7635,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Select'
         Enabled = False
         TabOrder = 9
-        OnClick = UIFontSelectFontButtonClick
+        OnClick = UIFontSelectFontButtonSelectClick
       end
       object DRC: TAdvOfficeCheckBoxEx
         Left = 252
@@ -6655,7 +7664,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object RAMSizeButtonClear: TBitBtn
+      object RAMSizeButtonClear: TBitBtnEx
         Left = 407
         Top = 116
         Width = 43
@@ -6687,7 +7696,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object UIFontProvider: TComboBox
+      object UIFontProvider: TComboBox2Ex
         Left = 372
         Top = 370
         Width = 78
@@ -6711,7 +7720,7 @@ object FormMAMESettings: TFormMAMESettings
           'SDL'
           'OSX')
       end
-      object TypeUserInterface: TComboBox
+      object TypeUserInterface: TComboBox2Ex
         Left = 252
         Top = 370
         Width = 119
@@ -6733,9 +7742,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object DisplayLanguageList: TEasyListview
         Left = 16
-        Top = 238
+        Top = 258
         Width = 220
-        Height = 199
+        Height = 179
         BackGround.Enabled = True
         CellSizes.Report.Height = 19
         Color = clWhite
@@ -6789,7 +7798,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveNVRAMOnExit: TAdvOfficeCheckBoxEx
         Left = 16
-        Top = 72
+        Top = 92
         Width = 128
         Height = 20
         Hint = 
@@ -6805,7 +7814,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object AutoSave: TAdvOfficeCheckBoxEx
         Left = 16
-        Top = 92
+        Top = 112
         Width = 103
         Height = 20
         Hint = 
@@ -6819,7 +7828,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object EnableSaveStateRewind: TAdvOfficeCheckBoxEx
         Left = 16
-        Top = 112
+        Top = 132
         Width = 152
         Height = 20
         Hint = 'Enable rewind save states'
@@ -6831,7 +7840,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveStateRewindBufferSize: TGaugeBar
         Left = 16
-        Top = 148
+        Top = 168
         Width = 220
         Height = 20
         Hint = 'Rewind buffer size in megabytes'
@@ -6845,9 +7854,9 @@ object FormMAMESettings: TFormMAMESettings
         Position = 100
         OnChange = SaveStateRewindBufferSizeChange
       end
-      object SaveStateName: TEdit
+      object SaveStateName: TEditEx
         Left = 16
-        Top = 192
+        Top = 212
         Width = 175
         Height = 21
         Hint = 'Override of the default state subfolder naming; %g == gamename'
@@ -6856,9 +7865,9 @@ object FormMAMESettings: TFormMAMESettings
         ShowHint = False
         TabOrder = 22
       end
-      object ButtonSaveStateNameReset: TBitBtn
+      object SaveStateNameButtonReset: TBitBtnEx
         Left = 193
-        Top = 192
+        Top = 212
         Width = 43
         Height = 21
         Hint = 'Set default save state name'
@@ -6866,14 +7875,28 @@ object FormMAMESettings: TFormMAMESettings
         ParentShowHint = False
         ShowHint = True
         TabOrder = 23
-        OnClick = ButtonSaveStateNameResetClick
+        OnClick = SaveStateNameButtonResetClick
+      end
+      object SkipMandatoryFileMan: TAdvOfficeCheckBoxEx
+        Left = 16
+        Top = 72
+        Width = 202
+        Height = 20
+        Hint = 
+          'Skip prompting the user for any mandatory images with the file m' +
+          'anager at startup'
+        TabOrder = 24
+        Alignment = taLeftJustify
+        Caption = 'Skip Mandatory Images at Startup'
+        ReturnIsTab = False
+        Themed = True
       end
     end
     object TPage
       Left = 0
       Top = 0
       Caption = 'SDL'
-      object SDKKeyboardMappingBox: TAdvGroupBoxEx
+      object SDKKeyboardMappingGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 20
         Width = 249
@@ -6883,17 +7906,23 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable SDL Keyboard Mapping'
         Ctl3D = True
         TabOrder = 0
-        object LabelSDLKeymapFilename: TLabel
+        object SDLKeymapFilenameLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 94
-          Height = 15
+          Width = 97
+          Height = 16
           Caption = 'Keymap Filename'
           Enabled = False
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDLKeymapFilename: TEdit
+        object SDLKeymapFilename: TEditEx
           Left = 8
           Top = 36
           Width = 144
@@ -6907,7 +7936,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 0
         end
-        object ButtonSDLKeymapFilenameSelect: TBitBtn
+        object SDLKeymapFilenameButtonSelect: TBitBtnEx
           Left = 154
           Top = 36
           Width = 43
@@ -6918,9 +7947,9 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
-          OnClick = ButtonSDLKeymapFilenameSelectClick
+          OnClick = SDLKeymapFilenameButtonSelectClick
         end
-        object ButtonSDLKeymapFilenameReset: TBitBtn
+        object SDLKeymapFilenameButtonReset: TBitBtnEx
           Left = 197
           Top = 36
           Width = 43
@@ -6931,10 +7960,10 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-          OnClick = ButtonSDLKeymapFilenameResetClick
+          OnClick = SDLKeymapFilenameButtonResetClick
         end
       end
-      object SDLJoystickMappingBox: TAdvGroupBoxEx
+      object SDLJoystickMappingGroupBox: TAdvGroupBoxEx
         Left = 362
         Top = 236
         Width = 240
@@ -6943,79 +7972,127 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Joystick Mapping                                             '
         Ctl3D = True
         TabOrder = 1
-        object LabelSDLJoystickMapping1: TLabel
+        object SDLJoystickMapping1Label: TShadowLabel
           Left = 8
           Top = 26
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#1'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping2: TLabel
+        object SDLJoystickMapping2Label: TShadowLabel
           Left = 8
           Top = 48
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#2'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping3: TLabel
+        object SDLJoystickMapping3Label: TShadowLabel
           Left = 8
           Top = 71
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#3'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping4: TLabel
+        object SDLJoystickMapping4Label: TShadowLabel
           Left = 8
           Top = 93
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#4'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping5: TLabel
+        object SDLJoystickMapping5Label: TShadowLabel
           Left = 8
           Top = 115
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#5'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping6: TLabel
+        object SDLJoystickMapping6Label: TShadowLabel
           Left = 8
           Top = 137
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#6'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping7: TLabel
+        object SDLJoystickMapping7Label: TShadowLabel
           Left = 8
           Top = 159
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#7'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLJoystickMapping8: TLabel
+        object SDLJoystickMapping8Label: TShadowLabel
           Left = 8
           Top = 181
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#8'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDLJoystickMapping1: TComboBox
+        object SDLJoystickMapping1: TComboBox2Ex
           Left = 24
           Top = 24
           Width = 103
@@ -7040,7 +8117,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping1Custom: TEdit
+        object SDLJoystickMapping1Custom: TEditEx
           Left = 129
           Top = 24
           Width = 103
@@ -7059,7 +8136,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 1
         end
-        object SDLJoystickMapping2: TComboBox
+        object SDLJoystickMapping2: TComboBox2Ex
           Left = 24
           Top = 46
           Width = 103
@@ -7084,7 +8161,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping2Custom: TEdit
+        object SDLJoystickMapping2Custom: TEditEx
           Left = 129
           Top = 46
           Width = 103
@@ -7103,7 +8180,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 3
         end
-        object SDLJoystickMapping3: TComboBox
+        object SDLJoystickMapping3: TComboBox2Ex
           Left = 24
           Top = 68
           Width = 103
@@ -7128,7 +8205,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping3Custom: TEdit
+        object SDLJoystickMapping3Custom: TEditEx
           Left = 129
           Top = 68
           Width = 103
@@ -7147,7 +8224,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 5
         end
-        object SDLJoystickMapping4: TComboBox
+        object SDLJoystickMapping4: TComboBox2Ex
           Left = 24
           Top = 90
           Width = 103
@@ -7172,7 +8249,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping4Custom: TEdit
+        object SDLJoystickMapping4Custom: TEditEx
           Left = 129
           Top = 90
           Width = 103
@@ -7191,7 +8268,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 7
         end
-        object SDLJoystickMapping5: TComboBox
+        object SDLJoystickMapping5: TComboBox2Ex
           Left = 24
           Top = 112
           Width = 103
@@ -7216,7 +8293,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping5Custom: TEdit
+        object SDLJoystickMapping5Custom: TEditEx
           Left = 129
           Top = 112
           Width = 103
@@ -7235,7 +8312,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 9
         end
-        object SDLJoystickMapping6: TComboBox
+        object SDLJoystickMapping6: TComboBox2Ex
           Left = 24
           Top = 134
           Width = 103
@@ -7260,7 +8337,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping6Custom: TEdit
+        object SDLJoystickMapping6Custom: TEditEx
           Left = 129
           Top = 134
           Width = 103
@@ -7279,7 +8356,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 11
         end
-        object SDLJoystickMapping7: TComboBox
+        object SDLJoystickMapping7: TComboBox2Ex
           Left = 24
           Top = 156
           Width = 103
@@ -7304,7 +8381,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping7Custom: TEdit
+        object SDLJoystickMapping7Custom: TEditEx
           Left = 129
           Top = 156
           Width = 103
@@ -7323,7 +8400,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 13
         end
-        object SDLJoystickMapping8: TComboBox
+        object SDLJoystickMapping8: TComboBox2Ex
           Left = 24
           Top = 178
           Width = 103
@@ -7348,7 +8425,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLJoystickMapping8Custom: TEdit
+        object SDLJoystickMapping8Custom: TEditEx
           Left = 129
           Top = 178
           Width = 103
@@ -7377,10 +8454,9 @@ object FormMAMESettings: TFormMAMESettings
           Alignment = taLeftJustify
           Caption = 'PS3 Sixaxis Controller'
           ReturnIsTab = False
-          Themed = True
         end
       end
-      object SDLLightgunMappingBox: TAdvGroupBoxEx
+      object SDLLightgunMappingGroupBox: TAdvGroupBoxEx
         Left = 617
         Top = 236
         Width = 240
@@ -7389,79 +8465,127 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Lightgun Mapping (XInput)'
         Ctl3D = True
         TabOrder = 2
-        object LabelSDLLightgunMapping1: TLabel
+        object SDLLightgunMapping1Label: TShadowLabel
           Left = 8
           Top = 27
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#1'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping2: TLabel
+        object SDLLightgunMapping2Label: TShadowLabel
           Left = 8
           Top = 49
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#2'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping3: TLabel
+        object SDLLightgunMapping3Label: TShadowLabel
           Left = 8
           Top = 71
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#3'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping4: TLabel
+        object SDLLightgunMapping4Label: TShadowLabel
           Left = 8
           Top = 93
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#4'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping5: TLabel
+        object SDLLightgunMapping5Label: TShadowLabel
           Left = 8
           Top = 115
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#5'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping6: TLabel
+        object SDLLightgunMapping6Label: TShadowLabel
           Left = 8
           Top = 137
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#6'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping7: TLabel
+        object SDLLightgunMapping7Label: TShadowLabel
           Left = 8
           Top = 158
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#7'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLLightgunMapping8: TLabel
+        object SDLLightgunMapping8Label: TShadowLabel
           Left = 8
           Top = 180
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#8'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDLLightgunMapping1: TComboBox
+        object SDLLightgunMapping1: TComboBox2Ex
           Left = 24
           Top = 24
           Width = 103
@@ -7486,7 +8610,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping1Custom: TEdit
+        object SDLLightgunMapping1Custom: TEditEx
           Left = 129
           Top = 24
           Width = 103
@@ -7505,7 +8629,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 1
         end
-        object SDLLightgunMapping2: TComboBox
+        object SDLLightgunMapping2: TComboBox2Ex
           Left = 24
           Top = 46
           Width = 103
@@ -7530,7 +8654,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping2Custom: TEdit
+        object SDLLightgunMapping2Custom: TEditEx
           Left = 129
           Top = 46
           Width = 103
@@ -7549,7 +8673,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 3
         end
-        object SDLLightgunMapping3: TComboBox
+        object SDLLightgunMapping3: TComboBox2Ex
           Left = 24
           Top = 68
           Width = 103
@@ -7574,7 +8698,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping3Custom: TEdit
+        object SDLLightgunMapping3Custom: TEditEx
           Left = 129
           Top = 68
           Width = 103
@@ -7593,7 +8717,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 5
         end
-        object SDLLightgunMapping4: TComboBox
+        object SDLLightgunMapping4: TComboBox2Ex
           Left = 24
           Top = 90
           Width = 103
@@ -7618,7 +8742,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping4Custom: TEdit
+        object SDLLightgunMapping4Custom: TEditEx
           Left = 129
           Top = 90
           Width = 103
@@ -7637,7 +8761,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 7
         end
-        object SDLLightgunMapping5: TComboBox
+        object SDLLightgunMapping5: TComboBox2Ex
           Left = 24
           Top = 112
           Width = 103
@@ -7662,7 +8786,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping5Custom: TEdit
+        object SDLLightgunMapping5Custom: TEditEx
           Left = 129
           Top = 112
           Width = 103
@@ -7681,7 +8805,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 9
         end
-        object SDLLightgunMapping6: TComboBox
+        object SDLLightgunMapping6: TComboBox2Ex
           Left = 24
           Top = 134
           Width = 103
@@ -7706,7 +8830,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping6Custom: TEdit
+        object SDLLightgunMapping6Custom: TEditEx
           Left = 129
           Top = 134
           Width = 103
@@ -7725,7 +8849,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 11
         end
-        object SDLLightgunMapping7: TComboBox
+        object SDLLightgunMapping7: TComboBox2Ex
           Left = 24
           Top = 156
           Width = 103
@@ -7750,7 +8874,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping7Custom: TEdit
+        object SDLLightgunMapping7Custom: TEditEx
           Left = 129
           Top = 156
           Width = 103
@@ -7769,7 +8893,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 13
         end
-        object SDLLightgunMapping8: TComboBox
+        object SDLLightgunMapping8: TComboBox2Ex
           Left = 24
           Top = 178
           Width = 103
@@ -7794,7 +8918,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDLLightgunMapping8Custom: TEdit
+        object SDLLightgunMapping8Custom: TEditEx
           Left = 129
           Top = 178
           Width = 103
@@ -7814,7 +8938,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 15
         end
       end
-      object SDL2MouseMappingBox: TAdvGroupBoxEx
+      object SDL2MouseMappingGroupBox: TAdvGroupBoxEx
         Left = 617
         Top = 20
         Width = 240
@@ -7823,79 +8947,127 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Mouse Mapping (SDL 2)'
         Ctl3D = True
         TabOrder = 3
-        object LabelSDL2MouseMapping1: TLabel
+        object SDL2MouseMapping1Label: TShadowLabel
           Left = 8
           Top = 27
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#1'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping2: TLabel
+        object SDL2MouseMapping2Label: TShadowLabel
           Left = 8
           Top = 49
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#2'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping3: TLabel
+        object SDL2MouseMapping3Label: TShadowLabel
           Left = 8
           Top = 71
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#3'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping4: TLabel
+        object SDL2MouseMapping4Label: TShadowLabel
           Left = 8
           Top = 93
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#4'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping5: TLabel
+        object SDL2MouseMapping5Label: TShadowLabel
           Left = 8
           Top = 115
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#5'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping6: TLabel
+        object SDL2MouseMapping6Label: TShadowLabel
           Left = 8
           Top = 137
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#6'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping7: TLabel
+        object SDL2MouseMapping7Label: TShadowLabel
           Left = 8
           Top = 158
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#7'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2MouseMapping8: TLabel
+        object SDL2MouseMapping8Label: TShadowLabel
           Left = 8
           Top = 180
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#8'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDL2MouseMapping1: TComboBox
+        object SDL2MouseMapping1: TComboBox2Ex
           Left = 24
           Top = 24
           Width = 103
@@ -7920,7 +9092,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping1Custom: TEdit
+        object SDL2MouseMapping1Custom: TEditEx
           Left = 129
           Top = 24
           Width = 103
@@ -7939,7 +9111,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 1
         end
-        object SDL2MouseMapping2: TComboBox
+        object SDL2MouseMapping2: TComboBox2Ex
           Left = 24
           Top = 46
           Width = 103
@@ -7964,7 +9136,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping2Custom: TEdit
+        object SDL2MouseMapping2Custom: TEditEx
           Left = 129
           Top = 46
           Width = 103
@@ -7983,7 +9155,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 3
         end
-        object SDL2MouseMapping3: TComboBox
+        object SDL2MouseMapping3: TComboBox2Ex
           Left = 24
           Top = 68
           Width = 103
@@ -8008,7 +9180,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping3Custom: TEdit
+        object SDL2MouseMapping3Custom: TEditEx
           Left = 129
           Top = 68
           Width = 103
@@ -8027,7 +9199,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 5
         end
-        object SDL2MouseMapping4: TComboBox
+        object SDL2MouseMapping4: TComboBox2Ex
           Left = 24
           Top = 90
           Width = 103
@@ -8052,7 +9224,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping4Custom: TEdit
+        object SDL2MouseMapping4Custom: TEditEx
           Left = 129
           Top = 90
           Width = 103
@@ -8071,7 +9243,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 7
         end
-        object SDL2MouseMapping5: TComboBox
+        object SDL2MouseMapping5: TComboBox2Ex
           Left = 24
           Top = 112
           Width = 103
@@ -8096,7 +9268,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping5Custom: TEdit
+        object SDL2MouseMapping5Custom: TEditEx
           Left = 129
           Top = 112
           Width = 103
@@ -8115,7 +9287,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 9
         end
-        object SDL2MouseMapping6: TComboBox
+        object SDL2MouseMapping6: TComboBox2Ex
           Left = 24
           Top = 134
           Width = 103
@@ -8140,7 +9312,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping6Custom: TEdit
+        object SDL2MouseMapping6Custom: TEditEx
           Left = 129
           Top = 134
           Width = 103
@@ -8159,7 +9331,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 11
         end
-        object SDL2MouseMapping7: TComboBox
+        object SDL2MouseMapping7: TComboBox2Ex
           Left = 24
           Top = 156
           Width = 103
@@ -8184,7 +9356,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping7Custom: TEdit
+        object SDL2MouseMapping7Custom: TEditEx
           Left = 129
           Top = 156
           Width = 103
@@ -8203,7 +9375,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 13
         end
-        object SDL2MouseMapping8: TComboBox
+        object SDL2MouseMapping8: TComboBox2Ex
           Left = 24
           Top = 178
           Width = 103
@@ -8228,7 +9400,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2MouseMapping8Custom: TEdit
+        object SDL2MouseMapping8Custom: TEditEx
           Left = 129
           Top = 178
           Width = 103
@@ -8248,7 +9420,7 @@ object FormMAMESettings: TFormMAMESettings
           TabOrder = 15
         end
       end
-      object SDL2KeyboardMappingBox: TAdvGroupBoxEx
+      object SDL2KeyboardMappingGroupBox: TAdvGroupBoxEx
         Left = 362
         Top = 20
         Width = 240
@@ -8257,79 +9429,127 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Keyboard Mapping (SDL 2)'
         Ctl3D = True
         TabOrder = 4
-        object LabelSDL2KeyboardMapping1: TLabel
+        object SDL2KeyboardMapping1Label: TShadowLabel
           Left = 8
           Top = 27
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#1'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping2: TLabel
+        object SDL2KeyboardMapping2Label: TShadowLabel
           Left = 8
           Top = 49
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#2'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping3: TLabel
+        object SDL2KeyboardMapping3Label: TShadowLabel
           Left = 8
           Top = 71
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#3'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping4: TLabel
+        object SDL2KeyboardMapping4Label: TShadowLabel
           Left = 8
           Top = 93
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#4'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping5: TLabel
+        object SDL2KeyboardMapping5Label: TShadowLabel
           Left = 8
           Top = 115
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#5'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping6: TLabel
+        object SDL2KeyboardMapping6Label: TShadowLabel
           Left = 8
           Top = 137
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#6'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping7: TLabel
+        object SDL2KeyboardMapping7Label: TShadowLabel
           Left = 8
           Top = 158
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#7'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2KeyboardMapping8: TLabel
+        object SDL2KeyboardMapping8Label: TShadowLabel
           Left = 8
           Top = 180
-          Width = 13
-          Height = 15
+          Width = 16
+          Height = 16
           Caption = '#8'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDL2KeyboardMapping1: TComboBox
+        object SDL2KeyboardMapping1: TComboBox2Ex
           Left = 24
           Top = 24
           Width = 103
@@ -8354,7 +9574,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping1Custom: TEdit
+        object SDL2KeyboardMapping1Custom: TEditEx
           Left = 129
           Top = 24
           Width = 103
@@ -8373,7 +9593,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 1
         end
-        object SDL2KeyboardMapping2: TComboBox
+        object SDL2KeyboardMapping2: TComboBox2Ex
           Left = 24
           Top = 46
           Width = 103
@@ -8398,7 +9618,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping2Custom: TEdit
+        object SDL2KeyboardMapping2Custom: TEditEx
           Left = 129
           Top = 46
           Width = 103
@@ -8417,7 +9637,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 3
         end
-        object SDL2KeyboardMapping3: TComboBox
+        object SDL2KeyboardMapping3: TComboBox2Ex
           Left = 24
           Top = 68
           Width = 103
@@ -8442,7 +9662,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping3Custom: TEdit
+        object SDL2KeyboardMapping3Custom: TEditEx
           Left = 129
           Top = 68
           Width = 103
@@ -8461,7 +9681,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 5
         end
-        object SDL2KeyboardMapping4: TComboBox
+        object SDL2KeyboardMapping4: TComboBox2Ex
           Left = 24
           Top = 90
           Width = 103
@@ -8486,7 +9706,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping4Custom: TEdit
+        object SDL2KeyboardMapping4Custom: TEditEx
           Left = 129
           Top = 90
           Width = 103
@@ -8505,7 +9725,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 7
         end
-        object SDL2KeyboardMapping5: TComboBox
+        object SDL2KeyboardMapping5: TComboBox2Ex
           Left = 24
           Top = 112
           Width = 103
@@ -8530,7 +9750,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping5Custom: TEdit
+        object SDL2KeyboardMapping5Custom: TEditEx
           Left = 129
           Top = 112
           Width = 103
@@ -8549,7 +9769,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 9
         end
-        object SDL2KeyboardMapping6: TComboBox
+        object SDL2KeyboardMapping6: TComboBox2Ex
           Left = 24
           Top = 134
           Width = 103
@@ -8574,7 +9794,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping6Custom: TEdit
+        object SDL2KeyboardMapping6Custom: TEditEx
           Left = 129
           Top = 134
           Width = 103
@@ -8593,7 +9813,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 11
         end
-        object SDL2KeyboardMapping7: TComboBox
+        object SDL2KeyboardMapping7: TComboBox2Ex
           Left = 24
           Top = 156
           Width = 103
@@ -8618,7 +9838,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping7Custom: TEdit
+        object SDL2KeyboardMapping7Custom: TEditEx
           Left = 129
           Top = 156
           Width = 103
@@ -8637,7 +9857,7 @@ object FormMAMESettings: TFormMAMESettings
           ShowHint = True
           TabOrder = 13
         end
-        object SDL2KeyboardMapping8: TComboBox
+        object SDL2KeyboardMapping8: TComboBox2Ex
           Left = 24
           Top = 178
           Width = 103
@@ -8662,7 +9882,7 @@ object FormMAMESettings: TFormMAMESettings
             'auto'
             'Custom Name')
         end
-        object SDL2KeyboardMapping8Custom: TEdit
+        object SDL2KeyboardMapping8Custom: TEditEx
           Left = 129
           Top = 178
           Width = 103
@@ -8693,7 +9913,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object SDLOutputModeBox: TAdvGroupBoxEx
+      object SDLOutputModeGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 166
         Width = 249
@@ -8702,19 +9922,25 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Output Mode'
         ParentCtl3D = True
         TabOrder = 6
-        object LabelSDLScaleMode: TLabel
+        object SDLScaleModeLabel: TShadowLabel
           Left = 8
           Top = 42
-          Width = 196
-          Height = 15
+          Width = 199
+          Height = 16
           Caption = 'Scale Mode (Software Renderer Only)'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object SDLCenterHorizontally: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 20
-          Width = 129
+          Width = 124
           Height = 20
           Hint = 'Center horizontally within the view area'
           Checked = True
@@ -8739,7 +9965,7 @@ object FormMAMESettings: TFormMAMESettings
           State = cbChecked
           Themed = True
         end
-        object SDLScaleMode: TComboBox
+        object SDLScaleMode: TComboBox2Ex
           Left = 8
           Top = 58
           Width = 233
@@ -8779,7 +10005,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         Themed = True
       end
-      object SDLLowLevelDriver: TAdvGroupBoxEx
+      object SDLLowLevelDriverGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 334
         Width = 331
@@ -8788,43 +10014,67 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'SDL Low Level Driver'
         Ctl3D = True
         TabOrder = 8
-        object LabelSDLVideoDriverToUse: TLabel
+        object SDLVideoDriverToUseLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 87
-          Height = 15
+          Width = 90
+          Height = 16
           Caption = 'SDL Video Driver'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDL2RenderDriverToUse: TLabel
+        object SDL2RenderDriverToUseLabel: TShadowLabel
           Left = 112
           Top = 20
-          Width = 103
-          Height = 15
+          Width = 106
+          Height = 16
           Caption = 'SDL 2 Render Driver'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLAudioDriverToUse: TLabel
+        object SDLAudioDriverToUseLabel: TShadowLabel
           Left = 222
           Top = 20
-          Width = 89
-          Height = 15
+          Width = 92
+          Height = 16
           Caption = 'SDL Audio Driver'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelSDLAlternativeLibGLToUse: TLabel
+        object SDLAlternativeLibGLToUseLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 102
-          Height = 15
+          Width = 105
+          Height = 16
           Caption = 'Alternative libGL.so'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object SDLVideoDriverToUse: TComboBox
+        object SDLVideoDriverToUse: TComboBox2Ex
           Left = 8
           Top = 36
           Width = 101
@@ -8845,7 +10095,7 @@ object FormMAMESettings: TFormMAMESettings
             'X11'
             'DirectFB')
         end
-        object SDL2RenderDriverToUse: TComboBox
+        object SDL2RenderDriverToUse: TComboBox2Ex
           Left = 112
           Top = 36
           Width = 107
@@ -8867,7 +10117,7 @@ object FormMAMESettings: TFormMAMESettings
             'OpenGL'
             'DirectFB')
         end
-        object SDLAudioDriverToUse: TComboBox
+        object SDLAudioDriverToUse: TComboBox2Ex
           Left = 222
           Top = 36
           Width = 101
@@ -8888,7 +10138,7 @@ object FormMAMESettings: TFormMAMESettings
             'Alsa'
             'Arts')
         end
-        object SDLAlternativeLibGLToUse: TComboBox
+        object SDLAlternativeLibGLToUse: TComboBox2Ex
           Left = 8
           Top = 80
           Width = 103
@@ -8909,7 +10159,7 @@ object FormMAMESettings: TFormMAMESettings
             'Auto'
             'Custom')
         end
-        object SDLAlternativeLibGLToUseCustom: TEdit
+        object SDLAlternativeLibGLToUseCustom: TEditEx
           Left = 114
           Top = 80
           Width = 165
@@ -8918,7 +10168,7 @@ object FormMAMESettings: TFormMAMESettings
           Enabled = False
           TabOrder = 4
         end
-        object ButtonSDLAlternativeLibGLToUseCustom: TBitBtn
+        object SDLAlternativeLibGLToUseCustomButtonSelect: TBitBtnEx
           Left = 281
           Top = 80
           Width = 43
@@ -8929,12 +10179,12 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowHint = True
           TabOrder = 5
-          OnClick = ButtonSDLAlternativeLibGLToUseCustomClick
+          OnClick = SDLAlternativeLibGLToUseCustomButtonSelectClick
         end
       end
     end
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 16
     Top = 546
     Width = 89
@@ -8944,7 +10194,7 @@ object FormMAMESettings: TFormMAMESettings
     TabOrder = 1
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 665
     Top = 546
     Width = 89
@@ -8954,7 +10204,7 @@ object FormMAMESettings: TFormMAMESettings
     ModalResult = 1
     TabOrder = 2
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 763
     Top = 546
     Width = 89
@@ -8978,6 +10228,7 @@ object FormMAMESettings: TFormMAMESettings
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object LabelGameTitle: TShadowLabel
       Left = 86
       Top = 1
@@ -9070,130 +10321,17 @@ object FormMAMESettings: TFormMAMESettings
       WordWrap = True
     end
   end
-  object ToolBarPages: TToolBar
-    Left = 300
-    Top = 80
-    Width = 568
-    Height = 21
-    Align = alNone
-    ButtonWidth = 97
-    Color = clBtnFace
-    Constraints.MaxWidth = 900
-    EdgeBorders = [ebBottom]
-    Flat = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    Images = FormMain.IL_MenuPopup
-    List = True
-    ParentColor = False
-    ParentFont = False
-    ShowCaptions = True
-    TabOrder = 5
-    Transparent = True
-    Wrapable = False
-    object ButtonPageFolders: TToolButton
-      Left = 0
-      Top = 0
-      AutoSize = True
-      Caption = 'Folders'
-      Down = True
-      Grouped = True
-      ImageIndex = 1
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageVideo1: TToolButton
-      Tag = 1
-      Left = 66
-      Top = 0
-      AutoSize = True
-      Caption = 'Video'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageVideo2: TToolButton
-      Tag = 2
-      Left = 123
-      Top = 0
-      AutoSize = True
-      Caption = 'Video 2'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageVideo3: TToolButton
-      Tag = 3
-      Left = 189
-      Top = 0
-      AutoSize = True
-      Caption = 'Video 3'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageLUA_Audio: TToolButton
-      Tag = 4
-      Left = 255
-      Top = 0
-      AutoSize = True
-      Caption = 'LUA and Audio'
-      Grouped = True
-      ImageIndex = 501
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageInput: TToolButton
-      Tag = 5
-      Left = 356
-      Top = 0
-      AutoSize = True
-      Caption = 'Input'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageMisc: TToolButton
-      Tag = 6
-      Left = 413
-      Top = 0
-      AutoSize = True
-      Caption = 'Miscellaneous'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageSDLMAMEInput: TToolButton
-      Tag = 7
-      Left = 509
-      Top = 0
-      AutoSize = True
-      Caption = 'SDL'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-  end
-  object ButtonResetToDefault: TBitBtn
+  object ButtonResetToDefault: TBitBtnEx
     Left = 109
     Top = 546
     Width = 89
     Height = 25
     Hint = 'Load only emulator default settings'
     Caption = 'Reset to Default'
-    TabOrder = 6
+    TabOrder = 5
     OnClick = ButtonResetToDefaultClick
   end
-  object ButtonReadFileHelp: TBitBtn
+  object ButtonReadFileHelp: TBitBtnEx
     Left = 202
     Top = 551
     Width = 15
@@ -9206,10 +10344,10 @@ object FormMAMESettings: TFormMAMESettings
     Font.Name = 'Trebuchet MS'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 6
     OnClick = ButtonReadFileHelpClick
   end
-  object ButtonHelpSaveValidateAllCustomFiles: TBitBtn
+  object ButtonHelpSaveValidateAllCustomFiles: TBitBtnEx
     Left = 437
     Top = 551
     Width = 15
@@ -9222,7 +10360,7 @@ object FormMAMESettings: TFormMAMESettings
     Font.Name = 'Trebuchet MS'
     Font.Style = []
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 7
     OnClick = ButtonHelpSaveValidateAllCustomFilesClick
   end
   object SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx
@@ -9239,7 +10377,7 @@ object FormMAMESettings: TFormMAMESettings
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 8
     OnClick = SaveValidateAllCustomFilesClick
     Alignment = taLeftJustify
     Caption = 'Validate All Custom Files on Save'

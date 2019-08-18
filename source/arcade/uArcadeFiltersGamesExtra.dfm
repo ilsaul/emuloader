@@ -114,15 +114,15 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object LabelSTVMultiSlot: TShadowLabel
     Left = 24
-    Top = 200
-    Width = 103
-    Height = 17
+    Top = 199
+    Width = 110
+    Height = 19
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsItalic]
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = clGray
@@ -135,15 +135,15 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object LabelNeoGeoMVS: TShadowLabel
     Left = 24
-    Top = 168
-    Width = 103
-    Height = 17
+    Top = 167
+    Width = 110
+    Height = 19
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsItalic]
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = clGray
@@ -201,15 +201,15 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object LabelHideMAMESoftlist_vgmplay: TShadowLabel
     Left = 434
-    Top = 168
-    Width = 153
-    Height = 17
+    Top = 167
+    Width = 162
+    Height = 19
     Caption = 'MAME Software List: vgmplay'
     Font.Charset = ANSI_CHARSET
     Font.Color = clGray
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsItalic]
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = clGray
@@ -342,9 +342,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With No Main Set')
   end
   object HideDeviceSets: TAdvOfficeCheckBoxEx
-    Left = 301
+    Left = 305
     Top = 6
-    Width = 107
+    Width = 103
     Height = 20
     TabOrder = 5
     Alignment = taRightJustify
@@ -388,9 +388,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'Games With No BIOS ROMs')
   end
   object HideBiosSets: TAdvOfficeCheckBoxEx
-    Left = 106
+    Left = 110
     Top = 6
-    Width = 97
+    Width = 93
     Height = 19
     TabOrder = 8
     Alignment = taRightJustify
@@ -419,7 +419,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Left = 8
     Top = 152
     Width = 161
-    Height = 20
+    Height = 18
     Hint = 
       'Check it to show only Neo-Geo games compatible with multi-slot m' +
       'achines'#13#10'MAME v0.154 minimum required'
@@ -435,7 +435,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Left = 8
     Top = 184
     Width = 164
-    Height = 20
+    Height = 18
     Hint = 
       'Check it to show only ST-V games compatible with multi-slot mach' +
       'ines'#13#10'MAME v0.154 minimum required'
@@ -919,7 +919,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Left = 418
     Top = 152
     Width = 180
-    Height = 20
+    Height = 18
     ShowHint = True
     TabOrder = 19
     Alignment = taLeftJustify

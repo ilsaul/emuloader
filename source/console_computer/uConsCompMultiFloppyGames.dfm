@@ -251,21 +251,20 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     Top = 88
     Width = 877
     Height = 300
-    Color1 = clBlue
+    Color1 = clWhite
     Color2 = clSilver
     Color3 = 7891291
     Color4 = 7891291
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
     object GamesList: TEasyListview
-      Left = 2
+      Left = 1
       Top = 2
-      Width = 873
-      Height = 296
+      Width = 875
+      Height = 297
       CellSizes.Tile.Width = 254
       CellSizes.Report.Height = 22
       Color = clWhite
@@ -280,7 +279,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000017000000FFFFFF1F0001000000
+        0006000000800800010100010000000000000019000000FFFFFF1F0001000000
         0100000001000000440000000000000000000000000011000000544561737943
         6F6C756D6E53746F726564FFFECE000600000080080001010001010000000000
         0086010000FFFFFF1F000100000001000000050000005400690074006C006500

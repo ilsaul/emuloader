@@ -1,6 +1,7 @@
 object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
   Left = 539
   Top = 231
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings (Basic Mode)'
@@ -35,69 +36,116 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       Left = 0
       Top = 0
       Caption = 'Folders'
-      object FolderROMsDisksBox: TLabel
+      object FolderROMsLabel: TShadowLabel
         Left = 9
         Top = 15
-        Width = 169
-        Height = 15
+        Width = 172
+        Height = 16
         Caption = 'Path to ROM Sets and CHD Files'
         ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
-      object LabelFolderGameSnapshots: TLabel
+      object FolderGameSnapshotsLabel: TShadowLabel
         Left = 9
         Top = 211
-        Width = 155
-        Height = 15
+        Width = 158
+        Height = 16
         Caption = 'Directory to Save Screenshots'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderNVRAM: TLabel
+      object FolderNVRAMLabel: TShadowLabel
         Left = 295
         Top = 211
-        Width = 185
-        Height = 15
+        Width = 188
+        Height = 16
         Caption = 'Directory to Save NVRAM Contents'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderArtworks: TLabel
+      object FolderArtworksLabel: TShadowLabel
         Left = 295
         Top = 120
-        Width = 219
-        Height = 15
+        Width = 222
+        Height = 16
         Caption = 'Path to Artwork Files / Effect Overlay Files'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderSamples: TLabel
+      object FolderSamplesLabel: TShadowLabel
         Left = 9
         Top = 257
-        Width = 104
-        Height = 15
+        Width = 107
+        Height = 16
         Caption = 'Path to Sample Sets'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderInputDeviceLogs: TLabel
+      object FolderInputDeviceLogsLabel: TShadowLabel
         Left = 294
         Top = 257
-        Width = 186
-        Height = 15
+        Width = 189
+        Height = 16
         Caption = 'Directory to Save Input Device Logs'
         ParentShowHint = False
+        ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelFolderIniFiles: TLabel
+      object FolderIniFilesLabel: TShadowLabel
         Left = 9
         Top = 120
-        Width = 80
-        Height = 15
+        Width = 83
+        Height = 16
         Caption = 'Path to Ini Files'
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
         Transparent = True
       end
       object FolderROMs: TEasyListview
@@ -160,7 +208,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderROMsKeyAction
       end
-      object FolderROMsButtonUp: TBitBtn
+      object FolderROMsButtonUp: TBitBtnEx
         Tag = 1
         Left = 471
         Top = 32
@@ -174,7 +222,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderROMsButtonUpClick
       end
-      object FolderROMsButtonDown: TBitBtn
+      object FolderROMsButtonDown: TBitBtnEx
         Left = 514
         Top = 32
         Width = 43
@@ -187,7 +235,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderROMsButtonUpClick
       end
-      object FolderROMsButtonSelect: TBitBtn
+      object FolderROMsButtonSelect: TBitBtnEx
         Left = 471
         Top = 70
         Width = 43
@@ -199,7 +247,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 3
         OnClick = FolderROMsButtonSelectClick
       end
-      object FolderROMsButtonEdit: TBitBtn
+      object FolderROMsButtonEdit: TBitBtnEx
         Left = 514
         Top = 70
         Width = 43
@@ -209,7 +257,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 4
         OnClick = FolderROMsButtonEditClick
       end
-      object FolderROMsButtonDelete: TBitBtn
+      object FolderROMsButtonDelete: TBitBtnEx
         Left = 471
         Top = 91
         Width = 43
@@ -219,7 +267,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 5
         OnClick = FolderROMsButtonDeleteClick
       end
-      object FolderROMsButtonClear: TBitBtn
+      object FolderROMsButtonClear: TBitBtnEx
         Left = 514
         Top = 91
         Width = 43
@@ -231,7 +279,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 6
         OnClick = FolderROMsButtonClearClick
       end
-      object FolderSamples: TEdit
+      object FolderSamples: TEditEx
         Left = 9
         Top = 274
         Width = 217
@@ -246,7 +294,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
         TabOrder = 7
       end
-      object FolderSamplesButtonSelect: TBitBtn
+      object FolderSamplesButtonSelect: TBitBtnEx
         Left = 228
         Top = 274
         Width = 43
@@ -258,7 +306,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 8
         OnClick = FolderSamplesButtonSelectClick
       end
-      object FolderGameSnapshots: TEdit
+      object FolderGameSnapshots: TEditEx
         Left = 9
         Top = 228
         Width = 217
@@ -273,7 +321,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
         TabOrder = 9
       end
-      object FolderGameSnapshotsButtonSelect: TBitBtn
+      object FolderGameSnapshotsButtonSelect: TBitBtnEx
         Left = 228
         Top = 228
         Width = 43
@@ -285,7 +333,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 10
         OnClick = FolderGameSnapshotsButtonSelectClick
       end
-      object FolderNVRAM: TEdit
+      object FolderNVRAM: TEditEx
         Left = 295
         Top = 228
         Width = 217
@@ -300,7 +348,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
         TabOrder = 11
       end
-      object FolderNVRAMButtonSelect: TBitBtn
+      object FolderNVRAMButtonSelect: TBitBtnEx
         Left = 514
         Top = 228
         Width = 43
@@ -372,7 +420,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderArtworksKeyAction
       end
-      object FolderArtworksButtonUp: TBitBtn
+      object FolderArtworksButtonUp: TBitBtnEx
         Tag = 1
         Left = 295
         Top = 183
@@ -386,7 +434,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderArtworksButtonUpClick
       end
-      object FolderArtworksButtonDown: TBitBtn
+      object FolderArtworksButtonDown: TBitBtnEx
         Left = 338
         Top = 183
         Width = 43
@@ -399,7 +447,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderArtworksButtonUpClick
       end
-      object FolderArtworksButtonSelect: TBitBtn
+      object FolderArtworksButtonSelect: TBitBtnEx
         Left = 385
         Top = 183
         Width = 43
@@ -411,7 +459,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 16
         OnClick = FolderArtworksButtonSelectClick
       end
-      object FolderArtworksButtonEdit: TBitBtn
+      object FolderArtworksButtonEdit: TBitBtnEx
         Left = 428
         Top = 183
         Width = 43
@@ -421,7 +469,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 17
         OnClick = FolderArtworksButtonEditClick
       end
-      object FolderArtworksButtonDelete: TBitBtn
+      object FolderArtworksButtonDelete: TBitBtnEx
         Left = 471
         Top = 183
         Width = 43
@@ -431,7 +479,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 18
         OnClick = FolderArtworksButtonDeleteClick
       end
-      object FolderArtworksButtonClear: TBitBtn
+      object FolderArtworksButtonClear: TBitBtnEx
         Left = 514
         Top = 183
         Width = 43
@@ -443,7 +491,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 19
         OnClick = FolderArtworksButtonClearClick
       end
-      object FolderInputDeviceLogs: TEdit
+      object FolderInputDeviceLogs: TEditEx
         Left = 294
         Top = 274
         Width = 217
@@ -458,7 +506,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ShowHint = False
         TabOrder = 20
       end
-      object FolderInputDeviceLogsButtonSelect: TBitBtn
+      object FolderInputDeviceLogsButtonSelect: TBitBtnEx
         Left = 513
         Top = 274
         Width = 43
@@ -530,7 +578,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderIniFilesKeyAction
       end
-      object FolderIniFilesButtonUp: TBitBtn
+      object FolderIniFilesButtonUp: TBitBtnEx
         Tag = 1
         Left = 8
         Top = 183
@@ -544,7 +592,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderIniFilesButtonUpClick
       end
-      object FolderIniFilesButtonDown: TBitBtn
+      object FolderIniFilesButtonDown: TBitBtnEx
         Left = 51
         Top = 183
         Width = 43
@@ -557,7 +605,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabStop = False
         OnClick = FolderIniFilesButtonUpClick
       end
-      object FolderIniFilesButtonSelect: TBitBtn
+      object FolderIniFilesButtonSelect: TBitBtnEx
         Left = 98
         Top = 183
         Width = 43
@@ -569,7 +617,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 25
         OnClick = FolderIniFilesButtonSelectClick
       end
-      object FolderIniFilesButtonEdit: TBitBtn
+      object FolderIniFilesButtonEdit: TBitBtnEx
         Left = 141
         Top = 183
         Width = 43
@@ -579,7 +627,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 26
         OnClick = FolderIniFilesButtonEditClick
       end
-      object FolderIniFilesButtonDelete: TBitBtn
+      object FolderIniFilesButtonDelete: TBitBtnEx
         Left = 184
         Top = 183
         Width = 43
@@ -589,7 +637,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         TabOrder = 27
         OnClick = FolderIniFilesButtonDeleteClick
       end
-      object FolderIniFilesButtonClear: TBitBtn
+      object FolderIniFilesButtonClear: TBitBtnEx
         Left = 227
         Top = 183
         Width = 43
@@ -606,33 +654,46 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       Left = 0
       Top = 0
       Caption = 'Video and Audio'
-      object LabelVideoOutputMode: TAdvGroupBoxEx
+      object VideoOutputModeGroupBox: TAdvGroupBoxEx
         Left = 8
         Top = 15
-        Width = 141
+        Width = 155
         Height = 165
         RoundEdges = True
         Caption = 'Output Mode'
         ParentCtl3D = True
         TabOrder = 1
-        object LabelScreenResolution: TLabel
+        object ScreenResolutionLabel: TShadowLabel
           Left = 8
           Top = 120
-          Width = 56
-          Height = 15
+          Width = 59
+          Height = 16
           Hint = 'Preferred resolution of'
           Caption = 'Resolution'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelScreenRefreshRate_Custom: TLabel
-          Left = 85
+        object ScreenRefreshRateLabel: TShadowLabel
+          Left = 95
           Top = 120
-          Width = 14
-          Height = 15
+          Width = 17
+          Height = 16
           Caption = 'Hz'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
         object WindowMode: TAdvOfficeCheckBoxEx
@@ -703,10 +764,10 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           State = cbChecked
           Themed = True
         end
-        object ScreenResolution: TComboBox
+        object ScreenResolution: TComboBox2Ex
           Left = 8
           Top = 136
-          Width = 76
+          Width = 80
           Height = 21
           Style = csDropDownList
           Ctl3D = True
@@ -757,10 +818,10 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
             '1920x1440'
             '2048x1536')
         end
-        object ScreenRefreshRate: TComboBox
-          Left = 85
+        object ScreenRefreshRate: TComboBox2Ex
+          Left = 95
           Top = 136
-          Width = 48
+          Width = 53
           Height = 21
           Hint = 'Screen refresh rate'
           Style = csDropDownList
@@ -797,8 +858,8 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
             '240')
         end
       end
-      object FullScreenBox: TAdvGroupBoxEx
-        Left = 412
+      object FullScreenGroupBox: TAdvGroupBoxEx
+        Left = 426
         Top = 15
         Width = 125
         Height = 63
@@ -832,7 +893,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object PerformanceGroupBox: TAdvGroupBoxEx
-        Left = 164
+        Left = 178
         Top = 15
         Width = 233
         Height = 63
@@ -841,15 +902,21 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Performance'
         ParentCtl3D = True
         TabOrder = 2
-        object LabelFrameskip: TLabel
+        object FrameskipLabel: TShadowLabel
           Left = 214
           Top = 22
-          Width = 6
-          Height = 15
+          Width = 9
+          Height = 16
           Caption = '0'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object AutoFrameskip: TAdvOfficeCheckBoxEx
@@ -876,7 +943,6 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Throttle'
           ReturnIsTab = False
           State = cbChecked
-          Themed = True
         end
         object SyncronizeRefreshRate: TAdvOfficeCheckBoxEx
           Left = 8
@@ -908,7 +974,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object Mouse: TAdvOfficeCheckBoxEx
-        Left = 164
+        Left = 178
         Top = 162
         Width = 97
         Height = 20
@@ -920,7 +986,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object Joystick: TAdvOfficeCheckBoxEx
-        Left = 300
+        Left = 314
         Top = 162
         Width = 99
         Height = 20
@@ -932,7 +998,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object SkipGameInfo: TAdvOfficeCheckBoxEx
-        Left = 412
+        Left = 426
         Top = 115
         Width = 103
         Height = 20
@@ -944,7 +1010,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Themed = True
       end
       object Cheat: TAdvOfficeCheckBoxEx
-        Left = 412
+        Left = 426
         Top = 135
         Width = 105
         Height = 20
@@ -955,8 +1021,8 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ReturnIsTab = False
         Themed = True
       end
-      object LabelScreenRotation: TAdvGroupBoxEx
-        Left = 164
+      object ScreenRotationGroupBox: TAdvGroupBoxEx
+        Left = 178
         Top = 91
         Width = 233
         Height = 63
@@ -1014,7 +1080,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         end
       end
       object ReadConfigFiles: TAdvOfficeCheckBoxEx
-        Left = 412
+        Left = 426
         Top = 95
         Width = 113
         Height = 20
@@ -1027,7 +1093,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         State = cbChecked
         Themed = True
       end
-      object GroupBoxAudio: TAdvGroupBoxEx
+      object AudioGroupBox: TAdvGroupBoxEx
         Left = 364
         Top = 192
         Width = 189
@@ -1037,25 +1103,37 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Audio'
         ParentCtl3D = True
         TabOrder = 4
-        object LabelSampleRate: TLabel
+        object SampleRateLabel: TShadowLabel
           Left = 100
           Top = 40
-          Width = 65
-          Height = 15
+          Width = 68
+          Height = 16
           Caption = 'Sample Rate'
           ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = True
         end
-        object LabelVolume: TLabel
+        object VolumeLabel: TShadowLabel
           Left = 8
           Top = 40
-          Width = 72
-          Height = 15
+          Width = 75
+          Height = 16
           Hint = 'Volume [%ddB]'
           Caption = 'Volume [0dB]'
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object Samples: TAdvOfficeCheckBoxEx
@@ -1072,7 +1150,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           State = cbChecked
           Themed = True
         end
-        object SampleRate: TComboBox
+        object SampleRate: TComboBox2Ex
           Left = 100
           Top = 56
           Width = 82
@@ -1139,7 +1217,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Vector'
         ParentCtl3D = True
         TabOrder = 0
-        object LabelVectorBeamWidth: TLabel
+        object VectorBeamWidthLabel: TShadowLabel
           Left = 8
           Top = 40
           Width = 113
@@ -1150,9 +1228,15 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
-        object LabelVectorFlickerEffect: TLabel
+        object VectorFlickerEffectLabel: TShadowLabel
           Left = 168
           Top = 40
           Width = 121
@@ -1163,6 +1247,12 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
           Transparent = False
         end
         object Antialias: TAdvOfficeCheckBoxEx
@@ -1212,7 +1302,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       end
     end
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 8
     Top = 383
     Width = 89
@@ -1222,7 +1312,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     TabOrder = 1
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 370
     Top = 383
     Width = 89
@@ -1232,7 +1322,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     ModalResult = 1
     TabOrder = 2
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 468
     Top = 383
     Width = 89
@@ -1348,64 +1438,17 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
       WordWrap = True
     end
   end
-  object ToolBarPages: TToolBar
-    Left = 365
-    Top = 60
-    Width = 200
-    Height = 21
-    Align = alNone
-    ButtonWidth = 126
-    Color = clBtnFace
-    Constraints.MaxWidth = 900
-    EdgeBorders = [ebBottom]
-    Flat = True
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    Images = FormMain.IL_MenuPopup
-    List = True
-    ParentColor = False
-    ParentFont = False
-    ShowCaptions = True
-    TabOrder = 5
-    Transparent = True
-    Wrapable = False
-    object ButtonPageFolders: TToolButton
-      Left = 0
-      Top = 0
-      AutoSize = True
-      Caption = 'Folders'
-      Down = True
-      Grouped = True
-      ImageIndex = 1
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-    object ButtonPageVideo1: TToolButton
-      Tag = 1
-      Left = 66
-      Top = 0
-      AutoSize = True
-      Caption = 'Video / Audio / Input'
-      Grouped = True
-      ImageIndex = 500
-      Style = tbsCheck
-      OnClick = ButtonPageFoldersClick
-    end
-  end
-  object ButtonResetToDefault: TBitBtn
+  object ButtonResetToDefault: TBitBtnEx
     Left = 101
     Top = 383
     Width = 89
     Height = 25
     Hint = 'Load only emulator default settings'
     Caption = 'Reset to Default'
-    TabOrder = 6
+    TabOrder = 5
     OnClick = ButtonResetToDefaultClick
   end
-  object ButtonReadFileHelp: TBitBtn
+  object ButtonReadFileHelp: TBitBtnEx
     Left = 194
     Top = 388
     Width = 15
@@ -1418,10 +1461,10 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     Font.Name = 'Trebuchet MS'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 6
     OnClick = ButtonReadFileHelpClick
   end
-  object ButtonHelpSaveValidateAllCustomFiles: TBitBtn
+  object ButtonHelpSaveValidateAllCustomFiles: TBitBtnEx
     Left = 144
     Top = 62
     Width = 15
@@ -1434,7 +1477,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     Font.Name = 'Trebuchet MS'
     Font.Style = []
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 8
     OnClick = ButtonHelpSaveValidateAllCustomFilesClick
   end
   object SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx
@@ -1451,12 +1494,59 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 7
     OnClick = SaveValidateAllCustomFilesClick
     Alignment = taLeftJustify
     Caption = 'Validate All Custom Files on Save'
     ReturnIsTab = False
     ShadowColor = clSkyBlue
     Themed = True
+  end
+  object ButtonPagePanel: TPanelEx
+    Left = 360
+    Top = 61
+    Width = 205
+    Height = 24
+    Color1 = clGray
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object ButtonPageFolders: TSpeedButtonEx
+      Left = 5
+      Top = 0
+      Width = 66
+      Height = 22
+      GroupIndex = 1
+      Down = True
+      Caption = 'Folders'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      OnClick = ButtonPageFoldersClick
+    end
+    object ButtonPageVideo1: TSpeedButtonEx
+      Tag = 1
+      Left = 71
+      Top = 0
+      Width = 130
+      Height = 22
+      GroupIndex = 1
+      Caption = 'Video / Audio / Input'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      ParentFont = False
+      OnClick = ButtonPageFoldersClick
+    end
   end
 end

@@ -304,7 +304,7 @@ begin
   FreeAndNil(filters_file);
   FormMain.ELV_SelectItem(FiltersListView, 0, FormMain.SelectedFilterName, Ord(FormMain.SelectedFilterName <> ''));
   if iconFolder = '' then
-     iconFolder:= FiltersListView.Selection.First.Caption;
+     iconFolder:= Trim(FiltersListView.Selection.First.Caption);
   FiltersListView.SetFocus;
 
   //Arcade Games Filters

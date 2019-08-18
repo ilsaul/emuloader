@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, ImgList, ComCtrls, Buttons, IniFiles,
   ExtCtrls, GR32_RangeBars, uGR32Extra, MPCommonObjects, EasyListview,
   MPCommonUtilities, Registry, uCommon, PanelEx, AdvOfficeButtons, AdvGroupBox,
-  ShadowLabel, ExTrackBar, ToolWin;
+  ShadowLabel, ExTrackBar, ToolWin, EditEx, ButtonsEx, ColorBoxEx;
 
 type
   TScreenInfo = record // for MAME/HBMAME
@@ -40,31 +40,31 @@ type
     SteadyKey: TAdvOfficeCheckBoxEx;
     CoinLockout: TAdvOfficeCheckBoxEx;
     UIMouse: TAdvOfficeCheckBoxEx;
-    JoystickBox: TAdvGroupBoxEx;
+    JoystickGroupBox: TAdvGroupBoxEx;
     JoystickDeadzone: TGaugeBar2;
-    LabelAnalogSettings: TAdvGroupBoxEx;
-    LabelAnalog_Paddle: TLabel;
-    LabelAnalog_Joystick: TLabel;
-    LabelAnalog_LightGun: TLabel;
-    LabelAnalog_Pedal: TLabel;
-    LabelAnalog_Dial: TLabel;
-    LabelAnalog_Trackball: TLabel;
-    LabelAnalog_Positional: TLabel;
-    LabelAnalog_Mouse: TLabel;
-    Analog_Paddle: TComboBox;
-    Analog_Joystick: TComboBox;
-    Analog_LightGun: TComboBox;
-    Analog_Pedal: TComboBox;
-    Analog_Dial: TComboBox;
-    Analog_Trackball: TComboBox;
-    Analog_Positional: TComboBox;
-    Analog_Mouse: TComboBox;
+    AnalogSettingsGroupBox: TAdvGroupBoxEx;
+    Analog_PaddleLabel: TShadowLabel;
+    Analog_JoystickLabel: TShadowLabel;
+    Analog_LightGunLabel: TShadowLabel;
+    Analog_PedalLabel: TShadowLabel;
+    Analog_DialLabel: TShadowLabel;
+    Analog_TrackballLabel: TShadowLabel;
+    Analog_PositionalLabel: TShadowLabel;
+    Analog_MouseLabel: TShadowLabel;
+    Analog_Paddle: TComboBox2Ex;
+    Analog_Joystick: TComboBox2Ex;
+    Analog_LightGun: TComboBox2Ex;
+    Analog_Pedal: TComboBox2Ex;
+    Analog_Dial: TComboBox2Ex;
+    Analog_Trackball: TComboBox2Ex;
+    Analog_Positional: TComboBox2Ex;
+    Analog_Mouse: TComboBox2Ex;
     SkipGameInfo: TAdvOfficeCheckBoxEx;
     ReadConfigFiles: TAdvOfficeCheckBoxEx;
     WriteConfigFiles: TAdvOfficeCheckBoxEx;
     Cheat: TAdvOfficeCheckBoxEx;
-    LabelRAMSize: TLabel;
-    RAMSize: TEdit;
+    RAMSizeLabel: TShadowLabel;
+    RAMSize: TEditEx;
     ConfirmQuit: TAdvOfficeCheckBoxEx;
     DebugGroupBox: TAdvGroupBoxEx;
     Log: TAdvOfficeCheckBoxEx;
@@ -78,535 +78,522 @@ type
     WaitVerticalSync: TAdvOfficeCheckBoxEx;
     BilinearFilter: TAdvOfficeCheckBoxEx;
     UIActive: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtn;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    ToolBarPages: TToolBar;
-    ButtonPageFolders: TToolButton;
-    ButtonPageVideo1: TToolButton;
-    ButtonPageVideo3: TToolButton;
-    ButtonPageInput: TToolButton;
-    ButtonPageMisc: TToolButton;
-    FolderROMsDisksBox: TLabel;
+    ButtonReadFile: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    FolderROMsLabel: TShadowLabel;
     FolderROMs: TEasyListview;
-    FolderROMsButtonUp: TBitBtn;
-    FolderROMsButtonDown: TBitBtn;
-    FolderROMsButtonSelect: TBitBtn;
-    FolderROMsButtonEdit: TBitBtn;
-    FolderROMsButtonDelete: TBitBtn;
-    FolderROMsButtonClear: TBitBtn;
-    LabelFolderIniFiles: TLabel;
-    FolderSamples: TEdit;
-    FolderSamplesButtonSelect: TBitBtn;
-    LabelFolderGameSnapshots: TLabel;
-    FolderGameSnapshots: TEdit;
-    FolderGameSnapshotsButtonSelect: TBitBtn;
-    LabelFolderGamesConfigurations: TLabel;
-    FolderGamesConfigurations: TEdit;
-    FolderGamesConfigurationsButtonSelect: TBitBtn;
-    LabelFolderCheatFiles: TLabel;
-    FolderCheatFiles: TEdit;
-    FolderCheatFilesButtonSelect: TBitBtn;
-    LabelFolderMemoryCards: TLabel;
-    FolderMemoryCards: TEdit;
-    FolderMemoryCardsButtonSelect: TBitBtn;
-    LabelFolderDiff: TLabel;
-    FolderDiff: TEdit;
-    FolderDiffButtonSelect: TBitBtn;
-    LabelFolderSaveStates: TLabel;
-    FolderSaveStates: TEdit;
-    FolderSaveStatesButtonSelect: TBitBtn;
-    LabelFolderNVRAM: TLabel;
-    FolderNVRAM: TEdit;
-    FolderNVRAMButtonSelect: TBitBtn;
-    LabelFolderHashFiles: TLabel;
-    FolderHashFiles: TEdit;
-    FolderHashFilesButtonSelect: TBitBtn;
-    LabelFolderArtworks: TLabel;
+    FolderROMsButtonUp: TBitBtnEx;
+    FolderROMsButtonDown: TBitBtnEx;
+    FolderROMsButtonSelect: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
+    FolderIniFilesLabel: TShadowLabel;
+    FolderSamples: TEditEx;
+    FolderSamplesButtonSelect: TBitBtnEx;
+    FolderGameSnapshotsLabel: TShadowLabel;
+    FolderGameSnapshots: TEditEx;
+    FolderGameSnapshotsButtonSelect: TBitBtnEx;
+    FolderGamesConfigurationsLabel: TShadowLabel;
+    FolderGamesConfigurations: TEditEx;
+    FolderGamesConfigurationsButtonSelect: TBitBtnEx;
+    FolderCheatFilesLabel: TShadowLabel;
+    FolderCheatFiles: TEditEx;
+    FolderCheatFilesButtonSelect: TBitBtnEx;
+    FolderMemoryCardsLabel: TShadowLabel;
+    FolderMemoryCards: TEditEx;
+    FolderMemoryCardsButtonSelect: TBitBtnEx;
+    FolderDiffLabel: TShadowLabel;
+    FolderDiff: TEditEx;
+    FolderDiffButtonSelect: TBitBtnEx;
+    FolderSaveStatesLabel: TShadowLabel;
+    FolderSaveStates: TEditEx;
+    FolderSaveStatesButtonSelect: TBitBtnEx;
+    FolderNVRAMLabel: TShadowLabel;
+    FolderNVRAM: TEditEx;
+    FolderNVRAMButtonSelect: TBitBtnEx;
+    FolderHashFilesLabel: TShadowLabel;
+    FolderHashFiles: TEditEx;
+    FolderHashFilesButtonSelect: TBitBtnEx;
+    FolderArtworksLabel: TShadowLabel;
     FolderArtworks: TEasyListview;
-    FolderArtworksButtonUp: TBitBtn;
-    FolderArtworksButtonDown: TBitBtn;
-    FolderArtworksButtonSelect: TBitBtn;
-    FolderArtworksButtonEdit: TBitBtn;
-    FolderArtworksButtonDelete: TBitBtn;
-    FolderArtworksButtonClear: TBitBtn;
-    LabelFolderSamples: TLabel;
+    FolderArtworksButtonUp: TBitBtnEx;
+    FolderArtworksButtonDown: TBitBtnEx;
+    FolderArtworksButtonSelect: TBitBtnEx;
+    FolderArtworksButtonEdit: TBitBtnEx;
+    FolderArtworksButtonDelete: TBitBtnEx;
+    FolderArtworksButtonClear: TBitBtnEx;
+    FolderSamplesLabel: TShadowLabel;
     FolderIniFiles: TEasyListview;
-    FolderIniFilesButtonUp: TBitBtn;
-    FolderIniFilesButtonDown: TBitBtn;
-    FolderIniFilesButtonSelect: TBitBtn;
-    FolderIniFilesButtonEdit: TBitBtn;
-    FolderIniFilesButtonDelete: TBitBtn;
-    FolderIniFilesButtonClear: TBitBtn;
-    LabelFolderInputDeviceLogs: TLabel;
-    FolderInputDeviceLogs: TEdit;
-    FolderInputDeviceLogsButtonSelect: TBitBtn;
-    LabelFolderControllerDefinitions: TLabel;
-    FolderControllerDefinitionsButtonSelect: TBitBtn;
-    LabelFolderCrosshairFiles: TLabel;
-    FolderCrosshairFilesButtonSelect: TBitBtn;
-    CoinImpulse: TComboBox;
-    LabelCoinImpulse: TLabel;
-    LabelControllerDefinitions: TLabel;
-    ControllerDefinitions: TComboBox;
-    LabelVectorFlickerEffect: TLabel;
+    FolderIniFilesButtonUp: TBitBtnEx;
+    FolderIniFilesButtonDown: TBitBtnEx;
+    FolderIniFilesButtonSelect: TBitBtnEx;
+    FolderIniFilesButtonEdit: TBitBtnEx;
+    FolderIniFilesButtonDelete: TBitBtnEx;
+    FolderIniFilesButtonClear: TBitBtnEx;
+    FolderInputDeviceLogsLabel: TShadowLabel;
+    FolderInputDeviceLogs: TEditEx;
+    FolderInputDeviceLogsButtonSelect: TBitBtnEx;
+    FolderControllerDefinitionsLabel: TShadowLabel;
+    FolderControllerDefinitionsButtonSelect: TBitBtnEx;
+    FolderCrosshairFilesLabel: TShadowLabel;
+    FolderCrosshairFilesButtonSelect: TBitBtnEx;
+    CoinImpulse: TComboBox2Ex;
+    CoinImpulseLabel: TShadowLabel;
+    ControllerDefinitionsLabel: TShadowLabel;
+    ControllerDefinitions: TComboBox2Ex;
+    VectorFlickerEffectLabel: TShadowLabel;
     VectorFlickerEffect: TGaugeBar2;
-    LabelJoystickDeadzone: TLabel;
+    JoystickDeadzoneLabel: TShadowLabel;
     Joystick: TAdvOfficeCheckBoxEx;
     JoystickContradictory: TAdvOfficeCheckBoxEx;
     JoystickSaturation: TGaugeBar2;
-    LabelJoystickSaturation: TLabel;
-    LabelSystemBios: TLabel;
+    JoystickSaturationLabel: TShadowLabel;
+    SystemBiosLabel: TShadowLabel;
     BiosSetsListView: TEasyListview;
-    LabelUIFont: TLabel;
-    UIFont: TEdit;
-    UIFontSelectFontButton: TBitBtn;
-    DebuggerScript: TEdit;
-    DebuggerScriptBrowse: TBitBtn;
-    LabelDebuggerScript: TLabel;
+    UIFontLabel: TShadowLabel;
+    UIFont: TEditEx;
+    UIFontSelectFontButtonSelect: TBitBtnEx;
+    DebuggerScript: TEditEx;
+    DebuggerScriptButtonSelect: TBitBtnEx;
+    DebuggerScriptLabel: TShadowLabel;
     DRC: TAdvOfficeCheckBoxEx;
     DRCUseC: TAdvOfficeCheckBoxEx;
     HTTPServer: TAdvGroupBoxEx;
-    Label2: TLabel;
-    HTTPPort: TEdit;
-    Label3: TLabel;
-    HTTPPath: TEdit;
+    HTTPPortLabel: TShadowLabel;
+    HTTPPort: TEditEx;
+    HTTPPathLabel: TShadowLabel;
+    HTTPPath: TEditEx;
     UnevenStretch: TAdvOfficeCheckBoxEx;
     LabelGameTitle: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameStatus: TShadowLabel;
-    RAMSizeButtonClear: TBitBtn;
-    ButtonPageSDLMAMEInput: TToolButton;
-    SDKKeyboardMappingBox: TAdvGroupBoxEx;
-    LabelSDLKeymapFilename: TLabel;
-    SDLKeymapFilename: TEdit;
-    ButtonSDLKeymapFilenameSelect: TBitBtn;
-    ButtonSDLKeymapFilenameReset: TBitBtn;
-    SDLJoystickMappingBox: TAdvGroupBoxEx;
-    SDLJoystickMapping1: TComboBox;
-    SDLJoystickMapping1Custom: TEdit;
-    LabelSDLJoystickMapping1: TLabel;
-    LabelSDLJoystickMapping2: TLabel;
-    LabelSDLJoystickMapping3: TLabel;
-    LabelSDLJoystickMapping4: TLabel;
-    LabelSDLJoystickMapping5: TLabel;
-    LabelSDLJoystickMapping6: TLabel;
-    LabelSDLJoystickMapping7: TLabel;
-    LabelSDLJoystickMapping8: TLabel;
-    SDLJoystickMapping2: TComboBox;
-    SDLJoystickMapping2Custom: TEdit;
-    SDLJoystickMapping3: TComboBox;
-    SDLJoystickMapping3Custom: TEdit;
-    SDLJoystickMapping4: TComboBox;
-    SDLJoystickMapping4Custom: TEdit;
-    SDLJoystickMapping5: TComboBox;
-    SDLJoystickMapping5Custom: TEdit;
-    SDLJoystickMapping6: TComboBox;
-    SDLJoystickMapping6Custom: TEdit;
-    SDLJoystickMapping7: TComboBox;
-    SDLJoystickMapping7Custom: TEdit;
-    SDLJoystickMapping8: TComboBox;
-    SDLJoystickMapping8Custom: TEdit;
+    RAMSizeButtonClear: TBitBtnEx;
+    SDKKeyboardMappingGroupBox: TAdvGroupBoxEx;
+    SDLKeymapFilenameLabel: TShadowLabel;
+    SDLKeymapFilename: TEditEx;
+    SDLKeymapFilenameButtonSelect: TBitBtnEx;
+    SDLKeymapFilenameButtonReset: TBitBtnEx;
+    SDLJoystickMappingGroupBox: TAdvGroupBoxEx;
+    SDLJoystickMapping1: TComboBox2Ex;
+    SDLJoystickMapping1Custom: TEditEx;
+    SDLJoystickMapping1Label: TShadowLabel;
+    SDLJoystickMapping2Label: TShadowLabel;
+    SDLJoystickMapping3Label: TShadowLabel;
+    SDLJoystickMapping4Label: TShadowLabel;
+    SDLJoystickMapping5Label: TShadowLabel;
+    SDLJoystickMapping6Label: TShadowLabel;
+    SDLJoystickMapping7Label: TShadowLabel;
+    SDLJoystickMapping8Label: TShadowLabel;
+    SDLJoystickMapping2: TComboBox2Ex;
+    SDLJoystickMapping2Custom: TEditEx;
+    SDLJoystickMapping3: TComboBox2Ex;
+    SDLJoystickMapping3Custom: TEditEx;
+    SDLJoystickMapping4: TComboBox2Ex;
+    SDLJoystickMapping4Custom: TEditEx;
+    SDLJoystickMapping5: TComboBox2Ex;
+    SDLJoystickMapping5Custom: TEditEx;
+    SDLJoystickMapping6: TComboBox2Ex;
+    SDLJoystickMapping6Custom: TEditEx;
+    SDLJoystickMapping7: TComboBox2Ex;
+    SDLJoystickMapping7Custom: TEditEx;
+    SDLJoystickMapping8: TComboBox2Ex;
+    SDLJoystickMapping8Custom: TEditEx;
     PS3SixaxisControllers: TAdvOfficeCheckBoxEx;
-    SDLLightgunMappingBox: TAdvGroupBoxEx;
-    LabelSDLLightgunMapping1: TLabel;
-    LabelSDLLightgunMapping2: TLabel;
-    LabelSDLLightgunMapping3: TLabel;
-    LabelSDLLightgunMapping4: TLabel;
-    LabelSDLLightgunMapping5: TLabel;
-    LabelSDLLightgunMapping6: TLabel;
-    LabelSDLLightgunMapping7: TLabel;
-    LabelSDLLightgunMapping8: TLabel;
-    SDLLightgunMapping1: TComboBox;
-    SDLLightgunMapping1Custom: TEdit;
-    SDLLightgunMapping2: TComboBox;
-    SDLLightgunMapping2Custom: TEdit;
-    SDLLightgunMapping3: TComboBox;
-    SDLLightgunMapping3Custom: TEdit;
-    SDLLightgunMapping4: TComboBox;
-    SDLLightgunMapping4Custom: TEdit;
-    SDLLightgunMapping5: TComboBox;
-    SDLLightgunMapping5Custom: TEdit;
-    SDLLightgunMapping6: TComboBox;
-    SDLLightgunMapping6Custom: TEdit;
-    SDLLightgunMapping7: TComboBox;
-    SDLLightgunMapping7Custom: TEdit;
-    SDLLightgunMapping8: TComboBox;
-    SDLLightgunMapping8Custom: TEdit;
-    SDL2MouseMappingBox: TAdvGroupBoxEx;
-    LabelSDL2MouseMapping1: TLabel;
-    LabelSDL2MouseMapping2: TLabel;
-    LabelSDL2MouseMapping3: TLabel;
-    LabelSDL2MouseMapping4: TLabel;
-    LabelSDL2MouseMapping5: TLabel;
-    LabelSDL2MouseMapping6: TLabel;
-    LabelSDL2MouseMapping7: TLabel;
-    LabelSDL2MouseMapping8: TLabel;
-    SDL2MouseMapping1: TComboBox;
-    SDL2MouseMapping1Custom: TEdit;
-    SDL2MouseMapping2: TComboBox;
-    SDL2MouseMapping2Custom: TEdit;
-    SDL2MouseMapping3: TComboBox;
-    SDL2MouseMapping3Custom: TEdit;
-    SDL2MouseMapping4: TComboBox;
-    SDL2MouseMapping4Custom: TEdit;
-    SDL2MouseMapping5: TComboBox;
-    SDL2MouseMapping5Custom: TEdit;
-    SDL2MouseMapping6: TComboBox;
-    SDL2MouseMapping6Custom: TEdit;
-    SDL2MouseMapping7: TComboBox;
-    SDL2MouseMapping7Custom: TEdit;
-    SDL2MouseMapping8: TComboBox;
-    SDL2MouseMapping8Custom: TEdit;
-    SDL2KeyboardMappingBox: TAdvGroupBoxEx;
-    LabelSDL2KeyboardMapping1: TLabel;
-    LabelSDL2KeyboardMapping2: TLabel;
-    LabelSDL2KeyboardMapping3: TLabel;
-    LabelSDL2KeyboardMapping4: TLabel;
-    LabelSDL2KeyboardMapping5: TLabel;
-    LabelSDL2KeyboardMapping6: TLabel;
-    LabelSDL2KeyboardMapping7: TLabel;
-    LabelSDL2KeyboardMapping8: TLabel;
-    SDL2KeyboardMapping1: TComboBox;
-    SDL2KeyboardMapping1Custom: TEdit;
-    SDL2KeyboardMapping2: TComboBox;
-    SDL2KeyboardMapping2Custom: TEdit;
-    SDL2KeyboardMapping3: TComboBox;
-    SDL2KeyboardMapping3Custom: TEdit;
-    SDL2KeyboardMapping4: TComboBox;
-    SDL2KeyboardMapping4Custom: TEdit;
-    SDL2KeyboardMapping5: TComboBox;
-    SDL2KeyboardMapping5Custom: TEdit;
-    SDL2KeyboardMapping6: TComboBox;
-    SDL2KeyboardMapping6Custom: TEdit;
-    SDL2KeyboardMapping7: TComboBox;
-    SDL2KeyboardMapping7Custom: TEdit;
-    SDL2KeyboardMapping8: TComboBox;
-    SDL2KeyboardMapping8Custom: TEdit;
-    LabelWatchdog: TLabel;
-    Watchdog: TEdit;
-    Debugger: TComboBox;
-    Label4: TLabel;
+    SDLLightgunMappingGroupBox: TAdvGroupBoxEx;
+    SDLLightgunMapping1Label: TShadowLabel;
+    SDLLightgunMapping2Label: TShadowLabel;
+    SDLLightgunMapping3Label: TShadowLabel;
+    SDLLightgunMapping4Label: TShadowLabel;
+    SDLLightgunMapping5Label: TShadowLabel;
+    SDLLightgunMapping6Label: TShadowLabel;
+    SDLLightgunMapping7Label: TShadowLabel;
+    SDLLightgunMapping8Label: TShadowLabel;
+    SDLLightgunMapping1: TComboBox2Ex;
+    SDLLightgunMapping1Custom: TEditEx;
+    SDLLightgunMapping2: TComboBox2Ex;
+    SDLLightgunMapping2Custom: TEditEx;
+    SDLLightgunMapping3: TComboBox2Ex;
+    SDLLightgunMapping3Custom: TEditEx;
+    SDLLightgunMapping4: TComboBox2Ex;
+    SDLLightgunMapping4Custom: TEditEx;
+    SDLLightgunMapping5: TComboBox2Ex;
+    SDLLightgunMapping5Custom: TEditEx;
+    SDLLightgunMapping6: TComboBox2Ex;
+    SDLLightgunMapping6Custom: TEditEx;
+    SDLLightgunMapping7: TComboBox2Ex;
+    SDLLightgunMapping7Custom: TEditEx;
+    SDLLightgunMapping8: TComboBox2Ex;
+    SDLLightgunMapping8Custom: TEditEx;
+    SDL2MouseMappingGroupBox: TAdvGroupBoxEx;
+    SDL2MouseMapping1Label: TShadowLabel;
+    SDL2MouseMapping2Label: TShadowLabel;
+    SDL2MouseMapping3Label: TShadowLabel;
+    SDL2MouseMapping4Label: TShadowLabel;
+    SDL2MouseMapping5Label: TShadowLabel;
+    SDL2MouseMapping6Label: TShadowLabel;
+    SDL2MouseMapping7Label: TShadowLabel;
+    SDL2MouseMapping8Label: TShadowLabel;
+    SDL2MouseMapping1: TComboBox2Ex;
+    SDL2MouseMapping1Custom: TEditEx;
+    SDL2MouseMapping2: TComboBox2Ex;
+    SDL2MouseMapping2Custom: TEditEx;
+    SDL2MouseMapping3: TComboBox2Ex;
+    SDL2MouseMapping3Custom: TEditEx;
+    SDL2MouseMapping4: TComboBox2Ex;
+    SDL2MouseMapping4Custom: TEditEx;
+    SDL2MouseMapping5: TComboBox2Ex;
+    SDL2MouseMapping5Custom: TEditEx;
+    SDL2MouseMapping6: TComboBox2Ex;
+    SDL2MouseMapping6Custom: TEditEx;
+    SDL2MouseMapping7: TComboBox2Ex;
+    SDL2MouseMapping7Custom: TEditEx;
+    SDL2MouseMapping8: TComboBox2Ex;
+    SDL2MouseMapping8Custom: TEditEx;
+    SDL2KeyboardMappingGroupBox: TAdvGroupBoxEx;
+    SDL2KeyboardMapping1Label: TShadowLabel;
+    SDL2KeyboardMapping2Label: TShadowLabel;
+    SDL2KeyboardMapping3Label: TShadowLabel;
+    SDL2KeyboardMapping4Label: TShadowLabel;
+    SDL2KeyboardMapping5Label: TShadowLabel;
+    SDL2KeyboardMapping6Label: TShadowLabel;
+    SDL2KeyboardMapping7Label: TShadowLabel;
+    SDL2KeyboardMapping8Label: TShadowLabel;
+    SDL2KeyboardMapping1: TComboBox2Ex;
+    SDL2KeyboardMapping1Custom: TEditEx;
+    SDL2KeyboardMapping2: TComboBox2Ex;
+    SDL2KeyboardMapping2Custom: TEditEx;
+    SDL2KeyboardMapping3: TComboBox2Ex;
+    SDL2KeyboardMapping3Custom: TEditEx;
+    SDL2KeyboardMapping4: TComboBox2Ex;
+    SDL2KeyboardMapping4Custom: TEditEx;
+    SDL2KeyboardMapping5: TComboBox2Ex;
+    SDL2KeyboardMapping5Custom: TEditEx;
+    SDL2KeyboardMapping6: TComboBox2Ex;
+    SDL2KeyboardMapping6Custom: TEditEx;
+    SDL2KeyboardMapping7: TComboBox2Ex;
+    SDL2KeyboardMapping7Custom: TEditEx;
+    SDL2KeyboardMapping8: TComboBox2Ex;
+    SDL2KeyboardMapping8Custom: TEditEx;
+    WatchdogLabel: TShadowLabel;
+    Watchdog: TEditEx;
+    Debugger: TComboBox2Ex;
+    DebuggerLabel: TShadowLabel;
     DRCLogUML: TAdvOfficeCheckBoxEx;
     DRCLogNative: TAdvOfficeCheckBoxEx;
-    LabelUIFontProvider: TLabel;
-    UIFontProvider: TComboBox;
-    ButtonResetToDefault: TBitBtn;
-    ButtonReadFileHelp: TBitBtn;
-    LabelFolderFontFiles: TLabel;
-    FolderFontFiles: TEdit;
-    FolderFontFilesButtonSelect: TBitBtn;
-    ButtonHelpSaveValidateAllCustomFiles: TBitBtn;
-    LabelScreenRotation: TAdvGroupBoxEx;
+    UIFontProviderLabel: TShadowLabel;
+    UIFontProvider: TComboBox2Ex;
+    ButtonResetToDefault: TBitBtnEx;
+    ButtonReadFileHelp: TBitBtnEx;
+    FolderFontFilesLabel: TShadowLabel;
+    FolderFontFiles: TEditEx;
+    FolderFontFilesButtonSelect: TBitBtnEx;
+    ButtonHelpSaveValidateAllCustomFiles: TBitBtnEx;
+    ScreenRotationGroupBox: TAdvGroupBoxEx;
     FlipX: TAdvOfficeCheckBoxEx;
     FlipY: TAdvOfficeCheckBoxEx;
     RotateRight: TAdvOfficeCheckBoxEx;
     RotateLeft: TAdvOfficeCheckBoxEx;
     AutoRotateRight: TAdvOfficeCheckBoxEx;
     AutoRotateLeft: TAdvOfficeCheckBoxEx;
-    ScreenOptionsBox: TAdvGroupBoxEx;
-    LabelBrightness: TLabel;
-    LabelPrescale_ScaleScreen: TLabel;
-    LabelContrast: TLabel;
-    LabelGamma: TLabel;
-    LabelPauseBrightness: TLabel;
+    ScreenOptionsGroupBox: TAdvGroupBoxEx;
+    BrightnessLabel: TShadowLabel;
+    Prescale_ScaleScreenLabel: TShadowLabel;
+    ContrastLabel: TShadowLabel;
+    GammaLabel: TShadowLabel;
+    PauseBrightnessLabel: TShadowLabel;
     Prescale_ScaleScreen: TGaugeBar;
     Brightness: TGaugeBar2;
     Contrast: TGaugeBar2;
     Gamma: TGaugeBar2;
     PauseBrightness: TGaugeBar2;
-    FullScreenBox: TAdvGroupBoxEx;
-    LabelFullScreenBrightness: TLabel;
-    LabelFullScreenContrast: TLabel;
-    LabelFullScreenGamma: TLabel;
+    FullScreenGroupBox: TAdvGroupBoxEx;
+    FullScreenBrightnessLabel: TShadowLabel;
+    FullScreenContrastLabel: TShadowLabel;
+    FullScreenGammaLabel: TShadowLabel;
     TripleBuffer: TAdvOfficeCheckBoxEx;
     SwitchResolution: TAdvOfficeCheckBoxEx;
     FullScreenBrightness: TGaugeBar2;
     FullScreenContrast: TGaugeBar2;
     FullScreenGamma: TGaugeBar2;
-    FolderControllerDefinitions: TEdit;
-    FolderCrosshairFiles: TEdit;
-    FolderDebuggerCommentsButtonSelect: TBitBtn;
-    FolderDebuggerComments: TEdit;
-    LabelFolderDebuggerComments: TLabel;
+    FolderControllerDefinitions: TEditEx;
+    FolderCrosshairFiles: TEditEx;
+    FolderDebuggerCommentsButtonSelect: TBitBtnEx;
+    FolderDebuggerComments: TEditEx;
+    FolderDebuggerCommentsLabel: TShadowLabel;
     SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx;
     SDLVideoPerformance: TAdvOfficeCheckBoxEx;
-    SDLOutputModeBox: TAdvGroupBoxEx;
-    LabelSDLScaleMode: TLabel;
+    SDLOutputModeGroupBox: TAdvGroupBoxEx;
+    SDLScaleModeLabel: TShadowLabel;
     SDLCenterHorizontally: TAdvOfficeCheckBoxEx;
     SDLCenterVertically: TAdvOfficeCheckBoxEx;
-    SDLScaleMode: TComboBox;
+    SDLScaleMode: TComboBox2Ex;
     SDLSplitFullScreenMonitors: TAdvOfficeCheckBoxEx;
-    SDLLowLevelDriver: TAdvGroupBoxEx;
-    LabelSDLVideoDriverToUse: TLabel;
-    LabelSDL2RenderDriverToUse: TLabel;
-    LabelSDLAudioDriverToUse: TLabel;
-    LabelSDLAlternativeLibGLToUse: TLabel;
-    SDLVideoDriverToUse: TComboBox;
-    SDL2RenderDriverToUse: TComboBox;
-    SDLAudioDriverToUse: TComboBox;
-    SDLAlternativeLibGLToUse: TComboBox;
-    SDLAlternativeLibGLToUseCustom: TEdit;
-    ButtonSDLAlternativeLibGLToUseCustom: TBitBtn;
-    ButtonResetHTTPServer: TBitBtn;
-    UIModeBox: TAdvGroupBoxEx;
-    LabelUIModeKeyCustom: TLabel;
-    UIModeKeyCustom: TEdit;
-    ButtonUIModeKeyDetectKey: TBitBtn;
-    CommOptionsBox: TAdvGroupBoxEx;
-    LabelCommLocalHost: TLabel;
-    CommLocalHost: TEdit;
-    LabelCommLocalPort: TLabel;
-    CommLocalPort: TEdit;
-    LabelCommRemoteHost: TLabel;
-    CommRemoteHost: TEdit;
-    LabelCommRemotePort: TLabel;
-    CommRemotePort: TEdit;
-    CommLocalHostButtonReset: TBitBtn;
-    CommLocalPortButtonReset: TBitBtn;
-    CommRemoteHostButtonReset: TBitBtn;
-    CommRemotePortButtonReset: TBitBtn;
+    SDLLowLevelDriverGroupBox: TAdvGroupBoxEx;
+    SDLVideoDriverToUseLabel: TShadowLabel;
+    SDL2RenderDriverToUseLabel: TShadowLabel;
+    SDLAudioDriverToUseLabel: TShadowLabel;
+    SDLAlternativeLibGLToUseLabel: TShadowLabel;
+    SDLVideoDriverToUse: TComboBox2Ex;
+    SDL2RenderDriverToUse: TComboBox2Ex;
+    SDLAudioDriverToUse: TComboBox2Ex;
+    SDLAlternativeLibGLToUse: TComboBox2Ex;
+    SDLAlternativeLibGLToUseCustom: TEditEx;
+    SDLAlternativeLibGLToUseCustomButtonSelect: TBitBtnEx;
+    HTTPServerButtonReset: TBitBtnEx;
+    UIModeGroupBox: TAdvGroupBoxEx;
+    UIModeKeyCustomLabel: TShadowLabel;
+    UIModeKeyCustom: TEditEx;
+    UIModeKeyButtonDetectKey: TBitBtnEx;
+    CommOptionsGroupBox: TAdvGroupBoxEx;
+    CommLocalHostLabel: TShadowLabel;
+    CommLocalHost: TEditEx;
+    CommLocalPortLabel: TShadowLabel;
+    CommLocalPort: TEditEx;
+    CommRemoteHostLabel: TShadowLabel;
+    CommRemoteHost: TEditEx;
+    CommRemotePortLabel: TShadowLabel;
+    CommRemotePort: TEditEx;
+    CommLocalHostButtonReset: TBitBtnEx;
+    CommLocalPortButtonReset: TBitBtnEx;
+    CommRemoteHostButtonReset: TBitBtnEx;
+    CommRemotePortButtonReset: TBitBtnEx;
     EnableGlobalInputs: TAdvOfficeCheckBoxEx;
     VectorBeamWidthMin: TGaugeBar2;
-    LabelVectorBeamWidthMin: TLabel;
-    LabelVectorBeamWidthMax: TLabel;
+    VectorBeamWidthMinLabel: TShadowLabel;
+    VectorBeamWidthMaxLabel: TShadowLabel;
     VectorBeamWidthMax: TGaugeBar2;
-    LabelVectorBeamIntensityWeight: TLabel;
+    VectorBeamIntensityWeightLabel: TShadowLabel;
     VectorBeamIntensityWeight: TGaugeBar2;
-    FolderLanguageFilesButtonSelect: TBitBtn;
-    FolderLanguageFiles: TEdit;
-    LabelFolderLanguageFiles: TLabel;
-    FolderPluginFilesButtonSelect: TBitBtn;
-    FolderPluginFiles: TEdit;
-    LabelFolderPluginFiles: TLabel;
+    FolderLanguageFilesButtonSelect: TBitBtnEx;
+    FolderLanguageFiles: TEditEx;
+    FolderLanguageFilesLabel: TShadowLabel;
+    FolderPluginFilesButtonSelect: TBitBtnEx;
+    FolderPluginFiles: TEditEx;
+    FolderPluginFilesLabel: TShadowLabel;
     RecordInputTimecodeFile: TAdvOfficeCheckBoxEx;
-    LabelRecordInputTimecodeFile: TShadowLabel;
-    LabelExitAfterInputPlayback: TShadowLabel;
+    RecordInputTimecodeFileLabel: TShadowLabel;
+    ExitAfterInputPlaybackLabel: TShadowLabel;
     ExitAfterInputPlayback: TAdvOfficeCheckBoxEx;
-    LabelTypeUserInterface: TLabel;
-    TypeUserInterface: TComboBox;
-    LabelDisplayLanguage: TLabel;
+    TypeUserInterfaceLabel: TShadowLabel;
+    TypeUserInterface: TComboBox2Ex;
+    DisplayLanguageLabel: TShadowLabel;
     DisplayLanguageList: TEasyListview;
-    ButtonPageLUA_Audio: TToolButton;
-    AutobootBox: TAdvGroupBoxEx;
-    LabelAutobootCommand: TLabel;
-    LabelAutobootDelay: TLabel;
-    LabelAutobootLuaScript: TLabel;
-    AutobootCommand: TEdit;
+    AutobootGroupBox: TAdvGroupBoxEx;
+    AutobootCommandLabel: TShadowLabel;
+    AutobootDelayLabel: TShadowLabel;
+    AutobootLuaScriptLabel: TShadowLabel;
+    AutobootCommand: TEditEx;
     AutobootDelay: TGaugeBar;
-    AutobootLuaScript: TEdit;
-    AutobootLuaScriptSelectButton: TBitBtn;
-    AutobootCommandButtonClear: TBitBtn;
+    AutobootLuaScript: TEditEx;
+    AutobootLuaScriptSelectButton: TBitBtnEx;
+    AutobootCommandButtonClear: TBitBtnEx;
     EnableEmulatorLUAConsole: TAdvOfficeCheckBoxEx;
     EnableLUAPluginSupport: TAdvOfficeCheckBoxEx;
-    LabelLUAPluginsToEnable: TLabel;
+    LUAPluginsToEnableLabel: TShadowLabel;
     UnevenStretchX: TAdvOfficeCheckBoxEx;
-    IntegerScaleFactorHorizontal: TEdit;
-    LabelIntegerScaleFactorVertical: TLabel;
-    IntegerScaleFactorVertical: TEdit;
-    LabelIntegerScaleFactorHorizontal: TLabel;
+    IntegerScaleFactorHorizontal: TEditEx;
+    IntegerScaleFactorVerticalLabel: TShadowLabel;
+    IntegerScaleFactorVertical: TEditEx;
+    IntegerScaleFactorHorizontalLabel: TShadowLabel;
     LUAPluginsToEnable: TEasyListview;
-    LabelLUAPluginsToEnable2: TLabel;
-    LabelSnapshotsBox: TAdvGroupBoxEx;
-    LabelSnapshotNameFormat: TLabel;
-    LabelSnapshotView: TLabel;
-    LabelSnapSizeCustomX: TLabel;
+    LUAPluginsToEnable2Label: TShadowLabel;
+    SnapshotsGroupBox: TAdvGroupBoxEx;
+    SnapshotNameFormatLabel: TShadowLabel;
+    SnapshotViewLabel: TShadowLabel;
+    SnapSizeCustomXLabel: TShadowLabel;
     SnapBurnIn: TAdvOfficeCheckBoxEx;
-    ButtonSnapNameDefault: TBitBtn;
-    SnapView: TComboBox;
-    ButtonSnapViewDefault: TBitBtn;
+    SnapNameButtonDefault: TBitBtnEx;
+    SnapView: TComboBox2Ex;
+    SnapViewButtonDefault: TBitBtnEx;
     SnapSizeAuto: TAdvOfficeCheckBoxEx;
-    SnapSizeWidth: TEdit;
-    SnapSizeHeight: TEdit;
-    SnapName: TEdit;
+    SnapSizeWidth: TEditEx;
+    SnapSizeHeight: TEditEx;
+    SnapName: TEditEx;
     SnapBilinear: TAdvOfficeCheckBoxEx;
-    EffectOverlay: TEdit;
-    EffectOverlayBrowse: TBitBtn;
-    Label9: TLabel;
+    EffectOverlay: TEditEx;
+    EffectOverlayButtonSelect: TBitBtnEx;
+    EffectOverlayLabel: TShadowLabel;
     IntegerScaleOverscan: TAdvOfficeCheckBoxEx;
-    VideoOutputMode: TComboBox;
-    ButtonHelpVideoOutputMode: TBitBtn;
-    LabelVideoOutputMode: TLabel;
-    GroupBoxAudio: TAdvGroupBoxEx;
-    LabelAudioLatency: TLabel;
-    LabelSampleRate: TLabel;
-    LabelVolume: TLabel;
-    LabelSoundOutputMethod: TLabel;
+    VideoOutputMode: TComboBox2Ex;
+    VideoOutputModeButtonHelp: TBitBtnEx;
+    VideoOutputModeLabel: TShadowLabel;
+    AudioGroupBox: TAdvGroupBoxEx;
+    AudioLatencyLabel: TShadowLabel;
+    SampleRateLabel: TShadowLabel;
+    VolumeLabel: TShadowLabel;
+    SoundOutputMethodLabel: TShadowLabel;
     Samples: TAdvOfficeCheckBoxEx;
-    AudioLatency: TComboBox;
-    SampleRate: TComboBox;
+    AudioLatency: TComboBox2Ex;
+    SampleRate: TComboBox2Ex;
     Volume: TGaugeBar;
-    ButtonAudioLatencyReset: TBitBtn;
-    SoundOutputMethod: TComboBox;
+    AudioLatencyButtonReset: TBitBtnEx;
+    SoundOutputMethod: TComboBox2Ex;
     OSDInputOptionsGroupBox: TAdvGroupBoxEx;
-    LabelOSDInputKeyboardProvider: TLabel;
-    OSDInputKeyboardProvider: TComboBox;
-    LabelOSDInputMouseProvider: TLabel;
-    OSDInputMouseProvider: TComboBox;
-    LabelOSDInputLightgunProvider: TLabel;
-    OSDInputLightgunProvider: TComboBox;
-    LabelOSDInputJoystickProvider: TLabel;
-    OSDInputJoystickProvider: TComboBox;
+    OSDInputKeyboardProviderLabel: TShadowLabel;
+    OSDInputKeyboardProvider: TComboBox2Ex;
+    OSDInputMouseProviderLabel: TShadowLabel;
+    OSDInputMouseProvider: TComboBox2Ex;
+    OSDInputLightgunProviderLabel: TShadowLabel;
+    OSDInputLightgunProvider: TComboBox2Ex;
+    OSDInputJoystickProviderLabel: TShadowLabel;
+    OSDInputJoystickProvider: TComboBox2Ex;
     Antialias: TAdvOfficeCheckBoxEx;
     Rotate: TAdvOfficeCheckBoxEx;
     NotebookVideoPostProcessingEffectsPages: TNotebook;
-    ToolBarVideoPostProcessingEffectsPages: TToolBar;
-    ButtonPageVideoEffectsBGFX: TToolButton;
-    ButtonPageVideoEffectsHLSL: TToolButton;
-    ButtonPageVideoEffectsGLSL: TToolButton;
-    LabelShadowMaskTexture: TLabel;
-    LabelHLSLPath: TLabel;
-    Label7: TLabel;
-    LabelHLSLUpscaleSnapshot: TLabel;
-    LabelShadowMaskTileMode: TLabel;
+    ShadowMaskTextureLabel: TShadowLabel;
+    HLSLPathLabel: TShadowLabel;
+    HLSLUpscaleSnapshotXLabel: TShadowLabel;
+    HLSLUpscaleSnapshotLabel: TShadowLabel;
+    ShadowMaskTileModeLabel: TShadowLabel;
     HLSLEnable: TAdvOfficeCheckBoxEx;
     YIQEnable: TAdvOfficeCheckBoxEx;
-    ShadowMaskTexture: TEdit;
-    ButtonSelectShadowMaskTexture: TBitBtn;
-    HLSLPath: TEdit;
-    ButtonSelectHLSLPath: TBitBtn;
+    ShadowMaskTexture: TEditEx;
+    ShadowMaskTextureButtonSelect: TBitBtnEx;
+    HLSLPath: TEditEx;
+    HLSLPathButtonSelect: TBitBtnEx;
     ReadCustomHLSLFile: TAdvOfficeCheckBoxEx;
     WriteCustomHLSLFile: TAdvOfficeCheckBoxEx;
-    HLSLIniFile: TEdit;
-    HLSLIniFileButtonReset: TBitBtn;
-    HLSLUpscaleSnapX: TEdit;
-    HLSLUpscaleSnapY: TEdit;
-    ButtonHLSLUpscaleSnapReset: TBitBtn;
+    HLSLIniFile: TEditEx;
+    HLSLIniFileButtonReset: TBitBtnEx;
+    HLSLUpscaleSnapX: TEditEx;
+    HLSLUpscaleSnapY: TEditEx;
+    HLSLUpscaleSnapButtonReset: TBitBtnEx;
     HLSLOversampling: TAdvOfficeCheckBoxEx;
-    ShadowMaskTileMode: TComboBox;
-    ShadowMaskTextureButtonReset: TBitBtn;
-    LabelBGFXPath: TLabel;
-    Label14: TLabel;
-    LabelBGFXShadowMaskTextureName: TLabel;
-    LabelBGFXScreenShaderChains: TLabel;
-    BGFXPath: TEdit;
-    BGFXPathButtonSelect: TBitBtn;
-    BGFXBackend: TComboBox;
+    ShadowMaskTileMode: TComboBox2Ex;
+    ShadowMaskTextureButtonReset: TBitBtnEx;
+    BGFXPathLabel: TShadowLabel;
+    BGFXBackendLabel: TShadowLabel;
+    BGFXShadowMaskTextureNameLabel: TShadowLabel;
+    BGFXScreenShaderChainsLabel: TShadowLabel;
+    BGFXPath: TEditEx;
+    BGFXPathButtonSelect: TBitBtnEx;
+    BGFXBackend: TComboBox2Ex;
     BGFXDebug: TAdvOfficeCheckBoxEx;
-    BGFXShadowMaskTextureName: TEdit;
-    BGFXShadowMaskTextureNameButtonSelect: TBitBtn;
-    BGFXShadowMaskTextureNameButtonReset: TBitBtn;
-    BGFXScreenShaderChains: TEdit;
-    BGFXScreenShaderChainsButtonReload: TBitBtn;
-    BGFXScreenShaderChainsButtonSelect: TBitBtn;
-    LabelEnableOpenGLFilterNotFF: TLabel;
-    LabelGLSL_Shader_MAME: TLabel;
-    LabelGLSL_Shader_Screen: TLabel;
-    LabelGLSL_Shader_Screen0: TLabel;
-    LabelGLSL_Shader_Screen1: TLabel;
-    LabelGLSL_Shader_Screen2: TLabel;
-    LabelGLSL_Shader_Screen3: TLabel;
-    LabelGLSL_Shader_Screen4: TLabel;
-    LabelGLSL_Shader_Screen5: TLabel;
-    LabelGLSL_Shader_Screen6: TLabel;
-    LabelGLSL_Shader_Screen7: TLabel;
-    LabelGLSL_Shader_Screen8: TLabel;
-    LabelGLSL_Shader_Screen9: TLabel;
-    LabelGLSL_Shader_MAME0: TLabel;
-    LabelGLSL_Shader_MAME1: TLabel;
-    LabelGLSL_Shader_MAME2: TLabel;
-    LabelGLSL_Shader_MAME3: TLabel;
-    LabelGLSL_Shader_MAME4: TLabel;
-    LabelGLSL_Shader_MAME5: TLabel;
-    LabelGLSL_Shader_MAME6: TLabel;
-    LabelGLSL_Shader_MAME7: TLabel;
-    LabelGLSL_Shader_MAME8: TLabel;
-    LabelGLSL_Shader_MAME9: TLabel;
+    BGFXShadowMaskTextureName: TEditEx;
+    BGFXShadowMaskTextureNameButtonSelect: TBitBtnEx;
+    BGFXShadowMaskTextureNameButtonReset: TBitBtnEx;
+    BGFXScreenShaderChains: TEditEx;
+    BGFXScreenShaderChainsButtonReload: TBitBtnEx;
+    BGFXScreenShaderChainsButtonSelect: TBitBtnEx;
+    EnableOpenGLFilterNotFFLabel: TShadowLabel;
+    GLSL_Shader_MAMELabel: TShadowLabel;
+    GLSL_Shader_ScreenLabel: TShadowLabel;
+    GLSL_Shader_Screen0Label: TShadowLabel;
+    GLSL_Shader_Screen1Label: TShadowLabel;
+    GLSL_Shader_Screen2Label: TShadowLabel;
+    GLSL_Shader_Screen3Label: TShadowLabel;
+    GLSL_Shader_Screen4Label: TShadowLabel;
+    GLSL_Shader_Screen5Label: TShadowLabel;
+    GLSL_Shader_Screen6Label: TShadowLabel;
+    GLSL_Shader_Screen7Label: TShadowLabel;
+    GLSL_Shader_Screen8Label: TShadowLabel;
+    GLSL_Shader_Screen9Label: TShadowLabel;
+    GLSL_Shader_MAME0Label: TShadowLabel;
+    GLSL_Shader_MAME1Label: TShadowLabel;
+    GLSL_Shader_MAME2Label: TShadowLabel;
+    GLSL_Shader_MAME3Label: TShadowLabel;
+    GLSL_Shader_MAME4Label: TShadowLabel;
+    GLSL_Shader_MAME5Label: TShadowLabel;
+    GLSL_Shader_MAME6Label: TShadowLabel;
+    GLSL_Shader_MAME7Label: TShadowLabel;
+    GLSL_Shader_MAME8Label: TShadowLabel;
+    GLSL_Shader_MAME9Label: TShadowLabel;
     OpenGLForcePowerTwoTextures: TAdvOfficeCheckBoxEx;
     OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBoxEx;
     EnableOpenGL_VBO: TAdvOfficeCheckBoxEx;
     EnableOpenGL_PBO: TAdvOfficeCheckBoxEx;
     EnableGLSL: TAdvOfficeCheckBoxEx;
     EnableOpenGLFilterNotFF: TAdvOfficeCheckBoxEx;
-    GLSL_Shader_Screen0: TEdit;
-    ButtonGLSL_Shader_Screen0: TBitBtn;
-    GLSL_Shader_Screen1: TEdit;
-    ButtonGLSL_Shader_Screen1: TBitBtn;
-    GLSL_Shader_Screen2: TEdit;
-    ButtonGLSL_Shader_Screen2: TBitBtn;
-    GLSL_Shader_Screen3: TEdit;
-    ButtonGLSL_Shader_Screen3: TBitBtn;
-    GLSL_Shader_Screen4: TEdit;
-    ButtonGLSL_Shader_Screen4: TBitBtn;
-    GLSL_Shader_Screen5: TEdit;
-    ButtonGLSL_Shader_Screen5: TBitBtn;
-    GLSL_Shader_Screen6: TEdit;
-    ButtonGLSL_Shader_Screen6: TBitBtn;
-    GLSL_Shader_Screen7: TEdit;
-    ButtonGLSL_Shader_Screen7: TBitBtn;
-    GLSL_Shader_Screen8: TEdit;
-    ButtonGLSL_Shader_Screen8: TBitBtn;
-    GLSL_Shader_Screen9: TEdit;
-    ButtonGLSL_Shader_Screen9: TBitBtn;
-    GLSL_Shader_MAME0: TEdit;
-    ButtonGLSL_Shader_MAME0: TBitBtn;
-    GLSL_Shader_MAME1: TEdit;
-    ButtonGLSL_Shader_MAME1: TBitBtn;
-    GLSL_Shader_MAME2: TEdit;
-    ButtonGLSL_Shader_MAME2: TBitBtn;
-    GLSL_Shader_MAME3: TEdit;
-    ButtonGLSL_Shader_MAME3: TBitBtn;
-    GLSL_Shader_MAME4: TEdit;
-    ButtonGLSL_Shader_MAME4: TBitBtn;
-    GLSL_Shader_MAME5: TEdit;
-    ButtonGLSL_Shader_MAME5: TBitBtn;
-    GLSL_Shader_MAME6: TEdit;
-    ButtonGLSL_Shader_MAME6: TBitBtn;
-    GLSL_Shader_MAME7: TEdit;
-    ButtonGLSL_Shader_MAME7: TBitBtn;
-    GLSL_Shader_MAME8: TEdit;
-    ButtonGLSL_Shader_MAME8: TBitBtn;
-    GLSL_Shader_MAME9: TEdit;
-    ButtonGLSL_Shader_MAME9: TBitBtn;
-    OSDOutputOptionsBox: TAdvGroupBoxEx;
-    LabelOSDOutputProvider: TLabel;
-    OSDOutputProvider: TComboBox;
+    GLSL_Shader_Screen0: TEditEx;
+    GLSL_Shader_Screen0ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen1: TEditEx;
+    GLSL_Shader_Screen1ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen2: TEditEx;
+    GLSL_Shader_Screen2ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen3: TEditEx;
+    GLSL_Shader_Screen3ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen4: TEditEx;
+    GLSL_Shader_Screen4ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen5: TEditEx;
+    GLSL_Shader_Screen5ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen6: TEditEx;
+    GLSL_Shader_Screen6ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen7: TEditEx;
+    GLSL_Shader_Screen7ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen8: TEditEx;
+    GLSL_Shader_Screen8ButtonSelect: TBitBtnEx;
+    GLSL_Shader_Screen9: TEditEx;
+    GLSL_Shader_Screen9ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME0: TEditEx;
+    GLSL_Shader_MAME0ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME1: TEditEx;
+    GLSL_Shader_MAME1ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME2: TEditEx;
+    GLSL_Shader_MAME2ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME3: TEditEx;
+    GLSL_Shader_MAME3ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME4: TEditEx;
+    GLSL_Shader_MAME4ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME5: TEditEx;
+    GLSL_Shader_MAME5ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME6: TEditEx;
+    GLSL_Shader_MAME6ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME7: TEditEx;
+    GLSL_Shader_MAME7ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME8: TEditEx;
+    GLSL_Shader_MAME8ButtonSelect: TBitBtnEx;
+    GLSL_Shader_MAME9: TEditEx;
+    GLSL_Shader_MAME9ButtonSelect: TBitBtnEx;
+    OSDOutputOptionsGroupBox: TAdvGroupBoxEx;
+    OSDOutputProviderLabel: TShadowLabel;
+    OSDOutputProvider: TComboBox2Ex;
     BGFXScreenShaderChains_ListView: TEasyListview;
-    BGFXScreenShaderChains_ListViewButtonAdd: TBitBtn;
-    BGFXScreenShaderChains_ListViewButtonSelect: TBitBtn;
-    LabelBGFXScreenShaderChainsDetailsHTML: TLabel;
-    LabelBGFXScreenShaderChainsHelp: TLabel;
-    BGFXScreenShaderChainsButtonReset: TBitBtn;
-    VectorPostProcessingBox: TAdvGroupBoxEx;
+    BGFXScreenShaderChains_ListViewButtonAdd: TBitBtnEx;
+    BGFXScreenShaderChains_ListViewButtonSelect: TBitBtnEx;
+    BGFXScreenShaderChainsDetailsHTMLLabel: TShadowLabel;
+    BGFXScreenShaderChainsHelpLabel: TShadowLabel;
+    BGFXScreenShaderChainsButtonReset: TBitBtnEx;
+    VectorPostProcessingGroupBox: TAdvGroupBoxEx;
     VectorBeamSmooth: TGaugeBar2;
-    LabelVectorBeamSmooth: TLabel;
+    VectorBeamSmoothLabel: TShadowLabel;
     VectorMaximumAttenuation: TGaugeBar2;
-    LabelVectorMaximumAttenuation: TLabel;
+    VectorMaximumAttenuationLabel: TShadowLabel;
     VectorMinimumLengthAttenuation: TGaugeBar2;
-    LabelVectorMinimumLengthAttenuation: TLabel;
+    VectorMinimumLengthAttenuationLabel: TShadowLabel;
     UnevenStretchY: TAdvOfficeCheckBoxEx;
     AutoUnevenStretchXY: TAdvOfficeCheckBoxEx;
     PortAudioSettingsGroupBox: TAdvGroupBoxEx;
-    LabelPortAudioAPI: TLabel;
-    LabelPortAudioDevice: TLabel;
-    LabelPortAudioLatency: TLabel;
-    ButtonClearPortAudioAPI: TBitBtn;
-    PortAudioAPI: TEdit;
-    PortAudioDevice: TEdit;
-    ButtonClearPortAudioDevice: TBitBtn;
-    PortAudioLatency: TEdit;
-    ButtonResetPortAudioLatency: TBitBtn;
+    PortAudioAPILabel: TShadowLabel;
+    PortAudioDeviceLabel: TShadowLabel;
+    PortAudioLatencyLabel: TShadowLabel;
+    PortAudioAPIButtonClear: TBitBtnEx;
+    PortAudioAPI: TEditEx;
+    PortAudioDevice: TEditEx;
+    PortAudioDeviceButtonClear: TBitBtnEx;
+    PortAudioLatency: TEditEx;
+    PortAudioLatencyButtonReset: TBitBtnEx;
     SaveNVRAMOnExit: TAdvOfficeCheckBoxEx;
-    Label1: TLabel;
+    WatchdogSecsLabel: TShadowLabel;
     AutoSave: TAdvOfficeCheckBoxEx;
     EnableSaveStateRewind: TAdvOfficeCheckBoxEx;
-    LabelSaveStateRewindBufferSize: TLabel;
+    SaveStateRewindBufferSizeLabel: TShadowLabel;
     SaveStateRewindBufferSize: TGaugeBar;
-    SaveStateName: TEdit;
-    LabelSaveStateName: TLabel;
-    ButtonSaveStateNameReset: TBitBtn;
-    LabelFallbackArtwork: TLabel;
-    FallbackArtwork: TEdit;
-    ButtonPageVideo2: TToolButton;
+    SaveStateName: TEditEx;
+    SaveStateNameLabel: TShadowLabel;
+    SaveStateNameButtonReset: TBitBtnEx;
+    FallbackArtworkLabel: TShadowLabel;
+    FallbackArtwork: TEditEx;
     PerformanceGroupBox: TAdvGroupBoxEx;
-    LabelSpeed: TLabel;
-    LabelFrameskip: TLabel;
-    LabelThreadPriority: TLabel;
-    LabelNumberProcessors: TLabel;
-    LabelBenchmark: TLabel;
-    LabelSecondsToRun: TLabel;
+    SpeedLabel: TShadowLabel;
+    FrameskipLabel: TShadowLabel;
+    ThreadPriorityLabel: TShadowLabel;
+    NumberProcessorsLabel: TShadowLabel;
+    BenchmarkLabel: TShadowLabel;
+    SecondsToRunLabel: TShadowLabel;
     AutoFrameskip: TAdvOfficeCheckBoxEx;
     Throttle: TAdvOfficeCheckBoxEx;
     Sleep: TAdvOfficeCheckBoxEx;
@@ -614,54 +601,66 @@ type
     RefreshSpeed: TAdvOfficeCheckBoxEx;
     SyncronizeRefreshRate: TAdvOfficeCheckBoxEx;
     Speed: TGaugeBar2;
-    Frameskip: TComboBox;
-    ThreadPriority: TComboBox;
-    NumberProcessors: TComboBox;
+    Frameskip: TComboBox2Ex;
+    ThreadPriority: TComboBox2Ex;
+    NumberProcessors: TComboBox2Ex;
     Benchmark: TGaugeBar;
     SecondsToRun: TGaugeBar;
-    ScreensBox: TAdvGroupBoxEx;
-    LabelScreenName: TLabel;
-    LabelScreenAspectRatio: TLabel;
-    LabelScreenResolution: TLabel;
-    LabelScreenRefreshRate_Custom: TLabel;
-    LabelScreenView: TLabel;
-    LabelScreensSelector: TLabel;
-    ScreenName: TComboBox;
-    ScreenAspectRatio: TComboBox;
-    ScreenResolution: TComboBox;
-    ScreenRefreshRate: TComboBox;
-    ScreenView: TComboBox;
+    ScreensGroupBox: TAdvGroupBoxEx;
+    ScreenNameLabel: TShadowLabel;
+    ScreenAspectRatioLabel: TShadowLabel;
+    ScreenResolutionLabel: TShadowLabel;
+    ScreenRefreshRate_CustomLabel: TShadowLabel;
+    ScreenViewLabel: TShadowLabel;
+    ScreensSelectorLabel: TShadowLabel;
+    ScreenName: TComboBox2Ex;
+    ScreenAspectRatio: TComboBox2Ex;
+    ScreenResolution: TComboBox2Ex;
+    ScreenRefreshRate: TComboBox2Ex;
+    ScreenView: TComboBox2Ex;
     NumberScreens: TExTrackBar;
-    ScreensSelector: TComboBox;
-    ButtonScreenDefaultSettings: TBitBtn;
-    LabelMonitorProvider: TLabel;
-    MonitorProvider: TComboBox;
-    LabelSnapSizeCustom: TLabel;
-    LabelOverrideArtwork: TLabel;
-    OverrideArtwork: TEdit;
+    ScreensSelector: TComboBox2Ex;
+    ScreenButtonDefaultSettings: TBitBtnEx;
+    MonitorProviderLabel: TShadowLabel;
+    MonitorProvider: TComboBox2Ex;
+    SnapSizeCustomLabel: TShadowLabel;
+    OverrideArtworkLabel: TShadowLabel;
+    OverrideArtwork: TEditEx;
     CommSyncFrame: TAdvOfficeCheckBoxEx;
-    BGFXLUTTextureName: TEdit;
-    BGFXLUTTextureNameButtonSelect: TBitBtn;
-    BGFXLUTTextureNameButtonReset: TBitBtn;
-    LabelBGFXLUTTextureName: TLabel;
-    HLSLBloomPostProcessingBox: TAdvGroupBoxEx;
-    BloomBlendMode: TComboBox;
-    LabelBloomBlendMode: TLabel;
-    BloomLUTTextureScreen: TEdit;
-    BloomLUTTextureScreenButtonSelect: TBitBtn;
-    BloomLUTTextureScreenButtonReset: TBitBtn;
+    BGFXLUTTextureName: TEditEx;
+    BGFXLUTTextureNameButtonSelect: TBitBtnEx;
+    BGFXLUTTextureNameButtonReset: TBitBtnEx;
+    BGFXLUTTextureNameLabel: TShadowLabel;
+    HLSLBloomPostProcessingGroupBox: TAdvGroupBoxEx;
+    BloomBlendMode: TComboBox2Ex;
+    BloomBlendModeLabel: TShadowLabel;
+    BloomLUTTextureScreen: TEditEx;
+    BloomLUTTextureScreenButtonSelect: TBitBtnEx;
+    BloomLUTTextureScreenButtonReset: TBitBtnEx;
     BloomLUTEnabled: TAdvOfficeCheckBoxEx;
     BloomLOOTUIEnabled: TAdvOfficeCheckBoxEx;
-    BloomLUTTextureUI: TEdit;
-    BloomLUTTextureUIButtonSelect: TBitBtn;
-    BloomLUTTextureUIButtonReset: TBitBtn;
-    LabelFolderManualsPDF: TLabel;
-    FolderManualsPDF: TEdit;
-    FolderManualsPDFButtonSelect: TBitBtn;
+    BloomLUTTextureUI: TEditEx;
+    BloomLUTTextureUIButtonSelect: TBitBtnEx;
+    BloomLUTTextureUIButtonReset: TBitBtnEx;
+    FolderManualsPDFLabel: TShadowLabel;
+    FolderManualsPDF: TEditEx;
+    FolderManualsPDFButtonSelect: TBitBtnEx;
+    ButtonPageFolders: TSpeedButtonEx;
+    ButtonPageVideo1: TSpeedButtonEx;
+    ButtonPageVideo2: TSpeedButtonEx;
+    ButtonPageVideo3: TSpeedButtonEx;
+    ButtonPageLUAandAudio: TSpeedButtonEx;
+    ButtonPageInput: TSpeedButtonEx;
+    ButtonPageMisc: TSpeedButtonEx;
+    ButtonPageSDLMAMEInput: TSpeedButtonEx;
+    ButtonPageVideoEffectsBGFX: TSpeedButtonEx;
+    ButtonPageVideoEffectsHLSL: TSpeedButtonEx;
+    ButtonPageVideoEffectsGLSL: TSpeedButtonEx;
+    SkipMandatoryFileMan: TAdvOfficeCheckBoxEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
-    procedure EffectOverlayBrowseClick(Sender: TObject);
+    procedure EffectOverlayButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonSelectClick(Sender: TObject);
     procedure FolderSamplesButtonSelectClick(Sender: TObject);
     procedure FolderGamesConfigurationsButtonSelectClick(Sender: TObject);
@@ -670,7 +669,7 @@ type
     procedure FolderSaveStatesButtonSelectClick(Sender: TObject);
     procedure FolderGameSnapshotsButtonSelectClick(Sender: TObject);
     procedure FolderDiffButtonSelectClick(Sender: TObject);
-    procedure DebuggerScriptBrowseClick(Sender: TObject);
+    procedure DebuggerScriptButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonClearClick(Sender: TObject);
     procedure VolumeChange(Sender: TObject);
     procedure JoystickDeadzoneChange(Sender: TObject);
@@ -697,7 +696,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FolderNVRAMButtonSelectClick(Sender: TObject);
     procedure SpeedChange(Sender: TObject);
-    procedure ButtonScreenDefaultSettingsClick(Sender: TObject);
+    procedure ScreenButtonDefaultSettingsClick(Sender: TObject);
     procedure SnapSizeAutoClick(Sender: TObject);
     procedure SnapNameDefaultButtonClick(Sender: TObject);
     procedure SnapSizeWidthKeyPress(Sender: TObject; var Key: Char);
@@ -710,7 +709,7 @@ type
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
     procedure FolderROMsButtonUpClick(Sender: TObject);
     procedure UIModeKeyChange(Sender: TObject);
-    procedure ButtonUIModeKeyDetectKeyClick(Sender: TObject);
+    procedure UIModeKeyButtonDetectKeyClick(Sender: TObject);
     procedure FolderIniFilesKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure FolderIniFilesButtonUpClick(Sender: TObject);
@@ -727,16 +726,15 @@ type
     procedure FolderArtworksButtonClearClick(Sender: TObject);
     procedure FolderCheatFilesButtonSelectClick(Sender: TObject);
     procedure FolderHashFilesButtonSelectClick(Sender: TObject);
-    procedure ButtonSelectShadowMaskTextureClick(Sender: TObject);
+    procedure ShadowMaskTextureButtonSelectClick(Sender: TObject);
     procedure FolderCrosshairFilesButtonSelectClick(Sender: TObject);
-    procedure UIFontSelectFontButtonClick(Sender: TObject);
-    procedure ButtonPageFoldersClick(Sender: TObject);
+    procedure UIFontSelectFontButtonSelectClick(Sender: TObject);
     procedure SpeedMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure AutobootDelayChange(Sender: TObject);
     procedure AutobootLuaScriptSelectButtonClick(Sender: TObject);
-    procedure ButtonSnapViewDefaultClick(Sender: TObject);
-    procedure ButtonSelectHLSLPathClick(Sender: TObject);
+    procedure SnapViewButtonDefaultClick(Sender: TObject);
+    procedure HLSLPathButtonSelectClick(Sender: TObject);
     procedure BenchmarkChange(Sender: TObject);
     procedure HLSLIniFileButtonResetClick(Sender: TObject);
     procedure AutobootCommandButtonClearClick(Sender: TObject);
@@ -749,27 +747,27 @@ type
     procedure SDLJoystickMapping6Select(Sender: TObject);
     procedure SDLJoystickMapping7Select(Sender: TObject);
     procedure SDLJoystickMapping8Select(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME0Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME1Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME2Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME3Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME4Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME5Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME6Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME7Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME8Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_MAME9Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen0Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen1Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen2Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen3Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen4Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen5Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen6Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen7Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen8Click(Sender: TObject);
-    procedure ButtonGLSL_Shader_Screen9Click(Sender: TObject);
-    procedure ButtonAudioLatencyResetClick(Sender: TObject);
+    procedure GLSL_Shader_MAME0ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME1ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME2ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME3ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME4ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME5ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME6ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME7ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME8ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_MAME9ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen0ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen1ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen2ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen3ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen4ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen5ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen6ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen7ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen8ButtonSelectClick(Sender: TObject);
+    procedure GLSL_Shader_Screen9ButtonSelectClick(Sender: TObject);
+    procedure AudioLatencyButtonResetClick(Sender: TObject);
     procedure WatchdogKeyPress(Sender: TObject; var Key: Char);
     procedure SnapSizeHeightKeyPress(Sender: TObject; var Key: Char);
     procedure SDL2MouseMapping1Select(Sender: TObject);
@@ -797,11 +795,11 @@ type
     procedure SDLLightgunMapping7Select(Sender: TObject);
     procedure SDLLightgunMapping8Select(Sender: TObject);
     procedure SDLAlternativeLibGLToUseSelect(Sender: TObject);
-    procedure ButtonSDLAlternativeLibGLToUseCustomClick(Sender: TObject);
-    procedure ButtonSDLKeymapFilenameSelectClick(Sender: TObject);
-    procedure ButtonSDLKeymapFilenameResetClick(Sender: TObject);
-    procedure ButtonSnapNameDefaultClick(Sender: TObject);
-    procedure ButtonSaveStateNameResetClick(Sender: TObject);
+    procedure SDLAlternativeLibGLToUseCustomButtonSelectClick(Sender: TObject);
+    procedure SDLKeymapFilenameButtonSelectClick(Sender: TObject);
+    procedure SDLKeymapFilenameButtonResetClick(Sender: TObject);
+    procedure SnapNameButtonDefaultClick(Sender: TObject);
+    procedure SaveStateNameButtonResetClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     function BiosSetsListViewItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
@@ -814,10 +812,10 @@ type
     procedure FolderDebuggerCommentsButtonSelectClick(Sender: TObject);
     procedure SaveValidateAllCustomFilesClick(Sender: TObject);
     procedure ButtonHelpSaveValidateAllCustomFilesClick(Sender: TObject);
-    procedure ButtonResetHTTPServerClick(Sender: TObject);
+    procedure HTTPServerButtonResetClick(Sender: TObject);
     procedure HLSLUpscaleSnapXKeyPress(Sender: TObject; var Key: Char);
     procedure HLSLUpscaleSnapYKeyPress(Sender: TObject; var Key: Char);
-    procedure ButtonHLSLUpscaleSnapResetClick(Sender: TObject);
+    procedure HLSLUpscaleSnapButtonResetClick(Sender: TObject);
     procedure CommLocalHostKeyPress(Sender: TObject; var Key: Char);
     procedure CommLocalPortKeyPress(Sender: TObject; var Key: Char);
     procedure CommLocalHostButtonResetClick(Sender: TObject);
@@ -829,7 +827,7 @@ type
     procedure VectorBeamWidthMinChange(Sender: TObject);
     procedure VectorBeamWidthMaxChange(Sender: TObject);
     procedure VectorBeamIntensityWeightChange(Sender: TObject);
-    procedure ButtonHelpVideoOutputModeClick(Sender: TObject);
+    procedure VideoOutputModeButtonHelpClick(Sender: TObject);
     procedure FolderLanguageFilesButtonSelectClick(Sender: TObject);
     procedure FolderPluginFilesButtonSelectClick(Sender: TObject);
     procedure IntegerScaleFactorHorizontalKeyPress(Sender: TObject;
@@ -841,16 +839,15 @@ type
     procedure BGFXScreenShaderChainsButtonReloadClick(Sender: TObject);
     procedure BGFXScreenShaderChainsButtonSelectClick(Sender: TObject);
     procedure ShadowMaskTextureButtonResetClick(Sender: TObject);
-    procedure ButtonPageVideoEffectsBGFXClick(Sender: TObject);
     function BGFXScreenShaderChains_ListViewItemCompare(
       Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
       Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
     procedure BGFXScreenShaderChains_ListViewItemPaintText(
       Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
       ACanvas: TCanvas);
-    procedure LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter(Sender: TObject);
-    procedure LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave(Sender: TObject);
-    procedure LabelBGFXScreenShaderChainsDetailsHTMLClick(Sender: TObject);
+    procedure BGFXScreenShaderChainsDetailsHTMLLabelMouseEnter(Sender: TObject);
+    procedure BGFXScreenShaderChainsDetailsHTMLLabelMouseLeave(Sender: TObject);
+    procedure BGFXScreenShaderChainsDetailsHTMLLabelClick(Sender: TObject);
     procedure BGFXScreenShaderChains_ListViewButtonSelectClick(
       Sender: TObject);
     procedure BGFXScreenShaderChains_ListViewButtonAddClick(
@@ -874,6 +871,8 @@ type
     procedure BloomLUTTextureUIButtonSelectClick(Sender: TObject);
     procedure BloomLUTTextureUIButtonResetClick(Sender: TObject);
     procedure FolderManualsPDFButtonSelectClick(Sender: TObject);
+    procedure ButtonPageFoldersClick(Sender: TObject);
+    procedure ButtonPageVideoEffectsBGFXClick(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -885,12 +884,12 @@ type
     procedure EnableSettingsIniMAME;
     procedure PopulateVideoOutputMode;
     procedure PopulateDisplayLanguage;
-    //procedure PopulateBGFXBackend;
+
     procedure PopulateLUAPlugins_ListView;
     procedure ReadPluginIni(const CustomPluginString: String = '');
     procedure WritePluginIni;
     procedure PopulateBGFXShaderChains_ListView;
-    //function  GetCustomIniFile(FileID: ShortInt): String;
+
     procedure LoadIniToStringList(FileID: ShortInt; var ListHolder: THashedStringList);
     procedure LoadCustomSettingsFiles;
     procedure LoadCustomFilesArray;
@@ -898,10 +897,10 @@ type
     procedure FixScreenViewNameWrite(ScreenIndex: Integer);
     procedure ReadMAMEIniFile(const IniFile: String; EmuDefaultSettings: Boolean = False);
     procedure WriteMAMEIniFile(const customIni: String; CustomGameOption: Boolean);
-    procedure SelectGLSLShaderMAME(EditHolder: TEdit; IsMAMEFile: Boolean = True);
+    procedure SelectGLSLShaderMAME(EditHolder: TEditEx; IsMAMEFile: Boolean = True);
     procedure EnableDisableControls;
-    procedure ToggleSDLDeviceMappingCustom(SDLDeviceMapping: TComboBox; SDLCustomMapping: TEdit);
-    procedure SelectLUTTextureFile(EditHolder: TEdit);
+    procedure ToggleSDLDeviceMappingCustom(SDLDeviceMapping: TComboBox2Ex; SDLCustomMapping: TEditEx);
+    procedure SelectLUTTextureFile(EditHolder: TEditEx);
   public
     { Public declarations }
     emuIni,
@@ -1048,26 +1047,26 @@ begin
          (EntryString = 'sx ') then
          begin
            IntegerScaleFactorHorizontal.Enabled:= True;
-           LabelIntegerScaleFactorHorizontal.Enabled:= True;
+           IntegerScaleFactorHorizontalLabel.Enabled:= True;
          end
       else
       if (EntryString = 'intscaley ') or
          (EntryString = 'sy ') then
          begin
            IntegerScaleFactorVertical.Enabled:= True;
-           LabelIntegerScaleFactorVertical.Enabled:= True;
+           IntegerScaleFactorVerticalLabel.Enabled:= True;
          end
       else
       if EntryString = 'fallback_artwork ' then
          begin
            FallbackArtwork.Enabled:= True;
-           LabelFallbackArtwork.Enabled:= True;
+           FallbackArtworkLabel.Enabled:= True;
          end
       else
       if EntryString = 'override_artwork ' then
          begin
            OverrideArtwork.Enabled:= True;
-           LabelOverrideArtwork.Enabled:= True;
+           OverrideArtworkLabel.Enabled:= True;
          end
       else
       if (EntryString = 'antialias ') or
@@ -1076,18 +1075,18 @@ begin
       else
       if EntryString =  'beam ' then
          begin
-           LabelVectorBeamWidthMin.Hint:= 'Beam Width [%2.2f]';
-           LabelVectorBeamWidthMin.Caption:= 'Beam Width [1.00]';
+           VectorBeamWidthMinLabel.Hint:= 'Beam Width [%2.2f]';
+           VectorBeamWidthMinLabel.Caption:= 'Beam Width [1.00]';
            VectorBeamWidthMin.Hint:= 'Set vector beam width';
-           LabelVectorBeamWidthMax.Enabled:= False;
+           VectorBeamWidthMaxLabel.Enabled:= False;
            VectorBeamWidthMax.Enabled:= False;
-           LabelVectorBeamIntensityWeight.Enabled:= False;
+           VectorBeamIntensityWeightLabel.Enabled:= False;
            VectorBeamIntensityWeight.Enabled:= False;
          end
       else
       if (EntryString = 'vector_beam_smooth ') or
          (EntryString = 'vecsmooth ') then
-         VectorPostProcessingBox.Enabled:= True
+         VectorPostProcessingGroupBox.Enabled:= True
       else
       if EntryString =  'http ' then
          HTTPServer.Enabled:= True
@@ -1097,20 +1096,20 @@ begin
       else
       if (EntryString = 'autoboot_script ') or
          (EntryString = 'script ') then
-         AutobootBox.Enabled:= True
+         AutobootGroupBox.Enabled:= True
       else
       if EntryString =  'plugins ' then
          begin
            EnableLUAPluginSupport.Enabled:= True;
            LUAPluginsToEnable.Enabled:= True;
-           LabelLUAPluginsToEnable.Enabled:= True;
-           LabelLUAPluginsToEnable2.Enabled:= True;
+           LUAPluginsToEnableLabel.Enabled:= True;
+           LUAPluginsToEnable2Label.Enabled:= True;
          end
       else
       if (EntryString =  'language ') or
          (EntryString =  'lang ') then
          begin
-           LabelDisplayLanguage.Enabled:= True;
+           DisplayLanguageLabel.Enabled:= True;
            DisplayLanguageList.Enabled:= True;
          end
       else
@@ -1120,11 +1119,14 @@ begin
       if EntryString =  'skip_gameinfo ' then
          SkipGameInfo.Enabled:= True
       else
+      if EntryString =  'skip_mandatory_fileman ' then
+         SkipMandatoryFileMan.Enabled:= True
+      else
       if EntryString =  'uifont ' then
          begin
            UIFont.Enabled:= True;
-           LabelUIFont.Enabled:= True;
-           UIFontSelectFontButton.Enabled:= True;
+           UIFontLabel.Enabled:= True;
+           UIFontSelectFontButtonSelect.Enabled:= True;
          end
       else
       if EntryString =  'ui_mouse ' then
@@ -1154,91 +1156,6 @@ begin
      begin
        if PosEx('sdl', LowerCase(emuFileExec)) <> 0 then
           IsSDLMAME:= True;
-
-       {if FileExists(emuIni) then
-          begin
-            mameIni:= THashedStringList.Create;
-            mameIni.LoadFromFile(emuIni);
-            for Loop:=0 to mameIni.Count-1 do
-            begin
-              if SameText(Copy(mameIni[Loop], 1, 12), 'sdlvideofps ') then
-                 begin
-                   IsSDLMAME:= True;
-                 end
-              else
-              if SameText(Copy(mameIni[Loop], 1, 8), 'gl_glsl ') then
-                 begin
-                   GLSL_GroupBox.Enabled:= True;
-                 end
-              else
-              if SameText(Copy(mameIni[Loop], 1, 12), 'hlsl_enable ') then
-                 begin
-                   HLSL_GroupBox.Enabled:= True;
-                 end
-              else
-              if SameText(Copy(mameIni[Loop], 1, 13), 'bgfx_backend ') then
-                 begin
-                   BGFX_GroupBox.Enabled:= True;
-                 end
-              else
-
-              //if SameText(Copy(mameIni[Loop], 1, 16), 'hlsl_prescale_x ') then
-              //   begin
-              //     LabelHLSLPrescaleOverride.Enabled:= True;
-              //     LabelHLSLPrescaleOverrideX.Enabled:= True;
-              //     HLSLPrescaleOverrideX.Enabled:= True;
-              //     LabelHLSLPrescaleOverrideY.Enabled:= True;
-              //     HLSLPrescaleOverrideY.Enabled:= True;
-              //   end
-              //else
-              if SameText(Copy(mameini[Loop], 1, 5), 'beam ') then
-                 begin
-                   LabelVectorBeamWidthMin.Hint:= 'Beam Width [%2.2f]';
-                   LabelVectorBeamWidthMin.Caption:= 'Beam Width [1.00]';
-                   VectorBeamWidthMin.Hint:= 'Set vector beam width';
-                   LabelVectorBeamWidthMax.Enabled:= False;
-                   VectorBeamWidthMax.Enabled:= False;
-                   LabelVectorBeamIntensityWeight.Enabled:= False;
-                   VectorBeamIntensityWeight.Enabled:= False;
-                 end
-              else
-              if SameText(Copy(mameini[Loop], 1, 5), 'http ') then
-                 HTTPServer.Enabled:= True
-              else
-              if SameText(Copy(mameini[Loop], 1, 8), 'console ') then
-                 EnableEmulatorLUAConsole.Enabled:= True
-              else
-              if SameText(Copy(mameini[Loop], 1, 8), 'plugins ') then
-                 EnableLUAPluginSupport.Enabled:= True
-              else
-              if SameText(Copy(mameini[Loop], 1, 9), 'language ') or
-                 SameText(Copy(mameini[Loop], 1, 5), 'lang ') then
-                 begin
-                   LabelDisplayLanguage.Enabled:= True;
-                   DisplayLanguageList.Enabled:= True;
-                 end
-              else
-              if SameText(Copy(mameini[Loop], 1, 12), 'useallheads ') then
-                 SDLSplitFullScreenMonitors.Enabled:= True
-              else
-              if SameText(Copy(mameini[Loop], 1, 14), 'skip_gameinfo ') then
-                 SkipGameInfo.Enabled:= True
-              else
-              if SameText(Copy(mameini[Loop], 1, 7), 'uifont ') then
-                 begin
-                   UIFont.Enabled:= True;
-                   LabelUIFont.Enabled:= True;
-                   UIFontSelectFontButton.Enabled:= True;
-                 end
-              else
-              if SameText(Copy(mameini[Loop], 1, 9), 'ui_mouse ') then
-                 UIMouse.Enabled:= True
-              if SameText(Copy(mameini[Loop], 1, 15), 'multithreading ') or
-                 SameText(Copy(mameini[Loop], 1, 3), 'mt ') or
-                 Multithreading.Enabled:= True;
-            end;
-            FreeAndNil(mameIni);
-          end;}
      end;
 
   VideoOutputMode.Items.Add('Auto');
@@ -1261,7 +1178,6 @@ begin
         VideoOutputMode.Items.Add('BGFX (cross-platform)');
         VideoOutputMode.Items.Add('None');
         //VideoOutputMode.ItemIndex:= 2;
-        //ButtonPageSDLMAME.Enabled:= False;
       end;
   end;
   VideoOutputMode.ItemIndex:= 0;
@@ -1847,7 +1763,7 @@ var
   FoldersList: TStringList;
   Loop, Loop2: Integer;
 
-  function SetComboBoxItemZero(ComboBoxHolder: TComboBox): Boolean;
+  function SetComboBoxItemZero(ComboBoxHolder: TComboBox2Ex): Boolean;
   begin
     Result:= True;
     if ComboBoxHolder.ItemIndex = -1 then
@@ -1950,7 +1866,7 @@ var
     EditHolder.Text:= glValue;
   end;
 
-  function GetSDLDeviceMapping(ComboBoxHolder: TComboBox; EditHolder: TEdit): Boolean;
+  function GetSDLDeviceMapping(ComboBoxHolder: TComboBox2Ex; EditHolder: TEditEx): Boolean;
   var
     devValue: String;
   begin
@@ -2119,8 +2035,8 @@ begin
             else
             if EntryString = 'snapsize ' then
                begin
-                 LabelSnapSizeCustomX.Hint:= LowerCase(GetStringValue);
-                 SnapSizeAuto.Checked:= LabelSnapSizeCustomX.Hint = 'auto';
+                 SnapSizeCustomXLabel.Hint:= LowerCase(GetStringValue);
+                 SnapSizeAuto.Checked:= SnapSizeCustomXLabel.Hint = 'auto';
                  //LabelSnaphotResolution.Hint:= LowerCase(GetStringValue);
                  //SnapSizeAuto.Checked:= LabelSnaphotResolution.Hint = 'auto';
                  case SnapSizeAuto.Checked of
@@ -2132,13 +2048,13 @@ begin
                    False:
                      begin
                        //Loop2:= Pos('x', LabelSnaphotResolution.Hint);
-                       Loop2:= PosEx('x', LabelSnapSizeCustomX.Hint);
+                       Loop2:= PosEx('x', SnapSizeCustomXLabel.Hint);
                        if Loop2 = 0 then
                           SnapSizeAuto.Checked:= True
                        else
                           begin
-                            SnapSizeWidth.Text:= Copy(LabelSnapSizeCustomX.Hint, 1, Loop2-1);
-                            SnapSizeHeight.Text:= Copy(LabelSnapSizeCustomX.Hint, Loop2+1, Length(LabelSnapSizeCustomX.Hint));
+                            SnapSizeWidth.Text:= Copy(SnapSizeCustomXLabel.Hint, 1, Loop2-1);
+                            SnapSizeHeight.Text:= Copy(SnapSizeCustomXLabel.Hint, Loop2+1, Length(SnapSizeCustomXLabel.Hint));
                             //SnapSizeWidth.Text:= Copy(LabelSnaphotResolution.Hint, 1, Loop2-1);
                             //SnapSizeHeight.Text:= Copy(LabelSnaphotResolution.Hint, Loop2+1, Length(LabelSnaphotResolution.Hint));
                           end;
@@ -2781,6 +2697,9 @@ begin
             else
             if EntryString = 'skip_gameinfo ' then
                SkipGameInfo.Checked:= GetBooleanValue
+            else
+            if EntryString =  'skip_mandatory_fileman ' then
+               SkipMandatoryFileMan.Checked:= GetBooleanValue
             else
             if EntryString = 'uifont ' then
                UIFont.Text:= GetStringValue
@@ -3445,7 +3364,7 @@ begin
             // SDLMAME
             // # SDL KEYBOARD MAPPING
             if EntryString = 'keymap ' then
-               SDKKeyboardMappingBox.CheckBox.Checked:= GetBooleanValue
+               SDKKeyboardMappingGroupBox.CheckBox.Checked:= GetBooleanValue
             else
             if EntryString = 'keymap_file ' then
                SDLKeymapFilename.Text:= GetStringValue
@@ -3614,7 +3533,7 @@ begin
                  Value:= GetStringValue;
                  SDLAlternativeLibGLToUse.ItemIndex:= Ord(Value <> 'auto');
                  SDLAlternativeLibGLToUseCustom.Enabled:= SDLAlternativeLibGLToUse.ItemIndex = 1;
-                 ButtonSDLAlternativeLibGLToUseCustom.Enabled:= SDLAlternativeLibGLToUseCustom.Enabled;
+                 SDLAlternativeLibGLToUseCustomButtonSelect.Enabled:= SDLAlternativeLibGLToUseCustom.Enabled;
                  if SDLAlternativeLibGLToUseCustom.Enabled then
                     SDLAlternativeLibGLToUseCustom.Text:= Value;
                end;
@@ -3797,7 +3716,7 @@ var
        Result:= EditHolder.Text;
   end;
 
-  function SetSDLDevice(ComboBoxHolder: TComboBox; EditHolder: TEdit): String;
+  function SetSDLDevice(ComboBoxHolder: TComboBox2Ex; EditHolder: TEditEx): String;
   begin
     Result:= 'auto';
     if (ComboBoxHolder.ItemIndex = 1) and (EditHolder.Text <> '') then
@@ -4483,6 +4402,9 @@ begin
          if tmpEntryStr = 'skip_gameinfo ' then
             UpdateMAMELine(EntryString, GetBooleanValue(SkipGameInfo.Checked))
          else
+         if tmpEntryStr = 'skip_mandatory_fileman ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(SkipMandatoryFileMan.Checked))
+         else
          if tmpEntryStr = 'uifont ' then
             begin
               FormMain.FixEmptyValue(UIFont, 'default');
@@ -5118,7 +5040,7 @@ begin
          // SDLMAME
          // # SDL KEYBOARD MAPPING
          if tmpEntryStr = 'keymap ' then
-            UpdateMAMELine(EntryString, GetBooleanValue(SDKKeyboardMappingBox.CheckBox.Checked))
+            UpdateMAMELine(EntryString, GetBooleanValue(SDKKeyboardMappingGroupBox.CheckBox.Checked))
          else
          if tmpEntryStr = 'keymap_file ' then
             UpdateMAMELine(EntryString, SDLKeymapFilename.Text)
@@ -5355,7 +5277,7 @@ begin
        BiosSetsListView.EndUpdate;
        Exit;
      end;
-  LabelSystemBios.Caption:= 'Bios: '+BiosSet.ReadString('Descriptions', FormMain.MemGameInfo.eBiosName, '');
+  SystemBiosLabel.Caption:= 'Bios: '+BiosSet.ReadString('Descriptions', FormMain.MemGameInfo.eBiosName, '');
   BiosSetList:= TStringList.Create;
   BiosSet.ReadSectionValues(FormMain.MemGameInfo.eBiosName, BiosSetList);
   //BiosSetList.CustomSort(CompareStringListNatural); // this sorts the filename, NOT set title
@@ -5505,7 +5427,7 @@ begin
   ScreensSelector.OnSelect(Self);
 end;
 
-procedure TFormMAMESettings.EffectOverlayBrowseClick(Sender: TObject);
+procedure TFormMAMESettings.EffectOverlayButtonSelectClick(Sender: TObject);
 var
   FolderStr, FileStr, GameStr: String;
 begin
@@ -5576,7 +5498,7 @@ begin
   FormMain.DialogSelectFolder(FolderDiff, False);
 end;
 
-procedure TFormMAMESettings.DebuggerScriptBrowseClick(Sender: TObject);
+procedure TFormMAMESettings.DebuggerScriptButtonSelectClick(Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select a debugger script file', DebuggerScript, False, True, DebuggerScript.Text);
 end;
@@ -5599,78 +5521,78 @@ end;
 
 procedure TFormMAMESettings.VolumeChange(Sender: TObject);
 begin
-  LabelVolume.Caption:= Format(LabelVolume.Hint, [Volume.Position]);
+  VolumeLabel.Caption:= Format(VolumeLabel.Hint, [Volume.Position]);
 end;
 
 procedure TFormMAMESettings.JoystickDeadzoneChange(Sender: TObject);
 begin
-  LabelJoystickDeadzone.Caption:= Format(LabelJoystickDeadzone.Hint, [JoystickDeadzone.Position]);
+  JoystickDeadzoneLabel.Caption:= Format(JoystickDeadzoneLabel.Hint, [JoystickDeadzone.Position]);
 end;
 
 procedure TFormMAMESettings.BrightnessChange(Sender: TObject);
 begin
-  LabelBrightness.Caption:= Format(LabelBrightness.Hint, [Brightness.Position]);
+  BrightnessLabel.Caption:= Format(BrightnessLabel.Hint, [Brightness.Position]);
 end;
 
 procedure TFormMAMESettings.ContrastChange(Sender: TObject);
 begin
-  LabelContrast.Caption:= Format(LabelContrast.Hint, [Contrast.Position]);
+  ContrastLabel.Caption:= Format(ContrastLabel.Hint, [Contrast.Position]);
 end;
 
 procedure TFormMAMESettings.GammaChange(Sender: TObject);
 begin
-  LabelGamma.Caption:= Format(LabelGamma.Hint, [Gamma.Position]);
+  GammaLabel.Caption:= Format(GammaLabel.Hint, [Gamma.Position]);
 end;
 
 procedure TFormMAMESettings.PauseBrightnessChange(Sender: TObject);
 begin
-  LabelPauseBrightness.Caption:= Format(LabelPauseBrightness.Hint, [PauseBrightness.Position]);
+  PauseBrightnessLabel.Caption:= Format(PauseBrightnessLabel.Hint, [PauseBrightness.Position]);
 end;
 
 procedure TFormMAMESettings.LabelJoystickSaturationValueClick(
   Sender: TObject);
 begin
-  LabelJoystickSaturation.Caption:= Format('%1.2f', [JoystickSaturation.Position]);
+  JoystickSaturationLabel.Caption:= Format('%1.2f', [JoystickSaturation.Position]);
 end;
 
 procedure TFormMAMESettings.Prescale_ScaleScreenChange(Sender: TObject);
 begin
-  LabelPrescale_ScaleScreen.Caption:= Format(LabelPrescale_ScaleScreen.Hint, [Prescale_ScaleScreen.Position]);
+  Prescale_ScaleScreenLabel.Caption:= Format(Prescale_ScaleScreenLabel.Hint, [Prescale_ScaleScreen.Position]);
 end;
 
 procedure TFormMAMESettings.FullScreenBrightnessChange(Sender: TObject);
 begin
-  LabelFullScreenBrightness.Caption:= Format(LabelFullScreenBrightness.Hint, [FullScreenBrightness.Position]);
+  FullScreenBrightnessLabel.Caption:= Format(FullScreenBrightnessLabel.Hint, [FullScreenBrightness.Position]);
 end;
 
 procedure TFormMAMESettings.FullScreenContrastChange(Sender: TObject);
 begin
-  LabelFullScreenContrast.Caption:= Format(LabelFullScreenContrast.Hint, [FullScreenContrast.Position]);
+  FullScreenContrastLabel.Caption:= Format(FullScreenContrastLabel.Hint, [FullScreenContrast.Position]);
 end;
 
 procedure TFormMAMESettings.FullScreenGammaChange(Sender: TObject);
 begin
-  LabelFullScreenGamma.Caption:= Format(LabelFullScreenGamma.Hint, [FullScreenGamma.Position]);
+  FullScreenGammaLabel.Caption:= Format(FullScreenGammaLabel.Hint, [FullScreenGamma.Position]);
 end;
 
 procedure TFormMAMESettings.VectorFlickerEffectChange(Sender: TObject);
 begin
-  LabelVectorFlickerEffect.Caption:= Format(LabelVectorFlickerEffect.Hint, [VectorFlickerEffect.Position]);
+  VectorFlickerEffectLabel.Caption:= Format(VectorFlickerEffectLabel.Hint, [VectorFlickerEffect.Position]);
 end;
 
 procedure TFormMAMESettings.SecondsToRunChange(Sender: TObject);
 begin
   if SecondsToRun.Position < 60 then
      begin
-       if LabelSecondsToRun.Hint <> 'sec' then
-          LabelSecondsToRun.Hint:= 'sec';
+       if SecondsToRunLabel.Hint <> 'sec' then
+          SecondsToRunLabel.Hint:= 'sec';
      end
   else
      begin
-       if LabelSecondsToRun.Hint <> 'min' then
-          LabelSecondsToRun.Hint:= 'min';
+       if SecondsToRunLabel.Hint <> 'min' then
+          SecondsToRunLabel.Hint:= 'min';
      end;
-  LabelSecondsToRun.Caption:= SecondsToRun.Hint+GetPlayTime(SecondsToRun.Position*1000)+' '+LabelSecondsToRun.Hint+']';
+  SecondsToRunLabel.Caption:= SecondsToRun.Hint+GetPlayTime(SecondsToRun.Position*1000)+' '+SecondsToRunLabel.Hint+']';
 end;
 
 procedure TFormMAMESettings.ScreenNameSelect(Sender: TObject);
@@ -5744,10 +5666,10 @@ begin
   if ScreensSelector.ItemIndex > 0 then
      HintStr:= 'the '+HintStr;
 
-  ScreenName.Hint:= LabelScreenName.Hint+' '+HintStr;
-  ScreenAspectRatio.Hint:= LabelScreenAspectRatio.Hint+' '+HintStr;
-  ScreenResolution.Hint:= LabelScreenResolution.Hint+' '+HintStr;
-  ScreenView.Hint:= LabelScreenView.Hint+' '+HintStr;
+  ScreenName.Hint:= ScreenNameLabel.Hint+' '+HintStr;
+  ScreenAspectRatio.Hint:= ScreenAspectRatioLabel.Hint+' '+HintStr;
+  ScreenResolution.Hint:= ScreenResolutionLabel.Hint+' '+HintStr;
+  ScreenView.Hint:= ScreenViewLabel.Hint+' '+HintStr;
 end;
 
 procedure TFormMAMESettings.ScreenRefreshRateSelect(
@@ -5759,7 +5681,7 @@ end;
 
 procedure TFormMAMESettings.JoystickSaturationChange(Sender: TObject);
 begin
-  LabelJoystickSaturation.Caption:= Format(LabelJoystickSaturation.Hint, [JoystickSaturation.Position]);
+  JoystickSaturationLabel.Caption:= Format(JoystickSaturationLabel.Hint, [JoystickSaturation.Position]);
 end;
 
 procedure TFormMAMESettings.FolderROMsButtonEditClick(
@@ -5784,63 +5706,26 @@ begin
   //   FormMain.SetGroupBoxState(BGFX_GroupBox, False, True);
   if not OSDInputOptionsGroupBox.Enabled then
      FormMain.SetGroupBoxState(OSDInputOptionsGroupBox, False, True);
-  if not AutobootBox.Enabled then
-     FormMain.SetGroupBoxState(AutobootBox, False, True);
+  if not AutobootGroupBox.Enabled then
+     FormMain.SetGroupBoxState(AutobootGroupBox, False, True);
 
-  if not VectorPostProcessingBox.Enabled then
-     FormMain.SetGroupBoxState(VectorPostProcessingBox, False, True);
+  if not VectorPostProcessingGroupBox.Enabled then
+     FormMain.SetGroupBoxState(VectorPostProcessingGroupBox, False, True);
 
-  case IsSDLMAME of
-    True:
-      begin
-        //for Loop:= 0 to HLSL_GroupBox.ControlCount-1 do
-        //    HLSL_GroupBox.Controls[Loop].Enabled:= False;
-        //HLSL_GroupBox.Font.Color:= clBtnShadow;
-        //HLSL_GroupBox.Enabled:= False;
-        //FormMain.SetGroupBoxState(DebuggerFontBox, False, True); // removed since MAME 0.61 have changed debugger font for 'auto'... too much hassle to support!!!!
-        //for Loop:=0 to DebuggerFontBox.ControlCount-1 do
-        //    DebuggerFontBox.Controls[Loop].Enabled:= False;
-        //DebuggerFontBox.Font.Color:= clBtnShadow;
-        //DebuggerFontBox.Enabled:= False;
+  if not IsSDLMAME then
+     begin
+       NotebookVideoPostProcessingEffectsPages.DoubleBuffered:= True;
+       ButtonPageSDLMAMEInput.Enabled:= False;
+     end;
 
-      end;
-    False:
-      begin
-        NotebookVideoPostProcessingEffectsPages.DoubleBuffered:= True;
-        //HLSL_GroupBox.DoubleBuffered:= True;
-        //GLSL_GroupBox.DoubleBuffered:= True;
-        //BGFX_GroupBox.DoubleBuffered:= True;
-        //ButtonPageSDLMAMEVideoAudio.Enabled:= False;
-        ButtonPageSDLMAMEInput.Visible:= False;//Enabled:= False;
-      end;
-  end;
   FormMain.SetGroupBoxState(HTTPServer, HTTPServer.Enabled, True);
 end;
 
 procedure TFormMAMESettings.FormShow(Sender: TObject);
 var
   iStr: String;
+  Loop: Integer;
 begin
-  FormMain.ResizeFormAddScrollBars(FormMAMESettings);
-
-  VectorGroupBox.DoubleBuffered:= True;
-  VectorPostProcessingBox.DoubleBuffered:= True;
-  PerformanceGroupBox.DoubleBuffered:= True;
-  GroupBoxAudio.DoubleBuffered:= True;
-  ScreenOptionsBox.DoubleBuffered:= True;
-  FullScreenBox.DoubleBuffered:= True;
-  JoystickBox.DoubleBuffered:= True;
-  AutobootBox.DoubleBuffered:= True;
-
-  {SDLOutputModeBox.DoubleBuffered:= True;
-  GLSL_GroupBox.DoubleBuffered:= True;
-  SDLLowLevelDriver.DoubleBuffered:= True;
-  SDKKeyboardMappingBox.DoubleBuffered:= True;
-  SDLJoystickMappingBox.DoubleBuffered:= True;
-  SDLLightgunMappingBox.DoubleBuffered:= True;
-  SDL2MouseMappingBox.DoubleBuffered:= True;
-  SDL2KeyboardMappingBox.DoubleBuffered:= True;}
-
   FormMain.ELV_ResetNormalColors(FolderROMs);
   FormMain.ELV_ResetNormalColors(FolderIniFiles);
   FormMain.ELV_ResetNormalColors(FolderArtworks);
@@ -5849,11 +5734,90 @@ begin
   FormMain.ELV_ResetNormalColors(LUAPluginsToEnable);
   FormMain.ELV_ResetNormalColors(BGFXScreenShaderChains_ListView);
 
+  if IsNightMode then
+  begin
+    FormMAMESettings.Color:= menu_background_color[1];
+    NumberScreens.Font.Color:= item_caption_active_color[1];
+    for Loop:= 0 to FormMAMESettings.ComponentCount-1 do
+       begin
+         if FormMAMESettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormMAMESettings.Components[Loop]))
+         else
+         if FormMAMESettings.Components[Loop] is TSpeedButtonEx then
+            FormMain.SetButtonExColors(TSpeedButtonEx(FormMAMESettings.Components[Loop]))
+         else
+         if FormMAMESettings.Components[Loop] is TEditEx then
+            SetEditNightColors(TEditEx(FormMAMESettings.Components[Loop]))
+         else
+         if FormMAMESettings.Components[Loop] is TAdvGroupBoxEx then
+            begin
+              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormMAMESettings.Components[Loop]));
+              SetGroupBoxColors(TAdvGroupBoxEx(FormMAMESettings.Components[Loop]),
+                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            end
+         else
+         if FormMAMESettings.Components[Loop] is TComboBox2Ex then
+            SetComboBox2ExColors(TComboBox2Ex(FormMAMESettings.Components[Loop]), True)
+         else
+         if FormMAMESettings.Components[Loop] is TGaugeBar then
+            SetGaugeBarColors(TGaugeBar(FormMAMESettings.Components[Loop]))
+         else
+         if FormMAMESettings.Components[Loop] is TGaugeBar2 then
+            SetGaugeBarColors(TGaugeBar(FormMAMESettings.Components[Loop]))
+         else
+         if FormMAMESettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]).DisabledFontColor:= clGray;
+              TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            end;
+         if FormMAMESettings.Components[Loop] is TShadowLabel then
+            begin
+              SetLabelColors(TShadowLabel(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              if not TShadowLabel(FormMAMESettings.Components[Loop]).Transparent then
+                 TShadowLabel(FormMAMESettings.Components[Loop]).Color:= FormMAMESettings.Color;
+            end
+         else
+         if FormMAMESettings.Components[Loop] is TEasyListView then
+            begin
+              FormMain.SetEasyListViewColors(TEasyListView(FormMAMESettings.Components[Loop]), FormMAMESettings.Color, clWhite, -1, clGray);
+              FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings.Components[Loop]), True);
+              FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormMAMESettings.Components[Loop]), True);
+            end;
+       end;
+
+    SetCheckBoxColors(SaveValidateAllCustomFiles, clSilver, clrMedDarkGray, False);
+    SetLabelColors(EnableOpenGLFilterNotFFLabel, clSilver, clrMedDarkGray, False);
+    SetLabelColors(BGFXScreenShaderChainsHelpLabel, clrLightRed, clMaroon, False);
+    SetLabelColors(BGFXScreenShaderChainsDetailsHTMLLabel, clrLightBlue, clNavy, False);
+    SetLabelColors(LUAPluginsToEnable2Label, clrLightRed, clMaroon, False);
+    SetLabelColors(RecordInputTimecodeFileLabel, clSilver, clrMedDarkGray, False);
+    SetLabelColors(ExitAfterInputPlaybackLabel, clSilver, clrMedDarkGray, False);
+
+    if Tag = 1 then
+       SetFormColors(FormMAMESettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, IsNightMode)
+    else
+       SetFormColors(FormMAMESettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
+
+    SetColorEmulatorTopBar(TopBar, sysID, True);
+  end;
+
+  HTTPServer.Enabled:= False;
+  VectorGroupBox.DoubleBuffered:= True;
+  VectorPostProcessingGroupBox.DoubleBuffered:= True;
+  PerformanceGroupBox.DoubleBuffered:= True;
+  AudioGroupBox.DoubleBuffered:= True;
+  ScreenOptionsGroupBox.DoubleBuffered:= True;
+  FullScreenGroupBox.DoubleBuffered:= True;
+  JoystickGroupBox.DoubleBuffered:= True;
+  AutobootGroupBox.DoubleBuffered:= True;
+
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
 
   IsSDLMAME:= False;
   PopulateVideoOutputMode;
-  EnableSettingsIniMAME; //
+  EnableSettingsIniMAME;
   if IsSDLMAME then
      begin
        Debugger.Items.BeginUpdate;
@@ -5868,16 +5832,12 @@ begin
   if (Tag = 0) or (SystemIcon.Tag = 1) then
      begin
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-       // old code, use "emuFileExec" var (March 16, 2016)
-       //case IsAlterMAME of
-       //  True : LabelEmulatorVersion.Caption:= FormMain.AlterMAMEFile+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-       //  False: LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[sysID]+#13#10+emuIni;//GameIni;//LabelReadFileIni.Caption;
-       //end;
 
-       case sysID of
-         idMAME  : TopBar.Color1:= clSkyBlue; // MAME
-         idHBMAME: TopBar.Color1:= $00b4bf8f;//$00bfb490; // HBMAME
-       end;
+       SetColorEmulatorTopBar(TopBar, sysID, True); // TopBar.Color1:= $00c0cddc;
+       //case sysID of
+       //  idMAME  : TopBar.Color1:= clSkyBlue; // MAME
+       //  idHBMAME: TopBar.Color1:= $00b4bf8f;//$00bfb490; // HBMAME
+       //end;
 
        FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(sysID), SystemIcon);
        //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
@@ -5887,7 +5847,7 @@ begin
 
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
        if SystemIcon.Tag = 1 then
-          ButtonPageFolders.Visible:= False;
+          ButtonPageFolders.Enabled:= False;
      end
   else
   if Tag = 1 then
@@ -5899,11 +5859,6 @@ begin
           LabelEmulatorVersion.Caption:= iStr
        else
           LabelEmulatorVersion.Caption:= '';
-
-       //if FormMain.EmulatorVersion[sysID] <> '' then
-       //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[sysID]
-       //else
-       //   LabelEmulatorVersion.Caption:= '';
 
        if LabelEmulatorVersion.Caption = '' then
           LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption
@@ -5919,11 +5874,12 @@ begin
        //                                            SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       case FormMain.MemGameInfo.eGameSetStatus of
-         0: TopBar.Color1:= $00f0fae5; // green
-         1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
-       end;
+       SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status // for light mode and night mode
+       //case FormMain.MemGameInfo.eGameSetStatus of
+       //  0: TopBar.Color1:= $00f0fae5; // green
+       //  1: TopBar.Color1:= $00e5f0fa; // red (based on green)
+       //  2: TopBar.Color1:= $00eeeeee; // silver (base on green)
+       //end;
 
 
        //if FormMain.MemGameInfo.eSoftwareName <> '' then
@@ -5936,7 +5892,7 @@ begin
        //SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
 
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
-       ButtonPageFolders.Visible:= False;
+       ButtonPageFolders.Enabled:= False;
      end;
 
   LoadBiosList('');
@@ -5949,20 +5905,17 @@ begin
 
   PopulateBGFXShaderChains_ListView; // read all .json files from mamedir\bgfx\chains\ folder and add to the ListView...
 
-  ButtonResetToDefault.Visible:= not ButtonPageFolders.Visible;
+  ButtonResetToDefault.Visible:= not ButtonPageFolders.Enabled;
   if not ButtonResetToDefault.Visible then
-     begin
-       ButtonReadFileHelp.Visible:= False;
-       //LabelReadFileIni.Left:= 109;
-       //LabelReadFileIni.Width:= LabelReadFileIni.Width+130;
-     end;
+     ButtonReadFileHelp.Visible:= False;
+
   ButtonReadFile.Click;
   if FormMain.CheckSelected(BiosSetsListView) then
      BiosSetsListView.Selection.First.ImageIndex:= 8;
 
-  LabelBGFXScreenShaderChains.Hint:= BGFXScreenShaderChains.Text; // this will hold shader chain's current value
-  if LabelBGFXScreenShaderChains.Hint = '' then
-     LabelBGFXScreenShaderChains.Hint:= 'default';
+  BGFXScreenShaderChainsLabel.Hint:= BGFXScreenShaderChains.Text; // this will hold shader chain's current value
+  if BGFXScreenShaderChainsLabel.Hint = '' then
+     BGFXScreenShaderChainsLabel.Hint:= 'default';
   Screen.Cursor:= crDefault;
 end;
 
@@ -5973,10 +5926,10 @@ end;
 
 procedure TFormMAMESettings.SpeedChange(Sender: TObject);
 begin
-  LabelSpeed.Caption:= Format(LabelSpeed.Hint, [Speed.Position]);
+  SpeedLabel.Caption:= Format(SpeedLabel.Hint, [Speed.Position]);
 end;
 
-procedure TFormMAMESettings.ButtonScreenDefaultSettingsClick(
+procedure TFormMAMESettings.ScreenButtonDefaultSettingsClick(
   Sender: TObject);
 begin
   ScreenName.ItemIndex:= 0;
@@ -5989,8 +5942,8 @@ procedure TFormMAMESettings.SnapSizeAutoClick(Sender: TObject);
 begin
   SnapSizeWidth.Enabled:= not SnapSizeAuto.Checked;
   SnapSizeHeight.Enabled:= not SnapSizeAuto.Checked;
-  LabelSnapSizeCustomX.Enabled:= not SnapSizeAuto.Checked;
-  LabelSnapSizeCustom.Enabled:= not SnapSizeAuto.Checked;
+  SnapSizeCustomXLabel.Enabled:= not SnapSizeAuto.Checked;
+  SnapSizeCustomLabel.Enabled:= not SnapSizeAuto.Checked;
 end;
 
 procedure TFormMAMESettings.SnapNameDefaultButtonClick(Sender: TObject);
@@ -6054,10 +6007,10 @@ end;
 
 procedure TFormMAMESettings.UIModeKeyChange(Sender: TObject);
 begin
-  ButtonUIModeKeyDetectKey.Enabled:= UIModeKeyCustom.Enabled;
+  UIModeKeyButtonDetectKey.Enabled:= UIModeKeyCustom.Enabled;
 end;
 
-procedure TFormMAMESettings.ButtonUIModeKeyDetectKeyClick(Sender: TObject);
+procedure TFormMAMESettings.UIModeKeyButtonDetectKeyClick(Sender: TObject);
 begin
   FormMAMESettings.KeyPreview:= False;
   SetEditBkColor(UIModeKeyCustom);
@@ -6150,7 +6103,7 @@ begin
   FormMain.DialogSelectFolder(FolderHashFiles, False);
 end;
 
-procedure TFormMAMESettings.ButtonSelectShadowMaskTextureClick(
+procedure TFormMAMESettings.ShadowMaskTextureButtonSelectClick(
   Sender: TObject);
 var
   FolderStr, FileStr, GameStr: String;
@@ -6180,15 +6133,14 @@ begin
   FormMain.DialogSelectFolder(FolderCrosshairFiles, True);
 end;
 
-procedure TFormMAMESettings.UIFontSelectFontButtonClick(Sender: TObject);
+procedure TFormMAMESettings.UIFontSelectFontButtonSelectClick(Sender: TObject);
 var
   FileStr, FolderList, GameStr: String;
 begin
   FolderList:= FolderFontFiles.Text;
   if FolderList = '' then
-     FolderList:= ExtractFilePath(emuFileExec); // ExtractFilePath(FormMain.EmulatorFile[sysID]);
-  //if not DirectoryExists(FolderList) then
-  //   Exit;
+     FolderList:= ExtractFilePath(emuFileExec);
+
   if FormMAMESettings.Tag = 0 then
      GameStr:= FormMain.GetArcadeSystemIniSection(sysID)
   else
@@ -6206,15 +6158,6 @@ begin
      end;
 end;
 
-procedure TFormMAMESettings.ButtonPageFoldersClick(Sender: TObject);
-begin
-  NotebookPages.PageIndex:= TToolButton(Sender).Tag;
-  if ToolBarPages.Tag <> NotebookPages.PageIndex then
-     ToolBarPages.Buttons[ToolBarPages.Tag].ImageIndex:= 500;
-  ToolBarPages.Tag:= TToolButton(Sender).Tag;
-  TToolButton(Sender).ImageIndex:= 1;
-end;
-
 procedure TFormMAMESettings.SpeedMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
@@ -6226,13 +6169,13 @@ procedure TFormMAMESettings.AutobootDelayChange(Sender: TObject);
 begin
   if AutobootDelay.Position < 60 then
      begin
-       if LabelAutobootDelay.HelpKeyword <> 'sec' then
-          LabelAutobootDelay.HelpKeyword:= 'sec'
+       if AutobootDelayLabel.HelpKeyword <> 'sec' then
+          AutobootDelayLabel.HelpKeyword:= 'sec'
      end
   else
-  if LabelAutobootDelay.HelpKeyword <> 'min' then
-     LabelAutobootDelay.HelpKeyword:= 'min';
-  LabelAutobootDelay.Caption:= Format(LabelAutobootDelay.Hint, [GetPlayTime(AutobootDelay.Position*1000)+' '+LabelAutobootDelay.HelpKeyword]);
+  if AutobootDelayLabel.HelpKeyword <> 'min' then
+     AutobootDelayLabel.HelpKeyword:= 'min';
+  AutobootDelayLabel.Caption:= Format(AutobootDelayLabel.Hint, [GetPlayTime(AutobootDelay.Position*1000)+' '+AutobootDelayLabel.HelpKeyword]);
 end;
 
 procedure TFormMAMESettings.AutobootLuaScriptSelectButtonClick(Sender: TObject);
@@ -6240,12 +6183,12 @@ begin
   FormMain.DialogOpenFile(16, 'Select a LUA script file', AutobootLuaScript, False);
 end;
 
-procedure TFormMAMESettings.ButtonSnapViewDefaultClick(Sender: TObject);
+procedure TFormMAMESettings.SnapViewButtonDefaultClick(Sender: TObject);
 begin
   SnapView.ItemIndex:= 0;
 end;
 
-procedure TFormMAMESettings.ButtonSelectHLSLPathClick(Sender: TObject);
+procedure TFormMAMESettings.HLSLPathButtonSelectClick(Sender: TObject);
 begin
   FormMain.DialogSelectFolder(HLSLPath, False);
 end;
@@ -6254,15 +6197,15 @@ procedure TFormMAMESettings.BenchmarkChange(Sender: TObject);
 begin
   if Benchmark.Position < 60 then
      begin
-       if LabelBenchmark.Hint <> 'sec' then
-          LabelBenchmark.Hint:= 'sec';
+       if BenchmarkLabel.Hint <> 'sec' then
+          BenchmarkLabel.Hint:= 'sec';
      end
   else
      begin
-       if LabelBenchmark.Hint <> 'min' then
-          LabelBenchmark.Hint:= 'min';
+       if BenchmarkLabel.Hint <> 'min' then
+          BenchmarkLabel.Hint:= 'min';
      end;
-  LabelBenchmark.Caption:= 'Benchmark ['+GetPlayTime(Benchmark.Position*1000)+' '+LabelBenchmark.Hint+']';
+  BenchmarkLabel.Caption:= 'Benchmark ['+GetPlayTime(Benchmark.Position*1000)+' '+BenchmarkLabel.Hint+']';
 end;
 
 procedure TFormMAMESettings.HLSLIniFileButtonResetClick(Sender: TObject);
@@ -6281,10 +6224,9 @@ begin
   RAMSize.Clear;
 end;
 
-procedure TFormMAMESettings.ToggleSDLDeviceMappingCustom(SDLDeviceMapping: TComboBox; SDLCustomMapping: TEdit);
+procedure TFormMAMESettings.ToggleSDLDeviceMappingCustom(SDLDeviceMapping: TComboBox2Ex; SDLCustomMapping: TEditEx);
 begin
   SDLCustomMapping.Enabled:= SDLDeviceMapping.ItemIndex = 1;
-  //SDLJoystickMapping1Custom.Enabled:= SDLJoystickMapping1.ItemIndex = 1;
 end;
 
 procedure TFormMAMESettings.SDLJoystickMapping1Select(Sender: TObject);
@@ -6327,14 +6269,14 @@ begin
   ToggleSDLDeviceMappingCustom(SDLJoystickMapping8, SDLJoystickMapping8Custom);
 end;
 
-procedure TFormMAMESettings.SelectGLSLShaderMAME(EditHolder: TEdit; IsMAMEFile: Boolean = True);
+procedure TFormMAMESettings.SelectGLSLShaderMAME(EditHolder: TEditEx; IsMAMEFile: Boolean = True);
 var
   sFile, sFolder: String;
 begin
   if EditHolder.Text <> '' then
      sFolder:= ExtractFilePath(EditHolder.Text);
   if (sFolder <> '') and (not DirectoryExists(sFolder)) then
-     sFolder:= ExtractFilePath(emuFileExec); // sFolder:= FormMain.EmulatorFile[sysID];
+     sFolder:= ExtractFilePath(emuFileExec);
   case IsMAMEFile of
     True : sFile:= FormMain.DialogOpenFile(12, 'Select a GLSL shader MAME file', EditHolder, False, True, sFolder);
     False: sFile:= FormMain.DialogOpenFile(12, 'Select a GLSL shader screen file', EditHolder, False, True, sFolder);
@@ -6343,117 +6285,117 @@ begin
      EditHolder.Text:= ChangeFileExt(sFile, ''); // shader file cannot have file extension
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME0Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME0ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME0);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME1Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME1ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME1);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME2Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME2ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME2);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME3Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME3ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME3);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME4Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME4ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME4);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME5Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME5ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME5);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME6Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME6ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME6);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME7Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME7ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME7);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME8Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME8ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME8);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_MAME9Click(Sender: TObject);
+procedure TFormMAMESettings.GLSL_Shader_MAME9ButtonSelectClick(Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_MAME9);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen0Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen0ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen0, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen1Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen1ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen1, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen2Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen2ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen2, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen3Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen3ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen3, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen4Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen4ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen4, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen5Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen5ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen5, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen6Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen6ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen6, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen7Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen7ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen7, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen8Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen8ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen8, False);
 end;
 
-procedure TFormMAMESettings.ButtonGLSL_Shader_Screen9Click(
+procedure TFormMAMESettings.GLSL_Shader_Screen9ButtonSelectClick(
   Sender: TObject);
 begin
   SelectGLSLShaderMAME(GLSL_Shader_Screen9, False);
 end;
 
-procedure TFormMAMESettings.ButtonAudioLatencyResetClick(Sender: TObject);
+procedure TFormMAMESettings.AudioLatencyButtonResetClick(Sender: TObject);
 begin
   AudioLatency.ItemIndex:= 1;
 end;
@@ -6588,33 +6530,33 @@ procedure TFormMAMESettings.SDLAlternativeLibGLToUseSelect(
   Sender: TObject);
 begin
   ToggleSDLDeviceMappingCustom(SDLAlternativeLibGLToUse, SDLAlternativeLibGLToUseCustom);
-  ButtonSDLAlternativeLibGLToUseCustom.Enabled:= SDLAlternativeLibGLToUseCustom.Enabled;
+  SDLAlternativeLibGLToUseCustomButtonSelect.Enabled:= SDLAlternativeLibGLToUseCustom.Enabled;
 end;
 
-procedure TFormMAMESettings.ButtonSDLAlternativeLibGLToUseCustomClick(
+procedure TFormMAMESettings.SDLAlternativeLibGLToUseCustomButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(12, 'Select an alternative libGL.so file to use', SDLAlternativeLibGLToUseCustom, False);
 end;
 
-procedure TFormMAMESettings.ButtonSDLKeymapFilenameSelectClick(
+procedure TFormMAMESettings.SDLKeymapFilenameButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(19, 'Select a keymap file', SDLKeymapFilename, False);
 end;
 
-procedure TFormMAMESettings.ButtonSDLKeymapFilenameResetClick(
+procedure TFormMAMESettings.SDLKeymapFilenameButtonResetClick(
   Sender: TObject);
 begin
   SDLKeymapFilename.Text:= 'keymap.dat';
 end;
 
-procedure TFormMAMESettings.ButtonSnapNameDefaultClick(Sender: TObject);
+procedure TFormMAMESettings.SnapNameButtonDefaultClick(Sender: TObject);
 begin
   SnapName.Text:= '%g/%i';
 end;
 
-procedure TFormMAMESettings.ButtonSaveStateNameResetClick(Sender: TObject);
+procedure TFormMAMESettings.SaveStateNameButtonResetClick(Sender: TObject);
 begin
   SaveStateName.Text:= '%g';
 end;
@@ -6627,18 +6569,11 @@ begin
   if FolderROMs.Scrollbars.VertBarVisible then
      FolderROMs.Header.Columns[0].Width:= FolderROMs.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
 
-  SaveValidateAllCustomFiles.Visible:= not ButtonPageFolders.Visible;
+  SaveValidateAllCustomFiles.Visible:= not ButtonPageFolders.Enabled;
   ButtonHelpSaveValidateAllCustomFiles.Visible:= SaveValidateAllCustomFiles.Visible;
 
-  if not ButtonPageSDLMAMEInput.Visible then
+  if not ButtonPageFolders.Enabled then
      begin
-       ToolBarPages.Width:= ToolBarPages.Width-ButtonPageSDLMAMEInput.Width;
-       ToolBarPages.Left:= ToolBarPages.Left+ButtonPageSDLMAMEInput.Width;
-     end;
-  if not ButtonPageFolders.Visible then
-     begin
-       ToolBarPages.Width:= ToolBarPages.Width-ButtonPageFolders.Width;
-       ToolBarPages.Left:= ToolBarPages.Left+ButtonPageFolders.Width;
        ButtonPageVideo1.Down:= True;
        ButtonPageVideo1.Click;
      end;
@@ -6708,10 +6643,20 @@ end;
 
 procedure TFormMAMESettings.SaveValidateAllCustomFilesClick(Sender: TObject);
 begin
-  if SaveValidateAllCustomFiles.Checked then
-     SaveValidateAllCustomFiles.Font.Color:= clBlue
+  if IsNightMode then
+     begin
+       if SaveValidateAllCustomFiles.Checked then
+          SaveValidateAllCustomFiles.Font.Color:= clrLightBlue
+       else
+          SaveValidateAllCustomFiles.Font.Color:= clSilver;
+     end
   else
-     SaveValidateAllCustomFiles.Font.Color:= clrDarkGray;
+     begin
+       if SaveValidateAllCustomFiles.Checked then
+          SaveValidateAllCustomFiles.Font.Color:= clBlue
+       else
+          SaveValidateAllCustomFiles.Font.Color:= clrDarkGray;
+     end;
 end;
 
 procedure TFormMAMESettings.ButtonHelpSaveValidateAllCustomFilesClick(
@@ -6743,7 +6688,7 @@ begin
   GenerateMessage('Help', 'Validate All Custom Files on Save');
 end;
 
-procedure TFormMAMESettings.ButtonResetHTTPServerClick(Sender: TObject);
+procedure TFormMAMESettings.HTTPServerButtonResetClick(Sender: TObject);
 begin
   HTTPPort.Text:= '8080';
   HTTPPath.Text:= 'web';
@@ -6759,7 +6704,7 @@ begin
   Key:= FormMain.KeyPressValidateNumbers(Key);
 end;
 
-procedure TFormMAMESettings.ButtonHLSLUpscaleSnapResetClick(
+procedure TFormMAMESettings.HLSLUpscaleSnapButtonResetClick(
   Sender: TObject);
 begin
   HLSLUpscaleSnapX.Text:= '2048';
@@ -6817,21 +6762,21 @@ end;
 
 procedure TFormMAMESettings.VectorBeamWidthMinChange(Sender: TObject);
 begin
-  LabelVectorBeamWidthMin.Caption:= Format(LabelVectorBeamWidthMin.Hint, [VectorBeamWidthMin.Position]);
+  VectorBeamWidthMinLabel.Caption:= Format(VectorBeamWidthMinLabel.Hint, [VectorBeamWidthMin.Position]);
 end;
 
 procedure TFormMAMESettings.VectorBeamWidthMaxChange(Sender: TObject);
 begin
-  LabelVectorBeamWidthMax.Caption:= Format(LabelVectorBeamWidthMax.Hint, [VectorBeamWidthMax.Position]);
+  VectorBeamWidthMaxLabel.Caption:= Format(VectorBeamWidthMaxLabel.Hint, [VectorBeamWidthMax.Position]);
 end;
 
 procedure TFormMAMESettings.VectorBeamIntensityWeightChange(
   Sender: TObject);
 begin
-  LabelVectorBeamIntensityWeight.Caption:= Format(LabelVectorBeamIntensityWeight.Hint, [VectorBeamIntensityWeight.Position]);
+  VectorBeamIntensityWeightLabel.Caption:= Format(VectorBeamIntensityWeightLabel.Hint, [VectorBeamIntensityWeight.Position]);
 end;
 
-procedure TFormMAMESettings.ButtonHelpVideoOutputModeClick(
+procedure TFormMAMESettings.VideoOutputModeButtonHelpClick(
   Sender: TObject);
 begin
   CallMessageBox;
@@ -6871,7 +6816,7 @@ end;
 procedure TFormMAMESettings.BGFXScreenShaderChainsButtonReloadClick(
   Sender: TObject);
 begin
-  BGFXScreenShaderChains.Text:= LabelBGFXScreenShaderChains.Hint; // this will hold shader chain's current value
+  BGFXScreenShaderChains.Text:= BGFXScreenShaderChainsLabel.Hint; // this will hold shader chain's current value
 end;
 
 procedure TFormMAMESettings.BGFXScreenShaderChainsButtonResetClick(Sender: TObject);
@@ -6905,17 +6850,6 @@ begin
   ShadowMaskTexture.Text:= 'shadow-mask.png';
 end;
 
-procedure TFormMAMESettings.ButtonPageVideoEffectsBGFXClick(Sender: TObject);
-begin
-  NotebookVideoPostProcessingEffectsPages.PageIndex:= TToolButton(Sender).Tag;
-
-  if ToolBarVideoPostProcessingEffectsPages.Tag <> NotebookVideoPostProcessingEffectsPages.PageIndex then
-     ToolBarVideoPostProcessingEffectsPages.Buttons[ToolBarVideoPostProcessingEffectsPages.Tag].ImageIndex:= 500;
-  ToolBarVideoPostProcessingEffectsPages.Tag:= TToolButton(Sender).Tag;
-  TToolButton(Sender).ImageIndex:= 1;
-
-end;
-
 function TFormMAMESettings.BGFXScreenShaderChains_ListViewItemCompare(
   Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
   Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
@@ -6935,19 +6869,23 @@ begin
      ACanvas.Font.Style:= [fsBold];
 end;
 
-procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLMouseEnter(Sender: TObject);
+procedure TFormMAMESettings.BGFXScreenShaderChainsDetailsHTMLLabelMouseEnter(Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clBlue;
-  TLabel(Sender).Font.Style:= [fsUnderline];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clCream, clrMedDarkGray, False)
+  else
+     TShadowLabel(Sender).Color:= clBlue;
 end;
 
-procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLMouseLeave(Sender: TObject);
+procedure TFormMAMESettings.BGFXScreenShaderChainsDetailsHTMLLabelMouseLeave(Sender: TObject);
 begin
-  TLabel(Sender).Font.Color:= clNavy;
-  TLabel(Sender).Font.Style:= [];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
+  else
+     TShadowLabel(Sender).Font.Color:= clNavy;
 end;
 
-procedure TFormMAMESettings.LabelBGFXScreenShaderChainsDetailsHTMLClick(Sender: TObject);
+procedure TFormMAMESettings.BGFXScreenShaderChainsDetailsHTMLLabelClick(Sender: TObject);
 begin
   CallShellExecute(Sender);
 end;
@@ -6977,23 +6915,21 @@ begin
   BGFXScreenShaderChains_ListViewButtonSelect.Click;
 end;
 
-
-
 procedure TFormMAMESettings.VectorBeamSmoothChange(Sender: TObject);
 begin
-  LabelVectorBeamSmooth.Caption:= Format(LabelVectorBeamSmooth.Hint, [VectorBeamSmooth.Position]);
+  VectorBeamSmoothLabel.Caption:= Format(VectorBeamSmoothLabel.Hint, [VectorBeamSmooth.Position]);
 end;
 
 procedure TFormMAMESettings.VectorMaximumAttenuationChange(
   Sender: TObject);
 begin
-  LabelVectorMaximumAttenuation.Caption:= Format(LabelVectorMaximumAttenuation.Hint, [VectorMaximumAttenuation.Position]);
+  VectorMaximumAttenuationLabel.Caption:= Format(VectorMaximumAttenuationLabel.Hint, [VectorMaximumAttenuation.Position]);
 end;
 
 procedure TFormMAMESettings.VectorMinimumLengthAttenuationChange(
   Sender: TObject);
 begin
-  LabelVectorMinimumLengthAttenuation.Caption:= Format(LabelVectorMinimumLengthAttenuation.Hint, [VectorMinimumLengthAttenuation.Position]);
+  VectorMinimumLengthAttenuationLabel.Caption:= Format(VectorMinimumLengthAttenuationLabel.Hint, [VectorMinimumLengthAttenuation.Position]);
 end;
 
 procedure TFormMAMESettings.PortAudioLatencyKeyPress(Sender: TObject;
@@ -7011,7 +6947,7 @@ end;
 procedure TFormMAMESettings.SaveStateRewindBufferSizeChange(
   Sender: TObject);
 begin
-  LabelSaveStateRewindBufferSize.Caption:= Format(LabelSaveStateRewindBufferSize.Hint, [SaveStateRewindBufferSize.Position]);
+  SaveStateRewindBufferSizeLabel.Caption:= Format(SaveStateRewindBufferSizeLabel.Hint, [SaveStateRewindBufferSize.Position]);
 end;
 
 procedure TFormMAMESettings.BGFXShadowMaskTextureNameButtonSelectClick(
@@ -7038,7 +6974,7 @@ begin
      end;
 end;
 
-procedure TFormMAMESettings.SelectLUTTextureFile(EditHolder: TEdit);
+procedure TFormMAMESettings.SelectLUTTextureFile(EditHolder: TEditEx);
 var
   sFile, sFolder: String;
 begin
@@ -7049,7 +6985,7 @@ begin
 
   sFile:= FormMain.DialogOpenFile(5, 'Select a LUT texture file', EditHolder, False, True, sFolder);
   if sFile <> '' then
-     EditHolder.Text:= sFile; //ChangeFileExt(sFile, ''); // shader file cannot have file extension
+     EditHolder.Text:= sFile; // shader file cannot have file extension
 end;
 
 procedure TFormMAMESettings.BGFXPathButtonSelectClick(Sender: TObject);
@@ -7059,19 +6995,8 @@ end;
 
 procedure TFormMAMESettings.BGFXLUTTextureNameButtonSelectClick(
   Sender: TObject);
-//var
-//  sFile, sFolder: String;
 begin
   SelectLUTTextureFile(BGFXLUTTextureName);
-  //if BGFXLUTTextureName.Text <> '' then
-  //   sFolder:= ExtractFilePath(BGFXLUTTextureName.Text);
-  //if (sFolder <> '') and (not DirectoryExists(sFolder)) then
-  //   sFolder:= ExtractFilePath(emuFileExec);
-  //
-  //sFile:= FormMain.DialogOpenFile(12, 'Select a BGFX LUT file', BGFXLUTTextureName, False, True, sFolder);
-  //
-  //if sFile <> '' then
-  //   BGFXLUTTextureName.Text:= sFile; //ChangeFileExt(sFile, ''); // shader file cannot have file extension ??? not sure about this yet (November 01, 2018)
 end;
 
 procedure TFormMAMESettings.BGFXLUTTextureNameButtonResetClick(
@@ -7106,6 +7031,18 @@ end;
 procedure TFormMAMESettings.FolderManualsPDFButtonSelectClick(Sender: TObject);
 begin
   FormMain.DialogSelectFolder(FolderManualsPDF, False);
+end;
+
+procedure TFormMAMESettings.ButtonPageFoldersClick(Sender: TObject);
+begin
+  if NotebookPages.PageIndex <> TSpeedButtonEx(Sender).Tag then
+     NotebookPages.PageIndex:= TSpeedButtonEx(Sender).Tag;
+end;
+
+procedure TFormMAMESettings.ButtonPageVideoEffectsBGFXClick(Sender: TObject);
+begin
+  if NotebookVideoPostProcessingEffectsPages.PageIndex <> TSpeedButtonEx(Sender).Tag then
+     NotebookVideoPostProcessingEffectsPages.PageIndex:= TSpeedButtonEx(Sender).Tag;
 end;
 
 end.

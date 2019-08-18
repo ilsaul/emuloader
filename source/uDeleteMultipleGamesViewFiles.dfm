@@ -44,7 +44,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clBlack
     GroupFont.Height = -13
-    GroupFont.Name = 'Trebuchet MS'
+    GroupFont.Name = 'Verdana'
     GroupFont.Style = [fsBold]
     HintType = ehtToolTip
     Header.Columns.Items = {

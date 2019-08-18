@@ -314,9 +314,11 @@ begin
   else
      FormArcadeMultiSlotGames.Height:= 440-PanelNeoGeoMVS.Height;
 
-  SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, -1, True);
+  SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, nil, -1, True);
   if IsNightMode then
      begin
+       SetPanelBorderColors(PanelNeoGeoMVS, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+
        FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
        GamesList.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
        PanelNeoGeoMVS.Color1:= clrLightBlack;
@@ -324,11 +326,11 @@ begin
        MultiSlotMachines.Color:= GamesList.Color;
        MultiSlotMachines.Font.Color:= clWhite;
 
-       SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelHelpText, clrLightRed, clMaroon);// MsgTxtColors.colorFileName, clNavy);
+       SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelHelpText, clrLightRed, clMaroon, False);
 
-       SetLabelColors(LabelMultiSlotMachinesChooseMachineToRun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelMultiSlotMachinesBoldDefaultMachine, clrLightBlue, clNavy);
+       SetLabelColors(LabelMultiSlotMachinesChooseMachineToRun, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelMultiSlotMachinesBoldDefaultMachine, clrLightBlue, clNavy, False);
 
        FormMain.SetPanelExStyle(PanelMultiSlotMachines, True);
        SetPanelNightColors(PanelMultiSlotMachines,
@@ -346,6 +348,9 @@ begin
        FormMain.SetButtonExColors(ButtonChangePanelNeoGeoMVS);
        FormMain.SetButtonExColors(ButtonOkMultiSlotMachines);
        FormMain.SetButtonExColors(ButtonCancelMultiSlotMachines);
+
+       FormMain.SetEasyListViewHeaderColors(GamesList, True);
+       FormMain.SetEasyListViewHeaderColors(MultiSlotMachines, True);
 
        FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
        FormMain.ELV_SetRibbonNightColors(0, MultiSlotMachines, True);

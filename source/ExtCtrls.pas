@@ -1037,6 +1037,7 @@ type
 procedure Frame3D(Canvas: TCanvas; var Rect: TRect;
   TopColor, BottomColor: TColor; Width: Integer);
 procedure NotebookHandlesNeeded(Notebook: TNotebook);
+function  GetColorPrettyName(iColor: TColor): String; // added by Ciro Alfredo Consentino (July 07, 2019)
 
 implementation
 
@@ -4946,6 +4947,12 @@ begin
   Items.AddObject(LName, TObject(LColor));
 end;
 
+function GetColorPrettyName(iColor: TColor): String; // added by Ciro Alfredo Consentino (July 07, 2019)
+begin
+  if not IntToIdent(iColor, Result, ColorToPretyName) then
+     Result:= '';
+end;
+
 constructor TCustomColorBox.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -5082,6 +5089,7 @@ begin
       LColor := ColorToRGB(TColor(Items.Objects[0]));
       Color := LColor;
       CustomColors.Text := Format('ColorA=%.8x', [LColor]);
+      Options := [cdFullOpen, cdAnyColor]; // added by Ciro Alfredo Consentino (July 04, 2019)
       Result := Execute;
       if Result then
       begin
@@ -5225,7 +5233,10 @@ begin
         end;
       end;
     end;
-    ItemIndex := I;
+    if (ItemIndex = 0) and (I = 0) then
+       Invalidate { Refresh the color shown }
+    else
+       ItemIndex := I;
   end;
   FSelectedColor := AColor;
 end;

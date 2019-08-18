@@ -154,14 +154,14 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 26
     Width = 201
     Height = 23
-    Style = csOwnerDrawFixed
+    Style = csDropDownList
     Ctl3D = True
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
-    ItemHeight = 17
+    ItemHeight = 15
     ItemIndex = 0
     ParentCtl3D = False
     ParentFont = False
@@ -204,7 +204,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 4
     Left = 8
     Top = 213
-    Width = 212
+    Width = 209
     Height = 20
     TabOrder = 5
     OnClick = ListAllClick

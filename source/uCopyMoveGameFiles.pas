@@ -111,30 +111,27 @@ var
 begin
   if IsNightMode then
      begin
-       SetFormColors(nil, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, -1);
+       SetFormColors(FormCopyMoveGameFiles, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, nil, -1, True);
 
-       FormCopyMoveGameFiles.Color:= menu_background_color[1];
+       //FormCopyMoveGameFiles.Color:= menu_background_color[1];
        //SetPanelColors(FormArcadeEmulatorsSetup.PanelBottom, menu_background_color[1], clrMedDarkGray);
 
-       PanelFileInfo.Color1:= clrBlackBk;
-       SetPanelNightColors(PanelProgress, clrBlackBk, menu_background_color[1]);
+       PanelFileInfo.Color1:= FormCopyMoveGameFiles.Color;//clrBlackBk;
+       PanelProgress.Style:= vgSolid;
+       PanelProgress.Color1:= FormCopyMoveGameFiles.Color;
 
-       //PanelFileInfo.Style:= vgSimple;
-       //SetPanelNightColors(PanelFileInfo, clrBlackBk, clrDarkRed);
-       //SetPanelNightColors(PanelProgress, clrDarkRed, clrDarkGray);
+       SetLabelColors(LabelFileType, clrLightRed, clMaroon, False);
 
-       SetLabelColors(LabelFileType, MsgTxtColors.colorWarning, clMaroon);
-
-       SetLabelColors(LabelGameFile, clWhite, clNavy);
-       SetLabelColors(LabelFileSizeDate, clWhite, clNavy);
-       SetLabelColors(LabelCopyToTitle, clWhite, clrMedBlue);
-       SetLabelColors(LabelRemainingFiles, clWhite, clrMedBlue);
-       SetLabelColors(LabelCopyTo, clYellow, clrDarkOrange);
-       SetLabelColors(LabelCanceledByUser, MsgTxtColors.colorWarning, clMaroon);
+       SetLabelColors(LabelGameFile, clCream, item_caption_active_shadow_color[1],False);
+       SetLabelColors(LabelFileSizeDate, clCream, item_caption_active_shadow_color[1],False);
+       SetLabelColors(LabelCopyToTitle, clrLightBlue, clNavy, False);
+       SetLabelColors(LabelRemainingFiles, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelCopyTo, clrOrangeBarTop, -1, False);
+       SetLabelColors(LabelCanceledByUser, clrLightRed, clMaroon, False);
 
        Log.BorderStyle:= bsNone;
-       Log.Color:= menu_background_color[1];//clrDarkGray;
-       Log.Font.Color:= item_caption_active_color[1];//clWhite;
+       Log.Color:= FormCopyMoveGameFiles.Color;
+       Log.Font.Color:= item_caption_active_color[1];
 
        FormMain.SetButtonExColors(ButtonCancel);
        FormMain.SetButtonExColors(ButtonPause);

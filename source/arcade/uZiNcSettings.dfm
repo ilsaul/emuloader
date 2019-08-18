@@ -1,6 +1,7 @@
 object FormZiNcSettings: TFormZiNcSettings
   Left = 774
   Top = 490
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -38,53 +39,86 @@ object FormZiNcSettings: TFormZiNcSettings
     ShadowColor = 12632284
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelControllerZNC: TLabel
+  object ControllerZNCLabel: TShadowLabel
     Left = 8
     Top = 217
-    Width = 104
-    Height = 15
+    Width = 107
+    Height = 16
     Caption = 'Controller [.znc file]'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelRendererZNC: TLabel
+  object RendererZNCLabel: TShadowLabel
     Left = 8
     Top = 263
-    Width = 98
-    Height = 15
+    Width = 101
+    Height = 16
     Caption = 'Renderer [.znc file]'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelControllerConfigFile: TLabel
+  object ControllerConfigFileLabel: TShadowLabel
     Left = 288
     Top = 217
-    Width = 142
-    Height = 15
+    Width = 145
+    Height = 16
     Caption = 'Controller Config [.cfg file]'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelRendererConfigFile: TLabel
+  object RendererConfigFileLabel: TShadowLabel
     Left = 288
     Top = 263
-    Width = 136
-    Height = 15
+    Width = 139
+    Height = 16
     Caption = 'Renderer Config [.cfg file]'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
-  object LabelROMsFolders: TLabel
+  object ROMsFoldersLabel: TShadowLabel
     Left = 8
     Top = 87
-    Width = 73
-    Height = 15
+    Width = 76
+    Height = 16
     Caption = 'ROMs Folders'
     ParentShowHint = False
     ShowAccelChar = False
     ShowHint = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object TopBar: TPanelEx
@@ -102,6 +136,7 @@ object FormZiNcSettings: TFormZiNcSettings
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object GameIcon: TImage
       Left = 76
       Top = 48
@@ -128,6 +163,9 @@ object FormZiNcSettings: TFormZiNcSettings
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -151,6 +189,9 @@ object FormZiNcSettings: TFormZiNcSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -181,6 +222,9 @@ object FormZiNcSettings: TFormZiNcSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -200,22 +244,34 @@ object FormZiNcSettings: TFormZiNcSettings
     Caption = 'Enable Sound'
     Ctl3D = True
     TabOrder = 1
-    object Label12: TLabel
+    object SoundFilterCutoffLabel: TShadowLabel
       Left = 24
       Top = 106
-      Width = 63
-      Height = 15
+      Width = 66
+      Height = 16
       Caption = 'Filter Cutoff'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelSoundLiteSurroundMultiplier: TLabel
+    object LabelSoundLiteSurroundMultiplier: TShadowLabel
       Left = 116
       Top = 60
-      Width = 12
-      Height = 15
+      Width = 15
+      Height = 16
       Caption = '40'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
     object SoundFilter: TAdvOfficeCheckBoxEx
@@ -256,7 +312,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object SoundFilterCutoff: TComboBox
+    object SoundFilterCutoff: TComboBox2Ex
       Left = 24
       Top = 122
       Width = 75
@@ -306,21 +362,34 @@ object FormZiNcSettings: TFormZiNcSettings
     Caption = 'Video'
     Ctl3D = True
     TabOrder = 2
-    object Label10: TLabel
+    object RotateLabel: TShadowLabel
       Left = 8
       Top = 84
-      Width = 34
-      Height = 15
+      Width = 37
+      Height = 16
       Caption = 'Rotate'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelNetGameConnect: TLabel
+    object NetGameConnectLabel: TShadowLabel
       Left = 8
       Top = 152
-      Width = 101
-      Height = 15
+      Width = 104
+      Height = 16
       Caption = 'Net Game Connect'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
     object SlowGeometry: TAdvOfficeCheckBoxEx
       Left = 8
@@ -359,7 +428,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object Rotate: TComboBox
+    object Rotate: TComboBox2Ex
       Left = 8
       Top = 100
       Width = 125
@@ -395,7 +464,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object NetGameConnect: TEdit
+    object NetGameConnect: TEditEx
       Left = 8
       Top = 168
       Width = 125
@@ -418,119 +487,185 @@ object FormZiNcSettings: TFormZiNcSettings
     Caption = 'OpenGL / Direct3D Renderer'
     Ctl3D = True
     TabOrder = 3
-    object LabelResolution: TLabel
+    object ResolutionLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 56
-      Height = 15
+      Width = 59
+      Height = 16
       Caption = 'Resolution'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object Label1: TLabel
+    object ColorDepthLabel: TShadowLabel
       Left = 8
       Top = 66
-      Width = 64
-      Height = 15
+      Width = 67
+      Height = 16
       Caption = 'Color Depth'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object Label2: TLabel
+    object ScanLinesLabel: TShadowLabel
       Left = 8
       Top = 112
-      Width = 49
-      Height = 15
+      Width = 52
+      Height = 16
       Caption = 'Scanlines'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object Label3: TLabel
+    object BlendingLabel: TShadowLabel
       Left = 98
       Top = 20
-      Width = 47
-      Height = 15
+      Width = 50
+      Height = 16
       Caption = 'Blending'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelFramerateManual: TLabel
+    object FramerateManualLabel: TShadowLabel
       Left = 325
       Top = 112
-      Width = 96
-      Height = 15
+      Width = 99
+      Height = 16
       Caption = 'Manual Framerate'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelTurnDisplay: TLabel
+    object TurnDisplayLabel: TShadowLabel
       Left = 98
       Top = 130
-      Width = 86
-      Height = 15
+      Width = 89
+      Height = 16
       Caption = 'Turn the Display'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelFramerateManualRange: TLabel
+    object FramerateManualRangeLabel: TShadowLabel
       Left = 372
       Top = 130
-      Width = 55
-      Height = 15
+      Width = 58
+      Height = 16
       Hint = 'Framerate Manual [%u]'
       Caption = '(0 to 1000)'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelTextureSettings: TLabel
+    object TextureSettingsLabel: TShadowLabel
       Left = 237
       Top = 20
-      Width = 84
-      Height = 15
+      Width = 87
+      Height = 16
       Caption = 'Texture Settings'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object Label4: TLabel
+    object TextureTypeLabel: TShadowLabel
       Left = 237
       Top = 38
-      Width = 26
-      Height = 15
+      Width = 29
+      Height = 16
       Caption = 'Type'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object LabelTextureCache: TLabel
+    object TextureCacheLabel: TShadowLabel
       Left = 325
       Top = 38
-      Width = 33
-      Height = 15
+      Width = 36
+      Height = 16
       Caption = 'Cache'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object LabelTextureFilter: TLabel
+    object TextureFilterLabel: TShadowLabel
       Left = 405
       Top = 38
-      Width = 26
-      Height = 15
+      Width = 29
+      Height = 16
       Caption = 'Filter'
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = False
     end
-    object Resolution: TComboBox
+    object Resolution: TComboBox2Ex
       Left = 8
       Top = 36
       Width = 80
@@ -560,7 +695,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       Themed = True
     end
-    object ColorDepth: TComboBox
+    object ColorDepth: TComboBox2Ex
       Left = 8
       Top = 82
       Width = 80
@@ -583,7 +718,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '16-bit'
         '32-bit')
     end
-    object Scanlines: TComboBox
+    object Scanlines: TComboBox2Ex
       Left = 8
       Top = 128
       Width = 80
@@ -607,7 +742,7 @@ object FormZiNcSettings: TFormZiNcSettings
         'Black'
         'Bright')
     end
-    object Blending: TComboBox
+    object Blending: TComboBox2Ex
       Left = 98
       Top = 36
       Width = 129
@@ -699,7 +834,7 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object TurnDisplay: TComboBox
+    object TurnDisplay: TComboBox2Ex
       Left = 187
       Top = 128
       Width = 40
@@ -723,7 +858,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '1'
         '2')
     end
-    object FramerateManual: TEdit
+    object FramerateManual: TEditEx
       Left = 325
       Top = 128
       Width = 45
@@ -752,7 +887,7 @@ object FormZiNcSettings: TFormZiNcSettings
       State = cbChecked
       Themed = True
     end
-    object TextureType: TComboBox
+    object TextureType: TComboBox2Ex
       Left = 267
       Top = 36
       Width = 54
@@ -777,7 +912,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '5-bit'
         '8-bit')
     end
-    object TextureCache: TComboBox
+    object TextureCache: TComboBox2Ex
       Left = 361
       Top = 36
       Width = 40
@@ -801,7 +936,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '1'
         '2')
     end
-    object TextureFilter: TComboBox
+    object TextureFilter: TComboBox2Ex
       Left = 435
       Top = 36
       Width = 40
@@ -827,7 +962,7 @@ object FormZiNcSettings: TFormZiNcSettings
         '3')
     end
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 8
     Top = 478
     Width = 89
@@ -837,7 +972,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 4
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 521
     Top = 478
     Width = 89
@@ -847,7 +982,7 @@ object FormZiNcSettings: TFormZiNcSettings
     ModalResult = 1
     TabOrder = 5
   end
-  object ControllerZNC: TEdit
+  object ControllerZNC: TEditEx
     Left = 8
     Top = 233
     Width = 219
@@ -861,7 +996,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 7
     OnChange = ControllerZNCChange
   end
-  object ControllerZNCButtonSelect: TBitBtn
+  object ControllerZNCButtonSelect: TBitBtnEx
     Left = 229
     Top = 233
     Width = 43
@@ -873,7 +1008,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 8
     OnClick = ControllerZNCButtonSelectClick
   end
-  object RendererZNC: TEdit
+  object RendererZNC: TEditEx
     Left = 8
     Top = 279
     Width = 219
@@ -887,7 +1022,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 9
     OnChange = RendererZNCChange
   end
-  object RendererZNCButtonSelect: TBitBtn
+  object RendererZNCButtonSelect: TBitBtnEx
     Left = 229
     Top = 279
     Width = 43
@@ -899,7 +1034,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 10
     OnClick = RendererZNCButtonSelectClick
   end
-  object ControllerConfigFile: TEdit
+  object ControllerConfigFile: TEditEx
     Left = 288
     Top = 233
     Width = 219
@@ -914,7 +1049,7 @@ object FormZiNcSettings: TFormZiNcSettings
     ShowHint = True
     TabOrder = 11
   end
-  object ControllerConfigFileButtonSelect: TBitBtn
+  object ControllerConfigFileButtonSelect: TBitBtnEx
     Left = 509
     Top = 233
     Width = 43
@@ -926,7 +1061,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 12
     OnClick = ControllerConfigFileButtonSelectClick
   end
-  object RendererConfigFile: TEdit
+  object RendererConfigFile: TEditEx
     Left = 288
     Top = 279
     Width = 219
@@ -939,7 +1074,7 @@ object FormZiNcSettings: TFormZiNcSettings
     ShowHint = True
     TabOrder = 13
   end
-  object RendererConfigFileButtonSelect: TBitBtn
+  object RendererConfigFileButtonSelect: TBitBtnEx
     Left = 509
     Top = 279
     Width = 43
@@ -1009,7 +1144,7 @@ object FormZiNcSettings: TFormZiNcSettings
     OnItemEditEnd = FolderROMsItemEditEnd
     OnKeyAction = FolderROMsKeyAction
   end
-  object ButtonUp: TBitBtn
+  object ButtonUp: TBitBtnEx
     Tag = 1
     Left = 8
     Top = 187
@@ -1023,7 +1158,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabStop = False
     OnClick = ButtonUpClick
   end
-  object ButtonDown: TBitBtn
+  object ButtonDown: TBitBtnEx
     Left = 51
     Top = 187
     Width = 43
@@ -1036,7 +1171,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabStop = False
     OnClick = ButtonUpClick
   end
-  object FolderROMButtonSelect: TBitBtn
+  object FolderROMButtonSelect: TBitBtnEx
     Left = 380
     Top = 187
     Width = 43
@@ -1048,7 +1183,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 18
     OnClick = FolderROMButtonSelectClick
   end
-  object FolderROMsButtonEdit: TBitBtn
+  object FolderROMsButtonEdit: TBitBtnEx
     Left = 423
     Top = 187
     Width = 43
@@ -1060,7 +1195,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 19
     OnClick = FolderROMsButtonEditClick
   end
-  object FolderROMsButtonDelete: TBitBtn
+  object FolderROMsButtonDelete: TBitBtnEx
     Left = 466
     Top = 187
     Width = 43
@@ -1072,7 +1207,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 20
     OnClick = FolderROMsButtonDeleteClick
   end
-  object FolderROMsButtonClear: TBitBtn
+  object FolderROMsButtonClear: TBitBtnEx
     Left = 509
     Top = 187
     Width = 43
@@ -1084,7 +1219,7 @@ object FormZiNcSettings: TFormZiNcSettings
     TabOrder = 21
     OnClick = FolderROMsButtonClearClick
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 619
     Top = 478
     Width = 89

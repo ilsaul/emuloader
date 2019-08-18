@@ -159,15 +159,15 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
     Color4 = clTeal
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableCustomBorder = ecbDouble
+    EnableCustomBorder = ecbSingle
     Frames = []
     ParentBackground = False
     Style = vgSolid
     object FoldersList: TMemo
       Left = 0
       Top = 0
-      Width = 620
-      Height = 203
+      Width = 622
+      Height = 205
       Align = alClient
       BorderStyle = bsNone
       Color = 15856113

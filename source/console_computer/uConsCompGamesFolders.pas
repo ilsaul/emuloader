@@ -328,9 +328,9 @@ begin
     PanelFolders.Left:= 558;
     PanelFolders.Height:= 672;
     if FormConsCompGamesFolders.ClientWidth <> 984 then
-       FormConsCompGamesFolders.ClientWidth:= 984;// .Width:= 1000;
+       FormConsCompGamesFolders.ClientWidth:= 984;
     if FormConsCompGamesFolders.ClientHeight <> 672 then
-       FormConsCompGamesFolders.ClientHeight:= 672;// Height:= 710;
+       FormConsCompGamesFolders.ClientHeight:= 672;
 
     if iScreenHeight = 720 then
        begin
@@ -352,10 +352,7 @@ begin
   end;
 
   if iScreenHeight < 720 then
-     begin
-       //FormMain.ResizeFormAddScrollBars(FormConsCompGamesFolders);
-       Exit;
-     end;
+     Exit;
 
   if iScreenHeight = 720 then
      begin
@@ -384,11 +381,6 @@ begin
   ResizeForm;
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
-
-  //FormMain.IL_GameIconSmall.GetIcon(MaxNonArcadeSystems+1, IconCartridge.Picture.Icon);
-  //FormMain.IL_GameIconSmall.GetIcon(MaxNonArcadeSystems+2, IconDiscImage.Picture.Icon);
-  //FormMain.IL_GameIconSmall.GetIcon(MaxNonArcadeSystems+3, IconFloppyDisk.Picture.Icon);
-  //FormMain.IL_GameIconSmall.GetIcon(MaxNonArcadeSystems+4, IconCassetteTape.Picture.Icon);
 
   FormMain.IL_LeftPanel.GetIcon(16, IconCartridge.Picture.Icon);
   FormMain.IL_LeftPanel.GetIcon(20, IconDiscImage.Picture.Icon);

@@ -42,14 +42,6 @@ type
     PopupSystemsViewMode: TMenuItem;
     PopupSystemsViewMode_Tiles: TMenuItem;
     PopupSystemsViewMode_LargeIcons: TMenuItem;
-    PanelSearchGames: TPanelEx;
-    PanelSearchGamesCaptionBar: TShadowLabel;
-    ButtonFilterTitleClose: TShadowLabel;
-    LabelSearchGamesFilter: TShadowLabel;
-    SystemViewMode_Tiles: TAdvOfficeRadioButtonEx;
-    LabelSystemViewMode_Tiles: TLabel;
-    SystemViewMode_LargeIcons: TAdvOfficeRadioButtonEx;
-    LabelSystemViewMode_LargeIcons: TLabel;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
@@ -100,7 +92,6 @@ type
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormResize(Sender: TObject);
-    procedure SystemViewMode_TilesClick(Sender: TObject);
   private
     { Private declarations }
     SystemsSoftList: array[1..MaxConsoleComputerSystems] of THashedStringList; // holds softlist names for each system
@@ -436,7 +427,7 @@ end;
 
 procedure TFormConsCompSystemsEditor.UpdateAssignedSystemTotalFiles;
 begin
-  LabelSoftListAssignedToSystem.Caption:= '  '+IntToStr(SoftListAssignedToSystem.Groups.ItemCount)+LabelSoftListAssignedToSystem.Hint+Systems.Selection.First.Caption;
+  LabelSoftListAssignedToSystem.Caption:= '  '+IntToStr(SoftListAssignedToSystem.Groups.ItemCount)+LabelSoftListAssignedToSystem.Hint+SystemsListCustom[Systems.Tag, 0];
 end;
 
 procedure TFormConsCompSystemsEditor.UpdateNotAssignedTotalFiles;
@@ -701,6 +692,8 @@ begin
   if IsNightMode then
      begin
        FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.SetEasyListViewHeaderColors(SoftListAssignedToSystem, True);
+       FormMain.SetEasyListViewHeaderColors(SoftListFilesNotAssigned, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftListAssignedToSystem, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftListFilesNotAssigned, True);
      end;
@@ -772,27 +765,17 @@ begin
      end;
   if PopupSoftList.PopupComponent = SoftListFilesNotAssigned then
      begin
-       PopupMoveSelectedToDestination.Caption:= 'Assign Selected to "'+Systems.Selection.First.Caption+'"';
+       PopupMoveSelectedToDestination.Caption:= 'Assign Selected to "'+SystemsListCustom[Systems.Tag, 0]+'"';
        PopupMoveSelectedToDestination.ShortCut:= 0;
        PopupMoveSelectedToDestination.Tag:= 0;
      end
   else
   if PopupSoftList.PopupComponent = SoftListAssignedToSystem then
      begin
-       PopupMoveSelectedToDestination.Caption:= 'Remove Selected from "'+Systems.Selection.First.Caption+'"';
+       PopupMoveSelectedToDestination.Caption:= 'Remove Selected from "'+SystemsListCustom[Systems.Tag, 0]+'"';
        PopupMoveSelectedToDestination.ShortCut:= VK_DELETE;
        PopupMoveSelectedToDestination.Tag:= 1;
      end;
-
-  {if not ValidateSelectedGame then
-     begin
-       if IsImagePopupMenu then
-          begin
-            PostMessage(Handle, WM_LBUTTONDOWN, MK_LBUTTON, 0);
-            PostMessage(Handle, WM_LBUTTONUP, MK_LBUTTON, 0);
-          end;
-       Exit;
-     end;}
 end;
 
 procedure TFormConsCompSystemsEditor.PopupMoveSelectedToDestinationClick(
@@ -1161,16 +1144,5 @@ procedure TFormConsCompSystemsEditor.FormResize(Sender: TObject);
 begin
   UpdateSystemsDimensions;
 end;
-
-procedure TFormConsCompSystemsEditor.SystemViewMode_TilesClick(
-  Sender: TObject);
-begin
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
-  if TAdvOfficeRadioButtonEx(Sender).Tag = 0 then
-     SystemViewMode_LargeIcons.Font.Style:= []
-  else
-     SystemViewMode_Tiles.Font.Style:= [];
-end;
-
 
 end.

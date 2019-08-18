@@ -57,7 +57,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     AutoSize = False
     Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
+    Font.Color = 21414
     Font.Height = -13
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold, fsItalic]
@@ -100,7 +100,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     AutoSize = False
     Caption = 'Software List Title'
     Font.Charset = ANSI_CHARSET
-    Font.Color = 21414
+    Font.Color = clMaroon
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]

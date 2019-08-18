@@ -118,7 +118,6 @@ begin
   SoftwareLists.Header.Columns[1].Width:= 165;
   SoftwareLists.Header.Columns[2].Width:= 125;
   FrameSoftwareList.Width:= FrameSoftwareList.Width-200;
-
 end;
 
 function TFormArcadeSoftwareListCustomize.GetSoftListFileTitle(const FileXML: String; out MediaTypeIndex: Integer): WideString;
@@ -299,7 +298,6 @@ end;
 
 procedure TFormArcadeSoftwareListCustomize.FormShow(Sender: TObject);
 begin
-  //SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   ResizeForm;
   FormMain.ELV_ResetNormalColors(SoftwareLists);
   FormMain.LoadMediaTypeIcons(IL_MediaType, True);
@@ -308,23 +306,34 @@ begin
 
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
 
+  GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
+  
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, -1, IsNightMode);
-       SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1]);
+       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
+       SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1], False);
 
        FrameSoftwareList.Color1:= FormArcadeSoftwareListCustomize.Color;
 
        FormMain.SetEasyListViewColors(SoftwareLists, menu_background_color[1], clWhite);
 
-       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(UseBiggerFontIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(UseBiggerFontIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
+       FormMain.SetEasyListViewHeaderColors(SoftwareLists, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
+
+       SoftwareLists.Align:= alNone;
+       SoftwareLists.Height:= SoftwareLists.Height-2;
+       SoftwareLists.Top:= SoftwareLists.Top+1;
+
+       SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       FormMain.SetButtonExColors(ButtonYes);
+       FormMain.SetButtonExColors(ButtonNo);
+       FormMain.SetButtonExColors(ButtonResetToCurrent);
      end;
 
-  GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
   FormMain.HideFilterMsgBox;
 end;
 

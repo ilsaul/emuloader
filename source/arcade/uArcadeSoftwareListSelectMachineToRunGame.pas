@@ -151,7 +151,7 @@ begin
   FrameMachinesList.Width:= FrameMachinesList.Width+iWidthDec;
   FrameMachinesList.Height:= FrameMachinesList.Height+iHeight;
 
-  MachinesListView.Width:= MachinesListView.Width+iWidthDec-4;
+  MachinesListView.Width:= MachinesListView.Width+iWidthDec-2;
   MachinesListView.Height:= MachinesListView.Height+iHeight;
   LabelGameTitle.Width:= LabelGameTitle.Width+iWidthDec;
   ButtonYes.Left:= ButtonYes.Left+iWidthDec;
@@ -230,21 +230,22 @@ begin
   ResizeForm;
   if IsNightMode then
   begin
-    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-    SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor);
-    SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack);
+    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor, False);
+    SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack, False);
 
     FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
 
     FormMain.SetEasyListViewColors(MachinesListView, FormArcadeSoftwareListMachineToRunGame.Color, clWhite);
 
-    SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);//clWhite, clNavy);
-    SetCheckBoxColors(HidePreliminaryMachines, item_caption_active_color[1], item_caption_active_shadow_color[1]);//clWhite, clNavy);
+    SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+    SetCheckBoxColors(HidePreliminaryMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
     FormMain.SetButtonExColors(ButtonYes);
     FormMain.SetButtonExColors(ButtonNo);
     FormMain.SetButtonExColors(ButtonResetToCurrent);
 
+    FormMain.SetEasyListViewHeaderColors(MachinesListView, True);
     FormMain.ELV_SetRibbonNightColors(0, MachinesListView, True);
   end;
 

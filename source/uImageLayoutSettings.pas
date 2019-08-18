@@ -763,9 +763,9 @@ begin
   if IsNightMode then
      begin
        if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
-          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, item_caption_active_color[1], item_caption_active_shadow_color[1])
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, item_caption_active_color[1], item_caption_active_shadow_color[1], False)
        else
-          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, clGray, clrMedDarkGray);
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, clGray, clrMedDarkGray, False);
      end
   else
      begin
@@ -877,18 +877,18 @@ procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream, -1, False)
   else
-     SetLabelColors(TShadowLabel(Sender), clBlue, clNavy);
+     SetLabelColors(TShadowLabel(Sender), clBlue, clNavy, False);
 end;
 
 procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
   else
-     SetLabelColors(TShadowLabel(Sender), MsgTxtColors.colorFileName, $00dddddd);
+     SetLabelColors(TShadowLabel(Sender), MsgTxtColors.colorFileName, $00dddddd, False);
 end;
 
 procedure TFormImageLayoutSettings.ButtonHelp_CustomCategoryConsCompClick(

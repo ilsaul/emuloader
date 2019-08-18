@@ -89,9 +89,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewFolder: TShadowLabel
       Left = 13
       Top = 2
-      Width = 313
+      Width = 300
       Height = 16
-      Caption = 'Folder (emulator relative path supported, no network path)'
+      Caption = 'Folder (emulator relative path support, no network path)'
       ShowAccelChar = False
       ShadowColor = clGray
       ShadowEnabled = False
@@ -169,17 +169,17 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object LabelSnapDirAutoSearch: TShadowLabel
       Left = 10
-      Top = 44
-      Width = 379
-      Height = 12
+      Top = 42
+      Width = 365
+      Height = 14
       Caption = 
         'Snap Dir Auto-Search: emudir\videosnaps\; snap_dir\videosnaps\; ' +
         'snap_dir'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowAccelChar = False

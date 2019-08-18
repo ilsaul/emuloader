@@ -161,19 +161,17 @@ end;
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream, -1, False) //clrLightBlue, clrMedBlue, False)
   else
      TShadowLabel(Sender).Font.Color:= clBlue;
-  TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
   else
      TShadowLabel(Sender).Font.Color:= clNavy;
-  TShadowLabel(Sender).Font.Style:= [];
 end;
 
 procedure TFormArcadeScanGamesMode.FullScanClick(Sender: TObject);

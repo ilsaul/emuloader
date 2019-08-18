@@ -98,8 +98,6 @@ type
     procedure FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonFilterTitleApplyClick(Sender: TObject);
     procedure ButtonFilterTitleResetClick(Sender: TObject);
-    procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
-      const ARect: TRect; var DefaultDraw: Boolean);
     procedure SystemsHideScrollBarAreaClick(Sender: TObject);
     procedure GamesListFontSizeSmallerClick(Sender: TObject);
     procedure ButtonApplyChangesClick(Sender: TObject);
@@ -119,6 +117,9 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure SplitterMoved(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
+      const ARect: TRect; var DefaultDraw: Boolean);
   private
     { Private declarations }
     extraDataFile: array[1..MaxConsoleComputerSystems] of THashedStringList;
@@ -264,7 +265,7 @@ begin
   if IsSearchBar then
      iSystemName:= ' - Search bar results'
   else
-     iSystemName:=' - '+Systems.Selection.First.Caption;
+     iSystemName:=' - '+SystemsListCustom[Systems.Tag, 0];
 
   if CustomGamesList.Groups.VisibleItemCount = 1 then
      LabelCustomGamesListTotal.Caption:= '  '+IntToStr(CustomGamesList.Groups.VisibleItemCount)+' game'+iSystemName
@@ -794,6 +795,7 @@ begin
   if IsNightMode then
      begin
        FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.SetEasyListViewHeaderColors(CustomGamesList, True);
        FormMain.ELV_SetRibbonNightColors(0, CustomGamesList, True);
      end;
 
@@ -1098,20 +1100,6 @@ begin
      end;
 end;
 
-procedure TFormConsCompGamesEditor.ToolBarFilterTitleCustomDraw(
-  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  if PanelSearchGames.Style = vgSolid then
-     begin
-       Sender.Canvas.Brush.Color:= PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top];
-       Sender.Canvas.Rectangle(Sender.ClientRect);
-     end
-  else
-     FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
-                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
-end;
-
 procedure TFormConsCompGamesEditor.SystemsHideScrollBarAreaClick(
   Sender: TObject);
 begin
@@ -1326,6 +1314,29 @@ end;
 procedure TFormConsCompGamesEditor.FormResize(Sender: TObject);
 begin
   UpdateSystemsDimensions;
+end;
+
+procedure TFormConsCompGamesEditor.FormCreate(Sender: TObject);
+begin
+  if Screen.Fonts.IndexOf('Terminal') = -1 then
+     begin
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, 7);
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyText, 7);
+     end;
+end;
+
+procedure TFormConsCompGamesEditor.ToolBarFilterTitleCustomDraw(
+  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
+begin
+  if PanelSearchGames.Style = vgSolid then
+     begin
+       Sender.Canvas.Brush.Color:= PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top];
+       Sender.Canvas.Rectangle(Sender.ClientRect);
+     end
+  else
+     FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
+                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
+                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
 end;
 
 end.

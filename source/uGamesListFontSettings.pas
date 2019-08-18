@@ -15,9 +15,9 @@ type
     PopupFontSettings: TBcBarPopupMenu;
     PopupResetAllToCurrentFonts: TMenuItem;
     PopupSetSelectedToDefaultFonts: TMenuItem;
-    CopyFromParent1: TMenuItem;
+    PopupCopyFontFromArcadeParentFont: TMenuItem;
     N1: TMenuItem;
-    SetFontsToMatchAllSystemsFont1: TMenuItem;
+    PopupSetFontsToMatchAllSystemsFont: TMenuItem;
     PopupResetSelectedToCurrentFonts: TMenuItem;
     PopupSetAllToDefaultFonts: TMenuItem;
     N2: TMenuItem;
@@ -36,9 +36,13 @@ type
     ButtonCancel: TBitBtnEx;
     PopupShowAvailableSystemsOnly: TMenuItem;
     PopupHelp: TMenuItem;
-    SetAllConsoleComputerSystemsFontsToAllSystems1: TMenuItem;
+    PopupSetAllConsoleComputerSystemsFontsToAllSystems: TMenuItem;
     N4: TMenuItem;
-    SetAllToArcadeParentGameFont1: TMenuItem;
+    PopupSetAllToArcadeParentGameFont: TMenuItem;
+    PopupCopyAllFontsFromLightMode: TMenuItem;
+    N5: TMenuItem;
+    PopupCopySelectedFontsFromLightMode: TMenuItem;
+    PopupShowFontName: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure GamesFontItemPaintText(Sender: TCustomEasyListview;
@@ -64,10 +68,11 @@ type
     procedure GamesBackgroundImageButtonUpdateClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure PopupShowAvailableSystemsOnlyClick(Sender: TObject);
-    procedure SetFontsToMatchAllSystemsFont1Click(Sender: TObject);
-    procedure SetAllConsoleComputerSystemsFontsToAllSystems1Click(
+    procedure PopupSetFontsToMatchAllSystemsFontClick(Sender: TObject);
+    procedure PopupSetAllConsoleComputerSystemsFontsToAllSystemsClick(
       Sender: TObject);
     procedure PopupHelpClick(Sender: TObject);
+    procedure PopupShowFontNameClick(Sender: TObject);
   private
     ArcadeSystemsHave: Boolean;
     tFont_Parent, tFont_Clone, tFont_Preliminary, tFont_MissingROMs, tFont_MissingROMsPreliminary: TFont;
@@ -114,21 +119,21 @@ end;
 
 procedure TFormGamesListFontSettings.UpdateFontSizeInfo(Item: TEasyItem; UpdatePixelsLabel: Boolean = False);
 var
-  NewPixelsValue, FontSizeValue: Integer;
-  //FontNameValue: WideString;
+  NewPixelsValue, FontSizeValue, DetailLine: Integer;
+  FontNameValue: WideString;
 
   function GetFontParamsStr(var FontSource: TFont): String;
   begin
     if Assigned(FontSource) then
        begin
          NewPixelsValue:= FormMain.GetFontHeightSize(FontSource);
-         //FontNameValue:= FontSource.Name;
+         FontNameValue:= FontSource.Name;
          FontSizeValue:= FontSource.Size;
        end
     else
        begin
          NewPixelsValue:= FormMain.GetFontHeightSize(GamesFont.Font);
-         //FontNameValue:= GamesFont.Font.Name;
+         FontNameValue:= GamesFont.Font.Name;
          FontSizeValue:= GamesFont.Font.Size;
        end;
   end;
@@ -144,7 +149,7 @@ begin
     5: // all systems
       begin
         NewPixelsValue:= FormMain.GetFontHeightSize(GamesFont.Font);
-        //FontNameValue:= GamesFont.Font.Name;
+        FontNameValue:= GamesFont.Font.Name;
         FontSizeValue:= GamesFont.Font.Size;
       end;
   else
@@ -162,9 +167,15 @@ begin
   if NewPixelsValue >= PixelsMax then
      PixelsMax:= NewPixelsValue;
 
-  Item.Captions[1]:= '  font size: '+IntToStr(FontSizeValue)+' - height: '+IntToStr(NewPixelsValue)+' pixels ';
-  //Item.Captions[2]:= '  font: '+FontNameValue;
-  //Item.Captions[2]:= IntToStr(NewPixelsValue);
+  if PopupShowFontName.Checked then
+     begin
+       Item.Captions[1]:= '  font name: '+FontNameValue;
+       Item.Details[1]:= 1;
+     end;
+
+  DetailLine:= Ord(PopupShowFontName.Checked)+1; // PopupShowFontName.Checked + 1 -> either Captions[1] or Captions[2]
+  Item.Captions[DetailLine]:= '  font size: '+IntToStr(FontSizeValue)+' - height: '+IntToStr(NewPixelsValue)+' pixels ';
+  Item.Details[DetailLine]:= DetailLine;
 
   if PixelsMin > PixelsMax then
      begin
@@ -178,26 +189,6 @@ function TFormGamesListFontSettings.IsArcadeSystem(Item: TEasyItem): Boolean;
 begin
   Result:= Item.StateImageIndex = -1;
 end;
-
-{procedure TFormGamesListFontSettings.ELV_UpdateScrollBar;
-begin
-  if GamesFont.Scrollbars.VertBarVisible then
-     begin
-       if not ScrollBarLastVisible then
-          begin
-            GamesFont.Header.Columns[0].Width:= GamesFont.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
-            ScrollBarLastVisible:= True;
-          end;
-     end
-  else
-     begin
-       if ScrollBarLastVisible then
-          begin
-            GamesFont.Header.Columns[0].Width:= GamesFont.Header.Columns[0].Width+GetSystemMetrics(SM_CXVSCROLL);
-            ScrollBarLastVisible:= False;
-          end;
-     end;
-end;}
 
 procedure TFormGamesListFontSettings.UpdateFontSizeInfoAllSystems;
 var
@@ -225,13 +216,6 @@ var
     Item.Caption:= ItemCaption;
     Item.Tag:= Ord(not IsNormal); // for the selection ribbon; 1 (True) -> normal blue color; 0 (False) -> Missing ROMs red color
     Item.Details[1]:= 1;
-    //if GamesFont.PaintInfoItem.TileDetailCount = 2 then
-    //   Item.Details[1]:= 1
-    //else
-    //   begin
-    //     Item.Details[1]:= 1;
-    //     Item.Details[2]:= 2;
-    //   end;
   end;
 
 begin
@@ -239,8 +223,6 @@ begin
   GamesFont.BeginUpdate;
   GamesFont.Items.ReIndexDisable:= True;
   AddItem(5, 'All Systems', 0);
-  //AddItem(4, 'Preliminary Set, Missing ROMs/CHDs', -1, False);
-  //AddItem(4, 'Preliminary / Missing ROMs', -1, False);
   AddItem(4, 'Missing ROMs, Preliminary', -1, False);
   AddItem(3, 'Missing ROMs/CHDs', -1, False);
   AddItem(2, 'Preliminary Set');
@@ -269,20 +251,6 @@ begin
          end;
     end;
 
-    //if Item.StateImageIndex = -1 then
-    //   UpdateFontSizeInfo(Item)
-    //else
-    //   begin
-    //     Item.Details[1]:= 1;
-    //     //if GamesFont.PaintInfoItem.TileDetailCount = 2 then
-    //     //   Item.Details[1]:= 1
-    //     //else
-    //     //   begin
-    //     //     Item.Details[1]:= 1;
-    //     //     Item.Details[2]:= 2;
-    //     //   end;
-    //     UpdateFontSizeInfo(Item);
-    //   end;
     Item:= GamesFont.Groups.NextItem(Item);
   until Item = nil;
   GamesFont.EndUpdate;
@@ -588,8 +556,8 @@ begin
   end;
 
   strFolder:= FormMain.GetFolderFull(33);
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(0), strFolder, IL_FontSettings); // parent
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(9), strFolder, IL_FontSettings); // clone
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(0),  strFolder, IL_FontSettings); // parent
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(9),  strFolder, IL_FontSettings); // clone
   FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(12), strFolder, IL_FontSettings); // preliminary
   FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(30), strFolder, IL_FontSettings); // found with missing rom/chd
   FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(25), strFolder, IL_FontSettings); // preliminary found widht misssing rom/chd
@@ -654,15 +622,15 @@ begin
     end;
   end;
 
-  if Position = 1 then //[1, 2] then
+  if Position in [1, 2] then
      begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= TileDetailsTextColor;
-       ACanvas.Font.Style:= [];//fsItalic];
+       ACanvas.Font.Style:= [];
      end;
 
-  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas, Ord(Item.ImageIndex in [3, 4]));
 end;
 
 procedure TFormGamesListFontSettings.FormCloseQuery(Sender: TObject;
@@ -674,7 +642,7 @@ begin
      begin
        FormMain.ClearListView(GamesFont);
        FormMain.GamesListView.BeginUpdate;
-       FormMain.GamesListView.Font:= GamesFont.Font; // FormMain.SetFont(GamesFont.Font, FormMain.GamesListView.Font);
+       FormMain.GamesListView.Font:= GamesFont.Font;
        FormMain.SetFont(tFont_Parent, FormMain.Font_Parent);
        FormMain.SetFont(tFont_Clone, FormMain.Font_Clone);
        FormMain.SetFont(tFont_Preliminary, FormMain.Font_Preliminary);
@@ -690,8 +658,7 @@ begin
        end;
 
        FormMain.GamesListView.EndUpdate;
-       FormMain.UpdateCustomGameFontFile;
-       //FormMain.GamesListView.Refresh;
+       FormMain.WriteCustomGameFontFile(IsNightMode);
      end;
   FreeAndNil(tFont_Parent);
   FreeAndNil(tFont_Clone);
@@ -834,9 +801,6 @@ begin
        end;
 
     UpdateFontSizeInfo(selItem, True);
-    //if selItem.StateImageIndex = 0 then // "All Systems"
-    //   UpdateFontSizeInfoAllSystems;
-    //  err
     selItem:= GamesFont.Selection.Next(selItem);
   until selItem = nil;
 
@@ -850,7 +814,6 @@ procedure TFormGamesListFontSettings.GamesBackgroundColorSelect(
 begin
   GamesFont.Color:= GamesBackgroundColor.Selected;
   TileDetailsTextColor:= GetContrastColor(GamesFont.Color);
-  //FormMain.MachinesListSidePanel.Color:= FormMain.GamesListView.Color;
 end;
 
 procedure TFormGamesListFontSettings.ButtonDefaultBkSortedColorClick(
@@ -948,7 +911,7 @@ begin
   GamesFont.EndUpdate;
 end;
 
-procedure TFormGamesListFontSettings.SetFontsToMatchAllSystemsFont1Click(
+procedure TFormGamesListFontSettings.PopupSetFontsToMatchAllSystemsFontClick(
   Sender: TObject);
 var
   selItem: TEasyItem;
@@ -1018,7 +981,7 @@ begin
   GamesFont.SetFocus;
 end;
 
-procedure TFormGamesListFontSettings.SetAllConsoleComputerSystemsFontsToAllSystems1Click(
+procedure TFormGamesListFontSettings.PopupSetAllConsoleComputerSystemsFontsToAllSystemsClick(
   Sender: TObject);
 var
   selItem: TEasyItem;
@@ -1067,5 +1030,15 @@ begin
   GenerateMessage('Help', 'Shed some light into the darkness.');
 end;
 
+
+procedure TFormGamesListFontSettings.PopupShowFontNameClick(
+  Sender: TObject);
+begin
+  GamesFont.BeginUpdate;
+  GamesFont.PaintInfoItem.TileDetailCount:= Ord(PopupShowFontName.Checked)+2;
+  UpdateFontSizeInfoAllSystems;
+  GamesFont.EndUpdate;
+  GamesFont.SetFocus;
+end;
 
 end.

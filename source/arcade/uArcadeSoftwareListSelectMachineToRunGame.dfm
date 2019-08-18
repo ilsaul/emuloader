@@ -238,14 +238,13 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     Color4 = 16750899
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
     object MachinesListView: TEasyListview
-      Left = 2
+      Left = 1
       Top = 2
-      Width = 957
+      Width = 958
       Height = 409
       CellSizes.Report.Height = 20
       Color = clWhite
@@ -270,7 +269,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000168010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000169010000FFFFFF1F0001000000
         01000000070000004D0061006300680069006E00650000000000000000000000
         0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
         080001010001010000000000016E000000FFFFFF1F0001000000010000000400

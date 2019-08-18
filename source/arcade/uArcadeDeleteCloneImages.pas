@@ -7,7 +7,7 @@ uses
   StdCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, ImgList, uMain, ExtCtrls, ComCtrls,
   uCommon, ToolWin, Buttons, PanelEx, GR32_Image, ShadowLabel,
-  Menus, BarMenus;
+  Menus, BarMenus, ButtonsEx;
 
 type
   TEasyGameInfo_dc = class(TEasyItemStored)
@@ -44,28 +44,26 @@ type
 type
   TFormArcadeDeleteCloneImages = class(TForm)
     PanelImages: TPanelEx;
-    PanelScreen1: TPanel;
+    PanelScreen1: TPanelEx;
     ImageScr1: TImage32;
-    PanelParentGameScr1: TPanel;
+    PanelParentGameScr1: TPanelEx;
     ImageParentScr1: TImage32;
     IL_Systems: TImageList;
     BarTextInfoScr1: TPanelEx;
     LabelTextInfoScr1: TShadowLabel;
     BarTextInfoParentScr1: TPanelEx;
     LabelTextInfoParentScr1: TShadowLabel;
-    PanelGames: TPanel;
+    PanelGames: TPanelEx;
     DeleteClonesList: TEasyListview;
-    Shape1: TShape;
-    PanelEx1: TPanelEx;
+    PanelTop: TPanelEx;
     SystemIcon: TImage;
     ImageCategoryIcon: TImage;
-    ButtonScan: TBitBtn;
-    ButtonDeleteImages: TBitBtn;
-    ButtonDeleteSelected: TBitBtn;
-    ButtonHelp: TBitBtn;
-    ButtonRemoveSelected: TBitBtn;
-    PanelEx2: TPanelEx;
-    ButtonRenameToParent: TBitBtn;
+    ButtonScan: TBitBtnEx;
+    ButtonDeleteImages: TBitBtnEx;
+    ButtonDeleteSelected: TBitBtnEx;
+    ButtonHelp: TBitBtnEx;
+    ButtonRemoveSelected: TBitBtnEx;
+    ButtonRenameToParent: TBitBtnEx;
     IL_ToolBar: TImageList;
     LabelSystem: TShadowLabel;
     LabelImageCategory: TShadowLabel;
@@ -325,7 +323,7 @@ begin
      Exit;
   ImageCategoryIcon.Tag:= selCat;
   LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
 end;
 
 procedure TFormArcadeDeleteCloneImages.SelectSystem;
@@ -468,7 +466,7 @@ end;
 procedure TFormArcadeDeleteCloneImages.FormShow(Sender: TObject);
 begin
   FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
 
   LabelSystem.Caption:= FormMain.GetArcadeSystemShortTitle(SystemIcon.Tag);
   LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
@@ -478,6 +476,49 @@ begin
   FormMain.ELV_ResetNormalColors(DeleteClonesList);
   FixBackgroundColor;
   FormMain.LoadSystemsIcons(IL_Systems);
+
+  DeleteClonesList.Color:= FormMain.GamesListView.Color;
+  if FormMain.GamesListView.BackGround.Enabled then
+     begin
+       DeleteClonesList.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
+       DeleteClonesList.BackGround.Tile:= FormMain.GamesListView.BackGround.Tile;
+       DeleteClonesList.BackGround.Enabled:= True;
+     end;
+
+  DeleteClonesList.Font:= FormMain.GamesListView.Font;
+
+  if IsNightMode then
+     begin
+       FormArcadeDeleteCloneImages.Color:= menu_background_color[1];
+       SetPanelColors(PanelTop, FormMain.PanelSearchGames_ToolBar.Color1, FormMain.PanelSearchGames_ToolBar.Color2, (FormMain.PanelSearchGames_ToolBar.Style <> vgSimple));
+
+       SetLabelColors(LabelSystem, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelImageCategory, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       {SetLabelColors(FormGamesListFontSettings.LabelBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetColorBoxColors(FormGamesListFontSettings.GamesBackgroundColor, True);
+       SetCheckBoxColors(FormGamesListFontSettings.GamesBackgroundImageEnable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(FormGamesListFontSettings.GamesTileBackground, item_caption_active_color[1], item_caption_active_shadow_color[1], False);}
+       SetLabelColors(LabelTextInfoScr1, clCream,  clrDarkGray, False);
+       LabelTextInfoScr1.Color:= clrMedDarkGray;
+       SetLabelColors(LabelTextInfoParentScr1, clCream,  clrDarkGray, False);
+       LabelTextInfoParentScr1.Color:= clrMedDarkGray;
+
+       BarTextInfoScr1.Color1:= FormArcadeDeleteCloneImages.Color;
+       BarTextInfoParentScr1.Color1:= FormArcadeDeleteCloneImages.Color;
+       PanelParentGameScr1.Color1:= FormArcadeDeleteCloneImages.Color;
+       PanelScreen1.Color1:= FormArcadeDeleteCloneImages.Color;
+
+       FormMain.SetButtonExColors(ButtonScan);
+       FormMain.SetButtonExColors(ButtonRemoveSelected);
+       FormMain.SetButtonExColors(ButtonRenameToParent);
+       FormMain.SetButtonExColors(ButtonDeleteImages);
+       FormMain.SetButtonExColors(ButtonDeleteSelected);
+       FormMain.SetButtonExColors(ButtonHelp);
+
+       FormMain.SetEasyListViewColors(DeleteClonesList, -1, -1, clrOrangeBarTop);
+       FormMain.SetEasyListViewHeaderColors(DeleteClonesList, True);
+     end;
+     
   UpdateTotalGamesLabel;
 end;
 
@@ -485,11 +526,15 @@ procedure TFormArcadeDeleteCloneImages.DeleteClonesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(
-                TEasyGameInfo_dc(Item).eSystem,
-                TEasyGameInfo_dc(Item).eGameStatus,
-                TEasyGameInfo_dc(Item).eDriverStatus,
-                TEasyGameInfo_dc(Item).eClone, ACanvas, True, False);
+  FormMain.GetCanvasFont(TEasyGameInfo_dc(Item).eSystem,
+                         -1,
+                         False,
+                         TEasyGameInfo_dc(Item).eGameStatus,
+                         TEasyGameInfo_dc(Item).eDriverStatus,
+                         TEasyGameInfo_dc(Item).eClone, ACanvas, False, DeleteClonesList);
+  if ACanvas.Font.Size <> 9 then
+     ACanvas.Font.Size:= 9;
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas, TEasyGameInfo_dc(Item).eGameStatus);
 end;
 
 

@@ -212,13 +212,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_versioninfo: TShadowLabel
       Left = 12
       Top = 46
-      Width = 78
-      Height = 15
+      Width = 71
+      Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -233,13 +233,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1: TShadowLabel
       Left = 26
       Top = 76
-      Width = 192
-      Height = 15
+      Width = 172
+      Height = 16
       Caption = 'AlterMAME 1 (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -254,13 +254,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_versioninfo: TShadowLabel
       Left = 12
       Top = 119
-      Width = 78
-      Height = 15
+      Width = 71
+      Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -275,13 +275,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_exec: TShadowLabel
       Left = 26
       Top = 3
-      Width = 190
-      Height = 15
+      Width = 170
+      Height = 16
       Caption = 'Emulator File (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -294,41 +294,20 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Transparent = True
     end
     object LabelAlterMAME1_Autorun: TShadowLabel
-      Left = 237
-      Top = 227
-      Width = 295
+      Left = 227
+      Top = 228
+      Width = 290
       Height = 16
-      Caption = '(Run game with AlterMAME if fails with primary MAME)'
+      Caption = 'Run game with AlterMAME if fails with primary MAME'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clWhite
       ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelAlterMAME1_Tip2: TShadowLabel
-      Left = 227
-      Top = 76
-      Width = 259
-      Height = 15
-      Caption = '--                                                           --'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -336,22 +315,22 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Transparent = True
     end
     object LabelAlterMAME1_Tip1: TShadowLabel
-      Left = 244
-      Top = 75
-      Width = 226
+      Left = 310
+      Top = 76
+      Width = 229
       Height = 16
       Caption = 'Play MAME games with a second emulator'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = True
       ShadowColor = clWhite
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -361,13 +340,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2: TShadowLabel
       Left = 26
       Top = 149
-      Width = 192
-      Height = 15
+      Width = 172
+      Height = 16
       Caption = 'AlterMAME 2 (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -400,44 +379,23 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Frames = []
       Transparent = True
     end
-    object LabelAlterMAME2_Tip2: TShadowLabel
-      Left = 227
-      Top = 149
-      Width = 247
-      Height = 15
-      Caption = '--                                                        --'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
     object LabelAlterMAME2_Tip1: TShadowLabel
-      Left = 244
-      Top = 148
-      Width = 215
+      Left = 323
+      Top = 149
+      Width = 216
       Height = 16
       Caption = 'Play MAME games with a third emulator'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowAccelChar = False
       ShowHint = True
       ShadowColor = clWhite
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -466,16 +424,16 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Transparent = True
     end
     object LabelAlterMAME2_Autorun: TShadowLabel
-      Left = 237
-      Top = 247
-      Width = 285
+      Left = 227
+      Top = 248
+      Width = 280
       Height = 16
-      Caption = '(Run game with AlterMAME 2 if fails with AlterMAME)'
+      Caption = 'Run game with AlterMAME 2 if fails with AlterMAME'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clWhite
@@ -487,7 +445,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Transparent = True
     end
     object ButtonBrowseArcade_exec: TBitBtnEx
-      Left = 586
+      Left = 538
       Top = 20
       Width = 47
       Height = 21
@@ -580,13 +538,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object AlterMAME1_Autorun: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 226
-      Width = 225
-      Height = 20
+      Width = 215
+      Height = 18
       Hint = 'Run selected game with AlterMAME executable if fails with MAME'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowHint = True
@@ -620,9 +578,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnChange = AlterMAME1_versioninfoChange
     end
     object PanelMAMEEmulatorsText: TPanelEx
-      Left = 219
+      Left = 275
       Top = 3
-      Width = 410
+      Width = 268
       Height = 15
       Color1 = 15856113
       Color2 = clSilver
@@ -634,18 +592,16 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ParentBackground = False
       Style = vgSolid
       object LabelMAMELink_Tabs: TShadowLabel
-        Left = 1
+        Left = 42
         Top = 0
-        Width = 316
-        Height = 15
-        Caption = 
-          '--            /                             /                  /' +
-          '         --'
+        Width = 198
+        Height = 16
+        Caption = #8226'                                    '#8226'                        '#8226
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = 14540253
@@ -657,18 +613,18 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         Transparent = True
       end
       object LabelMAMELink1: TShadowLabel
-        Left = 18
+        Left = 1
         Top = 0
-        Width = 41
-        Height = 15
+        Width = 39
+        Height = 16
         Cursor = crHandPoint
         Hint = 'http://mamedev.org'
         Caption = 'MAME'
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         ParentShowHint = False
         ShowAccelChar = False
@@ -685,18 +641,18 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         OnMouseLeave = LabelMAMELink1MouseLeave
       end
       object LabelMAMELink3: TShadowLabel
-        Left = 192
+        Left = 165
         Top = 0
-        Width = 69
-        Height = 15
+        Width = 64
+        Height = 16
         Cursor = crHandPoint
         Hint = 'http://wolfmame.marpirc.net'
         Caption = 'WolfMAME'
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         ParentShowHint = False
         ShowAccelChar = False
@@ -713,10 +669,10 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         OnMouseLeave = LabelMAMELink1MouseLeave
       end
       object LabelMAMELink4: TShadowLabel
-        Left = 271
+        Left = 242
         Top = 0
-        Width = 27
-        Height = 15
+        Width = 23
+        Height = 16
         Cursor = crHandPoint
         Hint = 
           'http://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=8&' +
@@ -725,8 +681,8 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         ParentShowHint = False
         ShowAccelChar = False
@@ -743,18 +699,18 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
         OnMouseLeave = LabelMAMELink1MouseLeave
       end
       object LabelMAMELink2: TShadowLabel
-        Left = 70
+        Left = 52
         Top = 0
-        Width = 111
-        Height = 15
+        Width = 101
+        Height = 16
         Cursor = crHandPoint
         Hint = 'http://hbmame.1emulation.com'
         Caption = 'HomeBrew MAME'
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
         Font.Height = -12
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Name = 'Segoe UI'
+        Font.Style = []
         ParentFont = False
         ParentShowHint = False
         ShowAccelChar = False
@@ -774,7 +730,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object Arcade_exec: TEditEx
       Left = 8
       Top = 20
-      Width = 577
+      Width = 529
       Height = 21
       TabStop = False
       AutoSize = False
@@ -861,15 +817,15 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object AlterMAME2_Autorun: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 246
-      Width = 225
-      Height = 20
+      Width = 214
+      Height = 17
       Hint = 
         'Run selected game with AlterMAME 2 executable if fails with Alte' +
         'rMAME 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowHint = True
@@ -880,6 +836,18 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Caption = 'Autorun Game With AlterMAME 2'
       ReturnIsTab = False
       Themed = True
+    end
+    object ButtonClearArcade_exec: TBitBtnEx
+      Left = 586
+      Top = 20
+      Width = 47
+      Height = 21
+      Hint = 'Click here to clear Emulator File and Version Info'
+      Caption = 'Clear'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 15
+      OnClick = ButtonClearArcade_execClick
     end
   end
   object PanelSystemTitleBottom: TPanelEx
@@ -941,7 +909,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   object IL_Systems: TImageList
     Height = 68
     Width = 68
-    Left = 584
+    Left = 592
     Top = 120
   end
 end

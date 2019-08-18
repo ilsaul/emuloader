@@ -301,4 +301,25 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     State = cbChecked
     Themed = True
   end
+  object PauseAnimation: TAdvOfficeCheckBoxEx
+    Left = 520
+    Top = 307
+    Width = 109
+    Height = 20
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 12574688
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    ShowHint = True
+    TabOrder = 9
+    OnClick = PauseAnimationClick
+    Alignment = taLeftJustify
+    Caption = 'Pause Animation'
+    ReturnIsTab = False
+    ShadowEnabled = True
+    ShadowColor = 4213580
+    Themed = True
+  end
 end

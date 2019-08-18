@@ -600,7 +600,9 @@ begin
   else
   if Position = 1 then
      begin
-       ACanvas.Font.Style:= [fsItalic];
+       ACanvas.Font.Style:= [];
+       if LabelCategoryIniFolderForMESS.Tag = 1 then
+          ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           begin
             if Item.Selected then
@@ -649,22 +651,18 @@ procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream, -1, False) //clrLightBlue, clrMedBlue)
   else
      SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
-
-  TShadowLabel(Sender).Font.Style:= [fsBold, fsUnderline];
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
   else
      SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
-
-  TShadowLabel(Sender).Font.Style:= [fsBold];
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSClick(
@@ -723,9 +721,11 @@ begin
   else
   if Position = 1 then
      begin
+       ACanvas.Font.Style:= [];
        ACanvas.Font.Name:= 'Segoe UI';
        ACAnvas.Font.Size:= 9;
-       ACanvas.Font.Style:= [fsItalic];
+       if LabelCategoryIniFolderForMESS.Tag = 1 then
+          ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           begin
             if Item.Selected then

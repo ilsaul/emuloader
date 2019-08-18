@@ -1,6 +1,7 @@
 object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   Left = 887
   Top = 451
+  ActiveControl = ButtonCancel
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
@@ -23,15 +24,21 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object Label1: TLabel
+  object FolderROMsLabel: TShadowLabel
     Left = 8
     Top = 87
-    Width = 501
-    Height = 15
+    Width = 504
+    Height = 16
     Caption = 
       'ROMs Folders [10 max]... Optional. If no folders are defined, "e' +
       'mu_dir\ROMs" is used by default'
     ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object LabelReadFileIni: TShadowLabel
@@ -51,6 +58,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     ShadowColor = 12632284
     ShadowEnabled = False
     EllipsType = etPathEllips
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object TopBar: TPanelEx
@@ -86,6 +96,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ShadowColor = 16112579
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -109,6 +122,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
@@ -146,6 +162,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ShadowColor = clSilver
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
@@ -213,7 +232,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     OnItemSelectionChanged = FolderROMsItemSelectionChanged
     OnKeyAction = FolderROMsKeyAction
   end
-  object ButtonUp: TBitBtn
+  object FolderROMsButtonUp: TBitBtnEx
     Tag = 1
     Left = 476
     Top = 103
@@ -225,9 +244,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     ShowHint = True
     TabOrder = 2
     TabStop = False
-    OnClick = ButtonUpClick
+    OnClick = FolderROMsButtonUpClick
   end
-  object ButtonDown: TBitBtn
+  object FolderROMsButtonDown: TBitBtnEx
     Left = 476
     Top = 124
     Width = 43
@@ -238,9 +257,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     ShowHint = True
     TabOrder = 3
     TabStop = False
-    OnClick = ButtonUpClick
+    OnClick = FolderROMsButtonUpClick
   end
-  object FolderROMButtonSelect: TBitBtn
+  object FolderROMsButtonSelect: TBitBtnEx
     Left = 525
     Top = 103
     Width = 43
@@ -250,9 +269,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4
-    OnClick = FolderROMButtonSelectClick
+    OnClick = FolderROMsButtonSelectClick
   end
-  object FolderROMsButtonEdit: TBitBtn
+  object FolderROMsButtonEdit: TBitBtnEx
     Left = 568
     Top = 103
     Width = 43
@@ -262,7 +281,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 6
     OnClick = FolderROMsButtonEditClick
   end
-  object FolderROMsButtonDelete: TBitBtn
+  object FolderROMsButtonDelete: TBitBtnEx
     Left = 525
     Top = 124
     Width = 43
@@ -272,7 +291,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 7
     OnClick = FolderROMsButtonDeleteClick
   end
-  object FolderROMsButtonClear: TBitBtn
+  object FolderROMsButtonClear: TBitBtnEx
     Left = 568
     Top = 124
     Width = 43
@@ -284,7 +303,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 8
     OnClick = FolderROMsButtonClearClick
   end
-  object FolderROMsButtonSetActiveInactive: TBitBtn
+  object FolderROMsButtonSetActiveInactive: TBitBtnEx
     Left = 476
     Top = 149
     Width = 43
@@ -294,7 +313,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 5
     OnClick = FolderROMsButtonSetActiveInactiveClick
   end
-  object GroupBox2: TAdvGroupBoxEx
+  object VideoGroupBox: TAdvGroupBoxEx
     Left = 8
     Top = 177
     Width = 601
@@ -303,37 +322,64 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     Caption = 'Video'
     Ctl3D = True
     TabOrder = 9
-    object LabelFullScreenResolution: TLabel
+    object FullScreenResolutionLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 116
-      Height = 15
+      Width = 119
+      Height = 16
       Caption = 'Full Screen Resolution'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object LabelWidescreenWindow: TLabel
+    object WidescreenWindowLabel: TShadowLabel
       Left = 284
       Top = 20
-      Width = 66
-      Height = 15
+      Width = 69
+      Height = 16
       Caption = 'Aspect Ratio'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object LabelFrameskip: TLabel
+    object FrameskipLabel: TShadowLabel
       Left = 176
       Top = 20
-      Width = 54
-      Height = 15
+      Width = 57
+      Height = 16
       Caption = 'Frameskip'
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object Label2: TLabel
+    object ForceManagedTexturesLabel: TShadowLabel
       Left = 392
       Top = 20
-      Width = 85
-      Height = 15
+      Width = 88
+      Height = 16
       Caption = 'Textures Format'
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object FullScreenResolution: TComboBox
+    object FullScreenResolution: TComboBox2Ex
       Left = 8
       Top = 36
       Width = 160
@@ -366,7 +412,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
     end
-    object WidescreenWindow: TComboBox
+    object WidescreenWindow: TComboBox2Ex
       Left = 284
       Top = 36
       Width = 100
@@ -382,7 +428,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '16:9'
         '16:10')
     end
-    object Frameskip: TComboBox
+    object Frameskip: TComboBox2Ex
       Left = 176
       Top = 36
       Width = 100
@@ -406,7 +452,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '8'
         '9')
     end
-    object ForceManagedTextures: TComboBox
+    object ForceManagedTextures: TComboBox2Ex
       Left = 392
       Top = 36
       Width = 160
@@ -481,7 +527,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object FilterTilemaps: TAdvOfficeCheckBoxEx
       Left = 176
       Top = 106
-      Width = 105
+      Width = 100
       Height = 20
       Hint = 
         'Enables bilinear filtering on tilemaps (looks good, but can caus' +
@@ -572,7 +618,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     State = cbChecked
     Themed = True
   end
-  object AdvGroupBox1: TAdvGroupBoxEx
+  object InputGroupBox: TAdvGroupBoxEx
     Left = 8
     Top = 315
     Width = 493
@@ -608,21 +654,35 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Caption = 'Use Raw Input (2 Mouses Support)'
       Ctl3D = True
       TabOrder = 1
-      object LabelRawDevicePlayer1: TLabel
+      object RawDevicePlayer1Label: TShadowLabel
         Left = 8
         Top = 24
-        Width = 41
-        Height = 15
+        Width = 44
+        Height = 16
         Caption = 'Player 1'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object LabelRawDevicePlayer2: TLabel
+      object RawDevicePlayer2Label: TShadowLabel
         Left = 140
         Top = 24
-        Width = 41
-        Height = 15
+        Width = 44
+        Height = 16
         Caption = 'Player 2'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
       end
-      object RawDevicePlayer1: TComboBox
+      object RawDevicePlayer1: TComboBox2Ex
         Left = 52
         Top = 20
         Width = 75
@@ -638,7 +698,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
           'Mouse 3'
           'Mouse 4')
       end
-      object RawDevicePlayer2: TComboBox
+      object RawDevicePlayer2: TComboBox2Ex
         Left = 184
         Top = 20
         Width = 75
@@ -682,7 +742,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Themed = True
     end
   end
-  object ButtonReadFile: TBitBtn
+  object ButtonReadFile: TBitBtnEx
     Left = 8
     Top = 408
     Width = 89
@@ -694,7 +754,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     TabOrder = 12
     OnClick = ButtonReadFileClick
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 425
     Top = 408
     Width = 89
@@ -704,7 +764,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     ModalResult = 1
     TabOrder = 13
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 523
     Top = 408
     Width = 89

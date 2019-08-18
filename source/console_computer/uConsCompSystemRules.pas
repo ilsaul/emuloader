@@ -9,7 +9,7 @@ uses
 
 type
   TFormConsCompSystemRules = class(TForm)
-    PanelEx1: TPanelEx;
+    PanelTop: TPanelEx;
     RulesFile: TRichEditURL;
     LabelTitle: TShadowLabel;
     SystemIcon: TImage;

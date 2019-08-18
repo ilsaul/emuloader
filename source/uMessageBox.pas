@@ -124,9 +124,9 @@ begin
        if PanelBottom.Tag = 4 then // multi-slot arcade machines
           MessageIcon.Tag:= -1;
        if MessageIcon.Tag <> -1 then
-          SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, MessageIcon.Tag, IsNightMode);
+          SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, nil, MessageIcon.Tag, IsNightMode);
 
-       SetColorsGameTopBar(MessageIcon.Tag{-1}, PanelTop, IsNightMode); // blue for -1 or game set status (green, red, gray)
+       SetColorsGameTopBar(MessageIcon.Tag, PanelTop, IsNightMode); // blue for -1 or game set status (green, red, gray)
      end;
 
   if IsNightMode then
@@ -135,10 +135,6 @@ begin
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonAbort);
-
-  //     FormMessageBox.Color:= menu_background_color[1];
-  //     LabelMessage.Color:= menu_background_color[1];
-  //     SetPanelColors(PanelBottom, menu_background_color[1], clrMedDarkGray);
      end;
 
   if IconMediaType.Tag <> -1 then
@@ -184,7 +180,6 @@ procedure TFormMessageBox.LabelMessageURLClick(Sender: TObject;
   const URL: String);
 begin
   CallShellExecute(Sender, URL);
-  //ShellExecute(Handle, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
 end;
     
 procedure TFormMessageBox.LabelMessageResizeRequest(Sender: TObject;

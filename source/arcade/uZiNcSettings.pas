@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, Buttons, GR32_RangeBars, ComCtrls,
   ExtCtrls, IniFiles, ToolWin, ImgList, MPCommonObjects,
   EasyListview, PanelEx, ShadowLabel, AdvGroupBox,
-  AdvOfficeButtons;
+  AdvOfficeButtons, ButtonsEx, EditEx, ColorBoxEx;
 
 type
   TFormZiNcSettings = class(TForm)
@@ -19,30 +19,30 @@ type
     SoundFilter: TAdvOfficeCheckBoxEx;
     SoundStereoExciter: TAdvOfficeCheckBoxEx;
     SoundLiteSurround: TAdvOfficeCheckBoxEx;
-    Label12: TLabel;
-    SoundFilterCutoff: TComboBox;
-    LabelSoundLiteSurroundMultiplier: TLabel;
+    SoundFilterCutoffLabel: TShadowLabel;
+    SoundFilterCutoff: TComboBox2Ex;
+    LabelSoundLiteSurroundMultiplier: TShadowLabel;
     SoundLiteSurroundMultiplier: TGaugeBar;
     SlowGeometry: TAdvOfficeCheckBoxEx;
     MemoryPrediction: TAdvOfficeCheckBoxEx;
     StackInRAMHack: TAdvOfficeCheckBoxEx;
-    Label10: TLabel;
-    Rotate: TComboBox;
+    RotateLabel: TShadowLabel;
+    Rotate: TComboBox2Ex;
     NetGameServer: TAdvOfficeCheckBoxEx;
-    LabelNetGameConnect: TLabel;
-    NetGameConnect: TEdit;
+    NetGameConnectLabel: TShadowLabel;
+    NetGameConnect: TEditEx;
     OpenGLD3DRendererBox: TAdvGroupBoxEx;
-    LabelResolution: TLabel;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    LabelFramerateManual: TLabel;
-    LabelTurnDisplay: TLabel;
-    Resolution: TComboBox;
+    ResolutionLabel: TShadowLabel;
+    ColorDepthLabel: TShadowLabel;
+    ScanLinesLabel: TShadowLabel;
+    BlendingLabel: TShadowLabel;
+    FramerateManualLabel: TShadowLabel;
+    TurnDisplayLabel: TShadowLabel;
+    Resolution: TComboBox2Ex;
     FullScreen: TAdvOfficeCheckBoxEx;
-    ColorDepth: TComboBox;
-    Scanlines: TComboBox;
-    Blending: TComboBox;
+    ColorDepth: TComboBox2Ex;
+    Scanlines: TComboBox2Ex;
+    Blending: TComboBox2Ex;
     Dithering: TAdvOfficeCheckBoxEx;
     ShowFPS: TAdvOfficeCheckBoxEx;
     FrameLimitation: TAdvOfficeCheckBoxEx;
@@ -50,42 +50,42 @@ type
     FramerateDetection: TAdvOfficeCheckBoxEx;
     LabelEmulatorVersion: TShadowLabel;
     SystemIcon: TImage;
-    ButtonReadFile: TBitBtn;
+    ButtonReadFile: TBitBtnEx;
     LabelReadFileIni: TShadowLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    LabelControllerZNC: TLabel;
-    ControllerZNC: TEdit;
-    ControllerZNCButtonSelect: TBitBtn;
-    LabelRendererZNC: TLabel;
-    RendererZNC: TEdit;
-    RendererZNCButtonSelect: TBitBtn;
-    LabelControllerConfigFile: TLabel;
-    ControllerConfigFile: TEdit;
-    ControllerConfigFileButtonSelect: TBitBtn;
-    LabelRendererConfigFile: TLabel;
-    RendererConfigFile: TEdit;
-    RendererConfigFileButtonSelect: TBitBtn;
-    LabelROMsFolders: TLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    ControllerZNCLabel: TShadowLabel;
+    ControllerZNC: TEditEx;
+    ControllerZNCButtonSelect: TBitBtnEx;
+    RendererZNCLabel: TShadowLabel;
+    RendererZNC: TEditEx;
+    RendererZNCButtonSelect: TBitBtnEx;
+    ControllerConfigFileLabel: TShadowLabel;
+    ControllerConfigFile: TEditEx;
+    ControllerConfigFileButtonSelect: TBitBtnEx;
+    RendererConfigFileLabel: TShadowLabel;
+    RendererConfigFile: TEditEx;
+    RendererConfigFileButtonSelect: TBitBtnEx;
+    ROMsFoldersLabel: TShadowLabel;
     FolderROMs: TEasyListview;
-    ButtonUp: TBitBtn;
-    ButtonDown: TBitBtn;
-    FolderROMButtonSelect: TBitBtn;
-    FolderROMsButtonEdit: TBitBtn;
-    FolderROMsButtonDelete: TBitBtn;
-    FolderROMsButtonClear: TBitBtn;
+    ButtonUp: TBitBtnEx;
+    ButtonDown: TBitBtnEx;
+    FolderROMButtonSelect: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
     LabelGameStatus: TShadowLabel;
-    TurnDisplay: TComboBox;
-    FramerateManual: TEdit;
-    LabelFramerateManualRange: TLabel;
+    TurnDisplay: TComboBox2Ex;
+    FramerateManual: TEditEx;
+    FramerateManualRangeLabel: TShadowLabel;
     EnableKeys: TAdvOfficeCheckBoxEx;
-    LabelTextureSettings: TLabel;
-    Label4: TLabel;
-    TextureType: TComboBox;
-    LabelTextureCache: TLabel;
-    TextureCache: TComboBox;
-    TextureFilter: TComboBox;
-    LabelTextureFilter: TLabel;
+    TextureSettingsLabel: TShadowLabel;
+    TextureTypeLabel: TShadowLabel;
+    TextureType: TComboBox2Ex;
+    TextureCacheLabel: TShadowLabel;
+    TextureCache: TComboBox2Ex;
+    TextureFilter: TComboBox2Ex;
+    TextureFilterLabel: TShadowLabel;
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SoundLiteSurroundMultiplierChange(Sender: TObject);
@@ -500,8 +500,50 @@ begin
 end;
 
 procedure TFormZiNcSettings.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(FolderROMs);
+
+  if IsNightMode then
+  begin
+    for Loop:= 0 to FormZiNcSettings.ComponentCount-1 do
+       begin
+         if FormZiNcSettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormZiNcSettings.Components[Loop]))
+         else
+         if FormZiNcSettings.Components[Loop] is TEditEx then
+            SetEditNightColors(TEditEx(FormZiNcSettings.Components[Loop]))
+         else
+         if FormZiNcSettings.Components[Loop] is TAdvGroupBoxEx then
+            begin
+              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
+              SetGroupBoxColors(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]),
+                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            end
+         else
+         if FormZiNcSettings.Components[Loop] is TComboBox2Ex then
+            SetComboBox2ExColors(TComboBox2Ex(FormZiNcSettings.Components[Loop]), True)
+         else
+         if FormZiNcSettings.Components[Loop] is TGaugeBar then
+            SetGaugeBarColors(TGaugeBar(FormZiNcSettings.Components[Loop]))
+         else
+         if FormZiNcSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontColor:= clGray;
+              TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            end;
+         if FormZiNcSettings.Components[Loop] is TShadowLabel then
+            SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       end;
+    SetFormColors(FormZiNcSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
+    SetColorEmulatorTopBar(TopBar, idZiNc, True);
+    FormMain.SetEasyListViewColors(FolderROMs, FormZiNcSettings.Color, clWhite, -1, clGray);    
+    FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+  end;
+
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idZiNc, emuVersionStr);
 
   //if FormMain.EmulatorVersion[idZiNc] <> '' then
@@ -514,7 +556,7 @@ begin
        //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idZiNc]+#13#10+LabelReadFileIni.Caption;
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
-       TopBar.Color1:= $00c0cddc;
+       SetColorEmulatorTopBar(TopBar, idZiNc, True); // TopBar.Color1:= $00c0cddc;
        FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idZiNc), SystemIcon);
        //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idZiNc, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
@@ -534,7 +576,7 @@ begin
           LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+
                                          LabelEmulatorVersion.Caption;
        LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
-       LabelROMsFolders.Enabled:= False;
+       ROMsFoldersLabel.Enabled:= False;
        FolderROMs.Enabled:= False;
        FolderROMs.Font.Color:= clSilver;
        ButtonUp.Enabled:= False;
@@ -548,11 +590,12 @@ begin
        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
 
-       case FormMain.MemGameInfo.eGameSetStatus of
-         0: TopBar.Color1:= $00f0fae5; // green
-         1: TopBar.Color1:= $00e5f0fa; // red (based on green)
-         2: TopBar.Color1:= $00eeeeee; // silver (base on green)
-       end;
+       SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar);
+       //case FormMain.MemGameInfo.eGameSetStatus of
+       //  0: TopBar.Color1:= $00f0fae5; // green
+       //  1: TopBar.Color1:= $00e5f0fa; // red (based on green)
+       //  2: TopBar.Color1:= $00eeeeee; // silver (base on green)
+       //end;
      end;
   OpenGLD3DRendererBox.DoubleBuffered:= True;
   AudioBox.DoubleBuffered:= True;

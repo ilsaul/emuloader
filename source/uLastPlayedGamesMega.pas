@@ -734,21 +734,9 @@ begin
   if IsNightMode then
      begin
        FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.SetEasyListViewHeaderColors(LastPlayedList, True);
        FormMain.ELV_SetRibbonNightColors(0, LastPlayedList, True);
      end;
-
-  {if IsNightMode then
-     begin
-       SetFormColors(FormLastPlayedGamesMega, nil, PanelBottom, nil, nil);
-
-       Systems.Color:= FormLastPlayedGamesMega.Color;
-       Systems.Font.Color:= clWhite;
-       Systems.HotTrack.Color:= clWhite;
-
-       LabelSystemTitle.Color:= $00590000;
-       PanelPlayedListHeader.ColorFrame:= clBlue;
-       SetLabelColors(LabelSystemTitle, MsgTxtColors.colorWarning, clred);
-     end;}
 
   LastSelectedStateImageIndex:= -5; // set to "unknown" or "not set"
   AddGamesMRU;

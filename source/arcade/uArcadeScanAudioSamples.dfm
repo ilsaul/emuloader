@@ -15,6 +15,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   Scaled = False
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -28,7 +29,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     Align = alClient
     BorderStyle = bsNone
     CellSizes.Tile.Width = 382
-    CellSizes.Report.Height = 20
+    CellSizes.Report.Height = 28
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
     EditManager.Font.Color = clBlack
@@ -74,7 +75,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
-    ImagesSmall = FormMain.IL_StandardIconsSmall
+    ImagesSmall = FormMain.IL_StandardIconsStandard
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoGroup.BandBlended = False
     PaintInfoGroup.BandColor = clGray
@@ -142,7 +143,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
       ShowAccelChar = False
       ShowHint = True
       ShadowColor = 15856113
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -254,6 +255,8 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     end
   end
   object IL_Systems: TImageList
+    Height = 24
+    Width = 24
     Left = 144
     Top = 168
   end

@@ -16,6 +16,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
   OldCreateOrder = False
   Scaled = False
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   OnResize = FormResize
   OnShow = FormShow
   PixelsPerInch = 96
@@ -426,6 +427,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Caption = '# of Players'
         ReturnIsTab = False
         State = cbChecked
+        Themed = True
       end
       object EditSelected_NumberPlayers: TEditEx
         Left = 368
@@ -475,11 +477,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       object LabelHotkeyText: TShadowLabel
         Left = 8
         Top = 33
-        Width = 471
+        Width = 387
         Height = 9
-        Caption = 
-          'edit hotkeys    :title    :year    :manufacturer    :number of p' +
-          'layers    :all'
+        Caption = '  :title    :year    :manufacturer    :number of players    :all'
         Font.Charset = OEM_CHARSET
         Font.Color = 3684408
         Font.Height = -8
@@ -488,7 +488,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clMoneyGreen
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -496,7 +496,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Transparent = True
       end
       object LabelHotkeyKeys: TShadowLabel
-        Left = 89
+        Left = 7
         Top = 33
         Width = 363
         Height = 9
@@ -509,7 +509,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ParentFont = False
         ShowAccelChar = False
         ShadowColor = clMoneyGreen
-        ShadowEnabled = True
+        ShadowEnabled = False
         EllipsType = etNone
         ColorFrame = clBlack
         ColorInnerFrame = clBlack
@@ -603,18 +603,18 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         object LabelToolBarFilterTitle: TShadowLabel
           Left = 4
           Top = 4
-          Width = 148
+          Width = 131
           Height = 14
           Caption = 'Search games by Title'
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
           Font.Name = 'Verdana'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
           ShowAccelChar = False
           ShadowColor = clWhite
-          ShadowEnabled = True
+          ShadowEnabled = False
           EllipsType = etNone
           ColorFrame = clBlack
           ColorInnerFrame = clBlack

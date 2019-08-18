@@ -19,11 +19,11 @@ object FormCustomCommandLine: TFormCustomCommandLine
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelIniFile: TLabel
+  object LabelIniFile: TShadowLabel
     Left = 0
     Top = 52
-    Width = 74
-    Height = 18
+    Width = 77
+    Height = 19
     Caption = ' > File: %s.ini'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
@@ -31,6 +31,12 @@ object FormCustomCommandLine: TFormCustomCommandLine
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsItalic, fsUnderline]
     ParentFont = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object TopBar: TImage32
@@ -47,7 +53,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
-    object LabelGameDescription: TLabel
+    object LabelGameDescription: TShadowLabel
       Left = 56
       Top = 6
       Width = 414
@@ -61,43 +67,69 @@ object FormCustomCommandLine: TFormCustomCommandLine
       Font.Style = [fsItalic]
       ParentFont = False
       ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       WordWrap = True
     end
   end
-  object ParametersBox: TGroupBox
+  object ParametersBox: TAdvGroupBoxEx
     Left = 8
     Top = 128
     Width = 534
     Height = 217
+    RoundEdges = True
     Caption = 
       'Parameters (add spaces, at the end of prefix and/or before the s' +
       'uffix, if needed)'
+    Ctl3D = True
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
-    object LabelPrefixToAdd: TLabel
+    object LabelPrefixToAdd: TShadowLabel
       Left = 8
       Top = 144
-      Width = 68
-      Height = 15
+      Width = 71
+      Height = 16
       Caption = 'Prefix to Add'
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object LabelFieldToAdd: TLabel
+    object LabelFieldToAdd: TShadowLabel
       Left = 162
       Top = 144
-      Width = 64
-      Height = 15
+      Width = 67
+      Height = 16
       Caption = 'Field to Add'
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object LabelSuffixToAdd: TLabel
+    object LabelSuffixToAdd: TShadowLabel
       Left = 325
       Top = 144
-      Width = 68
-      Height = 15
+      Width = 71
+      Height = 16
       Caption = 'Suffix to Add'
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
     end
-    object ButtonMoveParameterDown: TButton
+    object ButtonMoveParameterDown: TBitBtnEx
       Left = 477
       Top = 48
       Width = 49
@@ -107,7 +139,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 0
       OnClick = ButtonMoveParameterUpClick
     end
-    object ButtonParameterDelete: TButton
+    object ButtonParameterDelete: TBitBtnEx
       Left = 477
       Top = 80
       Width = 49
@@ -117,7 +149,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 1
       OnClick = ButtonParameterDeleteClick
     end
-    object ButtonMoveParameterUp: TButton
+    object ButtonMoveParameterUp: TBitBtnEx
       Tag = 1
       Left = 477
       Top = 16
@@ -128,7 +160,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 2
       OnClick = ButtonMoveParameterUpClick
     end
-    object ButtonUpdate: TButton
+    object ButtonUpdate: TBitBtnEx
       Left = 477
       Top = 160
       Width = 49
@@ -197,7 +229,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       OnEnter = EmulatorBatchFileEnter
       OnExit = EmulatorBatchFileExit
     end
-    object ButtonAddParameter: TButton
+    object ButtonAddParameter: TBitBtnEx
       Left = 477
       Top = 112
       Width = 49
@@ -209,16 +241,18 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 7
       OnClick = ButtonAddParameterClick
     end
-    object ParameterSurroundWithQuotes: TCheckBox
+    object ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx
       Left = 162
       Top = 192
       Width = 121
       Height = 17
       Hint = 'Surround the parameter with quotes (excluding the prefix)'
-      Caption = 'Field With Quotes'
       TabOrder = 8
+      Alignment = taLeftJustify
+      Caption = 'Field With Quotes'
+      ReturnIsTab = False
     end
-    object PrefixSendLeadingSpace: TCheckBox
+    object PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 192
       Width = 129
@@ -226,10 +260,12 @@ object FormCustomCommandLine: TFormCustomCommandLine
       Hint = 
         'Add a blank space before the prefix, even if prefix is empty (re' +
         'commended)'
-      Caption = 'Send Leading Space'
       Checked = True
-      State = cbChecked
       TabOrder = 9
+      Alignment = taLeftJustify
+      Caption = 'Send Leading Space'
+      ReturnIsTab = False
+      State = cbChecked
     end
     object ParametersListView: TEasyListview
       Tag = 1
@@ -302,14 +338,16 @@ object FormCustomCommandLine: TFormCustomCommandLine
       OnKeyAction = ParametersListViewKeyAction
     end
   end
-  object AdditionalParametersBox: TGroupBox
+  object AdditionalParametersBox: TAdvGroupBoxEx
     Left = 8
     Top = 352
     Width = 534
     Height = 49
+    RoundEdges = True
     Caption = 
       'Additional Parameters (will be added at the end of the command l' +
       'ine)'
+    Ctl3D = True
     TabOrder = 2
     object AdditionalParameters: TEditEx
       Left = 8
@@ -334,7 +372,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 3
-    object ButtonReload: TButton
+    object ButtonReload: TBitBtnEx
       Left = 2
       Top = 2
       Width = 68
@@ -346,7 +384,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 0
       OnClick = ButtonReloadClick
     end
-    object ButtonClearCustomCommandLine: TButton
+    object ButtonClearCustomCommandLine: TBitBtnEx
       Left = 73
       Top = 2
       Width = 49
@@ -358,7 +396,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 1
       OnClick = ButtonClearCustomCommandLineClick
     end
-    object ButtonPreview: TButton
+    object ButtonPreview: TBitBtnEx
       Left = 125
       Top = 2
       Width = 68
@@ -370,7 +408,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 2
       OnClick = ButtonPreviewClick
     end
-    object ButtonOk: TButton
+    object ButtonOk: TBitBtnEx
       Left = 409
       Top = 2
       Width = 68
@@ -383,7 +421,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 3
       OnClick = ButtonOkClick
     end
-    object ButtonCancel: TButton
+    object ButtonCancel: TBitBtnEx
       Left = 480
       Top = 2
       Width = 68
@@ -396,12 +434,14 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 4
     end
   end
-  object LabelCustomEmulatorFile: TGroupBox
+  object LabelCustomEmulatorFile: TAdvGroupBoxEx
     Left = 8
     Top = 72
     Width = 534
     Height = 49
+    RoundEdges = True
     Caption = 'Emulator File / Batch File (full path, no quotes)'
+    Ctl3D = True
     TabOrder = 4
     object EmulatorBatchFile: TEditEx
       Left = 8
@@ -415,7 +455,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       OnEnter = EmulatorBatchFileEnter
       OnExit = EmulatorBatchFileExit
     end
-    object ButtonEmulatorBatchFileBrowse: TButton
+    object ButtonEmulatorBatchFileBrowse: TBitBtnEx
       Left = 477
       Top = 17
       Width = 49

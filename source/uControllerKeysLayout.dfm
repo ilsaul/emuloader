@@ -23,19 +23,12 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object FrameBottom: TBevel
+  object LabelWarning: TShadowLabel
     Left = 0
     Top = 385
     Width = 697
     Height = 20
     Align = alBottom
-    Shape = bsTopLine
-  end
-  object LabelWarning: TShadowLabel
-    Left = 58
-    Top = 387
-    Width = 580
-    Height = 16
     Alignment = taCenter
     Caption = 
       'Press LEFT key / mouse button to view previous layout or RIGHT k' +
@@ -50,6 +43,9 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
     ShadowColor = clSilver
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object ControllerImage: TImage32
@@ -57,7 +53,6 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
     Top = 0
     Width = 697
     Height = 385
-    Align = alClient
     Bitmap.DrawMode = dmBlend
     Bitmap.ResamplerClassName = 'TKernelResampler'
     Bitmap.Resampler.KernelClassName = 'THermiteKernel'

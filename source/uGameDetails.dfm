@@ -15,7 +15,6 @@ object FormGameDetails: TFormGameDetails
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
@@ -171,9 +170,9 @@ object FormGameDetails: TFormGameDetails
     end
   end
   object FrameROMsListView: TPanelEx
-    Left = 297
+    Left = 298
     Top = 89
-    Width = 781
+    Width = 780
     Height = 490
     Color1 = 15856113
     Color2 = 1
@@ -181,15 +180,14 @@ object FormGameDetails: TFormGameDetails
     Color4 = 16750899
     ColorFrame = clSilver
     ColorInnerFrame = 7891291
-    EnableInnerFrame = True
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
     object ROMsListView: TEasyListview
       Tag = 1
-      Left = 2
+      Left = 1
       Top = 2
-      Width = 777
+      Width = 778
       Height = 486
       BackGround.Enabled = True
       BorderStyle = bsNone
