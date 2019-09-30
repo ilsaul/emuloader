@@ -123,6 +123,29 @@ end;
 
 procedure TFormArcadeROMsFolders.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormArcadeROMsFolders.Color:= menu_background_color[1];
+       PanelSystemsSelect.Color1:= clrBlackBk;
+       FormMain.SetEasyListViewColors(SystemSelector, clrBlackBk, clWhite);
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       SetSystemTitleBarNightColors(PanelSystemTitle, FormArcadeROMsFolders.PanelSystemTitleBottom);
+
+       SetPanelNightColors(PanelFoldersList, -1, -1, checked_innerframecolor[1], clrDarkGray);
+
+       SetCheckBoxColors(UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(UseLargeIcons);
+
+       FoldersList.Color:= menu_background_color[1];
+       FoldersList.Font.Color:= item_caption_active_color[1];
+       FormMain.SetWin10DarkScrollBar(FoldersList);
+
+       FormMain.SetButtonExColors(ButtonCancel);
+
+       SetBottomPanelColors(PanelBottom);
+     end;
+
   ReadWriteSettings(True);
   ResizeForm;
   FormMain.ELV_ResetNormalColors(SystemSelector);

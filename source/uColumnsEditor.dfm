@@ -3,7 +3,7 @@ object FormColumnsEditor: TFormColumnsEditor
   Top = 230
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Customize Columns (Details / Grouped)'
+  Caption = 'Customize Columns'
   ClientHeight = 464
   ClientWidth = 466
   Color = 15856113
@@ -527,6 +527,7 @@ object FormColumnsEditor: TFormColumnsEditor
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnDblClick = ColumnsListViewDblClick
       OnItemCheckChange = ColumnsListViewItemCheckChange
       OnItemEdited = ColumnsListViewItemEdited

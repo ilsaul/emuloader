@@ -9,7 +9,7 @@ uses
 
 type
   TFormImageLayoutDimensions = class(TForm)
-    PanelEx2: TPanelEx;
+    PanelLabels: TPanelEx;
     LabelImagesPanel: TShadowLabel;
     LabelImagesPanelDimensions: TShadowLabel;
     LabelImage1: TShadowLabel;

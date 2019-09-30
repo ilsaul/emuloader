@@ -79,6 +79,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 0
+    CustomCheckRadioEnabled = False
     OnItemPaintText = SystemsItemPaintText
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
@@ -178,6 +179,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnItemCheckChange = ImageCategory_SelectorItemCheckChange
       OnItemSelectionChanged = ImageCategory_SelectorItemSelectionChanged
     end
@@ -206,9 +208,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
         Color = 16448250
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -13
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
         ShowAccelChar = False
@@ -262,7 +264,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     end
     object ButtonResetImageCategoryFolder: TBitBtnEx
       Left = 382
-      Top = 7
+      Top = 6
       Width = 43
       Height = 21
       Hint = 'Reset folder to current'
@@ -274,7 +276,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     end
     object ButtonClearImageCategoryFolder: TBitBtnEx
       Left = 338
-      Top = 7
+      Top = 6
       Width = 43
       Height = 21
       Caption = 'Clear'
@@ -309,7 +311,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     end
     object ButtonDefaultImageCategoryFolder: TBitBtnEx
       Left = 426
-      Top = 7
+      Top = 6
       Width = 47
       Height = 21
       Hint = 'Use a default folder name assigned by the frontend'
@@ -318,8 +320,8 @@ object FormImageCategorySettings: TFormImageCategorySettings
       OnClick = ButtonDefaultImageCategoryFolderClick
     end
     object ButtonZippedImages: TBitBtnEx
-      Left = 754
-      Top = 17
+      Left = 762
+      Top = 26
       Width = 43
       Height = 25
       Hint = 'How to use zipped images'
@@ -330,8 +332,8 @@ object FormImageCategorySettings: TFormImageCategorySettings
       OnClick = ButtonZippedImagesClick
     end
     object ButtonOk: TBitBtnEx
-      Left = 809
-      Top = 17
+      Left = 810
+      Top = 26
       Width = 89
       Height = 25
       Hint = 'Close and update settings'
@@ -342,8 +344,8 @@ object FormImageCategorySettings: TFormImageCategorySettings
       TabOrder = 6
     end
     object ButtonCancel: TBitBtnEx
-      Left = 905
-      Top = 17
+      Left = 904
+      Top = 26
       Width = 89
       Height = 25
       Hint = 'Close without updating'
@@ -374,7 +376,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Left = 667
       Top = 28
       Width = 43
-      Height = 21
+      Height = 22
       Hint = 'Reset background color to current'
       Caption = 'Reset'
       ParentShowHint = False
@@ -391,6 +393,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Caption = 'Use A Single Background Color'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object PanelCategoriesBottom: TPanelEx
@@ -409,9 +412,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
     Style = vgSolid
     object LabelShowHideCategories: TShadowLabel
       Left = 74
-      Top = 59
+      Top = 61
       Width = 170
-      Height = 25
+      Height = 22
       Cursor = crHandPoint
       Alignment = taCenter
       AutoSize = False
@@ -419,9 +422,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -496,7 +499,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Left = 259
       Top = 28
       Width = 43
-      Height = 21
+      Height = 22
       Hint = 'Reset background color to current'
       Caption = 'Reset'
       ParentShowHint = False
@@ -531,9 +534,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -557,9 +560,9 @@ object FormImageCategorySettings: TFormImageCategorySettings
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -574,18 +577,18 @@ object FormImageCategorySettings: TFormImageCategorySettings
       WordWrap = True
     end
     object LabelSystemNotAvailable: TShadowLabel
-      Left = 14
+      Left = 21
       Top = 61
-      Width = 155
+      Width = 141
       Height = 16
       Caption = 'SYSTEM NOT AVAILABLE'
       Color = 16448250
       Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False

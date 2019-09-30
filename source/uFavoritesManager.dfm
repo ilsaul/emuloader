@@ -107,53 +107,15 @@ object FormFavoritesManager: TFormFavoritesManager
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = FavoritesListColumnClick
     OnColumnSizeChanging = FavoritesListColumnSizeChanging
     OnDblClick = FavoritesListDblClick
     OnItemCompare = FavoritesListItemCompare
     OnItemEdited = FavoritesListItemEdited
     OnItemEditEnd = FavoritesListItemEditEnd
+    OnItemPaintText = FavoritesListItemPaintText
     OnKeyAction = FavoritesListKeyAction
-  end
-  object PanelUpdatingFavTagInGames: TPanelEx
-    Left = 317
-    Top = 176
-    Width = 350
-    Height = 41
-    Color1 = clLime
-    Color2 = clTeal
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = 7891291
-    ColorInnerFrame = clBlack
-    EnableInnerFrame = True
-    EnableCustomBorder = ecbDouble
-    Frames = []
-    ParentBackground = False
-    Style = vgSimple
-    Visible = False
-    object LabelTaskMessage: TShadowLabel
-      Left = 6
-      Top = 11
-      Width = 333
-      Height = 15
-      AutoSize = False
-      Caption = 'Updating favorite tags in games list, please wait...'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clSilver
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
   end
   object NewFavoritePanel: TPanelEx
     Left = 0

@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   GraphicEx, StdCtrls, ComCtrls, ExtCtrls, uCommon, mmSystem, ShadowLabel,
-  GR32_Image;
+  GR32_RangeBars, GR32_Image, GR32_Layers, ColorBoxEx, AdvOfficeButtons,
+  PanelEx, ButtonsEx, XiProgressBar;
 
 type
   TFormStatus = class(TForm)
@@ -13,15 +14,88 @@ type
     LabelMessage: TShadowLabel;
     LabelTimer: TShadowLabel;
     LabelStatusType: TShadowLabel;
-    ProgressBar: TProgressBar;
     LabelVersion: TShadowLabel;
     LabelSoftwareScanCount: TShadowLabel;
+    SplashScreenSettingsBox: TPanelEx;
+    SplashScreenSettingsBoxLabel: TShadowLabel;
+    SplashScreenEnableTextsAlternateLayout: TAdvOfficeCheckBoxEx;
+    SplashScreenShowTextShadows: TAdvOfficeCheckBoxEx;
+    SplashScreenEnableAlternateLogoFile: TAdvOfficeCheckBoxEx;
+    SplashScreenSettingsTextFontColorsBox: TPanelEx;
+    SplashScreenSettingsTextFontColorsBoxLabel: TShadowLabel;
+    SplashScreenTitleTextColorLabel: TShadowLabel;
+    SplashScreenTitleTextColor: TColorBoxEx;
+    SplashScreenMessageTextColor: TColorBoxEx;
+    SplashScreenMessageTextColorLabel: TShadowLabel;
+    SplashScreenTimerTextColorLabel: TShadowLabel;
+    SplashScreenTimerTextColor: TColorBoxEx;
+    SplashScreenVersionInfoTextColor: TColorBoxEx;
+    SplashScreenVersionInfoTextColorLabel: TShadowLabel;
+    SplashScreenSoftwareTextColorLabel: TShadowLabel;
+    SplashScreenSoftwareTextColor: TColorBoxEx;
+    SplashScreenVersionInfoPositionLabel: TShadowLabel;
+    SplashScreenVersionInfoPositionX: TGaugeBar;
+    SplashScreenVersionInfoPositionXLabel: TShadowLabel;
+    SplashScreenVersionInfoPositionY: TGaugeBar;
+    SplashScreenVersionInfoPositionYLabel: TShadowLabel;
+    ColorsBoxButtonDefault: TSpeedButtonEx;
+    VersionInfoPositionButtonDefault: TSpeedButtonEx;
+    SplashScreenVersionInfoPositionLeftLabel: TShadowLabel;
+    SplashScreenVersionInfoPositionTopLabel: TShadowLabel;
+    SplashScreenProgressBarColorSchemeLabel: TShadowLabel;
+    SplashScreenProgressBarColorScheme: TComboBox2Ex;
+    ProgressBarSchemeButtonDefault: TSpeedButtonEx;
+    ProgressBarPanel: TPanelEx;
+    ProgressBar: TXiProgressBar;
+    StatusButtonClose: TBitBtnEx;
+    SplashScreenProgressBarColorBackTopLabel: TShadowLabel;
+    SplashScreenProgressBarColorBackDownLabel: TShadowLabel;
+    SplashScreenProgressBarColorBarTopLabel: TShadowLabel;
+    SplashScreenProgressBarColorBarDownLabel: TShadowLabel;
+    SplashScreenProgressBarColorBackBorderLabel: TShadowLabel;
+    SplashScreenProgressBarColorBackTop: TColorBoxEx;
+    SplashScreenProgressBarColorBackDown: TColorBoxEx;
+    SplashScreenProgressBarColorBackBorder: TColorBoxEx;
+    SplashScreenProgressBarColorBarTop: TColorBoxEx;
+    SplashScreenProgressBarColorBarDown: TColorBoxEx;
+    ProgressBarCopyCurrentColorsToCustomButton: TBitBtnEx;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure StatusButtonCloseClick(Sender: TObject);
+    procedure ImageBkMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer; Layer: TCustomLayer);
+    procedure SplashScreenVersionInfoPositionXChange(Sender: TObject);
+    procedure SplashScreenVersionInfoPositionYChange(Sender: TObject);
+    procedure SplashScreenShowTextShadowsClick(Sender: TObject);
+    procedure SplashScreenTitleTextColorSelect(Sender: TObject);
+    procedure SplashScreenMessageTextColorSelect(Sender: TObject);
+    procedure SplashScreenTimerTextColorSelect(Sender: TObject);
+    procedure SplashScreenSoftwareTextColorSelect(Sender: TObject);
+    procedure SplashScreenEnableAlternateLogoFileClick(Sender: TObject);
+    procedure ColorsBoxButtonDefaultClick(Sender: TObject);
+    procedure SplashScreenEnableTextsAlternateLayoutClick(Sender: TObject);
+    procedure VersionInfoPositionButtonDefaultClick(Sender: TObject);
+    procedure SplashScreenVersionInfoTextColorSelect(Sender: TObject);
+    procedure SplashScreenProgressBarColorSchemeSelect(Sender: TObject);
+    procedure ProgressBarSchemeButtonDefaultClick(Sender: TObject);
+    procedure SplashScreenProgressBarColorBackTopSelect(Sender: TObject);
+    procedure SplashScreenProgressBarColorBackDownSelect(Sender: TObject);
+    procedure SplashScreenProgressBarColorBackBorderSelect(
+      Sender: TObject);
+    procedure SplashScreenProgressBarColorBarTopSelect(Sender: TObject);
+    procedure SplashScreenProgressBarColorBarDownSelect(Sender: TObject);
+    procedure ProgressBarCopyCurrentColorsToCustomButtonClick(
+      Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
+    CustomProgressBar: Boolean;
     procedure ResetTimerLabel;
+    procedure LoadImageLogo;
+    procedure StatusChangeLayout;
+    procedure ToggleProgressBarColorBox;
+    procedure SetProgressBarColorBox;
   public
     { Public declarations }
     procedure StartThreadClock;
@@ -100,61 +174,116 @@ end;
 
 procedure TFormStatus.UpdateProgressBar(Position, Total: Integer);
 var
-  CalculatePosition: LongInt;
+  CalculatePosition: Integer;
 begin
   if Total in [0, 1] then
      Exit;
-  if not ProgressBar.Visible then
-     ProgressBar.Visible:= True;
+  if not ProgressBarPanel.Visible then
+     ProgressBarPanel.Visible:= True;
   CalculatePosition:= Trunc((Position * 100) / Total);
   if CalculatePosition > ProgressBar.Position then
      ProgressBar.Position:= CalculatePosition;
 end;
 
-{procedure TFormStatus.ResizeForm;
+procedure TFormStatus.LoadImageLogo;
+var
+  iFile: String;
 begin
-  Exit;
-  if Screen.Height < 600 then
+  if not SplashScreenEnableAlternateLogoFile.Checked then
+     iFile:= 'logo.png'
+  else
      begin
-       LabelStatusType.Font.Name:= 'Segoe UI';
-       LabelStatusType.Font.Size:= 7;
-       LabelStatusType.Font.Style:= [fsBold];
-       LabelStatusType.Left:= 35;
-       LabelStatusType.Top:= 272;
-       LabelStatusType.Width:= 440;
-       LabelStatusType.Height:= 13;
-
-       LabelMessage.Font.Name:= 'Arial';
-       LabelMessage.Font.Size:= 7;
-       LabelMessage.Font.Style:= [fsBold];
-       LabelMessage.Left:= 23;
-       LabelMessage.Top:= 286;
-       LabelMessage.Width:= 425;
-       LabelMessage.Height:= 23;
-
-       LabelTimer.Font.Size:= 7;
-       LabelTimer.Left:= 405;
-       LabelTimer.Top:= 310;
-
-       ProgressBar.Width:= 401;
-       ProgressBar.Height:= 9;
-       ProgressBar.Left:= 2;
-       ProgressBar.Top:= 311;
-
-       LabelVersion.Font.Name:= 'Arial';
-       LabelVersion.Font.Size:= 7;
-       LabelVersion.Font.Style:= [fsBold];
-       LabelVersion.Left:= 135;
-       LabelVersion.Top:= 32;
+       iFile:= 'logo2.png';
+       if not FileExists(FormMain.GetFolderFull(35)+iFile) then
+          iFile:= 'logo.png;'
      end;
-end;}
+
+  if FileExists(FormMain.GetFolderFull(35)+iFile) then
+     begin
+       ImageBk.Bitmap:= nil;
+       ImageBk.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+iFile);
+     end;
+end;
+
+procedure TFormStatus.StatusChangeLayout;
+begin
+  if SplashScreenEnableTextsAlternateLayout.Checked then
+  begin
+    LabelStatusType.Left:= 4;
+    LabelTimer.Top:= 548;
+    ProgressBarPanel.Top:= 547;
+    ProgressBarPanel.Left:= 76;
+  end
+  else
+  begin
+    if not FormMain.IsStartup then
+    begin
+      LabelStatusType.Left:= 90;
+      LabelTimer.Top:= 566;
+      ProgressBarPanel.Left:= 4;
+      ProgressBarPanel.Top:= 548;
+    end;
+  end;
+end;
+
+procedure TFormStatus.ToggleProgressBarColorBox;
+
+  function ToggleEnabled(ColorBoxExSource: TColorBoxEx; IsEnabled: Boolean): Boolean;
+  begin
+    Result:= True;
+    if ColorBoxExSource.Enabled <> IsEnabled then
+       ColorBoxExSource.Enabled:= IsEnabled;
+  end;
+
+begin
+  ToggleEnabled(SplashScreenProgressBarColorBackTop, (SplashScreenProgressBarColorScheme.ItemIndex = 0) and CustomProgressBar);
+  ToggleEnabled(SplashScreenProgressBarColorBackDown, SplashScreenProgressBarColorBackTop.Enabled);
+  ToggleEnabled(SplashScreenProgressBarColorBackBorder, SplashScreenProgressBarColorBackTop.Enabled);
+  ToggleEnabled(SplashScreenProgressBarColorBarTop, SplashScreenProgressBarColorBackTop.Enabled);
+  ToggleEnabled(SplashScreenProgressBarColorBarDown, SplashScreenProgressBarColorBackTop.Enabled);
+
+  SplashScreenProgressBarColorBackTopLabel.Enabled:= SplashScreenProgressBarColorBackTop.Enabled;
+  SplashScreenProgressBarColorBackDownLabel.Enabled:= SplashScreenProgressBarColorBackTop.Enabled;
+  SplashScreenProgressBarColorBackBorderLabel.Enabled:= SplashScreenProgressBarColorBackTop.Enabled;
+  SplashScreenProgressBarColorBarTopLabel.Enabled:= SplashScreenProgressBarColorBackTop.Enabled;
+  SplashScreenProgressBarColorBarDownLabel.Enabled:= SplashScreenProgressBarColorBackTop.Enabled;
+
+  if ProgressBarCopyCurrentColorsToCustomButton.Enabled <> (not SplashScreenProgressBarColorBackTop.Enabled) then
+     ProgressBarCopyCurrentColorsToCustomButton.Enabled:= not SplashScreenProgressBarColorBackTop.Enabled;
+end;
+
+procedure TFormStatus.SetProgressBarColorBox;
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       // user custom colors
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackTop,    SplashScreenProgressBarColorBackTop.NoneColorColor);// CustomProgressBarColors.BackColorTop);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackDown,   SplashScreenProgressBarColorBackDown.NoneColorColor);// CustomProgressBarColors.BackColorDown);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackBorder, SplashScreenProgressBarColorBackBorder.NoneColorColor);// CustomProgressBarColors.BackColorBorder);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBarTop,     SplashScreenProgressBarColorBarTop.NoneColorColor);// CustomProgressBarColors.BarColorTop);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBarDown,    SplashScreenProgressBarColorBarDown.NoneColorColor); // CustomProgressBarColors.BarColorDown);
+     end
+  else
+     begin
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackTop,    ProgressBar.BackColorFace);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackDown,   ProgressBar.BackColorGrad);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBackBorder, ProgressBar.ColorBorder);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBarTop,     ProgressBar.ForeColorFace);
+       FormMain.SetSelectedColorBox(SplashScreenProgressBarColorBarDown,    ProgressBar.ForeColorGrad);
+     end;
+end;
 
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
-  if Screen.Fonts.IndexOf('Terminal') = -1 then
+  CustomProgressBar:= Screen.Width >= 1280;
+  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then // if Screen.Fonts.IndexOf('Terminal') = -1 then
      begin
-       FormMain.ChangeLabelFontConsolas(LabelTimer);
-       FormMain.ChangeLabelFontConsolas(LabelSoftwareScanCount);
+       FormMain.ChangeLabelFontConsolas(LabelTimer, 9, [fsBold]);
+       FormMain.ChangeLabelFontConsolas(LabelSoftwareScanCount, 9, [fsBold]);
+       //LabelTimer.Height:= LabelTimer.Height+1; // it must be 14 pixels for the "Lucida Console" font
+       //LabelSoftwareScanCount.Height:= LabelSoftwareScanCount.Height+1; // it must be 14 pixels for the "Lucida Console" font
+       LabelTimer.Layout:= tlCenter;
+       LabelSoftwareScanCount.Layout:= tlCenter;
      end;
 
   mmResult:= 0;
@@ -162,9 +291,7 @@ begin
   LabelMessage.Caption:= '';
 
   if not Application.Terminated then
-     begin
-       LabelMessage.Left:= 4;
-     end;
+     LabelMessage.Left:= 4;
 end;
 
 procedure TFormStatus.FormShow(Sender: TObject);
@@ -175,18 +302,15 @@ begin
        Exit;
      end;
 
-  if FormStatus.Tag = 1 then
-     Exit;
-  SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOMOVE+SWP_NOSIZE);
-  FormStatus.Left:= (Screen.Width shr 1)-(Width shr 1)-1;
-  FormStatus.Top:=  (Screen.Height shr 1)-(Height shr 1)-1;
-
-  if FileExists(FormMain.GetFolderFull(35)+'logo.png') then
+  if FormStatus.Tag = 0 then
      begin
+       SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOMOVE+SWP_NOSIZE);
+
+       FormStatus.Left:= (Screen.Width shr 1)-(Width shr 1)-1;
+       FormStatus.Top:=  (Screen.Height shr 1)-(Height shr 1)-1;
+
        FormStatus.Tag:= 1;
-       ImageBk.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'logo.png');
      end;
-  LabelVersion.Caption:= FormMain.FrontendVersion;
 end;
 
 procedure TFormStatus.FormCloseQuery(Sender: TObject;
@@ -197,10 +321,10 @@ begin
        if mmResult <> 0 then
           StopThreadClock; // force timer clock to stop when closing the status screen!
        SetProgressPos(0); // reset progress bar position (required)
-       TitleStr(''); // clean title message (cosmetic fix, not required)
+       TitleStr('');   // clean title message (cosmetic fix, not required)
        MessageStr(''); //clean detailed message (cosmetic fix, not required)
-       if ProgressBar.Visible then
-          ProgressBar.Visible:= False;
+       if ProgressBarPanel.Visible then
+          ProgressBarPanel.Visible:= False;
      end;
 end;
 
@@ -238,5 +362,200 @@ begin
 end;
 }
 
+
+procedure TFormStatus.StatusButtonCloseClick(
+  Sender: TObject);
+begin
+  StatusButtonClose.Visible:= False;
+  FormMain.SetLabelSoftwareScanCountVisible(False);
+  if SplashScreenSettingsBox.Top = 4 then
+     FormStatus.ClientWidth:= ImageBk.Width
+  else
+     FormStatus.ClientHeight:= ImageBk.Height;
+
+  FormStatus.KeyPreview:= False; // disable ESC key detection
+  FormStatus.Tag:= 1;
+
+  FormStatus.Left:= (Screen.Width shr 1)-(Width shr 1)-1;
+  FormStatus.Top:=  (Screen.Height shr 1)-(Height shr 1)-1;
+
+  Close;
+end;
+
+procedure TFormStatus.ImageBkMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
+  Layer: TCustomLayer);
+const
+   sc_DragMove = $f012;
+begin
+  if StatusButtonClose.Visible then
+     begin
+       ReleaseCapture;
+       FormStatus.Perform(wm_SysCommand, sc_DragMove, 0);
+     end;
+end;
+
+procedure TFormStatus.SplashScreenVersionInfoPositionXChange(
+  Sender: TObject);
+begin
+  SplashScreenVersionInfoPositionXLabel.Caption:= IntToStr(SplashScreenVersionInfoPositionX.Position);
+  if LabelVersion.Left <> SplashScreenVersionInfoPositionX.Position then
+     LabelVersion.Left:= SplashScreenVersionInfoPositionX.Position;
+end;
+
+procedure TFormStatus.SplashScreenVersionInfoPositionYChange(
+  Sender: TObject);
+begin
+  SplashScreenVersionInfoPositionYLabel.Caption:= IntToStr(SplashScreenVersionInfoPositionY.Position);
+  if LabelVersion.Top <> SplashScreenVersionInfoPositionY.Position then
+     LabelVersion.Top:= SplashScreenVersionInfoPositionY.Position;
+end;
+
+procedure TFormStatus.SplashScreenShowTextShadowsClick(Sender: TObject);
+begin
+  LabelStatusType.ShadowEnabled:= SplashScreenShowTextShadows.Checked;
+  LabelMessage.ShadowEnabled:= SplashScreenShowTextShadows.Checked;
+  LabelTimer.ShadowEnabled:= SplashScreenShowTextShadows.Checked;
+  LabelSoftwareScanCount.ShadowEnabled:= SplashScreenShowTextShadows.Checked;
+  LabelVersion.ShadowEnabled:= SplashScreenShowTextShadows.Checked;
+end;
+
+procedure TFormStatus.SplashScreenTitleTextColorSelect(Sender: TObject);
+begin
+  LabelStatusType.Font.Color:= SplashScreenTitleTextColor.Selected;
+end;
+
+procedure TFormStatus.SplashScreenMessageTextColorSelect(Sender: TObject);
+begin
+  LabelMessage.Font.Color:= SplashScreenMessageTextColor.Selected;
+end;
+
+procedure TFormStatus.SplashScreenTimerTextColorSelect(Sender: TObject);
+begin
+  LabelTimer.Font.Color:= SplashScreenTimerTextColor.Selected;
+end;
+
+procedure TFormStatus.SplashScreenSoftwareTextColorSelect(Sender: TObject);
+begin
+  LabelSoftwareScanCount.Font.Color:= SplashScreenSoftwareTextColor.Selected;
+end;
+
+procedure TFormStatus.SplashScreenEnableAlternateLogoFileClick(Sender: TObject);
+begin
+  LoadImageLogo;
+end;
+
+procedure TFormStatus.ColorsBoxButtonDefaultClick(
+  Sender: TObject);
+begin
+  SetDefaultColorBox(SplashScreenTitleTextColor);
+  SetDefaultColorBox(SplashScreenMessageTextColor);
+  SetDefaultColorBox(SplashScreenTimerTextColor);
+  SetDefaultColorBox(SplashScreenSoftwareTextColor);
+  SetDefaultColorBox(SplashScreenVersionInfoTextColor);
+end;
+
+procedure TFormStatus.SplashScreenEnableTextsAlternateLayoutClick(
+  Sender: TObject);
+begin
+  StatusChangeLayout;
+end;
+
+procedure TFormStatus.VersionInfoPositionButtonDefaultClick(
+  Sender: TObject);
+begin
+  SplashScreenVersionInfoPositionX.Position:= 6;
+  SplashScreenVersionInfoPositionY.Position:= 228;
+end;
+
+procedure TFormStatus.SplashScreenVersionInfoTextColorSelect(
+  Sender: TObject);
+begin
+  LabelVersion.Font.Color:= SplashScreenVersionInfoTextColor.Selected;
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorSchemeSelect(
+  Sender: TObject);
+begin
+  if (SplashScreenProgressBarColorScheme.ItemIndex = 0) and (not CustomProgressBar) then
+     ProgressBar.ColorScheme:= csDesert//TColorScheme(1)
+  else
+     ProgressBar.ColorScheme:= TColorScheme(SplashScreenProgressBarColorScheme.ItemIndex);
+
+  ToggleProgressBarColorBox;
+  SetProgressBarColorBox;
+end;
+
+procedure TFormStatus.ProgressBarSchemeButtonDefaultClick(Sender: TObject);
+begin
+  SetSelectedComboBox(1, SplashScreenProgressBarColorScheme);
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorBackTopSelect(
+  Sender: TObject);
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       SplashScreenProgressBarColorBackTop.NoneColorColor:= SplashScreenProgressBarColorBackTop.Selected;
+       ProgressBar.BackColorFace:= SplashScreenProgressBarColorBackTop.Selected;
+     end;
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorBackDownSelect(
+  Sender: TObject);
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       SplashScreenProgressBarColorBackDown.NoneColorColor:= SplashScreenProgressBarColorBackDown.Selected;
+       ProgressBar.BackColorGrad:= SplashScreenProgressBarColorBackDown.Selected;
+     end;
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorBackBorderSelect(
+  Sender: TObject);
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       SplashScreenProgressBarColorBackBorder.NoneColorColor:= SplashScreenProgressBarColorBackBorder.Selected;
+       ProgressBar.ColorBorder:= SplashScreenProgressBarColorBackBorder.Selected;
+     end;
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorBarTopSelect(
+  Sender: TObject);
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       SplashScreenProgressBarColorBarTop.NoneColorColor:= SplashScreenProgressBarColorBarTop.Selected;
+       ProgressBar.ForeColorFace:= SplashScreenProgressBarColorBarTop.Selected;
+     end;
+end;
+
+procedure TFormStatus.SplashScreenProgressBarColorBarDownSelect(
+  Sender: TObject);
+begin
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
+     begin
+       SplashScreenProgressBarColorBarDown.NoneColorColor:= SplashScreenProgressBarColorBarDown.Selected;
+       ProgressBar.ForeColorGrad:= SplashScreenProgressBarColorBarDown.Selected;
+     end;
+end;
+
+procedure TFormStatus.ProgressBarCopyCurrentColorsToCustomButtonClick(
+  Sender: TObject);
+begin
+  SplashScreenProgressBarColorBackTop.NoneColorColor:=    SplashScreenProgressBarColorBackTop.Selected;
+  SplashScreenProgressBarColorBackDown.NoneColorColor:=   SplashScreenProgressBarColorBackDown.Selected;
+  SplashScreenProgressBarColorBackBorder.NoneColorColor:= SplashScreenProgressBarColorBackBorder.Selected;
+  SplashScreenProgressBarColorBarTop.NoneColorColor:=     SplashScreenProgressBarColorBarTop.Selected;
+  SplashScreenProgressBarColorBarDown.NoneColorColor:=    SplashScreenProgressBarColorBarDown.Selected;
+end;
+
+procedure TFormStatus.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if FormStatus.KeyPreview then
+     if Key = #27 then
+        StatusButtonClose.Click;
+end;
 
 end.

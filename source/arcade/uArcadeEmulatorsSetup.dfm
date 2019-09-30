@@ -106,6 +106,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      CustomCheckRadioEnabled = False
       OnItemSelectionChanged = SystemSelectorItemSelectionChanged
     end
   end
@@ -193,6 +194,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Caption = 'Large Icons'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object PanelEmulatorDetails: TPanelEx
@@ -296,9 +298,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_Autorun: TShadowLabel
       Left = 227
       Top = 228
-      Width = 290
+      Width = 299
       Height = 16
-      Caption = 'Run game with AlterMAME if fails with primary MAME'
+      Caption = 'Run game with AlterMAME 1 if fails with primary MAME'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -361,13 +363,13 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_versioninfo: TShadowLabel
       Left = 12
       Top = 192
-      Width = 78
-      Height = 15
+      Width = 71
+      Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
-      Font.Name = 'Tahoma'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
@@ -426,9 +428,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_Autorun: TShadowLabel
       Left = 227
       Top = 248
-      Width = 280
+      Width = 289
       Height = 16
-      Caption = 'Run game with AlterMAME 2 if fails with AlterMAME'
+      Caption = 'Run game with AlterMAME 2 if fails with AlterMAME 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -555,6 +557,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Caption = 'Autorun Game With AlterMAME 1'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object AlterMAME1_versioninfo: TEditEx
       Left = 96
@@ -836,6 +839,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Caption = 'Autorun Game With AlterMAME 2'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonClearArcade_exec: TBitBtnEx
       Left = 586
@@ -890,9 +894,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False

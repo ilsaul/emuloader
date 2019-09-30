@@ -131,10 +131,12 @@ begin
 
   if IsNightMode then
      begin
+       FormMain.SetCheckBoxExCustomIcon(NightMode);
        FormMain.SetButtonExColors(ButtonYestoAll);
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonAbort);
+       FormMain.SetWin10DarkScrollBar(LabelMessage);
      end;
 
   if IconMediaType.Tag <> -1 then

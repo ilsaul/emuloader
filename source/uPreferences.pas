@@ -4,10 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles,
-  Buttons, BarMenus, GraphicEx, MPCommonObjects, EasyListview,
-  SplitterEx, AdvOfficeButtons, ShadowLabel, PanelEx, ShellAPI,
-  GR32_RangeBars, EditEx, ButtonsEx, ColorBoxEx;
+  ExtCtrls, StdCtrls, ComCtrls, Menus, IniFiles, MPCommonObjects, EasyListview,
+  GR32_RangeBars, ButtonsEx, ShadowLabel, PanelEx, Buttons, BarMenus, GraphicEx,
+  SplitterEx, AdvOfficeButtons, ShellAPI, EditEx, ColorBoxEx, Themes;
 
 type
   TFormPreferences = class(TForm)
@@ -97,8 +96,8 @@ type
     LabelGamesListStatusBarFontColor: TShadowLabel;
     GamesListStatusBarFontColor: TColorBoxEx;
     LabelGamesListStatusBarTopColor: TShadowLabel;
-    MAMEGameDocsBox: TPanelEx;
-    MAMEGameDocsBoxLabel: TShadowLabel;
+    MAMEGameDocsColorsBox: TPanelEx;
+    MAMEGameDocsColorsBoxLabel: TShadowLabel;
     GameDocumentsBackgroundColor: TColorBoxEx;
     GameDocumentsButtonDefault: TBitBtnEx;
     GameDocsShowBorder: TAdvOfficeCheckBoxEx;
@@ -140,21 +139,19 @@ type
     ImageBorderColorBoxLabel: TShadowLabel;
     ImageBorderColor: TColorBoxEx;
     ImageBorderColorButtonDefault: TBitBtnEx;
-    MAMEGameManualsPDFFolderBox: TPanelEx;
-    MAMEGameManualsPDFFolderBoxLabel: TShadowLabel;
+    SampleBox: TPanelEx;
+    SampleBoxLabel: TShadowLabel;
     PanelPage1: TPanelEx;
     Settings_GeneralBox: TPanelEx;
     Settings_GeneralBoxLabel: TShadowLabel;
     IgnoreExitCode1InvalidFunctionLabel: TShadowLabel;
-    UseItalicFontStyleSystemTitleBarLabel: TShadowLabel;
     LeftAlignEmulatorGameTextMessageBoxLabel: TShadowLabel;
     DisableMinimize: TAdvOfficeCheckBoxEx;
     AllowOnlyOneInstance: TAdvOfficeCheckBoxEx;
     IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx;
-    UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx;
     LeftAlignEmulatorGameTextMessageBox: TAdvOfficeCheckBoxEx;
-    PanelEx10: TPanelEx;
-    ShadowLabel15: TShadowLabel;
+    GamesListBox: TPanelEx;
+    GamesListBoxLabel: TShadowLabel;
     GameListHeaderFont_Setting: TShadowLabel;
     LabelDisableNaturalSorting: TShadowLabel;
     LabelGameMultilineCaptions: TShadowLabel;
@@ -197,9 +194,9 @@ type
     Setting_MAMEGameDocsBoxLabel: TShadowLabel;
     GameDocsDisplayOrderBox: TPanelEx;
     GameDocsLabel: TShadowLabel;
-    ButtonUp: TBitBtnEx;
-    ButtonDown: TBitBtnEx;
-    ButtonResetAutoGameInfoOrder: TBitBtnEx;
+    GameDocsButtonUp: TBitBtnEx;
+    GameDocsButtonDown: TBitBtnEx;
+    GameDocsButtonReset: TBitBtnEx;
     GameDocs: TEasyListview;
     GameDocsDisplayModeBox: TPanelEx;
     GameDocsDisplayModeBoxLabel: TShadowLabel;
@@ -227,13 +224,6 @@ type
     LastPlayedHideSeconds: TAdvOfficeCheckBoxEx;
     TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx;
     GameDocsFont_Setting: TShadowLabel;
-    CheckBoxRadioButtonBox: TPanelEx;
-    CheckBoxRadioButtonBoxLabel: TShadowLabel;
-    CheckBoxRadioButtonProfile: TComboBox2Ex;
-    CheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx;
-    CheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx;
-    CheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx;
-    CheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure GamesBackgroundColorSelect(Sender: TObject);
@@ -244,11 +234,11 @@ type
     procedure GamesBackgroundImageButtonUpdateClick(Sender: TObject);
     procedure GamesTileBackgroundClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure ButtonResetAutoGameInfoOrderClick(Sender: TObject);
+    procedure GameDocsButtonResetClick(Sender: TObject);
     procedure ButtonDefaultBkSortedColorClick(Sender: TObject);
     procedure GameDocsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
-    procedure ButtonUpClick(Sender: TObject);
+    procedure GameDocsButtonUpClick(Sender: TObject);
     procedure GameSelectionAlphaBlendClick(Sender: TObject);
     procedure ImageSplitterSingleColorSelect(Sender: TObject);
     procedure ImageSplitterSingleColorHotSelect(Sender: TObject);
@@ -314,7 +304,6 @@ type
     procedure SearchGamesPanelEditBoxFontColorSelect(Sender: TObject);
     procedure SearchGamesPanelEditBoxBackgroundColorSelect(
       Sender: TObject);
-    procedure CheckBoxRadioButtonProfileSelect(Sender: TObject);
   private
     { Private declarations }
     MoveControls: Boolean;
@@ -363,11 +352,22 @@ begin
   begin
     // you cannot change a control parent property in Form.OnCreate() event
     MoveControls:= True;
-    PanelPage2.Left:= 0;
-    PanelPage2.Top:= PanelPage1.Top;
-    PanelPage2.Visible:= False;
-    FormPreferences.ClientHeight:= PanelPage1.Top+PanelPage1.Height;
-    FormPreferences.ClientWidth:= PanelPage1.Width;
+    {if Screen.Width >= 1920 then
+       begin
+         PanelTabButtons.Visible:= False;
+         PanelPage1.Top:= 0;
+         PanelPage2.Top:= 0;
+         FormPreferences.ClientHeight:= PanelPage1.Top+PanelPage1.Height;
+         FormPreferences.ClientWidth:= PanelPage1.Width+PanelPage2.Width;
+       end
+    else}
+       begin
+         PanelPage2.Left:= 0;
+         PanelPage2.Top:= PanelPage1.Top;
+         PanelPage2.Visible:= False;
+         FormPreferences.ClientHeight:= PanelPage1.Top+PanelPage1.Height;
+         FormPreferences.ClientWidth:= PanelPage1.Width;
+       end;
   end;
   
   if FormPreferences.Tag = 2 then
@@ -538,7 +538,7 @@ begin
   FormMain.ELV_ResetNormalColors(GameDocs);
 end;
 
-procedure TFormPreferences.ButtonResetAutoGameInfoOrderClick(
+procedure TFormPreferences.GameDocsButtonResetClick(
   Sender: TObject);
 var
   Loop: Integer;
@@ -565,9 +565,9 @@ begin
      ACanvas.Font.Color:= clGray;
 end;
 
-procedure TFormPreferences.ButtonUpClick(Sender: TObject);
+procedure TFormPreferences.GameDocsButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(GameDocs, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(GameDocs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormPreferences.GameSelectionAlphaBlendClick(Sender: TObject);
@@ -734,14 +734,22 @@ end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoMouseEnter(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clBlue;
-  TShadowLabel(Sender).Font.Style:= [fsUnderline];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clCream)//, clrMedDarkGray)
+  else
+     SetLabelColors(TShadowLabel(Sender), clBlue);
+  //TShadowLabel(Sender).Font.Color:= clBlue;
+  //TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoMouseLeave(Sender: TObject);
 begin
-  TShadowLabel(Sender).Font.Color:= clNavy;
-  TShadowLabel(Sender).Font.Style:= [];
+  if IsNightMode then
+     SetLabelColors(TShadowLabel(Sender), clSilver)//, clrMedDarkGray)
+  else
+     SetLabelColors(TShadowLabel(Sender), clNavy);
+  //TShadowLabel(Sender).Font.Color:= clNavy;
+  //TShadowLabel(Sender).Font.Style:= [];
 end;
 
 procedure TFormPreferences.LabelGoToMAMEInfoClick(Sender: TObject);
@@ -1135,21 +1143,6 @@ procedure TFormPreferences.SearchGamesPanelEditBoxBackgroundColorSelect(
 begin
   if not IsNightMode then
      FormMain.FilterGameTitle_ToolBar.Color:= SearchGamesPanelEditBoxBackgroundColor.Selected;
-
-end;
-
-procedure TFormPreferences.CheckBoxRadioButtonProfileSelect(
-  Sender: TObject);
-var
-  IsCustom: Boolean;
-begin
-  IsCustom:= CheckBoxRadioButtonProfile.ItemIndex > 0;
-  if IsCustom then
-     CheckBoxRadioButtonBoxFolderFullPathLabel.Hint:= FormMain.GetCheckBoxThemeFolder+CheckBoxRadioButtonProfile.Text+'\';
-
-  FormMain.SetCheckBoxExCustomIcon(CheckBoxRadioButton_Check1, IsCustom);
-  FormMain.SetRadioButtonExCustomIcon(CheckBoxRadioButton_Radio1, IsCustom);
-  FormMain.SetRadioButtonExCustomIcon(CheckBoxRadioButton_Radio2, IsCustom);
 end;
 
 end.

@@ -93,10 +93,13 @@ begin
   if IsNightMode then
      begin
        SetFormColors(FormSelectDirectory, TopBar, BottomBar, LabelTitle, nil, nil, -1, IsNightMode);
-       SetLabelColors(LabelSelectedPath, clSilver, item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(AddSubFolders, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelSelectedPath, clSilver, item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(AddSubFolders, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(AddSubFolders);
        ShellTree.Color:= FormSelectDirectory.Color;
        ShellTree.Font.Color:= clCream;
+
+       FormMain.SetWin10DarkScrollBar(ShellTree);
      end;
 end;
 

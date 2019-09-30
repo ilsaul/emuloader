@@ -208,8 +208,27 @@ end;
 procedure TFormConsCompSelectEmulator.FormShow(Sender: TObject);
 begin
   Screen.Cursor:= crHourGlass;
-  ResizeForm;
+
   FormMain.ELV_ResetNormalColors(EmulatorsList);
+
+  if IsNightMode then
+     begin
+       FormConsCompSelectEmulator.Color:= menu_background_color[1];
+       PanelBottom.Frames:= [];
+       SetBottomPanelColors(PanelBottom);
+       FormMain.SetEasyListViewColors(EmulatorsList, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
+       FormMain.ELV_SetCheckRadioCustomIcon(EmulatorsList);
+       FormMain.SetWin10DarkScrollBar(EmulatorsList);
+       SetLabelColors(LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(UseSmallIcons, clWhite, item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(UseSmallIcons);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+     end;
+
+  ResizeForm;
+
   if IsNightMode then
      FormMain.ELV_SetNightModeColors(EmulatorsList);
 
@@ -245,17 +264,17 @@ end;
 procedure TFormConsCompSelectEmulator.EmulatorsListGroupPaintText(
   Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas);
 begin
-  ACanvas.Font.Size:= 10;//ACanvas.Font.Size+2;
+  ACanvas.Font.Size:= 10;
   ACanvas.Font.Name:= 'Trebuchet MS';
   if IsNightMode then
      ACanvas.Font.Color:= clrOrangeBarTop
   else
      ACanvas.Font.Color:= clMaroon;
 
-  if LabelTips.Tag = 1 then
-     ACanvas.Font.Style:= [fsBold, fsItalic]
-  else
-     ACanvas.Font.Style:= [fsBold];
+  //if LabelTips.Tag = 1 then
+  //   ACanvas.Font.Style:= [fsBold, fsItalic]
+  //else
+  ACanvas.Font.Style:= [fsBold];
 end;
 
 procedure TFormConsCompSelectEmulator.EmulatorsListItemCheckChange(

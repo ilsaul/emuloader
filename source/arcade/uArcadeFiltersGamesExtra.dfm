@@ -233,6 +233,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object PanelBottom: TPanelEx
     Left = 0
@@ -352,6 +353,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object DeviceROMs: TComboBox2Ex
     Left = 213
@@ -398,6 +400,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object HideGamesWithCHDFiles: TAdvOfficeCheckBoxEx
     Left = 8
@@ -414,6 +417,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object NeoGeoMVS: TAdvOfficeCheckBoxEx
     Left = 8
@@ -430,6 +434,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object STVMultiSlot: TAdvOfficeCheckBoxEx
     Left = 8
@@ -446,6 +451,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object ControlType_New: TComboBox2Ex
     Left = 418
@@ -495,6 +501,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object HideNoDumpROMsGames: TAdvOfficeCheckBoxEx
     Left = 8
@@ -511,6 +518,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object SaveState: TComboBox2Ex
     Left = 213
@@ -535,6 +543,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Top = 187
     Width = 400
     Height = 152
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'Category (uncheck to hide)         '
     Ctl3D = True
@@ -593,6 +602,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryFruitMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -609,6 +619,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryRhythm: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -625,6 +636,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMature: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -642,6 +654,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMahjong: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -658,6 +671,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryTabletop: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -674,6 +688,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryPinMAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -690,6 +705,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryQuiz: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -706,6 +722,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryUtilities: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -722,6 +739,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryCalculator: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -738,6 +756,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryEducational: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -754,6 +773,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryElectronic: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -770,6 +790,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryPrinters: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -786,6 +807,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryPhones: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -802,6 +824,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMAMEConsoleMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -818,6 +841,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMAMEComputerMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -834,6 +858,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMAMEHandheldMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -850,6 +875,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryMusic: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -866,6 +892,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategoryBoardGame: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -882,6 +909,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object CategorySlotMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -899,6 +927,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBoxEx
@@ -914,6 +943,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object HideMAMESoftlist_vgmplay: TAdvOfficeCheckBoxEx
     Left = 418
@@ -928,6 +958,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ReturnIsTab = False
     ShadowColor = clSilver
     Themed = True
+    CustomIconsEnabled = False
   end
   object SpecialList: TComboBox2Ex
     Left = 418

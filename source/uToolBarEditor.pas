@@ -119,10 +119,33 @@ var
 begin
   // must call FormMain.ButtonFilterTitleClose.Click to close all search panels, and also hide the tool bar attached panel
   // if user uncheck "Search Games"
-  
+
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   if IsNightMode then
-     FormMain.ELV_SetNightModeColors(ToolBarListView);
+     begin
+       FormToolBarEditor.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       SetLabelColors(LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(ToolBarListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
+       FormMain.ELV_SetNightModeColors(ToolBarListView);
+       FormMain.ELV_SetCheckRadioCustomIcon(ToolBarListView);
+
+       SetCheckBoxColors(BoundToGamesPanel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(ShowHideToolBar,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(BoundToGamesPanel);
+       FormMain.SetCheckBoxExCustomIcon(ShowHideToolBar);
+
+
+       IconSizeExtraLarge.Font.Color:= item_caption_active_color[1];
+       IconSizeLarge.Font.Color:=      item_caption_active_color[1];
+       IconSizeSmall.Font.Color:=      item_caption_active_color[1];
+
+       FormMain.SetButtonExColors(ButtonClose);
+       FormMain.SetButtonExColors(ButtonDefault);
+     end;
+
   ToolBarListView.BeginUpdate;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
   begin

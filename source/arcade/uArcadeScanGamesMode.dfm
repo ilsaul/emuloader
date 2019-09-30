@@ -23,17 +23,17 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
   TextHeight = 15
   object LabelImportantTips: TShadowLabel
     Left = 17
-    Top = 352
-    Width = 324
-    Height = 31
+    Top = 351
+    Width = 354
+    Height = 37
     Caption = 
       'Important: bios/device sets included; parent sets are ignored; m' +
       'erged sets are not supported.'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
     Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
+    Font.Name = 'Trebuchet MS'
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = clGray
@@ -76,6 +76,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
     Top = 8
     Width = 364
     Height = 159
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = '           Choose Scan Mode '
     TabOrder = 1
@@ -167,6 +168,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Checked = True
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object QuickScan: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -186,6 +188,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Caption = 'Quick Scan'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ForceAllAvailable: TAdvOfficeRadioButtonEx
       Tag = 2
@@ -205,6 +208,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Caption = 'Force Games Available'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ScanMAMESetsBox: TAdvGroupBoxEx
       Left = 7
@@ -212,7 +216,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Width = 349
       Height = 41
       BorderStyle = bsAdvNone
-      Transparent = False
+      CheckBox.CustomIconsEnabled = False
       Caption = '         Scan MAME Sets (v0.162 or newer)'
       Ctl3D = True
       TabOrder = 3
@@ -241,6 +245,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
         Checked = True
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ScanMAMEArcadeMachines: TAdvOfficeRadioButtonEx
         Tag = 1
@@ -254,6 +259,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
         Caption = 'Arcade/Machines'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ScanMAMESoftwareListGames: TAdvOfficeRadioButtonEx
         Tag = 2
@@ -267,6 +273,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
         Caption = 'Software List Games'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
     end
   end
@@ -276,6 +283,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
     Top = 184
     Width = 364
     Height = 131
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = '           MAME Software List Games '
     Ctl3D = True
@@ -428,6 +436,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Caption = 'Disable'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -449,6 +458,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Checked = True
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButtonEx
       Tag = 2
@@ -468,6 +478,7 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
       Caption = 'Enable: Overwrite Mode'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx
       Left = 328
@@ -507,5 +518,6 @@ object FormArcadeScanGamesMode: TFormArcadeScanGamesMode
     Caption = 'Add MAME Device Sets With No ROMs'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
 end

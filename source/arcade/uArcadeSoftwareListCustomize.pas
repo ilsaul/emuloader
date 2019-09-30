@@ -311,18 +311,24 @@ begin
   if IsNightMode then
      begin
        SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
-       SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1]);
 
        FrameSoftwareList.Color1:= FormArcadeSoftwareListCustomize.Color;
 
        FormMain.SetEasyListViewColors(SoftwareLists, menu_background_color[1], clWhite);
 
-       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(UseBiggerFontIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(CheckAll,                item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(UseBiggerFontIconSize,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetCheckBoxExCustomIcon(CheckAll);
+       FormMain.SetCheckBoxExCustomIcon(FilterShowUncheckedOnly);
+       FormMain.SetCheckBoxExCustomIcon(UseBiggerFontIconSize);
 
        FormMain.SetEasyListViewHeaderColors(SoftwareLists, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
+       FormMain.ELV_SetCheckRadioCustomIcon(SoftwareLists);
+       FormMain.SetWin10DarkScrollBar(SoftwareLists);
 
        SoftwareLists.Align:= alNone;
        SoftwareLists.Height:= SoftwareLists.Height-2;

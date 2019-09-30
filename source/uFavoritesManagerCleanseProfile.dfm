@@ -135,6 +135,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = FavoritesCleanseListColumnClick
     OnItemCompare = FavoritesCleanseListItemCompare
     OnKeyAction = FavoritesCleanseListKeyAction

@@ -38,13 +38,13 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
     object LabelTitle: TShadowLabel
       Left = 56
       Top = 16
-      Width = 60
-      Height = 16
+      Width = 77
+      Height = 17
       Caption = 'Label Title'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
+      Font.Height = -13
+      Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False

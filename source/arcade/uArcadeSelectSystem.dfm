@@ -49,9 +49,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -132,6 +132,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      CustomCheckRadioEnabled = False
       OnDblClick = SystemsListViewDblClick
       OnItemPaintText = SystemsListViewItemPaintText
       OnItemSelectionChanged = SystemsListViewItemSelectionChanged
@@ -217,6 +218,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Caption = 'Add MAME Device Sets With No ROMs'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object MAMESoftwareListBox: TAdvGroupBoxEx
     Tag = 1
@@ -224,6 +226,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Top = 184
     Width = 364
     Height = 131
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = '           MAME Software List Games '
     Ctl3D = True
@@ -376,6 +379,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Caption = 'Disable'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -397,6 +401,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Checked = True
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButtonEx
       Tag = 2
@@ -416,6 +421,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Caption = 'Enable: Overwrite Mode'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx
       Left = 328
@@ -442,6 +448,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Top = 8
     Width = 364
     Height = 159
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = '           Choose Scan Mode '
     Ctl3D = True
@@ -543,6 +550,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Caption = 'For This Task Only'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object QuickScan: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -562,6 +570,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Caption = 'Quick Scan'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object FullScan: TAdvOfficeRadioButtonEx
       Left = 9
@@ -582,6 +591,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Checked = True
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ScanMAMESetsBox: TAdvGroupBoxEx
       Left = 7
@@ -589,7 +599,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Width = 349
       Height = 41
       BorderStyle = bsAdvNone
-      Transparent = False
+      CheckBox.CustomIconsEnabled = False
       Caption = '         Scan MAME Sets (v0.162 or newer)'
       Ctl3D = True
       TabOrder = 3
@@ -618,6 +628,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         Checked = True
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ScanMAMEArcadeMachines: TAdvOfficeRadioButtonEx
         Tag = 1
@@ -631,6 +642,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         Caption = 'Arcade/Machines'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ScanMAMESoftwareListGames: TAdvOfficeRadioButtonEx
         Tag = 2
@@ -644,6 +656,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         Caption = 'Software List Games'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
     end
     object ForceAllAvailable: TAdvOfficeRadioButtonEx
@@ -664,6 +677,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Caption = 'Force Games Available'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object IL_Systems: TImageList

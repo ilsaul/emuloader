@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, ImgList, ComCtrls, Buttons, IniFiles,
   ExtCtrls, GR32_RangeBars, uGR32Extra, MPCommonObjects, EasyListview,
   MPCommonUtilities, Registry, uCommon, PanelEx, AdvOfficeButtons, AdvGroupBox,
-  ShadowLabel, ExTrackBar, ToolWin, EditEx, ButtonsEx, ColorBoxEx;
+  ShadowLabel, ToolWin, EditEx, ButtonsEx, ColorBoxEx, XiTrackBar;
 
 type
   TScreenInfo = record // for MAME/HBMAME
@@ -618,7 +618,6 @@ type
     ScreenResolution: TComboBox2Ex;
     ScreenRefreshRate: TComboBox2Ex;
     ScreenView: TComboBox2Ex;
-    NumberScreens: TExTrackBar;
     ScreensSelector: TComboBox2Ex;
     ScreenButtonDefaultSettings: TBitBtnEx;
     MonitorProviderLabel: TShadowLabel;
@@ -657,6 +656,14 @@ type
     ButtonPageVideoEffectsHLSL: TSpeedButtonEx;
     ButtonPageVideoEffectsGLSL: TSpeedButtonEx;
     SkipMandatoryFileMan: TAdvOfficeCheckBoxEx;
+    DebuggerPort: TEditEx;
+    DebuggerPortButtonReset: TBitBtnEx;
+    ShadowLabel1: TShadowLabel;
+    EnableMenuBar: TAdvOfficeCheckBoxEx;
+    AttachWindowLabel: TShadowLabel;
+    AttachWindow: TEditEx;
+    NumberScreens: TXiTrackBar;
+    NumberScreensLabel: TShadowLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -873,6 +880,7 @@ type
     procedure FolderManualsPDFButtonSelectClick(Sender: TObject);
     procedure ButtonPageFoldersClick(Sender: TObject);
     procedure ButtonPageVideoEffectsBGFXClick(Sender: TObject);
+    procedure DebuggerPortButtonResetClick(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
@@ -1854,7 +1862,7 @@ var
     Result:= StrToFloat(Format(StrFormat, [StrToFloat(GetStringValue)]));
   end;
 
-  function GetGLSLShaderMAME(EditHolder: TEdit): Boolean;
+  function GetGLSLShaderMAME(EditHolder: TEditEx): Boolean;
   var
     glValue: String;
   begin
@@ -2640,6 +2648,15 @@ begin
                     Debugger.ItemIndex:= 1;
                end
             else
+            if EntryString = 'debugger_port ' then
+               DebuggerPort.Text:= GetStringValue
+            else
+            //if EntryString = 'debugger_font ' then // enable in a future frontend build
+            //   Value:= GetStringValue
+            //else
+            //if EntryString = 'debugger_font_size '
+            //   Value:= GetStringValue
+            //else
             if EntryString = 'comm_localhost ' then
                CommLocalHost.Text:= GetStringValue
             else
@@ -2869,6 +2886,12 @@ begin
             //   end
             //else
             // # WINDOWS VIDEO OPTIONS
+            if EntryString = 'menu ' then
+               EnableMenuBar.Checked:= GetBooleanValue
+            else
+            if EntryString = 'attach_window ' then
+               AttachWindow.Text:= GetStringValue
+            else
             if EntryString = 'video ' then
                begin
                  Value:= GetStringValue;
@@ -3709,7 +3732,7 @@ var
     UpdateMAMELine(EntryStr, Value);
   end;
 
-  function SetGLSLShader(EditHolder: TEdit): String;
+  function SetGLSLShader(EditHolder: TEditEx): String;
   begin
     Result:= 'none';
     if EditHolder.Text <> '' then
@@ -4350,6 +4373,20 @@ begin
               UpdateMAMELine(EntryString, Value);
             end
          else
+         if tmpEntryStr = 'debugger_port ' then
+            begin
+              if DebuggerPort.Text = '' then
+                 DebuggerPortButtonReset.Click;
+              UpdateMAMELine(EntryString, DebuggerPort.Text)
+            end
+         else
+         //if EntryString = 'debugger_font ' then // enable in a future frontend build
+         //   Value:= GetStringValue
+         //else
+         //if EntryString = 'debugger_font_size '
+         //   Value:= GetStringValue
+         //else
+
          //# CORE COMM OPTIONS
          if tmpEntryStr = 'comm_localhost ' then
             UpdateMAMELine(EntryString, CommLocalHost.Text)
@@ -4627,6 +4664,12 @@ begin
          //   end
          //else
          // # WINDOWS VIDEO OPTIONS
+         if tmpEntryStr = 'menu ' then
+            UpdateMAMELine(EntryString, IntToStr(Ord(EnableMenuBar.Checked)))
+         else
+         if tmpEntryStr = 'attach_window ' then
+            UpdateMAMELine(EntryString, AttachWindow.Text)
+         else
          if tmpEntryStr = 'video ' then
             begin
               Value:= 'auto';
@@ -5737,7 +5780,8 @@ begin
   if IsNightMode then
   begin
     FormMAMESettings.Color:= menu_background_color[1];
-    NumberScreens.Font.Color:= item_caption_active_color[1];
+    SetXiTrackBarColors(NumberScreens);
+    //NumberScreens.Font.Color:= item_caption_active_color[1];
     for Loop:= 0 to FormMAMESettings.ComponentCount-1 do
        begin
          if FormMAMESettings.Components[Loop] is TBitBtnEx then
@@ -5755,6 +5799,8 @@ begin
               SetGroupBoxColors(TAdvGroupBoxEx(FormMAMESettings.Components[Loop]),
                                 clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
                                 item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+
+              FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormMAMESettings.Components[Loop]));
             end
          else
          if FormMAMESettings.Components[Loop] is TComboBox2Ex then
@@ -5768,13 +5814,14 @@ begin
          else
          if FormMAMESettings.Components[Loop] is TAdvOfficeCheckBoxEx then
             begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
               TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]).DisabledFontColor:= clGray;
               TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormMAMESettings.Components[Loop]));
             end;
          if FormMAMESettings.Components[Loop] is TShadowLabel then
             begin
-              SetLabelColors(TShadowLabel(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              SetLabelColors(TShadowLabel(FormMAMESettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
               if not TShadowLabel(FormMAMESettings.Components[Loop]).Transparent then
                  TShadowLabel(FormMAMESettings.Components[Loop]).Color:= FormMAMESettings.Color;
             end
@@ -5783,17 +5830,20 @@ begin
             begin
               FormMain.SetEasyListViewColors(TEasyListView(FormMAMESettings.Components[Loop]), FormMAMESettings.Color, clWhite, -1, clGray);
               FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings.Components[Loop]), True);
+              FormMain.ELV_SetCheckRadioCustomIcon(TEasyListView(FormMAMESettings.Components[Loop]));
+              FormMain.ELV_SetEditBkColor(TEasyListView(FormMAMESettings.Components[Loop]));
               FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormMAMESettings.Components[Loop]), True);
             end;
        end;
 
-    SetCheckBoxColors(SaveValidateAllCustomFiles, clSilver, clrMedDarkGray, False);
-    SetLabelColors(EnableOpenGLFilterNotFFLabel, clSilver, clrMedDarkGray, False);
-    SetLabelColors(BGFXScreenShaderChainsHelpLabel, clrLightRed, clMaroon, False);
-    SetLabelColors(BGFXScreenShaderChainsDetailsHTMLLabel, clrLightBlue, clNavy, False);
-    SetLabelColors(LUAPluginsToEnable2Label, clrLightRed, clMaroon, False);
-    SetLabelColors(RecordInputTimecodeFileLabel, clSilver, clrMedDarkGray, False);
-    SetLabelColors(ExitAfterInputPlaybackLabel, clSilver, clrMedDarkGray, False);
+    SetCheckBoxColors(SaveValidateAllCustomFiles, clSilver, clrMedDarkGray);
+    FormMain.SetCheckBoxExCustomIcon(SaveValidateAllCustomFiles);
+    SetLabelColors(EnableOpenGLFilterNotFFLabel, clSilver, clrMedDarkGray);
+    SetLabelColors(BGFXScreenShaderChainsHelpLabel, clrLightRed, clMaroon);
+    SetLabelColors(BGFXScreenShaderChainsDetailsHTMLLabel, clrLightBlue, clNavy);
+    SetLabelColors(LUAPluginsToEnable2Label, clrLightRed, clMaroon);
+    SetLabelColors(RecordInputTimecodeFileLabel, clSilver, clrMedDarkGray);
+    SetLabelColors(ExitAfterInputPlaybackLabel, clSilver, clrMedDarkGray);
 
     if Tag = 1 then
        SetFormColors(FormMAMESettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, IsNightMode)
@@ -5801,6 +5851,14 @@ begin
        SetFormColors(FormMAMESettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
 
     SetColorEmulatorTopBar(TopBar, sysID, True);
+
+    FormMain.SetWin10DarkScrollBar(FolderROMs);
+    FormMain.SetWin10DarkScrollBar(FolderIniFiles);
+    FormMain.SetWin10DarkScrollBar(FolderArtworks);
+    FormMain.SetWin10DarkScrollBar(BiosSetsListView);
+    FormMain.SetWin10DarkScrollBar(DisplayLanguageList);
+    FormMain.SetWin10DarkScrollBar(LUAPluginsToEnable);
+    FormMain.SetWin10DarkScrollBar(BGFXScreenShaderChains_ListView);
   end;
 
   HTTPServer.Enabled:= False;
@@ -6002,7 +6060,7 @@ end;
 
 procedure TFormMAMESettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings.UIModeKeyChange(Sender: TObject);
@@ -6028,7 +6086,7 @@ end;
 
 procedure TFormMAMESettings.FolderIniFilesButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderIniFiles, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderIniFiles, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings.FolderIniFilesButtonSelectClick(
@@ -6065,7 +6123,7 @@ end;
 
 procedure TFormMAMESettings.FolderArtworksButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderArtworks, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderArtworks, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings.FolderArtworksButtonSelectClick(
@@ -6666,24 +6724,24 @@ begin
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
   FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
-  FormMain.AddMsgText('(mame.ini; hbmame.ini; ume.ini; emufilename.ini)', clBlack, [fsItalic]);
+  FormMain.AddMsgText('(mame.ini; hbmame.ini; ume.ini; emufilename.ini)', clBlack);
   FormMain.AddMsgText(', ignoring all custom files.'+#13#10+
                       'This is the old frontend''s saving method and I for one, prefer this way.'+#13#10+#13#10);
   FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    It will keep custom settings files clean and avoid duplicated settings across files. '+
                       'All files will be scanned accordingly ');
-  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack, [fsItalic]);
+  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack);
   FormMain.AddMsgText('.'+#13#10+'    There''s one major downside. Say you have settings in ');
-  FormMain.AddMsgText('drivername.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('drivername.ini', clBlack);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('gamename.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('gamename.ini', clBlack);
   FormMain.AddMsgText('. Then you decide to delete ');
-  FormMain.AddMsgText('drivername.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('drivername.ini', clBlack);
   FormMain.AddMsgText('. All its settings will be lost as they are not listed in later files, '+
                       'forcing you to set them again in ');
-  FormMain.AddMsgText('gamename.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('gamename.ini', clBlack);
   FormMain.AddMsgText('.'+#13#10+#13#10+'In doubt, keep this feature ');
-  FormMain.AddMsgText('disabled/unchecked.', clBlack, [fsItalic]);
+  FormMain.AddMsgText('disabled/unchecked.', clBlack);
 
   GenerateMessage('Help', 'Validate All Custom Files on Save');
 end;
@@ -6872,7 +6930,7 @@ end;
 procedure TFormMAMESettings.BGFXScreenShaderChainsDetailsHTMLLabelMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clCream, clrMedDarkGray, False)
+     SetLabelColors(TShadowLabel(Sender), clCream, clrMedDarkGray)
   else
      TShadowLabel(Sender).Color:= clBlue;
 end;
@@ -6880,7 +6938,7 @@ end;
 procedure TFormMAMESettings.BGFXScreenShaderChainsDetailsHTMLLabelMouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
   else
      TShadowLabel(Sender).Font.Color:= clNavy;
 end;
@@ -7043,6 +7101,11 @@ procedure TFormMAMESettings.ButtonPageVideoEffectsBGFXClick(Sender: TObject);
 begin
   if NotebookVideoPostProcessingEffectsPages.PageIndex <> TSpeedButtonEx(Sender).Tag then
      NotebookVideoPostProcessingEffectsPages.PageIndex:= TSpeedButtonEx(Sender).Tag;
+end;
+
+procedure TFormMAMESettings.DebuggerPortButtonResetClick(Sender: TObject);
+begin
+  DebuggerPort.Text:= '23946';
 end;
 
 end.

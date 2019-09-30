@@ -50,8 +50,6 @@ type
 type
   TFormFavoritesManager = class(TForm)
     FavoritesList: TEasyListview;
-    LabelTaskMessage: TShadowLabel;
-    PanelUpdatingFavTagInGames: TPanelEx;
     IL_SystemType: TImageList;
     NewFavoritePanel: TPanelEx;
     LabelHotkeyText: TShadowLabel;
@@ -97,6 +95,8 @@ type
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure PopupSettingsSmallFontClick(Sender: TObject);
     procedure PopupSettingsCenterWindowClick(Sender: TObject);
+    procedure FavoritesListItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
     UpdateFavStatusInGames: Boolean;
@@ -116,7 +116,6 @@ type
     procedure EditTitleFileName(ColumnIndex: Integer);
     procedure RemoveInvalidEntries;
     function  ValidateGamesActiveProfile: Boolean;
-    procedure ShowUpdateFavGamesListPanel;
     procedure ReadSettings;
     procedure WriteSettings;
   public
@@ -152,7 +151,7 @@ end;
 
 procedure TFormFavoritesManager.UpdateDateTime(destItem: TEasyItem; const fFile: String);
 begin
-  TFavFileInfo(destItem).eDateTime:= FileAge(fFile);
+  TFavFileInfo(destItem).eDateTime:= FileAgeW(fFile);
   TFavFileInfo(destItem).eDateTimeText:= FormMain.GetDateTimeStr(TFavFileInfo(destItem).eDateTime);
 end;
 
@@ -793,8 +792,8 @@ begin
        Exit;
      end;
 
-  LabelTaskMessage.Caption:= 'Generating list of impurities, please wait...';
-  ShowUpdateFavGamesListPanel;
+  FormMain.ShowFilterMsgBox('Favorites Manager', 'Generating list of impurities, please wait...', True);
+
   Application.ProcessMessages;
   Screen.Cursor:= crHourGlass;
 
@@ -834,30 +833,33 @@ begin
        if not Assigned(FormFavoritesManagerCleanseProfile) then
           FormFavoritesManagerCleanseProfile:= TFormFavoritesManagerCleanseProfile.Create(nil);
 
-       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.BeginUpdate;
-       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= True;
-       LoadCustomMAMEIconToForm(FormFavoritesManagerCleanseProfile, 3);
-       FormMain.LoadSystemsIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False);
-       FormMain.LoadNonArcadeSystemIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False, False);
        FormMain.ELV_ResetNormalColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList);
 
        if IsNightMode then
           begin
             FormFavoritesManagerCleanseProfile.Color:= menu_background_color[1];
             SetPanelColors(FormFavoritesManagerCleanseProfile.PanelBottom, menu_background_color[1], clrMedDarkGray);
-            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTopMessage, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTotal, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTopMessage, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            SetLabelColors(FormFavoritesManagerCleanseProfile.LabelTotal,      item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
             FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorder:= False;
-            //FormFavoritesManagerCleanseProfile.FavoritesCleanseList.ShowThemedBorderColor:= FavoritesList.ShowThemedBorderColor;
             FormMain.SetEasyListViewColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, menu_background_color[1], item_caption_active_color[1]);
             FormMain.SetEasyListViewHeaderColors(FormFavoritesManagerCleanseProfile.FavoritesCleanseList, True);
+            FormMain.ELV_SetEditBkColor(FormFavoritesManagerCleanseProfile.FavoritesCleanseList);
             FormMain.ELV_SetRibbonNightColors(0, FormFavoritesManagerCleanseProfile.FavoritesCleanseList, True);
 
             FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonConfirm);
             FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonAbort);
             FormMain.SetButtonExColors(FormFavoritesManagerCleanseProfile.ButtonRemoveSelected);
-          end;
+
+            FormMain.SetWin10DarkScrollBar(FormFavoritesManagerCleanseProfile.FavoritesCleanseList);
+           end;
+
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.BeginUpdate;
+       FormFavoritesManagerCleanseProfile.FavoritesCleanseList.Items.ReIndexDisable:= True;
+       LoadCustomMAMEIconToForm(FormFavoritesManagerCleanseProfile, 3);
+       FormMain.LoadSystemsIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False);
+       FormMain.LoadNonArcadeSystemIcons(FormFavoritesManagerCleanseProfile.IL_Systems, False, False);
 
        FavoriteGamesList:= THashedStringList.Create;
        FavoriteGamesList.LoadFromFile(FormMain.GetFavoritesFolder+TFavFileInfo(favItem).eFileName);
@@ -929,14 +931,15 @@ begin
                 FormMain.AddMsgText('    File ');
                 FormMain.AddMsgText(TFavFileInfo(favItem).eFileName, MsgTxtColors.colorFileName, [fsBold]);
                 FormMain.AddMsgText(' will be cleansed of all impurities, based on current games list.'+#13#10);
-                FormMain.AddMsgText('(arcade/console/computer)', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+                FormMain.AddMsgText('(arcade/console/computer)', MsgTxtColors.colorFileName, [fsBold]);
                 FormMain.AddMsgText('.'+#13#10+'Valid game entries of systems that are not available anymore will also be removed. Click ');
                 FormMain.AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
                 FormMain.AddMsgText(' button if you want to abort.'+#13#10+#13#10+'Continue ?');
                 if GenerateMessage(FavMsgTitle, 'A file is about to be changed.', '', 1, False, 2) = mrYes then
                    begin
-                     LabelTaskMessage.Caption:= 'Cleansing profile of impure data, please wait...';
-                     ShowUpdateFavGamesListPanel;
+                     FormMain.ShowFilterMsgBox('Favorites Manager', 'Cleansing profile of impure data, please wait...', True);
+                     //LabelTaskMessage.Caption:= 'Cleansing profile of impure data, please wait...';
+                     //ShowUpdateFavGamesListPanel;
                      FavoriteGamesList.BeginUpdate;
                      // remove all games from fav .ini file...
 
@@ -980,7 +983,7 @@ begin
        FavoriteGamesList.EndUpdate;}
      end;
 
-  PanelUpdatingFavTagInGames.Visible:= False;
+  FormMain.HideFilterMsgBox;
   Screen.Cursor:= crDefault;
   Application.ProcessMessages;
 
@@ -1050,8 +1053,8 @@ begin
   if (not UpdateFavStatusInGames) and (LastActiveFavFilter = FormMain.FavoriteProfile[1]) then
      Exit;
 
-  LabelTaskMessage.Caption:= 'Updating favorite tags in games list, please wait...';
-  ShowUpdateFavGamesListPanel;
+  FormMain.ShowFilterMsgBox('Favorites Manager', 'Updating favorite tags in games list, please wait...', True);
+
   Application.ProcessMessages;
   Screen.Cursor:= crHourGlass;
 
@@ -1124,20 +1127,7 @@ begin
   if FormMain.IsThumbnailView then
      FormMain.ResetThumbnails;
   Screen.Cursor:= crDefault;
-  PanelUpdatingFavTagInGames.Visible:= False;
-end;
-
-procedure TFormFavoritesManager.ShowUpdateFavGamesListPanel;
-var
-  iLeft, iTop: Integer;
-begin
-  iLeft:= (FormFavoritesManager.Width-PanelUpdatingFavTagInGames.Width) div 2;
-  iTop:= (FormFavoritesManager.Height-PanelUpdatingFavTagInGames.Height) div 2;
-  if PanelUpdatingFavTagInGames.Left <> iLeft then
-     PanelUpdatingFavTagInGames.Left:= iLeft;
-  if PanelUpdatingFavTagInGames.Top <> iTop then
-     PanelUpdatingFavTagInGames.Top:= iTop;
-  PanelUpdatingFavTagInGames.Visible:= True;
+  FormMain.HideFilterMsgBox;
 end;
 
 procedure TFormFavoritesManager.FavoritesListKeyAction(
@@ -1194,21 +1184,36 @@ begin
 end;
 
 procedure TFormFavoritesManager.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   LoadCustomMAMEIconToForm(TForm(Sender), 3);
   FormMain.AddDefaultIcons('systemtype_arcade.ico', FormMain.GetFolderFull(32), IL_SystemType);
   FormMain.AddDefaultIcons('systemtype_computer.ico', FormMain.GetFolderFull(32), IL_SystemType);
 
   FormMain.ELV_ResetNormalColors(FavoritesList);
-  
+
   if IsNightMode then
      begin
        SetFormColors(FormFavoritesManager, nil, nil, nil, nil, nil, -1, False);
+       FormMain.SetToolBarPanelColors(FormMain.PanelSearchGames_ToolBar, NewFavoritePanel);
+
+       SetLabelColors(FormFavoritesManager.LabelHotkeyText, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(FormFavoritesManager.LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1]);
+
+       for Loop:= 0 to FormFavoritesManager.ComponentCount-1 do
+       begin
+         if FormFavoritesManager.Components[Loop] is TSpeedButtonEx then
+            TSpeedButtonEx(FormFavoritesManager.Components[Loop]).Font.Color:= clWhite;
+       end;
 
        FormMain.SetEasyListViewColors(FavoritesList, menu_background_color[1], clWhite);
        FormMain.SetEasyListViewHeaderColors(FavoritesList, True);
+       FormMain.ELV_SetEditBkColor(FavoritesList);
        FormMain.ELV_SetRibbonNightColors(0, FavoritesList, True);
+       FormMain.SetWin10DarkScrollBar(FavoritesList);
      end;
+
   ReadSettings;
 
   //if (Screen.Width < 960) and (FormFavoritesManager.WindowState <> wsMaximized) then
@@ -1438,7 +1443,7 @@ end;
 
 procedure TFormFavoritesManager.FormCreate(Sender: TObject);
 begin
-  if Screen.Fonts.IndexOf('Terminal') = -1 then
+  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then //if Screen.Fonts.IndexOf('Terminal') = -1 then
      begin
        FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, 7);
        FormMain.ChangeLabelFontConsolas(LabelHotkeyText, 7);
@@ -1488,6 +1493,13 @@ begin
        FormFavoritesManager.Left:= (Screen.Width shr 1)-(FormFavoritesManager.Width shr 1)-1;
        FormFavoritesManager.Top:= (Screen.Height shr 1)-(FormFavoritesManager.Height shr 1)-1;
      end;
+end;
+
+procedure TFormFavoritesManager.FavoritesListItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  FormMain.ELV_SetEditingFontColor(TEasyListView(Sender), Item, ACanvas);
 end;
 
 end.

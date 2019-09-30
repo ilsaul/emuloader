@@ -113,7 +113,7 @@ type
     { Private declarations }
     procedure ReadZiNc_cfg(iniFile: String);
     procedure WriteZiNc_cfg(const customIniFile: String);
-    procedure RemovePathFromFileName(EditHolder: TEdit);
+    procedure RemovePathFromFileName(EditHolder: TEditEx);
   public
     emuIni,
     GameIni,
@@ -508,40 +508,44 @@ begin
   if IsNightMode then
   begin
     for Loop:= 0 to FormZiNcSettings.ComponentCount-1 do
-       begin
-         if FormZiNcSettings.Components[Loop] is TBitBtnEx then
-            FormMain.SetButtonExColors(TBitBtnEx(FormZiNcSettings.Components[Loop]))
-         else
-         if FormZiNcSettings.Components[Loop] is TEditEx then
-            SetEditNightColors(TEditEx(FormZiNcSettings.Components[Loop]))
-         else
-         if FormZiNcSettings.Components[Loop] is TAdvGroupBoxEx then
-            begin
-              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
-              SetGroupBoxColors(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]),
-                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-            end
-         else
-         if FormZiNcSettings.Components[Loop] is TComboBox2Ex then
-            SetComboBox2ExColors(TComboBox2Ex(FormZiNcSettings.Components[Loop]), True)
-         else
-         if FormZiNcSettings.Components[Loop] is TGaugeBar then
-            SetGaugeBarColors(TGaugeBar(FormZiNcSettings.Components[Loop]))
-         else
-         if FormZiNcSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
-            begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-              TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontColor:= clGray;
-              TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-            end;
-         if FormZiNcSettings.Components[Loop] is TShadowLabel then
-            SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       end;
+    begin
+      if FormZiNcSettings.Components[Loop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormZiNcSettings.Components[Loop]))
+      else
+      if FormZiNcSettings.Components[Loop] is TEditEx then
+         SetEditNightColors(TEditEx(FormZiNcSettings.Components[Loop]))
+      else
+      if FormZiNcSettings.Components[Loop] is TAdvGroupBoxEx then
+         begin
+           SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
+           SetGroupBoxColors(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]),
+                             clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                             item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+           FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
+         end
+      else
+      if FormZiNcSettings.Components[Loop] is TComboBox2Ex then
+         SetComboBox2ExColors(TComboBox2Ex(FormZiNcSettings.Components[Loop]), True)
+      else
+      if FormZiNcSettings.Components[Loop] is TGaugeBar then
+         SetGaugeBarColors(TGaugeBar(FormZiNcSettings.Components[Loop]))
+      else
+      if FormZiNcSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+         begin
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+           TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontColor:= clGray;
+           TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]));
+         end;
+      if FormZiNcSettings.Components[Loop] is TShadowLabel then
+         SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+    end;
     SetFormColors(FormZiNcSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idZiNc, True);
-    FormMain.SetEasyListViewColors(FolderROMs, FormZiNcSettings.Color, clWhite, -1, clGray);    
+    FormMain.SetEasyListViewColors(FolderROMs, FormZiNcSettings.Color, clWhite, -1, clGray);
+    FormMain.ELV_SetEditBkColor(FolderROMs);
     FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+    FormMain.SetWin10DarkScrollBar(FolderROMs);
   end;
 
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idZiNc, emuVersionStr);
@@ -639,7 +643,7 @@ begin
 //  end;
 end;
 
-procedure TFormZiNcSettings.RemovePathFromFileName(EditHolder: TEdit);
+procedure TFormZiNcSettings.RemovePathFromFileName(EditHolder: TEditEx);
 var
   iEmuPath, iFilePath: String;
 begin
@@ -750,14 +754,15 @@ end;
 
 procedure TFormZiNcSettings.ButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormZiNcSettings.FramerateManualKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 

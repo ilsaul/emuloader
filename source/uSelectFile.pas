@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ComCtrls, ExtCtrls, IniFiles,
   MPCommonObjects, MPCommonUtilities, EasyListview,
-  ShadowLabel, Buttons, PanelEx;
+  ShadowLabel, Buttons, PanelEx, EditEx, ButtonsEx;
 
 type
   TFileInfo = class(TEasyItemStored)
@@ -35,15 +35,15 @@ type
   TFormSelectFile = class(TForm)
     FilesFolder: TShadowLabel;
     FilesListView: TEasyListview;
-    PanelEx1: TPanelEx;
+    BottomBar: TPanelEx;
     LabelShortcuts: TShadowLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
-    PanelGameTitle: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    TopBar: TPanelEx;
     SystemIcon: TImage;
     LabelGameTitle: TShadowLabel;
-    LabelGameNameCloneOf: TShadowLabel;
-    NewFilename: TEdit;
+    LabelEmulatorVersion: TShadowLabel;
+    NewFilename: TEditEx;
     LabelNewFilename: TShadowLabel;
     procedure FormShow(Sender: TObject);
     procedure NewFilenameKeyPress(Sender: TObject; var Key: Char);
@@ -124,7 +124,7 @@ begin
          TFileInfo(Item).eFileFolder:= ExtractFilePath(tmpList[Loop]);
          TFileInfo(Item).eSize:= GetFileSize(tmpList[Loop]);
          TFileInfo(Item).eSizeText:= FormMain.GetSizeType(TFileInfo(Item).eSize, False);
-         TFileInfo(Item).eDateTime:= FileAge(tmpList[Loop]);
+         TFileInfo(Item).eDateTime:= FileAgeW(tmpList[Loop]);
          TFileInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TFileInfo(Item).eDateTime);
        end;
        FilesListView.Items.ReIndexDisable:= False;
@@ -157,6 +157,29 @@ end;
 procedure TFormSelectFile.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(FilesListView);
+
+  SetFormColors(FormSelectFile, TopBar, BottomBar, LabelGameTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
+  SetColorEmulatorTopBar(TopBar, idMAME, True);
+
+  if IsNightMode then
+     begin
+       SetLabelColors(FilesFolder, clSilver);
+       SetLabelColors(LabelNewFilename, item_caption_active_color[1]);
+       SetLabelColors(LabelShortcuts, clrLightRed);
+       SetEditNightColors(NewFileName);
+
+       FormMain.SetEasyListViewColors(FilesListView, FormSelectFile.Color, clWhite, -1, clGray);
+       FormMain.SetEasyListViewHeaderColors(FilesListView, True);
+       FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
+       FormMain.SetWin10DarkScrollBar(FilesListview);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+     end;
+
+
+  //SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
+
   LoadFilesList;
   Exit;
 

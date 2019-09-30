@@ -29,6 +29,7 @@ object FormRenameImageFile: TFormRenameImageFile
     Color3 = 1117964
     Color4 = clMaroon
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -39,7 +40,7 @@ object FormRenameImageFile: TFormRenameImageFile
       Height = 48
       Transparent = True
     end
-    object NewFilename: TEdit
+    object NewFilename: TEditEx
       Left = 60
       Top = 13
       Width = 158
@@ -55,7 +56,7 @@ object FormRenameImageFile: TFormRenameImageFile
       TabOrder = 0
       OnKeyPress = NewFilenameKeyPress
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 220
       Top = 14
       Width = 32
@@ -64,7 +65,7 @@ object FormRenameImageFile: TFormRenameImageFile
       TabOrder = 1
       OnClick = ButtonOkClick
     end
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 252
       Top = 14
       Width = 41

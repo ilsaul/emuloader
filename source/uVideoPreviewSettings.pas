@@ -220,7 +220,7 @@ begin
   FormMain.AddMsgText('%1', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag are optional. Some players might run and auto-close without the need of a video/audio file to play.'+#13#10+
                       'Note that if ');
-  FormMain.AddMsgText('Dummy Media Player Parameters', MsgTxtColors.colorWarning, [fsItalic]);
+  FormMain.AddMsgText('Dummy Media Player Parameters', MsgTxtColors.colorWarning);
   FormMain.AddMsgText(' is empty, the media player parameters will be used automatically.'+#13#10+#13#10+
                       '    As a bonus, current playing video will be stopped when you want to start a game or exit the frontend.'+#13#10+
                       'Make sure the file ');
@@ -253,7 +253,7 @@ begin
   FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' (small RAM footprint and portable). Make sure to enable ');
-  FormMain.AddMsgText('Store settings to .ini file', MsgTxtColors.colorWarning, [fsItalic]);
+  FormMain.AddMsgText('Store settings to .ini file', MsgTxtColors.colorWarning);
   FormMain.AddMsgText(' option in MPC Home Cinema for maximum customization. '+
                       #13#10+#13#10+'    Select the ');
   FormMain.AddMsgText('executable', clBlack, [fsBold]);
@@ -282,7 +282,7 @@ begin
                       #13#10+'    The ');
   FormMain.AddMsgText('AutoPlay', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' setting play videos automatically when selecting games. Disabled by default for safety reasons (click the help ');
-  FormMain.AddMsgText('?', MsgTxtColors.colorFileName, [fsItalic]);
+  FormMain.AddMsgText('?', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' button for more details).'+#13#10+#13#10+
                       '    The setting ');
   FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', clBlack, [fsBold]);
@@ -313,7 +313,48 @@ begin
 end;
 
 procedure TFormVideoPreviewSettings.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
+  if IsNightMode then
+     begin
+       FormVideoPreviewSettings.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       FormMain.SetEasyListViewColors(SystemsVideoPreview, clrBlackBk, clWhite);
+
+       PanelSettings.Color1:= menu_background_color[1];
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetSystemTypeLabelColors(LabelSystemType);
+       SetLabelColors(LabelSystemNotAvailable, clSilver, clNavy);
+
+       SetSystemTitleBarNightColors(PanelSystemsTitle, PanelSystemsTitleBottom);
+
+       for Loop:= 0 to FormVideoPreviewSettings.ComponentCount-1 do
+       begin
+         if FormVideoPreviewSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+         begin
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormVideoPreviewSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormVideoPreviewSettings.Components[Loop]));
+         end
+         else
+         if FormVideoPreviewSettings.Components[Loop] is TEditEx then
+            SetEditNightColors(TEditEx(FormVideoPreviewSettings.Components[Loop]))
+         else
+         if FormVideoPreviewSettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormVideoPreviewSettings.Components[Loop]));
+       end;
+
+       SetLabelColors(LabelVideoPreviewAutoPlay, clrLightRed, clrBlackBk);
+
+       SetLabelColors(LabelVideoPreviewFolder,                item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelSnapDirAutoSearch,                 item_shortcut_color[1], item_shortcut_selected_color[1]);
+       SetLabelColors(LabelVideoPreviewMediaPlayerExecutable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVideoPreviewMediaPlayerParameters, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVideoPreviewDummyVideoParameters,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+     end;
+     
   FormMain.ELV_FindSelectedSystemMulti(SystemsVideoPreview, FormMain.SelectedEasyItem); //FormMain.ELV_SelectItem(SystemsVideoPreview, 0);
   SystemsVideoPreview.SetFocus;
   Tag:= 0;

@@ -338,7 +338,7 @@ end;
 
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);
 begin
-  mResult:= TBitBtn(Sender).ModalResult;
+  mResult:= TBitBtnEx(Sender).ModalResult;
 end;
 
 procedure TFormArcadeFiltersExtra.ButtonDefaultOptionsClick(Sender: TObject);

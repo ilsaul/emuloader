@@ -142,6 +142,7 @@ object FormSelectDirectory: TFormSelectDirectory
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonOk: TBitBtnEx
       Left = 239

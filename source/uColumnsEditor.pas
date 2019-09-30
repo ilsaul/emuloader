@@ -242,12 +242,48 @@ begin
 end;
 
 procedure TFormColumnsEditor.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(ColumnsListView);
-  if IsNightMode then
-     FormMain.ELV_SetNightModeColors(ColumnsListView);
   if FormMain.PanelMachinesList.Visible then
-     FormColumnsEditor.Caption:= 'Customize Software List Columns (Details / Grouped)';
+     FormColumnsEditor.Caption:= 'Customize Software List Columns';
+
+  if IsNightMode then
+     begin
+       FormColumnsEditor.Caption:= FormColumnsEditor.Caption+' (Night Mode)';
+       FormMain.ELV_SetNightModeColors(ColumnsListView);
+       FormMain.ELV_SetCheckRadioCustomIcon(ColumnsListView);
+
+       FormColumnsEditor.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       PanelColumnsList.Color1:= clrLightBlack;
+       FormMain.SetEasyListViewColors(ColumnsListView, clrLightBlack, clCream);
+       FormMain.ELV_SetEditBkColor(ColumnsListView);
+
+       SetPanelColors(PanelTitleTip, clrMedDarkGray, menu_background_color[1], False);
+       SetLabelColors(LabelTitleTip, item_shortcut_color[1], item_shortcut_selected_color[1]);
+
+       SetLabelColors(LabelButtonUpDown,                       clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonEditWidth,                    clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonSize,                         clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonResetSize,                    clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonDefaultSize,                  clrLightRed, clMaroon);
+       SetLabelColors(LabelToggleVisibility,                   clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonReloadProfileDefaultSettings, clrLightRed, clMaroon);
+       SetLabelColors(LabelButtonSetDefaultAll,                clrLightRed, clMaroon);
+
+       SetLabelColors(LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       for Loop:= 0 to FormColumnsEditor.ComponentCount-1 do
+       begin
+         if FormColumnsEditor.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormColumnsEditor.Components[Loop]));
+       end;
+
+     end;
+
   ResetColumns;
 end;
 
@@ -542,14 +578,14 @@ end;
 
 procedure TFormColumnsEditor.ButtonUpClick(Sender: TObject);
 begin
-  MoveColumn(Boolean(TBitBtn(Sender).Tag));
+  MoveColumn(Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormColumnsEditor.ButtonEditWidthClick(Sender: TObject);
 begin
   FormMain.SetFormKeyPreview(FormColumnsEditor);
-  ColumnsListView.Tag:= TBitBtn(Sender).Tag+1; // Tag = 2 (size column)
-  FormMain.ELV_EnableEdit(ColumnsListView, TToolButton(Sender).Tag);
+  ColumnsListView.Tag:= TBitBtnEx(Sender).Tag+1; // Tag = 2 (size column)
+  FormMain.ELV_EnableEdit(ColumnsListView, TBitBtnEx(Sender).Tag); // TToolButton(Sender).Tag); // why is TToolButton used here ? is it a left-over code ? (September 13, 2019)
 end;
 
 procedure TFormColumnsEditor.ButtonReloadProfileClick(Sender: TObject);
@@ -574,7 +610,7 @@ begin
   if not FormMain.CheckSelected(ColumnsListView) then
      Exit;
   tSize:= StrToInt(ColumnsListView.Selection.First.Captions[1]);
-  case TBitBtn(Sender).Tag of
+  case TBitBtnEx(Sender).Tag of
     0: Dec(tSize); // VK_LEFT
     1: Inc(tSize); // VK_RIGHT
   end;

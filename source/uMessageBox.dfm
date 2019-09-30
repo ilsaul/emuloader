@@ -203,6 +203,7 @@ object FormMessageBox: TFormMessageBox
       Caption = 'Night Mode'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
 end

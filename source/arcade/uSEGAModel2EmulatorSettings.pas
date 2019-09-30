@@ -83,6 +83,8 @@ type
     procedure FolderROMsItemEditEnd(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure FolderROMsButtonUpClick(Sender: TObject);
+    procedure FolderROMsItemCheckChange(Sender: TCustomEasyListview;
+      Item: TEasyItem);
   private
     { Private declarations }
     customResolution: String;
@@ -165,6 +167,7 @@ begin
          with FolderROMs.Items.Add do
          begin
            ImageIndex:= 4;
+           Checked:= ActiveROMFolder;
            Caption:= Value;
            Captions[1]:= FolderROM_Status[Ord(ActiveROMFolder)];
          end;
@@ -574,6 +577,7 @@ begin
               SetGroupBoxColors(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]),
                                 clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
                                 item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+              FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
             end
          else
          if FormSEGAModel2EmulatorSettings.Components[Loop] is TComboBox2Ex then
@@ -581,17 +585,21 @@ begin
          else
          if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
             begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
               TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontColor:= clGray;
               TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
             end;
          if FormSEGAModel2EmulatorSettings.Components[Loop] is TShadowLabel then
-            SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
        end;
     SetFormColors(FormSEGAModel2EmulatorSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idSEGAModel2, True);
     FormMain.SetEasyListViewColors(FolderROMs, FormSEGAModel2EmulatorSettings.Color, clWhite, -1, clGray);
+    FormMain.ELV_SetCheckRadioCustomIcon(FolderROMs);
+    FormMain.ELV_SetEditBkColor(FolderROMs);
     FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+    FormMain.SetWin10DarkScrollBar(FolderROMs);
   end;
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSegaModel2, emuVersionStr);
 
@@ -603,6 +611,7 @@ begin
   //else
   //   LabelEmulatorVersion.Caption:= '';
 
+  //FolderROMs.Header.Columns[0].Width:= FolderROMs.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   if Tag = 0 then
      begin
        //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
@@ -655,20 +664,14 @@ end;
 
 procedure TFormSEGAModel2EmulatorSettings.FolderROMsButtonSetActiveInactiveClick(
   Sender: TObject);
+var
+  Item: TEasyItem;
 begin
   if FolderROMs.Selection.Count <> 1 then
      Exit;
+  Item:= FolderROMs.Selection.First;
+  Item.Checked:= not Item.Checked;
   FolderROMs.SetFocus;
-  if FolderROMs.Selection.First.Captions[1] = 'Active' then
-     begin
-       FolderROMs.Selection.First.Captions[1]:= 'Inactive';
-       FolderROMsButtonSetActiveInactive.Caption:= 'Enable';
-     end
-  else
-     begin
-       FolderROMs.Selection.First.Captions[1]:= 'Active';
-       FolderROMsButtonSetActiveInactive.Caption:= 'Disable';
-     end;
 end;
 
 procedure TFormSEGAModel2EmulatorSettings.FormCloseQuery(Sender: TObject;
@@ -754,6 +757,23 @@ end;
 procedure TFormSEGAModel2EmulatorSettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
   FormMain.ELV_MoveItem(FolderROMs, Boolean(TButton(Sender).Tag));
+end;
+
+procedure TFormSEGAModel2EmulatorSettings.FolderROMsItemCheckChange(
+  Sender: TCustomEasyListview; Item: TEasyItem);
+begin
+  if Item.Checked then
+     begin
+       Item.Captions[1]:= 'Active';
+       if Item.Selected then
+          FolderROMsButtonSetActiveInactive.Caption:= 'Disable';
+     end
+  else
+     begin
+       Item.Captions[1]:= 'Inactive';
+       if Item.Selected then
+          FolderROMsButtonSetActiveInactive.Caption:= 'Enable';
+     end;
 end;
 
 end.

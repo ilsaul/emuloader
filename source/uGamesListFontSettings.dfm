@@ -88,6 +88,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnDblClick = GamesFontDblClick
     OnItemPaintText = GamesFontItemPaintText
     OnItemSelectionChanged = GamesFontItemSelectionChanged
@@ -142,6 +143,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       NoneColorColor = clWhite
       Selected = clWhite
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+      Color = clWhite
       ItemHeight = 16
       TabOrder = 0
       OnSelect = GamesBackgroundColorSelect
@@ -173,6 +175,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Caption = 'Show Image as Background [.png]'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object GamesBackgroundImage: TEditEx
       Left = 284
@@ -180,6 +183,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Width = 318
       Height = 21
       AutoSize = False
+      Color = clWhite
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 3
@@ -198,6 +202,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object GamesBackgroundImageButtonUpdate: TBitBtnEx
       Left = 653

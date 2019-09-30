@@ -6,40 +6,46 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, Buttons, GR32_Image, IniFiles,
   EditEx, ImgList, MPCommonObjects, EasyListview, ButtonsEx,
-  AdvOfficeButtons, ShadowLabel, AdvGroupBox;
+  AdvOfficeButtons, ShadowLabel, AdvGroupBox, PanelEx;
 
 type
   TFormCustomCommandLine = class(TForm)
-    TopBar: TImage32;
-    ParametersBox: TAdvGroupBoxEx;
-    ButtonMoveParameterDown: TBitBtnEx;
-    ButtonParameterDelete: TBitBtnEx;
-    ButtonMoveParameterUp: TBitBtnEx;
-    ButtonUpdate: TBitBtnEx;
-    LabelPrefixToAdd: TShadowLabel;
-    PrefixToAdd: TEditEx;
-    LabelFieldToAdd: TShadowLabel;
-    FieldToAdd: TComboBoxEx;
-    LabelSuffixToAdd: TShadowLabel;
-    SuffixToAdd: TEditEx;
-    ButtonAddParameter: TBitBtnEx;
-    ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx;
-    PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx;
-    AdditionalParametersBox: TAdvGroupBoxEx;
-    AdditionalParameters: TEditEx;
-    LabelGameDescription: TShadowLabel;
-    BottomBar: TImage32;
+    LabelIniFile: TShadowLabel;
+    TopBar: TPanelEx;
+    SystemIcon: TImage;
+    LabelGameTitle: TShadowLabel;
+    GameIcon: TImage;
+    LabelEmulatorVersion: TShadowLabel;
+    LabelScanMode: TShadowLabel;
+    PanelBottom: TPanelEx;
     ButtonReload: TBitBtnEx;
     ButtonClearCustomCommandLine: TBitBtnEx;
-    ButtonPreview: TBitBtnEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    LabelCustomEmulatorFile: TAdvGroupBoxEx;
-    EmulatorBatchFile: TEditEx;
-    ButtonEmulatorBatchFileBrowse: TBitBtnEx;
+    ParametersBox: TAdvGroupBoxEx;
     ParametersListView: TEasyListview;
-    LabelIniFile: TShadowLabel;
-    procedure ButtonEmulatorBatchFileBrowseClick(Sender: TObject);
+    ButtonMoveParameterUp: TBitBtnEx;
+    ButtonMoveParameterDown: TBitBtnEx;
+    ButtonParameterDelete: TBitBtnEx;
+    ButtonAddParameter: TBitBtnEx;
+    ButtonUpdate: TBitBtnEx;
+    SuffixToAdd: TEditEx;
+    LabelSuffixToAdd: TShadowLabel;
+    FieldToAdd: TComboBoxEx;
+    LabelFieldToAdd: TShadowLabel;
+    PrefixToAdd: TEditEx;
+    LabelPrefixToAdd: TShadowLabel;
+    PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx;
+    ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx;
+    CustomEmulatorFileBoxLabel: TShadowLabel;
+    EmulatorBatchFile: TEditEx;
+    EmulatorBatchFileButtonSelect: TBitBtnEx;
+    AdditionalParameters: TEditEx;
+    AdditionalParametersBoxLabel: TShadowLabel;
+    CommandLinePreviewLabel: TShadowLabel;
+    CommandLinePreview: TMemo;
+    AdditionalParametersButtonClear: TBitBtnEx;
+    procedure EmulatorBatchFileButtonSelectClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonClearCustomCommandLineClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -48,22 +54,23 @@ type
     procedure ButtonParameterDeleteClick(Sender: TObject);
     procedure ButtonReloadClick(Sender: TObject);
     procedure ButtonUpdateClick(Sender: TObject);
-    procedure ButtonPreviewClick(Sender: TObject);
     procedure ParametersListViewKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure ParametersListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
-    procedure EmulatorBatchFileEnter(Sender: TObject);
-    procedure EmulatorBatchFileExit(Sender: TObject);
     procedure ParametersListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure AdditionalParametersButtonClearClick(Sender: TObject);
   private
     { Private declarations }
     FileNameFullPath: String;
+    IsZiNcSystem: Boolean;
+    ZiNcFilePath: String;
     procedure WriteCustomCommandLine;
 
     procedure SetComboBoxEx(Holder: TComboBoxEx; ItemNumber: Integer; ResetSelection: Boolean = False);
     procedure SetComboBoxExImgIndex(Holder: TComboBoxEx; ImgIndex: Integer; ResetSelection: Boolean = False);
+    procedure UpdateCommandLinePreview;
   public
     { Public declarations }
   end;
@@ -169,7 +176,7 @@ begin
   pStr:= GenerateParams(0);
   CommandLineFile.Add('Prefix='+pStr);
   pStr:= GenerateParams(1);
-  CommandLineFile.Add('PrefixSendLeadingSpace='+IntToStr(Ord(PrefixSendLeadingSpace.Checked)));
+  CommandLineFile.Add('PrefixAddLeadingSpace='+IntToStr(Ord(PrefixSendLeadingSpace.Checked)));
   CommandLineFile.Add('Parameters='+pStr);
   pStr:= GenerateParams(2);
   CommandLineFile.Add('Suffix='+pStr);
@@ -186,7 +193,7 @@ begin
   FreeAndNil(CommandLineFile);
 end;
 
-procedure TFormCustomCommandLine.ButtonEmulatorBatchFileBrowseClick(
+procedure TFormCustomCommandLine.EmulatorBatchFileButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(2, 'Select a file', EmulatorBatchFile, False);
@@ -194,6 +201,8 @@ begin
 end;
 
 procedure TFormCustomCommandLine.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   //FormMain.LoadBarImage(TopBar, 'msgbox_top.png');
   //FormMain.LoadSystemTopIcon(FormCustomCommandLine, FormMain.MemGameInfo.eSystemID);
@@ -201,9 +210,34 @@ begin
   FormMain.ELV_ResetNormalColors(ParametersListView);
   //FormMain.GetGameROMIcon(TopBar);
 
-  case TopBar.Tag of
-    0, 1: LabelGameDescription.Caption:= FormMain.MemGameInfo.eTitle;
-       2: LabelGameDescription.Caption:= FormMain.GetArcadeEmulatorDescription(FormMain.MemGameInfo.eSystemID);
+  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True:
+      begin
+        LabelScanMode.Visible:= False;
+        //LabelEmulatorVersion.Width:= 875;
+        FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
+      end;
+    False:
+      begin
+        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+      end;
+  end;
+
+  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
+  LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+
+  IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
+  ZiNcFilePath:= '';
+  LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
+
+  SetFormColors(FormCustomCommandLine, TopBar, PanelBottom, LabelGameTitle, LabelEmulatorVersion, LabelScanMode, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
+
+  {case TopBar.Tag of
+    0, 1: LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
+       2: LabelGameTitle.Caption:= FormMain.GetArcadeEmulatorDescription(FormMain.MemGameInfo.eSystemID);
   end;
   case TopBar.Tag of
     0:
@@ -221,11 +255,62 @@ begin
         FileNameFullPath:= FormMain.GetArcadeSystemIniSection(FormMain.MemGameInfo.eSystemID, True);
         Caption:= Caption+' [System]';
       end;
-  end;
+  end;}
 
   FileNameFullPath:= FormMain.GetCustomCommandLineFileFullPath(FileNameFullPath, FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eSystemType, FormMain.MemGameInfo.eSoftwareName);
   LabelIniFile.Caption:= '> File: "'+FileNameFullPath+'"';
-  LabelGameDescription.Caption:= LabelGameDescription.Caption;
+
+  if IsNightMode then
+     begin
+       for Loop:= 0 to FormCustomCommandLine.ComponentCount-1 do
+       begin
+         if FormCustomCommandLine.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormCustomCommandLine.Components[Loop]))
+         else
+         if FormCustomCommandLine.Components[Loop] is TEditEx then
+            SetEditNightColors(TEditEx(FormCustomCommandLine.Components[Loop]))
+         else
+         if FormCustomCommandLine.Components[Loop] is TAdvOfficeCheckBoxEx then
+          begin
+            SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormCustomCommandLine.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            TAdvOfficeCheckBoxEx(FormCustomCommandLine.Components[Loop]).DisabledFontColor:= clGray;
+            TAdvOfficeCheckBoxEx(FormCustomCommandLine.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormCustomCommandLine.Components[Loop]));
+          end;
+       end;
+
+       SetGroupBoxBorderStyle(ParametersBox);
+       SetGroupBoxColors(ParametersBox,
+                         clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+       FormMain.SetGroupBoxExCustomIcon(ParametersBox);
+
+       //SetComboBox2ExColors(FieldToAdd, True);
+
+       SetLabelColors(LabelIniFile, clrLightRed);
+
+       SetLabelColors(CustomEmulatorFileBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPrefixToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFieldToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelSuffixToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(AdditionalParametersBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(CommandLinePreviewLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(ParametersListView, menu_background_color[1], clWhite, -1, clGray);
+       FormMain.SetEasyListViewHeaderColors(ParametersListView, True);
+       FormMain.ELV_SetCheckRadioCustomIcon(ParametersListView);
+       FormMain.ELV_SetEditBkColor(ParametersListView);
+       FormMain.ELV_SetRibbonNightColors(0, ParametersListView, True);
+
+
+       CommandLinePreview.Color:= clrDarkGray;
+       CommandLinePreview.BorderStyle:= bsNone;
+       CommandLinePreview.Font.Color:= clCream;
+
+       FormMain.SetWin10DarkScrollBar(ParametersListView);
+       FormMain.SetWin10DarkScrollBar(CommandLinePreview);
+     end;
+
   ButtonReload.Click;
 end;
 
@@ -269,18 +354,21 @@ begin
     end;
   end;
   ParametersListView.EndUpdate;
+  UpdateCommandLinePreview;
 end;
 
 procedure TFormCustomCommandLine.ButtonMoveParameterUpClick(
   Sender: TObject);
 begin
   FormMain.ELV_MoveItem(ParametersListView, Boolean(TButton(Sender).Tag));
+  UpdateCommandLinePreview;
 end;
 
 procedure TFormCustomCommandLine.ButtonParameterDeleteClick(
   Sender: TObject);
 begin
   ParametersListView.Selection.DeleteSelected;
+  UpdateCommandLinePreview;
   ParametersListView.SetFocus;
 end;
 
@@ -291,6 +379,7 @@ begin
        // add a name field
        SetComboBoxEx(FieldToAdd, 1 , True); // Name field
        ButtonAddParameter.Click;
+       UpdateCommandLinePreview;
      end;
 end;
 
@@ -308,6 +397,7 @@ begin
           True : ParametersListView.Selection.First.Captions[3]:= 'Yes';
           False: ParametersListView.Selection.First.Captions[3]:= 'No';
         end;
+        UpdateCommandLinePreview;
       end;
     False:
       begin
@@ -317,7 +407,7 @@ begin
   end;
 end;
 
-procedure TFormCustomCommandLine.ButtonPreviewClick(Sender: TObject);
+procedure TFormCustomCommandLine.UpdateCommandLinePreview;
 var
   cmdLine, sPrefix, sParameters, sSuffix, sQuotes: String;
   Item: TEasyItem;
@@ -328,6 +418,7 @@ begin
        Exit;
      end;
   cmdLine:= '';
+  CommandLinePreview.Lines.Clear;
   if FormMain.CheckTotal(ParametersListView) then
      begin
        Item:= ParametersListView.Groups.FirstItem;
@@ -362,8 +453,11 @@ begin
   if AdditionalParameters.Text <> '' then
      cmdLine:= cmdLine+' '+AdditionalParameters.Text;
   if cmdLine <> '' then
-     GenerateMessage('Custom Command Line', 'This is a preview of the command line that will be used to run the game.',
-                     cmdLine, 2);
+     begin
+       CommandLinePreview.Lines.Add(cmdLine);
+       //GenerateMessage('Custom Command Line', 'This is a preview of the command line that will be used to run the game.',
+       //                cmdLine, 2);
+     end;
 end;
 
 procedure TFormCustomCommandLine.ParametersListViewKeyAction(
@@ -391,16 +485,6 @@ begin
   ParameterSurroundWithQuotes.Checked:= Item.Captions[3] = 'Yes';
 end;
 
-procedure TFormCustomCommandLine.EmulatorBatchFileEnter(Sender: TObject);
-begin
-  TEdit(Sender).Color:= clWindow;
-end;
-
-procedure TFormCustomCommandLine.EmulatorBatchFileExit(Sender: TObject);
-begin
-  TEdit(Sender).Color:= $00fafafa;
-end;
-
 procedure TFormCustomCommandLine.ParametersListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
@@ -408,5 +492,10 @@ begin
   FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
+
+procedure TFormCustomCommandLine.AdditionalParametersButtonClearClick(Sender: TObject);
+begin
+  AdditionalParameters.Text:= '';
+end;
 
 end.

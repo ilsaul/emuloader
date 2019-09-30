@@ -89,6 +89,7 @@ end;
 procedure TFormArcadeFileVersions.FormShow(Sender: TObject);
 begin
   FormMain.ELV_ResetNormalColors(Systems);
+
   if Screen.Height > 700 then
      FormMain.LoadSystemsIcons(IL_Systems, False)
   else

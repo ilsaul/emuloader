@@ -31,7 +31,7 @@ var
 
 implementation
 
-uses uMain;
+uses uMain, uCommon;
 
 {$R *.dfm}
 
@@ -89,6 +89,11 @@ end;
 
 procedure TFormControllerKeysLayout.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormControllerKeysLayout.Color:= menu_background_color[1];
+       LabelWarning.Font.Color:= clCream;
+     end;
   LoadCtrlImg;
   SetFocus;
 end;

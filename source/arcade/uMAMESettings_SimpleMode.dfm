@@ -204,6 +204,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderROMsKeyAction
@@ -416,6 +417,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Selection.UseFocusRect = False
         TabOrder = 13
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderArtworksKeyAction
@@ -574,6 +576,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Selection.UseFocusRect = False
         TabOrder = 22
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderIniFilesKeyAction
@@ -659,6 +662,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Top = 15
         Width = 155
         Height = 165
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Output Mode'
         ParentCtl3D = True
@@ -707,6 +711,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Window Mode'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object MaximizeWindow: TAdvOfficeCheckBoxEx
           Left = 8
@@ -721,6 +726,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object KeepAspectRatio: TAdvOfficeCheckBoxEx
           Left = 8
@@ -735,6 +741,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object WaitVerticalSync: TAdvOfficeCheckBoxEx
           Left = 8
@@ -747,6 +754,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Wait Vertical Sync'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object HardwareStretch: TAdvOfficeCheckBoxEx
           Left = 8
@@ -763,6 +771,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object ScreenResolution: TComboBox2Ex
           Left = 8
@@ -863,6 +872,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Top = 15
         Width = 125
         Height = 63
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Full Screen'
         ParentCtl3D = True
@@ -878,6 +888,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Triple Buffer'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object SwitchResolution: TAdvOfficeCheckBoxEx
           Left = 8
@@ -890,6 +901,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Switch Resolution'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object PerformanceGroupBox: TAdvGroupBoxEx
@@ -897,7 +909,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Top = 15
         Width = 233
         Height = 63
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Performance'
         ParentCtl3D = True
@@ -930,6 +942,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Auto Frameskip'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Throttle: TAdvOfficeCheckBoxEx
           Left = 127
@@ -943,6 +956,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Throttle'
           ReturnIsTab = False
           State = cbChecked
+          CustomIconsEnabled = False
         end
         object SyncronizeRefreshRate: TAdvOfficeCheckBoxEx
           Left = 8
@@ -957,6 +971,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Sync Refresh Rate'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Frameskip: TGaugeBar
           Left = 128
@@ -984,6 +999,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Enable Mouse'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object Joystick: TAdvOfficeCheckBoxEx
         Left = 314
@@ -996,6 +1012,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Enable Joystick'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object SkipGameInfo: TAdvOfficeCheckBoxEx
         Left = 426
@@ -1008,6 +1025,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Skip Game Info'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object Cheat: TAdvOfficeCheckBoxEx
         Left = 426
@@ -1020,12 +1038,14 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Caption = 'Cheats Enabled'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ScreenRotationGroupBox: TAdvGroupBoxEx
         Left = 178
         Top = 91
         Width = 233
         Height = 63
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Screen Rotation'
         ParentCtl3D = True
@@ -1041,6 +1061,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Flip Left-Right'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object FlipY: TAdvOfficeCheckBoxEx
           Left = 117
@@ -1053,6 +1074,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Flip Upside-Down'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object RotateRight: TAdvOfficeCheckBoxEx
           Left = 117
@@ -1065,6 +1087,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Right'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object RotateLeft: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1077,6 +1100,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           Caption = 'Left'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object ReadConfigFiles: TAdvOfficeCheckBoxEx
@@ -1092,12 +1116,14 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object AudioGroupBox: TAdvGroupBoxEx
         Left = 364
         Top = 192
         Width = 189
         Height = 84
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         ShadowColor = clSilver
         Caption = 'Audio'
@@ -1149,6 +1175,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object SampleRate: TComboBox2Ex
           Left = 100
@@ -1206,6 +1233,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object VectorGroupBox: TAdvGroupBoxEx
@@ -1213,6 +1241,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         Top = 192
         Width = 328
         Height = 84
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Vector'
         ParentCtl3D = True
@@ -1268,6 +1297,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object VectorBeamWidth: TGaugeBar2
           Left = 8
@@ -1501,6 +1531,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
     ReturnIsTab = False
     ShadowColor = clSkyBlue
     Themed = True
+    CustomIconsEnabled = False
   end
   object ButtonPagePanel: TPanelEx
     Left = 360

@@ -10272,7 +10272,6 @@ end;
 
 procedure TTrackBar.Changed;
 begin
-  //if Assigned(FOnChange) then FOnChange(Self);
   // added by Ciro Alfredo Consentino to fix OnChange() event being fired 3 times after changing .Position
   if Assigned(FOnChange) then
      begin

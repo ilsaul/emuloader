@@ -318,7 +318,6 @@ begin
   if IsNightMode then
      begin
        SetPanelBorderColors(PanelNeoGeoMVS, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
-
        FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
        GamesList.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
        PanelNeoGeoMVS.Color1:= clrLightBlack;
@@ -326,11 +325,11 @@ begin
        MultiSlotMachines.Color:= GamesList.Color;
        MultiSlotMachines.Font.Color:= clWhite;
 
-       SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelHelpText, clrLightRed, clMaroon, False);
+       SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelHelpText,          clrLightRed, clMaroon);
 
-       SetLabelColors(LabelMultiSlotMachinesChooseMachineToRun, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelMultiSlotMachinesBoldDefaultMachine, clrLightBlue, clNavy, False);
+       SetLabelColors(LabelMultiSlotMachinesChooseMachineToRun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelMultiSlotMachinesBoldDefaultMachine, clrLightBlue, clNavy);
 
        FormMain.SetPanelExStyle(PanelMultiSlotMachines, True);
        SetPanelNightColors(PanelMultiSlotMachines,
@@ -354,6 +353,8 @@ begin
 
        FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
        FormMain.ELV_SetRibbonNightColors(0, MultiSlotMachines, True);
+       FormMain.SetWin10DarkScrollBar(GamesList);
+       FormMain.SetWin10DarkScrollBar(MultiSlotMachines);
      end;
 
   LastSelectedMachine:= nil;
@@ -413,7 +414,7 @@ end;
 
 procedure TFormArcadeMultiSlotGames.ButtonUpClick(Sender: TObject);
 begin
-  MoveToSlot(Boolean(TBitBtn(Sender).Tag));
+  MoveToSlot(Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormArcadeMultiSlotGames.ButtonRemoveFromListClick(Sender: TObject);

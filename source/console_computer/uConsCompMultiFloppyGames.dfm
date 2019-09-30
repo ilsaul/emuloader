@@ -38,13 +38,13 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
     Style = vgSimple
     object LabelTotalFloppyDisks: TShadowLabel
       Left = 418
-      Top = 11
-      Width = 51
-      Height = 18
+      Top = 14
+      Width = 45
+      Height = 16
       Caption = '00 Disks'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
@@ -340,6 +340,7 @@ object FormConsCompMultiFloppyGames: TFormConsCompMultiFloppyGames
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemCompare = GamesListItemCompare
       OnItemPaintText = GamesListItemPaintText
       OnKeyAction = GamesListKeyAction

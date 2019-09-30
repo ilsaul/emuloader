@@ -362,7 +362,21 @@ begin
   FormMain.ELV_ResetNormalColors(ConsCompSystemsListView);
 
   if IsNightMode then
-     FormMain.ELV_SetNightModeColors(ConsCompSystemsListView);
+     begin
+       FormSelectFilterSystemSimple.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       FormMain.SetEasyListViewColors(ConsCompSystemsListView, menu_background_color[1], item_caption_active_color[1]);
+       SetLabelColors(LabelMultiSelect, clrLightBlue, clNavy);
+
+       FormMain.ELV_SetNightModeColors(ConsCompSystemsListView);
+       FormMain.SetWin10DarkScrollBar(ConsCompSystemsListView);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonReload);
+       FormMain.SetButtonExColors(ResetToMachineTypeSystemsMegaFilter);
+       FormMain.SetButtonExColors(ButtonHelp);
+     end;
 
   //ELV_PopulateCustomSystems(SystemsListView, FormMain.ButtonGameFilterConsoleComputerSystems.Tag);
   //FormMain.ELV_PopulateSystems(SystemsListView, True);
@@ -439,8 +453,8 @@ begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       if LabelMultiSelect.Tag = 1 then
-          ACanvas.Font.Style:= [fsItalic];
+       //if LabelMultiSelect.Tag = 1 then
+       //   ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else
@@ -460,7 +474,7 @@ begin
                       '    Just select the systems you want and click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. ');
-  FormMain.AddMsgText('Machine Type / Systems', clBlack, [fsItalic]);
+  FormMain.AddMsgText('Machine Type / Systems', clBlack);
   FormMain.AddMsgText(' full filter will be bypassed automatically, no additional configuration required.'+#13#10+
                       '    To restore the full filter again, either click on the ');
   FormMain.AddMsgText('Reset To Default', MsgTxtColors.colorFileName, [fsBold]);
@@ -470,7 +484,7 @@ begin
   FormMain.AddMsgText(' filter and click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. The ');
-  FormMain.AddMsgText('Systems Quick Filter', clBlack, [fsItalic]);
+  FormMain.AddMsgText('Systems Quick Filter', clBlack);
   FormMain.AddMsgText(' will be disabled.'+#13#10+#13#10+
                       '    When you restart the frontend, the current filter setting will be restored with ');
   FormMain.AddMsgText('Machine Type / Systems', clBlack, [fsBold]);
@@ -482,11 +496,11 @@ begin
                       '    How do you know which filter is active ? To make this easy, the ');
   FormMain.AddMsgText('Systems Quick Filter', clBlack, [fsBold]);
   FormMain.AddMsgText(' tool bar button have two icons, one with a ');
-  FormMain.AddMsgText('RED', clRed, [fsBold, fsItalic]);
+  FormMain.AddMsgText('RED', clRed, [fsBold]);
   FormMain.AddMsgText(' stripe, showing that the filter is ');
   FormMain.AddMsgText('disabled', clBlack, [fsBold]);
   FormMain.AddMsgText(' and another with a ');
-  FormMain.AddMsgText('GREEN', clGreen, [fsBold, fsItalic]);
+  FormMain.AddMsgText('GREEN', clGreen, [fsBold]);
   FormMain.AddMsgText(' stripe, showing that the filter is ');
   FormMain.AddMsgText('active', clBlack, [fsBold]);
   FormMain.AddMsgText('. The filter is disabled by default.'+#13#10#13#10+

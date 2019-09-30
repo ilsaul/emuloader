@@ -100,18 +100,19 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -13
-          Font.Name = 'Trebuchet MS'
-          Font.Style = [fsBold, fsItalic]
+          Font.Name = 'Verdana'
+          Font.Style = []
           ParentColor = False
           ParentFont = False
           ShowAccelChar = False
           ShadowColor = 14540253
-          ShadowEnabled = True
+          ShadowEnabled = False
           EllipsType = etNone
           ColorFrame = clBlack
           ColorInnerFrame = clBlack
           Frames = []
           Transparent = True
+          Layout = tlCenter
         end
       end
     end
@@ -179,18 +180,19 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -13
-          Font.Name = 'Trebuchet MS'
-          Font.Style = [fsBold, fsItalic]
+          Font.Name = 'Verdana'
+          Font.Style = []
           ParentColor = False
           ParentFont = False
           ShowAccelChar = False
           ShadowColor = 14540253
-          ShadowEnabled = True
+          ShadowEnabled = False
           EllipsType = etNone
           ColorFrame = clBlack
           ColorInnerFrame = clBlack
           Frames = []
           Transparent = True
+          Layout = tlCenter
         end
       end
     end
@@ -274,6 +276,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = DeleteClonesListColumnClick
       OnItemCompare = DeleteClonesListItemCompare
       OnItemPaintText = DeleteClonesListItemPaintText

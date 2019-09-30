@@ -239,6 +239,7 @@ object FormZiNcSettings: TFormZiNcSettings
     CheckBox.Hint = 'Turns sound on/off'
     CheckBox.State = cbChecked
     CheckBox.Visible = True
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Enable Sound'
@@ -285,6 +286,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Sound Filter'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object SoundStereoExciter: TAdvOfficeCheckBoxEx
       Left = 8
@@ -299,6 +301,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Stereo Exciter'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object SoundLiteSurround: TAdvOfficeCheckBoxEx
       Left = 8
@@ -311,6 +314,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Lite-Surround Sound'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object SoundFilterCutoff: TComboBox2Ex
       Left = 24
@@ -357,6 +361,7 @@ object FormZiNcSettings: TFormZiNcSettings
     Top = 263
     Width = 141
     Height = 197
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
@@ -405,6 +410,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Slow Geometry'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MemoryPrediction: TAdvOfficeCheckBoxEx
       Left = 8
@@ -416,6 +422,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Memory Prediction'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object StackInRAMHack: TAdvOfficeCheckBoxEx
       Left = 8
@@ -427,6 +434,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Stack In RAM (Hack)'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Rotate: TComboBox2Ex
       Left = 8
@@ -463,6 +471,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Net Game Server'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object NetGameConnect: TEditEx
       Left = 8
@@ -482,6 +491,7 @@ object FormZiNcSettings: TFormZiNcSettings
     Top = 308
     Width = 483
     Height = 157
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'OpenGL / Direct3D Renderer'
@@ -694,6 +704,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Full Screen'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ColorDepth: TComboBox2Ex
       Left = 8
@@ -777,6 +788,7 @@ object FormZiNcSettings: TFormZiNcSettings
       Caption = 'Dithering (16-bit)'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowFPS: TAdvOfficeCheckBoxEx
       Left = 237
@@ -791,6 +803,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object FrameLimitation: TAdvOfficeCheckBoxEx
       Left = 325
@@ -805,6 +818,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object FrameSkip: TAdvOfficeCheckBoxEx
       Left = 237
@@ -819,6 +833,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object FramerateDetection: TAdvOfficeCheckBoxEx
       Left = 325
@@ -833,6 +848,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object TurnDisplay: TComboBox2Ex
       Left = 187
@@ -886,6 +902,7 @@ object FormZiNcSettings: TFormZiNcSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object TextureType: TComboBox2Ex
       Left = 267
@@ -1140,6 +1157,7 @@ object FormZiNcSettings: TFormZiNcSettings
     Selection.UseFocusRect = False
     TabOrder = 15
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnItemEdited = FolderROMsItemEdited
     OnItemEditEnd = FolderROMsItemEditEnd
     OnKeyAction = FolderROMsKeyAction

@@ -1721,8 +1721,8 @@ begin
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
   if IsNightMode then
      begin
-       SetLabelColors(LabelYear, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelYear,      clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        SetPanelBorderColors(FrameROMsListView, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
@@ -1731,8 +1731,9 @@ begin
        FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite);
        FormMain.SetEasyListViewHeaderColors(ROMsListView, True);
        FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
+       FormMain.SetWin10DarkScrollBar(ROMsListView);
      end;
-
+  
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
 
   LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????

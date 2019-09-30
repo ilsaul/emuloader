@@ -1131,11 +1131,11 @@ begin
     Y := X;
     W := Width - Pen.Width + 1;
     H := Height - Pen.Width + 1;
-    if Pen.Width = 0 then
-    begin
-      Dec(W);
-      Dec(H);
-    end;
+    //if Pen.Width = 0 then
+    //begin
+    //  Dec(W);
+    //  Dec(H);
+    //end;
     if W < H then S := W else S := H;
     if FShape in [stSquare, stRoundSquare, stCircle] then
     begin
@@ -4968,7 +4968,7 @@ procedure TCustomColorBox.CreateWnd;
 begin
   inherited CreateWnd;
   if FNeedToPopulate then
-    PopulateList;
+     PopulateList;
 end;
 
 procedure TCustomColorBox.DrawItem(Index: Integer; Rect: TRect;
@@ -5069,7 +5069,7 @@ begin
     { If the user picked a custom color, force a select event to happen
       so the user can handle it }
     if PickCustomColor and Assigned(OnSelect)then
-      OnSelect(Self);
+       OnSelect(Self);
     Key := #0;
   end;
 end;

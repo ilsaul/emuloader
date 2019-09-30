@@ -14,7 +14,6 @@ type
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
     ButtonReset: TBitBtnEx;
-    SystemsListView: TEasyListview;
     IL_Systems: TImageList;
     IL_MachinesFilters: TImageList;
     LabelSelectMode: TShadowLabel;
@@ -38,6 +37,8 @@ type
     N3: TMenuItem;
     PopupCheckAllHandheldSystems: TMenuItem;
     PopupUncheckAllHandheldSystems: TMenuItem;
+    PanelSystemsListView: TPanelEx;
+    SystemsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormActivate(Sender: TObject);
     procedure SystemsListViewKeyAction(Sender: TCustomEasyListview;
@@ -109,7 +110,7 @@ begin
 
   ScreenWidthTest:= Screen.Width;
   ScreenHeightTest:= Screen.Height;
-  MaxHeight:= (ScreenHeightTest-68)-FormSelectFilterSystemMega.Top;
+  MaxHeight:= (ScreenHeightTest-45)-FormSelectFilterSystemMega.Top;
 
   case ScreenHeightTest of
     900: // 1440x900
@@ -210,7 +211,7 @@ begin
 
   PanelMachinesType.Height:= MachinesTypeList.Height+1;
 
-  SystemsListView.Top:= (PanelMachinesType.Top+PanelMachinesType.Height)+3;
+  //SystemsListView.Top:= (PanelMachinesType.Top+PanelMachinesType.Height)+3;
 
   ItemsLineCount:= SystemsListView.Groups.VisibleItemCount div ColumnsCount;
   if ItemsLineCount = 0 then
@@ -224,21 +225,27 @@ begin
   SystemsListView.Height:= (ItemsLineCount*SystemsListView.CellSizes.Tile.Height)+SystemsListView.PaintInfoItem.Border;
 
   SystemsListView.Width:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+  PanelSystemsListView.Height:= SystemsListView.Height+SystemsListView.Top;
   FormSelectFilterSystemMega.ClientWidth:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+SystemsListView.Left;
-  FormSelectFilterSystemMega.ClientHeight:= SystemsListView.Top+SystemsListView.Height+PanelBottom.Height;
+  FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
 
-  if FormSelectFilterSystemMega.Height > MaxHeight then
+  //FormSelectFilterSystemMega.ClientHeight:= PanelSystemsListView.Top+PanelSystemsListView.Height+PanelBottom.Height;
+
+  if (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height) > MaxHeight then //ScreenHeightTest-68) then
+  //if FormSelectFilterSystemMega.Height > MaxHeight then
      begin
-       HeightDiff:= FormSelectFilterSystemMega.ClientHeight-MaxHeight+GetSystemMetrics(SM_CYCAPTION)+SystemsListView.PaintInfoItem.Border;
-       SystemsListView.Height:= SystemsListView.Height-HeightDiff+SystemsListView.PaintInfoItem.Border;
-       FormSelectFilterSystemMega.ClientHeight:= MaxHeight-GetSystemMetrics(SM_CYCAPTION);
+       HeightDiff:= (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height)-MaxHeight;//(ScreenHeightTest-68); //// FormSelectFilterSystemMega.Height-MaxHeight;//+GetSystemMetrics(SM_CYCAPTION);//+SystemsListView.PaintInfoItem.Border;
+       SystemsListView.Height:= SystemsListView.Height-HeightDiff;//+SystemsListView.PaintInfoItem.Border;
+       PanelSystemsListView.Height:= SystemsListView.Height;//+SystemsListView.Top;
+       FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
+       //FormSelectFilterSystemMega.Height:= FormSelectFilterSystemMega.Height-HeightDiff;// MaxHeight-GetSystemMetrics(SM_CYCAPTION);
      end;
   if (FormSelectFilterSystemMega.Left+FormSelectFilterSystemMega.Width) >= ScreenWidthTest then
      FormSelectFilterSystemMega.Left:= 0;
 
   if MachinesTypeList.Scrollbars.VertBarVisible then
      MachinesTypeList.HotTrack.Enabled:= False;
-     
+
   if SystemsListView.Scrollbars.VertBarVisible then
      begin
        SystemsListView.HotTrack.Enabled:= False;
@@ -541,6 +548,7 @@ var
 begin
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
+
   FormMain.ELV_ResetNormalColors(SystemsListView);
   FormMain.ELV_ResetNormalColors(MachinesTypeList);
 
@@ -554,8 +562,30 @@ begin
 
   if IsNightMode then
      begin
+       FormSelectFilterSystemMega.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       SetPanelColors(PanelMachinesType, menu_background_color[1], -1, True);
+       SetPanelColors(PanelSystemsListView, menu_background_color[1], -1, True);
+
+       FormMain.SetEasyListViewColors(MachinesTypeList, menu_background_color[1], item_caption_active_color[1]);
+       FormMain.SetEasyListViewColors(SystemsListView,  menu_background_color[1], item_caption_active_color[1]);
+       SetLabelColors(LabelSelectMode,               item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelCategoryIniForMESS,       clrLightBlue, clNavy);
+       SetLabelColors(LabelCategoryIniFolderForMESS, clSilver);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonReset);
+       FormMain.SetButtonExColors(ButtonHelp);
+
+       FormMain.ELV_SetCheckRadioCustomIcon(MachinesTypeList);
+       FormMain.ELV_SetCheckRadioCustomIcon(SystemsListView);
+
        FormMain.ELV_SetNightModeColors(MachinesTypeList);
        FormMain.ELV_SetNightModeColors(SystemsListView);
+
+       FormMain.SetWin10DarkScrollBar(SystemsListview);
+       FormMain.SetWin10DarkScrollBar(MachinesTypeList);
      end;
 
   FiltersHaveChanged:= False;
@@ -600,9 +630,11 @@ begin
   else
   if Position = 1 then
      begin
+       ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Style:= [];
-       if LabelCategoryIniFolderForMESS.Tag = 1 then
-          ACanvas.Font.Style:= [fsItalic];
+       ACanvas.Font.Size:= 9;
+       //if LabelCategoryIniFolderForMESS.Tag = 1 then
+       //   ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           begin
             if Item.Selected then
@@ -623,7 +655,7 @@ begin
   FormMain.AddMsgText('    Select machine types and system types you want show or hide in the main games list.'+
                       ' Make sure you tick the checkbox next to each machine type and system.'+#13#10+
                       'MAME software list games are not part of ');
-  FormMain.AddMsgText('console/computer/handheld systems', clBlack, [fsItalic]);
+  FormMain.AddMsgText('console/computer/handheld systems', clBlack);
   FormMain.AddMsgText('.'+#13#10+#13#10+'The ');
   FormMain.AddMsgText('Arcade Machines', clBlack, [fsBold]);
   FormMain.AddMsgText(' machine type include MAME games.'+#13#10+'The ');
@@ -651,18 +683,18 @@ procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clCream, -1, False) //clrLightBlue, clrMedBlue)
+     SetLabelColors(TShadowLabel(Sender), clCream)
   else
-     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
+     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver);
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
   else
-     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
+     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver);
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSClick(
@@ -723,9 +755,9 @@ begin
      begin
        ACanvas.Font.Style:= [];
        ACanvas.Font.Name:= 'Segoe UI';
-       ACAnvas.Font.Size:= 9;
-       if LabelCategoryIniFolderForMESS.Tag = 1 then
-          ACanvas.Font.Style:= [fsItalic];
+       ACanvas.Font.Size:= 9;
+       //if LabelCategoryIniFolderForMESS.Tag = 1 then
+       //   ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           begin
             if Item.Selected then

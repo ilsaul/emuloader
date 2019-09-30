@@ -106,6 +106,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       Caption = 'Show Unchecked Only'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object FilterShowParentSetsOnly: TAdvOfficeCheckBoxEx
       Left = 220
@@ -119,6 +120,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       Caption = 'Show Parent Sets Only'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object CheckAll: TAdvOfficeCheckBoxEx
@@ -135,6 +137,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
     ReturnIsTab = False
     State = cbChecked
     Themed = True
+    CustomIconsEnabled = False
   end
   object TopBar: TPanelEx
     Left = 0
@@ -319,6 +322,7 @@ object FormArcadeMAMEMachinesCustomize: TFormArcadeMAMEMachinesCustomize
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = MachinesListEditorColumnClick
       OnIncrementalSearch = MachinesListEditorIncrementalSearch
       OnItemCheckChange = MachinesListEditorItemCheckChange

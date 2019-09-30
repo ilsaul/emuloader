@@ -231,21 +231,25 @@ begin
   if IsNightMode then
   begin
     SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-    SetLabelColors(LabelTotalMachines, LabelGameName.Font.Color, LabelGameName.ShadowColor, False);
-    SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack, False);
+    SetLabelColors(LabelTotalMachines,      LabelGameName.Font.Color, LabelGameName.ShadowColor);
+    SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack);
 
     FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
 
     FormMain.SetEasyListViewColors(MachinesListView, FormArcadeSoftwareListMachineToRunGame.Color, clWhite);
+    FormMain.SetEasyListViewHeaderColors(MachinesListView, True);
+    FormMain.SetWin10DarkScrollBar(MachinesListView);
 
-    SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-    SetCheckBoxColors(HidePreliminaryMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+    SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+    SetCheckBoxColors(HidePreliminaryMachines,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+    FormMain.SetCheckBoxExCustomIcon(ShowAvailableMachinesOnly);
+    FormMain.SetCheckBoxExCustomIcon(HidePreliminaryMachines);
 
     FormMain.SetButtonExColors(ButtonYes);
     FormMain.SetButtonExColors(ButtonNo);
     FormMain.SetButtonExColors(ButtonResetToCurrent);
 
-    FormMain.SetEasyListViewHeaderColors(MachinesListView, True);
     FormMain.ELV_SetRibbonNightColors(0, MachinesListView, True);
   end;
 

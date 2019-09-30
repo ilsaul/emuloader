@@ -3,7 +3,7 @@ unit uApplyFilterMsgBox;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls,
   ShadowLabel, PanelEx, ExtCtrls;
 
 type
@@ -12,6 +12,8 @@ type
     LabelBoxMessageTitle: TShadowLabel;
     LabelBoxMessage: TShadowLabel;
     MsgIcon: TImage;
+    procedure PanelBackgroundMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
   public
@@ -24,5 +26,14 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFormApplyFilterMsgBox.PanelBackgroundMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+const
+   sc_DragMove = $f012;
+begin
+  ReleaseCapture;
+  FormApplyFilterMsgBox.Perform(wm_SysCommand, sc_DragMove, 0);
+end;
 
 end.

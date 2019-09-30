@@ -573,6 +573,7 @@ object FormMain: TFormMain
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnColumnClick = GamesListViewColumnClick
         OnColumnSizeChanging = GamesListViewColumnSizeChanging
         OnDblClick = GamesListViewDblClick
@@ -770,6 +771,7 @@ object FormMain: TFormMain
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnDblClick = MachinesListSidePanelDblClick
         OnIncrementalSearch = MachinesListSidePanelIncrementalSearch
         OnItemCompare = MachinesListSidePanelItemCompare
@@ -1356,7 +1358,7 @@ object FormMain: TFormMain
           Images = IL_LeftPanel
           OnClick = WebButtonExitClick
         end
-        object WebButtonPlayVideoPreview: TSpeedButtonEx
+        object WebButtonVideoPreviewPlay: TSpeedButtonEx
           Left = 188
           Top = 0
           Width = 132
@@ -1366,7 +1368,7 @@ object FormMain: TFormMain
           Flat = True
           ImageIndex = 25
           Images = IL_LeftPanel
-          OnClick = WebButtonPlayVideoPreviewClick
+          OnClick = PopupVideoPreviewPlayClick
         end
       end
     end
@@ -1794,12 +1796,13 @@ object FormMain: TFormMain
           ImageIndex = 7
           OnClick = ButtonNextLayoutClick
         end
-        object ButtonPlayVideoPreview: TToolButton
+        object ButtonVideoPreviewPlay: TToolButton
           Left = 250
           Top = 0
           Hint = 'Play a video of selected game'
           Caption = 'Play Video Preview'
           ImageIndex = 9
+          OnClick = PopupVideoPreviewPlayClick
         end
         object ButtonInternetGameInfo: TToolButton
           Left = 281
@@ -2213,11 +2216,12 @@ object FormMain: TFormMain
       ImageIndex = 20
       OnClick = PopupMachineToRunGameClick
     end
-    object PopupPlayVideoPreview: TMenuItem
+    object PopupVideoPreviewPlay: TMenuItem
       Caption = 'Play Video Preview'
       Hint = 'Play a video of selected game'
       ImageIndex = 13
       ShortCut = 8278
+      OnClick = PopupVideoPreviewPlayClick
     end
     object PopupViewGameManualPDF: TMenuItem
       Caption = 'View Game Manual (PDF)'
@@ -3533,6 +3537,12 @@ object FormMain: TFormMain
       Caption = 'Use Alternate Frontend Icons'
       Hint = 'Load icons from "\alternate\" sub-folder'
       OnClick = MenuUseAlternateFrontendIconsClick
+    end
+    object MenuCustomizeSplashScreen: TMenuItem
+      Caption = 'Customize Splash Screen'
+      Hint = 'Change font colors and layout'
+      ImageIndex = 19
+      OnClick = MenuCustomizeSplashScreenClick
     end
     object N23: TMenuItem
       Caption = '-'

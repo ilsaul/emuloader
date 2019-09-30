@@ -385,23 +385,30 @@ begin
   if IsNightMode then
      begin
        SetFormColors(FormArcadeMAMEMachinesCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
-       SetLabelColors(LabelTotalMachinesList, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(LabelTotalMachinesList, clCream, item_caption_active_shadow_color[1]);
 
        FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
 
        FrameSoftwareList.Color1:= FormArcadeMAMEMachinesCustomize.Color;
        FormMain.SetEasyListViewColors(MachinesListEditor, menu_background_color[1], clWhite);
 
-       SetCheckBoxColors(CheckAll, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(FilterShowParentSetsOnly, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+       SetCheckBoxColors(CheckAll,                 item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FilterShowUncheckedOnly,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(FilterShowParentSetsOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetCheckBoxExCustomIcon(CheckAll);
+       FormMain.SetCheckBoxExCustomIcon(FilterShowUncheckedOnly);
+       FormMain.SetCheckBoxExCustomIcon(FilterShowParentSetsOnly);
 
        FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True);
        FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
+       FormMain.ELV_SetCheckRadioCustomIcon(MachinesListEditor);
 
        MachinesListEditor.Align:= alNone;
        MachinesListEditor.Height:= MachinesListEditor.Height-2;
        MachinesListEditor.Top:= MachinesListEditor.Top+1;
+
+       FormMain.SetWin10DarkScrollBar(MachinesListEditor);
 
        SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
        FormMain.SetButtonExColors(ButtonYes);

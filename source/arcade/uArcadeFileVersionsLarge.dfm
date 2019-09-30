@@ -52,7 +52,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -141,7 +141,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -230,7 +230,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -319,7 +319,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -408,7 +408,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -497,7 +497,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -586,7 +586,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743
@@ -675,7 +675,7 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
       Font.Color = clMaroon
       Font.Height = -16
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14079743

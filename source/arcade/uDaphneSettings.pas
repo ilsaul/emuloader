@@ -214,16 +214,17 @@ begin
       else
       if FormDaphneSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
          begin
-           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
            TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontColor:= clGray;
            TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]));
          end;
       if FormDaphneSettings.Components[Loop] is TShadowLabel then
-         SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+         SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
     end;
     SetFormColors(FormDaphneSettings, nil, nil, LabelGameTitle, LabelEmulatorFile, nil, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idDaphne, True);
-    SetLabelColors(LabelReadFileIni, LabelEmulatorFile.Font.Color, LabelEmulatorFile.ShadowColor, False);
+    SetLabelColors(LabelReadFileIni, LabelEmulatorFile.Font.Color, LabelEmulatorFile.ShadowColor);
   end;
   
   LaserdiscType.Items.BeginUpdate;

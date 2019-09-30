@@ -90,6 +90,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Top = 48
     Width = 193
     Height = 259
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'Export All Games'
     Ctl3D = True
@@ -119,7 +120,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Tag = 1
       Left = 8
       Top = 20
-      Width = 176
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -130,6 +131,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_NonArcadeMAMEMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -146,12 +148,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_MAMESoftwareListGames: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 60
-      Width = 166
+      Width = 179
       Height = 18
       Checked = True
       ShowHint = True
@@ -162,12 +165,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_MAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 96
-      Width = 57
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -178,12 +182,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_Supermodel3: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 116
-      Width = 94
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -194,12 +199,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_Daphne: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 136
-      Width = 64
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -210,12 +216,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_Demul: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 156
-      Width = 56
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -226,12 +233,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 176
-      Width = 75
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -242,12 +250,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_DICE: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 196
-      Width = 47
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -258,12 +267,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_SegaModel2: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 216
-      Width = 93
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -274,12 +284,13 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ExportOption_ZiNc: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 8
       Top = 236
-      Width = 47
+      Width = 179
       Height = 20
       Checked = True
       ShowHint = True
@@ -290,6 +301,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object GroupMAMEContentManagerPlus: TAdvGroupBoxEx
@@ -297,6 +309,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Top = 312
     Width = 209
     Height = 45
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'MAME Content Manager Plus'
     Ctl3D = True
@@ -317,6 +330,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object MCMPlus_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -334,6 +348,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object GroupExportOptionsGameColumnsFullFormat: TAdvGroupBoxEx
@@ -341,6 +356,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Top = 48
     Width = 183
     Height = 309
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'Game Info To Export'
     Ctl3D = True
@@ -429,6 +445,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemPaintText = GameInfoListToExportItemPaintText
     end
     object GameInfoListToExport_MoveUp: TBitBtnEx
@@ -484,6 +501,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ReturnIsTab = False
       ShadowColor = clSilver
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelp_GameInfoToExport_MicrosoftExcelFormat: TBitBtnEx
       Left = 154
@@ -551,6 +569,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ReturnIsTab = False
       ShadowColor = clSilver
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object TopBar: TPanelEx
@@ -732,6 +751,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemPaintText = ExportListItemPaintText
       OnItemSelectionChanged = ExportListItemSelectionChanged
     end

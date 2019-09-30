@@ -355,6 +355,26 @@ end;
 
 procedure TFormArcadeGamesFilter.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormArcadeGamesFilter.Color:= menu_background_color[1];
+       PanelFilters.Color1:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       SetLabelColors(LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(FiltersListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
+       FormMain.SetWin10DarkScrollBar(FiltersListView);
+
+       IconSizeExtraLarge.Font.Color:= item_caption_active_color[1];
+       IconSizeLarge.Font.Color:= item_caption_active_color[1];
+       IconSizeSmall.Font.Color:= item_caption_active_color[1];
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonGoToCurrentFilter);
+     end;
+
   case FiltersIniFound of
     True:
       begin

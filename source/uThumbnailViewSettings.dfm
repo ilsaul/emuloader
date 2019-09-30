@@ -1,7 +1,6 @@
 object FormThumbnailView: TFormThumbnailView
   Left = 600
   Top = 600
-  ActiveControl = GridWidthSize
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Thumbnail Settings'
@@ -136,28 +135,45 @@ object FormThumbnailView: TFormThumbnailView
     Frames = []
     Transparent = False
   end
-  object GridWidthSize: TExTrackBar
-    Left = 25
-    Top = 462
-    Width = 345
-    Height = 45
-    Max = 400
-    Min = 120
-    PageSize = 10
-    Frequency = 10
-    Position = 144
-    TabOrder = 0
-    OnChange = GridWidthSizeChange
+  object GridWidthSizeLabelBottom: TShadowLabel
+    Left = 33
+    Top = 493
+    Width = 332
+    Height = 15
+    Caption = '120                   260                   400'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
     Font.Name = 'Consolas'
     Font.Style = []
     ParentFont = False
-    LabelsFactor = 1
-    LabelsFactorOperation = foMul
-    LabelsInterval = 40
-    SelEnable = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
+  object ShadowLabel1: TShadowLabel
+    Left = 33
+    Top = 565
+    Width = 332
+    Height = 15
+    Caption = '120                   260                   400'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Consolas'
+    Font.Style = []
+    ParentFont = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
   end
   object BorderColor: TColorBoxEx
     Left = 430
@@ -171,7 +187,7 @@ object FormThumbnailView: TFormThumbnailView
     ItemHeight = 16
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
     OnSelect = BorderColorSelect
   end
   object ShowBorder: TAdvOfficeCheckBoxEx
@@ -181,12 +197,13 @@ object FormThumbnailView: TFormThumbnailView
     Height = 20
     Hint = 'Show border arround the entire frame'
     ShowHint = True
-    TabOrder = 2
+    TabOrder = 1
     OnClick = ShowBorderClick
     Alignment = taLeftJustify
     Caption = 'Show Border'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object BorderColorDefault: TBitBtnEx
     Left = 620
@@ -197,7 +214,7 @@ object FormThumbnailView: TFormThumbnailView
     Caption = 'Default'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 3
+    TabOrder = 2
     OnClick = BorderColorDefaultClick
   end
   object ShowGameTitles: TAdvOfficeCheckBoxEx
@@ -208,13 +225,14 @@ object FormThumbnailView: TFormThumbnailView
     Hint = 'Show/hide captions of games'
     Checked = True
     ShowHint = True
-    TabOrder = 4
+    TabOrder = 3
     OnClick = ShowGameTitlesClick
     Alignment = taLeftJustify
     Caption = 'Show Game Title'
     ReturnIsTab = False
     State = cbChecked
     Themed = True
+    CustomIconsEnabled = False
   end
   object MaintainAspectRatio: TAdvOfficeCheckBoxEx
     Left = 684
@@ -224,13 +242,14 @@ object FormThumbnailView: TFormThumbnailView
     Hint = 'Generate thumbnails without distorting the image'
     Checked = True
     ShowHint = True
-    TabOrder = 5
+    TabOrder = 4
     OnClick = MaintainAspectRatioClick
     Alignment = taLeftJustify
     Caption = 'Maintain Aspect Ratio'
     ReturnIsTab = False
     State = cbChecked
     Themed = True
+    CustomIconsEnabled = False
   end
   object ShowPreviewScreenshotsPanel: TAdvOfficeCheckBoxEx
     Left = 684
@@ -242,35 +261,13 @@ object FormThumbnailView: TFormThumbnailView
       ' layouts)'
     Checked = True
     ShowHint = True
-    TabOrder = 6
+    TabOrder = 5
     Alignment = taLeftJustify
     Caption = 'Show Screenshots Panel'
     ReturnIsTab = False
     State = cbChecked
     Themed = True
-  end
-  object GridHeightSize: TExTrackBar
-    Left = 25
-    Top = 534
-    Width = 345
-    Height = 45
-    Max = 400
-    Min = 120
-    PageSize = 10
-    Frequency = 10
-    Position = 178
-    TabOrder = 7
-    OnChange = GridHeightSizeChange
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Consolas'
-    Font.Style = []
-    ParentFont = False
-    LabelsFactor = 1
-    LabelsFactorOperation = foMul
-    LabelsInterval = 40
-    SelEnable = False
+    CustomIconsEnabled = False
   end
   object ELV_ThumbnailPreview: TEasyListview
     Left = 8
@@ -314,15 +311,16 @@ object FormThumbnailView: TFormThumbnailView
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
-    TabOrder = 8
+    TabOrder = 6
     View = elsThumbnail
+    CustomCheckRadioEnabled = False
     OnItemPaintText = ELV_ThumbnailPreviewItemPaintText
     OnItemThumbnailDraw = ELV_ThumbnailPreviewItemThumbnailDraw
   end
   object ButtonGridWidthSize_Decrease: TBitBtnEx
     Tag = -1
     Left = 8
-    Top = 462
+    Top = 463
     Width = 22
     Height = 22
     Caption = #231
@@ -332,13 +330,29 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 7
     OnClick = ButtonGridWidthSize_DecreaseClick
   end
   object ButtonGridWidthSize_Increase: TBitBtnEx
     Tag = 1
     Left = 365
-    Top = 462
+    Top = 463
+    Width = 22
+    Height = 22
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 8
+    OnClick = ButtonGridWidthSize_DecreaseClick
+  end
+  object ButtonGridHeightSize_Increase: TBitBtnEx
+    Tag = 1
+    Left = 365
+    Top = 535
     Width = 22
     Height = 22
     Caption = #232
@@ -349,28 +363,12 @@ object FormThumbnailView: TFormThumbnailView
     Font.Style = []
     ParentFont = False
     TabOrder = 10
-    OnClick = ButtonGridWidthSize_DecreaseClick
-  end
-  object ButtonGridHeightSize_Increase: TBitBtnEx
-    Tag = 1
-    Left = 365
-    Top = 534
-    Width = 22
-    Height = 22
-    Caption = #232
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 12
     OnClick = ButtonGridHeightSize_DecreaseClick
   end
   object ButtonGridHeightSize_Decrease: TBitBtnEx
     Tag = -1
     Left = 8
-    Top = 534
+    Top = 535
     Width = 22
     Height = 22
     Caption = #231
@@ -380,7 +378,7 @@ object FormThumbnailView: TFormThumbnailView
     Font.Name = 'Wingdings'
     Font.Style = []
     ParentFont = False
-    TabOrder = 11
+    TabOrder = 9
     OnClick = ButtonGridHeightSize_DecreaseClick
   end
   object PanelBottom: TPanelEx
@@ -454,10 +452,10 @@ object FormThumbnailView: TFormThumbnailView
     Top = 488
     Width = 397
     Height = 95
-    Transparent = False
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'Icons'
-    TabOrder = 14
+    TabOrder = 12
     object ShowSystemIcon: TAdvOfficeCheckBoxEx
       Left = 6
       Top = 44
@@ -472,6 +470,7 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowFavoriteIcon: TAdvOfficeCheckBoxEx
       Left = 204
@@ -485,6 +484,7 @@ object FormThumbnailView: TFormThumbnailView
       Caption = 'Favorite'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowMediaTypeIcon: TAdvOfficeCheckBoxEx
       Left = 6
@@ -500,6 +500,7 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object SystemIconSize: TComboBox2Ex
       Left = 68
@@ -540,6 +541,7 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ThumbLeftAlignIcons: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -556,6 +558,7 @@ object FormThumbnailView: TFormThumbnailView
       Checked = True
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ThumbRightAlignIcons: TAdvOfficeRadioButtonEx
       Left = 316
@@ -569,6 +572,7 @@ object FormThumbnailView: TFormThumbnailView
       Caption = 'Right Align'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowIconsWithNoThumbnail: TAdvOfficeCheckBoxEx
       Left = 6
@@ -583,6 +587,7 @@ object FormThumbnailView: TFormThumbnailView
       Caption = 'Show Icons With No Thumbnail'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MediaTypeIconSize: TComboBox2Ex
       Left = 68
@@ -623,7 +628,82 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
+  end
+  object GridWidthSize: TXiTrackBar
+    Left = 33
+    Top = 460
+    Width = 329
+    Height = 28
+    BackColor = 15856113
+    TickColor = 7500402
+    DisabledTickColor = clSilver
+    SlideBorderColor = 7500402
+    SlideFaceColor = clWhite
+    SlideGradColor = 15395562
+    DisabledSlideBorderColor = 12500670
+    DisabledSlideFaceColor = 14211288
+    DisabledSlideGradColor = 15263976
+    DisabledThumbBorderColor = 11908533
+    DisabledThumbFaceColor = 15395562
+    DisabledThumbGradColor = 13619151
+    ThumbBorderColor = 6381921
+    ThumbFaceColor = clWhite
+    ThumbGradColor = 14145495
+    OverThumbBorderColor = 7631988
+    OverThumbFaceColor = 13750737
+    OverThumbGradColor = 9803157
+    DownThumbBorderColor = 7631988
+    DownThumbFaceColor = 10066329
+    DownThumbGradColor = 12698049
+    SmoothCorners = True
+    ColorScheme = csWhite
+    Max = 400
+    Min = 120
+    Position = 144
+    Frequency = 10
+    TickStyle = tsAuto
+    TickMarks = tmBottomRight
+    Orientation = trHorizontal
+    OnChange = GridWidthSizeChange
+  end
+  object GridHeightSize: TXiTrackBar
+    Left = 33
+    Top = 532
+    Width = 329
+    Height = 28
+    BackColor = 15856113
+    TickColor = 7500402
+    DisabledTickColor = clSilver
+    SlideBorderColor = 7500402
+    SlideFaceColor = clWhite
+    SlideGradColor = 15395562
+    DisabledSlideBorderColor = 12500670
+    DisabledSlideFaceColor = 14211288
+    DisabledSlideGradColor = 15263976
+    DisabledThumbBorderColor = 11908533
+    DisabledThumbFaceColor = 15395562
+    DisabledThumbGradColor = 13619151
+    ThumbBorderColor = 6381921
+    ThumbFaceColor = clWhite
+    ThumbGradColor = 14145495
+    OverThumbBorderColor = 7631988
+    OverThumbFaceColor = 13750737
+    OverThumbGradColor = 9803157
+    DownThumbBorderColor = 7631988
+    DownThumbFaceColor = 10066329
+    DownThumbGradColor = 12698049
+    SmoothCorners = True
+    ColorScheme = csWhite
+    Max = 400
+    Min = 120
+    Position = 178
+    Frequency = 10
+    TickStyle = tsAuto
+    TickMarks = tmBottomRight
+    Orientation = trHorizontal
+    OnChange = GridHeightSizeChange
   end
   object IL_Thumbnail: TImageList
     Height = 128

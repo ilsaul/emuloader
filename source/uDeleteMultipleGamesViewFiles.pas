@@ -463,7 +463,7 @@ begin
              TViewFileInfo(addItem).eFileName:= tmpFileName;
              TViewFileInfo(addItem).eFileSize:= GetFileSize(tmpFileName);
              TViewFileInfo(addItem).eFileSizeText:= FormMain.GetSizeType(TViewFileInfo(addItem).eFileSize, False);
-             TViewFileInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
+             TViewFileInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAgeW(tmpFileName));
              TViewFileInfo(addItem).eMerged:= False; // always false
              //if tmpMediaType = 0 then
              if not FormMain.IsMediaTypeCHD(tmpMediaType, False) then
@@ -527,6 +527,7 @@ begin
 
   FormDeleteMultipleGamesViewFiles.Left:= (Screen.Width shr 1)-((FormDeleteMultipleGamesViewFiles.Width shr 1)-1); // to center the form
 
+  FormMain.SetWin10DarkScrollBar(FilesListView);
 
   // add all files in the list
   FilesListView.BeginUpdate;
@@ -560,14 +561,14 @@ begin
     0:
       begin
         ACanvas.Font.Name:= 'Trebuchet MS';
-        ACanvas.Font.Size:= ACanvas.Font.Size+2;
+        ACanvas.Font.Size:= ACanvas.Font.Size+2; // 11
         if LabelTotalItems.Tag = 0 then
            ACanvas.Font.Color:= clMaroon // light mode
         else
            ACanvas.Font.Color:= clrLightRed; // night mode
 
-        if FormDeleteMultipleGamesFiles.DestinationFolderLabel.Tag = 1 then
-           ACanvas.Font.Style:= [fsItalic];
+        //if FormDeleteMultipleGamesFiles.DestinationFolderLabel.Tag = 1 then
+        //   ACanvas.Font.Style:= [fsItalic];
       end;
     1:
       begin

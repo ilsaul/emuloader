@@ -4,13 +4,13 @@ interface
 
 uses
   Windows, Classes, Graphics, Controls, Forms, StdCtrls, ComCtrls,
-  ExtCtrls, Buttons;
+  ExtCtrls, Buttons, ButtonsEx, ShadowLabel;
 
 type
   TFormArcadeMAMu_ExcludedList = class(TForm)
-    Cancel: TBitBtn;
-    ButtonOk: TBitBtn;
-    LabelInfo: TLabel;
+    Cancel: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    LabelInfo: TShadowLabel;
     ExcludedFiles: TMemo;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private

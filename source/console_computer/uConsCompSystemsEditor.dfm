@@ -176,6 +176,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnColumnSizeChanged = SoftListAssignedToSystemColumnSizeChanged
         OnDblClick = SoftListAssignedToSystemDblClick
         OnItemSelectionChanged = SoftListAssignedToSystemItemSelectionChanged
@@ -284,6 +285,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnColumnClick = SoftListFilesNotAssignedColumnClick
         OnColumnSizeChanged = SoftListFilesNotAssignedColumnSizeChanged
         OnDblClick = SoftListFilesNotAssignedDblClick
@@ -380,6 +382,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Caption = 'Hide Systems Scroll Bar'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object GamesListFontSizeSmaller: TBitBtnEx
         Tag = -1
@@ -529,6 +532,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      CustomCheckRadioEnabled = False
       OnItemImageDraw = SystemsItemImageDraw
       OnItemImageGetSize = SystemsItemImageGetSize
       OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
@@ -562,9 +566,9 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Color = 16448250
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -13
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
         ShowAccelChar = False

@@ -4,21 +4,19 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
-  StdCtrls, ExTrackBar, ExtCtrls, Buttons, GraphicEx, AdvOfficeButtons,
+  StdCtrls, ExtCtrls, Buttons, GraphicEx, AdvOfficeButtons,
   MPCommonObjects, EasyListview, MPCommonUtilities, ShadowLabel, ImgList, PanelEx,
-  uMain, uCommon, ButtonsEx, AdvGroupBox, ColorBoxEx;
+  uMain, uCommon, ButtonsEx, AdvGroupBox, ColorBoxEx, XiTrackBar;
 
 type
   TFormThumbnailView = class(TForm)
     LabelGridWidthSize: TShadowLabel;
-    GridWidthSize: TExTrackBar;
     BorderColor: TColorBoxEx;
     ShowBorder: TAdvOfficeCheckBoxEx;
     BorderColorDefault: TBitBtnEx;
     ShowGameTitles: TAdvOfficeCheckBoxEx;
     MaintainAspectRatio: TAdvOfficeCheckBoxEx;
     ShowPreviewScreenshotsPanel: TAdvOfficeCheckBoxEx;
-    GridHeightSize: TExTrackBar;
     LabelGridHeightSize: TShadowLabel;
     LabelImageSize: TShadowLabel;
     ELV_ThumbnailPreview: TEasyListview;
@@ -46,16 +44,18 @@ type
     ShowIconsWithNoThumbnail: TAdvOfficeCheckBoxEx;
     MediaTypeIconSize: TComboBox2Ex;
     ShowSpecialIcon: TAdvOfficeCheckBoxEx;
+    GridWidthSize: TXiTrackBar;
+    GridWidthSizeLabelBottom: TShadowLabel;
+    ShadowLabel1: TShadowLabel;
+    GridHeightSize: TXiTrackBar;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);
     procedure ButtonApplyClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure GridWidthSizeChange(Sender: TObject);
     procedure BorderColorDefaultClick(Sender: TObject);
     procedure BorderColorSelect(Sender: TObject);
     procedure ShowBorderClick(Sender: TObject);
     procedure ShowGameTitlesClick(Sender: TObject);
-    procedure GridHeightSizeChange(Sender: TObject);
     procedure ButtonGridWidthSize_DecreaseClick(Sender: TObject);
     procedure ButtonGridHeightSize_DecreaseClick(Sender: TObject);
     procedure ELV_ThumbnailPreviewItemThumbnailDraw(
@@ -77,6 +77,8 @@ type
     procedure ShowIconsWithNoThumbnailClick(Sender: TObject);
     procedure MediaTypeIconSizeSelect(Sender: TObject);
     procedure ShowSpecialIconClick(Sender: TObject);
+    procedure GridWidthSizeChange(Sender: TObject);
+    procedure GridHeightSizeChange(Sender: TObject);
   private
     { Private declarations }
     tImageWidth, tImageHeight: Integer; // this is the maximum width x height bounds of the thumb image
@@ -143,8 +145,8 @@ procedure TFormThumbnailView.ButtonApplyClick(Sender: TObject);
 var
   UpdateSettings, UpdateCellGrid: Boolean;
 begin
-  iModalResult:= TBitBtn(Sender).ModalResult;
-  FormThumbnailView.ModalResult:= TBitBtn(Sender).ModalResult;
+  iModalResult:= TBitBtnEx(Sender).ModalResult;
+  FormThumbnailView.ModalResult:= TBitBtnEx(Sender).ModalResult;
   UpdateSettings:= False;
   UpdateCellGrid:= False;
 
@@ -266,7 +268,7 @@ begin
        FormMain.ELV_MakeVisible;
      end;
 
-  if TBitBtn(Sender).Tag = 1 then
+  if TBitBtnEx(Sender).Tag = 1 then
      Close;
 end;
 
@@ -471,10 +473,53 @@ end;
 procedure TFormThumbnailView.FormShow(Sender: TObject);
 var
   Item: TEasyItem;
+  Loop: Integer;
 begin
   ButtonApply.Enabled:= FormMain.IsThumbnailView;
   FormMain.ELV_ResetNormalColors(ELV_ThumbnailPreview);
   FormMain.ELV_SetBackgroundColor(ELV_ThumbnailPreview);
+
+  if IsNightMode then
+     begin
+       FormThumbnailView.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       SetXiTrackBarColors(GridWidthSize);
+       SetXiTrackBarColors(GridHeightSize);
+       //GridWidthSize.Font.Color:=  item_caption_active_color[1];
+       //GridHeightSize.Font.Color:= item_caption_active_color[1];
+
+       SetGroupBoxBorderStyle(IconsGroupBox);
+       SetGroupBoxColors(IconsGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+
+       SetComboBox2ExColors(SystemIconSize, True);
+       SetComboBox2ExColors(MediaTypeIconSize, True);
+
+       SetColorBoxColors(BorderColor, True);
+
+       ELV_ThumbnailPreview.ShowThemedBorderColor:= clrBorderGroupBoxGrayBk;
+       for Loop:= 0 to FormThumbnailView.ComponentCount-1 do
+       begin
+         if FormThumbnailView.Components[Loop] is TShadowLabel then
+            SetLabelColors(TShadowLabel(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1])
+         else
+         if FormThumbnailView.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormThumbnailView.Components[Loop]));
+            end
+         else
+         if FormThumbnailView.Components[Loop] is TAdvOfficeRadioButtonEx then
+            begin
+              SetRadioButtonColors(TAdvOfficeRadioButtonEx(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+              FormMain.SetRadioButtonExCustomIcon(TAdvOfficeRadioButtonEx(FormThumbnailView.Components[Loop]));
+            end
+         else
+         if FormThumbnailView.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormThumbnailView.Components[Loop]));
+       end;
+     end;
+
   if FormMain.GamesListView.BackGround.Enabled then
      begin
        ELV_ThumbnailPreview.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
@@ -557,7 +602,7 @@ begin
   GridWidthSize.Position:= ELV_ThumbnailPreview.CellSizes.Thumbnail.Width;
   GridHeightSize.Position:= ELV_ThumbnailPreview.CellSizes.Thumbnail.Height;
 
-  GridWidthSize.OnChange(Self); // force update
+  GridWidthSize.OnChange(Self);  // force update
   GridHeightSize.OnChange(Self); // force update
 
   ELV_ThumbnailPreview.BeginUpdate;
@@ -624,26 +669,6 @@ begin
      end;
 end;
 
-procedure TFormThumbnailView.GridWidthSizeChange(Sender: TObject);
-begin
-  LabelGridWidthSizeValue.Caption:= IntToStr(GridWidthSize.Position);
-
-  case ELV_ThumbnailPreview.Items.Count of
-    1: ELV_ThumbnailPreview.Width:= GridWidthSize.Position+2;
-    2: ELV_ThumbnailPreview.Width:= ((GridWidthSize.Position+2)*2)+16;
-  end;
-  if FormThumbnailView.Tag = 0 then
-     UpdateImageSize(True, False);
-end;
-
-procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);
-begin
-  LabelGridHeightSizeValue.Caption:= IntToStr(GridHeightSize.Position);
-  ELV_ThumbnailPreview.Height:= GridHeightSize.Position+2;
-  if FormThumbnailView.Tag = 0 then
-     UpdateImageSize(False, True);
-end;
-
 procedure TFormThumbnailView.BorderColorDefaultClick(Sender: TObject);
 begin
   FormMain.SetSelectedColorBox(BorderColor, BorderColor.DefaultColorColor);
@@ -675,13 +700,13 @@ end;
 procedure TFormThumbnailView.ButtonGridWidthSize_DecreaseClick(
   Sender: TObject);
 begin
-  GridWidthSize.Position:= GridWidthSize.Position+TBitBtn(Sender).Tag;
+  GridWidthSize.Position:= GridWidthSize.Position+TBitBtnEx(Sender).Tag;
 end;
 
 procedure TFormThumbnailView.ButtonGridHeightSize_DecreaseClick(
   Sender: TObject);
 begin
-  GridHeightSize.Position:= GridHeightSize.Position+TBitBtn(Sender).Tag;
+  GridHeightSize.Position:= GridHeightSize.Position+TBitBtnEx(Sender).Tag;
 end;
 
 procedure TFormThumbnailView.ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect);
@@ -843,7 +868,7 @@ procedure TFormThumbnailView.ButtonAbortClick(Sender: TObject);
 var
   RestoreSettings, RestoreCellGrid: Boolean;
 begin
-  iModalResult:= TBitBtn(Sender).ModalResult;
+  iModalResult:= TBitBtnEx(Sender).ModalResult;
   RestoreSettings:= False; // will restore settings only if at least one setting has changed with "Update" button!
   RestoreCellGrid:= False; // will restore thumbnails only
   if FormMain.ThumbnailSettings.MaintainAspectRatio <> CurrentThumbSettings.MaintainAspectRatio then
@@ -1034,6 +1059,26 @@ procedure TFormThumbnailView.ShowSpecialIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowSpecialIcon:= ShowSpecialIcon.Checked;
   UpdateIcons;
+end;
+
+procedure TFormThumbnailView.GridWidthSizeChange(Sender: TObject);
+begin
+  LabelGridWidthSizeValue.Caption:= IntToStr(GridWidthSize.Position);
+
+  case ELV_ThumbnailPreview.Items.Count of
+    1: ELV_ThumbnailPreview.Width:= GridWidthSize.Position+2;
+    2: ELV_ThumbnailPreview.Width:= ((GridWidthSize.Position+2)*2)+16;
+  end;
+  if FormThumbnailView.Tag = 0 then
+     UpdateImageSize(True, False);
+end;
+
+procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);
+begin
+  LabelGridHeightSizeValue.Caption:= IntToStr(GridHeightSize.Position);
+  ELV_ThumbnailPreview.Height:= GridHeightSize.Position+2;
+  if FormThumbnailView.Tag = 0 then
+     UpdateImageSize(False, True);
 end;
 
 end.

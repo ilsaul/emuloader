@@ -127,6 +127,7 @@ object FormDaphneSettings: TFormDaphneSettings
     Top = 87
     Width = 313
     Height = 195
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'General'
@@ -177,6 +178,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'No Joysticks'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object SRAMContinuousUpdate: TAdvOfficeCheckBoxEx
       Left = 8
@@ -192,6 +194,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'SRAM Continuous Update'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object FastBoot: TAdvOfficeCheckBoxEx
       Left = 8
@@ -207,6 +210,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Fast Boot'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object StopLaserdiscPlayer: TAdvOfficeCheckBoxEx
       Left = 8
@@ -222,6 +226,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Stop Laserdisc Player'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Daphne_NoLog: TAdvOfficeCheckBoxEx
       Left = 168
@@ -237,6 +242,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object Daphne_NoWarnings: TAdvOfficeCheckBoxEx
       Left = 168
@@ -250,6 +256,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'No Warnings'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object SendUsageStatistics: TAdvOfficeCheckBoxEx
       Left = 168
@@ -267,6 +274,7 @@ object FormDaphneSettings: TFormDaphneSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object EnableCheat: TAdvOfficeCheckBoxEx
       Left = 168
@@ -282,6 +290,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Enable Cheat'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object IdleExit: TAdvOfficeCheckBoxEx
       Left = 8
@@ -297,12 +306,13 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Idle Exit [00:30 sec]'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object IdleExitValue: TGaugeBar
       Tag = 14
       Left = 8
       Top = 84
-      Width = 226
+      Width = 295
       Height = 20
       Hint = 'Idle Exit [%s '
       Color = clWindow
@@ -321,6 +331,7 @@ object FormDaphneSettings: TFormDaphneSettings
     Top = 87
     Width = 185
     Height = 195
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
@@ -372,6 +383,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Full Screen'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object FullScale: TAdvOfficeCheckBoxEx
       Left = 8
@@ -385,6 +397,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Full Scale'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object IgnoreAspectRatio: TAdvOfficeCheckBoxEx
       Left = 8
@@ -400,6 +413,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Ignore Aspect Ratio'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Daphne_OpenGL: TAdvOfficeCheckBoxEx
       Left = 8
@@ -416,6 +430,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'OpenGL'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object BlankSearches: TAdvOfficeCheckBoxEx
       Left = 8
@@ -429,6 +444,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Blank Searches'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object BlankSkips: TAdvOfficeCheckBoxEx
       Left = 8
@@ -442,6 +458,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Blank Skips'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object AudioBox: TAdvGroupBoxEx
@@ -449,6 +466,7 @@ object FormDaphneSettings: TFormDaphneSettings
     Top = 293
     Width = 233
     Height = 85
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Audio'
@@ -482,6 +500,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'No Sound'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Daphne_PreferSamples: TAdvOfficeCheckBoxEx
       Left = 128
@@ -495,6 +514,7 @@ object FormDaphneSettings: TFormDaphneSettings
       Caption = 'Prefer Samples'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object AudioVolumeVLDP: TGaugeBar
       Tag = 14

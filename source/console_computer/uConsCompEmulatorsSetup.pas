@@ -164,7 +164,7 @@ type
     function  SetVirtualDriveIcon(const vtFileName: String): Integer;
     procedure SetResetParameterIcon(IconHolder: TImage; ButtonPressed: Boolean = False);
 
-    procedure UpdateMemParameter(EditHolder: TEdit; var MemVarParameter: String);
+    procedure UpdateMemParameter(EditHolder: TEditEx; var MemVarParameter: String);
 
     function  GetEmuNameParametersIni(sysID, MediaTypeID: Integer; const EmulatorFileName: String; var KeysListHolder: TStringList; CheckDefaultIni: Boolean): String;
     procedure ReadEmuParameters(EmulatorIndex: ShortInt);
@@ -629,7 +629,7 @@ procedure TFormConsCompEmulatorsSetup.ToggleControls(const sysID: Integer);
   procedure SetControlStatus(ctrlEnabled: Boolean; IconImgDest, IconDefaultParamDest: TImage;
                  LabelMediaType,
                  LabelParameter1, LabelParameter2: TShadowLabel;
-                 ParameterEdit1, ParameterEdit2: TEdit);
+                 ParameterEdit1, ParameterEdit2: TEditEx);
   begin
     IconImgDest.Visible:= ctrlEnabled;
     IconDefaultParamDest.Visible:= ctrlEnabled; // disabled for now... enable for a future expansion maybe ???
@@ -842,12 +842,106 @@ begin
 end;
 
 procedure TFormConsCompEmulatorsSetup.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   ResizeForm;
 
   FormMain.ELV_ResetNormalColors(Systems);
   if IsNightMode then
-     FormMain.ELV_SetNightModeColors(Systems);
+     begin
+       FormMain.ELV_SetNightModeColors(Systems);
+
+       FormConsCompEmulatorsSetup.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       SetTabButtonLineColors(PageButtonsBottomLine);
+
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+
+       PanelEmulators.Color1:= menu_background_color[1];
+
+       PanelSystemTitle.Color1:= clrLightBlack;
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetSystemTypeLabelColors(LabelSystemType);
+
+       // virtual drive
+       SetLabelColors(LabelDaemonToolsFile,    item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelDaemonToolsMount,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelDaemonToolsUnmount, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetEditNightColors(DaemonToolsFile);
+       SetEditNightColors(DaemonToolsMount);
+       SetEditNightColors(DaemonToolsUnmount);
+
+       // emulator file
+       SetLabelColors(LabelEmulatorFile, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuTitle,     item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetEditNightColors(EmulatorFile);
+       SetEditNightColors(EmuDescription);
+
+       // cartridge parameters
+       SetLabelColors(LabelEmuCartridgeParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuCartridgeParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuCartridgeParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuCartridgeParameter);
+       SetEditNightColors(EmuCartridgeParameter2);
+
+       // disc image parameters
+       SetLabelColors(LabelEmuDiscImageParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuDiscImageParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuDiscImageParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuDiscImageParameter);
+       SetEditNightColors(EmuDiscImageParameter2);
+
+       // boot disc image parameters
+       SetLabelColors(LabelEmuBootDiscParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuBootDiscParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuBootDiscParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuBootDiscParameter);
+       SetEditNightColors(EmuBootDiscParameter2);
+
+       // floppy disk parameters
+       SetLabelColors(LabelEmuFloppyDiskParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuFloppyDiskParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuFloppyDiskParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuFloppyDiskParameter);
+       SetEditNightColors(EmuFloppyDiskParameter2);
+
+       // cassette tape parameters
+       SetLabelColors(LabelEmuCassetteTapeParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuCassetteTapeParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuCassetteTapeParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuCassetteTapeParameter);
+       SetEditNightColors(EmuCassetteTapeParameter2);
+
+       // hard disk drive parameters
+       SetLabelColors(LabelEmuHardDiskDriveParameter,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEmuHardDiskDriveParameter1, clrLightRed, clMaroon);
+       SetLabelColors(LabelEmuHardDiskDriveParameter2, clrLightRed, clMaroon);
+
+       SetEditNightColors(EmuHardDiskDriveParameter);
+       SetEditNightColors(EmuHardDiskDriveParameter2);
+
+       for Loop:= 0 to FormConsCompEmulatorsSetup.ComponentCount-1 do
+       begin
+         if FormConsCompEmulatorsSetup.Components[Loop] is TShadowLabel then
+            TShadowLabel(FormConsCompEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True
+         else
+         if FormConsCompEmulatorsSetup.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormConsCompEmulatorsSetup.Components[Loop]))
+         else
+         if FormConsCompEmulatorsSetup.Components[Loop] is TSpeedButtonEx then
+            FormMain.SetButtonExColors(TSpeedButtonEx(FormConsCompEmulatorsSetup.Components[Loop]));
+       end;
+     end;
+
   GetExtIcon('.exe', IL_EmulatorIcon); // .exe files
   GetExtIcon('.bat', IL_EmulatorIcon); // .bat files
   GetExtIcon('.exe', IL_EmulatorIcon); // emulator executable files
@@ -889,12 +983,12 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.EmulatorFileChange(Sender: TObject);
 begin
-  //UpdateMemParameter(TEdit(Sender), newEmulatorFile[Systems.Tag, PanelEmulators.Tag]); // can't use this or it doesn't update the internal vars correctly (August 11, 2017)
+  //UpdateMemParameter(TEditEx(Sender), newEmulatorFile[Systems.Tag, PanelEmulators.Tag]); // can't use this or it doesn't update the internal vars correctly (August 11, 2017)
   if newEmulatorFileCustom[Systems.Tag, PanelEmulators.Tag] <> EmulatorFile.Text then
      newEmulatorFileCustom[Systems.Tag, PanelEmulators.Tag]:= EmulatorFile.Text;
   if EmulatorFile.Text <> '' then
      begin
-       if EmulatorFile.Tag = 0 then // when clicking "Select" button, the TEdit(Sender).OnChange is already called!!!!!
+       if EmulatorFile.Tag = 0 then // when clicking "Select" button, the TEditEx(Sender).OnChange is already called
           ReadEmuParameters(PanelEmulators.Tag);
      end
   else
@@ -904,10 +998,10 @@ end;
 procedure TFormConsCompEmulatorsSetup.EmuDescriptionChange(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmulatorVersionCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmulatorVersionCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
-procedure TFormConsCompEmulatorsSetup.UpdateMemParameter(EditHolder: TEdit; var MemVarParameter: String);
+procedure TFormConsCompEmulatorsSetup.UpdateMemParameter(EditHolder: TEditEx; var MemVarParameter: String);
 begin
   if MemVarParameter <> EditHolder.Text then
      MemVarParameter:= EditHolder.Text;
@@ -915,67 +1009,67 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCartridgeParameterChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuCartridgeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuCartridgeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuDiscImageParameterChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameterCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuDiscImageParameterCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuBootDiscParameterChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuLoadFromDiscCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuLoadFromDiscCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuFloppyDiskParameterChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuFloppyDiskParameterCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuFloppyDiskParameterCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCassetteTapeParameterChange(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuCassetteTapeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuCassetteTapeParameterCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCartridgeParameter2Change(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuCartridgeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuCartridgeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuDiscImageParameter2Change(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuBootDiscParameter2Change(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuDiscImageParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuFloppyDiskParameter2Change(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuFloppyDiskParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuFloppyDiskParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuCassetteTapeParameter2Change(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuCassetteTapeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuCassetteTapeParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuHardDiskDriveParameterChange(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuHardDiskDriveParameterCustom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuHardDiskDriveParameterCustom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmuHardDiskDriveParameter2Change(
   Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newEmuHardDiskDriveParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
+  UpdateMemParameter(TEditEx(Sender), newEmuHardDiskDriveParameter2Custom[Systems.Tag, PanelEmulators.Tag]);
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonInstructionsClick(Sender: TObject);
@@ -1048,12 +1142,12 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.DaemonToolsMountChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newVirtualDriveMount);
+  UpdateMemParameter(TEditEx(Sender), newVirtualDriveMount);
 end;
 
 procedure TFormConsCompEmulatorsSetup.DaemonToolsUnmountChange(Sender: TObject);
 begin
-  UpdateMemParameter(TEdit(Sender), newVirtualDriveUnmount);
+  UpdateMemParameter(TEditEx(Sender), newVirtualDriveUnmount);
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonSelectDaemonToolsClick(Sender: TObject);
@@ -1229,7 +1323,7 @@ begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [fsItalic];
+       //ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else

@@ -804,7 +804,7 @@ object FormNightMode: TFormNightMode
       Left = 614
       Top = 8
       Width = 287
-      Height = 258
+      Height = 354
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -865,7 +865,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelFieldFontColor: TShadowLabel
         Left = 4
-        Top = 71
+        Top = 95
         Width = 55
         Height = 16
         Caption = 'Field Font'
@@ -886,10 +886,31 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelCaptionBarFontColor: TShadowLabel
         Left = 4
-        Top = 233
-        Width = 72
+        Top = 281
+        Width = 53
         Height = 16
-        Caption = 'Caption Font'
+        Caption = 'Title Font'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object NightModeLabelSearchGamesFloatingPanel: TShadowLabel
+        Left = 96
+        Top = 261
+        Width = 78
+        Height = 16
+        Caption = 'Floating Panel'
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -907,7 +928,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel
         Left = 4
-        Top = 95
+        Top = 143
         Width = 52
         Height = 16
         Caption = 'Text Font'
@@ -928,7 +949,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel
         Left = 4
-        Top = 119
+        Top = 167
         Width = 73
         Height = 16
         Caption = 'Text Bk Color'
@@ -949,7 +970,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelEditBoxCustomFrameColor: TShadowLabel
         Left = 4
-        Top = 164
+        Top = 212
         Width = 68
         Height = 16
         Caption = 'Frame Color'
@@ -970,7 +991,7 @@ object FormNightMode: TFormNightMode
       end
       object LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TShadowLabel
         Left = 4
-        Top = 188
+        Top = 236
         Width = 79
         Height = 16
         Caption = 'Focused Color'
@@ -991,31 +1012,10 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesPanelEditBoxFrameColor: TShadowLabel
         Left = 96
-        Top = 144
+        Top = 192
         Width = 113
         Height = 16
         Caption = 'Edit Box Frame Color'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 12574688
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object NightModeLabelSearchGamesFloatingPanel: TShadowLabel
-        Left = 96
-        Top = 213
-        Width = 78
-        Height = 16
-        Caption = 'Floating Panel'
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -1058,9 +1058,24 @@ object FormNightMode: TFormNightMode
         OnSelect = NightModeSearchGamesPanelFilterFontColorSelect
         CustomColorsEnabled = True
       end
-      object NightModeSearchGamesPanelFieldFontColor: TColorBoxEx
+      object NightModeSearchGamesPanelFilterShadowColor: TColorBoxEx
         Left = 96
         Top = 68
+        Width = 185
+        Height = 22
+        Hint = 'Shadow Font Color For The Filter Text'
+        DefaultColorColor = 1578258
+        NoneColorColor = clNone
+        Selected = 1578258
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+        ItemHeight = 16
+        TabOrder = 2
+        OnSelect = NightModeSearchGamesPanelFilterShadowColorSelect
+        CustomColorsEnabled = True
+      end
+      object NightModeSearchGamesPanelFieldFontColor: TColorBoxEx
+        Left = 96
+        Top = 92
         Width = 185
         Height = 22
         Hint = 'Font Color For The Category Text'
@@ -1069,13 +1084,28 @@ object FormNightMode: TFormNightMode
         Selected = 9469548
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 2
+        TabOrder = 3
         OnSelect = NightModeSearchGamesPanelFieldFontColorSelect
+        CustomColorsEnabled = True
+      end
+      object NightModeSearchGamesPanelFieldShadowColor: TColorBoxEx
+        Left = 96
+        Top = 116
+        Width = 185
+        Height = 22
+        Hint = 'Shadow Font Color For The Category Text'
+        DefaultColorColor = 1578258
+        NoneColorColor = clNone
+        Selected = 1578258
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+        ItemHeight = 16
+        TabOrder = 4
+        OnSelect = NightModeSearchGamesPanelFieldShadowColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelCaptionBarFontColor: TColorBoxEx
         Left = 96
-        Top = 230
+        Top = 278
         Width = 185
         Height = 22
         Hint = 'Font Color For The Caption Bar'
@@ -1084,13 +1114,28 @@ object FormNightMode: TFormNightMode
         Selected = 11836807
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 3
+        TabOrder = 5
         OnSelect = NightModeSearchGamesPanelCaptionBarFontColorSelect
+        CustomColorsEnabled = True
+      end
+      object NightModeSearchGamesPanelCaptionBarShadowColor: TColorBoxEx
+        Left = 96
+        Top = 302
+        Width = 185
+        Height = 22
+        Hint = 'Shadow Font Color For The Caption Bar'
+        DefaultColorColor = 1578258
+        NoneColorColor = clNone
+        Selected = 1578258
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+        ItemHeight = 16
+        TabOrder = 6
+        OnSelect = NightModeSearchGamesPanelCaptionBarShadowColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxFontColor: TColorBoxEx
         Left = 96
-        Top = 92
+        Top = 140
         Width = 185
         Height = 22
         Hint = 'Font Color For The Edit Box'
@@ -1099,13 +1144,13 @@ object FormNightMode: TFormNightMode
         Selected = 11836807
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 4
+        TabOrder = 7
         OnSelect = NightModeSearchGamesPanelEditBoxFontColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBoxEx
         Left = 96
-        Top = 116
+        Top = 164
         Width = 185
         Height = 22
         Hint = 'Background Color For The Edit Box'
@@ -1114,13 +1159,13 @@ object FormNightMode: TFormNightMode
         Selected = 4734774
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 5
+        TabOrder = 8
         OnSelect = NightModeSearchGamesPanelEditBoxBackgroundColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBoxEx
         Left = 96
-        Top = 161
+        Top = 209
         Width = 185
         Height = 22
         Hint = 'Frame Color For The Edit Box'
@@ -1128,13 +1173,13 @@ object FormNightMode: TFormNightMode
         Selected = 5131854
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 6
+        TabOrder = 9
         OnSelect = NightModeSearchGamesPanelEditBoxCustomFrameColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TColorBoxEx
         Left = 96
-        Top = 185
+        Top = 233
         Width = 185
         Height = 22
         Hint = 'Focused Frame Color For The Edit Box'
@@ -1143,9 +1188,66 @@ object FormNightMode: TFormNightMode
         Selected = 11836807
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 7
+        TabOrder = 10
         OnSelect = NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect
         CustomColorsEnabled = True
+      end
+      object NightModeSearchGamesPanelFilterShadowEnabled: TAdvOfficeCheckBoxEx
+        Left = 4
+        Top = 69
+        Width = 91
+        Height = 20
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+        OnClick = NightModeSearchGamesPanelFilterShadowEnabledClick
+        Alignment = taLeftJustify
+        Caption = 'Filter Shadow'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+      end
+      object NightModeSearchGamesPanelFieldShadowEnabled: TAdvOfficeCheckBoxEx
+        Left = 4
+        Top = 117
+        Width = 91
+        Height = 20
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 12
+        OnClick = NightModeSearchGamesPanelFieldShadowEnabledClick
+        Alignment = taLeftJustify
+        Caption = 'Field Shadow'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+      end
+      object NightModeSearchGamesPanelCaptionBarShadowEnabled: TAdvOfficeCheckBoxEx
+        Left = 4
+        Top = 303
+        Width = 90
+        Height = 20
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 13
+        OnClick = NightModeSearchGamesPanelCaptionBarShadowEnabledClick
+        Alignment = taLeftJustify
+        Caption = 'Title Shadow'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
       end
       object NightModeSearchGamesPanelColorsButtonPreview: TBitBtnEx
         Left = 170
@@ -1156,9 +1258,44 @@ object FormNightMode: TFormNightMode
         Caption = 'Preview'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 8
+        TabOrder = 14
         OnClick = NightModeSearchGamesPanelColorsButtonPreviewClick
         UseCustomDraw = True
+      end
+      object NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColor: TColorBoxEx
+        Left = 96
+        Top = 326
+        Width = 185
+        Height = 22
+        Hint = 'Background color of the title bar'
+        DefaultColorColor = 11836807
+        NoneColorColor = clNone
+        Selected = 11836807
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
+        ItemHeight = 16
+        TabOrder = 15
+        OnSelect = NightModeSearchGamesPanelCaptionBarOpaqueBackgroundColorSelect
+        CustomColorsEnabled = True
+      end
+      object NightModeSearchGamesPanelCaptionBarOpaqueBackgroundEnabled: TAdvOfficeCheckBoxEx
+        Left = 4
+        Top = 327
+        Width = 90
+        Height = 20
+        Hint = 'Check to set title bar background in opaque mode'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 16
+        OnClick = NightModeSearchGamesPanelCaptionBarOpaqueBackgroundEnabledClick
+        Alignment = taLeftJustify
+        Caption = 'Title Bkgrd'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
       end
       object NightModeSearchGamesPanelColorsButtonDefault2: TBitBtnEx
         Tag = 1
@@ -1168,7 +1305,7 @@ object FormNightMode: TFormNightMode
         Height = 21
         Hint = 'Reset colors to default'
         Caption = '2'
-        TabOrder = 9
+        TabOrder = 17
         OnClick = NightModeSearchGamesPanelColorsButtonDefaultClick
         ImageIndex = 15
         Images = FormMain.IL_MenuPopup
@@ -3981,9 +4118,9 @@ object FormNightMode: TFormNightMode
     end
     object NightModeCheckBoxRadioButtonBox: TPanelEx
       Left = 614
-      Top = 282
+      Top = 444
       Width = 287
-      Height = 67
+      Height = 68
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -4024,8 +4161,8 @@ object FormNightMode: TFormNightMode
         Transparent = False
       end
       object NightModeCheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel
-        Left = 235
-        Top = 20
+        Left = 208
+        Top = 4
         Width = 46
         Height = 16
         Caption = 'FullPath'
@@ -4050,21 +4187,19 @@ object FormNightMode: TFormNightMode
       end
       object NightModeCheckBoxRadioButtonProfile: TComboBox2Ex
         Left = 4
-        Top = 39
+        Top = 22
         Width = 225
         Height = 21
         Style = csOwnerDrawFixed
         Color = clWhite
         ItemHeight = 15
         TabOrder = 0
-        OnSelect = NightModeCheckBoxRadioButtonProfileSelect
-        CustomColorsEnabled = True
       end
       object NightModeCheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx
-        Left = 100
-        Top = 20
+        Left = 4
+        Top = 44
         Width = 62
-        Height = 19
+        Height = 20
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -4081,10 +4216,10 @@ object FormNightMode: TFormNightMode
         CustomIconsEnabled = False
       end
       object NightModeCheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx
-        Left = 172
-        Top = 20
+        Left = 76
+        Top = 44
         Width = 62
-        Height = 19
+        Height = 20
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -4099,10 +4234,10 @@ object FormNightMode: TFormNightMode
         CustomIconsEnabled = False
       end
       object NightModeCheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx
-        Left = 4
-        Top = 20
+        Left = 152
+        Top = 44
         Width = 73
-        Height = 19
+        Height = 20
         AllowGrayed = True
         Checked = True
         Font.Charset = ANSI_CHARSET
@@ -4121,44 +4256,14 @@ object FormNightMode: TFormNightMode
       end
       object BitBtnEx1: TBitBtnEx
         Left = 233
-        Top = 38
+        Top = 21
         Width = 49
         Height = 24
         Hint = 'Click here to update the folders list (no restart needed)'
         Caption = 'Update'
         TabOrder = 4
-        OnClick = BitBtnEx1Click
+        OnClick = ToolBarOverlayIconsFolderButtonUpdateClick
       end
-    end
-    object NightModeUseWin10DarkModeScrollBars: TAdvOfficeCheckBoxEx
-      Left = 334
-      Top = 700
-      Width = 260
-      Height = 20
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 12574688
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 17
-      Alignment = taLeftJustify
-      Caption = 'Use Windows 10 Dark Scroll Bar in Games List'
-      ReturnIsTab = False
-      CustomIconsEnabled = False
-    end
-    object NightModeUseWin10DarkModeScrollBarsButtonHelp: TBitBtnEx
-      Left = 310
-      Top = 700
-      Width = 19
-      Height = 17
-      Hint = 'What is this for ?'
-      Caption = '?'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 18
-      OnClick = NightModeUseWin10DarkModeScrollBarsButtonHelpClick
-      UseCustomDraw = True
     end
   end
   object PanelPage2: TPanelEx
@@ -4194,32 +4299,32 @@ object FormNightMode: TFormNightMode
     Style = vgSimple
     object ButtonPage1: TSpeedButtonEx
       Tag = 1
-      Left = 710
-      Top = 3
-      Width = 94
-      Height = 25
+      Left = 704
+      Top = 4
+      Width = 100
+      Height = 26
       Caption = 'PAGE 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
+      Font.Height = -13
+      Font.Name = 'System'
+      Font.Style = [fsBold]
       ParentFont = False
       OnClick = ButtonPage1Click
       UseCustomDraw = True
     end
     object ButtonPage2: TSpeedButtonEx
       Tag = 2
-      Left = 808
-      Top = 3
-      Width = 94
-      Height = 25
+      Left = 804
+      Top = 4
+      Width = 100
+      Height = 26
       Caption = 'PAGE 2'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
+      Font.Height = -13
+      Font.Name = 'System'
+      Font.Style = [fsBold]
       ParentFont = False
       OnClick = ButtonPage2Click
       UseCustomDraw = True

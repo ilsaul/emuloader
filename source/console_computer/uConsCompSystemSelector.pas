@@ -239,6 +239,24 @@ procedure TFormConsCompSystemSelector.FormShow(Sender: TObject);
 begin
   LoadCustomMAMEIconToForm(TForm(Sender));
 
+  FormMain.ELV_ResetNormalColors(Systems);
+
+  if IsNightMode then
+     begin
+       FormConsCompSystemSelector.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
+
+       SetLabelColors(LabelCreateNewList, clrMedSilver, clrDarkGray);
+       SetCheckBoxColors(CreateNewList, clrLightRed, clrDarkRed);
+       FormMain.SetCheckBoxExCustomIcon(CreateNewList);
+
+       FormMain.SetButtonExColors(ButtonApply);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonHelp);
+     end;
+
   ResizeForm;
 
   CreateNewList.Checked:= Boolean(FormMain.MenuCreateCustomGamesList.Tag);
@@ -248,7 +266,6 @@ begin
   Systems.Selection.MultiSelect:= ButtonHelp.Visible;
   //Systems.HotTrack.Enabled:= not CreateNewList.Visible; // always enabled from now on
 
-  FormMain.ELV_ResetNormalColors(Systems);
   if IsNightMode then
      FormMain.ELV_SetNightModeColors(Systems);
 

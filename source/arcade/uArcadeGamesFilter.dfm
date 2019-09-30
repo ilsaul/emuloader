@@ -121,6 +121,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnGroupClick = FiltersListViewGroupClick
       OnItemDblClick = FiltersListViewItemDblClick
       OnItemSelectionChanged = FiltersListViewItemSelectionChanged

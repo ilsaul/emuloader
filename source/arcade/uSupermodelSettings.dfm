@@ -172,6 +172,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Top = 211
     Width = 831
     Height = 272
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Video'
@@ -323,6 +324,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Disable Throttle'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowFPS: TAdvOfficeCheckBoxEx
       Left = 432
@@ -336,6 +338,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Show FPS'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Real3DVertexShader: TEditEx
       Left = 8
@@ -344,6 +347,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Height = 21
       Hint = 'Load Real3D vertex shader for 3D rendering'
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
@@ -355,6 +359,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Height = 21
       Hint = 'Load Real3D fragment shader for 3D rendering'
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
@@ -395,6 +400,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Widescreen'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object FullScreen: TAdvOfficeCheckBoxEx
       Left = 554
@@ -408,6 +414,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Full Screen'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object GPUMultithreading: TAdvOfficeCheckBoxEx
       Left = 672
@@ -425,6 +432,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object Video3DEngine: TComboBox2Ex
       Left = 8
@@ -456,6 +464,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Disable V-Sync'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Stretch: TAdvOfficeCheckBoxEx
       Left = 672
@@ -469,6 +478,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Stretch'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object LoadTileMapVertexShader2D: TEditEx
       Left = 428
@@ -476,6 +486,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Width = 350
       Height = 21
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 13
@@ -498,6 +509,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Width = 350
       Height = 21
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 15
@@ -528,6 +540,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Multi-Texture (Legacy 3D Engine)'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object LoadReal3DScrollFogVertexShader: TEditEx
       Left = 8
@@ -536,6 +549,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Height = 21
       Hint = 'Load Real3D vertex shader for 3D rendering'
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 18
@@ -571,6 +585,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Height = 21
       Hint = 'Load Real3D fragment shader for 3D rendering'
       AutoSize = False
+      Color = clWhite
       ParentShowHint = False
       ShowHint = True
       TabOrder = 21
@@ -600,6 +615,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object InputGroupBox: TAdvGroupBoxEx
@@ -607,6 +623,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Top = 557
     Width = 312
     Height = 102
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Input'
@@ -668,6 +685,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Enable Force Feedback (DirectInput / XInput)'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object Crosshairs: TComboBox2Ex
       Left = 136
@@ -696,6 +714,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Top = 495
     Width = 411
     Height = 197
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     ShadowColor = clSilver
     Caption = 'Audio'
@@ -779,6 +798,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Disable Sound'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object DisableMusic: TAdvOfficeCheckBoxEx
       Left = 8
@@ -791,6 +811,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Disable Digital Sound Board (MPEG music)'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object MusicVolume: TGaugeBar
       Left = 8
@@ -823,6 +844,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Flip Stereo'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object AudioBalanceFrontRear: TGaugeBar
       Left = 8
@@ -915,6 +937,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Top = 495
     Width = 405
     Height = 50
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = 'PowerPC Bus Frequency (PPC)'
     Ctl3D = True
@@ -987,6 +1010,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
       Caption = 'Use Custom [1-1000]'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object Multithreading: TAdvOfficeCheckBoxEx
@@ -1003,6 +1027,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     ReturnIsTab = False
     State = cbChecked
     Themed = True
+    CustomIconsEnabled = False
   end
   object ButtonReadFile: TBitBtnEx
     Left = 8
@@ -1090,6 +1115,7 @@ object FormSupermodelSettings: TFormSupermodelSettings
     Selection.UseFocusRect = False
     TabOrder = 9
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnItemEdited = FolderROMsItemEdited
     OnItemEditEnd = FolderROMsItemEditEnd
     OnKeyAction = FolderROMsKeyAction

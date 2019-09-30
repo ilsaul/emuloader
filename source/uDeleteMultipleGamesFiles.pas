@@ -88,7 +88,7 @@ type
 
 type
   TFormDeleteMultipleGamesFiles = class(TForm)
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     IL_DeleteGameIcons: TImageList;
     FileTypesGroupBox: TAdvGroupBoxEx;
     DeleteROMs: TAdvOfficeCheckBoxEx;
@@ -285,9 +285,9 @@ begin
   if IsNightMode then
   begin
     if Enabled then
-       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1], False)
+       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1])
     else
-       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack, False);
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack);
   end
   else
   begin
@@ -934,18 +934,20 @@ begin
   ItemsLineCount:= -1;
   MaxItemsLineCount:= -1;
 
-  if iScreenWidth < 1024 then
-     ItemsColumnCount:= 1;
+  //if iScreenWidth < 1024 then
+  //   ItemsColumnCount:= 1;
 
   case iScreenWidth of
     1024:
       begin
-        GamesList.CellSizes.Tile.Width:= 492;
+        if GamesList.Groups.VisibleItemCount > 12 then
+           GamesList.CellSizes.Tile.Width:= 492;
         FileTextMaxCount:= 66;
       end;
     1152:
       begin
-        GamesList.CellSizes.Tile.Width:= 550;
+        if GamesList.Groups.VisibleItemCount > 12 then
+           GamesList.CellSizes.Tile.Width:= 550;
         FileTextMaxCount:= 76;
       end;
     1920:
@@ -975,22 +977,24 @@ begin
            ItemsColumnCount:= 3;
       end;
   end;
+  if GamesList.Groups.VisibleItemCount < 13 then
+     ItemsColumnCount:= 1;
 
   case iScreenHeight of
-    480: // 640x480 / 720x480
-      begin
-        if ActionMode = 0 then
-           MaxItemsLineCount:= 7
-        else
-           MaxItemsLineCount:= 6;
-      end;
-    600: // 800x600 / 960x600
-      begin
-        if ActionMode = 0 then
-           MaxItemsLineCount:= 10
-        else
-           MaxItemsLineCount:= 9;
-      end;
+    //480: // 640x480 / 720x480
+    //  begin
+    //    if ActionMode = 0 then
+    //       MaxItemsLineCount:= 7
+    //    else
+    //       MaxItemsLineCount:= 6;
+    //  end;
+    //600: // 800x600 / 960x600
+    //  begin
+    //    if ActionMode = 0 then
+    //       MaxItemsLineCount:= 10
+    //    else
+    //       MaxItemsLineCount:= 9;
+    //  end;
     720: // 1280x720
       begin
         if ActionMode = 0 then
@@ -1089,9 +1093,9 @@ begin
   GamesList.Height:= (ItemsLineCount*GamesList.CellSizes.Tile.Height)+GamesList.PaintInfoItem.Border;
 
   if PanelDestinationFolder.Visible then
-     bPanelSize:= BottomBar.Height+PanelDestinationFolder.Height
+     bPanelSize:= PanelBottom.Height+PanelDestinationFolder.Height
   else
-     bPanelSize:= BottomBar.Height;
+     bPanelSize:= PanelBottom.Height;
 
   FormDeleteMultipleGamesFiles.ClientHeight:= GamesList.Height+bPanelSize;
 
@@ -1104,21 +1108,30 @@ begin
 
   if FormDeleteMultipleGamesFiles.ClientWidth <> 1230 then
      begin
-       if ItemsColumnCount = 1 then
+       {if ItemsColumnCount = 1 then
           begin
             ButtonDeleteFiles.Caption:= ActionString;
             ButtonHelp.Caption:= '?';
             ButtonHelp.Width:= 23;
             ButtonNo.Width:= 53;
             ButtonDeleteFiles.Width:= 53;
-          end;
+          end;}
        ButtonNo.Left:= (FormdeleteMultipleGamesFiles.ClientWidth-ButtonNo.Width)-4;
        ButtonDeleteFiles.Left:= ButtonNo.Left-ButtonDeleteFiles.Width-4;
        ButtonHelp.Left:= ButtonDeleteFiles.Left-ButtonHelp.Width-4;
      end;
+  if FormDeleteMultipleGamesFiles.ClientWidth > 750 then
+     begin
+       CopyMoveOverwriteFiles.Left:= ButtonSelectROMsFolder.Left+ButtonSelectROMsFolder.Width+9;
+       CopyMoveAddSystemFolder.Left:= CopyMoveOverwriteFiles.Left+103;
+       CopyMoveOverwriteFiles.Top:= 23;
+       CopyMoveAddSystemFolder.Top:= 23;
+     end;
 end;
 
 procedure TFormDeleteMultipleGamesFiles.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(GamesList);
   FormMain.CheckSevenZip(-1);
@@ -1146,8 +1159,6 @@ begin
        ButtonDeleteFiles.Caption:= ActionString+' Files';
        FileTypesGroupBox.Caption:= 'Check Arcade File Types to '+ActionString;
 
-       //DeleteCFGsNVRAMs.Font.Color:= clGray;
-       DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        //DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
      end;
@@ -1160,31 +1171,28 @@ begin
 
   if IsNightMode then
   begin
-    //FormDeleteMultipleGamesFiles.Color:= menu_background_color[1];
-    SetPanelColors(BottomBar, FormDeleteMultipleGamesFiles.Color, -1, True);
-    //SetFormColors(FormDeleteMultipleGamesFiles, nil, BottomBar, nil, nil, nil, -1, IsNightMode);
+    SetBottomPanelColors(PanelBottom); //SetPanelColors(BottomBar, FormDeleteMultipleGamesFiles.Color, -1, True);
+
+    for Loop:= 0 to FormDeleteMultipleGamesFiles.ComponentCount-1 do
+    begin
+      if FormDeleteMultipleGamesFiles.Components[Loop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormDeleteMultipleGamesFiles.Components[Loop]))
+      else
+      if FormDeleteMultipleGamesFiles.Components[Loop] is TAdvOfficeCheckBoxEx then
+      begin
+        SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormDeleteMultipleGamesFiles.Components[Loop]), clCream, item_caption_active_shadow_color[1], clrMedDarkGray, clrLightBlack);
+        FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormDeleteMultipleGamesFiles.Components[Loop]));
+      end;
+    end;
 
     PanelDestinationFolder.Color1:= FormDeleteMultipleGamesFiles.Color;
-    SetLabelColors(DestinationFolderLabel, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+    SetLabelColors(DestinationFolderLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
     SetEditNightColors(DestinationFolder);
 
-    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
-    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
-    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
     SetGroupBoxBorderStyle(FileTypesGroupBox);
-    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1]{clCream}, item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
-    FormMain.SetButtonExColors(ButtonDeleteFiles);
-    FormMain.SetButtonExColors(ButtonNo);
-    FormMain.SetButtonExColors(ButtonSelectROMsFolder);
-    FormMain.SetButtonExColors(ButtonHelp);
+    FormMain.SetWin10DarkScrollBar(GamesList);
   end;
 
   ChangeCheckBoxColor(DeleteROMs.Checked, DeleteROMs);
@@ -1255,10 +1263,10 @@ begin
                       '    You can choose what files will be processed in the ');
   FormMain.AddMsgText('Check Arcade File Types To '+ActionString, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' group box. These settings are for ');
-  FormMain.AddMsgText('MAME and arcade', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('MAME and arcade', clBlack, [fsBold]);
   FormMain.AddMsgText(' systems only!'+#13#10+
                       '    To delete game files of ');
-  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold]);
   FormMain.AddMsgText(' systems, check ');
   FormMain.AddMsgText('Delete Game File From Disk', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' option (not compatible with MAME and arcade games).'+#13#10+#13#10+
@@ -1714,8 +1722,8 @@ begin
        FormDeleteMultipleGamesViewFiles.BottomBar.Frames:= [];
        FormDeleteMultipleGamesViewFiles.BottomBar.Style:= vgSimple;
        SetFormColors(FormDeleteMultipleGamesViewFiles, nil, FormDeleteMultipleGamesViewFiles.BottomBar, nil, nil, nil, -1, IsNightMode);
-       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clrLightRed, clrLightBlack, False);
-       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clCream, item_caption_active_shadow_color[1], False);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelGhostedFiles, clrLightRed, clrLightBlack);
+       SetLabelColors(FormDeleteMultipleGamesViewFiles.LabelTotalItems, clCream, item_caption_active_shadow_color[1]);
 
        FormMain.SetEasyListViewColors(FormDeleteMultipleGamesViewFiles.FilesListView, FormDeleteMultipleGamesViewFiles.Color, clWhite, clWhite);
 

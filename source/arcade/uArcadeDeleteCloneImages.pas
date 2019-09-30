@@ -492,15 +492,12 @@ begin
        FormArcadeDeleteCloneImages.Color:= menu_background_color[1];
        SetPanelColors(PanelTop, FormMain.PanelSearchGames_ToolBar.Color1, FormMain.PanelSearchGames_ToolBar.Color2, (FormMain.PanelSearchGames_ToolBar.Style <> vgSimple));
 
-       SetLabelColors(LabelSystem, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelImageCategory, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       {SetLabelColors(FormGamesListFontSettings.LabelBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetColorBoxColors(FormGamesListFontSettings.GamesBackgroundColor, True);
-       SetCheckBoxColors(FormGamesListFontSettings.GamesBackgroundImageEnable, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(FormGamesListFontSettings.GamesTileBackground, item_caption_active_color[1], item_caption_active_shadow_color[1], False);}
-       SetLabelColors(LabelTextInfoScr1, clCream,  clrDarkGray, False);
+       SetLabelColors(LabelSystem,        item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelImageCategory, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetLabelColors(LabelTextInfoScr1, clCream,  clrDarkGray);
        LabelTextInfoScr1.Color:= clrMedDarkGray;
-       SetLabelColors(LabelTextInfoParentScr1, clCream,  clrDarkGray, False);
+       SetLabelColors(LabelTextInfoParentScr1, clCream,  clrDarkGray);
        LabelTextInfoParentScr1.Color:= clrMedDarkGray;
 
        BarTextInfoScr1.Color1:= FormArcadeDeleteCloneImages.Color;
@@ -517,6 +514,7 @@ begin
 
        FormMain.SetEasyListViewColors(DeleteClonesList, -1, -1, clrOrangeBarTop);
        FormMain.SetEasyListViewHeaderColors(DeleteClonesList, True);
+       FormMain.SetWin10DarkScrollBar(DeleteClonesList);
      end;
      
   UpdateTotalGamesLabel;

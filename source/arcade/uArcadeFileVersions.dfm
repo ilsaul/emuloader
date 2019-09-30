@@ -93,6 +93,7 @@ object FormArcadeFileVersions: TFormArcadeFileVersions
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnItemPaintText = SystemsItemPaintText
   end
   object IL_Systems: TImageList

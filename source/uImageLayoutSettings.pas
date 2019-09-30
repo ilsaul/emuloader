@@ -724,6 +724,76 @@ end;
 
 procedure TFormImageLayoutSettings.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormImageLayoutSettings.Color:= menu_background_color[1];
+
+       PanelLayoutsSelector.Color1:= clrBlackBk;
+       FormMain.SetEasyListViewColors(LayoutListView, clrBlackBk, clWhite);
+       FormMain.ELV_SetCheckRadioCustomIcon(LayoutListView);
+
+       FormMain.SetSystemTitleLabelColors(LabelLayoutTitle);
+       SetLabelColors(LabelShowHideLayouts, item_shortcut_color[1], item_shortcut_selected_color[1]);
+
+       SetSystemTitleBarNightColors(PanelLayoutTitle, FormImageLayoutSettings.PanelLayoutsTitleBottom);
+
+       SetGroupBoxBorderStyle(GroupBoxCategoryAllSystems);
+       SetGroupBoxColors(GroupBoxCategoryAllSystems,
+                         clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+
+       SetLabelColors(LabelPanel1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel4, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(PanelEnabledScr2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(PanelEnabledScr3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(PanelEnabledScr2);
+       FormMain.SetCheckBoxExCustomIcon(PanelEnabledScr3);
+
+       FrameIconLayScr1.Brush.Color:= clrBlackBk;
+       FrameIconLayScr2.Brush.Color:= clrBlackBk;
+       FrameIconLayScr3.Brush.Color:= clrBlackBk;
+       FrameIconLayScr4.Brush.Color:= clrBlackBk;
+
+       SetLabelColors(LabelLayScr1, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr2, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr3, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr4, clrLightRed, clMaroon);
+
+       SetGroupBoxBorderStyle(GroupBoxCategoryConsoleComputer);
+       SetGroupBoxColors(GroupBoxCategoryConsoleComputer,
+                         clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+       FormMain.SetGroupBoxExCustomIcon(GroupBoxCategoryConsoleComputer);
+
+       SetLabelColors(LabelPanel1_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel2_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel3_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelPanel4_ConsComp, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FrameIconLayScr1_ConsComp.Brush.Color:= clrBlackBk;
+       FrameIconLayScr2_ConsComp.Brush.Color:= clrBlackBk;
+       FrameIconLayScr3_ConsComp.Brush.Color:= clrBlackBk;
+       FrameIconLayScr4_ConsComp.Brush.Color:= clrBlackBk;
+
+       SetLabelColors(LabelLayScr1_ConsComp, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr2_ConsComp, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr3_ConsComp, clrLightRed, clMaroon);
+       SetLabelColors(LabelLayScr4_ConsComp, clrLightRed, clMaroon);
+
+       FormMain.SetButtonExColors(ButtonClose);
+       FormMain.SetButtonExColors(ButtonAbort);
+       FormMain.SetButtonExColors(ButtonHelp);
+       FormMain.SetButtonExColors(ButtonLayoutResetPanelsIndex);
+       FormMain.SetButtonExColors(ButtonLayoutCopyCatAllSystems_ConsComp);
+       FormMain.SetButtonExColors(ButtonLayoutResetPanelsIndex_ConsComp);
+       FormMain.SetButtonExColors(ButtonHelp_CustomCategoryConsComp);
+
+       SetBottomPanelColors(PanelBottom);
+     end;
+
   LabelPanel2.Top:= LabelPanel1.Top;
   LabelPanel3.Top:= LabelPanel1.Top;
   FormMain.ELV_ResetNormalColors(LayoutListView);
@@ -745,14 +815,14 @@ begin
   Item:= LayoutListView.Groups.FirstItem;
   repeat
     if Item.ImageIndex > 0 then
-       Item.Checked:= Boolean(TBitBtn(Sender).Tag);
+       Item.Checked:= Boolean(TBitBtnEx(Sender).Tag);
     Item:= LayoutListView.Groups.NextItem(Item);
   until Item = nil;
   LayoutListView.EndUpdate;
   TShadowLabel(Sender).Tag:= Ord(not Boolean(TShadowLabel(Sender).Tag));
   case TShadowLabel(Sender).Tag of
-    0: TShadowLabel(Sender).Caption:= 'CLICK HERE TO HIDE ALL LAYOUTS';
-    1: TShadowLabel(Sender).Caption:= 'CLICK HERE TO SHOW ALL LAYOUTS';
+    0: TShadowLabel(Sender).Caption:= 'HIDE ALL LAYOUTS';
+    1: TShadowLabel(Sender).Caption:= 'SHOW ALL LAYOUTS';
   end;
   LayoutListView.SetFocus;
 end;
@@ -763,9 +833,9 @@ begin
   if IsNightMode then
      begin
        if GroupBoxCategoryConsoleComputer.CheckBox.Checked then
-          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, item_caption_active_color[1], item_caption_active_shadow_color[1], False)
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, item_caption_active_color[1], item_caption_active_shadow_color[1])
        else
-          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, clGray, clrMedDarkGray, False);
+          SetGroupBoxFontColors(GroupBoxCategoryConsoleComputer, clGray, clrMedDarkGray);
      end
   else
      begin
@@ -877,18 +947,18 @@ procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clCream, -1, False)
+     SetLabelColors(TShadowLabel(Sender), clCream)
   else
-     SetLabelColors(TShadowLabel(Sender), clBlue, clNavy, False);
+     SetLabelColors(TShadowLabel(Sender), clBlue, clNavy);
 end;
 
 procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
   else
-     SetLabelColors(TShadowLabel(Sender), MsgTxtColors.colorFileName, $00dddddd, False);
+     SetLabelColors(TShadowLabel(Sender), MsgTxtColors.colorFileName, $00dddddd);
 end;
 
 procedure TFormImageLayoutSettings.ButtonHelp_CustomCategoryConsCompClick(

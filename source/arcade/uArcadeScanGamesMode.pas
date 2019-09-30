@@ -90,8 +90,54 @@ begin
 end;
 
 procedure TFormArcadeScanGamesMode.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   //ScanMAMESetsBox.Tag:= FormMain.MenuCreateMAMESoftwareListGames.HelpContext;
+  if IsNightMode then
+     begin
+       FormArcadeScanGamesMode.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       for Loop:= 0 to FormArcadeScanGamesMode.ComponentCount-1 do
+       begin
+         if FormArcadeScanGamesMode.Components[Loop] is TAdvOfficeRadioButtonEx then
+         begin
+           SetRadioButtonColors(TAdvOfficeRadioButtonEx(FormArcadeScanGamesMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+           FormMain.SetRadioButtonExCustomIcon(TAdvOfficeRadioButtonEx(FormArcadeScanGamesMode.Components[Loop]));
+         end
+         else
+         if FormArcadeScanGamesMode.Components[Loop] is TAdvOfficeCheckBoxEx then
+         begin
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormArcadeScanGamesMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormArcadeScanGamesMode.Components[Loop]));
+         end
+         else
+         if FormArcadeScanGamesMode.Components[Loop] is TAdvGroupBoxEx then
+         begin
+           SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormArcadeScanGamesMode.Components[Loop]));
+           SetGroupBoxColors(TAdvGroupBoxEx(FormArcadeScanGamesMode.Components[Loop]), clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+         end
+         else
+         if FormArcadeScanGamesMode.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormArcadeScanGamesMode.Components[Loop]));
+       end;
+
+       LabelMAMESoftwareListBox_BlankLine.Pen.Color:= FormArcadeScanGamesMode.Color;
+       LabelMAMESoftwareListBox_BlankLine2.Pen.Color:= FormArcadeScanGamesMode.Color;
+       SetLabelColors(LabelFullScan,          clrLightBlue, clNavy);
+       SetLabelColors(LabelQuickScan,         clrLightBlue, clNavy);
+       SetLabelColors(LabelForceAllAvailable, clrLightBlue, clNavy);
+
+       SetLabelColors(LabelMAMESoftwareListBox,               clrLightBlue, clNavy);
+       SetLabelColors(LabelMAMESoftwareList_Disabled,         clrLightRed, clMaroon);
+       SetLabelColors(LabelMAMESoftwareList_EnabledUpdate,    clrLightRed, clMaroon);
+       SetLabelColors(LabelMAMESoftwareList_EnabledOverwrite, clrLightRed, clMaroon);
+       SetLabelColors(LabelCustomizeMAMESoftwareList,         item_shortcut_color[1], item_shortcut_selected_color[1]);
+
+       SetLabelColors(LabelImportantTips, clrLightRed, clMaroon);
+     end;
+
   FormMain.IL_MenuPopup.GetIcon(8, ScanModeIcon.Picture.Icon);
   FormMain.IL_StandardIconsSmall.GetIcon(MaxGameID+MaxConsoleComputerSystems+1, ImageScanMAME.Picture.Icon);
   FormMain.LoadIconIntoImage('emu_ume', ImageMAMESoftwareList);
@@ -161,7 +207,7 @@ end;
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clCream, -1, False) //clrLightBlue, clrMedBlue, False)
+     SetLabelColors(TShadowLabel(Sender), clCream)
   else
      TShadowLabel(Sender).Font.Color:= clBlue;
 end;
@@ -169,7 +215,7 @@ end;
 procedure TFormArcadeScanGamesMode.LabelCustomizeMAMESoftwareListMouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
   else
      TShadowLabel(Sender).Font.Color:= clNavy;
 end;
@@ -230,7 +276,7 @@ begin
   FormMain.AddMsgText(' games with MAME (consoles/computers).'+
                       ' One important rule you must follow to use software list games with Emu Loader:'+#13#10+#13#10);
   FormMain.AddMsgText('    Game files must be in sub-folders named the same name as XML filenames from ', clBlack, [fsBold]);
-  FormMain.AddMsgText('mamedir\hash\', MsgTxtColors.colorFileName, [fsBold, fsItalic]);
+  FormMain.AddMsgText('mamedir\hash\', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' folder.', clBlack, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'    There are three options to choose from:'+#13#10);
   FormMain.AddMsgText('1. ', clMaroon, [fsBold]);
@@ -239,11 +285,11 @@ begin
   FormMain.AddMsgText('2. ', clMaroon, [fsBold]);
   FormMain.AddMsgText('Enable, Update Mode', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': new software lists will be created and current ones updated only if ');
-  FormMain.AddMsgText('CRC32 checksum', clBlack, [fsItalic]);
+  FormMain.AddMsgText('CRC32 checksum', clBlack);
   FormMain.AddMsgText(' of MAME ');
-  FormMain.AddMsgText('softlist.xml', clBlack, [fsItalic]);
+  FormMain.AddMsgText('softlist.xml', clBlack);
   FormMain.AddMsgText(' file is different than the checksum in frontend ');
-  FormMain.AddMsgText('softlist.el', clBlack, [fsItalic]);
+  FormMain.AddMsgText('softlist.el', clBlack);
   FormMain.AddMsgText(' file.'+#13#10);
   FormMain.AddMsgText('3. ', clMaroon, [fsBold]);
   FormMain.AddMsgText('Enable, Overwrite Mode', MsgTxtColors.colorFileName, [fsBold]);
@@ -251,7 +297,7 @@ begin
                       '    Say you have ');
   FormMain.AddMsgText('rompath d:\emu\mame_roms;d:\emu\mess_roms', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText(' in ');
-  FormMain.AddMsgText('mame.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('mame.ini', clBlack);
   FormMain.AddMsgText(', and have ');
   FormMain.AddMsgText('H.E.R.O.', clBlack, [fsBold]);
   FormMain.AddMsgText(' (hero.zip)', MsgTxtColors.colorWarning, [fsBold]);
@@ -263,14 +309,14 @@ begin
   FormMain.AddMsgText(' (msx1_cart.xml)', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. '+#13#10+
                       'Both files should be in the following folders (softlist sub-folders are not required in ');
-  FormMain.AddMsgText('mame.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('mame.ini', clBlack);
   FormMain.AddMsgText('):'+#13#10#13#10);
-  FormMain.AddMsgText('    Atari 2600', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('    Atari 2600', clBlack, [fsBold]);
   FormMain.AddMsgText(' (console system)');
   FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\a2600\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText('  or  ', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('d:\emu\mess_roms\a2600\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
-  FormMain.AddMsgText(#13#10+#13#10+'    MSX1 Cartridge', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText(#13#10+#13#10+'    MSX1 Cartridge', clBlack, [fsBold]);
   FormMain.AddMsgText(' (computer system)');
   FormMain.AddMsgText(#13#10+'d:\emu\mame_roms\msx1_cart\hero.zip', MsgTxtColors.colorWarning, [fsBold], taLeftJustify, 9, 'Consolas');
   FormMain.AddMsgText('  or  ', MsgTxtColors.colorFileName, [fsBold]);
@@ -281,5 +327,6 @@ begin
                       MsgTxtColors.colorFileName);
   GenerateMessage('Help', 'Software List Games');
 end;
+
 
 end.

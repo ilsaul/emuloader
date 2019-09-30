@@ -123,6 +123,8 @@ begin
     begin
       if FormMain.imgFolder[LoopSys, LoopCategory] <> newSnapshotFolderArcade[LoopSys, LoopCategory] then
          begin
+           if LoopCategory = 1 then
+              FormMain.MenuImageCategorySettings.Tag:= 1;
            FormMain.imgFolder[LoopSys, LoopCategory]:= newSnapshotFolderArcade[LoopSys, LoopCategory];
            if FormMain.IsMAMEBasedSys(LoopSys) then
               begin
@@ -139,7 +141,11 @@ begin
     for LoopCategory:=Low(ImageCategoryArray) to High(ImageCategoryArray) do
     begin
       if SnapshotFolderCustom[LoopSys, LoopCategory] <> newSnapshotFolderConsComp[LoopSys, LoopCategory] then
-         SnapshotFolderCustom[LoopSys, LoopCategory]:= newSnapshotFolderConsComp[LoopSys, LoopCategory];
+         begin
+           if LoopCategory = 1 then
+              FormMain.MenuImageCategorySettings.Tag:= 1;
+           SnapshotFolderCustom[LoopSys, LoopCategory]:= newSnapshotFolderConsComp[LoopSys, LoopCategory];
+         end;
     end;
   end;
 
@@ -267,13 +273,13 @@ begin
      begin
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
           begin
-            if newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag] <> TEdit(Sender).Text then
-               newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]:= TEdit(Sender).Text;
+            if newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag] <> TEditEx(Sender).Text then
+               newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]:= TEditEx(Sender).Text;
           end
        else
           begin
-            if newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag] <> TEdit(Sender).Text then
-               newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]:= TEdit(Sender).Text;
+            if newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag] <> TEditEx(Sender).Text then
+               newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]:= TEditEx(Sender).Text;
           end;
      end;
 end;
@@ -307,6 +313,50 @@ end;
 
 procedure TFormImageCategorySettings.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormImageCategorySettings.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelImageCategorySelector); // SetPanelColors(PanelImageCategorySelector, menu_background_color[1], clrMedDarkGray);
+
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+       PanelSystemTitle.Color1:= clrLightBlack;
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetSystemTypeLabelColors(LabelSystemType);
+       SetLabelColors(LabelSystemNotAvailable, clSilver, clNavy);
+
+       PanelImageCategories.Color1:= menu_background_color[1];
+       FormMain.SetEasyListViewColors(ImageCategory_Selector, menu_background_color[1], item_caption_active_color[1]);
+       FormMain.ELV_SetCheckRadioCustomIcon(ImageCategory_Selector);
+
+       FormMain.SetSystemTitleLabelColors(LabelCategoryTitle);
+       SetLabelColors(LabelShowHideCategories, item_shortcut_color[1], item_shortcut_selected_color[1]);
+       LabelShowHideCategories.Color:= clrDarkGray;
+       LabelShowHideCategories.ColorFrame:= clrMedDarkGray;
+
+       SetSystemTitleBarNightColors(PanelCategoryTitle, FormImageCategorySettings.PanelCategoryTitleBottom, False);
+       PanelCategoriesBottom.Color1:= menu_background_color[1];
+
+       SetLabelColors(LabelImageCategoryFolder,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelImageBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(ImageSingleBackgroundColorEnabled, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(ImageSingleBackgroundColorEnabled); 
+
+       SetEditNightColors(ImageCategoryFolder);
+       SetColorBoxColors(ImageCategoryBackgroundColor, True);
+       SetColorBoxColors(ImageSingleBackgroundColor, True);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(ButtonImageCategoryFolder);
+       FormMain.SetButtonExColors(ButtonClearImageCategoryFolder);
+       FormMain.SetButtonExColors(ButtonResetImageCategoryFolder);
+       FormMain.SetButtonExColors(ImageSingleBackgroundColorButtonReset);
+       FormMain.SetButtonExColors(ButtonDefaultImageCategoryFolder);
+       FormMain.SetButtonExColors(ButtonImageCategoryBackgroundColorReset);
+       FormMain.SetButtonExColors(ButtonZippedImages);
+     end;
+
   LoadCustomMAMEIconToForm(TForm(Sender));
 
   FormMain.LoadSystemsIcons(IL_Systems, False);
@@ -456,7 +506,7 @@ procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clCream, -1, False)
+     SetLabelColors(TShadowLabel(Sender), clCream)
   else
      TShadowLabel(Sender).Font.Color:= clBlue;
 end;
@@ -465,7 +515,7 @@ procedure TFormImageCategorySettings.LabelShowHideCategoriesMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1], False)
+     SetLabelColors(TShadowLabel(Sender), item_shortcut_color[1], item_shortcut_selected_color[1])
   else
      TShadowLabel(Sender).Font.Color:= MsgTxtColors.colorFileName;
 end;
@@ -535,3 +585,4 @@ begin
 end;
 
 end.
+

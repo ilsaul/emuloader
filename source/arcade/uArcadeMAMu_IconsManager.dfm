@@ -161,6 +161,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnItemCompare = NotUsedIconsListItemCompare
       OnItemFreeing = NotUsedIconsListItemFreeing
       OnItemPaintText = NotUsedIconsListItemPaintText
@@ -396,6 +397,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Selection.UseFocusRect = False
     TabOrder = 2
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = MissingIconsListColumnClick
     OnColumnSizeChanged = MissingIconsListColumnSizeChanged
     OnColumnSizeChanging = MissingIconsListColumnSizeChanging
@@ -497,7 +499,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         TabOrder = 4
         OnClick = ButtonScanNotUsedClick
       end
-      object BitBtn3: TBitBtn
+      object ButtonHelp: TBitBtn
         Left = 662
         Top = 2
         Width = 38
@@ -507,7 +509,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         ParentShowHint = False
         ShowHint = True
         TabOrder = 1
-        OnClick = BitBtn3Click
+        OnClick = ButtonHelpClick
       end
     end
   end

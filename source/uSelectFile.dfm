@@ -40,6 +40,9 @@ object FormSelectFile: TFormSelectFile
     ShadowColor = clSilver
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object LabelNewFilename: TShadowLabel
@@ -59,6 +62,9 @@ object FormSelectFile: TFormSelectFile
     ShadowColor = clSilver
     ShadowEnabled = False
     EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
   end
   object FilesListView: TEasyListview
@@ -133,6 +139,7 @@ object FormSelectFile: TFormSelectFile
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = FilesListViewColumnClick
     OnDblClick = FilesListViewDblClick
     OnItemCompare = FilesListViewItemCompare
@@ -140,7 +147,7 @@ object FormSelectFile: TFormSelectFile
     OnItemSelectionChanged = FilesListViewItemSelectionChanged
     OnKeyAction = FilesListViewKeyAction
   end
-  object PanelEx1: TPanelEx
+  object BottomBar: TPanelEx
     Left = 0
     Top = 323
     Width = 604
@@ -151,30 +158,34 @@ object FormSelectFile: TFormSelectFile
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = clGreen
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
     object LabelShortcuts: TShadowLabel
-      Left = 142
+      Left = 121
       Top = 17
-      Width = 319
-      Height = 14
+      Width = 362
+      Height = 16
       Caption = 
         'Shortcuts [ENTER: Select | ESC: Cancel | DELETE: Delete Selected' +
         ' File]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Segoe UI'
-      Font.Style = [fsItalic]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 208
       Top = 47
       Width = 89
@@ -186,7 +197,7 @@ object FormSelectFile: TFormSelectFile
       ShowHint = True
       TabOrder = 0
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 306
       Top = 47
       Width = 89
@@ -199,7 +210,7 @@ object FormSelectFile: TFormSelectFile
       TabOrder = 1
     end
   end
-  object PanelGameTitle: TPanelEx
+  object TopBar: TPanelEx
     Left = 0
     Top = 0
     Width = 604
@@ -210,6 +221,7 @@ object FormSelectFile: TFormSelectFile
     Color3 = 16112579
     Color4 = 16707808
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = []
     ParentBackground = False
     Style = vgSimple
@@ -240,11 +252,14 @@ object FormSelectFile: TFormSelectFile
       ShadowColor = clSkyBlue
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
       Layout = tlCenter
       WordWrap = True
     end
-    object LabelGameNameCloneOf: TShadowLabel
+    object LabelEmulatorVersion: TShadowLabel
       Left = 40
       Top = 34
       Width = 545
@@ -263,10 +278,13 @@ object FormSelectFile: TFormSelectFile
       ShadowColor = 12632284
       ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end
-  object NewFilename: TEdit
+  object NewFilename: TEditEx
     Left = 361
     Top = 291
     Width = 238

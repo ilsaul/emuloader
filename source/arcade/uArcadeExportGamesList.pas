@@ -520,6 +520,8 @@ begin
 end;
 
 procedure TFormArcadeExportGamesList.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
   FormMain.ELV_ResetNormalColors(ExportList);
   FormMain.ELV_ResetNormalColors(GameInfoListToExport);
@@ -533,48 +535,32 @@ begin
        FormMain.SetEasyListViewColors(ExportList, FormArcadeExportGamesList.Color, clWhite, clrLightRed, clGray);
        FormMain.SetEasyListViewHeaderColors(ExportList, True);
 
-       SetGroupBoxBorderStyle(GroupMAMEContentManagerPlus);
-       SetGroupBoxColors(GroupMAMEContentManagerPlus, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-
-       SetCheckBoxColors(MCMPlus_MAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(MCMPlus_HBMAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-
-       SetGroupBoxBorderStyle(GroupExportOptionsAllGames);
-       SetGroupBoxColors(GroupExportOptionsAllGames, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-
-       SetCheckBoxColors(ExportOption_ArcadeGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_NonArcadeMAMEMachines, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_MAMESoftwareListGames, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_MAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_Supermodel3, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_Daphne, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_Demul, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_HBMAME, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_DICE, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_SegaModel2, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(ExportOption_ZiNc, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-
-       SetGroupBoxBorderStyle(GroupExportOptionsGameColumnsFullFormat);
-       SetGroupBoxColors(GroupExportOptionsGameColumnsFullFormat, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-
-       FormMain.SetEasyListViewColors(GameInfoListToExport, FormArcadeExportGamesList.Color, item_caption_active_color[1]{clWhite}, clRed);
+       FormMain.SetEasyListViewColors(GameInfoListToExport, FormArcadeExportGamesList.Color, item_caption_active_color[1], clRed);
        FormMain.SetEasyListViewHeaderColors(GameInfoListToExport, True);
-
-       SetCheckBoxColors(GameInfoToExport_UseGamesListVisibleColumns, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       SetCheckBoxColors(GameInfoToExport_MicrosoftExcelFormat, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
 
        FormMain.ELV_SetNightModeColors(ExportList);
        FormMain.ELV_SetNightModeColors(GameInfoListToExport);
 
-       FormMain.SetButtonExColors(ButtonApplyAndExit);
-       FormMain.SetButtonExColors(ButtonApply);
-       FormMain.SetButtonExColors(ButtonCancel);
-       FormMain.SetButtonExColors(ButtonHelp);
-       FormMain.SetButtonExColors(GameInfoListToExport_MoveUp);
-       FormMain.SetButtonExColors(GameInfoListToExport_MoveDown);
-       FormMain.SetButtonExColors(GameInfoListToExport_Reset);
-       FormMain.SetButtonExColors(GameInfoListToExport_Default);
-       FormMain.SetButtonExColors(ButtonHelp_GameInfoToExport_MicrosoftExcelFormat);
+       FormMain.ELV_SetCheckRadioCustomIcon(GameInfoListToExport);
+
+       for Loop:= 0 to FormArcadeExportGamesList.ComponentCount-1 do
+       begin
+         if FormArcadeExportGamesList.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormArcadeExportGamesList.Components[Loop]))
+         else
+         if FormArcadeExportGamesList.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormArcadeExportGamesList.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormArcadeExportGamesList.Components[Loop]));
+            end
+         else
+         if FormArcadeExportGamesList.Components[Loop] is TAdvGroupBoxEx then
+            begin
+              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormArcadeExportGamesList.Components[Loop]));
+              SetGroupBoxColors(TAdvGroupBoxEx(FormArcadeExportGamesList.Components[Loop]), clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                                               item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            end;
+       end;
      end;
 
   ReadSettings;
@@ -601,7 +587,7 @@ end;
 
 procedure TFormArcadeExportGamesList.GameInfoListToExport_MoveUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(GameInfoListToExport, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(GameInfoListToExport, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormArcadeExportGamesList.FormCloseQuery(Sender: TObject;
@@ -638,7 +624,7 @@ begin
   FormMain.AddMsgText('Game Info to Export', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' settings are only used in this output format. You can change what game info will be inluded, '+
                       'their order and visibility. Optionally, you can create the .txt file in a format that can be imported in ');
-  FormMain.AddMsgText('Excel', clBlack, [fsItalic]);
+  FormMain.AddMsgText('Excel', clBlack);
   FormMain.AddMsgText(' by checking the ');
   FormMain.AddMsgText('Microsoft Excel Format', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' option.'+#13#10+#13#10);
@@ -648,7 +634,7 @@ begin
 
   FormMain.AddMsgText('  MAME Content Manager Plus', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': use this mode if you want to create a .txt file compatible with ');
-  FormMain.AddMsgText('MCM+', clBlack, [fsItalic]);
+  FormMain.AddMsgText('MCM+', clBlack);
   FormMain.AddMsgText(' application. Only MAME and HBMAME games will be added even if you have other systems selected.'+#13#10+#13#10+
                       '    Each output more have three options to choose:'+#13#10+#13#10);
 

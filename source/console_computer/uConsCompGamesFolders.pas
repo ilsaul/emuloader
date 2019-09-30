@@ -376,7 +376,53 @@ begin
 end;
 
 procedure TFormConsCompGamesFolders.FormShow(Sender: TObject);
+var
+  Loop: Integer;
 begin
+  FormMain.ELV_ResetNormalColors(Systems);
+  FormMain.ELV_ResetNormalColors(FolderROM);
+  FormMain.ELV_ResetNormalColors(FolderDiscImage);
+  FormMain.ELV_ResetNormalColors(FolderFloppyDisk);
+  FormMain.ELV_ResetNormalColors(FolderCassetteTape);
+  FormMain.ELV_ResetNormalColors(FolderHardDiskDrive);
+
+  if IsNightMode then
+     begin
+       FormConsCompGamesFolders.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+
+       PanelFolders.Color1:= menu_background_color[1];
+
+       PanelSystemTitle.Color1:= clrLightBlack;
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetSystemTypeLabelColors(LabelSystemType);
+
+       SetLabelColors(LabelRecursiveFolderInfo, clrLightRed, clMaroon);
+
+       SetLabelColors(LabelFolderROM,           item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFolderDiscImage,     item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFolderFloppyDisk,    item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFolderCassetteTape,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFolderHardDiskDrive, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(FolderROM,           clrDarkGray, clCream, -1, clSilver);
+       FormMain.SetEasyListViewColors(FolderDiscImage,     clrDarkGray, clCream, -1, clSilver);
+       FormMain.SetEasyListViewColors(FolderFloppyDisk,    clrDarkGray, clCream, -1, clSilver);
+       FormMain.SetEasyListViewColors(FolderCassetteTape,  clrDarkGray, clCream, -1, clSilver);
+       FormMain.SetEasyListViewColors(FolderHardDiskDrive, clrDarkGray, clCream, -1, clSilver);
+
+       for Loop:= 0 to FormConsCompGamesFolders.ComponentCount-1 do
+       begin
+         if FormConsCompGamesFolders.Components[Loop] is TShadowLabel then
+            TShadowLabel(FormConsCompGamesFolders.Components[Loop]).UseCustomDisabledFontColor:= True
+         else
+         if FormConsCompGamesFolders.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormConsCompGamesFolders.Components[Loop]));
+       end;
+     end;
+
   LoadCustomMAMEIconToForm(TForm(Sender));
   ResizeForm;
 
@@ -388,13 +434,6 @@ begin
   FormMain.IL_LeftPanel.GetIcon(18, IconCassetteTape.Picture.Icon);
   FormMain.IL_LeftPanel.GetIcon(22, IconHardDiskDrive.Picture.Icon);
 
-  FormMain.ELV_ResetNormalColors(Systems);
-  FormMain.ELV_ResetNormalColors(FolderROM);
-  FormMain.ELV_ResetNormalColors(FolderDiscImage);
-  FormMain.ELV_ResetNormalColors(FolderFloppyDisk);
-  FormMain.ELV_ResetNormalColors(FolderCassetteTape);
-  FormMain.ELV_ResetNormalColors(FolderHardDiskDrive);
-
   if IsNightMode then
      begin
        FormMain.ELV_SetNightModeColors(Systems);
@@ -403,7 +442,15 @@ begin
        FormMain.ELV_SetNightModeColors(FolderFloppyDisk);
        FormMain.ELV_SetNightModeColors(FolderCassetteTape);
        FormMain.ELV_SetNightModeColors(FolderHardDiskDrive);
+
+       FormMain.SetWin10DarkScrollBar(Systems);
+       FormMain.SetWin10DarkScrollBar(FolderROM);
+       FormMain.SetWin10DarkScrollBar(FolderDiscImage);
+       FormMain.SetWin10DarkScrollBar(FolderFloppyDisk);
+       FormMain.SetWin10DarkScrollBar(FolderCassetteTape);
+       FormMain.SetWin10DarkScrollBar(FolderHardDiskDrive);
      end;
+     
   InitializeFoldersVariablesTemp;
   ELV_PopulateCustomSystems(Systems, Systems.Tag, -1, True);
 end;

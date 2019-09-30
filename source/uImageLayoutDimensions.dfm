@@ -20,7 +20,7 @@ object FormImageLayoutDimensions: TFormImageLayoutDimensions
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object PanelEx2: TPanelEx
+  object PanelLabels: TPanelEx
     Left = 0
     Top = 172
     Width = 273
@@ -37,25 +37,28 @@ object FormImageLayoutDimensions: TFormImageLayoutDimensions
     ParentBackground = False
     Style = vgSolid
     object LabelImagesPanel: TShadowLabel
-      Left = 30
+      Left = 38
       Top = 36
-      Width = 94
-      Height = 21
+      Width = 83
+      Height = 18
       Caption = 'Images Panel:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clYellow
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMaroon
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImagesPanelDimensions: TShadowLabel
-      Left = 130
+      Left = 122
       Top = 36
       Width = 113
       Height = 21
@@ -64,122 +67,143 @@ object FormImageLayoutDimensions: TFormImageLayoutDimensions
       Caption = '1000x1000 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clYellow
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMaroon
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage1: TShadowLabel
-      Left = 46
+      Left = 53
       Top = 64
-      Width = 60
-      Height = 21
+      Width = 53
+      Height = 18
       Caption = 'Image 1:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage1Dimensions: TShadowLabel
-      Left = 110
+      Left = 117
       Top = 64
-      Width = 116
-      Height = 21
+      Width = 102
+      Height = 18
       Caption = '1000x1000 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage2Dimensions: TShadowLabel
-      Left = 110
+      Left = 117
       Top = 84
-      Width = 116
-      Height = 21
+      Width = 102
+      Height = 18
       Caption = '1000x1000 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage2: TShadowLabel
-      Left = 46
+      Left = 53
       Top = 84
-      Width = 60
-      Height = 21
+      Width = 53
+      Height = 18
       Caption = 'Image 2:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage3: TShadowLabel
-      Left = 46
+      Left = 53
       Top = 104
-      Width = 60
-      Height = 21
+      Width = 53
+      Height = 18
       Caption = 'Image 3:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage3Dimensions: TShadowLabel
-      Left = 110
+      Left = 117
       Top = 104
-      Width = 116
-      Height = 21
+      Width = 102
+      Height = 18
       Caption = '1000x1000 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelLayoutTitle: TShadowLabel
@@ -192,50 +216,59 @@ object FormImageLayoutDimensions: TFormImageLayoutDimensions
       Caption = 'Layout Title'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
-      Font.Height = -16
+      Font.Height = -13
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clMaroon
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage4: TShadowLabel
-      Left = 46
+      Left = 53
       Top = 124
-      Width = 60
-      Height = 21
+      Width = 53
+      Height = 18
       Caption = 'Image 4:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
     object LabelImage4Dimensions: TShadowLabel
-      Left = 110
+      Left = 117
       Top = 124
-      Width = 116
-      Height = 21
+      Width = 102
+      Height = 18
       Caption = '1000x1000 pixels'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
-      Font.Height = -15
+      Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clGray
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Transparent = True
     end
   end

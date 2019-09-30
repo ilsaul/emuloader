@@ -1,11 +1,11 @@
 object FormPreferences: TFormPreferences
-  Left = 847
-  Top = 236
+  Left = 462
+  Top = 229
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Preferences'
-  ClientHeight = 795
-  ClientWidth = 1840
+  ClientHeight = 773
+  ClientWidth = 1818
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -27,8 +27,8 @@ object FormPreferences: TFormPreferences
   object PanelTabButtons: TPanelEx
     Left = 0
     Top = 0
-    Width = 1840
-    Height = 29
+    Width = 1818
+    Height = 23
     Align = alTop
     Color1 = 14540253
     Color2 = 15856113
@@ -41,43 +41,43 @@ object FormPreferences: TFormPreferences
     Style = vgSimple
     object ButtonPage1: TSpeedButtonEx
       Tag = 1
-      Left = 1
+      Left = 2
       Top = 1
       Width = 100
-      Height = 26
+      Height = 22
       GroupIndex = 1
       Down = True
       Caption = 'PAGE 1'
       Flat = True
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'System'
-      Font.Style = [fsBold]
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
       ParentFont = False
       OnClick = ButtonPage1Click
     end
     object ButtonPage2: TSpeedButtonEx
       Tag = 2
-      Left = 102
+      Left = 103
       Top = 1
-      Width = 100
-      Height = 26
+      Width = 146
+      Height = 22
       GroupIndex = 1
-      Caption = 'PAGE 2'
+      Caption = 'PAGE 2 - Light Mode'
       Flat = True
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'System'
-      Font.Style = [fsBold]
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
       ParentFont = False
       OnClick = ButtonPage1Click
     end
   end
   object PanelPage2: TPanelEx
-    Left = 920
-    Top = 29
+    Left = 909
+    Top = 23
     Width = 909
     Height = 636
     Color1 = 15856113
@@ -929,6 +929,7 @@ object FormPreferences: TFormPreferences
         Width = 518
         Height = 21
         AutoSize = False
+        Color = clWhite
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 2
@@ -1328,7 +1329,7 @@ object FormPreferences: TFormPreferences
         OnSelect = GamesListStatusBarFontColorSelect
       end
     end
-    object MAMEGameDocsBox: TPanelEx
+    object MAMEGameDocsColorsBox: TPanelEx
       Left = 614
       Top = 403
       Width = 287
@@ -1343,14 +1344,14 @@ object FormPreferences: TFormPreferences
       Frames = []
       ParentBackground = False
       Style = vgSolid
-      object MAMEGameDocsBoxLabel: TShadowLabel
+      object MAMEGameDocsColorsBoxLabel: TShadowLabel
         Left = 0
         Top = 0
         Width = 285
         Height = 18
         Align = alTop
         AutoSize = False
-        Caption = 'MAME Game Docs'
+        Caption = 'MAME Game Docs Colors'
         CaptionIndent = 3
         Color = clCream
         ParentColor = False
@@ -1994,9 +1995,9 @@ object FormPreferences: TFormPreferences
       end
     end
   end
-  object MAMEGameManualsPDFFolderBox: TPanelEx
-    Left = 816
-    Top = 688
+  object SampleBox: TPanelEx
+    Left = 112
+    Top = 672
     Width = 287
     Height = 96
     Color1 = 15856113
@@ -2009,7 +2010,7 @@ object FormPreferences: TFormPreferences
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object MAMEGameManualsPDFFolderBoxLabel: TShadowLabel
+    object SampleBoxLabel: TShadowLabel
       Left = 0
       Top = 0
       Width = 285
@@ -2032,7 +2033,7 @@ object FormPreferences: TFormPreferences
   end
   object PanelPage1: TPanelEx
     Left = 0
-    Top = 29
+    Top = 23
     Width = 909
     Height = 636
     Color1 = 15856113
@@ -2048,7 +2049,7 @@ object FormPreferences: TFormPreferences
       Left = 8
       Top = 8
       Width = 301
-      Height = 305
+      Height = 421
       Color1 = 15856113
       Color2 = clSilver
       Color3 = clYellow
@@ -2081,7 +2082,7 @@ object FormPreferences: TFormPreferences
       end
       object IgnoreExitCode1InvalidFunctionLabel: TShadowLabel
         Left = 20
-        Top = 117
+        Top = 77
         Width = 268
         Height = 19
         Caption = 'Don'#39't show this error after exiting the emulator'
@@ -2100,30 +2101,9 @@ object FormPreferences: TFormPreferences
         Frames = []
         Transparent = True
       end
-      object UseItalicFontStyleSystemTitleBarLabel: TShadowLabel
-        Left = 20
-        Top = 77
-        Width = 252
-        Height = 19
-        Caption = 'Uncheck this option if you dislike italic fonts'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clGray
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
       object LeftAlignEmulatorGameTextMessageBoxLabel: TShadowLabel
         Left = 20
-        Top = 157
+        Top = 117
         Width = 213
         Height = 19
         Caption = 'Do not center texts in message boxes'
@@ -2170,7 +2150,7 @@ object FormPreferences: TFormPreferences
       end
       object IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 100
+        Top = 60
         Width = 221
         Height = 20
         Checked = True
@@ -2182,26 +2162,12 @@ object FormPreferences: TFormPreferences
         Themed = True
         CustomIconsEnabled = False
       end
-      object UseItalicFontStyleSystemTitleBar: TAdvOfficeCheckBoxEx
-        Left = 4
-        Top = 60
-        Width = 303
-        Height = 20
-        Checked = True
-        TabOrder = 3
-        Alignment = taLeftJustify
-        Caption = 'Italic Font Style for System Title/Type Bars/Labels'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
-      end
       object LeftAlignEmulatorGameTextMessageBox: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 140
+        Top = 100
         Width = 240
         Height = 20
-        TabOrder = 4
+        TabOrder = 3
         Alignment = taLeftJustify
         Caption = 'Left Align Emulators Info and Games Info'
         ReturnIsTab = False
@@ -2210,9 +2176,9 @@ object FormPreferences: TFormPreferences
       end
       object HideDOSBoxBox: TPanelEx
         Left = 4
-        Top = 210
+        Top = 323
         Width = 291
-        Height = 94
+        Height = 97
         Color1 = 15856113
         Color2 = clSilver
         Color3 = clYellow
@@ -2224,7 +2190,7 @@ object FormPreferences: TFormPreferences
         Style = vgSolid
         object HideDOSBoxRunGameLabel: TShadowLabel
           Left = 16
-          Top = 57
+          Top = 60
           Width = 241
           Height = 37
           AutoSize = False
@@ -2264,13 +2230,13 @@ object FormPreferences: TFormPreferences
         end
         object HideDOSBoxEmuVersionCreateGames: TAdvOfficeCheckBoxEx
           Left = 0
-          Top = 20
-          Width = 247
+          Top = 23
+          Width = 255
           Height = 20
           Checked = True
           TabOrder = 0
           Alignment = taLeftJustify
-          Caption = 'Create Games List / Read Emulator Version'
+          Caption = 'Create Games List / Detect Emulator Version'
           ReturnIsTab = False
           State = cbChecked
           Themed = True
@@ -2278,7 +2244,7 @@ object FormPreferences: TFormPreferences
         end
         object HideDOSBoxRunGame: TAdvOfficeCheckBoxEx
           Left = 0
-          Top = 40
+          Top = 43
           Width = 304
           Height = 20
           TabOrder = 1
@@ -2290,7 +2256,7 @@ object FormPreferences: TFormPreferences
         end
       end
     end
-    object PanelEx10: TPanelEx
+    object GamesListBox: TPanelEx
       Left = 325
       Top = 8
       Width = 576
@@ -2305,7 +2271,7 @@ object FormPreferences: TFormPreferences
       Frames = []
       ParentBackground = False
       Style = vgSolid
-      object ShadowLabel15: TShadowLabel
+      object GamesListBoxLabel: TShadowLabel
         Left = 0
         Top = 0
         Width = 574
@@ -2486,7 +2452,7 @@ object FormPreferences: TFormPreferences
       object AddLeadingZeroVersionInfoMAME: TAdvOfficeCheckBoxEx
         Left = 4
         Top = 100
-        Width = 290
+        Width = 245
         Height = 18
         TabOrder = 3
         Alignment = taLeftJustify
@@ -2498,7 +2464,7 @@ object FormPreferences: TFormPreferences
       object DisableCloneIndent: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 20
-        Width = 187
+        Width = 201
         Height = 18
         Hint = 'Align clone games to parent'
         TabOrder = 4
@@ -2512,7 +2478,7 @@ object FormPreferences: TFormPreferences
       object DisableDriverStatusIcons: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 40
-        Width = 145
+        Width = 201
         Height = 18
         TabOrder = 5
         OnClick = DisableCloneIndentClick
@@ -2525,7 +2491,7 @@ object FormPreferences: TFormPreferences
       object HideDriverStatusTexts: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 60
-        Width = 146
+        Width = 201
         Height = 18
         TabOrder = 6
         OnClick = DisableCloneIndentClick
@@ -2551,7 +2517,7 @@ object FormPreferences: TFormPreferences
       object ShortDriverColumnTitles: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 100
-        Width = 195
+        Width = 201
         Height = 18
         TabOrder = 8
         Alignment = taLeftJustify
@@ -2563,7 +2529,7 @@ object FormPreferences: TFormPreferences
       object LastPlayedHideSeconds: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 120
-        Width = 167
+        Width = 201
         Height = 18
         TabOrder = 9
         Alignment = taLeftJustify
@@ -2575,7 +2541,7 @@ object FormPreferences: TFormPreferences
       object TotalPlayTimeHideSeconds: TAdvOfficeCheckBoxEx
         Left = 358
         Top = 140
-        Width = 156
+        Width = 201
         Height = 18
         TabOrder = 10
         Alignment = taLeftJustify
@@ -2634,6 +2600,7 @@ object FormPreferences: TFormPreferences
         Height = 21
         Hint = 'Select MAMu_ Icons Folder'
         AutoSize = False
+        Color = clWhite
         ParentShowHint = False
         ShowHint = False
         TabOrder = 0
@@ -2651,7 +2618,7 @@ object FormPreferences: TFormPreferences
     end
     object ImagesSpecialSettingsBox: TPanelEx
       Left = 8
-      Top = 332
+      Top = 445
       Width = 301
       Height = 96
       Color1 = 15856113
@@ -2883,7 +2850,7 @@ object FormPreferences: TFormPreferences
         TabOrder = 1
       end
       object InternetGameInfoProgettoEMMALinkButtonDefault: TBitBtnEx
-        Left = 174
+        Left = 175
         Top = 19
         Width = 141
         Height = 23
@@ -2912,7 +2879,7 @@ object FormPreferences: TFormPreferences
         OnClick = InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefaultClick
       end
       object InternetGameInfoArcadeItaliaLinkButtonDefault: TBitBtnEx
-        Left = 317
+        Left = 318
         Top = 19
         Width = 124
         Height = 23
@@ -3223,7 +3190,7 @@ object FormPreferences: TFormPreferences
           Frames = []
           Transparent = True
         end
-        object ButtonUp: TBitBtnEx
+        object GameDocsButtonUp: TBitBtnEx
           Tag = 1
           Left = 0
           Top = 146
@@ -3233,9 +3200,9 @@ object FormPreferences: TFormPreferences
           Caption = 'Up'
           TabOrder = 1
           TabStop = False
-          OnClick = ButtonUpClick
+          OnClick = GameDocsButtonUpClick
         end
-        object ButtonDown: TBitBtnEx
+        object GameDocsButtonDown: TBitBtnEx
           Left = 52
           Top = 146
           Width = 47
@@ -3244,9 +3211,9 @@ object FormPreferences: TFormPreferences
           Caption = 'Down'
           TabOrder = 2
           TabStop = False
-          OnClick = ButtonUpClick
+          OnClick = GameDocsButtonUpClick
         end
-        object ButtonResetAutoGameInfoOrder: TBitBtnEx
+        object GameDocsButtonReset: TBitBtnEx
           Left = 125
           Top = 146
           Width = 47
@@ -3254,7 +3221,7 @@ object FormPreferences: TFormPreferences
           Hint = 'Set the order of the texts to default'
           Caption = 'Reset'
           TabOrder = 3
-          OnClick = ButtonResetAutoGameInfoOrderClick
+          OnClick = GameDocsButtonResetClick
         end
         object GameDocs: TEasyListview
           Tag = 1
@@ -3311,6 +3278,7 @@ object FormPreferences: TFormPreferences
           Selection.UseFocusRect = False
           TabOrder = 0
           View = elsReport
+          CustomCheckRadioEnabled = False
           OnItemPaintText = GameDocsItemPaintText
         end
       end
@@ -3421,7 +3389,9 @@ object FormPreferences: TFormPreferences
         Left = 4
         Top = 144
         Width = 269
-        Height = 23
+        Height = 21
+        AutoSize = False
+        Color = clWhite
         TabOrder = 2
       end
       object MAMEGameManualsPDFFolderButtonSelect: TBitBtnEx
@@ -3447,109 +3417,6 @@ object FormPreferences: TFormPreferences
         ShowHint = True
         TabOrder = 4
         OnClick = MAMEGameManualsPDFFolderButtonDefaultClick
-      end
-    end
-    object CheckBoxRadioButtonBox: TPanelEx
-      Left = 8
-      Top = 444
-      Width = 301
-      Height = 96
-      Color1 = 15856113
-      Color2 = clSilver
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clSilver
-      ColorInnerFrame = clGreen
-      EnableCustomBorder = ecbSingle
-      Frames = []
-      ParentBackground = False
-      Style = vgSolid
-      object CheckBoxRadioButtonBoxLabel: TShadowLabel
-        Left = 0
-        Top = 0
-        Width = 299
-        Height = 18
-        Align = alTop
-        AutoSize = False
-        Caption = 'Check Box / Radio Button'
-        CaptionIndent = 3
-        Color = clCream
-        ParentColor = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = 15132390
-        ColorInnerFrame = clBlack
-        Frames = [lfrLeft, lfrRight, lfrBottom]
-        Transparent = False
-      end
-      object CheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel
-        Left = 240
-        Top = 4
-        Width = 46
-        Height = 16
-        Caption = 'FullPath'
-        ParentShowHint = False
-        ShowHint = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Visible = False
-      end
-      object CheckBoxRadioButtonProfile: TComboBox2Ex
-        Left = 4
-        Top = 22
-        Width = 225
-        Height = 23
-        Style = csDropDownList
-        Color = clWhite
-        ItemHeight = 15
-        TabOrder = 0
-        OnSelect = CheckBoxRadioButtonProfileSelect
-      end
-      object CheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx
-        Left = 8
-        Top = 48
-        Width = 62
-        Height = 20
-        TabOrder = 1
-        TabStop = True
-        Alignment = taLeftJustify
-        Caption = 'Radio 1'
-        Checked = True
-        ReturnIsTab = False
-        Themed = True
-        CustomIconsEnabled = False
-      end
-      object CheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx
-        Left = 80
-        Top = 48
-        Width = 62
-        Height = 20
-        TabOrder = 2
-        Alignment = taLeftJustify
-        Caption = 'Radio 2'
-        ReturnIsTab = False
-        Themed = True
-        CustomIconsEnabled = False
-      end
-      object CheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx
-        Left = 156
-        Top = 48
-        Width = 73
-        Height = 20
-        Checked = True
-        TabOrder = 3
-        Alignment = taLeftJustify
-        Caption = 'CheckBox'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
       end
     end
   end

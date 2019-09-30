@@ -25,9 +25,9 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
   TextHeight = 15
   object LabelWarning: TShadowLabel
     Left = 0
-    Top = 385
+    Top = 389
     Width = 697
-    Height = 20
+    Height = 16
     Align = alBottom
     Alignment = taCenter
     Caption = 

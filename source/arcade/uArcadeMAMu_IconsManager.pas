@@ -174,7 +174,7 @@ type
     ButtonScanBoth: TBitBtn;
     ButtonScanMissing: TBitBtn;
     ButtonScanNotUsed: TBitBtn;
-    BitBtn3: TBitBtn;
+    ButtonHelp: TBitBtn;
     PopupShowDevicesOnly: TMenuItem;
     N6: TMenuItem;
     PopupNotUsedSortListbyFilenames: TMenuItem;
@@ -249,7 +249,7 @@ type
     procedure ButtonScanBothClick(Sender: TObject);
     procedure ButtonScanMissingClick(Sender: TObject);
     procedure ButtonScanNotUsedClick(Sender: TObject);
-    procedure BitBtn3Click(Sender: TObject);
+    procedure ButtonHelpClick(Sender: TObject);
     procedure MissingIconsListColumnSizeChanging(
       Sender: TCustomEasyListview; Column: TEasyColumn; Width,
       NewWidth: Integer; var Allow: Boolean);
@@ -1112,7 +1112,7 @@ begin
                TNotUsedIconInfo(addItem).eFileName:= ExtractFileName(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eSize:= GetFileSize(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eSizeText:= FormMain.GetSizeType(TNotUsedIconInfo(addItem).eSize, False);
-               TNotUsedIconInfo(addItem).eDateTime:= FileAge(tempList[Loop2]);
+               TNotUsedIconInfo(addItem).eDateTime:= FileAgeW(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(TNotUsedIconInfo(addItem).eDateTime);
                TNotUsedIconInfo(addItem).eFullPath:= ExtractFilePath(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eNameOriginal:= TNotUsedIconInfo(addItem).eFileName;
@@ -1358,8 +1358,8 @@ begin
           begin
             ACanvas.Font.Color:= clMaroon;
             ACanvas.Font.Name:= 'Consolas';
-            ACanvas.Font.Size:= 8;//ACanvas.Font.Size-1;
-            ACanvas.Font.Style:= [];//ACanvas.Font.Style+[fsItalic];
+            ACanvas.Font.Size:= 8;
+            ACanvas.Font.Style:= [];
           end;
      end
   else
@@ -1992,7 +1992,7 @@ begin
     FileFull:= TNotUsedIconInfo(Item).eFullPath+TNotUsedIconInfo(Item).eFileName;
     TNotUsedIconInfo(Item).eSize:= GetFileSize(FileFull);
     TNotUsedIconInfo(Item).eSizeText:= FormMain.GetSizeType(TNotUsedIconInfo(Item).eSize, False);
-    TNotUsedIconInfo(Item).eDateTime:= FileAge(FileFull);
+    TNotUsedIconInfo(Item).eDateTime:= FileAgeW(FileFull);
     TNotUsedIconInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TNotUsedIconInfo(Item).eDateTime);
     LoadIconNotUsed(FileFull, True, TNotUsedIconInfo(Item).eImageIndex);
     case TMenuItem(Sender).Tag of
@@ -2231,7 +2231,7 @@ begin
   ScanFiles;
 end;
 
-procedure TFormArcadeMAMu_IconsManager.BitBtn3Click(Sender: TObject);
+procedure TFormArcadeMAMu_IconsManager.ButtonHelpClick(Sender: TObject);
 begin
   // missing icons
   CallMessageBox;

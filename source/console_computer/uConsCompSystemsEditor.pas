@@ -332,7 +332,7 @@ begin
   SoftListFilesNotAssigned.Items.ReIndexDisable:= True;
   for Loop:=0 to NotAssignedSoftListFiles.Count-1 do
   begin
-    sIndex:= SoftListFiles_Name.IndexOf(NotAssignedSoftListFiles[Loop]);
+    //sIndex:= SoftListFiles_Name.IndexOf(NotAssignedSoftListFiles[Loop]);
     //if SoftListFiles_MediaType[sIndex] = -1 then
     //   ShowMessageW('There are no games in this MAME software list: "'+NotAssignedSoftListFiles[Loop]+'"') // for debugging only!!! January 10, 2017
     //else
@@ -656,6 +656,54 @@ begin
   //     FormStatus.StartThreadClock;
   //   end;
 
+  FormMain.ELV_ResetNormalColors(Systems);
+  FormMain.ELV_ResetNormalColors(SoftListAssignedToSystem);
+  FormMain.ELV_ResetNormalColors(SoftListFilesNotAssigned);
+
+  if IsNightMode then
+     begin
+       FormConsCompSystemsEditor.Color:= menu_background_color[1];
+
+       FormConsCompSystemsEditor.PanelSystems.Color1:= menu_background_color[1];
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+
+       SetPanelColors(PanelSystemTitle, menu_background_color[1], clrDarkGray);
+       SetPanelColors(PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+
+       PanelSoftwareLists.Color1:= menu_background_color[1];
+       PanelAssignedSoftwareList.Color1:= menu_background_color[1];
+       PanelRemainingSoftwareList.Color1:= menu_background_color[1];
+       FormMain.SetEasyListViewColors(SoftListAssignedToSystem, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewColors(SoftListFilesNotAssigned, menu_background_color[1], clWhite);
+
+       LabelSoftListAssignedToSystem.Color:= clrLightBlack;
+       LabelSoftListFilesNotAssigned.Color:= clrLightBlack;
+       SetLabelColors(LabelSoftListAssignedToSystem, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelSoftListFilesNotAssigned, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(SystemsHideScrollBarArea, clCream{item_caption_active_color[1]}, item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(SystemsHideScrollBarArea);
+
+       SetLabelColors(GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetButtonExColors(GamesListFontSizeSmaller);
+       FormMain.SetButtonExColors(GamesListFontSizeSmaller_x4);
+       FormMain.SetButtonExColors(GamesListFontSizeLarger);
+       FormMain.SetButtonExColors(GamesListFontSizeLarger_x4);
+
+       FormMain.SetButtonExColors(ButtonOptions);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+
+       SetBottomPanelColors(PanelBottom);
+
+       FormMain.UpdateSplitterStyle(Splitter, tsSolidColor, menu_background_color[1], clGray);
+       FormMain.UpdateSplitterStyle(SplitterMainSoftware, tsSolidColor, menu_background_color[1], clGray);
+       FormMain.SetGripIcon(Splitter, False);
+       FormMain.SetGripIcon(SplitterMainSoftware, False);
+     end;
+
   ReadSettings;
 
   if FormConsCompSystemsEditor.Tag = 1 then
@@ -685,9 +733,6 @@ begin
   //   end;
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
-  FormMain.ELV_ResetNormalColors(Systems);
-  FormMain.ELV_ResetNormalColors(SoftListAssignedToSystem);
-  FormMain.ELV_ResetNormalColors(SoftListFilesNotAssigned);
 
   if IsNightMode then
      begin
@@ -696,6 +741,9 @@ begin
        FormMain.SetEasyListViewHeaderColors(SoftListFilesNotAssigned, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftListAssignedToSystem, True);
        FormMain.ELV_SetRibbonNightColors(0, SoftListFilesNotAssigned, True);
+       FormMain.SetWin10DarkScrollBar(Systems);
+       FormMain.SetWin10DarkScrollBar(SoftListAssignedToSystem);
+       FormMain.SetWin10DarkScrollBar(SoftListFilesNotAssigned);
      end;
 
   InitSystemsList;
@@ -1129,7 +1177,7 @@ begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [fsItalic];
+       //ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else

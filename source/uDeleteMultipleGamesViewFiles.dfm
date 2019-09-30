@@ -89,6 +89,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnGroupImageDraw = FilesListViewGroupImageDraw
     OnGroupImageDrawIsCustom = FilesListViewGroupImageDrawIsCustom
     OnItemPaintText = FilesListViewItemPaintText
@@ -128,16 +129,16 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     object LabelGhostedFiles: TShadowLabel
       Left = 280
       Top = 12
-      Width = 261
+      Width = 242
       Height = 37
       Caption = 
         'NOTE: Ghosted files will not be deleted. They are shown here jus' +
         't for information.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 12632284

@@ -239,6 +239,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     Selection.UseFocusRect = False
     TabOrder = 1
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnItemCheckChange = FilesListViewItemCheckChange
     OnItemPaintText = FilesListViewItemPaintText
     OnKeyAction = FilesListViewKeyAction
@@ -259,9 +260,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     ParentBackground = False
     Style = vgSimple
     object LabelTotalFiles: TShadowLabel
-      Left = 287
-      Top = 15
-      Width = 80
+      Left = 431
+      Top = 17
+      Width = 72
       Height = 15
       Alignment = taCenter
       Caption = '00 Total Files'
@@ -269,7 +270,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Font.Color = 10900224
       Font.Height = -12
       Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 15856113
@@ -281,9 +282,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object LabelTotalFilesChecked: TShadowLabel
-      Left = 287
-      Top = 31
-      Width = 100
+      Left = 431
+      Top = 33
+      Width = 91
       Height = 15
       Alignment = taCenter
       Caption = '00 Files Checked'
@@ -291,7 +292,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Font.Color = 10900224
       Font.Height = -12
       Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 15856113
@@ -303,10 +304,10 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Transparent = True
     end
     object ButtonNo: TBitBtnEx
-      Left = 727
-      Top = 14
-      Width = 89
-      Height = 34
+      Left = 744
+      Top = 18
+      Width = 73
+      Height = 30
       Hint = 'Click here to cancel the operation'
       Caption = 'Cancel'
       ModalResult = 7
@@ -317,9 +318,10 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object FileTypesGroupBox: TAdvGroupBoxEx
       Left = 8
       Top = 6
-      Width = 223
+      Width = 199
       Height = 41
       CaptionPosition = cpTopCenter
+      CheckBox.CustomIconsEnabled = False
       RoundEdges = True
       ShadowColor = clMedGray
       Caption = ' Auto-Check Arcade File Types '
@@ -328,9 +330,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ParentColor = False
       TabOrder = 2
       object DeleteCFGsNVRAMs: TAdvOfficeCheckBoxEx
-        Left = 121
+        Left = 107
         Top = 18
-        Width = 100
+        Width = 88
         Height = 18
         Hint = 'Use this option to check/uncheck game config/RAM files'
         HelpContext = 2
@@ -345,16 +347,17 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 2
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        Caption = 'CFGs/NVRAMs'
+        Caption = 'CFG/NVRAM'
         ReturnIsTab = False
         ShadowColor = 14540253
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object DeleteROMs: TAdvOfficeCheckBoxEx
         Left = 7
         Top = 18
-        Width = 55
+        Width = 48
         Height = 18
         Hint = 'Use this option to check/uncheck the gamename .zip/.7z file'
         Checked = True
@@ -368,16 +371,17 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 0
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        Caption = 'ROMs'
+        Caption = 'ROM'
         ReturnIsTab = False
         ShadowColor = 14540253
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object DeleteCHDs: TAdvOfficeCheckBoxEx
-        Left = 66
+        Left = 58
         Top = 18
-        Width = 53
+        Width = 46
         Height = 18
         Hint = 
           'Use this option to check/uncheck CHD files (if supported by the ' +
@@ -393,17 +397,18 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
         TabOrder = 1
         OnClick = DeleteCHDsClick
         Alignment = taLeftJustify
-        Caption = 'CHDs'
+        Caption = 'CHD'
         ReturnIsTab = False
         ShadowColor = 14540253
         Themed = True
+        CustomIconsEnabled = False
       end
     end
     object DeleteGameFromGamesList: TAdvOfficeCheckBoxEx
       Tag = -1
-      Left = 392
-      Top = 13
-      Width = 182
+      Left = 215
+      Top = 15
+      Width = 180
       Height = 18
       Hint = 'Use this option to delete the game entry from main games list'
       Checked = True
@@ -424,11 +429,12 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 14540253
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object DeleteGameFileFromDisk: TAdvOfficeCheckBoxEx
-      Left = 392
-      Top = 29
-      Width = 170
+      Left = 215
+      Top = 31
+      Width = 180
       Height = 18
       Hint = 
         'Auto-check the game file to be deleted (recycle bin not supporte' +
@@ -451,12 +457,13 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ShadowColor = 14540253
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonYes: TBitBtnEx
-      Left = 626
-      Top = 14
-      Width = 89
-      Height = 34
+      Left = 665
+      Top = 18
+      Width = 73
+      Height = 30
       Hint = 'Click here to process all checked files'
       Caption = 'Delete Files'
       ParentShowHint = False
@@ -465,8 +472,8 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       OnClick = ButtonYesClick
     end
     object ButtonHelp: TBitBtnEx
-      Left = 584
-      Top = 20
+      Left = 626
+      Top = 22
       Width = 33
       Height = 23
       Hint = 'A litte help on how to use this feature'
@@ -495,11 +502,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
     object DestinationFolderLabel: TShadowLabel
       Left = 8
       Top = 4
-      Width = 371
+      Width = 245
       Height = 16
-      Caption = 
-        'Destination folder. Full paths only, no network paths. ANSI path' +
-        's only!'
+      Caption = 'Destination folder. Full path, no network path.'
       ShowAccelChar = False
       ShadowColor = clSilver
       ShadowEnabled = False
@@ -519,9 +524,9 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       TabOrder = 0
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx
-      Left = 490
+      Left = 492
       Top = 20
-      Width = 99
+      Width = 98
       Height = 20
       Hint = 
         'Check this option to ovewrite existing files in the destination ' +
@@ -532,6 +537,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Caption = 'Overwrite Files'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonSelectROMsFolder: TBitBtnEx
       Left = 440
@@ -546,7 +552,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       OnClick = ButtonSelectROMsFolderClick
     end
     object CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx
-      Left = 594
+      Left = 595
       Top = 20
       Width = 121
       Height = 20
@@ -561,6 +567,7 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object IL_MediaType: TImageList

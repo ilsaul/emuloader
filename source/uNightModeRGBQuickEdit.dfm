@@ -4,8 +4,8 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'RGB Quick Edit'
-  ClientHeight = 266
-  ClientWidth = 292
+  ClientHeight = 262
+  ClientWidth = 544
   Color = 2565927
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -43,7 +43,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   end
   object NightModeRGBQuickEdit_GreenLabel: TShadowLabel
     Left = 16
-    Top = 105
+    Top = 112
     Width = 34
     Height = 16
     Caption = 'Green'
@@ -66,7 +66,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   end
   object NightModeRGBQuickEdit_BlueLabel: TShadowLabel
     Left = 16
-    Top = 129
+    Top = 143
     Width = 26
     Height = 16
     Caption = 'Blue'
@@ -87,17 +87,9 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object NightModeRGBQuickEdit_ColorSample: TShape
-    Left = 90
-    Top = 78
-    Width = 186
-    Height = 69
-    Brush.Color = clBlack
-    Pen.Color = clGray
-  end
   object NightModeKeysHintLabel: TShadowLabel
     Left = 16
-    Top = 179
+    Top = 216
     Width = 261
     Height = 16
     Caption = 'TAB : Change Focus   ENTER : Apply   ESC : Abort'
@@ -121,7 +113,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeColorBoxExHint: TShadowLabel
     Left = 14
     Top = 12
-    Width = 264
+    Width = 511
     Height = 31
     Alignment = taCenter
     AutoSize = False
@@ -143,12 +135,12 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object NightModeRGBQuickEdit_HexLabel: TShadowLabel
+  object NightModeRGBQuickEdit_HexLabel2: TShadowLabel
     Left = 16
-    Top = 153
-    Width = 68
+    Top = 174
+    Width = 23
     Height = 16
-    Caption = 'Hex   000000'
+    Caption = 'Hex'
     Color = 5787720
     Font.Charset = ANSI_CHARSET
     Font.Color = 12574688
@@ -167,7 +159,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Transparent = True
   end
   object NightModeRGBQuickEdit_ColorSampleLabel: TShadowLabel
-    Left = 125
+    Left = 377
     Top = 57
     Width = 127
     Height = 16
@@ -189,22 +181,9 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object NightModeRGBQuickEdit_ColorSample_Current: TShape
-    Left = 183
-    Top = 79
-    Width = 93
-    Height = 68
-    Hint = 'Click to restore color'
-    Brush.Color = clBlack
-    ParentShowHint = False
-    Pen.Color = clGray
-    Pen.Style = psClear
-    ShowHint = True
-    OnMouseUp = NightModeRGBQuickEdit_ColorSample_CurrentMouseUp
-  end
   object NightModeKeysHint2Label: TShadowLabel
     Left = 16
-    Top = 197
+    Top = 234
     Width = 233
     Height = 16
     Caption = 'Mouse Left-Click on Current Color To Reset'
@@ -226,8 +205,8 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Transparent = True
   end
   object NightModeRGBQuickEdit_ColorSample_CurrentLabel: TShadowLabel
-    Left = 188
-    Top = 153
+    Left = 440
+    Top = 167
     Width = 87
     Height = 16
     Alignment = taCenter
@@ -250,8 +229,121 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object NightModeRGBQuickEdit_Red: TEditEx
+  object TrackBarColorR_ButtonDec: TSpeedButtonEx
+    Tag = -1
     Left = 51
+    Top = 78
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorR_ButtonDecClick
+  end
+  object TrackBarColorR_ButtonInc: TSpeedButtonEx
+    Tag = 1
+    Left = 277
+    Top = 78
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorR_ButtonDecClick
+  end
+  object TrackBarColorG_ButtonDec: TSpeedButtonEx
+    Tag = -1
+    Left = 51
+    Top = 109
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorG_ButtonDecClick
+  end
+  object TrackBarColorG_ButtonInc: TSpeedButtonEx
+    Tag = 1
+    Left = 277
+    Top = 109
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorG_ButtonDecClick
+  end
+  object TrackBarColorB_ButtonDec: TSpeedButtonEx
+    Tag = -1
+    Left = 51
+    Top = 140
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorB_ButtonDecClick
+  end
+  object TrackBarColorB_ButtonInc: TSpeedButtonEx
+    Tag = 1
+    Left = 277
+    Top = 140
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    OnClick = TrackBarColorB_ButtonDecClick
+  end
+  object NightModeRGBQuickEdit_HexLabel: TShadowLabel
+    Left = 51
+    Top = 174
+    Width = 39
+    Height = 16
+    Caption = '000000'
+    Color = 5787720
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 12574688
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    ShowAccelChar = False
+    ShadowColor = 5588805
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = 4210752
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
+  object NightModeRGBQuickEdit_Red: TEditEx
+    Left = 305
     Top = 78
     Width = 30
     Height = 21
@@ -265,8 +357,8 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     UseCustomBorder = True
   end
   object NightModeRGBQuickEdit_Green: TEditEx
-    Left = 51
-    Top = 102
+    Left = 305
+    Top = 109
     Width = 30
     Height = 21
     AutoSize = False
@@ -279,8 +371,8 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     UseCustomBorder = True
   end
   object NightModeRGBQuickEdit_Blue: TEditEx
-    Left = 51
-    Top = 126
+    Left = 305
+    Top = 140
     Width = 30
     Height = 21
     AutoSize = False
@@ -293,8 +385,8 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     UseCustomBorder = True
   end
   object NightModeRGBQuickEdit_ButtonApply: TBitBtnEx
-    Left = 90
-    Top = 226
+    Left = 341
+    Top = 222
     Width = 86
     Height = 25
     Hint = 'Set current color to colorbox'
@@ -305,12 +397,156 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     TabOrder = 3
   end
   object NightModeRGBQuickEdit_ButtonAbort: TBitBtnEx
-    Left = 191
-    Top = 226
+    Left = 443
+    Top = 222
     Width = 86
     Height = 25
     Caption = 'Abort'
     ModalResult = 2
     TabOrder = 4
+  end
+  object TrackBarColorR: TXiTrackBar
+    Tag = -1
+    Left = 75
+    Top = 74
+    Width = 200
+    Height = 29
+    BackColor = 2565927
+    TickColor = 12574688
+    DisabledTickColor = clGray
+    SlideBorderColor = 1315860
+    SlideFaceColor = 3289650
+    SlideGradColor = 5263440
+    DisabledSlideBorderColor = 2368548
+    DisabledSlideFaceColor = 2565927
+    DisabledSlideGradColor = 3289650
+    DisabledThumbBorderColor = 2368548
+    DisabledThumbFaceColor = 3289650
+    DisabledThumbGradColor = 4342338
+    ThumbBorderColor = 1315860
+    ThumbFaceColor = clGray
+    ThumbGradColor = 5000268
+    OverThumbBorderColor = 1315860
+    OverThumbFaceColor = clMedGray
+    OverThumbGradColor = 9803157
+    DownThumbBorderColor = 1315860
+    DownThumbFaceColor = 6316128
+    DownThumbGradColor = 3750201
+    SmoothCorners = True
+    ColorScheme = csDark
+    Min = 0
+    Max = 255
+    Frequency = 16
+    TickStyle = tsAuto
+    TickMarks = tmBottomRight
+    Orientation = trHorizontal
+    OnChange = TrackBarColorRChange
+  end
+  object TrackBarColorG: TXiTrackBar
+    Tag = -1
+    Left = 75
+    Top = 105
+    Width = 200
+    Height = 29
+    BackColor = 2565927
+    TickColor = 12574688
+    DisabledTickColor = clGray
+    SlideBorderColor = 1315860
+    SlideFaceColor = 3289650
+    SlideGradColor = 5263440
+    DisabledSlideBorderColor = 2368548
+    DisabledSlideFaceColor = 2565927
+    DisabledSlideGradColor = 3289650
+    DisabledThumbBorderColor = 2368548
+    DisabledThumbFaceColor = 3289650
+    DisabledThumbGradColor = 4342338
+    ThumbBorderColor = 1315860
+    ThumbFaceColor = clGray
+    ThumbGradColor = 5000268
+    OverThumbBorderColor = 1315860
+    OverThumbFaceColor = clMedGray
+    OverThumbGradColor = 9803157
+    DownThumbBorderColor = 1315860
+    DownThumbFaceColor = 6316128
+    DownThumbGradColor = 3750201
+    SmoothCorners = True
+    ColorScheme = csDark
+    Min = 0
+    Max = 255
+    Frequency = 16
+    TickStyle = tsAuto
+    TickMarks = tmBottomRight
+    Orientation = trHorizontal
+    OnChange = TrackBarColorGChange
+  end
+  object TrackBarColorB: TXiTrackBar
+    Tag = -1
+    Left = 75
+    Top = 136
+    Width = 200
+    Height = 29
+    BackColor = 2565927
+    TickColor = 12574688
+    DisabledTickColor = clGray
+    SlideBorderColor = 1315860
+    SlideFaceColor = 3289650
+    SlideGradColor = 5263440
+    DisabledSlideBorderColor = 2368548
+    DisabledSlideFaceColor = 2565927
+    DisabledSlideGradColor = 3289650
+    DisabledThumbBorderColor = 2368548
+    DisabledThumbFaceColor = 3289650
+    DisabledThumbGradColor = 4342338
+    ThumbBorderColor = 1315860
+    ThumbFaceColor = clGray
+    ThumbGradColor = 5000268
+    OverThumbBorderColor = 1315860
+    OverThumbFaceColor = clMedGray
+    OverThumbGradColor = 9803157
+    DownThumbBorderColor = 1315860
+    DownThumbFaceColor = 6316128
+    DownThumbGradColor = 3750201
+    SmoothCorners = True
+    ColorScheme = csDark
+    Min = 0
+    Max = 255
+    Frequency = 16
+    TickStyle = tsAuto
+    TickMarks = tmBottomRight
+    Orientation = trHorizontal
+    OnChange = TrackBarColorBChange
+  end
+  object NightModeRGBQuickEdit_ColorSample: TPanelEx
+    Left = 342
+    Top = 78
+    Width = 93
+    Height = 83
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGray
+    ColorInnerFrame = clGreen
+    Frames = [frLeft, frTop, frBottom]
+    ParentBackground = False
+    Style = vgSolid
+  end
+  object NightModeRGBQuickEdit_ColorSample_Current: TPanelEx
+    Left = 435
+    Top = 78
+    Width = 93
+    Height = 83
+    Hint = 'Click to restore color'
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGray
+    ColorInnerFrame = clGreen
+    Frames = [frTop, frRight, frBottom]
+    ParentBackground = False
+    ShowHint = True
+    Style = vgSolid
+    OnMouseUp = NightModeRGBQuickEdit_ColorSample_CurrentMouseUp
   end
 end

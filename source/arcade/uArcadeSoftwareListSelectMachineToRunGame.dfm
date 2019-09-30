@@ -131,6 +131,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       Caption = 'Show Available Only'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object HidePreliminaryMachines: TAdvOfficeCheckBoxEx
       Left = 247
@@ -145,6 +146,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       Caption = 'Hide Preliminary Machines'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object TopBar: TPanelEx
@@ -335,6 +337,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = MachinesListViewColumnClick
       OnDblClick = MachinesListViewDblClick
       OnItemPaintText = MachinesListViewItemPaintText

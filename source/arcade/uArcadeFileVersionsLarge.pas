@@ -139,6 +139,45 @@ end;
 
 procedure TFormArcadeFileVersionsLarge.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormArcadeFileVersionsLarge.Color:= menu_background_color[1];
+       Panel1.Color1:= menu_background_color[1];
+       Panel2.Color1:= menu_background_color[1];
+       Panel3.Color1:= menu_background_color[1];
+       Panel4.Color1:= menu_background_color[1];
+       Panel5.Color1:= menu_background_color[1];
+       Panel6.Color1:= menu_background_color[1];
+       Panel7.Color1:= menu_background_color[1];
+       Panel8.Color1:= menu_background_color[1];
+
+       SetLabelColors(LabelSystemTitle1, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle2, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle3, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle4, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle5, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle6, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle7, clrOrangeBarTop, clrMedDarkGray);
+       SetLabelColors(LabelSystemTitle8, clrOrangeBarTop, clrMedDarkGray);
+
+       SetLabelColors(LabelEmuFileName1, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName2, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName3, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName4, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName5, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName6, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName7, clGray, clrMedDarkGray);
+       SetLabelColors(LabelEmuFileName8, clGray, clrMedDarkGray);
+
+       SetLabelColors(LabelVersionInfo1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo2, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo3, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo4, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo5, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo6, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo7, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelVersionInfo8, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+     end;
   AddSystems;
 end;
 

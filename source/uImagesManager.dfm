@@ -118,6 +118,7 @@ object FormImagesManager: TFormImagesManager
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = MissingImagesListColumnClick
     OnColumnSizeChanged = MissingImagesListColumnSizeChanged
     OnColumnSizeChanging = MissingImagesListColumnSizeChanging
@@ -239,6 +240,7 @@ object FormImagesManager: TFormImagesManager
       Selection.UseFocusRect = False
       TabOrder = 1
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnDblClick = NotUsedImagesListDblClick
       OnItemPaintText = NotUsedImagesListItemPaintText
       OnItemSelectionChanged = NotUsedImagesListItemSelectionChanged

@@ -117,6 +117,7 @@ object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIco
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnItemCheckChange = NotWorkingIconsItemCheckChange
     OnItemPaintText = NotWorkingIconsItemPaintText
     OnKeyAction = NotWorkingIconsKeyAction
@@ -130,9 +131,9 @@ object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIco
     BevelOuter = bvNone
     TabOrder = 1
     object LabelHotkeys: TShadowLabel
-      Left = 343
+      Left = 335
       Top = 4
-      Width = 282
+      Width = 290
       Height = 19
       Hint = 
         'Hotkeys -> "SPACE": Check/Uncheck     "ESC": Cancel     "ENTER":' +
@@ -143,15 +144,18 @@ object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIco
       Font.Color = clMaroon
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
       Layout = tlCenter
     end
-    object ButtonSourceIcon: TBitBtn
+    object ButtonSourceIcon: TBitBtnEx
       Left = 2
       Top = 2
       Width = 75
@@ -161,7 +165,7 @@ object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIco
       TabOrder = 0
       OnClick = ButtonSourceIconClick
     end
-    object ButtonDeleteFiles: TBitBtn
+    object ButtonDeleteFiles: TBitBtnEx
       Left = 82
       Top = 2
       Width = 75
@@ -171,7 +175,7 @@ object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIco
       TabOrder = 1
       OnClick = ButtonDeleteFilesClick
     end
-    object ButtonCancel: TBitBtn
+    object ButtonCancel: TBitBtnEx
       Left = 162
       Top = 2
       Width = 75

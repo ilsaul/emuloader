@@ -505,7 +505,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000001CA010000FFFFFF1F0001000000
+          00060000008008000101000100000000000001C8010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -541,6 +541,7 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 0
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderROMsKeyAction
@@ -879,7 +880,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -915,6 +916,7 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 25
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderArtworksKeyAction
@@ -1010,7 +1012,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000104010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000102010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True
@@ -1046,6 +1048,7 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 32
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemEdited = FolderROMsItemEdited
         OnItemEditEnd = FolderROMsItemEditEnd
         OnKeyAction = FolderIniFilesKeyAction
@@ -1346,6 +1349,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 169
         Height = 417
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Render Options'
         ParentCtl3D = True
@@ -1393,6 +1397,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Window Mode'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object MaximizeWindow: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1407,6 +1412,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object KeepAspectRatio: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1421,6 +1427,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object WaitVerticalSync: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1433,6 +1440,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Wait Vertical Sync'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object BilinearFilter: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1447,6 +1455,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object UnevenStretch: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1464,6 +1473,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object UnevenStretchX: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1479,6 +1489,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Uneven Stretch (Hor)'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object IntegerScaleFactorHorizontal: TEditEx
           Left = 47
@@ -1524,6 +1535,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Integer Scale Overscan'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object UnevenStretchY: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1539,6 +1551,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Uneven Stretch (Vert)'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object AutoUnevenStretchXY: TAdvOfficeCheckBoxEx
           Left = 8
@@ -1554,6 +1567,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Auto Uneven Stretch'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object VectorGroupBox: TAdvGroupBoxEx
@@ -1561,6 +1575,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 214
         Width = 169
         Height = 213
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Vector'
         ParentCtl3D = True
@@ -1716,6 +1731,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object ScreenOptionsGroupBox: TAdvGroupBoxEx
@@ -1723,6 +1739,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 169
         Height = 279
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Game Screen'
         Ctl3D = True
@@ -1955,6 +1972,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 169
         Height = 193
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Full Screen'
         ParentCtl3D = True
@@ -2027,6 +2045,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Triple Buffer'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object SwitchResolution: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2039,6 +2058,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Switch Resolution'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object FullScreenBrightness: TGaugeBar2
           Left = 8
@@ -2094,6 +2114,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 227
         Width = 169
         Height = 200
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Snapshots / Movies'
         ParentCtl3D = True
@@ -2177,6 +2198,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Burn-in Snapshot'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object SnapNameButtonDefault: TBitBtnEx
           Left = 125
@@ -2247,6 +2269,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object SnapSizeWidth: TEditEx
           Left = 68
@@ -2309,6 +2332,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object ArtworkGroupBox: TAdvGroupBoxEx
@@ -2316,6 +2340,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 169
         Height = 181
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Artwork'
         ParentCtl3D = True
@@ -2365,6 +2390,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object ArtworkBezels: TAdvOfficeCheckBoxEx
           Left = 110
@@ -2379,6 +2405,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object ArtworkOverlays: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2393,6 +2420,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object ArtworkCrop: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2407,6 +2435,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Crop'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object ArtworkControlPanels: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2421,6 +2450,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object ArtworkMarquees: TAdvOfficeCheckBoxEx
           Left = 88
@@ -2435,6 +2465,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object FallbackArtwork: TEditEx
           Left = 8
@@ -2444,6 +2475,7 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 
             'Fallback artwork if no external artwork or internal driver layou' +
             't defined'
+          Color = clWhite
           Enabled = False
           TabOrder = 6
         end
@@ -2453,6 +2485,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 153
           Height = 23
           Hint = 'Override artwork for external artwork and internal driver layout'
+          Color = clWhite
           Enabled = False
           TabOrder = 7
         end
@@ -2462,6 +2495,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 297
         Width = 169
         Height = 131
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Screen Rotation'
         ParentCtl3D = True
@@ -2477,6 +2511,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Flip Left-Right'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object FlipY: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2489,6 +2524,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Flip Upside-Down'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object RotateRight: TAdvOfficeCheckBoxEx
           Left = 88
@@ -2501,6 +2537,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Right'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object RotateLeft: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2513,6 +2550,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Left'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object AutoRotateRight: TAdvOfficeCheckBoxEx
           Left = 88
@@ -2525,6 +2563,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Auto Right'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object AutoRotateLeft: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2539,6 +2578,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Auto Left'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Rotate: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2555,6 +2595,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
       end
     end
@@ -2579,12 +2620,25 @@ object FormMAMESettings: TFormMAMESettings
         Frames = []
         Transparent = True
       end
+      object AttachWindowLabel: TShadowLabel
+        Left = 336
+        Top = 79
+        Width = 151
+        Height = 16
+        Caption = 'Attach To Arbitrary Window'
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
       object PerformanceGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 12
         Width = 308
         Height = 194
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Performance'
         ParentCtl3D = True
@@ -2707,6 +2761,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Auto Frameskip'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Throttle: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2721,6 +2776,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object Sleep: TAdvOfficeCheckBoxEx
           Left = 8
@@ -2737,6 +2793,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object Multithreading: TAdvOfficeCheckBoxEx
           Left = 79
@@ -2752,6 +2809,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Multithreading'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object RefreshSpeed: TAdvOfficeCheckBoxEx
           Left = 191
@@ -2768,6 +2826,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object SyncronizeRefreshRate: TAdvOfficeCheckBoxEx
           Left = 191
@@ -2782,6 +2841,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Sync Refresh Rate'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Speed: TGaugeBar2
           Left = 8
@@ -2934,7 +2994,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 222
         Width = 176
         Height = 193
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Screens'
         ParentCtl3D = True
@@ -3036,6 +3096,26 @@ object FormMAMESettings: TFormMAMESettings
           ParentShowHint = False
           ShowAccelChar = False
           ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object NumberScreensLabel: TShadowLabel
+          Left = 11
+          Top = 42
+          Width = 45
+          Height = 14
+          Caption = '1 2 3 4'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Consolas'
+          Font.Style = []
+          ParentFont = False
           ShadowColor = clGray
           ShadowEnabled = False
           EllipsType = etNone
@@ -3232,32 +3312,6 @@ object FormMAMESettings: TFormMAMESettings
             'Cropped'
             'Stretched')
         end
-        object NumberScreens: TExTrackBar
-          Left = 4
-          Top = 16
-          Width = 50
-          Height = 41
-          Hint = 
-            'Number of screens to create (usually you want just one)'#13#10'Multi-s' +
-            'creen games can have different screen settings'
-          Max = 4
-          Min = 1
-          PageSize = 1
-          Position = 1
-          TabOrder = 5
-          ThumbLength = 18
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Consolas'
-          Font.Style = []
-          ParentFont = False
-          LabelsLeftTop = 26
-          LabelsFactor = 1
-          LabelsFactorOperation = foMul
-          LabelsInterval = 1
-          SelEnable = False
-        end
         object ScreensSelector: TComboBox2Ex
           Tag = -1
           Left = 81
@@ -3276,7 +3330,7 @@ object FormMAMESettings: TFormMAMESettings
           ItemIndex = 0
           ParentCtl3D = False
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 5
           Text = 'All Screens'
           OnSelect = ScreensSelectorSelect
           Items.Strings = (
@@ -3293,14 +3347,50 @@ object FormMAMESettings: TFormMAMESettings
           Height = 21
           Hint = 'Set default values for the selected screen'
           Caption = 'Reset'
-          TabOrder = 7
+          TabOrder = 6
           OnClick = ScreenButtonDefaultSettingsClick
+        end
+        object NumberScreens: TXiTrackBar
+          Left = 8
+          Top = 14
+          Width = 47
+          Height = 28
+          Hint = 'Number of screens to create (usually you want just one)'
+          BackColor = 15856113
+          TickColor = 7500402
+          DisabledTickColor = clSilver
+          SlideBorderColor = 7500402
+          SlideFaceColor = clWhite
+          SlideGradColor = 15395562
+          DisabledSlideBorderColor = 12500670
+          DisabledSlideFaceColor = 14211288
+          DisabledSlideGradColor = 15263976
+          DisabledThumbBorderColor = 11908533
+          DisabledThumbFaceColor = 15395562
+          DisabledThumbGradColor = 13619151
+          ThumbBorderColor = 6381921
+          ThumbFaceColor = clWhite
+          ThumbGradColor = 14145495
+          OverThumbBorderColor = 7631988
+          OverThumbFaceColor = 13750737
+          OverThumbGradColor = 9803157
+          DownThumbBorderColor = 7631988
+          DownThumbFaceColor = 10066329
+          DownThumbGradColor = 12698049
+          SmoothCorners = True
+          ColorScheme = csWhite
+          Max = 4
+          Min = 1
+          Position = 1
+          TickStyle = tsAuto
+          TickMarks = tmBottomRight
+          Orientation = trHorizontal
         end
       end
       object MonitorProvider: TComboBox2Ex
         Left = 336
         Top = 29
-        Width = 121
+        Width = 153
         Height = 21
         Hint = 'Monitor Discovery Method'
         Style = csDropDownList
@@ -3323,6 +3413,28 @@ object FormMAMESettings: TFormMAMESettings
           'Win32'
           'DXGI'
           'SDL')
+      end
+      object EnableMenuBar: TAdvOfficeCheckBoxEx
+        Left = 336
+        Top = 56
+        Width = 120
+        Height = 20
+        Hint = 'Enables menu bar if available by UI implementation'
+        TabOrder = 3
+        Alignment = taLeftJustify
+        Caption = 'Enable Menu Bar'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+      end
+      object AttachWindow: TEditEx
+        Left = 336
+        Top = 95
+        Width = 153
+        Height = 23
+        Hint = 'Use an existing window as the first emulation window'
+        Color = clWhite
+        TabOrder = 4
       end
     end
     object TPage
@@ -3638,6 +3750,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Enable Debugging Statistics'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object BGFXShadowMaskTextureName: TEditEx
             Left = 8
@@ -3774,6 +3887,7 @@ object FormMAMESettings: TFormMAMESettings
             Selection.UseFocusRect = False
             TabOrder = 10
             View = elsReport
+            CustomCheckRadioEnabled = False
             OnDblClick = BGFXScreenShaderChains_ListViewDblClick
             OnItemCompare = BGFXScreenShaderChains_ListViewItemCompare
             OnItemPaintText = BGFXScreenShaderChains_ListViewItemPaintText
@@ -3948,6 +4062,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Enable HLSL'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object YIQEnable: TAdvOfficeCheckBoxEx
             Left = 195
@@ -3963,6 +4078,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Enable YIQ Colorspace'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object ShadowMaskTexture: TEditEx
             Left = 8
@@ -4026,6 +4142,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Read Custom File'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object WriteCustomHLSLFile: TAdvOfficeCheckBoxEx
             Left = 124
@@ -4039,6 +4156,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Write Custom File'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object HLSLIniFile: TEditEx
             Left = 239
@@ -4121,6 +4239,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Enable HLSL Oversampling'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object ShadowMaskTileMode: TComboBox2Ex
             Left = 8
@@ -4161,6 +4280,7 @@ object FormMAMESettings: TFormMAMESettings
             Top = 54
             Width = 330
             Height = 107
+            CheckBox.CustomIconsEnabled = False
             RoundEdges = True
             Caption = 'Vector Post-Processing'
             Ctl3D = True
@@ -4277,6 +4397,7 @@ object FormMAMESettings: TFormMAMESettings
             Top = 192
             Width = 329
             Height = 161
+            CheckBox.CustomIconsEnabled = False
             RoundEdges = True
             Caption = 'Bloom Post-Processing'
             Ctl3D = True
@@ -4369,6 +4490,7 @@ object FormMAMESettings: TFormMAMESettings
               Caption = 'Enable Screen LUT Texture'
               ReturnIsTab = False
               Themed = True
+              CustomIconsEnabled = False
             end
             object BloomLOOTUIEnabled: TAdvOfficeCheckBoxEx
               Left = 8
@@ -4383,6 +4505,7 @@ object FormMAMESettings: TFormMAMESettings
               Caption = 'Enable UI / Artwork LUT Texture'
               ReturnIsTab = False
               Themed = True
+              CustomIconsEnabled = False
             end
             object BloomLUTTextureUI: TEditEx
               Left = 8
@@ -4807,6 +4930,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Force Power of Two Textures'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object OpenGLDisableUseGL_ARBTextureRectangle: TAdvOfficeCheckBoxEx
             Left = 235
@@ -4819,6 +4943,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Don'#39't Use GL_ARB Texture Rectangle'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object EnableOpenGL_VBO: TAdvOfficeCheckBoxEx
             Left = 8
@@ -4833,6 +4958,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             State = cbChecked
             Themed = True
+            CustomIconsEnabled = False
           end
           object EnableOpenGL_PBO: TAdvOfficeCheckBoxEx
             Left = 132
@@ -4847,6 +4973,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             State = cbChecked
             Themed = True
+            CustomIconsEnabled = False
           end
           object EnableGLSL: TAdvOfficeCheckBoxEx
             Left = 8
@@ -4860,6 +4987,7 @@ object FormMAMESettings: TFormMAMESettings
             Caption = 'Enable GLSL'
             ReturnIsTab = False
             Themed = True
+            CustomIconsEnabled = False
           end
           object EnableOpenGLFilterNotFF: TAdvOfficeCheckBoxEx
             Left = 235
@@ -4873,6 +5001,7 @@ object FormMAMESettings: TFormMAMESettings
             ReturnIsTab = False
             State = cbChecked
             Themed = True
+            CustomIconsEnabled = False
           end
           object GLSL_Shader_Screen0: TEditEx
             Left = 239
@@ -4880,6 +5009,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 6
           end
           object GLSL_Shader_Screen0ButtonSelect: TBitBtnEx
@@ -4900,6 +5030,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 8
           end
           object GLSL_Shader_Screen1ButtonSelect: TBitBtnEx
@@ -4920,6 +5051,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 10
           end
           object GLSL_Shader_Screen2ButtonSelect: TBitBtnEx
@@ -4940,6 +5072,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 12
           end
           object GLSL_Shader_Screen3ButtonSelect: TBitBtnEx
@@ -4960,6 +5093,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 14
           end
           object GLSL_Shader_Screen4ButtonSelect: TBitBtnEx
@@ -4980,6 +5114,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 16
           end
           object GLSL_Shader_Screen5ButtonSelect: TBitBtnEx
@@ -5000,6 +5135,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 18
           end
           object GLSL_Shader_Screen6ButtonSelect: TBitBtnEx
@@ -5020,6 +5156,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 20
           end
           object GLSL_Shader_Screen7ButtonSelect: TBitBtnEx
@@ -5040,6 +5177,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 22
           end
           object GLSL_Shader_Screen8ButtonSelect: TBitBtnEx
@@ -5060,6 +5198,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 24
           end
           object GLSL_Shader_Screen9ButtonSelect: TBitBtnEx
@@ -5080,6 +5219,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 26
           end
           object GLSL_Shader_MAME0ButtonSelect: TBitBtnEx
@@ -5100,6 +5240,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 28
           end
           object GLSL_Shader_MAME1ButtonSelect: TBitBtnEx
@@ -5120,6 +5261,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 30
           end
           object GLSL_Shader_MAME2ButtonSelect: TBitBtnEx
@@ -5140,6 +5282,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 32
           end
           object GLSL_Shader_MAME3ButtonSelect: TBitBtnEx
@@ -5160,6 +5303,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 34
           end
           object GLSL_Shader_MAME4ButtonSelect: TBitBtnEx
@@ -5180,6 +5324,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 36
           end
           object GLSL_Shader_MAME5ButtonSelect: TBitBtnEx
@@ -5200,6 +5345,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 38
           end
           object GLSL_Shader_MAME6ButtonSelect: TBitBtnEx
@@ -5220,6 +5366,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 40
           end
           object GLSL_Shader_MAME7ButtonSelect: TBitBtnEx
@@ -5240,6 +5387,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 42
           end
           object GLSL_Shader_MAME8ButtonSelect: TBitBtnEx
@@ -5260,6 +5408,7 @@ object FormMAMESettings: TFormMAMESettings
             Width = 180
             Height = 21
             AutoSize = False
+            Color = clWhite
             TabOrder = 44
           end
           object GLSL_Shader_MAME9ButtonSelect: TBitBtnEx
@@ -5324,6 +5473,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 289
         Width = 297
         Height = 152
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Auto-boot (LUA Scripts)'
         Ctl3D = True
@@ -5387,6 +5537,7 @@ object FormMAMESettings: TFormMAMESettings
           Height = 21
           Hint = 'Command to execute after machine boot'
           AutoSize = False
+          Color = clWhite
           ParentShowHint = False
           ShowHint = False
           TabOrder = 0
@@ -5414,6 +5565,7 @@ object FormMAMESettings: TFormMAMESettings
           Hint = 'Script for debugger'
           TabStop = False
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           ParentCtl3D = False
           ParentShowHint = False
@@ -5457,6 +5609,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable Emulator LUA Console'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object EnableLUAPluginSupport: TAdvOfficeCheckBoxEx
         Left = 16
@@ -5471,6 +5624,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object LUAPluginsToEnable: TEasyListview
         Left = 16
@@ -5536,12 +5690,14 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 3
         View = elsReport
+        CustomCheckRadioEnabled = False
       end
       object AudioGroupBox: TAdvGroupBoxEx
         Left = 632
         Top = 65
         Width = 222
         Height = 152
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         ShadowColor = clSilver
         Caption = 'Audio'
@@ -5623,6 +5779,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object AudioLatency: TComboBox2Ex
           Left = 95
@@ -5737,6 +5894,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 240
         Width = 222
         Height = 153
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'PortAudio Settings'
         Ctl3D = True
@@ -5801,6 +5959,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 161
           Height = 21
           AutoSize = False
+          Color = clWhite
           ParentShowHint = False
           ShowHint = False
           TabOrder = 1
@@ -5811,6 +5970,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 161
           Height = 21
           AutoSize = False
+          Color = clWhite
           ParentShowHint = False
           ShowHint = False
           TabOrder = 2
@@ -5830,6 +5990,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 161
           Height = 21
           AutoSize = False
+          Color = clWhite
           ParentShowHint = False
           ShowHint = False
           TabOrder = 4
@@ -5933,6 +6094,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Mutli-Keyboard'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object Mouse: TAdvOfficeCheckBoxEx
         Left = 16
@@ -5945,6 +6107,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Mouse'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object MultiMouse: TAdvOfficeCheckBoxEx
         Left = 16
@@ -5957,6 +6120,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Multi-Mouse'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object LightGun: TAdvOfficeCheckBoxEx
         Left = 168
@@ -5969,6 +6133,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Light Gun'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object DualLightGun: TAdvOfficeCheckBoxEx
         Left = 168
@@ -5981,6 +6146,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Dual Light Gun'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object LightGunOffScreenReload: TAdvOfficeCheckBoxEx
         Left = 168
@@ -5993,6 +6159,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Off-Screen Reload'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object NaturalKeyboard: TAdvOfficeCheckBoxEx
         Left = 16
@@ -6005,6 +6172,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Natural Keyboard'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object SteadyKey: TAdvOfficeCheckBoxEx
         Left = 168
@@ -6017,6 +6185,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Steady Key'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object CoinLockout: TAdvOfficeCheckBoxEx
         Left = 168
@@ -6031,6 +6200,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object UIMouse: TAdvOfficeCheckBoxEx
         Left = 564
@@ -6045,12 +6215,14 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Display User Interface Mouse Cursor'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object JoystickGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 163
         Width = 297
         Height = 85
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Joystick'
         ParentCtl3D = True
@@ -6123,6 +6295,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object JoystickContradictory: TAdvOfficeCheckBoxEx
           Left = 151
@@ -6137,6 +6310,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Joystick Contradictory'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object JoystickSaturation: TGaugeBar2
           Left = 152
@@ -6161,6 +6335,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 289
         Height = 197
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Automatic Device Selection [Analog Controls]'
         ParentCtl3D = True
@@ -6523,6 +6698,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable Partial Keyboard Emulation (UI Enabled)'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object CoinImpulse: TComboBox2Ex
         Left = 168
@@ -6587,7 +6763,7 @@ object FormMAMESettings: TFormMAMESettings
         CheckBox.Action = caNone
         CheckBox.Hint = 'Enable local http server'
         CheckBox.Visible = True
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Enable HTTP Server'
         ParentCtl3D = True
@@ -6666,6 +6842,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 224
         Width = 289
         Height = 69
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Full Keyboard Emulation (User Interface Disabled)'
         ParentCtl3D = True
@@ -6718,6 +6895,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 12
         Width = 219
         Height = 236
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Comm Options'
         Ctl3D = True
@@ -6910,6 +7088,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Syncronize Frames'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
       end
       object EnableGlobalInputs: TAdvOfficeCheckBoxEx
@@ -6923,6 +7102,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable Global Inputs'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object RecordInputTimecodeFile: TAdvOfficeCheckBoxEx
         Left = 16
@@ -6934,6 +7114,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Record an Input Timecode File'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ExitAfterInputPlayback: TAdvOfficeCheckBoxEx
         Left = 216
@@ -6945,13 +7126,14 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Exit Emulator After Input Playback'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object OSDInputOptionsGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 256
         Width = 297
         Height = 109
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'OSD Input Options'
         Ctl3D = True
@@ -7115,6 +7297,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 300
         Width = 217
         Height = 65
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'OSD Output Options'
         ParentCtl3D = True
@@ -7296,6 +7479,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Skip Game Info'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ReadConfigFiles: TAdvOfficeCheckBoxEx
         Left = 16
@@ -7310,6 +7494,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object WriteConfigFiles: TAdvOfficeCheckBoxEx
         Left = 16
@@ -7322,6 +7507,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Write Config Files'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object Cheat: TAdvOfficeCheckBoxEx
         Left = 138
@@ -7334,6 +7520,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Cheats Enabled'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object RAMSize: TEditEx
         Left = 252
@@ -7342,6 +7529,7 @@ object FormMAMESettings: TFormMAMESettings
         Height = 21
         Hint = 'Size of RAM (if supported by driver)'
         AutoSize = False
+        Color = clWhite
         TabOrder = 4
         OnKeyPress = RAMSizeKeyPress
       end
@@ -7356,23 +7544,24 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Confirm Quit'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object DebugGroupBox: TAdvGroupBoxEx
         Left = 252
         Top = 146
         Width = 197
-        Height = 156
+        Height = 197
         CheckBox.Action = caNone
         CheckBox.Hint = 'Enable/disable debugger'
         CheckBox.Visible = True
-        Transparent = False
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Enable Debugger'
         ParentCtl3D = True
         TabOrder = 6
         object DebuggerScriptLabel: TShadowLabel
           Left = 8
-          Top = 110
+          Top = 150
           Width = 88
           Height = 16
           Caption = 'Debugger Script'
@@ -7434,6 +7623,21 @@ object FormMAMESettings: TFormMAMESettings
           ColorInnerFrame = clBlack
           Frames = []
         end
+        object ShadowLabel1: TShadowLabel
+          Left = 8
+          Top = 110
+          Width = 80
+          Height = 16
+          Caption = 'Debugger Port'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
         object Log: TAdvOfficeCheckBoxEx
           Left = 8
           Top = 40
@@ -7445,6 +7649,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Log'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object OSLog: TAdvOfficeCheckBoxEx
           Left = 81
@@ -7459,6 +7664,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Log to Debugger'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object Verbose: TAdvOfficeCheckBoxEx
           Left = 8
@@ -7471,6 +7677,7 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Verbose'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object UpdateInPause: TAdvOfficeCheckBoxEx
           Left = 81
@@ -7483,15 +7690,17 @@ object FormMAMESettings: TFormMAMESettings
           Caption = 'Update In Pause'
           ReturnIsTab = False
           Themed = True
+          CustomIconsEnabled = False
         end
         object DebuggerScript: TEditEx
           Left = 8
-          Top = 128
+          Top = 168
           Width = 137
           Height = 21
           Hint = 'Script for debugger'
           TabStop = False
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           ParentCtl3D = False
           ParentShowHint = False
@@ -7500,7 +7709,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object DebuggerScriptButtonSelect: TBitBtnEx
           Left = 146
-          Top = 128
+          Top = 168
           Width = 43
           Height = 21
           Hint = 'Click here to select a file'
@@ -7546,6 +7755,33 @@ object FormMAMESettings: TFormMAMESettings
             'Internal'
             'Windows'
             'None')
+        end
+        object DebuggerPort: TEditEx
+          Left = 8
+          Top = 128
+          Width = 137
+          Height = 21
+          Hint = 'Port to use for GDB stub debugger'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 8
+        end
+        object DebuggerPortButtonReset: TBitBtnEx
+          Left = 146
+          Top = 128
+          Width = 43
+          Height = 21
+          Hint = 'Click here to use the default port'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 9
+          OnClick = DebuggerPortButtonResetClick
         end
       end
       object BiosSetsListView: TEasyListview
@@ -7612,6 +7848,7 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 7
         View = elsReport
+        CustomCheckRadioEnabled = False
         OnItemCompare = BiosSetsListViewItemCompare
       end
       object UIFont: TEditEx
@@ -7621,6 +7858,7 @@ object FormMAMESettings: TFormMAMESettings
         Height = 21
         Hint = 'Specify a font to use'
         AutoSize = False
+        Color = clWhite
         Ctl3D = True
         Enabled = False
         ParentCtl3D = False
@@ -7650,6 +7888,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object DRCUseC: TAdvOfficeCheckBoxEx
         Left = 252
@@ -7663,6 +7902,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Force DRC To Use C Backend'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object RAMSizeButtonClear: TBitBtnEx
         Left = 407
@@ -7684,6 +7924,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Write DRC UML Disassembly Log'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object DRCLogNative: TAdvOfficeCheckBoxEx
         Left = 252
@@ -7695,6 +7936,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Write DRC Native Disassembly Log'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object UIFontProvider: TComboBox2Ex
         Left = 372
@@ -7795,6 +8037,7 @@ object FormMAMESettings: TFormMAMESettings
         Selection.UseFocusRect = False
         TabOrder = 17
         View = elsReport
+        CustomCheckRadioEnabled = False
       end
       object SaveNVRAMOnExit: TAdvOfficeCheckBoxEx
         Left = 16
@@ -7811,6 +8054,7 @@ object FormMAMESettings: TFormMAMESettings
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object AutoSave: TAdvOfficeCheckBoxEx
         Left = 16
@@ -7825,6 +8069,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Auto Save State'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object EnableSaveStateRewind: TAdvOfficeCheckBoxEx
         Left = 16
@@ -7837,6 +8082,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Enable Save State Rewind'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object SaveStateRewindBufferSize: TGaugeBar
         Left = 16
@@ -7861,6 +8107,7 @@ object FormMAMESettings: TFormMAMESettings
         Height = 21
         Hint = 'Override of the default state subfolder naming; %g == gamename'
         AutoSize = False
+        Color = clWhite
         ParentShowHint = False
         ShowHint = False
         TabOrder = 22
@@ -7890,6 +8137,7 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Skip Mandatory Images at Startup'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
     end
     object TPage
@@ -7902,6 +8150,7 @@ object FormMAMESettings: TFormMAMESettings
         Width = 249
         Height = 65
         CheckBox.Visible = True
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Enable SDL Keyboard Mapping'
         Ctl3D = True
@@ -7968,6 +8217,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 236
         Width = 240
         Height = 207
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Joystick Mapping                                             '
         Ctl3D = True
@@ -8123,6 +8373,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8167,6 +8418,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8211,6 +8463,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8255,6 +8508,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8299,6 +8553,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8343,6 +8598,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8387,6 +8643,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8431,6 +8688,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8454,6 +8712,7 @@ object FormMAMESettings: TFormMAMESettings
           Alignment = taLeftJustify
           Caption = 'PS3 Sixaxis Controller'
           ReturnIsTab = False
+          CustomIconsEnabled = False
         end
       end
       object SDLLightgunMappingGroupBox: TAdvGroupBoxEx
@@ -8461,6 +8720,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 236
         Width = 240
         Height = 207
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Lightgun Mapping (XInput)'
         Ctl3D = True
@@ -8616,6 +8876,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8660,6 +8921,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8704,6 +8966,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8748,6 +9011,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8792,6 +9056,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8836,6 +9101,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8880,6 +9146,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8924,6 +9191,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -8943,6 +9211,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 20
         Width = 240
         Height = 207
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Mouse Mapping (SDL 2)'
         Ctl3D = True
@@ -9098,6 +9367,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9142,6 +9412,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9186,6 +9457,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9230,6 +9502,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9274,6 +9547,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9318,6 +9592,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9362,6 +9637,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9406,6 +9682,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9425,6 +9702,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 20
         Width = 240
         Height = 207
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Keyboard Mapping (SDL 2)'
         Ctl3D = True
@@ -9580,6 +9858,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9624,6 +9903,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9668,6 +9948,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9712,6 +9993,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9756,6 +10038,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9800,6 +10083,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9844,6 +10128,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9888,6 +10173,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           AutoSize = False
+          Color = clWhite
           Ctl3D = True
           Enabled = False
           Font.Charset = ANSI_CHARSET
@@ -9912,12 +10198,14 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Show SDL Video Performance'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object SDLOutputModeGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 166
         Width = 249
         Height = 87
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Output Mode'
         ParentCtl3D = True
@@ -9950,6 +10238,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object SDLCenterVertically: TAdvOfficeCheckBoxEx
           Left = 136
@@ -9964,6 +10253,7 @@ object FormMAMESettings: TFormMAMESettings
           ReturnIsTab = False
           State = cbChecked
           Themed = True
+          CustomIconsEnabled = False
         end
         object SDLScaleMode: TComboBox2Ex
           Left = 8
@@ -9971,6 +10261,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 233
           Height = 21
           Style = csDropDownList
+          Color = clWhite
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -10004,12 +10295,14 @@ object FormMAMESettings: TFormMAMESettings
         Caption = 'Split Full Screen Image Across Monitors'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object SDLLowLevelDriverGroupBox: TAdvGroupBoxEx
         Left = 16
         Top = 334
         Width = 331
         Height = 109
+        CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'SDL Low Level Driver'
         Ctl3D = True
@@ -10080,6 +10373,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 101
           Height = 21
           Style = csDropDownList
+          Color = clWhite
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -10101,6 +10395,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 107
           Height = 21
           Style = csDropDownList
+          Color = clWhite
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -10123,6 +10418,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 101
           Height = 21
           Style = csDropDownList
+          Color = clWhite
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -10144,6 +10440,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 103
           Height = 21
           Style = csDropDownList
+          Color = clWhite
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -10165,6 +10462,7 @@ object FormMAMESettings: TFormMAMESettings
           Width = 165
           Height = 21
           AutoSize = False
+          Color = clWhite
           Enabled = False
           TabOrder = 4
         end
@@ -10384,5 +10682,6 @@ object FormMAMESettings: TFormMAMESettings
     ReturnIsTab = False
     ShadowColor = clSkyBlue
     Themed = True
+    CustomIconsEnabled = False
   end
 end

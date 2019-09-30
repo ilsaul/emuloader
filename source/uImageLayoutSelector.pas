@@ -64,6 +64,16 @@ end;
 
 procedure TFormImageLayoutSelector.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormImageLayoutSelector.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       FormMain.SetEasyListViewColors(LayoutsListView, menu_background_color[1], item_caption_active_color[1]);
+       FormMain.SetSystemTitleLabelColors(LabelLayoutTitle);
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+     end;
+
   FormMain.ELV_ResetNormalColors(LayoutsListView);
   if IsNightMode then
      FormMain.ELV_SetNightModeColors(LayoutsListView);

@@ -541,6 +541,26 @@ var
   strFolder: String;
 begin
   FormMain.ELV_ResetNormalColors(GamesFont);
+  if IsNightMode then
+     begin
+       SetBottomPanelColors(PanelBottom);
+       SetEditNightColors(GamesBackgroundImage);
+       SetLabelColors(LabelBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetColorBoxColors(GamesBackgroundColor, True);
+       SetCheckBoxColors(GamesBackgroundImageEnable, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(GamesTileBackground,        item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(GamesBackgroundImageEnable);
+       FormMain.SetCheckBoxExCustomIcon(GamesTileBackground);
+
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(GamesBackgroundImageButtonSelect);
+       FormMain.SetButtonExColors(GamesBackgroundImageButtonUpdate);
+       FormMain.SetButtonExColors(ButtonDefaultBkSortedColor);
+
+       FormMain.SetWin10DarkScrollBar(GamesFont);
+     end;
+
   FormMain.SetSelectedColorBox(GamesBackgroundColor, FormMain.GamesListView.Color);
   TileDetailsTextColor:= GetContrastColor(GamesFont.Color);
   ResizeForm;

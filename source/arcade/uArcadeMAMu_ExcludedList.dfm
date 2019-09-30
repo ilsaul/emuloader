@@ -19,7 +19,7 @@ object FormArcadeMAMu_ExcludedList: TFormArcadeMAMu_ExcludedList
   OnCloseQuery = FormCloseQuery
   PixelsPerInch = 96
   TextHeight = 15
-  object LabelInfo: TLabel
+  object LabelInfo: TShadowLabel
     Left = 17
     Top = 362
     Width = 354
@@ -34,10 +34,16 @@ object FormArcadeMAMu_ExcludedList: TFormArcadeMAMu_ExcludedList
     Font.Name = 'Verdana'
     Font.Style = []
     ParentFont = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
     Transparent = True
     WordWrap = True
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 420
     Top = 366
     Width = 89
@@ -63,7 +69,7 @@ object FormArcadeMAMu_ExcludedList: TFormArcadeMAMu_ExcludedList
     ScrollBars = ssVertical
     TabOrder = 2
   end
-  object Cancel: TBitBtn
+  object Cancel: TBitBtnEx
     Left = 518
     Top = 366
     Width = 89

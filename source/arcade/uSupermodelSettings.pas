@@ -598,17 +598,20 @@ begin
          else
          if FormSupermodelSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
             begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
               TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]).DisabledFontColor:= clGray;
               TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormSupermodelSettings.Components[Loop]));
             end;
          if FormSupermodelSettings.Components[Loop] is TShadowLabel then
-            SetLabelColors(TShadowLabel(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
+            SetLabelColors(TShadowLabel(FormSupermodelSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
        end;
     SetFormColors(FormSupermodelSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idSupermodel, True);
     FormMain.SetEasyListViewColors(FolderROMs, FormSupermodelSettings.Color, clWhite, -1, clGray);
+    FormMain.ELV_SetEditBkColor(FolderROMs);
     FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+    FormMain.SetWin10DarkScrollBar(FolderROMs);
   end;
 
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSupermodel, emuVersionStr);
@@ -741,7 +744,7 @@ end;
 
 procedure TFormSupermodelSettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormSupermodelSettings.FolderROMsButtonSelectClick(
@@ -771,8 +774,9 @@ end;
 procedure TFormSupermodelSettings.PowerPCFrequencyCustomKeyPress(
   Sender: TObject; var Key: Char);
 begin
-  if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-     Key:= Char(0);
+  Key:= FormMain.KeyPressValidateNumbers(Key);
+  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
+  //   Key:= Char(0);
 end;
 
 procedure TFormSupermodelSettings.Real3DVertexShaderButtonSelectClick(

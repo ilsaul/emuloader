@@ -267,6 +267,7 @@ object FormGameDetails: TFormGameDetails
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = ROMsListViewColumnClick
       OnItemCompare = ROMsListViewItemCompare
       OnItemPaintText = ROMsListViewItemPaintText

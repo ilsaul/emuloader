@@ -7,7 +7,7 @@ uses
   Graphics, SysUtils, ShlObj, Forms, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, ShadowLabel,
-  EasyListview, MPCommonObjects, MPCommonUtilities,
+  EasyListview, MPCommonObjects, MPCommonUtilities, EditEx,
   uCommon;
 
 const
@@ -231,7 +231,7 @@ procedure UpdateCustomGamesFolders;
 function  CheckSystemGamesFolders(sysID: ShortInt): Boolean;
 
 function  GetVirtualDriveIniSection(const VirtualDriveFileName: String): String;
-procedure ReadDaemonToolsSettings(UpdateMainVars: Boolean; VirtualDriveFileName: TEdit = nil; MountEdit: TEdit = nil; UnmountEdit: TEdit = nil);
+procedure ReadDaemonToolsSettings(UpdateMainVars: Boolean; VirtualDriveFileName: TEditEx = nil; MountEdit: TEditEx = nil; UnmountEdit: TEditEx = nil);
 
 procedure EmuParametersAddMissingSections;
 
@@ -943,7 +943,7 @@ begin
      Result:= 'Custom Virtual Drive';
 end;
 
-procedure ReadDaemonToolsSettings(UpdateMainVars: Boolean; VirtualDriveFileName: TEdit = nil; MountEdit: TEdit = nil; UnmountEdit: TEdit = nil);
+procedure ReadDaemonToolsSettings(UpdateMainVars: Boolean; VirtualDriveFileName: TEditEx = nil; MountEdit: TEditEx = nil; UnmountEdit: TEditEx = nil);
 var
   dtoolsFileName: TMemIniFile;
   iniSection, dtFile, dtMount, dtUnmount: String;

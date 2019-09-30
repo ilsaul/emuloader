@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ImgList,
   MPCommonObjects, EasyListview, StdCtrls, ComCtrls, ToolWin,
-  unitExIcon, ShadowLabel, ExtCtrls, Buttons;
+  unitExIcon, ShadowLabel, ExtCtrls, Buttons, ButtonsEx;
 
 type
   TNotWorkingGameInfo = class(TEasyItemStored)
@@ -46,9 +46,9 @@ type
     IL_NotWorking: TImageList;
     Panel1: TPanel;
     LabelHotkeys: TShadowLabel;
-    ButtonSourceIcon: TBitBtn;
-    ButtonDeleteFiles: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonSourceIcon: TBitBtnEx;
+    ButtonDeleteFiles: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     procedure NotWorkingIconsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure NotWorkingIconsKeyAction(Sender: TCustomEasyListview;

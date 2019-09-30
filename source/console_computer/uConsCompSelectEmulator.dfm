@@ -56,8 +56,6 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     PaintInfoGroup.ImageIndent = 6
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Size = 42
-    PaintInfoItem.CheckIndent = 132
-    PaintInfoItem.CheckSize = 13
     PaintInfoItem.CheckType = ectRadio
     PaintInfoItem.TileDetailCount = 2
     ParentColor = True
@@ -73,6 +71,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnGroupImageDraw = EmulatorsListGroupImageDraw
     OnGroupImageGetSize = EmulatorsListGroupImageGetSize
     OnGroupImageDrawIsCustom = EmulatorsListGroupImageDrawIsCustom
@@ -153,6 +152,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       Caption = 'Small Icons'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object IL_EmulatorIcon: TImageList

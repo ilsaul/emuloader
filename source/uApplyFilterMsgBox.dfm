@@ -2,9 +2,9 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
   Left = 849
   Top = 422
   BorderIcons = []
-  BorderStyle = bsToolWindow
-  ClientHeight = 66
-  ClientWidth = 473
+  BorderStyle = bsNone
+  ClientHeight = 82
+  ClientWidth = 514
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -21,8 +21,8 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
   object PanelBackground: TPanelEx
     Left = 0
     Top = 0
-    Width = 473
-    Height = 66
+    Width = 514
+    Height = 82
     Align = alClient
     Color1 = clWhite
     Color2 = clGray
@@ -35,10 +35,11 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    OnMouseDown = PanelBackgroundMouseDown
     object LabelBoxMessageTitle: TShadowLabel
-      Left = 38
-      Top = 11
-      Width = 427
+      Left = 46
+      Top = 19
+      Width = 452
       Height = 17
       AutoSize = False
       Caption = 'Games Filters'
@@ -58,9 +59,9 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
       Transparent = True
     end
     object LabelBoxMessage: TShadowLabel
-      Left = 8
-      Top = 36
-      Width = 456
+      Left = 46
+      Top = 44
+      Width = 451
       Height = 17
       AutoSize = False
       Caption = 'Applying filters, please wait...'
@@ -80,8 +81,8 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
       Transparent = True
     end
     object MsgIcon: TImage
-      Left = 8
-      Top = 8
+      Left = 16
+      Top = 16
       Width = 24
       Height = 24
       Transparent = True

@@ -118,6 +118,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      CustomCheckRadioEnabled = False
       OnItemImageDraw = SystemsItemImageDraw
       OnItemImageGetSize = SystemsItemImageGetSize
       OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
@@ -167,9 +168,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Color = 16448250
         Font.Charset = ANSI_CHARSET
         Font.Color = clMaroon
-        Font.Height = -13
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
         ShowAccelChar = False
@@ -319,12 +320,14 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = CustomGamesListColumnClick
       OnColumnSizeChanging = CustomGamesListColumnSizeChanging
       OnIncrementalSearch = CustomGamesListIncrementalSearch
       OnItemCompare = CustomGamesListItemCompare
       OnItemEdited = CustomGamesListItemEdited
       OnItemEditEnd = CustomGamesListItemEditEnd
+      OnItemPaintText = CustomGamesListItemPaintText
       OnKeyAction = CustomGamesListKeyAction
     end
     object PanelEditSelected: TPanelEx
@@ -380,6 +383,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object EditSelected_Year: TEditEx
         Left = 104
@@ -404,6 +408,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object EditSelected_Manufacturer: TEditEx
         Left = 104
@@ -428,6 +433,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ReturnIsTab = False
         State = cbChecked
         Themed = True
+        CustomIconsEnabled = False
       end
       object EditSelected_NumberPlayers: TEditEx
         Left = 368
@@ -518,7 +524,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSize: TShadowLabel
         Tag = 9
-        Left = 403
+        Left = 123
         Top = 3
         Width = 25
         Height = 23
@@ -554,15 +560,15 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         OnClick = ButtonOptionsClick
       end
       object ButtonApplyChanges: TBitBtnEx
-        Left = 48
-        Top = 2
+        Left = 416
+        Top = 11
         Width = 121
         Height = 25
         Hint = 'Close and update main games list with current changes'
         Caption = 'Apply Changes'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -13
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
@@ -570,15 +576,15 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         OnClick = ButtonApplyChangesClick
       end
       object ButtonAbortChanges: TBitBtnEx
-        Left = 169
-        Top = 2
+        Left = 537
+        Top = 11
         Width = 121
         Height = 25
         Hint = 'Close and ignore any changes made to the games data'
         Caption = 'Abort Changes'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -13
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
@@ -690,7 +696,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeLarger_x4: TBitBtnEx
         Tag = 4
-        Left = 456
+        Left = 176
         Top = 2
         Width = 46
         Height = 25
@@ -707,7 +713,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeLarger: TBitBtnEx
         Tag = 1
-        Left = 430
+        Left = 150
         Top = 2
         Width = 25
         Height = 25
@@ -724,7 +730,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeSmaller_x4: TBitBtnEx
         Tag = -4
-        Left = 328
+        Left = 48
         Top = 2
         Width = 46
         Height = 25
@@ -741,7 +747,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       end
       object GamesListFontSizeSmaller: TBitBtnEx
         Tag = -1
-        Left = 376
+        Left = 96
         Top = 2
         Width = 25
         Height = 25
@@ -757,7 +763,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         OnClick = GamesListFontSizeSmallerClick
       end
       object SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx
-        Left = 534
+        Left = 254
         Top = 5
         Width = 146
         Height = 20
@@ -770,6 +776,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Caption = 'Hide Systems Scroll Bar'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
     end
   end
@@ -810,29 +817,29 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     OnMeasureMenuItem = PopupGamesListMeasureMenuItem
     Left = 416
     Top = 80
-    object EditTitle1: TMenuItem
+    object PopupEditTitle: TMenuItem
       Caption = 'Edit Title'
-      OnClick = EditTitle1Click
+      OnClick = PopupEditTitleClick
     end
-    object EditYear1: TMenuItem
+    object PopupEditYear: TMenuItem
       Tag = 1
       Caption = 'Edit Year'
-      OnClick = EditTitle1Click
+      OnClick = PopupEditTitleClick
     end
-    object EditManufacturer1: TMenuItem
+    object PopupEditManufacturer: TMenuItem
       Tag = 2
       Caption = 'Edit Manufacturer'
-      OnClick = EditTitle1Click
+      OnClick = PopupEditTitleClick
     end
-    object EditNumberofPlayers1: TMenuItem
+    object PopupEditNumberofPlayers: TMenuItem
       Tag = 3
       Caption = 'Edit Number of Players'
-      OnClick = EditTitle1Click
+      OnClick = PopupEditTitleClick
     end
-    object EditAll1: TMenuItem
+    object PopupEditAll: TMenuItem
       Tag = -1
       Caption = 'Edit All'
-      OnClick = EditTitle1Click
+      OnClick = PopupEditTitleClick
     end
     object N1: TMenuItem
       Caption = '-'
@@ -840,9 +847,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     object PopupMachinesListSidePanelResetColumnsWidth: TMenuItem
       Caption = 'Reset Columns Width'
     end
-    object ResetSystemsPanelSize: TMenuItem
+    object PopupResetSystemsPanelSize: TMenuItem
       Caption = 'Reset Systems Panel Size'
-      OnClick = ResetSystemsPanelSizeClick
+      OnClick = PopupResetSystemsPanelSizeClick
     end
   end
   object PopupMenuOptions: TBcBarPopupMenu

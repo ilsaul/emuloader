@@ -285,9 +285,9 @@ begin
   if IsNightMode then
   begin
     if Enabled then
-       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1], False)
+       SetCheckBoxColors(CheckBoxHolder, clCream, item_caption_active_shadow_color[1])
     else
-       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack, False);
+       SetCheckBoxColors(CheckBoxHolder, clMedGray, clrLightBlack);
   end
   else
   begin
@@ -688,11 +688,51 @@ end;
 
 procedure TFormDeleteGamesFiles.FormShow(Sender: TObject);
 var
-  HeightDiff: Integer;
+  HeightDiff, Loop: Integer;
   Screen480, ScreenHighRes: Boolean;
 begin
   FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
   FormMain.ELV_ResetNormalColors(FilesListView);
+
+  if IsNightMode then
+  begin
+    //BottomBar.Style:= vgSolid;
+    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+
+    for Loop:= 0 to FormDeleteGamesFiles.ComponentCount-1 do
+    begin
+      if FormDeleteGamesFiles.Components[Loop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormDeleteGamesFiles.Components[Loop]))
+      else
+      if FormDeleteGamesFiles.Components[Loop] is TAdvOfficeCheckBoxEx then
+      begin
+        SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormDeleteGamesFiles.Components[Loop]), clCream, item_caption_active_shadow_color[1], clrMedDarkGray, clrLightBlack);
+        FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormDeleteGamesFiles.Components[Loop]));
+      end;
+    end;
+
+    SetLabelColors(LabelGameDetails,     LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelSoftwareList,    LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+                                             // 200,83,0   200,200,0
+    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);
+
+    FormMain.SetEasyListViewColors(FilesListView, FormDeleteGamesFiles.Color, clWhite);
+    FormMain.ELV_SetCheckRadioCustomIcon(FilesListView);
+
+    PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
+    SetEditNightColors(DestinationFolder);
+    SetLabelColors(DestinationFolderLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+    SetGroupBoxBorderStyle(FileTypesGroupBox);
+    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+
+    SetLabelColors(LabelTotalFiles,        clCream, clNavy);
+    SetLabelColors(LabelTotalFilesChecked, clCream, clNavy);
+
+    FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
+    FormMain.SetWin10DarkScrollBar(FilesListview);
+  end;
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
   case FormMain.MemGameInfo.eIsCustomGame of
@@ -708,6 +748,7 @@ begin
         DeleteGameFromGamesList.Visible:= ActionMode = 0; //True;
         DeleteGameFileFromDisk.Enabled:= ActionMode = 0;
         DeleteGameFromGamesList.Enabled:= ActionMode = 0;
+
         //FormMain.IL_PopupPlayCustomEmulators.GetIcon(FormMain.MemGameInfo.eCustomMediaType+11, GameIcon.Picture.Icon);
         // not used here...//FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame, FormMain.MemGameInfo.eMediaType, GameIcon, FormMain.MemGameInfo.eSoftwareExecParameter);
       end;
@@ -723,6 +764,8 @@ begin
   Screen480:= Screen.Height = 480;
   //Screen480:= True; // for debugging (October 27, 2016)
 
+  LabelTotalFiles.Left:= 360;
+  LabelTotalFilesChecked.Left:= 360;
   if Screen.Width < 800 then
      begin
        HeightDiff:= FormDeleteGamesFiles.Width-(Screen.Width-15); //635; 715
@@ -786,46 +829,6 @@ begin
   end;
 
   LoadMediaIcons;
-
-  if IsNightMode then
-  begin
-    SetFormColors(FormDeleteGamesFiles, TopBar, BottomBar, LabelGameTitle, LabelGameDetails, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-    SetLabelColors(LabelGameDetails, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
-    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
-    SetLabelColors(LabelSoftwareList, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
-                                             // 200,83,0   200,200,0
-    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack, False);
-    //SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack, False);
-
-    FormMain.SetEasyListViewColors(FilesListView, FormDeleteGamesFiles.Color, clWhite);
-
-    PanelDestinationFolder.Color1:= FormDeleteGamesFiles.Color;
-    SetEditNightColors(DestinationFolder);
-    SetLabelColors(DestinationFolderLabel, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor, False);
-
-    SetCheckBoxColors(DeleteROMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCHDs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteCFGsNVRAMs, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
-    SetCheckBoxColors(DeleteGameFromGamesList, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(DeleteGameFileFromDisk, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
-    SetCheckBoxColors(CopyMoveOverwriteFiles, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-    SetCheckBoxColors(CopyMoveAddSystemFolder, clCream, item_caption_active_shadow_color[1], False, clMedGray, clrLightBlack);
-
-    SetGroupBoxBorderStyle(FileTypesGroupBox);
-    SetGroupBoxColors(FileTypesGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, clCream, item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-
-    SetLabelColors(LabelTotalFiles, clCream, clNavy, False);
-    SetLabelColors(LabelTotalFilesChecked, clCream, clNavy, False);
-
-    FormMain.SetButtonExColors(ButtonYes);
-    FormMain.SetButtonExColors(ButtonNo);
-    FormMain.SetButtonExColors(ButtonSelectROMsFolder);
-    FormMain.SetButtonExColors(ButtonHelp);
-
-    FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
-  end;
   
   if ActionMode = 0 then
      begin
@@ -834,17 +837,10 @@ begin
      end
   else
      begin
-       //LabelWarning.Caption:= 'Uncheck files you do NOT want to '+LowerCase(ActionString)+'. Network paths are not supported!';
        ButtonYes.Caption:= ActionString+' Files';
-       //DeleteCFGsNVRAMs.Font.Color:= clSilver;
-       DeleteCFGsNVRAMs.Font.Style:= [fsBold, fsStrikeout];
        DeleteCFGsNVRAMs.Checked:= False;
        DeleteCFGsNVRAMs.Enabled:= False;
-       //LabelTotalFiles.Left:= LabelTotalFiles.Left-59;
-       //LabelTotalFilesChecked.Left:= LabelTotalFilesChecked.Left-59;
      end;
-  //else
-  //   FileTypesGroupBox.Width:= 131;
 
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status
 
@@ -982,29 +978,22 @@ begin
     0:
       begin
         ACanvas.Font.Name:= 'Trebuchet MS';
-        ACanvas.Font.Size:= ACanvas.Font.Size+2;
-
+        ACanvas.Font.Size:= ACanvas.Font.Size+2; // 11
         if IsNightMode then
            ACanvas.Font.Color:= clrLightRed
         else
            ACanvas.Font.Color:= clMaroon;
 
-        if DestinationFolderLabel.Tag = 1 then
-           ACanvas.Font.Style:= [fsItalic];
-        //if Item.Selected and not IsNightMode then
-        //   ACanvas.Font.Color:= clMaroon;
+        //if DestinationFolderLabel.Tag = 1 then
+        //   ACanvas.Font.Style:= [fsItalic];
       end;
     1:
       begin
         ACanvas.Font.Name:= 'Consolas';
-        //ACanvas.Font.Name:= 'Lucida Console';//'Consolas';
-        //ACanvas.Font.Size:= 8;//ACanvas.Font.Size;//+1;
       end;
     2:
       begin
         ACanvas.Font.Name:= 'Consolas';
-        //ACanvas.Font.Name:= 'Verdana';
-        //ACanvas.Font.Size:= 7;//ACanvas.Font.Size-1;
       end;
   end;
   if Item.Ghosted then
@@ -1098,7 +1087,7 @@ begin
          CallMessageBox;
          FormMain.ShowGameNameEntryMsgBox;
          GenerateMessage(FormDeleteGamesFiles.Caption, FormMain.MemGameInfo.eTitle, '    You haven''t selected a destination '+
-                         'folder. Use only full paths. Cannot continue.', 2, False, -1);
+                         'folder, cannot continue.', 2, False, -1);
          Exit;
        end;
      end;
@@ -1206,18 +1195,18 @@ begin
   FormMain.AddMsgText('    You can choose what files will be processed in the ');
   FormMain.AddMsgText('Check Arcade File Types To '+ActionString, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' group box. These settings are for ');
-  FormMain.AddMsgText('MAME and arcade', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('MAME and arcade', clBlack, [fsBold]);
   FormMain.AddMsgText(' systems only!'+#13#10+
                       '    You can manually check of uncheck each listed file to be ');
   FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. Doing so, settings from the file type panel are ignored.'+#13#10+
                       '    To delete game files of ');
-  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold]);
   FormMain.AddMsgText(' systems, check ');
   FormMain.AddMsgText('Delete Game File From Disk', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' option (not compatible with MAME and arcade games).'+#13#10+#13#10+
                       '    If you want to delete ');
-  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold, fsItalic]);
+  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold]);
   FormMain.AddMsgText(' games from main games list (why wouldn''t you ?), check ');
   FormMain.AddMsgText('Delete Game From Games List', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. This option is not compatible with MAME and arcade games.'+#13#10+#13#10+

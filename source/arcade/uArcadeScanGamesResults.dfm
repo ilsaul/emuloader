@@ -118,6 +118,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnGroupCompare = ROMsListViewGroupCompare
     OnItemCompare = ROMsListViewItemCompare
     OnItemPaintText = ROMsListViewItemPaintText
@@ -138,6 +139,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 80
     object SystemIcon: TImage
       Left = 4
       Top = 4
@@ -343,15 +345,16 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       Left = 320
       Top = 50
       Width = 185
-      Height = 21
+      Height = 23
       Hint = 'MAME games filter'
       Style = csDropDownList
+      Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Tahoma'
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
       Font.Style = []
-      ItemHeight = 13
+      ItemHeight = 15
       ItemIndex = 0
       ParentFont = False
       TabOrder = 1

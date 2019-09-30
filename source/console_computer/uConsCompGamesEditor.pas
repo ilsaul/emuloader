@@ -28,13 +28,13 @@ type
     MultiSelectedInfo_Cancel: TBitBtnEx;
     PopupGamesList: TBcBarPopupMenu;
     PopupMachinesListSidePanelResetColumnsWidth: TMenuItem;
-    EditTitle1: TMenuItem;
-    EditYear1: TMenuItem;
-    EditManufacturer1: TMenuItem;
-    EditNumberofPlayers1: TMenuItem;
-    EditAll1: TMenuItem;
+    PopupEditTitle: TMenuItem;
+    PopupEditYear: TMenuItem;
+    PopupEditManufacturer: TMenuItem;
+    PopupEditNumberofPlayers: TMenuItem;
+    PopupEditAll: TMenuItem;
     N1: TMenuItem;
-    ResetSystemsPanelSize: TMenuItem;
+    PopupResetSystemsPanelSize: TMenuItem;
     PanelSystemTitleBottom: TPanelEx;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
@@ -93,8 +93,8 @@ type
     procedure PopupGamesListMeasureMenuItem(Sender: TObject;
       AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
-    procedure ResetSystemsPanelSizeClick(Sender: TObject);
-    procedure EditTitle1Click(Sender: TObject);
+    procedure PopupResetSystemsPanelSizeClick(Sender: TObject);
+    procedure PopupEditTitleClick(Sender: TObject);
     procedure FilterGameTitleKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonFilterTitleApplyClick(Sender: TObject);
     procedure ButtonFilterTitleResetClick(Sender: TObject);
@@ -120,6 +120,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
       const ARect: TRect; var DefaultDraw: Boolean);
+    procedure CustomGamesListItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
     extraDataFile: array[1..MaxConsoleComputerSystems] of THashedStringList;
@@ -771,7 +773,92 @@ begin
        FormStatus.StartThreadClock;
      end;
 
+  FormMain.ELV_ResetNormalColors(Systems);
+  FormMain.ELV_ResetNormalColors(CustomGamesList);
+  
   Application.ProcessMessages;
+
+  if IsNightMode then
+     begin
+       FormConsCompGamesEditor.Color:= menu_background_color[1];
+
+       FormConsCompGamesEditor.PanelSystems.Color1:= menu_background_color[1];
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+
+       SetPanelColors(PanelSystemTitle, menu_background_color[1], clrDarkGray);
+       SetPanelColors(PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+
+       PanelCustomGamesSelectedSystem.Color1:= menu_background_color[1];
+       PanelEditSelected.Color1:= menu_background_color[1];
+
+       FormMain.SetEasyListViewColors(CustomGamesList, menu_background_color[1], clWhite);
+       CustomGamesList.ShowThemedBorder:= False;
+       FormMain.ELV_SetEditBkColor(CustomGamesList);
+
+       LabelCustomGamesListTotal.Color:= clrLightBlack;
+       SetLabelColors(LabelCustomGamesListTotal, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       LabelCustomGamesListTotal.Frames:= [];
+
+       SetLabelColors(LabelEditSelected, clCream, item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(LabelEditSelected_Manufacturer,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(LabelEditSelected_Year,          item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(LabelEditSelected_NumberPlayers, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetCheckBoxExCustomIcon(LabelEditSelected_Manufacturer);
+       FormMain.SetCheckBoxExCustomIcon(LabelEditSelected_Year);
+       FormMain.SetCheckBoxExCustomIcon(LabelEditSelected_NumberPlayers);
+
+       SetEditNightColors(EditSelected_Manufacturer);
+       SetEditNightColors(EditSelected_Year);
+       SetEditNightColors(EditSelected_NumberPlayers);
+
+       FormMain.SetButtonExColors(ButtonMultiSelectedInfo_Confirm);
+       FormMain.SetButtonExColors(MultiSelectedInfo_Cancel);
+
+       FormMain.UpdateSplitterStyle(Splitter, tsSolidColor, menu_background_color[1], clGray);
+       FormMain.SetGripIcon(Splitter, False);
+
+       SetPanelColors(PanelToolBarGamesEditor, FormMain.PanelSearchGames_ToolBar.Color1,
+                      FormMain.PanelSearchGames_ToolBar.Color2, FormMain.PanelSearchGames_ToolBar.Style = vgSolid);
+
+       FormMain.SetToolBarPanelColors(PanelToolBarGamesEditor, PanelSearchGames);
+
+       SetLabelColors(LabelToolBarFilterTitle, FormMain.LabelSearchGamesBy_ToolBar.Font.Color);
+
+       FilterGameTitle.Font.Color:= FormMain.FilterGameTitle_ToolBar.Font.Color;
+       FilterGameTitle.Color:= FormMain.FilterGameTitle_ToolBar.Color;
+
+       FilterGameTitle.ColorFrame:= FormMain.FilterGameTitle_ToolBar.ColorFrame;
+       FilterGameTitle.ColorFrameFocused:= FormMain.FilterGameTitle_ToolBar.ColorFrameFocused;
+
+       FilterGameTitle.UseCustomBorder:= True;
+
+       SetCheckBoxColors(SystemsHideScrollBarArea, clCream, item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(SystemsHideScrollBarArea);
+
+       SetLabelColors(GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       FormMain.SetButtonExColors(GamesListFontSizeSmaller);
+       FormMain.SetButtonExColors(GamesListFontSizeSmaller_x4);
+       FormMain.SetButtonExColors(GamesListFontSizeLarger);
+       FormMain.SetButtonExColors(GamesListFontSizeLarger_x4);
+
+       FormMain.SetButtonExColors(ButtonApplyChanges);
+       FormMain.SetButtonExColors(ButtonAbortChanges);
+
+       FormMain.SetButtonExColors(ButtonOptions);
+
+       SetLabelColors(LabelHotkeyText, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1]);
+     end
+  else
+     begin
+       FormMain.SetToolBarPanelColors(PanelToolBarGamesEditor, FormMain.PanelSearchGames_ToolBar);
+       FormMain.SetToolBarPanelColors(PanelToolBarGamesEditor, PanelSearchGames);
+       LabelToolBarFilterTitle.Font:= FormMain.LabelSearchGamesFilter_ToolBar.Font;
+     end;
 
   ReadSettings;
 
@@ -789,14 +876,13 @@ begin
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
 
-  FormMain.ELV_ResetNormalColors(Systems);
-  FormMain.ELV_ResetNormalColors(CustomGamesList);
-
   if IsNightMode then
      begin
        FormMain.ELV_SetNightModeColors(Systems);
        FormMain.SetEasyListViewHeaderColors(CustomGamesList, True);
        FormMain.ELV_SetRibbonNightColors(0, CustomGamesList, True);
+       FormMain.SetWin10DarkScrollBar(Systems);
+       FormMain.SetWin10DarkScrollBar(CustomGamesList);
      end;
 
   //ReadEmulatorsInfo;
@@ -1041,7 +1127,7 @@ begin
   FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
 end;
 
-procedure TFormConsCompGamesEditor.ResetSystemsPanelSizeClick(
+procedure TFormConsCompGamesEditor.PopupResetSystemsPanelSizeClick(
   Sender: TObject);
 begin
   if SystemsHideScrollBarArea.Checked then
@@ -1053,12 +1139,12 @@ begin
      PanelSystems.Width:= 392;
 end;
 
-procedure TFormConsCompGamesEditor.EditTitle1Click(Sender: TObject);
+procedure TFormConsCompGamesEditor.PopupEditTitleClick(Sender: TObject);
 begin
   if FormMain.ELV_IsEditing(CustomGamesList) or PanelEditSelected.Visible then
      Exit;
 
-  EditSelectedFields(TEdit(Sender).Tag);
+  EditSelectedFields(TEditEx(Sender).Tag);
     //VK_F2: EditSelectedFields(0); // title
     //VK_F3: EditSelectedFields(1); // year
     //VK_F4: EditSelectedFields(2); // manufacturer
@@ -1079,7 +1165,7 @@ begin
   if Key = #27 then
      begin
        Key:= #0;
-       TEdit(Sender).Text:= '';
+       TEditEx(Sender).Text:= '';
      end;
 end;
 
@@ -1294,7 +1380,6 @@ begin
        ACanvas.Font.Name:= 'Segoe UI';
        ACanvas.Font.Size:= 9;
        ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [fsItalic];
        if IsNightMode then
           ACanvas.Font.Color:= clMedGray
        else
@@ -1304,7 +1389,6 @@ begin
           ACanvas.Font.Color:= clrDarkGray;
      end;
 end;
-
 
 procedure TFormConsCompGamesEditor.SplitterMoved(Sender: TObject);
 begin
@@ -1318,7 +1402,7 @@ end;
 
 procedure TFormConsCompGamesEditor.FormCreate(Sender: TObject);
 begin
-  if Screen.Fonts.IndexOf('Terminal') = -1 then
+  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then //if Screen.Fonts.IndexOf('Terminal') = -1 then
      begin
        FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, 7);
        FormMain.ChangeLabelFontConsolas(LabelHotkeyText, 7);
@@ -1337,6 +1421,13 @@ begin
      FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
                            PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
                            PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
+end;
+
+procedure TFormConsCompGamesEditor.CustomGamesListItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  FormMain.ELV_SetEditingFontColor(TEasyListView(Sender), Item, ACanvas);
 end;
 
 end.

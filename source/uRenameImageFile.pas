@@ -4,15 +4,15 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
-  StdCtrls, ExtCtrls, PanelEx, Buttons;
+  StdCtrls, ExtCtrls, PanelEx, Buttons, ButtonsEx, EditEx;
 
 type
   TFormRenameImageFile = class(TForm)
     PanelEx3: TPanelEx;
     Icon: TImage;
-    NewFilename: TEdit;
-    ButtonOk: TBitBtn;
-    ButtonAbort: TBitBtn;
+    NewFilename: TEditEx;
+    ButtonOk: TBitBtnEx;
+    ButtonAbort: TBitBtnEx;
     procedure NewFilenameKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonAbortClick(Sender: TObject);

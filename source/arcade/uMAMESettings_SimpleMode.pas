@@ -1276,53 +1276,57 @@ begin
   begin
     FormMAMESettings_SimpleMode.Color:= menu_background_color[1];
     for Loop:= 0 to FormMAMESettings_SimpleMode.ComponentCount-1 do
-       begin
-         if FormMAMESettings_SimpleMode.Components[Loop] is TBitBtnEx then
-            FormMain.SetButtonExColors(TBitBtnEx(FormMAMESettings_SimpleMode.Components[Loop]))
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TSpeedButtonEx then
-            FormMain.SetButtonExColors(TSpeedButtonEx(FormMAMESettings_SimpleMode.Components[Loop]))
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TEditEx then
-            SetEditNightColors(TEditEx(FormMAMESettings_SimpleMode.Components[Loop]))
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TAdvGroupBoxEx then
-            begin
-              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormMAMESettings_SimpleMode.Components[Loop]));
-              SetGroupBoxColors(TAdvGroupBoxEx(FormMAMESettings_SimpleMode.Components[Loop]),
-                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-            end
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TComboBox2Ex then
-            SetComboBox2ExColors(TComboBox2Ex(FormMAMESettings_SimpleMode.Components[Loop]), True)
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TGaugeBar then
-            SetGaugeBarColors(TGaugeBar(FormMAMESettings_SimpleMode.Components[Loop]))
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TGaugeBar2 then
-            SetGaugeBarColors(TGaugeBar(FormMAMESettings_SimpleMode.Components[Loop]))
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TAdvOfficeCheckBoxEx then
-            begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-              TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontColor:= clGray;
-              TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-            end;
-         if FormMAMESettings_SimpleMode.Components[Loop] is TShadowLabel then
-            begin
-              SetLabelColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-              if not TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Transparent then
-                 TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Color:= FormMAMESettings_SimpleMode.Color;
-            end
-         else
-         if FormMAMESettings_SimpleMode.Components[Loop] is TEasyListView then
-            begin
-              FormMain.SetEasyListViewColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), FormMAMESettings_SimpleMode.Color, clWhite, -1, clGray);
-              FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
-              FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
-            end;
-       end;
+     begin
+       if FormMAMESettings_SimpleMode.Components[Loop] is TBitBtnEx then
+          FormMain.SetButtonExColors(TBitBtnEx(FormMAMESettings_SimpleMode.Components[Loop]))
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TSpeedButtonEx then
+          FormMain.SetButtonExColors(TSpeedButtonEx(FormMAMESettings_SimpleMode.Components[Loop]))
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TEditEx then
+          SetEditNightColors(TEditEx(FormMAMESettings_SimpleMode.Components[Loop]))
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TAdvGroupBoxEx then
+          begin
+            SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormMAMESettings_SimpleMode.Components[Loop]));
+            SetGroupBoxColors(TAdvGroupBoxEx(FormMAMESettings_SimpleMode.Components[Loop]),
+                              clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                              item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+            FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormMAMESettings_SimpleMode.Components[Loop]));
+          end
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TComboBox2Ex then
+          SetComboBox2ExColors(TComboBox2Ex(FormMAMESettings_SimpleMode.Components[Loop]), True)
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TGaugeBar then
+          SetGaugeBarColors(TGaugeBar(FormMAMESettings_SimpleMode.Components[Loop]))
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TGaugeBar2 then
+          SetGaugeBarColors(TGaugeBar(FormMAMESettings_SimpleMode.Components[Loop]))
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TAdvOfficeCheckBoxEx then
+          begin
+            SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontColor:= clGray;
+            TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+            FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]));
+          end;
+       if FormMAMESettings_SimpleMode.Components[Loop] is TShadowLabel then
+          begin
+            SetLabelColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+            if not TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Transparent then
+               TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Color:= FormMAMESettings_SimpleMode.Color;
+          end
+       else
+       if FormMAMESettings_SimpleMode.Components[Loop] is TEasyListView then
+          begin
+            FormMain.SetEasyListViewColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), FormMAMESettings_SimpleMode.Color, clWhite, -1, clGray);
+            FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
+            FormMain.ELV_SetCheckRadioCustomIcon(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]));
+            FormMain.ELV_SetEditBkColor(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]));
+            FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
+          end;
+     end;
     SetFormColors(FormMAMESettings_SimpleMode, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, sysID, True);
     FormMain.SetEasyListViewColors(FolderROMs, FormMAMESettings_SimpleMode.Color, clWhite, -1, clGray);
@@ -1332,6 +1336,10 @@ begin
     FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
     FormMain.ELV_SetRibbonNightColors(0, FolderIniFiles, True);
     FormMain.ELV_SetRibbonNightColors(0, FolderArtworks, True);
+
+    FormMain.SetWin10DarkScrollBar(FolderROMs);
+    FormMain.SetWin10DarkScrollBar(FolderIniFiles);
+    FormMain.SetWin10DarkScrollBar(FolderArtworks);
   end;
 
   ButtonPagePanel.Color1:= FormMAMESettings_SimpleMode.Color;
@@ -1449,7 +1457,7 @@ end;
 
 procedure TFormMAMESettings_SimpleMode.FolderROMsButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings_SimpleMode.FolderArtworksKeyAction(
@@ -1464,7 +1472,7 @@ end;
 
 procedure TFormMAMESettings_SimpleMode.FolderArtworksButtonUpClick(Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderArtworks, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderArtworks, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings_SimpleMode.FolderArtworksButtonSelectClick(
@@ -1524,7 +1532,7 @@ end;
 procedure TFormMAMESettings_SimpleMode.FolderIniFilesButtonUpClick(
   Sender: TObject);
 begin
-  FormMain.ELV_MoveItem(FolderIniFiles, Boolean(TBitBtn(Sender).Tag));
+  FormMain.ELV_MoveItem(FolderIniFiles, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
 procedure TFormMAMESettings_SimpleMode.FolderIniFilesButtonSelectClick(
@@ -1587,24 +1595,24 @@ begin
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
   FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
-  FormMain.AddMsgText('(mame.ini; ume.ini; hbmame.ini; emufilename.ini)', clBlack, [fsItalic]);
+  FormMain.AddMsgText('(mame.ini; ume.ini; hbmame.ini; emufilename.ini)', clBlack);
   FormMain.AddMsgText(', ignoring all custom files.'+#13#10+
                       'This is the old frontend''s saving method and I for one, prefer this way.'+#13#10+#13#10);
   FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
   FormMain.AddMsgText('    It will keep custom settings files clean and avoid duplicated settings across files. '+
                       'All files will be scanned accordingly ');
-  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack, [fsItalic]);
+  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack);
   FormMain.AddMsgText('.'+#13#10+'    There''s one major downside. Say you have settings in ');
-  FormMain.AddMsgText('drivername.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('drivername.ini', clBlack);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('gamename.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('gamename.ini', clBlack);
   FormMain.AddMsgText('. Then you decide to delete ');
-  FormMain.AddMsgText('drivername.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('drivername.ini', clBlack);
   FormMain.AddMsgText('. All its settings will be lost as they are not listed in later files, '+
                       'forcing you to set them again in ');
-  FormMain.AddMsgText('gamename.ini', clBlack, [fsItalic]);
+  FormMain.AddMsgText('gamename.ini', clBlack);
   FormMain.AddMsgText('.'+#13#10+#13#10+'In doubt, keep this feature ');
-  FormMain.AddMsgText('disabled/unchecked.', clBlack, [fsItalic]);
+  FormMain.AddMsgText('disabled/unchecked.', clBlack);
 
   GenerateMessage('Help', 'Validate All Custom Files on Save');
 end;

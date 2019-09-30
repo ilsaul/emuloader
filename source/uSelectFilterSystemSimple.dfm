@@ -198,6 +198,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     Selection.UseFocusRect = False
     TabOrder = 1
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnDblClick = ConsCompSystemsListViewDblClick
     OnItemImageDraw = ConsCompSystemsListViewItemImageDraw
     OnItemImageGetSize = ConsCompSystemsListViewItemImageGetSize

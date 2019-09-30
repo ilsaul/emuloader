@@ -283,6 +283,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     Top = 111
     Width = 819
     Height = 345
+    Align = alBottom
     Color = clWhite
     ParentColor = False
     TabOrder = 2
@@ -329,6 +330,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object InputPlayback: TAdvOfficeRadioButtonEx
         Left = 8
@@ -349,6 +351,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Checked = True
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object InputFileName: TEditEx
         Left = 222
@@ -385,6 +388,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Caption = 'Record'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBoxEx
         Left = 170
@@ -404,6 +408,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object InputRecordTimecodeFile: TAdvOfficeCheckBoxEx
         Left = 366
@@ -424,6 +429,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ButtonInputResetFileName: TBitBtnEx
         Left = 688
@@ -574,6 +580,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           Selection.UseFocusRect = False
           TabOrder = 0
           View = elsReport
+          CustomCheckRadioEnabled = False
           OnColumnClick = InputListViewColumnClick
           OnItemCompare = InputListViewItemCompare
           OnItemEdited = InputListViewItemEdited
@@ -636,6 +643,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object AutoSaveState: TAdvOfficeCheckBoxEx
         Left = 100
@@ -659,6 +667,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object PanelSaveStateListView: TPanelEx
         Left = 8
@@ -776,6 +785,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           Selection.UseFocusRect = False
           TabOrder = 0
           View = elsReport
+          CustomCheckRadioEnabled = False
           OnColumnClick = SaveStateListViewColumnClick
           OnItemCompare = SaveStateListViewItemCompare
           OnItemEdited = SaveStateListViewItemEdited
@@ -1056,6 +1066,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object InsertMemoryCard_Slot1: TEditEx
         Left = 40
@@ -1308,6 +1319,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           Selection.UseFocusRect = False
           TabOrder = 0
           View = elsReport
+          CustomCheckRadioEnabled = False
           OnColumnClick = MemoryCardListViewColumnClick
           OnDblClick = MemoryCardListViewDblClick
           OnItemCompare = MemoryCardListViewItemCompare
@@ -1394,6 +1406,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         DisabledFontShadowColor = clBlack
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object ButtonRecordMovieResetFileNameTitle: TBitBtnEx
         Tag = 1
@@ -1467,6 +1480,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Caption = 'WAV File'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object RecordMovieMNG: TAdvOfficeRadioButtonEx
         Tag = 1
@@ -1486,6 +1500,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Caption = 'MNG File'
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object RecordMovieAVI: TAdvOfficeRadioButtonEx
         Left = 8
@@ -1508,6 +1523,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
         Checked = True
         ReturnIsTab = False
         Themed = True
+        CustomIconsEnabled = False
       end
       object PanelRecordMovieListView: TPanelEx
         Left = 8
@@ -1628,6 +1644,7 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
           Selection.UseFocusRect = False
           TabOrder = 0
           View = elsReport
+          CustomCheckRadioEnabled = False
           OnColumnClick = RecordMovieListViewColumnClick
           OnItemCompare = RecordMovieListViewItemCompare
           OnItemEdited = RecordMovieListViewItemEdited
@@ -1678,8 +1695,8 @@ object FormArcadeRunGameExtraMAME: TFormArcadeRunGameExtraMAME
     MenuStyle = msWindowsXP
     UseSystemFont = False
     DrawModule = FormMain.BcDrawModule
-    Left = 664
-    Top = 72
+    Left = 8
+    Top = 464
     object PopupMemoryCardAssignToSlot1: TMenuItem
       Tag = 1
       Caption = 'Assign to Slot 1'

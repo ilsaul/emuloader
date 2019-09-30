@@ -1,6 +1,6 @@
 object FormImageLayoutSettings: TFormImageLayoutSettings
-  Left = 1125
-  Top = 812
+  Left = 1094
+  Top = 768
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Image Layout Settings'
@@ -153,6 +153,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnItemCheckChange = LayoutListViewItemCheckChange
       OnItemPaintText = LayoutListViewItemPaintText
       OnItemSelectionChanged = LayoutListViewItemSelectionChanged
@@ -178,8 +179,8 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Width = 445
     Height = 161
     CheckBox.Action = caNone
-    CheckBox.Themed = True
     CheckBox.Visible = True
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = '      Use Custom Category for Console/Computer '
     Ctl3D = True
@@ -251,7 +252,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -277,7 +278,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -330,7 +331,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -363,7 +364,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -516,7 +517,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Style = vgSimple
     object LabelLayoutTitle: TShadowLabel
       Left = 8
-      Top = -3
+      Top = 0
       Width = 918
       Height = 19
       Alignment = taCenter
@@ -525,9 +526,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -541,21 +542,20 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Layout = tlCenter
     end
     object LabelShowHideLayouts: TShadowLabel
-      Left = 0
+      Left = 8
       Top = 0
-      Width = 250
+      Width = 148
       Height = 16
       Cursor = crHandPoint
       Hint = 'Toggle visible / not visible for all layouts'
-      Alignment = taCenter
       AutoSize = False
-      Caption = 'CLICK HERE TO HIDE ALL LAYOUTS'
+      Caption = 'HIDE ALL LAYOUTS'
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ParentShowHint = False
@@ -579,7 +579,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Top = 269
     Width = 445
     Height = 161
-    CheckBox.Themed = True
+    CheckBox.CustomIconsEnabled = False
     RoundEdges = True
     Caption = ' Category (All Systems) '
     Ctl3D = True
@@ -650,7 +650,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -676,7 +676,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -729,7 +729,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -762,7 +762,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 14540253
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -866,6 +866,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object PanelEnabledScr3: TAdvOfficeCheckBoxEx
       Left = 249
@@ -889,6 +890,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ShadowColor = clSilver
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonLayoutResetPanelsIndex: TBitBtnEx
       Left = 388

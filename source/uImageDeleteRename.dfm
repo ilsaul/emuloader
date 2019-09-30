@@ -58,9 +58,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
     Font.Charset = ANSI_CHARSET
     Font.Color = 21414
-    Font.Height = -13
+    Font.Height = -12
     Font.Name = 'Trebuchet MS'
-    Font.Style = [fsBold, fsItalic]
+    Font.Style = [fsBold]
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = 16448250
@@ -400,6 +400,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Width = 510
     Height = 21
     AutoSize = False
+    Color = clWhite
     TabOrder = 0
     Visible = False
     OnKeyPress = RenameImageEditBoxKeyPress

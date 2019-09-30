@@ -62,22 +62,19 @@ begin
   SetFormColors(FormImageDeleteRename, TopBar, BottomBar, LabelGameTitle, LabelGameName, LabelGameStatus, FormMain.MemGameInfo.eGameSetStatus, True);
   if IsNightMode then
      begin
-       if LabelSystemTitle.Tag = 0 then
-          LabelSystemTitle.Font.Style:= [];
-       //SetLabelColors(LabelGameStatus, clrLightBlue, clBlue, False);
-       SetLabelColors(LabelFilename, item_caption_active_color[1], item_caption_active_shadow_color[1], False); // MsgTxtColors.colorFileName, clNavy, False);
+       //if LabelSystemTitle.Tag = 0 then
+       //   LabelSystemTitle.Font.Style:= [];
+       SetLabelColors(LabelFilename, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        FormMain.SetSystemTitleLabelColors(LabelSystemTitle); // SetLabelColors(LabelSystemTitle, clrLightRed, clrLightBlack, False);
-       //SetLabelColors(LabelSoftwareListTitle, item_caption_active_color[1], item_caption_active_shadow_color[1], False);
-       FormMain.SetSystemTypeLabelColors(LabelSoftwareListTitle);
-       SetLabelColors(LabelFileTypeMismatch, clrLightRed, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelDimensions, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelFileSize, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelDateTime, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelFileType, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelRenameImage, clCream, item_caption_active_shadow_color[1], False);
-       SetPanelNightColors(ImagePreviewFrame, -1, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
-       //SetSystemTitleBarNightColors(PanelTop_SplitBarTop, PanelTop_SplitBarBottom);
+       FormMain.SetSystemTypeLabelColors(LabelSoftwareListTitle);
+       SetLabelColors(LabelFileTypeMismatch, clrLightRed, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelDimensions,       clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFileSize,         clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelDateTime,         clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFileType,         clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelRenameImage,      clCream, item_caption_active_shadow_color[1]);
+       SetPanelNightColors(ImagePreviewFrame, -1, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
        FrameImageCategoryIcon.Style:= vgSimple;
        SetPanelNightColors(FrameImageCategoryIcon, clrDarkBlue, clrLightBlack, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
@@ -184,7 +181,7 @@ end;
 
 procedure TFormImageDeleteRename.ButtonOkClick(Sender: TObject);
 begin
-  mmResult:= TBitBtn(Sender).ModalResult;
+  mmResult:= TBitBtnEx(Sender).ModalResult;
   Close;
 end;
 

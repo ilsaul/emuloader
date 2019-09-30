@@ -76,6 +76,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 0
+    CustomCheckRadioEnabled = False
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
   object PanelFolders: TPanelEx
@@ -177,19 +178,19 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Transparent = True
     end
     object LabelRecursiveFolderInfo: TShadowLabel
-      Left = 38
+      Left = 23
       Top = 542
-      Width = 350
-      Height = 55
+      Width = 379
+      Height = 37
+      AutoSize = False
       Caption = 
-        '    Recursive folders is supported. Add main folders and full pa' +
-        'ths only. Do NOT add sub-folders as they are scanned automatical' +
-        'ly. ANSI paths only (no Unicode).'
+        '    Add main folders only, full path. Sub-folders are scanned au' +
+        'tomatically (recursive scan). ANSI paths only, no Unicode.'
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
       Font.Height = -13
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = 12632284
@@ -331,6 +332,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemEdited = FolderROMItemEdited
       OnItemEditEnd = FolderROMItemEditEnd
       OnKeyAction = FolderROMKeyAction
@@ -485,6 +487,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Selection.UseFocusRect = False
       TabOrder = 7
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemEdited = FolderDiscImageItemEdited
       OnItemEditEnd = FolderDiscImageItemEditEnd
       OnKeyAction = FolderDiscImageKeyAction
@@ -640,6 +643,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Selection.UseFocusRect = False
       TabOrder = 14
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemEdited = FolderFloppyDiskItemEdited
       OnItemEditEnd = FolderFloppyDiskItemEditEnd
       OnKeyAction = FolderFloppyDiskKeyAction
@@ -780,6 +784,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Selection.UseFocusRect = False
       TabOrder = 20
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemEdited = FolderCassetteTapeItemEdited
       OnItemEditEnd = FolderCassetteTapeItemEditEnd
       OnKeyAction = FolderCassetteTapeKeyAction
@@ -989,6 +994,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Selection.UseFocusRect = False
       TabOrder = 29
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnItemEdited = FolderHardDiskDriveItemEdited
       OnItemEditEnd = FolderHardDiskDriveItemEditEnd
       OnKeyAction = FolderHardDiskDriveKeyAction
@@ -1098,9 +1104,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -1125,9 +1131,9 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False

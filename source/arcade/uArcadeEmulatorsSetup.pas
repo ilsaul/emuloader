@@ -106,7 +106,6 @@ type
     procedure SetAlterMAME2Text;
     //procedure ClearEmulatorIcon(AlterMAME: Boolean);
     //function  SetEmulatorIcon(sysID: ShortInt; IsAlterMAME: Boolean): Integer;
-    //procedure ResizeForm;
     procedure SetSystemInfo(sysID: ShortInt);
     procedure ReadWriteSettings(ReadMode: Boolean);
   public
@@ -190,8 +189,71 @@ procedure TFormArcadeEmulatorsSetup.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  if IsNightMode then
+     begin
+       FormArcadeEmulatorsSetup.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+
+       PanelSystemsSelect.Color1:= clrBlackBk;
+       PanelEmulatorDetails.Color1:= menu_background_color[1];
+
+       FormMain.SetEasyListViewColors(SystemSelector, clrBlackBk, clWhite);
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       SetSystemTitleBarNightColors(PanelSystemTitle, PanelSystemTitleBottom);
+
+       SetLabelColors(LabelArcade_exec,        item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelArcade_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetLabelColors(LabelMAMELink_Tabs, clSilver, clBlue);
+       SetLabelColors(LabelMAMELink1, clSilver, clrMedBlue);
+       SetLabelColors(LabelMAMELink2, clSilver, clrMedBlue);
+       SetLabelColors(LabelMAMELink3, clSilver, clrMedBlue);
+       SetLabelColors(LabelMAMELink4, clSilver, clrMedBlue);
+
+       SetLabelColors(LabelAlterMAME1,             item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelAlterMAME1_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelAlterMAME1_Tip1,        clSilver, item_caption_active_shadow_color[1]);
+
+       SetLabelColors(LabelAlterMAME2,             item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelAlterMAME2_versioninfo, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelAlterMAME2_Tip1,        clSilver, item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(AlterMAME1_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetCheckBoxColors(AlterMAME2_Autorun, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetLabelColors(LabelAlterMAME1_Autorun, clSilver, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelAlterMAME2_Autorun, clSilver, item_caption_active_shadow_color[1]);
+
+       SetCheckBoxColors(UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
+
+       SetEditNightColors(Arcade_exec);
+       SetEditNightColors(Arcade_versioninfo);
+       SetEditNightColors(AlterMAME1_exec);
+       SetEditNightColors(AlterMAME1_versioninfo);
+       SetEditNightColors(AlterMAME2_exec);
+       SetEditNightColors(AlterMAME2_versioninfo);
+
+       PanelMAMEEmulatorsText.Color1:= PanelEmulatorDetails.Color1;
+
+       for Loop:= 0 to FormArcadeEmulatorsSetup.ComponentCount-1 do
+       begin
+         if FormArcadeEmulatorsSetup.Components[Loop] is TShadowLabel then
+            TShadowLabel(FormArcadeEmulatorsSetup.Components[Loop]).UseCustomDisabledFontColor:= True
+         else
+         if FormArcadeEmulatorsSetup.Components[Loop] is TAdvOfficeCheckBoxEx then
+            begin
+              TAdvOfficeCheckBoxEx(FormArcadeEmulatorsSetup.Components[Loop]).DisabledFontColor:= clGray;
+              TAdvOfficeCheckBoxEx(FormArcadeEmulatorsSetup.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormArcadeEmulatorsSetup.Components[Loop]));
+            end
+         else
+         if FormArcadeEmulatorsSetup.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormArcadeEmulatorsSetup.Components[Loop]));
+       end;
+     end;
+
   ReadWriteSettings(True);
-  //ResizeForm;
 
   FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
   FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
@@ -488,60 +550,6 @@ begin
   //end;
 end;
 
-{
-procedure TFormArcadeEmulatorsSetup.ResizeForm;
-var
-  Loop: Integer;
-begin
-  Exit;
-  if Screen.Height > 480 then
-     Exit;
-
-  UseLargeIcons.Visible:= False;
-  SystemSelector.Left:= 0;
-  SystemSelector.Top:= 0;
-  LabelSystemTitle.Top:= LabelSystemTitle.Top-16;
-  PanelSystemsSelect.Height:= PanelSystemsSelect.Height-16;
-
-  LabelArcade_exec.Top:= LabelArcade_exec.Top-24;
-  PanelMAMEEmulatorsText.Top:=PanelMAMEEmulatorsText.Top-24;
-  Arcade_exec.Top:=Arcade_exec.Top-24;
-  ButtonBrowseArcade_exec.Top:=ButtonBrowseArcade_exec.Top-24;
-  LabelArcade_versioninfo.Top:= LabelArcade_versioninfo.Top-24;
-  Arcade_versioninfo.Top:= Arcade_versioninfo.Top-24;
-  LabelAlterMAME1.Top:= LabelAlterMAME1.Top-24;
-  AlterMAME1_exec.Top:= AlterMAME1_exec.Top-24;
-  ButtonBrowseAlterMAME1.Top:= ButtonBrowseAlterMAME1.Top-24;
-  ButtonClearAlterMAME1.Top:= ButtonClearAlterMAME1.Top-24;
-  ButtonHelpAlterMAME.Top:= ButtonHelpAlterMAME.Top-24;
-  LabelAlterMAME1_versioninfo.Top:= LabelAlterMAME1_versioninfo.Top-24;
-  AlterMAME1_versioninfo.Top:= AlterMAME1_versioninfo.Top-24;
-  AlterMAME1_Autorun.Top:= AlterMAME1_Autorun.Top-24;
-  LabelAlterMAME1_Autorun.Top:= LabelAlterMAME1_Autorun.Top-24;
-  ButtonSetOptions.Top:= ButtonSetOptions.Top-28;
-  ButtonUpdateSystem.Top:= ButtonUpdateSystem.Top-28;
-  ButtonClearSystem.Top:= ButtonClearSystem.Top-28;
-
-  FormArcadeEmulatorsSetup.ClientHeight:= 392;
-  FormArcadeEmulatorsSetup.ClientWidth:= FormArcadeEmulatorsSetup.ClientWidth-16;
-
-  Arcade_exec.Width:= Arcade_exec.Width-16;
-  ButtonBrowseArcade_exec.Left:= ButtonBrowseArcade_exec.Left-16;
-  Arcade_versioninfo.Width:= Arcade_versioninfo.Width-16;
-  AlterMAME1_exec.Width:= AlterMAME1_exec.Width-16;
-  ButtonBrowseAlterMAME1.Left:= ButtonBrowseAlterMAME1.Left-16;
-  ButtonClearAlterMAME1.Left:= ButtonClearAlterMAME1.Left-16;
-  ButtonHelpAlterMAME.Left:= ButtonHelpAlterMAME.Left-16;
-  AlterMAME1_versioninfo.Width:= AlterMAME1_versioninfo.Width-16;
-  ButtonSetOptions.Left:= ButtonSetOptions.Left-8;
-  ButtonUpdateSystem.Left:= ButtonUpdateSystem.Left-8;
-  ButtonClearSystem.Left:= ButtonClearSystem.Left-8;
-
-  ButtonOk.Left:= ButtonOk.Left-8;
-  ButtonCancel.Left:= ButtonCancel.Left-8;
-end;
-}
-
 procedure TFormArcadeEmulatorsSetup.Arcade_execChange(Sender: TObject);
 begin
   newEmulatorFile[SystemSelector.Tag]:= Arcade_exec.Text;
@@ -562,7 +570,7 @@ begin
      begin
        Screen.Cursor:= crHourGlass;
        GetEmulatorDefaultDescription(SystemSelector.Tag); // get emulator version info
-       newEmulatorDateTime[SystemSelector.Tag]:= FileAge(Arcade_exec.Text); // get modified date/time
+       newEmulatorDateTime[SystemSelector.Tag]:= FileAgeW(Arcade_exec.Text); // get modified date/time
        //SetEmulatorIcon(SystemSelector.Tag, False);
        Screen.Cursor:= crDefault;
      end;
@@ -637,7 +645,7 @@ begin
      begin
        Screen.Cursor:= crHourGlass;
        FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[1], newAlterMAMEVersion[1], newbuildAlterMAME[1]);
-       newAlterMAMEDateTime[1]:= FileAge(AlterMAME1_exec.Text); // get modified date/time
+       newAlterMAMEDateTime[1]:= FileAgeW(AlterMAME1_exec.Text); // get modified date/time
        SetAlterMAMEText;
        //SetEmulatorIcon(-1, True);
        Screen.Cursor:= crDefault;
@@ -670,21 +678,21 @@ begin
   if FileExists(Arcade_exec.Text) then
      begin
        GetEmulatorDefaultDescription(SystemSelector.Tag); // get emulator version info
-       newEmulatorDateTime[SystemSelector.Tag]:= FileAge(Arcade_exec.Text); // get modified date/time
+       newEmulatorDateTime[SystemSelector.Tag]:= FileAgeW(Arcade_exec.Text); // get modified date/time
      end;
   if LabelAlterMAME1.Enabled then
      begin
        if (AlterMAME1_exec.Text <> '') and FileExists(newAlterMAMEFile[1]) then
           begin
             FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[1], newAlterMAMEVersion[1], newbuildAlterMAME[1]);
-            newAlterMAMEDateTime[1]:= FileAge(AlterMAME1_exec.Text); // get modified date/time
+            newAlterMAMEDateTime[1]:= FileAgeW(AlterMAME1_exec.Text); // get modified date/time
             SetAlterMAMEText;
           end;
 
        if (AlterMAME2_exec.Text <> '') and FileExists(newAlterMAMEFile[2]) then
           begin
             FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[2], newAlterMAMEVersion[2], newbuildAlterMAME[2]);
-            newAlterMAMEDateTime[2]:= FileAge(AlterMAME2_exec.Text); // get modified date/time
+            newAlterMAMEDateTime[2]:= FileAgeW(AlterMAME2_exec.Text); // get modified date/time
             SetAlterMAME2Text;
           end;
      end;
@@ -707,9 +715,9 @@ end;
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue, False)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clrMedBlue)
   else
-     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver, False);
+     SetLabelColors(TShadowLabel(Sender), clBlue, clSilver);
 
   TShadowLabel(Sender).Font.Style:= [fsUnderline];
 end;
@@ -717,9 +725,9 @@ end;
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1MouseLeave(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clSilver, clrMedBlue, False)
+     SetLabelColors(TShadowLabel(Sender), clSilver, clrMedBlue)
   else
-     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver, False);
+     SetLabelColors(TShadowLabel(Sender), clNavy, clSilver);
 
   TShadowLabel(Sender).Font.Style:= [];
 end;
@@ -779,7 +787,6 @@ begin
 
     PanelSystemTitle.Top:= PanelSystemTitle.Top+iDiff;
     PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top+iDiff;
-    //LabelSystemTitle.Top:= LabelSystemTitle.Top+iDiff;
     SystemSelector.Height:= 166*2;
     SystemSelector.CellSizes.Icon.Height:= 166;
     SystemSelector.CellSizes.Icon.Width:= 156;
@@ -793,7 +800,6 @@ begin
     SystemSelector.Height:= 92;
     SystemSelector.CellSizes.Icon.Height:= 92;
     SystemSelector.CellSizes.Icon.Width:= 78;
-    //LabelSystemTitle.Top:= LabelSystemTitle.Top-iDiff; // 108;
     PanelSystemTitle.Top:= PanelSystemTitle.Top-iDiff;
     PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top-iDiff;
     PanelSystemsSelect.Height:= PanelSystemsSelect.Height-iDiff; // 125;
@@ -822,7 +828,7 @@ begin
      begin
        Screen.Cursor:= crHourGlass;
        FormMain.GetArcadeEmulatorVersion(idMAME, newAlterMAMEFile[2], newAlterMAMEVersion[2], newbuildAlterMAME[2]);
-       newAlterMAMEDateTime[2]:= FileAge(AlterMAME2_exec.Text); // get modified date/time
+       newAlterMAMEDateTime[2]:= FileAgeW(AlterMAME2_exec.Text); // get modified date/time
        SetAlterMAME2Text;
        //SetEmulatorIcon(-1, True);
        Screen.Cursor:= crDefault;

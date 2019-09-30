@@ -10,7 +10,7 @@ uses
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
-  BevelEx, ColorBoxEx, GR32_RangeBars, uGR32Extra;
+  BevelEx, ColorBoxEx, GR32_RangeBars, uGR32Extra, XiTrackBar;//, uGetWindowsVersion;
 
 const
   MaxArcadeSystems = 8;
@@ -389,6 +389,10 @@ type
     Red, Green, Blue, Alpha: Word;
   end;
 
+var
+  IsNightMode: Boolean;//, ShowDarkPopupMenu: Boolean;
+  MsgTxtColors: TMsgBoxColors;
+
 function GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
                       pMesh: Pointer; dwNumMesh, dwMode: DWORD): DWord; stdcall;
                       external 'msimg32.dll';
@@ -405,7 +409,7 @@ function  StrCmpLogicalW(psz1, psz2: PWideChar{WideString}): Integer; stdcall; e
 procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
 //procedure WinGradient(ACanvas: TCanvas);
 
-function  GetVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
+function  GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 function  GetFileInfo2(FName, InfoType: String): String;
 function  GetFileSize(const AFileName: String): Int64;
 
@@ -429,19 +433,21 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
 // bright / dark theme functions
-procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
 procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean; ForceNightColors: Boolean = False);
 procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil; ForceNightColors: Boolean = False);
 procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar; ForceNightColors: Boolean = False); overload;
 procedure SetGaugeBarColors(GaugeBar2Source: TGaugeBar2; ForceNightColors: Boolean = False); overload;
-procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
-procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetXiTrackBarColors(TrackBarSource: TXiTrackBar);
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
+procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 procedure SetGroupBoxBorderStyle(GroupBoxSource: TAdvGroupBoxEx);
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
-procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = False);
 procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
+procedure SetBottomPanelColors(PanelSource: TPanelEx);
 procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
 
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
@@ -500,6 +506,8 @@ function  CompareFloatValue(const A, B: Extended): ShortInt;
 function  CompareTDateTime(const A, B: TDateTime): Integer;
 
 procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
+procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar); overload;
+procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar2); overload;
 
 function  XML_CheckData(const strLine, FieldEntry: String): Boolean;
 function  XML_GetEntryName(const strLine: String): String;
@@ -519,7 +527,8 @@ function  GetScrLayoutDefaultType(LayoutIndex, ImageIndex: Byte): ShortInt;
 function  GetScrLayoutAltVerticalDefault(LayoutIndex: Byte): ShortInt;
 
 //function  Is64BitOS: Boolean;
-//function  GetWindowsVersion: String;
+function  GetWindowsVersion: String;
+function  IsWin10: Boolean;
 
 function  FileExists(const FileName: String): Boolean;
 //function  CopyFile(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
@@ -532,8 +541,8 @@ function  SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boole
 
 procedure CallMaximizeWindow(FormHolder: TForm);
 
-procedure SetEditBkColor(EditHolder: TEdit);
-function  IsEditEditing(EditHolder: TEdit): Boolean;
+procedure SetEditBkColor(EditHolder: TEditEx);
+function  IsEditEditing(EditHolder: TEditEx): Boolean;
 //procedure BrowseEditBkColor(EditHolder: TEdit);
 
 function  ShortDirString(const FileFullPath: String; MaxLength: Integer): String;
@@ -614,19 +623,22 @@ procedure CalcCRC32(p: Pointer; ByteCount: DWORD; var CRCValue: DWORD);
 function  CalcStringCRC32(s: String; out CRC32: DWORD): Boolean;
 function  CalcFileCRC32(FromName: WideString): String;
 
-var
-  IsNightMode: Boolean;
-  MsgTxtColors: TMsgBoxColors;
+//var
+//  IsNightMode: Boolean;
+//  MsgTxtColors: TMsgBoxColors;
 
 implementation
 
-procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
-  LabelSource.Font.Color:= iColor;
+  if LabelSource.Font.Color <> iColor then
+     LabelSource.Font.Color:= iColor;
   if iShadowColor <> -1 then
      LabelSource.ShadowColor:= iShadowColor;
-  LabelSource.ShadowEnabled:= iShadowEnabled;
-  LabelSource.UseCustomDisabledFontColor:= IsNightMode;
+  if LabelSource.ShadowEnabled <> iShadowEnabled  then
+     LabelSource.ShadowEnabled:= iShadowEnabled;
+  if LabelSource.UseCustomDisabledFontColor <> IsNightMode then
+     LabelSource.UseCustomDisabledFontColor:= IsNightMode;
 end;
 
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
@@ -762,7 +774,6 @@ begin
        GaugeBar2Source.HighLightColor:= clrDarkGray;
        GaugeBar2Source.ShadowColor:= clrBlackBk;
        GaugeBar2Source.ShowHandleGrip:= True;
-
      end
   else
      begin
@@ -773,22 +784,40 @@ begin
      end;
 end;
 
-procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetXiTrackBarColors(TrackBarSource: TXiTrackBar);
+begin
+  if IsNightMode then
+     begin
+       if TrackBarSource.ColorScheme <> csDark then
+          TrackBarSource.ColorScheme:= csDark;
+     end
+  else
+     begin
+       if TrackBarSource.ColorScheme <> csWhite then
+          TrackBarSource.ColorScheme:= csWhite;
+     end;
+end;
+
+procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
   CheckBoxSource.Font.Color:= iColor;
-  CheckBoxSource.ShadowColor:= iShadowColor;
-  CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+  if CheckBoxSource.ShadowColor <> -1 then
+     CheckBoxSource.ShadowColor:= iShadowColor;
+  if CheckBoxSource.ShadowEnabled <> iShadowEnabled then
+     CheckBoxSource.ShadowEnabled:= iShadowEnabled;
   if iDisabledColor <> -1 then
      CheckBoxSource.DisabledFontColor:= iDisabledColor;
   if iDisabledShadowColor <> -1 then
      CheckBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
-procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor, iShadowColor: TColor; iShadowEnabled: Boolean = True; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1);
+procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
   RadioButtonSource.Font.Color:= iColor;
-  RadioButtonSource.ShadowColor:= iShadowColor;
-  RadioButtonSource.ShadowEnabled:= iShadowEnabled;
+  if RadioButtonSource.ShadowColor <> -1 then
+     RadioButtonSource.ShadowColor:= iShadowColor;
+  if RadioButtonSource.ShadowEnabled <> iShadowEnabled then
+     RadioButtonSource.ShadowEnabled:= iShadowEnabled;
   if iDisabledColor <> -1 then
      RadioButtonSource.DisabledFontColor:= iDisabledColor;
   if iDisabledShadowColor <> -1 then
@@ -797,6 +826,8 @@ end;
 
 procedure SetGroupBoxBorderStyle(GroupBoxSource: TAdvGroupBoxEx);
 begin
+  if GroupBoxSource.BorderStyle = bsAdvNone then
+     Exit;
   GroupBoxSource.RoundEdges:= not IsNightMode;
   if IsNightMode then
      GroupBoxSource.BorderStyle:= bsAdvDualColors
@@ -804,13 +835,15 @@ begin
      GroupBoxSource.BorderStyle:= bsAdvSingle;
 end;
 
-procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor, iShadowColor: TColor; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxColors(GroupBoxSource: TAdvGroupBoxEx; iBorderColor, iBorderInnerColor, iColor: TColor; iShadowColor: TColor = -1; iDisabledColor: TColor = -1; iDisabledShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
   GroupBoxSource.BorderColor:= iBorderColor;
   GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
   GroupBoxSource.Font.Color:= iColor;
-  GroupBoxSource.ShadowColor:= iShadowColor;
-  GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+  if GroupBoxSource.ShadowColor <> -1 then
+     GroupBoxSource.ShadowColor:= iShadowColor;
+  if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
+     GroupBoxSource.ShadowEnabled:= iShadowEnabled;
 
   if iDisabledColor <> -1 then
      GroupBoxSource.DisabledFontColor:= iDisabledColor;
@@ -818,13 +851,19 @@ begin
      GroupBoxSource.DisabledFontShadowColor:= iDisabledShadowColor;
 end;
 
-procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = True);
+procedure SetGroupBoxFontColors(GroupBoxSource: TAdvGroupBoxEx; iFontColor: TColor; iShadowFontColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
   GroupBoxSource.Font.Color:= iFontColor;
   if iShadowFontColor <> -1 then
      GroupBoxSource.ShadowColor:= iShadowFontColor;
   if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
      GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+end;
+
+procedure SetBottomPanelColors(PanelSource: TPanelEx);
+begin
+  if IsNightMode then
+     SetPanelColors(PanelSource, menu_background_color[1], clrDarkGray);
 end;
 
 procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; IsSolidDrawStyle: Boolean = False);
@@ -980,8 +1019,11 @@ begin
      EditSource.ColorFrameFocused:= FrameFocusedColor;
   if FrameDisabledColor <> -1 then
      EditSource.ColorFrameDisabled:= FrameDisabledColor;
+
   EditSource.Font.Color:= FontColor;
-  EditSource.UseCustomBorder:= True;
+
+  if EditSource.UseCustomBorder <> EnableCustomBorder then
+     EditSource.UseCustomBorder:= True;
 end;
 
 procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
@@ -1224,7 +1266,7 @@ begin
     if PanelBottomSource <> nil then
     begin
       if IsBottomColorSilver then
-         SetPanelNightColors(PanelBottomSource, menu_background_color[1], clrMedDarkGray, clrLightBlue)
+         SetPanelNightColors(PanelBottomSource, menu_background_color[1], clrDarkGray{clrMedDarkGray}, clrLightBlue)
       else
          SetPanelNightColors(PanelBottomSource, clrBlackBk, clrDarkGray, clrLightBlue);
     end;
@@ -1234,7 +1276,7 @@ begin
       case GameStatus of // 0 - have (available); 1 - missing ROMs/CHDs; 2 - missing (no .zip and no ROMs found... even if CHDs are found)
         -1: // default blue gradient
           begin
-            LabelGameTitle.Font.Color:= clrOrangeBarTop;// clYellow;
+            LabelGameTitle.Font.Color:= clrOrangeBarTop;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         0: // green gradient (have)
@@ -1244,30 +1286,30 @@ begin
           end;
         1: // red gradient (missing ROMs/CHDs)
           begin
-            LabelGameTitle.Font.Color:= clRed;// clYellow;
+            LabelGameTitle.Font.Color:= clRed;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         2: // gray gradient (missing)
           begin
-            LabelGameTitle.Font.Color:= clrOrangeBarTop;//clYellow;
-            LabelGameTitle.ShadowColor:= clMaroon;// clrDarkGray;
+            LabelGameTitle.Font.Color:= clrOrangeBarTop;
+            LabelGameTitle.ShadowColor:= clMaroon;
           end;
       end;
-      LabelGameTitle.ShadowEnabled:= False;//True;
+      LabelGameTitle.ShadowEnabled:= False;
     end;
 
     if LabelGameName <> nil then
     begin
       if IsBottomColorSilver then
-         SetLabelColors(LabelGameName, clCream, item_caption_active_shadow_color[1], False)
+         SetLabelColors(LabelGameName, clCream, item_caption_active_shadow_color[1])
       else
-         SetLabelColors(LabelGameName, clWhite, clrMedBlue, False);
+         SetLabelColors(LabelGameName, clWhite, clrMedBlue);
 
     end;
 
     if LabelGameStatus <> nil then
     begin
-      SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack{clNavy}, False);
+      SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack);
     end;
   end;
   //else
@@ -1480,7 +1522,7 @@ begin
   GradientFill(ACanvas.Handle, @Vertexs, 2, @GRect, 1, GRADIENT_FILL_RECT_V);
 end;
 
-function GetVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
+function GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 var
   VerInfoSize: DWORD;
   VerInfo: Pointer;
@@ -2208,13 +2250,9 @@ begin
     if IsNightMode then
     begin
       SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, nil, -1, True);
-
       FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
       FormMessageBox.NightMode.Font.Color:=$00f1f1f1;
-
-
-       //SetPanelColors(PanelTop_Bottom, clrBlackBk, menu_background_color[1]);
     end;
   end;
 end;
@@ -2713,9 +2751,25 @@ end;
 
 procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
 begin
+  if sIndex = -1 then
+     Exit; // invalid value
   ComboBoxHolder.ItemIndex:= sIndex;
   if Assigned(ComboBoxHolder.OnSelect) then
      ComboBoxHolder.OnSelect(ComboBoxHolder);
+end;
+
+procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar);
+begin
+  GaugeBarSource.Position:= iPosition;
+  if Assigned(GaugeBarSource.OnChange) then
+     GaugeBarSource.OnChange(GaugeBarSource);
+end;
+
+procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar2);
+begin
+  GaugeBarSource.Position:= iPosition;
+  if Assigned(GaugeBarSource.OnChange) then
+     GaugeBarSource.OnChange(GaugeBarSource);
 end;
 
 function XML_CheckData(const strLine, FieldEntry: String): Boolean;
@@ -3097,51 +3151,155 @@ end;
 //  Result:= SizeOf(Pointer) = 8; // this validation does NOT work!!!
 //end;
 
-{
+
 function GetWindowsVersion: String;
 var
    WindowsInfo: TOSVersionInfo;
 begin
-    WindowsInfo.dwOSVersionInfoSize:= SizeOf(OSVERSIONINFO);
-    GetVersionEx(WindowsInfo);
-    case WindowsInfo.dwPlatformId of
-      VER_PLATFORM_WIN32_NT:
-         begin
-           case WindowsInfo.dwMajorVersion of
-             4: Result:=  'Microsoft Windows NT';
-             5:
-               begin
-                 case WindowsInfo.dwMinorVersion of
-                   0: Result:= 'Microsoft Windows 2000';
-                   1: Result:= 'Microsoft Windows XP';
-                   2: Result:= 'Microsoft Windows 2003';
-                 end;
+  WindowsInfo.dwOSVersionInfoSize:= SizeOf(OSVERSIONINFO);
+  GetVersionEx(WindowsInfo);
+  case WindowsInfo.dwPlatformId of
+    VER_PLATFORM_WIN32_NT:
+       begin
+         case WindowsInfo.dwMajorVersion of
+           4: Result:=  'Microsoft Windows NT';
+           5:
+             begin
+               case WindowsInfo.dwMinorVersion of
+                 0: Result:= 'Microsoft Windows 2000';
+                 1: Result:= 'Microsoft Windows XP';
+                 2: Result:= 'Microsoft Windows 2003';
                end;
-             6:
-               begin
-                 case WindowsInfo.dwMinorVersion of
-                   0: Result:= 'Microsoft Windows Vista';
-                   1: Result:= 'Microsoft Windows 7';
-                 end;
-           end;
-         end;
-      VER_PLATFORM_WIN32_WINDOWS:
-         begin
-           // no need to check for dwMajorVersion... it's always 4
-           case WindowsInfo.dwMajorVersion of
-             4:
-               begin
-                 case WindowsInfo.dwMinorVersion of
-                    0: Result:= 'Microsoft Windows 95';
-                   10: Result:= 'Microsoft Windows 98';
-                   90: Result:= 'Microsoft Windows ME';
-                 end;
+             end;
+           6:
+             begin
+               case WindowsInfo.dwMinorVersion of
+                 0: Result:= 'Microsoft Windows Vista';
+                 1: Result:= 'Microsoft Windows 7';
+                 2: Result:= 'Microsoft Windows 8.0'; // Win8.1 is unknown
+                 // 3: Result:= 'Microsoft Windows 10'; // taken from registry
                end;
-           end;
+             end;
+           else
+             Result:= 'MajorVersion: '+IntToStr(WindowsInfo.dwMajorVersion)+#13#10+'Minor Version: '+IntToStr(WindowsInfo.dwMinorVersion);
          end;
-    end;
+       end;
+    VER_PLATFORM_WIN32_WINDOWS:
+       begin
+         // no need to check for dwMajorVersion... it's always 4
+         case WindowsInfo.dwMajorVersion of
+           4:
+             begin
+               case WindowsInfo.dwMinorVersion of
+                  0: Result:= 'Microsoft Windows 95';
+                 10: Result:= 'Microsoft Windows 98';
+                 90: Result:= 'Microsoft Windows ME';
+               end;
+             end;
+         end;
+       end;
+  end;
 end;
-}
+
+function IsWin10: Boolean;
+var
+  VerInfo: TOSVersionInfo;
+  iStr, VersionStr: String;
+  iMajorVersion{, iMinorVersion}: DWORD;
+  iBuildNumber: Integer;
+begin
+  Result:= False;
+  iMajorVersion:= 0;
+  //iMinorVersion:= 0;
+  iBuildNumber:= 0;
+  VersionStr:= '';
+
+  with TRegistry.Create(KEY_READ) do
+  begin
+    try
+      RootKey:= HKEY_LOCAL_MACHINE;
+      if OpenKey('\SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+      begin
+        if ValueExists('CurrentMajorVersionNumber') then
+           iMajorVersion:= ReadInteger('CurrentMajorVersionNumber');
+        //if iStr <> '' then
+        //   iMajorVersion:= StrToInt64(iStr);
+        CloseKey;
+
+        //if OpenKey('\SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+        //begin
+        //  if ValueExists('CurrentMinorVersionNumber') then
+        //     iMinorVersion:= ReadInteger('CurrentMinorVersionNumber');
+        //  //if iStr <> '' then
+        //  //   iMinorVersion:= StrToInt64(istr);
+        //  CloseKey;
+        //end;
+      end;
+
+      if iMajorVersion = 0 then
+      begin
+        if OpenKey('\SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+        begin
+          if ValueExists('CurrentVersion') then
+             VersionStr:= ReadString('CurrentVersion');
+          CloseKey;
+        end;
+      end;
+
+      if OpenKey('SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+      begin
+        if ValueExists('ReleaseId') then
+        begin
+          iStr:= ReadString('ReleaseId');
+          if iStr <> '' then
+             iBuildNumber:= StrToInt(iStr);
+        end;
+        CloseKey;
+
+        {if iStr = '' then
+        begin
+          if OpenKey('SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+          begin
+            if ValueExists('CurrentBuildNumber') then
+            begin
+              iStr:= ReadString('CurrentBuildNumber');
+              if iStr <> '' then
+                 iBuildNumber:= StrToInt(iStr);
+            end;
+            CloseKey;
+          end;
+          if iStr = '' then
+             if OpenKey('\SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
+             begin
+               // fallback to "CurrentBuild" if "CurrentBuildNumber" doesn't exist
+               if ValueExists('CurrentBuild') then
+               begin
+                 iStr:= ReadString('CurrentBuild');
+                 if iStr <> '' then
+                    iBuildNumber:= StrToInt(iStr);
+               end;
+               CloseKey;
+             end;
+        end;}
+      end;
+    finally
+      Free;
+    end;
+  end;
+  if VersionStr = '' then
+     Result:= iMajorVersion = 10
+  else
+     Result:= SameText(VersionStr, '6.3');
+
+  if Result then
+     Result:= (iBuildNumber >= 1809); // only Win10 build 1809 or never have support dark mode for "Windows Explorer"
+
+  // for debugging only, do not enable
+  //ShowMessageW('Major Version: '+IntToStr(iMajorVersion)+#13#10+
+  //             'Minor Version: '+IntToStr(iMinorVersion)+#13#10+
+  //             'Current Build: '+IntToStr(iBuildNumber));
+end;
+
 // FileExists need fix for Delphi 7... for Delphi 2007 they are already fixed!!!!!
 function FileExists(const FileName: String): Boolean;
 var
@@ -3231,13 +3389,13 @@ begin
   FormHolder.Height:= Screen.Height-95;
 end;
 
-procedure SetEditBkColor(EditHolder: TEdit);
+procedure SetEditBkColor(EditHolder: TEditEx);
 begin
   EditHolder.Color:= $e67878; // -> 15104120; RGB(120, 120, 255)
   EditHolder.SetFocus;
 end;
 
-function IsEditEditing(EditHolder: TEdit): Boolean;
+function IsEditEditing(EditHolder: TEditEx): Boolean;
 begin
   Result:= EditHolder.Color = $e67878;
 end;

@@ -76,6 +76,7 @@ object FormToolBarEditor: TFormToolBarEditor
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnItemCheckChange = ToolBarListViewItemCheckChange
     OnItemPaintText = ToolBarListViewItemPaintText
   end
@@ -181,6 +182,7 @@ object FormToolBarEditor: TFormToolBarEditor
       ReturnIsTab = False
       ShadowColor = clSkyBlue
       Themed = True
+      CustomIconsEnabled = False
     end
     object ShowHideToolBar: TAdvOfficeCheckBoxEx
       Left = 8
@@ -197,6 +199,7 @@ object FormToolBarEditor: TFormToolBarEditor
       ShadowColor = clSkyBlue
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonDefault: TBitBtnEx
       Left = 684

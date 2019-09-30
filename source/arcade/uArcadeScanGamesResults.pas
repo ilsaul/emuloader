@@ -924,25 +924,26 @@ var
   Loop: Integer;
   missSoftListFiles: THashedStringList;
 begin
-  CallMaximizeWindow(TForm(Sender));
   FormMain.ELV_ResetNormalColors(ROMsListView);
+
+  CallMaximizeWindow(TForm(Sender));
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, nil, -1, False);
-       SetLabelColors(LabelGamesListList, clWhite, clrMedBlue, False);
-       SetLabelColors(LabelTotalGames, clWhite, clrDarkOrange, False);
-       SetLabelColors(LabelSearchBar, clWhite, clrMedBlue, False);
+       SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, nil, -1, True);
+       SetLabelColors(LabelGamesListList, clWhite, clrMedBlue);
+       SetLabelColors(LabelTotalGames,    clWhite, clrDarkOrange);
+       SetLabelColors(LabelSearchBar,     clWhite, clrMedBlue);
        SetComboBox2ExColors(MAMEMachinesFilter, True);
 
+
        FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrOrangeBarTop);
+       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);
+       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
+       FormMain.SetWin10DarkScrollBar(ROMsListView);
 
        SetEditNightColors(SearchBarEdit);
-
        FormMain.SetButtonExColors(ButtonToggleTree);
-
-       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);       
-       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
      end;
      
   tempFolder:= FormMain.GetFolderFull(32);

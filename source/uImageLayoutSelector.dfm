@@ -48,9 +48,9 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -162,6 +162,7 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
     Selection.UseFocusRect = False
     TabOrder = 1
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnDblClick = LayoutsListViewDblClick
     OnItemSelectionChanged = LayoutsListViewItemSelectionChanged
     OnKeyAction = LayoutsListViewKeyAction

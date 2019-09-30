@@ -63,6 +63,16 @@ end;
 
 procedure TFormImageCategorySelector.FormShow(Sender: TObject);
 begin
+  if IsNightMode then
+     begin
+       FormImageCategorySelector.Color:= menu_background_color[1];
+       SetBottomPanelColors(PanelBottom);
+       FormMain.SetEasyListViewColors(CategoriesListView, menu_background_color[1], item_caption_active_color[1]);
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
+     end;
+
   FormMain.ELV_ResetNormalColors(CategoriesListView);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 

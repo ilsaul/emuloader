@@ -78,6 +78,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 0
+    CustomCheckRadioEnabled = False
     OnItemDblClick = SystemsItemDblClick
     OnItemPaintText = SystemsItemPaintText
     OnKeyAction = SystemsKeyAction
@@ -122,11 +123,11 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       Left = 4
       Top = 2
       Width = 149
-      Height = 22
+      Height = 19
       Checked = True
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -139,6 +140,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelp: TBitBtnEx
       Left = 486

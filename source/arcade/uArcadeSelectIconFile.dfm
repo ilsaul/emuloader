@@ -31,15 +31,15 @@ object FormArcadeSelectIconFile: TFormArcadeSelectIconFile
   end
   object LabelCurrentSourceFile: TShadowLabel
     Left = 12
-    Top = 377
-    Width = 111
-    Height = 18
+    Top = 379
+    Width = 106
+    Height = 16
     Caption = 'Current Source File:'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clMaroon
-    Font.Height = -13
+    Font.Color = clBlack
+    Font.Height = -12
     Font.Name = 'Segoe UI'
-    Font.Style = [fsItalic]
+    Font.Style = []
     ParentFont = False
     ShowAccelChar = False
     ShadowColor = 12632284
@@ -116,10 +116,11 @@ object FormArcadeSelectIconFile: TFormArcadeSelectIconFile
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsTile
+    CustomCheckRadioEnabled = False
     OnItemCompare = FilesListViewItemCompare
     OnItemPaintText = FilesListViewItemPaintText
   end
-  object ButtonOk: TBitBtn
+  object ButtonOk: TBitBtnEx
     Left = 413
     Top = 374
     Width = 89
@@ -130,7 +131,7 @@ object FormArcadeSelectIconFile: TFormArcadeSelectIconFile
     TabOrder = 1
     OnClick = ButtonOkClick
   end
-  object ButtonCancel: TBitBtn
+  object ButtonCancel: TBitBtnEx
     Left = 511
     Top = 374
     Width = 89

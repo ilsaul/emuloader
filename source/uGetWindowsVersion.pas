@@ -1,0 +1,577 @@
+unit uGetWindowsVersion;
+
+ // _WIN32_WINNT > 0x0400 || !defined(_WIN32_WINNT)
+ // _WIN32_WINNT >= 0x0501
+ // _WIN32_WINNT >= 0x0600
+
+interface
+
+uses Types, Windows;
+
+(*$HPPEMIT '// WINVER check BEGIN ' *)
+(*$HPPEMIT '#if (WINVER < 0x0400)' *)
+(*$HPPEMIT '  #error WINVER < 0x0400' *)
+(*$HPPEMIT '#endif' *)
+(*$HPPEMIT '// WINVER check END. ' *)
+(*$HPPEMIT '' *)
+(*$HPPEMIT '// WIN2K SDK fixes BEGIN ' *)
+(*$HPPEMIT '#ifndef WINTRUST_H' *)
+(*$HPPEMIT '  #include<wintrust.h>' *)
+(*$HPPEMIT '#endif' *)
+(*$HPPEMIT '// WIN2K SDK fixes END. ' *)
+(*$HPPEMIT '//' *)
+(*$HPPEMIT '// WINDOWS provides two definitions of BLOB: wtypes.h defines a' *)
+(*$HPPEMIT '// BLOB as a tagBLOB struct whereas nspapi.h defines a BLOB as a _BLOB' *)
+(*$HPPEMIT '// struct. Unfortunately, VCL does not use the portable BLOB type but' *)
+(*$HPPEMIT '// rather relies on tagBLOB. So here we use a kludge to try to determine' *)
+(*$HPPEMIT '// which flavour of BLOB we have (which is determined by the order of header' *)
+(*$HPPEMIT '// inclusion by the compilation unit). If it is the _BLOB, we expose the' *)
+(*$HPPEMIT '// tagBLOB type for VCL.' *)
+(*$HPPEMIT '//' *)
+(*$HPPEMIT '#if !defined(__clang__)' *)
+(*$HPPEMIT '  #if sizeof(_BLOB) == 8      // We know that BLOB is 8 bytes ' *)
+(*$HPPEMIT '  typedef _BLOB tagBLOB;      // If unknown, _BLOB would be 4 ' *)
+(*$HPPEMIT '  #endif                      // tagBLOB Kludge' *)
+(*$HPPEMIT '  #if sizeof(tagBLOB) == 4    // tagBLOB has probably not been defined yet' *)
+(*$HPPEMIT '    #ifndef _tagBLOB_DEFINED' *)
+(*$HPPEMIT '      #define _tagBLOB_DEFINED' *)
+(*$HPPEMIT '      #define _BLOB_DEFINED' *)
+(*$HPPEMIT '      #define _LPBLOB_DEFINED' *)
+(*$HPPEMIT '      typedef struct  tagBLOB' *)
+(*$HPPEMIT '      {' *)
+(*$HPPEMIT '      ULONG cbSize;' *)
+(*$HPPEMIT '      /* [size_is] */ BYTE __RPC_FAR *pBlobData;' *)
+(*$HPPEMIT '      } BLOB;' *)
+(*$HPPEMIT '' *)
+(*$HPPEMIT '      typedef struct tagBLOB __RPC_FAR *LPBLOB;' *)
+(*$HPPEMIT '    #endif    // _tagBLOB_DEFINED' *)
+(*$HPPEMIT '  #endif      // sizeof(tagBLOB) == 4' *)
+(*$HPPEMIT '' *)
+(*$HPPEMIT '#else' *)
+(*$HPPEMIT '' *)
+(*$HPPEMIT '#endif' *)
+(*$HPPEMIT '#if defined(WIN32_LEAN_AND_MEAN) && !defined(_DDEHEADER_INCLUDED_)' *)
+(*$HPPEMIT '  #include <dde.h>' *)
+(*$HPPEMIT '#endif      // WIN32_LEAN_AND_MEAN & _DDEHEADER_INCLUDED_' *)
+(*$HPPEMIT '' *)
+(*$HPPEMIT 'namespace Winapi {'*)
+(*$HPPEMIT 'namespace Windows {'*)
+(*$HPPEMIT '  typedef _LARGE_INTEGER TLargeInteger;'*)
+(*$HPPEMIT ''*)
+(*$HPPEMIT '#if (WINVER >= 0x0500)'*)
+(*$HPPEMIT '  typedef BITMAPV5HEADER *PBitmapV5Header;'*)
+(*$HPPEMIT '  typedef BITMAPV5HEADER  TBitmapV5Header;'*)
+(*$HPPEMIT '  typedef tagEMRGRADIENTFILL *PEMGradientFill;'*)
+(*$HPPEMIT '  typedef tagEMRGRADIENTFILL  TEMGradientFill;'*)
+(*$HPPEMIT '  typedef tagEMRALPHABLEND *PEMRAlphaBlend;'*)
+(*$HPPEMIT '  typedef tagEMRALPHABLEND  TEMRAlphaBlend;'*)
+(*$HPPEMIT '  typedef tagEMRTRANSPARENTBLT *PEMRTransparentBLT;'*)
+(*$HPPEMIT '  typedef tagEMRTRANSPARENTBLT  TEMRTransparentBLT;'*)
+(*$HPPEMIT '  typedef _WGLSWAP *PWGLSwap;'*)
+(*$HPPEMIT '  typedef _WGLSWAP  TWGLSwap;'*)
+(*$HPPEMIT '  typedef tagMOUSEMOVEPOINT *PMouseMovePoint;'*)
+(*$HPPEMIT '  typedef tagMOUSEMOVEPOINT  TMouseMovePoint;'*)
+(*$HPPEMIT '  typedef FLASHWINFO  TFlashWInfo;'*)
+(*$HPPEMIT '  typedef tagMENUINFO *PMenuInfo;'*)
+(*$HPPEMIT '  typedef tagMENUINFO  TMenuInfo;'*)
+(*$HPPEMIT '  typedef tagMENUGETOBJECTINFO *PMenuGetObjectInfo;'*)
+(*$HPPEMIT '  typedef tagMENUGETOBJECTINFO  TMenuGetObjectInfo;'*)
+(*$HPPEMIT '  typedef tagGUITHREADINFO *PGUIThreadInfo;'*)
+(*$HPPEMIT '  typedef tagGUITHREADINFO  TGUIThreadInfo;'*)
+(*$HPPEMIT '  typedef tagCURSORINFO *PCursorInfo;'*)
+(*$HPPEMIT '  typedef tagCURSORINFO  TCursorInfo;'*)
+(*$HPPEMIT '  typedef tagWINDOWINFO *PWindowInfo;'*)
+(*$HPPEMIT '  typedef tagWINDOWINFO  TWindowInfo;'*)
+(*$HPPEMIT '  typedef tagTITLEBARINFO *PTitleBarInfo;'*)
+(*$HPPEMIT '  typedef tagTITLEBARINFO  TTitleBarInfo;'*)
+(*$HPPEMIT '  typedef tagMENUBARINFO *PMenuBarInfo;'*)
+(*$HPPEMIT '  typedef tagMENUBARINFO  TMenuBarInfo;'*)
+(*$HPPEMIT '  typedef tagSCROLLBARINFO *PScrollBarInfo;'*)
+(*$HPPEMIT '  typedef tagSCROLLBARINFO  TScrollBarInfo;'*)
+(*$HPPEMIT '  typedef tagCOMBOBOXINFO *PComboBoxInfo;'*)
+(*$HPPEMIT '  typedef tagCOMBOBOXINFO  TComboBoxInfo;'*)
+(*$HPPEMIT '  typedef tagALTTABINFO *PAltTabInfo;'*)
+(*$HPPEMIT '  typedef tagALTTABINFO  TAltTabInfo;'*)
+(*$HPPEMIT '#endif'*)
+(*$HPPEMIT ''*)
+(*$HPPEMIT '} // namespace Winapi'*)
+(*$HPPEMIT '} // namespace Windows'*)
+(*$HPPEMIT ''*)
+(*$HPPEMIT '#include "wtsapi32.h"'*)
+(*$HPPEMIT '#ifndef _WIN64'*)
+(*$HPPEMIT '#pragma link "wtsapi32.lib"'*)
+(*$HPPEMIT '#endif //_WIN64'*)
+
+type
+  // Translated from WINDEF.H
+
+  // line 190
+  DWORDLONG = UInt64;
+  {$EXTERNALSYM DWORDLONG}
+
+  ULONGLONG = UInt64;
+  {$EXTERNALSYM ULONGLONG}
+  PULONGLONG = ^UInt64;
+  {$EXTERNALSYM PULONGLONG}
+
+// line 490
+const
+  VER_SERVER_NT                       = $80000000;
+  {$EXTERNALSYM VER_SERVER_NT}
+  VER_WORKSTATION_NT                  = $40000000;
+  {$EXTERNALSYM VER_WORKSTATION_NT}
+  VER_SUITE_SMALLBUSINESS             = $00000001;
+  {$EXTERNALSYM VER_SUITE_SMALLBUSINESS}
+  VER_SUITE_ENTERPRISE                = $00000002;
+  {$EXTERNALSYM VER_SUITE_ENTERPRISE}
+  VER_SUITE_BACKOFFICE                = $00000004;
+  {$EXTERNALSYM VER_SUITE_BACKOFFICE}
+  VER_SUITE_COMMUNICATIONS            = $00000008;
+  {$EXTERNALSYM VER_SUITE_COMMUNICATIONS}
+  VER_SUITE_TERMINAL                  = $00000010;
+  {$EXTERNALSYM VER_SUITE_TERMINAL}
+  VER_SUITE_SMALLBUSINESS_RESTRICTED  = $00000020;
+  {$EXTERNALSYM VER_SUITE_SMALLBUSINESS_RESTRICTED}
+  VER_SUITE_EMBEDDEDNT                = $00000040;
+  {$EXTERNALSYM VER_SUITE_EMBEDDEDNT}
+  VER_SUITE_DATACENTER                = $00000080;
+  {$EXTERNALSYM VER_SUITE_DATACENTER}
+  VER_SUITE_SINGLEUSERTS              = $00000100;
+  {$EXTERNALSYM VER_SUITE_SINGLEUSERTS}
+  VER_SUITE_PERSONAL                  = $00000200;
+  {$EXTERNALSYM VER_SUITE_PERSONAL}
+  VER_SUITE_BLADE                     = $00000400;
+  {$EXTERNALSYM VER_SUITE_BLADE}
+  VER_SUITE_EMBEDDED_RESTRICTED       = $00000800;
+  {$EXTERNALSYM VER_SUITE_EMBEDDED_RESTRICTED}
+  VER_SUITE_SECURITY_APPLIANCE        = $00001000;
+  {$EXTERNALSYM VER_SUITE_SECURITY_APPLIANCE}
+  VER_SUITE_STORAGE_SERVER            = $00002000;
+  {$EXTERNALSYM VER_SUITE_STORAGE_SERVER}
+  VER_SUITE_COMPUTE_SERVER            = $00004000;
+  {$EXTERNALSYM VER_SUITE_COMPUTE_SERVER}
+  VER_SUITE_WH_SERVER                 = $00008000;
+  {$EXTERNALSYM VER_SUITE_WH_SERVER}
+
+//
+// Product types
+// This list grows with each OS release.
+//
+// There is no ordering of values to ensure callers
+// do an equality test i.e. greater-than and less-than
+// comparisons are not useful.
+//
+// NOTE: Values in this list should never be deleted.
+//       When a product-type 'X' gets dropped from a
+//       OS release onwards, the value of 'X' continues
+//       to be used in the mapping table of GetProductInfo.
+//
+
+  PRODUCT_UNDEFINED                           = $00000000;
+  {$EXTERNALSYM PRODUCT_UNDEFINED}
+
+  PRODUCT_ULTIMATE                            = $00000001;
+  {$EXTERNALSYM PRODUCT_ULTIMATE}
+  PRODUCT_HOME_BASIC                          = $00000002;
+  {$EXTERNALSYM PRODUCT_HOME_BASIC}
+  PRODUCT_HOME_PREMIUM                        = $00000003;
+  {$EXTERNALSYM PRODUCT_HOME_PREMIUM}
+  PRODUCT_ENTERPRISE                          = $00000004;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE}
+  PRODUCT_HOME_BASIC_N                        = $00000005;
+  {$EXTERNALSYM PRODUCT_HOME_BASIC_N}
+  PRODUCT_BUSINESS                            = $00000006;
+  {$EXTERNALSYM PRODUCT_BUSINESS}
+  PRODUCT_STANDARD_SERVER                     = $00000007;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER}
+  PRODUCT_DATACENTER_SERVER                   = $00000008;
+  {$EXTERNALSYM PRODUCT_DATACENTER_SERVER}
+  PRODUCT_SMALLBUSINESS_SERVER                = $00000009;
+  {$EXTERNALSYM PRODUCT_SMALLBUSINESS_SERVER}
+  PRODUCT_ENTERPRISE_SERVER                   = $0000000A;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_SERVER}
+  PRODUCT_STARTER                             = $0000000B;
+  {$EXTERNALSYM PRODUCT_STARTER}
+  PRODUCT_DATACENTER_SERVER_CORE              = $0000000C;
+  {$EXTERNALSYM PRODUCT_DATACENTER_SERVER_CORE}
+  PRODUCT_STANDARD_SERVER_CORE                = $0000000D;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER_CORE}
+  PRODUCT_ENTERPRISE_SERVER_CORE              = $0000000E;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_SERVER_CORE}
+  PRODUCT_ENTERPRISE_SERVER_IA64              = $0000000F;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_SERVER_IA64}
+  PRODUCT_BUSINESS_N                          = $00000010;
+  {$EXTERNALSYM PRODUCT_BUSINESS_N}
+  PRODUCT_WEB_SERVER                          = $00000011;
+  {$EXTERNALSYM PRODUCT_WEB_SERVER}
+  PRODUCT_CLUSTER_SERVER                      = $00000012;
+  {$EXTERNALSYM PRODUCT_CLUSTER_SERVER}
+  PRODUCT_HOME_SERVER                         = $00000013;
+  {$EXTERNALSYM PRODUCT_HOME_SERVER}
+  PRODUCT_STORAGE_EXPRESS_SERVER              = $00000014;
+  {$EXTERNALSYM PRODUCT_STORAGE_EXPRESS_SERVER}
+  PRODUCT_STORAGE_STANDARD_SERVER             = $00000015;
+  {$EXTERNALSYM PRODUCT_STORAGE_STANDARD_SERVER}
+  PRODUCT_STORAGE_WORKGROUP_SERVER            = $00000016;
+  {$EXTERNALSYM PRODUCT_STORAGE_WORKGROUP_SERVER}
+  PRODUCT_STORAGE_ENTERPRISE_SERVER           = $00000017;
+  {$EXTERNALSYM PRODUCT_STORAGE_ENTERPRISE_SERVER}
+  PRODUCT_SERVER_FOR_SMALLBUSINESS            = $00000018;
+  {$EXTERNALSYM PRODUCT_SERVER_FOR_SMALLBUSINESS}
+  PRODUCT_SMALLBUSINESS_SERVER_PREMIUM        = $00000019;
+  {$EXTERNALSYM PRODUCT_SMALLBUSINESS_SERVER_PREMIUM}
+  PRODUCT_HOME_PREMIUM_N                      = $0000001A;
+  {$EXTERNALSYM PRODUCT_HOME_PREMIUM_N}
+  PRODUCT_ENTERPRISE_N                        = $0000001B;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_N}
+  PRODUCT_ULTIMATE_N                          = $0000001C;
+  {$EXTERNALSYM PRODUCT_ULTIMATE_N}
+  PRODUCT_WEB_SERVER_CORE                     = $0000001D;
+  {$EXTERNALSYM PRODUCT_WEB_SERVER_CORE}
+  PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT    = $0000001E;
+  {$EXTERNALSYM PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT}
+  PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY      = $0000001F;
+  {$EXTERNALSYM PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY}
+  PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING     = $00000020;
+  {$EXTERNALSYM PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING}
+  PRODUCT_SERVER_FOUNDATION                   = $00000021;
+  {$EXTERNALSYM PRODUCT_SERVER_FOUNDATION}
+  PRODUCT_HOME_PREMIUM_SERVER                 = $00000022;
+  {$EXTERNALSYM PRODUCT_HOME_PREMIUM_SERVER}
+  PRODUCT_SERVER_FOR_SMALLBUSINESS_V          = $00000023;
+  {$EXTERNALSYM PRODUCT_SERVER_FOR_SMALLBUSINESS_V}
+  PRODUCT_STANDARD_SERVER_V                   = $00000024;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER_V}
+  PRODUCT_DATACENTER_SERVER_V                 = $00000025;
+  {$EXTERNALSYM PRODUCT_DATACENTER_SERVER_V}
+  PRODUCT_ENTERPRISE_SERVER_V                 = $00000026;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_SERVER_V}
+  PRODUCT_DATACENTER_SERVER_CORE_V            = $00000027;
+  {$EXTERNALSYM PRODUCT_DATACENTER_SERVER_CORE_V}
+  PRODUCT_STANDARD_SERVER_CORE_V              = $00000028;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER_CORE_V}
+  PRODUCT_ENTERPRISE_SERVER_CORE_V            = $00000029;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_SERVER_CORE_V}
+  PRODUCT_HYPERV                              = $0000002A;
+  {$EXTERNALSYM PRODUCT_HYPERV}
+  PRODUCT_STORAGE_EXPRESS_SERVER_CORE         = $0000002B;
+  {$EXTERNALSYM PRODUCT_STORAGE_EXPRESS_SERVER_CORE}
+  PRODUCT_STORAGE_STANDARD_SERVER_CORE        = $0000002C;
+  {$EXTERNALSYM PRODUCT_STORAGE_STANDARD_SERVER_CORE}
+  PRODUCT_STORAGE_WORKGROUP_SERVER_CORE       = $0000002D;
+  {$EXTERNALSYM PRODUCT_STORAGE_WORKGROUP_SERVER_CORE}
+  PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE      = $0000002E;
+  {$EXTERNALSYM PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE}
+  PRODUCT_STARTER_N                           = $0000002F;
+  {$EXTERNALSYM PRODUCT_STARTER_N}
+  PRODUCT_PROFESSIONAL                        = $00000030;
+  {$EXTERNALSYM PRODUCT_PROFESSIONAL}
+  PRODUCT_PROFESSIONAL_N                      = $00000031;
+  {$EXTERNALSYM PRODUCT_PROFESSIONAL_N}
+  PRODUCT_SB_SOLUTION_SERVER                  = $00000032;
+  {$EXTERNALSYM PRODUCT_SB_SOLUTION_SERVER}
+  PRODUCT_SERVER_FOR_SB_SOLUTIONS             = $00000033;
+  {$EXTERNALSYM PRODUCT_SERVER_FOR_SB_SOLUTIONS}
+  PRODUCT_STANDARD_SERVER_SOLUTIONS           = $00000034;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER_SOLUTIONS}
+  PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE      = $00000035;
+  {$EXTERNALSYM PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE}
+  PRODUCT_SB_SOLUTION_SERVER_EM               = $00000036;
+  {$EXTERNALSYM PRODUCT_SB_SOLUTION_SERVER_EM}
+  PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM          = $00000037;
+  {$EXTERNALSYM PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM}
+  PRODUCT_SOLUTION_EMBEDDEDSERVER             = $00000038;
+  {$EXTERNALSYM PRODUCT_SOLUTION_EMBEDDEDSERVER}
+  PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE        = $00000039;
+  {$EXTERNALSYM PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE}
+  PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE   = $0000003F;
+  {$EXTERNALSYM PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE}
+  PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT       = $0000003B;
+  {$EXTERNALSYM PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT}
+  PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL       = $0000003C;
+  {$EXTERNALSYM PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL}
+  PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC    = $0000003D;
+  {$EXTERNALSYM PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC}
+  PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC    = $0000003E;
+  {$EXTERNALSYM PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC}
+  PRODUCT_CLUSTER_SERVER_V                    = $00000040;
+  {$EXTERNALSYM PRODUCT_CLUSTER_SERVER_V}
+  PRODUCT_EMBEDDED                            = $00000041;
+  {$EXTERNALSYM PRODUCT_EMBEDDED}
+  PRODUCT_STARTER_E                           = $00000042;
+  {$EXTERNALSYM PRODUCT_STARTER_E}
+  PRODUCT_HOME_BASIC_E                        = $00000043;
+  {$EXTERNALSYM PRODUCT_HOME_BASIC_E}
+  PRODUCT_HOME_PREMIUM_E                      = $00000044;
+  {$EXTERNALSYM PRODUCT_HOME_PREMIUM_E}
+  PRODUCT_PROFESSIONAL_E                      = $00000045;
+  {$EXTERNALSYM PRODUCT_PROFESSIONAL_E}
+  PRODUCT_ENTERPRISE_E                        = $00000046;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_E}
+  PRODUCT_ULTIMATE_E                          = $00000047;
+  {$EXTERNALSYM PRODUCT_ULTIMATE_E}
+  PRODUCT_ENTERPRISE_EVALUATION               = $00000048;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_EVALUATION}
+  PRODUCT_MULTIPOINT_STANDARD_SERVER          = $0000004C;
+  {$EXTERNALSYM PRODUCT_MULTIPOINT_STANDARD_SERVER}
+  PRODUCT_MULTIPOINT_PREMIUM_SERVER           = $0000004D;
+  {$EXTERNALSYM PRODUCT_MULTIPOINT_PREMIUM_SERVER}
+  PRODUCT_STANDARD_EVALUATION_SERVER          = $0000004F;
+  {$EXTERNALSYM PRODUCT_STANDARD_EVALUATION_SERVER}
+  PRODUCT_DATACENTER_EVALUATION_SERVER        = $00000050;
+  {$EXTERNALSYM PRODUCT_DATACENTER_EVALUATION_SERVER}
+  PRODUCT_ENTERPRISE_N_EVALUATION             = $00000054;
+  {$EXTERNALSYM PRODUCT_ENTERPRISE_N_EVALUATION}
+  PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER = $0000005F;
+  {$EXTERNALSYM PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER}
+  PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER  = $00000060;
+  {$EXTERNALSYM PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER}
+  PRODUCT_CORE_N                              = $00000062;
+  {$EXTERNALSYM PRODUCT_CORE_N}
+  PRODUCT_CORE_COUNTRYSPECIFIC                = $00000063;
+  {$EXTERNALSYM PRODUCT_CORE_COUNTRYSPECIFIC}
+  PRODUCT_CORE_SINGLELANGUAGE                 = $00000064;
+  {$EXTERNALSYM PRODUCT_CORE_SINGLELANGUAGE}
+  PRODUCT_CORE                                = $00000065;
+  {$EXTERNALSYM PRODUCT_CORE}
+  PRODUCT_PROFESSIONAL_WMC                    = $00000067;
+  {$EXTERNALSYM PRODUCT_PROFESSIONAL_WMC}
+  PRODUCT_UNLICENSED                          = $ABCDABCD;
+  {$EXTERNALSYM PRODUCT_UNLICENSED}
+
+type
+  POSVersionInfoA = ^TOSVersionInfoA;
+  POSVersionInfoW = ^TOSVersionInfoW;
+  POSVersionInfo = POSVersionInfoW;
+  _OSVERSIONINFOA = record
+    dwOSVersionInfoSize: DWORD;
+    dwMajorVersion: DWORD;
+    dwMinorVersion: DWORD;
+    dwBuildNumber: DWORD;
+    dwPlatformId: DWORD;
+    szCSDVersion: array[0..127] of AnsiChar; { Maintenance AnsiString for PSS usage }
+  end;
+  {$EXTERNALSYM _OSVERSIONINFOA}
+  _OSVERSIONINFOW = record
+    dwOSVersionInfoSize: DWORD;
+    dwMajorVersion: DWORD;
+    dwMinorVersion: DWORD;
+    dwBuildNumber: DWORD;
+    dwPlatformId: DWORD;
+    szCSDVersion: array[0..127] of WideChar; { Maintenance UnicodeString for PSS usage }
+  end;
+  {$EXTERNALSYM _OSVERSIONINFOW}
+  _OSVERSIONINFO = _OSVERSIONINFOW;
+  TOSVersionInfoA = _OSVERSIONINFOA;
+  TOSVersionInfoW = _OSVERSIONINFOW;
+  TOSVersionInfo = TOSVersionInfoW;
+  OSVERSIONINFOA = _OSVERSIONINFOA;
+  {$EXTERNALSYM OSVERSIONINFOA}
+  OSVERSIONINFOW = _OSVERSIONINFOW;
+  {$EXTERNALSYM OSVERSIONINFOW}
+  OSVERSIONINFO = OSVERSIONINFOW;
+  {$EXTERNALSYM OSVERSIONINFO}
+
+  POSVersionInfoExA = ^TOSVersionInfoExA;
+  POSVersionInfoExW = ^TOSVersionInfoExW;
+  POSVersionInfoEx = POSVersionInfoExW;
+  _OSVERSIONINFOEXA = record
+    dwOSVersionInfoSize: DWORD;
+    dwMajorVersion: DWORD;
+    dwMinorVersion: DWORD;
+    dwBuildNumber: DWORD;
+    dwPlatformId: DWORD;
+    szCSDVersion: array[0..127] of AnsiChar; { Maintenance AnsiString for PSS usage }
+    wServicePackMajor: WORD;
+    wServicePackMinor: WORD;
+    wSuiteMask: WORD;
+    wProductType: BYTE;
+    wReserved:BYTE;
+  end;
+  {$EXTERNALSYM _OSVERSIONINFOEXA}
+  _OSVERSIONINFOEXW = record
+    dwOSVersionInfoSize: DWORD;
+    dwMajorVersion: DWORD;
+    dwMinorVersion: DWORD;
+    dwBuildNumber: DWORD;
+    dwPlatformId: DWORD;
+    szCSDVersion: array[0..127] of WideChar; { Maintenance UnicodeString for PSS usage }
+    wServicePackMajor: WORD;
+    wServicePackMinor: WORD;
+    wSuiteMask: WORD;
+    wProductType: BYTE;
+    wReserved:BYTE;
+  end;
+  {$EXTERNALSYM _OSVERSIONINFOEXW}
+  _OSVERSIONINFOEX = _OSVERSIONINFOEXW;
+  TOSVersionInfoExA = _OSVERSIONINFOEXA;
+  TOSVersionInfoExW = _OSVERSIONINFOEXW;
+  TOSVersionInfoEx = TOSVersionInfoExW;
+  OSVERSIONINFOEXA = _OSVERSIONINFOEXA;
+  {$EXTERNALSYM OSVERSIONINFOEXA}
+  OSVERSIONINFOEXW = _OSVERSIONINFOEXW;
+  {$EXTERNALSYM OSVERSIONINFOEXW}
+  OSVERSIONINFOEX = OSVERSIONINFOEXW;
+  {$EXTERNALSYM OSVERSIONINFOEX}
+  LPOSVERSIONINFOEXA = POSVERSIONINFOEXA;
+  {$EXTERNALSYM LPOSVERSIONINFOEXA}
+  LPOSVERSIONINFOEXW = POSVERSIONINFOEXW;
+  {$EXTERNALSYM LPOSVERSIONINFOEXW}
+  LPOSVERSIONINFOEX = LPOSVERSIONINFOEXW;
+  {$EXTERNALSYM LPOSVERSIONINFOEX}
+  RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW;
+  {$EXTERNALSYM RTL_OSVERSIONINFOEXW}
+  PRTL_OSVERSIONINFOEXW = POSVERSIONINFOEXW;
+  {$EXTERNALSYM PRTL_OSVERSIONINFOEXW}
+
+{ dwPlatformId defines }
+const
+  VER_PLATFORM_WIN32s = 0;
+  {$EXTERNALSYM VER_PLATFORM_WIN32s}
+  VER_PLATFORM_WIN32_WINDOWS = 1;
+  {$EXTERNALSYM VER_PLATFORM_WIN32_WINDOWS}
+  VER_PLATFORM_WIN32_NT = 2;
+  {$EXTERNALSYM VER_PLATFORM_WIN32_NT}
+  VER_PLATFORM_WIN32_CE = 3;
+  {$EXTERNALSYM VER_PLATFORM_WIN32_CE}
+
+
+  VER_EQUAL = 1;
+  {$EXTERNALSYM VER_EQUAL}
+  VER_GREATER = 2;
+  {$EXTERNALSYM VER_GREATER}
+  VER_GREATER_EQUAL = 3;
+  {$EXTERNALSYM VER_GREATER_EQUAL}
+  VER_LESS = 4;
+  {$EXTERNALSYM VER_LESS}
+  VER_LESS_EQUAL = 5;
+  {$EXTERNALSYM VER_LESS_EQUAL}
+  VER_AND = 6;
+  {$EXTERNALSYM VER_AND}
+  VER_OR = 7;
+  {$EXTERNALSYM VER_OR}
+
+  VER_CONDITION_MASK = 7;
+  {$EXTERNALSYM VER_CONDITION_MASK}
+  VER_NUM_BITS_PER_CONDITION_MASK = 3;
+  {$EXTERNALSYM VER_NUM_BITS_PER_CONDITION_MASK}
+
+  VER_BUILDNUMBER = $00000004;
+  {$EXTERNALSYM VER_BUILDNUMBER}
+  VER_MAJORVERSION = $00000002;
+  {$EXTERNALSYM VER_MAJORVERSION}
+  VER_MINORVERSION = $00000001;
+  {$EXTERNALSYM VER_MINORVERSION}
+  VER_PLATFORMID = $00000008;
+  {$EXTERNALSYM VER_PLATFORMID}
+  VER_SERVICEPACKMAJOR = $00000020;
+  {$EXTERNALSYM VER_SERVICEPACKMAJOR}
+  VER_SERVICEPACKMINOR = $00000010;
+  {$EXTERNALSYM VER_SERVICEPACKMINOR}
+  VER_SUITENAME = $00000040;
+  {$EXTERNALSYM VER_SUITENAME}
+  VER_PRODUCT_TYPE = $00000080;
+  {$EXTERNALSYM VER_PRODUCT_TYPE}
+
+  VER_NT_WORKSTATION = $0000001;
+  {$EXTERNALSYM VER_NT_WORKSTATION}
+  VER_NT_DOMAIN_CONTROLLER = $0000002;
+  {$EXTERNALSYM VER_NT_DOMAIN_CONTROLLER}
+  VER_NT_SERVER = $0000003;
+  {$EXTERNALSYM VER_NT_SERVER}
+
+function GetVersion: DWORD; stdcall;
+{$EXTERNALSYM GetVersion}
+function GetVersionEx(var lpVersionInformation: TOSVersionInfo): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionEx}
+function GetVersionExA(var lpVersionInformation: TOSVersionInfoA): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionExA}
+function GetVersionExW(var lpVersionInformation: TOSVersionInfoW): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionExW}
+function GetVersionEx(var lpVersionInformation: TOSVersionInfoEx): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionEx}
+function GetVersionExA(var lpVersionInformation: TOSVersionInfoExA): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionExA}
+function GetVersionExW(var lpVersionInformation: TOSVersionInfoExW): BOOL; stdcall; overload;
+{$EXTERNALSYM GetVersionExW}
+
+function VerifyVersionInfo(var lpVersionInformation: TOSVersionInfoEx;
+  dwTypeMask: DWORD; dwlConditionMask: DWORDLONG): BOOL; stdcall;
+{$EXTERNALSYM VerifyVersionInfo}
+function VerifyVersionInfoA(var lpVersionInformation: TOSVersionInfoExA;
+  dwTypeMask: DWORD; dwlConditionMask: DWORDLONG): BOOL; stdcall;
+{$EXTERNALSYM VerifyVersionInfoA}
+function VerifyVersionInfoW(var lpVersionInformation: TOSVersionInfoExW;
+  dwTypeMask: DWORD; dwlConditionMask: DWORDLONG): BOOL; stdcall;
+{$EXTERNALSYM VerifyVersionInfoW}
+
+function VerSetConditionMask(dwlConditionMask: DWORDLONG; dwTypeBitMask: DWORD;
+  dwConditionMask: Byte): ULONGLONG; stdcall;
+{$EXTERNALSYM VerSetConditionMask}
+
+//
+// _WIN32_WINNT version constants
+//
+// from website: https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=vs-2019
+//
+//#define _WIN32_WINNT_NT4                    0x0400 // Windows NT 4.0
+//#define _WIN32_WINNT_WIN2K                  0x0500 // Windows 2000
+//#define _WIN32_WINNT_WINXP                  0x0501 // Windows XP
+//#define _WIN32_WINNT_WS03                   0x0502 // Windows Server 2003
+//#define _WIN32_WINNT_WIN6                   0x0600 // Windows Vista
+//#define _WIN32_WINNT_VISTA                  0x0600 // Windows Vista
+//#define _WIN32_WINNT_WS08                   0x0600 // Windows Server 2008
+//#define _WIN32_WINNT_LONGHORN               0x0600 // Windows Vista
+//#define _WIN32_WINNT_WIN7                   0x0601 // Windows 7
+//#define _WIN32_WINNT_WIN8                   0x0602 // Windows 8
+//#define _WIN32_WINNT_WINBLUE                0x0603 // Windows 8.1
+//#define _WIN32_WINNT_WINTHRESHOLD           0x0A00 // Windows 10
+//#define _WIN32_WINNT_WIN10                  0x0A00 // Windows 10
+
+{ _WIN32_WINNT version constants }
+{ Translated from SDKDDKVER.H }
+const
+  _WIN32_WINNT_NT4 = $0400;
+  {$EXTERNALSYM _WIN32_WINNT_NT4}
+  _WIN32_WINNT_WIN2K = $0500;
+  {$EXTERNALSYM _WIN32_WINNT_WIN2K}
+  _WIN32_WINNT_WINXP = $0501;
+  {$EXTERNALSYM _WIN32_WINNT_WINXP}
+  _WIN32_WINNT_WS03 = $0502;
+  {$EXTERNALSYM _WIN32_WINNT_WS03}
+  _WIN32_WINNT_WIN6 = $0600;
+  {$EXTERNALSYM _WIN32_WINNT_WIN6}
+  _WIN32_WINNT_VISTA = $0600;
+  {$EXTERNALSYM _WIN32_WINNT_VISTA}
+  _WIN32_WINNT_WS08 = $0600;
+  {$EXTERNALSYM _WIN32_WINNT_WS08}
+  _WIN32_WINNT_LONGHORN = $0600;
+  {$EXTERNALSYM _WIN32_WINNT_LONGHORN}
+  _WIN32_WINNT_WIN7 = $0601;
+  {$EXTERNALSYM _WIN32_WINNT_WIN7}
+  _WIN32_WINNT_WIN8 = $0602;
+  {$EXTERNALSYM _WIN32_WINNT_WIN8}
+  _WIN32_WINNT_WINBLUE = $0603;
+  {$EXTERNALSYM _WIN32_WINNT_WINBLUE}
+  _WIN32_WINNT_WINTHRESHOLD = $0A00;
+  {$EXTERNALSYM _WIN32_WINNT_WINTHRESHOLD}
+  _WIN32_WINNT_WIN10 = $0A00;
+  {$EXTERNALSYM _WIN32_WINNT_WIN10}
+
+
+implementation
+
+function GetVersion; external kernel32 name 'GetVersion';
+function GetVersionEx(var lpVersionInformation: TOSVersionInfo): BOOL; external kernel32 name 'GetVersionExW';
+function GetVersionExA(var lpVersionInformation: TOSVersionInfoA): BOOL; external kernel32 name 'GetVersionExA';
+function GetVersionExW(var lpVersionInformation: TOSVersionInfoW): BOOL; external kernel32 name 'GetVersionExW';
+function GetVersionEx(var lpVersionInformation: TOSVersionInfoEx): BOOL; external kernel32 name 'GetVersionExW';
+function GetVersionExA(var lpVersionInformation: TOSVersionInfoExA): BOOL; external kernel32 name 'GetVersionExA';
+function GetVersionExW(var lpVersionInformation: TOSVersionInfoExW): BOOL; external kernel32 name 'GetVersionExW';
+
+function VerifyVersionInfo; external kernel32 name 'VerifyVersionInfoW';
+function VerifyVersionInfoA; external kernel32 name 'VerifyVersionInfoA';
+function VerifyVersionInfoW; external kernel32 name 'VerifyVersionInfoW';
+function VerSetConditionMask; external kernel32 name 'VerSetConditionMask';
+
+end.

@@ -198,6 +198,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Width = 403
       Height = 21
       AutoSize = False
+      Color = clWhite
       Ctl3D = True
       ParentCtl3D = False
       ParentShowHint = False
@@ -221,6 +222,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Width = 403
       Height = 21
       AutoSize = False
+      Color = clWhite
       Ctl3D = True
       ParentCtl3D = False
       ParentShowHint = False
@@ -244,6 +246,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Width = 403
       Height = 21
       AutoSize = False
+      Color = clWhite
       Ctl3D = True
       ParentCtl3D = False
       ParentShowHint = False
@@ -261,6 +264,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Caption = 'AutoPlay'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object VideoPreviewParentGameVideo: TAdvOfficeCheckBoxEx
       Left = 658
@@ -273,6 +277,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Caption = 'Parent Game Video'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtnEx
       Left = 147
@@ -300,6 +305,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Caption = 'Play Dummy Video to Stop Current Playback'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonHelpVideoPreviewPlayDummyVideo: TBitBtnEx
       Left = 636
@@ -323,6 +329,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Width = 403
       Height = 21
       AutoSize = False
+      Color = clWhite
       Ctl3D = True
       ParentCtl3D = False
       ParentShowHint = False
@@ -366,6 +373,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       State = cbChecked
       Themed = True
+      CustomIconsEnabled = False
     end
     object ButtonResetVideoPreviewMediaPlayerParameters: TBitBtnEx
       Left = 416
@@ -491,6 +499,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 2
+    CustomCheckRadioEnabled = False
     OnItemPaintText = SystemsVideoPreviewItemPaintText
     OnItemSelectionChanged = SystemsVideoPreviewItemSelectionChanged
   end
@@ -520,9 +529,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Color = 16448250
       Font.Charset = ANSI_CHARSET
       Font.Color = clMaroon
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -538,16 +547,16 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelSystemType: TShadowLabel
       Left = 32
       Top = 0
-      Width = 51
+      Width = 48
       Height = 16
       Caption = 'ARCADE'
       Color = 16448250
       Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False
@@ -561,18 +570,18 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Layout = tlCenter
     end
     object LabelSystemNotAvailable: TShadowLabel
-      Left = 697
+      Left = 719
       Top = 0
-      Width = 203
+      Width = 182
       Height = 16
       Caption = 'THIS SYSTEM IS NOT AVAILABLE'
       Color = 16448250
       Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
+      Font.Height = -12
       Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold, fsItalic]
+      Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
       ShowAccelChar = False

@@ -103,6 +103,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     Selection.UseFocusRect = False
     TabOrder = 0
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnColumnClick = FilesListViewColumnClick
     OnDblClick = FilesListViewDblClick
     OnItemCompare = FilesListViewItemCompare

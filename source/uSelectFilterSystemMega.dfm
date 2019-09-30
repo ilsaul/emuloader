@@ -1,7 +1,6 @@
 object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
   Left = 1365
   Top = 620
-  ActiveControl = SystemsListView
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Machine Type and Systems Filters'
@@ -165,88 +164,6 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       OnClick = ButtonHelpClick
     end
   end
-  object SystemsListView: TEasyListview
-    Tag = -1
-    Left = 4
-    Top = 205
-    Width = 628
-    Height = 294
-    AllowHiddenCheckedItems = True
-    BorderStyle = bsNone
-    CellSizes.Tile.Height = 44
-    CellSizes.Tile.Width = 200
-    CellSizes.Report.Height = 28
-    Color = clWhite
-    EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Trebuchet MS'
-    EditManager.Font.Style = []
-    UseDockManager = False
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Trebuchet MS'
-    Font.Style = []
-    GroupFont.Charset = ANSI_CHARSET
-    GroupFont.Color = clBlack
-    GroupFont.Height = -12
-    GroupFont.Name = 'Segoe UI'
-    GroupFont.Style = []
-    Header.Columns.Items = {
-      0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000000000174020000FFFFFF1F0001000000
-      00000000000000000000000000000000}
-    Header.Draggable = False
-    Header.FixedSingleColumn = True
-    Header.Font.Charset = ANSI_CHARSET
-    Header.Font.Color = clBlack
-    Header.Font.Height = -12
-    Header.Font.Name = 'Segoe UI'
-    Header.Font.Style = []
-    Header.Height = 23
-    HotTrack.Color = clBlack
-    HotTrack.Enabled = True
-    HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
-    HotTrack.Underline = False
-    ImagesExLarge = IL_Systems
-    PaintInfoGroup.Expandable = False
-    PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.CheckType = ectBox
-    PaintInfoItem.ShowBorder = False
-    PaintInfoItem.TileDetailCount = 2
-    ParentFont = False
-    ParentShowHint = False
-    PopupMenu = PopupSystems
-    ShowThemedBorder = False
-    ShowHint = True
-    Selection.BlendColorSelRect = 10902593
-    Selection.BlendIcon = False
-    Selection.BorderColor = 10902593
-    Selection.BorderColorSelRect = 10902593
-    Selection.Color = 10902593
-    Selection.FullCellPaint = True
-    Selection.FullItemPaint = True
-    Selection.GradientColorBottom = 16506264
-    Selection.GradientColorTop = 15582647
-    Selection.InactiveBorderColor = 10902593
-    Selection.InactiveColor = 15582647
-    Selection.MouseButton = [cmbLeft, cmbRight]
-    Selection.MultiSelect = True
-    Selection.RectSelect = True
-    Selection.RoundRectRadius = 2
-    Selection.TextColor = clBlack
-    Selection.UseFocusRect = False
-    TabOrder = 1
-    View = elsTile
-    OnItemCheckChange = SystemsListViewItemCheckChange
-    OnItemImageDraw = SystemsListViewItemImageDraw
-    OnItemImageGetSize = SystemsListViewItemImageGetSize
-    OnItemImageDrawIsCustom = SystemsListViewItemImageDrawIsCustom
-    OnItemPaintText = SystemsListViewItemPaintText
-    OnKeyAction = SystemsListViewKeyAction
-  end
   object PanelMachinesType: TPanelEx
     Left = 0
     Top = 25
@@ -278,15 +195,30 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
       EditManager.Font.Height = -12
-      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Name = 'Trebuchet MS'
       EditManager.Font.Style = []
       UseDockManager = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      GroupFont.Charset = ANSI_CHARSET
+      GroupFont.Color = clBlack
+      GroupFont.Height = -12
+      GroupFont.Name = 'Segoe UI'
+      GroupFont.Style = []
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
         0006000000800800010100010000000000000174020000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
+      Header.Font.Charset = ANSI_CHARSET
+      Header.Font.Color = clBlack
+      Header.Font.Height = -12
+      Header.Font.Name = 'Segoe UI'
+      Header.Font.Style = []
       Header.Height = 23
       HotTrack.Color = clBlack
       HotTrack.Enabled = True
@@ -299,6 +231,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       PaintInfoItem.CheckType = ectBox
       PaintInfoItem.ShowBorder = False
       PaintInfoItem.TileDetailCount = 2
+      ParentFont = False
       ParentShowHint = False
       ShowThemedBorder = False
       ShowHint = True
@@ -320,8 +253,108 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsTile
+      CustomCheckRadioEnabled = False
       OnItemCheckChange = MachinesTypeListItemCheckChange
       OnItemPaintText = MachinesTypeListItemPaintText
+    end
+  end
+  object PanelSystemsListView: TPanelEx
+    Left = 0
+    Top = 202
+    Width = 608
+    Height = 302
+    Align = alTop
+    Color1 = clWhite
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clGreen
+    ColorInnerFrame = clGreen
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object SystemsListView: TEasyListview
+      Tag = -1
+      Left = 4
+      Top = 3
+      Width = 628
+      Height = 294
+      AllowHiddenCheckedItems = True
+      BorderStyle = bsNone
+      CellSizes.Tile.Height = 44
+      CellSizes.Tile.Width = 200
+      CellSizes.Report.Height = 28
+      Color = clWhite
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clBlack
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Trebuchet MS'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
+      Font.Style = []
+      GroupFont.Charset = ANSI_CHARSET
+      GroupFont.Color = clBlack
+      GroupFont.Height = -12
+      GroupFont.Name = 'Segoe UI'
+      GroupFont.Style = []
+      Header.Columns.Items = {
+        0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+        0006000000800800010100010000000000000174020000FFFFFF1F0001000000
+        00000000000000000000000000000000}
+      Header.Draggable = False
+      Header.FixedSingleColumn = True
+      Header.Font.Charset = ANSI_CHARSET
+      Header.Font.Color = clBlack
+      Header.Font.Height = -12
+      Header.Font.Name = 'Segoe UI'
+      Header.Font.Style = []
+      Header.Height = 23
+      HotTrack.Color = clBlack
+      HotTrack.Enabled = True
+      HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
+      HotTrack.Underline = False
+      ImagesExLarge = IL_Systems
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.CheckType = ectBox
+      PaintInfoItem.ShowBorder = False
+      PaintInfoItem.TileDetailCount = 2
+      ParentFont = False
+      ParentShowHint = False
+      PopupMenu = PopupSystems
+      ShowThemedBorder = False
+      ShowHint = True
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.MultiSelect = True
+      Selection.RectSelect = True
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsTile
+      CustomCheckRadioEnabled = False
+      OnItemCheckChange = SystemsListViewItemCheckChange
+      OnItemImageDraw = SystemsListViewItemImageDraw
+      OnItemImageGetSize = SystemsListViewItemImageGetSize
+      OnItemImageDrawIsCustom = SystemsListViewItemImageDrawIsCustom
+      OnItemPaintText = SystemsListViewItemPaintText
+      OnKeyAction = SystemsListViewKeyAction
     end
   end
   object IL_Systems: TImageList

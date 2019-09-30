@@ -106,6 +106,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       Caption = 'Show Unchecked Only'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
     object UseBiggerFontIconSize: TAdvOfficeCheckBoxEx
       Left = 252
@@ -119,6 +120,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       Caption = 'Use Bigger Icon and Font Sizes'
       ReturnIsTab = False
       Themed = True
+      CustomIconsEnabled = False
     end
   end
   object CheckAll: TAdvOfficeCheckBoxEx
@@ -135,6 +137,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     ReturnIsTab = False
     State = cbChecked
     Themed = True
+    CustomIconsEnabled = False
   end
   object TopBar: TPanelEx
     Left = 0
@@ -304,6 +307,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnColumnClick = SoftwareListsColumnClick
       OnItemCheckChange = SoftwareListsItemCheckChange
       OnItemCheckChanging = SoftwareListsItemCheckChanging

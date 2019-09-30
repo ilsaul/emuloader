@@ -516,9 +516,9 @@ begin
   if IsNightMode then
      begin
        FormMain.SetEasyListViewHeaderColors(FilesListView, True);
-       SetLabelColors(LabelTotalItems, clrOrangeBarTop, -1, False);
-
-       SetLabelColors(LabelDownloadLink, clWhite, clBlue, False);
+       FormMain.SetWin10DarkScrollBar(FilesListView);
+       SetLabelColors(LabelTotalItems, clrOrangeBarTop);
+       SetLabelColors(LabelDownloadLink, clWhite, clBlue);
      end;
   FormMain.CheckSevenZip(Tag);
   FormMain.LoadSystemsIcons(IL_Systems);
@@ -728,7 +728,7 @@ end;
 procedure TFormArcadeScanAudioSamples.LabelDownloadLinkMouseEnter(Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy, False)
+     SetLabelColors(TShadowLabel(Sender), clrLightBlue, clNavy)
   else
      LabelDownloadLink.Font.Color:= clBlue;
 end;
@@ -737,7 +737,7 @@ procedure TFormArcadeScanAudioSamples.LabelDownloadLinkMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then
-     SetLabelColors(TShadowLabel(Sender), clWhite, clBlue, False)
+     SetLabelColors(TShadowLabel(Sender), clWhite, clBlue)
   else
      LabelDownloadLink.Font.Color:= clNavy;
 end;

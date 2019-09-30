@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, MPCommonObjects, EasyListview, ImgList,
-  unitExIcon, IniFiles, ExtCtrls, ShadowLabel, Buttons;
+  unitExIcon, IniFiles, ExtCtrls, ShadowLabel, Buttons, ButtonsEx;
 
 type
   TFileInfo = class(TEasyItemStored)
@@ -35,8 +35,8 @@ type
     IL_IconFiles: TImageList;
     Shape1: TShape;
     LabelCurrentSourceFile: TShadowLabel;
-    ButtonOk: TBitBtn;
-    ButtonCancel: TBitBtn;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     procedure FormShow(Sender: TObject);
     procedure ButtonCancelClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
@@ -152,7 +152,7 @@ begin
     TFileInfo(Item).eFileFolder:= ExtractFilePath(FilesList[Loop]);
     TFileInfo(Item).eSize:= GetFileSize(FilesList[Loop]);
     TFileInfo(Item).eSizeText:= FormMain.GetSizeType(TFileInfo(Item).eSize, False);
-    TFileInfo(Item).eDateTime:= FileAge(FilesList[Loop]);
+    TFileInfo(Item).eDateTime:= FileAgeW(FilesList[Loop]);
     TFileInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TFileInfo(Item).eDateTime);
     Item.Details[1]:= 5;
   end;
@@ -170,7 +170,6 @@ begin
      begin
        ACanvas.Font.Name:= 'Consolas';
        ACanvas.Font.Size:= 8;
-       //ACanvas.Font.Style:= ACanvas.Font.Style+[fsItalic];
      end;
   //FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;

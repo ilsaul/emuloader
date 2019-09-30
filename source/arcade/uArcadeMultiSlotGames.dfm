@@ -255,6 +255,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     Selection.UseFocusRect = False
     TabOrder = 6
     View = elsReport
+    CustomCheckRadioEnabled = False
     OnItemPaintText = GamesListItemPaintText
     OnItemSelectionChanged = GamesListItemSelectionChanged
     OnKeyAction = GamesListKeyAction
@@ -300,7 +301,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       Left = 517
       Top = 255
       Width = 171
-      Height = 18
+      Height = 15
       Caption = 'default machine is in bold'
       Font.Charset = ANSI_CHARSET
       Font.Color = clNavy
@@ -408,6 +409,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       Selection.UseFocusRect = False
       TabOrder = 0
       View = elsReport
+      CustomCheckRadioEnabled = False
       OnDblClick = MultiSlotMachinesDblClick
       OnKeyAction = MultiSlotMachinesKeyAction
     end

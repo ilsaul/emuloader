@@ -79,7 +79,8 @@ uses
   uArcadeMAMEMachinesCustomize in 'arcade\uArcadeMAMEMachinesCustomize.pas' {FormArcadeMAMEMachinesCustomize},
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
-  uNightModeRGBQuickEdit in 'uNightModeRGBQuickEdit.pas' {FormNightModeRGBQuickEdit};
+  uNightModeRGBQuickEdit in 'uNightModeRGBQuickEdit.pas' {FormNightModeRGBQuickEdit},
+  uGetWindowsVersion in 'uGetWindowsVersion.pas';
 
 // {$R *.RES}
 {$R EmuLoader.res}

@@ -29,6 +29,7 @@ object FormRenameIconFile: TFormRenameIconFile
     Color3 = clWhite
     Color4 = clMaroon
     ColorFrame = 7891291
+    ColorInnerFrame = clGreen
     Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSolid
@@ -39,7 +40,7 @@ object FormRenameIconFile: TFormRenameIconFile
       Height = 32
       Transparent = True
     end
-    object NewFilename: TEdit
+    object NewFilename: TEditEx
       Left = 54
       Top = 11
       Width = 158
@@ -55,7 +56,7 @@ object FormRenameIconFile: TFormRenameIconFile
       TabOrder = 0
       OnKeyPress = NewFilenameKeyPress
     end
-    object ButtonOk: TBitBtn
+    object ButtonOk: TBitBtnEx
       Left = 214
       Top = 12
       Width = 32
@@ -64,7 +65,7 @@ object FormRenameIconFile: TFormRenameIconFile
       TabOrder = 1
       OnClick = ButtonOkClick
     end
-    object ButtonAbort: TBitBtn
+    object ButtonAbort: TBitBtnEx
       Left = 246
       Top = 12
       Width = 41

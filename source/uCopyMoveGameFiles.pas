@@ -6,12 +6,11 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   ImgList, StdCtrls, Buttons, ComCtrls, ShadowLabel, PanelEx, ExtCtrls,
-  IniFiles, GraphicEx, RichEditURL, ButtonsEx;
+  IniFiles, GraphicEx, RichEditURL, ButtonsEx, XiProgressBar;
 
 type
   TFormCopyMoveGameFiles = class(TForm)
     PanelProgress: TPanelEx;
-    ProgressBar: TProgressBar;
     ButtonPause: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
     PanelTop: TPanelEx;
@@ -29,6 +28,7 @@ type
     LabelGameFile: TShadowLabel;
     LabelFileSizeDate: TShadowLabel;
     LabelFileType: TShadowLabel;
+    ProgressBar: TXiProgressBar;
     procedure FormShow(Sender: TObject);
     procedure ButtonPauseClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -113,25 +113,26 @@ begin
      begin
        SetFormColors(FormCopyMoveGameFiles, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, nil, -1, True);
 
-       //FormCopyMoveGameFiles.Color:= menu_background_color[1];
-       //SetPanelColors(FormArcadeEmulatorsSetup.PanelBottom, menu_background_color[1], clrMedDarkGray);
-
-       PanelFileInfo.Color1:= FormCopyMoveGameFiles.Color;//clrBlackBk;
+       ProgressBar.ColorScheme:= csMetal;
+       
+       PanelFileInfo.Color1:= FormCopyMoveGameFiles.Color;
        PanelProgress.Style:= vgSolid;
        PanelProgress.Color1:= FormCopyMoveGameFiles.Color;
 
-       SetLabelColors(LabelFileType, clrLightRed, clMaroon, False);
+       SetLabelColors(LabelFileType, clrLightRed, clMaroon);
 
-       SetLabelColors(LabelGameFile, clCream, item_caption_active_shadow_color[1],False);
-       SetLabelColors(LabelFileSizeDate, clCream, item_caption_active_shadow_color[1],False);
-       SetLabelColors(LabelCopyToTitle, clrLightBlue, clNavy, False);
-       SetLabelColors(LabelRemainingFiles, clCream, item_caption_active_shadow_color[1], False);
-       SetLabelColors(LabelCopyTo, clrOrangeBarTop, -1, False);
-       SetLabelColors(LabelCanceledByUser, clrLightRed, clMaroon, False);
+       SetLabelColors(LabelGameFile,       clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFileSizeDate,   clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelCopyToTitle,    clrLightBlue, clNavy);
+       SetLabelColors(LabelRemainingFiles, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelCopyTo,         clrOrangeBarTop, -1);
+       SetLabelColors(LabelCanceledByUser, clrLightRed, clMaroon);
 
        Log.BorderStyle:= bsNone;
        Log.Color:= FormCopyMoveGameFiles.Color;
        Log.Font.Color:= item_caption_active_color[1];
+
+       FormMain.SetWin10DarkScrollBar(Log);
 
        FormMain.SetButtonExColors(ButtonCancel);
        FormMain.SetButtonExColors(ButtonPause);
@@ -607,7 +608,7 @@ begin
 
                              tmpFileSize:= GetFileSize(tmpFileName);
                              FileSizeText:= FormMain.GetSizeType(tmpFileSize, False);
-                             DateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
+                             DateTimeText:= FormMain.GetDateTimeStr(FileAgeW(tmpFileName));
                              LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date Modified: '+DateTimeText;
 
                              iTotalFilesSizeLeft:= iTotalFilesSizeLeft-tmpFileSize;
@@ -874,7 +875,7 @@ begin
 
                         tmpFileSize:= GetFileSize(tmpFileName);
                         FileSizeText:= FormMain.GetSizeType(tmpFileSize, False);
-                        DateTimeText:= FormMain.GetDateTimeStr(FileAge(tmpFileName));
+                        DateTimeText:= FormMain.GetDateTimeStr(FileAgeW(tmpFileName));
                         LabelFileSizeDate.Caption:= Format('Size: %-14s', [FileSizeText])+'  Date Modified: '+DateTimeText;
 
                         iTotalFilesSizeLeft:= iTotalFilesSizeLeft-tmpFileSize;
@@ -994,7 +995,9 @@ end;
 
 procedure TFormCopyMoveGameFiles.FormActivate(Sender: TObject);
 begin
+  //ShowMessage('Debug mode, comment me later!');
   //Exit; // for debugging only, do not enable
+
   if LabelCopyToTitle.Tag = 0 then
      begin
        LabelCopyToTitle.Tag:= 1;

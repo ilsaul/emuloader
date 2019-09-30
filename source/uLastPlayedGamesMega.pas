@@ -531,7 +531,7 @@ end;
 procedure TFormLastPlayedGamesMega.ButtonSelectGameClick(Sender: TObject);
 begin
   if FormMain.CheckSelected(LastPlayedList) then
-     SelectGameToPlay(LastPlayedList.Selection.First, Boolean(TBitBtn(Sender).Tag = 1));
+     SelectGameToPlay(LastPlayedList.Selection.First, Boolean(TBitBtnEx(Sender).Tag = 1));
 end;
 
 procedure TFormLastPlayedGamesMega.FormKeyPress(Sender: TObject;
@@ -582,7 +582,7 @@ begin
         FormLastPlayedGamesMega.ClientWidth:= Systems.CellSizes.Icon.Width*ItemsColumnCount;
         iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
         Systems.Height:= iDiff;
-        PanelSystems.Height:= Systems.Height;//+LabelSystemTitle.Height;
+        PanelSystems.Height:= Systems.Height;
         FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelSystemsTitle.Height+PanelGames.Height+PanelBottom.Height;
         iDiff:= FormLastPlayedGamesMega.ClientWidth-LastPlayedList.Width;
         LastPlayedList.Width:= FormLastPlayedGamesMega.ClientWidth;
@@ -670,12 +670,12 @@ begin
            begin
              iDiff:= (Systems.CellSizes.Icon.Height*ItemsLineCount);
              Systems.Height:= iDiff;
-             PanelSystems.Height:= Systems.Height;//+LabelSystemTitle.Height;
+             PanelSystems.Height:= Systems.Height;
              FormLastPlayedGamesMega.ClientHeight:= PanelSystems.Height+PanelSystemsTitle.Height+PanelGames.Height+PanelBottom.Height;
            end;
         if Systems.Scrollbars.VertBarVisible then
            begin
-             Systems.Width:= Systems.Width-2;//Systems.PaintInfoItem.Border; // must remove right border before the vertical scrollbar!!!
+             Systems.Width:= Systems.Width-2;//Systems.PaintInfoItem.Border; // must remove right border before the vertical scrollbar
              iDiff:= FormLastPlayedGamesMega.ClientWidth;
              FormLastPlayedGamesMega.ClientWidth:= Systems.Width;
              iDiff:= FormLastPlayedGamesMega.ClientWidth-iDiff;
@@ -733,9 +733,38 @@ begin
 
   if IsNightMode then
      begin
+       FormLastPlayedGamesMega.Color:= menu_background_color[1];
+
+       PanelSystems.Color1:= clrBlackBk;
+       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+
+       PanelGames.Color1:= menu_background_color[1];
+
+       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
+       FormMain.SetSystemTypeLabelColors(LabelSystemType);
+
+       SetLabelColors(LabelTitleCaption,        clWhite, clNavy);
+       SetLabelColors(LabelGameNameCaption,     clWhite, clNavy);
+       SetLabelColors(LabelSoftwareNameCaption, clWhite, clNavy);
+       SetLabelColors(LabelLastPlayed,          clWhite, clNavy);
+       SetLabelColors(LabelTotalPlaytime,       clWhite, clNavy);
+
+       SetSystemTitleBarNightColors(PanelSystemsTitle, FormLastPlayedGamesMega.PanelPlayedListHeader);
+
+       FormMain.SetEasyListViewColors(LastPlayedList, menu_background_color[1], item_caption_active_color[1]);
+
+       FormMain.SetButtonExColors(ButtonSelectGame);
+       FormMain.SetButtonExColors(ButtonSelectGameExit);
+       FormMain.SetButtonExColors(ButtonClose);
+
+       SetBottomPanelColors(PanelBottom);
+
        FormMain.ELV_SetNightModeColors(Systems);
        FormMain.SetEasyListViewHeaderColors(LastPlayedList, True);
        FormMain.ELV_SetRibbonNightColors(0, LastPlayedList, True);
+
+       FormMain.SetWin10DarkScrollBar(Systems);
+       FormMain.SetWin10DarkScrollBar(LastPlayedList);
      end;
 
   LastSelectedStateImageIndex:= -5; // set to "unknown" or "not set"

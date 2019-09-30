@@ -120,12 +120,23 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Frames = []
       Transparent = True
     end
-    object ProgressBar: TProgressBar
+    object ProgressBar: TXiProgressBar
       Left = 8
       Top = 42
       Width = 716
       Height = 16
-      TabOrder = 0
+      ColorBorder = 7039851
+      BackColorFace = 14737632
+      BackColorGrad = clWhite
+      ForeColorFace = 15790320
+      ForeColorGrad = 11382189
+      SmoothCorners = False
+      ColorScheme = csSilver
+      Max = 100
+      Min = 0
+      Position = 0
+      Step = 10
+      Orientation = pbHorizontal
     end
     object ButtonPause: TBitBtnEx
       Left = 8
@@ -134,7 +145,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Height = 23
       Hint = 'Pause the operation'
       Caption = 'Pause'
-      TabOrder = 1
+      TabOrder = 0
       Visible = False
       OnClick = ButtonPauseClick
     end
@@ -147,7 +158,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Caption = 'Cancel'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 1
       OnClick = ButtonCancelClick
     end
   end

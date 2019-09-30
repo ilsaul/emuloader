@@ -1225,7 +1225,7 @@ begin
                TNotUsedImageInfo(Item).eFileName:= ExtractFileName(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eSize:= GetFileSize(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eSizeText:= FormMain.GetSizeType(TNotUsedImageInfo(Item).eSize, False);
-               TNotUsedImageInfo(Item).eDateTime:= FileAge(FilesList[Loop2]);
+               TNotUsedImageInfo(Item).eDateTime:= FileAgeW(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TNotUsedImageInfo(Item).eDateTime);
                TNotUsedImageInfo(Item).eFullPath:= ExtractFilePath(FilesList[Loop2]);
                if Length(TNotUsedImageInfo(Item).eFullPath) > 36 then
@@ -1454,7 +1454,7 @@ begin
      begin
        SetPanelColors(PanelToolBarButtons, menu_background_color[1], clrMedDarkGray);
        SetPanelColors(BottomBar, FormMain.StatusBarPanel.Color1, FormMain.StatusBarPanel.Color2, (FormMain.StatusBarPanel.Style <> vgSimple));
-       
+
        FormMain.SetButtonExColors(ButtonImageCategory);
        FormMain.SetButtonExColors(ButtonScanMissing);
        FormMain.SetButtonExColors(ButtonScanNotUsedImages);
@@ -1463,9 +1463,14 @@ begin
 
        FormMain.SetEasyListViewColors(MissingImagesList, -1, -1, clrOrangeBarTop);
        FormMain.SetEasyListViewHeaderColors(MissingImagesList, True);
+       FormMain.ELV_SetEditBkColor(MissingImagesList);
 
        FormMain.SetEasyListViewColors(NotUsedImagesList, -1, -1, clrOrangeBarTop);
        FormMain.SetEasyListViewHeaderColors(NotUsedImagesList, True);
+       FormMain.ELV_SetEditBkColor(NotUsedImagesList);
+
+       FormMain.SetWin10DarkScrollBar(MissingImagesList);
+       FormMain.SetWin10DarkScrollBar(NotUsedImagesList);
      end;
 end;
 
@@ -1866,7 +1871,7 @@ begin
     FileFull:= TNotUsedImageInfo(Item).eFullPath+TNotUsedImageInfo(Item).eFileName;
     TNotUsedImageInfo(Item).eSize:= GetFileSize(FileFull);
     TNotUsedImageInfo(Item).eSizeText:= FormMain.GetSizeType(TNotUsedImageInfo(Item).eSize, False);
-    TNotUsedImageInfo(Item).eDateTime:= FileAge(FileFull);
+    TNotUsedImageInfo(Item).eDateTime:= FileAgeW(FileFull);
     TNotUsedImageInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TNotUsedImageInfo(Item).eDateTime);
     case TMenuItem(Sender).Tag of
       0: Item:= NotUsedImagesList.Selection.Next(Item);

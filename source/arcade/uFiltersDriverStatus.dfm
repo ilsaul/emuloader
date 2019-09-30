@@ -138,7 +138,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   object ListAll: TAdvOfficeRadioButtonEx
     Left = 8
     Top = 85
-    Width = 103
+    Width = 225
     Height = 20
     TabOrder = 1
     TabStop = True
@@ -148,6 +148,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Checked = True
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object DriverStatusCategory: TComboBox2Ex
     Left = 24
@@ -178,7 +179,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Tag = 1
     Left = 8
     Top = 117
-    Width = 207
+    Width = 225
     Height = 20
     TabOrder = 2
     OnClick = ListAllClick
@@ -186,12 +187,13 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Caption = '            Working (Good+Imperfect)'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object Imperfect: TAdvOfficeRadioButtonEx
     Tag = 3
     Left = 8
     Top = 181
-    Width = 167
+    Width = 225
     Height = 20
     TabOrder = 4
     OnClick = ListAllClick
@@ -199,12 +201,13 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Caption = '            Working (Imperfect)'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object Preliminary: TAdvOfficeRadioButtonEx
     Tag = 4
     Left = 8
     Top = 213
-    Width = 209
+    Width = 225
     Height = 20
     TabOrder = 5
     OnClick = ListAllClick
@@ -212,12 +215,13 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Caption = '            Non-Working (Preliminary)'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
   object Good: TAdvOfficeRadioButtonEx
     Tag = 2
     Left = 8
     Top = 149
-    Width = 151
+    Width = 225
     Height = 20
     TabOrder = 3
     OnClick = ListAllClick
@@ -225,5 +229,6 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Caption = '            Working (Good)'
     ReturnIsTab = False
     Themed = True
+    CustomIconsEnabled = False
   end
 end
