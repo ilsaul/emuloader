@@ -7,7 +7,7 @@ uses
   StdCtrls, ComCtrls, ExtCtrls, IniFiles, Buttons,
   MPCommonObjects, EasyListview, uCommon, ImgList,
   PanelEx, AdvOfficeButtons, ShadowLabel, GR32_Image, GraphicEx,
-  AdvGroupBox, ButtonsEx;
+  AdvGroupBox, ButtonsEx, BevelEx;
 
 type
   TLayoutInfo = record
@@ -33,7 +33,7 @@ type
     ButtonClose: TBitBtnEx;
     IL_ImageCategory_ExtraLarge: TImageList;
     ButtonAbort: TBitBtnEx;
-    ImageScrLayoutFrame: TBevel;
+    ImageScrLayoutFrame: TBevelEx;
     PanelLayoutsSelector: TPanelEx;
     LayoutListView: TEasyListview;
     ImageScrLayout: TImage32;
@@ -77,10 +77,12 @@ type
     LabelPanel2_ConsComp: TShadowLabel;
     ButtonHelp_CustomCategoryConsComp: TBitBtnEx;
     ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtnEx;
-    PanelLayoutTitle: TPanelEx;
-    PanelLayoutsTitleBottom: TPanelEx;
+    PanelSystemTitle: TPanelEx;
     LabelLayoutTitle: TShadowLabel;
-    LabelShowHideLayouts: TShadowLabel;
+    PanelSystemTitleBottom: TPanelEx;
+    ShowHideLayoutsPanel: TPanelEx;
+    ShowHideLayoutsLabel: TShadowLabel;
+    LayoutsRightFrame: TBevelEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LayoutListViewItemCheckChange(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -100,7 +102,7 @@ type
     procedure ButtonHelpClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IconLayScr4Click(Sender: TObject);
-    procedure LabelShowHideLayoutsClick(Sender: TObject);
+    procedure ShowHideLayoutsLabelClick(Sender: TObject);
     procedure GroupBoxCategoryConsoleComputerCheckBoxClick(
       Sender: TObject);
     procedure ButtonLayoutCopyCatAllSystems_ConsCompClick(Sender: TObject);
@@ -109,8 +111,8 @@ type
     procedure IconLayScr3_ConsCompClick(Sender: TObject);
     procedure IconLayScr4_ConsCompClick(Sender: TObject);
     procedure ButtonLayoutResetPanelsIndex_ConsCompClick(Sender: TObject);
-    procedure LabelShowHideLayoutsMouseEnter(Sender: TObject);
-    procedure LabelShowHideLayoutsMouseLeave(Sender: TObject);
+    procedure ShowHideLayoutsLabelMouseEnter(Sender: TObject);
+    procedure ShowHideLayoutsLabelMouseLeave(Sender: TObject);
     procedure ButtonHelp_CustomCategoryConsCompClick(Sender: TObject);
   private
     { Private declarations }
@@ -732,10 +734,13 @@ begin
        FormMain.SetEasyListViewColors(LayoutListView, clrBlackBk, clWhite);
        FormMain.ELV_SetCheckRadioCustomIcon(LayoutListView);
 
+       SetPanelColors(PanelSystemTitle, menu_background_color[1], clrDarkGray);
+       SetPanelColors(PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
        FormMain.SetSystemTitleLabelColors(LabelLayoutTitle);
-       SetLabelColors(LabelShowHideLayouts, item_shortcut_color[1], item_shortcut_selected_color[1]);
 
-       SetSystemTitleBarNightColors(PanelLayoutTitle, FormImageLayoutSettings.PanelLayoutsTitleBottom);
+       ShowHideLayoutsPanel.Color1:= clrLightBlack;
+       ShowHideLayoutsPanel.ColorFrame:= clrLightGrayFrame;
+       SetLabelColors(ShowHideLayoutsLabel, item_shortcut_color[1], item_shortcut_selected_color[1]);
 
        SetGroupBoxBorderStyle(GroupBoxCategoryAllSystems);
        SetGroupBoxColors(GroupBoxCategoryAllSystems,
@@ -783,6 +788,11 @@ begin
        SetLabelColors(LabelLayScr3_ConsComp, clrLightRed, clMaroon);
        SetLabelColors(LabelLayScr4_ConsComp, clrLightRed, clMaroon);
 
+       ImageScrLayoutFrame.CustomColor1:= clrBorderGroupBoxGrayBk;
+       ImageScrLayoutFrame.CustomColor2:= clrInnerBorderGroupBoxGrayBk;
+
+       PanelBottom.ColorFrame:= clrBorderGroupBoxGrayBk;
+       
        FormMain.SetButtonExColors(ButtonClose);
        FormMain.SetButtonExColors(ButtonAbort);
        FormMain.SetButtonExColors(ButtonHelp);
@@ -806,7 +816,7 @@ begin
   LoadLayoutIcons;
 end;
 
-procedure TFormImageLayoutSettings.LabelShowHideLayoutsClick(
+procedure TFormImageLayoutSettings.ShowHideLayoutsLabelClick(
   Sender: TObject);
 var
   Item: TEasyItem;
@@ -821,8 +831,8 @@ begin
   LayoutListView.EndUpdate;
   TShadowLabel(Sender).Tag:= Ord(not Boolean(TShadowLabel(Sender).Tag));
   case TShadowLabel(Sender).Tag of
-    0: TShadowLabel(Sender).Caption:= 'HIDE ALL LAYOUTS';
-    1: TShadowLabel(Sender).Caption:= 'SHOW ALL LAYOUTS';
+    0: TShadowLabel(Sender).Caption:= 'HIDE ALL'+#13#10+'LAYOUTS';
+    1: TShadowLabel(Sender).Caption:= 'SHOW ALL'+#13#10+'LAYOUTS';
   end;
   LayoutListView.SetFocus;
 end;
@@ -943,7 +953,7 @@ begin
 
 end;
 
-procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseEnter(
+procedure TFormImageLayoutSettings.ShowHideLayoutsLabelMouseEnter(
   Sender: TObject);
 begin
   if IsNightMode then
@@ -952,7 +962,7 @@ begin
      SetLabelColors(TShadowLabel(Sender), clBlue, clNavy);
 end;
 
-procedure TFormImageLayoutSettings.LabelShowHideLayoutsMouseLeave(
+procedure TFormImageLayoutSettings.ShowHideLayoutsLabelMouseLeave(
   Sender: TObject);
 begin
   if IsNightMode then

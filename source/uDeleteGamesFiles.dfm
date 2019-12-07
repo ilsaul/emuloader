@@ -152,13 +152,13 @@ object FormDeleteGamesFiles: TFormDeleteGamesFiles
       Height = 14
       Caption = '[softlist title] '
       Font.Charset = ANSI_CHARSET
-      Font.Color = 21414
+      Font.Color = clBlack
       Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
       ShowAccelChar = False
-      ShadowColor = 12632284
+      ShadowColor = 21414
       ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack

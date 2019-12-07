@@ -311,7 +311,7 @@ type
     NightModeCheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx;
     NightModeCheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx;
     NightModeCheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx;
-    BitBtnEx1: TBitBtnEx;
+    NightModeCheckBoxRadioButtonProfileButtonUpdate: TBitBtnEx;
     NightModeLabelSearchGamesFloatingPanel: TShadowLabel;
     NightModeUseWin10DarkModeScrollBars: TAdvOfficeCheckBoxEx;
     NightModeUseWin10DarkModeScrollBarsButtonHelp: TBitBtnEx;
@@ -498,7 +498,7 @@ type
       Sender: TObject);
     procedure NightModeGameDocsFont_SettingClick(Sender: TObject);
     procedure NightModeCheckBoxRadioButtonProfileSelect(Sender: TObject);
-    procedure BitBtnEx1Click(Sender: TObject);
+    procedure NightModeCheckBoxRadioButtonProfileButtonUpdateClick(Sender: TObject);
     procedure NightModeUseWin10DarkModeScrollBarsButtonHelpClick(
       Sender: TObject);
   private
@@ -2448,7 +2448,7 @@ begin
   FormMain.SetRadioButtonExCustomIcon(NightModeCheckBoxRadioButton_Radio2);
 end;
 
-procedure TFormNightMode.BitBtnEx1Click(Sender: TObject);
+procedure TFormNightMode.NightModeCheckBoxRadioButtonProfileButtonUpdateClick(Sender: TObject);
 begin
   FormMain.PopulateCheckRadioProfiles(True);
 end;

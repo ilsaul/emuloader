@@ -4,7 +4,7 @@ object FormSelectFile: TFormSelectFile
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Load an Input File'
-  ClientHeight = 402
+  ClientHeight = 420
   ClientWidth = 604
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -25,7 +25,7 @@ object FormSelectFile: TFormSelectFile
   TextHeight = 15
   object FilesFolder: TShadowLabel
     Left = 5
-    Top = 269
+    Top = 288
     Width = 593
     Height = 19
     AutoSize = False
@@ -47,7 +47,7 @@ object FormSelectFile: TFormSelectFile
   end
   object LabelNewFilename: TShadowLabel
     Left = 132
-    Top = 293
+    Top = 312
     Width = 225
     Height = 16
     Alignment = taRightJustify
@@ -69,7 +69,7 @@ object FormSelectFile: TFormSelectFile
   end
   object FilesListView: TEasyListview
     Left = -1
-    Top = 55
+    Top = 74
     Width = 606
     Height = 207
     CellSizes.Report.Height = 20
@@ -93,7 +93,7 @@ object FormSelectFile: TFormSelectFile
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-      0006000000800800010100010000000001000166010000FFFFFF1F0001000000
+      0006000000800800010100010000000001000168010000FFFFFF1F0001000000
       01000000040000004E0061006D00650000000000000000000000000011000000
       5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
       0100000000000178000000FFFFFF1F0001000000010000000400000053006900
@@ -120,6 +120,7 @@ object FormSelectFile: TFormSelectFile
     PaintInfoItem.ShowBorder = False
     ParentFont = False
     ParentShowHint = False
+    ShowThemedBorder = False
     ShowHint = False
     Selection.BlendColorSelRect = 10902593
     Selection.BlendIcon = False
@@ -149,7 +150,7 @@ object FormSelectFile: TFormSelectFile
   end
   object BottomBar: TPanelEx
     Left = 0
-    Top = 323
+    Top = 341
     Width = 604
     Height = 79
     Align = alBottom
@@ -214,7 +215,7 @@ object FormSelectFile: TFormSelectFile
     Left = 0
     Top = 0
     Width = 604
-    Height = 52
+    Height = 70
     Align = alTop
     Color1 = 16445669
     Color2 = clWhite
@@ -225,6 +226,7 @@ object FormSelectFile: TFormSelectFile
     Frames = []
     ParentBackground = False
     Style = vgSimple
+    Steps = 70
     object SystemIcon: TImage
       Tag = -50
       Left = 4
@@ -237,14 +239,14 @@ object FormSelectFile: TFormSelectFile
       Left = 40
       Top = 4
       Width = 556
-      Height = 26
+      Height = 33
       AutoSize = False
       Caption = 
         'The Gladiator - Road of the Sword / Shen Jian (M68k label V100) ' +
         '(ARM label V100, ROM 02/25/03 SHEN JIAN) (JAMMA PCB)'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -11
+      Font.Height = -13
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
@@ -261,16 +263,16 @@ object FormSelectFile: TFormSelectFile
     end
     object LabelEmulatorVersion: TShadowLabel
       Left = 40
-      Top = 34
-      Width = 545
-      Height = 13
+      Top = 46
+      Width = 555
+      Height = 14
       AutoSize = False
       Caption = 
         'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
         'ftlist: softwarename]'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
-      Font.Height = -9
+      Font.Height = -11
       Font.Name = 'Verdana'
       Font.Style = []
       ParentFont = False
@@ -286,7 +288,7 @@ object FormSelectFile: TFormSelectFile
   end
   object NewFilename: TEditEx
     Left = 361
-    Top = 291
+    Top = 310
     Width = 238
     Height = 21
     TabStop = False

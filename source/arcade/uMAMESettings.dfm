@@ -2637,7 +2637,7 @@ object FormMAMESettings: TFormMAMESettings
         Left = 16
         Top = 12
         Width = 308
-        Height = 194
+        Height = 214
         CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         Caption = 'Performance'
@@ -2645,7 +2645,7 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 0
         object SpeedLabel: TShadowLabel
           Left = 8
-          Top = 107
+          Top = 130
           Width = 123
           Height = 16
           Hint = 'Gameplay Speed [%3.2f]'
@@ -2663,7 +2663,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object FrameskipLabel: TShadowLabel
           Left = 108
-          Top = 63
+          Top = 86
           Width = 57
           Height = 16
           Caption = 'Frameskip'
@@ -2680,7 +2680,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ThreadPriorityLabel: TShadowLabel
           Left = 208
-          Top = 63
+          Top = 86
           Width = 81
           Height = 16
           Caption = 'Thread Priority'
@@ -2697,7 +2697,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object NumberProcessorsLabel: TShadowLabel
           Left = 8
-          Top = 63
+          Top = 86
           Width = 83
           Height = 16
           Caption = '# of Processors'
@@ -2714,7 +2714,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object BenchmarkLabel: TShadowLabel
           Left = 158
-          Top = 107
+          Top = 130
           Width = 121
           Height = 16
           Hint = 'sec'
@@ -2732,7 +2732,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object SecondsToRunLabel: TShadowLabel
           Left = 8
-          Top = 150
+          Top = 173
           Width = 278
           Height = 16
           Hint = 'sec'
@@ -2845,7 +2845,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Speed: TGaugeBar2
           Left = 8
-          Top = 123
+          Top = 146
           Width = 142
           Height = 20
           Hint = 
@@ -2864,7 +2864,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object Frameskip: TComboBox2Ex
           Left = 108
-          Top = 79
+          Top = 102
           Width = 93
           Height = 21
           Hint = 'Set frameskip to fixed value (autoframeskip must be disabled)'
@@ -2896,7 +2896,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object ThreadPriority: TComboBox2Ex
           Left = 208
-          Top = 79
+          Top = 102
           Width = 92
           Height = 21
           Hint = 'Thread priority for the main game thread'
@@ -2932,7 +2932,7 @@ object FormMAMESettings: TFormMAMESettings
         end
         object NumberProcessors: TComboBox2Ex
           Left = 8
-          Top = 79
+          Top = 102
           Width = 93
           Height = 21
           Hint = 
@@ -2959,7 +2959,7 @@ object FormMAMESettings: TFormMAMESettings
         object Benchmark: TGaugeBar
           Tag = 14
           Left = 158
-          Top = 123
+          Top = 146
           Width = 142
           Height = 20
           Hint = 'Implies: -video none -sound none -nothrottle'
@@ -2975,7 +2975,7 @@ object FormMAMESettings: TFormMAMESettings
         object SecondsToRun: TGaugeBar
           Tag = 14
           Left = 8
-          Top = 166
+          Top = 189
           Width = 293
           Height = 20
           Hint = 'Time to Run Before Automatically Exiting ['
@@ -2988,10 +2988,24 @@ object FormMAMESettings: TFormMAMESettings
           Position = 0
           OnChange = SecondsToRunChange
         end
+        object LowLatency: TAdvOfficeCheckBoxEx
+          Left = 191
+          Top = 60
+          Width = 95
+          Height = 20
+          Hint = 'Draws new frame before throttling to reduce input latency'
+          Enabled = False
+          TabOrder = 12
+          Alignment = taLeftJustify
+          Caption = 'Low Latency'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
       end
       object ScreensGroupBox: TAdvGroupBoxEx
         Left = 16
-        Top = 222
+        Top = 242
         Width = 176
         Height = 193
         CheckBox.CustomIconsEnabled = False
@@ -3518,7 +3532,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 13
+        ItemHeight = 0
         ParentFont = False
         ParentShowHint = False
         ShowHint = True

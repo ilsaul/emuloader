@@ -280,8 +280,8 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     end
     object LabelGameFile: TShadowLabel
       Left = 83
-      Top = 23
-      Width = 518
+      Top = 21
+      Width = 638
       Height = 16
       AutoSize = False
       Caption = 'd:\mame_roms\elevator.zip'
@@ -303,9 +303,9 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     end
     object LabelFileSizeDate: TShadowLabel
       Left = 83
-      Top = 39
+      Top = 37
       Width = 638
-      Height = 14
+      Height = 16
       AutoSize = False
       Caption = 'Size: 0000.00 KBytes  Date/Time: Jan/01/2016 00:00:00'
       Font.Charset = ANSI_CHARSET
@@ -326,7 +326,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     end
     object LabelFileType: TShadowLabel
       Left = 95
-      Top = 2
+      Top = 0
       Width = 620
       Height = 21
       AutoSize = False
@@ -351,6 +351,6 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     Height = 48
     Width = 48
     Left = 696
-    Top = 104
+    Top = 80
   end
 end

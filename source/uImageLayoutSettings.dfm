@@ -4,8 +4,8 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Image Layout Settings'
-  ClientHeight = 642
-  ClientWidth = 934
+  ClientHeight = 558
+  ClientWidth = 878
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -23,70 +23,30 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object ImageScrLayoutFrame: TBevel
-    Left = 646
-    Top = 401
-    Width = 278
-    Height = 178
-    Shape = bsFrame
+  object ImageScrLayoutFrame: TBevelEx
+    Left = 423
+    Top = 359
+    Width = 279
+    Height = 179
+    Shape = bsDualFrame
+    Style = bsCustomColors
+    CustomColor1 = clGray
+    CustomColor2 = 5263440
   end
-  object PanelBottom: TPanelEx
-    Left = 0
-    Top = 600
-    Width = 934
-    Height = 42
-    Align = alBottom
-    Color1 = 15856113
-    Color2 = 14540253
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = clGreen
-    ColorInnerFrame = clGreen
-    Frames = []
-    ParentBackground = False
-    Style = vgSimple
-    object ButtonHelp: TBitBtnEx
-      Left = 8
-      Top = 11
-      Width = 89
-      Height = 25
-      Hint = 'How to use this feature'
-      Caption = 'Help'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      OnClick = ButtonHelpClick
-    end
-    object ButtonClose: TBitBtnEx
-      Left = 743
-      Top = 11
-      Width = 89
-      Height = 25
-      Hint = 'Close and update settings'
-      Caption = 'Apply'
-      ModalResult = 1
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-    end
-    object ButtonAbort: TBitBtnEx
-      Left = 841
-      Top = 11
-      Width = 89
-      Height = 25
-      Hint = 'Close and abort changes'
-      Caption = 'Abort'
-      ModalResult = 2
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-    end
+  object LayoutsRightFrame: TBevelEx
+    Left = 412
+    Top = 0
+    Width = 4
+    Height = 558
+    Shape = bsLeftLine
+    Style = bsCustomColors
+    CustomColor2 = clNone
   end
   object PanelLayoutsSelector: TPanelEx
     Left = 0
     Top = 0
-    Width = 934
-    Height = 244
+    Width = 412
+    Height = 558
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -97,10 +57,10 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     ParentBackground = False
     Style = vgSolid
     object LayoutListView: TEasyListview
-      Left = 8
-      Top = 8
-      Width = 952
-      Height = 228
+      Left = 2
+      Top = 24
+      Width = 439
+      Height = 532
       AllowHiddenCheckedItems = True
       BorderStyle = bsNone
       CellSizes.Tile.Height = 76
@@ -115,7 +75,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000000001B8030000FFFFFF1F0001000000
+        00060000008008000101000100000000000001B7010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -158,10 +118,116 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnItemPaintText = LayoutListViewItemPaintText
       OnItemSelectionChanged = LayoutListViewItemSelectionChanged
     end
+    object PanelSystemTitle: TPanelEx
+      Left = 0
+      Top = 0
+      Width = 412
+      Height = 16
+      Align = alTop
+      Color1 = 15856113
+      Color2 = 15132390
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+      object LabelLayoutTitle: TShadowLabel
+        Left = 0
+        Top = 0
+        Width = 412
+        Height = 16
+        Align = alBottom
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'LAYOUT TITLE'
+        Color = 16448250
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = 14540253
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        Layout = tlCenter
+      end
+    end
+    object PanelSystemTitleBottom: TPanelEx
+      Left = 0
+      Top = 16
+      Width = 412
+      Height = 8
+      Align = alTop
+      Color1 = 15132390
+      Color2 = clWhite
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+    end
+    object ShowHideLayoutsPanel: TPanelEx
+      Left = 317
+      Top = 493
+      Width = 83
+      Height = 51
+      Color1 = 16448250
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clSilver
+      ColorInnerFrame = clGreen
+      Frames = [frLeft, frTop, frRight, frBottom]
+      ParentBackground = False
+      Style = vgSolid
+      object ShowHideLayoutsLabel: TShadowLabel
+        Left = 11
+        Top = 8
+        Width = 62
+        Height = 37
+        Cursor = crHandPoint
+        Hint = 'Toggle visible / not visible for all layouts'
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'HIDE ALL'#13#10'LAYOUTS'
+        Color = 16448250
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 10900224
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        ShadowColor = 14540253
+        ShadowEnabled = True
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        OnClick = ShowHideLayoutsLabelClick
+        OnMouseEnter = ShowHideLayoutsLabelMouseEnter
+        OnMouseLeave = ShowHideLayoutsLabelMouseLeave
+      end
+    end
   end
   object ImageScrLayout: TImage32
-    Left = 647
-    Top = 402
+    Left = 425
+    Top = 361
     Width = 275
     Height = 175
     Bitmap.DrawMode = dmBlend
@@ -171,11 +237,11 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     ParentColor = False
     Scale = 1.000000000000000000
     ScaleMode = smNormal
-    TabOrder = 2
+    TabOrder = 1
   end
   object GroupBoxCategoryConsoleComputer: TAdvGroupBoxEx
-    Left = 8
-    Top = 440
+    Left = 423
+    Top = 177
     Width = 445
     Height = 161
     CheckBox.Action = caNone
@@ -501,82 +567,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnClick = ButtonLayoutResetPanelsIndex_ConsCompClick
     end
   end
-  object PanelLayoutTitle: TPanelEx
-    Left = 0
-    Top = 244
-    Width = 934
-    Height = 16
-    Color1 = clWhite
-    Color2 = 15132390
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = clGreen
-    ColorInnerFrame = clGreen
-    Frames = []
-    ParentBackground = False
-    Style = vgSimple
-    object LabelLayoutTitle: TShadowLabel
-      Left = 8
-      Top = 0
-      Width = 918
-      Height = 19
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'LAYOUT TITLE'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clMaroon
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-      Layout = tlCenter
-    end
-    object LabelShowHideLayouts: TShadowLabel
-      Left = 8
-      Top = 0
-      Width = 148
-      Height = 16
-      Cursor = crHandPoint
-      Hint = 'Toggle visible / not visible for all layouts'
-      AutoSize = False
-      Caption = 'HIDE ALL LAYOUTS'
-      Color = 16448250
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 10900224
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-      ShadowColor = 14540253
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-      Layout = tlCenter
-      OnClick = LabelShowHideLayoutsClick
-      OnMouseEnter = LabelShowHideLayoutsMouseEnter
-      OnMouseLeave = LabelShowHideLayoutsMouseLeave
-    end
-  end
   object GroupBoxCategoryAllSystems: TAdvGroupBoxEx
-    Left = 8
-    Top = 269
+    Left = 423
+    Top = 6
     Width = 445
     Height = 161
     CheckBox.CustomIconsEnabled = False
@@ -589,7 +582,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Font.Name = 'Trebuchet MS'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 2
     object FrameIconLayScr2: TShape
       Left = 120
       Top = 42
@@ -911,20 +904,56 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       OnClick = ButtonLayoutResetPanelsIndexClick
     end
   end
-  object PanelLayoutsTitleBottom: TPanelEx
-    Left = 0
-    Top = 260
-    Width = 934
-    Height = 12
-    Color1 = 15132390
-    Color2 = 15856113
+  object PanelBottom: TPanelEx
+    Left = 737
+    Top = 395
+    Width = 107
+    Height = 107
+    Color1 = 15856113
+    Color2 = 14540253
     Color3 = clYellow
     Color4 = clTeal
-    ColorFrame = clGreen
+    ColorFrame = clGray
     ColorInnerFrame = clGreen
-    Frames = []
+    Frames = [frLeft, frTop, frRight, frBottom]
     ParentBackground = False
     Style = vgSimple
+    object ButtonHelp: TBitBtnEx
+      Left = 9
+      Top = 73
+      Width = 89
+      Height = 25
+      Hint = 'How to use this feature'
+      Caption = 'Help'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = ButtonHelpClick
+    end
+    object ButtonClose: TBitBtnEx
+      Left = 9
+      Top = 9
+      Width = 89
+      Height = 25
+      Hint = 'Close and update settings'
+      Caption = 'Apply'
+      ModalResult = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object ButtonAbort: TBitBtnEx
+      Left = 9
+      Top = 41
+      Width = 89
+      Height = 25
+      Hint = 'Close and abort changes'
+      Caption = 'Abort'
+      ModalResult = 2
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
   end
   object IL_Layouts: TImageList
     Height = 68

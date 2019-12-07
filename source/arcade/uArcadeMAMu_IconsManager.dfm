@@ -58,10 +58,11 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
   TextHeight = 15
   object SplitterList: TSplitterEx
     Left = 462
-    Top = 31
+    Top = 47
     Width = 7
-    Height = 456
+    Height = 465
     Align = alRight
+    ResizeStyle = rsUpdate
     OnMoved = SplitterListMoved
     Appearance.BorderColor = clNone
     Appearance.BorderColorHot = clNone
@@ -76,9 +77,9 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
   end
   object PanelNotUsedIcons: TPanel
     Left = 469
-    Top = 31
+    Top = 47
     Width = 305
-    Height = 456
+    Height = 465
     Align = alRight
     BevelOuter = bvNone
     Constraints.MinWidth = 305
@@ -90,6 +91,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Height = 7
       Cursor = crVSplit
       Align = alTop
+      ResizeStyle = rsUpdate
       Appearance.BorderColor = clNone
       Appearance.BorderColorHot = clNone
       Appearance.Color = 16445929
@@ -113,13 +115,13 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Constraints.MinHeight = 320
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -13
-      EditManager.Font.Name = 'Trebuchet MS'
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
       EditManager.Font.Style = []
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Trebuchet MS'
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clBlack
@@ -168,18 +170,18 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       OnItemSelectionChanged = NotUsedIconsListItemSelectionChanged
       OnKeyAction = NotUsedIconsListKeyAction
     end
-    object NotUsedIconHistory: TRichEdit
+    object NotUsedIconHistory: TRichEditURL
       Left = 0
       Top = 349
       Width = 305
-      Height = 107
+      Height = 116
       TabStop = False
       Align = alClient
       BorderStyle = bsNone
       Color = 15856113
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
@@ -189,147 +191,177 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       WantReturns = False
       WordWrap = False
     end
-    object CoolBarNotUsedIconHistory: TCoolBar
+    object PanelNotUsedIconHistory: TPanelEx
       Left = 0
       Top = 327
       Width = 305
       Height = 22
-      BandBorderStyle = bsNone
-      BandMaximize = bmNone
-      Bands = <>
-      EdgeBorders = []
-      FixedOrder = True
-      object LabelFileHistory: TLabel
-        Left = 140
-        Top = 2
-        Width = 86
-        Height = 18
-        Caption = 'FILE HISTORY'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold, fsItalic]
-        ParentFont = False
-      end
-      object ButtonClearHistoryNotUsed: TSpeedButton
+      Align = alTop
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clGreen
+      ColorInnerFrame = clGreen
+      Frames = []
+      ParentBackground = False
+      Style = vgWindowsTheme
+      object LabelFileHistory: TShadowLabel
         Left = 2
+        Top = 4
+        Width = 62
+        Height = 16
+        Caption = 'File History'
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object ButtonClearHistoryNotUsed: TSpeedButtonEx
+        Left = 66
         Top = 0
-        Width = 80
-        Height = 20
-        Caption = 'Clear History'
+        Width = 47
+        Height = 22
+        Hint = 'Clear history for the selected icon'
+        Caption = 'Clear'
+        Flat = True
+        OnClick = ButtonClearHistoryNotUsedClick
+      end
+      object ButtonNotUsedDeleteFiles: TSpeedButtonEx
+        Left = 170
+        Top = 0
+        Width = 135
+        Height = 22
+        Caption = 'Delete Not Used Icons'
         Flat = True
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -11
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsBold]
+        ParentFont = False
+        OnClick = ButtonNotUsedDeleteFilesClick
+      end
+    end
+    object PanelRenameFile: TPanelEx
+      Left = 10
+      Top = 28
+      Width = 290
+      Height = 83
+      Color1 = clWhite
+      Color2 = clGray
+      Color3 = 7891291
+      Color4 = 16750899
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
+      EnableCustomBorder = ecbDouble
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+      Visible = False
+      object RenameFileIcon: TImage
+        Left = 8
+        Top = 8
+        Width = 32
+        Height = 32
+        IncrementalDisplay = True
+        Transparent = True
+      end
+      object RenameFileTitleLabel: TShadowLabel
+        Left = 47
+        Top = 4
+        Width = 92
+        Height = 17
+        Caption = 'Rename File'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object RenameFileOldFileName: TShadowLabel
+        Left = 47
+        Top = 25
+        Width = 232
+        Height = 16
+        AutoSize = False
+        Caption = 'My Current FileName.ico'
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object RenameFileNewFileName: TEditEx
+        Left = 8
+        Top = 48
+        Width = 181
+        Height = 23
+        AutoSize = False
+        BevelOuter = bvNone
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
         Font.Name = 'Trebuchet MS'
         Font.Style = []
         ParentFont = False
-        OnClick = ButtonClearHistoryNotUsedClick
+        TabOrder = 0
+        OnKeyPress = RenameFileNewFileNameKeyPress
       end
-    end
-  end
-  object BottomBar: TCoolBar
-    Left = 0
-    Top = 487
-    Width = 774
-    Height = 25
-    Align = alBottom
-    BandBorderStyle = bsNone
-    BandMaximize = bmNone
-    Bands = <
-      item
-        Control = ToolBarMissingIcons
-        ImageIndex = -1
-        MinHeight = 21
-        Width = 774
-      end>
-    EdgeBorders = [ebTop]
-    FixedOrder = True
-    object LabelTotalItemsMissing: TLabel
-      Left = 82
-      Top = 0
-      Width = 139
-      Height = 23
-      Caption = '00000 Missing Game Icons'
-      Constraints.MinHeight = 23
-      ShowAccelChar = False
-      Layout = tlCenter
-    end
-    object LabelTotalItemsNotUsed: TLabel
-      Left = 469
-      Top = 0
-      Width = 114
-      Height = 23
-      Caption = ' 00000 not Used Icons'
-      Constraints.MinHeight = 23
-      ShowAccelChar = False
-      Transparent = True
-      Layout = tlCenter
-    end
-    object ButtonNotUsedDeleteFiles: TSpeedButton
-      Left = 637
-      Top = 0
-      Width = 135
-      Height = 22
-      Caption = 'Delete Not Used Icons'
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = [fsBold]
-      ParentFont = False
-      OnClick = ButtonNotUsedDeleteFilesClick
-    end
-    object ToolBarMissingIcons: TToolBar
-      Left = 0
-      Top = 0
-      Width = 80
-      Height = 21
-      AutoSize = True
-      ButtonHeight = 21
-      ButtonWidth = 54
-      Constraints.MaxWidth = 80
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      List = True
-      ShowCaptions = True
-      TabOrder = 0
-      Transparent = True
-      Wrapable = False
-      object ButtonOptionsMissingGameIcons: TToolButton
-        Left = 0
-        Top = 0
-        Hint = 'Click here to set options for the missing game icons list'
-        AutoSize = True
-        Caption = 'Options'
-        DropdownMenu = PopupMissingIconsOptions
-        ImageIndex = 4
+      object RenameFileButtonOk: TBitBtnEx
+        Tag = 1
+        Left = 193
+        Top = 47
+        Width = 43
+        Height = 25
+        Caption = 'Ok'
+        TabOrder = 1
+        OnClick = RenameFileButtonOkClick
+      end
+      object RenameFileButtonAbort: TBitBtnEx
+        Left = 237
+        Top = 47
+        Width = 43
+        Height = 25
+        Caption = 'Abort'
+        TabOrder = 2
+        OnClick = RenameFileButtonOkClick
       end
     end
   end
   object MissingIconsList: TEasyListview
     Left = 0
-    Top = 31
+    Top = 47
     Width = 462
-    Height = 456
+    Height = 465
+    HelpContext = -1
     Align = alClient
     BorderStyle = bsNone
-    CellSizes.Tile.Height = 52
-    CellSizes.Tile.Width = 200
+    CellSizes.Tile.Width = 260
     CellSizes.Report.Height = 20
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clWindowText
+    EditManager.Font.Color = clBlack
     EditManager.Font.Height = -12
     EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
     ImagesState = FormMain.IL_GroupedMode
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -341,38 +373,39 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000009000000110000005445617379436F6C756D6E53746F726564FFFECE
-      000600000080080001010001000000000100010E010000FFFFFF1F0001000000
+      0006000000800800010100010000000001000190010000FFFFFF1F0001000000
       01000000050000005400690074006C0065000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010100000000000155000000FFFFFF1F000100000001000000040000004E00
+      00010100000000000164000000FFFFFF1F000100000001000000040000004E00
       61006D006500000000000000000000000000110000005445617379436F6C756D
-      6E53746F726564FFFECE00060000008008000101000102000000000001550000
+      6E53746F726564FFFECE00060000008008000101000102000000000001640000
       00FFFFFF1F0001000000010000000800000043006C006F006E00650020006F00
       6600000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE0006000000800800010100010300000000000155000000FFFFFF
+      726564FFFECE0006000000800800010100010300000000000164000000FFFFFF
       1F00010000000100000009000000420069006F00730020004E0061006D006500
       000000000000000000000000110000005445617379436F6C756D6E53746F7265
-      64FFFECE000600000080080001010001040000000000015A000000FFFFFF1F00
+      64FFFECE0006000000800800010100010400000000000169000000FFFFFF1F00
       01000000010000000B00000044007200690076006500720020004E0061006D00
       6500000000000000000000000000110000005445617379436F6C756D6E53746F
-      726564FFFECE0006000000800800010100010500000000000150000000FFFFFF
+      726564FFFECE000600000080080001010001050000000000015A000000FFFFFF
       1F0001000000010000000D000000440072006900760065007200200053007400
       6100740075007300000000000000000000000000110000005445617379436F6C
-      756D6E53746F726564FFFECE00060000008008000101000106000000000001AA
+      756D6E53746F726564FFFECE00060000008008000101000106000000000001B4
       000000FFFFFF1F0001000000010000000C0000004D0061006E00750066006100
       6300740075007200650072000000000000000000000000001100000054456173
       79436F6C756D6E53746F726564FFFECE00060000008008000101000107000000
-      00000155000000FFFFFF1F0001000000010000000D0000005600650072007300
+      0000015A000000FFFFFF1F0001000000010000000D0000005600650072007300
       69006F006E002000410064006400650064000000000000000000000000001100
       00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-      00010800000000000141000000FFFFFF1F0001000000010000000A0000004D00
+      0001080000000000014B000000FFFFFF1F0001000000010000000A0000004D00
       65006300680061006E006900630061006C00000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1300
@@ -381,6 +414,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     ImagesExLarge = IL_MissingIcons
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoItem.TileDetailCount = 2
     ParentFont = False
     ParentShowHint = False
     PopupMenu = PopupMissingIcons
@@ -395,7 +429,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
-    TabOrder = 2
+    TabOrder = 1
     View = elsReport
     CustomCheckRadioEnabled = False
     OnColumnClick = MissingIconsListColumnClick
@@ -411,7 +445,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Left = 0
     Top = 0
     Width = 774
-    Height = 31
+    Height = 47
     Align = alTop
     AutoSize = True
     Color1 = clWhite
@@ -427,30 +461,32 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Left = 0
       Top = 0
       Width = 774
-      Height = 31
+      Height = 47
       Align = alTop
-      Color1 = 16448250
+      Color1 = 15856113
       Color2 = clSilver
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 7891291
       ColorInnerFrame = clGreen
-      Frames = [frBottom]
+      Frames = []
       ParentBackground = False
-      Style = vgSimple
+      Style = vgWindowsTheme
       object SystemIcon: TImage
-        Left = 1
-        Top = 3
+        Left = 325
+        Top = 2
         Width = 24
         Height = 24
+        OnClick = SystemSelectLabelClick
       end
-      object ButtonSystem: TBitBtn
+      object SystemSelectLabel: TShadowLabel
         Tag = 1
-        Left = 27
+        Left = 352
         Top = 2
-        Width = 345
-        Height = 26
+        Width = 270
+        Height = 24
         Hint = 'Click here to select a system'
+        AutoSize = False
         Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -460,55 +496,107 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 0
-        OnClick = ButtonSystemClick
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        Layout = tlCenter
+        OnClick = SystemSelectLabelClick
       end
-      object ButtonScanBoth: TBitBtn
-        Left = 400
+      object OptionsMissingGameIconsButton: TSpeedButtonEx
+        Left = 2
+        Top = 2
+        Width = 22
+        Height = 24
+        Hint = 'Click here to set options for the missing game icons list'
+        Flat = True
+        ImageIndex = 7
+        Images = FormMain.IL_MenuPopup
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = OptionsMissingGameIconsButtonClick
+      end
+      object LabelTotalItemsNotUsed: TShadowLabel
+        Left = 469
+        Top = 29
+        Width = 83
+        Height = 16
+        Caption = 'Not Used Icons'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        Layout = tlCenter
+      end
+      object LabelTotalItemsMissing: TShadowLabel
+        Left = 2
+        Top = 29
+        Width = 109
+        Height = 16
+        Caption = 'Missing Game Icons'
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        Layout = tlCenter
+      end
+      object ButtonScanBoth: TBitBtnEx
+        Left = 30
         Top = 2
         Width = 65
-        Height = 26
+        Height = 25
         Hint = 'Click here to scan missing and not used icons'
         Caption = 'Scan Both'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 2
+        TabOrder = 1
         OnClick = ButtonScanBothClick
       end
-      object ButtonScanMissing: TBitBtn
-        Left = 471
+      object ButtonScanMissing: TBitBtnEx
+        Left = 97
         Top = 2
         Width = 90
-        Height = 26
+        Height = 25
         Hint = 'Click here to scan games with missing icons'
         Caption = 'Scan Missing'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 2
         OnClick = ButtonScanMissingClick
       end
-      object ButtonScanNotUsed: TBitBtn
-        Left = 567
+      object ButtonScanNotUsed: TBitBtnEx
+        Left = 189
         Top = 2
         Width = 90
-        Height = 26
+        Height = 25
         Hint = 'Click here to scan not used icons'
         Caption = 'Scan Not Used'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 4
+        TabOrder = 3
         OnClick = ButtonScanNotUsedClick
       end
-      object ButtonHelp: TBitBtn
-        Left = 662
+      object ButtonHelp: TBitBtnEx
+        Left = 280
         Top = 2
         Width = 38
-        Height = 26
+        Height = 25
         Hint = 'How do I use this thing ? :)'
         Caption = 'Help'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 1
+        TabOrder = 0
         OnClick = ButtonHelpClick
       end
     end
@@ -521,7 +609,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Height = 32
     Width = 32
     Left = 648
-    Top = 88
+    Top = 176
   end
   object PopupMissingIcons: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -677,7 +765,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     DrawModule = FormMain.BcDrawModule
     OnMeasureMenuItem = PopupMissingIconsMeasureMenuItem
     Left = 648
-    Top = 120
+    Top = 208
     object PopupEditIcon: TMenuItem
       Caption = 'Edit With Associated Editor'
       ShortCut = 13

@@ -7,7 +7,7 @@ uses
   ComCtrls, StdCtrls, ImgList, GraphicEx, GR32_Image, GR32, GR32_Resamplers,
   ExtCtrls, Buttons, Menus, BarMenus, MPCommonObjects, ShellAPI,
   MPCommonUtilities, EasyListview, IniFiles, uCommon, SplitterEx, PanelEx,
-  ButtonsEx, ShadowLabel;
+  ButtonsEx, ShadowLabel, EditEx, BevelEx;
 
 type
   TMissingImageInfo = class(TEasyItemStored)
@@ -131,7 +131,6 @@ type
     PopupScanDeviceSets: TMenuItem;
     PanelToolBarButtons: TPanelEx;
     ImageCategoryIcon: TImage;
-    ButtonImageCategory: TBitBtnEx;
     ButtonHelp: TBitBtnEx;
     ButtonScanMissing: TBitBtnEx;
     ButtonScanInvalidImages: TBitBtnEx;
@@ -145,6 +144,15 @@ type
     ButtonNotUsedImagesDeleteFiles: TSpeedButtonEx;
     LabelTotalItemsNotUsed: TShadowLabel;
     ButtonInvalidImagesDeleteFiles: TSpeedButtonEx;
+    ImageCategorySelectLabel: TShadowLabel;
+    PanelRenameFile: TPanelEx;
+    RenameFileIcon: TImage;
+    RenameFileTitleLabel: TShadowLabel;
+    RenameFileOldFileName: TShadowLabel;
+    RenameFileNewFileName: TEditEx;
+    RenameFileButtonOk: TBitBtnEx;
+    RenameFileButtonAbort: TBitBtnEx;
+    RenameFileIconFrame: TBevelEx;
     procedure FormShow(Sender: TObject);
     procedure MissingImagesListColumnClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; ShiftState: TShiftState;
@@ -197,7 +205,6 @@ type
       ShiftState: TShiftState; var Handled: Boolean);
     procedure ButtonInvalidImagesDeleteFilesClick(Sender: TObject);
     procedure SplitterListMoved(Sender: TObject);
-    procedure ButtonImageCategoryClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonScanMissingClick(Sender: TObject);
     procedure ButtonScanInvalidImagesClick(Sender: TObject);
@@ -206,6 +213,10 @@ type
       NewWidth: Integer; var Allow: Boolean);
     procedure ButtonScanNotUsedImagesClick(Sender: TObject);
     procedure ButtonNotUsedImagesDeleteFilesClick(Sender: TObject);
+    procedure ImageCategorySelectLabelClick(Sender: TObject);
+    procedure RenameFileButtonOkClick(Sender: TObject);
+    procedure RenameFileNewFileNameKeyPress(Sender: TObject;
+      var Key: Char);
   private
     { Private declarations }
     SelectedItemMissing, SelectedItemNotUsed: TEasyItem;
@@ -252,7 +263,7 @@ var
 
 implementation
 
-uses uMain, uStatus, uRenameImageFile;//, uRenameFile;
+uses uMain, uStatus;//, uRenameFile;
 
 {$R *.dfm}
 
@@ -335,12 +346,12 @@ procedure TFormImagesManager.SelectImageCategory;
 var
   selCat: ShortInt;
 begin
-  selCat:= FormMain.CallSelectImageCategory(ButtonImageCategory.Tag, False, True, True);
+  selCat:= FormMain.CallSelectImageCategory(ImageCategorySelectLabel.Tag, False, True, True);
   if selCat = -1 then
      Exit;
-  ButtonImageCategory.Tag:= selCat;
-  ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon, 2);
+  ImageCategorySelectLabel.Tag:= selCat;
+  ImageCategorySelectLabel.Caption:= GetImageCategoryTitle(ImageCategorySelectLabel.Tag);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], ImageCategoryIcon, 2);
 end;
 
 procedure TFormImagesManager.ReadIniFile;
@@ -419,13 +430,13 @@ function TFormImagesManager.ValidateImageFolder: Boolean;
 var
   tmpFolder: String;
 begin
-  tmpFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME);
+  tmpFolder:= FormMain.GetFolderFull(ImageCategorySelectLabel.Tag, idMAME);
   Result:= tmpFolder <> '';// DirectoryExists(tmpFolder);
   if Result then
      Exit;
 
   if GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
-                     'No folder is selected for '+ButtonImageCategory.Caption+'. Would you like to select one now ?', 1) = mrYes then
+                     'No folder is selected for '+ImageCategorySelectLabel.Caption+'. Would you like to select one now ?', 1) = mrYes then
      begin
        FormMain.MenuImageCategorySettings.Click;
        ValidateImageFolder;
@@ -477,8 +488,8 @@ end;
 procedure TFormImagesManager.UpdateTotalGamesLabelMissing;
 begin
   case LabelTotalItemsMissing.Tag of
-    0: LabelTotalItemsMissing.Caption:= ' '+IntToStr(MissingImagesList.Groups.ItemCount)+' Missing Images';
-    1: LabelTotalItemsMissing.Caption:= ' '+IntToStr(MissingImagesList.Groups.ItemCount)+' Images Found';
+    0: LabelTotalItemsMissing.Caption:= 'Missing Images: '+IntToStr(MissingImagesList.Groups.ItemCount);
+    1: LabelTotalItemsMissing.Caption:= 'Images Found: '+IntToStr(MissingImagesList.Groups.ItemCount);
   end;
 end;
 
@@ -538,29 +549,29 @@ var
        
     if SearchFile then
        begin
-         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
+         ELFormat:=  FormMain.GetImageName(FormMain.TempGameVars.eName, ImageCategorySelectLabel.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
          SoftwareNameDir:= FormMain.TempGameVars.eSoftwareName;
          if SoftwareNameDir <> '' then
             SoftwareNameDir:= SoftwareNameDir+'\';
          NewMAMESnapName:= ''; // used by in-game snapshot only "gamename\0000.png"
          // EL format
          ImageFound:= FileExists(tempFolder+SoftwareNameDir+ELFormat+'.png'); // search unzipped image
-         if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+         if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
             ImageFound:= FileExists(tempFolder+SoftwareNameDir+ELFormat+'.jpg');
 
          if (not ImageFound) and FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
             begin
               ImageFound:= FileExists(tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.png'); // search unzipped image
-              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
                  ImageFound:= FileExists(tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.jpg');
 
-              if (not ImageFound) and (ButtonImageCategory.Tag = 1) then
+              if (not ImageFound) and (ImageCategorySelectLabel.Tag = 1) then
               begin
                 // for game snapshots only
-                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
+                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ImageCategorySelectLabel.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
 
                 ImageFound:= FileExists(tempFolder+SoftwareNameDir+NewMAMESnapName+'.png'); // search unzipped image
-                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
                    ImageFound:= FileExists(tempFolder+SoftwareNameDir+NewMAMESnapName+'.jpg');
               end;
             end;
@@ -573,7 +584,7 @@ var
          TMissingImageInfo(Item).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
          TMissingImageInfo(Item).eSystemID:= FormMain.TempGameVars.eSystemID;
          TMissingImageInfo(Item).eSystemType:= FormMain.TempGameVars.eSystemType;
-         TMissingImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
+         TMissingImageInfo(Item).eImageCategory:= ImageCategorySelectLabel.Tag;
          TMissingImageInfo(Item).eTitle:= FormMain.TempGameVars.eTitle;
          TMissingImageInfo(Item).eName:= FormMain.TempGameVars.eName;
          TMissingImageInfo(Item).eClone:= FormMain.TempGameVars.eClone;
@@ -616,9 +627,9 @@ begin
      end;
   LabelTotalItemsMissing.Tag:= 0;
   FormStatus.MessageStr('Scanning for games with missing images');
-  tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME); // [imgType, sysID]
+  tempFolder:= FormMain.GetFolderFull(ImageCategorySelectLabel.Tag, idMAME); // [imgType, sysID]
 
-  ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
+  ExtraFolderStrMAME:= ImageCategoryArray[ImageCategorySelectLabel.Tag, 3]+'\';
 
   ButtonNotUsedImagesDeleteFiles.Visible:= False;
   FormMain.ClearListView(MissingImagesList);
@@ -658,8 +669,8 @@ begin
   case Result of
     True:
       begin
-        MissingImagesList.Groups.FirstGroup.Caption:= ButtonImageCategory.Caption+' [Scan Missing Images]';
-        MissingImagesList.Groups.FirstGroup.ImageIndex:= ButtonImageCategory.Tag;
+        MissingImagesList.Groups.FirstGroup.Caption:= ImageCategorySelectLabel.Caption+' [Scan Missing Images]';
+        MissingImagesList.Groups.FirstGroup.ImageIndex:= ImageCategorySelectLabel.Tag;
       end;
     False:
       begin
@@ -809,7 +820,7 @@ var
        
     if SearchFile then
        begin
-         ELFormat:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
+         ELFormat:= FormMain.GetImageName(FormMain.TempGameVars.eName, ImageCategorySelectLabel.Tag, 0);//, FormMain.TempGameVars.eSoftwareName);
          SoftwareNameDir:= FormMain.TempGameVars.eSoftwareName;
          if SoftwareNameDir <> '' then
             SoftwareNameDir:= SoftwareNameDir+'\';
@@ -819,7 +830,7 @@ var
          // EL format
          FileFullPath:= tempFolder+SoftwareNameDir+ELFormat+'.png';
          ImageFound:= FileExists(FileFullPath); // search unzipped image
-         if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+         if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
             begin
               FileFullPath:= tempFolder+SoftwareNameDir+ELFormat+'.jpg';
               ImageFound:= FileExists(FileFullPath);
@@ -829,20 +840,20 @@ var
             begin
               FileFullPath:= tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.png';
               ImageFound:= FileExists(FileFullPath); // search unzipped image
-              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+              if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
                  begin
                    FileFullPath:= tempFolder+ExtraFolderStrMAME+SoftwareNameDir+ELFormat+'.jpg';
                    ImageFound:= FileExists(FileFullPath);
                  end;
 
-              if (not ImageFound) and (ButtonImageCategory.Tag = 1) then
+              if (not ImageFound) and (ImageCategorySelectLabel.Tag = 1) then
               begin
                 // for game snapshots only
-                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ButtonImageCategory.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
+                NewMAMESnapName:= FormMain.GetImageName(FormMain.TempGameVars.eName, ImageCategorySelectLabel.Tag, 1);//, FormMain.TempGameVars.eSoftwareName); // used by in-game snapshot only "gamename\0000.png"
 
                 FileFullPath:= tempFolder+SoftwareNameDir+NewMAMESnapName+'.png';
                 ImageFound:= FileExists(FileFullPath); // search unzipped image
-                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+                if (not ImageFound) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
                    begin
                      FileFullPath:= tempFolder+SoftwareNameDir+NewMAMESnapName+'.jpg';
                      ImageFound:= FileExists(FileFullPath);
@@ -858,7 +869,7 @@ var
          TMissingImageInfo(Item).eROMIdentification:= FormMain.TempGameVars.eROMIdentification;
          TMissingImageInfo(Item).eSystemID:= FormMain.TempGameVars.eSystemID;
          TMissingImageInfo(Item).eSystemType:= FormMain.TempGameVars.eSystemType;
-         TMissingImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
+         TMissingImageInfo(Item).eImageCategory:= ImageCategorySelectLabel.Tag;
          TMissingImageInfo(Item).eTitle:= FormMain.TempGameVars.eTitle;
          TMissingImageInfo(Item).eName:= FormMain.TempGameVars.eName;
          TMissingImageInfo(Item).eClone:= FormMain.TempGameVars.eClone;
@@ -900,9 +911,9 @@ begin
      end;
   LabelTotalItemsMissing.Tag:= 1;
   FormStatus.MessageStr('Scanning available images on missing games');
-  tempFolder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME); // [imgType, sysID]
+  tempFolder:= FormMain.GetFolderFull(ImageCategorySelectLabel.Tag, idMAME); // [imgType, sysID]
 
-  ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
+  ExtraFolderStrMAME:= ImageCategoryArray[ImageCategorySelectLabel.Tag, 3]+'\';
 
   ButtonNotUsedImagesDeleteFiles.Visible:= False;
   FormMain.ClearListView(MissingImagesList);
@@ -942,8 +953,8 @@ begin
   case Result of
     True:
       begin
-        MissingImagesList.Groups.FirstGroup.Caption:= ButtonImageCategory.Caption+' [Scan Images of Missing Games]';
-        MissingImagesList.Groups.FirstGroup.ImageIndex:= ButtonImageCategory.Tag;
+        MissingImagesList.Groups.FirstGroup.Caption:= ImageCategorySelectLabel.Caption+' [Scan Images of Missing Games]';
+        MissingImagesList.Groups.FirstGroup.ImageIndex:= ImageCategorySelectLabel.Tag;
         ButtonNotUsedImagesDeleteFiles.Visible:= True;
         CreateImagePanelForm;
         FormMain.ELV_SelectItem(MissingImagesList, 0);
@@ -981,7 +992,7 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
   FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(#13#10+'To ');
+  FormMain.AddMsgText(#13#10+'To      ');
   FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
 
   if FileExists(FilePath+NewName) then
@@ -1012,7 +1023,7 @@ end;
 
 procedure TFormImagesManager.UpdateTotalFilesLabelNotUsed;
 begin
-  LabelTotalItemsNotUsed.Caption:= ' '+IntToStr(NotUsedImagesList.Groups.ItemCount)+' Not Used Images';
+  LabelTotalItemsNotUsed.Caption:= 'Invalid Images: '+IntToStr(NotUsedImagesList.Groups.ItemCount);
 end;
 
 procedure TFormImagesManager.ScanFiles(ShowFolderMessage: Boolean = True);
@@ -1041,18 +1052,18 @@ var
       iImageName:= FormMain.GetImageName(iGameName, imgCatLoop, 0);//, strSoftwareName)
       tempString:= Folder+SoftwareNameDir+iImageName;//+'.png';
       FileIndex:= FilesList.IndexOf(tempString+'.png');
-      if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+      if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
          FileIndex:= FilesList.IndexOf(tempString+'.jpg');
 
       if (FileIndex = -1) then //and FormMain.IsMAMEBasedSys(FormMain.TempGameVars.eSystemID) then
          begin
            tempString:= Folder+ExtraFolderStrMAME+SoftwareNameDir+iImageName;
            FileIndex:= FilesList.IndexOf(tempString+'.png');
-           if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag)) then
+           if (FileIndex = -1) and (not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag)) then
               FileIndex:= FilesList.IndexOf(tempString+'.jpg');
          end;
 
-      if (FileIndex = -1) and (ButtonImageCategory.Tag = 1) then
+      if (FileIndex = -1) and (ImageCategorySelectLabel.Tag = 1) then
          begin
            NewMAMESnapName:= FormMain.GetImageName(iGameName, imgCatLoop, 1);//, strSoftwareName); // used by in-game snapshot only "gamename\0000.png"
            tempString:= Folder+SoftwareNameDir+NewMAMESnapName;
@@ -1083,7 +1094,7 @@ var
              end;
           Result:= MainFolderGroup.Items.AddCustom(TNotUsedImageInfo, nil);
           if Result <> nil then
-             MainFolderGroup.ImageIndex:= ButtonImageCategory.Tag;
+             MainFolderGroup.ImageIndex:= ImageCategorySelectLabel.Tag;
         end;
       False:
         begin
@@ -1099,7 +1110,7 @@ var
              end;
           Result:= Group.Items.AddCustom(TNotUsedImageInfo, nil);
           if Result <> nil then
-             Group.ImageIndex:= ButtonImageCategory.Tag;
+             Group.ImageIndex:= ImageCategorySelectLabel.Tag;
         end;
     end;
   end;
@@ -1164,20 +1175,20 @@ begin
 
   // scan image files
   FormStatus.MessageStr('Building images files list');
-  Folder:= FormMain.GetFolderFull(ButtonImageCategory.Tag, idMAME);
+  Folder:= FormMain.GetFolderFull(ImageCategorySelectLabel.Tag, idMAME);
   FilesList:= THashedStringList.Create;
   GetFilesList(Folder, '.png', '*.*', FilesList, True, False, True);
-  if not FormMain.ImagesPNGOnly(ButtonImageCategory.Tag) then
+  if not FormMain.ImagesPNGOnly(ImageCategorySelectLabel.Tag) then
      GetFilesList(Folder, '.jpg', '*.*', FilesList, True, False, True);
 
   Loop2:= Ord(FilesList.Count > 0);
   case Boolean(Loop2) of
     True:
       begin
-        ExtraFolderStrMAME:= ImageCategoryArray[ButtonImageCategory.Tag, 3]+'\';
+        ExtraFolderStrMAME:= ImageCategoryArray[ImageCategorySelectLabel.Tag, 3]+'\';
         FilesList.BeginUpdate;
         FormStatus.MessageStr('Validating '+IntToStr(el_GamesList.Count)+' games ('+IntToStr(MaxImagePerCategory)+' images per game)'+#13#10+
-                              'Image category: '+GetImageCategoryTitle(ButtonImageCategory.Tag));
+                              'Image category: '+GetImageCategoryTitle(ImageCategorySelectLabel.Tag));
 
         TotalGamesCount:= el_GamesList.Count;
         for Loop2:=0 to el_GamesList.Count-1 do
@@ -1221,7 +1232,7 @@ begin
 
                Item:= AddToGroup(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eImageLoaded:= False;
-               TNotUsedImageInfo(Item).eImageCategory:= ButtonImageCategory.Tag;
+               TNotUsedImageInfo(Item).eImageCategory:= ImageCategorySelectLabel.Tag;
                TNotUsedImageInfo(Item).eFileName:= ExtractFileName(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eSize:= GetFileSize(FilesList[Loop2]);
                TNotUsedImageInfo(Item).eSizeText:= FormMain.GetSizeType(TNotUsedImageInfo(Item).eSize, False);
@@ -1293,20 +1304,14 @@ var
   end;
 
 begin
-  //if ImageName ='D:\EmuLoader\snap\a2600\a2600 - Copy.png' then
-  //   beep;
   IconSize:= IL_NotUsedImages.Width;
-  //ImageToLoad:= TBitmap32.Create;
-  //ImageToLoad.Clear;
-  //TKernelResampler.Create(ImageToLoad);
-  //TKernelResampler(ImageToLoad.Resampler).Kernel:=
-  //           TCustomKernelClass(THermiteKernel).Create; // Hermite (used to be Lanczos filter)
 
   ImageToLoad:= TImage32.Create(nil);
   TKernelResampler.Create(ImageToLoad.Bitmap);
   TKernelResampler(ImageToLoad.Bitmap.Resampler).Kernel:=
              TCustomKernelClass(TCosineKernel).Create; // Hermite (used to be Lanczos filter)
 
+  ImageToLoad.Bitmap.DrawMode:= dmBlend;
   iType:= FormMain.LoadPreviewImage(ImageName, ImageToLoad);
   if (ImageToLoad.Bitmap.Width/ImageToLoad.Bitmap.Height) <= (IconSize/IconSize) then
      begin
@@ -1429,48 +1434,58 @@ begin
   FormMain.LoadCategoriesIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ButtonImageCategory.Tag, 0], ImageCategoryIcon, 2);
-  ButtonImageCategory.Caption:= GetImageCategoryTitle(ButtonImageCategory.Tag);
+  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], ImageCategoryIcon, 2);
+  ImageCategorySelectLabel.Caption:= GetImageCategoryTitle(ImageCategorySelectLabel.Tag);
 
   FormMain.ELV_ResetNormalColors(MissingImagesList);
   FormMain.ELV_ResetNormalColors(NotUsedImagesList);
 
-  MissingImagesList.Color:= FormMain.GamesListView.Color;
-  if FormMain.GamesListView.BackGround.Enabled then
-     begin
-       MissingImagesList.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
-       MissingImagesList.BackGround.Tile:= FormMain.GamesListView.BackGround.Tile;
-       MissingImagesList.BackGround.Enabled:= True;
+  FormMain.ELV_SetBackgroundColor(MissingImagesList, True);
+  FormMain.ELV_SetBackgroundColor(NotUsedImagesList, True);
 
-       NotUsedImagesList.BackGround.Image.Assign(FormMain.GamesListView.BackGround.Image);
-       NotUsedImagesList.BackGround.Tile:= FormMain.GamesListView.BackGround.Tile;
-       NotUsedImagesList.BackGround.Enabled:= True;
-     end;
+  MissingImagesList.Color:= FormMain.GamesListView.Color;
 
   MissingImagesList.Font:= FormMain.GamesListView.Font;
   NotUsedImagesList.Font:= FormMain.GamesListView.Font;
 
+  if MissingImagesList.Font.Size > 9 then
+     MissingImagesList.Font.Size:= 9;
+
+  if NotUsedImagesList.Font.Size > 9 then
+     NotUsedImagesList.Font.Size:= 9;
+
   if IsNightMode then
      begin
-       SetPanelColors(PanelToolBarButtons, menu_background_color[1], clrMedDarkGray);
-       SetPanelColors(BottomBar, FormMain.StatusBarPanel.Color1, FormMain.StatusBarPanel.Color2, (FormMain.StatusBarPanel.Style <> vgSimple));
+       FormMain.SetToolBarPanelColors(FormMain.PanelSearchGames_ToolBar, PanelToolBarButtons);
+       FormMain.SetToolBarPanelColors(FormMain.StatusBarPanel, BottomBar);
 
-       FormMain.SetButtonExColors(ButtonImageCategory);
-       FormMain.SetButtonExColors(ButtonScanMissing);
-       FormMain.SetButtonExColors(ButtonScanNotUsedImages);
-       FormMain.SetButtonExColors(ButtonScanInvalidImages);
-       FormMain.SetButtonExColors(ButtonHelp);
+       for Loop:= 0 to FormImagesManager.ComponentCount-1 do
+       begin
+         if FormImagesManager.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormImagesManager.Components[Loop]))
+         else
+         if FormImagesManager.Components[Loop] is TSpeedButtonEx then
+            FormMain.SetButtonExColors(TSpeedButtonEx(FormImagesManager.Components[Loop]))
+         else
+         if FormImagesManager.Components[Loop] is TEasyListView then
+            begin
+              FormMain.SetEasyListViewColors(TEasyListView(FormImagesManager.Components[Loop]), -1, -1, clWhite);//clrOrangeBarTop);
+              FormMain.SetEasyListViewHeaderColors(TEasyListView(FormImagesManager.Components[Loop]), True);
+              FormMain.ELV_SetEditBkColor(TEasyListView(FormImagesManager.Components[Loop]));
+              FormMain.SetWin10DarkScrollBar(TEasyListView(FormImagesManager.Components[Loop]));
+            end;
+       end;
 
-       FormMain.SetEasyListViewColors(MissingImagesList, -1, -1, clrOrangeBarTop);
-       FormMain.SetEasyListViewHeaderColors(MissingImagesList, True);
-       FormMain.ELV_SetEditBkColor(MissingImagesList);
+       RenameFileIconFrame.CustomColor1:= clrDarkGray;
+       RenameFileIconFrame.CustomColor2:= clrDarkGray;
 
-       FormMain.SetEasyListViewColors(NotUsedImagesList, -1, -1, clrOrangeBarTop);
-       FormMain.SetEasyListViewHeaderColors(NotUsedImagesList, True);
-       FormMain.ELV_SetEditBkColor(NotUsedImagesList);
+       FormMain.ELV_SetRibbonNightColors(0, NotUsedImagesList, True);
 
-       FormMain.SetWin10DarkScrollBar(MissingImagesList);
-       FormMain.SetWin10DarkScrollBar(NotUsedImagesList);
+       SetLabelColors(ImageCategorySelectLabel, clCream);
+       SetLabelColors(LabelTotalItemsMissing, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelTotalItemsNotUsed, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       SetEditNightColors(RenameFileNewFileName);
      end;
 end;
 
@@ -1648,8 +1663,8 @@ procedure TFormImagesManager.FormCanResize(Sender: TObject; var NewWidth,
 begin
   if NewWidth < 931 then
      Resize:= False;
-  LabelTotalItemsNotUsed.Left:= PanelNotUsed.Left;
-  ButtonInvalidImagesDeleteFiles.Left:= BottomBar.Width-158
+  LabelTotalItemsNotUsed.Left:= PanelNotUsed.Left+4;
+  ButtonInvalidImagesDeleteFiles.Left:= BottomBar.Width-ButtonInvalidImagesDeleteFiles.Width-2;
 end;
 
 procedure TFormImagesManager.FormActivate(Sender: TObject);
@@ -1788,23 +1803,27 @@ begin
           ACanvas.Font.Color:= clrLightRed
        else
           ACanvas.Font.Color:= clMaroon;
-       ACAnvas.Font.Style:= [fsBold];
+       ACanvas.Font.Style:= [fsBold];
      end;
   if Position > 0 then
      begin
        ACanvas.Font.Name:= 'Consolas';
-       ACanvas.Font.Size:= 8;
+       ACanvas.Font.Size:= 9;
        if IsNightMode then
-          ACanvas.Font.Color:= clSilver// clrLightBlue
-       else
-          ACanvas.Font.Color:= clNavy;
-     end
-  else
-     begin
-       if ACanvas.Font.Size <> 9 then
-          ACanvas.Font.Size:= 9;
+          if Item.Selected then
+             begin
+               if Sender.Focused then
+                  ACanvas.Font.Color:= clSilver;
+             end
+          else
+             ACanvas.Font.Color:= clSilver;
      end;
-  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
+  //else
+  //   begin
+  //     if ACanvas.Font.Size <> 9 then
+  //        ACanvas.Font.Size:= 9;
+  //   end;
+  //FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
 procedure TFormImagesManager.NotUsedImagesListItemSelectionChanged(
@@ -1815,8 +1834,12 @@ begin
   if Item.Selected and (NotUsedImagesList.Selection.Count = 1) then
      begin
        SelectedItemNotUsed:= Item;
-       FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedImageInfo(Item).eFileName, TNotUsedImageInfo(Item).eNameOriginal))),
-                                    NotUsedImagesList);
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(Ord((not SameText(TNotUsedImageInfo(Item).eFileName, TNotUsedImageInfo(Item).eNameOriginal))),
+                                            NotUsedImagesList)
+       else
+          FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedImageInfo(Item).eFileName, TNotUsedImageInfo(Item).eNameOriginal))),
+                                       NotUsedImagesList);
 
        iType:= FormMain.LoadPreviewImage(TNotUsedImageInfo(Item).eFullPath+TNotUsedImageInfo(Item).eFileName, ImagePreview);
        if iType = ifUnknown then
@@ -1989,72 +2012,19 @@ begin
 end;
 
 procedure TFormImagesManager.PopupNotUsedRenameFileClick(Sender: TObject);
-var
-  OldName, NewName: String;
-  //newWidth,
-  //newHeight,
-  //leftPos,
-  //topPos,
 begin
   if NotUsedImagesList.Selection.Count <> 1 then
      Exit;
-  OldName:= TNotUsedImageInfo(SelectedItemNotUsed).eFileName;
-  if not Assigned(FormRenameImageFile) then
-     FormRenameImageFile:= TFormRenameImageFile.Create(nil);
 
-  IL_NotUsedImages.GetIcon(TNotUsedImageInfo(SelectedItemNotUsed).eImageIndex, FormRenameImageFile.Icon.Picture.Icon);
-  //IL_NotUsedImages.Draw(FormRenameImageFile.IconBar.Bitmap.Canvas, 1, 2, TNotUsedImageInfo(SelectedItemNotUsed).eImageIndex);
-  {ImageIcon:= TBitmap32.Create;
-  TKernelResampler.Create(ImageIcon);
-  TKernelResampler(ImageIcon.Resampler).Kernel:=
-             TCustomKernelClass(THermiteKernel).Create; // Hermite filter
+  IL_NotUsedImages.GetIcon(TNotUsedImageInfo(SelectedItemNotUsed).eImageIndex, RenameFileIcon.Picture.Icon);
 
-  ImageIcon.BeginUpdate;
-  ImageIcon.Clear;
-  ImageIcon.LoadFromFile(TNotUsedImageInfo(SelectedItemNotUsed).eFullPath+OldName);
-  IconSize:= FormRenameImageFile.Icon.Width;
-  if (ImageIcon.Width/ImageIcon.Height) <= (IconSize/IconSize) then
-     begin
-       // stretch height to match
-       NewWidth:= MulDiv(IconSize, ImageIcon.Width, ImageIcon.Height);
-       MakeThumbNail(ImageIcon, NewWidth, IconSize);
-       // center horizontally
-       //leftPos:= Trunc((IconSize-DestImage.Width) div 2);
-       //topPos:= 0;
-     end
-  else
-     begin
-       // stretch width to match
-       NewHeight:= MulDiv(IconSize, ImageIcon.Height, ImageIcon.Width);
-       MakeThumbNail(ImageIcon, IconSize, NewHeight);
-       // center vertically
-       //leftPos:= 0;
-       //topPos:= Trunc((IconSize-DestImage.Height) div 2);
-     end;
-  FreeAndNil(DestImage);
-  FreeAndNil(ImageIcon);}
+  RenameFileOldFileName.Caption:= TNotUsedImageInfo(SelectedItemNotUsed).eFileName;
 
-  FormRenameImageFile.Left:= PanelNotUsed.Left+FormImagesManager.Left+10;
-  FormRenameImageFile.Top:= PanelNotUsed.Top+FormImagesManager.Top+28;
+  RenameFileNewFileName.Text:= RenameFileOldFileName.Caption;
+  RenameFileNewFileName.SelectAll;
 
-  FormRenameImageFile.OldFileName:= OldName;
-  FormRenameImageFile.NewFilename.Text:= OldName;
-  FormRenameImageFile.NewFilename.SelectAll;
-  FormRenameImageFile.ShowModal;
-  NewName:= Trim(FormRenameImageFile.NewFilename.Text);
-  if FormRenameImageFile.mmResult = mrOk then
-     begin
-       NewName:= ChangeFileExt(NewName, ExtractFileExt(oldName));
-       if RenameImageFile(OldName, NewName, TNotUsedImageInfo(SelectedItemNotUsed).eFullPath) then
-          begin
-            TNotUsedImageInfo(SelectedItemNotUsed).eFileName:= NewName;
-            SelectedItemNotUsed.Invalidate(True);
-            FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedImageInfo(SelectedItemNotUsed).eFileName,
-                                                           TNotUsedImageInfo(SelectedItemNotUsed).eNameOriginal))),
-                                         NotUsedImagesList);
-          end;
-     end;
-  FreeAndNil(FormRenameImageFile);
+  PanelRenameFile.Show;
+  RenameFileNewFileName.SetFocus;
 end;
 
 procedure TFormImagesManager.NotUsedImagesListDblClick(
@@ -2103,12 +2073,7 @@ end;
 
 procedure TFormImagesManager.SplitterListMoved(Sender: TObject);
 begin
-  LabelTotalItemsNotUsed.Left:= PanelNotUsed.Left;
-end;
-
-procedure TFormImagesManager.ButtonImageCategoryClick(Sender: TObject);
-begin
-  SelectImageCategory;
+  LabelTotalItemsNotUsed.Left:= PanelNotUsed.Left+4;
 end;
 
 procedure TFormImagesManager.ButtonHelpClick(Sender: TObject);
@@ -2254,6 +2219,78 @@ begin
    NotUsedImagesList.SetFocus;
 end;
 
+
+procedure TFormImagesManager.ImageCategorySelectLabelClick(
+  Sender: TObject);
+begin
+  SelectImageCategory;
+end;
+
+procedure TFormImagesManager.RenameFileButtonOkClick(Sender: TObject);
+var
+  NewName, OldName: String;
+  Continue: Boolean;
+  Loop: Integer;
+begin
+  if TBitBtnEx(Sender).Tag = 1 then
+  begin
+    Continue:= True;
+    NewName:= Trim(RenameFileNewFileName.Text);
+    OldName:= RenameFileOldFileName.Caption;
+    if (NewName = '') or (NewName = '.') then
+       Continue:= False
+    else
+    begin
+      NewName:= ChangeFileExt(NewName, ExtractFileExt(OldName));
+      Continue:= not SameText(NewName, OldName);
+    end;
+
+    if Continue then
+    begin
+      if RenameImageFile(OldName, NewName, TNotUsedImageInfo(SelectedItemNotUsed).eFullPath) then
+         begin
+           TNotUsedImageInfo(SelectedItemNotUsed).eFileName:= NewName;
+           SelectedItemNotUsed.Invalidate(True);
+           if IsNightMode then
+              FormMain.ELV_SetRibbonNightColors(Ord((not SameText(TNotUsedImageInfo(SelectedItemNotUsed).eFileName,
+                                                                  TNotUsedImageInfo(SelectedItemNotUsed).eNameOriginal))),
+                                                NotUsedImagesList)
+
+           else
+              FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedImageInfo(SelectedItemNotUsed).eFileName,
+                                                             TNotUsedImageInfo(SelectedItemNotUsed).eNameOriginal))),
+                                           NotUsedImagesList);
+         end;
+    end;
+  end;
+
+  RenameFileIcon.Picture.Icon:= nil;
+  RenameFileOldFileName.Caption:= '';
+  RenameFileNewFileName.Clear;
+  PanelRenameFile.Hide;
+  NotUsedImagesList.SetFocus;
+end;
+
+procedure TFormImagesManager.RenameFileNewFileNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key in ['/', '*', '?', '<', '>', '|', ':', ';'] then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+  if Key = #13 then
+     begin
+       Key:= #0; // to remove the "ding" sound when pressing some keys like ENTER, ESC and others
+       RenameFileButtonOk.Click;
+     end
+  else
+  if Key = #27 then
+     begin
+       Key:= #0;
+       RenameFileButtonAbort.Click;
+     end;
+end;
 
 end.
 

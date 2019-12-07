@@ -4,7 +4,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Image File'
-  ClientHeight = 336
+  ClientHeight = 418
   ClientWidth = 784
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -23,12 +23,14 @@ object FormImageDeleteRename: TFormImageDeleteRename
   PixelsPerInch = 96
   TextHeight = 15
   object LabelFilename: TShadowLabel
-    Left = 261
-    Top = 127
-    Width = 513
+    Left = 348
+    Top = 119
+    Width = 428
     Height = 31
     AutoSize = False
-    Caption = 'd:\EmuLoader\snap\elevator.png'
+    Caption = 
+      'z:\emulators\my_subfolder1\this_is_a_subfolder\games\mame\EmuLoa' +
+      'der\snap\gamename.png'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = 10900224
@@ -42,23 +44,24 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ShowHint = True
     ShadowColor = clSilver
     ShadowEnabled = False
-    EllipsType = etPathEllips
+    EllipsType = etNone
     ColorFrame = clBlack
     ColorInnerFrame = clBlack
     Frames = []
+    WordWrapSpaceless = True
     Transparent = True
     WordWrap = True
   end
   object LabelSystemTitle: TShadowLabel
-    Left = 261
-    Top = 91
-    Width = 513
+    Left = 348
+    Top = 80
+    Width = 426
     Height = 19
     AutoSize = False
     Caption = 'Supermodel: A Sega Model 3 Arcade Emulator'
     Font.Charset = ANSI_CHARSET
     Font.Color = 21414
-    Font.Height = -12
+    Font.Height = -13
     Font.Name = 'Trebuchet MS'
     Font.Style = [fsBold]
     ParentFont = False
@@ -72,8 +75,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelRenameImage: TShadowLabel
-    Left = 261
-    Top = 251
+    Left = 348
+    Top = 304
     Width = 210
     Height = 16
     Caption = 'New Name (file extension not required)'
@@ -93,16 +96,16 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelSoftwareListTitle: TShadowLabel
-    Left = 261
-    Top = 108
-    Width = 513
-    Height = 14
+    Left = 348
+    Top = 100
+    Width = 426
+    Height = 16
     AutoSize = False
     Caption = 'Software List Title'
     Font.Charset = ANSI_CHARSET
     Font.Color = clMaroon
-    Font.Height = -11
-    Font.Name = 'Tahoma'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
     ShowAccelChar = False
@@ -117,9 +120,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Visible = False
   end
   object LabelFileSize: TShadowLabel
-    Left = 348
-    Top = 180
-    Width = 348
+    Left = 438
+    Top = 204
+    Width = 337
     Height = 15
     AutoSize = False
     Caption = 'Size: 331 Bytes'
@@ -139,9 +142,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelDateTime: TShadowLabel
-    Left = 348
-    Top = 196
-    Width = 348
+    Left = 438
+    Top = 220
+    Width = 337
     Height = 15
     AutoSize = False
     Caption = 'Date/Time: mmm/dd/yyyy hh:nn:ss'
@@ -161,9 +164,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileType: TShadowLabel
-    Left = 348
-    Top = 212
-    Width = 348
+    Left = 438
+    Top = 236
+    Width = 337
     Height = 15
     AutoSize = False
     Caption = 'Type: Joint Photographic Experts Group (JPEG)'
@@ -183,8 +186,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object LabelFileTypeMismatch: TShadowLabel
-    Left = 391
-    Top = 227
+    Left = 481
+    Top = 251
     Width = 199
     Height = 16
     Caption = 'file type does not match file extension'
@@ -205,8 +208,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Visible = False
   end
   object LabelDimensions: TShadowLabel
-    Left = 348
-    Top = 164
+    Left = 438
+    Top = 188
     Width = 150
     Height = 15
     Caption = 'Dimensions: 1000x1000'
@@ -226,8 +229,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Transparent = True
   end
   object FrameImageCategoryIcon: TPanelEx
-    Left = 258
-    Top = 163
+    Left = 348
+    Top = 187
     Width = 82
     Height = 82
     Color1 = clWhite
@@ -251,7 +254,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object BottomBar: TPanelEx
     Left = 0
-    Top = 295
+    Top = 377
     Width = 784
     Height = 41
     Align = alBottom
@@ -395,9 +398,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
     end
   end
   object RenameImageEditBox: TEditEx
-    Left = 261
-    Top = 267
-    Width = 510
+    Left = 348
+    Top = 320
+    Width = 377
     Height = 21
     AutoSize = False
     Color = clWhite
@@ -407,9 +410,9 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object ImagePreviewFrame: TPanelEx
     Left = 8
-    Top = 88
-    Width = 239
-    Height = 239
+    Top = 80
+    Width = 329
+    Height = 329
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -423,8 +426,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
     object ImagePreview: TImage32
       Left = 0
       Top = 0
-      Width = 235
-      Height = 235
+      Width = 325
+      Height = 325
       Bitmap.DrawMode = dmBlend
       Bitmap.ResamplerClassName = 'TKernelResampler'
       Bitmap.Resampler.KernelClassName = 'TCosineKernel'
@@ -437,5 +440,18 @@ object FormImageDeleteRename: TFormImageDeleteRename
       ScaleMode = smResize
       TabOrder = 0
     end
+  end
+  object RenameImageEditBoxButtonReset: TBitBtnEx
+    Left = 727
+    Top = 319
+    Width = 49
+    Height = 23
+    Hint = 'Click here to confirm operation'
+    Caption = 'Reset'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+    Visible = False
+    OnClick = RenameImageEditBoxButtonResetClick
   end
 end

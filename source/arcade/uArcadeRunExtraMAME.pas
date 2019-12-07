@@ -1467,8 +1467,8 @@ begin
 
     SetTabButtonLineColors(PagesButtonBottomLine);
 
-    SetLabelColors(LabelMachineInUse,      clrLightRed, clrLightBlack);
-    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);
+    SetLabelColors(LabelMachineInUse,      LabelGameName.Font.Color, clrLightBlack);
+    SetLabelColors(LabelSoftwareListTitle, LabelGameName.Font.Color, clrLightBlack);
 
     // playback/record panel
     SetPanelNightColors(PanelInputListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);

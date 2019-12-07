@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, unitExIcon,
   StdCtrls, ImgList, ExtCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, Menus, BarMenus, IniFiles, ShellAPI, Buttons,
-  ComCtrls, ToolWin, SplitterEx, PanelEx;
+  ComCtrls, ToolWin, SplitterEx, PanelEx, ShadowLabel, ButtonsEx,
+  RichEditURL, EditEx;
 
 type
   TMissingIconInfo = class(TEasyItemStored)
@@ -120,24 +121,18 @@ type
     N4: TMenuItem;
     PopupNotUsedSaveIconsListToFile: TMenuItem;
     PopupNotUsedRemoveRenamedIcons: TMenuItem;
-    BottomBar: TCoolBar;
-    LabelTotalItemsMissing: TLabel;
-    LabelTotalItemsNotUsed: TLabel;
-    ButtonNotUsedDeleteFiles: TSpeedButton;
     PopupNotUsedClearFileHistory: TMenuItem;
-    NotUsedIconHistory: TRichEdit;
+    NotUsedIconHistory: TRichEditURL;
     PopupNotUsedUpdateIconInfoSelectedIcons: TMenuItem;
     PopupNotUsedUpdateIconInfoAllIcons: TMenuItem;
     N7: TMenuItem;
-    CoolBarNotUsedIconHistory: TCoolBar;
-    LabelFileHistory: TLabel;
-    ButtonClearHistoryNotUsed: TSpeedButton;
+    PanelNotUsedIconHistory: TPanelEx;
+    LabelFileHistory: TShadowLabel;
+    ButtonClearHistoryNotUsed: TSpeedButtonEx;
     N9: TMenuItem;
     PopupUpdateNotWorkingIconGames: TMenuItem;
     PopupUpdateNotWorkingIconGamesHelp: TMenuItem;
     PopupCopyIconZZZtoSelectedGames: TMenuItem;
-    ToolBarMissingIcons: TToolBar;
-    ButtonOptionsMissingGameIcons: TToolButton;
     PopupMissingIconsOptions: TBcBarPopupMenu;
     PopupSearchCloneIcons: TMenuItem;
     MenuItem12: TMenuItem;
@@ -170,11 +165,10 @@ type
     PanelButtons: TPanelEx;
     PanelToolBarButtons: TPanelEx;
     SystemIcon: TImage;
-    ButtonSystem: TBitBtn;
-    ButtonScanBoth: TBitBtn;
-    ButtonScanMissing: TBitBtn;
-    ButtonScanNotUsed: TBitBtn;
-    ButtonHelp: TBitBtn;
+    ButtonScanBoth: TBitBtnEx;
+    ButtonScanMissing: TBitBtnEx;
+    ButtonScanNotUsed: TBitBtnEx;
+    ButtonHelp: TBitBtnEx;
     PopupShowDevicesOnly: TMenuItem;
     N6: TMenuItem;
     PopupNotUsedSortListbyFilenames: TMenuItem;
@@ -182,6 +176,18 @@ type
     PopupSearchIconsSoftwarelistGames: TMenuItem;
     PopupShowSoftwarelistGamesOnly: TMenuItem;
     PopupSearchIconsDeviceSets: TMenuItem;
+    SystemSelectLabel: TShadowLabel;
+    OptionsMissingGameIconsButton: TSpeedButtonEx;
+    ButtonNotUsedDeleteFiles: TSpeedButtonEx;
+    LabelTotalItemsNotUsed: TShadowLabel;
+    LabelTotalItemsMissing: TShadowLabel;
+    PanelRenameFile: TPanelEx;
+    RenameFileIcon: TImage;
+    RenameFileNewFileName: TEditEx;
+    RenameFileTitleLabel: TShadowLabel;
+    RenameFileButtonOk: TBitBtnEx;
+    RenameFileButtonAbort: TBitBtnEx;
+    RenameFileOldFileName: TShadowLabel;
     procedure FormShow(Sender: TObject);
     function MissingIconsListItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
@@ -245,7 +251,6 @@ type
     procedure PopupRestoreColumnsSizesClick(Sender: TObject);
     procedure PopupMissingIconsPopup(Sender: TObject);
     procedure PopupMissSearchforGameTitleClick(Sender: TObject);
-    procedure ButtonSystemClick(Sender: TObject);
     procedure ButtonScanBothClick(Sender: TObject);
     procedure ButtonScanMissingClick(Sender: TObject);
     procedure ButtonScanNotUsedClick(Sender: TObject);
@@ -257,6 +262,10 @@ type
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
       var DoDefault: Boolean): Integer;
     procedure PopupNotUsedSortListbyFilenamesClick(Sender: TObject);
+    procedure SystemSelectLabelClick(Sender: TObject);
+    procedure OptionsMissingGameIconsButtonClick(Sender: TObject);
+    procedure RenameFileNewFileNameKeyPress(Sender: TObject; var Key: Char);
+    procedure RenameFileButtonOkClick(Sender: TObject);
   private
     { Private declarations }
     IconHistoryFolder: String;
@@ -309,8 +318,7 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon, uArcadeMAMu_ExcludedList, uRenameIconFile,
-  uArcadeDeleteMAMu_NotWorkingIcons;
+uses uMain, uStatus, uCommon, uArcadeMAMu_ExcludedList, uArcadeDeleteMAMu_NotWorkingIcons;
 
 {$R *.dfm}
 
@@ -337,6 +345,18 @@ begin
           True : Result:= 'Yes';
           False: Result:= '';
         end;
+      end;
+    50: // tiles view mode
+      begin
+        Result:= eName;
+        if FormMain.GameIsClone(eClone) then
+           Result:= Result+' [clone of '+eClone+']';
+
+        if FormMain.ValidateBiosName(eBiosName, eName) then
+           Result:= Result+' [bios '+eBiosName+']';
+
+        //if MemGameInfo.eSoftwareName <> '' then             //  change this to [software n64: Nintendo 64]
+        //   StatusBar_GamesGameName.Caption:= StatusBar_GamesGameName.Caption+' [software '+MemGameInfo.eSoftwareName+']';
       end;
   end;
 end;
@@ -531,11 +551,12 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.UpdateTotalGamesLabelMissing;
 begin
-  LabelTotalItemsMissing.Caption:= IntToStr(MissingIconsList.Groups.VisibleItemCount);
   if not (PopupGamesViewMode.Tag in [4, 5]) then
-     LabelTotalItemsMissing.Caption:= LabelTotalItemsMissing.Caption+' Missing Game Icons'
+     LabelTotalItemsMissing.Caption:= 'Missing Game Icons'
   else
-     LabelTotalItemsMissing.Caption:= LabelTotalItemsMissing.Caption+' Games With "Not Working" Icons';
+     LabelTotalItemsMissing.Caption:= 'Games With "Not Working" Icons';
+
+  LabelTotalItemsMissing.Caption:= LabelTotalItemsMissing.Caption+': '+IntToStr(MissingIconsList.Groups.VisibleItemCount);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.ResetMissingIconsList;
@@ -637,7 +658,7 @@ var
 
   function IsValidGame: Boolean;
   begin
-    Result:= uMain.TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag;
+    Result:= uMain.TEasyGameInfo(gItem).eSystemID = SystemSelectLabel.Tag;
     if Result then
        Result:= uMain.TEasyGameInfo(gItem).eSoftwareName = '';
 
@@ -676,7 +697,7 @@ var
     case Result of
       True:
         begin
-          addGameItem:= FormMain.ScanFoldersIcon(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName, ButtonSystem.Tag, FileFullPath, False);
+          addGameItem:= FormMain.ScanFoldersIcon(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName, SystemSelectLabel.Tag, FileFullPath, False);
           //addGameItem:= not addGameItem; // not needed, just for testing
         end;
       False: Exit; // for clone games, "SearchCloneGames" is disabled... need to exit, nothing to add!!
@@ -734,7 +755,7 @@ var
          TMissingIconInfo(Item).eMechanical:= FormMain.TempGameVars.eMechanical;
          TMissingIconInfo(Item).eGameStatus:= FormMain.TempGameVars.eGameSetStatus;
          TMissingIconInfo(Item).eIsIconZZZ:= iszzzIcon;
-         //Item.Details[1]:= 500;
+         Item.Details[1]:= 50;
        end;
     Application.ProcessMessages;
   end;
@@ -803,7 +824,7 @@ begin
      begin
        FormStatus.Close;
        if not Result then
-          GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(ButtonSystem.Tag),
+          GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                           '    Scan complete, but it seems that all games have icons. If you want to scan clone icons, '+
                           'make sure to select the "Search Clone Icons" check box.', 2);
      end;
@@ -961,7 +982,7 @@ begin
   CallMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
   FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(#13#10+'To ');
+  FormMain.AddMsgText(#13#10+'To      ');
   FormMain.AddMsgText(FilePath+NewName, MsgTxtColors.colorFileName, [fsBold]);
 
   if FileExists(FilePath+NewName) then
@@ -992,7 +1013,7 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.UpdateTotalFilesLabelNotUsed;
 begin
-  LabelTotalItemsNotUsed.Caption:= ' '+IntToStr(NotUsedIconsList.Groups.ItemCount)+' Not Used Icons';
+  LabelTotalItemsNotUsed.Caption:= ' Not Used Icons: '+IntToStr(NotUsedIconsList.Groups.ItemCount);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.ScanFiles(ShowFolderMessage: Boolean = True); // function for not used icons!!!!!
@@ -1039,7 +1060,7 @@ begin
       gItem:= FormMain.GamesListView.Groups.FirstInGroup(gGroup);
       repeat
         FormMain.FillTempGameInfo(gItem);
-        if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
+        if TEasyGameInfo(gItem).eSystemID = SystemSelectLabel.Tag then
            begin
              el_GamesList.Add(TEasyGameInfo(gItem).eName+'.ico');
              AddToHashedList(TEasyGameInfo(gItem).eBiosName);
@@ -1056,7 +1077,7 @@ begin
     gItem:= FormMain.GamesListView.Groups.FirstItem;
     repeat
       FormMain.FillTempGameInfo(gItem);
-      if TEasyGameInfo(gItem).eSystemID = ButtonSystem.Tag then
+      if TEasyGameInfo(gItem).eSystemID = SystemSelectLabel.Tag then
          begin
            el_GamesList.Add(TEasyGameInfo(gItem).eName+'.ico');
            AddToHashedList(TEasyGameInfo(gItem).eBiosName);
@@ -1073,7 +1094,7 @@ begin
   // scan icon files
   FormStatus.MessageStr('Building icons files list');
   tempList:= THashedStringList.Create;
-  GetFilesList(FormMain.GetMAMu_IconFolder(ButtonSystem.Tag, False), '.ico', '*.ico', tempList, False, False, True);
+  GetFilesList(FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), '.ico', '*.ico', tempList, False, False, True);
   Loop2:= Ord(tempList.Count > 0);
   case Boolean(Loop2) of
     True:
@@ -1108,7 +1129,7 @@ begin
              begin
                addItem:= NotUsedIconsList.Items.AddCustom(TNotUsedIconInfo, nil);
                TNotUsedIconInfo(addItem).eIconLoaded:= False;
-               TNotUsedIconInfo(addItem).eSystemID:= ButtonSystem.Tag;
+               TNotUsedIconInfo(addItem).eSystemID:= SystemSelectLabel.Tag;
                TNotUsedIconInfo(addItem).eFileName:= ExtractFileName(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eSize:= GetFileSize(tempList[Loop2]);
                TNotUsedIconInfo(addItem).eSizeText:= FormMain.GetSizeType(TNotUsedIconInfo(addItem).eSize, False);
@@ -1131,15 +1152,15 @@ begin
            end
         else
            begin
-             GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(ButtonSystem.Tag),
+             GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                              'Scanning complete but nothing was found.', 2);
            end;
       end;
     False:
       begin
-        GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(ButtonSystem.Tag),
+        GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                         'Could not find any icon files in the following folders.'+#13#10+
-                        FormMain.GetMAMu_IconFolder(ButtonSystem.Tag, False), 2);
+                        FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), 2);
       end;
   end;
   FreeAndNil(tempList);
@@ -1249,12 +1270,12 @@ procedure TFormArcadeMAMu_IconsManager.SelectSystem;
 var
   selSys: ShortInt;
 begin
-  selSys:= FormMain.CallSelectArcadeSystem(0, ButtonSystem.Tag-1);
+  selSys:= FormMain.CallSelectArcadeSystem(0, SystemSelectLabel.Tag-1);
   if selSys = -1 then
      Exit;
-  ButtonSystem.Tag:= selSys;
-  ButtonSystem.Caption:= FormMain.GetArcadeEmulatorDescription(selSys);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
+  SystemSelectLabel.Tag:= selSys;
+  SystemSelectLabel.Caption:= FormMain.GetArcadeEmulatorDescription(selSys);
+  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemSelectLabel.Tag, SystemIcon.Picture.Icon);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
@@ -1300,18 +1321,65 @@ end;
 procedure TFormArcadeMAMu_IconsManager.FormShow(Sender: TObject);
 var
   Folder: String;
+  Loop: Integer;
 begin
   ReadIniFile;
   IconHistoryFolder:= FormMain.FrontendPath+'resources\icons_history\';
   CheckAndCreateFolder(IconHistoryFolder);
   Folder:= FormMain.GetFolderFull(32);
-  
+
   FormMain.ELV_ResetNormalColors(MissingIconsList);
   FormMain.ELV_ResetNormalColors(NotUsedIconsList);
-  ButtonSystem.Caption:= '  '+FormMain.GetArcadeEmulatorDescription(ButtonSystem.Tag);
-  FormMain.AddGamesSystemsIcons(IL_MissingIcons);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(ButtonSystem.Tag, SystemIcon.Picture.Icon);
 
+  FormMain.ELV_SetBackgroundColor(MissingIconsList, True);
+
+  MissingIconsList.Font:= FormMain.GamesListView.Font;
+  if MissingIconsList.Font.Size > 9 then
+     MissingIconsList.Font.Size:= 9;
+
+  if IsNightMode then
+     begin
+       FormArcadeMAMu_IconsManager.Color:= menu_background_color[1];
+
+       FormMain.SetToolBarPanelColors(FormMain.PanelSearchGames_ToolBar, PanelToolBarButtons);
+       FormMain.SetToolBarPanelColors(FormMain.PanelSearchGames_ToolBar, PanelNotUsedIconHistory);
+
+       for Loop:= 0 to FormArcadeMAMu_IconsManager.ComponentCount-1 do
+       begin
+         if FormArcadeMAMu_IconsManager.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormArcadeMAMu_IconsManager.Components[Loop]))
+         else
+         if FormArcadeMAMu_IconsManager.Components[Loop] is TSpeedButtonEx then
+            FormMain.SetButtonExColors(TSpeedButtonEx(FormArcadeMAMu_IconsManager.Components[Loop]));
+       end;
+
+       FormMain.SetEasyListViewColors(MissingIconsList, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewHeaderColors(MissingIconsList, True);
+       FormMain.ELV_SetEditBkColor(MissingIconsList);
+
+       FormMain.SetEasyListViewColors(NotUsedIconsList, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewHeaderColors(NotUsedIconsList, True);
+       FormMain.ELV_SetEditBkColor(NotUsedIconsList);
+       FormMain.ELV_SetRibbonNightColors(0, NotUsedIconsList, True);
+
+       FormMain.SetWin10DarkScrollBar(MissingIconsList);
+       FormMain.SetWin10DarkScrollBar(NotUsedIconsList);
+
+       SetLabelColors(SystemSelectLabel, clCream);
+       SetLabelColors(LabelTotalItemsMissing, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelTotalItemsNotUsed, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelFileHistory, clCream);
+
+       NotUsedIconHistory.Color:= menu_background_color[1];
+       NotUsedIconHistory.Font.Color:= item_caption_active_color[1];
+       FormMain.SetWin10DarkScrollBar(NotUsedIconHistory);
+
+       SetEditNightColors(RenameFileNewFileName);
+     end;
+     
+  SystemSelectLabel.Caption:= FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag);
+  FormMain.AddGamesSystemsIcons(IL_MissingIcons);
+  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemSelectLabel.Tag, SystemIcon.Picture.Icon);
 
   ExcludeFileStr:= FormMain.GetArcadeFolder+'el_mamu_exclude.ini';
   ExcludeFiles:= THashedStringList.Create;
@@ -1347,31 +1415,44 @@ procedure TFormArcadeMAMu_IconsManager.MissingIconsListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  FormMain.GetCanvasFontCustom(
+  FormMain.GetCanvasFont(
                 TMissingIconInfo(Item).eSystemID,
+                -1, False,
                 TMissingIconInfo(Item).eGameStatus,
                 TMissingIconInfo(Item).eDriverStatus,
-                TMissingIconInfo(Item).eClone, ACanvas, True, False);
+                TMissingIconInfo(Item).eClone, ACanvas, False, MissingIconsList);
+
+  if ACanvas.Font.Size > 9 then
+     ACanvas.Font.Size:= 9;
+
   if MissingIconsList.View = elsTile then
      begin
        if Position > 0 then
           begin
-            ACanvas.Font.Color:= clMaroon;
-            ACanvas.Font.Name:= 'Consolas';
-            ACanvas.Font.Size:= 8;
-            ACanvas.Font.Style:= [];
+            if IsNightMode then
+               ACanvas.Font.Color:= clrLightRed
+            else
+               ACanvas.Font.Color:= clMaroon;
+            ACanvas.Font:= FormMain.Font_TilesViewDetailsText;
+            if ACanvas.Font.Size > 9 then
+               ACanvas.Font.Size:= 9;
+
+            //ACanvas.Font.Name:= 'Consolas';
+            //ACanvas.Font.Size:= 8;
+            //ACanvas.Font.Style:= [];
           end;
-     end
-  else
-  begin
-    if not (Position in [0, 6]) then
-       begin
-         // only columns Title and Manufacturer will use user defined font
-         // all others will use Tahoma, size 8 
-         ACanvas.Font.Name:= 'Tahoma';
-         ACanvas.Font.Size:= 8;
-       end;
-  end;
+     end;
+  FormMain.ELV_ItemPaintText_General(MissingIconsList, Item, ACanvas, TMissingIconInfo(Item).eGameStatus);
+  //else
+  //begin
+  //  if not (Position in [0, 6]) then
+  //     begin
+  //       // only columns Title and Manufacturer will use user defined font
+  //       // all others will use Tahoma, size 8
+  //       ACanvas.Font.Name:= 'Tahoma';
+  //       ACanvas.Font.Size:= 8;
+  //     end;
+  //end;
 end;
 
 procedure TFormArcadeMAMu_IconsManager.MissingIconsListColumnClick(
@@ -1547,15 +1628,25 @@ procedure TFormArcadeMAMu_IconsManager.NotUsedIconsListItemPaintText(
 begin
   if not SameText(TNotUsedIconInfo(Item).eFileName, TNotUsedIconInfo(Item).eNameOriginal) then
      begin
-       ACanvas.Font.Color:= clMaroon;
-       ACAnvas.Font.Style:= [fsBold];
+       if IsNightMode then
+          ACanvas.Font.Color:= clrLightRed
+       else
+          ACanvas.Font.Color:= clMaroon;
+       ACanvas.Font.Style:= [fsBold];
      end;
   if Position > 0 then
      begin
        ACanvas.Font.Name:= 'Consolas';
-       ACanvas.Font.Size:= 8;
+       ACanvas.Font.Size:= 9;
+       if IsNightMode then
+          if Item.Selected then
+             begin
+               if Sender.Focused then
+                  ACanvas.Font.Color:= clSilver;
+             end
+          else
+             ACanvas.Font.Color:= clSilver;
      end;
-       //ACanvas.Font.Size:= ACanvas.Font.Size-2;
 end;
 
 procedure TFormArcadeMAMu_IconsManager.NotUsedIconsListItemSelectionChanged(
@@ -1564,8 +1655,12 @@ begin
   if Item.Selected and (NotUsedIconsList.Selection.Count = 1) then
      begin
        SelectedItemNotUsed:= Item;
-       FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedIconInfo(Item).eFileName, TNotUsedIconInfo(Item).eNameOriginal))),
-                                    NotUsedIconsList);
+       if IsNightMode then
+          FormMain.ELV_SetRibbonNightColors(Ord((not SameText(TNotUsedIconInfo(Item).eFileName, TNotUsedIconInfo(Item).eNameOriginal))),
+                                            NotUsedIconsList)
+       else
+          FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedIconInfo(Item).eFileName, TNotUsedIconInfo(Item).eNameOriginal))),
+                                       NotUsedIconsList);
        UpdateHistoryPanel(Item);
      end;
 end;
@@ -1625,7 +1720,7 @@ procedure TFormArcadeMAMu_IconsManager.PopupEditIconClick(Sender: TObject);
 begin
   if NotUsedIconsList.Selection.Count <> 1 then
      Exit;
-  if FileExists(TNotUsedIconInfo(SelectedItemNotUsed).eFullPath+TNotUsedIconInfo(SelectedItemNotUsed).eFileName) then
+  if FileExistsW(WideString(TNotUsedIconInfo(SelectedItemNotUsed).eFullPath+TNotUsedIconInfo(SelectedItemNotUsed).eFileName)) then
      begin
        AddFileHistory(SelectedItemNotUsed, 'Edit with associated editor');
        SaveHistoryToFile(SelectedItemNotUsed);
@@ -1747,65 +1842,20 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.PopupNotUsedRenameFileClick(
   Sender: TObject);
-var
-  OldName, NewName: String;
 
-  procedure UpdateMissingIcon(const GameName, SoftwareName: String);
-  var
-    MissingItem: TEasyItem;
-  begin
-    MissingItem:= SearchName(ChangeFileExt(GameName, ''), SoftwareName);
-    if MissingItem <> nil then
-       begin
-         TMissingIconInfo(MissingItem).eIconLoaded:= False;
-         if SoftwareName = '' then
-            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification
-         else
-            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification; // this is new softlist game image index uMain "MaxGameID"
-         MissingItem.Invalidate(True);
-       end;
-  end;
-  
 begin
   if NotUsedIconsList.Selection.Count <> 1 then
      Exit;
-  OldName:= TNotUsedIconInfo(SelectedItemNotUsed).eFileName;
-  if not Assigned(FormRenameIconFile) then
-     FormRenameIconFile:= TFormRenameIconFile.Create(nil);
 
-  IL_NotUsedIcons.GetIcon(TNotUsedIconInfo(SelectedItemNotUsed).eImageIndex, FormRenameIconFile.Icon.Picture.Icon);
-  FormRenameIconFile.Left:= PanelNotUsedIcons.Left+FormArcadeMAMu_IconsManager.Left+10;
-  FormRenameIconFile.Top:= PanelNotUsedIcons.Top+FormArcadeMAMu_IconsManager.Top+28;
+  IL_NotUsedIcons.GetIcon(TNotUsedIconInfo(SelectedItemNotUsed).eImageIndex, RenameFileIcon.Picture.Icon);
 
-  FormRenameIconFile.OldFileName:= OldName;
-  FormRenameIconFile.NewFilename.Text:= OldName;
-  FormRenameIconFile.NewFilename.SelectAll;
-  FormRenameIconFile.ShowModal;
-  NewName:= Trim(FormRenameIconFile.NewFilename.Text);
-  if FormRenameIconFile.mmResult = mrOk then
-     begin
-       NewName:= ChangeFileExt(NewName, '.ico');
-       case RenameIconFile(OldName, NewName, TNotUsedIconInfo(SelectedItemNotUsed).eFullPath) of
-         True:
-           begin
-             AddFileHistory(SelectedItemNotUsed, Format('Rename from "%s" to "%s" (ok)', [ExtractFileName(OldName), ExtractFileName(NewName)]));
-             TNotUsedIconInfo(SelectedItemNotUsed).eFileName:= NewName;
-             SelectedItemNotUsed.Invalidate(True);
-             FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedIconInfo(SelectedItemNotUsed).eFileName,
-                                                            TNotUsedIconInfo(SelectedItemNotUsed).eNameOriginal))),
-                                          NotUsedIconsList);
-             UpdateMissingIcon(OldName, ''); // need to add SoftwareName here ????
-             UpdateMissingIcon(NewName, ''); // need to add SoftwareName here ????
-           end;
-         False:
-           begin
-             AddFileHistory(SelectedItemNotUsed, Format('Rename from "%s" to "%s" (failed)', [ExtractFileName(OldName), ExtractFileName(NewName)]));
-           end;
-       end;
-       SaveHistoryToFile(SelectedItemNotUsed, OldName);
-       UpdateHistoryPanel(SelectedItemNotUsed);
-     end;
-  FreeAndNil(FormRenameIconFile);
+  RenameFileOldFileName.Caption:= TNotUsedIconInfo(SelectedItemNotUsed).eFileName;
+
+  RenameFileNewFileName.Text:= RenameFileOldFileName.Caption;
+  RenameFileNewFileName.SelectAll;
+
+  PanelRenameFile.Show;
+  RenameFileNewFileName.SetFocus;
 end;
 
 procedure TFormArcadeMAMu_IconsManager.PopupNotUsedSaveIconsListToFileClick(
@@ -1902,7 +1952,7 @@ begin
   if NewWidth < 790 then
      Resize:= False;
   LabelTotalItemsNotUsed.Left:= PanelNotUsedIcons.Left;
-  ButtonNotUsedDeleteFiles.Left:= BottomBar.Width-159;
+  ButtonNotUsedDeleteFiles.Left:= PanelNotUsedIconHistory.Width-ButtonNotUsedDeleteFiles.Width-1;
 end;
 
 procedure TFormArcadeMAMu_IconsManager.ButtonCloseClick(Sender: TObject);
@@ -2005,9 +2055,9 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.SplitterListMoved(Sender: TObject);
 begin
-  NotUsedIconsList.CellSizes.Tile.Width:= NotUsedIconsList.Width-GetSystemMetrics(SM_CXVSCROLL);//18;
+  NotUsedIconsList.CellSizes.Tile.Width:= NotUsedIconsList.Width-GetSystemMetrics(SM_CXVSCROLL);
   LabelTotalItemsNotUsed.Left:= PanelNotUsedIcons.Left;
-  LabelFileHistory.Left:= Round(LabelFileHistory.Parent.Width div 2);
+  //LabelFileHistory.Left:= Round(LabelFileHistory.Parent.Width div 2);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.FormActivate(Sender: TObject);
@@ -2024,6 +2074,7 @@ begin
             FormArcadeMAMu_IconsManager.Left:= (Screen.Width-FormArcadeMAMu_IconsManager.Width) div 2;
           end;
      end;
+  NotUsedIconsList.CellSizes.Tile.Width:= NotUsedIconsList.Width-GetSystemMetrics(SM_CXVSCROLL);
   MissingIconsList.Tag:= 1;
 end;
 
@@ -2204,11 +2255,6 @@ begin
   CallShellExecute(Sender, SearchString); //ShellExecute(Handle, 'open', PAnsiChar(SearchString), nil, nil, SW_SHOWNORMAL);
 end;
 
-procedure TFormArcadeMAMu_IconsManager.ButtonSystemClick(Sender: TObject);
-begin
-  SelectSystem;
-end;
-
 procedure TFormArcadeMAMu_IconsManager.ButtonScanBothClick(Sender: TObject);
 begin
   if not ValidateMAMu_Folders then
@@ -2324,6 +2370,111 @@ begin
   NotUsedIconsList.BeginUpdate;
   NotUsedIconsList.Sort.SortAll;
   NotUsedIconsList.EndUpdate;
+end;
+
+procedure TFormArcadeMAMu_IconsManager.SystemSelectLabelClick(Sender: TObject);
+begin
+  SelectSystem;
+end;
+
+procedure TFormArcadeMAMu_IconsManager.OptionsMissingGameIconsButtonClick(
+  Sender: TObject);
+begin
+  ShowDropdownMenu(TSpeedButtonEx(Sender), PopupMissingIconsOptions);
+end;
+
+procedure TFormArcadeMAMu_IconsManager.RenameFileNewFileNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key in ['/', '*', '?', '<', '>', '|', ':', ';'] then
+     begin
+       Key:= Char(0);
+       Exit;
+     end;
+  if Key = #13 then
+     begin
+       Key:= #0; // to remove the "ding" sound when pressing some keys like ENTER, ESC and others
+       RenameFileButtonOk.Click;
+     end
+  else
+  if Key = #27 then
+     begin
+       Key:= #0;
+       RenameFileButtonAbort.Click;
+     end;
+end;
+
+procedure TFormArcadeMAMu_IconsManager.RenameFileButtonOkClick(
+  Sender: TObject);
+var
+  NewName, OldName: String;
+  Continue: Boolean;
+
+  procedure UpdateMissingIcon(const GameName, SoftwareName: String);
+  var
+    MissingItem: TEasyItem;
+  begin
+    MissingItem:= SearchName(ChangeFileExt(GameName, ''), SoftwareName);
+    if MissingItem <> nil then
+       begin
+         TMissingIconInfo(MissingItem).eIconLoaded:= False;
+         if SoftwareName = '' then
+            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification
+         else
+            TMissingIconInfo(MissingItem).eImageIndex:= TMissingIconInfo(MissingItem).eROMIdentification; // this is new softlist game image index uMain "MaxGameID"
+         MissingItem.Invalidate(True);
+       end;
+  end;
+  
+begin
+  if TBitBtnEx(Sender).Tag = 1 then
+  begin
+    Continue:= True;
+    NewName:= Trim(RenameFileNewFileName.Text);
+    OldName:= RenameFileOldFileName.Caption;
+    if (NewName = '') or (NewName = '.') then
+       Continue:= False
+    else
+    begin
+      NewName:= ChangeFileExt(NewName, '.ico'); // make sure file extension is ".ico"
+      Continue:= not SameText(NewName, OldName);
+    end;
+
+    if Continue then
+    begin
+       case RenameIconFile(OldName, NewName, TNotUsedIconInfo(SelectedItemNotUsed).eFullPath) of
+         True:
+           begin
+             AddFileHistory(SelectedItemNotUsed, Format('Rename from "%s" to "%s" (ok)', [ExtractFileName(OldName), ExtractFileName(NewName)]));
+             TNotUsedIconInfo(SelectedItemNotUsed).eFileName:= NewName;
+             SelectedItemNotUsed.Invalidate(True);
+
+             if IsNightMode then
+                FormMain.ELV_SetRibbonNightColors(Ord((not SameText(TNotUsedIconInfo(SelectedItemNotUsed).eFileName,
+                                                  TNotUsedIconInfo(SelectedItemNotUsed).eNameOriginal))),
+                                                  NotUsedIconsList)
+             else
+                FormMain.ELV_SetSelectRibbon(Ord((not SameText(TNotUsedIconInfo(SelectedItemNotUsed).eFileName,
+                                            TNotUsedIconInfo(SelectedItemNotUsed).eNameOriginal))),
+                                            NotUsedIconsList);
+             UpdateMissingIcon(OldName, ''); // need to add SoftwareName here ????
+             UpdateMissingIcon(NewName, ''); // need to add SoftwareName here ????
+           end;
+         False:
+           begin
+             AddFileHistory(SelectedItemNotUsed, Format('Rename from "%s" to "%s" (failed)', [ExtractFileName(OldName), ExtractFileName(NewName)]));
+           end;
+       end;
+       SaveHistoryToFile(SelectedItemNotUsed, OldName);
+       UpdateHistoryPanel(SelectedItemNotUsed);
+    end;
+  end;
+
+  RenameFileIcon.Picture.Icon:= nil;
+  RenameFileOldFileName.Caption:= '';
+  RenameFileNewFileName.Clear;
+  PanelRenameFile.Hide;
+  NotUsedIconsList.SetFocus;
 end;
 
 end.

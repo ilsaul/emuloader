@@ -711,11 +711,10 @@ begin
       end;
     end;
 
-    SetLabelColors(LabelGameDetails,     LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelEmulatorVersion, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-    SetLabelColors(LabelSoftwareList,    LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
-                                             // 200,83,0   200,200,0
-    SetLabelColors(LabelSoftwareListTitle, clrLightRed, clrLightBlack);
+    SetLabelColors(LabelGameDetails,       LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelEmulatorVersion,   LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelSoftwareList,      LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
+    SetLabelColors(LabelSoftwareListTitle, LabelGameDetails.Font.Color, LabelGameDetails.ShadowColor);
 
     FormMain.SetEasyListViewColors(FilesListView, FormDeleteGamesFiles.Color, clWhite);
     FormMain.ELV_SetCheckRadioCustomIcon(FilesListView);

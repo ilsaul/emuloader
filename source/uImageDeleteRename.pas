@@ -5,7 +5,7 @@ interface
 uses
   Windows, Classes, Graphics, Controls, Forms, GR32_Image, StdCtrls, ExtCtrls,
   PanelEx, ShadowLabel, uCommon, uCommonCustom, SysUtils, Buttons, GraphicEx,
-  EditEx, ButtonsEx;
+  EditEx, ButtonsEx, AdvOfficeButtons;
 
 type
   TFormImageDeleteRename = class(TForm)
@@ -32,11 +32,13 @@ type
     MediaTypeIcon: TImage;
     LabelDimensions: TShadowLabel;
     ImageCategoryIcon: TImage;
+    RenameImageEditBoxButtonReset: TBitBtnEx;
     procedure FormShow(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
     procedure RenameImageEditBoxKeyPress(Sender: TObject; var Key: Char);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure RenameImageEditBoxButtonResetClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -75,13 +77,16 @@ begin
        SetLabelColors(LabelFileType,         clCream, item_caption_active_shadow_color[1]);
        SetLabelColors(LabelRenameImage,      clCream, item_caption_active_shadow_color[1]);
        SetPanelNightColors(ImagePreviewFrame, -1, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       //SetCheckBoxColors(EnableLargePreviewImage, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       //FormMain.SetCheckBoxExCustomIcon(EnableLargePreviewImage);
 
-       FrameImageCategoryIcon.Style:= vgSimple;
-       SetPanelNightColors(FrameImageCategoryIcon, clrDarkBlue, clrLightBlack, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       //FrameImageCategoryIcon.Style:= vgSimple;
+       SetPanelNightColors(FrameImageCategoryIcon, clrLightBlack{clrDarkBlue}, clrLightBlack, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
        SetEditNightColors(RenameImageEditBox);
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.SetButtonExColors(RenameImageEditBoxButtonReset);
      end;
 
   FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
@@ -159,9 +164,9 @@ begin
   FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
 
   mmResult:= mrCancel;
-  RenameImageEditBox.Visible:= FormImageDeleteRename.Tag = 1;
+  RenameImageEditBox.Visible:= FormImageDeleteRename.Tag = 1; // 0 -> delete; 1 -> rename
   LabelRenameImage.Visible:= RenameImageEditBox.Visible;
-  // 0 -> delete; 1 -> rename
+  RenameImageEditBoxButtonReset.Visible:= RenameImageEditBox.Visible;
 
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
 
@@ -174,7 +179,7 @@ begin
     begin
       Caption:= 'Rename Image File';
       ButtonOk.Caption:= 'Rename File';
-      RenameImageEditBox.Text:= ChangeFileExtW(ExtractFileNameW(ImageFileName), '');
+      RenameImageEditBoxButtonReset.Click; // RenameImageEditBox.Text:= ChangeFileExtW(ExtractFileNameW(ImageFileName), '');
       RenameImageEditBox.SetFocus;
     end;
 end;
@@ -201,7 +206,7 @@ begin
       end;
     #27:
       begin
-        Key:= #0; // remove the "ding" sound when pressing ESC/ENTER keys
+        Key:= #0;
         ButtonCancel.Click;
       end;
   end;
@@ -220,6 +225,12 @@ begin
   if (mmResult = mrOk) then
      if ((FormImageDeleteRename.Tag = 1) and (Trim(RenameImageEditBox.Text) = '')) then
      CanClose:= False;
+end;
+
+procedure TFormImageDeleteRename.RenameImageEditBoxButtonResetClick(
+  Sender: TObject);
+begin
+  RenameImageEditBox.Text:= ChangeFileExtW(ExtractFileNameW(ImageFileName), '');
 end;
 
 end.

@@ -273,7 +273,7 @@ var
   zIcon: TIcon;
   //FolderStr: String;
 begin
-  FormArcadeDeleteMAMu_NotWorkingIcons.Tag:= FormArcadeMAMu_IconsManager.ButtonSystem.Tag;
+  FormArcadeDeleteMAMu_NotWorkingIcons.Tag:= FormArcadeMAMu_IconsManager.SystemSelectLabel.Tag;
   ButtonSourceIcon.Enabled:= LabelHotkeys.Tag <> 0; // delete files only support zzz.ico ?
   FormArcadeMAMu_IconsManager.SourceIconFile:= 'zzz.ico';
   case LabelHotkeys.Tag of

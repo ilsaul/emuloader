@@ -173,7 +173,10 @@ begin
        end;
       0: // File Missing
         begin
-          LabelSource.Font.Color:= clRed;
+          if IsNightMode then
+             LabelSource.Font.Color:= clrLightRed
+          else
+             LabelSource.Font.Color:= clRed;
           if IsNightMode then
              LabelSource.ShadowColor:= $323200;
         end;
@@ -181,7 +184,7 @@ begin
         begin
           if IsNightMode then
              begin
-               LabelSource.Font.Color:= clLime;
+               LabelSource.Font.Color:= clrLightGreen;// clLime;
                LabelSource.ShadowColor:= $003232;
              end
           else
@@ -191,7 +194,7 @@ begin
         begin
           if IsNightMode then
              begin
-               LabelSource.Font.Color:= clYellow;
+               LabelSource.Font.Color:= clrOrangeBarTop;//clYellow;
                LabelSource.ShadowColor:= $003232;
              end
           else
@@ -209,52 +212,6 @@ var
   begin
     Result:= FileFound;
   end;
-
-  function Wrap_Label_No_Spaces(LabelSource: TShadowLabel; const AText: String): Boolean;
-  var
-    i: integer;
-    s: String;
-    WrappedText: String;
-  begin
-    Result:= True;
-    s:= '';
-    WrappedText:= '';
-    LabelSource.Caption:= '';
-    i:= 1;
-    while i <= Length(AText) do begin
-      s:= s+AText[i];
-      if LabelSource.Canvas.TextWidth(s) > LabelSource.ClientWidth then
-         begin
-           System.Delete(s, Length(s), 1);
-           WrappedText:= WrappedText+s+#13#10;
-           s:= '';
-         end
-      else
-        Inc(i);
-    end;
-    LabelSource.Caption:= WrappedText;
-  end;
-  {
-  var
-    i:integer;
-    mylen:integer;
-    s1:string;
-    s2:string;
-  begin
-    s1:= '0123456789012345678901234567890123456789';
-    s2:='';
-    mylen := 5;
-    i:=1;
-    repeat
-      s2:=s2+s1[i];
-      if (i mod mylen) = 0 then begin
-        s2:= s2+#10#13;
-      end;
-      inc(i);
-    until i > length(s1);
-    label1.caption := s2;
-  end;
-  }
 
 begin
   Result:= sValue <> '';
@@ -274,16 +231,13 @@ begin
      begin
        LeftPanelSize:= LeftTextMaxSize;
        // enable WordWrap and create a 2 lines label
-       // for manufacturer, category and maybe game file (MAME "CPS3" set has a really huge .chd filename)
-       // DOESN'T work for filenames without spaces (September 16, 2016)
+       // for manufacturer, category and game file (MAME "CPS3" set has a really huge .chd filename)
        LabelTemp.AutoSize:= False;
        LabelTemp.Width:= LeftPanelSize;
-       LabelTemp.Height:= LabelTemp.Height+8;
+       LabelTemp.Height:= LabelTemp.Height*2;
 
        LabelTemp.WordWrap:= True;
-       LabelTemp.AutoSize:= True;
-       LabelTemp.AutoSize:= False;
-       LabelTemp.Width:= LeftPanelSize;
+       LabelTemp.WordWrapSpaceless:= True;
 
        if sLabelHint <> '' then
           begin // only enable label hint if text is bigger than panel

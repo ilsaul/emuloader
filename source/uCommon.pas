@@ -16,8 +16,8 @@ const
   MaxArcadeSystems = 8;
   MaxIniCountMAME: Byte = 12; // MAME .ini files array - see more in uMain.GetCustomIniFileMAME() function
   MaxImagePerCategory = 30;
-  MaxImageLayouts = 26; // single, dual, triple, quad
-  MaxImagePanels = 4;
+  MaxImageLayouts     = 26; // single, dual, triple, quad
+  MaxImagePanels      = 4;
 
   idMAME       = 1;
   idSupermodel = 2;
@@ -33,11 +33,11 @@ const
   //idFontClone       = 1;
   //idFontMissingROMs = 2;
 
-  aScreenType: packed array[-1..4] of String = ('', 'Raster', 'Vector', 'LCD', 'SVG', 'Unknown');  
+  aScreenType:  packed array[-1..4] of String = ('', 'Raster', 'Vector', 'LCD', 'SVG', 'Unknown');
   aOrientation: packed array[-1..1] of String = ('', 'Horizontal', 'Vertical');
-  aStatus: packed array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
-  aSaveState: packed array[-1..1] of String = ('', 'Unsupported', 'Supported');
-  aMediaType: packed array[-1..1] of packed array[0..1] of String =
+  aStatus:      packed array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
+  aSaveState:   packed array[-1..1] of String = ('', 'Unsupported', 'Supported');
+  aMediaType:   packed array[-1..1] of packed array[0..1] of String =
     (('', ''),
      ('ROM', 'zipfile'),
      ('Compressed Hunks of Data', 'chd'));
@@ -68,7 +68,7 @@ const
      ('image_16_select',      'Select',           'select.png',        'select',     'select_directory',          'Select'));
 
   aColumns: packed array[0..23] of packed array[0..1] of String = (
-     //IniEntryName,     ColumnTitle
+   // IniEntryName,      ColumnTitle
      ('Title',           'Title'),            // 00
      ('Year',            'Year'),             // 01
      ('Manufacturer',    'Manufacturer'),     // 02
@@ -77,7 +77,7 @@ const
      ('Resolution',      'Resolution'),       // 04
      ('RefreshRate',     'Refresh Rate'),     // 05
 
-     ('Category',        'Category'),         // 06 catver.ini (MAME arcade); mess.ini (version.ini pack from AntoPISA); non-arcade machines -listxml; softlist <description> (hash\softwarelist.xml files)
+     ('Category',        'Category'),         // 06 catver.ini / category.ini (MAME arcade); mess.ini (version.ini pack AntoPISA); non-arcade machines -listxml; softlist <description> (hash\softwarelist.xml files)
      ('VersionAdded',    'Version Added'),    // 07
 
      ('Name',            'Game Name'),        // 08
@@ -105,12 +105,12 @@ const
     400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 115, 130, 110, 130, 65);
 
   aColumnsMachinesList: packed array[0..6] of String =
-     ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // Machines List Side Panel
+     ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // MAME Machines Filter Panel
 
-  aColumnsWidthMachinesList: packed array[0..6] of Integer =         // Machines List Side Panel
+  aColumnsWidthMachinesList: packed array[0..6] of Integer =  // MAME Machines Filter Panel
      (250, 45, 120, 85, 85, 95, 90);
 
-  aColumnsSoftwareListOrder: packed array[0..11] of Integer =
+  aColumnsSoftwareListOrder: packed array[0..11] of Integer = // MAME Machines Filter Panel
      ( 0,  // 00 -> title
        1,  // 01 -> year
        2,  // 02 -> manufacturer
@@ -124,8 +124,7 @@ const
       13,  // 10 -> emulation status
       19); // 11 -> game size
 
-  ChecksumMode: array [0..4] of TMessageDigestClass = (
-    TMD2, TMD4, TMD5, TSHA1, TRIPEMD160);
+  ChecksumMode: array [0..4] of TMessageDigestClass = (TMD2, TMD4, TMD5, TSHA1, TRIPEMD160);
 
   {ListSelectionColors: packed array[0..4] of packed array[0..1] of Integer =
     // normal colors (blue), missing ROMs/CHDs colors (red),
@@ -270,7 +269,7 @@ const
   clrMedSilver   = TColor($00e6e6e6); // RGB(230, 230, 230) -> for system title bar
 
   clrBlackBk     = TColor($00000001); // RGB(0, 0, 1) -> this is needed to create gradient in TPanelEx
-  clrLightBlack  = TColor($000f0f0f); // RGB(15, 15, 15) -> used in system title background... "Console/Computer Emulator Settings" screen and others
+  clrLightBlack  = TColor($000f0f0f); // RGB(15, 15, 15) -> used in system title background - "Console/Computer Emulator Settings" screen and others
 
   clrLightBlue   = TColor($00ff9933); // RGB(51, 153, 255)
   clrMedBlue     = TColor($00c83232); // RGB(50, 50, 200)
@@ -306,18 +305,24 @@ const
 
   // position 0 -> light mode; position 1 -> night mode
   menu_background_color: array[0..1] of Integer = ($00fafafa, $00272727);
-  hint_line_color: array[0..1] of Integer = ($00c5c5c5, clrBorderGroupBoxGrayBk);//$00c5c5c5);
+
+  hint_line_color: array[0..1] of Integer = ($00c5c5c5, clrBorderGroupBoxGrayBk);
   hint_text_color: array[0..1] of Integer = ($00993300, $00af912b);
-  item_caption_active_color: array[0..1] of Integer = (clBlack, $00bfdfe0);
-  item_caption_active_shadow_color: array[0..1] of Integer = (clGray, $00404b4c); //$00566465);
-  item_caption_disabled_color: array[0..1] of Integer = ($00c5c5c5, clGray);
-  item_shortcut_color: array[0..1] of Integer = ($006e1500, clrLightBlue);
+
+  item_caption_active_color:        array[0..1] of Integer = (clBlack, $00bfdfe0);
+  item_caption_active_shadow_color: array[0..1] of Integer = (clGray, $00404b4c);
+  item_caption_disabled_color:      array[0..1] of Integer = ($00c5c5c5, clGray);
+
+  item_shortcut_color:          array[0..1] of Integer = ($006e1500, clrLightBlue);
   item_shortcut_selected_color: array[0..1] of Integer = ($006e1500, clrDarkBlue);
-  item_caption_selected_color: array[0..1] of Integer = ($006e1500, $006e1500);
-  help_text_color: array[0..1] of Integer = (clMedGray, clGray); // RGB(255, 255, 255) - night mode (new March 17, 2019)
-  help_text_selected_color: array[0..1] of Integer = (clGray, clrDarkSilver); // RGB(255, 255, 255) - night mode (new March 17, 2019) ... $00c5c5c5 color is unreadable!
-  checked_framecolor: array[0..1] of Integer = ($00399bf7, $00399bf7);//, $00fce489);
-  checked_innerframecolor: array[0..1] of Integer = ($00f1f1f1, $005d5d5d);// ($009ccefc, $009ccefc); // (new March 17, 2019)
+
+  item_caption_selected_color:  array[0..1] of Integer = ($006e1500, $006e1500);
+
+  help_text_color:          array[0..1] of Integer = (clMedGray, clGray);
+  help_text_selected_color: array[0..1] of Integer = (clGray, clrDarkSilver);
+
+  checked_framecolor:      array[0..1] of Integer = ($00399bf7, $00399bf7);
+  checked_innerframecolor: array[0..1] of Integer = ($00f1f1f1, $005d5d5d);
 
   selection_frame_color: array[0..1] of Integer = ($0000b7ff, $000078f0); // RGB(240, 125, 0)   - night mode
   selection_singlecolor: array[0..1] of Integer = ($0000b7ff, $000078f0); // RGB(240, 125, 0)   - night mode
@@ -356,7 +361,7 @@ type
   TWideFileStream = class(THandleStream)
   public
     constructor Create(const FileName: WideString; Mode: Word);
-    destructor Destroy; override;
+    destructor  Destroy; override;
   end;
 
   TWideMemoryStream = class(TMemoryStream)
@@ -373,13 +378,13 @@ type
   public
     constructor Create(Instance: THandle; const ResName: WideString; ResType: PWideChar);
     constructor CreateFromID(Instance: THandle; ResID: Word; ResType: PWideChar);
-    destructor Destroy; override;
-    function Write(const Buffer; Count: Longint): Longint; override;
+    destructor  Destroy; override;
+    function  Write(const Buffer; Count: LongInt): LongInt; override;
     procedure SaveToFile(const FileName: WideString);
   end;
 
   PRGB = ^TRGB;
-  TRGB = record b, g, r: Byte;
+  TRGB = record B, G, R: Byte;
   end;
   PRGBArray = ^TRGBArray;
   TRGBARRAY = array[0..0] of TRGB;
@@ -390,7 +395,7 @@ type
   end;
 
 var
-  IsNightMode: Boolean;//, ShowDarkPopupMenu: Boolean;
+  IsNightMode:  Boolean;//, ShowDarkPopupMenu: Boolean;
   MsgTxtColors: TMsgBoxColors;
 
 function GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
@@ -404,10 +409,9 @@ function  WideFileCreate(const FileName: WideString): Integer;
 function  WideExpandFileName(const FileName: WideString): WideString;
 function  WideFileOpen(const FileName: WideString; Mode: LongWord): Integer;
 
-function  StrCmpLogicalW(psz1, psz2: PWideChar{WideString}): Integer; stdcall; external 'shlwapi.dll';
+function  StrCmpLogicalW(psz1, psz2: PWideChar): Integer; stdcall; external 'shlwapi.dll';
 
 procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
-//procedure WinGradient(ACanvas: TCanvas);
 
 function  GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 function  GetFileInfo2(FName, InfoType: String): String;
@@ -417,10 +421,10 @@ function  GetFileSize(const AFileName: String): Int64;
 function  ShortToLongFileName(const ShortName: String): String;
 function  ShortToLongPath(const ShortName: String): String;
 function  LongToShortFileName(const LongName: String): String;
-//function  LongToShortPath(const LongName: String): String; // this function doesn't work, use ExtractShortPathName() instead!!! October 10, 2016
+//function  LongToShortPath(const LongName: String): String; // this function doesn't work, use ExtractShortPathName() instead (October 10, 2016)
 {$ENDIF WIN32}
 
-function  ExtractShortPathName(const FileName: string): string; // function from Delphi XE 10 Seattle source code
+function  ExtractShortPathName(const FileName: String): String; // function from Delphi XE 10 Seattle source code
 
 function  Pos(const substr, str: WideString): Integer; overload;
 function  PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
@@ -432,7 +436,7 @@ procedure Move(const Source; var Dest; count: Integer); overload;
 
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 
-// bright / dark theme functions
+// light / dark theme functions
 procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
@@ -453,14 +457,6 @@ procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1;
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
 procedure SetEditNightColors(EditSource: TEditEx);
 procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1; EnableCustomBorder: Boolean = True);
-procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
-                            FontColor: TColor = -1;
-                            GradientColorTop: TColor = -1; GradientColorBottom: TColor = -1; FrameColor: TColor = -1;
-                            FrameColor_Focused: TColor = -1;
-                            GradientColorTop_Hover: TColor = -1; GradientColorBottom_Hover: TColor = -1; FrameColor_Hover: TColor = -1;
-                            //GradientColorTop_Down: TColor = -1; GradientColorBottom_Down: TColor = -1; FrameColor_Down: TColor = -1;
-                            GradientColorTop_Disabled: TColor = -1; GradientColorBottom_Disabled: TColor = -1; FrameColor_Disabled: TColor = -1;
-                            FontColor_Disabled: TColor = -1; FontShadowColor_Disabled: TColor = -1);
 
 procedure PopulateMsgColors;
 procedure SetLightColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
@@ -1026,59 +1022,6 @@ begin
      EditSource.UseCustomBorder:= True;
 end;
 
-procedure SetButtonExNightColors(ButtonSource: TBitBtnEx; ForceUpdate: Boolean;
-                            FontColor: TColor = -1;
-                            GradientColorTop: TColor = -1; GradientColorBottom: TColor = -1; FrameColor: TColor = -1;
-                            FrameColor_Focused: TColor = -1;
-                            GradientColorTop_Hover: TColor = -1; GradientColorBottom_Hover: TColor = -1; FrameColor_Hover: TColor = -1;
-                            //GradientColorTop_Down: TColor = -1; GradientColorBottom_Down: TColor = -1; FrameColor_Down: TColor = -1;
-                            GradientColorTop_Disabled: TColor = -1; GradientColorBottom_Disabled: TColor = -1; FrameColor_Disabled: TColor = -1;
-                            FontColor_Disabled: TColor = -1; FontShadowColor_Disabled: TColor = -1);
-begin
-  // this function is not being used by anything yet.... it might not be necessary
-  if FontColor <> -1 then
-     ButtonSource.Font.Color:= FontColor;
-
-  if GradientColorTop <> -1 then
-     ButtonSource.GradientColorTop:= GradientColorTop;
-
-  if GradientColorBottom <> -1 then
-     ButtonSource.GradientColorBottom:= GradientColorBottom;
-
-  if FrameColor <> -1 then
-     ButtonSource.FrameColor:= FrameColor;
-
-  if FrameColor_Focused <> -1 then
-     ButtonSource.FrameColor_Focused:= FrameColor_Focused;
-
-  if GradientColorTop_Hover <> -1 then
-     ButtonSource.GradientColorTop_Hover:= GradientColorTop_Hover;
-
-  if GradientColorBottom_Hover <> -1 then
-     ButtonSource.GradientColorBottom_Hover:= GradientColorBottom_Hover;
-
-  if FrameColor_Hover <> -1 then
-     ButtonSource.FrameColor_Hover:= FrameColor_Hover;
-
-  if GradientColorTop_Disabled <> -1 then
-     ButtonSource.GradientColorTop_Disabled:= GradientColorTop_Disabled;
-
-  if GradientColorBottom_Disabled <> -1 then
-     ButtonSource.GradientColorBottom_Disabled:= GradientColorBottom_Disabled;
-
-  if FrameColor_Disabled <> -1 then
-     ButtonSource.FrameColor_Disabled:= FrameColor_Disabled;
-
-  if FontColor_Disabled <> -1 then
-     ButtonSource.FontColorDisabled:= FontColor_Disabled;
-
-  if FontShadowColor_Disabled <> -1 then
-     ButtonSource.FontShadowColorDisabled:= FontShadowColor_Disabled;
-
-  if ForceUpdate then
-     ButtonSource.Invalidate;
-end;
-
 procedure PopulateMsgColors;
 begin
   if IsNightMode then
@@ -1130,12 +1073,12 @@ begin
   if IsBottomColorSilver then
      begin
        if PanelSource.Color2 <> $00f1f1f1 then
-          PanelSource.Color2:= $00f1f1f1; // silver bottom color
+          PanelSource.Color2:=  $00f1f1f1; // silver bottom color
      end
   else
      begin
        if PanelSource.Color2 <> clWhite then
-          PanelSource.Color2:= clWhite; // white bottom color (FormMessageBox ... and others ?)
+          PanelSource.Color2:=  clWhite; // white bottom color (FormMessageBox ... and others ?)
      end;
   PanelSource.Canvas.UnLock;
 end;
@@ -1169,7 +1112,7 @@ procedure SetColorEmulatorTopBar(PanelExSource: TPanelEx; EmulatorID: Integer; I
 var
   iTop, iBottom: TColor;
 begin
-  // night mode top color is 60% dark of the light color...
+  // night mode top color is 60% dark of the light color
   case EmulatorID of
     idMAME:
       begin
@@ -1276,22 +1219,22 @@ begin
       case GameStatus of // 0 - have (available); 1 - missing ROMs/CHDs; 2 - missing (no .zip and no ROMs found... even if CHDs are found)
         -1: // default blue gradient
           begin
-            LabelGameTitle.Font.Color:= clrOrangeBarTop;
+            LabelGameTitle.Font.Color:=  clrOrangeBarTop;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         0: // green gradient (have)
           begin
-            LabelGameTitle.Font.Color:= clLime;
+            LabelGameTitle.Font.Color:=  clLime;
             LabelGameTitle.ShadowColor:= clNavy;
           end;
         1: // red gradient (missing ROMs/CHDs)
           begin
-            LabelGameTitle.Font.Color:= clRed;
+            LabelGameTitle.Font.Color:=  clRed;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         2: // gray gradient (missing)
           begin
-            LabelGameTitle.Font.Color:= clrOrangeBarTop;
+            LabelGameTitle.Font.Color:=  clrOrangeBarTop;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
       end;
@@ -1338,14 +1281,14 @@ var
 begin
   Flags := FORMAT_MESSAGE_FROM_SYSTEM or FORMAT_MESSAGE_IGNORE_INSERTS or FORMAT_MESSAGE_ARGUMENT_ARRAY;
   if Dll <> 0 then
-    Flags := Flags or FORMAT_MESSAGE_FROM_HMODULE;
+     Flags := Flags or FORMAT_MESSAGE_FROM_HMODULE;
 
   SetLength(Result, 256);
   Len := FormatMessageW(Flags, Pointer(Dll), ErrorCode, 0, PWideChar(Result), Length(Result), nil);
   SetLength(Result, Len);
 
   if Trim(Result) = '' then
-    Result := WideFormat('Unspecified error (%d) from %s.', [ErrorCode, LibName]);
+     Result := WideFormat('Unspecified error (%d) from %s.', [ErrorCode, LibName]);
 end;
 
 function WideSysErrorMessage(ErrorCode: Integer): WideString;
@@ -1355,8 +1298,7 @@ end;
 
 function WideFileCreate(const FileName: WideString): Integer;
 begin
-  Result := Integer(CreateFileW(PWideChar(FileName), GENERIC_READ or GENERIC_WRITE,
-    0, nil, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0))
+  Result := Integer(CreateFileW(PWideChar(FileName), GENERIC_READ or GENERIC_WRITE, 0, nil, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0))
 end;
 
 function WideExpandFileName(const FileName: WideString): WideString;
@@ -1382,8 +1324,8 @@ const
     FILE_SHARE_READ or FILE_SHARE_WRITE);
 begin
   Result := Integer(CreateFileW(PWideChar(FileName), AccessMode[Mode and 3],
-    ShareMode[(Mode and $F0) shr 4], nil, OPEN_EXISTING,
-      FILE_ATTRIBUTE_NORMAL, 0));
+            ShareMode[(Mode and $F0) shr 4], nil, OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL, 0));
 end;
 
 // WideFileStream
@@ -1468,9 +1410,11 @@ procedure TWideResourceStream.Initialize(Instance: THandle; Name, ResType: PWide
 
 begin
   HResInfo := FindResourceW(Instance, Name, ResType);
-  if HResInfo = 0 then Error;
+  if HResInfo = 0 then
+     Error;
   HGlobal := LoadResource(Instance, HResInfo);
-  if HGlobal = 0 then Error;
+  if HGlobal = 0 then
+     Error;
   SetPointer(LockResource(HGlobal), SizeOfResource(Instance, HResInfo));
 end;
 
@@ -1481,7 +1425,7 @@ begin
   inherited Destroy;
 end;
 
-function TWideResourceStream.Write(const Buffer; Count: Longint): Longint;
+function TWideResourceStream.Write(const Buffer; Count: LongInt): LongInt;
 begin
   raise EStreamError.CreateRes(PResStringRec(@SCantWriteResourceStreamError));
 end;
@@ -1506,19 +1450,19 @@ var
   function SetVertex(var Vertex: TTriVertex; X, Y: Integer; Color: TColor): Boolean;
   begin
     Result:= True;
-    Vertex.X      := X;
-    Vertex.Y      := Y;
-    Vertex.Red    := (Color and $000000FF) shl 8;
-    Vertex.Green  := (Color and $0000FF00);
-    Vertex.Blue   := (Color and $00FF0000) shr 8;
-    Vertex.Alpha  := 0;
+    Vertex.X    := X;
+    Vertex.Y    := Y;
+    Vertex.Red  := (Color and $000000ff) shl 8;
+    Vertex.Green:= (Color and $0000ff00);
+    Vertex.Blue := (Color and $00ff0000) shr 8;
+    Vertex.Alpha:= 0;
   end;
 
 begin
-  SetVertex(Vertexs[0], ARect.Left, ARect.Top, FColor1);
+  SetVertex(Vertexs[0], ARect.Left,  ARect.Top,    FColor1);
   SetVertex(Vertexs[1], ARect.Right, ARect.Bottom, FColor2);
   GRect.UpperLeft := 0;
-  GRect.LowerRight := 1;
+  GRect.LowerRight:= 1;
   GradientFill(ACanvas.Handle, @Vertexs, 2, @GRect, 1, GRADIENT_FILL_RECT_V);
 end;
 
@@ -1694,7 +1638,7 @@ end;
 //end;
 {$ENDIF WIN32}
 
-function ExtractShortPathName(const FileName: string): string; // function from Delphi XE 10 Seattle source code
+function ExtractShortPathName(const FileName: String): String; // function from Delphi XE 10 Seattle source code
 var
   Buffer: array[0..MAX_PATH - 1] of Char;
   Len: Integer;
@@ -1702,14 +1646,14 @@ begin
   // param "FileName" can be only path (with or without "\") or with a filename at the end
   Len := GetShortPathName(PChar(FileName), Buffer, Length(Buffer));
   if Len <= Length(Buffer) then
-    SetString(Result, Buffer, Len)
+     SetString(Result, Buffer, Len)
   else
     if Len > 0 then
     begin
       SetLength(Result, Len);
       Len := GetShortPathName(PChar(FileName), PChar(Result), Len);
       if Len < Length(Result) then
-        SetLength(Result, Len);
+         SetLength(Result, Len);
     end;
 end;
 
@@ -1788,7 +1732,7 @@ end;
 function PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
 // copy of Fastcode function PosEx_JOH_IA32_8
 // Needed for Delphi 6 and to Fix Bug in D7 PosEx
-// not needed for Delphi 2006 and newer!!!!
+// not needed for Delphi 2006 and newer
 asm {299 Bytes}
   sub     esp, 20
   mov     [esp], ebx
@@ -2154,7 +2098,7 @@ asm
   fild    qword ptr [eax]
   fistp   qword ptr [edx]
 end;
-// end of file functions (from old uFilesUtil.pas)
+// end of file functions
 
 procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
 var
@@ -2163,11 +2107,11 @@ begin
   if FileToOpen <> '' then
      LinkStr:= FileToOpen
   else
-  if Sender is TLabel then
-     LinkStr:= TLabel(Sender).Hint
-  else
   if Sender is TShadowLabel then
      LinkStr:= TShadowLabel(Sender).Hint
+  else
+  if Sender is TLabel then
+     LinkStr:= TLabel(Sender).Hint
   else
   if Sender is TMenuItem then
      LinkStr:= TMenuItem(Sender).Hint;
@@ -2186,7 +2130,7 @@ begin
   FormMessageBox.LabelMessage.Lines.AddStrings(ZipFilesList);
 
   FormMessageBox.ButtonYes.Caption:= 'Close';
-  FormMessageBox.ButtonYes.Left:= 262;
+  FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2); //262;
   FormMessageBox.ButtonNo.Visible:= False;
 
   Result:= FormMessageBox.ShowModal;
@@ -2219,10 +2163,7 @@ begin
   if MessageType = 2 then
      begin
        FormMessageBox.ButtonYes.Caption:= 'Close';
-
        FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2);
-       //if FormMessageBox.Width < 720 then
-       //   FormMessageBox.ButtonYes.Left:= 254;
        FormMessageBox.ButtonNo.Visible:= False;
      end;
   case DefaultButtonNo of
@@ -2252,7 +2193,7 @@ begin
       SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, nil, -1, True);
       FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
-      FormMessageBox.NightMode.Font.Color:=$00f1f1f1;
+      FormMessageBox.NightMode.Font.Color:= $00f1f1f1;
     end;
   end;
 end;
@@ -2291,7 +2232,6 @@ begin
     idSupermodel: Result:= 'supermodelsegamodel3';
     idDaphne    : Result:= 'daphne';
     idDemul     : Result:= 'demul';
-    //idHBMAME    : Result:= 'hbmame';
     idDICE      : Result:= 'dice';
     idSegaModel2: Result:= 'segamodel2';
     idZiNc      : Result:= 'zinc';
@@ -2305,7 +2245,7 @@ begin
     5: Result:= Result+'.elsoftlist';
     6: Result:= Result+'.elsoftlistreq';
     9: Result:= Result+'_crc32collision.txt'; // id "9" to give some room for future expansion (February 15, 2018)
-   10: Result:= Result+'_romsnodump.txt'; //
+   10: Result:= Result+'_romsnodump.txt';
   end;
 end;
 
@@ -3203,12 +3143,12 @@ end;
 
 function IsWin10: Boolean;
 var
-  VerInfo: TOSVersionInfo;
+  //VerInfo: TOSVersionInfo;
   iStr, VersionStr: String;
   iMajorVersion{, iMinorVersion}: DWORD;
   iBuildNumber: Integer;
 begin
-  Result:= False;
+  //Result:= False;
   iMajorVersion:= 0;
   //iMinorVersion:= 0;
   iBuildNumber:= 0;
@@ -3347,9 +3287,9 @@ begin
   if OverwriteExisting then
      flags:= flags+MOVEFILE_REPLACE_EXISTING;
   Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName),
-           flags);//MOVEFILE_COPY_ALLOWED
-           //+MOVEFILE_REPLACE_EXISTING
-           //+MOVEFILE_WRITE_THROUGH);
+                      flags);//MOVEFILE_COPY_ALLOWED
+                      //+MOVEFILE_REPLACE_EXISTING
+                      //+MOVEFILE_WRITE_THROUGH);
 end;
 
 procedure SetDefaultColorBox(const ColorHolder: TColorBoxEx);

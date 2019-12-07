@@ -6013,14 +6013,14 @@ begin
        if PressedKey in ['0'..'9', '.', Chr(VK_BACK)] then
           Result:= PressedKey
        else
-          Result:= Char(0); // abort key presses!!!
+          Result:= Char(0); // abort key presses
      end
   else
      begin
        if PressedKey in ['0'..'9', Chr(VK_BACK)] then
           Result:= PressedKey
        else
-          Result:= Char(0); // abort key presses!!!
+          Result:= Char(0); // abort key presses
      end;
 end;
 
@@ -6036,16 +6036,8 @@ var
   AnsiStr: String;
   UnicodeStr, pExecFile: Boolean;
 begin
-  //if Length(AppPath) > 1000 then
-  //   begin
-  //     GenerateMessage('Error', 'Command line is too long.',
-  //                     'The command line has more than 1000 chars - ['+IntToStr(Length(AppPath))+']', 2, False, 1);
-  //     Exit;
-  //   end;
-
   AnsiStr:= AppPath;
-  //UnicodeStr:= AnsiStr <> AppPath;
-  UnicodeStr:= True;
+  UnicodeStr:= True; //UnicodeStr:= AnsiStr <> AppPath;
   if UnicodeStr then
      begin
        FillChar(SIW, SizeOf(SIW), #0);
@@ -10508,7 +10500,7 @@ begin
 end;
 
 // the new driver "neogeo_noslot.c" is for the regular arcade machine (driver renamed to "neopcb.cpp" in MAME v0.174)!!!! April 29, 2016
-// Neo-Geo 6 slots machine (drivername: neogeo; this requires the software list to work neogeo.xml
+// Neo-Geo 6 slots machine (drivername: neogeo; this requires "neogeo.xml" software list to work 
 // usage (MAME v0.154 ana newer)
 // ume64 neogeo -cart1 fatfury1 -cart2 fatfury2 -cart3 fatfursp -cart4 rbffspec -cart5 rbff2 -cart6 garou
 
@@ -15945,7 +15937,8 @@ begin
            // arcade images manager
            (EasyListView_To_Check.Name = 'MissingImagesList') or (EasyListView_To_Check.Name = 'NotUsedImagesList') or
            // arcade delete clone images
-           (EasyListView_To_Check.Name = 'DeleteClonesList');
+           (EasyListView_To_Check.Name = 'DeleteClonesList') or
+           (EasyListView_To_Check.Name = 'MissingIconsList'); // MAMu_ Icons Manager
 end;
 
 procedure TFormMain.ELV_SetSelectRibbon(State: ShortInt; EasyListViewHolder: TEasyListView; ForceUpdate: Boolean = False; ForceNightColors: Boolean = False);
@@ -16051,6 +16044,7 @@ const                             //     0,75,150   185,50,0
   //                                //     8,8,12      12,8,8
   //ColorBottom: array[0..1] of TColor = ($000c0808, $0008080c);
   //ColorBorder: array[0..1] of TColor = (clNavy, clMaroon);
+  
                                      //  8,8,120     120,8,8
   ColorTop   : array[0..1] of TColor = ($00780808, $00080878);
                                      //   8,8,78      78,8,8
@@ -16075,6 +16069,12 @@ begin
   EasyListView_Source.Selection.BorderColor:= ColorBorder[State]; // frame color
   EasyListView_Source.Selection.TextColor:= clCream; // this doesn't work, call ELV_ItemPaintText_General() function instead}
 
+  EasyListView_Source.Selection.InactiveColor:= $00444444; // RGB(68, 68, 68)
+  EasyListView_Source.Selection.InactiveGradientColorTop:= $00444444; // RGB(68, 68, 68)
+  EasyListView_Source.Selection.InactiveGradientColorBottom:= $004b4b4b; // RGB(75, 75, 75)
+  EasyListView_Source.Selection.InactiveBorderColor:= $00505050; // RGB(80, 80, 80) $005a5a5a; // RGB(90, 90, 90)
+  EasyListView_Source.Selection.InactiveTextColor:= clSilver;
+
   //EasyListView_Source.Selection.InactiveColor:= FormPreferences.GamesSelectionInactiveTopColor.DefaultColorColor; //  ListSelectionColorInactive[0, State];
   //EasyListView_Source.Selection.InactiveGradientColorTop:= FormPreferences.GamesSelectionInactiveTopColor.DefaultColorColor;
   //EasyListView_Source.Selection.InactiveGradientColorBottom:= FormPreferences.GamesSelectionInactiveBottomColor.DefaultColorColor;
@@ -16095,6 +16095,12 @@ begin
   ELV_Source.Selection.GradientColorTop:= clrOrangeBarTop; // gradient top
   ELV_Source.Selection.GradientColorBottom:= clrOrangeBarBottom; // gradient bottom
   ELV_Source.Selection.BorderColor:= clrOrangeBarBorder; // frame color
+
+  ELV_Source.Selection.InactiveColor:= $00444444; // RGB(68, 68, 68)
+  ELV_Source.Selection.InactiveGradientColorTop:= $00444444; // RGB(68, 68, 68)
+  ELV_Source.Selection.InactiveGradientColorBottom:= $004b4b4b; // RGB(75, 75, 75)
+  ELV_Source.Selection.InactiveBorderColor:= $00505050; // RGB(80, 80, 80) $005a5a5a; // RGB(90, 90, 90)
+  ELV_Source.Selection.InactiveTextColor:= clSilver;
 
   ELV_Source.Selection.BlendColorSelRect:= ELV_Source.Selection.BorderColor;
   ELV_Source.Selection.BorderColorSelRect:= ELV_Source.Selection.BorderColor;
@@ -24591,10 +24597,11 @@ begin
 end;
 
 procedure TFormMain.ClearScreenshots;
+var
+  Loop: Integer;
 begin
-  ClearScreenshot(1);
-  ClearScreenshot(2);
-  ClearScreenshot(3);
+  for Loop:= 1 to MaxImagePanels do
+      ClearScreenshot(Loop);
 end;
 
 procedure TFormMain.ResetNoImageLoaded;
@@ -24612,10 +24619,12 @@ end;
 procedure TFormMain.ToggleFavoriteLastFilter;
 
   procedure ResetGamesList;
+  var
+    iLoop: Integer;
   begin
-    ClearImageInfo(1);
-    ClearImageInfo(2);
-    ClearImageInfo(3);
+    for iLoop:= 1 to MaxImagePanels do
+        ClearImageInfo(iLoop);
+        
     ResetFavoriteSettings; // reset TMenuItem and other settings
     SetGameType(False);
   end;
@@ -25206,8 +25215,8 @@ var
 
     function FindUnzippedImage(FullImageName: WideString): Boolean;
     var
-      iLoopMAME1, iLoopMAME2, iLoopMAME3, iLoopMAME4: Integer; // this is for unzipped images only, MAME/HBMAME only
-      iNameSearch: array[1..MaxImagePanels] of WideString; // again, for unzipped images only, MAME/HBMAME only
+      iLoopMAME1, iLoopMAME2, iLoopMAME3, iLoopMAME4: Integer; // for unzipped images only, MAME/HBMAME only
+      iNameSearch: array[1..MaxImagePanels] of WideString;     // for unzipped images only, MAME/HBMAME only
     begin
       Result:= True;
       iNameSearch[ScreenIndex]:= FullImageName;
@@ -25382,7 +25391,7 @@ var
                 ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                 if not ContinueImg[ScreenIndex] then
                    begin
-                     // check img extra folder
+                     // check image extra folder
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                          ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
                                          ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
@@ -25396,7 +25405,7 @@ var
                      ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
                      if not ContinueImg[ScreenIndex] then
                         begin
-                          // check img extra folder
+                          // check image extra folder
                           ContinueImg[ScreenIndex]:= FileExistsW(Folder[ScreenIndex]+
                                               ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2]+'\'+
                                               ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]);
@@ -25548,7 +25557,7 @@ begin
      if FormPreferences.FixRetroArchImageFileNames.Checked then
         ImageName[ScreenIndex]:= FixRetroArchImageFileNames(ImageName[ScreenIndex]);
 
-  NewMAMESnapName[ScreenIndex]:= ''; // used by in-game snapshot only "gamename\0000.png"
+  NewMAMESnapName[ScreenIndex]:= '';      // used by in-game snapshot only "gamename\0000.png"
   NewMAMESnapCloneName[ScreenIndex]:= ''; // used by in-game snapshot only "parent_gamename\0000.png"
 
   // save current image details (sysID, imgCategory, SoftwareName, Image FileName)
@@ -25557,9 +25566,9 @@ begin
   CurrentImageZip[ScreenIndex]:= ImageDetails[ScreenIndex].FileName;
   CurrentCustomSystemID[ScreenIndex]:= ImageDetails[ScreenIndex].CustomSystemID;
 
-  GetImageFileName(False); // search for unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
+  GetImageFileName(False); // search unzipped image (snap\gamename.png; snap\snap\gamename.png; snap\gamename\0000.png; snap\snap\gamename\0000.png)
   if not ContinueImg[ScreenIndex] then
-     GetImageFileName(True); // search for zipped image
+     GetImageFileName(True); // search zipped image
 
   if (not ContinueImg[ScreenIndex]) and (not MemGameInfo.eIsCustomGame) then
      begin
@@ -25615,7 +25624,7 @@ begin
       begin
         if iImageTag[ScreenIndex] > 1 then
         begin
-          // need to restore TImage32.Tag value to what is was (no image found)... this is used by "prev/next" image buttons
+          // must restore TImage32.Tag value to what is was (no image found); used by "prev/next" image buttons
           if iImageTag[ScreenIndex] <> ImageDetails[ScreenIndex].ImageCurrentTag then
              begin
                if ScreenIndex = 1 then
@@ -43910,21 +43919,51 @@ procedure TFormMain.PopupMAMu_IconsManagerClick(Sender: TObject);
 begin
   if not Assigned(FormArcadeMAMu_IconsManager) then
      FormArcadeMAMu_IconsManager:= TFormArcadeMAMu_IconsManager.Create(nil);
-  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterList, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
-                                FormPreferences.GamesListSplitterSingleColor.Selected,
-                                FormPreferences.GamesListSplitterSingleColorHot.Selected);
-  UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterIconHistory, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
-                                FormPreferences.GamesListSplitterSingleColor.Selected,
-                                FormPreferences.GamesListSplitterSingleColorHot.Selected);
-  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterList, FormPreferences.GamesListSplitterShowGripIcon.Checked);
-  SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormPreferences.GamesListSplitterShowGripIcon.Checked);
 
   if IsNightMode then
      begin
+       UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterList, tsSolidColor,
+                           FormNightMode.NightModeImageSplitterSingleColor.Selected,
+                           FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
+
+       UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterIconHistory, tsSolidColor,
+                           FormNightMode.NightModeImageSplitterSingleColor.Selected,
+                           FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
+
+       SetGripIcon(FormArcadeMAMu_IconsManager.SplitterList, FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked);
+       SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormNightMode.NightModeGamesListSplitterShowGripIcon.Checked);
+
        SetPopupMenuNightColors(FormArcadeMAMu_IconsManager.PopupMissingIcons);
        SetPopupMenuNightColors(FormArcadeMAMu_IconsManager.PopupMissingIconsOptions);
        SetPopupMenuNightColors(FormArcadeMAMu_IconsManager.PopupNotUsedIcons);
+
+       SetPanelNightColors(FormArcadeMAMu_IconsManager.PanelRenameFile,
+                           FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
+
+       SetLabelColors(FormArcadeMAMu_IconsManager.RenameFileTitleLabel,
+                      FormNightMode.NightModePanelColorsTitleFontColor.Selected,
+                      FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected,
+                      FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked);
+
+       SetLabelColors(FormArcadeMAMu_IconsManager.RenameFileOldFileName, FormNightMode.NightModePanelColorsImageCategoryTextFontColor.Selected);
+       //SetLabelColors(FormArcadeMAMu_IconsManager.RenameFileOldFileName, FormNightMode.NightModePanelColorsImageZipTextFontColor.Selected);
+     end
+  else
+     begin
+       UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterList, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
+                           FormPreferences.GamesListSplitterSingleColor.Selected,
+                           FormPreferences.GamesListSplitterSingleColorHot.Selected);
+       UpdateSplitterStyle(FormArcadeMAMu_IconsManager.SplitterIconHistory, TTMSStyle(FormPreferences.GamesListSplitterStyleSelector.ItemIndex),
+                           FormPreferences.GamesListSplitterSingleColor.Selected,
+                           FormPreferences.GamesListSplitterSingleColorHot.Selected);
+
+       SetGripIcon(FormArcadeMAMu_IconsManager.SplitterList, FormPreferences.GamesListSplitterShowGripIcon.Checked);
+       SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormPreferences.GamesListSplitterShowGripIcon.Checked);
      end;
+
   FormArcadeMAMu_IconsManager.FormStyle:= fsStayOnTop;
   FormArcadeMAMu_IconsManager.Show;
 end;
@@ -43948,6 +43987,19 @@ begin
 
        UpdateSplitterStyle(FormImagesManager.SplitterNotUsed, tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
        SetGripIcon(FormImagesManager.SplitterNotUsed, PopupImageShowSplitterGrip.Checked);
+
+       SetPanelNightColors(FormImagesManager.PanelRenameFile,
+                           FormNightMode.NightModeSearchGamesPanelTopColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelBottomColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelOuterFrameColor.Selected,
+                           FormNightMode.NightModeSearchGamesPanelInnerFrameColor.Selected);
+
+       SetLabelColors(FormImagesManager.RenameFileTitleLabel,
+                      FormNightMode.NightModePanelColorsTitleFontColor.Selected,
+                      FormNightMode.NightModePanelColorsTitleShadowFontColor.Selected,
+                      FormNightMode.NightModePanelColorsTitleShadowEnabled.Checked);
+
+       SetLabelColors(FormImagesManager.RenameFileOldFileName, FormNightMode.NightModePanelColorsImageCategoryTextFontColor.Selected);
      end;
 
   FormImagesManager.ShowModal;
@@ -45193,16 +45245,6 @@ end;
 procedure TFormMain.PopupCustomizeColumnsHeaderFontClick(Sender: TObject);
 begin
   ELV_SetCustomHeaderFont(PopupCustomizeColumnsHeaderFont.Tag = 1);
-  {FontDialog.Font:= GamesListView.Header.Font;
-  FontDialog.Tag:= 5;
-  if not FontDialog.Execute then
-     Exit;
-  UpdateHeaderFont(GamesListView);
-  UpdateHeaderFont(MachinesListSidePanel);
-  if IsNightMode then
-     FormNightMode.NightModeGamesListHeaderFont.Font:= GamesListview.Header.Font
-  else
-     FormPreferences.GameListHeaderFont_Setting.Font:= GamesListview.Header.Font;}
 end;
 
 procedure TFormMain.PopupDefaultHeaderFontClick(Sender: TObject);
@@ -45261,7 +45303,7 @@ end;
 
 procedure TFormMain.MainMenuOptionsPopup(Sender: TObject);
 begin
-  MenuCreateMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idMAME) and FileExists(GetMAMEMachineSoftListFile(False, idMAME));
+  MenuCreateMAMESoftwareListGames.Visible:=   VerifyArcadeGamesSys(idMAME)   and FileExists(GetMAMEMachineSoftListFile(False, idMAME));
   MenuCreateHBMAMESoftwareListGames.Visible:= VerifyArcadeGamesSys(idHBMAME) and FileExists(GetMAMEMachineSoftListFile(False, idHBMAME));
 
   MenuCustomizeColumns.Visible:= (IsDetailsView or IsGroupedView);
@@ -45311,7 +45353,7 @@ begin
      Exit;
   if ListHolder.Count = 0 then
      Exit;
-  //ShowMessageW('total items before: '+IntToStr(ListHolder.Count));
+  //ShowMessageW('total items before: '+IntToStr(ListHolder.Count)); // for debugging only, do not enable
 
   ExcludedList:= THashedStringList.Create;
   ExcludedList.LoadFromFile(GetSoftListExcludeFile(sysID));
@@ -45324,7 +45366,7 @@ begin
   end;
   ListHolder.EndUpdate;
   FreeAndNil(ExcludedList);
-  //ShowMessageW('total items before: '+IntToStr(ListHolder.Count));
+  //ShowMessageW('total items before: '+IntToStr(ListHolder.Count)); // for debugging only, do not enable
 end;
 
 procedure TFormMain.SoftListValidateListsXML(sysID: ShortInt; var ListHolder: THashedStringList);
@@ -45426,7 +45468,7 @@ begin
           end;
      end;
 
-  Sleep(5); // // a tiny pause
+  Sleep(5); // a tiny pause
 end;
 
 procedure TFormMain.SetLabelSoftwareScanCountVisible(IsVisible: Boolean);
@@ -47584,7 +47626,7 @@ begin
   if not IsMultiList then
      begin
        ClearMemGameInfo(TempGameVars);
-       FormMain.ClearScreenshots;
+       ClearScreenshots;
        FormStatus.Close;
      end;
 end;

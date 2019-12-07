@@ -309,7 +309,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clWhite
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -439,7 +439,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ParentFont = False
       ShowAccelChar = False
       ShadowColor = clWhite
-      ShadowEnabled = True
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack

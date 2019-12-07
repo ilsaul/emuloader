@@ -23,6 +23,7 @@ type
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ShellTreeChange(Sender: TObject; Node: TTreeNode);
     procedure FormShow(Sender: TObject);
+    procedure ShellTreeGetImageIndex(Sender: TObject; Node: TTreeNode);
   private
     { Private declarations }
   public
@@ -101,6 +102,13 @@ begin
 
        FormMain.SetWin10DarkScrollBar(ShellTree);
      end;
+end;
+
+procedure TFormSelectDirectory.ShellTreeGetImageIndex(Sender: TObject;
+  Node: TTreeNode);
+begin
+  if Node.Selected then
+     FormSelectDirectory.Caption:= 'image index: '+IntToStr(Node.ImageIndex);
 end;
 
 end.

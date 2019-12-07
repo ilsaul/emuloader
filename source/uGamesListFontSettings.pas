@@ -222,7 +222,7 @@ begin
   ELV_PopulateCustomSystems(GamesFont, -1, 4, True);
   GamesFont.BeginUpdate;
   GamesFont.Items.ReIndexDisable:= True;
-  AddItem(5, 'All Systems', 0);
+  AddItem(5, 'All Console/Computer Systems', 0);
   AddItem(4, 'Missing ROMs, Preliminary', -1, False);
   AddItem(3, 'Missing ROMs/CHDs', -1, False);
   AddItem(2, 'Preliminary Set');
@@ -525,7 +525,7 @@ begin
   //if iWidth < 960 then
   //   ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8
   //else
-     ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-16;//ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
+  ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-16;//ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
 
   if not HaveScrollBar then
@@ -582,7 +582,7 @@ begin
   FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(30), strFolder, IL_FontSettings); // found with missing rom/chd
   FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(25), strFolder, IL_FontSettings); // preliminary found widht misssing rom/chd
 
-  FormMain.AddDefaultIcons('emucon.ico', FormMain.GetFolderFull(32), IL_FontSettings); // all systems
+  FormMain.AddDefaultIcons('emucon.ico', FormMain.GetFolderFull(32), IL_FontSettings);      // all systems
   FormMain.LoadNonArcadeSystemIcons(IL_FontSettings, False, False, True);
 
   if FormMain.GamesListView.BackGround.Enabled then
@@ -1034,7 +1034,6 @@ begin
   GamesFont.SetFocus;
 end;
 
-
 procedure TFormGamesListFontSettings.PopupHelpClick(Sender: TObject);
 begin
   CallMessageBox;
@@ -1042,14 +1041,13 @@ begin
                       'they might have different height in pixels. Even more so if you change the font size.'+#13#10+
                       'For thumbnails view mode this is a problem. To make this easy, you can see a ');
   FormMain.AddMsgText('font height', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' value next to the font size. This can help you to choose fonts that have the same height.'+#13#10+#13#10+
-                      '    By default, all systems are visible in the list. To hide systems you don''t have, just enable the ');
+  FormMain.AddMsgText(' value next to the font size. This can help you choose fonts that have the same height.'+#13#10+#13#10+
+                      '    By default, all systems are visible in the list. To hide systems you don''t have, enable ');
   FormMain.AddMsgText('Show Available Systems Only', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' option in popup menu.');
 
   GenerateMessage('Help', 'Shed some light into the darkness.');
 end;
-
 
 procedure TFormGamesListFontSettings.PopupShowFontNameClick(
   Sender: TObject);
@@ -1060,5 +1058,6 @@ begin
   GamesFont.EndUpdate;
   GamesFont.SetFocus;
 end;
+
 
 end.

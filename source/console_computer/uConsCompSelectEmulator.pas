@@ -255,7 +255,7 @@ begin
      begin
        ACanvas.Font.Name:= 'Verdana';
        ACanvas.Font.Size:= 8;
-       ACanvas.Font.Color:= clrMedDarkGray;//$00606060;
+       ACanvas.Font.Color:= clrMedDarkGray;
        if IsNightMode and Item.Selected then
           ACanvas.Font.Color:= clrDarkGray;
      end;

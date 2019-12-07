@@ -43,6 +43,7 @@ object FormSelectDirectory: TFormSelectDirectory
     ShowRoot = False
     TabOrder = 0
     OnChange = ShellTreeChange
+    OnGetImageIndex = ShellTreeGetImageIndex
   end
   object TopBar: TPanelEx
     Left = 0

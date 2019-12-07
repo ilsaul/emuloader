@@ -664,6 +664,7 @@ type
     AttachWindow: TEditEx;
     NumberScreens: TXiTrackBar;
     NumberScreensLabel: TShadowLabel;
+    LowLatency: TAdvOfficeCheckBoxEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -1145,7 +1146,11 @@ begin
          Multithreading.Enabled:= True
       else
       if EntryString = 'keyboardprovider ' then
-         OSDInputOptionsGroupBox.Enabled:= True;
+         OSDInputOptionsGroupBox.Enabled:= True
+      else
+      if (EntryString = 'lowlatency ') or
+         (EntryString = 'lolat ') then
+         LowLatency.Enabled:= True;
     end;
   end;
   FreeAndNil(mameIni);
@@ -2055,7 +2060,6 @@ begin
                      end;
                    False:
                      begin
-                       //Loop2:= Pos('x', LabelSnaphotResolution.Hint);
                        Loop2:= PosEx('x', SnapSizeCustomXLabel.Hint);
                        if Loop2 = 0 then
                           SnapSizeAuto.Checked:= True
@@ -2063,8 +2067,6 @@ begin
                           begin
                             SnapSizeWidth.Text:= Copy(SnapSizeCustomXLabel.Hint, 1, Loop2-1);
                             SnapSizeHeight.Text:= Copy(SnapSizeCustomXLabel.Hint, Loop2+1, Length(SnapSizeCustomXLabel.Hint));
-                            //SnapSizeWidth.Text:= Copy(LabelSnaphotResolution.Hint, 1, Loop2-1);
-                            //SnapSizeHeight.Text:= Copy(LabelSnaphotResolution.Hint, Loop2+1, Length(LabelSnaphotResolution.Hint));
                           end;
                      end;
                  end;
@@ -2116,6 +2118,10 @@ begin
             if (EntryString = 'refreshspeed ') or
                (EntryString = 'rs ') then
                RefreshSpeed.Checked:= GetBooleanValue
+            else
+            if (EntryString = 'lowlatency ') or
+               (EntryString = 'lolat ') then
+               LowLatency.Checked:= GetBooleanValue
             else
             // # CORE RENDER OPTIONS
             if (EntryString = 'keepaspect ') or
@@ -3976,6 +3982,10 @@ begin
          if (tmpEntryStr = 'refreshspeed ') or
             (tmpEntryStr = 'rs ') then
             UpdateMAMELine(EntryString, GetBooleanValue(RefreshSpeed.Checked))
+         else
+         if (tmpEntryStr = 'lowlatency ') or
+            (tmpEntryStr = 'lolat ') then
+            UpdateMAMELine(EntryString, GetBooleanValue(LowLatency.Checked))
          else
          // # CORE RENDER OPTIONS
          if (tmpEntryStr = 'keepaspect ') or

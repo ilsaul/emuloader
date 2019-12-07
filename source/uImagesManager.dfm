@@ -1,6 +1,6 @@
 object FormImagesManager: TFormImagesManager
-  Left = 479
-  Top = 244
+  Left = 1112
+  Top = 552
   Width = 931
   Height = 550
   BorderIcons = [biSystemMenu, biMaximize]
@@ -86,9 +86,10 @@ object FormImagesManager: TFormImagesManager
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
+    Header.Height = 23
     Header.Visible = True
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1300
@@ -246,6 +247,111 @@ object FormImagesManager: TFormImagesManager
       OnItemSelectionChanged = NotUsedImagesListItemSelectionChanged
       OnKeyAction = NotUsedImagesListKeyAction
     end
+    object PanelRenameFile: TPanelEx
+      Left = 10
+      Top = 28
+      Width = 290
+      Height = 101
+      Color1 = clWhite
+      Color2 = clGray
+      Color3 = 7891291
+      Color4 = 16750899
+      ColorFrame = clSilver
+      ColorInnerFrame = 7891291
+      EnableCustomBorder = ecbDouble
+      Frames = []
+      ParentBackground = False
+      Style = vgSimple
+      Visible = False
+      object RenameFileIconFrame: TBevelEx
+        Left = 7
+        Top = 7
+        Width = 50
+        Height = 50
+        Style = bsCustomColors
+        CustomColor1 = clGray
+        CustomColor2 = clGray
+      end
+      object RenameFileIcon: TImage
+        Left = 8
+        Top = 8
+        Width = 48
+        Height = 48
+        IncrementalDisplay = True
+        Transparent = True
+      end
+      object RenameFileTitleLabel: TShadowLabel
+        Left = 65
+        Top = 4
+        Width = 92
+        Height = 17
+        Caption = 'Rename File'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Verdana'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object RenameFileOldFileName: TShadowLabel
+        Left = 65
+        Top = 42
+        Width = 214
+        Height = 16
+        AutoSize = False
+        Caption = 'My Current Image FileName.png'
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object RenameFileNewFileName: TEditEx
+        Left = 8
+        Top = 66
+        Width = 181
+        Height = 23
+        AutoSize = False
+        BevelOuter = bvNone
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnKeyPress = RenameFileNewFileNameKeyPress
+      end
+      object RenameFileButtonOk: TBitBtnEx
+        Tag = 1
+        Left = 193
+        Top = 65
+        Width = 43
+        Height = 25
+        Caption = 'Ok'
+        TabOrder = 1
+        OnClick = RenameFileButtonOkClick
+      end
+      object RenameFileButtonAbort: TBitBtnEx
+        Left = 237
+        Top = 65
+        Width = 43
+        Height = 25
+        Caption = 'Abort'
+        TabOrder = 2
+        OnClick = RenameFileButtonOkClick
+      end
+    end
   end
   object PanelToolBarButtons: TPanelEx
     Left = 0
@@ -253,29 +359,31 @@ object FormImagesManager: TFormImagesManager
     Width = 915
     Height = 31
     Align = alTop
-    Color1 = 16448250
+    Color1 = 15856113
     Color2 = clSilver
     Color3 = clYellow
     Color4 = clTeal
     ColorFrame = 7891291
     ColorInnerFrame = clGreen
-    Frames = [frBottom]
+    Frames = []
     ParentBackground = False
-    Style = vgSimple
+    Style = vgWindowsTheme
     object ImageCategoryIcon: TImage
       Left = 2
       Top = 3
       Width = 24
       Height = 24
+      OnClick = ImageCategorySelectLabelClick
     end
-    object ButtonImageCategory: TBitBtnEx
+    object ImageCategorySelectLabel: TShadowLabel
       Tag = 1
-      Left = 28
-      Top = 2
-      Width = 140
-      Height = 26
-      Hint = 'Click here to select a image category'
-      Caption = 'Control Panel Layout'
+      Left = 30
+      Top = 3
+      Width = 100
+      Height = 24
+      Hint = 'Click here to select an image category'
+      AutoSize = False
+      Caption = 'Game Snapshot'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -284,11 +392,18 @@ object FormImagesManager: TFormImagesManager
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 0
-      OnClick = ButtonImageCategoryClick
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+      Layout = tlCenter
+      OnClick = ImageCategorySelectLabelClick
     end
     object ButtonScanMissing: TBitBtnEx
-      Left = 183
+      Left = 135
       Top = 2
       Width = 124
       Height = 26
@@ -296,11 +411,11 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Scan Missing Images'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 1
       OnClick = ButtonScanMissingClick
     end
     object ButtonScanInvalidImages: TBitBtnEx
-      Left = 489
+      Left = 441
       Top = 2
       Width = 118
       Height = 26
@@ -308,11 +423,11 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Scan Invalid Images'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 3
+      TabOrder = 2
       OnClick = ButtonScanInvalidImagesClick
     end
     object ButtonHelp: TBitBtnEx
-      Left = 620
+      Left = 565
       Top = 2
       Width = 38
       Height = 26
@@ -320,11 +435,11 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Help'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 0
       OnClick = ButtonHelpClick
     end
     object ButtonScanNotUsedImages: TBitBtnEx
-      Left = 311
+      Left = 263
       Top = 2
       Width = 174
       Height = 26
@@ -332,7 +447,7 @@ object FormImagesManager: TFormImagesManager
       Caption = 'Scan Images of Missing Games'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 4
+      TabOrder = 3
       OnClick = ButtonScanNotUsedImagesClick
     end
   end
@@ -354,10 +469,9 @@ object FormImagesManager: TFormImagesManager
     object LabelTotalItemsMissing: TShadowLabel
       Left = 4
       Top = 1
-      Width = 127
+      Width = 85
       Height = 22
-      Hint = ' %u Missing Images'
-      Caption = ' 000000 Missing Images'
+      Caption = 'Missing Images'
       Constraints.MinHeight = 22
       ShowAccelChar = False
       ShadowColor = clGray
@@ -384,11 +498,11 @@ object FormImagesManager: TFormImagesManager
       OnClick = ButtonNotUsedImagesDeleteFilesClick
     end
     object LabelTotalItemsNotUsed: TShadowLabel
-      Left = 610
+      Left = 614
       Top = 0
-      Width = 121
+      Width = 79
       Height = 23
-      Caption = ' 000000 Invalid Images'
+      Caption = 'Invalid Images'
       Constraints.MinHeight = 23
       ShowAccelChar = False
       ShadowColor = clGray
@@ -552,7 +666,7 @@ object FormImagesManager: TFormImagesManager
     Height = 48
     Width = 48
     Left = 856
-    Top = 144
+    Top = 168
   end
   object PopupNotUsedIcons: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -582,7 +696,7 @@ object FormImagesManager: TFormImagesManager
     DrawModule = FormMain.BcDrawModule
     OnMeasureMenuItem = PopupMissingImagesMeasureMenuItem
     Left = 824
-    Top = 144
+    Top = 168
     object PopupNotUsedViewFullScreen: TMenuItem
       Caption = 'View with Associated App'
       ShortCut = 13

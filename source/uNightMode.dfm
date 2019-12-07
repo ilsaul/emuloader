@@ -170,9 +170,9 @@ object FormNightMode: TFormNightMode
         Width = 190
         Height = 22
         Hint = 'Bottom Gradient Background Color'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clNone
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 3
@@ -617,9 +617,9 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Frame Color'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clNone
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 5
@@ -673,9 +673,9 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Frame Color'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clNone
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 9
@@ -687,8 +687,8 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Text Font Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 10
@@ -728,9 +728,9 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Frame Color'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clNone
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 13
@@ -1124,8 +1124,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Frame Color For The Edit Box'
-        DefaultColorColor = 5131854
-        Selected = 5131854
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 6
@@ -1288,8 +1288,8 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Games List Background Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 0
@@ -1496,8 +1496,8 @@ object FormNightMode: TFormNightMode
         Width = 228
         Height = 22
         Hint = 'MAME Game Docs Background Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 0
@@ -1542,8 +1542,8 @@ object FormNightMode: TFormNightMode
         Width = 228
         Height = 22
         Hint = 'MAME Game Docs 7 Pixels Border Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 3
@@ -1650,8 +1650,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Menu Frame Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 0
@@ -2144,8 +2144,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Frame Color While Hovering'
-        DefaultColorColor = 2236962
-        Selected = 2236962
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 8
@@ -2200,8 +2200,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Shadow Font Color For The Disabled Ttext'
-        DefaultColorColor = 2236962
-        Selected = 2236962
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 12
@@ -2443,9 +2443,9 @@ object FormNightMode: TFormNightMode
         Width = 221
         Height = 22
         Hint = 'Color Of The Splitter'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clNone
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 2
@@ -2615,7 +2615,9 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Hint Box Background Color'
+        DefaultColorColor = 1513239
         NoneColorColor = clBtnFace
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 1
@@ -2741,9 +2743,9 @@ object FormNightMode: TFormNightMode
         Width = 205
         Height = 22
         Hint = 'Shadow Font Color For The Text'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clBtnFace
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 9
@@ -2973,9 +2975,9 @@ object FormNightMode: TFormNightMode
         Width = 221
         Height = 22
         Hint = 'Color Of The Splitter'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clBtnFace
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 2
@@ -3046,9 +3048,9 @@ object FormNightMode: TFormNightMode
         Width = 225
         Height = 22
         Hint = 'Image 7 Pixels Border Color'
-        DefaultColorColor = 1578258
+        DefaultColorColor = 1513239
         NoneColorColor = clWhite
-        Selected = 1578258
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 0
@@ -3705,8 +3707,8 @@ object FormNightMode: TFormNightMode
         Width = 190
         Height = 22
         Hint = 'Top Gradient Background Color / Single Color'
-        DefaultColorColor = 1578258
-        Selected = 1578258
+        DefaultColorColor = 1513239
+        Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 2
@@ -3925,9 +3927,9 @@ object FormNightMode: TFormNightMode
         Width = 221
         Height = 22
         Hint = 'Background Color'
-        DefaultColorColor = 2367253
+        DefaultColorColor = 2367259
         NoneColorColor = clBtnFace
-        Selected = 2367253
+        Selected = 2367259
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 1
@@ -4119,7 +4121,7 @@ object FormNightMode: TFormNightMode
         Themed = True
         CustomIconsEnabled = False
       end
-      object BitBtnEx1: TBitBtnEx
+      object NightModeCheckBoxRadioButtonProfileButtonUpdate: TBitBtnEx
         Left = 233
         Top = 38
         Width = 49
@@ -4127,7 +4129,7 @@ object FormNightMode: TFormNightMode
         Hint = 'Click here to update the folders list (no restart needed)'
         Caption = 'Update'
         TabOrder = 4
-        OnClick = BitBtnEx1Click
+        OnClick = NightModeCheckBoxRadioButtonProfileButtonUpdateClick
       end
     end
     object NightModeUseWin10DarkModeScrollBars: TAdvOfficeCheckBoxEx
