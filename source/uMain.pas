@@ -17883,10 +17883,17 @@ var
         Result:= Copy(str, i, l-i+1);
       end;
   end;
-  
+
 begin
-  Result:= TrimSpaces(s);
+  if Pos('&#10;', s) <> 0 then
+     begin
+       Result:= StringReplace(s, '&#10;', ' ', [rfIgnoreCase, rfReplaceAll]); // for game "colasm" from "cgenie_cass.xml" software list (May 20, 2020)
+       Result:= TrimSpaces(Result);
+     end
+  else
+     Result:= TrimSpaces(s);
   if Result = '' then Exit;
+
   pp:= PChar(Result);
   repeat
     pp:= StrScan(pp, '&');
@@ -22457,6 +22464,7 @@ var
 begin
   TempField:= '';
   TempGameVars.eName:= ListHolder.Names[Index];
+
   TempGameVars.eMechanical:= False; // reset mechanical tag to FALSE to avoid errors
   TempGameVars.eGameSize:= 0; // set to zero just in case
   tmpString:= ListHolder.ValueFromIndex[Index];
@@ -23772,6 +23780,8 @@ begin
                       SoftwareListMsgActive:= True;
                       FormStatus.MessageStr('Adding software games to games list.');
                     end;
+
+                 //FormStatus.MessageStr(TempGameVars.eSoftwareName+' -> gamename: '+TempGameVars.eName);
                end;
 
             if TempGameVars.eSoftwareUsageTip <> '' then
@@ -29030,7 +29040,7 @@ begin
 
     if not gColumn.Visible then
        columnFile.WriteInteger('Visible', aColumns[gColumn.Index, 0], 0);
-       
+
     gColumn:= GamesListView.Header.NextColumn(gColumn);
   until gColumn = nil;
 
@@ -31137,7 +31147,7 @@ begin
   CurrentGameDocsSingleDisplayPanel:= FormPreferences.GameDocsDisplayModeSinglePanel.Checked;
 
   CurrentLeadingZeroVerInfo:= FormPreferences.AddLeadingZeroVersionInfoMAME.Checked;
-  
+
   FormPreferences.ShowModal;
 
   if FormStatus.LabelSoftwareScanCount.Visible then
@@ -31180,7 +31190,7 @@ begin
 
   WriteLightModeSettings;
   WriteSplashSettings; // just in case...
-  
+
   SetImageHintBoxColors(1, True); // update ImageHintPanel
   SetImageHintBoxColors(2, True); // update ImageHintPanel2[2]
   SetImageHintBoxColors(3, True); // update ImageHintPanel2[3]

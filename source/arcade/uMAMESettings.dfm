@@ -3532,7 +3532,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 0
+        ItemHeight = 13
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
@@ -6206,7 +6206,7 @@ object FormMAMESettings: TFormMAMESettings
         Top = 92
         Width = 97
         Height = 20
-        Hint = 'Ignore coin inputs if coin lockout ouput is active'
+        Hint = 'Ignore coin inputs if coin lockout output is active'
         Checked = True
         TabOrder = 8
         Alignment = taLeftJustify
