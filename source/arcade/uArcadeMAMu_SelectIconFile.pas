@@ -1,4 +1,4 @@
-unit uArcadeSelectIconFile;
+unit uArcadeMAMu_SelectIconFile;
 
 interface
 
@@ -30,7 +30,7 @@ type
     property eDateTimeText: String read fDateTimeText write fDateTimeText;
   end;
 
-  TFormArcadeSelectIconFile = class(TForm)
+  TFormArcadeMAMu_SelectIconFile = class(TForm)
     FilesListView: TEasyListview;
     IL_IconFiles: TImageList;
     Shape1: TShape;
@@ -56,13 +56,13 @@ type
   end;
 
 var
-  FormArcadeSelectIconFile: TFormArcadeSelectIconFile;
+  FormArcadeMAMu_SelectIconFile: TFormArcadeMAMu_SelectIconFile;
 
 implementation
 
 {$R *.dfm}
 
-uses uMain, uCommon;
+uses uMain, uCommon, uArcadeMAMu_IconsManager;
 
 function TFileInfo.GetCaptions(Column: Integer): WideString;
 begin
@@ -80,7 +80,7 @@ begin
      Result:= -1;
 end;
 
-procedure TFormArcadeSelectIconFile.FormShow(Sender: TObject);
+procedure TFormArcadeMAMu_SelectIconFile.FormShow(Sender: TObject);
 begin
   mmResult:= mrCancel;
   SelectedFileName:= '';
@@ -90,25 +90,25 @@ begin
      FilesListView.HotTrack.Enabled:= False;
 end;
 
-procedure TFormArcadeSelectIconFile.ButtonCancelClick(Sender: TObject);
+procedure TFormArcadeMAMu_SelectIconFile.ButtonCancelClick(Sender: TObject);
 begin
   mmResult:= mrCancel;
   Close;
 end;
 
-procedure TFormArcadeSelectIconFile.ButtonOkClick(Sender: TObject);
+procedure TFormArcadeMAMu_SelectIconFile.ButtonOkClick(Sender: TObject);
 begin
   mmResult:= mrOk;
   Close;
 end;
 
-procedure TFormArcadeSelectIconFile.LoadIconFiles;
+procedure TFormArcadeMAMu_SelectIconFile.LoadIconFiles;
 var
   Loop: Integer;
-  FilesList: THashedStringList;
   Icon32: TExIcon;
   icoIndex: Integer;
   Item: TEasyItem;
+  iFile: String;
 
   function AddIconToList: Integer;
   var
@@ -125,44 +125,43 @@ var
 
 
 begin
-  FilesList:= THashedStringList.Create;
-  GetFilesList(FormMain.MAMu_Folder, '.ico', 'zzz*.ico', FilesList, False, True, True);
-  if FilesList.Count = 0 then
+  if FormArcadeMAMu_IconsManager.ZZZIconList.Count = 0 then
      begin
-       FreeAndNil(FilesList);
        GenerateMessage('Error', 'No files found.', '    There are no files available '+
-                       'in "'+FormMain.MAMu_Folder+'" folder. Aborting...', 2);
+                       'in icons folder(s). Aborting...', 2);
        Exit;
      end;
   FilesListView.BeginUpdate;
   FilesListView.Items.ReIndexDisable:= True;
-  for Loop:= 0 to FilesList.Count-1 do
+  for Loop:= 0 to FormArcadeMAMu_IconsManager.ZZZIconList.Count-1 do
   begin
-    Item:= FilesListView.Items.AddCustom(TFileInfo, nil);
-    TFileInfo(Item).eImageIndex:= -1;
+    if FormMain.ScanFoldersIcon(FormArcadeMAMu_IconsManager.ZZZIconList.ValueFromIndex[Loop], '', idMAME, iFile, False) then
+    begin
+      Item:= FilesListView.Items.AddCustom(TFileInfo, nil);
+      TFileInfo(Item).eImageIndex:= -1;
 
-    if FormMain.LoadMAMu_Icon(FilesList[Loop], Icon32, icoIndex, False) then
-       begin
-         Icon32.CurrentImage:= icoIndex;
-         TFileInfo(Item).eImageIndex:= AddIconToList;
-         Icon32.Releasehandle;
-         FreeAndNil(Icon32);
-       end;
-    TFileInfo(Item).eFileName:= ExtractFileName(FilesList[Loop]);
-    TFileInfo(Item).eFileFolder:= ExtractFilePath(FilesList[Loop]);
-    TFileInfo(Item).eSize:= GetFileSize(FilesList[Loop]);
-    TFileInfo(Item).eSizeText:= FormMain.GetSizeType(TFileInfo(Item).eSize, False);
-    TFileInfo(Item).eDateTime:= FileAgeW(FilesList[Loop]);
-    TFileInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TFileInfo(Item).eDateTime);
-    Item.Details[1]:= 5;
+      if FormMain.LoadMAMu_Icon(iFile, Icon32, icoIndex, False) then
+         begin
+           Icon32.CurrentImage:= icoIndex;
+           TFileInfo(Item).eImageIndex:= AddIconToList;
+           Icon32.Releasehandle;
+           FreeAndNil(Icon32);
+         end;
+      TFileInfo(Item).eFileName:= ExtractFileName(iFile);
+      TFileInfo(Item).eFileFolder:= ExtractFilePath(iFile);
+      TFileInfo(Item).eSize:= GetFileSize(iFile);
+      TFileInfo(Item).eSizeText:= FormMain.GetSizeType(TFileInfo(Item).eSize, False);
+      TFileInfo(Item).eDateTime:= FileAgeW(iFile);
+      TFileInfo(Item).eDateTimeText:= FormMain.GetDateTimeStr(TFileInfo(Item).eDateTime);
+      Item.Details[1]:= 5;
+    end;
   end;
   FilesListView.Items.ReIndexDisable:= False;
   FilesListView.Sort.SortAll;
   FilesListView.EndUpdate;
-  FreeAndNil(FilesList);
 end;
 
-procedure TFormArcadeSelectIconFile.FilesListViewItemPaintText(
+procedure TFormArcadeMAMu_SelectIconFile.FilesListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
@@ -174,7 +173,7 @@ begin
   //FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
-procedure TFormArcadeSelectIconFile.FormCloseQuery(Sender: TObject;
+procedure TFormArcadeMAMu_SelectIconFile.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if CanClose then
@@ -184,11 +183,10 @@ begin
             if FormMain.CheckSelected(FilesListView) then
                SelectedFileName:= TFileInfo(FilesListView.Selection.First).eFileName;
           end;
-
      end;
 end;
 
-function TFormArcadeSelectIconFile.FilesListViewItemCompare(
+function TFormArcadeMAMu_SelectIconFile.FilesListViewItemCompare(
   Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
   Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
 begin

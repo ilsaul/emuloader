@@ -527,6 +527,8 @@ function  GetWindowsVersion: String;
 function  IsWin10: Boolean;
 
 function  FileExists(const FileName: String): Boolean;
+function  FileExists2(const FileName: WideString): Boolean; // Unicode version for Windows 10 ?? (May 25, 2020)
+
 //function  CopyFile(const OldName, NewName: WideString; OverwriteExistingFile: Boolean = True): Boolean;
 function  RenameFile(const OldName, NewName: String; OverwriteExistingFile: Boolean = True): Boolean;
 function  MoveFile(const OldName, NewName: String; OverwriteExisting: Boolean): Boolean;
@@ -3247,6 +3249,17 @@ var
 begin
   // faster than original Delphi 7 "FileExists()" function
   Code:= GetFileAttributes(PChar(FileName));
+  //Result:= (FILE_ATTRIBUTE_DIRECTORY and Code = 0);
+  Result:= (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code = 0);
+  // Code will never return negative values!!!
+end;
+
+function FileExists2(const FileName: WideString): Boolean;
+var
+  Code: Cardinal;
+begin
+  // faster than original Delphi 7 "FileExists()" function
+  Code:= GetFileAttributesW(PWideChar(FileName));
   //Result:= (FILE_ATTRIBUTE_DIRECTORY and Code = 0);
   Result:= (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code = 0);
   // Code will never return negative values!!!

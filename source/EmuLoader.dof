@@ -110,7 +110,7 @@ IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=8
 MinorVer=8
-Release=4
+Release=5
 Build=0
 Debug=0
 PreRelease=0
@@ -122,7 +122,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=
 FileDescription=Emu Loader
-FileVersion=8.8.4.0
+FileVersion=8.8.5.0
 InternalName=EmuLoader.exe
 LegalCopyright=(C) Ciro Alfredo Consentino
 LegalTrademarks=

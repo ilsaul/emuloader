@@ -401,19 +401,6 @@ type
     IntegerScaleFactorHorizontalLabel: TShadowLabel;
     LUAPluginsToEnable: TEasyListview;
     LUAPluginsToEnable2Label: TShadowLabel;
-    SnapshotsGroupBox: TAdvGroupBoxEx;
-    SnapshotNameFormatLabel: TShadowLabel;
-    SnapshotViewLabel: TShadowLabel;
-    SnapSizeCustomXLabel: TShadowLabel;
-    SnapBurnIn: TAdvOfficeCheckBoxEx;
-    SnapNameButtonDefault: TBitBtnEx;
-    SnapView: TComboBox2Ex;
-    SnapViewButtonDefault: TBitBtnEx;
-    SnapSizeAuto: TAdvOfficeCheckBoxEx;
-    SnapSizeWidth: TEditEx;
-    SnapSizeHeight: TEditEx;
-    SnapName: TEditEx;
-    SnapBilinear: TAdvOfficeCheckBoxEx;
     EffectOverlay: TEditEx;
     EffectOverlayButtonSelect: TBitBtnEx;
     EffectOverlayLabel: TShadowLabel;
@@ -622,7 +609,6 @@ type
     ScreenButtonDefaultSettings: TBitBtnEx;
     MonitorProviderLabel: TShadowLabel;
     MonitorProvider: TComboBox2Ex;
-    SnapSizeCustomLabel: TShadowLabel;
     OverrideArtworkLabel: TShadowLabel;
     OverrideArtwork: TEditEx;
     CommSyncFrame: TAdvOfficeCheckBoxEx;
@@ -665,6 +651,30 @@ type
     NumberScreens: TXiTrackBar;
     NumberScreensLabel: TShadowLabel;
     LowLatency: TAdvOfficeCheckBoxEx;
+    VectorBeamDotSize: TGaugeBar2;
+    VectorBeamDotSizeLabel: TShadowLabel;
+    SnapshotsGroupBox: TAdvGroupBoxEx;
+    SnapshotNameFormatLabel: TShadowLabel;
+    SnapshotViewLabel: TShadowLabel;
+    SnapSizeCustomXLabel: TShadowLabel;
+    SnapSizeCustomLabel: TShadowLabel;
+    SnapBurnIn: TAdvOfficeCheckBoxEx;
+    SnapNameButtonDefault: TBitBtnEx;
+    SnapView: TComboBox2Ex;
+    SnapViewButtonDefault: TBitBtnEx;
+    SnapSizeAuto: TAdvOfficeCheckBoxEx;
+    SnapSizeWidth: TEditEx;
+    SnapSizeHeight: TEditEx;
+    SnapName: TEditEx;
+    SnapBilinear: TAdvOfficeCheckBoxEx;
+    SpeakerReportLabel: TShadowLabel;
+    SpeakerReport: TComboBox2Ex;
+    DebugLogConsole: TAdvOfficeCheckBoxEx;
+    DebuggerFont: TShadowLabel;
+    DebuggerFontButtonReset: TBitBtnEx;
+    DebuggerFontSizeLabel: TShadowLabel;
+    DebuggerFontSize: TGaugeBar;
+    SkipWarnings: TAdvOfficeCheckBoxEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -882,11 +892,16 @@ type
     procedure ButtonPageFoldersClick(Sender: TObject);
     procedure ButtonPageVideoEffectsBGFXClick(Sender: TObject);
     procedure DebuggerPortButtonResetClick(Sender: TObject);
+    procedure VectorBeamDotSizeChange(Sender: TObject);
+    procedure DebuggerFontButtonResetClick(Sender: TObject);
+    procedure DebuggerFontClick(Sender: TObject);
+    procedure DebuggerFontSizeChange(Sender: TObject);
   private
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
     IsSDLMAME: Boolean;
     IniCustomList: packed array[1..11] of THashedStringList; // 1 -> debug.ini; 11 -> parent_game.ini
+    procedure Disable_MAMEui_Settings;
     function  RemoveQuotes(const DataString: String): String;
     procedure PopulateNumberProcessors;
     procedure LoadBiosList(const SelectBiosName: String);
@@ -1093,6 +1108,12 @@ begin
            VectorBeamIntensityWeight.Enabled:= False;
          end
       else
+      if EntryString = 'beam_dot_size ' then
+         begin
+           VectorBeamDotSize.Enabled:= True;
+           VectorBeamDotSizeLabel.Enabled:= True;
+         end
+      else
       if (EntryString = 'vector_beam_smooth ') or
          (EntryString = 'vecsmooth ') then
          VectorPostProcessingGroupBox.Enabled:= True
@@ -1150,7 +1171,13 @@ begin
       else
       if (EntryString = 'lowlatency ') or
          (EntryString = 'lolat ') then
-         LowLatency.Enabled:= True;
+         LowLatency.Enabled:= True
+      else
+      if EntryString = 'speaker_report ' then
+         begin
+           SpeakerReport.Enabled:= True;
+           SpeakerReportLabel.Enabled:= True;
+         end;
     end;
   end;
   FreeAndNil(mameIni);
@@ -1775,6 +1802,7 @@ var
   MAMEIniFile, ctrlrDefinitionsList: THashedStringList;
   FoldersList: TStringList;
   Loop, Loop2: Integer;
+  UI_FileName: String;
 
   function SetComboBoxItemZero(ComboBoxHolder: TComboBox2Ex): Boolean;
   begin
@@ -1900,13 +1928,36 @@ var
   end;
 
 begin
-  if not FileExists(IniFile) then
-     Exit;
-
    ThousandSeparator:= Char(',');
    DecimalSeparator:= Char('.');
+
+   if SkipWarnings.Enabled then
+   begin
+     UI_FileName:= ExtractFilePath(IniFile)+'ui.ini';
+     if FileExists(UI_FileName) then
+        begin
+          MAMEIniFile:= THashedStringList.Create;
+          MAMEIniFile.LoadFromFile(UI_FileName);
+          for Loop:=0 to MAMEIniFile.Count-1 do
+          begin
+            TextLine:= MAMEIniFile[Loop];
+            EntryString:= XML_GetEntryName(TextLine);
+            if EntryString = 'skip_warnings ' then
+               begin
+                 SkipWarnings.Checked:= GetBooleanValue;
+                 Break;
+               end;
+          end;
+          FreeAndNil(MAMEIniFile);
+        end;
+   end;
+
+   if not FileExists(IniFile) then
+     Exit;
+
    MAMEIniFile:= THashedStringList.Create;
    MAMEIniFile.LoadFromFile(IniFile);
+
    for Loop:=0 to MAMEIniFile.Count -1 do
    begin
      TextLine:= MAMEIniFile[Loop];
@@ -2263,6 +2314,9 @@ begin
             if EntryString = 'beam_width_max ' then
                VectorBeamWidthMax.Position:= GetFloatValue('%2.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
             else
+            if EntryString = 'beam_dot_size ' then
+               VectorBeamDotSize.Position:= GetFloatValue('%2.2f')
+            else
             if EntryString = 'beam_intensity_weight ' then
                VectorBeamIntensityWeight.Position:= GetFloatValue('%1.2f') // StrToFloat(Format('%2.2f', [StrToFloat(GetStringValue)]))
             else
@@ -2368,6 +2422,13 @@ begin
             if (EntryString = 'volume ') or
                (EntryString = 'vol ') then
                Volume.Position:= GetIntegerValue
+            else
+            if EntryString = 'speaker_report ' then
+               begin
+                 SpeakerReport.ItemIndex:= GetIntegerValue;
+                 if SpeakerReport.ItemIndex = -1 then
+                    SpeakerReport.ItemIndex:= 0;
+               end
             else
             // # CORE INPUT OPTIONS
             if (EntryString = 'coin_lockout ') or
@@ -2617,6 +2678,9 @@ begin
             if EntryString = 'debugscript ' then
                DebuggerScript.Text:= GetStringValue
             else
+            if EntryString = 'debuglog ' then
+               DebugLogConsole.Checked:= GetBooleanValue
+            else
             if EntryString = 'debugger ' then // for MAME 0.153ex5 and newer
                begin
                  Value:= LowerCase(GetStringValue);
@@ -2657,12 +2721,28 @@ begin
             if EntryString = 'debugger_port ' then
                DebuggerPort.Text:= GetStringValue
             else
-            //if EntryString = 'debugger_font ' then // enable in a future frontend build
-            //   Value:= GetStringValue
-            //else
-            //if EntryString = 'debugger_font_size '
-            //   Value:= GetStringValue
-            //else
+            if (EntryString = 'debugger_font ') or
+               (EntryString = 'dfont ') then
+               begin
+                 Value:= GetStringValue;
+                 if Value = 'auto' then
+                    Value:= 'Lucida Console';
+
+                 DebuggerFont.Font.Name:= Value;
+                 DebuggerFont.Hint:= Value;
+                 if Value = 'Lucida Console' then
+                    DebuggerFont.Hint:= DebuggerFont.Hint+#13#10+'[Auto]';
+               end
+            else
+            if (EntryString = 'debugger_font_size ') or
+               (EntryString = 'dfontsize ') then
+               begin
+                 Value:= GetStringValue;
+                 if Value = '' then
+                    Value:= '0';
+                 DebuggerFontSize.Position:= StrToInt(Value);
+               end
+            else
             if EntryString = 'comm_localhost ' then
                CommLocalHost.Text:= GetStringValue
             else
@@ -3612,7 +3692,7 @@ procedure TFormMAMESettings.WriteMAMEIniFile(const customIni: String; CustomGame
 var
   MAMEIniFile, GameIniFile: THashedStringList;
   Loop, LoopPlugin: Integer;
-  Value, tmpEntryStr, EntryString: String;
+  Value, tmpEntryStr, EntryString, UI_FileName: String;
 
   //if (data->data != NULL)
 	//   fprintf(inifile, "%-25s %s\n", data->names[0], data->data);
@@ -3805,6 +3885,31 @@ begin
       end;
     False:
       begin
+        if SkipWarnings.Enabled then
+        begin
+          UI_FileName:= ExtractFilePath(emuIni)+'ui.ini';
+          if not FormMain.CheckReadOnly(UI_FileName) then
+             begin
+               MAMEIniFile:= THashedStringList.Create;
+               MAMEIniFile.LoadFromFile(UI_FileName);
+               for Loop:=0 to MAMEIniFile.Count-1 do
+               begin
+                 if MAMEIniFile[Loop] <> '' then
+                 begin
+                   EntryString:= XML_GetEntryName(MAMEIniFile[Loop]);
+                   tmpEntryStr:= EntryString+' ';
+                   if tmpEntryStr = 'skip_warnings ' then
+                      begin
+                        UpdateMAMELine(EntryString, GetBooleanValue(SkipWarnings.Checked));
+                        MAMEIniFile.SaveToFile(UI_FileName);
+                        Break;
+                      end;
+                 end;
+               end;
+               FreeAndNil(MAMEIniFile);
+             end;
+        end;
+
         if FormMain.CheckReadOnly(emuIni) then
            Exit;
       end;
@@ -4126,6 +4231,9 @@ begin
          if tmpEntryStr = 'beam_width_max ' then
             UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamWidthMax.Position]), True)
          else
+         if tmpEntryStr = 'beam_dot_size ' then
+            UpdateMAMELine(EntryString, Format('%2.2f', [VectorBeamDotSize.Position]), True)
+         else
          if tmpEntryStr = 'beam_intensity_weight ' then
             UpdateMAMELine(EntryString, Format('%1.2f', [VectorBeamIntensityWeight.Position]), True)
          else
@@ -4226,6 +4334,13 @@ begin
          if (tmpEntryStr = 'volume ') or
             (tmpEntryStr = 'vol ') then
             UpdateMAMELine(EntryString, IntToStr(Volume.Position))
+         else
+         if tmpEntryStr = 'speaker_report ' then
+            begin
+              if SpeakerReport.ItemIndex = -1 then
+                 SpeakerReport.ItemIndex:= 0;
+              UpdateMAMELine(EntryString, IntToStr(SpeakerReport.ItemIndex))
+            end
          else
          // # CORE INPUT OPTIONS
          if (tmpEntryStr = 'coin_lockout ') or
@@ -4350,6 +4465,9 @@ begin
          if tmpEntryStr = 'debugscript ' then
             UpdateMAMELine('debugscript', DebuggerScript.Text)
          else
+         if tmpEntryStr = 'debuglog ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(DebugLogConsole.Checked))
+         else
          if tmpEntryStr = 'debugger ' then
             begin
               //Auto
@@ -4390,13 +4508,21 @@ begin
               UpdateMAMELine(EntryString, DebuggerPort.Text)
             end
          else
-         //if EntryString = 'debugger_font ' then // enable in a future frontend build
-         //   Value:= GetStringValue
-         //else
-         //if EntryString = 'debugger_font_size '
-         //   Value:= GetStringValue
-         //else
-
+         if (tmpEntryStr = 'debugger_font ') or
+            (tmpEntryStr = 'dfont ') then
+            begin
+              Value:= DebuggerFont.Font.Name;
+              if Value = 'Lucida Console' then
+                 Value:= 'auto';
+              UpdateMAMELine(EntryString, Value);
+            end
+         else
+         if (tmpEntryStr = 'debugger_font_size ') or
+            (tmpEntryStr = 'dfontsize ') then
+            begin
+              UpdateMAMELine(EntryString, IntToStr(DebuggerFontSize.Position));
+            end
+         else
          //# CORE COMM OPTIONS
          if tmpEntryStr = 'comm_localhost ' then
             UpdateMAMELine(EntryString, CommLocalHost.Text)
@@ -5774,6 +5900,12 @@ begin
   FormMain.SetGroupBoxState(HTTPServer, HTTPServer.Enabled, True);
 end;
 
+procedure TFormMAMESettings.Disable_MAMEui_Settings;
+begin
+  // all "ui.ini" settings will be disabled for custom game/driver settings
+  SkipWarnings.Enabled:= False;
+end;
+
 procedure TFormMAMESettings.FormShow(Sender: TObject);
 var
   iStr: String;
@@ -5915,11 +6047,15 @@ begin
 
        // custom settings only. folders settings are only available when configuring MAME/HBMAME main settings (mame.ini; ume.ini; hbmame.ini)
        if SystemIcon.Tag = 1 then
-          ButtonPageFolders.Enabled:= False;
+          begin
+            ButtonPageFolders.Enabled:= False;
+            Disable_MAMEui_Settings;
+          end;
      end
   else
   if Tag = 1 then
      begin
+       Disable_MAMEui_Settings;
        // is game custom options... this case will never be used by emulator default settings!!! (March 16, 2016)
        //iStr:= emuVersionStr;
        iStr:= FormMain.EmulatorVersion[sysID];
@@ -7116,6 +7252,54 @@ end;
 procedure TFormMAMESettings.DebuggerPortButtonResetClick(Sender: TObject);
 begin
   DebuggerPort.Text:= '23946';
+end;
+
+procedure TFormMAMESettings.VectorBeamDotSizeChange(Sender: TObject);
+begin
+  VectorBeamDotSizeLabel.Caption:= Format(VectorBeamDotSizeLabel.Hint, [VectorBeamDotSize.Position]);
+end;
+
+procedure TFormMAMESettings.DebuggerFontButtonResetClick(Sender: TObject);
+begin
+  DebuggerFont.Font.Name:= 'Lucida Console'; // info taken from "debugger_font", file "mame\uimetrics.cpp"
+  DebuggerFont.Font.Size:= 9;
+  DebuggerFont.Caption:= 'Font';
+  DebuggerFont.Hint:= DebuggerFont.Font.Name+#13#10+'[Auto]';
+  DebuggerFontSize.Position:= 0; // auto
+end;
+
+procedure TFormMAMESettings.DebuggerFontClick(Sender: TObject);
+begin
+  FormMain.FontDialog.Font.Name:= DebuggerFont.Font.Name;
+  FormMain.FontDialog.Font.Size:= DebuggerFont.Font.Size;
+  FormMain.FontDialog.Font.Color:= clBlack;
+  FormMain.FontDialog.Tag:= 6;
+  if FormMain.FontDialog.Execute then
+     begin
+       DebuggerFont.Font.Name:= FormMain.FontDialog.Font.Name;
+       DebuggerFont.Font.Size:= FormMain.FontDialog.Font.Size;
+       DebuggerFont.Hint:= DebuggerFont.Font.Name;
+       if DebuggerFont.Font.Name = 'Lucida Console' then
+          DebuggerFont.Hint:= DebuggerFont.Hint+#13#10+'[Auto]';
+
+       DebuggerFontSize.Position:= DebuggerFont.Font.Size;
+       if (DebuggerFont.Font.Size = 9) and (DebuggerFontSize.Position <> 0) then
+          DebuggerFontSize.Position:= 0;
+     end;
+end;
+
+procedure TFormMAMESettings.DebuggerFontSizeChange(Sender: TObject);
+begin
+  if DebuggerFontSize.Position > 0 then
+     begin
+       DebuggerFontSizeLabel.Caption:= 'Font Size '+IntToStr(DebuggerFontSize.Position);
+       DebuggerFont.Font.Size:= DebuggerFontSize.Position;
+     end
+  else
+     begin
+       DebuggerFontSizeLabel.Caption:= 'Font Size [Auto]';
+       DebuggerFont.Font.Size:= 9;
+     end;
 end;
 
 end.

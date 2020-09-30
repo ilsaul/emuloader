@@ -1,4 +1,4 @@
-unit uArcadeDeleteMAMu_NotWorkingIcons;
+unit uArcadeMAMu_DeleteNotWorkingIcons;
 
 interface
 
@@ -41,7 +41,7 @@ type
   end;
 
 type
-  TFormArcadeDeleteMAMu_NotWorkingIcons = class(TForm)
+  TFormArcadeMAMu_DeleteNotWorkingIcons = class(TForm)
     NotWorkingIcons: TEasyListview;
     IL_NotWorking: TImageList;
     Panel1: TPanel;
@@ -73,11 +73,11 @@ type
   end;
 
 var
-  FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIcons;
+  FormArcadeMAMu_DeleteNotWorkingIcons: TFormArcadeMAMu_DeleteNotWorkingIcons;
 
 implementation
 
-uses uMain, uArcadeMAMu_IconsManager, uCommon, uArcadeSelectIconFile;
+uses uMain, uArcadeMAMu_IconsManager, uCommon, uArcadeMAMu_SelectIconFile;
 
 {$R *.dfm}
 
@@ -104,13 +104,13 @@ function TNotWorkingGameInfo.GetImageIndexes(Column: Integer): TCommonImageIndex
 begin
   if Column = 0 then
      begin
-       case FormArcadeDeleteMAMu_NotWorkingIcons.LabelHotkeys.Tag of
+       case FormArcadeMAMu_DeleteNotWorkingIcons.LabelHotkeys.Tag of
          //0: Result:= 0; // delete icons
          1, 2: // copy / update "zzz" icon to game name 1-> copy; 2-> update
            begin
              if not eIconLoaded then
                 begin
-                  eImageIndex:= FormArcadeDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(eSystemID, eName, eSoftwareName);
+                  eImageIndex:= FormArcadeMAMu_DeleteNotWorkingIcons.AddMAMu_Icon(eSystemID, eName, eSoftwareName);
                   if eImageIndex = -1 then
                      eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
                   eIconLoaded:= True;
@@ -123,7 +123,7 @@ begin
      Result:= -1;
 end;
 
-function TFormArcadeDeleteMAMu_NotWorkingIcons.AddMAMu_Icon(sysID: Integer; const GameName, SoftwareName: String): Integer;
+function TFormArcadeMAMu_DeleteNotWorkingIcons.AddMAMu_Icon(sysID: Integer; const GameName, SoftwareName: String): Integer;
 var
   Icon32: TExIcon;
   tmpIco: TIcon;
@@ -147,12 +147,13 @@ begin
   FreeAndNil(Icon32);
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.PopulateGamesList;
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.PopulateGamesList;
 var
   Item, addItem: TEasyItem;
   Continue: Boolean;
   zIcon: TIcon;
   addIndex, selItem: Integer;
+  FilePath: String;
 begin
   if not FormMain.CheckTotal(FormArcadeMAMu_IconsManager.MissingIconsList) then
      Exit;
@@ -182,7 +183,7 @@ begin
   selItem:= 1;
   case LabelHotkeys.Tag of
     0, 2: Item:= FormArcadeMAMu_IconsManager.MissingIconsList.Groups.FirstItem; // delete files / update "zzz.ico" to all "not working" games
-    1: Item:= FormArcadeMAMu_IconsManager.MissingIconsList.Selection.First; // copy "zzz.ico" to selected games
+    1:    Item:= FormArcadeMAMu_IconsManager.MissingIconsList.Selection.First; // copy "zzz.ico" to selected games
   end;
   repeat
     Continue:= True;
@@ -194,14 +195,19 @@ begin
        begin
          addItem:= NotWorkingIcons.Items.AddCustom(TNotWorkingGameInfo, nil);
          case LabelHotkeys.Tag of
-           0:
+           0: // delete files
              begin
-               zIcon:= TIcon.Create;
                // add the softlistname sub-folder after "FormMAMu_Folder" here...
-               zIcon.LoadFromFile(FormMain.MAMu_Folder+TMissingIconInfo(Item).eName+'.ico'); // index = MaxGameID+1
-               addIndex:= IL_NotWorking.AddIcon(zIcon);
-               FreeAndNil(zIcon);
-               TNotWorkingGameInfo(addItem).eImageIndex:= addIndex;
+               // this operation seems to never be called anywhere!!! (June 15, 2020)
+               // zIcon:= TIcon.Create;
+               if FormMain.ScanFoldersIcon(TMissingIconInfo(Item).eName, TMissingIconInfo(Item).eSoftwareName, TMissingIconInfo(Item).eSystemID, FilePath, False) then
+                  begin
+                    zIcon:= TIcon.Create;
+                    zIcon.LoadFromFile(FilePath); // zIcon.LoadFromFile(FormMain.MAMu_Folder+TMissingIconInfo(Item).eName+'.ico'); // index = MaxGameID+1
+                    addIndex:= IL_NotWorking.AddIcon(zIcon);
+                    TNotWorkingGameInfo(addItem).eImageIndex:= addIndex;
+                    FreeAndNil(zIcon);
+                  end;
              end;
            2: TNotWorkingGameInfo(addItem).eImageIndex:= MaxGameID+1;
            //0, 2: TNotWorkingGameInfo(addItem).eImageIndex:= MaxGameID+1;
@@ -226,18 +232,18 @@ begin
        end;
     case LabelHotkeys.Tag of
       0, 2: Item:= FormArcadeMAMu_IconsManager.MissingIconsList.Groups.NextItem(Item); // delete files
-      1: Item:= FormMain.ELV_GetNextSelected(FormArcadeMAMu_IconsManager.MissingIconsList, Item, selItem); // copy / update "zzz.ico" to selected games
+      1:    Item:= FormMain.ELV_GetNextSelected(FormArcadeMAMu_IconsManager.MissingIconsList, Item, selItem); // copy / update "zzz.ico" to selected games
       //1: Item:= FormMAMu_IConsManager.MissingIconsList.Selection.Next(Item); // copy / update "zzz.ico" to selected games
     end;
   until Item = nil;
   NotWorkingIcons.EndUpdate;
   case LabelHotkeys.Tag of
-    0: FormArcadeDeleteMAMu_NotWorkingIcons.Caption:= Format('%s - [%u Files]', [FormArcadeDeleteMAMu_NotWorkingIcons.Caption, NotWorkingIcons.Groups.ItemCount]);
-    1, 2: FormArcadeDeleteMAMu_NotWorkingIcons.Caption:= Format('%s - [%u Games]', [FormArcadeDeleteMAMu_NotWorkingIcons.Caption, NotWorkingIcons.Groups.ItemCount-1]);
+    0:    FormArcadeMAMu_DeleteNotWorkingIcons.Caption:= Format('%s - [%u Files]', [FormArcadeMAMu_DeleteNotWorkingIcons.Caption, NotWorkingIcons.Groups.ItemCount]);
+    1, 2: FormArcadeMAMu_DeleteNotWorkingIcons.Caption:= Format('%s - [%u Games]', [FormArcadeMAMu_DeleteNotWorkingIcons.Caption, NotWorkingIcons.Groups.ItemCount-1]);
   end;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIconsItemPaintText(
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIconsItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
@@ -268,40 +274,43 @@ begin
         ACanvas.Font.Color:= clGray;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.SetMode;
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.SetMode;
 var
   zIcon: TIcon;
-  //FolderStr: String;
 begin
-  FormArcadeDeleteMAMu_NotWorkingIcons.Tag:= FormArcadeMAMu_IconsManager.SystemSelectLabel.Tag;
+  FormArcadeMAMu_DeleteNotWorkingIcons.Tag:= FormArcadeMAMu_IconsManager.SystemSelectLabel.Tag;
   ButtonSourceIcon.Enabled:= LabelHotkeys.Tag <> 0; // delete files only support zzz.ico ?
-  FormArcadeMAMu_IconsManager.SourceIconFile:= 'zzz.ico';
+  if FormArcadeMAMu_IconsManager.SourceIconFile = '' then
+     FormArcadeMAMu_IconsManager.SourceIconFile:= 'zzz.ico';
   case LabelHotkeys.Tag of
     0:
       begin
-        FormArcadeDeleteMAMu_NotWorkingIcons.Caption:= 'Delete '+FormArcadeDeleteMAMu_NotWorkingIcons.Caption;
+        FormArcadeMAMu_DeleteNotWorkingIcons.Caption:= 'Delete '+FormArcadeMAMu_DeleteNotWorkingIcons.Caption;
         LabelHotkeys.Caption:= LabelHotkeys.Caption+'Delete Files';
       end;
     1:
       begin
-        FormArcadeDeleteMAMu_NotWorkingIcons.Caption:= 'Copy '+FormArcadeDeleteMAMu_NotWorkingIcons.Caption;
+        FormArcadeMAMu_DeleteNotWorkingIcons.Caption:= 'Copy '+FormArcadeMAMu_DeleteNotWorkingIcons.Caption;
         ButtonDeleteFiles.Caption:= 'Copy Files';
         ButtonDeleteFiles.Hint:= 'Click here to copy "zzz" icon to checked games';
         LabelHotkeys.Caption:= LabelHotkeys.Caption+'Copy Files';
       end;
     2:
       begin
-        FormArcadeDeleteMAMu_NotWorkingIcons.Caption:= 'Update '+FormArcadeDeleteMAMu_NotWorkingIcons.Caption;
+        FormArcadeMAMu_DeleteNotWorkingIcons.Caption:= 'Update '+FormArcadeMAMu_DeleteNotWorkingIcons.Caption;
         ButtonDeleteFiles.Caption:= 'Update Files';
         ButtonDeleteFiles.Hint:= 'Click here to update "zzz" icon to checked games';
         LabelHotkeys.Caption:= LabelHotkeys.Caption+'Update Files';
       end;
   end;
-  if not FileExists(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile) then
+
+  if FormArcadeMAMu_IconsManager.zzzIconFolder = '' then
+     FormArcadeMAMu_IconsManager.zzzIconFolder:= FormMain.DetectFolderIcon('zzz.ico');
+  if not FileExists(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile) then
      begin
        CallMessageBox;
        FormMain.AddMsgText('    Required file ');
-       FormMain.AddMsgText(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile, MsgTxtColors.colorFileName,[fsBold]);
+       FormMain.AddMsgText(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile, MsgTxtColors.colorFileName,[fsBold]);
        FormMain.AddMsgText(' was not found. Cannot proceed...');
        GenerateMessage('Error', 'File not found', '', 2, False, 1);
        //ButtonCancel.Click;
@@ -310,8 +319,7 @@ begin
 
   FormMain.AddGamesSystemsIcons(IL_NotWorking, False);
   zIcon:= TIcon.Create;
-  //zIcon.LoadFromFile(IncludeTrailingPathDelimiter(FormMain.MAMu_Folders[1])+FormMAMu_IconsManager.SourceIconFile); // index = MaxGameID+1
-  zIcon.LoadFromFile(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile); // index = MaxGameID+1
+  zIcon.LoadFromFile(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile); // index = MaxGameID+1
 
   IL_NotWorking.AddIcon(zIcon);
   FreeAndNil(zIcon);
@@ -326,14 +334,14 @@ begin
   PopulateGamesList;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.ReplaceZZZIcon;
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.ReplaceZZZIcon;
 var
   Icon32: TExIcon;
   icoIndex: Integer;
   nIcon: TIcon;
   Item: TEasyItem;
 begin
-  if not FormMain.LoadMAMu_Icon(FormMain.MAMu_Folder+FormArcadeMAMu_IconsManager.SourceIconFile, Icon32, icoIndex, False) then
+  if not FormMain.LoadMAMu_Icon(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile, Icon32, icoIndex, False) then
      Exit;
   Item:= NotWorkingIcons.Groups.FirstItem;
   Icon32.CurrentImage:= icoIndex;
@@ -351,13 +359,13 @@ begin
   NotWorkingIcons.EndUpdate;
 end;
 
-function TFormArcadeDeleteMAMu_NotWorkingIcons.CheckNameZZZ(FileNameStr: String): Boolean;
+function TFormArcadeMAMu_DeleteNotWorkingIcons.CheckNameZZZ(FileNameStr: String): Boolean;
 begin
   Result:= (FileNameStr = 'zzz.ico') or
            (Copy(FileNameStr , 1, 4) = 'zzz_');
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIconsKeyAction(
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIconsKeyAction(
   Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
   var DoDefault: Boolean);
 begin
@@ -367,7 +375,7 @@ begin
   end;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.FormShow(Sender: TObject);
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.FormShow(Sender: TObject);
 begin
   mmResult:= mrCancel;
   ButtonSourceIcon.Enabled:= LabelHotkeys.Tag <> 0;
@@ -376,7 +384,7 @@ begin
      NotWorkingIcons.HotTrack.Enabled:= False;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIconsItemCheckChange(
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIconsItemCheckChange(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if CheckNameZZZ(TNotWorkingGameInfo(Item).eName) then
@@ -388,14 +396,14 @@ begin
   end;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.FormKeyPress(Sender: TObject;
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.FormKeyPress(Sender: TObject;
   var Key: Char);
 begin
   if Key = #27 then
      ButtonCancel.Click;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.ButtonSourceIconClick(Sender: TObject);
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.ButtonSourceIconClick(Sender: TObject);
 var
   NewFileStr: String;
 begin
@@ -403,11 +411,13 @@ begin
   // "zzz*.ico"
   NewFileStr:= '';
   FormArcadeMAMu_IconsManager.DetectFileMD5;
-  if not Assigned(FormArcadeSelectIconFile) then
-     FormArcadeSelectIconFile:= TFormArcadeSelectIconFile.Create(nil);
-  FormArcadeSelectIconFile.ShowModal;
-  NewFileStr:= FormArcadeSelectIconFile.SelectedFileName;
-  FreeAndNil(FormArcadeSelectIconFile);
+  if not Assigned(FormArcadeMAMu_SelectIconFile) then
+     FormArcadeMAMu_SelectIconFile:= TFormArcadeMAMu_SelectIconFile.Create(nil);
+
+  FormArcadeMAMu_SelectIconFile.LabelCurrentSourceFile.Caption:= FormArcadeMAMu_SelectIconFile.LabelCurrentSourceFile.Caption+' '+FormArcadeMAMu_IconsManager.SourceIconFile;
+  FormArcadeMAMu_SelectIconFile.ShowModal;
+  NewFileStr:= FormArcadeMAMu_SelectIconFile.SelectedFileName;
+  FreeAndNil(FormArcadeMAMu_SelectIconFile);
   if NewFileStr = '' then
      Exit;
   if SameText(NewFileStr, FormArcadeMAMu_IconsManager.SourceIconFile) then
@@ -417,13 +427,13 @@ begin
   ReplaceZZZIcon;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.ButtonDeleteFilesClick(Sender: TObject);
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.ButtonDeleteFilesClick(Sender: TObject);
 begin
   mmResult:= mrOk;
   Close;
 end;
 
-procedure TFormArcadeDeleteMAMu_NotWorkingIcons.ButtonCancelClick(Sender: TObject);
+procedure TFormArcadeMAMu_DeleteNotWorkingIcons.ButtonCancelClick(Sender: TObject);
 begin
   mmResult:= mrCancel;
   Close;

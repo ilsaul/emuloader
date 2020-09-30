@@ -27,7 +27,7 @@ object FormMain: TFormMain
     Left = 794
     Top = 55
     Width = 6
-    Height = 692
+    Height = 691
     Align = alRight
     ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
@@ -382,7 +382,7 @@ object FormMain: TFormMain
     Left = 0
     Top = 55
     Width = 794
-    Height = 692
+    Height = 691
     Align = alClient
     BevelOuter = bvNone
     Color = 15856113
@@ -391,7 +391,7 @@ object FormMain: TFormMain
       Left = 230
       Top = 0
       Width = 6
-      Height = 692
+      Height = 691
       Visible = False
       Appearance.BorderColor = clNone
       Appearance.BorderColorHot = clNone
@@ -408,7 +408,7 @@ object FormMain: TFormMain
       Left = 236
       Top = 0
       Width = 558
-      Height = 692
+      Height = 691
       Align = alClient
       BevelOuter = bvNone
       Color1 = 15856113
@@ -424,7 +424,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 558
-        Height = 672
+        Height = 671
         Align = alClient
         CellSizes.SmallIcon.Height = 20
         CellSizes.Tile.Width = 260
@@ -591,7 +591,7 @@ object FormMain: TFormMain
       object StatusBarPanel: TPanelEx
         Tag = 1
         Left = 0
-        Top = 672
+        Top = 671
         Width = 558
         Height = 20
         Align = alBottom
@@ -628,7 +628,7 @@ object FormMain: TFormMain
         object StatusBar_GamesGameName: TShadowLabel
           Left = 147
           Top = 2
-          Width = 378
+          Width = 379
           Height = 16
           Caption = 
             'gamename [clonename] [biosname] [merged] [xml file: softwarename' +
@@ -678,7 +678,7 @@ object FormMain: TFormMain
       Left = 0
       Top = 0
       Width = 230
-      Height = 692
+      Height = 691
       Align = alLeft
       BevelOuter = bvNone
       Color1 = 15856113
@@ -695,7 +695,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 230
-        Height = 672
+        Height = 671
         Align = alClient
         CellSizes.Report.Height = 20
         Color = clWhite
@@ -782,7 +782,7 @@ object FormMain: TFormMain
       end
       object StatusBarPanelMachines: TPanelEx
         Left = 0
-        Top = 672
+        Top = 671
         Width = 230
         Height = 20
         Align = alBottom
@@ -1231,7 +1231,7 @@ object FormMain: TFormMain
     Left = 800
     Top = 55
     Width = 450
-    Height = 692
+    Height = 691
     Align = alRight
     BevelOuter = bvNone
     Color1 = 15856113
@@ -4018,6 +4018,7 @@ object FormMain: TFormMain
       end
       object N44: TMenuItem
         Caption = '-'
+        Hint = 'MAME / Arcade'
       end
       object MenuImagesManager: TMenuItem
         Caption = 'MAME Images Manager'
@@ -4025,7 +4026,7 @@ object FormMain: TFormMain
         OnClick = MenuImagesManagerClick
       end
       object MenuImagesDeleteCloneGameImages: TMenuItem
-        Caption = 'Delete Clone Game Images'
+        Caption = 'Delete Images of Clone Games'
         OnClick = MenuImagesDeleteCloneGameImagesClick
       end
     end

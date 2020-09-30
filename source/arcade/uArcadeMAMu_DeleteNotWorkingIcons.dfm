@@ -1,4 +1,4 @@
-object FormArcadeDeleteMAMu_NotWorkingIcons: TFormArcadeDeleteMAMu_NotWorkingIcons
+object FormArcadeMAMu_DeleteNotWorkingIcons: TFormArcadeMAMu_DeleteNotWorkingIcons
   Left = 547
   Top = 317
   ActiveControl = NotWorkingIcons

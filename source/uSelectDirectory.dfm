@@ -4,8 +4,8 @@ object FormSelectDirectory: TFormSelectDirectory
   ActiveControl = ShellTree
   BorderStyle = bsDialog
   Caption = 'Browse for Folder'
-  ClientHeight = 402
-  ClientWidth = 434
+  ClientHeight = 481
+  ClientWidth = 584
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -26,8 +26,8 @@ object FormSelectDirectory: TFormSelectDirectory
   object ShellTree: TShellTreeView
     Left = 0
     Top = 37
-    Width = 434
-    Height = 301
+    Width = 584
+    Height = 380
     AutoContextMenus = False
     ObjectTypes = [otFolders]
     Root = 'rfDesktop'
@@ -40,15 +40,13 @@ object FormSelectDirectory: TFormSelectDirectory
     Indent = 19
     ParentColor = False
     RightClickSelect = True
-    ShowRoot = False
     TabOrder = 0
     OnChange = ShellTreeChange
-    OnGetImageIndex = ShellTreeGetImageIndex
   end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 434
+    Width = 584
     Height = 37
     Align = alTop
     Color1 = 16445669
@@ -94,8 +92,8 @@ object FormSelectDirectory: TFormSelectDirectory
   end
   object BottomBar: TPanelEx
     Left = 0
-    Top = 338
-    Width = 434
+    Top = 417
+    Width = 584
     Height = 64
     Align = alBottom
     Color1 = clWhite
@@ -109,8 +107,8 @@ object FormSelectDirectory: TFormSelectDirectory
     Style = vgSimple
     object LabelSelectedPath: TShadowLabel
       Left = 2
-      Top = 3
-      Width = 430
+      Top = 5
+      Width = 580
       Height = 19
       AutoSize = False
       Caption = 'Full path of the selected item is shown here...'
@@ -146,7 +144,7 @@ object FormSelectDirectory: TFormSelectDirectory
       CustomIconsEnabled = False
     end
     object ButtonOk: TBitBtnEx
-      Left = 239
+      Left = 389
       Top = 31
       Width = 89
       Height = 25
@@ -156,7 +154,7 @@ object FormSelectDirectory: TFormSelectDirectory
       TabOrder = 1
     end
     object ButtonCancel: TBitBtnEx
-      Left = 337
+      Left = 487
       Top = 31
       Width = 89
       Height = 25

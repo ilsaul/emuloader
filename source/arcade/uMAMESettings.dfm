@@ -154,7 +154,7 @@ object FormMAMESettings: TFormMAMESettings
   end
   object NotebookPages: TNotebook
     Left = 0
-    Top = 100
+    Top = 99
     Width = 868
     Height = 454
     Color = 15856113
@@ -440,7 +440,7 @@ object FormMAMESettings: TFormMAMESettings
       object FolderLanguageFilesLabel: TShadowLabel
         Left = 303
         Top = 192
-        Width = 143
+        Width = 141
         Height = 16
         Caption = 'Path to UI Translation Files'
         ParentShowHint = False
@@ -1357,7 +1357,7 @@ object FormMAMESettings: TFormMAMESettings
         object IntegerScaleFactorVerticalLabel: TShadowLabel
           Left = 92
           Top = 225
-          Width = 24
+          Width = 23
           Height = 16
           Caption = 'Vert'
           Enabled = False
@@ -1566,170 +1566,6 @@ object FormMAMESettings: TFormMAMESettings
           Alignment = taLeftJustify
           Caption = 'Auto Uneven Stretch'
           ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-      end
-      object VectorGroupBox: TAdvGroupBoxEx
-        Left = 384
-        Top = 214
-        Width = 169
-        Height = 213
-        CheckBox.CustomIconsEnabled = False
-        RoundEdges = True
-        Caption = 'Vector'
-        ParentCtl3D = True
-        TabOrder = 1
-        object VectorFlickerEffectLabel: TShadowLabel
-          Left = 8
-          Top = 40
-          Width = 121
-          Height = 15
-          Hint = 'Flicker Effect [%3.2f]'
-          AutoSize = False
-          Caption = 'Flicker Effect [0.00]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = False
-        end
-        object VectorBeamWidthMinLabel: TShadowLabel
-          Left = 8
-          Top = 83
-          Width = 145
-          Height = 15
-          Hint = 'Beam Min Width [%2.2f]'
-          AutoSize = False
-          Caption = 'Beam Min Width [1.00]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = False
-        end
-        object VectorBeamWidthMaxLabel: TShadowLabel
-          Left = 8
-          Top = 126
-          Width = 145
-          Height = 15
-          Hint = 'Beam Max Width [%2.2f]'
-          AutoSize = False
-          Caption = 'Beam Max Width [1.00]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = False
-        end
-        object VectorBeamIntensityWeightLabel: TShadowLabel
-          Left = 8
-          Top = 169
-          Width = 158
-          Height = 15
-          Hint = 'Beam Intensity Weight [%1.2f]'
-          AutoSize = False
-          Caption = 'Beam Intensity Weight [0.00]'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = False
-        end
-        object VectorFlickerEffect: TGaugeBar2
-          Left = 8
-          Top = 56
-          Width = 153
-          Height = 20
-          Hint = 'Set vector flicker effect'
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 10.000000000000000000
-          Max = 100.000000000000000000
-          ShowHandleGrip = True
-          SmallChange = 0.500000000000000000
-          OnChange = VectorFlickerEffectChange
-        end
-        object VectorBeamWidthMin: TGaugeBar2
-          Left = 8
-          Top = 99
-          Width = 153
-          Height = 20
-          Hint = 'Set minimum vector beam width'
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 0.100000001490116100
-          Max = 10.000000000000000000
-          Min = 0.009999999776482582
-          ShowHandleGrip = True
-          SmallChange = 0.009999999776482582
-          Position = 1.000000000000000000
-          OnChange = VectorBeamWidthMinChange
-        end
-        object VectorBeamWidthMax: TGaugeBar2
-          Left = 8
-          Top = 142
-          Width = 153
-          Height = 20
-          Hint = 'Set maximum vector beam width'
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 0.100000001490116100
-          Max = 10.000000000000000000
-          Min = 0.009999999776482582
-          ShowHandleGrip = True
-          SmallChange = 0.009999999776482582
-          Position = 1.000000000000000000
-          OnChange = VectorBeamWidthMaxChange
-        end
-        object VectorBeamIntensityWeight: TGaugeBar2
-          Left = 8
-          Top = 185
-          Width = 153
-          Height = 20
-          Hint = 'Set maximum vector beam width'
-          Backgnd = bgPattern
-          ButtonSize = 12
-          LargeChange = 0.100000001490116100
-          Max = 1.000000000000000000
-          Min = -1.000000000000000000
-          ShowHandleGrip = True
-          SmallChange = 0.009999999776482582
-          OnChange = VectorBeamIntensityWeightChange
-        end
-        object Antialias: TAdvOfficeCheckBoxEx
-          Left = 8
-          Top = 20
-          Width = 65
-          Height = 19
-          Hint = 'Use antialiasing when drawing vectors'
-          Checked = True
-          Enabled = False
-          TabOrder = 4
-          Alignment = taLeftJustify
-          Caption = 'Antialias'
-          ReturnIsTab = False
-          State = cbChecked
           Themed = True
           CustomIconsEnabled = False
         end
@@ -2109,232 +1945,6 @@ object FormMAMESettings: TFormMAMESettings
           OnChange = FullScreenGammaChange
         end
       end
-      object SnapshotsGroupBox: TAdvGroupBoxEx
-        Left = 568
-        Top = 227
-        Width = 169
-        Height = 200
-        CheckBox.CustomIconsEnabled = False
-        RoundEdges = True
-        Caption = 'Snapshots / Movies'
-        ParentCtl3D = True
-        TabOrder = 6
-        object SnapshotNameFormatLabel: TShadowLabel
-          Left = 8
-          Top = 20
-          Width = 76
-          Height = 16
-          Caption = 'Name Format'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object SnapshotViewLabel: TShadowLabel
-          Left = 8
-          Top = 64
-          Width = 28
-          Height = 16
-          Caption = 'View'
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object SnapSizeCustomXLabel: TShadowLabel
-          Left = 111
-          Top = 134
-          Width = 10
-          Height = 16
-          Caption = 'X'
-          Enabled = False
-          ParentShowHint = False
-          ShowAccelChar = False
-          ShowHint = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object SnapSizeCustomLabel: TShadowLabel
-          Left = 24
-          Top = 134
-          Width = 45
-          Height = 16
-          Caption = 'Custom'
-          Enabled = False
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object SnapBurnIn: TAdvOfficeCheckBoxEx
-          Left = 7
-          Top = 176
-          Width = 113
-          Height = 20
-          Hint = 'Create burn-in snapshots for each screen'
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Burn-in Snapshot'
-          ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object SnapNameButtonDefault: TBitBtnEx
-          Left = 125
-          Top = 36
-          Width = 38
-          Height = 21
-          Hint = 'Set default snapshot name'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-          OnClick = SnapNameButtonDefaultClick
-        end
-        object SnapView: TComboBox2Ex
-          Left = 8
-          Top = 80
-          Width = 115
-          Height = 21
-          Hint = 
-            'Specify snapshot/movie view'#13#10'Select the default '#39'internal'#39' to us' +
-            'e internal pixel-aspect views'
-          Style = csDropDownList
-          Ctl3D = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentCtl3D = False
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-          Text = 'Internal'
-          Items.Strings = (
-            'Internal'
-            'Auto'
-            'Standard'
-            'Native'
-            'Pixel Aspect'
-            'Cocktail')
-        end
-        object SnapViewButtonDefault: TBitBtnEx
-          Left = 124
-          Top = 80
-          Width = 38
-          Height = 21
-          Hint = 'Set default snapshot / movie view'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-          OnClick = SnapViewButtonDefaultClick
-        end
-        object SnapSizeAuto: TAdvOfficeCheckBoxEx
-          Left = 8
-          Top = 111
-          Width = 106
-          Height = 20
-          Hint = 'Set resolution to game'#39's original size (raw pixels)'
-          Checked = True
-          TabOrder = 4
-          OnClick = SnapSizeAutoClick
-          Alignment = taLeftJustify
-          Caption = 'Auto Resolution'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object SnapSizeWidth: TEditEx
-          Left = 68
-          Top = 131
-          Width = 40
-          Height = 21
-          Hint = 'Custom resolution width'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-          OnKeyPress = SnapSizeWidthKeyPress
-        end
-        object SnapSizeHeight: TEditEx
-          Left = 122
-          Top = 131
-          Width = 40
-          Height = 21
-          Hint = 'Custom resolution height'
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          Enabled = False
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-          OnKeyPress = SnapSizeHeightKeyPress
-        end
-        object SnapName: TEditEx
-          Left = 8
-          Top = 36
-          Width = 115
-          Height = 21
-          Hint = 
-            'Override the default snapshot naming; %g == gamename, %i == inde' +
-            'x'
-          AutoSize = False
-          Color = clWhite
-          ParentShowHint = False
-          ShowHint = False
-          TabOrder = 7
-        end
-        object SnapBilinear: TAdvOfficeCheckBoxEx
-          Left = 8
-          Top = 156
-          Width = 123
-          Height = 20
-          Hint = 
-            'Specify if the snapshot/movie should have bilinear filtering app' +
-            'lied'
-          Checked = True
-          TabOrder = 8
-          Alignment = taLeftJustify
-          Caption = 'Apply Bilinear Filter'
-          ReturnIsTab = False
-          State = cbChecked
-          Themed = True
-          CustomIconsEnabled = False
-        end
-      end
       object ArtworkGroupBox: TAdvGroupBoxEx
         Left = 568
         Top = 12
@@ -2598,6 +2208,207 @@ object FormMAMESettings: TFormMAMESettings
           CustomIconsEnabled = False
         end
       end
+      object VectorGroupBox: TAdvGroupBoxEx
+        Left = 384
+        Top = 214
+        Width = 353
+        Height = 170
+        CheckBox.CustomIconsEnabled = False
+        RoundEdges = True
+        Caption = 'Vector'
+        ParentCtl3D = True
+        TabOrder = 1
+        object VectorFlickerEffectLabel: TShadowLabel
+          Left = 8
+          Top = 40
+          Width = 121
+          Height = 15
+          Hint = 'Flicker Effect [%3.2f]'
+          AutoSize = False
+          Caption = 'Flicker Effect [0.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object VectorBeamWidthMinLabel: TShadowLabel
+          Left = 176
+          Top = 40
+          Width = 145
+          Height = 15
+          Hint = 'Beam Min Width [%2.2f]'
+          AutoSize = False
+          Caption = 'Beam Min Width [1.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object VectorBeamWidthMaxLabel: TShadowLabel
+          Left = 176
+          Top = 83
+          Width = 145
+          Height = 15
+          Hint = 'Beam Max Width [%2.2f]'
+          AutoSize = False
+          Caption = 'Beam Max Width [1.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object VectorBeamIntensityWeightLabel: TShadowLabel
+          Left = 8
+          Top = 83
+          Width = 158
+          Height = 15
+          Hint = 'Beam Intensity Weight [%1.2f]'
+          AutoSize = False
+          Caption = 'Beam Intensity Weight [0.00]'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object VectorBeamDotSizeLabel: TShadowLabel
+          Left = 8
+          Top = 126
+          Width = 145
+          Height = 15
+          Hint = 'Beam Dot Size [%2.2f]'
+          AutoSize = False
+          Caption = 'Beam Dot Size [1.00]'
+          Enabled = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object VectorFlickerEffect: TGaugeBar2
+          Left = 8
+          Top = 56
+          Width = 153
+          Height = 20
+          Hint = 'Set vector flicker effect'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 10.000000000000000000
+          Max = 100.000000000000000000
+          ShowHandleGrip = True
+          SmallChange = 0.500000000000000000
+          OnChange = VectorFlickerEffectChange
+        end
+        object VectorBeamWidthMin: TGaugeBar2
+          Left = 176
+          Top = 56
+          Width = 153
+          Height = 20
+          Hint = 'Set minimum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 10.000000000000000000
+          Min = 0.009999999776482582
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          Position = 1.000000000000000000
+          OnChange = VectorBeamWidthMinChange
+        end
+        object VectorBeamWidthMax: TGaugeBar2
+          Left = 176
+          Top = 99
+          Width = 153
+          Height = 20
+          Hint = 'Set maximum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 10.000000000000000000
+          Min = 0.009999999776482582
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          Position = 1.000000000000000000
+          OnChange = VectorBeamWidthMaxChange
+        end
+        object VectorBeamIntensityWeight: TGaugeBar2
+          Left = 8
+          Top = 99
+          Width = 153
+          Height = 20
+          Hint = 'Set maximum vector beam width'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 0.100000001490116100
+          Max = 1.000000000000000000
+          Min = -1.000000000000000000
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          OnChange = VectorBeamIntensityWeightChange
+        end
+        object Antialias: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 20
+          Width = 65
+          Height = 19
+          Hint = 'Use antialiasing when drawing vectors'
+          Checked = True
+          Enabled = False
+          TabOrder = 4
+          Alignment = taLeftJustify
+          Caption = 'Antialias'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object VectorBeamDotSize: TGaugeBar2
+          Left = 8
+          Top = 142
+          Width = 321
+          Height = 20
+          Hint = 'Set vector beam size for dots'
+          Backgnd = bgPattern
+          ButtonSize = 12
+          Enabled = False
+          LargeChange = 0.100000001490116100
+          Max = 10.000000000000000000
+          Min = 1.000000000000000000
+          ShowHandleGrip = True
+          SmallChange = 0.009999999776482582
+          Position = 1.000000000000000000
+          OnChange = VectorBeamDotSizeChange
+        end
+      end
     end
     object TPage
       Left = 0
@@ -2623,7 +2434,7 @@ object FormMAMESettings: TFormMAMESettings
       object AttachWindowLabel: TShadowLabel
         Left = 336
         Top = 79
-        Width = 151
+        Width = 149
         Height = 16
         Caption = 'Attach To Arbitrary Window'
         ShadowColor = clGray
@@ -2681,7 +2492,7 @@ object FormMAMESettings: TFormMAMESettings
         object ThreadPriorityLabel: TShadowLabel
           Left = 208
           Top = 86
-          Width = 81
+          Width = 80
           Height = 16
           Caption = 'Thread Priority'
           ParentShowHint = False
@@ -3450,6 +3261,232 @@ object FormMAMESettings: TFormMAMESettings
         Color = clWhite
         TabOrder = 4
       end
+      object SnapshotsGroupBox: TAdvGroupBoxEx
+        Left = 336
+        Top = 242
+        Width = 169
+        Height = 200
+        CheckBox.CustomIconsEnabled = False
+        RoundEdges = True
+        Caption = 'Snapshots / Movies'
+        ParentCtl3D = True
+        TabOrder = 5
+        object SnapshotNameFormatLabel: TShadowLabel
+          Left = 8
+          Top = 20
+          Width = 76
+          Height = 16
+          Caption = 'Name Format'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object SnapshotViewLabel: TShadowLabel
+          Left = 8
+          Top = 64
+          Width = 28
+          Height = 16
+          Caption = 'View'
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object SnapSizeCustomXLabel: TShadowLabel
+          Left = 111
+          Top = 134
+          Width = 10
+          Height = 16
+          Caption = 'X'
+          Enabled = False
+          ParentShowHint = False
+          ShowAccelChar = False
+          ShowHint = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object SnapSizeCustomLabel: TShadowLabel
+          Left = 24
+          Top = 134
+          Width = 45
+          Height = 16
+          Caption = 'Custom'
+          Enabled = False
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object SnapBurnIn: TAdvOfficeCheckBoxEx
+          Left = 7
+          Top = 176
+          Width = 113
+          Height = 20
+          Hint = 'Create burn-in snapshots for each screen'
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Burn-in Snapshot'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object SnapNameButtonDefault: TBitBtnEx
+          Left = 125
+          Top = 36
+          Width = 38
+          Height = 21
+          Hint = 'Set default snapshot name'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = SnapNameButtonDefaultClick
+        end
+        object SnapView: TComboBox2Ex
+          Left = 8
+          Top = 80
+          Width = 115
+          Height = 21
+          Hint = 
+            'Specify snapshot/movie view'#13#10'Select the default '#39'internal'#39' to us' +
+            'e internal pixel-aspect views'
+          Style = csDropDownList
+          Ctl3D = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentCtl3D = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
+          Text = 'Internal'
+          Items.Strings = (
+            'Internal'
+            'Auto'
+            'Standard'
+            'Native'
+            'Pixel Aspect'
+            'Cocktail')
+        end
+        object SnapViewButtonDefault: TBitBtnEx
+          Left = 124
+          Top = 80
+          Width = 38
+          Height = 21
+          Hint = 'Set default snapshot / movie view'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = SnapViewButtonDefaultClick
+        end
+        object SnapSizeAuto: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 111
+          Width = 106
+          Height = 20
+          Hint = 'Set resolution to game'#39's original size (raw pixels)'
+          Checked = True
+          TabOrder = 4
+          OnClick = SnapSizeAutoClick
+          Alignment = taLeftJustify
+          Caption = 'Auto Resolution'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object SnapSizeWidth: TEditEx
+          Left = 68
+          Top = 131
+          Width = 40
+          Height = 21
+          Hint = 'Custom resolution width'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+          OnKeyPress = SnapSizeWidthKeyPress
+        end
+        object SnapSizeHeight: TEditEx
+          Left = 122
+          Top = 131
+          Width = 40
+          Height = 21
+          Hint = 'Custom resolution height'
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          Enabled = False
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          OnKeyPress = SnapSizeHeightKeyPress
+        end
+        object SnapName: TEditEx
+          Left = 8
+          Top = 36
+          Width = 115
+          Height = 21
+          Hint = 
+            'Override the default snapshot naming; %g == gamename, %i == inde' +
+            'x'
+          AutoSize = False
+          Color = clWhite
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 7
+        end
+        object SnapBilinear: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 156
+          Width = 123
+          Height = 20
+          Hint = 
+            'Specify if the snapshot/movie should have bilinear filtering app' +
+            'lied'
+          Checked = True
+          TabOrder = 8
+          Alignment = taLeftJustify
+          Caption = 'Apply Bilinear Filter'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+          CustomIconsEnabled = False
+        end
+      end
     end
     object TPage
       Left = 0
@@ -3602,7 +3639,7 @@ object FormMAMESettings: TFormMAMESettings
           object BGFXShadowMaskTextureNameLabel: TShadowLabel
             Left = 8
             Top = 100
-            Width = 118
+            Width = 117
             Height = 16
             Caption = 'Shadow Mask Texture'
             ParentShowHint = False
@@ -3665,7 +3702,7 @@ object FormMAMESettings: TFormMAMESettings
           object BGFXScreenShaderChainsHelpLabel: TShadowLabel
             Left = 126
             Top = 144
-            Width = 229
+            Width = 230
             Height = 16
             Caption = 'select a shader in the list or type in edit box'
             Font.Charset = ANSI_CHARSET
@@ -3688,7 +3725,7 @@ object FormMAMESettings: TFormMAMESettings
           object BGFXLUTTextureNameLabel: TShadowLabel
             Left = 384
             Top = 100
-            Width = 101
+            Width = 99
             Height = 16
             Caption = 'LUT Texture Name'
             ParentShowHint = False
@@ -3984,7 +4021,7 @@ object FormMAMESettings: TFormMAMESettings
           object ShadowMaskTextureLabel: TShadowLabel
             Left = 8
             Top = 98
-            Width = 118
+            Width = 117
             Height = 16
             Caption = 'Shadow Mask Texture'
             ParentShowHint = False
@@ -4050,7 +4087,7 @@ object FormMAMESettings: TFormMAMESettings
           object ShadowMaskTileModeLabel: TShadowLabel
             Left = 8
             Top = 146
-            Width = 132
+            Width = 131
             Height = 16
             Caption = 'Shadow Mask Tile Mode'
             ParentShowHint = False
@@ -5496,7 +5533,7 @@ object FormMAMESettings: TFormMAMESettings
         object AutobootCommandLabel: TShadowLabel
           Left = 8
           Top = 20
-          Width = 209
+          Width = 210
           Height = 16
           Caption = 'Execute Command After Machine Boot'
           ShowAccelChar = False
@@ -5511,7 +5548,7 @@ object FormMAMESettings: TFormMAMESettings
         object AutobootDelayLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 124
+          Width = 123
           Height = 16
           Hint = 'Delay Timer [%s]'
           HelpType = htKeyword
@@ -5531,7 +5568,7 @@ object FormMAMESettings: TFormMAMESettings
         object AutobootLuaScriptLabel: TShadowLabel
           Left = 8
           Top = 107
-          Width = 221
+          Width = 222
           Height = 16
           Hint = 'Delay Timer [%u sec]'
           Caption = 'LUA Script to Execute After Machine Boot'
@@ -5708,9 +5745,9 @@ object FormMAMESettings: TFormMAMESettings
       end
       object AudioGroupBox: TAdvGroupBoxEx
         Left = 632
-        Top = 65
+        Top = 19
         Width = 222
-        Height = 152
+        Height = 196
         CheckBox.CustomIconsEnabled = False
         RoundEdges = True
         ShadowColor = clSilver
@@ -5750,7 +5787,7 @@ object FormMAMESettings: TFormMAMESettings
         object VolumeLabel: TShadowLabel
           Left = 8
           Top = 64
-          Width = 141
+          Width = 140
           Height = 16
           Hint = 'Volume Attenuation [%ddB]'
           Caption = 'Volume Attenuation [0dB]'
@@ -5771,6 +5808,22 @@ object FormMAMESettings: TFormMAMESettings
           Width = 112
           Height = 16
           Caption = 'Sound Output Mode'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object SpeakerReportLabel: TShadowLabel
+          Left = 8
+          Top = 151
+          Width = 82
+          Height = 16
+          Caption = 'Speaker Report'
+          Enabled = False
           ShowAccelChar = False
           ShadowColor = clGray
           ShadowEnabled = False
@@ -5902,6 +5955,35 @@ object FormMAMESettings: TFormMAMESettings
             'PortAudio'
             'None')
         end
+        object SpeakerReport: TComboBox2Ex
+          Left = 8
+          Top = 167
+          Width = 115
+          Height = 21
+          Hint = 
+            'Print report of speaker ouput maxima (0=none, or 1-4 for more de' +
+            'tail)'
+          Style = csDropDownList
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
+          Text = 'None'
+          Items.Strings = (
+            'None'
+            'Details (Level 1)'
+            'Details (Level 2)'
+            'Details (Level 3)'
+            'Details (Level 4)')
+        end
       end
       object PortAudioSettingsGroupBox: TAdvGroupBoxEx
         Left = 632
@@ -6028,7 +6110,7 @@ object FormMAMESettings: TFormMAMESettings
       object CoinImpulseLabel: TShadowLabel
         Left = 168
         Top = 120
-        Width = 103
+        Width = 102
         Height = 16
         Caption = 'Coin Impulse Time'
         ShowAccelChar = False
@@ -6432,7 +6514,7 @@ object FormMAMESettings: TFormMAMESettings
         object Analog_TrackballLabel: TShadowLabel
           Left = 152
           Top = 152
-          Width = 51
+          Width = 49
           Height = 16
           Caption = 'Trackball'
           ShowAccelChar = False
@@ -7360,8 +7442,8 @@ object FormMAMESettings: TFormMAMESettings
       Top = 0
       Caption = 'Miscellaneous'
       object RAMSizeLabel: TShadowLabel
-        Left = 252
-        Top = 100
+        Left = 16
+        Top = 327
         Width = 127
         Height = 16
         Caption = 'RAM Size (if supported)'
@@ -7391,7 +7473,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIFontLabel: TShadowLabel
         Left = 252
-        Top = 398
+        Top = 238
         Width = 98
         Height = 16
         Caption = 'User Inteface Font'
@@ -7407,7 +7489,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIFontProviderLabel: TShadowLabel
         Left = 372
-        Top = 354
+        Top = 195
         Width = 47
         Height = 16
         Caption = 'Provider'
@@ -7421,8 +7503,8 @@ object FormMAMESettings: TFormMAMESettings
       end
       object TypeUserInterfaceLabel: TShadowLabel
         Left = 252
-        Top = 354
-        Width = 118
+        Top = 195
+        Width = 116
         Height = 16
         Caption = 'Type of User Interface'
         ShowAccelChar = False
@@ -7434,8 +7516,8 @@ object FormMAMESettings: TFormMAMESettings
         Frames = []
       end
       object DisplayLanguageLabel: TShadowLabel
-        Left = 16
-        Top = 240
+        Left = 252
+        Top = 14
         Width = 171
         Height = 16
         Caption = 'User Interface Display Language'
@@ -7468,7 +7550,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveStateNameLabel: TShadowLabel
         Left = 16
-        Top = 196
+        Top = 195
         Width = 91
         Height = 16
         Caption = 'Save State Name'
@@ -7525,7 +7607,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object Cheat: TAdvOfficeCheckBoxEx
         Left = 138
-        Top = 32
+        Top = 52
         Width = 105
         Height = 20
         Hint = 'Enable cheat subsystem'
@@ -7537,9 +7619,9 @@ object FormMAMESettings: TFormMAMESettings
         CustomIconsEnabled = False
       end
       object RAMSize: TEditEx
-        Left = 252
-        Top = 116
-        Width = 153
+        Left = 16
+        Top = 343
+        Width = 175
         Height = 21
         Hint = 'Size of RAM (if supported by driver)'
         AutoSize = False
@@ -7560,249 +7642,11 @@ object FormMAMESettings: TFormMAMESettings
         Themed = True
         CustomIconsEnabled = False
       end
-      object DebugGroupBox: TAdvGroupBoxEx
-        Left = 252
-        Top = 146
-        Width = 197
-        Height = 197
-        CheckBox.Action = caNone
-        CheckBox.Hint = 'Enable/disable debugger'
-        CheckBox.Visible = True
-        CheckBox.CustomIconsEnabled = False
-        RoundEdges = True
-        Caption = 'Enable Debugger'
-        ParentCtl3D = True
-        TabOrder = 6
-        object DebuggerScriptLabel: TShadowLabel
-          Left = 8
-          Top = 150
-          Width = 88
-          Height = 16
-          Caption = 'Debugger Script'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object WatchdogLabel: TShadowLabel
-          Left = 8
-          Top = 64
-          Width = 58
-          Height = 16
-          Hint = 
-            'Creates new thread that kills the application after a few second' +
-            's'
-          Caption = 'Watchdog'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-        end
-        object DebuggerLabel: TShadowLabel
-          Left = 92
-          Top = 64
-          Width = 94
-          Height = 16
-          Caption = 'Debugger To Use'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object WatchdogSecsLabel: TShadowLabel
-          Left = 55
-          Top = 83
-          Width = 25
-          Height = 16
-          Hint = 
-            'Creates new thread that kills the application after a few second' +
-            's'
-          Caption = 'secs'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-        end
-        object ShadowLabel1: TShadowLabel
-          Left = 8
-          Top = 110
-          Width = 80
-          Height = 16
-          Caption = 'Debugger Port'
-          ShowAccelChar = False
-          ShadowColor = clGray
-          ShadowEnabled = False
-          EllipsType = etNone
-          ColorFrame = clBlack
-          ColorInnerFrame = clBlack
-          Frames = []
-          Transparent = True
-        end
-        object Log: TAdvOfficeCheckBoxEx
-          Left = 8
-          Top = 40
-          Width = 57
-          Height = 20
-          Hint = 'Generate an error.log file'
-          TabOrder = 0
-          Alignment = taLeftJustify
-          Caption = 'Log'
-          ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object OSLog: TAdvOfficeCheckBoxEx
-          Left = 81
-          Top = 40
-          Width = 112
-          Height = 20
-          Hint = 
-            'Output error.log data to system diagnostic output (debugger or s' +
-            'tandard error)'
-          TabOrder = 1
-          Alignment = taLeftJustify
-          Caption = 'Log to Debugger'
-          ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object Verbose: TAdvOfficeCheckBoxEx
-          Left = 8
-          Top = 20
-          Width = 81
-          Height = 20
-          Hint = 'Display additional diagnostic information'
-          TabOrder = 2
-          Alignment = taLeftJustify
-          Caption = 'Verbose'
-          ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object UpdateInPause: TAdvOfficeCheckBoxEx
-          Left = 81
-          Top = 20
-          Width = 109
-          Height = 20
-          Hint = 'Keep calling video updates while in pause'
-          TabOrder = 3
-          Alignment = taLeftJustify
-          Caption = 'Update In Pause'
-          ReturnIsTab = False
-          Themed = True
-          CustomIconsEnabled = False
-        end
-        object DebuggerScript: TEditEx
-          Left = 8
-          Top = 168
-          Width = 137
-          Height = 21
-          Hint = 'Script for debugger'
-          TabStop = False
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 4
-        end
-        object DebuggerScriptButtonSelect: TBitBtnEx
-          Left = 146
-          Top = 168
-          Width = 43
-          Height = 21
-          Hint = 'Click here to select a file'
-          Caption = 'Select'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 5
-          OnClick = DebuggerScriptButtonSelectClick
-        end
-        object Watchdog: TEditEx
-          Left = 11
-          Top = 80
-          Width = 40
-          Height = 21
-          Hint = 
-            'Creates new thread that kills the application after a few second' +
-            's'
-          AutoSize = False
-          TabOrder = 6
-          Text = '2500'
-          OnKeyPress = WatchdogKeyPress
-        end
-        object Debugger: TComboBox2Ex
-          Left = 92
-          Top = 80
-          Width = 97
-          Height = 21
-          Style = csDropDownList
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ItemHeight = 13
-          ItemIndex = 0
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 7
-          Text = 'Auto'
-          Items.Strings = (
-            'Auto'
-            'Internal'
-            'Windows'
-            'None')
-        end
-        object DebuggerPort: TEditEx
-          Left = 8
-          Top = 128
-          Width = 137
-          Height = 21
-          Hint = 'Port to use for GDB stub debugger'
-          TabStop = False
-          AutoSize = False
-          Color = clWhite
-          Ctl3D = True
-          ParentCtl3D = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 8
-        end
-        object DebuggerPortButtonReset: TBitBtnEx
-          Left = 146
-          Top = 128
-          Width = 43
-          Height = 21
-          Hint = 'Click here to use the default port'
-          Caption = 'Reset'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 9
-          OnClick = DebuggerPortButtonResetClick
-        end
-      end
       object BiosSetsListView: TEasyListview
         Left = 465
         Top = 30
         Width = 385
-        Height = 407
+        Height = 245
         BackGround.Enabled = True
         CellSizes.Report.Height = 19
         Color = clWhite
@@ -7867,7 +7711,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIFont: TEditEx
         Left = 252
-        Top = 414
+        Top = 254
         Width = 153
         Height = 21
         Hint = 'Specify a font to use'
@@ -7880,7 +7724,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIFontSelectFontButtonSelect: TBitBtnEx
         Left = 407
-        Top = 414
+        Top = 254
         Width = 43
         Height = 21
         Hint = 'Click here to select a font'
@@ -7890,8 +7734,8 @@ object FormMAMESettings: TFormMAMESettings
         OnClick = UIFontSelectFontButtonSelectClick
       end
       object DRC: TAdvOfficeCheckBoxEx
-        Left = 252
-        Top = 12
+        Left = 16
+        Top = 239
         Width = 141
         Height = 20
         Hint = 'Enable DRC CPU core if available'
@@ -7905,8 +7749,8 @@ object FormMAMESettings: TFormMAMESettings
         CustomIconsEnabled = False
       end
       object DRCUseC: TAdvOfficeCheckBoxEx
-        Left = 252
-        Top = 32
+        Left = 16
+        Top = 259
         Width = 189
         Height = 20
         Hint = 'Force DRC to use C backend'
@@ -7919,8 +7763,8 @@ object FormMAMESettings: TFormMAMESettings
         CustomIconsEnabled = False
       end
       object RAMSizeButtonClear: TBitBtnEx
-        Left = 407
-        Top = 116
+        Left = 193
+        Top = 343
         Width = 43
         Height = 21
         Hint = 'Click here to clear RAM size'
@@ -7929,8 +7773,8 @@ object FormMAMESettings: TFormMAMESettings
         OnClick = RAMSizeButtonClearClick
       end
       object DRCLogUML: TAdvOfficeCheckBoxEx
-        Left = 252
-        Top = 52
+        Left = 16
+        Top = 279
         Width = 194
         Height = 20
         TabOrder = 13
@@ -7941,8 +7785,8 @@ object FormMAMESettings: TFormMAMESettings
         CustomIconsEnabled = False
       end
       object DRCLogNative: TAdvOfficeCheckBoxEx
-        Left = 252
-        Top = 72
+        Left = 16
+        Top = 299
         Width = 201
         Height = 20
         TabOrder = 14
@@ -7954,7 +7798,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object UIFontProvider: TComboBox2Ex
         Left = 372
-        Top = 370
+        Top = 211
         Width = 78
         Height = 21
         Hint = 'Provider for user interface font'
@@ -7978,7 +7822,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object TypeUserInterface: TComboBox2Ex
         Left = 252
-        Top = 370
+        Top = 211
         Width = 119
         Height = 21
         Style = csDropDownList
@@ -7997,10 +7841,10 @@ object FormMAMESettings: TFormMAMESettings
           'Cabinet')
       end
       object DisplayLanguageList: TEasyListview
-        Left = 16
-        Top = 258
-        Width = 220
-        Height = 179
+        Left = 252
+        Top = 32
+        Width = 197
+        Height = 156
         BackGround.Enabled = True
         CellSizes.Report.Height = 19
         Color = clWhite
@@ -8014,7 +7858,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          00060000008008000101000100000000000000D9000000FFFFFF1F0001000000
+          00060000008008000101000100000000000000C2000000FFFFFF1F0001000000
           010000001A0000004C0061006E00670075006100670065002000280064006500
           6600610075006C007400200069006E00200062006F006C006400290000000000
           0000000000000000}
@@ -8116,7 +7960,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveStateName: TEditEx
         Left = 16
-        Top = 212
+        Top = 211
         Width = 175
         Height = 21
         Hint = 'Override of the default state subfolder naming; %g == gamename'
@@ -8128,7 +7972,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object SaveStateNameButtonReset: TBitBtnEx
         Left = 193
-        Top = 212
+        Top = 211
         Width = 43
         Height = 21
         Hint = 'Set default save state name'
@@ -8149,6 +7993,343 @@ object FormMAMESettings: TFormMAMESettings
         TabOrder = 24
         Alignment = taLeftJustify
         Caption = 'Skip Mandatory Images at Startup'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+      end
+      object DebugGroupBox: TAdvGroupBoxEx
+        Left = 465
+        Top = 283
+        Width = 385
+        Height = 137
+        CheckBox.Action = caNone
+        CheckBox.Hint = 'Enable/disable debugger'
+        CheckBox.Visible = True
+        CheckBox.CustomIconsEnabled = False
+        RoundEdges = True
+        Caption = 'Enable Debugger'
+        ParentCtl3D = True
+        TabOrder = 6
+        object DebuggerScriptLabel: TShadowLabel
+          Left = 196
+          Top = 90
+          Width = 88
+          Height = 16
+          Caption = 'Debugger Script'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object WatchdogLabel: TShadowLabel
+          Left = 8
+          Top = 44
+          Width = 58
+          Height = 16
+          Hint = 
+            'Creates new thread that kills the application after a few second' +
+            's'
+          Caption = 'Watchdog'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object DebuggerLabel: TShadowLabel
+          Left = 92
+          Top = 44
+          Width = 92
+          Height = 16
+          Caption = 'Debugger To Use'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object WatchdogSecsLabel: TShadowLabel
+          Left = 52
+          Top = 63
+          Width = 25
+          Height = 16
+          Hint = 
+            'Creates new thread that kills the application after a few second' +
+            's'
+          Caption = 'secs'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+        end
+        object ShadowLabel1: TShadowLabel
+          Left = 196
+          Top = 44
+          Width = 80
+          Height = 16
+          Caption = 'Debugger Port'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = True
+        end
+        object DebuggerFont: TShadowLabel
+          Left = 8
+          Top = 90
+          Width = 57
+          Height = 38
+          Hint = 'Lucida Console [Auto]'
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'Font'
+          Color = clWhite
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Lucida Console'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clGray
+          ColorInnerFrame = clBlack
+          Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
+          Transparent = False
+          Layout = tlCenter
+          OnClick = DebuggerFontClick
+        end
+        object DebuggerFontSizeLabel: TShadowLabel
+          Left = 72
+          Top = 90
+          Width = 114
+          Height = 16
+          AutoSize = False
+          Caption = 'Font Size [Auto]'
+          ShowAccelChar = False
+          ShadowColor = clGray
+          ShadowEnabled = False
+          EllipsType = etNone
+          ColorFrame = clBlack
+          ColorInnerFrame = clBlack
+          Frames = []
+          Transparent = False
+        end
+        object Log: TAdvOfficeCheckBoxEx
+          Left = 269
+          Top = 20
+          Width = 42
+          Height = 20
+          Hint = 'Generate an error.log file'
+          TabOrder = 0
+          Alignment = taLeftJustify
+          Caption = 'Log'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object OSLog: TAdvOfficeCheckBoxEx
+          Left = 322
+          Top = 20
+          Width = 57
+          Height = 20
+          Hint = 
+            'Output error.log data to system diagnostic output (debugger or s' +
+            'tandard error)'
+          TabOrder = 1
+          Alignment = taLeftJustify
+          Caption = 'OS Log'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object Verbose: TAdvOfficeCheckBoxEx
+          Left = 8
+          Top = 20
+          Width = 81
+          Height = 20
+          Hint = 'Display additional diagnostic information'
+          TabOrder = 2
+          Alignment = taLeftJustify
+          Caption = 'Verbose'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object UpdateInPause: TAdvOfficeCheckBoxEx
+          Left = 81
+          Top = 20
+          Width = 109
+          Height = 20
+          Hint = 'Keep calling video updates while in pause'
+          TabOrder = 3
+          Alignment = taLeftJustify
+          Caption = 'Update In Pause'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object DebuggerScript: TEditEx
+          Left = 196
+          Top = 108
+          Width = 137
+          Height = 21
+          Hint = 'Script for debugger'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+        end
+        object DebuggerScriptButtonSelect: TBitBtnEx
+          Left = 334
+          Top = 108
+          Width = 43
+          Height = 21
+          Hint = 'Click here to select a file'
+          Caption = 'Select'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 5
+          OnClick = DebuggerScriptButtonSelectClick
+        end
+        object Watchdog: TEditEx
+          Left = 8
+          Top = 60
+          Width = 40
+          Height = 21
+          Hint = 
+            'Creates new thread that kills the application after a few second' +
+            's'
+          AutoSize = False
+          TabOrder = 6
+          Text = '2500'
+          OnKeyPress = WatchdogKeyPress
+        end
+        object Debugger: TComboBox2Ex
+          Left = 92
+          Top = 60
+          Width = 97
+          Height = 21
+          Style = csDropDownList
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ItemHeight = 13
+          ItemIndex = 0
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+          Text = 'Auto'
+          Items.Strings = (
+            'Auto'
+            'Internal'
+            'Windows'
+            'None')
+        end
+        object DebuggerPort: TEditEx
+          Left = 196
+          Top = 62
+          Width = 137
+          Height = 21
+          Hint = 'Port to use for GDB stub debugger'
+          TabStop = False
+          AutoSize = False
+          Color = clWhite
+          Ctl3D = True
+          ParentCtl3D = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 8
+        end
+        object DebuggerPortButtonReset: TBitBtnEx
+          Left = 334
+          Top = 62
+          Width = 43
+          Height = 21
+          Hint = 'Click here to use the default port'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 9
+          OnClick = DebuggerPortButtonResetClick
+        end
+        object DebugLogConsole: TAdvOfficeCheckBoxEx
+          Left = 196
+          Top = 20
+          Width = 65
+          Height = 20
+          Hint = 'Write debug console output to debug.log'
+          TabOrder = 10
+          Alignment = taLeftJustify
+          Caption = 'Console'
+          ReturnIsTab = False
+          Themed = True
+          CustomIconsEnabled = False
+        end
+        object DebuggerFontButtonReset: TBitBtnEx
+          Left = 144
+          Top = 108
+          Width = 43
+          Height = 21
+          Hint = 'Click here to reset to default'
+          Caption = 'Reset'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 11
+          OnClick = DebuggerFontButtonResetClick
+        end
+        object DebuggerFontSize: TGaugeBar
+          Left = 72
+          Top = 108
+          Width = 66
+          Height = 20
+          Color = clWhite
+          Backgnd = bgPattern
+          ButtonSize = 12
+          LargeChange = 4
+          Max = 48
+          Min = -1
+          ShowHint = False
+          ShowHandleGrip = True
+          Position = 0
+          OnChange = DebuggerFontSizeChange
+        end
+      end
+      object SkipWarnings: TAdvOfficeCheckBoxEx
+        Left = 138
+        Top = 32
+        Width = 105
+        Height = 20
+        Hint = 'Display fewer repeated warnings about imperfect emulation'
+        TabOrder = 25
+        Alignment = taLeftJustify
+        Caption = 'Skip Warnings'
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False

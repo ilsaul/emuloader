@@ -1,4 +1,4 @@
-object FormArcadeSelectIconFile: TFormArcadeSelectIconFile
+object FormArcadeMAMu_SelectIconFile: TFormArcadeMAMu_SelectIconFile
   Left = 566
   Top = 280
   ActiveControl = FilesListView

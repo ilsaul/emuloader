@@ -23,7 +23,6 @@ type
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ShellTreeChange(Sender: TObject; Node: TTreeNode);
     procedure FormShow(Sender: TObject);
-    procedure ShellTreeGetImageIndex(Sender: TObject; Node: TTreeNode);
   private
     { Private declarations }
   public
@@ -56,6 +55,8 @@ begin
   ShellTree.ShowRoot:= True;
   //ShellTree.Path:= 'd:\EmuLoader\snap';
   ShellTree.Items.EndUpdate;
+  if IsNightMode then
+     FormMain.SetWin10DarkScrollBar(ShellTree); // must be here to fix selection colors and scroll bar (September 25, 2020)
   //ShellTree.Selected.MakeVisible;
   if Screen.Cursor <> crDefault then
      Screen.Cursor:= crDefault;
@@ -99,16 +100,9 @@ begin
        FormMain.SetCheckBoxExCustomIcon(AddSubFolders);
        ShellTree.Color:= FormSelectDirectory.Color;
        ShellTree.Font.Color:= clCream;
-
-       FormMain.SetWin10DarkScrollBar(ShellTree);
+       FormMain.SetButtonExColors(ButtonOk);
+       FormMain.SetButtonExColors(ButtonCancel);
      end;
-end;
-
-procedure TFormSelectDirectory.ShellTreeGetImageIndex(Sender: TObject;
-  Node: TTreeNode);
-begin
-  if Node.Selected then
-     FormSelectDirectory.Caption:= 'image index: '+IntToStr(Node.ImageIndex);
 end;
 
 end.

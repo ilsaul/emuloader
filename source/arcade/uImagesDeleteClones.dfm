@@ -1,11 +1,10 @@
-object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
-  Left = 515
-  Top = 216
+object FormImagesDeleteClones: TFormImagesDeleteClones
+  Left = 915
+  Top = 592
+  Width = 1006
+  Height = 610
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'Delete MAME and Arcade Clone Images'
-  ClientHeight = 572
-  ClientWidth = 954
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -20,9 +19,27 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
+  object Splitter: TSplitterEx
+    Left = 632
+    Top = 0
+    Width = 6
+    Height = 572
+    Align = alRight
+    ResizeStyle = rsUpdate
+    Appearance.BorderColor = clNone
+    Appearance.BorderColorHot = clNone
+    Appearance.Color = 16445929
+    Appearance.ColorTo = 15587527
+    Appearance.ColorHot = 13891839
+    Appearance.ColorHotTo = 7782911
+    Appearance.SingleColor = clBtnFace
+    Appearance.SingleColorHot = clGray
+    GripStyle = sgDots
+    Style = tsOffice2007Luna
+  end
   object PanelImages: TPanelEx
     Tag = 1
-    Left = 602
+    Left = 638
     Top = 0
     Width = 352
     Height = 572
@@ -37,11 +54,12 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     Frames = []
     ParentBackground = False
     Style = vgSolid
-    object PanelScreen1: TPanelEx
+    OnResize = PanelImagesResize
+    object PanelGameScr1: TPanelEx
       Left = 0
       Top = 0
       Width = 352
-      Height = 284
+      Height = 286
       Align = alTop
       BevelOuter = bvNone
       Color1 = 15856113
@@ -57,7 +75,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Left = 0
         Top = 20
         Width = 352
-        Height = 264
+        Height = 266
         Align = alClient
         Bitmap.DrawMode = dmBlend
         Bitmap.ResamplerClassName = 'TKernelResampler'
@@ -91,10 +109,10 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
           Top = 0
           Width = 352
           Height = 20
-          Hint = 'SCREEN 1'
+          Hint = 'GAME'
           Align = alClient
           Alignment = taCenter
-          Caption = 'SCREEN 1'
+          Caption = 'GAME'
           Color = clBtnFace
           Constraints.MinHeight = 20
           Font.Charset = ANSI_CHARSET
@@ -118,9 +136,9 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     end
     object PanelParentGameScr1: TPanelEx
       Left = 0
-      Top = 284
+      Top = 286
       Width = 352
-      Height = 288
+      Height = 286
       Align = alClient
       BevelOuter = bvNone
       Color1 = 15856113
@@ -136,7 +154,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Left = 0
         Top = 20
         Width = 352
-        Height = 268
+        Height = 266
         Align = alClient
         Bitmap.DrawMode = dmBlend
         Bitmap.ResamplerClassName = 'TKernelResampler'
@@ -200,7 +218,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
   object PanelGames: TPanelEx
     Left = 0
     Top = 0
-    Width = 602
+    Width = 632
     Height = 572
     Align = alClient
     BevelOuter = bvNone
@@ -213,20 +231,21 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     Frames = []
     ParentBackground = False
     Style = vgVista
+    OnResize = PanelGamesResize
     object DeleteClonesList: TEasyListview
       Left = 0
       Top = 57
-      Width = 602
+      Width = 632
       Height = 515
       Align = alClient
-      CellSizes.Report.Height = 20
+      CellSizes.Report.Height = 28
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
       EditManager.Font.Height = -12
       EditManager.Font.Name = 'Segoe UI'
       EditManager.Font.Style = []
-      ImagesState = IL_Systems
+      ImagesState = FormMain.IL_ArcadeSystem_Small
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -240,27 +259,27 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        000600000080080001010101000000000100019A010000FFFFFF1F0001000000
+        0006000000800800010100010000000001000186010000FFFFFF1F0001000000
         01000000050000005400690074006C0065000000000000000000000000001100
         00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-        00010100000000000164000000FFFFFF1F000100000001000000040000004E00
+        00010100000000000178000000FFFFFF1F000100000001000000040000004E00
         61006D006500000000000000000000000000110000005445617379436F6C756D
-        6E53746F726564FFFECE00060000008008000101000102000000000001630000
+        6E53746F726564FFFECE00060000008008000101000102000000000001780000
         00FFFFFF1F0001000000010000000800000043006C006F006E00650020006F00
         6600000000000000000000000000}
       Header.Draggable = False
       Header.Font.Charset = ANSI_CHARSET
       Header.Font.Color = clBlack
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
+      Header.Font.Height = -12
+      Header.Font.Name = 'Segoe UI'
       Header.Font.Style = []
+      Header.Height = 23
       Header.Sizeable = False
       Header.Visible = True
       IncrementalSearch.Enabled = True
       IncrementalSearch.ResetTime = 1300
       IncrementalSearch.StartType = eissFocusedNode
-      ImagesSmall = FormMain.IL_StandardIconsSmall
-      PaintInfoColumn.CaptionIndent = 0
+      ImagesSmall = FormMain.IL_StandardIconsStandard
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
       ParentFont = False
       ParentShowHint = False
@@ -286,7 +305,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
     object PanelTop: TPanelEx
       Left = 0
       Top = 0
-      Width = 602
+      Width = 632
       Height = 57
       Align = alTop
       Color1 = 15856113
@@ -423,9 +442,7 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         Top = 30
         Width = 106
         Height = 24
-        Hint = 
-          'Rename image to parent game name (selected game, no multi-select' +
-          ' support!)'
+        Hint = 'Rename image to parent game name (all selected games)'
         Caption = 'Rename to Parent'
         ParentShowHint = False
         ShowHint = True
@@ -433,10 +450,6 @@ object FormArcadeDeleteCloneImages: TFormArcadeDeleteCloneImages
         OnClick = ButtonRenameToParentClick
       end
     end
-  end
-  object IL_Systems: TImageList
-    Left = 264
-    Top = 160
   end
   object IL_ToolBar: TImageList
     Height = 24

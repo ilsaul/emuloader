@@ -1740,6 +1740,7 @@ type
 
     function  VideoPreviewValidateSnapFolder(const FilePath: WideString): WideString;
     function  VideoPreviewFindFile(sysID, CustomSysID: ShortInt; IsCustomGame: Boolean; const GameName, CloneOfName: WideString; const SoftwareName: String = ''): WideString;
+    function  VideoPreviewFindFile_MAME(sysID, CustomSysID: ShortInt; IsCustomGame: Boolean; const GameName, CloneOfName: WideString; const SoftwareName: String = ''): WideString; // for multiple paths support
     procedure VideoPreviewPlay(StopCurrentPlayback: Boolean = False);
     procedure VideoPreviewPlayDummy(ForcePlayback: Boolean = False);
 
@@ -1928,6 +1929,7 @@ type
 
     ToolBarOverlayIconFolderStr: String;
     MAMu_Folder: String;
+    MAMu_FoldersList: TStringList; // for multi-paths support
 
     SortAuditGames, UseSevenZip: Boolean;
     AutoMAMEInfoDATFile, AutoHistoryDATFile, AutoStoryDATFile, AutoMarpDATFile, AutoGameInitDATFile: THashedStringList;
@@ -2220,7 +2222,7 @@ type
     procedure LoadFolders_ConfigFiles(sysID: Integer; out dirCFG: String; out dirNVRAM: String);
     function  MountFoldersListMAME(ListHolder: TEasyListView): String;
     function  MountFoldersListToString(ListSource: TStringList): String;
-    procedure ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
+    procedure ExtractFolders2MAME(sysID: Integer; const PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
     procedure ExtractMultiFolders(const FoldersStr: String; SystemID: Integer; ELV_ListHolder: TEasyListView);
 
     procedure UpdateImageHintBoxPosition(HintBoxSource: TPanelEx; ImageSource: TImage32; PositionIndex: Integer);
@@ -2285,6 +2287,7 @@ type
     function  CheckMAMEIniFileUI(const ExeFileName: String): Boolean;
     function  CheckMAMu_Folder: Boolean;
     function  ScanFoldersIcon(const IconName, SoftwareName: String; sysID: Byte; out FileFullPath: String; ZippedIcon: Boolean; ZippedIconArrayIndex: Integer = -1): Boolean;
+    function  DetectFolderIcon(const iFileName: String): String;
     function  GetMAMu_IconFileName(sysID: Byte; romID: Integer; const GameName, CloneName, DriverName, BiosName, SoftwareName: String; ZippedIcon: Boolean; ZippedIconArrayIndex: Integer = -1): String;
 
     function  LoadMAMu_Icon(const IconFile: String; var IconVar: TExIcon; var IconIndex: Integer; ZippedIcon: Boolean; const ZipFullPath: String = ''; const SoftwareName: String = ''; IconSize: Integer = 32; ZippedIconArrayIndex: Integer = -1): Boolean;
@@ -2544,7 +2547,7 @@ uses
   uThumbnailViewSettings,
   uArcadeFileVersions, uImageLayoutSettings,
   uSelectDirectory, uArcadeROMsFolders, uGamesListFontSettings,
-  uArcadeDeleteCloneImages, uDeleteGamesFiles,
+  uImagesDeleteClones, uDeleteGamesFiles,
   uArcadeMAMu_IconsManager, uImagesManager,
   uSupermodelSettings, uArcadeFiltersGamesExtra, uImageDeleteRename,
   uImageLayoutDimensions, uDaphneSettings, uArcadeScanGamesMode,
@@ -3723,13 +3726,10 @@ end;
 procedure TFormMain.AddRequestThumbExtraction(Item: TEasyItem);
 var
   Request: TMyThreadRequest;
-  //{folderScan, }SoftwareDir, ExtraFolderStrMAME, zipFile, SoftListZipFile, SoftListZipFile_SL: String;
-  //FoundZipped, FoundZippedSoftList, FoundZippedSoftList_SL, Continue: Boolean;
-  //SoftIndex: Integer;
-  //Continue: Boolean;
-  //folderScan{, fileScan, fileExt}: WideString;
 
   function SearchImageFile(IsNewImageNamingMAME: Boolean; SearchInZip: Boolean = False): Boolean;
+  var
+    tLoopMAME: Integer;
   begin
     TEasyGameInfo(Item).fThumbTempVars.fileExt:= '.png';
     Result:= False;
@@ -3760,15 +3760,13 @@ var
                 if Result then
                    begin
                      Result:= Assigned(imgZipFileSoftList[TEasyGameInfo(Item).fThumbTempVars.SoftIndex, 1]);
-                     //if not Result then
-                     //   Exit;
                      if Result then
                         begin
                           Result:= imgZipFileSoftList[TEasyGameInfo(Item).fThumbTempVars.SoftIndex, 1].IndexOf(TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt) <> -1;
                           if Result then
                              begin
                                TEasyGameInfo(Item).fThumbTempVars.FoundZippedSoftList:= True;
-                               TEasyGameInfo(Item).fThumbTempVars.zipFile:= TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile;
+                               TEasyGameInfo(Item).fThumbTempVars.zipFile:= ExtractFilePath(imgZipFileSoftList[TEasyGameInfo(Item).fThumbTempVars.SoftIndex, 1].Strings[0])+TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile;
                              end;
                         end;
                    end;
@@ -3783,14 +3781,13 @@ var
                           if Result then
                              begin
                                TEasyGameInfo(Item).fThumbTempVars.FoundZippedSoftList_SL:= True;
-                               TEasyGameInfo(Item).fThumbTempVars.zipFile:= TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL;
+                               TEasyGameInfo(Item).fThumbTempVars.zipFile:= ExtractFilePath(imgZipFileSoftList_SL[1].Strings[0])+TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL;
                              end;
                         end;
                    end;
 
                 if (not Result) and (not IsNewImageNamingMAME) then // search in snap.zip
                    begin
-                     //imgZipFileList: packed array[1..MaxArcadeSystems] of packed array[0..High(ImageCategoryArray)] of THashedStringList;
                      Result:= Assigned(imgZipFileList[TEasyGameInfo(Item).eSystemID, 1]);
                      if Result then
                         begin
@@ -3798,6 +3795,7 @@ var
                           if Result then
                              begin
                                TEasyGameInfo(Item).fThumbTempVars.FoundZipped:= True;
+                               TEasyGameInfo(Item).fThumbTempVars.zipFile:= ExtractFilePath(imgZipFileList[TEasyGameInfo(Item).eSystemID, 1].Strings[0])+TEasyGameInfo(Item).fThumbTempVars.zipFile;
                              end;
                         end;
 
@@ -3805,14 +3803,14 @@ var
               end
           end;
         end;
-      False:
+      False: // unzipped images
         begin
           case TEasyGameInfo(Item).eIsCustomGame of
             True:
               begin
                 TEasyGameInfo(Item).fThumbTempVars.ExtraFolderStrMAME:= '';
                 Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
-                if not Result then //and (not IsNewImageNamingMAME) then
+                if not Result then
                    begin
                      Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+WideString(ImageCategoryArray[1, 3]+'\')+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
                      if Result then
@@ -3835,13 +3833,40 @@ var
               begin
                 // arcade systems check for .png files only (no support for .jpg in game snaps)
                 TEasyGameInfo(Item).fThumbTempVars.ExtraFolderStrMAME:= '';
-                Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
-                if not Result then //and (not IsNewImageNamingMAME) then
-                   begin
-                     Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+WideString(ImageCategoryArray[1, 3]+'\'+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir)+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
-                     if Result then
-                        TEasyGameInfo(Item).fThumbTempVars.ExtraFolderStrMAME:= ImageCategoryArray[1, 3]+'\';
-                   end;
+                if IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) then
+                begin
+                  if imgFolderMAME[Ord(TEasyGameInfo(Item).eSystemID <> idMAME)+1, 1] <> nil then
+                     begin
+                       for tLoopMAME:=0 to imgFolderMAME[Ord(TEasyGameInfo(Item).eSystemID <> idMAME)+1, 1].Count-1 do
+                       begin
+                         TEasyGameInfo(Item).fThumbTempVars.folderScan:= imgFolderMAME[Ord(TEasyGameInfo(Item).eSystemID <> idMAME)+1, 1].Strings[tLoopMAME];
+                         TEasyGameInfo(Item).fThumbTempVars.folderScan:= FullEmuFolderFix(TEasyGameInfo(Item).fThumbTempVars.folderScan, TEasyGameInfo(Item).eSystemID, True); // for zipped images
+
+                         Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
+                         if not Result then //and (not IsNewImageNamingMAME) then
+                            begin
+                              Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+WideString(ImageCategoryArray[1, 3]+'\'+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir)+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
+                              if Result then
+                                 TEasyGameInfo(Item).fThumbTempVars.ExtraFolderStrMAME:= ImageCategoryArray[1, 3]+'\';
+                            end;
+
+                         if Result then
+                            Break;
+                       end;
+                     end
+                  else
+                     Result:= False;
+                end
+                else
+                begin
+                  Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
+                  if not Result then //and (not IsNewImageNamingMAME) then
+                     begin
+                       Result:= FileExistsW(TEasyGameInfo(Item).fThumbTempVars.folderScan+WideString(ImageCategoryArray[1, 3]+'\'+TEasyGameInfo(Item).fThumbTempVars.SoftwareDir)+TEasyGameInfo(Item).fThumbTempVars.fileScan+TEasyGameInfo(Item).fThumbTempVars.fileExt);
+                       if Result then
+                          TEasyGameInfo(Item).fThumbTempVars.ExtraFolderStrMAME:= ImageCategoryArray[1, 3]+'\';
+                     end;
+                end;
               end;
           end;
         end;
@@ -3888,27 +3913,42 @@ begin
   TEasyGameInfo(Item).eThumbnailLoading:= True;
 
   case TEasyGameInfo(Item).eIsCustomGame of
-    True : TEasyGameInfo(Item).fThumbTempVars.folderScan:= FullFolderFix(SnapshotFolderCustom[TEasyGameInfo(Item).eCustomSystemID, 1]);
-    False: TEasyGameInfo(Item).fThumbTempVars.folderScan:= GetFolderFull(1, TEasyGameInfo(Item).eSystemID);
+    True :
+      begin
+        TEasyGameInfo(Item).fThumbTempVars.folderScan:= FullFolderFix(SnapshotFolderCustom[TEasyGameInfo(Item).eCustomSystemID, 1]);
+        TEasyGameInfo(Item).fThumbTempVars.zipFile:= TEasyGameInfo(Item).fThumbTempVars.folderScan+GetImgZipFileName(1); // snap.zip
+      end;
+    False:
+      begin
+        if IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) then
+           begin
+             TEasyGameInfo(Item).fThumbTempVars.folderScan:= '';
+             TEasyGameInfo(Item).fThumbTempVars.zipFile:= GetImgZipFileName(1); // snap.zip
+           end
+        else
+           begin
+             TEasyGameInfo(Item).fThumbTempVars.folderScan:= GetFolderFull(1, TEasyGameInfo(Item).eSystemID);
+             TEasyGameInfo(Item).fThumbTempVars.zipFile:= TEasyGameInfo(Item).fThumbTempVars.folderScan+GetImgZipFileName(1); // snap.zip
+           end;
+      end;
   end;
 
-  TEasyGameInfo(Item).fThumbTempVars.zipFile:= TEasyGameInfo(Item).fThumbTempVars.folderScan+GetImgZipFileName(1); // snap.zip
-  
   if not TEasyGameInfo(Item).eIsCustomGame then
   begin
-    if TEasyGameInfo(Item).eSoftwareName <> '' then
+    //if IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) and // for the future if HBMAME starts using software lists (June 01, 2020)
+    if (TEasyGameInfo(Item).eSystemID = idMAME) and (TEasyGameInfo(Item).eSoftwareName <> '') then
        begin
          TEasyGameInfo(Item).fThumbTempVars.SoftwareDir:= TEasyGameInfo(Item).eSoftwareName+'\';
          if Assigned(imgSoftwareNameZipList) then
             begin
               TEasyGameInfo(Item).fThumbTempVars.SoftIndex:= imgSoftwareNameZipList.IndexOf(TEasyGameInfo(Item).eSoftwareName);
               if TEasyGameInfo(Item).fThumbTempVars.SoftIndex <> -1 then
-                 TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile:= TEasyGameInfo(Item).fThumbTempVars.folderScan+TEasyGameInfo(Item).eSoftwareName+'.zip';
+                 TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile:= TEasyGameInfo(Item).eSoftwareName+'.zip';
             end;
          if TEasyGameInfo(Item).eSystemID = idMAME then // IsMAMEBasedSys(TEasyGameInfo(Item).eSystemID) then
             begin
               if Assigned(imgZipFileSoftList_SL[1]) then
-                 TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL:= TEasyGameInfo(Item).fThumbTempVars.folderScan+GetImgZipFileName_SL(1); // thumbs use in-game snaps only
+                 TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL:= GetImgZipFileName_SL(1); // thumbs use in-game snaps only
             end;
        end;
   end;
@@ -3944,9 +3984,10 @@ begin
              if not TEasyGameInfo(Item).fThumbTempVars.Continue then
                 begin
                   TEasyGameInfo(Item).fThumbTempVars.Continue:=
-                             ((TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile <> '')    and (FileExistsW(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile))) or
-                             ((TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL <> '') and (FileExistsW(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL))) or
-                             FileExistsW(TEasyGameInfo(Item).fThumbTempVars.zipFile);
+                             {(}(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile <> '')    {and (FileExistsW(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile)))} or
+                             {(}(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL <> '') {and (FileExistsW(TEasyGameInfo(Item).fThumbTempVars.SoftListZipFile_SL)))} or
+                                (TEasyGameInfo(Item).fThumbTempVars.zipFile <> '');//
+                             //FileExistsW(TEasyGameInfo(Item).fThumbTempVars.zipFile);
 
                   case TEasyGameInfo(Item).fThumbTempVars.Continue of
                     True:
@@ -5452,11 +5493,11 @@ begin
      begin
        repeat
          FileExt:= ExtractFileExtW(Search.Name);
-         if (not SameText(FileExt, '.png')) and (not SameText(FileExt, '.jpg')) and (not SameText(FileExt, '.gif'))then
+         if (not SameText(FileExt, '.png')) and (not SameText(FileExt, '.jpg')) and (not SameText(FileExt, '.gif')) then
             FoundValidFile:= True;
        until FoundValidFile or (FindNextW(Search) <> 0);
        if FoundValidFile then
-          Result:= FilePath+Search.Name;
+          Result:= FilePath+FileExt;// Search.Name;
      end;
   FindCloseW(Search);
 end;
@@ -5470,7 +5511,7 @@ begin
   Result:= '';
   if VideoPreviewMediaPlayerExecutable = '' then
      Exit;
-
+  
   Folder:= ''; // var to generate the full path from "ArcadeVideoPreviewDir[]" and "ConsoleComputerVideoPreviewDir[]" arrays
   if IsCustomGame then
      begin
@@ -5489,10 +5530,8 @@ begin
   if SoftwareName <> '' then
      FolderSoftware:= SoftwareName+'\';
 
-
-  if Folder <> '' then
+  if Folder <> '' then // scan custom folder defined by user in "Video Preview Settings"
      begin
-       FolderVideoSnapDouble:= 'videosnaps\';
        if FindFirstW(Folder+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
           Result:= Folder+FolderSoftware+Search.Name
        else
@@ -5505,9 +5544,10 @@ begin
                end;
           end;
      end;
-  if (Result = '') and (SoftwareName = '')  then
+
+  if (Result = '') then //and (SoftwareName = '') and (not IsMAMEBasedSys(sysID)) then
      begin
-       FolderVideoSnapDouble:= 'videosnaps\';
+       FolderVideoSnapDouble:= 'videosnaps\'; //search in "videosnaps\videosnaps\" (double sub-folder)
        if FindFirstW(Folder+FolderVideoSnapDouble+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
           Result:= Folder+FolderVideoSnapDouble+FolderSoftware+Search.Name
        else
@@ -5523,62 +5563,152 @@ begin
 
   if Result = '' then
      begin
-       if IsCustomGame then
+       // search video file in emulator "snap" folder; if MAME, call alternate function for multiple folders scan
+       // for all other emulators (arcade / console / computer), only a single folder is supported
+       if IsMAMEBasedSys(sysID) then
           begin
-            FolderEmuVideo:= ''; // "emudir\" is NOT supported for EmuCon systems!!! //ExtractFilePath(EmulatorFile[CustomSysID])+'videosnaps\';
-            FolderSnap:= FullFolderFix(SnapshotFolderCustom[CustomSysID, 1]);
-            FolderEmuVideo_SL:= '';
+            Result:= VideoPreviewFindFile_MAME(sysID, -1, IsCustomGame, GameName, CloneOfName, SoftwareName);
           end
        else
-          begin
-            FolderEmuVideo:= ExtractFilePath(EmulatorFile[sysID])+'videosnaps\';
-            FolderSnap:= FullFolderFix(imgFolder[sysID, 1], EmulatorFile[sysID]);
-            FolderEmuVideo_SL:= ExtractFilePath(EmulatorFile[sysID])+'videosnaps_sl\';
-          end;
-       if (FolderSnap <> '') or (FolderEmuVideo <> '') then
        begin
-         FolderVideoSnap:= FolderSnap+'videosnaps\';
-         FolderVideoSnap_SL:= FolderSnap+'videosnaps_sl\';
-         if FindFirstW(FolderEmuVideo+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
-            Result:= FolderEmuVideo+FolderSoftware+Search.Name
-         else
-         if FindFirstW(FolderVideoSnap+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
-            Result:= FolderVideoSnap+FolderSoftware+Search.Name
-         else
-         if SoftwareName <> '' then
-            begin // scan "\videosnaps_sl\" sub-folder for MAME software list games
-              if FindFirstW(FolderEmuVideo_SL+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
-                 Result:= FolderEmuVideo_SL+FolderSoftware+Search.Name
-              else
-              if FindFirstW(FolderVideoSnap_SL+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
-                 Result:= FolderVideoSnap_SL+FolderSoftware+Search.Name
+         if IsCustomGame then
+            begin
+              FolderSnap:= FullFolderFix(SnapshotFolderCustom[CustomSysID, 1]);
+              FolderEmuVideo:= ''; // "emudir\" is NOT supported for EmuCon systems!!! //ExtractFilePath(EmulatorFile[CustomSysID])+'videosnaps\';
             end
          else
             begin
-              FileToLoad:= VideoPreviewValidateSnapFolder(FolderSnap+FolderSoftware+FileStr);
-              if FileToLoad <> '' then
-                 Result:= FileToLoad
-              else
-                 begin
-                    if GameIsClone(CloneOfName) and (VideoPreviewParentGameVideo) then
-                       begin
-                         if FindFirstW(FolderEmuVideo+FolderSoftware+CloneOfName+'.*', $37, Search) = 0 then
-                            Result:= FolderEmuVideo+FolderSoftware+Search.Name
-                         else
-                         if FindFirstW(FolderVideoSnap+FolderSoftware+CloneOfName+'.*', $37, Search) = 0 then
-                            Result:= FolderVideoSnap+FolderSoftware+Search.Name
-                         else
-                            begin
-                              FileToLoad:= VideoPreviewValidateSnapFolder(FolderSnap+FolderSoftware+CloneOfName);
-                              if FileToLoad <> '' then
-                                 Result:= FileToLoad;
-                            end;
-                       end;
-                 end;
+              FolderSnap:= FullFolderFix(imgFolder[sysID, 1], EmulatorFile[sysID]);
+              FolderEmuVideo:= ExtractFilePath(EmulatorFile[sysID])+'videosnaps\';
             end;
+
+         if (FolderSnap <> '') or (FolderEmuVideo <> '') then
+         begin
+           FolderVideoSnap:= FolderSnap+'videosnaps\';
+
+           if FindFirstW(FolderEmuVideo+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
+              Result:= FolderEmuVideo+FolderSoftware+Search.Name
+           else
+           if FindFirstW(FolderVideoSnap+FolderSoftware+FileStr+'.*', $37, Search) = 0 then
+              Result:= FolderVideoSnap+FolderSoftware+Search.Name
+           else
+              begin
+                FileToLoad:= VideoPreviewValidateSnapFolder(FolderSnap+FolderSoftware+FileStr); // search "snaps" folder (might be mixed with game images)
+                if FileToLoad <> '' then
+                   Result:= FileToLoad
+                else
+                   begin
+                      if GameIsClone(CloneOfName) and (VideoPreviewParentGameVideo) then
+                         begin
+                           if FindFirstW(FolderEmuVideo+FolderSoftware+CloneOfName+'.*', $37, Search) = 0 then
+                              Result:= FolderEmuVideo+FolderSoftware+Search.Name
+                           else
+                           if FindFirstW(FolderVideoSnap+FolderSoftware+CloneOfName+'.*', $37, Search) = 0 then
+                              Result:= FolderVideoSnap+FolderSoftware+Search.Name
+                           else
+                              begin
+                                FileToLoad:= VideoPreviewValidateSnapFolder(FolderSnap+FolderSoftware+CloneOfName); // search "snaps" folder (might be mixed with game images)
+                                if FileToLoad <> '' then
+                                   Result:= FileToLoad;
+                              end;
+                         end;
+                   end;
+              end;
+         end;
        end;
      end;
   FindCloseW(Search);
+end;
+
+function TFormMain.VideoPreviewFindFile_MAME(sysID, CustomSysID: ShortInt; IsCustomGame: Boolean; const GameName, CloneOfName: WideString; const SoftwareName: String = ''): WideString;
+var
+  Search: TSearchRecW;
+  Folder, FolderSoftware, FolderSnap, FolderVideoSnap, FolderEmuVideo, FolderVideoSnap_SL, FolderEmuVideo_SL, FolderVideoSnapDouble: String;
+  FileToLoad: WideString;
+  iLoop2: Integer;
+
+  function ScanSnapRecursive(const FileNameStr: WideString; ValidateFileExtension: Boolean): WideString;
+  var
+    iLoop: Integer;
+  begin
+    Result:= '';
+    if imgFolderMAME[Ord(sysID <> idMAME)+1, 1] <> nil then
+       begin
+         // scan all folders from "snapshot_directory" (mame.ini)
+         for iLoop:=0 to imgFolderMAME[Ord(sysID <> idMAME)+1, 1].Count-1 do
+         begin
+           FolderSnap:= IncludeTrailingPathDelimiter(imgFolderMAME[Ord(sysID <> idMAME)+1, 1].Strings[iLoop]);
+           if FindFirstW(FolderSnap+FolderVideoSnap+FolderSoftware+FileNameStr+'.*', $37, Search) = 0 then
+              Result:= FolderSnap+FolderVideoSnap+FolderSoftware+Search.Name
+           else
+           if FindFirstW(FolderSnap+FolderVideoSnap+FolderVideoSnapDouble+FolderSoftware+FileNameStr+'.*', $37, Search) = 0 then
+              Result:= FolderSnap+FolderVideoSnap+FolderVideoSnapDouble+FolderSoftware+Search.Name
+           else
+           if SoftwareName <> '' then
+              begin // scan "\videosnaps_sl\" sub-folder for MAME software list games
+                if FindFirstW(FolderSnap+FolderVideoSnap_SL+FolderSoftware+FileNameStr+'.*', $37, Search) = 0 then
+                   Result:= FolderSnap+FolderVideoSnap_SL+FolderSoftware+Search.Name
+              end;
+           if Result <> '' then
+              Break;
+         end;
+       end;
+  end;
+
+  function ScanAllFolders(const iGameName: WideString): WideString;
+  var
+    iLoopAll: Integer;
+  begin
+    Result:= ScanSnapRecursive(iGameName, False); // scan "snaps\videosnaps" or "snaps\videosnaps_sl\"
+    if Result = '' then
+       begin
+         // scan files in "emulator_root\videosnaps\" (arcade) or "emulator_root\videosnaps_sl\" for software lists
+         if FindFirstW(FolderEmuVideo+FolderSoftware+iGameName+'.*', $37, Search) = 0 then
+            Result:= FolderEmuVideo+FolderSoftware+Search.Name
+         else
+         if SoftwareName <> '' then
+            begin // scan "\videosnaps_sl\" sub-folder for MAME software list games
+              if FindFirstW(FolderEmuVideo_SL+FolderSoftware+iGameName+'.*', $37, Search) = 0 then
+                 Result:= FolderEmuVideo_SL+FolderSoftware+Search.Name
+            end;
+       end;
+
+    if (Result = '') and (imgFolderMAME[Ord(sysID <> idMAME)+1, 1] <> nil) then
+       begin
+         // search video files directly in "snap\" folder, mixed with image files
+         // scan all folders from "snapshot_directory" (mame.ini)
+         for iLoopAll:=0 to imgFolderMAME[Ord(sysID <> idMAME)+1, 1].Count-1 do
+         begin
+           FolderSnap:= IncludeTrailingPathDelimiter(imgFolderMAME[Ord(sysID <> idMAME)+1, 1].Strings[iLoopAll]);
+           FileToLoad:= VideoPreviewValidateSnapFolder(FolderSnap+FolderSoftware+iGameName);
+           if FileToLoad <> '' then
+              begin
+                Result:= FileToLoad;
+                Break;
+              end;
+         end;
+       end;
+  end;
+
+begin
+  // scan MAME "snaps" folder for video files, multiple paths support
+  Result:= '';
+
+  Folder:= ''; // var to generate the full path from "ArcadeVideoPreviewDir[]" and "ConsoleComputerVideoPreviewDir[]" arrays
+  FolderSoftware:= '';
+  if SoftwareName <> '' then
+     FolderSoftware:= SoftwareName+'\';
+
+  FolderVideoSnap:=    'videosnaps\'; // FolderSnap+'videosnaps\';
+  FolderVideoSnap_SL:= 'videosnaps_sl\'; // FolderSnap+'videosnaps_sl\';
+  FolderVideoSnapDouble:= 'videosnaps\';
+
+  FolderEmuVideo:= ExtractFilePath(EmulatorFile[sysID])+FolderVideoSnap;
+  FolderEmuVideo_SL:= ExtractFilePath(EmulatorFile[sysID])+FolderVideoSnap_SL;
+
+  Result:= ScanAllFolders(GameName);
+  if (Result = '') and GameIsClone(CloneOfName) and VideoPreviewParentGameVideo then
+     Result:= ScanAllFolders(CloneOfName);
 end;
 
 procedure TFormMain.VideoPreviewPlay(StopCurrentPlayback: Boolean = False);
@@ -7061,12 +7191,12 @@ begin
     end;
 
     VideoFile:= VideoPreviewMediaPlayerExecutable;
-    INIFile.WriteString('MediaPlayer', 'File', VideoFile);
+    INIFile.WriteString ('MediaPlayer', 'File', VideoFile);
     INIFile.WriteInteger('MediaPlayer', 'Enabled', Ord(VideoPreviewEnabled));
     INIFile.WriteInteger('MediaPlayer', 'AutoPlay', Ord(VideoPreviewAutoPlay));
     INIFile.WriteInteger('MediaPlayer', 'ParentGameVideo', Ord(VideoPreviewParentGameVideo));
     INIFile.WriteInteger('MediaPlayer', 'PlayDummyVideo', Ord(VideoPreviewPlayDummyVideo));
-    INIFile.WriteString('MediaPlayer', 'DummyVideoParameters', VideoPreviewDummyVideoParameters);
+    INIFile.WriteString ('MediaPlayer', 'DummyVideoParameters', VideoPreviewDummyVideoParameters);
 
     if VideoFile <> '' then
        VideoFile:= ExtractFileName(VideoFile);
@@ -7398,11 +7528,11 @@ var
          // MAMu_ icons
          ValueToRead:= ExtractMAMEIniValue(LineStr);
          if ValueToRead = '' then
-            ValueToRead:= 'icons'
-         else
-            ValueToRead:= GetFirstPathOnly(ValueToRead);
+            ValueToRead:= 'icons';
+         //else
+         //   ValueToRead:= GetFirstPathOnly(ValueToRead);
 
-         ValueToRead:= RemoveQuotes(ValueToRead);
+         //ValueToRead:= RemoveQuotes(ValueToRead);
          FormPreferences.MAMu_IconsFolder.Text:= ValueToRead;
        end;
   end;
@@ -9598,7 +9728,6 @@ begin
        CommandLine:= SystemStr+EmulatorFileName+SystemStr+' -help > '+SystemStr+tempFile+SystemStr;
        SetCurrentDir(EmulatorFileName);
        RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, GetWindowStateEmulator);
-       //RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, 1{GetWindowStateEmulator});//, False);//SW_SHOWMINIMIZED, False); // WinXP / Sev7n / 8ight
        SetCurrentDir(FrontendPath);
      end
   else
@@ -17124,7 +17253,6 @@ begin
   IniFilesDir[SystemID]:= iniDirString;
 end;
 
-// what is this function used for ? October 30, 2016
 function TFormMain.LoadFolderSpecial_MAME(sysID: Byte; const ExeFileStr: String; FolderIndex: Byte): String;
 var
   MAMEIniFile: THashedStringList;
@@ -17164,7 +17292,7 @@ begin
                 (EntryString = 'artwork_directory ') then
                 begin
                   Folder:= ExtractMAMEIniValue(TextLine);
-                  //ExtractFolders2MAME(SystemID, Folder2, ArtworksDir[Ord(SystemID = idMAME)]);
+                  //ExtractFolders2MAME(SystemID, Folder2, ArtworksDir[Ord(SystemID = idMAME)]); // not used anymore
                   Break;
                 end;
              //end;
@@ -17183,7 +17311,7 @@ begin
                 (EntryString = 'sp ') then
                 begin
                   Folder:= ExtractMAMEIniValue(TextLine);
-                  //ExtractFolders2MAME(SystemID, Folder2, SamplesDir[Ord(SystemID = idMAME)]);
+                  //ExtractFolders2MAME(SystemID, Folder2, SamplesDir[Ord(SystemID = idMAME)]); // not used anymore
                   Break;
                 end;
            end;
@@ -17456,8 +17584,10 @@ begin
   Result:= '';
   if not Assigned(ListHolder) then
      Exit;
+
   if ListHolder.Items.Count = 0 then
      Exit;
+
   for Loop:=0 to ListHolder.Items.Count-1 do
   begin
     if Result <> '' then
@@ -17467,7 +17597,7 @@ begin
   end;
 end;
 
-function TFormMain.MountFoldersListToString(ListSource: TStringList): String;
+function TFormMain.MountFoldersListToString(ListSource: TStringList): String; // this function is not being used anywhere (May 2020)
 var
   Loop: Integer;
   ValueToAdd: String;
@@ -17492,7 +17622,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ExtractFolders2MAME(sysID: Integer; PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
+procedure TFormMain.ExtractFolders2MAME(sysID: Integer; const PathsList: String; var ListHolder: TStringList; IncludeEmuFullPath: Boolean = True; EmuFileName: String = '');
 var
   PathName, EmuFileStr: String;
   Loop: Integer;
@@ -17526,7 +17656,9 @@ begin
   else
      EmuFileStr:= EmuFileName;
   FreeAndNil(ListHolder);
-  ListHolder:= THashedStringList.Create;
+  if not Assigned(ListHolder) then
+     ListHolder:= TStringList.Create;
+     
   ListHolder.BeginUpdate;
   PathName:= '';
   for Loop:=1 to Length(PathsList) do
@@ -24591,7 +24723,7 @@ begin
   if ScreenIndex = 1 then
      begin
        try
-         Images.Bitmap:= nil
+         Images.Bitmap:= nil;
        finally
        end;
      end
@@ -25024,8 +25156,11 @@ var
     begin
       if (not MemGameInfo.eIsCustomGame) and IsMAMEBasedSys(MemGameInfo.eSystemID) then
       begin
-        Result:= True;
-        case ScreenIndex of
+         Result:= True;
+        if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
+           ContinueImg[ScreenIndex]:= FileExists(ExtractFilePath(Folder[ScreenIndex])+zFile[ScreenIndex]);
+
+        {case ScreenIndex of
          1:
            begin
              if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
@@ -25067,8 +25202,6 @@ var
              if imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex] <> nil then
              for iLoopScr4:=0 to imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Count-1 do
              begin
-
-               begin
                Folder[ScreenIndex]:= imgFolderMAME[Ord(MemGameInfo.eSystemID <> idMAME)+1, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[iLoopScr4];
                Folder[ScreenIndex]:= FullEmuFolderFix(Folder[ScreenIndex], MemGameInfo.eSystemID, True); // for zipped images
                ContinueImg[ScreenIndex]:= FileExists(Folder[ScreenIndex]+zFile[ScreenIndex]);
@@ -25077,7 +25210,7 @@ var
                end;
              end;
            end;
-       end;
+       end;}
       end
       else
       begin
@@ -25146,7 +25279,13 @@ var
     begin
       case FoundZipCustomGameInSnapDir[ScreenIndex] of
         True : FileName:= FolderSnapEmuCon[ScreenIndex]+zFile[ScreenIndex]; // use "snapdir\titles.zip"; "snapdir\covers.zip" (for EmuCon games only)
-        False: FileName:= Folder[ScreenIndex]+zFile[ScreenIndex]; // use "imgcatdir\titles.zip"; "imgcatdir\covers.zip"
+        False:
+          begin
+            if IsMAMEBasedSys(MemGameInfo.eSystemID) then
+               FileName:= ExtractFilePath(Folder[ScreenIndex])+zFile[ScreenIndex] // use "imgcatdir\titles.zip"; "imgcatdir\covers.zip"
+            else
+               FileName:= Folder[ScreenIndex]+zFile[ScreenIndex]; // use "imgcatdir\titles.zip"; "imgcatdir\covers.zip"
+          end;
       end;
 
       try
@@ -25295,6 +25434,7 @@ var
     case SearchInZip of
       True:
         begin
+          // must create a new array for the .zip file with full path and prevent re-scan for the .zip files in the "FindZipFile()" function
           case MemGameInfo.eIsCustomGame of
             True:
               begin
@@ -25333,8 +25473,10 @@ var
                                  ContinueImg[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].IndexOf({NameString}ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]) <> -1;
                                end;
                           end;
+
                        if ContinueImg[ScreenIndex] then
                           begin
+                            Folder[ScreenIndex]:= ImgZipFileSoftList[ImageSoftNameIndex, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[0];
                             ImageDetails[ScreenIndex].FileName:= ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex];
                             FoundInSoftListZipFile[ScreenIndex]:= True;
                           end;
@@ -25361,6 +25503,7 @@ var
                        end;
                        if ContinueImg[ScreenIndex] then
                           begin
+                            Folder[ScreenIndex]:= ImgZipFileSoftList_SL[ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[0];
                             ImageDetails[ScreenIndex].FileName:= SoftwareNameString[ScreenIndex]+ImageToSearch[ScreenIndex]+ImageExt[ScreenIndex]; // it must be "softlistname\gamename.???"
                             FoundInSoftListZipFile_SL[ScreenIndex]:= True;
                           end;
@@ -25388,7 +25531,11 @@ var
                    end;
 
                 if ContinueImg[ScreenIndex] then
-                   ImageDetails[ScreenIndex].IsZipped:= True;
+                   begin
+                     if IsMAMEBasedSys(MemGameInfo.eSystemID) then
+                        Folder[ScreenIndex]:= imgZipFileList[MemGameInfo.eSystemID, ImageDetails[ScreenIndex].ImageCategoryIndex].Strings[0];
+                     ImageDetails[ScreenIndex].IsZipped:= True;
+                   end;
               end;
           end;
         end;
@@ -30150,7 +30297,7 @@ begin
 
          if HaveOverlay or HaveOverlayText then
             begin
-              MergedIcon:= TIcon.Create;          // front              // back
+              MergedIcon:= TIcon.Create;          // front               // back
               if HaveOverlay then
                  MergedIcon.Handle:= CombineIcons(tmpIconOverlay.Handle, tmpIcon.Handle);
 
@@ -30196,78 +30343,6 @@ begin
                                        IntToStr(IconList.Height)+') was not added.'+#13#10+
                      IconList.Name+#13#10+iIconFolder+IconFileName, 2, False, 1);
 end;
-
-// deprecated function
-{procedure TFormMain.AddMainScrIcons(const IconFileName, IconsFolder: String; IconListLarge, IconListSmall: TImageList; Reload: Boolean);
-var
-  Icon32: TExIcon;
-  icoLoop: ShortInt;
-  ColorDepth: TPixelFormat;
-  LargeIconAdded, SmallIconAdded: Boolean;
-  ErrorMsg: String;
-
-  procedure AddIcon(DestImgList: TImageList);
-  var
-    tmpIcon: TIcon;
-  begin
-    Icon32.CurrentImage:= icoLoop;
-    tmpIcon:= TIcon.Create;
-    tmpIcon.Handle:= Icon32.Handle;
-    DestImgList.AddIcon(tmpIcon);
-    tmpIcon.ReleaseHandle;
-    FreeAndNil(tmpIcon);
-  end;
-
-begin
-  // this is only used to load games list tool bar filter icons (June 07, 2018)
-  if not FileExists(IconsFolder+IconFileName) then
-     begin
-       GenerateMessage('Error', 'Could not access a file.',
-                       Format(MissingIconFileMsg, [IconsFolder+IconFileName]), 2);
-       Exit;
-     end;
-  Icon32:= TExIcon.Create;
-  Icon32.LoadFromFile(IconsFolder+IconFileName);
-  ColorDepth:= pf32bit;
-  LargeIconAdded:= False;
-  SmallIconAdded:= Reload;
-  for icoLoop:=0 to Icon32.ImageCount-1 do
-  begin
-    if (Icon32.Images[icoLoop].Width = IconListLarge.Width) and
-       (Icon32.Images[icoLoop].Height = IconListLarge.Height) and
-       (Icon32.Images[icoLoop].PixelFormat = ColorDepth) then
-       begin
-         AddIcon(IconListLarge);
-         LargeIconAdded:= True;
-       end
-    else
-    if (Icon32.Images[icoLoop].Width = IconListSmall.Width) and
-       (Icon32.Images[icoLoop].Height = IconListSmall.Height) and
-       (Icon32.Images[icoLoop].PixelFormat = ColorDepth) and
-       (not Reload) then
-       begin
-         AddIcon(IconListSmall);
-         SmallIconAdded:= True;
-       end;
-    if LargeIconAdded and SmallIconAdded then
-       Break;
-  end;
-  FreeAndNil(Icon32);
-  ErrorMsg:= '';
-  if not LargeIconAdded then
-     ErrorMsg:= 'Large icon ('+IntToStr(IconListLarge.Width)+'x'+
-                               IntToStr(IconListLarge.Height)+' was not added.'+#13#10+
-                IconListLarge.Name+#13#10+IconsFolder+IconFileName;
-                
-  if not SmallIconAdded then
-     begin
-       if ErrorMsg <> '' then
-          ErrorMsg:= ErrorMsg+#13#10+#13#10;
-       ErrorMsg:= 'Small icons (24x24) was not added.'+#13#10+IconListSmall.Name+#13#10+IconsFolder+IconFileName;
-     end;
-  if ErrorMsg <> '' then
-     GenerateMessage('Error', 'Failed to a load file.', ErrorMsg, 2, False, 1);
-end;}
 
 procedure TFormMain.AddGameIcons(const IconFileName, IconsFolder: String);
 var
@@ -30417,7 +30492,8 @@ end;
 
 function TFormMain.GetMAMu_IconFolder(sysID: Byte; AddExtraIconPath: Boolean; const SoftwareName: String = ''): String;
 begin
-  Result:= MAMu_Folder; // for all systems, single folder
+  Result:= '';//MAMu_Folder; // for all systems, single folder
+  beep;
   case sysID of
     idDICE: Result:= Result+'dice\'; // for DICE - sub-folder "icons\dice\"
     idZiNc: Result:= Result+'zinc\'; // for ZiNc - sub-folder "icons\zinc\"
@@ -30437,9 +30513,36 @@ begin
      Result:= True;
 end;
 
+function TFormMain.DetectFolderIcon(const iFileName: String): String;
+var
+  iLoop: Integer;
+  iStr: String;
+begin
+  Result:= '';
+  if Assigned(MAMu_FoldersList) then
+     begin
+       for iLoop:=0 to MAMu_FoldersList.Count-1 do
+       begin
+         iStr:= MAMu_FoldersList[iLoop];
+         if FileExists(iStr+iFileName) then
+            begin
+              Result:= iStr;
+              Break;
+            end;
+       end;
+     end;
+end;
+
 function TFormMain.ScanFoldersIcon(const IconName, SoftwareName: String; sysID: Byte; out FileFullPath: String; ZippedIcon: Boolean; ZippedIconArrayIndex: Integer = -1): Boolean;
 var
-  FileStr, Folder: String;
+  FileStr, Folder, iStr: String;
+
+  function FixExtension: Boolean;
+  begin
+    if ExtractFileExt(FileStr) = '' then
+       FileStr:= FileStr+'.ico';
+  end;
+
 begin
   case ZippedIcon of
     True:
@@ -30457,7 +30560,8 @@ begin
         else
           Folder:= '';
         end;
-        FileStr:= Folder+IconName+'.ico';
+        FileStr:= Folder+IconName;
+        FixExtension;
         if SoftwareName = '' then
            Result:= MAMu_IconsList.IndexOf(FileStr) <> -1
         else
@@ -30474,7 +30578,8 @@ begin
         if sysID in [idDICE, idZiNc] then
            begin
              // will search on MAME icons (root icons.zip folder)
-             FileStr:= IconName+'.ico';
+             FileStr:= IconName;
+             FixExtension;
              Result:= MAMu_IconsList.IndexOf(FileStr) <> -1;
              if Result then
                 FileFullPath:= FileStr;
@@ -30485,15 +30590,23 @@ begin
         Result:= CheckMAMu_Folder;
         if not Result then
            Exit;
-        FileStr:= GetMAMu_IconFolder(sysID, False, SoftwareName)+IconName+'.ico';
-        Result:= FileExists(FileStr);
+        FileStr:= GetMAMu_IconFolder(sysID, False, SoftwareName)+IconName;
+        FixExtension;
+
+        iStr:= DetectFolderIcon(Folder+FileStr);
+        Result:= iStr <> '';
         if not Result then
            begin
-             FileStr:= GetMAMu_IconFolder(sysID, True, SoftwareName)+IconName+'.ico';
-             Result:= FileExists(FileStr);
+             FileStr:= GetMAMu_IconFolder(sysID, True, SoftwareName)+IconName;
+             FixExtension;
+             iStr:= DetectFolderIcon(Folder+FileStr);
+             Result:= iStr <> '';
            end;
         if Result then
-           FileFullPath:= FileStr;
+           begin
+             Folder:= iStr;
+             FileFullPath:= Folder+FileStr;
+           end;
       end;
   end;
 end;
@@ -30669,8 +30782,6 @@ begin
   Index24Bit_48x:= -1;
   Index8Bit_48x:= -1;
 
-  //if (IconFile = 'drawhelp.ico') or (IconFile = '007agesp.ico') or (IconFile = 'elvactr.ico') then
-  //   beep;
   IconVar:= TExIcon.Create;
   case ZippedIcon of
     True:
@@ -30770,14 +30881,14 @@ var
     nIcon.ReleaseHandle;
     FreeAndNil(nIcon);
     
-    {if ItemSource <> nil then
-       begin
-         TEasyGameInfo(ItemSource).eMAMu_Icon:= TIcon.Create;
-         TEasyGameInfo(ItemSource).eMAMu_Icon.Width:= IconSize;
-         TEasyGameInfo(ItemSource).eMAMu_Icon.Height:= IconSize;
-         TEasyGameInfo(ItemSource).eMAMu_Icon.Handle:= Icon32.Handle; // doesn't work, invalid ico (empty)
-         //TEasyGameInfo(ItemSource).eMAMu_Icon.Assign(nIcon); // doesn't work, invalid ico (empty)
-       end;}
+    //if ItemSource <> nil then
+    //   begin
+    //     TEasyGameInfo(ItemSource).eMAMu_Icon:= TIcon.Create;
+    //     TEasyGameInfo(ItemSource).eMAMu_Icon.Width:= IconSize;
+    //     TEasyGameInfo(ItemSource).eMAMu_Icon.Height:= IconSize;
+    //     TEasyGameInfo(ItemSource).eMAMu_Icon.Handle:= Icon32.Handle; // doesn't work, invalid ico (empty)
+    //     //TEasyGameInfo(ItemSource).eMAMu_Icon.Assign(nIcon); // doesn't work, invalid ico (empty)
+    //   end;
   end;
 
   function AddIcon(DestImgList: TImageList): Integer;
@@ -30821,7 +30932,7 @@ var
                FreeAndNil(icoBMP);
              end;
          end;
-         fIcon.Releasehandle;
+         fIcon.ReleaseHandle;
          FreeAndNil(fIcon);
        end;
   end;
@@ -30836,7 +30947,7 @@ begin
           begin
             SearchZip:= Assigned(MAMu_IconsList);
             if SearchZip then
-               iZipPath:= MAMu_IconsList.Values['!zipfile'];
+               iZipPath:= MAMu_IconsList.Strings[0];
           end
        else
           begin
@@ -30851,21 +30962,26 @@ begin
             if SearchZip then
                SearchZip:= Assigned(MAMu_IconsList_SL[ZipIndex]);
             if SearchZip then
-               iZipPath:= MAMu_IconsList_SL[ZipIndex].Values['!zipfile'];
+               iZipPath:= MAMu_IconsList_SL[ZipIndex].Strings[0];
           end;
        if not SearchZip then
           Exit;
 
-       if iZipPath = '' then
-          Exit; // .zip file not found even though the .zip contents list exists!? this should NEVER happen
-       FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, True, ZipIndex);
-       if FileToLoad = '' then
-          Exit;
+       if iZipPath <> '' then
+          //Exit; // .zip file not found even though the .zip contents list exists!? this should NEVER happen
+          FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, True, ZipIndex);
      end;
 
-  if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
-     Result:= AddIcon(IconList);
-  FreeAndNil(Icon32);
+  //if FileToLoad = '' then
+  //   Exit;
+
+  if FileToLoad <> '' then
+     begin
+       if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
+          Result:= AddIcon(IconList);
+       FreeAndNil(Icon32);
+     end;
+
 end;
 
 procedure TFormMain.MenuExitClick(Sender: TObject);
@@ -31160,7 +31276,7 @@ begin
        WriteArcadeImageCategories(False, True, imgFolder); // save MAMEu_ folder setting to MAME's "ui.ini" or "eldir\arcade\image_categories.ini" file
        case PopupEnableMAMu_Icons.Checked of
          True : ResetMAMu_ImageList(True);
-         False: PopupEnableMAMu_Icons.Enabled:= DirectoryExists(MAMu_Folder);
+         False: PopupEnableMAMu_Icons.Enabled:= MAMu_Folder <> '';// DirectoryExists(MAMu_Folder);
        end;
      end;
 
@@ -31390,6 +31506,7 @@ begin
   FormStatus.MessageStr('Loading primary settings.');
   FormStatus.StartThreadClock;
   FormStatus.Show;
+  Application.ProcessMessages;
   LastColumnSorted:= 0;
   LastColumnSortDirection:= esdAscending;
   VerifyTempDirectory;
@@ -31606,7 +31723,7 @@ procedure TFormMain.FormShow(Sender: TObject);
 var
   GamesListFound, UpdateArcadeVersionInfo: packed array[1..MaxArcadeSystems] of Boolean;
   UpdateAlterMAME1VersionInfo, UpdateAlterMAME2VersionInfo: Boolean;
-  Loop, NewDateTime: Integer;
+  Loop, NewDateTime, CleanInstallDialogModal: Integer;
   ErrorStr, ErrorMsgTitle: String;
   tmpString: String;
   Continue, ScanModeSelected, IsFirstTimeRun: Boolean;
@@ -31876,7 +31993,7 @@ begin
 
   InitNightModeScreen;
   InitPreferencesScreen;
-  
+
   // must set custom colors here, after FormNightMode is created
   SetButtonExColors(FormStatus.ColorsBoxButtonDefault, True, True);
   SetButtonExColors(FormStatus.VersionInfoPositionButtonDefault, True, True);
@@ -31980,21 +32097,32 @@ begin
         if not Assigned(FormCleanInstallGuide) then
            FormCleanInstallGuide:= TFormCleanInstallGuide.Create(nil);
 
+        if MenuCustomizeSplashScreen.Tag = 0 then
+           begin
+             ChangeLabelFontConsolas(FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus, 9, [fsBold]);
+             ChangeLabelFontConsolas(FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus, 9, [fsBold]);
+             ChangeLabelFontConsolas(FormCleanInstallGuide.LabelQuickSetupGuide, 9, [fsBold]);
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Top:= FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Top+1;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Top:= FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Top+1;
+           end;
+
         ReadSettingsCleanInstall;
         if not ValidateFile(GetArcadeEmulatorsFile) then
            begin
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= clrLightRed;
-             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.ShadowColor:= clBlack;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Hint+' not found]';
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.Font.Color:= clYellow;
+             FormCleanInstallGuide.LabelOption_SelectArcadeEmulators_FileStatus.ShadowColor:= clrOrange;
            end;
-        if not ValidateFile(GetSysImageFolders) then
+        if not ValidateFile(GetSysGameFolders) then
            begin
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Hint+' not found)';
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= clrLightRed;
-             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clBlack;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Caption:= FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Hint+' not found]';
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:= clYellow;
+             FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clrOrange;
            end;
-        FormStatus.Close; // close FormStatus to prevent clean guide dialog to be hidden behind it (December 31, 2017)
-        if FormCleanInstallGuide.ShowModal = mrCancel then
+        FormStatus.Close; // close FormStatus to prevent clean guide dialog to be hidden behind it
+        CleanInstallDialogModal:= FormCleanInstallGuide.ShowModal;
+
+        if CleanInstallDialogModal = mrCancel then
            begin
              TerminateEmuLoader:= True;
              FreeAndNil(FormCleanInstallGuide);
@@ -32018,26 +32146,30 @@ begin
              MenuUseAlternateFrontendIcons.Tag:= 0;
            end;
 
-        if FormCleanInstallGuide.Option_SelectArcadeEmulators.Checked then
-           MenuArcadeEmulatorSetup.Click;
+        if CleanInstallDialogModal = mrOk then
+        begin
+          if FormCleanInstallGuide.Option_SelectArcadeEmulators.Checked then
+             MenuArcadeEmulatorSetup.Click;
 
-        if FormCleanInstallGuide.Option_CreateArcadeGamesList.Checked then
-           begin
-             if ValidateFile(GetArcadeEmulatorsFile) then // only create MAME/arcade games list if file "eldir\arcade\emulators.ini" exists; arcade emulators require it
-                CreateListArcade:= True;
-           end;
+          if FormCleanInstallGuide.Option_CreateArcadeGamesList.Checked then
+             begin
+               if ValidateFile(GetArcadeEmulatorsFile) then // only create MAME/arcade games list if file "eldir\arcade\emulators.ini" exists; arcade emulators require it
+                  CreateListArcade:= True;
+             end;
 
-        if FormCleanInstallGuide.Option_SelectConsoleComputerEmulators.Checked then
-           MenuCustomEmulatorsSetup.Click;
+          if FormCleanInstallGuide.Option_SelectConsoleComputerEmulators.Checked then
+             MenuCustomEmulatorsSetup.Click;
 
-        if FormCleanInstallGuide.Option_SelectConsoleComputerGamesFolders.Checked then
-           MenuCustomSystemsFoldersSettings.Click;
+          if FormCleanInstallGuide.Option_SelectConsoleComputerGamesFolders.Checked then
+             MenuCustomSystemsFoldersSettings.Click;
 
-        if FormCleanInstallGuide.Option_CreateConsoleComputerGamesList.Checked then
-           begin
-             if ValidateFile(GetSysGameFolders) then // only create console/computer games list if file "eldir\console_computer\sysgamefolders.ini" exists; console/computer games require it
-                CreateListConsoleComputer:= True;
-           end;
+          if FormCleanInstallGuide.Option_CreateConsoleComputerGamesList.Checked then
+             begin
+               if ValidateFile(GetSysGameFolders) then // only create console/computer games list if file "eldir\console_computer\sysgamefolders.ini" exists; console/computer games require it
+                  CreateListConsoleComputer:= True;
+             end;
+        end;
+        
         WriteSettingsCleanInstall; // update "el_extra.ini" with clean install dialog settings
         FreeAndNil(FormCleanInstallGuide);
 
@@ -32370,9 +32502,10 @@ end;
 
 procedure TFormMain.ImgZipParseFilesList(sysID, imageCategoryID: Integer);
 var
-  imgFile: String;
+  imgFile, FolderZip: String;
   ArchiveItem: TZFArchiveItem;
   tResult: Boolean;
+  iLoop: Integer;
 begin
   if (not IsSystemAvailable(sysID)) or (imgFolder[sysID, imageCategoryID] = '') then
      begin
@@ -32389,8 +32522,27 @@ begin
        Exit;
      end;
 
-  imgFile:= GetFolderFull(imageCategoryID, sysID)+GetImgZipFileName(imageCategoryID);
-  tResult:= FileExists(imgFile);
+  if IsMAMEBasedSys(sysID) then
+  begin
+    tResult:= False;
+    FolderZip:= '';
+    if imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID] <> nil then
+       for iLoop:=0 to imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Count-1 do
+       begin
+         FolderZip:= imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Strings[iLoop];
+         FolderZip:= FullEmuFolderFix(FolderZip, sysID, True); // for zipped images
+         imgFile:= FolderZip+GetImgZipFileName(imageCategoryID); // single folder for all systems, except MAME/HBMAME
+         tResult:= FileExists(imgFile);
+         if tResult then
+            Break;
+       end;
+  end
+  else
+    begin
+      imgFile:= GetFolderFull(imageCategoryID, sysID)+GetImgZipFileName(imageCategoryID); // single folder for all systems, except MAME/HBMAME
+      tResult:= FileExists(imgFile);
+    end;
+    
   if not tResult then
      begin
        FreeAndNil(imgZipFileList[sysID, imageCategoryID]);
@@ -32441,9 +32593,13 @@ begin
       Exit;
     end;
   end;
+  if IsMAMEBasedSys(sysID) then
+     imgZipFileList[sysID, imageCategoryID].Insert(0, imgFile); // to prevent searching for snap.zip (and others) every time user selects a game
+
   imgZipFileList[sysID, imageCategoryID].EndUpdate;
   ZipForge.CloseArchive;
   ZipForge.FileName:= '';
+
   // for debugging only... leave it commented
   //if (sysID = idMAME) and (imageCategoryID = 1) then
   //   imgZipFileList[sysID, imageCategoryID].SaveToFile(FrontendPath+'snap-zip_contents.txt');
@@ -32571,9 +32727,10 @@ end;
 
 procedure TFormMain.ImgZipParseFilesSoftwareList(sysID, imageCategoryID, SoftwareIndex: Integer; const SoftwareName: String);
 var
-  imgFile: String;
+  imgFile, FolderZip: String;
   ArchiveItem: TZFArchiveItem;
   tResult: Boolean;
+  iLoop: Integer;
 begin
   //       "snap\msx1_cart.zip"
   // added "snap\msx1_cart\msx1_cart.zip" support (February 12, 2018)
@@ -32593,13 +32750,45 @@ begin
        Exit;
      end;
 
-  imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'.zip';
-  tResult:= FileExists(imgFile);
-  if not tResult then
-     begin
-       imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'\'+SoftwareName+'.zip';
-       tResult:= FileExists(imgFile);
-     end;
+  if IsMAMEBasedSys(sysID) then
+  begin
+    tResult:= False;
+    FolderZip:= '';
+    if imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID] <> nil then
+    begin
+       for iLoop:=0 to imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Count-1 do
+       begin
+         FolderZip:= imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Strings[iLoop];
+         FolderZip:= FullEmuFolderFix(FolderZip, sysID, True); // for zipped images
+         //imgFile:= FolderZip+SoftwareName+'.zip';
+         tResult:= FileExists(FolderZip+SoftwareName+'.zip');
+         if not tResult then
+            begin
+              tResult:= FileExists(FolderZip+SoftwareName+'\'+SoftwareName+'.zip');
+              if tResult then
+                 begin
+                   imgFile:= FolderZip+SoftwareName+'\'+SoftwareName+'.zip';
+                   Break;
+                 end
+            end
+         else
+            begin
+              imgFile:= FolderZip+SoftwareName+'.zip';
+              Break;
+            end;
+       end;
+    end;
+  end
+  else
+    begin
+      imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'.zip';
+      tResult:= FileExists(imgFile);
+      if not tResult then
+         begin
+           imgFile:= GetFolderFull(imageCategoryID, sysID)+SoftwareName+'\'+SoftwareName+'.zip';
+           tResult:= FileExists(imgFile);
+         end;
+    end;
 
   if not tResult then
      begin
@@ -32652,12 +32841,15 @@ begin
       Exit;
     end;
   end;
+  if IsMAMEBasedSys(sysID) then
+     imgZipFileSoftList[SoftwareIndex, imageCategoryID].Insert(0, imgFile); // to prevent searching for snap.zip (and others) every time user selects a game
+
   imgZipFileSoftList[SoftwareIndex, imageCategoryID].EndUpdate;
   ZipForge.CloseArchive;
   ZipForge.FileName:= '';
   // for debugging only... leave it commented!
   //if (sysID = idMAME) and (imageCategoryID = 1) then
-  //   imgZipFileList[sysID, imageCategoryID].SaveToFile(FrontendPath+'snap-zip_contents.txt');
+  //   imgZipFileSoftList[SoftwareIndex, imageCategoryID.SaveToFile(FrontendPath+'snap-zip_contents.txt');
 end;
 
 // functions to initialize "snap_sl.zip" files... "categoryname_sl.zip" (July 24, 2018)
@@ -32725,9 +32917,10 @@ end;
 
 procedure TFormMain.ImgZipParseFilesSoftwareList_SL(sysID, imageCategoryID: Integer);
 var
-  imgFile: String;
+  imgFile, FolderZip: String;
   ArchiveItem: TZFArchiveItem;
   tResult: Boolean;
+  iLoop: Integer;
 begin
   // "snap\snap_sl.zip" / "snap\titles_sl.zip" / "snap\covers_sl.zip"
   if (not IsSystemAvailable(sysID)) or (imgFolder[sysID, imageCategoryID] = '') then
@@ -32746,8 +32939,28 @@ begin
        Exit;
      end;
 
-  imgFile:= GetFolderFull(imageCategoryID, sysID)+GetImgZipFileName_SL(imageCategoryID); // no need for '.zip'
-  tResult:= FileExists(imgFile);
+  if IsMAMEBasedSys(sysID) then
+  begin
+    tResult:= False;
+    FolderZip:= '';
+    if imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID] <> nil then
+    begin
+       for iLoop:=0 to imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Count-1 do
+       begin
+         FolderZip:= imgFolderMAME[Ord(sysID <> idMAME)+1, imageCategoryID].Strings[iLoop];
+         FolderZip:= FullEmuFolderFix(FolderZip, sysID, True); // for zipped images
+         imgFile:= FolderZip+GetImgZipFileName_SL(imageCategoryID);
+         tResult:= FileExists(imgFile); // no need for '.zip'
+         if tResult then
+            Break;
+       end;
+    end;
+  end
+  else
+    begin
+      imgFile:= GetFolderFull(imageCategoryID, sysID)+GetImgZipFileName_SL(imageCategoryID); // no need for '.zip'
+      tResult:= FileExists(imgFile);
+    end;
 
   if not tResult then
      begin
@@ -32800,6 +33013,9 @@ begin
       Exit;
     end;
   end;
+  if IsMAMEBasedSys(sysID) then
+     imgZipFileSoftList_SL[imageCategoryID].Insert(0, imgFile); // to prevent searching for snap.zip (and others) every time user selects a game
+
   imgZipFileSoftList_SL[imageCategoryID].EndUpdate;
   ZipForge.CloseArchive;
   ZipForge.FileName:= '';
@@ -35300,8 +35516,8 @@ begin
        Sleep(50); // a small delay to prevent memory leaks in thumbnails view with images panel enabled; only happens at startup
        if PopupEnableMAMu_Icons.Checked and (not IsThumbnailView) then
           begin
-            TEasyGameInfo(SelectedEasyItem).eIconLoaded:= False;
-            TEasyGameInfo(SelectedEasyItem).Initialized:= False;
+            //TEasyGameInfo(SelectedEasyItem).eIconLoaded:= False;
+            //TEasyGameInfo(SelectedEasyItem).Initialized:= False;
           end;
        GamesListView.EndUpdate(False);
 
@@ -35413,6 +35629,7 @@ begin
 
   FreeImageZipVars;
   FreeMAMu_ZipVars;
+  FreeAndNil(MAMu_FoldersList); // multiple paths support StringList
 
   DestroyImageLayoutControls;
 
@@ -36030,7 +36247,8 @@ var
   ArchiveItem: TZFArchiveItem;
   iFolder: String;
 begin
-  iFolder:= MAMu_Folder;
+  // deprecated code, single folder support only
+  {iFolder:= MAMu_Folder;
   iconsFile:= 'icons.zip';
   if SoftwareName <> '' then
      begin
@@ -36042,6 +36260,39 @@ begin
           iconsFile:= SoftwareName+'.zip';
      end;
   Result:= FileExists(iFolder+iconsFile);
+  if not Result then
+     begin
+       FreeAndNil(IconsListSource);
+       Exit;
+     end;}
+
+  iconsFile:= 'icons.zip';
+  if SoftwareName <> '' then
+     begin
+       iconsFile:= SoftwareName+'\'+iconsFile;
+       iFolder:= DetectFolderIcon(iconsFile);
+
+       Result:= iFolder <> '';
+       if not Result then
+          begin
+            iconsFile:= 'icons\'+SoftwareName+'\icons.zip';
+            iFolder:= DetectFolderIcon(iconsFile);
+            Result:= iFolder <> '';
+          end;
+
+       if not Result then
+          begin
+            iconsFile:= SoftwareName+'.zip';
+            iFolder:= DetectFolderIcon(iconsFile);
+            Result:= iFolder <> '';
+          end;
+     end
+  else
+     begin
+       iFolder:= DetectFolderIcon(iconsFile);
+       Result:= iFolder <> '';
+       //Result:= FileExists(iFolder+iconsFile);
+     end;
   if not Result then
      begin
        FreeAndNil(IconsListSource);
@@ -36089,7 +36340,7 @@ begin
   ZipForgeIcons.FileName:= '';
   Result:= IconsListSource.Count > 0;
   if Result then
-     IconsListSource.Insert(0, '!zipFile='+iFolder+iconsFile) // first line is the filename, so we don't search .zip file for every game icon to be loaded
+     IconsListSource.Insert(0, iFolder+iconsFile) // first line is the filename, so we don't search .zip file for every game icon to be loaded
   else
      FreeAndNil(IconsListSource); // no valid .ico files inside "icons.zip" or "softwarename.zip"
 end;
@@ -36142,7 +36393,7 @@ begin
   FreeAndNil(MAMu_FileStream);
   FreeAndNil(MAMu_SoftwareNameZipList);
   FreeAndNil(MAMu_IconsList); // arcade icons THashedStringList
-
+  
   // MAME software list
   if Length(MAMu_FileStream_SL) > 0 then
      begin
@@ -37007,7 +37258,7 @@ begin
      PopupThumbDeleteSelectedGameSnapshot.Caption:= 'Delete Selected '+GetImageCategoryTitle(1);
 
   if not PopupEnableMAMu_Icons.Checked then
-     PopupEnableMAMu_Icons.Enabled:= DirectoryExists(MAMu_Folder);
+     PopupEnableMAMu_Icons.Enabled:= MAMu_Folder <> '';// DirectoryExists(MAMu_Folder);
 
   PopupScanAllSelectedGames.Enabled:= (selCount > 0) and (not MemGameInfo.eIsCustomGame);
   PopupScanForceSelectedGamesAvailable.Enabled:= PopupScanAllSelectedGames.Enabled;
@@ -39238,7 +39489,12 @@ end;
 
 procedure TFormMain.SetMAMu_Folder(const FolderString: String);
 begin
-  MAMu_Folder:= FullEmuFolderFix(FolderString, idMAME, False);
+  MAMu_Folder:= FolderString;//FullEmuFolderFix(FolderString, idMAME, False);
+  case Assigned(MAMu_FoldersList) of
+    True : MAMu_FoldersList.Clear;
+    False: MAMu_FoldersList:= TStringList.Create;
+  end;
+  ExtractFolders2MAME(idMAME, FolderString, MAMu_FoldersList, True); // emulator full path already generated in TStringList
 end;
 
 function TFormMain.UpdateMAMu_ScanFolder: Boolean;
@@ -41429,10 +41685,12 @@ end;
 procedure TFormMain.CallSelectImageLayout(SelectLayoutIndex: Integer; ShowSelectorDialog: Boolean);
 var
   OutBounds: Integer;
-  Continue: Boolean;
+  Continue, IsVisible: Boolean;
   iLoop: Integer;
 begin
   iLoop:= SelectLayoutIndex;
+
+  IsVisible:= ButtonPreviousLayout.Enabled;
 
   if ShowSelectorDialog then
   begin
@@ -41464,6 +41722,13 @@ begin
   if not Continue then
      Exit;
 
+  if (not ShowSelectorDialog) and (not IsStartup) and IsVisible then
+     begin
+       ButtonPreviousLayout.Enabled:= False;
+       ButtonScreenshotLayouts.Enabled:= False;
+       ButtonNextLayout.Enabled:= False;
+     end;
+
   if (not IsStartup) and (MenuImageLayoutSettings.Tag = 1) then
      UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag);
   MenuImageLayoutSettings.Tag:= 1; // need to set ".Tag=1" to allow saving layout settings next time user change layouts
@@ -41485,16 +41750,25 @@ begin
        LoadImageLayoutPreview(ButtonScreenshotLayouts.Tag);
        UpdateImageDimensionsInfo;
      end;
+
+  if (not ShowSelectorDialog) and (not IsStartup) and IsVisible then
+     begin
+       ButtonPreviousLayout.Enabled:= True;
+       ButtonScreenshotLayouts.Enabled:= True;
+       ButtonNextLayout.Enabled:= True;
+     end;
 end;
 
 function TFormMain.CallSelectImageCategory(SelectCategoryID: ShortInt; GhostDisabled, ShowDisabled: Boolean; ShowSelectorDialog: Boolean;  IsToolBarFilter: Boolean = False): ShortInt;
 var
   OutBounds: Integer;
-  Continue: Boolean;
+  Continue, IsVisible: Boolean;
   iLoop: Integer;
 begin
   Result:= -1;
   iLoop:= SelectCategoryID;
+
+  IsVisible:= ButtonPreviousCategory.Visible and ButtonPreviousCategory.Enabled;
 
   if ShowSelectorDialog then
   begin
@@ -41542,10 +41816,24 @@ begin
          if not IsStartup then
             Exit;
        end;
-       
+
+    if (not ShowSelectorDialog) and (not IsStartup) and IsVisible then
+       begin
+         ButtonPreviousCategory.Enabled:= False;
+         ButtonImageCategory.Enabled:= False;
+         ButtonNextCategory.Enabled:= False;
+       end;
+
     ChangeImageCategory(iLoop);
     if (not IsStartup) and IsSingleImageLayout then
        UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // force update the image category settings in single layout
+
+    if (not ShowSelectorDialog) and (not IsStartup) and IsVisible then
+       begin
+         ButtonPreviousCategory.Enabled:= True;
+         ButtonImageCategory.Enabled:= True;
+         ButtonNextCategory.Enabled:= True;
+       end;
   end;
 end;
 
@@ -41775,7 +42063,7 @@ var
 begin
   if ButtonInternetGameInfo.Down then
      Exit;
-     
+
   Index:= ButtonScreenshotLayouts.Tag;
   repeat
     case MoveForward of
@@ -42929,10 +43217,16 @@ end;
 
 procedure TFormMain.MenuImagesDeleteCloneGameImagesClick(Sender: TObject);
 begin
-  if not Assigned(FormArcadeDeleteCloneImages) then
-     FormArcadeDeleteCloneImages:= TFormArcadeDeleteCloneImages.Create(nil);
-  FormArcadeDeleteCloneImages.ShowModal;
-  FreeAndNil(FormArcadeDeleteCloneImages);
+  if not Assigned(FormImagesDeleteClones) then
+     FormImagesDeleteClones:= TFormImagesDeleteClones.Create(nil);
+
+  if IsNightMode then
+     begin
+       UpdateSplitterStyle(FormImagesDeleteClones.Splitter, tsSolidColor, FormNightMode.NightModeImageSplitterSingleColor.Selected, FormNightMode.NightModeImageSplitterSingleColorHot.Selected);
+       SetGripIcon(FormImagesDeleteClones.Splitter, PopupImageShowSplitterGrip.Checked);
+     end;
+  FormImagesDeleteClones.ShowModal;
+  FreeAndNil(FormImagesDeleteClones);
 end;
 
 procedure TFormMain.PopupDeleteSelectedGamesClick(Sender: TObject);
@@ -46847,7 +47141,6 @@ begin
      begin
        PanelHolder:= ImageHintPanel;
        UpdateImageHintPanelText(1);
-
      end
   else
   if TImage32(Sender) = ImageScr[2] then
@@ -50481,7 +50774,7 @@ begin
   if IsNightMode then
      begin
        if FormNightMode.NightModeUseWin10DarkModeScrollBars.Checked then
-          SetWindowTheme(iHandle, 'DarkMode_Explorer', nil) // works on ListView, RichEdit, Memo, WebBrowser
+          SetWindowTheme(iHandle, 'DarkMode_Explorer', nil) // works on ListView, RichEdit, Memo, WebBrowser, ShellTreeView
        else
           SetWindowTheme(iHandle, nil, nil);
      end

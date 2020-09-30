@@ -172,7 +172,7 @@ begin
   FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' mixed together with image files in the ');
   FormMain.AddMsgText('snap_dir', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' root folder (not recommended).'+#13#10#13#10+
+  FormMain.AddMsgText(' root folder (not recommended!).'+#13#10#13#10+
                       '    Note that even if you select a custom folder for your video files, if not '+
                       'found, the files will also be searched in these folders!');
   GenerateMessage('Help', 'What is Snap Dir Auto-Search ?');

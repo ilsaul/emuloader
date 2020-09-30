@@ -691,6 +691,9 @@ begin
                InternetGameInfoProgettoEMMALinkButtonDefault.Click;
             if InternetMAMESoftwareListGameInfoLink.Text = '' then
                InternetMAMESoftwareListGameInfoProgettoEMMALinkButtonDefault.Click;
+
+            if Trim(MAMu_IconsFolder.Text) = '' then
+               MAMu_IconsFolder.Text:= 'icons';
             FormMain.UpdateVideoPreviewIni;
             FormMain.SetVideoPreviewState;
           end;

@@ -88,7 +88,7 @@ type
     property eSaveHistory: Boolean read fSaveHistory write fSaveHistory;
     property eHistory: TStringList read fHistory write fHistory;
   end;
-  
+
 type
   TFormArcadeMAMu_IconsManager = class(TForm)
     IL_MissingIcons: TImageList;
@@ -308,7 +308,7 @@ type
     procedure CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
   public
     { Public declarations }
-    SourceIconFile: String;
+    SourceIconFile, zzzIconFolder: String;
     ZZZIconList: THashedStringList;
     procedure DetectFileMD5;
   end;
@@ -318,7 +318,7 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon, uArcadeMAMu_ExcludedList, uArcadeDeleteMAMu_NotWorkingIcons;
+uses uMain, uStatus, uCommon, uArcadeMAMu_ExcludedList, uArcadeMAMu_DeleteNotWorkingIcons;
 
 {$R *.dfm}
 
@@ -432,10 +432,19 @@ end;
 function TFormArcadeMAMu_IconsManager.IsFolderEmpty: Boolean;
 var
   Search: TSearchRec;
+  Loop: Integer;
 begin
-  Result:= FindFirst(FormMain.MAMu_Folder+'*.ico', $37, Search) = 0;
+  Result:= False;
+  for Loop:=0 to FormMain.MAMu_FoldersList.Count-1 do
+  begin
+    if FindFirst(FormMain.MAMu_FoldersList[Loop]+'*.ico'+'*.ico', $37, Search) = 0 then
+       begin
+         Result:= True;
+         Break;
+       end;
+  end;
   FindClose(Search);
-     
+
   if not Result then
      GenerateMessage('Warning', 'Folder is empty.',
                      '    No icons could be found in icons folder. MAMu_ icons manager only works with '+
@@ -698,9 +707,9 @@ var
       True:
         begin
           addGameItem:= FormMain.ScanFoldersIcon(FormMain.TempGameVars.eName, FormMain.TempGameVars.eSoftwareName, SystemSelectLabel.Tag, FileFullPath, False);
-          //addGameItem:= not addGameItem; // not needed, just for testing
+          //addGameItem:= not addGameItem; // not needed, debugging only, do not remove/uncomment
         end;
-      False: Exit; // for clone games, "SearchCloneGames" is disabled... need to exit, nothing to add!!
+      False: Exit; // for clone games, "SearchCloneGames" is disabled... need to exit, nothing to add
     end;
     iszzzIcon:= False;
 
@@ -843,8 +852,9 @@ var
     Result:= False;
     gamesItem:= MissingIconsList.Groups.FirstItem;
     repeat
-      IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
-                                               TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
+      //app crash here... TMissingIconInfo() is empty ???
+      //IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
+      //                                         TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
       if (TMissingIconInfo(gamesItem).eName = TNotWorkingGameInfo(Item).eName) and
          (TMissingIconInfo(gamesItem).eSoftwareName = TNotWorkingGameInfo(Item).eSoftwareName) then
          begin
@@ -860,7 +870,7 @@ var
 
   procedure FreeDelForm;
   begin
-    FreeAndNil(FormArcadeDeleteMAMu_NotWorkingIcons);
+    FreeAndNil(FormArcadeMAMu_DeleteNotWorkingIcons);
     MissingIconsList.SetFocus;
   end;
 
@@ -871,36 +881,39 @@ begin
      begin
        if not FormMain.CheckSelected(MissingIconsList) then
           Exit;
-       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
-                                                TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
-       if not FileExists(FormMain.MAMu_Folder+'zzz.ico') then
+
+       zzzIconFolder:= FormMain.DetectFolderIcon(SourceIconFile);//'zzz.ico');
+       if not FileExists(zzzIconFolder+SourceIconFile) then
           begin
-            GenerateMessage('Error', 'File not found', '    File zzz.ico was not found. This file is required for this '+
+            GenerateMessage('Error', 'File not found', '    File '+SourceIconFile+{zzz.ico}' was not found. This file is required for this '+
                             'feature to work properly! Cannot proceed...', 2, False, 1);
             Exit;
           end;
+
+       IconFolder:= FormMain.GetMAMu_IconFolder(TMissingIconInfo(MissingIconsList.Selection.First).eSystemID, False,
+                                                TMissingIconInfo(MissingIconsList.Selection.First).eSoftwareName);
      end;
   // Tag = 0 -> delete files
   // Tag = 1 -> copy files
   // Tag = 2 -> update files
 
-  if not Assigned(FormArcadeDeleteMAMu_NotWorkingIcons) then
-     FormArcadeDeleteMAMu_NotWorkingIcons:= TFormArcadeDeleteMAMu_NotWorkingIcons.Create(nil);
-  FormArcadeDeleteMAMu_NotWorkingIcons.LabelHotkeys.Tag:= ActionIndex;
-  FormArcadeDeleteMAMu_NotWorkingIcons.SetMode;
-  if not FormMain.CheckTotal(FormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIcons) then
+  if not Assigned(FormArcadeMAMu_DeleteNotWorkingIcons) then
+     FormArcadeMAMu_DeleteNotWorkingIcons:= TFormArcadeMAMu_DeleteNotWorkingIcons.Create(nil);
+  FormArcadeMAMu_DeleteNotWorkingIcons.LabelHotkeys.Tag:= ActionIndex;
+  FormArcadeMAMu_DeleteNotWorkingIcons.SetMode;
+  if not FormMain.CheckTotal(FormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIcons) then
      begin
        FreeDelForm;
        Exit;
      end;
 
-  FormArcadeDeleteMAMu_NotWorkingIcons.ShowModal;
-  if FormArcadeDeleteMAMu_NotWorkingIcons.mmResult = mrCancel then
+  FormArcadeMAMu_DeleteNotWorkingIcons.ShowModal;
+  if FormArcadeMAMu_DeleteNotWorkingIcons.mmResult = mrCancel then
      begin
        FreeDelForm;
        Exit;
      end;
-  if FormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIcons.CheckManager.Count = 0 then
+  if FormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIcons.CheckManager.Count = 0 then
      begin
        FreeDelForm;
        Exit;
@@ -918,16 +931,18 @@ begin
     2: FormStatus.TitleStr('Update "Not Working" Icons');
   end;
   FormStatus.MessageStr('Processing games.');
-  ClearSelectedMissing;
+  //ClearSelectedMissing;
   MissingIconsList.BeginUpdate;
-  Item:= FormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIcons.Groups.FirstItem;
+  Item:= FormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIcons.Groups.FirstItem;
   repeat
     if Item.Checked then
        begin
          GameSelected:= False;
          // need to add SoftwareName here!!!!!!!!
-         FileStr:= FormMain.GetMAMu_IconFolder(FormArcadeDeleteMAMu_NotWorkingIcons.Tag, False)+
+
+         FileStr:= FormMain.GetMAMu_IconFolder(FormArcadeMAMu_DeleteNotWorkingIcons.Tag, False)+
                    TNotWorkingGameInfo(Item).eName+'.ico';
+         FileStr:= FormMain.MAMu_FoldersList[0]+FileStr;
          case ActionIndex of
            0: // delete files
              begin
@@ -938,23 +953,17 @@ begin
              end;
            1, 2: // copy / update "zzz" icon to games
              begin
-               if CopyFile(PAnsiChar(IconFolder+FormArcadeMAMu_IconsManager.SourceIconFile), PAnsiChar(FileStr), False) then
+               if CopyFile(PAnsiChar(zzzIconFolder+SourceIconFile), PAnsiChar(FileStr), False) then
                   SelectGameMissList;
-
-               //if CopyFile(PAnsiChar(IconFolder+'zzz.ico'), PAnsiChar(FileStr), False) then
-               //   begin
-                    //Sleep(80);
-               //     SelectGameMissList;
-               //   end;
              end;
          end;
        end;
-    Item:= FormArcadeDeleteMAMu_NotWorkingIcons.NotWorkingIcons.Groups.NextItem(Item);
+    Item:= FormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIcons.Groups.NextItem(Item);
     Application.ProcessMessages;
   until Item = nil;
   MissingIconsList.EndUpdate;
   FreeDelForm;
-  ClearSelectedMissing;
+  //ClearSelectedMissing;
   PopupReloadIconsSelectedGames.Click;
   if CloseFormStatus then
      FormStatus.Close;
@@ -1094,7 +1103,14 @@ begin
   // scan icon files
   FormStatus.MessageStr('Building icons files list');
   tempList:= THashedStringList.Create;
-  GetFilesList(FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), '.ico', '*.ico', tempList, False, False, True);
+  for Loop2:=0 to FormMain.MAMu_FoldersList.Count-1 do
+  begin
+    tmpString:= IncludeTrailingPathDelimiter(FormMain.MAMu_FoldersList[Loop2]);
+    GetFilesList(tmpString+FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), '.ico', '*.ico', tempList, False, False, True); // icon_dir\
+    GetFilesList(tmpString+FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, True), '.ico', '*.ico', tempList, False, False, True); // icon_dir\icons\
+  end;
+
+  //GetFilesList(FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), '.ico', '*.ico', tempList, False, False, True);
   Loop2:= Ord(tempList.Count > 0);
   case Boolean(Loop2) of
     True:
@@ -1287,7 +1303,13 @@ begin
   case FileExists(BlankIcon) of
     True:
       begin
-        IconFullPath:= FormMain.GetMAMu_IconFolder(sysID, False);
+        IconFullPath:= FormMain.GetFirstPathOnly(FormMain.MAMu_Folder);
+        if IconFullPath <> '' then
+           begin
+             IconFullPath:= RemoveQuotes(IconFullPath);
+             IconFullPath:= IconFullPath+FormMain.GetMAMu_IconFolder(sysID, False);
+           end;
+
         SoftNameFolder:= '';
         if SoftwareName <> '' then
            SoftNameFolder:= SoftwareName+'\';
@@ -1929,10 +1951,17 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.DetectFileMD5;
 var
-  MD5Str: String;
+  MD5Str, iFolder: String;
   Loop: Integer;
 begin
-  GetFilesList(FormMain.MAMu_Folder, '.ico', 'zzz*.ico', ZZZIconList, False, True, True);
+  for Loop:=0 to FormMain.MAMu_FoldersList.Count-1 do
+  begin
+    iFolder:= IncludeTrailingPathDelimiter(FormMain.MAMu_FoldersList[Loop]);
+    GetFilesList(iFolder, '.ico', 'zzz*.ico', ZZZIconList, False, True, True);
+    iFolder:= iFolder+'icons\';
+    GetFilesList(iFolder, '.ico', 'zzz*.ico', ZZZIconList, False, False, True);
+  end;
+  
   ZZZIconList.Sorted:= False;
   if ZZZIconList.Count > 0 then
      begin

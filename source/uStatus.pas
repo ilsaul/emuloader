@@ -187,21 +187,21 @@ end;
 
 procedure TFormStatus.LoadImageLogo;
 var
-  iFile: String;
+  iFile, iFolder: String;
 begin
-  if not SplashScreenEnableAlternateLogoFile.Checked then
-     iFile:= 'logo.png'
-  else
+  iFile:= 'logo.png';
+  iFolder:= FormMain.GetFolderFull(35);
+  if SplashScreenEnableAlternateLogoFile.Checked then
      begin
        iFile:= 'logo2.png';
-       if not FileExists(FormMain.GetFolderFull(35)+iFile) then
+       if not FileExists(iFolder+iFile) then
           iFile:= 'logo.png;'
      end;
 
-  if FileExists(FormMain.GetFolderFull(35)+iFile) then
+  if FileExists(iFolder+iFile) then
      begin
        ImageBk.Bitmap:= nil;
-       ImageBk.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+iFile);
+       ImageBk.Bitmap.LoadFromFile(iFolder+iFile);
      end;
 end;
 
@@ -276,11 +276,11 @@ end;
 procedure TFormStatus.FormCreate(Sender: TObject);
 begin
   CustomProgressBar:= Screen.Width >= 1280;
-  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then // if Screen.Fonts.IndexOf('Terminal') = -1 then
+  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then
      begin
        FormMain.ChangeLabelFontConsolas(LabelTimer, 9, [fsBold]);
        FormMain.ChangeLabelFontConsolas(LabelSoftwareScanCount, 9, [fsBold]);
-       //LabelTimer.Height:= LabelTimer.Height+1; // it must be 14 pixels for the "Lucida Console" font
+       //LabelTimer.Height:= LabelTimer.Height+1; // it must be 14 pixels for the "Lucida Console" font (no, it doesn't... June 08, 2020)
        //LabelSoftwareScanCount.Height:= LabelSoftwareScanCount.Height+1; // it must be 14 pixels for the "Lucida Console" font
        LabelTimer.Layout:= tlCenter;
        LabelSoftwareScanCount.Layout:= tlCenter;
