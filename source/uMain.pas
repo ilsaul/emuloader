@@ -1222,7 +1222,6 @@ type
     procedure MenuIncrementalSearchGameTitleClick(Sender: TObject);
     procedure MenuImagesEnableToolBarClick(Sender: TObject);
     procedure MenuEnableToolBarClick(Sender: TObject);
-    procedure ButtonMAMu_IconsClick(Sender: TObject);
     procedure MenuEmulatorReloadROMsFoldersClick(Sender: TObject);
     procedure NewTitleFormatClick(Sender: TObject);
     procedure PopupSetFoldersMAMu_Click(Sender: TObject);
@@ -1457,10 +1456,25 @@ type
     procedure PopupImageUseSingleBackgroundColorClick(Sender: TObject);
     procedure MenuCustomizeSplashScreenClick(Sender: TObject);
     procedure PopupVideoPreviewPlayClick(Sender: TObject);
+    procedure ButtonGameFilterFavoritesMouseUp(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ButtonMAMu_IconsMouseUp(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure GamesListViewItemImageDrawIsCustom(
+      Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+      var IsCustom: Boolean);
+    procedure GamesListViewItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
+    procedure GamesListViewItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
 
   { Private declarations }
   private
     //FileIcon: TIcon;
+    //iMAMu_Icon: TIcon;
     LastColumnSorted: Integer;
     LastColumnSortDirection: TEasySortDirection;
     IsMultiColumnSort: Boolean;
@@ -1842,6 +1856,8 @@ type
     procedure DrawDisabledImage(DC: HDC; ImageList: TCustomImageList; Index, X, Y: Integer; BlendColor: TColor = clNone);
     function  DeleteSingleGameFromGamesListConsoleComputer(ShowDeleteMessage: Boolean): Boolean;
     procedure ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect); // for OnItemThumbnailDraw() event in main games list
+
+    // procedure SetRichEditText(RichEdit: TRichEditURL; Text: WideString; AnsiCodePage: UINT); // add unicode text into RichEdit, do not remove this! (February 24, 2021)
 
   protected
     // fixes for Windows Vista / Sev7n / 8ight / 10, not needed for Delphi 2009 and newer compilers
@@ -2496,9 +2512,13 @@ type
     procedure LoadSystemsIcons(IL_Holder: TImageList; EmptyImageList: Boolean = True);
     procedure LoadCategoriesIcons(IL_Holder: TImageList);
 
-    function  AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+    function  AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
                          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
                          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
+
+    //function  AppendText2(ARichEdit: TRichEdit98; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+    //                      AAlignment: TAlignment98 = taLeft; const AFontName: String = 'default'; AFontSize: Integer = -1): Integer;
+    //                      //AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 
     procedure AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
                                iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
@@ -5944,9 +5964,9 @@ procedure TFormMain.ClearGameInfoRichEdit;
 begin
   if (not ProcessingGameDocuments) and (PopupAutomaticGameInformation.Checked) then
      begin
-       MAMEInfoTextHolder.Lines.BeginUpdate;
+       //MAMEInfoTextHolder.Lines.BeginUpdate;
        MAMEInfoTextHolder.Lines.Clear;
-       MAMEInfoTextHolder.Lines.EndUpdate;
+       //MAMEInfoTextHolder.Lines.EndUpdate;
      end;
 end;
 
@@ -8282,10 +8302,16 @@ var
   end;
 
 begin
-  if not ValidateFile(GetLightModeFile) then
-     Exit;
   if not Assigned(FormStatus) then
      Exit;
+
+  if not ValidateFile(GetLightModeFile) then
+     begin
+       // this is for a clean install
+       if IsStartup and (FormStatus.ImageBk.Bitmap = nil) then
+          FormStatus.SplashScreenEnableAlternateLogoFile.OnClick(Self);
+       Exit;
+     end;
 
   IniFile:= TMemIniFile.Create(GetLightModeFile);
 
@@ -12246,11 +12272,6 @@ begin
          SetCurrentDir(ExtractFilePath(AlterMAMEFile[2]))
       else
          SetCurrentDir(ExtractFilePath(EmulatorFile[MemGameInfo.eSystemID]));
-
-      //case RunWithAlterMAME[1] of
-      //  True : SetCurrentDir(ExtractFilePath(AlterMAMEFile[1]));
-      //  False: SetCurrentDir(ExtractFilePath(EmulatorFile[MemGameInfo.eSystemID]));
-      //end;
 
       IsRunningGame:= True;
 
@@ -25335,7 +25356,10 @@ var
   function LoadNotAvailableImg: Boolean;
   begin
     Result:= True;
-    NoImageFile[ScreenIndex]:= GetFolderFull(35, MemGameInfo.eSystemID)+'emuloader.png';
+
+    NoImageFile[ScreenIndex]:= GetFolderFull(35, MemGameInfo.eSystemID)+'img_missing\'+ImageCategoryArray[ImageDetails[ScreenIndex].ImageCategoryIndex, 2];
+    if not FileExists(NoImageFile[ScreenIndex]) then
+       NoImageFile[ScreenIndex]:= GetFolderFull(35, MemGameInfo.eSystemID)+'emuloader.png';
     ClearImageInfo(ScreenIndex);
     if FileExists(NoImageFile[ScreenIndex]) then
        begin
@@ -30493,7 +30517,6 @@ end;
 function TFormMain.GetMAMu_IconFolder(sysID: Byte; AddExtraIconPath: Boolean; const SoftwareName: String = ''): String;
 begin
   Result:= '';//MAMu_Folder; // for all systems, single folder
-  beep;
   case sysID of
     idDICE: Result:= Result+'dice\'; // for DICE - sub-folder "icons\dice\"
     idZiNc: Result:= Result+'zinc\'; // for ZiNc - sub-folder "icons\zinc\"
@@ -30523,8 +30546,8 @@ begin
      begin
        for iLoop:=0 to MAMu_FoldersList.Count-1 do
        begin
-         iStr:= MAMu_FoldersList[iLoop];
-         if FileExists(iStr+iFileName) then
+         iStr:= Trim(MAMu_FoldersList[iLoop]);
+         if FileExistsW(iStr+iFileName) then
             begin
               Result:= iStr;
               Break;
@@ -30768,9 +30791,6 @@ var
          IconVar.LoadFromStream(MAMu_FileStream_SL[ZippedIconArrayIndex]);
          MAMu_FileStream_SL[ZippedIconArrayIndex].Clear;
        end;
-    //if Result then
-
-    //MAMu_FileStream.Clear;
   end;
 
 begin
@@ -31990,6 +32010,7 @@ begin
      Exit;
   ELV_ResetNormalColors(GamesListView);
   ELV_ResetNormalColors(MachinesListSidePanel);
+  MAMEInfoTextHolder.Lines.Clear; // prevent garbish text at startup
 
   InitNightModeScreen;
   InitPreferencesScreen;
@@ -35505,31 +35526,6 @@ begin
   if IsNightMode then
      SetPreferencesColors;
 
-  SetGameType(False); // apply games filters
-  
-  if CheckSelected(GamesListView) then
-     begin
-       if FormStatus.Visible then
-          FormStatus.MessageStr('Loading selected game details.');
-       // fix for the selected game not loading MAMu_ icon
-       GamesListView.BeginUpdate;
-       Sleep(50); // a small delay to prevent memory leaks in thumbnails view with images panel enabled; only happens at startup
-       if PopupEnableMAMu_Icons.Checked and (not IsThumbnailView) then
-          begin
-            //TEasyGameInfo(SelectedEasyItem).eIconLoaded:= False;
-            //TEasyGameInfo(SelectedEasyItem).Initialized:= False;
-          end;
-       GamesListView.EndUpdate(False);
-
-       //GamesListView.Scrollbars.OffsetX:= 0;
-       Application.ProcessMessages;
-
-       //SetSelectedGame(True); // reload selected game info, just to make sure... no need for this as it's called in SetGameType(False) above (April 25, 2018)
-     end;
-
-  UpdateStatusBarGame; // to clear icons and labels
-  UpdateStatusBarMachine; // to clear icons and labels
-
   PopupEnableFavorites.Hint:= FavoriteProfile[0];
 
   if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
@@ -35546,10 +35542,54 @@ begin
 
   AlterMAME_ValidateMAME;
 
+  SetGameType(False); // apply games filters
+
+  UpdateStatusBarGame; // to clear icons and labels
+  UpdateStatusBarMachine; // to clear icons and labels
+
+  if CheckSelected(GamesListView) then
+     begin
+       if FormStatus.Visible then
+          FormStatus.MessageStr('Loading selected game details.');
+       // fix for the selected game not loading MAMu_ icon
+       GamesListView.BeginUpdate;
+       Sleep(50); // a small delay to prevent memory leaks in thumbnails view with images panel enabled; only happens at startup
+       if PopupEnableMAMu_Icons.Checked and (not IsThumbnailView) then
+          begin
+            //TEasyGameInfo(SelectedEasyItem).eIconLoaded:= False;
+            //TEasyGameInfo(SelectedEasyItem).Initialized:= False;
+          end;
+       GamesListView.EndUpdate(False);
+
+       //GamesListView.Scrollbars.OffsetX:= 0;
+       Application.ProcessMessages;
+       //SetSelectedGame(True); // reload selected game info, just to make sure... no need for this as it's called in SetGameType(False) above (April 25, 2018)
+     end;
+
+  {UpdateStatusBarGame; // to clear icons and labels
+  UpdateStatusBarMachine; // to clear icons and labels
+
+  PopupEnableFavorites.Hint:= FavoriteProfile[0];
+
+  if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
+     buildMAME:= GetMAMEBinaryVersion(EmulatorFile[idMAME]);
+
+  if (buildHBMAME = '') and (EmulatorFile[idHBMAME] <> '') then
+     buildHBMAME:= GetMAMEBinaryVersion(EmulatorFile[idHBMAME]);
+
+  if (buildAlterMAME[1] = '') and (AlterMAMEFile[1] <> '') then
+     buildAlterMAME[1]:= GetMAMEBinaryVersion(AlterMAMEFile[1]);
+
+  if (buildAlterMAME[2] = '') and (AlterMAMEFile[2] <> '') then
+     buildAlterMAME[2]:= GetMAMEBinaryVersion(AlterMAMEFile[2]);
+
+  AlterMAME_ValidateMAME;}
+
   FormStatus.Close;
-  Application.ProcessMessages;
-  FormMain.SetFocus;
-  FocusGamesList;
+  //Application.ProcessMessages;
+  //FormMain.SetFocus;
+  //FocusGamesList;
+
   if IsThumbnailView then
      ResetThumbnails; // reset thumbs here or they might not show at startup
 end;
@@ -36497,12 +36537,17 @@ begin
        if not CheckTotal(GamesListView) then
           begin
             if PopupEnableMAMu_Icons.Tag = 0 then
-               PopupEnableMAMu_Icons.Click; // disable feature as no games are loaded in the list
+               begin
+                 PopupEnableMAMu_Icons.Click; // disable feature as no games are loaded in the list
+                 ButtonMAMu_Icons.Down:= PopupEnableMAMu_Icons.Checked;
+                 Exit; // new code (January 29, 2021)
+               end;
           end;
      end;
   if PopupEnableMAMu_Icons.Tag = 1 then
      PopupEnableMAMu_Icons.Tag:= 0;
   InitMAMu_Zip;
+  ButtonMAMu_Icons.Down:= PopupEnableMAMu_Icons.Checked;
   FocusGamesList;
 end;
 
@@ -37490,20 +37535,26 @@ begin
   CallSetDeleteOptions(TMenuItem(Sender).Hint, TMenuItem(Sender));
 end;
 
-function TFormMain.AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+function TFormMain.AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 var
   reFontName: String;
   reFontCharSet: TFontCharSet;
-  reFontSize: Integer;
+  reFontSize, iSelStart, iSelLength: Integer;
+  reFontColor: TColor;
 begin
-  if AFontName <> 'default' then
+  {if AFontName <> 'default' then
      reFontName:= ARichEdit.Font.Name;
   if AFontCharSet <> DEFAULT_CHARSET then
      reFontCharSet:= ARichEdit.Font.Charset;
   if AFontSize <> -1 then
-     reFontSize:= ARichEdit.Font.Size;
+     reFontSize:= ARichEdit.Font.Size;}
+
+  reFontName:= ARichEdit.Font.Name;
+  reFontCharSet:= ARichEdit.Font.Charset;
+  reFontSize:= ARichEdit.Font.Size;
+  reFontColor:= ARichEdit.Font.Color;
 
   ARichEdit.SelStart:= ARichEdit.GetTextLen;
   Result:= ARichEdit.Lines.Count; // line index of added text
@@ -37515,7 +37566,10 @@ begin
   if AAlignment <> taLeftJustify then
      ARichEdit.Paragraph.Alignment:= AALignment;
 
-  ARichEdit.SelAttributes.Color:= AFontColor;
+  if AFontColor = -1 then
+     ARichEdit.SelAttributes.Color:= ARichEdit.Font.Color
+  else
+     ARichEdit.SelAttributes.Color:= AFontColor;
   ARichEdit.SelAttributes.Style:= AFontStyle;
 
   if AFontName <> 'default' then
@@ -37523,17 +37577,94 @@ begin
   if AFontCharSet <> DEFAULT_CHARSET then
      ARichEdit.SelAttributes.Charset:= aFontCharset;
   if AFontSize <> -1 then
-     ARichEdit.SelAttributes.Size:= AFontSize;
+     ARichEdit.SelAttributes.Size:= AFontSize
+  else
+     ARichEdit.SelAttributes.Size:= ARichEdit.Font.Size;
   ARichEdit.SelText:= AText;
 
   // restore defaults or next texts will have format of last added text
-  if AAlignment <> taLeftJustify then
+  ARichEdit.Paragraph.Alignment:= taLeftJustify;
+  ARichEdit.SelAttributes.Name:= reFontName;
+  ARichEdit.SelAttributes.Size:= reFontSize;
+  ARichEdit.SelAttributes.Charset:= reFontCharSet;
+  aRichEdit.SelAttributes.Style:= [];
+
+  {if AAlignment <> taLeftJustify then
      ARichEdit.Paragraph.Alignment:= taLeftJustify;
   if AFontName <> 'default' then
      ARichEdit.SelAttributes.Name:= reFontName;
   if AFontSize <> -1 then
      ARichEdit.SelAttributes.Size:= reFontSize;
+
+  if AFontStyle <> [] then
+     ARichEdit.SelAttributes.Style:= [];}
 end;
+
+{function TFormMain.AppendText2(ARichEdit: TRichEdit98; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
+         AAlignment: TAlignment98 = taLeft; const AFontName: String = 'default'; AFontSize: Integer = -1): Integer;//
+         //AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
+var
+  restoreFontName: String;
+  //reFontCharSet: TFontCharSet;
+  restoreFontSize: Integer;
+  restoreFontColor: TColor;
+  ASelStart, ASelLength: Integer;
+begin
+  ASelStart := ARichEdit.SelStart;
+  ASelLength:= ARichEdit.SelLength;
+
+  restoreFontName:= ARichEdit.Font.Name;
+  if AFontSize = -1 then
+     restoreFontSize:= ARichEdit.Font.Size;
+
+  restoreFontColor:= ARichEdit.Font.Color;
+
+  ARichEdit.SelStart:= ARichEdit.GetTextLen;
+  Result:= ARichEdit.WideLines.Count; // line index of added text
+  ARichEdit.SelLength:= 0;
+
+  //if ATextBackgroundColor <> Graphics.clNone then
+  //   ARichEdit.TextBKColor(ATextBackGroundColor); // doesn't work ? (March 01, 2018)
+
+  //if AAlignment <> taLeft then
+     ARichEdit.Paragraph.Alignment:= AALignment;
+
+  //if AFontColor <> clBlack then
+     ARichEdit.SelAttributes.Color:= AFontColor;
+
+  //if AFontStyle <> [] then
+     ARichEdit.SelAttributes.Style:= AFontStyle;
+  //else
+  //   ARichEdit.SelAttributes.Style:= [];
+
+  if AFontName <> 'default' then
+     ARichEdit.SelAttributes.Name:= AFontName
+  else
+     ARichEdit.SelAttributes.Name:= ARichEdit.Font.Name;
+  //if AFontCharSet <> DEFAULT_CHARSET then
+  //   ARichEdit.SelAttributes.Charset:= aFontCharset;
+  if AFontSize <> -1 then
+     ARichEdit.SelAttributes.Size:= AFontSize
+  else
+     ARichEdit.SelAttributes.Size:= ARichEdit.Font.Size;
+
+  ARichEdit.WideSelText:= AText;
+
+  // restore defaults or next texts will have format of last added text
+  //if AAlignment <> taLeft then
+     ARichEdit.Paragraph.Alignment:= taLeft;
+  //if AFontName <> 'default' then
+     ARichEdit.SelAttributes.Name:= restoreFontName;
+  //if AFontColor <> clBlack then
+     ARichEdit.SelAttributes.Color:= restoreFontColor;
+  //if AFontSize <> -1 then
+     ARichEdit.SelAttributes.Size:= restoreFontSize;
+  //if AFontStyle <> [] then
+     ARichEdit.SelAttributes.Style:= [];// reFontStyle;
+
+  ARichEdit.SelStart := ASelStart;
+  ARichEdit.SelLength:= ASelLength;
+end;}
 
 procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
                                iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
@@ -37541,6 +37672,8 @@ begin
   if (iFontColor = clBlack) and IsNightMode then
      iFontColor:= FormMessageBox.LabelMessage.Font.Color;
   AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
+  //SetRichEditText(FormMessageBox.LabelMessage, iTextToAdd, 1200);
+  //AppendText2(RichEdit98, iTextToAdd, iFontColor, iFontStyle, taLeft, iFontName, iFontSize);
 end;
 
 procedure TFormMain.SetSinglePanelLayoutGameDocuments;
@@ -37757,8 +37890,12 @@ begin
         pathFile:= LocateDATFile('messinfo.dat');
         LoadDAT(AutoMAMEInfoDATFile, True);
 
-        pathFile:= LocateDATFile('history.dat');
-        LoadDAT(AutoHistoryDATFile);
+        pathFile:= LocateDATFile('history.xml');
+        if not LoadDAT(AutoHistoryDATFile) then
+           begin
+             pathFile:= LocateDATFile('history.dat');
+             LoadDAT(AutoHistoryDATFile);
+           end;
 
         pathFile:= LocateDATFile('story.dat');
         LoadDAT(AutoStoryDATFile);
@@ -37833,21 +37970,45 @@ procedure TFormMain.ShowGameInfoAll;
 var
   LineIndex: Integer;
   AddLine, NoFilesMsg: Boolean;
-  DATVersion: String;
+  DATVersion: WideString;
   docItem: TEasyItem;
+  IsXML: Boolean;
 
-  function AddTextLine(const TextLine: String): Boolean;
+  function EmptyLineStr: WideString;
   begin
-    Result:= True;
-    MAMEInfoTextHolder.Lines.Add(TextLine);
+    Result:= #13#10;//Chr(13)+Chr(10);//'\r\n';
   end;
 
-  function AddTitleTextLine(const TextLine: String): Integer;
+
+  function AddTextLine(const TextLine: WideString): Boolean;
   begin
-    Result:= AppendText(MAMEInfoTextHolder, TextLine, MAMEInfoTextHolder.Font.Color, [fsBold], taCenter);
+    Result:= True;
+    MAMEInfoTextHolder.SelStart:= MAMEInfoTextHolder.GetTextLen; // this is the same as in AppendText() function but using current font settings
+    MAMEInfoTextHolder.SelText:= TextLine+EmptyLineStr;
+
+    //AppendText(MAMEInfoTextHolder, TextLine+EmptyLineStr);
+    //SetRichEditText(MAMEInfoTextHolder, TextLine, 1200);
+    //MAMEInfoTextHolder.Lines.Add(TextLine); // this causes "Insert Line Error" / "OutOfResouces" crashes
+
+    //TntMemo1.SelStart:= TntMemo1.GetTextLen;
+    //TntMemo1.SelText:= TextLine+EmptyLineStr;
+  end;
+
+  function AddTitleTextLine(const TextLine: WideString): Integer;
+  begin
+    Result:= AppendText(MAMEInfoTextHolder, TextLine+EmptyLineStr, -1, [fsBold], taCenter);
+    //TntMemo1.SelStart:= TntMemo1.GetTextLen;
+    //TntMemo1.SelText:= TextLine+EmptyLineStr;
+  end;
+
+  function IsEndTag(const iFileTxt: WideString): Boolean;
+  begin
+    Result:= iFileTxt = '$end';
   end;
 
   function InformationData: Boolean;
+  var
+    iText: WideString;
   begin
     Result:= MemGameInfo.eSoftwareName = '';
     if Result then
@@ -37871,46 +38032,57 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
-                begin
-                  case AddLine of
-                    False:
-                      begin
-                        if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$mame' then
-                           begin
-                             AddLine:= True;
-                             GameDocsGoToInformation.Tag:= AddTitleTextLine('---------- Information Data ----------'+#13#10);
-                           end;
-                      end;
-                    True: AddTextLine(AutoMAMEInfoDATFile[LineIndex]);
+                repeat
+                  iText:= Trim(AutoMAMEInfoDATFile[LineIndex]);
+                  if not IsEndTag(iText) then
+                  begin
+                    case AddLine of
+                      False:
+                        begin
+                          if iText = '$mame' then
+                             begin
+                               AddLine:= True;
+                               GameDocsGoToInformation.Tag:= AddTitleTextLine('---------- Information Data ----------');
+                             end;
+                        end;
+                      True:
+                        begin
+                          iText:= DecodeUnicodeStr(iText);
+                          AddTextLine(iText);//+EmptyLineStr);
+                        end;
+                    end;
                   end;
                   Inc(LineIndex);
-                end;
+                until IsEndTag(iText); //iText = '$end';
               end;
          end;
     end;
     GameDocsGoToInformation.Visible:= GameDocsGoToInformation.Tag <> -1;// Result;
   end;
 
-  function AddHistoryURL(const strLine: String; linkIndex: Integer): Boolean;
+  function AddHistoryURL(const strLine: WideString; startlink: Integer): Boolean;
   var
-    titleText, linkText: String;
+    titleText, linkText{, extraText}: WideString;
     endLink: Integer;
   begin
-    if linkIndex > 0 then
-       titleText:= Copy(strLine, 1, linkIndex-1);
+    //extraText:= '';
+    if startlink > 0 then
+       titleText:= Copy(strLine, 1, startlink-1);
 
     endLink:= PosEx('">', strLine);
-    linkText:= 'http://www.arcade-history.com/index.php'+Copy(strLine, linkIndex+9, endLink-linkIndex-9);
+    linkText:= 'https://www.arcade-history.com/'+Copy(strLine, startlink+9, endLink-startlink-9);
 
     titleText:= TitleText+Copy(strLine, endLink+2, Length(strLine));
     endLink:= PosEx('</a>', titleText);
     if endLink <> 0 then
-       Delete(titleText, endLink, 3);
+       begin
+         //extraText:= Copy(titleText, endLink+4, Length(strLine));
+         Delete(titleText, endLink, 3);
+       end;
 
     Result:= (titleText <> '') and (linkText <> '');
     if Result then
-       AddTextLine(titleText+': '+linkText);
+       AddTextLine(titleText+' '+linkText);
   end;
 
   function HistoryData: Boolean;
@@ -37918,6 +38090,7 @@ var
     Loop, Loop2, webIndex, TagStrSize: Integer;
     TagString, TagEndInfo: String;
     FoundData: Boolean;
+    iText, iText2: WideString;
   begin
     Result:= Assigned(AutoHistoryDATFile);
     if Result then
@@ -37926,40 +38099,47 @@ var
          AddLine:= False;
          FoundData:= False;
          if MemGameInfo.eSoftwareName = '' then
-              TagString:= '$info'
+            TagString:= '$info'
            else
-              TagString:= '$'+MemGameInfo.eSoftwareName;
-           TagStrSize:= Length(TagString);
+            TagString:= '$'+MemGameInfo.eSoftwareName;
+
+         TagStrSize:= Length(TagString);
          TagEndInfo:= '$end';
          for Loop:=0 to AutoHistoryDATFile.Count -1 do
          begin
-           if Copy(AutoHistoryDATFile[Loop], 1, TagStrSize) = TagString then
+           iText:= Trim(AutoHistoryDATFile[Loop]);
+           if Copy(iText, 1, TagStrSize) = TagString then
               begin
-                Result:= GetGameHistory(MemGameInfo.eName, AutoHistoryDATFile[Loop], TagStrSize);
+                Result:= GetGameHistory(MemGameInfo.eName, iText, TagStrSize); // "iText" replace "AutoHistoryDATFile[Loop]"
                 if Result then
                    begin
                      Loop2:= Loop+1;
-                     GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------'+#13#10);
-                     while Trim(AutoHistoryDATFile[Loop2]) <> TagEndInfo do
-                     begin
-                       case AddLine of
-                         False:
-                           begin
-                             if Trim(AutoHistoryDATFile[Loop2]) = '$bio' then
-                                AddLine:= True;
-                           end;
-                         True:
-                           begin
-                             webIndex:= PosEx('<a href=', AutoHistoryDATFile[Loop2]);
-                             if webIndex <> 0 then
-                                AddHistoryURL(AutoHistoryDATFile[Loop2], webIndex)
-                             else
-                                AddTextLine(AutoHistoryDATFile[Loop2]);
-                           end;
+                     GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------');
+                     repeat
+                       iText2:= Trim(AutoHistoryDATFile[Loop2]);
+                       if not IsEndTag(iText2) then
+                       begin
+                         case AddLine of
+                           False:
+                             begin
+                               if iText2 = '$bio' then
+                                  AddLine:= True;
+                             end;
+                           True:
+                             begin
+                               iText2:= DecodeUnicodeStr(iText2);
+                               //webIndex:= PosEx('<a href=', iText2);
+                               //if webIndex <> 0 then
+                               //   AddHistoryURL(iText2, webIndex)
+                               //else
+                                  AddTextLine(iText2);
+                             end;
+                         end;
                        end;
                        Inc(Loop2);
-                     end;
-                     if AutoHistoryDATFile[Loop2] = TagEndInfo then
+                     until iText2 = TagEndInfo;
+
+                     if iText2 = TagEndInfo then // "iText2" replace "AutoHistoryDATFile[Loop2]"
                         FoundData:= True;
                    end;
               end;
@@ -37970,7 +38150,90 @@ var
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
 
+  function HistoryXML: Boolean;
+  var
+    Loop, Loop2, webIndex, TagStrSize: Integer;
+    TagString, TagEndInfo: String;
+    FoundData, FoundTagEnd: Boolean;
+    TagStartInfo: WideString;
+  begin
+    Result:= Assigned(AutoHistoryDATFile);
+    if Result then
+       begin
+         Result:= PosEx('<?xml ', AutoHistoryDATFile.Strings[0]) <> 0;
+         IsXML:= Result;
+         if not Result then // file format is history.dat, call the proper function
+            begin
+              HistoryData;
+              Exit;
+            end;
+         NoFilesMsg:= False;
+         AddLine:= False;
+         FoundData:= False;
+         FoundTagEnd:= False;
+
+         if MemGameInfo.eSoftwareName = '' then
+            TagString:= '<system name="'+MemGameInfo.eName+'"'
+         else
+            TagString:= '<item list="'+MemGameInfo.eSoftwareName+'" name="'+MemGameInfo.eName+'"';
+
+         TagStrSize:= Length(TagString);
+         TagEndInfo:= '</text>';
+         for Loop:=0 to AutoHistoryDATFile.Count -1 do
+         begin
+           TagStartInfo:= Trim(AutoHistoryDATFile[Loop]); // should it be here or below "if AddLine then..." ? (February 17, 2021)
+           if not FoundData then
+              FoundData:= PosEx(TagString, TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+
+           if FoundData then
+              begin
+                if not AddLine then
+                   AddLine:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+
+                if AddLine then
+                   begin
+                     // TagStartInfo:= Trim(AutoHistoryDATFile[Loop]); // should it be here or at the top ? (February 17, 2021)
+                     Delete(TagStartInfo, 1, Length('<text>'));
+                     if TagStartInfo <> '' then
+                        Loop2:= Loop // some entries are in the same line as the '<text>' tag :(
+                     else
+                        Loop2:= Loop+1; // info stars on next line
+
+                     GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------');
+                     while PosEx(TagEndInfo, AutoHistoryDATFile[Loop2]) = 0 do // while Trim(AutoHistoryDATFile[Loop2]) <> TagEndInfo do
+                     begin
+                       if TagStartInfo = '' then
+                          TagStartInfo:= Trim(AutoHistoryDATFile[Loop2]);
+                       TagStartInfo:= DecodeHTML(TagStartInfo);
+                       TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+
+                       webIndex:= PosEx('<a href=', TagStartInfo);
+                       if webIndex <> 0 then
+                          AddHistoryURL(TagStartInfo, webIndex)
+                       else
+                          AddTextLine(TagStartInfo);
+
+                       Inc(Loop2);
+                       TagStartInfo:= '';
+                     end;
+                     if PosEx(TagEndInfo, AutoHistoryDATFile[Loop2]) <> 0 then
+                        begin
+                          if Trim(AutoHistoryDATFile[Loop2-1]) <> '' then
+                             AddTextLine('');
+                          FoundTagEnd:= True;
+                        end;
+                   end;
+              end;
+           if FoundTagEnd then
+              Break; // get out of the "history.xml" loop or the function will will go all the down to the end of the file
+         end;
+       end;
+    GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
+  end;
+
   function GameDriverData: Boolean;
+  var
+    iText: WideString;
   begin
     Result:= MemGameInfo.eSoftwareName = '';
     if Result then
@@ -37985,22 +38248,30 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                GameDocsGoToDriverInfo.Tag:= AddTitleTextLine('---------- Driver Data ----------'+#13#10);
+                GameDocsGoToDriverInfo.Tag:= AddTitleTextLine('---------- Driver Data ----------');
                 DATVersion:= AutoMAMEInfoDATFile[0];
                 Delete(DATVersion, 1, 2);
-                AddTextLine(DATVersion+#13#10);
-                while Trim(AutoMAMEInfoDATFile[LineIndex]) <> '$end' do
-                begin
-                  case AddLine of
-                    False:
-                      begin
-                        if Trim(AutoMAMEInfoDATFile[LineIndex]) = '$drv' then
-                           AddLine:= True;
-                      end;
-                    True: AddTextLine(AutoMAMEInfoDATFile[LineIndex]);
+                AddTextLine(DATVersion+EmptyLineStr);
+
+                repeat
+                  iText:= Trim(AutoMAMEInfoDATFile[LineIndex]);
+                  if not IsEndTag(iText) then
+                  begin
+                    case AddLine of
+                      False:
+                        begin
+                          if iText = '$drv' then
+                             AddLine:= True;
+                        end;
+                      True:
+                        begin
+                          iText:= DecodeUnicodeStr(iText);
+                          AddTextLine(iText); //AutoMAMEInfoDATFile[LineIndex]);
+                        end;
+                    end;
                   end;
                   Inc(LineIndex);
-                end;
+                until IsEndTag(iText); // iText = '$end';
               end;
          end;
     end;
@@ -38008,6 +38279,8 @@ var
   end;
 
   function StoryData: Boolean;
+  var
+    iText: WideString;
   begin
     Result:= MemGameInfo.eSoftwareName = '';
     if Result then
@@ -38022,23 +38295,30 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                GameDocsGoToStory.Tag:= AddTitleTextLine('---------- Story Data ----------'+#13#10);
+                GameDocsGoToStory.Tag:= AddTitleTextLine('---------- Story Data ----------');
                 DATVersion:= AutoStoryDATFile[0];
                 Delete(DATVersion, 1, 2);
-                AddTextLine(DATVersion+#13#10);
-                while Trim(AutoStoryDATFile[LineIndex]) <> '$end' do
-                begin
-                  case AddLine of
-                    False:
-                      begin
-                        if (Trim(AutoStoryDATFile[LineIndex]) = '$bio') or
-                           (Trim(AutoStoryDATFile[LineIndex]) = '$story') then
-                           AddLine:= True;
-                      end;
-                    True: AddTextLine(AutoStoryDATFile[LineIndex]);
+                AddTextLine(DATVersion+EmptyLineStr);
+                repeat
+                  iText:= Trim(AutoStoryDATFile[LineIndex]);
+                  if not IsEndTag(iText) then
+                  begin
+                    case AddLine of
+                      False:
+                        begin
+                          if (iText = '$bio') or
+                             (iText = '$story') then
+                             AddLine:= True;
+                        end;
+                      True:
+                        begin
+                          iText:= DecodeUnicodeStr(iText);
+                          AddTextLine(iText); // AutoStoryDATFile[LineIndex]);
+                        end;
+                    end;
                   end;
                   Inc(LineIndex);
-                end;
+                until IsEndTag(iText); // iText = '$end';
               end;
          end;
     end;
@@ -38050,6 +38330,7 @@ var
     IsHTM: Boolean;
     iLoopH, iPos2H: Integer;
     ScoreStr: String;
+    iText: WideString;
   begin
     Result:= MemGameInfo.eSoftwareName = '';
     if Result then
@@ -38082,24 +38363,24 @@ var
              Result:= LineIndex <> -1;
              if Result then
                 begin
-                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------'+#13#10);
+                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------');
                   DATVersion:= TrimLeft(AutoMarpDATFile[1]);
-                  AddTextLine(DATVersion+#13#10+'[ http://replay.marpirc.net/r/'+MemGameInfo.eName+' ]'+#13#10);
+                  AddTextLine(DATVersion+EmptyLineStr+'[ http://replay.marpirc.net/r/'+MemGameInfo.eName+' ]'+EmptyLineStr);
                   iLoopH:= Pos(':', AutoMarpDATFile[LineIndex])+1; // 1st char
                   //ScoreStr:= AutoMarpDATFile[LineIndex];
                   //beep;
                   ScoreStr:= Copy(AutoMarpDATFile[LineIndex], iLoopH, Length(AutoMarpDATFile[LineIndex]));
                   Delete(ScoreStr, PosEx(':', ScoreStr, iPos2H), Length(AutoMarpDATFile[LineIndex]));
-                  AddTextLine(' 1.    '+TrimRight(ScoreStr));
+                  AddTextLine(' 1.    '+DecodeUnicodeStr(TrimRight(ScoreStr)));
 
                   ScoreStr:= Copy(AutoMarpDATFile[LineIndex+1], iLoopH, Length(AutoMarpDATFile[LineIndex+1]));
                   Delete(ScoreStr, PosEx(':', ScoreStr, iPos2H), Length(AutoMarpDATFile[LineIndex+1]));
-                  AddTextLine(' 2.    '+TrimRight(ScoreStr));
+                  AddTextLine(' 2.    '+DecodeUnicodeStr(TrimRight(ScoreStr)));
 
                   ScoreStr:= Copy(AutoMarpDATFile[LineIndex+2], iLoopH, Length(AutoMarpDATFile[LineIndex+2]));
                   Delete(ScoreStr, PosEx(':', ScoreStr, iPos2H), Length(AutoMarpDATFile[LineIndex+2]));
-                  AddTextLine(' 3.    '+TrimRight(ScoreStr));
-                end;
+                  AddTextLine(' 3.    '+DecodeUnicodeStr(TrimRight(ScoreStr)));
+                end;                         
            end
            else
            begin
@@ -38109,22 +38390,29 @@ var
              if Result then
                 begin
                   Inc(LineIndex);
-                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------'+#13#10);
+                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------');
                   DATVersion:= AutoMarpDATFile[0];
                   Delete(DATVersion, 1, 2);
-                  AddTextLine(DATVersion+#13#10);
-                  while Trim(AutoMarpDATFile[LineIndex]) <> '$end' do
-                  begin
-                    case AddLine of
-                      False:
-                        begin
-                          if (Trim(AutoMarpDATFile[LineIndex]) = '$marp') then
-                             AddLine:= True;
-                        end;
-                      True: AddTextLine(AutoMarpDATFile[LineIndex]);
+                  AddTextLine(DATVersion+EmptyLineStr);
+                  repeat
+                    iText:= Trim(AutoMarpDATFile[LineIndex]);
+                    if not IsEndTag(iText) then
+                    begin
+                      case AddLine of
+                        False:
+                          begin
+                            if iText  = '$marp' then
+                               AddLine:= True;
+                          end;
+                        True:
+                          begin
+                            iText:= DecodeUnicodeStr(iText);
+                            AddTextLine(iText); //AutoMarpDATFile[LineIndex]);
+                          end;
+                      end;
                     end;
                     Inc(LineIndex);
-                  end;
+                  until IsEndTag(iText); // iText = '$end';
                 end;
            end;
          end;
@@ -38133,6 +38421,8 @@ var
   end;
 
   function GameInitData: Boolean;
+  var
+    iText: WideString;
   begin
     Result:= MemGameInfo.eSoftwareName = '';
     if Result then
@@ -38156,21 +38446,28 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                while Trim(AutoGameInitDATFile[LineIndex]) <> '$end' do
-                begin
-                  case AddLine of
-                    False:
-                      begin
-                        if Trim(AutoGameInitDATFile[LineIndex]) = '$mame' then
-                           begin
-                             AddLine:= True;
-                             GameDocsGoToGameInit.Tag:= AddTitleTextLine('---------- Game Initialization ----------'+#13#10);
-                           end;
-                      end;
-                    True: AddTextLine(AutoGameInitDATFile[LineIndex]);
+                repeat
+                  iText:= Trim(AutoGameInitDATFile[LineIndex]);
+                  if not IsEndTag(iText) then
+                  begin
+                    case AddLine of
+                      False:
+                        begin
+                          if iText  = '$mame' then
+                             begin
+                               AddLine:= True;
+                               GameDocsGoToGameInit.Tag:= AddTitleTextLine('---------- Game Initialization ----------');
+                             end;
+                        end;
+                      True:
+                        begin
+                          iText:= DecodeUnicodeStr(iText);
+                          AddTextLine(iText); // AutoGameInitDATFile[LineIndex]);
+                        end;
+                    end;
                   end;
                   Inc(LineIndex);
-                end;
+                until IsEndTag(iText); // iText = '$end';
               end;
          end;
     end;
@@ -38181,7 +38478,7 @@ var
   begin
     case Index of
       1: InformationData;
-      2: HistoryData;
+      2: HistoryXML; //HistoryData;
       3: GameDriverData;
       4: StoryData;
       5: MarpData;
@@ -38190,6 +38487,8 @@ var
   end;
 
 begin
+  //TNTMemo1.Color:= MAMEInfoTextHolder.Color;
+  //TNTMemo1.Font:= MAMEInfoTextHolder.Font;
   GameDocsGoToInformation.Tag:= -1;
   GameDocsGoToHistory.Tag:= -1;
   GameDocsGoToDriverInfo.Tag:= -1;
@@ -38206,11 +38505,14 @@ begin
        ClearGameInfoRichEdit;
        Exit;
      end;
+  IsXML:= False; // for history.xml
   ProcessingGameDocuments:= True;
 
   // detect files with full path
+  //TntMemo1.Lines.Clear;
   MAMEInfoTextHolder.Lines.BeginUpdate;
   MAMEInfoTextHolder.Lines.Clear;
+
   NoFilesMsg:= True;
   docItem:= FormPreferences.GameDocs.Groups.FirstItem;
   repeat
@@ -39469,11 +39771,6 @@ begin
      PopupShowToolBar.Checked:= MenuEnableToolBar.Checked;
   PopupShowToolBar.Visible:= not PopupShowToolBar.Checked;
   PopupMainMenu.Visible:= not MenuEnableToolBar.Checked;
-end;
-
-procedure TFormMain.ButtonMAMu_IconsClick(Sender: TObject);
-begin
-  PopupEnableMAMu_Icons.Click;
 end;
 
 procedure TFormMain.MenuEmulatorReloadROMsFoldersClick(Sender: TObject);
@@ -49577,10 +49874,12 @@ begin
        GamesListView.Header.Font:= FormNightMode.NightModeGamesListHeaderFont.Font
     else
        GamesListView.Header.Font:= FormPreferences.GameListHeaderFont_Setting.Font;
-       
+
     ToggleGamesScrollBarsWin10;
+
     SetEditExBorderStyle;
     SetPreferencesColors;
+
   end
   else
   begin
@@ -50745,6 +51044,7 @@ begin
   SetWin10DarkScrollBar(MachinesListSidePanel);
   SetWin10DarkScrollBar(MAMEInfoTextHolder);
   SetWin10DarkScrollBar(WebBrowser);
+  //SetWin10DarkScrollBar(TntMemo1);
 end;
 
 procedure TFormMain.SetWin10DarkScrollBar(Sender: TObject);
@@ -50760,6 +51060,9 @@ begin
   if Sender is TRichEditURL then
      iHandle:= TRichEditURL(Sender).Handle
   else
+  //if Sender is TTntMemo then
+  //   iHandle:= TTntMemo(Sender).Handle
+  //else
   if Sender is TMemo then
      iHandle:= TMemo(Sender).Handle
   else
@@ -50768,6 +51071,9 @@ begin
   else
   if Sender is TWebBrowser then
      iHandle:= TWebBrowser(Sender).Handle
+  //else
+  //if Sender is TComboBox2Ex then
+  //   //iHandle:= TComboBox2Ex(Sender).Handle // this does NOT work
   else
      Exit;
 
@@ -50858,8 +51164,132 @@ begin
        VideoPreviewPlayDummy;
        VideoPreviewPlay;
      end;
-
 end;
+
+procedure TFormMain.ButtonGameFilterFavoritesMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  case Button of
+    mbLeft : PopupEnableFavorites.Click;
+    mbRight: PopupFavorites.Popup(FormMain.Left+ButtonGameFilterFavorites.Left+8, FormMain.Top+28+ToolBarButtons.ButtonHeight+3);
+  end;
+end;
+
+procedure TFormMain.ButtonMAMu_IconsMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  case Button of
+    mbLeft : PopupEnableMAMu_Icons.Click;
+    mbRight: PopupMAMu_Icons.Popup(FormMain.Left+ButtonMAMu_Icons.Left+8, FormMain.Top+28+ToolBarButtons.ButtonHeight+3);
+  end;
+end;
+
+procedure TFormMain.GamesListViewItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  //if Assigned(iMAMu_Icon) and (TEasyGameInfo(Item).eName <> 'nrallyx') then
+  //   IsCustom:= True;
+end;
+
+procedure TFormMain.GamesListViewItemImageDraw(Sender: TCustomEasyListview;
+  Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+  const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
+begin
+  //if Assigned(iMAMu_Icon) then
+  //   begin
+  //     if not iMAMu_Icon.Empty then
+  //        ACanvas.Draw(RectArray.IconRect.Left, RectArray.IconRect.Top, iMAMu_Icon);
+  //   end;
+end;
+
+procedure TFormMain.GamesListViewItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  //if Assigned(iMAMu_Icon) then
+  //   begin
+  //     ImageWidth:=  48;
+  //     ImageHeight:= 48;
+  //   end;
+end;
+
+{procedure TFormMain.SetRichEditText(RichEdit: TRichEditURL; Text: WideString; AnsiCodePage: UINT);
+const
+  EM_SETTEXTEX = WM_USER + 97;
+
+  GTL_DEFAULT         = 0;      // do the default (return # of chars)
+  GTL_USECRLF         = 1;      // compute answer using CRLFs for paragraphs
+  GTL_PRECISE         = 2;      // compute a precise answer
+  GTL_CLOSE           = 4;      // fast computation of a "close" answer
+  GTL_NUMCHARS        = 8;      // return the number of characters
+  GTL_NUMBYTES        = 16;     // return the number of _bytes_
+
+
+  SF_TEXT             = $0001;
+  SF_RTF              = $0002;
+  SF_RTFNOOBJS        = $0003;          // outbound only
+  SF_TEXTIZED         = $0004;          // outbound only
+  SF_UNICODE          = $0010;          // Unicode file of some kind
+
+  EM_STREAMIN                         = WM_USER + 73;
+  EM_STREAMOUT                        = WM_USER + 74;
+
+type
+  _SetTextEx = packed record
+    Flags: DWORD;
+    CodePage: UINT;
+end;
+
+SETTEXTEX = _SetTextEx;
+TSetTextEx = _SetTextEx;
+
+var
+  TheSetTextEx: TSetTextEx;
+
+begin
+  TheSetTextEx.Flags := GTL_DEFAULT;
+  TheSetTextEx.CodePage := AnsiCodePage;
+
+  SendMessage(RichEdit.Handle, EM_SETTEXTEX, WPARAM(@TheSetTextEx), LPARAM(PChar(Text)));}
+
+  // debug code for RichEdit98 unicode... do not remove this!
+  {var
+  iText: WideString;
+  iFile: TStringList;
+begin
+  // set handle to Unicode
+  //SetWindowLongW(RichEdit98.Handle, GWL_WNDPROC, GetWindowLong(RichEdit98.Handle, GWL_WNDPROC));
+  //SetWindowLongW(MAMEInfoTextHolder.Handle, GWL_WNDPROC, GetWindowLong(MAMEInfoTextHolder.Handle, GWL_WNDPROC));
+
+  //RichEdit98.WideLines.BeginUpdate;
+  //RichEdit98.WideLines.LoadFromFile('D:\emulators\mame\binary\dats\history.xml');
+  //RichEdit98.WideLines.EndUpdate;
+  //ShowMessage('stop');
+  //exit;
+  iFile:= TStringList.Create;
+  iFile.LoadFromFile('D:\emulators\mame\binary\dats\history.xml');
+  if iFile.Count > 0 then
+  begin
+    iText:= iFile.Strings[8];
+    ShadowLabel1.Caption:= DecodeUnicodeStr(iText);
+    SetRichEditText(MAMEInfoTextHolder, DecodeUnicodeStr(iText), 1200);
+    AppendText2(RichEdit98, DecodeUnicodeStr(iText), clWhite, [], taLeft, 'Arial', 22);
+  end;
+  FreeAndNil(iFile);
+  //TEasyGameInfo(GamesListView.Selection.First).eTitle:= iText;
+  Exit;
+
+  if IsWindowUnicode(RichEdit98.Handle) then
+     beep
+  else
+     beep;
+
+  if IsWindowUnicode(MAMEInfoTextHolder.Handle) then
+     beep
+  else
+     beep;}
+//end;
 
 end.
 

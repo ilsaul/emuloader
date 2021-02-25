@@ -416,7 +416,6 @@ begin
 
        iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
        iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
-       //iTop:= iTop+ ((ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height) div 2);
 
        FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
      end
@@ -426,7 +425,6 @@ begin
 
        iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
        iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
-       //siTop:= iTop+((ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height) div 2);
 
        iSysTypeIndex:= -1;
        if SystemIsConsole(Item.StateImageIndex) then

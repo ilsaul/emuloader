@@ -99,7 +99,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelToolBarBkTopColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -238,7 +238,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionTopColor: TShadowLabel
         Left = 4
         Top = 69
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -259,7 +259,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionFontColor: TShadowLabel
         Left = 4
         Top = 141
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -301,7 +301,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionMissROMsTopColor: TShadowLabel
         Left = 4
         Top = 187
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -322,7 +322,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionMissROMsFontColor: TShadowLabel
         Left = 4
         Top = 258
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -385,7 +385,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionInactiveTopColor: TShadowLabel
         Left = 4
         Top = 304
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -406,7 +406,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesSelectionInactiveFontColor: TShadowLabel
         Left = 4
         Top = 376
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -908,7 +908,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel
         Left = 4
         Top = 95
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -929,7 +929,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel
         Left = 4
         Top = 119
-        Width = 73
+        Width = 72
         Height = 16
         Caption = 'Text Bk Color'
         Font.Charset = ANSI_CHARSET
@@ -992,7 +992,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelSearchGamesPanelEditBoxFrameColor: TShadowLabel
         Left = 96
         Top = 144
-        Width = 113
+        Width = 114
         Height = 16
         Caption = 'Edit Box Frame Color'
         Font.Charset = ANSI_CHARSET
@@ -1714,7 +1714,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorFontColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -1735,7 +1735,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorGradientTop: TShadowLabel
         Left = 4
         Top = 78
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -1798,7 +1798,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorGradientTopHover: TShadowLabel
         Left = 4
         Top = 181
-        Width = 59
+        Width = 57
         Height = 16
         Caption = 'Top Hover'
         Font.Charset = ANSI_CHARSET
@@ -1819,7 +1819,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorGradientTopDisabled: TShadowLabel
         Left = 4
         Top = 394
-        Width = 72
+        Width = 70
         Height = 16
         Caption = 'Top Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1945,7 +1945,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorFontColorDisabled: TShadowLabel
         Left = 4
         Top = 339
-        Width = 73
+        Width = 72
         Height = 16
         Caption = 'Text Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1987,7 +1987,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelButtonColorGradientTopSelected: TShadowLabel
         Left = 4
         Top = 260
-        Width = 71
+        Width = 69
         Height = 16
         Caption = 'Top Selected'
         Font.Charset = ANSI_CHARSET
@@ -2557,7 +2557,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelHintBox_TextColor: TShadowLabel
         Left = 4
         Top = 175
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3155,7 +3155,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelPanelColorsTitleFontColor: TShadowLabel
         Left = 4
         Top = 191
-        Width = 53
+        Width = 52
         Height = 16
         Caption = 'Title Font'
         Font.Charset = ANSI_CHARSET
@@ -3176,7 +3176,7 @@ object FormNightMode: TFormNightMode
       object NightModePanelColorsImageCategoryTextFontColorLabel: TShadowLabel
         Left = 4
         Top = 143
-        Width = 88
+        Width = 87
         Height = 16
         Caption = 'Image Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3197,7 +3197,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelSearchGamesPanelTopColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -3218,7 +3218,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelPanelColorsTitle2FontColor: TShadowLabel
         Left = 4
         Top = 239
-        Width = 62
+        Width = 61
         Height = 16
         Caption = 'Title 2 Font'
         Font.Charset = ANSI_CHARSET
@@ -3608,7 +3608,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesListStatusBarFontColor: TShadowLabel
         Left = 4
         Top = 95
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3650,7 +3650,7 @@ object FormNightMode: TFormNightMode
       object NightModeLabelGamesListStatusBarTopColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -3892,7 +3892,7 @@ object FormNightMode: TFormNightMode
       object NightModeGamesListHeaderFontColorLabel: TShadowLabel
         Left = 4
         Top = 23
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -4137,6 +4137,7 @@ object FormNightMode: TFormNightMode
       Top = 700
       Width = 260
       Height = 20
+      Checked = True
       Font.Charset = ANSI_CHARSET
       Font.Color = 12574688
       Font.Height = -12
@@ -4147,6 +4148,7 @@ object FormNightMode: TFormNightMode
       Alignment = taLeftJustify
       Caption = 'Use Windows 10 Dark Scroll Bar in Games List'
       ReturnIsTab = False
+      State = cbChecked
       CustomIconsEnabled = False
     end
     object NightModeUseWin10DarkModeScrollBarsButtonHelp: TBitBtnEx
@@ -4512,7 +4514,7 @@ object FormNightMode: TFormNightMode
     object NightModeImagesHintBoxPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 131
+      Width = 132
       Height = 16
       Caption = 'Preview: Image Hint Box'
       Color = 5787720
@@ -5381,7 +5383,7 @@ object FormNightMode: TFormNightMode
     object NightModeNewProfileProfileNameTipLabel: TShadowLabel
       Left = 109
       Top = 199
-      Width = 257
+      Width = 256
       Height = 16
       Caption = 'You may select a profile above to copy its colors'
       Font.Charset = ANSI_CHARSET

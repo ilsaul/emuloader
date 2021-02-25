@@ -25,7 +25,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelControlType: TShadowLabel
     Left = 418
     Top = 56
-    Width = 111
+    Width = 109
     Height = 16
     Caption = 'MAME Control Type'
     ShowAccelChar = False
@@ -40,7 +40,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelInterfaceType: TShadowLabel
     Left = 213
     Top = 56
-    Width = 134
+    Width = 132
     Height = 16
     Caption = 'Interface Type (Controls)'
     ShowAccelChar = False
@@ -55,7 +55,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelAudioType: TShadowLabel
     Left = 8
     Top = 56
-    Width = 64
+    Width = 62
     Height = 16
     Caption = 'Audio Type'
     ShowAccelChar = False
@@ -551,7 +551,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object LabelCategoryFiltersGroupBoxHint: TShadowLabel
       Left = 199
       Top = 0
-      Width = 180
+      Width = 178
       Height = 17
       Caption = ' catver.ini or category.ini required '
       Font.Charset = ANSI_CHARSET

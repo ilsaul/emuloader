@@ -2458,7 +2458,7 @@ procedure TFormNightMode.NightModeUseWin10DarkModeScrollBarsButtonHelpClick(
 begin
   GenerateMessage('Info', NightModeUseWin10DarkModeScrollBars.Caption,
                   '    Windows 10 doesn''t paint all controls with dark theme colors. This setting tries to do exactly that, '+
-                  'forcing scroll bars to paint in dark colors. This is an experimental feature and it requires '+
+                  'force scroll bars to paint in dark colors. This is an experimental feature and it requires '+
                   'Windows 10 build 1809 or newer. Emu Loader does this by using an undocumented API function:'+#13#10+#13#10+
                   'SetWindowTheme(hWnd, ''DarkMode_Explorer'', NULL)'+#13#10+#13#10+
                   '    Until Windows 10 officially adds support for dark themed controls of third-party applications, this hack '+

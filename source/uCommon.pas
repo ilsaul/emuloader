@@ -1226,12 +1226,12 @@ begin
           end;
         0: // green gradient (have)
           begin
-            LabelGameTitle.Font.Color:=  clLime;
+            LabelGameTitle.Font.Color:=  clrLightGreen;// clLime;
             LabelGameTitle.ShadowColor:= clNavy;
           end;
         1: // red gradient (missing ROMs/CHDs)
           begin
-            LabelGameTitle.Font.Color:=  clRed;
+            LabelGameTitle.Font.Color:=  clrLightRed;//clRed;
             LabelGameTitle.ShadowColor:= clMaroon;
           end;
         2: // gray gradient (missing)
@@ -1254,7 +1254,7 @@ begin
 
     if LabelGameStatus <> nil then
     begin
-      SetLabelColors(LabelGameStatus, clrLightBlue, clrLightBlack);
+      SetLabelColors(LabelGameStatus, clrMedSilver{clrLightBlue}, clrLightBlack);
     end;
   end;
   //else

@@ -4005,6 +4005,11 @@ const
   ComCtlVersionIE501 = $00050051;
   ComCtlVersionIE6 = $00060000;
 
+  // Flags for the GETEXTEX data structure (RichEdit)
+  GT_SELECTION          = 2;
+  GT_RAWTEXT            = 4;
+  GT_NOHIDDENTEXT       = 8;
+
 function GetComCtlVersion: Integer;
 procedure CheckToolMenuDropdown(ToolButton: TToolButton);
 
@@ -11442,7 +11447,7 @@ end;
 
 procedure TCustomRichEdit.CreateParams(var Params: TCreateParams);
 const
-  RichEditModuleName = 'RICHED32.DLL';
+  RichEditModuleName = 'RICHED20.DLL';//'RICHED32.DLL';
   HideScrollBars: array[Boolean] of DWORD = (ES_DISABLENOSCROLL, 0);
   HideSelections: array[Boolean] of DWORD = (ES_NOHIDESEL, 0);
 begin
@@ -11452,7 +11457,8 @@ begin
     if FRichEditModule <= HINSTANCE_ERROR then FRichEditModule := 0;
   end;
   inherited CreateParams(Params);
-  CreateSubClass(Params, 'RICHEDIT');
+
+  CreateSubClass(Params, RICHEDIT_CLASSA); //'RICHEDIT20A');//'RICHEDIT');
   with Params do
   begin
     Style := Style or HideScrollBars[FHideScrollBars] or
@@ -11463,7 +11469,9 @@ end;
 
 procedure TCustomRichEdit.CreateWnd;
 var
-  Plain, DesignMode, WasModified: Boolean;
+  DesignMode: WORD;
+  Plain, WasModified: Boolean;
+  //Plain, DesignMode, WasModified: Boolean;
 begin
   WasModified := inherited Modified;
   inherited CreateWnd;
@@ -11476,8 +11484,8 @@ begin
   if FMemStream <> nil then
   begin
     Plain := PlainText;
-    FMemStream.ReadBuffer(DesignMode, sizeof(DesignMode));
-    PlainText := DesignMode;
+    FMemStream.ReadBuffer(DesignMode, SizeOf(DesignMode));
+    PlainText := Boolean(DesignMode) or Plain;// DesignMode;
     try
       Lines.LoadFromStream(FMemStream);
       FMemStream.Free;
@@ -11497,8 +11505,8 @@ begin
   FMemStream := TMemoryStream.Create;
   Plain := PlainText;
   DesignMode := (csDesigning in ComponentState);
-  PlainText := DesignMode;
-  FMemStream.WriteBuffer(DesignMode, sizeof(DesignMode));
+  PlainText := DesignMode or Plain;
+  FMemStream.WriteBuffer(DesignMode, SizeOf(DesignMode));
   try
     Lines.SaveToStream(FMemStream);
     FMemStream.Position := 0;
@@ -11586,9 +11594,18 @@ end;
 function TCustomRichEdit.GetSelText: string;
 var
   Length: Integer;
+  LGetTextEx: TGetTextEx;
 begin
   SetLength(Result, GetSelLength + 1);
-  Length := SendMessage(Handle, EM_GETSELTEXT, 0, Longint(PChar(Result)));
+
+  LGetTextEx.cb := Longint(PChar(Result)) * SizeOf(Char); // Size is in bytes, not chars
+  LGetTextEx.Flags := GT_SELECTION;                       // Get selected text
+  LGetTextEx.codepage := 1200;                            // Return text in Unicode format
+  LGetTextEx.lpDefaultChar := nil;
+  LGetTextEx.lpUsedDefChar := nil;
+
+  Length := SendMessage(Handle, EM_GETSELTEXT, Integer(@LGetTextEx), Longint(PChar(Result)));
+  //Length := SendMessage(Handle, EM_GETSELTEXT, 0, Longint(PChar(Result)));
   SetLength(Result, Length);
 end;
 

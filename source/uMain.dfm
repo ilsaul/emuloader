@@ -261,12 +261,14 @@ object FormMain: TFormMain
       object ButtonGameFilterFavorites: TToolButton
         Left = 222
         Top = 0
-        Hint = 'Show favorites list [Ctrl+F3 toggle ON/OFF]'
+        Hint = 
+          'Show favorites list [Ctrl+F3 toggle ON/OFF]'#13#10'(mouse right-click ' +
+          'for more options)'
         AutoSize = True
         Caption = 'Favorites Filter'
-        DropdownMenu = PopupFavorites
         ImageIndex = 4
         Style = tbsCheck
+        OnMouseUp = ButtonGameFilterFavoritesMouseUp
       end
       object ButtonArcadeGamesFilters: TToolButton
         Tag = 1
@@ -310,11 +312,14 @@ object FormMain: TFormMain
       object ButtonMAMu_Icons: TToolButton
         Left = 497
         Top = 0
-        Hint = 'Show MAMu_ icons for MAME and arcade games'
+        Hint = 
+          'Show MAMu_ icons for MAME and arcade games'#13#10'(mouse right-click f' +
+          'or more options)'
         AutoSize = True
         Caption = 'MAMu_ Icons-MAME and Arcade'
-        DropdownMenu = PopupMAMu_Icons
         ImageIndex = 9
+        Style = tbsCheck
+        OnMouseUp = ButtonMAMu_IconsMouseUp
       end
       object ButtonExtraFilters: TToolButton
         Left = 552
@@ -580,6 +585,9 @@ object FormMain: TFormMain
         OnIncrementalSearch = GamesListViewIncrementalSearch
         OnItemCompare = GamesListViewItemCompare
         OnItemFreeing = GamesListViewItemFreeing
+        OnItemImageDraw = GamesListViewItemImageDraw
+        OnItemImageGetSize = GamesListViewItemImageGetSize
+        OnItemImageDrawIsCustom = GamesListViewItemImageDrawIsCustom
         OnItemInitialize = GamesListViewItemInitialize
         OnItemPaintText = GamesListViewItemPaintText
         OnItemSelectionChanged = GamesListViewItemSelectionChanged
@@ -1543,7 +1551,7 @@ object FormMain: TFormMain
           ParentShowHint = False
           PopupMenu = PopupGameDocuments
           ReadOnly = True
-          ScrollBars = ssBoth
+          ScrollBars = ssVertical
           ShowHint = False
           TabOrder = 0
           WantReturns = False

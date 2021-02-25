@@ -334,6 +334,8 @@ begin
   ApplyFilter_Misc:= False; // set default to FALSE; only set to TRUE if user click "Apply" button AND only if any of the filters changed
   ELV_PopulateControlType;
   SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
+
+  // FormMain.SetWin10DarkScrollBar(ControlType_New); // this does NOT work :_((
 end;
 
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);

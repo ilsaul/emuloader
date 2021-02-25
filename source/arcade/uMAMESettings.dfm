@@ -3569,7 +3569,7 @@ object FormMAMESettings: TFormMAMESettings
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemHeight = 13
+        ItemHeight = 0
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
