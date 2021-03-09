@@ -988,7 +988,7 @@ end;
 // not used icons functions
 function TFormArcadeMAMu_IconsManager.RenameIconFile(OldName, NewName, FilePath: String): Boolean;
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
   FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'To      ');
@@ -1330,7 +1330,7 @@ begin
       end;
     False:
       begin
-        CallMessageBox;
+        FormMain.InitMessageBox;// CallMessageBox;
         FormMain.AddMsgText('    Failed to create a blank icon file. File ');
         FormMain.AddMsgText(BlankIcon, MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found!');
@@ -1350,6 +1350,7 @@ begin
   CheckAndCreateFolder(IconHistoryFolder);
   Folder:= FormMain.GetFolderFull(32);
 
+  NotUsedIconHistory.Lines.Clear;
   FormMain.ELV_ResetNormalColors(MissingIconsList);
   FormMain.ELV_ResetNormalColors(NotUsedIconsList);
 
@@ -2309,35 +2310,35 @@ end;
 procedure TFormArcadeMAMu_IconsManager.ButtonHelpClick(Sender: TObject);
 begin
   // missing icons
-  CallMessageBox;
-  FormMain.AddMsgText('Games With Missing Icons', MsgTxtColors.colorFileName, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to create a list of all games without an icon'+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
+  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.AddMsgText('Games With Missing Icons', MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to create a list of all games without a custom icon'+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], taCenter, -1, 'Verdana');
   FormMain.AddMsgText('    Select a system. There are extra search options in popup menu. Click ');
   FormMain.AddMsgText('Scan Missing', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. Only one system can be listed at a time (no multiple lists).'+#13#10+
                       '    To create a snapshot, run selected game with ');
-  FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Enter', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' key, mouse double-click or ');
-  FormMain.AddMsgText('Play', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' in popup menu. You can remove games from the list after taking snapshots with ');
-  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       '    Use the popup menu to filter your games list. '+
                       'You can also export the list to a .txt file with ');
-  FormMain.AddMsgText('Save Games List To File', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Save Games List To File', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10);
-  FormMain.AddMsgText('Not Used Icons', MsgTxtColors.colorFileName, [fsBold], taCenter);
-  FormMain.AddMsgText(#13#10+'How to delete icon files that are not used by the games list'+#13#10+#13#10, MsgTxtColors.colorBoldTitle, [], taCenter, 8, 'Verdana');
+  FormMain.AddMsgText('Not Used Icons', MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
+  FormMain.AddMsgText(#13#10+'How to delete icon files that are not used by the games list'+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select a system then click ');
   FormMain.AddMsgText('Scan Not Used', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. If you want to keep a file, remove it from the list with ');
-  FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Delete', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Remove Selected', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in popup menu ');
-  FormMain.AddMsgText('(files are not actually deleted).', MsgTxtColors.colorBoldTitle, [fsItalic]);
+  FormMain.AddMsgText('(files are not actually deleted).', MsgTxtColors.colorKeyValue, [fsItalic]);
   FormMain.AddMsgText(#13#10+
                       '    If needed, you can update ');
   FormMain.AddMsgText('el_dir\arcade\el_mamu_exclude.ini', MsgTxtColors.colorFileName, [fsBold]);
@@ -2346,14 +2347,14 @@ begin
   FormMain.AddMsgText('Save To File', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button.'+#13#10+
                       '    To edit icons, select one and press ');
-  FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Enter', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' key, mouse double-click or ');
-  FormMain.AddMsgText('Edit With Associated Editor', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Edit With Associated Editor', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       '    To rename an icon, press ');
-  FormMain.AddMsgText('F2', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('F2', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' key or ');
-  FormMain.AddMsgText('Rename File', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Rename File', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in the popup menu.'+#13#10+
                       'History files are stored in ');
   FormMain.AddMsgText('el_dir\icons_history\', MsgTxtColors.colorFileName, [fsBold]);
@@ -2361,7 +2362,7 @@ begin
   FormMain.AddMsgText('icon_filename.txt', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' format.'+#13#10+
                       '    After editing an icon, the info must be update manually with ');
-  FormMain.AddMsgText('Update Icon Info', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Update Icon Info', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       'Only 1 (one) system is supported at a time. Click ');
   FormMain.AddMsgText('Delete Not Used Icons', MsgTxtColors.colorFileName, [fsBold]);

@@ -308,7 +308,7 @@ begin
      FormArcadeMAMu_IconsManager.zzzIconFolder:= FormMain.DetectFolderIcon('zzz.ico');
   if not FileExists(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile) then
      begin
-       CallMessageBox;
+       FormMain.InitMessageBox;// CallMessageBox;
        FormMain.AddMsgText('    Required file ');
        FormMain.AddMsgText(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile, MsgTxtColors.colorFileName,[fsBold]);
        FormMain.AddMsgText(' was not found. Cannot proceed...');

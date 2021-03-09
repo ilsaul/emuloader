@@ -104,7 +104,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewMediaPlayerExecutable: TShadowLabel
       Left = 13
       Top = 63
-      Width = 182
+      Width = 183
       Height = 16
       Caption = 'Media Player File (.exe; .bat; .cmd)'
       ShowAccelChar = False
@@ -134,7 +134,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewAutoPlay: TShadowLabel
       Left = 728
       Top = 56
-      Width = 146
+      Width = 147
       Height = 16
       Caption = '(use with extreme caution!)'
       Font.Charset = ANSI_CHARSET
@@ -572,7 +572,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelSystemNotAvailable: TShadowLabel
       Left = 719
       Top = 0
-      Width = 182
+      Width = 179
       Height = 16
       Caption = 'THIS SYSTEM IS NOT AVAILABLE'
       Color = 16448250

@@ -160,7 +160,7 @@ object FormArcadeGamesFilter: TFormArcadeGamesFilter
       object LabelIconSizeValue: TShadowLabel
         Left = 204
         Top = 22
-        Width = 72
+        Width = 73
         Height = 16
         Caption = 'Large (48x48)'
         ShowAccelChar = False

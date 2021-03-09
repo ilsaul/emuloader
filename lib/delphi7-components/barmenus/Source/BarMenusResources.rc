@@ -1,0 +1,4 @@
+/* Copyright (C) 2001 Bluecave Software. All Rights Reserved. */
+
+BCRADIOITEM BITMAP "RadioItem.bmp"
+BCSUBMENUITEM BITMAP "SubMenuItem.bmp"

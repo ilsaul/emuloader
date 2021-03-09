@@ -25,7 +25,7 @@ object FormFavoritesManager: TFormFavoritesManager
     Left = 0
     Top = 47
     Width = 781
-    Height = 355
+    Height = 354
     Align = alClient
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 22

@@ -504,10 +504,10 @@ type
   private
     { Private declarations }
     MoveControls: Boolean;
-    //CurrentPickColor, CopyPickColor: TColor;
     CurrentProfileName: String;
     procedure UpdateGamesBackgroundImage(ImageEnabledCheckBox: TAdvOfficeCheckBoxEx; ImageFileNameEditBox: TEditEx; NightModeControls: Boolean; IsNightModePreview: Boolean = False);
     procedure NightModeRepaintToolBar;
+
     procedure SetPanelExParentPos(PanelSource: TPanelEx; LeftPos, TopPos: Integer);
     procedure HintBoxUpdateSize;
   public
@@ -516,7 +516,6 @@ type
     procedure PopulateIconOverlayFoldersList;
 
     procedure NewProfile_PopulateELV;
-
   end;
 
 var
@@ -1525,7 +1524,7 @@ procedure TFormNightMode.NightModeGameDocumentsBackgroundColorSelect(
   Sender: TObject);
 begin
   if IsNightMode then
-     FormMain.MAMEInfoTextHolder.Color:= NightModeGameDocumentsBackgroundColor.Selected;
+     FormMain.MAMEDocsText.Color:= NightModeGameDocumentsBackgroundColor.Selected;
 
   NightModeGameDocsFont_Setting.Color:= NightModeGameDocumentsBackgroundColor.Selected;
 end;
@@ -1538,7 +1537,7 @@ begin
   NightModeGameDocsFont_Setting.Font.Size:= 9;
   NightModeGameDocsFont_Setting.Font.Style:= [];
   if IsNightMode then
-     FormMain.MAMEInfoTextHolder.Font:= NightModeGameDocsFont_Setting.Font;
+     FormMain.MAMEDocsText.Font:= NightModeGameDocsFont_Setting.Font;
 
   FormMain.SetSelectedColorBox(NightModeGameDocumentsBackgroundColor, NightModeGameDocumentsBackgroundColor.DefaultColorColor);
 end;
@@ -2430,7 +2429,7 @@ begin
      begin
        NightModeGameDocsFont_Setting.Font:= FormMain.FontDialog.Font;
        if IsNightMode then
-          FormMain.MAMEInfoTextHolder.Font:= NightModeGameDocsFont_Setting.Font;
+          FormMain.MAMEDocsText.Font:= NightModeGameDocsFont_Setting.Font;
      end;
 end;
 

@@ -67,17 +67,16 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
       Transparent = True
     end
   end
-  object RulesFile: TRichEditURL
+  object RulesFileW: TTntRichEdit
     Left = 0
     Top = 53
     Width = 984
     Height = 564
+    OnURLClick = RulesFileWURLClick
     Align = alClient
     BorderStyle = bsNone
     Color = clWhite
-    ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 1
-    OnURLClick = RulesFileURLClick
   end
 end

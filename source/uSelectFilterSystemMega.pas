@@ -651,25 +651,25 @@ end;
 
 procedure TFormSelectFilterSystemMega.ButtonHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    Select machine types and system types you want show or hide in the main games list.'+
                       ' Make sure you tick the checkbox next to each machine type and system.'+#13#10+
                       'MAME software list games are not part of ');
-  FormMain.AddMsgText('console/computer/handheld systems', clBlack);
+  FormMain.AddMsgText('console/computer/handheld systems', MsgTxtColors.colorKeyTitle);
   FormMain.AddMsgText('.'+#13#10+#13#10+'The ');
-  FormMain.AddMsgText('Arcade Machines', clBlack, [fsBold]);
+  FormMain.AddMsgText('Arcade Machines', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' machine type include MAME games.'+#13#10+'The ');
-  FormMain.AddMsgText('MAME Machine Without Software List', clBlack, [fsBold]);
+  FormMain.AddMsgText('MAME Machine Without Software List', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option require AntoPISA''s ');
   FormMain.AddMsgText('mess.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file to work.'+#13#10+#13#10+'    Checking options ');
-  FormMain.AddMsgText('All Arcade Systems', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('All Arcade Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('All Console/Computer/Handheld Systems', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('All Console/Computer/Handheld Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will show or hide ');
-  FormMain.AddMsgText('all', clBlack, [fsBold]);
+  FormMain.AddMsgText('all', -1, [fsBold]);
   FormMain.AddMsgText(' systems, but they will ');
-  FormMain.AddMsgText('not', clBlack, [fsBold]);
+  FormMain.AddMsgText('not', -1, [fsBold]);
   FormMain.AddMsgText(' change the checked status of individual systems.'+#13#10+#13#10+
                       '    Filter settings are saved in ');
   FormMain.AddMsgText('EmuLoader.ini', MsgTxtColors.colorFileName, [fsBold]);

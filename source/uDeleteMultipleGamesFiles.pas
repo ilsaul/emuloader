@@ -1250,50 +1250,50 @@ end;
 
 procedure TFormDeleteMultipleGamesFiles.ButtonHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    Remove all games from the list that you do not want to ');
-  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorMachineName, [fsBold]);
   FormMain.AddMsgText('. Select one or more games and click ');
-  FormMain.AddMsgText('Remove Selected Games', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Remove Selected Games', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' menu item (popup menu, mouse right-click) or press ');
   FormMain.AddMsgText('Delete', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' hotkey (keyboard).'+#13#10+'To quickly find a parent game (MAME and arcade only), click ');
   FormMain.AddMsgText('Select Parent Game', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' menu item (popup menu).'+#13#10+#13#10+
                       '    You can choose what files will be processed in the ');
-  FormMain.AddMsgText('Check Arcade File Types To '+ActionString, MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Check Arcade File Types To '+ActionString, MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' group box. These settings are for ');
-  FormMain.AddMsgText('MAME and arcade', clBlack, [fsBold]);
+  FormMain.AddMsgText('MAME and arcade', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' systems only!'+#13#10+
                       '    To delete game files of ');
-  FormMain.AddMsgText('console/computer/handheld', clBlack, [fsBold]);
+  FormMain.AddMsgText('console/computer/handheld', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' systems, check ');
-  FormMain.AddMsgText('Delete Game File From Disk', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Delete Game File From Disk', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option (not compatible with MAME and arcade games).'+#13#10+#13#10+
                       '    If you want to delete console/computer/handheld games from '+
                       'main games list (why wouldn''t you ?), check ');
-  FormMain.AddMsgText('Delete Game From Games List', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Delete Game From Games List', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('. This option is not compatible with MAME and arcade games.'+
                       #13#10+#13#10+'    You can also view a list of files to be ');
-  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorMachineName, [fsBold]);
   FormMain.AddMsgText(' for each game. Select one or more games and call the popup menu. Click ');
-  FormMain.AddMsgText('View Selected Files List', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('View Selected Files List', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' menu item to view only selected games or ');
-  FormMain.AddMsgText('View Files List (All Games)', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('View Files List (All Games)', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' to view files list of all games in the list.'+#13#10+
                      ('Console/computer/handheld systems will show the ghost icon from EmuCon frontend.')+
                      #13#10+#13#10+'    To ');
-  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorMachineName, [fsBold]);
   FormMain.AddMsgText(' files, click ');
-  FormMain.AddMsgText(ActionString+' Files', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(ActionString+' Files', MsgTxtColors.colorMachineName, [fsBold]);
   FormMain.AddMsgText(' button. You can follow the progress in a detailed dialog box. If there are errors, they will be listed in the log '+
                       'panel.'+#13#10+#13#10);
   FormMain.AddMsgText('    Each MAME and arcade game can have three (3) file type icons at the right side of the item''s cell:'+#13#10);
-  FormMain.AddMsgText('Zip', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Zip', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' icon for the gamename.zip, if found'+#13#10);
-  FormMain.AddMsgText('CHD', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('CHD', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' icon for the game CHD file(s), if found'+#13#10);
-  FormMain.AddMsgText('Config', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Config', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' icon for the game settings files, if found'+#13#10+#13#10+
                       'Console/computer/handheld games do not need them because they have a single game file.'+#13#10+#13#10);
 
@@ -1526,7 +1526,7 @@ begin
      begin
        if DestinationFolder.Text = '' then
        begin
-         CallMessageBox;
+         FormMain.InitMessageBox; //CallMessageBox;
          FormMain.ShowGameNameEntryMsgBox;
          GenerateMessage('Error', FormDeleteMultipleGamesFiles.Caption, '    You haven''t selected a destination '+
                          'folder. Use only full paths. Cannot continue.', 2, False, -1);
@@ -1540,7 +1540,7 @@ begin
         FileTypeStr:= Trim(ExtractFileDrive(DestinationFolder.Text));
         if FileTypeStr = '' then
            begin
-             CallMessageBox;
+             FormMain.InitMessageBox; //CallMessageBox;
              FormMain.ShowGameNameEntryMsgBox;
              GenerateMessage('Error', FormDeleteMultipleGamesFiles.Caption, '    Could not detect the destination drive letter. '+
                              'Please make sure you enter a full destination path.', 2, False, 1);
@@ -1558,7 +1558,7 @@ begin
         if not SysUtils.GetDiskFreeSpaceEx(PChar(FileTypeStr), iFreeAvailable, iTotalAvailable, nil) then
            begin
              ErrorMsg:= GetLastError;
-             CallMessageBox;
+             FormMain.InitMessageBox; //CallMessageBox;
              FormMain.AddMsgText('    There was an error trying to detect the required free space in the destination path (');
              FormMain.AddMsgText(FileTypeStr, MsgTxtColors.colorFileName, [fsBold]);
              FormMain.AddMsgText('.'#13#10+#13#10+'Error code '+IntToStr(ErrorMsg)+': ');
@@ -1569,9 +1569,9 @@ begin
            end;
         if iFreeAvailable <= iFreeRequired then
            begin
-             CallMessageBox;
+             FormMain.InitMessageBox; //CallMessageBox;
              FormMain.AddMsgText('    Can''t ');
-             FormMain.AddMsgText(LowerCase(ActionString), clBlack, [fsBold]);
+             FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorMachineName, [fsBold]);
              FormMain.AddMsgText(' files. There is not enough free space in drive ');
              FormMain.AddMsgText(FileTypeStr, MsgTxtColors.colorFileName, [fsBold]);
              FormMain.AddMsgText(#13#10+'The drive letter might also be invalid. Please select another destination, '+
@@ -1604,9 +1604,9 @@ begin
      FileTypeStr:= ' console/computer/handheld games.';
 
 
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    You are about to ');
-  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText(LowerCase(ActionString), MsgTxtColors.colorMachineName, [fsBold]);
   if ActionMode <> -1 then
      FormMain.AddMsgText(':'+#13#10+#13#10+FileTypeStr+#13#10)
   else

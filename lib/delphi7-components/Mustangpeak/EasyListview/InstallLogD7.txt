@@ -1,0 +1,267 @@
+***************************************
+BEGIN: Unregistering Component Package
+***************************************
+
+Reading Extra Paths from Setup.ini
+   C:\Arquivos de programas\Borland\Delphi7\components\Mustangpeak\EasyListview\Source
+
+Cleaning Known Package Registry Entry
+
+Reading Packages:
+c:\arquivos de programas\borland\delphi7\Bin\dclindy70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclnet70.bpl
+$(ProgramFiles)\Borland\Delphi7\Bin\dclstd70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclmcn70.bpl
+$(ProgramFiles)\Borland\Delphi7\Bin\dclmid70.bpl
+$(ProgramFiles)\Borland\Delphi7\Bin\dcldb70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclocx70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclsmp70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dcldbx70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dcldbxcds70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\DBWEBXPRT.BPL
+$(ProgramFiles)\Borland\Delphi7\Bin\dclbde70.bpl
+$(ProgramFiles)\Borland\Delphi7\Bin\dbx70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclwbm70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclie70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclwebsnap70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclado70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\DCLIB70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dcltee70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dcldss70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclclxdb70.bpl
+$(ProgramFiles)\Borland\Delphi7\Bin\dclclxstd70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclsmpedit70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\applet70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclemacsedit70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclact70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclmlwiz70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dcl31w70.bpl
+c:\arquivos de programas\borland\delphi7\Bin\dclshlctrls70.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madBasic\Delphi 7\madBasic_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madBasic\Delphi 7\madHelp_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madDisAsm\Delphi 7\madDisAsm_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madExcept\Delphi 7\madExceptIde_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madExcept\Delphi 7\madExcept_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madExcept\Delphi 7\madExceptVcl_.bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madExcept\Delphi 7\madExceptWizard_.bpl
+$(ProgramFiles)\Borland\Delphi7\ZipForge\Lib\Delphi 7\dclZipForged7.bpl
+c:\arquivos de programas\borland\delphi7\Projects\Bpl\GR32_DSGN_D7.bpl
+$(ProgramFiles)\Borland\Delphi7\Projects\Bpl\GR32_D7.bpl
+c:\arquivos de programas\borland\delphi7\Projects\Bpl\VirtualTreesD7D.bpl
+c:\arquivos de programas\borland\delphi7\Projects\Bpl\components.bpl
+$(SystemRoot)\system32\ibevnt70.bpl
+ 
+Stripping off path and extension
+dclindy70
+dclnet70
+dclstd70
+dclmcn70
+dclmid70
+dcldb70
+dclocx70
+dclsmp70
+dcldbx70
+dcldbxcds70
+DBWEBXPRT
+dclbde70
+dbx70
+dclwbm70
+dclie70
+dclwebsnap70
+dclado70
+DCLIB70
+dcltee70
+dcldss70
+dclclxdb70
+dclclxstd70
+dclsmpedit70
+applet70
+dclemacsedit70
+dclact70
+dclmlwiz70
+dcl31w70
+dclshlctrls70
+madBasic_
+madHelp_
+madDisAsm_
+madExceptIde_
+madExcept_
+madExceptVcl_
+madExceptWizard_
+dclZipForged7
+GR32_DSGN_D7
+GR32_D7
+VirtualTreesD7D
+components
+ibevnt70
+ 
+Reading Packages to remove
+EasyListviewD7
+EasyListviewD7D
+ 
+Stripping off path and extension
+EasyListviewD7
+EasyListviewD7D
+ 
+Scanning for previously installed packages....
+Known Package Registry Entry Cleaned
+
+Cleaning Disabled Package Registry Entry
+
+Reading Packages:
+ 
+Stripping off path and extension
+ 
+Reading Packages to remove
+EasyListviewD7
+EasyListviewD7D
+ 
+Stripping off path and extension
+EasyListviewD7
+EasyListviewD7D
+ 
+Scanning for previously installed packages....
+Disabled Package Registry Entry Cleaned
+
+Reading Search Path Registry Entry
+C:\Arquivos de programas\Borland\Delphi7\ZipForge\Lib\Delphi 7
+c:\Arquivos de programas\Borland\Delphi7\Lib
+c:\Arquivos de programas\Borland\Delphi7\Bin
+c:\Arquivos de programas\Borland\Delphi7\Imports
+c:\Arquivos de programas\Borland\Delphi7\Projects\Bpl
+C:\Arquivos de programas\Borland\Delphi7\madCollection\madBasic\Delphi 7
+C:\Arquivos de programas\Borland\Delphi7\madCollection\madDisAsm\Delphi 7
+C:\Arquivos de programas\Borland\Delphi7\madCollection\madExcept\Delphi 7
+c:\Arquivos de programas\Borland\Delphi7\components
+c:\Arquivos de programas\Borland\Delphi7\components\barmenus\Source
+c:\Arquivos de programas\Borland\Delphi7\components\CoolTrayIcon
+c:\Arquivos de programas\Borland\Delphi7\components\FastMM
+c:\Arquivos de programas\Borland\Delphi7\components\graphicex
+c:\Arquivos de programas\Borland\Delphi7\components\graphicex\obj
+c:\Arquivos de programas\Borland\Delphi7\components\graphics32
+c:\Arquivos de programas\Borland\Delphi7\components\Virtual Treeview\Source
+c:\Arquivos de programas\Borland\Delphi7\components\Virtual Treeview\Design
+    
+    
+Writing Search Path Registry Entry
+Removing extra characters and blank lines
+Formatting.....
+$(ProgramFiles)\Borland\Delphi7\ZipForge\Lib\Delphi 7
+$(Delphi)\Lib
+$(Delphi)\Bin
+$(Delphi)\Imports
+$(Delphi)\Projects\Bpl
+$(ProgramFiles)\Borland\Delphi7\madCollection\madBasic\Delphi 7
+$(ProgramFiles)\Borland\Delphi7\madCollection\madDisAsm\Delphi 7
+$(ProgramFiles)\Borland\Delphi7\madCollection\madExcept\Delphi 7
+$(Delphi)\components
+$(Delphi)\components\barmenus\Source
+$(Delphi)\components\CoolTrayIcon
+$(Delphi)\components\FastMM
+$(Delphi)\components\graphicex
+$(Delphi)\components\graphicex\obj
+$(Delphi)\components\graphics32
+$(Delphi)\components\Virtual Treeview\Source
+$(Delphi)\components\Virtual Treeview\Design
+Writing to Key: Software\Borland\Delphi\7.0\Library  Value: Search Path
+Search Path Registry Entry written
+
+Reading Browse Path Registry Entry
+c:\Arquivos de programas\Borland\Delphi7\source\vcl
+c:\Arquivos de programas\Borland\Delphi7\Source\Rtl
+c:\Arquivos de programas\Borland\Delphi7\source\rtl\Corba45
+c:\Arquivos de programas\Borland\Delphi7\source\rtl\Sys
+c:\Arquivos de programas\Borland\Delphi7\source\rtl\Win
+c:\Arquivos de programas\Borland\Delphi7\source\rtl\common
+c:\Arquivos de programas\Borland\Delphi7\source\Internet
+c:\Arquivos de programas\Borland\Delphi7\source\clx
+c:\Arquivos de programas\Borland\Delphi7\source\websnap
+c:\Arquivos de programas\Borland\Delphi7\Source\WebMidas
+c:\Arquivos de programas\Borland\Delphi7\Source\Indy
+c:\Arquivos de programas\Borland\Delphi7\Source\IntraWeb
+c:\Arquivos de programas\Borland\Delphi7\Source\Samples
+c:\Arquivos de programas\Borland\Delphi7\Source\Soap
+c:\Arquivos de programas\Borland\Delphi7\Source\ToolsAPI
+c:\Arquivos de programas\Borland\Delphi7\Source\Xml
+    
+    
+Writing Browse Path Registry Entry
+Removing extra characters and blank lines
+Formatting.....
+$(Delphi)\source\vcl
+$(Delphi)\Source\Rtl
+$(Delphi)\source\rtl\Corba45
+$(Delphi)\source\rtl\Sys
+$(Delphi)\source\rtl\Win
+$(Delphi)\source\rtl\common
+$(Delphi)\source\Internet
+$(Delphi)\source\clx
+$(Delphi)\source\websnap
+$(Delphi)\Source\WebMidas
+$(Delphi)\Source\Indy
+$(Delphi)\Source\IntraWeb
+$(Delphi)\Source\Samples
+$(Delphi)\Source\Soap
+$(Delphi)\Source\ToolsAPI
+$(Delphi)\Source\Xml
+Writing to Key: Software\Borland\Delphi\7.0\Library  Value: Browsing Path
+Browse Path Registry Entry written
+
+***************************************
+END: Unregistering Component Package
+***************************************
+
+
+***************************************
+BEGIN: Compiling Component Package
+***************************************
+Validating Output Folders
+Creating temp compile folder
+Folder Created: c:\temp_dir\ESetup
+
+Config.ini -U Switch: C:\ARQUIV~1\Borland\Delphi7\ZipForge\Lib\DELPHI~1;c:\ARQUIV~1\Borland\Delphi7\Lib;c:\ARQUIV~1\Borland\Delphi7\Bin;c:\ARQUIV~1\Borland\Delphi7\Imports;c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\madBasic\DELPHI~1;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\MADDIS~1\DELPHI~1;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\MADEXC~1\DELPHI~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\barmenus\Source;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\COOLTR~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\FastMM;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~2;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~2\obj;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\VIRTUA~1\Source;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\VIRTUA~1\Design;
+Config.ini -I Switch: ..\Include
+Config.ini -LE Switch: c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl
+Config.ini -LN Switch: c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl
+Config.ini -N Switch: c:\temp_dir\ESetup
+
+Compiling....
+
+Redirector Working Dir: C:\ARQUIV~1\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Delphi
+Redirector CreateProcess command: "c:\ARQUIV~1\Borland\Delphi7\Bin\DCC32.exe" EasyListviewD7.dpk
+
+
+Borland Delphi Version 15.0
+Copyright (c) 1983,2002 Borland Software Corporation
+EasyListviewD7.dpk(1) EasyListviewD7.dpk(31) EasyListviewD7.dpk(32) EasyListviewD7.dpk(32) Fatal: Required package 'MPCommonLibD7' not found
+
+
+Could not find compiled BPL file: c:\Arquivos de programas\Borland\Delphi7\Projects\Bpl\EasyListviewD7.bpl
+
+
+Config.ini -U Switch: C:\ARQUIV~1\Borland\Delphi7\ZipForge\Lib\DELPHI~1;c:\ARQUIV~1\Borland\Delphi7\Lib;c:\ARQUIV~1\Borland\Delphi7\Bin;c:\ARQUIV~1\Borland\Delphi7\Imports;c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\madBasic\DELPHI~1;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\MADDIS~1\DELPHI~1;C:\ARQUIV~1\Borland\Delphi7\MADCOL~1\MADEXC~1\DELPHI~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\barmenus\Source;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\COOLTR~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\FastMM;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~2;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~2\obj;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\GRAPHI~1;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\VIRTUA~1\Source;c:\ARQUIV~1\Borland\Delphi7\COMPON~1\VIRTUA~1\Design;
+Config.ini -I Switch: ..\Include
+Config.ini -LE Switch: c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl
+Config.ini -LN Switch: c:\ARQUIV~1\Borland\Delphi7\Projects\Bpl
+Config.ini -N Switch: c:\temp_dir\ESetup
+
+Compiling....
+
+Redirector Working Dir: C:\ARQUIV~1\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Delphi
+Redirector CreateProcess command: "c:\ARQUIV~1\Borland\Delphi7\Bin\DCC32.exe" EasyListviewD7D.dpk
+
+
+Borland Delphi Version 15.0
+Copyright (c) 1983,2002 Borland Software Corporation
+EasyListviewD7D.dpk(1) EasyListviewD7D.dpk(32) EasyListviewD7D.dpk(33) EasyListviewD7.dpk(1)   EasyListviewD7.dpk(31) EasyListviewD7.dpk(32) EasyListviewD7.dpk(32) Fatal: Required package 'MPCommonLibD7' not found
+
+
+Could not find compiled BPL file: c:\Arquivos de programas\Borland\Delphi7\Projects\Bpl\EasyListviewD7D.bpl
+
+
+ 
+Adding Package BPL to Registry
+***************************************
+END: Compiling Component Package
+***************************************
+

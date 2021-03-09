@@ -282,7 +282,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel1_ConsComp: TShadowLabel
       Left = 39
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
@@ -450,7 +450,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel4_ConsComp: TShadowLabel
       Left = 365
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
@@ -471,7 +471,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel3_ConsComp: TShadowLabel
       Left = 257
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
@@ -493,7 +493,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel2_ConsComp: TShadowLabel
       Left = 148
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
@@ -607,7 +607,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel1: TShadowLabel
       Left = 41
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
@@ -775,7 +775,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel4: TShadowLabel
       Left = 365
       Top = 23
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
@@ -796,7 +796,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel2: TShadowLabel
       Left = 148
       Top = 8
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
@@ -818,7 +818,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel3: TShadowLabel
       Left = 257
       Top = 8
-      Width = 43
+      Width = 42
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET

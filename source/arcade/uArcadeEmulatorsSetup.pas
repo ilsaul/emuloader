@@ -611,25 +611,25 @@ end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonHelpAlterMAMEClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; // CallMessageBox;
   FormMain.AddMsgText('    You can select a second and a third MAME emulator to run games. Handy when you want/need to run a game that '+
                       'requires a different MAME build or a MAME variant like ');
-  FormMain.AddMsgText('SDLMAME', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('SDLMAME', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10);//+'You can also use ');
-  FormMain.AddMsgText('Raine Arcade Emulator ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Raine Arcade Emulator ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('http://raine.1emulation.com', MsgTxtcolors.colorFileName, [fsUnderline]); // http://rainemu.swishparty.co.uk (no longer valid)
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('FinalBurn Alpha ', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('FinalBurn Alpha ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('https://www.fbalpha.com', MsgTxtcolors.colorFileName, [fsUnderline]);
 
   FormMain.AddMsgText(' emulators can be used (other third-party emulators and/or variants are not supported at this time).'+#13#10+#13#10+
                       '    There are two ways to use AlterMAME. By ');
-  FormMain.AddMsgText('autorun', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('autorun', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText('; make sure to check ');
-  FormMain.AddMsgText('Autorun Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Autorun Game With AlterMAME', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' options, also available in games popup menu (mouse right-click). It only works if the primary MAME fails to load the game.'+#13#10+
                       'Or run a game directly with AlterMAME by selecting ');
-  FormMain.AddMsgText('Run Game With AlterMAME', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Run Game With AlterMAME', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in games popup menu.'+#13#10+#13#10+
                       '    No ROMs validation is made so, make sure to audit your ROMs with a ROMs manager '+
                       'tool like ClrMAME or RomCenter. The emulators must also be fully configured before you can use them.');

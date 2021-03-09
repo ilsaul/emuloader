@@ -8,7 +8,7 @@ uses
   Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
   Graphics, SysUtils, ShlObj, Forms, Menus, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
-  uMessageBox, uSelectDirectory, Math, MPCommonUtilities,
+  uMessageBox, uMessageBox_4K, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
   BevelEx, ColorBoxEx, GR32_RangeBars, uGR32Extra, XiTrackBar;//, uGetWindowsVersion;
 
@@ -434,7 +434,7 @@ function  UpperCase(const S: String): String; overload;
 procedure Move(const Source; var Dest; count: Integer); overload;
 // end of file functions (from the old uFilesUtil.pas)
 
-procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
+procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; Visibility: Word = SW_SHOWNORMAL);
 
 // light / dark theme functions
 procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
@@ -470,6 +470,12 @@ function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const D
                           IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
 procedure CallMessageBox;
 procedure FreeMessageBox;
+
+function  GenerateMessage4K(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
+                            IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
+procedure CallMessageBox4K;
+procedure FreeMessageBox4K;
+
 
 function  GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 //function  GetSystemROMFileName(SystemID: Byte; const SoftwareList: String = ''): String;
@@ -2102,9 +2108,9 @@ asm
 end;
 // end of file functions
 
-procedure CallShellExecute(Sender: TObject; FileToOpen: String = ''; Visibility: Word = SW_SHOWNORMAL);
+procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; Visibility: Word = SW_SHOWNORMAL);
 var
-  LinkStr: String;
+  LinkStr: WideString;
 begin
   if FileToOpen <> '' then
      LinkStr:= FileToOpen
@@ -2119,7 +2125,7 @@ begin
      LinkStr:= TMenuItem(Sender).Hint;
 
   if LinkStr <> '' then
-     ShellExecute(Application.Handle, 'open', PChar(LinkStr), nil, nil, Visibility);
+     ShellExecuteW(Application.Handle, 'open', PWideChar(LinkStr), nil, nil, Visibility);
 end;
 
 function GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
@@ -2128,8 +2134,8 @@ begin
   FormMessageBox.PanelBottom.Tag:= 1;
   FormMessageBox.Caption:= 'Error: Zip File';
   FormMessageBox.LabelMessageTitle:= TitleMessage;
-  FormMessageBox.LabelMessage.Clear;
-  FormMessageBox.LabelMessage.Lines.AddStrings(ZipFilesList);
+  FormMessageBox.LabelMessageW.Clear;
+  FormMessageBox.LabelMessageW.Lines.AddStrings(ZipFilesList);
 
   FormMessageBox.ButtonYes.Caption:= 'Close';
   FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2); //262;
@@ -2148,7 +2154,15 @@ begin
   // 01 -> Error
   // 02 -> Question
   // 03 -> Command Line
-  CallMessageBox;
+  if not Assigned(FormMessageBox4K) then
+     CallMessageBox
+  else
+     begin
+       CallMessageBox4K;
+       Result:= GenerateMessage4K(WindowMessage, TitleMessage, DescriptionMessage, MessageType, DefaultButtonNo,
+                                  IconIndex, GameSetStatus);
+       Exit;
+     end;
 
   FormMessageBox.PanelBottom.Tag:= IconIndex;
   FormMessageBox.Caption:= WindowMessage;
@@ -2157,9 +2171,9 @@ begin
 
   if DescriptionMessage <> '' then
      begin
-       FormMessageBox.LabelMessage.Lines.BeginUpdate;
-       FormMessageBox.LabelMessage.Lines.Add(DescriptionMessage);
-       FormMessageBox.LabelMessage.Lines.EndUpdate;
+       FormMessageBox.LabelMessageW.SelStart:= FormMessageBox.LabelMessageW.GetTextLen;
+       FormMessageBox.LabelMessageW.SelLength:= 0;
+       FormMessageBox.LabelMessageW.SelText:= DescriptionMessage;
      end;
 
   if MessageType = 2 then
@@ -2190,11 +2204,12 @@ begin
   begin
     FormMessageBox:= TFormMessageBox.Create(nil);
     FormMessageBox.NightMode.Checked:= IsNightMode;
+    FormMessageBox.LabelMessageW.Clear; // ensure RichEdit is clear of any texts
     if IsNightMode then
     begin
       SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, nil, -1, True);
-      FormMessageBox.LabelMessage.Color:= FormMessageBox.Color;
-      FormMessageBox.LabelMessage.Font.Color:= $00f1f1f1;
+      FormMessageBox.LabelMessageW.Color:= FormMessageBox.Color;
+      FormMessageBox.LabelMessageW.Font.Color:= $00f1f1f1;
       FormMessageBox.NightMode.Font.Color:= $00f1f1f1;
     end;
   end;
@@ -2204,6 +2219,74 @@ procedure FreeMessageBox;
 begin
   FreeAndNil(FormMessageBox);
 end;
+
+function GenerateMessage4K(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
+                           IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
+begin
+  // icon index:
+  // -1 -> Game Icon
+  // 00 -> Info (default icon)
+  // 01 -> Error
+  // 02 -> Question
+  // 03 -> Command Line
+  CallMessageBox4K;
+
+  FormMessageBox4K.PanelBottom.Tag:= IconIndex;
+  FormMessageBox4K.Caption:= WindowMessage;
+  FormMessageBox4K.LabelMessageTitle:= TitleMessage;
+  FormMessageBox4K.MessageIcon.Tag:= GameSetStatus;
+
+  if DescriptionMessage <> '' then
+     begin
+       FormMessageBox4K.LabelMessageW.SelStart:= FormMessageBox4K.LabelMessageW.GetTextLen;
+       FormMessageBox4K.LabelMessageW.SelLength:= 0;
+       FormMessageBox4K.LabelMessageW.SelText:= DescriptionMessage;
+     end;
+
+  if MessageType = 2 then
+     begin
+       FormMessageBox4K.ButtonYes.Caption:= 'Close';
+       FormMessageBox4K.ButtonYes.Left:= (FormMessageBox4K.PanelBottom.Width div 2) - (FormMessageBox4K.ButtonYes.Width div 2);
+       FormMessageBox4K.ButtonNo.Visible:= False;
+     end;
+  case DefaultButtonNo of
+    True:
+      begin
+        with FormMessageBox4K do
+        begin
+          ActiveControl:= ButtonNo;
+        end;
+      end;
+    False: FormMessageBox4K.ActiveControl:= FormMessageBox4K.ButtonYes;
+  end;
+  FormMessageBox4K.LabelMessageW.ReadOnly:= True;
+  Result:= FormMessageBox4K.ShowModal;
+  FreeMessageBox4K;
+end;
+
+procedure CallMessageBox4K;
+begin
+  if not Assigned(FormMessageBox4K) then
+  begin
+    FormMessageBox4K:= TFormMessageBox4K.Create(nil);
+    FormMessageBox4K.NightMode.Checked:= IsNightMode;
+    FormMessageBox4K.LabelMessageW.Clear; // ensure RichEdit is clear of any texts
+    FormMessageBox4K.LabelMessageW.ReadOnly:= False;
+    if IsNightMode then
+    begin
+      SetFormColors(FormMessageBox4K, FormMessageBox4K.PanelTop, FormMessageBox4K.PanelBottom, FormMessageBox4K.LabelGameTitle, FormMessageBox4K.LabelGameName, nil, -1, True);
+      FormMessageBox4K.LabelMessageW.Color:= FormMessageBox4K.Color;
+      FormMessageBox4K.LabelMessageW.Font.Color:= $00f1f1f1;
+      FormMessageBox4K.NightMode.Font.Color:= $00f1f1f1;
+    end;
+  end;
+end;
+
+procedure FreeMessageBox4K;
+begin
+  FreeAndNil(FormMessageBox4K);
+end;
+
 
 function GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 begin
@@ -4506,11 +4589,12 @@ begin
                              ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS);
                              //ListHolder.Add(IntToStr(MediaTypeID)+Folder+iName);
                            end;
-                        if UnicodeStr then
-                           begin
-                             //ShowMessage('iName encoded: '+iName);
-                           //MessageBoxW(Application.Handle, PWideChar(SearchW.Name+#13#10+iName+#13#10+Utf8Decode(iName)), 'New MessageBoxW', mb_Ok);
-                           end;
+                        // for debugging only, do not enable
+                        //if UnicodeStr then
+                        //   begin
+                        //     //ShowMessage('iName encoded: '+iName);
+                        //   //MessageBoxW(Application.Handle, PWideChar(SearchW.Name+#13#10+iName+#13#10+Utf8Decode(iName)), 'New MessageBoxW', mb_Ok);
+                        //   end;
                       end;
                  end;
             end;

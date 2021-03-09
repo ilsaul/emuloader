@@ -323,22 +323,22 @@ end;
 
 procedure TFormConsCompSystemSelector.ButtonHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   FormMain.AddMsgText('    You can select more than one system:'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Hold ');
-  FormMain.AddMsgText('Ctrl', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Ctrl', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' or ');
-  FormMain.AddMsgText('Shift', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Shift', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' key down and click on all systems you want to include in the filter.'+#13#10+
                       '    You can also use the arrow keys to browse the list and press the ');
-  FormMain.AddMsgText('Space', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Space', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' bar to select/unselect systems.'+#13#10+#13#10);
   if CreateNewList.Visible then
      begin
        FormMain.AddMsgText('2.', MsgTxtColors.colorWarning, [fsBold]);
        FormMain.AddMsgText(' Check option ');
-       FormMain.AddMsgText('Create a New List', MsgTxtColors.colorWarning, [fsBold]);
+       FormMain.AddMsgText('Create a New List', MsgTxtColors.colorKeyTitle, [fsBold]);
        FormMain.AddMsgText(' to delete current games lists and create new ones.'+#13#10+#13#10);
        FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
      end
@@ -349,12 +349,12 @@ begin
   FormMain.AddMsgText(' to apply the changes, or press the ');
   FormMain.AddMsgText('Enter', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' key.'+#13#10+#13#10);
-  FormMain.AddMsgText('    Notes:', clBlack, [fsBold]);
+  FormMain.AddMsgText('    Notes:', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(#13#10+
                       '- You can still select single systems'+#13#10+
                       '- Browse/select works just like in Windows Explorer'+#13#10+
                       '- Selecting ');
-  FormMain.AddMsgText('All Systems', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('All Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will discard all other selections');
   case ActionMode of
     0: FormMain.AddMsgText(#13#10+

@@ -60,7 +60,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Left = 462
     Top = 47
     Width = 7
-    Height = 465
+    Height = 464
     Align = alRight
     ResizeStyle = rsUpdate
     OnMoved = SplitterListMoved
@@ -79,7 +79,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Left = 469
     Top = 47
     Width = 305
-    Height = 465
+    Height = 464
     Align = alRight
     BevelOuter = bvNone
     Constraints.MinWidth = 305
@@ -174,7 +174,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Left = 0
       Top = 349
       Width = 305
-      Height = 116
+      Height = 115
       TabStop = False
       Align = alClient
       BorderStyle = bsNone
@@ -347,7 +347,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     Left = 0
     Top = 47
     Width = 462
-    Height = 465
+    Height = 464
     HelpContext = -1
     Align = alClient
     BorderStyle = bsNone

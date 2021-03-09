@@ -154,7 +154,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonSnaplDirAutoSearchHelpClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    You can place your video files in emulator''s folder or game snapshot folders. By doing this you don''t need '+
                       'to select custom folders for video files. All systems are supported, not just MAME. You have three choices:'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
@@ -188,22 +188,22 @@ end;
 procedure TFormVideoPreviewSettings.ButtonHelpVideoPreviewMediaPlayerParametersClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    The ');
   FormMain.AddMsgText('%1', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag is required so Emu Loader can replace it by the video/audio filename.'+#13#10+
                       '    Why you ask ? Some media player like ');
-  FormMain.AddMsgText('VLC media player ', clBlack, [fsBold]);
+  FormMain.AddMsgText('VLC media player ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('http://www.videolan.org/vlc/index.html', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' require command line switches before the filename.');
   FormMain.AddMsgText(#13#10+'    Others like ');
-  FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
+  FormMain.AddMsgText('Media Player Classic Home Cinema ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' can have switches before or after the filename.'+#13#10+
                       '    This tag is also required for batch files, but extra tags are not supported.'+
                       #13#10+'Emu Loader will surround the file with quotes so, there''s '+
                       'no need to use them.'+#13#10+'    Make sure to include a ');
-  FormMain.AddMsgText('auto close', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('auto close', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' parameter so the media player closes itself after the playback is finished!');
 
   GenerateMessage('Info', 'Required parameter.');
@@ -212,7 +212,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonHelpVideoPreviewPlayDummyVideoClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    If a video from previous selected game is still playing and you select a new game that have '+
                       'no video to play, the previous video keeps playing until it finishes or you manually close the media player.'+#13#10+
                       'You can use this setting to force Emu Loader to load and play a "100 ms" video for games without a video file.'+#13#10+#13#10+
@@ -220,14 +220,14 @@ begin
   FormMain.AddMsgText('%1', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag are optional. Some players might run and auto-close without the need of a video/audio file to play.'+#13#10+
                       'Note that if ');
-  FormMain.AddMsgText('Dummy Media Player Parameters', MsgTxtColors.colorWarning);
+  FormMain.AddMsgText('Dummy Media Player Parameters', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' is empty, the media player parameters will be used automatically.'+#13#10+#13#10+
                       '    As a bonus, current playing video will be stopped when you want to start a game or exit the frontend.'+#13#10+
                       'Make sure the file ');
   FormMain.AddMsgText('resources\images\novideo.avi', MsgTxtColors.colorFileName, [fsBold]);
   //FormMain.AddMsgText('resources\images\no_image\novideo.avi', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' exists or the dummy video will not load.');
-  
+
   GenerateMessage('Help', 'Play Dummy Video to Stop Current Playback');
 end;
 
@@ -248,22 +248,22 @@ end;
 procedure TFormVideoPreviewSettings.ButtonVideoPreviewHelpClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    It''s very simple and easy to setup. First, get a media player of your choice. I use and recommend the awesome ');
-  FormMain.AddMsgText('Media Player Classic Home Cinema ', clBlack, [fsBold]);
+  FormMain.AddMsgText('Media Player Classic Home Cinema ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' (small RAM footprint and portable). Make sure to enable ');
-  FormMain.AddMsgText('Store settings to .ini file', MsgTxtColors.colorWarning);
+  FormMain.AddMsgText('Store settings to .ini file', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' option in MPC Home Cinema for maximum customization. '+
                       #13#10+#13#10+'    Select the ');
-  FormMain.AddMsgText('executable', clBlack, [fsBold]);
+  FormMain.AddMsgText('executable', MsgTxtColors.colorKeyValue, [fsBold]);
   FormMain.AddMsgText(' file. Parameters will be loaded automatically if defined in ');
   FormMain.AddMsgText('\ini_files\videopreview.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('. If not, type the proper switches to play, and if possible, auto-close when playback is done.'+//#13#10+
                       ' You can also use a ');
-  FormMain.AddMsgText('batch', clBlack, [fsBold]);
+  FormMain.AddMsgText('batch', MsgTxtColors.colorKeyValue, [fsBold]);
   FormMain.AddMsgText(' file but extra parameters are not supported.'+#13#10+#13#10+
-                      '    The ');//FormMain.AddMsgText('    The ', MsgTxtColors.colorWarning, [fsBold]);
+                      '    The ');
   FormMain.AddMsgText('%1', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag is required for the video/audio filename. Surrounding quotes are not required.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'    Select a ');
@@ -272,27 +272,27 @@ begin
   FormMain.AddMsgText('folder', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' where video/audio files are. Recursive folder scan is NOT supported.');
   FormMain.AddMsgText(#13#10+'    Check ');
-  FormMain.AddMsgText('Play Video Enabled', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play Video Enabled', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting. Uncheck it if you want to disable this feature completely.'+
                       #13#10+'    Check ');
-  FormMain.AddMsgText('Parent Game Video', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Parent Game Video', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting for clone games, to play videos of parent games (MAME and arcade only).'+#13#10+'    Check ');
-  FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting to enforce playback of a short video file on a new selected game that doesn''t have a video file.'+
                       #13#10+'    The ');
-  FormMain.AddMsgText('AutoPlay', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('AutoPlay', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting play videos automatically when selecting games. Disabled by default for safety reasons (click the help ');
   FormMain.AddMsgText('?', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' button for more details).'+#13#10+#13#10+
                       '    The setting ');
-  FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', clBlack, [fsBold]);
+  FormMain.AddMsgText('Play Dummy Video to Stop Current Playback', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' exists because there is no way for the frontend to "terminate" the running media player application.'+#13#10+#13#10+
                       '    If ');
-  FormMain.AddMsgText('AutoPlay', clBlack, [fsBold]);
+  FormMain.AddMsgText('AutoPlay', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' is disabled, you can play videos manually with ');
   FormMain.AddMsgText('Shift+V', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' shortcut or ');
-  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in images tool bar buttons / games popup menu. There''s a button assigned for arcade controllers as well.');
 
   GenerateMessage('Help', 'How to watch game video previews.');
@@ -400,7 +400,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonVideoPreviewAutoPlayHelpClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    This option play videos automatically when selecting games but, depending on how '+
                       'you setup the media player, it might crash the frontend or even Windows if you select different games while a '+
                       'video is playing.'+#13#10+#13#10+
@@ -410,9 +410,9 @@ begin
                       'Remember that you can start a video by:'+#13#10);
   FormMain.AddMsgText('Shift-V', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' shortcut'+#13#10);
-  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' button in images tool bar buttons'+#13#10);
-  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' menu option in games popup menu (mouse right click)'+#13#10+
                       'If browsing games with an arcade controller, there''s a button assigned for this task.');
   GenerateMessage('Info', 'AutoPlay video previews.');

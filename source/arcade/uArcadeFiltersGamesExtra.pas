@@ -107,6 +107,7 @@ begin
        ControlType_New.Items.Add(cStr);
   end;
   ControlType_New.Items.EndUpdate;
+  ControlType_New.DropDownCount:= ControlType_New.Items.Count+2;
 end;
 
 procedure TFormArcadeFiltersExtra.UpdateSettings;
@@ -402,7 +403,7 @@ end;
 procedure TFormArcadeFiltersExtra.ButtonCategoriesToHideInfoClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   FormMain.AddMsgText('    To use these MAME/HBMAME filters you must place ');
   FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' or ');
@@ -413,7 +414,7 @@ begin
   FormMain.AddMsgText('category_hb.ini', MsgTxtColors.colorFileName, [fsBold]);
 
   FormMain.AddMsgText(' from AntoPISA in ');
-  FormMain.AddMsgText(FormMain.GetFolderFull(43), MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(FormMain.GetFolderFull(43), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' folder and restart the frontend to load the new info in the games list.'+
                       #13#10+#13#10+'You can find ');
   FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
@@ -430,11 +431,11 @@ begin
   FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' is also available at Progetto EMMA: http://www.progettoemma.net/history/catlist.php'+#13#10+#13#10+
                       'The ');
-  FormMain.AddMsgText('MAME Console Machines', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('MAME Console Machines', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('MAME Computer Machines', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('MAME Computer Machines', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('MAME Handheld Machines', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('MAME Handheld Machines', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' filters will show/hide MAME machines only (from -listxml output). Software lists are not included.');
 
   GenerateMessage('Help', 'Hide categories based on an external file.', '', 2);

@@ -1533,30 +1533,6 @@ object FormMain: TFormMain
         ParentBackground = False
         TabOrder = 1
         Visible = False
-        object MAMEInfoTextHolder: TRichEditURL
-          Left = 0
-          Top = 0
-          Width = 370
-          Height = 131
-          TabStop = False
-          Align = alClient
-          BorderStyle = bsNone
-          Color = clWhite
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          PopupMenu = PopupGameDocuments
-          ReadOnly = True
-          ScrollBars = ssVertical
-          ShowHint = False
-          TabOrder = 0
-          WantReturns = False
-          OnURLClick = MAMEInfoTextHolderURLClick
-        end
         object MAMEInfoStatusBar: TPanelEx
           Left = 0
           Top = 131
@@ -1573,6 +1549,30 @@ object FormMain: TFormMain
           ParentBackground = False
           Style = vgSimple
           Visible = False
+        end
+        object MAMEDocsText: TTntRichEdit
+          Left = 0
+          Top = 0
+          Width = 370
+          Height = 131
+          TabStop = False
+          OnURLClick = MAMEDocsTextURLClick
+          Align = alClient
+          BorderStyle = bsNone
+          Color = clWhite
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          ParentShowHint = False
+          PopupMenu = PopupGameDocuments
+          ReadOnly = True
+          ScrollBars = ssVertical
+          ShowHint = False
+          TabOrder = 1
+          WantReturns = False
         end
       end
     end
@@ -3313,16 +3313,16 @@ object FormMain: TFormMain
     object N9: TMenuItem
       Caption = '-'
     end
-    object PopupMAMu_IconsManager: TMenuItem
-      Caption = 'MAMu_ Icons Manager'
-      Hint = 'For missing and not used icons'
-      OnClick = PopupMAMu_IconsManagerClick
-    end
     object PopupReloadMAMu_Icons: TMenuItem
       Caption = 'Reload All Icons'
       Hint = 'Clear cache and reload icons'
       ImageIndex = 3
       OnClick = PopupShowParentIconsClick
+    end
+    object PopupMAMu_IconsManager: TMenuItem
+      Caption = 'MAMu_ Icons Manager'
+      Hint = 'For missing and not used icons'
+      OnClick = PopupMAMu_IconsManagerClick
     end
   end
   object IL_LeftPanel: TImageList
@@ -3551,6 +3551,19 @@ object FormMain: TFormMain
       Hint = 'Change font colors and layout'
       ImageIndex = 19
       OnClick = MenuCustomizeSplashScreenClick
+    end
+    object N63: TMenuItem
+      Caption = '-'
+    end
+    object MenuEnable4KMode2160p: TMenuItem
+      AutoCheck = True
+      Caption = 'Enable 4K Mode (2160p)'
+      Hint = 'Bigger dialogs, fonts and controls'
+    end
+    object Menu4KModeReadMeFirst: TMenuItem
+      Caption = '4K Mode, Read Me First'
+      Hint = 'What is this setting for ?'
+      OnClick = Menu4KModeReadMeFirstClick
     end
     object N23: TMenuItem
       Caption = '-'
@@ -4767,8 +4780,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 48
-    Top = 336
+    Left = 8
+    Top = 256
   end
   object PopupFilterGameTitle: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -4797,8 +4810,8 @@ object FormMain: TFormMain
     UseSystemFont = False
     DrawModule = BcDrawModule
     OnMeasureMenuItem = MainMenuOptionsMeasureMenuItem
-    Left = 80
-    Top = 336
+    Left = 40
+    Top = 256
     object FilterTextBarIncludeToolBarFilters: TMenuItem
       AutoCheck = True
       Caption = 'Include Tool Bar Filters'

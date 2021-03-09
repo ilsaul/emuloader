@@ -78,7 +78,8 @@ uses
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
   uNightModeRGBQuickEdit in 'uNightModeRGBQuickEdit.pas' {FormNightModeRGBQuickEdit},
-  uGetWindowsVersion in 'uGetWindowsVersion.pas';
+  uGetWindowsVersion in 'uGetWindowsVersion.pas',
+  uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K};
 
 // {$R *.RES}
 {$R EmuLoader.res}

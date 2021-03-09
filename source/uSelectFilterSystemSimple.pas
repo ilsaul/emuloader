@@ -465,42 +465,42 @@ end;
 
 procedure TFormSelectFilterSystemSimple.ButtonHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    This filter allows you to quickly select or or more systems without changing settings in ');
-  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' main filter.'+#13#10+'Very useful if you just want to show a single system.'+#13#10+#13#10+
                       '    Just select the systems you want and click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. ');
-  FormMain.AddMsgText('Machine Type / Systems', clBlack);
+  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorKeyTitle);
   FormMain.AddMsgText(' full filter will be bypassed automatically, no additional configuration required.'+#13#10+
                       '    To restore the full filter again, either click on the ');
   FormMain.AddMsgText('Reset To Default', MsgTxtColors.colorFileName, [fsBold]);
 
   FormMain.AddMsgText(' button or open ');
-  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' filter and click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button. The ');
-  FormMain.AddMsgText('Systems Quick Filter', clBlack);
+  FormMain.AddMsgText('Systems Quick Filter', MsgTxtColors.colorKeyTitle);
   FormMain.AddMsgText(' will be disabled.'+#13#10+#13#10+
                       '    When you restart the frontend, the current filter setting will be restored with ');
-  FormMain.AddMsgText('Machine Type / Systems', clBlack, [fsBold]);
+  FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' filter or ');
-  FormMain.AddMsgText('Systems Quick Filter', clBlack, [fsBold]);
+  FormMain.AddMsgText('Systems Quick Filter', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', depending on which filter was active at the time.'+#13#10+#13#10+'    ');
-  FormMain.AddMsgText('MAME Machines Filter Panel', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('MAME Machines Filter Panel', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting will be disabled to prevent games filtering errors.'+#13#10+#13#10+
                       '    How do you know which filter is active ? To make this easy, the ');
-  FormMain.AddMsgText('Systems Quick Filter', clBlack, [fsBold]);
+  FormMain.AddMsgText('Systems Quick Filter', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' tool bar button have two icons, one with a ');
-  FormMain.AddMsgText('RED', clRed, [fsBold]);
+  FormMain.AddMsgText('RED', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' stripe, showing that the filter is ');
-  FormMain.AddMsgText('disabled', clBlack, [fsBold]);
+  FormMain.AddMsgText('disabled', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' and another with a ');
-  FormMain.AddMsgText('GREEN', clGreen, [fsBold]);
+  FormMain.AddMsgText('GREEN', MsgTxtColors.colorCmdLine, [fsBold]);
   FormMain.AddMsgText(' stripe, showing that the filter is ');
-  FormMain.AddMsgText('active', clBlack, [fsBold]);
+  FormMain.AddMsgText('active', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('. The filter is disabled by default.'+#13#10#13#10+
                       '    There are more select/unselect options in the popup menu (mouse right-click). '+
                       'Make sure to call the popup menu on top of a selected system so you don''t lose current selections.');

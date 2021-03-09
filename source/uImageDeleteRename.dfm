@@ -77,7 +77,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelRenameImage: TShadowLabel
     Left = 348
     Top = 304
-    Width = 210
+    Width = 211
     Height = 16
     Caption = 'New Name (file extension not required)'
     Font.Charset = ANSI_CHARSET
@@ -446,7 +446,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     Top = 319
     Width = 49
     Height = 23
-    Hint = 'Click here to confirm operation'
+    Hint = 'Click here to reset name to game filename'
     Caption = 'Reset'
     ParentShowHint = False
     ShowHint = True

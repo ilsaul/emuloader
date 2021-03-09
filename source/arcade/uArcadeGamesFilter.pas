@@ -191,7 +191,7 @@ begin
       end;
     False:
       begin
-        CallMessageBox;
+        FormMain.InitMessageBox;// CallMessageBox;
         FormMain.AddMsgText('    File ');
         FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found. The filters list cannot be loaded.'+#13#10+'Aborting...');
@@ -202,9 +202,9 @@ begin
 
   if (not Assigned(mainSectionList)) or (mainSectionList.Count = 0) then
      begin
-       CallMessageBox;
+       FormMain.InitMessageBox;// CallMessageBox;
        FormMain.AddMsgText('    The ');
-       FormMain.AddMsgText('[main]', clBlack, [fsBold]);
+       FormMain.AddMsgText('[main]', MsgTxtColors.colorExitCode, [fsBold]);
        FormMain.AddMsgText(' section is empty or was not be found. This section is required for the filters to work correctly.'+
                            #13#10+'File ');
        FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
@@ -275,11 +275,11 @@ begin
             end
          else
             begin
-              CallMessageBox;
+              FormMain.InitMessageBox;// CallMessageBox;
               FormMain.AddMsgText('Section ');
-              FormMain.AddMsgText('['+mainSectionList.Names[Loop]+']', clBlack, [fsBold]);
+              FormMain.AddMsgText('['+mainSectionList.Names[Loop]+']', MsgTxtColors.colorExitCode, [fsBold]);
               FormMain.AddMsgText(' but there is nothing in it. No sub-filters will be added for ');
-              FormMain.AddMsgText(mainSectionList.ValueFromIndex[Loop], clBlack, [fsBold]);
+              FormMain.AddMsgText(mainSectionList.ValueFromIndex[Loop], MsgTxtColors.colorExitCode, [fsBold]);
               FormMain.AddMsgText('. Either remove this section or replace the file ');
               FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
               FormMain.AddMsgText(' with a proper copy.');

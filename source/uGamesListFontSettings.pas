@@ -1036,14 +1036,14 @@ end;
 
 procedure TFormGamesListFontSettings.PopupHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    Customizing game fonts is easy. If you select different fonts, '+
                       'they might have different height in pixels. Even more so if you change the font size.'+#13#10+
                       'For thumbnails view mode this is a problem. To make this easy, you can see a ');
-  FormMain.AddMsgText('font height', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('font height', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' value next to the font size. This can help you choose fonts that have the same height.'+#13#10+#13#10+
                       '    By default, all systems are visible in the list. To hide systems you don''t have, enable ');
-  FormMain.AddMsgText('Show Available Systems Only', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Show Available Systems Only', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option in popup menu.');
 
   GenerateMessage('Help', 'Shed some light into the darkness.');

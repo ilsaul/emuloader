@@ -105,26 +105,6 @@ object FormMessageBox: TFormMessageBox
       Visible = False
     end
   end
-  object LabelMessage: TRichEditURL
-    Left = 8
-    Top = 80
-    Width = 667
-    Height = 305
-    BorderStyle = bsNone
-    Color = clWhite
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
-    ReadOnly = True
-    ScrollBars = ssVertical
-    TabOrder = 0
-    WantReturns = False
-    OnResizeRequest = LabelMessageResizeRequest
-    OnURLClick = LabelMessageURLClick
-  end
   object PanelBottom: TPanelEx
     Left = 0
     Top = 386
@@ -205,5 +185,25 @@ object FormMessageBox: TFormMessageBox
       Themed = True
       CustomIconsEnabled = False
     end
+  end
+  object LabelMessageW: TTntRichEdit
+    Left = 8
+    Top = 80
+    Width = 667
+    Height = 305
+    OnURLClick = LabelMessageWURLClick
+    BorderStyle = bsNone
+    Color = clWhite
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 2
+    WantReturns = False
+    OnResizeRequest = LabelMessageWResizeRequest
   end
 end

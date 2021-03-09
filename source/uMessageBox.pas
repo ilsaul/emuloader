@@ -5,11 +5,10 @@ interface
 uses
   Windows, Classes, Graphics, Controls, Forms, SysUtils,
   Buttons, StdCtrls, ComCtrls, ExtCtrls, ShadowLabel, Messages, PanelEx,
-  RichEditURL, ShellAPI, AdvOfficeButtons, ButtonsEx;
+  ShellAPI, AdvOfficeButtons, ButtonsEx, TntComCtrls;
 
 type
   TFormMessageBox = class(TForm)
-    LabelMessage: TRichEditURL;
     PanelBottom: TPanelEx;
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
@@ -21,16 +20,18 @@ type
     ButtonAbort: TBitBtnEx;
     IconMediaType: TImage;
     NightMode: TAdvOfficeCheckBoxEx;
+    LabelMessageW: TTntRichEdit;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
-    procedure LabelMessageURLClick(Sender: TObject; const URL: String);
-    procedure LabelMessageResizeRequest(Sender: TObject; Rect: TRect);
     procedure FormCreate(Sender: TObject);
     procedure NightModeClick(Sender: TObject);
+    procedure LabelMessageWResizeRequest(Sender: TObject; Rect: TRect);
+    procedure LabelMessageWURLClick(Sender: TObject; const URL: WideString);
   private
     { Private declarations }
     RichEditHeight: Integer;
     procedure WMSysCommand(var MSG: TWMSysCommand); message WM_SYSCOMMAND;
+    //procedure Resize_4K;
   public
     LabelMessageTitle: WideString;
     { Public declarations }
@@ -136,7 +137,7 @@ begin
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonAbort);
-       FormMain.SetWin10DarkScrollBar(LabelMessage);
+       FormMain.SetWin10DarkScrollBar(LabelMessageW);
      end;
 
   if IconMediaType.Tag <> -1 then
@@ -161,38 +162,71 @@ begin
      begin
        //scrMaxHeight:= 400; // for debugging 640x840 resolution
        scrMaxHeight:= Screen.Height-80;
-       newHeight:= FormMessageBox.LabelMessage.Top+RichEditHeight+PanelBottom.Height+16;
+       newHeight:= FormMessageBox.LabelMessageW.Top+RichEditHeight+PanelBottom.Height+16;
        if newHeight <= scrMaxHeight then
           begin
             // size of URLRichEdit changes according to the text length
             FormMessageBox.ClientHeight:= newHeight;
-            LabelMessage.Height:= RichEditHeight+1;
+            LabelMessageW.Height:= RichEditHeight+1;
           end
        else
           begin
             // height must be lowered even more due to screen height
             FormMessageBox.ClientHeight:= scrMaxHeight;
-            LabelMessage.Height:= RichEditHeight-(newHeight-scrMaxHeight);
+            LabelMessageW.Height:= RichEditHeight-(newHeight-scrMaxHeight);
           end;
      end;
   BringToFront;
 end;
 
-procedure TFormMessageBox.LabelMessageURLClick(Sender: TObject;
-  const URL: String);
+{procedure TFormMessageBox.Resize_4K;
 begin
-  CallShellExecute(Sender, URL);
-end;
-    
-procedure TFormMessageBox.LabelMessageResizeRequest(Sender: TObject;
-  Rect: TRect);
-begin
-  RichEditHeight:= Rect.Bottom-Rect.Top;
-end;
+    FormMessageBox.ClientWidth:= 1280;
+    FormMessageBox.ClientHeight:= 799;
+    FormMessageBox.Font.Size:= 16;
+    FormMessageBox.PanelTop.Height:= 150;
+    FormMessageBox.PanelBottom.Height:= 71;
+    FormMessageBox.LabelMessageW.Top:= 150;
+    FormMessageBox.LabelMessageW.Left:= 10;
+    FormMessageBox.LabelMessageW.Width:= 1260;
+    //FormMessageBox.LabelMessageW.Height:= 577;
+    FormMessageBox.MessageIcon.Width:= 128;
+    FormMessageBox.MessageIcon.Height:= 128;
+    FormMessageBox.IconMediaType.Top:= 84;
+    FormMessageBox.IconMediaType.Left:= 143;
+    FormMessageBox.LabelGameTitle.Left:= 144;
+    FormMessageBox.LabelGameTitle.Width:= 1125;
+    FormMessageBox.LabelGameTitle.Height:= 59;
+    FormMessageBox.LabelGameTitle.Font.Size:= 18;
+    FormMessageBox.LabelGameName.Top:= 84;
+    FormMessageBox.LabelGameName.Left:= 199;
+    FormMessageBox.LabelGameName.Width:= 1069;
+    FormMessageBox.LabelGameName.Height:= 47;
+    FormMessageBox.NightMode.Top:= 17;
+    FormMessageBox.NightMode.Left:= 24;
+    FormMessageBox.ButtonYestoAll.Top:= 14;
+    FormMessageBox.ButtonYestoAll.Left:= 281;
+    FormMessageBox.ButtonYestoAll.Width:= 168;
+    FormMessageBox.ButtonYestoAll.Height:= 45;
+    FormMessageBox.ButtonYes.Top:= 14;
+    FormMessageBox.ButtonYes.Left:= 448;
+    FormMessageBox.ButtonYes.Width:= 168;
+    FormMessageBox.ButtonYes.Height:= 45;
+    FormMessageBox.ButtonNo.Top:= 14;
+    FormMessageBox.ButtonNo.Left:= 640;
+    FormMessageBox.ButtonNo.Width:= 168;
+    FormMessageBox.ButtonNo.Height:= 45;
+    FormMessageBox.ButtonAbort.Top:= 14;
+    FormMessageBox.ButtonAbort.Left:= 831;
+    FormMessageBox.ButtonAbort.Width:= 168;
+    FormMessageBox.ButtonAbort.Height:= 45;
+end;}
 
 procedure TFormMessageBox.FormCreate(Sender: TObject);
 begin
-  LabelMessage.Height:= 1300; // without this hack-fix, form height goes nuts, DO NOT REMOVE!
+  //if FormMain.MenuEnable4KMode2160p then
+  //   Resize_4K;
+  LabelMessageW.Height:= 1500; // without this hack-fix, form height goes nuts, DO NOT REMOVE!
 end;
 
 procedure TFormMessageBox.NightModeClick(Sender: TObject);
@@ -203,5 +237,15 @@ begin
   FormMain.MenuEnableNightMode.OnClick(Self);
 end;
 
+procedure TFormMessageBox.LabelMessageWResizeRequest(Sender: TObject;
+  Rect: TRect);
+begin
+  RichEditHeight:= Rect.Bottom-Rect.Top;
+end;
+
+procedure TFormMessageBox.LabelMessageWURLClick(Sender: TObject; const URL: WideString);
+begin
+  CallShellExecute(Sender, URL);
+end;
 
 end.

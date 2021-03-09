@@ -322,7 +322,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCassetteTapeParameter: TShadowLabel
       Left = 32
       Top = 480
-      Width = 324
+      Width = 323
       Height = 16
       Caption = 'Cassette Tape Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET

@@ -5,16 +5,16 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, ComCtrls, ShadowLabel, RichEditURL,
-  ShellApi, ExtCtrls;
+  ShellApi, ExtCtrls, TntComCtrls;
 
 type
   TFormConsCompSystemRules = class(TForm)
     PanelTop: TPanelEx;
-    RulesFile: TRichEditURL;
     LabelTitle: TShadowLabel;
     SystemIcon: TImage;
+    RulesFileW: TTntRichEdit;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure RulesFileURLClick(Sender: TObject; const URL: String);
+    procedure RulesFileWURLClick(Sender: TObject; const URL: WideString);
   private
     { Private declarations }
   public
@@ -34,10 +34,10 @@ begin
      Close;
 end;
 
-procedure TFormConsCompSystemRules.RulesFileURLClick(Sender: TObject;
-  const URL: String);
+procedure TFormConsCompSystemRules.RulesFileWURLClick(Sender: TObject;
+  const URL: WideString);
 begin
-  ShellExecute(Handle, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
+  ShellExecuteW(Handle, 'open', PWideChar(URL), nil, nil, SW_SHOWNORMAL);
 end;
 
 end.

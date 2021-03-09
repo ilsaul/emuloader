@@ -703,19 +703,24 @@ end;
 
 procedure TFormImageLayoutSettings.ButtonHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
-  FormMain.AddMsgText('    Customize image categories for each layout'+#13#10+#13#10+
-                      '1. Select a layout to setup.'+#13#10+
-                      '2. On ');
-  FormMain.AddMsgText('Category (All Systems)', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' click panel icons to select an image category.'+#13#10+
-                      '3. Uncheck ');
-  FormMain.AddMsgText('Panel #', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' checkboxes to hide panels (except panel 1, 4 and quad layouts).'+#13#10+
-                      '4. Repeat the process from step ');
-  FormMain.AddMsgText('#1', clBlack, [fsBold]);
-  FormMain.AddMsgText(' for other layouts.'+#13#10+
-                      '5. To hide/disable a layout, clear the checkbox in the layouts list.'+#13#10+#13#10+
+  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.AddMsgText('    Customize image categories for each layout'+#13#10+#13#10);
+  FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Select a layout to setup.'+#13#10);
+  FormMain.AddMsgText('2.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' On ');
+  FormMain.AddMsgText('Category (All Systems)', MsgTxtColors.colorKeyTitle, [fsBold]);
+  FormMain.AddMsgText(' click panel icons to select an image category.'+#13#10);
+  FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Uncheck ');
+  FormMain.AddMsgText('Panel #', MsgTxtColors.colorKeyTitle, [fsBold]);
+  FormMain.AddMsgText(' checkboxes to hide panels (except panel 1, 4 and quad layouts).'+#13#10);
+  FormMain.AddMsgText('4.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Repeat the process from step ');
+  FormMain.AddMsgText('#1', MsgTxtColors.colorExitCode, [fsBold]);
+  FormMain.AddMsgText(' for other layouts.'+#13#10);
+  FormMain.AddMsgText('5.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To hide/disable a layout, clear the checkbox in the layouts list.'+#13#10+#13#10+
                       '    When you''re done, click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to save and apply changes or click ');
@@ -974,18 +979,22 @@ end;
 procedure TFormImageLayoutSettings.ButtonHelp_CustomCategoryConsCompClick(
   Sender: TObject);
 begin
-  CallMessageBox;
-  FormMain.AddMsgText('    You can use alternate categories for console/computer systems and MAME software lists.'+#13#10+#13#10+
-                      '1. Click panel icons to select an image category.'+#13#10+
-                      '2. To enable the custom categories make sure to tick the checkbox. Uncheck ');
-  FormMain.AddMsgText('Panel #', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.AddMsgText('    You can use alternate categories for console/computer systems and MAME software lists.'+#13#10+#13#10);
+  FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Click panel icons to select an image category.'+#13#10);
+  FormMain.AddMsgText('2.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To enable the custom categories make sure to tick the checkbox. Uncheck ');
+  FormMain.AddMsgText('Panel #', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' checkboxes in ');
-  FormMain.AddMsgText('All Systems', MsgTxtColors.colorFileName, [fsBold]);
-  FormMain.AddMsgText(' box to hide panels (except panel 1, 4 and quad layouts).'+#13#10+
-                      '4. Repeat the process from step ');
-  FormMain.AddMsgText('#1', clBlack, [fsBold]);
-  FormMain.AddMsgText(' for other layouts.'+#13#10+
-                      '5. To hide/disable a layout, clear the checkbox in the layouts list.'+#13#10+#13#10+
+  FormMain.AddMsgText('All Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
+  FormMain.AddMsgText(' box to hide panels (except panel 1, 4 and quad layouts).'+#13#10);
+  FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Repeat the process from step ');
+  FormMain.AddMsgText('#1', MsgTxtColors.colorExitCode, [fsBold]);
+  FormMain.AddMsgText(' for other layouts.');
+  FormMain.AddMsgText('4.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To hide/disable a layout, clear the checkbox in the layouts list.'+#13#10+#13#10+
                       '    When you''re done, click ');
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to save and apply changes or click ');

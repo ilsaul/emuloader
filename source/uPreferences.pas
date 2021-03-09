@@ -391,7 +391,7 @@ procedure TFormPreferences.GameDocumentsBackgroundColorSelect(
   Sender: TObject);
 begin
   if not IsNightMode then
-     FormMain.MAMEInfoTextHolder.Color:= GameDocumentsBackgroundColor.Selected;
+     FormMain.MAMEDocsText.Color:= GameDocumentsBackgroundColor.Selected;
 
   GameDocsFont_Setting.Color:= GameDocumentsBackgroundColor.Selected;
 end;
@@ -403,7 +403,7 @@ begin
   GameDocsFont_Setting.Font.Size:= 9;
   GameDocsFont_Setting.Font.Style:= [];
   if not IsNightMode then
-     FormMain.MAMEInfoTextHolder.Font:= GameDocsFont_Setting.Font;
+     FormMain.MAMEDocsText.Font:= GameDocsFont_Setting.Font;
 
   FormMain.SetSelectedColorBox(GameDocumentsBackgroundColor, GameDocumentsBackgroundColor.DefaultColorColor);
 end;
@@ -1116,7 +1116,7 @@ begin
      begin
        GameDocsFont_Setting.Font:= FormMain.FontDialog.Font;
        if not IsNightMode then
-          FormMain.MAMEInfoTextHolder.Font:= GameDocsFont_Setting.Font;
+          FormMain.MAMEDocsText.Font:= GameDocsFont_Setting.Font;
      end;
 end;
 

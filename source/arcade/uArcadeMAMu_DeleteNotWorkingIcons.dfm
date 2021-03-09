@@ -131,9 +131,9 @@ object FormArcadeMAMu_DeleteNotWorkingIcons: TFormArcadeMAMu_DeleteNotWorkingIco
     BevelOuter = bvNone
     TabOrder = 1
     object LabelHotkeys: TShadowLabel
-      Left = 335
+      Left = 336
       Top = 4
-      Width = 290
+      Width = 289
       Height = 19
       Hint = 
         'Hotkeys -> "SPACE": Check/Uncheck     "ESC": Cancel     "ENTER":' +

@@ -1074,38 +1074,38 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonInstructionsClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   FormMain.AddMsgText('    Set ');
-  FormMain.AddMsgText('emulators filenames', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('emulators filenames', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('titles', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('titles', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('emulator command line parameters', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('emulator command line parameters', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('games folders', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('games folders', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10+
                       'Remember to insert a ');
-  FormMain.AddMsgText('%s', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('%s', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag in the parameter so it can be replaced by the game filename.'+#13#10+#13#10+
                       '    Emulator parameters are read from ');
   FormMain.AddMsgText(GetEmuParametersFile(False), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file, but for games with ');
-  FormMain.AddMsgText('multiple floppy disks', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('multiple floppy disks', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', the extra parameters required by a few emulators are hard-coded in frontend''s '+
                       'source code.'+#13#10+
                      'Read the docs in ');
   FormMain.AddMsgText('custom_games\docs\special_rules\', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' folder for more details.'#13#10+#13#10+
                      '    You can use ');
-  FormMain.AddMsgText('four (4) emulators per system', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('four (4) emulators per system', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('. Do not use the same emulator filename more than once in the same system.'+#13#10+#13#10+
                      '    The ');
-  FormMain.AddMsgText('Boot Disc Parameter', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Boot Disc Parameter', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' setting is used for CD/DVD images mounted on a virtual drive ');
-  FormMain.AddMsgText('(Daemon Tools / Virtual CloneDrive / Alcohol 120%)', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('(Daemon Tools / Virtual CloneDrive / Alcohol 120%)', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+
                      'Some emulators, like SSF (Sega Saturn), do not support loading games from a CD image.'+#13#10+#13#10+'    ');
-  FormMain.AddMsgText('Parameter 2', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Parameter 2', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' is optional. You can use it to launch a game with different parameters. Most emulators don''t need this.');
 
   FormMain.AddMsgText(#13#10+#13#10+'    Want to reset emulator title to default ? Clear the title edit box, select another system and back or click "Apply" button to exit.');
@@ -1170,31 +1170,31 @@ procedure TFormConsCompEmulatorsSetup.ButtonDaemonToolsHelpClick(Sender: TObject
 begin
   // adds margin to a TEdit - MakeLong(left margin, right margin)...
   //SendMessage(Edit1.Handle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, MakeLong(0, 30));
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   FormMain.AddMsgText('    Some emulators require a real CD/DVD for proper emulation instead of loading an image file. '+
                       'Only disc images mounted on a virtual drive can be used.'+#13#10+#13#10+
                       '    Officially, three virtual drive applications are supported, and have separate mount/unmount parameters for '+
                       'each of them in ');
   FormMain.AddMsgText(GetEmuParametersFile, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(': ');
-  FormMain.AddMsgText('Daemon Tools', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Daemon Tools', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('Elby Virtual CloneDrive', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Elby Virtual CloneDrive', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
-  FormMain.AddMsgText('Alcohol 120% / 52%', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Alcohol 120% / 52%', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('.'+#13#10+#13#10+
                       '    The frontend tries to detect which tool you are using based on the executable file:'+#13#10+'- ');
-  FormMain.AddMsgText('Daemon Tools', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Daemon Tools', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(': ');
   FormMain.AddMsgText('DTLite*.exe', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText('; ');
   FormMain.AddMsgText('Daemon*.exe', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'- ');
-  FormMain.AddMsgText('Virtual CloneDrive', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Virtual CloneDrive', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(': ');
   FormMain.AddMsgText('VCDMount*.exe', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'- ');
-  FormMain.AddMsgText('Alcohol 120% / 52%', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText('Alcohol 120% / 52%', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(': ');
   FormMain.AddMsgText('AxCmd.exe', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+
@@ -1202,15 +1202,15 @@ begin
   FormMain.AddMsgText(GetEmuParametersFile(False), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(', please use the proper section related to the application you are using.'+#13#10+
                       'The ');
-  FormMain.AddMsgText('[Custom Virtual Drive]', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText('[Custom Virtual Drive]', MsgTxtColors.colorExitCode, [fsBold]);
   FormMain.AddMsgText(' section can be used for any other virtual drive application (like UltraISO).'+#13#10+#13#10+
                       '    To enable/disable mounting images on virtual drive, select a game in main '+
                       'games list and open the popup menu (mouse right-click). Choose ');
-  FormMain.AddMsgText('Play +mount image in virtual drive', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Play +mount image in virtual drive', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option.'+#13#10+#13#10+
                       '    You only need to do that once for each system. When running other games, you can simply '+
                       'mouse double-click or press ENTER key. The last selected ');
-  FormMain.AddMsgText('play with...', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('play with...', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option will be used.');
 
   GenerateMessage('Info', 'Mouting Disc Images on a Virtual Drive');

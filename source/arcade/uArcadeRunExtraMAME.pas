@@ -236,6 +236,9 @@ type
     MemCardFileExtFilter: String;
     ActiveFileID: Integer; // what set type is this (gamename, clone, bios)
     FoundInputExtra: Boolean; // sets to FALSE is settings "record_timecode" and "exit_after_playback" do not exist in mame.ini
+
+    function  RenameTextConfirmDialog(const NewValueStr: Variant; newFileStr: WideString; iRemoveItem, iItem: TEasyItem): Boolean;
+
     procedure GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
     //procedure SelectFileDialog(FeatureIndex: Byte);
     procedure CheckMemoryCardSupport;
@@ -1080,23 +1083,16 @@ begin
   if NearItem = nil then
      NearItem:= ELV_Holder.Groups.NextItem(Item);
   FileStr:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
-  CallMessageBox;
+  FormMain.InitMessageBox;// CallMessageBox;
   //ShowGameNameEntryMsgBox;
-  FormMain.AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
-  FormMain.AddMsgText(FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
+  FormMain.AddEmulatorHeaderArcade;
+  FormMain.AddSoftwareListHeader;
 
-  if FormMain.MemGameInfo.eSoftwareName <> '' then
-     begin
-       FormMain.AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
-       FormMain.AddMsgText(FormMain.MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], FormMain.AlignEmuGameText, -1, 'Trebuchet MS');
-     end;
-  FormMain.AddMsgText(#13#10);
-
-  FormMain.AddMsgText('File:'+#13#10, clBlack, [fsBold]);
-  FormMain.AddMsgText(FileStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Lucida Console');
-  FormMain.AddMsgText('Size: ', clBlack, [fsBold]);
+  FormMain.AddCommandLineMsgBox(FileStr, True, False);
+  //FormMain.AddMsgText(#13#10+FileStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Lucida Console');
+  FormMain.AddMsgText('Size: ', -1, [fsBold]);
   FormMain.AddMsgText(TFileInfo(Item).eSizeText+#13#10);
-  FormMain.AddMsgText('Date modified: ', clBlack, [fsBold]);
+  FormMain.AddMsgText('Date modified: ', -1, [fsBold]);
   FormMain.AddMsgText(TFileInfo(Item).eDateTimeText+#13#10);
 
   FormMain.AddMsgText(#13#10+'   Are you sure you want to delete this file ? Recycle bin is not supported...');
@@ -2024,6 +2020,35 @@ begin
   EditFileName_EndEdit_ELV(InputListView);
 end;
 
+function TFormArcadeRunGameExtraMAME.RenameTextConfirmDialog(const NewValueStr: Variant; newFileStr: WideString; iRemoveItem, iItem: TEasyItem): Boolean;
+begin
+  Result:= False;
+  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.AddMsgText('    The destination file already exists.'+#13#10);
+  FormMain.AddCommandLineMsgBox(newFileStr, False, False);
+  //FormMain.AddMsgText(newFileStr, MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  FormMain.AddMsgText(#13#10+'Size: ', -1, [fsBold]);
+  FormMain.AddMsgText(TFileInfo(iRemoveItem).eSizeText+#13#10);
+  FormMain.AddMsgText(#13#10+'Date modified: ', -1, [fsBold]);
+  FormMain.AddMsgText(TFileInfo(iRemoveItem).eDateTimeText+' ');
+
+  if TFileInfo(iRemoveItem).eDateTime > TFileInfo(iItem).eDateTime then
+     FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
+  else
+  if TFileInfo(iRemoveItem).eDateTime < TFileInfo(iItem).eDateTime then
+     FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
+  else
+     FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
+
+  FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
+  FormMain.AddCommandLineMsgBox(TFileInfo(iItem).eFileName, True, False);
+  //FormMain.AddMsgText(TFileInfo(iItem).eFileName, MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  FormMain.AddMsgText(' and overwrite the file above ?');
+
+  if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(iItem).eFileName+'" to "'+NewValueStr+'".', '', 1, False, 2) = mrYes then
+     Result:= True;
+end;
+
 procedure TFormArcadeRunGameExtraMAME.InputListViewItemEdited(
   Sender: TCustomEasyListview; Item: TEasyItem; var NewValue: Variant;
   var Accept: Boolean);
@@ -2050,28 +2075,8 @@ begin
           begin
             RemoveItem:= GetItem_ELV(newFile, InputListView);
 
-            CallMessageBox;
-            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
-            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
-            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
-                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
-
-            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
-            else
-            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
-            else
-               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
-
-            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-            FormMain.AddMsgText(' and overwrite the file above ?');
-
-            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
-               begin
-                 iRename:= True;
-               end;
+            if RenameTextConfirmDialog(NewValue, newFile, RemoveItem, Item) then
+               iRename:= True;
           end
        else
           iRename:= True;
@@ -2152,28 +2157,8 @@ begin
           begin
             RemoveItem:= GetItem_ELV(newFile, SaveStateListView);
 
-            CallMessageBox;
-            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
-            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
-            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
-                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
-
-            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
-            else
-            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
-            else
-               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
-
-            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-            FormMain.AddMsgText(' and overwrite the file above ?');
-
-            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
-               begin
-                 iRename:= True;
-               end;
+            if RenameTextConfirmDialog(NewValue, newFile, RemoveItem, Item) then
+               iRename:= True;
           end
        else
           iRename:= True;
@@ -2273,28 +2258,8 @@ begin
           begin
             RemoveItem:= GetItem_ELV(newFile, MemoryCardListView);
 
-            CallMessageBox;
-            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
-            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
-            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
-                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
-
-            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
-            else
-            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
-            else
-               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
-
-            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-            FormMain.AddMsgText(' and overwrite the file above ?');
-
-            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
-               begin
-                 iRename:= True;
-               end;
+            if RenameTextConfirmDialog(NewValue, newFile, RemoveItem, Item) then
+               iRename:= True;
           end
        else
           iRename:= True;
@@ -2578,28 +2543,8 @@ begin
           begin
             RemoveItem:= GetItem_ELV(newFile, InputListView);
 
-            CallMessageBox;
-            FormMain.AddMsgText('    The destination file already exists.'+#13#10);
-            FormMain.AddMsgText(newFile, clNavy, [fsBold]);
-            FormMain.AddMsgText(#13#10+'Size: '+TFileInfo(RemoveItem).eSizeText+
-                                #13#10+'Date modified: '+TFileInfo(RemoveItem).eDateTimeText+' ');
-
-            if TFileInfo(RemoveItem).eDateTime > TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(newer)', MsgTxtColors.colorFileName, [fsBold])
-            else
-            if TFileInfo(RemoveItem).eDateTime < TFileInfo(Item).eDateTime then
-               FormMain.AddMsgText('(older)', MsgTxtColors.colorFileName, [fsBold])
-            else
-               FormMain.AddMsgText('(same date)', MsgTxtColors.colorFileName, [fsBold]);
-
-            FormMain.AddMsgText(#13#10+#13#10+'    Do you want to rename ');
-            FormMain.AddMsgText(TFileInfo(Item).eFileName, MsgTxtColors.colorFileName, [fsBold]);
-            FormMain.AddMsgText(' and overwrite the file above ?');
-
-            if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(Item).eFileName+'" to "'+NewValue+'".', '', 1, False, 2) = mrYes then
-               begin
-                 iRename:= True;
-               end;
+            if RenameTextConfirmDialog(NewValue, newFile, RemoveItem, Item) then
+               iRename:= True;
           end
        else
           iRename:= True;

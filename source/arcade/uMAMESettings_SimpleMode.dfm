@@ -1147,7 +1147,7 @@ object FormMAMESettings_SimpleMode: TFormMAMESettings_SimpleMode
         object VolumeLabel: TShadowLabel
           Left = 8
           Top = 40
-          Width = 75
+          Width = 74
           Height = 16
           Hint = 'Volume [%ddB]'
           Caption = 'Volume [0dB]'

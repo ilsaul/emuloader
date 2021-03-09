@@ -179,7 +179,7 @@ begin
     begin
       Caption:= 'Rename Image File';
       ButtonOk.Caption:= 'Rename File';
-      RenameImageEditBoxButtonReset.Click; // RenameImageEditBox.Text:= ChangeFileExtW(ExtractFileNameW(ImageFileName), '');
+      RenameImageEditBoxButtonReset.Click;
       RenameImageEditBox.SetFocus;
     end;
 end;

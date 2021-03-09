@@ -579,7 +579,7 @@ object FormImageCategorySettings: TFormImageCategorySettings
     object LabelSystemNotAvailable: TShadowLabel
       Left = 21
       Top = 61
-      Width = 141
+      Width = 138
       Height = 16
       Caption = 'SYSTEM NOT AVAILABLE'
       Color = 16448250

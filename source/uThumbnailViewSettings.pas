@@ -374,7 +374,7 @@ begin
 
   if (not FoundImg_Hor) or (not FoundImg_Vert) then
      begin
-       CallMessageBox;
+       FormMain.InitMessageBox; //CallMessageBox;
        if (not FoundImg_Hor) then
           begin
             FormMain.AddMsgText('File ');

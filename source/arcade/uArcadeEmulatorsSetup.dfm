@@ -214,7 +214,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_versioninfo: TShadowLabel
       Left = 12
       Top = 46
-      Width = 71
+      Width = 70
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
@@ -256,7 +256,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_versioninfo: TShadowLabel
       Left = 12
       Top = 119
-      Width = 71
+      Width = 70
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
@@ -363,7 +363,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_versioninfo: TShadowLabel
       Left = 12
       Top = 192
-      Width = 71
+      Width = 70
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET

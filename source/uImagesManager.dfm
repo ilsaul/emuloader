@@ -24,7 +24,7 @@ object FormImagesManager: TFormImagesManager
     Left = 604
     Top = 31
     Width = 6
-    Height = 457
+    Height = 456
     Align = alRight
     OnMoved = SplitterListMoved
     Appearance.BorderColor = clNone
@@ -42,7 +42,7 @@ object FormImagesManager: TFormImagesManager
     Left = 0
     Top = 31
     Width = 604
-    Height = 457
+    Height = 456
     Align = alClient
     BorderStyle = bsNone
     CellSizes.Report.Height = 28
@@ -133,14 +133,14 @@ object FormImagesManager: TFormImagesManager
     Left = 610
     Top = 31
     Width = 305
-    Height = 457
+    Height = 456
     Align = alRight
     BevelOuter = bvNone
     Constraints.MinWidth = 305
     TabOrder = 1
     object SplitterNotUsed: TSplitterEx
       Left = 0
-      Top = 250
+      Top = 249
       Width = 305
       Height = 7
       Cursor = crVSplit
@@ -158,7 +158,7 @@ object FormImagesManager: TFormImagesManager
     end
     object ImagePreview: TImage32
       Left = 0
-      Top = 257
+      Top = 256
       Width = 305
       Height = 200
       Align = alBottom
@@ -178,7 +178,7 @@ object FormImagesManager: TFormImagesManager
       Left = 0
       Top = 0
       Width = 305
-      Height = 250
+      Height = 249
       Align = alClient
       BorderStyle = bsNone
       CellSizes.Tile.Width = 288
@@ -453,7 +453,7 @@ object FormImagesManager: TFormImagesManager
   end
   object BottomBar: TPanelEx
     Left = 0
-    Top = 488
+    Top = 487
     Width = 915
     Height = 24
     Align = alBottom

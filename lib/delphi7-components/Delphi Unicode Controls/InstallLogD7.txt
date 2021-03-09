@@ -1,0 +1,446 @@
+***************************************
+BEGIN: Unregistering Component Package
+***************************************
+
+Reading Extra Paths from Setup.ini
+   C:\Program Files (x86)\Borland\Delphi7\components\Delphi Unicode Controls\Source
+
+Cleaning Known Package Registry Entry
+
+Reading Packages:
+c:\program files (x86)\borland\delphi7\Bin\dclnet70.bpl
+$(Delphi)\Bin\dclstd70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclmcn70.bpl
+$(Delphi)\Bin\dclmid70.bpl
+$(Delphi)\Bin\dcldb70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclocx70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclsmp70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dcldbx70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dcldbxcds70.bpl
+c:\program files (x86)\borland\delphi7\Bin\DBWEBXPRT.BPL
+$(Delphi)\Bin\dclbde70.bpl
+$(Delphi)\Bin\dbx70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclwbm70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclie70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclwebsnap70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclado70.bpl
+c:\program files (x86)\borland\delphi7\Bin\DCLIB70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dcltee70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dcldss70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclclxdb70.bpl
+$(Delphi)\Bin\dclclxstd70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclsmpedit70.bpl
+c:\program files (x86)\borland\delphi7\Bin\applet70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclemacsedit70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclact70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclmlwiz70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dcl31w70.bpl
+$(SystemRoot)\SysWOW64\ibevnt70.bpl
+c:\program files (x86)\borland\delphi7\Bin\dclshlctrls70.bpl
+$(Delphi)\ZipForge\Lib\Delphi 7\dclZipForged7.bpl
+$(Delphi)\madCollection\madBasic\Delphi 7\madBasic_.bpl
+$(Delphi)\madCollection\madBasic\Delphi 7\madHelp_.bpl
+$(Delphi)\madCollection\madDisAsm\Delphi 7\madDisAsm_.bpl
+$(Delphi)\madCollection\madExcept\Delphi 7\madExceptIde_.bpl
+$(Delphi)\madCollection\madExcept\Delphi 7\madExcept_.bpl
+$(Delphi)\madCollection\madExcept\Delphi 7\madExceptVcl_.bpl
+ 
+Stripping off path and extension
+dclnet70
+dclstd70
+dclmcn70
+dclmid70
+dcldb70
+dclocx70
+dclsmp70
+dcldbx70
+dcldbxcds70
+DBWEBXPRT
+dclbde70
+dbx70
+dclwbm70
+dclie70
+dclwebsnap70
+dclado70
+DCLIB70
+dcltee70
+dcldss70
+dclclxdb70
+dclclxstd70
+dclsmpedit70
+applet70
+dclemacsedit70
+dclact70
+dclmlwiz70
+dcl31w70
+ibevnt70
+dclshlctrls70
+dclZipForged7
+madBasic_
+madHelp_
+madDisAsm_
+madExceptIde_
+madExcept_
+madExceptVcl_
+ 
+Reading Packages to remove
+d7\TntUnicodeVcl_R70.dpk
+d7\TntUnicodeVcl_D70.dpk
+ 
+Stripping off path and extension
+d7\TntUnicodeVcl_R70
+d7\TntUnicodeVcl_D70
+ 
+Scanning for previously installed packages....
+Known Package Registry Entry Cleaned
+
+Cleaning Disabled Package Registry Entry
+
+Reading Packages:
+ 
+Stripping off path and extension
+ 
+Reading Packages to remove
+d7\TntUnicodeVcl_R70.dpk
+d7\TntUnicodeVcl_D70.dpk
+ 
+Stripping off path and extension
+d7\TntUnicodeVcl_R70
+d7\TntUnicodeVcl_D70
+ 
+Scanning for previously installed packages....
+Disabled Package Registry Entry Cleaned
+
+Reading Search Path Registry Entry
+C:\Program Files (x86)\Borland\Delphi7\ZipForge\Lib\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\Lib
+C:\Program Files (x86)\Borland\Delphi7\Bin
+C:\Program Files (x86)\Borland\Delphi7\Imports
+C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl
+C:\Program Files (x86)\Borland\Delphi7\Rave5\Lib
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madBasic\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madDisAsm\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madExcept\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madExcept\..\Plugins\win32
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madKernel\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madShell\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\components
+C:\Program Files (x86)\Borland\Delphi7\components\AdvComponents
+C:\Program Files (x86)\Borland\Delphi7\components\barmenus\Source
+C:\Program Files (x86)\Borland\Delphi7\components\FastMM
+C:\Program Files (x86)\Borland\Delphi7\components\graphicex
+C:\Program Files (x86)\Borland\Delphi7\components\graphicex\obj
+C:\Program Files (x86)\Borland\Delphi7\components\Graphics32
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\Common Library\Source
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\Common Library\Include
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\EasyListview\Source
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\EasyListview\Include
+C:\Program Files (x86)\Borland\Delphi7\components\SevenZipVCL
+C:\Program Files (x86)\Borland\Delphi7\components\XiControls
+C:\Program Files (x86)\Borland\Delphi7\components\RichEdit98
+    
+    
+Writing Search Path Registry Entry
+Removing extra characters and blank lines
+Formatting.....
+$(Delphi)\ZipForge\Lib\Delphi 7
+$(Delphi)\Lib
+$(Delphi)\Bin
+$(Delphi)\Imports
+$(Delphi)\Projects\Bpl
+$(Delphi)\Rave5\Lib
+$(Delphi)\madCollection\madBasic\Delphi 7
+$(Delphi)\madCollection\madDisAsm\Delphi 7
+$(Delphi)\madCollection\madExcept\Delphi 7
+$(Delphi)\madCollection\madExcept\..\Plugins\win32
+$(Delphi)\madCollection\madKernel\Delphi 7
+$(Delphi)\madCollection\madShell\Delphi 7
+$(Delphi)\components
+$(Delphi)\components\AdvComponents
+$(Delphi)\components\barmenus\Source
+$(Delphi)\components\FastMM
+$(Delphi)\components\graphicex
+$(Delphi)\components\graphicex\obj
+$(Delphi)\components\Graphics32
+$(Delphi)\components\Mustangpeak\Common Library\Source
+$(Delphi)\components\Mustangpeak\Common Library\Include
+$(Delphi)\components\Mustangpeak\EasyListview\Source
+$(Delphi)\components\Mustangpeak\EasyListview\Include
+$(Delphi)\components\SevenZipVCL
+$(Delphi)\components\XiControls
+$(Delphi)\components\RichEdit98
+Writing to Key: Software\Borland\Delphi\7.0\Library  Value: Search Path
+Search Path Registry Entry written
+
+Reading Browse Path Registry Entry
+C:\Program Files (x86)\Borland\Delphi7\source\vcl
+C:\Program Files (x86)\Borland\Delphi7\Source\Rtl
+C:\Program Files (x86)\Borland\Delphi7\source\rtl\Corba45
+C:\Program Files (x86)\Borland\Delphi7\source\rtl\Sys
+C:\Program Files (x86)\Borland\Delphi7\source\rtl\Win
+C:\Program Files (x86)\Borland\Delphi7\source\rtl\common
+C:\Program Files (x86)\Borland\Delphi7\source\Internet
+C:\Program Files (x86)\Borland\Delphi7\source\clx
+C:\Program Files (x86)\Borland\Delphi7\source\websnap
+C:\Program Files (x86)\Borland\Delphi7\Source\WebMidas
+C:\Program Files (x86)\Borland\Delphi7\Source\Indy
+C:\Program Files (x86)\Borland\Delphi7\Source\IntraWeb
+C:\Program Files (x86)\Borland\Delphi7\Source\Samples
+C:\Program Files (x86)\Borland\Delphi7\Source\Soap
+C:\Program Files (x86)\Borland\Delphi7\Source\ToolsAPI
+C:\Program Files (x86)\Borland\Delphi7\Source\Xml
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madBasic\Sources
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madKernel\Sources
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madShell\Sources
+    
+    
+Writing Browse Path Registry Entry
+Removing extra characters and blank lines
+Formatting.....
+$(Delphi)\source\vcl
+$(Delphi)\Source\Rtl
+$(Delphi)\source\rtl\Corba45
+$(Delphi)\source\rtl\Sys
+$(Delphi)\source\rtl\Win
+$(Delphi)\source\rtl\common
+$(Delphi)\source\Internet
+$(Delphi)\source\clx
+$(Delphi)\source\websnap
+$(Delphi)\Source\WebMidas
+$(Delphi)\Source\Indy
+$(Delphi)\Source\IntraWeb
+$(Delphi)\Source\Samples
+$(Delphi)\Source\Soap
+$(Delphi)\Source\ToolsAPI
+$(Delphi)\Source\Xml
+$(Delphi)\madCollection\madBasic\Sources
+$(Delphi)\madCollection\madKernel\Sources
+$(Delphi)\madCollection\madShell\Sources
+Writing to Key: Software\Borland\Delphi\7.0\Library  Value: Browsing Path
+Browse Path Registry Entry written
+
+***************************************
+END: Unregistering Component Package
+***************************************
+
+
+***************************************
+BEGIN: Compiling Component Package
+***************************************
+Validating Output Folders
+Creating temp compile folder
+Folder Created: C:\temp_dir\ESetup
+
+Config.ini -U Switch: C:\PROGRA~2\Borland\Delphi7\ZipForge\Lib\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\Lib;C:\PROGRA~2\Borland\Delphi7\Bin;C:\PROGRA~2\Borland\Delphi7\Imports;C:\PROGRA~2\Borland\Delphi7\Projects\Bpl;C:\Program Files (x86)\Borland\Delphi7\Rave5\Lib;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\madBasic\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADDIS~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADEXC~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADEXC~1\..\Plugins\win32;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADKER~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\madShell\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\ADVCOM~2;C:\PROGRA~2\Borland\Delphi7\COMPON~1\barmenus\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\FastMM;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~2;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~2\obj;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\COMMON~1\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\COMMON~1\Include;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Include;C:\PROGRA~2\Borland\Delphi7\COMPON~1\SEVENZ~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\XICONT~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\RICHED~1;
+Config.ini -I Switch: ..\Include
+Config.ini -LE Switch: C:\PROGRA~2\Borland\Delphi7\Projects\Bpl
+Config.ini -LN Switch: C:\PROGRA~2\Borland\Delphi7\Projects\Bpl
+Config.ini -N Switch: C:\temp_dir\ESetup
+
+Compiling....
+
+Redirector Working Dir: C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Delphi\d7
+Redirector CreateProcess command: "C:\PROGRA~2\Borland\Delphi7\Bin\DCC32.exe" TntUnicodeVcl_R70.dpk
+
+
+Borland Delphi Version 15.0
+Copyright (c) 1983,2002 Borland Software Corporation
+TntUnicodeVcl_R70.dpk(1) TntUnicodeVcl_R70.dpk(31) TntUnicodeVcl_R70.dpk(32) TntUnicodeVcl_R70.dpk(33) TntUnicodeVcl_R70.dpk(34) TntUnicodeVcl_R70.dpk(36) TntUnicodeVcl_R70.dpk(36) TntUnicodeVcl_R70.dpk(36) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(57) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(66) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(890) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\ActiveIMM_TLB.pas(1375) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(39) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(94) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(94) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(447) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(447) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(1)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(29) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(386) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(386) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(387) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)  
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(81) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(81) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(84) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrUtils.pas(452) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(388) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(388) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(388) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)    
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(38) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(38) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(1)         C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(163) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(163) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(163) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(164) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(164) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(31)      C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(31) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(278) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(278) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(279) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(279) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(279) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(279) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(298) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClasses.pas(1781) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(168) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWideStrings.pas(832) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(40) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFormatStrUtils.pas(504) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(396) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSysUtils.pas(1700) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(448) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(450) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntWindows.pas(1453) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(94) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntSystem.pas(1385) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(52) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(52) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(56) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntAxCtrls.pas(192) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClipBrd.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClipBrd.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClipBrd.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntClipBrd.pas(87) 
+TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(1)    C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(65) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(65) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(65) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(65) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(69) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(147) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(147) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(147) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(148) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(1)   C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(44) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(46) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGraphics.pas(143) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(148) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(148) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(148) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(1)      C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(127) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(128) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(203) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(203) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(203) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(207) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntActnList.pas(836) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(128) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(128) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(21)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(201) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(201) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(201) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(201) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(201) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(23)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(146) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(146) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(1)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(989) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(989) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(989) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(989) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(990) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(990) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(991) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(991) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(991) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(991) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(992) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(996) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(2205) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(2717) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdCtrls.pas(3216) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(146) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(146) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(1)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(394) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(394) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(394) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(395) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(395) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(395) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(399) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtCtrls.pas(1063) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(147) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(149) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDialogs.pas(982) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(617) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(621) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntStdActns.pas(1923) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(202) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(204) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntForms.pas(874) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(128) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(128) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(130) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntMenus.pas(1147) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(148) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(150) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntControls.pas(1100) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(32) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntFileCtrl.pas(119) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(1)  C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(96) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(97) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(97) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(97) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(97) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(99) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntButtons.pas(983) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(63) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(67) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtDlgs.pas(318) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(37) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(37) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(41) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntRegistry.pas(149) 
+TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(66) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCheckLst.pas(185) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(227) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(230) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntGrids.pas(676) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(29) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1143) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1144) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1144) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1144) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1144) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1144) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1145) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1147) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1151) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1153) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(2205) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(2717) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(3229) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(3741) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(4253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(4765) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntComCtrls.pas(5059) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(253) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(255) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDB.pas(901) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(535) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(535) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(535) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(535) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(536) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(536) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(536) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(536) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(536) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(538) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(1693) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBCtrls.pas(2196) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(245) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(245) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(245) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(245) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(246) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(250) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBGrids.pas(1176) 
+TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(441) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(441) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(445) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(669) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(1181) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntExtActns.pas(1401) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(73) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(77) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntListActns.pas(208) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(207) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBActns.pas(595) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(41) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(45) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntBandActn.pas(93) 
+TntUnicodeVcl_R70.dpk(70) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(20) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(56) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntDBLogDlg.pas(134) 
+TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(72) TntUnicodeVcl_R70.dpk(73) 
+47416 lines, 5.58 seconds, 371856 bytes code, 2049 bytes data.
+
+
+Found compiled BPL file: C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\TntUnicodeVcl_R70.bpl
+
+
+Config.ini -U Switch: C:\PROGRA~2\Borland\Delphi7\ZipForge\Lib\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\Lib;C:\PROGRA~2\Borland\Delphi7\Bin;C:\PROGRA~2\Borland\Delphi7\Imports;C:\PROGRA~2\Borland\Delphi7\Projects\Bpl;C:\Program Files (x86)\Borland\Delphi7\Rave5\Lib;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\madBasic\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADDIS~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADEXC~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADEXC~1\..\Plugins\win32;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\MADKER~1\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\MADCOL~1\madShell\DELPHI~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\ADVCOM~2;C:\PROGRA~2\Borland\Delphi7\COMPON~1\barmenus\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\FastMM;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~2;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~2\obj;C:\PROGRA~2\Borland\Delphi7\COMPON~1\GRAPHI~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\COMMON~1\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\COMMON~1\Include;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Source;C:\PROGRA~2\Borland\Delphi7\COMPON~1\MUSTAN~1\EASYLI~1\Include;C:\PROGRA~2\Borland\Delphi7\COMPON~1\SEVENZ~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\XICONT~1;C:\PROGRA~2\Borland\Delphi7\COMPON~1\RICHED~1;
+Config.ini -I Switch: ..\Include
+Config.ini -LE Switch: C:\PROGRA~2\Borland\Delphi7\Projects\Bpl
+Config.ini -LN Switch: C:\PROGRA~2\Borland\Delphi7\Projects\Bpl
+Config.ini -N Switch: C:\temp_dir\ESetup
+
+Compiling....
+
+Redirector Working Dir: C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Delphi\d7
+Redirector CreateProcess command: "C:\PROGRA~2\Borland\Delphi7\Bin\DCC32.exe" TntUnicodeVcl_D70.dpk
+
+
+Borland Delphi Version 15.0
+Copyright (c) 1983,2002 Borland Software Corporation
+TntUnicodeVcl_D70.dpk(1) TntUnicodeVcl_D70.dpk(42) TntUnicodeVcl_D70.dpk(43) TntUnicodeVcl_R70.dpk(1)  TntUnicodeVcl_R70.dpk(31) TntUnicodeVcl_R70.dpk(32) TntUnicodeVcl_R70.dpk(33) TntUnicodeVcl_R70.dpk(34) TntUnicodeVcl_R70.dpk(36) TntUnicodeVcl_R70.dpk(36) TntUnicodeVcl_R70.dpk(36) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(70) TntUnicodeVcl_R70.dpk(72) TntUnicodeVcl_R70.dpk(73) 
+TntUnicodeVcl_D70.dpk(45) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)  
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(59) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(61) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntForms_Design.pas(423) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)     
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(60) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)          
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(53) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDesignEditors_Design.pas(197) 
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(62) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntComCtrls_Design.pas(229) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)    
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(19) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(36) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntDBGrids_Design.pas(59) 
+TntUnicodeVcl_D70.dpk(54) TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)               
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(28) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(28) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(28) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(30) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(81) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(83) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntWideStringProperty_Design.pas(401) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)  
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(32) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(32) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(32) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(33) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(34) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(36) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(49) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(49) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(49) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(50) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(50) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(50) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(50) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(50) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(52) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntMenus_Design.pas(392) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)    
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(21) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(22) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(79) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(80) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(82) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntStrEdit_Design.pas(420) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)         
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(26) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(29) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntUnicodeVcl_Register.pas(133) 
+TntUnicodeVcl_D70.dpk(54) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(1) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Source\TntCompilers.inc(356)    
+C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(23) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(24) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(25) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(27) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(157) C:\PROGRA~2\Borland\Delphi7\COMPON~1\DELPHI~1\Design\TntActions_Design.pas(184) 
+TntUnicodeVcl_D70.dpk(54) TntUnicodeVcl_D70.dpk(56) TntUnicodeVcl_D70.dpk(57) 
+5774 lines, 2.53 seconds, 26784 bytes code, 241 bytes data.
+
+
+Found compiled BPL file: C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\TntUnicodeVcl_D70.bpl
+
+
+ 
+Adding Package BPL to Registry
+Adding: $(Delphi)\Projects\Bpl\TntUnicodeVcl_D70.bpl
+***************************************
+END: Compiling Component Package
+***************************************
+
+***************************************
+BEGIN: Registering Component Package Paths
+***************************************
+
+Reading Search Path Registry Entry
+Search Path Registry Entry Read...
+C:\Program Files (x86)\Borland\Delphi7\ZipForge\Lib\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\Lib
+C:\Program Files (x86)\Borland\Delphi7\Bin
+C:\Program Files (x86)\Borland\Delphi7\Imports
+C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl
+C:\Program Files (x86)\Borland\Delphi7\Rave5\Lib
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madBasic\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madDisAsm\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madExcept\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madExcept\..\Plugins\win32
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madKernel\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\madCollection\madShell\Delphi 7
+C:\Program Files (x86)\Borland\Delphi7\components
+C:\Program Files (x86)\Borland\Delphi7\components\AdvComponents
+C:\Program Files (x86)\Borland\Delphi7\components\barmenus\Source
+C:\Program Files (x86)\Borland\Delphi7\components\FastMM
+C:\Program Files (x86)\Borland\Delphi7\components\graphicex
+C:\Program Files (x86)\Borland\Delphi7\components\graphicex\obj
+C:\Program Files (x86)\Borland\Delphi7\components\Graphics32
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\Common Library\Source
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\Common Library\Include
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\EasyListview\Source
+C:\Program Files (x86)\Borland\Delphi7\components\Mustangpeak\EasyListview\Include
+C:\Program Files (x86)\Borland\Delphi7\components\SevenZipVCL
+C:\Program Files (x86)\Borland\Delphi7\components\XiControls
+C:\Program Files (x86)\Borland\Delphi7\components\RichEdit98
+ 
+Adding Package source path:
+   C:\Program Files (x86)\Borland\Delphi7\components\Delphi Unicode Controls\Source
+
+Reading Extra Paths from Setup.ini
+   C:\Program Files (x86)\Borland\Delphi7\components\Delphi Unicode Controls\Source
+
+    
+Writing Search Path Registry Entry
+Removing extra characters and blank lines
+Formatting.....
+$(Delphi)\ZipForge\Lib\Delphi 7
+$(Delphi)\Lib
+$(Delphi)\Bin
+$(Delphi)\Imports
+$(Delphi)\Projects\Bpl
+$(Delphi)\Rave5\Lib
+$(Delphi)\madCollection\madBasic\Delphi 7
+$(Delphi)\madCollection\madDisAsm\Delphi 7
+$(Delphi)\madCollection\madExcept\Delphi 7
+$(Delphi)\madCollection\madExcept\..\Plugins\win32
+$(Delphi)\madCollection\madKernel\Delphi 7
+$(Delphi)\madCollection\madShell\Delphi 7
+$(Delphi)\components
+$(Delphi)\components\AdvComponents
+$(Delphi)\components\barmenus\Source
+$(Delphi)\components\FastMM
+$(Delphi)\components\graphicex
+$(Delphi)\components\graphicex\obj
+$(Delphi)\components\Graphics32
+$(Delphi)\components\Mustangpeak\Common Library\Source
+$(Delphi)\components\Mustangpeak\Common Library\Include
+$(Delphi)\components\Mustangpeak\EasyListview\Source
+$(Delphi)\components\Mustangpeak\EasyListview\Include
+$(Delphi)\components\SevenZipVCL
+$(Delphi)\components\XiControls
+$(Delphi)\components\RichEdit98
+$(Delphi)\components\Delphi Unicode Controls\Source
+Writing to Key: Software\Borland\Delphi\7.0\Library  Value: Search Path
+Search Path Registry Entry written
+
+***************************************
+END: Registering Component Package Paths
+***************************************
+

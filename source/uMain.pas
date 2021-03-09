@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, ZipForge, Graphics, Controls, Forms,
   Menus, ComCtrls, ToolWin, ExtCtrls, IniFiles, StdCtrls, Buttons, Dialogs,
-  FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars,
-  GR32_Resamplers {$IFDEF Ex},GR32_ResamplersEx {$ENDIF},
+  FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars, {RichEdit,}//for AppendTextW()
+  TntComCtrls, GR32_Resamplers {$IFDEF Ex},GR32_ResamplersEx {$ENDIF},
   ShellAPI, CommCtrl, JPEG, Themes, BarMenus, XPMan, UxTheme,
   URLMon, OleCtrls, SHDocVw, madExceptVcl, unitExIcon, BcDrawModule,
   BcCustomDrawModule, BcRectUtilities, ImgList, RichEditURL, AdvGroupBox, AdvOfficeButtons,
@@ -133,7 +133,7 @@ type
     FoundZipped, FoundZippedSoftList, FoundZippedSoftList_SL, Continue: Boolean;
     SoftIndex: Integer;
   end;
-    
+
   TThumbnailSettings = packed record
     Width: Integer;
     Height: Integer;
@@ -940,7 +940,6 @@ type
     PopupDeleteMAMELCDGameOptions: TMenuItem;
     CreateSupermodelXMLdatFromSourceFile1: TMenuItem;
     HelpMAMEDocumentation: TMenuItem;
-    MAMEInfoTextHolder: TRichEditURL;
     PopupPlayGameExtraParametersMAME: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState: TMenuItem;
     PopupMachinesListSidePanelFiltersSaveState_Supported: TMenuItem;
@@ -1171,6 +1170,10 @@ type
     MenuImageUseSingleBackgroundColor: TMenuItem;
     PopupImageUseSingleBackgroundColor: TMenuItem;
     MenuCustomizeSplashScreen: TMenuItem;
+    MAMEDocsText: TTntRichEdit;
+    MenuEnable4KMode2160p: TMenuItem;
+    Menu4KModeReadMeFirst: TMenuItem;
+    N63: TMenuItem;
     procedure MenuExitClick(Sender: TObject);
     procedure MenuPreferencesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1232,7 +1235,6 @@ type
     procedure PopupScanResultsAllGamesClick(Sender: TObject);
     procedure PopupScanResultsSelectedGameClick(Sender: TObject);
     procedure MenuROMsFoldersClick(Sender: TObject);
-    procedure MAMEInfoTextHolderURLClick(Sender: TObject; const URL: String);
     procedure PopupImageCenterAllSplittersClick(Sender: TObject);
     procedure GamesListViewItemFreeing(Sender: TCustomEasyListview; Item: TEasyItem);
     procedure GamesListViewItemSelectionChanged(Sender: TCustomEasyListview; Item: TEasyItem);
@@ -1470,6 +1472,8 @@ type
     procedure GamesListViewItemImageGetSize(Sender: TCustomEasyListview;
       Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
       ImageHeight: Integer);
+    procedure MAMEDocsTextURLClick(Sender: TObject; const URL: WideString);
+    procedure Menu4KModeReadMeFirstClick(Sender: TObject);
 
   { Private declarations }
   private
@@ -1823,7 +1827,6 @@ type
     procedure AddRemoveMachineToExcludedList(AddToList: Boolean);
 
     // custom systems / custom emulators / custom games
-    procedure AddEmulatorHeader(const iEmulatorFile: String = '');
     function  GameFoldersFound(CustomSystemID, CustomMediaType: Integer): Boolean;
 
     procedure UpdatePlayedCustomGame(GamePlayTime: Cardinal; ELV_ItemToUpdate: TEasyItem);
@@ -1951,7 +1954,7 @@ type
     AutoMAMEInfoDATFile, AutoHistoryDATFile, AutoStoryDATFile, AutoMarpDATFile, AutoGameInitDATFile: THashedStringList;
 
     AlignEmuGameText: TAlignment;
-    
+
     FavoriteProfile: packed array[0..1] of String; // 0 - title; 1 - filename (January 2014)
     ControlType: THashedStringList;
 
@@ -1968,6 +1971,20 @@ type
     function  ReadCustomCommandLine(const sFileFullPath: WideString; RunningGame: Boolean = False): WideString;
     procedure DeleteCustomCommandLine(const sFileName: WideString);
 
+    procedure SelectScanGamesModeHelpButton;
+
+    procedure AddGamesListHeaderConsComp;
+    procedure AddEmulatorHeaderConsComp(const iEmulatorFile: WideString = '');
+    procedure AddGamesListHeaderArcade(const GamesListVersionStr: WideString);
+    procedure AddEmulatorHeaderArcade(ShowEmulatorFileName: Boolean = False);
+    procedure AddSoftwareListHeader;
+    procedure AddAlterMAMEHeader(IndexAlterMAME: Integer; AddEmptyLineAtTop: Boolean);
+    procedure AddMAMEMachineHeader(IsArcadeGame: Boolean; const MachineStr: WideString; IsMultiSlot: Boolean = False);
+    procedure AddWarningMissROMs(SetNameStr: WideString; AddEmptyLineAtTop: Boolean = True);
+    procedure InitMessageBox;
+    procedure DeinitMessageBox;
+    procedure ChangeMsgBoxButtonCaptions;
+    
     procedure SetPanelExFrames(CheckBoxOuterBorder: TAdvOfficeCheckBoxEx; CheckBoxInnerBorder: TAdvOfficeCheckBoxEx; PanelSource: TPanelEx; PanelHeight: Integer; NightModeOnly: Boolean);
     procedure SetPanelExFrameHeight(PanelSource: TPanelEx; iSize: Integer);
     procedure SetPanelExStyle(PanelSource: TPanelEx; IsGradient: Boolean);
@@ -2110,6 +2127,7 @@ type
     function  RunMAMEExtraParameters(sysID: Byte; const iEmulatorFile, SoftlistMachineName: String): String;
     function  GetTitleMachineToUse(sysID: Integer; const iMachineName, GameName, SoftwareName: String; var ItemHolder: TEasyItem): WideString;
     function  GetAlignEmuGameText: TAlignment;
+    procedure AddCommandLineMsgBox(CommandLineStr: WideString; AddBlankLineAtTheTop: Boolean = True; AddRunPrefix: Boolean = True);
     function  ExecuteGame(RunWithAlterMAME_Index: ShortInt = -1; MAME_ExtraPamars: Boolean = False): Integer;
 
     procedure ExecuteGameCustom; // custom games, emulators and run MAME softlist games (ported from EmuCon)
@@ -2516,12 +2534,13 @@ type
                          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
                          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 
-    //function  AppendText2(ARichEdit: TRichEdit98; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
-    //                      AAlignment: TAlignment98 = taLeft; const AFontName: String = 'default'; AFontSize: Integer = -1): Integer;
-    //                      //AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
+    function  AppendTextW(ARichEdit: TTntRichEdit; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
+                          AAlignment: TAlignment = taLeftJustify; ATextBackgroundColor: TColor = -1;
+                          const AFontName: String = 'default'; AFontSize: Integer = -1; AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 
-    procedure AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
-                               iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
+    procedure AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = -1; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
+                               iFontSize: Integer = -1; const iFontName: String = 'default'; iTextBackgroundColor: TColor = -1;
+                               const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 
     // BcBarMenus
     property  DrawBuffer: TBitmap read GetDrawBuffer;
@@ -2553,7 +2572,7 @@ implementation
 
 uses
   uPreferences, uStatus,
-  uAbout, uMessageBox,
+  uAbout, uMessageBox, uMessageBox_4K,
   uGameDetails, uArcadeEmulatorsSetup,
   uZiNcSettings, uToolBarEditor,
   uControllerKeysLayout, uArcadeGamesFilter,
@@ -5797,7 +5816,7 @@ var
   CommandLine, ErrorMsgTitle, AppTitle, AssociatedApp, ManualsFolderDouble, SoftwareNameFolder: String;
   FileFullPath: WideString;
 
-  function AddEmulatorHeader: Boolean;
+  function AddEmulatorHeaderPDF: Boolean;
   begin
     AddMsgText('Associated Application   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
     AddMsgText(AppTitle+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
@@ -5830,9 +5849,9 @@ begin
   if AssociatedApp = '' then
      begin
        AppTitle:= 'error';
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        EnableMsgMediaTypeLabel(False, True);
-       AddEmulatorHeader;
+       AddEmulatorHeaderPDF;
        AddMsgText('File extension');
        AddMsgText('.pdf', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' is not associated with any application!'+#13#10+#13#10+
@@ -5964,9 +5983,9 @@ procedure TFormMain.ClearGameInfoRichEdit;
 begin
   if (not ProcessingGameDocuments) and (PopupAutomaticGameInformation.Checked) then
      begin
-       //MAMEInfoTextHolder.Lines.BeginUpdate;
-       MAMEInfoTextHolder.Lines.Clear;
-       //MAMEInfoTextHolder.Lines.EndUpdate;
+       //MAMEDocsText.Lines.BeginUpdate;
+       MAMEDocsText.Lines.Clear;
+       //MAMEDocsText.Lines.EndUpdate;
      end;
 end;
 
@@ -6018,10 +6037,10 @@ begin
        else
        if IsGameDocsSinglePanelDisplay then
        begin
-         if MenuShowImages.Checked then
-            DisplayImage;
          if ShowGameInfoValidate then
             ShowGameInfoAll;
+         if MenuShowImages.Checked then
+            DisplayImage;
        end
        else
        begin
@@ -6226,11 +6245,11 @@ begin
   if not pExecFile then
      begin
        ErrorMsg:= GetLastError;
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(#13#10+'Error Code ');
-       AddMsgText(IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg), clBlack, [fsBold]);
+       AddMsgText(IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg), MsgTxtColors.colorWarning, [fsBold]);
        GenerateMessage('Error', 'Run Process', '', 2, False, 1);
      end;
 
@@ -6900,7 +6919,7 @@ begin
   SetSelectedColorBox(FormNightMode.NightModeGameDocumentsBackgroundColor, IniFile.ReadInteger('GameDocuments', 'BackgroundColor', FormNightMode.NightModeGameDocumentsBackgroundColor.DefaultColorColor));
   if IsNightMode then
      begin
-       MAMEInfoTextHolder.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
+       MAMEDocsText.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
        SetEditExBorderStyle;
      end;
 
@@ -7332,7 +7351,7 @@ begin
            if not ShowErrorMsg then
               begin
                 if ShowFileNotFoundMessage then
-                   CallMessageBox;
+                   InitMessageBox; //CallMessageBox;
                 ShowErrorMsg:= True;
               end
            else
@@ -7343,7 +7362,7 @@ begin
 
            if ShowFileNotFoundMessage then
            begin
-             AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, clBlack, [fsBold]);
+             AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, MsgTxtColors.colorKeyTitle{clBlack}, [fsBold]);
              AddMsgText('File not found: ');
              AddMsgText(EmulatorFile[Loop], MsgTxtColors.colorWarning);
 
@@ -8482,7 +8501,7 @@ begin
     FormPreferences.GameDocsFont_Setting.Font.Style:= TFontStyles(Byte(IniFile.ReadInteger('GameDocuments', 'FontType', 0)));
     SetSelectedColorBox(FormPreferences.GameDocumentsBackgroundColor, IniFile.ReadInteger('GameDocuments', 'BackgroundColor', FormPreferences.GameDocumentsBackgroundColor.DefaultColorColor));
     if not IsNightMode then
-       MAMEInfoTextHolder.Font:= FormPreferences.GameDocsFont_Setting.Font;
+       MAMEDocsText.Font:= FormPreferences.GameDocsFont_Setting.Font;
 
     SetSelectedColorBox(FormPreferences.GameDocsBorderColor, IniFile.ReadInteger('GameDocuments', 'BorderColor', clBlack));
     FormPreferences.GameDocsShowBorder.Checked:= Boolean(IniFile.ReadInteger('GameDocuments', 'ShowBorder', 1));
@@ -9039,6 +9058,8 @@ begin
       InternetMAMESoftwareListGameInfoLink.Text:= INIFile.ReadString('Preferences', 'InternetGameSoftwareListInfoLink', 'http://www.progettoemma.net/mess/gioco.php?game=%s&list=%s');
     end;
 
+    MenuEnable4KMode2160p.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'Enable4KMode2160p', 0));
+
     FormPreferences.RestoreInternetGameInfoStartup.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'RestoreInternetGameInfoStartup', 0));
     if FormPreferences.RestoreInternetGameInfoStartup.Checked then
        ButtonInternetGameInfo.Down:= Boolean(INIFile.ReadInteger('Preferences', 'InternetGameInfoStartup', 0));
@@ -9474,6 +9495,8 @@ begin
       INIFile.WriteString('Preferences',  'NightModeProfile', NightModeProfileStr);
       INIFile.WriteInteger('Preferences', 'NightModeProfileUseColorsActiveProfile', MenuCustomizeNightModeColors.Tag);
 
+      INIFile.WriteInteger('Preferences', 'Enable4KMode2160p', Ord(MenuEnable4KMode2160p.Checked));
+
       INIFile.WriteInteger('Preferences', 'BrowseGameWithArcadeControl', MenuArcadeBrowseGames.Tag);
       INIFile.WriteInteger('Preferences', 'ArcadeSlikStik_Swap2ndStick', Ord(MenuArcadeControlSlikStik_SwapStick.Checked));
       //INIFile.WriteInteger('Preferences', 'ArcadeX-Arcade_Stick1NumLockFix', Ord(MenuArcadeControlPlayer1StickNumLockFixXArcade.Checked));
@@ -9570,16 +9593,16 @@ begin
            begin
              if not ShowMsg then
              begin
-               CallMessageBox;
+               InitMessageBox; //CallMessageBox;
                ShowMsg:= True;
              end
              else
                AddMsgText(#13#10+#13#10);
 
-             AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, clBlack, [fsBold]);
+             AddMsgText('    '+GetArcadeEmulatorDescription(Loop, True)+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
              AddMsgText('File: ');
-             AddMsgText(EmulatorFile[Loop]+#13#10, MsgTxtColors.colorWarning);
-             AddMsgText('Initialization file is missing and failed to be created.', clBlack, [fsItalic]);
+             AddMsgText(EmulatorFile[Loop]+#13#10, MsgTxtColors.colorFileName);
+             AddMsgText('Initialization file is missing and failed to be created.', MsgTxtColors.colorWarning, [fsItalic]);
 
              Result:= False;
            end;
@@ -10559,7 +10582,7 @@ begin
      ROMsList.SaveToFile(GetGamesFolderEL+GetSystemFileName(idSupermodel, 1))
   else
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('ROMs list file ');
        AddMsgText(GetGamesFolderEL+GetSystemFileName(idSupermodel, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
@@ -10616,6 +10639,37 @@ end;
 
 procedure TFormMain.ShowGameNameEntryMsgBox(MultiSlot: Boolean = False; const MultiSlotMachineName: String = '');
 begin
+  if Assigned(FormMessageBox) then
+     with FormMessageBox do
+  else
+  if Assigned(FormMessageBox4K) then
+     with FormMessageBox4K do
+
+  begin
+    if not MultiSlot then
+       begin
+         IconMediaType.Visible:= True;
+         LabelGameName.Visible:= True;
+         LabelGameName.Canvas.Lock;
+         LabelGameName.Caption:= {'name: '+}StatusBar_GamesGameName.Caption;
+         // MAME merged set status
+         if MemGameInfo.eIsMerged then
+            LabelGameName.Caption:= LabelGameName.Caption;
+         if MemGameInfo.eSoftwareUsageTip <> '' then
+            LabelGameName.Caption:= LabelGameName.Caption+#13#10+'usage: '+MemGameInfo.eSoftwareUsageTip;
+         LabelGameName.Canvas.UnLock;
+       end
+    else
+       begin
+         if MultiSlotMachineName <> '' then
+         begin
+           LabelGameName.Visible:= True;
+           LabelGameName.Caption:= {'name: '+}MultiSlotMachineName;
+         end;
+       end;
+    IconMediaType.Visible:= LabelGameName.Visible;
+  end;
+  exit;
   if not MultiSlot then
      begin
        FormMessageBox.IconMediaType.Visible:= True;
@@ -11018,6 +11072,123 @@ begin
      Result:= taLeftJustify
   else
      Result:= taCenter;
+end;
+
+procedure TFormMain.AddGamesListHeaderConsComp;
+var
+  TempStr: WideString;
+begin
+  TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
+  AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddEmulatorHeaderConsComp(const iEmulatorFile: WideString = '');
+begin
+  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  if iEmulatorFile = '' then
+     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS')
+  else
+     AddMsgText(iEmulatorFile+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddGamesListHeaderArcade(const GamesListVersionStr: WideString);
+begin
+  AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(GamesListVersionStr+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddEmulatorHeaderArcade(ShowEmulatorFileName: Boolean = False);
+begin
+  AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+
+  if ShowEmulatorFileName then
+     AddMsgText(EmulatorFile[MemGameInfo.eSystemID]+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddSoftwareListHeader;
+var
+  iText: WideString;
+begin
+  iText:= 'Software List   ';
+  if MemGameInfo.eIsCustomGame then
+     iText:= GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' '+iText;
+  AddMsgText(iText, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddAlterMAMEHeader(IndexAlterMAME: Integer; AddEmptyLineAtTop: Boolean);
+var
+  iStr: WideString;
+begin
+  case IndexAlterMAME of
+    1: iStr:= 'AlterMAME Emulator   ';
+    2: iStr:= 'AlterMAME 2 Emulator  ';
+  end;
+  if AddEmptyLineAtTop then
+     iStr:= #13#10+iStr;
+  AddMsgText(iStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(AlterMAMEVersion[IndexAlterMAME]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddMAMEMachineHeader(IsArcadeGame: Boolean; const MachineStr: WideString; IsMultiSlot: Boolean = False);
+var
+  iStr: WideString;
+begin
+  if IsMultiSlot then
+     iStr:= 'Multi-slot Machine   '
+  else
+  if IsArcadeGame then
+     iStr:= 'Machine   '
+  else
+     iStr:= 'MAME Machine   '; // Console/Computer systems
+  iStr:= #13#10+iStr;
+
+  AddMsgText(iStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+  AddMsgText(MachineStr+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+end;
+
+procedure TFormMain.AddWarningMissROMs(SetNameStr: WideString; AddEmptyLineAtTop: Boolean = True);
+var
+  iFontSize: Integer;
+  iLines: WideString;
+begin
+  iFontSize:= 10;
+  if Assigned(FormMessageBox4K) then
+     iFontSize:= FormMessageBox4K.LabelMessageW.Font.Size;
+
+  iLines:= '';
+  if AddEmptyLineAtTop then
+     iLines:= #13#10;
+  AddMsgText(iLines+'WARNING: One on more ROMs/CHDs are missing, "'+
+             SetNameStr+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, iFontSize);
+end;
+
+procedure TFormMain.AddCommandLineMsgBox(CommandLineStr: WideString; AddBlankLineAtTheTop: Boolean = True; AddRunPrefix: Boolean = True);
+var
+  iColor: TColor;
+  iRunStr: WideString;
+  FontSize: Integer;
+begin
+  FontSize:= 10;
+  if IsNightMode then
+     iColor:= MsgTxtColors.colorKeyValue
+  else
+     iColor:= clBlack;
+
+  iRunStr:= '';
+  if AddRunPrefix then
+     iRunStr:= 'run>';
+     
+  if AddBlankLineAtTheTop then
+     iRunStr:= #13#10+iRunStr;
+
+  if Assigned(FormMessageBox4K) then
+     FontSize:= FormMessageBox4K.LabelMessageW.Font.Size+2;
+
+  AddMsgText(iRunStr, iColor, [], taLeftJustify, FontSize{10}, 'Consolas');
+  AddMsgText(CommandLineStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, FontSize{10}, 'Consolas');
 end;
 
 // ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
@@ -11649,7 +11820,7 @@ begin
      begin
        if not RunWithAlterMAME[RunWithAlterMAME_Index] then
           begin
-            CallMessageBox;
+            InitMessageBox; //CallMessageBox;
             if AlterMAMEFile[RunWithAlterMAME_Index] <> '' then
                NewOption:= 'not found'
             else
@@ -11687,11 +11858,12 @@ begin
             end;
           False:
             begin
-              CallMessageBox;
+              InitMessageBox; //CallMessageBox;
               EnableMsgMediaTypeLabel(False);
-              AddEmulatorHeader;
-              AddMsgText('    Game file ');
-              AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
+              AddGamesListHeaderConsComp;
+              AddEmulatorHeaderConsComp;
+              AddMsgText(#13#10+'    Game file ');
+              AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName);
               AddMsgText(' was not found!');
               if not GameFoldersFound(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType) then
                  AddMsgText(' Games folders are empty or not selected.');
@@ -11918,8 +12090,10 @@ begin
                     NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
                     if NewOption = '' then
                        begin
-                         CallMessageBox;
+                         InitMessageBox; //CallMessageBox;
                          ShowGameNameEntryMsgBox;
+                         AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
+                         AddEmulatorHeaderArcade;
                          GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle,
                                          'Cannot execute because the game file was not found. Aborting...', 2, False, 0);
 
@@ -11982,7 +12156,7 @@ begin
                        CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc stores game index in "eScreenType" var
                     else
                        begin
-                         CallMessageBox;
+                         InitMessageBox; // CallMessageBox;
                          ShowGameNameEntryMsgBox;
                          case IsROM_Bios(MemGameInfo.eROMIdentification) of
                            True : GenerateMessage(msgBoxTitle, MemGameInfo.eTitle,
@@ -12059,53 +12233,33 @@ begin
 
       if MenuViewEmulatorFullCommandLine.Checked or IsDemulEmptySystem then
          begin
-           CallMessageBox;
+           InitMessageBox; // CallMessageBox;
            case MemGameInfo.eIsCustomGame of
              True : EnableMsgMediaTypeLabel(False);
              False: ShowGameNameEntryMsgBox(IsMultiSlot, MultiSlotMachineName);
            end;
 
-           FormMessageBox.ButtonYes.Caption:= 'Execute';
-           FormMessageBox.ButtonNo.Caption:= 'Abort';
+           ChangeMsgBoxButtonCaptions;
+           //FormMessageBox.ButtonYes.Caption:= 'Execute';
+           //FormMessageBox.ButtonNo.Caption:= 'Abort';
 
            case MemGameInfo.eIsCustomGame of
-             True :
-               begin
-                 TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-               end;
-             False:
-               begin
-                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-               end;
+             True : AddGamesListHeaderConsComp;
+             False: AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
            end;
 
            if RunWithAlterMAME[1] then
-              begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end
+              AddAlterMAMEHeader(1, False)
            else
            if RunWithAlterMAME[2] then
-              begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end
+              AddAlterMAMEHeader(2, False)
            else
-              begin
-                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end;
+              AddEmulatorHeaderArcade;
 
            if IsMultiSlot then
               begin
                 if MachineToUse_Title <> '' then
-                   begin
-                     AddMsgText(#13#10+'Multi-slot Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                     AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                   end;
+                   AddMAMEMachineHeader(True, MachineToUse_Title+#13#10, True);
 
                 msItem:= FormArcadeMultiSlotGames.GamesList.Groups.FirstItem;
                 repeat
@@ -12116,36 +12270,30 @@ begin
                     else
                        NewOption:= IntToStr(msItem.Index+1);
                                       // two leading zeroes
-                    AddMsgText(#13#10+NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [], taLeftJustify);
-                    AddMsgText(msItem.Captions[1], clBlack, [], taLeftJustify);
+                    AddMsgText(NewOption+' ', MsgTxtColors.colorMachineMultiSlot, [], taLeftJustify);
+                    AddMsgText(msItem.Captions[1]+#13#10, MsgTxtColors.colorKeyValue, [], taLeftJustify);
                   end;
 
                   msItem:= FormArcadeMultiSlotGames.GamesList.Groups.NextItem(msItem);
                 until msItem = nil;
                 FreeAndNil(FormArcadeMultiSlotGames);
-                AddMsgText(#13#10);
               end;
 
            if not MemGameInfo.eIsCustomGame then
               begin
                  if MemGameInfo.eSoftwareName <> '' then
                     begin
-                      AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                      AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-
-                      AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                      AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                      AddMAMEMachineHeader(True, MachineToUse_Title, False);
+                      AddSoftwareListHeader;
                     end;
               end
            else
               begin
-                AddMsgText(#13#10+'MAME Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMAMEMachineHeader(False, MachineToUse_Title, False);
               end;
 
            if not IsDemulEmptySystem then
-              //AddMsgText(#13#10+CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas')
-              AddMsgText(#13#10+AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFile), MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas')
+              AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFile))
            else
               AddMsgText(#13#10+'    The system name is blank, Demul cannot run games without it. If this is a playable game, '+
                          'please post a message in the forum or contact by e-mail.'+#13#10+#13#10+
@@ -12155,31 +12303,25 @@ begin
 
            if (not RunWithAlterMAME[1]) and TryAgainAlterMAME[1] then
               begin
-                AddMsgText(#13#10+#13#10);
-                AddMsgText('AlterMAME will be used to run "'+MemGameInfo.eName+'" if it fails '+
-                           'to load with MAME.'+#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator  ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddAlterMAMEHeader(1, True);
+                AddMsgText('Will be used if it fails to load with MAME'+#13#10, -1, [], ALignEmuGameText);
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[1], [rfIgnoreCase]);
                 if IsBatchFileAlterMAME[1] then
                    NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
 
-                AddMsgText(#13#10+AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[1]), MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[1]));
               end;
            if (not RunWithAlterMAME[2]) and TryAgainAlterMAME[2] then
               begin
-                AddMsgText(#13#10+#13#10);
-                AddMsgText('AlterMAME 2 will be used to run "'+MemGameInfo.eName+'" if it fails '+
-                           'to load with AlterMAME.'+#13#10);
-                AddMsgText(#13#10+'AlterMAME 2 Emulator  ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddAlterMAMEHeader(2, True);
+                AddMsgText('Will be used if it fails to load with AlterMAME'+#13#10, -1, [], AlignEmuGameText);
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[2], [rfIgnoreCase]);
                 if IsBatchFileAlterMAME[2] then
                    NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
 
-                AddMsgText(#13#10+AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[2]), MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[2]));
               end;
            if not IsMultiSlot then
               begin
@@ -12187,14 +12329,13 @@ begin
                 begin
                   if (MemGameInfo.eGameSetStatus > 0) then
                      begin
-                       AddMsgText(#13#10);
-                       AddMsgText(#13#10+'WARNING: One on more ROMs/CHDs are missing, "'+
-                                  MemGameInfo.eName+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
+                       AddWarningMissROMs(MemGameInfo.eName);
+                       //AddMsgText(#13#10+'WARNING: One on more ROMs/CHDs are missing, "'+
+                       //           MemGameInfo.eName+'" might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                      end
                   else
                      if (MemGameInfo.eSystemID = idZiNc) and (NewOption = '') then
                         begin
-                          AddMsgText(#13#10);
                           AddMsgText(#13#10+'WARNING: Zip file was not found. "'+MemGameInfo.eName+'" cannot be run!'+
                                      #13#10+'ZiNc might return "Error 1: Incorrect Function" message.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                         end;
@@ -12202,11 +12343,12 @@ begin
 
                 if (MAMEMachineItem <> nil) and (TEasyGameInfo(MAMEMachineItem).eGameSetStatus > 0) then
                    begin
-                     if MemGameInfo.eGameSetStatus = 0 then
-                        AddMsgText(#13#10+#13#10);
+                     AddWarningMissROMs(MachineNameStr, (MemGameInfo.eGameSetStatus = 0));//, (MemGameInfo.eGameSetStatus = 0));
 
-                     AddMsgText('WARNING: One on more ROMs/CHDs are missing, "'+
-                                MachineNameStr+'" machine might not run properly!'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
+                     //NewOption:= 'WARNING: One on more ROMs/CHDs are missing, "'+MachineNameStr+'" machine might not run properly!'+#13#10;
+                     //if MemGameInfo.eGameSetStatus = 0 then
+                     //   NewOption:= #13#10+NewOption;
+                     //AddMsgText(NewOption, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText, 10);
                    end;
               end;
 
@@ -12357,55 +12499,33 @@ begin
          end
       else
          begin
-           CallMessageBox;
+           InitMessageBox; //CallMessageBox;
            case MemGameInfo.eIsCustomGame of
              True : EnableMsgMediaTypeLabel(False);
              False: ShowGameNameEntryMsgBox;
            end;
 
            case MemGameInfo.eIsCustomGame of
-             True:
-               begin
-                 TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-                 AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-               end;
-             False:
-               begin
-                 AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                 AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-               end;
+             True : AddGamesListHeaderConsComp;
+             False: AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
            end;
 
            if (RunWithAlterMAME[1] and (not TryAgainAlterMAME[1])) then
-              begin
-                AddMsgText('AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end
+              AddAlterMAMEHeader(1, False)
            else
            if (RunWithAlterMAME[2] and (not TryAgainAlterMAME[2])) then
-              begin
-                AddMsgText('AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end
+              AddAlterMAMEHeader(2, False)
            else
-              begin
-                AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-              end;
+              AddEmulatorHeaderArcade;
 
            if not MemGameInfo.eIsCustomGame then
               begin
                 if MemGameInfo.eSoftwareName <> '' then
-                   begin
-                     AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                     AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                   end;
+                   AddMAMEMachineHeader(True, MemGameInfo.eCategory, False);
               end
            else
               begin
-                AddMsgText(#13#10+'Machine   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(MachineToUse_Title+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddMAMEMachineHeader(False, MachineToUse_Title, False);
                 AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
               end;
 
@@ -12436,8 +12556,7 @@ begin
               begin
                 //if ExitCodeAlterMAME[1] <> 2 then // if ExitCode <> 2 then
                 //   AddMsgText(#13#10);
-                AddMsgText(#13#10+'AlterMAME Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[1]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddAlterMAMEHeader(1, True);
 
                 if ExitCodeAlterMAME[1] <> 0 then
                    begin
@@ -12467,8 +12586,7 @@ begin
               begin
                 //if ExitCodeAlterMAME[2] <> 2 then // if ExitCode <> 2 then
                 //   AddMsgText(#13#10);
-                AddMsgText(#13#10+'AlterMAME 2 Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-                AddMsgText(AlterMAMEVersion[2]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+                AddAlterMAMEHeader(2, True);
 
                 if ExitCodeAlterMAME[2] <> 0 then
                    begin
@@ -12499,12 +12617,11 @@ begin
                 if (RunWithAlterMAME[1] and (ExitCodeAlterMAME[1] = 0)) or (RunWithAlterMAME[2] and (ExitCodeAlterMAME[2] = 0)) then
                    AddMsgText(#13#10);
                 if (MemGameInfo.eSoftwareName = '') and (not MemGameInfo.eIsCustomGame) then
-                   AddMsgText(#13#10+'Please check for missing ROMs/CHDs. Would you like to '+
-                              'view ROMs/CHDs details now ?')
+                   AddMsgText(#13#10+'Check for missing ROMs/CHDs. Would you like to view ROMs/CHDs details now ?')
                 else
                    begin
                      // need to use MAMEMachineItem var here and use TempGameVars variables in GameDetails screen...
-                     AddMsgText(#13#10+'Please check for missing ROMs/CHDs and make sure the machine ');
+                     AddMsgText(#13#10+'Check for missing ROMs/CHDs and make sure the machine ');
                      AddMsgText(MachineToUse_Title, MsgTxtColors.colorMachineName);//, [fsItalic]); // colorMachineMultiSlot
                      AddMsgText(' ('+MachineNameStr+') ');
                      AddMsgText('doesn''t have missing ROMs/CHDs. Would you like to view ROMs/CHDs details now ?');
@@ -12524,8 +12641,10 @@ begin
 end;
 
 procedure TFormMain.EnableMsgMediaTypeLabel(MountImage: Boolean; AssociatedApplication: Boolean = False);
+var
+  iForm: TForm;
 begin
-  FormMessageBox.IconMediaType.Tag:= 0;
+  //FormMessageBox.IconMediaType.Tag:= 0;
 
   //need to improve the media icon... it will display system icon for arcade games ??????
   //perhaps make it always visible ????
@@ -12534,8 +12653,15 @@ begin
   // 3: Floppy Disk
   // 4: Cassette Tape
   // 5: Hard Disk Drive
-  with FormMessageBox do
+  if Assigned(FormMessageBox) then
+     with FormMessagebox do
+  else
+  if Assigned(FormMessageBox4K) then
+     with FormMessageBox4K do
+
+  //with FormMessageBox do
   begin
+    IconMediaType.Tag:= 0;
     IconMediaType.Visible:= True;
     LabelGameName.Visible:= True;
 
@@ -12600,24 +12726,46 @@ begin
      HideFilterMsgBox;
 end;
 
-procedure TFormMain.AddEmulatorHeader(const iEmulatorFile: String = '');
+procedure TFormMain.InitMessageBox;
 begin
-  AddMsgText('Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+'   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-  if iEmulatorFile = '' then
-     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS')
+  if MenuEnable4KMode2160p.Checked then
+     CallMessageBox4K
   else
-     AddMsgText(iEmulatorFile+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-  AddMsgText(#13#10);
+     CallMessageBox;
+end;
+
+procedure TFormMain.DeinitMessageBox;
+begin
+  if Assigned(FormMessageBox4K) then
+     FreeMessageBox4K
+  else
+     FreeMessageBox;
+end;
+
+procedure TFormMain.ChangeMsgBoxButtonCaptions;
+begin
+  if Assigned(FormMessageBox) then
+     with FormMessageBox do
+  else
+  if Assigned(FormMessageBox4K) then
+     with FormMessageBox4K do
+
+  begin
+    ButtonYes.Caption:= 'Execute';
+    ButtonNo.Caption:= 'Abort';
+  end;
+  //FormMessageBox.ButtonYes.Caption:= 'Execute';
+  //FormMessageBox.ButtonNo.Caption:= 'Abort';
 end;
 
 procedure TFormMain.ExecuteGameCustom;
 const
-  WinViceFlipDisk: String = ' -flipname "%s"'; // Commodore 64 for multi-floppy disk games
+  WinViceFlipDisk: WideString = ' -flipname "%s"'; // Commodore 64 for multi-floppy disk games
 var
   CommandLine, EmuParameters, MultiFloppyParameter, txtString: WideString;
   EmulatorString, ErrorMsgTitle,
   MountImageStr, UnmountImageStr: WideString;
-  GameFileExt, TempStr: String;
+  GameFileExt, TempStr: WideString;
   Continue, UseVirtualDrive, IsBatchFile, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;
   ExtraParameters, ExtraDefaultParameters: TMemIniFile;
   IsJavaPSPEmu, IsWinApeEmu: Boolean;
@@ -12681,12 +12829,11 @@ var
       // read first 4 bytes of file to validate 'C' 'A' 'R' 'T' tag for Atari800, Atari800Win, Altirra
       Result:= ReadAtari800CartTypeTag(TempGameVars.eName);
     end;
-
   begin
     Result:= (MemGameInfo.eCustomSystemID = 48) and (MemGameInfo.eCustomMediaType = 1);
     if not Result then Exit;
 
-    tmpFileSize:= MemGameInfo.eGameSize div 1024;
+    tmpFileSize:= MemGameInfo.eGameSize div 1024; // size is KBytes
     if IsAtari800Emu(ExtractFileName(EmulatorString)) then
     begin
       // need to check if cartridge is a executable
@@ -12708,8 +12855,13 @@ var
           256: CommandLine:= CommandLine+' -cart-type 23'; // XEGS 256 KB cartridge
           512: CommandLine:= CommandLine+' -cart-type 24'; // XEGS 512 KB cartridge
          1024: CommandLine:= CommandLine+' -cart-type 25'; // XEGS 1 MB cartridge
-            2: CommandLine:= CommandLine+' -cart-type 57';  // Standard 2 KB cartridge ... November 2013
-            4: CommandLine:= CommandLine+' -cart-type 58';  // Standard 4 KB cartridge ... November 2013
+            2: CommandLine:= CommandLine+' -cart-type 57'; // Standard 2 KB cartridge ......... November 2013
+            4: CommandLine:= CommandLine+' -cart-type 58'; // Standard 4 KB cartridge ......... November 2013
+       131072: CommandLine:= CommandLine+' -cart-type 62'; // The!Cart 128 MB cartridge ....... March 2021
+         4096: CommandLine:= CommandLine+' -cart-type 63'; // Flash MegaCart 4 MB cartridge ... March 2021
+         2048: CommandLine:= CommandLine+' -cart-type 64'; // MegaCart 2 MB cartridge ......... March 2021
+        32768: CommandLine:= CommandLine+' -cart-type 65'; // The!Cart 32 MB cartridge ........ March 2021
+        65536: CommandLine:= CommandLine+' -cart-type 66'; // The!Cart 64 MB cartridge ........ March 2021
         else
           Exit;
         end;
@@ -12731,8 +12883,13 @@ var
            256: CommandLine:= CommandLine+' /cartmapper 23'; // XEGS 256 KB cartridge
            512: CommandLine:= CommandLine+' /cartmapper 24'; // XEGS 512 KB cartridge
           1024: CommandLine:= CommandLine+' /cartmapper 25'; // XEGS 1 MB cartridge
-             2: CommandLine:= CommandLine+' /cartmapper 57';  // Standard 2 KB cartridge
-             4: CommandLine:= CommandLine+' /cartmapper 58';  // Standard 4 KB cartridge
+             2: CommandLine:= CommandLine+' /cartmapper 57'; // Standard 2 KB cartridge
+             4: CommandLine:= CommandLine+' /cartmapper 58'; // Standard 4 KB cartridge
+        131072: CommandLine:= CommandLine+' /cartmapper 62'; // The!Cart 128 MB cartridge ....... March 2021
+          4096: CommandLine:= CommandLine+' /cartmapper 63'; // Flash MegaCart 4 MB cartridge ... March 2021
+          2048: CommandLine:= CommandLine+' /cartmapper 64'; // MegaCart 2 MB cartridge ......... March 2021
+         32768: CommandLine:= CommandLine+' /cartmapper 65'; // The!Cart 32 MB cartridge ........ March 2021
+         65536: CommandLine:= CommandLine+' /cartmapper 66'; // The!Cart 64 MB cartridge ........ March 2021
          else
            Exit;
          end;
@@ -12755,11 +12912,12 @@ var
       begin
       tmpCartStr:= '';
       case TmpFileSize of
-          2: tmpCartStr:= '-carttype 2k'; // Standard 2 KB cartridge ... November 2013
-          4: tmpCartStr:= '-carttype 4k'; // Standard 4 KB cartridge ... November 2013
-          8: tmpCartStr:= '-carttype 8k'; // Standard 8 KB cartridge
-         16: Exit;//tmpCartStr:= '';  // Standard 16 KB cartridge
+          2: tmpCartStr:= '-carttype 2k';  // Standard 2 KB cartridge ... November 2013
+          4: tmpCartStr:= '-carttype 4k';  // Standard 4 KB cartridge ... November 2013
+          8: tmpCartStr:= '-carttype 8k';  // Standard 8 KB cartridge
+       //16: tmpCartStr:= '-carttype 16k'; // Standard 16 KB cartridge ... March 2021
          40: tmpCartStr:= '-carttype bountybob'; // Bounty Bob Strikes Back 40 KB cartridge
+       //64: tmpCartStr:= '-carttype sdx'; // Standard 64 KB cartridge ... March 2021
       else
          tmpCartStr:= '-carttype xegs'; // XEGS 32 KB, 64 KB, 128 KB, 256KB, 512 KB, 1 MB cartridges
       end;
@@ -12861,10 +13019,11 @@ begin
     True: ExtraParameters:= TMemIniFile.Create(GetEmuParametersFile);
     False:
       begin
-        CallMessageBox;
+        InitMessageBox; // CallMessageBox;
         EnableMsgMediaTypeLabel(((MemGameInfo.eCustomMediaType = 2) and (EmulatorMountVirtualDrive[MemGameInfo.eCustomSystemID])));
-        AddEmulatorHeader;
-        AddMsgText('    File ');
+        AddGamesListHeaderConsComp;
+        AddEmulatorHeaderConsComp;
+        AddMsgText(#13#10+'    File ');
         AddMsgText(GetEmuParametersFile, MsgTxtColors.colorFileName, [fsBold]);
         AddMsgText(' was not found! The frontend can''t function properly without it. Aborting...');
         GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
@@ -12874,17 +13033,19 @@ begin
 
   if not GetEmulatorFile then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        EnableMsgMediaTypeLabel(((MemGameInfo.eCustomMediaType = 2) and (EmulatorMountVirtualDrive[MemGameInfo.eCustomSystemID])));
+       AddGamesListHeaderConsComp;
        if EmulatorString <> '' then
           begin
-            AddEmulatorHeader;
-            AddMsgText(EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            // AddEmulatorHeaderConsComp; // cannot be used here
+            AddCommandLineMsgBox(EmulatorString);
+            //AddMsgText(#13#10+EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
             AddMsgText(#13#10+'    Emulator file not found! Please make sure the file exists or select another emulator before running games.');
           end
        else
           begin
-            AddMsgText('    Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+
+            AddMsgText(#13#10+'    Emulator '+IntToStr(EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID])+
                        ' not selected. Please select one before running games. You can also try to run this game with MAME.');
           end;
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
@@ -12938,11 +13099,12 @@ begin
              IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
              if not IsFileFound then
                 begin
-                  CallMessageBox;
+                  InitMessageBox; //CallMessageBox;
                   EnableMsgMediaTypeLabel(False);
-                  AddEmulatorHeader;
-                  AddMsgText('    Game file ');
-                  AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
+                  AddGamesListHeaderConsComp;
+                  AddEmulatorHeaderConsComp;
+                  AddMsgText(#13#10+'    Game file ');
+                  AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName);//, [fsBold]);
                   AddMsgText(' was not found! The main floppy disk could not be located.');
                   if not GameFoldersFound(MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType) then
                      AddMsgText(' Games folders are empty or not selected.');
@@ -12972,19 +13134,21 @@ begin
                    ReadDaemonToolsSettings(True);
                    if not FileExistsW(VirtualDriveFile) then
                       begin
-                        CallMessageBox;
+                        InitMessageBox; //CallMessageBox;
                         EnableMsgMediaTypeLabel(UseVirtualDrive);
-                        AddEmulatorHeader;
-                        AddMsgText('    The virtual drive executable file could not be found '+
+                        AddGamesListHeaderConsComp;
+                        AddEmulatorHeaderConsComp;
+
+                        AddMsgText(#13#10+'    The virtual drive executable file could not be found '+
                                    'or hasn''t been selected yet. Please go to ');
-                        AddMsgText('Emulator Setup', clBlack, [fsBold]);
+                        AddMsgText('Emulator Setup', MsgTxtColors.colorKeyTitle, [fsBold]);
                         AddMsgText(' screen to select a file.'+#13#10+#13#10+
                                    '    Officially supported virtual drive tools are:'+#13#10);
-                        AddMsgText('Daemon Tools ', clBlack, [fsBold]);
-                        AddMsgText('http://www.daemon-tools.cc', MsgTxtColors.colorFileName);
-                        AddMsgText(#13#10+'Elby Virtual CloneDrive ', clBlack, [fsBold]);
+                        AddMsgText('Daemon Tools ', MsgTxtColors.colorExitCode, [fsBold]);
+                        AddMsgText('http://www.daemon-tools.cc');//, MsgTxtColors.colorExitCode);
+                        AddMsgText(#13#10+'Elby Virtual CloneDrive ', MsgTxtColors.colorExitCode, [fsBold]);
                         AddMsgText('http://www.slysoft.com', MsgTxtColors.colorFileName);
-                        AddMsgText(#13#10+'Alcohol 120% ', clBlack, [fsBold]);
+                        AddMsgText(#13#10+'Alcohol 120% ', MsgTxtColors.colorExitCode, [fsBold]);
                         AddMsgText('http://www.alcohol-soft.com', MsgTxtColors.colorFileName);
                         AddMsgText(#13#10+#13#10+'This feature is for disc images only. Aborting...');
 
@@ -13032,11 +13196,12 @@ begin
 
         if not IsFileFound then
            begin
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              EnableMsgMediaTypeLabel(UseVirtualDrive);
-             AddEmulatorHeader;
-             AddMsgText('    Game file ');
-             AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
+             AddGamesListHeaderConsComp;
+             AddEmulatorHeaderConsComp;
+             AddMsgText(#13#10+'    Game file ');
+             AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName);
              AddMsgText(' was not found!');
              case MemGameInfo.eIsCustomGame of
                True:
@@ -13072,10 +13237,12 @@ begin
                         TempGameVars.eName:= '/SMC='+TempGameVars.eName
                      else
                         begin
-                          CallMessageBox;
+                          InitMessageBox; //CallMessageBox;
                           EnableMsgMediaTypeLabel(UseVirtualDrive);
-                          AddEmulatorHeader;
-                          AddMsgText('    File extension ');
+                          AddGamesListHeaderConsComp;
+                          AddEmulatorHeaderConsComp;
+                          
+                          AddMsgText(#13#10+'    File extension ');
                           AddMsgText(LowerCase(GameFileExt), MsgTxtColors.colorFileName, [fsBold]);
                           AddMsgText(' not supported. Valid file extensions are: ');
                           AddMsgText('.gxb', MsgTxtColors.colorFileName, [fsBold]);
@@ -13113,7 +13280,7 @@ begin
                      begin
                        // for Commodore 64 and Commodore 128
                        // search for fliplist file, for floppy disks only (WinVICE emulator only)
-                       TempGameVars.eName:= GetFolderFull(38)+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+'\'+
+                       TempGameVars.eName:= WideString(GetFolderFull(38)+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+'\')+
                                             ChangeFileExtW(ExtractFileNameW(MemGameInfo.eName), '.vfl'); // WinVICE flip list file
                        if FileExistsW(TempGameVars.eName) then
                           CommandLine:= CommandLine+WideFormat(WinViceFlipDisk, [TempGameVars.eName]);
@@ -13181,10 +13348,13 @@ begin
       end;
     False:
       begin
-        CallMessageBox;
+        InitMessageBox; //CallMessageBox;
         EnableMsgMediaTypeLabel(UseVirtualDrive);
-        AddEmulatorHeader;
-        AddMsgText(EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+        AddGamesListHeaderConsComp;
+        AddEmulatorHeaderConsComp;
+
+        AddCommandLineMsgBox(EmulatorString);
+        //AddMsgText(#13#10+EmulatorString+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
         AddMsgText(#13#10+'    No parameters were found. Please make sure the emulator parameter is not empty. '+
                    'Also check the selected parameter (1 or 2) in the main tool bar buttons.'+#13#10+#13#10+
                    'If the game is a disc image, check if the emulator requires or not a parameter to load the game.');
@@ -13240,7 +13410,7 @@ begin
          59: // Amstrad CPC
            begin
              if IsWinApeEmu then
-                CommandLine:= Format(CommandLine, [TempGameVars.eName]);
+                CommandLine:= WideFormat(CommandLine, [TempGameVars.eName]);
            end;
        end;
      end;
@@ -13256,44 +13426,47 @@ begin
          True : ErrorMsgTitle:= 'Run '+GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Game: '+SystemsListCustom[MemGameInfo.eCustomSystemID, 0];
          False: ErrorMsgTitle:= 'Run Game: '+SystemsListCustom[MemGameInfo.eCustomSystemID, 0];
        end;
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
+              
        case MemGameInfo.eIsCustomGame of
          True:
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
-             TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddGamesListHeaderConsComp;
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
+             AddSoftwareListHeader;
+             //AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
        end;
-       
-       AddEmulatorHeader;
-       FormMessageBox.ButtonYes.Caption:= 'Execute';
-       FormMessageBox.ButtonNo.Caption:= 'Abort';
+
+       AddEmulatorHeaderConsComp;
+
+       ChangeMsgBoxButtonCaptions;
+       //FormMessageBox.ButtonYes.Caption:= 'Execute';
+       //FormMessageBox.ButtonNo.Caption:= 'Abort';
 
        if UseVirtualDrive then
           begin
-            AddMsgText('Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
-            AddMsgText(UnmountImageStr+#13#10+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Mount Image On Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
-            AddMsgText(MountImageStr+#13#10#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
-            AddMsgText('Execute Emulator'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
-            AddMsgText(CommandLine+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
             AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
-            AddMsgText(UnmountImageStr, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddCommandLineMsgBox(UnmountImageStr+#13#10, False); // AddMsgText(UnmountImageStr+#13#10+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText('Mount Image On Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
+            AddCommandLineMsgBox(MountImageStr+#13#10, False); // AddMsgText(MountImageStr+#13#10#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText('Execute Emulator'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
+            AddCommandLineMsgBox(CommandLine, False); // AddMsgText(CommandLine+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddMsgText(#13#10+'Unmount Image From Virtual Drive'+#13#10, MsgTxtColors.colorKeyTitle, [], AlignEmuGameText);
+            AddCommandLineMsgBox(UnmountImageStr, False); // AddMsgText(UnmountImageStr, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
           end
        else
           begin
-            AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+            AddCommandLineMsgBox(CommandLine); // AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
           end;
 
        Continue:= GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle,
@@ -13323,7 +13496,7 @@ begin
   IsRunningGame:= True;
   ExitCode:= RunProcess(CommandLine, True);
   IsRunningGame:= False;
-  
+
   if UseVirtualDrive then
      RunProcess(UnmountImageStr, True, SW_SHOWNORMAL); // unmount image after exiting the emulator
 
@@ -13348,34 +13521,38 @@ begin
                end;
        //   end;
 
-       CallMessageBox;
+       InitMessageBox; // CallMessageBox;
        case MemGameInfo.eIsCustomGame of
          True:
            begin
              EnableMsgMediaTypeLabel(UseVirtualDrive);
-             TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
-             AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddGamesListHeaderConsComp;
+             //TempStr:= GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Games List   ';
+             //AddMsgText(TempStr, MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
          False:
            begin
              ShowGameNameEntryMsgBox;
-             AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
+             AddSoftwareListHeader;
+             //AddMsgText('Games list   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(GetGamesListVersion(MemGameInfo.eSystemID)+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
-             AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-             AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(GetArcadeSystemIniSection(MemGameInfo.eSystemID)+' Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+             //AddMsgText(MemGameInfo.eCategory+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
            end;
        end;
-       AddEmulatorHeader;
+       AddEmulatorHeaderConsComp;
        AddMsgText(#13#10+'Error '+IntToStr(ExitCode), MsgTxtColors.colorExitCode, [fsBold]);
        AddMsgText(': '+SysErrorMessage(ExitCode)+'.');
        // check this link for most common error messages:
        // http://www.febooti.com/products/automation-workshop/online-help/events/run-dos-cmd-command/exit-codes/
        if ExitCode = 2 then
           begin
-            AddMsgText(#13#10);
-            AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText);
+            AddWarningMissROMs(MemGameInfo.eName);
+            //AddMsgText(#13#10);
+            //AddMsgText(#13#10+'Required files are missing, "'+MemGameInfo.eName+'" cannot be run.'+#13#10, MsgTxtColors.colorWarning, [fsItalic], AlignEmuGameText);
           end;
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle, '', 2);
      end;
@@ -13416,7 +13593,7 @@ begin
   if AssociatedApp = '' then
      begin
        AppTitle:= 'error';
-       CallMessageBox;
+       InitMessageBox; // CallMessageBox;
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('File extension');
@@ -13439,13 +13616,14 @@ begin
   IsFileFound:= SearchGameFile(MemGameInfo.eName, MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType, ButtonImageCUE.Down, True, TempGameVars.eName);
   if not IsFileFound then
      begin
-       CallMessageBox;
-       FormMessageBox.ButtonYes.Caption:= 'Execute';
-       FormMessageBox.ButtonNo.Caption:= 'Abort';
+       InitMessageBox;// CallMessageBox;
+       ChangeMsgBoxButtonCaptions;
+       //FormMessageBox.ButtonYes.Caption:= 'Execute';
+       //FormMessageBox.ButtonNo.Caption:= 'Abort';
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('    File ');
-       AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText(MemGameInfo.eName, MsgTxtColors.colorFileName);
        AddMsgText(' was not found! If game is located on a removable media, insert it and try again...'+#13#10+
                    'Folders list might also be blank. Select at least one folder to point the location of your games.');
        GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle);
@@ -13458,12 +13636,12 @@ begin
   if MenuViewEmulatorFullCommandLine.Checked then
      begin
        ErrorMsgTitle:= 'Run '+GetSystemTypeTitle(MemGameInfo.eCustomSystemID, False)+' Game ['+SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+']';
-       CallMessageBox;
+       InitMessageBox; // CallMessageBox;
        EnableMsgMediaTypeLabel(False, True);
        AddEmulatorHeader;
        AddMsgText('    You have chosen to run a game with the associated application.'+#13#10+
                   'The application executable was read from Windows registry.'+#13#10+#13#10);
-       AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
+       AddCommandLineMsgBox(CommandLine); //AddMsgText(CommandLine, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Consolas');
        if GenerateMessage(ErrorMsgTitle, MemGameInfo.eTitle, '', 1) = mrNo then
           begin
             ResetToFrontend;
@@ -13799,23 +13977,25 @@ begin
        Result:= FileExists(sFolder+cfgFile);
        if not Result then
           begin
-            CallMessageBox;
+            InitMessageBox; //CallMessageBox;
             EnableMsgMediaTypeLabel(False);
-            AddEmulatorHeader(emuFile);
-            AddMsgText('    The emulator config file was not found. ');
-            AddMsgText('KEGS32', clBlack, [fsBold]);
+            AddGamesListHeaderConsComp;
+            AddEmulatorHeaderConsComp(emuFile);
+            AddMsgText(#13#10+
+                       '    The emulator config file was not found. ');
+            AddMsgText('KEGS32', MsgTxtColors.colorKeyTitle, [fsBold]);
             AddMsgText(' and ');
-            AddMsgText('GSport', clBlack, [fsBold]);
+            AddMsgText('GSport', MsgTxtColors.colorKeyTitle, [fsBold]);
             AddMsgtext(' emulators do not support loading disks from the command line. Disk file names '+
                        'must be added manually in the config file.'+#13#10+#13#10+
                        '    Please make sure file ');
             AddMsgText('config.kegs', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgtext(' exist for ');
-            AddMsgText('KEGS32', clBlack, [fsBold]);
+            AddMsgText('KEGS32', MsgTxtColors.colorKeyTitle, [fsBold]);
             AddMsgtext(' emulator or ');
             AddMsgText('config.txt', MsgTxtColors.colorFileName, [fsBold]);
             AddMsgtext(' exist for ');
-            AddMsgText('GSport', clBlack, [fsBold]);
+            AddMsgText('GSport', MsgTxtColors.colorKeyTitle, [fsBold]);
             AddMsgtext(' emulator.'+#13#10+#13#10+'Aborting...');
 
             GenerateMessage('Warning! Load Floppy Game on Apple IIGS', MemGameInfo.eTitle);
@@ -13967,7 +14147,7 @@ begin
   rFile:= GetUsageRulesFile(MemGameInfo.eCustomSystemID);
   if not FileExists(rFile) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    File ');
        AddMsgText(rFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found! Cannot display the system''s usage rules.');
@@ -13978,7 +14158,8 @@ begin
      FormConsCompSystemRules:= TFormConsCompSystemRules.Create(nil);
   IL_StandardIconsExtraLarge.GetIcon(MaxGameID+MemGameInfo.eCustomSystemID, FormConsCompSystemRules.SystemIcon.Picture.Icon);
   FormConsCompSystemRules.LabelTitle.Caption:= SystemsListCustom[MemGameInfo.eCustomSystemID, 0];
-  FormConsCompSystemRules.RulesFile.Lines.LoadFromFile(rFile);
+  FormConsCompSystemRules.RulesFileW.Lines.LoadFromFile(rFile); // FormConsCompSystemRules.RulesFile.Lines.LoadFromFile(rFile);
+  FormConsCompSystemRules.RulesFileW.ReadOnly:= True;
   FormConsCompSystemRules.ShowModal;
   FreeAndNil(FormConsCompSystemRules);
 end;
@@ -14032,7 +14213,7 @@ var
     Result:= True;
     AddMsgText('    Emulator in use not supported for multiple disks: '+#13#10);
     AddMsgText(EmulatorVersionCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
-    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold]);//, fsItalic]);
+    AddMsgText(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold]);
   end;
 
 begin
@@ -14048,46 +14229,46 @@ begin
 
   if not Result then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        if MemGameInfo.eCustomMediaType = IsFloppy then
           AddMsgText('    Multiple floppy disks loading is only supported on following ')
        else
           AddMsgText('    '+MediaTypeCustom[MemGameInfo.eCustomMediaType, 0]+' game selected. '+
                      'Multiple floppy disks loading is only supported on following ');
-       AddMsgText('systems', MsgTxtColors.colorBoldTitle, [fsBold]); AddMsgText('/'); AddMsgText('emulators', clBlack, [fsBold]);
+       AddMsgText('systems', MsgTxtColors.colorBoldTitle, [fsBold]); AddMsgText('/'); AddMsgText('emulators', MsgTxtColors.colorBoldTitle, [fsBold]);
        AddMsgText(':'+#13#10+#13#10);
-       AddMsgText('Amiga', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Amiga', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('FS-UAE', clBlack, [fsBold]);
+       AddMsgText('FS-UAE', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' / ');
-       AddMsgText('WinUAE'+#13#10, clBlack, [fsBold]);
-       AddMsgText('Commodore 64 / 128 / VIC-20', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('WinUAE'+#13#10, MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Commodore 64 / 128 / VIC-20', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('WinVICE'+#13#10, clBlack, [fsBold]);
-       AddMsgText('Atari 400/800/XL', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('WinVICE'+#13#10, MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Atari 400/800/XL', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('Altirra', clBlack, [fsBold]);
+       AddMsgText('Altirra', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' (15 disks max) / ');
-       AddMsgText('Atari++', clBlack, [fsBold]);
+       AddMsgText('Atari++', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' (4 disks max)'+#13#10+' / ');
-       AddMsgText('Apple II', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Apple II', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('AppleWin', clBlack, [fsBold]);
+       AddMsgText('AppleWin', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' / ');
-       AddMsgText('JACE', clBlack, [fsBold]);
+       AddMsgText('JACE', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' (2 disks max)'+#13#10);
-       AddMsgText('Apple IIGS', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Apple IIGS', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('GSport', clBlack, [fsBold]);
+       AddMsgText('GSport', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' / ');
-       AddMsgText('KEGS32', clBlack, [fsBold]);
+       AddMsgText('KEGS32', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' (11 disks max)'+#13#10);
-       AddMsgText('Amstrad CPC', MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText('Amstrad CPC', MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText(': ');
-       AddMsgText('WinAPE', clBlack, [fsBold]);
+       AddMsgText('WinAPE', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' (2 disks max)'+#13#10+#13#10+
                   '    For ');
-       AddMsgText('MSX', clBlack, [fsBold]);
+       AddMsgText('MSX', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' multiple disks, use the ');
        AddMsgText('v-DRIVE', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' feature from ');
@@ -14105,7 +14286,7 @@ begin
         if not IsWinVice(emuFile) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
              AddMsgText('WinVICE', MsgTxtColors.colorFileName, [fsBold]);
@@ -14129,7 +14310,7 @@ begin
         if not IsAmigaUAE(emuFile) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
              AddMsgText('FS-UAE', MsgTxtColors.colorFileName, [fsBold]);
@@ -14151,7 +14332,7 @@ begin
            (not IsAtariPlusPlus(emuFile)) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
              AddMsgText('Altirra', MsgTxtColors.colorFileName, [fsBold]);
@@ -14174,7 +14355,7 @@ begin
            (not SameText(emuFile, 'jace.cmd')) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
              AddMsgText('AppleWin', MsgTxtColors.colorFileName, [fsBold]);
@@ -14195,7 +14376,7 @@ begin
         if not IsAppleIIGS(emuFile) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              AddMsgText('    Only ');
              GetSelectedEmulatorMulti;
              AddMsgText('KEGS32', MsgTxtColors.colorFileName, [fsBold]);
@@ -14216,7 +14397,7 @@ begin
         if not IsWinApe(emuFile) then
            begin
              Result:= False;
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              GetSelectedEmulatorMulti;
              AddMsgText('    Only ');
              AddMsgText('WinApe', MsgTxtColors.colorFileName, [fsBold]);
@@ -14485,10 +14666,10 @@ begin
          FileFullPath:= FloppyCommand+ExtractFileName(ChangeFileExt(FileFullPath, '.vfl'));
          GamesFiles.SaveToFile(FileFullPath); // save the flip list file
        except
-         CallMessageBox;
+         InitMessageBox; //CallMessageBox;
          EnableMsgMediaTypeLabel(False);
-         AddEmulatorHeader(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]]);
-         AddMsgText('    Flip list file ');
+         AddEmulatorHeaderConsComp(EmulatorFileCustom[sysID, EmulatorIndexToUseCustom[sysID]]);
+         AddMsgText(#13#10+'    Flip list file ');
          AddMsgText(FileFullPath, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(' could not be saved. Please make sure the destination folder exists and try again. Aborting...');
          GenerateMessage(iMsgTitle, MemGameInfo.eTitle);
@@ -14536,7 +14717,7 @@ begin
   Result:= FileExists(iniStr);
   if not Result then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    File ');
        AddMsgText(iniStr, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. Unable to edit file.'+
@@ -17001,10 +17182,10 @@ begin
        if FavTitleStr = '' then
           FavTitleStr:= 'Default';
           
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('No games were added, already in the list.'+#13#10+#13#10);
        if AddtoFavorites then
-          AddMsgText(FavTitleStr+#13#10, clBlack, [fsBold]);
+          AddMsgText(FavTitleStr+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
        AddMsgText('File: ');
        if AddToFavorites then
           AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold])
@@ -17045,10 +17226,10 @@ begin
         FoundTxtFile:= FileExists(GetFavoritesFile);
         if not FoundTxtFile then
            begin
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              AddMsgText('    File not found. '+
                         'Games cannot be removed from the favorites list.'+#13#10+#13#10);
-             AddMsgText(FavoriteProfile[0]+#13#10, clBlack, [fsBold]);
+             AddMsgText(FavoriteProfile[0]+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
              AddMsgText('File: ');
              AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold]);
              GenerateMessage('Info', MsgTitle);
@@ -17061,7 +17242,7 @@ begin
         FoundTxtFile:= FileExists(GetSpecialFile);
         if not FoundTxtFile then
            begin
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              AddMsgText('    File not found. '+
                         'Games cannot be removed from the special list.'+#13#10+#13#10);
              AddMsgText('File: ');
@@ -17155,11 +17336,11 @@ begin
         else
            tStr:= 'special';
 
-        CallMessageBox;
+        InitMessageBox; //CallMessageBox;
         AddMsgText('No games were removed from the '+tStr+' list.'+#13#10+#13#10);
 
         if RemoveFromFavorites then
-           AddMsgText(FavTitleStr+#13#10, clBlack, [fsBold]);
+           AddMsgText(FavTitleStr+#13#10, MsgTxtColors.colorKeyTitle, [fsBold]);
         AddMsgText('File: ');
         if RemoveFromFavorites then
            AddMsgText(FavoriteProfile[1], MsgTxtColors.colorFileName, [fsBold])
@@ -18182,7 +18363,7 @@ var
              begin
                if ShowErrorMessage then
                   begin
-                    CallMessageBox;
+                    InitMessageBox; //CallMessageBox;
                     AddMsgText('File ');
                     AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
                     AddMsgText(' is empty! Aborting...');
@@ -18195,7 +18376,7 @@ var
         begin
           if not ShowErrorMessage then
              Exit;
-          CallMessageBox;
+          InitMessageBox; //CallMessageBox;
           AddMsgText('File ');
           AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText(' was not found! Aborting...');
@@ -18210,7 +18391,7 @@ begin
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('File ');
        AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
@@ -19988,7 +20169,7 @@ begin
      ROMsList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 1))
   else
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('ROMs list file ');
        AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
@@ -20141,7 +20322,7 @@ var
        Result:= 4
     else
        begin
-         CallMessageBox;
+         InitMessageBox; //CallMessageBox;
          AddMsgText('New screen type found: ');
          AddMsgText(ScreenTypeString, MsgTxtColors.colorFileName, [fsBold]);
          AddMsgText(#13#10+'Game: ');
@@ -20734,7 +20915,7 @@ begin
      ROMsList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 1))
   else
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('ROMs list file ');
        AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
@@ -20865,7 +21046,7 @@ begin
   TempString:= ExtractFilePath(EmulatorFile[idDaphne])+'config.xml';
   if not ValidateFile(TempString) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('File ');
        AddMsgText(TempString, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found or is blank. Aborting...');
@@ -21057,7 +21238,7 @@ var
           Result:= (GetFileSize(tempFileName) > 0);
           if not Result then
              begin
-               CallMessageBox;
+               InitMessageBox; //CallMessageBox;
                AddMsgText('File ');
                AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
                AddMsgText(' is empty! Aborting...');
@@ -21067,7 +21248,7 @@ var
         end;
       False:
         begin
-          CallMessageBox;
+          InitMessageBox; //CallMessageBox;
           AddMsgText('File ');
           AddMsgText(tempFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText(' was not found! Aborting...');
@@ -21296,7 +21477,7 @@ begin
   TitleErrorMsg:= 'Error: Create Games List ['+GetArcadeEmulatorDescription(sysID)+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('File ');
        AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
@@ -21319,7 +21500,7 @@ begin
      begin
        if sysID <> idDemul then
           begin
-            CallMessageBox;
+            InitMessageBox; //CallMessageBox;
             AddMsgText('ClrMAME XML database file ');
             AddMsgText(tempFile, MsgTxtColors.colorFileName, [fsBold]);
             AddMsgText(' was not found. Make sure the file exists and click ');
@@ -21336,7 +21517,7 @@ begin
                begin
                  if not FileExists(tempFile) then
                     begin
-                      CallMessageBox;
+                      InitMessageBox; //CallMessageBox;
                       AddMsgText('ClrMAME XML database file ');
                       AddMsgText(tempFile, MsgTxtColors.colorFileName, [fsBold]);
                       AddMsgText(' still was not found. This task will be terminated...');
@@ -21975,7 +22156,7 @@ begin
      ROMsList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 1))
   else
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('ROMs list file ');
        AddMsgText(GetGamesFolderEL+GetSystemFileName(sysID, 1), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not created. You will not be able to scan and audit games. Please try again.');
@@ -22226,7 +22407,7 @@ begin
   TitleErrorMsg:= 'Error: Create Software List ['+EmuTitle+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('File ');
        AddMsgText(EmulatorFile[sysID], MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. This task will be terminated.');
@@ -22796,7 +22977,7 @@ begin
      end;
   if BiosEmptyMsg then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    This is a BIOS set but ');
        AddMsgText('eBiosName', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' field is blank! Emu Loader requires this field to have the same value as ');
@@ -28548,7 +28729,7 @@ begin
      begin
        Result:= False;
        FreeAndNil(TestFile);
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Invalid header. The ');
        AddMsgText('MComprHD', MsgTxtColors.colorWarning, [fsBold]);
        AddMsgText(' tag of ');
@@ -28570,7 +28751,7 @@ begin
         begin
           Result:= False;
           FreeAndNil(TestFile);
-          CallMessageBox;
+          InitMessageBox; //CallMessageBox;
           AddMsgText('File: ');
           AddMsgText(DiskFileName, MsgTxtColors.colorFileName, [fsBold]);
           AddMsgText('Header version found: ');
@@ -28584,7 +28765,7 @@ begin
   except
     Result:= False;
     FreeAndNil(TestFile);
-    CallMessageBox;
+    InitMessageBox; //CallMessageBox;
     AddMsgText('    An error occurred while reading the chd file. '+
                'Header version and file checksum cannot be validated.'+#13#10+
                'File: ');
@@ -28977,7 +29158,7 @@ begin
   end;
   if FileExists(iniFile) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Are you sure you want to delete ');
        AddMsgText(iniFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file ? Recycle bin is not supported. Click No to abort.');
@@ -31600,6 +31781,8 @@ begin
 
        MenuUseAlternateFrontendIcons.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseAlternateFrontendIcons', 0));
 
+       MenuEnable4KMode2160p.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'Enable4KMode2160p', 0));
+
        FreeAndNil(INIFile);
      end;
 
@@ -31657,7 +31840,7 @@ begin
   FavoriteProfile[1]:= 'favorites.txt';
   PopupEnableFavorites.Hint:= FavoriteProfile[0];
 
-  MAMEInfoTextHolder.Color:= clNone;
+  MAMEDocsText.Color:= clNone;
 
   LoadControlTypeList; // populate controls list in the search bar tool button (Supermodel 3 emulator controls file not included)
 
@@ -31676,7 +31859,7 @@ begin
   Result:= CheckAndCreateFolder(FrontendPath+'temp');
   if not Result then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('Folder ');
        AddMsgText(FrontendPath+'temp', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' could not be created.'+#13#10+'Please create the temp '+
@@ -32010,7 +32193,7 @@ begin
      Exit;
   ELV_ResetNormalColors(GamesListView);
   ELV_ResetNormalColors(MachinesListSidePanel);
-  MAMEInfoTextHolder.Lines.Clear; // prevent garbish text at startup
+  MAMEDocsText.Lines.Clear; // prevent garbish text at startup
 
   InitNightModeScreen;
   InitPreferencesScreen;
@@ -32535,7 +32718,7 @@ begin
      end;
   if ZipForge.Active then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Unable to open ');
        AddMsgText(GetImgZipFileName(imageCategoryID), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file as there is another .zip file already opened.');
@@ -32763,7 +32946,7 @@ begin
 
   if ZipForge.Active then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Unable to open ');
        AddMsgText(SoftwareName+'.zip', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('( '+ImageCategoryArray[imageCategoryID, 3]+') file, another .zip file is already opened.');
@@ -32952,7 +33135,7 @@ begin
 
   if ZipForge.Active then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Unable to open ');
        AddMsgText(GetImgZipFileName_SL(imageCategoryID), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('( '+ImageCategoryArray[imageCategoryID, 3]+') file, another .zip file is already opened.');
@@ -33210,7 +33393,7 @@ begin
 
   if ZipForge.Active then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    Unable to open ');
        AddMsgText(GetImgZipFileName(imageCategoryID), MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' file as there is another .zip file already opened.');
@@ -35008,7 +35191,11 @@ begin
        if UseLargeIcon then
           begin
             Result:= Result-15; // IL_MediaType starts at ZERO, not 15
-            IL_MediaType.GetIcon(Result, IconHolder.Picture.Icon);
+            case IconHolder.Width of
+              24: IL_MediaType.GetIcon(Result, IconHolder.Picture.Icon);
+              32: IL_MediaType_Large.GetIcon(Result, IconHolder.Picture.Icon);
+              48: IL_MediaType_ExtraLarge.GetIcon(Result, IconHolder.Picture.Icon);
+            end;
           end
        else
           IL_LeftPanel.GetIcon(Result, IconHolder.Picture.Icon);
@@ -37544,20 +37731,13 @@ var
   reFontSize, iSelStart, iSelLength: Integer;
   reFontColor: TColor;
 begin
-  {if AFontName <> 'default' then
-     reFontName:= ARichEdit.Font.Name;
-  if AFontCharSet <> DEFAULT_CHARSET then
-     reFontCharSet:= ARichEdit.Font.Charset;
-  if AFontSize <> -1 then
-     reFontSize:= ARichEdit.Font.Size;}
-
   reFontName:= ARichEdit.Font.Name;
   reFontCharSet:= ARichEdit.Font.Charset;
   reFontSize:= ARichEdit.Font.Size;
   reFontColor:= ARichEdit.Font.Color;
 
-  ARichEdit.SelStart:= ARichEdit.GetTextLen;
   Result:= ARichEdit.Lines.Count; // line index of added text
+  ARichEdit.SelStart:= ARichEdit.GetTextLen;
   ARichEdit.SelLength:= 0;
 
   //if ATextBackgroundColor <> Graphics.clNone then
@@ -37586,94 +37766,81 @@ begin
   ARichEdit.Paragraph.Alignment:= taLeftJustify;
   ARichEdit.SelAttributes.Name:= reFontName;
   ARichEdit.SelAttributes.Size:= reFontSize;
+  ARichEdit.SelAttributes.Color:= reFontColor;
   ARichEdit.SelAttributes.Charset:= reFontCharSet;
   aRichEdit.SelAttributes.Style:= [];
-
-  {if AAlignment <> taLeftJustify then
-     ARichEdit.Paragraph.Alignment:= taLeftJustify;
-  if AFontName <> 'default' then
-     ARichEdit.SelAttributes.Name:= reFontName;
-  if AFontSize <> -1 then
-     ARichEdit.SelAttributes.Size:= reFontSize;
-
-  if AFontStyle <> [] then
-     ARichEdit.SelAttributes.Style:= [];}
 end;
 
-{function TFormMain.AppendText2(ARichEdit: TRichEdit98; const AText: WideString; AFontColor: TColor = clBlack; AFontStyle: TFontStyles = [];
-         AAlignment: TAlignment98 = taLeft; const AFontName: String = 'default'; AFontSize: Integer = -1): Integer;//
-         //AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
+function TFormMain.AppendTextW(ARichEdit: TTntRichEdit; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
+         AAlignment: TAlignment = taLeftJustify; ATextBackgroundColor: TColor = -1;
+         const AFontName: String = 'default'; AFontSize: Integer = -1; AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 var
-  restoreFontName: String;
-  //reFontCharSet: TFontCharSet;
-  restoreFontSize: Integer;
-  restoreFontColor: TColor;
-  ASelStart, ASelLength: Integer;
+  restoreFont: TFont;
+  //FormatW: CHARFORMAT2W;
 begin
-  ASelStart := ARichEdit.SelStart;
-  ASelLength:= ARichEdit.SelLength;
+  restoreFont:= ARichEdit.Font;
 
-  restoreFontName:= ARichEdit.Font.Name;
-  if AFontSize = -1 then
-     restoreFontSize:= ARichEdit.Font.Size;
+  Result:= ARichEdit.Lines.Count; // line index of added text
 
-  restoreFontColor:= ARichEdit.Font.Color;
+  //ARichEdit.SelStart:= ARichEdit.GetTextLen; // no need since SelStart gets updated one every new added text (do not remove this code)
+  //if ARichEdit.SelLength <> 0 then ARichEdit.SelLength:= 0; // no need since we are not selecting any text, just adding new ones (do not remove this code)
 
-  ARichEdit.SelStart:= ARichEdit.GetTextLen;
-  Result:= ARichEdit.WideLines.Count; // line index of added text
-  ARichEdit.SelLength:= 0;
+  ARichEdit.Paragraph.Alignment:= AALignment; // always set paragraph alignment, no matter what (for safety)
 
-  //if ATextBackgroundColor <> Graphics.clNone then
-  //   ARichEdit.TextBKColor(ATextBackGroundColor); // doesn't work ? (March 01, 2018)
-
-  //if AAlignment <> taLeft then
-     ARichEdit.Paragraph.Alignment:= AALignment;
-
-  //if AFontColor <> clBlack then
+  if AFontColor = -1 then
+     ARichEdit.SelAttributes.Color:= ARichEdit.Font.Color
+  else
      ARichEdit.SelAttributes.Color:= AFontColor;
-
-  //if AFontStyle <> [] then
-     ARichEdit.SelAttributes.Style:= AFontStyle;
-  //else
-  //   ARichEdit.SelAttributes.Style:= [];
+  ARichEdit.SelAttributes.Style:= AFontStyle;
 
   if AFontName <> 'default' then
-     ARichEdit.SelAttributes.Name:= AFontName
-  else
-     ARichEdit.SelAttributes.Name:= ARichEdit.Font.Name;
-  //if AFontCharSet <> DEFAULT_CHARSET then
-  //   ARichEdit.SelAttributes.Charset:= aFontCharset;
+     ARichEdit.SelAttributes.Name:= AFontName;
+  if AFontCharSet <> DEFAULT_CHARSET then
+     ARichEdit.SelAttributes.Charset:= aFontCharset;
   if AFontSize <> -1 then
      ARichEdit.SelAttributes.Size:= AFontSize
   else
      ARichEdit.SelAttributes.Size:= ARichEdit.Font.Size;
 
-  ARichEdit.WideSelText:= AText;
+  //if ATextBackgroundColor <> -1 then
+  //   begin
+  //     // minimum RichEdit 2.0
+  //     FillChar(FormatW, SizeOf(FormatW), 0);
+  //     FormatW.cbSize:= SizeOf(FormatW);
+  //     FormatW.dwMask:= CFM_BACKCOLOR;
+  //     //FormatW.dwEffects:= 0; // To disable CFE_AUTOCOLOR ; don't know what this is for
+  //     FormatW.crBackColor:= ATextBackgroundColor;
+  //     ARichEdit.Perform(EM_SETCHARFORMAT, SCF_SELECTION, Longint(@FormatW));
+  //   end;
+
+  ARichEdit.SelText:= AText;
 
   // restore defaults or next texts will have format of last added text
-  //if AAlignment <> taLeft then
-     ARichEdit.Paragraph.Alignment:= taLeft;
-  //if AFontName <> 'default' then
-     ARichEdit.SelAttributes.Name:= restoreFontName;
-  //if AFontColor <> clBlack then
-     ARichEdit.SelAttributes.Color:= restoreFontColor;
-  //if AFontSize <> -1 then
-     ARichEdit.SelAttributes.Size:= restoreFontSize;
-  //if AFontStyle <> [] then
-     ARichEdit.SelAttributes.Style:= [];// reFontStyle;
+  if ARichEdit.Paragraph.Alignment <> taLeftJustify then
+     ARichEdit.Paragraph.Alignment:= taLeftJustify;
 
-  ARichEdit.SelStart := ASelStart;
-  ARichEdit.SelLength:= ASelLength;
-end;}
+  if ARichEdit.SelAttributes.Name <> restoreFont.Name then
+     ARichEdit.SelAttributes.Name:= restoreFont.Name;
+  if ARichEdit.SelAttributes.Size <> restoreFont.Size then
+     ARichEdit.SelAttributes.Size:= restoreFont.Size;
+  if ARichEdit.SelAttributes.Color <> restoreFont.Color then
+     ARichEdit.SelAttributes.Color:= restoreFont.Color;
+  if ARichEdit.SelAttributes.Charset <> restoreFont.Charset then
+     ARichEdit.SelAttributes.Charset:= restoreFont.Charset;
+  if ARichEdit.SelAttributes.Style <> restoreFont.Style then
+     ARichEdit.SelAttributes.Style:= restoreFont.Style;
+end;
 
-procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = clBlack; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
-                               iFontSize: Integer = -1; const iFontName: String = 'default'; const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
+procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor = -1; iFontStyle: TFontStyles = []; iTextAlign: TAlignment = taLeftJustify;
+                               iFontSize: Integer = -1; const iFontName: String = 'default'; iTextBackgroundColor: TColor = -1;
+                               const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 begin
-  if (iFontColor = clBlack) and IsNightMode then
-     iFontColor:= FormMessageBox.LabelMessage.Font.Color;
-  AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
-  //SetRichEditText(FormMessageBox.LabelMessage, iTextToAdd, 1200);
-  //AppendText2(RichEdit98, iTextToAdd, iFontColor, iFontStyle, taLeft, iFontName, iFontSize);
+  //AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
+  if Assigned(FormMessageBox) then
+     AppendTextW(FormMessageBox.LabelMessageW, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iTextBackgroundColor, iFontName, iFontSize, iFontCharSet)
+  else
+  if Assigned(FormMessageBox4K) then
+     AppendTextW(FormMessageBox4K.LabelMessageW, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iTextBackgroundColor, iFontName, iFontSize, iFontCharSet)
 end;
 
 procedure TFormMain.SetSinglePanelLayoutGameDocuments;
@@ -37770,7 +37937,7 @@ begin
                     PanelGameDocuments.Align:= alClient;
                     PanelGameDocuments.Visible:= True;
                     if not IsStartup then
-                       MAMEInfoTextHolder.Refresh;
+                       MAMEDocsText.Refresh;
                     if not PanelScreenshotsArea.Visible then
                        PanelScreenshotsArea.Visible:= True;
                     if not Splitter.Visible then
@@ -37853,6 +38020,31 @@ var
        end;
   end;
 
+  function FixHistoryXML_NameEntries: Boolean;
+  var
+    xLoop: Integer;
+    xStr: String;
+  begin
+    // remove left spaces from "<system name="gamename" />" and "<item list="nes" name="100mandk" />"
+    // for ".IndexOf()" searches; way quicker than "PosEx()" searches
+    if not Assigned(AutoHistoryDATFile) then
+       Exit;
+    if AutoHistoryDATFile.Count = 0 then
+       Exit;
+
+    AutoHistoryDATFile.BeginUpdate;
+    for xLoop:=0 to AutoHistoryDATFile.Count-1 do
+    begin
+      xStr:= AutoHistoryDATFile[xLoop];
+      if PosEx('<system name="', Xstr) <> 0 then
+         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr)
+      else
+      if PosEx('<item list="', Xstr) <> 0 then
+         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr);
+    end;
+    AutoHistoryDATFile.EndUpdate;
+  end;
+
 begin
   ResetGameDocsQuickMenus;
 
@@ -37895,7 +38087,9 @@ begin
            begin
              pathFile:= LocateDATFile('history.dat');
              LoadDAT(AutoHistoryDATFile);
-           end;
+           end
+        else
+           FixHistoryXML_NameEntries;
 
         pathFile:= LocateDATFile('story.dat');
         LoadDAT(AutoStoryDATFile);
@@ -37929,7 +38123,7 @@ begin
         GameDocsGoToMarp.Visible:= False;
         GameDocsGoToGameInit.Visible:= False;
 
-        MAMEInfoTextHolder.Lines.Clear;
+        MAMEDocsText.Lines.Clear;
         SplitterMAMEInfo.Visible:= False;
         PanelGameDocuments.Visible:= False;
 
@@ -37969,36 +38163,53 @@ end;
 procedure TFormMain.ShowGameInfoAll;
 var
   LineIndex: Integer;
-  AddLine, NoFilesMsg: Boolean;
+  AddLine, NoFilesMsg, IsFirstLine, IsLastDocLineEmpty: Boolean;
   DATVersion: WideString;
   docItem: TEasyItem;
   IsXML: Boolean;
+  DocsCount: Byte;
+
+  function InitRichEdit: Boolean;
+  begin
+    Result:= True;
+    MAMEDocsText.SelStart:= 0; // MAMEDocsText.GetTextLen; // this is the same as in AppendText() function but using current font/paragraph settings
+    MAMEDocsText.SelLength:= 0; // ensure no text is selected
+  end;
 
   function EmptyLineStr: WideString;
   begin
-    Result:= #13#10;//Chr(13)+Chr(10);//'\r\n';
+    Result:= #13;//#10; // RichEdit 2.0 only uses #13 as carriage return char
   end;
 
+  function AddTitleTextLine(const TextLine: WideString): Integer;
+  //var
+  //  bkColor: TColor;
+  begin
+    if IsFirstLine then
+       begin
+         IsFirstLine:= False;
+         InitRichEdit;
+       end
+    else
+       begin
+         if not IsLastDocLineEmpty then
+            MAMEDocsText.SelText:= EmptyLineStr;
+       end;
+    //if IsNightMode then
+    //   bkColor:= BrightenColor(MAMEDocsText.Color, 3)
+    //else
+    //   bkColor:= DarkenColor(MAMEDocsText.Color, 3);
+    Result:= AppendTextW(MAMEDocsText, TextLine+EmptyLineStr, -1, [fsBold], taCenter);//, bkColor);
+  end;
 
   function AddTextLine(const TextLine: WideString): Boolean;
   begin
     Result:= True;
-    MAMEInfoTextHolder.SelStart:= MAMEInfoTextHolder.GetTextLen; // this is the same as in AppendText() function but using current font settings
-    MAMEInfoTextHolder.SelText:= TextLine+EmptyLineStr;
-
-    //AppendText(MAMEInfoTextHolder, TextLine+EmptyLineStr);
-    //SetRichEditText(MAMEInfoTextHolder, TextLine, 1200);
-    //MAMEInfoTextHolder.Lines.Add(TextLine); // this causes "Insert Line Error" / "OutOfResouces" crashes
-
-    //TntMemo1.SelStart:= TntMemo1.GetTextLen;
-    //TntMemo1.SelText:= TextLine+EmptyLineStr;
-  end;
-
-  function AddTitleTextLine(const TextLine: WideString): Integer;
-  begin
-    Result:= AppendText(MAMEInfoTextHolder, TextLine+EmptyLineStr, -1, [fsBold], taCenter);
-    //TntMemo1.SelStart:= TntMemo1.GetTextLen;
-    //TntMemo1.SelText:= TextLine+EmptyLineStr;
+    //MAMEDocsText.SelStart:= MAMEDocsText.GetTextLen; // this is the same as in AppendText() function but using current font/paragraph settings
+    //if MAMEDocsText.SelLength <> 0 then
+    //   MAMEDocsText.SelLength:= 0;
+    MAMEDocsText.SelText:= TextLine+EmptyLineStr;
+    //MAMEDocsText.Lines.Add(TextLine); // this causes "Insert Line Error" / "OutOfResouces" crashes... never use this ever again! (March 02, 2021)
   end;
 
   function IsEndTag(const iFileTxt: WideString): Boolean;
@@ -38042,18 +38253,20 @@ var
                           if iText = '$mame' then
                              begin
                                AddLine:= True;
-                               GameDocsGoToInformation.Tag:= AddTitleTextLine('---------- Information Data ----------');
+                               GameDocsGoToInformation.Tag:= AddTitleTextLine(' ---------- Information Data ---------- ');
                              end;
                         end;
                       True:
                         begin
                           iText:= DecodeUnicodeStr(iText);
-                          AddTextLine(iText);//+EmptyLineStr);
+                          AddTextLine(iText);
                         end;
                     end;
                   end;
                   Inc(LineIndex);
                 until IsEndTag(iText); //iText = '$end';
+                iText:= Trim(AutoMAMEInfoDATFile[LineIndex-2]);
+                IsLastDocLineEmpty:= iText = '';
               end;
          end;
     end;
@@ -38077,7 +38290,7 @@ var
     if endLink <> 0 then
        begin
          //extraText:= Copy(titleText, endLink+4, Length(strLine));
-         Delete(titleText, endLink, 3);
+         Delete(titleText, endLink, 4);
        end;
 
     Result:= (titleText <> '') and (linkText <> '');
@@ -38087,10 +38300,10 @@ var
 
   function HistoryData: Boolean;
   var
-    Loop, Loop2, webIndex, TagStrSize: Integer;
+    Loop, webIndex, TagStrSize: Integer;
     TagString, TagEndInfo: String;
     FoundData: Boolean;
-    iText, iText2: WideString;
+    iText: WideString;
   begin
     Result:= Assigned(AutoHistoryDATFile);
     if Result then
@@ -38105,6 +38318,7 @@ var
 
          TagStrSize:= Length(TagString);
          TagEndInfo:= '$end';
+
          for Loop:=0 to AutoHistoryDATFile.Count -1 do
          begin
            iText:= Trim(AutoHistoryDATFile[Loop]);
@@ -38113,47 +38327,51 @@ var
                 Result:= GetGameHistory(MemGameInfo.eName, iText, TagStrSize); // "iText" replace "AutoHistoryDATFile[Loop]"
                 if Result then
                    begin
-                     Loop2:= Loop+1;
-                     GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------');
-                     repeat
-                       iText2:= Trim(AutoHistoryDATFile[Loop2]);
-                       if not IsEndTag(iText2) then
-                       begin
-                         case AddLine of
-                           False:
-                             begin
-                               if iText2 = '$bio' then
-                                  AddLine:= True;
-                             end;
-                           True:
-                             begin
-                               iText2:= DecodeUnicodeStr(iText2);
-                               //webIndex:= PosEx('<a href=', iText2);
-                               //if webIndex <> 0 then
-                               //   AddHistoryURL(iText2, webIndex)
-                               //else
-                                  AddTextLine(iText2);
-                             end;
-                         end;
-                       end;
-                       Inc(Loop2);
-                     until iText2 = TagEndInfo;
-
-                     if iText2 = TagEndInfo then // "iText2" replace "AutoHistoryDATFile[Loop2]"
-                        FoundData:= True;
+                     webIndex:= Loop+1;
+                     FoundData:= True;
+                     Break;
                    end;
               end;
-           if FoundData then
-              Break; // get out of the "history.dat" loop or the function will will go all the down to the end of the file
          end;
+
+         if FoundData then
+            begin
+              Loop:= webIndex;
+              GameDocsGoToHistory.Tag:= AddTitleTextLine(' ---------- History Data ---------- ');
+              repeat
+                iText:= Trim(AutoHistoryDATFile[Loop]);
+                if not IsEndTag(iText) then
+                begin
+                  case AddLine of
+                    False:
+                      begin
+                        if iText = '$bio' then
+                           AddLine:= True;
+                      end;
+                    True:
+                      begin
+                        iText:= DecodeUnicodeStr(iText);
+                        webIndex:= PosEx('<a href=', iText);
+                        if webIndex <> 0 then
+                           AddHistoryURL(iText, webIndex)
+                        else
+                           AddTextLine(iText);
+                      end;
+                  end;
+                end;
+                Inc(Loop);
+              until iText = TagEndInfo;
+              iText:= Trim(AutoHistoryDATFile[Loop-2]);
+              IsLastDocLineEmpty:= iText = '';
+            end;
        end;
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
 
   function HistoryXML: Boolean;
   var
-    Loop, Loop2, webIndex, TagStrSize: Integer;
-    TagString, TagEndInfo: String;
+    Loop, webIndex{, TagStrSize}: Integer;
+    TagString, TagStringEndChar, TagEndInfo: String;
     FoundData, FoundTagEnd: Boolean;
     TagStartInfo: WideString;
   begin
@@ -38177,56 +38395,112 @@ var
          else
             TagString:= '<item list="'+MemGameInfo.eSoftwareName+'" name="'+MemGameInfo.eName+'"';
 
-         TagStrSize:= Length(TagString);
-         TagEndInfo:= '</text>';
-         for Loop:=0 to AutoHistoryDATFile.Count -1 do
-         begin
-           TagStartInfo:= Trim(AutoHistoryDATFile[Loop]); // should it be here or below "if AddLine then..." ? (February 17, 2021)
-           if not FoundData then
-              FoundData:= PosEx(TagString, TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+         TagStringEndChar:= ' />';
+         Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+         if Loop = -1 then
+            begin
+              TagStringEndChar:= '/>'; // remove the space for the "end" entry tag... just in case
+              Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+            end;
 
-           if FoundData then
-              begin
-                if not AddLine then
-                   AddLine:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+         if Loop <> -1 then
+            begin
+              //webIndex:= -1;
+              TagEndInfo:= '</text>';
+              repeat
+                TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
+                if not FoundData then
+                   FoundData:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
 
-                if AddLine then
+                if FoundData then
+                    begin
+                    Delete(TagStartInfo, 1, Length('<text>'));
+                     if TagStartInfo <> '' then
+                        webIndex:= Loop // some entries are in the same line as the '<text>' tag :(
+                     else
+                        webIndex:= Loop+1; // info stars on next line
+                     //Break; // get out of the loop
+                   end;
+                Inc(Loop);
+              until FoundData;//webIndex <> -1;
+            end;
+
+         {repeat
+           TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
+
+           if not AddLine then
+              AddLine:= PosEx(TagString, TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+
+           if AddLine then
+              begin // remove the AddLine code, start already from here since EL does "IndexOf()" for the game entry now!!!
+              dsdsadsd
+                if not FoundData then
+                   FoundData:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+
+                if FoundData then
                    begin
-                     // TagStartInfo:= Trim(AutoHistoryDATFile[Loop]); // should it be here or at the top ? (February 17, 2021)
                      Delete(TagStartInfo, 1, Length('<text>'));
                      if TagStartInfo <> '' then
-                        Loop2:= Loop // some entries are in the same line as the '<text>' tag :(
+                        webIndex:= Loop // some entries are in the same line as the '<text>' tag :(
                      else
-                        Loop2:= Loop+1; // info stars on next line
-
-                     GameDocsGoToHistory.Tag:= AddTitleTextLine('---------- History Data ----------');
-                     while PosEx(TagEndInfo, AutoHistoryDATFile[Loop2]) = 0 do // while Trim(AutoHistoryDATFile[Loop2]) <> TagEndInfo do
-                     begin
-                       if TagStartInfo = '' then
-                          TagStartInfo:= Trim(AutoHistoryDATFile[Loop2]);
-                       TagStartInfo:= DecodeHTML(TagStartInfo);
-                       TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
-
-                       webIndex:= PosEx('<a href=', TagStartInfo);
-                       if webIndex <> 0 then
-                          AddHistoryURL(TagStartInfo, webIndex)
-                       else
-                          AddTextLine(TagStartInfo);
-
-                       Inc(Loop2);
-                       TagStartInfo:= '';
-                     end;
-                     if PosEx(TagEndInfo, AutoHistoryDATFile[Loop2]) <> 0 then
-                        begin
-                          if Trim(AutoHistoryDATFile[Loop2-1]) <> '' then
-                             AddTextLine('');
-                          FoundTagEnd:= True;
-                        end;
+                        webIndex:= Loop+1; // info stars on next line
+                     //Break; // get out of the loop
                    end;
               end;
-           if FoundTagEnd then
-              Break; // get out of the "history.xml" loop or the function will will go all the down to the end of the file
-         end;
+           Inc(Loop);
+         until FoundData;//webIndex <> -1;}
+
+         {TagEndInfo:= '</text>';
+
+         for Loop:=0 to AutoHistoryDATFile.Count -1 do
+         begin
+           TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
+           if not AddLine then
+              AddLine:= PosEx(TagString, TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+                   dfdfdfd
+           if AddLine then
+              begin
+                if not FoundData then
+                   FoundData:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
+
+                if FoundData then
+                   begin
+                     Delete(TagStartInfo, 1, Length('<text>'));
+                     if TagStartInfo <> '' then
+                        webIndex:= Loop // some entries are in the same line as the '<text>' tag :(
+                     else
+                        webIndex:= Loop+1; // info stars on next line
+                     Break; // get out of the loop
+                   end;
+              end;
+         end;}
+
+         if FoundData then
+            begin
+              Loop:= webIndex;
+              GameDocsGoToHistory.Tag:= AddTitleTextLine(' ---------- History Data ---------- ');
+              repeat
+                if TagStartInfo = '' then
+                   TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
+                TagStartInfo:= DecodeHTML(TagStartInfo);
+                TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+
+                webIndex:= PosEx('<a href=', TagStartInfo);
+                if webIndex <> 0 then
+                   AddHistoryURL(TagStartInfo, webIndex)
+                else
+                   AddTextLine(TagStartInfo);
+
+                Inc(Loop);
+                TagStartInfo:= '';
+
+                if PosEx(TagEndInfo, AutoHistoryDATFile[Loop]) <> 0 then
+                   FoundTagEnd:= True;
+              until FoundTagEnd; // PosEx(TagEndInfo, AutoHistoryDATFile[Loop]) <> 0;
+
+              TagEndInfo:= Trim(AutoHistoryDATFile[Loop-1]);
+              IsLastDocLineEmpty:= TagEndInfo = '';
+            end;
        end;
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
@@ -38248,7 +38522,7 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                GameDocsGoToDriverInfo.Tag:= AddTitleTextLine('---------- Driver Data ----------');
+                GameDocsGoToDriverInfo.Tag:= AddTitleTextLine(' ---------- Driver Data ---------- ');
                 DATVersion:= AutoMAMEInfoDATFile[0];
                 Delete(DATVersion, 1, 2);
                 AddTextLine(DATVersion+EmptyLineStr);
@@ -38272,6 +38546,8 @@ var
                   end;
                   Inc(LineIndex);
                 until IsEndTag(iText); // iText = '$end';
+                iText:= Trim(AutoMAMEInfoDATFile[LineIndex-2]);
+                IsLastDocLineEmpty:= iText = '';
               end;
          end;
     end;
@@ -38295,7 +38571,7 @@ var
            if Result then
               begin
                 Inc(LineIndex);
-                GameDocsGoToStory.Tag:= AddTitleTextLine('---------- Story Data ----------');
+                GameDocsGoToStory.Tag:= AddTitleTextLine(' ---------- Story Data ---------- ');
                 DATVersion:= AutoStoryDATFile[0];
                 Delete(DATVersion, 1, 2);
                 AddTextLine(DATVersion+EmptyLineStr);
@@ -38319,6 +38595,8 @@ var
                   end;
                   Inc(LineIndex);
                 until IsEndTag(iText); // iText = '$end';
+                iText:= Trim(AutoStoryDATFile[LineIndex-2]);
+                IsLastDocLineEmpty:= iText = '';
               end;
          end;
     end;
@@ -38363,7 +38641,7 @@ var
              Result:= LineIndex <> -1;
              if Result then
                 begin
-                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------');
+                  GameDocsGoToMarp.Tag:= AddTitleTextLine(' ---------- MAME Action Replay Page ---------- ');
                   DATVersion:= TrimLeft(AutoMarpDATFile[1]);
                   AddTextLine(DATVersion+EmptyLineStr+'[ http://replay.marpirc.net/r/'+MemGameInfo.eName+' ]'+EmptyLineStr);
                   iLoopH:= Pos(':', AutoMarpDATFile[LineIndex])+1; // 1st char
@@ -38380,6 +38658,8 @@ var
                   ScoreStr:= Copy(AutoMarpDATFile[LineIndex+2], iLoopH, Length(AutoMarpDATFile[LineIndex+2]));
                   Delete(ScoreStr, PosEx(':', ScoreStr, iPos2H), Length(AutoMarpDATFile[LineIndex+2]));
                   AddTextLine(' 3.    '+DecodeUnicodeStr(TrimRight(ScoreStr)));
+
+                  IsLastDocLineEmpty:= False;
                 end;                         
            end
            else
@@ -38390,10 +38670,10 @@ var
              if Result then
                 begin
                   Inc(LineIndex);
-                  GameDocsGoToMarp.Tag:= AddTitleTextLine('---------- MAME Action Replay Page ----------');
+                  GameDocsGoToMarp.Tag:= AddTitleTextLine(' ---------- MAME Action Replay Page ---------- ');
                   DATVersion:= AutoMarpDATFile[0];
-                  Delete(DATVersion, 1, 2);
-                  AddTextLine(DATVersion+EmptyLineStr);
+                  Delete(DATVersion, 1, 4); // iLoopH:= PosEx(' ',DATVersion);
+                  AddTextLine(Trim(DATVersion)+EmptyLineStr);
                   repeat
                     iText:= Trim(AutoMarpDATFile[LineIndex]);
                     if not IsEndTag(iText) then
@@ -38413,6 +38693,8 @@ var
                     end;
                     Inc(LineIndex);
                   until IsEndTag(iText); // iText = '$end';
+                  iText:= Trim(AutoMarpDATFile[LineIndex-2]);
+                  IsLastDocLineEmpty:= iText = '';
                 end;
            end;
          end;
@@ -38456,7 +38738,7 @@ var
                           if iText  = '$mame' then
                              begin
                                AddLine:= True;
-                               GameDocsGoToGameInit.Tag:= AddTitleTextLine('---------- Game Initialization ----------');
+                               GameDocsGoToGameInit.Tag:= AddTitleTextLine(' ---------- Game Initialization ---------- ');
                              end;
                         end;
                       True:
@@ -38468,6 +38750,8 @@ var
                   end;
                   Inc(LineIndex);
                 until IsEndTag(iText); // iText = '$end';
+                iText:= Trim(AutoGameInitDATFile[LineIndex-2]);
+                IsLastDocLineEmpty:= iText = '';
               end;
          end;
     end;
@@ -38487,8 +38771,6 @@ var
   end;
 
 begin
-  //TNTMemo1.Color:= MAMEInfoTextHolder.Color;
-  //TNTMemo1.Font:= MAMEInfoTextHolder.Font;
   GameDocsGoToInformation.Tag:= -1;
   GameDocsGoToHistory.Tag:= -1;
   GameDocsGoToDriverInfo.Tag:= -1;
@@ -38506,12 +38788,12 @@ begin
        Exit;
      end;
   IsXML:= False; // for history.xml
+  IsLastDocLineEmpty:= True; // do not add an empty line before the DOC title
   ProcessingGameDocuments:= True;
 
-  // detect files with full path
-  //TntMemo1.Lines.Clear;
-  MAMEInfoTextHolder.Lines.BeginUpdate;
-  MAMEInfoTextHolder.Lines.Clear;
+  MAMEDocsText.ReadOnly:= False; // using suplied richedit20.dll, empty lines are not added if control is ReadOnly = True... HUH!? :_((
+  MAMEDocsText.Lines.Clear;
+  MAMEDocsText.Lines.BeginUpdate;
 
   NoFilesMsg:= True;
   docItem:= FormPreferences.GameDocs.Groups.FirstItem;
@@ -38521,9 +38803,13 @@ begin
     docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
   until docItem = nil;
   if NoFilesMsg then
-     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in "mamedir\ui.ini" file.');
-  MAMEInfoTextHolder.Lines.EndUpdate;
-  SendMessage(MAMEInfoTextHolder.Handle, WM_VSCROLL, SB_TOP, 0); // move scrollbar to top
+     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in "mamedir\ui.ini" file.')
+  else
+     MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrollar to the top either
+
+  MAMEDocsText.Lines.EndUpdate;
+  MAMEDocsText.ReadOnly:= True;
+
   ProcessingGameDocuments:= False;
 end;
 
@@ -38578,7 +38864,7 @@ procedure TFormMain.ButtonArcadeGamesFiltersClick(Sender: TObject);
 begin
   if not FileExists(GetFolderFull(43)+'mame_filters.ini') then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    File ');
        AddMsgText(GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' was not found. Filters list cannot be built.'+#13#10+'Aborting...');
@@ -39753,7 +40039,7 @@ begin
           FormNightMode.NightModeGameDocsFont_Setting.Font:= FontDialog.Font
        else
           FormPreferences.GameDocsFont_Setting.Font:= FontDialog.Font;
-       MAMEInfoTextHolder.Font:= FontDialog.Font;
+       MAMEDocsText.Font:= FontDialog.Font;
      end;
 end;
 
@@ -39957,7 +40243,7 @@ begin
                  else
                     SysStr:= GetArcadeSystemShortTitle(sysID)+' (software list: '+SysStr+')';
 
-                 CallMessageBox;
+                 InitMessageBox; //CallMessageBox;
                  AddMsgText('    There are games from multiple systems selected. Only ');
                  AddMsgText(SysStr, MsgTxtColors.colorFileName, [fsBold]);
                  AddMsgText(' sets will be processed.'+#13#10+'Do you want to continue ?');
@@ -40179,7 +40465,7 @@ begin
      Exit;
   if MemGameInfo.eScanMode <> 0 then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        ShowGameNameEntryMsgBox;
        GenerateMessage('Scan Results', MemGameInfo.eTitle, '    Scan mode used: '+LowerCase(aScanMode[MemGameInfo.eScanMode])+
                               '. Nothing to see here...', 2);
@@ -40210,7 +40496,7 @@ begin
           False:
             begin
               FreeAndNil(missFile);
-              CallMessageBox;
+              InitMessageBox; //CallMessageBox;
               ShowGameNameEntryMsgBox;
               GenerateMessage('Scan Results', MemGameInfo.eTitle, '    No data was found for '+
                               'this set. This feature require that at least one ROM/CHD is present.', 2);
@@ -40222,10 +40508,9 @@ begin
         //CallMessageBox;
         //AppendText(FormMessageBox.LabelMessage, '    File ');
         //AppendText(FormMessageBox.LabelMessage, GetFolderFull(43)+'mame_filters.ini', $00a65300, [fsBold]);
-        CallMessageBox;
+        InitMessageBox; //CallMessageBox;
         ShowGameNameEntryMsgBox;
         AddMsgText('File ');
-        //AddMsgText(sFile, clBlack, []
         GenerateMessage('Scan Results', MemGameInfo.eTitle, 'File "'+
                         sFile+'" was not found.'+#13#10+
                         'All you games/machines are OK or you need to scan this game/machine again.', 2);
@@ -40242,12 +40527,6 @@ begin
   FormArcadeROMsFolders.ShowModal;
   FreeAndNil(FormArcadeROMsFolders);
   FocusGamesList;
-end;
-
-procedure TFormMain.MAMEInfoTextHolderURLClick(Sender: TObject;
-  const URL: String);
-begin
-  CallShellExecute(nil, URL);
 end;
 
 procedure TFormMain.CenterImageSplitterQuad(SplitterHolder: TSplitterEx; CenterAll: Boolean = False);
@@ -43639,18 +43918,22 @@ var
 
   function AddMsgEmulatorInfo: Boolean;
   begin
-    AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-    AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-    AddMsgText(EmulatorFile[MemGameInfo.eSystemID]+#13#10+#13#10, clBlack, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+    AddEmulatorHeaderArcade;
+    //AddMsgText('Emulator   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+    //AddMsgText(EmulatorVersion[MemGameInfo.eSystemID]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+    AddMsgText(EmulatorFile[MemGameInfo.eSystemID]+#13#10+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
 
     if MemGameInfo.eSoftwareName <> '' then
        begin
-         AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
-         AddMsgText(MemGameInfo.eCategory+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');//, 9);
+         AddSoftwareListHeader;
+         //AddMsgText('Software List   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
+         //AddMsgText(MemGameInfo.eCategory+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');//, 9);
+         AddMsgText(#13#10); // add extra empty line ? (March 04, 2021)
        end;
   end;
 
 begin
+  //see why cons/comp games do not select the game file to delete
   CheckDelROM:= True; // default value
   CheckDelCHD:= (TMenuItem(Sender).Tag > 0); // default value; delete = false; copy/move = true
   CheckDelCFG:= True; // default value
@@ -43747,7 +44030,7 @@ begin
         if (not Assigned(sysCustomFolders[MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType])) or
            (sysCustomFolders[MemGameInfo.eCustomSystemID, MemGameInfo.eCustomMediaType].Count = 0) then
            begin
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              EnableMsgMediaTypeLabel(False);
              AddMsgText('System   ', MsgTxtColors.colorKeyTitle, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
              AddMsgText(SystemsListCustom[MemGameInfo.eCustomSystemID, 0]+#13#10, MsgTxtColors.colorKeyValue, [fsBold], AlignEmuGameText, -1, 'Trebuchet MS');
@@ -43768,7 +44051,7 @@ begin
        begin
          if not ROMsContinue then
             begin
-              CallMessageBox;
+              InitMessageBox; //CallMessageBox;
               ShowGameNameEntryMsgBox;
               AddMsgEmulatorInfo;
               AddMsgText(#13#10+'    There is nothing to do as this game uses no ROMs or CHDs files.');
@@ -43787,7 +44070,7 @@ begin
                dCFG:= IncludeTrailingPathDelimiter(emuROMsFolders[idDaphne].Strings[0])+MemGameInfo.eName+'.zip';
                if not FileExists(dCFG) then
                   begin
-                    CallMessageBox;
+                    InitMessageBox; //CallMessageBox;
                     ShowGameNameEntryMsgBox;
                     AddMsgEmulatorInfo;
                     AddMsgText('    File does not exist, you haven''t selected a Daphne '+
@@ -43800,7 +44083,7 @@ begin
              end
           else
              begin
-               CallMessageBox;
+               InitMessageBox; //CallMessageBox;
                ShowGameNameEntryMsgBox;
                AddMsgEmulatorInfo;
                AddMsgText('    ROMs folder is blank. There are no folders set for the emulator.'+
@@ -43847,7 +44130,7 @@ begin
         end;
         if not Continue then
            begin
-             CallMessageBox;
+             InitMessageBox; //CallMessageBox;
              ShowGameNameEntryMsgBox;
              AddMsgEmulatorInfo;
              AddMsgText('    ROM, CFG, NVRAM folders are blank. There are no folders set for the emulator.'+
@@ -43933,10 +44216,10 @@ begin
   sysFile:= GetGamesFolderEL(2)+SystemsListCustom[TempGameVars.eCustomSystemID, 2];
   if (not FileExists(sysFile)) and ShowDeleteMessage then
      begin
-       CallMessageBox;
-       FormMain.AddMsgText('File ');
-       FormMain.AddMsgText(sysFile, MsgTxtColors.colorFileName, [fsBold]);
-       FormMain.AddMsgText(' was not found. Cannot delete game from games list.');
+       InitMessageBox; //CallMessageBox;
+       AddMsgText('File ');
+       AddMsgText(sysFile, MsgTxtColors.colorFileName, [fsBold]);
+       AddMsgText(' was not found. Cannot delete game from games list.');
        GenerateMessage('Error', 'Delete Selected Game From Games List', '', 2, False, 1);
        ClearMemGameInfo(TempGameVars);
        Exit;
@@ -43983,14 +44266,14 @@ begin
 
   if ShowDeleteMessage then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        FormMain.AddMsgText('    Game deleted...');
        FormMain.AddMsgText(#13#10+#13#10+'System: ');
        FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(#13#10+'Title: ');
-       FormMain.AddMsgText(TempGameVars.eTitle, clBlack, [fsBold]);
+       FormMain.AddMsgText(TempGameVars.eTitle, MsgTxtColors.colorKeyTitle, [fsBold]);
        FormMain.AddMsgText(#13#10+'Media Type: ');
-       FormMain.AddMsgText(MediaTypeCustom[TempGameVars.eCustomMediaType, 0], clBlack, [fsBold]);
+       FormMain.AddMsgText(MediaTypeCustom[TempGameVars.eCustomMediaType, 0], MsgTxtColors.colorKeyTitle, [fsBold]);
 
        GenerateMessage('Info', 'Delete Selected Game From Games List', '');
      end;
@@ -44088,15 +44371,15 @@ begin
 
   // now for single selected game
   FillTempGameInfo(Item);
-  CallMessageBox;
+  InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    You are about to ');
   FormMain.AddMsgText(LowerCase(TMenuItem(Sender).Caption), MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'System: ');
   FormMain.AddMsgText(SystemsListCustom[TempGameVars.eCustomSystemID, 0], MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'Title: ');
-  FormMain.AddMsgText(TempGameVars.eTitle, clBlack, [fsBold]);
+  FormMain.AddMsgText(TempGameVars.eTitle, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'Media Type: ');
-  FormMain.AddMsgText(MediaTypeCustom[TempGameVars.eCustomMediaType, 0], clBlack, [fsBold]);
+  FormMain.AddMsgText(MediaTypeCustom[TempGameVars.eCustomMediaType, 0], MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+#13#10+'Are you sure ? The game file will not be deleted, only the game from the main games list.');
 
   if GenerateMessage('Confirmation', TMenuItem(Sender).Caption, '', 1, True, 2) = mrNo then
@@ -44667,7 +44950,7 @@ var
       04: Result:= iCompare(TEasyGameInfo(gItem1).eScreenResolution, TEasyGameInfo(gItem2).eScreenResolution);
       05: Result:= iCompare(TEasyGameInfo(gItem1).eScreenRefreshRate, TEasyGameInfo(gItem2).eScreenRefreshRate);
       06: Result:= iCompare(TEasyGameInfo(gItem1).eCategory, TEasyGameInfo(gItem2).eCategory);
-      07: Result:= AnsiCompareText(TEasyGameInfo(gItem1).eVersionAdded, TEasyGameInfo(gItem2).eVersionAdded);
+      07: Result:= iCompare(TEasyGameInfo(gItem1).eVersionAdded, TEasyGameInfo(gItem2).eVersionAdded);
       08: Result:= iCompare(TEasyGameInfo(gItem1).eName, TEasyGameInfo(gItem2).eName);
       09: Result:= iCompare(TEasyGameInfo(gItem1).eClone, TEasyGameInfo(gItem2).eClone);
       10: Result:= iCompare(TEasyGameInfo(gItem1).eDriverName, TEasyGameInfo(gItem2).eDriverName);
@@ -45398,6 +45681,74 @@ begin
   LabelWebBrowserStatus.Constraints.MaxWidth:= WebBrowserStatusPanel.Constraints.MaxWidth-12;
 end;
 
+procedure TFormMain.SelectScanGamesModeHelpButton;
+begin
+  InitMessageBox; //CallMessageBox;
+  AddMsgText('    Starting from v0.162, you can run ');
+  AddMsgText('non-arcade', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' games with MAME (consoles/computers).'+
+             ' One important rule you must follow to use software list games with Emu Loader:'+#13#10+#13#10);
+  AddMsgText('    Game files must be in sub-folders named the same name as XML filenames from ', MsgTxtColors.colorExitCode, [fsBold]);
+  AddMsgText('mamedir\hash\', MsgTxtColors.colorFileName, [fsBold]);
+  AddMsgText(' folder.'+#13#10+#13#10+'    There are three options to choose from:'+#13#10);
+  AddMsgText('1. ', MsgTxtColors.colorWarning, [fsBold]);
+  AddMsgText('Disable', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(': software lists will not be created and all frontend games list files deleted.'+#13#10);
+  AddMsgText('2. ', MsgTxtColors.colorWarning, [fsBold]);
+  AddMsgText('Enable, Update Mode', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(': new software lists will be created and current ones updated only if ');
+  AddMsgText('CRC32 checksum', MsgTxtColors.colorExitCode, [fsBold]);
+  AddMsgText(' of MAME ');
+  AddMsgText('softlist.xml', MsgTxtColors.colorFileName, [fsBold]);
+  AddMsgText(' file is different than the checksum in frontend ');
+  AddMsgText('softlist.el', MsgTxtColors.colorFileName, [fsBold]);
+  AddMsgText(' file.'+#13#10);
+  AddMsgText('3. ', MsgTxtColors.colorWarning, [fsBold]);
+  AddMsgText('Enable, Overwrite Mode', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(': all software lists will be created, overwriting current frontend lists even if file checksums match.'+#13#10+#13#10+
+             '    Say you have ');
+  AddCommandLineMsgBox(#13#10+'rompath d:\emu\mame_roms;d:\emu\mess_roms', False, False);
+  //AddMsgText('rompath d:\emu\mame_roms;d:\emu\mess_roms', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  AddMsgText('in ');
+  AddMsgText('mame.ini', MsgTxtColors.colorFileName, [fsBold]);
+  AddMsgText(', and have ');
+  AddMsgText('H.E.R.O.', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' (hero.zip)', MsgTxtColors.colorKeyValue, [fsBold]);
+  AddMsgText(' game for two different software lists, ');
+  AddMsgText('Atari 2600', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' (a2600.xml)', MsgTxtColors.colorKeyValue, [fsBold]);
+  AddMsgText(' and ');
+  AddMsgText('MSX1 Cartridges', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' (msx1_cart.xml)', MsgTxtColors.colorKeyValue, [fsBold]);
+  AddMsgText('. '+#13#10+
+             'Both files should be in the following folders (softlist sub-folders are not required in ');
+  AddMsgText('mame.ini', MsgTxtColors.colorFileName, [fsBold]);
+  AddMsgText('):'+#13#10#13#10);
+  AddMsgText('    Atari 2600', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' (console system)');
+
+  AddCommandLineMsgBox(#13#10+'d:\emu\mame_roms\a2600\hero.zip', False, False);
+  //AddMsgText(#13#10+'d:\emu\mame_roms\a2600\hero.zip', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  AddMsgText('or'+#13#10);// AddMsgText('  or  ');//, MsgTxtColors.colorFileName, [fsBold]);
+
+  AddCommandLineMsgBox('d:\emu\mess_roms\a2600\hero.zip', False, False);
+  //AddMsgText('d:\emu\mess_roms\a2600\hero.zip', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  AddMsgText(#13#10+'    MSX1 Cartridge', MsgTxtColors.colorKeyTitle, [fsBold]);
+  AddMsgText(' (computer system)');
+
+  AddCommandLineMsgBox(#13#10+'d:\emu\mame_roms\msx1_cart\hero.zip', False, False);
+  //AddMsgText(#13#10+'d:\emu\mame_roms\msx1_cart\hero.zip', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  AddMsgText('or'+#13#10); //AddMsgText('  or  ');//, MsgTxtColors.colorFileName, [fsBold]);
+
+  AddCommandLineMsgBox('d:\emu\mess_roms\msx1_cart\hero.zip', False, False);
+  //AddMsgText('d:\emu\mess_roms\msx1_cart\hero.zip', MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
+  AddMsgText(#13#10+#13#10+'    Easy. The same rule applies to game snapshots and video previews. '+
+             'Go here for more details:'+#13#10);
+  AddMsgText('http://www.mameworld.info/ubbthreads/showthreaded.php?Cat=&Number=341588&page=0&view=collapsed&sb=5&o=&fpart=1&vc=1&new=',
+             MsgTxtColors.colorFileName);
+  GenerateMessage('Help', 'Software List Games');
+end;
+
 procedure TFormMain.PopupSelectScanGamesModeClick(Sender: TObject);
 begin
   if not Assigned(FormArcadeScanGamesMode) then
@@ -45696,8 +46047,8 @@ end;
 
 procedure TFormMain.GameDocsGoToInformationClick(Sender: TObject);
 begin
-  MAMEInfoTextHolder.Perform(WM_VSCROLL, SB_TOP, 0);
-  MAMEInfoTextHolder.Perform(EM_LINESCROLL, 0, TMenuItem(Sender).Tag);
+  MAMEDocsText.Perform(WM_VSCROLL, SB_TOP, 0);
+  MAMEDocsText.Perform(EM_LINESCROLL, 0, TMenuItem(Sender).Tag);
 end;
 
 procedure TFormMain.MenuShowPlayersInfoFromNplayersIniOnlyClick(
@@ -48060,9 +48411,20 @@ begin
   MsgTitle:= SystemsListCustom[SystemID, 0]+#13#10+'Create Games List';
   if (MenuCreateCustomGamesList.Tag = 1) and ValidateFile(SystemFileName) and (ButtonMainMenuOptions.Tag = 0) then
      begin
-       CallMessageBox;
-       FormMessageBox.ButtonYesToAll.Visible:= True;
-       FormMessageBox.ButtonAbort.Visible:= True;
+       InitMessageBox; // CallMessageBox;
+       if Assigned(FormMessageBox) then
+          with FormMessageBox do
+       else
+       if Assigned(FormMessageBox4K) then
+          with FormMessageBox4K do
+
+       begin
+         ButtonYesToAll.Visible:= True;
+         ButtonAbort.Visible:= True;
+       end;
+       //FormMessageBox.ButtonYesToAll.Visible:= True;
+       //FormMessageBox.ButtonAbort.Visible:= True;
+
        IL_StandardIconsExtraLarge.GetIcon(SystemID, FormMessageBox.MessageIcon.Picture.Icon);
 
        AddMsgText('    Option ');
@@ -48070,7 +48432,7 @@ begin
        AddMsgText(' is enabled. '+#13#10+
                    'The list for the current system will be overwritten!'+#13#10+#13#10+
                    '    To add more games into an existing list, ');
-       AddMsgText('uncheck', clBlack, [fsBold]);
+       AddMsgText('uncheck', MsgTxtColors.colorBoldTitle, [fsBold]);
        AddMsgText(' this option in the select systems dialog...'+#13#10+#13#10+
                    '    Choose what to do:'+#13#10+
                    '- Click ');
@@ -48081,14 +48443,14 @@ begin
                   '- Click ');
        AddMsgText('Yes To All', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to overwrite the list for all selected systems ');
-       AddMsgText('(away with this message!)', clBlack, [fsItalic]);
+       AddMsgText('(away with this message!)', MsgTxtColors.colorBoldTitle, [fsItalic]);
        AddMsgText(#13#10+
                   '- Click ');
        AddMsgText('No', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' to avoid creating the list for the current system (or ');
        AddMsgText('Esc', MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText(' key; title''s bar ');
-       AddMsgText('Close', clBlack, [fsBold]);
+       AddMsgText('Close', MsgTxtColors.colorBoldTitle, [fsBold]);
        AddMsgText(' button)'+#13#10+
                  '- Click ');
        AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
@@ -48510,7 +48872,7 @@ begin
      end;
   if not ValidateFile(GetEmuParametersFile) then
      begin
-       CallMessageBox;
+       InitMessageBox; //CallMessageBox;
        AddMsgText('    File ');
        AddMsgText(GetEmuParametersFile, MsgTxtColors.colorFileName, [fsBold]);
        AddMsgText('was not found! Emulator parameters must be '+
@@ -48772,21 +49134,21 @@ var
 begin
   OldArcadeFavFolder:= FrontendPath+'ini_files\favorites\';
   ConsCompFavFolder:= GetConsoleComputerFolder+'favorites\';
-  CallMessageBox;
-  FormMain.AddMsgText('    This function will copy and covert favorite profiles to the new format required by Emu Loader v8.3 and newer.'+#13#10+
-                      'Emu Loader and EmuCon frontend profiles that have the same filename are merged into a single profile, saved in ');
-  FormMain.AddMsgText(GetFavoritesFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
-  FormMain.AddMsgText(' new folder. Existing files in this folder will be overwritten.'+#13#10+#13#10+
-                      '    If you have EmuCon profiles that you want to use, make sure to copy them in ');
-  FormMain.AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
-  FormMain.AddMsgText(' folder. Make sure EmuCon profiles are already updated to EmuCon version 2.7.6 or newer (with .txt file extension).'+#13#10+#13#10+
-                      '    Files from ');
-  FormMain.AddMsgText(OldArcadeFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
-  FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
+  InitMessageBox; //CallMessageBox;
+  AddMsgText('    This function will copy and covert favorite profiles to the new format required by Emu Loader v8.3 and newer.'+#13#10+
+             'Emu Loader and EmuCon frontend profiles that have the same filename are merged into a single profile, saved in ');
+  AddMsgText(GetFavoritesFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
+  AddMsgText(' new folder. Existing files in this folder will be overwritten.'+#13#10+#13#10+
+             '    If you have EmuCon profiles that you want to use, make sure to copy them in ');
+  AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
+  AddMsgText(' folder. Make sure EmuCon profiles are already updated to EmuCon version 2.7.6 or newer (with .txt file extension).'+#13#10+#13#10+
+             '    Files from ');
+  AddMsgText(OldArcadeFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
+  AddMsgText(' and ');
+  AddMsgText(ConsCompFavFolder, MsgTxtColors.colorFileName, [fsBold], taLeftJustify, -1, 'Consolas');
 
-  FormMain.AddMsgText(' folders will not be deleted after the conversion is completed. Make sure to manually delete those two folders (or not) '+
-                      'as they will not be used anymore.'+#13#10+#13#10+'Do you want to continue ?');
+  AddMsgText(' folders will not be deleted after the conversion is completed. Make sure to manually delete those two folders (or not) '+
+             'as they will not be used anymore.'+#13#10+#13#10+'Do you want to continue ?');
   if GenerateMessage('Instructions', 'Convert Favorite Profiles to New Format', '', 1) = mrNo then
      Exit;
 
@@ -48864,7 +49226,7 @@ begin
   FreeAndNil(ConsCompFavList);
   FormStatus.Close;
 
-  CallMessageBox;
+  InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    Here''s what happened... :)'+#13#10+#13#10+
                       'Arcade profiles copied: ');
   FormMain.AddMsgText(IntToStr(ArcadeFilesCopied), MsgTxtColors.colorFileName, [fsBold]);
@@ -49315,7 +49677,7 @@ begin
        // floating "Search Games" panel
        PanelSearchGames.Style:= vgSolid;
        SetPanelNightColors(PanelSearchGames, $00f1f1f1);
-       SetLabelColors(LabelSearchGamesFilter, clBlack, clWhite);
+       SetLabelColors(LabelSearchGamesFilter, clBlack,  clWhite);
        SetLabelColors(LabelSearchGamesBy,     clMaroon, clCream);
 
        SetLabelColors(PanelSearchGamesCaptionBar, clBlack, clGray);
@@ -49453,7 +49815,7 @@ begin
        FormNightMode.NightModeGameDocsShowBorder.OnClick(Self);
        FormNightMode.NightModeGameDocsBorderColor.OnSelect(Self);
        FormNightMode.NightModeGameDocumentsBackgroundColor.OnSelect(Self);
-       MAMEInfoTextHolder.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
+       MAMEDocsText.Font:= FormNightMode.NightModeGameDocsFont_Setting.Font;
        FormNightMode.NightModeGameDocsShowStatusBar.OnClick(Self);
 
      end
@@ -49462,7 +49824,7 @@ begin
        FormPreferences.GameDocsShowBorder.OnClick(Self);
        FormPreferences.GameDocsBorderColor.OnSelect(Self);
        FormPreferences.GameDocumentsBackgroundColor.OnSelect(Self);
-       MAMEInfoTextHolder.Font:= FormPreferences.GameDocsFont_Setting.Font;
+       MAMEDocsText.Font:= FormPreferences.GameDocsFont_Setting.Font;
        FormPreferences.GameDocsShowStatusBar.OnClick(Self);
      end;
 end;
@@ -50231,13 +50593,13 @@ end;
 
 procedure TFormMain.FilterSearchBarHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  InitMessageBox; //CallMessageBox;
 
   FormMain.AddMsgText('1', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. Type what you want to search for in teh text bar and press ');
-  FormMain.AddMsgText('ENTER', clBlack, [fsBold]);
+  FormMain.AddMsgText('ENTER', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' key or click ');
-  FormMain.AddMsgText('Apply', clBlack, [fsBold]);
+  FormMain.AddMsgText('Apply', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' button.'+#13#10+#13#10);
   FormMain.AddMsgText('2', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. You can select another search criteria. Click on settings button and select another option.'+#13#10+'     ');
@@ -50264,26 +50626,25 @@ begin
 
   FormMain.AddMsgText('3', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. You can use the ');
-  FormMain.AddMsgText('Controls', clBlack, [fsBold]);
+  FormMain.AddMsgText('Controls', MsgTxtColors.colorBoldTitle, [fsBold]);
   FormMain.AddMsgText(' button to filter games by control. This filter ignores the search criteria and the controls selection'+
                       ' in the ');
-  FormMain.AddMsgText('Misc', clBlack, [fsBold]);
+  FormMain.AddMsgText('Misc', MsgTxtColors.colorBoldTitle, [fsBold]);
   FormMain.AddMsgText(' main filter button. Just select a control and the filter will apply immediately.'+#13#10+#13#10);
 
   FormMain.AddMsgText('4', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. Click on ');
-  FormMain.AddMsgText('Reset', clBlack, [fsBold]);
+  FormMain.AddMsgText('Reset', MsgTxtColors.colorBoldTitle, [fsBold]);
   FormMain.AddMsgText(' button to reset filters to default settings (main tool bar buttons).'+#13#10+#13#10);
 
   FormMain.AddMsgText('5', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText('. Check ');
-  FormMain.AddMsgText('Include Tool Bar Filters', clBlack, [fsBold]);
+  FormMain.AddMsgText('Include Tool Bar Filters', MsgTxtColors.colorBoldTitle, [fsBold]);
   FormMain.AddMsgText(' button to include main filters in the search.'+#13#10+
                       '    System, Parent/Clone, Have/Miss, Working/Non-Working, Orientation, Misc Filters'+#13#10+#13#10);
-  FormMain.AddMsgText('Note', clBlack, [fsBold]);
-  FormMain.AddMsgText(': If you change main filters, you must apply the search bar again.'+#13#10);
-  FormMain.AddMsgText('Warning', clBlack, [fsBold]);
-  FormMain.AddMsgText(': Unicode strings are not supported in the TEdit control.');
+  FormMain.AddMsgText('Note', MsgTxtColors.colorBoldTitle, [fsBold]);
+  FormMain.AddMsgText(': If you change main filters, you must apply the search bar again.');
+  
   GenerateMessage('Info', 'How to use the search bar.');
 end;
 
@@ -51042,9 +51403,8 @@ procedure TFormMain.ToggleGamesScrollBarsWin10;
 begin
   SetWin10DarkScrollBar(GamesListView);
   SetWin10DarkScrollBar(MachinesListSidePanel);
-  SetWin10DarkScrollBar(MAMEInfoTextHolder);
+  SetWin10DarkScrollBar(MAMEDocsText);
   SetWin10DarkScrollBar(WebBrowser);
-  //SetWin10DarkScrollBar(TntMemo1);
 end;
 
 procedure TFormMain.SetWin10DarkScrollBar(Sender: TObject);
@@ -51057,12 +51417,9 @@ begin
   if Sender is TEasyListView then
      iHandle:= TEasyListView(Sender).Handle
   else
-  if Sender is TRichEditURL then
-     iHandle:= TRichEditURL(Sender).Handle
+  if Sender is TTntRichEdit then
+     iHandle:= TTntRichEdit(Sender).Handle
   else
-  //if Sender is TTntMemo then
-  //   iHandle:= TTntMemo(Sender).Handle
-  //else
   if Sender is TMemo then
      iHandle:= TMemo(Sender).Handle
   else
@@ -51214,82 +51571,21 @@ begin
   //   end;
 end;
 
-{procedure TFormMain.SetRichEditText(RichEdit: TRichEditURL; Text: WideString; AnsiCodePage: UINT);
-const
-  EM_SETTEXTEX = WM_USER + 97;
 
-  GTL_DEFAULT         = 0;      // do the default (return # of chars)
-  GTL_USECRLF         = 1;      // compute answer using CRLFs for paragraphs
-  GTL_PRECISE         = 2;      // compute a precise answer
-  GTL_CLOSE           = 4;      // fast computation of a "close" answer
-  GTL_NUMCHARS        = 8;      // return the number of characters
-  GTL_NUMBYTES        = 16;     // return the number of _bytes_
-
-
-  SF_TEXT             = $0001;
-  SF_RTF              = $0002;
-  SF_RTFNOOBJS        = $0003;          // outbound only
-  SF_TEXTIZED         = $0004;          // outbound only
-  SF_UNICODE          = $0010;          // Unicode file of some kind
-
-  EM_STREAMIN                         = WM_USER + 73;
-  EM_STREAMOUT                        = WM_USER + 74;
-
-type
-  _SetTextEx = packed record
-    Flags: DWORD;
-    CodePage: UINT;
+procedure TFormMain.MAMEDocsTextURLClick(Sender: TObject;
+  const URL: WideString);
+begin
+  CallShellExecute(nil, URL);
 end;
 
-SETTEXTEX = _SetTextEx;
-TSetTextEx = _SetTextEx;
-
-var
-  TheSetTextEx: TSetTextEx;
-
+procedure TFormMain.Menu4KModeReadMeFirstClick(Sender: TObject);
 begin
-  TheSetTextEx.Flags := GTL_DEFAULT;
-  TheSetTextEx.CodePage := AnsiCodePage;
-
-  SendMessage(RichEdit.Handle, EM_SETTEXTEX, WPARAM(@TheSetTextEx), LPARAM(PChar(Text)));}
-
-  // debug code for RichEdit98 unicode... do not remove this!
-  {var
-  iText: WideString;
-  iFile: TStringList;
-begin
-  // set handle to Unicode
-  //SetWindowLongW(RichEdit98.Handle, GWL_WNDPROC, GetWindowLong(RichEdit98.Handle, GWL_WNDPROC));
-  //SetWindowLongW(MAMEInfoTextHolder.Handle, GWL_WNDPROC, GetWindowLong(MAMEInfoTextHolder.Handle, GWL_WNDPROC));
-
-  //RichEdit98.WideLines.BeginUpdate;
-  //RichEdit98.WideLines.LoadFromFile('D:\emulators\mame\binary\dats\history.xml');
-  //RichEdit98.WideLines.EndUpdate;
-  //ShowMessage('stop');
-  //exit;
-  iFile:= TStringList.Create;
-  iFile.LoadFromFile('D:\emulators\mame\binary\dats\history.xml');
-  if iFile.Count > 0 then
-  begin
-    iText:= iFile.Strings[8];
-    ShadowLabel1.Caption:= DecodeUnicodeStr(iText);
-    SetRichEditText(MAMEInfoTextHolder, DecodeUnicodeStr(iText), 1200);
-    AppendText2(RichEdit98, DecodeUnicodeStr(iText), clWhite, [], taLeft, 'Arial', 22);
-  end;
-  FreeAndNil(iFile);
-  //TEasyGameInfo(GamesListView.Selection.First).eTitle:= iText;
-  Exit;
-
-  if IsWindowUnicode(RichEdit98.Handle) then
-     beep
-  else
-     beep;
-
-  if IsWindowUnicode(MAMEInfoTextHolder.Handle) then
-     beep
-  else
-     beep;}
-//end;
+  GenerateMessage4K('Emu Loader', 'Enable 4K Mode (2160p)',
+  '    What is 4K mode ?'+#13#10+
+  'If you have a monitor with 2160p or higher resolution, the frontend looks tiny since it does not support screen DPI scale. '+
+  'This mode increases dialog sizes, font sizes and some controls for easy reading.'+#13#10+
+  '    It''s only ment to be used with screen DPI scale is at 100%. Experimental feature.', 2, False, -1);
+end;
 
 end.
 

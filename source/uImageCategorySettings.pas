@@ -398,18 +398,24 @@ end;
 
 procedure TFormImageCategorySettings.ButtonZippedImagesClick(Sender: TObject);
 begin
-  CallMessageBox;
-  FormMain.AddMsgText('    You can show/hide image categories, change their background color and select folders'+#13#10+#13#10+
-                      '1. To setup folders, select a system, a category, then a folder where images are. Relative path is relative to the emulator directory. '+
-                      'You can select multiple folders for MAME and HBMAME. Each folder must be separated by a ; char (semicolon)'+#13#10+#13#10+
-                      '2. To hide a category, clear the checkbox on each of them. This setting is the same for all '+
-                      'systems!'+#13#10+#13#10+
-                      '3. To set a background color for each category, select a category and then the color of your choice. This setting '+
-                      'is the same for all systems.'+#13#10+#13#10+
-                      '4. Or if you prefer to use the same color for all categories, enable "Use A Single Background Color" setting and then '+
+  FormMain.InitMessageBox; //CallMessageBox;
+
+  FormMain.AddMsgText('    You can show/hide image categories, change their background color and select folders'+#13#10+#13#10);
+  FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To setup folders, select a system, a category, then a folder where images are. Relative path is relative to the emulator directory. '+
+                      'You can select multiple folders for MAME and HBMAME. Each folder must be separated by a ; char (semicolon)'+#13#10+#13#10);
+  FormMain.AddMsgText('2.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To hide a category, clear the checkbox on each of them. This setting is the same for all '+
+                      'systems!'+#13#10+#13#10);
+  FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' To set a background color for each category, select a category and then the color of your choice. This setting '+
+                      'is the same for all systems.'+#13#10+#13#10);
+  FormMain.AddMsgText('4.', MsgTxtColors.colorWarning, [fsBold]);
+  FormMain.AddMsgText(' Or if you prefer to use the same color for all categories, enable "Use A Single Background Color" setting and then '+
                       'select the color of your choice.'+#13#10+#13#10+
                       '    Image background colors and single background color settings are different for night mode and light mode, depending on what mode is active.'+#13+#10+
                       'When you''re done, click ');
+
   FormMain.AddMsgText('Apply', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to save and apply changes or click ');
   FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);

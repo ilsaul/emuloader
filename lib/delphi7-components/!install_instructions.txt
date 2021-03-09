@@ -1,0 +1,66 @@
+How to install the components to compile Emu Loader
+---------------------------------------------------
+
+NOTES (please read before installing):
+
+ - You need "Borland Delphi 7" to compile Emu Loader project. Older and newer Delphi compilers are not supported. Delphi 7 is not freeware and don't know where you can
+   get it, please don't ask. You also need some knowledge on how to work with Delphi 7, it's not nearly as easy as compiling a MAME build.
+   If you want to compile Emu Loader just for the fun of it, I do not recommend it.
+
+ - I've made several modifications to some Delphi 7's IDE components, and they are all included with Emu Loader's source code. You don't need to recompile them in Delphi 7.
+
+ - Other components are heavily modified/improved, except the ones created by me.
+
+ - If you already have Graphics32, EasyListView, BcBarMenus installed (not from my components.dpk package), I'm affraid you'll have to remove them before installing my versions
+   of those components, specially "EasyListView" (from MustangPeak)... otherwise, Emu Loader will not compile correctly (sorry for this inconvenience).
+ - I've moved mountains to make sure some key Delphi 7 components work without issues in Windows 7 and Windows 10 (or at least work without crashing).
+
+ - Unicode support in this frontend is limited.
+
+
+01. Make sure Delphi 7 is not running
+
+02. Install ZipForge v2.73 in any folder (do not use newer versions as they have a nag screen)
+
+03. Install madExcept v5 or newer in any folder: make sure to select "madSimple", "madExcept 5", "madKernel", "madSecurity", "madShell" modules (do not install older versions)
+    - you are free to update madExcept to newer versions as they will not cause problems to compile the frontend ("hopefully")
+
+04. unRAR custom components "delphi7_components.rar" in any folder
+
+05. Open Delphi 7 and add the following directories in "Directories / Library Path" before installing the components (main menu "Tools" / "Environment Options" / "Library" tab),
+    so you can install the custom components you've just unRAR'ed:
+    - components\
+    - components\barmenus\Source\
+    - components\fastMM\
+    - components\graphicex\
+    - components\graphicex\obj\
+    - components\Graphics32\
+    - components\Mustangpeak\Common Library\Source\
+    - components\Mustangpeak\EasyListview\Source\
+    - components\SevenZipVCL\
+    - components\AdvComponents\
+    - components\Delphi Unicode Controls\
+    - components\XiControls\
+
+06. Click OK button to confirm the new library paths
+
+07. Install TNT Unicode Components pack
+    - open and compile "Delphi Unicode Controls\Delphi\d7\TntUnicodeVcl_R70.dpk (do not click "Install")
+    - open, compile and install "Delphi Unicode Controls\Delphi\d7\TntUnicodeVcl_D70.dpk"
+
+08. Install Graphics32 (it will create a new "Graphics32" tab in the components list)
+    - open and compile "Graphics32\Packages\GR32_D7.dpk" (do not click "Install")
+    - open, compile and install  "Graphics32\Packages\GR32_DSGN_D7.dpk"
+
+09. Install EasyListView (it will create a new "MustangPeak" tab in the components list)
+    - open and compile "Mustangpeak\Common Library\Delphi\MPCommonLibD7.dpk"  (do not click "Install")
+    - open and compile "Mustangpeak\Common Library\Delphi\MPCommonLibD7D.dpk" (do not click "Install")
+    - open and compile "Mustangpeak\EasyListview\Delphi\EasyListviewD7.dpk"   (do not click "Install")
+    - open, compile and install "Mustangpeak\EasyListview\Delphi\EasyListviewD7D.dpk"
+
+10. Open "components.dpk" and click "Compile" button, then click "Install" button. All components will appear in a new "Components" tab
+
+11. Save and close "components.dpk"
+
+12. You can now open Emu Loader project "EmuLoader.dpr" to compile. The source code path can be anywhere but DO NOT use Unicode folder names
+   - ignore the warnings in the "Build" panel at the bottom (Delphi 7 IDE); they do not cause any problems to the compiled project

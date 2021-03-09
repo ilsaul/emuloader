@@ -182,7 +182,95 @@ const
   {$EXTERNALSYM EM_GETLANGOPTIONS}
   EM_GETLANGOPTIONS                   = WM_USER + 121; 
   {$EXTERNALSYM EM_GETIMECOMPMODE}
-  EM_GETIMECOMPMODE                   = WM_USER + 122; 
+  EM_GETIMECOMPMODE                   = WM_USER + 122;
+  {$EXTERNALSYM EM_FINDTEXTW}
+  EM_FINDTEXTW                        = WM_USER + 123;
+  {$EXTERNALSYM EM_FINDTEXTEXW}
+  EM_FINDTEXTEXW                      = WM_USER + 124;
+
+{ RE3.0 FE messages }
+
+  EM_RECONVERSION                     = WM_USER + 125;
+  {$EXTERNALSYM EM_RECONVERSION}
+  EM_SETIMEMODEBIAS                   = WM_USER + 126;
+  {$EXTERNALSYM EM_SETIMEMODEBIAS}
+  EM_GETIMEMODEBIAS                   = WM_USER + 127;
+  {$EXTERNALSYM EM_GETIMEMODEBIAS}
+
+{ BiDi specific messages }
+
+  EM_SETBIDIOPTIONS                   = WM_USER + 200;
+  {$EXTERNALSYM EM_SETBIDIOPTIONS}
+  EM_GETBIDIOPTIONS                   = WM_USER + 201;
+  {$EXTERNALSYM EM_GETBIDIOPTIONS}
+
+  EM_SETTYPOGRAPHYOPTIONS             = WM_USER + 202;
+  {$EXTERNALSYM EM_SETTYPOGRAPHYOPTIONS}
+  EM_GETTYPOGRAPHYOPTIONS             = WM_USER + 203;
+  {$EXTERNALSYM EM_GETTYPOGRAPHYOPTIONS}
+
+{ Extended edit style specific messages }
+
+  EM_SETEDITSTYLE                     = WM_USER + 204;
+  {$EXTERNALSYM EM_SETEDITSTYLE}
+  EM_GETEDITSTYLE                     = WM_USER + 205;
+  {$EXTERNALSYM EM_GETEDITSTYLE}
+
+{  Extended edit style masks }
+
+  SES_EMULATESYSEDIT                  = 1;
+  {$EXTERNALSYM SES_EMULATESYSEDIT}
+  SES_BEEPONMAXTEXT                   = 2;
+  {$EXTERNALSYM SES_BEEPONMAXTEXT}
+  SES_EXTENDBACKCOLOR                 = 4;
+  {$EXTERNALSYM SES_EXTENDBACKCOLOR}
+  SES_MAPCPS                          = 8;  // (obsolete)
+  {$EXTERNALSYM SES_MAPCPS}
+  SES_EMULATE10                       = 16; // (obsolete)
+  {$EXTERNALSYM SES_EMULATE10}
+  SES_USECRLF                         = 32; // (obsolete)
+  {$EXTERNALSYM SES_USECRLF}
+  SES_NOXLTSYMBOLRANGE                = 32;
+  {$EXTERNALSYM SES_NOXLTSYMBOLRANGE}
+  SES_USEAIMM                         = 64;
+  {$EXTERNALSYM SES_USEAIMM}
+  SES_NOIME                           = 128;
+  {$EXTERNALSYM SES_NOIME}
+
+  SES_ALLOWBEEPS                      = 256;
+  {$EXTERNALSYM SES_ALLOWBEEPS}
+  SES_UPPERCASE                       = 512;
+  {$EXTERNALSYM SES_UPPERCASE}
+  SES_LOWERCASE                       = 1024;
+  {$EXTERNALSYM SES_LOWERCASE}
+  SES_NOINPUTSEQUENCECHK              = 2048;
+  {$EXTERNALSYM SES_NOINPUTSEQUENCECHK}
+  SES_BIDI                            = 4096;
+  {$EXTERNALSYM SES_BIDI}
+  SES_SCROLLONKILLFOCUS               = 8192;
+  {$EXTERNALSYM SES_SCROLLONKILLFOCUS}
+  SES_XLTCRCRLFTOCR                   = 16384;
+  {$EXTERNALSYM SES_XLTCRCRLFTOCR}
+  SES_DRAFTMODE                       = 32768;
+  {$EXTERNALSYM SES_DRAFTMODE}
+
+  SES_USECTF                          = $0010000;
+  {$EXTERNALSYM SES_USECTF}
+  SES_HIDEGRIDLINES                   = $0020000;
+  {$EXTERNALSYM SES_HIDEGRIDLINES}
+  SES_USEATFONT                       = $0040000;
+  {$EXTERNALSYM SES_USEATFONT}
+  SES_CUSTOMLOOK                      = $0080000;
+  {$EXTERNALSYM SES_CUSTOMLOOK}
+  SES_LBSCROLLNOTIFY                  = $0100000;
+  {$EXTERNALSYM SES_LBSCROLLNOTIFY}
+  SES_CTFALLOWEMBED                   = $0200000;
+  {$EXTERNALSYM SES_CTFALLOWEMBED}
+  SES_CTFALLOWSMARTTAG                = $0400000;
+  {$EXTERNALSYM SES_CTFALLOWSMARTTAG}
+  SES_CTFALLOWPROOFING                = $0800000;
+  {$EXTERNALSYM SES_CTFALLOWPROOFING}
+
 
 { Options for EM_SETLANGOPTIONS and EM_GETLANGOPTIONS }
 
@@ -1154,8 +1242,14 @@ const
   {$EXTERNALSYM GT_DEFAULT}
   GT_DEFAULT                  = 0; 
   {$EXTERNALSYM GT_USECRLF}
-  GT_USECRLF                  = 1; 
-
+  GT_USECRLF                  = 1;
+  {$EXTERNALSYM GT_SELECTION}
+  GT_SELECTION                = 2;
+  {$EXTERNALSYM GT_RAWTEXT}
+  GT_RAWTEXT                  = 4;
+  {$EXTERNALSYM GT_NOHIDDENTEXT}
+  GT_NOHIDDENTEXT             = 8;
+  
 { EM_GETTEXTEX info; this struct is passed in the wparam of the message }
 
 type
@@ -1199,7 +1293,7 @@ type
 { UNICODE embedding character }
 const
   {$EXTERNALSYM WCH_EMBEDDING}
-  WCH_EMBEDDING     = $FFFC; 
+  WCH_EMBEDDING     = $FFFC;
 
 implementation
 

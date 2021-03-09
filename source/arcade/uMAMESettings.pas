@@ -6801,31 +6801,44 @@ end;
 
 procedure TFormMAMESettings.ButtonReadFileHelpClick(Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reload Settings', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('Reload Settings', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will load a list of custom files one by one, overwriting settings from the previous one.'+
                       ' MAME does this when loading games.'+#13#10);
-  FormMain.AddMsgText('- mame.ini; ume.ini; hbmame.ini; emufilename.ini'+#13#10+
-                      '- debug.ini'+#13#10+
-                      '- vertical.ini (if screen game is vertical)'+#13#10+
-                      '- horizont.ini (if screen game is horizontal)'+#13#10+
-                      '- arcade.ini (MAME v0.163 and newer)'+#13#10+
-                      '- console.ini (MAME v0.163 and newer)'+#13#10+
-                      '- computer.ini (MAME v0.163 and newer)'+#13#10+
-                      '- othersys.ini (MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10+
-                      '- raster.ini (if screen game is raster)'+#13#10+
-                      '- vector.ini (if screen game is vector)'+#13#10+
-                      '- lcd.ini (if screen game is lcd)'+#13#10+
-                      '- svg.ini (if screen game is svg)'+#13#10+
-                      '- source\sourcefile.ini or sourcefile.ini'+#13#10+
-                      '- biosname.ini'+#13#10+
-                      '- parentgame.ini (if current game is clone)'+#13#10+
-                      '- gamename.ini'+#13#10+#13#10);
-  FormMain.AddMsgText('    Button ');
-  FormMain.AddMsgText('Reset to Default', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('mame.ini; ume.ini; hbmame.ini; emufilename.ini'+#13#10+
+                      'debug.ini'+#13#10+
+                      'vertical.ini', MsgTxtcolors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is vertical)'+#13#10);
+  FormMain.AddMsgText('horizont.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is horizontal)'+#13#10);
+  FormMain.AddMsgText('arcade.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (MAME v0.163 and newer)'+#13#10);
+  FormMain.AddMsgText('console.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (MAME v0.163 and newer)'+#13#10);
+  FormMain.AddMsgText('computer.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (MAME v0.163 and newer)'+#13#10);
+  FormMain.AddMsgText('othersys.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (MAME v0.163 and newer; this filename and its purpose is a mistery to me!)'+#13#10);
+  FormMain.AddMsgText('raster.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is raster)'+#13#10);
+  FormMain.AddMsgText('vector.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is vector)'+#13#10);
+  FormMain.AddMsgText('lcd.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is lcd)'+#13#10);
+  FormMain.AddMsgText('svg.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if screen game is svg)'+#13#10);
+  FormMain.AddMsgText('source\sourcefile.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' or ');
+  FormMain.AddMsgText('sourcefile.ini'+#13#10, MsgTxtColors.colorFileName);
+  FormMain.AddMsgText('biosname.ini'+#13#10, MsgTxtColors.colorFileName);
+  FormMain.AddMsgText('parentgame.ini', MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(' (if current game is clone)'+#13#10);
+  FormMain.AddMsgText('gamename.ini'+#13#10,  MsgTxtColors.colorFileName);
+  FormMain.AddMsgText(#13#10+'    Button ');
+  FormMain.AddMsgText('Reset to Default', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will only load emulator default settings: mame.ini; ume.ini; hbmame.ini; ignoring everything else.');
-  GenerateMessage('Help', 'Why two reload buttons ?');
+  GenerateMessage('Help', 'What each button does ?');
 end;
 
 procedure TFormMAMESettings.FolderFontFilesButtonSelectClick(
@@ -6866,28 +6879,28 @@ end;
 procedure TFormMAMESettings.ButtonHelpSaveValidateAllCustomFilesClick(
   Sender: TObject);
 begin
-  CallMessageBox;
+  FormMain.InitMessageBox; //CallMessageBox;
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
-  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
+  FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
-  FormMain.AddMsgText('(mame.ini; hbmame.ini; ume.ini; emufilename.ini)', clBlack);
+  FormMain.AddMsgText('(mame.ini; hbmame.ini; ume.ini; emufilename.ini)', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(', ignoring all custom files.'+#13#10+
                       'This is the old frontend''s saving method and I for one, prefer this way.'+#13#10+#13#10);
-  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorFileName, [fsItalic], taCenter);
+  FormMain.AddMsgText('Enabled / Checked'+#13#10+#13#10, MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
   FormMain.AddMsgText('    It will keep custom settings files clean and avoid duplicated settings across files. '+
                       'All files will be scanned accordingly ');
-  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', clBlack);
+  FormMain.AddMsgText('(debug.ini; vector.ini; drivername.ini; etc)', MsgTxtColors.colorFileName);
   FormMain.AddMsgText('.'+#13#10+'    There''s one major downside. Say you have settings in ');
-  FormMain.AddMsgText('drivername.ini', clBlack);
+  FormMain.AddMsgText('drivername.ini', MsgTxtColors.colorFileName);
   FormMain.AddMsgText(' and ');
-  FormMain.AddMsgText('gamename.ini', clBlack);
+  FormMain.AddMsgText('gamename.ini', MsgTxtColors.colorFileName);
   FormMain.AddMsgText('. Then you decide to delete ');
-  FormMain.AddMsgText('drivername.ini', clBlack);
+  FormMain.AddMsgText('drivername.ini', MsgTxtColors.colorFileName);
   FormMain.AddMsgText('. All its settings will be lost as they are not listed in later files, '+
                       'forcing you to set them again in ');
-  FormMain.AddMsgText('gamename.ini', clBlack);
+  FormMain.AddMsgText('gamename.ini', MsgTxtColors.colorFileName);
   FormMain.AddMsgText('.'+#13#10+#13#10+'In doubt, keep this feature ');
-  FormMain.AddMsgText('disabled/unchecked.', clBlack);
+  FormMain.AddMsgText('disabled/unchecked.', MsgTxtColors.colorKeyValue);
 
   GenerateMessage('Help', 'Validate All Custom Files on Save');
 end;
@@ -6983,10 +6996,10 @@ end;
 procedure TFormMAMESettings.VideoOutputModeButtonHelpClick(
   Sender: TObject);
 begin
-  CallMessageBox;
-  FormMain.AddMsgText('OpenGL', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.AddMsgText('OpenGL', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' video mode is only supported in SDLMAME and starting from MAME v0.159.'+#13#10);
-  FormMain.AddMsgText('DirectDraw', MsgTxtColors.colorFileName, [fsBold]);
+  FormMain.AddMsgText('DirectDraw', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' video mode is only supported in MAME v0.170 and lower versions.'+#13#10+#13#10+
                       'In doubt, leave this setting in ');
   FormMain.AddMsgText('Auto', MsgTxtColors.colorFileName, [fsBold]);

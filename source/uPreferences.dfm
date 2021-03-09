@@ -142,7 +142,7 @@ object FormPreferences: TFormPreferences
       object NightModeLabelToolBarBkTopColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         ShowAccelChar = False
@@ -293,7 +293,7 @@ object FormPreferences: TFormPreferences
       object NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel
         Left = 4
         Top = 95
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -308,7 +308,7 @@ object FormPreferences: TFormPreferences
       object NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel
         Left = 4
         Top = 119
-        Width = 73
+        Width = 72
         Height = 16
         Caption = 'Text Bk Color'
         ShowAccelChar = False
@@ -421,7 +421,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionTopColorLabel: TShadowLabel
         Left = 4
         Top = 70
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         ShowAccelChar = False
@@ -436,7 +436,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionFontColorLabel: TShadowLabel
         Left = 4
         Top = 142
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -451,7 +451,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionMissROMsTopColorLabel: TShadowLabel
         Left = 4
         Top = 188
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         ShowAccelChar = False
@@ -466,7 +466,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionMissROMsFontColorLabel: TShadowLabel
         Left = 4
         Top = 259
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -496,7 +496,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionInactiveTopColorLabel: TShadowLabel
         Left = 4
         Top = 305
-        Width = 58
+        Width = 56
         Height = 16
         Caption = 'Top Bkgrd'
         ShowAccelChar = False
@@ -511,7 +511,7 @@ object FormPreferences: TFormPreferences
       object GamesSelectionInactiveFontColorLabel: TShadowLabel
         Left = 4
         Top = 376
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -1230,7 +1230,7 @@ object FormPreferences: TFormPreferences
       object LabelGamesListStatusBarFontColor: TShadowLabel
         Left = 4
         Top = 95
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -1245,7 +1245,7 @@ object FormPreferences: TFormPreferences
       object LabelGamesListStatusBarTopColor: TShadowLabel
         Left = 4
         Top = 47
-        Width = 24
+        Width = 22
         Height = 16
         Caption = 'Top'
         ShowAccelChar = False
@@ -1554,7 +1554,7 @@ object FormPreferences: TFormPreferences
       object HintBox_TextColorLabel: TShadowLabel
         Left = 4
         Top = 175
-        Width = 52
+        Width = 51
         Height = 16
         Caption = 'Text Font'
         ShowAccelChar = False
@@ -2216,7 +2216,7 @@ object FormPreferences: TFormPreferences
         object HideDOSBoxBoxLabel: TShadowLabel
           Left = 16
           Top = 3
-          Width = 153
+          Width = 154
           Height = 16
           Caption = 'Hide Command Prompt Box'
           ShowAccelChar = False
@@ -2327,7 +2327,7 @@ object FormPreferences: TFormPreferences
       object LabelDisableNaturalSorting: TShadowLabel
         Left = 20
         Top = 77
-        Width = 201
+        Width = 200
         Height = 19
         Caption = 'Use ASCII sorting (1, 10, 11, 2, 20, 3)'
         Font.Charset = ANSI_CHARSET
@@ -2756,7 +2756,7 @@ object FormPreferences: TFormPreferences
       object InternetGameInfoBoxTip1Label: TShadowLabel
         Left = 176
         Top = 0
-        Width = 271
+        Width = 269
         Height = 16
         Caption = 'Tag       required to be replaced by                       and'
         Font.Charset = ANSI_CHARSET
